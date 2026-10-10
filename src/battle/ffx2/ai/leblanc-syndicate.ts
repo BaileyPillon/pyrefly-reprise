@@ -1,316 +1,131 @@
 /**
- * The Leblanc Syndicate — Chateau Leblanc, FFX-2 Chapter 2. Five AI scripts.
+ * The Leblanc Syndicate — Chateau Leblanc, FFX-2 Chapter VI. Leblanc's own script and the registry of the room's scripts.
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14].
- * Source: `research/ffx2-leblanc-syndicate.md` §5.3, §5.4 (abbreviated `§`);
- * spec `docs/plans/chapter-leblanc-review.md` §2.5.
+ * **Re-parity AI lane C (2026-10-10): the scripts are the game's own** (`m253` here; Ormi in `syndicate-ormi.ts`, Logos and
+ * the two goons in `syndicate-logos.ts`), read in `research/re-ffx2-ai-leblanc-den-ixion.md` section 3, rows O, L, G and K
+ * of section 8. The earlier build followed `research/ffx2-leblanc-syndicate.md` §5.3, §5.4 (a wiki reading of the same
+ * script and an AUTHORED Logos); where they differ the script wins, and `docs/handoff/re-parity-ai-ffx2-c.md` lists each
+ * difference. What the three facts that decide the fight become:
  *
- * ### The three AI facts that decide the fight [§5.4]
+ * 1. **No Love Lost is not a step of her cycle** (L1). A trio counter (it starts at 5, so her first poll makes it 6) gains 1
+ *    each poll. At 8 or more, with Ormi and Logos both alive, she uses it (three commands in one action); the poll after
+ *    it, with the counter still at 8 or more and the combo flag set, issues **nothing**, clears the flag and zeroes the
+ *    counter (the next poll is the next step), so No Love Lost comes on her 3rd, 11th, 19th ... command. Her five-step
+ *    cycle (Attack, spell or Osmose, Love Tap or White Wind, Attack, Mach Fan or a grenade) is never used up by it. With
+ *    Ormi or Logos dead the counter stays at 8 or more and it never comes back.
+ * 2. **Not-So-Mighty Guard is cast exactly twice** (L2): on her first command and on the 25th poll of the Guard counter
+ *    (25 ordinary turns plus the No Love Losts before it), on all monsters; turn 5 of the cycle is a plain Attack.
+ * 3. **Killing either henchman ends No Love Lost**; Ormi alone reaches Huggles; Leblanc alone keeps buffing.
  *
- * 1. **Killing *either* henchman switches off No Love Lost.** The trigger
- *    requires both. Logos has the least HP (989) and the worst threat, so he is
- *    the correct target — which is what every published strategy says, arrived
- *    at here independently from the script.
- * 2. **Ormi only reaches Huggles when he is the last enemy alive** (~1,185 on a
- *    party whose largest standard-dressphere pool at Lv 22 is a Warrior's
- *    1,089). **Killing Leblanc and Logos first arms the fight's deadliest
- *    move.** This inverts the reflexive "weakest first" habit.
- * 3. **Leblanc alone is a stalemate engine, not a threat.** With both henchmen
- *    dead her turn-4 branch resolves to White Wind — she heals an empty enemy
- *    party and **cures her own statuses, wiping your Darkness** — while turns 1
- *    and 5 keep re-applying Protect + Shell + Regen.
- *
- * The derived correct order is therefore **Logos -> Ormi -> Leblanc**, with a
- * heal banked for Concussive Blast at Ormi's 25 %.
+ * What stays as it was and why (listed in the handoff): her Attack target, which the game weights by closeness and facing,
+ * is a uniform pick (L3, no positions); the combo's window of invincibility for Ormi and Logos, her Agility 254 and the
+ * hit-points-to-1 death hooks (L6) need an action that has a length, which the engine's instant actions do not have (the
+ * animation length belongs to batch W4), so the clean-up poll is folded into the next poll and nothing is made invincible.
+ * `Ffx2EngineOptions.leblancScriptSinirothX` (PR-0106) is no longer read: its OFF reading was the wiki's, and the script
+ * is the other one.
  */
 
 import type { Command } from '../../common/types.ts';
-import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
+import type { AiContext, AiScript } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
+import { drGoonScript, femGoonScript, logosActIIScript, logosScript } from './syndicate-logos.ts';
+import { ormiActIIScript, ormiActIScript, ormiScript } from './syndicate-ormi.ts';
+import { girls, pickId, scriptMod } from './script-rolls.ts';
 
-/**
- * Ormi's Supercollider targets the character **furthest away** [§4.2] — a
- * positional rule, and we have no positions: `Ffx2Unit` carries only `slot`, a
- * formation index, and the free-movement battlefield the rule implies does not
- * exist in our presentation either.
- *
- * **AUTHORED, owner-approved 2026-09-21:** the highest `slot` is the back of
- * the formation and therefore the stand-in for "furthest away". Adding a
- * `Targeting` union member in `src/battle/common/types.ts` for one ability
- * would be a contract change for a rule we cannot honour faithfully anyway,
- * so the script picks the target instead.
- */
-export const SUPERCOLLIDER_TARGETS_BACK_OF_FORMATION = true;
+/** The trio counter (`mf_firstAtack`) starts at 5, so her first poll makes it 6. */
+const TRIO_START = 5;
+/** No Love Lost needs the counter at 8 or more. */
+export const NO_LOVE_LOST_AT = 8;
+/** The Guard counter reaches this on the poll that casts the second Not-So-Mighty Guard. */
+export const SECOND_GUARD_AT = 25;
+/** She reaches for Osmose below this much MP (`m253.src:174`). */
+export const OSMOSE_BELOW_MP = 15;
 
-/**
- * Leblanc's `[8x - 5]`-th turn is her 3rd, 11th, 19th… — i.e. `turn % 8 === 3`.
- * [§4.5, §5.3, verified: 2 sources]
- */
-const NO_LOVE_LOST_PHASE = 3;
-const NO_LOVE_LOST_PERIOD = 8;
+/** Memory keys, one per hidden variable of the script. */
+export const MEM = { trio: 'trio', combo: 'combo', guard: 'guard', cycle: 'cycle' } as const;
 
-/**
- * "After her [25 + times No Love Lost was used] turn -> Not-So-Mighty Guard." §5.3, §19.2.
- * Two readings (PR-0106): OFF, the **AUTHORED** one this script used until D-242, every turn past
- * 25 + uses (no source says "every turn", §19.2); ON (the default since D-242, `constants.ts` LEBLANC_SCRIPT_SINIROTHX,
- * `flags.leblancScriptSinirothX`), SinirothX's, once, **on** turn 25 + uses, as the No Love Lost line
- * is read (GameFAQs' reading, our estimate).
- */
-const FAILSAFE_TURN = 25;
+/** Fira, Thundara, Blizzara, Watera: the order her `random() % 4` picks them in. */
+const SPELLS = ['x2-leblanc-fira', 'x2-leblanc-thundara', 'x2-leblanc-blizzara', 'x2-leblanc-watera'] as const;
 
-/** Leblanc reaches for Osmose only at or below this MP. She starts on 460. §4.4 */
-const OSMOSE_MP_GATE = 14;
-
-/** Ormi's Concussive Blast branch: `HP < 1/4 max`. §5.3 */
-const CONCUSSIVE_BLAST_HP_FRACTION = 0.25;
-
-function randomPartyTarget(ctx: AiContext): string[] {
-  const party = ctx.party();
-  return party.length > 0 ? [ctx.rng.pick(party).id] : [];
+function use(id: string, targets: string[] = []): Command {
+  return { kind: 'ability', id, targets };
 }
 
-/** The back of the formation — see {@link SUPERCOLLIDER_TARGETS_BACK_OF_FORMATION}. */
-function backOfFormation(ctx: AiContext): string[] {
-  const party = ctx.party();
-  if (party.length === 0) return [];
-  let furthest = party[0] as Ffx2Unit;
-  for (const unit of party) if (unit.slot > furthest.slot) furthest = unit;
-  return [furthest.id];
-}
-
-/** Advance and return this unit's 1-based turn number. */
-function nextTurn(ctx: AiContext): number {
-  const taken = mem(ctx.self, 'actions');
-  setMem(ctx.self, 'actions', taken + 1);
-  return taken + 1;
-}
-
-/** A living enemy-side unit whose id starts with `prefix` (Acts I–III share names). */
-function livingAlly(ctx: AiContext, prefix: string): Ffx2Unit | undefined {
-  return ctx.allies().find((u) => u.id === prefix || u.id.startsWith(`${prefix}-`));
-}
-
-// ---------------------------------------------------------------------------
-// Ormi — "Chateau End" [§5.3, verified: 2 sources — decompile-derived]
-// ---------------------------------------------------------------------------
-//
-// ```
-// Turn 1-3  Normal Attack on a random character
-// Turn 4    Supercollider on the character FURTHEST AWAY
-// If (HP < 1/4 max) -> Concussive Blast
-// If (Ormi is the ONLY enemy remaining):
-//    Normal Attack 1/2 | Supercollider 1/4 | Huggles 1/4
-// ```
-//
-// **The precedence between the two overrides is AUTHORED.** The source lists
-// them sequentially — basic pattern, then the HP branch, then the last-enemy
-// branch — and states no order. This script takes them in the order the source
-// prints them, which keeps both of §5.4's facts true: a *healthy* last-standing
-// Ormi still reaches Huggles (the credible-mistake loss the chapter is built
-// around), and a dying Ormi still opens with Concussive Blast whether or not
-// his friends are up (§5.4: "budget a heal for it").
-
-export const ormiScript: AiScript = {
-  id: 'ffx2-leblanc-ormi',
-
-  decide(ctx: AiContext): Command | null {
-    const turn = nextTurn(ctx);
-    const self = ctx.self;
-
-    if (self.hp < self.stats.maxHp * CONCUSSIVE_BLAST_HP_FRACTION) {
-      return { kind: 'ability', id: 'x2-ormi-concussive-blast', targets: [] };
+/** The cycle's five steps (`mf_t` 0 to 4), after the trio and Guard branches have passed. */
+function cycleStep(ctx: AiContext): Command {
+  const self = ctx.self;
+  const party = girls(ctx);
+  const step = mem(self, MEM.cycle);
+  setMem(self, MEM.cycle, (step + 1) % 5);
+  switch (step) {
+    case 0:
+    case 3:
+      return use('x2-leblanc-fan-slap', pickId(ctx.rng, party));
+    case 1: {
+      if (self.mp < OSMOSE_BELOW_MP) return use('x2-leblanc-osmose', pickId(ctx.rng, party));
+      const spell = SPELLS[scriptMod(ctx.rng, 4)]!;
+      return use(spell, pickId(ctx.rng, party));
     }
-
-    if (ctx.allies().length === 0) {
-      const roll = ctx.rng.int(0, 3);
-      if (roll <= 1) {
-        return { kind: 'ability', id: 'x2-ormi-shield-bash', targets: randomPartyTarget(ctx) };
-      }
-      if (roll === 2) {
-        return { kind: 'ability', id: 'x2-ormi-supercollider', targets: backOfFormation(ctx) };
-      }
-      return { kind: 'ability', id: 'x2-ormi-huggles', targets: randomPartyTarget(ctx) };
+    case 2: {
+      // A coin picks Ormi or Logos; that one alive gets Love Tap, else White Wind on all monsters.
+      const favoured = scriptMod(ctx.rng, 2) === 0 ? 'ormi' : 'logos';
+      return ctx.allies().some((u) => u.id === favoured) ? use('x2-leblanc-love-tap', [favoured]) : use('x2-leblanc-white-wind');
     }
-
-    const step = ((turn - 1) % 4) + 1;
-    if (step === 4) {
-      return { kind: 'ability', id: 'x2-ormi-supercollider', targets: backOfFormation(ctx) };
+    default: {
+      const roll = scriptMod(ctx.rng, 5);
+      return use(roll === 0 ? 'x2-leblanc-flash-bomb' : roll === 1 ? 'x2-leblanc-hush-grenade' : 'x2-leblanc-mach-fan');
     }
-    return { kind: 'ability', id: 'x2-ormi-shield-bash', targets: randomPartyTarget(ctx) };
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Leblanc — "Chateau End" [§5.3, verified: 2 sources — decompile-derived]
-// ---------------------------------------------------------------------------
-//
-// ```
-// Turn 1  Not-So-Mighty Guard
-// Turn 2  Normal Attack (Fan Slap) on a random character
-// Turn 3  If (MP <= 14) -> Osmose; else Fira/Blizzara/Thundara/Watera, 1/4 each
-// Turn 4A (1/2)  If (Ormi alive)  -> Love Tap on Ormi   else White Wind
-// Turn 4B (1/2)  If (Logos alive) -> Love Tap on Logos  else White Wind
-// Turn 5  Not-So-Mighty Guard
-// Turn 6  Mach Fan (3/5) | Flash Bomb (1/5) | Hush Grenade (1/5)
-// Repeat from Turn 2
-//
-// Action Number Pattern (overrides the above):
-//   After her [8x-5] turn, if BOTH Ormi and Logos have HP -> No Love Lost.
-//   After her [25 + timesNoLoveLostUsed] turn -> Not-So-Mighty Guard.
-// ```
-
-const LEBLANC_ELEMENTS = [
-  'x2-leblanc-fira',
-  'x2-leblanc-blizzara',
-  'x2-leblanc-thundara',
-  'x2-leblanc-watera',
-] as const;
+  }
+}
 
 export const leblancScript: AiScript = {
   id: 'ffx2-leblanc',
+  decide(ctx) {
+    const self = ctx.self;
+    if (girls(ctx).length === 0) return null;
 
-  decide(ctx: AiContext): Command | null {
-    const turn = nextTurn(ctx);
-    const uses = mem(ctx.self, 'noLoveLostUses');
-
-    const ormi = livingAlly(ctx, 'ormi');
-    const logos = livingAlly(ctx, 'logos');
-
-    // Override 1 — the trio combo. Requires **both** henchmen to have HP.
-    if (turn % NO_LOVE_LOST_PERIOD === NO_LOVE_LOST_PHASE && ormi && logos) {
-      setMem(ctx.self, 'noLoveLostUses', uses + 1);
-      return { kind: 'ability', id: 'x2-nll-1', targets: [] };
-    }
-
-    // Override 2 — the failsafe (PR-0106: the AUTHORED every-turn reading OFF, SinirothX's once ON).
-    const sinirothX = ctx.flags['leblancScriptSinirothX'] === true;
-    if (sinirothX ? turn === FAILSAFE_TURN + uses && !mem(ctx.self, 'failsafeFired') : turn > FAILSAFE_TURN + uses) {
-      if (sinirothX) setMem(ctx.self, 'failsafeFired', 1);
-      return { kind: 'ability', id: 'x2-leblanc-not-so-mighty-guard', targets: [] };
-    }
-
-    // The basic loop: turn 1 once, then turns 2..6 repeating.
-    const step = turn === 1 ? 1 : ((turn - 2) % 5) + 2;
-
-    // Turn 5: the wiki's "repeat turn 1" (OFF, §5.3) or SinirothX's Normal Attack (ON, §19.3).
-    if (step === 1 || (step === 5 && !sinirothX)) {
-      return { kind: 'ability', id: 'x2-leblanc-not-so-mighty-guard', targets: [] };
-    }
-    if (step === 2 || step === 5) {
-      return { kind: 'ability', id: 'x2-leblanc-fan-slap', targets: randomPartyTarget(ctx) };
-    }
-    if (step === 3) {
-      if (ctx.self.mp <= OSMOSE_MP_GATE) {
-        return { kind: 'ability', id: 'x2-leblanc-osmose', targets: randomPartyTarget(ctx) };
+    let trio = mem(self, MEM.trio, TRIO_START) + 1;
+    if (trio >= NO_LOVE_LOST_AT) {
+      if (mem(self, MEM.combo) === 1) {
+        // The poll after a No Love Lost issues nothing and zeroes the counter; she is polled again at the next step,
+        // so it is folded into this call: the counter is 0, and this call is the poll after it.
+        setMem(self, MEM.combo, 0);
+        trio = 1;
+      } else if (['ormi', 'logos'].every((id) => ctx.allies().some((u) => u.id === id))) {
+        setMem(self, MEM.trio, trio);
+        setMem(self, MEM.combo, 1);
+        return use('x2-nll-1');
       }
-      const spell = ctx.rng.pick([...LEBLANC_ELEMENTS]);
-      return { kind: 'ability', id: spell, targets: randomPartyTarget(ctx) };
     }
-    if (step === 4) {
-      // 4A / 4B, one coin flip. Each branch names one henchman and falls back
-      // to White Wind when *that* one is down — which is why killing Logos
-      // first already costs her half her support turns.
-      const favoured = ctx.rng.int(0, 1) === 0 ? ormi : logos;
-      if (favoured) {
-        return { kind: 'ability', id: 'x2-leblanc-love-tap', targets: [favoured.id] };
-      }
-      return { kind: 'ability', id: 'x2-leblanc-white-wind', targets: [] };
+    setMem(self, MEM.trio, trio);
+
+    // Not-So-Mighty Guard on all monsters: the first command, and the poll on which the Guard counter reaches 25.
+    const guard = mem(self, MEM.guard);
+    if (guard === 0) {
+      setMem(self, MEM.guard, 1);
+      return use('x2-leblanc-not-so-mighty-guard');
     }
-
-    // Step 6 — Mach Fan 3/5, Flash Bomb 1/5, Hush Grenade 1/5.
-    const roll = ctx.rng.int(0, 4);
-    if (roll <= 2) return { kind: 'ability', id: 'x2-leblanc-mach-fan', targets: [] };
-    if (roll === 3) return { kind: 'ability', id: 'x2-leblanc-flash-bomb', targets: [] };
-    return { kind: 'ability', id: 'x2-leblanc-hush-grenade', targets: [] };
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Logos — **AUTHORED, not canon** [§5.3, §13 G3]
-// ---------------------------------------------------------------------------
-//
-// **No AI script is published for Logos, in any of his fights.** His infobox
-// carries no `aiscript` flag where Leblanc's and Ormi's do. What *is* known is
-// his Last Room ability set: Hail of Bullets + Russian Roulette on top of
-// Double Shot.
-//
-// §13's recommended reconstruction, shipped here and labelled: a **3-turn loop
-// of Double Shot, Double Shot, then Russian Roulette or Hail of Bullets**,
-// because the two published Syndicate scripts are both 3-6 turn loops with an
-// action-count override and that is the house shape. Nothing about the
-// encounter's design depends on the reconstruction being right; what it must
-// not do is present itself as canon.
-
-/** AUTHORED. §13 G3 — no source publishes Logos' script. */
-export const LOGOS_SCRIPT_IS_AUTHORED = true;
-
-export const logosScript: AiScript = {
-  id: 'ffx2-leblanc-logos',
-
-  decide(ctx: AiContext): Command | null {
-    const turn = nextTurn(ctx);
-    const step = ((turn - 1) % 3) + 1;
-
-    if (step <= 2) {
-      return { kind: 'ability', id: 'x2-logos-double-shot', targets: randomPartyTarget(ctx) };
+    if (guard + 1 === SECOND_GUARD_AT) {
+      setMem(self, MEM.guard, SECOND_GUARD_AT + 1);
+      return use('x2-leblanc-not-so-mighty-guard');
     }
-    if (ctx.rng.int(0, 1) === 0) {
-      return { kind: 'ability', id: 'x2-logos-russian-roulette', targets: randomPartyTarget(ctx) };
-    }
-    return { kind: 'ability', id: 'x2-logos-hail-of-bullets', targets: [] };
-  },
-};
-
-// ---------------------------------------------------------------------------
-// The two goons — Act I only. §4.6
-// ---------------------------------------------------------------------------
-//
-// **AUTHORED.** §4.6 publishes the goons' ability *lists* and nothing about how
-// they choose. Both scripts do the least interesting thing that uses the whole
-// published list: the Dr. Goon has one action, and the Fem-Goon picks uniformly
-// from hers. They exist to make Act I's lesson — Def 120 versus MDef 4 —
-// legible, not to be a threat.
-
-export const drGoonScript: AiScript = {
-  id: 'ffx2-leblanc-dr-goon',
-  decide: (ctx) => ({ kind: 'ability', id: 'x2-goon-strike', targets: randomPartyTarget(ctx) }),
-};
-
-const FEM_GOON_PARTY_WIDE = [
-  'x2-fem-goon-fire',
-  'x2-fem-goon-blizzard',
-  'x2-fem-goon-thunder',
-  'x2-fem-goon-water',
-] as const;
-
-const FEM_GOON_SINGLE = [
-  'x2-fem-goon-fira',
-  'x2-fem-goon-blizzara',
-  'x2-fem-goon-thundara',
-  'x2-fem-goon-watera',
-  'x2-leblanc-fan-slap',
-] as const;
-
-export const femGoonScript: AiScript = {
-  id: 'ffx2-leblanc-fem-goon',
-  decide(ctx: AiContext): Command | null {
-    if (ctx.rng.int(0, 1) === 0) {
-      return { kind: 'ability', id: ctx.rng.pick([...FEM_GOON_PARTY_WIDE]), targets: [] };
-    }
-    return {
-      kind: 'ability',
-      id: ctx.rng.pick([...FEM_GOON_SINGLE]),
-      targets: randomPartyTarget(ctx),
-    };
+    setMem(self, MEM.guard, guard + 1);
+    return cycleStep(ctx);
   },
 };
 
 export const leblancSyndicateScripts: readonly AiScript[] = [
   leblancScript,
   logosScript,
+  logosActIIScript,
   ormiScript,
+  ormiActIScript,
+  ormiActIIScript,
   drGoonScript,
   femGoonScript,
 ];
+
+export { drGoonScript, femGoonScript, logosActIIScript, logosScript, ormiActIIScript, ormiActIScript, ormiScript };
 
 export default leblancSyndicateScripts;
