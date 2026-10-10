@@ -6,20 +6,12 @@ also include the reverse engineered and decompiled game mechanics please. this i
 its art is **provisional** (new subjects only, never replacing an approved painting), end state first is waived for the night, and his concept pick is **A, "Two Rounds on the Ridge"**.
 Plan and answers: [ch-gui-review](../plans/ch-gui-review.md) (section 9.1). Research: [ffx-sinspawn-gui](../../research/ffx-sinspawn-gui.md) and [re-ffx-ai-gui](../../research/re-ffx-ai-gui.md) ("RE n").
 
-## PAUSED 2026-10-10 12:10 EDT (Bailey: "ok pause here for later resumption"): exactly where this stopped
+## Status 2026-10-10 (afternoon): finished, merged with W2, proved
 
-**Done and pushed (feba684a and earlier):** the whole chapter (engine plumbing, both fights, the seam, the scenes, the guide, the tests, the bench), and the first art install (the Gui parts in new folders and both Ridge plates).
-**Done in this checkpoint (not yet proven in a browser):**
-- Seymour's art is now its own subject, `characters/seymour-guest` (copies of his approved idle, cast, hurt and KO plus three provisional poses, attack / item / victory from the overnight run's `m5` series; scale 0.90 / 1.05 / 1.04 by eye, stance measured): `tools/gui-art-install.mjs` (it copies, never writes the approved folder), `SEYMOUR_GUEST_ART` in `sinspawn-gui-ids.ts`, the guest build's `spriteKey`. Installed into the local art mirror `D:\pyrefly-art-gui` (this worktree's `public/art` junction) and its manifest regenerated; **not** installed anywhere else (run the installer with `--dest` for any other tree).
-- Art picks decided by looking at the contact sheets: the body, head and arm picks stay as installed (the new body candidates `L1b 501..516` are no clear improvement); the Ridge plates stay (`p3-506`, `ruined-i2i-301`); Seymour's poses as above; **no seam stills** (Concept A is a white-out and three lines; the run's 18 stills are kept in `D:/pyrefly-overnight-art/2026-10-10/mushroom-seam-*`); arm-right "hit" candidates are the guard pose again, so that arm flinches on its idle.
-**Checks that have NOT run on this checkpoint:** any vitest file (the Gui data, rules, flow, story, bench and scene files were green at feba684a, before the `spriteKey` change; the art, manifest and party-stature suites have not been re-run against the new `seymour-guest` folder), the full suite, and every browser run with the final art (the one attempted desktop run died on a 30 s `page.goto` timeout against a cold Vite server, so nothing new was seen: Seymour's three new poses have never been looked at in the game, and their `scale` and `stanceX` are unverified). `npx tsc --noEmit` and `node tools/orphans.mjs` were clean after the change. The dev server on 5190 is stopped.
+The chapter is complete as briefed and sits on the engine of `origin/re-parity-w2` (919f2c78: the game's turn order, status step and per-turn ticks), merged by a real merge commit (9d886e2e; no rebase). **What is left is Bailey's, not the branch's:** the party estimate, the art picks (provisional), and listing the chapter on the board.
+History in short: step one and the checkpoint (f77abf91, 645fea67), the assembled chapter (feba684a), the paused checkpoint (b790865e, a71ed913: Seymour's own art subject), then the W2 merge below and the final proofs.
 
-**Next steps, in order:**
-1. `npm test`-style targeted run first: `node node_modules/vitest/vitest.mjs run tests/unit/chapters --testTimeout=60000 --maxWorkers=3`, then the art and manifest suites, `party-stature-chapters`, `guide-doc`, `chapter-numbers`; fix anything the new `seymour-guest` subject trips (a suite that wants every `characters/*` folder registered, for example).
-2. Start Vite (`node node_modules/vite/bin/vite.js --port 5190 --host 127.0.0.1 --strictPort`), **warm it with `curl` on `/` and `/src/main.ts` and wait until both answer before the run** (the cold start is what timed out), then `PYREFLY_BROWSER=gpu node tools/gui-smoke.mjs --out <dir> --tag desk --stop win` (about 12 min). LOOK at Seymour's attack, item and victory in the second fight: if the figure is the wrong size or slides, change `scale` in the `SEYMOUR_GUEST` table of the installer and re-run it (the table is the one place).
-3. `--lose2 --speed1 skip` (the retry checkpoint) and the phone run `--w 390 --h 844 --touch --speed1 skip --stop link2`; one browser at a time, no source edits during a run (Vite reloads the page).
-4. Convert a few shots to jpg into `docs/screenshots/ch-gui/` (1600x900 and 390x844), run the full suite once (`node node_modules/vitest/vitest.mjs run --testTimeout=60000 --maxWorkers=4`), update the Proof section, commit, push `ch-gui`, message "main".
-5. Then the open list below (the party estimate is Bailey's call or a real save read in the emulator).
+**Seymour's art (this afternoon's pick, looked at against his approved paintings).** He is painted from `characters/seymour-guest`: copies of his approved Macalania idle, cast, hurt and KO plus three provisional poses from the overnight run (attack `m5` 503, item `m5` 501, victory `m5` 506; scale 0.90 / 1.05 / 1.04 by eye, stance measured). In the game (the frames are in `docs/screenshots/ch-gui/seymour-pose-*.jpg`) the attack is the lean and reach on his run at the target, the item is the bottle in his lowered hand, the victory is the composed figure; each stands on the party's feet line at about Auron's height, so no scale was changed. No seam stills (Concept A is a white-out and three lines; the 18 candidates are in `D:/pyrefly-overnight-art/2026-10-10/mushroom-seam-*`); arm-right "hit" candidates are the guard pose again, so that arm flinches on its idle; the body, head, arm and plate picks stay.
 
 ## What exists
 
@@ -58,9 +50,11 @@ Scenes before and after (ten lines, nine lines), the strategy guide's card and p
 
 | Line | Chain won | Fight 2 won (of those that reach it) |
 |---|---|---|
-| the shipped advisor line (`src/engine/tactics/sinspawn-gui.ts`) | 196/200 (98 %) | 196/196 |
-| the same without Auron's Power Break | 116/200 (58 %) | 116/116 |
-| Attack only | 0/200 | none reached |
+| the shipped advisor line (`src/engine/tactics/sinspawn-gui.ts`) | 197/200 (98.5 %); was 196/200 before the W2 merge | 197/197 |
+| the same without Auron's Power Break | 125/200 (62.5 %); was 116/200 | 125/125 |
+| Attack only | 0/200 (both) | none reached |
+
+(The numbers moved by the game's own turn order and status rolls, not by any change to the chapter: nothing was tuned. The advisor's first-fight wipes were thunder 2, attack 1, dragon-fang 1, now attack 3. The by-line-up table below is from before the merge and was not re-measured.)
 
 **By line-up (40 seeds each, the same advisor line, every three of the six; first-fight openers):** the line is built around Auron's Power Break, so the default three (Tidus, Auron, Lulu) is the best of the twenty at 39/40; the rest of the Auron line-ups
 win 38/40 (Tidus, Auron, Wakka), 37/40 (Yuna, Auron, Lulu), 31/40 (Tidus, Yuna, Auron), 28/40 (Yuna, Auron, Wakka); line-ups without him win from 26/40 (Tidus, Wakka, Lulu) down to none (Yuna, Kimahri and Wakka; Kimahri's line-ups are the weakest on this
@@ -91,11 +85,12 @@ a file that already stands there is copied to `<real art folder>-replaced/` firs
 Seymour is painted from a NEW subject, `characters/seymour-guest` (`SEYMOUR_GUEST_ART` in `sinspawn-gui-ids.ts`; the guest build's `spriteKey`): the installer COPIES his approved Macalania idle, cast, hurt and KO into it (the approved `seymour-macalania` folder is only read, never written; each copy's sidecar says so and carries the measured stance) and adds three PROVISIONAL poses from the overnight run's `m5` series, whose mature face and chest marks match his approved paintings better than the younger `1` to `4` series the run listed: **attack** (the lean and reach, `attack-m5-cand-503`), **item** (the bottle in his lowered hand, `item-m5-cand-501`) and **victory** (the composed standing figure, `victory-m5-cand-506`). They face left like his approved set (the stage mirrors left-facing art onto the party side). A new subject has no measured row in the pose-registration tables, so each new pose's sidecar carries its own `scale` (head against the approved idle's head, by eye: 0.90, 1.05, 1.04) and `stanceX` (measured by the installer); `ready` and `critical` fall back to the idle. Both are an agent's pick, not Bailey's approval, and to be judged against the game's own look.
 The staging is an estimate for the framing (`scenes/mushroom-rock-road.ts`: the body 4.4 m, the head 3.6, the arms 3.3 against the party's 1.75).
 
-## Proof
+## Proof (on the merged tree, 9d886e2e plus this note)
 
-`npx tsc --noEmit` clean; the new and affected unit files pass (the story, data, rules, flow and bench files above, the three goldens, the guide and registry suites); `node tools/orphans.mjs` lists none of the new modules; the full suite once at the end
-(`npm test -- --testTimeout=60000 --maxWorkers=4`). In a real browser (headless Chromium, real GPU, real keys then the advisor's line, `tools/gui-smoke.mjs`): the typed word, party prep that holds, the pre scene, the four parts, a real-key Attack, the head's
-warning, the arms down and grown back, the seam, the guest hour's first menu, the post scene and the results; screenshots under `docs/screenshots/ch-gui/` (1600x900 and 390x844).
+- `npx tsc --noEmit` clean; `node tools/orphans.mjs` lists none of the chapter's modules (W2's own 52 orphans are W2's).
+- Unit: the Gui data, rules, flow, story, scene and bench files (7 files, 106 tests), `ffx-guest-member`, `mushroom-door`, `chapter-numbers` and `ffx-engine-golden` (18 digests, **unchanged by the merge**) pass. Before the merge the targeted set (141 files, 1,737 tests: the chapters folder, the art and manifest suites, party-stature, strategy-guide, story-triggers, cutscene poses) was green too. **The full suite, once on the merge (9d886e2e, `--testTimeout=60000 --maxWorkers=4`): 1,025 files, 1,013 passed, 4 failed, 8 skipped; 15,952 tests, 15,882 passed, 8 failed, 61 skipped, 1 todo.** The four failing files pinned things the chapter adds or the guest hour, not the engine, and were fixed in ddba7ad7 (each file green when run alone afterwards, 105 tests): `data-ffx-command-records` (the record counts 461 and 459, and Requiem's shatter byte 30 from the game's table), `re-parity-ai-evrae` (four rows added to the gaze-class fixture, each derived from the game's formula column; the same method reproduces all 412 existing rows), `re-parity-ai-merged-hooks` (the probe's attacker is Yuna in a link whose line-up leaves Tidus out) and `themes-chapter-cue-map` (the hidden chapter's cue row moved out of the map, which holds listed chapters only). A second full run on the fixed tree is the last line of this note if it finished before the push.
+- Browser (headless Chromium, real GPU, real keys then the advisor's line, `tools/gui-smoke.mjs`, on the merged tree with the final art): the desktop run to the results (the typed word, party prep that holds, the pre scene, the four parts, a real-key Attack, the head's warning, the arms down and regrown, the seam, the guest hour's first menu, the post scene on the ruined plate, the results), `--lose2 --speed1 skip --seed 3` (the defeat panel, RETRY, the second fight again on its first turns with Seymour at 1,200), and the phone run (`--w 390 --h 844 --touch --stop link2`): all pass, no page errors, no missing art. Shots: `docs/screenshots/ch-gui/` (1600x900 and 390x844, jpg).
+- Notes on the runs: at `--speed1 skip` the first fight's outcome varies run to run even on one seed (the real-key Attack and the advisor race the clock), so a run that loses the first fight is not a bug; retry the run. **One unexplained event:** one retry attempt (before the W2 merge) threw `FFXEngine: init(setup) has not been called` after RETRY and the menu never opened; it did not repeat in the four later tries (one before the merge, three on the merged tree). It happened with the smoke's `autoBattle('defend')` still set on the presenter at `skip` speed, so it may be the smoke's own race, but it was not isolated: if a player ever reports a dead menu after RETRY on the second fight, start there.
 
 ## Open, in the order they matter
 
@@ -104,6 +99,20 @@ warning, the arms down and grown back, the seam, the guest hour's first menu, th
 3. **The Guest slab** (a banner when Seymour joins) is not built; the pre and post scenes and the guide carry him. Cut before a link, as ordered.
 4. The RE note's Requiem line, the Lancet line and the Stoic count (above) are corrections for the note's next revision.
 5. Listing the chapter on the board is the driver's word, not this branch's.
+
+## Merged with W2 (`origin/re-parity-w2` 919f2c78), 2026-10-10: how the chapter sits in W2's structure
+
+Merge commit 9d886e2e, six textual conflicts, all of the "both changed the same lines" kind. Nothing of W2 was reverted (the merge differs from `origin/re-parity-w2` in 75 files, every one of them the chapter's own or a shared file the chapter already touched; `git diff --name-only origin/re-parity-w2 HEAD`).
+
+| W2 changed | Where the chapter's rule went |
+|---|---|
+| `ActorRuntime` and `FFXRuntime` moved to `runtime.ts` | `FFXRuntime.noSwitch` is there (the only runtime field the chapter adds) |
+| the turn order is the game's tie key on byte counters (`adapt/slots.ts`); the old priority list in `turnQueue.ts` is gone | Seymour is **party slot 7** in `PARTY_SLOT` (the game's eighth party slot, which W2's header said no chapter used); his row of the party table is actor 7, so his random stream, opening draw and tie key are the game's. The script random's party order (`ai/script-random.ts`) already named him |
+| `applyStatus` is gone; infliction is the game's status step on the command record | Venom's Slow with duration byte 0 is **the kernel's own behaviour** (`kernel/status-inflict.ts#temporalStep` writes Slow's counter 0 and clears Haste's: strips Haste, slows no one), so `statuses.ts` carries no rule of ours. The Venom record is `{ rank: 3, chances: [[3, 100], [24, 100]] }` and no `durations` (the byte is 0) |
+| command records carry `rank`, `chances`, `durations` | Requiem (rank 4), the Lv. 1 Key Sphere (rank 2) and the Gui rows (rank 3) carry the field |
+| Overdrive on the game's rules is W5 | Seymour's **Stoic gauge and Requiem stay on the shared `overdrive.ts` path** (the guest branch of the Stoic count, `victim.guest !== undefined`), so W5's merge onto this chapter is mechanical; `research/re-ffx-ai-gui.md` section 7 is what the game's files say about him as a guest |
+
+Three test pins moved with the game's draws, each with its reason in the test, nothing tuned: `sinspawn-gui-data` (the Venom record's shape), `sinspawn-gui-rules` (the Stoic test takes the first seed from 3 on where Gui's Attack lands: a physical blow rolls to hit and W2 changed the draws), `ffx-guest-member` (12 decisions instead of 24: Natus's Break now ends the lone survivor at step 22, it was about 30). Bench numbers: "Numbers" above.
 
 ## Merging with the Experiment lane (`ch-experiment`, 8f268b17)
 
