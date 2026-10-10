@@ -259,6 +259,12 @@ One run of the whole unit suite on `632ea7b5` plus this note's working tree (202
 Grothia's and Pterya's attacks and specials became explicit single-target rows, the sample moved, and situation 65 reached Stamina Spring, whose drain emits a second damage event, on the user, that the test counted as a hit on the target. Fixed in the test (only the
 events that land on the target are compared) and re-run green (13 of 13). Nothing else outside the art-only set failed, and `ffx2-atb-golden` and `ff7-golden` passed unchanged.
 
+## 10. After the merge into release candidate 1 (2026-10-09, added by the merge; the rest of this note is as lane C left it)
+
+Merged into `re-parity-rc1` as `348e2694`. This note names lane B's `hit-hooks.ts` and `hit-event.ts` and `FFXRuntime.reactions` throughout; the candidate deleted them (one runner, `ai/hooks.ts#runOnHit`), and the nine scripts register through `ai/hit-script.ts` and queue through
+`ai/hit-gates.ts#react` over the one reaction queue; no rule changed. The merged tree reproduces this note's six golden digests and its 500-seed results (section 4) seed by seed. Bailey's answers of the same day to section 8 (his option labels, verbatim): decision 1, Chapter XVIII: **"Ship 12, retune our line
+later (Recommended)"**; decision 4, Evrae's Delay: **"Turn it on (Recommended)"** (`DELAY_ADVANCES_HASTE_PHASE` is true, commit `3663cd3a`). Decisions 2, 3, 5, 6 and 7 are still open. Everything about the merge, the proofs and the other flip is in [re-parity-rc1](re-parity-rc1.md).
+
 ## How to re-run
 
 ```
