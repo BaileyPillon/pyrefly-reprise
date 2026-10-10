@@ -33,6 +33,8 @@
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
+import { NATUS_LINE } from './guides/natus-line.ts';
+import { NATUS_LINE_TEXT } from './guides/natus-line-text.ts';
 
 /** Chapter X — Seymour Natus, the north end of the Highbridge of Bevelle. */
 export const NATUS_META: ChapterMeta = {
@@ -72,7 +74,8 @@ export const NATUS_META: ChapterMeta = {
       rule: { kind: 'victory' },
     },
   ],
-  tip: 'He has no Defense, so every swing lands in full. Soften a stone guardian at once, and Haste only Tidus and Auron.',
+  // The shipped line's tip; a candidate line (`./guides/natus-line.ts`) teaches its own (`./guides/natus-line-text.ts`).
+  tip: NATUS_LINE_TEXT[NATUS_LINE].tip ?? 'He has no Defense, so every swing lands in full. Soften a stone guardian at once, and Haste only Tidus and Auron.',
   snapshots: [
     { image: 'backdrops/bevelle-highbridge.png', caption: 'the city lit at night' },
     { image: 'characters/seymour-natus/cast.png', caption: 'no longer a man' },
