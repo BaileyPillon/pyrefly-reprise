@@ -69,18 +69,18 @@ describe('Shiva (m167): the order the script tests, F1 to F3', () => {
 
   it('F2: the table is chosen on the counter AFTER adding 3: pre-add 60 is the early table, 62 the late one', () => {
     // Early (new counter < 65): mod 4 = 0 Heavenly Strike, 1 Blizzaga, 2 or 3 Attack. Late (>= 65): 0 Heavenly Strike, 1 Chain Attack (chain counter 1), 2 or 3 Blizzaga.
-    const early = exactTally(outcome({ [AC]: 60 }), 4);
+    const early = exactTally(outcome({ [AC]: 60 }), 120);
     expect(share(early, 'x2-shiva-heavenly-strike|chain=0|ac=63')).toBeCloseTo(P(16384), 12);
     expect(share(early, 'x2-shiva-blizzaga|chain=0|ac=63')).toBeCloseTo(P(16384), 12);
     expect(share(early, 'x2-shiva-kick|chain=0|ac=63')).toBeCloseTo(P(32768), 12);
     expect(total(early)).toBeCloseTo(1, 12);
-    const late = exactTally(outcome({ [AC]: 62 }), 4);
+    const late = exactTally(outcome({ [AC]: 62 }), 120);
     expect(share(late, 'x2-shiva-heavenly-strike|chain=0|ac=65')).toBeCloseTo(P(16384), 12);
     expect(share(late, 'x2-shiva-triple-attack|chain=1|ac=65')).toBeCloseTo(P(16384), 12);
     expect(share(late, 'x2-shiva-blizzaga|chain=0|ac=65')).toBeCloseTo(P(32768), 12);
     expect(total(late)).toBeCloseTo(1, 12);
     // 61 + 3 = 64 stays early; the boundary is the pre-add counter 62.
-    expect(share(exactTally(outcome({ [AC]: 61 }), 4), 'x2-shiva-kick|chain=0|ac=64')).toBeCloseTo(P(32768), 12);
+    expect(share(exactTally(outcome({ [AC]: 61 }), 120), 'x2-shiva-kick|chain=0|ac=64')).toBeCloseTo(P(32768), 12);
   });
 
   it('F1: Triple Attack is three polls of Chain Attack, each with its own girl, no gain after the first, no Diamond Dust test between', () => {
@@ -211,7 +211,7 @@ describe('Anima (m169): A1', () => {
       const a = fresh({ [AC]: 0 });
       const board = boardOf(a, [a, ...girls()], rng);
       return `${cmd(script.decide(board.ctx)).id}|ac=${a.aiMemory?.[AC]}`;
-    }, 5);
+    }, 120);
     expect(share(tally, 'x2-anima-pain|ac=5')).toBeCloseTo(P(residueCount(0, 5)), 12);
     expect(share(tally, 'x2-anima-stare|ac=5')).toBeCloseTo(1 - P(residueCount(0, 5)), 12);
     expect(residueCount(0, 5)).toBe(13108);

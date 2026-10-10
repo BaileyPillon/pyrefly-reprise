@@ -126,7 +126,7 @@ describe('The Magus Sisters (m171, m172, m173): M1 to M7', () => {
       const t = trio({ cindy: { [TURN]: 0 } });
       const c = cmd(poll(t, t.cindy, rng));
       return c.id === 'x2-cindy-regen' ? `${c.id}:${c.targets[0]}` : c.id;
-    }, 5);
+    }, 120);
     expect(share(tally, 'x2-cindy-absorb')).toBeCloseTo(P(13108), 12);
     expect(share(tally, 'x2-cindy-demi')).toBeCloseTo(P(13107), 12);
     expect(share(tally, 'x2-cindy-camisade')).toBeCloseTo(P(26214), 12);
@@ -173,7 +173,7 @@ describe('The Magus Sisters (m171, m172, m173): M1 to M7', () => {
     const tally = exactTally((rng) => {
       const t = trio();
       return cmd(poll(t, t.sandy, rng)).id;
-    }, 3);
+    }, 120);
     expect(share(tally, 'x2-sandy-razzia')).toBeCloseTo(P(21846), 12);
     expect(share(tally, 'x2-sandy-attack')).toBeCloseTo(P(43690), 12);
     const t = trio();
@@ -184,7 +184,7 @@ describe('The Magus Sisters (m171, m172, m173): M1 to M7', () => {
     const tally = exactTally((rng) => {
       const t = trio();
       return cmd(poll(t, t.mindy, rng)).id;
-    }, 6);
+    }, 120);
     for (const spell of ['firaga', 'blizzaga', 'thundaga', 'waterga']) expect(share(tally, `x2-mindy-${spell}`)).toBeCloseTo(P(10923), 12);
     expect(share(tally, 'x2-mindy-passado')).toBeCloseTo(P(21844), 12);
     // The pick comes first: draws [pick 1, roll 0] -> Rikku, Firaga.

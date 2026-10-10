@@ -44,7 +44,7 @@ describe('the action entry (m152 worker 1): rows 1 to 3 of 5.1', () => {
       const p = paragonUnit();
       const c = cmd(paragonScript.decide(boardOf(p, [p, ...girls()], rng).ctx));
       return `${c.id}|step=${p.aiMemory?.[STEP]}`;
-    }, 4);
+    }, 120);
     // P4: case 1 is "poison and confuse", case 2 "itchy" (the first build had the two swapped).
     expect(share(tally, 'paragon-attack-poison|step=1')).toBeCloseTo(0.25, 12);
     expect(share(tally, 'paragon-attack-confuse|step=1')).toBeCloseTo(0.25, 12);
@@ -60,7 +60,7 @@ describe('the action entry (m152 worker 1): rows 1 to 3 of 5.1', () => {
       const p = paragonUnit({ [STEP]: 1 });
       const c = cmd(paragonScript.decide(boardOf(p, [p, ...girls()], rng).ctx));
       return `${c.id}|step=${p.aiMemory?.[STEP]}`;
-    }, 2);
+    }, 120);
     expect(share(tally, 'paragon-attack-drain|step=0')).toBeCloseTo(0.5, 12);
     expect(share(tally, 'paragon-genesis|step=0')).toBeCloseTo(0.5, 12);
     const p = paragonUnit({ [STEP]: 1 });

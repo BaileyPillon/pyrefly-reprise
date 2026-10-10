@@ -57,7 +57,7 @@ describe('the action entry (m295 / m328): rows 4 to 7 of 7.1, exactly', () => {
     // r1 mod 2 = 0 -> the chain; else r2 mod 2 = 0 -> a girl, then r3 mod 3: 0 Moon, 1 Mire, 2 Mist; else r4 mod 3 = 0 -> Flare, else Demi.
     const quarter = P(mod2(1)) * P(mod2(0));
     for (const [script, id, mire] of [[tremaScript, 'trema', 'trema-beguiling-mire'], [tremaArenaScript, 'trema-arena', 'trema-arena-beguiling-mire']] as const) {
-      const tally = exactTally(run(script, id), 6);
+      const tally = exactTally(run(script, id), 12);
       expect(share(tally, 'trema-dying-star')).toBeCloseTo(P(mod2(0)), 12);
       expect(share(tally, 'trema-waning-moon')).toBeCloseTo(quarter * P(mod3(0)), 12);
       expect(share(tally, mire)).toBeCloseTo(quarter * P(mod3(1)), 12);
@@ -70,7 +70,7 @@ describe('the action entry (m295 / m328): rows 4 to 7 of 7.1, exactly', () => {
       expect(share(tally, 'trema-demi')).toBeLessThan(0.17);
       expect(share(tally, 'trema-flare')).toBeCloseTo(1 / 12, 3);
     }
-  });
+  }, 120_000); // about a second alone; 12 classes over four rolls, twice, so a loaded machine (the full suite, several lanes) needs room
 
   it('T5: Beguiling Mire is one row (0x40d4) in both versions: power 5, three hits, Stop chance 120', () => {
     expect(ab('trema-beguiling-mire')).toMatchObject({ power: 5, hits: 3 });

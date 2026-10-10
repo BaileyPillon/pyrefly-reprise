@@ -85,8 +85,10 @@ class Stop extends Error {}
 
 /**
  * Every outcome of `run` with its probability. `run(rng)` must build its own fresh state, play one decision and return a
- * string key for the outcome. `modulus` is the least common multiple of every roll's `n` in that decision (2, 3, 4, 5, 6 or 8
- * alone is enough for the scripts here); picks branch over 6 equal classes, which is exact for 1, 2, 3 and 6 candidates.
+ * string key for the outcome. `modulus` is a common multiple of every roll's `n` in that decision. The tests pass 120 (the least
+ * common multiple of 1 to 6 and 8) wherever the script rolls once, on purpose: a table taken over exactly `n` classes cannot tell
+ * `mod 3` from `mod 4`, so a mutant that changes the modulus would survive (Sandy's odds did in the first mutation pass); over 120
+ * classes the two give different shares. Picks branch over 6 equal classes, which is exact for 1, 2, 3 and 6 candidates.
  */
 export function exactTally(run: (rng: Rng) => string, modulus: number): Map<string, number> {
   const out = new Map<string, number>();
