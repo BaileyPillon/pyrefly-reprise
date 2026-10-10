@@ -140,7 +140,7 @@ export interface EncounterChainOptions {
   /**
    * The Save Sphere between links (O-4 = C, FA2 = b; FFX-2 Chapter XI only).
    * Called instead of a bare re-stage when the next formation carries
-   * `restoresPartyOnEntry`; it must call `swap` exactly once, under its cover,
+   * `restoresPartyOnEntry` (and not `noSaveSphereCard`: the Experiment's Act II restores with no card); it must call `swap` exactly once, under its cover,
    * and resolve after. Omitted, or for any other formation, the next link is
    * re-staged exactly as before.
    */
@@ -235,7 +235,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
       engine.init(setup);
       await stage.stage(engine.state());
     };
-    if (group.restoresPartyOnEntry === true && opts.saveSphere) {
+    if (group.restoresPartyOnEntry === true && group.noSaveSphereCard !== true && opts.saveSphere) {
       // Under the Save Sphere's cover: re-init, re-stage, and show the HUD the
       // refilled HP and MP before the wash clears.
       let swapped = false;

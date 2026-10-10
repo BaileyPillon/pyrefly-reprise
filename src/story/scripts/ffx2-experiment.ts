@@ -9,7 +9,8 @@
  *
  * 1. **pre**: the Faction's boast and dare, the rules (its power rises with the parts dug up in the desert, it breaks when beaten and can be rebuilt), and the readout, 1 / 1 / 1.
  * 2. **the seam** (`act-one-broken`, a chain seam, a mid-battle script that plays at Act I's fall): the first win, the cheeky line Paine whispers and Yuna delivers in Al Bhed, the
- *    technician's delight, **the rebuild** (our compression of the game's hours of digging: each piece is installed the moment it is found), the readout again, 5 / 5 / 5, and the
+ *    technician's delight, **the rest** (one plain narration line: there is no Save Sphere at Djose, so the flow plays no card there; the engine still restores the party on entry to Act II),
+ *    **the rebuild** (our compression of the game's hours of digging: each piece is installed the moment it is found), the readout again, 5 / 5 / 5, and the
  *    confession that the Faction overbuilt it and cannot stop it. It must fit {@link SEAM_BUDGET_MS}: a seam plays with the player's hands off.
  * 3. **mid-battle callouts** in Act II (two, each a short interrupt): the first Lifeslicer and the first Annihilator, in Paine's and Rikku's voices, naming the answer without naming the button.
  * 4. **post**: the crew's callback to its first boast, and **Paine's one sincere beat** (who taught her Al Bhed, and what changed her), the chapter's emotional point, then the run and the chase.
@@ -57,31 +58,25 @@ const PRE: StoryScript = [
 
 /**
  * The chain seam between the acts: Act I's fall to the full weapon's entrance. Written to fit {@link SEAM_BUDGET_MS} (the runner cuts a seam at its own authored length plus a
- * short grace, capped at that budget); every `say` carries its own `auto`, so no beat sits on a Confirm. About 22 seconds as authored.
+ * short grace, capped at that budget); every `say` carries its own `auto`, so no beat sits on a Confirm. 24.1 seconds as authored by `scriptDurationMs` (typing included), 1.9 s under the budget; `tests/unit/chapters/experiment-story.test.ts` holds it there.
  */
 const SEAM: StoryScript = [
-  camera('action', 500),
-  say('none', 'The machine folds at the waist. Smoke curls out of its joints.', { auto: 1700 }), // ours: it breaks
-  say('rikku-x2', 'We trashed it! Ta-daaa!', { auto: 1100 }), // ours: Rikku sets up
-  say('yuna-x2', 'We really did.', { auto: 1000 }), // ours: Yuna reacts
-  say('none', 'Paine whispers something. Yuna strikes a pose and says it in Al Bhed.', { auto: 2000 }), // ours: the cheeky line, stage direction only
-  say('none', 'The technician laughs. "I like her. I will build something stronger."', { auto: 2000 }), // ours: he likes the attitude
-  say('yuna-x2', 'He understood me?!', { auto: 1000 }), // ours: Yuna is surprised
-  say('rikku-x2', 'Language, Yunie!', { auto: 900 }), // ours: Rikku scolds
+  camera('action', 400),
+  say('none', 'The machine folds in half. Smoke pours out.', { auto: 1200 }), // ours: it breaks
+  say('rikku-x2', 'We trashed it! Ta-daaa!', { auto: 800 }), // ours: Rikku sets up
+  say('none', 'Paine whispers. Yuna repeats it in Al Bhed, with a pose.', { auto: 1400 }), // ours: the cheeky line, stage direction only
+  say('none', 'The technician laughs. "I will build something stronger."', { auto: 1500 }), // ours: he likes the attitude
+  say('yuna-x2', 'He understood me?!', { auto: 800 }), // ours: Yuna is surprised
   flash(200, '#fff1b8'),
-  say('none', 'Days in the desert. Every piece they dig up goes straight onto the machine.', { auto: 1700 }), // ours: the dig, compressed; upgrades install the moment a piece is found
-  say('none', 'ATTACK 2... 3... 4... 5.', { auto: 900 }), // ours: the readout climbs
-  shake(6, 250),
-  say('none', 'DEFENSE 2... 3... 4... 5.', { auto: 900 }),
-  shake(8, 250),
-  say('none', 'SPECIAL 2... 3... 4... 5.', { auto: 900 }),
-  shake(12, 350),
-  say('none', 'They roll it back in. Nobody is polishing it now.', { auto: 1700 }), // ours: the rebuilt machine, out of control
-  say('none', '"We, um, got carried away. It will not listen to us."', { auto: 2000 }), // ours: the confession (our words over the sourced beat)
-  say('paine', 'You built it. And cannot stop it?', { auto: 1400 }), // ours: Paine's flat reaction
-  say('rikku-x2', 'Shame on you!', { auto: 900 }), // ours: Rikku scolds again
-  say('yuna-x2', 'There is only one thing to do.', { auto: 1300 }), // ours: Yuna's go-call
-  camera('idle', 500),
+  // The rest between the acts, in one plain line (the driver, 2026-10-10: no Save Sphere card at Djose; the engine still restores the party on entry to Act II).
+  say('none', 'The girls rest while the Machine Faction rebuilds the Experiment.', { auto: 1400 }),
+  say('none', 'ATTACK 5. DEFENSE 5. SPECIAL 5.', { auto: 1200 }), // ours: the readout, 5 / 5 / 5 (our compression of the game's days of digging)
+  shake(8, 300),
+  say('none', '"We, um, got carried away. It will not listen to us."', { auto: 1400 }), // ours: the confession (our words over the sourced beat)
+  say('paine', 'You built it. And cannot stop it?', { auto: 1200 }), // ours: Paine's flat reaction
+  say('rikku-x2', 'Shame on you!', { auto: 800 }), // ours: Rikku scolds
+  say('yuna-x2', 'There is only one thing to do.', { auto: 1100 }), // ours: Yuna's go-call
+  camera('idle', 400),
 ];
 
 // --------------------------------------------------------------------------- mid

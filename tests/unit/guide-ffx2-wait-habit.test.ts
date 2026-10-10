@@ -51,9 +51,9 @@ describe('the rule itself', () => {
     expect(WAIT_SPLIT_HABIT_RULE.short.length).toBeLessThanOrEqual(SHORT_MAX);
   });
 
-  it('only Chapters V and VI (and XI, XV and XVI, the ship briefs) carry it; no FFX guide carries a clock rule', () => {
+  it('only Chapters V and VI (and XI, XV and XVI, the ship briefs, and the hidden Experiment) carry it; no FFX guide carries a clock rule', () => {
     const carriers = GUIDES.filter((g) => g.clockRules).map((g) => g.id);
-    expect(carriers.sort()).toEqual([FFX2_LEBLANC_GUIDE.id, FFX2_VEGNAGUN_SHUYIN_GUIDE.id, 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose'].sort());
+    expect(carriers.sort()).toEqual([FFX2_LEBLANC_GUIDE.id, FFX2_VEGNAGUN_SHUYIN_GUIDE.id, 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'ffx2-masterpiece-theatre'].sort());
   });
 });
 

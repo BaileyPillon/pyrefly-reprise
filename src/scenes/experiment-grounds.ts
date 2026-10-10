@@ -40,11 +40,15 @@ export const EXPERIMENT_GROUNDS_FRAME: DjosePlateFrame = {
 export const EXPERIMENT_SPOT: [number, number, number] = EXPERIMENT_GROUNDS_FRAME.ixion ?? [4.2, 0, -6.0];
 
 /**
- * The Experiment's world height (staging, ours). A walking weapon taller than the girls and well under an aeon: about twice the girls' 1.78, with the boss height the
- * Djose scenes use (3.4) as the ceiling. The real figure is the art run's painting; the model's own ratio to the girls is not measured for this monster (no row in
- * `data/ffx2/fiend-stature.ts`, and a stature is only ever a ratio read from the game's model).
+ * The Experiment's world height: the game's own ratio to the girls, at the Chamber's party height. The RE note (`research/re-ffx2-experiment.md` section 2 and section 12 Q7) gives
+ * the body's real height as 50.78 (the model's 25.39 times the engine scale 2.0, `[H]`), and the girls' mean in this party's dresses is 17.727 (White Mage Yuna 16.77, Dark Knight
+ * Rikku 18.54, Dark Knight Paine 17.87: the same means Chapters XI, XV and XVI read in `data/ffx2/fiend-stature.ts`), so the body stands 2.86 times the girls: 5.098 over the Chamber's
+ * 1.78. It is kept here and not in that shared table because the table holds engine scales of 1 and 4 only (its test pins that). Both bodies share the model (Special 1's scene
+ * is the body with no extra modules), so both stand at this height. A ratio, not a measure of the painting: the art run's picture is scaled to it.
  */
-export const EXPERIMENT_FIGURE_HEIGHT = 3.6;
+export const EXPERIMENT_REAL_HEIGHT = 50.78;
+export const EXPERIMENT_GIRLS_MEAN = (16.77 + 18.54 + 17.87) / 3;
+export const EXPERIMENT_FIGURE_HEIGHT = Math.round(DJOSE_PARTY_HEIGHT * (EXPERIMENT_REAL_HEIGHT / EXPERIMENT_GIRLS_MEAN) * 1000) / 1000;
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [EXPERIMENT_SPOT, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 

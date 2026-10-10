@@ -124,8 +124,9 @@ export const experimentActOneGroup: EnemyGroupDef = attachMonsterRecords({
 /**
  * Act II: the full weapon at 5 / 5 / 5, and the chapter's **retry checkpoint**. `restoresPartyOnEntry` is the Save Sphere's rule (the party enters at full HP and MP, a girl
  * KO'd in Act I stands up, items spent stay spent) and marks the link as the checkpoint (`app/screens/BattleChainCheckpoint.ts#checkpointAt`): a loss in Act II reopens Act II, never
- * Act I or the seam. The sourced shape is the game's (hours of digging and a repair between the two fights restore the party); the Save Sphere card the flow plays at this boundary
- * is the nearest existing presentation of "the party is restored", and is one line to drop if Bailey dislikes it (remove this flag and the carried state stands).
+ * Act I or the seam. The sourced shape is the game's (hours of digging and a repair between the two fights restore the party). There is no Save Sphere at Djose, so the link sets
+ * `noSaveSphereCard` (the driver's call, 2026-10-10): the engine restores and the retry checkpoint stands, the flow re-stages plainly with no card, and the seam's last narration
+ * lines say the girls rested (`story/scripts/ffx2-experiment.ts`). Drop `restoresPartyOnEntry` as well and the carried state stands, with no restore and no checkpoint.
  */
 export const experimentActTwoGroup: EnemyGroupDef = attachMonsterRecords({
   id: DJOSE_EXPERIMENT_2,
@@ -134,6 +135,7 @@ export const experimentActTwoGroup: EnemyGroupDef = attachMonsterRecords({
   canEscape: false,
   musicCues: ACT_II_CUE,
   restoresPartyOnEntry: true,
+  noSaveSphereCard: true,
 });
 
 export const experimentGroups: readonly EnemyGroupDef[] = [experimentActOneGroup, experimentActTwoGroup];

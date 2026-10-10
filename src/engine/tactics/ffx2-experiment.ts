@@ -1,13 +1,14 @@
 /**
  * The Experiment (FFX-2 Chapter 5, Djose Temple; our hidden chapter "The Experiment"): the line the sources' clears use. **FFX-2 only** [AGENTS.md rule 14].
  *
- * Registered under the FFX-2 game in `./lookup.ts`, so an FFX board never reaches it; the combatant id is the chapter's own `x2-experiment`. The line is written to
- * win **every** choice of levels the prep tab offers, and is measured on all of them (`tests/unit/chapters/experiment-bench.test.ts`).
+ * Registered under the FFX-2 game in `./lookup.ts`, so an FFX board never reaches it; the chapter's two bodies are `x2-experiment-prototype` (Act I) and `x2-experiment` (Act II). The line
+ * is the same for both and is measured on both acts, and on every Special level the model knows (`tests/unit/chapters/experiment-engine.test.ts`, `experiment-bench.test.ts`); it is a
+ * line, an input to a measurement, and nothing in the boss was tuned to it (D-410).
  *
  * ## The line
  *
  * The guides' clear (Jegged's Chapter 5 Djose page, the wiki, `research/ffx2-experiment.md`): two Dark Knights on **Darkness**, which ignores Defense (the Experiment's Defense
- * climbs to 205), and a White Mage who puts **Protect** up before anything else (the wiki: "having Protect up at the start of the battle mitigates the damage"), then **Shell** when
+ * climbs to 205), and a White Mage who puts **Protect** up before anything else (the wiki's clear has Protect up from the first turn), then **Shell** when
  * the Annihilator is on its list, keeps the party healed and raises whoever Lifeslicer or a Rocket Launcher put down.
  *
  * **Yuna (White Mage)**, in this order:

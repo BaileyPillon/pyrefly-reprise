@@ -31,7 +31,7 @@ export interface ExperimentLevels {
   readonly special: UpgradeLevel;
 }
 
-/** Act I: the first test, nothing dug yet (Jegged: "Attack Lv. 1, Defense Lv. 1, Special Lv. 1"). */
+/** Act I: the first test, nothing dug yet (Jegged's first fight is the machine at Level 1 in all three). */
 export const ACT_I_LEVELS: ExperimentLevels = { attack: 1, defense: 1, special: 1 };
 /** Act II: the full weapon, all three at the maximum, the state the game's Episode Complete needs a win in. */
 export const ACT_II_LEVELS: ExperimentLevels = { attack: 5, defense: 5, special: 5 };

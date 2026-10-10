@@ -119,9 +119,13 @@ export interface ChapterRun {
 
 /**
  * The chapter as the flow plays it, both acts with the chapter's own mid-battle triggers (`setupForChapter`, then `setupForNextLink`: the Act II setup restores the party and keeps
- * the triggers), driven by the shipped line. `before(engine, link)` runs right after each link's init, for a test that wants to set a state.
+ * the triggers), driven by the shipped line. `before(engine, link)` runs right after each link's init, for a test that wants to set a state; `onDecision(engine, decision, link)` runs at each
+ * player decision before it is answered, for a test that reads the board (the guide panel's view).
  */
-export function driveChapterWithTriggers(seed = 1, opts: ExperimentDriveOptions & { before?: (engine: FFX2Engine, link: number) => void } = {}): ChapterRun {
+export function driveChapterWithTriggers(
+  seed = 1,
+  opts: ExperimentDriveOptions & { before?: (engine: FFX2Engine, link: number) => void; onDecision?: (engine: FFX2Engine, decision: Input, link: number) => void } = {},
+): ChapterRun {
   const logs: BattleEvent[][] = [];
   const engines: FFX2Engine[] = [];
   let setup = setupForChapter(FFX2_EXPERIMENT, seed);
@@ -139,6 +143,7 @@ export function driveChapterWithTriggers(seed = 1, opts: ExperimentDriveOptions 
       if (d.kind === 'battle-over') { outcome = d.result.outcome; break; }
       if (d.kind === 'waiting') { engine.tick(Math.max(1, d.nextEventMs)); continue; }
       if (d.kind !== 'player-input') continue;
+      opts.onDecision?.(engine, d, link);
       const picked = opts.line === 'naive' ? null : intendedStrategy(d.actorId, d.commands, engine);
       engine.submit(picked ?? fallback(d));
     }
