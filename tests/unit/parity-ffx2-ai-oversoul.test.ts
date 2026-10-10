@@ -9,8 +9,10 @@
  * Impact once, then 1/5 each of Ultima, Holy, Judgment, Genesis, Big Bang (13,108 of 65,536 for the first); the MP-0 branch and the
  * idle branch (1/3 each of Judgment, Genesis, Big Bang) are the note's tables.
  *
- * Kept as Bailey decided (D-151, "it waits to be hit"), listed for him: rows 1 to 3 act only once it has a reason
- * (`OVERSOUL_ESTIMATES.lowHpActsEveryTurn`, false); `lowHpActsEveryTurn = true` is the game's own rule and is tested too.
+ * Kept as Bailey decided (D-151, "it waits to be hit"), listed for him: rows 1 to 3 act only once it has a reason (a result has
+ * landed, or the idle limit has passed; `OVERSOUL_ESTIMATES.lowHpActsEveryTurn`, false); after the first result the state the script
+ * sets is never cleared by those rows, so under 40 percent he acts on every poll, as the script does. `lowHpActsEveryTurn = true`
+ * is the game's own rule (it also acts untouched) and is tested too.
  *
  * Mutation-checked by hand (scratch, one line at a time, each caught here): the float test as a double; "below" as "at or below";
  * the answer made at once instead of next poll; the copy aimed at the girl's group; the Demi loop clearing its state; the Normal
@@ -166,7 +168,7 @@ describe('HP row A (below 40 percent): Reflect, MP 0, then mod 8 (6.1)', () => {
   const LOW = 80000;
 
   it('1/8 each of Firaga, Thundaga, Blizzaga, Waterga (in that order, on the party) and 1/2 Attack on a girl, exactly', () => {
-    const tally = exactTally((rng) => cmd(poll({}, LOW, IDLE, rng).c).id, 8);
+    const tally = exactTally((rng) => cmd(poll({}, LOW, IDLE, rng).c).id, 120);
     for (const spell of ['firaga', 'thundaga', 'blizzaga', 'waterga']) expect(share(tally, `paragon-os-${spell}`)).toBeCloseTo(P(8192), 12);
     expect(share(tally, 'paragon-os-attack')).toBeCloseTo(0.5, 12);
     expect(total(tally)).toBeCloseTo(1, 12);
@@ -185,7 +187,7 @@ describe('HP row A (below 40 percent): Reflect, MP 0, then mod 8 (6.1)', () => {
   });
 
   it('MP 0 -> the MP-0 branch (row 3): mod 2, 0 Osmose, 1 Attack, each on a uniform girl', () => {
-    const tally = exactTally((rng) => cmd(poll({}, LOW, IDLE, rng, (u) => (u.mp = 0)).c).id, 2);
+    const tally = exactTally((rng) => cmd(poll({}, LOW, IDLE, rng, (u) => (u.mp = 0)).c).id, 120);
     expect(share(tally, 'x2-shared-osmose')).toBeCloseTo(0.5, 12);
     expect(share(tally, 'paragon-os-attack')).toBeCloseTo(0.5, 12);
   });
@@ -206,7 +208,7 @@ describe('HP row B (below 10 percent): Final Impact once, then mod 5 (6.1)', () 
   });
 
   it('afterwards: Ultima 13,108, Holy 13,107, Judgment 13,107, Genesis 13,107, Big Bang 13,107 of 65,536; Final Impact never again', () => {
-    const tally = exactTally((rng) => cmd(poll({ [K.finalUsed]: true }, LOW, IDLE, rng).c).id, 5);
+    const tally = exactTally((rng) => cmd(poll({ [K.finalUsed]: true }, LOW, IDLE, rng).c).id, 120);
     expect(share(tally, 'paragon-os-ultima')).toBeCloseTo(P(13108), 12);
     for (const id of ['paragon-os-holy', 'paragon-os-judgement', 'paragon-genesis', 'paragon-big-bang']) expect(share(tally, id)).toBeCloseTo(P(13107), 12);
     expect(share(tally, 'paragon-os-final-impact')).toBe(0);
@@ -228,6 +230,15 @@ describe('HP row B (below 10 percent): Final Impact once, then mod 5 (6.1)', () 
     expect(cmd(c).id).toBe('paragon-os-attack');
     expect(u.aiMemory?.[K.state]).toBe(OS_DEMI);
   });
+
+  it('and nothing in rows 1 to 3 clears the state, as in the script: after ONE result under 40 percent he acts on every poll (D-151 governs only the time before the first hit)', () => {
+    const u = os({ [K.state]: OS_NORMAL }, 80000);
+    const b = boardOf(u, [u, ...girls()], scriptedRng([1, 2, 3]), 0);
+    expect(cmd(script.decide(b.ctx)).id).toBe('paragon-os-thundaga');
+    expect(cmd(script.decide(b.ctx)).id).toBe('paragon-os-blizzaga');
+    expect(cmd(script.decide(b.ctx)).id).toBe('paragon-os-waterga');
+    expect(u.aiMemory?.[K.state]).toBe(OS_NORMAL);
+  });
 });
 
 describe('the idle branch, its limit, and what the owner decided (D-151)', () => {
@@ -239,7 +250,7 @@ describe('the idle branch, its limit, and what the owner decided (D-151)', () =>
   });
 
   it('past the limit it acts once and the count starts again: Dispel if anyone is Reflected, else mod 3: Judgment, Genesis, Big Bang', () => {
-    const tally = exactTally((rng) => cmd(poll({}, MAX, IDLE, rng).c).id, 3);
+    const tally = exactTally((rng) => cmd(poll({}, MAX, IDLE, rng).c).id, 120);
     expect(share(tally, 'paragon-os-judgement')).toBeCloseTo(P(21846), 12);
     expect(share(tally, 'paragon-genesis')).toBeCloseTo(P(21845), 12);
     expect(share(tally, 'paragon-big-bang')).toBeCloseTo(P(21845), 12);

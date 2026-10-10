@@ -36,9 +36,12 @@
  * ## What stays as the owner decided
  *
  * Bailey adopted this option on 2026-09-25 (D-151) as a fiend that **waits to be hit**. The script acts on its HP and its MP **on
- * every poll, hit or not** (rows 1 to 3 come before the answer states), so the build keeps the decision: with
- * {@link OVERSOUL_ESTIMATES}`.lowHpActsEveryTurn` false (the default) rows 1 to 3 are only reached once it has a reason to act, a
- * pending answer or the idle limit. Setting it true is the game's own rule (O4 and O12); it is listed for Bailey.
+ * every poll, hit or not** (rows 1 to 3 come before the answer states, and never clear them), so the build keeps the decision:
+ * with {@link OVERSOUL_ESTIMATES}`.lowHpActsEveryTurn` false (the default) rows 1 to 3 are only reached once it has a reason to
+ * act, a pending answer or the idle limit. The answer state is the script's own, so once a result has landed and until a row that
+ * reads it runs, the HP rows keep acting on every poll while he is under 40 percent: D-151 governs the time before the first hit
+ * (and after the idle limit), not that. Setting the switch true is the game's own rule (O4 and O12), which also acts when
+ * untouched; both are listed for Bailey with the measurement of a third reading (the HP rows spending the state).
  *
  * ## Timers (kept in their current units; for the W4 merge)
  *
@@ -199,6 +202,9 @@ export const paragonOversoulScript: AiScript = {
     if (!OVERSOUL_ESTIMATES.lowHpActsEveryTurn && state === OS_NOTHING) {
       // It waits to be hit (D-151): untouched and inside the idle limit it does nothing, whatever its HP and MP; once the limit
       // passes it acts once (rows 1 to 4 below) and the count starts again, like the idle branch it takes the place of.
+      // After the first result the answer state is set, and rows 1 to 3 never clear it (as in the script): under 40 percent he then
+      // acts on every poll, the script's own rule. D-151 does not speak to that; making the HP rows spend the state (one action
+      // per hit) measured 406 wins of 500 against 193, so it is not done here and is listed for Bailey (handoff, decisions).
       if (!elapsed) return null;
       stir(ctx);
     }
