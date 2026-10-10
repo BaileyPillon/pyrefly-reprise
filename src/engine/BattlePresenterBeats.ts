@@ -39,7 +39,7 @@ import {
 
 export async function turnStart(ctx: EventCtx, actorId: CombatantId): Promise<void> {
   ctx.stage.actor(actorId)?.setPose('idle');
-  void ctx.moments.turnStart();
+  void ctx.moments.turnStart(actorId);
   await ctx.sleep(TIMING.turnStart);
 }
 
@@ -71,9 +71,9 @@ export async function actionStart(
   // The shot. An Overdrive earns its own rig — letterbox, name slab, held
   // push-in — and everything else gets the ordinary punch-in on the attacker.
   if (event.command.kind === 'overdrive') {
-    await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE');
+    await ctx.moments.overdriveStart(event.actorId, event.abilityName ?? 'OVERDRIVE', event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind });
   } else {
-    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? []);
+    await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind });
   }
   await fxActionOpen(ctx, event);
   // RUN-IN (FFX-2 only, r38-motion): the girl runs to her target before the blow; the lunge below then only carries the strike (`lungeFor`).

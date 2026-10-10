@@ -166,6 +166,11 @@ export class PaintedStage implements BattleStage {
   /** Release 39: which master of each painting the figures draw from, measured against the camera that is looking at them (`StageArt.ts`). */
   readonly art: StageArt;
 
+  /** The scene's shot director (`SceneStaging.shotDirector`), which `BattleMoments` asks before it moves the camera for a beat; absent for every scene but the hidden Fayth chapter's. */
+  get shotDirector(): SceneSlots['shotDirector'] {
+    return this.opts.slots.shotDirector;
+  }
+
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
     this.partRings = new PartRings(opts.scene);

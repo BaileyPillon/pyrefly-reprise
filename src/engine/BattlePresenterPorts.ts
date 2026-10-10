@@ -383,6 +383,8 @@ export interface BattleStage {
   paints?(id: CombatantId, pose: string): boolean;
   /** RUN-IN's field: painted shapes, camera truck, smear (r38-motion, FFX-2 only; `motion/StageMotionPort.ts`). Optional and additive. */
   readonly motion?: import('./motion/StageMotionPort.ts').StageMotionPort;
+  /** The scene's shot director, which `BattleMoments` asks before it moves the camera for a beat (`ShotDirector.ts`). Optional and additive: a stage without one plays every beat's own shot. */
+  readonly shotDirector?: import('./ShotDirector.ts').ShotDirector;
 }
 
 /** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */

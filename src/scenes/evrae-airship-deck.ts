@@ -5,7 +5,7 @@ import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
-import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
+import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName, SceneStaging } from './types.ts';
 import type { SceneSlots } from './index.ts';
 import { AirshipRangeDirector, attachAirshipRange } from './evrae-airship-director.ts';
 import { DECK, EVRAE_NEAR_SPOT_BEFORE_E1H, EVRAE_WORLD_HEIGHT, RANGE_STAGING, type RigNumbers } from './evrae-airship-range.ts';
@@ -221,7 +221,7 @@ export const EVRAE_DECK_PLATE = 'evrae-airship-deck';
 export interface DeckPlate {
   readonly key: string;
   readonly roll?: number;
-  readonly staging?: { readonly figureHeights?: Readonly<Record<string, number>>; readonly enemySpots?: Readonly<Record<string, [number, number, number]>> }; // `SceneStaging` heights and spots added to the deck's pins by combatant id (XVII's Genais and Core, evrae-airship-sin.ts); omitted: the deck as it was
+  readonly staging?: { readonly figureHeights?: Readonly<Record<string, number>>; readonly enemySpots?: Readonly<Record<string, [number, number, number]>>; readonly shotDirector?: SceneStaging['shotDirector'] }; // `SceneStaging` heights and spots added to the deck's pins by combatant id (XVII's Genais and Core, evrae-airship-sin.ts), and a camera director (the hidden Fayth chapter, exp-fayth-deck.ts); omitted: the deck as it was
 }
 
 /**
