@@ -973,6 +973,10 @@ export interface EnemyFields {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
+  plainAttack?: FFXPlainAttack;
+  /** FFX-2 only (re-parity W3): a copy of {@link EnemyDef.ffx2Record}, made in `src/battle/ffx2/setup.ts`. */
+  ffx2Record?: FFX2MonsterRecord;
   /** A part that revives on a CTB-tick timer instead of staying dead. See {@link EnemyDef.reviveRule}. */
   reviveRule?: PartReviveRule;
   /** FFX-2 only: enemy level, feeding step 1 of the X-2 damage flowchart. Range 1–99. */
@@ -1328,6 +1332,142 @@ export interface StatusApplication {
 }
 
 /**
+ * The fields of the game's own command record that the FFX parity kernels read and an
+ * {@link AbilityDef}'s other fields do not carry (re-parity W1; **FFX only**).
+ *
+ * Source: the Steam HD build's battle kernel tables (item, command, monster magic 1 and 2),
+ * `research/re-ffx-commands.md` section 1; `src/data/ffx/command-records/` holds one record per ability.
+ * The record's formula, power, element, hit count, accuracy byte, crit byte and shatter chance are NOT
+ * repeated here: the ability's own fields keep carrying them, and `research/re-ffx-commands.md`
+ * section 4 lists where they differ from the game's.
+ */
+export interface FFXCommandRecord {
+  /** The record id: 0x2000 + n (item table), 0x3000 + n (command), 0x4000 + n (monster magic 1), 0x6000 + n (monster magic 2). */
+  id: number;
+  /** Record byte 0x17: the command type (1 black magic, 2 white magic, 4 the Overdrive family; Magic Booster boosts 1 and 2). */
+  type: number;
+  /**
+   * Record word 0x1c (u32), the bits the kernels read: bits 3 to 5 the accuracy formula (0 always hits), 6 Darkness
+   * applies, 8 absorb (a drain's sign), 13 and 14 Delay Attack and Delay Buster, 16 pierces Armored, 18 uses the
+   * weapon's properties, 23 no effect on the living.
+   */
+  flagsMisc: number;
+  /** Record word 0x20 (u16): bits 0 and 1 the damage type (1 physical, 2 magical), 2 can crit, 3 crit bonus from equipment, 4 heals, 6 cap 9999, 7 cap 99999. */
+  flagsDamage: number;
+  /** Record byte 0x23: the damage classes, 1 HP, 2 MP, 4 CTB. */
+  damageClass: number;
+}
+
+/**
+ * An enemy's plain Attack as the game's monster table has it (re-parity W1; **FFX only**).
+ *
+ * The engine has one generic `attack` command for every actor, and its record is the party's (0x3000: accuracy
+ * formula 3, which reads the user's Accuracy stat). A monster never uses that record: it attacks with a
+ * monster-side one. Where the game says which, the enemy carries it here and the FFX engine resolves its
+ * `attack` command on it; an enemy with none keeps the engine's own reading of the plain Attack (always hits,
+ * can crit), derived from the ability's flags. Source: `research/re-ffx-commands.md` section 6.
+ */
+export interface FFXPlainAttack {
+  record: FFXCommandRecord;
+  /** Record byte 0x29, the base of accuracy formulas 1 and 2. */
+  accuracy: number;
+  /** Record byte 0x27, the crit bonus byte (read when the record does not take the equipment's bonus). */
+  critBonus: number;
+}
+
+/**
+ * The game's own command row for one FFX-2 ability (re-parity W3; **FFX-2 only**).
+ *
+ * Source: the Steam HD build's FFX-2 battle kernel tables (item.bin, command.bin and monmagic.bin), whose rows are
+ * the in-memory command record the exe's functions read (`Cmd+0xNN`); `src/data/ffx2/command-records/` holds one
+ * record per ability, `research/re-ffx2-commands.md` says how each was matched and where our numbers differ.
+ * The FFX-2 kernels (`src/battle/ffx2/kernel/`) read exactly these fields. Numbers only: no game text, no game code.
+ */
+export interface FFX2CommandRecord {
+  /** The row's command id: 0x2000 + n (item.bin), 0x3000 + n (command.bin), 0x4000 + n (monmagic.bin). */
+  id: number;
+  /** `Cmd+0x0e`: the sub-menu category. The Booster auto-ability boosts categories 1 (Black Magic) and 2 (White Magic). */
+  category: number;
+  /** `Cmd+0x10`: target flags (0x40 can target the dead, 0x80 can target all, 0x400 skips the `Chr+0x5ac` test). */
+  flagsTarget: number;
+  /** `Cmd+0x14`: bits 3 to 5 the accuracy formula (0 never rolls), 0x40 Darkness applies, 0x80 reflectable, 0x100 absorbs, 0x200 steals an item, 0x1000/0x2000 Delay, 0x4000 random targets, 0x10000 uses the character's properties, 0x40000 needs a dead target, 0x4000000 Bribe. */
+  flagsMisc: number;
+  /** `Cmd+0x1c`: bits 0 and 1 the damage type (1 physical, 2 magical), 2 can crit, 3 the crit chance is the row's byte, 4 heals, 5 cleanses, 6 cap 9999, 7 cap 99999, 8 steals gil. */
+  flagsDamage: number;
+  /** `Cmd+0x27`: the damage classes, 1 HP, 2 MP, 4 ATB. */
+  damageClass: number;
+  /** `Cmd+0x28`: the damage formula (0 to 0x18). */
+  formula: number;
+  /** `Cmd+0x29`: the crit chance, read when `flagsDamage` has bit 3. */
+  critByte: number;
+  /** `Cmd+0x2a`: the base of accuracy formula 1. */
+  accuracy: number;
+  /** `Cmd+0x2b`: the power. */
+  power: number;
+  /** `Cmd+0x2c`: hits per target. */
+  hits: number;
+  /** `Cmd+0x2d`: the chance a Petrified target shatters. */
+  shatter: number;
+  /** `Cmd+0x2e`: the element bits (1 fire, 2 ice, 4 thunder, 8 water, 0x10 gravity, 0x20 holy). */
+  element: number;
+  /** `Cmd+0x78`: the species-killer mask. */
+  killer: number;
+  /** `Cmd+0x2f`: the group 1 status chance bytes by index (Death 0, Petrify 1, Sleep 2, Silence 3, Darkness 4, Poison 5, Confusion 6, Berserk 7, Curse 8, Defense 9, Eject 10...); an absent index is 0. */
+  status1?: Readonly<Record<number, number>>;
+  /** `Cmd+0x47`: the group 2 status chance bytes by index (Shell 0, Protect 1, Reflect 2, Regen 3, Haste 4, Slow 5, Stop 6, the seven stat stages 7 to 13, Doom 14...). */
+  status2?: Readonly<Record<number, number>>;
+  /** `Cmd+0x5f`: the signed amounts (durations of the timed statuses, steps of the stat stages) by group 2 index. */
+  statusTime?: Readonly<Record<number, number>>;
+  /**
+   * Several game rows that are ONE command of ours, of which the game's script picks one per cast with equal chance
+   * (Logos' Russian Roulette: five rows that differ only in the status they carry). The record's own fields are the first
+   * of them; the engine draws the pick once per cast, before the hit determination (the script draws it before it queues
+   * the command), and runs the chosen row. Absent for every other command; a variant never has a `pickOne` of its own.
+   */
+  pickOne?: ReadonlyArray<Omit<FFX2CommandRecord, 'pickOne'>>;
+}
+
+/**
+ * The game's own monster row for one FFX-2 enemy, the part the engine's enemy data does not carry (re-parity W3;
+ * **FFX-2 only**). The fields the engine does carry (ACC, the resist bytes, the percent and Delay immunities, the steal
+ * byte and the stolen gil) are corrected in place from the same row where they differ, by
+ * `src/data/ffx2/monster-records/`; `research/re-ffx2-commands.md` section 7 lists every correction.
+ */
+export interface FFX2MonsterRecord {
+  /** The row in monster.bin (`table` 1) or monster2.bin (`table` 2, the Oversoul version). */
+  row: number;
+  table: 1 | 2;
+  /** Row +0x16, the Accuracy stat (accuracy formula 2 reads it). */
+  acc: number;
+  /** Row +0x20, the group 1 resist bytes by status index (255 = immune), sparse: an absent index is 0. */
+  resist1: Readonly<Record<number, number>>;
+  /** Row +0x38, the group 2 resist bytes by status index, sparse. */
+  resist2: Readonly<Record<number, number>>;
+  /** Row +0x1a, the special-flag word: bit 0 immune to the percent formulas, 1 hit reactions do not slow it, 6 immune to ATB damage, 9 immune to Bribe. */
+  special: number;
+  /** Row +0x9a, the species mask the species-killer commands test. */
+  species: number;
+  /** Row +0xc4, the resist byte of accuracy formula 7. */
+  zantetsu: number;
+  /** Row +0xab, the item-steal chance byte (the gil chance byte is 255 for every monster). */
+  stealByte: number;
+  /** Row +0xa4, the figure Pilfer Gil takes. */
+  stealGil: number;
+  /** Row +0xb4: common item id, quantity, rare item id, quantity (the game's item ids, 0 = empty). */
+  steal: readonly [number, number, number, number];
+  /** Row +0xbc: two Bribe slots, item id and quantity each. */
+  bribe: readonly [number, number, number, number];
+  /** The row's own plain Attack (its first command named Attack), which the generic `attack` command resolves on for this enemy. */
+  plainAttack?: FFX2CommandRecord;
+  /**
+   * The rows this monster runs in place of the ability's own, by ability id: the game gives a move of the same name a different row in
+   * different fights (Ormi's Concussive Shock, power 4, in the first two acts of Chapter VI and the Blast, power 6, in the last; the Left
+   * Bulwark's reactions are rows of their own). Absent: the ability's own row for every move.
+   */
+  commands?: Readonly<Record<string, FFX2CommandRecord>>;
+}
+
+/**
  * One action record — the unit of everything a combatant can do.
  *
  * Numbers come from `research/*.md`; data files MUST cite the section in a
@@ -1406,6 +1546,19 @@ export interface AbilityDef {
   messageTemplate?: string;
   /** Which timed-input overlay this ability opens, if any. `null`/absent = no minigame. */
   minigame?: MinigameKind | null;
+  /**
+   * **FFX only** (re-parity W1): the game's own command record for this ability, attached by
+   * `src/data/ffx/index.ts` from `src/data/ffx/command-records/`. Absent for an ability with no game record
+   * (one of ours): the FFX engine then derives the same fields from the ability's own flags, as it always read them.
+   */
+  record?: FFXCommandRecord;
+  /**
+   * **FFX-2 only** (re-parity W3): the game's own command row for this ability, attached by
+   * `src/data/ffx2/command-records/` (data-layer abilities) and by `src/battle/ffx2/abilities-*.ts` (the engine's fallback
+   * table). Absent for an ability with no game row (a passive, a menu marker, one of ours): the FFX-2 engine then derives
+   * the same fields from the ability's own flags (`src/battle/ffx2/adapt/command.ts`).
+   */
+  ffx2Record?: FFX2CommandRecord;
   /**
    * Escape hatch for one-off scripted rules that do not deserve a schema field:
    * Mega Death's "kills everything not Zombie", Jecht Beam's petrify-and-then
@@ -1581,6 +1734,11 @@ export interface AbilityCommand {
    * engine rolls a default from the seeded RNG.
    */
   extra?: MinigameResult;
+  /**
+   * FFX-2 only (re-parity W3): the gil offered, for Lady Luck's Bribe (the accuracy formula and the reward read it;
+   * `ActionRec+0xb0`). Omitted, a Bribe offers nothing and the game's rule makes it miss.
+   */
+  gilSpent?: number;
 }
 
 /** Use an item from the Item (or Use) menu. */
@@ -2550,6 +2708,10 @@ export interface EnemyDef {
   doomTurns?: number;
   /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
   zanmatoLevel?: number;
+  /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
+  plainAttack?: FFXPlainAttack;
+  /** FFX-2 only (re-parity W3): the game's monster row for this enemy (see {@link FFX2MonsterRecord}); absent = the authored fields only. */
+  ffx2Record?: FFX2MonsterRecord;
   /**
    * A part that **cannot be permanently killed**: it comes back on a timer.
    *

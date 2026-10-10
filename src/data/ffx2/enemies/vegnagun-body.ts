@@ -14,6 +14,7 @@
 
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { ACC_EVA_LUCK_MOD_IMMUNITY, STANDARD_AILMENT_IMMUNITY, STAT_MOD_IMMUNITY_5 } from './vegnagun-shared.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 const LEG_LIKE_IMMUNITIES = {
   ...STANDARD_AILMENT_IMMUNITY,
@@ -139,5 +140,8 @@ export const vegnagunBodyGroup: EnemyGroupDef = {
   parts: [bulwark('bulwark-r', 'Right Bulwark', 1), bulwark('bulwark-l', 'Left Bulwark', 2)],
   musicCues: [{ at: 'start', track: 'boss-vegnagun', fadeMs: 600 }],
 };
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [vegnagunBodyGroup]) attachMonsterRecords(group);
 
 export default vegnagunBodyGroup;

@@ -1,72 +1,74 @@
 /**
- * Chapter 3, part 2 — Yu Yevon [ffx-bfa-yu-yevon §3].
+ * Chapter 3, part 2: Yu Yevon, his turn and his `onHit` (`research/re-ffx-ai-yunalesca-bfa.md` section 6, m176 in `sins07_10`;
+ * **FFX only**).
  *
- * Half his scheduled turns are a scripted do-nothing, so Gravija — which takes
- * exactly 75% of *every* combatant's current HP, his own included, and can never
- * KO — lands roughly every 36 ticks.
+ * His turn (rows V1 to V3), in this order:
  *
- * The fight is the **Curaga counting rule**: he fires at most one Curaga per
- * player-side action that damaged him, evaluated after that action has fully
- * resolved. Hits, targets and spells inside one command are irrelevant, which
- * is why Doublecast nets a clean 9 999 and a twelve-hit Attack Reels nets its
- * whole total minus one. Poison ticks, his own Gravija self-damage and a
- * Pagoda's Power Wave never count, and a counter never triggers a counter.
+ * 1. If the Osmose turn has been taken (`yy.osmosed`): Ultima on the front line, and the counter returns to 0.
+ * 2. Else, on his very first turn only: nothing. That is the only idle turn there is.
+ * 3. Else, with seven or more counters: Osmose on each of Character #1 to #3 who is alive and in the battle (the script
+ *    queues one single-target action each, up to three in one turn; ours is one Osmose aimed at that group, `osmose` carries
+ *    `extra.groupTarget`, which resolves each target in turn the same way), and the Osmose turn is taken.
+ * 4. Else: Gravija on the front line plus himself. His two Yu Pagodas are not in the group.
  *
- * The party carries a permanent, fayth-granted Auto-Life from the possessed-aeon
- * fights onward, which is what makes this unlosable.
+ * His reaction (`onHit`, V4 and V5): unless the last attacker is himself, a Power Wave first strips his Zombie and Reflect,
+ * and then, if the sub-action left `LastDamageTakenHP` above 0, the counter goes up by one and he casts Curaga on himself.
+ * One counter per sub-action that dealt him HP damage, whoever dealt it, and a Doublecast is two. His own Gravija and a
+ * heal or a miss never count. A Pagoda's Power Wave on a Zombie Yu Yevon is 1,500 damage, so it counts, and the Curaga it
+ * draws heals him because the Zombie has just been stripped. A Poison tick raises no hit event. The counter is reset only
+ * by the Ultima turn, so counters taken between the Osmose turn and the Ultima turn are wasted.
  */
 
-import type { Command } from '../../common/types.ts';
+import type { Command, FFXCombatant } from '../../common/types.ts';
+import { isAlive, rtOf } from '../state.ts';
+import { removeStatus } from '../statuses.ts';
+import { canQueue, frontLine } from './game-rolls.ts';
+import { type HitEvent, queueCounter, registerHitScript } from './hit-script.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
-const IDLE = 'yy.idle';
-const CURAGA_COUNT = 'yy.curagaCount';
-const PENDING = 'yy.pendingScript';
+const FIRST_DONE = 'yy.firstDone';
+const COUNTER = 'yy.curagaCount';
+const OSMOSED = 'yy.osmosed';
 
-/** Curagas fired before the Osmose / Ultima pair [ffx-bfa-yu-yevon §3.4]. */
+/** Counters it takes before the Osmose and Ultima pair [note section 6.2]. */
 export const YU_YEVON_CURAGA_THRESHOLD = 7;
 
 export const yuYevonAi = (ai: AiContext): Command | null => {
-  const party = ai.ctx.state.activeIds.slice();
+  const { ctx, self, memory } = ai;
+  const front = frontLine(ctx).map((c) => c.id);
 
-  // The Osmose -> Ultima pair queued by the Curaga counter.
-  const pending = num(ai.memory, PENDING, 0);
-  if (pending === 1) {
-    ai.memory[PENDING] = 2;
-    return use(ai, 'osmose', party);
+  if (memory[OSMOSED] === true) {
+    memory[OSMOSED] = false;
+    memory[COUNTER] = 0;
+    return use(ai, 'ultima', front);
   }
-  if (pending === 2) {
-    ai.memory[PENDING] = 0;
-    ai.memory[CURAGA_COUNT] = 0;
-    return use(ai, 'ultima', party);
+  if (num(memory, FIRST_DONE, 0) === 0) {
+    memory[FIRST_DONE] = 1;
+    return null;
   }
-
-  // Alternate a scripted no-op with Gravija.
-  const idle = num(ai.memory, IDLE, 0);
-  ai.memory[IDLE] = idle === 0 ? 1 : 0;
-  if (idle === 0) return null;
-  // Gravija "removes exactly 75% of current HP from **every target on the
-  // field** — including Yu Yevon himself" [ffx-bfa-yu-yevon §3.3, verified: 2
-  // sources]. "Every target on the field" is every target: the two Yu Pagodas
-  // are on it too, and leaving them out of the list was what kept them topped
-  // up while they healed him, so the attrition route §3.5 documents could never
-  // land. The record already carries `targeting: 'all'` and
-  // `extra.includesUser`, so an empty target list lets `targeting.ts` expand it
-  // to the whole field rather than the hand-built party-plus-self list.
-  return use(ai, 'gravija', []);
+  if (num(memory, COUNTER, 0) >= YU_YEVON_CURAGA_THRESHOLD) {
+    memory[OSMOSED] = true;
+    const party = front.filter((id) => ctx.state.activeIds.includes(id) && isAlive(ctx.state.combatants[id] as FFXCombatant));
+    return party.length > 0 ? use(ai, 'osmose', party) : null;
+  }
+  return use(ai, 'gravija', [...front, self.id]);
 };
 
-/**
- * The counter hook: one Curaga per damaging player **action**.
- *
- * Returns the counter command, or `null` when nothing should fire. The engine
- * calls this once per resolved action, never per hit and never for a counter.
- */
-export function yuYevonCounter(ai: AiContext): Command | null {
-  const count = num(ai.memory, CURAGA_COUNT, 0) + 1;
-  ai.memory[CURAGA_COUNT] = count;
-  if (count >= YU_YEVON_CURAGA_THRESHOLD) ai.memory[PENDING] = 1;
-  return use(ai, 'curaga', [ai.self.id]);
+/** His `onHit` (m176 f3 @0x01AF). */
+function yuYevonHit(event: HitEvent): void {
+  const { ctx, target: boss, attacker, def } = event;
+  if (attacker.id === boss.id) return;
+  if (def.id === 'power-wave-aeon') {
+    removeStatus(ctx, boss, 'zombie', 'dispelled');
+    removeStatus(ctx, boss, 'reflect', 'dispelled');
+  }
+  if (event.lastDamage <= 0) return;
+  const memory = rtOf(ctx, boss.id).ai;
+  memory[COUNTER] = num(memory, COUNTER, 0) + 1;
+  if (!canQueue(boss)) return;
+  const ai: AiContext = { ctx, self: boss, memory };
+  queueCounter(ctx, { actorId: boss.id, targetId: boss.id, command: use(ai, 'curaga', [boss.id]) });
 }
 
 registerAiScript('yu-yevon', yuYevonAi);
+registerHitScript('yu-yevon', yuYevonHit);

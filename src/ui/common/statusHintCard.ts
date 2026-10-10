@@ -30,6 +30,15 @@
  * PR-0302 repair (desktop, guide open): where the 14-px floor leaves the sheet too little room beside the
  * full card ({@link guideSqueezed}: FFX at 1280 px wide), the card carries the rule's one-sentence form,
  * and if even that is too much it stands alone in the column and the sheet steps aside while it is up.
+ *
+ * R3942 (Bailey, 2026-10-08, "I'll go with all your recommendations"; the Chapter IV card pick, option 1; FFX-2 only,
+ * phone only): the phone card is ONE row, the status chip then "Paine: Holy Water, Esuna, Remedy" (`CureHint.line`,
+ * class `sthint--line`), 31 px tall where the two-line sentence card was 73. At the real sizes the giants study picked
+ * (Bahamut 70 percent on a phone) the girls stand low, and the three-row card sat on their legs (Chapter IV, Yuna's share
+ * hidden: 52 percent at 390x844 and 98 at 375x667, live 8 and 65, now 6 and 38). The text stays 14.2 px, the card stays
+ * docked 6 px above the party chips, no figure moves: the card's top edge is simply 42 px lower (22 on a 430-wide phone,
+ * where the sentence fitted two rows). FFX's phone card and every desktop card are unchanged. Numbers and pictures:
+ * `docs/handoff/r3942-stage.md`, last section.
  */
 
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
@@ -60,11 +69,19 @@ export function partyHints(game: StatusGame, state: BattleState | null, partyIds
 }
 
 /** The card's inner HTML: the first hint in full, a second one short. Phone: the first, short. Pure. */
-export function hintCardHtml(hints: readonly CureHint[], phone: boolean): string {
+export function hintCardHtml(hints: readonly CureHint[], phone: boolean, oneLine = false): string {
   const first = hints[0];
   if (!first) return '';
+  // R3942 (FFX-2 phone, Bailey 2026-10-08): one row, the chip then "Paine: Holy Water, Esuna, Remedy". No "GUIDE" word: the chip is the
+  // card's label, and the row has no room for both at 14.2 px. A hint with no `line` keeps the sentence.
+  if (phone && oneLine && first.line !== undefined) return `<div class="sthint__head"><i>${first.label}</i></div><div class="sthint__body">${first.line}</div>`;
   const body = phone ? first.short : hints[1] ? `${first.html} ${hints[1].short}` : first.html;
   return `<div class="sthint__head">GUIDE <i>${first.label}</i></div><div class="sthint__body">${body}</div>`;
+}
+
+/** Does this phone card take the one-row form? FFX-2's phone card only (FFX's keeps its two-line sentence), and only for a hint that has one. Pure. */
+export function oneLineCard(game: StatusGame, hints: readonly CureHint[], phone: boolean): boolean {
+  return phone && game === 'ffx2' && hints[0]?.line !== undefined;
 }
 
 /** The least the sheet may be left to show beside the card, in layout (stage-grid) px: two lines of its type and its padding. */
@@ -100,7 +117,7 @@ export class StatusHintCard {
   private overFrames = 0;
 
   /** `help`: the player's BATTLE HELP switch (the save's `battleHelp`), read every frame. */
-  constructor(game: StatusGame, private readonly help: () => boolean = battleHelpOn) {
+  constructor(private readonly game: StatusGame, private readonly help: () => boolean = battleHelpOn) {
     this.el = document.createElement('div');
     this.el.className = `sthint sthint--${game}`;
     this.el.dataset['role'] = 'status-hint';
@@ -116,7 +133,9 @@ export class StatusHintCard {
    * `open`: a decision is open. `phone`: the upright-phone layout is on.
    */
   update(hints: readonly CureHint[], open: boolean, stage: HTMLElement | null, guide: HTMLElement | null, phone: boolean): void {
-    const full = open && this.help() ? hintCardHtml(hints, phone) : '';
+    // R3942 (FFX-2 phone only): the one-row card. The class is set before the card docks, so the dock measures the one-row height.
+    const line = oneLineCard(this.game, hints, phone);
+    const full = open && this.help() ? hintCardHtml(hints, phone, line) : '';
     const slot = stage && guide && !guide.hidden && !guide.classList.contains('sgd--off') && !phone
       ? guide.querySelector<HTMLElement>('.sgd__slot')
       : null;
@@ -129,6 +148,7 @@ export class StatusHintCard {
     }
     this.show(this.compact ? hintCardHtml(hints, true) : full);
     this.el.classList.toggle('sthint--phone', phone);
+    this.el.classList.toggle('sthint--line', line && full !== '');
     if (phone && full) this.dockPhone(stage);
     if (!stage) return;
     if (slot) {

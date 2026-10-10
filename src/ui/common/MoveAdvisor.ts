@@ -1,4 +1,5 @@
 import './move-advisor.css';
+import './move-advisor-tip.css';
 import type { AvailableCommand, BattleState, CombatantId, GameId } from '../../battle/common/types.ts';
 import { buildAdvisorView, type AdvisorOptions, type AdvisorView, type MoveSuggestion } from '../../engine/tactics/advisor.ts';
 import { readSetting, writeSetting } from '../../app/SaveData.ts';
@@ -156,6 +157,8 @@ export class MoveAdvisor {
   private density: Density = 0;
   /** `signature@cap@width` the current density was measured for. */
   private fittedFor = '';
+  /** The card stood in the FFX HUD's one-row tip (`data-zone="tip"`, `ffx/advisorTip.ts`) the last time it was fitted: the bare rung while it does, the ladder from the top once it leaves. */
+  private wasTip = false;
   /** Re-applies "the chip goes where the card goes" (./advisorChipFollow.ts, PR-0130). */
   private readonly syncChip: () => void;
 
@@ -419,6 +422,24 @@ export class MoveAdvisor {
     if (!this.cached || !this.visible || this.cardEl.hidden) return;
     const width = this.cardEl.clientWidth;
     if (width <= 0) return;
+    // The one-row tip (r3942-giants-ffx, FFX only): always the bare rung, laid out as a row by `move-advisor-tip.css`, and what does not fit is dropped whole (`fitTipRow`).
+    // Leaving the tip (the guide folded with G hands the card a real box) starts the ladder over from the full card.
+    // `render()` starts every new board at the full card (density 0), so the bare rung is asked for whenever the tip is on and the card is not on it, not only when the tip begins.
+    const tip = this.cardEl.dataset['zone'] === 'tip';
+    if ((tip && this.density !== MAX_DENSITY) || (!tip && this.wasTip)) {
+      this.density = tip ? MAX_DENSITY : 0;
+      this.fittedFor = '';
+      this.cardEl.innerHTML = cardHtml(this.cached, this.density);
+    }
+    this.wasTip = tip;
+    if (tip) {
+      const key = `${this.lastSignature}@tip@${Math.round(width / 4)}`;
+      if (key !== this.fittedFor) {
+        this.fittedFor = key;
+        fitTipRow(this.cardEl);
+      }
+      return;
+    }
     const cap = this.capHeight();
     if (cap <= 0) return;
 
@@ -460,6 +481,12 @@ export class MoveAdvisor {
         }
       }
       if (!kept) this.cardEl.innerHTML = cardHtml(this.cached, density, false);
+    }
+    // A tight effect kept where the box was wider is taken off again when the box turned out narrower and the line no longer fits. The fit `render` runs measures the card at the anchors' width and the FFX HUD writes
+    // its own box after it, and the loop above never re-renders a card that is already on the last rung, so the line stayed, cut off at the foot, for the whole decision (the folded guide's rail at 1024x768,
+    // Chapter III: 79 grid px of card in a box of 66, `advisorFolded.ts`).
+    if (this.cardEl.scrollHeight > cap + 1 && this.cardEl.querySelector('.mad__effect--tight')) {
+      this.cardEl.innerHTML = cardHtml(this.cached, this.density, false);
     }
   }
 
@@ -516,6 +543,40 @@ export class MoveAdvisor {
     this.cardEl.style.bottom = `${anchors.bottom.toFixed(2)}px`;
     this.toggleEl.style.left = `${left.toFixed(2)}px`;
     this.toggleEl.style.bottom = `${(anchors.bottom + this.cardEl.offsetHeight + 2).toFixed(2)}px`;
+  }
+}
+
+/**
+ * The one-row tip's fitting ladder: everything the row holds, then what does not fit taken off whole, never cut through a word or a glyph, the least valuable first: the move is the answer
+ * and its target the rest of it, so they go last. First the chips (where the lead move lives, what it costs), the last first; then the actor's name (the party panel already says whose turn it
+ * is) when the row is wider than its box or the target is squeezed; then, when the target is still left under three letters, the arrow and the target together (a target squeezed to nothing
+ * leaves its arrow clipped to a dash), the room they could not use going back to the name if it fits. Otherwise the target gives way with an ellipsis (`move-advisor-tip.css`). A fresh fit starts from the whole row.
+ */
+function fitTipRow(card: HTMLElement): void {
+  const move = card.querySelector<HTMLElement>('.mad__move:not(.mad__move--alt)');
+  const line = move?.querySelector<HTMLElement>('.mad__line');
+  if (!move || !line) return;
+  const stats = move.querySelector<HTMLElement>('.mad__stats');
+  const chips = stats ? (Array.from(stats.children) as HTMLElement[]) : [];
+  const actor = line.querySelector<HTMLElement>('.mad__actor');
+  const arrow = line.querySelector<HTMLElement>('.mad__arrow');
+  const target = line.querySelector<HTMLElement>('.mad__target');
+  for (const c of chips) c.hidden = false;
+  for (const e of [actor, arrow, target]) e?.removeAttribute('data-tip-cut');
+  const wider = (el: HTMLElement): boolean => el.scrollWidth > el.clientWidth + 0.5;
+  for (let i = chips.length - 1; i >= 0 && stats && wider(stats); i--) chips[i]!.hidden = true;
+  const cut = (e: HTMLElement | null): void => e?.setAttribute('data-tip-cut', '');
+  if (actor && (wider(line) || (target && wider(target)))) cut(actor);
+  if (arrow && target && wider(target)) {
+    const em = parseFloat(getComputedStyle(target).fontSize) || 5;
+    if (target.clientWidth < 3 * em) {
+      cut(arrow);
+      cut(target);
+      if (actor) {
+        actor.removeAttribute('data-tip-cut'); // the room the answer could not use goes back to the name, if the name fits
+        if (wider(line)) cut(actor);
+      }
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
+import { FFX2_GIANT_SHARE } from '../../data/ffx2/fiend-stature.ts';
 import {
   pickSlabWidth,
   placeSlab,
@@ -145,6 +146,18 @@ export function reticleBoxes(root: HTMLElement): IntentAvoidRect[] {
 
 export type ProjectFn = (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') => { x: number; y: number } | null;
 
+/** A combatant's painted silhouette box on screen, viewport px (`TargetingPort.rect`). */
+export type PaintedRectFn = (id: CombatantId) => { x: number; y: number; w: number; h: number } | null;
+
+/**
+ * The giants of FFX-2 (r3942-stage wave 2; Bailey, 2026-10-08, "go with your recommendations": Bahamut, Paragon and Anima stand at their real size, three to four times a girl on
+ * screen): the combatants whose body the slab avoids as their whole painted silhouette. The head-to-feet estimate ({@link BODY_HALF_WIDTH}) is a box a quarter of a giant's width and a
+ * third of its height around the head point, which left the slab free to land on the rest of him: 20 percent of Bahamut's painting (his pick, option 3) and 35 percent of Anima's (her pick, option 4; 42 percent at her real size, option 3) in the options study.
+ * The slab is still soft against it (`placeSlab`, tiered): where a giant fills the frame it may still sit on him, covering the least it can, but where the frame has room beside him
+ * (the right of Bahamut's wing, the right of Anima's robe) it stands there. FFX-2 HUD only; the ids are this game's (`data/ffx2/fiend-stature.ts` `FFX2_GIANT_SHARE`).
+ */
+export const GIANT_BODY_RECT: ReadonlySet<string> = new Set(Object.keys(FFX2_GIANT_SHARE));
+
 /**
  * Every living fighter's body box, in viewport pixels.
  *
@@ -154,12 +167,18 @@ export type ProjectFn = (id: CombatantId, anchor?: 'head' | 'chest' | 'feet') =>
  * for the girls and deliberately narrow for a spread dragon: a box that
  * claimed Bahamut's whole wingspan would leave the slab nowhere to stand.
  */
-export function fighterBoxes(state: BattleState | null, project: ProjectFn): IntentAvoidRect[] {
+export function fighterBoxes(state: BattleState | null, project: ProjectFn, painted?: PaintedRectFn): IntentAvoidRect[] {
   if (!state) return [];
   const out: IntentAvoidRect[] = [];
   for (const id of Object.keys(state.combatants)) {
     const c = state.combatants[id];
     if (!c || c.hp <= 0) continue;
+    // r3942-stage wave 2 (FFX-2 only): a giant's body box is its painted silhouette, not the head-to-feet estimate (see `GIANT_BODY_RECT`).
+    const body = c.side !== 'party' && GIANT_BODY_RECT.has(id) ? painted?.(id) : null;
+    if (body && body.w > 0 && body.h > 0) {
+      out.push({ left: body.x, right: body.x + body.w, top: body.y, bottom: body.y + body.h, soft: true, party: false });
+      continue;
+    }
     const head = project(id, 'head');
     const feet = project(id, 'feet');
     if (!head || !feet) continue;

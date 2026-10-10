@@ -27,6 +27,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { noiseCanvas, radialCanvas, rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
+import { GAGAZET_STAGING } from './gagazet-giants.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 
 // ---------------------------------------------------------------------------
@@ -51,8 +52,13 @@ import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from '
  * The camera the parallax stack and the backdrop framing are solved for —
  * identical to the `idle` rig's position. See "Framing the backdrop" in
  * `docs/ENGINE-API.md`.
+ *
+ * **r3942-giants-ffx (FFX only, Chapter I): the rig stands 1.0 left, 0.62 higher and 1.75 further back than it did** ([0, 3.05, 9.5] to here) and looks 7.6 degrees down (it was 9.0),
+ * for Seymour Flux at 0.6 of his real height (6.017 units, from 4.1). From the old rig his head would stand about 85 px above the top of the 1600x900 frame; from here the whole figure
+ * is in, the party at 92 percent of the size it has live and Flux reading 1.93 over it (the options study's picture 4: 91 percent and 1.94; `docs/handoff/r3942-giants-ffx.md`). The
+ * parallax stack follows the rig. The `action` and `enemy` rigs that frame him stand back with it (below).
  */
-const CAMERA_REF: [number, number, number] = [0, 3.05, 9.5];
+const CAMERA_REF: [number, number, number] = [-1.0, 3.668, 11.25];
 
 /** World z of the painting plane, and the plane's world width. */
 const BACKDROP_DISTANCE = -48;
@@ -94,16 +100,23 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * move reads as a push-in and not as a cut.
    */
   intro: { position: [0.2, 6.2, 16.0], lookAt: [1.0, 2.0, -3.2], fov: 30, sway: 1.5 },
-  idle: { position: CAMERA_REF, lookAt: [0.15, 1.35, -1.2], fov: 32 },
+  idle: { position: CAMERA_REF, lookAt: [-1.01, 2.01, -1.2], fov: 32 },
   /**
    * Pushed in for an ability beat. Two things are solved here: the attacker
    * (slot 0, and x ≈ 1.5 mid-lunge) and the boss (x 3.1) are both well inside
    * the frame — an action rig that frames only the target turns every attack
    * into a shot of the target. (Since PR-0002 A no party slot is near the left edge.)
+   *
+   * r3942-giants-ffx (FFX only): with Flux at 6.017 units (from 4.1) the two rigs that frame him stand back and aim higher so that his whole figure and Mortiorchis stay in the
+   * shot, as they were before (the old `action` [0.25, 2.8, 8.85] and `enemy` [1.5, 2.9, 5.9], aimed at y 1.45 and 1.6, would cut his head by 8 and 20 percent of the frame).
+   * How near they can stand is limited by the painting: its top edge is at y 12.7 at its depth (z -48), and a camera that looks higher than about 12.6 there shows the void above
+   * it, so both rigs sit at about `idle`'s distance (11.6 and 9.6 against 11.25) and differ from it by where they aim: `action` a little right of `idle`, `enemy` at the boss.
+   * The `enemy` rig stays left of x 0 for the parallax bands (a camera further right shows the right edge of the z -20 band at the frame's edge). `party` and `victory` frame the
+   * party and show the boss as far as they reach, as they did.
    */
-  action: { position: [0.25, 2.8, 8.85], lookAt: [1.15, 1.45, -1.1], fov: 32, sway: 0.7 },
+  action: { position: [-0.8, 3.3, 11.6], lookAt: [0.2, 1.7, -1.1], fov: 32, sway: 0.7 },
   party: { position: [-0.05, 2.2, 7.2], lookAt: [-0.95, 1.15, 0.45], fov: 32, sway: 0.7 },
-  enemy: { position: [1.5, 2.9, 5.9], lookAt: [2.9, 1.6, -2.2], fov: 32, sway: 0.7 },
+  enemy: { position: [-0.2, 3.6, 9.6], lookAt: [1.1, 2.1, -2.2], fov: 32, sway: 0.7 },
   victory: { position: [-0.1, 2.05, 7.5], lookAt: [-0.95, 1.15, 0.9], fov: 32, sway: 1.2 },
 };
 
@@ -171,10 +184,9 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [1.8, 1.85, -7.0], // high float    -> x 0.487..0.700, y 0.108..0.358
   [3.35, 0, -6.6], // ground, back-right
 ];
-// R13-02 (FFX only): the bosses pinned where live e3b8c2a3's relax stood them (measured 1600x900 and 2000x1012), so Mortiorchis's
-// bracket leaves the NEXT BEST MOVE card its band. A pin is never prone-slid, so Mortiorchis's spot carries his old -1.52 slide.
-type Spot3 = [number, number, number];
-export const GAGAZET_STAGING = { holdParty: true, enemySpots: { 'seymour-flux': [3.54, 0, -7.6] as Spot3, mortiorchis: [1.03, 1.01, -7.6] as Spot3 } };
+// r3942-giants-ffx: Seymour Flux's and Mortiorchis's pins and heights (and the party height they are read against) live in `./gagazet-giants.ts`, out of this file (house style: under
+// 400 lines; this scene was 876 before the giants), and are re-exported here, so every importer is unchanged.
+export { GAGAZET_PARTY_HEIGHT, GAGAZET_STAGING } from './gagazet-giants.ts';
 
 /**
  * One wind-blown snow drift, as an **alpha mask**.

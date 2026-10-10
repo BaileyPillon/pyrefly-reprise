@@ -31,7 +31,7 @@ describe('data (research §2, §3)', () => {
     for (const k of ['ISAARU_ID', 'GROTHIA_ID', 'PTERYA_ID', 'SPATHI_ID', 'ISAARU_BYSTANDER_SCRIPT', 'GROTHIA_SCRIPT', 'PTERYA_SCRIPT', 'SPATHI_SCRIPT'] as const) {
       expect(rules[k], k).toBe(data[k]);
     }
-    for (const k of ['GROTHIA_ATTACK', 'GROTHIA_ATTACK_YUNA', 'GROTHIA_FIRA', 'GROTHIA_HELLFIRE', 'PTERYA_ATTACK', 'PTERYA_ATTACK_YUNA',
+    for (const k of ['GROTHIA_SUMMON', 'PTERYA_SUMMON', 'SPATHI_SUMMON', 'GROTHIA_ATTACK', 'GROTHIA_ATTACK_YUNA', 'GROTHIA_FIRA', 'GROTHIA_HELLFIRE', 'PTERYA_ATTACK', 'PTERYA_ATTACK_YUNA',
       'PTERYA_SONIC_WINGS', 'PTERYA_ENERGY_RAY', 'SPATHI_COUNTDOWN', 'SPATHI_MEGA_FLARE'] as const) {
       expect(rules[k], k).toBe(rows[k]);
     }
@@ -66,7 +66,7 @@ describe('data (research §2, §3)', () => {
       // Its own installed subject (INSTALLED.md: the aeon painting with his O-4 C mark), never a roster aeon's id (I-G6).
       expect(['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']).not.toContain(e!.spriteKey);
     }
-    expect(s!.abilityIds).toEqual([rows.SPATHI_COUNTDOWN, rows.SPATHI_MEGA_FLARE]); // no counter rows (I-4)
+    expect(s!.abilityIds).toEqual([rows.SPATHI_SUMMON, rows.SPATHI_COUNTDOWN, rows.SPATHI_MEGA_FLARE]); // no counter rows (I-4, the script agrees: Spathi has no hit reaction here)
     const isaaru = ISAARU_GROUPS[0]!.enemies[0]!;
     expect(isaaru).toMatchObject({ hp: 10, mp: 1, abilityIds: [], flags: { untargetable: true } });
   });
@@ -143,20 +143,26 @@ describe('damage, on the engine chain at roll 16 (research §5.2 [derived], §5.
 });
 
 describe('Grothia (§4.1)', () => {
-  it('Yuna alone: his Yuna attack, no gauge gain; first turn against an aeon: Hellfire, gauge spent', () => {
+  // Re-parity (AI lane C, D-15, D-17): his first turn is the Summon; the gauge starts at 100, and his attack on Yuna alone adds 5 to it
+  // like any other (capped at 100, so it shows nothing yet); the first turn against an aeon is Hellfire and spends the gauge.
+  it('Summon first; Yuna alone: his Yuna attack (the gauge stays at its cap); then, an aeon out: Hellfire, gauge spent', () => {
     const engine = newEngine('isaaru-grothia', 3);
     expect(actor(engine, GROTHIA).overdrive).toMatchObject({ gauge: 100, enemyGaugeRules: rules.ISAARU_GAUGE_RULES });
-    drive(engine, (d) => (d.actorId === 'yuna' ? summon('shiva') : defend()), (e) => starts(e.state().log, GROTHIA).length >= 2);
+    drive(
+      engine,
+      (d) => (d.actorId === 'yuna' && starts(engine.state().log, GROTHIA).includes(rows.GROTHIA_ATTACK_YUNA) ? summon('shiva') : defend()),
+      (e) => starts(e.state().log, GROTHIA).includes(rows.GROTHIA_HELLFIRE),
+    );
     const log = engine.state().log;
     const moves = starts(log, GROTHIA);
-    expect(moves.slice(0, 2)).toEqual([rows.GROTHIA_ATTACK_YUNA, rows.GROTHIA_HELLFIRE]);
-    const first = log.findIndex((e) => e.type === 'action-start' && e.actorId === GROTHIA);
-    const gaugeBefore = log.slice(0, first + 3).filter((e) => e.type === 'overdrive-gauge' && e.who === GROTHIA);
-    expect(gaugeBefore).toEqual([]); // hitting Yuna fills nothing
+    expect(moves.slice(0, 3)).toEqual([rows.GROTHIA_SUMMON, rows.GROTHIA_ATTACK_YUNA, rows.GROTHIA_HELLFIRE]);
+    const hellfire = log.findIndex((e) => e.type === 'action-start' && e.abilityId === rows.GROTHIA_HELLFIRE);
+    const gaugeBefore = log.slice(0, hellfire).filter((e) => e.type === 'overdrive-gauge' && e.who === GROTHIA && e.cause !== 'overdrive');
+    expect(gaugeBefore).toEqual([]); // 100 plus 5 is still 100: the cap shows nothing (the spend, cause 'overdrive', is Hellfire's own)
     expect(actor(engine, GROTHIA).overdrive?.gauge).toBeLessThan(10);
   });
 
-  it('+5 per attack on an aeon, +3 per targeting; Fira and Attack both drawn', () => {
+  it('+5 per attack on an aeon, +3 per hit event; Fira and Attack both drawn', () => {
     const engine = newEngine('isaaru-grothia', 5);
     let shielded = false;
     const guard = () => { shielded = true; return { kind: 'ability' as const, id: 'shield', targets: ['ixion'] }; };
@@ -186,7 +192,7 @@ describe('Pterya (§4.2)', () => {
     const steps = log.filter((e) => e.type === 'overdrive-gauge' && e.who === PTERYA).map((e) => e.type === 'overdrive-gauge' ? [e.cause, e.to - e.from] : []);
     expect(steps).toContainEqual(['attacking', 10]);
     expect(steps).toContainEqual(['targeted', 15]);
-    if (moves[0] !== rows.PTERYA_ATTACK_YUNA) expect(log.some((e) => e.type === 'summon')).toBe(true);
+    expect(moves[0]).toBe(rows.PTERYA_SUMMON); // D-17: the first turn is the Summon
   });
 });
 
@@ -195,9 +201,10 @@ describe('Spathi (§4.3)', () => {
     const engine = newEngine('isaaru-spathi', 4);
     expect(engine.state().flags[rules.SPATHI_COUNT_FLAG]).toBe(5);
     drive(engine, (d) => (d.actorId === 'yuna' ? summon('ixion') : { kind: 'ability', id: 'shield', targets: [d.actorId] }),
-      (e) => starts(e.state().log, SPATHI).length >= 7);
+      (e) => starts(e.state().log, SPATHI).length >= 8);
     const log = engine.state().log;
-    expect(starts(log, SPATHI)).toEqual([...Array(5).fill(rows.SPATHI_COUNTDOWN), rows.SPATHI_MEGA_FLARE, rows.SPATHI_COUNTDOWN]);
+    // D-17: turn 1 is the Summon, turns 2 to 6 the countdown, turn 7 Mega Flare (the 6th turn before the Summon existed).
+    expect(starts(log, SPATHI)).toEqual([rows.SPATHI_SUMMON, ...Array(5).fill(rows.SPATHI_COUNTDOWN), rows.SPATHI_MEGA_FLARE, rows.SPATHI_COUNTDOWN]);
     const counts = log.filter((e) => e.type === 'message' && e.kind === 'telegraph').map((e) => (e.type === 'message' ? e.text : ''));
     expect(counts).toEqual(['Spathi: 5', 'Spathi: 4', 'Spathi: 3', 'Spathi: 2', 'Spathi: 1', 'Spathi: 5']);
     // Shielded, Mega Flare lands for about a quarter (537-617 band at roll 16, §5.3).
@@ -234,10 +241,11 @@ describe('Isaaru (B8)', () => {
 describe('repairs after the engine review (2026-09-25)', () => {
   it("the intent slab calls Countdown what it is: no damage, not 'non-elemental damage to itself'", () => {
     const engine = newEngine('isaaru-spathi', 4) as ReturnType<typeof createFFXEngine>;
+    drive(engine, () => defend(), (e) => starts(e.state().log, SPATHI).length >= 1);
     nextInput(engine);
     const intent = engine.intent();
     expect(intent?.enemyId).toBe(SPATHI);
-    expect(intent?.abilityId).toBe(rows.SPATHI_COUNTDOWN);
+    expect(intent?.abilityId).toBe(rows.SPATHI_COUNTDOWN); // his second turn: the Summon is behind him
     expect(intent?.description).toBe('Deals no damage.');
   });
 

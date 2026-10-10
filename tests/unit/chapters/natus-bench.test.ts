@@ -339,9 +339,12 @@ describe(`Seymour Natus — win rates across ${SEEDS} seeds (measured, not tuned
     for (const r of [...Object.values(results), ...Object.values(mid)]) expect(r.outcomes['unfinished'] ?? 0).toBe(0);
   });
 
-  it('the wrong line is the one that calls Desperado; Poison-and-wait never leaves phase 1 by its own hand', () => {
-    expect(results.wrong.desperadoRate).toBeGreaterThan(0);
-    expect(results.intended.desperadoRate).toBe(0);
+  // Re-parity (D-21, FFX only): Mortibody's script scores every Shell, Haste, Reflect and Nul on the three active
+  // slots against `mod 4 + 4` (one lower in Natus's last phase, 0 with Haste on all three), so the intended line, which
+  // keeps the three Shelled, is no longer Desperado-free. Haste on all three still calls it most.
+  it('Haste on all three calls Desperado most; the intended line calls it too; Poison-and-wait never does and never leaves phase 1', () => {
+    expect(results.wrong.desperadoRate).toBeGreaterThan(results.intended.desperadoRate);
+    expect(results.intended.desperadoRate).toBeGreaterThan(0);
     expect(results['poison-wait'].desperadoRate).toBe(0);
     expect(results['poison-wait'].phase3).toBe(0);
   });

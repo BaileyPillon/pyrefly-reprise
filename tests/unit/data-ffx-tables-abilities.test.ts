@@ -211,7 +211,14 @@ describe('FFX ability catalog — Black Magic and Overdrives always hit (canMiss
   ];
 
   /** Physical Strength attacks in the same two enemy files that correctly still roll accuracy — must stay unset. */
-  const BFA_AND_SEYMOUR_STILL_ROLLING_IDS = ['cross-cleave', 'left-arm-strike', 'left-arm-strike-2', 'blade-blitz'];
+  const BFA_AND_SEYMOUR_STILL_ROLLING_IDS = ['blade-blitz'];
+
+  /**
+   * Re-parity W1 (2026-10-08, FFX only): these three used to roll on an accuracy byte of 100 that the data marks
+   * `[estimate]`. Their command records in the game's own table (0x6074, 0x60c6, 0x60c7) carry accuracy formula 0, and
+   * the exe's hit check rolls nothing for formula 0 (`research/re-ffx-rng-hit.md` section 4), so they always hit.
+   */
+  const NOW_ALWAYS_HIT_BY_THE_GAME_RECORD = ['cross-cleave', 'left-arm-strike', 'left-arm-strike-2'];
 
   it('every authorised enemy magical/status/Overdrive record has canMiss === false (strict)', () => {
     const merged: Record<string, AbilityDef> = { ...SEYMOUR_FLUX_ABILITIES, ...BRASKAS_FINAL_AEON_ABILITIES };
@@ -269,6 +276,13 @@ describe('FFX ability catalog — Black Magic and Overdrives always hit (canMiss
       if (chance === null) offenders.push(id);
     }
     expect(offenders, `these should roll (hitChance !== null) but always hit instead: ${offenders.join(', ')}`).toEqual([]);
+    // ...and the three the game's own records make unevadable (accuracy formula 0) no longer roll.
+    for (const id of NOW_ALWAYS_HIT_BY_THE_GAME_RECORD) {
+      const def = merged[id];
+      expect(def, id).toBeDefined();
+      expect(def!.record!.flagsMisc & 0x38, `${id}: the record's accuracy formula is 0`).toBe(0);
+      expect(hitChance(enemyUser, partyTarget, def!), id).toBeNull();
+    }
   });
 
   it('a representative sample resolves canMiss: false explicitly (not just by default omission)', () => {

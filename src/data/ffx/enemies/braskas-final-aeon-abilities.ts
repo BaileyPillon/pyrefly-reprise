@@ -31,8 +31,18 @@
  *   lighter-weight `[estimate]`s since no default playthrough fights them.
  *
  * `extra` keys used in this file:
- *   - `overdriveGaugeGain: number` — on `power-wave-bfa`. Fixed +20% to
- *     BFA's own Overdrive gauge on landing [§1.6, verified: 2 sources].
+ *   - `overdriveGaugeGain: number` — no row here sets it any more. BFA's
+ *     +20 from a Pagoda's Power Wave is his own `onHit`
+ *     (`ai/braskas-final-aeon.ts`; re-ffx-ai-yunalesca-bfa §3.5), so the row
+ *     carries no gauge rider (the key stays recognised by `scripted.ts`).
+ *   - `groupTarget: true` — the script names exactly who the command hits
+ *     (`performCommand(group, command)`), whatever the row's own single or
+ *     multi flag says [re-ffx-ai-yunalesca-bfa §1.4]: Gravija (the front line
+ *     and Yu Yevon himself, not his Pagodas) and Osmose (each of Character #1
+ *     to #3 who is alive). The possessed aeons' rows do not need it: a special
+ *     is a single-target row (the player's own aeon's record says the same) and
+ *     the script names its one target, and an all-enemies row already is the
+ *     front line (`targeting.ts#resolveTargets`).
  *   - `zombieInverts: true` — on `power-wave-bfa` / `power-wave-aeon`. If
  *     the target is Zombie, the heal becomes damage of the same magnitude
  *     (standard Zombie inversion) but the status-strip still happens.
@@ -48,14 +58,16 @@
  *     literally 0; `ffx-combat-core.md` §1.1 says a raw rank-0 byte falls
  *     back to rank 3 (NOT "instant") — this is shipped as `rank: 3` already,
  *     the flag just documents why the byte and the shipped rank differ.
- *   - `curagaCounter: 'excludes-self-damage'` — documented on Yu Yevon's
- *     `EnemyFields` in `braskas-final-aeon.ts`: his Curaga counter fires at
- *     most once per player-side damaging *action* (not per hit), and is
- *     never triggered by his own Gravija, by Poison ticks, or by a Yu
- *     Pagoda's Power Wave landing on him while Zombie [§3.4.1].
+ *   - `curagaCounter: 'excludes-self-damage'` — superseded by his own
+ *     `onHit` (`ai/yu-yevon.ts`; re-ffx-ai-yunalesca-bfa §6.3): one Curaga per
+ *     sub-action that dealt him HP damage, from anyone but himself (a
+ *     Pagoda's Power Wave on a Zombie Yu Yevon included, which the old
+ *     reading [§3.4.1] left out); never his own Gravija, a heal, a miss or a
+ *     Poison tick.
  *   - `mirrorsCasterStats: true` — on every possessed-aeon ability. The
  *     `EnemyDef.stats` block the engine builds for a possessed aeon is a
- *     live copy of the player's own aeon (Luck forced to 1); these
+ *     live copy of the player's own aeon (Luck stays the record's 0 and MP its 1,
+ *     `ai/possession-setup.ts`); these
  *     `AbilityDef`s carry the move's formula/power/flags only.
  *
  * ACCURACY EDIT (2026-09-16, by the FFX player-data agent, authorised by the
@@ -453,7 +465,8 @@ export const powerWaveBfa: AbilityDef = {
   removesStatuses: ['zombie', 'poison', 'silence', 'darkness', 'slow', 'power-break', 'magic-break', 'armor-break', 'mental-break'],
   flags: ['heals', 'removes-statuses', 'never-break-damage-limit'],
   canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [estimate] — see file header's ACCURACY EDIT note.
-  extra: { overdriveGaugeGain: 20, zombieInverts: true },
+  // The +20 into his Overdrive gauge is his `onHit` (`ai/braskas-final-aeon.ts`), not this row's.
+  extra: { zombieInverts: true },
   messageTemplate: '{user} uses Power Wave on {target}',
 };
 
@@ -544,7 +557,8 @@ export const gravija: AbilityDef = {
   removesStatuses: [],
   flags: [],
   canMiss: false, // ffx-yunalesca.md §7.2, ffx-bfa-yu-yevon.md §1.3 [estimate] — see file header's ACCURACY EDIT note.
-  extra: { rankZeroFallback: true, includesUser: true, cannotKo: true },
+  // `groupTarget`: the script names the group, the front line plus himself; his Pagodas are not in it (re-ffx-ai-yunalesca-bfa 6.2).
+  extra: { rankZeroFallback: true, includesUser: true, cannotKo: true, groupTarget: true },
   messageTemplate: '{user} uses Gravija',
 };
 
@@ -595,7 +609,7 @@ export const possessedValeforSonicWings: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'single-enemy', // one random living actor, aimed by the script; the player's own aeon's record says the same (re-ffx-ai-yunalesca-bfa 5.5)
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -615,7 +629,7 @@ export const possessedValeforEnergyRay: AbilityDef = {
   formula: 'special-magic',
   damageType: 'other',
   element: ['none'],
-  targeting: 'single-enemy',
+  targeting: 'all-enemies', // forced on the whole front line by the script (re-ffx-ai-yunalesca-bfa 5.5)
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -665,7 +679,7 @@ export const possessedIfritMeteorStrike: AbilityDef = {
   formula: 'strength',
   damageType: 'other',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'single-enemy', // one random living actor, aimed by the script; the player's own aeon's record says the same (re-ffx-ai-yunalesca-bfa 5.5)
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -711,7 +725,7 @@ export const possessedIxionAerospark: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'single-enemy', // one random living actor, aimed by the script; the player's own aeon's record says the same (re-ffx-ai-yunalesca-bfa 5.5)
   hits: 1,
   statusEffects: [],
   removesStatuses: ['shell', 'protect', 'reflect', 'nulblaze', 'nulfrost', 'nulshock', 'nultide', 'regen', 'haste'],
@@ -764,7 +778,7 @@ export const possessedShivaHeavenlyStrike: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'single-enemy', // one random living actor, aimed by the script; the player's own aeon's record says the same (re-ffx-ai-yunalesca-bfa 5.5)
   hits: 1,
   statusEffects: [],
   removesStatuses: [],

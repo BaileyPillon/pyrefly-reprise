@@ -123,14 +123,16 @@ export const SIN_CORE_ELEMENT_CYCLE: readonly string[] = [SIN_CORE_FIRE, SIN_COR
 // (every key prefixed `sin.`; `sin.turn` alone marks Overdrive Sin's battle)
 // ---------------------------------------------------------------------------
 
-/** Party targetings of the Fin since it last attacked (§5.1.1; an aeon counts 2, S-27). Package F writes it. */
+/** The Fin's hit counter (`v8`): +1 per hit event, +2 while an aeon holds the field; it resets when the Fin attacks (note 5.3). */
 export const SIN_FIN_HITS = 'sin.fin.hits';
-/** The Fin's regular NEAR actions toward the charge (§5.1.2). Package F. */
+/** The Fin's regular NEAR actions toward the charge (`v7`, 0 to 3). */
 export const SIN_FIN_REGULAR_ACTS = 'sin.fin.regularActs';
-/** True between "Core gathers energy." and the Gravija that follows (§5.1.2). Package F. */
+/** True between "Core gathers energy." and the Gravija that follows (`v7` = 4). */
 export const SIN_FIN_CHARGED = 'sin.fin.charged';
-/** The Right Fin's below-16,250 latch (§5.2). Package F. */
+/** The Right Fin's below-16,250 latch: the script's phase flag, set at a hit event and never cleared (note 5.3). */
 export const SIN_FIN_LATCHED = 'sin.fin.latched';
+/** The Fin's one-event guard (`v9`): a FAR Negation sets it and the next hit event (its own) is swallowed (note 5.3). */
+export const SIN_FIN_NEGATION_GUARD = 'sin.fin.negationGuard';
 /**
  * What the last Negation removed, per combatant: `Record<CombatantId, StatusId[]>`
  * (§11 item 4: the HUD must show what Negation took, and its mercy, the cured
@@ -143,27 +145,13 @@ export const SIN_GENAIS_SHELLED = 'sin.genais.shelled';
 export const SIN_CORE_STATE = 'sin.core.state';
 /** The next step of the Core's F, B, T, W counter cycle (§3.3). Package G. */
 export const SIN_CORE_COUNTER_STEP = 'sin.core.counterStep';
+/** The Core's stored score (`v29`): built at the start of each of its turns, lowered by 3 on every hit event until the next (note 6.5). */
+export const SIN_CORE_SCORE = 'sin.core.score';
+/** The Core's one-event guard (`v11`): its own Negation sets it and swallows the hit event that Negation raises on the Core. */
+export const SIN_CORE_GUARD = 'sin.core.guard';
 /** True once the Core is down: `markSinRuntime` then marks Genais a non-combatant (§5.3.2 item 5). Package G. */
 export const SIN_CORE_DOWN = 'sin.core.down';
 
 /** `inactive` (Genais out), `charging` (gathering), `ready` (Gravija next), `free` (Genais dead). */
 export const SIN_CORE_STATES = ['inactive', 'charging', 'ready', 'free'] as const;
 export type SinCoreState = (typeof SIN_CORE_STATES)[number];
-
-// ---------------------------------------------------------------------------
-// The counter shape the Sin collectors return (`sin-counters.ts`)
-// ---------------------------------------------------------------------------
-
-/**
- * One free action a Sin collector asks `reactions.ts#collectBossCounters` to
- * queue. `targets` is the aim: omitted or empty, the engine's own resolution
- * picks (a random party member for a `single-enemy` row). Waterga names the
- * caster here (§3.2 "the caster", `[verified: 4 sources]`; plan REVIEW
- * must-change 1).
- */
-export interface SinCounter {
-  actorId: CombatantId;
-  abilityId: string;
-  cause: string;
-  targets?: CombatantId[];
-}

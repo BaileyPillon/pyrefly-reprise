@@ -189,7 +189,10 @@ function walk(groupId: string, seed: number, party = gagazetBuild): Walk {
 
 describe('buildAdvisorView — agreement with the shipped tactic', () => {
   it('tops the card with the chapter line in Chapter 1, at several seeds', () => {
-    for (const seed of [1, 2, 3]) {
+    // Seeds [1, 2, 3] -> [2, 3, 4] on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in
+    // the game's order and Cross Cleave always hits, so seed 1's Chapter 1 is a three-decision wipe and cannot show the
+    // agreement over more than five decisions.
+    for (const seed of [2, 3, 4]) {
       const result = walk('seymour-flux', seed);
       expect(result.decisions).toBeGreaterThan(5);
       expect(result.advised).toBe(result.decisions);

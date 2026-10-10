@@ -371,11 +371,11 @@ describe('every offered row is submittable as offered', () => {
    * the state, because that is what the presenter animates: a row that produces
    * no events produces no feedback either.
    */
-  function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[]): void {
+  function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[], seed = 3): void {
     for (const who of front) {
       // One engine per row: submitting a row changes the board, and the point
       // is what each row does from the same starting position.
-      const probe = newEngine(groupId, 3, build);
+      const probe = newEngine(groupId, seed, build);
       frontWithFullGauge(probe, who);
       const offered: AvailableCommand[] = turnFor(probe, who).commands.filter((c) => c.enabled);
 
@@ -385,7 +385,7 @@ describe('every offered row is submittable as offered', () => {
         // is not a Zombie legitimately does nothing, and the menu cannot know
         // in advance. Every *action* row has to do something.
         if (row.command.kind === 'item') continue;
-        const engine = newEngine(groupId, 3, build);
+        const engine = newEngine(groupId, seed, build);
         frontWithFullGauge(engine, who);
         const decision = turnFor(engine, who);
         const live = decision.commands.find((c) => c.label === row.label && c.enabled);
@@ -411,7 +411,10 @@ describe('every offered row is submittable as offered', () => {
   }
 
   it('holds for the Chapter 1 board, Wakka and Lulu included', () => {
-    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri']);
+    // Seed 3 -> 1 on 2026-10-09 (re-parity AI-Seymour, FFX only): everyone else only Defends, and on seed 3 Seymour Flux's script (the
+    // game's own, research/re-ffx-ai-seymour.md D-01 to D-08) puts Kimahri on the floor before his first turn, so the probe
+    // ends before he is asked. Seed 1 lets Wakka, Lulu and Kimahri all act; nothing about the menu rows changed.
+    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri'], 1);
   });
 
   // Three named actors on one board is what let Rikku's `Steal`, `Use` and

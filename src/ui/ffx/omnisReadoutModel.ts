@@ -1,4 +1,4 @@
-import type { BattleState, ElementalAffinities, FFXCombatant } from '../../battle/common/types.ts';
+import type { BattleState, ElementalAffinities } from '../../battle/common/types.ts';
 import {
   MORTIPHASM_IDS,
   OMNIS_GA,
@@ -6,11 +6,11 @@ import {
   OMNIS_RA,
   OMNIS_STATE,
   omnisAffinities,
+  omnisCastOrder,
   omnisDiscs,
   type Element4,
   type OmnisState,
 } from '../../battle/ffx/ai/seymour-omnis-rules.ts';
-import { isAlive } from '../../battle/ffx/predicates.ts';
 import {
   omnisBlizzaga,
   omnisBlizzara,
@@ -41,20 +41,26 @@ import {
  *
  * What the line may not do (plan §6.2, O-4): **name which party member a spell
  * hits** (the mapping is an estimate, B12). It names only the spells, which the
- * sources give: one per disc, **-ra** on one or two discs of an element, **-ga**
- * on three or four [§4.1, verified: 4 sources], one per living member plus one
- * [single source: wiki], the first discs keeping theirs (`planOmnisVolley`).
+ * game's scripts give: always four, in the order his layout fixes, **-ra** for an
+ * element on one or two discs, **-ga** on three or four (re-parity,
+ * `research/re-ffx-ai-seymour.md` section 5.4; `planOmnisVolley`).
  *
- * **The colour order is our estimate** (B8: the ring and the reset cycle,
- * `seymour-omnis-rules.ts#DISC_RING`, `#OMNIS_RESET_CYCLE`); the widget prints
- * {@link COLOUR_ORDER_NOTE} beside every strip, and nothing here restates the
- * order (it reads the facings the engine turned, never the ring).
+ * **The colour order** (B8, D-184: "our estimate") is now the game's own, both halves: the ring, Fire, Ice, Water,
+ * Thunder (its AI script, 2026-10-07; `seymour-omnis-rules.ts#DISC_RING`), and the reset order after Ultima, Ice,
+ * Water, Thunder, Fire (the same script, re-parity D-24; `#OMNIS_RESET_CYCLE`). The widget still prints
+ * {@link COLOUR_ORDER_NOTE} beside every strip: that wording is Bailey's to change, and is listed as stale in
+ * `docs/handoff/re-parity-ai-seymour.md`. Nothing here restates either order (it reads the facings the engine
+ * turned, never the ring).
  */
 
 /** The strip's words for the four elements. */
 export const ELEMENT_NAME: Readonly<Record<Element4, string>> = { fire: 'Fire', ice: 'Ice', lightning: 'Thunder', water: 'Water' };
 
-/** The label B8 asks for wherever the colour order is shown (our words). */
+/**
+ * The label B8 asks for wherever the colour order is shown (our words). Both the
+ * ring and the reset order are sourced now (the game's own script), so the words
+ * are stale; they stay because they are Bailey's wording to change.
+ */
 export const COLOUR_ORDER_NOTE = 'Colour order: our estimate';
 
 /**
@@ -95,14 +101,13 @@ export interface OmnisReadoutView {
 export interface OmnisReadoutInput {
   discs: readonly Element4[];
   state: OmnisState;
-  /** Party members standing (an aeon on the field counts alone, as the engine's `friendlies`). */
-  living: number;
   /** Disc indexes turned since his last turn, oldest first. */
   turned: readonly number[];
   /** The weakness he had when {@link turned} was last cleared. */
   weakBefore: Element4 | null;
 }
 
+/** The order the strip lists elements in (rows, tied counts). A display order, **not the disc ring**: that lives in the rules, and this file never reads it. */
 const ORDER: readonly Element4[] = ['fire', 'ice', 'lightning', 'water'];
 const LABEL: Readonly<Partial<Record<string, AffinityLabel>>> = { absorb: 'Absorbs', immune: 'Immune', resist: 'Halves', weak: 'Weak' };
 const ROWS: readonly AffinityLabel[] = ['Absorbs', 'Immune', 'Halves', 'Weak'];
@@ -127,15 +132,6 @@ export function glowsRed(state: OmnisState): boolean {
   return state === 'red' || state === 'dispelled';
 }
 
-/** Members standing, as the volley counts them (`state.ts#livingFriendlies`). */
-export function livingPartyOf(state: Pick<BattleState, 'combatants' | 'activeIds' | 'aeonId'>): number {
-  const ids = state.aeonId ? [state.aeonId] : state.activeIds;
-  return ids.filter((id) => {
-    const c = state.combatants[id] as FFXCombatant | undefined;
-    return c ? isAlive(c) : false;
-  }).length;
-}
-
 /** The weakness the discs give him, if any (four of a kind; the opposite element). */
 export function weaknessOf(affinities: ElementalAffinities): Element4 | null {
   return ORDER.find((e) => affinities[e] === 'weak') ?? null;
@@ -147,11 +143,10 @@ export function affinityRows(discs: readonly Element4[]): OmnisReadoutView['affi
   return ROWS.map((label) => ({ label, elements: ORDER.filter((e) => LABEL[aff[e] ?? 'normal'] === label) })).filter((r) => r.elements.length > 0);
 }
 
-/** The spells his next volley casts, largest group first: `[['Firaga', 3], ['Thundara', 1]]`. */
-export function volleyOf(discs: readonly Element4[], living: number): Array<[string, number]> {
-  const casts = Math.min(discs.length, Math.max(0, living) + 1);
+/** The spells his next volley casts, largest group first: `[['Firaga', 3], ['Thundara', 1]]`. Always four. */
+export function volleyOf(discs: readonly Element4[]): Array<[string, number]> {
   const groups = new Map<string, number>();
-  for (const element of discs.slice(0, casts)) {
+  for (const element of omnisCastOrder(discs)) {
     const shown = discs.filter((d) => d === element).length;
     const name = SPELL_NAME[shown >= 3 ? OMNIS_GA[element] : OMNIS_RA[element]] ?? element;
     groups.set(name, (groups.get(name) ?? 0) + 1);
@@ -201,7 +196,7 @@ export function omnisIntent(input: OmnisReadoutInput): IntentRun[] {
   if (input.state === 'red') return [{ text: 'He glows red: ' }, { text: dispel, bold: true }, { text: ' on the party, then ' }, { text: ultima, bold: true }, after];
   if (input.state === 'dispelled') return [{ text: 'He glows red: ' }, { text: ultima, bold: true }, { text: ' on the party next' }, after];
   if (input.state === 'reset-due') return [{ text: 'After ' }, { text: ultima, bold: true }, { text: ', every disc turns to the next element on his next turn.' }];
-  const out: IntentRun[] = [...lead(input.discs, input.turned), { text: ': ' }, ...listRuns(volleyOf(input.discs, input.living), true), { text: ' next.' }];
+  const out: IntentRun[] = [...lead(input.discs, input.turned), { text: ': ' }, ...listRuns(volleyOf(input.discs), true), { text: ' next.' }];
   const aff = omnisAffinities(input.discs);
   const weak = weaknessOf(aff);
   const absorbs = ORDER.find((e) => aff[e] === 'absorb');

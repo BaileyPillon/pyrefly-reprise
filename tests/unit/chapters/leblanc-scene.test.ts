@@ -177,9 +177,9 @@ describe('leblanc-last-room — PR-0093: the trio stages at human scale, not the
         expect(scene.slots.enemySpots?.[e.id], `${act} ${e.id}`).toBeDefined();
       }
     }
-    // another scene (Gagazet) publishes none of the Syndicate's heights or spots, and no advisor cap
+    // another scene (Gagazet) publishes none of the Syndicate's heights or spots, and no advisor cap (it names its own fiends' heights since r3942-giants-ffx: Flux and Mortiorchis, FFX only)
     const gagazet = await stage('gagazet');
-    expect(gagazet.slots.figureHeights).toBeUndefined();
+    for (const fiend of Object.keys(LEBLANC_LAST_ROOM_SLOTS.figureHeights!)) expect(gagazet.slots.figureHeights?.[fiend], fiend).toBeUndefined();
     expect(gagazet.slots.advisorCap).toBeUndefined();
     for (const fiend of Object.keys(LEBLANC_LAST_ROOM_SLOTS.enemySpots!)) expect(gagazet.slots.enemySpots?.[fiend], fiend).toBeUndefined();
   }, 60_000);

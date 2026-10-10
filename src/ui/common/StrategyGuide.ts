@@ -176,6 +176,8 @@ export class StrategyGuide {
   private peek = false;
   /** The rail is folded because the status cure card displaced the sheet, not for want of room: held while that card is up (`measureSqueeze`). */
   private hintFold = false;
+  /** This fight starts folded (`startFolded`): applied on the first frame, once the layout has said whether this is the upright phone, and dropped by any answer of the player's. */
+  private foldPending = false;
   /** The sheet's lines, measured (`./guideLines.ts`), and what they were measured for. */
   private lines: LineBox[] = [];
   private linesSig = '';
@@ -262,7 +264,17 @@ export class StrategyGuide {
     return this.squeezed ? this.peek : this.visible;
   }
 
+  /**
+   * This fight starts with the sheet folded to its chip (`SceneStaging.guideFolded`; FFX Chapters I and III, Bailey's "A2" of 2026-10-09). A **starting state, not a setting**: nothing is written to
+   * `Settings.guideVisible`, so the player's saved preference is never overwritten by the chapter; `G` opens the sheet as ever, and the player's own answer is then written as it always was. Applied on the
+   * first frame (`update`), when the layout has said whether this is the upright phone, which keeps its own guide sheet and is left alone. A player who has the guide off sees no difference.
+   */
+  startFolded(): void {
+    this.foldPending = true;
+  }
+
   setVisible(on: boolean): void {
+    this.foldPending = false; // the player has answered: the start no longer applies
     if (this.visible === on) return;
     this.visible = on;
     (this.opts.writeVisible ?? ((v: boolean) => writeSetting('guideVisible', v)))(on);
@@ -338,6 +350,13 @@ export class StrategyGuide {
 
   /** Per-frame tick from the HUD (`dt` in seconds): polls the pad, scrolls with its stick, keeps the height honest. */
   update(dt: number): void {
+    if (this.foldPending) {
+      this.foldPending = false;
+      if (!onPhone() && this.visible) {
+        this.visible = false; // not written: the fight's starting state, not the player's answer
+        this.applyVisible();
+      }
+    }
     this.pollPad();
     if (this.padScroll !== 0 && this.canScroll()) this.panelEl.scrollTop += padScrollStep(this.padScroll, dt);
     // Whether the rail fits above the girls is asked whether or not it is up: a player who turned the guide off and then asks for it at 130 percent

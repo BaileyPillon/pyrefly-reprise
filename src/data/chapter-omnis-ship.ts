@@ -21,8 +21,10 @@
  *
  * **Listed** 2026-09-25 (ship order D-162, "all recommendations please"): `./encounters.ts` puts
  * the result in `CHAPTERS` after Chapter IX, so chapter select shows it in the FFX group. The ring
- * order (O-7) and the reset cycle (O-11) still play as GameFAQs' cycle labelled "our estimate"
- * until Bailey confirms both (B8, D-145).
+ * order (O-7) has been the game's own since 2026-10-07 (its battle AI script: Fire, Ice, Water,
+ * Thunder); the reset cycle (O-11) is the same script's too since the boss-rules batch (re-parity
+ * D-24: Ice, Water, Thunder, Fire, where GameFAQs had Water, Ice, Thunder, Fire), though the
+ * strip's "Colour order: our estimate" words stay until Bailey changes them (B8, D-145).
  */
 
 import type { Chapter } from './encounters.ts';

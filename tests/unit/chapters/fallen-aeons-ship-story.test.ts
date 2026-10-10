@@ -25,8 +25,13 @@ import { MID_LINE_HOLD_MS, MID_SCRIPT_BUDGET_MS, SEAM_BUDGET_MS, scriptDurationM
 import { LINES, driveLink } from '../helpers/fallenAeonsDrive.ts';
 
 const SEEDS = Array.from({ length: 12 }, (_, i) => i + 1);
-/** Shiva's Stop lands about 7 times in 100 fights (all on Yuna, measured): enough seeds to see it. */
-const SHIVA_SEEDS = Array.from({ length: 40 }, (_, i) => i + 1);
+/**
+ * Shiva's Stop lands about 2 times in 100 fights, all on Yuna (7 in the first 400 seeds, the first at seed 43; measured).
+ * Re-parity W3 (FFX-2 only): it was about 7 in 100 before the status roll became the game's own, which is the rider's
+ * chance byte 30 plus five a level of difference (Shiva 41, Yuna 46 gives 5 in 101 a landed Heavenly Strike) with the
+ * hit decided once, in the game's order. 400 seeds is about 2 seconds at bench speed and is enough to see it land.
+ */
+const SHIVA_SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
 
 function allScripts(): Array<[string, StoryScript]> {
   return [['pre', S.pre], ['post', S.post], ...Object.entries(S.midScripts)];

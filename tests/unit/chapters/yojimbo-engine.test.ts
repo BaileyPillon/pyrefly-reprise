@@ -90,6 +90,15 @@ function makeInvincible(engine: BattleEngine): void {
   }
 }
 
+/**
+ * Re-parity (AI lane C, D-10): his very first turn is the Summon, aimed at Lady Ginnem, with no gauge change. A test that
+ * measures an ordinary turn lets that one go by first.
+ */
+function skipSummon(engine: BattleEngine): void {
+  const turn = nextYojimboTurn(engine);
+  if (!abilitiesUsedBy(turn, 'yojimbo').includes('yojimbo-summon')) throw new Error('his first turn was not the Summon');
+}
+
 /** Run until Yojimbo's next turn has resolved; return that turn's events, from its `turn-start`. */
 function nextYojimboTurn(engine: BattleEngine, choose: (d: Input) => Command = defend): BattleEvent[] {
   const from = engine.state().log.length;
@@ -168,7 +177,7 @@ describe('Yojimbo — the stat block and the formation [research §2]', () => {
     expect(rules.GINNEM_ID).toBe(data.GINNEM_ID);
     expect(rules.YOJIMBO_SCRIPT).toBe(data.YOJIMBO_SCRIPT);
     expect(rules.YOJIMBO_BYSTANDER_SCRIPT).toBe(data.YOJIMBO_BYSTANDER_SCRIPT);
-    for (const k of ['YOJIMBO_DAIGORO_ORDER', 'YOJIMBO_KOZUKA', 'YOJIMBO_WAKIZASHI', 'YOJIMBO_ZANMATO', 'DAIGORO_ATTACK'] as const) {
+    for (const k of ['YOJIMBO_SUMMON', 'YOJIMBO_DAIGORO_ORDER', 'YOJIMBO_KOZUKA', 'YOJIMBO_WAKIZASHI', 'YOJIMBO_ZANMATO', 'DAIGORO_ATTACK'] as const) {
       expect(rules[k], k).toBe(rows[k]);
     }
   });
@@ -177,9 +186,9 @@ describe('Yojimbo — the stat block and the formation [research §2]', () => {
 describe('Yojimbo — the action rows [research §3.1]', () => {
   const r = rows.YOJIMBO_ABILITIES;
 
-  it('Kozuka 16 and Wakizashi 28 are Strength, physical, one random character, no crit', () => {
+  it('Kozuka 16 and Wakizashi 28 are Strength, physical, one character (the script picks it and aims the row), no crit', () => {
     for (const [id, dc] of [['yojimbo-kozuka', 16], ['yojimbo-wakizashi', 28]] as const) {
-      expect(r[id]).toMatchObject({ formula: 'strength', power: dc, damageType: 'physical', targeting: 'random-enemy', hits: 1 });
+      expect(r[id]).toMatchObject({ formula: 'strength', power: dc, damageType: 'physical', targeting: 'single-enemy', hits: 1 });
       expect(r[id]?.flags).not.toContain('crit-eligible');
     }
   });
@@ -252,6 +261,7 @@ describe("Capability: Yojimbo's turn orders Daigoro to act [§2.5, §3.1]", () =
   it('below 25 % the only action is the order, and the dog acts on the same turn', () => {
     const engine = newEngine(4);
     makeInvincible(engine);
+    skipSummon(engine);
     for (let i = 0; i < 12; i++) {
       setGauge(engine, 0);
       const turn = nextYojimboTurn(engine);
@@ -266,6 +276,7 @@ describe("Capability: Yojimbo's turn orders Daigoro to act [§2.5, §3.1]", () =
     const measure = (dogStr: number, yojimboStr: number): number => {
       const engine = newEngine(5);
       makeInvincible(engine);
+      skipSummon(engine);
       (engine.state().combatants['daigoro'] as FFXCombatant).stats.str = dogStr;
       yojimbo(engine).stats.str = yojimboStr;
       setGauge(engine, 0);
@@ -306,7 +317,7 @@ describe('Capability: the Zanmato gauge is exposed in state and events [§4.1]',
     expect((engine.state().combatants['daigoro'] as FFXCombatant).overdrive).toBeUndefined();
   });
 
-  it('+3 once per party action that targets him, not per hit (Y-1)', () => {
+  it('+3 once per party action that reaches him, not per hit (his onHit, D-13)', () => {
     const engine = newEngine(8);
     makeInvincible(engine);
     let done = false;
@@ -324,9 +335,10 @@ describe('Capability: the Zanmato gauge is exposed in state and events [§4.1]',
     expect(hits).toHaveLength(4);
   });
 
-  it('+2 on each of his attacking turns (the Daigoro order included), emitted as cause "attacking"', () => {
+  it('+2 on each of his turns after the first (the Daigoro order included), emitted as cause "attacking"', () => {
     const engine = newEngine(9);
     makeInvincible(engine);
+    skipSummon(engine);
     setGauge(engine, 30);
     const turn = nextYojimboTurn(engine);
     const gain = turn.filter((e) => e.type === 'overdrive-gauge' && e.who === 'yojimbo');
@@ -345,39 +357,45 @@ describe('Capability: the Zanmato gauge is exposed in state and events [§4.1]',
     expect([24, 49, 79, 99].map((g) => rules.yojimboBand(g))).toEqual(['daigoro', 'kozuka', 'wakizashi', 'heightened']);
   });
 
-  it('in play, each band uses exactly its pool, every member of it, at an even split (B2)', () => {
+  it('in play, each band uses exactly its pool, every member of it, at the script\'s own odds (D-11; re-parity-ai-yojimbo has the exact ones)', () => {
     for (const [gauge, pool] of [[10, ['yojimbo-daigoro']], [30, ['yojimbo-daigoro', 'yojimbo-kozuka']], [60, ['yojimbo-daigoro', 'yojimbo-kozuka', 'yojimbo-wakizashi']]] as const) {
       const count = new Map<string, number>();
-      for (let seed = 1; seed <= 150; seed++) {
+      for (let seed = 1; seed <= 300; seed++) {
         const engine = newEngine(seed);
         makeInvincible(engine);
+        skipSummon(engine);
         setGauge(engine, gauge);
         const used = abilitiesUsedBy(nextYojimboTurn(engine), 'yojimbo');
         expect(used).toHaveLength(1);
         count.set(used[0]!, (count.get(used[0]!) ?? 0) + 1);
       }
       expect([...count.keys()].sort()).toEqual([...pool].sort());
-      for (const n of count.values()) expect(n).toBeGreaterThan(150 / pool.length / 2);
+      for (const o of rules.yojimboOdds(gauge)) {
+        expect(Math.abs((count.get(o.id) ?? 0) / 300 - o.of65536 / 65_536), `${o.id} at gauge ${gauge}`).toBeLessThan(0.1);
+      }
     }
   });
 
-  it('at 100 his next turn is Zanmato, 9,999 to each of the three, then the gauge returns to 0 (B2)', () => {
+  it('at 100 his next turn is Zanmato, 9,999 to each of the three, then the gauge is 0 and the turn\'s +2 makes it 2 (D-12)', () => {
     const engine = newEngine(10);
     makeInvincible(engine);
+    skipSummon(engine);
     setGauge(engine, 100);
     const turn = nextYojimboTurn(engine);
     expect(abilitiesUsedBy(turn, 'yojimbo')).toEqual(['yojimbo-zanmato']);
     const reset = turn.find((e) => e.type === 'overdrive-gauge' && e.who === 'yojimbo');
     expect(reset).toMatchObject({ from: 100, to: 0, cause: 'zanmato' });
+    expect(turn.filter((e) => e.type === 'overdrive-gauge' && e.who === 'yojimbo')[1]).toMatchObject({ from: 0, to: 2, cause: 'attacking' });
     const dmg = turn.filter((e) => e.type === 'damage' && (e as { sourceId?: string }).sourceId === 'yojimbo') as Array<{ targetId: string; amount: number }>;
     expect(dmg.map((d) => d.targetId).sort()).toEqual(['kimahri', 'lulu', 'yuna']);
     for (const d of dmg) expect(d.amount).toBe(9_999);
-    expect(yojimbo(engine).overdrive?.gauge).toBe(0);
+    expect(yojimbo(engine).overdrive?.gauge).toBe(2);
   });
 
   it('Protect does not reduce Zanmato', () => {
     const engine = newEngine(12);
     makeInvincible(engine);
+    skipSummon(engine);
     for (const id of engine.state().activeIds) {
       const c = engine.state().combatants[id]!;
       c.statuses['protect'] = { id: 'protect', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };

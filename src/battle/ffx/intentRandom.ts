@@ -41,9 +41,10 @@ export function ffxRandomTarget(
   if (!ids) return null;
   const perHit = isRandomTargeting(pickDef.targeting) && pickDef.hits > 1;
   // Aimed, every hit of a per-hit volley lands on the aim, so the row is the
-  // whole volley and divides back to one hit. Natus's Multi-ra
-  // (`distinctTargetsPerHit`) already sends every later hit elsewhere.
-  const divisor = perHit && pickDef.extra?.['distinctTargetsPerHit'] !== true ? pickDef.hits : 1;
+  // whole volley and divides back to one hit. A row the script aims
+  // (`scriptAims`: the Multi-ra of Seymour and Natus) sends each hit to the
+  // target the script named for it, so a candidate's row is already one hit.
+  const divisor = perHit && pickDef.extra?.['scriptAims'] !== true ? pickDef.hits : 1;
   return randomTargetRows(ids, pickDef.hits, perHit, divisor, (id) =>
     estimateCommand(ctx.state, enemyId, { ...command, targets: [id] } as Command, def, ctx.content, id)?.perTarget ?? null,
   );

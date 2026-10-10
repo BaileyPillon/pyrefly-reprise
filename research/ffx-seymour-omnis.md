@@ -23,6 +23,7 @@ The same tags as in `research/ffx-seymour-natus-highbridge.md` §0.1.
 | `[derived]` | Computed by me from `[decompiled]` constants with the damage chain in `research/ffx-combat-core.md` §2. |
 | `[estimate]` | My own design judgement, not a measured fact. |
 | `[conflict]` | The sources disagree. Listed again in §10 with what to do. |
+| `[game script]` | Read from the game's own battle AI script in the Steam HD Remaster (live build 25501027), datamined 2026-10-07. It is the game itself, so where the written sources disagree it decides. Only the fact and where it came from are kept here: no game text and no code. |
 
 ### 0.2 What I did
 
@@ -206,7 +207,7 @@ Consequences `[derived]`:
 |---|---|---|
 | A **physical** hit on a disc turns **that disc** 90° **counter-clockwise** (left) | Only Wakka, Valefor, Anima, Mindy can reach (§2) | wiki (both pages + ability table) + GameFAQs + Jegged + GamerGuides + Samurai + LP `[verified: 6 sources]` |
 | A **magic** hit on a disc turns it 90° **clockwise** (right) | Any caster; the disc takes no damage | same `[verified: 6 sources]` |
-| **The order of the four colours around a disc** | **Unsourced.** Without it, "one turn left" has no defined result. Needs footage or a reference image (O-7). | open |
+| **The order of the four colours around a disc** (O-7) | **Fire → Ice → Water → Thunder → Fire.** A **magic** hit on a disc steps it one step **forward** round this ring, a **physical** hit one step **back**; other hit types do nothing. Three readings existed. GameFAQs' explicit list (its reset cycle, §4.4) says Fire, Water, Ice, Thunder. The wiki's list reads Fire, Ice, Water, Thunder. **The game's own battle AI script** (Steam HD Remaster, live build 25501027, datamined 2026-10-07) says Fire, Ice, Water, Thunder. **The script decides**: it is the game itself, and it agrees with the wiki. A look-only frame of the real discs (read 2026-09-25, nothing saved; `docs/concepts/chapters/omnis/INSTALLED.md`) agrees too: clockwise it reads Fire, Thunder, Water, Ice, which is this ring read the way a spell turns the disc. | `[game script]`, settled 2026-10-07 (Bailey: "go ahead and fix the omnis disc order too"). The 2026-09-25 build had read GameFAQs' reset cycle as the ring (B8 = b), which swapped Ice and Water. |
 | Whether "magic" includes Nul spells, Haste, Cure, Scan and so on aimed at a disc | Unstated. The discs are immune to all those statuses; the sources mean offensive spells. Build: Black Magic and damaging magic only `[estimate]` (O-8). | open |
 
 ### 4.4 The attack counter, Dispel and Ultima
@@ -220,7 +221,7 @@ Consequences `[derived]`:
 | Next turn | **Dispel** on the whole party; his DEF drops to 100 | Dispel: `[verified: 4 sources]`; DEF: `[single source: wiki]` + LP partial |
 | The turn after | **Ultima** on the whole party; DEF rises to 150 | Ultima: `[verified: 4 sources]`; DEF: `[single source: wiki]` |
 | Then | **All four discs are reset to one colour, the next in the cycle**, and he goes back to casting four spells | wiki (both pages) + GameFAQs + GamerGuides + LP `[verified: 4 sources]`. **When** `[conflict]`: GameFAQs "immediately after Ultima"; GamerGuides "on the turn after Ultima" and the wiki *Mortiphasm* page (revid 3981206) "on his next turn after casting Ultima". 2 sources against 1 (O-10, open; corrected 2026-09-24 by the plan review, S8). |
-| **The cycle order** `[conflict]` | GameFAQs: **Fire → Water → Ice → Thunder**. The wiki says only "the next element listed above", and its list reads Fire, Ice, Water, Thunder. | O-11: build GameFAQs' explicit order, label it, and confirm on footage |
+| **The cycle order** `[conflict]` | GameFAQs: **Fire → Water → Ice → Thunder**. The wiki says only "the next element listed above", and its list reads Fire, Ice, Water, Thunder. **The game's own battle AI script cycles Ice, Water, Thunder, Fire** (`[game script]`, 2026-10-07): the ring's order, which is the wiki's reading. | O-11: the script decides, so GameFAQs' explicit order is wrong. **The build still followed GameFAQs** (`OMNIS_RESET_CYCLE`) until the boss-rules batch; the ring itself was fixed first (O-7). **Update 2026-10-09: built** (release candidate 1, `research/re-ffx-ai-seymour.md` D-24): the reset sets every disc to Ice, then Water, Thunder, Fire. |
 | Lines | He speaks before the first Dispel and before each Ultima (Auronlu Ch. XV; wiki quotes) | `[verified: 2 sources]`. Write original lines (rule 8). |
 
 **Defense after the reset.** DEF stays 150 after the first Ultima (it never returns to 180) `[derived from the wiki's wording]`. How the scripted Defense values interact with Armor Break status is unstated (O-12).
@@ -239,16 +240,16 @@ The battle ends when **Seymour** dies (the discs cannot be killed) `[derived]`. 
 ### 4.7 Reference pseudocode (sourced rules only; the open items are marked)
 
 ```
-ELEMENTS cycle (after Ultima) = [fire, water, ice, thunder]   // O-11, GameFAQs
+ELEMENTS cycle (after Ultima) = [fire, water, ice, thunder]   // O-11, GameFAQs (the game's script cycles ice, water, thunder, fire: built 2026-10-09, release candidate 1)
 discs = [fire, fire, fire, fire]; cycleIdx = 0; hits = 0; state = 'normal'
-DISC_RING = ?                                                 // O-7: colour order around each disc
+DISC_RING = [fire, ice, water, thunder]                       // O-7, the game's script: a magic hit steps forward, a physical hit back
 
 on any attack that hits Seymour (incl. counters and reflected spells; discs: O-9):
     hits += 1
     if hits >= (seymour.hp < 20000 ? 3 : 6) and state == 'normal': state = 'red'   // glow
 
 on a hit on disc d:
-    physical -> discs[d] = DISC_RING.left(discs[d]);  magic -> discs[d] = DISC_RING.right(discs[d])
+    physical -> discs[d] = DISC_RING.back(discs[d]);  magic -> discs[d] = DISC_RING.forward(discs[d])
     recomputeAffinity()
 
 recomputeAffinity():
@@ -395,11 +396,11 @@ Chapter I's post already closes on Seymour saying Spira's sorrow is patient (`sr
 | O-4 | Which disc's spell goes to which party member, and in what order | **Open.** `[estimate]`: disc order left to right, one per living member in slot order, the fourth at random. Label it. |
 | O-5 | Thunder ↔ Water as the opposite pair in FFX | Standard, but no Omnis source names it (the all-Thunder and all-Water states are never described). Check on footage. |
 | O-6 | The two-Water bug | `[single source]`. Ask Bailey: faithful or fixed. Recommend faithful but hidden (it only changes Fire). |
-| O-7 | **The colour order around each disc** | **Open and blocking**: turning a disc has no defined result without it. Get it from footage or reference images before the chapter is built. |
+| O-7 | **The colour order around each disc** | **Settled 2026-10-07 by the game's own battle AI script: Fire, Ice, Water, Thunder; a magic hit steps forward, a physical hit back** (§4.3). Three readings: GameFAQs Fire, Water, Ice, Thunder (its reset cycle, not a ring); the wiki Fire, Ice, Water, Thunder; the script Fire, Ice, Water, Thunder. The script decides. Built 2026-10-07 (`r3941-omnis`); the 2026-09-25 estimate had Ice and Water swapped. |
 | O-8 | Which spells turn a disc | `[estimate]`: damaging magic only. |
 | O-9 | Whether hits on the discs count toward the 6 / 3 | **Open.** `[estimate]`: no (the sources say "attacks on Seymour"). |
 | O-10 | Disc reset timing: straight after Ultima, or on his next turn | **Open** `[conflict]`: the wiki *Mortiphasm* page and GamerGuides say on his next turn after Ultima, GameFAQs straight after. 2 against 1, so the majority rule says **next turn**; Bailey's call (plan B23). *Corrected 2026-09-24: this row first said "build straight after Ultima"; the wiki sentence had not been counted.* |
-| O-11 | **The post-Ultima cycle order**: GameFAQs Fire → Water → Ice → Thunder; the wiki's list reads Fire, Ice, Water, Thunder | Build GameFAQs' explicit order; **confirm on footage** with O-7. |
+| O-11 | **The post-Ultima cycle order**: GameFAQs Fire → Water → Ice → Thunder; the wiki's list reads Fire, Ice, Water, Thunder; **the game's script cycles Ice, Water, Thunder, Fire** | **Settled by the script 2026-10-07: the ring's order (the wiki's reading), not GameFAQs'.** Not built on the release line (`OMNIS_RESET_CYCLE` was still GameFAQs' order and waited for the boss-rules batch). **Built 2026-10-09 in release candidate 1** (`research/re-ffx-ai-seymour.md` D-24; the reset sets every disc to Ice, then Water, Thunder, Fire). |
 | O-12 | The scripted Defense changes (180 → 100 → 150) and Armor Break | `[single source]` for the values; the interaction with Armor Break is unstated. `[estimate]`: Armor Break wins while it lasts, and Dispel on the party does not remove it from him. |
 | O-13 | Optional aeons (Anima, Yojimbo, Magus Sisters) in the preset | Design choice. Anima gives the one extra story line; Yojimbo's Zanmato level 4 is sourced. **Ask Bailey.** |
 | O-14 | Party stats | `[estimate]`: the BFA preset (§6.2). |
@@ -464,6 +465,10 @@ Chapter I's post already closes on Seymour saying Spira's sorrow is patient (`sr
 - Auronlu, *FFX Game Script*, Chapter XV: Showdown with Sin: http://auronlu.istad.org/ffx-script/chapter-xv-showdown-with-sin/
 - Not retrievable: Game8 (HTTP 403)
 
+**The game itself** (datamined 2026-10-07; the fact and where it came from, no game text and no code kept here)
+
+- The Steam HD Remaster's own battle AI script for Seymour Omnis and the Mortiphasms, live build 25501027 (Bailey's installed copy), read by the 2026-10-07 reader notes (`D:/Tools/rea/FINDINGS.md`, section B8). It gives the colour ring and the turn step used in §4.3, and the order of the reset cycle in §4.4.
+
 **Local prior research consulted:** `research/ffx-seymour-natus-highbridge.md` (format, loader, N-3, N-9), `research/ffx-bfa-yu-yevon.md` §4 and §5.1, `research/ffx-seymour-flux.md` §4.4.2, `research/ffx-combat-core.md` §1.2, §2, §2.9, §4, `research/ffx2-combat-core.md` (opposite pairs), `research/ffx-seymour-anima-macalania.md` (C-6, music), `docs/audio/THEMES.md` §3, `src/story/scripts/seymour-flux.ts`, `src/data/encounters.ts` (chapter order), `docs/target/approved-hashes.json`, `docs/target/decisions.json` D-134.
 
 ---
@@ -489,3 +494,4 @@ Chapter I's post already closes on Seymour saying Spira's sorrow is patient (`sr
 | 15 | Garden of Pain placement, before the point of no return | wiki Inside Sin, Auronlu, Jegged 31/32, GameFAQs | agree |
 | 16 | No Omnis / Mortiphasm art exists | `public/art/characters/`, `docs/concepts/chapters/`, `approved-hashes.json` | confirmed absent |
 | 17 | Plan review (2026-09-24, `docs/plans/chapter-omnis-review.md` Review) | re-fetched revids; engine `baseDamage` | tables confirmed; corrected here: O-10 is 2 sources to 1 for *next turn*; disc turns in the queue are an `[estimate]`; §3.3 cites §6.2 (was §6.3); which disc drops its spell with a member KO'd is an `[estimate]` |
+| 18 | The colour order around a disc and the post-Ultima cycle (O-7, O-11), 2026-10-07 | GameFAQs, the wiki's list and the game's own battle AI script (build 25501027) | GameFAQs differs; the wiki and the script agree: Fire, Ice, Water, Thunder. The script decides. |

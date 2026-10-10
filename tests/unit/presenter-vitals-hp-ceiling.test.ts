@@ -12,7 +12,9 @@
  *
  * Case 1 replays that exact opening through the real engine, the real
  * `BattlePresenter` and a recording `HudPort`: Chapter VIII, seed 1, the four
- * party commands the evidence log recorded. Case 2 runs the shared projection
+ * party commands the evidence log recorded (seed 1 in the log; seed 2 since Evrae follows his own script, re-parity AI lane C,
+ * which moved every seeded draw: the four commands and the two events they must produce are the evidence, the seed only gets
+ * the game there). Case 2 runs the shared projection
  * on a real state from each game. **Game case: both** — the projection is
  * shared playback plumbing (AGENTS.md rule 14, CHK-020); the defect was seen in
  * FFX and the same arithmetic ran for FFX-2.
@@ -49,7 +51,7 @@ function evraeEngine() {
     party: chapter.buildRef,
     enemies: chapter.enemyGroupRef,
     triggers: [],
-    seed: 1,
+    seed: 2,
     condition: 'normal',
     canEscape: false,
   } as never);
@@ -80,7 +82,7 @@ const OPENING: Array<{ actorId: CombatantId; command: Command }> = [
 ];
 
 describe('PR-0156: the party row never reads HP above maximum', () => {
-  it('Chapter VIII seed 1, revive then Al Bhed Potion: no row over its maximum, through the real presenter', async () => {
+  it('Chapter VIII seed 2, revive then Al Bhed Potion: no row over its maximum, through the real presenter', async () => {
     const engine = evraeEngine();
     const drawn: string[] = [];
     let peakTidus = 0;

@@ -48,6 +48,9 @@
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
 import {
+  GROTHIA_SUMMON,
+  PTERYA_SUMMON,
+  SPATHI_SUMMON,
   GROTHIA_ATTACK,
   GROTHIA_ATTACK_YUNA,
   GROTHIA_FIRA,
@@ -196,7 +199,7 @@ const grothia: EnemyDef = {
   forms: [{ name: 'Grothia', spriteKey: 'grothia', hp: 8_000 }],
   aiScriptId: GROTHIA_SCRIPT,
   rewards: NO_REWARDS,
-  abilityIds: [GROTHIA_ATTACK, GROTHIA_ATTACK_YUNA, GROTHIA_FIRA, GROTHIA_HELLFIRE],
+  abilityIds: [GROTHIA_SUMMON, GROTHIA_ATTACK, GROTHIA_ATTACK_YUNA, GROTHIA_FIRA, GROTHIA_HELLFIRE],
   flags: { isBoss: true },
   doomTurns: 5, // §2.2 [decompiled] + wiki + GameFAQs
   threatenChance: 0, // I-3 / B10 — 0 means IMMUNE in this contract
@@ -233,7 +236,7 @@ const pterya: EnemyDef = {
   forms: [{ name: 'Pterya', spriteKey: 'pterya', hp: 12_000 }],
   aiScriptId: PTERYA_SCRIPT,
   rewards: NO_REWARDS,
-  abilityIds: [PTERYA_ATTACK, PTERYA_ATTACK_YUNA, PTERYA_SONIC_WINGS, PTERYA_ENERGY_RAY],
+  abilityIds: [PTERYA_SUMMON, PTERYA_ATTACK, PTERYA_ATTACK_YUNA, PTERYA_SONIC_WINGS, PTERYA_ENERGY_RAY],
   flags: { isBoss: true },
   doomTurns: 5, // §2.2
   threatenChance: 0, // I-3 / B10
@@ -271,7 +274,7 @@ const spathi: EnemyDef = {
   aiScriptId: SPATHI_SCRIPT,
   rewards: NO_REWARDS,
   // The two counter rows (4:127, 4:173) are not shipped: I-4, B9.
-  abilityIds: [SPATHI_COUNTDOWN, SPATHI_MEGA_FLARE],
+  abilityIds: [SPATHI_SUMMON, SPATHI_COUNTDOWN, SPATHI_MEGA_FLARE],
   flags: { isBoss: true },
   doomTurns: 5, // §2.2
   threatenChance: 0, // I-3 / B10

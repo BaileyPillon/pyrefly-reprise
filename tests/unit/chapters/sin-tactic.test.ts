@@ -240,15 +240,19 @@ describe('PR-0269: the race priorities (Chapter XVII)', () => {
     expect(label(d.commands, sinFinsCore('tidus', d.commands, engine))).not.toBe('Al Bhed Potion');
   });
 
+  // Re-parity (AI lane C, D-23): Genais starts in its shell and its first turn leaves it, so the flag is set after the party's menu
+  // opens (the tactic reads the live flag).
   it('link 3: while Genais is shelled the front row is Tidus, Yuna and Lulu (Fire answers the shell): Auron makes way', () => {
-    const { engine, d } = at('sin-genais-core', 'auron', { 'sin.genais.shelled': true });
+    const { engine, d } = at('sin-genais-core', 'auron');
+    (engine.state().flags as Record<string, unknown>)['sin.genais.shelled'] = true;
     const cmd = sinFinsCore('auron', d.commands, engine);
     expect(cmd?.kind).toBe('switch');
     expect(inOf(cmd)).toBe('lulu');
   });
 
   it('link 3: out of its shell Genais gets physicals from Tidus, Auron and Yuna (Lulu is not in front)', () => {
-    const { engine, d } = at('sin-genais-core', 'auron', { 'sin.genais.shelled': false });
+    const { engine, d } = at('sin-genais-core', 'auron');
+    expect((engine.state().flags as Record<string, unknown>)['sin.genais.shelled']).toBe(false); // it left the shell on its first turn
     expect(sinFinsCore('auron', d.commands, engine)?.kind).toBe('attack');
   });
 });

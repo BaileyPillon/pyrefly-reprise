@@ -23,6 +23,7 @@ import { describe, expect, it } from 'vitest';
 import type { ChapterScripts, Step, StoryScript } from '../../../src/story/dsl.ts';
 import { MAX_LINE_CHARS, MAX_QUIP_WORDS, lintScript } from '../../../src/story/dsl.ts';
 import { seymourAnimaMacalaniaScripts } from '../../../src/story/scripts/seymour-anima-macalania.ts';
+import { AI_EMITTED_TRIGGERS } from '../../../src/story/registry.ts';
 
 const chapter: ChapterScripts = seymourAnimaMacalaniaScripts;
 
@@ -231,8 +232,10 @@ describe('macalania story — structure', () => {
     expect(step?.type === 'results' && step.silent).toBeFalsy();
   });
 
-  it('wires every trigger to a script and every script to a trigger', () => {
-    const referenced = new Set(chapter.mid.map((t) => t.script));
+  it('wires every trigger to a script and every script to a trigger (the summon beat is emitted by the AI, not a mid trigger)', () => {
+    // Re-parity: the summon writes his HP back to 6,000 in the same breath, so no `hp-below` read after the action
+    // could see it; the engine emits the `script-trigger` itself (`AI_EMITTED_TRIGGERS`).
+    const referenced = new Set([...chapter.mid.map((t) => t.script), ...AI_EMITTED_TRIGGERS['seymour-anima-macalania']]);
     const defined = new Set(Object.keys(chapter.midScripts));
     expect([...referenced].sort()).toEqual([...defined].sort());
   });
@@ -317,18 +320,14 @@ describe('macalania story — canon beats in order', () => {
     expect(pre.slice(i + 1, i + 3).some(([who]) => who === 'auron' || who === 'seymour')).toBe(true);
   });
 
-  it('fires the three mid beats in act order: summon, Boost, restore', () => {
-    expect(chapter.mid.map((t) => t.id)).toEqual([
-      'mac-anima-summon',
-      'mac-first-boost',
-      'mac-seymour-restored',
-    ]);
-    // Act one -> two at 3,000 of 6,000 [§5.2].
-    const summon = chapter.mid[0]!.when;
-    expect(summon.type === 'hp-below' && summon.fraction).toBe(0.5);
+  it('has the summon beat from the AI and the two other beats as mid triggers, in act order: Boost, restore', () => {
+    // Act one -> two at 3,000 of 6,000 (or a lethal blow) is Seymour's own summon: the engine emits the beat.
+    expect(AI_EMITTED_TRIGGERS['seymour-anima-macalania']).toEqual(['mac-anima-summon']);
+    expect(chapter.midScripts['mac-anima-summon']).toBeDefined();
+    expect(chapter.mid.map((t) => t.id)).toEqual(['mac-first-boost', 'mac-seymour-restored']);
     // Act two -> three when Anima reaches 0; she is removed, not KO'd, so
     // `hp-below` at 0 is the only hook that fires.
-    const restore = chapter.mid[2]!.when;
+    const restore = chapter.mid[1]!.when;
     expect(restore.type === 'hp-below' && restore.fraction).toBe(0);
   });
 

@@ -55,15 +55,15 @@ function ffxContent(): FFXContentRegistry {
   return reg;
 }
 
-/** The chapter's own setup, seed 1, advanced to the first command menu. */
-function firstMenu(chapterId: string): AnyEngine {
+/** The chapter's own setup, seed 1 unless the case names another, advanced to the first command menu. */
+function firstMenu(chapterId: string, seed = 1): AnyEngine {
   const chapter = getChapter(chapterId);
   if (!chapter) throw new Error(`no chapter ${chapterId}`);
   const engine = (chapter.game === 'ffx'
     ? createFFXEngine({ content: ffxContent(), autoResolveMinigames: true })
     : new FFX2Engine(ffx2EngineOptions())) as unknown as AnyEngine;
-  engine.setSeed?.(1);
-  engine.init(setupForChapter(chapter, 1));
+  engine.setSeed?.(seed);
+  engine.init(setupForChapter(chapter, seed));
   for (let i = 0; i < 10_000; i++) {
     const d = engine.nextDecision();
     if (d.kind === 'waiting') {
@@ -119,7 +119,10 @@ describe('PR-0153: a rolled victim is shown as every candidate (both games)', ()
   });
 
   it("Chapter XI (FFX-2): Shiva's Kick at a random girl lists all three girls", () => {
-    const engine = firstMenu('ffx2-fallen-aeons');
+    // Re-parity W3: the first seed whose first menu predicts the Kick, not seed 1. Shiva's pick depends on the stream, and the
+    // game's draw order moved it (seed 1 now predicts Heavenly Strike, which is not the case under test).
+    let engine = firstMenu('ffx2-fallen-aeons');
+    for (let seed = 2; seed <= 40 && engine.intent()?.moveName !== 'Kick'; seed++) engine = firstMenu('ffx2-fallen-aeons', seed);
     const intent = engine.intent();
     expect(intent?.moveName).toBe('Kick');
     const ids = (intent?.randomTarget?.rows ?? []).map((r) => r.targetId).sort();

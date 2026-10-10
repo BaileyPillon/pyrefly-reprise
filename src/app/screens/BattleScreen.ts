@@ -278,7 +278,7 @@ export class BattleScreen extends Screen {
     this.spectacle = attachSpectacle({ game: chapter.game, renderer: this.app.renderer, scene: this.scene.scene, camera: this.app.renderer.camera, stage: this.stage, root: this.root });
 
     // --- HUD + ports -------------------------------------------------------
-    this.hud = createHud(chapter.game, () => this.stage, this.engine, scene.slots.artNamespace, scene.slots.advisorCap, scene.slots.intentRoof); // the field (FFX-2 Oversoul look); the engine (FF7's item counts); the scene's art namespace (the experimental Leblanc chapter's party heads); the scene's cap on the FFX-2 advisor card; whether the FFX-2 intent slab hangs over the highest head (Chapter VI)
+    this.hud = createHud(chapter.game, () => this.stage, this.engine, scene.slots.artNamespace, scene.slots.advisorCap, scene.slots.intentRoof, scene.slots.guideFolded); // the field (FFX-2 Oversoul look); the engine (FF7's item counts); the scene's art namespace (the experimental Leblanc chapter's party heads); the scene's cap on the FFX-2 advisor card; whether the FFX-2 intent slab hangs over the highest head (Chapter VI)
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);

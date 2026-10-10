@@ -29,7 +29,6 @@ import type {
 import {
   FFX2Engine,
   abilityRegistryFrom,
-  computeDamage,
   dressphereRegistryFrom,
   garmentGridRegistryFrom,
   itemRegistryFrom,
@@ -37,6 +36,7 @@ import {
 } from '../../src/battle/ffx2/index.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { farplaneBuild } from '../../src/data/ffx2/builds/farplane.ts';
+import { computeDamage } from './helpers/ffx2Damage.ts';
 
 /** The eight statuses the four Breaks and their Up counterparts apply. */
 const EIGHT = ['str-up', 'str-down', 'mag-up', 'mag-down', 'def-up', 'def-down', 'mdef-up', 'mdef-down'] as const;
@@ -199,8 +199,12 @@ describe('on the real engine, Power Break lands Str Down on a Bulwark [§3.3]', 
     ]);
     for (const ability of offensive) {
       expect(ability.formula, ability.name).toBe('fractional');
-      const hit = (user: FFX2Combatant) =>
-        computeDamage({ user, target: paine, ability, chainCount: 0, crit: false, randomRoll: 256 }).amount;
+      // Re-parity W3: "Magical attack detected" is the game's MP-class row (damage class 2), so its fraction comes off MP and
+      // the hit's HP number is 0; the other two rows come off HP. Either pool counts as "its own damage".
+      const hit = (user: FFX2Combatant) => {
+        const out = computeDamage({ user, target: paine, ability, chainCount: 0, crit: false, randomRoll: 256 });
+        return out.amount + out.mp;
+      };
       expect(hit(clean), ability.name).toBeGreaterThan(0);
       expect(hit(broken), ability.name).toBe(hit(clean));
     }

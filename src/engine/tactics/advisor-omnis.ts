@@ -3,9 +3,8 @@
  * has to see that as the move it is (critic round 13 PR-0197).
  *
  * A disc takes no damage (`immune-to-damage`): the engine emits the hit's
- * `damage` event with `amount: 0`, and the disc turns at the turn's end
- * (`battle/ffx/ai/seymour-omnis-rules.ts`, `ticks.ts#onTurnEnd`), which a
- * one-command preview never reaches. So the preview of "Attack -> Mortiphasm A"
+ * `damage` event with `amount: 0`, and the disc turns from its own `onHit` hook
+ * (`battle/ffx/ai/seymour-omnis.ts`), which this preview does not read. So the preview of "Attack -> Mortiphasm A"
  * read as a zero-damage no-op, the state guard filed the chapter's own line
  * behind every useful row, and a card-follower never turned a disc in four
  * live attempts, trailing the intended line on the bench (24 against 27 of 40).
@@ -26,9 +25,9 @@
 import type { BattleEvent, BattleState, Command } from '../../battle/common/types.ts';
 import { simulateFFXCommand, type SimOutcome } from '../../battle/ffx/simulate.ts';
 import {
-  DISC_RING,
   type Element4,
   MORTIPHASM_IDS,
+  discAfterTurn,
   omnisDiscs,
 } from '../../battle/ffx/ai/seymour-omnis-rules.ts';
 
@@ -42,7 +41,7 @@ export interface DiscTurn {
   gaLost: number;
 }
 
-/** His volley: one spell per disc, -ga where its element shows on 3+ discs [§4.1]. */
+/** His volley: four spells, -ga for each spell of an element that shows on 3+ discs (3 or 4 of them) [§4.1]. */
 export function gaCount(discs: readonly Element4[]): number {
   const n: Record<string, number> = {};
   for (const d of discs) n[d] = (n[d] ?? 0) + 1;
@@ -66,11 +65,8 @@ export function discTurnOf(state: Readonly<BattleState>, command: Command, outco
   // action's damage type; the preview's ability record carries the same one.
   const physical = command.kind === 'attack' || outcome.ability?.damageType === 'physical';
   const direction: 'left' | 'right' = physical ? 'left' : 'right';
-  const now = before[index]!;
-  const at = DISC_RING.indexOf(now);
-  const step = direction === 'right' ? -1 : 1; // `turnDisc`'s own step
   const after = [...before];
-  after[index] = DISC_RING[(at + step + DISC_RING.length) % DISC_RING.length]!;
+  after[index] = discAfterTurn(before[index]!, direction); // the engine's own step (`turnDisc` calls the same function)
   return { index, direction, before, after, gaLost: Math.max(0, gaCount(before) - gaCount(after)) };
 }
 

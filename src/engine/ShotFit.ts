@@ -18,6 +18,7 @@
  */
 
 import type { CombatantId } from '../battle/common/types.ts';
+import { FFX2_GIANT_SHARE } from '../data/ffx2/fiend-stature.ts';
 import type { ActorHandle, BattleStage, CameraPort } from './BattlePresenterPorts.ts';
 
 /** A-11: share of a party figure's quad a push-in may not cut into. */
@@ -53,11 +54,19 @@ export function fittedPush(stage: BattleStage, cam: CameraPort, rig: string | nu
   return cam.frame(rig, push, partySubjects(stage, PARTY_MIN))?.push ?? push;
 }
 
-/** A-1 (FFX-2): the party at 90% and the enemy in play at 75%, with the sway margin. */
+/**
+ * A-1 (FFX-2): the party at 90% and the enemy in play at 75%, with the sway margin.
+ * r3942-stage wave 2 repair (FFX-2 only): an enemy that is one of the giants (Bahamut, Paragon, Anima) is in play only whole ({@link GIANT_WHOLE_MIN}): the scenes' close rigs were authored for the
+ * figure each room was built for, and under them a giant three times as tall passed the 75 percent with its head above the frame (Bahamut's `action` shot, 0.78 inside). A wait shot that would cut one
+ * falls back to the master (`ffx2Shot`), whose frame holds him whole, and the push is the one that keeps him so.
+ */
 function ffx2Subjects(stage: BattleStage, focus: CombatantId | null): Subject[] {
   const subjects = partySubjects(stage, FFX2_PARTY_MIN);
   const boss = focus ? stage.actor(focus) : undefined;
-  if (boss) subjects.push({ actor: boss, min: FFX2_BOSS_MIN + FIT_MARGIN, floor: FFX2_BOSS_MIN });
+  if (boss && focus) {
+    const giant = FFX2_GIANT_SHARE[focus] !== undefined && stage.sideOf(focus) === 'enemy';
+    subjects.push(giant ? { actor: boss, min: Math.min(1, GIANT_WHOLE_MIN + FIT_MARGIN), floor: GIANT_WHOLE_MIN } : { actor: boss, min: FFX2_BOSS_MIN + FIT_MARGIN, floor: FFX2_BOSS_MIN });
+  }
   return subjects;
 }
 
@@ -76,6 +85,25 @@ export function ffx2RevealSubjects(stage: BattleStage, focus: CombatantId | null
   const boss = focus ? stage.actor(focus) : undefined;
   if (boss) subjects.push({ actor: boss, min: FFX2_BOSS_MIN + FIT_MARGIN, floor: FFX2_BOSS_MIN });
   return subjects;
+}
+
+/**
+ * r3942-stage wave 2 repair (FFX-2 only: Bahamut, Paragon and Anima; the independent check of 2026-10-08): how whole the opening keeps a giant at the least. The scenes' `intro` and `enemy` rigs
+ * were authored for the figure each scene was built for, and a giant three times its height filled the frame past its top edge for 2 to 3 s of the reveal (the head out of frame, the name plate
+ * up). The reveal and the opening shot hold a giant as whole as the master keeps it, and never under this (`ShotRules.reveal`, `ShotRules.opening`), and a wait shot holds it to this ({@link ffx2Subjects}).
+ */
+export const GIANT_WHOLE_MIN = 0.97;
+
+/**
+ * r3942-stage wave 2 repair: the room a reveal's shot leaves a giant, as a dolly: the camera may stand this fraction of its distance nearer the aim and still keep the giant whole, so the idle sway
+ * and the push never put its crown on the frame's edge (the furthest blend that is merely whole stood the head flush with the top edge).
+ */
+export const REVEAL_GIANT_ROOM = 0.1;
+
+/** A giant held to `whole` of its painted quad (with the sway margin), as one subject for `CameraPort.frame`; null with no such actor staged. */
+export function giantWholeSubject(stage: BattleStage, id: CombatantId, whole: number): Subject | null {
+  const actor = stage.actor(id);
+  return actor ? { actor, min: Math.min(1, whole + FIT_MARGIN), floor: whole } : null;
 }
 
 /** A-1 (FFX-2): the push to use on `rig`, never cutting the party or the enemy in play. */

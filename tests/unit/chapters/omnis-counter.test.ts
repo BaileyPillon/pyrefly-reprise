@@ -29,13 +29,13 @@ function hitUntil(e: BattleEngine, stop: (e: BattleEngine) => boolean): void {
 }
 
 describe('the attack counter (§4.4)', () => {
-  it('six attacks on him light the glow, five do not', () => {
+  it('six attacks on him light the glow, five do not (the sixth zeroes the counter as it lights it: D-28)', () => {
     const e = newEngine(1);
     makeInvincible(e);
     hitUntil(e, (x) => flags(x)['omnis.hits'] === 5);
     expect(flags(e)['omnis.state']).toBe('normal');
-    hitUntil(e, (x) => flags(x)['omnis.hits'] === 6);
-    expect(flags(e)['omnis.state']).toBe('red');
+    hitUntil(e, (x) => flags(x)['omnis.state'] === 'red');
+    expect(flags(e)['omnis.hits']).toBe(0);
     expect(e.state().log.some((ev) => ev.type === 'message' && ev.text === 'Seymour Omnis glows red')).toBe(true);
   });
 
@@ -43,8 +43,9 @@ describe('the attack counter (§4.4)', () => {
     const e = newEngine(1);
     makeInvincible(e);
     actor(e, OMNIS).hp = 19_999;
-    hitUntil(e, (x) => (flags(x)['omnis.hits'] as number) >= 3);
-    expect(flags(e)['omnis.state']).toBe('red');
+    hitUntil(e, (x) => flags(x)['omnis.state'] === 'red');
+    const taps = e.state().log.filter((ev) => ev.type === 'damage' && ev.targetId === OMNIS && ev.sourceId !== OMNIS && ev.amount > 0).length;
+    expect(taps).toBe(3);
   });
 
   it('his own spells bounced off a Reflected party count as attacks (§4.4, single source: wiki)', () => {
@@ -97,7 +98,7 @@ describe('Dispel, then Ultima, then the reset (§4.4; B23 = a)', () => {
     expect(flags(e)['omnis.state']).toBe('dispelled');
   });
 
-  it('his next turn is Ultima: Defense 150, the counter resets, and the discs wait for his turn after', () => {
+  it('his next turn is Ultima: Defense 150, the counter resets; the turn after is only the reset (no spell), to Ice, and then four Blizzaga (D-24, D-27)', () => {
     const e = newEngine(4);
     makeInvincible(e);
     flags(e)['omnis.state'] = 'red';
@@ -106,19 +107,23 @@ describe('Dispel, then Ultima, then the reset (§4.4; B23 = a)', () => {
     expect(actor(e, OMNIS).stats.def).toBe(150);
     expect(flags(e)['omnis.hits']).toBe(0);
     expect(discs(e)).toEqual(['fire', 'fire', 'fire', 'fire']);
-    const volleysBefore = omnisTurns(e.state().log).length;
-    drive(e, () => defend(), (x) => omnisTurns(x.state().log).length > volleysBefore && omnisActions(x).at(-1) !== 'omnis-ultima');
-    expect(discs(e)).toEqual(['water', 'water', 'water', 'water']);
-    expect(actor(e, OMNIS).affinities).toEqual({ water: 'absorb', lightning: 'weak' });
+    const turnsBefore = omnisTurns(e.state().log).length;
+    drive(e, () => defend(), (x) => omnisTurns(x.state().log).length > turnsBefore);
+    expect(omnisActions(e).at(-1)).toBe('omnis-ultima'); // the reset turn cast nothing
+    expect(discs(e)).toEqual(['ice', 'ice', 'ice', 'ice']);
     const reset = e.state().log.find((ev) => ev.type === 'affinity-change' && ev.cause === 'reset');
     expect(reset).toBeDefined();
-    expect(omnisActions(e).at(-1)).toBe('omnis-waterga');
+    // his affinity follows at the next turn start of any actor (D-30), then the next turn of his is the volley
+    nextInput(e);
+    expect(actor(e, OMNIS).affinities).toEqual({ ice: 'absorb', fire: 'weak' });
+    drive(e, () => defend(), (x) => omnisTurns(x.state().log).length > turnsBefore + 1);
+    expect(omnisActions(e).slice(-4)).toEqual(['omnis-blizzaga', 'omnis-blizzaga', 'omnis-blizzaga', 'omnis-blizzaga']);
     // Defense never goes back to 180 (§4.4 [derived]).
     expect(actor(e, OMNIS).stats.def).toBe(150);
   });
 
-  it('the reset walks the cycle Fire -> Water -> Ice -> Thunder -> Fire (O-11, GameFAQs; B8 = b)', () => {
-    expect([...OMNIS_RESET_CYCLE]).toEqual(['fire', 'water', 'ice', 'lightning']);
+  it('the reset walks the cycle Ice -> Water -> Thunder -> Fire -> Ice (the script counter starts at 0 and moves first: D-24)', () => {
+    expect([...OMNIS_RESET_CYCLE]).toEqual(['fire', 'ice', 'water', 'lightning']); // by counter value; the first reset is index 1
     const e = newEngine(9);
     makeInvincible(e);
     const seen: string[] = [];
@@ -127,7 +132,7 @@ describe('Dispel, then Ultima, then the reset (§4.4; B23 = a)', () => {
       drive(e, () => defend(), (x) => flags(x)['omnis.state'] === 'normal');
       seen.push(discs(e)[0]!);
     }
-    expect(seen).toEqual(['water', 'ice', 'lightning', 'fire']);
+    expect(seen).toEqual(['ice', 'water', 'lightning', 'fire']);
   });
 
   it('Armor Break wins over every scripted Defense (O-12, built as our estimate)', () => {
@@ -198,9 +203,12 @@ describe('the affinity ladder (§4.2)', () => {
     expect(omnisAffinities(['ice', 'ice', 'ice', 'ice'])).toMatchObject({ ice: 'absorb', fire: 'weak' });
   });
 
-  it('B9 = faithful: two Water discs make him immune to Fire, not Water; the constant flips it', () => {
+  it('the Water-pair slip (D-31): two Water discs make him immune to Fire, not Water, only when the Water pair is the first the chain meets', () => {
     expect(omnisAffinities(['water', 'water', 'fire', 'ice'])).toMatchObject({ fire: 'immune', water: 'normal', ice: 'resist' });
-    expect(omnisAffinities(['water', 'water', 'fire', 'ice'], false)).toMatchObject({ fire: 'resist', water: 'immune', ice: 'resist' });
+    expect(omnisAffinities(['water', 'water', 'lightning', 'lightning'])).toMatchObject({ fire: 'immune', water: 'normal', lightning: 'immune' });
+    // a Fire or an Ice pair meets Water in its own branch, which is right
+    expect(omnisAffinities(['water', 'water', 'fire', 'fire'])).toMatchObject({ fire: 'immune', water: 'immune' });
+    expect(omnisAffinities(['water', 'water', 'ice', 'ice'])).toMatchObject({ ice: 'immune', water: 'immune', fire: 'normal' });
     expect(omnisAffinities(['water', 'water', 'water', 'fire'])).toMatchObject({ water: 'absorb', fire: 'resist' });
   });
 
@@ -233,9 +241,13 @@ describe('aeons (§4.5)', () => {
 
 describe('rule 6 labels (repair pass, 2026-09-25)', () => {
   it('every unsourced behaviour the verifier named is labelled our estimate', () => {
-    for (const key of ['aeonHoldsField', 'emptyAimFallback', 'reflectBounce', 'discExtraImmunities', 'ringOrder'] as const) {
+    // After the scripts (re-parity) the ring, the reset order, the aim and the counter are the game's; what stays our estimate is below.
+    for (const key of ['emptyAimFallback', 'reflectBounce', 'discExtraImmunities'] as const) {
       expect(OMNIS_ASSUMPTIONS[key]).toMatch(/our estimate/);
     }
+    // The ring order was an estimate until the game's own AI script settled it (O-7, 2026-10-07), and the reset order until the script's compiled cycle did (re-parity D-24).
+    expect(OMNIS_ASSUMPTIONS.ringOrder).toMatch(/sourced, no longer an assumption/);
+    expect(OMNIS_ASSUMPTIONS.resetCycle).toMatch(/sourced, no longer an assumption/);
     // The aeon eaters are sourced and global, not an assumption of this chapter.
     expect(OMNIS_ASSUMPTIONS.aeonAbsorb).toMatch(/every FFX battle/);
   });

@@ -61,6 +61,10 @@ export interface Ffx2Unit extends FFX2Combatant {
   gilPilfered?: boolean;
   /** `EnemyDef.autoStatuses`, kept so a Dispel can leave them alone (`resolve.ts`). */
   autoStatuses?: StatusId[];
+  /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
+  bribeAccumulated?: number;
+  /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */
+  bribeThreshold?: number;
 }
 
 /** Ability lookup. Data files register the real table; `abilities.ts` is the fallback. */
@@ -188,7 +192,8 @@ export interface Ffx2EngineOptions {
   actionTimeSeconds?: number;
   /**
    * IC-1 (`constants.ts` IMMUNE_HITS_SKIP_CHAIN, ON since D-242): an immune hit opens no chain
-   * window. Unsourced either way (`research/ffx2-combat-core.md` §9.2). For measurement runs.
+   * window. **No longer read** (re-parity W3): the game's chain counter rises only when a positive HP number is
+   * applied (`kernel/apply.ts applyHpDamage`), so an immune hit never opens a window; kept so callers still compile.
    */
   immuneHitsSkipChain?: boolean;
   /** `constants.ts` NAMED_TARGETS_ONLY (Acta Est Fabula on the Redoubts only), for a measurement run. */

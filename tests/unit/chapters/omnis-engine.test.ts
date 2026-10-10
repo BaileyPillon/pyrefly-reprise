@@ -129,17 +129,19 @@ describe('the volley planner (§4.1; B12 = a)', () => {
   it('-ra on 1-2 matching discs, -ga on 3-4', () => {
     expect(plan('fire,fire,fire,ice')).toEqual(['omnis-firaga', 'omnis-firaga', 'omnis-firaga', 'omnis-blizzara']);
     expect(plan('fire,fire,ice,ice')).toEqual(['omnis-fira', 'omnis-fira', 'omnis-blizzara', 'omnis-blizzara']);
-    expect(plan('fire,water,ice,lightning')).toEqual(['omnis-fira', 'omnis-watera', 'omnis-blizzara', 'omnis-thundara']);
+    // four different elements: the table's order is Fire, Ice, Water, Thunder, not disc order (D-26)
+    expect(plan('fire,water,ice,lightning')).toEqual(['omnis-fira', 'omnis-blizzara', 'omnis-watera', 'omnis-thundara']);
     expect(plan('water,water,water,water')).toEqual(['omnis-waterga', 'omnis-waterga', 'omnis-waterga', 'omnis-waterga']);
   });
-  it('with members down he casts one per living member plus one: 3, then 2; the first discs keep their spells', () => {
-    expect(plan('fire,ice,water,lightning', ['yuna'])).toEqual(['omnis-fira', 'omnis-blizzara', 'omnis-watera']);
-    expect(plan('fire,ice,water,lightning', ['yuna', 'auron'])).toEqual(['omnis-fira', 'omnis-blizzara']);
+  it('with members down he still casts four spells (D-26: always four; the old rule cast one per living member plus one)', () => {
+    const four = ['omnis-fira', 'omnis-blizzara', 'omnis-watera', 'omnis-thundara'];
+    expect(plan('fire,ice,water,lightning', ['yuna'])).toEqual(four);
+    expect(plan('fire,ice,water,lightning', ['yuna', 'auron'])).toEqual(four);
   });
 });
 
-describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
-  it('Wakka reaches a disc and his hit turns it left (Fire -> Water); the disc takes 0 and stands', () => {
+describe("turning the discs (§4.3; along the game's own ring, O-7: a blow steps back, a spell forward)", () => {
+  it('Wakka reaches a disc and his hit turns it left (Fire -> Thunder); the disc takes 0 and stands', () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const d = inputFor(e, 'wakka');
@@ -148,21 +150,25 @@ describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
     const events = e.submit({ kind: 'attack', targets: ['mortiphasm-2'] });
     const hit = events.find((ev) => ev.type === 'damage' && ev.targetId === 'mortiphasm-2');
     expect(hit && hit.type === 'damage' ? hit.amount : -1).toBe(0);
-    expect(discs(e)).toEqual(['fire', 'water', 'fire', 'fire']);
+    expect(discs(e)).toEqual(['fire', 'lightning', 'fire', 'fire']);
     expect(actor(e, 'mortiphasm-2').hp).toBe(1);
     const change = events.find((ev) => ev.type === 'affinity-change');
     expect(change).toMatchObject({ targetId: OMNIS, cause: 'part-turn', partId: 'mortiphasm-2', direction: 'left' });
-    // three Fire discs absorb Fire, one Water disc halves Water; no weakness any more
-    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', water: 'resist' });
+    // his affinity is read at the next turn start, not inside the action (D-30): still the all-Fire reading here
+    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', ice: 'weak' });
+    nextInput(e);
+    // three Fire discs absorb Fire, one Thunder disc halves Thunder; no weakness any more
+    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', lightning: 'resist' });
   });
 
-  it("Lulu's Blizzara turns a disc right (Fire -> Thunder)", () => {
+  it("Lulu's Blizzara turns a disc right (Fire -> Ice)", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     inputFor(e, 'lulu');
     e.submit({ kind: 'ability', id: 'blizzara', targets: ['mortiphasm-4'] });
-    expect(discs(e)).toEqual(['fire', 'fire', 'fire', 'lightning']);
-    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', lightning: 'resist' });
+    expect(discs(e)).toEqual(['fire', 'fire', 'fire', 'ice']);
+    nextInput(e);
+    expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', ice: 'resist' });
   });
 
   it('Tidus and Auron cannot reach a disc; their menus offer only Omnis', () => {
@@ -197,7 +203,7 @@ describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
     }
   });
 
-  it('an all-enemies action touches the discs for 0 and turns none (B10 = a)', () => {
+  it('an all-enemies spell touches the four discs for 0 and turns each of them: only the damage type decides (D-32)', () => {
     const e = newEngine(6);
     makeInvincible(e);
     nextInput(e);
@@ -206,7 +212,8 @@ describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
     const onDiscs = events.filter((ev) => ev.type === 'damage' && (DISCS as readonly string[]).includes(ev.targetId));
     expect(onDiscs.length).toBe(4);
     for (const h of onDiscs) expect(h.type === 'damage' && h.amount).toBe(0);
-    expect(discs(e).join()).toBe(before);
+    expect(before).toBe('fire,fire,fire,fire');
+    expect(discs(e).join()).toBe('ice,ice,ice,ice'); // a magical hit is +1 on every disc it reaches
   });
 });
 

@@ -4,8 +4,8 @@
  * `resolve.ts` as a pure move (critic PR-0083 / F3; house rule 7). FFX-2 only.
  */
 
-import type { CombatantId, Rng } from '../common/types.ts';
-import type { AbilityRegistry, Emit, Ffx2Unit } from './internal.ts';
+import type { BattleState, CombatantId, Rng } from '../common/types.ts';
+import type { AbilityRegistry, Emit, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { breakChain } from './chain.ts';
 import { applyStatus, removeStatus } from './statuses.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
@@ -17,8 +17,10 @@ export interface ResolveContext {
   emit: Emit;
   breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
   timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
-  immuneHitsSkipChain?: boolean; // IC-1's switch; absent = `constants.ts` IMMUNE_HITS_SKIP_CHAIN (ON, D-242)
+  immuneHitsSkipChain?: boolean; // IC-1's switch: no longer read (the game's chain counter rises only on a positive HP hit)
   namedTargetsOnly?: boolean; // `extra.namedTargetsOnly` rows; absent = `constants.ts` NAMED_TARGETS_ONLY
+  state?: BattleState; // the battle's flags: a stolen item goes to `inventory:<id>`, stolen gil to `stolenGil` (`steal.ts`)
+  items?: ItemRegistry; // item names for the steal message
 }
 
 /**
@@ -46,6 +48,7 @@ export function applyHpDelta(
 
   if (target.statuses['auto-life']) {
     removeStatus(target, 'auto-life');
+    removeStatus(target, 'ko'); // a Death status that landed in the same hit is undone with the life it was spent on
     ctx.emit({ type: 'status-remove', targetId: target.id, status: 'auto-life', reason: 'consumed' });
     target.hp = Math.max(1, Math.floor(target.stats.maxHp * AUTO_LIFE_REVIVE_FRACTION));
     target.alive = true;
@@ -75,6 +78,26 @@ export function heal(ctx: ResolveContext, target: Ffx2Unit, amount: number, caus
   target.hp = Math.min(target.stats.maxHp, target.hp + amount);
   const gained = target.hp - before;
   if (gained > 0) ctx.emit({ type: 'heal', targetId: target.id, amount: gained, cause });
+}
+
+/**
+ * What a revival leaves behind once a heal has already put HP back on a KO'd unit (the command-row path: the heal and
+ * the cleansed Death status are the kernels' result): the KO status goes, the unit is back on the field, and the
+ * `revive` (and, for a part, `part-restored`) event says so. FFX-2 only.
+ */
+export function afterRevive(ctx: ResolveContext, target: Ffx2Unit, cause: string): void {
+  removeStatus(target, 'ko');
+  target.alive = true;
+  target.removed = false;
+  ctx.emit({ type: 'revive', targetId: target.id, hp: target.hp, cause });
+  if (target.flags.isPart) {
+    ctx.emit({
+      type: 'part-restored',
+      partId: target.id,
+      hp: target.hp,
+      ...(target.flags.partOf ? { ownerId: target.flags.partOf } : {}),
+    });
+  }
 }
 
 /** Bring a KO'd unit back. `fraction` is of max HP: Phoenix Down 0.25, Full-Life 1.0. */

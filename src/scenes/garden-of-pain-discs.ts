@@ -1,4 +1,4 @@
-import { Group, Mesh, MeshBasicMaterial, PlaneGeometry, type Camera, type Object3D, type Texture } from 'three';
+import { BufferGeometry, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, PlaneGeometry, type Camera, type Object3D, type Texture } from 'three';
 import { artUrl, tryLoadTexture } from '../engine/PaintedArt.ts';
 import { OMNIS_FACING_KEY } from '../engine/OmnisDiscTap.ts';
 
@@ -13,10 +13,20 @@ import { OMNIS_FACING_KEY } from '../engine/OmnisDiscTap.ts';
 // recommendations"): painted discs, the quarter that faces him lit. The art is
 // installed and locked (`docs/concepts/chapters/omnis/INSTALLED.md`):
 //
-// - `characters/mortiphasm/idle.png`, 668 x 668, disc radius 318 at the centre.
-//   Its quarters run **clockwise on screen from screen right: Fire, Water, Ice,
-//   Thunder** (our estimate, B8). **Never mirrored**: a mirror reverses the ring.
-//   A turn is a rotation.
+// - `characters/mortiphasm/idle.png`, 668 x 668, disc radius 318 at the centre
+//   (`idle@2x.png` is the same painting at twice the pixels). Its quarters run
+//   **clockwise on screen from screen right: Fire, Water, Ice, Thunder**
+//   (`DISC_PAINTED_RING`; the order it was painted in as our estimate,
+//   B8). **Never mirrored**: a mirror reverses the ring. A turn is a rotation.
+// - **The ring the disc shows is not the order it was painted in** (2026-10-07).
+//   The game's own battle AI script settled the ring as Fire, Ice, Water,
+//   Thunder (`research/ffx-seymour-omnis.md` O-7), whose opposite colours are
+//   other pairs than the painting's (Fire against Water, not Ice), so no turn or
+//   mirror of the painting gives it. The approved masters are locked, so the disc
+//   is not one square: it is four quarter triangles (`discGeometry`), each
+//   showing the painted quarter of its colour, turned to where the ring puts it.
+//   When the masters are re-ordered, `DISC_PAINTED_RING` follows them and
+//   every turn is zero.
 // - `characters/mortiphasm-facing/idle.png`, the same size: lights the quarter at
 //   screen right, dims the other three, draws a gold rim arc. It does not turn
 //   with the disc; it is rotated 180 degrees for a disc on his right.
@@ -28,8 +38,23 @@ import { OMNIS_FACING_KEY } from '../engine/OmnisDiscTap.ts';
 // its (figure-less) actor by the FFX HUD tap (`src/engine/OmnisDiscTap.ts`) as
 // the presenter plays the fight; this module turns the painting to match.
 
-/** The ring, clockwise on screen from screen right. Mirrored from `seymour-omnis-rules.ts#DISC_RING` (a test pins it). */
-export const DISC_RING_ON_SCREEN = ['fire', 'water', 'ice', 'lightning'] as const;
+/**
+ * What the approved masters hold: their four quarters, clockwise on screen from
+ * screen right (quarter k is centred on k x 90 degrees). A fact about the files
+ * (`mortiphasm/idle.png` and its 2x master; `docs/concepts/chapters/omnis/INSTALLED.md`),
+ * and a test reads their pixels against it.
+ */
+export const DISC_PAINTED_RING = ['fire', 'water', 'ice', 'lightning'] as const;
+
+/**
+ * **The ring the disc shows, clockwise on screen from screen right: Fire,
+ * Thunder, Water, Ice.** It is the engine's ring (`seymour-omnis-rules.ts#DISC_RING`,
+ * Fire, Ice, Water, Thunder) read the way a spell turns the disc: a spell turns it
+ * **clockwise**, which brings the next colour of the engine's ring round to face
+ * him (Fire to Ice); a blow turns it counter-clockwise (Fire to Thunder). A test
+ * pins it against the engine.
+ */
+export const DISC_RING_ON_SCREEN = ['fire', 'lightning', 'water', 'ice'] as const;
 
 /** The painting's pixels: its size and the disc's radius (`mortiphasm/idle.json`). */
 export const DISC_PAINT = { size: 668, radius: 318 } as const;
@@ -58,6 +83,56 @@ export function discAngleFor(element: string, towardHim: 0 | 180): number {
 export function nearestAngle(current: number, target: number): number {
   const delta = ((((target - current) % 360) + 540) % 360) - 180;
   return current + delta;
+}
+
+/**
+ * For each quarter the disc shows (clockwise from screen right), how many
+ * clockwise quarter turns further round the painting its colour sits: the
+ * quarter shown at k is the painted quarter `(k + turns[k]) % 4`. All zeros
+ * when the painting is already in the shown order. A colour the painting does
+ * not hold is drawn as painted.
+ */
+export function quarterTurns(
+  shown: readonly string[] = DISC_RING_ON_SCREEN,
+  painted: readonly string[] = DISC_PAINTED_RING,
+): number[] {
+  return shown.map((element, k) => {
+    const p = painted.indexOf(element);
+    return p < 0 ? 0 : (((p - k) % 4) + 4) % 4;
+  });
+}
+
+/**
+ * **The disc's square cut along its two diagonals into its four quarters**, each
+ * a triangle that samples the painted quarter of its colour, turned by a whole
+ * number of quarter turns (`turns`, from {@link quarterTurns}) so that it stands
+ * where the ring being shown puts it. The cuts are the painting's own quarter
+ * boundaries (its centre is the square's centre, its dividers run along the
+ * diagonals), so every UV is a corner of the square or its centre: the pixels
+ * are the master's, moved and never resampled, and two triangles that share a
+ * cut share its vertices exactly. With every turn zero the four triangles are
+ * the plain square.
+ */
+export function discGeometry(size: number, turns: readonly number[] = quarterTurns()): BufferGeometry {
+  const h = size / 2;
+  // The square's corners clockwise on screen from the top right; shown quarter k lies between corner k and corner k + 1.
+  const corners: ReadonlyArray<readonly [number, number]> = [[h, h], [h, -h], [-h, -h], [-h, h]];
+  const position: number[] = [];
+  const uv: number[] = [];
+  for (let k = 0; k < 4; k++) {
+    const turn = (((turns[k] ?? 0) % 4) + 4) % 4;
+    // Counter-clockwise seen from the front, so the face is not culled: the centre, the later corner, the earlier one.
+    for (const corner of [-1, (k + 1) % 4, k]) {
+      const at = corner < 0 ? ([0, 0] as const) : corners[corner]!;
+      const from = corner < 0 ? ([0, 0] as const) : corners[(corner + turn) % 4]!; // the same place, `turn` quarter turns round the painting
+      position.push(at[0], at[1], 0);
+      uv.push((from[0] + h) / size, (from[1] + h) / size);
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(position, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uv, 2));
+  return geometry;
 }
 
 interface DiscProp {
@@ -89,9 +164,9 @@ export class GardenDiscs {
     this.group.name = 'mortiphasm-discs';
     const size = (diameter * DISC_PAINT.size) / (2 * DISC_PAINT.radius);
     this.props = placements.map((place) => {
-      const mk = (order: number): Mesh => {
+      const mk = (order: number, geometry: BufferGeometry): Mesh => {
         const mat = new MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, toneMapped: false });
-        const m = new Mesh(new PlaneGeometry(size, size), mat);
+        const m = new Mesh(geometry, mat);
         m.position.set(...place.centre);
         m.renderOrder = order;
         m.frustumCulled = false;
@@ -99,7 +174,7 @@ export class GardenDiscs {
         return m;
       };
       const start = discAngleFor('fire', place.towardHim); // §4.1: all four open on Fire [verified: 3 sources]
-      const prop: DiscProp = { place, disc: mk(-2), face: mk(-1), angle: start, target: start, seen: null };
+      const prop: DiscProp = { place, disc: mk(-2, discGeometry(size)), face: mk(-1, new PlaneGeometry(size, size)), angle: start, target: start, seen: null };
       prop.disc.name = `mortiphasm-disc:${place.id}`;
       prop.face.name = `mortiphasm-facing:${place.id}`;
       billboard(prop.disc, () => prop.angle);

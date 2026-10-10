@@ -80,14 +80,14 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     expect(v.intent.filter((r) => r.bold).map((r) => r.text)).toEqual(['Fire', 'Firaga', 'weak to Ice']);
   });
 
-  it("a turned disc (c-iii): Lulu's Blizzara turns the upper-left disc to Thunder; the line and the strip follow the event", () => {
+  it("a turned disc (c-iii): Wakka's blow turns the upper-left disc to Thunder (a blow steps back along the game's ring, Fire to Thunder); the line and the strip follow the event", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const { readout, stage } = mountReadout();
     readout.sync(e.state() as BattleState);
-    inputFor(e, 'lulu');
+    inputFor(e, 'wakka');
     readout.sync(e.state() as BattleState);
-    const events = e.submit({ kind: 'ability', id: 'blizzara', targets: ['mortiphasm-1'] });
+    const events = e.submit({ kind: 'attack', targets: ['mortiphasm-1'] });
     for (const ev of events) readout.onEvent(ev);
     const v = readout.view()!;
     expect(intentText(v.intent)).toBe(FRAME_III);
@@ -101,14 +101,14 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     expect(intentText(readout.view()!.intent)).toBe('The discs show three Fire and one Thunder: three Firaga and one Thundara next.');
   });
 
-  it("Wakka's blow turns a disc left, to Water (B8's ring, our estimate): Watera, and Ice no longer hurts him extra", () => {
+  it("Lulu's Blizzara turns a disc right, to Ice (a spell steps forward along the game's ring, Fire to Ice): Blizzara, and Ice no longer hurts him extra", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const { readout } = mountReadout();
     readout.sync(e.state() as BattleState);
-    inputFor(e, 'wakka');
-    for (const ev of e.submit({ kind: 'attack', targets: ['mortiphasm-1'] })) readout.onEvent(ev);
-    expect(intentText(readout.view()!.intent)).toBe('One disc turned to Water: three Firaga and one Watera next. Ice no longer hurts him extra.');
+    inputFor(e, 'lulu');
+    for (const ev of e.submit({ kind: 'ability', id: 'blizzara', targets: ['mortiphasm-1'] })) readout.onEvent(ev);
+    expect(intentText(readout.view()!.intent)).toBe('One disc turned to Ice: three Firaga and one Blizzara next. Ice no longer hurts him extra.');
   });
 
   it('the glow (c-ii): six attacks fill the counter; the line names Dispel, then Ultima; then Ultima alone; then the reset', () => {
@@ -135,17 +135,18 @@ describe('the intent line says what the frames say (O-4 C), from the real engine
     const all: string[] = [];
     for (const state of ['normal', 'red', 'dispelled', 'reset-due'] as const) {
       for (const discs of [['fire', 'fire', 'fire', 'fire'], ['water', 'fire', 'ice', 'lightning'], ['water', 'water', 'fire', 'fire']] as const) {
-        for (const turned of [[], [0], [0, 2]]) all.push(intentText(omnisIntent({ discs, state, living: 3, turned, weakBefore: 'ice' })));
+        for (const turned of [[], [0], [0, 2]]) all.push(intentText(omnisIntent({ discs, state, turned, weakBefore: 'ice' })));
       }
     }
     for (const s of all) expect(s).not.toMatch(names);
   });
 
-  it('the volley counts one spell per living member plus one; the first discs keep theirs (planOmnisVolley)', () => {
-    expect(volleyOf(['fire', 'fire', 'fire', 'fire'], 3)).toEqual([['Firaga', 4]]);
-    expect(volleyOf(['fire', 'fire', 'fire', 'fire'], 1)).toEqual([['Firaga', 2]]); // an aeon holds the field
-    expect(volleyOf(['lightning', 'fire', 'fire', 'fire'], 2)).toEqual([['Firaga', 2], ['Thundara', 1]]);
-    expect(volleyOf(['water', 'water', 'ice', 'lightning'], 3)).toEqual([['Watera', 2], ['Blizzara', 1], ['Thundara', 1]]);
+  // Re-parity (D-26, D-33): always four spells, in the order his layout fixes, whoever is standing and aeon or not.
+  it('the volley is always four spells, grouped, in the order his layout fixes (planOmnisVolley)', () => {
+    expect(volleyOf(['fire', 'fire', 'fire', 'fire'])).toEqual([['Firaga', 4]]);
+    expect(volleyOf(['lightning', 'fire', 'fire', 'fire'])).toEqual([['Firaga', 3], ['Thundara', 1]]);
+    expect(volleyOf(['water', 'water', 'ice', 'lightning'])).toEqual([['Watera', 2], ['Blizzara', 1], ['Thundara', 1]]);
+    expect(volleyOf(['fire', 'water', 'ice', 'lightning'])).toEqual([['Fira', 1], ['Blizzara', 1], ['Watera', 1], ['Thundara', 1]]);
   });
 
   it("two Water discs make him immune to Fire, not Water (B9, faithful): the strip says so", () => {
@@ -178,7 +179,7 @@ describe('the strip (O-2 B)', () => {
     expect(COLOUR_ORDER_NOTE).toMatch(/our estimate/);
     const src = readFileSync(join(ROOT, 'src/ui/ffx/omnisReadoutModel.ts'), 'utf8');
     expect(src).not.toMatch(/import[^;]*(DISC_RING|OMNIS_RESET_CYCLE)/); // the single constant stays in the rules
-    expect(DISC_RING).toEqual(['fire', 'water', 'ice', 'lightning']);
+    expect(DISC_RING).toEqual(['fire', 'ice', 'water', 'lightning']);
   });
 
   it('landscape: the frame space (1600x900) scaled 0.4 into the grid; phone: into the HUD root, marked for the rail', () => {

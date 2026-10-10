@@ -186,7 +186,10 @@ describe('the chain (research §1.2, §4.4)', () => {
 
   it('the 5,000 AP is paid on the last link only; no link has a retry checkpoint (B12 = a)', () => {
     for (const [i, link] of LINKS.entries()) {
-      const engine = newEngine(link, 14);
+      // Seed 14 -> 15 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the
+      // game's order, so seed 14's Ixion misses Grothia once and Hellfire ends the duel; seed 15 is the first that wins
+      // all three links with the aeon's plain Attack.
+      const engine = newEngine(link, 15);
       const foe = engine.state().enemyIds.find((id) => id !== ISAARU)!;
       actor(engine, foe).hp = 1;
       drive(engine, (d) => (d.actorId === 'yuna' ? summon(link === 'isaaru-grothia' ? 'ixion' : 'shiva') : { kind: 'attack', targets: [foe] }));

@@ -84,26 +84,101 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the killed enemy's item drops (research ffx-vs-ffx2-presentation §9; `results.ts#OVERKILL_DROP_MULTIPLIER`).
  * The line overkills a Guado Guardian on both seeds, so the victory event's drops change and nothing else:
  * with the multiplier stubbed to 1 this file is 18/18 on the old values, and the other 16 digests never moved.
+ * Chapter XII (Seymour Omnis) re-pinned 2026-10-07 by r3941-omnis on the release line (FFX only, Bailey: "go ahead and fix the omnis disc
+ * order too"): the disc ring is the game's own, Fire, Ice, Water, Thunder, a spell one step forward and a blow one step
+ * back (research O-7), where it was Fire, Water, Ice, Thunder with a spell at -1. The line turns discs, so exactly the
+ * two seymour-omnis digests of that line's table moved (seed 1 354e0ace -> 18304bd, seed 7 ac28e23c -> 9bd433ce on its engine, before
+ * the parity work below); both were still victories. Proved by setting the ring back to the old transitions (Fire, Thunder, Ice, Water
+ * read at +1 for a spell): both old digests returned, and the other 16 never moved.
+ * All 18 digests re-baselined 2026-10-08 by re-parity W1 ("game-code parity", FFX only): the hit roll, the damage
+ * variance, the critical roll and the damage chain now come from the kernels proven against FFX.exe
+ * (src/battle/ffx/kernel/), through src/battle/ffx/adapt/ and hit-apply.ts, drawn in the game's order (hit, variance,
+ * critical; targets outer, hits inner) and fed the game's own command flags (src/data/ffx/command-records/). Every
+ * log moves because the draw order and the formulas moved, which is the point, and
+ * tests/unit/parity-ffx-engine-wiring.test.ts is the proof that the engine computes what the kernels compute. Four
+ * outcomes moved, all on seeds that were not tuned: seymour-flux#7 victory -> defeat (Cross Cleave never misses in
+ * the game's record), seymour-omnis#1 victory -> defeat, seymour-natus#1 and #7 defeat -> victory; the other 14 keep
+ * their outcome. The per-chapter causes are in docs/handoff/re-parity-w1.md. The old values are in git history (the
+ * commit before the one that moved them).
+ * Chapter III re-baselined a second time the same day, same track (FFX only): the five possessed aeons' plain Attack runs
+ * on the game's monster-side record 0x6000 (accuracy formula 2 on a byte of 90, physical, cannot crit) and not on the
+ * party's Attack record, so about half of it misses, as the record says (the old engine never missed). That moves the
+ * digests of the links where a possessed aeon attacks (seed 1: links 5 to 7; seed 7: links 3 to 7); every outcome is still
+ * victory and no other digest moved.
+ * Chapter II re-baselined 2026-10-08 by re-parity AI lane B ("game-script parity", FFX only): Yunalesca runs the game's own
+ * script (research/re-ffx-ai-yunalesca-bfa.md section 2) through the engine's new hit events (hit-hooks.ts and hit-event.ts then; `ai/hooks.ts` and `ai/hit-script.ts` since release candidate 1).
+ * Her counters follow every action that reaches her, a form changes after the last hit of the action that ended it, her
+ * anti-aeon Mind Blast and Osmose land on the aeon on the field, Form II's counter advances on aeon turns, and a pick draws
+ * only with two or more candidates. Both digests move (yunalesca#1 victory -> defeat, #7 still a victory); no other
+ * chapter's digest moved.
+ * Chapter III re-baselined 2026-10-09 by re-parity AI lane B ("game-script parity", FFX only): Braska's Final Aeon, the Yu
+ * Pagodas, the five possessed aeons and Yu Yevon run the game's own scripts (research/re-ffx-ai-yunalesca-bfa.md sections 3
+ * to 6) through the same hit events. His gauge is the script's fixed arithmetic, his moves its tables, a Pagoda returns with
+ * the damage it absorbed after two or three of its own turns, a possessed aeon aims and rolls as its script says, a
+ * character the fayth revives acts next, and Yu Yevon casts Gravija on every turn after his first, on the front line and
+ * himself. Both digests move (braskas-final-aeon#1 seven victories -> a defeat on link 1, #7 seven victories again); no other
+ * chapter's digest moved.
+ * Chapters I, VII, X and XII re-baselined 2026-10-09 by re-parity AI-Seymour ("game-script parity", FFX only): Seymour
+ * Flux and the Mortiorchis, Seymour with the Guado Guardians and Anima, Seymour Natus with Mortibody, and Seymour Omnis
+ * with the Mortiphasm discs now follow the game's own compiled scripts (research/re-ffx-ai-seymour.md, rows D-01 to D-33):
+ * the shared cycle state, the hooks that run once per action per target before the death check, the revive values, the
+ * formation start hooks, the Desperado ladder, the disc ring and the affinity timing. These eight digests (seeds 1 and 7 of
+ * those four chapters) move because every enemy turn and every hook of those fights moved; the other ten (Chapters II, III,
+ * VIII, IX and XIV) are byte for byte what they were. Five outcomes moved on seeds nobody tuned: seymour-flux#1 and #7
+ * defeat -> victory, seymour-natus#7 victory -> defeat, seymour-omnis#1 defeat -> victory and #7 victory -> defeat; the
+ * 500-seed tables and their causes are in docs/handoff/re-parity-ai-seymour.md. Nothing on the boss or the party was tuned.
+ * Chapters VIII, IX and XIV re-baselined 2026-10-09 by re-parity AI lane C ("game-script parity", FFX only): Evrae and Cid, Yojimbo
+ * and Isaaru's three aeons run the game's own scripts (research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md sections 2 to 4) through the
+ * same hit events. Evrae's counter is filled by the command's formula byte and his Haste starts under 10,666; Cid acts every 42
+ * ticks, not 36; Yojimbo's first turn is a Summon, his odds are the script's, Zanmato leaves the gauge at 2 and the +3 is a hit
+ * event; every aeon of the contest opens with a Summon and fills its gauge from every attack at Yuna; the aeon opens at CTB 0
+ * and the party one tick later. All six digests move and every outcome is still a victory; no other chapter's digest moved.
+ * Release candidate 1, 2026-10-09 (re-parity W1, AI lane B and AI-Seymour merged onto release 39.4.2, "game-code and
+ * game-script parity merged onto 39.4.2", FFX only). The merged tree was run against each lane's own table: 17 of the 18
+ * digests are the lanes' own, byte for byte (all eight of AI-Seymour's, Chapter II's two, Chapter III seed 1's, and the
+ * six other chapters'). ONE moved, braskas-final-aeon#7, and only its link 5 (Possessed Shiva; links 1 to 4, 6 and 7 are
+ * identical, every outcome is still victory): there is one hit runner now (`ai/hooks.ts`, lane B's `hit-hooks.ts` and
+ * `hit-event.ts` are gone) and it tells each target of an action right after its own hits, AI-Seymour's reading of the
+ * game's per-record application, where lane B's own runner told them all after the last target. Tidus's Overdrive there
+ * reaches Possessed Shiva and both Pagodas; Shiva's hook spends a GetRandomValue draw, which now falls between Shiva's hit
+ * and the Pagodas' two, so their damage variance comes from the next draws and the two amounts 2230 and 2377 become 2358
+ * and 2459. Nothing else in that log changes (docs/handoff/re-parity-rc1.md, with the proof).
+ * Release candidate 1 with AI lane C, 2026-10-09 (re-parity AI lane C merged onto that three-lane tree, "game-script parity",
+ * FFX only). The merged tree was run against the table above: 12 of the 18 digests are byte for byte what they were (all eight
+ * of AI-Seymour's, Chapter II's two and Chapter III's two). SIX moved: evrae-airship, yojimbo-cavern and isaaru-via-purifico, seeds
+ * 1 and 7, the six lane C re-baselined on its own branch (see its paragraph above), and each equals lane C's own digest to the byte,
+ * so the merge kept its behaviour: its nine hit scripts now run on the one runner (`ai/hit-script.ts` over `ai/hooks.ts`, the old
+ * `hit-hooks.ts` is gone), and none of the three fights has two listening targets in one action, so the runner's order (the
+ * paragraph above) cannot move them. Every outcome is still victory. Nothing on the boss or the party was tuned.
+ * Release candidate 1 folded into the release line, 2026-10-09 (re-parity-rc1 merged with r3943-int `a74b2b8e`, FFX only; docs/handoff/re-parity-rc1.md
+ * section 8). The merged tree was run against the table above: ALL 18 digests are byte for byte what they were and nothing is re-pinned. The release
+ * line's only battle-code change in that merge was the Chapter XII ring of the r3941-omnis paragraph; release candidate 1 already had the same ring from the
+ * game's own script (AI-Seymour, D-25: Fire, Ice, Water, Thunder, a spell +1 and a blow -1), so the merged rules (the release line's pure `discAfterTurn`
+ * and ring, release candidate 1's reset order, affinity timing and four spells) play Chapter XII exactly as before: seymour-omnis#1 and #7 are the table's
+ * 'e6d67f23:victory' and '9b077938:defeat', not the release line's own digests, which belong to its older engine. The rest of that line's changes are
+ * presentation (scenes, HUDs, statures, art) and reach no battle log. Nothing on the boss or the party was tuned.
+ * Releases 39.2 to 39.4.2 changed no FFX battle code or data (their battle-side changes are FFX-2's Trema data, the Leblanc
+ * preview's chapter registry and `types.ts`'s `hopelessRetry`). A digest that moves from here on is a change to explain.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'd5fd8bf4:defeat',
-  'seymour-flux#7': '420e8126:victory',
-  'yunalesca#1': 'b20edebb:victory',
-  'yunalesca#7': '2b4ba8df:victory',
-  'braskas-final-aeon#1': 'ca3f7569:victory e41be697:victory 128fa095:victory d57abcc1:victory 4c3a1fd4:victory 2ec2be2f:victory 2e29d25c:victory',
-  'braskas-final-aeon#7': 'c1e3482:victory 90fc8d41:victory 918adb39:victory ad58d940:victory abbc417b:victory 9621c0d7:victory 3bcdda13:victory',
-  'seymour-anima-macalania#1': 'fb27d3f2:victory',
-  'seymour-anima-macalania#7': 'ab704669:victory',
-  'evrae-airship#1': 'ebf9b7c4:victory',
-  'evrae-airship#7': '73022786:victory',
-  'yojimbo-cavern#1': '354ac345:victory',
-  'yojimbo-cavern#7': '13a3322e:victory',
-  'seymour-natus#1': '6fe6bbe1:defeat',
-  'seymour-natus#7': '4be27cc4:defeat',
-  'seymour-omnis#1': '354e0ace:victory',
-  'seymour-omnis#7': 'ac28e23c:victory',
-  'isaaru-via-purifico#1': 'a9b7568a:victory 5be7c9ed:victory 32b8ae86:victory',
-  'isaaru-via-purifico#7': 'cc3291bd:victory a32106b5:victory 3c5d0bb6:victory',
+  'seymour-flux#1': '2c90f3e4:victory',
+  'seymour-flux#7': 'b4e09b07:victory',
+  'yunalesca#1': '92593bcc:defeat',
+  'yunalesca#7': 'a986c071:victory',
+  'braskas-final-aeon#1': '8e66e41a:defeat',
+  'braskas-final-aeon#7': '4d03bcf:victory ecf9d5ca:victory 73095ebb:victory 7da3a6c6:victory 35dd0a26:victory 56db843f:victory 4a48b320:victory',
+  'seymour-anima-macalania#1': 'd6364844:victory',
+  'seymour-anima-macalania#7': 'f5b75fc0:victory',
+  'evrae-airship#1': 'f57a4639:victory',
+  'evrae-airship#7': '551512c6:victory',
+  'yojimbo-cavern#1': 'a8bfe256:victory',
+  'yojimbo-cavern#7': '1e3f39eb:victory',
+  'seymour-natus#1': 'c2522add:victory',
+  'seymour-natus#7': '514b6086:defeat',
+  'seymour-omnis#1': 'e6d67f23:victory',
+  'seymour-omnis#7': '9b077938:defeat',
+  'isaaru-via-purifico#1': '8d821114:victory 6894473d:victory 57e66da:victory',
+  'isaaru-via-purifico#7': '70244c57:victory f901bf84:victory e9573bc6:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

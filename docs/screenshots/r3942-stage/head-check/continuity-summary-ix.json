@@ -1,0 +1,83 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "yojimbo-cavern",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 126.8,
+   "swaps": 119,
+   "snapsPerMinute": 0.47,
+   "maxHeadJumpPct": 4.8,
+   "maxFeetShiftPx": 0.9,
+   "worstJerkPx": 85.5,
+   "strips": 20,
+   "worstSwapStrips": [
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-095-lulu-hurt-ko.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-003-kimahri-idle-hurt.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-024-kimahri-hurt-idle.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-118-kimahri-idle-victory.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-083-yuna-hurt-critical.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-082-yuna-critical-hurt.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-006-kimahri-idle-ready.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-066-yuna-ready-item.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-007-kimahri-ready-item.jpg",
+    "yojimbo-cavern-win-r3942/continuity/strips/swap-099-lulu-ko-critical.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 126.8,
+ "counted": 119,
+ "swaps": 120,
+ "size": {
+  "judged": 119,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 0,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 4.8,
+  "maxHeadJumpPctRegistration": 0.3,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 0.9,
+  "feetOverTolerance": 0,
+  "headMeasured": 119,
+  "headRegistration": 72,
+  "headSilhouette": 47,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 1,
+  "snapsPerMinute": 0.47,
+  "hardCuts": 1,
+  "hardCutsPerMinute": 0.47,
+  "ghostSwaps": 99,
+  "ghostFrames": 401,
+  "worstGhostSeverity": 0.387,
+  "ghostOverFail": 0,
+  "jerks": 35,
+  "worstJerkPx": 85.5,
+  "jerksOverFail": 6,
+  "lowestIou": 0.115,
+  "maxCentroidShiftPx": 89.1
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "72 of 119 measured swaps had a registered head (tolerance 3 percent); 47 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.47 snaps per minute is over 0.25",
+    "6 jerk(s) of 40 px or more in one frame (worst 85.5 px)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5192/",
+ "date": "2026-10-08T07:43:48.184Z"
+}

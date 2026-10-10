@@ -14,28 +14,27 @@
  * transfers across games". FFX-2's Yojimbo drops the party to 1 HP / 1 MP on
  * an action counter (§8.2) and never reaches this file.
  *
- * ## Built on assumptions (Bailey's picks on the preflight are pending)
+ * ## Game-script parity (re-parity, AI lane C)
  *
- * Every value below that no source states is an `[estimate]`, is labelled
- * "our estimate" in {@link YOJIMBO_ASSUMPTIONS} so a guide or a widget can
- * print it, and is one named constant, never a scattered literal
- * [AGENTS.md hard rule 6]:
+ * His turn and his `onHit` are `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md`
+ * section 3 (m288, run in the note's interpreter over all 65,536 draws), which
+ * replaced the estimates this file was built on: the odds inside each band are
+ * the script's exact ones (D-11, so the owner's "even split" decision D-050 is
+ * answered by a source), the first turn is a Summon (D-10), Zanmato resets the
+ * gauge to 0 and the turn's common +2 then makes it 2 (D-12), and the "+3" is a
+ * hit event, once per action per target after its last hit, gated by
+ * `isCounterattackAllowed()` (D-13). What stays an owner decision:
  *
- * - **B2** — the odds *inside* each gauge band are unsourced (§9 Y-1): split
- *   evenly; the "slightly likelier at 80 %" nudge is left out and disclosed.
- *   The gauge starts at 0 and returns to 0 after Zanmato.
- * - **Y-1** — "+3 % when targeted" is paid once per **action** that names him,
- *   not per hit (`abilities.ts` calls `onTargeted` once per target, before
- *   the hit loop). "+2 % when attacking" is paid on every turn he acts except
- *   Zanmato, **including the Daigoro order** (the research's own pseudocode,
- *   §4.2); whether the order turn counts is not sourced.
  * - **B3** — Lady Ginnem and Daigoro are on the field but untargetable, never
- *   a victory condition and never in the CTB queue (Y-5, Y-10).
- * - **B9** — Threaten fails on him (`threatenChance: 0`) until Y-3 is sourced.
+ *   a victory condition and never in the CTB queue (Y-5, Y-10; the script
+ *   agrees: the setup makes them untargetable and off the CTB bar).
+ * - **B9** — Threaten fails on him (`threatenChance: 0`), D-057: the owner kept
+ *   it over the byte, which reads landable (resistance 0).
  */
 
 import type { BattleState, CombatantId, FFXCombatant } from '../../common/types.ts';
 import { type ActorRuntime, type Ctx, tryActor } from '../state.ts';
+import { applyBossOpening } from './opening.ts';
 
 // ---------------------------------------------------------------------------
 // Ids — mirrored by `src/data/ffx/enemies/yojimbo.ts` (the battle layer never
@@ -53,6 +52,7 @@ export const YOJIMBO_BYSTANDER_SCRIPT = 'yojimbo-bystander';
 
 /** Action row ids (`src/data/ffx/enemies/yojimbo-abilities.ts`). */
 export const YOJIMBO_DAIGORO_ORDER = 'yojimbo-daigoro';
+export const YOJIMBO_SUMMON = 'yojimbo-summon';
 export const YOJIMBO_KOZUKA = 'yojimbo-kozuka';
 export const YOJIMBO_WAKIZASHI = 'yojimbo-wakizashi';
 export const YOJIMBO_ZANMATO = 'yojimbo-zanmato';
@@ -62,13 +62,13 @@ export const DAIGORO_ATTACK = 'daigoro-attack';
 // The gauge — §4.1
 // ---------------------------------------------------------------------------
 
-/** §4.1 `[single source: wiki boss page]` — "+3 %" each time the party targets him. */
-export const YOJIMBO_GAUGE_PER_TARGETING = 3;
-/** §4.1 / review `[single source: wiki boss page]` — "+2 % when attacking". */
-export const YOJIMBO_GAUGE_PER_ATTACK = 2;
-/** `[estimate]` (B2, Y-1) — no source states the starting gauge. */
+/** m288 onHit (note 3.3): +3, capped at 100, once per action per target after its last hit, while he can counter. */
+export const YOJIMBO_GAUGE_PER_HIT_EVENT = 3;
+/** m288 onTurn (note 3.2): +2 at the join after every row but the first turn (Zanmato's included), capped at 100. */
+export const YOJIMBO_GAUGE_PER_TURN = 2;
+/** The monster setup writes 0 and his script never sets another value (note 3.1). */
 export const YOJIMBO_GAUGE_START = 0;
-/** `[estimate]` (B2, Y-1) — no source states the gauge after Zanmato. */
+/** Zanmato's row writes 0 before it fires; the turn's +2 then follows (D-12). */
 export const YOJIMBO_GAUGE_AFTER_ZANMATO = 0;
 
 /** §4.1 `[verified: 3 sources]` — at or above this, Kozuka joins the pool. */
@@ -97,9 +97,8 @@ export function yojimboBand(gauge: number): YojimboBand {
 }
 
 /**
- * The actions open to him at a gauge value below 100, **each equally likely**
- * — B2, our estimate. The membership of each band is sourced
- * `[verified: 3 sources]`; the even split is not.
+ * The actions open to him at a gauge value below 100. The membership of each band is the script's
+ * (`[verified: 3 sources]` and now read from the game); the weights are {@link yojimboOdds}.
  */
 export function yojimboPool(gauge: number): readonly string[] {
   if (gauge >= BAND_WAKIZASHI) return [YOJIMBO_DAIGORO_ORDER, YOJIMBO_KOZUKA, YOJIMBO_WAKIZASHI];
@@ -107,18 +106,26 @@ export function yojimboPool(gauge: number): readonly string[] {
   return [YOJIMBO_DAIGORO_ORDER];
 }
 
-/** The line a guide or widget prints wherever the odds are shown (B2). */
-export const YOJIMBO_ODDS_NOTE =
-  'Our estimate: inside each band every open move is equally likely. The game does not publish the odds.';
+/**
+ * The exact odds of each open move at a gauge value below 100, as counts of the 65,536 values of `GetRandomValue()`
+ * (note 3.2): 80 to 99 `mod 4` (Wakizashi 0, Kozuka 1, Daigoro 2 and 3), 50 to 79 `mod 5` (Wakizashi 0, Kozuka 1,
+ * Daigoro 2 to 4), 25 to 49 `mod 4` (Kozuka 0, Daigoro 1 to 3), below 25 Daigoro without a draw.
+ */
+export function yojimboOdds(gauge: number): ReadonlyArray<{ id: string; of65536: number }> {
+  if (gauge >= BAND_HEIGHTENED) {
+    return [{ id: YOJIMBO_WAKIZASHI, of65536: 16_384 }, { id: YOJIMBO_KOZUKA, of65536: 16_384 }, { id: YOJIMBO_DAIGORO_ORDER, of65536: 32_768 }];
+  }
+  if (gauge >= BAND_WAKIZASHI) {
+    return [{ id: YOJIMBO_WAKIZASHI, of65536: 13_108 }, { id: YOJIMBO_KOZUKA, of65536: 13_107 }, { id: YOJIMBO_DAIGORO_ORDER, of65536: 39_321 }];
+  }
+  if (gauge >= BAND_KOZUKA) return [{ id: YOJIMBO_KOZUKA, of65536: 16_384 }, { id: YOJIMBO_DAIGORO_ORDER, of65536: 49_152 }];
+  return [{ id: YOJIMBO_DAIGORO_ORDER, of65536: 65_536 }];
+}
 
-/** The assumptions this encounter is built on, as data, so the guide and the board can print them. */
+/** The owner decisions this encounter keeps over the script, as data, so the guide and the board can print them. */
 export const YOJIMBO_ASSUMPTIONS = [
-  { id: 'B2', claim: 'Inside each gauge band every open action is equally likely; the 80 % nudge is not modelled', label: 'our estimate' },
-  { id: 'B2', claim: 'The gauge starts at 0 and returns to 0 after Zanmato', label: 'our estimate' },
-  { id: 'Y-1', claim: '+3 % per party action that targets him, not per hit', label: 'our estimate' },
-  { id: 'Y-1', claim: '+2 % on every turn he acts except Zanmato, the Daigoro order included', label: 'our estimate' },
   { id: 'B3', claim: 'Lady Ginnem and Daigoro cannot be targeted', label: 'our estimate' },
-  { id: 'B9', claim: 'Threaten fails on him until a source settles it', label: 'our estimate' },
+  { id: 'B9', claim: 'Threaten fails on him (D-057; the byte reads landable)', label: 'owner decision' },
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -138,9 +145,10 @@ export function isYojimboBattle(ctx: Ctx): boolean {
  *   can find the one enemy that carries it. `enemyToCombatant` builds no enemy
  *   gauge (Anima's is attached the same way). Every change emits the ordinary
  *   `overdrive-gauge` event, cause `'targeted'`, `'attacking'` or `'zanmato'`.
- * - **The +3 per targeting** rides on `ActorRuntime.gaugePerTargeting`, the
- *   capability Macalania Anima introduced (`overdrive.ts#onTargeted`).
+ * - **The +3 per hit event** is his `onHit` (`./yojimbo.ts`).
  * - **Ginnem and Daigoro** own no CTB counter and never decide the battle.
+ * - **The opening** (D-14): the formation's start hook gives him First Strike and CTB 0 and each of the seven party slots
+ *   one tick (`./opening.ts`), so his first turn, the Summon, comes before anyone else's.
  */
 export function applyYojimboSetup(ctx: Ctx): void {
   const yojimbo = tryActor(ctx, YOJIMBO_ID);
@@ -152,6 +160,7 @@ export function applyYojimboSetup(ctx: Ctx): void {
     enemyGaugeRules: 'yojimbo',
   };
   markYojimboRuntime(ctx.state, ctx.rt.actors);
+  applyBossOpening(ctx, [YOJIMBO_ID]);
 }
 
 /**
@@ -166,8 +175,6 @@ export function markYojimboRuntime(
 ): void {
   const self = state.combatants[YOJIMBO_ID] as FFXCombatant | undefined;
   if (self?.enemy?.aiScriptId !== YOJIMBO_SCRIPT) return;
-  const yojimbo = actors.get(YOJIMBO_ID);
-  if (yojimbo) yojimbo.gaugePerTargeting = YOJIMBO_GAUGE_PER_TARGETING;
   for (const id of [GINNEM_ID, DAIGORO_ID]) {
     const rt = actors.get(id);
     if (!rt) continue;

@@ -37,8 +37,12 @@ describe('Yunalesca keeps today\'s rig (FFX only, Chapter II; PR-0307)', () => {
 
   it('every other FFX colossus and Bahamut still is one', () => {
     for (const id of ['seymour-natus', 'yojimbo', 'braskas-final-aeon', 'evrae', 'ffx2-bahamut', 'bahamut']) expect(classify([id])).toBe('colossus');
-    expect(scaleTarget('seymour-natus')).toBe(2.2);
+    expect(scaleTarget('evrae')).toBe(2.4);
     expect(scaleTarget('ffx2-bahamut')).toBe(2.0);
+    // Natus and Braska's Final Aeon are colossi still (their master, their clearance) but BOSS SCALE no longer sizes them: their scenes draw them at the real sizes Bailey picked
+    // (r3942-giants-ffx, FFX only, Chapters X and III; `docs/handoff/r3942-giants-ffx.md`).
+    expect(scaleTarget('seymour-natus')).toBeNull();
+    expect(scaleTarget('braskas-final-aeon')).toBeNull();
   });
 });
 

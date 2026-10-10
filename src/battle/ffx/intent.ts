@@ -12,7 +12,7 @@
  * Every FFX rotation is stateful. Seymour's six-step cycle lives in
  * `state.flags`, Yunalesca's `priv0004` in her actor's AI memory, the
  * Mortiorchis's charge ladder in both, and `braskas-final-aeon.ts` *writes* to
- * the Overdrive gauge and to `bfa.logSeen` on the way past. Asking one of them
+ * the Overdrive gauge (and the opener flag) on the way past. Asking one of them
  * "what would you do" by calling it is therefore an action with consequences:
  * call it once per frame and the Mortiorchis charges to Total Annihilation in
  * about a second, Yunalesca's ring spins, and the battle the player is in the
@@ -30,7 +30,7 @@
  *
  * Some rotations are deterministic (Bahamut's 12-action loop, Shuyin's 8-step
  * cycle, Yunalesca Form III's five-step ring) and some are weighted branches
- * (her `P(heal) = 20 * zombieSlots + 10`, BFA's 75/25 table). A hand-maintained
+ * (her `P(heal) = 20 * zombieSlots + 10`, BFA's one-in-three and one-in-five tables). A hand-maintained
  * "this one is random" table would rot the first time a data agent retunes a
  * weight, so the confidence is **sampled**: the same dry run is repeated
  * {@link SAMPLE_COUNT} times from different RNG positions and the answers are
@@ -59,7 +59,8 @@ import type {
 import { SeededRng } from '../common/rng.ts';
 import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
-import { activeScriptId, chooseAiCommand, fluxPhase } from './ai/index.ts';
+import { activeScriptId, chooseAiCommand } from './ai/index.ts';
+import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
 import { type ActionEstimate, type TargetEstimate, estimateCommand } from './estimate.ts';
@@ -162,7 +163,7 @@ function deepCopy<T>(value: T): T {
  * |---|---|---|
  * | `state.combatants` | deep copy | HP, statuses and `enemy.formIndex` are all written during a form change |
  * | `state.flags` | copy | Seymour's whole cycle lives here |
- * | `state.log` | **shared reference** | read-only for a script (`bfa.logSeen` scans it) and the single biggest object in the state — copying it per sample would make a prediction cost more than the frame it draws on |
+ * | `state.log` | **shared reference** | read-only for a script and the single biggest object in the state — copying it per sample would make a prediction cost more than the frame it draws on |
  * | `rt.actors` | deep copy, per entry | `ai` memory and `charge` are both written |
  * | `rng` | fork at the given stream position | a script that rolls must not consume the battle's stream |
  * | `content` | shared reference | a read-only registry |
@@ -365,33 +366,32 @@ export function countersFor(ctx: Ctx, enemy: FFXCombatant): string[] {
   if (script.startsWith('yunalesca')) {
     const form = enemy.enemy?.formIndex ?? 0;
     if (form === 0) {
-      out.push('Answers a physical hit with Blind, a magical one with Silence, anything else with Sleep [ffx-yunalesca §5.1]');
-      out.push('Her Blind/Silence gate reads the target she last picked, not your attacker — keep one member Blinded and the Blind counter never fires [ffx-yunalesca §5.1]');
+      out.push('Answers every action that reaches her, a miss too: Blind to a physical one, Silence to a magical one, Sleep to one that is neither [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
+      out.push('Her Blind/Silence gate reads the target she last picked, not your attacker (Tidus before her first move) — keep that one Blinded and the Blind counter never fires [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
     } else if (form === 1) {
-      out.push('49% chance to answer any hit with Dispelling Slap [ffx-yunalesca §5.2]');
+      out.push('49% chance to answer any action that reaches her, a miss too, with Dispelling Slap [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
     } else {
-      out.push('Answers every hit with Dispelling Slap [ffx-yunalesca §5.3]');
+      out.push('Answers every action that reaches her, a miss too, with Dispelling Slap [ffx-yunalesca §5.1, re-ffx-ai-yunalesca-bfa §2.9]');
     }
   }
 
   if (script === 'seymour-flux' || script === 'mortiorchis') {
-    out.push('A Delay attempt on either of them fails and is punished with party-wide Slowga [ffx-seymour-flux §4.6]');
+    out.push('Delay Attack or Delay Buster on the Mortiorchis is punished with party-wide Slowga; no other delay is [re-ffx-ai-seymour §2.5]');
     const host = tryActor(ctx, 'seymour-flux');
     if (host && isAlive(host)) {
-      if (host.hp * 4 >= host.stats.maxHp * 3) {
-        out.push('Below 75% HP Seymour answers with Protect [ffx-seymour-flux §4.3]');
-      }
-      if (host.hp * 2 >= host.stats.maxHp || fluxPhase(ctx) === 1) { // Poison below 50% leaves it pending [§4.3]
-        out.push('Below 50% HP Seymour answers with Reflect and phase 2 opens [ffx-seymour-flux §4.3]');
+      // Each line answers once: the line is spent when it fires, so a later Dispel is never answered by it [§2.5].
+      if (fluxLine(ctx, host, 'protect') !== 0) out.push('Under 75% HP Seymour answers with Protect, one time only [re-ffx-ai-seymour §2.5]');
+      if (fluxLine(ctx, host, 'reflect') !== 0) { // Poison below 50% leaves it pending until the next real hit [§2.5]
+        out.push('Under 50% HP Seymour answers with Reflect and phase 2 opens, one time only [re-ffx-ai-seymour §2.5]');
       }
     }
     if (ctx.state.aeonId) {
-      out.push('Banish deletes your aeon the moment it has taken one turn [ffx-seymour-flux §4.5]');
+      out.push('Banish deletes your aeon on his next turn, whatever it has done [re-ffx-ai-seymour §2.3]');
     }
   }
 
   if (script === 'yu-yevon') {
-    out.push('Answers damage with Curaga on itself [ffx-bfa-yu-yevon §3.4.1]');
+    out.push('Answers every action that damages him, from anyone but himself, with Curaga on himself; the seventh makes his next turn Osmose, then Ultima [ffx-bfa-yu-yevon §3.4.1, re-ffx-ai-yunalesca-bfa §6.3]');
   }
 
   return out;
@@ -406,18 +406,18 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
     const raw = ctx.state.flags['bfa.gauge'];
     const gauge = Math.max(typeof raw === 'number' ? raw : 0, enemy.overdrive?.gauge ?? 0);
     const form = enemy.enemy?.formIndex ?? 0;
-    const belowHalf = enemy.hp * 2 <= enemy.stats.maxHp;
-    const od = ctx.state.aeonId
-      ? 'Jecht Bomber'
-      : form === 1 && belowHalf
-        ? 'Ultimate Jecht Shot'
-        : form === 1
-          ? 'Triumphant Grasp'
-          : 'Triumphant Grasp';
-    out.push(`Overdrive ${Math.round(gauge)}/100 — spends it on ${od} the turn it fills [ffx-bfa-yu-yevon §1.6]`);
+    const half = Math.floor((enemy.enemy?.forms[1]?.hp ?? enemy.stats.maxHp) / 2);
+    const lowPhase = form === 1 && (rtOf(ctx, enemy.id).ai['bfa.phase2'] === true || enemy.hp < half);
+    const od = ctx.state.aeonId ? 'Jecht Bomber' : lowPhase ? 'Ultimate Jecht Shot' : 'Triumphant Grasp';
+    // The test reads the gauge as his last hook left it, so the turn it reaches 100 is not the Overdrive turn [re-ffx-ai-yunalesca-bfa §3.4].
+    out.push(
+      gauge >= 100
+        ? `Overdrive 100/100 — his next turn is ${od} [ffx-bfa-yu-yevon §1.6, re-ffx-ai-yunalesca-bfa §3.4]`
+        : `Overdrive ${Math.round(gauge)}/100 — spends it on ${od} the turn after it fills [ffx-bfa-yu-yevon §1.6, re-ffx-ai-yunalesca-bfa §3.4]`,
+    );
     const used = ctx.state.flags['bfa.talkUsed'];
     const left = 2 - (typeof used === 'number' ? used : 0);
-    if (left > 0) out.push(`Talk zeroes that gauge and costs him his next turn — ${left} charge${left === 1 ? '' : 's'} left [ffx-bfa-yu-yevon §1.6]`);
+    if (left > 0) out.push(`Talk cancels that Overdrive and costs him his next turn (the gauge clears when it starts) — ${left} charge${left === 1 ? '' : 's'} left [ffx-bfa-yu-yevon §1.6, re-ffx-ai-yunalesca-bfa §3.6]`);
   }
 
   if (has(enemy, 'confuse')) out.push('Confused — it strikes a random side, so this prediction is a guess');

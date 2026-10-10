@@ -68,6 +68,9 @@ export const paragonOversoulAbilities: AbilityDef[] = [
     statusEffects: OVERSOUL_ESTIMATES.attackItchy ? [{ status: 'itchy', chance: 255, duration: 0 }] : [],
     flags: ['crit-eligible'],
     // It rolls: "often misses" [verified: 3 sources]; the flat rate is OVERSOUL_ESTIMATES.physicalHitPercent.
+    // Re-parity W3 (FFX-2 only): the engine no longer reads this number. The game's row for this move (0x41da) carries accuracy formula 2,
+    // so the hit is the race of the Paragon's own Accuracy and Luck against the girl's Luck and Evasion (`ffx2Record`, attached in
+    // `data/ffx2/index.ts`); the estimate stays here as the record of what the FAQs said.
     accuracy: OVERSOUL_ESTIMATES.physicalHitPercent,
     messageTemplate: 'Paragon attacks {target}',
   },

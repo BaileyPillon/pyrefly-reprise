@@ -221,6 +221,7 @@ export const EVRAE_DECK_PLATE = 'evrae-airship-deck';
 export interface DeckPlate {
   readonly key: string;
   readonly roll?: number;
+  readonly staging?: { readonly figureHeights?: Readonly<Record<string, number>>; readonly enemySpots?: Readonly<Record<string, [number, number, number]>> }; // `SceneStaging` heights and spots added to the deck's pins by combatant id (XVII's Genais and Core, evrae-airship-sin.ts); omitted: the deck as it was
 }
 
 /**
@@ -365,6 +366,7 @@ async function buildDeck(plate: DeckPlate, opts: SceneBuildOptions): Promise<Sce
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     ...EVRAE_AIRSHIP_DECK_STAGING,
+    ...plate.staging, enemySpots: { ...EVRAE_AIRSHIP_DECK_STAGING.enemySpots, ...plate.staging?.enemySpots },
     palette: { ...EVRAE_AIRSHIP_DECK_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);

@@ -170,7 +170,7 @@ describe('Evrae — the stat block and the action rows', () => {
     expect(cid?.flags.untargetable).toBe(true);
     expect(cid?.immunityFlags).toContain('immune-to-sensor');
     expect(cid?.immunityFlags).toContain('immune-to-scan');
-    expect(cid?.stats.agi).toBe(16); // C-6 — the decompile, not the wiki's 11
+    expect(cid?.stats.agi).toBe(11); // C-6 settled by the script (re-parity D-09): his init writes 11 over the record's 16
     const missiles = EVRAE_ABILITIES['cid-guided-missiles'];
     expect(missiles?.formula).toBe('fixed');
     expect(missiles?.power).toBe(4);
@@ -608,7 +608,9 @@ describe('Evrae — FFX only [rule 14]', () => {
       party: gagazetBuild,
       enemies: group,
       triggers: [],
-      seed: 7,
+      // Seed 7 -> 4 on 2026-10-08 (re-parity W1, FFX only): the engine now draws hit, variance and critical in the
+      // game's order and Cross Cleave always hits, so seed 7's Chapter 1 is over after five decisions; seed 4 gives the eight.
+      seed: 4,
       condition: 'normal',
       canEscape: false,
     });

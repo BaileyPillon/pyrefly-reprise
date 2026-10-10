@@ -37,6 +37,7 @@ import { addPlateDim, type PlateDimSpec } from './plateDim.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import { bracketScale } from './frameBracket.ts';
 import { viewportAspect } from './cavern-stolen-fayth-rigs.ts';
+import { giantPhoneHeights } from './giant-stage.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -166,6 +167,15 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
 };
 
 export const BEVELLE_UNDERGROUND_RIGS = RIGS;
+
+/**
+ * Bahamut's idle camera on the upright phone (r3942-stage wave 2, **FFX-2 only**; Bailey, 2026-10-08, "go with your recommendations": option 4 of the giants options sheet, Bahamut at
+ * 0.7 of his real height, `data/ffx2/fiend-stature.ts` `FFX2_GIANT_SHARE`). Solved at 390x844 with the options sheet's own solver for the figures where the phone stands them: the
+ * whole figure, head and wings, below the boss gauge and the enemy-intent strip (his top at y 104 of the field's 520), the girls as large as the frame leaves them with their feet on
+ * y 445 (the cure-hint card of this fight, `.sthint`, starts at 407: Yuna's legs are under it, as in the picture Bailey picked), no painting edge past today's (0 percent of the frame
+ * beyond the plate). The A-12 slice fit (`ShotRules.fitPhone`) leaves it as it is: everyone already fits one slice and the frame. The desktop keeps {@link RIGS}.`idle`.
+ */
+export const BEVELLE_PHONE_GIANT_IDLE: CameraRig = { position: [-0.3201, 4.6555, 16.479], lookAt: [-0.058, 3.7037, 6.5279], fov: 32 };
 
 /**
  * Three active slots in the FFX arc, front to back and staggered into the lower
@@ -342,6 +352,9 @@ export const BEVELLE_UNDERGROUND_ENEMY_ACTOR_DEFAULTS = {
   edgeFade: 0.2,
   alphaCut: 0.04,
 } as const;
+
+/** The girls' world height in this room: the stage's house default (`resolveSceneHeights`; the build publishes none), the unit Bahamut's real height is a ratio of. */
+export const BEVELLE_GIRLS_HEIGHT = 1.82;
 
 /** The slot table `SCENES` in `./index.ts` stages fighters against. */
 export const BEVELLE_UNDERGROUND_SLOTS: SceneSlots = {
@@ -2156,6 +2169,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
 
   // -------------------------------------------------------------------- loop
   let clock = 0;
+  const phoneGiants = giantPhoneHeights(['bahamut'], 'ffx2-bahamut', BEVELLE_GIRLS_HEIGHT);
   const build: SceneBuild = {
     group,
     get backdrop(): Backdrop {
@@ -2163,9 +2177,11 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
     },
     lights,
     particles,
-    rigs: RIGS,
+    rigs: phoneGiants['bahamut'] === undefined ? RIGS : { ...RIGS, idle: BEVELLE_PHONE_GIANT_IDLE },
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    // r3942-stage wave 2 (FFX-2 only): on the upright phone Bahamut stands at 0.7 of his real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING sizes him with his camera, `fx/mix/giants.ts`).
+    ...(phoneGiants ? { figureHeights: phoneGiants } : {}),
     palette: { ...PALETTE },
     update(dt: number): void {
       clock += dt;

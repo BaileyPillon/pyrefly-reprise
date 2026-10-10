@@ -22,6 +22,7 @@
  */
 
 import type { AbilityDef, AbilityId, EnemyGroupDef, ItemDef, ItemId } from '../../battle/common/types.ts';
+import { attachCommandRecords } from './command-records/index.ts';
 
 // ---------------------------------------------------------------------------
 // Player-side abilities — src/data/ffx/abilities/**
@@ -276,6 +277,10 @@ Object.assign(
   Object.fromEntries(ITEM_EFFECT_ABILITIES.map((a) => [a.id, a])),
   Object.fromEntries(ALL_BOSS_ABILITIES.map((a) => [a.id, a])),
 );
+
+// Re-parity W1: every ability that has one gets the game's own command record (type, flag words, damage classes),
+// in place, so an item's effect and its catalog entry (the same object) carry it alike. `command-records/`.
+attachCommandRecords(Object.values(ABILITIES));
 
 /**
  * Every `AbilityDef` this project ships for FFX (player spells/skills/

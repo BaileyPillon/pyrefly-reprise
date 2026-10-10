@@ -15,10 +15,19 @@
  *    never in it; kept at full HP they healed him faster than he whittled
  *    himself down and §3.5's attrition route could not be reached.
  *
+ * **Superseded in part, 2026-10-09 (re-parity AI lane B, FFX only;
+ * `research/re-ffx-ai-yunalesca-bfa.md` section 6, rows V2, V4 and V5).** Read from his
+ * own script: (1) his Gravija is `performCommand(group, Gravija)` on a group built
+ * from the front line plus himself, so his Yu Pagodas are NOT in it (blocker #16a's
+ * reading, "every target on the field", was the wiki's); (2) his Curaga counter is
+ * his `onHit`, raised for every sub-action that dealt him HP damage from anyone
+ * but himself, so a Yu Pagoda's Power Wave on a Zombie Yu Yevon (1,500 damage after
+ * the inversion) counts and draws a Curaga; a heal, a miss and his own Gravija still
+ * do not. What these tests keep: a defend-only party draws zero Curagas, a party
+ * attack draws one per damaging action, and the attrition route still ends the fight.
+ *
  * Game case: **FFX only**. The formation, the counter and Gravija are all
- * Chapter 3 content; FFX-2 has no counter of this shape. The `attacker.side`
- * guard itself is shared plumbing and sits in the FFX reaction collector, which
- * FFX-2 does not use.
+ * Chapter 3 content; FFX-2 has no counter of this shape.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -66,6 +75,8 @@ interface Run {
   curagas: number;
   gravijas: number;
   pagodaHitByGravija: boolean;
+  yevonHitByGravija: boolean;
+  partyHitByGravija: boolean;
   bossFloor: number;
   turns: number;
   outcome: string;
@@ -82,6 +93,8 @@ function defendOnly(seed: number, maxTurns: number): Run {
     curagas: 0,
     gravijas: 0,
     pagodaHitByGravija: false,
+    yevonHitByGravija: false,
+    partyHitByGravija: false,
     bossFloor: boss.hp,
     turns: 0,
     outcome: 'none',
@@ -107,6 +120,10 @@ function defendOnly(seed: number, maxTurns: number): Run {
         }
         if (ev.type === 'damage' && lastAbility === 'gravija' && ev.targetId.startsWith('yu-pagoda')) {
           run.pagodaHitByGravija = true;
+        }
+        if (ev.type === 'damage' && lastAbility === 'gravija' && ev.targetId === 'yu-yevon') run.yevonHitByGravija = true;
+        if (ev.type === 'damage' && lastAbility === 'gravija' && ['tidus', 'yuna', 'auron'].includes(ev.targetId)) {
+          run.partyHitByGravija = true;
         }
       }
     }
@@ -145,36 +162,50 @@ describe('Yu Yevon counters only player-side actions (§3.4.1)', () => {
     }
 
     // Counters fired inside the player's own action land in `state().log`,
-    // which `submit` drains into rather than re-delivering as a decision.
-    const curagas = engine
-      .state()
-      .log.filter((ev) => ev.type === 'counter' && ev.abilityId === 'curaga' && ev.actorId === 'yu-yevon').length;
+    // which `submit` drains into rather than re-delivering as a decision. Each is
+    // filed under the action it followed.
+    const answered: string[] = [];
+    let provoker = '';
+    for (const ev of engine.state().log) {
+      if (ev.type === 'action-start') provoker = ev.actorId;
+      if (ev.type === 'counter' && ev.abilityId === 'curaga' && ev.actorId === 'yu-yevon') answered.push(provoker);
+    }
+    const party = ['tidus', 'yuna', 'auron'];
 
     expect(attacks).toBe(3);
-    expect(curagas, 'one Curaga per player-side damaging action').toBe(3);
+    expect(answered.filter((who) => party.includes(who)), 'one Curaga per player-side damaging action').toHaveLength(3);
+    // Re-parity AI lane B (row V5): this party's weapons put Zombie on him, and a Yu Pagoda's Power Wave on a Zombie Yu
+    // Yevon is 1,500 damage once the heal is inverted, which the game counts (his hook strips the Zombie, then tests the
+    // damage). Nothing else on his side may provoke him: his own Gravija and Curaga never do.
+    for (const who of answered.filter((w) => !party.includes(w))) expect(who, 'only a Pagoda’s Power Wave counts').toMatch(/^yu-pagoda/);
   });
 });
 
-describe('Gravija reaches every target on the field (§3.3)', () => {
-  it('the Yu Pagodas take Gravija damage too', () => {
+describe('Gravija reaches the front line and Yu Yevon himself, and not his Pagodas (m176 f2, row V2)', () => {
+  it('the party and Yu Yevon take Gravija damage, the Yu Pagodas do not', () => {
     const run = defendOnly(4, 200);
     expect(run.gravijas).toBeGreaterThan(0);
-    expect(run.pagodaHitByGravija, 'Gravija skipped his own Pagodas').toBe(true);
+    expect(run.partyHitByGravija, 'the front line is in the group').toBe(true);
+    expect(run.yevonHitByGravija, 'so is he (addToMatchingGroup(20))').toBe(true);
+    expect(run.pagodaHitByGravija, 'his Pagodas are not in the group the script builds').toBe(false);
   });
 
-  it('§3.5’s attrition route wins: suppress the Pagodas, wait, then one hit', () => {
+  it('§3.5’s attrition route wins: wait for Gravija to bring him low, then one hit', () => {
     // §3.5: "Keep both Pagodas suppressed and simply wait: Gravija damages Yu
     // Yevon himself for 75% of his own current HP each cast. When Gravija
     // starts showing 0, he is at 1 HP and any hit finishes him." §3.3 adds that
-    // Gravija "cannot KO (75% of current can never reach 0)", which is why the
-    // floor is 1 and why a hit is still needed.
+    // Gravija "cannot KO (75% of current can never reach 0)", which is why a hit
+    // is still needed.
     //
-    // Before the fix this line could not exist: Gravija never touched the
-    // Pagodas, and every Power Wave they aimed at him returned a 9,999 Curaga,
-    // so he parked at 4,801 and the battle ended on the stalemate guard.
+    // Re-parity AI lane B (2026-10-09, rows V1, V2 and P4): from his own script, he casts Gravija on every turn after
+    // his first (9,999 at most while he is high, then 75% of what is left), his Pagodas are not in the group, and a
+    // Pagoda returns with every point it absorbed in its last life, so "suppressing" them gets dearer each time and
+    // this party does not try. What happens instead is that he comes down to the Pagoda equilibrium, a few hundred to a
+    // thousand HP, where 1,500 per Power Wave and 75% per Gravija trade blows, and any swing worth that much finishes
+    // him: the Curaga his hook queues is refused by the death check that follows it. So the line below only waits
+    // (Defend) and swings once he is under 1,000.
     const engine = boot(4);
     const boss = combatant(engine, 'yu-yevon');
-    const pagodaIds = ['yu-pagoda-left', 'yu-pagoda-right'];
     let attritionFloor = boss.hp;
     let outcome = 'none';
 
@@ -187,17 +218,11 @@ describe('Gravija reaches every target on the field (§3.3)', () => {
       if (d.kind === 'player-input') {
         const rows = d.commands.filter((c) => c.enabled);
         const canAttack = rows.some((c) => c.command.kind === 'attack');
-        const standing = pagodaIds.filter((id) => {
-          const p = combatant(engine, id);
-          return p.alive && p.hp > 0 && !p.removed;
-        });
-        if (canAttack && boss.hp <= 1) {
+        if (canAttack && boss.hp <= 1_000) {
           // Everything up to here was his own Gravija: this is the "any hit
           // finishes him" step, so freeze what attrition alone achieved.
           attritionFloor = Math.min(attritionFloor, boss.hp);
           engine.submit({ kind: 'attack', targets: ['yu-yevon'] } as Command);
-        } else if (canAttack && standing.length > 0) {
-          engine.submit({ kind: 'attack', targets: [standing[0] as string] } as Command);
         } else {
           defend(engine, d);
         }
@@ -206,7 +231,7 @@ describe('Gravija reaches every target on the field (§3.3)', () => {
       if (engine.state().turn > 900) break;
     }
 
-    expect(attritionFloor, `Gravija alone took him to ${attritionFloor} of 99,999`).toBe(1);
+    expect(attritionFloor, `Gravija alone took him to ${attritionFloor} of 99,999`).toBeLessThanOrEqual(1_000);
     expect(outcome, 'the documented attrition route did not end the battle').toBe('victory');
   });
 });

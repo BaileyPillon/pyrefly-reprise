@@ -19,6 +19,7 @@
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
 import { STANDARD_AILMENT_IMMUNITY } from './vegnagun-shared.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 export const DJOSE_IXION = 'ffx2-djose-ixion';
 export const IXION_ID = 'x2-ixion';
@@ -113,3 +114,6 @@ export const djoseIxionGroup: EnemyGroupDef = {
 };
 
 export const ixionDjoseGroups: readonly EnemyGroupDef[] = [djoseIxionGroup];
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [djoseIxionGroup]) attachMonsterRecords(group);

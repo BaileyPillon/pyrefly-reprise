@@ -58,7 +58,6 @@ import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import { executeCommand } from './execute.ts';
 import { commandAbility } from './state.ts';
 import { critChance, hitChance } from './formulas.ts';
-import { equipmentCrit } from './equipment.ts';
 import { markAirshipRuntime } from './ai/sin-setup.ts';
 import { markIsaaruRuntime } from './ai/isaaru-rules.ts';
 
@@ -526,6 +525,5 @@ export function previewCritChance(
   const user = state.combatants[actorId] as FFXCombatant | undefined;
   const target = (targetId ? state.combatants[targetId] : undefined) as FFXCombatant | undefined;
   if (!user || !target) return 0;
-  const equip = equipmentCrit(user);
-  return Math.max(0, Math.min(100, critChance(user, target, def, equip)));
+  return Math.max(0, Math.min(100, critChance(user, target, def)));
 }

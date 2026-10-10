@@ -9,7 +9,8 @@
  *    nothing (rule 9: no thinking state, no card flip);
  *  - Chapter I's opening, through the worker at the desktop budget: the search's pick on the first
  *    menu (the method check's census: Slow on Seymour Flux, which the engine lands; the research
- *    lists Slow both ways, `research/ffx-seymour-flux.md` §1.3, see the handoff).
+ *    lists Slow both ways, `research/ffx-seymour-flux.md` §1.3, see the handoff; Hastega on the untouched
+ *    boards since the boss ran the game's own script, 2026-10-09, see the pin at the end).
  *
  * Game case: FFX only.
  */
@@ -140,6 +141,18 @@ describe('advisor v4 on the card (FFX)', () => {
       picks.push(`${d.actorId}: ${top.label} -> ${top.targetName ?? '-'}`);
     }
     // Measured 2026-09-28: the prototype's census move (12 of 12 seeds there), through the worker.
-    expect(picks).toEqual(['tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux', 'tidus: Slow -> Seymour Flux']);
+    // Seed 3 moved on 2026-10-08 (re-parity W1, FFX only: hit, critical and damage rolls through the game's kernels). Its
+    // first menu is a Zombie board either way (Lance of Atrophy lands on Yuna and the Zombie with it: 761 damage and a
+    // pick of Slow before; 792 damage, Yuna on 708 of 1500 and a pick of Holy Water now). The card's own rule says the
+    // same as the search now does ("While Yuna is a Zombie the next Full-Life is a kill, not a heal: clear it now").
+    // Restoring only Cross Cleave's old accuracy formula leaves the seed-3 pick unchanged, so it is the whole wired
+    // engine's numbers and not one change; seeds 1 and 2 open on an untouched board and still pick Slow.
+    // Seeds 1 and 2 and seed 3 moved on 2026-10-09 (re-parity AI-Seymour, FFX only): Seymour Flux and the Mortiorchis now follow the
+    // game's own scripts (research/re-ffx-ai-seymour.md D-01 to D-08: one shared cycle state, the mount copying Flux's CTB counter
+    // after its turn). The search replays the engine's fight, so on an untouched board its best first move is Hastega, where it
+    // was Slow (seed 5 and 6 open the same way). Seed 3's first menu is a Zombie board either way, with Lance of Atrophy now
+    // landing on Kimahri instead of Yuna: the pick is Holy Water on the Zombie, the card's own rule. Nothing on the advisor, the
+    // boss or the party was tuned; the guide's wording on the opening is listed in docs/handoff/re-parity-ai-seymour.md.
+    expect(picks).toEqual(['tidus: Hastega -> the party', 'tidus: Hastega -> the party', 'tidus: Holy Water -> Kimahri']);
   }, 600_000);
 });

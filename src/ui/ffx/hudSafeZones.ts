@@ -281,6 +281,32 @@ export interface AdvisorZoneInput {
    */
   enemies?: readonly Rect[];
   chipReserve?: number; // measured chip height + gap, grid px (floor: ADVISOR_CHIP_RESERVE)
+  /**
+   * The small key chips along the top of the stage that only the one-row tip needs to keep off (`advisorTip.ts`): the strategy guide's G and scroll chips and the PAUSE chip. They are
+   * not obstacles to the designed card (its boxes never reach them at 100 percent text), so no other pass reads this field. Absent: none.
+   */
+  keepOff?: readonly Rect[];
+  /**
+   * The same list as {@link enemies}, with each painted silhouette taken to where the camera's shot comes to rest (`FFXBattleHud.enemySpriteRectsAtRest`), for the one-row tip only
+   * (`advisorTip.ts`). `enemies` follows the live silhouette so the designed card keeps clear of the gold target bracket drawn on it, and a camera that is still gliding in the first
+   * seconds of a decision carries that box 25 to 30 grid px over the top row, which the tip has 3 to 4 px of slack above: it stood on the top row only when the solve happened to land
+   * after the glide (r3942-giants-ffx). Absent: the tip reads `enemies`.
+   */
+  enemiesAtRest?: readonly Rect[];
+  /**
+   * The strategy guide's `G` chip while the guide is **folded** in a scene that starts its fights folded (Chapters I and III: `SceneStaging.guideFolded`), else `null`/absent. The card then stays clear of the
+   * chip row and the `N` chip parks beside the `G` chip (`advisorFolded.ts`); no other fight and no open guide ever sets it, so no chapter whose card is placed today moves.
+   */
+  guideChip?: Rect | null;
+  /** The advisor's `N` chip with its whole label ("hide moves"), measured, in grid px: what its dock beside {@link guideChip} must hold. Absent: no dock. */
+  chipSize?: { readonly width: number; readonly height: number } | null;
+  /** The same chip as the key-only badge the tip uses (`move-advisor-tip.css`, `.mad--tip`), measured the same way: the dock beside {@link guideChip} when the whole label does not fit in the chip row. */
+  badgeSize?: { readonly width: number; readonly height: number } | null;
+  /**
+   * The folded guide's card did not fit its rail at this decision even printed bare (the board's note and the move are taller than the rail: Chapter I's second decision at 1024x768, 87 grid px in 66), and
+   * a card cut off at its foot hides the move: the HUD has measured it (`FFXBattleHud.guardFoldedCard`) and asks for the tip for the rest of the decision. Only with {@link guideChip}; absent: not set.
+   */
+  foldedFallback?: boolean;
 }
 
 /** Where the advisor card's box goes. `bottom` is distance from the stage's bottom edge. */
@@ -292,7 +318,9 @@ export interface AdvisorZone {
    * Tallest the card may grow before it would reach whatever is above it.
    *
    * Never less than {@link MIN_ADVISOR_HEIGHT}: a box that cannot offer that
-   * much is not returned at all.
+   * much is not returned at all. (Two kinds are the exceptions, and say so: the
+   * Sin fights' strip, 34, `advisorStrip.ts`, and the one-row tip, 18,
+   * `advisorTip.ts`: both are the last resort of a frame with no room for a card.)
    */
   maxHeight: number;
   /**
@@ -301,7 +329,13 @@ export interface AdvisorZone {
    * rather than chosen first — that is the whole change from the round-02
    * build, where the name came first and the geometry was bent to reach it.
    */
-  kind: 'shelf' | 'pocket' | 'open' | 'compact';
+  kind: 'shelf' | 'pocket' | 'open' | 'compact' | 'tip';
+  /**
+   * Where the `N` chip stands when the zone parks it itself: beside the folded guide's `G` chip, in the chip row (`advisorFolded.ts`): `left` and `bottom` in grid px, `bottom` from the stage's bottom edge.
+   * `badge`: the whole label did not fit in the row, so the dock is the key-only badge's: the HUD draws the chip as the badge (`.mad--tip`) while the card is up, and with the card put away by `N` the chip reads in full where the card stood.
+   * Absent: the chip rides above the card (the card's own rule), or is the tip's badge.
+   */
+  chip?: { left: number; bottom: number; badge?: boolean };
 }
 
 /**
@@ -382,16 +416,21 @@ export function anchorOf(input: AdvisorZoneInput): { x: number; y: number } {
  * and at 90.4 it is 133.2, which is the card the advisor track designed. So
  * the height is capped by the box *and* by `(boxWidth - minWidth) / SKEW`.
  */
-function solveCard(obstacles: readonly Rect[], input: AdvisorZoneInput, minWidth: number): AdvisorZone | null {
-  const reserve = Math.max(ADVISOR_CHIP_RESERVE, input.chipReserve ?? 0);
+export function solveCard(
+  obstacles: readonly Rect[],
+  input: AdvisorZoneInput,
+  minWidth: number,
+  reserve: number = Math.max(ADVISOR_CHIP_RESERVE, input.chipReserve ?? 0),
+  minHeight: number = MIN_ADVISOR_HEIGHT, // the folded guide's rail (`advisorFolded.ts`) is 66 to 70 grid px under the chip row and asks for the short card's 60
+): AdvisorZone | null {
   const box = solveBox(obstacles, {
-    minWidth: minWidth + SKEW * MIN_ADVISOR_HEIGHT,
-    minHeight: MIN_ADVISOR_HEIGHT + reserve,
+    minWidth: minWidth + SKEW * minHeight,
+    minHeight: minHeight + reserve,
     anchor: anchorOf(input),
     minWidthAt: (boxWidth) => {
       // A box only counts if some height in [MIN, MAX] leaves `minWidth` after
-      // the shear. `height >= MIN_ADVISOR_HEIGHT` is the binding case.
-      return boxWidth - SKEW * MIN_ADVISOR_HEIGHT >= minWidth;
+      // the shear. `height >= minHeight` is the binding case.
+      return boxWidth - SKEW * minHeight >= minWidth;
     },
   });
   if (!box) return null;
@@ -401,7 +440,7 @@ function solveCard(obstacles: readonly Rect[], input: AdvisorZoneInput, minWidth
     box.bottom - box.top - reserve,
     (boxWidth - minWidth) / SKEW,
   );
-  if (height < MIN_ADVISOR_HEIGHT) return null;
+  if (height < minHeight) return null;
   const card = cardBoxInside(box, height);
   if (card.width < minWidth) return null;
   return {

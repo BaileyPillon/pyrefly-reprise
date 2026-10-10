@@ -6,38 +6,29 @@
  * some {@link ActionFlag}s and a list of {@link StatusApplication}s, and it all
  * resolves through here. Genuinely one-off rules hang off `AbilityDef.extra`
  * and are dispatched in `scripted.ts`.
+ *
+ * **The order of an action is the game's** (re-parity W1, FFX only; `research/re-ffx-rng-hit.md` section 7): the
+ * game visits the targets one after another and runs each target's hits one after another, and inside a hit the
+ * draws come hit roll, damage variance, critical roll. An action that picks a fresh random target for every hit
+ * (Slice & Dice, the Furies, Multi-ra) has no fixed target to run the hits against, so it stays hit by hit.
+ * The arithmetic of one hit is the game's own, in `adapt/hit.ts`; what the engine does around a hit is
+ * `hit-apply.ts`.
  */
 
-import type {
-  AbilityDef,
-  AbilityId,
-  CombatantId,
-  ElementId,
-  FFXCombatant,
-  StatusId,
-} from '../common/types.ts';
-import { damageRng, percentRoll } from '../common/rng.ts';
+import type { AbilityDef, AbilityId, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
 import { idiv } from './math.ts';
-import { type Ctx, has, hasFlag, isAlive, onField, rtOf, stacks } from './state.ts';
-import { computeDamage, critChance, hitChance, poolOf, resolveElements } from './formulas.ts';
-import type { TimingBonus } from './formulas.ts';
-import { equipmentCrit, hasAuto, weaponElements, weaponStatusStrikes } from './equipment.ts';
-import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, koActor, reviveActor } from './hp.ts';
-import { banishAeon } from './aeons.ts';
-import { applyStatus, bouncesOffReflect, consumeNulCharges, removeStatus, removeStatuses, rollStatus } from './statuses.ts';
-import { applyDelay } from './turnQueue.ts';
-import { isPerHitRandom, nextHitTargets, redirectTarget, reflectBounceTarget, resolveTargets } from './targeting.ts';
-import {
-  onDamageDealt,
-  onDamageTaken,
-  onFlatTrigger,
-  onHealDealt,
-  onTargeted,
-  TACTICIAN_STATUSES,
-  VICTIM_STATUSES,
-} from './overdrive.ts';
-import { runScriptedExtra } from './scripted.ts';
+import { type Ctx, has, hasFlag, stacks } from './state.ts';
+import type { TimingBonus } from './adapt/hit.ts';
+import { drawsOf } from './adapt/draws.ts';
+import { resolveElements } from './elements.ts';
+import { hasAuto, weaponElements } from './equipment.ts';
+import { ejectActor, settleDeferredDeath } from './hp.ts';
+import { listensToHit, runOnHit, runOnTargeted } from './ai/hooks.ts';
+import { resolveCommand } from './adapt/command.ts';
+import { aimedTargetForHit, aimedTargets, isPerHitRandom, nextHitTargets, resolveTargets, scriptAimsAt } from './targeting.ts';
+import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
+import { type HitScope, resolveOneHit } from './hit-apply.ts';
 
 /** Knobs the caller can override per resolution. */
 export interface ResolveOptions {
@@ -93,19 +84,28 @@ export function blockedBySilence(user: FFXCombatant, def: AbilityDef): boolean {
   return def.category === 'blackmagic' || def.category === 'whitemagic' || def.category === 'summon';
 }
 
-/** Statuses this action tries to land, including weapon strikes. */
-function statusApplications(user: FFXCombatant, def: AbilityDef): Array<{ status: StatusId; chance: number; duration: number; stacks?: number }> {
-  const own = def.statusEffects.map((s) => ({ ...s }));
-  if (!hasFlag(def, 'inherits-weapon-properties')) return own;
-  for (const strike of weaponStatusStrikes(user)) {
-    if (own.some((s) => s.status === strike.status)) continue;
-    own.push({ status: strike.status, chance: strike.chance, duration: 254 });
-  }
-  return own;
-}
-
 function elementFor(elements: readonly ElementId[]): ElementId {
   return elements.length > 0 ? (elements[0] as ElementId) : 'none';
+}
+
+/**
+ * The targets the hit records have landed on are done: each one's script hears of the action once
+ * (`onHit`), **before** its death is decided, and a lethal hit that nothing saved then kills (re-parity,
+ * `research/re-ffx-ai-seymour.md` section 1.1; FFX only). Inert for a target with no script hooks.
+ * Targets are visited in the order of their **last** hit record, as the game applies them.
+ */
+function finishTouched(scope: HitScope): void {
+  const { ctx, user, def } = scope;
+  const done = [...scope.touched.values()].sort((a, b) => a.last - b.last);
+  scope.touched.clear();
+  for (const { target, hpBefore, lastDamage } of done) {
+    // A follow-up row (Blitz Ace's Last Hit) is part of the action its main row already announced: one `onHit` per action.
+    if (scope.options.followUp !== true && listensToHit(target)) {
+      const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
+      runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore, lastDamage, affectsHp });
+    }
+    settleDeferredDeath(ctx, target, user.id);
+  }
 }
 
 /**
@@ -124,268 +124,42 @@ export function resolveAbility(
   const hitCount = Math.max(0, options.hits ?? def.hits);
   const perHitRandom = isPerHitRandom(def.targeting);
   const elements = resolveElements(user, def, weaponElements(user));
-  const primaryElement = elementFor(def.element.length > 0 ? def.element : elements);
-  const pool = poolOf(def);
-  const heals = hasFlag(def, 'heals');
-  let totalDealt = 0;
-  let landedAnyStatus = false;
 
-  let targets = resolveTargets(ctx, user, def, chosenTargets);
+  // A row the script aims (`extra.scriptAims`, re-parity) goes where the command names, hit by hit; no pick is drawn for it.
+  const aimed = perHitRandom && scriptAimsAt(def) && chosenTargets.length > 0;
+  let targets = aimed ? aimedTargets(ctx, def, chosenTargets) : resolveTargets(ctx, user, def, chosenTargets);
   if (targets.length === 0 && def.targeting !== 'self') return 0;
 
   // A gauge that fills on **being targeted** (a heal or a debuff counts) is paid here, once per action and
   // not again for a follow-up row, before any hit resolves. Inert unless `gaugePerTargeting` is set [overdrive.ts].
   if (options.followUp !== true) for (const t of targets) onTargeted(ctx, t, user);
+  // The targets' scripts hear the command named them (`onTargeted`), before any damage. A follow-up row is the same action.
+  if (options.followUp !== true) runOnTargeted(ctx, { def, user }, targets);
 
-  const totalHits = perHitRandom ? hitCount : hitCount * Math.max(1, targets.length);
-  let hitIndex = 0;
+  const scope: HitScope = {
+    ctx,
+    user,
+    def,
+    options,
+    draws: drawsOf(ctx.rng),
+    primaryElement: elementFor(def.element.length > 0 ? def.element : elements),
+    totalHits: perHitRandom ? hitCount : hitCount * Math.max(1, targets.length),
+    hitIndex: 0,
+    totalDealt: 0,
+    touched: new Map(),
+  };
 
-  for (let h = 0; h < hitCount; h++) {
-    if (perHitRandom) targets = nextHitTargets(ctx, user, def, h, targets);
-    for (const rawTarget of targets) {
-      let target = redirectTarget(ctx, user, rawTarget, def);
-
-      // Reflect bounces a single-target reflectable spell to the other side.
-      if (bouncesOffReflect(def, target)) {
-        const bounced = reflectBounceTarget(ctx, target);
-        if (!bounced) {
-          ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
-          hitIndex++;
-          continue;
-        }
-        onFlatTrigger(ctx, target, 'rook', 'rook');
-        target = bounced;
-      }
-
-      // Nul statuses beat everything, including Absorb.
-      if (consumeNulCharges(ctx, target, elements)) {
-        ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
-        onFlatTrigger(ctx, target, 'rook', 'rook');
-        hitIndex++;
-        continue;
-      }
-
-      // `misses-if-target-alive` whiffs on a living target — but a living
-      // **Zombie** is still processed, and killed [ffx-combat-core §12.3].
-      if (hasFlag(def, 'misses-if-target-alive') && isAlive(target) && !has(target, 'zombie')) {
-        ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'wrong-state' });
-        hitIndex++;
-        continue;
-      }
-
-      // Hit roll.
-      const chance = hitChance(user, target, def);
-      if (chance !== null && !(chance > percentRoll(ctx.rng))) {
-        ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'evaded' });
-        onFlatTrigger(ctx, target, 'dancer', 'dancer');
-        hitIndex++;
-        continue;
-      }
-
-      const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
-      // Critical roll.
-      let crit = false;
-      if (hasFlag(def, 'crit-eligible')) {
-        if (has(user, 'guaranteed-critical')) crit = true;
-        else crit = percentRoll(ctx.rng) < critChance(user, target, def, equipmentCrit(user));
-      }
-
-      const varianceRoll = damageRng(ctx.rng);
-      const input = {
-        // The damage chain alone may read another actor's stat block
-        // [ffx-seymour-flux §5.4] — see `ResolveOptions.statsUser`.
-        user: options.statsUser ?? user,
-        target,
-        def: row,
-        crit,
-        varianceRoll,
-        elements,
-        targetCtb: rtOf(ctx, target.id).ctb,
-        ...(options.power !== undefined ? { power: options.power } : {}),
-        ...(options.timing ? { timing: options.timing } : {}),
-        ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
-      };
-      const result = def.formula === 'none' ? { amount: 0, affinity: 'normal' as const, capped: false } : computeDamage(input);
-
-      // Revival effects (`heals` + `can-target-dead`: Life, Full-Life, Phoenix
-      // Down, Mega Phoenix) resolve here, never through the HP path below.
-      //
-      // - On a **KO'd** target they revive it. That includes a KO'd Zombie: the
-      //   reversal applies only to a *living* Zombie, and Zombie survives KO,
-      //   so the target comes back still Zombie [ffx-combat-core §4.2,
-      //   ffx-yunalesca §7.1, §15.2 #29]. Refusing to revive a KO'd Zombie —
-      //   what this code used to do — makes every zombified member who dies
-      //   permanently lost, which is exactly how Chapter 2 bled out in Form II.
-      // - On a **living Zombie** they kill it outright ("revival effects
-      //   instantly kill a living Zombie" — the `zombie` status contract).
-      let resolvedAsRevival = false;
-      if (heals && hasFlag(def, 'can-target-dead')) {
-        if (!isAlive(target) && onField(target)) {
-          resolvedAsRevival = true;
-          const restore = Math.abs(result.amount) || idiv(target.stats.maxHp, 2);
-          if (reviveActor(ctx, target, restore, def.id)) {
-            onHealDealt(ctx, user, target, restore);
-          } else {
-            ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
-          }
-        } else if (has(target, 'zombie')) {
-          resolvedAsRevival = true;
-          const lethal = Math.max(target.hp, Math.abs(result.amount));
-          dealDamage(ctx, target, lethal, {
-            sourceId: user.id,
-            element: primaryElement,
-            crit: false,
-            hitIndex,
-            hitCount: totalHits,
-          });
-          totalDealt += lethal;
-        }
-      }
-
-      if (resolvedAsRevival) {
-        // Handled above; skip the ordinary HP application.
-      } else if (pool === 'ctb') {
-        // Haste/Slow's own CTB shift is applied by the status path, so the
-        // formula result only moves the counter for pure `ctb` actions.
-        rtOf(ctx, target.id).ctb = Math.max(0, rtOf(ctx, target.id).ctb + result.amount);
-      } else if (result.amount !== 0) {
-        if (pool === 'mp' || pool === 'both') {
-          const drained = applyMpDelta(ctx, target, result.amount, user.id);
-          if (hasFlag(def, 'drains-mp') || def.formula === 'lancet') {
-            applyMpDelta(ctx, user, -Math.abs(drained), user.id);
-          }
-        }
-        if (pool === 'hp' || pool === 'both') {
-          dealDamage(ctx, target, result.amount, {
-            sourceId: user.id,
-            element: primaryElement,
-            affinity: result.affinity,
-            crit,
-            hitIndex,
-            hitCount: totalHits,
-            ...(result.capped ? { capped: true } : {}),
-          });
-          if (result.amount > 0) {
-            // A physical hit WAKES a sleeper [ffx-combat-core §4.2; the shipped
-            // status record says it in as many words —
-            // `data/ffx/statuses/core.ts` sleep: "Physical damage wakes the
-            // sleeper; magic damage does not", and its `curedBy` lists "any
-            // physical hit"]. This is additive and it closes a soft-lock, not
-            // just a fidelity gap: `state.ts canAct` drops a sleeper out of the
-            // CTB queue entirely, and `ticks.ts onTurnEnd` is the only place
-            // `tickDurationStatuses` runs — so a sleeping actor never reaches a
-            // turn end and its 3-turn Sleep never counts down. Measured in
-            // Chapter 3: one Yu Pagoda Curse put Tidus to sleep on turn 17 of a
-            // 204-turn battle and he never acted again.
-            if (def.damageType === 'physical' && has(target, 'sleep')) {
-              removeStatus(ctx, target, 'sleep', 'expired');
-            }
-            totalDealt += result.amount;
-            onDamageTaken(ctx, target, result.amount, user.side === 'enemy');
-            onDamageDealt(ctx, user, def, result.amount);
-            if (hasFlag(def, 'drains')) {
-              healOutsideChain(ctx, user, result.amount, 'drain', user.id);
-            }
-          } else if (result.amount < 0) {
-            onHealDealt(ctx, user, target, -result.amount);
-          }
-        }
-      } else if ((pool === 'hp' || pool === 'both') && def.formula !== 'none' && isAlive(target)) {
-        // **A connecting hit that computes to zero is still a hit, and FFX puts
-        // the number on the screen.** `immune_to_percentage_damage` enemies
-        // "take 0 from Percentage Total / Percentage Current"
-        // [ffx-combat-core §291], and a Fury spell whose damage constant is 0 —
-        // Bio Fury, Death Fury — is authored `power: 0` on purpose
-        // [§5.7]: the cast is the *carrier* for a rider, not a blank.
-        //
-        // Suppressing the event made three shipped Overdrive rows invisible:
-        // Bio Fury, Death Fury and Demi Fury each spent a full gauge and
-        // emitted nothing but `action-start` / `overdrive-gauge{spent}` /
-        // `action-end`, which reads exactly like a broken button. `formula:
-        // 'none'` is excluded because those actions never ran a damage chain at
-        // all (Steal, Use, Cheer) and have no number to show.
-        dealDamage(ctx, target, 0, {
-          sourceId: user.id,
-          element: primaryElement,
-          affinity: result.affinity,
-          crit,
-          hitIndex,
-          hitCount: totalHits,
-        });
-      }
-
-      // Statuses, then removals, then delay — the decompile's order.
-      for (const app of statusApplications(user, row)) {
-        // Death is `ko` in this contract (there is no separate death status),
-        // and landing it must *kill* — HP to 0, a `ko` event, Auto-Life
-        // consulted — not merely attach a marker to a living combatant. The
-        // roll still goes through `rollStatus`, which is where a living
-        // Zombie's Death resistance is raised to 255: that is the whole of
-        // Mega Death's Zombie exception [ffx-yunalesca §5.3, §7.1].
-        if (app.status === 'ko') {
-          if (!isAlive(target)) continue;
-          if (rollStatus(ctx, target, 'ko', app.chance)) {
-            landedAnyStatus = true;
-            koActor(ctx, target, user.id);
-          }
-          continue;
-        }
-        if (applyStatus(ctx, user, target, app, def.id, { skipCtbShift: pool === 'ctb' })) {
-          landedAnyStatus = true;
-          // Eject is not just a marker: it takes the target off the field, and
-          // it counts as defeated [ffx-combat-core §4.2].
-          if (app.status === 'eject') {
-            if (target.side === 'aeon') banishAeon(ctx, target.id);
-            else ejectActor(ctx, target, 'eject');
-          }
-          if (TACTICIAN_STATUSES.includes(app.status) && target.side === 'enemy') {
-            onFlatTrigger(ctx, user, 'tactician', 'tactician');
-          }
-          if (VICTIM_STATUSES.includes(app.status) && user.side === 'enemy') {
-            onFlatTrigger(ctx, target, 'victim', 'victim');
-          }
-        }
-      }
-      if (hasFlag(def, 'removes-statuses') && def.removesStatuses.length > 0) {
-        removeStatuses(ctx, target, def.removesStatuses, def.category === 'item' ? 'cured' : 'dispelled');
-      }
-      if (hasFlag(row, 'weak-delay')) applyDelay(ctx, target.id, 'weak');
-      if (hasFlag(row, 'strong-delay')) applyDelay(ctx, target.id, 'strong');
-
-      // Shatter a petrified target.
-      if (hasFlag(def, 'shatter') && has(target, 'petrify')) {
-        const shatterChance = def.shatterChance ?? 0;
-        if (shatterChance > 0 && percentRoll(ctx.rng) < shatterChance) {
-          ejectActor(ctx, target, 'shatter');
-        }
-      }
-
-      // **A petrified MONSTER always shatters** — no roll, no `shatter` flag
-      // needed on whatever petrified it [ffx-seymour-anima-macalania §2.2,
-      // verified: 2 sources: grayfox96's status-chance note + the FF Wiki
-      // strategy section]. The flagged path above is the *other* rule: a
-      // chance to shatter something that was **already** petrified, which is
-      // what Seymour's -ra spells carry at 10.
-      //
-      // Until this existed, Petrify was a dead end against an enemy. Rikku's
-      // Petrify Grenade and Kimahri's Stone Breath both apply `petrify` at
-      // chance 254 and neither carries the `shatter` flag, so a petrified
-      // Guado Guardian simply stood there: out of the turn queue
-      // (`predicates.ts#inTurnQueue` excludes Petrify) but still **alive**, so
-      // it went on Covering every physical aimed at Seymour and went on firing
-      // its 1,000 HP Auto-Potion counter. §7 row 2 — "Petrify the Guardians
-      // for an instant kill, at the cost of the overkill AP" — was unreachable
-      // and the tactic spent four turns finding that out.
-      //
-      // Draws no RNG, so a seeded run is unchanged wherever it does not fire, and it cannot fire in
-      // any shipped chapter: every FFX enemy this project ships outside Macalania carries
-      // `petrify: 255`. FFX-2 runs its own engine and is untouched [AGENTS.md rule 14].
-      if (target.side === 'enemy' && has(target, 'petrify') && onField(target)) {
-        ejectActor(ctx, target, 'shatter');
-      }
-
-      runScriptedExtra(ctx, user, def, target, result.amount);
-      hitIndex++;
+  if (perHitRandom) {
+    // A fresh random target for every hit: the hit records of the whole action are in before any target's script hears of it.
+    for (let h = 0; h < hitCount; h++) {
+      targets = aimed ? aimedTargetForHit(ctx, def, chosenTargets, h) : nextHitTargets(ctx, user, def);
+      for (const target of targets) resolveOneHit(scope, target);
+    }
+    finishTouched(scope);
+  } else {
+    for (const target of targets) {
+      for (let h = 0; h < hitCount; h++) resolveOneHit(scope, target);
+      finishTouched(scope);
     }
   }
 
@@ -399,9 +173,7 @@ export function resolveAbility(
 
   // Self-Destruct removes the user once the hits have landed.
   if (hasFlag(def, 'destroys-user')) ejectActor(ctx, user, 'eject');
-  void landedAnyStatus;
-  void options.isCounter;
-  return totalDealt;
+  return scope.totalDealt;
 }
 
 /** The ability an item resolves to, with the item's own targeting applied. */

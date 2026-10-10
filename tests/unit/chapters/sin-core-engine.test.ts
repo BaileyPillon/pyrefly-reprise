@@ -4,6 +4,11 @@
  * must-changes 1, 2 and 8 and the should-changes on Cura and the Reflect
  * bounce). Sources: `research/ffx-sin.md` §3.2, §3.3, §5.3. **FFX only.**
  *
+ * Since re-parity AI lane C the rules are the game's scripts (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 6),
+ * proved line by line in `tests/unit/re-parity-ai-sin-core.test.ts`: Genais starts in its shell (its first turn leaves it),
+ * the thresholds are strict, Cura answers every hit event, the Core rolls its stored score and a `mod maxHP` counter. This file
+ * is the whole-fight layer on top of them.
+ *
  * Board set-ups (an HP value, a status) are written onto the live battle state
  * before a turn, then the engine plays the turn: every assertion reads what the
  * engine did (AGENTS.md hard rule 3).
@@ -17,6 +22,7 @@ import { sinFahrenheitBuild } from '../../../src/data/ffx/builds/sin-fahrenheit.
 import { SIN_CORE_ASSUMPTIONS } from '../../../src/battle/ffx/ai/sin-genais-core.ts';
 
 const [G, C, V, T] = ['sinspawn-genais', 'sin-core', 'sin-genais-venom', 'sin-genais-thrashing'] as const;
+const OUT = 'sin-genais-shell-out';
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
 const content = new FFXContentRegistry();
@@ -103,7 +109,10 @@ function counterHits(events: readonly BattleEvent[], from: string, ability: stri
   return out;
 }
 
-/** Put Genais in its shell through its own turn (§5.3.1 item 3). */
+/**
+ * Put Genais in its shell through its own turn (§5.3.1 item 3): below 10,000 HP it enters (from the open), and a Genais that
+ * still stands in the shell it starts in just sighs. Either way it is shelled afterwards.
+ */
 function shell(e: BattleEngine): void {
   live(e, G).hp = 9_000;
   enemyTurns(e, G, 1);
@@ -111,12 +120,14 @@ function shell(e: BattleEngine): void {
 }
 
 describe('Genais out of its shell [§5.3.1 item 1, verified: 4 sources]', () => {
-  it('runs Venom, Venom, Thrashing and repeats; Venom\'s single target is the seed\'s pick', () => {
+  // Re-parity (D-23): Genais starts IN its shell, and its first turn leaves it (HP 20,000 is above 12,000); the rotation starts after.
+  it('leaves the shell it starts in, then runs Venom, Venom, Thrashing and repeats; Venom\'s single target is the seed\'s pick', () => {
     const targets = new Set<string>();
     for (const seed of [1, 2, 3, 4, 5, 6]) {
       const e = engine(seed);
-      enemyTurns(e, G, 6);
-      expect(moves(e, G).slice(0, 6), `seed ${seed}`).toEqual([V, V, T, V, V, T]);
+      expect(flags(e)['sin.genais.shelled']).toBe(true);
+      enemyTurns(e, G, 7);
+      expect(moves(e, G).slice(0, 7), `seed ${seed}`).toEqual([OUT, V, V, T, V, V, T]);
       const first = log(e).find((x) => x.type === 'action-start' && x.actorId === G && x.abilityId === V);
       const hit = log(e).find((x, k) => first && k > log(e).indexOf(first) && x.type === 'damage' && x.sourceId === G);
       if (hit && hit.type === 'damage') targets.add(hit.targetId);
@@ -128,7 +139,7 @@ describe('Genais out of its shell [§5.3.1 item 1, verified: 4 sources]', () => 
     const venomOn = (protect: boolean): { target: string; amount: number } => {
       const e = engine(7);
       if (protect) for (const id of ['tidus', 'yuna', 'auron']) live(e, id).statuses['protect'] = status('protect');
-      enemyTurns(e, G, 1);
+      enemyTurns(e, G, 2); // the shell-out turn, then the first Venom
       const k = log(e).findIndex((x) => x.type === 'action-start' && x.actorId === G && x.abilityId === V);
       const hit = log(e).slice(k).find((x) => x.type === 'damage' && x.sourceId === G);
       if (!hit || hit.type !== 'damage') throw new Error('no Venom damage');
@@ -142,39 +153,52 @@ describe('Genais out of its shell [§5.3.1 item 1, verified: 4 sources]', () => 
   });
 });
 
-describe('The shell [§5.3.1 items 3-5; S-2 default]', () => {
-  it('shells on its own turn at 10,000 HP or less, not at 10,001', () => {
+describe('The shell [note 6.2: both thresholds strict]', () => {
+  // Re-parity (D-23, D-24): it enters below 10,000 (not at 10,000) and leaves above 12,000 (not at 12,000), both on its own turn.
+  it('enters on its own turn below 10,000 HP, not at 10,000; leaves above 12,000, not at 12,000', () => {
     const e = engine(3);
-    live(e, G).hp = 10_001;
+    enemyTurns(e, G, 1);
+    expect(moves(e, G).at(-1)).toBe(OUT);
+    expect(flags(e)['sin.genais.shelled']).toBe(false);
+    live(e, G).hp = 10_000;
     enemyTurns(e, G, 1);
     expect(moves(e, G).at(-1)).toBe(V);
     expect(flags(e)['sin.genais.shelled']).toBe(false);
-    live(e, G).hp = 10_000;
+    live(e, G).hp = 9_999;
     enemyTurns(e, G, 1);
     expect(moves(e, G).at(-1)).toBe('sin-genais-shell-in');
     expect(flags(e)['sin.genais.shelled']).toBe(true);
     expect(live(e, G).immunityFlags).toEqual(expect.arrayContaining(['armored', 'immune-to-percentage-damage']));
     expect(flags(e)['sin.core.state']).toBe('charging');
+    live(e, G).hp = 12_000;
     enemyTurns(e, G, 1);
     expect(moves(e, G).at(-1)).toBe('sin-genais-sigh');
+    expect(flags(e)['sin.genais.shelled']).toBe(true);
+    live(e, G).hp = 12_001;
+    enemyTurns(e, G, 1);
+    expect(moves(e, G).at(-1)).toBe(OUT);
+    expect(flags(e)['sin.genais.shelled']).toBe(false);
+    expect(flags(e)['sin.core.state']).toBe('inactive');
   });
 
-  it('in the shell, Cura answers each action that hits it, once per action (a status-only action draws none); out at 12,000+', () => {
+  // Re-parity (D-26): the hook runs for every hit event, a miss and a status-only action included; only the Core's Gravija is
+  // refused, and the exit is strict.
+  it('in the shell, Cura answers every hit event, a status-only action too, once per event; it leaves above 12,000', () => {
     const e = engine(4, ['tidus', 'wakka', 'auron']);
     shell(e);
     for (let n = 0; n < 2; n++) {
       const d = turnOf(e, 'wakka')!;
-      delete live(e, 'wakka').statuses['darkness']; // Sigh's Darkness makes a swing miss, and a miss is not a hit
+      delete live(e, 'wakka').statuses['darkness']; // Sigh's Darkness makes a swing miss; a miss draws the Cura too, but its heal is the thing read here
       const at = act(e, d, 'attack', undefined, G); // `submit` resolves the action and its counters
       expect(counters(since(e, at), G)).toEqual(['sin-genais-cura']);
       const k = since(e, at).findIndex((x) => x.type === 'counter' && x.abilityId === 'sin-genais-cura');
       const heal = since(e, at).slice(k).find((x) => x.type === 'damage' && x.targetId === G);
       expect(heal && heal.type === 'damage' ? heal.amount : 0).toBeLessThan(0); // on itself, a heal
     }
-    expect(counters(since(e, act(e, turnOf(e, 'tidus')!, 'ability', 'slow', G)), G)).toEqual([]);
-    live(e, G).hp = 12_000;
+    expect(counters(since(e, act(e, turnOf(e, 'tidus')!, 'ability', 'slow', G)), G)).toEqual(['sin-genais-cura']);
+    live(e, G).hp = 12_001;
     enemyTurns(e, G, 1);
-    expect(moves(e, G).at(-1)).toBe('sin-genais-shell-out');
+    expect(moves(e, G).at(-1)).toBe(OUT);
     expect(flags(e)['sin.genais.shelled']).toBe(false);
     expect(live(e, G).immunityFlags).not.toContain('armored');
     expect(live(e, G).immunityFlags).not.toContain('immune-to-percentage-damage');
@@ -278,33 +302,42 @@ describe("The Core's turns and counters [§5.3.2]", () => {
     expect(flags(e)['sin.core.state']).toBe('inactive');
   });
 
-  it('counters Negation first when it rolls, otherwise Fire, Blizzard, Thunder, Water, cycling', () => {
+  // Re-parity (D-28, D-29): each hit event draws `mod maxHP` then `mod 8`; Negation when the roll is under the stored score less 3
+  // (the stored score drops by 3 per event), else an element when the first draw is above the Core's HP; the cycle moves only
+  // when an element fires.
+  it('counters Negation when its stored score beats the roll, otherwise Fire, Blizzard, Thunder, Water in cycle order', () => {
     const e = engine(9, ['tidus', 'wakka', 'auron']);
     const seen: string[] = [];
-    for (let n = 0; n < 6; n++) {
+    for (let n = 0; n < 14; n++) {
       const d = turnOf(e, 'wakka')!;
-      // Board set-up: the party kept standing (not this test's subject), the Core's chance pinned for this targeting.
+      // Board set-up: the party kept standing (not this test's subject); the stored score pinned for this targeting (11 - 3 = 8 beats
+      // every roll of mod 8, 0 beats none); the Core wounded enough for the counter draw (P = 1 - 6,000 / 36,000) to be likely.
       for (const id of ['tidus', 'wakka', 'auron']) {
         live(e, id).hp = live(e, id).stats.maxHp;
         delete live(e, id).statuses['poison'];
       }
-      flags(e)['sin.core.negationChance'] = n === 0 ? 1 : 0;
+      flags(e)['sin.core.score'] = n === 0 ? 11 : 0;
+      live(e, C).hp = 6_000;
       seen.push(...counters(since(e, act(e, d, 'attack', undefined, C)), C));
     }
-    expect(seen).toEqual(['sin-core-negation', 'sin-core-fire', 'sin-core-blizzard', 'sin-core-thunder', 'sin-core-water', 'sin-core-fire']);
+    expect(seen[0]).toBe('sin-core-negation');
+    const elements = seen.slice(1);
+    expect(elements.length).toBeGreaterThanOrEqual(5);
+    const cycle = ['sin-core-fire', 'sin-core-blizzard', 'sin-core-thunder', 'sin-core-water'];
+    expect(elements).toEqual(elements.map((_, i) => cycle[i % 4]));
     expect(typeof flags(e)['sin.negation.lastTaken']).toBe('string'); // JSON: flags hold scalars
   });
 
-  it("recalculates Negation's chance on its turn (S-12, labelled): both Breaks on the Core read 3/8", () => {
+  it("rebuilds the stored score at the start of its turn (S-12 is the script's): both Breaks on the Core score 6", () => {
     const e = engine(10);
     for (const s of ['armor-break', 'mental-break'] as const) live(e, C).statuses[s] = status(s);
     enemyTurns(e, C, 1);
-    expect(flags(e)['sin.core.negationChance']).toBeCloseTo(3 / 8);
+    expect(flags(e)['sin.core.score']).toBe(6);
   });
 
-  it('carries every estimate as data', () => {
+  it('carries every estimate it still has as data', () => {
     const ids = SIN_CORE_ASSUMPTIONS.map((a) => a.id);
-    for (const id of ['S-2', 'S-12', 'S-13-before', 'S-13-after', 'absorbed-draws-counter', 'cura-per-action', 'reflect-bounce', 'S-15']) {
+    for (const id of ['S-2', 'S-12', 'S-13', 'S-15', 'cura-per-hit-event', 'counter-step', 'reflect-bounce', 'liveness-lag']) {
       expect(ids).toContain(id);
     }
   });

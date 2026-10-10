@@ -1,45 +1,18 @@
 /**
- * Element resolution [ffx-combat-core §3].
+ * Element resolution (re-parity W1; **FFX only**).
  *
- * Five real elements plus non-elemental. The multi-element rule is "take the
- * single strongest affinity", with one exception: multiple **weaknesses**
- * multiply, so double-weak is x2.25.
+ * The multiplier is the kernel's (`kernel/element.ts`: any weakness 3/2 per bit, else a neutral bit leaves the hit
+ * alone, else a resisted bit halves it, else a nulled bit zeroes it, else every bit is absorbed and the sign flips;
+ * `research/re-ffx-damage.md` section 5). This module keeps the two helpers the engine needs around it: which
+ * elements a hit carries once the weapon's strikes are folded in, and the label of the reading for a target.
  */
 
-import type { Affinity, AbilityDef, ElementId, FFXCombatant } from '../common/types.ts';
-import { AFFINITY_MULTIPLIER_FFX } from '../common/types.ts';
+import type { AbilityDef, Affinity, ElementId, FFXCombatant } from '../common/types.ts';
+import { affinityOf } from './adapt/affinity.ts';
 
-const AFFINITY_RANK: Readonly<Record<Affinity, number>> = {
-  absorb: 4,
-  immune: 3,
-  weak: 2,
-  resist: 1,
-  normal: 0,
-};
-
-/**
- * Multi-element resolution: take the single strongest affinity among the
- * attack's elements, except that multiple *weaknesses* multiply
- * (double-weak = x2.25) [ffx-combat-core §3].
- */
-export function resolveAffinity(
-  target: FFXCombatant,
-  elements: readonly ElementId[],
-): { affinity: Affinity; multiplier: number } {
-  const real = elements.filter((e) => e !== 'none');
-  if (real.length === 0) return { affinity: 'normal', multiplier: 1 };
-
-  let best: Affinity = 'normal';
-  let weakCount = 0;
-  for (const e of real) {
-    const a = target.affinities[e] ?? 'normal';
-    if (a === 'weak') weakCount++;
-    if (AFFINITY_RANK[a] > AFFINITY_RANK[best]) best = a;
-  }
-  if (best === 'weak' && weakCount > 1) {
-    return { affinity: 'weak', multiplier: Math.pow(AFFINITY_MULTIPLIER_FFX.weak, weakCount) };
-  }
-  return { affinity: best, multiplier: AFFINITY_MULTIPLIER_FFX[best] };
+/** The label (weak, normal, resist, immune, absorb) of an attack's elements against a target, by the game's ladder. */
+export function resolveAffinity(target: FFXCombatant, elements: readonly ElementId[]): { affinity: Affinity } {
+  return { affinity: affinityOf(target, elements) };
 }
 
 /** Elements this hit actually carries, folding in weapon strikes. */
