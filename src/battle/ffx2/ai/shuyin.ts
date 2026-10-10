@@ -1,107 +1,107 @@
 /**
- * Shuyin — the final boss [ffx2-vegnagun-shuyin §5.5, §3.5].
+ * Shuyin — the final boss of link 5 [research/re-ffx2-ai-bahamut-vegnagun.md section 7; re-parity AI lane FFX-2 a].
+ * **FFX-2 only.** The decision table of the game's own script (`m260`), in our words.
  *
- * A clean eight-turn cycle, with Terror of Zanarkand — the Blitz Ace analogue —
- * parked at slot 2 so it lands early and again every eighth turn:
+ * **The turn cycle** is eight actions long, with Terror of Zanarkand at slot 2:
  *
  * ```
- * 1 Attack · 2 TERROR OF ZANARKAND · 3 Attack · 4 Run & Slash ·
- * 5 Attack · 6 Spin Cut · 7 Attack · 8 Force Rain -> goto 1
+ * 1 Attack · 2 TERROR OF ZANARKAND · 3 Attack · 4 Hit & Run · 5 Attack · 6 Spin Cut · 7 Attack · 8 Force Rain -> goto 1
  * ```
  *
- * **Interrupts consume the turn and land no attack**: above half HP a 1-in-10
- * chance per turn of a yell or a one-shot Braska / Auron / Jecht line (five
- * available, each used at most once); below half, 1-in-14 from a pool of seven.
- * They are the pacing valve that keeps a nine-hit Defense-ignoring combo from
- * arriving every eight turns without pause.
+ * Targets (rows S1): the Attack of turn 1 and Terror of Zanarkand pick a girl by the near-weighted search; the Attacks of turns 3,
+ * 5 and 7 and the Spin Cut pick uniformly; Hit & Run (6 hits at random targets) and Force Rain take the whole party. **Terror
+ * of Zanarkand is aimed at the girl wearing her Special 1 dressphere** (Yuna's Floral Fallal, then Paine's Full Throttle, then
+ * Rikku's Machina Maw, a later check winning over an earlier one) and at the search's pick when nobody wears one. There is no
+ * Yuna-first rule anywhere in the script: the old "he hunts Yuna" reading (a PS2 reading from one source) is gone.
  *
- * **Targeting quirk (§3.5).** The original PS2 release has Shuyin
- * preferentially target Yuna whenever she is alive — he is hunting the woman
- * wearing Lenne's dressphere. International / HD targets anybody. We ship the
- * original, exposed as `flags.shuyinTargetsAnyone` so an authenticity toggle
- * can flip it. The gameplay consequence is real: do not make Yuna the healer.
- *
- * Terror of Zanarkand is telegraphed with `charge` events rather than landing
- * unannounced — 1,710–1,935 across nine unblockable hits will KO almost any
- * party member at this level, so the player is owed the tell.
+ * **Voice lines** (rows S2). Each poll whose gate is open flips a coin (`random() % 2`); on a heads the gate shuts, and with
+ * HP below half a pool of seven lines (`random() % 7`: Jecht x3, Auron x2, Braska x2), otherwise a pool of five (Jecht, Auron
+ * x2, Braska x2), picks one line: if it has not been spoken it is, and the poll ends (a turn spent on a line, cycle unmoved);
+ * if it has, the poll goes on and attacks. The poll after a heads never flips: the gate opens again. So the chance that a given
+ * unspoken line is the next to speak is 1/10 above half HP and 1/14 below, per open poll, not per turn in total.
+ * The story binds one line per pool (`shuyin-taunt`, `shuyin-desperate`), whatever the pool's pick.
  */
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
+import { scriptMod, searchNear, searchUniform, SCENES } from './script-rolls.ts';
 
-const CYCLE: readonly string[] = [
-  'shuyin-attack',
-  'terror-of-zanarkand',
-  'shuyin-attack',
-  'run-and-slash',
-  'shuyin-attack',
-  'spin-cut',
-  'shuyin-attack',
-  'force-rain',
-];
+/** The pools, by the order of the pick: Jecht, Auron, Braska. */
+const LINES_HIGH = ['jeck01', 'alone01', 'alone02', 'blaska01', 'blaska02'] as const;
+const LINES_LOW = ['jeck02', 'jeck03', 'jeck04', 'alone03', 'alone04', 'blaska03', 'blaska04'] as const;
 
-/** One-shot flavour lines: five above half HP, seven below. §5.5 */
-const LINES_HIGH = 5;
-const LINES_LOW = 7;
-const INTERRUPT_CHANCE_HIGH = 10;
-const INTERRUPT_CHANCE_LOW = 14;
+/** The three Special 1 dresspheres, in the order the script checks them (a later one wins). */
+const SPECIAL_ONE: readonly string[] = ['floral-fallal', 'full-throttle', 'machina-maw'];
 
-/** Party-wide moves take no explicit target list. */
-const PARTY_WIDE = new Set(['force-rain', 'run-and-slash']);
-
-/** §3.5 — Yuna bias, unless the authenticity toggle says otherwise. */
-function pickTarget(ctx: AiContext): Ffx2Unit | undefined {
-  const party = ctx.party();
-  if (party.length === 0) return undefined;
-  if (ctx.flags['shuyinTargetsAnyone'] === true) return ctx.rng.pick(party);
-  const yuna = party.find((p) => p.id === 'yuna');
-  return yuna ?? ctx.rng.pick(party);
-}
-
-/** Roll the flavour interrupt. Returns true when the turn was spent on a line. */
-function tryInterrupt(ctx: AiContext): boolean {
+/** The voice-line gate; true when this poll was spent on a line. */
+function tryVoiceLine(ctx: AiContext): boolean {
   const self = ctx.self;
-  const low = self.hp < self.stats.maxHp / 2;
-  const pool = low ? LINES_LOW : LINES_HIGH;
-  const used = mem(self, low ? 'linesLow' : 'linesHigh');
-  if (used >= pool) return false;
-  const chance = low ? INTERRUPT_CHANCE_LOW : INTERRUPT_CHANCE_HIGH;
-  if (ctx.rng.int(1, chance) !== 1) return false;
-
-  setMem(self, low ? 'linesLow' : 'linesHigh', used + 1);
+  if (mem(self, 'gate') !== 0) {
+    setMem(self, 'gate', 0);
+    return false;
+  }
+  if (scriptMod(ctx.rng, 2) !== 0) return false;
+  setMem(self, 'gate', 1);
+  const low = self.hp < Math.floor(self.stats.maxHp / 2);
+  const pool: readonly string[] = low ? LINES_LOW : LINES_HIGH;
+  const key = pool[scriptMod(ctx.rng, pool.length)] ?? pool[0] ?? '';
+  if (mem(self, key) !== 0) return false;
+  setMem(self, key, 1);
+  const spoken = pool.filter((k) => mem(self, k) !== 0).length - 1;
   ctx.emit({
     type: 'script-trigger',
     name: low ? 'shuyin-desperate' : 'shuyin-taunt',
-    payload: { index: used, half: low ? 'low' : 'high' },
+    payload: { index: spoken, half: low ? 'low' : 'high', line: key },
   });
   return true;
+}
+
+/** Terror of Zanarkand's target: the near-weighted pick, then the Special 1 override. */
+function terrorTarget(ctx: AiContext): Ffx2Unit | undefined {
+  const girls = ctx.party();
+  let target = searchNear(ctx.rng, girls, SCENES.shuyin);
+  for (const sphere of SPECIAL_ONE) {
+    const wearer = girls.find((g) => g.dresspheres?.current === sphere);
+    if (wearer) target = wearer;
+  }
+  return target;
+}
+
+function aimed(id: string, target: Ffx2Unit | undefined): Command | null {
+  return target ? { kind: 'ability', id, targets: [target.id] } : null;
 }
 
 export const shuyinScript: AiScript = {
   id: 'shuyin',
 
   decide(ctx: AiContext): Command | null {
-    if (tryInterrupt(ctx)) return null;
+    if (tryVoiceLine(ctx)) return null;
 
-    const s = mem(ctx.self, 'step');
-    setMem(ctx.self, 'step', s + 1);
-    const abilityId = CYCLE[s % CYCLE.length] ?? 'shuyin-attack';
-
-    if (abilityId === 'terror-of-zanarkand') {
-      // The countdown telegraph. Nine Defense-ignoring hits are coming.
-      ctx.emit({
-        type: 'charge',
-        enemyId: ctx.self.id,
-        name: 'Terror of Zanarkand',
-        turnsLeft: 0,
-        stage: 2,
-      });
+    const self = ctx.self;
+    const turn = mem(self, 'turn') + 1;
+    setMem(self, 'turn', turn);
+    const girls = ctx.party();
+    switch (turn) {
+      case 1:
+        return aimed('shuyin-attack', searchNear(ctx.rng, girls, SCENES.shuyin));
+      case 2: {
+        // The countdown telegraph. Nine Defense-ignoring hits are coming.
+        ctx.emit({ type: 'charge', enemyId: self.id, name: 'Terror of Zanarkand', turnsLeft: 0, stage: 2 });
+        return aimed('terror-of-zanarkand', terrorTarget(ctx));
+      }
+      case 3:
+      case 5:
+      case 7:
+        return aimed('shuyin-attack', searchUniform(ctx.rng, girls));
+      case 4:
+        return { kind: 'ability', id: 'run-and-slash', targets: [] };
+      case 6:
+        return aimed('spin-cut', searchUniform(ctx.rng, girls));
+      default:
+        setMem(self, 'turn', 0);
+        return { kind: 'ability', id: 'force-rain', targets: [] };
     }
-
-    if (PARTY_WIDE.has(abilityId)) return { kind: 'ability', id: abilityId, targets: [] };
-    const target = pickTarget(ctx);
-    return { kind: 'ability', id: abilityId, targets: target ? [target.id] : [] };
   },
 };
 

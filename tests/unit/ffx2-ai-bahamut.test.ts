@@ -1,18 +1,22 @@
 /**
- * Bahamut's AI [research/ffx2-bahamut.md §2.1].
+ * Bahamut's AI [research/ffx2-bahamut.md §2.1, re-read from the game's own script by re-parity AI lane FFX-2 a:
+ * research/re-ffx2-ai-bahamut-vegnagun.md section 2; the row-by-row tests are in parity-ffx2-ai-bahamut.test.ts].
  *
  * The script is the single most implementation-critical asset in that document:
- * a fully deterministic, fixed 12-action loop with **no HP-threshold trigger**
- * for Mega Flare and **no phase changes**. Turns 7–11 are five dead turns — the
- * party's designated free-damage window, and the reason the fight is winnable
- * at Lv 20.
+ * a fully deterministic loop with **no HP-threshold trigger** for Mega Flare and
+ * **no phase changes**. The countdown turns are the party's designated free-damage
+ * window, and the reason the fight is winnable at Lv 20.
+ *
+ * Re-pinned for "game-script parity" (re-parity AI lane FFX-2 a): the Curse comes once, at the very first
+ * action, not once per loop; the loop is six actions (Attack x3, Impulse x2, Mega Flare) with the countdown
+ * between the second Impulse and Mega Flare; the countdown shows 5, 4, 3, 2 and then 1 with the cast.
  *
  * If any of these assertions start failing because someone added an HP trigger
  * "to make the fight more dynamic", the encounter has stopped being FFX-2's.
  */
 
 import { describe, expect, it } from 'vitest';
-import { FFX2Engine, aiScriptFor, bahamutStep, defaultAbilities } from '../../src/battle/ffx2/index.ts';
+import { FFX2Engine, aiScriptFor, defaultAbilities } from '../../src/battle/ffx2/index.ts';
 import type { AiContext, EventDraft, Ffx2Unit } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
@@ -60,50 +64,53 @@ function runLoop(turns: number, mutate?: (self: Ffx2Unit, turn: number) => void)
   return { chosen, emitted, self, flags };
 }
 
-const ONE_CYCLE = [
-  'bahamut-curse',
+/** The first action of the battle, then the six-action cycle that repeats. */
+const OPENING = ['bahamut-curse'];
+const CYCLE = [
   'attack',
   'attack',
   'attack',
   'impulse',
   'impulse',
-  null, null, null, null, null, // turns 7-11: the countdown
+  null, null, null, null, null, // the countdown: five turns that do nothing
   'mega-flare',
 ];
 
-describe('the fixed 12-action loop', () => {
-  it('runs Curse, three Attacks, two Impulses, five dead turns, Mega Flare', () => {
-    expect(runLoop(12).chosen).toEqual(ONE_CYCLE);
+describe('Curse once, then the six-action cycle', () => {
+  it('runs Curse once, then Attack x3, Impulse x2, five countdown turns, Mega Flare', () => {
+    expect(runLoop(12).chosen).toEqual([...OPENING, ...CYCLE]);
   });
 
-  it('wraps back to Curse and repeats identically — the loop never resets', () => {
-    expect(runLoop(24).chosen).toEqual([...ONE_CYCLE, ...ONE_CYCLE]);
+  it('wraps back to Attack, not to Curse, and repeats identically — the loop never resets', () => {
+    expect(runLoop(1 + 2 * CYCLE.length).chosen).toEqual([...OPENING, ...CYCLE, ...CYCLE]);
   });
 
-  it('has NO HP-threshold trigger: Mega Flare is purely turn-counted', () => {
+  it('has NO HP-threshold trigger: Mega Flare is purely counted', () => {
     // Drop Bahamut to 1 HP on turn 0 and the script must not deviate.
     const low = runLoop(12, (self, turn) => {
       if (turn === 0) self.hp = 1;
     });
-    expect(low.chosen).toEqual(ONE_CYCLE);
+    expect(low.chosen).toEqual([...OPENING, ...CYCLE]);
   });
 
-  it('counts ACTIONS, not time — so Slowing him slows the countdown too', () => {
-    // `bahamutStep` is a pure function of the action counter, with no clock in it.
-    expect(bahamutStep(0)).toBe(1);
-    expect(bahamutStep(6)).toBe(7);
-    expect(bahamutStep(11)).toBe(12);
-    expect(bahamutStep(12)).toBe(1);
+  it('counts turns of his own on this base: one turn stands for one 150-poll step (a timer row for lane W4)', () => {
+    // The game counts 5 x 150 AI polls on a running clock, so Slow, Haste and a long action do not change it; until the
+    // engine's clock is the logic step the count is five of his turns and nothing the script reads moves it.
+    const slowed = runLoop(12, (self) => {
+      self.statuses['slow'] = { id: 'slow', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true };
+    });
+    expect(slowed.chosen).toEqual([...OPENING, ...CYCLE]);
   });
 });
 
 describe('the Mega Flare countdown telegraph', () => {
-  it('emits `charge` events reading 5, 4, 3, 2, 1 then 0', () => {
+  it('emits `charge` events reading 5, 4, 3, 2, 1, the 1 with the cast: the turns until the cast are 4 to 0', () => {
     const { emitted } = runLoop(12);
     const charges = emitted.filter((e) => e.type === 'charge') as Array<
       Extract<BattleEvent, { type: 'charge' }>
     >;
-    expect(charges.map((c) => c.turnsLeft)).toEqual([5, 4, 3, 2, 1, 0]);
+    expect(charges.map((c) => c.name)).toEqual(['5', '4', '3', '2', '1']);
+    expect(charges.map((c) => c.turnsLeft)).toEqual([4, 3, 2, 1, 0]);
     expect(charges.every((c) => c.enemyId === 'bahamut')).toBe(true);
   });
 
@@ -112,7 +119,7 @@ describe('the Mega Flare countdown telegraph', () => {
     const charges = emitted.filter((e) => e.type === 'charge') as Array<
       Extract<BattleEvent, { type: 'charge' }>
     >;
-    expect(charges.map((c) => c.stage)).toEqual([1, 1, 1, 2, 2, 2]);
+    expect(charges.map((c) => c.stage)).toEqual([1, 1, 1, 2, 2]);
   });
 
   it('presents a NUMBER, not an invented English string', () => {
@@ -127,11 +134,11 @@ describe('the Mega Flare countdown telegraph', () => {
   });
 
   it('exposes the live countdown on the encounter flags for the HUD', () => {
-    const { flags } = runLoop(9);
-    expect(flags['bahamutCountdown']).toBe(3);
+    const { flags } = runLoop(9); // Curse, A A A I I, then the countdown turns: silent, 5, 4
+    expect(flags['bahamutCountdown']).toBe(4);
   });
 
-  it('spends turns 7–11 doing nothing at all — five free party turns', () => {
+  it('spends the five countdown turns doing nothing at all — five free party turns', () => {
     const { chosen } = runLoop(12);
     expect(chosen.slice(6, 11)).toEqual([null, null, null, null, null]);
   });

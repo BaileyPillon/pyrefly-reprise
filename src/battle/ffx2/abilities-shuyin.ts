@@ -91,8 +91,9 @@ export const SHUYIN_ABILITIES: AbilityDef[] = [
     /**
      * The Phase B transition, and where the cannon fail clock starts.
      * `docs/CONTRACTS.md`: genuinely one-off scripted rules live in `extra`.
-     * [ffx2-vegnagun-shuyin §4.2.2] — 240 combined enemy turns, Shuyin's lines
-     * 3..6 at every 48th, line 7 ends the run in the bad ending. `[estimate]`
+     * [re-ffx2-ai-bahamut-vegnagun 6.1, the game's own script] — one shared counter of the Head's and the Redoubts'
+     * phase-2 polls, Shuyin's lines 3..6 at its 20, 40, 60 and 80, line 7 on the Head's first poll at 100 or more
+     * ends the run in the bad ending (it was an estimate of 240 turns and a line every 48).
      */
     extra: {
       failTimer: { fireAtTurn: HEAD_FIRE_AT_TURN, lineInterval: HEAD_LINE_INTERVAL },
