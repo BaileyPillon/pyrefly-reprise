@@ -134,9 +134,10 @@ describe("the attached records are the game's table", () => {
 
   it('the ability counts the record table was built for', () => {
     // 453 and 2 since the Seymour re-parity: the zero-hit "Wait" that Seymour spent in Anima's act is gone (the game
-    // takes his turns away instead), and it was one of the rows without a record.
-    expect(ALL_ABILITIES).toHaveLength(453);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(451);
+    // takes his turns away instead), and it was one of the rows without a record. 457 and 455 since re-parity AI lane C added
+    // the first-turn Summon dummies: Yojimbo's (0x4090) and one per Isaaru aeon (0x408c, 0x408b, 0x408f), each with its record.
+    expect(ALL_ABILITIES).toHaveLength(457);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(455);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });

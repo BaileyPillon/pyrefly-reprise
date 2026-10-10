@@ -170,7 +170,7 @@ describe('Evrae — the stat block and the action rows', () => {
     expect(cid?.flags.untargetable).toBe(true);
     expect(cid?.immunityFlags).toContain('immune-to-sensor');
     expect(cid?.immunityFlags).toContain('immune-to-scan');
-    expect(cid?.stats.agi).toBe(16); // C-6 — the decompile, not the wiki's 11
+    expect(cid?.stats.agi).toBe(11); // C-6 settled by the script (re-parity D-09): his init writes 11 over the record's 16
     const missiles = EVRAE_ABILITIES['cid-guided-missiles'];
     expect(missiles?.formula).toBe('fixed');
     expect(missiles?.power).toBe(4);

@@ -109,6 +109,7 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'evrae-out-of-breath-range': { id: 0x6065, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 0 }, // Out of breath range.
   'evrae-haste': { id: 0x3036, type: 2, flagsMisc: 0x15030086, flagsDamage: 0x12, damageClass: 4 }, // Haste
   'cid-guided-missiles': { id: 0x6073, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1 }, // Guided Missiles
+  'yojimbo-summon': { id: 0x4090, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0 }, // Summon
   'yojimbo-daigoro': { id: 0x4086, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 0 }, // Daigoro
   'yojimbo-kozuka': { id: 0x4082, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1 }, // Kozuka
   'yojimbo-wakizashi': { id: 0x4083, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1 }, // Wakizashi
@@ -137,6 +138,9 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   'omnis-waterga': { id: 0x304c, type: 1, flagsMisc: 0x15230086, flagsDamage: 0x2, damageClass: 1 }, // Waterga
   'omnis-dispel': { id: 0x303d, type: 2, flagsMisc: 0x15030006, flagsDamage: 0x32, damageClass: 0 }, // Dispel
   'omnis-ultima': { id: 0x60f0, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1 }, // Ultima
+  'grothia-summon': { id: 0x408c, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0 }, // Summon
+  'pterya-summon': { id: 0x408b, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0 }, // Summon
+  'spathi-summon': { id: 0x408f, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0 }, // Summon
   'grothia-attack': { id: 0x4000, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1 }, // Attack
   'grothia-attack-yuna': { id: 0x407f, type: 0, flagsMisc: 0x52, flagsDamage: 0xd, damageClass: 1 }, // Attack (picked by hand)
   'grothia-fira': { id: 0x3045, type: 1, flagsMisc: 0x15030086, flagsDamage: 0x2, damageClass: 1 }, // Fira

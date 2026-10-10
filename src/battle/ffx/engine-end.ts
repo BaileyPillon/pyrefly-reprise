@@ -15,7 +15,6 @@ import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { drainScriptReactions } from './ai/reaction-drain.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
-import { runEvraePhaseHooks } from './ai/evrae-counters.ts';
 import { counterInputs } from './counter-inputs.ts';
 import { aeonDuelLost, dismissAeon } from './aeons.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
@@ -56,7 +55,7 @@ export function afterAction(
   void damageDealt;
 
   // Who this action damaged, landed a status on, or pushed into a new form.
-  const { damaged, counterable, statusCounterable } = counterInputs(actor.id, actionEvents);
+  const { damaged, counterable } = counterInputs(actor.id, actionEvents);
 
   // The Mortiorchis never dies; it drains Seymour and comes back smaller.
   runMortibsorptionIfDown(ctx);
@@ -67,20 +66,22 @@ export function afterAction(
   // in every other battle.
   runMacalaniaPhaseHooks(ctx);
 
-  // Evrae's 1/3-HP self-Haste: a hook, so Guided Missiles trip it too [§5.4]. No-op elsewhere.
-  runEvraePhaseHooks(ctx);
+  // (Evrae's 1/3-HP self-Haste is an `onHit` hook now, `ai/evrae-counters.ts`: it runs for every action that reaches him,
+  // a missed Guided Missiles included, so no phase hook is run from here any more.)
 
   // From here to the end of the turn every free action is a reaction: the boss scripts' queued reactions (`ai/hooks.ts`,
   // drained below), the older boss counters and the equipment reactions. A script that keeps the engine's old rule, a
   // counter never triggers another counter (AI lane B's Yunalesca and Yu Yevon: `ai/hit-script.ts#queueCounter`), asks for
-  // nothing while this is set; the scripts of the other lane chain on purpose and never read it.
+  // nothing while this is set; the scripts of the other lane chain on purpose and never read it. AI lane C's scripts
+  // (Evrae, Yojimbo, Isaaru's aeons, the Fins, Genais and the Core, Sin's face) are gated by `ai/hit-gates.ts#counterAllowed`,
+  // which reads the same flag: a hit that is itself a reaction moves their counters and asks for nothing.
   ctx.rt.inReaction = true;
 
   // Boss counters fire from the hit hook and cost no turn.
   if (command) {
     const def = commandAbility(ctx, command);
     if (def) {
-      for (const counter of collectBossCounters(ctx, actor, def, counterable, statusCounterable)) {
+      for (const counter of collectBossCounters(ctx, actor, def, counterable)) {
         const counterActor = tryActor(ctx, counter.actorId);
         if (!counterActor || !isAlive(counterActor)) continue;
         h.push({

@@ -17,8 +17,8 @@
  * ## The five rows that will be built wrong without a comment (§3.3)
  *
  * 1. **Haste is a `Counter Self`, not a scheduled turn.** It consumes no action
- *    slot and fires out of turn order, so the AI script never selects it;
- *    `ai/evrae-rules.ts#castEvraeHaste` resolves it directly. It is the
+ *    slot and fires out of turn order, so the AI script never selects it; his
+ *    `onHit` (`ai/evrae-counters.ts`) queues it as a free action. It is the
  *    *player's* Haste row (`ffx_command.csv` #54), so it carries full player
  *    semantics: recovery `floor(/2)` **and** the pending counter halved on the
  *    spot. Both halves, or the phase change reads flat.
@@ -59,8 +59,10 @@ import type { AbilityDef } from '../../../battle/common/types.ts';
 // ---------------------------------------------------------------------------
 
 /**
- * The melee row. §3.1: Strength, base 16, one random character, accuracy 120,
- * `can_crit`, **`affected_by_dark`**, shatter 10, `long_range = false`.
+ * The melee row. §3.1: Strength, base 16, one character, accuracy 120,
+ * `can_crit`, **`affected_by_dark`**, shatter 10, `long_range = false`. The
+ * script picks the victim itself (a draw only with two or more standing) and
+ * aims the row, so the row is `single-enemy` (re-parity, `ai/evrae.ts`).
  *
  * Darkness is the melee off-switch and it is **per action**: this row is
  * blanked by Dark Attack / Dark Buster and Swooping Scythe is not (§6.1). Say
@@ -77,7 +79,7 @@ const attack: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy',
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -91,14 +93,14 @@ const attack: AbilityDef = {
  * §3.1: Strength, base 8, **whole party**, accuracy 100, **`long_range = true`**,
  * **shatter 50**, `affected_by_dark = false`, no crit.
  *
- * It is a **counter**, not a scheduled turn: Evrae answers being targeted while
- * the ship is pulled back in phase 2 with this, and it **drags the fight back
- * to NEAR** (§5.5, verified: 2 sources). The range change is applied by
- * `ai/evrae-rules.ts#collectEvraeCounters`, not by an `extra.script`, because
- * that keeps it once per reaction rather than once per hit per target.
- *
- * Whether it exists at all in phase 1 is **C-12**; the owner-approved default
- * is phase 2 only — see `SWOOP_PHASE_TWO_ONLY`.
+ * It is both a **counter** and a scheduled turn of the Haste phase (re-parity
+ * D-05, D-06): Evrae answers a hit that reaches him while the ship is pulled
+ * back with this, and on his own FAR turn he uses it instead of Photon Spray;
+ * either way it **drags the fight back to NEAR** (§5.5, verified: 2 sources).
+ * The range change is written by `ai/evrae-counters.ts` (the hit) and
+ * `ai/evrae.ts` (the turn), not by an `extra.script`, which keeps it once per
+ * reaction rather than once per hit per target. It exists only from the Haste
+ * phase on (the script's rows, which settle C-12).
  */
 const swoopingScythe: AbilityDef = {
   id: 'evrae-swooping-scythe',
@@ -181,7 +183,7 @@ const stoneGaze: AbilityDef = {
   formula: 'none',
   damageType: 'magical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy', // the Attack slot's pick (the script aims it; one draw with two or more standing)
   hits: 1,
   statusEffects: [
     { status: 'petrify', chance: 100, duration: 254 }, // §3.1 [decompiled]

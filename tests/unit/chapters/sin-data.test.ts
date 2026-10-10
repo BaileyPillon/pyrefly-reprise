@@ -184,7 +184,7 @@ describe('the four records against research §2.1 to §2.4 (plan §2.2 table)', 
       expect(cid.aiScriptId).toBe('cid-fahrenheit-sin');
       expect(cid.abilityIds).toEqual([]);
       expect(cid.flags.untargetable).toBe(true);
-      expect(cid.stats.agi).toBe(16);
+      expect(cid.stats.agi).toBe(11); // D-09 (re-parity AI lane C): his init writes 11 over the record's 16, in both fights
     }
   });
 });

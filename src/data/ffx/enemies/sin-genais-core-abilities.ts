@@ -30,7 +30,10 @@
 import type { AbilityDef } from '../../../battle/common/types.ts';
 import { SIN_NEGATION_LIST } from './sin-fins-abilities.ts';
 
-/** A no-damage, self-targeted system line, its name a decompiled string kept verbatim. */
+/**
+ * A no-damage, self-targeted system line, its name a decompiled string kept verbatim. **It has no hit record** (the game's records
+ * for these captions say 0 hits, re-parity AI lane C): a caption raises no hit event, so it can never run its owner's `onHit`.
+ */
 function systemLine(id: string, name: string, row: string): AbilityDef {
   return {
     id,
@@ -44,7 +47,7 @@ function systemLine(id: string, name: string, row: string): AbilityDef {
     damageType: 'other',
     element: ['none'],
     targeting: 'self',
-    hits: 1,
+    hits: 0,
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -236,7 +239,8 @@ export const coreGravija: AbilityDef = {
   flags: ['always-break-damage-limit'],
   breaksDamageLimit: true,
   canMiss: false, // §3 "Always hits" [decompiled]
-  extra: { decompiledRow: '6:148' },
+  // The script aims it at exactly the front line and Genais (the Core is not in its group; re-parity AI lane C).
+  extra: { decompiledRow: '6:148', groupTarget: true },
   messageTemplate: '{user} uses {ability}',
 };
 

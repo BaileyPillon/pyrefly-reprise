@@ -49,7 +49,11 @@ export const SIN_NEGATION_LIST: readonly StatusId[] = [
   'regen', 'haste', 'slow',
 ];
 
-/** A no-damage, self-targeted system line (a telegraph or a skipped turn). */
+/**
+ * A no-damage, self-targeted system line (a telegraph or a skipped turn). **It has no hit record** (the game's records for these
+ * captions say 0 hits, re-parity AI lane C, `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 1.1): a caption raises no hit event,
+ * so it can never run its own owner's `onHit`.
+ */
 function systemLine(id: string, name: string, row: string): AbilityDef {
   return {
     id,
@@ -63,7 +67,7 @@ function systemLine(id: string, name: string, row: string): AbilityDef {
     damageType: 'other',
     element: ['none'],
     targeting: 'self',
-    hits: 1,
+    hits: 0,
     statusEffects: [],
     removesStatuses: [],
     flags: [],
@@ -172,7 +176,7 @@ export const finGravijaFar: AbilityDef = {
   formula: 'none',
   damageType: 'other',
   element: ['none'],
-  targeting: 'all-enemies',
+  targeting: 'self', // aimed at the Fin himself (note 5.3): its one hit record raises a hit event on him, as his Negations do
   hits: 1,
   statusEffects: [],
   removesStatuses: [],

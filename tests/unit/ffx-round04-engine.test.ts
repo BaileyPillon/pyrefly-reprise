@@ -189,15 +189,28 @@ describe('PR-0004 — a Threatened enemy cannot counterattack [ffx-combat-core �
   // AGENTS.md hard rule 4, and the half of the acceptance check that survives
   // the fix: a guard nothing calls is a guard that does not exist. This fails
   // the moment the call site is deleted again, which is how the defect arrived.
-  it('canCounter is actually called — a guard with no call site is the original defect', () => {
-    const reactions = src('battle/ffx/ai/reactions.ts');
-    const calls = [...reactions.matchAll(/canCounter\s*\(/g)];
-    const declarations = [...reactions.matchAll(/function\s+canCounter\s*\(/g)];
-    expect(declarations.length, 'canCounter is no longer declared in reactions.ts').toBe(1);
-    expect(
-      calls.length - declarations.length,
-      'canCounter has no call site: §4.2 is encoded but never consulted',
-    ).toBeGreaterThan(0);
+  //
+  // `canCounter()` in `ai/reactions.ts` was that guard. Once every boss answered from its `onHit` hook (re-parity: AI-Seymour,
+  // AI lanes B and C) the producers it guarded were gone, and the rule moved with them to the two places a hook's free action
+  // is gated now: the reaction drain refuses an owner that cannot act (`ai/hooks.ts#canQueueCommand`, Threaten among the
+  // refusals, called by `ai/reaction-drain.ts`) and the scripts of AI lane C test the same state before they queue
+  // (`ai/game-rolls.ts#canQueue`, which is `canAct` and so refuses Threaten, called by `ai/hit-gates.ts`). The behaviour is
+  // pinned by the two tests above; this one keeps both guards from becoming call-less again.
+  it('the Threaten guards of the boss reactions are actually called — a guard with no call site is the original defect', () => {
+    const body = (text: string, name: string): string => {
+      const start = text.indexOf(`function ${name}(`);
+      expect(start, `${name} is no longer declared`).toBeGreaterThanOrEqual(0);
+      return text.slice(start, text.indexOf('\n}', start));
+    };
+    const callsOf = (text: string, name: string): number => [...text.matchAll(new RegExp(`\\b${name}\\s*\\(`, 'g'))].length;
+
+    const hooks = src('battle/ffx/ai/hooks.ts');
+    expect(body(hooks, 'canQueueCommand'), 'the drain gate no longer refuses a Threatened owner').toContain("s['threaten']");
+    expect(callsOf(src('battle/ffx/ai/reaction-drain.ts'), 'canQueueCommand'), 'the drain never consults canQueueCommand: §4.2 is encoded but never consulted').toBeGreaterThan(0);
+
+    expect(body(src('battle/ffx/ai/game-rolls.ts'), 'canQueue'), 'canQueue no longer goes through canAct').toContain('canAct(');
+    expect(body(src('battle/ffx/predicates.ts'), 'canAct'), 'canAct no longer refuses a Threatened combatant').toContain("'threaten'");
+    expect(callsOf(src('battle/ffx/ai/hit-gates.ts'), 'canQueue'), 'the lane C scripts never consult canQueue: §4.2 is encoded but never consulted').toBeGreaterThan(0);
   });
 });
 

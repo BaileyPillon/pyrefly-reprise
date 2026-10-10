@@ -121,6 +121,12 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * VIII, IX and XIV) are byte for byte what they were. Five outcomes moved on seeds nobody tuned: seymour-flux#1 and #7
  * defeat -> victory, seymour-natus#7 victory -> defeat, seymour-omnis#1 defeat -> victory and #7 victory -> defeat; the
  * 500-seed tables and their causes are in docs/handoff/re-parity-ai-seymour.md. Nothing on the boss or the party was tuned.
+ * Chapters VIII, IX and XIV re-baselined 2026-10-09 by re-parity AI lane C ("game-script parity", FFX only): Evrae and Cid, Yojimbo
+ * and Isaaru's three aeons run the game's own scripts (research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md sections 2 to 4) through the
+ * same hit events. Evrae's counter is filled by the command's formula byte and his Haste starts under 10,666; Cid acts every 42
+ * ticks, not 36; Yojimbo's first turn is a Summon, his odds are the script's, Zanmato leaves the gauge at 2 and the +3 is a hit
+ * event; every aeon of the contest opens with a Summon and fills its gauge from every attack at Yuna; the aeon opens at CTB 0
+ * and the party one tick later. All six digests move and every outcome is still a victory; no other chapter's digest moved.
  * Release candidate 1, 2026-10-09 (re-parity W1, AI lane B and AI-Seymour merged onto release 39.4.2, "game-code and
  * game-script parity merged onto 39.4.2", FFX only). The merged tree was run against each lane's own table: 17 of the 18
  * digests are the lanes' own, byte for byte (all eight of AI-Seymour's, Chapter II's two, Chapter III seed 1's, and the
@@ -131,6 +137,13 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * reaches Possessed Shiva and both Pagodas; Shiva's hook spends a GetRandomValue draw, which now falls between Shiva's hit
  * and the Pagodas' two, so their damage variance comes from the next draws and the two amounts 2230 and 2377 become 2358
  * and 2459. Nothing else in that log changes (docs/handoff/re-parity-rc1.md, with the proof).
+ * Release candidate 1 with AI lane C, 2026-10-09 (re-parity AI lane C merged onto that three-lane tree, "game-script parity",
+ * FFX only). The merged tree was run against the table above: 12 of the 18 digests are byte for byte what they were (all eight
+ * of AI-Seymour's, Chapter II's two and Chapter III's two). SIX moved: evrae-airship, yojimbo-cavern and isaaru-via-purifico, seeds
+ * 1 and 7, the six lane C re-baselined on its own branch (see its paragraph above), and each equals lane C's own digest to the byte,
+ * so the merge kept its behaviour: its nine hit scripts now run on the one runner (`ai/hit-script.ts` over `ai/hooks.ts`, the old
+ * `hit-hooks.ts` is gone), and none of the three fights has two listening targets in one action, so the runner's order (the
+ * paragraph above) cannot move them. Every outcome is still victory. Nothing on the boss or the party was tuned.
  * Releases 39.2 to 39.4.2 changed no FFX battle code or data (their battle-side changes are FFX-2's Trema data, the Leblanc
  * preview's chapter registry and `types.ts`'s `hopelessRetry`). A digest that moves from here on is a change to explain.
  */
@@ -143,16 +156,16 @@ const GOLDEN: Record<string, string> = {
   'braskas-final-aeon#7': '4d03bcf:victory ecf9d5ca:victory 73095ebb:victory 7da3a6c6:victory 35dd0a26:victory 56db843f:victory 4a48b320:victory',
   'seymour-anima-macalania#1': 'd6364844:victory',
   'seymour-anima-macalania#7': 'f5b75fc0:victory',
-  'evrae-airship#1': '14674509:victory',
-  'evrae-airship#7': '3c97dd63:victory',
-  'yojimbo-cavern#1': 'fce6b795:victory',
-  'yojimbo-cavern#7': 'c3a419df:victory',
+  'evrae-airship#1': 'f57a4639:victory',
+  'evrae-airship#7': '551512c6:victory',
+  'yojimbo-cavern#1': 'a8bfe256:victory',
+  'yojimbo-cavern#7': '1e3f39eb:victory',
   'seymour-natus#1': 'c2522add:victory',
   'seymour-natus#7': '514b6086:defeat',
   'seymour-omnis#1': 'e6d67f23:victory',
   'seymour-omnis#7': '9b077938:defeat',
-  'isaaru-via-purifico#1': 'd916c9d0:victory bc11f7e3:victory 42ea7beb:victory',
-  'isaaru-via-purifico#7': 'b073037f:victory 584e6881:victory e0f5e2d6:victory',
+  'isaaru-via-purifico#1': '8d821114:victory 6894473d:victory 57e66da:victory',
+  'isaaru-via-purifico#7': '70244c57:victory f901bf84:victory e9573bc6:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

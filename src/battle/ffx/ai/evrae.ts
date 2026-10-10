@@ -1,9 +1,10 @@
 /**
  * The two rotations of the *Fahrenheit* fight — **Evrae** and **Cid**.
  *
- * Source: `research/ffx-evrae-airship.md` §4.4 (what Evrae does at each range),
- * §5.7 (the reference pseudocode this file follows step for step) and §2.3
- * (Cid's decision order, quoted verbatim below). Everything they read — the
+ * Source: `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 2 (the two
+ * scripts read from the game, m119 and m149; re-parity AI lane C), which replaced
+ * the wiki-derived pseudocode of `research/ffx-evrae-airship.md` §4.4, §5.7 and
+ * §2.3 (Cid's decision order, quoted verbatim below). Everything they read — the
  * constants, the AUTHORED decisions, the airship flags, the setup hook, the
  * counters — lives in `./evrae-rules.ts` and is re-exported from here, so one
  * import reaches the whole encounter. The split is the 400-line house limit
@@ -16,12 +17,15 @@
 
 import type { Command } from '../../common/types.ts';
 import { type Ctx, rtOf, tryActor } from '../state.ts';
+import { randomLiving } from './game-rolls.ts';
 import { type AiContext, registerAiScript, use } from './types.ts';
 import {
   AIRSHIP_BREATH_CHARGED,
   AIRSHIP_MISSILES,
   AIRSHIP_NEAR_STEP,
+  AIRSHIP_ORDER,
   AIRSHIP_OUT_OF_AMMO,
+  AIRSHIP_RANGE,
   CID_GUIDED_MISSILES,
   CID_ID,
   CID_SCRIPT,
@@ -33,8 +37,10 @@ import {
   EVRAE_POISON_BREATH,
   EVRAE_SCRIPT,
   EVRAE_STONE_GAZE,
+  EVRAE_SWOOPING_SCYTHE,
   airshipRange,
   applyQueuedOrder,
+  evraePhase,
   isEvraeBattle,
   queuedOrder,
 } from './evrae-rules.ts';
@@ -59,25 +65,18 @@ function consumeCharge(ctx: Ctx): void {
 // ---------------------------------------------------------------------------
 
 /**
- * §5.7, transcribed. The one structural difference from the pseudocode is that
- * **Swooping Scythe is not a scheduled branch here** — it is a counter, fired
- * from `collectEvraeCounters` the instant the player targets Evrae at FAR in
- * phase 2, which is what both sources describe ("a counter that brings Evrae
- * close after unleashing it") and what makes §4.5's trap bite.
+ * His turn, as the script has it (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 2.3, m119 f2 @0x1D5). The slot
+ * `v7` (`AIRSHIP_NEAR_STEP`, with `AIRSHIP_BREATH_CHARGED` for 3) only advances at NEAR:
  *
- * Read the three range branches against each other and the mechanic is the
- * whole rotation:
+ * - **NEAR, slot 0 or 1** → one living, targetable front-line member is picked (a draw only with two or more); the Attack
+ *   slot is a Stone Gaze on that member while the counter is above 5 (and the counter is spent), else an Attack on it.
+ * - **NEAR, slot 2** → Inhale, the telegraph. **Slot 3** → Poison Breath on the front line.
+ * - **FAR, slot 3** → the named whiff: the ship pulled back while he breathed in, and the player's spent turn *worked* (§12.3).
+ * - **FAR, Haste phase** → Swooping Scythe on the front line, then he is NEAR and the pending order is gone (D-05).
+ * - **FAR otherwise** → Photon Spray: eight hits, each re-rolling its target (`targeting: 'random-enemy'`, a fresh pick per
+ *   hit). **Not** an 8x multiplier on one victim [§3.3 note 5].
  *
- * - **FAR with a charged breath** → the named whiff. The player spent a turn on
- *   an order instead of on damage and it *worked*; §12.3 calls this a
- *   celebration beat, and the row is a real decompiled action, not a message.
- * - **FAR otherwise** → Photon Spray: eight hits, each re-rolling its target
- *   (`targeting: 'random-enemy'`, which this contract defines as a fresh pick
- *   per hit). **Not** an 8x multiplier on one victim [§3.3 note 5].
- * - **NEAR** → the four-turn cycle, with Stone Gaze replacing a melee slot once
- *   the aggro counter is spent. Phase 2 stops using Stone Gaze, which
- *   {@link stoneGazeDue} encodes by gating on phase 1 — "unless one is already
- *   readied" [§5.4, single source].
+ * Swooping Scythe is also his answer to a hit while FAR in the Haste phase: that is his `onHit` (`./evrae-counters.ts`).
  */
 export const evraeAi = (ai: AiContext): Command | null => {
   const ctx = ai.ctx;
@@ -87,6 +86,11 @@ export const evraeAi = (ai: AiContext): Command | null => {
     if (charged) {
       consumeCharge(ctx);
       return use(ai, EVRAE_OUT_OF_BREATH_RANGE, [ai.self.id]);
+    }
+    if (evraePhase(ctx) === 2) {
+      ctx.state.flags[AIRSHIP_RANGE] = 'near';
+      ctx.state.flags[AIRSHIP_ORDER] = '';
+      return use(ai, EVRAE_SWOOPING_SCYTHE, []);
     }
     return use(ai, EVRAE_PHOTON_SPRAY, []);
   }
@@ -106,11 +110,13 @@ export const evraeAi = (ai: AiContext): Command | null => {
   }
 
   ctx.state.flags[AIRSHIP_NEAR_STEP] = s >= 3 ? 1 : s + 1;
+  const victim = randomLiving(ctx);
+  const aim = victim === undefined ? [] : [victim.id];
   if (stoneGazeDue(ctx)) {
     spendStoneGazeCounter(ctx);
-    return use(ai, EVRAE_STONE_GAZE, []);
+    return use(ai, EVRAE_STONE_GAZE, aim);
   }
-  return use(ai, EVRAE_ATTACK, []);
+  return use(ai, EVRAE_ATTACK, aim);
 };
 
 // ---------------------------------------------------------------------------

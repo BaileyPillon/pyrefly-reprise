@@ -113,7 +113,8 @@ describe('PR-0191: the gauge holds Zanmato until the 9,999 lands', () => {
     // Once Yojimbo's action has ended, the panel tells the truth again.
     const end = all.findIndex((e, k) => k > nineNines && e.type === 'action-end');
     expect(seen[end]!.full).toBe(false);
-    expect(g.panelEl.dataset['gauge']).toBe('0');
+    // Zanmato zeroes the gauge and the turn's common +2 then makes it 2 (re-parity AI lane C, D-12; it was 0).
+    expect(g.panelEl.dataset['gauge']).toBe('2');
   });
 
   it('the banner finishes its 2.6 s even when the reset arrives 0.6 s in', async () => {

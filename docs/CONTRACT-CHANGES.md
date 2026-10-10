@@ -6,6 +6,36 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-09 — AI lane C's nine hit scripts register on the one `onHit` runner: Evrae, Yojimbo, Isaaru's aeons, the Fins, Genais and the Core, Sin's face (release candidate 1; FFX only; no shared contract file changed)
+
+Branch `re-parity-rc1`. No file in the contract list changed. Recorded because the next entry (AI lane C's own, written against lane B's `hit-hooks.ts`) names modules that no longer exist. Handoff:
+[re-parity-rc1](handoff/re-parity-rc1.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- The nine script ids lane C registers (`evrae`, `yojimbo`, Grothia, Pterya, both Fins, Genais, the Core, Overdrive Sin) hang on `ai/hooks.ts#runOnHit` through `ai/hit-script.ts#registerHitScript`, as lane B's five do. `ai/hit-gates.ts#react`
+  queues through `ai/hit-script.ts#queueCounter`, the one first-in-first-out reaction queue with the aim as `requiresAlive` and nothing queued while a reaction resolves (`FFXRuntime.inReaction`), and keeps the script's own rule that an owner
+  with a reaction already waiting asks for no second one (it reads `peekReactions`). Where lane C's entry below says `hit-hooks.ts`, `hit-event.ts` or `FFXRuntime.reactions`, read these.
+- Each target hears an action right after its own hits (the one runner's order), where lane C's runner told every target after the last. It matters only for an action that reaches two scripts at once (link 3 of Chapter XVII: Genais and the Core),
+  where a hook's draw now falls before the later target's damage draws.
+- `ai/reactions.ts` loses `canCounter` (its last callers were the Evrae and Sin branches lane C removed; the Threaten rule is `ai/hooks.ts#canQueueCommand` for the drain and `ai/game-rolls.ts#canQueue` for the scripts' own gates), and
+  `collectBossCounters` has no producer left: it stays, returning none, as the seam `engine-end.ts#afterAction` runs first. `tests/unit/ffx-round04-engine.test.ts` now checks the call sites of those two guards.
+
+## 2026-10-09 — The boss scripts of Chapters VIII, IX, XIV, XVII and XVIII follow the game's scripts: shared hit gates, a command-formula table, a formation opening and a reach table for Sin's distance 1 (re-parity AI lane C; FFX only; no shared contract file changed)
+
+Branch `re-parity-ai-ffx-c`, on lane B's hit events. No file in the contract list changed. Recorded because the engine's internal surface and the order in which a boss's events arrive change. Handoff:
+[re-parity-ai-evrae-yojimbo-isaaru-sin](handoff/re-parity-ai-evrae-yojimbo-isaaru-sin.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- New modules, none exported from `src/battle/ffx/index.ts`: `ai/hit-gates.ts` (`counterAllowed`, `react`, `reactionAim`, `frontIds`, `aeonHoldsField`: the gates between a boss's hook and the free action it asks for), `ai/opening.ts` (`applyBossOpening`: the formation start hook,
+  the boss's CTB 0 and each of the seven party counters +1), `ai/command-formula.ts` (the command's damage-formula byte from its game record: `formulaByteOf`, `gazeStepOf`, `isFormulaThree`, `FORMULA_BYTE_OVERRIDES`), `reach.ts` (`REACH_ZERO_COMMANDS`, `isReachZero`).
+- `targeting.ts#reachesFoesAtRange` also reads `state.flags['airship.distance']`: at 1 (Overdrive Sin after his second pull) only the game's reach-0 commands miss. The flag exists only in that battle (3, then 1, then 0); everywhere else the old FAR / NEAR gate decides as before.
+- Evrae's, Yojimbo's, Isaaru's and Sin's answers are `onHit` hooks now: `ai/reactions.ts#collectBossCounters` lost its Evrae and Sin branches (`collectSinCounters`, `collectOverdriveSinCounters`, `collectSinFinsCounters`, `collectSinGenaisCoreCounters` and the `SinCounter` type are gone;
+  `ai/sin-counters.ts` keeps only the liveness hook), its `statusAddedEnemyIds` parameter is gone (`engine-end.ts` no longer destructures `statusCounterable`), and `engine-end.ts` no longer calls `runEvraePhaseHooks`. `markEvraeRuntime` no longer sets `countsPartyTargetings`; the field and its counter in
+  `overdrive.ts#onTargeted` stay (a test pins them) and no script reads them.
+- `state.flags` keys: new `airship.distance`, `airship.hasteGuard`, `airship.delayCount`, `airship.delayAdvancesHaste` (a bench's override of the owner decision C-13), `sin.fin.negationGuard`, `sin.core.score`, `sin.core.guard`; `sin.fin.hits` counts hit events; removed
+  `airship.hasted`, `airship.targetings`, `sin.core.negationChance`, `sin.core.counterChanceBefore` and `sin.core.absorbedDrawsCounter`. The HUD-facing keys (`sin.turn`, `sin.turnsLeft`, `sin.fin.charged`, `sin.genais.shelled`, `sin.core.state`, `sin.negation.lastTaken`) are unchanged; `sin.gigaGravitonTurn` now defaults to 12.
+- Ability data: the game's caption dummies carry `hits: 0` (they raise no hit event), the do-nothing Gravija is aimed at the Fin, the Core's Gravija sets `extra.groupTarget` (lane B's key), Yojimbo's and Isaaru's Summon rows are new with command records (`command-records/enemies.ts`), and Cid's Agility is 11.
+- Draw order: a boss pick draws only with two or more candidates; the Fins', the Core's, Sin's, Yojimbo's, Isaaru's and Evrae's rolls are `GetRandomValue` (sixteen bits) reduced by the script's own `mod`, a draw on every hit event where the script takes one; the engine's one seeded stream still supplies all of it. Every seed-pinned
+  expectation downstream (six golden digests, the chapter and strategy tests) moved with it and was re-pinned with its cause.
+
 ## 2026-10-09 — The FFX-2 engine rolls hits, critical hits, damage, statuses and theft through the proven kernels: `FFX2CommandRecord`, `FFX2MonsterRecord`, `AbilityDef.ffx2Record`, `EnemyDef.ffx2Record`, `EnemyFields.ffx2Record`, `AbilityCommand.gilSpent`, and the `src/battle/ffx2` exports that left (re-parity W3; FFX-2 only; additive for the contract file)
 
 Branch `re-parity`. `src/battle/common/types.ts` gains the interfaces `FFX2CommandRecord` (the game's own command row for one FFX-2 ability: the 14 fields the kernels read, the
