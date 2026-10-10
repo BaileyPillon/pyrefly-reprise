@@ -186,26 +186,46 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * victory and isaaru-via-purifico#1 link 3 victory -> defeat; the other 13 keep their outcome. One seed is one sample, not a change of difficulty: the
  * 500-seed rates are in the handoff, and the one chapter whose rate moved by more than sampling is Chapter X (386 -> 302 of 500, Natus's Flare at the
  * game's rank 3; with rank 5 put back the merged tree wins 386, release candidate 1's number). Nothing on the boss or the party was tuned.
+ * All 18 digests re-baselined 2026-10-10 by re-parity W5 ("game-code parity", FFX only): the Overdrive gauge is the game's (a party member's
+ * bar is 100 points and an aeon's 20, the hooks divide first and add 1, a Healer counts the HP restored, Shield zeroes and Boost doubles on anyone), a wiped
+ * aeon stays away its own number of battles, an aeon wears the gear the game gives it (critical bonus 6, Pierce on nine, Break Damage Limit on five), Steal
+ * rolls the game's byte, and nobody's counter moves when an aeon comes or goes, so the summoner keeps the recovery her Summon cost (src/battle/ffx/gauge.ts,
+ * aeon-gear.ts, adapt/od-world.ts, adapt/aeon-party.ts, adapt/steal.ts; tests/unit/parity-ffx-engine-gauge.test.ts, parity-ffx-engine-aeons.test.ts and
+ * parity-ffx-engine-steal.test.ts are the proof that the engine computes what the kernels compute). Every link's log was compared event by event, with the
+ * sequence numbers ignored, against the same line on 919f2c78 (the W2 base, which reproduces the table above to the digit). Braska's link 2 (seeds 1 and 7)
+ * is identical and keeps its digest (7ce233c2, 3f923603): the 32 other links all move, for these reasons only:
+ * (a) the log differs in `overdrive-gauge` events and nothing else: evrae-airship#1 and #7, seymour-omnis#1 and #7, yojimbo-cavern#7, braskas-final-aeon#1
+ *     and #7 links 3 and 4; the gauge numbers and counts are the game's, and nothing the party or the boss does changed.
+ * (b) the first other difference is the turn after an aeon leaves (dismiss, KO or Banish): the old tree let the summoner act at once, the new one lets the
+ *     party act while she pays her Summon: seymour-flux#1 and #7, seymour-natus#1 and #7, seymour-anima-macalania#1, yojimbo-cavern#1, isaaru-via-purifico#1
+ *     and #7 link 1, braskas-final-aeon#1 and #7 link 1 (the Bahamut that falls to Braska's Final Aeon).
+ * (c) the first other difference is a choice the gauge decides: the game's gains leave an aeon without the Overdrive it had (isaaru-via-purifico links 2
+ *     and 3 on both seeds: Mega Flare and Hellfire become Attack; macalania#7: Sonic Wings in place of Energy Ray) and give Auron his earlier (yunalesca#1
+ *     and #7: Shooting Star where an Attack was).
+ * (d) braskas-final-aeon links 5 to 7 (both seeds) follow from the difference in link 1: the chain carries each member's HP, MP and gauge on, and a member
+ *     carried under half HP opens the next link with the Critical status.
+ * Every outcome stays a victory but one: isaaru-via-purifico#1 link 3 moves defeat -> victory. One seed is one sample; the 500-seed rates are in
+ * docs/handoff/re-parity-w5.md. Nothing on the boss or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'f43e6425:victory',
-  'seymour-flux#7': 'b3b5dc89:victory',
-  'yunalesca#1': 'e4fa5b5:victory',
-  'yunalesca#7': 'e8ac709e:victory',
-  'braskas-final-aeon#1': '2a9963a1:victory 7ce233c2:victory b87824d1:victory 54b637e9:victory 7050e863:victory 79dafd3d:victory e705f669:victory',
-  'braskas-final-aeon#7': '84ded0fc:victory 3f923603:victory ff619cfa:victory 42a858b4:victory 9423d5cf:victory 8177bb67:victory d34a326:victory',
-  'seymour-anima-macalania#1': '717af44e:victory',
-  'seymour-anima-macalania#7': '24c905b1:victory',
-  'evrae-airship#1': '7cbbc0a9:victory',
-  'evrae-airship#7': 'a6f3a8cd:victory',
-  'yojimbo-cavern#1': '31e2df5d:victory',
-  'yojimbo-cavern#7': 'a4d2201f:victory',
-  'seymour-natus#1': '3d2c375e:victory',
-  'seymour-natus#7': 'a6ddf6a4:victory',
-  'seymour-omnis#1': '24b9763c:victory',
-  'seymour-omnis#7': 'f4692070:victory',
-  'isaaru-via-purifico#1': '93bb6988:victory 99f47fed:victory b0b4e114:defeat',
-  'isaaru-via-purifico#7': '65881ea:victory 90bccf93:victory f4940447:victory',
+  'seymour-flux#1': 'd0fa190d:victory',
+  'seymour-flux#7': '8bca8763:victory',
+  'yunalesca#1': '3476dd5:victory',
+  'yunalesca#7': '1e5be9d4:victory',
+  'braskas-final-aeon#1': '208173d8:victory 7ce233c2:victory 83e2d1e6:victory d790b12b:victory f533934b:victory e004400a:victory 1c1eaef9:victory',
+  'braskas-final-aeon#7': 'd1bc6e2:victory 3f923603:victory d55948af:victory e97ae0a6:victory 2f8294e9:victory c3b6257f:victory 3a654e47:victory',
+  'seymour-anima-macalania#1': 'cb8ff7fa:victory',
+  'seymour-anima-macalania#7': '77c0da0e:victory',
+  'evrae-airship#1': '96e55b09:victory',
+  'evrae-airship#7': '99a25fb5:victory',
+  'yojimbo-cavern#1': '7681d4e3:victory',
+  'yojimbo-cavern#7': 'a2f8d812:victory',
+  'seymour-natus#1': 'dc26538f:victory',
+  'seymour-natus#7': 'cd5b1bcb:victory',
+  'seymour-omnis#1': 'f3c16c45:victory',
+  'seymour-omnis#7': 'c2a59197:victory',
+  'isaaru-via-purifico#1': 'd77cdbaf:victory 33e06f11:victory ee292b8b:victory',
+  'isaaru-via-purifico#7': '95ec44e3:victory 18c9be5f:victory 60e31feb:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {
