@@ -1,0 +1,5023 @@
+[
+ {
+  "chapter": "braskas-final-aeon",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 281.6,
+    "pxAfter": 281.7,
+    "pxRatio": 1,
+    "topBefore": 512.8,
+    "topAfter": 512.9,
+    "topMinBefore": 512.8,
+    "topMinAfter": 512.8,
+    "xBefore": 562.3,
+    "wBefore": 256.3,
+    "xAfter": 562.4,
+    "wAfter": 256.3,
+    "hBefore": 281.6,
+    "hAfter": 281.7,
+    "bottomAfter": 794.5,
+    "leftAfter": 562.4,
+    "rightAfter": 818.6,
+    "visibleInFrameBefore": 0.954,
+    "visibleInFrameAfter": 0.994,
+    "visibleBefore": 0.954,
+    "visibleAfter": 0.994,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 118,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 128,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 316.6,
+    "pxAfter": 287.9,
+    "pxRatio": 0.909,
+    "topBefore": 473.2,
+    "topAfter": 501.6,
+    "topMinBefore": 473.1,
+    "topMinAfter": 501.5,
+    "xBefore": 806.6,
+    "wBefore": 237.7,
+    "xAfter": 817,
+    "wAfter": 216.1,
+    "hBefore": 316.6,
+    "hAfter": 287.9,
+    "bottomAfter": 789.5,
+    "leftAfter": 817,
+    "rightAfter": 1033.1,
+    "visibleInFrameBefore": 0.967,
+    "visibleInFrameAfter": 0.983,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0.033,
+    "offFrameAfter": 0.017,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 78,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "aboveAfter": {
+     "gap": 117,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 245.9,
+    "pxAfter": 261.3,
+    "pxRatio": 1.063,
+    "topBefore": 432.8,
+    "topAfter": 417.5,
+    "topMinBefore": 432.8,
+    "topMinAfter": 417.5,
+    "xBefore": 700.5,
+    "wBefore": 162.4,
+    "xAfter": 695.5,
+    "wAfter": 172.6,
+    "hBefore": 245.9,
+    "hAfter": 261.3,
+    "bottomAfter": 678.8,
+    "leftAfter": 695.5,
+    "rightAfter": 868.1,
+    "visibleInFrameBefore": 0.269,
+    "visibleInFrameAfter": 0.352,
+    "visibleBefore": 0.269,
+    "visibleAfter": 0.352,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 38,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 32,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 417.5,
+   "topMinBefore": 432.8
+  },
+  "topClearanceAfter": 417.5,
+  "boss": {
+   "before": {
+    "id": "braskas-final-aeon",
+    "h": 333.6,
+    "top": 189.4
+   },
+   "after": {
+    "id": "braskas-final-aeon",
+    "h": 333.1,
+    "top": 189.6
+   },
+   "bossPxBefore": 328,
+   "bossPxAfter": 328
+  },
+  "framing": {
+   "partyPxBefore": 281,
+   "partyPxAfter": 277,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.046
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.49
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.29
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.007
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.453
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.201
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 1,
+  "hitsAfter": 1,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [
+   {
+    "panel": ".ig-stat-list",
+    "actor": "yuna",
+    "px": 3804,
+    "facePx": 0
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   18.8,
+   18.4
+  ]
+ },
+ {
+  "chapter": "braskas-final-aeon",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 113.4,
+    "pxAfter": 115.1,
+    "pxRatio": 1.015,
+    "topBefore": 298.5,
+    "topAfter": 299,
+    "topMinBefore": 298.4,
+    "topMinAfter": 299,
+    "xBefore": 17.5,
+    "wBefore": 102.2,
+    "xAfter": 13.3,
+    "wAfter": 103.8,
+    "hBefore": 113.4,
+    "hAfter": 115.1,
+    "bottomAfter": 414.1,
+    "leftAfter": 13.3,
+    "rightAfter": 117.1,
+    "visibleInFrameBefore": 0.953,
+    "visibleInFrameAfter": 0.992,
+    "visibleBefore": 0.953,
+    "visibleAfter": 0.992,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 182,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 183,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 125.7,
+    "pxAfter": 116,
+    "pxRatio": 0.923,
+    "topBefore": 283,
+    "topAfter": 294.7,
+    "topMinBefore": 282.9,
+    "topMinAfter": 294.7,
+    "xBefore": 114.8,
+    "wBefore": 94.4,
+    "xAfter": 116.3,
+    "wAfter": 87.1,
+    "hBefore": 125.7,
+    "hAfter": 116,
+    "bottomAfter": 410.7,
+    "leftAfter": 116.3,
+    "rightAfter": 203.3,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 167,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 178,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 105.3,
+    "pxAfter": 113.3,
+    "pxRatio": 1.076,
+    "topBefore": 268,
+    "topAfter": 261.4,
+    "topMinBefore": 268,
+    "topMinAfter": 261.4,
+    "xBefore": 64.4,
+    "wBefore": 69.7,
+    "xAfter": 59.1,
+    "wAfter": 75,
+    "hBefore": 105.3,
+    "hAfter": 113.3,
+    "bottomAfter": 374.7,
+    "leftAfter": 59.1,
+    "rightAfter": 134,
+    "visibleInFrameBefore": 0.249,
+    "visibleInFrameAfter": 0.323,
+    "visibleBefore": 0.249,
+    "visibleAfter": 0.323,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 152,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 145,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 261.4,
+   "topMinBefore": 268
+  },
+  "topClearanceAfter": 261.4,
+  "boss": {
+   "before": {
+    "id": "braskas-final-aeon",
+    "h": 164.1,
+    "top": 153.6
+   },
+   "after": {
+    "id": "braskas-final-aeon",
+    "h": 165.4,
+    "top": 152.8
+   },
+   "bossPxBefore": 164,
+   "bossPxAfter": 166
+  },
+  "framing": {
+   "partyPxBefore": 115,
+   "partyPxAfter": 115,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.191,
+  "masterMove": 0.19,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.047
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.565
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.237
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.009
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.517
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.167
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   15.5,
+   15.6
+  ]
+ },
+ {
+  "chapter": "evrae-airship",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "rikku",
+   "wakka"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 264,
+    "pxAfter": 263.4,
+    "pxRatio": 0.998,
+    "topBefore": 426.9,
+    "topAfter": 427.1,
+    "topMinBefore": 426.5,
+    "topMinAfter": 426.8,
+    "xBefore": 692,
+    "wBefore": 229.4,
+    "xAfter": 756.7,
+    "wAfter": 228.8,
+    "hBefore": 264,
+    "hAfter": 263.4,
+    "bottomAfter": 690.6,
+    "leftAfter": 756.7,
+    "rightAfter": 985.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 192,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 139,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "rikku",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 213.9,
+    "pxAfter": 194.9,
+    "pxRatio": 0.911,
+    "topBefore": 406.8,
+    "topAfter": 425.6,
+    "topMinBefore": 406.5,
+    "topMinAfter": 425.4,
+    "xBefore": 903.9,
+    "wBefore": 118.8,
+    "xAfter": 973.3,
+    "wAfter": 108.7,
+    "hBefore": 213.9,
+    "hAfter": 194.9,
+    "bottomAfter": 620.5,
+    "leftAfter": 973.3,
+    "rightAfter": 1082,
+    "visibleInFrameBefore": 0.868,
+    "visibleInFrameAfter": 0.889,
+    "visibleBefore": 0.868,
+    "visibleAfter": 0.889,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 172,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": null,
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "wakka",
+    "ratio": 1.201,
+    "worldBefore": 1.82,
+    "worldAfter": 2.186,
+    "worldRatio": 1.201,
+    "pxBefore": 216.8,
+    "pxAfter": 260.4,
+    "pxRatio": 1.201,
+    "topBefore": 406.2,
+    "topAfter": 362.8,
+    "topMinBefore": 406.1,
+    "topMinAfter": 362.6,
+    "xBefore": 524.8,
+    "wBefore": 124.2,
+    "xAfter": 576.4,
+    "wAfter": 148.5,
+    "hBefore": 216.8,
+    "hAfter": 260.4,
+    "bottomAfter": 623.2,
+    "leftAfter": 576.4,
+    "rightAfter": 724.9,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 171,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "aboveAfter": {
+     "gap": 75,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.745,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.937
+   }
+  ],
+  "tallest": {
+   "id": "wakka",
+   "topMinAfter": 362.6,
+   "topMinBefore": 406.1
+  },
+  "topClearanceAfter": 362.6,
+  "boss": {
+   "before": {
+    "id": "evrae",
+    "h": 403.1,
+    "top": 284.6
+   },
+   "after": {
+    "id": "evrae",
+    "h": 403.1,
+    "top": 284.2
+   },
+   "bossPxBefore": 403,
+   "bossPxAfter": 403
+  },
+  "framing": {
+   "partyPxBefore": 233,
+   "partyPxAfter": 241,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": true
+  },
+  "cameraMove": 0.002,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 64,
+  "masterFov": [
+   34,
+   34
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0.133
+   },
+   {
+    "a": "tidus",
+    "b": "wakka",
+    "share": 0
+   },
+   {
+    "a": "rikku",
+    "b": "wakka",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0.111
+   },
+   {
+    "a": "tidus",
+    "b": "wakka",
+    "share": 0
+   },
+   {
+    "a": "rikku",
+    "b": "wakka",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 1,
+  "hitsAfter": 0,
+  "faceHitsBefore": 1,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   16,
+   17.3
+  ]
+ },
+ {
+  "chapter": "evrae-airship",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "rikku",
+   "wakka"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 161.5,
+    "pxAfter": 161.5,
+    "pxRatio": 1,
+    "topBefore": 267.9,
+    "topAfter": 267.9,
+    "topMinBefore": 267.7,
+    "topMinAfter": 267.7,
+    "xBefore": 110.2,
+    "wBefore": 140.3,
+    "xAfter": 118.3,
+    "wAfter": 140.2,
+    "hBefore": 161.5,
+    "hAfter": 161.5,
+    "bottomAfter": 429.3,
+    "leftAfter": 118.3,
+    "rightAfter": 258.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 132,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 132,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "rikku",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 128.8,
+    "pxAfter": 117.3,
+    "pxRatio": 0.911,
+    "topBefore": 255.6,
+    "topAfter": 267,
+    "topMinBefore": 255.5,
+    "topMinAfter": 266.9,
+    "xBefore": 238.8,
+    "wBefore": 71.6,
+    "xAfter": 250.1,
+    "wAfter": 65.3,
+    "hBefore": 128.8,
+    "hAfter": 117.3,
+    "bottomAfter": 384.4,
+    "leftAfter": 250.1,
+    "rightAfter": 315.4,
+    "visibleInFrameBefore": 0.853,
+    "visibleInFrameAfter": 0.872,
+    "visibleBefore": 0.853,
+    "visibleAfter": 0.872,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 120,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 131,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "wakka",
+    "ratio": 1.201,
+    "worldBefore": 1.82,
+    "worldAfter": 2.186,
+    "worldRatio": 1.201,
+    "pxBefore": 130.6,
+    "pxAfter": 156.9,
+    "pxRatio": 1.201,
+    "topBefore": 255.3,
+    "topAfter": 229.1,
+    "topMinBefore": 255.3,
+    "topMinAfter": 229,
+    "xBefore": 10.3,
+    "wBefore": 74.8,
+    "xAfter": 10.9,
+    "wAfter": 89.8,
+    "hBefore": 130.6,
+    "hAfter": 156.9,
+    "bottomAfter": 386,
+    "leftAfter": 10.9,
+    "rightAfter": 100.7,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 120,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 93,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.745,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.937
+   }
+  ],
+  "tallest": {
+   "id": "wakka",
+   "topMinAfter": 229,
+   "topMinBefore": 255.3
+  },
+  "topClearanceAfter": 229,
+  "boss": {
+   "before": {
+    "id": "evrae",
+    "h": 241.2,
+    "top": 182.5
+   },
+   "after": {
+    "id": "evrae",
+    "h": 241.1,
+    "top": 182.5
+   },
+   "bossPxBefore": 241,
+   "bossPxAfter": 241
+  },
+  "framing": {
+   "partyPxBefore": 141,
+   "partyPxAfter": 146,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": true
+  },
+  "cameraMove": 0.001,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   34,
+   34
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0.147
+   },
+   {
+    "a": "tidus",
+    "b": "wakka",
+    "share": 0
+   },
+   {
+    "a": "rikku",
+    "b": "wakka",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0.129
+   },
+   {
+    "a": "tidus",
+    "b": "wakka",
+    "share": 0
+   },
+   {
+    "a": "rikku",
+    "b": "wakka",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   15,
+   14.9
+  ]
+ },
+ {
+  "chapter": "isaaru-via-purifico",
+  "viewport": "1600x900",
+  "party": [
+   "yuna"
+  ],
+  "figs": [
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.68,
+    "worldAfter": 1.68,
+    "worldRatio": 1,
+    "pxBefore": 289.7,
+    "pxAfter": 289.7,
+    "pxRatio": 1,
+    "topBefore": 492.4,
+    "topAfter": 492.4,
+    "topMinBefore": 491.8,
+    "topMinAfter": 491.8,
+    "xBefore": 584,
+    "wBefore": 227.6,
+    "xAfter": 584,
+    "wAfter": 227.6,
+    "hBefore": 289.7,
+    "hAfter": 289.7,
+    "bottomAfter": 782.1,
+    "leftAfter": 584,
+    "rightAfter": 811.6,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 237,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 237,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   }
+  ],
+  "tallest": {
+   "id": "yuna",
+   "topMinAfter": 491.8,
+   "topMinBefore": 491.8
+  },
+  "topClearanceAfter": 491.8,
+  "boss": {
+   "before": {
+    "id": "grothia",
+    "h": 326.5,
+    "top": 320.1
+   },
+   "after": {
+    "id": "grothia",
+    "h": 326.5,
+    "top": 320.1
+   },
+   "bossPxBefore": 328,
+   "bossPxAfter": 328
+  },
+  "framing": {
+   "partyPxBefore": 293,
+   "partyPxAfter": 293,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": true,
+   "liveOkAfter": true
+  },
+  "cameraMove": 0,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [],
+  "pairsAfter": [],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   15.4,
+   15.2
+  ]
+ },
+ {
+  "chapter": "isaaru-via-purifico",
+  "viewport": "390x844",
+  "party": [
+   "yuna"
+  ],
+  "figs": [
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.68,
+    "worldAfter": 1.68,
+    "worldRatio": 1,
+    "pxBefore": 130.9,
+    "pxAfter": 130.9,
+    "pxRatio": 1,
+    "topBefore": 279.3,
+    "topAfter": 279.3,
+    "topMinBefore": 279.1,
+    "topMinAfter": 279.1,
+    "xBefore": 38.5,
+    "wBefore": 102.8,
+    "xAfter": 38.6,
+    "wAfter": 102.8,
+    "hBefore": 130.9,
+    "hAfter": 130.9,
+    "bottomAfter": 410.2,
+    "leftAfter": 38.6,
+    "rightAfter": 141.4,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 163,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 163,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   }
+  ],
+  "tallest": {
+   "id": "yuna",
+   "topMinAfter": 279.1,
+   "topMinBefore": 279.1
+  },
+  "topClearanceAfter": 279.1,
+  "boss": {
+   "before": {
+    "id": "grothia",
+    "h": 160.5,
+    "top": 196.1
+   },
+   "after": {
+    "id": "grothia",
+    "h": 160.5,
+    "top": 196.1
+   },
+   "bossPxBefore": 161,
+   "bossPxAfter": 161
+  },
+  "framing": {
+   "partyPxBefore": 131,
+   "partyPxAfter": 131,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": true,
+   "liveOkAfter": true
+  },
+  "cameraMove": 0.005,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [],
+  "pairsAfter": [],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.4,
+   14.3
+  ]
+ },
+ {
+  "chapter": "seymour-anima-macalania",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "rikku"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 297.9,
+    "pxAfter": 298,
+    "pxRatio": 1,
+    "topBefore": 445.7,
+    "topAfter": 445.8,
+    "topMinBefore": 444.9,
+    "topMinAfter": 445,
+    "xBefore": 682.9,
+    "wBefore": 192.2,
+    "xAfter": 682.8,
+    "wAfter": 191.8,
+    "hBefore": 297.9,
+    "hAfter": 298,
+    "bottomAfter": 743.8,
+    "leftAfter": 682.8,
+    "rightAfter": 874.6,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 170,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 170,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 256.3,
+    "pxAfter": 233.5,
+    "pxRatio": 0.911,
+    "topBefore": 438.5,
+    "topAfter": 461.2,
+    "topMinBefore": 437.9,
+    "topMinAfter": 460.7,
+    "xBefore": 542.6,
+    "wBefore": 189.8,
+    "xAfter": 551.1,
+    "wAfter": 172.8,
+    "hBefore": 256.3,
+    "hAfter": 233.5,
+    "bottomAfter": 694.7,
+    "leftAfter": 551.1,
+    "rightAfter": 723.9,
+    "visibleInFrameBefore": 0.747,
+    "visibleInFrameAfter": 0.762,
+    "visibleBefore": 0.747,
+    "visibleAfter": 0.762,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 163,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 186,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "rikku",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 309.7,
+    "pxAfter": 282.1,
+    "pxRatio": 0.911,
+    "topBefore": 407.1,
+    "topAfter": 434.2,
+    "topMinBefore": 406.7,
+    "topMinAfter": 433.9,
+    "xBefore": 888.4,
+    "wBefore": 155.2,
+    "xAfter": 895.3,
+    "wAfter": 141.4,
+    "hBefore": 309.7,
+    "hAfter": 282.1,
+    "bottomAfter": 716.3,
+    "leftAfter": 895.3,
+    "rightAfter": 1036.8,
+    "visibleInFrameBefore": 0.988,
+    "visibleInFrameAfter": 0.997,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0.012,
+    "offFrameAfter": 0.003,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": null,
+    "aboveAfter": null,
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   }
+  ],
+  "tallest": {
+   "id": "rikku",
+   "topMinAfter": 433.9,
+   "topMinBefore": 406.7
+  },
+  "topClearanceAfter": 433.9,
+  "boss": {
+   "before": {
+    "id": "seymour-macalania",
+    "h": 371.9,
+    "top": 216.7
+   },
+   "after": {
+    "id": "seymour-macalania",
+    "h": 371.9,
+    "top": 216.7
+   },
+   "bossPxBefore": 375,
+   "bossPxAfter": 375
+  },
+  "framing": {
+   "partyPxBefore": 292,
+   "partyPxAfter": 275,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": true,
+   "liveOkAfter": true
+  },
+  "cameraMove": 0.003,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.253
+   },
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "rikku",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.238
+   },
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "rikku",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [
+   "yuna"
+  ],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 1,
+  "hitsAfter": 1,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [
+   {
+    "panel": ".ig-stat-list",
+    "actor": "rikku",
+    "px": 2124,
+    "facePx": 0
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   17.4,
+   16.3
+  ]
+ },
+ {
+  "chapter": "seymour-anima-macalania",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "rikku"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 130.5,
+    "pxAfter": 132.2,
+    "pxRatio": 1.013,
+    "topBefore": 275.1,
+    "topAfter": 275.2,
+    "topMinBefore": 274.8,
+    "topMinAfter": 274.9,
+    "xBefore": 85.8,
+    "wBefore": 84.2,
+    "xAfter": 81.9,
+    "wAfter": 85.3,
+    "hBefore": 130.5,
+    "hAfter": 132.2,
+    "bottomAfter": 407.4,
+    "leftAfter": 81.9,
+    "rightAfter": 167.3,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 139,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 139,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 116.1,
+    "pxAfter": 107.1,
+    "pxRatio": 0.922,
+    "topBefore": 271.7,
+    "topAfter": 282.3,
+    "topMinBefore": 271.5,
+    "topMinAfter": 282,
+    "xBefore": 26.3,
+    "wBefore": 86.3,
+    "xAfter": 25.8,
+    "wAfter": 79.5,
+    "hBefore": 116.1,
+    "hAfter": 107.1,
+    "bottomAfter": 389.3,
+    "leftAfter": 25.8,
+    "rightAfter": 105.4,
+    "visibleInFrameBefore": 0.698,
+    "visibleInFrameAfter": 0.705,
+    "visibleBefore": 0.698,
+    "visibleAfter": 0.705,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 136,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 146,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "rikku",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 138.6,
+    "pxAfter": 127.8,
+    "pxRatio": 0.922,
+    "topBefore": 257.7,
+    "topAfter": 269.9,
+    "topMinBefore": 257.6,
+    "topMinAfter": 269.8,
+    "xBefore": 180.4,
+    "wBefore": 69.8,
+    "xAfter": 181,
+    "wAfter": 64.4,
+    "hBefore": 138.6,
+    "hAfter": 127.8,
+    "bottomAfter": 397.7,
+    "leftAfter": 181,
+    "rightAfter": 245.4,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 122,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 134,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   }
+  ],
+  "tallest": {
+   "id": "rikku",
+   "topMinAfter": 269.8,
+   "topMinBefore": 257.6
+  },
+  "topClearanceAfter": 269.8,
+  "boss": {
+   "before": {
+    "id": "seymour-macalania",
+    "h": 182.3,
+    "top": 162.4
+   },
+   "after": {
+    "id": "seymour-macalania",
+    "h": 183.8,
+    "top": 161.7
+   },
+   "bossPxBefore": 183,
+   "bossPxAfter": 185
+  },
+  "framing": {
+   "partyPxBefore": 130,
+   "partyPxAfter": 123,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": true
+  },
+  "cameraMove": 0.164,
+  "masterMove": 0.16,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "yuna",
+    "b": "tidus",
+    "share": 0.302
+   },
+   {
+    "a": "yuna",
+    "b": "rikku",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.295
+   },
+   {
+    "a": "tidus",
+    "b": "rikku",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "rikku",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.9,
+   15.3
+  ]
+ },
+ {
+  "chapter": "seymour-flux",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "kimahri"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 280.6,
+    "pxAfter": 293.9,
+    "pxRatio": 1.048,
+    "topBefore": 447.2,
+    "topAfter": 450.3,
+    "topMinBefore": 446.2,
+    "topMinAfter": 449.1,
+    "xBefore": 605.5,
+    "wBefore": 260.3,
+    "xAfter": 591.6,
+    "wAfter": 272.8,
+    "hBefore": 280.6,
+    "hAfter": 293.9,
+    "bottomAfter": 744.2,
+    "leftAfter": 591.6,
+    "rightAfter": 864.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 159,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 194,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 297,
+    "pxAfter": 282.1,
+    "pxRatio": 0.95,
+    "topBefore": 394.1,
+    "topAfter": 422.5,
+    "topMinBefore": 393.6,
+    "topMinAfter": 421.7,
+    "xBefore": 842.7,
+    "wBefore": 227.2,
+    "xAfter": 849.8,
+    "wAfter": 216.5,
+    "hBefore": 297,
+    "hAfter": 282.1,
+    "bottomAfter": 704.6,
+    "leftAfter": 849.8,
+    "rightAfter": 1066.2,
+    "visibleInFrameBefore": 0.893,
+    "visibleInFrameAfter": 0.909,
+    "visibleBefore": 0.917,
+    "visibleAfter": 0.939,
+    "offFrameBefore": 0.024,
+    "offFrameAfter": 0.03,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": null,
+    "aboveAfter": null,
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "kimahri",
+    "ratio": 1.211,
+    "worldBefore": 1.82,
+    "worldAfter": 2.204,
+    "worldRatio": 1.211,
+    "pxBefore": 245.5,
+    "pxAfter": 310.2,
+    "pxRatio": 1.264,
+    "topBefore": 355.3,
+    "topAfter": 297.8,
+    "topMinBefore": 355.2,
+    "topMinAfter": 297.6,
+    "xBefore": 744.5,
+    "wBefore": 159.3,
+    "xAfter": 718.3,
+    "wAfter": 201.8,
+    "hBefore": 245.5,
+    "hAfter": 310.2,
+    "bottomAfter": 608.1,
+    "leftAfter": 718.3,
+    "rightAfter": 920.1,
+    "visibleInFrameBefore": 0.292,
+    "visibleInFrameAfter": 0.46,
+    "visibleBefore": 0.292,
+    "visibleAfter": 0.46,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 68,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 43,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.751,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.945
+   }
+  ],
+  "tallest": {
+   "id": "kimahri",
+   "topMinAfter": 297.6,
+   "topMinBefore": 355.2
+  },
+  "topClearanceAfter": 297.6,
+  "boss": {
+   "before": {
+    "id": "seymour-flux",
+    "h": 362.6,
+    "top": 85.6
+   },
+   "after": {
+    "id": "seymour-flux",
+    "h": 370.5,
+    "top": 77.4
+   },
+   "bossPxBefore": 365,
+   "bossPxAfter": 375
+  },
+  "framing": {
+   "partyPxBefore": 277,
+   "partyPxAfter": 299,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.435,
+  "masterMove": 0.436,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.083
+   },
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0.476
+   },
+   {
+    "a": "yuna",
+    "b": "kimahri",
+    "share": 0.323
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.061
+   },
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0.368
+   },
+   {
+    "a": "yuna",
+    "b": "kimahri",
+    "share": 0.214
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 2,
+  "hitsAfter": 2,
+  "faceHitsBefore": 1,
+  "faceHitsAfter": 1,
+  "newHits": [],
+  "worseHits": [
+   {
+    "panel": ".ig-stat-list",
+    "actor": "yuna",
+    "px": 3513,
+    "facePx": 0
+   },
+   {
+    "panel": ".ffx-sensor",
+    "actor": "yuna",
+    "px": 5912,
+    "facePx": 1423
+   }
+  ],
+  "allHitsAfter": [
+   {
+    "panel": ".ig-stat-list",
+    "actor": "yuna",
+    "px": 3513,
+    "facePx": 0
+   },
+   {
+    "panel": ".ffx-sensor",
+    "actor": "yuna",
+    "px": 5912,
+    "facePx": 1423
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   19.6,
+   19.8
+  ]
+ },
+ {
+  "chapter": "seymour-flux",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "kimahri"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 129.3,
+    "pxAfter": 129.3,
+    "pxRatio": 1,
+    "topBefore": 365.1,
+    "topAfter": 365.1,
+    "topMinBefore": 364.7,
+    "topMinAfter": 364.7,
+    "xBefore": 22.2,
+    "wBefore": 120.7,
+    "xAfter": 22.3,
+    "wAfter": 120.8,
+    "hBefore": 129.3,
+    "hAfter": 129.3,
+    "bottomAfter": 494.4,
+    "leftAfter": 22.3,
+    "rightAfter": 143,
+    "visibleInFrameBefore": 0.939,
+    "visibleInFrameAfter": 0.939,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0.061,
+    "offFrameAfter": 0.061,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 229,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 229,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 138.4,
+    "pxAfter": 125.8,
+    "pxRatio": 0.909,
+    "topBefore": 335.6,
+    "topAfter": 348.2,
+    "topMinBefore": 335.4,
+    "topMinAfter": 348,
+    "xBefore": 131,
+    "wBefore": 107.3,
+    "xAfter": 135.9,
+    "wAfter": 97.5,
+    "hBefore": 138.4,
+    "hAfter": 125.8,
+    "bottomAfter": 474,
+    "leftAfter": 135.9,
+    "rightAfter": 233.4,
+    "visibleInFrameBefore": 0.912,
+    "visibleInFrameAfter": 0.937,
+    "visibleBefore": 0.912,
+    "visibleAfter": 0.937,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 200,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 212,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "kimahri",
+    "ratio": 1.211,
+    "worldBefore": 1.82,
+    "worldAfter": 2.204,
+    "worldRatio": 1.211,
+    "pxBefore": 118.4,
+    "pxAfter": 144.1,
+    "pxRatio": 1.217,
+    "topBefore": 302.6,
+    "topAfter": 276.9,
+    "topMinBefore": 302.5,
+    "topMinAfter": 276.8,
+    "xBefore": 80.3,
+    "wBefore": 77.9,
+    "xAfter": 71.8,
+    "wAfter": 94.8,
+    "hBefore": 118.4,
+    "hAfter": 144.1,
+    "bottomAfter": 421,
+    "leftAfter": 71.8,
+    "rightAfter": 166.6,
+    "visibleInFrameBefore": 0.442,
+    "visibleInFrameAfter": 0.574,
+    "visibleBefore": 0.442,
+    "visibleAfter": 0.574,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 167,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 141,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.751,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.945
+   }
+  ],
+  "tallest": {
+   "id": "kimahri",
+   "topMinAfter": 276.8,
+   "topMinBefore": 302.5
+  },
+  "topClearanceAfter": 276.8,
+  "boss": {
+   "before": {
+    "id": "seymour-flux",
+    "h": 185,
+    "top": 137.7
+   },
+   "after": {
+    "id": "seymour-flux",
+    "h": 185,
+    "top": 137.7
+   },
+   "bossPxBefore": 186,
+   "bossPxAfter": 186
+  },
+  "framing": {
+   "partyPxBefore": 130,
+   "partyPxAfter": 134,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.004,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0.38
+   },
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.088
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0.251
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.063
+   },
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0.292
+   },
+   {
+    "a": "yuna",
+    "b": "kimahri",
+    "share": 0.182
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 1,
+  "hitsAfter": 1,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [
+   {
+    "panel": ".ig-stat-list",
+    "actor": "tidus",
+    "px": 1013,
+    "facePx": 0
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   17.2,
+   17.5
+  ]
+ },
+ {
+  "chapter": "seymour-natus",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "kimahri"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.75,
+    "worldAfter": 1.75,
+    "worldRatio": 1,
+    "pxBefore": 200.3,
+    "pxAfter": 200.5,
+    "pxRatio": 1.001,
+    "topBefore": 544.9,
+    "topAfter": 547.2,
+    "topMinBefore": 544.5,
+    "topMinAfter": 546.8,
+    "xBefore": 560.7,
+    "wBefore": 183,
+    "xAfter": 560.9,
+    "wAfter": 183.3,
+    "hBefore": 200.3,
+    "hAfter": 200.5,
+    "bottomAfter": 747.6,
+    "leftAfter": 560.9,
+    "rightAfter": 744.2,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 140,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 142,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.75,
+    "worldAfter": 1.594,
+    "worldRatio": 0.911,
+    "pxBefore": 221.1,
+    "pxAfter": 201.5,
+    "pxRatio": 0.911,
+    "topBefore": 506.4,
+    "topAfter": 528.2,
+    "topMinBefore": 506.3,
+    "topMinAfter": 528.2,
+    "xBefore": 649.5,
+    "wBefore": 164.6,
+    "xAfter": 657.1,
+    "wAfter": 150,
+    "hBefore": 221.1,
+    "hAfter": 201.5,
+    "bottomAfter": 729.7,
+    "leftAfter": 657.1,
+    "rightAfter": 807.1,
+    "visibleInFrameBefore": 0.527,
+    "visibleInFrameAfter": 0.474,
+    "visibleBefore": 0.527,
+    "visibleAfter": 0.474,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 101,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "aboveAfter": {
+     "gap": 123,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "kimahri",
+    "ratio": 1.211,
+    "worldBefore": 1.75,
+    "worldAfter": 2.119,
+    "worldRatio": 1.211,
+    "pxBefore": 230.8,
+    "pxAfter": 280.6,
+    "pxRatio": 1.216,
+    "topBefore": 518.4,
+    "topAfter": 471.4,
+    "topMinBefore": 518.2,
+    "topMinAfter": 471.2,
+    "xBefore": 834.2,
+    "wBefore": 149.9,
+    "xAfter": 819.4,
+    "wAfter": 182.1,
+    "hBefore": 230.8,
+    "hAfter": 280.6,
+    "bottomAfter": 751.9,
+    "leftAfter": 819.4,
+    "rightAfter": 1001.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 113,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "aboveAfter": {
+     "gap": 66,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.751,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.945
+   }
+  ],
+  "tallest": {
+   "id": "kimahri",
+   "topMinAfter": 471.2,
+   "topMinBefore": 518.2
+  },
+  "topClearanceAfter": 471.2,
+  "boss": {
+   "before": {
+    "id": "seymour-natus",
+    "h": 349.7,
+    "top": 231.4
+   },
+   "after": {
+    "id": "seymour-natus",
+    "h": 359.8,
+    "top": 223.1
+   },
+   "bossPxBefore": 340,
+   "bossPxAfter": 359
+  },
+  "framing": {
+   "partyPxBefore": 217,
+   "partyPxAfter": 227,
+   "scaleBefore": 0.45,
+   "scaleAfter": 0.45,
+   "plansBefore": 1,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.024,
+  "masterMove": 0.03,
+  "masterLookMove": 0.01,
+  "lensMove": 0,
+  "masterFov": [
+   28,
+   28
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.473
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.526
+   },
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "kimahri",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   15.2,
+   14.8
+  ]
+ },
+ {
+  "chapter": "seymour-natus",
+  "viewport": "390x844",
+  "party": [
+   "yuna",
+   "tidus",
+   "kimahri"
+  ],
+  "figs": [
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.75,
+    "worldAfter": 1.594,
+    "worldRatio": 0.911,
+    "pxBefore": 126.4,
+    "pxAfter": 114.9,
+    "pxRatio": 0.909,
+    "topBefore": 330,
+    "topAfter": 341.5,
+    "topMinBefore": 329.9,
+    "topMinAfter": 341.3,
+    "xBefore": 96.1,
+    "wBefore": 98.6,
+    "xAfter": 100.6,
+    "wAfter": 89.6,
+    "hBefore": 126.4,
+    "hAfter": 114.9,
+    "bottomAfter": 456.4,
+    "leftAfter": 100.6,
+    "rightAfter": 190.2,
+    "visibleInFrameBefore": 0.513,
+    "visibleInFrameAfter": 0.455,
+    "visibleBefore": 0.513,
+    "visibleAfter": 0.455,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 214,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 225,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.75,
+    "worldAfter": 1.75,
+    "worldRatio": 1,
+    "pxBefore": 118,
+    "pxAfter": 118,
+    "pxRatio": 1,
+    "topBefore": 356,
+    "topAfter": 356,
+    "topMinBefore": 355.8,
+    "topMinAfter": 355.8,
+    "xBefore": 46,
+    "wBefore": 110.5,
+    "xAfter": 46.1,
+    "wAfter": 110.5,
+    "hBefore": 118,
+    "hAfter": 118,
+    "bottomAfter": 474,
+    "leftAfter": 46.1,
+    "rightAfter": 156.6,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 239,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 239,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "kimahri",
+    "ratio": 1.211,
+    "worldBefore": 1.75,
+    "worldAfter": 2.119,
+    "worldRatio": 1.211,
+    "pxBefore": 131.1,
+    "pxAfter": 159.6,
+    "pxRatio": 1.217,
+    "topBefore": 340.7,
+    "topAfter": 312.2,
+    "topMinBefore": 340.6,
+    "topMinAfter": 312.1,
+    "xBefore": 210.3,
+    "wBefore": 89,
+    "xAfter": 201.3,
+    "wAfter": 108.1,
+    "hBefore": 131.1,
+    "hAfter": 159.6,
+    "bottomAfter": 471.8,
+    "leftAfter": 201.3,
+    "rightAfter": 309.4,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 224,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 196,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.751,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.945
+   }
+  ],
+  "tallest": {
+   "id": "kimahri",
+   "topMinAfter": 312.1,
+   "topMinBefore": 340.6
+  },
+  "topClearanceAfter": 312.1,
+  "boss": {
+   "before": {
+    "id": "seymour-natus",
+    "h": 124.8,
+    "top": 202.9
+   },
+   "after": {
+    "id": "seymour-natus",
+    "h": 124.8,
+    "top": 202.9
+   },
+   "bossPxBefore": 124,
+   "bossPxAfter": 124
+  },
+  "framing": {
+   "partyPxBefore": 126,
+   "partyPxAfter": 132,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   28,
+   28
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.487
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "yuna",
+    "b": "tidus",
+    "share": 0.545
+   },
+   {
+    "a": "yuna",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "kimahri",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.1,
+   13.8
+  ]
+ },
+ {
+  "chapter": "seymour-omnis",
+  "viewport": "1600x900",
+  "party": [
+   "yuna",
+   "tidus",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.8,
+    "worldAfter": 1.64,
+    "worldRatio": 0.911,
+    "pxBefore": 264.5,
+    "pxAfter": 230.9,
+    "pxRatio": 0.873,
+    "topBefore": 482.9,
+    "topAfter": 504.3,
+    "topMinBefore": 482.3,
+    "topMinAfter": 503.8,
+    "xBefore": 853,
+    "wBefore": 198.6,
+    "xAfter": 861.8,
+    "wAfter": 173.5,
+    "hBefore": 264.5,
+    "hAfter": 230.9,
+    "bottomAfter": 735.2,
+    "leftAfter": 861.8,
+    "rightAfter": 1035.3,
+    "visibleInFrameBefore": 0.963,
+    "visibleInFrameAfter": 0.994,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0.037,
+    "offFrameAfter": 0.006,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 374,
+     "panel": ".ffx-omr__note"
+    },
+    "aboveAfter": {
+     "gap": 396,
+     "panel": ".ffx-omr__note"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.8,
+    "worldAfter": 1.8,
+    "worldRatio": 1,
+    "pxBefore": 237.8,
+    "pxAfter": 228.2,
+    "pxRatio": 0.959,
+    "topBefore": 515.5,
+    "topAfter": 512.7,
+    "topMinBefore": 514.9,
+    "topMinAfter": 512.3,
+    "xBefore": 529.2,
+    "wBefore": 215,
+    "xAfter": 543,
+    "wAfter": 206.1,
+    "hBefore": 237.8,
+    "hAfter": 228.2,
+    "bottomAfter": 740.9,
+    "leftAfter": 543,
+    "rightAfter": 749.1,
+    "visibleInFrameBefore": 0.997,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0.003,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 227,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "aboveAfter": {
+     "gap": 107,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.8,
+    "worldAfter": 1.912,
+    "worldRatio": 1.062,
+    "pxBefore": 205.9,
+    "pxAfter": 211.8,
+    "pxRatio": 1.028,
+    "topBefore": 451.3,
+    "topAfter": 438.8,
+    "topMinBefore": 451.1,
+    "topMinAfter": 438.6,
+    "xBefore": 735.1,
+    "wBefore": 136.3,
+    "xAfter": 735.2,
+    "wAfter": 140.2,
+    "hBefore": 205.9,
+    "hAfter": 211.8,
+    "bottomAfter": 650.5,
+    "leftAfter": 735.2,
+    "rightAfter": 875.4,
+    "visibleInFrameBefore": 0.839,
+    "visibleInFrameAfter": 0.869,
+    "visibleBefore": 0.839,
+    "visibleAfter": 0.869,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 363,
+     "panel": ".ffx-omr__strip"
+    },
+    "aboveAfter": {
+     "gap": 34,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 438.6,
+   "topMinBefore": 451.1
+  },
+  "topClearanceAfter": 438.6,
+  "boss": {
+   "before": {
+    "id": "seymour-omnis",
+    "h": 375.1,
+    "top": 260.4
+   },
+   "after": {
+    "id": "seymour-omnis",
+    "h": 363.8,
+    "top": 266.1
+   },
+   "bossPxBefore": 378,
+   "bossPxAfter": 367
+  },
+  "framing": {
+   "partyPxBefore": 238,
+   "partyPxAfter": 225,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.449,
+  "masterMove": 0.452,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "yuna",
+    "b": "tidus",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.115
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.046
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "yuna",
+    "b": "tidus",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.067
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.064
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 2,
+  "hitsAfter": 2,
+  "faceHitsBefore": 1,
+  "faceHitsAfter": 1,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [
+   {
+    "panel": ".ig-cmd-stack",
+    "actor": "tidus",
+    "px": 329,
+    "facePx": 110
+   },
+   {
+    "panel": ".ig-stat-list",
+    "actor": "yuna",
+    "px": 2560,
+    "facePx": 0
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.9,
+   14.9
+  ]
+ },
+ {
+  "chapter": "seymour-omnis",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.8,
+    "worldAfter": 1.8,
+    "worldRatio": 1,
+    "pxBefore": 99.9,
+    "pxAfter": 99.8,
+    "pxRatio": 1,
+    "topBefore": 318.6,
+    "topAfter": 318.6,
+    "topMinBefore": 318.3,
+    "topMinAfter": 318.3,
+    "xBefore": 60,
+    "wBefore": 92.2,
+    "xAfter": 60.1,
+    "wAfter": 92.2,
+    "hBefore": 99.9,
+    "hAfter": 99.8,
+    "bottomAfter": 418.5,
+    "leftAfter": 60.1,
+    "rightAfter": 152.3,
+    "visibleInFrameBefore": 0.538,
+    "visibleInFrameAfter": 0.579,
+    "visibleBefore": 0.538,
+    "visibleAfter": 0.579,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 170,
+     "panel": ".ffx-omr__strip"
+    },
+    "aboveAfter": {
+     "gap": 170,
+     "panel": ".ffx-omr__strip"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.8,
+    "worldAfter": 1.64,
+    "worldRatio": 0.911,
+    "pxBefore": 111,
+    "pxAfter": 101,
+    "pxRatio": 0.91,
+    "topBefore": 304.5,
+    "topAfter": 314.5,
+    "topMinBefore": 304.2,
+    "topMinAfter": 314.3,
+    "xBefore": 108.4,
+    "wBefore": 84.8,
+    "xAfter": 112.3,
+    "wAfter": 77.1,
+    "hBefore": 111,
+    "hAfter": 101,
+    "bottomAfter": 415.5,
+    "leftAfter": 112.3,
+    "rightAfter": 189.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 156,
+     "panel": ".ffx-omr__strip"
+    },
+    "aboveAfter": {
+     "gap": 166,
+     "panel": ".ffx-omr__strip"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.8,
+    "worldAfter": 1.912,
+    "worldRatio": 1.062,
+    "pxBefore": 93.7,
+    "pxAfter": 99.6,
+    "pxRatio": 1.063,
+    "topBefore": 278.7,
+    "topAfter": 272.9,
+    "topMinBefore": 278.7,
+    "topMinAfter": 272.8,
+    "xBefore": 93.8,
+    "wBefore": 62.8,
+    "xAfter": 91.8,
+    "wAfter": 66.8,
+    "hBefore": 93.7,
+    "hAfter": 99.6,
+    "bottomAfter": 372.4,
+    "leftAfter": 91.8,
+    "rightAfter": 158.6,
+    "visibleInFrameBefore": 0.31,
+    "visibleInFrameAfter": 0.431,
+    "visibleBefore": 0.31,
+    "visibleAfter": 0.431,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 131,
+     "panel": ".ffx-omr__strip"
+    },
+    "aboveAfter": {
+     "gap": 125,
+     "panel": ".ffx-omr__strip"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 272.8,
+   "topMinBefore": 278.7
+  },
+  "topClearanceAfter": 272.8,
+  "boss": {
+   "before": {
+    "id": "seymour-omnis",
+    "h": 154.9,
+    "top": 181.7
+   },
+   "after": {
+    "id": "seymour-omnis",
+    "h": 154.9,
+    "top": 181.7
+   },
+   "bossPxBefore": 156,
+   "bossPxAfter": 156
+  },
+  "framing": {
+   "partyPxBefore": 102,
+   "partyPxAfter": 101,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.002,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   35,
+   35
+  ],
+  "pairsBefore": [
+   {
+    "a": "yuna",
+    "b": "tidus",
+    "share": 0.462
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.557
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.535
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.498
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.49
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0.403
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 2,
+  "hitsAfter": 2,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [
+   {
+    "panel": ".ffx-omr__intent",
+    "actor": "tidus",
+    "px": 1610,
+    "facePx": 0
+   },
+   {
+    "panel": ".ffx-omr__intent",
+    "actor": "yuna",
+    "px": 1122,
+    "facePx": 0
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.6,
+   13.8
+  ]
+ },
+ {
+  "chapter": "sin-face",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 178.9,
+    "pxAfter": 178.9,
+    "pxRatio": 1,
+    "topBefore": 516.5,
+    "topAfter": 516.5,
+    "topMinBefore": 516.2,
+    "topMinAfter": 516.3,
+    "xBefore": 738.3,
+    "wBefore": 157.8,
+    "xAfter": 738.3,
+    "wAfter": 157.8,
+    "hBefore": 178.9,
+    "hAfter": 178.9,
+    "bottomAfter": 695.4,
+    "leftAfter": 738.3,
+    "rightAfter": 896,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": null,
+    "aboveAfter": null,
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 158.8,
+    "pxAfter": 144.6,
+    "pxRatio": 0.91,
+    "topBefore": 475,
+    "topAfter": 489.1,
+    "topMinBefore": 474.8,
+    "topMinAfter": 489,
+    "xBefore": 621.1,
+    "wBefore": 118.3,
+    "xAfter": 626.3,
+    "wAfter": 107.7,
+    "hBefore": 158.8,
+    "hAfter": 144.6,
+    "bottomAfter": 633.7,
+    "leftAfter": 626.3,
+    "rightAfter": 733.9,
+    "visibleInFrameBefore": 0.994,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 0.994,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 95,
+     "panel": ".ffx-sinhud__gaze"
+    },
+    "aboveAfter": {
+     "gap": 109,
+     "panel": ".ffx-sinhud__gaze"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 160,
+    "pxAfter": 170,
+    "pxRatio": 1.062,
+    "topBefore": 475.4,
+    "topAfter": 465.4,
+    "topMinBefore": 475.3,
+    "topMinAfter": 465.4,
+    "xBefore": 906.6,
+    "wBefore": 106.2,
+    "xAfter": 903.3,
+    "wAfter": 112.8,
+    "hBefore": 160,
+    "hAfter": 170,
+    "bottomAfter": 635.4,
+    "leftAfter": 903.3,
+    "rightAfter": 1016.1,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": null,
+    "aboveAfter": null,
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 465.4,
+   "topMinBefore": 475.3
+  },
+  "topClearanceAfter": 465.4,
+  "boss": {
+   "before": {
+    "id": "overdrive-sin",
+    "h": 527.2,
+    "top": -110.4
+   },
+   "after": {
+    "id": "overdrive-sin",
+    "h": 527.2,
+    "top": -110.6
+   },
+   "bossPxBefore": 0,
+   "bossPxAfter": 0
+  },
+  "framing": {
+   "partyPxBefore": null,
+   "partyPxAfter": null,
+   "scaleBefore": 0,
+   "scaleAfter": 0,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": null,
+   "liveOkAfter": null
+  },
+  "cameraMove": 0,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   36,
+   36
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.007
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.5,
+   14.6
+  ]
+ },
+ {
+  "chapter": "sin-face",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 102.9,
+    "pxAfter": 102.9,
+    "pxRatio": 1,
+    "topBefore": 277.5,
+    "topAfter": 277.5,
+    "topMinBefore": 277.4,
+    "topMinAfter": 277.4,
+    "xBefore": 82.6,
+    "wBefore": 90.9,
+    "xAfter": 78.6,
+    "wAfter": 90.9,
+    "hBefore": 102.9,
+    "hAfter": 102.9,
+    "bottomAfter": 380.4,
+    "leftAfter": 78.6,
+    "rightAfter": 169.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 145,
+     "panel": ".ffx-sinhud__gaze"
+    },
+    "aboveAfter": {
+     "gap": 145,
+     "panel": ".ffx-sinhud__gaze"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 91.5,
+    "pxAfter": 83.3,
+    "pxRatio": 0.91,
+    "topBefore": 253.6,
+    "topAfter": 261.8,
+    "topMinBefore": 253.5,
+    "topMinAfter": 261.7,
+    "xBefore": 15.1,
+    "wBefore": 68.1,
+    "xAfter": 14.1,
+    "wAfter": 62,
+    "hBefore": 91.5,
+    "hAfter": 83.3,
+    "bottomAfter": 345,
+    "leftAfter": 14.1,
+    "rightAfter": 76.1,
+    "visibleInFrameBefore": 0.994,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 0.994,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 156,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 165,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 92.2,
+    "pxAfter": 97.9,
+    "pxRatio": 1.062,
+    "topBefore": 253.8,
+    "topAfter": 248.1,
+    "topMinBefore": 253.8,
+    "topMinAfter": 248.1,
+    "xBefore": 179.6,
+    "wBefore": 61.6,
+    "xAfter": 173.8,
+    "wAfter": 65.4,
+    "hBefore": 92.2,
+    "hAfter": 97.9,
+    "bottomAfter": 346,
+    "leftAfter": 173.8,
+    "rightAfter": 239.2,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 122,
+     "panel": ".ffx-sinhud__gaze"
+    },
+    "aboveAfter": {
+     "gap": 116,
+     "panel": ".ffx-sinhud__gaze"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 248.1,
+   "topMinBefore": 253.8
+  },
+  "topClearanceAfter": 248.1,
+  "boss": {
+   "before": {
+    "id": "overdrive-sin",
+    "h": 308.2,
+    "top": -88.3
+   },
+   "after": {
+    "id": "overdrive-sin",
+    "h": 308.2,
+    "top": -88.3
+   },
+   "bossPxBefore": 0,
+   "bossPxAfter": 0
+  },
+  "framing": {
+   "partyPxBefore": null,
+   "partyPxAfter": null,
+   "scaleBefore": 0,
+   "scaleAfter": 0,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": null,
+   "liveOkAfter": null
+  },
+  "cameraMove": 0,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   36,
+   36
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.006
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.4,
+   14.5
+  ]
+ },
+ {
+  "chapter": "sin-fins-core",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 179.3,
+    "pxAfter": 179.3,
+    "pxRatio": 1,
+    "topBefore": 516.2,
+    "topAfter": 516.2,
+    "topMinBefore": 516,
+    "topMinAfter": 516,
+    "xBefore": 737.8,
+    "wBefore": 158.2,
+    "xAfter": 737.8,
+    "wAfter": 158.2,
+    "hBefore": 179.3,
+    "hAfter": 179.3,
+    "bottomAfter": 695.5,
+    "leftAfter": 737.8,
+    "rightAfter": 896,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 383,
+     "panel": ".ffx-sinfin"
+    },
+    "aboveAfter": {
+     "gap": 383,
+     "panel": ".ffx-sinfin"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 158.3,
+    "pxAfter": 144.2,
+    "pxRatio": 0.911,
+    "topBefore": 475.2,
+    "topAfter": 489.4,
+    "topMinBefore": 475.2,
+    "topMinAfter": 489.3,
+    "xBefore": 621,
+    "wBefore": 117.6,
+    "xAfter": 626.2,
+    "wAfter": 107.1,
+    "hBefore": 158.3,
+    "hAfter": 144.2,
+    "bottomAfter": 633.6,
+    "leftAfter": 626.2,
+    "rightAfter": 733.3,
+    "visibleInFrameBefore": 0.996,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 0.996,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": null,
+    "aboveAfter": null,
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 159.8,
+    "pxAfter": 169.8,
+    "pxRatio": 1.062,
+    "topBefore": 475.4,
+    "topAfter": 465.5,
+    "topMinBefore": 475.3,
+    "topMinAfter": 465.3,
+    "xBefore": 906.6,
+    "wBefore": 105.9,
+    "xAfter": 903.3,
+    "wAfter": 112.5,
+    "hBefore": 159.8,
+    "hAfter": 169.8,
+    "bottomAfter": 635.3,
+    "leftAfter": 903.3,
+    "rightAfter": 1015.8,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 342,
+     "panel": ".ffx-sinfin"
+    },
+    "aboveAfter": {
+     "gap": 332,
+     "panel": ".ffx-sinfin"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 465.3,
+   "topMinBefore": 475.3
+  },
+  "topClearanceAfter": 465.3,
+  "boss": {
+   "before": {
+    "id": "left-fin",
+    "h": 444.7,
+    "top": 122.3
+   },
+   "after": {
+    "id": "left-fin",
+    "h": 444.7,
+    "top": 122.1
+   },
+   "bossPxBefore": 0,
+   "bossPxAfter": 0
+  },
+  "framing": {
+   "partyPxBefore": null,
+   "partyPxAfter": null,
+   "scaleBefore": 0,
+   "scaleAfter": 0,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": null,
+   "liveOkAfter": null
+  },
+  "cameraMove": 0.001,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   36,
+   36
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.005
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   15.2,
+   14.5
+  ]
+ },
+ {
+  "chapter": "sin-fins-core",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 103.5,
+    "pxAfter": 103.6,
+    "pxRatio": 1,
+    "topBefore": 298.3,
+    "topAfter": 298.3,
+    "topMinBefore": 298.2,
+    "topMinAfter": 298.2,
+    "xBefore": 159.1,
+    "wBefore": 91.4,
+    "xAfter": 159,
+    "wAfter": 91.4,
+    "hBefore": 103.5,
+    "hAfter": 103.6,
+    "bottomAfter": 401.9,
+    "leftAfter": 159,
+    "rightAfter": 250.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 109,
+     "panel": ".ffx-sinfin"
+    },
+    "aboveAfter": {
+     "gap": 109,
+     "panel": ".ffx-sinfin"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 91.5,
+    "pxAfter": 83.3,
+    "pxRatio": 0.911,
+    "topBefore": 274.6,
+    "topAfter": 282.8,
+    "topMinBefore": 274.5,
+    "topMinAfter": 282.7,
+    "xBefore": 91.4,
+    "wBefore": 68,
+    "xAfter": 94.5,
+    "wAfter": 61.9,
+    "hBefore": 91.5,
+    "hAfter": 83.3,
+    "bottomAfter": 366.1,
+    "leftAfter": 94.5,
+    "rightAfter": 156.4,
+    "visibleInFrameBefore": 0.998,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 0.998,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 85,
+     "panel": ".ffx-sinfin"
+    },
+    "aboveAfter": {
+     "gap": 94,
+     "panel": ".ffx-sinfin"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 92.4,
+    "pxAfter": 98.1,
+    "pxRatio": 1.062,
+    "topBefore": 274.7,
+    "topAfter": 269,
+    "topMinBefore": 274.6,
+    "topMinAfter": 268.9,
+    "xBefore": 256.6,
+    "wBefore": 61.3,
+    "xAfter": 254.7,
+    "wAfter": 65,
+    "hBefore": 92.4,
+    "hAfter": 98.1,
+    "bottomAfter": 367.1,
+    "leftAfter": 254.7,
+    "rightAfter": 319.8,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 86,
+     "panel": ".ffx-sinfin"
+    },
+    "aboveAfter": {
+     "gap": 80,
+     "panel": ".ffx-sinfin"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 268.9,
+   "topMinBefore": 274.6
+  },
+  "topClearanceAfter": 268.9,
+  "boss": {
+   "before": {
+    "id": "left-fin",
+    "h": 257.3,
+    "top": 108.5
+   },
+   "after": {
+    "id": "left-fin",
+    "h": 257.3,
+    "top": 108.3
+   },
+   "bossPxBefore": 0,
+   "bossPxAfter": 0
+  },
+  "framing": {
+   "partyPxBefore": null,
+   "partyPxAfter": null,
+   "scaleBefore": 0,
+   "scaleAfter": 0,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": null,
+   "liveOkAfter": null
+  },
+  "cameraMove": 0.001,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   36,
+   36
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.003
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   14.1,
+   14.3
+  ]
+ },
+ {
+  "chapter": "yojimbo-cavern",
+  "viewport": "1600x900",
+  "party": [
+   "lulu",
+   "kimahri",
+   "yuna"
+  ],
+  "figs": [
+   {
+    "id": "lulu",
+    "ratio": 0.99,
+    "worldBefore": 1.75,
+    "worldAfter": 1.733,
+    "worldRatio": 0.99,
+    "pxBefore": 216.9,
+    "pxAfter": 214.7,
+    "pxRatio": 0.99,
+    "topBefore": 580.3,
+    "topAfter": 582.4,
+    "topMinBefore": 580.1,
+    "topMinAfter": 582.3,
+    "xBefore": 544.1,
+    "wBefore": 95.7,
+    "xAfter": 544.2,
+    "wAfter": 94.9,
+    "hBefore": 216.9,
+    "hAfter": 214.7,
+    "bottomAfter": 797.2,
+    "leftAfter": 544.2,
+    "rightAfter": 639.1,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": null,
+    "aboveAfter": null,
+    "feetMovedWorld": 0.002,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.614,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.772
+   },
+   {
+    "id": "kimahri",
+    "ratio": 1.211,
+    "worldBefore": 1.75,
+    "worldAfter": 2.119,
+    "worldRatio": 1.211,
+    "pxBefore": 207.3,
+    "pxAfter": 252.2,
+    "pxRatio": 1.217,
+    "topBefore": 567.6,
+    "topAfter": 523.7,
+    "topMinBefore": 567.3,
+    "topMinAfter": 523.3,
+    "xBefore": 668.3,
+    "wBefore": 191.2,
+    "xAfter": 658.2,
+    "wAfter": 231.9,
+    "hBefore": 207.3,
+    "hAfter": 252.2,
+    "bottomAfter": 775.8,
+    "leftAfter": 658.2,
+    "rightAfter": 890.1,
+    "visibleInFrameBefore": 0.745,
+    "visibleInFrameAfter": 0.773,
+    "visibleBefore": 0.745,
+    "visibleAfter": 0.773,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 409,
+     "panel": ".ffx-zg__panel"
+    },
+    "aboveAfter": {
+     "gap": 366,
+     "panel": ".ffx-zg__panel"
+    },
+    "feetMovedWorld": 0.002,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.751,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.945
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.75,
+    "worldAfter": 1.594,
+    "worldRatio": 0.911,
+    "pxBefore": 216.5,
+    "pxAfter": 196.9,
+    "pxRatio": 0.91,
+    "topBefore": 579.5,
+    "topAfter": 599,
+    "topMinBefore": 579.2,
+    "topMinAfter": 598.7,
+    "xBefore": 807.9,
+    "wBefore": 169.2,
+    "xAfter": 815,
+    "wAfter": 153.8,
+    "hBefore": 216.5,
+    "hAfter": 196.9,
+    "bottomAfter": 796,
+    "leftAfter": 815,
+    "rightAfter": 968.8,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 421,
+     "panel": ".ffx-zg__panel"
+    },
+    "aboveAfter": {
+     "gap": 441,
+     "panel": ".ffx-zg__panel"
+    },
+    "feetMovedWorld": 0.002,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   }
+  ],
+  "tallest": {
+   "id": "kimahri",
+   "topMinAfter": 523.3,
+   "topMinBefore": 567.3
+  },
+  "topClearanceAfter": 523.3,
+  "boss": {
+   "before": {
+    "id": "yojimbo",
+    "h": 250.8,
+    "top": 318.3
+   },
+   "after": {
+    "id": "yojimbo",
+    "h": 260.2,
+    "top": 308.9
+   },
+   "bossPxBefore": 250,
+   "bossPxAfter": 260
+  },
+  "framing": {
+   "partyPxBefore": 213,
+   "partyPxAfter": 220,
+   "scaleBefore": 1,
+   "scaleAfter": 1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.001,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   28,
+   28
+  ],
+  "pairsBefore": [
+   {
+    "a": "lulu",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "lulu",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0.276
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "lulu",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "lulu",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0.438
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [
+   "kimahri"
+  ],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   21.4,
+   17.7
+  ]
+ },
+ {
+  "chapter": "yojimbo-cavern",
+  "viewport": "390x844",
+  "party": [
+   "lulu",
+   "kimahri",
+   "yuna"
+  ],
+  "figs": [
+   {
+    "id": "lulu",
+    "ratio": 0.99,
+    "worldBefore": 1.75,
+    "worldAfter": 1.733,
+    "worldRatio": 0.99,
+    "pxBefore": 130.3,
+    "pxAfter": 129,
+    "pxRatio": 0.99,
+    "topBefore": 274.8,
+    "topAfter": 276.1,
+    "topMinBefore": 274.7,
+    "topMinAfter": 276,
+    "xBefore": 18.6,
+    "wBefore": 63.1,
+    "xAfter": 18.9,
+    "wAfter": 62.6,
+    "hBefore": 130.3,
+    "hAfter": 129,
+    "bottomAfter": 405.1,
+    "leftAfter": 18.9,
+    "rightAfter": 81.5,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 139,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 140,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.614,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.772
+   },
+   {
+    "id": "kimahri",
+    "ratio": 1.211,
+    "worldBefore": 1.75,
+    "worldAfter": 2.119,
+    "worldRatio": 1.211,
+    "pxBefore": 124.2,
+    "pxAfter": 151.4,
+    "pxRatio": 1.219,
+    "topBefore": 267.3,
+    "topAfter": 240.6,
+    "topMinBefore": 267.1,
+    "topMinAfter": 240.4,
+    "xBefore": 99.6,
+    "wBefore": 119.6,
+    "xAfter": 92.8,
+    "wAfter": 145.1,
+    "hBefore": 124.2,
+    "hAfter": 151.4,
+    "bottomAfter": 392,
+    "leftAfter": 92.8,
+    "rightAfter": 237.9,
+    "visibleInFrameBefore": 0.699,
+    "visibleInFrameAfter": 0.75,
+    "visibleBefore": 0.699,
+    "visibleAfter": 0.75,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 132,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 105,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.751,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.945
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.75,
+    "worldAfter": 1.594,
+    "worldRatio": 0.911,
+    "pxBefore": 130.6,
+    "pxAfter": 118.6,
+    "pxRatio": 0.908,
+    "topBefore": 275.4,
+    "topAfter": 287.3,
+    "topMinBefore": 275.2,
+    "topMinAfter": 287.3,
+    "xBefore": 180.7,
+    "wBefore": 103.5,
+    "xAfter": 185.4,
+    "wAfter": 94,
+    "hBefore": 130.6,
+    "hAfter": 118.6,
+    "bottomAfter": 405.9,
+    "leftAfter": 185.4,
+    "rightAfter": 279.4,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 140,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 0,
+     "panel": ".ffx-zg__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   }
+  ],
+  "tallest": {
+   "id": "kimahri",
+   "topMinAfter": 240.4,
+   "topMinBefore": 267.1
+  },
+  "topClearanceAfter": 240.4,
+  "boss": {
+   "before": {
+    "id": "yojimbo",
+    "h": 128.9,
+    "top": 135.7
+   },
+   "after": {
+    "id": "yojimbo",
+    "h": 128.9,
+    "top": 135.7
+   },
+   "bossPxBefore": 126,
+   "bossPxAfter": 126
+  },
+  "framing": {
+   "partyPxBefore": 128,
+   "partyPxAfter": 133,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.001,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   29,
+   29
+  ],
+  "pairsBefore": [
+   {
+    "a": "lulu",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "lulu",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0.331
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "lulu",
+    "b": "kimahri",
+    "share": 0
+   },
+   {
+    "a": "lulu",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "kimahri",
+    "b": "yuna",
+    "share": 0.493
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [
+   "kimahri"
+  ],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 3,
+  "hitsAfter": 2,
+  "faceHitsBefore": 3,
+  "faceHitsAfter": 2,
+  "newHits": [],
+  "worseHits": [
+   {
+    "panel": ".ffx-zg__panel",
+    "actor": "kimahri",
+    "px": 6737,
+    "facePx": 6737
+   }
+  ],
+  "allHitsAfter": [
+   {
+    "panel": ".ffx-zg__panel",
+    "actor": "lulu",
+    "px": 684,
+    "facePx": 684
+   },
+   {
+    "panel": ".ffx-zg__panel",
+    "actor": "kimahri",
+    "px": 6737,
+    "facePx": 6737
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   17.8,
+   17
+  ]
+ },
+ {
+  "chapter": "yunalesca",
+  "viewport": "1600x900",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 292,
+    "pxAfter": 292.3,
+    "pxRatio": 1.001,
+    "topBefore": 505.1,
+    "topAfter": 504.9,
+    "topMinBefore": 504.5,
+    "topMinAfter": 504.3,
+    "xBefore": 758.3,
+    "wBefore": 258.6,
+    "xAfter": 758.1,
+    "wAfter": 259,
+    "hBefore": 292,
+    "hAfter": 292.3,
+    "bottomAfter": 797.2,
+    "leftAfter": 758.1,
+    "rightAfter": 1017.1,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 110,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 119,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 293.1,
+    "pxAfter": 266.7,
+    "pxRatio": 0.91,
+    "topBefore": 449.6,
+    "topAfter": 475.9,
+    "topMinBefore": 449.5,
+    "topMinAfter": 475.9,
+    "xBefore": 543.9,
+    "wBefore": 219.7,
+    "xAfter": 553.9,
+    "wAfter": 200,
+    "hBefore": 293.1,
+    "hAfter": 266.7,
+    "bottomAfter": 742.6,
+    "leftAfter": 553.9,
+    "rightAfter": 753.9,
+    "visibleInFrameBefore": 0.981,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 0.981,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 55,
+     "panel": ".mad__card"
+    },
+    "aboveAfter": {
+     "gap": 91,
+     "panel": ".mad__card"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 252,
+    "pxAfter": 267.8,
+    "pxRatio": 1.063,
+    "topBefore": 432.3,
+    "topAfter": 416.5,
+    "topMinBefore": 432.1,
+    "topMinAfter": 416.2,
+    "xBefore": 903.2,
+    "wBefore": 168,
+    "xAfter": 898,
+    "wAfter": 178.6,
+    "hBefore": 252,
+    "hAfter": 267.8,
+    "bottomAfter": 684.3,
+    "leftAfter": 898,
+    "rightAfter": 1076.7,
+    "visibleInFrameBefore": 0.485,
+    "visibleInFrameAfter": 0.52,
+    "visibleBefore": 0.519,
+    "visibleAfter": 0.554,
+    "offFrameBefore": 0.033,
+    "offFrameAfter": 0.034,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 37,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "aboveAfter": {
+     "gap": 31,
+     "panel": "[data-role=\"move-advisor-card\"]"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 416.2,
+   "topMinBefore": 432.1
+  },
+  "topClearanceAfter": 416.2,
+  "boss": {
+   "before": {
+    "id": "yunalesca",
+    "h": 427.8,
+    "top": 166.3
+   },
+   "after": {
+    "id": "yunalesca",
+    "h": 427.7,
+    "top": 166.3
+   },
+   "bossPxBefore": 428,
+   "bossPxAfter": 428
+  },
+  "framing": {
+   "partyPxBefore": 281,
+   "partyPxAfter": 277,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 1,
+   "plansAfter": 1,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.008,
+  "masterMove": 0,
+  "masterLookMove": 0,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.019
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.482
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.447
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 3,
+  "hitsAfter": 2,
+  "faceHitsBefore": 1,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [
+   {
+    "panel": ".ig-stat-list",
+    "actor": "tidus",
+    "px": 1583,
+    "facePx": 0
+   },
+   {
+    "panel": ".ig-stat-list",
+    "actor": "auron",
+    "px": 2701,
+    "facePx": 0
+   }
+  ],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   16.8,
+   16.4
+  ]
+ },
+ {
+  "chapter": "yunalesca",
+  "viewport": "390x844",
+  "party": [
+   "tidus",
+   "yuna",
+   "auron"
+  ],
+  "figs": [
+   {
+    "id": "tidus",
+    "ratio": 1,
+    "worldBefore": 1.82,
+    "worldAfter": 1.82,
+    "worldRatio": 1,
+    "pxBefore": 138.1,
+    "pxAfter": 140.3,
+    "pxRatio": 1.016,
+    "topBefore": 312.4,
+    "topAfter": 315.7,
+    "topMinBefore": 312.1,
+    "topMinAfter": 315.4,
+    "xBefore": 121.4,
+    "wBefore": 122.2,
+    "xAfter": 118.9,
+    "wAfter": 124.2,
+    "hBefore": 138.1,
+    "hAfter": 140.3,
+    "bottomAfter": 456,
+    "leftAfter": 118.9,
+    "rightAfter": 243.1,
+    "visibleInFrameBefore": 1,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 1,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 177,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 180,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.62,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.78
+   },
+   {
+    "id": "yuna",
+    "ratio": 0.911,
+    "worldBefore": 1.82,
+    "worldAfter": 1.658,
+    "worldRatio": 0.911,
+    "pxBefore": 141.3,
+    "pxAfter": 130.5,
+    "pxRatio": 0.924,
+    "topBefore": 285.6,
+    "topAfter": 301,
+    "topMinBefore": 285.6,
+    "topMinAfter": 301,
+    "xBefore": 16.3,
+    "wBefore": 105.7,
+    "xAfter": 16.8,
+    "wAfter": 97.8,
+    "hBefore": 141.3,
+    "hAfter": 130.5,
+    "bottomAfter": 431.5,
+    "leftAfter": 16.8,
+    "rightAfter": 114.6,
+    "visibleInFrameBefore": 0.995,
+    "visibleInFrameAfter": 1,
+    "visibleBefore": 0.995,
+    "visibleAfter": 1,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": false,
+    "chk011After": false,
+    "aboveBefore": {
+     "gap": 150,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 165,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.565,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.711
+   },
+   {
+    "id": "auron",
+    "ratio": 1.062,
+    "worldBefore": 1.82,
+    "worldAfter": 1.933,
+    "worldRatio": 1.062,
+    "pxBefore": 124.3,
+    "pxAfter": 133.8,
+    "pxRatio": 1.077,
+    "topBefore": 276.3,
+    "topAfter": 270.5,
+    "topMinBefore": 276.2,
+    "topMinAfter": 270.3,
+    "xBefore": 188.5,
+    "wBefore": 82.9,
+    "xAfter": 184.4,
+    "wAfter": 89.2,
+    "hBefore": 124.3,
+    "hAfter": 133.8,
+    "bottomAfter": 404.3,
+    "leftAfter": 184.4,
+    "rightAfter": 273.5,
+    "visibleInFrameBefore": 0.528,
+    "visibleInFrameAfter": 0.564,
+    "visibleBefore": 0.528,
+    "visibleAfter": 0.564,
+    "offFrameBefore": 0,
+    "offFrameAfter": 0,
+    "chk011Before": true,
+    "chk011After": true,
+    "aboveBefore": {
+     "gap": 141,
+     "panel": ".eint__panel"
+    },
+    "aboveAfter": {
+     "gap": 135,
+     "panel": ".eint__panel"
+    },
+    "feetMovedWorld": 0,
+    "shadowBaseBefore": 0.62,
+    "shadowBaseAfter": 0.658,
+    "ringBaseBefore": 0.78,
+    "ringBaseAfter": 0.828
+   }
+  ],
+  "tallest": {
+   "id": "auron",
+   "topMinAfter": 270.3,
+   "topMinBefore": 276.2
+  },
+  "topClearanceAfter": 270.3,
+  "boss": {
+   "before": {
+    "id": "yunalesca",
+    "h": 225.6,
+    "top": 136.4
+   },
+   "after": {
+    "id": "yunalesca",
+    "h": 228.1,
+    "top": 136.5
+   },
+   "bossPxBefore": 226,
+   "bossPxAfter": 228
+  },
+  "framing": {
+   "partyPxBefore": 135,
+   "partyPxAfter": 136,
+   "scaleBefore": -1,
+   "scaleAfter": -1,
+   "plansBefore": 2,
+   "plansAfter": 2,
+   "liveOkBefore": false,
+   "liveOkAfter": false
+  },
+  "cameraMove": 0.177,
+  "masterMove": 0.181,
+  "masterLookMove": 0.02,
+  "lensMove": 0,
+  "masterFov": [
+   32,
+   32
+  ],
+  "pairsBefore": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0.005
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.472
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "pairsAfter": [
+   {
+    "a": "tidus",
+    "b": "yuna",
+    "share": 0
+   },
+   {
+    "a": "tidus",
+    "b": "auron",
+    "share": 0.436
+   },
+   {
+    "a": "yuna",
+    "b": "auron",
+    "share": 0
+   }
+  ],
+  "newChk011": [],
+  "fixedChk011": [],
+  "keyFeatureHitsBefore": 0,
+  "keyFeatureHitsAfter": 0,
+  "keyFeaturesBefore": 0,
+  "keyFeaturesAfter": 0,
+  "keyFeatureHitsAfterList": [],
+  "keyFeatureHitsBeforeList": [],
+  "hitsBefore": 0,
+  "hitsAfter": 0,
+  "faceHitsBefore": 0,
+  "faceHitsAfter": 0,
+  "newHits": [],
+  "worseHits": [],
+  "allHitsAfter": [],
+  "errors": [],
+  "gl": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "seconds": [
+   16.1,
+   21.9
+  ]
+ }
+]

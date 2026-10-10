@@ -140,8 +140,8 @@ describe('the volley planner (§4.1; B12 = a)', () => {
   });
 });
 
-describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
-  it("Wakka reaches a disc and his hit turns it left, -1 on the script's ring (Fire -> Thunder); the disc takes 0 and stands", () => {
+describe("turning the discs (§4.3; along the game's own ring, O-7: a blow steps back, a spell forward)", () => {
+  it('Wakka reaches a disc and his hit turns it left (Fire -> Thunder); the disc takes 0 and stands', () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     const d = inputFor(e, 'wakka');
@@ -161,7 +161,7 @@ describe('turning the discs (§4.3; the ring is our estimate, B8 = b)', () => {
     expect(actor(e, OMNIS).affinities).toEqual({ fire: 'absorb', lightning: 'resist' });
   });
 
-  it("Lulu's Blizzara turns a disc right, +1 on the script's ring (Fire -> Ice)", () => {
+  it("Lulu's Blizzara turns a disc right (Fire -> Ice)", () => {
     const e = newEngine(2, lineUp(['wakka', 'lulu', 'tidus']));
     makeInvincible(e);
     inputFor(e, 'lulu');

@@ -30,4 +30,6 @@ export interface Decision {
   report: Partial<FramingReport>;
   /** The size each boss plays from here on (`scaleLock.ts`); null: none is sized (or the phone, which keeps today's rig). */
   lock: ScaleLock | null;
+  /** The plan plays a giant's own camera (`giants.ts`, r3942-stage wave 2): the table's pose, held by the plan like the table's pin (no live re-plan). */
+  giant?: boolean;
 }

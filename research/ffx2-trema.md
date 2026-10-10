@@ -637,3 +637,44 @@ Everything else (stats, action list, DCs, copy lists, the once-only Final Impact
 **Status.** `[single source — FF Wiki; GameFAQs silent; our estimate]`. The Steam session can confirm it only with a Cloister 100 save, which we do not have (`observed-trema-steam-2026-09-25.md`).
 
 **What it means for the chapter (a recommendation, not built).** Chapter XIII should end with **no victory pose**: the girls hold their battle stance while the post-battle scene runs (§7.2), as Chapter 4 does after Bahamut. The sources speak only of the **pose**. They say nothing about the fanfare or the victory quips after Trema, and the chapter's post script already cuts the music as the scene begins. The presentation program's A-4 (`docs/plans/presentation-program-2026-09-26.md`) adds a `victoryPose: 'pose' | 'hold'` presenter port; the recommendation is to set Chapter XIII's `src/data/chapter-meta-trema.ts` value to `'hold'` in A-4's batch-4 step, beside II, IV and V. A-4's `'hold'` also keeps the victory cue quiet; for Trema that part is `[ours]`, because no source mentions a fanfare either way.
+
+## 14. Research addendum (2026-10-08): how tall Trema really stands (the HD model)
+
+**FFX-2 only** (rule 14: this is FFX-2's Trema). Asked because Chapter XIII drew Trema at 0.72 of Paragon (2.23 against girls of 1.75, 1.27 times them) far back, so he read 0.80 of a girl on screen, and the build is moving to real sizes (Bailey, 2026-10-07: "I'll go with your recommendations full speed": real game sizes for everyone, heroes and bosses together, the camera unchanged). This section is the measurement behind Trema's row in `src/data/ffx2/fiend-stature.ts`. Paragon and Oversoul are giants (94.3 tall, 298 wide) and are not in the table.
+
+**14.1 Method.** The Steam *FINAL FANTASY X/X-2 HD Remaster* files on this PC, FFX-2 build 25501027, read with the project's own reverse-engineering lane (`D:/Tools/rea`, outside the repository; facts only: no game file, model, text or decompiled code is in this repository). The engine's size law, read from the game's model loader and its world-matrix builder: **a model's world size is its mesh size in the HD files times the engine scale `C` (a float in the params block of the model's `.chr`) times the AI script's scale vector** (1 here). Trema is a human-sized monster and carries `C = 1`; the monster records for Trema (monster 295 and the later 328, both 999,999 HP) name the same model, `m295`. `[single source: own measurement]`
+
+**14.2 The table** (game units; the girls' side is the mean of the three dresspheres Chapter XIII's party wears, Dark Knight Yuna `c013` 17.07, Alchemist Rikku `c023` 17.46 and Dark Knight Paine `c053` 17.87 from the game's own job table, **17.47**):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Trema | `m295` | 17.808 | 1 | **17.808** | 17 | **1.02** |
+
+Trema's stored engine height (17) is 5 percent under the mesh, as it is for most humans (a median of 0.96 across the 262 FFX models at `C = 1`, 0.93 in FFX-2). `[single source: own measurement]`
+
+**14.3 The caveat that goes with the number: about 5 percent.** A bind-pose silhouette with the hat and the staff included, one reader, one build. The painting we draw is Trema stooped on his staff and our own; the table sets how tall he stands next to a girl.
+
+**14.4 Not found, and so not claimed.** (a) **The lens.** The game's formation for this fight has Trema at (-25, 0, 0) and the girls at (30, 0, 0), (25, 0, 18) and (25, 0, -18) in game units (y up-negative: 55 units, or about five and a half world units, between him and the girls, on one line), `[datamined: build 25501027]`; the files hold no camera that would say how big he reads on screen, so the distance and the camera in `src/scenes/cloister-100.ts` are ours. (b) An idle-pose height.
+
+**14.5 What the build does with it.** Chapter XIII draws Trema at 1.02 of the girls' standing height (1.75): 1.784 world units, in place of 2.23, and he stands where 39.4.1 stood him, on the beast's spot (x 1.05, z -5.8; wave 1 had brought him beside the girls at x 1.3, z -0.6, which Bailey withdrew on 2026-10-08 with "Yes, original spacing", the real sizes staying), so he reads 0.63 of a girl at 1600x900 (0.80 live; real at the same distance 1.02) and 0.65 on the phone (0.87 live). Both Paragon links keep the beast's spot and height. Presentation only: the battle engine's output is unchanged; the camera is the same pose at 1600x900 (on the phone the slice fit stands nearer than live's, the girls 154 px against 125, because this link no longer inherits Paragon's old fit: `docs/handoff/r3942-stage.md`).
+
+
+## 15. Research addendum (2026-10-08): how tall Paragon and Oversoul really stand (the HD model)
+
+**FFX-2 only** (rule 14: this is FFX-2's Paragon, and Oversoul Paragon, which is the same model, `m152`, link 1 of Chapter XIII). Asked because Chapter XIII drew Paragon at 3.1 against girls of 1.75 (1.77 times a girl, 1.12 on screen), a number that §14 above left alone ("Paragon and Oversoul are giants and are not in the table"), and Bailey took the giants options round of 2026-10-08 (option 3 on a desktop, option 4 on the phone: "go with your recommendations"). This section is the measurement behind Paragon's row in `src/data/ffx2/fiend-stature.ts`.
+
+**15.1 Method.** As 14.1: the HD files of FFX-2 build 25501027, the engine's size law, Paragon a beast with `C = 4`. Paragon and Oversoul Paragon are one model (`m152`), so one row serves both forms. `[single source: own measurement]`
+
+**15.2 The table** (game units; the girls' side is Chapter XIII's, **17.47**, as 14.2):
+
+| Fiend | Model | Raw mesh height | C | Height (raw x C) | Engine height E (a design height) | Over the girls |
+|---|---|---|---|---|---|---|
+| Paragon and Oversoul | `m152` | 23.573 | 4 | **94.29** (298 wide, 215 deep) | 90 | **5.40** |
+
+The stored engine height (90) is 5 percent under the mesh: high confidence. `[single source: own measurement]`
+
+**15.3 The caveat.** About 5 percent, one reader, one build; the default pose is spread (the beast stands crouched on all fours in our painting, which reads about as wide as it is tall).
+
+**15.4 Not found, and so not claimed.** The camera. The formation has Paragon at (25, 0, 0) and the girls at (-71, 0, 0), (-71, 0, 21) and (-71, 0, -21) in game units (`[datamined: build 25501027]`: 96 units, about ten world units, between them on one line, farther than the scene's 7 behind the girls' centre); the build keeps the scene's own spot (1.05, -5.8).
+
+**15.5 What the build does with it.** Chapter XIII link 1, FFX-2 only: Paragon stands at his **real height** on a desktop, 9.447 world units over the girls' 1.75 (5.40; he was 3.1), held by the colossus camera of `giants.ts` (option 3: 1.9 times as far and 2.4 higher): 4.24 times a girl on screen, 604 px tall at 1600x900, whole, with the girls 142 px of 279; and at **0.7** of it on the phone, 6.613 (2.98 on screen, the girls 83 px of 125). Link 2's Trema is not a giant and keeps wave 1's spot and height (the plan changes camera when the giant leaves the stage). The enemy-intent card stands clear of him. Presentation only.

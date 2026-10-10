@@ -6,6 +6,8 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots } from './index.ts';
+import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
+import { giantPhoneHeights } from './giant-stage.ts';
 import { CLOISTER_CAMERA_REF, CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS, cloisterRenderAspect, cloisterRigsFor } from './cloister-100-rigs.ts';
 import { CloisterLink } from './cloister-100-link.ts';
 
@@ -70,6 +72,10 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
  * the party, above the party plates. The enemy-move slab hangs over its head
  * by that panel's own design (`src/ui/common/EnemyIntent.ts`, "the slab's
  * whole habit is to hang over a head"); it is a toggle (E), not a fixed band.
+ *
+ * **Trema stands here too, as he did on 39.4.1** (r3942-stage, FFX-2 only; Bailey, 2026-10-08, "Yes, original spacing"). Wave 1 had given him a spot of his own beside the
+ * girls (1.3, -0.6) so that his real height read as a girl's; he picked the old spacing with the real sizes, so the old man keeps this far-back spot and only his height
+ * ({@link CLOISTER_ACTOR_HEIGHTS}, 1.784 against the estimate of 2.23) is new. The kill link's prop walks to it (`cloister-100-link.ts`).
  */
 export const CLOISTER_BOSS_SPOT: [number, number, number] = [1.05, 0, -5.8];
 
@@ -79,12 +85,16 @@ export const CLOISTER_LINK_SIDE_SPOT: [number, number, number] = [4.3, 0, -4.2];
 const ENEMY_SLOTS: Array<[number, number, number]> = [CLOISTER_BOSS_SPOT, [3.5, 0, -5.4], [-1.1, 0, -6.6]];
 
 /**
- * World heights, presentation estimates, both ours (`INSTALLED.md` "Sizes":
- * Trema at 0.72 of Paragon). Paragon is a little under Chapter IV's boss
- * height, so the whole beast fits the band the FFX-2 HUD leaves open. The
- * party takes the FFX-2 chapters' 1.75.
+ * Trema's world height (r3942-stage, FFX-2 only): the girls' 1.75 times his model's ratio to them, from the game's own HD model (`data/ffx2/fiend-stature.ts`,
+ * `research/ffx2-trema.md` §14): 17.8 over the girls' 17.47 (Dark Knight, Alchemist, Dark Knight) is 1.02, so 1.784 (it was an estimate of 2.23, 0.72 of Paragon).
  */
-export const CLOISTER_ACTOR_HEIGHTS = { party: 1.75, paragon: 3.1, trema: 2.23 } as const;
+const TREMA_HEIGHT = ffx2FiendFigureHeights(['trema'], 'ffx2-trema', 1.75)['trema']!;
+
+/**
+ * World heights: Trema's is the table's ({@link TREMA_HEIGHT}). Paragon is a giant (the game's Paragon and Oversoul model is 94 tall) and keeps our estimate, a little
+ * under Chapter IV's boss height, so the whole beast fits the band the FFX-2 HUD leaves open. The party takes the FFX-2 chapters' 1.75.
+ */
+export const CLOISTER_ACTOR_HEIGHTS = { party: 1.75, paragon: 3.1, trema: TREMA_HEIGHT } as const;
 
 /** Combatant ids this scene stages specially (`src/data/ffx2/enemies/{paragon,trema}.ts`). */
 export const CLOISTER_IDS = { paragon: 'paragon', trema: 'trema' } as const;
@@ -234,6 +244,8 @@ export const buildCloister100Scene: SceneFactory = async (opts: SceneBuildOption
     partyHeight: CLOISTER_ACTOR_HEIGHTS.party,
     enemyHeight: CLOISTER_ACTOR_HEIGHTS.paragon,
     ...CLOISTER_STAGING,
+    // r3942-stage wave 2 (FFX-2 only): on the upright phone Paragon stands at 0.7 of his real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING, `fx/mix/giants.ts`).
+    figureHeights: { ...CLOISTER_STAGING.figureHeights, ...giantPhoneHeights([CLOISTER_IDS.paragon], 'ffx2-trema', CLOISTER_ACTOR_HEIGHTS.party) },
     palette: { ...CLOISTER_100_PALETTE },
     update(dt: number): void {
       backdrop.update(dt);

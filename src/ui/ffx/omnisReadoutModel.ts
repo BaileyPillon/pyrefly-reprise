@@ -45,17 +45,22 @@ import {
  * element on one or two discs, **-ga** on three or four (re-parity,
  * `research/re-ffx-ai-seymour.md` section 5.4; `planOmnisVolley`).
  *
- * **The colour order** (B8, D-184: "our estimate") is now the game's own ring and reset
- * order (`seymour-omnis-rules.ts#DISC_RING`, `#OMNIS_RESET_CYCLE`; re-parity). The widget still prints
+ * **The colour order** (B8, D-184: "our estimate") is now the game's own, both halves: the ring, Fire, Ice, Water,
+ * Thunder (its AI script, 2026-10-07; `seymour-omnis-rules.ts#DISC_RING`), and the reset order after Ultima, Ice,
+ * Water, Thunder, Fire (the same script, re-parity D-24; `#OMNIS_RESET_CYCLE`). The widget still prints
  * {@link COLOUR_ORDER_NOTE} beside every strip: that wording is Bailey's to change, and is listed as stale in
- * `docs/handoff/re-parity-ai-seymour.md`. Nothing here restates the order (it reads the facings the engine
+ * `docs/handoff/re-parity-ai-seymour.md`. Nothing here restates either order (it reads the facings the engine
  * turned, never the ring).
  */
 
 /** The strip's words for the four elements. */
 export const ELEMENT_NAME: Readonly<Record<Element4, string>> = { fire: 'Fire', ice: 'Ice', lightning: 'Thunder', water: 'Water' };
 
-/** The label B8 asks for wherever the colour order is shown (our words). */
+/**
+ * The label B8 asks for wherever the colour order is shown (our words). Both the
+ * ring and the reset order are sourced now (the game's own script), so the words
+ * are stale; they stay because they are Bailey's wording to change.
+ */
 export const COLOUR_ORDER_NOTE = 'Colour order: our estimate';
 
 /**
@@ -102,6 +107,7 @@ export interface OmnisReadoutInput {
   weakBefore: Element4 | null;
 }
 
+/** The order the strip lists elements in (rows, tied counts). A display order, **not the disc ring**: that lives in the rules, and this file never reads it. */
 const ORDER: readonly Element4[] = ['fire', 'ice', 'lightning', 'water'];
 const LABEL: Readonly<Partial<Record<string, AffinityLabel>>> = { absorb: 'Absorbs', immune: 'Immune', resist: 'Halves', weak: 'Weak' };
 const ROWS: readonly AffinityLabel[] = ['Absorbs', 'Immune', 'Halves', 'Weak'];

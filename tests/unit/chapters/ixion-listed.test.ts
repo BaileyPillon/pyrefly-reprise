@@ -57,7 +57,8 @@ describe('the plates: the recommended options, provisional until Bailey picks, o
       expect(DJOSE_PLATE_FRAMES[key], key).toBeDefined();
     }
     expect(DJOSE_BACKDROP).toBe(DJOSE_PLATE_FRAMES[DJOSE_CHAMBER_PLATE]);
-    // Measured headless at 1600x900, 2000x1012 and 390x844 against a gridded copy of C2 (handoff): staging, ours.
+    // Measured headless at 1600x900, 2000x1012 and 390x844 against a gridded copy of C2 (handoff): staging, ours. r3942-stage: Ixion (real height 3.175, `data/ffx2/fiend-stature.ts`)
+    // stands where 39.4.1 stood him, (4.2, -6.0), his hooves on the lit floor right of the pit (wave 1's (3.2, -3.8), nearer the girls, is withdrawn: Bailey's "Yes, original spacing").
     expect(DJOSE_PLATE_FRAMES['djose-chamber-provisional']!.ixion).toEqual([4.2, 0, -6.0]);
     expect(DJOSE_SPOTS[DJOSE_IXION_ID]).toEqual(DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT);
     // The other plates keep the standard spot.

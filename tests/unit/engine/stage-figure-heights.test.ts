@@ -78,7 +78,8 @@ describe('PaintedStage — a per-combatant height from the scene', () => {
   });
 
   it('leaves everyone the scene does not name on the stage rule', async () => {
-    const stage = stageWith(CAVERN_STOLEN_FAYTH_SLOTS);
+    // r3942-stage: Chapter IX now names all three of its fiends, so the rule is read off the same slots with only Daigoro named, as the scene named him before.
+    const stage = stageWith({ ...CAVERN_STOLEN_FAYTH_SLOTS, figureHeights: { daigoro: CAVERN_ACTOR_HEIGHTS.daigoro } });
     await stage.add(fiend('yojimbo', 1, true));
     await stage.add(fiend('ginnem', 0, false));
     expect(optsFor('yojimbo')['worldHeight']).toBe(CAVERN_ACTOR_HEIGHTS.yojimbo);

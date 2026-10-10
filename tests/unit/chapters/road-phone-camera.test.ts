@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 /**
  * PR-0201 option A (Bailey, 2026-09-26, "I'll go with all of your recommendations"): on an upright
- * phone the Road's idle camera pulls straight back per link, Shiva and Anima to z 13.2, the Sisters
+ * phone the Road's idle camera pulls straight back per link, Shiva to z 13.2, the Sisters
  * to z 15.5, so every fighter of the link fits the phone's 390 px slice of the 16:9 render; the
- * desktop keeps its rig. `docs/concepts/phone-2026-09-26/README.md`.
+ * desktop keeps its rig. `docs/concepts/phone-2026-09-26/README.md`. **Anima's (r3942-stage wave 2,
+ * Bailey, 2026-10-08, "go with your recommendations": 0.7 of her real height, 9.6 world units) is her
+ * own: z 19.49, looking up the figure, `ROAD_PHONE_ANIMA`.**
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]: Chapter XI's scene.
  */
@@ -14,7 +16,9 @@ import { BattleCamera, type CameraRig } from '../../../src/engine/BattleCamera.t
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { loadScene, type LoadedScene } from '../../../src/scenes/index.ts';
 import { ROAD_FIGURE_HEIGHTS, ROAD_IDS, ROAD_LINK_IDS, ROAD_RIGS, ROAD_SPOTS, ROAD_TO_THE_FARPLANE_SLOTS } from '../../../src/scenes/road-to-the-farplane.ts';
+import { ffx2GiantHeight } from '../../../src/data/ffx2/fiend-stature.ts';
 import {
+  ROAD_PHONE_ANIMA,
   ROAD_PHONE_IDLE_Z,
   RoadPhoneCamera,
   roadLinkOf,
@@ -53,7 +57,7 @@ function spanNdc(rig: CameraRig, link: RoadLink): { lo: number; hi: number; top:
   const boxes: Array<[number, number, number, number]> = ROAD_TO_THE_FARPLANE_SLOTS.party.map((s) => [s[0], s[1], s[2], 1.78]);
   for (const id of LINK_ENEMIES[link]) {
     const s = ROAD_SPOTS[id]!;
-    boxes.push([s[0], s[1], s[2], ROAD_FIGURE_HEIGHTS[id] ?? 3.4]);
+    boxes.push([s[0], s[1], s[2], ROAD_FIGURE_HEIGHTS[id] ?? ffx2GiantHeight(id, 'ffx2-fallen-aeons', 1.78, true) ?? 3.4]);
   }
   let lo = Infinity;
   let hi = -Infinity;
@@ -75,9 +79,9 @@ function spanNdc(rig: CameraRig, link: RoadLink): { lo: number; hi: number; top:
 const SLICE_NDC = (2 * (390 - 2 * FRAME_MARGIN)) / ((520 * 16) / 9);
 
 describe('Road phone camera: the rigs (option A)', () => {
-  it('dollies only z: Shiva and Anima to 13.2, the Sisters to 15.5; look point and fov stay', () => {
+  it('dollies only z: Shiva to 13.2, the Sisters to 15.5; look point and fov stay', () => {
     const idle = ROAD_RIGS['idle']!;
-    for (const link of ['shiva', 'sisters', 'anima'] as const) {
+    for (const link of ['shiva', 'sisters'] as const) {
       const rig = roadPhoneIdle(idle, link);
       const p = vec(rig.position);
       expect([p.x, p.y]).toEqual([vec(idle.position).x, vec(idle.position).y]);
@@ -85,7 +89,17 @@ describe('Road phone camera: the rigs (option A)', () => {
       expect(rig.lookAt).toEqual(idle.lookAt);
       expect(rig.fov).toBe(idle.fov);
     }
-    expect(ROAD_PHONE_IDLE_Z).toEqual({ shiva: 13.2, sisters: 15.5, anima: 13.2 });
+    expect(ROAD_PHONE_IDLE_Z).toEqual({ shiva: 13.2, sisters: 15.5, anima: 19.49 });
+  });
+
+  it('Anima (0.7 of her real height, 9.6 units) has her own camera: z 19.49, standing at x -0.1 and y 2.35 and looking up her figure; fov and sway stay', () => {
+    const idle = ROAD_RIGS['idle']!;
+    const rig = roadPhoneIdle(idle, 'anima');
+    expect(vec(rig.position).toArray()).toEqual([ROAD_PHONE_ANIMA.x, ROAD_PHONE_ANIMA.y, ROAD_PHONE_IDLE_Z.anima]);
+    expect(vec(rig.lookAt).toArray()).toEqual([...ROAD_PHONE_ANIMA.lookAt]);
+    expect(vec(rig.lookAt).y).toBeGreaterThan(vec(idle.lookAt).y + 1.5); // up her figure: the desktop's look is at a girl's height
+    expect(rig.fov).toBe(idle.fov);
+    expect(rig.sway).toBe(idle.sway);
   });
 
   it('today\'s idle cannot hold a link in one phone slice; each link\'s phone idle can', () => {

@@ -553,7 +553,7 @@ export class FFX2BattleHud implements HudPort {
   /** Every box on the board the slab would rather not cover, in viewport px. */
   private intentObstacles(opts: { skipChainChip?: boolean; addIntentPanel?: boolean } = {}): IntentAvoidRect[] {
     const out = boardRects(this.el, { ...opts, scale: this.stageScale || 1, chipReach: this.intentChipHeight() });
-    for (const box of fighterBoxes(this.lastState, this.project)) out.push(box);
+    for (const box of fighterBoxes(this.lastState, this.project, (id) => this.targeting?.rect(id) ?? null)) out.push(box);
     // PR-0094: a part's face and weapon rank with the chrome.
     for (const box of keyFeatureObstacles(this.targeting?.keyFeatures?.() ?? [])) out.push(box);
     // PR-0012: in a portrait letterbox the help band sits in the bar above the

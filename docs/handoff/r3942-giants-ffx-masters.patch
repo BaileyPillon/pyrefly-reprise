@@ -1,0 +1,11 @@
+diff --git a/src/engine/fx/mix/masters.ts b/src/engine/fx/mix/masters.ts
+--- a/src/engine/fx/mix/masters.ts
++++ b/src/engine/fx/mix/masters.ts
+@@ -53,7 +53,6 @@
+  */
+ export function scaleTarget(id: string): number | null {
+   if (/^yojimbo/.test(id)) return 1.15;
+-  if (/^(seymour-natus|braskas-final-aeon)/.test(id)) return 2.2;
+   if (/^evrae/.test(id)) return 2.4;
+   if (/^(bahamut|ffx2-bahamut)/.test(id)) return 2.0;
+   return null;

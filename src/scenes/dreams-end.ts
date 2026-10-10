@@ -34,6 +34,7 @@ import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import { rng } from '../engine/ProceduralArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
+import { DREAMS_END_STAGING } from './dreams-end-giants.ts';
 import type {
   SceneBuild,
   SceneBuildOptions,
@@ -69,8 +70,13 @@ import type {
  * The camera the parallax stack and the backdrop framing are solved for —
  * identical to the `idle` rig's position. See "Framing the backdrop" in
  * `docs/ENGINE-API.md`.
+ *
+ * **r3942-giants-ffx (FFX only, Chapter III): the idle rig is the colossus masters' look, low and a little left** ([0, 2.75, 9.8] to here: 1.55 lower, 1.65 left, aimed about 2 degrees
+ * above level where it looked 4.3 down), for Braska's Final Aeon at 0.75 of his real height (6.919 units, from 4.1) with the Yu Pagodas behind him (`DREAMS_END_STAGING`). CHAPTER
+ * FRAMING tries the colossus master for a boss like this one and, at this size, it fails every step (a member stands inside his painted silhouette at rest, Yuna and a pagoda under panels),
+ * so the plan plays this rig: the options study's picture 4 (`docs/handoff/r3942-giants-ffx.md`). The parallax stack follows it.
  */
-const CAMERA_REF: [number, number, number] = [0, 2.75, 9.8];
+const CAMERA_REF: [number, number, number] = [-1.65, 1.2, 9.85];
 
 /** World z of the painting plane, and the plane's world width. */
 const BACKDROP_DISTANCE = -50;
@@ -107,7 +113,7 @@ const BACKDROP_CENTRE_Y = 1.23;
  * units at the plane's depth and `victory` swings the view axis out to
  * x = -8.1 — both inside the 80 x 45.7 plane.
  */
-const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
+export const DREAMS_END_RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
   /**
    * The establishing shot: wide, low and **tilted up** — the one rig in the
    * game that looks at the sky. It frames the whole burning eye and the cloud
@@ -120,7 +126,7 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * budget this reveal has, and it is why `BACKDROP_CENTRE_Y` is what it is.
    */
   intro: { position: [0.1, 2.35, 13.2], lookAt: [0.3, 3.6, -4.5], fov: 30, sway: 1.4 },
-  idle: { position: CAMERA_REF, lookAt: [0.15, 1.9, -1.4], fov: 32 },
+  idle: { position: CAMERA_REF, lookAt: [0.26, 1.57, -1.3], fov: 32 },
   /**
    * Pushed in for an ability beat. Solved so the attacker (slot 0, and x ≈ 1.4
    * mid-lunge) and the boss (x 2.9) are both well inside the frame — an action
@@ -128,10 +134,13 @@ const RIGS: Record<SceneRigName, CameraRig> & Record<string, CameraRig> = {
    * being hit. It was slid 0.16-0.18 left to keep party slot 1 (then at
    * x -3.0) whole at the left edge; since PR-0002 A that slot stands
    * front-right, so every party slot is well inside this frame.
+   *
+   * r3942-giants-ffx (FFX only): with the aeon at 6.919 units and the pagodas behind him at 5.7 and 6.3 (from 4.1 and 2.255), `action` and `enemy` aim higher and stand lower, like
+   * `idle`, so that his head and both pagodas stay in the shot (the old ones, [0.08, 2.55, 9.1] and [1.4, 2.7, 5.9] aimed at y 1.95 and 2.1, cut his head by 4 and 14 percent of the frame).
    */
-  action: { position: [0.08, 2.55, 9.1], lookAt: [0.8, 1.95, -1.2], fov: 32, sway: 0.7 },
+  action: { position: [0.6, 1.6, 8.7], lookAt: [0, 2.2, -1.2], fov: 32, sway: 0.7 },
   party: { position: [0.0, 2.15, 8.0], lookAt: [-0.8, 1.25, 0.5], fov: 32, sway: 0.7 },
-  enemy: { position: [1.4, 2.7, 5.9], lookAt: [2.9, 2.1, -2.3], fov: 32, sway: 0.7 },
+  enemy: { position: [2.4, 1.8, 8.5], lookAt: [2.7, 2.3, -2.3], fov: 32, sway: 0.7 },
   victory: { position: [-0.2, 2.1, 8.2], lookAt: [-0.8, 1.3, 0.9], fov: 32, sway: 1.2 },
 };
 
@@ -371,6 +380,10 @@ export const DREAMS_END_ACTOR_HEIGHTS = {
   /** Stand-in while the Final Aeon art is still being generated. */
   seymourFlux: 2.7,
 } as const;
+
+// r3942-giants-ffx: Braska's Final Aeon's and the Yu Pagodas' pins and heights (`DREAMS_END_STAGING`, `DREAMS_END_ROW_SHIFT`, `DREAMS_END_BFA_PIN`, and the party height they are read against) live in
+// `./dreams-end-giants.ts`, out of this file (house style: under 400 lines; this scene was 1,701 before the giants), and are re-exported here, so every importer is unchanged.
+export { DREAMS_END_BFA_PIN, DREAMS_END_PARTY_HEIGHT, DREAMS_END_ROW_SHIFT, DREAMS_END_STAGING } from './dreams-end-giants.ts';
 
 /**
  * The scene's default cut-out protection for a painted actor parked on
@@ -1627,10 +1640,10 @@ export const buildDreamsEndScene: SceneFactory = async (
     },
     lights,
     particles,
-    rigs: RIGS,
+    rigs: DREAMS_END_RIGS,
     partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
-    holdParty: true, // PARTY_SLOTS is the composition (PR-0002 A, D-041)
+    ...DREAMS_END_STAGING, // holdParty (PARTY_SLOTS is the composition, PR-0002 A, D-041) and the aeon and the pagodas at the game's sizes and arrangement (r3942-giants-ffx)
     palette: { ...PALETTE },
     update(dt: number): void {
       clock += dt;

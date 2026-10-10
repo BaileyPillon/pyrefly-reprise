@@ -83,16 +83,25 @@ export const DEF_AFTER_DISPEL = 100;
 export const DEF_AFTER_ULTIMA = 150;
 
 /**
- * **The ring, in the direction a spell turns a disc: Fire -> Ice -> Water -> Thunder -> Fire** (m106 @0x1842 to
- * 0x1b28, the disc scenes; the research note section 5.2). A physical hit turns a disc the other way. This is **not**
- * the painting's ring (`garden-of-pain-discs.ts`): the disc art was drawn to the earlier estimate and still has its
- * quarters as Fire, Water, Ice, Thunder, so a turn can read as a half turn on screen; the colour facing him is right.
+ * **The colour ring around one disc: Fire → Ice → Water → Thunder → Fire.**
+ * **Sourced (2026-10-07, research O-7; the same ring in `research/re-ffx-ai-seymour.md` section 5.2, m106 @0x1842 to
+ * 0x1b28, the disc scenes):** the game's own battle AI script (Steam HD Remaster build 25501027) steps a disc along it,
+ * **forward for a magic hit, back for a physical one**. It replaces the 2026-09-25 estimate (Fire, Water, Ice, Thunder:
+ * GameFAQs' reset cycle drawn as the ring, B8 = b), which had Ice and Water swapped. The painted disc turns clockwise
+ * for a spell, and its quarters are re-seated to this order (`src/scenes/garden-of-pain-discs.ts`).
  */
 export const DISC_RING: readonly Element4[] = ['fire', 'ice', 'water', 'lightning'];
 
+/** What a disc shows after one turn: a spell (`'right'`) steps forward along the ring, a blow (`'left'`) back; `turnDisc` and the advisor both call it. */
+export function discAfterTurn(now: Element4, direction: 'left' | 'right'): Element4 {
+  const at = DISC_RING.indexOf(now);
+  return at < 0 ? now : (DISC_RING[(at + (direction === 'right' ? 1 : DISC_RING.length - 1)) % DISC_RING.length] as Element4);
+}
+
 /**
- * **What the reset turns the discs to**: the counter starts at 0 and moves on first, so the order of resets is
- * **Ice, Water, Thunder, Fire** (index 1, 2, 3, 0), then Ice again.
+ * **What the reset turns the discs to** (the script's own order, O-11 now settled by it: the earlier build used
+ * GameFAQs' Fire, Water, Ice, Thunder, B8 = b): the counter starts at 0 and moves on first, so the order of resets is
+ * **Ice, Water, Thunder, Fire** (index 1, 2, 3, 0), then Ice again: the {@link DISC_RING} order.
  */
 export const OMNIS_RESET_CYCLE: readonly Element4[] = ['fire', 'ice', 'water', 'lightning'];
 
@@ -171,18 +180,17 @@ function facings(discs: readonly Element4[]): Record<CombatantId, Element4> {
 }
 
 /**
- * Turn disc `index` one quarter: a spell (`'right'`) moves it +1 on the ring, a blow (`'left'`) -1. The state changes
- * now; his affinity follows at the next turn start. The event names what the layout makes him (the readout and the
- * Sensor redraw from it), which is what the next refresh will write.
+ * Turn disc `index` one quarter along {@link DISC_RING}: a spell (`'right'`) moves it +1, a blow (`'left'`) -1
+ * ({@link discAfterTurn}, which the advisor's preview calls too). The state changes now; his affinity follows at the
+ * next turn start. The event names what the layout makes him (the readout and the Sensor redraw from it), which is
+ * what the next refresh will write.
  */
 export function turnDisc(ctx: Ctx, index: number, direction: 'left' | 'right'): void {
   const omnis = tryActor(ctx, OMNIS_ID);
   const discs = omnisDiscs(ctx.state);
   const now = discs[index];
   if (!omnis || now === undefined) return;
-  const at = DISC_RING.indexOf(now);
-  const step = direction === 'right' ? 1 : -1;
-  discs[index] = DISC_RING[(at + step + DISC_RING.length) % DISC_RING.length] as Element4;
+  discs[index] = discAfterTurn(now, direction);
   writeDiscs(ctx, discs);
   ctx.emit({
     type: 'affinity-change',

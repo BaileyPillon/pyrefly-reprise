@@ -682,6 +682,61 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
     expect(roomy.text).toContain('30 MP');
   });
 
+  it("takes a tight effect line off again when the box turns out narrower and shorter than the one it was kept in (the folded guide's rail, Chapter III at 1024x768)", () => {
+    const lead = {
+      command: { kind: 'ability', targets: [] } as unknown as MoveSuggestion['command'], targetId: null, targetName: 'the party', label: 'Hastega', menu: 'White Magic',
+      effect: 'Speeds the party’s turns up', reason: 'It puts Haste on the party', estimate: null, mpCost: 30, hitChance: null, critChance: 0, statuses: [], cures: [],
+      cite: '', warning: '', score: 1, isSwitch: false, source: 'simulated',
+    } as unknown as MoveSuggestion;
+    const view = { actorId: 'tidus', actorName: 'Tidus', suggestions: [lead], note: '', considered: 3 } as unknown as AdvisorView;
+    const heights = (card: HTMLElement): number => card.querySelectorAll('p, article').length * 10 + (card.querySelector('.mad__head') ? 12 : 0);
+    const { advisor, stage } = mountAdvisor();
+    const card = cardOf(stage);
+    let cap = 40;
+    let width = 164;
+    card.style.maxHeight = `${cap}px`;
+    Object.defineProperty(card, 'clientWidth', { configurable: true, get: () => width });
+    Object.defineProperty(card, 'clientHeight', { configurable: true, get: () => Math.min(cap, heights(card)) });
+    Object.defineProperty(card, 'scrollHeight', { configurable: true, get: () => heights(card) });
+    advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
+    const inner = advisor as unknown as { cached: AdvisorView | null; lastSignature: string; render(): void };
+    inner.cached = view;
+    inner.lastSignature = '';
+    inner.render();
+    advisor.update(16);
+    // The fit `render` runs measures the card at the anchors' width: the bare rung and its tight line fit (40).
+    expect(advisor.printedDensity).toBe(MAX_DENSITY);
+    expect(card.querySelector('.mad__effect--tight'), 'the tight line fits the box it was fitted in').not.toBeNull();
+    expect(heights(card)).toBe(40);
+
+    // The HUD then writes its own box: shorter (36) and narrower. The card is already on the last rung, so the loop has nothing to step to; the line no longer fits and has to go.
+    cap = 36;
+    width = 126;
+    card.style.maxHeight = `${cap}px`;
+    advisor.update(16);
+    expect(card.querySelector('.mad__effect--tight'), 'the line is taken off, not left cut off at the foot').toBeNull();
+    expect(card.textContent).toContain('Hastega');
+    expect(card.textContent).not.toContain('Speeds the party');
+    expect(heights(card)).toBeLessThanOrEqual(cap + 1);
+    expect(advisor.printedDensity).toBe(MAX_DENSITY);
+
+    // And a box that still holds it keeps it: nothing else about the tight line changed.
+    const keeper = mountAdvisor();
+    const card2 = cardOf(keeper.stage);
+    card2.style.maxHeight = '40px';
+    Object.defineProperty(card2, 'clientWidth', { configurable: true, get: () => 164 });
+    Object.defineProperty(card2, 'clientHeight', { configurable: true, get: () => Math.min(40, heights(card2)) });
+    Object.defineProperty(card2, 'scrollHeight', { configurable: true, get: () => heights(card2) });
+    keeper.advisor.showDecision('tidus', makeFakeCommands(), makeFakeBattleState());
+    const inner2 = keeper.advisor as unknown as { cached: AdvisorView | null; lastSignature: string; render(): void };
+    inner2.cached = view;
+    inner2.lastSignature = '';
+    inner2.render();
+    keeper.advisor.update(16);
+    keeper.advisor.update(16);
+    expect(card2.querySelector('.mad__effect--tight')).not.toBeNull();
+  });
+
   it('leaves the card alone where there is no layout to measure', () => {
     // A card that has not been laid out reports zero for both, and zero means
     // "no reading" rather than "no room".

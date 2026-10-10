@@ -242,9 +242,12 @@ describe('aeons (§4.5)', () => {
 describe('rule 6 labels (repair pass, 2026-09-25)', () => {
   it('every unsourced behaviour the verifier named is labelled our estimate', () => {
     // After the scripts (re-parity) the ring, the reset order, the aim and the counter are the game's; what stays our estimate is below.
-    for (const key of ['emptyAimFallback', 'reflectBounce', 'discExtraImmunities', 'discArt'] as const) {
+    for (const key of ['emptyAimFallback', 'reflectBounce', 'discExtraImmunities'] as const) {
       expect(OMNIS_ASSUMPTIONS[key]).toMatch(/our estimate/);
     }
+    // The ring order was an estimate until the game's own AI script settled it (O-7, 2026-10-07), and the reset order until the script's compiled cycle did (re-parity D-24).
+    expect(OMNIS_ASSUMPTIONS.ringOrder).toMatch(/sourced, no longer an assumption/);
+    expect(OMNIS_ASSUMPTIONS.resetCycle).toMatch(/sourced, no longer an assumption/);
     // The aeon eaters are sourced and global, not an assumption of this chapter.
     expect(OMNIS_ASSUMPTIONS.aeonAbsorb).toMatch(/every FFX battle/);
   });

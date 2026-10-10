@@ -43,17 +43,13 @@ describe('the Garden of Pain — tables', () => {
     expect(getChapter('seymour-omnis')?.sceneKey).toBe('garden-of-pain');
   });
 
-  // Re-parity (D-25, FFX only): the script's ring is Fire -> Ice -> Water -> Thunder (+1 for a spell), but the painted
-  // discs were drawn to the earlier estimate and are approved art, so their quarters still run Fire, Water, Ice, Thunder
-  // (`garden-of-pain-discs.ts`). The colour that faces him is the script's; a turn on screen can read as a half turn.
-  // Whether to repaint the quarters is Bailey's call (handoff `re-parity-ai-seymour.md`).
-  it('mirrors the engine ids; the painted ring has the same four colours as the script\'s, in the painting\'s older order', () => {
+  it("mirrors the engine ids; the disc shows the engine's ring (the game's own, O-7) read the way a spell turns it", () => {
     expect(GARDEN_IDS.omnis).toBe(OMNIS_ID);
     expect([...GARDEN_IDS.discs]).toEqual([...MORTIPHASM_IDS]);
     expect([...OMNIS_DISC_IDS]).toEqual([...MORTIPHASM_IDS]);
-    expect([...DISC_RING_ON_SCREEN].sort()).toEqual([...DISC_RING].sort());
-    expect([...DISC_RING_ON_SCREEN]).toEqual(['fire', 'water', 'ice', 'lightning']);
-    expect([...DISC_RING]).toEqual(['fire', 'ice', 'water', 'lightning']);
+    // Clockwise from screen right the disc runs Fire, then the engine's ring backwards: a spell steps forward along the
+    // engine's ring and turns the disc clockwise, so the next colour sits just counter-clockwise of the one facing him.
+    expect([...DISC_RING_ON_SCREEN]).toEqual([DISC_RING[0], ...DISC_RING.slice(1).reverse()]);
   });
 
   it('three party slots in the lower left; Seymour pinned right of them and further back; one slot per disc', () => {
@@ -148,12 +144,12 @@ describe('the discs — which quarter faces him', () => {
     expect(discAngleFor('fire', 180)).toBe(180);
   });
 
-  it('a spell turns a disc clockwise and brings Thunder round; a blow turns it back and brings Water (the engine rule)', () => {
-    // Fire -> Thunder is a spell (right): the short way from Fire's angle is +90, clockwise.
-    expect(nearestAngle(discAngleFor('fire', 0), discAngleFor('lightning', 0)) - discAngleFor('fire', 0)).toBe(90);
-    expect(nearestAngle(discAngleFor('fire', 180), discAngleFor('lightning', 180)) - discAngleFor('fire', 180)).toBe(90);
-    // Fire -> Water is a blow (left): counter-clockwise.
-    expect(nearestAngle(discAngleFor('fire', 0), discAngleFor('water', 0)) - discAngleFor('fire', 0)).toBe(-90);
+  it('a spell turns a disc clockwise and brings Ice round; a blow turns it back and brings Thunder (the engine rule)', () => {
+    // Fire -> Ice is a spell (right): the short way from Fire's angle is +90, clockwise.
+    expect(nearestAngle(discAngleFor('fire', 0), discAngleFor('ice', 0)) - discAngleFor('fire', 0)).toBe(90);
+    expect(nearestAngle(discAngleFor('fire', 180), discAngleFor('ice', 180)) - discAngleFor('fire', 180)).toBe(90);
+    // Fire -> Thunder is a blow (left): counter-clockwise.
+    expect(nearestAngle(discAngleFor('fire', 0), discAngleFor('lightning', 0)) - discAngleFor('fire', 0)).toBe(-90);
   });
 
   it('turns the painted disc to the colour its actor carries, a quarter over DISC_TURN_MS, and snaps on a new fight', () => {
@@ -167,7 +163,7 @@ describe('the discs — which quarter faces him', () => {
     });
     discs.update(0.016, root);
     expect(discs.angles()).toEqual([0, 0, 180, 180]);
-    actors[0]!.userData[OMNIS_FACING_KEY] = 'lightning'; // a spell turned disc 1
+    actors[0]!.userData[OMNIS_FACING_KEY] = 'ice'; // a spell turned disc 1
     discs.update(0.1, root);
     const mid = discs.angles()[0]!;
     expect(mid).toBeGreaterThan(0);

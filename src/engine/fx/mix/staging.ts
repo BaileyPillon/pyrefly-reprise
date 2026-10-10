@@ -1,8 +1,9 @@
 import type { PerspectiveCamera, Vector3 } from 'three';
 import { STAGE_HOLD_KEY } from '../../StageRelax.ts';
 import { placeOwned } from '../../motion/PlaceOwner.ts';
-import { figBox, figOf, subjectId, type Actor } from './geometry.ts';
+import { figBox, subjectId, type Actor } from './geometry.ts';
 import { MULTIPART } from './masters.ts';
+import { planFigOf } from './planFig.ts';
 
 /**
  * The MAX mix (D-316), CHAPTER FRAMING's static staging, written onto the figures and held for the
@@ -103,14 +104,15 @@ export class Staging {
   planScale(actors: readonly Actor[], camPos: Vector3, target: (id: string) => number | null, frac = 1, opts: ScaleOpts = {}): void {
     const party = actors.filter((a) => a.facing >= 0);
     if (!party.length) return;
+    // The party is read at the shared height (`planFig.ts`: a colossus keeps its size whatever the heroes' own heights, FFX r3941-heights).
     const persp = (a: Actor): number => {
-      const f = figOf(a);
+      const f = planFigOf(a);
       return f.h / Math.abs(a.scale.y || 1) / Math.max(0.5, f.feet.distanceTo(camPos));
     };
     const pMean = party.reduce((s, a) => s + persp(a), 0) / party.length;
     const view = opts.view;
     const shown = (a: Actor): number => {
-      const b = figBox(figOf(a), view!.cam, view!.W, view!.H);
+      const b = figBox(planFigOf(a), view!.cam, view!.W, view!.H);
       return (b.b - b.t) / Math.abs(a.scale.y || 1);
     };
     const shownMean = view ? party.reduce((s, a) => s + shown(a), 0) / party.length : 1;

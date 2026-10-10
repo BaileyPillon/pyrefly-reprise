@@ -84,6 +84,12 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the killed enemy's item drops (research ffx-vs-ffx2-presentation §9; `results.ts#OVERKILL_DROP_MULTIPLIER`).
  * The line overkills a Guado Guardian on both seeds, so the victory event's drops change and nothing else:
  * with the multiplier stubbed to 1 this file is 18/18 on the old values, and the other 16 digests never moved.
+ * Chapter XII (Seymour Omnis) re-pinned 2026-10-07 by r3941-omnis on the release line (FFX only, Bailey: "go ahead and fix the omnis disc
+ * order too"): the disc ring is the game's own, Fire, Ice, Water, Thunder, a spell one step forward and a blow one step
+ * back (research O-7), where it was Fire, Water, Ice, Thunder with a spell at -1. The line turns discs, so exactly the
+ * two seymour-omnis digests of that line's table moved (seed 1 354e0ace -> 18304bd, seed 7 ac28e23c -> 9bd433ce on its engine, before
+ * the parity work below); both were still victories. Proved by setting the ring back to the old transitions (Fire, Thunder, Ice, Water
+ * read at +1 for a spell): both old digests returned, and the other 16 never moved.
  * All 18 digests re-baselined 2026-10-08 by re-parity W1 ("game-code parity", FFX only): the hit roll, the damage
  * variance, the critical roll and the damage chain now come from the kernels proven against FFX.exe
  * (src/battle/ffx/kernel/), through src/battle/ffx/adapt/ and hit-apply.ts, drawn in the game's order (hit, variance,
@@ -144,6 +150,13 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * so the merge kept its behaviour: its nine hit scripts now run on the one runner (`ai/hit-script.ts` over `ai/hooks.ts`, the old
  * `hit-hooks.ts` is gone), and none of the three fights has two listening targets in one action, so the runner's order (the
  * paragraph above) cannot move them. Every outcome is still victory. Nothing on the boss or the party was tuned.
+ * Release candidate 1 folded into the release line, 2026-10-09 (re-parity-rc1 merged with r3943-int `a74b2b8e`, FFX only; docs/handoff/re-parity-rc1.md
+ * section 8). The merged tree was run against the table above: ALL 18 digests are byte for byte what they were and nothing is re-pinned. The release
+ * line's only battle-code change in that merge was the Chapter XII ring of the r3941-omnis paragraph; release candidate 1 already had the same ring from the
+ * game's own script (AI-Seymour, D-25: Fire, Ice, Water, Thunder, a spell +1 and a blow -1), so the merged rules (the release line's pure `discAfterTurn`
+ * and ring, release candidate 1's reset order, affinity timing and four spells) play Chapter XII exactly as before: seymour-omnis#1 and #7 are the table's
+ * 'e6d67f23:victory' and '9b077938:defeat', not the release line's own digests, which belong to its older engine. The rest of that line's changes are
+ * presentation (scenes, HUDs, statures, art) and reach no battle log. Nothing on the boss or the party was tuned.
  * Releases 39.2 to 39.4.2 changed no FFX battle code or data (their battle-side changes are FFX-2's Trema data, the Leblanc
  * preview's chapter registry and `types.ts`'s `hopelessRetry`). A digest that moves from here on is a change to explain.
  */

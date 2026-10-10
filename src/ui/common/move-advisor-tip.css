@@ -1,0 +1,100 @@
+/*
+ * The advisor card as one row: the tip (r3942-giants-ffx, FFX only; `src/ui/ffx/advisorTip.ts`).
+ *
+ * `FFXBattleHud.placeAdvisor` writes `data-zone="tip"` on the card when the frame is too full for any box the card fits in (Seymour Flux's chapter and Braska's, at Bailey's giants'
+ * sizes) and the only clear ground is a band along the top of the stage a dozen grid px tall. `MoveAdvisor.fitCard` then prints the bare rung and this file lays it out as a row:
+ *
+ *     [N]  NEXT  Tidus  Hastega -> the party   IN WHITE MAGIC   30 MP
+ *
+ * The lead move only: the runner-up, the effect, the reason, the warning and the board's note are the full card's. The move and its target are rigid (they are the answer); the two chips
+ * after them give way, last first (`MoveAdvisor`, `fitTipRow`), then the actor's name, then the arrow and the target together, so nothing is ever cut through a word or a glyph. The `N` chip is the badge on the left (`.mad--tip`, set with the zone): key only,
+ * in the same row, because there is no room above the bar for it and none to spare beside it. The authored sizes are the card's own (`move-advisor.css`), so the type floor and TEXT SIZE
+ * apply as they do there. Nothing here is read by FFX-2: its HUD never writes this zone.
+ */
+
+.mad__card[data-zone='tip'] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 8px 1.5px 9px;
+  overflow: hidden;
+  white-space: nowrap;
+  /* A row has no foot to fade: the mask that hides a card's cut-off last line would eat the underline's end. */
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* The word that names the bar. The card's `> *` counter-skew does not reach a pseudo-element. */
+.mad__card[data-zone='tip']::before {
+  content: 'Next';
+  flex: none;
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(4.6px, var(--mad-fs-floor));
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ig-accent);
+  transform: skewX(var(--ig-skew-inverse));
+}
+
+/* What the full card says and the row does not. */
+.mad__card[data-zone='tip'] .mad__head,
+.mad__card[data-zone='tip'] .mad__move--alt,
+.mad__card[data-zone='tip'] .mad__warn,
+.mad__card[data-zone='tip'] .mad__rank,
+.mad__card[data-zone='tip'] .mad__idle {
+  display: none;
+}
+
+.mad__card[data-zone='tip'] .mad__move {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+/* The answer: who, what, to whom. The move's name never shrinks; the target gives way last of all, with an ellipsis (a name cut mid-word reads as another name). */
+.mad__card[data-zone='tip'] .mad__line {
+  flex: 0 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.mad__card[data-zone='tip'] .mad__actor,
+.mad__card[data-zone='tip'] .mad__label,
+.mad__card[data-zone='tip'] .mad__arrow {
+  flex: none;
+}
+.mad__card[data-zone='tip'] .mad__target {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* What the row has no room for, taken off whole by `MoveAdvisor.fitTipRow`: the actor's name, then the arrow and the target together. (An attribute, not `hidden`: the actor's own rule sets its display.) */
+.mad__card[data-zone='tip'] [data-tip-cut] {
+  display: none !important;
+}
+
+/* Where the move lives and what it costs: whole chips or none (`fitTipRow` drops the last one that does not fit). */
+.mad__card[data-zone='tip'] .mad__stats {
+  flex: 0 100 auto; /* the chips give way a hundred times faster than the answer does */
+  min-width: 0;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  margin: 0;
+}
+.mad__card[data-zone='tip'] .mad__stat {
+  flex: none;
+}
+
+/* The chip is the badge while the bar is up: the key alone, the same height as the bar's row. When the player puts the bar away (`N`) the class is off and the chip reads "N best move" again. */
+.mad--tip .mad__toggle span {
+  display: none;
+}

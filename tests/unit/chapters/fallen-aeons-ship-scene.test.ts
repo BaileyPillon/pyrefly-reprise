@@ -68,11 +68,25 @@ describe('the Road to the Farplane — tables', () => {
   });
 
   it('the Sisters at the concepts README\'s heights: Sandy tallest, Mindy smallest and hovering', () => {
-    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.sandy]).toBe(2.3);
-    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.cindy]).toBe(1.7);
-    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.mindy]).toBe(1.2);
+    // r3942-stage: the game's own HD models over the girls' 1.78 (`data/ffx2/fiend-stature.ts`): Sandy 1.29, Cindy 0.83, Mindy 0.71, Shiva 1.94 (was 2.3, 1.7, 1.2 and the boss height 3.4)
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.sandy]).toBe(2.297);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.cindy]).toBe(1.48);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.mindy]).toBe(1.26);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.shiva]).toBe(3.453);
+    expect(ROAD_FIGURE_HEIGHTS[ROAD_IDS.anima]).toBeUndefined(); // a giant: keeps the scene's boss height
     expect(ROAD_SPOTS[ROAD_IDS.mindy]![1]).toBeGreaterThan(0);
     for (const id of [ROAD_IDS.shiva, ROAD_IDS.sandy, ROAD_IDS.cindy, ROAD_IDS.anima]) expect(ROAD_SPOTS[id]![1], id).toBe(0);
+  });
+
+  it("Shiva, the Sisters and Anima stand on the spots release 39.4.1 stood them on (r3942-stage keeps only the real heights), and the room names no advisor cap", () => {
+    expect(ROAD_SPOTS).toEqual({
+      [ROAD_IDS.shiva]: [1.12, 0, -5.0],
+      [ROAD_IDS.sandy]: [0.95, 0, -4.9],
+      [ROAD_IDS.cindy]: [1.85, 0, -2.7],
+      [ROAD_IDS.mindy]: [3.0, 0.55, -4.0],
+      [ROAD_IDS.anima]: [1.0, 0, -6.2],
+    });
+    expect(ROAD_TO_THE_FARPLANE_SLOTS.advisorCap).toBeUndefined();
   });
 
   it('every fighter stands right of and behind the party, and in frame at the idle rig (16:9)', () => {
@@ -148,7 +162,7 @@ describe('the Road to the Farplane — the real factory', () => {
     loaded.push(scene);
     expect(scene.placeholder).toBe(false);
     expect(scene.slots.enemySpots?.[ROAD_IDS.shiva]).toEqual(ROAD_SPOTS[ROAD_IDS.shiva]);
-    expect(scene.slots.figureHeights?.[ROAD_IDS.mindy]).toBe(1.2);
+    expect(scene.slots.figureHeights?.[ROAD_IDS.mindy]).toBe(1.26);
     expect(scene.slots.holdParty).toBe(true);
     expect(() => scene.update(0.016)).not.toThrow();
   });

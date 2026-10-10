@@ -34,11 +34,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
+     "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -50,11 +54,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
+     "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -72,7 +80,22 @@
       3,
       4
      ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
      "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
       2,
       3,
       4
@@ -93,6 +116,11 @@
       4
      ],
      "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -129,8 +157,14 @@
     "attack.json": "21cf8b3db92daf0ac9d546a2fb1c3f656db8045a0802a51aa4f4e4853da34d22",
     "cast.png": "395376f1bc26383a29eb87386b1787919032cbf1571bfe46688d7a4eda0485db",
     "cast.json": "0b020352c938597661770e5368c0ff65db9b05918d956eacbcf66a7e9a22182d",
+    "critical.png": "4cb6889a7cb8fb7bbfb7a6742431541447abd65bc7c8294221c3b9cda40e0561",
+    "critical.json": "fefd32fa604eeb76006126b403b58472b7024479951e248091bda4d58fcae9ce",
+    "defend.png": "cba1e7e5d288dde99923705ff8ef1b6d7adcb2067ed97c3123e67cc53a672096",
+    "defend.json": "3e3a84afc89866c5a31355dd738a38bfc94263963d06206fdc076ecdfc043069",
     "follow.png": "fada5db7ba731da361a99edb4745327c66c3565b9891568b1ed9f9e848585bb4",
     "follow.json": "7227546efa4e026d0e94db01e95fb47d886751b7be9aa80c0e91fcd8bf9fc03e",
+    "hurt.png": "da9b2ae9f79b809695d443bafc093e79d7e2622b6f6b77cad464ccc95132d46b",
+    "hurt.json": "9c57adf93b648b6b8a65da4d37be8f970512d6ca515cdb20cf9f0253c123d31d",
     "idle.png": "585835c14ba0cc49c96226eaa63e91e3236338120e4c0a1b738e1836d6ff05dd",
     "idle.json": "565e29dc79f7f1df41b30b5eab80a66ba9d9d80f3f4fb4a9b2b6e981034ddba1",
     "item.png": "67c4610d621f011da158ee48591e91aa2303d9ab8b5d00f3c792153728ceb245",
@@ -139,6 +173,8 @@
     "ko.json": "65ff1794b098c980b8f0b1bd55543abea5ea92c634093e5b8c5860a175a332ce",
     "ready.png": "89213f2917ffce5ceb9900f108de61121424931f8427623d4805e61effd9050c",
     "ready.json": "4d7cea1f48d82ed5f80739aa2da52d79d76a45726d9872013eb9b402daf83d2b",
+    "sleep.png": "53cfcc0fb48feb1bb58f48a0e3423390376ed07856d9fa08f73ea02bfa7de19d",
+    "sleep.json": "7643a82b3949c38f81d6af6f560e3541b263364d9ab73dab23b6815ab21aac4f",
     "twirl-end.png": "2fe094ba204e2921ac2072dfac4a16ae226af933b1a99838982daee5054e575c",
     "twirl-end.json": "ff5ef04ac171f0e2d0169c92ad7fd232db8172cd7d07954537023c08120424f3",
     "twirl-forming.png": "3fcbbc8327473d766ff208a00c0cd8bf812b6ecb47e8c4147feaf951e04d3f7f",
@@ -155,9 +191,16 @@
    "manifest": {
     "states": [
      "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
      "idle",
      "item",
+     "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -169,9 +212,16 @@
     "facing": "right",
     "states2x": [
      "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
      "idle",
      "item",
+     "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -181,6 +231,31 @@
     ],
     "tiers": {
      "attack": [
+      2,
+      3,
+      4
+     ],
+     "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
       2,
       3,
       4
@@ -195,7 +270,17 @@
       3,
       4
      ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
      "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -235,12 +320,26 @@
    "files": {
     "attack.png": "95e6b0a09017f785e07b1a877d0fa2f42e15d0b5955d39d55680e4ed9bb12c22",
     "attack.json": "3bf1739be0105cee12f993aecc83e8574c9edd15f68ca6cbfa88e11a0f4f027e",
+    "cast.png": "5620d833343997a12876d52ac29d09248e27c03724f10db229f0cf681b7cdf27",
+    "cast.json": "2d785c52d230a6d1b681cc94d3ab2e1fcfc7541fa6bb77a4f031b982a0975a9e",
+    "critical.png": "9a2a924ea9012ae20a7e6a6599eb6531af85c3e6eb1ab152fdde405780fbbbac",
+    "critical.json": "97b335a45acb930eb4ba2c04e0618efce5a62aa079c94dea5bc184855716c3de",
+    "defend.png": "064518d3296c42f16877f7e24a8a659841f3931f2949158a314b9b8e5154690e",
+    "defend.json": "3979cdd6cf69dcaff0085b2b418f585f59dda050ce0e3ea4588db82d778dddfc",
+    "follow.png": "28d87e5cfddb6c36f855e88017d652c09f7d043c2883c0f5ffe2870c6dd27cc1",
+    "follow.json": "f3ae187cc8b600bfeb0595de24b4b37ed7d7913c8ee9b1567f68bfa5ab0e7044",
+    "hurt.png": "1580f2e2a34c7b87521f6ee3ef559b9c68591d82bba1c43986292129cd08496d",
+    "hurt.json": "72a27c6480210089664f9564200ba204a31211c00a5f77d7b6857afe5496a981",
     "idle.png": "46ffeb18419a30b6eaf6c1aada04af96b57a29a02f08d04c0cac6b892c5b2aeb",
     "idle.json": "d180802c5ac8ffb5b8524dfc7508f4637c465359a1f439d737393e591cd6e813",
     "item.png": "9124937b6bfe5115d0e4181d798bf0ecd6440811bbb21326adf08dfa824ca474",
     "item.json": "19b3cfbcfe23b9e37e9e0321b3b2578605a94f92bed4f81624ee7f0ef940039d",
+    "ko.png": "03c419065d0729fbdfb736984251f7c4462dbd57972b08ffea9552af411f69a2",
+    "ko.json": "a0a84cf5d7a4aef7c9d9a138bba4a32efaae92f0a7cc0352d1851f00dfcb3a55",
     "ready.png": "e214a1714bc6933acd802f9e581a14fcb689baea82d8121a679463800d0bb42b",
     "ready.json": "210de5a5804d525cbda377a471f9bcfb4a24b0c965b674272bd29b2786289a0a",
+    "sleep.png": "82f95ec352cb415e9b18a1b16ff09d5aa6c983916ef0a5177eb3ba9644805511",
+    "sleep.json": "1bbfeaaa22f990aba48a45ec19cb1ee847e8806d83c8d9b46980193337c21076",
     "twirl-end.png": "59d543006906b32f6406eadf471a8b9f95763a857ed12a19b244a3c7920515f0",
     "twirl-end.json": "1c5c1be66dc0b2c89ebbcc154b3e000f17328e311cb418a8d92a21d227a45d73",
     "twirl-forming.png": "bfa8e07c8297ac99182568a1c6da3e798f6a52f0c7ea574e43b0295c17227149",
@@ -260,11 +359,16 @@
     "states": [
      "attack",
      "cast",
+     "critical",
      "dance",
+     "defend",
+     "follow",
      "hurt",
      "idle",
      "item",
      "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -276,11 +380,16 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
      "dance",
+     "defend",
+     "follow",
      "hurt",
      "idle",
      "item",
      "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -298,7 +407,22 @@
       3,
       4
      ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
      "dance": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
       2,
       3,
       4
@@ -319,6 +443,16 @@
       4
      ],
      "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -355,8 +489,14 @@
     "attack.json": "f5b0007b169549e4cdb967599ce707a35e6a97037cc9c54229c1b9989d3a394e",
     "cast.png": "98b78b45ad5a339ecb790ca700704c10de58e404ab4c29ee7a3ef3f25effb400",
     "cast.json": "2b596175dd5b327027082969dbc95f6293b28074deaa2b48c5d51e22cb3e3e60",
+    "critical.png": "c690d8d07256312cdcd4a3ef58546a0cd5d293c34c6676982632036efe5fb27f",
+    "critical.json": "c6cee83063105cdd678fd81bc78d4b7309648d4ccbb13e06c150ab2abc91caa8",
     "dance.png": "084036165df91056e7427acbdef01e2a0cb2dbd792f2add11c8ec5c5dec58d8a",
     "dance.json": "88b5d62910ec672ad00a2528944e237a6989674b207b671a92995f20e28f6ecb",
+    "defend.png": "d16ae5fc46732e0e72b7c499d5f8bd751400225e65389e0a5ed48de3d2fbb01d",
+    "defend.json": "ce6ad80fb73156377a7ad44ba56e181410b3de0b7f03bd5173cfb386c8d2a0b3",
+    "follow.png": "bb61f94d81281bcdacc768ea3e4d84dbe83acc8a5ebac9f60f47fd9530f59a28",
+    "follow.json": "1d85f0eb6dd8196d7fb29e1889fa9c7595c7b88e71123a390f1ab5d74dc11699",
     "hurt.png": "052bcd7d51c168daf4f847cce145ebbf92e5b231d805be02e32d48be4b3be98e",
     "hurt.json": "b32ec0acc973cc16bc6c98e626ef3f8a25bee0ffd84dbafb2e047ffec63dc34c",
     "idle.png": "ce91be16be4b983a1aea2429446bd083be7b384f3ff2b878e4cea4aa288798b8",
@@ -365,6 +505,10 @@
     "item.json": "422db5d0bcec97d597c7068858d1f4ef86552d2c4f77388f0ce52091a970da20",
     "ko.png": "7528db924183639cdcc7ac3e73c3ef78bcbfc2ea714d21e00fc25ace282dbbce",
     "ko.json": "91630c123a6f6148b6c9edc63bb32c39741f4d8e20575926c7a088f6daf13f74",
+    "ready.png": "87c4c6a960f51ec827eeb667c3ad28d3c02b6bb0c2732f41197e6b03455e12f4",
+    "ready.json": "494071d02955fb8e09e042a780c97459bca064edf1a83466ed723af75f7f2d51",
+    "sleep.png": "994b154003544300615fd77b2d7fea51855fc25532fcd31b9c6ab382d8a7802e",
+    "sleep.json": "2ad62e706b0343cfbb1f0f30edc6115fb44e6cbdc2dcb20950ca3474012564ac",
     "twirl-end.png": "75838123c0ff61f244e0ba82e8e9e22eee723aed7273aee1d23d7d624f12da30",
     "twirl-end.json": "d854f48cd67fbfa8e37169300cf2097a7dcecfcf05c73e7698bc1e40d4602d87",
     "twirl-forming.png": "8711befb99fe7cc73e339e5fed41e946339717c2611b4193bbfaa1777a43ba33",
@@ -382,12 +526,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -399,12 +546,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -418,6 +568,16 @@
       4
      ],
      "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -448,6 +608,11 @@
       4
      ],
      "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -484,6 +649,10 @@
     "attack.json": "b5a6684dd92f46ee0ea38dbec2436f2f71e27c094a23f4fdcfef9174c6e91abf",
     "cast.png": "8c5109070d8c1b6d1e23d857cbf4575651754f324ecfa96c17128a14bfc263ef",
     "cast.json": "f7fe1e2dd89f7dc96deacd1537e334bea55ec4b7ac1dfa71fbc7b3ca03b82979",
+    "critical.png": "33b4c2c922b882611a88f75b8f2ba86760e4a5ac796e9b32515e4799da34bc11",
+    "critical.json": "568fee3742494983bac5540c52950c38dae107b50abe4868f31730bbb93ae112",
+    "defend.png": "a08a8c3b4241aedcea55088af7b31ecacf09c045f19b63bc2ed93e2cd3a8d2df",
+    "defend.json": "8f1c9652b2e3fa356c1ba7b9906781c7646981ba2b51831a52b2d7f3b23c4110",
     "follow.png": "14b271f41d47adbbeda19e0fcfb30d7e7ec47e6866f6c974316cbbeeb4092c7a",
     "follow.json": "2386d1f00367d8f24563810164adbdb4475f77a3112aa2364b1ce2e5e6fa052d",
     "hurt.png": "3adf172394e92db66b41c9d727878bf1a5759e118828030ae8e6cc2c953a4c13",
@@ -496,6 +665,8 @@
     "ko.json": "42c441a03d7a514856c0c8d10ff17491f9a55179ef42b34cdc801525abad2274",
     "ready.png": "0e1f751e438d817319f796c948afb35ec8a695c5a99cab5f51bb26ea68e7ed95",
     "ready.json": "42a00823a63828b8b4ca9f5a703e224c289e3c0184745bbfb8e63067a60a71e9",
+    "sleep.png": "63e098b75ba6410e50aeb59354acf0aad0fd0b259f554d85da813aae4bf993a8",
+    "sleep.json": "db9983f2849a7784a762b045628808136949e9c5834e8554940da29cc6dae305",
     "twirl-end.png": "44b3b99427cc719ae65cc4b15b754279e648ca62102c2c256072c1433a98a039",
     "twirl-end.json": "7d33a505a44476ff234b8b8277268c558ee0c92729daa0ded7d3e8c5d2a1849a",
     "twirl-forming.png": "3d78158d4088f3e170736362e6b48706e9d6d6233799013a790389e18d8f55d9",
@@ -514,9 +685,12 @@
      "attack",
      "cast",
      "critical",
+     "defend",
      "follow",
+     "hurt",
      "idle",
      "item",
+     "ko",
      "od-x2-warrior-armor-break",
      "od-x2-warrior-power-break",
      "ready",
@@ -533,9 +707,12 @@
      "attack",
      "cast",
      "critical",
+     "defend",
      "follow",
+     "hurt",
      "idle",
      "item",
+     "ko",
      "od-x2-warrior-armor-break",
      "od-x2-warrior-power-break",
      "ready",
@@ -562,7 +739,17 @@
       3,
       4
      ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
      "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
       2,
       3,
       4
@@ -573,6 +760,11 @@
       4
      ],
      "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
       2,
       3,
       4
@@ -631,12 +823,18 @@
     "cast.json": "23142513167ea7841e12935e3daa0eb1265f51a3386621a5c25fe33dd1b41538",
     "critical.png": "f23f998b5fd3f242e3aed39ca4ed9bde099040235a4a8d4fcc1b2f82bde7edf4",
     "critical.json": "dfec939e0f3eb2796d2d7e68db169cf31577125f33e8019a452e7f34601b7684",
+    "defend.png": "495e58e64cb6d2ac31423ced113032bd309425ed04b03e28d679168e0156b5ce",
+    "defend.json": "ed615e0dc6f3134ecafeafb8ab9bcfc5c16dd42dfe8aa7f2fa83c2b787d2f737",
     "follow.png": "f4cdb5d65bef20ae3991ef12f8b6b3136ed3f0df3e3a77739f4bec69647f03c1",
     "follow.json": "714de946cba113d3a795a3b2599ad81a1dc22f2dc8a44d9cb2880f95c5acf315",
+    "hurt.png": "e8463888a21030c32f2b674b4b61c213f0b8a523d6ceea840a5b1bfc1431d0ea",
+    "hurt.json": "db288a50483a8996e34b5ee82dead56b6355ecbf9405cac0f626c20e73f1c300",
     "idle.png": "6b2565786c85283f2e7bd29b910b6a874f6fcc7a106ea41ec752c2f6e9bfa8f9",
     "idle.json": "0763b0bbe57538029af8ae4af3f196d920e798bdb5082d7a2ed19074fc85d472",
     "item.png": "06b68c4a7f615a1107f5343d0efceb5dd387398c9d751fb6792769376fad6727",
     "item.json": "1670b9fdaec9fc9642c68b15a5f45206abda8113d2258f31b4ff2e440d8fefef",
+    "ko.png": "8ef58b208bc5be24bfc5d62a2d24d55e5bd1b0fcbeb6673b8c282b05196c6a2e",
+    "ko.json": "b2ec43c640df3be4612a783298c082b6e3cb993ca426de42bb45bb03692693cf",
     "od-x2-warrior-armor-break.png": "745b015ce9525b6ea935ee94fe080252ad87fa9ab79d797b8dd8577e4d9153fa",
     "od-x2-warrior-armor-break.json": "1b303938c30b1b2ee2a451f38fcd51fda62a34f9c3c6058fec53f0fa7ab711ad",
     "od-x2-warrior-power-break.png": "745b015ce9525b6ea935ee94fe080252ad87fa9ab79d797b8dd8577e4d9153fa",
@@ -660,564 +858,10 @@
   "paine-white-mage": {
    "manifest": {
     "states": [
-     "cast",
-     "follow",
-     "idle",
-     "item",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start"
-    ],
-    "portrait": false,
-    "facing": "right",
-    "states2x": [
-     "cast",
-     "follow",
-     "idle",
-     "item",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start"
-    ],
-    "tiers": {
-     "cast": [
-      2,
-      3,
-      4
-     ],
-     "follow": [
-      2,
-      3,
-      4
-     ],
-     "idle": [
-      2,
-      3,
-      4
-     ],
-     "item": [
-      2,
-      3,
-      4
-     ],
-     "twirl-end": [
-      2,
-      3,
-      4
-     ],
-     "twirl-forming": [
-      2,
-      3,
-      4
-     ],
-     "twirl-going": [
-      2,
-      3,
-      4
-     ],
-     "twirl-start": [
-      2,
-      3,
-      4
-     ]
-    }
-   },
-   "files": {
-    "cast.png": "4e15b46b001dae462b8f43de246c093596d7d654fc50a72431c0ebdd4f9454ee",
-    "cast.json": "3f6a842419073f7e3700c1d0ba6cbdf598033977d9813624e7257522ddedb016",
-    "follow.png": "01cf83747b9ad25d95e3bb2758e67a06750bcf12173e3b0417146bbe5c154f7f",
-    "follow.json": "ae1a9217a911fc444fcbbdb73050d29e5134eacc30c87b7ec7509171c75649f3",
-    "idle.png": "391084382d681f3e5577c0198f382c4efa763710413b6934feefb135f030d0ba",
-    "idle.json": "db3042d6983e49ebe76edf324fa171500be33d13d159f8bc5107489d0fa95d7f",
-    "item.png": "12b4554d375751b4a35e9a966c98aad01a01a1d655ad38b22fbe41a6c431fb8b",
-    "item.json": "78a0268a2b400b99a7f7dd83640b4448b4739ddaf32f7c442e3c29284a58daf3",
-    "twirl-end.png": "c8a3cf7b18b62057bfc4aaa943a92614b249ff08dbeb72d809c3697eed5ee7b3",
-    "twirl-end.json": "7bb4386555e638897058fb00d4805017a712fd28ff26f27a25d93c02e7bc93e4",
-    "twirl-forming.png": "07557613d34493903af5815e7e7326246df56b9a1838fd1e8b7a66a0b1a55510",
-    "twirl-forming.json": "c4d62ce3e1d3df7d00563088814449f60e560b7cf1d6c0970563875e6e2d589a",
-    "twirl-going.png": "b6d33301c8d2e83ccb63c5790b164bee1afec95865c7f4fb4b1dfb15688283ac",
-    "twirl-going.json": "140e001464f0402e6186b9d0cecec407fd0c89953ee46f53b20e02569b9d505d",
-    "twirl-start.png": "2a7f8ad66d2dd68e29f2c8bc36a0970f1e1330e2b8023f95e1e492fa8cfc5339",
-    "twirl-start.json": "5e9a512bc335e919bd3af77032ec1389ccac27c4d1a66d3b788c4957ce9c12d1"
-   }
-  },
-  "rikku-alchemist": {
-   "manifest": {
-    "states": [
      "attack",
-     "cast",
-     "hurt",
-     "idle",
-     "item",
-     "ready",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start",
-     "victory"
-    ],
-    "portrait": false,
-    "facing": "right",
-    "states2x": [
-     "attack",
-     "cast",
-     "hurt",
-     "idle",
-     "item",
-     "ready",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start",
-     "victory"
-    ],
-    "tiers": {
-     "attack": [
-      2,
-      3,
-      4
-     ],
-     "cast": [
-      2,
-      3,
-      4
-     ],
-     "hurt": [
-      2,
-      3,
-      4
-     ],
-     "idle": [
-      2,
-      3,
-      4
-     ],
-     "item": [
-      2,
-      3,
-      4
-     ],
-     "ready": [
-      2,
-      3,
-      4
-     ],
-     "twirl-end": [
-      2,
-      3,
-      4
-     ],
-     "twirl-forming": [
-      2,
-      3,
-      4
-     ],
-     "twirl-going": [
-      2,
-      3,
-      4
-     ],
-     "twirl-start": [
-      2,
-      3,
-      4
-     ],
-     "victory": [
-      2,
-      3,
-      4
-     ]
-    }
-   },
-   "files": {
-    "attack.png": "c1b00b676cdbaa0a2da54e4c9c55b455d596ed6fe17b6f8589621d857b8d0f65",
-    "attack.json": "dbad17878de0a75aad568f0e2ef2dd7e2a36932dae6081a19b59190a67bb8451",
-    "cast.png": "64e6c3fd607a7aeedc4358253c899c402d885df9fdebd5452645e7dafd1d5456",
-    "cast.json": "6f79bf301518abb2bb4362fa68c635f653b8c8d48103aabd7157b3c8ae51da9f",
-    "hurt.png": "7cce23a451cddf6bbb67b56afba0081f7bc27b6b6f0ec4787ed64b4c7eb6944e",
-    "hurt.json": "35cb9fcd72f666a0158f88757467b8843756563a22ee2110fd60ac97d5cff2fc",
-    "idle.png": "c0b29b8bb773d8c6459badfb8e85d47ca8ebbdbc62a5e10bb35d8959f4cda202",
-    "idle.json": "117ee0022c655c70d2d3a68f3187adbe56c1ad7a44f95cf2666deb9e7edfe25d",
-    "item.png": "2b64256ad7b6e233aa0a65614be4657869b8242037eacafc32a747b5d48970ad",
-    "item.json": "047ed42f08fb03f2fb9bb11a3f9f563428065ff86352473cd90b924e0beb2c00",
-    "ready.png": "a800fb1dbca2481b1f19bfb016676102f8a2cb6422212d15a86147e7fa5c0c1b",
-    "ready.json": "18f80ae0636e5db1f4945053a8c65e1c8ebf71d38d383c92ddef7925faea9188",
-    "twirl-end.png": "4b85d74f26da1c76ceb1012d79c8275d356c3c2af90a5acce0487ed16153ed90",
-    "twirl-end.json": "fe007c0af16bb8400cb33931047b31c70490222229edf41365b63d3f7429c377",
-    "twirl-forming.png": "08a1c8dc7fc3e4afce532217f002e57a9c81f72ed31c79ba5e9dbea4f2bca569",
-    "twirl-forming.json": "e9615de19187c8a1cd37d84c7a8cb18f9b05b6318e4ccaddecfaaf7428e667dc",
-    "twirl-going.png": "4036c84b4cb38900b21934a167bbfd5c6dadcb380ade11c9b21cc2e0ffad4e44",
-    "twirl-going.json": "1621676afcf197dcd6ec157b8372ecef60735f3b60761a459ad7e2687e4e849c",
-    "twirl-start.png": "289b499d74c7204a2e631785b87b37b44093013d375d16f2aae4063e3cc815fc",
-    "twirl-start.json": "d314f8f8f98aa1839c798363b1c5e625964cbeb4f42041aacf89c647ccddded5",
-    "victory.png": "cd0ba18d6ff8493dfba4f1e2267cfd6d0b38a6314a1fb844d4e481bcf5ebc039",
-    "victory.json": "9a30f1f5abd8cf0d79a581d828bf0f073d02dcfb9fe9dc93c560e51bd38fd592"
-   }
-  },
-  "rikku-black-mage": {
-   "manifest": {
-    "states": [
-     "attack",
-     "cast",
-     "follow",
-     "idle",
-     "item",
-     "ko",
-     "ready",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start"
-    ],
-    "portrait": false,
-    "facing": "right",
-    "states2x": [
-     "attack",
-     "cast",
-     "follow",
-     "idle",
-     "item",
-     "ko",
-     "ready",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start"
-    ],
-    "tiers": {
-     "attack": [
-      2,
-      3,
-      4
-     ],
-     "cast": [
-      2,
-      3,
-      4
-     ],
-     "follow": [
-      2,
-      3,
-      4
-     ],
-     "idle": [
-      2,
-      3,
-      4
-     ],
-     "item": [
-      2,
-      3,
-      4
-     ],
-     "ko": [
-      2,
-      3,
-      4
-     ],
-     "ready": [
-      2,
-      3,
-      4
-     ],
-     "twirl-end": [
-      2,
-      3,
-      4
-     ],
-     "twirl-forming": [
-      2,
-      3,
-      4
-     ],
-     "twirl-going": [
-      2,
-      3,
-      4
-     ],
-     "twirl-start": [
-      2,
-      3,
-      4
-     ]
-    }
-   },
-   "files": {
-    "attack.png": "25445b09aa73ab8dce7ab2fb5c27a8ddadbafb6d4ae77e0e96664ec73a90f4e1",
-    "attack.json": "d40402f1c9cd5c6e1bd7ba91b341aa5ad634e634f7b45045b4949d9045e6e8c0",
-    "cast.png": "5090d504649ec001f59a450bc10f6973384559c2453afd3f7a7b963f2b8a734e",
-    "cast.json": "4bc6cfc394c84579c9172618c2650d281a96059a9a3af85162b610201e8ff8fd",
-    "follow.png": "d6684b0d79413ab25e9f0e8d8ada08afdb52a62b8a7a4c7d37ad6f641116d373",
-    "follow.json": "877155047c4c1f281d40df22206e0b5464f02d4615290e569c1498a53f2180aa",
-    "idle.png": "fbe93a4f88ecf63585aa6c4a20edb33eb1ba0c8f453a41af720eb240f44072d0",
-    "idle.json": "dc8a5c8022a10151abd4cf757c82a17f8a484ee77bb9723a77688310f6de057d",
-    "item.png": "dc7b5271343c79331cbcff220ac8f22f28502f2921d3e0d43d43d203f17bf5d1",
-    "item.json": "0e245c3dffa1fb9e667314cd41085dd7ebf687b4d92c6338331b1bf026cbfc5b",
-    "ko.png": "1cc4bd5ebb3154dabdf3f3bbc4b8139abbf0a3835a9270b3dc91bdce9f53ea8d",
-    "ko.json": "9e4d0ca06703db2d8887f6a354874221cf79d805c5a1885592bc0985d422e052",
-    "ready.png": "86584c3369a1d1a798cf4dfffe3c5fe6020a6c2291c39a084f80a0a9484c5e4f",
-    "ready.json": "1c9b843de17046fdc7438db5a28924637518ae5bc771079f4ffb1e0129d501d0",
-    "twirl-end.png": "8ec59c077524d7e5137355f9833f5cfcdeec286306d9516db015ae2a19d8c6e7",
-    "twirl-end.json": "ca0e5b8690e33c61bf3cbccf91ce895d85e9bab2a1c1c5a55c88e78bec22c0ae",
-    "twirl-forming.png": "d0bfc090687ccec173c7de8aaa05aac33f4feef390607c0d9d35bed087f49a7c",
-    "twirl-forming.json": "106f2d8ecefbb70c72ae70d1b2e5dad93b8daf542267b1cce17a091cbe5be54a",
-    "twirl-going.png": "f2426809856be532d3d07e3c767b28b2ba221c064ba9fbd122ca122d0f8645df",
-    "twirl-going.json": "6bedb27f3342adad983eecccb231c4fbf9fcad9d1de791ca8ae5f2b7c9230064",
-    "twirl-start.png": "7d3926cb9eaf30ee860de48a7db85eafbf0aea9df7eaa0d87a8074517ed6e737",
-    "twirl-start.json": "de84b411a0bf77cba7a2294810cadfe0b0d04ae7d2fcd5efb80ba107e3d959e7"
-   }
-  },
-  "rikku-gunner": {
-   "manifest": {
-    "states": [
-     "attack",
-     "cast",
-     "idle",
-     "item",
-     "ko",
-     "ready",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-mid",
-     "twirl-start",
-     "victory"
-    ],
-    "portrait": false,
-    "facing": "right",
-    "states2x": [
-     "attack",
-     "cast",
-     "idle",
-     "item",
-     "ko",
-     "ready",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-mid",
-     "twirl-start",
-     "victory"
-    ],
-    "tiers": {
-     "attack": [
-      2,
-      3,
-      4
-     ],
-     "cast": [
-      2,
-      3,
-      4
-     ],
-     "idle": [
-      2,
-      3,
-      4
-     ],
-     "item": [
-      2,
-      3,
-      4
-     ],
-     "ko": [
-      2,
-      3,
-      4
-     ],
-     "ready": [
-      2,
-      3,
-      4
-     ],
-     "twirl-end": [
-      2,
-      3,
-      4
-     ],
-     "twirl-forming": [
-      2,
-      3,
-      4
-     ],
-     "twirl-going": [
-      2,
-      3,
-      4
-     ],
-     "twirl-mid": [
-      2,
-      3,
-      4
-     ],
-     "twirl-start": [
-      2,
-      3,
-      4
-     ],
-     "victory": [
-      2,
-      3,
-      4
-     ]
-    }
-   },
-   "files": {
-    "attack.png": "8273894ce5c3c0708c0a6fb06d078a3492a4b1185542799ee4ceb5d41ec20ab5",
-    "attack.json": "91e90089839332c2c2de829e3cc871a5c7b28b7b229169913c67d0a0b7f456bc",
-    "cast.png": "1d48868f96a8f14a2c00a7e1c76af3455168948ea4d8aaeecd84a786c01114f6",
-    "cast.json": "7d292ee6af699fa3abafd47fbc7be2f29d84f6de5e6bc53677b352414316252f",
-    "idle.png": "cd03d69b5e692f89d8c1c27fa0e1e81438d45ca7a6d5afa084efc6029decd7b5",
-    "idle.json": "e67d39529f7a4bc124d3b2e94d8b14739338b1ab9ee1f6e76e879529f9013ee0",
-    "item.png": "8acb9721ba15c38bb2f922f66fdf1e95c693d99fd2f4ae8ae5c7563d1069d55a",
-    "item.json": "399f73a4efe2521ba800ea8ff5ce2dfed849737ca3ac60b1d886a3d73ea89333",
-    "ko.png": "ea2a11599e7653b4c49515cd777becc0c6a48f5970ea71cc9b352cf6782c4dba",
-    "ko.json": "f4b9f49c5cc32451658d05898718a12f543442c8c84b379b2a087af8b075d8c7",
-    "ready.png": "6422fb6ce162671bbbdf69710c081b95ac8f86643cee2c8456354c0c652b849a",
-    "ready.json": "06295a78ef81e4e1f205fa80cec4ab5fabbec6dc3187572263cb6550041b7798",
-    "twirl-end.png": "f34ceae8792cd2813f32c76078cf6e407eb68143a4d3016b6f7f9f1a02010142",
-    "twirl-end.json": "3d4687c3f2585707c92a705c8de7853af0908a831d3164eca3e62916856f3233",
-    "twirl-forming.png": "17ea4f1fc3db913bb20ec1d056126d463f47911d2e2405136387fbe53b69410b",
-    "twirl-forming.json": "27cdf5acd1d9f80b784aef288ac7886558f91947a5fde8700320a3c39b587bbc",
-    "twirl-going.png": "e56e0a5b4a22e85e82c6508aacb5d583bc35058f3dfca5b0ab9ff2b16b855011",
-    "twirl-going.json": "b57d651262344a0a82b495748109f3def6939fa8562ad6dae2662d7273eb6d6e",
-    "twirl-mid.png": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc",
-    "twirl-mid.json": "bbe70e79189a671404a92c4c0c1b024f7ca6dfcc5d136dc61b79cfff2edeb772",
-    "twirl-start.png": "71ecd2334949e578b08a021355bc44c117121e3b6d9155d7a90d5073d796a356",
-    "twirl-start.json": "5364004f23d2c487e2567d369d73e54cd94f1bcc56c50a121d36f468ca919cc2",
-    "victory.png": "dccc92628a59988a8dd83ec60d0c5384e9ab90a36e92888bb3c96153f1f88c87",
-    "victory.json": "755a9f96e5ecf8d66dda5100b4781907acaa6b89d00505ccdfafe3b58a2225f2"
-   }
-  },
-  "rikku-songstress": {
-   "manifest": {
-    "states": [
-     "attack",
-     "cast",
-     "dance",
-     "hurt",
-     "idle",
-     "item",
-     "ko",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start",
-     "victory"
-    ],
-    "portrait": false,
-    "facing": "front",
-    "states2x": [
-     "attack",
-     "cast",
-     "dance",
-     "hurt",
-     "idle",
-     "item",
-     "ko",
-     "twirl-end",
-     "twirl-forming",
-     "twirl-going",
-     "twirl-start",
-     "victory"
-    ],
-    "tiers": {
-     "attack": [
-      2,
-      3,
-      4
-     ],
-     "cast": [
-      2,
-      3,
-      4
-     ],
-     "dance": [
-      2,
-      3,
-      4
-     ],
-     "hurt": [
-      2,
-      3,
-      4
-     ],
-     "idle": [
-      2,
-      3,
-      4
-     ],
-     "item": [
-      2,
-      3,
-      4
-     ],
-     "ko": [
-      2,
-      3,
-      4
-     ],
-     "twirl-end": [
-      2,
-      3,
-      4
-     ],
-     "twirl-forming": [
-      2,
-      3,
-      4
-     ],
-     "twirl-going": [
-      2,
-      3,
-      4
-     ],
-     "twirl-start": [
-      2,
-      3,
-      4
-     ],
-     "victory": [
-      2,
-      3,
-      4
-     ]
-    }
-   },
-   "files": {
-    "attack.png": "67ac3a26e6111c4bb9cf306c0b126b6c4b2e34cd3ecc76d102759e3ca4b39c03",
-    "attack.json": "cec70a0c3a7164b9f6d0de984716dde8277f15a7e4aca8abc2d1109938b4463f",
-    "cast.png": "cffa22fcfa27f19da5285cd94b5bbf47afebd8d350878334483136de3570a562",
-    "cast.json": "1c7361c1fd8d8b39413997e6782e7ccc3dafb380c9e378be57f7459e85781e00",
-    "dance.png": "4b3a1d9df1579f2c61b034cdd299e79c7dd49146e0ddaf4bafb0a48a99ead145",
-    "dance.json": "a3762664640e129a8683a751d6a82ebba7dd53bbb79d4b1da81fe55c6f880726",
-    "hurt.png": "fec78e2124c5e0b7f6874dcefc3123aec52b3740c6c2b4a485dcb05e61feba90",
-    "hurt.json": "5c76da8adaa3c9fffb404239e5428efd042d731e8ff12e37e0b90286d6f767f4",
-    "idle.png": "f16fb4f4b55c826926819b111741a845602bdb1b70af2de94a6c187c5089b5d4",
-    "idle.json": "810cef6b36b8233f7fb68af18e5a96109031db76b9bba00ecc9d3dcffb2aed4c",
-    "item.png": "0a1fefcc01927cf69bd847524221a29debabefb2d942d32305f6aa9005290b2d",
-    "item.json": "38f0320af755184753be40c452b116d622e19b06fb6eada6e9a1ec42c55f78a8",
-    "ko.png": "17f4f7ede4856a4e393a54075bd73231f4af7f9f4052f500c171810f1318ba5f",
-    "ko.json": "b6e5765a058020ad970b054d419ffba64a44c296202c0528a5cdde5f59a962b1",
-    "twirl-end.png": "77226d09cedc6e4c3bfd9db45deda7ab3bc87445cccd49998a6728cd571b383d",
-    "twirl-end.json": "984f3f528549924827f2bd6f01f8743e063db63e633e1928dea92680d456f0cc",
-    "twirl-forming.png": "453eac1e63ba162793850d041f30f3d8e13e229f346ea6b842109111d84e3f72",
-    "twirl-forming.json": "b6c4e1d42e1cb2b279b27a7bd2850f05edde7b3706477e2d64bff10600d40997",
-    "twirl-going.png": "51c81f0e753a3a75d6c8585119f89773801844a722337a612c9b696266caa9fe",
-    "twirl-going.json": "5df1926e35d9cab54f17bf74535dc2f6cbb70b6543ab7507ff50dc0c32d07ada",
-    "twirl-start.png": "c438ce86bb6f68c3d3019fdccda3ad8c3ed3bad2acd0fb11dc7a10a112ce6af2",
-    "twirl-start.json": "6e9ed5bd42192004607aa1feb6f71fdd4916270138b84cf98474b97d4dc47c66",
-    "victory.png": "1cdad88c5857ee0f93aa3957e0defe27a103e5795e08d6e36a34b32f720bf926",
-    "victory.json": "e27fc426c580864c75c06e5149697e83ab2037fb787f0816bc79f49327633fae"
-   }
-  },
-  "rikku-thief": {
-   "manifest": {
-    "states": [
      "cast",
      "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
@@ -1234,8 +878,10 @@
     "portrait": false,
     "facing": "right",
     "states2x": [
+     "attack",
      "cast",
      "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
@@ -1250,12 +896,22 @@
      "victory"
     ],
     "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
      "cast": [
       2,
       3,
       4
      ],
      "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -1323,10 +979,804 @@
     }
    },
    "files": {
+    "attack.png": "fc604512e729d621bb37f457ee2e1b3d25b0a3e97643d1e002fb1886c21d2c42",
+    "attack.json": "4d4f550a983e50957389f227fdbad62db93634e736336ec540d06876daedda4a",
+    "cast.png": "4e15b46b001dae462b8f43de246c093596d7d654fc50a72431c0ebdd4f9454ee",
+    "cast.json": "3f6a842419073f7e3700c1d0ba6cbdf598033977d9813624e7257522ddedb016",
+    "critical.png": "57d9dc6fad068001e6d6f84418a8babb2dae92b02a32cfb252931db1e9b3dc9d",
+    "critical.json": "50dc21984f95d9d3db58a1049637c1129800306c2289404c27657c8701e20a8b",
+    "defend.png": "d70aa6f046cc8ae1c7d1881a31e358800854ced1d321e3e387fa6949d562aaa0",
+    "defend.json": "6f16515066d7ef290568384fb413f1843e1113efb19af850b237e2fad8d9d4df",
+    "follow.png": "01cf83747b9ad25d95e3bb2758e67a06750bcf12173e3b0417146bbe5c154f7f",
+    "follow.json": "ae1a9217a911fc444fcbbdb73050d29e5134eacc30c87b7ec7509171c75649f3",
+    "hurt.png": "ae143676158453716c8e09986128a9e67bda392012e5a6c6dc73c6559cdcd99c",
+    "hurt.json": "e6392b7996527409641718dad0d2866d3bdaab5885c4cf55ffd9b599ad0a4cac",
+    "idle.png": "391084382d681f3e5577c0198f382c4efa763710413b6934feefb135f030d0ba",
+    "idle.json": "db3042d6983e49ebe76edf324fa171500be33d13d159f8bc5107489d0fa95d7f",
+    "item.png": "12b4554d375751b4a35e9a966c98aad01a01a1d655ad38b22fbe41a6c431fb8b",
+    "item.json": "78a0268a2b400b99a7f7dd83640b4448b4739ddaf32f7c442e3c29284a58daf3",
+    "ko.png": "ca7da43a3dd1c23192165969e340f9d1b3a738cd215d63d148e21d746e1a1a2e",
+    "ko.json": "0a441f9019ce3320eac1db5c002699cdee832a7b6333a12a8581dd435e8fddb9",
+    "ready.png": "790dfcfecbcdfcbfd59735c4b1c316ec9706a4570de8ea0119f0ee29fff4ab20",
+    "ready.json": "ff69be284dec2d2024f77d49d5ca861da97de281d703759a92c5f803d6d9248c",
+    "sleep.png": "a9b7c5760448676c407b7efb4b37da3915a3ffa360b2031ca405d312a4fae0c3",
+    "sleep.json": "98d20919c76c0104ee5d1532e118f8ba2f7b311e1afcdfb3e74c05c7cf768a11",
+    "twirl-end.png": "c8a3cf7b18b62057bfc4aaa943a92614b249ff08dbeb72d809c3697eed5ee7b3",
+    "twirl-end.json": "7bb4386555e638897058fb00d4805017a712fd28ff26f27a25d93c02e7bc93e4",
+    "twirl-forming.png": "07557613d34493903af5815e7e7326246df56b9a1838fd1e8b7a66a0b1a55510",
+    "twirl-forming.json": "c4d62ce3e1d3df7d00563088814449f60e560b7cf1d6c0970563875e6e2d589a",
+    "twirl-going.png": "b6d33301c8d2e83ccb63c5790b164bee1afec95865c7f4fb4b1dfb15688283ac",
+    "twirl-going.json": "140e001464f0402e6186b9d0cecec407fd0c89953ee46f53b20e02569b9d505d",
+    "twirl-start.png": "2a7f8ad66d2dd68e29f2c8bc36a0970f1e1330e2b8023f95e1e492fa8cfc5339",
+    "twirl-start.json": "5e9a512bc335e919bd3af77032ec1389ccac27c4d1a66d3b788c4957ce9c12d1",
+    "victory.png": "b1bd7f45322ad56ef45448e6ecc3df1eded85f931d5785c866af9b8736a155b9",
+    "victory.json": "66e419522277ad7b41c3604f6591c8494afe51b8c4a8b05ea01bd25ac439fd82"
+   }
+  },
+  "rikku-alchemist": {
+   "manifest": {
+    "states": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "portrait": false,
+    "facing": "right",
+    "states2x": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
+     "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
+      2,
+      3,
+      4
+     ],
+     "idle": [
+      2,
+      3,
+      4
+     ],
+     "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
+      2,
+      3,
+      4
+     ],
+     "twirl-end": [
+      2,
+      3,
+      4
+     ],
+     "twirl-forming": [
+      2,
+      3,
+      4
+     ],
+     "twirl-going": [
+      2,
+      3,
+      4
+     ],
+     "twirl-start": [
+      2,
+      3,
+      4
+     ],
+     "victory": [
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "files": {
+    "attack.png": "c1b00b676cdbaa0a2da54e4c9c55b455d596ed6fe17b6f8589621d857b8d0f65",
+    "attack.json": "dbad17878de0a75aad568f0e2ef2dd7e2a36932dae6081a19b59190a67bb8451",
+    "cast.png": "64e6c3fd607a7aeedc4358253c899c402d885df9fdebd5452645e7dafd1d5456",
+    "cast.json": "6f79bf301518abb2bb4362fa68c635f653b8c8d48103aabd7157b3c8ae51da9f",
+    "critical.png": "1edba481b52e1bb3a786de9ecedd016d3f12ff4c1b327179d9367c7d306d4b3e",
+    "critical.json": "ec37e76329ea9b8154c55668e2666f2e7ceb31301900bd7a2b707706e74b4fc3",
+    "defend.png": "366cec955e65f1bbd6093723d97622a6c15373264eac5ea43104cdc223439a63",
+    "defend.json": "7e986b8e7618af6d0b49f6e4f24a95a608173564ced130f6002859b3e16b3d91",
+    "follow.png": "d4174727fdffad8206069c0f3e56dcabaeddb2aec92715e9b87f9406f5518a34",
+    "follow.json": "bd0e9f487c96a331856768099ac24ccb4c3166eb9580ceb7818c18cc5356b8fd",
+    "hurt.png": "7cce23a451cddf6bbb67b56afba0081f7bc27b6b6f0ec4787ed64b4c7eb6944e",
+    "hurt.json": "35cb9fcd72f666a0158f88757467b8843756563a22ee2110fd60ac97d5cff2fc",
+    "idle.png": "c0b29b8bb773d8c6459badfb8e85d47ca8ebbdbc62a5e10bb35d8959f4cda202",
+    "idle.json": "117ee0022c655c70d2d3a68f3187adbe56c1ad7a44f95cf2666deb9e7edfe25d",
+    "item.png": "2b64256ad7b6e233aa0a65614be4657869b8242037eacafc32a747b5d48970ad",
+    "item.json": "047ed42f08fb03f2fb9bb11a3f9f563428065ff86352473cd90b924e0beb2c00",
+    "ko.png": "170db99607bdff839b5593cc840eec962050a1f55a19daebeaab5e1ec200d135",
+    "ko.json": "063ec02ae1c85e002c98429814b605b46e738a1fc569d13ab9111a1862c5ea58",
+    "ready.png": "a800fb1dbca2481b1f19bfb016676102f8a2cb6422212d15a86147e7fa5c0c1b",
+    "ready.json": "18f80ae0636e5db1f4945053a8c65e1c8ebf71d38d383c92ddef7925faea9188",
+    "sleep.png": "a0c1cf0d325aa657d84d304cdfede18136ef48f1fbd40245a4e14ac0cfc38ca6",
+    "sleep.json": "1653add00926351b5ca63326436876c23980f6e5549558c6cc443b29b14b519d",
+    "twirl-end.png": "4b85d74f26da1c76ceb1012d79c8275d356c3c2af90a5acce0487ed16153ed90",
+    "twirl-end.json": "fe007c0af16bb8400cb33931047b31c70490222229edf41365b63d3f7429c377",
+    "twirl-forming.png": "08a1c8dc7fc3e4afce532217f002e57a9c81f72ed31c79ba5e9dbea4f2bca569",
+    "twirl-forming.json": "e9615de19187c8a1cd37d84c7a8cb18f9b05b6318e4ccaddecfaaf7428e667dc",
+    "twirl-going.png": "4036c84b4cb38900b21934a167bbfd5c6dadcb380ade11c9b21cc2e0ffad4e44",
+    "twirl-going.json": "1621676afcf197dcd6ec157b8372ecef60735f3b60761a459ad7e2687e4e849c",
+    "twirl-start.png": "289b499d74c7204a2e631785b87b37b44093013d375d16f2aae4063e3cc815fc",
+    "twirl-start.json": "d314f8f8f98aa1839c798363b1c5e625964cbeb4f42041aacf89c647ccddded5",
+    "victory.png": "cd0ba18d6ff8493dfba4f1e2267cfd6d0b38a6314a1fb844d4e481bcf5ebc039",
+    "victory.json": "9a30f1f5abd8cf0d79a581d828bf0f073d02dcfb9fe9dc93c560e51bd38fd592"
+   }
+  },
+  "rikku-black-mage": {
+   "manifest": {
+    "states": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "portrait": false,
+    "facing": "right",
+    "states2x": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
+     "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
+      2,
+      3,
+      4
+     ],
+     "idle": [
+      2,
+      3,
+      4
+     ],
+     "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
+      2,
+      3,
+      4
+     ],
+     "twirl-end": [
+      2,
+      3,
+      4
+     ],
+     "twirl-forming": [
+      2,
+      3,
+      4
+     ],
+     "twirl-going": [
+      2,
+      3,
+      4
+     ],
+     "twirl-start": [
+      2,
+      3,
+      4
+     ],
+     "victory": [
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "files": {
+    "attack.png": "25445b09aa73ab8dce7ab2fb5c27a8ddadbafb6d4ae77e0e96664ec73a90f4e1",
+    "attack.json": "d40402f1c9cd5c6e1bd7ba91b341aa5ad634e634f7b45045b4949d9045e6e8c0",
+    "cast.png": "5090d504649ec001f59a450bc10f6973384559c2453afd3f7a7b963f2b8a734e",
+    "cast.json": "4bc6cfc394c84579c9172618c2650d281a96059a9a3af85162b610201e8ff8fd",
+    "critical.png": "4516f29037ec4f5beaff879ca1fa8b5d5e0066d72c69aaa9f0d09145ca1429ad",
+    "critical.json": "b23af33f579b9b2f54e6b8f1f3837d01cad2d967d8e8de40208f608663e1cabc",
+    "defend.png": "ce8c50033c5c7166cab44345d1df854868ea5e1e37de74559997baa926f6e5d4",
+    "defend.json": "412da9fc75ef3fff35259f7526e51865e5e1d4e3432a6ec6a000717ba9503f15",
+    "follow.png": "d6684b0d79413ab25e9f0e8d8ada08afdb52a62b8a7a4c7d37ad6f641116d373",
+    "follow.json": "877155047c4c1f281d40df22206e0b5464f02d4615290e569c1498a53f2180aa",
+    "hurt.png": "ef87fcb64ac63564d77e5813820a356d2cabdf3721aaa866298182426929ae41",
+    "hurt.json": "a3f1739dfafe58ba21d7db7f7a7c8045172d366cef75f0bdcc7692754664d5d1",
+    "idle.png": "fbe93a4f88ecf63585aa6c4a20edb33eb1ba0c8f453a41af720eb240f44072d0",
+    "idle.json": "dc8a5c8022a10151abd4cf757c82a17f8a484ee77bb9723a77688310f6de057d",
+    "item.png": "dc7b5271343c79331cbcff220ac8f22f28502f2921d3e0d43d43d203f17bf5d1",
+    "item.json": "0e245c3dffa1fb9e667314cd41085dd7ebf687b4d92c6338331b1bf026cbfc5b",
+    "ko.png": "1cc4bd5ebb3154dabdf3f3bbc4b8139abbf0a3835a9270b3dc91bdce9f53ea8d",
+    "ko.json": "9e4d0ca06703db2d8887f6a354874221cf79d805c5a1885592bc0985d422e052",
+    "ready.png": "86584c3369a1d1a798cf4dfffe3c5fe6020a6c2291c39a084f80a0a9484c5e4f",
+    "ready.json": "1c9b843de17046fdc7438db5a28924637518ae5bc771079f4ffb1e0129d501d0",
+    "sleep.png": "c47cde3fa724e8594680d81b525af078282f652e6333794f2efad6fae0aa370b",
+    "sleep.json": "92a647d2b22d04736c82599d666dddeda3117ed0541ee99fdcb4926358905b2f",
+    "twirl-end.png": "8ec59c077524d7e5137355f9833f5cfcdeec286306d9516db015ae2a19d8c6e7",
+    "twirl-end.json": "ca0e5b8690e33c61bf3cbccf91ce895d85e9bab2a1c1c5a55c88e78bec22c0ae",
+    "twirl-forming.png": "d0bfc090687ccec173c7de8aaa05aac33f4feef390607c0d9d35bed087f49a7c",
+    "twirl-forming.json": "106f2d8ecefbb70c72ae70d1b2e5dad93b8daf542267b1cce17a091cbe5be54a",
+    "twirl-going.png": "f2426809856be532d3d07e3c767b28b2ba221c064ba9fbd122ca122d0f8645df",
+    "twirl-going.json": "6bedb27f3342adad983eecccb231c4fbf9fcad9d1de791ca8ae5f2b7c9230064",
+    "twirl-start.png": "7d3926cb9eaf30ee860de48a7db85eafbf0aea9df7eaa0d87a8074517ed6e737",
+    "twirl-start.json": "de84b411a0bf77cba7a2294810cadfe0b0d04ae7d2fcd5efb80ba107e3d959e7",
+    "victory.png": "0153f31d65e3b05b8b0c755b4d04560e288f78c069405e431db4d0ff6dd3d117",
+    "victory.json": "ec7493ce9c4c2b8f92d643dcadf5b94ad5dc251ce2af54b05de220d9f486078a"
+   }
+  },
+  "rikku-gunner": {
+   "manifest": {
+    "states": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-mid",
+     "twirl-start",
+     "victory"
+    ],
+    "portrait": false,
+    "facing": "right",
+    "states2x": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-mid",
+     "twirl-start",
+     "victory"
+    ],
+    "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
+     "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
+      2,
+      3,
+      4
+     ],
+     "idle": [
+      2,
+      3,
+      4
+     ],
+     "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
+      2,
+      3,
+      4
+     ],
+     "twirl-end": [
+      2,
+      3,
+      4
+     ],
+     "twirl-forming": [
+      2,
+      3,
+      4
+     ],
+     "twirl-going": [
+      2,
+      3,
+      4
+     ],
+     "twirl-mid": [
+      2,
+      3,
+      4
+     ],
+     "twirl-start": [
+      2,
+      3,
+      4
+     ],
+     "victory": [
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "files": {
+    "attack.png": "8273894ce5c3c0708c0a6fb06d078a3492a4b1185542799ee4ceb5d41ec20ab5",
+    "attack.json": "91e90089839332c2c2de829e3cc871a5c7b28b7b229169913c67d0a0b7f456bc",
+    "cast.png": "1d48868f96a8f14a2c00a7e1c76af3455168948ea4d8aaeecd84a786c01114f6",
+    "cast.json": "7d292ee6af699fa3abafd47fbc7be2f29d84f6de5e6bc53677b352414316252f",
+    "critical.png": "c0792fa439d5858d41e9a904866bd4de0abe07c8ea045d5ca6c35df59861b10d",
+    "critical.json": "0876bf15fe02b11a55e7971ed256dc61fdf45ce33320bd6fe66183922b13bf07",
+    "defend.png": "a86d7070b106504db1280135baea916d802d1db058b83ac2f655cfbafb20d2d3",
+    "defend.json": "3f36a16a2929396c10d6fdbba1c77c7249e2ecca3eecd66bb4e5a71f2109a8f9",
+    "follow.png": "5d1871893aa376e25341ef1793d2f5e127567e67dba38361433081da3419e90c",
+    "follow.json": "a86bdb694ca1222d4ae320e8cb7d5063ff7f0462553bdf0f14af71f3ef2eedf0",
+    "hurt.png": "63cbd684da9a727036bc4ac0f90a8fcd3e83ca10e70a71ed898e896a25c8e9a6",
+    "hurt.json": "cbb28be24b8f6ff82d221d2ee789a004c7a60e865a7e8391cc0d8c3b0e0ea376",
+    "idle.png": "cd03d69b5e692f89d8c1c27fa0e1e81438d45ca7a6d5afa084efc6029decd7b5",
+    "idle.json": "e67d39529f7a4bc124d3b2e94d8b14739338b1ab9ee1f6e76e879529f9013ee0",
+    "item.png": "8acb9721ba15c38bb2f922f66fdf1e95c693d99fd2f4ae8ae5c7563d1069d55a",
+    "item.json": "399f73a4efe2521ba800ea8ff5ce2dfed849737ca3ac60b1d886a3d73ea89333",
+    "ko.png": "ea2a11599e7653b4c49515cd777becc0c6a48f5970ea71cc9b352cf6782c4dba",
+    "ko.json": "f4b9f49c5cc32451658d05898718a12f543442c8c84b379b2a087af8b075d8c7",
+    "ready.png": "6422fb6ce162671bbbdf69710c081b95ac8f86643cee2c8456354c0c652b849a",
+    "ready.json": "06295a78ef81e4e1f205fa80cec4ab5fabbec6dc3187572263cb6550041b7798",
+    "sleep.png": "fcfd5e7e5a2e736aeeaff446fc892295b078ee18ff4f1bdb4f4c942118b90156",
+    "sleep.json": "f89acc128ba2f7342378180b550f59f651708fdd01739d9e3f9112e0f6421d61",
+    "twirl-end.png": "f34ceae8792cd2813f32c76078cf6e407eb68143a4d3016b6f7f9f1a02010142",
+    "twirl-end.json": "3d4687c3f2585707c92a705c8de7853af0908a831d3164eca3e62916856f3233",
+    "twirl-forming.png": "17ea4f1fc3db913bb20ec1d056126d463f47911d2e2405136387fbe53b69410b",
+    "twirl-forming.json": "27cdf5acd1d9f80b784aef288ac7886558f91947a5fde8700320a3c39b587bbc",
+    "twirl-going.png": "e56e0a5b4a22e85e82c6508aacb5d583bc35058f3dfca5b0ab9ff2b16b855011",
+    "twirl-going.json": "b57d651262344a0a82b495748109f3def6939fa8562ad6dae2662d7273eb6d6e",
+    "twirl-mid.png": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc",
+    "twirl-mid.json": "bbe70e79189a671404a92c4c0c1b024f7ca6dfcc5d136dc61b79cfff2edeb772",
+    "twirl-start.png": "71ecd2334949e578b08a021355bc44c117121e3b6d9155d7a90d5073d796a356",
+    "twirl-start.json": "5364004f23d2c487e2567d369d73e54cd94f1bcc56c50a121d36f468ca919cc2",
+    "victory.png": "dccc92628a59988a8dd83ec60d0c5384e9ab90a36e92888bb3c96153f1f88c87",
+    "victory.json": "755a9f96e5ecf8d66dda5100b4781907acaa6b89d00505ccdfafe3b58a2225f2"
+   }
+  },
+  "rikku-songstress": {
+   "manifest": {
+    "states": [
+     "attack",
+     "cast",
+     "critical",
+     "dance",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "portrait": false,
+    "facing": "front",
+    "states2x": [
+     "attack",
+     "cast",
+     "critical",
+     "dance",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
+     "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "dance": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
+      2,
+      3,
+      4
+     ],
+     "idle": [
+      2,
+      3,
+      4
+     ],
+     "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
+      2,
+      3,
+      4
+     ],
+     "twirl-end": [
+      2,
+      3,
+      4
+     ],
+     "twirl-forming": [
+      2,
+      3,
+      4
+     ],
+     "twirl-going": [
+      2,
+      3,
+      4
+     ],
+     "twirl-start": [
+      2,
+      3,
+      4
+     ],
+     "victory": [
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "files": {
+    "attack.png": "67ac3a26e6111c4bb9cf306c0b126b6c4b2e34cd3ecc76d102759e3ca4b39c03",
+    "attack.json": "cec70a0c3a7164b9f6d0de984716dde8277f15a7e4aca8abc2d1109938b4463f",
+    "cast.png": "cffa22fcfa27f19da5285cd94b5bbf47afebd8d350878334483136de3570a562",
+    "cast.json": "1c7361c1fd8d8b39413997e6782e7ccc3dafb380c9e378be57f7459e85781e00",
+    "critical.png": "97aaf03958e91d1486d1189ab657128ef3492aff94fdf55819fc615834f0e697",
+    "critical.json": "86d26b445c55b41fc0e73941a597cb1b96b76422c13242d8fc46701fb7b20f7e",
+    "dance.png": "4b3a1d9df1579f2c61b034cdd299e79c7dd49146e0ddaf4bafb0a48a99ead145",
+    "dance.json": "a3762664640e129a8683a751d6a82ebba7dd53bbb79d4b1da81fe55c6f880726",
+    "hurt.png": "fec78e2124c5e0b7f6874dcefc3123aec52b3740c6c2b4a485dcb05e61feba90",
+    "hurt.json": "5c76da8adaa3c9fffb404239e5428efd042d731e8ff12e37e0b90286d6f767f4",
+    "idle.png": "f16fb4f4b55c826926819b111741a845602bdb1b70af2de94a6c187c5089b5d4",
+    "idle.json": "810cef6b36b8233f7fb68af18e5a96109031db76b9bba00ecc9d3dcffb2aed4c",
+    "item.png": "0a1fefcc01927cf69bd847524221a29debabefb2d942d32305f6aa9005290b2d",
+    "item.json": "38f0320af755184753be40c452b116d622e19b06fb6eada6e9a1ec42c55f78a8",
+    "ko.png": "17f4f7ede4856a4e393a54075bd73231f4af7f9f4052f500c171810f1318ba5f",
+    "ko.json": "b6e5765a058020ad970b054d419ffba64a44c296202c0528a5cdde5f59a962b1",
+    "ready.png": "4cd23d12d94261ed5fbf87dcc46bb61e646a9df2f5f940dca505918a357f1533",
+    "ready.json": "ddba542fcade3567372fe738b092cfe904e5b9e72e5be081a118858a8c8df7fb",
+    "sleep.png": "8d3b6f7ed50bc45f2e5b67ace7b5c4a51ee2018fc866ec5d83ad53bb65c3ff0f",
+    "sleep.json": "1080636e58c9066961c8e104ab1bb3c960dff47eafe749d9cb579fa5323877b2",
+    "twirl-end.png": "77226d09cedc6e4c3bfd9db45deda7ab3bc87445cccd49998a6728cd571b383d",
+    "twirl-end.json": "984f3f528549924827f2bd6f01f8743e063db63e633e1928dea92680d456f0cc",
+    "twirl-forming.png": "453eac1e63ba162793850d041f30f3d8e13e229f346ea6b842109111d84e3f72",
+    "twirl-forming.json": "b6c4e1d42e1cb2b279b27a7bd2850f05edde7b3706477e2d64bff10600d40997",
+    "twirl-going.png": "51c81f0e753a3a75d6c8585119f89773801844a722337a612c9b696266caa9fe",
+    "twirl-going.json": "5df1926e35d9cab54f17bf74535dc2f6cbb70b6543ab7507ff50dc0c32d07ada",
+    "twirl-start.png": "c438ce86bb6f68c3d3019fdccda3ad8c3ed3bad2acd0fb11dc7a10a112ce6af2",
+    "twirl-start.json": "6e9ed5bd42192004607aa1feb6f71fdd4916270138b84cf98474b97d4dc47c66",
+    "victory.png": "1cdad88c5857ee0f93aa3957e0defe27a103e5795e08d6e36a34b32f720bf926",
+    "victory.json": "e27fc426c580864c75c06e5149697e83ab2037fb787f0816bc79f49327633fae"
+   }
+  },
+  "rikku-thief": {
+   "manifest": {
+    "states": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "portrait": false,
+    "facing": "right",
+    "states2x": [
+     "attack",
+     "cast",
+     "critical",
+     "defend",
+     "follow",
+     "hurt",
+     "idle",
+     "item",
+     "ko",
+     "ready",
+     "sleep",
+     "twirl-end",
+     "twirl-forming",
+     "twirl-going",
+     "twirl-start",
+     "victory"
+    ],
+    "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
+     "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
+      2,
+      3,
+      4
+     ],
+     "idle": [
+      2,
+      3,
+      4
+     ],
+     "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
+      2,
+      3,
+      4
+     ],
+     "twirl-end": [
+      2,
+      3,
+      4
+     ],
+     "twirl-forming": [
+      2,
+      3,
+      4
+     ],
+     "twirl-going": [
+      2,
+      3,
+      4
+     ],
+     "twirl-start": [
+      2,
+      3,
+      4
+     ],
+     "victory": [
+      2,
+      3,
+      4
+     ]
+    }
+   },
+   "files": {
+    "attack.png": "743bba8feb5cc6cf08bcc3dd590e3cdd87a557421e927dfb5790551b3dd8707a",
+    "attack.json": "4457555f2f03dfe10c036b36503e880bee1f89b97a4fba3804b45f7b1e27466a",
     "cast.png": "720409176e0ee584c250e7bbe90dd6154cd2100e11a4a0da796c24ee6c2a172c",
     "cast.json": "99987569944b0b076d003b03c20dea368671779932ec69c0a013e2d8e57b940f",
     "critical.png": "66fe7b56f05366330c63d3f049bab3d1f481a0b3ba3b9f13f74308c0013955e1",
     "critical.json": "28e66539e8cdadd5b6facf412b75da62f6760db6cab17da15da210c721f0658d",
+    "defend.png": "9af816fda5e6be0268d83f10a1681cae9e646d7aa434e40b3dda5d8818171d5c",
+    "defend.json": "5ea9731036b1a82739521864010459e07c519de0bb530e72c5551443844d3b84",
     "follow.png": "8e9ed6cb4e22eb3ba59b840d1f42e07f88ce01c7d01c339a34ddf71c9184706b",
     "follow.json": "aae89e88c9d5edb36740466497947deb4bad166a06c5bb5e2d33e16d49c37d5e",
     "hurt.png": "5e2fc453e070990a30ee1b648ccef25dc6038436935641ec1d756a90c23d44d9",
@@ -1358,12 +1808,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-start",
      "victory"
@@ -1373,12 +1826,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-start",
      "victory"
@@ -1390,6 +1846,16 @@
       4
      ],
      "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -1424,6 +1890,11 @@
       3,
       4
      ],
+     "sleep": [
+      2,
+      3,
+      4
+     ],
      "twirl-end": [
       2,
       3,
@@ -1446,6 +1917,10 @@
     "attack.json": "3dbddbfd4435c3d28bee81049481324dbc0a9fe00162018ff23aed9437d717f3",
     "cast.png": "75a950a642411f4b418fa1a8e983b02abd24f4fa0bd252490bd0e3d7a68952db",
     "cast.json": "e70fdad9aafeca21499b3e92dc609522938bc6973b88db6835ef3bfb7f6c8fe7",
+    "critical.png": "edcdfadc8f5e9c6ebeac70efba160d3ab589b1415eb75e2d6cdd5a11e27d78a2",
+    "critical.json": "6f8e3573fef3bcbb41eeafd3bfcb7ee18dc24e602da59b9c23ad5f05e746ea92",
+    "defend.png": "6de437dedb48f099745405f599a47d2debb19687a363cf1f0ef887ea17235ef0",
+    "defend.json": "bb3809729c68bb29e746d3997a99098359d5c2407b353913fb84021cec4826ec",
     "follow.png": "5cbce718248c07620231c28f76663f925d36368b36abec77ba19faa8915dafa7",
     "follow.json": "cceb1d35f538af5e9edc8a5142b174ce96e44bee55c8ae55b676fd6723621b09",
     "hurt.png": "060ed5607af0f60292bd4d6d0157f0c61ff32ed46a790b5b6aa6835417c993d7",
@@ -1458,6 +1933,8 @@
     "ko.json": "e32d1d14256fc6a103fddf14e65fc9be087349164a5989d48ab1b57e198b5282",
     "ready.png": "4fd1f457820b28acd5118fcda74a0a4657881b987e3a01ebabebdb351700c5cf",
     "ready.json": "a0629865139c6ff338d9d8386f47cf204b8fbc9964be35a6ae33210fe0e0e20a",
+    "sleep.png": "0df66a7a927ae28608c08566da5557c02436682ce1199f9f91067812944458fb",
+    "sleep.json": "ad3184687ab0698b5e645b80065e90d2e69b8181667b077f9bd354d0b3feb1fb",
     "twirl-end.png": "baaa9ee89a47b2d6bce7bbee07c3c29ca53f218b16d22b722bcd83649ef09aaf",
     "twirl-end.json": "f6f00de3b8c1a1433dcc4a14b02aa701d4fd04df90611f735e4e315885121ae6",
     "twirl-start.png": "9519f1fe920c4a1ed999fe34606b6cf6613479b06d2314468cc37a56af9db58b",
@@ -1471,9 +1948,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
+     "hurt",
      "idle",
      "item",
+     "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-start",
@@ -1484,9 +1967,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
+     "hurt",
      "idle",
      "item",
+     "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-start",
@@ -1503,7 +1992,22 @@
       3,
       4
      ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
      "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
       2,
       3,
       4
@@ -1514,6 +2018,21 @@
       4
      ],
      "item": [
+      2,
+      3,
+      4
+     ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -1545,12 +2064,24 @@
     "attack.json": "f98162a2ecac3cc093fc5aae5145039da9161a7e376ba314e2abf31d8a031249",
     "cast.png": "0de1fd4e004088906f121607b57f4e4b81ef613e9277ca021e90d29d0adb7b7f",
     "cast.json": "5aa4ca6fd30a8364b7fb87fb3c01ccf298b85da8de7cd7af4ed4f03a34321f08",
+    "critical.png": "9ed675d02e986e2a0ba17023c134bbc46d586b3b87b88ebc112d3a24fd54c9c4",
+    "critical.json": "1d817cedc3870e4dfa04246107f02028faa4e420faaec91203f110ed5f9e0c3f",
+    "defend.png": "d6d4403b72ab97d7257ce328adfcee6271d04a10bdda23485a3bc9e6fd0a2396",
+    "defend.json": "e88da5d4f1444abdfe57164d2c61f92a745a351f60bfc67edc0921a50b8a6654",
     "follow.png": "3d2ac6f1f7e08c78ea2eb732693ebf7bc797e0d1831376920942263a46564fa0",
     "follow.json": "a1b2cd3af4a8914221d9fa7565a022cd86c47556ca160e9d4cfb4df578c0bc35",
+    "hurt.png": "f6b0fef0152979a3fa92f6253c90fbe8ce9a4517523f38f4ba227a62d15e084c",
+    "hurt.json": "025f3dc9726cf1fd604f02d891feb78ae24e4e7e479c2bd13cb1c70a5c569ce9",
     "idle.png": "c021d5ef0971d97b0a235bae8c86f02968465ab81f1197d43b4f955b97e7b32f",
     "idle.json": "18768778f3d8879cd35c600fce7e34366f660a0daba11c88c78fbb22485bdc0c",
     "item.png": "83a413618d5655c63b9d0ea00d3b495e95b9646e809c16b8854907c25ba5e338",
     "item.json": "edb613393bf781ab647ebcc690587b4ebc6028540a2b12a47a0ce746d4b6d0ba",
+    "ko.png": "39db706f2c0cb4bd3ec36666e84e040e94059ef648712bbd979e12e630198193",
+    "ko.json": "5377aec35bb0f5069aa2062f002cd22001004de6f74ef2800d1cc46af71c4ca3",
+    "ready.png": "ed74be5605fb59e3963f50fa532f4589ca90f84b2ab07d16a7a2493d40600eae",
+    "ready.json": "8b731dd60503a70652e7f92b855df3e7d1339dbf6e2f7a77368e13670885ddd0",
+    "sleep.png": "6193cd49e515744592be95e0d2830a06c3bd5a368c570701eb71c94447a24237",
+    "sleep.json": "4e0cf74000279dcd567729c743ee2776eb9ef92a4bc0f388aa20646351348b2f",
     "twirl-end.png": "67e759168743955dff492eddd6f5ba971b9cf42fa5ecdface6c0dff5f1947c7f",
     "twirl-end.json": "d27e1c39e4a6ff4fbcddc5ca9692fb7f869c29adfc323708fef917e4f7498232",
     "twirl-forming.png": "c53a43eccbee1841466e381c5fc9b16b17601f425b11216dcc517beb4e0cc343",
@@ -1566,12 +2097,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -1583,12 +2117,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -1602,6 +2139,16 @@
       4
      ],
      "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -1632,6 +2179,11 @@
       4
      ],
      "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -1668,6 +2220,10 @@
     "attack.json": "c28e401043b6e988bf5d187c69d4eba17600f7bafef1dbac8869544b0e37cea4",
     "cast.png": "796eec370deb9860c5148f26014ebee1d4c28d8f934c5def05edd88dce422e82",
     "cast.json": "7f5781e349d5a311c2da3bbef626cce87b21c36a96b3aa7d67aca2510dd33b0a",
+    "critical.png": "7b1f886d431eb136ccddfcf341959019803df74568169a3c83b3782705100ebc",
+    "critical.json": "e596c5e195320cc7456282d9c7fc5f9c10e8bafd7778f0853ad06977ead56c81",
+    "defend.png": "e139e5135d4a6358c07f92c4b5407b385f34cc3140101e917a9899cf4af40f66",
+    "defend.json": "3f88ec6df5f17f095a5a3871880e6e75a70a4afa63ea5809b3d11997d996e159",
     "follow.png": "863491dbb5eda1090f9c301234f7c5c16b18843f6cfce82e591b4e9030c2deb3",
     "follow.json": "b61987b4882eabfc6ca98690a808584b6c3c0ee71c579b236bec24f9cb14b8cc",
     "hurt.png": "0a815102b38fa0a88b49e9b7ec5b7bc10deacf1e528fcd5665eef6e1472aff17",
@@ -1680,6 +2236,8 @@
     "ko.json": "f0056d1e6d8d0f7e6c446dabffb7210647c748f37e1039a0356998b09eed611b",
     "ready.png": "7dae23b989ffa054f5bdcfb72db3cae07da039d41cbc1a2f9c1b5c65cbee452c",
     "ready.json": "fda5968acae30bb28f6b4e5de5413b2d70c264ce37ef054c678083032949239e",
+    "sleep.png": "ee136f841a635ddd6de5db1593e380ef4e528b7338e2b0134c6f83305590e733",
+    "sleep.json": "6b401c8504b5457376f521c6deb812d64a0943bfcdada9b97cb5d8a8300e915f",
     "twirl-end.png": "737f81723273ff6bbb111b342271e26b1c044d4fa96a5143713c974835c48222",
     "twirl-end.json": "026f87324d980382c3c19ce7bc62ed6ab02b1aaca0194fe743293eef305a5705",
     "twirl-forming.png": "99c122886a2766462dbe0967d6ade6556274e9fa698eb123e9b5f4c8f4c143a2",
@@ -1698,6 +2256,8 @@
      "attack",
      "cast",
      "critical",
+     "defend",
+     "follow",
      "hurt",
      "idle",
      "item",
@@ -1717,6 +2277,8 @@
      "attack",
      "cast",
      "critical",
+     "defend",
+     "follow",
      "hurt",
      "idle",
      "item",
@@ -1742,6 +2304,16 @@
       4
      ],
      "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
       2,
       3,
       4
@@ -1815,6 +2387,10 @@
     "cast.json": "175a3eb3d3bb95fae437e0c02b6308315e485c3aa037fcc3a16f73a30eef42e0",
     "critical.png": "b34ccf661e8cdd118beed4b3c5c7ead99055d29affeea7d3e1ce4c97f60879b0",
     "critical.json": "e1e14e2863df21df29a633283a92677d05d52113d43c297e38ac980e1f51c5a1",
+    "defend.png": "34d29042ddc91038230bac4fd83a5478357a843f8e3e7702ba3bf7136031f22a",
+    "defend.json": "e9aa8ed6fd0ecb1819bb404c6f6ac1a837e767be9f0b669bb117b7e137ba608a",
+    "follow.png": "3a2264047d6a412adfe03406e32a00020ba2d0945c61262285c7122a992d6cf5",
+    "follow.json": "2fecbcec21e91fe34eb6ac3f2d8e7462e0549e43d98e9479bbff41ff70a9071e",
     "hurt.png": "fdf06616039f139c4c6f7dcc04e40595eee9c1a0acd212f5d1560340b55445aa",
     "hurt.json": "b15134e82650245f6b350cb01b6160358e31ab83bcbd8e2ecf5d56fd5761a026",
     "idle.png": "f711e68f661ebbfb45ce785202e2778defffe0c60e59e2a0d87cc509373e6134",
@@ -1846,10 +2422,16 @@
     "states": [
      "attack",
      "cast",
+     "critical",
      "dance",
+     "defend",
+     "follow",
+     "hurt",
      "idle",
      "item",
      "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -1861,10 +2443,16 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
      "dance",
+     "defend",
+     "follow",
+     "hurt",
      "idle",
      "item",
      "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -1882,7 +2470,27 @@
       3,
       4
      ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
      "dance": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
+      2,
+      3,
+      4
+     ],
+     "follow": [
+      2,
+      3,
+      4
+     ],
+     "hurt": [
       2,
       3,
       4
@@ -1898,6 +2506,16 @@
       4
      ],
      "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -1934,14 +2552,26 @@
     "attack.json": "25612c58d144890f0ab838c1b8fb28bfd5a6f6cd6ed0483a7373740f45a7abc9",
     "cast.png": "3656c7cf9a26da485042a6919fd5c8d07036594afa437eef5f69b9b5885a49f9",
     "cast.json": "ff7092ae65ebc43eec45a4cf15e0d5ff3326e4b269494b496b477eb96865d79b",
+    "critical.png": "b28eb040a5134200669db151123d26f39b5f1fcf7864eff6f42a2c04e198b2a2",
+    "critical.json": "2d3cac7fb6b3c1a559ab0cc35ecae76fb8d87e3e6bfc06fc381c3900e84c14a5",
     "dance.png": "d1048baad2366629524d06a362245e3158b25e63b839a6e152eba5814aca82e7",
     "dance.json": "2fceda10896a160d9839089ec6090f7df62d23233f70ddc79e3cae2514ee89e3",
+    "defend.png": "f39972c1db9df94fe1ed0198008cf19778085f1d98909ae4a25652bd27084c59",
+    "defend.json": "03c8936f8da4e4992d77b5c4d73d9ee8f4554e2ceb0f8dcfcdfbb3c839c0ac45",
+    "follow.png": "bb2933c455bc8b7a06ce5d32a2512dc42949acb9d6ed903d5f37402b2e26892a",
+    "follow.json": "5cfe7c9bed214017bad9d02a92772de2f2a0b515691cf3a9c4b6cd852a3b929a",
+    "hurt.png": "1969261880317c7d84979fde495ad2c2a44f4545765541965d34b618fb68dc3e",
+    "hurt.json": "772e3633df8954c74c5f65da296cc424310c854c77d98e8d2e675b4c867f7e19",
     "idle.png": "1a810b499d50fb6c61744986603d690406aed55a2a25eb5d7cd6010f27b1b459",
     "idle.json": "e6d59370c2647194df0727bee28a2ba7b1c698cf7499126da1879f8f5162c413",
     "item.png": "028b8e2a2f45c4b73fe1be8ff9e64bf1e54816e66e6b9830a8684fa6747febe2",
     "item.json": "64e16deb8f63c7d0030ce505016d16682890e88dc1f3e7c068468bb11634e357",
     "ko.png": "bf77d230abf08a74412f4a4a548aa4b06e8bf26a5068067a31ef50bddb03945f",
     "ko.json": "3bf03e4ade961d6d776065c08c09459f88a5da50505951da194af567d35bae06",
+    "ready.png": "e8b63a9bfe7cea1c1a24f7dc09ea7bfae35bf133af5a73ce782912aacce30d55",
+    "ready.json": "3247e70e18da62e826910a9b42b020ea5f6842665995dc64df4378930bc4841b",
+    "sleep.png": "6564ead56652d80810b404a846838b05762bf5c95d763aa40a7ca40e7dae36f7",
+    "sleep.json": "8d7b25dfd5cfa0575c856cce41793cc47708bc174ff28683326692769ccb8538",
     "twirl-end.png": "7d77226f0d5270e0710c1e755737dea27c3b3b33e5cd20a685aa2564a948400f",
     "twirl-end.json": "8703a9884edcc074ca088de23ad34b962567931fea0a8082996a03ce30b97aa4",
     "twirl-forming.png": "ab4a75feeba6689ebd7fe6b177f8c86957ad18e96a364d156cdb2de55135125c",
@@ -1959,12 +2589,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -1976,12 +2609,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -1995,6 +2631,16 @@
       4
      ],
      "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -2025,6 +2671,11 @@
       4
      ],
      "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -2061,6 +2712,10 @@
     "attack.json": "be0b8c3fca6ef61950d3751df41f8da6a39bbf84bb862f2f15a52b2c230d2177",
     "cast.png": "1e79bd510c81b90907286594879d94cc8a64417896e89c1755975e228b97d0a1",
     "cast.json": "8a13bf10dbc404d39e975e8428f44b2848325764af5fe82a7e7fade15f034658",
+    "critical.png": "90fced4e3f153257941f605e750849c9ce36376f4aa8f66f5ce210bd41495312",
+    "critical.json": "924c51bdb7850ec4d62c9122ed71efadce378ee2ff05e241b51933545c011af8",
+    "defend.png": "f18bac34835f11ee056a11658f6d86341d3c7076ab2f3d24b7e1503c4302f158",
+    "defend.json": "19fcc4bc8e98d4cc7c7985cef840567ca64a239878c0db6c8f6edf6f31419bbc",
     "follow.png": "8aebfb7281f55da1fb8d75f56512a15b1ea7dd4717c4596c52bed7083f9bb492",
     "follow.json": "00d13bf52bad1b7b6ad7aecb8866a5e849ff039b8088fa13d9c90b25441f9968",
     "hurt.png": "f25f7fe9a7349891463131d3d479ec66aa64cc90c7b82ca24572ccdf4bce999f",
@@ -2073,6 +2728,8 @@
     "ko.json": "bc914498b7070958f783e0b134f6064543b476332e6ff1f97ee96dc75cc784ab",
     "ready.png": "125d94446891071a6e26e6ddaafe79c231747be2d5cc92eac5dc6143db69e866",
     "ready.json": "48387c81fa3d79f14a6dce9429dde56d1e8923fc8bb11b5df59dc17012933459",
+    "sleep.png": "2da0c28afc9e25cc11605ff6901309d711e2f2429ff6732103d379f8ed1705fe",
+    "sleep.json": "d597547877ab9340e5dde577d5bdc9e59ae97a3bf5fda60f7cfa417df1556dea",
     "twirl-end.png": "74366ed5bccefa10d0ecfe2414b5d7f224650c0096611beec57beb832a8bed2f",
     "twirl-end.json": "01ce460fb333ba5c58fe183612df9d4ab857d218e8dadb9dfbd81c1ea3077af3",
     "twirl-forming.png": "c6fc3fbea10d37a257795d0f0cc3b704d411e0ed60fde441ac9f73af5a62fae8",
@@ -2088,12 +2745,17 @@
   "yuna-warrior": {
    "manifest": {
     "states": [
+     "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
+     "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -2103,12 +2765,17 @@
     "portrait": false,
     "facing": "right",
     "states2x": [
+     "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
+     "ko",
      "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -2116,7 +2783,22 @@
      "victory"
     ],
     "tiers": {
+     "attack": [
+      2,
+      3,
+      4
+     ],
      "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -2141,7 +2823,17 @@
       3,
       4
      ],
+     "ko": [
+      2,
+      3,
+      4
+     ],
      "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -2174,8 +2866,14 @@
     }
    },
    "files": {
+    "attack.png": "309ceac08bc6e39c78c6b26818bf819f057d68b41f7e1250e8cc6b9cae37af14",
+    "attack.json": "5ba9b257b0dec004a167628fc1c1e570c80fc4fa71e00ee1dc6d895c5ced7f02",
     "cast.png": "9f3ba907abe97c30cd8c877660defaea38177b42191df90669337f791634754c",
     "cast.json": "1811c0821d1347abb9aeb93a2463926db133dc4134557bc27729593d1739e762",
+    "critical.png": "19803f9a5207fc9dff28df8939bbbece1339d6e9d49c5661809cd71575e8c7cb",
+    "critical.json": "8a6a608380d612c840c2cd091e6970e5e1658f0ebc402f689959b8a4c8677b60",
+    "defend.png": "bbb173a0db01ae197111837654e1718eab6eb005fe451e6ffe4cf20bf4fe0896",
+    "defend.json": "d3b06a765ffbc344c6ef211a9ededa42a83adede33e4bb0ffeed45e1697f7fbd",
     "follow.png": "898c8b83a8f9c9acf7e4a22ee4a3ca6b621f4ec06f469da2ae0d3b644b6774d5",
     "follow.json": "44118365f4af461bb7351b319e9e6357a85a0cc227b1e224b43d317e9a302563",
     "hurt.png": "59432b041511fc535bfbd7b088f55ac150481036536de45a1fe0f2f0406efc14",
@@ -2184,8 +2882,12 @@
     "idle.json": "bb819ec5b6350dd189c6133c634390a2de6e9f4d716245355da2a2243b1ed9ee",
     "item.png": "3e4f1417d103fb69b8419a82bef2d05847f3d84dd10d4b3b2f1073e532575824",
     "item.json": "28920e0e47edd67f43247800cfdcf0ddb1aa03cd55e00d02c19a1931e67941e0",
+    "ko.png": "e687bdb53f6aa5d7336b596fa1ab12f063cdcd9e7e40d9305209da94e8346701",
+    "ko.json": "fc32a0366fc8f39d091177358c504b4d63425d376ba0f4d23e9b06e370b786a8",
     "ready.png": "29fcc07025c057699f82c00b668bbc6463d6a3e5a2733816d1931bd7624ef1f0",
     "ready.json": "545918b57f815950e1d04a43576bceef3155f0e7a9e01f2bfa5f5b6cc5aad5ac",
+    "sleep.png": "541214f33028fcec9afa3572ddeb7b86eb2f5064bb241b1415a74cbe6c3b51a4",
+    "sleep.json": "9d6887511a03cf53fade4bb508241646bf6551b45204040000f47a1cd2b5db54",
     "twirl-end.png": "ed572641dceadada922936c9871af26c1c8a68aa512b5903f2cd06e61a7f0e29",
     "twirl-end.json": "019f1063c56f01b5870a72f1cff698e506879ec4dc42553e39718cf5a600957f",
     "twirl-forming.png": "0eedfd7385c65a644923e3c945d35b3bdb41ac6cfae28c4cda58c686badbd2f1",
@@ -2203,11 +2905,15 @@
     "states": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -2219,11 +2925,15 @@
     "states2x": [
      "attack",
      "cast",
+     "critical",
+     "defend",
      "follow",
      "hurt",
      "idle",
      "item",
      "ko",
+     "ready",
+     "sleep",
      "twirl-end",
      "twirl-forming",
      "twirl-going",
@@ -2237,6 +2947,16 @@
       4
      ],
      "cast": [
+      2,
+      3,
+      4
+     ],
+     "critical": [
+      2,
+      3,
+      4
+     ],
+     "defend": [
       2,
       3,
       4
@@ -2262,6 +2982,16 @@
       4
      ],
      "ko": [
+      2,
+      3,
+      4
+     ],
+     "ready": [
+      2,
+      3,
+      4
+     ],
+     "sleep": [
       2,
       3,
       4
@@ -2298,16 +3028,24 @@
     "attack.json": "a00ebc1847e3540a903d308e4ac3e0ed5b732f34de20ca2c10e3413c87a02810",
     "cast.png": "9fc54b0a753896a7b28465e117118bb42aa4df48621caa255973bd4d20808bc9",
     "cast.json": "8682c67badd9557e832e5a1a1c478ab9d3a8523bd5f42a5924506316b3b41915",
+    "critical.png": "b8bc09a9e96f1510110d9a325d8754970118d8a771a13064a288b48f0c0a8352",
+    "critical.json": "b98eb50e7baa09c13c55ec14fd15dfc44ee6ae6adc07e7b34b5ec8905e102ef9",
+    "defend.png": "b4ee085f43454a5fe234af3dcad67f7f00cbd20c51528377cfbdb77cf9b23dce",
+    "defend.json": "eae2acce77acbbe81f6ec74ebc0ba8e43757a05c8a85255c9042ab80f7876dc8",
     "follow.png": "8573590de142f91bfe58bac83def87192501b3d50b07fe3b13de8bae9ae5004b",
     "follow.json": "18e45810538c145c245490fac9bf2f45d748bd5d0ce50cea1e80549a9d6aa9bd",
-    "hurt.png": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
-    "hurt.json": "3e52232fc2e7070ff74464603cde5dae5765de89b784ad00c3847f8db25fad2a",
+    "hurt.png": "bb94d63c86dfb97df4e125e5c119e8a9742367e95610095b355cc7e088ac016b",
+    "hurt.json": "88d65d07b8c2332e16ef963e4bc524ad0574246327a8e1b593b8908f4204e8e5",
     "idle.png": "63d483f581cd56d2ce57bf2e871bad6add03126091802aa5a59adfb4a0ef3577",
     "idle.json": "de130f349d53d5a2bfd364d381c79fe1240357c41723ea10df6204513fb4d407",
     "item.png": "c524046a5cc7d46dbfd4699a709aba13e8aaa337f85205878fec162a1231e7de",
     "item.json": "0d6ed2bb3ac5b426ce1022002dc3619a93b5fd24434568d8c4d609ea41168ab9",
-    "ko.png": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
-    "ko.json": "eea1fc56308a6caacbbc75539cabf77b308498ae7249158d2b3e666f552028af",
+    "ko.png": "ad7ed8b6ae3a8f55aeea44d66516f6f60b65ebdd10c6a64b2c804723c7e23ed2",
+    "ko.json": "f985d0bb12d6af8e97d12ed8be57dfff60b263b2f4a4000ce835f09d73a2e935",
+    "ready.png": "830f0c76860872d0a03dd2698c66029f8d69390df70a8062fae0e68cb0b6fcba",
+    "ready.json": "1401a095cf65acad5ae96b8c06eb1380e53b8b29309402d86b9615e541fed38a",
+    "sleep.png": "ac884b792c4d79a2bfe67502f6a28692d31b51e590705e1db2f7a7a985413334",
+    "sleep.json": "027bc29be17fe4c1836005a1d7778bdaa1752c0bb56c430d47b6c9fd0cc4c557",
     "twirl-end.png": "be34ba2bd8eb68f6a067911e79aebe5a2515ba6e0c37d145835b4346864983bf",
     "twirl-end.json": "2ffb63a69e563396f9ed0e0fa077e2cdcd3d6da7898cd05c00b861783219d212",
     "twirl-forming.png": "39d68f7a4ec12be540cf91881566ae001d1081599854b62bac5a29e57e524afe",

@@ -63,11 +63,12 @@ export * from './seymour-omnis-rules.ts';
  * aeon is now the script's.
  */
 export const OMNIS_ASSUMPTIONS = {
+  ringOrder: "sourced, no longer an assumption (O-7, 2026-10-07): the game's own battle AI script steps a disc Fire, Ice, Water, Thunder, forward for a spell and back for a blow; the painted disc is re-seated to it (garden-of-pain-discs.ts)",
+  resetCycle: "sourced, no longer an assumption (O-11, settled by the game's own script, re-parity D-24): the reset turn sets every disc to the next colour of Ice, Water, Thunder, Fire (the ring's order); GameFAQs' Fire, Water, Ice, Thunder is retired",
   aeonAbsorb: 'sourced, not an assumption: Ifrit absorbs Fire, Ixion Thunder, Shiva Ice (verified: 2 sources); their default armour in every FFX battle (setup.ts AEON_INNATE_AFFINITIES, rule 14)',
   emptyAimFallback: 'our estimate: an empty-aim fallback skips the discs as a random pick does (research names random-target attacks only)',
   reflectBounce: 'our estimate: a Reflect bounce never lands on a disc (research names random-target attacks only)',
   discExtraImmunities: 'our estimate: the discs are also immune to Life and to Threaten (neither sourced for m106; both moot on an unkillable part with no turns)',
-  discArt: 'our estimate: the painted discs keep the earlier ring (Fire, Water, Ice, Thunder), so a turn can read as a half turn on screen; the colour that faces him is the script\'s',
 } as const;
 
 function setDefense(ctx: Ctx, value: number): void {

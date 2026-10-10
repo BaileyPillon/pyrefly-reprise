@@ -1,0 +1,83 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "sin-fins-core",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 1109.3,
+   "swaps": 1516,
+   "snapsPerMinute": 0.7,
+   "maxHeadJumpPct": 24,
+   "maxFeetShiftPx": 1,
+   "worstJerkPx": 365.5,
+   "strips": 18,
+   "worstSwapStrips": [
+    "sin-fins-core-win-on/continuity/strips/swap-874-right-fin-idle-cast.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-970-right-fin-idle-ko.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-414-left-fin-hurt-ko.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-455-right-fin-cast-idle.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-473-right-fin-idle-attack.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-602-right-fin-attack-idle.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-871-rikku-follow-idle.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-974-rikku-critical-victory.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-869-rikku-attack-follow.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 1109.3,
+ "counted": 1516,
+ "swaps": 1675,
+ "size": {
+  "judged": 1151,
+  "costumeSwaps": 3,
+  "sameArtSwaps": 362,
+  "costumeWorstHeadPct": 51.2,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 24,
+  "maxHeadJumpPctRegistration": 0.3,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 1,
+  "feetOverTolerance": 0,
+  "headMeasured": 1151,
+  "headRegistration": 1084,
+  "headSilhouette": 67,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 13,
+  "snapsPerMinute": 0.7,
+  "hardCuts": 17,
+  "hardCutsPerMinute": 0.92,
+  "ghostSwaps": 1121,
+  "ghostFrames": 4615,
+  "worstGhostSeverity": 0.446,
+  "ghostOverFail": 56,
+  "jerks": 561,
+  "worstJerkPx": 365.5,
+  "jerksOverFail": 228,
+  "lowestIou": 0.035,
+  "maxCentroidShiftPx": 362.3
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "1084 of 1151 measured swaps had a registered head (tolerance 3 percent); 67 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.7 snaps per minute is over 0.25",
+    "228 jerk(s) of 40 px or more in one frame (worst 365.5 px)",
+    "56 swap(s) show a double image of severity 0.4 or more (worst 0.446)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5190/",
+ "date": "2026-10-07T18:24:50.302Z"
+}

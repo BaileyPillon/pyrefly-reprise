@@ -25,9 +25,9 @@
 import type { BattleEvent, BattleState, Command } from '../../battle/common/types.ts';
 import { simulateFFXCommand, type SimOutcome } from '../../battle/ffx/simulate.ts';
 import {
-  DISC_RING,
   type Element4,
   MORTIPHASM_IDS,
+  discAfterTurn,
   omnisDiscs,
 } from '../../battle/ffx/ai/seymour-omnis-rules.ts';
 
@@ -65,11 +65,8 @@ export function discTurnOf(state: Readonly<BattleState>, command: Command, outco
   // action's damage type; the preview's ability record carries the same one.
   const physical = command.kind === 'attack' || outcome.ability?.damageType === 'physical';
   const direction: 'left' | 'right' = physical ? 'left' : 'right';
-  const now = before[index]!;
-  const at = DISC_RING.indexOf(now);
-  const step = direction === 'right' ? 1 : -1; // `turnDisc`'s own step: a spell +1 on the game's ring, a blow -1
   const after = [...before];
-  after[index] = DISC_RING[(at + step + DISC_RING.length) % DISC_RING.length]!;
+  after[index] = discAfterTurn(before[index]!, direction); // the engine's own step (`turnDisc` calls the same function)
   return { index, direction, before, after, gaLost: Math.max(0, gaCount(before) - gaCount(after)) };
 }
 

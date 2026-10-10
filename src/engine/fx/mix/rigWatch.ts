@@ -32,7 +32,8 @@ export interface BattleCameraLike {
   readonly rigNames: string[];
   readonly pushAmount: number;
   getRig(name: string): RigShape | undefined;
-  addRig(name: string, rig: RigShape): void;
+  /** `continues` (r3942-stage wave 2 repair): the rig is `name` going on, not a scene's own new camera (`BattleCamera.addRig`; a fake that takes two arguments ignores it). */
+  addRig(name: string, rig: RigShape, continues?: boolean): void;
   moveTo(name: string, ms?: number, easing?: unknown): Promise<void>;
   snapTo(name: string): void;
 }
@@ -79,6 +80,14 @@ export class RigWatch {
     };
   }
 
+  /**
+   * Register `rig` as the rig `name` going on: the master planned from the fitted rig, or today's put back, is not a scene's own new camera for a link, so a giant's phone fit stays its link's
+   * through it, however far CHAPTER FRAMING moves the rig (`BattleCamera.addRig`'s `continues`, `FrameFit.LinkFits`).
+   */
+  private put(name: string, rig: RigShape): void {
+    this.bc.addRig(name, rig, true);
+  }
+
   /** Today's rig (as the scene registered it), as a pose. */
   base(name: string): Pose | null {
     const r = (this.installedOnce ? this.orig.get(name) : undefined) ?? this.bc.getRig(name) ?? this.orig.get(name);
@@ -108,8 +117,11 @@ export class RigWatch {
     return this.n.moves + this.n.snaps;
   }
 
-  /** Register the master as the resting rig and re-author the close rigs from it; `on` false puts today's back. */
-  install(m: Pose, on: boolean): void {
+  /**
+   * Register the master as the resting rig and re-author the close rigs from it; `on` false puts today's back. `close` false (a giant's own camera, `giants.ts`) leaves the close rigs
+   * as the scene authored them: a camera 1.8 times as far and 2.9 higher would carry them with it and turn every close shot into a long one.
+   */
+  install(m: Pose, on: boolean, close = true): void {
     if (!this.installedOnce) {
       for (const name of this.bc.rigNames) {
         const r = this.bc.getRig(name);
@@ -122,12 +134,12 @@ export class RigWatch {
     const base = this.base('idle');
     for (const [name, r] of this.orig) {
       if (on && name === 'idle') {
-        this.bc.addRig('idle', { position: m.pos.clone(), lookAt: m.look.clone(), fov: m.fov, ...(r.sway !== undefined ? { sway: r.sway } : {}) });
-      } else if (on && base && CLOSE.includes(name)) {
+        this.put('idle', { position: m.pos.clone(), lookAt: m.look.clone(), fov: m.fov, ...(r.sway !== undefined ? { sway: r.sway } : {}) });
+      } else if (on && close && base && CLOSE.includes(name)) {
         const fov = r.fov ?? this.cam.fov;
-        this.bc.addRig(name, { position: m.pos.clone().add(v(r.position).sub(base.pos)), lookAt: v(r.lookAt), fov: fov + (m.fov - base.fov), ...(r.sway !== undefined ? { sway: r.sway } : {}) });
+        this.put(name, { position: m.pos.clone().add(v(r.position).sub(base.pos)), lookAt: v(r.lookAt), fov: fov + (m.fov - base.fov), ...(r.sway !== undefined ? { sway: r.sway } : {}) });
       } else {
-        this.bc.addRig(name, r);
+        this.put(name, r);
       }
     }
     this.wroteIdle = on ? m.pos.clone() : null;
@@ -221,7 +233,7 @@ export class RigWatch {
     delete o['moveTo'];
     delete o['snapTo'];
     this.restore();
-    if (this.installedOnce) for (const [name, r] of this.orig) this.bc.addRig(name, r);
+    if (this.installedOnce) for (const [name, r] of this.orig) this.put(name, r);
     if (this.installedOnce && this.bc.rigName.split('~')[0] === 'idle') this.bc.snapTo('idle');
   }
 }

@@ -10,6 +10,8 @@ boss-side-fix-needs-measured-options rule).
 95 % interval about 57-70 %)**; the credibly wrong line wins **0 of 200**. No method check is owed.
 Four facts Bailey should see before the chapter is listed are in "What the numbers say" below.
 
+**Re-measured 2026-10-07 (branch `r3941-omnis`, engine at `0e46667c`), before and after the disc ring became the game's own** (Fire, Ice, Water, Thunder, a spell one step forward and a blow one step back; research O-7). **All five lines are identical to the digit**, 200 seeds each: 127, 1, 142, 0 and 0 wins, the same turns, Omnis HP and key moments as the tables below. On the intended line the first blow now turns a Fire disc to Thunder where it turned it to Water, and the disc colours differ on all 200 seeds, yet outcome, battle turns, Omnis HP and party HP differ on none of them (a separate old-against-new replay of the tactic): the ring order changes what the discs show, not how this line plays. The `weakness`, `break-brute` and `wrong` lines never turn a disc. The reset cycle is still GameFAQs' (O-11), so the numbers still rest on that one estimate.
+
 ## Method
 
 - **Real engine, real data, approved build.** `createFFXEngine` with the shipped content, group

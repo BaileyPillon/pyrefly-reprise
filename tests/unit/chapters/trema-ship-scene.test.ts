@@ -42,17 +42,22 @@ describe('Cloister 100 — tables', () => {
     expect(getChapter('ffx2-trema')?.sceneKey).toBe('via-infinito');
   });
 
-  it('three party slots in the lower left, the boss spot far back and right of them', () => {
+  it('three party slots in the lower left, the beast\'s spot far back and right of them, Trema on it at his real height', () => {
     expect(CLOISTER_100_SLOTS.party).toHaveLength(3);
     for (const p of CLOISTER_100_SLOTS.party) {
       expect(p[0]).toBeLessThan(CLOISTER_BOSS_SPOT[0]);
       expect(p[2]).toBeGreaterThan(CLOISTER_BOSS_SPOT[2]);
     }
     expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.paragon]).toEqual(CLOISTER_BOSS_SPOT);
+    // r3942-stage, Bailey 2026-10-08 ("Yes, original spacing"): Trema stands where 39.4.1 stood him, on the beast's spot, far back (wave 1's own spot beside the girls is withdrawn), at his real height
     expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.trema]).toEqual(CLOISTER_BOSS_SPOT);
+    expect(CLOISTER_100_SLOTS.enemySpots?.[CLOISTER_IDS.trema]).toEqual([1.05, 0, -5.8]);
     expect(CLOISTER_100_SLOTS.figureHeights?.[CLOISTER_IDS.trema]).toBe(CLOISTER_ACTOR_HEIGHTS.trema);
-    // INSTALLED.md "Sizes": Trema at 0.72 of Paragon.
-    expect(CLOISTER_ACTOR_HEIGHTS.trema / CLOISTER_ACTOR_HEIGHTS.paragon).toBeCloseTo(0.72, 2);
+    // `data/ffx2/fiend-stature.ts`: 17.8 over the girls' 17.47 is 1.02 (research/ffx2-trema.md §14); it was INSTALLED.md "Sizes": 0.72 of Paragon (2.23)
+    expect(CLOISTER_ACTOR_HEIGHTS.trema).toBe(1.784);
+    expect(CLOISTER_ACTOR_HEIGHTS.trema / CLOISTER_ACTOR_HEIGHTS.party).toBeCloseTo(1.02, 2);
+    // the fiend is where it was on 39.4.1, well above the move-advisor card: the room names no cap (the card is as it was)
+    expect(CLOISTER_100_SLOTS.advisorCap).toBeUndefined();
   });
 
   it('every rig set has the four the contract needs, plus the link rig', () => {

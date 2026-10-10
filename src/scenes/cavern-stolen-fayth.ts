@@ -5,13 +5,14 @@ import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
-import { CAVERN_WIDE_RIGS, cavernRigsFor, viewportAspect } from './cavern-stolen-fayth-rigs.ts';
+import { CAVERN_WIDE_RIGS, cavernPartySlots, cavernRigsFor, viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import type { SceneSlots } from './index.ts';
 import { ArrivalWait, SakuraArrival, sakuraArrivalAt, softDiscTexture, SAKURA_ARRIVAL_MS } from './cavern-stolen-fayth-arrival.ts';
 import { CAVERN_IDS, findFigure, victoryStruck, type StagedFigure } from './cavern-stolen-fayth-cast.ts';
 import { GinnemGlow } from './cavern-stolen-fayth-glow.ts';
 import { hurriedArrivalPace, takeOpeningBegun, takeOpeningHurried } from './openingMark.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
+import { fiendFigureHeights } from '../data/ffx/fiend-stature.ts';
 
 // ---------------------------------------------------------------------------
 // The Cavern of the Stolen Fayth, the last chamber (FFX)
@@ -92,16 +93,16 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
 export const CAVERN_ENEMY_SLOT = { ginnem: 0, yojimbo: 1, daigoro: 2 } as const;
 
 /**
- * World heights, every one a presentation estimate (`docs/concepts/chapters/
- * yojimbo/INSTALLED.md`, the visual bible's `[estimate]`, no game data): Yojimbo
- * 2.55, Daigoro 0.73, Ginnem at human scale. The party takes the FFX chapters'
- * 1.75. The stage sizes Ginnem at 0.7 of the boss height (1.785), its rule for
- * a non-boss fiend; Daigoro gets his own through `figureHeights` (the stage's
- * per-combatant height, which shrinks his shadow and turn ring with him).
+ * World heights (r3942-stage, FFX only): the party's 1.75 is Tidus's (the heroes stand at their own ratio to it, `data/ffx/party-stature.ts`) and each fiend stands at that height
+ * times its model's ratio to Tidus's 18.15 (`data/ffx/fiend-stature.ts`, `research/ffx-yojimbo.md` section 12): Yojimbo 27.1 is 2.613, Daigoro 8.0 is 0.769, Lady Ginnem 17.3 is 1.670 (they
+ * were estimates: 2.55, 0.73 and the stage's 0.7-of-boss rule, 1.785). Every fiend is named in `figureHeights`. **Yojimbo's size on screen is still BOSS SCALE's** (`fx/mix/masters.ts`
+ * `scaleTarget`, Bailey's 1.15 times the party): it grows this base by 1.135 at the first menu (it grew 2.55 by 1.178), so he is drawn about 2.97; his real 1.44 over the heroes becomes about 1.0
+ * at the six units he stands behind them. Where he stands is the corridor between Yuna and the Sensor plate, the enemy shot's frame and these tests (`docs/handoff/r3942-stage.md`).
  */
-export const CAVERN_ACTOR_HEIGHTS = { party: 1.75, yojimbo: 2.55, daigoro: 0.73, ginnem: 1.785 } as const;
+const FIEND_HEIGHTS = fiendFigureHeights(['yojimbo', 'daigoro', 'ginnem'], 1.75);
+export const CAVERN_ACTOR_HEIGHTS = { party: 1.75, yojimbo: FIEND_HEIGHTS['yojimbo']!, daigoro: FIEND_HEIGHTS['daigoro']!, ginnem: FIEND_HEIGHTS['ginnem']! } as const;
 
-/** Each enemy stays on its spot; the party is held on its slots; Daigoro stands at his own height. */
+/** Each enemy stays on its spot; the party is held on its slots; every fiend stands at its own real height. */
 const CAVERN_STAGING = {
   holdParty: true,
   enemySpots: {
@@ -109,7 +110,7 @@ const CAVERN_STAGING = {
     [CAVERN_IDS.yojimbo]: ENEMY_SLOTS[CAVERN_ENEMY_SLOT.yojimbo]!,
     [CAVERN_IDS.daigoro]: ENEMY_SLOTS[CAVERN_ENEMY_SLOT.daigoro]!,
   },
-  figureHeights: { [CAVERN_IDS.daigoro]: CAVERN_ACTOR_HEIGHTS.daigoro },
+  figureHeights: { [CAVERN_IDS.yojimbo]: CAVERN_ACTOR_HEIGHTS.yojimbo, [CAVERN_IDS.daigoro]: CAVERN_ACTOR_HEIGHTS.daigoro, [CAVERN_IDS.ginnem]: CAVERN_ACTOR_HEIGHTS.ginnem },
 } as const;
 
 /** The published slots, same shape every other scene exports. */
@@ -215,7 +216,8 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
   });
   group.add(lights.group);
 
-  const pools = PARTY_SLOTS.slice(0, 3).map((s) => {
+  const partySlots = cavernPartySlots(PARTY_SLOTS, viewportAspect()); // nearer the lens on a phone (r3941-heights, FFX only)
+  const pools = partySlots.slice(0, 3).map((s) => {
     const pool = makeLightPool({ color: 0xcfe2f2, radius: 0.95, opacity: 0.1 });
     pool.position.set(s[0], 0.02, s[2]);
     group.add(pool);
@@ -361,7 +363,7 @@ export const buildCavernStolenFaythScene: SceneFactory = async (opts: SceneBuild
     particles,
     pixelScaled: [glow],
     rigs,
-    partySlots: PARTY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
+    partySlots: partySlots.map((s) => new Vector3(s[0], s[1], s[2])),
     enemySlots: ENEMY_SLOTS.map((s) => new Vector3(s[0], s[1], s[2])),
     partyHeight: CAVERN_ACTOR_HEIGHTS.party,
     enemyHeight: CAVERN_ACTOR_HEIGHTS.yojimbo,

@@ -1,0 +1,340 @@
+
+== braskas-final-aeon @ 1600x900  party tidus, yuna, auron  live camera moved 0 (sway included), master pose moved 0 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 118px under .mad__card -> 128px under .mad__card; to the viewport top 512.8 -> 512.8px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 281.6 -> 281.7 px (x1)  top 512.8 -> 512.9 (min over window 512.8 -> 512.8)  inFrame 0.954 -> 0.994  visible 0.954 -> 0.994
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 78px under [data-role="move-advisor-card"] -> 117px under .mad__card; to the viewport top 473.1 -> 501.5px; off frame 0.033 -> 0.017
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 316.6 -> 287.9 px (x0.909)  top 473.2 -> 501.6 (min over window 473.1 -> 501.5)  inFrame 0.967 -> 0.983  visible 1 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 38px under .mad__card -> 32px under [data-role="move-advisor-card"]; to the viewport top 432.8 -> 417.5px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 245.9 -> 261.3 px (x1.063)  top 432.8 -> 417.5 (min over window 432.8 -> 417.5)  inFrame 0.269 -> 0.352  visible 0.269 -> 0.352
+  boss rect: {"id":"braskas-final-aeon","h":333.6,"top":189.4} -> {"id":"braskas-final-aeon","h":333.1,"top":189.6}  framing bossPx 328 -> 328  partyPx 281 -> 277  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before auron; after auron; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 1 -> 1 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.046, tidus-auron 0.49, yuna-auron 0.29 | after tidus-yuna 0.007, tidus-auron 0.453, yuna-auron 0.201
+
+== braskas-final-aeon @ 390x844  party tidus, yuna, auron  live camera moved 0.191 (sway included), master pose moved 0.19 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 182px under .eint__panel -> 183px under .eint__panel; to the viewport top 298.4 -> 299px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 113.4 -> 115.1 px (x1.015)  top 298.5 -> 299 (min over window 298.4 -> 299)  inFrame 0.953 -> 0.992  visible 0.953 -> 0.992
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 167px under .eint__panel -> 178px under .eint__panel; to the viewport top 282.9 -> 294.7px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 125.7 -> 116 px (x0.923)  top 283 -> 294.7 (min over window 282.9 -> 294.7)  inFrame 1 -> 1  visible 1 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 152px under .eint__panel -> 145px under .eint__panel; to the viewport top 268 -> 261.4px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 105.3 -> 113.3 px (x1.076)  top 268 -> 261.4 (min over window 268 -> 261.4)  inFrame 0.249 -> 0.323  visible 0.249 -> 0.323
+  boss rect: {"id":"braskas-final-aeon","h":164.1,"top":153.6} -> {"id":"braskas-final-aeon","h":165.4,"top":152.8}  framing bossPx 164 -> 166  partyPx 115 -> 115  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before auron; after auron; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.047, tidus-auron 0.565, yuna-auron 0.237 | after tidus-yuna 0.009, tidus-auron 0.517, yuna-auron 0.167
+
+== evrae-airship @ 1600x900  party tidus, rikku, wakka  live camera moved 0.002 (sway included), master pose moved 0 (look 0, lens 64, fov 34 -> 34)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 192px under .mad__card -> 139px under [data-role="move-advisor-card"]; to the viewport top 426.5 -> 426.8px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 264 -> 263.4 px (x0.998)  top 426.9 -> 427.1 (min over window 426.5 -> 426.8)  inFrame 1 -> 1  visible 1 -> 1
+  rikku    feet (the actor's ground point) moved 0 world units
+  rikku    head room above: 172px under .mad__card -> no panel above; to the viewport top 406.5 -> 425.4px; off frame 0 -> 0
+  rikku    world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 213.9 -> 194.9 px (x0.911)  top 406.8 -> 425.6 (min over window 406.5 -> 425.4)  inFrame 0.868 -> 0.889  visible 0.868 -> 0.889
+  wakka    feet (the actor's ground point) moved 0 world units
+  wakka    head room above: 171px under [data-role="move-advisor-card"] -> 75px under [data-role="move-advisor-card"]; to the viewport top 406.1 -> 362.6px; off frame 0 -> 0
+  wakka    world 1.82 -> 2.186 (x1.201, table 1.201)  screen h 216.8 -> 260.4 px (x1.201)  top 406.2 -> 362.8 (min over window 406.1 -> 362.6)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"evrae","h":403.1,"top":284.6} -> {"id":"evrae","h":403.1,"top":284.2}  framing bossPx 403 -> 403  partyPx 233 -> 241  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 1 -> 0 (face hits 1 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-rikku 0.133, tidus-wakka 0, rikku-wakka 0 | after tidus-rikku 0.111, tidus-wakka 0, rikku-wakka 0
+
+== evrae-airship @ 390x844  party tidus, rikku, wakka  live camera moved 0.001 (sway included), master pose moved 0 (look 0, lens 0, fov 34 -> 34)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 132px under .eint__panel -> 132px under .eint__panel; to the viewport top 267.7 -> 267.7px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 161.5 -> 161.5 px (x1)  top 267.9 -> 267.9 (min over window 267.7 -> 267.7)  inFrame 1 -> 1  visible 1 -> 1
+  rikku    feet (the actor's ground point) moved 0 world units
+  rikku    head room above: 120px under .eint__panel -> 131px under .eint__panel; to the viewport top 255.5 -> 266.9px; off frame 0 -> 0
+  rikku    world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 128.8 -> 117.3 px (x0.911)  top 255.6 -> 267 (min over window 255.5 -> 266.9)  inFrame 0.853 -> 0.872  visible 0.853 -> 0.872
+  wakka    feet (the actor's ground point) moved 0 world units
+  wakka    head room above: 120px under .eint__panel -> 93px under .eint__panel; to the viewport top 255.3 -> 229px; off frame 0 -> 0
+  wakka    world 1.82 -> 2.186 (x1.201, table 1.201)  screen h 130.6 -> 156.9 px (x1.201)  top 255.3 -> 229.1 (min over window 255.3 -> 229)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"evrae","h":241.2,"top":182.5} -> {"id":"evrae","h":241.1,"top":182.5}  framing bossPx 241 -> 241  partyPx 141 -> 146  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-rikku 0.147, tidus-wakka 0, rikku-wakka 0 | after tidus-rikku 0.129, tidus-wakka 0, rikku-wakka 0
+
+== isaaru-via-purifico @ 1600x900  party yuna  live camera moved 0 (sway included), master pose moved 0 (look 0, lens 0, fov 32 -> 32)  errors 0
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 237px under .mad__card -> 237px under .mad__card; to the viewport top 491.8 -> 491.8px; off frame 0 -> 0
+  yuna     world 1.68 -> 1.68 (x1, table 0.911)  screen h 289.7 -> 289.7 px (x1)  top 492.4 -> 492.4 (min over window 491.8 -> 491.8)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"grothia","h":326.5,"top":320.1} -> {"id":"grothia","h":326.5,"top":320.1}  framing bossPx 328 -> 328  partyPx 293 -> 293  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before  | after 
+
+== isaaru-via-purifico @ 390x844  party yuna  live camera moved 0.005 (sway included), master pose moved 0 (look 0, lens 0, fov 32 -> 32)  errors 0
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 163px under .eint__panel -> 163px under .eint__panel; to the viewport top 279.1 -> 279.1px; off frame 0 -> 0
+  yuna     world 1.68 -> 1.68 (x1, table 0.911)  screen h 130.9 -> 130.9 px (x1)  top 279.3 -> 279.3 (min over window 279.1 -> 279.1)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"grothia","h":160.5,"top":196.1} -> {"id":"grothia","h":160.5,"top":196.1}  framing bossPx 161 -> 161  partyPx 131 -> 131  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before  | after 
+
+== seymour-anima-macalania @ 1600x900  party tidus, yuna, rikku  live camera moved 0.003 (sway included), master pose moved 0 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 170px under .mad__card -> 170px under [data-role="move-advisor-card"]; to the viewport top 444.9 -> 445px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 297.9 -> 298 px (x1)  top 445.7 -> 445.8 (min over window 444.9 -> 445)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 163px under .mad__card -> 186px under .mad__card; to the viewport top 437.9 -> 460.7px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 256.3 -> 233.5 px (x0.911)  top 438.5 -> 461.2 (min over window 437.9 -> 460.7)  inFrame 0.747 -> 0.762  visible 0.747 -> 0.762
+  rikku    feet (the actor's ground point) moved 0 world units
+  rikku    head room above: no panel above -> no panel above; to the viewport top 406.7 -> 433.9px; off frame 0.012 -> 0.003
+  rikku    world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 309.7 -> 282.1 px (x0.911)  top 407.1 -> 434.2 (min over window 406.7 -> 433.9)  inFrame 0.988 -> 0.997  visible 1 -> 1
+  boss rect: {"id":"seymour-macalania","h":371.9,"top":216.7} -> {"id":"seymour-macalania","h":371.9,"top":216.7}  framing bossPx 375 -> 375  partyPx 292 -> 275  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before yuna; after none; newly failing: none; newly passing: yuna
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 1 -> 1 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.253, tidus-rikku 0, yuna-rikku 0 | after tidus-yuna 0.238, tidus-rikku 0, yuna-rikku 0
+
+== seymour-anima-macalania @ 390x844  party tidus, yuna, rikku  live camera moved 0.164 (sway included), master pose moved 0.16 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 139px under .eint__panel -> 139px under .eint__panel; to the viewport top 274.8 -> 274.9px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 130.5 -> 132.2 px (x1.013)  top 275.1 -> 275.2 (min over window 274.8 -> 274.9)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 136px under .eint__panel -> 146px under .eint__panel; to the viewport top 271.5 -> 282px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 116.1 -> 107.1 px (x0.922)  top 271.7 -> 282.3 (min over window 271.5 -> 282)  inFrame 0.698 -> 0.705  visible 0.698 -> 0.705
+  rikku    feet (the actor's ground point) moved 0 world units
+  rikku    head room above: 122px under .eint__panel -> 134px under .eint__panel; to the viewport top 257.6 -> 269.8px; off frame 0 -> 0
+  rikku    world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 138.6 -> 127.8 px (x0.922)  top 257.7 -> 269.9 (min over window 257.6 -> 269.8)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"seymour-macalania","h":182.3,"top":162.4} -> {"id":"seymour-macalania","h":183.8,"top":161.7}  framing bossPx 183 -> 185  partyPx 130 -> 123  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before yuna; after yuna; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before yuna-tidus 0.302, yuna-rikku 0, tidus-rikku 0 | after tidus-yuna 0.295, tidus-rikku 0, yuna-rikku 0
+
+== seymour-flux @ 1600x900  party tidus, yuna, kimahri  live camera moved 0.435 (sway included), master pose moved 0.436 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 159px under .mad__card -> 194px under [data-role="move-advisor-card"]; to the viewport top 446.2 -> 449.1px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 280.6 -> 293.9 px (x1.048)  top 447.2 -> 450.3 (min over window 446.2 -> 449.1)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: no panel above -> no panel above; to the viewport top 393.6 -> 421.7px; off frame 0.024 -> 0.03
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 297 -> 282.1 px (x0.95)  top 394.1 -> 422.5 (min over window 393.6 -> 421.7)  inFrame 0.893 -> 0.909  visible 0.917 -> 0.939
+  kimahri  feet (the actor's ground point) moved 0 world units
+  kimahri  head room above: 68px under .mad__card -> 43px under .mad__card; to the viewport top 355.2 -> 297.6px; off frame 0 -> 0
+  kimahri  world 1.82 -> 2.204 (x1.211, table 1.211)  screen h 245.5 -> 310.2 px (x1.264)  top 355.3 -> 297.8 (min over window 355.2 -> 297.6)  inFrame 0.292 -> 0.46  visible 0.292 -> 0.46
+  boss rect: {"id":"seymour-flux","h":362.6,"top":85.6} -> {"id":"seymour-flux","h":370.5,"top":77.4}  framing bossPx 365 -> 375  partyPx 277 -> 299  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before kimahri; after kimahri; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 2 -> 2 (face hits 1 -> 1); new: none; worse: yuna/.ig-stat-list 3513px face 0; yuna/.ffx-sensor 5912px face 1423
+  party overlap (share of the smaller box): before tidus-yuna 0.083, tidus-kimahri 0.476, yuna-kimahri 0.323 | after tidus-yuna 0.061, tidus-kimahri 0.368, yuna-kimahri 0.214
+
+== seymour-flux @ 390x844  party tidus, yuna, kimahri  live camera moved 0.004 (sway included), master pose moved 0 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 229px under .eint__panel -> 229px under .eint__panel; to the viewport top 364.7 -> 364.7px; off frame 0.061 -> 0.061
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 129.3 -> 129.3 px (x1)  top 365.1 -> 365.1 (min over window 364.7 -> 364.7)  inFrame 0.939 -> 0.939  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 200px under .eint__panel -> 212px under .eint__panel; to the viewport top 335.4 -> 348px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 138.4 -> 125.8 px (x0.909)  top 335.6 -> 348.2 (min over window 335.4 -> 348)  inFrame 0.912 -> 0.937  visible 0.912 -> 0.937
+  kimahri  feet (the actor's ground point) moved 0 world units
+  kimahri  head room above: 167px under .eint__panel -> 141px under .eint__panel; to the viewport top 302.5 -> 276.8px; off frame 0 -> 0
+  kimahri  world 1.82 -> 2.204 (x1.211, table 1.211)  screen h 118.4 -> 144.1 px (x1.217)  top 302.6 -> 276.9 (min over window 302.5 -> 276.8)  inFrame 0.442 -> 0.574  visible 0.442 -> 0.574
+  boss rect: {"id":"seymour-flux","h":185,"top":137.7} -> {"id":"seymour-flux","h":185,"top":137.7}  framing bossPx 186 -> 186  partyPx 130 -> 134  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before kimahri; after kimahri; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 1 -> 1 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-kimahri 0.38, tidus-yuna 0.088, kimahri-yuna 0.251 | after tidus-yuna 0.063, tidus-kimahri 0.292, yuna-kimahri 0.182
+
+== seymour-natus @ 1600x900  party tidus, yuna, kimahri  live camera moved 0.024 (sway included), master pose moved 0.03 (look 0.01, lens 0, fov 28 -> 28)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 140px under .mad__card -> 142px under .mad__card; to the viewport top 544.5 -> 546.8px; off frame 0 -> 0
+  tidus    world 1.75 -> 1.75 (x1, table 1)  screen h 200.3 -> 200.5 px (x1.001)  top 544.9 -> 547.2 (min over window 544.5 -> 546.8)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 101px under [data-role="move-advisor-card"] -> 123px under [data-role="move-advisor-card"]; to the viewport top 506.3 -> 528.2px; off frame 0 -> 0
+  yuna     world 1.75 -> 1.594 (x0.911, table 0.911)  screen h 221.1 -> 201.5 px (x0.911)  top 506.4 -> 528.2 (min over window 506.3 -> 528.2)  inFrame 0.527 -> 0.474  visible 0.527 -> 0.474
+  kimahri  feet (the actor's ground point) moved 0 world units
+  kimahri  head room above: 113px under [data-role="move-advisor-card"] -> 66px under [data-role="move-advisor-card"]; to the viewport top 518.2 -> 471.2px; off frame 0 -> 0
+  kimahri  world 1.75 -> 2.119 (x1.211, table 1.211)  screen h 230.8 -> 280.6 px (x1.216)  top 518.4 -> 471.4 (min over window 518.2 -> 471.2)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"seymour-natus","h":349.7,"top":231.4} -> {"id":"seymour-natus","h":359.8,"top":223.1}  framing bossPx 340 -> 359  partyPx 217 -> 227  scale 0.45 -> 0.45  plans 1 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before yuna; after yuna; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-kimahri 0, tidus-yuna 0.473, kimahri-yuna 0 | after tidus-yuna 0.526, tidus-kimahri 0, yuna-kimahri 0
+
+== seymour-natus @ 390x844  party yuna, tidus, kimahri  live camera moved 0 (sway included), master pose moved 0 (look 0, lens 0, fov 28 -> 28)  errors 0
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 214px under .eint__panel -> 225px under .eint__panel; to the viewport top 329.9 -> 341.3px; off frame 0 -> 0
+  yuna     world 1.75 -> 1.594 (x0.911, table 0.911)  screen h 126.4 -> 114.9 px (x0.909)  top 330 -> 341.5 (min over window 329.9 -> 341.3)  inFrame 0.513 -> 0.455  visible 0.513 -> 0.455
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 239px under .eint__panel -> 239px under .eint__panel; to the viewport top 355.8 -> 355.8px; off frame 0 -> 0
+  tidus    world 1.75 -> 1.75 (x1, table 1)  screen h 118 -> 118 px (x1)  top 356 -> 356 (min over window 355.8 -> 355.8)  inFrame 1 -> 1  visible 1 -> 1
+  kimahri  feet (the actor's ground point) moved 0 world units
+  kimahri  head room above: 224px under .eint__panel -> 196px under .eint__panel; to the viewport top 340.6 -> 312.1px; off frame 0 -> 0
+  kimahri  world 1.75 -> 2.119 (x1.211, table 1.211)  screen h 131.1 -> 159.6 px (x1.217)  top 340.7 -> 312.2 (min over window 340.6 -> 312.1)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"seymour-natus","h":124.8,"top":202.9} -> {"id":"seymour-natus","h":124.8,"top":202.9}  framing bossPx 124 -> 124  partyPx 126 -> 132  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before yuna; after yuna; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-kimahri 0, tidus-yuna 0.487, kimahri-yuna 0 | after yuna-tidus 0.545, yuna-kimahri 0, tidus-kimahri 0
+
+== seymour-omnis @ 1600x900  party yuna, tidus, auron  live camera moved 0.449 (sway included), master pose moved 0.452 (look 0, lens 0, fov 32 -> 32)  errors 0
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 374px under .ffx-omr__note -> 396px under .ffx-omr__note; to the viewport top 482.3 -> 503.8px; off frame 0.037 -> 0.006
+  yuna     world 1.8 -> 1.64 (x0.911, table 0.911)  screen h 264.5 -> 230.9 px (x0.873)  top 482.9 -> 504.3 (min over window 482.3 -> 503.8)  inFrame 0.963 -> 0.994  visible 1 -> 1
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 227px under [data-role="move-advisor-card"] -> 107px under [data-role="move-advisor-card"]; to the viewport top 514.9 -> 512.3px; off frame 0.003 -> 0
+  tidus    world 1.8 -> 1.8 (x1, table 1)  screen h 237.8 -> 228.2 px (x0.959)  top 515.5 -> 512.7 (min over window 514.9 -> 512.3)  inFrame 0.997 -> 1  visible 1 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 363px under .ffx-omr__strip -> 34px under .mad__card; to the viewport top 451.1 -> 438.6px; off frame 0 -> 0
+  auron    world 1.8 -> 1.912 (x1.062, table 1.062)  screen h 205.9 -> 211.8 px (x1.028)  top 451.3 -> 438.8 (min over window 451.1 -> 438.6)  inFrame 0.839 -> 0.869  visible 0.839 -> 0.869
+  boss rect: {"id":"seymour-omnis","h":375.1,"top":260.4} -> {"id":"seymour-omnis","h":363.8,"top":266.1}  framing bossPx 378 -> 367  partyPx 238 -> 225  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 2 -> 2 (face hits 1 -> 1); new: none; worse: none
+  party overlap (share of the smaller box): before yuna-tidus 0, yuna-auron 0.115, tidus-auron 0.046 | after yuna-tidus 0, yuna-auron 0.067, tidus-auron 0.064
+
+== seymour-omnis @ 390x844  party tidus, yuna, auron  live camera moved 0.002 (sway included), master pose moved 0 (look 0, lens 0, fov 35 -> 35)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 170px under .ffx-omr__strip -> 170px under .ffx-omr__strip; to the viewport top 318.3 -> 318.3px; off frame 0 -> 0
+  tidus    world 1.8 -> 1.8 (x1, table 1)  screen h 99.9 -> 99.8 px (x1)  top 318.6 -> 318.6 (min over window 318.3 -> 318.3)  inFrame 0.538 -> 0.579  visible 0.538 -> 0.579
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 156px under .ffx-omr__strip -> 166px under .ffx-omr__strip; to the viewport top 304.2 -> 314.3px; off frame 0 -> 0
+  yuna     world 1.8 -> 1.64 (x0.911, table 0.911)  screen h 111 -> 101 px (x0.91)  top 304.5 -> 314.5 (min over window 304.2 -> 314.3)  inFrame 1 -> 1  visible 1 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 131px under .ffx-omr__strip -> 125px under .ffx-omr__strip; to the viewport top 278.7 -> 272.8px; off frame 0 -> 0
+  auron    world 1.8 -> 1.912 (x1.062, table 1.062)  screen h 93.7 -> 99.6 px (x1.063)  top 278.7 -> 272.9 (min over window 278.7 -> 272.8)  inFrame 0.31 -> 0.431  visible 0.31 -> 0.431
+  boss rect: {"id":"seymour-omnis","h":154.9,"top":181.7} -> {"id":"seymour-omnis","h":154.9,"top":181.7}  framing bossPx 156 -> 156  partyPx 102 -> 101  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before tidus,auron; after tidus,auron; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 2 -> 2 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before yuna-tidus 0.462, yuna-auron 0.557, tidus-auron 0.535 | after tidus-yuna 0.498, tidus-auron 0.49, yuna-auron 0.403
+
+== sin-face @ 1600x900  party tidus, yuna, auron  live camera moved 0 (sway included), master pose moved 0 (look 0, lens 0, fov 36 -> 36)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: no panel above -> no panel above; to the viewport top 516.2 -> 516.3px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 178.9 -> 178.9 px (x1)  top 516.5 -> 516.5 (min over window 516.2 -> 516.3)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 95px under .ffx-sinhud__gaze -> 109px under .ffx-sinhud__gaze; to the viewport top 474.8 -> 489px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 158.8 -> 144.6 px (x0.91)  top 475 -> 489.1 (min over window 474.8 -> 489)  inFrame 0.994 -> 1  visible 0.994 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: no panel above -> no panel above; to the viewport top 475.3 -> 465.4px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 160 -> 170 px (x1.062)  top 475.4 -> 465.4 (min over window 475.3 -> 465.4)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"overdrive-sin","h":527.2,"top":-110.4} -> {"id":"overdrive-sin","h":527.2,"top":-110.6}  framing bossPx 0 -> 0  partyPx null -> null  scale 0 -> 0  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.007, tidus-auron 0, yuna-auron 0 | after tidus-yuna 0, tidus-auron 0, yuna-auron 0
+
+== sin-face @ 390x844  party tidus, yuna, auron  live camera moved 0 (sway included), master pose moved 0 (look 0, lens 0, fov 36 -> 36)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 145px under .ffx-sinhud__gaze -> 145px under .ffx-sinhud__gaze; to the viewport top 277.4 -> 277.4px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 102.9 -> 102.9 px (x1)  top 277.5 -> 277.5 (min over window 277.4 -> 277.4)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 156px under .eint__panel -> 165px under .eint__panel; to the viewport top 253.5 -> 261.7px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 91.5 -> 83.3 px (x0.91)  top 253.6 -> 261.8 (min over window 253.5 -> 261.7)  inFrame 0.994 -> 1  visible 0.994 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 122px under .ffx-sinhud__gaze -> 116px under .ffx-sinhud__gaze; to the viewport top 253.8 -> 248.1px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 92.2 -> 97.9 px (x1.062)  top 253.8 -> 248.1 (min over window 253.8 -> 248.1)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"overdrive-sin","h":308.2,"top":-88.3} -> {"id":"overdrive-sin","h":308.2,"top":-88.3}  framing bossPx 0 -> 0  partyPx null -> null  scale 0 -> 0  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.006, tidus-auron 0, yuna-auron 0 | after tidus-yuna 0, tidus-auron 0, yuna-auron 0
+
+== sin-fins-core @ 1600x900  party tidus, yuna, auron  live camera moved 0.001 (sway included), master pose moved 0 (look 0, lens 0, fov 36 -> 36)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 383px under .ffx-sinfin -> 383px under .ffx-sinfin; to the viewport top 516 -> 516px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 179.3 -> 179.3 px (x1)  top 516.2 -> 516.2 (min over window 516 -> 516)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: no panel above -> no panel above; to the viewport top 475.2 -> 489.3px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 158.3 -> 144.2 px (x0.911)  top 475.2 -> 489.4 (min over window 475.2 -> 489.3)  inFrame 0.996 -> 1  visible 0.996 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 342px under .ffx-sinfin -> 332px under .ffx-sinfin; to the viewport top 475.3 -> 465.3px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 159.8 -> 169.8 px (x1.062)  top 475.4 -> 465.5 (min over window 475.3 -> 465.3)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"left-fin","h":444.7,"top":122.3} -> {"id":"left-fin","h":444.7,"top":122.1}  framing bossPx 0 -> 0  partyPx null -> null  scale 0 -> 0  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.005, tidus-auron 0, yuna-auron 0 | after tidus-yuna 0, tidus-auron 0, yuna-auron 0
+
+== sin-fins-core @ 390x844  party tidus, yuna, auron  live camera moved 0.001 (sway included), master pose moved 0 (look 0, lens 0, fov 36 -> 36)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 109px under .ffx-sinfin -> 109px under .ffx-sinfin; to the viewport top 298.2 -> 298.2px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 103.5 -> 103.6 px (x1)  top 298.3 -> 298.3 (min over window 298.2 -> 298.2)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 85px under .ffx-sinfin -> 94px under .ffx-sinfin; to the viewport top 274.5 -> 282.7px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 91.5 -> 83.3 px (x0.911)  top 274.6 -> 282.8 (min over window 274.5 -> 282.7)  inFrame 0.998 -> 1  visible 0.998 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 86px under .ffx-sinfin -> 80px under .ffx-sinfin; to the viewport top 274.6 -> 268.9px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 92.4 -> 98.1 px (x1.062)  top 274.7 -> 269 (min over window 274.6 -> 268.9)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"left-fin","h":257.3,"top":108.5} -> {"id":"left-fin","h":257.3,"top":108.3}  framing bossPx 0 -> 0  partyPx null -> null  scale 0 -> 0  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before none; after none; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.003, tidus-auron 0, yuna-auron 0 | after tidus-yuna 0, tidus-auron 0, yuna-auron 0
+
+== yojimbo-cavern @ 1600x900  party lulu, kimahri, yuna  live camera moved 0.001 (sway included), master pose moved 0 (look 0, lens 0, fov 28 -> 28)  errors 0
+  lulu     feet (the actor's ground point) moved 0.002 world units
+  lulu     head room above: no panel above -> no panel above; to the viewport top 580.1 -> 582.3px; off frame 0 -> 0
+  lulu     world 1.75 -> 1.733 (x0.99, table 0.99)  screen h 216.9 -> 214.7 px (x0.99)  top 580.3 -> 582.4 (min over window 580.1 -> 582.3)  inFrame 1 -> 1  visible 1 -> 1
+  kimahri  feet (the actor's ground point) moved 0.002 world units
+  kimahri  head room above: 409px under .ffx-zg__panel -> 366px under .ffx-zg__panel; to the viewport top 567.3 -> 523.3px; off frame 0 -> 0
+  kimahri  world 1.75 -> 2.119 (x1.211, table 1.211)  screen h 207.3 -> 252.2 px (x1.217)  top 567.6 -> 523.7 (min over window 567.3 -> 523.3)  inFrame 0.745 -> 0.773  visible 0.745 -> 0.773
+  yuna     feet (the actor's ground point) moved 0.002 world units
+  yuna     head room above: 421px under .ffx-zg__panel -> 441px under .ffx-zg__panel; to the viewport top 579.2 -> 598.7px; off frame 0 -> 0
+  yuna     world 1.75 -> 1.594 (x0.911, table 0.911)  screen h 216.5 -> 196.9 px (x0.91)  top 579.5 -> 599 (min over window 579.2 -> 598.7)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"yojimbo","h":250.8,"top":318.3} -> {"id":"yojimbo","h":260.2,"top":308.9}  framing bossPx 250 -> 260  partyPx 213 -> 220  scale 1 -> 1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before kimahri; after none; newly failing: none; newly passing: kimahri
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before lulu-kimahri 0, lulu-yuna 0, kimahri-yuna 0.276 | after lulu-kimahri 0, lulu-yuna 0, kimahri-yuna 0.438
+
+== yojimbo-cavern @ 390x844  party lulu, kimahri, yuna  live camera moved 0.001 (sway included), master pose moved 0 (look 0, lens 0, fov 29 -> 29)  errors 0
+  lulu     feet (the actor's ground point) moved 0 world units
+  lulu     head room above: 139px under .eint__panel -> 140px under .eint__panel; to the viewport top 274.7 -> 276px; off frame 0 -> 0
+  lulu     world 1.75 -> 1.733 (x0.99, table 0.99)  screen h 130.3 -> 129 px (x0.99)  top 274.8 -> 276.1 (min over window 274.7 -> 276)  inFrame 1 -> 1  visible 1 -> 1
+  kimahri  feet (the actor's ground point) moved 0 world units
+  kimahri  head room above: 132px under .eint__panel -> 105px under .eint__panel; to the viewport top 267.1 -> 240.4px; off frame 0 -> 0
+  kimahri  world 1.75 -> 2.119 (x1.211, table 1.211)  screen h 124.2 -> 151.4 px (x1.219)  top 267.3 -> 240.6 (min over window 267.1 -> 240.4)  inFrame 0.699 -> 0.75  visible 0.699 -> 0.75
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 140px under .eint__panel -> 0px under .ffx-zg__panel; to the viewport top 275.2 -> 287.3px; off frame 0 -> 0
+  yuna     world 1.75 -> 1.594 (x0.911, table 0.911)  screen h 130.6 -> 118.6 px (x0.908)  top 275.4 -> 287.3 (min over window 275.2 -> 287.3)  inFrame 1 -> 1  visible 1 -> 1
+  boss rect: {"id":"yojimbo","h":128.9,"top":135.7} -> {"id":"yojimbo","h":128.9,"top":135.7}  framing bossPx 126 -> 126  partyPx 128 -> 133  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before kimahri; after none; newly failing: none; newly passing: kimahri
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 3 -> 2 (face hits 3 -> 2); new: none; worse: kimahri/.ffx-zg__panel 6737px face 6737
+  party overlap (share of the smaller box): before lulu-kimahri 0, lulu-yuna 0, kimahri-yuna 0.331 | after lulu-kimahri 0, lulu-yuna 0, kimahri-yuna 0.493
+
+== yunalesca @ 1600x900  party tidus, yuna, auron  live camera moved 0.008 (sway included), master pose moved 0 (look 0, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 110px under .mad__card -> 119px under [data-role="move-advisor-card"]; to the viewport top 504.5 -> 504.3px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 292 -> 292.3 px (x1.001)  top 505.1 -> 504.9 (min over window 504.5 -> 504.3)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 55px under .mad__card -> 91px under .mad__card; to the viewport top 449.5 -> 475.9px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 293.1 -> 266.7 px (x0.91)  top 449.6 -> 475.9 (min over window 449.5 -> 475.9)  inFrame 0.981 -> 1  visible 0.981 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 37px under [data-role="move-advisor-card"] -> 31px under [data-role="move-advisor-card"]; to the viewport top 432.1 -> 416.2px; off frame 0.033 -> 0.034
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 252 -> 267.8 px (x1.063)  top 432.3 -> 416.5 (min over window 432.1 -> 416.2)  inFrame 0.485 -> 0.52  visible 0.519 -> 0.554
+  boss rect: {"id":"yunalesca","h":427.8,"top":166.3} -> {"id":"yunalesca","h":427.7,"top":166.3}  framing bossPx 428 -> 428  partyPx 281 -> 277  scale -1 -> -1  plans 1 -> 1
+  CHK-011 (a party figure under 75 percent clear or in frame): before auron; after auron; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 3 -> 2 (face hits 1 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.019, tidus-auron 0.482, yuna-auron 0 | after tidus-yuna 0, tidus-auron 0.447, yuna-auron 0
+
+== yunalesca @ 390x844  party tidus, yuna, auron  live camera moved 0.177 (sway included), master pose moved 0.181 (look 0.02, lens 0, fov 32 -> 32)  errors 0
+  tidus    feet (the actor's ground point) moved 0 world units
+  tidus    head room above: 177px under .eint__panel -> 180px under .eint__panel; to the viewport top 312.1 -> 315.4px; off frame 0 -> 0
+  tidus    world 1.82 -> 1.82 (x1, table 1)  screen h 138.1 -> 140.3 px (x1.016)  top 312.4 -> 315.7 (min over window 312.1 -> 315.4)  inFrame 1 -> 1  visible 1 -> 1
+  yuna     feet (the actor's ground point) moved 0 world units
+  yuna     head room above: 150px under .eint__panel -> 165px under .eint__panel; to the viewport top 285.6 -> 301px; off frame 0 -> 0
+  yuna     world 1.82 -> 1.658 (x0.911, table 0.911)  screen h 141.3 -> 130.5 px (x0.924)  top 285.6 -> 301 (min over window 285.6 -> 301)  inFrame 0.995 -> 1  visible 0.995 -> 1
+  auron    feet (the actor's ground point) moved 0 world units
+  auron    head room above: 141px under .eint__panel -> 135px under .eint__panel; to the viewport top 276.2 -> 270.3px; off frame 0 -> 0
+  auron    world 1.82 -> 1.933 (x1.062, table 1.062)  screen h 124.3 -> 133.8 px (x1.077)  top 276.3 -> 270.5 (min over window 276.2 -> 270.3)  inFrame 0.528 -> 0.564  visible 0.528 -> 0.564
+  boss rect: {"id":"yunalesca","h":225.6,"top":136.4} -> {"id":"yunalesca","h":228.1,"top":136.5}  framing bossPx 226 -> 228  partyPx 135 -> 136  scale -1 -> -1  plans 2 -> 2
+  CHK-011 (a party figure under 75 percent clear or in frame): before auron; after auron; newly failing: none; newly passing: none
+  CHK-008 faces and weapons under a panel (0 -> 0 boxes): 0 -> 0
+  HUD hits 0 -> 0 (face hits 0 -> 0); new: none; worse: none
+  party overlap (share of the smaller box): before tidus-yuna 0.005, tidus-auron 0.472, yuna-auron 0 | after tidus-yuna 0, tidus-auron 0.436, yuna-auron 0

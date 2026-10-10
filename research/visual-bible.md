@@ -69,6 +69,8 @@ body_px = round(height_cm × 0.343)
 
 **Head units.** Party sprites are drawn at **5.25 heads**. On a 60 px body: head 11 px, neck 2, torso 17, hips 4, legs 22, feet 4. Kimahri and Auron are drawn at **5.6 heads** (more heroic); Yuna/Rikku/Paine at **5.0 heads** (slightly larger head reads friendlier at small size). `[estimate]`
 
+**Update 2026-10-07 (r3941-heights, FFX only).** The wiki heights above are a single source and are kept for comparison. The heights the battle applies to the seven FFX heroes are the HD Remaster models' own, as ratios to Tidus (Tidus 1.000, Yuna 0.911, Auron 1.062, Kimahri 1.211, Wakka 1.201, Lulu 0.990, Rikku 0.911), with the method, the build, the wiki comparison and the bind-pose caveat in [ffx-character-heights.md](ffx-character-heights.md); they live in `src/data/ffx/party-stature.ts`. The FFX-2 girls are not covered yet.
+
 **Boss sizes** (on-screen sprite height in logical px, before any scene scaling):
 
 | Boss | Sprite px (H) | Cell | Note |
