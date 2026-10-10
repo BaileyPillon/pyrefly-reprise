@@ -194,15 +194,31 @@ describe('Chapter X line switch (FFX only)', () => {
     for (const id of NATUS_LINE_IDS) reports.set(id, playLine(id));
   }, 600_000);
 
-  it('the shipped line is live and is the tactic as it was: every menu of six whole battles, the guide and the tip', () => {
-    expect(NATUS_LINE).toBe('shipped');
+  it('the shipped line is the tactic as it was, whichever line is live: every menu of six whole battles, the guide text and the tip', () => {
     const r = reports.get('shipped')!;
     expect(r.decisions).toBeGreaterThan(150);
     expect(r.legacyMatches).toBe(r.decisions);
-    expect(r.registeredMatches).toBe(r.decisions);
-    expect(guideForChapter('seymour-natus')).toBe(natusGuideFor('shipped'));
-    expect(NATUS_META.tip).toMatch(/Haste only Tidus and Auron/);
+    // Bailey's wording of 2026-09-25, to the sentence: a line's edits never reach it
+    const shipped = natusGuideFor('shipped');
     expect(NATUS_LINE_TEXT.shipped).toEqual({});
+    expect(shipped.rules).toHaveLength(5);
+    expect(shipped.rules[3]!.short).toBe('An aeon gets one turn: make it an Overdrive');
+    expect(shipped.phases![2]!.note).toBe('Natus casts Flare; Mortibody Curas him for about 1,200.');
+    expect(shipped.hints.find((h) => h.when.labels?.includes('Cura'))!.text).toMatch(/^Multi-ra hits two guardians for about a thousand each, and Flare one for twice that/);
+  });
+
+  it('the live line is the one NATUS_LINE names: the registered tactic, the registered guide and the pause tip', () => {
+    const r = reports.get(NATUS_LINE)!;
+    expect(r.registeredMatches).toBe(r.decisions);
+    expect(guideForChapter('seymour-natus')).toEqual(natusGuideFor(NATUS_LINE));
+    const lineTip = NATUS_LINE_TEXT[NATUS_LINE].tip;
+    if (lineTip !== undefined) expect(NATUS_META.tip).toBe(lineTip);
+    else expect(NATUS_META.tip).toMatch(/Haste only Tidus and Auron/);
+  });
+
+  // The one assertion a pick changes: the line is Bailey's to move (`src/data/guides/natus-line.ts`), and the two cases above follow it.
+  it('the shipped line stays live until Bailey picks another (his pick of 2026-09-25)', () => {
+    expect(NATUS_LINE).toBe('shipped');
   });
 
   for (const id of NATUS_LINE_IDS) {
