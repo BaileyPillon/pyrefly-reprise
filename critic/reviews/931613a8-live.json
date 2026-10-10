@@ -1,0 +1,46 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-10T05:10:00.000Z",
+  "build": { "mainSha": "931613a8", "bundle": "KHicpkvR", "artifactHash": "9a9f101511a3222447bdce8fcf3c023d55684196a7c68cc689d3c00c18aac6c9" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    {
+      "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/931613a8.json --url https://echoesofspira.com/ --changed-from critic/artifacts/a021787a.json --full: result PASS, liveManifest match, artifactHash 9a9f1015..c6c9, 5084 files checked, 0 mismatched, 0 missing, 0 wrong type, 0 errors; index.html identical once the Cloudflare beacon is cut out; assets/index-KHicpkvR.js served with cache-control public, max-age=0, must-revalidate. Smoke run: 0 console errors, 0 responses >= 400; prerendered music (boss-seymour, title, chapter-select, scene-gagazet, pause mp3s) all 200 and audioDebug playing boss-seymour with the prerendered manifest, sprite and v2 cues decoded; first load to __pyreflyReady 2.0 to 5.3 s (headless GPU mode)."
+    },
+    {
+      "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Every capture follows an assertion: __pyrefly.screen() was title, then party-prep with SEYMOUR FLUX in the page text, then cutscene, then battle (Chapter I, Mortiorchis and Seymour Flux, ATTACK menu and NEXT BEST MOVE card present) before any shot. Changed flow with real keys: G opened the guide (card gone) and G again restored the card; Enter on ATTACK opened TARGET, Escape cancelled it back to the command menu on the battle screen, then ATTACK plus Enter on the target landed (battle log damage events, Lance of Atrophy 788 on Kimahri). Escape and P each paused (screen pause), H hid the pause panels and restored them, and the same key resumed (screen battle). Screens: D:/Tools/pyrefly-scratch/2026-10-10-live/v-*.png. Observation, not classed as a defect: on a first-run profile the Auron coach card swallows the first Enter on the command menu (two presses opened TARGET); not compared with the previous live build."
+    },
+    {
+      "id": "CHK-024", "result": "PASS", "mandatory": false,
+      "evidence": "Reload smoke on the live URL: master volume changed 80 to 50 in the pause SETTINGS tab with real keys, and a battle left a recorded attempt (seymour-flux attempts 1, playTimeMs about 23 s, seenCoach entries) in pyrefly-reprise:save:v1. After page.reload the save string was byte-identical, and audioDebug volumes read master 0.5, music 0.7, sfx 0.7 (applied, not just stored). Chapter select then showed normally. The full upgrade matrix was not run."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact, all 5084 files, full compare against the previous build manifest (a021787a)",
+      "title to chapter select to party prep to cutscene to Chapter I battle with real Enter presses at 1600x900, fresh context, cache-busted URL",
+      "attack, target picker cancel, attack landing, G guide fold and restore",
+      "Escape and P pause and resume, H hide and show panels",
+      "prerendered music requests and AudioManager state",
+      "settings change and progress record surviving a reload",
+      "console errors and 4xx/5xx over two full runs"
+    ],
+    "reused": [
+      "the deploy tool byte compare of 608 files (superseded by the full verify-live)",
+      "focused review 931613a8-focused for the chapters and the continuity, balance and presentation findings"
+    ],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (a save written by the previous live build, truncated storage, the reset flow)",
+      "a chapter cleared through to the results screen (the auto-battle step did not start because the pause screen was still open; progress was shown by the recorded attempt, not a clear)",
+      "any chapter other than Chapter I, and the FFX-2 chapters (deep review owed)",
+      "phone width and 1280x720",
+      "audio heard by ear (agents cannot hear)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50
+}
