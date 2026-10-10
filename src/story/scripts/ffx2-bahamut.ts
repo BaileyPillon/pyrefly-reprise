@@ -95,7 +95,7 @@ export const ffx2BahamutScripts: ChapterScripts = {
     // She raises the guns. Her hands are not steady, and it should show.
     setPose('yuna-x2', 'ready'),
     beat(1400),
-    music('boss-ffx2-aeon', 1400),
+    music('boss-bahamut', 1400),
     battleStart(),
   ],
   post: [

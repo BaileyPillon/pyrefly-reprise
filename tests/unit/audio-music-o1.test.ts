@@ -40,10 +40,15 @@ const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
 };
 const replacedLater = new Set(later.cues.map((c) => c.cue));
 const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
+// The two FFX-2 cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
+// `audio-music-elevenlabs-2026-10-10.test.ts` against `docs/audio/music-elevenlabs-2026-10-10.json`.
+const addedRecord = read('docs/audio/music-elevenlabs-2026-10-10.json') as { cues: { cue: string; file: { bytes: number } }[] };
+const addedCues = new Set(addedRecord.cues.map((c) => c.cue));
+const addedBytes = addedRecord.cues.reduce((sum, c) => sum + c.file.bytes, 0);
 
 describe('music O1: every cue at LAME V0', () => {
   it('records every shipped cue, each reproduced byte for byte before the re-encode', () => {
-    expect(report.cues.map((c) => c.cue).sort()).toEqual(Object.keys(manifest.music).sort());
+    expect(report.cues.map((c) => c.cue).sort()).toEqual(Object.keys(manifest.music).filter((k) => !addedCues.has(k)).sort());
     for (const c of report.cues) expect(c.q5ReproducesShipped, `${c.cue} twin`).toBe(true);
   });
 
@@ -52,11 +57,12 @@ describe('music O1: every cue at LAME V0', () => {
       if (!replacedByV2.has(c.cue) && !replacedLater.has(c.cue)) expect(manifest.music[c.cue]?.bytes, `${c.cue} bytes`).toBe(c.after.bytes);
     }
     const total = Object.values(manifest.music).reduce((a, m) => a + m.bytes, 0);
-    expect(total).toBe(v2.totals.musicBytesAfter + movedLater);
+    expect(total).toBe(v2.totals.musicBytesAfter + movedLater + addedBytes);
   });
 
   it('has not slipped back to q5: at least 200 kbps average, no encoder wall', () => {
     for (const [cue, m] of Object.entries(manifest.music)) {
+      if (addedCues.has(cue)) continue; // a raw take at its own bitrate (about 140 to 160 kbps), not a V0 re-encode
       expect((m.bytes * 8) / m.duration, `${cue} average bitrate`).toBeGreaterThan(200_000);
     }
     for (const c of report.cues) {
@@ -80,7 +86,7 @@ describe('music O1: every cue at LAME V0', () => {
     }
   });
 
-  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, not the old 60', () => {
-    expect(AUDIO_BUDGET_BYTES).toBe(90e6);
+  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, 100 MB under D-6xx (2026-10-10), not the old 60', () => {
+    expect(AUDIO_BUDGET_BYTES).toBe(100e6);
   });
 });

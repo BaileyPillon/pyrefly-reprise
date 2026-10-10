@@ -28,8 +28,8 @@
  *
  * `musicKeys` names the cues this chapter's `Chapter.music` record and its
  * story script actually use — Chapter 4's `scene-bevelle-underground` /
- * `boss-ffx2-aeon` (no dedicated Leblanc cue exists yet; see the class doc on
- * `FFX2_LEBLANC` in `./encounters.ts`) plus the shared `victory-ffx2` fanfare.
+ * `boss-leblanc` (her own ElevenLabs take since 2026-10-10; before that the shared
+ * `boss-ffx2-aeon`, see the class doc on `FFX2_LEBLANC` in `./encounters.ts`) plus the shared `victory-ffx2` fanfare.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -84,7 +84,7 @@ export const FFX2_LEBLANC_META: ChapterMeta = {
     { image: 'characters/ormi/idle.png', caption: 'loses again, shows up anyway' },
   ],
   focalCharacterId: 'leblanc',
-  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon', 'victory-ffx2'],
+  musicKeys: ['scene-bevelle-underground', 'boss-leblanc', 'victory-ffx2'],
 };
 
 export default FFX2_LEBLANC_META;

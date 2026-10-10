@@ -234,7 +234,7 @@ export const ffx2LeblancScripts: ChapterScripts = {
     setPose('yuna-x2', 'ready'),
     // No dedicated boss cue exists yet — fallback to Chapter 4's, same reason
     // as the scene cue above.
-    music('boss-ffx2-aeon', 1200),
+    music('boss-leblanc', 1200),
     battleStart(),
   ],
 

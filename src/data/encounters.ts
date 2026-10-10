@@ -252,7 +252,7 @@ export const FFX2_BAHAMUT: Chapter = {
     scene: 'scene-bevelle-underground',
     // "Yuna's Ballad" — the one aeon fight with its own leitmotif rather than a
     // boss theme [bahamut.ts:114; THEMES.md cue map row 17].
-    battle: 'boss-ffx2-aeon',
+    battle: 'boss-bahamut',
     // No `victory`: the flourish is suppressed for this chapter.
   },
   sensorTexts: {
@@ -341,7 +341,7 @@ export const FFX2_LEBLANC: Chapter = {
   music: {
     // Fallback to Chapter 4's cues — see the class doc above.
     scene: 'scene-bevelle-underground',
-    battle: 'boss-ffx2-aeon',
+    battle: 'boss-leblanc',
     victory: 'victory-ffx2',
   },
   sensorTexts: {

@@ -12,6 +12,16 @@
       "truePeakDb": -1.5,
       "score": "0cf1d83fd2bd62cc"
     },
+    "boss-bahamut": {
+      "file": "music/boss-bahamut.mp3",
+      "loopStart": 12.671678,
+      "loopEnd": 75.83644,
+      "duration": 78.8364,
+      "bytes": 1379184,
+      "lufs": -16.0,
+      "truePeakDb": -2.4,
+      "source": "elevenlabs-music_v2_5"
+    },
     "boss-dread": {
       "file": "music/boss-dread.mp3",
       "loopStart": 10.666667,
@@ -48,6 +58,16 @@
       "bytes": 3534672,
       "lufs": -16.0,
       "truePeakDb": -1.5
+    },
+    "boss-leblanc": {
+      "file": "music/boss-leblanc.mp3",
+      "loopStart": 5.878753,
+      "loopEnd": 76.122268,
+      "duration": 79.1223,
+      "bytes": 1554446,
+      "lufs": -16.0,
+      "truePeakDb": -4.0,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-seymour": {
       "file": "music/boss-seymour.mp3",

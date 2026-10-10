@@ -19,7 +19,7 @@
  */
 
 import { audio } from '../../audio/index.ts';
-import { TRACK_BLURBS, trackNames } from '../../audio/index.ts';
+import { TRACK_BLURBS, hasTrack, trackNames } from '../../audio/index.ts';
 import { escapeHtml } from './html.ts';
 
 /** `"Iron Verdict" — a never-ending...` -> `Iron Verdict`. */
@@ -69,7 +69,11 @@ export class MusicPlayer {
 
   constructor(opts: MusicPlayerOptions) {
     const chapterKeys = new Set(opts.chapterKeys);
-    this.rows = trackNames()
+    // The composed tracks, plus this chapter's own stand-in cues (`boss-leblanc`, `boss-bahamut`, 2026-10-10: an ElevenLabs take whose synth fallback is
+    // the aeon score), which `trackNames()` leaves out so previews never duplicate: the fight's own music must be in the list that marks it.
+    const composed = trackNames();
+    const names = [...composed, ...[...chapterKeys].filter((k) => hasTrack(k) && !composed.includes(k))];
+    this.rows = names
       .map((name) => ({ name, title: trackTitle(name), chapter: chapterKeys.has(name) }))
       // Chapter tracks first, then everything else, each group alphabetical by
       // title so the list does not reshuffle when a cue is added.

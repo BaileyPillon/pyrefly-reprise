@@ -118,7 +118,7 @@ export const bahamutGroup: EnemyGroupDef = {
     // "Yuna's Ballad" — the only aeon fight with its own leitmotif instead of a boss theme; deliberately
     // sorrowful, not triumphant. No victory cue: Chapter 4 suppresses the whole flourish (silent Results
     // screen), handled by `ResultsStep.silent`, not here [ffx2-bahamut §1.7, §5.4; CONTRACT-CHANGES §8].
-    { at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 },
+    { at: 'start', track: 'boss-bahamut', fadeMs: 800 },
   ],
 };
 
