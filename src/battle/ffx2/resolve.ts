@@ -129,13 +129,20 @@ export function resolveAbility(
   // ignored. The chain counter is target-keyed (`chain.ts`), so each stage's
   // chaining is already correct without further work. FFX-2 only — no FFX
   // ability sets the key and no FFX code path reads it.
+  //
+  // **`extra.sequenceTargets`** (re-parity AI lane C): when set, the command names one target per stage, in order —
+  // the first for this ability, the next for the first stage of `sequence`, and so on — as the game's scripted
+  // batches do (Baralai's Triple Attack is three Chain Attack commands at three fixed girls). Absent, every stage
+  // picks its own targets from its own targeting, as No Love Lost's does.
   const sequence = options.inSequence ? undefined : ability.extra?.['sequence'];
   if (Array.isArray(sequence) && user.alive) {
-    for (const nextId of sequence) {
+    const named = ability.extra?.['sequenceTargets'] === true;
+    for (const [index, nextId] of sequence.entries()) {
       if (typeof nextId !== 'string') continue;
       const stage = ctx.abilities.get(nextId);
       if (!stage) continue;
-      total += resolveAbility(ctx, user, stage, [], { ...options, inSequence: true });
+      const aimed = named && requested[index + 1] !== undefined ? [requested[index + 1] as CombatantId] : [];
+      total += resolveAbility(ctx, user, stage, aimed, { ...options, inSequence: true });
     }
   }
 

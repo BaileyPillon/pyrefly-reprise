@@ -29,6 +29,7 @@ import type {
 } from '../common/types.ts';
 import type { AtbSpeed } from './constants.ts';
 import type { AtbMode } from './active.ts';
+import type { ResultsReport } from './results-tally.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -264,6 +265,13 @@ export interface AiScript {
   onTargeted?(ctx: AiContext, sourceId: CombatantId): void;
   /** Optional hook run when a Regen tick heals `self` (the Magus Sisters' +5, §4.2). */
   onRegen?(ctx: AiContext, amount: number): void;
+  /**
+   * Optional hook run after every action that applied results to `self` (`engineHooks.ts#notifyEnemiesResults`),
+   * once, with how many and whose latest one it was. The game runs the reaction entry once per result (each landing
+   * strike, one for a miss, one for a no-effect result, never `self`'s own); Baralai's burst counter and Ixion's
+   * action counter count them (`results-tally.ts`; re-parity AI lane C, `research/re-ffx2-ai-leblanc-den-ixion.md` 1.2).
+   */
+  onResults?(ctx: AiContext, report: ResultsReport): void;
   /**
    * Optional **out-of-turn counter** (`engineHooks.ts#runCounters`): asked once after every
    * party action that damaged `self`, with the damage and that action's mitigation class
