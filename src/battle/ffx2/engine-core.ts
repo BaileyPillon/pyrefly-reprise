@@ -214,6 +214,10 @@ export class Ffx2EngineCore {
       ...(this.options.namedTargetsOnly !== undefined ? { namedTargetsOnly: this.options.namedTargetsOnly } : {}), // Acta switch
       state: this.battleState, // a stolen item goes to `inventory:<id>`, stolen gil to `stolenGil` (`steal.ts`)
       ...(this.options.items ? { items: this.options.items } : {}),
+      // The reaction entry of a script that defines one (AI-FFX2-b): once per result applied to an enemy. Absent scripts are untouched.
+      onResult: (target, source, ability) => {
+        if (target.side === 'enemy') aiScriptFor(target.enemy?.aiScriptId).onResult?.(this.aiContext(target), source, ability);
+      },
     };
   }
 

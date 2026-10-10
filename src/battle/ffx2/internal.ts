@@ -265,6 +265,17 @@ export interface AiScript {
   /** Optional hook run when a Regen tick heals `self` (the Magus Sisters' +5, §4.2). */
   onRegen?(ctx: AiContext, amount: number): void;
   /**
+   * Optional **reaction entry** (re-parity AI-FFX2-b; FFX-2 only): runs once for every result applied to `self`, after the
+   * result's HP, MP and statuses are in (`resolve-strike.ts`, the game's result applier). That is once per strike that
+   * lands (a three-hit command that lands is three results), once for a command that misses or has no effect on `self`
+   * (one result for the whole command), once for a status-only or zero-damage strike, once for a drain's transfer, which
+   * is delivered to the drainer with the drainer as the source, and once for a Scan or Libra. `source` is the unit whose
+   * command it is and `ability` the command's row. Regen and Poison ticks are not routed here ({@link onRegen} keeps
+   * them). The fallen aeons' and the Magus Sisters' gauges, Paragon's Big Bang flag and the Oversoul's answer state are
+   * written here [research/re-ffx2-ai-fallen-trema.md 1.2]. No other script defines it, so no other log changes.
+   */
+  onResult?(ctx: AiContext, source: Ffx2Unit, ability: AbilityDef): void;
+  /**
    * Optional **out-of-turn counter** (`engineHooks.ts#runCounters`): asked once after every
    * party action that damaged `self`, with the damage and that action's mitigation class
    * (`execute.ts#attackClass`). A command returned here resolves at once, costs `self` no

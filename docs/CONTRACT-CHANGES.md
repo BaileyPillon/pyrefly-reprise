@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-10 — A scripted FFX-2 command may name its targets exactly: `AbilityCommand.exactTargets` (additive; FFX-2 only; AI lane FFX2-b)
+
+Branch `re-parity-ai-ffx2-b`. One optional field on a shared contract type, `src/battle/common/types.ts`. Handoff: [re-parity-ai-ffx2-b](handoff/re-parity-ai-ffx2-b.md). Game case: FFX-2 only (the FFX and FF7 engines never read it).
+
+- `AbilityCommand.exactTargets?: boolean`: the game queues an enemy's command with a target mask of the characters its script named, whatever group the row can reach, so a copied
+  all-party spell aimed "at the attacker alone" (the Oversoul Paragon's answer, row O9) must hit only the girl named in `targets`. Set, `resolveAbility` keeps only the named ids of the resolved
+  pool (`resolve.ts`, the same filter `extra.namedTargetsOnly` uses); omitted, the row's own targeting decides as before. `execute.ts` passes it through; `ai/paragon-oversoul.ts` is the only script that sets it.
+- Engine-internal, no contract file: `AiScript.onResult` (the reaction entry, run once per result applied to an enemy) and `ResolveContext.onResult`, called from `resolve-strike.ts` (each strike, each miss, a drain's
+  transfer to the drainer) and `resolve.ts` (a Scan or Libra). Inert for every script that does not define it.
+
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 
 Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is

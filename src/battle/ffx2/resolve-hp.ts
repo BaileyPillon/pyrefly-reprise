@@ -4,7 +4,7 @@
  * `resolve.ts` as a pure move (critic PR-0083 / F3; house rule 7). FFX-2 only.
  */
 
-import type { BattleState, CombatantId, Rng } from '../common/types.ts';
+import type { AbilityDef, BattleState, CombatantId, Rng } from '../common/types.ts';
 import type { AbilityRegistry, Emit, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { breakChain } from './chain.ts';
 import { applyStatus, removeStatus } from './statuses.ts';
@@ -15,6 +15,8 @@ export interface ResolveContext {
   abilities: AbilityRegistry;
   rng: Rng;
   emit: Emit;
+  /** A result was applied to `target` by `source`'s command `ability` (AI-FFX2-b): the engine hands it to the target's script `onResult`. Absent in unit fixtures. */
+  onResult?(target: Ffx2Unit, source: Ffx2Unit, ability: AbilityDef): void;
   breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
   timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
   immuneHitsSkipChain?: boolean; // IC-1's switch: no longer read (the game's chain counter rises only on a positive HP hit)

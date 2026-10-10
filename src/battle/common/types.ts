@@ -1739,6 +1739,13 @@ export interface AbilityCommand {
    * `ActionRec+0xb0`). Omitted, a Bribe offers nothing and the game's rule makes it miss.
    */
   gilSpent?: number;
+  /**
+   * FFX-2 only (re-parity AI-FFX2-b): a scripted command that names its targets exactly. The game queues an enemy's command with
+   * a target mask of the characters its script named, whatever group the row can reach, so an all-party row copied "at the
+   * attacker alone" (the Oversoul Paragon's answer) hits only the girl named in `targets`. Omitted, the row's own targeting
+   * decides, as before; no other script sets it.
+   */
+  exactTargets?: boolean;
 }
 
 /** Use an item from the Item (or Use) menu. */

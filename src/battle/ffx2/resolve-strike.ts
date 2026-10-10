@@ -193,6 +193,7 @@ function strike(env: Env, target: Ffx2Unit): number {
   if (ability.extra?.['cannotKill'] === true && hp > 0 && hp >= target.hp) hp = Math.max(0, target.hp - 1); // Bullseye
 
   // --- apply: HP (with the chain), MP, then statuses, then theft -----------------------------------------------
+  let drained = false; // an HP or MP transfer went back to the user (a drain's own result, below)
   const wasAlive = target.alive;
   const index = env.index;
   env.index += 1;
@@ -220,7 +221,10 @@ function strike(env: Env, target: Ffx2Unit): number {
         });
       }
       applyHpDelta(ctx, target, hp, user.id);
-      if (command.absorbs && hp > 0) heal(ctx, user, hp, 'drain');
+      if (command.absorbs && hp > 0) {
+        heal(ctx, user, hp, 'drain');
+        drained = true;
+      }
     }
   }
   if ((settled.flags & CLASS_MP) !== 0 && settled.mp !== 0) {
@@ -232,7 +236,10 @@ function strike(env: Env, target: Ffx2Unit): number {
       if (command.absorbs) {
         const userBefore = user.mp;
         user.mp = Math.min(user.stats.maxMp, userBefore + moved);
-        if (user.mp > userBefore) ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: user.mp - userBefore });
+        if (user.mp > userBefore) {
+          ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: user.mp - userBefore });
+          drained = true;
+        }
       }
     } else if (moved < 0) {
       ctx.emit({ type: 'mp-heal', targetId: target.id, sourceId: user.id, amount: -moved });
@@ -247,6 +254,10 @@ function strike(env: Env, target: Ffx2Unit): number {
   }
   if (command.stealsItem) applyStealItem(env.theft, command, user, target);
   if (command.stealsGil) applyPilferGil(env.theft, user, target);
+  // The reaction entry (AI-FFX2-b): the result is in. A drain's transfer is a result of its own, delivered to the drainer with the
+  // drainer as the source (`research/re-ffx2-ai-fallen-trema.md` 1.2); the strike itself is a result on its target.
+  ctx.onResult?.(target, user, ability);
+  if (drained) ctx.onResult?.(user, user, ability);
   return hp;
 }
 
@@ -329,6 +340,7 @@ export function runStrikes(
           reason: result.result === HitResult.NoEffect ? 'immune' : 'evaded',
         });
         env.index += 1;
+        ctx.onResult?.(target, user, ability); // a miss or a no-effect is one result for the whole command (AI-FFX2-b)
         continue;
       }
       done[i] = (done[i] ?? 0) + 1;
