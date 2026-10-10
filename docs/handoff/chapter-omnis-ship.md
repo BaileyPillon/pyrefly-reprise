@@ -68,6 +68,7 @@ wide sizes; a scene test pins the party right of the stack at 16:9.
   `tests/unit/chapters/omnis-ring.test.ts` pins the three together (`research/ffx-seymour-omnis.md` O-7). The
   reset cycle (O-11) is still GameFAQs' order, so the strip still says "Colour order: our estimate"; the game's
   script cycles Ice, Water, Thunder, Fire, and that waits for the boss-rules batch.
+  **Update 2026-10-09 (release candidate 1 folded in, FFX only):** the reset cycle is the script's now (Ice, Water, Thunder, Fire; `research/re-ffx-ai-seymour.md` D-24), so only the strip's "Colour order: our estimate" words are left over: they are Bailey's wording and stay until he says. `docs/handoff/re-parity-rc1.md` section 8.
 
 ## Proof
 

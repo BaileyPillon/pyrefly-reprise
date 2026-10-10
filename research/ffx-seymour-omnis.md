@@ -221,7 +221,7 @@ Consequences `[derived]`:
 | Next turn | **Dispel** on the whole party; his DEF drops to 100 | Dispel: `[verified: 4 sources]`; DEF: `[single source: wiki]` + LP partial |
 | The turn after | **Ultima** on the whole party; DEF rises to 150 | Ultima: `[verified: 4 sources]`; DEF: `[single source: wiki]` |
 | Then | **All four discs are reset to one colour, the next in the cycle**, and he goes back to casting four spells | wiki (both pages) + GameFAQs + GamerGuides + LP `[verified: 4 sources]`. **When** `[conflict]`: GameFAQs "immediately after Ultima"; GamerGuides "on the turn after Ultima" and the wiki *Mortiphasm* page (revid 3981206) "on his next turn after casting Ultima". 2 sources against 1 (O-10, open; corrected 2026-09-24 by the plan review, S8). |
-| **The cycle order** `[conflict]` | GameFAQs: **Fire → Water → Ice → Thunder**. The wiki says only "the next element listed above", and its list reads Fire, Ice, Water, Thunder. **The game's own battle AI script cycles Ice, Water, Thunder, Fire** (`[game script]`, 2026-10-07): the ring's order, which is the wiki's reading. | O-11: the script decides, so GameFAQs' explicit order is wrong. **The build still follows GameFAQs** (`OMNIS_RESET_CYCLE`) until the boss-rules batch; the ring itself was fixed first (O-7). |
+| **The cycle order** `[conflict]` | GameFAQs: **Fire → Water → Ice → Thunder**. The wiki says only "the next element listed above", and its list reads Fire, Ice, Water, Thunder. **The game's own battle AI script cycles Ice, Water, Thunder, Fire** (`[game script]`, 2026-10-07): the ring's order, which is the wiki's reading. | O-11: the script decides, so GameFAQs' explicit order is wrong. **The build still followed GameFAQs** (`OMNIS_RESET_CYCLE`) until the boss-rules batch; the ring itself was fixed first (O-7). **Update 2026-10-09: built** (release candidate 1, `research/re-ffx-ai-seymour.md` D-24): the reset sets every disc to Ice, then Water, Thunder, Fire. |
 | Lines | He speaks before the first Dispel and before each Ultima (Auronlu Ch. XV; wiki quotes) | `[verified: 2 sources]`. Write original lines (rule 8). |
 
 **Defense after the reset.** DEF stays 150 after the first Ultima (it never returns to 180) `[derived from the wiki's wording]`. How the scripted Defense values interact with Armor Break status is unstated (O-12).
@@ -240,7 +240,7 @@ The battle ends when **Seymour** dies (the discs cannot be killed) `[derived]`. 
 ### 4.7 Reference pseudocode (sourced rules only; the open items are marked)
 
 ```
-ELEMENTS cycle (after Ultima) = [fire, water, ice, thunder]   // O-11, GameFAQs (the game's script cycles ice, water, thunder, fire: not built yet)
+ELEMENTS cycle (after Ultima) = [fire, water, ice, thunder]   // O-11, GameFAQs (the game's script cycles ice, water, thunder, fire: built 2026-10-09, release candidate 1)
 discs = [fire, fire, fire, fire]; cycleIdx = 0; hits = 0; state = 'normal'
 DISC_RING = [fire, ice, water, thunder]                       // O-7, the game's script: a magic hit steps forward, a physical hit back
 
@@ -400,7 +400,7 @@ Chapter I's post already closes on Seymour saying Spira's sorrow is patient (`sr
 | O-8 | Which spells turn a disc | `[estimate]`: damaging magic only. |
 | O-9 | Whether hits on the discs count toward the 6 / 3 | **Open.** `[estimate]`: no (the sources say "attacks on Seymour"). |
 | O-10 | Disc reset timing: straight after Ultima, or on his next turn | **Open** `[conflict]`: the wiki *Mortiphasm* page and GamerGuides say on his next turn after Ultima, GameFAQs straight after. 2 against 1, so the majority rule says **next turn**; Bailey's call (plan B23). *Corrected 2026-09-24: this row first said "build straight after Ultima"; the wiki sentence had not been counted.* |
-| O-11 | **The post-Ultima cycle order**: GameFAQs Fire → Water → Ice → Thunder; the wiki's list reads Fire, Ice, Water, Thunder; **the game's script cycles Ice, Water, Thunder, Fire** | **Settled by the script 2026-10-07: the ring's order (the wiki's reading), not GameFAQs'.** Not built yet: `OMNIS_RESET_CYCLE` is still GameFAQs' order and waits for the boss-rules batch (measured first, shown to Bailey once). |
+| O-11 | **The post-Ultima cycle order**: GameFAQs Fire → Water → Ice → Thunder; the wiki's list reads Fire, Ice, Water, Thunder; **the game's script cycles Ice, Water, Thunder, Fire** | **Settled by the script 2026-10-07: the ring's order (the wiki's reading), not GameFAQs'.** Not built on the release line (`OMNIS_RESET_CYCLE` was still GameFAQs' order and waited for the boss-rules batch). **Built 2026-10-09 in release candidate 1** (`research/re-ffx-ai-seymour.md` D-24; the reset sets every disc to Ice, then Water, Thunder, Fire). |
 | O-12 | The scripted Defense changes (180 → 100 → 150) and Armor Break | `[single source]` for the values; the interaction with Armor Break is unstated. `[estimate]`: Armor Break wins while it lasts, and Dispel on the party does not remove it from him. |
 | O-13 | Optional aeons (Anima, Yojimbo, Magus Sisters) in the preset | Design choice. Anima gives the one extra story line; Yojimbo's Zanmato level 4 is sourced. **Ask Bailey.** |
 | O-14 | Party stats | `[estimate]`: the BFA preset (§6.2). |

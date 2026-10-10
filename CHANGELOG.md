@@ -11,7 +11,7 @@ address still carries it.
 
 ## 2026-10-09 · Release candidate 1: Final Fantasy X and X-2 battles from the game's own code (not live)
 
-Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pushed, not deployed, no review run)
+Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, release 39.4.2, folded with the release driver's final build a74b2b8e into one tree and pushed to the branch; not deployed, no review run, no production build of the combined tree)
 
 - **FFX:** every attack, spell, item and Overdrive now decides whether it hits, whether it is a
   critical hit and how much damage it does the way the game's own program does, read from Bailey's
@@ -60,9 +60,10 @@ Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pu
   Hastes two and Shells three, now calls Desperado about half the time Mortibody checks. 386 of 500
   seeds (393 before).
 - **FFX, Chapter XII:** Seymour Omnis and the Mortiphasm discs follow the script. The discs turn Fire,
-  Ice, Water, Thunder and reset Ice, Water, Thunder, Fire; he always casts four spells, in the
-  order the disc layout fixes; the reset turn casts nothing; hits during the glow are ignored. The
-  readout strip names four spells. Easier: 427 of 500 seeds (281 before).
+  Ice, Water, Thunder and reset Ice, Water, Thunder, Fire (the painted discs on screen turn the same
+  way: their four colours are seated to the game's ring); he always casts four spells, in the order
+  the disc layout fixes; the reset turn casts nothing; hits during the glow are ignored. The readout
+  strip names four spells. Easier: 427 of 500 seeds (281 before).
 - **FFX, Chapter VIII:** Evrae and Cid follow the game's scripts. Evrae Hastes himself once his HP is
   under 10,666 and, in his Haste phase, answers a hit from afar with a Swooping Scythe (and a hit up
   close with a fresh Haste while Slow holds); his Stone Gaze counter fills by the class of the
@@ -191,16 +192,20 @@ Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pu
   the game's 12 turns and our own strategy line is reworked later ("Ship 12, retune our line later");
   delaying Evrae starts his Haste phase ("Turn it on"); Mega Flare uses the game's 14 ("Use 14 from
   the files").
-- **Both:** nothing else moved for the player. FF7 is unchanged: its engine logs are byte for byte
+- **Both:** nothing else moved for the player in battle. FF7 is unchanged: its engine logs are byte for byte
   the same, and no file its engine or data can reach changed except one shared type file, whose
-  additions are types only; the FFX engine reaches none of the FFX-2 batch's files either. No art,
-  audio or saves changed; the only interface edits are the Omnis readout strip, the enemy-intent
-  previews' texts, Sin's turn clock (it opens at 12 and no longer prints "our estimate"), and the
-  chances the FFX-2 battle menu and move advisor print.
+  additions are types only; the FFX engine reaches none of the FFX-2 batch's files either. This
+  candidate changed no art, audio or saves; the only interface edits are the Omnis readout strip, the
+  enemy-intent previews' texts, Sin's turn clock (it opens at 12 and no longer prints "our estimate"),
+  and the chances the FFX-2 battle menu and move advisor print. **It is built together with the
+  release driver's build** (the heroes' real heights, the real boss sizes and spacing, the folded
+  strategy guide, Bailey's 115 picked poses, the Omnis discs seated to the game's ring), which is
+  described in that build's own entry and moves no battle number: the combined tree plays every FFX
+  and FFX-2 chapter exactly as this candidate did, on all 500 seeds of each.
 - **Disclosed, FFX:** Chapter I is now won by the shipped line on every test seed (one sourced rule,
   the Mortiorchis copying Flux's turn counter, is the whole move) and Chapter XII by 85 percent; the
-  painted Omnis discs still run the old colour order, so a one-step turn can read as a half turn on
-  screen, and the strip still prints "colour order: our estimate"; the strategy guides, the advisor
+  Omnis strip still prints "colour order: our estimate" although the ring and the reset order are both
+  the game's now (Bailey's wording, left until he changes it); the strategy guides, the advisor
   card and the auto-battle line for Chapters I, III and X still describe the old fights; Chapter XVIII
   is won by the built-in line on 3 of 500 seeds (the line and the party preset are tuned for 13
   turns; the rework is a later batch) and its guide card still says 13 turns where the HUD clock says
@@ -239,13 +244,19 @@ Address: none yet (branch re-parity-rc1 on main 00fc1bbf, release 39.4.2; not pu
   batch, with their outcomes listed in docs/handoff/re-parity-w3.md, reproduced on the merged tree,
   and had their Chapter IV rows (30 hashes of the main one, 3 and 12 in the other two) re-pinned once
   for Mega Flare at the game's power 14, with the first differing event named; the full unit suite
-  once on the exact tree (979 files, 15,289 tests; 3 failures that also fail on the untouched 39.4.2
-  tree: art installed after that release and not yet registered); 500 seeds a chapter through every
+  once on the exact tree of the five merges (979 files, 15,289 tests; 3 failures that also failed on
+  the untouched 39.4.2 tree: art installed after that release and not yet registered); 500 seeds a chapter through every
   FFX and every FFX-2 chain (the boss-script lane's five chapters equal its own run seed by seed,
   outcome, party turns and engine turns, on all 2,500 seed-runs; the FFX-2 chapters keep every seed's
   win or loss, Chapter IV moving only in turns with Mega Flare); a production build of the candidate
-  before the FFX-2 batch and the fifth lane were merged (bundle index-BcR9TGJ3.js; the final build is
-  cut after the next merge). Details, the conflicts of the five merges and the decisions still open:
+  before the FFX-2 batch and the fifth lane were merged (bundle index-BcR9TGJ3.js); none of the
+  combined tree (the release driver cuts the final build). **After the release driver's build was
+  folded in:** tsc clean; all 18 FFX logs, the four FFX-2 goldens and the FF7 golden reproduce with
+  nothing re-pinned (the only battle code in that build is Omnis's disc ring, which this candidate
+  already had from the game's own script); the Omnis bench and 500 seeds a chapter through every FFX
+  and every FFX-2 chain equal the unfolded candidate on every seed; the full unit suite once on that
+  exact tree (1,010 files, 15,706 tests: 0 failures; the three art-drift failures are gone with the
+  final art). Details, the conflicts of the six merges and the decisions still open:
   docs/handoff/re-parity-rc1.md.
 
 ## 2026-10-08 · Release 39.4.2 on echoesofspira.com
