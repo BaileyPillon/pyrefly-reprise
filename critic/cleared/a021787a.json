@@ -4,67 +4,8 @@
   "deployedAt": "2026-10-09T01:03:34.683Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 3947,
-  "policyVersion": 2,
   "artifactHash": "713f2d21ab944898044c1c90d44fc39fda12ad4f93494d6e426af220a13f55ca",
   "review": "deep",
-  "reasons": [
-    "src/ui/common/EnemyIntent.ts: global layout, input and boot is a shared system",
-    "public/art/manifest.json: asset loader and manifests is a shared system"
-  ],
-  "systems": [
-    "FFX-2 HUD",
-    "asset loader and manifests",
-    "effects, lighting and sprites",
-    "global layout, input and boot",
-    "painted artwork",
-    "title, chapter select, prep, pause and results screens"
-  ],
-  "chapters": [
-    "seymour-flux",
-    "yunalesca",
-    "braskas-final-aeon",
-    "ffx2-bahamut",
-    "ffx2-vegnagun-shuyin",
-    "ffx2-leblanc",
-    "seymour-anima-macalania",
-    "evrae-airship",
-    "yojimbo-cavern",
-    "seymour-natus",
-    "ffx2-fallen-aeons",
-    "seymour-omnis",
-    "ffx2-trema",
-    "isaaru-via-purifico",
-    "ffx2-den-of-woe",
-    "ffx2-ixion-djose",
-    "sin-fins-core",
-    "sin-face"
-  ],
-  "checks": [
-    "CHK-002",
-    "CHK-003",
-    "CHK-006",
-    "CHK-007",
-    "CHK-008",
-    "CHK-009",
-    "CHK-010",
-    "CHK-012",
-    "CHK-013",
-    "CHK-014",
-    "CHK-015",
-    "CHK-016",
-    "CHK-017",
-    "CHK-018",
-    "CHK-019",
-    "CHK-020",
-    "CHK-021",
-    "CHK-026",
-    "CHK-027"
-  ],
-  "liveArtifact": {
-    "result": "PASS",
-    "checked": 50,
-    "at": "2026-10-09T01:03:34.683Z"
-  },
   "obligations": [
     {
       "kind": "live",
@@ -84,7 +25,7 @@
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "carried",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "fd0ae96",
@@ -132,13 +73,10 @@
         "b80f772f",
         "55db51dd",
         "04cdcd45"
-      ]
+      ],
+      "carriedTo": "931613a8",
+      "at": "2026-10-10T03:59:18.757Z"
     }
   ],
-  "ownerOverride": {
-    "words": "So have you corrected the Leblanc chapter the way I wanted you to? Push it live now please if it's done ... As a hotfix",
-    "date": "2026-10-09T01:03:34.683Z",
-    "report": "critic/reviews/a021787a-focused.json",
-    "changedArea": null
-  }
+  "supersededBy": "931613a8"
 }

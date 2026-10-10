@@ -1,0 +1,654 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-10T03:41:50.970Z",
+ "build": {
+  "mainSha": "931613a8",
+  "branch": "rc1-rel",
+  "bundle": "KHicpkvR",
+  "files": 5084,
+  "liveBuild": "39.4.2 (a021787a, cUSnFK7q)"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "plan": "node tools/critic-plan.mjs: deep class, deepBeforeDeploy false",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression at critical or major severity against live 39.4.2: Chapters I, II, IV, V and XVIII play, win and lose through the real UI as live does.",
+  "Presentation part: the sizes, the fold and the 24 sampled first menus match the picks at 1600x900, 2000x1012 and 390x844; CHK-026 passes (live fails it on Chapter IV).",
+  "Battle-rule part: a real attack lands in the chapters sampled; Chapter XVIII difficulty is the owner's decision and disclosed, and the three winning seeds were reproduced.",
+  "CHK-027 fails but is no worse than live; disclosed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 3,
+   "where": "FFX I, II, III, X, XVII; FFX-2 IV, V, XI, XIII first menus",
+   "reason": "The battle screen fills the window at 1600x900 and 2000x1012 in 8 chapters sampled and at 390x844 in 6; no full-screen layer covers the stage.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx2.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-phone.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-1600-b.jpg"
+   ]
+  },
+  {
+   "id": "CHK-003",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 2,
+   "where": "sampled first menus",
+   "reason": "Captures read by eye (guide, card, command rows legible at 1600x900 and 2000x1012; phone rows readable); no font-size measurement was taken, so no PASS.",
+   "game": "both"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated + manual",
+   "minutes": 3,
+   "where": "FFX Chapter I and III, 1600x900 and 2000x1012",
+   "reason": "G opens and closes the guide and N and E toggle by real keys in Chapter I and III (the card becomes the one-row tip on G and returns on the second G); the chips name the keys.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/seymour-flux-1600x900-1-first-menu.png",
+    "critic/reviews/931613a8-focused/shots/seymour-flux-1600x900-2-guide-G.png",
+    "critic/reviews/931613a8-focused/shots/seymour-flux-1600x900-3-guide-closed-again.png",
+    "critic/reviews/931613a8-focused/shots/braskas-final-aeon-1600x900-2-guide-G.png",
+    "critic/reviews/931613a8-focused/shots/seymour-flux-1600x900.json",
+    "critic/reviews/931613a8-focused/shots/braskas-final-aeon-1600x900.json"
+   ]
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 0,
+   "where": "n/a",
+   "reason": "The advisor on a broken board was not exercised in this pass; healthy-board cards read sensibly (Hastega, Shell, Stamina Tonic).",
+   "game": "both"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 0,
+   "where": "n/a",
+   "reason": "Transient overlays across death or phase changes were not examined beyond full fights that ended without a stale-root failure.",
+   "game": "both"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 2,
+   "where": "FFX and FFX-2 first menus",
+   "reason": "No raw ids or debug text in 24 first-menu captures. Sampled, not exhaustive.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx2.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-phone.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-1600-b.jpg"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 3,
+   "where": "FFX I, III; FFX-2 IV, XI, XIII",
+   "reason": "Panels do not cover the painted figures in the captures; the folded card sits 7 px under the G and N chips and clear of the figures.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx2.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-phone.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-1600-b.jpg"
+   ]
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 0,
+   "where": "n/a",
+   "reason": "Names read in full in the captures (Yu Pagoda, Braska's Final Aeon, Seymour Natus) but the Act III status-row case is not part of this change and was not tested.",
+   "game": "both"
+  },
+  {
+   "id": "CHK-010",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 1,
+   "where": "8 chapters",
+   "reason": "One real target step per chapter was opened (5-target captures); the selection was not judged against the targeting tile.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/yunalesca-1600x900-5-target.png"
+   ]
+  },
+  {
+   "id": "CHK-011",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 1,
+   "where": "FFX III, II, XVII",
+   "reason": "Every enemy in the order list was visible in the captures sampled (Chapter III shows Braska and both Pagodas, Chapter II both forms); later links of Chapter XVII and other multi-part chapters were not played.",
+   "game": "both"
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 0,
+   "where": "FFX-2 dressphere chapters",
+   "reason": "The 112 new paintings were not each looked at in the running game; the five short-KO poses and the three held Defend fallbacks were not exercised. verify-approved reads 916 ok / 0 mismatched / 0 missing and art-derive verify passed (3,734 masters, 0 problems). Left to the deep review.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/data/art-verify.txt"
+   ]
+  },
+  {
+   "id": "CHK-014",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 0,
+   "where": "n/a",
+   "reason": "Menu and portrait poses were not opened in this pass.",
+   "game": "both"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 40,
+   "where": "FFX I, II, III, XVIII; FFX-2 IV, V",
+   "reason": "Every route used real Playwright keyboard input (touch viewports for the phone captures): title, board, prep, scene, menus, Attack and target, G, N, E, pause. Victory reached in Chapters I, IV and V through the real UI.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/continuity/index.json"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 0,
+   "where": "all",
+   "reason": "Each capture asserted screen=battle and awaitingMenu where it said so: 0 failed assertions in 24 first-menu runs, and every continuity route ended with err=0 fails=0.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/seymour-flux-1600x900.json"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "UNVERIFIED",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 4,
+   "where": "dist-gate",
+   "reason": "The exact artifact is built here (bundle KHicpkvR, 5,084 files, BASE_PATH=/) and every shipped art file is proved against its master (art-derive verify PASS, audit PASS); the full manifest, decode pass and live comparison belong to the deploy and the live review. The artifact carries the inert unreleased title painting echo.webp, as live does.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/data/art-verify.txt"
+   ]
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 3,
+   "where": "both",
+   "reason": "Both games sampled at the same moments: FFX I, II, III, X, XVII and FFX-2 IV, V, XI, XIII show the same HUD, card and guide behaviour with the intended game-specific differences (fold only in FFX I and III).",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx2.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-phone.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-1600-b.jpg"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "manual",
+   "minutes": 12,
+   "where": "both",
+   "reason": "Case from research: sizes and the fold are by game (FFX: Flux 60 percent, Braska 75 with pagodas, Natus, Genais and Core, Yunalesca 2.577; FFX-2: Bahamut, Paragon, Anima, Mega Flare 14). Present in the intended game and absent in the other: the folded guide is on in FFX Ch I and III and open in Ch II and every FFX-2 chapter; Mega Flare 14 is in FFX-2 data only. Data audit sampled: Mega Flare power 14 (re-ffx2-commands.md), Yunalesca 25.7 wing tips x 1.82 / 18.15 = 2.577 (ffx-yunalesca.md 18.5), Sin turn 12 (re-ffx-ai-evrae-yojimbo-isaaru-sin.md D-31), Yojimbo band odds 25/25/50 (same note 3.2). Not audited: the 457 command rows, 33 monster rows and the Left Fin, Natus and Seymour tables, left to the deep review.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx2.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-phone.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-1600-b.jpg"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 0,
+   "where": "FFX I, II, XVIII; FFX-2 IV, V",
+   "reason": "Win and loss reach their real destinations: Chapter I, IV and V wins through results and back to the board, Chapter II and XVIII losses through the defeat flow (err=0, fails=0).",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/continuity/index.json"
+   ]
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 0,
+   "where": "both",
+   "reason": "Everything was driven through the real presentation path (the app, the stage, the HUD); the engine seed sweep of Chapter XVIII was run apart and is labelled so.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/continuity/index.json"
+   ]
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 50,
+   "where": "FFX-2 IV, V; FFX I, II, XVIII",
+   "reason": "Size continuity across pose changes passes in all five chapters played (max head jump 9.5, 12.1, 0.3, 9.3 and 2.4 percent; mass-read swaps under 30; feet shift under 1.0 px). Live 39.4.2 FAILS the same check on Chapter IV (76.8 percent head jump, 18 swaps over tolerance, 31 feet over), so the candidate fixes it. The five short-KO poses were not reached by these routes.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/continuity/ffx2-bahamut-win-931613a8/continuity/continuity.json",
+    "critic/reviews/931613a8-focused/continuity/seymour-flux-win-931613a8/continuity/continuity.json",
+    "critic/reviews/931613a8-focused/continuity/ffx2-vegnagun-shuyin-win-931613a8/continuity/continuity.json",
+    "critic/reviews/931613a8-focused/continuity/yunalesca-win-931613a8/continuity/continuity.json",
+    "critic/reviews/931613a8-focused/continuity/sin-face-win-931613a8/continuity/continuity.json",
+    "critic/reviews/931613a8-focused/continuity-live/ffx2-bahamut-win-live3942/continuity/continuity.json"
+   ]
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "mandatory": true,
+   "mode": "automated",
+   "minutes": 50,
+   "where": "FFX I, II, XVIII; FFX-2 IV, V",
+   "reason": "Continuity of motion FAILS on all five chapters (Chapter I 1.39 KO hard cuts a minute, 5 jerks of 40 px or more, worst 225 px; IV 15 jerks, worst 137 px, 2 double images over 0.4; V 44 jerks, worst 810 px, 34 double images, 0.41 snaps; II 0.39 snaps, worst 264 px; XVIII 1.06 snaps, worst 284 px). Live fails the same check in the three chapters run (Chapter IV 24 jerks and 15 double images; I 33 jerks, worst 349 px, 1.01 snaps; II 0.48 snaps, worst 320 px). The candidate is equal or better than live in every chapter compared, so this is disclosed and not a regression. The 810 px jerk is Vegnagun's tail beam pose swap, a deliberate whole-body attack pose.",
+   "game": "both",
+   "evidence": [
+    "critic/reviews/931613a8-focused/continuity/seymour-flux-win-931613a8/continuity/strips/jerk-000-kimahri.jpg",
+    "critic/reviews/931613a8-focused/continuity/ffx2-vegnagun-shuyin-win-931613a8/continuity/strips/jerk-000-vegnagun-tail.jpg",
+    "critic/reviews/931613a8-focused/continuity/ffx2-bahamut-win-931613a8/continuity/continuity.json",
+    "critic/reviews/931613a8-focused/continuity-live/seymour-flux-win-live3942/continuity/continuity.json"
+   ]
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "candidate": {
+   "ffx2-bahamut": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "reasons027": [
+     "15 jerk(s) of 40 px or more in one frame (worst 137.3 px)",
+     "2 swap(s) show a double image of severity 0.4 or more (worst 0.419)"
+    ],
+    "battleSeconds": 265,
+    "swaps": 314,
+    "maxHeadJumpPct": 9.5,
+    "maxFeetShiftPx": 0.4,
+    "snapsPerMinute": 0.23,
+    "jerksOver40": 15,
+    "worstJerkPx": 137.3,
+    "ghostOver": 2,
+    "worstGhost": 0.419,
+    "file": "critic/reviews/931613a8-focused/continuity/ffx2-bahamut-win-931613a8/continuity/continuity.json"
+   },
+   "seymour-flux": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "reasons027": [
+     "1.39 snaps per minute is over 0.25",
+     "5 jerk(s) of 40 px or more in one frame (worst 225.1 px)"
+    ],
+    "battleSeconds": 301.2,
+    "swaps": 290,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 0.6,
+    "snapsPerMinute": 1.39,
+    "jerksOver40": 5,
+    "worstJerkPx": 225.1,
+    "ghostOver": 0,
+    "worstGhost": 0.388,
+    "file": "critic/reviews/931613a8-focused/continuity/seymour-flux-win-931613a8/continuity/continuity.json"
+   },
+   "sin-face": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "reasons027": [
+     "1.06 snaps per minute is over 0.25",
+     "35 jerk(s) of 40 px or more in one frame (worst 283.8 px)"
+    ],
+    "battleSeconds": 170,
+    "swaps": 327,
+    "maxHeadJumpPct": 0.3,
+    "maxFeetShiftPx": 1,
+    "snapsPerMinute": 1.06,
+    "jerksOver40": 35,
+    "worstJerkPx": 283.8,
+    "ghostOver": 0,
+    "worstGhost": 0.375,
+    "file": "critic/reviews/931613a8-focused/continuity/sin-face-win-931613a8/continuity/continuity.json"
+   },
+   "ffx2-vegnagun-shuyin": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "reasons027": [
+     "0.41 snaps per minute is over 0.25",
+     "44 jerk(s) of 40 px or more in one frame (worst 810.5 px)",
+     "34 swap(s) show a double image of severity 0.4 or more (worst 0.461)"
+    ],
+    "battleSeconds": 1028.3,
+    "swaps": 962,
+    "maxHeadJumpPct": 9.3,
+    "maxFeetShiftPx": 0.8,
+    "snapsPerMinute": 0.41,
+    "jerksOver40": 44,
+    "worstJerkPx": 810.5,
+    "ghostOver": 34,
+    "worstGhost": 0.461,
+    "file": "critic/reviews/931613a8-focused/continuity/ffx2-vegnagun-shuyin-win-931613a8/continuity/continuity.json"
+   },
+   "yunalesca": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "reasons027": [
+     "0.39 snaps per minute is over 0.25",
+     "98 jerk(s) of 40 px or more in one frame (worst 264.4 px)",
+     "17 swap(s) show a double image of severity 0.4 or more (worst 0.406)"
+    ],
+    "battleSeconds": 622.6,
+    "swaps": 873,
+    "maxHeadJumpPct": 2.4,
+    "maxFeetShiftPx": 0.9,
+    "snapsPerMinute": 0.39,
+    "jerksOver40": 98,
+    "worstJerkPx": 264.4,
+    "ghostOver": 17,
+    "worstGhost": 0.406,
+    "file": "critic/reviews/931613a8-focused/continuity/yunalesca-win-931613a8/continuity/continuity.json"
+   }
+  },
+  "liveBaseline39_4_2": {
+   "ffx2-bahamut": {
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "maxHeadJumpPct": 76.8,
+    "headOver": 18,
+    "feetOver": 31,
+    "snapsPerMinute": 0.18,
+    "jerksOver40": 24,
+    "worstJerkPx": 63.5,
+    "ghostOver": 15
+   },
+   "seymour-flux": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "maxHeadJumpPct": 12.1,
+    "headOver": 0,
+    "feetOver": 0,
+    "snapsPerMinute": 1.01,
+    "jerksOver40": 33,
+    "worstJerkPx": 348.6,
+    "ghostOver": 2
+   },
+   "yunalesca": {
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "maxHeadJumpPct": 25.9,
+    "headOver": 0,
+    "feetOver": 0,
+    "snapsPerMinute": 0.48,
+    "jerksOver40": 72,
+    "worstJerkPx": 319.7,
+    "ghostOver": 18
+   }
+  },
+  "notRun": [
+   "ffx2-trema (started, stopped after its first menus: a 100-minute chapter)",
+   "every other chapter: left to the deep review"
+  ],
+  "note": "CHK-026 PASS on all five chapters (live: FAIL on Chapter IV, 76.8 percent head jump). CHK-027 FAIL on all five and on all three live baselines; the candidate has fewer jerks and double images than live in Chapters I and IV."
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "No tile composites were made for the picks in this change (real sizes, the fold, 112 poses); they are not registered as tiles with a build field I captured against. Nothing is claimed matched."
+ },
+ "issues": [
+  {
+   "id": "F931-01",
+   "severity": "major",
+   "category": "feel",
+   "confidence": "high",
+   "game": "both",
+   "chapter": "I, II, IV, V, XVIII",
+   "title": "Motion continuity (CHK-027) fails: KO pose hard cuts, one-frame jerks of 40 px or more and double-image pose swaps",
+   "expected": "At most 0.25 snaps a minute, no jerk of 40 px or more, no double image over 0.4 (policy).",
+   "observed": "Fails in all five chapters played; live fails the same way and worse (jerks over 40 px: live 24 and 33, candidate 15 and 5 in Chapters IV and I). The 7 KO snaps in Chapter I are party KOs cutting to the lying pose.",
+   "repro": "node critic/runner/lib/continuity.mjs --base=<preview> --chapters=ffx2-bahamut,seymour-flux --tag=x (seed 1)",
+   "evidence": [
+    "critic/reviews/931613a8-focused/continuity/seymour-flux-win-931613a8/continuity/strips/jerk-000-kimahri.jpg",
+    "critic/reviews/931613a8-focused/continuity/ffx2-vegnagun-shuyin-win-931613a8/continuity/strips/jerk-000-vegnagun-tail.jpg"
+   ],
+   "requirement": "CHK-027 (D-421)",
+   "where": "pose swaps in the presenter (KO, hurt, cast frames)",
+   "fix": "blend or hold-frame the KO and attack pose swaps",
+   "acceptanceCheck": "CHK-027 PASS on the five chapters",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F931-02",
+   "severity": "major",
+   "category": "balance",
+   "confidence": "medium",
+   "game": "FFX",
+   "chapter": "XVIII Sin's face",
+   "title": "Chapter XVIII is won by 3 of 500 seeds of the built-in line and no real-input win was reached",
+   "expected": "The chapter stays winnable by a human route (the owner chose the game's 12-turn clock and to retune later: \"Ship 12, retune our line later\").",
+   "observed": "I reproduced the RE session's number in the engine (the shipped line wins seeds 118, 124 and 129 of 1 to 500, in 63 to 65 party turns). Real-UI routes driven by the advisor lost at seed 1 and at seed 118 (58 turns, defeat). No human-pace route is shown to win, so \"winnable by any route\" is unproven, though three engine wins show it is not impossible. The guide card still says 13 turns. The rule is the owner's decision and is not itself the defect.",
+   "repro": "PYREFLY_MEASURE=1 PYREFLY_MEASURE_CHAPTERS=sin-face PYREFLY_MEASURE_SEEDS=1-500 npx vitest run tests/unit/ffx-parity-measure.test.ts; route.mjs sin-face win --seed=118",
+   "evidence": [
+    "critic/reviews/931613a8-focused/data/sinface-500.json",
+    "critic/reviews/931613a8-focused/route-sin/"
+   ],
+   "requirement": "owner decision plus a playable chapter",
+   "where": "src/data/ffx/enemies/overdrive-sin*.ts, src/engine/tactics/sin-face.ts",
+   "fix": "the retune the owner scheduled",
+   "acceptanceCheck": "a human-pace win demonstrated",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F931-03",
+   "severity": "polish",
+   "category": "content",
+   "confidence": "high",
+   "game": "FFX, FFX-2",
+   "chapter": "I, III, VIII, IX, X, XVII, XVIII, FFX-2 IV",
+   "title": "Known stale texts: guide cards of FFX Ch I, III, VIII, IX, X, XVII and XVIII, the FFX-2 Ch IV Mega Flare figure and the Omnis \"our estimate\" label",
+   "expected": "Texts match the new rules.",
+   "observed": "Disclosed by the RE session; not retested by me.",
+   "repro": "read the cards",
+   "evidence": [],
+   "requirement": "accuracy of printed information",
+   "where": "strategy guides",
+   "fix": "the planned text batch",
+   "acceptanceCheck": "cards re-read",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F931-04",
+   "severity": "polish",
+   "category": "delivery",
+   "confidence": "high",
+   "game": "both",
+   "chapter": "artifact",
+   "title": "Three replaced approved paintings await Bailey's final OK; three Defend paintings are held and fall back to ready",
+   "expected": "Bailey sees the replaced art.",
+   "observed": "YUNA-WM-hurt, YUNA-WM-ko and RIKKU-DK-hurt replace approved paintings; three Defend poses are held as on live. verify-approved reads 916/0/0.",
+   "repro": "n/a",
+   "evidence": [
+    "critic/reviews/931613a8-focused/data/art-verify.txt"
+   ],
+   "requirement": "approved art is never replaced on an agent's say-so",
+   "where": "public/art/characters",
+   "fix": "Bailey's eye",
+   "acceptanceCheck": "his word",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F931-05",
+   "severity": "polish",
+   "category": "delivery",
+   "confidence": "high",
+   "game": "both",
+   "chapter": "artifact",
+   "title": "The artifact carries 39.5's unreleased title painting echo.webp, inert",
+   "expected": "No unreleased asset.",
+   "observed": "dist-gate/art/title/echo.webp and echo.json are present and nothing loads them; the previous candidate did the same.",
+   "repro": "ls dist-gate/art/title",
+   "evidence": [],
+   "requirement": "delivery hygiene",
+   "where": "public/art/title",
+   "fix": "decide before the deploy",
+   "acceptanceCheck": "file list",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F931-06",
+   "severity": "suggestion",
+   "category": "visual",
+   "confidence": "medium",
+   "game": "FFX-2",
+   "chapter": "XIII",
+   "title": "The Paragon at 1600x900 is cropped by the frame at its head and right (colossus framing)",
+   "expected": "Bailey's pick: real size with colossus framing.",
+   "observed": "As picked; the head leaves the top of the picture at 1600x900 and fits better at 2000x1012.",
+   "repro": "first menu of Chapter XIII",
+   "evidence": [
+    "critic/reviews/931613a8-focused/shots/sheet-1600-b.jpg",
+    "critic/reviews/931613a8-focused/shots/sheet-2000-ffx2.jpg"
+   ],
+   "requirement": "owner pick",
+   "where": "staging",
+   "fix": "none unless Bailey wants",
+   "acceptanceCheck": "his eye",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F931-07",
+   "severity": "suggestion",
+   "category": "process",
+   "confidence": "high",
+   "game": "both",
+   "chapter": "engine",
+   "title": "61 modules are built but wired to nothing (node tools/orphans.mjs), 37 of them the documented unwired FFX and FFX-2 kernels",
+   "expected": "AGENTS rule 4: no unwired subsystem.",
+   "observed": "The 19 FFX and 18 FFX-2 kernels are documented as not wired (waves W2 and W4); the rest are older orphans.",
+   "repro": "node tools/orphans.mjs",
+   "evidence": [],
+   "requirement": "rule 4",
+   "where": "src/battle/*/kernel",
+   "fix": "wire them in the next batch",
+   "acceptanceCheck": "orphans list",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Candidate rebuilt in place (BASE_PATH=/, bundle KHicpkvR, 5,084 files); art derive verify and audit PASS; verify-approved 916/0/0 (ROOT=D:/pyrefly-r39-int)",
+   "First menus with a real attack: Ch I, II, III, X, XVII, FFX-2 IV, V, XI, XIII at 1600x900 and 2000x1012 (Ch I and III also G, Ch I also E)",
+   "Phone 390x844 touch first menus: Ch I, II, III, FFX-2 IV, XI, XIII",
+   "Full real-UI fights with continuity: FFX-2 IV (won, 40 turns), V (won, 111 turns), FFX I (won, 33), II (lost), XVIII (lost); live 39.4.2 Ch IV, I, II for comparison",
+   "Chapter XVIII 500 seeds in the engine (3 wins) and a real route at seed 118",
+   "Data audit sample (Mega Flare, Yunalesca stature, Sin clock, Yojimbo bands)"
+  ],
+  "reused": [
+   {
+    "what": "the full suite (1,003 files, 15,645 tests) and tsc",
+    "from": "the driver's own run, release-suite-931613a8.log",
+    "why": "same commit and tree"
+   }
+  ],
+  "notTested": [
+   "Play-through of FFX VII, VIII, IX, X, XII, XIV, XVII and FFX-2 XI, XIII, XV, XVI; the FFX-2 Ch XIII long fight",
+   "The five short-KO poses and the three held Defend fallbacks in play",
+   "Hit and crit chances printed against outcomes over many hits",
+   "Full data audit of command and monster rows",
+   "Tile composites for approved targets",
+   "The 1280x720 size"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy, then the deep review on the live build with the continuity harness over every remaining chapter and the short-KO dressphere chapters.",
+ "elapsedMinutes": 150,
+ "notes": "GPU mode. Preview server on 127.0.0.1:5471 stopped by PID afterwards."
+}
