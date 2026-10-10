@@ -37,9 +37,11 @@ Written 2026-10-10 ~18:50 EDT by the main session ("FFX assets decompile and exp
   - the seam `src/engine/ShotDirector.ts` (10 optional beat handlers, ctx = camera port, speed, skipping, actor and side, action kind and ability id, targets, hit) through `SceneStaging.shotDirector`, `PaintedStage`, `BattleStage` and `BattleMoments`; the stub director declines everything;
   - `tools/vite-ffx-local.mjs` (serve-only) and `src/engine/ffx3d/localAssets.ts` (DEV-gated probe, validated manifest);
   - guards in `tests/unit/ffx-local-guard.test.ts`.
-- **ARCHITECTURE REVIEW OWED** (main session, on resume):
-  - `BattleMoments.ts` went +133/−38 (552 → 647 lines) for an "inert" seam. Read the diff; if the director consults can move into a helper module, shrink it.
-  - The inert path must stay call-for-call identical (the lane recorded a log from the unmodified code: `tests/unit/engine/stage-shot-director.test.ts`).
+- **Architecture review (main session, ~19:10 EDT): PASS.**
+  - `ask()` is undefined when no director exists, so every beat runs its old code with no extra await.
+  - A handler that throws costs the shot, not the battle.
+  - A taken beat skips only the camera moves; the letterbox, vignette, plate and sounds stay, which is right for the FFX camera.
+  - Notes for the focused review: `BattleMoments.ts` grew 552 to 647, so consider a bridge helper; `subject()` calls `stage.sideOf` in `actionOpen` and `overdriveStart` even with no director (pure, but could be lazy).
 - **Camera-lab:** the seam touches `BattleMoments`, `BattlePresenterBeats`, `BattlePresenterPorts` and `BattlePresenterStage`. Tell "Game perspective mockups" when it reaches main (it was not running on 2026-10-10).
 - **Orphans:** 52 → 53; the new one is `localAssets.ts`, until phase 3 wires it.
 - **critic-plan:** DEEP (chapter-registry, battle-presenter, build-config). Focused review before the deploy, deep after.
