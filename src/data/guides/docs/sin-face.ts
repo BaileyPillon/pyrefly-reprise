@@ -5,9 +5,10 @@
  * Overdrive Sin in our own words and in its order (layout: `../doc-types.ts`);
  * `research/jegged-encounter-guides-ffx-b.md` section 7 holds the page and every difference. HP, Steal
  * and Drops are the numbers this game uses, and so is the clock: the page says about sixteen turns,
- * the game ends the fight on the thirteenth (`research/ffx-sin.md` S-1, our estimate), so that is the
- * number printed. The preparation paragraph sits at the foot of the previous boss's page there and is
- * this fight's preparation, so it opens this page.
+ * the game ends the fight on Sin's twelfth (the game's own script: `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md`
+ * section 7.2, which settled `research/ffx-sin.md` S-1; it read "the thirteenth, our estimate" until CH-XVIII, re-parity),
+ * so that is the number printed. The preparation paragraph sits at the foot of the previous boss's page there and is
+ * this fight's preparation, so it opens this page. The party starts in armour with all three Wards (`sinFaceBuild`).
  */
 
 import type { GuideDoc } from '../doc-types.ts';
@@ -43,7 +44,7 @@ export const SIN_FACE_DOC: GuideDoc = {
     { t: 'field', label: 'HP', value: '140,000' },
     {
       t: 'p',
-      text: 'This battle runs on a clock: after about thirteen turns Sin uses its Overdrive, Giga-Graviton, an attack that ends the game on the spot.',
+      text: 'This battle runs on a clock: on its twelfth turn Sin uses its Overdrive, Giga-Graviton, an attack that ends the game on the spot.',
     },
     {
       t: 'p',

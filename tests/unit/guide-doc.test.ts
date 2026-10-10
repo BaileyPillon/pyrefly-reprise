@@ -199,9 +199,11 @@ describe('every HP a document prints is one the game uses (AGENTS.md rule 6)', (
     // Paragon: the chapter ships Oversoul Paragon (210,000); the page's table gives the normal form's 200,000.
     expect(text('ffx2-trema')).toContain('210,000');
     expect(text('ffx2-trema')).not.toContain('200,000');
-    // Spathi opens its count at 5 here (the page says 4); Sin's clock ends the fight on the 13th turn (the page says 16).
+    // Spathi opens its count at 5 here (the page says 4); Sin's clock ends the fight on its 12th turn, the game's own script
+    // (the page says about 16; it read "about thirteen turns" until CH-XVIII, re-parity, Bailey 2026-10-09).
     expect(text('isaaru-via-purifico')).toContain('counts down from 5 to 1');
-    expect(text('sin-face')).toContain('about thirteen turns');
+    expect(text('sin-face')).toContain('on its twelfth turn');
+    expect(text('sin-face')).not.toContain('thirteen');
     // Baralai's Drill Shot after 8 changes (the page says 10).
     expect(text('ffx2-den-of-woe')).toContain('changed 8 times');
     // Natus: the game awards no drop (the item has no record yet); the page lists a Lv. 2 Key Sphere.

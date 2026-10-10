@@ -7,8 +7,14 @@
  * **Game case: FFX only** [AGENTS.md rule 14; research/ffx-sin.md §0.3]: a CTB turn clock that ends in a
  * scripted Game Over, the airship's pull, Armor Break, aeons. Nothing here is true of FFX-2.
  *
- * **The clock's length is our estimate, labelled on the page** (S-1, D-266/D-280): the sources say the 12th
- * or the 13th turn, and the chapter uses the 13th until the Steam check settles it.
+ * **The clock is the game's own twelve turns.** The sources disagreed (the 12th or the 13th, S-1, D-266/D-280); the
+ * game's script settles it: Giga-Graviton is Sin's 12th turn, three pulls and eight mouth turns before it
+ * (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 7.2; re-parity AI lane C, D-31). Rewritten from "our
+ * estimate, the 13th" by CH-XVIII (re-parity, Bailey 2026-10-09: "Ship 12, retune our line later (Recommended)").
+ *
+ * **The line and the party follow it** (`src/engine/tactics/sin-face.ts`, `sinFaceBuild` in
+ * `src/data/ffx/builds/sin-fahrenheit.ts`): Lulu Doublecasts Firaga, and the party wears the three Wards the
+ * sources and this guide's own page ask for.
  *
  * Listed with its chapter on 2026-09-29 (D-279), through `./index.ts`'s `GUIDES`.
  */
@@ -22,9 +28,9 @@ export const SIN_FACE_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: "Sin's turns are the clock. Three turns pulling the ship in, then the mouth opens, and when it is fully open Giga-Graviton ends the fight: no Auto-Life or aeon saves you. We use the 13th turn; the sources say 12th or 13th, and that is our estimate.",
-      short: "Beat it before Sin's 13th turn (our estimate)",
-      cite: 'ffx-sin §5.4, §3.4, §10 S-1',
+      text: "Sin's turns are the clock. Three turns pulling the ship in, eight more while the mouth opens, and on its twelfth turn Giga-Graviton ends the fight: no Auto-Life or aeon saves you. The game's own script fixes the twelfth.",
+      short: "Beat it before Sin's 12th turn",
+      cite: 'ffx-sin §5.4, §3.4 (the twelfth: re-ffx-ai-evrae-yojimbo-isaaru-sin §7.2)',
     },
     {
       text: 'During the three pulls only Wakka and magic reach. Bring Wakka and Lulu in, and spend the other turns on Hastega and Cheer: they cost nothing the clock can take back.',
@@ -37,9 +43,14 @@ export const SIN_FACE_GUIDE: ChapterGuide = {
       cite: 'ffx-sin §8 row 8',
     },
     {
-      text: 'Every sixth hit on it (every third from an aeon) draws Gaze, one status on the whole party at a 30% chance: Petrify, Confuse or Zombie. Any Ward blocks it completely.',
+      text: 'Lulu is most of the damage: she Doublecasts Firaga on every turn she can pay for two, and drinks an Ether when she cannot. A Mental Break from Auron opens Sin to both casts.',
+      short: 'Lulu Doublecasts Firaga; Ether to refill',
+      cite: 'ffx-sin §6.2, §8 row 8 (Doublecast is hers here: ffx-bfa-yu-yevon §4.2)',
+    },
+    {
+      text: 'Every sixth hit on it (every third from an aeon) draws Gaze, one status on the whole party at a 30% chance: Petrify, Confuse or Zombie. Any Ward blocks it completely, and the party starts with all three.',
       short: 'Gaze answers hits; Wards block it',
-      cite: 'ffx-sin §5.4, §8 row 9',
+      cite: 'ffx-sin §1.2, §5.4, §8 row 9',
     },
   ],
 
@@ -75,6 +86,11 @@ export const SIN_FACE_GUIDE: ChapterGuide = {
       cite: 'ffx-sin §8 row 8',
     },
     {
+      when: { labels: ['Doublecast'] },
+      text: 'Two Firagas for one turn: the most damage Lulu has, at twice the MP, and magic reaches through the pulls',
+      cite: 'ffx-bfa-yu-yevon §4.2, ffx-sin §5.4',
+    },
+    {
       when: { labels: ['Firaga', 'Fira'] },
       text: 'Magic reaches through the pulls, and Sin has no element to avoid',
       cite: 'ffx-sin §2.2, §5.4',
@@ -96,7 +112,7 @@ export const SIN_FACE_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Ether', 'Turbo Ether'] },
-      text: "Lulu's Firaga is the burst's steadiest damage; keep her casting",
+      text: "Lulu's Doublecast Firagas are the burst's steadiest damage; refill her before she cannot pay for two",
       cite: 'ffx-sin §8 row 8',
     },
   ],
