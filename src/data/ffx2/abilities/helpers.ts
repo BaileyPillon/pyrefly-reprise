@@ -3,8 +3,8 @@
  *
  * Charge (`chargeTicks`) and recovery (`recoveryTicks`) values follow the
  * decoded tick model in `research/ffx2-combat-core.md` §1.2–1.4:
- * `ticks = floor(10000 * value / (agility + 1))`, consumed at 3000 ticks/s at
- * Normal ATB speed. No source publishes per-ability charge-time *values* (only
+ * `units = floor(10000 * value / (agility + 1))`; since re-parity W4 the engine counts them down at the game's own
+ * 70 / 95 / 120 units a logic step (29.97 steps a second), and a record that carries the game's cost fields overrides these tiers. No source publishes per-ability charge-time *values* (only
  * the CT/RT/2xRT tags and the tier ordering), so the four tiers below are the
  * doc's own `[estimate]` conversion from the previously-authored second-values
  * into the same value-unit system real stats use — see §1.3's "CTIM value
