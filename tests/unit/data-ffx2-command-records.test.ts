@@ -6,7 +6,7 @@
  *
  *  - every attached record is the game's row, field for field: `tests/fixtures/parity/ffx2/command_rows.json` holds the
  *    205 rows the seven chapters can reach (numbers only; `research/re-ffx2-commands.md`); the deliberate
- *    overrides (the two Triple Attacks) are listed in {@link OVERRIDES};
+ *    overrides (Shiva's Triple Attack) are listed in {@link OVERRIDES};
  *  - every ability the seven chapters can reach has a record or is on the short list of ours that have none;
  *  - the numbers an ability carries itself that differ from its record (the record wins in the engine) are a fixture,
  *    `ability_differences.json`: a new or fixed difference must change it (regenerate with PYREFLY_UPDATE_FIXTURES=1);
@@ -64,8 +64,9 @@ const OVERRIDES: Readonly<Record<string, Partial<Row>>> = {
   // (Mega Flare was held at the authored 24 over the row's 14 until Bailey, 2026-10-09: "Use 14 from the files". Both of its
   // records carry the row's power now, so neither is an override any more; the Mega Flare test below pins the 14.)
   // Triple Attack: the game queues Chain Attack three times; the ability is one action with three hits.
+  // (Baralai's is no longer an override: since re-parity AI lane C it is three Chain Attack commands at three fixed girls, the first
+  // ability and a `sequence` of two more, each the exact row 0x4100.)
   'x2-shiva-triple-attack': { hits: 3 },
-  'x2-den-baralai-triple-attack': { hits: 3 },
 };
 
 const sparse = (s: Readonly<Record<number, number>> | undefined): Sparse => {
@@ -271,7 +272,6 @@ const KNOWN_TARGETING_DIFFERENCES: string[] = [
   'x2-shuyin-attack: ability random-enemy, row not random',
   'x2-shiva-triple-attack: ability random-enemy, row not random',
   'x2-anima-oblivion: ability random-enemy, row not random',
-  'x2-den-baralai-triple-attack: ability random-enemy, row not random',
 ];
 
 describe('AGENTS.md rule 5 (magic never rolls) against the game\'s rows', () => {

@@ -152,8 +152,8 @@ describe('the corrections the monster rows make to the authored enemy data', () 
  * the wrong row, the Left Bulwark's reactions on the Right's and Ormi's Concussive Shock of the first two acts on the Blast of the last.)
  */
 const NOT_IN_ITS_LIST: Readonly<Record<string, string>> = {
-  'ffx2-leblanc-logos-room/logos-room:x2-logos-hail-of-bullets': "Logos has no Hail of Bullets in the second room's list; our data gives him the third room's move (AI batch c decides)",
-  'ffx2-leblanc-logos-room/ormi-logos-room:x2-ormi-concussive-blast': "Ormi's list in the second room has no Concussive move at all; our data gives him the Blast (AI batch c decides)",
+  // (AI lane C, 2026-10-10: Logos' second room has no Hail of Bullets and Ormi's first two rooms no Concussive move in the game's lists or its
+  // scripts, so our lists no longer carry them and the two exceptions that stood here are gone.)
   'ffx2-road-shiva/x2-shiva:x2-shiva-kick': "Shiva's list has no plain Attack; our data gives her a Kick on the generic monster Attack (AI batch b decides)",
   'ffx2-road-magus-sisters/sandy:x2-magus-delta-attack': "the sisters' joint command is issued by their script, it is in no single sister's list",
   'ffx2-road-magus-sisters/mindy:x2-magus-delta-attack': "the sisters' joint command is issued by their script, it is in no single sister's list",
@@ -196,14 +196,14 @@ describe("a move the game gives a different row in a different fight runs on tha
     return unit;
   };
 
-  it("Ormi's Concussive Shock (power 4) in the first room, the Blast (power 6) in the last", () => {
-    const first = resolveCommand(blast, ormi('ffx2-leblanc-entrance', 'ormi-entrance')).record;
-    expect([first.id, first.power]).toEqual([0x40fa, 4]);
+  it("Ormi's Concussive Blast is the game's row 0x40fb (power 6) in the last room, the only room whose script casts it", () => {
+    // Re-parity AI lane C: the first two rooms' scripts never cast a Concussive move (m243, m244) and their lists no longer carry it; the
+    // game's list for the first room has a row 0x40fa (power 4) that no script of the three rooms issues, so it is not attached.
     const last = resolveCommand(blast, ormi('ffx2-leblanc-last-room', 'ormi')).record;
     expect([last.id, last.power]).toEqual([0x40fb, 6]);
-    // The second room's Ormi has no Concussive move in the game's list (it is in the exceptions above); he keeps the ability's own row.
-    const second = resolveCommand(blast, ormi('ffx2-leblanc-logos-room', 'ormi-logos-room')).record;
-    expect(second.id).toBe(0x40fb);
+    for (const [group, id] of [['ffx2-leblanc-entrance', 'ormi-entrance'], ['ffx2-leblanc-logos-room', 'ormi-logos-room']] as const) {
+      expect(data.ENEMY_GROUPS_BY_ID[group]!.enemies.find((e) => e.id === id)!.abilityIds, id).not.toContain('x2-ormi-concussive-blast');
+    }
   });
 
   it('the Left Bulwark answers on its own three rows, the Right on the first three', () => {

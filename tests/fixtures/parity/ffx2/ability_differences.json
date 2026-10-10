@@ -30,7 +30,6 @@
   "x2-den-baralai-drill-shot": ["type 0->1"],
   "x2-den-baralai-glint": ["rolls true->false"],
   "x2-den-baralai-looming-glacier": ["none->class 2 formula 7 power 16"],
-  "x2-den-baralai-triple-attack": ["rolls true->false","crit true->false"],
   "x2-den-gippal-grinder": ["rolls true->false"],
   "x2-den-gippal-mortar": ["rolls true->false"],
   "x2-den-gippal-potion-plus": ["formula 8->5"],
