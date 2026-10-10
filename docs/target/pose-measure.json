@@ -19177,35 +19177,35 @@
     },
     "hurt": {
      "anchor": [
-      315.0,
-      101.0
+      265.0,
+      66.0
      ],
-     "baseline": 819.0,
-     "current": 0.909,
+     "baseline": 736.0,
+     "current": 1.6,
      "head": [
-      274.8,
-      67.4,
-      355.2,
-      134.6
+      242.2,
+      47.0,
+      287.8,
+      85.0
      ],
      "prone": false,
-     "reading": 0.909,
-     "scale": 0.909,
+     "reading": 1.603,
+     "scale": 1.6,
      "scaleSrc": "noise",
-     "sha": "bb94d63c86dfb97df4e125e5c119e8a9742367e95610095b355cc7e088ac016b",
+     "sha": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
      "size": [
-      744,
-      835
+      758,
+      752
      ],
      "stance": {
-      "row": 818.0,
+      "row": 736.0,
       "src": "silhouette",
-      "x": 402.0,
-      "x0": 236.0,
-      "x1": 568.0
+      "x": 350.0,
+      "x0": 214.0,
+      "x1": 486.0
      },
      "standing": true,
-     "stature": 0.634
+     "stature": 1.001
     },
     "idle": {
      "anchor": [
@@ -19271,25 +19271,25 @@
     },
     "ko": {
      "anchor": [
-      954.0,
-      196.0
+      884.0,
+      122.0
      ],
-     "baseline": 296.0,
-     "current": 0.8,
+     "baseline": 380.0,
+     "current": 1.0,
      "head": [
-      908.4,
-      157.9,
-      999.6,
-      234.1
+      841.8,
+      86.7,
+      926.2,
+      157.3
      ],
      "prone": true,
-     "reading": 0.8,
-     "scale": 0.8,
-     "scaleSrc": "noise",
-     "sha": "ad7ed8b6ae3a8f55aeea44d66516f6f60b65ebdd10c6a64b2c804723c7e23ed2",
+     "reading": 0.864,
+     "scale": 0.864,
+     "scaleSrc": "reviewed",
+     "sha": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
      "size": [
-      1306,
-      315
+      1102,
+      396
      ],
      "stance": null,
      "standing": false

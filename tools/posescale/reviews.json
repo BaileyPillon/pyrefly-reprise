@@ -453,9 +453,9 @@
   "critical": 0.893,
   "defend": 1.176,
   "follow": 1.316,
-  "hurt": 0.909,
+  "hurt": 1.603,
   "item": 1.126,
-  "ko": 0.8,
+  "ko": 0.864,
   "ready": 1.0,
   "sleep": 1.111,
   "victory": 1.286

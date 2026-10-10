@@ -380,6 +380,7 @@
    "pose": "hurt",
    "game": "FFX-2",
    "replacesApproved": true,
+   "restoredOut": "restored out 2026-10-10: Bailey, \"resume work please\" and \"I'll go with all of your recommendations\" (the driver's recommendation \"keep Rikku, restore both Yuna\", D-644); the 2026-10-07 painting is back (1x, sidecar, 2x, 3x, 4x) and this picks version is in D:/Tools/pyrefly-art-backup/held/2026-10-10-yuna-wm-restored-out (HELD.json); the pin moved back through its supersedes chain",
    "playedBefore": "alternate beside the approved hurt painting",
    "candidate": {
     "night": "2026-10-07",
@@ -470,6 +471,7 @@
    "pose": "ko",
    "game": "FFX-2",
    "replacesApproved": true,
+   "restoredOut": "restored out 2026-10-10: Bailey, \"resume work please\" and \"I'll go with all of your recommendations\" (the driver's recommendation \"keep Rikku, restore both Yuna\", D-644); the 2026-10-07 painting is back (1x, sidecar, 2x, 3x, 4x) and this picks version is in D:/Tools/pyrefly-art-backup/held/2026-10-10-yuna-wm-restored-out (HELD.json); the pin moved back through its supersedes chain",
    "playedBefore": "alternate beside the approved ko painting",
    "candidate": {
     "night": "2026-10-08",

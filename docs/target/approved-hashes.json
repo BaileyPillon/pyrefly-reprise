@@ -7009,41 +7009,55 @@
     "approved": "2026-10-03"
    },
    "public/art/characters/yuna-white-mage/hurt.png": {
-    "sha256": "bb94d63c86dfb97df4e125e5c119e8a9742367e95610095b355cc7e088ac016b",
-    "mtime": "2026-10-09T15:41:04.958Z",
-    "approved": "2026-10-09",
-    "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
+    "sha256": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
+    "mtime": "2026-10-10T17:27:27.776Z",
+    "approved": "2026-10-10",
+    "replacedBy": "bailey:2026-10-10 (restore of the 2026-10-07 paintings, D-644; Bailey 2026-10-10, verbatim \"resume work please\" and \"I'll go with all of your recommendations\", accepting the driver's recommendation \"keep Rikku, restore both Yuna\"; the 2026-10-09 picks versions moved out to D:/Tools/pyrefly-art-backup/held/2026-10-10-yuna-wm-restored-out; FFX-2 only)",
     "supersedes": {
-     "sha256": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
-     "mtime": "2026-10-07T12:33:58.386Z",
-     "approved": "2026-10-07",
-     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+     "sha256": "bb94d63c86dfb97df4e125e5c119e8a9742367e95610095b355cc7e088ac016b",
+     "mtime": "2026-10-09T15:41:04.958Z",
+     "approved": "2026-10-09",
+     "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
      "supersedes": {
-      "sha256": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
-      "mtime": "2026-10-04T11:21:07.318Z",
-      "approved": "2026-10-03",
-      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/hurt.png"
+      "sha256": "3001a910ef0a7b64dba0b8264bbff92f516b2813c1c8a7d5bf3babf7e6d70485",
+      "mtime": "2026-10-07T12:33:58.386Z",
+      "approved": "2026-10-07",
+      "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+      "supersedes": {
+       "sha256": "5fe8e4c3c8c7cd3a6d01d3830d226846c0f2c3c2d95f030230d03f59e9ab5490",
+       "mtime": "2026-10-04T11:21:07.318Z",
+       "approved": "2026-10-03",
+       "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/hurt.png"
+      },
+      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/yuna-white-mage/hurt.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
      },
-     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/yuna-white-mage/hurt.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
+     "backup": "D:/Tools/pyrefly-art-backup/held/2026-10-10-yuna-wm-restored-out/characters/yuna-white-mage/hurt.png (tiers and sidecar: same folder; HELD.json lists them)"
     }
    },
    "public/art/characters/yuna-white-mage/ko.png": {
-    "sha256": "ad7ed8b6ae3a8f55aeea44d66516f6f60b65ebdd10c6a64b2c804723c7e23ed2",
-    "mtime": "2026-10-09T15:41:04.991Z",
-    "approved": "2026-10-09",
-    "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
+    "sha256": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
+    "mtime": "2026-10-10T17:27:28.763Z",
+    "approved": "2026-10-10",
+    "replacedBy": "bailey:2026-10-10 (restore of the 2026-10-07 paintings, D-644; Bailey 2026-10-10, verbatim \"resume work please\" and \"I'll go with all of your recommendations\", accepting the driver's recommendation \"keep Rikku, restore both Yuna\"; the 2026-10-09 picks versions moved out to D:/Tools/pyrefly-art-backup/held/2026-10-10-yuna-wm-restored-out; FFX-2 only)",
     "supersedes": {
-     "sha256": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
-     "mtime": "2026-10-07T12:33:58.480Z",
-     "approved": "2026-10-07",
-     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+     "sha256": "ad7ed8b6ae3a8f55aeea44d66516f6f60b65ebdd10c6a64b2c804723c7e23ed2",
+     "mtime": "2026-10-09T15:41:04.991Z",
+     "approved": "2026-10-09",
+     "replacedBy": "bailey:2026-10-09 (picks install; Bailey 2026-10-09 ~11:30 EDT, verbatim \"I'll go with all your recommendations. Scenes not screens.\", accepting the driver's recommendation \"install pick #1 for every pose except the three weak Rikku rows, which get a re-render tonight.\")",
      "supersedes": {
-      "sha256": "bf859d072d61d85d534a1d9eb3018605bf65a39ad93a4e2ae027fde778d30cd2",
-      "mtime": "2026-10-04T11:21:07.318Z",
-      "approved": "2026-10-03",
-      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/ko.png"
+      "sha256": "4f428ed869edd8a3c7ef07d3fa3b16dcf7bb325abb8cbf60d84bf82f3855cde9",
+      "mtime": "2026-10-07T12:33:58.480Z",
+      "approved": "2026-10-07",
+      "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+      "supersedes": {
+       "sha256": "bf859d072d61d85d534a1d9eb3018605bf65a39ad93a4e2ae027fde778d30cd2",
+       "mtime": "2026-10-04T11:21:07.318Z",
+       "approved": "2026-10-03",
+       "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna-white-mage/ko.png"
+      },
+      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/yuna-white-mage/ko.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
      },
-     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-09-picks-before-install/characters/yuna-white-mage/ko.png (tiers and sidecar: D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks)"
+     "backup": "D:/Tools/pyrefly-art-backup/held/2026-10-10-yuna-wm-restored-out/characters/yuna-white-mage/ko.png (tiers and sidecar: same folder; HELD.json lists them)"
     }
    },
    "public/art/characters/braskas-final-aeon-2/telegraph.png": {
