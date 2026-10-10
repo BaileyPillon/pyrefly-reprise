@@ -58,7 +58,7 @@ the reason is in the row; where it says "ours", the value is a number our data c
 | command damage flag word (can crit, takes the equipment's bonus) | `AbilityDef.record.flagsDamage` |
 | command crit byte | ours (`AbilityDef.bonusCrit`); an enemy's `plainAttack.critBonus` |
 | user Luck stack, target Jinx stack | stack counts |
-| user equipment crit bonus (`Chr+0x5d8`) | the equipped weapon's and armour's `bonusCrit` for the party; **0 for every monster and aeon, settled in the exe** (research/re-ffx-commands.md section 5) |
+| user equipment crit bonus (`Chr+0x5d8`) | the equipped weapon's and armour's `bonusCrit` for the party; **0 for every monster, settled in the exe** (research/re-ffx-commands.md section 5); **6 for every aeon (corrected by re-parity W5, 2026-10-10: an aeon wears two fixed pieces of gear, crit byte 3 each; docs/handoff/re-parity-w5.md)** |
 | always-critical buff | the `guaranteed-critical` status -> buff flag 0x10 |
 
 **Per-hit pipeline** (`kernel/hitdamage.ts`, exe 0x78e630)

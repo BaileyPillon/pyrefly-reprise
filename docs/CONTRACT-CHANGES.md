@@ -6,6 +6,18 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-10 — The FFX Overdrive gauge, the aeons' gear and recovery, and Steal follow the game's code (re-parity W5; FFX only; no file of the contract list changes in behaviour)
+
+Branch `re-parity-w5` (from `origin/re-parity-w2` `919f2c78`). Handoff: [re-parity-w5](handoff/re-parity-w5.md). Game case: FFX only (the FFX-2 and FF7 engines import none of these files; `ffx2-atb-golden` and `ff7-golden` pass unchanged). `src/battle/common/types.ts` gets doc-comment edits only (the three Overdrive-mode comments and `AeonFields.reviveCountdown`); no member is added, removed or retyped.
+
+- New engine-private modules: `gauge.ts` (the engine's API over the gauge kernels: `gaugeOnHit`, `gaugeOnOutcome`, `gaugeOnDeath`, `gaugeOnTurn`, `gaugeOnVictory`, `gaugeOnEscape`, `gaugeAdd`, `gaugeTransfer`, `gaugePay`), `aeon-gear.ts` (`AEON_GEAR`, `aeonGearOf`: critical bonus 6, auto-ability words and recovery count of the ten aeons), `adapt/od-world.ts`, `adapt/aeon-party.ts`, `adapt/steal.ts`. `AEON_GEAR` and `aeonGearOf` are exported from `src/battle/ffx/index.ts`.
+- **Removed exports** of `src/battle/ffx/index.ts` and `overdrive.ts`: `AEON_REVIVE_BATTLES` (the authored 3; the game's counts are in `AEON_GEAR`), `AEON_FILL_MULT`, `TACTICIAN_STATUSES`, `VICTIM_STATUSES`, and the hooks `onDamageTaken`, `onDamageDealt`, `onHealDealt`, `onFlatTrigger`, `onTurnStartGauge`, `payVictorGauge`; `aeons.ts` loses `aeonEntryDelay` (dead code) and the freeze and thaw of the party's counters. `addGauge`, `setGauge`, `spendOverdrive`, `overdriveReady` keep their signatures. `AEON_REVIVE_BATTLES` was imported by one test only.
+- `HitReport` (`adapt/hit.ts`, engine-private) gains `outcomeByte`, `base`, `chargesOverdrive` and `transfers`; `resolveSteal(ctx, user, target, missed = false)` gains a defaulted parameter; `autoWordA`/`autoWordB` (`adapt/words.ts`) add an aeon's fixed gear and the gauge bits (Double, Triple, SOS, Overdrive to AP); `equipmentCrit` returns 6 for an aeon.
+- The gauge of an aeon is still stored in percent (0 to 100) so the HUD, the builds and the chain carry are unchanged; the game's bar is 20 points wide and the kernels see it as `gauge / 5` (`adapt/od-world.ts`).
+- `FFXEngine.init` (`engine.ts`) holds the events `buildBattle` raises (a carried member under half HP gains Critical) until the context exists, then pushes them; before, such a start threw `init(setup) has not been called`. Found by `chapters/isaaru-bench` once wiped aeons stayed away for the game's counts.
+- `BattleScreenSetup.ts#carryFfx` carries an aeon's `reviveCountdown` to the next link (each link is a battle of the game).
+- The Overdrive-mode strings in `src/data/ffx/overdrives/modes.ts` and the comments in `types.ts` say the game's integer forms (divide, truncate, add 1; Healer counts the HP restored).
+
 ## 2026-10-10 — The FFX turn order, status step and per-turn ticks (re-parity W2) meet the game-script lanes: byte counters under the scripts' openings, hooks around the ticks, and the game's can-act test in two (release candidate 2 base; FFX only; no shared contract file changed in shape)
 
 Branch `re-parity-w2`, merge of `origin/re-parity-rc1` (`931613a8`). Recorded because the entries below describe the same engine files from two sides and neither is right alone. `src/battle/common/types.ts`
