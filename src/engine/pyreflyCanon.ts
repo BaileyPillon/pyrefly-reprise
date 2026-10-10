@@ -16,6 +16,7 @@
 import type { CombatantId } from '../battle/common/types.ts';
 import { departureKindOf } from './BattlePresenterDepartures.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
+import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
 
 /**
  * People, who die as people: the presentation plan's A-5 row ("Humans
@@ -121,6 +122,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   'via-purifico': { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-isaaru-bevelle.md §7: the arena rows name no particles' },
   // Ixion at Djose (Chapter XVI, FFX-2 only): the Chamber on its stand-in plate (the key is the plate's, `data/ixion-plates.ts`).
   [DJOSE_CHAMBER_PLATE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-ixion-djose.md §6.1: the arena rows name no particles' },
+  // The Experiment at Djose (the hidden chapter, FFX-2 only): the Fayth Antechamber; the key is its plate's (`data/experiment-plates.ts`).
+  [EXPERIMENT_GROUNDS_PLATE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-experiment.md §6.1: the arena rows name no particles' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.
   'sector1-reactor': {
     game: 'ff7',

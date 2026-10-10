@@ -52,21 +52,21 @@ import { FFX2_IXION_DJOSE } from './chapter-ffx2-ixion-djose.ts';
 import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
 import { SIN_FACE } from './chapter-sin-face.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
-import { experimentalLeblanc } from './chapter-exp-leblanc.ts'; // the Leblanc preview (FFX-2 only; below)
+import { experimentalLeblanc } from './chapter-exp-leblanc.ts'; import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts'; // the hidden FFX-2 experiments: the Leblanc preview and the Experiment (below)
 
 /**
  * Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden FF7 experiment `'ff7-guard-scorpion'`, 2026-09-27,
  * which never writes `SaveData.chapters`: `app/experiments/`). Also the keys used in `SaveData.chapters`.
  */
 export type ChapterId =
-  | 'ff7-guard-scorpion'
+  | 'ff7-guard-scorpion' | 'ffx2-masterpiece-theatre' // the Experiment (mission Masterpiece Theatre) (2026-10-10), hidden like the others (FFX-2; no card, its word on chapter select, `app/screens/frontend/experimentDoor.ts`), never in `SaveData.chapters`
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
   | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc'; // the last: the Leblanc preview (2026-10-06), hidden (no card; its word on chapter select, `app/screens/frontend/leblancDoor.ts`), never in `SaveData.chapters`
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
-export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc'>;
+export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-masterpiece-theatre'>;
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -108,7 +108,7 @@ export interface Chapter {
   id: ChapterId;
   game: GameId;
   /** Display order on chapter select, 1–18 (XVI Ixion, listed 2026-09-27; XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment). */
-  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19;
+  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; // 19 and 20: the hidden experiments after the eighteen (shown as EXP, `ui/common/roman.ts`)
   /** An experiment: its attempts, clears and time go to the experiments' store, never the save, and it is no part of any count. FF7's Guard Scorpion is hidden (no card; `BattleScreenExperiment`); the FFX-2 Leblanc preview is hidden too (no card; its word on chapter select, `./chapter-exp-leblanc.ts`) and plays through the chapters' own flow. */
   experimental?: true;
   /** Card title. The encounter's name. */
@@ -355,8 +355,8 @@ export const FFX2_LEBLANC: Chapter = {
 };
 
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN, UNLISTED_CHAPTERS }; // the last: registered, not listed (`./chapters-unlisted.ts`)
-/** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card: the Leblanc preview, Chapter VI's mission in new paintings (FFX-2 only), reached by typing its word on chapter select. */
-export const EXPERIMENT_CHAPTERS: readonly Chapter[] = [experimentalLeblanc(FFX2_LEBLANC)] as const;
+/** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card: the Leblanc preview, Chapter VI's mission in new paintings (FFX-2 only), and the Experiment, the Machine Faction's weapon with the upgrades the player chooses (FFX-2 only), each reached by typing its word on chapter select. */
+export const EXPERIMENT_CHAPTERS: readonly Chapter[] = [experimentalLeblanc(FFX2_LEBLANC), FFX2_EXPERIMENT] as const;
 
 /** All eighteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [

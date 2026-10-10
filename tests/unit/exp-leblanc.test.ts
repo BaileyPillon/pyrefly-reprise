@@ -208,7 +208,7 @@ describe('the experiment is the same encounter', () => {
     expect(exp.experimental).toBe(true);
     expect(exp.number).toBe(19);
     expect(exp.title).toBe('Experimental: Leblanc (new art)');
-    expect(EXPERIMENT_CHAPTERS).toEqual([exp]);
+    expect(EXPERIMENT_CHAPTERS.filter((c) => c.id === exp.id)).toEqual([exp]); // the other hidden experiments (Sinspawn Gui, FFX) are their own suites'
     expect(CHAPTERS).not.toContain(exp);
     expect(CHAPTER_IDS as readonly string[]).not.toContain('exp-leblanc');
     expect(UNLISTED_CHAPTERS).not.toContain(exp);
@@ -482,7 +482,7 @@ describe('the scene registry: the same room over its own plate and namespace', (
 
 describe('an experiment, not a chapter: the board, the store, the save', () => {
   /** The board has no experiment card (it is hidden behind its word, `exp-leblanc-door.test.ts`); these tests hand the experiment in to read what its card would be. */
-  const WITH_CARD = { experiments: EXPERIMENT_CHAPTERS } as const;
+  const WITH_CARD = { experiments: EXPERIMENT_CHAPTERS.filter((c) => c.id === 'exp-leblanc') } as const;
   let save: SaveStore;
   let store: Record<string, string>;
   beforeEach(() => {

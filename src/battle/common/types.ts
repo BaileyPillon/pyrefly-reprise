@@ -2827,6 +2827,13 @@ export interface EnemyGroupDef {
    */
   restoresPartyOnEntry?: boolean;
   /**
+   * **FFX-2, with `restoresPartyOnEntry`: the party is restored but the Save Sphere card is not shown** (the Experiment's Act II, Djose Temple; the driver's pick of
+   * 2026-10-10: "no 'SAVE SPHERE' card: there is none at Djose"). The engine still refills HP and MP and stands a KO'd girl up, and the link is still the retry
+   * checkpoint; only the card is skipped (`runEncounterChain` re-stages plainly, as every other chained link does), and the story line before the link says why the girls
+   * are whole again. Absent everywhere else, so Chapter XI keeps its card.
+   */
+  noSaveSphereCard?: boolean;
+  /**
    * **FFX-2, a chained link the party enters carrying everything** (Chapter XV,
    * the Den of Woe; `docs/plans/chapter-gippal-review.md` GP3 = a, `[derived]`:
    * the sources carry HP, the rest is our reading of "no break"). On top of the

@@ -26,6 +26,7 @@ import { SEYMOUR_NATUS_GUIDE } from './seymour-natus.ts';
 import { ISAARU_GUIDE } from './ffx-isaaru.ts';
 import { SIN_FINS_CORE_GUIDE } from './sin-fins-core.ts';
 import { SIN_FACE_GUIDE } from './sin-face.ts';
+import { FFX2_EXPERIMENT_GUIDE } from './ffx2-experiment.ts';
 
 export type {
   ChapterGuide,
@@ -57,6 +58,7 @@ export {
   ISAARU_GUIDE,
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
+  FFX2_EXPERIMENT_GUIDE,
 };
 
 export const GUIDES: readonly ChapterGuide[] = [
@@ -91,6 +93,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   // Chapters XVII and XVIII (FFX only), listed 2026-09-29 with their chapters: the Fins and the Core, the Face.
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
+  // The hidden Experiment (FFX-2 only, Chapter 5 at Djose Temple; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_EXPERIMENT_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

@@ -41,6 +41,9 @@ import { denOfWoeAbilities } from './den-of-woe-abilities.ts';
 // Ixion at Djose (FFX-2 Chapter 3 finale; registered, unlisted behind a switch): `./ixion-djose.ts`.
 import { ixionDjoseGroups } from './ixion-djose.ts';
 import { x2IxionAbilities } from './ixion-djose-abilities.ts';
+// The Experiment at Djose Temple (FFX-2 Chapter 5; the hidden chapter "The Experiment", FFX-2 only): `./experiment.ts`.
+import { experimentGroups } from './experiment.ts';
+import { experimentAbilities } from './experiment-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -56,6 +59,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...tremaOptionGroups,
   ...denOfWoeGroups,
   ...ixionDjoseGroups,
+  ...experimentGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -81,6 +85,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...paragonOversoulAbilities,
   ...denOfWoeAbilities,
   ...x2IxionAbilities,
+  ...experimentAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

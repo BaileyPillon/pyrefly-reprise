@@ -27,6 +27,7 @@ import { SEYMOUR_NATUS_DOC } from './seymour-natus.ts';
 import { ISAARU_DOC } from './ffx-isaaru.ts';
 import { SIN_FINS_CORE_DOC } from './sin-fins-core.ts';
 import { SIN_FACE_DOC } from './sin-face.ts';
+import { FFX2_EXPERIMENT_DOC } from './ffx2-experiment.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -47,6 +48,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   ISAARU_DOC,
   SIN_FINS_CORE_DOC,
   SIN_FACE_DOC,
+  FFX2_EXPERIMENT_DOC, // the hidden Experiment (FFX-2 only)
 ];
 
 /** The document for one chapter id, if it has one. */
