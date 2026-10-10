@@ -138,7 +138,7 @@ export class EvraeHarnessBattle {
     const range = airshipRangeOf(this.state());
     if (!range || !AirshipOrderWidget.applies(range)) return;
     this.widgetOpen = true;
-    void this.widget.open(d.commands, range, missilesLeftOf(this.state())).then((cmd: Command) => {
+    void this.widget.open(d.commands, missilesLeftOf(this.state())).then((cmd: Command) => {
       this.widgetOpen = false;
       this.pending = null;
       if (this.disposed) return;

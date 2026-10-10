@@ -288,31 +288,46 @@ describe('#12 Trigger Commands fire from the player command list', () => {
     expect(events.some((e) => e.type === 'message' || e.type === 'overdrive-gauge')).toBe(true);
   });
 
-  it('runs out after two charges and the third row is refused, not silent', () => {
+  it('two Talks work, the third is offered and only speaks, and then the row is spent and says so [§1.6, B7]', () => {
     const engine = newEngine('braskas-final-aeon', 1, dreamsEndBuild);
-    let offers = 0;
-    let refusals = 0;
-    for (let i = 0; i < 400; i++) {
+    const st = engine.state();
+    let offered = 0;
+    let thirdSpeaks = false;
+    let spentRows = 0;
+    for (let i = 0; i < 800 && spentRows < 2; i++) {
+      // A party that only defends is not what is under test: keep it standing.
+      for (const id of [...st.activeIds, ...st.reserveIds]) {
+        const c = st.combatants[id];
+        if (c) {
+          c.stats.maxHp = 99_999;
+          c.hp = 99_999;
+        }
+      }
       const d = engine.nextDecision();
       if (d.kind === 'battle-over') break;
       if (d.kind !== 'player-input') continue;
       const talk = d.commands.find((c) => c.label === 'Talk');
+      if (talk) {
+        // The row is on offer exactly while no Talk waits on his turn and the third has not been spoken.
+        const used = Number(st.flags['bfa.talkUsed'] ?? 0);
+        expect(talk.enabled, `Talk after ${used} used`).toBe(st.flags['bfa.talkPending'] !== true && used < 3);
+      }
       if (talk?.enabled) {
-        offers++;
+        offered++;
         const events = submitAndRead(engine, talk.command as Command);
-        if (!events.some((e) => e.type === 'overdrive-gauge')) refusals++;
+        if (offered === 3) thirdSpeaks = events.some((e) => e.type === 'message' && /nothing left to say/.test(e.text)) && st.flags['bfa.talkPending'] !== true;
         continue;
       }
-      // §1.6 offers a third Talk deliberately; it must say why it does nothing.
-      if (talk && !talk.enabled) {
-        expect(talk.disabledReason).toBeDefined();
-        refusals++;
+      // Spent (the third Talk is behind it): greyed, and it says why.
+      if (talk && Number(st.flags['bfa.talkUsed'] ?? 0) >= 3) {
+        expect(talk.disabledReason).toBe('Nothing left to say');
+        spentRows++;
       }
       engine.submit({ kind: 'defend', targets: [] });
-      if (refusals > 0 && offers >= 2) break;
     }
-    expect(offers, 'two charges, battle-wide').toBe(2);
-    expect(refusals, 'and then it stops working, out loud').toBeGreaterThan(0);
+    expect(offered, 'two charges, and the third Talk offered: it only speaks').toBe(3);
+    expect(thirdSpeaks, 'the third Talk says it has nothing left to say and leaves nothing waiting').toBe(true);
+    expect(spentRows, 'and then the row is spent, out loud').toBeGreaterThan(0);
   });
 
   it('gives Kimahri +10 Strength and Yuna +10 Magic Defense [ffx-seymour-flux §4.7]', () => {

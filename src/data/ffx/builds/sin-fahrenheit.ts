@@ -69,7 +69,7 @@ export const sinFahrenheitBuild: FFXPartyBuild = {
  * preset (D-264), with **Tidus's and Rikku's orders to Cid** added back. In the
  * Fin fights the Trigger Command is Evrae's: "Tidus and Rikku, Trigger Command,
  * **same**" (research/ffx-sin.md §4 `[verified: 4 sources]`), which is the pair
- * of menu markers `pull-back` / `close-in` Chapter VIII's `fahrenheit.ts` gives
+ * of menu markers `pull-back` / `close-in` / `cancel-order` Chapter VIII's `fahrenheit.ts` gives
  * them and `highbridge.ts` strips for every later chapter. Nothing else changes;
  * link 4 (`sinFahrenheitBuild` above) has no order (§3.5).
  *
@@ -78,7 +78,7 @@ export const sinFahrenheitBuild: FFXPartyBuild = {
  * Command in links 3 and 4). How that row reads is package F's and P's.
  */
 export const SIN_FINS_ORDER_OWNERS: readonly string[] = ['tidus', 'rikku'];
-const ORDERS: readonly string[] = ['pull-back', 'close-in'];
+const ORDERS: readonly string[] = ['pull-back', 'close-in', 'cancel-order'];
 
 export const sinFinsCoreBuild: FFXPartyBuild = {
   ...sinFahrenheitBuild,

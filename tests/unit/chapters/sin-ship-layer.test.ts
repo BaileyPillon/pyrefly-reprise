@@ -155,7 +155,7 @@ describe('the Trigger Command widget without a missile rack', () => {
   it('no pip strip and no volley in the cost when volleysLeft is null (the Fins)', () => {
     const w = new AirshipOrderWidget();
     document.body.appendChild(w.el);
-    void w.open([trigger('pull-back'), trigger('close-in')], 'far', null);
+    void w.open([trigger('pull-back', false), trigger('close-in')], null);
     expect(w.el.querySelector('.ffx-airship-order__pips')).toBeNull();
     expect(w.el.querySelector('.ffx-airship-order__left')).toBeNull();
     expect(w.el.textContent).not.toMatch(/volley/i);
@@ -166,7 +166,7 @@ describe('the Trigger Command widget without a missile rack', () => {
   it('Evrae keeps its three pips (a number is passed)', () => {
     const w = new AirshipOrderWidget();
     document.body.appendChild(w.el);
-    void w.open([trigger('pull-back'), trigger('close-in')], 'near', 2);
+    void w.open([trigger('pull-back'), trigger('close-in', false)], 2);
     expect(w.el.querySelectorAll('.ffx-airship-order__pips i')).toHaveLength(3);
     expect(w.el.querySelectorAll('.ffx-airship-order__pip--live')).toHaveLength(2);
     expect(w.el.textContent).toMatch(/1 volley/);
@@ -178,7 +178,7 @@ describe('the Trigger Command widget without a missile rack', () => {
       const orders = new AirshipOrders();
       document.body.appendChild(orders.el);
       const attack = { label: 'Attack', enabled: true, command: { kind: 'attack', targets: [] }, validTargets: [] } as unknown as AvailableCommand;
-      void orders.choose([trigger('pull-back'), trigger('close-in'), attack], { flags } as unknown as BattleState, async (c) => c[0]!.command as Command);
+      void orders.choose([trigger('pull-back'), trigger('close-in', false), attack], { flags } as unknown as BattleState, async (c) => c[0]!.command as Command);
       await Promise.resolve();
       await Promise.resolve();
       expect(orders.el.hidden).toBe(false);

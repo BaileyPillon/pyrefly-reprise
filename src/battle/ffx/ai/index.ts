@@ -11,7 +11,7 @@ import type { Command, FFXCombatant } from '../../common/types.ts';
 import { type Ctx, isAlive, livingFriendlies, tryActor } from '../state.ts';
 import { type AiContext, aiContextFor, getAiScript } from './types.ts';
 import { consumeSeymourTalk, seymourTalkAvailable } from './seymour-flux.ts';
-import { consumeBfaTalk } from './braskas-final-aeon.ts';
+import { bfaTalkState, consumeBfaTalk } from './braskas-final-aeon.ts';
 import {
   SEYMOUR_MACALANIA_SCRIPT,
   GUADO_GUARDIAN_SCRIPT,
@@ -21,9 +21,12 @@ import {
 } from './seymour-anima-macalania.ts';
 import { consumeNatusTalk, isNatusScript, natusTalkAvailable } from './seymour-natus-rules.ts';
 import {
+  ORDER_CANCEL,
   ORDER_CLOSE_IN,
   ORDER_PULL_BACK,
   airshipOrderAvailable,
+  airshipOrderDisabledReason,
+  cancelAirshipOrder,
   queueAirshipOrder,
 } from './evrae-rules.ts';
 
@@ -44,7 +47,7 @@ import './sin-scripts.ts';
 export * from './types.ts';
 export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
 export { yunalescaCounter, yunalescaEntryAction } from './yunalesca.ts';
-export { bfaTalkCharges, consumeBfaTalk } from './braskas-final-aeon.ts';
+export { bfaTalkCharges, bfaTalkState, consumeBfaTalk } from './braskas-final-aeon.ts';
 export { YU_YEVON_CURAGA_THRESHOLD } from './yu-yevon.ts';
 export {
   MAC_ACT,
@@ -109,13 +112,11 @@ export function applyTalkTrigger(ctx: Ctx, talker: FFXCombatant): boolean {
   // **Natus has its own table too** — Tidus / Auron +10 Strength, Yuna +10
   // Magic Defense [ffx-seymour-natus-highbridge §6.2, verified: 4 sources].
   if (isNatusScript(script)) return consumeNatusTalk(ctx, talker);
-  if (script.startsWith('bfa') || script === 'braskas-final-aeon') {
-    return consumeBfaTalk(aiContextFor(ctx, boss));
-  }
+  if (isBfaScript(script)) return consumeBfaTalk(aiContextFor(ctx, boss));
   return false;
 }
 
-/** True when submitting Talk right now would do something [§4.7, §1.6]. */
+/** True when the Talk row is on offer right now [§4.7, §1.6; Braska's Final Aeon: `bfaTalkState`]. */
 export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
   const boss = triggerHost(ctx);
   if (!boss) return false;
@@ -123,11 +124,19 @@ export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
   if (script === 'seymour-flux' || script === 'mortiorchis') return seymourTalkAvailable(ctx, talker.id);
   if (isMacalaniaScript(script)) return macalaniaTalkAvailable(ctx, talker.id);
   if (isNatusScript(script)) return natusTalkAvailable(ctx, talker.id);
-  if (script.startsWith('bfa') || script === 'braskas-final-aeon') {
-    const used = ctx.state.flags['bfa.talkUsed'];
-    return typeof used === 'number' ? used < 2 : true;
-  }
+  if (isBfaScript(script)) return bfaTalkState(ctx.state.flags) === 'open';
   return false;
+}
+
+function isBfaScript(script: string): boolean {
+  return script.startsWith('bfa') || script === 'braskas-final-aeon';
+}
+
+/** Why Talk is greyed: Braska's Final Aeon's waiting Talk says so, every other greyed Talk has nothing left to say. */
+function talkDisabledReason(ctx: Ctx): string {
+  const boss = triggerHost(ctx);
+  const script = boss ? (activeScriptId(boss) ?? boss.id) : '';
+  return isBfaScript(script) && bfaTalkState(ctx.state.flags) === 'pending' ? 'Waiting for his turn' : 'Nothing left to say';
 }
 
 // ---------------------------------------------------------------------------
@@ -149,8 +158,8 @@ export function talkAvailable(ctx: Ctx, talker: FFXCombatant): boolean {
 export interface TriggerHandler {
   available: (ctx: Ctx, user: FFXCombatant) => boolean;
   apply: (ctx: Ctx, user: FFXCombatant) => boolean;
-  /** Why the menu row is greyed when `available` is false. */
-  disabledReason: string;
+  /** Why the menu row is greyed when `available` is false (a function when the reason depends on the state). */
+  disabledReason: string | ((ctx: Ctx, user: FFXCombatant) => string);
   /** What the banner says when a submitted trigger is refused. */
   rejectedMessage: (user: FFXCombatant) => string;
 }
@@ -176,42 +185,48 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
       }
       return true;
     },
-    // §1.6's third Talk is offered and deliberately inert; say so rather than
-    // spending a turn in silence, which reads as a broken button.
-    disabledReason: 'Nothing left to say',
+    // Braska's Final Aeon (re-parity row B7, Bailey 2026-10-09 "Yes, match the game"): the row is greyed while a Talk waits on his
+    // next turn, and the third Talk is offered and only speaks (`rejectedMessage`), after which the row is spent. Say so rather
+    // than spending a turn in silence, which reads as a broken button.
+    disabledReason: (ctx) => talkDisabledReason(ctx),
     rejectedMessage: (user) => `${user.name} has nothing left to say`,
   },
   /**
-   * **Evrae, on the *Fahrenheit*** — the two orders to Cid
+   * **Evrae, on the *Fahrenheit*** — the three orders to Cid
    * [research/ffx-evrae-airship.md §4.2, verified: 3 sources for who may issue
-   * them]. Two ids rather than one id with a payload, deliberately:
+   * them]. One id each rather than one id with a payload, deliberately:
    * `TriggerCommand` has no `extra` field and adding one would be a contract
    * change for no gain.
    *
-   * The order does **not** move the ship. It is queued, last order wins, and
-   * Cid flies it on his next turn in place of a missile volley.
+   * The order does **not** move the ship. It is queued and Cid flies it on his next turn in place of a missile volley.
+   * Only the one on offer is available ({@link orderOnOffer}): Pull back at NEAR, Close in at FAR, Cancel while one stands.
    */
-  [ORDER_PULL_BACK]: {
-    available: (ctx, user) => airshipOrderAvailable(ctx, user.id),
-    apply: (ctx, user) => sayOrder(ctx, user, ORDER_PULL_BACK, 'pull back'),
-    disabledReason: 'Not your call',
-    rejectedMessage: (user) => `${user.name} cannot give that order`,
-  },
-  [ORDER_CLOSE_IN]: {
-    available: (ctx, user) => airshipOrderAvailable(ctx, user.id),
-    apply: (ctx, user) => sayOrder(ctx, user, ORDER_CLOSE_IN, 'close in'),
-    disabledReason: 'Not your call',
-    rejectedMessage: (user) => `${user.name} cannot give that order`,
-  },
+  [ORDER_PULL_BACK]: orderHandler(ORDER_PULL_BACK, (ctx, user) => sayOrder(ctx, user, ORDER_PULL_BACK, 'pull back')),
+  [ORDER_CLOSE_IN]: orderHandler(ORDER_CLOSE_IN, (ctx, user) => sayOrder(ctx, user, ORDER_CLOSE_IN, 'close in')),
+  [ORDER_CANCEL]: orderHandler(ORDER_CANCEL, (ctx, user) => {
+    if (!cancelAirshipOrder(ctx, user)) return false;
+    ctx.emit({ type: 'message', text: `${user.name} cancels the order`, kind: 'story' });
+    return true;
+  }),
 };
+
+/** One of the three airship orders: available while it is the one on offer, and the reason says why not. */
+function orderHandler(orderId: string, apply: TriggerHandler['apply']): TriggerHandler {
+  return {
+    available: (ctx, user) => airshipOrderAvailable(ctx, user.id, orderId),
+    apply,
+    disabledReason: (ctx, user) => airshipOrderDisabledReason(ctx, user.id, orderId),
+    rejectedMessage: (user) => `${user.name} cannot give that order`,
+  };
+}
 
 /**
  * Queue an Evrae order and **say** it was queued, for the reason Talk says it
  * spoke: an order changes nothing on the field until Cid's next turn, so
  * without a line the row produced only `action-start` / `action-end` and read
  * as a broken button (`tests/unit/trigger-commands.test.ts`, found when the
- * chapter was registered). Placeholder copy, like the engine's other three
- * airship messages [docs/handoff/chapter-evrae-engine.md "Owed"]. FFX only.
+ * chapter was registered). Placeholder copy, like the engine's other airship
+ * messages [docs/handoff/chapter-evrae-engine.md "Owed"]. FFX only.
  */
 function sayOrder(ctx: Ctx, user: FFXCombatant, orderId: string, words: string): boolean {
   if (!queueAirshipOrder(ctx, user, orderId)) return false;

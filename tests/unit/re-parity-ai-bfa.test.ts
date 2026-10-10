@@ -385,15 +385,46 @@ describe('Talk (m132 f5 @0x05E8; the scenes of sins06_00)', () => {
     expect(gaugeOf(t)).toBe(2);
   });
 
-  it('is offered through the trigger table twice and answers false the third time', () => {
+  it('the menu follows the game: greyed while a Talk waits on his turn, the third Talk offered and only speaking, then spent', () => {
+    // Re-parity row B7's menu half (Bailey, 2026-10-09, "Yes, match the game"): in the game Talk is disabled for Tidus until his
+    // next turn has been lost (scene 3 re-enables it), the third Talk is offered and only speaks, and then the command is removed.
     const t = bfa();
     const talk = triggerHandler('talk')!;
     const tidus = t.at('tidus');
+    const reason = (): string => (typeof talk.disabledReason === 'function' ? talk.disabledReason(t.ctx, tidus) : talk.disabledReason);
+    const hisTurn = (): void => {
+      t.rng.feed(1, 0, 0);
+      expect(chooseAiCommand(t.ctx, t.boss), 'his turn is lost').toBeNull();
+    };
     expect(talk.available(t.ctx, tidus)).toBe(true);
-    expect(talk.apply(t.ctx, tidus)).toBe(true);
+    // Talk 1 waits on his next turn: the row is greyed until he has lost it.
     expect(talk.apply(t.ctx, tidus)).toBe(true);
     expect(talk.available(t.ctx, tidus)).toBe(false);
+    expect(reason()).toBe('Waiting for his turn');
+    hisTurn();
+    expect(talk.available(t.ctx, tidus)).toBe(true);
+    // Talk 2: the same.
+    expect(talk.apply(t.ctx, tidus)).toBe(true);
+    expect(talk.available(t.ctx, tidus)).toBe(false);
+    expect(reason()).toBe('Waiting for his turn');
+    hisTurn();
+    // The third Talk is offered, and it only speaks: nothing waits on his turn afterwards.
+    expect(talk.available(t.ctx, tidus)).toBe(true);
     expect(talk.apply(t.ctx, tidus)).toBe(false);
+    expect(t.ctx.state.flags['bfa.talkPending']).not.toBe(true);
+    // Then the row is spent.
+    expect(talk.available(t.ctx, tidus)).toBe(false);
+    expect(reason()).toBe('Nothing left to say');
+  });
+
+  it('a Talk waiting on his turn is not another charge: the row is greyed, so it cannot be spent twice before he acts', () => {
+    const t = bfa();
+    const talk = triggerHandler('talk')!;
+    const tidus = t.at('tidus');
+    expect(talk.apply(t.ctx, tidus)).toBe(true);
+    // Before the change the row stayed usable here, and a second Talk before his turn burned the second charge for one lost turn.
+    expect(talk.available(t.ctx, tidus)).toBe(false);
+    expect(bfaTalkCharges(aiContextFor(t.ctx, t.boss))).toBe(1);
   });
 });
 
