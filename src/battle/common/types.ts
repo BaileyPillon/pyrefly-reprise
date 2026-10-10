@@ -1044,6 +1044,30 @@ export interface FFXCombatant extends Combatant {
   aeon?: AeonFields;
   /** Present only when `side === 'enemy'`. */
   enemy?: EnemyFields;
+  /**
+   * **A guest in the party** (FFX only; the hidden Sinspawn Gui chapter's Seymour): a party-side fighter lent to the line-up for one battle. Copied from
+   * {@link FFXMemberBuild.guest}; absent on every other combatant, so nothing else reads it. Read-only after setup.
+   */
+  guest?: FFXGuestSpec;
+}
+
+/**
+ * What makes a party member a **guest** (FFX only; additive, 2026-10-10; `docs/CONTRACT-CHANGES.md`). A guest is an ordinary party-side combatant in the
+ * build's `activeSlots` (so every surface that lists the active party already draws him), with these differences and no others:
+ *
+ * - **who takes his turn:** `control: 'player'` is the existing path (a command menu from his own `learnedAbilityIds`); `'ai'` makes him an automatic actor
+ *   (`controller: 'ai'`) whose turn is the registered script `aiScriptId` (`battle/ffx/ai`), aimed at the enemy side;
+ * - **he is not the player's to lose:** the party-wipe test (`engine-end.ts#checkEnd`) does not count him as standing unless `keepsPartyAlive` is true;
+ * - **he earns nothing:** no AP, no Sphere Level, no results row (`results.ts`, `ui/common/resultsMath.ts`);
+ * - **he is never benched:** a guest is never in `reserve`, so he can neither be switched in nor out.
+ */
+export interface FFXGuestSpec {
+  /** Who takes his turns. */
+  control: Controller;
+  /** The AI script of an `'ai'` guest, registered with `registerAiScript` (and `registerScriptHooks`, when it has hooks). Absent: a plain Attack at a random living foe. */
+  aiScriptId?: string;
+  /** True when the battle is still alive while only the guest stands (the game's loss rule says so). Default false: the battle is lost when no non-guest member stands. */
+  keepsPartyAlive?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -2581,6 +2605,8 @@ export interface FFXMemberBuild {
    * decision 6].
    */
   statuses?: Partial<Record<StatusId, StatusInstance>>;
+  /** A guest in the party for this chapter's battle (see {@link FFXGuestSpec}). Absent for every ordinary member. */
+  guest?: FFXGuestSpec;
 }
 
 /** One aeon Yuna owns at this point. */

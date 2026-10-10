@@ -53,20 +53,18 @@ import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
 import { SIN_FACE } from './chapter-sin-face.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 import { experimentalLeblanc } from './chapter-exp-leblanc.ts'; // the Leblanc preview (FFX-2 only; below)
+import { SINSPAWN_GUI } from './chapter-sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only; below)
 
-/**
- * Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden FF7 experiment `'ff7-guard-scorpion'`, 2026-09-27,
- * which never writes `SaveData.chapters`: `app/experiments/`). Also the keys used in `SaveData.chapters`.
- */
+/** Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden experiments, which never write `SaveData.chapters`: `app/experiments/`). Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
   | 'ff7-guard-scorpion'
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc'; // the last: the Leblanc preview (2026-10-06), hidden (no card; its word on chapter select, `app/screens/frontend/leblancDoor.ts`), never in `SaveData.chapters`
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc' | 'sinspawn-gui'; // the last two: hidden, no card, each opened by its word on chapter select (`app/screens/frontend/leblancDoor.ts`, `mushroomDoor.ts`): the Leblanc preview (2026-10-06) and Sinspawn Gui (FFX, 2026-10-10)
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
-export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc'>;
+export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'sinspawn-gui'>;
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -355,8 +353,8 @@ export const FFX2_LEBLANC: Chapter = {
 };
 
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN, UNLISTED_CHAPTERS }; // the last: registered, not listed (`./chapters-unlisted.ts`)
-/** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card: the Leblanc preview, Chapter VI's mission in new paintings (FFX-2 only), reached by typing its word on chapter select. */
-export const EXPERIMENT_CHAPTERS: readonly Chapter[] = [experimentalLeblanc(FFX2_LEBLANC)] as const;
+/** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card, each reached by typing its word on chapter select: the Leblanc preview (Chapter VI's mission in new paintings, FFX-2 only) and Sinspawn Gui (FFX only). */
+export const EXPERIMENT_CHAPTERS: readonly Chapter[] = [experimentalLeblanc(FFX2_LEBLANC), SINSPAWN_GUI] as const;
 
 /** All eighteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [

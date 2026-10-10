@@ -7,13 +7,7 @@ import type { ChapterId } from '../../data/encounters.ts';
 import { ControlsHint, isCoarsePointer } from '../../ui/common/ControlsHint.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
-import {
-  buildChapterTiles,
-  groupChapterTiles,
-  stepGroup,
-  stepSelection,
-  type ChapterTile,
-} from './frontend/chapterGrid.ts';
+import { buildChapterTiles, groupChapterTiles, stepGroup, stepSelection, type ChapterTile } from './frontend/chapterGrid.ts';
 import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
@@ -21,6 +15,7 @@ import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
 import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
 import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
+import { MUSHROOM_DOOR_CHAPTER, MUSHROOM_DOOR_WORD } from './frontend/mushroomDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
 import { experimentRecord } from '../experiments/experimentRecords.ts';
 
@@ -101,7 +96,8 @@ export class ChapterSelectScreen extends Screen {
   /** The secret door (Bailey's approved option A); fed by keys, taps and pad buttons, shows nothing. */
   private door = new SecretDoor();
   private leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD); // the second door, to the hidden Leblanc experiment (`frontend/leblancDoor.ts`): its word, typed; shows nothing either
-  private wordKey = false; // a later letter of that word was just typed: the board leaves this frame's presses alone (the A of "leblanc" is `left`)
+  private mushroomDoor = new WordDoor(MUSHROOM_DOOR_WORD); // the third door, to the hidden Sinspawn Gui chapter (`frontend/mushroomDoor.ts`): its word, typed; shows nothing either
+  private wordKey = false; // a later letter of a word was just typed: the board leaves this frame's presses alone (the A of "leblanc" is `left`, the S of "mushroom" is `down`)
   private opening: ChapterId | null = null; // its last letter was just typed: the door opens on the next frame, which can take that press (C is START; see `handleInput`)
   private eyebrow: HTMLElement | null = null;
   /** A-3: the focused chapter's battle starts loading while its card is read. */
@@ -297,6 +293,7 @@ export class ChapterSelectScreen extends Screen {
   private armDoor(): void {
     this.door = new SecretDoor();
     this.leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD);
+    this.mushroomDoor = new WordDoor(MUSHROOM_DOOR_WORD);
     window.addEventListener('keydown', this.onDoorKey);
     this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');
     this.eyebrow?.addEventListener('click', this.onDoorTap);
@@ -313,7 +310,8 @@ export class ChapterSelectScreen extends Screen {
     const at = now();
     if (this.door.feedKey(e.key, at) === 'open') this.openDoor();
     if (this.leblancDoor.feedKey(e.key, at) === 'open') this.opening = EXP_LEBLANC_DOOR_CHAPTER; // the board is shut from now (`confirm`, this handler); the door opens on the next frame
-    if (this.leblancDoor.continued) this.wordKey = true;
+    if (this.mushroomDoor.feedKey(e.key, at) === 'open') this.opening = MUSHROOM_DOOR_CHAPTER; // the same, for the Sinspawn Gui word
+    if (this.leblancDoor.continued || this.mushroomDoor.continued) this.wordKey = true;
   };
 
   private readonly onDoorTap = (): void => {

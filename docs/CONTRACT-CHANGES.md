@@ -6,6 +6,20 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-10 — A guest in the party (`FFXGuestSpec`) and a second hidden chapter, Sinspawn Gui at Mushroom Rock Road (branch `ch-gui`; FFX only; additive)
+
+Branch `ch-gui` (from `re-parity-rc1` 931613a8, the live build 39.4.3). Bailey, 2026-10-10: "I'll add in those 2 chapter recommendations", then "i want those chapters added in over night while im sleep ... also include the reverse engineered and decompiled game mechanics please. this is really important." Two contract files change, both additively;
+every other change is in modules no other chapter imports. Plan: [ch-gui-review](plans/ch-gui-review.md). Game case: FFX only (FFX-2 and FF7 import none of the files below; `ffx-engine-golden` (all 18 digests), `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/common/types.ts`: new `FFXGuestSpec { control: Controller; aiScriptId?: string; keepsPartyAlive?: boolean }`; `FFXMemberBuild.guest?` and `FFXCombatant.guest?`. A guest is an ordinary party-side combatant in `activeSlots`: `control: 'ai'` makes him an automatic actor (`controller: 'ai'`)
+  running the script `aiScriptId` aimed at the enemy side; he does not count as standing for the party-wipe test unless `keepsPartyAlive`; he earns no AP and has no results row; he is never benched. Absent on every other member, so nothing else reads it.
+- `src/data/encounters.ts`: `ChapterId` gains `'sinspawn-gui'`; `ListedChapterId` excludes it; `EXPERIMENT_CHAPTERS` lists it beside the Leblanc preview. `CHAPTERS` and `CHAPTER_IDS` stay the eighteen. It is `experimental: true`: its attempts, clears and time go to the experiments' store
+  (`pyrefly-reprise:experiments:v1`), never the save, so there is no save change and no migration. Four lines in `tests/unit/exp-leblanc.test.ts` and `exp-leblanc-door.test.ts` assumed `EXPERIMENT_CHAPTERS` was exactly the Leblanc preview; they filter by id now.
+- Engine readers of the new field (all gated on `guest`): `battle/ffx/setup.ts#memberToCombatant` (controller and the copied block), `ai/index.ts#activeScriptId` and `#chooseAiCommand`'s fallback (a party-side actor with no script now aims at `livingEnemies`; an enemy's fallback is unchanged), `ai/hooks.ts#scriptIdOf`,
+  `engine-end.ts#checkEnd` (the wipe test), `results.ts` (`earnedAp`, `turnParticipation`), `simulate.ts#cloneCombatant`, `ui/common/resultsMath.ts#buildMemberRows` (no row for a guest).
+- `app/screens/frontend/mushroomDoor.ts` and `ChapterSelectScreen.ts`: a third typed-word door, `mushroom`, beside "limit" and "leblanc" (`wordKey` is now "any word's later letter just typed"). Pinned by `tests/unit/mushroom-door.test.ts` (29 cases, the real `Input`, board and title screen).
+- Pinned by `tests/unit/ffx-guest-member.test.ts` (setup, both controls, the script and its hooks, the loss rule, no rewards, determinism, `fork`).
+
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 
 Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is

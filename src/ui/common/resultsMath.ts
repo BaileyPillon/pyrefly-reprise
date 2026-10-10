@@ -267,7 +267,8 @@ export function buildMemberRows(
     const listedIds = new Set([...earnedIds, ...actedIds]);
     const known = [...build.activeSlots, ...build.reserve.filter((id) => listedIds.has(id))];
     for (const id of listedIds) if (!known.includes(id)) known.push(id);
-    return known.map((id) => {
+    const guests = new Set(build.members.filter((m) => m.guest).map((m) => m.id)); // a guest in the party (`FFXGuestSpec`) has no row: he earns nothing
+    return known.filter((id) => !guests.has(id)).map((id) => {
       const member = build.members.find((m) => m.id === id);
       const eligible = earnedIds.has(id);
       const sLv = member?.sphereGrid.sLv ?? 0;

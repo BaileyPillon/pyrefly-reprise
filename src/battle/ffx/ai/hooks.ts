@@ -85,10 +85,10 @@ export function registerFormationPreTurn(handler: FormationPreTurn): void {
   if (!FORMATION_PRE_TURN.includes(handler)) FORMATION_PRE_TURN.push(handler);
 }
 
-/** The `aiScriptId` in force for a combatant (a form's own id wins), without importing the AI index. */
+/** The `aiScriptId` in force for a combatant (a form's own id wins; a guest in the party has no forms, his build names it), without importing the AI index. */
 export function scriptIdOf(c: FFXCombatant): string | undefined {
   const enemy = c.enemy;
-  if (!enemy) return undefined;
+  if (!enemy) return c.guest?.aiScriptId;
   return enemy.forms[enemy.formIndex]?.aiScriptId ?? enemy.aiScriptId;
 }
 

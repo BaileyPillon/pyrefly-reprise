@@ -65,11 +65,14 @@ function memberToCombatant(m: FFXMemberBuild, slot: number, active: boolean): FF
     affinities: {},
     immunities: {},
     immunityFlags: [],
-    controller: 'player',
+    // A guest (`FFXMemberBuild.guest`) may be the game's to command: an `'ai'` guest is an automatic actor (`engine.ts#advance`), running the script
+    // `guest.aiScriptId` aimed at the enemy side (`ai/index.ts#chooseAiCommand`). Every ordinary member stays the player's.
+    controller: m.guest?.control === 'ai' ? 'ai' : 'player',
     alive: m.hp > 0,
     removed: !active,
     slot,
     flags: {},
+    ...(m.guest ? { guest: { ...m.guest } } : {}),
     learnedAbilityIds: [...m.learnedAbilityIds],
     equipment: { weapon: { ...m.equipment.weapon }, armor: { ...m.equipment.armor } },
     overdrive: {

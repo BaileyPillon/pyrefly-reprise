@@ -191,9 +191,11 @@ export function checkEnd(h: EndHooks): boolean {
 
   // An aeon holding the field keeps the party alive by definition.
   if (ctx.state.aeonId === null) {
+    // A guest in the party (`FFXGuestSpec`, the hidden Sinspawn Gui chapter's Seymour) is not the player's to lose: unless the data says the battle goes on
+    // while only he stands (`keepsPartyAlive`), he does not count as standing. Nobody else has a `guest`, so no other battle reads this.
     const standing = ctx.state.activeIds
       .map((id) => tryActor(ctx, id))
-      .filter((c): c is FFXCombatant => c !== undefined && isAlive(c) && !has(c, 'petrify'));
+      .filter((c): c is FFXCombatant => c !== undefined && isAlive(c) && !has(c, 'petrify') && (c.guest === undefined || c.guest.keepsPartyAlive === true));
     if (standing.length === 0) {
       const escaped = ctx.state.activeIds.every((id) => {
         const c = tryActor(ctx, id);

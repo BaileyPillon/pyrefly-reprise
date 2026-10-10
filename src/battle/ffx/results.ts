@@ -74,6 +74,7 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
 function earnedAp(ctx: Ctx, id: CombatantId): boolean {
   const member = tryActor(ctx, id);
   if (!member || !member.alive || has(member, 'ko') || has(member, 'petrify')) return false;
+  if (member.guest) return false; // a guest in the party (`FFXGuestSpec`) earns nothing: he is lent, not owned
   return (ctx.rt.actors.get(id)?.turnsTaken ?? 0) > 0;
 }
 
@@ -117,6 +118,7 @@ function sphereLevels(ctx: Ctx, ap: number): Record<CombatantId, number> {
 function turnParticipation(ctx: Ctx): Record<CombatantId, number> {
   const out: Record<CombatantId, number> = {};
   for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) {
+    if (tryActor(ctx, id)?.guest) continue; // a guest has no results row (`FFXGuestSpec`)
     const taken = ctx.rt.actors.get(id)?.turnsTaken ?? 0;
     if (taken > 0) out[id] = taken;
   }

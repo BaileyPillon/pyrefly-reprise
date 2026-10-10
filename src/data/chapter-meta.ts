@@ -21,6 +21,7 @@ import type { GameId } from '../battle/common/types.ts';
 import type { ChapterId } from './encounters.ts';
 import { FFX2_LEBLANC_META } from './chapter-meta-ffx2-leblanc.ts';
 import { EXP_LEBLANC_META } from './chapter-meta-exp-leblanc.ts';
+import { SINSPAWN_GUI_META } from './chapter-meta-sinspawn-gui.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
 import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
@@ -386,11 +387,8 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   ...SIN_CHAPTER_META, // Chapters XVII and XVIII (FFX), listed 2026-09-29 (D-279)
 ] as const;
 
-/**
- * Metadata for chapters that are registered but not listed (`./chapters-unlisted.ts`, and the Leblanc preview): the pause screen and the
- * prep panel find them by id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record into `CHAPTER_META`.
- */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META] as const; // the Leblanc preview (2026-10-06); Sin's two were listed 2026-09-29
+/** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, SINSPAWN_GUI_META] as const; // the Leblanc preview (2026-10-06) and Sinspawn Gui (2026-10-10); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

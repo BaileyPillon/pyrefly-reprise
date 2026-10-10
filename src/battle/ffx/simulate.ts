@@ -253,6 +253,7 @@ function cloneCombatant(c: FFXCombatant): FFXCombatant {
     };
   }
   if (c.aeon) out.aeon = { ...c.aeon };
+  if (c.guest) out.guest = { ...c.guest };
   if (c.enemy) {
     out.enemy = {
       ...c.enemy,
