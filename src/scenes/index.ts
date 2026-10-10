@@ -24,8 +24,7 @@ import { buildBevelleUndergroundScene, BEVELLE_UNDERGROUND_SLOTS } from './bevel
 import { buildDreamsEndScene, DREAMS_END_SLOTS } from './dreams-end.ts';
 import { buildFarplanePainted, buildFarplaneScene, FARPLANE_SLOTS } from './farplane.ts';
 import { buildLeblancLastRoomScene, LEBLANC_LAST_ROOM_SLOTS } from './leblanc-last-room.ts';
-import { buildExpLeblancLastRoomScene, EXP_LEBLANC_LAST_ROOM_SLOTS } from './exp-leblanc-last-room.ts';
-import { EXP_LEBLANC_SCENE } from '../data/art/artNamespace.ts';
+import { EXPERIMENT_SCENE_ENTRIES, EXPERIMENT_SCENE_FACTORIES } from './experiment-scenes.ts'; // the hidden chapters' scenes (Leblanc's room, the Experiment's grounds, Mushroom Rock Road, the Fayth deck): their rows live in a side table, so this file does not grow for one
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { buildEvraeAirshipDeckScene, EVRAE_AIRSHIP_DECK_SLOTS } from './evrae-airship-deck.ts';
 import { SIN_SCENE_ENTRIES, SIN_SCENE_FACTORIES } from './evrae-airship-sin.ts';
@@ -36,11 +35,7 @@ import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.t
 import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
 import { buildDjoseChamberScene, DJOSE_CHAMBER_SLOTS } from './djose-chamber.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
-import { buildExperimentGroundsScene, EXPERIMENT_GROUNDS_SLOTS } from './experiment-grounds.ts'; // the Experiment's grounds (FFX-2 only, hidden chapter)
-import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
-import { buildMushroomRockRoadScene, MUSHROOM_SLOTS } from './mushroom-rock-road.ts';
-import { MUSHROOM_ROCK_SCENE } from '../data/ffx/sinspawn-gui-ids.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { buildSector1ReactorScene, SECTOR1_SLOTS } from './sector1-reactor.ts';
 import { mountScene, stagingOf, type SceneBuild, type SceneFactory, type SceneStaging } from './types.ts';
@@ -190,12 +185,7 @@ SCENES.set('farplane', {
  */
 SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Leblanc — the Last Room',
   build: buildDemoScene, slots: LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
-/** The Experiment's fight (FFX-2 only, hidden chapter): the Machine Faction's grounds at Djose Temple, on a provisional plate (`./experiment-grounds.ts`, `data/experiment-plates.ts`). */
-SCENES.set(EXPERIMENT_GROUNDS_PLATE, { key: EXPERIMENT_GROUNDS_PLATE, title: "Djose Temple — the Machine Faction's grounds",
-  build: buildDemoScene, slots: EXPERIMENT_GROUNDS_SLOTS, placeholder: false });
-/** The experimental Leblanc chapter's room (FFX-2 only): the same room over its own plate and art namespace (`./exp-leblanc-last-room.ts`). */
-SCENES.set(EXP_LEBLANC_SCENE, { key: EXP_LEBLANC_SCENE, title: 'Chateau Leblanc — the Last Room (new art)',
-  build: buildDemoScene, slots: EXP_LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
+for (const entry of EXPERIMENT_SCENE_ENTRIES) SCENES.set(entry.key, entry); // the hidden chapters' scenes (`./experiment-scenes.ts`)
 /**
  * Macalania Temple, the antechamber (Chapter 7, FFX only) — real
  * (`buildMacalaniaTempleScene` in {@link SCENE_FACTORIES}); `build` is the
@@ -227,9 +217,6 @@ SCENES.set('garden-of-pain', { key: 'garden-of-pain', title: 'Inside Sin — the
 /** The Highbridge of Bevelle (Chapter X, FFX only): real, `build` unreachable as for Leblanc [highbridge.ts]. */
 SCENES.set('bevelle-highbridge', { key: 'bevelle-highbridge', title: 'Highbridge of Bevelle — before the Main Gate',
   build: buildDemoScene, slots: HIGHBRIDGE_SLOTS, placeholder: false });
-/** Mushroom Rock Road (the hidden Sinspawn Gui chapter, FFX only, a provisional plate): real, `build` unreachable as for Leblanc [mushroom-rock-road.ts]. */
-SCENES.set(MUSHROOM_ROCK_SCENE, { key: MUSHROOM_ROCK_SCENE, title: "Mushroom Rock Road — Operation Mi'ihen",
-  build: buildDemoScene, slots: MUSHROOM_SLOTS, placeholder: false });
 /** The Via Purifico, the last chamber (Chapter XIV, FFX only): real, `build` unreachable as for Leblanc [via-purifico.ts]. */
 SCENES.set('via-purifico', { key: 'via-purifico', title: 'Via Purifico — the last chamber',
   build: buildDemoScene, slots: VIA_PURIFICO_SLOTS, placeholder: false });
@@ -277,7 +264,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'dreams-end': buildDreamsEndScene,
   'bevelle-underground': buildBevelleUndergroundScene,
   'leblanc-last-room': buildLeblancLastRoomScene,
-  [EXP_LEBLANC_SCENE]: buildExpLeblancLastRoomScene, // the experimental Leblanc chapter (FFX-2 only)
+  ...EXPERIMENT_SCENE_FACTORIES, // the hidden chapters' scenes (`./experiment-scenes.ts`)
   'macalania-temple': buildMacalaniaTempleScene,
   'evrae-airship-deck': buildEvraeAirshipDeckScene,
   ...SIN_SCENE_FACTORIES, // Chapters XVII and XVIII (FFX only): the deck over Sin's plates
@@ -286,11 +273,9 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'road-to-the-farplane': buildRoadToTheFarplaneScene,
   'garden-of-pain': buildGardenOfPainScene,
   'bevelle-highbridge': buildHighbridgeScene,
-  [MUSHROOM_ROCK_SCENE]: buildMushroomRockRoadScene, // the hidden Sinspawn Gui chapter (FFX only)
   'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
   [DJOSE_CHAMBER_PLATE]: buildDjoseChamberScene, // Chapter XVI (FFX-2 only); the provisional plate's key
-  [EXPERIMENT_GROUNDS_PLATE]: buildExperimentGroundsScene, // the Experiment (FFX-2 only, hidden chapter)
   'sector1-reactor': buildSector1ReactorScene, // FF7 only
 };
 

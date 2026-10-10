@@ -7,6 +7,7 @@
  * - **The Leblanc preview** (`'exp-leblanc'`, number 19, 2026-10-06; FFX-2 only): Chapter VI's mission in new paintings, derived from the listed chapter.
  * - **The Experiment** (`'ffx2-masterpiece-theatre'`, number 20, 2026-10-10; FFX-2 only): the Machine Faction's weapon at Djose Temple, fought twice.
  * - **Sinspawn Gui** (`'sinspawn-gui'`, number 21, 2026-10-10; FFX only): the Mushroom Rock Road monster in two fights, the second with Seymour as a guest.
+ * - **Fayth** (`'exp-fayth'`, number 22, 2026-10-10; FFX only): Evrae on the Fahrenheit's deck, Chapter VIII's encounter, fought with FFX's own battle camera (D-632); derived from Chapter VIII's record.
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
@@ -19,8 +20,9 @@ import type { Chapter } from './encounters.ts';
 import { experimentalLeblanc } from './chapter-exp-leblanc.ts';
 import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts';
 import { SINSPAWN_GUI } from './chapter-sinspawn-gui.ts';
+import { EXP_FAYTH } from './chapter-exp-fayth.ts';
 
-/** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from. */
+/** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH] as const;
 }

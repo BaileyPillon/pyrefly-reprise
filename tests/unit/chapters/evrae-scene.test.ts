@@ -368,18 +368,21 @@ describe('the range director, driven by the real engine', () => {
 
 describe('FFX only [AGENTS.md rule 14]', () => {
   const dir = fileURLToPath(new URL('../../../src/scenes/', import.meta.url));
-  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship'));
+  /** The hidden Fayth chapter's scene (2026-10-10, FFX only) builds this same deck over Chapter VIII's plate with a camera director on it, so it is the second consumer of the deck factory besides Sin's `evrae-airship-sin.ts`. */
+  const FAYTH_DECK = 'exp-fayth-deck.ts';
+  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK);
 
   it('the scene files import nothing from FFX-2', () => {
     expect(mine.length).toBeGreaterThanOrEqual(7);
+    expect(mine).toContain(FAYTH_DECK);
     for (const f of mine) {
       const src = readFileSync(`${dir}${f}`, 'utf8');
       expect(src, f).not.toMatch(/battle\/ffx2|data\/ffx2|ui\/ffx2/);
     }
   });
 
-  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception)', () => {
-    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts')) {
+  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception, and the Fayth chapter’s deck the second)', () => {
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts' && x !== FAYTH_DECK)) {
       expect(readFileSync(`${dir}${f}`, 'utf8'), f).not.toMatch(/evrae-airship/);
     }
   });
