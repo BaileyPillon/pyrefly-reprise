@@ -72,8 +72,11 @@ export class FFXEngine implements FFXBattleEngine {
     this.buffer = [];
     this.awaitingInput = false;
     const content = (this.options.content ?? getFFXRegistry()).clone();
-    const emit = (event: EventInput): void => this.push(event);
+    // Events the build itself raises (a carried member below half HP gains the Critical status) wait for the context to exist [re-parity W5].
+    let ready = false; const early: EventInput[] = [];
+    const emit = (event: EventInput): void => (ready ? this.push(event) : void early.push(event));
     this.ctx = buildBattle(setup, this.rng, content, emit);
+    ready = true; for (const event of early) this.push(event);
   }
 
   setSeed(n: number): void {
