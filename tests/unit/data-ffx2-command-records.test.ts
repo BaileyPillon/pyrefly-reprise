@@ -5,8 +5,8 @@
  * ability the game's own command row, which the parity kernels read. This file pins:
  *
  *  - every attached record is the game's row, field for field: `tests/fixtures/parity/ffx2/command_rows.json` holds the
- *    205 rows the seven chapters can reach (numbers only; `research/re-ffx2-commands.md`); the deliberate
- *    overrides (the two Triple Attacks) are listed in {@link OVERRIDES};
+ *    206 rows the seven chapters can reach (numbers only; `research/re-ffx2-commands.md`; Osmose's row was added by AI-FFX2-b); the deliberate
+ *    overrides (Baralai's Triple Attack) are listed in {@link OVERRIDES};
  *  - every ability the seven chapters can reach has a record or is on the short list of ours that have none;
  *  - the numbers an ability carries itself that differ from its record (the record wins in the engine) are a fixture,
  *    `ability_differences.json`: a new or fixed difference must change it (regenerate with PYREFLY_UPDATE_FIXTURES=1);
@@ -63,8 +63,8 @@ const rowOf = (id: number): Row | undefined => ROWS[`0x${id.toString(16)}`];
 const OVERRIDES: Readonly<Record<string, Partial<Row>>> = {
   // (Mega Flare was held at the authored 24 over the row's 14 until Bailey, 2026-10-09: "Use 14 from the files". Both of its
   // records carry the row's power now, so neither is an override any more; the Mega Flare test below pins the 14.)
-  // Triple Attack: the game queues Chain Attack three times; the ability is one action with three hits.
-  'x2-shiva-triple-attack': { hits: 3 },
+  // Triple Attack: the game queues Chain Attack three times; Baralai's ability is one action with three hits. (Shiva's is the game's too
+  // since AI-FFX2-b: three polls of the one-hit Chain Attack, so it is no override any more.)
   'x2-den-baralai-triple-attack': { hits: 3 },
 };
 
@@ -269,7 +269,6 @@ describe('FFX-2 command record coverage', () => {
 const KNOWN_TARGETING_DIFFERENCES: string[] = [
   'x2-dark-knight-black-sky: ability all-enemies, row random',
   'x2-shuyin-attack: ability random-enemy, row not random',
-  'x2-shiva-triple-attack: ability random-enemy, row not random',
   'x2-anima-oblivion: ability random-enemy, row not random',
   'x2-den-baralai-triple-attack: ability random-enemy, row not random',
 ];

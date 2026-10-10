@@ -65,12 +65,15 @@ export const x2ShivaAbilities: AbilityDef[] = [
     ...base,
     id: 'x2-shiva-triple-attack',
     name: 'Triple Attack',
-    power: 12, // DC 12 x3 [SinirothX + wiki]
+    // Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity"): the game's Chain Attack (row 0x4100, power 12, ONE hit, never
+    // rolls, recovery 0), cast on three consecutive polls with a girl picked each time (`ai/fallen-aeons.ts`, F1). It used to be
+    // one 3-hit command on random targets ([SinirothX + wiki] "3 hits on random targets"); the follow-ups are Shiva's own polls now.
+    power: 12, // DC 12 per hit [SinirothX + wiki]
     formula: 'strength',
     damageType: 'physical',
     element: ['none'],
-    targeting: 'random-enemy', // "3 hits on random targets"
-    hits: 3,
+    targeting: 'single-enemy',
+    hits: 1,
     flags: ['crit-eligible'],
     messageTemplate: 'Shiva uses Triple Attack',
   },
