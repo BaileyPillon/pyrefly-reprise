@@ -20,6 +20,7 @@
  */
 
 import type { FFXMemberBuild } from '../../../battle/common/types.ts';
+import { SEYMOUR_GUEST_ART } from '../sinspawn-gui-ids.ts';
 
 /** The weapon's base critical bonus, as every character's record carries (`research/ffx-seymour-flux.md` §7.7.1; the weapon record's crit byte is 3). */
 const WEAPON_BONUS_CRIT = 3;
@@ -37,7 +38,7 @@ export function buildSeymourGuest(): FFXMemberBuild {
   return {
     id: 'seymour',
     name: 'Seymour',
-    spriteKey: 'seymour-macalania', // his human form: the approved Macalania paintings (provisional here; they face left and the stage mirrors them onto the party side)
+    spriteKey: SEYMOUR_GUEST_ART, // his human form: copies of the approved Macalania paintings plus three provisional poses (attack, item, victory); they face left and the stage mirrors them onto the party side
     portraitKey: 'seymour-macalania',
     stats: { hp: 1_200, mp: 999, str: 20, def: 25, mag: 35, mdef: 100, agi: 20, luck: 18, eva: 10, acc: 10, maxHp: 1_200, maxMp: 999 },
     hp: 1_200,

@@ -34,3 +34,9 @@ export const GUI_ARM_SCRIPT = 'sinspawn-gui-arm' as const;
 
 /** The party actor Seymour plays as (the game's actor 7). */
 export const SEYMOUR_GUEST_ID = 'seymour' as const;
+
+/**
+ * The art subject Seymour is painted from on the party side: `public/art/characters/seymour-guest`, a copy of his approved Macalania idle, cast, hurt and KO paintings plus three provisional
+ * poses (attack, item, victory; `tools/gui-art-install.mjs`). A subject of its own so the approved `seymour-macalania` folder is never written to.
+ */
+export const SEYMOUR_GUEST_ART = 'seymour-guest' as const;

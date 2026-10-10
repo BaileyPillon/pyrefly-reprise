@@ -68,6 +68,23 @@ const PICKS = {
   },
 };
 
+/**
+ * Seymour as the party-side guest of fight 2 (`src/data/ffx/builds/seymour-guest.ts`, `spriteKey: 'seymour-guest'`). The engine reads ONE folder per figure, and his approved Macalania set
+ * (`characters/seymour-macalania`: idle, cast, hurt, ko) has no attack, item or victory painting, so a NEW subject holds a COPY of those four approved paintings (never touched, never replaced: the
+ * approved folder is only read) plus three provisional poses from the overnight run. They face LEFT like his approved set (the stage mirrors left-facing art onto the party side). The poses are the
+ * run's `m5` series, whose mature face and chest marks match his approved paintings better than the younger `1` to `4` series the run listed (`new-chapters-picks.md` item 4): attack = the lean and reach,
+ * item = the bottle in his lowered hand, victory = the composed standing figure. `scale` is the pose's head against the approved idle's head (measured by eye off the cropped paintings, the
+ * rule of `src/engine/PoseRegistration.ts`; no measured row exists for a new subject, so the sidecar carries it) and `stanceX` is measured here from the lowest part of the silhouette.
+ */
+const SEYMOUR_GUEST = {
+  attack: { src: D + 'seymour-macalania/attack/t10-sey-attack-m5-cand-503.png', scale: 0.9 },
+  item: { src: D + 'seymour-macalania/item/t10-sey-item-m5-cand-501.png', scale: 1.05 },
+  victory: { src: D + 'seymour-macalania/victory/t10-sey-victory-m5-cand-506.png', scale: 1.04 },
+};
+/** The approved paintings copied into the guest's folder, with their measured stance (`src/data/art/poseRegistrationFoes.ts`, row `seymour-macalania`) written into the copy's sidecar. */
+const SEYMOUR_APPROVED_COPIES = { idle: 520.5, cast: 521.0, hurt: 521.0, ko: undefined };
+for (const [pose, row] of Object.entries(SEYMOUR_GUEST)) (PICKS['seymour-guest'] ??= {})[pose] = row.src;
+
 /** The two plates of the Ridge: the camp (fight 1) and the ruined camp (fight 2), 2688 x 1536 (the run's RealESRGAN x4 then x0.5 of a 1344 x 768 render made from our own code-drawn layout sketch). */
 const BACKDROPS = {
   'mushroom-rock-road': D + 'mushroom-ridge/backdrop/t10-up-ridge-p3-506-cand-1.raw.png',
@@ -169,6 +186,43 @@ function contentBox(rgba, w, h) {
   return { x0, y0, x1, y1 };
 }
 
+/** Where the figure stands, in the cropped painting's own pixels: the middle of the alpha mass in the lowest 8 percent of the silhouette (the rule of `src/engine/PoseRegistration.ts`). */
+function stanceOf(rgba, width, box) {
+  const top = Math.floor(box.y1 - 0.08 * (box.y1 - box.y0));
+  let sum = 0, mass = 0;
+  for (let y = top; y <= box.y1; y++) {
+    for (let x = box.x0; x <= box.x1; x++) {
+      const a = rgba[(y * width + x) * 4 + 3];
+      if (a > 128) { sum += x; mass++; }
+    }
+  }
+  return Math.round(((sum / mass - box.x0 + MARGIN) * 2)) / 2;
+}
+
+/** The approved Macalania paintings copied (png, sidecar and every tier) into the guest's own folder; the approved folder is only read. */
+function copyApproved() {
+  const from = join(DEST, 'characters', 'seymour-macalania');
+  const to = join(DEST, 'characters', 'seymour-guest');
+  for (const [pose, stanceX] of Object.entries(SEYMOUR_APPROVED_COPIES)) {
+    for (const tier of ['', '@2x', '@3x', '@4x']) {
+      for (const ext of ['.png', '.json']) {
+        const src = join(from, pose + tier + ext);
+        if (!existsSync(src)) continue;
+        const dst = join(to, pose + tier + ext);
+        if (DRY) { console.log(`COPY   seymour-guest/${pose}${tier}${ext}  <-  ${src}`); continue; }
+        mkdirSync(to, { recursive: true });
+        if (ext === '.json') {
+          const j = JSON.parse(readFileSync(src, 'utf8'));
+          if (stanceX !== undefined && tier === '') j.stanceX = stanceX;
+          j.copyOf = 'characters/seymour-macalania/' + pose + tier + '.png (his approved painting, copied unchanged so the guest has one folder; this copy is not a new approval)';
+          writeFileSync(dst, `${JSON.stringify(j, null, 2)}\n`);
+        } else copyFileSync(src, dst);
+      }
+    }
+  }
+  console.log(`${DRY ? 'would copy' : 'copied '} his approved ${Object.keys(SEYMOUR_APPROVED_COPIES).join(', ')} into seymour-guest`);
+}
+
 async function install(subject, pose, src) {
   if (!existsSync(src)) throw new Error(`missing source ${src}`);
   const raw = readFileSync(src);
@@ -199,6 +253,10 @@ async function install(subject, pose, src) {
     origin: 'Original art only (rule 8): our own renders from our own prompts; no retail image as input or reference',
     installedBy: 'tools/gui-art-install.mjs',
   };
+  if (SEYMOUR_GUEST[pose] && subject === 'seymour-guest') {
+    sidecar.scale = SEYMOUR_GUEST[pose].scale;
+    sidecar.stanceX = stanceOf(cleaned, info.width, box);
+  }
   const same = existsSync(file) && sha(readFileSync(file)) === sha(png);
   if (DRY) {
     console.log(`${same ? 'same  ' : 'WRITE '} ${subject}/${pose}  ${w}x${h}  <-  ${src}`);
@@ -269,6 +327,7 @@ for (const [subject, poses] of Object.entries(PICKS)) {
   for (const [pose, src] of Object.entries(poses)) await install(subject, pose, src);
 }
 for (const [key, src] of Object.entries(BACKDROPS)) await installPlate(key, src);
+copyApproved();
 if (!DRY) {
   const r = spawnSync(process.execPath, [join(REPO, 'tools', 'gen', 'manifest.mjs'), `--root=${DEST}`, '--quiet'], { cwd: REPO, stdio: 'inherit' });
   if (r.status !== 0) process.exit(r.status ?? 1);
