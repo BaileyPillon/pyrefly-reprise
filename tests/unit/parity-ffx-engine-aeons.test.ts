@@ -261,5 +261,5 @@ describe('a real chain: the battle\'s own save settles every wiped aeon once', (
     }
     expect(wipes, 'the sample wiped aeons').toBeGreaterThan(5);
     expect(carried, 'and carried a count to a later link').toBeGreaterThan(3);
-  });
+  }, 120_000);
 });

@@ -202,7 +202,7 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * (c) the first other difference is a choice the gauge decides: the game's gains leave an aeon without the Overdrive it had (isaaru-via-purifico links 2
  *     and 3 on both seeds: Mega Flare and Hellfire become Attack; macalania#7: Sonic Wings in place of Energy Ray) and give Auron his earlier (yunalesca#1
  *     and #7: Shooting Star where an Attack was).
- * (d) braskas-final-aeon links 5 to 7 (both seeds) follow from the difference in link 1: the chain carries each member's HP, MP and gauge on, and a member
+ * (d) braskas-final-aeon links 5 to 7 (both seeds) follow from the differences of the earlier links: the chain carries each member's HP, MP and gauge on, and a member
  *     carried under half HP opens the next link with the Critical status.
  * Every outcome stays a victory but one: isaaru-via-purifico#1 link 3 moves defeat -> victory. One seed is one sample; the 500-seed rates are in
  * docs/handoff/re-parity-w5.md. Nothing on the boss or the party was tuned.

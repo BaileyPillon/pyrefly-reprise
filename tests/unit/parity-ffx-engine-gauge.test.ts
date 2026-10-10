@@ -181,6 +181,9 @@ function scenarioOf(flavor: string, rng: ReturnType<typeof makeRng>): Scenario {
     }
     case 'enemy-hits-party': {
       const t = lean(party(rng.int(0, 2)), 2);
+      // Rook and Dancer are the outcome hook's modes: a Shell or Protect that turns the blow aside, a blow that misses (a high Evasion)
+      if (rng.next() < 0.25) { t.mode = 10; t.spec.shell = true; t.spec.protect = true; }
+      else if (rng.next() < 0.3) { t.mode = 6; t.spec.eva = 250; }
       const others = withParty(t.slot).map((o) => lean(o, 1));
       return { label: flavor, def: rng.pick(ENEMY_MOVES), user: enemySeat(rng, 0), target: t, others, aeonOut: false };
     }
