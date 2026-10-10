@@ -1,57 +1,62 @@
 /**
- * Trema, Chapter XIII link 2 (Cloister 100 of the Via Infinito). **FFX-2 only** [AGENTS.md
- * rule 14]. Research `research/ffx2-trema.md` §4.2, `[SinirothX]`; the HP triggers agree with
- * the wiki:
+ * Trema, Chapter XIII link 2 (Cloister 100 of the Via Infinito). **FFX-2 only** [AGENTS.md rule 14].
  *
- * ```
- * (1) 1/2 Dying Star, 1/8 Demi, 1/8 Flare, 1/12 Choking Mist, 1/12 Beguiling Mire, 1/12 Waning Moon
- * (2a) after Dying Star: Falling Leaf, then (3a) Thundering Wave, then back to (1)
- * (2b) after anything else: back to (1)
- * HP triggers (each fires once, at the next chance):
- *   HP < 1/2 max -> Meteor;  HP < 1/4 max -> Meteor;  HP < 1/6 max -> Ultima
- * ```
+ * **Re-parity AI-FFX2-b (2026-10-10): the game's own script**, `m295` (the story fight) and `m328` (the Fiend Arena), which
+ * decide identically (`research/re-ffx2-ai-fallen-trema.md` section 7, rows T1 to T5), read in our own words. The first build was
+ * SinirothX's dump (research `ffx2-trema.md` 4.2) with a story table of his own; both versions now run the one decision tree.
  *
- * The weights are drawn as one roll in 24ths (12 / 3 / 3 / 2 / 2 / 2). Each of the three
- * chain turns picks its own target (Split_Infinity: it "can land on one girl or be split").
+ * ## The action entry, in the order the script tests (7.1)
  *
- * - **Triggers** are strict `<` ("below", the Vegnagun Tail precedent) and fire in their
- *   order, one per turn. A trigger due mid-chain goes first and the chain resumes after it;
- *   the sources do not order the two, `[estimate]`.
- * - **The MP gate** (TR4 = b, `[single source]` + `[conflict]` T-5): Demi needs 10 MP, Flare
- *   54 and Ultima 90 although Spellspring makes the cast itself free; Meteor needs none
- *   `[verified: 4 sources]`. A rolled spell he cannot afford fails and the turn passes; an
- *   Ultima trigger he cannot afford is spent. Neither fallback is in the sources, `[estimate]`.
+ * | # | Condition | Action |
+ * |---|---|---|
+ * | 1 | HP < max/6 (integer division, 166,666) and the Ultima flag is 0 | flag 1; Ultima on all the party; end |
+ * | 2 | HP < max/4 (249,999) and the Meteor counter <= 1 | counter 2; Meteor on all the party; end |
+ * | 3 | HP < max/2 (499,999) and the Meteor counter = 0 | counter 1; Meteor on all the party; end |
+ * | 4 | else `random() mod 2` = 0 | **three commands in this one poll**, each with its own uniform girl: Dying Star, Falling Leaf, Thundering Wave (12/24) |
+ * | 5 | else `random() mod 2` = 0 | a uniform girl, then `random() mod 3`: 0 Waning Moon, 1 Beguiling Mire, 2 Choking Mist (2/24 each) |
+ * | 6 | else `random() mod 3` = 0 | Flare on a uniform girl (2/24) |
+ * | 7 | else | Demi on all the party (4/24) |
+ *
+ * All the tests are strict "below" on the current HP; the flags start at 0 and are never cleared. HP can pass several lines
+ * between two polls: at 249,998 or less with no Meteor cast yet the quarter row sets the counter to 2, so **one** Meteor is cast
+ * and the half-HP Meteor is skipped for good (T2). The chain is **queued in one poll** (T3): the second and third link start
+ * back to back as each finishes, and no HP row can fall between them, because the rows are only read at a poll, which comes after
+ * the Thundering Wave's recovery. The queue is kept in his AI memory; the targets are rolled when it is made.
+ *
+ * ## What stays as the owner decided
+ *
+ * - **The MP gate (TR4 = b, D-146; T4).** The script never reads MP, and with Spellspring the costs are 0, so draining his MP
+ *   would change nothing in the game. Bailey kept the reading that a rolled spell he cannot afford fails (Demi 10, Flare 54,
+ *   Ultima 90; Meteor needs none) and wrote it into the guide; it stays and is listed for him.
+ * - His Meteor callouts are the story's (`trema-meteor-1` and `-2`, by the number of Meteors **cast**, so the one Meteor of a skipped
+ *   half line is the first), and `trema-ultima`.
+ *
+ * **Timers** (kept in their current units; for the W4 merge): after the chain Trema recovers 120 = 9,302 units (98 steps, 3.27 s);
+ * after the three-hit fists 80 = 6,201 (66 steps, 2.20 s); Dying Star and Falling Leaf recover in 0; Flare and Ultima charge 7,751
+ * (82 steps), Demi 6,201 (66), Meteor charge 9,302 (98) and recovery 7,751 (82). None of them is a script rule.
  */
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
+import { maxHpDiv, pickGirl, scriptMod } from './script-rolls.ts';
 
-const CHAIN_STAGE = 'tremaChain';
-const FIRED = 'tremaTriggers';
-
-/** The three HP triggers, in firing order [§4.2]. */
-export const TREMA_TRIGGERS = [
-  { below: 1 / 2, id: 'trema-meteor' },
-  { below: 1 / 4, id: 'trema-meteor' },
-  { below: 1 / 6, id: 'trema-ultima' },
-] as const;
-
-function randomGirl(ctx: AiContext): string[] {
-  const party = ctx.party();
-  return party.length > 0 ? [ctx.rng.pick(party).id] : [];
-}
+/** AI memory: the Ultima flag (0/1), the Meteor counter (0, 1, 2), the Meteors cast so far (callouts), the queued chain links. */
+const ULTIMA = 'tremaUltima';
+const METEOR = 'tremaMeteor';
+const METEORS_CAST = 'tremaMeteorsCast';
+const QUEUE = 'tremaQueue';
 
 function use(id: string, targets: string[]): Command {
   return { kind: 'ability', id, targets };
 }
 
-/** The MP the AI needs for a spell (the ability's own cost; Spellspring does not waive this check). */
+/** The MP the AI needs for a spell (the ability's own cost; Spellspring does not waive this check, TR4 = b). */
 export function tremaCanAfford(ctx: AiContext, id: string): boolean {
   return ctx.self.mp >= (ctx.ability(id)?.mpCost ?? 0);
 }
 
-/** Cast `id`, or pass the turn with a line when his MP has been drained below its cost. */
+/** Cast `id`, or pass the turn with a line when his MP has been drained below its cost (TR4 = b). */
 function cast(ctx: AiContext, id: string, targets: string[]): Command | null {
   if (tremaCanAfford(ctx, id)) return use(id, targets);
   const name = ctx.ability(id)?.name ?? id;
@@ -59,75 +64,73 @@ function cast(ctx: AiContext, id: string, targets: string[]): Command | null {
   return null;
 }
 
-/** How many HP triggers have fired so far, 0 to 3. */
+/** How many HP rows have fired so far (Ultima flag plus Meteors cast), 0 to 3. */
 export function tremaTriggersFired(unit: AiContext['self']): number {
-  return mem(unit, FIRED);
+  return mem(unit, ULTIMA) + mem(unit, METEORS_CAST);
 }
 
-/**
- * One roll's weights, in 24ths, as the cumulative upper bounds of Dying Star, Demi, Flare, Choking
- * Mist and Beguiling Mire (Waning Moon takes the rest), plus which Mire row it uses.
- */
-export interface TremaWeights {
-  bounds: readonly [number, number, number, number, number];
-  mire: string;
+/** The Meteor row: the story's callout names the Meteor by how many have been cast. */
+function meteor(ctx: AiContext, counter: number): Command | null {
+  const self = ctx.self;
+  setMem(self, METEOR, counter);
+  const cast1 = mem(self, METEORS_CAST) + 1;
+  setMem(self, METEORS_CAST, cast1);
+  ctx.emit({ type: 'script-trigger', name: `trema-meteor-${cast1}`, payload: { who: self.id } });
+  return use('trema-meteor', []);
 }
 
-/** The story version [SinirothX]: 12 / 3 / 3 / 2 / 2 / 2. */
-export const TREMA_STORY_WEIGHTS: TremaWeights = { bounds: [12, 15, 18, 20, 22], mire: 'trema-beguiling-mire' };
+/** Queue the second and third link with their own targets, then play the first. */
+function startChain(ctx: AiContext): Command {
+  const first = pickGirl(ctx);
+  const second = pickGirl(ctx);
+  const third = pickGirl(ctx);
+  setMem(ctx.self, QUEUE, `trema-falling-leaf:${second[0] ?? ''}|trema-thundering-wave:${third[0] ?? ''}`);
+  return use('trema-dying-star', first);
+}
 
-/**
- * The Fiend Arena version (International / HD), **option 2 (TR1 b), OFF**: Demi **1/6**, Flare
- * **1/12**, "the rest as story" [SinirothX Colosseum entry, `[single source]`, research §3.3], so
- * 12 / 4 / 2 / 2 / 2 / 2; and its Beguiling Mire is 5 x3 (§4.2).
- */
-export const TREMA_ARENA_WEIGHTS: TremaWeights = { bounds: [12, 16, 18, 20, 22], mire: 'trema-arena-beguiling-mire' };
+/** The next queued link, or nothing when the chain is over. */
+function nextLink(ctx: AiContext): Command | null {
+  const queue = ctx.self.aiMemory?.[QUEUE];
+  if (typeof queue !== 'string' || queue === '') return null;
+  const [head, ...rest] = queue.split('|');
+  setMem(ctx.self, QUEUE, rest.join('|'));
+  const [id, target] = (head ?? '').split(':');
+  if (!id) return null;
+  return use(id, target ? [target] : []);
+}
 
-/** Trema's script for one weight table. The story version's draws are the ones it always made. */
-export function makeTremaScript(id: string, weights: TremaWeights): AiScript {
-  const [star, demi, flare, mist, mire] = weights.bounds;
+/** Trema's script for one version. The two versions decide alike; the Fiend Arena's Beguiling Mire is its own row (power 5). */
+export function makeTremaScript(id: string, mireId: string): AiScript {
   return {
     id,
     decide(ctx) {
       const self = ctx.self;
-      const fired = mem(self, FIRED);
-      const due = TREMA_TRIGGERS[fired];
-      if (due && self.hp < self.stats.maxHp * due.below) {
-        setMem(self, FIRED, fired + 1);
-        // `trema-meteor-1`, `trema-meteor-2`, `trema-ultima`: the hooks for TR13's callouts.
-        const name = due.id === 'trema-ultima' ? 'trema-ultima' : `trema-meteor-${fired + 1}`;
-        ctx.emit({ type: 'script-trigger', name, payload: { who: self.id } });
-        return cast(ctx, due.id, []);
+      const link = nextLink(ctx);
+      if (link) return link; // the chain's later links start before any row is read
+      const hp = self.hp;
+      if (hp < maxHpDiv(self, 6) && mem(self, ULTIMA) === 0) {
+        setMem(self, ULTIMA, 1);
+        ctx.emit({ type: 'script-trigger', name: 'trema-ultima', payload: { who: self.id } });
+        return cast(ctx, 'trema-ultima', []);
       }
-
-      const stage = mem(self, CHAIN_STAGE);
-      if (stage === 1) {
-        setMem(self, CHAIN_STAGE, 2);
-        return use('trema-falling-leaf', randomGirl(ctx));
+      const counter = mem(self, METEOR);
+      if (hp < maxHpDiv(self, 4) && counter <= 1) return meteor(ctx, 2);
+      if (hp < maxHpDiv(self, 2) && counter === 0) return meteor(ctx, 1);
+      if (scriptMod(ctx, 2) === 0) return startChain(ctx);
+      if (scriptMod(ctx, 2) === 0) {
+        const girl = pickGirl(ctx);
+        const pick = scriptMod(ctx, 3);
+        return use(pick === 0 ? 'trema-waning-moon' : pick === 1 ? mireId : 'trema-choking-mist', girl);
       }
-      if (stage === 2) {
-        setMem(self, CHAIN_STAGE, 0);
-        return use('trema-thundering-wave', randomGirl(ctx));
-      }
-
-      const roll = ctx.rng.int(0, 23); // 24ths
-      if (roll < star) {
-        setMem(self, CHAIN_STAGE, 1);
-        return use('trema-dying-star', randomGirl(ctx));
-      }
-      if (roll < demi) return cast(ctx, 'trema-demi', []);
-      if (roll < flare) return cast(ctx, 'trema-flare', randomGirl(ctx));
-      if (roll < mist) return use('trema-choking-mist', randomGirl(ctx));
-      if (roll < mire) return use(weights.mire, randomGirl(ctx));
-      return use('trema-waning-moon', randomGirl(ctx));
+      if (scriptMod(ctx, 3) === 0) return cast(ctx, 'trema-flare', pickGirl(ctx));
+      return cast(ctx, 'trema-demi', []);
     },
   };
 }
 
-export const tremaScript: AiScript = makeTremaScript('trema', TREMA_STORY_WEIGHTS);
+export const tremaScript: AiScript = makeTremaScript('trema', 'trema-beguiling-mire');
 /**
- * Fiend Arena Trema (option 2, OFF). Its pattern text "is cut off after Waning Moon" (research
- * §3.3), so the HP triggers are unsourced for it: it keeps the story's Meteor, Meteor, Ultima,
- * the reading that does not make it easier, `[estimate]`.
+ * Fiend Arena Trema (option 2, OFF). The script is the story's (`m328` decides as `m295`); only its Beguiling Mire row
+ * differs in our data (`trema-arena-beguiling-mire`, power 5).
  */
-export const tremaArenaScript: AiScript = makeTremaScript('trema-arena', TREMA_ARENA_WEIGHTS);
+export const tremaArenaScript: AiScript = makeTremaScript('trema-arena', 'trema-arena-beguiling-mire');

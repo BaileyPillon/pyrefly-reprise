@@ -56,6 +56,12 @@ import { discardPick, girlsInSlotOrder, pickGirl, scriptMod } from './script-rol
 import { oversoulCommandClass } from './oversoul-lists.ts';
 
 /**
+ * The script's idle limit in polls: the 1,201st idle poll acts (`o152.src:130-143`), 40.04 s of running clock at the measured 29.97 logic
+ * steps a second. Documentation for the structural change that waits for Bailey; nothing reads it (the build counts `idleSeconds`).
+ */
+export const OVERSOUL_IDLE_POLLS = 1200;
+
+/**
  * The values of the first build's research gaps that still matter. The game's script answered most of them; each line says which
  * way. Change one line to measure another reading.
  */

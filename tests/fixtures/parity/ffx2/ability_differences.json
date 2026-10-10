@@ -1,11 +1,9 @@
 {
   "paragon-big-bang": ["type 2->0"],
   "paragon-genesis": ["type 2->0","cap default->99999","status +damage-9999 254","status +guaranteed-critical 254"],
-  "paragon-os-attack": ["status -itchy 254"],
   "paragon-os-dispel": ["status +damage-9999 254","status +guaranteed-critical 254"],
-  "paragon-os-final-impact": ["type 0->1","cap 99999->default"],
+  "paragon-os-final-impact": ["cap 99999->default"],
   "paragon-os-judgement": ["cap default->99999"],
-  "trema-beguiling-mire": ["power 4->5"],
   "trema-dying-star": ["cap 99999->default"],
   "trema-waning-moon": ["power 0->5","type 0->1","crit false->true"],
   "x2-alchemist-stash-elixir": ["power 1->16"],

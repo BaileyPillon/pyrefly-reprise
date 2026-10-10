@@ -22,7 +22,7 @@ import { describe, expect, it } from 'vitest';
 import type { AbilityDef, AbilityCommand, Command } from '../../src/battle/common/types.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
-import { K, OS_COPY, OS_DEMI, OS_NORMAL, OVERSOUL_ESTIMATES, hpBelow, paragonOversoulScript as script } from '../../src/battle/ffx2/ai/paragon-oversoul.ts';
+import { K, OS_COPY, OS_DEMI, OS_NORMAL, OVERSOUL_ESTIMATES, OVERSOUL_IDLE_POLLS, hpBelow, paragonOversoulScript as script } from '../../src/battle/ffx2/ai/paragon-oversoul.ts';
 import { COPY_IDS, HEAL_BUFF_IDS, oversoulCommandClass } from '../../src/battle/ffx2/ai/oversoul-lists.ts';
 import { TICK_RATE_BASE } from '../../src/battle/ffx2/constants.ts';
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
@@ -294,5 +294,7 @@ describe('the first poll (O14) and the data', () => {
     expect(paragonOversoul.abilityIds).toContain('x2-shared-osmose');
     expect(ab('x2-shared-osmose').ffx2Record).toMatchObject({ id: 0x317b, damageClass: 2, formula: 9, power: 6 });
     expect(OVERSOUL_ESTIMATES).toMatchObject({ finalImpactReducible: true, attackItchy: false, idleSeconds: 20, lowHpActsEveryTurn: false });
+    // O2, structural: the game's limit is 1,200 idle polls = 40.04 s at 29.97 steps a second; the build's is 20 s. The conversion the handoff quotes:
+    expect(OVERSOUL_IDLE_POLLS * 0.033367).toBeCloseTo(40.04, 2);
   });
 });
