@@ -22,6 +22,7 @@
 
 import type { CombatantId } from '../../common/types.ts';
 import type { Ctx } from '../state.ts';
+import { queueEmit } from './hooks.ts';
 
 /** Every name this chapter emits. Mirrored in the story script (a test pins the two). */
 export const OMNIS_CALLOUTS = {
@@ -66,6 +67,18 @@ export function omnisCalloutOnce(ctx: Ctx, key: string, name: OmnisCallout, who?
   if (omnisSaid(ctx, key)) return false;
   ctx.state.flags[SAID + key] = true;
   ctx.emit({ type: 'script-trigger', name, payload: who === undefined ? {} : { who } });
+  return true;
+}
+
+/**
+ * Spend `key` now and emit `name` **after the action's own events**: for a line a hook asks for from inside an
+ * action (a disc turned, the glow, his HP under a quarter). The hook runs between the damage numbers and the
+ * `action-end`, and a line that pauses playback belongs after them, where the turn-end scan used to put it.
+ */
+export function omnisCalloutAfter(ctx: Ctx, key: string, name: OmnisCallout, who?: CombatantId): boolean {
+  if (omnisSaid(ctx, key)) return false;
+  ctx.state.flags[SAID + key] = true;
+  queueEmit(ctx, { type: 'script-trigger', name, payload: who === undefined ? {} : { who } });
   return true;
 }
 

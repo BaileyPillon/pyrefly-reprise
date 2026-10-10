@@ -55,6 +55,7 @@ import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/
 import {
   DAIGORO_ATTACK,
   YOJIMBO_DAIGORO_ORDER,
+  YOJIMBO_SUMMON,
   YOJIMBO_KOZUKA,
   YOJIMBO_WAKIZASHI,
   YOJIMBO_ZANMATO,
@@ -183,7 +184,7 @@ const yojimbo: EnemyDef = {
   // §2.4 [decompiled] + GameFAQs [verified: 2 sources] — no AP, no gil, no
   // drop, no steal. The real reward is the Chamber of the Fayth (§2.4, §7).
   rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 4_060, drops: [] },
-  abilityIds: [YOJIMBO_DAIGORO_ORDER, YOJIMBO_KOZUKA, YOJIMBO_WAKIZASHI, YOJIMBO_ZANMATO],
+  abilityIds: [YOJIMBO_SUMMON, YOJIMBO_DAIGORO_ORDER, YOJIMBO_KOZUKA, YOJIMBO_WAKIZASHI, YOJIMBO_ZANMATO],
   flags: { isBoss: true },
   poisonTickPercent: 25, // §2.1 [decompiled] — Poison-immune anyway
   doomTurns: 5, // §2.1 [decompiled] byte 119 [verified: 4 sources]

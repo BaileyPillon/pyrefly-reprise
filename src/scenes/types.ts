@@ -170,6 +170,19 @@ export interface SceneStaging {
    */
   readonly figureHeights?: Readonly<Record<string, number>>;
   /**
+   * A world height for one **form** of a boss, keyed by the art id the stage draws (`yunalesca-1`: `BattlePresenterArt.artIdFor`, `<combatant id>-<form index + 1>`), overriding the stage's
+   * rule (`worldHeightFor`) while that painting is up. The painting swaps with the form (`PaintedStage.setArt`) and the model the game draws is a different mesh per form, so a height is
+   * true of one form only: a form with no entry stands at the shared boss height, exactly as before, and a scene that names none gets what it always got. `figureHeights` (per combatant) wins
+   * where both name one. For Chapter II's first form, Lady Yunalesca at her wing tips (FFX only: `data/ffx/form-stature.ts`).
+   */
+  readonly formHeights?: Readonly<Record<string, number>>;
+  /**
+   * This scene's fights start with the strategy guide **folded** to its chip, and `G` opens it (FFX only: Chapters I and III; Bailey's pick "A2" of 2026-10-09: the full NEXT BEST MOVE card stands in the
+   * guide's place, and while the guide is open the card is the one-row tip). A starting state for the fight, not a setting: nothing is written to `Settings.guideVisible`, so the player's saved preference
+   * is never overwritten by the chapter and a player who has the guide off sees no difference. Not on the upright phone, which keeps its own guide sheet. Omitted everywhere else.
+   */
+  readonly guideFolded?: boolean;
+  /**
    * Which way each side's bodies turn, overriding the house rule (party and
    * aeons toward +x, enemies toward -x, `facingForSide`). For FF7, whose party
    * stands on the right facing left and whose enemies face right
@@ -230,6 +243,28 @@ export interface SceneStaging {
     bounce: Readonly<{ color: number; strength: number }>;
     erode: number;
   }>;
+  /**
+   * Draw every figure from this art namespace instead of the base art (`src/data/art/artNamespace.ts`): the stage prefixes each
+   * art id it resolves, so `yuna-gunner` is read from `characters/exp-leblanc-yuna-gunner/`. The experimental Leblanc chapter
+   * (FFX-2 only) is the one user; omitted everywhere else, where every id resolves exactly as it always did.
+   */
+  readonly artNamespace?: string;
+  /**
+   * The most height, in HUD grid px (the 640x360 stage the FFX-2 chrome is laid out on), FFX-2's move-advisor card may take in this
+   * scene. The card hangs from the bottom band of the frame; a scene whose fiends stand low enough to reach that band gives it less
+   * room so it prints fewer lines and its top edge stays below their feet (Chapter VI's fiends, bigger since the real-stature table,
+   * `data/ffx2/syndicate-stature.ts`). It rides the card's own cap (`FFX2BattleHud`, `advisorLane.ts`: a cap only tightens). Omitted
+   * everywhere else: the card keeps the stylesheet's 104. FFX-2 only: the FFX HUD places its card through `ffx/hudSafeZones.ts`.
+   */
+  readonly advisorCap?: number;
+  /**
+   * The FFX-2 enemy-intent slab hangs over the **highest** living enemy's head instead of the acting one's (at the acting one's x), and folds its body to the room
+   * above it. A scene whose fiends stand at different depths and real heights (Chapter VI: Logos and Ormi, far back and tall, stand higher on the screen than a
+   * near, shorter fiend) would otherwise have the slab lie across the taller one's head. `true` or omitted: the plain head and the body's own cap. FFX-2 only: the
+   * FFX HUD's panel is mounted without it (`FFX2BattleHud.intentHead` and `intentMaxHeight`, `intentBoard.highestEnemyHead` and `intentRoom`,
+   * `EnemyIntentMountOptions.maxHeight`).
+   */
+  readonly intentRoof?: boolean;
 }
 
 /** The staging switches a build set, and only those. */
@@ -241,6 +276,8 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.holdParty) out.holdParty = true;
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
+  if (build.formHeights) out.formHeights = build.formHeights;
+  if (build.guideFolded === true) out.guideFolded = true;
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;
   if (build.turnRings === false) out.turnRings = false;
@@ -249,6 +286,9 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.poseShiftPx) out.poseShiftPx = build.poseShiftPx;
   if (build.restPoses === false) out.restPoses = false;
   if (build.figureLight) out.figureLight = build.figureLight;
+  if (build.artNamespace) out.artNamespace = build.artNamespace;
+  if (build.advisorCap !== undefined) out.advisorCap = build.advisorCap;
+  if (build.intentRoof === true) out.intentRoof = true;
   return out;
 }
 

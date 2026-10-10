@@ -3,8 +3,11 @@
 **Game case: FFX-2 only.** FFX has its own scripts and its own engine; they have their own notes. This note covers the
 FFX-2 chapters `ffx2-fallen-aeons` (Shiva, the three Magus Sisters, Anima on the Road to the Farplane) and `ffx2-trema`
 (Paragon in its normal and its Oversoul form, then Trema, on Cloister 100 of the Via Infinito). Part of the `re-parity`
-track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)), P6 (boss AI follows the scripts). Drafted 2026-10-08.
-Research only: no engine or AI code is changed by this note.
+track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)), P6 (boss AI follows the scripts). Drafted 2026-10-08; the
+logic rate, the clock during effects and the charge tick (main finding 8, the notation, 1.1, 1.7, 6.3, 6.4, section 9, row
+O2, section 11) and the step counts (rounded up: section 8 and the inline counts) corrected on 2026-10-09 from the live
+measurement ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)). Research only: no engine or AI code is changed by
+this note.
 
 **Source note (applies to every statement below unless a line says otherwise):** FFX2_Data.vbf Steam build 25501027
 (FFX-2.exe SHA-256 6EA7F142...CD69). The AI is the developers' own script source shipped in the archive under
@@ -46,8 +49,10 @@ own words: no script text, no game text and no decompiled code is reproduced her
    opens with Final Impact once per fight, then a five-way pool; neither waits to be hit (`o152.src:87-95,194-272`).
    The "waits until hit" part is only the idle branch above 40 percent HP with MP.
 8. **The idle limit is 1200 idle polls (the 1201st acts) and any result applied to it resets it** (hit, miss, status-only,
-   its own drain). `wait` is a no-op in this build, so a poll is one logic step of a running ATB clock: 40 s at 30 steps a
-   second, 20 s at 60 (`o152.src:56,130-143`).
+   its own drain). `wait` is a no-op in this build, so a poll is one logic step of a running ATB clock: 1,200 steps are
+   40.04 s at the measured 29.97 steps a second (`o152.src:56,130-143`). *Corrected by the 2026-10-09 measurement
+   ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 3):* the first draft gave "40 s at 30 steps a second,
+   20 s at 60" while the rate was unsettled; 20 s would need 60 steps a second, which the running game does not run.
 9. **The Oversoul answers on its next poll, and its answers differ from our lists.** A girl's heal or buff that lands **on
    it** makes it cast Demi on the party every poll until a new result lands. A spell from a 32-command list is copied back
    at the caster alone. Anything else (physical attacks, items, Darkness) gets a Normal Attack at a **uniformly random
@@ -83,12 +88,15 @@ own words: no script text, no game text and no decompiled code is reproduced her
   (Yuna slot 0, Rikku 1, Paine 2). `random()` is a uniform pick (stream 2, low 16 bits; the modulo bias is below 0.01
   percentage points and ignored); target searches use stream 4 (`searchr` is near-weighted, `searchr_nop` uniform, a single
   candidate draws nothing). "Recovery" and "charge" are `cost x 10000 / (AGI + 1)` units, 95 units a step at Normal speed.
-  Seconds are given as "at 30/s" and "at 60/s" because the PC logic rate is not settled (the earlier lanes' evidence favours
-  30; nobody has timed it). Source line ranges are cited as `m167.src:86-91`.
+  Seconds are at the measured 29.97 steps a second, one step being 0.033367 s (corrected by the 2026-10-09 measurement,
+  which closed the 30-or-60 question: [re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 3). Step counts
+  derived from units are rounded up, because the game's counter has to reach 0 or less and so needs the next whole step
+  (a 16,666-unit refill took 176 steps on the running game; 16,666 / 95 = 175.4); a figure with a decimal point, such as a
+  first-poll range, is the exact quotient and is left unrounded. Source line ranges are cited as `m167.src:86-91`.
 
 ## 1. Engine facts these fights depend on
 
-### 1.1 A poll is one step; `wait` costs nothing [H for the code, L for the rate]
+### 1.1 A poll is one step; `wait` costs nothing [H for the code; the rate is measured, 29.97 a second]
 
 An actor that has finished recovery and thinking is "ready"; on that step the engine runs its (empty) menu entry and then
 its action entry. If the entry queues no command the actor falls back to the start of the ATB state machine, which
@@ -158,7 +166,9 @@ word, not the thinking byte, and the battle-start call that sets the thinking ba
 ### 1.7 Every actor here has the Damage-Not-Stop bit [H]
 
 Special words 0x3c3 (Shiva, Anima, the Sisters, Trema) and 0x2db (Paragon) have bit 1 set, so a hit reaction never halves
-their gauge; only charging does.
+their gauge. (Corrected by the 2026-10-09 measurement: this line ended "only charging does". The charging flag stayed 0
+through all 7 charge countdowns measured on the running game, and they fell the full 95 units a step, so in play nothing
+halves a charge: [re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 6.)
 
 ## 2. Shiva (m167; story scene ikai09_229; arena scene crcr00_096)
 
@@ -346,7 +356,7 @@ hand-over is 1; nothing in these scripts sets it [M].
 from the scene's start formation (boss at (25, 0); girls at (-71, 0), (-71, 21), (-71, -21), boss facing the party): weights
 335 / 230 / 230 give about **42.3% / 28.9% / 28.8%** for Yuna, Rikku, Paine; positions change during play.
 
-**Numbers:** Attack recovery 100 = 5,291 units (56 steps); the Itchy Attack 60 = 3,174 (33 steps); Genesis and Big Bang
+**Numbers:** Attack recovery 100 = 5,291 units (56 steps); the Itchy Attack 60 = 3,174 (34 steps); Genesis and Big Bang
 recovery 80 = 4,232 (45), charge 120 = 6,349 (67). First poll after the start: 9.7 to 28.9 steps.
 
 ## 6. Oversoul Paragon (m152 worker 0 = `o152.src`; scenes stbv09_224, crcr00_114, crcr01_014)
@@ -425,16 +435,19 @@ State "nothing", HP at or above 40 percent, MP above 0: if the idle counter is *
 otherwise the counter gains 1, the call `wait(1)` returns at once, and the poll ends without a command. So the action comes on the
 **1201st** consecutive idle poll. When it acts: Reflect on any girl -> Dispel on all party; else `random() mod 3`: 0 Judgment
 (uniform girl), 1 Genesis (all), 2 Big Bang (all). The counter is reset by the reaction (any result, 6.2) and the answer polls do
-not add to it. Polls come once per step while the ATB clock runs (1.1): **1200 steps = 40 s at 30/s, 20 s at 60/s of running
-clock**; every party action that executes and every Wait-mode submenu adds to the real time. 1200 frames at 60 a second is
-the reading that gives the community dump's "20 seconds".
+not add to it. Polls come once per step while the ATB clock runs (1.1): **1200 steps = 40.04 s of running clock at the
+measured 29.97 steps a second**; every Wait-mode submenu adds to the real time, while a party action's animation did not
+stop the clock for the commands measured (a girl's Attack and Fire, four monster casts). (Corrected by the 2026-10-09
+measurement, which replaces "40 s at 30/s, 20 s at 60/s" and "every party action that executes adds to the real time":
+[re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) sections 3 and 7.) The community dump's "20 seconds" is 1200 frames
+at 60 a second; the running game does not step at 60 a second.
 
 ### 6.4 The named estimates of `OVERSOUL_ESTIMATES`, answered from the files
 
 | Estimate (`ai/paragon-oversoul.ts`) | Ours | The files |
 |---|---|---|
 | `physicalHitPercent` (:47) | flat 50 | the formula-2 race of row 0x41da: base ACC 95 plus LCK 16 against the girl's Luck, Evasion and stage terms (no fixed rate) |
-| `idleSeconds` (:53) | 20 s | 1200 idle polls, the 1201st acts; 40 s at 30/s, 20 s at 60/s of running clock; reset by any result (6.3) |
+| `idleSeconds` (:53) | 20 s | 1200 idle polls, the 1201st acts; 40.04 s of running clock at the measured 29.97 steps a second (corrected by the 2026-10-09 measurement; it read "40 s at 30/s, 20 s at 60/s"); reset by any result (6.3) |
 | `magicBelow` (:59) | 4/10 | strict float test of HP / max HP < 0.4, acting on every poll (6.1) |
 | `finalBelow` (:60) | 1/10 | strict float test < 0.1 |
 | `finalImpactHits` (:62) | 14 | 14 |
@@ -491,56 +504,61 @@ All strict "below" tests on the current HP. The flags start at 0, are never clea
 
 Nothing in the script reads MP. With Spellspring the costs are 0, so draining his MP changes nothing [M for the status
 reaching the effective word]. Trema has no reaction: nothing he does depends on what the party does apart from HP.
-After the chain Trema recovers for 120 = 9,302 units (98 steps); after the three-hit fists 80 = 6,201 (65 steps). First poll
+After the chain Trema recovers for 120 = 9,302 units (98 steps); after the three-hit fists 80 = 6,201 (66 steps). First poll
 after the start: 14.3 to 42.4 steps. **Versions:** the compiled story and arena scripts have identical decision code; the
 files hold one row for each move (Beguiling Mire power 5 in both).
 
-## 8. Cadence reference (units from the rows; steps at Normal speed, no halving)
+## 8. Cadence reference (units from the rows; steps at Normal speed, no charge halving, rounded up)
 
-Recovery = `cost_atb x 10000 / (AGI+1)`, charge = `cost_cast x 10000 / (AGI+1)`; 95 units per step. Only the moves these
-actors use. Thinking after each command is only the 30 steps per fallen girl (1.6).
+Recovery = `cost_atb x 10000 / (AGI+1)`, charge = `cost_cast x 10000 / (AGI+1)`; 95 units per step, for a charge as well as
+a recovery (a charge is not halved in play, 1.7). Only the moves these actors use. Thinking after each command is only the
+30 steps per fallen girl (1.6). Steps are the units divided by 95 and **rounded up**, because the game's counter has to
+reach 0 or less (corrected by the 2026-10-09 measurement: the first draft rounded to the nearest step and printed, for
+example, 33 for the 3,174 units of the Itchy Attack, which take 34).
 
 | Actor (AGI) | Move | Charge units (steps) | Recovery units (steps) |
 |---|---|---|---|
-| Shiva (124) | Attack | 0 | 8,000 (84) |
+| Shiva (124) | Attack | 0 | 8,000 (85) |
 | | Chain Attack | 0 | 0 |
 | | Blizzaga | 5,600 (59) | 0 |
-| | Heavenly Strike | 8,000 (84) | 6,400 (67) |
-| | Diamond Dust | 9,600 (101) | 16,000 (168) |
+| | Heavenly Strike | 8,000 (85) | 6,400 (68) |
+| | Diamond Dust | 9,600 (102) | 16,000 (169) |
 | Anima (133) | Anima Attack | 0 | 7,462 (79) |
 | | Pain | 7,462 (79) | 5,970 (63) |
-| | Oblivion | 14,925 (157) | 14,925 (157) |
-| Cindy (72) | Guard / White Highwind | 16,438 (173) | 10,958 (115) |
-| | Absorb | 13,698 (144) | 5,479 (58) |
-| | Demi | 10,958 (115) | 0 |
+| | Oblivion | 14,925 (158) | 14,925 (158) |
+| Cindy (72) | Guard / White Highwind | 16,438 (174) | 10,958 (116) |
+| | Absorb | 13,698 (145) | 5,479 (58) |
+| | Demi | 10,958 (116) | 0 |
 | | Regen | 8,219 (87) | 0 |
 | | Camisade | 0 | 0 |
-| | Delta Attack | 0 | 27,397 (288) |
-| Sandy (83) | Attack | 0 | 11,904 (125) |
+| | Delta Attack | 0 | 27,397 (289) |
+| Sandy (83) | Attack | 0 | 11,904 (126) |
 | | Razzia | 0 | 0 |
 | Mindy (89) | Firaga, Blizzaga, Thundaga, Waterga | 7,777 (82) | 0 |
 | | Passado | 0 | 0 |
 | Paragon (188) | Attack | 0 | 5,291 (56) |
-| | Itchy Attack | 0 | 3,174 (33) |
+| | Itchy Attack | 0 | 3,174 (34) |
 | | Genesis, Big Bang | 6,349 (67) | 4,232 (45) |
 | Oversoul (244) | Attack | 0 | 4,081 (43) |
-| | Judgment | 4,897 (52) | 1,632 (17) |
-| | Genesis, Big Bang | 4,897 (52) | 3,265 (34) |
+| | Judgment | 4,897 (52) | 1,632 (18) |
+| | Genesis, Big Bang | 4,897 (52) | 3,265 (35) |
 | | Final Impact | 4,897 (52) | 4,081 (43) |
-| | -aga spells, Osmose | 2,857 (30) | 0 |
-| | Demi | 3,265 (34) | 0 |
+| | -aga spells, Osmose | 2,857 (31) | 0 |
+| | Demi | 3,265 (35) | 0 |
 | | Ultima, Holy | 4,081 (43) | 0 |
 | | Dispel | 2,448 (26) | 0 |
 | Trema (128) | Dying Star, Falling Leaf | 0 | 0 |
 | | Thundering Wave | 0 | 9,302 (98) |
-| | Waning Moon, Beguiling Mire, Choking Mist | 0 | 6,201 (65) |
+| | Waning Moon, Beguiling Mire, Choking Mist | 0 | 6,201 (66) |
 | | Flare, Ultima | 7,751 (82) | 0 |
-| | Demi | 6,201 (65) | 0 |
+| | Demi | 6,201 (66) | 0 |
 | | Meteor | 9,302 (98) | 7,751 (82) |
 
 ## 9. Open items, and what could not be decoded
 
-- **Logic rate** [L]: 30 or 60 steps per second; every "seconds" figure above carries both.
+- **Logic rate**: settled, 29.97 steps a second (60 / 1.001 / 2), measured on the running game on 2026-10-09; the earlier
+  [L] entry ("30 or 60 steps per second; every seconds figure carries both") is closed, and every seconds figure above is
+  at that rate ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 3).
 - **Battle-local variables start at 0** [M]: allocation not traced (1.3).
 - **Command queue consumer** [M]: that the three Trema links start back to back and what separates them was read from the ring
   and its processor but not run.
@@ -585,7 +603,7 @@ Row key: *game* = this note; *ours* = file:line in `src/battle/ffx2/` (paths bel
 | P5 | The MP gate | none in the script; a Genesis or Big Bang started with MP below 38 or 40 fails when its charge ends (1.5) | blocks Genesis and the counter at 0 MP (`ai/paragon.ts:49-51,64-67,72`) | a failed cast spends its charge in the game and passes the turn in ours |
 | P6 | Stats | MDEF 89, ACC 95 (monster.bin) | MDEF 88, ACC 0 (`data/paragon.ts:50,54`) | no effect on the normal form (its attacks never roll) |
 | O1 | Physical miss rate | the ordinary race: threshold = 16 + 95 - girl's Luck - Evasion + stage terms, roll 0 to 100 (row 0x41da, formula 2); the Oversoul block has ACC 95, LCK 16 | flat 50 percent (`ai/paragon-oversoul.ts:47`); ACC 0 in the data (`data/paragon-oversoul.ts:167`) | high-Luck girls dodge far more than half; low-Luck girls far less |
-| O2 | The idle limit | 1200 idle polls (the 1201st acts), counted only in idle polls, reset by any result | 20 s of engine ticks (60,000 at `TICK_RATE_BASE` 3,000) since the last result or answer (`ai/paragon-oversoul.ts:53,214`; `constants.ts:16`) | the game's 1200 steps are 114,000 ATB units at Normal speed, 38 s on our 3,000-a-second scale (the ATB note puts the game at 2,850 a second if it runs 30 steps a second): about 1.9 times ours; the logic rate only matters for real seconds |
+| O2 | The idle limit | 1200 idle polls (the 1201st acts), counted only in idle polls, reset by any result | 20 s of engine ticks (60,000 at `TICK_RATE_BASE` 3,000) since the last result or answer (`ai/paragon-oversoul.ts:53,214`; `constants.ts:16`) | the game's 1200 steps are 114,000 ATB units at Normal speed: 38 s on our 3,000-a-second scale, and 40.04 s of real time at the measured 29.97 steps a second (2,847 units a second): about 1.9 times ours on the engine's scale and 2.0 in real seconds (corrected by the 2026-10-09 measurement; it compared 2,850 a second "if it runs 30 steps a second") |
 | O3 | HP thresholds | strict float tests: < 0.4 and < 0.1 of max HP (o152.src:87-95) | `<` on the same fractions (`ai/paragon-oversoul.ts:59-60,212`) | the same, checked at 84,000 and 21,000 |
 | O4 | Acting at low HP | every poll, hit or not (o152.src:87-95,194-272) | waits to be hit; `lowHpActsEveryTurn` false (`ai/paragon-oversoul.ts:89,212-213`) | the HP rows are the main behaviour below 40 percent |
 | O5 | Final Impact | 14 hits, never rolls, random targets, once per fight, after the Reflect and MP rows, physical bit so Protect halves, 1/8 of max HP and MP (row 0x41c4; o152.src:243) | 14 hits, once, not reducible (`ai/paragon-oversoul.ts:62-64,186-189`) | `finalImpactReducible` should be true |
@@ -614,7 +632,7 @@ Row key: *game* = this note; *ours* = file:line in `src/battle/ffx2/` (paths bel
 | HP thresholds 0.1 and 0.4 are tested first, every poll. | **Confirmed.** | Float32 ratio, strict: with 210,000 HP the tests are 20,999 and 83,999 or less. A Reflect-on-any-girl Dispel and the MP-0 branch come before the pools inside each HP row. |
 | Below 40% it acts every turn without waiting to be hit, so `lowHpActsEveryTurn` should be true. | **Confirmed.** | Rows 1 and 2 run before the answer state is read, and the idle branch is only reached above 40 percent. |
 | The idle limit is 1200 AI polls. | **Confirmed, refined.** | The counter is tested before it is incremented, so the 1201st idle poll acts. Only idle polls count; a result of any kind (hit, miss, status, its own drain) resets it. |
-| At 30 polls per second that is 40 s; SinirothX's 20 s would need 60 polls per second; the wiki's 2.5 minutes has no support. | **Confirmed as arithmetic, rate still open.** | A poll is one logic step of a running ATB clock, and `wait(1)` is a no-op in this build, so no hidden stretching. 20 s is exactly 1200 frames at 60 a second; the rate of the PC logic is the only open number. 2.5 minutes would need 4,500 steps at 30/s and is not in the script. |
+| At 30 polls per second that is 40 s; SinirothX's 20 s would need 60 polls per second; the wiki's 2.5 minutes has no support. | **Confirmed; the rate is measured (29.97 a second).** | A poll is one logic step of a running ATB clock, and `wait(1)` is a no-op in this build, so no hidden stretching. 1,200 polls are 40.04 s at the measured 29.97 steps a second; 20 s is exactly 1200 frames at 60 a second, which the running game does not step at. 2.5 minutes would need about 4,500 steps and is not in the script. (Corrected by the 2026-10-09 measurement; this row read "rate still open" and gave "4,500 steps at 30/s".) |
 | The reaction block only records the party's last action; the answer is issued on its next ready poll (`answerTiming: 'next-turn'`). | **Confirmed.** | Also for normal Paragon's Big Bang, which replaces the move due on the next poll. |
 | The "Attack b" answer is Demi (0x3082) on all girls, repeated until she does something else. | **Confirmed, refined.** | The list is 11 commands (Cure, Cura, Curaga, Full-Cure, Regen, Esuna, Life, Full-Life, Shell, Protect, Reflect), only those that land **on Paragon** count, and the Demi repeats every poll until another result lands on Paragon (any command). |
 | Final Impact is 14 hits, never rolls to hit, picks random targets. | **Confirmed.** | Row 0x41c4: 14 hits, no accuracy roll, random-target flag, 1/8 of max HP and MP, **physical bit (Protect halves)**, cast once per fight. |

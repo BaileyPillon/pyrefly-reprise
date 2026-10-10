@@ -22,10 +22,9 @@
  * | **2** | Anima arrives in slot 3 (M4); Seymour stays on the field and idles | Anima at 0 HP → "Seymour dismisses Anima!" and she is removed |
  * | **3** | Seymour returns to **6,000 HP** with **Magic 25 → 32** | Seymour dead |
  *
- * **He cannot be killed before he summons.** We ship the HD behaviour (our
- * declared baseline): every hit on him is clamped to **5,999** and his HP is
- * floored at **1** until the summon script has run [§5.2, verified: 2 sources].
- * The PS2 softlock is a bug; reproducing it would be an own goal.
+ * **He cannot be killed before he summons**, and the game's way of saying so is his own script: a lethal hit
+ * reaches his `onHit` before the death check, which writes his max HP and HP to 6,000 and runs the summon
+ * (re-parity, `research/re-ffx-ai-seymour.md` section 3.5). There is no damage cap and no HP floor any more.
  *
  * **There is no alternation guard here.** The "two turns in a row → no-op"
  * rule is specific to the Flux fight; §5.1 says explicitly not to copy it.
@@ -47,19 +46,18 @@
  * `setup.ts#enemyToCombatant` reads it as `removed: true`, and
  * `forms.ts#revealEnemy` clears both.
  *
- * ## Owner-approved assumptions carried by this file
+ * ## The four assumptions Bailey adopted on 2026-09-21 are answered by the scripts
  *
- * Each is **AUTHORED**, not canon, and each is one line from being flipped.
- * Bailey approved all four on 2026-09-21 ("Yes to all recommendations").
+ * They were placeholders for a missing source ("Yes to all recommendations"), each one line from being flipped.
+ * The game's own scripts (re-parity, `research/re-ffx-ai-seymour.md` section 3) now settle them, and the switches
+ * are gone:
  *
- * | # | Assumption | Where the switch is |
+ * | # | Assumption | The script |
  * |---|---|---|
- * | **C-2** | Seymour is **present but untargetable** while Anima is on the field | `SEYMOUR_UNTARGETABLE_IN_ACT_TWO` |
- * | **C-11** | Auto-Potion fires on **any** damage, not physical only | `AUTO_POTION_ON_ANY_DAMAGE` |
- * | **C-14** | The ice → lightning → water → fire order **persists into act three** | `ACT_THREE_KEEPS_ELEMENT_ORDER` |
- * | **C-4 / G-1** | Anima's gauge is **+10 % per turn taken, +5 % per targeting** | `ANIMA_GAUGE_PER_TURN` / `ANIMA_GAUGE_PER_TARGETING` |
- *
- * All four constants live in `src/battle/ffx/ai/seymour-anima-macalania.ts`.
+ * | **C-2** | Seymour is **present but untargetable** while Anima is on the field | true: the summon row switches off his Targetable and his turns |
+ * | **C-11** | Auto-Potion fires on **any** damage, not physical only | true: any action that took HP from the Guardian, with the exceptions in `macalania-guardian.ts` |
+ * | **C-14** | The ice → lightning → water → fire order **persists into act three** | true: the spell-set index is never reset |
+ * | **C-4 / G-1** | Anima's gauge is **+10 % per turn taken, +5 % per targeting** | **not so**: +5 on each Pain and +5 per action that reaches her; her turn itself adds nothing |
  *
  * ## Conflicts recorded rather than merged
  *
@@ -200,7 +198,6 @@ const seymour: EnemyDef = {
     'mac-multi-thundara',
     'mac-multi-watera',
     'mac-multi-fira',
-    'mac-seymour-idle',
   ],
   flags: { isBoss: true },
   sensorText: 'Ice, lightning, water, fire. In that order, every time. He is telling you on purpose.',

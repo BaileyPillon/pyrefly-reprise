@@ -107,7 +107,10 @@ describe('the guide and the tactic (FFX only)', () => {
     expect(tacticFor(newEngine(1))).toBe(seymourOmnis);
   });
 
-  it('is the bench\'s intended line: on the approved build it wins like it (127 of 200 there)', () => {
+  // 127 -> 169 of 200 on 2026-10-09 (re-parity AI-Seymour, FFX only): the game's own script gives him a spell-free reset turn
+  // each cycle (D-27) and always four spells in the order his layout fixes (D-26), among other rows; the ablation is in
+  // docs/handoff/re-parity-ai-seymour.md. Nothing on the boss or the party was tuned; the old band was 110 to 145.
+  it('is the bench\'s intended line: on the approved build it wins like it (169 of 200 there)', () => {
     let wins = 0;
     const seeds = 200;
     for (let seed = 1; seed <= seeds; seed++) {
@@ -120,7 +123,7 @@ describe('the guide and the tactic (FFX only)', () => {
       if (engine.state().result?.outcome === 'victory') wins++;
     }
     console.log(`[omnis tactic] ${wins}/${seeds} wins on the Garden of Pain build`);
-    expect(wins).toBeGreaterThanOrEqual(110);
-    expect(wins).toBeLessThanOrEqual(145);
+    expect(wins).toBeGreaterThanOrEqual(145);
+    expect(wins).toBeLessThanOrEqual(190);
   }, 180_000); // about 12 s alone: 200 whole fights on the real engine
 });

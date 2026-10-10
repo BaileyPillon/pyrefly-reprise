@@ -16,6 +16,7 @@
  */
 
 import type { AbilityDef, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
+import { holdsDeathForHook } from './ai/hooks.ts';
 import { idiv } from './math.ts';
 import { type Ctx, has, hasFlag, isAlive, onField, rtOf } from './state.ts';
 import { type HitDraws } from './adapt/draws.ts';
@@ -67,6 +68,21 @@ export interface HitScope {
   rank: number;
   /** The hit record of each target the action has touched, made when its first hit starts. */
   records: Map<CombatantId, ActionRecord>;
+  /**
+   * The targets the hit records have landed on since their scripts last heard of it, with their HP before the
+   * first record, the index of the last one and the running `LastDamageTakenHP` (the HP-class results after the cap
+   * and before the clamp, overkill included, a heal negative): `resolveAbility` runs each one's `onHit` hook once
+   * its hits are in (re-parity).
+   */
+  touched: Map<CombatantId, Touched>;
+}
+
+/** What an action has done to one target so far, for the target's `onHit` (`abilities.ts#finishTouched`). */
+export interface Touched {
+  target: FFXCombatant;
+  hpBefore: number;
+  last: number;
+  lastDamage: number;
 }
 
 /** A new scope's empty record book. */
@@ -116,6 +132,14 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     onFlatTrigger(ctx, target, 'rook', 'rook');
     target = bounced;
   }
+  // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
+  let seen = scope.touched.get(target.id);
+  if (seen) seen.last = scope.hitIndex;
+  else {
+    seen = { target, hpBefore: target.hp, last: scope.hitIndex, lastDamage: 0 };
+    scope.touched.set(target.id, seen);
+  }
+  const holdKo = holdsDeathForHook(target) ? { holdKo: true as const } : {};
 
   const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
   const targetRt = rtOf(ctx, target.id);
@@ -215,6 +239,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
 
     // The HP class.
     if ((report.classes & 1) !== 0 && hpAmount !== 0) {
+      seen.lastDamage += hpAmount; // LastDamageTakenHP: after the cap, before the clamp to the HP that was left
       dealDamage(ctx, target, hpAmount, {
         sourceId: user.id,
         element: scope.primaryElement,
@@ -223,6 +248,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
         ...(report.capped ? { capped: true } : {}),
+        ...holdKo,
       });
       if (hpAmount > 0) {
         // A physical hit WAKES a sleeper [ffx-combat-core §4.2; the shipped
@@ -269,6 +295,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         crit,
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
+        ...holdKo,
       });
     }
   }

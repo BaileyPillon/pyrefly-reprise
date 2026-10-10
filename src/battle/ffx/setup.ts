@@ -35,6 +35,7 @@ import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
 import { applyAeonDuelSetup } from './aeon-duel.ts';
+import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -223,44 +224,6 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
   return c;
 }
 
-/**
- * A possessed aeon fights with **the player's own aeon's stat block**
- * [ffx-bfa-yu-yevon §2.2, verified: 2 sources].
- *
- * The wiki bestiary literally lists a possessed aeon's HP as "Yuna Valefor HP"
- * and its Strength / Magic / Defense / Magic Defense / Agility / Accuracy /
- * Evasion as "Varies"; only Luck is fixed, and it is forced to **1**. So the
- * gauntlet is self-balancing: a player who fed Yuna's aeons faces hard copies
- * of them, a player who ignored them faces trivial ones. That is a live copy,
- * not a table, which is why `data/ffx/enemies/braskas-final-aeon.ts` ships
- * `stats: { hp: 1, ... }` placeholders with a doc comment saying the engine
- * must overwrite them here — and until it did, every one of the five possessed
- * aeons stood up with **1 HP** and died to the first hit, which made five of
- * the chapter's seven links a walkover.
- *
- * Affinities are **not** mirrored (PR-0069): `AeonBuild` carries none to mirror,
- * and `research/ffx-bfa-yu-yevon.md` §2 sources the possessed aeons' stats, moves
- * and Luck 1 but is silent on their affinities, so each keeps the affinities its
- * own data file gives it (`data/ffx/enemies/braskas-final-aeon.ts`). Luck 1 is
- * the one deliberate divergence from the player's copy, per the bestiary.
- *
- * No-ops for every other enemy in the game: the id has to start with
- * `possessed-` *and* name an aeon the party actually owns.
- */
-function mirrorPossessedAeon(c: FFXCombatant, party: FFXPartyBuild): void {
-  if (!c.id.startsWith('possessed-')) return;
-  const aeonId = c.id.slice('possessed-'.length);
-  const build = party.aeons.find((a) => a.id === aeonId);
-  if (!build) return;
-  c.stats = { ...build.stats, luck: 1 };
-  c.hp = build.stats.maxHp;
-  c.mp = build.stats.maxMp;
-  c.alive = c.hp > 0;
-  c.affinities = { ...c.affinities }; // its own data file's affinities, copied (PR-0069: none to mirror)
-  const form = c.enemy?.forms[0];
-  if (form) form.hp = build.stats.maxHp;
-}
-
 /** Build the state and runtime for one battle. */
 export function buildBattle(
   setup: BattleSetup,
@@ -392,6 +355,7 @@ export function buildBattle(
   rebuildCarriedPools(ctx); // a chain's later links arrive with Double HP / Double MP on: their stats are the base maxima
 
   seedInitialCtb(ctx, setup.condition ?? 'normal');
+  applyPossessionOpening(ctx); // the possession fights' and Yu Yevon's opening counters [ai/possession-setup.ts]
   // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.
   applyMacalaniaSetup(ctx);
   applyEvraeSetup(ctx); // NEAR opening, Cid a non-combatant, Wakka's ranged blitzball [ffx-evrae-airship §4.1, §2.1, §4.3]

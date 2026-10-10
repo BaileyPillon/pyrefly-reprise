@@ -17,7 +17,7 @@
  *    everyone else swings, Lulu keeps casting, Yuna makes way.
  *
  * Aeons are not used, as in the bench: the preset's aeon gauges are not full (said in the bench plan). The
- * clock is S-1's default, the 13th turn, our estimate. Nothing here changes a boss number.
+ * clock is the script's own, the 12th turn (re-parity AI lane C, D-31); the tactic reads it from `sin.turnsLeft`. Nothing here changes a boss number.
  */
 
 import type { AnyCombatant, AvailableCommand, BattleEngine, Command, CombatantId } from '../../battle/common/types.ts';

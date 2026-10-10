@@ -1,8 +1,9 @@
 import { logicalArtUrl } from './ArtShipped.ts';
-import type { PoseRegistrationRow, PoseRegistrationTable } from '../data/art/poseRegistrationTypes.ts';
+import type { HeadBox, PoseRegistrationRow, PoseRegistrationTable } from '../data/art/poseRegistrationTypes.ts';
 import { POSE_REGISTRATION_FFX } from '../data/art/poseRegistrationFfx.ts';
 import { POSE_REGISTRATION_FFX2 } from '../data/art/poseRegistrationFfx2.ts';
 import { POSE_REGISTRATION_FOES } from '../data/art/poseRegistrationFoes.ts';
+import { POSE_REGISTRATION_EXP } from '../data/art/poseRegistrationExp.ts';
 
 /**
  * **One figure, one size and one stance in every pose** (release 39 pose registration; both games).
@@ -21,17 +22,20 @@ import { POSE_REGISTRATION_FOES } from '../data/art/poseRegistrationFoes.ts';
  * - `feetRow` is the row of the soles when a weapon's tip is lower than the boots and the alpha baseline would plant the
  *   figure above the floor.
  * - `upright` marks a standing pose that is wider than tall (a lunge): the aspect test would lay it down like a KO.
+ * - `head` (r394, D-510) is where the pose's head is, as fractions of the painting: `HeadLock.ts` holds it to the idle's size on screen
+ *   under the stage camera, so a swap of pose never changes the head by what the camera does to a lying or a reaching painting.
  *
  * Pure: no `three`, no DOM.
  */
 
-export type { PoseRegistrationRow, PoseRegistrationTable };
+export type { HeadBox, PoseRegistrationRow, PoseRegistrationTable };
 
 /** Every measured subject, by the art id (`tidus`, `yuna-gunner`, `valefor`). */
 export const POSE_REGISTRATION: PoseRegistrationTable = {
   ...POSE_REGISTRATION_FFX,
   ...POSE_REGISTRATION_FFX2,
   ...POSE_REGISTRATION_FOES,
+  ...POSE_REGISTRATION_EXP, // the experimental Leblanc chapter's paintings, `exp-leblanc-<subject>` (`tools/exp-art-table.mjs`)
 };
 
 const CHARACTER_POSE = /\/art\/characters\/([^/]+)\/([^/.?#]+)\.png(?:[?#].*)?$/;
@@ -47,6 +51,11 @@ export function poseRegistrationFor(imageUrl: string, table: PoseRegistrationTab
   const m = CHARACTER_POSE.exec(logicalArtUrl(imageUrl));
   if (!m) return undefined;
   return table[m[1]!]?.[m[2]!];
+}
+
+/** The art subject a painting belongs to (`tidus` for `/art/characters/tidus/ko.png`, also as the shipped `.webp`), or null: the head lock only compares planes of one subject. */
+export function subjectOfPainting(imageUrl: string): string | null {
+  return CHARACTER_POSE.exec(logicalArtUrl(imageUrl))?.[1] ?? null;
 }
 
 /** What {@link stanceShift} needs to know about one plane. */

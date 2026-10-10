@@ -2,9 +2,9 @@ import type { Object3D } from 'three';
 import { artManifest } from '../../ArtManifest.ts';
 import { artUrl, loadPainted, prewarmPainted, softSilhouette, tryLoadMeta, type PaintedTexture, type PoseMeta } from '../../PaintedArt.ts';
 import { giveBackColumn, hideColumn, showColumn } from './twirlColumn.ts';
-import { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_WEIGHT, girlOf, keyRescale, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
+import { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_WEIGHT, girlOf, keyRescale, namespacePrefixOf, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
 
-export { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_PARTS, TWIRL_WEIGHT, girlOf, keyRescale, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
+export { GRID_EVENT, HOLD_MAX_MS, LATE_MS, TWIRL_PARTS, TWIRL_WEIGHT, girlOf, keyRescale, namespacePrefixOf, playAt, twirlKeysOf, twirlPlan, twirlStepMs, twirlTimes, type TwirlKey } from './twirlPlan.ts';
 
 /** The pause between two prewarmed keys (ms): each decode is a burst of main-thread work, never two back to back. */
 const WARM_GAP_MS = 250;
@@ -104,6 +104,8 @@ export class TwirlSlot {
    */
   eager = true;
   private readonly girls = new Map<string, Guts>();
+  /** The art-namespace prefix of the figures watched (`exp-leblanc-`, the Leblanc preview; `''` for the base art): the Change submenu's ids are base ones, the keys are looked up in this namespace. */
+  private prefix = '';
   private readonly flashes = new Map<Guts, Guts['flash']>();
   private readonly warmed = new Set<string>();
   private warming: Promise<void> = Promise.resolve();
@@ -144,6 +146,7 @@ export class TwirlSlot {
       }
       flash.call(a, colour, ms, peak, floorCut);
     };
+    this.prefix = namespacePrefixOf(subjectOf(a.poseUrls['idle']));
     this.girls.set(girlOf(subjectOf(a.poseUrls['idle'])), a);
     this.idle(() => (this.eager ? this.prewarmFrom(a) : undefined));
   }
@@ -195,7 +198,7 @@ export class TwirlSlot {
     if (mine) this.prewarmFrom(mine); // the dressphere she leaves and her twirl-mid, first
     const keys: TwirlKey[] = [];
     for (const id of to) {
-      const fig = `${girl.toLowerCase()}-${id}`;
+      const fig = `${this.prefix}${girl.toLowerCase()}-${id}`;
       void this.idleMeta(fig); // the new outfit's scale, ahead of the change (see `prewarmFrom`)
       for (const key of ['twirl-forming', 'twirl-end']) keys.push({ figure: fig, key });
     }
@@ -208,7 +211,8 @@ export class TwirlSlot {
     const from = subjectOf(a.poseUrls['idle']);
     const girl = girlOf(from);
     if (!m || !girl) return false;
-    return Object.keys(m.subjects).some((id) => id.startsWith(`${girl}-`) && twirlKeysOf(m.subjects[id]?.states ?? []).length > 0);
+    const prefix = namespacePrefixOf(from); // her own namespace's figures only
+    return Object.keys(m.subjects).some((id) => id.startsWith(`${prefix}${girl}-`) && twirlKeysOf(m.subjects[id]?.states ?? []).length > 0);
   }
 
   /** A figure's idle sidecar (its pixel scale), fetched once per battle. */

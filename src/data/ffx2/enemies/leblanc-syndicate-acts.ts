@@ -22,6 +22,7 @@ import {
   ormiAct3,
   statsOf,
 } from './leblanc-syndicate.ts';
+import { attachMonsterRecords } from '../monster-records/index.ts';
 
 // ---------------------------------------------------------------------------
 // Acts I and II. §2
@@ -243,5 +244,8 @@ export const leblancSyndicateGroups: readonly EnemyGroupDef[] = [
   leblancLogosRoomGroup,
   leblancLastRoomGroup,
 ];
+
+// The game's own monster rows on these enemies (re-parity W3): ACC, the resist bytes, the steal byte. `../monster-records/index.ts`.
+for (const group of [leblancEntranceGroup, leblancLogosRoomGroup]) attachMonsterRecords(group);
 
 export default leblancSyndicateGroups;

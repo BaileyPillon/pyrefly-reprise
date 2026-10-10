@@ -11,6 +11,11 @@ export function rectKey(r: Rect | null): string {
   return r ? `${r.left},${r.top},${r.right},${r.bottom}` : '-';
 }
 
+/** A measured size (the advisor's `N` chip beside the folded guide's chip, `advisorFolded.ts`) as a key; `-` for none. */
+export function sizeKey(size: { readonly width: number; readonly height: number } | null | undefined): string {
+  return size ? `${size.width}x${size.height}` : '-';
+}
+
 /**
  * *Which* panels and fighters are on the screen, ignoring where they are.
  *
@@ -28,6 +33,7 @@ export function panelPresence(input: AdvisorZoneInput): string {
   const on = (r: Rect | null | undefined): string => (r ? '1' : '0');
   return [
     on(input.guide),
+    on(input.guideChip),
     on(input.sensor),
     on(input.intent),
     on(input.intentChip),

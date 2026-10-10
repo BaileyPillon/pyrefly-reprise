@@ -14,7 +14,8 @@
  * oracle tests could not see (a Regen that lands did not reset its holder's tick counter: KOs with no action resolving went from
  * 0.58 to 3.89 a seed in Chapter II).
  *
- * Runs only with `PYREFLY_MEASURE=1`; `PYREFLY_MEASURE_SEEDS=N` (default 12), `PYREFLY_MEASURE_CHAPTERS=a,b`,
+ * Runs only with `PYREFLY_MEASURE=1`; `PYREFLY_MEASURE_SEEDS` is read as `ffx-parity-measure.test.ts` reads it (a range `1-500` or a
+ * list `1,7,42`, default 1 to 12; a bare number is that one seed, not a count), `PYREFLY_MEASURE_CHAPTERS=a,b`,
  * `PYREFLY_MEASURE_CAUSE_OUT=<file>` writes the JSON. Measure, never tune: nothing here changes a number.
  *
  * Game case: **FFX only**.
@@ -31,7 +32,17 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const OUT = process.env['PYREFLY_MEASURE_CAUSE_OUT'];
-const SEED_COUNT = Math.max(1, Number(process.env['PYREFLY_MEASURE_SEEDS'] ?? '12') || 12);
+/** The same reading as `ffx-parity-measure.test.ts`: a range `1-500`, a list `1,7,42`, or by default 1 to 12. */
+function parseSeeds(spec: string | undefined): number[] {
+  if (!spec) return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const range = /^(\d+)-(\d+)$/.exec(spec);
+  if (range) {
+    const [from, to] = [Number(range[1]), Number(range[2])];
+    return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  }
+  return spec.split(',').map((s) => Number(s.trim())).filter((n) => Number.isFinite(n));
+}
+const SEEDS = parseSeeds(process.env['PYREFLY_MEASURE_SEEDS']);
 const ONLY = (process.env['PYREFLY_MEASURE_CHAPTERS'] ?? '').split(',').filter((s) => s.length > 0);
 const MAX_STEPS = 200_000;
 const MAX_LINKS = 12;
@@ -143,7 +154,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX: the causes behind each chapter (PYREF
     const result: Record<string, ChapterTally> = {};
     for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx' && (ONLY.length === 0 || ONLY.includes(c.id)))) {
       const t: ChapterTally = { seeds: 0, wins: 0, partyKoBy: {}, statusOnParty: {}, statusOnEnemy: {}, uses: {}, hits: {}, misses: {}, crits: {}, damage: {}, turns: {} };
-      for (let seed = 1; seed <= SEED_COUNT; seed += 1) {
+      for (const seed of SEEDS) {
         const outcome = await playChain(chapter, seed, t);
         t.seeds += 1;
         if (outcome === 'victory') t.wins += 1;

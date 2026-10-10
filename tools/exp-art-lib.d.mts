@@ -1,0 +1,12 @@
+export const REPO: string;
+export const NAMESPACE: string;
+export const SCENE_KEY: string;
+export const BASE_SCENE_KEY: string;
+export const RELEASE_ART: string;
+export const EXP_ART: string;
+export const REAL_COPY_IN_MIRROR: readonly string[];
+export function nsId(base: string): string;
+export function baseId(id: string): string;
+export function readJson<T = unknown>(path: string, fallback?: T | null): T | null;
+export function statesOf(artRoot: string, base: string): string[];
+export function chapterSubjects(manifestRoot?: string): Promise<{ girls: string[]; enemies: string[] }>;

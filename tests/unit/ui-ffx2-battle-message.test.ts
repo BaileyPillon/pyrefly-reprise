@@ -127,13 +127,21 @@ describe('FFX2BattleHud draws battle messages (PR-0143)', () => {
     expect(shown).toBe(true);
   });
 
-  it('shows Pilfer Gil\'s amount from the real engine (Leblanc, 1,500 gil)', () => {
+  it('shows Pilfer Gil\'s amount from the real engine (Leblanc, a share of her 1,500 gil)', () => {
     const engine = engineFor(LEBLANC_ACT_III, 3);
     hud.sync(engine.state(), { elapsedMs: 0, bars: [] });
     const leblanc = engine.state().enemyIds.find((id) => engine.state().combatants[id]?.name === 'Leblanc')!;
     for (const e of rikkuDoes(engine, 'x2-thief-pilfer-gil', leblanc)) void hud.onEvent(e);
     expect(nameOf(root)).toBe('Rikku');
-    expect(chipOf(root)).toBe('pilfered 1,500 gil!');
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"): the old engine took the whole figure with no roll (1,500). The game's rule
+    // (`kernel/steal.ts stealGil`, research/re-ffx2-hit-status.md section 5) takes between half and all of the enemy's figure, by a
+    // draw: this seed's draw gives 1,267. The banner must print exactly what the engine put in the party's gil.
+    const taken = engine.state().flags['stolenGil'];
+    expect(typeof taken).toBe('number');
+    expect(taken as number).toBeGreaterThanOrEqual(750);
+    expect(taken as number).toBeLessThanOrEqual(1500);
+    expect(chipOf(root)).toBe(`pilfered ${(taken as number).toLocaleString('en-US')} gil!`);
+    expect(taken).toBe(1267);
   });
 
   it('hides after the hold, and a new line restarts it', () => {

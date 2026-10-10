@@ -3,6 +3,7 @@ import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
+import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { battleStart, beat, camera, fx, music, narrate, say, type SpeakerId, type StoryScript } from '../../story/dsl.ts';
 import {
@@ -13,7 +14,7 @@ import {
 } from '../../story/runner/CutsceneRunner.ts';
 import { DialogueBox } from '../../ui/common/DialogueBox.ts';
 import { ControlsHint, type ControlHintItem } from '../../ui/common/ControlsHint.ts';
-import { romanNumeral } from '../../ui/common/roman.ts';
+import { chapterLabel } from '../../ui/common/roman.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
@@ -180,14 +181,15 @@ export class CutsceneScreen extends Screen {
     if (chapter) {
       this.eyebrowEl = document.createElement('div');
       this.eyebrowEl.className = 'cutscene__eyebrow';
-      this.eyebrowEl.innerHTML = `<span class="cutscene__eyebrow-rule"></span><span class="cutscene__eyebrow-label">CHAPTER ${romanNumeral(
-        chapter.number,
+      this.eyebrowEl.innerHTML = `<span class="cutscene__eyebrow-rule"></span><span class="cutscene__eyebrow-label">${chapterLabel(
+        chapter,
       )} &middot; ${escapeHtml(chapter.location.toUpperCase())}</span>`;
       this.root.appendChild(this.eyebrowEl);
     }
 
     // Backdrop, then the stage (figures, effects, and the box inside its shake layer), then the flash.
-    this.stage = new CutsceneStage(this.root, { wait: (ms) => this.waitGate(ms), skipping: () => this.runner?.skipped === true });
+    const artNamespace = artNamespaceOfScene(sceneKey); // the experimental Leblanc chapter's story figures stand on its own paintings (`data/art/artNamespace.ts`)
+    this.stage = new CutsceneStage(this.root, { wait: (ms) => this.waitGate(ms), skipping: () => this.runner?.skipped === true, ...(artNamespace ? { artNamespace } : {}) });
     this.stage.mount();
     this.stage.prepare(this.opts.script ?? DEMO_CUTSCENE_SCRIPT);
 
@@ -197,6 +199,7 @@ export class CutsceneScreen extends Screen {
       ...(this.opts.nameFor ? { nameFor: this.opts.nameFor } : {}),
       ...(this.opts.portraitFor ? { portraitFor: this.opts.portraitFor } : {}),
       ...(this.opts.roleFor ? { roleFor: this.opts.roleFor } : {}),
+      ...(artNamespace ? { artNamespace } : {}), // the experimental Leblanc chapter's speakers show its own portraits
     });
     this.dialogueBox.mount();
 

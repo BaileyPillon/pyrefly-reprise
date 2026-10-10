@@ -8,7 +8,9 @@ import { cameraAt, centroid, gapPx, partyPx, unionBox, UP, type Box, type Fig, t
  * The mix takes C's **colossus** masters only (JUDGE.md, the options page's "The mix I would take"):
  * Natus, Yojimbo, Braska's Final Aeon, Evrae and Bahamut get a low camera at about half the
  * party's height, aimed up at the boss's chest (at most 9 degrees), so the boss looms, and BOSS SCALE
- * brings it to 1.6 to 2.4 times the party on screen. Vegnagun keeps its approved D-228 rig (field of
+ * brings Evrae and Bahamut to 2.4 and 2.0 times the party on screen (Yojimbo to 1.15, a size he holds: `scaleTarget`, `scaleHeld`; and no boss is re-sized
+ * once a plan has sized it: `scaleLock.ts`). Natus and Braska's Final Aeon are not re-sized (r3942-giants-ffx: their scenes draw them at their
+ * real sizes, see `scaleTarget`). Vegnagun keeps its approved D-228 rig (field of
  * view 40) and Sin its own deck camera (`keepsToday`). Yunalesca is not a colossus here (round 19, PR-0307): her
  * master pulled the camera past the Zanarkand Dome plate's edge at every aspect, so Chapter II keeps today's rig. Every
  * other fight keeps today's rig; all of them,
@@ -45,13 +47,31 @@ export const MULTIPART = /^(vegnagun|sin-|overdrive-sin|seymour-natus-ring|morti
 /**
  * BOSS SCALE: the on-screen height each colossus should reach against the party's mean (VP-1001-13,
  * -43). Null keeps the drawn scale.
+ *
+ * **Seymour Natus and Braska's Final Aeon have no entry any more** (r3942-giants-ffx, FFX only, Chapters X and III; Bailey, 2026-10-08, "all of your recommendations"). Both used to be
+ * grown to 2.2 times the party on a desktop (Natus drawn 2.43 units, grown to about 3.96; the aeon drawn 4.1, grown only where a plan played the colossus master, which at his new size it
+ * does not). Their scenes now draw them at the sizes Bailey picked: Natus at his real 4.455 units (`scenes/highbridge.ts`, `HIGHBRIDGE_REAL_SIZE`) and the aeon at 75 percent of his real
+ * height, 6.919 (`scenes/dreams-end.ts`). With an entry BOSS SCALE would grow a master's Natus a further 1.14 (to about 5.07) and the aeon past Bailey's 75 percent, so the plan could not
+ * keep Chapter X's pinned master or Chapter III's picture (`docs/handoff/r3942-giants-ffx.md`, "What needs the framing engine").
+ *
+ * Yojimbo (FFX Chapter IX only; r392-boss-scale, Bailey 2026-10-06: "About 1.15x the party", held until a real FFX screenshot settles his size): his
+ * drawn height (2.55 against the party's 1.75, `scenes/cavern-stolen-fayth.ts`) is a presentation estimate and he stands 6.7 units further from the
+ * camera, so he read 1.00 times the party's mean at rest and 1.33 when the step 0.25 landed, and the plan chose another step at each menu.
  */
 export function scaleTarget(id: string): number | null {
-  if (/^(seymour-natus|braskas-final-aeon|yojimbo)/.test(id)) return 2.2;
+  if (/^yojimbo/.test(id)) return 1.15;
   if (/^evrae/.test(id)) return 2.4;
   if (/^(bahamut|ffx2-bahamut)/.test(id)) return 2.0;
   return null;
 }
+
+/**
+ * A boss whose BOSS SCALE is a size to hold, not a colossus's loom: it takes its target in every plan, at full step, on today's rig as well as
+ * under the master, from the first frame its figures stand still, and the HUD fit moves the camera for it, never the boss (`scaleLock.ts`). Yojimbo
+ * only: his target is a proportion Bailey picked (1.15 times the party), so there is no step to give up to clear the HUD (a boss grown only 16 percent
+ * crowds the panels little, and a step down would be the 0.96 to 1.33 swing back); the colossi keep their steps.
+ */
+export const scaleHeld = (id: string): boolean => /^yojimbo/.test(id);
 
 export interface MasterIn {
   cls: MasterClass;

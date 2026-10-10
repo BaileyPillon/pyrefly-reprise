@@ -24,6 +24,14 @@
  * the one run and never written to the save (D-100: "kept in memory, not saved
  * to disk").
  *
+ * **A checkpoint that would be hopeless (PR-0407, FFX-2's Trema only).** A retry replays the state the link was
+ * entered on, and Trema's was entered on whatever Paragon left: with one girl standing the engine measured 0 wins in
+ * 200 retries (107 of them lost within two decisions), and each retry opens on that same state. A formation that names
+ * `hopelessRetry` says what a retry does when fewer than `standing` of the party are on their feet in that state:
+ * `'restore'` opens it with the Save Sphere's rule (`resumeSetup`), `'chapter-start'` keeps no checkpoint there
+ * (`checkpointAt`). The first entry is never changed. No other formation names the rule (pinned by
+ * `tests/unit/chapters/trema-hopeless-retry.test.ts`), so every other retry is as it was.
+ *
  * Layering: no `three`, no DOM.
  */
 
@@ -53,7 +61,21 @@ export function checkpointAt(link: number, group: EnemyGroupDef, setup: BattleSe
   // Chapter XIII (FFX-2, TR5 = b): Trema's link is a checkpoint with no Save Sphere. The setup
   // it was entered on already carries Paragon's end state, so a retry replays that state.
   if (group.restoresPartyOnEntry !== true && group.checkpointOnEntry !== true) return null;
+  // PR-0407: a state the girls cannot win from is not worth returning to; 'chapter-start' keeps no checkpoint there.
+  if (hopelessAt(group, setup) && group.hopelessRetry?.answer === 'chapter-start') return null;
   return { group, setup, link };
+}
+
+/** How many of the party stand in the state `setup` opens on: HP above 0 and no KO. A member with no `hp` is at the build's own full value. */
+export function standingIn(setup: BattleSetup): number {
+  const members = setup.party.members as ReadonlyArray<{ hp?: number; statuses?: Record<string, unknown> }>;
+  return members.filter((m) => (m.hp ?? 1) > 0 && m.statuses?.['ko'] === undefined).length;
+}
+
+/** True when `group` names a hopeless retry (PR-0407, `EnemyGroupDef.hopelessRetry`) and fewer than its `standing` stand in `setup`. */
+export function hopelessAt(group: EnemyGroupDef, setup: BattleSetup): boolean {
+  const rule = group.hopelessRetry;
+  return rule !== undefined && standingIn(setup) < rule.standing;
 }
 
 /**
@@ -64,7 +86,12 @@ export function checkpointAt(link: number, group: EnemyGroupDef, setup: BattleSe
  * so the same losing fight does not replay verbatim.
  */
 export function resumeSetup(checkpoint: ChainCheckpoint, seed: number): BattleSetup {
-  return { ...checkpoint.setup, seed: seed + checkpoint.link - 1 };
+  const setup = { ...checkpoint.setup, seed: seed + checkpoint.link - 1 };
+  // PR-0407: from a state the girls cannot win from, a retry opens with the Save Sphere's rule (the engine's
+  // `restoreAtSaveSphere` reads `restoresPartyOnEntry` off the formation it is given). The checkpoint keeps the
+  // carried state, so every further retry is judged on it again; a state with enough on their feet replays as entered.
+  if (checkpoint.group.hopelessRetry?.answer !== 'restore' || !hopelessAt(checkpoint.group, setup)) return setup;
+  return { ...setup, enemies: { ...setup.enemies, restoresPartyOnEntry: true } };
 }
 
 /** What the flow carries from one attempt of a chapter to the next. */

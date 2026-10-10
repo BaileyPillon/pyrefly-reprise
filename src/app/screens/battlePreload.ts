@@ -40,10 +40,11 @@
  */
 
 import type { Chapter } from '../../data/encounters.ts';
-import { artIdFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
+import { artCandidatesFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
 import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
 import { pixelUrlFor } from '../../engine/ArtTier.ts';
+import { artNamespaceOfScene, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
 import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
 import { plateIdFor } from './pause/plates.ts';
@@ -152,8 +153,8 @@ export function plateUrlFor(sceneKey: string): string {
 }
 
 /** The pause close-up the pause's `srcset` will pick for this window (`PortraitStage.mountPlate`). */
-export function pausePlateUrl(memberId: string, game: Chapter['game']): string {
-  const url1x = artUrl(`art/pause/${plateIdFor(memberId, game)}.png`);
+export function pausePlateUrl(memberId: string, game: Chapter['game'], namespace?: string): string {
+  const url1x = artUrl(`art/pause/${plateIdFor(memberId, game, namespace)}.png`);
   if (typeof window === 'undefined') return url1x;
   return pickHeroBackgroundUrl(url1x, pause2xUrlFor(url1x), window.innerWidth, window.innerHeight, window.devicePixelRatio);
 }
@@ -217,6 +218,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     // The opening state first (A-3: the card over the ink names its boss and party from it).
     const engine = await createEngine(chapter.game, setupForChapter(chapter, seed), { automated: true });
     const state = engine.state();
+    const ns = artNamespaceOfScene(chapter.sceneKey); // the scene's art namespace (the experimental Leblanc chapter): the same ids the stage will resolve
     const figures = stagedIds(state)
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => c !== undefined && !c.flags.hidden && !c.removed);
@@ -227,8 +229,8 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     if (boss) {
       cardInfo.set(chapter.id, {
         bossName: boss.name,
-        artKey: boss.spriteKey || boss.id,
-        party: party.map((c) => ({ id: c.id, artId: c.spriteKey || c.id, name: c.name })),
+        artKey: inArtNamespace(ns, boss.spriteKey || boss.id),
+        party: party.map((c) => ({ id: c.id, artId: inArtNamespace(ns, c.spriteKey || c.id), name: c.name })),
       });
     }
     // Phases 1 and 2: the pre-battle scene, its opening frame first.
@@ -245,14 +247,14 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     // (`BattleStartBanner.memberFaceHtml`), decoded so no chip shows its letter (PR-0176).
     const faces = [
       ...[...new Set(party.flatMap((c) => [c.id, c.spriteKey || c.id]))].map((id) => portraitUrl(id)),
-      ...party.filter((c) => c.spriteKey && c.spriteKey !== c.id).map((c) => artUrl(`art/characters/${c.spriteKey}/idle.png`)),
+      ...party.filter((c) => c.spriteKey && c.spriteKey !== c.id).map((c) => artUrl(`art/characters/${inArtNamespace(ns, c.spriteKey)}/idle.png`)),
     ];
     const facesWarm = warm(faces);
     const later: string[] = [];
     for (const c of figures) {
       if (stopped()) return report();
       const kind = c.side === 'enemy' ? 'enemy' : 'party';
-      const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
+      const art = await resolveArt(artCandidatesFor(c, ns), kind);
       // Only what the manifest says is on disk: a figure with no painting
       // (Cid on the airship, an FFX-2 dressphere with no portrait) is drawn by
       // its stand-in, and asking for its files was a 404 each (round 11).
@@ -291,7 +293,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     }
 
     // Phase 5: the party's pause close-ups (first Esc, then tab-next).
-    await warm(party.map((c) => pausePlateUrl(c.id, chapter.game)));
+    await warm(party.map((c) => pausePlateUrl(c.id, chapter.game, ns)));
   } catch (e) {
     console.warn(`[preload] ${chapter.id}: stopped early`, e);
   } finally {

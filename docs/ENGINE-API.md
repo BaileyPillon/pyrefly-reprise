@@ -330,6 +330,27 @@ breathe and sway — a body on the ground does not shift its weight — widens t
 contact shadow to the body's footprint, and pulls `headPoint` / `centerPoint`
 down to the top of the actual plane, so damage numerals land over the body.
 
+**Party stature (r3941-heights, FFX only).** The battle stage hands each FFX hero his own `worldHeight`: the scene's
+shared `partyHeight` times his ratio to Tidus (`src/data/ffx/party-stature.ts`, source
+`research/ffx-character-heights.md`; the stage's half is `src/engine/PartyStature.ts`, `figureHeight`). The factor is
+the *actor's*, not a pose's, and the plane scales about the feet (the anchor row sits on the ground point at any scale),
+so the per-pose registration, the KO and hurt scales and the head lock see one pixel scale and nothing per pose
+changes. Everything the actor derives from `worldHeight` (`headPoint`, `centerPoint`, `height`, the selection pool, the
+hop, shake, lean and crouch) follows it; the contact shadow and the turn ring the stage authors at a fixed radius are
+scaled by the same factor. FFX-2, aeons, fiends and a height a scene or an arrival director names are not touched.
+`?stature=off` plays the old equal heights for same-build A/B captures. Kimahri's applied ratio is 1.304, not his datamined
+1.211 (his idle is cropped at his spear tip; `research/ffx-character-heights.md` sections 3 and 5a).
+
+**Whatever places the camera or a boss reads the party at the shared height** (Bailey, 2026-10-07: "Keep camera and bosses as
+before"). The stage records the factor it drew a hero by on the actor (`userData[STATURE_KEY]`, set only when it is not 1;
+`src/engine/PartyStature.ts`), and `src/engine/SharedHeight.ts` reads it back: `backToShared` scales a quad or a point about
+the actor's ground point by `1 / k`. The readers that decide where the camera or a fiend stands use it: CHAPTER FRAMING and BOSS
+SCALE (`fx/mix/planFig.ts`: `planFigOf` is `figOf` with the hero brought back; `Framing.visible`, `Staging.planScale`), the phone's
+A-12 refit (`FitSubject.shared`, set by `ShotRules.fitPhone`), and the formation relaxation (`PaintedStage.projectRect(id, cam,
+shared)`, read through `screenRects(true)` by `relaxFormation`). Everything that shows the figure (the drawing, the HUD's anchors,
+the held shots, A-11's pushes, the x-ray fade) reads the real one. A figure with no key reads as 1: nothing changes for FFX-2,
+FF7, an aeon, a fiend or `?stature=off`.
+
 ### Options
 
 | Option | Meaning |
@@ -380,6 +401,7 @@ down to the top of the actual plane, so damage numerals land over the body.
 | `setBrightness(m)`, `setTint(c)`, `setRimLight(c, s, dir?)`, `setBounceLight(c, s)` | Drive the look from the scene's light rig. |
 | `headPoint(out?)`, `centerPoint(out?)`, `height` | Anchors for VFX and damage numerals. Both follow the pose: over a prone body they aim at the plane's top, not at where the head used to be. |
 | `isProne`, `poseSize` | Whether the pose on screen is a downed painting, and its `[width, height]` in world units. |
+| `holdHead(view)`, `headLock` | D-510 (r394): **the engine keeps the head steady.** The battle stage calls `holdHead` once a frame, after `update`, with the camera's view-projection (`HeadLockStage.holdHeads`); every plane that shows, and whose painting has a registered head box (`PoseRegistration.ts` `head`), is scaled about the feet so that head is as big on screen as the idle's is under the same camera (`HeadLock.ts`), within 0.9 to 1.1 of the table's scale. An actor never handed a view (a cutscene, a portrait) is never touched, and neither is a pose with no head box. `headLock` counts what it did and every time the band bit (`headLock.snapshot()`); `?headlock=off` switches it off for A/B captures. |
 | `subject` | What `PaintedArt.load` found, or `null`. |
 | `shadow`, `tweens`, `dispose()` | |
 

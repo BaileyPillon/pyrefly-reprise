@@ -47,5 +47,27 @@
   "ready": {
    "gateLift": "Bailey 2026-10-05 19:27 EDT, on the driver's recommendation: \"you can continue please\" (lift the D-298 stature floor for exactly Lulu critical and Rikku Berserker ready)"
   }
+ },
+ "yuna": {
+  "victory": {
+   "allow": {
+    "scale": 1.0255,
+    "why": "r392 camera allowance, from the heads the continuity harness measures on screen (round 23 on live 39.1 and the r392 runs on the same table): her victory head sits about a third of a figure lower than her idle's head, so the stage camera's perspective moves it against the idle's. Idle to victory reads x0.948 to x0.953 where the camera converges strongly (Macalania, the close victory camera of Seymour and Anima: the plane's top edge 17 to 23 percent longer than its bottom, five runs), x0.985 to x0.996 in the gentle cameras (I, III, IX, X, XII: 1 to 5 percent), and about x1.00 in a flat or rising one (Chapter XVII's Sin core, 0.99 to 1.004: Tidus, Wakka and Lulu read x0.997 to x1.006 there; Yuna's victory was not seen in it, her value is the fitted line's, x0.9987 at 1.00 and x1.0016 at 0.99). 1.0255 (table 0.784 to 0.804) centres the window: Macalania x0.972 to 0.977, the gentle cameras x1.011 to 1.021, a rising camera x1.027, about a quarter of a percent inside the 3 percent tolerance at both ends; the factor may not fall under 1.0235 (Macalania) or pass 1.0284 (the rising camera)"
+   }
+  },
+  "critical": {
+   "allow": {
+    "scale": 1.0103,
+    "why": "r392 recentring: her critical head reads x0.983 to x0.998 of her idle's in the seven chapters that show it (I, III, VII, IX, X, XII, XVII), all on the small side, so a swap between her critical and her victory (x1.0255 above) would read up to x1.028 bigger (critical to victory x0.9996 to x1.0027 before this change); 1.0103 (table 0.967 to 0.977) centres the critical against the idle (x0.993 to x1.008) and keeps critical to victory at x1.015 to x1.018"
+   }
+  }
+ },
+ "rikku": {
+  "victory": {
+   "allow": {
+    "scale": 1.015,
+    "why": "r392 camera allowance, from the harness's on-screen heads (round 23 and the r392 runs): her victory head sits well below her idle's (about a tenth of a figure), so the close victory camera at Macalania draws it x0.967 to x0.970 of the idle's (the only FFX chapter that showed her victory in those runs); the far cameras draw a lower head 2 to 4 percent bigger (Yuna's and Auron's victory heads at Macalania against the other chapters), so 1.015 brings Macalania to x0.981 to x0.984 and a far camera to about x1.01 to x1.02, 3 percent allowed both ways. Seen in one chapter: the far-camera end is inferred from Yuna's and Auron's"
+   }
+  }
  }
 }

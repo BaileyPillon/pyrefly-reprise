@@ -29,7 +29,8 @@ afterEach(() => { Object.assign(OVERSOUL_ESTIMATES, DEFAULTS); });
 describe('the Oversoul block and rows (§12.2)', () => {
   it('SinirothX: HP 210,000, Str / Mag 244, Def 88, MDef 89, Agi 244, Luck 16, Eva 0; the normal form\'s immunities', () => {
     expect(paragonOversoul.stats).toEqual({
-      hp: 210000, mp: 9999, maxHp: 210000, maxMp: 9999, str: 244, mag: 244, def: 88, mdef: 89, agi: 244, eva: 0, luck: 16, acc: 0,
+      // Re-parity W3 (FFX-2 only; reason "game-code parity"): acc is 95, the game's monster row (SinirothX lists none, so the data carried 0).
+      hp: 210000, mp: 9999, maxHp: 210000, maxMp: 9999, str: 244, mag: 244, def: 88, mdef: 89, agi: 244, eva: 0, luck: 16, acc: 95,
     });
     expect(paragonOversoul.immunities).toEqual(paragon.immunities);
     expect(paragonOversoul.rewards).toMatchObject({ exp: 13000, ap: 2, gil: 8000 });
@@ -46,11 +47,25 @@ describe('the Oversoul block and rows (§12.2)', () => {
     });
   });
 
-  it('its physicals roll at the flat estimate whatever the girl\'s Luck, and cause Itchy; its magic never misses', () => {
+  it('its physicals roll the game\'s accuracy formula 2 (its Accuracy and Luck against the girl\'s Luck and Evasion), and cause Itchy; its magic never misses', () => {
     const b = fresh();
     const attack = ab('paragon-os-attack');
     expect(attack.canMiss).not.toBe(false); // hard rule 5: it rolls
-    for (const girl of ['yuna', 'rikku', 'paine']) expect(hitPercent(b.unit('paragon'), b.unit(girl), attack)).toBe(50);
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"). It used to roll the flat estimate (OVERSOUL_ESTIMATES.physicalHitPercent, 50 %)
+    // whatever the girl's stats; the game's row (0x41da) carries accuracy formula 2, so the race is `LCK_a + ACC_a - LCK_t - EVA_t` against
+    // a draw of 0..100. Against the Rabite's Foot builds of this board (Luck 111 or 112) that is below zero: it never lands, which is
+    // the "luck dodges it" the build was made for. The flat estimate is now unread (listed for Bailey in the W3 handoff).
+    const p = b.unit('paragon');
+    const race = (luck: number, eva: number): number => (100 * Math.max(0, Math.min(101, p.stats.luck + p.stats.acc - luck - eva))) / 101;
+    for (const girl of ['yuna', 'rikku', 'paine']) {
+      const g = b.unit(girl);
+      expect(hitPercent(p, g, attack)).toBeCloseTo(race(g.stats.luck, g.stats.eva), 6);
+      expect(hitPercent(p, g, attack)).toBe(0);
+    }
+    const bare = b.unit('yuna');
+    bare.stats.luck = 11; // a girl without the Rabite's Foot
+    expect(hitPercent(p, bare, attack)).toBeCloseTo(race(11, bare.stats.eva), 6);
+    expect(hitPercent(p, bare, attack)).toBeGreaterThan(90);
     expect(attack.statusEffects).toEqual([{ status: 'itchy', chance: 255, duration: 0 }]);
     for (const id of ['paragon-os-judgement', 'paragon-os-holy', 'paragon-os-firaga', 'paragon-os-ultima', 'paragon-os-demi']) {
       expect(ab(id).canMiss, id).toBe(false);
@@ -65,7 +80,13 @@ describe('the Oversoul block and rows (§12.2)', () => {
     for (const g of girls) { g.stats.maxHp = 80000; g.hp = 80000; } // survive all 14, to count them
     resolveAbility(b.resolveCtx(), b.unit('paragon'), ab('paragon-os-final-impact'), []);
     const hits = b.events.filter((e) => e.type === 'damage' && e.sourceId === 'paragon');
-    expect(hits).toHaveLength(14);
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"): fourteen hits are planned (the first event says so), but the game plans the
+    // targets before any damage and a girl who falls mid-action drops her remaining hits (they are not re-aimed), and the hits of one
+    // action stack the target's chain (x1.45, x1.5, ... on the same girl), so 80,000 HP does not always outlast the spread. Every hit
+    // that lands is still at least 1/8 of her max HP.
+    expect(Number(hits[0]!['hitCount'])).toBe(14);
+    expect(hits.length).toBeGreaterThanOrEqual(10);
+    expect(hits.length).toBeLessThanOrEqual(14);
     // 80,000 / 8 = 10,000 before the randomiser (240 to 271 / 256): past the 9,999 cap, which it breaks.
     for (const h of hits) expect(Number(h.amount)).toBeGreaterThanOrEqual(9375);
     expect(hits.some((h) => Number(h.amount) > 9999)).toBe(true);

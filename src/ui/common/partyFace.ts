@@ -21,6 +21,7 @@
  * not the fallback glyph underneath them.
  */
 
+import { inArtNamespace } from '../../data/art/artNamespace.ts';
 import { faceImgHtml, faceLayersHtml, type FaceOptions } from './portrait.ts';
 
 export interface PartyFaceMember {
@@ -33,6 +34,12 @@ export interface PartyFaceMember {
    * Leave undefined for FFX — it has no dressphere and one portrait per id.
    */
   dressphere?: string;
+  /**
+   * The art namespace of the chapter she is shown for (`data/art/artNamespace.ts`; FFX-2's experimental Leblanc chapter): every
+   * layer is looked up inside it (`exp-leblanc-yuna-gunner`), so a base portrait of the old art is never stacked over the new
+   * painting's head. Absent: the base art, exactly as always.
+   */
+  artNamespace?: string;
 }
 
 /**
@@ -54,6 +61,17 @@ export interface PartyFaceMember {
  */
 export function partyFaceHtml(m: PartyFaceMember, opts: FaceOptions = {}): string {
   if (!m.dressphere) return faceImgHtml(m.id, m.name, opts);
-  const art = `${m.id}-${m.dressphere}`;
-  return faceLayersHtml([art, `${m.id}-x2`, m.id], art, m.name, opts);
+  const { art, portraits } = faceLadder(m.id, m.dressphere, m.artNamespace);
+  return faceLayersHtml(portraits, art, m.name, opts);
+}
+
+/**
+ * A girl's idle painting (`art`) and the portrait ids her face tile climbs above it, most specific first: `<girl>-<dressphere>`, `<girl>-x2`, `<girl>`.
+ * Inside an art namespace (`data/art/artNamespace.ts`; the experimental Leblanc chapter) there are NO portraits: the head is the crop of the
+ * namespaced idle painting alone (`face-crops.json`), so a portrait of the old art is never stacked over the new painting, and a first frame before
+ * the art manifest has loaded never asks for a portrait file that does not exist.
+ */
+export function faceLadder(id: string, dressphere: string, artNamespace?: string): { art: string; portraits: string[] } {
+  const art = inArtNamespace(artNamespace, `${id}-${dressphere}`);
+  return { art, portraits: artNamespace ? [] : [art, `${id}-x2`, id] };
 }

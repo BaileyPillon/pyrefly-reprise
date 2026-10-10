@@ -62,6 +62,13 @@ wide sizes; a scene test pins the party right of the stack at 16:9.
 - **B18's own cue** (O-6 sketches on `docs/audio/audition.html`).
 - **The listing** (B8): Bailey confirms the ring order and the reset cycle first; the listing step is
   the Trema precedent (`5c8706d6`).
+  **Update 2026-10-07 (`r3941-omnis`, FFX only): the ring half of B8 is settled.** The game's own battle AI
+  script steps a disc Fire, Ice, Water, Thunder (a spell forward, a blow back); `DISC_RING`, the painted disc
+  (re-seated in code from the unchanged masters) and the advisor's preview all follow it, and
+  `tests/unit/chapters/omnis-ring.test.ts` pins the three together (`research/ffx-seymour-omnis.md` O-7). The
+  reset cycle (O-11) is still GameFAQs' order, so the strip still says "Colour order: our estimate"; the game's
+  script cycles Ice, Water, Thunder, Fire, and that waits for the boss-rules batch.
+  **Update 2026-10-09 (release candidate 1 folded in, FFX only):** the reset cycle is the script's now (Ice, Water, Thunder, Fire; `research/re-ffx-ai-seymour.md` D-24), so only the strip's "Colour order: our estimate" words are left over: they are Bailey's wording and stay until he says. `docs/handoff/re-parity-rc1.md` section 8.
 
 ## Proof
 

@@ -3,6 +3,7 @@ import type { InputSnapshot } from '../../app/Input.ts';
 import type { ChoiceStep, NarrateStep, SayStep, SpeakerId } from '../../story/dsl.ts';
 import type { DialoguePort } from '../../story/runner/CutsceneRunner.ts';
 import { dialogueObjectPosition, portraitImgHtml } from './portrait.ts';
+import { portraitIdIn } from './portraitNamespace.ts';
 import { FARPLANE_VOICE_ROLE, isFarplaneVoice, speakerRole } from './speaker-roles.ts';
 import { escapeHtml } from './html.ts';
 import { autoAdvanceHoldMs, computeRevealCount, isFullyRevealed, typingDurationMs } from './typewriter.ts';
@@ -28,6 +29,12 @@ export interface DialogueBoxOptions {
   nameFor?: (who: SpeakerId) => string;
   /** Portrait key for a speaker id. Defaults to the id itself. */
   portraitFor?: (who: SpeakerId) => string | undefined;
+  /**
+   * The art namespace of the scene the box is in (the experimental Leblanc chapter, `data/art/artNamespace.ts`): a speaker the namespace has repainted
+   * shows its own portrait (`portraitNamespace.ts`), whichever way the portrait id was chosen (a step's own `portrait`, `portraitFor`, the speaker id).
+   * Absent: every id is read from the base art, as it always was.
+   */
+  artNamespace?: string;
   /**
    * The tracked tag beside the name (`Tidus [GUARDIAN]`). Defaults to
    * {@link speakerRole}; return `undefined` for a bare name.
@@ -311,7 +318,8 @@ export class DialogueBox implements DialoguePort {
     this.roleEl.textContent = role ?? '';
     this.roleEl.hidden = !role;
 
-    const portraitId = opts.narrate || opts.who === 'none' ? undefined : (opts.portrait ?? this.opts.portraitFor?.(opts.who) ?? opts.who);
+    const chosenId = opts.narrate || opts.who === 'none' ? undefined : (opts.portrait ?? this.opts.portraitFor?.(opts.who) ?? opts.who);
+    const portraitId = portraitIdIn(this.opts.artNamespace, chosenId);
     // `object-position` is per-speaker (PR-0056: Jecht's face sits nowhere near
     // where the others' do), so it travels on the `<img>` itself rather than as
     // a shared CSS rule — `object-fit: cover` lives in dialogue-box.css since

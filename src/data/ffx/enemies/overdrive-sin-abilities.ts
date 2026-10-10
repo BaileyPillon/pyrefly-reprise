@@ -50,7 +50,7 @@ export const drawnToSin: AbilityDef = {
   damageType: 'other',
   element: ['none'],
   targeting: 'self',
-  hits: 1,
+  hits: 0, // the game's record has no hit record (re-parity AI lane C): the pull raises no hit event on Sin
   statusEffects: [],
   removesStatuses: [],
   flags: [],
@@ -137,7 +137,7 @@ export const gazeAeon: AbilityDef = {
  * The row alone only KOs whoever it hits. **The Game Over is the script** and it
  * ignores Auto-Life and an aeon on the field (§3.4, `[verified: 4 sources]`):
  * `ai/overdrive-sin-rules.ts` raises the engine's scripted-Game-Over flag on
- * the same turn. Which of Sin's turns it comes on is **S-1** (12th or 13th).
+ * the same turn. It is Sin's 12th turn (S-1, settled by the script: re-parity AI lane C, D-31).
  */
 export const gigaGraviton: AbilityDef = {
   id: 'overdrive-sin-giga-graviton',

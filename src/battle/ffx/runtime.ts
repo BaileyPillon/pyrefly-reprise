@@ -47,35 +47,14 @@ export interface ActorRuntime {
   /** Successful steals against this enemy, halving the base chance each time. */
   stealCount: number;
   /**
-   * Cap on every **single hit** of HP damage this actor takes, applied inside
-   * `hp.ts#dealDamage` before {@link hpFloor}.
-   *
-   * Macalania Seymour is the case this exists for: in the HD Remaster — this
-   * project's declared baseline — he "cannot be killed before he summons", and
-   * the build enforces it by capping every hit on him at **5,999** until Anima
-   * has been summoned [ffx-seymour-anima-macalania §5.2, verified: 2 sources].
-   * On PS2 the same situation with a 6,000+ second Doublecast **softlocks the
-   * game**; that is a bug, not a feature, and reproducing it would be an own
-   * goal.
-   *
-   * Engine-internal on purpose — `ActorRuntime` is not a contract file and
-   * nothing outside `src/battle/ffx/**` sees it, so this is a capability, not
-   * a schema change. The encounter's AI script sets it at setup and deletes it
-   * when the summon fires.
+   * **The game's Guard status on an enemy** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; FFX only): a
+   * single-target *physical* party action aimed at a monster is redirected to **an ally that holds Guard and can
+   * act** (the one with the most HP if several do) [`targeting.ts#coverOf`, the exe's cover routine 0x78eef0].
+   * Magic is never covered. A script sets it (Macalania's Seymour marks a Guado Guardian when a physical command
+   * names him) and the holder's own script clears it when the holder is next hit. Kept off the status list on
+   * purpose: nothing about it is shown to the player, and the damage chain never reads it.
    */
-  damageCapPerHit?: number;
-  /** Lowest HP any damage may take this actor to. Cleared with {@link damageCapPerHit}. */
-  hpFloor?: number;
-  /**
-   * **Enemy Cover**: a single-target *physical* party action aimed at this id
-   * lands on **this** actor instead [ffx-seymour-anima-macalania §2.3,
-   * verified: 2 sources]. Magic is never covered.
-   *
-   * The mirror image of the party-side Guard/Sentinel interception
-   * `targeting.ts#redirectTarget` has always had. Cleared implicitly when the
-   * coverer dies, because the redirect only considers living enemies.
-   */
-  coversAllyId?: CombatantId;
+  guardMark?: boolean;
   /**
    * Overdrive gauge points this **enemy** gains every time a player-side action
    * targets it, whether or not the action deals damage.
@@ -110,8 +89,7 @@ export interface ActorRuntime {
    * {@link gaugePerTargeting} answers "was I targeted" with a gauge; this with a
    * number a script compares against its own last reading. Evrae's Swooping
    * Scythe fires on *being targeted* at range [§4.5], which includes a miss and
-   * a status-only command, so neither the damage nor the status set expresses
-   * it. Bumped by `onTargeted`, once per action.
+   * a status-only command, so neither damage nor status expresses it. Bumped by `onTargeted`, once per action.
    */
   countsPartyTargetings?: boolean;
   partyTargetings?: number;
@@ -199,4 +177,13 @@ export interface FFXRuntime {
    * mid-battle rebuilds it and a death never does.
    */
   letterTags?: { rosterSize: number; tags: ReadonlyMap<CombatantId, string> };
+  /**
+   * True from the end of an action's own events to the end of its turn, while the free actions that follow it (the boss
+   * scripts' queued reactions, the older boss counters, the equipment reactions) resolve. A script that keeps the old
+   * rule "a counter never triggers another counter" (Yunalesca and Yu Yevon, `ai/hit-script.ts#queueCounter`) asks for
+   * nothing while it is set; `engine-end.ts#afterAction` sets and clears it. Absent until first needed.
+   */
+  inReaction?: boolean;
+  /** `state.nextSeq` when Yunalesca last changed form: a Doublecast whose first cast did it cancels the second (row Y6). */
+  formDiedAtSeq?: number;
 }

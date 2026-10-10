@@ -8,6 +8,11 @@
  * `buildBattle` (exact thresholds and formulas), and whole fights driven by
  * submitted commands (the order, the charge, the whiff, the counts, Negation).
  *
+ * Since re-parity AI lane C the rules are the game's scripts
+ * (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 5), proved line by
+ * line in `tests/unit/re-parity-ai-sin-fins.test.ts`; this file is the
+ * whole-fight layer on top of them.
+ *
  * **Game case: FFX only** [AGENTS.md rule 14].
  */
 
@@ -119,11 +124,11 @@ describe('setup: both Fin links open FAR with Cid at the helm (§4, S-8)', () =>
     }
   });
 
-  it('every estimate the Fins carry is named (S-8, S-12, S-19, S-20, S-25, S-27, aeon reach, the seam line-up)', () => {
+  // Re-parity (AI lane C, D-19 to D-22): the script settled S-8, S-12, S-19, S-25, S-27, the Negation slots and the Right Fin's
+  // latch, so those left the list; what remains is what the script cannot say.
+  it('every estimate the Fins still carry is named (the seam line-up, S-20, aeon reach, C-7)', () => {
     const ids = SIN_FINS_ASSUMPTIONS.map((a) => a.id);
-    for (const id of ['seam-lineup', 'S-8', 'S-12', 'S-19', 'S-20', 'S-25', 'S-27', 'aeon-reach-far', 'negation-slots', 'C-7']) {
-      expect(ids, id).toContain(id);
-    }
+    expect(ids).toEqual(['seam-lineup', 'S-20', 'aeon-reach-far', 'C-7']);
   });
 });
 
@@ -329,15 +334,22 @@ describe('the Right Fin (§5.2)', () => {
     expect(at2(ctx, 'far', 5)).toBe('sin-fin-smack');
   });
 
-  it('under 16,250 HP it latches: always attacks at NEAR, FAR from 3, and a Cura above the line does not undo it', () => {
+  // Re-parity (D-21): the script sets the phase flag inside its `onHit`, strictly below 16,250, so it is the hit event that latches
+  // it, not the Fin's turn; a status-only action reaches the hook too.
+  it('under 16,250 HP (strict), read at a hit event, it latches: always attacks at NEAR, FAR from 3, and a Cura above the line does not undo it', () => {
     const ctx = ctxOn('sin-right-fin', 6);
     const fin = who(ctx, 'right-fin');
+    const touch = (): void => { executeCommand(ctx, who(ctx, 'tidus'), { kind: 'ability', id: 'slow', targets: ['right-fin'] }, true); };
     fin.hp = 16_250;
-    expect(at2(ctx, 'near', 0)).toBe('sin-motionless');
+    touch();
     expect(ctx.state.flags['sin.fin.latched']).toBe(false);
+    expect(at2(ctx, 'near', 0)).toBe('sin-motionless');
     fin.hp = 16_249;
-    expect(at2(ctx, 'near', 0)).toBe('sin-fin-ram');
+    expect(at2(ctx, 'near', 0)).toBe('sin-motionless'); // the turn does not look at his HP
+    expect(ctx.state.flags['sin.fin.latched']).toBe(false);
+    touch();
     expect(ctx.state.flags['sin.fin.latched']).toBe(true);
+    expect(at2(ctx, 'near', 0)).toBe('sin-fin-ram');
     executeCommand(ctx, who(ctx, 'yuna'), { kind: 'ability', id: 'cura', targets: ['right-fin'] }, true);
     expect(fin.hp).toBeGreaterThan(16_250);
     for (let i = 0; i < 20; i++) expect(at2(ctx, 'near', 0)).toBe('sin-fin-ram');
@@ -346,7 +358,9 @@ describe('the Right Fin (§5.2)', () => {
   });
 });
 
-describe('Negation (§5.1.3, S-12: the wiki formula as named tunables)', () => {
+// Re-parity (D-19, D-20): the chance is the script's own score read off the three party slots (S-12 is settled), and the roll is
+// one draw of GetRandomValue() mod 16 (Left) or mod 12 (Right) against max(0, score - 3).
+describe('Negation (§5.1.3, S-12: the script\'s score)', () => {
   const clean = (ctx: Ctx): void => {
     for (const id of ['tidus', 'yuna', 'auron', 'left-fin', 'right-fin']) {
       const c = ctx.state.combatants[id];
@@ -354,25 +368,25 @@ describe('Negation (§5.1.3, S-12: the wiki formula as named tunables)', () => {
     }
   };
 
-  it('the NEAR chance is max(0, c - 3) / 16 (Left) or / 12 (Right); FAR is 80 % with Mental Break, else 0; the off switch', () => {
+  it('the NEAR chance is max(0, score - 3) / 16 (Left) or its exact mod-12 share (Right); FAR is 52,436 / 65,536 with Mental Break, else 0; the off switch', () => {
     const ctx = ctxOn('sin-left-fin', 1);
     clean(ctx);
     ctx.state.flags['airship.range'] = 'near';
-    expect(finNegationChance(ctx, 'left-fin')).toBe(0); // c = 2
+    expect(finNegationChance(ctx, 'left-fin')).toBe(0); // score 0: no buff on anyone
     for (const id of ['tidus', 'yuna', 'auron']) ctx.state.combatants[id]!.statuses['haste'] = inst('haste');
-    expect(finNegationChance(ctx, 'left-fin')).toBe(2 / 16); // 2 + 3
-    ctx.state.combatants['auron']!.statuses['protect'] = inst('protect'); // rightmost +1
-    ctx.state.combatants['tidus']!.statuses['protect'] = inst('protect'); // leftmost +2
+    expect(finNegationChance(ctx, 'left-fin')).toBe(2 / 16); // Haste on all three slots is worth 5
+    ctx.state.combatants['auron']!.statuses['protect'] = inst('protect'); // slot 3 counts twice
+    ctx.state.combatants['tidus']!.statuses['protect'] = inst('protect'); // slot 1 once
     expect(finNegationChance(ctx, 'left-fin')).toBe(5 / 16);
-    ctx.state.combatants['left-fin']!.statuses['armor-break'] = inst('armor-break'); // first Break +2
+    ctx.state.combatants['left-fin']!.statuses['armor-break'] = inst('armor-break'); // +2
     expect(finNegationChance(ctx, 'left-fin')).toBe(7 / 16);
-    ctx.state.combatants['left-fin']!.statuses['mental-break'] = inst('mental-break'); // second +1
+    ctx.state.combatants['left-fin']!.statuses['mental-break'] = inst('mental-break'); // +1
     expect(finNegationChance(ctx, 'left-fin')).toBe(8 / 16);
     ctx.state.flags[SIN_NEGATION_OFF] = true;
     expect(finNegationChance(ctx, 'left-fin')).toBe(0);
     delete ctx.state.flags[SIN_NEGATION_OFF];
     ctx.state.flags['airship.range'] = 'far';
-    expect(finNegationChance(ctx, 'left-fin')).toBe(0.8);
+    expect(finNegationChance(ctx, 'left-fin')).toBe(52_436 / 65_536); // mod 100 under 80 over the 65,536 draws
     delete ctx.state.combatants['left-fin']!.statuses['mental-break'];
     expect(finNegationChance(ctx, 'left-fin')).toBe(0);
 
@@ -380,7 +394,8 @@ describe('Negation (§5.1.3, S-12: the wiki formula as named tunables)', () => {
     clean(right);
     right.state.flags['airship.range'] = 'near';
     for (const id of ['tidus', 'yuna', 'auron']) right.state.combatants[id]!.statuses['shell'] = inst('shell');
-    expect(finNegationChance(right, 'right-fin')).toBe(2 / 12);
+    right.state.combatants['auron']!.statuses['protect'] = inst('protect'); // shell x3 + slot 3's Protect (2) = 5
+    expect(finNegationChance(right, 'right-fin')).toBe(10_924 / 65_536); // residues 0 and 1 of mod 12 occur 5,462 times each
   });
 
   it('NEAR, 400 targeted actions with Haste on three: fires at 2/16 within binomial noise, as a counter', () => {
@@ -408,9 +423,15 @@ describe('Negation (§5.1.3, S-12: the wiki formula as named tunables)', () => {
 
   it('NEAR Negation strips both sides, records what it took, and leaves Auto-Life, Doom and a permanent status', () => {
     const e = engineOn('sin-left-fin', 12, 'near');
+    // Re-parity W2 (FFX only): a Poisoned enemy must carry the Poison byte of its monster record (the tick is an error without it), and the
+    // Fin's data has none, being Poison-proof in play. The Fin here carries Poison because the test forces every status on, and since it no
+    // longer carries Sleep (below) it takes its turn and so a tick; this test is about what Negation takes, so the byte is scaffolding.
+    who(e, 'left-fin').enemy!.poisonTickPercent = 10;
     const party: StatusId[] = [...NEGATION_REMOVES];
-    // Petrify would shatter a struck monster and Threaten stops its counter: the Fin carries the other 22.
-    const onFin = party.filter((s) => s !== 'petrify' && s !== 'threaten');
+    // Petrify would shatter a struck monster, and Threaten, Sleep, Confuse and Berserk stop its counter (the game's
+    // isCounterattackAllowed, re-parity D-18): the Fin carries the other 19.
+    const blocks: StatusId[] = ['petrify', 'threaten', 'sleep', 'confuse', 'berserk'];
+    const onFin = party.filter((s) => !blocks.includes(s));
     // Re-parity W2 (FFX only): Petrify stands alone in the game, and the game's cleanse works on a Petrified record only for Petrify itself
     // (research/re-ffx-ctb-status.md section 12, correction 4), so a member who carried both would keep the Zombie the cleanse reaches
     // first (status 1 comes before Petrify's 2). Petrify goes on Auron, the other 23 on Tidus.

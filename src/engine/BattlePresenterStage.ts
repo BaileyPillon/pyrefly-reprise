@@ -10,7 +10,10 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artIdFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, worldHeightFor } from './BattlePresenterArt.ts';
+import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
+import { backToShared, statureOf } from './SharedHeight.ts';
+import { inArtNamespace } from '../data/art/artNamespace.ts';
 import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
@@ -31,6 +34,7 @@ import { bodyFacingOption, figureLightOf, poseScalingOf, stageCamera } from './S
 import { departureKindOf, departurePoses } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
 import { layProneFigures } from './ProneLay.ts';
+import { holdHeads } from './HeadLockStage.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { cutRigsOf } from './motion/CutRig.ts';
@@ -127,6 +131,7 @@ export class PaintedStage implements BattleStage {
   private readonly actors = new Map<CombatantId, StagedActor>();
   private readonly hits: HitEffects;
   private readonly scratch = new Vector3();
+  private readonly ground = new Vector3();
   private readonly paintScratch = new Vector3();
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [
     new Vector3(),
@@ -310,12 +315,15 @@ export class PaintedStage implements BattleStage {
     const kind: 'party' | 'enemy' = c.side === 'enemy' ? 'enemy' : 'party';
     // The mapped id first, then the raw ones, so a figure whose art has not
     // been renamed yet still shows its painting instead of a silhouette.
-    const art = await resolveArt([artIdFor(c), c.spriteKey, c.id], kind);
+    // The scene's art namespace (`data/art/artNamespace.ts`, the experimental Leblanc chapter): every candidate is read from the namespaced set; none: the base art, as always.
+    const art = await resolveArt(artCandidatesFor(c, this.opts.slots.artNamespace), kind);
     const { artId } = art;
     const poses = departurePoses(c.id, art.poses); // D-031 Evrae
     const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
-    const own = this.opts.slots.figureHeights?.[c.id]; // a scene's per-combatant height; ring and shadow follow it
-    const k = own !== undefined && !worldHeight ? own / worldHeightFor(c, heights) : 1;
+    const own = sceneOwnHeight(this.opts.slots, c.id, artId); // a scene's per-combatant height, else the height of the form this painting is (`SceneStaging.formHeights`); ring and shadow follow it
+    // r3941-heights (FFX only): a hero stands at his own height next to Tidus's (`PartyStature.ts`); the shadow and the ring follow it.
+    const size = figureHeight({ shared: worldHeightFor(c, heights), own, given: worldHeight, stature: partyStature(this.lastState?.game, c.side, c.id) });
+    const k = size.ringScale;
 
     const anchor = anchorFor(this.opts.slots.partAnchors, c.id);
     const actor = await PaintedActor.create({
@@ -325,7 +333,7 @@ export class PaintedStage implements BattleStage {
       // turns them (FF7, `sideFacing`). Mirroring is a separate question, answered by each pose's sidecar;
       // art painted the way its body faces is drawn exactly as painted.
       ...bodyFacingOption(this.opts.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
-      worldHeight: anchor ? SA.anchoredHeight(anchor) : (worldHeight ?? own ?? worldHeightFor(c, heights)),
+      worldHeight: anchor ? SA.anchoredHeight(anchor) : size.height,
       crossfadeMs: this.opts.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
       ...(this.opts.slots.poseShiftPx?.[artId] ? { poseShiftPx: this.opts.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
       poses,
@@ -353,6 +361,8 @@ export class PaintedStage implements BattleStage {
         opacity: kind === 'party' ? 0.85 : 0.7,
       },
     });
+    const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, worldHeightFor(c, heights), worldHeight); // a figure at a scene's form height is planned at the shared one too
+    if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
     const spots = kind === 'party' ? this.opts.slots.party : this.opts.slots.enemy;
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
@@ -449,14 +459,23 @@ export class PaintedStage implements BattleStage {
    * makes the 25%-coverage rule in the task mean what it says.
    *
    * Null for a combatant that is not staged, or while the canvas has no size.
+   *
+   * `shared` (r3941-heights): a hero the stage drew at his own height is read at the party's shared one (`SharedHeight.ts`), the figure the
+   * formation relaxation has always settled the fiends against, so a taller or shorter party does not walk a fiend (and with it the phone's
+   * camera fit and the colossi) off the place it stood. The default is the figure as drawn, which is what everything that shows it reads.
    */
-  projectRect(id: CombatantId, cam: PerspectiveCamera = this.opts.camera): DepthRect | null {
+  projectRect(id: CombatantId, cam: PerspectiveCamera = this.opts.camera, shared = false): DepthRect | null {
     const staged = this.actors.get(id);
     if (!staged) return null;
     const rect = this.opts.canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return null;
 
     const corners = staged.anchor ? this.anchoredQuad(staged) : staged.actor.contentQuad(this.quad);
+    const k = shared && !staged.anchor ? statureOf(staged.actor) : 1;
+    if (k !== 1) {
+      staged.actor.getWorldPosition(this.ground);
+      for (const c of corners) backToShared(c, this.ground, k);
+    }
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
@@ -476,16 +495,17 @@ export class PaintedStage implements BattleStage {
     // yawed 30 degrees differ by most of a unit, and a tie-break on one of them
     // flips which of two neighbours counts as "in front".
     staged.actor.centerPoint(this.scratch);
+    if (k !== 1) backToShared(this.scratch, this.ground, k); // the centre of the figure at the shared height too: who stands in front of whom is read as it always was
     const depth = this.scratch.distanceTo(cam.position);
 
     return { x: minX, y: minY, w: maxX - minX, h: maxY - minY, depth };
   }
 
-  /** Every staged combatant's screen rectangle, keyed by id. */
-  screenRects(): Map<CombatantId, DepthRect> {
+  /** Every staged combatant's screen rectangle, keyed by id (`shared`: the heroes at the party's shared height, see {@link projectRect}). */
+  screenRects(shared = false): Map<CombatantId, DepthRect> {
     const out = new Map<CombatantId, DepthRect>();
     for (const id of this.actors.keys()) {
-      const r = this.projectRect(id);
+      const r = this.projectRect(id, this.opts.camera, shared);
       if (r) out.set(id, r);
     }
     return out;
@@ -607,7 +627,7 @@ export class PaintedStage implements BattleStage {
     if (this.actors.size < 2) return true;
     const field = {
       actors: relaxActorsOf(this.actors),
-      rects: () => this.screenRects(),
+      rects: () => this.screenRects(true), // the fiends settle against the party at the shared height, as they always did (r3941-heights)
       panels: this.panels,
       camera: this.opts.camera,
       canvasW: rect.width,
@@ -617,13 +637,36 @@ export class PaintedStage implements BattleStage {
   }
 
   /** Swap a combatant's painting in place — form change, spherechange. */
-  async setArt(id: CombatantId, artId: string): Promise<void> {
+  async setArt(id: CombatantId, baseArtId: string): Promise<void> {
+    const artId = inArtNamespace(this.opts.slots.artNamespace, baseArtId); // a spherechange stays inside the scene's art namespace
     const staged = this.actors.get(id);
     if (!staged || staged.artId === artId) return;
+    const before = staged.artId;
     staged.artId = artId;
     const poses = await resolvePoseMap(artId, staged.kind);
     staged.painted = paintedPoses(artId, poses, characterUrl);
+    this.fitFormHeight(id, staged, before, artId); // before the poses load, so their scale is solved at the new height
     await staged.actor.loadPoses(poses, 'idle');
+  }
+
+  /**
+   * The figure's height for the painting that has just replaced another (`SceneStaging.formHeights`): Yunalesca's first form stands at her wing tips and her second and third at the shared
+   * boss height. Only a scene that names a height for the painting going out or the one coming in is touched; every other swap (a spherechange, a form whose scene names none) is left exactly as
+   * it was. The numbers are `add`'s own (`figureHeight`, the ring and the shadow at the same radii for the same `ringScale`), so a form that goes back to the shared height gets today's bit for bit.
+   */
+  private fitFormHeight(id: CombatantId, staged: StagedActor, fromArt: string, toArt: string): void {
+    const forms = this.opts.slots.formHeights;
+    const c = this.lastState?.combatants[id];
+    if (!forms || !c || staged.anchor || (forms[fromArt] === undefined && forms[toArt] === undefined)) return;
+    const heights = { party: this.opts.slots.partyHeight ?? 1.82, enemy: this.opts.slots.enemyHeight ?? 4.1 };
+    const size = figureHeight({ shared: worldHeightFor(c, heights), own: sceneOwnHeight(this.opts.slots, id, toArt), given: undefined, stature: partyStature(this.lastState?.game, c.side, id) });
+    const k = size.ringScale;
+    const party = staged.kind === 'party';
+    staged.actor.setWorldHeight(size.height, { shadow: (party ? 0.62 : 1.5) * k, ring: (party ? 0.78 : 1.7) * k });
+    // and the framing keeps reading her at the shared height while she stands at the form's: the key is set for her first painting and gone for the others, as `add` writes it
+    const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, id, toArt, worldHeightFor(c, heights));
+    if (planned !== 1) staged.actor.userData[STATURE_KEY] = planned;
+    else delete staged.actor.userData[STATURE_KEY];
   }
 
   async addCombatant(
@@ -832,6 +875,9 @@ export class PaintedStage implements BattleStage {
       this.opts.battleCamera,
       pinned,
     );
+    // D-510: every shown plane's head held to the idle's on screen, under this frame's camera (HeadLockStage.ts). After `layProneFigures`, which slides a body along
+    // the floor on the very frame it lies down: the lock reads the plane where it will be drawn.
+    holdHeads(figures, this.opts.camera);
     const paced = dt * paceRate('action'); // the pacing option (`pace.ts`): sparks and spell effects keep step with the actors
     this.hits.update(paced, this.opts.camera);
     this.spellFx.update(paced);

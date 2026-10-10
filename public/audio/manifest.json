@@ -51,12 +51,13 @@
     },
     "boss-seymour": {
       "file": "music/boss-seymour.mp3",
-      "loopStart": 7.272721,
-      "loopEnd": 98.661791,
-      "duration": 101.6618,
-      "bytes": 3319277,
+      "loopStart": 7.298889,
+      "loopEnd": 87.309955,
+      "duration": 90.31,
+      "bytes": 2678893,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -3.4,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-seymour-macalania": {
       "file": "music/boss-seymour-macalania.mp3",
@@ -116,12 +117,13 @@
     },
     "chapter-select": {
       "file": "music/chapter-select.mp3",
-      "loopStart": 4.285714,
-      "loopEnd": 74.77263,
-      "duration": 77.7726,
-      "bytes": 2313322,
+      "loopStart": 6.698798,
+      "loopEnd": 73.366553,
+      "duration": 76.3666,
+      "bytes": 2106911,
       "lufs": -16.0,
-      "truePeakDb": -1.4
+      "truePeakDb": -1.7,
+      "source": "elevenlabs-music_v2_5"
     },
     "ending-ffx": {
       "file": "music/ending-ffx.mp3",
@@ -217,12 +219,13 @@
     },
     "title": {
       "file": "music/title.mp3",
-      "loopStart": 8.275873,
-      "loopEnd": 94.826893,
-      "duration": 97.8269,
-      "bytes": 2888145,
+      "loopStart": 33.305805,
+      "loopEnd": 82.960975,
+      "duration": 85.961,
+      "bytes": 2331315,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -2.4,
+      "source": "elevenlabs-music_v2_5"
     },
     "victory-ffx": {
       "file": "music/victory-ffx.mp3",

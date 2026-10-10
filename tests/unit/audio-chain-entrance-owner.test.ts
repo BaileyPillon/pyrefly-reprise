@@ -87,9 +87,9 @@ class MusicOnlyRunner implements CutsceneRunnerPort {
   setAutoAdvance(): void {}
 }
 
-async function timeline(chapter: Chapter): Promise<{ log: Entry[]; links: number; outcome: string }> {
+async function timeline(chapter: Chapter, seed = 1): Promise<{ log: Entry[]; links: number; outcome: string }> {
   await registerBattleContent();
-  const setup = setupForChapter(chapter, 1);
+  const setup = setupForChapter(chapter, seed);
   const engine: BattleEngine =
     chapter.game === 'ffx'
       ? new FFXEngine({ autoResolveMinigames: true })
@@ -117,7 +117,7 @@ async function timeline(chapter: Chapter): Promise<{ log: Entry[]; links: number
     stage: { stage: () => Promise.resolve() },
     group: chapter.enemyGroupRef,
     setup,
-    seed: 1,
+    seed,
     findGroup: findEnemyGroup,
     audio,
     onLink: ({ links, group }) => {
@@ -176,7 +176,9 @@ describe('PR-0129: the data says who owns each chain entrance', () => {
 
 describe('PR-0129: the chain and the entrance scenes, played through', () => {
   it("Chapter 3 (FFX): no boss-jecht after 'valefor-enters'; boss-yu-yevon starts once and carries to the end", async () => {
-    const { log, links } = await timeline(byId('braskas-final-aeon'));
+    // Seed 7, not 1 (re-parity AI lane B, 2026-10-09): Braska's Final Aeon runs the game's own script and the shipped line
+    // loses seed 1's first link, so the chain never reaches possessed Valefor on it (37 of the first 40 seeds win).
+    const { log, links } = await timeline(byId('braskas-final-aeon'), 7);
     const valefor = indexOfLink(log, 'possessed-valefor');
     const scene = indexOfScript(log, 'valefor-enters');
     const yu = indexOfLink(log, 'yu-yevon');

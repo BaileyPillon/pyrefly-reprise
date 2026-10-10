@@ -49,11 +49,10 @@
  *    (`adapt/status-odds.ts`, the kernel's `statusLanding`) [ffx-combat-core
  *    §4.1]. Two panels reading two derivations of one number is the worst
  *    outcome available, so there is one.
- *  * **FFX-2** mirrors `src/battle/ffx2/resolve.ts#applyRiders` — resistance
- *    255 blocks, a chance byte of 254 or more always lands, and everything else
- *    is `statusChanceLinear(userLevel, chance, targetLevel, resist)`
- *    [ffx2-combat-core §2.6a]. The engine's own exported helper is called, not
- *    a copy of the arithmetic.
+ *  * **FFX-2** mirrors the status kernels the engine rolls (`resolve-strike.ts`, re-parity W3):
+ *    a chance byte of 255 always lands, then a resist of 255 never, then 254 always, and
+ *    everything else is the roll `0..100 < chance + 5 * (levelGap) - resist`. The engine's own
+ *    exported helper (`statusProbability`) is called, not a copy of the arithmetic.
  *
  * Pure and DOM-free. Nothing in `src/battle/**` changes.
  */
@@ -64,12 +63,13 @@ import type {
   BattleState,
   Command,
   CombatantId,
+  FFX2Combatant,
   FFXCombatant,
   StatusId,
 } from '../../battle/common/types.ts';
 import type { SimOutcome } from '../../battle/ffx/simulate.ts';
 import { statusOdds } from '../../battle/ffx/estimate.ts';
-import { statusChanceLinear } from '../../battle/ffx2/statuses.ts';
+import { rolledChance, rollsStatus, statusProbability } from '../../battle/ffx2/adapt/preview.ts';
 import { STAT_STACK_MAX } from '../../battle/ffx2/constants.ts';
 
 /** FFX's ceiling for the six stacking buffs: the stage-buff step (`kernel/status-extra.ts#applyStageBuffs`) clamps a stack to five. */
@@ -89,7 +89,7 @@ export interface StatusChance {
 }
 
 /**
- * The odds one FFX-2 application lands, mirroring `resolve.ts#applyRiders`.
+ * The odds one FFX-2 application lands, mirroring the status kernels' landing rule.
  *
  * FFX-2 only. Kept here rather than in `estimate.ts` because X-2 has no
  * `estimate.ts` and adding one would be a change to `src/battle/**`, which this
@@ -99,16 +99,22 @@ function ffx2StatusPercent(
   user: AnyCombatant,
   target: AnyCombatant,
   app: { status: StatusId; chance: number },
+  def: AbilityDef,
 ): { percent: number; blocked: boolean } {
   const resist = (target.immunities as Record<string, number | undefined>)[app.status] ?? 0;
-  if (resist >= 255) return { percent: 0, blocked: true };
-  if (app.chance >= 254) return { percent: 100, blocked: false };
-  const percent = statusChanceLinear(
-    (user as { level?: number }).level ?? 1,
-    app.chance,
-    (target as { level?: number }).level ?? 1,
-    resist,
-  );
+  // The chance byte the engine rolls is the game's command row's, shared between a pick-one command's rows (Russian
+  // Roulette rolls the one row it picked); a status the row does not carry is never rolled.
+  const rolled = rolledChance(def, user as FFX2Combatant, app.status);
+  const chance = rolled?.chance ?? (rollsStatus(def, user as FFX2Combatant, app.status) ? app.chance : 0);
+  const percent =
+    100 *
+    (rolled?.share ?? 1) *
+    statusProbability(
+      chance,
+      resist,
+      (user as { level?: number }).level ?? 1,
+      (target as { level?: number }).level ?? 1,
+    );
   return { percent, blocked: percent <= 0 };
 }
 
@@ -238,7 +244,7 @@ export function statusChances(
       }
       const read =
         state.game === 'ffx2'
-          ? ffx2StatusPercent(user, target, app)
+          ? ffx2StatusPercent(user, target, app, def)
           : (() => {
               const o = statusOdds(target as FFXCombatant, app, def, user as FFXCombatant);
               return { percent: o.percent, blocked: o.blocked };

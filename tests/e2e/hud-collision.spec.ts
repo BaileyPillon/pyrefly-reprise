@@ -198,6 +198,16 @@ async function openTargetCursor(page: Page): Promise<boolean> {
   return false;
 }
 
+/** Chapters I and III start their fights with the guide folded and the preference still on (`SceneStaging.guideFolded`; r3943-int, FFX only). */
+const FOLDED_START: readonly string[] = ['seymour-flux', 'braskas-final-aeon'];
+
+/** The guide's sheet is up on the screen (the preference can be on while it is folded or squeezed). */
+const sheetUp = (page: Page): Promise<boolean> =>
+  page.evaluate(() => {
+    const el = document.querySelector<HTMLElement>('.sgd__panel');
+    return !!el && !el.hidden && el.getBoundingClientRect().width > 0;
+  });
+
 for (const vp of VIEWPORTS) {
   test.describe(`CHK-008 HUD against actors at ${vp.width}x${vp.height}`, () => {
     test.use({ viewport: vp });
@@ -211,7 +221,12 @@ for (const vp of VIEWPORTS) {
 
         // 1 all panels open (the coaching was marked seen; N, E and G switch on whatever is off).
         const opened = await setOptionalPanels(page, true);
-        states.push({ ...(await measure(page, '1 all panels open')), note: `advisor ${opened.n}, intent ${opened.e}, guide ${opened.g}` });
+        // The guide folded at the start of these two fights has its preference on, so the line above pressed nothing: "the guide open" is the sheet up, and the player's first G opens it.
+        if (FOLDED_START.includes(ch.id) && !(await sheetUp(page))) {
+          await page.keyboard.press('g');
+          await settle(page, 8);
+        }
+        states.push({ ...(await measure(page, '1 all panels open')), note: `advisor ${opened.n}, intent ${opened.e}, guide ${opened.g}${FOLDED_START.includes(ch.id) ? `, sheet up ${await sheetUp(page)}` : ''}` });
         // 2 and 3: a submenu and its cancel.
         if (await selectRow(page, /^item/i)) {
           await page.keyboard.press('Enter');

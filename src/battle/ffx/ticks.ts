@@ -18,8 +18,8 @@ import { doomTurn, endOfTurn, startOfTurn } from './adapt/ticks.ts';
 import { hasAuto } from './equipment.ts';
 import { onTurnStartGauge } from './overdrive.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
-import { runOmnisTurnEnd } from './ai/seymour-omnis-rules.ts';
 import { runSinLivenessHooks } from './ai/sin-counters.ts';
+import { runPostPoison, runPreTurn } from './ai/hooks.ts';
 
 /** Potions Auto-Potion reaches for, weakest first [ffx-combat-core §9]. */
 const AUTO_POTION_ORDER: readonly ItemId[] = ['potion', 'hi-potion', 'x-potion'];
@@ -64,7 +64,7 @@ const REMEDY_CURES: readonly string[] = [
 
 /**
  * Everything that happens as a combatant's turn opens, in the game's order (`pp_BtlTurnStart`, VA 0x00792a90): the start-of-turn
- * tick, then Doom, then the actor's own gauge hooks.
+ * tick, then the scripts' pre-turn hooks, then Doom, then the actor's own gauge hooks.
  *
  * The tick (VA 0x007af4f0): Regen pays every holder on the field `(its own tick counter * maxHP >> 8) + 100` (a Zombie takes it
  * as damage), the actor's Regen counter counts down, Defend, Guard, Sentinel, Shield and Boost end on the actor unless equipment
@@ -73,6 +73,11 @@ const REMEDY_CURES: readonly string[] = [
  */
 export function onTurnStart(ctx: Ctx, actor: FFXCombatant): void {
   startOfTurn(ctx, actor);
+  // The scripts' preTurn hooks run at every turn start, after the start-of-turn tick and before Doom and the action request: the formation's
+  // for everybody, then the actor's own script (re-parity, FFX only; `ai/hooks.ts`). Inert with none registered. That is the game's order:
+  // its turn start calls the tick (VA 0x007af4f0), then requests the pre-turn entry of the scripts (VA 0x00792a90), then Doom's tick
+  // (VA 0x00799cd0). The release-candidate line ran the hooks ahead of Regen's payout, before the tick was the game's.
+  runPreTurn(ctx, actor);
   refreshCriticalStatus(ctx, actor);
 
   // Doom counts down on the victim's own turn, even while asleep or skipping.
@@ -88,10 +93,11 @@ export function onTurnStart(ctx: Ctx, actor: FFXCombatant): void {
  * `resultsApplied` is false for a passed turn (a sleeper's), which takes no Poison damage (VA 0x007b20e0).
  */
 export function onTurnEnd(ctx: Ctx, actor: FFXCombatant, resultsApplied = true): void {
-  // Chapter XII: count the hits on Seymour Omnis and turn the discs this turn
-  // landed on (a no-op in every other battle) [ai/seymour-omnis-rules.ts].
-  runOmnisTurnEnd(ctx);
-  endOfTurn(ctx, actor, resultsApplied);
+  // (Nothing of Omnis's runs at a turn's end any more: his discs turn from the script's `onHit` and his affinity is
+  // refreshed by the formation's pre-turn hook, `ai/seymour-omnis.ts`.)
+  // The monster's postPoison hook runs right after its own Poison tick (Macalania's Seymour only): `endOfTurn` says
+  // whether the tick damaged the actor.
+  if (endOfTurn(ctx, actor, resultsApplied)) runPostPoison(ctx, actor);
   // Sin link 3 (FFX): once more after the counters and the tick, so a Genais KO inside the counter phase (Zombie +
   // its own Cura) frees the Core before the next menu, not an action later (CHECK 2 finding 2). A no-op elsewhere.
   runSinLivenessHooks(ctx);

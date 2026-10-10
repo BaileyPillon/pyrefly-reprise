@@ -22,8 +22,8 @@
  *
  * ## Conflicts recorded rather than merged (research §10)
  *
- * - **S-1** (open) — Giga-Graviton on the 12th or 13th turn: the AI's switch,
- *   default 13.
+ * - **S-1** (settled, re-parity AI lane C, D-31) — Giga-Graviton on Sin's 12th turn: the AI's
+ *   switch (`sin.gigaGravitonTurn`), default 12.
  * - **S-6** — Threaten: the byte reads 0 (landable); wiki, Gestahl and SinirothX
  *   say Immune. Default **immune** (`threatenChance: 0` means immune in this
  *   contract), the Evrae C-4 shape.

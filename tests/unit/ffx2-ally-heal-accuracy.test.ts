@@ -106,7 +106,10 @@ function selfHealRun(party: FFX2PartyBuild, groupId: string, seed: number): Heal
     const log = engine.state().log as BattleEvent[];
     for (; seen < log.length; seen++) {
       const e = log[seen] as BattleEvent & { sourceId?: string; targetId?: string };
-      if (e.type === 'miss' && ids.has(e.sourceId ?? '') && ids.has(e.targetId ?? '')) {
+      // A `wrong-state` miss (a Phoenix Down on a living girl, which this driver reaches once its Potions run out in a long
+      // fight) is not a hit roll, and PR-0075 is about the roll (`advisor-guard.ts` skips it for the same reason). Re-parity W3:
+      // the new draw order lets seed 30 of chapter 4 run that long.
+      if (e.type === 'miss' && (e as { reason?: string }).reason !== 'wrong-state' && ids.has(e.sourceId ?? '') && ids.has(e.targetId ?? '')) {
         out.friendlyMisses.push(`seed ${seed} ${e.sourceId}->${e.targetId}`);
       }
     }

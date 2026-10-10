@@ -22,13 +22,14 @@
 import '../../ui/common/party-prep.css';
 import type { GameId } from '../../battle/common/types.ts';
 import type { Chapter } from '../../data/encounters.ts';
+import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { audio } from '../../audio/index.ts';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import type { FlowScreen } from './BattleScreenFlow.ts';
 import { createStage, type Stage } from '../../ui/common/LetterboxStage.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
-import { romanNumeral } from '../../ui/common/roman.ts';
+import { chapterNumeral } from '../../ui/common/roman.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { rosterHtml, slotsHtml, statSheetHtml } from './PartyPrepContent.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
@@ -165,7 +166,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
         <span class="prep__eyebrow-rule"></span>
         <span class="prep__eyebrow-label">PARTY PREP</span>
       </div>
-      <div class="prep__where">${romanNumeral(this.chapter.number)} &middot; ${escapeHtml(
+      <div class="prep__where">${chapterNumeral(this.chapter)} &middot; ${escapeHtml(
         this.chapter.title.toUpperCase(),
       )} &mdash; ${escapeHtml(this.chapter.location.toUpperCase())}</div>
 
@@ -181,7 +182,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
       <div class="prep__start" data-action="prep:begin">
         <span><span class="prep__start-tri"></span>START BATTLE</span>
       </div>
-      <div class="prep__slots">${slotsHtml(this.chapter.buildRef)}</div>
+      <div class="prep__slots">${slotsHtml(this.chapter.buildRef, artNamespaceOfScene(this.chapter.sceneKey))}</div>
     `;
 
     this.body = this.stage.stage.querySelector('[data-role="body"]');
@@ -241,7 +242,7 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
   private renderRoster(): void {
     const col = this.root.querySelector('[data-role="roster"]');
     if (!col) return;
-    col.innerHTML = rosterHtml(this.chapter.buildRef, this.member);
+    col.innerHTML = rosterHtml(this.chapter.buildRef, this.member, artNamespaceOfScene(this.chapter.sceneKey));
   }
 
   private renderBody(): void {

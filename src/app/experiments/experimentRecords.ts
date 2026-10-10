@@ -123,3 +123,20 @@ export function addExperimentPlayTime(id: string, ms: number): void {
     r.playTimeMs += ms;
   });
 }
+
+/**
+ * What the chapters' own flow asks of the save (`BattleScreenFlow.playChapter`: `recordAttempt`, the previous best, `recordClear`),
+ * answered from the experiments' store. An experiment that plays through the chapters' flow (the FFX-2 Leblanc preview,
+ * `data/chapter-exp-leblanc.ts`) is handed this in place of the save, so it never writes `pyrefly-reprise:save:v1`.
+ */
+export interface FlowProgress {
+  recordAttempt(id: string): void;
+  chapter(id: string): { bestTimeMs: number | null };
+  recordClear(id: string, timeMs: number, turns: number): void;
+}
+
+export const experimentProgress: FlowProgress = {
+  recordAttempt: (id) => recordExperimentAttempt(id),
+  chapter: (id) => ({ bestTimeMs: experimentRecord(id).bestTimeMs }),
+  recordClear: (id, timeMs) => recordExperimentClear(id, timeMs),
+};

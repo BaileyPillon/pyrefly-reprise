@@ -30,6 +30,8 @@ import {
 import './seymour-flux.ts';
 import './yunalesca.ts';
 import './braskas-final-aeon.ts';
+import './yu-pagoda.ts';
+import './possessed-aeons.ts';
 import './yu-yevon.ts';
 import './seymour-anima-macalania.ts';
 import './evrae.ts';
@@ -40,12 +42,11 @@ import './isaaru.ts';
 import './sin-scripts.ts';
 
 export * from './types.ts';
-export { seymourDelayCounter, seymourThresholdCounters, consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
+export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
 export { yunalescaCounter, yunalescaEntryAction } from './yunalesca.ts';
 export { bfaTalkCharges, consumeBfaTalk } from './braskas-final-aeon.ts';
-export { yuYevonCounter, YU_YEVON_CURAGA_THRESHOLD } from './yu-yevon.ts';
+export { YU_YEVON_CURAGA_THRESHOLD } from './yu-yevon.ts';
 export {
-  MACALANIA_ASSUMPTIONS,
   MAC_ACT,
   MAC_ANIMA_SUMMONED,
   MAC_ELEMENT_STEP,
@@ -53,7 +54,6 @@ export {
   applyMacalaniaSetup,
   consumeMacalaniaTalk,
   macalaniaAct,
-  macalaniaGuardianCounter,
   macalaniaNextElement,
   macalaniaTalkAvailable,
   runMacalaniaPhaseHooks,
@@ -86,9 +86,10 @@ function triggerHost(ctx: Ctx): FFXCombatant | undefined {
  * Talk is one menu row with two entirely different, entirely encounter-owned
  * effects, so the dispatch is on the boss standing opposite:
  *
- * - **Braska's Final Aeon** — zeroes his Overdrive gauge and costs him his next
- *   turn; **two charges, battle-wide**, offered a deliberately inert third time
- *   [ffx-bfa-yu-yevon §1.6, §7.3].
+ * - **Braska's Final Aeon** — sets a flag his next turn answers: the pending Overdrive
+ *   is cancelled, the gauge cleared and the turn lost (nothing happens to the gauge
+ *   when Talk is used); **two charges, battle-wide**, offered a deliberately inert
+ *   third time [ffx-bfa-yu-yevon §1.6, §7.3; re-ffx-ai-yunalesca-bfa §3.6].
  * - **Seymour Flux** — Kimahri +10 Strength, Yuna +10 Magic Defense, **once per
  *   character** [ffx-seymour-flux §4.7].
  *
@@ -165,8 +166,8 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
       // the whole action produced nothing but `action-start` and `action-end` —
       // a row that works and looks broken.
       ctx.emit({ type: 'message', text: `${user.name} speaks`, kind: 'story' });
-      // Braska's Final Aeon keeps his gauge on the actor; the script's own
-      // mirror is zeroed inside `consumeBfaTalk` [ffx-bfa-yu-yevon §1.6].
+      // A boss that keeps its gauge on the actor (not Braska's Final Aeon, whose gauge is on the flag bag and is
+      // cleared when his next turn starts, `ai/braskas-final-aeon.ts`).
       const boss = triggerHost(ctx);
       if (boss?.overdrive && boss.overdrive.gauge > 0) {
         const from = boss.overdrive.gauge;

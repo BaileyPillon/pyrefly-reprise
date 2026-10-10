@@ -7,6 +7,8 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import { ParticleField, ParticlePresets } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import { ScenePalettes } from '../engine/ScenePalettes.ts';
+import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
+import { giantPhoneHeights } from './giant-stage.ts';
 import { RoadPhoneCamera, roadOnPhone, type RoadLinkIds } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
@@ -107,6 +109,10 @@ export const ROAD_LINK_IDS: RoadLinkIds = {
  * spot, a little deeper for her size. Every number is staging, solved at
  * 1600x900 against the FFX-2 HUD (the boss gauges top left, the command list
  * from 0.745 of the width, the party plates bottom right).
+ *
+ * **r3942-stage, Bailey 2026-10-08 ("Yes, original spacing"): these are the places release 39.4.1 stood them, again.** Wave 1 had brought Shiva and the Sisters nearer the
+ * girls at their real heights (Shiva 1.25, -2.2; Sandy 0.75, -2.6; Cindy 1.5, -3.4; Mindy 2.9, -2.0); he picked the old spacing with the real sizes, so only the heights
+ * below are new (what they read on screen from these spots, against 39.4.1, is in `docs/handoff/r3942-stage.md`).
  */
 export const ROAD_SPOTS: Readonly<Record<string, [number, number, number]>> = {
   [ROAD_IDS.shiva]: [1.12, 0, -5.0],
@@ -116,16 +122,20 @@ export const ROAD_SPOTS: Readonly<Record<string, [number, number, number]>> = {
   [ROAD_IDS.anima]: [1.0, 0, -6.2],
 };
 
+/** The girls' world height in this room (the FFX-2 chapters' 1.78, Chapter V's): the unit every fiend's real height is a ratio of. */
+export const ROAD_PARTY_HEIGHT = 1.78;
+
 /**
- * World heights at the party's scale, ours (the concepts README: Sandy 2.3,
- * Cindy 1.7, Mindy 1.2). Shiva and Anima take the scene's boss height and their
- * own sidecars' scale, as Chapter V's Shiva did.
+ * World heights (r3942-stage, FFX-2 only): the party's {@link ROAD_PARTY_HEIGHT} times each fiend's ratio to the girls, from the game's own HD models
+ * (`data/ffx2/fiend-stature.ts`, `research/ffx2-fallen-aeons.md` §12): Shiva 3.453 (1.94 times the girls; she was the scene's boss height, 3.4), Sandy 2.297 (1.29;
+ * was the concepts README's 2.3), Cindy 1.480 (0.83; was 1.7) and Mindy 1.260 (0.71; was 1.2). Anima is a giant and keeps the scene's boss height and her own
+ * sidecar's scale, as Chapter V's did.
  */
-export const ROAD_FIGURE_HEIGHTS: Readonly<Record<string, number>> = {
-  [ROAD_IDS.sandy]: 2.3,
-  [ROAD_IDS.cindy]: 1.7,
-  [ROAD_IDS.mindy]: 1.2,
-};
+export const ROAD_FIGURE_HEIGHTS: Readonly<Record<string, number>> = ffx2FiendFigureHeights(
+  [ROAD_IDS.shiva, ROAD_IDS.sandy, ROAD_IDS.cindy, ROAD_IDS.mindy],
+  'ffx2-fallen-aeons',
+  ROAD_PARTY_HEIGHT,
+);
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [
   ROAD_SPOTS[ROAD_IDS.shiva]!,
@@ -139,7 +149,7 @@ const ROAD_STAGING = { holdParty: true, enemySpots: ROAD_SPOTS, figureHeights: R
 export const ROAD_TO_THE_FARPLANE_SLOTS: SceneSlots = {
   party: PARTY_SLOTS.slice(0, 3).map((s) => [...s] as [number, number, number]),
   enemy: ENEMY_SLOTS.map((s) => [...s] as [number, number, number]),
-  partyHeight: 1.78,
+  partyHeight: ROAD_PARTY_HEIGHT,
   enemyHeight: 3.4,
   ...ROAD_STAGING,
 };
@@ -302,6 +312,8 @@ export const buildRoadToTheFarplaneScene: SceneFactory = async (opts: SceneBuild
     partyHeight: ROAD_TO_THE_FARPLANE_SLOTS.partyHeight!,
     enemyHeight: ROAD_TO_THE_FARPLANE_SLOTS.enemyHeight!,
     ...ROAD_STAGING,
+    // r3942-stage wave 2 (FFX-2 only): on the upright phone Anima stands at 0.7 of her real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING, `fx/mix/giants.ts`).
+    figureHeights: { ...ROAD_FIGURE_HEIGHTS, ...giantPhoneHeights([ROAD_IDS.anima], 'ffx2-fallen-aeons', ROAD_PARTY_HEIGHT) },
     palette: { ...ROAD_TO_THE_FARPLANE_PALETTE },
     ...(phoneCamera ? { bindCamera: (camera: BattleCamera | null): void => phoneCamera.bind(camera) } : {}),
     update(dt: number): void {

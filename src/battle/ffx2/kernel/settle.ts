@@ -4,7 +4,8 @@
  * orchestrator's whole order.
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), the tail of
- * the orchestrator at 0x6172c0. Spec: `research/re-ffx2-damage.md` section 2. Not wired into the engine.
+ * the orchestrator at 0x6172c0. Spec: `research/re-ffx2-damage.md` section 2. The engine runs it for every
+ * strike, after the status rolls (`resolve-strike.ts`).
  *
  * ORDER (HP, MP and ATB are each treated the same unless a step says otherwise):
  *

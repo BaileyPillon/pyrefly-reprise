@@ -22,6 +22,7 @@
 
 import { createHash } from 'node:crypto';
 import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef } from '../../../src/battle/common/types.ts';
+import type { Chapter } from '../../../src/data/encounters.ts';
 import {
   FFX2Engine,
   abilityRegistryFrom,
@@ -157,6 +158,16 @@ export function driveChapter6(
   topMs?: number,
 ): DriveResult {
   return driveChain(LEBLANC_CHAIN_ORDER, chateauBuild, seed, decisionMs, extra, prepare, topMs);
+}
+
+/**
+ * Any FFX-2 chapter record, driven through its own `nextGroupId` chain with its own party build: the Leblanc preview
+ * (`data/chapter-exp-leblanc.ts`, which must play exactly like Chapter VI) is the user.
+ */
+export function driveChapterRecord(chapter: Chapter, seed: number, decisionMs: number, extra: Partial<Ffx2EngineOptions> = {}): DriveResult {
+  const order: string[] = [];
+  for (let g: EnemyGroupDef | undefined = chapter.enemyGroupRef; g && !order.includes(g.id); g = g.nextGroupId ? data.ENEMY_GROUPS_BY_ID[g.nextGroupId] : undefined) order.push(g.id);
+  return driveChain(order, chapter.buildRef as BattleSetup['party'], seed, decisionMs, extra, undefined, undefined);
 }
 
 function driveChain(

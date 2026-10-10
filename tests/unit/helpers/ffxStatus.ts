@@ -65,6 +65,7 @@ export function inflict(ctx: Ctx, user: FFXCombatant | undefined, target: FFXCom
     totalDealt: 0,
     rank: 3,
     records: newRecordBook(),
+    touched: new Map(),
   };
   resolveOneHit(scope, target);
   const after = target.statuses[app.status];

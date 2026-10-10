@@ -170,7 +170,7 @@ describe('Evrae — the stat block and the action rows', () => {
     expect(cid?.flags.untargetable).toBe(true);
     expect(cid?.immunityFlags).toContain('immune-to-sensor');
     expect(cid?.immunityFlags).toContain('immune-to-scan');
-    expect(cid?.stats.agi).toBe(16); // C-6 — the decompile, not the wiki's 11
+    expect(cid?.stats.agi).toBe(11); // C-6 settled by the script (re-parity D-09): his init writes 11 over the record's 16
     const missiles = EVRAE_ABILITIES['cid-guided-missiles'];
     expect(missiles?.formula).toBe('fixed');
     expect(missiles?.power).toBe(4);
@@ -558,7 +558,10 @@ describe('Evrae — the airship, run against the real engine', () => {
 
     // Auto-Haste is a *permanent* Haste, and `applyStatus` refuses to displace
     // one — which is exactly the one thing the wiki says stops this Slow.
+    // The Petrify rider must be able to land on whoever the script picks (re-parity, AI lane C merged with W2: the victim is the script's
+    // pick, and a member of this build wears a Petrify ward, so a pick of that member would show nothing): the ward is taken off.
     const hasted = runGaze((c) => {
+      c.immunities['petrify'] = 0;
       c.statuses['haste'] = {
         id: 'haste',
         turnsRemaining: 255,

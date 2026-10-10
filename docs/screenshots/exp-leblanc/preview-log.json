@@ -1,0 +1,641 @@
+{
+ "base": "http://127.0.0.1:4191/",
+ "failures": [],
+ "steps": [
+  {
+   "k": "check.the board selects the experiment",
+   "v": {
+    "ok": true,
+    "detail": "exp-leblanc"
+   }
+  },
+  {
+   "k": "shot.1-chapter-select",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-1-chapter-select.jpg"
+  },
+  {
+   "k": "shot.2-party-prep",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-2-party-prep.jpg"
+  },
+  {
+   "k": "shot.3-story-scene",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3-story-scene.jpg"
+  },
+  {
+   "k": "shot.3b-story-line-rikku",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3b-story-line-rikku.jpg"
+  },
+  {
+   "k": "shot.3c-story-line-paine",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3c-story-line-paine.jpg"
+  },
+  {
+   "k": "shot.3d-story-line-yuna",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3d-story-line-yuna.jpg"
+  },
+  {
+   "k": "shot.3e-story-line-logos",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3e-story-line-logos.jpg"
+  },
+  {
+   "k": "shot.3f-story-line-ormi",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3f-story-line-ormi.jpg"
+  },
+  {
+   "k": "shot.3g-story-line-leblanc",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3g-story-line-leblanc.jpg"
+  },
+  {
+   "k": "shot.3h-story-line-brother",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-3h-story-line-brother.jpg"
+  },
+  {
+   "k": "story.portraits",
+   "v": {
+    "Rikku": "/art/portraits/exp-leblanc-rikku-x2.png",
+    "Paine": "/art/portraits/exp-leblanc-paine.png",
+    "Yuna": "/art/portraits/exp-leblanc-yuna-x2.png",
+    "Logos": "/art/portraits/exp-leblanc-logos.png",
+    "Ormi": "/art/portraits/exp-leblanc-ormi.png",
+    "Leblanc": "/art/portraits/exp-leblanc-leblanc.png",
+    "Brother": "/art/portraits/exp-leblanc-brother-x2.png"
+   }
+  },
+  {
+   "k": "check.the dialogue box wears the experiment's own portrait of every speaker it has one for",
+   "v": {
+    "ok": true,
+    "detail": {
+     "Rikku": "/art/portraits/exp-leblanc-rikku-x2.png",
+     "Paine": "/art/portraits/exp-leblanc-paine.png",
+     "Yuna": "/art/portraits/exp-leblanc-yuna-x2.png",
+     "Logos": "/art/portraits/exp-leblanc-logos.png",
+     "Ormi": "/art/portraits/exp-leblanc-ormi.png",
+     "Leblanc": "/art/portraits/exp-leblanc-leblanc.png",
+     "Brother": "/art/portraits/exp-leblanc-brother-x2.png"
+    }
+   }
+  },
+  {
+   "k": "shot.4g-turn-cutin",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4g-turn-cutin.jpg"
+  },
+  {
+   "k": "cutin.portrait",
+   "v": "/art/portraits/exp-leblanc-yuna-x2.png"
+  },
+  {
+   "k": "check.the turn cut-in wears the experiment's own portrait",
+   "v": {
+    "ok": true,
+    "detail": "/art/portraits/exp-leblanc-yuna-x2.png"
+   }
+  },
+  {
+   "k": "shot.4-act1-first-menu",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4-act1-first-menu.jpg"
+  },
+  {
+   "k": "shot.4a-act1-goon-cast",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4a-act1-goon-cast.jpg"
+  },
+  {
+   "k": "shot.4f-act1-item",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4f-act1-item.jpg"
+  },
+  {
+   "k": "shot.4c-act1-goon-hurt",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4c-act1-goon-hurt.jpg"
+  },
+  {
+   "k": "shot.4d-act1-goon-ko",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-4d-act1-goon-ko.jpg"
+  },
+  {
+   "k": "act1.goons",
+   "v": {
+    "cast": {
+     "id": "fem-goon",
+     "art": "exp-leblanc-ffx2-fem-goon",
+     "pose": "cast",
+     "facing": -1,
+     "mirrored": false
+    },
+    "attack": null,
+    "hurt": {
+     "id": "dr-goon",
+     "art": "exp-leblanc-ffx2-dr-goon",
+     "pose": "hurt",
+     "facing": -1,
+     "mirrored": false
+    },
+    "ko": {
+     "id": "fem-goon",
+     "art": "exp-leblanc-ffx2-fem-goon",
+     "pose": "ko",
+     "facing": -1,
+     "mirrored": true
+    }
+   }
+  },
+  {
+   "k": "act1.item",
+   "v": {
+    "id": "yuna",
+    "art": "exp-leblanc-yuna-gunner",
+    "pose": "item",
+    "facing": 1,
+    "mirrored": false
+   }
+  },
+  {
+   "k": "act1.goon-poses-seen",
+   "v": [
+    "dr-goon:hurt",
+    "dr-goon:idle",
+    "dr-goon:ko",
+    "fem-goon:cast",
+    "fem-goon:hurt",
+    "fem-goon:ko"
+   ]
+  },
+  {
+   "k": "field.act3",
+   "v": [
+    {
+     "id": "yuna",
+     "art": "exp-leblanc-yuna-gunner",
+     "placeholder": false
+    },
+    {
+     "id": "rikku",
+     "art": "exp-leblanc-rikku-thief",
+     "placeholder": false
+    },
+    {
+     "id": "paine",
+     "art": "exp-leblanc-paine-warrior",
+     "placeholder": false
+    },
+    {
+     "id": "logos",
+     "art": "exp-leblanc-logos",
+     "placeholder": false
+    },
+    {
+     "id": "ormi",
+     "art": "exp-leblanc-ormi",
+     "placeholder": false
+    },
+    {
+     "id": "leblanc",
+     "art": "exp-leblanc-leblanc",
+     "placeholder": false
+    }
+   ]
+  },
+  {
+   "k": "check.Act III stages the six figures from the experiment",
+   "v": {
+    "ok": true,
+    "detail": [
+     {
+      "id": "yuna",
+      "art": "exp-leblanc-yuna-gunner",
+      "placeholder": false
+     },
+     {
+      "id": "rikku",
+      "art": "exp-leblanc-rikku-thief",
+      "placeholder": false
+     },
+     {
+      "id": "paine",
+      "art": "exp-leblanc-paine-warrior",
+      "placeholder": false
+     },
+     {
+      "id": "logos",
+      "art": "exp-leblanc-logos",
+      "placeholder": false
+     },
+     {
+      "id": "ormi",
+      "art": "exp-leblanc-ormi",
+      "placeholder": false
+     },
+     {
+      "id": "leblanc",
+      "art": "exp-leblanc-leblanc",
+      "placeholder": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "shot.5-act3-first-menu",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5-act3-first-menu.jpg"
+  },
+  {
+   "k": "shot.5b-act3-first-menu-clean",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5b-act3-first-menu-clean.jpg"
+  },
+  {
+   "k": "stage.act3",
+   "v": [
+    {
+     "id": "yuna",
+     "side": "party",
+     "art": "exp-leblanc-yuna-gunner",
+     "pose": "idle",
+     "facing": 1,
+     "mirrored": false
+    },
+    {
+     "id": "rikku",
+     "side": "party",
+     "art": "exp-leblanc-rikku-thief",
+     "pose": "ready",
+     "facing": 1,
+     "mirrored": false
+    },
+    {
+     "id": "paine",
+     "side": "party",
+     "art": "exp-leblanc-paine-warrior",
+     "pose": "idle",
+     "facing": 1,
+     "mirrored": false
+    },
+    {
+     "id": "logos",
+     "side": "enemy",
+     "art": "exp-leblanc-logos",
+     "pose": "idle",
+     "facing": -1,
+     "mirrored": false
+    },
+    {
+     "id": "ormi",
+     "side": "enemy",
+     "art": "exp-leblanc-ormi",
+     "pose": "idle",
+     "facing": -1,
+     "mirrored": false
+    },
+    {
+     "id": "leblanc",
+     "side": "enemy",
+     "art": "exp-leblanc-leblanc",
+     "pose": "cast",
+     "facing": -1,
+     "mirrored": false
+    }
+   ]
+  },
+  {
+   "k": "check.every figure faces its opponents and none is drawn mirrored",
+   "v": {
+    "ok": true,
+    "detail": [
+     {
+      "id": "yuna",
+      "side": "party",
+      "art": "exp-leblanc-yuna-gunner",
+      "pose": "idle",
+      "facing": 1,
+      "mirrored": false
+     },
+     {
+      "id": "rikku",
+      "side": "party",
+      "art": "exp-leblanc-rikku-thief",
+      "pose": "ready",
+      "facing": 1,
+      "mirrored": false
+     },
+     {
+      "id": "paine",
+      "side": "party",
+      "art": "exp-leblanc-paine-warrior",
+      "pose": "idle",
+      "facing": 1,
+      "mirrored": false
+     },
+     {
+      "id": "logos",
+      "side": "enemy",
+      "art": "exp-leblanc-logos",
+      "pose": "idle",
+      "facing": -1,
+      "mirrored": false
+     },
+     {
+      "id": "ormi",
+      "side": "enemy",
+      "art": "exp-leblanc-ormi",
+      "pose": "idle",
+      "facing": -1,
+      "mirrored": false
+     },
+     {
+      "id": "leblanc",
+      "side": "enemy",
+      "art": "exp-leblanc-leblanc",
+      "pose": "cast",
+      "facing": -1,
+      "mirrored": false
+     }
+    ]
+   }
+  },
+  {
+   "k": "shot.5c-pause-member-yuna",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5c-pause-member-yuna.jpg"
+  },
+  {
+   "k": "shot.5c-pause-member-rikku",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5c-pause-member-rikku.jpg"
+  },
+  {
+   "k": "shot.5c-pause-member-paine",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5c-pause-member-paine.jpg"
+  },
+  {
+   "k": "shot.5c-pause-chapter",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5c-pause-chapter.jpg"
+  },
+  {
+   "k": "pause.plates",
+   "v": {
+    "member:yuna": {
+     "plates": [
+      {
+       "plate": "exp-leblanc-yuna-ffx2",
+       "art": "plate",
+       "src": "/art/pause/exp-leblanc-yuna-ffx2.2x.webp"
+      }
+     ],
+     "snaps": []
+    },
+    "member:rikku": {
+     "plates": [
+      {
+       "plate": "exp-leblanc-rikku-ffx2",
+       "art": "plate",
+       "src": "/art/pause/exp-leblanc-rikku-ffx2.2x.webp"
+      }
+     ],
+     "snaps": []
+    },
+    "member:paine": {
+     "plates": [
+      {
+       "plate": "exp-leblanc-paine",
+       "art": "plate",
+       "src": "/art/pause/exp-leblanc-paine.2x.webp"
+      }
+     ],
+     "snaps": []
+    },
+    "chapter": {
+     "plates": [
+      {
+       "plate": "exp-leblanc-leblanc",
+       "art": "plate",
+       "src": "/art/pause/exp-leblanc-leblanc.2x.webp"
+      }
+     ],
+     "snaps": [
+      "/art/backdrops/exp-leblanc-last-room.webp",
+      "/art/characters/exp-leblanc-leblanc/idle.png",
+      "/art/characters/exp-leblanc-ormi/idle.png"
+     ]
+    }
+   }
+  },
+  {
+   "k": "check.every member tab shows the experiment's own plate",
+   "v": {
+    "ok": true,
+    "detail": {
+     "member:yuna": {
+      "plates": [
+       {
+        "plate": "exp-leblanc-yuna-ffx2",
+        "art": "plate",
+        "src": "/art/pause/exp-leblanc-yuna-ffx2.2x.webp"
+       }
+      ],
+      "snaps": []
+     },
+     "member:rikku": {
+      "plates": [
+       {
+        "plate": "exp-leblanc-rikku-ffx2",
+        "art": "plate",
+        "src": "/art/pause/exp-leblanc-rikku-ffx2.2x.webp"
+       }
+      ],
+      "snaps": []
+     },
+     "member:paine": {
+      "plates": [
+       {
+        "plate": "exp-leblanc-paine",
+        "art": "plate",
+        "src": "/art/pause/exp-leblanc-paine.2x.webp"
+       }
+      ],
+      "snaps": []
+     },
+     "chapter": {
+      "plates": [
+       {
+        "plate": "exp-leblanc-leblanc",
+        "art": "plate",
+        "src": "/art/pause/exp-leblanc-leblanc.2x.webp"
+       }
+      ],
+      "snaps": [
+       "/art/backdrops/exp-leblanc-last-room.webp",
+       "/art/characters/exp-leblanc-leblanc/idle.png",
+       "/art/characters/exp-leblanc-ormi/idle.png"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "k": "check.the CHAPTER tab shows the preview's own hero plate and its own three snapshots",
+   "v": {
+    "ok": true,
+    "detail": {
+     "plates": [
+      {
+       "plate": "exp-leblanc-leblanc",
+       "art": "plate",
+       "src": "/art/pause/exp-leblanc-leblanc.2x.webp"
+      }
+     ],
+     "snaps": [
+      "/art/backdrops/exp-leblanc-last-room.webp",
+      "/art/characters/exp-leblanc-leblanc/idle.png",
+      "/art/characters/exp-leblanc-ormi/idle.png"
+     ]
+    }
+   }
+  },
+  {
+   "k": "kneel",
+   "v": {
+    "id": "yuna",
+    "side": "party",
+    "art": "exp-leblanc-yuna-gunner",
+    "pose": "critical",
+    "facing": 1,
+    "mirrored": false
+   }
+  },
+  {
+   "k": "shot.5d-low-hp-kneel",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-5d-low-hp-kneel.jpg"
+  },
+  {
+   "k": "check.a girl at low HP kneels in the experiment's own critical painting",
+   "v": {
+    "ok": true,
+    "detail": {
+     "id": "yuna",
+     "side": "party",
+     "art": "exp-leblanc-yuna-gunner",
+     "pose": "critical",
+     "facing": 1,
+     "mirrored": false
+    }
+   }
+  },
+  {
+   "k": "shot.7-enemy-action",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-7-enemy-action.jpg"
+  },
+  {
+   "k": "shot.6-party-attack",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-6-party-attack.jpg"
+  },
+  {
+   "k": "shot.7c-enemy-hurt",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-7c-enemy-hurt.jpg"
+  },
+  {
+   "k": "acted",
+   "v": {
+    "party": {
+     "id": "rikku",
+     "pose": "attack",
+     "art": "exp-leblanc-rikku-thief"
+    },
+    "enemy": {
+     "id": "leblanc",
+     "pose": "cast",
+     "art": "exp-leblanc-leblanc"
+    },
+    "hurt": null,
+    "foeHurt": {
+     "id": "ormi",
+     "pose": "hurt",
+     "art": "exp-leblanc-ormi"
+    }
+   }
+  },
+  {
+   "k": "check.a party attack and an enemy action were photographed",
+   "v": {
+    "ok": true,
+    "detail": {
+     "party": {
+      "id": "rikku",
+      "pose": "attack",
+      "art": "exp-leblanc-rikku-thief"
+     },
+     "enemy": {
+      "id": "leblanc",
+      "pose": "cast",
+      "art": "exp-leblanc-leblanc"
+     },
+     "hurt": null,
+     "foeHurt": {
+      "id": "ormi",
+      "pose": "hurt",
+      "art": "exp-leblanc-ormi"
+     }
+    }
+   }
+  },
+  {
+   "k": "victory.poses",
+   "v": [
+    {
+     "id": "yuna",
+     "pose": "victory"
+    },
+    {
+     "id": "rikku",
+     "pose": "victory"
+    },
+    {
+     "id": "paine",
+     "pose": "victory"
+    }
+   ]
+  },
+  {
+   "k": "shot.8-victory",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-8-victory.jpg"
+  },
+  {
+   "k": "check.the results screen follows the victory",
+   "v": {
+    "ok": true,
+    "detail": "results"
+   }
+  },
+  {
+   "k": "shot.9-results",
+   "v": "D:\\pyrefly-r39-posescale\\docs\\screenshots\\exp-leblanc\\preview-9-results.jpg"
+  },
+  {
+   "k": "results.wedge",
+   "v": {
+    "src": "/art/portraits/exp-leblanc-yuna-x2.png",
+    "w": 832,
+    "h": 1216
+   }
+  },
+  {
+   "k": "check.the results wedge wears the experiment's own portrait",
+   "v": {
+    "ok": true,
+    "detail": {
+     "src": "/art/portraits/exp-leblanc-yuna-x2.png",
+     "w": 832,
+     "h": 1216
+    }
+   }
+  },
+  {
+   "k": "check.no console errors",
+   "v": {
+    "ok": true,
+    "detail": []
+   }
+  },
+  {
+   "k": "check.no 404s",
+   "v": {
+    "ok": true,
+    "detail": []
+   }
+  }
+ ]
+}

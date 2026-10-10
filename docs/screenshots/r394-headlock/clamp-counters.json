@@ -1,0 +1,986 @@
+{
+ "about": "The head lock (HeadLock.ts) counters read from the live stage every 250 ms while the debug API plays each chapter automatically at fast speed (strategy intended, seed 1); the last reading per figure. planesHeld = planes the lock sized; clampedLow/High = frames the ask was outside 0.9 to 1.1 and was held at the band; factor range = the lock factor min..max over all figures; worstAskPct = the largest raw ask away from 1 (figure-level).",
+ "build": "r394-int d74fe648 (dist-gate)",
+ "chapters": [
+  {
+   "chapter": "yojimbo-cavern",
+   "outcome": "victory",
+   "seconds": 127,
+   "figures": 8,
+   "planesHeld": 7200,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.9835,
+   "factorMax": 1.0249,
+   "worstAskPct": 2.49,
+   "warnings": 0
+  },
+  {
+   "chapter": "sin-face",
+   "outcome": "defeat",
+   "seconds": 76,
+   "figures": 6,
+   "planesHeld": 5424,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.9752,
+   "factorMax": 1.0103,
+   "worstAskPct": 2.48,
+   "warnings": 0
+  },
+  {
+   "chapter": "seymour-anima-macalania",
+   "outcome": "victory",
+   "seconds": 119,
+   "figures": 12,
+   "planesHeld": 2409,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.986,
+   "factorMax": 1.0081,
+   "worstAskPct": 1.4,
+   "warnings": 0
+  },
+  {
+   "chapter": "seymour-flux",
+   "outcome": "defeat",
+   "seconds": 59,
+   "figures": 8,
+   "planesHeld": 3279,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.9956,
+   "factorMax": 1.0391,
+   "worstAskPct": 3.91,
+   "warnings": 0
+  },
+  {
+   "chapter": "yunalesca",
+   "outcome": "victory",
+   "seconds": 206,
+   "figures": 9,
+   "planesHeld": 11354,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.9947,
+   "factorMax": 1.0143,
+   "worstAskPct": 1.43,
+   "warnings": 0
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "outcome": "victory",
+   "seconds": 395,
+   "figures": 15,
+   "planesHeld": 9578,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.9966,
+   "factorMax": 1.011,
+   "worstAskPct": 1.1,
+   "warnings": 0
+  },
+  {
+   "chapter": "sin-fins-core",
+   "outcome": "defeat",
+   "seconds": 396,
+   "figures": 10,
+   "planesHeld": 17263,
+   "skipped": 0,
+   "clampedLow": 0,
+   "clampedHigh": 0,
+   "factorMin": 0.9618,
+   "factorMax": 1.0078,
+   "worstAskPct": 3.82,
+   "warnings": 0
+  }
+ ],
+ "byFigure": {
+  "yojimbo-cavern": {
+   "seconds": 127,
+   "polls": 430,
+   "result": {
+    "outcome": "victory"
+   },
+   "warnings": [],
+   "figures": {
+    "lulu": {
+     "planes": 3523,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9982692677776669,
+     "max": 1.0249124400988674,
+     "worstRaw": 1.0249124400988674,
+     "last": {
+      "pose": "victory",
+      "factor": 0.9982748694766584,
+      "raw": 0.9982748694766584,
+      "clamp": 0
+     }
+    },
+    "kimahri": {
+     "planes": 1777,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9944005850357873,
+     "max": 1.010586943063449,
+     "worstRaw": 1.010586943063449,
+     "last": {
+      "pose": "victory",
+      "factor": 1.003220596851928,
+      "raw": 1.003220596851928,
+      "clamp": 0
+     }
+    },
+    "yuna": {
+     "planes": 1900,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9835361242491246,
+     "max": 1.0136666810992174,
+     "worstRaw": 0.9835361242491246,
+     "last": {
+      "pose": "victory",
+      "factor": 0.9835361242491246,
+      "raw": 0.9835361242491246,
+      "clamp": 0
+     }
+    },
+    "yojimbo": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ginnem": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "daigoro": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "bahamut": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ifrit": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    }
+   }
+  },
+  "sin-face": {
+   "seconds": 76,
+   "polls": 266,
+   "result": {
+    "outcome": "defeat"
+   },
+   "warnings": [],
+   "figures": {
+    "tidus": {
+     "planes": 192,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9967965736168312,
+     "max": 1.00119518008635,
+     "worstRaw": 0.9967965736168312,
+     "last": {
+      "pose": "cast",
+      "factor": 1.0011301271310853,
+      "raw": 1.0011301271310853,
+      "clamp": 0
+     }
+    },
+    "yuna": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "auron": {
+     "planes": 1760,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9798091640229603,
+     "max": 1.0102583841999377,
+     "worstRaw": 0.9798091640229603,
+     "last": {
+      "pose": "ko",
+      "factor": 0.9798091640229603,
+      "raw": 0.9798091640229603,
+      "clamp": 0
+     }
+    },
+    "overdrive-sin": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "wakka": {
+     "planes": 1791,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9752982624635077,
+     "max": 1.0050475465631261,
+     "worstRaw": 0.9752982624635077,
+     "last": {
+      "pose": "ko",
+      "factor": 0.9752982624635077,
+      "raw": 0.9752982624635077,
+      "clamp": 0
+     }
+    },
+    "lulu": {
+     "planes": 1681,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9751955352629111,
+     "max": 1.001954759091497,
+     "worstRaw": 0.9751955352629111,
+     "last": {
+      "pose": "ko",
+      "factor": 0.9751955352629111,
+      "raw": 0.9751955352629111,
+      "clamp": 0
+     }
+    }
+   }
+  },
+  "seymour-anima-macalania": {
+   "seconds": 119,
+   "polls": 428,
+   "result": {
+    "outcome": "victory"
+   },
+   "warnings": [],
+   "figures": {
+    "tidus": {
+     "planes": 582,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9860353760620593,
+     "max": 1.0057014106876343,
+     "worstRaw": 0.9860353760620593,
+     "last": {
+      "pose": "victory",
+      "factor": 0.9901852714520014,
+      "raw": 0.9901852714520014,
+      "clamp": 0
+     }
+    },
+    "yuna": {
+     "planes": 1029,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9863337989860357,
+     "max": 1.008123901023047,
+     "worstRaw": 0.9863337989860357,
+     "last": {
+      "pose": "victory",
+      "factor": 0.9863337989860357,
+      "raw": 0.9863337989860357,
+      "clamp": 0
+     }
+    },
+    "rikku": {
+     "planes": 644,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9983981240277432,
+     "max": 1.0067743118526262,
+     "worstRaw": 1.0067743118526262,
+     "last": {
+      "pose": "attack",
+      "factor": 1.0022760451801154,
+      "raw": 1.0022760451801154,
+      "clamp": 0
+     }
+    },
+    "guado-guardian-a": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "guado-guardian-b": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "seymour-macalania": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "anima-macalania": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "valefor": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ifrit": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ixion": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "shiva": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "auron": {
+     "planes": 154,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 1.00209589052495,
+     "max": 1.0078987844353167,
+     "worstRaw": 1.0078987844353167,
+     "last": {
+      "pose": "victory",
+      "factor": 1.0050047523746817,
+      "raw": 1.0050047523746817,
+      "clamp": 0
+     }
+    }
+   }
+  },
+  "seymour-flux": {
+   "seconds": 59,
+   "polls": 204,
+   "result": {
+    "outcome": "defeat"
+   },
+   "warnings": [],
+   "figures": {
+    "tidus": {
+     "planes": 480,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9990393557424116,
+     "max": 1.039127954372325,
+     "worstRaw": 1.039127954372325,
+     "last": {
+      "pose": "ko",
+      "factor": 1.0370969654896927,
+      "raw": 1.0370969654896927,
+      "clamp": 0
+     }
+    },
+    "yuna": {
+     "planes": 1384,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 1.0026799010708156,
+     "max": 1.0264345414706133,
+     "worstRaw": 1.0264345414706133,
+     "last": {
+      "pose": "ko",
+      "factor": 1.0111036507973277,
+      "raw": 1.0111036507973277,
+      "clamp": 0
+     }
+    },
+    "kimahri": {
+     "planes": 1415,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9955756393978092,
+     "max": 1.0107720902203285,
+     "worstRaw": 1.0107720902203285,
+     "last": {
+      "pose": "ko",
+      "factor": 1.0048011080389747,
+      "raw": 1.0048011080389747,
+      "clamp": 0
+     }
+    },
+    "mortiorchis": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "seymour-flux": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "bahamut": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "valefor": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ifrit": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    }
+   }
+  },
+  "yunalesca": {
+   "seconds": 206,
+   "polls": 763,
+   "result": {
+    "outcome": "victory"
+   },
+   "warnings": [],
+   "figures": {
+    "tidus": {
+     "planes": 2457,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9947036642811613,
+     "max": 1.0071686861940483,
+     "worstRaw": 1.0071686861940483,
+     "last": {
+      "pose": "critical",
+      "factor": 1.00009190269008,
+      "raw": 1.00009190269008,
+      "clamp": 0
+     }
+    },
+    "yuna": {
+     "planes": 3650,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9951142368007178,
+     "max": 1.0067479110823703,
+     "worstRaw": 1.0067479110823703,
+     "last": {
+      "pose": "critical",
+      "factor": 0.9965840447605689,
+      "raw": 0.9965840447605689,
+      "clamp": 0
+     }
+    },
+    "auron": {
+     "planes": 3702,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 1.0036752024154671,
+     "max": 1.011890267310045,
+     "worstRaw": 1.011890267310045,
+     "last": {
+      "pose": "critical",
+      "factor": 1.0072870801387204,
+      "raw": 1.0072870801387204,
+      "clamp": 0
+     }
+    },
+    "yunalesca": {
+     "planes": 1545,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9988935809002188,
+     "max": 1.0143285547187946,
+     "worstRaw": 1.0143285547187946,
+     "last": {
+      "pose": "hurt",
+      "factor": 1.0119483890187768,
+      "raw": 1.0119483890187768,
+      "clamp": 0
+     }
+    },
+    "shiva": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ixion": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "ifrit": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "valefor": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "bahamut": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    }
+   }
+  },
+  "ffx2-vegnagun-shuyin": {
+   "seconds": 395,
+   "polls": 1474,
+   "result": {
+    "outcome": "victory"
+   },
+   "warnings": [],
+   "figures": {
+    "yuna": {
+     "planes": 1859,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9965805162245733,
+     "max": 1.0110026612719376,
+     "worstRaw": 1.0110026612719376,
+     "last": {
+      "pose": "hurt",
+      "factor": 0.99750685928436,
+      "raw": 0.99750685928436,
+      "clamp": 0
+     }
+    },
+    "paine": {
+     "planes": 3481,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 1.0004705278742574,
+     "max": 1.0088989454510826,
+     "worstRaw": 1.0088989454510826,
+     "last": {
+      "pose": "cast",
+      "factor": 1.0048070709962769,
+      "raw": 1.0048070709962769,
+      "clamp": 0
+     }
+    },
+    "vegnagun-tail": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "rikku": {
+     "planes": 4238,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 1.0003365751040145,
+     "max": 1.009619009410017,
+     "worstRaw": 1.009619009410017,
+     "last": {
+      "pose": "cast",
+      "factor": 1.00319030485228,
+      "raw": 1.00319030485228,
+      "clamp": 0
+     }
+    },
+    "node-a": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "node-b": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "node-c": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "vegnagun-leg": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "bulwark-r": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "bulwark-l": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "vegnagun-body": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "redoubt-r": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "redoubt-l": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "vegnagun-head": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "shuyin": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    }
+   }
+  },
+  "sin-fins-core": {
+   "seconds": 396,
+   "polls": 1485,
+   "result": {
+    "outcome": "defeat"
+   },
+   "warnings": [],
+   "figures": {
+    "cid": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "tidus": {
+     "planes": 5794,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9880611646929754,
+     "max": 1.007823448219106,
+     "worstRaw": 0.9880611646929754,
+     "last": {
+      "pose": "ko",
+      "factor": 0.992221047734155,
+      "raw": 0.992221047734155,
+      "clamp": 0
+     }
+    },
+    "yuna": {
+     "planes": 5673,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9618174671917511,
+     "max": 1.0041968486802169,
+     "worstRaw": 0.9618174671917511,
+     "last": {
+      "pose": "ko",
+      "factor": 0.9618174671917511,
+      "raw": 0.9618174671917511,
+      "clamp": 0
+     }
+    },
+    "left-fin": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "auron": {
+     "planes": 51,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9892752664711871,
+     "max": 1.002052861337061,
+     "worstRaw": 0.9892752664711871,
+     "last": {
+      "pose": "attack",
+      "factor": 0.9940734956480528,
+      "raw": 0.9940734956480528,
+      "clamp": 0
+     }
+    },
+    "wakka": {
+     "planes": 4952,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9940616655957478,
+     "max": 1.00487201238973,
+     "worstRaw": 0.9940616655957478,
+     "last": {
+      "pose": "victory",
+      "factor": 1.0005553560213536,
+      "raw": 1.0005553560213536,
+      "clamp": 0
+     }
+    },
+    "lulu": {
+     "planes": 793,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": 0.9769254714899983,
+     "max": 1.0014375798301502,
+     "worstRaw": 0.9769254714899983,
+     "last": {
+      "pose": "ko",
+      "factor": 0.9788899126692323,
+      "raw": 0.9788899126692323,
+      "clamp": 0
+     }
+    },
+    "right-fin": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "sinspawn-genais": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    },
+    "sin-core": {
+     "planes": 0,
+     "skipped": 0,
+     "clampedLow": 0,
+     "clampedHigh": 0,
+     "min": null,
+     "max": null,
+     "worstRaw": 1,
+     "last": null
+    }
+   }
+  }
+ }
+}

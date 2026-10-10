@@ -6,7 +6,8 @@
  * `docs/plans/ff7-guard-scorpion-architecture.md` §2.2):
  *
  * - **Keyboard:** on chapter select, type L-I-M-I-T, at most {@link KEY_GAP_MS}
- *   between letters. A wrong letter or a pause resets silently.
+ *   between letters. A wrong letter, a pause or a key the board answers (an
+ *   arrow, Enter, Escape) resets silently; Shift for the capitals does not.
  * - **Phone or mouse:** tap the small "Chapter select" label
  *   {@link TAP_COUNT} times within {@link TAP_WINDOW_MS}.
  * - **Gamepad:** L1 R1 L1 R1 Select, at most {@link PAD_GAP_MS} between presses.
@@ -18,6 +19,10 @@
  * Pure: no DOM, no timers, time comes in as an argument, so every rule has a
  * unit test (`tests/unit/ff7-secret-door.test.ts`). `ChapterSelectScreen`
  * feeds it and decides what "open" does.
+ *
+ * The typed word is {@link WordDoor}, which the hidden experimental Leblanc chapter's
+ * door shares (`./leblancDoor.ts`): the two doors behave the same way because they are
+ * the same code.
  *
  * Game case: FF7 only (the door leads to the FF7 experiment; the board itself is unchanged).
  */
@@ -44,9 +49,11 @@ export const PAD_SEQUENCE: readonly string[] = ['l1', 'r1', 'l1', 'r1', 'select'
 export const PAD_GAP_MS = 2000;
 
 /** Progress through one ordered sequence with a gap limit. */
-class SequenceMatcher {
+export class SequenceMatcher {
   private index = 0;
   private lastAt = -Infinity;
+  /** The last token carried a sequence already under way one step on (not its first token, not a restart). False after anything else: a pass, a reset, a wrong token, a late one. */
+  continued = false;
 
   constructor(
     private readonly sequence: readonly string[],
@@ -55,6 +62,7 @@ class SequenceMatcher {
 
   feed(token: string, atMs: number): DoorResult {
     if (this.index > 0 && atMs - this.lastAt > this.gapMs) this.index = 0;
+    this.continued = this.index > 0 && token === this.sequence[this.index];
     if (token === this.sequence[this.index]) {
       this.index += 1;
     } else {
@@ -67,25 +75,74 @@ class SequenceMatcher {
     return 'open';
   }
 
+  /** A key came that is not a token and does not break the sequence (Shift while typing capitals): the sequence stands, and that key carried nothing on. */
+  pass(): void {
+    this.continued = false;
+  }
+
   reset(): void {
     this.index = 0;
+    this.continued = false;
+  }
+}
+
+/**
+ * The keys that are part of typing and not of the board: they add no letter and do not break the word (Shift for the capitals, CapsLock, the other modifiers and locks,
+ * a dead key, an input method). Every other key that is not one character (an arrow, Enter, Escape, Tab, Backspace, a page key) is one the board answers: the player has gone on
+ * to something else, so it ends the word.
+ */
+const TYPING_AIDS: ReadonlySet<string> = new Set([
+  'Shift', 'CapsLock', 'Control', 'Alt', 'AltGraph', 'Meta', 'OS', 'Fn', 'FnLock', 'NumLock', 'ScrollLock', 'Hyper', 'Super', 'Symbol', 'SymbolLock',
+  'Dead', 'Compose', 'Process', 'Unidentified',
+]);
+
+/**
+ * A typed word, one `KeyboardEvent.key` at a time: the keyboard half of a secret door. Any case; Shift, CapsLock and the other typing aids are ignored outright; a wrong letter,
+ * a pause over `gapMs` or a key the board answers (an arrow, Enter, Escape) resets silently, and a wrong letter that is the word's first starts it again.
+ * {@link continued} is true only right after a letter that extended a live match, never for the key after it: the board may leave a press to the word only while it is the word's.
+ */
+export class WordDoor {
+  private readonly matcher: SequenceMatcher;
+
+  constructor(
+    readonly word: string,
+    gapMs: number = KEY_GAP_MS,
+  ) {
+    this.matcher = new SequenceMatcher(word.split(''), gapMs);
+  }
+
+  /** A key went down (`KeyboardEvent.key`): `'open'` on the word's last letter, otherwise `null`. */
+  feedKey(key: string, atMs: number): DoorResult {
+    if (key.length === 1) return this.matcher.feed(key.toLowerCase(), atMs);
+    if (TYPING_AIDS.has(key)) this.matcher.pass();
+    else this.matcher.reset(); // an arrow, Enter, Escape...: the board's own key, and the word is over
+    return null;
+  }
+
+  /** The key just fed was a later letter of the word, typed in time: the board it is typed on should leave that press to the word. False for every other key, the one after a letter included. */
+  get continued(): boolean {
+    return this.matcher.continued;
+  }
+
+  reset(): void {
+    this.matcher.reset();
   }
 }
 
 /** One board visit's door. Make a new one each time the board is entered. */
 export class SecretDoor {
-  private readonly word = new SequenceMatcher(DOOR_WORD.split(''), KEY_GAP_MS);
+  private readonly word = new WordDoor(DOOR_WORD);
   private readonly pad = new SequenceMatcher(PAD_SEQUENCE, PAD_GAP_MS);
   private taps: number[] = [];
 
   /**
-   * A key went down. `key` is `KeyboardEvent.key`. Keys that are not a single
-   * character (Shift, CapsLock, the arrows, F-keys) are ignored outright, so
-   * typing the word in capitals works; any other character resets the word.
+   * A key went down. `key` is `KeyboardEvent.key`. Shift, CapsLock and the other
+   * typing aids are ignored outright, so typing the word in capitals works; any
+   * other character resets the word, and so does a key the board answers (an
+   * arrow, Enter, Escape): see {@link WordDoor}.
    */
   feedKey(key: string, atMs: number): DoorResult {
-    if (key.length !== 1) return null;
-    return this.word.feed(key.toLowerCase(), atMs);
+    return this.word.feedKey(key, atMs);
   }
 
   /** A pad (or mapped keyboard) button went down, as an `app/Input.ts` button name. */

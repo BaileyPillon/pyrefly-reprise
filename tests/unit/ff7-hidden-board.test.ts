@@ -71,7 +71,7 @@ describe('the board (invariant I2)', () => {
   it('has eighteen tiles in two groups, none of them FF7, even with a record in the experiments store', () => {
     localStorage.setItem(EXPERIMENTS_KEY, JSON.stringify({ [ID]: { attempts: 3, clears: 2 } }));
     const tiles = buildChapterTiles(new SaveStore());
-    expect(tiles).toHaveLength(18);
+    expect(tiles).toHaveLength(18); // the eighteen: the Leblanc preview is hidden too (its word, `exp-leblanc-door.test.ts`)
     expect(tiles.some((t) => t.id === ID || (t.game as string) === 'ff7')).toBe(false);
     expect(groupChapterTiles(tiles).map((g) => g.game)).toEqual(['ffx', 'ffx2']);
     expect(boardProgress(tiles, 0).beaten).toBe(0);

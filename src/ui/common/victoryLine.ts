@@ -11,8 +11,10 @@
  * nothing.
  */
 
+import { artNamespaceOfScene, inArtNamespace } from '../../data/art/artNamespace.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { measuredPortraitIds } from './portrait.ts';
+import { portraitIdIn } from './portraitNamespace.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 
 /** One served victory line and the party member who says it. */
@@ -88,7 +90,9 @@ const X2_PORTRAITS = new Set(measuredPortraitIds().filter((id) => id.endsWith('-
  */
 export function wedgePortraitId(id: string, chapter: Chapter | undefined): string {
   if (chapter?.buildRef.game !== 'ffx2') return id;
-  return X2_PORTRAITS.has(`${id}-x2`) ? `${id}-x2` : id;
+  const own = X2_PORTRAITS.has(`${id}-x2`) ? `${id}-x2` : id;
+  // The Leblanc preview's own portraits (`data/art/artNamespace.ts`, `ui/common/portraitNamespace.ts`): the painting the namespace has repainted, else the base one.
+  return portraitIdIn(artNamespaceOfScene(chapter.sceneKey), own);
 }
 
 /**
@@ -106,7 +110,7 @@ export function wedgePortraitId(id: string, chapter: Chapter | undefined): strin
 export function wedgeFallenArt(chapter: Chapter | undefined, id: string): [string, string] {
   const build = chapter?.buildRef;
   const dress = build?.game === 'ffx2' ? build.members.find((m) => m.id === id)?.currentDressphere : undefined;
-  const dir = dress ? `${id}-${dress}` : id;
+  const dir = inArtNamespace(artNamespaceOfScene(chapter?.sceneKey), dress ? `${id}-${dress}` : id); // the Leblanc preview's own paintings (`data/art/artNamespace.ts`)
   const poses = ['hurt', 'ko', 'idle'].map((p) => `art/characters/${dir}/${p}.png`);
   if (manifestKnowsAssetNow(poses[0]!) === null) return [poses[0]!, poses[1]!];
   const onDisk = poses.filter((u) => manifestKnowsAssetNow(u) !== false);

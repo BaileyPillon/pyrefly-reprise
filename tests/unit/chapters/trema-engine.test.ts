@@ -151,7 +151,8 @@ describe("Trema's fractional moves (research §4.2)", () => {
     const b = board('trema');
     const yuna = b.unit('yuna');
     yuna.mp = 1000;
-    yuna.stats = { ...yuna.stats, eva: 0, luck: 0 };
+    // Re-parity W3: the game applies an MP number as clamp(MP - n, 0, max MP), so a girl needs a max MP that holds her 1000.
+    yuna.stats = { ...yuna.stats, eva: 0, luck: 0, maxMp: 1000 };
     yuna.chainWindowTicks = 50000; // chained: no evasion, so all three land
     const hp = yuna.hp;
     resolveAbility(b.resolveCtx(1), b.unit('trema'), A('trema-waning-moon'), ['yuna']);

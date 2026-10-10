@@ -31,6 +31,7 @@ import { isAlive, onField, targetable } from './predicates.ts';
 // unchanged — the split is a move, not an API change.
 export {
   canAct,
+  canQueueAction,
   canSwitchIn,
   has,
   inTurnQueue,

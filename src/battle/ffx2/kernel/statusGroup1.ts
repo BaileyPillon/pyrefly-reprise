@@ -4,7 +4,8 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69),
  * function 0x00619230. Spec: `research/re-ffx2-hit-status.md` section 4. Pure, no DOM, no engine types;
- * not wired into the engine. Randomness comes from a `draw(stream)` callback (see `./rng.ts`).
+ * the engine runs it through `./status.ts` (`resolve-strike.ts`). Randomness comes from a `draw(stream)`
+ * callback (see `./rng.ts`).
  *
  * For each of the 24 statuses, in index order, with `c` the command's chance byte (raised to the
  * attacker's weapon byte when the command uses character properties):

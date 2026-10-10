@@ -1189,3 +1189,15 @@
 @media (prefers-reduced-motion: reduce) {
   .ffx2-atbmode::before { animation: none; }
 }
+
+/*
+ * The experimental Leblanc chapter's room is a pale hall (FFX-2 only; branch exp-leblanc; the root's data-art-namespace is the scene's art namespace, set by BattleScreen).
+ * The chrome's translucent ink panels (--ig-ink-panel .84, --ig-ink-chip .62, --ig-ink-acting .94) were set over dark paintings; over this room they let the floor
+ * through and small type under them lost contrast (measured, tools/exp-art/hud-contrast.py: six of the 54 texts of the first menu slipped under 4.5, the lowest 3.57). With
+ * more ink every text holds (none under 4.5, the lowest 4.59) and the panels still read as glass. Every other chapter keeps the tokens.
+ */
+[data-art-namespace='exp-leblanc'] .ig {
+  --ig-ink-panel: rgba(11, 10, 18, 0.92);
+  --ig-ink-chip: rgba(11, 10, 18, 0.8);
+  --ig-ink-acting: rgba(11, 10, 18, 0.96);
+}

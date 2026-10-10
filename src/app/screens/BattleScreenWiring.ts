@@ -144,15 +144,22 @@ export function applyAtbConfig(engine: BattleEngine | null): void {
  * sources). The wrapper is transparent when coaching is off, already seen, or
  * suppressed with `?coach=off`, so every capture harness sees the bare HUD.
  */
-export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null): HudPort {
+export function createHud(game: GameId, field?: () => (OversoulField & StatusField) | null, engine?: BattleEngine | null, artNamespace?: string, advisorCap?: number, intentRoof?: boolean, guideFolded?: boolean): HudPort {
   // FF7 gets its own HUD: Bailey's option A made more faithful (docs/plans/ff7-hud-faithful-a-spec.md).
   // Never the FFX-2 HUD, never a coach, never the shared phone rail: it draws FF7's own phone band (FF7 only).
   // The Item list's counts come from the engine's bag (the HUD holds no numbers of its own).
   if (game === 'ff7') return new Ff7BattleHud(engine instanceof Ff7Engine ? { itemCount: (id) => engine.inventory()[id] } : {});
   // The upright-phone layout, option B (Bailey, 2026-09-25; `ui/common/phoneBattle.ts`).
+  // The FFX-2 HUD: the engine (advisor v3), and the scene's art namespace (the experimental Leblanc chapter's party heads come from its own paintings).
+  // `advisorCap`: the scene's cap on the advisor card's height (`SceneStaging.advisorCap`; a room whose fiends stand low), unset where none does.
+  // `intentRoof`: the scene hangs the enemy-intent slab over the highest enemy's head (`SceneStaging.intentRoof`; Chapter VI), unset everywhere else.
+  const ffx2Options = { engine: engine instanceof FFX2Engine ? engine : null, ...(artNamespace ? { artNamespace } : {}), ...(advisorCap !== undefined ? { advisorCap } : {}), ...(intentRoof ? { intentRoof } : {}) };
   const hud: HudPort = game === 'ffx'
     ? withSinHud(withOmnisReadout(withPhoneLayout(new FFXBattleHud(), installFfxPhoneHud)))
-    : withPhoneLayout(new FFX2BattleHud({ engine: engine instanceof FFX2Engine ? engine : null }), installFfx2PhoneHud); // advisor v3
+    : withPhoneLayout(new FFX2BattleHud(ffx2Options), installFfx2PhoneHud); // advisor v3
+  // `guideFolded`: the scene starts its fights with the strategy guide folded to its chip (`SceneStaging.guideFolded`; FFX Chapters I and III), unset everywhere else. The wrappers above patch the HUD
+  // they are given and hand the same object back, so it is the FFX HUD itself; the FFX-2 HUD has no such start and ignores the argument.
+  if (guideFolded && hud instanceof FFXBattleHud) hud.startGuideFolded();
   // The Oversoul look (FFX-2 only: Oversoul exists only in FFX-2), on the field the screen passes in.
   // Inert unless an Oversoul form is on the field (`engine/OversoulLook.ts`). The FFX side gets the
   // Mortiphasm disc colours and Omnis's red glow (FFX only, Chapter XII; inert without the Omnis state,

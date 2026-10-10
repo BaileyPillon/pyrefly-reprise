@@ -1,13 +1,712 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 53 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
-Each entry lists its changes as text and shows one picture from that build; "All pictures for this build" opens
-a page with every picture, before and after where both exist. Engineering detail lives in
-`docs/handoff/release-NN.md`.
+project began: 58 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
+kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
+picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-09 · Release candidate 1: Final Fantasy X and X-2 battles from the game's own code (not live)
+
+Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, release 39.4.2, folded with the release driver's final build a74b2b8e into one tree and pushed to the branch; not deployed, no review run, no production build of the combined tree)
+
+- **FFX:** every attack, spell, item and Overdrive now decides whether it hits, whether it is a
+  critical hit and how much damage it does the way the game's own program does, read from Bailey's
+  Steam copy and checked against it: the game's accuracy formula for each command, its order of
+  steps, its random draws in its order. Spells, items, Overdrives, aeon specials and several boss
+  attacks have no hit roll in the game and never miss (Seymour's Cross Cleave is one; the party
+  could dodge it before). Only the commands the game marks can land a critical hit: no spell does
+  any more (Lulu's Firaga and Thundaga lose their small chance), a few physical skills do
+  (Kimahri's Jump), and Daigoro's attack and Braska's Final Aeon's Triumphant Grasp do not. Luck
+  counts one point a stack in the critical sum, not ten. Damage follows the game's order of steps
+  (3 to 4 percent of ordinary hits were a point off), a natural Defense of 0 is no longer raised to
+  1, a petrified target takes no damage (Mortibody's Shattering Claw does nothing to a stoned party
+  member), the party's percent bonuses reach heals, and the five possessed aeons' plain attack
+  misses about half the time against the party's Evasion, as the game's record says.
+- **FFX, Chapter I:** Seymour Flux and the Mortiorchis follow the game's own script. One shared
+  cycle runs the pair, Flux Banishes an aeon on his next turn, his Protect and Reflect come once
+  each at 52,500 and 35,000 HP, and the Mortiorchis comes back at 4,000, 3,000, 2,000, 1,000 and
+  1,000 HP and takes Flux's turn counter after each of its turns, so Full-Life follows the Lance of
+  Atrophy far less often. With Cross Cleave unable to miss, the shipped auto-battle line wins all 500
+  test seeds (it won 267 of 500 on release 39.4.2).
+- **FFX, Chapter II:** Yunalesca follows her script. Her counters follow every action that reaches
+  her, a miss included; a form changes after the last hit of the blow that ended it and the rest of
+  a multi-hit blow is discarded; against a summoned aeon her Mind Blast and Osmose land on the aeon
+  on the field; Form II's counter advances on aeon turns. Harder: the shipped line wins 483 of 500
+  seeds (498 before) and loses 55 percent more party members.
+- **FFX, Chapter III:** Braska's Final Aeon, the Yu Pagodas, the five possessed aeons and Yu Yevon
+  follow their scripts. His Overdrive runs on a fixed gauge (+2 or +3 a turn, +5 a hit, +20 a
+  Power Wave) and fires the turn after it reads 100; Talk clears it when his next turn starts; Jecht
+  Beam comes a third of the time in his first and third phases. A destroyed Pagoda comes back after
+  two or three of its own turns (one if Slowed) carrying the damage it absorbed. A possessed aeon's
+  special lands on one actor (Bahamut's Impulse on all, Anima always Pain), a character the fayth
+  revives acts next, and Yu Yevon casts Gravija on every turn after his first, on the front line and
+  himself but not his Pagodas; his seventh damaging hit makes his next turn Osmose on each of the
+  three, then Ultima. A party that swings at him with a Zombie weapon now wins in about 24 turns, not
+  hundreds. The chapter still wins 486 of 500 seeds (487 before).
+- **FFX, Chapter VII:** Seymour, the Guado Guardians and Anima follow the script. Seymour's Shell and
+  the Guardians' Protect are real first turns, a Guardian drinks an Auto-Potion (+1,000 HP) when it
+  is damaged (not after a steal), Guard cover shields a Guardian from single-target blows, Anima's
+  gauge fills +5 a Pain and +5 an action that reaches her, a lethal blow before the summon lands
+  whole and Seymour is put back on 6,000 as Anima comes, and in act three he casts two spells at two
+  party slots (the Anima summon line is now triggered by the summon itself). The shipped line wins
+  443 of 500 seeds (482 before).
+- **FFX, Chapter X:** Natus owns the element order, his phase follows his HP down and back up,
+  Mortibody's Desperado ladder scores Shell, Haste, Reflect and the four Nuls, an aeon is Banished at
+  once, and Natus loses half of a Multi-ra when the third party slot is down. The shipped line, which
+  Hastes two and Shells three, now calls Desperado about half the time Mortibody checks. 386 of 500
+  seeds (393 before).
+- **FFX, Chapter XII:** Seymour Omnis and the Mortiphasm discs follow the script. The discs turn Fire,
+  Ice, Water, Thunder and reset Ice, Water, Thunder, Fire (the painted discs on screen turn the same
+  way: their four colours are seated to the game's ring); he always casts four spells, in the order
+  the disc layout fixes; the reset turn casts nothing; hits during the glow are ignored. The readout
+  strip names four spells. Easier: 427 of 500 seeds (281 before).
+- **FFX, Chapter VIII:** Evrae and Cid follow the game's scripts. Evrae Hastes himself once his HP is
+  under 10,666 and, in his Haste phase, answers a hit from afar with a Swooping Scythe (and a hit up
+  close with a fresh Haste while Slow holds); his Stone Gaze counter fills by the class of the
+  command that hit him (a weapon attack +2, a spell +1, anything else nothing), once per action, a
+  miss included, and keeps firing after the Haste phase starts; Cid is slower (an action every 42
+  ticks, not 36). **New, by Bailey's word ("Turn it on"): delaying Evrae now matters.** Delay Attack
+  counts 1 and Delay Buster 3, and at 3 his Haste phase starts with no HP lost, as the game's script
+  has it. The shipped line wins 490 of 500 seeds (488 before) and never uses Delay, so nothing it
+  plays moved.
+- **FFX, Chapter IX:** Yojimbo follows his script. He opens with a Summon aimed at Lady Ginnem and
+  acts before the party; inside each Overdrive-gauge band the game's own odds apply (80 to 99:
+  Wakizashi 25, Kozuka 25, Daigoro 50 percent; 50 to 79: 20, 20, 60; 25 to 49: Kozuka 25, Daigoro
+  75), Zanmato leaves the gauge at 2, and his "+3 when targeted" counts once per action that reaches
+  him, a miss included. Easier: 485 of 500 seeds (428 before), mostly because Daigoro (the dog's
+  bite) comes up more often and Wakizashi and Kozuka less (8.5 a run, 14.7 before).
+- **FFX, Chapter XIV:** Isaaru's three aeons follow their scripts. Each opens with a Summon aimed at
+  Isaaru and acts before the party; Grothia and Pterya fill their Overdrive gauges on every attack at
+  Yuna even with no aeon out; against an aeon each picks its special one time in three, the plain
+  Attack otherwise; Spathi's first Mega Flare comes one turn later. 423 of 500 seeds (434 before:
+  inside the noise).
+- **FFX, Chapter XVII:** the Fins, Genais and the Core follow their scripts. The Left Fin rams with
+  the game's odds by how often he has been hit (one in three, two in three, then always), the Right
+  Fin latches on at the first hit that leaves him under 16,250, and a Fin's Negation is scored from
+  the party's buffs (Shell, Reflect, Protect and Haste, member by member). Genais starts inside its
+  shell and leaves it on its first turn, heals itself with Cura on every hit while shelled, and
+  answers a spell with Waterga once out; the Core counters with its own Fire, Blizzard, Thunder and
+  Water, mostly when it is low, and its Negation chance falls as it is hit. Easier: 437 of 500 seeds
+  (269 before; 87 percent against 54).
+- **FFX, Chapter XVIII (Sin's face):** the game's script ends the fight with Giga-Graviton on Sin's
+  12th turn (the chapter used 13), Sin takes the first turn of the fight, after his second pull Use,
+  items, Wakka's reels and the aeon Overdrives of reach 1 reach him while melee does not, and the
+  Gaze counter rises on every hit from the first. **Now almost unwinnable for the built-in
+  auto-battle line: 3 of 500 seeds (124 on this candidate before the chapter's script went in, 151
+  on 39.4.2).** Bailey chose to ship the game's 12 ("Ship 12, retune our line later") and to rework
+  our own strategy line and the party preset in a later batch. The HUD clock opens at 12; the
+  strategy guide card still says 13 (known stale text until that batch).
+- **FFX-2:** every attack, spell, item and enemy move now decides whether it hits, whether it is a
+  critical hit, how much damage it does, which status it inflicts and whether it steals the way the
+  game's own program does, read from Bailey's Steam copy of FFX-2 and checked against it. Each move
+  runs on the game's own row for it (accuracy rule, power, critical chance, element, number of hits,
+  statuses) and each action is worked out in the game's order, with its random draws in that order.
+  Moves the game never rolls to hit for never miss: nearly every item and spell, and several boss
+  moves that used to miss about one time in ten (Vegnagun's Tail Beam and Noli Me Tangere, Ormi's
+  Supercollider, the Dark Knight's Darkness). A physical hit counts both sides' Luck, Evasion and
+  Accuracy as the game does: Shiva, Sandy and Ixion miss two to three times as often as before,
+  Nooj and Ormi's Shield Bash a third to a half more often, and the Paragon's Attack never touches a
+  girl who wears the Rabite's Foot. Critical hits follow the game's rule: the girls' Attack lands a
+  critical hit on about 44 of every 100 hits that land (11 before), enemies land them where their
+  row says (Nooj's Attack about one hit in ten), and a spell crits only if its row says so. Damage
+  follows the game's whole-number steps (about 70 percent of ordinary physical hits were a few
+  points off, up to 27), the chain bonus comes before the element, Shell halves what the row types
+  as magic and Protect what it types as physical (Bahamut's Impulse is neither; Noli Me Tangere,
+  Final Impact and the Grenade are physical), and a number applied to MP can no longer take a girl
+  above her maximum. Statuses land by the game's one rule; Logos' Russian Roulette is five different
+  results, one picked at random; Delta Attack leaves MP alone; Pilfer Gil takes between half and all
+  of a fiend's gil (it took all of it before), and Chapter VI's fiends now carry some. The hit,
+  critical and status chances the battle menu and the move advisor print come from the same rules.
+- **FFX-2, Chapter IV:** Bahamut's Impulse is untyped in the game's row, so Shell no longer halves it
+  and lowering his Magic no longer shrinks it (about 292 a hit under Shell, 191 before). **Mega Flare
+  now hits at the game's own power 14, where we had 24** (Bailey: "Use 14 from the files"): a girl
+  under Shell takes about 23 a hit instead of 69. The shipped line still wins every one of 500 seeds,
+  in 42 party turns. Of the researched routes (30 seeds each): Shell without the Breaks wins 30 of 30
+  (at least 28 before), healing alone 30 (1 before) and the Magic Break route alone 21 (at least 28
+  before); with the 24 still in, as the candidate stood until Bailey's answer, they read 25, 14 and 2,
+  because with no Shell and no cure the party is ground down, and a Mega Flare at a third of its old
+  damage is what lets those routes live. Mashing Attack still never wins (0 of 30) but leaves Bahamut
+  at 1,300 to 1,900 of his 8,400 HP.
+- **FFX-2, Chapter V:** harder. The shipped line wins 430 of 500 seeds (474 before) and loses 5.5
+  party members a run (3.1). The cause is three of the game's rows that differ from the numbers we
+  had: the Leg's Berserk (a chance of 255 that lands even through the Leg's full resistance, where
+  the old number did not), Mega Phoenix and the Leg's Slow. At a human pace (1.5 seconds a menu) the
+  shipped line wins 2 of 10 seeds; it won 4.
+- **FFX-2, Chapter VI:** the Grenade is a physical move in the game's row, so Leblanc's Protect
+  halves the shipped line's workhorse; Logos lives past Leblanc's third turn and No Love Lost fires on
+  11 of 20 seeds (2 before). The shipped line wins 491 of 500 seeds (488). Careless menu-mashing now
+  wins the three acts on 22 of 40 seeds with no decision time (it lost 12 of 12); at a human pace it
+  still loses every seed.
+- **FFX-2, Chapter XI:** easier, 490 of 500 seeds (430 before). The Dark Knight's Darkness never
+  misses (the game's row has no hit roll; it missed 11 times in 100) and hits harder by the game's
+  whole-number steps (3,806 a hit, 2,449 before), so Shiva falls sooner and acts half as often.
+- **FFX-2, Chapter XIII:** much easier, 213 of 500 seeds (36 before; 43 percent against 7). Two
+  causes that overlap: the game's critical rule and the game's rows. Final Impact is a physical move
+  in its row, so Protect halves it (1,734 a hit to 888), and Soul Spring hits HP and MP and drains
+  both (about 1,000 a hit). The Paragon's Attack now misses a girl who wears the Rabite's Foot every
+  time (it missed half of the time before) and no longer makes her Itchy; Trema's Beguiling Mire and
+  Choking Mist miss 71 to 84 times in 100 (68 to 70 before).
+- **FFX-2, Chapter XV:** harder, 234 of 500 seeds (274 before). The shades hit 5 to 12 percent
+  harder per hit under the game's whole-number damage (Nooj's Attack 269 to 301, Baralai's 231 to
+  251, Gippal's 223 to 236), 5 to 10 percent of their hits are now critical (none were), and the
+  chain bonus builds on the girls they hit several times (without it the chapter would win 309).
+- **FFX-2, Chapter XVI:** unchanged, 500 of 500 seeds (497 before). Ixion misses 14 of every 100
+  Attacks against the party's Evasion, as the game's rule has it (5 before).
+- **What changes in difficulty, FFX** (the shipped auto-battle line, 500 test seeds a chapter;
+  release 39.4.2 in brackets): Chapter I is much easier, 500 (267), because Seymour's mount now takes
+  its turns in step with him, as the game's script has it, which more than pays for Cross Cleave no
+  longer being able to miss. Chapter XII is easier, 427 (281), because Omnis always casts four spells
+  in the order the discs fix and his reset turn casts nothing. **Chapter XVII is much easier, 437
+  (269)**, because Genais heals itself with Cura on every hit and so sits in its shell far less, and
+  the Core counters mostly when it is low (its Fire, Blizzard, Thunder and Water fall from 12.5 to 7.2
+  a run). **Chapter IX is easier, 485 (428)**, because the game's odds send Yojimbo's dog at the party
+  more often than his blades, and his Summon first turn is a free turn for the party. **Chapter XVIII
+  (Sin's face) is now almost unwinnable for the built-in line, 3 (151)**: the game's script ends the
+  fight on Sin's 12th turn (the chapter used 13) and lets Sin act first, and the line and the party
+  preset were tuned against 13 turns (it read 124 once no spell could land a critical hit, as the
+  game has it); Bailey chose to ship the game's 12 and rework our own line and preset later. Chapter
+  VII is a little harder, 443 (482), because Seymour's first turn is a real Shell. Chapter II is a
+  little harder, 483 (498), and the party loses 55 percent more members, because Yunalesca's counters
+  follow every action that reaches her, a miss included, and her Mind Blast and Osmose land on the
+  summoned aeon. Chapters III, VIII (490), X and XIV (423) moved by 11 seeds or fewer, inside the
+  sampling noise.
+- **What changes in difficulty, FFX-2** (the same line and seeds; release 39.4.2 in brackets):
+  Chapter XIII is much easier, 213 (36), because of the game's real critical rule (the girls' hits are
+  critical about four times as often) and the game's ability rows (Final Impact is a physical move,
+  so Protect halves it; Soul Spring drains HP and MP). Chapter XI is easier, 490 (430), because the
+  Dark Knight's Darkness never misses and hits harder. Chapter V is harder, 430 (474), because three
+  of the game's rows differ from the numbers we had (the Leg's Berserk lands through the Leg's full
+  resistance, Mega Phoenix, the Leg's Slow). Chapter XV is harder, 234 (274), because the shades hit
+  5 to 12 percent harder, a tenth of Nooj's hits are critical, and the chain bonus builds on the
+  girls they hit several times. Chapters IV (500), VI (491; 488) and XVI (500; 497) do not move for
+  the shipped line (Chapter IV's side routes do: Mega Flare at the game's power 14 lets a party with
+  no Shell or no Breaks live through it).
+- **Bailey's choices behind this candidate:** Chapter I stays 1:1 with the game's script ("Keep 1:1",
+  his answer twice, Cross Cleave never missing among it), and where the game's script and one of his
+  earlier Seymour decisions that rested on an estimate disagree, the script stands ("Script wins").
+  On 2026-10-09 he also chose, for the three questions the boss scripts raised: Sin's clock stays at
+  the game's 12 turns and our own strategy line is reworked later ("Ship 12, retune our line later");
+  delaying Evrae starts his Haste phase ("Turn it on"); Mega Flare uses the game's 14 ("Use 14 from
+  the files").
+- **Both:** nothing else moved for the player in battle. FF7 is unchanged: its engine logs are byte for byte
+  the same, and no file its engine or data can reach changed except one shared type file, whose
+  additions are types only; the FFX engine reaches none of the FFX-2 batch's files either. This
+  candidate changed no art, audio or saves; the only interface edits are the Omnis readout strip, the
+  enemy-intent previews' texts, Sin's turn clock (it opens at 12 and no longer prints "our estimate"),
+  and the chances the FFX-2 battle menu and move advisor print. **It is built together with the
+  release driver's build** (the heroes' real heights, the real boss sizes and spacing, the folded
+  strategy guide, Bailey's 115 picked poses, the Omnis discs seated to the game's ring), which is
+  described in that build's own entry and moves no battle number: the combined tree plays every FFX
+  and FFX-2 chapter exactly as this candidate did, on all 500 seeds of each.
+- **Disclosed, FFX:** Chapter I is now won by the shipped line on every test seed (one sourced rule,
+  the Mortiorchis copying Flux's turn counter, is the whole move) and Chapter XII by 85 percent; the
+  Omnis strip still prints "colour order: our estimate" although the ring and the reset order are both
+  the game's now (Bailey's wording, left until he changes it); the strategy guides, the advisor
+  card and the auto-battle line for Chapters I, III and X still describe the old fights; Chapter XVIII
+  is won by the built-in line on 3 of 500 seeds (the line and the party preset are tuned for 13
+  turns; the rework is a later batch) and its guide card still says 13 turns where the HUD clock says
+  12; the guide cards for Chapters VIII (the Stone Gaze note), IX (the odds, still labelled "our
+  estimate") and XVII (the Negation card) still describe the old fights; Evrae's Haste story line plays
+  when his HP crosses a third, not when a Delay starts the phase; the Chapter VII, X and XII readouts,
+  the Anima summon line, Sin's turn clock and the enemy-intent previews had no real-input check in a
+  browser yet.
+- **Disclosed, FFX-2:** every printed chance is the game's rule applied to our own stat tables for
+  the girls (every stat but HP differs from the game's stat builder in 334 of 576 sample cells,
+  mostly higher in ours), so the shipped line's Attack crits 44 times in 100 hits; the chain's reset
+  still uses the old 2-second window (3 after a critical hit) in place of the game's hit reaction,
+  and a target inside it is always hit; no auto-ability but Break Damage Limit is modelled, so
+  Chapter XIII's build is harder than the game's by the Protect and Shell Adamantite gives; eleven
+  moves (Mega Flare among them) keep their authored "breaks the damage limit" flag where their rows
+  cap at 9,999; monsters' levels, HP and stat bytes stay as authored (seven enemies differ from their
+  rows); no guide text was rewritten, so the Chapter IV guide card still prints the old Mega Flare
+  figure ("1,152 becomes 192", from the 24); the printed chances, the Pilfer Gil banner and the
+  pause screen's chain count had no real-input check in a browser yet.
+- **Still the old rules, FFX:** turn order, status infliction and durations, Delay and the per-turn
+  ticks; the Overdrive gauge, Steal, Pilfer Gil, rewards, drops and the aeons' own stats; the order
+  menu of Chapters VIII and XVII (the game offers one Trigger Command at a time, ours keeps "last
+  order wins"); the game's own random number generators.
+- **Still the old rules, FFX-2:** the ATB gauge, charge, recovery and interruption, the status
+  timers, Poison and Regen; the girls' stat tables (the game's stat builder is not wired);
+  auto-abilities, weapon elements and statuses, back attacks, Confusion's all-target flip and the
+  Reflect bounce; the boss scripts of every FFX-2 chapter (Bahamut, Vegnagun and Shuyin, the Leblanc
+  Syndicate, Fallen Aeons, Paragon and Trema, Den of Woe, Ixion); the game's own random number
+  generators.
+- **How it was checked:** tsc clean; the FFX engine's whole-chain logs on 18 pinned seeds match
+  each lane's own record: 12 are byte for byte the earlier lanes' own, the six of Chapters VIII, IX
+  and XIV equal the boss-script lane's own to the byte, and one chain link of an earlier merge moved
+  two damage numbers with the merged hook order (explained and proved in
+  docs/handoff/re-parity-rc1.md); the FFX-2 batch and the fifth lane move none of them; the FF7 logs
+  pass unchanged; the FFX-2 engine's four golden logs (137 pinned replays) were re-baselined by its
+  batch, with their outcomes listed in docs/handoff/re-parity-w3.md, reproduced on the merged tree,
+  and had their Chapter IV rows (30 hashes of the main one, 3 and 12 in the other two) re-pinned once
+  for Mega Flare at the game's power 14, with the first differing event named; the full unit suite
+  once on the exact tree of the five merges (979 files, 15,289 tests; 3 failures that also failed on
+  the untouched 39.4.2 tree: art installed after that release and not yet registered); 500 seeds a chapter through every
+  FFX and every FFX-2 chain (the boss-script lane's five chapters equal its own run seed by seed,
+  outcome, party turns and engine turns, on all 2,500 seed-runs; the FFX-2 chapters keep every seed's
+  win or loss, Chapter IV moving only in turns with Mega Flare); a production build of the candidate
+  before the FFX-2 batch and the fifth lane were merged (bundle index-BcR9TGJ3.js); none of the
+  combined tree (the release driver cuts the final build). **After the release driver's build was
+  folded in:** tsc clean; all 18 FFX logs, the four FFX-2 goldens and the FF7 golden reproduce with
+  nothing re-pinned (the only battle code in that build is Omnis's disc ring, which this candidate
+  already had from the game's own script); the Omnis bench and 500 seeds a chapter through every FFX
+  and every FFX-2 chain equal the unfolded candidate on every seed; the full unit suite once on that
+  exact tree (1,010 files, 15,706 tests: 0 failures; the three art-drift failures are gone with the
+  final art). Details, the conflicts of the six merges and the decisions still open:
+  docs/handoff/re-parity-rc1.md.
+
+## 2026-10-08 · Release 39.4.2 on echoesofspira.com
+
+Address: https://echoesofspira.com (main a021787a, bundle cUSnFK7q)
+
+- **FFX-2:** a hotfix for Chapter VI, the Leblanc Syndicate: the fiends stand where release 39.4
+  stood them again, with the same gap to the party and the same camera, and keep the real sizes
+  release 39.4.1 gave them (Ormi 1.15 times the girls' height, Logos 1.26, Leblanc 1.05, Dr. Goon
+  1.10, Fem-Goon 1.01). This is Bailey's pick "Old spacing, real sizes", after he wrote that the way
+  the battles were framed in 39.4.1, "right next to each other", was bad and that the chapter
+  "looked way better before". At 1600x900 the fiends stand 0.59 to 0.83 of the girls' height on
+  screen (the focused review's own measure on the exact build reads 0.60 to 0.85): in Act I Fem-Goon
+  0.72, Dr. Goon 0.70 and Ormi 0.65; in Act II Ormi 0.83 and Logos 0.71; in Act III Ormi 0.83, Logos
+  0.80 and Leblanc 0.59. Release 39.4 had them at 0.43 to 0.71 and 39.4.1 at 0.71 to 1.13. The
+  nearest fiend is 172 to 223 px from the girls (39.4.1: 118 to 135; 39.4: 182 to 230). The camera
+  is the same pose in all three builds and all three acts, and on a phone the girls are within 3
+  percent of 39.4's size (39.4.1 had shrunk them 6 to 18 percent).
+- **FFX-2:** the enemy-intent card now hangs over the highest fiend's head instead of over the
+  acting fiend's, and its text folds to the room above it, so no card covers a head in any act at
+  1280x720, 1600x900 or 1920x1080, whichever fiend acts next (39.4 had Ormi 100 percent covered in
+  Act I, Logos 70 in Act II and Leblanc 100 in Act III; 39.4.1 had Logos 5 and 10 percent in Acts II
+  and III). The move-advisor card is whole again: the cap 39.4.1 gave it in this chapter is out,
+  because the nearest feet stand 40 px above its top, so it prints its full text. The hidden
+  experimental chapter (the word `leblanc`) plays Chapter VI's room by reference and gets the same
+  spots and the same card.
+- **Both:** nothing else moved. The fight itself is unchanged: no battle-engine, enemy-data or
+  golden file is in the change. FFX-2's Chapter IV and FFX's Chapter I first menus match live in 178
+  of 178 and 175 of 175 HUD boxes within 3 pixels, with the same real attack landing; the shared
+  enemy-intent mount gained one optional height limit that FFX never passes.
+- **Disclosed, FFX-2:** the folded card prints less at the smallest windows: Act I's Blizzard card
+  at 1600x900 shows Yuna's and Rikku's damage and folds Paine's row and the odds (F3943-01), and at
+  1280x720 every act folds, and the fold can land inside the red DAMAGE banner (Act II's reads
+  "DAMAGE · RANDOM" with its second line faded); holding J shows everything. On a phone the docked
+  strip touches the top 5 to 7 px of one head in two debug-route captures (Ormi in Act I, Logos in
+  Act III; none in five real-route loads; F3943-02), and Act I's first menu can still start with a
+  goon partly off the edge of the screen (F3942-01, a defect 39.4 already had; milder here than on
+  39.4.1: the worst goon 65 to 81 percent inside the screen at the first menu against 22 to 100 on
+  39.4.1). The fiends read 0.60 to 0.85 of the girls instead of their real 1.01 to 1.26 because the
+  old spacing keeps them far back (F3942-03: the price of the pick), and in Act III the plate names
+  sit under the status rows, as on 39.4 and 39.4.1 (F3942-05).
+- **Disclosed, both:** the build carries The Echo's title painting (art/title/echo.webp, 1.36 MB),
+  the second title screen release 39.5 will offer, and the regenerated art index lists it; nothing
+  loads it, so a player sees no change, but the file can be fetched by its address (F3943-03).
+- **Still open, as on 39.4.1:** the carried disclosures F392-01 (pose changes snap in every
+  chapter), F392-03 (the Zanmato gauge card on a phone in Chapter IX), F393-01 and F393-02 (the
+  hidden chapter's feet and head sizes), F394-01 (Auron's coat in three repaired poses) and F394-02
+  (a first menu downloads about 10 percent more art). The deep review is owed on this build: it
+  carries 45 earlier builds. Not in this release: the FFX heroes' real heights, the Omnis disc order
+  and the other fiends' real sizes (they wait for one combined release), and 39.5 (the second title
+  screen, the chapter-select alternates, the voices).
+- **Deploy notes:** it shipped under Bailey's owner override ("So have you corrected the Leblanc
+  chapter the way I wanted you to? Push it live now please if it's done" and "As a hotfix") because
+  45 builds already owe a deep review and the deploy gate would otherwise refuse. The deploy ran
+  with the preflight tests skipped and the dirty tree allowed; seven files were uploaded (4,533 were
+  already there) in 44.7 seconds and the Worker version is 38185bf4. docs/deploys.log records
+  2026-10-09T01:03:34Z, which is 21:03 EDT on 2026-10-08. The three earlier builds are on preview
+  addresses so the looks can be compared, each checked file by file: 39.4 at
+  https://echoes-of-spira-preview.baileypillon.workers.dev/, 39.3 at
+  https://echoes-of-spira-preview-393.baileypillon.workers.dev/ and 39.2 at
+  https://echoes-of-spira-preview-392.baileypillon.workers.dev/.
+- **How it was checked:** on the candidate (r394-int at a021787a, dist-gate bundle
+  index-cUSnFK7q.js, 4,539 files): tsc clean; the 45 Leblanc, Syndicate, intent-card and advisor
+  test files (534 tests) green; the full unit suite once with 60-second timeouts on the code head
+  d9bbce21: 921 files and 13,640 tests passed. A focused review of the exact build (65 minutes) said
+  SHIP, changed area FAIL (the three checks named above and the unrun continuity harness): Chapter
+  VI's Acts I to III at 1600x900 and 2000x1012 by real keys (the first menu, target cycling, Escape,
+  a real attack and a fiend's own action in each act), the chain to the results screen in 28
+  seconds, the hidden word, 35 browser runs with 0 console errors and 0 failed requests, 61 frames a
+  second; its own rebuild hashed differently from the deploy's in one generated file (the art
+  index), which an addendum reconciles. The deploy compared 50 files byte for byte on both
+  addresses. The live check (55 minutes) compared 4,539 of 4,539 files byte for byte, played Chapter
+  VI's Act I by real keys from the title, then FFX's Chapter I to its first menu, a real attack, an
+  options change and a reload, with 0 console errors and 0 responses of 400 or more, and said PASS.
+
+![Chapter VI, the Leblanc Syndicate: first menu of each act, release 39.4 against 39.4.1 against 39.4.2](docs/screenshots/r3941-spacing/leblanc-three-way.jpg)
+
+*FFX-2, Chapter VI: the first command menu of Acts I, II and III at 1600x900 and on a phone
+(390x844), release 39.4 on the left of each trio, the live 39.4.1 in the middle and this hotfix on
+the right, with each fiend's on-screen height over the girls' beside the real size from the game's
+models. The camera is the same in all three; the fiends are back on 39.4's spots at the real sizes,
+and the intent card no longer covers a head.*
+
+## 2026-10-07 · Release 39.4.1 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 04cdcd45, bundle DAnPZ-iy)
+
+- **FFX-2:** a hotfix for Chapter VI, the Leblanc Syndicate: every fiend is drawn at its real size
+  from the game's HD models, against the three girls. Ormi is 1.15 times the girls' height, Logos
+  1.26, Leblanc 1.05, Dr. Goon 1.10 and Fem-Goon 1.01. Before, the goons were drawn at 70 percent of
+  the party's height and the real sizes of Logos and Ormi had never been used; the fiends stand well
+  behind the girls, so on screen they read as about half a girl. At 1600x900 the fiends stood 0.44 to
+  0.72 of the girls' height on screen and now stand 0.71 to 1.15: in Act I Ormi goes from 0.57 to
+  1.10, Dr. Goon from 0.44 to 0.97 and Fem-Goon from 0.50 to 0.77; in Act II Ormi from 0.72 to 0.91
+  and Logos from 0.57 to 1.15; in Act III Logos from 0.63 to 1.15, Ormi from 0.72 to 0.90 and Leblanc
+  from 0.56 to 0.71. This is Bailey's pick of the Leblanc options, "Option 3: bosses forward", after
+  he wrote that the characters looked huge and the bosses tiny.
+- **FFX-2:** the fiends stand closer to the party, level with each other at the head, so a taller
+  fiend stands nearer instead of further back. The camera is unchanged on desktop (the same pose
+  within 0.04 units at 1600x900 in all three acts, the same lens), and on a phone it steps back a
+  little so the bigger fiends still fit.
+- **FFX-2:** the enemy-intent card no longer covers Ormi's head. In Act I it covered all of it (and
+  in Act III all of Leblanc's); now it covers none of Ormi's, at most 4 percent of Logos's head in Act
+  II and 9 to 10 percent in Act III (Leblanc's own card). No fiend touches the command list or the
+  plates at 1600x900 or 2000x1012, and every fiend is inside the frame. The cost: the move-advisor
+  card is capped in this chapter so it clears the bigger fiends' feet, which makes it three lines
+  instead of up to six (it drops the damage, hit and crit numbers and the "most damage" line there).
+  Whether Bailey wants that is his call (F3942-02).
+- **FFX-2:** the hidden experimental chapter (the word `leblanc`) plays Chapter VI's room and fiends
+  by reference, so it has the same sizes and spots.
+- **Both:** nothing else moved. The fight itself is unchanged: the engine's event logs for all three
+  acts of Chapter VI are byte for byte the same as on 39.4 over seeds 1 to 20 (and 1 to 10 with a
+  1.5-second decision time), and no battle-engine or enemy-data file is in the change. FFX-2's Chapter
+  IV and FFX's Chapter I first menus match 39.4 to within 3 pixels in 178 of 178 and 175 of 175 HUD
+  boxes, with the same real attack landing. Against 39.4 the build differs in two files: the bundle
+  (index-D57LJe-j.js out, index-DAnPZ-iy.js in) and index.html.
+- **Disclosed, FFX-2:** on a phone, Act I's first menu can still start with a goon partly off the
+  edge of the screen (F3942-01, major, a defect 39.4 already had: it lost a goon there entirely; the
+  hotfix improves it and does not finish it). The intent card still grazes Logos's head, up to 10
+  percent (F3942-04). Leblanc (0.71) and Fem-Goon (0.77) still read smaller than their real sizes
+  (1.05 and 1.01), because the HUD leaves the fiends a window of about 207 px at 1600x900 and the
+  shortest fiend of each act stands furthest back (F3942-03). In Act III the plate names sit under the
+  status rows, as on 39.4 (F3942-05).
+- **Still open, as on 39.4:** the carried disclosures F392-01 (pose changes snap in every chapter),
+  F392-03 (the Zanmato gauge card on a phone in Chapter IX), F393-01 and F393-02 (the hidden chapter's
+  feet and head sizes), F394-01 (Auron's coat in three repaired poses) and F394-02 (a first menu
+  downloads about 10 percent more art). The deep review is owed on this build: it carries 44 earlier
+  builds. Not in this release: the FFX heroes' real heights (alone they would make the heroes taller
+  while the FFX bosses stay small, so they wait for the boss sizes) and the Omnis disc order (it
+  changes battle rules, so it waits for a deep review); the sizes of the other fiends follow chapter
+  by chapter.
+- **Deploy notes:** it shipped under Bailey's owner override ("Push a hotfix for the sizing and
+  perspective problem please") because 44 builds already owe a deep review and the deploy gate read
+  the change as needing one first (no save-data file is in it; F3942-06). The deploy ran with the
+  preflight tests skipped and the dirty tree allowed; three files were uploaded (4,535 were already
+  there) and the Worker version is 1d742335. docs/deploys.log records 2026-10-08T02:33:53Z, which is
+  22:33 EDT on 2026-10-07. The same evening Bailey also asked for 39.4 on the preview address,
+  https://echoes-of-spira-preview.baileypillon.workers.dev/, so the old and the new sizes can be
+  compared side by side: it was published there (version bec5819e, 39.4's bundle D57LJe-j) and the
+  address served that bundle at the last check; 39.3 and 39.2 are queued for two more preview
+  addresses.
+- **How it was checked:** on the candidate (r394-int at 04cdcd45, dist-gate bundle
+  index-DAnPZ-iy.js, 4,537 files): tsc clean; the Leblanc tests, the two new test files and the tests
+  the diff touches (15 files, 270 tests) green; the full unit suite once with 60-second timeouts: 919
+  files and 13,618 tests passed, after one failure was fixed (the new size table lacked the confidence
+  tag the citation test wants in every FFX-2 data file). A focused review of the exact build (82
+  minutes) said SHIP, changed area FAIL (the phone's Act I framing, which 39.4 already had, and
+  polish): Chapter VI's Acts I to III at 1600x900, 2000x1012 and 390x844 by real keys (the first menu,
+  target cycling, Escape, a real attack and a fiend's own action in each act), the chain to the
+  Victory screen, 18 fresh phone loads, 47 runs with 0 console errors and 0 failed requests, 61 frames
+  a second. The deploy compared 46 files byte for byte on both addresses. The live check (40 minutes)
+  compared 4,537 of 4,537 files byte for byte, played Chapter VI's Act I by real keys from the title
+  (fiends read 1.152, 1.101 and 1.006 of the girls' height from the page's own actors; on screen 1.10,
+  0.97 and 0.77), the cancel path, pause and hide, a real attack and a fiend's own action, then FFX's
+  Chapter I to its first menu, a real attack, an options change and a reload, with 0 console errors
+  and 0 responses of 400 or more, and said PASS.
+
+![Chapter VI, the Leblanc Syndicate: first menu of each act, release 39.4 against 39.4.1](docs/screenshots/r3941-stage/leblanc-before-after.jpg)
+
+*FFX-2, Chapter VI: the first command menu of Acts I, II and III at 1600x900 and on a phone (390x844),
+the live 39.4 on the left of each pair and the hotfix on the right, with each fiend's on-screen height
+over the girls' beside the real size from the game's models. The camera is the same; the fiends are
+at their real size and stand nearer, and the intent card no longer covers Ormi's head.*
+
+## 2026-10-07 · Release 39.4 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 55db51dd, bundle D57LJe-j)
+
+- **Both:** the art repairs Bailey approved this morning are installed: 586 character and boss poses
+  (218 FFX and 368 FFX-2), 2,063 painting files in all (569 at the base size and 1,494 at the larger
+  sizes a sharper screen draws). Nothing was redrawn. The repairs take the jagged white fringe off the
+  edges of hair and cloth and make a costume's colour the same from one pose to the next, and every
+  repaired painting keeps the exact pixel size of the one it replaces. At battle size the edge repair
+  is subtle by design; at 3x the fringe is gone (the pictures below). Bailey's words: "yes install the
+  555 repairs, go with your recommendations". 555 of the poses had nothing to decide; the other 31
+  came as four calls, and he took the recommendation on each (the next three lines).
+- **Both:** where a figure runs off the edge of its painting, a hard straight cut is now a soft fade
+  about 30 to 35 pixels wide: 21 poses (12 FFX-2 and 9 FFX).
+- **FFX-2:** Paine's Black Mage dress matches her idle in five poses (attack, cast, KO, ready,
+  victory). Seven of its poses were violet and the idle is slate-blue; the research notes give no colour
+  for the dress, so this was a picture call, and the two poses the repair could not do cleanly (follow
+  and item) stay violet. Rikku's Thief critical pose lost one floating blue ellipse (121 pixels) beside
+  her right boot; a reviewer could not tell a stray from a deliberate puddle, and Bailey took the
+  recommendation to remove it.
+- **FFX:** Yuna's skirt matches her idle in four poses (attack, hurt, item, ready).
+- **FFX:** Evrae's (Chapter VIII) idle painting is a byte-for-byte twin of its near-idle painting again
+  at the base size, 3x and 4x (the 2x never was one). The repairs had made two files out of two
+  identical sources, 82,198 of 890,624 pixels apart along the edge, and a test requires the pair to be
+  the same file; the near-idle's repaired painting now stands in for both. The pre-repair file is in the
+  private art archive.
+- **Both:** what was not installed looks as it did: 39 repairs that failed review (a thinner sword
+  blade, mottled robes, erased fingers and the like), 5 FFX poses whose fade exists at the smaller
+  sizes only, and 7 poses of FF7's fight. Of the 586 installed poses, 475 are repaired at all four
+  sizes, 70 at the base size only (a sharper screen draws the older painting), 24 at the base size and
+  2x only, and 17 FFX fiend poses (Grothia, Pterya, Spathi) at the larger sizes only (a 1600x900
+  screen draws the base size, so it looks as before).
+- **Both:** a figure's head keeps its size when it changes pose, a knock-out included (Bailey's pick,
+  D-510). The stage now holds each pose's head to its idle's size on screen, under the frame's own
+  camera, within 10 percent of the table's scale; `?headlock=off` puts the old behaviour back. In the
+  continuity run, the two chapters that failed the head-size test (CHK-026) on 39.2 now pass. Chapter V
+  (FFX-2, Vegnagun and Shuyin): the worst head step fell from 3.50 to 0.27 percent and the swaps over 1
+  percent from 5 to 0. Chapter XVII (FFX, Sin's fins and core): 3.34 to 0.24 percent and 213 swaps to
+  0. The five other chapters measured (I, II, VII, IX, XVIII) pass too, with 0 swaps over 1 percent in
+  all seven. With `?headlock=off` on the same build the two still fail (3.51 and 3.78 percent), so the
+  lock is the cause. The lock's own counters over seven chapters played by the debug autoplayer read
+  56,507 planes held, 0 clamped, 0 warnings; the focused review's own real-key runs read 20,094 planes
+  held and 0 clamped, and 0.29 and 0.24 percent worst steps in Chapters V and XVII.
+- **FFX-2:** typing `leblanc` on the board opens the hidden chapter's party prep and leaves it up until
+  Enter (F393-03). The word's last letter, C, is also the board's START key, and the chapter used to
+  drop straight into its pre-battle scene, with party prep on screen for 2 ms.
+- **Both:** an arrow pressed after typing part of a secret word is the board's again and moves the
+  cursor (F393-04, the one regression 39.3 had against 39.2); the word `limit` for FF7's fight shares
+  the fix and types as before. The chapter is FFX-2 only; the board is both games'.
+- **FFX-2:** a run of the hidden chapter leaves the main save byte-identical (F393-05). It used to
+  write six first-run tips and a timestamp into the save, and a first-time FFX-2 player who found the
+  word first would have lost the first-battle hints of the real chapters. The cost: the hidden
+  chapter's own hints replay once per page load. The coach code is shared and both games' real chapters
+  teach their hints as before.
+- **Both:** a new title-screen track: ElevenLabs Music's take "title 1", which Bailey picked by ear
+  ("ok ill go with title 1"). A flute opens it and plays once (about 33 seconds), then 12 bars of piano
+  repeat (the loop runs from 33.3 to 83.0 seconds of an 86.0-second file); the old file brought the
+  piano in at about 8 seconds. Bailey heard the loop's wrap: "it sounds natural, keep it".
+- **FFX:** new battle music for Seymour Flux (Chapter I) and Seymour Omnis (Chapter XII, which plays the
+  same cue): take A, the epic orchestral one, 44 bars at about 132 bpm (the loop runs from 7.3 to 87.3
+  seconds of a 90.3-second file). Bailey: "ill go with this  it sounds epic!". After listening to the
+  loop jumps he said "this is the only one that isnt smooth, the other 2 are perfect"; this is one of
+  the two.
+- **Both:** new music for the chapter select board: take B, the default (Bailey: "I'll go with B"; its
+  loop jump is the other one he called perfect). The plan to offer A and C as selectable alternates is
+  not in this release.
+- **FFX:** Chapters VII (Seymour Anima) and X (Seymour Natus) keep the battle music they had in 39.3.
+  Take C, the organ one, had been picked for them ("Split: C early, A late"), but it is the one loop
+  Bailey heard as not smooth, and the rework of it was stopped, so C is held out of 39.4.
+- **Disclosed, Both:** the project's stereo gate (how the mix holds together in mono) fails on take A
+  and take B, and the title passes it only just. Correlation, side-to-mid and mono loss against the 0.60,
+  -6 dB and -1 dB it asks for: A 0.29, -2.6, -1.9; B 0.43, -4.0, -1.5; the title 0.602, -6.0, -1.0, and
+  only because its 33-second flute opening is nearly mono (its looping piano part alone reads 0.469,
+  -4.3, -1.36 and would miss all three). The takes ship as Bailey heard them; "narrow" versions of each
+  (0.73 to 0.74 correlation) pass the gate and swap in with one command, and Bailey has not chosen
+  between the two widths.
+- **Disclosed, Both:** every take is band-limited: a steep wall near 16.6 to 17.1 kHz (27 to 38 dB deep;
+  the files they replace had 6 to 12 dB), because the generator hands over a 128 kbps MP3 and the game's
+  encode keeps the wall. Only generating again at a higher output format would remove it, and a new roll
+  is a different piece of music. The shipped files are transcodes (MP3 to float to MP3).
+- **Disclosed, Both:** the three takes are AI-generated, with ElevenLabs Music (model music_v2_5) from
+  our own written briefs, cut to a loop and mastered here (one gain to -16 LUFS; no EQ, stereo repair
+  or reverb). No prompt names a composer, franchise, character or melody; nobody has checked the
+  takes against existing music, and no agent has heard any of it (Bailey chose by ear). They were
+  generated on Bailey's paid ElevenLabs plan; the plan, the date and the terms are to be confirmed on
+  the day a build ships. If a take cannot load, the game plays the older synthesized score for the cue,
+  a different piece. The in-game credits do not name the service yet (the repo's audio credits file
+  does).
+- **Disclosed, Both:** shipped audio is 87.09 MB of the 90 MB cap.
+- **Behind the scenes, Both:** against 39.3 the build holds the same 4,537 files and changes 2,070 of
+  them: 1,662 in place (1,656 repaired paintings, the art manifest, the audio manifest, the three music
+  files and index.html), 407 paintings that shipped as lossless WebP and now ship as PNG, and the
+  bundle (index-Dk9resVW.js out, index-D57LJe-j.js in). The stylesheet, both workers and the other 2,467
+  files are byte-identical. The 407 changed format because the repairs gave their edges soft, partly
+  transparent pixels (39.3's WebPs had alpha of only 0 and 255; every one of the 407 repaired files now
+  has partial alpha and colour under the transparent pixels), and the build ships a WebP only where
+  every decoder draws it the same. The shipped total grows from 9,482.6 to 9,670.6 MB (+188.0 MB, 2.0
+  percent): the art by 189.4 MB (the 407 from 142.6 to 253.9 MB, the 1,656 others by 78.1 MB) and the
+  three music files shrink by 1.4 MB. A player's first menu downloads about 10 percent more art
+  (14 to 16 MB, F394-02).
+- **Still open, FFX (Auron):** after the colour match, Auron's coat is uneven in his cast, attack and
+  victory poses (Chapters II, III, XVII and XVIII): pale blotches, a two-tone coat, flatter fold
+  shading (F394-01, polish; it needs Bailey's eye).
+- **Still open, FFX-2 (the hidden chapter):** the head lock does not cover it. Its figures still slide
+  their feet up to 75 px at an enemy's attack and change size at pose changes (F393-01 and F393-02),
+  its 183 placeholder poses stay exactly as 39.3 shipped them (the art repairs replaced 225 paintings of
+  Chapter VI, not the hidden chapter's copies), a girl who changes dressphere is drawn in the older
+  painting beside the new ones (F393-07), and the pre-battle scene's location label crosses the window
+  glow (F393-06).
+- **Still open, Both:** as on 39.3, pose changes in every chapter still snap (CHK-027: 0.28 to 0.97
+  snaps a minute in the seven chapters measured, against a limit of 0.25), and on a phone in Chapter IX
+  (FFX) the Zanmato gauge card hides Yojimbo and his fiends. Opening the chapter board creates an empty
+  record for a chapter in memory, and any later save (a HUD toggle, a setting) writes it into the main
+  save (F394-03, harmless, a suggestion). The deep review is owed on this build: it carries 43 earlier
+  builds.
+- **Deploy notes:** it shipped under Bailey's owner override ("yes deploy 39.4") because 43 builds
+  already owe a deep review and at most two deploys may go out while one is owed. The deploy ran with
+  the preflight tests skipped and the dirty tree allowed (the review's untracked build folder counts as
+  one); the full suite had passed on the candidate (below). docs/deploys.log records 14:54 EDT, the
+  moment the upload began; 2,061 files were uploaded (2,477 were already there), about 6.4 GB in 35
+  minutes, and the byte-for-byte checks and the records ended at 16:12 EDT.
+- **How it was checked:** on the candidate before the review (r394-int at 4d282a62, dist-gate bundle
+  index-DBDUO1LL.js): tsc clean over 3,091 files; `qa.mjs --strict` 0 findings in 26 music cues, 87.09
+  MB of the 90 MB cap; the audio tests 35 files and 585 tests passed; the browser proof on the built
+  files: all 26 cues decode to their manifest length with no loop click and no level jump, the title
+  and the board play from their files, Chapters I and XII play the new Seymour take and VII and X the
+  unchanged one, 17 of 18 chapters play every cue they should (Trema's results screen was not reached,
+  as on 2026-09-30), 0 console errors, 0 page errors, 0 failed requests; the door smoke (`leblanc`
+  opens party prep and it holds, a party attack lands, 0 console errors, 0 404s) passed; the full unit
+  suite ran 917 files and 13,629 tests with 60-second timeouts: 912 files and 13,582 tests passed, the
+  rest skipped by design (5 files, 46 tests, 1 todo), 0 failed. Then a focused review of the exact
+  build (55db51dd, rebuilt as bundle D57LJe-j; 78 minutes) said SHIP: changed area FAIL, but every
+  failure carried or polish (F392-01, F392-03, F393-01, F393-02; new polish F394-01 and F394-02); the
+  head-size check passed in Chapters V, XVII, I and IV, the door and the music behaved as above, 2,063
+  repaired files all matched the approved list and their old pixel sizes, and 3,346 of 3,346 shipped
+  images load in Chromium and WebKit. The deploy compared 2,114 files byte for byte on both
+  addresses. The live check (45 minutes) compared 4,537 of 4,537 files byte for byte, played the board,
+  `leblanc`, `limit`, Chapter I (FFX) and Chapter IV (FFX-2) by real keys with 0 console errors and 0
+  responses of 400 or more, read the new Seymour take looping in Chapter I and the head lock holding
+  Yuna's and Tidus's knock-outs at x1.0000, and said PASS.
+
+![Yuna's idle at 3x, before and after the repairs](docs/screenshots/r394-repairs/ch2-yuna-ffx-idle-closeup-3x.jpg)
+
+*FFX, Chapter II: Yuna's idle at 3x in real pixels, the live site (39.3) on the left and this build on the
+right. The pale fringe along her hair and cloth edges is gone. At battle size the change is subtle by
+design (a 1 to 3 pixel rim); the full six-pose sheet is `ch2-yuna-ffx-before-after.jpg` beside it.*
+
+![Rikku as a Dark Knight, idle at 3x, before and after the repairs](docs/screenshots/r394-repairs/ch5-rikku-dark-knight-ffx2-idle-closeup-3x.jpg)
+
+*FFX-2, Chapter V: Rikku as a Dark Knight, idle at 3x in real pixels, 39.3 beside this build; the six-pose
+sheet is `ch5-rikku-dark-knight-ffx2-before-after.jpg`.*
+
+![Yuna's idle to KO swap in Chapter XVII with the head lock on](docs/screenshots/r394-headlock/sin-fins-core-yuna-idle-ko-ON.jpg)
+
+*FFX, Chapter XVII: the frames around Yuna's swap from idle to KO with the head lock on; the head after over
+before reads x1.0001. With the lock off the same swap read x1.0378, and on 39.2 x1.0294.*
+
+## 2026-10-07 · Release 39.3 on echoesofspira.com
+
+Address: https://echoesofspira.com (main b80f772f, bundle Dk9resVW)
+
+- **FFX-2:** a hidden experimental chapter, "Experimental: Leblanc (new art)". Type `leblanc` on the
+  chapter board, the way `limit` opens FF7's fight, and it opens at once; the board still shows the
+  usual 18 cards ("0 of 18 beaten") and nothing on it names the chapter. It is Chapter VI's
+  encounter with the same party, fiends, scripts and numbers (the Syndicate at Chateau Leblanc in
+  three acts: the entrance, Logos's room and the last room with Leblanc, Logos and Ormi), painted
+  again with ChatGPT Images 2.5: 54 new paintings (44 poses the fight needs and 10 rarer ones), 7
+  dialogue portraits, 4 pause close-ups and a new moonlit hall for the backdrop, graded toward the
+  approved target, "mockup B". Chapter VI itself is unchanged. Bailey picked the word, putting it in
+  the live build and shipping the paintings as they are; the individual paintings were chosen by the
+  driver under his delegation, each one recorded as a pick he can overturn.
+- **Both:** the door is shared plumbing and is neutral everywhere else. Chapters I, IV and VI ask for
+  no experimental art and play with 39.2's own numbers; `limit` still opens FF7's fight; a wrong word
+  opens nothing; a plain A still moves the cursor left. The chapter's wins and attempts go to its own
+  store, so the board's counts do not move: after a win the board still shows nothing cleared.
+- **Behind the scenes:** against 39.2 the build adds 691 files (689 of them the chapter's, the other
+  two the new bundle and stylesheet), changes 3 (the art manifest, its derived list and index.html)
+  and drops the old bundle and stylesheet; every other shipped file is byte-identical. The art
+  manifest gained 135 entries, all the chapter's. The chapter's 260 1x paintings and their sidecars
+  are archived in the private art repository; the larger size tiers are owed.
+- **Still open, FFX-2 (the hidden chapter):** its figures slide their feet up to 75 px at an enemy's
+  attack and change size at pose changes (heads up to 35 percent by mass), and 219 of 567 pose
+  swaps show a double image: the defects the main chapters had, inside the new chapter (F393-01 and
+  F393-02, disclosed). A girl who changes dressphere is drawn in the older painting beside the new
+  ones (F393-07, a question for Bailey).
+- **Still open, Both (the word):** the word's last letter is also the board's START key, so the
+  chapter skips party prep (F393-03); after you type part of the word the first arrow press on the
+  board is swallowed, the one regression against 39.2 (F393-04); a run writes six first-run tips and
+  a timestamp into the main save, with no progress touched (F393-05); the pre-battle scene's
+  location label crosses the pale window glow (F393-06). A fix for the first three is being built
+  (branch r394-door); it is not live.
+- **Still open, Both:** as on 39.2, pose changes in every chapter still snap, ghost and jerk (0.58
+  snaps a minute against a limit of 0.25), and on a phone in Chapter IX (FFX) the Zanmato gauge card
+  hides Yojimbo and his fiends. The deep review is owed on this build: it carries 42 earlier builds.
+- **Deploy notes:** the full suite ran inside the deploy this time (906 files, 13,474 tests passed).
+  It shipped under Bailey's owner override ("Finish 39.2 + hidden chapter (Recommended)") because 42
+  builds owe a deep review. 307 files were uploaded and 4,231 were already there.
+- **How it was checked:** a focused review of the candidate said SHIP (85 minutes; changed area
+  FAIL, the failures being inside the new chapter); the deploy compared 737 files byte for byte on
+  both addresses; the live check compared 4,537 of 4,537 files, played the board, `leblanc`,
+  `limit`, Chapter I and Chapter IV by real keys with 0 console errors and 0 responses of 400 or
+  more, and said PASS.
+
+![The hidden chapter's Act III first menu beside the approved target](docs/screenshots/release-39.3/exp-leblanc-act3-target-vs-build.jpg)
+
+*Left: the approved target, mockup B (Moonlit Blue Hall). Right: the hidden chapter's Act III first menu on the 39.3 candidate at 1600x900, from the focused review.*
+
+![The hidden chapter's pre-battle scene on the live site](docs/screenshots/release-39.3/exp-leblanc-pre-battle-scene-live.jpg)
+
+*The pre-battle scene on echoesofspira.com at 1600x900 right after typing the word: the new moonlit hall and Rikku's new portrait. The pink location label at the top left crosses the window glow (F393-06).*
+
+![A Change in the hidden chapter](docs/screenshots/release-39.3/exp-leblanc-change-montage.jpg)
+
+*A Change in the hidden chapter, four frames at 1600x900, from the focused review: Rikku becomes a White Mage and is drawn in the older painting beside Yuna's and Paine's new ones (F393-07).*
+
+## 2026-10-07 · Release 39.2 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 002928c4, bundle BFTPT4o0)
+
+- **FFX:** in Chapter IX Yojimbo holds one size. On 39.1 he swung from 0.99 to 1.34 times the
+  party's height from one command menu to the next (285, 216, 216 and 279 px tall at the four menus
+  the review sampled at 1600x900); now he stands at 1.13 to 1.20 times at every menu (251, 261, 261
+  and 259 px). About 1.15 times was Bailey's pick and it stays an estimate: no source gives the
+  proportion and the real game's screen has not been read yet. A phone is unchanged (he is 1.00
+  times the party there).
+- **Both:** no boss is re-sized between command menus: each is sized once per phase. The change
+  reaches FFX's Seymour Natus, Braska's Final Aeon, Evrae and Yojimbo and FFX-2's Bahamut in code;
+  measured, it changes Yojimbo and Bahamut (Chapter IV) and nothing else.
+- **FFX-2:** in Chapter XIII (Trema) a Retry after Oversoul Paragon no longer replays a lost state.
+  When fewer than two girls are standing, Retry opens at Trema's battle start with all three girls up
+  at full HP and MP, Protect and Shell kept, the way a Save Sphere would; with two or more standing
+  it replays the state as entered, as before. On 39.1 a Retry with one girl standing won 0 of 200
+  test fights. The defeat card says nothing about it (an idea for Bailey's yes, F392-09). This was
+  Bailey's pick among three measured answers.
+- **Both:** REDUCE MOTION shortens the attack lunge. A strike that needed extra reach to touch its
+  target now travels half of what 39.1's solver added, in the same 440 ms, so no lunge is longer
+  than 2.9 units (4.4 with the setting off): in Chapter IV a fiend's lunge falls from a median 4.4
+  units to 2.18. FFX's party and fiends and FFX-2's fiends change; FFX-2's girls have no run-in
+  under REDUCE MOTION and are unchanged. The cost: a strike that needed the whole reach now stops
+  part-way (up to 149 px short for Seymour Flux's Lance of Atrophy), a question for Bailey (F392-08).
+- **FFX-2:** in Chapter IV Bahamut's reveal keeps Yuna in the frame. On 39.1 the camera's push cut
+  her (her smallest visible share was 0.43 at 1280x720, 0.42 at 1600x900, 0.83 at 2000x1012 and 0.96
+  at 2560x1080, over 12 runs); on 39.2 she is whole (smallest share 1.00) in all 15 of the review's
+  runs at those four window sizes, with REDUCE MOTION on and off. Desktop windows only; a phone
+  keeps its own framing. For about two seconds as the push ends she stands within 2 to 9 px of the
+  left edge (polish, F392-05).
+- **FFX:** the last pose-size fixes. In Chapter II Yunalesca's first form is sized by her head like
+  every other figure, so her hurt, attack and cast poses are 23 to 33 percent smaller than on 39.1
+  (head x0.99 of her idle's; it was x1.48, x1.42 and x1.29): a calmer, consistent picture that
+  loses the attack's wide sweep, and Bailey kept it. In Chapter VII Yuna's and Rikku's victory poses
+  are registered closer to their idles (x0.948 to x0.976 and x0.967 to x0.983) and the victory
+  camera has room for them; Chapter I's feet no longer read as sliding (the check had read the
+  figure's own jolt as a registration error: 4.2 px, now 0.9). The critic's pose-size check
+  passes in 17 of 18 chapters in this review's run, against 15 of 18 in round 23's run on 39.1.
+- **Behind the scenes:** the Bahamut route test has a 60 s timeout of its own (its heal-only case
+  takes 10 s alone and 17 to 25 s in the full suite), and the comments in the Trema code and the
+  contracts now name Bailey's answer. No game behaviour changed in either.
+- **Still open, Both:** pose changes still snap, ghost and jerk in every chapter, as on 39.1: 0.58
+  snaps a minute on both builds against a limit of 0.25 (F392-01). A knock-out is still a
+  one-frame cut, and in Chapter V (FFX-2) the check found two knock-out swaps whose head changes by
+  4 percent (0.4 px, invisible) against 3 allowed. The engine fix for Chapters V and XVII (Bailey's
+  pick) is built on a branch and not live.
+- **Still open, FFX (Chapter IX):** on a phone the Zanmato gauge card sits over Yojimbo and his two
+  fiends (F392-03, as on 39.1; it needs Bailey's look before a layout change).
+- **Deploy notes:** the first deploy run stopped at the full-suite gate on one 15 s timeout of
+  `tests/unit/ui-pause-stack.test.ts` under load (it passes alone in 1.7 s, and the full suite had
+  passed twice on this commit); the second was refused because the review's untracked build folder
+  counts as a dirty tree; the third shipped with the preflight tests skipped and the dirty tree
+  allowed (the driver's calls), under Bailey's owner override ("Yes, ship 39.2 on SHIP
+  (Recommended)"). It went live at 00:25 EDT.
+- **How it was checked:** a focused review of the candidate said SHIP (175 minutes; changed area
+  FAIL: the pose-size lane's own target, the check in all 18 chapters, was met in 17); the deploy
+  compared 46 files byte for byte on both addresses. No separate live check was run, because 39.3
+  replaced this build about two hours later; the deep review it owed carries to 39.3.
+
+![Chapter IX at four command menus, release 39.1 above and 39.2 below](docs/screenshots/release-39.2/ch9-yojimbo-menus-before-after.jpg)
+
+*Chapter IX (FFX) at command menus 1, 2, 4 and 5, 1600x900, real keys. Top: release 39.1, Yojimbo 285, 216, 216 and 279 px tall. Bottom: release 39.2, 251, 261, 261 and 259 px.*
+
+![Chapter IV's Bahamut reveal at 2000x1012, release 39.1 above and 39.2 below](docs/screenshots/release-39.2/ch4-bahamut-reveal-2000x1012-before-after.jpg)
+
+*Chapter IV (FFX-2) Bahamut's reveal at 2000x1012, the size of Bailey's own window, at 8.0, 8.8, 9.3 and 9.8 seconds. Top: release 39.1 cuts Yuna at the left edge (visible share 0.83). Bottom: release 39.2 keeps her whole (1.00).*
+
+![Chapter XIII's Retry with one girl standing](docs/screenshots/release-39.2/ch13-trema-retry-one-standing.jpg)
+
+*Chapter XIII (FFX-2), Trema, with one girl left standing after Paragon (staged): the defeat card, then Retry opens at Trema's battle start with all three girls up. Bottom: the control, two girls standing, where Retry replays the state as entered.*
 
 ## 2026-10-06 · Release 39.1 on echoesofspira.com
 

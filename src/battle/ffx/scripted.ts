@@ -14,7 +14,7 @@
  * | `minigameParams` | object | merged into the `minigame-request` payload |
  * | `reelStrip` | string[] | symbol strip for a Slots default roll |
  * | `stealRoll` | string | the ability makes §7.8.1's item-steal roll (`steal.ts`) |
- * | `distinctTargetsPerHit` | boolean | a `random-enemy` hit after the first avoids the previous pick when it can (`targeting.ts#nextHitTargets`; Natus's Multi-ra) |
+ * | `scriptAims` | boolean | a `random-enemy` row whose script names who each hit lands on (`targeting.ts#aimedTargetForHit`; the Seymour fights' spells) |
  *
  * Deliberately **not** here: instant death. Death, Death Fury, Pain, Zanmato and the two Wisps are not a script any more: each
  * one's game record carries a Death chance byte, and the status step (`adapt/status.ts`, the game's `pp_BtlInflictStatus`)
@@ -85,17 +85,18 @@ export function runScriptedExtra(
 }
 
 /**
- * The Mortiorchis's death-trigger HP transfer [ffx-seymour-flux §2.2].
+ * The mount's Mortibsorption, the reaction it queues when its own `onHit` finds it at 0 HP
+ * (`research/re-ffx-ai-seymour.md` section 2.5; formula 0x10: the user's max HP, no variance).
  *
- * It deals damage equal to its own current **max** HP to Seymour Flux, heals
- * itself for the same amount, and then its max HP drops by 1 000 for the next
- * cycle — down to a floor of 1 000, which it never goes below. A naive
- * `maxHp -= 1000` produces a dead mount, a 0-damage Mortibsorption and an
- * encounter with no Total Annihilation.
+ * **The revive is not here.** The game restores the mount before its death check: the hook
+ * (`ai/seymour-flux-hooks.ts#reviveMount`) sets its HP and max HP to the revive value (4,000, then
+ * 3,000, 2,000, 1,000 and 1,000 after that) and lowers that value for the next time, so the drain
+ * equals the value the mount came back at. This deals that max HP to the host and announces the
+ * mount's return: a `heal` with `cause: 'mortibsorption'`, the cue the presenter's `'returns'`
+ * departure fades the figure back in on.
  *
- * This is a **reaction**, not a scheduled turn: it consumes no CTB, does not
- * advance the charge ladder and does not trip the alternation guard. It fires
- * even when the drain is lethal to the host — resolve the drain, then check.
+ * A **reaction**, not a scheduled turn: it consumes no CTB and does not advance the cycle. It
+ * fires even when the drain is lethal to the host: resolve the drain, then check.
  */
 export function mortibsorption(ctx: Ctx, mount: FFXCombatant, host: FFXCombatant): number {
   const transfer = mount.stats.maxHp;
@@ -107,11 +108,6 @@ export function mortibsorption(ctx: Ctx, mount: FFXCombatant, host: FFXCombatant
     hitIndex: 0,
     hitCount: 1,
   });
-  mount.stats.maxHp = Math.max(MORTIORCHIS_MIN_MAX_HP, transfer - MORTIORCHIS_DECAY);
-  mount.hp = mount.stats.maxHp;
-  mount.alive = true;
-  mount.removed = false;
-  delete mount.statuses['ko'];
   ctx.emit({ type: 'heal', targetId: mount.id, sourceId: mount.id, amount: transfer, cause: 'mortibsorption' });
   return transfer;
 }

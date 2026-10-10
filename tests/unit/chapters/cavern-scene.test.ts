@@ -136,11 +136,12 @@ describe('cavern-stolen-fayth — formation and marks', () => {
     expect(SLOTS.holdParty).toBe(true);
   });
 
-  it("publishes its own heights, and Daigoro's through the stage's per-combatant height", () => {
+  it("publishes its own heights, and every fiend's through the stage's per-combatant height", () => {
     expect(SLOTS.partyHeight).toBe(1.75);
     expect(SLOTS.enemyHeight).toBe(H.yojimbo);
-    // Not the stage's 0.7-of-boss rule (BattlePresenterArt.worldHeightFor), which stood him as tall as Lulu.
-    expect(SLOTS.figureHeights).toEqual({ [CAVERN_IDS.daigoro]: H.daigoro });
+    // Not the stage's 0.7-of-boss rule (BattlePresenterArt.worldHeightFor), which stood Daigoro as tall as Lulu. r3942-stage names all three fiends at their real heights
+    // (`data/ffx/fiend-stature.ts`: Yojimbo 27.1, Daigoro 8.0 and Lady Ginnem 17.3 over Tidus's 18.15, times the party's 1.75).
+    expect(SLOTS.figureHeights).toEqual({ [CAVERN_IDS.yojimbo]: H.yojimbo, [CAVERN_IDS.daigoro]: H.daigoro, [CAVERN_IDS.ginnem]: H.ginnem });
   });
 
   it('keeps every figure off the FFX HUD at idle, 1600x900, measured with a real camera', () => {

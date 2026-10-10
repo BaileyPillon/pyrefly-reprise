@@ -4,7 +4,7 @@ import { Screen } from '../Screen.ts';
 import { BUTTONS, type InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
 import type { ChapterId } from '../../data/encounters.ts';
-import { ControlsHint } from '../../ui/common/ControlsHint.ts';
+import { ControlsHint, isCoarsePointer } from '../../ui/common/ControlsHint.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import {
@@ -19,8 +19,10 @@ import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts'
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
-import { SecretDoor } from './frontend/secretDoor.ts';
+import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
+import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
+import { experimentRecord } from '../experiments/experimentRecords.ts';
 
 /** Where the secret door leads: the hidden FF7 experiment (`data/chapter-ff7-guard-scorpion.ts`). */
 const SECRET_CHAPTER: ChapterId = 'ff7-guard-scorpion';
@@ -56,14 +58,6 @@ const TOUCH_HINTS = [
   { keyboard: 'Tap the plate', gamepad: 'Cross', label: 'begin', action: 'confirm' },
   { keyboard: 'Tap here', gamepad: 'Circle', label: 'back', action: 'cancel' },
 ];
-
-function isTouchScreen(): boolean {
-  try {
-    return typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
-  } catch {
-    return false;
-  }
-}
 
 /**
  * The board of the whole game: every listed encounter as its boss painted on
@@ -106,6 +100,9 @@ export class ChapterSelectScreen extends Screen {
   private confirming = false;
   /** The secret door (Bailey's approved option A); fed by keys, taps and pad buttons, shows nothing. */
   private door = new SecretDoor();
+  private leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD); // the second door, to the hidden Leblanc experiment (`frontend/leblancDoor.ts`): its word, typed; shows nothing either
+  private wordKey = false; // a later letter of that word was just typed: the board leaves this frame's presses alone (the A of "leblanc" is `left`)
+  private opening: ChapterId | null = null; // its last letter was just typed: the door opens on the next frame, which can take that press (C is START; see `handleInput`)
   private eyebrow: HTMLElement | null = null;
   /** A-3: the focused chapter's battle starts loading while its card is read. */
   private readonly warmer = new BoardWarmer();
@@ -138,7 +135,7 @@ export class ChapterSelectScreen extends Screen {
         <div class="fe-aside"></div>
       </div>
     `;
-    this.hint = new ControlsHint({ root: this.root, items: isTouchScreen() ? TOUCH_HINTS : HINTS });
+    this.hint = new ControlsHint({ root: this.root, items: isCoarsePointer() ? TOUCH_HINTS : HINTS });
     this.hint.mount();
     this.armDoor();
     // The list is drawn once: after this only its selected mark moves.
@@ -162,10 +159,20 @@ export class ChapterSelectScreen extends Screen {
 
   override handleInput(input: InputSnapshot): void {
     this.hint?.handleInput(input);
+    if (this.opening) {
+      // A typed word's last key went down since the last frame. That press is the door's and nobody else's: the word's C is START, and party prep begins the fight on START, so
+      // a press left latched skipped prep (F393-03). A key can be taken only inside a frame, so the door opens here, taking every press with it, as FF7's T (bound to nothing) never needed.
+      const id = this.opening;
+      this.opening = null;
+      for (const b of BUTTONS) input.consume(b);
+      this.openDoor(id);
+      return;
+    }
     if (this.confirming) return;
     // The door reads edges without consuming them, so the board below sees every press as before.
     for (const button of BUTTONS) if (input.justPressed(button) && this.door.feedButton(button, now()) === 'open') this.openDoor();
     if (this.confirming) return;
+    if (this.wordKey) { this.wordKey = false; for (const b of ['left', 'right', 'up', 'down', 'confirm', 'cancel'] as const) input.consume(b); } // a letter of the word is not a board press
 
     if (input.consume('left')) this.move(-1);
     else if (input.consume('right')) this.move(1);
@@ -256,11 +263,12 @@ export class ChapterSelectScreen extends Screen {
 
   private bestTime(id: string): number | null {
     const tile = this.tiles.find((t) => t.id === id);
+    if (tile?.chapter?.experimental) return experimentRecord(id).bestTimeMs; // an experiment's best time is in its own store (reading the save's would create a record there)
     return tile?.chapter ? this.app.save.chapter(id).bestTimeMs : null;
   }
 
   private confirm(): void {
-    if (this.confirming) return;
+    if (this.confirming || this.opening) return;
     const tile = this.tiles[this.selected];
     // A COMING card is never the cursor's home, but a stray `confirm` action
     // from a click must not start a chapter that does not exist.
@@ -288,6 +296,7 @@ export class ChapterSelectScreen extends Screen {
    */
   private armDoor(): void {
     this.door = new SecretDoor();
+    this.leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD);
     window.addEventListener('keydown', this.onDoorKey);
     this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');
     this.eyebrow?.addEventListener('click', this.onDoorTap);
@@ -300,8 +309,11 @@ export class ChapterSelectScreen extends Screen {
   }
 
   private readonly onDoorKey = (e: KeyboardEvent): void => {
-    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.confirming) return;
-    if (this.door.feedKey(e.key, now()) === 'open') this.openDoor();
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || this.confirming || this.opening) return;
+    const at = now();
+    if (this.door.feedKey(e.key, at) === 'open') this.openDoor();
+    if (this.leblancDoor.feedKey(e.key, at) === 'open') this.opening = EXP_LEBLANC_DOOR_CHAPTER; // the board is shut from now (`confirm`, this handler); the door opens on the next frame
+    if (this.leblancDoor.continued) this.wordKey = true;
   };
 
   private readonly onDoorTap = (): void => {
@@ -309,19 +321,19 @@ export class ChapterSelectScreen extends Screen {
   };
 
   /**
-   * Through the door. With `FF7_EXPERIMENT_READY` off (the default until the FF7
+   * Through a door (FF7's by default; the Leblanc word's passes its chapter, always open, and does exactly the same). With `FF7_EXPERIMENT_READY` off (the default until the FF7
    * engine and HUD exist) nothing happens at all. With it on, the board settles
    * on the hidden chapter **without** `rememberBoardChapter`, so the board never
    * reopens on an id it has no card for, and with no sound or sign (the success
    * flash is Bailey's pick, plan §2.2).
    */
-  private openDoor(): void {
-    if (this.confirming || !ff7ExperimentReady()) return;
+  private openDoor(id: ChapterId = SECRET_CHAPTER): void {
+    if (this.confirming || (id === SECRET_CHAPTER && !ff7ExperimentReady())) return;
     this.confirming = true;
-    (this.opts.onSelect ?? defaultOnSelect)(SECRET_CHAPTER);
+    (this.opts.onSelect ?? defaultOnSelect)(id);
     // No reset: the FF7 swirl now holds this frozen board while the fight loads (r29 PR-0222), and a key
     // pressed then must not move the cursor or start a card's preload under it. The flow replaces the board.
-    this.settle(SECRET_CHAPTER);
+    this.settle(id);
   }
 
   private settle(id: ChapterId | null): void {

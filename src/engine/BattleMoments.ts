@@ -260,7 +260,7 @@ export class BattleMoments {
   } = {}): Promise<void> {
     this.shots.headline = opts.bossId ?? this.shots.headline;
     this.shots.fitPhone();
-    const intro = this.pick('intro', 'idle');
+    const intro = this.shots.opening(this.pick('intro', 'idle')); // FFX-2 giants: the master, where the scene's intro would cut one (`ShotRules.opening`)
     this.cut(intro);
     if (this.skipping) {
       this.cut(this.pick('idle'));

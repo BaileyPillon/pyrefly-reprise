@@ -11,6 +11,13 @@
 import type { FFXCombatant } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
 
+/** Braska's Final Aeon's AI script ids (`ai/braskas-final-aeon.ts`). */
+function isBraskaScript(enemy: FFXCombatant): boolean {
+  const fields = enemy.enemy;
+  const id = fields?.forms[fields.formIndex]?.aiScriptId ?? fields?.aiScriptId ?? '';
+  return id.startsWith('bfa') || id === 'braskas-final-aeon';
+}
+
 /**
  * Advance to the next form, if there is one. Returns true when the combatant
  * transformed rather than dying.
@@ -36,17 +43,21 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
   enemy.removed = false;
   delete enemy.statuses['ko'];
 
-  // CTB surgery: the boss acts next unconditionally and every active party
-  // member is pushed back one tick, so nobody acts between the transformation
-  // and its entry action [ffx-yunalesca §1.3 step A].
-  rtOf(ctx, enemy.id).ctb = 0;
-  for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + 1);
+  // Yunalesca's script rewrites the turn order at both changes: the boss acts next and every active party member is
+  // pushed back one tick, so nobody acts between the transformation and its entry action [ffx-yunalesca §1.3 step A;
+  // re-ffx-ai-yunalesca-bfa §2.10]. Braska's Final Aeon's transformation script writes no CTB at all (§3.7), so his
+  // order is left as it was and he returns to his turn when it comes. The counters are the game's bytes (W2): a push
+  // back is clamped at 255.
+  if (!isBraskaScript(enemy)) {
+    rtOf(ctx, enemy.id).ctb = 0;
+    for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + 1);
 
-  // Both cycle counters reset on a transition.
-  const mem = rtOf(ctx, enemy.id).ai;
-  mem['priv0004'] = 0;
-  mem['priv0008'] = 0;
-  mem['priv002C'] = nextIndex;
+    // Both cycle counters reset on a transition, and the entry turn is pending.
+    const mem = rtOf(ctx, enemy.id).ai;
+    mem['priv0004'] = 0;
+    mem['priv0008'] = 0;
+    mem['priv002C'] = nextIndex;
+  }
 
   const event: Parameters<Ctx['emit']>[0] = {
     type: 'form-change',
@@ -75,7 +86,9 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
  * off-field arrival never blocks victory and never grants a false one. All that
  * was missing is the six lines below.
  *
- * The CTB surgery is `advanceForm`'s: the arrival takes the next turn.
+ * The CTB surgery is `advanceForm`'s: the arrival takes the next turn. `partyDelay` is what the arrival's script
+ * adds to each active party member's counter (Anima's: 1, `research/re-ffx-ai-seymour.md` section 3.6), so she acts
+ * before any of them even when one stood at 0.
  *
  * **Presenter note.** This emits `part-restored`, the only shipped event that
  * means "a combatant that was off the field is on it, with this much HP". Its
@@ -83,7 +96,7 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
  * holds — see `docs/handoff/chapter-macalania-engine.md` for the one presenter
  * change the arrival still needs.
  */
-export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number): void {
+export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number, partyDelay = 0): void {
   enemy.removed = false;
   enemy.flags.hidden = false;
   if (slot !== undefined) enemy.slot = slot;
@@ -91,6 +104,7 @@ export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number): void 
   delete enemy.statuses['ko'];
 
   rtOf(ctx, enemy.id).ctb = 0;
+  if (partyDelay !== 0) for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + partyDelay);
 
   const event: Parameters<Ctx['emit']>[0] = { type: 'part-restored', partId: enemy.id, hp: enemy.hp };
   if (enemy.flags.partOf !== undefined) event.ownerId = enemy.flags.partOf;

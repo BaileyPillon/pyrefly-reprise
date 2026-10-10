@@ -1,0 +1,544 @@
+[
+ {
+  "k": "shot.1-chapter-select-first",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-1-chapter-select-first.png"
+ },
+ {
+  "k": "board",
+  "v": {
+   "selected": {
+    "id": "exp-leblanc",
+    "text": "EXPExperimental: Leblanc (new art)"
+   },
+   "cards": 19,
+   "last": {
+    "id": "exp-leblanc",
+    "text": "EXPExperimental: Leblanc (new art)"
+   },
+   "hero": "Chapter EXP Experimental: Leblanc (new art)",
+   "prose": "Chapter VI's mission, in new paintings The same three-act ambush at Chateau Leblanc, fought exactly as it is in Chapter VI, over a set of new paintings made with ChatGPT Images. A preview: a figure not yet repainted is still the old painting, and nothing you do here is written to your chapter progress. ATB"
+  }
+ },
+ {
+  "k": "shot.2-chapter-select-experiment",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-2-chapter-select-experiment.png"
+ },
+ {
+  "k": "afterSelect",
+  "v": "party-prep"
+ },
+ {
+  "k": "shot.3-party-prep",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-3-party-prep.png"
+ },
+ {
+  "k": "afterPrep",
+  "v": "cutscene"
+ },
+ {
+  "k": "shot.4-cutscene",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-4-cutscene.png"
+ },
+ {
+  "k": "preBattle",
+  "v": {
+   "screen": "battle",
+   "presses": 0
+  }
+ },
+ {
+  "k": "menu",
+  "v": {
+   "screen": "battle",
+   "awaiting": true,
+   "st": {
+    "version": "0.1.0",
+    "seed": 1,
+    "screen": "battle",
+    "stack": [
+     "battle"
+    ],
+    "overlayDepth": 0,
+    "frameCount": 1632,
+    "elapsed": 29.741,
+    "registered": [
+     "hud2-mock",
+     "title",
+     "demo",
+     "ffx-hud-demo",
+     "chapter-select",
+     "party-prep",
+     "battle",
+     "party-prep-ffx2",
+     "cutscene",
+     "results",
+     "results-silent",
+     "scene-gagazet",
+     "scene-farplane",
+     "scene-zanarkand-dome",
+     "scene-dreams-end",
+     "scene-bevelle-underground",
+     "scene-leblanc-last-room",
+     "scene-macalania-temple",
+     "scene-evrae-airship-deck",
+     "results-victory",
+     "results-defeat",
+     "results-ffx2"
+    ],
+    "save": {
+     "version": 1,
+     "updatedAt": 1791313039447,
+     "chapters": {
+      "seymour-flux": {
+       "id": "seymour-flux",
+       "cleared": false,
+       "bestTimeMs": null,
+       "bestTurns": null,
+       "attempts": 0,
+       "playTimeMs": 0
+      }
+     },
+     "unlocked": [],
+     "settings": {
+      "masterVolume": 0.8,
+      "musicVolume": 0.7,
+      "sfxVolume": 0.7,
+      "sfxBalanceMigrated": true,
+      "textSpeed": 1,
+      "skipSeenCutscenes": false,
+      "lowEffects": false,
+      "fxLight": true,
+      "fxLiving": true,
+      "fxSpectacle": true,
+      "fxDof": true,
+      "fxFog": true,
+      "fxEdges": true,
+      "fxBreath": true,
+      "fxKo": true,
+      "fxFraming": true,
+      "fxHero": true,
+      "fxSphere": true,
+      "fxSplash": true,
+      "textSize": 1,
+      "guideVisible": true,
+      "advisorVisible": true,
+      "intentVisible": true,
+      "ffx2Atb": "wait",
+      "ffx2AtbMigrated": true,
+      "pausePanelsHidden": false,
+      "battleHelp": true,
+      "reduceMotion": false
+     },
+     "seenCoach": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx2-gauge"
+     ],
+     "flags": {}
+    },
+    "flowStep": "battle",
+    "flowScreens": {
+     "chapterSelect": true,
+     "partyPrep": false,
+     "cutscene": true,
+     "results": true
+    },
+    "screenState": {
+     "chapter": "exp-leblanc",
+     "game": "ffx2",
+     "scene": "exp-leblanc-last-room",
+     "scenePlaceholder": false,
+     "preview": false,
+     "links": 1,
+     "chainLength": 3,
+     "paused": false,
+     "canPause": true,
+     "canPauseOnCancel": true,
+     "exitIntent": null,
+     "playTimeMs": 0,
+     "hud": true,
+     "rig": "idle",
+     "actors": [
+      {
+       "id": "yuna",
+       "side": "party",
+       "art": "exp-leblanc-yuna-gunner",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": 1,
+       "mirrored": false,
+       "life": "idle"
+      },
+      {
+       "id": "rikku",
+       "side": "party",
+       "art": "exp-leblanc-rikku-thief",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": 1,
+       "mirrored": false,
+       "life": "idle"
+      },
+      {
+       "id": "paine",
+       "side": "party",
+       "art": "exp-leblanc-paine-warrior",
+       "pose": "ready",
+       "placeholder": false,
+       "facing": 1,
+       "mirrored": false,
+       "life": "ready"
+      },
+      {
+       "id": "ormi-entrance",
+       "side": "enemy",
+       "art": "exp-leblanc-ormi",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": -1,
+       "mirrored": true,
+       "life": "idle"
+      },
+      {
+       "id": "dr-goon",
+       "side": "enemy",
+       "art": "exp-leblanc-ffx2-dr-goon",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": -1,
+       "mirrored": true,
+       "life": "idle"
+      },
+      {
+       "id": "fem-goon",
+       "side": "enemy",
+       "art": "exp-leblanc-ffx2-fem-goon",
+       "pose": "idle",
+       "placeholder": false,
+       "facing": -1,
+       "mirrored": true,
+       "life": "idle"
+      }
+     ],
+     "spellFx": {
+      "quality": "full",
+      "running": [],
+      "quads": 0,
+      "cpuMs": 0,
+      "cpuMeanMs": 0,
+      "flights": {
+       "launched": 0,
+       "landed": 0,
+       "live": 0,
+       "lastLaunchAt": 0,
+       "lastLandAt": 0
+      }
+     },
+     "playback": {
+      "speed": "normal",
+      "timeScale": 1,
+      "auto": false,
+      "aborted": false,
+      "phase": "command:paine",
+      "awaitingMenu": true,
+      "played": 1,
+      "lastEvents": [
+       {
+        "seq": 1,
+        "type": "atb",
+        "ms": 1
+       }
+      ],
+      "lastCommand": null
+     },
+     "battle": {
+      "turn": 0,
+      "ticks": 5628,
+      "events": 2,
+      "result": null,
+      "combatants": [
+       {
+        "id": "yuna",
+        "hp": 1034,
+        "maxHp": 1034,
+        "mp": 51,
+        "alive": true,
+        "side": "party",
+        "statuses": []
+       },
+       {
+        "id": "rikku",
+        "hp": 934,
+        "maxHp": 934,
+        "mp": 106,
+        "alive": true,
+        "side": "party",
+        "statuses": []
+       },
+       {
+        "id": "paine",
+        "hp": 1089,
+        "maxHp": 1089,
+        "mp": 62,
+        "alive": true,
+        "side": "party",
+        "statuses": []
+       },
+       {
+        "id": "ormi-entrance",
+        "hp": 1640,
+        "maxHp": 1640,
+        "mp": 45,
+        "alive": true,
+        "side": "enemy",
+        "statuses": []
+       },
+       {
+        "id": "dr-goon",
+        "hp": 232,
+        "maxHp": 232,
+        "mp": 41,
+        "alive": true,
+        "side": "enemy",
+        "statuses": []
+       },
+       {
+        "id": "fem-goon",
+        "hp": 167,
+        "maxHp": 167,
+        "mp": 172,
+        "alive": true,
+        "side": "enemy",
+        "statuses": []
+       }
+      ]
+     },
+     "log": [
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 0,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.18993982410121896,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.28,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 0.5899453551912568,
+          "required": 13725,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0.599975428466122,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.0899666139518538,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0.10994282710126832,
+          "required": 15217,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 0
+      },
+      {
+       "type": "atb",
+       "snapshot": {
+        "elapsedMs": 1876,
+        "bars": [
+         {
+          "actorId": "yuna",
+          "fill": 0.6241320783829656,
+          "required": 12962,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "rikku",
+          "fill": 0.7704575163398693,
+          "required": 11475,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "paine",
+          "fill": 1,
+          "required": 13725,
+          "ready": true,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "ormi-entrance",
+          "fill": 0.9456969101296149,
+          "required": 16279,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "dr-goon",
+          "fill": 0.41960991038481815,
+          "required": 17073,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         },
+         {
+          "actorId": "fem-goon",
+          "fill": 0.4797923375172504,
+          "required": 15217,
+          "ready": false,
+          "charge": null,
+          "state": "normal"
+         }
+        ]
+       },
+       "seq": 1
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "k": "shot.5-battle-first-menu",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-5-battle-first-menu.png"
+ },
+ {
+  "k": "chapterInState",
+  "v": {
+   "chapter": null,
+   "screen": "battle"
+  }
+ },
+ {
+  "k": "shot.7a-yuna-attack-start",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-7a-yuna-attack-start.png"
+ },
+ {
+  "k": "shot.7b-yuna-attack-hit",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-7b-yuna-attack-hit.png"
+ },
+ {
+  "k": "shot.7c-yuna-attack-after",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-7c-yuna-attack-after.png"
+ },
+ {
+  "k": "actors",
+  "v": [
+   "paine",
+   "rikku",
+   "yuna"
+  ]
+ },
+ {
+  "k": "shot.8-after",
+  "v": "docs\\screenshots\\exp-leblanc\\yuna-8-after.png"
+ },
+ {
+  "k": "afterAttack",
+  "v": {
+   "logLen": 59,
+   "partyDamage": [
+    {
+     "from": "paine",
+     "to": "dr-goon",
+     "amount": 194,
+     "crit": false
+    },
+    {
+     "from": "rikku",
+     "to": "dr-goon",
+     "amount": 165,
+     "crit": false
+    },
+    {
+     "from": "yuna",
+     "to": "ormi-entrance",
+     "amount": 60,
+     "crit": false
+    }
+   ],
+   "verdict": "PASS"
+  }
+ },
+ {
+  "k": "requests",
+  "v": {
+   "total": 163,
+   "experimental": 106,
+   "baseLeaks": [
+    "/art/characters/yuna-white-mage/idle.png",
+    "/art/characters/rikku-dark-knight/idle.png",
+    "/art/characters/paine-warrior/idle.png",
+    "/art/characters/paine-dark-knight/idle.png",
+    "/art/characters/yuna-gunner/idle.png",
+    "/art/characters/rikku-thief/idle.png",
+    "/art/characters/yuna-dark-knight/idle.png",
+    "/art/characters/rikku-alchemist/idle.png",
+    "/art/characters/leblanc/idle.png",
+    "/art/characters/ormi/idle.png"
+   ]
+  }
+ },
+ {
+  "k": "expSample",
+  "v": [
+   "/art/backdrops/exp-leblanc-last-room.png",
+   "/art/characters/exp-leblanc-leblanc/idle.png",
+   "/art/backdrops/exp-leblanc-last-room.json",
+   "/art/characters/exp-leblanc-yuna-gunner/idle.png",
+   "/art/characters/exp-leblanc-rikku-thief/idle.png",
+   "/art/characters/exp-leblanc-paine-warrior/idle.png",
+   "/art/characters/exp-leblanc-ormi/idle.json",
+   "/art/characters/exp-leblanc-ormi/idle.png",
+   "/art/characters/exp-leblanc-ffx2-dr-goon/idle.json",
+   "/art/characters/exp-leblanc-ffx2-dr-goon/idle.png",
+   "/art/characters/exp-leblanc-ffx2-fem-goon/idle.json",
+   "/art/characters/exp-leblanc-ffx2-fem-goon/idle.png"
+  ]
+ },
+ {
+  "k": "consoleErrors",
+  "v": []
+ },
+ {
+  "k": "notFound",
+  "v": []
+ }
+]

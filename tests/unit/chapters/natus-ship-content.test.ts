@@ -152,7 +152,9 @@ describe('the tactic, on the real engine and the chapter record', () => {
     expect(all.filter((x) => x.kind === 'attack').every((x) => x.targets[0] === 'seymour-natus')).toBe(true);
   });
 
-  it('strategy 7 never Hastes a third: over twenty whole battles no three active members are Hasted at once and Desperado is never called', () => {
+  // Re-parity (D-21): "Desperado is never called" is no longer true of this line, because the game's test counts the
+  // Shells too (Haste on two plus Shell on three is a total of 5); what stays true is that it never Hastes a third.
+  it('strategy 7 never Hastes a third: over twenty whole battles no three active members are Hasted at once', () => {
     for (let seed = 1; seed <= 20; seed++) {
       const engine = newEngine(SEYMOUR_NATUS, seed);
       for (let i = 0; i < 8000; i++) {
@@ -164,8 +166,6 @@ describe('the tactic, on the real engine and the chapter record', () => {
         const hasted = st.activeIds.filter((id) => (st.combatants[id] as { statuses: Record<string, unknown> }).statuses.haste !== undefined);
         expect(hasted.length, `seed ${seed}`).toBeLessThan(3);
       }
-      const log = engine.state().log;
-      expect(log.some((e) => e.type === 'action-start' && e.abilityId === 'mortibody-desperado'), `seed ${seed}`).toBe(false);
     }
   }, 120_000);
 

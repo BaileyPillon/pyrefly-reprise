@@ -33,8 +33,14 @@ import { setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
 
 const MAX_DECISIONS = 40_000;
 
-/** The four seeds the coordinating session measures every encounter on. */
-const SEEDS = [1, 7, 42, 20260916];
+/**
+ * The four seeds the coordinating session measures every encounter on. Seed 1 became 3 on 2026-10-09 (re-parity AI lane B,
+ * research/re-ffx-ai-yunalesca-bfa.md sections 3 to 6): the shipped line now loses seed 1's first link (turn 443, the boss on
+ * 28,254 of 120,000), as it loses seeds 18 and 23 of the first forty. Braska's Final Aeon runs the game's own script (the
+ * gauge's fixed arithmetic, the game's move tables) and the Yu Pagodas return with the damage they absorbed; the 500-seed
+ * line is 486 wins, against 488 before (14 losses, all on link 1, against 12). A seed pin that moved with the rules.
+ */
+const SEEDS = [3, 7, 42, 20260916];
 
 /**
  * Braska's Final Aeon → Valefor → Ifrit → Ixion → Shiva → Bahamut → Yu Yevon,
@@ -291,7 +297,8 @@ describe('the shipped intended strategy beats Chapter 3', () => {
    * of the whole chapter in about a second.
    *
    * Measured **39/40** on this window as of round 5 (38/40 before it, 36/40
-   * before round 4). The bar is 36 so ordinary tail variance does not flake it,
+   * before round 4), and **37/40** since re-parity AI lane B made the boss and the Pagodas follow the game's
+   * scripts (seeds 1, 18 and 23 lose, all on link 1). The bar is 36 so ordinary tail variance does not flake it,
    * and so that a regression toward what this was at the §4.1 preset with no
    * bench, no Doublecast and no Zombie - **0/40, a guaranteed defeat on link 1**
    * - goes red immediately.
@@ -333,6 +340,7 @@ describe('the shipped intended strategy beats Chapter 3', () => {
    * unrelated tuning change.
    */
   it('wins the eight seeds the verifier picked, chain and all', () => {
+    // Still 8/8 on the game's own script (re-parity AI lane B).
     const seeds = [2, 3, 5, 11, 13, 99, 1234, 7777];
     const results = seeds.map((seed) => ({ seed, r: runChain(seed) }));
     const won = results.filter((x) => x.r.outcome === 'victory' && x.r.links === EXPECTED_LINKS);
@@ -349,41 +357,33 @@ describe('the shipped intended strategy beats Chapter 3', () => {
 });
 
 /**
- * The wrong tactic must stay punished, independently of whether the intended
- * line currently wins. `research/ffx-bfa-yu-yevon.md` §3.4.1 is the whole of
- * the last fight and it is counter-intuitive enough to be worth pinning:
+ * What swinging at Yu Yevon does. `research/ffx-bfa-yu-yevon.md` §3.4.1 is the whole of the last fight and was
+ * counter-intuitive enough to be worth pinning:
  *
  * > Yu Yevon fires **at most one Curaga per player-side action that deals him
  * > damage**, evaluated after that action has fully resolved.
  *
- * With this party's best single action worth about 3,700 and the counter-heal
- * capped at 9,999, **every swing is a net heal of six thousand**. The wrapper
- * below plays the obvious game — hit the boss — and what it measures is that
- * swinging buys nothing: the fight is not won by the party's damage.
+ * With this party's best single action worth about 3,700 and the counter-heal capped at 9,999, every swing is a net heal
+ * of six thousand **while he is not Zombie**. This party's Auron carries a Zombie weapon, though: while Yu Yevon is
+ * Zombie, each Curaga he draws on himself is 9,999 of damage instead, and only a Pagoda's Power Wave strips the status.
  *
- * **What it used to assert, and why that changed (Build A.1).** Until round 03
- * blockers #15 and #16a were fixed this block asserted that the swinging line
- * never ends and leaves him above 80,000 HP. That was not the research; it was
- * two defects. (a) `collectBossCounters` never checked `attacker.side`, so
- * every Yu Pagoda Power Wave aimed at him fired his own 9,999 Curaga — a row
- * §3.4.1's table scores at **0** — and the two Pagodas healed him faster than
- * anything could hurt him. (b) His Gravija's target list was hand-built as
- * party-plus-self, though §3.3 says it "removes exactly 75% of current HP from
- * **every target on the field**", so the Pagodas were never in its blast and
- * never suppressed. With both fixed, §3.5's stated attrition route works as
- * documented — "when Gravija starts showing 0, he is at 1 HP and any hit
- * finishes him" — and the group record's "Cannot be lost" holds. So a party
- * that does nothing but swing at him *does* eventually see him die, from his
- * own Gravija, after hundreds of turns. That is the shape this block now pins:
- * the counter still eats every swing, and the slow route stays slow.
+ * **What this block asserted, and why that changed (re-parity AI lane B, 2026-10-09).** Until then it pinned that the
+ * swinging line "wins only the slow way", after 300 or more turns of the last link (410 to 842 over forty seeds). That was
+ * the old engine's timing, not the game's: a revived character waited a full recovery before acting again, the Pagodas
+ * opened a long way behind the party and Yu Yevon cast Gravija on alternate turns only. Read from the scripts
+ * (research/re-ffx-ai-yunalesca-bfa.md sections 5.2, 5.3 and 6.2): a character the fayth revives acts next (CTB 0), both
+ * Pagodas start at CTB 24, and Yu Yevon casts Gravija on every turn after his first. Measured on the last link alone,
+ * forty seeds: the swinging party wins every one of them in 18 to 46 turns (median 24); with the revival and opening rules
+ * put back, 37 of the 40 end on the stalemate guard after 400 turns or more, as the old engine's did (35 wins in 410 to
+ * 842 turns and 5 stalemates). The shipped line (Doom first) is unaffected: 14 to 17 turns on the last link, as before.
+ * The Zombie route is one of the five exits the research lists (§3.5); with the game's timing it is a fast one.
  *
- * It reaches Yu Yevon by playing the shipped line for the first six links and
- * only overriding on the last one, so this measures the counter and nothing
- * else.
+ * It reaches Yu Yevon by playing the shipped line for the first six links and only overriding on the last one, so this
+ * measures the counter and nothing else.
  */
-describe('out-damaging Yu Yevon stays a losing tactic', () => {
-  for (const seed of [1, 42]) {
-    it(`a party that swings at him wins only the slow way (seed ${seed})`, () => {
+describe('swinging at Yu Yevon with a Zombie weapon wins by his own Curagas', () => {
+  for (const seed of [7, 42]) {
+    it(`a party that swings at him wins by turning his Curaga on him (seed ${seed})`, () => {
       let swings = 0;
       const r = runChain(seed, dreamsEndBuild, (d, engine) => {
         const state = engine.state();
@@ -400,27 +400,14 @@ describe('out-damaging Yu Yevon stays a losing tactic', () => {
       console.log(`seed ${seed}: ${r.outcome} after ${swings} swings\n  ${r.trail.join('\n  ')}`);
 
       // It got there: the first six links are the shipped line and they win.
-      expect(r.links, 'the wrapper must actually reach Yu Yevon, or it proves nothing').toBe(
-        EXPECTED_LINKS,
-      );
-      expect(swings, 'the wrapper must actually have swung at him').toBeGreaterThan(10);
+      expect(r.links, 'the wrapper must actually reach Yu Yevon, or it proves nothing').toBe(EXPECTED_LINKS);
+      expect(swings, 'the wrapper must actually have swung at him').toBeGreaterThan(5);
 
-      // The counter ate every swing; the only thing that moved his bar was his
-      // own Gravija, and §3.5 says that route ends at 1 HP with "any hit"
-      // finishing him. So the fight ends — after hundreds of turns of it.
       expect(r.outcome, 'the fight has to reach an outcome').toBe('victory');
       const lastLink = r.trail.at(-1) ?? '';
       expect(lastLink, 'the last link in the trail must be Yu Yevon').toContain('yu-yevon');
       const turns = Number(/turn=(\d+)/.exec(lastLink)?.[1] ?? 0);
-      // The shipped line (`intendedStrategy`, above) takes about 200 turns for
-      // the whole seven-link chain. Swinging at him takes that many on the last
-      // link alone: out-damaging the counter is still not a route this party
-      // has, which is what §3.5 warns about.
-      expect(turns, 'swinging must stay the slow route, not a way to out-damage him').toBeGreaterThan(
-        300,
-      );
-      // This one deliberately runs the last link to its decision ceiling, so it
-      // is the slowest block in the file; the budget is for a loaded machine.
+      expect(turns, 'with the game’s timing the Zombie route is quick, not hundreds of turns').toBeLessThan(100);
     }, 180_000);
   }
 });

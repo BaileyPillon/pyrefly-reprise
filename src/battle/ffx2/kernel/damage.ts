@@ -4,8 +4,8 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), the base damage
  * function at 0x61b910 (the older copy of the exe has it at 0x61b930; the two are byte-identical). Spec:
- * `research/re-ffx2-damage.md` section 1. Not wired into the engine: the engine still uses
- * `../formulas.ts` (floats, one truncation at the end).
+ * `research/re-ffx2-damage.md` section 1. The engine's hand-written float chain (`formulas.ts`, one truncation
+ * at the end) is gone: every damage class of every strike is computed here, through `./pipeline.ts`.
  *
  * Every operation mirrors the instruction sequence: IMUL products wrap at 32 bits, `/ 16`, `/ 64`, `/ 128`,
  * `/ 256` and `/ 1024` round toward zero, and the divisions by 12 and 255 are truncating signed divides. All

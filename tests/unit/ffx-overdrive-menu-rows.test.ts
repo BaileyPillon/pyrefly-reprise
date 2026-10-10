@@ -379,11 +379,7 @@ describe('every offered row is submittable as offered', () => {
    * the state, because that is what the presenter animates: a row that produces
    * no events produces no feedback either.
    */
-  function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[]): void {
-    // Seed 4, not 3 (re-parity W2): the opening counters are the game's 26 fixed draws now, so the seeds moved. With everybody but
-    // `who` defending, the question is only whether `who` gets a turn before the Chapter 1 board kills the front three; on seed 3
-    // Kimahri does not (Seymour Flux zombifies and kills him first), on seed 4 all five members used here do.
-    const seed = 4;
+  function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[], seed = 3): void {
     for (const who of front) {
       // One engine per row: submitting a row changes the board, and the point
       // is what each row does from the same starting position.
@@ -423,7 +419,10 @@ describe('every offered row is submittable as offered', () => {
   }
 
   it('holds for the Chapter 1 board, Wakka and Lulu included', () => {
-    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri']);
+    // Seed 3 -> 1 on 2026-10-09 (re-parity AI-Seymour, FFX only): everyone else only Defends, and on seed 3 Seymour Flux's script (the
+    // game's own, research/re-ffx-ai-seymour.md D-01 to D-08) puts Kimahri on the floor before his first turn, so the probe
+    // ends before he is asked. Seed 1 lets Wakka, Lulu and Kimahri all act; nothing about the menu rows changed.
+    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri'], 1);
   });
 
   // Three named actors on one board is what let Rikku's `Steal`, `Use` and

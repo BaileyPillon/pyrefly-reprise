@@ -1,0 +1,80 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "sin-fins-core",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 1028.1,
+   "swaps": 1469,
+   "snapsPerMinute": 0.7,
+   "maxHeadJumpPct": 24.1,
+   "maxFeetShiftPx": 1,
+   "worstJerkPx": 334.4,
+   "strips": 14,
+   "worstSwapStrips": [
+    "sin-fins-core-win-on/continuity/strips/swap-526-right-fin-idle-cast.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-815-right-fin-idle-ko.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-412-left-fin-hurt-ko.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-485-right-fin-cast-idle.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-471-right-fin-idle-attack.jpg",
+    "sin-fins-core-win-on/continuity/strips/swap-477-right-fin-attack-idle.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 1028.1,
+ "counted": 1469,
+ "swaps": 1620,
+ "size": {
+  "judged": 1104,
+  "costumeSwaps": 3,
+  "sameArtSwaps": 362,
+  "costumeWorstHeadPct": 51.5,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 24.1,
+  "maxHeadJumpPctRegistration": 0.2,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 1,
+  "feetOverTolerance": 0,
+  "headMeasured": 1104,
+  "headRegistration": 1048,
+  "headSilhouette": 56,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 12,
+  "snapsPerMinute": 0.7,
+  "hardCuts": 15,
+  "hardCutsPerMinute": 0.88,
+  "ghostSwaps": 1083,
+  "ghostFrames": 4615,
+  "worstGhostSeverity": 0.446,
+  "ghostOverFail": 55,
+  "jerks": 535,
+  "worstJerkPx": 334.4,
+  "jerksOverFail": 202,
+  "lowestIou": 0.061,
+  "maxCentroidShiftPx": 363.3
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "1048 of 1104 measured swaps had a registered head (tolerance 3 percent); 56 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.7 snaps per minute is over 0.25",
+    "202 jerk(s) of 40 px or more in one frame (worst 334.4 px)",
+    "55 swap(s) show a double image of severity 0.4 or more (worst 0.446)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5190/",
+ "date": "2026-10-07T22:22:03.706Z"
+}

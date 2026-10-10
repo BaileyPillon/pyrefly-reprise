@@ -40,7 +40,9 @@ describe('data: research §3.1 and §4.1, carried verbatim (rule 6)', () => {
     expect(x2Ixion.level).toBe(28);
     expect([x2Ixion.stats.hp, x2Ixion.stats.maxHp, x2Ixion.stats.mp]).toEqual([12380, 12380, 9999]);
     const s = x2Ixion.stats;
-    expect([s.str, s.mag, s.def, s.mdef, s.agi, s.eva, s.luck, s.acc]).toEqual([62, 21, 106, 82, 138, 35, 4, 0]);
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"): Accuracy is 95, the game's monster row (the research prints none, so the data
+    // carried 0 and the engine invented 104); `monster-records` lays the row's byte on every enemy. The other seven are unchanged.
+    expect([s.str, s.mag, s.def, s.mdef, s.agi, s.eva, s.luck, s.acc]).toEqual([62, 21, 106, 82, 138, 35, 4, 95]);
     expect(x2Ixion.affinities).toEqual({ lightning: 'absorb', water: 'weak', gravity: 'immune' });
     for (const st of ['ko', 'petrify', 'sleep', 'silence', 'darkness', 'poison', 'confuse', 'berserk', 'curse', 'eject', 'stop', 'doom'] as const) {
       expect(x2Ixion.immunities[st], st).toBe(255);
@@ -182,7 +184,9 @@ describe('resolution in the FFX-2 engine', () => {
     }
     expect(Math.min(...seen.thundara)).toBeGreaterThanOrEqual(149);
     expect(Math.max(...seen.thundara)).toBeLessThanOrEqual(169);
-    expect(Math.min(...seen.hammer)).toBeGreaterThanOrEqual(935);
+    // Re-parity W3 (FFX-2 only; reason "game-code parity"): the exe's integer chain truncates after the variance step, so the bottom of
+    // the Hammer's range is 934 where the FAQ's 935 stands (the draws give 934, 938, 942 ... 1,055: steps of one 256th of the base).
+    expect(Math.min(...seen.hammer)).toBeGreaterThanOrEqual(934);
     expect(Math.max(...seen.hammer)).toBeLessThanOrEqual(1057);
   });
 

@@ -143,17 +143,18 @@ export function doomTurn(ctx: Ctx, actor: FFXCombatant): boolean {
 
 /**
  * `pp_BtlEndTurnStatusTick` and the Poison marker of `pp_BtlActionDone` for the actor whose turn is closing. `resultsApplied`
- * is false for a passed turn (a sleeper's), which takes no Poison damage.
+ * is false for a passed turn (a sleeper's), which takes no Poison damage. Returns true when a Poison tick took HP from the
+ * actor (the caller runs the monster's `postPoison` hook right after it).
  */
-export function endOfTurn(ctx: Ctx, actor: FFXCombatant, resultsApplied: boolean): void {
+export function endOfTurn(ctx: Ctx, actor: FFXCombatant, resultsApplied: boolean): boolean {
   const chr = tickChrOf(ctx, actor, presentIds(ctx));
   const tick = endOfTurnTick(chr);
   for (const slot of tick.ticked) writeCounter(ctx, actor, slot, tick.counters[slot] as number);
 
-  if (!poisonMarked(chr, resultsApplied)) return;
+  if (!poisonMarked(chr, resultsApplied)) return false;
   const slot = slotOf(ctx, actor);
   const poison = poisonTick({ hp: actor.hp, maxHp: actor.stats.maxHp, poisonPercent: poisonPercentOf(actor) }, slot, slot);
-  if (poison.fired && poison.amount > 0) {
-    dealDamage(ctx, actor, poison.amount, { element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
-  }
+  if (!poison.fired || poison.amount <= 0) return false;
+  dealDamage(ctx, actor, poison.amount, { element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
+  return true;
 }

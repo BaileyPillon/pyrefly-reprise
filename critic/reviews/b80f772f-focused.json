@@ -1,0 +1,978 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-07T06:08:30.496Z",
+  "build": {
+    "mainSha": "b80f772f",
+    "branch": "r393-int-local (= origin/r393-int)",
+    "bundle": "Dk9resVW",
+    "stylesheet": "assets/index-Ta9GcVj0.css",
+    "files": 4537,
+    "artifactHash": "0b31ed8767792e02caa0a98484dbfcb55030a4ee5b6607451bb35a0b0b5c936f",
+    "liveBuild": "002928c4 (39.2, bundle BFTPT4o0, artifactHash 6f50f6a2d119bc8c50028f996304a4ba15b7f5b1588cae89a17d0d458f0ae4c4)",
+    "bundleFile": "assets/index-Dk9resVW.js"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "plan": {
+    "depth": "deep",
+    "deepBeforeDeploy": false,
+    "focusedBeforeDeploy": true,
+    "deepAfterDeploy": true,
+    "approvedArtCheck": false,
+    "dataAudit": true,
+    "saveData": "not classed: src/app/SaveData.ts, the save schema and any migration are untouched (git diff 002928c4..b80f772f is empty for them); the experiment's own store pyrefly-reprise:experiments:v1 is the FF7 experiment's file with one additive adapter, in the \"FF7 experiment: data, flow, its own store\" focused system",
+    "file": "critic/reviews/b80f772f-focused/plan.json"
+  },
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect and no regression at critical or major severity against live 39.2 (002928c4): the candidate is live 39.2 plus the hidden chapter and its plumbing, and every shipped file other than the new bundle, index.html, the stylesheet, art/derived.json, art/manifest.json and 689 exp-leblanc files is byte-identical to live (sha256 manifest diff: 691 added, 3 changed, 2 removed).",
+    "The three re-run base chapters (I FFX, IV and VI FFX-2) play to victory by real keys with live's own continuity numbers (CHK-026 PASS in all three, CHK-027 FAIL exactly as on live; Chapter VI shows more 40 px hit-recoil jerks in a longer fight, read as run-to-run spread, see CHK-027), show 0 requests for exp-leblanc art, no namespace attribute, haze 0, the default HUD ink, the same portraits, pause plates, command rows and tabs as live, with 0 console errors and 0 responses of 400 or more; the shipped stylesheet differs from live's by four additions, all scoped to the new classes and to the exp-leblanc namespace.",
+    "The door works as asked: the board shows the eighteen at 1600x900, 2000x1012 and 390x844, a wrong word or a pause does nothing, \"limit\" still opens FF7's chapter, and the typed word \"leblanc\" opens the hidden chapter without moving a cursor; the chapter plays end to end by real keys (scene, three acts, 71 turns, victory, results, board) and writes no clear, no count and no unlock.",
+    "Defects found are inside the brand-new hidden chapter or its door and so do not block: F393-01 and F393-02 (CHK-026 and CHK-027 FAIL in the new chapter: feet slide up to 75 px at Dr. Goon's attack, 219 double-image swaps), and polish F393-03 (the word skips party prep), F393-04 (a swallowed arrow press after a partial word, the one regression against live, rare), F393-05 (six coach hints in the main save), F393-06, F393-07. The pre-existing majors F392-01 (CHK-027 everywhere) and F392-03 (phone Chapter IX) are carried and disclosed."
+  ],
+  "checks": [
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 6,
+      "where": "both; Chapters I (FFX), IV and VI (FFX-2) and the hidden chapter; board, first menu, pause; 1600x900, 2000x1012, 390x844",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The pause owns the whole window at the three sizes (root 0,0,1600x900 in the harness runs, 0,0,2000x1012 and 0,0,390x844 measured in Chapters I and VI and in the hidden chapter) and the page never scrolls sideways (documentElement overflow 0 in every first menu and pause). The board keeps its eighteen cards at the three sizes with no clipped name; the new xlong title class is never applied (0 elements), so the shared CSS added for the hidden chapter changes nothing visible on the board.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-2000x1012.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-390x844-touch.json",
+        "critic/reviews/b80f772f-focused/door-2000/door-cand-2000x1012.json",
+        "critic/reviews/b80f772f-focused/door-phone/door-cand-390x844-touch.json",
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900/14-pause-3-chapter.jpg",
+        "critic/reviews/b80f772f-focused/door-2000/door-cand-2000x1012/14-pause-3-chapter.jpg",
+        "critic/reviews/b80f772f-focused/door-phone/door-cand-390x844-touch/14-pause-3-chapter.jpg"
+      ]
+    },
+    {
+      "id": "CHK-003",
+      "result": "FAIL",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 4,
+      "where": "both; Chapters I, IV, VI and the hidden chapter; first menu at 1600x900, 2000x1012, 390x844",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Text under the 14 px floor exists at the first menu, and it is the same text on live 39.2: Chapter I smallest 12.12 px (a numeral chip) with 11 elements between 12.12 and 13.99 px (live: 9, same smallest), Chapter IV 13.25 px and 7 (live identical), Chapter VI 13.27 px and 7 (live 7 to 11 depending on the moment), the hidden chapter 13.27 px and 7 (the same seven elements as Chapter VI: job chips, the HP maximums, the command-info label, the advisor arrow). Nothing is clipped except the phone's icon-only PAUSE chip (its label is hidden by design, as on 39.2). The candidate adds no text under the floor; the hidden chapter adds none beyond Chapter VI's. Pre-existing (F392-04 and the sizes above), polish.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json",
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/door-2000/door-cand-2000x1012.json",
+        "critic/reviews/b80f772f-focused/door-phone/door-cand-390x844-touch.json"
+      ]
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 2,
+      "where": "both; Chapters I, VI and the hidden chapter; command menu, target selection, pause",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Escape out of target selection returns to the command menu with no reticle left in all three chapters that showed one (hidden chapter 3 targets then 0 and 4 rows; Chapter VI 3 then 0 and 4 rows; Chapter I 2 then 0 and 6 rows), and Esc and P open and close the pause with Esc resuming the battle in the hidden chapter and in Chapters I, IV and VI. The diff touches no menu, targeting or overlay-lifetime code.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/seymour-flux-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/ffx2-bahamut-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/ffx2-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/16-target-single.jpg",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/16b-after-cancel.jpg"
+      ]
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 2,
+      "where": "FFX-2 hidden chapter; scene, advisor, intent, pause, results; base chapters unchanged",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "98 player-facing texts of the hidden chapter's run (every dialogue line, the advisor card, the enemy-intent card, the pause text, the results, the board) matched against the developer-vocabulary patterns (section sign, file stems ffx- and ffx2-, exp-leblanc, row and step numbers, debug, TODO, placeholder, chapter line, undefined, NaN): 0 hits. The all-caps tokens are real UI labels; \"EXPERIMENTAL\" and the numeral \"EXP\" are the chapter's intended wording (Bailey's title, D-488).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json"
+      ]
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 3,
+      "where": "FFX-2 hidden chapter first menu 1600x900 and phone; Chapters I, IV, VI first menu",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The harness's panel-against-actor measure at the first menu reports 0 overlaps in the hidden chapter and in Chapters I, IV and VI (the guide, enemy bars, advisor card and command stack clear every painted figure; advisor text 14.2 px or more). The hidden chapter's extra panel ink (scoped to its namespace) did not move any panel; at 390x844 the figures are small but unobstructed.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/seymour-flux-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/ffx2-bahamut-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/ffx2-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900/10-first-menu.jpg",
+        "critic/reviews/b80f772f-focused/door-phone/door-cand-390x844-touch/10-first-menu.jpg"
+      ]
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 2,
+      "where": "both; board (eighteen cards) and first menus at three sizes",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "No name is cut or ellipsised: 0 clipped text elements in the first menus of the hidden chapter and of Chapters I, IV and VI at 1600x900 and 2000x1012 (the phone's PAUSE chip label is hidden by design, as on 39.2) and 0 clipped card or hero names on the board at all three sizes (the new xlong class applies to 0 elements).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-2000x1012.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-390x844-touch.json",
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/door-2000/door-cand-2000x1012.json",
+        "critic/reviews/b80f772f-focused/door-phone/door-cand-390x844-touch.json"
+      ]
+    },
+    {
+      "id": "CHK-010",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 1,
+      "where": "hidden chapter target selection; reused for the base chapters",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Target selection in the hidden chapter shows its three reticles with the first lit and Esc returns to the menu (captures), and the base chapters' selection is untouched: targeting, reticle and highlight code are not in the diff, the shipped files other than the new bundle are byte-identical to live (manifest diff).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/16-target-single.jpg"
+      ],
+      "reusedFrom": "critic/reviews/002928c4-focused.json CHK-010 (PASS)",
+      "dependencyArgument": "src/engine/TargetHighlight.ts, the HUDs' target code and every art and audio file are unchanged between 002928c4 and b80f772f (git diff and the sha256 manifest diff: only the new bundle, index.html, the stylesheet, art/derived.json, art/manifest.json and 689 exp-leblanc files differ); the hidden chapter was looked at directly."
+    },
+    {
+      "id": "CHK-011",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 3,
+      "where": "FFX-2 hidden chapter, Acts I to III; Chapters I, IV, VI first menu",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Every enemy of the hidden chapter is on screen at the first menu of each act (Act I Ormi, Dr. Goon and Fem-Goon, the third a pale pink figure; Act II Logos and Ormi; Act III Leblanc, Logos and Ormi) and the HUD lists the same number; Chapters I, IV and VI show every enemy at 1600x900 and 2000x1012. Not re-run: the phone Chapter IX gauge card over Yojimbo that 39.2 reported (F392-03), which this diff does not touch.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900/10-first-menu.jpg",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/20-link-2.jpg",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/24-seam-3-first-menu.jpg",
+        "critic/reviews/b80f772f-focused/tile-exp-leblanc-act3.jpg"
+      ]
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 6,
+      "where": "FFX-2 hidden chapter; scene, first menu, pause, results; Chapters I, IV, VI",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "No fallback is the final face: all seven speakers of the pre-battle scene show the namespace's own portrait (exp-leblanc-rikku-x2, -paine, -yuna-x2, -logos, -ormi, -leblanc, -brother-x2: 7 of 7 loaded, naturalWidth above 0), every figure of the first menu is read from exp-leblanc-* with placeholder false, the party rows show painted heads, the results screen shows Yuna's new portrait (the namespace file exp-leblanc-yuna-x2 was requested), and the pause plates are the namespace's (pause/exp-leblanc-yuna-ffx2.2x.webp at 3213 px). Chapters I, IV and VI show the same portraits, HUD images and pause plates as live 39.2, with 0 requests for exp-leblanc art. 0 responses of 400 or more and 0 console errors in every run; every shipped image decodes in Chromium and WebKit (3,346 of 3,346).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/art-browser-load.txt",
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json",
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900/04-scene-1-rikku.jpg",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/31-results.jpg"
+      ]
+    },
+    {
+      "id": "CHK-013",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 4,
+      "where": "protected art; hidden chapter art in the running game",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "No approved or existing painting changed: against live 39.2 the sha256 manifest diff lists 691 added files (689 exp-leblanc paintings, depth map and plates, the new bundle and stylesheet), 3 changed (art/derived.json, art/manifest.json, index.html) and 2 removed (the old bundle and stylesheet); the art manifest gained 24 subjects, 7 portraits, 1 backdrop and 4 pause plates, all exp-leblanc, with none removed or changed. The new paintings were looked at inside the running game at 1600x900, 2000x1012 and 390x844 beside the old (Act III against the approved mockup B, composite attached); whether they are beautiful is Bailey's (CHK-B3), and D-509 already settled \"ship as is\".",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/manifest-diff-vs-live-39.2.json",
+        "critic/reviews/b80f772f-focused/tile-exp-leblanc-act3.jpg",
+        "critic/reviews/b80f772f-focused/exp-spherechange-montage.jpg"
+      ]
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 12,
+      "where": "both; board door typed with real keys; menus, pause, a whole fight",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Everything was done with page.keyboard and the game's own state read back: the word typed three ways (a press per letter, keyboard.type at 150 ms, a held last letter), \"limit\", wrong words, a pause between letters, plain A, ArrowRight, Enter, Escape, P, a target choice and its cancel, an attack, an item, a skill and a Change in the hidden chapter, and 71 turns to a victory. The seed was set by the harness's labelled setup hook (setSeed 1) and nothing in the debug API was used to prove a capability.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/word-probe/word-probe-leblanc-cand.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json"
+      ]
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 1,
+      "where": "every capture of this review",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Every capture went through the harness's makeSnap, which reads the screen, the menu state and the stale roots in the same breath and writes UNVERIFIED instead of a pass when they disagree (fails: 0 in every run). The first run of the door script was discarded, not used: its wrong word ended in the letter x, which the board reads as cancel, so it had left the board; the script was fixed (a letter the board does not map) and rerun from a fresh profile.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/index.json",
+        "critic/reviews/b80f772f-focused/others/index.json",
+        "critic/reviews/b80f772f-focused/exp-route/index.json",
+        "critic/reviews/b80f772f-focused/word-probe/index.json"
+      ]
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "mandatory": true,
+      "mode": "n/a",
+      "minutes": 0,
+      "where": "the live URL",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Nothing is deployed yet: this is the review of the production candidate before the deploy. The exact-artifact check is the live review's obligation after the deploy. The candidate's identity is recorded here for it: commit b80f772f, bundle assets/index-Dk9resVW.js, stylesheet assets/index-Ta9GcVj0.css, 4,537 files, artifactHash 0b31ed8767792e02caa0a98484dbfcb55030a4ee5b6607451bb35a0b0b5c936f (tools/artifact-manifest.mjs build --dir dist-gate)."
+    },
+    {
+      "id": "CHK-018",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 2,
+      "where": "src/ and the shipped art manifest",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The hand-written-variant grep (.N.png and .raw.png under src/ *.ts) finds only a comment in titleMarkup.ts that names a concept source file (pre-existing, not shipped). Every manifest entry the candidate adds is exp-leblanc and resolves to a file in the build: 24 subjects with 248 states, 7 portraits, 1 backdrop, 4 pause plates (none removed or changed). art-derive audit: art-derive audit: PASS: 1140 text files read; 2 art name(s) in pages, styles and data, each a shipped file: yes |   bundle: 769 literal art name(s): 14 a shipped file, 755 a derived master (mapped at run time), 0 dangling; 46 name(s) built at run time (covered by the real-play audit); 266 provenance mention(s) in JSON, not judged | audit exit 0.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/manifest-diff-vs-live-39.2.json",
+        "critic/reviews/b80f772f-focused/artifact-manifest-cand.json",
+        "critic/reviews/b80f772f-focused/art-derive-audit.log"
+      ]
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 12,
+      "where": "every shipped image of the candidate",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "All 3,346 shipped images (3,297 art files: 755 lossless WebP, 2,273 recompressed PNG, 269 PNG as shipped; and 49 others, the 689 new files among them) load and decode at the master's size in Chromium 153 and WebKit 26.6 with 0 failures (tools/art-browser-load.mjs). The manifest build's decode check lists two flat-colour images, art/portrait-parts/paine/1x and 2x/eyeR-catch.png, which are the same two on live 39.2's stored manifest (pre-existing, unchanged). art-derive verify: art-derive verify (exact): PASS: 3297 masters checked (755 WebP, 2542 PNG, 3028 pixel-compared), 0 problem(s), 161 s | verify exit 0.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/art-browser-load.txt",
+        "critic/reviews/b80f772f-focused/manifest-build.log",
+        "critic/reviews/b80f772f-focused/artifact-manifest-cand.json",
+        "critic/reviews/b80f772f-focused/art-derive-verify.log"
+      ]
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 4,
+      "where": "both; board, party prep code, pause, dialogue, results; FFX Chapter I against FFX-2 Chapters IV and VI",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The shared screens the plumbing touched behave the same in both games and the same as on live 39.2: Chapter I (FFX) and Chapters IV and VI (FFX-2) show the same dialogue portraits, HUD images, command rows, pause tabs (Yuna/Tidus.., Chapter, Guide, Options) and pause plates as live, 0 exp-leblanc requests, no namespace attribute, haze uniforms 0 and the HUD ink tokens at their defaults. The hidden chapter's party prep could not be seen: the word skips it (F393-03).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json",
+        "critic/reviews/b80f772f-focused/door-live/door-live-1600x900.json"
+      ]
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 3,
+      "where": "FFX-2 only (the chapter); both (the door and the plumbing)",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The chapter's case is FFX-2 only: its record is derived from Chapter VI's (game ffx2, Chateau Leblanc; docs/handoff/exp-leblanc.md section 15 states the case, with research/ via Chapter VI as the source). Presence: reached only by the word, the scene is FFX-2's Last Room in the new namespace. Absence from the FFX side: the board has no card, no pip, no EXP numeral and \"of 18\" in all runs; FFX Chapter I plays with 0 exp-leblanc requests, no namespace attribute, haze 0, the same HUD and pause as live; the HUD ink rule is scoped to [data-art-namespace=exp-leblanc] in .ig (the shipped stylesheet differs from live's by exactly four additions, all scoped).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/manifest-diff-vs-live-39.2.json"
+      ]
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 40,
+      "where": "hidden chapter and Chapters I, IV, VI; title to results to the board and a reload",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Each of the four chapters ran from the real entry to its outcome by legitimate input: the hidden chapter by the word to the pre-battle scene, three acts (two seams), 71 turns, victory in 7:41, the results screen, CONFIRM, an epilogue scene of 25 lines, the board; Chapters I, IV and VI each to victory, results, board and a reload that still shows the chapter cleared. After the hidden chapter's win the board shows no chapter cleared (nothing saved to progress, by design) and the experiments' store holds exp-leblanc attempts 1, clears 1, best 461,315 ms. Not exercised on the hidden chapter: a defeat and its retry, scene skip.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/31-results.jpg",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/34-board-after.jpg",
+        "critic/reviews/b80f772f-focused/continuity/seymour-flux-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/ffx2-bahamut-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/continuity/ffx2-leblanc-win-b80f772f/run.json"
+      ]
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 3,
+      "where": "FFX-2 hidden chapter against the base chapters",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The new subsystems reach the screen through the real presentation path: in the hidden chapter the grade pass carries the room's haze (hazeAmount 0.5, 0, 0.48; hazeColor 1, 0.958, 1; side 0.3), the root carries data-art-namespace exp-leblanc, the HUD ink tokens are the scoped ones (panel #0b0a12eb, chip #0b0a12cc, acting #0b0a12f5), the stage reads exp-leblanc-* figures and the dialogue, cut-in, results wedge and pause read the namespace's portraits and plates; in Chapters I, IV and VI every one of those is neutral (haze 0, no attribute, tokens #0b0a12d6 / #0b0a129e / #0b0a12f0, base files) and live has no haze uniform at all.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/door-phone/door-cand-390x844-touch.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-cand-2000x1012.json"
+      ]
+    },
+    {
+      "id": "CHK-025",
+      "result": "FAIL",
+      "mandatory": true,
+      "mode": "automated (real input) + manual reading of captures",
+      "minutes": 6,
+      "where": "hidden experiment; board, door, one full win; both games share the board",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "Hidden and separate, with one exception. The board shows the eighteen (18 cards, \"0 of 18 beaten\", 18 pips, no EXP numeral, no word; 0 experiment elements) at 1600x900, 2000x1012 and 390x844; the door opens the chapter and moves no cursor (the typed A of the word is not a \"left\"); wrong words, a pause between letters and \"limik\" do nothing; \"limit\" still opens FF7's chapter; a full win writes only pyrefly-reprise:experiments:v1 (exp-leblanc attempts 1, clears 1) and leaves chapters, unlocked, flags and settings of pyrefly-reprise:save:v1 as they were, the board shows no clear and \"of 18\" unchanged. But the main save is not byte-identical after a run: updatedAt moved and six UI coach flags were added to seenCoach (firstrun-board, firstrun-prep, firstrun-battle, ffx2-gauge, ffx2-dressphere, ffx2-chain; Chapter VI writes the same). No progress, count or unlock is touched. Not exercised: a defeat and the automated path.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json",
+        "critic/reviews/b80f772f-focused/door-live/door-live-1600x900.json"
+      ]
+    },
+    {
+      "id": "CHK-026",
+      "result": "FAIL",
+      "mandatory": true,
+      "mode": "automated (continuity harness, every rendered frame)",
+      "minutes": 32,
+      "where": "both; Chapters I (FFX), IV and VI (FFX-2) re-run on this candidate; the hidden chapter (FFX-2); 15 chapters reused",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "The three base chapters re-run on the candidate PASS as they did on 39.2 and with the same numbers: head up to 2.7 percent where registered (Chapter I 2.7, IV 0.9, VI 1.6; live 2.5, 0.8, 2.4), feet 1.0, 0.5 and 0.6 px (live 1.0, 0.4, 0.6), 0 swaps over tolerance. The hidden chapter FAILS (the harness's own verdict, read by mass and silhouette because the harness has no registration records for the namespace): 38 of 545 standing swaps move the feet over the 6 px tolerance (Leblanc 32 swaps, worst 14.2 px; Dr. Goon 4, worst 75.2 px at idle to attack; Rikku and Paine 9 px into victory) and 2 swaps change Logos' head by 35.4 percent (30 allowed): F393-01, inside a brand-new feature. The other 15 chapters are reused from the 39.2 run (coverage.reused).",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/continuity/continuity-summary.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/continuity.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/strips/swap-002-dr-goon-idle-attack.jpg"
+      ]
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "mandatory": true,
+      "mode": "automated (continuity harness, every rendered frame)",
+      "minutes": 32,
+      "where": "both; Chapters I, IV, VI re-run; the hidden chapter",
+      "environment": "headless Playwright Chromium on the GPU (PYREFLY_BROWSER=gpu), Windows 11; vite preview of D:/pyrefly-r39-int/dist-gate (BASE_PATH=/, 127.0.0.1:5427) beside live 39.2's own bytes (dist-release, 127.0.0.1:5428); 1600x900, 2000x1012, 390x844 (touch emulation, keyboard keys); seed 1",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "reason": "FAILS in every chapter measured, as on live 39.2. Base chapters on this candidate against live 39.2 (snaps per minute; worst jerk): Chapter I 0.95 and 349.8 px (live 0.98 and 348.8), IV 0.14 and 173.2 px (0.17 and 172.6), VI 0.23 and 190 px (0.27 and 260.4); over the three: 128 jerks of 40 px or more and 39 swaps with a double image of 0.40 or more (worst 0.442): F392-01, pre-existing. One number is higher than live's run and is stated rather than hidden: Chapter VI had 62 jerks of 40 px or more in 513 s of battle against 38 in 440 s on 39.2 (78 turns against 72; 47 of the 62 follow a damage event, a hit recoil, against 24 of 38); Chapters I and IV were 42 against 37 and 24 against 23. No recoil, presenter-motion or stage-motion code is in the diff, the only Chapter VI file changed is its scene builder (a refactor that falls back to its old values), and the run-to-run spread of this harness is large (39.2's own report: snaps in Chapter XIII 1.69 and 2.66), so it is read as the fight's length and not as a regression; a repeat on live under the same conditions was not run. The hidden chapter is worse in double images: 219 of 567 swaps reach 0.40 (worst 0.482, against about 3 percent of swaps in the base chapters), 43 jerks of 40 px or more (worst 159.1 px), 0.27 snaps a minute (two KOs): F393-02, inside a brand-new feature.",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/continuity/continuity-summary.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/continuity.json"
+      ]
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "ffx2-bahamut",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 417.9,
+        "swaps": 416,
+        "snapsPerMinute": 0.14,
+        "maxHeadJumpPct": 9.1,
+        "maxFeetShiftPx": 0.5,
+        "worstJerkPx": 173.2,
+        "strips": 20,
+        "worstSwapStrips": [
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-355-paine-follow-idle.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-367-paine-attack-follow.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-278-paine-hurt-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-276-paine-od-x2-warrior-armor-break-hurt.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-349-paine-od-x2-warrior-armor-break-ready.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-393-paine-ready-attack.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-248-paine-cast-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-023-rikku-hurt-ready.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-020-rikku-ready-hurt.jpg",
+          "ffx2-bahamut-win-b80f772f/continuity/strips/swap-096-rikku-idle-hurt.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-leblanc",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 513.3,
+        "swaps": 625,
+        "snapsPerMinute": 0.23,
+        "maxHeadJumpPct": 28.8,
+        "maxFeetShiftPx": 0.6,
+        "worstJerkPx": 190,
+        "strips": 20,
+        "worstSwapStrips": [
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-041-fem-goon-hurt-ko.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-045-dr-goon-hurt-ko.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-005-fem-goon-idle-cast.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-011-fem-goon-cast-idle.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-205-paine-item-ready.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-228-paine-critical-ready.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-227-paine-ready-critical.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-395-paine-follow-idle.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-135-paine-critical-victory.jpg",
+          "ffx2-leblanc-win-b80f772f/continuity/strips/swap-424-paine-attack-follow.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "seymour-flux",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 506.5,
+        "swaps": 435,
+        "snapsPerMinute": 0.95,
+        "maxHeadJumpPct": 12.6,
+        "maxFeetShiftPx": 1,
+        "worstJerkPx": 349.8,
+        "strips": 20,
+        "worstSwapStrips": [
+          "seymour-flux-win-b80f772f/continuity/strips/swap-287-yuna-hurt-ko.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-012-yuna-idle-ko.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-061-tidus-hurt-ko.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-197-tidus-idle-ko.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-201-tidus-ko-idle.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-007-yuna-hurt-critical.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-006-yuna-critical-hurt.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-014-kimahri-idle-ready.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-263-yuna-ko-idle.jpg",
+          "seymour-flux-win-b80f772f/continuity/strips/swap-359-auron-attack-follow.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 1437.7,
+    "counted": 1476,
+    "swaps": 1529,
+    "size": {
+      "judged": 1386,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 90,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 28.8,
+      "maxHeadJumpPctRegistration": 2.7,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1,
+      "feetOverTolerance": 0,
+      "headMeasured": 1386,
+      "headRegistration": 870,
+      "headSilhouette": 516,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 11,
+      "snapsPerMinute": 0.46,
+      "hardCuts": 14,
+      "hardCutsPerMinute": 0.58,
+      "ghostSwaps": 1368,
+      "ghostFrames": 5316,
+      "worstGhostSeverity": 0.442,
+      "ghostOverFail": 39,
+      "jerks": 331,
+      "worstJerkPx": 349.8,
+      "jerksOverFail": 128,
+      "lowestIou": 0.031,
+      "maxCentroidShiftPx": 166.8
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "870 of 1386 measured swaps had a registered head (tolerance 3 percent); 516 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "0.46 snaps per minute is over 0.25",
+          "128 jerk(s) of 40 px or more in one frame (worst 349.8 px)",
+          "39 swap(s) show a double image of severity 0.4 or more (worst 0.442)"
+        ]
+      }
+    },
+    "base": "http://127.0.0.1:5427/",
+    "date": "2026-10-07T05:22:36.861Z",
+    "hiddenChapter": {
+      "chapter": "exp-leblanc",
+      "checks": {
+        "CHK-026": {
+          "result": "FAIL",
+          "reasons": [
+            "2 swap(s) change a head by more than the tolerance (worst 35.4 percent; 0 percent where the head is registered)",
+            "39 swap(s) of a standing figure move its feet more than the tolerance (worst 75.2 px at 1600 wide)"
+          ],
+          "note": "0 of 569 measured swaps had a registered head (tolerance 3 percent); 569 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+        },
+        "CHK-027": {
+          "result": "FAIL",
+          "reasons": [
+            "0.27 snaps per minute is over 0.25",
+            "43 jerk(s) of 40 px or more in one frame (worst 159.1 px)",
+            "219 swap(s) show a double image of severity 0.4 or more (worst 0.482)"
+          ]
+        }
+      },
+      "summary": {
+        "battleSeconds": 442,
+        "swaps": 593,
+        "counted": 579,
+        "excludedByCut": 0,
+        "excludedNotShowing": 0,
+        "swapsPerMinute": 78.6,
+        "size": {
+          "judged": 569,
+          "costumeSwaps": 0,
+          "sameArtSwaps": 10,
+          "costumeWorstHeadPct": 0,
+          "costumeWorstFeetPx": 0,
+          "headMeasured": 569,
+          "headRegistration": 0,
+          "headSilhouette": 569,
+          "headUnmeasured": 0,
+          "maxHeadJumpPct": 35.4,
+          "maxHeadJumpPctRegistration": 0,
+          "headOverTolerance": 2,
+          "feetMeasured": 535,
+          "maxFeetShiftPx": 75.2,
+          "feetOverTolerance": 39
+        },
+        "motion": {
+          "snaps": 2,
+          "snapsPerMinute": 0.27,
+          "hardCuts": 2,
+          "hardCutsPerMinute": 0.27,
+          "snapsByToPose": {
+            "ko": 2
+          },
+          "lowestIou": 0.002,
+          "maxCentroidShiftPx": 129.9,
+          "ghostSwaps": 567,
+          "ghostFrames": 2172,
+          "worstGhostSeverity": 0.482,
+          "ghostOverFail": 219,
+          "jerks": 91,
+          "jerksMidMove": 52,
+          "worstJerkPx": 159.1,
+          "jerksOverFail": 43
+        },
+        "checks": {
+          "CHK-026": {
+            "result": "FAIL",
+            "reasons": [
+              "2 swap(s) change a head by more than the tolerance (worst 35.4 percent; 0 percent where the head is registered)",
+              "39 swap(s) of a standing figure move its feet more than the tolerance (worst 75.2 px at 1600 wide)"
+            ],
+            "note": "0 of 569 measured swaps had a registered head (tolerance 3 percent); 569 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+          },
+          "CHK-027": {
+            "result": "FAIL",
+            "reasons": [
+              "0.27 snaps per minute is over 0.25",
+              "43 jerk(s) of 40 px or more in one frame (worst 159.1 px)",
+              "219 swap(s) show a double image of severity 0.4 or more (worst 0.482)"
+            ]
+          }
+        },
+        "run": {
+          "fps": 55.6,
+          "maxDtMs": 2639.2,
+          "slowFrames": 792,
+          "frames": 24591,
+          "probeErrors": 0
+        }
+      },
+      "note": "Read by mass and silhouette: no registration records for the namespace in docs/target/pose-measure.json (headRegistration 0 of 569).",
+      "file": "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/continuity.json"
+    },
+    "liveBaseline": {
+      "build": "002928c4 (live 39.2)",
+      "file": "critic/reviews/002928c4-focused/continuity/continuity-summary.json",
+      "perChapter": [
+        {
+          "chapter": "seymour-flux",
+          "checks": {
+            "CHK-026": "PASS",
+            "CHK-027": "FAIL"
+          },
+          "snapsPerMinute": 0.98,
+          "maxHeadJumpPct": 12.6,
+          "maxFeetShiftPx": 1,
+          "worstJerkPx": 348.8
+        },
+        {
+          "chapter": "ffx2-bahamut",
+          "checks": {
+            "CHK-026": "PASS",
+            "CHK-027": "FAIL"
+          },
+          "snapsPerMinute": 0.17,
+          "maxHeadJumpPct": 9,
+          "maxFeetShiftPx": 0.4,
+          "worstJerkPx": 172.6
+        },
+        {
+          "chapter": "ffx2-leblanc",
+          "checks": {
+            "CHK-026": "PASS",
+            "CHK-027": "FAIL"
+          },
+          "snapsPerMinute": 0.27,
+          "maxHeadJumpPct": 28.8,
+          "maxFeetShiftPx": 0.6,
+          "worstJerkPx": 260.4
+        }
+      ]
+    },
+    "reused": {
+      "chapters": "the other 15 chapters of the plan",
+      "from": "critic/reviews/002928c4-focused/continuity (39.2 candidate, identical to live)",
+      "note": "see coverage.reused"
+    }
+  },
+  "targets": {
+    "required": 1,
+    "matched": 1,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0,
+    "note": "Tile of the plan's \"chapters\" group that this release can touch: the experimental chapter's Act III target, mockup B Moonlit Blue Hall (docs/concepts/exp-leblanc/B-moonlit-blue-hall-target.jpg; picked by the driver under D-494, Bailey has not seen it). Matched on the property the build claims (the room's look: pale blue and violet hall, heart window and door, glossy floor, candlelight); the mockup's framing (the girls seen from behind, left) is an inferred property, not built, and is a question for Bailey, not a failure. The pause, phone, cast, fight and presentation tiles are untouched for every listed chapter (identical to live).",
+    "list": [
+      {
+        "tile": "Experimental chapter: Act III target, mockup B",
+        "result": "matched",
+        "evidence": "critic/reviews/b80f772f-focused/tile-exp-leblanc-act3.jpg",
+        "note": "Act III first menu at 1600x900 beside the mockup; the room reads as the mockup's hall; figures face the fiends from the front, as the game stages them."
+      }
+    ]
+  },
+  "issues": [
+    {
+      "confidence": "high",
+      "id": "F393-01",
+      "severity": "major",
+      "category": "visual",
+      "title": "Hidden chapter, CHK-026: the figures slide their feet and change size at pose changes (Bailey's named defect class)",
+      "game": "ffx2",
+      "chapter": "exp-leblanc (hidden, Chapter VI in new paintings)",
+      "expected": "At every pose swap a figure's head changes by at most 3 percent (30 percent where it is read by mass) and a standing figure's feet by at most 2 px (6 px where the stance is read from the silhouette) at 1600 wide.",
+      "observed": "Real keys at 1600x900, seed 1, 442 s of battle, 593 swaps, 55.6 fps, 0 probe errors: 38 of 545 standing swaps move the feet over tolerance (Leblanc 32 swaps in idle/cast/attack/hurt pairs, worst 14.2 px; Dr. Goon 4 swaps idle to attack and back, worst 75.2 px, a second goon shows at the lunge's place for four frames; Rikku idle to victory 9.4 px; Paine cast to victory 9.0 px); Logos cast to hurt changes the head by 35.4 percent by mass (2 swaps). The harness read every head by mass (0 of 569 registered) because docs/target/pose-measure.json has no records for the exp-leblanc namespace.",
+      "repro": "node critic/reviews/b80f772f-focused/scripts/route-exp.mjs exp-leblanc win --base=<vite preview of dist-gate, ending in a slash> --evidence=<dir> --continuity --budget=1500000 (the harness's route with the word typed on the board; seed 1, 1600x900)",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/continuity.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/strips/swap-002-dr-goon-idle-attack.jpg",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/strips/swap-003-dr-goon-attack-idle.jpg"
+      ],
+      "requirement": "CHK-026 (D-420); Bailey 2026-10-04: \"As poses change for the characters their size changes too sometimes and that looks really bad\"",
+      "where": "the namespace's pose registration (src/data/art/poseRegistrationExp.ts) and its paintings; suspected, not traced: Leblanc's stances read from a trailing hem and fan, Dr. Goon's attack painting drawn at the lunge",
+      "fix": "Measure the exp-leblanc poses with the rig (tools/posescale/measure.py tiles) so the harness has registered heads and feet to judge at 3 percent and 2 px, starting with Leblanc's six poses and Dr. Goon's attack stance and Logos' hurt.",
+      "acceptanceCheck": "continuity.mjs on exp-leblanc: CHK-026 PASS with headRegistration above 0.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "confidence": "high",
+      "id": "F393-02",
+      "severity": "major",
+      "category": "feel",
+      "title": "Hidden chapter, CHK-027: 219 of 567 pose swaps show a double image of 0.40 or more, with 43 jerks and 0.27 snaps a minute",
+      "game": "ffx2",
+      "chapter": "exp-leblanc (hidden)",
+      "expected": "At most 0.25 snaps per minute of battle, no jerk of 40 px or more in one frame, no double image of severity 0.40 or more.",
+      "observed": "Same run as F393-01: 219 swaps (39 percent) reach a double image of 0.40 or more, worst 0.482 (the base chapters re-run: 39 of 1,368 ghosted swaps, about 3 percent, worst 0.442); 43 jerks of 40 px or more (worst 159.1 px); 2 snaps in 7.4 minutes of battle, 0.27 a minute, both KOs. The strips show two figures side by side at an enemy's attack start (Dr. Goon) and at KO.",
+      "repro": "as F393-01",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/continuity.json",
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/continuity/strips/swap-002-dr-goon-idle-attack.jpg"
+      ],
+      "requirement": "CHK-027 (D-421); Bailey 2026-10-04: \"pose changes snapping around in a discontinuous half motion\"",
+      "where": "the crossfade between poses whose silhouettes share little (the new paintings are drawn in different stances); suspected",
+      "fix": "Cut instead of crossfading between poses whose outlines overlap under a fifth, or add in-between frames, for the hidden chapter's attack, cast and KO swaps; the base chapters share the engine's F392-01 work.",
+      "acceptanceCheck": "continuity.mjs on exp-leblanc: ghostOverFail under 1 percent of swaps, snaps under 0.25 a minute.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "confidence": "high",
+      "id": "F392-01",
+      "severity": "major",
+      "category": "feel",
+      "title": "CHK-027 still FAILS in every chapter, as on live 39.2: pose changes snap, ghost and jerk (carried; re-measured in Chapters I, IV and VI)",
+      "game": "both",
+      "chapter": "all 18 (aggregate); re-run: seymour-flux, ffx2-bahamut, ffx2-leblanc",
+      "expected": "At most 0.25 snaps per minute of battle, no jerk of 40 px or more in one frame, no double image of severity 0.40 or more.",
+      "observed": "Candidate against live 39.2 (snaps a minute; worst jerk): Chapter I 0.95 and 349.8 px against 0.98 and 348.8; IV 0.14 and 173.2 against 0.17 and 172.6; VI 0.23 and 190 against 0.27 and 260.4. Over the three: 128 jerks of 40 px or more, 39 swaps with a double image of 0.40 or more (worst 0.442). Chapter VI's count of jerks of 40 px or more is higher than live's run (62 in 513 s against 38 in 440 s: a longer fight, 78 turns against 72, with more hit recoils; no recoil or motion code is in the diff; not repeated on live), so regressionVsLive is false by that argument, not by a repeat. The 15 other chapters keep 39.2's numbers (aggregate 0.58 snaps a minute, 1,102 jerks, 153 double images).",
+      "repro": "cd D:/pyrefly-r39-int; PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<preview of dist-gate> --evidence=<dir> --chapters=ffx2-bahamut,ffx2-leblanc,seymour-flux --tag=x",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/continuity/continuity-summary.json"
+      ],
+      "requirement": "CHK-027 (D-421)",
+      "where": "the engine's pose crossfade and KO cut (shared, unchanged by this candidate)",
+      "fix": "The next batch's pose-motion work (see 39.2's F392-01).",
+      "acceptanceCheck": "CHK-027 PASS in every chapter.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "confidence": "medium (reused, not re-run)",
+      "id": "F392-03",
+      "severity": "major",
+      "category": "interface",
+      "title": "Phone, Chapter IX: the Zanmato gauge card sits over Yojimbo, Daigoro and Ginnem (carried from 39.2; not re-run here)",
+      "game": "ffx",
+      "chapter": "yojimbo-cavern",
+      "expected": "The fiends are visible at 390x844.",
+      "observed": "As recorded by the 39.2 review (identical on live 39.1): the gauge card covers them. This candidate changes no Chapter IX file, HUD code or art (manifest diff), so it is reused, not re-measured.",
+      "repro": "see critic/reviews/002928c4-focused.json F392-03",
+      "evidence": [],
+      "requirement": "CHK-011",
+      "where": "the gauge card layout on phone widths",
+      "fix": "see 39.2",
+      "acceptanceCheck": "Chapter IX at 390x844 shows the three fiends.",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "confidence": "high",
+      "id": "F392-04",
+      "severity": "polish",
+      "category": "interface",
+      "title": "Text under the 14 px floor at the first menu (carried; same elements on live 39.2)",
+      "game": "both",
+      "chapter": "Chapters I, IV, VI and the hidden chapter",
+      "expected": "No text a player must read under 14 px.",
+      "observed": "Chapter I: 12.12 px (a numeral chip) and 10 more between 13.5 and 14 px; Chapter IV 13.25 px and 6 more; Chapter VI and the hidden chapter 13.27 px and 6 more (job chips, HP maximums, the command-info label, the advisor arrow). Identical lists on live 39.2; the hidden chapter adds none beyond Chapter VI's.",
+      "repro": "others.mjs (scripts/others.mjs), probe.under14List in the JSON",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/others/others-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/others/others-live-1600x900.json"
+      ],
+      "requirement": "CHK-003",
+      "where": "the shared HUD sizes",
+      "fix": "raise the 13.x px elements to 14",
+      "acceptanceCheck": "under14 = 0 at 1600x900",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "confidence": "high",
+      "id": "F393-03",
+      "severity": "polish",
+      "category": "interface",
+      "title": "Typing the word skips the hidden chapter's party prep: the last letter C is the START button",
+      "game": "ffx2",
+      "chapter": "exp-leblanc (hidden)",
+      "expected": "The word opens the chapter and the standard flow follows: party prep, the pre-battle scene, the fight (docs/handoff/exp-leblanc.md section 15; the brief).",
+      "observed": "Typed three ways (a key per letter, keyboard.type at 150 ms, the last letter held 110 ms) the screen goes chapter-select to cutscene; the DOM shows the party-prep root added and removed 2 ms apart (word-probe roots: chapter-select removed, party-prep added, party-prep removed, cutscene added). C is KeyC, START in src/app/Input.ts; PartyPrepScreen starts the chapter on justPressed('start') (PartyPrepScreen.ts line 311) and finds the press the word just made latched on its first frame. The first-run prep hint firstrun-prep is written as seen without the screen ever showing. The chapter is fully playable; the prep screen's namespaced faces are unreachable by the word.",
+      "repro": "node scripts/word-probe.mjs --base=<preview> --out=<dir> (variants press, type, hold)",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/word-probe/word-probe-leblanc-cand.json",
+        "critic/reviews/b80f772f-focused/word-probe/word-probe-leblanc-cand-roots.json"
+      ],
+      "requirement": "the brief and handoff section 15 (\"party prep, then the fight\"); AGENTS.md hard rule 9 (flow approved by Bailey)",
+      "where": "ChapterSelectScreen.onDoorKey / openDoor: the START edge is not consumed when the door opens (suspected from the code, proved by the DOM timeline)",
+      "fix": "Consume the START (and CONFIRM) edge when the door opens, or have a screen ignore an edge latched before its first frame.",
+      "acceptanceCheck": "word typed: party-prep stays on screen until Enter, in the same three typing styles.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "confidence": "high",
+      "id": "F393-04",
+      "severity": "polish",
+      "category": "interface",
+      "title": "After typing part of the word, the first arrow press on the board is swallowed (a regression against live, rare)",
+      "game": "both",
+      "chapter": "chapter select (shared board)",
+      "expected": "ArrowRight after \"lebl\" and a 3 s pause moves the cursor, as it does on live 39.2 (live: moved, ffx2-den-of-woe to ffx2-ixion-djose).",
+      "observed": "The cursor stayed on ffx2-ixion-djose; the second press moved it. WordDoor.continued stays true after a character was fed and is read again for every later keydown, including keys the door ignores (feedKey returns early for a non-character key), so ChapterSelectScreen.wordKey is set and update() consumes that frame's board presses. It needs a partial word typed and then a board key, so it is rare.",
+      "repro": "scripts/door.mjs --phase=full (arrowAfterPartial in the JSON); live comparison in door-live",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900.json",
+        "critic/reviews/b80f772f-focused/door-live/door-live-1600x900.json"
+      ],
+      "requirement": "the shared board keeps its presses (CHK-015); the door \"moves no cursor\" (CHK-025)",
+      "where": "src/app/screens/frontend/secretDoor.ts (WordDoor.continued) and ChapterSelectScreen.onDoorKey; suspected from the code, proved by the real-key run",
+      "fix": "Clear continued whenever a key does not continue the word (or only set wordKey for single-character keys).",
+      "acceptanceCheck": "the same real-key sequence moves the cursor on the first press.",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": true
+    },
+    {
+      "confidence": "high",
+      "id": "F393-05",
+      "severity": "polish",
+      "category": "prep",
+      "title": "A hidden-chapter run still writes six coach hints and a timestamp into the main save",
+      "game": "ffx2",
+      "chapter": "exp-leblanc (hidden)",
+      "expected": "CHK-025: a run leaves pyrefly-reprise:save:v1 byte-identical and writes only pyrefly-reprise:experiments:v1.",
+      "observed": "After one win the main save differs only in updatedAt and seenCoach (firstrun-board, firstrun-prep, firstrun-battle, ffx2-gauge, ffx2-dressphere, ffx2-chain); chapters, unlocked, flags and settings are unchanged and no clear is recorded (the board stays 0 of 18). Chapter VI writes the same hints. A first-time FFX-2 player who found the word first would lose those first-battle hints.",
+      "repro": "scripts/route-exp.mjs: lsBeforeWord against lsAfter in run.json",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-route/exp-leblanc-win-b80f772f/run.json"
+      ],
+      "requirement": "CHK-025",
+      "where": "the coach layer's seen-list (shared)",
+      "fix": "Skip recording seen hints when the chapter is experimental, or accept hints as UI state and say so in CHK-025.",
+      "acceptanceCheck": "the same run leaves the main save byte-identical.",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "confidence": "medium (judged by eye at 100 percent, not measured)",
+      "id": "F393-06",
+      "severity": "polish",
+      "category": "visual",
+      "title": "The pre-battle scene's location label (pink caps, top left) crosses the pale window glow and reads at the edge of legibility",
+      "game": "ffx2",
+      "chapter": "exp-leblanc (hidden)",
+      "expected": "The scene label reads over its room (CHK-003).",
+      "observed": "In the first scene frame \"EXPERIMENTAL · CHATEAU LEBLANC, GUADOSALAM\" is thin pink type over the pale blue and pink stained glass; \"LEBLANC\" is hard to read where it crosses the mullion.",
+      "repro": "door.mjs: 04-scene-1-rikku.jpg",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/door/door-cand-1600x900/04-scene-1-rikku.jpg"
+      ],
+      "requirement": "CHK-003",
+      "where": "the scene label's colour over the namespace backdrop",
+      "fix": "a darker shadow or plate behind the label for this room",
+      "acceptanceCheck": "contrast of the label over the backdrop at 1600x900 at or above 4.5",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "confidence": "high",
+      "id": "F393-07",
+      "severity": "suggestion",
+      "category": "visual",
+      "title": "Question for Bailey: after a Change the girl is drawn in the old painting beside the new-art figures (known, shipped as is)",
+      "game": "ffx2",
+      "chapter": "exp-leblanc (hidden)",
+      "expected": "D-509: the chapter's art ships as it is; its card says \"A figure not repainted yet is still the old painting\".",
+      "observed": "Rikku changed from Thief to White Mage stands in the old base painting, a different style from the new Yuna and Paine, for the rest of the fight (exp-spherechange-montage.jpg). Nothing is missing or invisible.",
+      "repro": "the harness's scripted Change in the hidden chapter",
+      "evidence": [
+        "critic/reviews/b80f772f-focused/exp-spherechange-montage.jpg"
+      ],
+      "requirement": "D-509",
+      "where": "the 16 dressphere paintings the handoff lists as not installed",
+      "fix": "none now; paint the other dresspheres if the chapter ever becomes visible",
+      "acceptanceCheck": "n/a",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Candidate b80f772f built fresh in place (npx vite build --outDir dist-gate --emptyOutDir, BASE_PATH=/, 4,537 files, 9,043 MB, bundle index-Dk9resVW.js, artifactHash 0b31ed8767792e02caa0a98484dbfcb55030a4ee5b6607451bb35a0b0b5c936f) and served by vite preview; live 39.2's own bytes (dist-release, bundle index-BFTPT4o0.js) served beside it; headless Playwright Chromium on the GPU, one browser at a time, the overnight art queue paused (PAUSE file) from 00:50 to 01:51 EDT.",
+      "The door: the board at three sizes, wrong word, a pause between letters, plain A, an arrow after a partial word, \"limit\", the word \"leblanc\" typed three ways, with the screen and the DOM roots timed after the last letter; the same run on live for the baseline.",
+      "The hidden chapter: board to results to board by real keys (one continuous run: scene with seven portraits, three acts, 71 turns, a Change, target selection and cancel, pause by Esc and P with the CHAPTER and member tabs, results, CONFIRM, reload), with the continuity harness watching every frame; the main save and the experiments' store read before and after; the pause's tabs and plates, the first menu and the dialogue at 1600x900, 2000x1012 and 390x844.",
+      "Chapters I (FFX), IV and VI (FFX-2): full runs to victory with the continuity harness (CHK-026 and CHK-027), and first menus, pause, portraits, HUD and art requests against live 39.2 at 1600x900, plus first menus and pause at 2000x1012 and 390x844.",
+      "The shipped files: sha256 manifest diff against live 39.2's stored manifest, art manifest entries, the production stylesheet's rule sets against live's, art-browser-load (3,346 images in Chromium and WebKit), manifest decode check; the diff of the shared engine and UI files read for neutrality (BattlePresenterArt, BattlePresenterStage, PoseRegistration, twirl, Renderer, GradeShader, Backdrop, partyFace, leblanc-last-room, ChapterSelectScreen, secretDoor).",
+      "Data audit: nothing under src/battle, src/data/ffx*, src/story, research/ or public/audio changed; the changed data files are art-namespace records, pose registration and chapter metadata (no sourced game value)."
+    ],
+    "reused": [
+      {
+        "what": "CHK-026 and CHK-027 for the 15 chapters not re-run (II, III, V, VII to XVIII)",
+        "from": "critic/reviews/002928c4-focused/continuity (the 39.2 candidate, byte-identical to live 39.2; 18 chapters, 164 minutes of battle)",
+        "why": "Dependency argument: the pose, stage, scene and presenter code the harness measures changed only by namespace-guarded additions (artCandidatesFor, inArtNamespace, namespacePrefixOf and POSE_REGISTRATION_EXP resolve to the very same ids and tables when a figure has no namespace); the one scene file changed, Chapter VI's, was re-run; every chapter's art and audio is byte-identical to live (manifest diff); the three chapters re-run (one FFX, two FFX-2, one of them Chapter VI) reproduce 39.2's numbers within run-to-run spread; no related open defect other than F392-01."
+      },
+      {
+        "what": "CHK-010 (selection) and the rest of CHK-006 for chapters not played",
+        "from": "critic/reviews/002928c4-focused.json",
+        "why": "No targeting, menu or overlay code is in the diff."
+      },
+      {
+        "what": "F392-03 (phone, Chapter IX gauge card)",
+        "from": "critic/reviews/002928c4-focused.json",
+        "why": "Chapter IX's files, HUD and the phone layout code are byte-identical to live; not re-run for time (usage mode PROTECT)."
+      }
+    ],
+    "notTested": [
+      "The hidden chapter's defeat, retry, scene skip, the automated route and its party prep screen (the word skips it, F393-03; the prep's namespaced faces are unreachable by the word).",
+      "Real Safari, a real phone, a gamepad, 4K and 21:9 (emulation only; no door route exists for phone or pad by design).",
+      "Audio: no audio file or routing code is in the diff (public/audio and src/audio unchanged), not auditioned.",
+      "The hidden chapter's Acts at the phone size beyond the first menu; the dressphere paintings that are not installed (known).",
+      "The deploy gates (tests, tsc, the full vitest suite) are the builder's and the deploy's; this review ran none of them."
+    ]
+  },
+  "regressions": [
+    "F393-04 (polish): the first arrow press on the board after a partial word is swallowed; works on live. Rare, not a ship matter."
+  ],
+  "nextReview": "Live verification of the exact artifact after the deploy (CHK-017: artifactHash 0b31ed8767792e02, bundle index-Dk9resVW.js), then the deep review owed on the live build (every chapter, the continuity harness again, the first-time-fan lens), with Bailey's eye on the hidden chapter: the feet and double images (F393-01, F393-02), the skipped party prep (F393-03), and whether the six coach hints in the main save matter (F393-05).",
+  "elapsedMinutes": 85,
+  "notes": {
+    "servers": "vite preview on 5427 (candidate) and 5428 (live 39.2 bytes) stopped by PID; ports closed",
+    "pause": "PAUSE file created 00:50 EDT and deleted 01:51 EDT; ComfyUI queue empty throughout",
+    "discarded": "the first run of the door script (wrong word ended in x = cancel) was discarded and rerun",
+    "scripts": "critic/reviews/b80f772f-focused/scripts"
+  }
+}

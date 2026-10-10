@@ -493,17 +493,23 @@ function runLine(seed: number, line: Line): LineRun {
  * four Mega Flares with her own Cures and, with no Attack row, the line has nothing left to press
  * (this harness allows no spherechange): the run stops **undecided** with 5,408-5,455 of his HP
  * on him on every seed. The line still loses; it no longer ends in a wipe.
+ *
+ * **Re-measured for Mega Flare at the game's power 14** (release candidate 1, 2026-10-09; Bailey: "Use 14 from the files"; FFX-2 only,
+ * reason "game-code parity"). The kernels now give Mega Flare about a third of the damage a girl under Shell took at the authored 24,
+ * so the White Mage outlasts three or four of them and the two damage dealers press on before they fall: the line still never wins
+ * (0 of 30 seeds), still casts no Shell and still loses two girls, but Bahamut is left with **1,306 to 1,912** of his 8,400 HP on the
+ * four seeds, not 2,800 or more. The bar below is an eighth of his HP: "the mashing party still falls well short of killing him".
  */
 describe('mashing Attack into Defense 160 stays a losing tactic', () => {
   for (const seed of SEEDS) {
-    it(`loses with most of his HP untouched (seed ${seed})`, () => {
+    it(`loses with part of his HP still on him (seed ${seed})`, () => {
       const r = runLine(seed, mashAttack);
       console.log(`mash, seed ${seed}:`, JSON.stringify(r));
 
       expect(r.outcome).not.toBe('victory');
       expect(r.shellCasts, 'the losing line is defined by never casting Shell [§3.3]').toBe(0);
       expect(r.kos, 'both damage dealers go down; the lone White Mage cannot attack').toBeGreaterThanOrEqual(2);
-      expect(r.bossHp, 'with most of his 8,400 HP still on him [§1.2, §2.3]').toBeGreaterThan(BAHAMUT_HP / 3);
+      expect(r.bossHp, 'with part of his 8,400 HP still on him [§1.2, §2.3]; measured 1,306-1,912 at Mega Flare 14').toBeGreaterThan(BAHAMUT_HP / 8);
     });
   }
 });
@@ -523,6 +529,13 @@ describe('mashing Attack into Defense 160 stays a losing tactic', () => {
  * ~4,155–4,398 of his 8,400 still on him. Compare the mashing line, which lives
  * to the second Mega Flare at ~41 turns: better damage buys an earlier death,
  * because the countdown is a contract and this line does not sign it.
+ *
+ * **Re-measured for Mega Flare at the game's power 14** (release candidate 1, 2026-10-09; Bailey: "Use 14 from the files"; FFX-2 only,
+ * reason "game-code parity"). The wipe is still total on every seed and the line still never wins (0 of 30), but a Mega Flare that
+ * does about a third of the damage no longer always finishes the party in the first cycle: on the four seeds the party falls after
+ * **1, 2, 2 and 4** Mega Flares (turns 32, 40, 42 and 76) with 1,493 to 3,870 of his HP left, and over thirty seeds a Mega Flare lands
+ * the last blow on 15. "The first cycle is enough" is therefore the FAQs' reading, not the exe's: the bars below are the measured
+ * ones (at most four Mega Flares, an eighth of his HP left).
  */
 describe('damage without mitigation stays a losing tactic', () => {
   const noMitigation = lever({ shell: false, heal: false, breaks: false, darkness: true });
@@ -543,11 +556,12 @@ describe('damage without mitigation stays a losing tactic', () => {
       // instead — the wipe is the cycle, not one ability — so the Mega Flare
       // attribution is asserted in aggregate over thirty seeds below rather
       // than per seed here.
-      expect(r.megaFlares, 'and the first cycle is enough [§2.4]').toBeLessThanOrEqual(2);
-      // Measured 2,760-4,398 left on the four seeds; the bar is a quarter of his
-      // bar so ordinary variance does not flake a test whose point is "nowhere
-      // near killing him".
-      expect(r.bossHp, 'with a large part of his HP still on him').toBeGreaterThan(BAHAMUT_HP / 4);
+      // Re-measured at Mega Flare 14: the party falls after one to four of them (1, 2, 2 and 4 on these seeds), where the authored 24
+      // wiped it within two.
+      expect(r.megaFlares, 'and four Mega Flares are enough [§2.4; the FAQs say the first]').toBeLessThanOrEqual(4);
+      // Measured 1,493-3,870 left on the four seeds at Mega Flare 14 (2,760-4,398 at 24); the bar is an eighth of his bar so ordinary
+      // variance does not flake a test whose point is "nowhere near killing him".
+      expect(r.bossHp, 'with part of his HP still on him').toBeGreaterThan(BAHAMUT_HP / 8);
     });
   }
 
@@ -608,6 +622,23 @@ describe('damage without mitigation stays a losing tactic', () => {
  * | **Magic Break x5** | "Everyone survives trivially" | 30/30 with **no Shell and no cure spell** |
  * | **Heal only** | not enough for a 917-HP Alchemist | 25/30 — the marginal route |
  *
+ * **Re-measured for re-parity W3 (FFX-2 only; reason "game-code parity"), seeds 1-30:** Shell 25/30, Magic Break 2/30, Heal
+ * only 14/30. The shipped line (Shell and the Breaks together) still wins 40 of 40. What moved, each from the game's rows
+ * (research/re-ffx2-commands.md §4): Impulse (6/16 of current HP) is an untyped move in the game's row, so Shell no longer halves
+ * it and a lowered Magic stat no longer scales it, so the engine's old reading of "Magic Break shrinks both Mega Flare and Impulse"
+ * is not the exe's. Measured per hit (seeds 1-30): Impulse averaged about 191 under Shell before and about 292 now (it is no longer halved);
+ * on the Magic Break route the party, with no Shell and no cure, is ground down by the Attack (about 186 a hit) and Impulse and the
+ * fight is decided against it on 28 of 30 seeds (Mega Flare itself still shrinks: about 96 a hit). §2.4's "survives trivially" for the
+ * Magic Break route is therefore the FAQs' claim, not the exe's.
+ *
+ * **Re-measured again for Mega Flare at the game's power 14** (release candidate 1, 2026-10-09; Bailey: "Use 14 from the files"; FFX-2
+ * only, reason "game-code parity"), seeds 1-30: **Shell 30/30, Magic Break 21/30, Heal only 30/30** (Mega Flare was the only number
+ * that changed: the authored 24 had been held over the game's row of 14). Mega Flare now does about a third of what it did to a girl
+ * under Shell, so the routes that lacked Shell or the Breaks live through it: the Magic Break route, which the Attack and Impulse had
+ * been grinding down on 28 of 30 seeds, clears 21, and Heal only clears every seed. On this one the exe's own power supports most
+ * of the FAQs' "survives trivially" (21 of 30, not 30 of 30). The shipped line (Shell and the Breaks together) is still faster than
+ * either lever alone, 44.0 turns against 57.8 for Shell alone on the four seeds, with nobody dying.
+ *
  * This is deliberately asserted rather than footnoted. The first round shipped
  * a handoff note claiming Shell was the *unique* answer; it is not — not in the
  * research and not in the engine — and pinning the real shape here stops the
@@ -617,14 +648,19 @@ describe('damage without mitigation stays a losing tactic', () => {
  */
 describe('each of the researched survival routes behaves as researched', () => {
   const routes: ReadonlyArray<readonly [string, Line, number]> = [
-    ['Shell route (no Breaks at all)', lever({ shell: true, heal: true, breaks: false, darkness: true }), 28],
-    ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 28],
+    // Re-parity W3: bars moved to the re-measured wins (25, 2 and 14 of 30); the Magic Break route had an upper bar of 6.
+    // **Mega Flare at the game's power 14** (release candidate 1, 2026-10-09; Bailey: "Use 14 from the files"): re-measured again,
+    // 30, 21 and 30 of 30, and the three bars are floors below those wins (24, 15 and 20), as the researched routes are.
+    ['Shell route (no Breaks at all)', lever({ shell: true, heal: true, breaks: false, darkness: true }), 24],
+    ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 15],
     // Re-measured 2026-09-26 for IC-2: 27/30 -> 1/30. Its wins were the all-target wrap: Mega Flare
     // killed Rikku, wrapped its third hit onto Yuna and never touched Paine, so the Warrior was left
     // to finish him. Each girl now takes Mega Flare once and the White Mage is the one left, with no
     // Attack row (this harness allows no spherechange): 27 of 30 stop undecided. §2.4 calls this
     // route marginal; the shipped line (Shell + Breaks) is unaffected. Flagged for Bailey in the plan.
-    ['heal-only route (no Shell, no Breaks)', lever({ shell: false, heal: true, breaks: false, darkness: true }), 1],
+    // Re-measured again for W3: 1/30 -> 14/30. The old 27 undecided seeds were a stalemate (the Attack and Impulse could not
+    // finish the party, Vigor could not finish Bahamut); with the game's numbers the fight is decided on 30 of 30.
+    ['heal-only route (no Shell, no Breaks)', lever({ shell: false, heal: true, breaks: false, darkness: true }), 20],
   ];
 
   for (const [name, line, bar] of routes) {
@@ -633,7 +669,7 @@ describe('each of the researched survival routes behaves as researched', () => {
       const wins = runs.filter((r) => r.outcome === 'victory').length;
       console.log(`${name}: ${wins}/30 wins`);
       expect(wins, `${name} is one of the researched routes and must clear the fight`).toBeGreaterThanOrEqual(bar);
-    });
+    }, 60_000);
   }
 
   it('and the shipped line is faster than either single lever, with nobody dying', () => {

@@ -68,6 +68,13 @@ export const GradeShader = {
     /** The bloom pass's own light (its last composite target) and whether a figure that shows its own colour gives it back (`figureTrue.ts`). */
     tBloom: { value: null as unknown },
     bloomRemove: { value: 0 },
+    // --- the room's haze (the experimental Leblanc room's grade, `ScenePalette.hazeColor` / `hazeAmount`); every default leaves the grade exactly as it was.
+    /** The colour of the milk the haze veils the frame with (linear, 0..1 per channel). */
+    hazeColor: { value: new Vector3(0, 0, 0) },
+    /** How much of it veils the frame at the bottom edge, at the middle and at the top edge (each 0..1, linear between them). (0, 0, 0) is no haze: the block is skipped. */
+    hazeAmount: { value: new Vector3(0, 0, 0) },
+    /** How far the haze thins toward the left and right edges of the frame, 0..1 (0 = the same all the way across, the default; 1 = none at the edge itself). */
+    hazeSide: { value: 0 },
   },
 
   vertexShader: /* glsl */ `
@@ -100,6 +107,9 @@ export const GradeShader = {
     uniform float figureTrue;
     uniform sampler2D tBloom;
     uniform float bloomRemove;
+    uniform vec3 hazeColor;
+    uniform vec3 hazeAmount;
+    uniform float hazeSide;
 
     varying vec2 vUv;
 
@@ -144,6 +154,15 @@ export const GradeShader = {
         vec3 u = sqrt(clamp(c * 0.5, 0.0, 1.0));
         vec3 looked = texture(uLook, u * (31.0 / 32.0) + 0.5 / 32.0).rgb;
         c = mix(c, looked, lookAmount);
+        luma = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      }
+
+      // the room's haze: a veil of hazeColor over everything that is not a painted figure (the figure mix below puts the figure's own colour over it), thicker or thinner
+      // from the bottom of the frame to its top, like a graduated filter. (0, 0, 0) is no haze: nothing in this block runs.
+      if (hazeAmount.x + hazeAmount.y + hazeAmount.z > 0.0) {
+        float hz = vUv.y < 0.5 ? mix(hazeAmount.x, hazeAmount.y, vUv.y * 2.0) : mix(hazeAmount.y, hazeAmount.z, vUv.y * 2.0 - 1.0);
+        hz *= 1.0 - hazeSide * smoothstep(0.2, 0.5, abs(vUv.x - 0.5));
+        c = mix(c, hazeColor, clamp(hz, 0.0, 1.0));
         luma = dot(c, vec3(0.2126, 0.7152, 0.0722));
       }
 

@@ -1,0 +1,60 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-06T07:20:00Z",
+  "build": {
+    "mainSha": "d3fe9fe5",
+    "bundle": "B6DQPYhY",
+    "artifactHash": "769a43ed69b4fdb2640e2a9918b2c2b6d94615d2f176b3f456562ebe327eea15"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/d3fe9fe5.json --url https://echoesofspira.com/ --changed-from critic/artifacts/816d80f9.json --full (run in D:/Final Fantasy, 2026-10-06 02:45Z-local to about 03:08 EDT) -> {result: PASS, artifactHash: 769a43ed69b4fdb2640e2a9918b2c2b6d94615d2f176b3f456562ebe327eea15, liveManifest: match, checked: 3848, mismatched: [], missing: [], wrongType: [], errors: [], notes: [], browserPages: index.html identical once Cloudflare's Web Analytics beacon (366 bytes + line feed) is removed, assetCacheControl: assets/index-B6DQPYhY.js public, max-age=0, must-revalidate}. A second, non-full run (changed files plus a 40-file sample, 50 files) also returned PASS. The stored manifest, the marker and the live manifest name the same artifactHash.",
+      "reason": "Identity rests on the byte comparison of all 3,848 files, not the bundle name."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Chromium by Playwright from node, PYREFLY_BROWSER=gpu (ANGLE D3D11 on the NVIDIA RTX 5070 Ti, no black canvas, no fallback), never Claude-in-Chrome or the built-in pane. Live https://echoesofspira.com/ with a ?v= cache-buster, fresh context per run, 1600x900, REAL key presses and mouse clicks. Each run read screen and screen stack before acting: title -> (Enter x2 incl. Auron briefing 'Eighteen fights') -> chapter-select -> click card -> party-prep -> Enter -> cutscene -> battle -> awaitingMenu true. Runs: FFX Ch I Seymour Flux (Oversoul Paragon, real Attack changed the turn/enemy state; submenu open + Escape cancel returned to command menu; Escape at command menu opened pause (stack battle>pause); H hid then restored .pause__ui; Escape resumed; P paused and P resumed) and FFX-2 Ch IV Bahamut (same sequence, same results). Music: boss-seymour prerendered during Ch I battle; pause cue 'Still Water' source prerendered, not the synth fallback. Console errors 0, page errors 0, HTTP >=400 0 across the two clean probe runs (tools/zz-pause-probe.tmp.mjs). Earlier script runs also showed 0 console errors.",
+      "reason": "States asserted before each action; the changed flow (battle presenter, pause, HUD, pose registration in FFX Ch I and FFX-2 Ch IV) ran with real input, positive and cancel paths."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on both runs: settings.musicVolume set to 0.42 via save.setSettings, page.reload, __pyreflyReady, value read back 0.42 (both Ch I and Ch IV runs). Progress was in-flight battle only (no chapter completed, so no chapter record asserted).",
+      "reason": "Lightweight reload smoke only; the full upgrade matrix is not part of a live pass and was not run."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: verify-live --full, 3,848 of 3,848 files byte-identical, content types right, beacon tolerated",
+      "title, briefing, chapter select, party prep, cutscene, battle by real input: FFX Ch I and FFX-2 Ch IV, 1600x900",
+      "real Attack turn, submenu cancel (Escape), pause by Escape and P, H hide and restore, resume",
+      "prerendered music (boss-seymour; pause cue) rather than procedural fallback",
+      "setting survives reload",
+      "console errors and 404s over the probe runs: 0 and 0"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full CHK-024 upgrade matrix",
+      "the 16 other chapters, win/loss/retry paths, cutscene content",
+      "the stature-floor lift itself (Lulu critical FFX, Rikku Berserker FFX-2) and pose registration quality: needs the deep review and a state that reaches those poses",
+      "phone sizes, other window sizes, other browsers, slow connections, audio by ear",
+      "chapter-complete progress record"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50,
+  "notes": "No critical or major finding. Harness notes: (a) tools/zz-live-*.tmp.mjs still expects the old briefing line 'Nine fights' (now 'Eighteen fights'), a stale script assertion, not a product defect; (b) the first scripted run stalled at party-prep because it never pressed Enter there, and a combined run pressed Escape right after cancelling a submenu so it saw no pause, both script ordering; a clean probe run with correct sequencing paused/hid/restored/resumed on both chapters; (c) two parallel browser sessions plus the full verifier were slow on this machine. The marker carries a deep obligation (40 carried builds) that this pass does not settle."
+}

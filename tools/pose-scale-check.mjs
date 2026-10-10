@@ -12,7 +12,7 @@
  *
  *  - a painting of a measured subject with no record: a new key landed (the art lane's new poses); measure it (the command is printed);
  *  - a record whose painting's bytes changed (re-rendered or re-installed): measure it again;
- *  - a record the table does not agree with (a hand-edited table, or `measure.py table` not run after `measure.py measure --write`);
+ *  - a record the table does not agree with (a hand-edited table, or `measure.py table` not run after `measure.py measure --write`): its scale, its stance and, since r394, its head box;
  *  - a reviewed pose whose head, at the scale the engine will use, is not within the reading's resolution (8 percent) of its idle's: either the table
  *    does not carry the reading (it is more than 12 percent from the pose's own scale), or it was edited by hand;
  *  - in a subject whose heads were fully reviewed (`headsComplete` in the record), a pose with no reading (a new key).
@@ -44,7 +44,7 @@ export function poseFiles(artDir, subject) {
 const size = (b) => Math.sqrt(Math.max(1e-9, b[2] - b[0]) * Math.max(1e-9, b[3] - b[1]));
 
 /**
- * @param {{records: any, table: Record<string, Record<string, {scale?: number, stanceX?: number, feetRow?: number, upright?: true}>>, artDir: string, subjects?: string[], listNew?: boolean}} o
+ * @param {{records: any, table: Record<string, Record<string, {scale?: number, stanceX?: number, feetRow?: number, upright?: true, head?: readonly number[]}>>, artDir: string, subjects?: string[], listNew?: boolean}} o
  * @returns {{failures: string[], notes: string[], summary: Array<{subject: string, poses: number, reviewed: number, registered: number}>}}
  */
 export function checkPoseScale({ records, table, artDir, subjects, listNew = false }) {
@@ -86,14 +86,23 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         registered++;
         if (!row || row.stanceX === undefined || Math.abs(row.stanceX - rec.stance.x) > 0.06) failures.push(`${key}: the table's stanceX (${row?.stanceX}) is not the record's (${rec.stance.x}); run measure.py table`);
       }
+      // r394 (D-510): the head box the engine holds to the idle's size on screen (`HeadLock.ts`) is the record's, as fractions of the painting; a foe with no face box has the 1 px stand-in and registers none
+      if (rec.size && !(idleBox?.length === 4 && idleBox[0] === 0 && idleBox[1] === 0 && idleBox[2] === 1 && idleBox[3] === 1)) {
+        const want = rec.head ? [rec.head[0] / rec.size[0], rec.head[1] / rec.size[1], rec.head[2] / rec.size[0], rec.head[3] / rec.size[1]] : null;
+        const got = row?.head;
+        if (want && (!got || got.length !== 4 || got.some((v, i) => Math.abs(v - want[i]) > 6e-5))) failures.push(`${key}: the table's head box (${got ? got.join(', ') : 'none'}) is not the record's (${want.map((v) => v.toFixed(4)).join(', ')}); run measure.py table`);
+        else if (!want && got) failures.push(`${key}: the table has a head box (${got.join(', ')}) that the record does not; run measure.py table`);
+      }
       if (['reviewed', 'accepted', 'gated', 'noise'].includes(rec.scaleSrc)) {
         reviewed++;
         const koLike = pose === 'ko' && rec.prone && !rec.standing; // a KO's table scale is the reading over the lying plane's projection (measure.py KO_PROJECTION)
         const proj = koLike ? (records.koProjection ?? 1) : 1;
-        const applied = rec.scaleSrc !== 'noise' || koLike;
+        const allow = rec.allow?.scale ?? 1; // r392: a camera allowance (measure.py, overrides.json `allow`): a factor the table carries over the reading, with its reason in the record
+        if (rec.allow && !(rec.allow.why && allow > 0.9 && allow < 1.1)) failures.push(`${key}: its camera allowance (${allow}) needs a reason and a factor between 0.9 and 1.1`);
+        const applied = rec.scaleSrc !== 'noise' || koLike || allow !== 1;
         const effective = applied ? (row?.scale ?? NaN) * proj : rec.current; // 'noise': the pose keeps the scale it has (the sidecar's, or the KO table's)
-        if (applied && (!row || row.scale === undefined || Math.abs(row.scale * proj - rec.scale) > 0.0006 * Math.max(1, proj > 0 ? 1 / proj : 1))) {
-          failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}${koLike ? ` over the KO projection ${proj}` : ''}); run measure.py table`);
+        if (applied && (!row || row.scale === undefined || Math.abs(row.scale * proj - rec.scale * allow) > 0.0006 * Math.max(1, proj > 0 ? 1 / proj : 1))) {
+          failures.push(`${key}: the table's scale (${row?.scale}) is not the record's (${rec.scale}${koLike ? ` over the KO projection ${proj}` : ''}${allow !== 1 ? ` times its camera allowance ${allow}` : ''}); run measure.py table`);
         } else if (!applied && row?.scale !== undefined) {
           failures.push(`${key}: the record keeps the pose's own scale but the table has one (${row.scale}); run measure.py table`);
         } else if (!applied) {
@@ -102,7 +111,7 @@ export function checkPoseScale({ records, table, artDir, subjects, listNew = fal
         } else if (rec.scaleSrc === 'gated') {
           if (!(rec.stature >= 0.595)) failures.push(`${key}: gated to the stature floor but its stature is ${rec.stature}`);
         } else if (rec.head && idleBox && effective) {
-          const ratio = (size(rec.head) * effective) / size(idleBox);
+          const ratio = (size(rec.head) * effective) / allow / size(idleBox); // the allowance is on purpose: the head at the reading's scale is the idle's
           if (Math.abs(ratio - 1) > 0.02) failures.push(`${key}: head at the scale the engine uses (${effective}) is x${ratio.toFixed(3)} of the idle's (the record's own reading says it should be x1.0)`);
         }
       }

@@ -3,8 +3,10 @@
 **Game case: FFX-2 only.** FFX has its own scripts and its own engine; they have their own notes. This note covers the
 FFX-2 chapter `ffx2-bahamut` (Bahamut) and the five links of `ffx2-vegnagun-shuyin` (Tail, Leg with the three Nodes, Body
 with the two Bulwarks, Head with the two Redoubts, Shuyin). Part of the `re-parity` track
-([docs/plans/re-parity.md](../docs/plans/re-parity.md)), P6 (boss AI follows the scripts). Drafted 2026-10-08. Research
-only: no engine or AI code is changed by this note.
+([docs/plans/re-parity.md](../docs/plans/re-parity.md)), P6 (boss AI follows the scripts). Drafted 2026-10-08; the logic
+rate, the clock during effects and the charge tick (main finding 2, the notation, 1.1, 2.2, section 9, row B3) and the step
+counts (rounded up: section 8 and the inline counts) corrected on 2026-10-09 from the live measurement
+([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)). Research only: no engine or AI code is changed by this note.
 
 **Source note (applies to every statement below unless a line says otherwise):** FFX2_Data.vbf Steam build 25501027
 (FFX-2.exe SHA-256 6EA7F142...CD69). The AI is the developers' own script source shipped in the archive under
@@ -21,8 +23,14 @@ our own words: no script text, no game text and no decompiled code is reproduced
 1. **Bahamut casts Curse once, at his very first action, not once per loop.** After that the loop is 6 actions: Attack,
    Attack, Attack, Impulse, Impulse, Mega Flare, with the countdown between the second Impulse and Mega Flare.
 2. **The countdown is 5 steps of 150 AI polls (750 polls), not 5 Bahamut turns.** A poll happens on every logic step
-   while he is ready and the ATB clock runs; Haste and Slow on him do not change it; any action executing, and a girl's
-   submenu in Wait mode, freeze it. Seconds depend on the logic rate (30 or 60 steps per second, unsettled): 25 s or 12.5 s.
+   while he is ready and the ATB clock runs; Haste and Slow on him do not change it; a girl's submenu in Wait mode freezes
+   it. 750 polls are 25.03 s of running clock at the measured 29.97 steps a second. *Corrected by the 2026-10-09
+   measurement ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) sections 3 and 7):* the first draft also had "any
+   action executing" freeze it and left the rate at 30 or 60 steps a second (25 s or 12.5 s). On the running game the
+   effects of Attack, Fire and four monster casts (552 steps with the action-executing flag set) stopped no gauge and no
+   charge countdown, and only the Wait flag did (719 steps), so an action executing does not freeze it for those commands.
+   Open: whether any other command does (his own Impulse and Mega Flare, a girl's Special, an item or a summon were not
+   measured), and his poll counter itself was not read (the drive did not reach his fight).
 3. **Mega Flare's table power is 14** (the same in the JP and US tables, nothing in the script changes it). Our 24 is a fit
    to anecdotes. With the table value the engine formula gives about 195 to 430 per girl before Shell.
 4. **The generic "battle too long" block in every one of these scripts never runs.** Its guard is true only when no girl
@@ -54,9 +62,11 @@ our own words: no script text, no game text and no decompiled code is reproduced
   partly inferred; [L] open.
 - **Notation.** A "poll" is one call of a monster's action entry. A "step" is one battle logic step. "Girl" is a party
   member (Yuna slot 0, Rikku slot 1, Paine slot 2). "Near-weighted" and "uniform" pick are defined in 1.4. Numbers are
-  written as the files have them. Seconds are shown as "at 30/s" and "at 60/s" because the PC logic rate is not settled
-  (the pacing code defines one step as two sixtieths of a second, the scene script that shows the Bahamut numbers
-  comments 75 units as 2.5 s, which favours 30/s; no stopwatch measurement has been made).
+  written as the files have them. Seconds are at the measured 29.97 steps a second, one step being 0.033367 s (corrected
+  by the 2026-10-09 measurement, which closed the 30-or-60 question: [re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)
+  section 3; the scene script that shows the Bahamut numbers comments 75 units as 2.5 s, and if a scene unit is one step
+  then 75 units are 2.50 s). Step counts derived from units are rounded up, because the game's counter has to reach 0 or
+  less and so needs the next whole step (a 16,666-unit refill took 176 steps on the running game; 16,666 / 95 = 175.4).
 
 ## 1. How the engine runs these scripts (applies to every actor below)
 
@@ -72,15 +82,22 @@ action entry advances counts **steps** whenever the script sometimes issues noth
 idle phase, the Head's idle branches) and counts **turns** otherwise.
 
 The clock steps only while: the battle is in its main state and the party is not wiped (a wiped or fully petrified party
-stops it), no pause flag is set, no action is executing (any command being carried out freezes every gauge), and the Wait
-flag is clear. Wait mode sets the flag only while a girl's menu is below the root command list. Active mode never sets it.
+stops it), no pause flag is set, the command-execution check's first output is 0, and the Wait flag is clear. (Corrected by
+the 2026-10-09 measurement: this line used to say "no action is executing (any command being carried out freezes every
+gauge)". On the running game no gauge or charge countdown stopped while the effects of Attack, Fire and four monster casts
+played, 552 steps with the action-executing flag set, so the check's first output stayed 0 for those commands; which
+commands raise it, if any, is open: [re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 7.) Wait mode sets the
+flag only while a girl's menu is below the root command list. Active mode never sets it.
 Haste (x21/20) and Slow (/2) change the speed of gauges but not whether a ready monster is polled.
 
 After a command ends, recovery is `cost_atb x 10000 / (AGI + 1)` units (the command's own cost, the monster's AGI byte),
 then thinking: `(draw mod T) + T/4` with T the monster record's thinking byte (0 for every actor here, so none) plus
 exactly 30 steps for every party member who is dead or petrified (run on the live exe: 0, 30, 90 for none, one, three down).
 Charge time is `cost_cast x 10000 / (AGI + 1)` units. Gauges fall by 95 units per step at Normal speed (Slow 70, Fast 120),
-halved while the monster is charging or in hit reaction. Cadence of each actor's moves is in section 8.
+halved while the monster is in hit reaction. (Corrected by the 2026-10-09 measurement: this line also had the halving
+"while the monster is charging". The tick function does halve then, but the charging flag stayed 0 through all 7 charge
+countdowns measured on the running game, and they fell the full 95 units a step, so in play a charge is not halved:
+[re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 6.) Cadence of each actor's moves is in section 8.
 
 ### 1.2 What a command from a script is [H]
 
@@ -151,7 +168,8 @@ Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, blo
 `m168.src`; the number windows are scene events in `btl/stbv05_229/evt_stbv05_229.src:12-40`.
 
 **Start.** The init section only disables moving and sets the death pattern; nothing else is set. The first gauge is 25% to
-74% of the recovery of command 0x302d (8,045 units): 2,011 to 5,971 units, 21 to 63 steps; thinking is 0 for him.
+74% of the recovery of command 0x302d (8,045 units): 2,011 to 5,971 units, 22 to 63 steps (rounded up; before the
+opening trim); thinking is 0 for him.
 
 ### 2.1 Action entry, in the order the script tests (m168.src:48-337) [H]
 
@@ -186,10 +204,14 @@ actions but only the inert block reads it.
 
 Each number is a scene event of 75 script units (the scene script's own comment: 2.5 s). The window text itself is not
 reproduced here. Counting starts when he is ready again after the second Impulse, that is after Impulse's charge (cost_cast
-100 = 11,494 units), execution and recovery (cost_atb 80 = 9,195 units, 97 steps) plus thinking. 750 polls are 25.0 s at
-30/s or 12.5 s at 60/s of **running clock**: every party action that executes, and every Wait-mode submenu, adds to the
-real time. Nothing the party does shortens it and nothing speeds it up; there is no HP trigger. Mega Flare then charges
-(cost_cast 120 = 13,793 units) and recovers (cost_atb 120 = 13,793 units).
+100 = 11,494 units), execution and recovery (cost_atb 80 = 9,195 units, 97 steps) plus thinking. 750 polls are 750 steps,
+25.03 s at the measured 29.97 steps a second, of **running clock**: every Wait-mode submenu adds to the real time (the
+Wait flag stopped every gauge on the running game), while a party action's animation did not stop the clock for the
+commands measured (a girl's Attack and Fire), so those add nothing. Whether any other command, such as his own Impulse or
+a girl's Special, does is open. (Corrected by the 2026-10-09 measurement, which replaces "25.0 s at 30/s or
+12.5 s at 60/s" and "every party action that executes adds to the real time": [re-ffx2-timing-measured.md](re-ffx2-timing-measured.md)
+sections 3 and 7.) Nothing the party does shortens it and nothing speeds it up; there is no HP trigger. Mega Flare then
+charges (cost_cast 120 = 13,793 units) and recovers (cost_atb 120 = 13,793 units).
 
 ### 2.3 Rows the script calls [H]
 
@@ -344,7 +366,7 @@ Action entry m288.src:49-140, m289.src:49-145; reaction 142-155 / 147-160.
 Rows: Physical attack detected formula 7 power 5 = 5/16 of each girl's max HP, physical bit, clears the girls' STR and DEF
 stage bytes; Magical attack detected MP damage, formula 7 power 3 = 3/16 of max MP, magical bit, clears MAG and MDEF stages;
 Hostile activity detected HP and MP damage 3/16 each, magical bit, clears Shell, Protect, Reflect, Regen and Haste. Charge
-30, recovery 100. Idle spells have recovery 0. Cadence at AGI 46: answers 6,382 units charge (67 steps) + 21,276 recovery
+30, recovery 100. Idle spells have recovery 0. Cadence at AGI 46: answers 6,382 units charge (68 steps) + 21,276 recovery
 (224 steps).
 **Reaction:** any result from a girl sets `bf_halu_00` to 1 and adds 1 to `bf_halu_01`. No death code.
 
@@ -397,7 +419,7 @@ target). **Death entry (489-493):** queues the Head's death command (0x4143) on 
 
 **The fail clock.** `bf_keisuke01` is shared: the Redoubts add 1 on every phase-2 action poll as well (6.2). Doom comes at
 100 or more on the Head's first later poll. Shuyin's lines come at 20, 40, 60 and 80 (and one at the start of phase 1,
-one at the start of phase 2, a Braska line at 51). Cadence at AGI 68: Mors Certa charge 17,391 units (183 steps) + recovery
+one at the start of phase 2, a Braska line at 51). Cadence at AGI 68: Mors Certa charge 17,391 units (184 steps) + recovery
 14,492 (153 steps); in phase 1 at AGI 110: Pallida Mors recovery 9,009 (95 steps).
 
 ### 6.2 Redoubts (Right m291, Left m292) [H]
@@ -450,32 +472,35 @@ charge 100; recovery 0 for the four Limit moves. Cadence at AGI 133: Attack reco
 Floral Fallal, Full Throttle and Machina Maw are the in-game names of job ids 0x500f (Yuna), 0x5015 (Paine) and 0x5012 (Rikku),
 each girl's first special dressphere. There is no Yuna-first rule anywhere in the script.
 
-## 8. Cadence reference (units from the rows; steps at Normal speed, no halving)
+## 8. Cadence reference (units from the rows; steps at Normal speed, no charge halving, rounded up)
 
-Recovery = `cost_atb x 10000 / (AGI+1)`, charge = `cost_cast x 10000 / (AGI+1)`; 95 units per step. Halving while charging or in
-hit reaction and the Haste, Slow factors are in 1.1. "Dialogue" rows are the speak commands (cost 60).
+Recovery = `cost_atb x 10000 / (AGI+1)`, charge = `cost_cast x 10000 / (AGI+1)`; 95 units per step, for a charge as well
+as a recovery (a charge is not halved in play: corrected by the 2026-10-09 measurement, see 1.1). The hit-reaction halving and
+the Haste, Slow factors are in 1.1. "Dialogue" rows are the speak commands (cost 60). Steps are the units divided by 95
+and **rounded up**, because the game's counter has to reach 0 or less (corrected by the 2026-10-09 measurement: the first
+draft rounded to the nearest step and printed, for example, 145 for the 13,793 units of Mega Flare, which take 146).
 
 | Actor (AGI) | Move | Charge units (steps) | Recovery units (steps) |
 |---|---|---|---|
 | Bahamut (86) | Attack | 0 | 11,494 (121) |
 | | Impulse | 11,494 (121) | 9,195 (97) |
-| | Mega Flare | 13,793 (145) | 13,793 (145) |
-| | Curse | 13,793 (145) | 0 |
+| | Mega Flare | 13,793 (146) | 13,793 (146) |
+| | Curse | 13,793 (146) | 0 |
 | Tail (115) | Noli Me Tangere | 0 | 8,620 (91) |
 | | Tail Beam | 10,344 (109) | 8,620 (91) |
 | Leg (34) | Vita Brevis | 34,285 (361) | 28,571 (301) |
 | | Break / Slow / Berserk | 22,857 / 25,714 / 28,571 | 0 / 0 / 22,857 |
-| | Dialogue | 0 | 17,142 (180) |
-| Node A-C (41) | missiles | 7,142 (75) | 23,809 (251) |
-| | Cura, Regen, Shell, Protect | 14,285 (150) | 0 |
-| | Flare / -ga spells | 23,809 (251) / 16,666 (175) | 0 |
-| Body (35) | Memento Mori, Charge Core | 8,333 (88) | 27,777 (292) |
+| | Dialogue | 0 | 17,142 (181) |
+| Node A-C (41) | missiles | 7,142 (76) | 23,809 (251) |
+| | Cura, Regen, Shell, Protect | 14,285 (151) | 0 |
+| | Flare / -ga spells | 23,809 (251) / 16,666 (176) | 0 |
+| Body (35) | Memento Mori, Charge Core | 8,333 (88) | 27,777 (293) |
 | | Full-Life | 55,555 (585) | 22,222 (234) |
-| Bulwarks (46) | answers | 6,382 (67) | 21,276 (224) |
+| Bulwarks (46) | answers | 6,382 (68) | 21,276 (224) |
 | Head (110 then 68) | Pallida Mors | 0 | 9,009 (95), then 14,492 (153) |
-| | Nemo / Odi / Mors Certa | 10,810 (114), then 17,391 (183) | 9,009 (95), then 14,492 (153) |
-| Redoubts (47) | Full-Life | 41,666 (439) | 16,666 (175) |
-| | Lacrimosa (HP / MP) | 12,500 (132) | 20,833 (219) |
+| | Nemo / Odi / Mors Certa | 10,810 (114), then 17,391 (184) | 9,009 (95), then 14,492 (153) |
+| Redoubts (47) | Full-Life | 41,666 (439) | 16,666 (176) |
+| | Lacrimosa (HP / MP) | 12,500 (132) | 20,833 (220) |
 | Shuyin (133) | Attack | 0 | 7,462 (79) |
 | | Limit moves | 7,462 (79) | 0 |
 
@@ -483,7 +508,13 @@ hit reaction and the Haste, Slow factors are in 1.1. "Dialogue" rows are the spe
 
 - **Mega Flare against the anecdotes** [L]: the table and the engine say 14 (2.3); why two published reports read two to three
   times higher is not explained. One measured cast settles it.
-- **Logic rate** [L]: 30 or 60 steps per second; the pacing code and the scene comment point to 30/s.
+- **Logic rate**: settled, 29.97 steps a second (60 / 1.001 / 2), measured on the running game on 2026-10-09; the earlier
+  [L] entry ("30 or 60 steps per second, the pacing code and the scene comment point to 30/s") is closed
+  ([re-ffx2-timing-measured.md](re-ffx2-timing-measured.md) section 3).
+- **Which commands stop the clock** [L]: the effects of Attack, Fire and four monster casts did not (552 steps with the
+  action-executing flag set), and only the Wait flag did. Bahamut's own Impulse and Mega Flare, a girl's Special, an item
+  or a summon were not measured, and his poll counter was not read, so whether a command freezes the 750-poll countdown is
+  open for them (corrected by the 2026-10-09 measurement, section 7 of the same note).
 - **Battle-local flags between the five links** [M]: assumed zero at each battle start.
 - **Whether the number windows pause the clock** [M]: the gating flags were read; none is set by message windows, but this was
   not run.
@@ -502,7 +533,7 @@ Row key: *game* = this note; *ours* = file:line in `src/battle/ffx2/`.
 |---|---|---|---|---|
 | B1 | Curse | cast once, on the very first action (m168.src:85-90) | every 12-action loop, step 1 (`ai/bahamut.ts:8,55-57`) | extra Curse every cycle |
 | B2 | Loop shape | 6 actions per cycle: 3 Attack, 2 Impulse, Mega Flare (m168.src:145-207) | 12-action loop with 5 dead turns (`ai/bahamut.ts:4-14,33-37,64-76`) | wrong rhythm, wrong action count |
-| B3 | Countdown unit | 5 x 150 AI polls on a running clock (m168.src:92-141) | 5 Bahamut turns; "Slowing him slows the countdown" (`ai/bahamut.ts:11,18-19`) | Slow/Haste must not change it; action animations and Wait submenus must freeze it |
+| B3 | Countdown unit | 5 x 150 AI polls on a running clock (m168.src:92-141) | 5 Bahamut turns; "Slowing him slows the countdown" (`ai/bahamut.ts:11,18-19`) | Slow/Haste must not change it; Wait submenus must freeze it (corrected by the 2026-10-09 measurement: an action's animation did not stop the clock for Attack, Fire and four monster casts; others open) |
 | B4 | Numbers shown | 5,4,3,2,1 at polls 150..750, the 1 with the cast (evt_stbv05_229.src:12-40) | 5,4,3,2,1 over turns 7-11, then 0 with the cast (`ai/bahamut.ts:66-79`) | one extra display, timing |
 | B5 | Attack / Curse target | near-weighted, unpoisoned first (Curse: un-Cursed first) | uniform random (`ai/bahamut.ts:43-46,56,59`) | central girl hit more, poison diverts |
 | B6 | Mega Flare power | 14 (monmagic row 0x409c) | `MEGA_FLARE_CONSTANT = 24` (`constants.ts:272`, `abilities-core.ts:123`) | about 2.9 x the table damage |

@@ -23,7 +23,7 @@
 
 import '../../../ui/common/party-prep-phone.css';
 import type { Chapter } from '../../../data/encounters.ts';
-import { romanNumeral } from '../../../ui/common/roman.ts';
+import { chapterNumeral } from '../../../ui/common/roman.ts';
 
 /** The width the stacked layout takes over below. Mirrors the CSS media query. */
 export const PHONE_PREP_QUERY = '(max-width: 599px)';
@@ -42,8 +42,8 @@ export function hasMoreBelow(prep: HTMLElement): boolean {
 }
 
 /** The short game and numeral label the stacked page shows top right, e.g. `FFX-2 · VI`. */
-export function phoneWhereLabel(chapter: Pick<Chapter, 'game' | 'number'>): string {
-  return `${chapter.game === 'ffx2' ? 'FFX-2' : 'FFX'} · ${romanNumeral(chapter.number)}`;
+export function phoneWhereLabel(chapter: Pick<Chapter, 'game' | 'number' | 'experimental'>): string {
+  return `${chapter.game === 'ffx2' ? 'FFX-2' : 'FFX'} · ${chapterNumeral(chapter)}`;
 }
 
 function el(cls: string, html = ''): HTMLElement {

@@ -20,6 +20,7 @@
 import type { GameId } from '../battle/common/types.ts';
 import type { ChapterId } from './encounters.ts';
 import { FFX2_LEBLANC_META } from './chapter-meta-ffx2-leblanc.ts';
+import { EXP_LEBLANC_META } from './chapter-meta-exp-leblanc.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
 import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
@@ -93,7 +94,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII' | 'EXP';
   title: string;
   subtitle: string;
   location: string;
@@ -386,12 +387,10 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
 ] as const;
 
 /**
- * Metadata for chapters that are registered but not listed
- * (`./chapters-unlisted.ts`): the pause screen and the prep panel find them by
- * id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing a
- * chapter moves its record from here into `CHAPTER_META`.
+ * Metadata for chapters that are registered but not listed (`./chapters-unlisted.ts`, and the Leblanc preview): the pause screen and the
+ * prep panel find them by id, and `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record into `CHAPTER_META`.
  */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [] as const; // none since Sin's two chapters were listed (2026-09-29)
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META] as const; // the Leblanc preview (2026-10-06); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

@@ -140,6 +140,9 @@ export const osmose: AbilityDef = {
   removesStatuses: [],
   flags: ['drains-mp', 'ignores-armored'],
   canMiss: false,
+  // `groupTarget`: a script that queues it names exactly whom it hits. Yu Yevon aims one at Character #1 to #3 who are alive,
+  // the Pagodas one at a time, Yunalesca's aeon ring at the aeon on the field (re-ffx-ai-yunalesca-bfa section 1.4).
+  extra: { groupTarget: true },
   messageTemplate: '{user} uses Osmose on {target}',
 };
 

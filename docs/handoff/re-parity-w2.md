@@ -1,13 +1,13 @@
 # Re-parity W2: the FFX engine takes its turn order, statuses and per-turn ticks from the game's own kernels
 
-Status: **built and committed on branch `re-parity-w2` (from `bd908802`), not merged, not deployed** (2026-10-09). Track `re-parity`
+Status: **built and committed on branch `re-parity-w2` (from `bd908802`, 2026-10-09), merged with release candidate 1 (`origin/re-parity-rc1`, 2026-10-10: see "Merged onto release candidate 1" below) and pushed to `origin/re-parity-w2`; not deployed**. Track `re-parity`
 ([plan](../plans/re-parity.md), [paper preflight](../plans/re-parity-review.md) row W2). Owner: Bailey.
 **Game case: FFX only** (AGENTS.md rule 14). FFX-2 and FF7 do not import any module this batch touched; `ffx2-atb-golden` and `ff7-golden`
 pass unchanged.
 
 Bailey, 2026-10-08, the ask this track answers: "It needs to be a 1:1 parity." On 2026-10-09: "Full speed ahead you don't need to conserve".
 
-Commits (all on `re-parity-w2`; nothing pushed):
+Commits (all on `re-parity-w2`; the table is the 2026-10-09 branch before the merge, which is described after it):
 
 | Commit | What |
 |---|---|
@@ -27,6 +27,141 @@ Commits (all on `re-parity-w2`; nothing pushed):
 | `6171dedb` | The status oracle runs 5,000 hits and carries a landed Threaten's decay to the next hit; Double HP / MP cases |
 | `939f0eb8` | `natus-bench`: the old midpoint party compares with "not behind" |
 | `e070c72a` | This note |
+| `06210431` | The note's list of deleted engine code names only what is gone (the head of the branch before the merge) |
+| `MERGE-SHA` | The merge of `origin/re-parity-rc1` (`931613a8`), conflicts resolved, the seams fixed and pinned, the goldens and the seed pins re-derived, this section |
+
+## Merged onto release candidate 1 (RC2-W2, 2026-10-10)
+
+Bailey, 2026-10-09: "Your findings need to be implemented into live builds as the decompilation work progresses." and, 2026-10-10, "ok keep going please".
+This lane makes W2 the base of the next release candidate: `origin/re-parity-rc1` (`931613a8`, release candidate 1 folded into the release driver's final
+build `a74b2b8e`) is merged into `re-parity-w2` (`06210431`) by a real merge commit (`MERGE-SHA`; no rebase, no squash), the 19 conflicts resolved as the RC1
+handoff said, and every W2 check run again on the merged tree. Pushed to `origin/re-parity-w2`; not deployed; no production build (D: has 2.9 GB free).
+**Game case (AGENTS.md rule 14): FFX only.** `ffx2-atb-golden`, `ffx2-hit-closes-menu`, `ffx2-menu-cancel-delay`, `chapters/den-of-woe-carry` and
+`ff7-golden` pass unchanged; the FFX-2 and FF7 engines reach none of the files this merge touched but `src/battle/common/types.ts` (interfaces and optional
+members, merged by git without a conflict).
+
+### M.1 The 19 conflicts, and how each was resolved
+
+| File | Resolution |
+|---|---|
+| `docs/CONTRACT-CHANGES.md` | Both sides' entries kept, newest first by commit time (W2's two entries sit between AI-Seymour's 18:01 entry and lane B's, and above the driver's phone-fit entry), plus this merge's entry on top. **Proved by line sets: 0 non-blank lines of either side (2,308 and 2,473) missing from the result** |
+| `src/battle/ffx/abilities.ts` | The `HitScope` literal carries all three: W2's `rank` and `records`, the scripts' `touched` |
+| `src/battle/ffx/hit-apply.ts` | The scripts' `holdsDeathForHook` import and `Touched` tally; `HitScope` has the three fields; the revival and the Zombie kill are W2's (the kernel's Death bit decides, then `applyStatusStep`), which drops the old `else if (has(target, 'zombie'))` branch the scripts had only added `...holdKo` to (open item 1) |
+| `src/battle/ffx/engine-end.ts` | The scripts' reaction drains around `inReaction` and after the Poison tick, W2's `onTurnEnd(ctx, actor, command !== undefined)` |
+| `src/battle/ffx/forms.ts` | The scripts' rule that Braska's Final Aeon's change writes no CTB and Yunalesca's writes boss 0 / party +1, on W2's byte counters (clamped at 255); both `normalise` calls gone |
+| `src/battle/ffx/state.ts`, `runtime.ts` | W2's `state.ts` (the interfaces live in `runtime.ts`); the scripts' three edits to those interfaces applied there: `guardMark` replaces `damageCapPerHit`, `hpFloor` and `coversAllyId`, `inReaction` and `formDiedAtSeq` are added |
+| `src/battle/ffx/ticks.ts` | `onTurnStart`: the tick, then the scripts' pre-turn hooks, then Doom (M.2 item 3); `onTurnEnd`: the kernel's Poison tick, and the monster's `postPoison` hook right after a tick that took HP (M.2 item 2); the scripts' removal of `runOmnisTurnEnd` kept (Omnis's discs turn from the script's `onHit`) |
+| `src/data/ffx/command-records/enemies.ts` | W2's records (every line carries `rank` and the status bytes) plus lane C's four Summon dummies (0x4090, 0x408c, 0x408b, 0x408f), rank 3 from W2's fixture of the game's 979 records |
+| `src/engine/tactics/advisor-roll.ts` | The header's two bullets: W2's FFX wording and W3's FFX-2 wording |
+| `tests/unit/ffx-engine-golden.test.ts` | Both lanes' header paragraphs, a new one for this merge, the table re-pinned once (M.4) |
+| `tests/unit/ffx-parity-measure.test.ts` | The scripts' seed reading (a range `1-500` or a list; a bare number is that one seed, not a count); `ffx-parity-cause.test.ts` reads it the same way |
+| `tests/unit/chapters/sin-fins-engine.test.ts` | The scripts' list of statuses that stop the Fin's counter, and W2's Petrify on Auron; the Fin gets a Poison byte (M.3) |
+| `tests/unit/ffx-ai.test.ts` | The scripts' cycle-state tests, with W2's `giveStatus` where they called the deleted `applyStatus` |
+| `advisor-note`, `advisor-v4-card`, `ffx-overdrive-menu-rows`, `guide-advisor-target-agreement`, `presenter-vitals-hp-ceiling`, `strategy-seymour-flux` | Seed pins both lanes had moved, **re-derived on the merged engine from the rule each stands for** (M.3), each with the history of both sides in its comment |
+
+### M.2 The seams a textual merge gets wrong without a conflict marker
+
+A merge that compiles can still be wrong: each of these is a rule one line wrote against the other line's old code. `tests/unit/re-parity-w2-rc1-merge.test.ts` (11 tests) pins
+them; every test was mutation-checked (the change that breaks it is named in the test's title, and each of the 10 mutants fails the test it should, restored byte for byte, sha1 checked).
+
+| # | Seam | What the merge does |
+|---|---|---|
+| 1 | **The scripts' boss openings and the kernel's opening.** Lane C's start hook (Yojimbo, Isaaru's aeons, Genais, Sin's face), lane B's possession openings and AI-Seymour's Macalania opening write "boss 0, party +1 or +2" after the engine's opening pass, and called W2's deleted `normalise` to rebase. | The opening pass is the game's 26 fixed draws on byte counters now. The writes stand as they are, a counter pushed back is clamped at 255 (`ai/opening.ts`, `ai/possession-setup.ts`, `ai/macalania-rules.ts`); the old rebase only shifted every counter by the same amount and never changed an order. The compiler found it (three errors) |
+| 2 | **`postPoison`.** The scripts call a monster's hook right after its own Poison tick (Macalania's Seymour); W2 moved the tick into the kernel adapter, so the hook's place was gone. | `adapt/ticks.ts#endOfTurn` returns whether the tick took HP and `ticks.ts#onTurnEnd` runs the hook then: not for a passed turn, not without Poison, not for a Poison byte of 0 |
+| 3 | **`preTurn` and the start-of-turn tick.** The scripts ran their pre-turn hooks first, before Regen's payout; W2's tick is the game's. | **The exe's `pp_BtlTurnStart` (VA 0x00792a90) calls the tick (0x007af4f0), then requests the scripts' pre-turn entry, then Doom's tick (0x00799cd0)**: the hooks run after the tick and before Doom. No golden digest and no parity file moved by the change |
+| 4 | **Threaten and the can-act test.** W2 took Threaten out of `canAct` (the pair is released as the turn opens, so a Threatened character takes its turn). The scripts' gate `canQueue`, the enemy Cover and the orders had used `canAct`'s refusal of Threaten, and the exe's `pp_BtlCanAct` (VA 0x007b24a0) is asked with its not-Threatened flag by every caller (counter queue, Cover, range check, Auto-Potion, Auto-Med, Auto-Phoenix). | New `canQueueAction` (`predicates.ts`) = `canAct` and not Threatened; the three call sites use it; `canAct` stays W2's. Six of the scripts' tests failed without it (a Threatened Evrae, Yojimbo, Isaaru's aeons, a Fin, Yu Yevon and Yunalesca queued reactions); the PR-0004 source-text pin points at the new gate |
+| 5 | **The mount's recovery (AI-Seymour open item 8).** The mount copies Flux's counter when its turn is requested and must be charged the dummy Command 150's rank 3, not the performed move's. | W2's `charge` adds `rank * tick speed` to the running counter, so the copy survives; all four moves the mount can perform (Slowga, Full-Life, Cross Cleave, Total Annihilation) and the pass are rank 3, the rank of record 0x608c (the fixture row is the proof). Chapter I: 499 of 500 on the merged tree (500 on RC1) |
+| 6 | **Hit scopes.** W2's `rank` and `records` and the scripts' `touched` are three fields of one object. | Pinned by the type checker (the test helper `inflict` builds a scope by hand and needed `touched`) |
+| 7 | **Found by W2's own oracle on the merged ability pool:** a Regen that lands in the hit that kills its holder did not reset the holder's tick counter (the status itself is never added to the dead target, so the reset had been skipped with it). | The reset belongs to the write-back, which runs before the death handler: moved ahead of the dead-target check in `adapt/status-apply.ts`. Not observable in play (a dead holder has no Regen; a fresh Regen resets again), but the oracle is the exe's |
+| 8 | **Evrae's Stone Gaze record.** W2 re-attached the ability to record 0x6062; lane C's class fixture and override table had the old record. | The override `0x6062: 3` and five fixture rows (0x6062, 0x609e, 0x609f, 0x60d2, 0x60f6), numbers only, read from the same game tables the fixture was made from |
+
+### M.3 Tests changed by the merge, and why
+
+| Test | Change | Reason |
+|---|---|---|
+| `re-parity-w2-rc1-merge` (new, 11 tests) | the seams above | M.2 |
+| `advisor-note` | the 16-decision board is seed 14 (was 7; W2's branch 8 and 1); the "then raise" sentence is seed 108 (was 218) | the same boards, reached by other seeds: seeds 1 to 13 miss a card (5, 9 and 11 only the Poison Fang one); none of 1 to 107 shows the timing sentence within 20 decisions. Nothing about the advisor changed |
+| `advisor-v4-card` | seed 3's first menu is Holy Water on Yuna (was Kimahri) | the Zombie is Yuna's now; the card's own rule is to clear a healer's Zombie at once |
+| `guide-advisor-target-agreement` | seed 2, label Tidus (was seed 9, Kimahri) | seed 2's opening puts the first Holy Water on Tidus, the premise the test was written on; the label is the rule's witness |
+| `presenter-vitals-hp-ceiling` | Chapter VIII seed 2 (W2's branch 3, the scripts' 2) | the first of seeds 1 to 60 that reproduces the evidence log's four commands |
+| `chapters/macalania-engine` A-8 | seed 1 (W2's branch 3) | the first of seeds 1 to 40 whose act three has a Multi- cast that lands both hits |
+| `chapters/evrae-engine` C-8 | the Auto-Haste half takes Petrify off the party | the victim is the script's pick now, and Rikku's armour (Al Bhed Bracer) wears Stone Ward; with her picked the Petrify rider shows nothing (nine of 60 seeds showed nothing; the three looked at all picked her). The claim (Auto-Haste blocks the Slow) is the seed-free one |
+| `chapters/sin-fins-engine` NEAR Negation | the Fin gets a Poison byte | it carries every status the test forces on, no longer Sleep (the scripts' list), so it takes a turn and a Poison tick, which W2 makes an error without the byte; the test is about what Negation takes |
+| `re-parity-ai-possessed` (2 tests) | the reference counters are redone from the same seed | the old reference relied on the 'scripted' start being jitter-free; it is the game's 26 draws now |
+| `re-parity-ai-bfa`, `re-parity-ai-yunalesca`, `ffx-ai` | `giveStatus` for the deleted `applyStatus` | setup helper only |
+| `ffx-round04-engine` | the PR-0004 call-site pin reads `canQueueAction` | M.2 item 4 |
+| `strategy-seymour-flux` | measured counts in the titles and comments (40 of 40 for seeds 1 to 40; 158 of 160 over the four windows, was 160) | floors unchanged (36 and 144): nothing tuned |
+| `strategy-guide` ("explains most of what it recommends") | the walk is seed 1 (was 42) | seed 42's battle is one of the six short ones in seeds 1 to 40 (38 decisions, 17 with a citation = 0.447); 34 of the 40 are above a half and the pool is 1,127 of 1,965 = 0.574, so the rule holds and the single battle is the variable one |
+| `chapters/sin-fins-core-bench` (the dry-Auron seam) | seeds 1, 2, 3 and 9 (were 1 to 4) | the seam (Auron short of 12 MP with an Ether in the bag, link 3, the Core unbroken) comes up on seeds 9, 12, 13 and 14 of the first 16 and none of the 16 leaves him Defending dry |
+| `chapters/evrae-breath-hold` (seed 8) | seed 3 (12 menus on the board; seed 7 has 10) | seed 8's battle holds for a charged breath on none of its menus now; the card's rule (answer with the line, never name Evrae) is unchanged |
+| `ffx-engine-golden` | all 18 digests re-pinned once | M.4 |
+
+### M.4 Goldens
+
+`ffx-engine-golden`: the merged tree against release candidate 1's table: **all 18 digests move**, which is the merge doing what W2 does (the opening is 26 draws, a landed hit runs the infliction step and its draws, the clock picks
+by a byte counter and the game's tie key); the scripts on top are unchanged, which the 24 AI parity files and the combined hooks test show. Five outcomes moved on seeds nobody tuned: `yunalesca#1` defeat to victory,
+`braskas-final-aeon#1` link 1 defeat to seven victories, `seymour-natus#7` defeat to victory, `seymour-omnis#7` defeat to victory, `isaaru-via-purifico#1` link 3 victory to defeat; the other 13 keep their outcome.
+One seed is one sample: M.5 has the rates. Re-pinned once, with the reason in the header. The old values are RC1's (`931613a8`) and W2's (`06210431`) in git history.
+`ffx2-atb-golden` (60), `ffx2-hit-closes-menu` (9), `ffx2-menu-cancel-delay` (36), `chapters/den-of-woe-carry` (32) and `ff7-golden` pass unchanged.
+
+### M.5 Measurement (the shipped `intendedStrategy`, whole chain; deterministic)
+
+**500 seeds** (`PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500`), the merged tree against release candidate 1 (its own run, seed by seed: `D:\Tools\ffx-parity\rc1-final\ffx-500-merged.json`), with W2's own move on the old scripts beside it
+("real" = beyond 3 sd of the difference of two samples, "borderline" = 2 to 3):
+
+| Chapter | RC1 wins | merged | change | sd | party turns RC1 to merged | party KOs RC1 to merged | W2 alone on the old scripts (its own change) |
+|---|---|---|---|---|---|---|---|
+| I Seymour Flux | 500 | 499 | -1 | -1.0 | 46.7 to 48.8 | 0.6 to 0.5 | 131 to 144 (+13) |
+| II Yunalesca | 483 | 494 | +11 | 2.3 borderline | 162.9 to 164.5 | 12.7 to 12.7 | 499 to 497 (-2) |
+| III Braska's Final Aeon | 486 | 478 | -8 | -1.4 | 244.8 to 244.1 | 5.2 to 5.5 | 488 to 476 (-12) |
+| VII Anima and Macalania | 443 | 456 | +13 | 1.4 | 58.3 to 59.4 | 5.4 to 5.2 | 494 to 493 (-1) |
+| VIII Evrae | 490 | 490 | 0 | 0.0 | 70.3 to 72.4 | 0.8 to 0.8 | 487 to 480 (-7) |
+| IX Yojimbo | 485 | 488 | +3 | 0.6 | 74.4 to 74.1 | 4.0 to 4.8 | 427 to 434 (+7) |
+| **X Seymour Natus** | 386 | **302** | **-84** | **-5.7 real** | 54.4 to 56.7 | 2.1 to 5.4 | 389 to 325 (-64) |
+| XII Seymour Omnis | 427 | 423 | -4 | -0.4 | 102.3 to 102.7 | 1.3 to 1.3 | 290 to 284 (-6) |
+| XIV Isaaru (3 links) | 423 | 431 | +8 | 0.7 | 28.9 to 28.7 | 2.8 to 2.7 | 424 to 446 (+22) |
+| XVII Sin: Fins and Core | 437 | 446 | +9 | 0.9 | 327.4 to 330.0 | 2.8 to 2.7 | 280 to 273 (-7) |
+| XVIII Sin: Face | 3 | 7 | +4 | 1.3 | 56.8 to 57.3 | 3.0 to 2.9 | 124 to 117 (-7) |
+
+**12 seeds** (the committed harness, unmodified; wins of 12, merged against RC1 and W2 alone): I 12 (RC1 12, W2 2), II 11 (10, 12), III 11 (11, 12), VII 12 (11, 10), VIII 11 (12, 12), IX 11 (12, 11), X 9 (8, 8), XII 10 (11, 6), XIV 11 (11, 10), XVII 10 (10, 7), XVIII 0 (0, 5);
+party turns 48.6, 156.2, 228.2, 61.2, 71.9, 75.4, 58.3, 99.2, 28.8, 328.1, 56.4; party KOs 0.4, 12.2, 6.3, 4.8, 1.0, 5.4, 5.6, 1.3, 2.6, 2.8, 3.0. No row moves by more than the sampling band of 12 seeds.
+
+**The one real mover is Chapter X (-84 of 500), and its cause is known: Natus's Flare is rank 3 in the game's record 0x6079 and 5 in our data** (Bailey's 1:1 rule stands; the data layer takes the record's rank). **Ablation, 500 seeds:** the
+merged tree with Flare's record at rank 5 wins **386 of 500, exactly RC1's number** (party turns 55.9, party KOs 2.4), so the rank is the whole of it. W2 alone found the same cause on the old scripts (389 to 325, with rank 5 put back 387).
+The other rows: II is borderline (+11, 2.3 sd; W2's own 2,000-seed run of the chapter found no move, 1,992 to 1,994, and with eleven chapters compared one row at this size is expected by chance); III moves -8 (-1.4 sd), in the direction and about the size W2's 2,000-seed run found on the
+old scripts (97.9 to 94.8 percent, all in link 1) and on the sampling edge; the rest are inside noise. Chapter I keeps the AI-Seymour result (499 of 500; seeds 1 to 40 are 40 of 40, the four windows 158 of 160): the mount's recovery is the dummy command's (M.2 item 5).
+Files: `D:\Tools\ffx-parity\rc2-w2\ffx-500-merged.json`, `ffx-12-merged.json`, `natus-flare5-500.json`, `ffx-500-final.json` (the same table re-run on the final source).
+
+### M.6 Verification
+
+* `tsc --noEmit` (TypeScript 7): clean. `node tools/orphans.mjs`: 1,457 modules, 1,405 reachable, **52 orphaned = the 24 from `origin/main` + the 18 unwired FFX-2 kernels + the 10 unwired FFX kernels** (aeon-party, aeon-stats, ap-award, battle-save, drops, gear-drop, overdrive-cost, overdrive-hooks, overdrive, steal-rewards: W5's); the nine W2 wired
+  (ctb, ctb-init, ctb-scheduler, ctb-table, rng, rolls, status-extra, status-inflict, status-pool) are reachable.
+* The W2 oracles on the merged tree: `parity-ffx-engine-ctb-status` (10), `parity-ffx-engine-status` (9; **5,000 generated hits, on an ability pool that grew with release candidate 1: one new situation found seam 7**), `parity-ffx-engine-ticks` (2), `parity-ffx-turn-ticks` (43) pass.
+  The 24 AI parity files (`re-parity-ai-*`, `parity-ffx-ai-*`) and `re-parity-ai-merged-hooks` (53) pass; `ffx-engine-golden` (18) passes on the re-pinned table.
+* The full unit suite, once, on the exact tree (`--testTimeout=60000 --maxWorkers=4`, the machine shared with other agents' runs; log `D:\Tools\ffx-parity\rc2-w2\fullsuite.log`):
+  **1,016 files: 984 passed, 24 failed, 8 skipped; 15,449 tests: 15,162 passed, 184 failed, 102 skipped, 1 todo.** **21 of the 24 failed files are the art-only ones this worktree always has** (it has no `public/art`; the same 21
+  as W1's and W2's own runs): `ui-portrait-face-crop` (145 tests), `trema-ship-content`, `art-ref-defaults`, `pause-remake`, `isaaru-ship`, `den-of-woe-ship-content`, `chapter-meta-seymour-anima-macalania`, `chapter-meta-evrae`, `natus-ship-scene`,
+  `natus-ship-content`, `leblanc-art`, `fallen-aeons-ship-content`, `chapter-meta-ffx2-leblanc`, `cutscene-story-poses`, `fallen-aeons-ship-scene`, `den-of-woe-ship-scene`, and five that fail on import for the missing `public/art/manifest.json`:
+  `party-face-manifest`, `chapters/yojimbo-content`, `chapters/leblanc-party-sprites`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapter-meta` (release candidate 1's run on the release art had 0 failures). **The other three were seed pins the merge moved**, re-pinned in
+  the merge commit (M.3) and each green when run alone on the final tree: `strategy-guide` ("explains most", seed 42 to 1), `chapters/sin-fins-core-bench` (the Ether seam, seeds 1 to 4 to 1, 2, 3 and 9) and `chapters/evrae-breath-hold` (seed 8 to 3). The suite was not repeated: one run, as the brief asks.
+* Mutation checks of the new test file: 10 mutants of the seams, 10 caught, each restored byte for byte (sha1 checked).
+
+### M.7 Open items, and decisions for Bailey
+
+1. **Death by the status record on a target whose script holds its KO.** Release candidate 1 held every lethal write of a scripted boss until its `onHit` had run; W2's write-back kills a target at the Death bit of the record. The two meet only on a Zombie hit by a
+   revival effect (Phoenix Down on a Zombie), and of the bosses that hold their KO only Braska's Final Aeon takes Zombie (50); the shipped Chapter III line uses Zombie for the pillars' Power Wave, not for Phoenix Down. W2's order is kept; which comes first in the exe for a Death bit is not read. Recommendation: leave it.
+2. **The equipment reactions** (Counterattack, Auto-Potion, Auto-Med, Auto-Phoenix, `ticks.ts#collectReactions`) do not test the can-act gate, though in the exe all four go through `pp_BtlCanAct` with the not-Threatened flag (a Threatened or sleeping wearer cannot react). Both lines had left it; not changed here (it would move seeds). Recommendation: a batch of its own, measured.
+3. **The preTurn order is now the exe's** (tick, pre-turn, Doom); nothing in the goldens or the parity files moved. The lanes' notes that say "before Doom, Provoke and the action request" stay true.
+4. W2's own decisions (section 10) stand and the merge changes none: Natus's Flare at rank 3 (Bailey's 1:1 rule; Chapter X 386 to 302 of 500), Chapter III's first link a little harder, an aeon's Defend that does nothing, the KO status reset and Zombie, the record bytes that now rule the status step, the stale status text.
+5. **Stale text, still not rewritten** (guides are Bailey's wording): `ui/common/statusWords.ts` ("gauge frozen, no turns" for Sleep), `data/ffx/statuses/core.ts` ("a physical hit" shatters a Petrified target), the Chapter X guide card and line that teach the old Flare cadence, the lists in the RC1 handoff section 6.
+6. No browser check was run (no UI file changed by this merge; the worktree has no `public/art`); the CTB list reads `predictTurnOrder`, which the oracle covers.
+
+### M.8 What the player sees (plain words, for the CHANGELOG entry of the release that carries this)
+
+**FFX, every chapter (W2).** Who acts next, and what a status does, follow the game. A fight opens with the game's own turn-order draws (First Strike gives a head start; a preemptive or ambush start spends none); after each action the clock waits the game's number of ticks,
+fast characters first when two are ready; Haste and Slow change the wait the way the game's tables do (and a Slow that fails no longer doubles the wait); Delay Attack and Delay Buster add the game's ticks. A status lands by the game's rule: one roll for each status a move can cause, the 255 and 254 rules, exclusions (Haste and Slow cancel, Petrify wipes the rest),
+no refresh of one already on. Regen pays by the ticks since its last payout, Poison takes 25 percent after an action (a sleeper's passed turn takes none), Doom counts from 5 on the victim's own turn, Sleep, Silence, Darkness, Shell, Protect, Reflect, Haste and Slow count down at the end of the holder's turn.
+**Chapter X is harder**: Natus casts Flare much more often, because its wait after a cast is rank 3 in the game's tables and was 5 in ours (W2 counted 5.2 casts a fight against 2.9): the shipped line wins 302 of 500 seeds, it won 386. Every other chapter stays inside the sampling band (Chapter I 99.8 percent, Chapter II 98.8, Chapter III 95.6).
 
 ## What the engine does now
 
@@ -214,7 +349,7 @@ Two more, made after: the shatter chance read from the ability instead of the re
 
 ## 5. Before and after
 
-Harness: `tests/unit/ffx-parity-measure.test.ts` with `PYREFLY_MEASURE=1` (`PYREFLY_MEASURE_SEEDS=N`, `PYREFLY_MEASURE_CHAPTERS=a,b`,
+Harness: `tests/unit/ffx-parity-measure.test.ts` with `PYREFLY_MEASURE=1` (`PYREFLY_MEASURE_SEEDS=1-N`, a range or a list since the merge, `PYREFLY_MEASURE_CHAPTERS=a,b`,
 `PYREFLY_MEASURE_OUT=<file>`): the shipped `intendedStrategy` through each FFX chapter's whole chain, seeds 1 to N. Before = the tree at
 `bd908802` (the W1 engine, the table of `docs/handoff/re-parity-w1.md` section 5), after = `9bd5b576` (the engine; `214d8915` only added the tally). Causes: `tests/unit/ffx-parity-cause.test.ts`
 and `tools/parity-cause-compare.mjs`.
@@ -426,8 +561,8 @@ Every other file passes, including all the parity tests, `ffx-engine-golden`, `f
 ```
 node "D:/Final Fantasy/node_modules/typescript/bin/tsc" --noEmit
 node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/parity-*.test.ts tests/unit/ffx-engine-golden.test.ts tests/unit/data-ffx-command-records.test.ts tests/unit/ffx-statuses.test.ts tests/unit/ffx-ctb.test.ts
-PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=500 PYREFLY_MEASURE_OUT=out.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/ffx-parity-measure.test.ts
-PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=500 PYREFLY_MEASURE_CAUSE_OUT=causes.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/ffx-parity-cause.test.ts
+PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_OUT=out.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/ffx-parity-measure.test.ts
+PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_CAUSE_OUT=causes.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/ffx-parity-cause.test.ts
 node tools/parity-cause-compare.mjs old-causes.json causes.json seymour-natus
 node tools/orphans.mjs
 ```

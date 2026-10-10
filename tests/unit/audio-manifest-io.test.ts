@@ -11,6 +11,7 @@
  */
 
 import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -19,10 +20,12 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { ManifestMusicEntry } from '../../tools/audio/manifest-io.mjs';
 import {
   LOOP_DECIMALS,
+  externalSource,
   mergeIntoManifest,
   musicEntry,
   readManifest,
   secondsAtSample,
+  setMusicEntryText,
   updateManifest,
   withManifestLock,
 } from '../../tools/audio/manifest-io.mjs';
@@ -217,5 +220,131 @@ describe('manifest-io', () => {
       return live;
     });
     expect((await readManifest(root)).music.delta?.loopEnd).toBe(9.123456);
+  });
+});
+
+/**
+ * Editing one entry as text, and the `source` exemption.
+ *
+ * The shipped manifest keeps the line endings its checkout gave it and writes `"lufs": -16.0`, so a parse and a
+ * stringify rewrites every entry. `setMusicEntryText` changes one block and nothing else, which is what lets the
+ * ElevenLabs install (docs/audio/music-elevenlabs-2026-10-07.json) be a three-block diff that merges with every
+ * other branch that touches a different cue.
+ */
+describe('setMusicEntryText and externalSource', () => {
+  const fixture = (eol: string): string =>
+    [
+      '{',
+      '  "version": 1,',
+      '  "sampleRate": 44100,',
+      '  "music": {',
+      '    "alpha": {',
+      '      "file": "music/alpha.mp3",',
+      '      "loopStart": 1.5,',
+      '      "loopEnd": 80,',
+      '      "duration": 83.25,',
+      '      "bytes": 100,',
+      '      "lufs": -16.0,',
+      '      "truePeakDb": -1.5,',
+      '      "score": "abc123"',
+      '    },',
+      '    "beta": {',
+      '      "file": "music/beta.mp3",',
+      '      "loopStart": 2.5,',
+      '      "loopEnd": 70.5,',
+      '      "duration": 73.5,',
+      '      "bytes": 200,',
+      '      "lufs": -16.0,',
+      '      "truePeakDb": -1.4',
+      '    },',
+      '    "gamma": {',
+      '      "file": "music/gamma.mp3",',
+      '      "loopStart": 3.5,',
+      '      "loopEnd": 60.5,',
+      '      "duration": 63.5,',
+      '      "bytes": 300,',
+      '      "lufs": -16.0,',
+      '      "truePeakDb": -1.3',
+      '    }',
+      '  },',
+      '  "sfx": null',
+      '}',
+      '',
+    ].join(eol);
+
+  const replacement = {
+    file: 'music/beta.mp3',
+    loopStart: 6.698798,
+    loopEnd: 73.366553,
+    duration: 76.3666,
+    bytes: 2106911,
+    lufs: -16,
+    truePeakDb: -2,
+    source: 'elevenlabs-music_v2_5',
+  };
+
+  it.each([
+    ['LF', '\n'],
+    ['CRLF', '\r\n'],
+  ])('changes only the named block, with %s line endings', (_name, eol) => {
+    const before = fixture(eol);
+    const after = setMusicEntryText(before, 'beta', replacement);
+    const a = before.split(eol);
+    const b = after.split(eol);
+    // Everything above and below the block is the same lines, in the same places.
+    expect(b.slice(0, 14)).toEqual(a.slice(0, 14));
+    expect(b.slice(-11)).toEqual(a.slice(-11));
+    expect(after.includes(eol)).toBe(true);
+    expect(after.replace(/\r\n/g, '\n').includes('\r')).toBe(false);
+    // It still parses, the other entries are untouched, and the new block reads as given.
+    const parsed = JSON.parse(after) as { music: Record<string, Record<string, unknown>> };
+    expect(parsed.music.beta).toEqual(replacement);
+    expect(parsed.music.alpha).toEqual(JSON.parse(before).music.alpha);
+    expect(parsed.music.gamma).toEqual(JSON.parse(before).music.gamma);
+    // The level fields keep a decimal point the way the file writes them; bytes stay whole.
+    expect(after).toContain('"lufs": -16.0,');
+    expect(after).toContain('"truePeakDb": -2.0,');
+    expect(after).toContain('"bytes": 2106911,');
+  });
+
+  it('keeps each block\'s closing line as it was: a comma in the middle, none on the last entry', () => {
+    const before = fixture('\n');
+    const middle = setMusicEntryText(before, 'beta', replacement).split('\n');
+    expect(middle[middle.indexOf('    "gamma": {') - 1]).toBe('    },');
+    const last = setMusicEntryText(before, 'gamma', { ...replacement, file: 'music/gamma.mp3' }).split('\n');
+    expect(last[last.indexOf('  },') - 1]).toBe('    }');
+  });
+
+  it('drops a field the new entry does not have (a render\'s `score` goes when the file is not a render)', () => {
+    const after = JSON.parse(setMusicEntryText(fixture('\n'), 'alpha', { ...replacement, file: 'music/alpha.mp3' })) as {
+      music: { alpha: Record<string, unknown> };
+    };
+    expect('score' in after.music.alpha).toBe(false);
+    expect(after.music.alpha.source).toBe('elevenlabs-music_v2_5');
+  });
+
+  it('throws for an entry the manifest does not have', () => {
+    expect(() => setMusicEntryText(fixture('\n'), 'delta', replacement)).toThrow(/no music entry "delta"/);
+  });
+
+  it('writes any entry the shipped manifest already has back as the very same text', () => {
+    const text = readFileSync(new URL('../../public/audio/manifest.json', import.meta.url), 'utf8');
+    const music = (JSON.parse(text) as { music: Record<string, { file: string }> }).music;
+    for (const [name, entry] of Object.entries(music)) {
+      expect(setMusicEntryText(text, name, entry), `${name} does not round-trip`).toBe(text);
+    }
+    const lf = text.replace(/\r\n/g, '\n');
+    for (const [name, entry] of Object.entries(music)) {
+      expect(setMusicEntryText(lf, name, entry), `${name} does not round-trip (LF)`).toBe(lf);
+    }
+  });
+
+  it('names a source only when the entry has a non-empty string for it', () => {
+    expect(externalSource({ source: 'elevenlabs-music_v2_5' })).toBe('elevenlabs-music_v2_5');
+    expect(externalSource({})).toBeNull();
+    expect(externalSource({ source: '' })).toBeNull();
+    expect(externalSource({ source: 7 })).toBeNull();
+    expect(externalSource(null)).toBeNull();
+    expect(externalSource(undefined)).toBeNull();
   });
 });

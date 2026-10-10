@@ -1,0 +1,816 @@
+{
+ "build": "b8fcae0b (vite build BASE_PATH=/, served by vite preview)",
+ "before": "critic/rounds/round-23 (live 39.1, d3fe9fe5)",
+ "rows": [
+  {
+   "chapter": "I",
+   "id": "seymour-flux",
+   "game": "FFX",
+   "before": {
+    "result": "FAIL",
+    "headRegisteredPct": 2.5,
+    "headMassPct": 12.6,
+    "feetPx": 4.2,
+    "over": 1,
+    "judged": 429,
+    "byHead": 247,
+    "byMass": 182,
+    "battleSeconds": 476,
+    "fps": 59.9,
+    "over_swaps": [
+     {
+      "figure": "yuna",
+      "pair": "hurt to idle",
+      "head": {
+       "ratio": 1.0135,
+       "source": "registration"
+      },
+      "feetPx": 4.2,
+      "standing": true
+     }
+    ]
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 2.5,
+    "headMassPct": 12.6,
+    "feetPx": 0.9,
+    "over": 0,
+    "judged": 427,
+    "byHead": 243,
+    "byMass": 184,
+    "battleSeconds": 477,
+    "fps": 59.8,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "II",
+   "id": "yunalesca",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.3,
+    "headMassPct": 25.9,
+    "feetPx": 0.9,
+    "over": 0,
+    "judged": 779,
+    "byHead": 553,
+    "byMass": 226,
+    "battleSeconds": 622,
+    "fps": 60,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.3,
+    "headMassPct": 25.9,
+    "feetPx": 1,
+    "over": 0,
+    "judged": 779,
+    "byHead": 615,
+    "byMass": 164,
+    "battleSeconds": 627,
+    "fps": 59.8,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "III",
+   "id": "braskas-final-aeon",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.8,
+    "headMassPct": 26.1,
+    "feetPx": 1.5,
+    "over": 0,
+    "judged": 1474,
+    "byHead": 876,
+    "byMass": 598,
+    "battleSeconds": 1362,
+    "fps": 59.9,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "FAIL",
+    "headRegisteredPct": 2.1,
+    "headMassPct": 34.9,
+    "feetPx": 1.5,
+    "over": 1,
+    "judged": 1477,
+    "byHead": 872,
+    "byMass": 605,
+    "battleSeconds": 1383,
+    "fps": 59.4,
+    "over_swaps": [
+     {
+      "figure": "possessed-valefor",
+      "pair": "ko to hurt",
+      "head": {
+       "ratio": 1.3487,
+       "source": "silhouette"
+      },
+      "feetPx": 43.6,
+      "standing": false
+     }
+    ]
+   },
+   "second": {
+    "result": "PASS",
+    "headRegisteredPct": 2.1,
+    "headMassPct": 26.1,
+    "feetPx": 1.5,
+    "over": 0,
+    "judged": 1777,
+    "byHead": 1046,
+    "byMass": 731,
+    "battleSeconds": 1624,
+    "fps": 59,
+    "over_swaps": []
+   }
+  },
+  {
+   "chapter": "IV",
+   "id": "ffx2-bahamut",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.1,
+    "headMassPct": 9.4,
+    "feetPx": 0.5,
+    "over": 0,
+    "judged": 356,
+    "byHead": 232,
+    "byMass": 124,
+    "battleSeconds": 359,
+    "fps": 59.7,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1,
+    "headMassPct": 9,
+    "feetPx": 0.5,
+    "over": 0,
+    "judged": 382,
+    "byHead": 244,
+    "byMass": 138,
+    "battleSeconds": 359,
+    "fps": 58.8,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "V",
+   "id": "ffx2-vegnagun-shuyin",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.3,
+    "headMassPct": 9.4,
+    "feetPx": 1.2,
+    "over": 0,
+    "judged": 1172,
+    "byHead": 836,
+    "byMass": 336,
+    "battleSeconds": 1457,
+    "fps": 59.7,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "FAIL",
+    "headRegisteredPct": 3.5,
+    "headMassPct": 9.4,
+    "feetPx": 0.7,
+    "over": 2,
+    "judged": 1192,
+    "byHead": 845,
+    "byMass": 347,
+    "battleSeconds": 1477,
+    "fps": 58.6,
+    "over_swaps": [
+     {
+      "figure": "rikku",
+      "pair": "hurt to ko",
+      "head": {
+       "ratio": 1.0309,
+       "source": "registration"
+      },
+      "feetPx": 26.5,
+      "standing": false
+     },
+     {
+      "figure": "rikku",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.965,
+       "source": "registration"
+      },
+      "feetPx": 10.9,
+      "standing": false
+     }
+    ]
+   },
+   "second": {
+    "result": "FAIL",
+    "headRegisteredPct": 3.3,
+    "headMassPct": 9.4,
+    "feetPx": 0.8,
+    "over": 1,
+    "judged": 1213,
+    "byHead": 881,
+    "byMass": 332,
+    "battleSeconds": 1552,
+    "fps": 58,
+    "over_swaps": [
+     {
+      "figure": "rikku",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9667,
+       "source": "registration"
+      },
+      "feetPx": 11,
+      "standing": false
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "VI",
+   "id": "ffx2-leblanc",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.7,
+    "headMassPct": 28.7,
+    "feetPx": 0.6,
+    "over": 0,
+    "judged": 536,
+    "byHead": 348,
+    "byMass": 188,
+    "battleSeconds": 424,
+    "fps": 59.9,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.6,
+    "headMassPct": 28.7,
+    "feetPx": 0.6,
+    "over": 0,
+    "judged": 582,
+    "byHead": 378,
+    "byMass": 204,
+    "battleSeconds": 639,
+    "fps": 59.6,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "VII",
+   "id": "seymour-anima-macalania",
+   "game": "FFX",
+   "before": {
+    "result": "FAIL",
+    "headRegisteredPct": 5.2,
+    "headMassPct": 25.7,
+    "feetPx": 0.9,
+    "over": 2,
+    "judged": 365,
+    "byHead": 130,
+    "byMass": 235,
+    "battleSeconds": 334,
+    "fps": 59.9,
+    "over_swaps": [
+     {
+      "figure": "yuna",
+      "pair": "idle to victory",
+      "head": {
+       "ratio": 0.9483,
+       "source": "registration"
+      },
+      "feetPx": 0.3,
+      "standing": true
+     },
+     {
+      "figure": "rikku",
+      "pair": "idle to victory",
+      "head": {
+       "ratio": 0.9667,
+       "source": "registration"
+      },
+      "feetPx": 0.3,
+      "standing": true
+     }
+    ]
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 2.4,
+    "headMassPct": 25.7,
+    "feetPx": 0.9,
+    "over": 0,
+    "judged": 365,
+    "byHead": 130,
+    "byMass": 235,
+    "battleSeconds": 331,
+    "fps": 59.8,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "VIII",
+   "id": "evrae-airship",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.6,
+    "headMassPct": 1.6,
+    "feetPx": 0.9,
+    "over": 0,
+    "judged": 378,
+    "byHead": 378,
+    "byMass": 0,
+    "battleSeconds": 334,
+    "fps": 59.3,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.5,
+    "headMassPct": 1.5,
+    "feetPx": 0.9,
+    "over": 0,
+    "judged": 372,
+    "byHead": 372,
+    "byMass": 0,
+    "battleSeconds": 336,
+    "fps": 58.8,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "IX",
+   "id": "yojimbo-cavern",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 2,
+    "headMassPct": 4.8,
+    "feetPx": 0.8,
+    "over": 0,
+    "judged": 119,
+    "byHead": 72,
+    "byMass": 47,
+    "battleSeconds": 125,
+    "fps": 59.7,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 2,
+    "headMassPct": 4.8,
+    "feetPx": 0.8,
+    "over": 0,
+    "judged": 119,
+    "byHead": 72,
+    "byMass": 47,
+    "battleSeconds": 127,
+    "fps": 58.3,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "X",
+   "id": "seymour-natus",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 0.6,
+    "headMassPct": 16.7,
+    "feetPx": 0.8,
+    "over": 0,
+    "judged": 265,
+    "byHead": 154,
+    "byMass": 111,
+    "battleSeconds": 216,
+    "fps": 60,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 2.1,
+    "headMassPct": 16.7,
+    "feetPx": 0.7,
+    "over": 0,
+    "judged": 257,
+    "byHead": 146,
+    "byMass": 111,
+    "battleSeconds": 215,
+    "fps": 59.4,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XI",
+   "id": "ffx2-fallen-aeons",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.8,
+    "headMassPct": 16.2,
+    "feetPx": 0.7,
+    "over": 0,
+    "judged": 863,
+    "byHead": 601,
+    "byMass": 262,
+    "battleSeconds": 943,
+    "fps": 59.9,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.1,
+    "headMassPct": 16.2,
+    "feetPx": 0.7,
+    "over": 0,
+    "judged": 708,
+    "byHead": 484,
+    "byMass": 224,
+    "battleSeconds": 846,
+    "fps": 59.2,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XII",
+   "id": "seymour-omnis",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.4,
+    "headMassPct": 8.7,
+    "feetPx": 1.6,
+    "over": 0,
+    "judged": 905,
+    "byHead": 554,
+    "byMass": 351,
+    "battleSeconds": 713,
+    "fps": 60,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 2.1,
+    "headMassPct": 8.7,
+    "feetPx": 1.5,
+    "over": 0,
+    "judged": 903,
+    "byHead": 552,
+    "byMass": 351,
+    "battleSeconds": 718,
+    "fps": 59.6,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XIII",
+   "id": "ffx2-trema",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.6,
+    "headMassPct": 2.5,
+    "feetPx": 0.7,
+    "over": 0,
+    "judged": 601,
+    "byHead": 429,
+    "byMass": 172,
+    "battleSeconds": 406,
+    "fps": 59.5,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.6,
+    "headMassPct": 2.5,
+    "feetPx": 0.7,
+    "over": 0,
+    "judged": 642,
+    "byHead": 450,
+    "byMass": 192,
+    "battleSeconds": 416,
+    "fps": 58.5,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XIV",
+   "id": "isaaru-via-purifico",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 0.4,
+    "headMassPct": 25.7,
+    "feetPx": 1.3,
+    "over": 0,
+    "judged": 221,
+    "byHead": 10,
+    "byMass": 211,
+    "battleSeconds": 259,
+    "fps": 59.9,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 0.3,
+    "headMassPct": 25.7,
+    "feetPx": 1.3,
+    "over": 0,
+    "judged": 221,
+    "byHead": 10,
+    "byMass": 211,
+    "battleSeconds": 259,
+    "fps": 59.1,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XV",
+   "id": "ffx2-den-of-woe",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.8,
+    "headMassPct": 3,
+    "feetPx": 1.2,
+    "over": 0,
+    "judged": 362,
+    "byHead": 266,
+    "byMass": 96,
+    "battleSeconds": 310,
+    "fps": 59.9,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.7,
+    "headMassPct": 3,
+    "feetPx": 1,
+    "over": 0,
+    "judged": 192,
+    "byHead": 124,
+    "byMass": 68,
+    "battleSeconds": 151,
+    "fps": 59.5,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XVI",
+   "id": "ffx2-ixion-djose",
+   "game": "FFX-2",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.1,
+    "headMassPct": 16.8,
+    "feetPx": 0.5,
+    "over": 0,
+    "judged": 369,
+    "byHead": 251,
+    "byMass": 118,
+    "battleSeconds": 408,
+    "fps": 59.5,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.1,
+    "headMassPct": 16.8,
+    "feetPx": 0.5,
+    "over": 0,
+    "judged": 410,
+    "byHead": 278,
+    "byMass": 132,
+    "battleSeconds": 494,
+    "fps": 57.8,
+    "over_swaps": []
+   },
+   "second": null
+  },
+  {
+   "chapter": "XVII",
+   "id": "sin-fins-core",
+   "game": "FFX",
+   "before": {
+    "result": "FAIL",
+    "headRegisteredPct": 3.3,
+    "headMassPct": 24.1,
+    "feetPx": 1,
+    "over": 3,
+    "judged": 1080,
+    "byHead": 1025,
+    "byMass": 55,
+    "battleSeconds": 1006,
+    "fps": 59.9,
+    "over_swaps": [
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9688,
+       "source": "registration"
+      },
+      "feetPx": 39.1,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "hurt to ko",
+      "head": {
+       "ratio": 1.0326,
+       "source": "registration"
+      },
+      "feetPx": 39.6,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9698,
+       "source": "registration"
+      },
+      "feetPx": 39,
+      "standing": false
+     }
+    ]
+   },
+   "after": {
+    "result": "FAIL",
+    "headRegisteredPct": 3.3,
+    "headMassPct": 24.2,
+    "feetPx": 1,
+    "over": 3,
+    "judged": 1198,
+    "byHead": 1135,
+    "byMass": 63,
+    "battleSeconds": 1104,
+    "fps": 59.5,
+    "over_swaps": [
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9698,
+       "source": "registration"
+      },
+      "feetPx": 39.2,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "hurt to ko",
+      "head": {
+       "ratio": 1.0334,
+       "source": "registration"
+      },
+      "feetPx": 39.7,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9696,
+       "source": "registration"
+      },
+      "feetPx": 39.1,
+      "standing": false
+     }
+    ]
+   },
+   "second": {
+    "result": "FAIL",
+    "headRegisteredPct": 3.8,
+    "headMassPct": 24.1,
+    "feetPx": 1,
+    "over": 6,
+    "judged": 1075,
+    "byHead": 1024,
+    "byMass": 51,
+    "battleSeconds": 1002,
+    "fps": 58.8,
+    "over_swaps": [
+     {
+      "figure": "yuna",
+      "pair": "idle to ko",
+      "head": {
+       "ratio": 1.0381,
+       "source": "registration"
+      },
+      "feetPx": 34.4,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9695,
+       "source": "registration"
+      },
+      "feetPx": 39.1,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "hurt to ko",
+      "head": {
+       "ratio": 1.0322,
+       "source": "registration"
+      },
+      "feetPx": 39.6,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9692,
+       "source": "registration"
+      },
+      "feetPx": 39,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "hurt to ko",
+      "head": {
+       "ratio": 1.0326,
+       "source": "registration"
+      },
+      "feetPx": 39.5,
+      "standing": false
+     },
+     {
+      "figure": "yuna",
+      "pair": "ko to idle",
+      "head": {
+       "ratio": 0.9685,
+       "source": "registration"
+      },
+      "feetPx": 39.1,
+      "standing": false
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "XVIII",
+   "id": "sin-face",
+   "game": "FFX",
+   "before": {
+    "result": "PASS",
+    "headRegisteredPct": 1.6,
+    "headMassPct": 6.2,
+    "feetPx": 0.9,
+    "over": 0,
+    "judged": 226,
+    "byHead": 225,
+    "byMass": 1,
+    "battleSeconds": 198,
+    "fps": 59.8,
+    "over_swaps": []
+   },
+   "after": {
+    "result": "PASS",
+    "headRegisteredPct": 1.8,
+    "headMassPct": 6.2,
+    "feetPx": 1.1,
+    "over": 0,
+    "judged": 228,
+    "byHead": 227,
+    "byMass": 1,
+    "battleSeconds": 200,
+    "fps": 59.6,
+    "over_swaps": []
+   },
+   "second": null
+  }
+ ]
+}

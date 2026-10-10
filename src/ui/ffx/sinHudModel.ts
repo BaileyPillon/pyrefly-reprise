@@ -38,11 +38,12 @@ import { SIN_FIN_CHARGED, SIN_FIN_IDS } from '../../battle/ffx/ai/sin-ids.ts';
 import { isAlive } from '../../battle/ffx/predicates.ts';
 
 /**
- * **S-1 is open** (12 or 13; only a check in the Steam HD Remaster settles it,
- * D-266). While it is, the clock carries the estimate line. One switch, turned
- * off when the check lands.
+ * **S-1 is settled** (re-parity AI lane C, D-31): the game's own script fires Giga-Graviton on Sin's 12th turn
+ * (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 7.2), which answers the Steam check D-266 asked for and D-280 awaited. The
+ * clock no longer carries the estimate line: this one switch, turned off when the answer landed. (The strategy-guide page
+ * still words the length as an estimate, `src/data/guides/sin-face.ts`: listed for Bailey, not rewritten.)
  */
-export const S1_OPEN = true;
+export const S1_OPEN = false;
 
 export type SinSegmentKind = 'pull' | 'window' | 'last';
 

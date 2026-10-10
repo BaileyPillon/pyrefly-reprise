@@ -201,6 +201,23 @@ export const SCENE_LOOKS_A: Readonly<Record<string, SceneLookA>> = {
     // The plate's teal floor and rock walls back (its painted floor reads ~0.16/0.39/0.47): lift, and less of the blue split tone.
     grade: { gain: [1.8, 1.55, 1.35], lift: [0.02, 0.03, 0.036], shadowTintAmount: 0.04 },
   },
+  /**
+   * The experimental Leblanc chapter's Last Room (FFX-2 only; branch `exp-leblanc`, 2026-10-06): the "Moonlit Blue Hall" plate is a pale, soft lavender marble hall with a
+   * polished floor, like the Farplane's pastel. Its own grade (`ScenePalettes.expMoonlitHall`: the plate as painted, then the mockup's haze) carries the look, so this row only
+   * adds light. The FFX-2 defaults (bloom from 0.45 at x1.5, the full Pink Hour look, four-point star streaks at 0.74) were tuned for dark plates with a few neon lights:
+   * on this one they bloomed the stained glass and every floor reflection to white. The plate paints its own light shafts (none added); the bloom is wide and soft
+   * (threshold 0.5 on the linear frame, radius 0.8: the milky glow round the windows, the door and the floor's reflections, which lifts the glass toward the mockup's);
+   * the stars only on the hottest peaks; no look LUT (its S-curve and split tone were tuned for dark plates and only harden pastels); no extra vignette.
+   */
+  'exp-leblanc-last-room': {
+    ...FFX2_BASE,
+    shafts: [],
+    bloom: { threshold: 0.5, strength: 0.7, radius: 0.8 },
+    streak: { ...FFX2_BASE.streak, gain: 0.45, threshold: 0.93 },
+    look: 0,
+    vignetteTint: '#9a96c8',
+    vignetteAdd: 0,
+  },
 };
 
 /** A room with no entry still gets the look, the bloom and the grade, with no shafts. */

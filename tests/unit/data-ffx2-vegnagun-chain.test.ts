@@ -80,6 +80,17 @@ describe('Vegnagun -> Shuyin chain', () => {
  * give one for — see the Node and Redoubt `it`s below; each says why inline
  * rather than inventing a number [AGENTS.md hard rule 6].
  */
+/**
+ * Re-parity W3 (FFX-2 only): `monster-records` lays the game's own steal byte on every steal table (`stealRate`, the
+ * /255 figure the Steal command rolls; `tests/unit/data-ffx2-monster-records.test.ts` pins it row for row). This file pins
+ * the AUTHORED table, so the byte is left out of the comparison.
+ */
+function authoredSteal(steal: EnemyDef['rewards']['steal']): unknown {
+  if (steal === undefined) return undefined;
+  const { stealRate: _byte, ...authored } = steal;
+  return authored;
+}
+
 describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
   it('Tail (vegnagun-tail): exp/ap/gil/drop/steal, §3.1 lines 203-206', () => {
     const e = CHAIN_ENEMIES['vegnagun-tail']!;
@@ -88,7 +99,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
     expect(e.rewards.gil).toBe(3000);
     expect(e.rewards.drops).toEqual([{ itemId: 'x2-megalixir', count: 1 }]);
     // §3.1 line 205 — Steal (50%): X-Potion ×4 / rare X-Potion ×6. [verified: 2 sources] (line 212).
-    expect(e.rewards.steal).toEqual({
+    expect(authoredSteal(e.rewards.steal)).toEqual({
       baseChance: 50,
       common: { itemId: 'x2-x-potion', count: 4 },
       rare: { itemId: 'x2-x-potion', count: 6 },
@@ -105,7 +116,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
     // drop uses `'gris-gris-bag'` (`src/data/ffx2/enemies/bahamut.ts:90`) —
     // not the `x2-` item-table namespace, which has no entry for either.
     expect(e.rewards.drops).toEqual([{ itemId: 'mythril-bangle', count: 1 }]);
-    expect(e.rewards.steal).toEqual({
+    expect(authoredSteal(e.rewards.steal)).toEqual({
       baseChance: 50,
       common: { itemId: 'x2-elixir', count: 1 },
       rare: { itemId: 'x2-elixir', count: 2 },
@@ -126,7 +137,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
       // Hero Drink on every Node kill, which is not what "rare" means.
       // Left alone; recorded as an open question (research §11).
       expect(e.rewards.drops, id).toEqual([{ itemId: 'x2-megalixir', count: 1 }]);
-      expect(e.rewards.steal, id).toEqual({
+      expect(authoredSteal(e.rewards.steal), id).toEqual({
         baseChance: 50,
         common: { itemId: 'x2-megalixir', count: 1 },
         rare: { itemId: 'x2-megalixir', count: 2 },
@@ -143,7 +154,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
     expect(e.rewards.ap).toBe(10);
     expect(e.rewards.gil).toBe(3000);
     expect(e.rewards.drops).toEqual([{ itemId: 'x2-megalixir', count: 1 }]);
-    expect(e.rewards.steal).toEqual({
+    expect(authoredSteal(e.rewards.steal)).toEqual({
       baseChance: 50,
       common: { itemId: 'x2-turbo-ether', count: 1 },
       rare: { itemId: 'x2-turbo-ether', count: 1 },
@@ -166,7 +177,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
         { itemId: 'x2-x-potion', count: 1, chance: 50 },
       ]);
       // Rare slot is `x2-l-bomb`: an ItemDef row since 2026-09-25 (`items/damage.ts`).
-      expect(e.rewards.steal, id).toEqual({
+      expect(authoredSteal(e.rewards.steal), id).toEqual({
         baseChance: 50,
         common: { itemId: 'x2-phoenix-down', count: 1 },
         rare: { itemId: 'x2-l-bomb', count: 1 },
@@ -185,7 +196,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
     // `src/battle/common/types.ts:899`), so both hold the same item, exactly
     // as the Body's Turbo Ether and the research's own "common and rare" rows
     // do (Tail, Leg, the boss's own Drop row). [verified: 2 sources] (line 392).
-    expect(e.rewards.steal).toEqual({
+    expect(authoredSteal(e.rewards.steal)).toEqual({
       baseChance: 50,
       common: { itemId: 'x2-megalixir', count: 1 },
       rare: { itemId: 'x2-megalixir', count: 1 },
@@ -214,7 +225,7 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
     expect(e.rewards.ap).toBe(20);
     expect(e.rewards.gil).toBe(0);
     expect(e.rewards.drops).toEqual([]);
-    expect(e.rewards.steal).toEqual({
+    expect(authoredSteal(e.rewards.steal)).toEqual({
       baseChance: 12.5,
       common: { itemId: 'x2-hero-drink', count: 1 },
       rare: { itemId: 'x2-hero-drink', count: 1 },

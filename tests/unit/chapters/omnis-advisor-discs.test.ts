@@ -58,8 +58,13 @@ describe('the Omnis advisor turns discs (PR-0197)', () => {
     const outcome = { events: [{ type: 'damage', targetId: 'mortiphasm-1', amount: 0 }], ability: null } as never;
     const turn = discTurnOf(state, { kind: 'attack', targets: ['mortiphasm-1'] }, outcome);
     expect(turn?.direction).toBe('left');
-    expect(turn?.after[0]).not.toBe('fire');
+    expect(turn?.after[0]).toBe('lightning'); // a blow steps back along the game's ring: Fire -> Thunder (O-7)
     expect(turn?.gaLost).toBe(3);
+    // A spell steps forward: Fire -> Ice.
+    const spell = discTurnOf(state, { kind: 'ability', id: 'blizzara', targets: ['mortiphasm-1'] }, { events: [{ type: 'damage', targetId: 'mortiphasm-1', amount: 0 }], ability: { damageType: 'magical' } } as never);
+    expect(spell?.direction).toBe('right');
+    expect(spell?.after[0]).toBe('ice');
+    expect(spell?.gaLost).toBe(3);
     expect(discTurnOf(engine.state(), { kind: 'attack', targets: ['seymour-omnis'] }, { events: [{ type: 'damage', targetId: 'seymour-omnis', amount: 300 }] } as never)).toBeNull();
   });
 

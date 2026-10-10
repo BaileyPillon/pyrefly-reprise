@@ -106,15 +106,16 @@ function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, contex
     // never reads as an overkill.
     rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] },
     // §1.4 "Revive rule (critical to implement correctly)" [verified: 2
-    // sources]. A destroyed Pagoda returns with `5,000 + the killing blow's
-    // excess` after **63 ticks** in the BFA fight (its own AGI 40 → base 7 →
-    // rank-3 recovery 21 → 3 × 21) and **72** in the possessed-aeon and Yu
-    // Yevon fights (AGI 30 → base 8 → 24 → 3 × 24). Until this shipped, two
-    // early swings switched the boss's heal / cleanse / Overdrive economy off
-    // for the rest of the battle: measured, both Pagodas were permanently
-    // dead from turn ~21 of a ~190-turn fight, and §1.6's own tuning table
-    // was stuck on its "both down" row (10-20 % gauge a turn) for 89 % of the
-    // encounter instead of its "both alive" row (60 %).
+    // sources]. A destroyed Pagoda comes back, so two early swings cannot switch
+    // the boss's heal / cleanse / Overdrive economy off for the rest of the
+    // battle (measured before this existed: both Pagodas permanently dead from
+    // turn ~21 of a ~190-turn fight).
+    //
+    // **The rule is the Pagodas' own script now** (re-parity, AI lane B; `ai/yu-pagoda.ts`, research/re-ffx-ai-yunalesca-bfa.md
+    // section 4): it returns with the damage it absorbed in the life that just ended (so the pool compounds), after two or three of
+    // its own turns (one if it is Slowed), a draw. This member only marks the part as one that returns; `delayTicks` (the
+    // earlier fixed 3 x rank-3 recovery, 63 ticks at AGI 40 and 72 at AGI 30) and `baseMaxHp` are read only if something other
+    // than a hit ever destroys one, which nothing does.
     reviveRule: { delayTicks: context === 'bfa' ? 63 : 72, baseMaxHp: 5000 },
     abilityIds:
       context === 'bfa'
@@ -277,13 +278,23 @@ const POSSESSED_AEON_ABILITY_IDS: Record<BraskasFinalAeonEnemyId, string[]> = {
   'yu-yevon': [],
 };
 
-/** Sensor lines, our own wording, inspired by the possessed aeons' short in-game lines [§2.2, verified: 2 sources]. */
+/**
+ * What a possessed aeon absorbs: the kernel records add the player aeon's own affinity (research/re-ffx-ai-yunalesca-bfa.md
+ * section 5.4): Ifrit Fire, Ixion Thunder, Shiva Ice. The rest have none.
+ */
+const POSSESSED_AFFINITIES: Partial<Record<BraskasFinalAeonEnemyId, EnemyDef['affinities']>> = {
+  'possessed-ifrit': { fire: 'absorb' },
+  'possessed-ixion': { lightning: 'absorb' },
+  'possessed-shiva': { ice: 'absorb' },
+};
+
 /**
  * The aeons whose script ends a turn with the plain Attack: the game's record for it is {@link POSSESSED_PLAIN_ATTACK}.
  * Anima and Yojimbo never use it there (`research/re-ffx-ai-yunalesca-bfa.md` section 5.5), so they carry none.
  */
 const POSSESSED_PLAIN_ATTACKERS: readonly string[] = ['possessed-valefor', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-bahamut'];
 
+/** Sensor lines, our own wording, inspired by the possessed aeons' short in-game lines [§2.2, verified: 2 sources]. */
 const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string>> = {
   'possessed-valefor': 'Strike true. It wants this to end.',
   'possessed-ifrit': 'The fire remembers you. It still obeys.',
@@ -297,11 +308,13 @@ const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string
 /**
  * Builds one possessed-aeon's `EnemyDef`. **Stats are placeholders** —
  * `mirrorsLiveAeonStats` in `flags`... no such field exists, so this is
- * documented in a comment instead: the engine must overwrite `stats`/`hp`/
- * `mp` at battle setup with a live copy of the corresponding
- * `AeonBuild` from the party's own roster, Luck forced to 1 [§2.2, verified:
- * 2 sources]. Everything else (immunities, ability ids, flags) is real data
- * and ships as-is.
+ * documented in a comment instead: the engine overwrites the stats at battle
+ * setup from the corresponding `AeonBuild` of the party's own roster
+ * (`battle/ffx/ai/possession-setup.ts`): Strength, Defense, Magic, Magic Defense,
+ * Agility, Evasion, Accuracy and maximum HP; Luck stays 0 and MP 1 as the monster
+ * record has them (re-ffx-ai-yunalesca-bfa.md §5.4; the wiki's "Luck 1" was
+ * [verified: 2 sources] and is overruled by the game's own script). Everything
+ * else (affinities, immunities, ability ids, flags) is real data and ships as-is.
  */
 function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
   return {
@@ -314,10 +327,11 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
     stats: { hp: 1, mp: 1, str: 1, def: 1, mag: 1, mdef: 1, agi: 1, luck: 1, eva: 0, acc: 0, maxHp: 1, maxMp: 1 },
     hp: 1,
     mp: 1,
-    affinities: {}, // mirrors the live aeon's own affinities at setup
+    affinities: { ...(POSSESSED_AFFINITIES[aeonId] ?? {}) }, // §5.4: Ifrit absorbs Fire, Ixion Thunder, Shiva Ice
     // §2.2 [verified: 2 sources]: aeons are immune to every negative status
     // except Curse and Delay (the "Aeon Ribbon" rule) — that holds for a
-    // possessed aeon too; only the controller changed.
+    // possessed aeon too; only the controller changed. Slow is on the list
+    // (the kernel record says 255; research/re-ffx-ai-yunalesca-bfa.md 5.4).
     immunities: {
       ko: 255,
       zombie: 255,
@@ -336,6 +350,7 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
       'armor-break': 255,
       'mental-break': 255,
       'auto-life': 255,
+      slow: 255,
     },
     immunityFlags: ['boss', 'immune-to-scan'],
     forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
@@ -438,9 +453,9 @@ export const yuYevonGroup: EnemyGroupDef = {
         mag: 200,
         mdef: 0, // §3.1 [conflict, immaterial] wiki says 1
         agi: 44,
-        luck: 1,
+        luck: 0, // the game's record (re-ffx-ai-yunalesca-bfa.md §6.1); the wiki's 1 is overruled
         eva: 0,
-        acc: 1,
+        acc: 0, // the game's record (same); the wiki's 1 is overruled
         maxHp: 99999,
         maxMp: 1,
       },

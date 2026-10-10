@@ -30,7 +30,7 @@ import {
 } from '../../../src/scenes/leblanc-last-room.ts';
 import { loadScene, resolveSceneHeights, type LoadedScene } from '../../../src/scenes/index.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
-import { LEBLANC_ACT_III } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
+import { LEBLANC_ACT_I, LEBLANC_ACT_II, LEBLANC_ACT_III } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx2/index.ts';
 
 describe('leblanc-last-room — the trio and the party marks', () => {
@@ -70,14 +70,20 @@ describe('leblanc-last-room — the trio and the party marks', () => {
     for (const slot of LEBLANC_LAST_ROOM_SLOTS.party.slice(0, 3)) expect(slot[2]).toBeGreaterThan(-2);
   });
 
-  it('gives every actor a positive, human-scaled world height, and keeps Ormi shorter and Logos taller than the party baseline (options.json: Ormi "short and stout", Logos "tall and slim")', () => {
+  it('gives every actor a positive, human-scaled world height, and stands the three bosses at their real heights over the girls (the HD models: Ormi 1.15, Logos 1.26, Leblanc 1.05)', () => {
     const h = LEBLANC_LAST_ROOM_ACTOR_HEIGHTS;
     for (const height of Object.values(h)) {
       expect(height).toBeGreaterThan(1.2);
       expect(height).toBeLessThan(2.3);
     }
-    expect(h.ormi).toBeLessThan(h.yuna);
-    expect(h.logos).toBeGreaterThan(h.paine);
+    // The first constants made Ormi "short and stout" (1.5 against the girls' 1.68, options.json) and Logos 1.95; they were never sourced and the models
+    // contradict them (`research/ffx2-leblanc-syndicate.md` §20): the table in `data/ffx2/syndicate-stature.ts` replaces them.
+    expect(h.ormi / h.yuna).toBeCloseTo(1.15, 2);
+    expect(h.logos / h.yuna).toBeCloseTo(1.26, 2);
+    expect(h.leblanc / h.yuna).toBeCloseTo(1.05, 2);
+    expect(h.logos).toBeGreaterThan(h.ormi);
+    expect(h.ormi).toBeGreaterThan(h.leblanc);
+    expect(h.leblanc).toBeGreaterThan(h.yuna);
   });
 
   it('gives partyHeight/enemyHeight sane fallbacks for a generic actor placed with no explicit height', () => {
@@ -156,6 +162,26 @@ describe('leblanc-last-room — PR-0093: the trio stages at human scale, not the
     // The stage and the published slot table agree.
     expect(scene.slots.partyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_SLOTS.partyHeight!, 5);
     expect(scene.slots.enemyHeight).toBeCloseTo(LEBLANC_LAST_ROOM_SLOTS.enemyHeight!, 5);
+  }, 60_000);
+
+  it('loadScene publishes the real heights of the Syndicate and the spots 39.4 stood them on to the stage (every fiend of the three acts, no 0.7 rule), and no advisor cap', async () => {
+    const scene = await stage('leblanc-last-room');
+    expect(scene.slots.figureHeights).toEqual(LEBLANC_LAST_ROOM_SLOTS.figureHeights);
+    expect(scene.slots.enemySpots).toEqual(LEBLANC_LAST_ROOM_SLOTS.enemySpots);
+    expect(scene.slots.advisorCap).toBeUndefined(); // the nearest fiend's feet stand 40 px above the card at its full height: nothing to cap (r3941-spacing)
+    expect(scene.slots.enemyLaneX).toEqual(LEBLANC_LAST_ROOM_SLOTS.enemyLaneX);
+    for (const act of [LEBLANC_ACT_I, LEBLANC_ACT_II, LEBLANC_ACT_III]) {
+      for (const e of ENEMY_GROUPS_BY_ID[act]!.enemies) {
+        // the stage reads `figureHeights[id]` before its own rule (`worldHeightFor`), so a goon is no longer 0.7 of a boss
+        expect(scene.slots.figureHeights?.[e.id], `${act} ${e.id}`).toBeGreaterThan(1.6);
+        expect(scene.slots.enemySpots?.[e.id], `${act} ${e.id}`).toBeDefined();
+      }
+    }
+    // another scene (Gagazet) publishes none of the Syndicate's heights or spots, and no advisor cap (it names its own fiends' heights since r3942-giants-ffx: Flux and Mortiorchis, FFX only)
+    const gagazet = await stage('gagazet');
+    for (const fiend of Object.keys(LEBLANC_LAST_ROOM_SLOTS.figureHeights!)) expect(gagazet.slots.figureHeights?.[fiend], fiend).toBeUndefined();
+    expect(gagazet.slots.advisorCap).toBeUndefined();
+    for (const fiend of Object.keys(LEBLANC_LAST_ROOM_SLOTS.enemySpots!)) expect(gagazet.slots.enemySpots?.[fiend], fiend).toBeUndefined();
   }, 60_000);
 
   it('a scene that publishes no heights (Gagazet, chapter 1) still stages at 1.82 / 4.1', async () => {

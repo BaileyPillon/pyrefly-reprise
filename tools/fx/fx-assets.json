@@ -43,6 +43,16 @@
    "sha256": "aeecba61d25efd165e71f342db89e60754dfa8d6dfb6cdc333dc68a61aedf3b0"
   },
   {
+   "path": "exp-leblanc-last-room/depth.json",
+   "bytes": 633,
+   "sha256": "9595518c856c4abec1c8fc1b091ae90ac65dba0390d2f733455ebd0b2d37ef7a"
+  },
+  {
+   "path": "exp-leblanc-last-room/depth.png",
+   "bytes": 834811,
+   "sha256": "bef977484fbc55d347b0f7f28e1887e3d6d1b859daafd199d961af2444f3a321"
+  },
+  {
    "path": "farplane/depth.json",
    "bytes": 703,
    "sha256": "ea7368aca28c3ba760b82298b65f64fec6263da657cdfdcc40a38242d8e50536"

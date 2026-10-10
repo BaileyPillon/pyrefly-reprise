@@ -1,0 +1,1487 @@
+[
+ {
+  "capture": "raw-r392b/ffx2-vegnagun-shuyin",
+  "subject": "rikku-dark-knight",
+  "direction": "up",
+  "frame": 4890,
+  "perspective": 0.984,
+  "ratio": 1.0363,
+  "idleHeadPx": 11.1
+ },
+ {
+  "capture": "raw-r392c/ffx2-vegnagun-shuyin",
+  "subject": "rikku-dark-knight",
+  "direction": "up",
+  "frame": 4863,
+  "perspective": 0.984,
+  "ratio": 1.0344,
+  "idleHeadPx": 11.1
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 52111,
+  "perspective": 0.994,
+  "ratio": 1.0152,
+  "idleHeadPx": 28.5
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 50061,
+  "perspective": 0.997,
+  "ratio": 1.0096,
+  "idleHeadPx": 31.6
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 51558,
+  "perspective": 0.997,
+  "ratio": 1.0323,
+  "idleHeadPx": 20
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 63464,
+  "perspective": 0.997,
+  "ratio": 1.0104,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 64964,
+  "perspective": 0.997,
+  "ratio": 1.0083,
+  "idleHeadPx": 31.3
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 39398,
+  "perspective": 0.998,
+  "ratio": 1.008,
+  "idleHeadPx": 31.4
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 47866,
+  "perspective": 0.998,
+  "ratio": 1.0085,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 60767,
+  "perspective": 0.998,
+  "ratio": 1.0091,
+  "idleHeadPx": 31.6
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 66069,
+  "perspective": 0.998,
+  "ratio": 1.0314,
+  "idleHeadPx": 20.8
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 66264,
+  "perspective": 0.998,
+  "ratio": 1.0176,
+  "idleHeadPx": 16.2
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 51424,
+  "perspective": 0.998,
+  "ratio": 1.0087,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 53332,
+  "perspective": 0.998,
+  "ratio": 1.0318,
+  "idleHeadPx": 20.8
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 55842,
+  "perspective": 0.998,
+  "ratio": 1.0091,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 56167,
+  "perspective": 0.998,
+  "ratio": 1.0325,
+  "idleHeadPx": 20.8
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 58549,
+  "perspective": 0.998,
+  "ratio": 1.0174,
+  "idleHeadPx": 16.1
+ },
+ {
+  "capture": "raw-r392b/evrae-airship",
+  "subject": "rikku",
+  "direction": "up",
+  "frame": 3077,
+  "perspective": 0.999,
+  "ratio": 1.0143,
+  "idleHeadPx": 24.7
+ },
+ {
+  "capture": "raw-r392b/evrae-airship",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 14662,
+  "perspective": 0.999,
+  "ratio": 1.0075,
+  "idleHeadPx": 32
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 62507,
+  "perspective": 0.999,
+  "ratio": 1.0311,
+  "idleHeadPx": 20.8
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 65794,
+  "perspective": 0.999,
+  "ratio": 1.0195,
+  "idleHeadPx": 16.4
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 46670,
+  "perspective": 0.999,
+  "ratio": 1.0315,
+  "idleHeadPx": 20.7
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 54092,
+  "perspective": 0.999,
+  "ratio": 1.0083,
+  "idleHeadPx": 31.4
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 56786,
+  "perspective": 0.999,
+  "ratio": 1.0162,
+  "idleHeadPx": 16.1
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 59161,
+  "perspective": 0.999,
+  "ratio": 1.0081,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-r392b/evrae-airship",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 14673,
+  "perspective": 1,
+  "ratio": 1.006,
+  "idleHeadPx": 31.9
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 62189,
+  "perspective": 1,
+  "ratio": 1.0294,
+  "idleHeadPx": 20.4
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 65804,
+  "perspective": 1,
+  "ratio": 1.0188,
+  "idleHeadPx": 16.1
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 56513,
+  "perspective": 1,
+  "ratio": 1.019,
+  "idleHeadPx": 16.4
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 51295,
+  "perspective": 1.001,
+  "ratio": 1.0281,
+  "idleHeadPx": 20.4
+ },
+ {
+  "capture": "raw-r392b/sin-fins-core",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 60559,
+  "perspective": 1.001,
+  "ratio": 0.9945,
+  "idleHeadPx": 31.9
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 46425,
+  "perspective": 1.001,
+  "ratio": 1.0381,
+  "idleHeadPx": 19.8
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 51070,
+  "perspective": 1.001,
+  "ratio": 0.9963,
+  "idleHeadPx": 31.9
+ },
+ {
+  "capture": "raw-r392c/sin-fins-core",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 56523,
+  "perspective": 1.001,
+  "ratio": 1.0169,
+  "idleHeadPx": 16.1
+ },
+ {
+  "capture": "raw-before/sin-fins-core",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 39228,
+  "perspective": 1.002,
+  "ratio": 0.9964,
+  "idleHeadPx": 30.6
+ },
+ {
+  "capture": "raw-r392/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 38165,
+  "perspective": 1.012,
+  "ratio": 1.0095,
+  "idleHeadPx": 17.2
+ },
+ {
+  "capture": "raw-before/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 33390,
+  "perspective": 1.013,
+  "ratio": 1.0093,
+  "idleHeadPx": 17.8
+ },
+ {
+  "capture": "raw-big-before/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 38367,
+  "perspective": 1.013,
+  "ratio": 1.0085,
+  "idleHeadPx": 17.2
+ },
+ {
+  "capture": "raw-r392b/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 38431,
+  "perspective": 1.013,
+  "ratio": 1.0088,
+  "idleHeadPx": 17.2
+ },
+ {
+  "capture": "raw-big-after/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 38289,
+  "perspective": 1.013,
+  "ratio": 1.0092,
+  "idleHeadPx": 17.2
+ },
+ {
+  "capture": "raw-r392b/seymour-omnis",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 10484,
+  "perspective": 1.014,
+  "ratio": 1.0078,
+  "idleHeadPx": 14.2
+ },
+ {
+  "capture": "raw-r392b/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 35330,
+  "perspective": 1.016,
+  "ratio": 1.0035,
+  "idleHeadPx": 30
+ },
+ {
+  "capture": "raw-before/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 32925,
+  "perspective": 1.017,
+  "ratio": 1.0025,
+  "idleHeadPx": 30
+ },
+ {
+  "capture": "raw-big-before/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 35243,
+  "perspective": 1.017,
+  "ratio": 1.0025,
+  "idleHeadPx": 30
+ },
+ {
+  "capture": "raw-r392/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 35147,
+  "perspective": 1.017,
+  "ratio": 1.0022,
+  "idleHeadPx": 30.1
+ },
+ {
+  "capture": "raw-r392b/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 35492,
+  "perspective": 1.017,
+  "ratio": 1.004,
+  "idleHeadPx": 30.9
+ },
+ {
+  "capture": "raw-big-after/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 35120,
+  "perspective": 1.017,
+  "ratio": 1.0032,
+  "idleHeadPx": 30
+ },
+ {
+  "capture": "raw-before/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 33166,
+  "perspective": 1.018,
+  "ratio": 1.0022,
+  "idleHeadPx": 30.9
+ },
+ {
+  "capture": "raw-big-before/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 35399,
+  "perspective": 1.018,
+  "ratio": 1.0032,
+  "idleHeadPx": 30.9
+ },
+ {
+  "capture": "raw-r392/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 35315,
+  "perspective": 1.018,
+  "ratio": 1.0034,
+  "idleHeadPx": 30.8
+ },
+ {
+  "capture": "raw-big-after/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 35299,
+  "perspective": 1.018,
+  "ratio": 1.0034,
+  "idleHeadPx": 30.9
+ },
+ {
+  "capture": "raw-r392b/ffx2-den-of-woe",
+  "subject": "yuna-lady-luck",
+  "direction": "up",
+  "frame": 9243,
+  "perspective": 1.022,
+  "ratio": 0.9934,
+  "idleHeadPx": 26.2
+ },
+ {
+  "capture": "raw-r392b/ffx2-trema",
+  "subject": "paine-dark-knight",
+  "direction": "up",
+  "frame": 25296,
+  "perspective": 1.022,
+  "ratio": 0.9991,
+  "idleHeadPx": 11.5
+ },
+ {
+  "capture": "raw-r392b/ffx2-fallen-aeons",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 16211,
+  "perspective": 1.023,
+  "ratio": 0.9938,
+  "idleHeadPx": 20.5
+ },
+ {
+  "capture": "raw-r392b/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 76169,
+  "perspective": 1.024,
+  "ratio": 0.9944,
+  "idleHeadPx": 19.7
+ },
+ {
+  "capture": "raw-r392c/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 82340,
+  "perspective": 1.024,
+  "ratio": 0.9932,
+  "idleHeadPx": 19.8
+ },
+ {
+  "capture": "raw-r392b/ffx2-trema",
+  "subject": "yuna-dark-knight",
+  "direction": "up",
+  "frame": 24489,
+  "perspective": 1.028,
+  "ratio": 0.9874,
+  "idleHeadPx": 21
+ },
+ {
+  "capture": "raw-r392b/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 73360,
+  "perspective": 1.031,
+  "ratio": 0.9919,
+  "idleHeadPx": 23
+ },
+ {
+  "capture": "raw-r392c/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 79567,
+  "perspective": 1.032,
+  "ratio": 0.9915,
+  "idleHeadPx": 23
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 3107,
+  "perspective": 1.038,
+  "ratio": 0.9761,
+  "idleHeadPx": 28.1
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 4926,
+  "perspective": 1.038,
+  "ratio": 0.9811,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 18117,
+  "perspective": 1.038,
+  "ratio": 0.9755,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 18333,
+  "perspective": 1.038,
+  "ratio": 0.9806,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 3090,
+  "perspective": 1.038,
+  "ratio": 0.976,
+  "idleHeadPx": 28.1
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 19900,
+  "perspective": 1.038,
+  "ratio": 0.9755,
+  "idleHeadPx": 27.6
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 19912,
+  "perspective": 1.038,
+  "ratio": 0.9754,
+  "idleHeadPx": 28.3
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 20117,
+  "perspective": 1.038,
+  "ratio": 0.9801,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 3087,
+  "perspective": 1.038,
+  "ratio": 0.9764,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 4791,
+  "perspective": 1.038,
+  "ratio": 0.9799,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 17906,
+  "perspective": 1.038,
+  "ratio": 0.9752,
+  "idleHeadPx": 28.3
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 19829,
+  "perspective": 1.038,
+  "ratio": 0.9768,
+  "idleHeadPx": 27.5
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 19840,
+  "perspective": 1.038,
+  "ratio": 0.9761,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 20050,
+  "perspective": 1.038,
+  "ratio": 0.9806,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 20119,
+  "perspective": 1.038,
+  "ratio": 0.9809,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 20055,
+  "perspective": 1.039,
+  "ratio": 0.9762,
+  "idleHeadPx": 27.5
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 20067,
+  "perspective": 1.039,
+  "ratio": 0.9755,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 20280,
+  "perspective": 1.039,
+  "ratio": 0.9793,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 3079,
+  "perspective": 1.039,
+  "ratio": 0.9769,
+  "idleHeadPx": 27.5
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 4788,
+  "perspective": 1.039,
+  "ratio": 0.98,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 17955,
+  "perspective": 1.039,
+  "ratio": 0.9751,
+  "idleHeadPx": 28.3
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 18169,
+  "perspective": 1.039,
+  "ratio": 0.9801,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 3076,
+  "perspective": 1.039,
+  "ratio": 0.977,
+  "idleHeadPx": 27.5
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 18107,
+  "perspective": 1.039,
+  "ratio": 0.9797,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 3074,
+  "perspective": 1.039,
+  "ratio": 0.9768,
+  "idleHeadPx": 27.5
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 3085,
+  "perspective": 1.039,
+  "ratio": 0.9762,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 4801,
+  "perspective": 1.039,
+  "ratio": 0.98,
+  "idleHeadPx": 27.4
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 17957,
+  "perspective": 1.039,
+  "ratio": 0.9748,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 18173,
+  "perspective": 1.039,
+  "ratio": 0.9799,
+  "idleHeadPx": 27.3
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 3221,
+  "perspective": 1.04,
+  "ratio": 0.9739,
+  "idleHeadPx": 29.8
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 18005,
+  "perspective": 1.04,
+  "ratio": 0.9734,
+  "idleHeadPx": 29.9
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 18223,
+  "perspective": 1.04,
+  "ratio": 0.9771,
+  "idleHeadPx": 28.8
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 2846,
+  "perspective": 1.04,
+  "ratio": 0.9729,
+  "idleHeadPx": 29.8
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 7210,
+  "perspective": 1.04,
+  "ratio": 0.9816,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 14862,
+  "perspective": 1.04,
+  "ratio": 0.9836,
+  "idleHeadPx": 32.1
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 14884,
+  "perspective": 1.04,
+  "ratio": 0.9809,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 17266,
+  "perspective": 1.04,
+  "ratio": 0.9815,
+  "idleHeadPx": 31
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 5014,
+  "perspective": 1.041,
+  "ratio": 0.9766,
+  "idleHeadPx": 28.7
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 19984,
+  "perspective": 1.041,
+  "ratio": 0.9723,
+  "idleHeadPx": 29.8
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 20203,
+  "perspective": 1.041,
+  "ratio": 0.9776,
+  "idleHeadPx": 28.8
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 4217,
+  "perspective": 1.041,
+  "ratio": 0.9775,
+  "idleHeadPx": 28.8
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 15995,
+  "perspective": 1.041,
+  "ratio": 0.9726,
+  "idleHeadPx": 29.8
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 16187,
+  "perspective": 1.041,
+  "ratio": 0.9783,
+  "idleHeadPx": 28.9
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 17842,
+  "perspective": 1.041,
+  "ratio": 0.9726,
+  "idleHeadPx": 29.9
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 18065,
+  "perspective": 1.041,
+  "ratio": 0.9766,
+  "idleHeadPx": 28.9
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 15074,
+  "perspective": 1.041,
+  "ratio": 0.9814,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-r392/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 17429,
+  "perspective": 1.041,
+  "ratio": 0.98,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 7055,
+  "perspective": 1.041,
+  "ratio": 0.9803,
+  "idleHeadPx": 31
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 14670,
+  "perspective": 1.041,
+  "ratio": 0.9836,
+  "idleHeadPx": 32.1
+ },
+ {
+  "capture": "raw-r392b/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 17266,
+  "perspective": 1.041,
+  "ratio": 0.9817,
+  "idleHeadPx": 31
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 7068,
+  "perspective": 1.041,
+  "ratio": 0.9804,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 14662,
+  "perspective": 1.041,
+  "ratio": 0.9819,
+  "idleHeadPx": 32.1
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 14875,
+  "perspective": 1.041,
+  "ratio": 0.9815,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-big-after/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 17216,
+  "perspective": 1.041,
+  "ratio": 0.9804,
+  "idleHeadPx": 31.1
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 7075,
+  "perspective": 1.041,
+  "ratio": 0.9812,
+  "idleHeadPx": 31
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 14692,
+  "perspective": 1.041,
+  "ratio": 0.9824,
+  "idleHeadPx": 32.2
+ },
+ {
+  "capture": "raw-big-after2/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 14899,
+  "perspective": 1.041,
+  "ratio": 0.9815,
+  "idleHeadPx": 31.2
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 14898,
+  "perspective": 1.043,
+  "ratio": 0.9808,
+  "idleHeadPx": 34.1
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 15123,
+  "perspective": 1.043,
+  "ratio": 0.9792,
+  "idleHeadPx": 32.9
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 17414,
+  "perspective": 1.043,
+  "ratio": 0.9795,
+  "idleHeadPx": 32.8
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 6366,
+  "perspective": 1.043,
+  "ratio": 0.9788,
+  "idleHeadPx": 33
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 13060,
+  "perspective": 1.043,
+  "ratio": 0.9812,
+  "idleHeadPx": 34
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 13267,
+  "perspective": 1.043,
+  "ratio": 0.9787,
+  "idleHeadPx": 33
+ },
+ {
+  "capture": "raw-bstrip/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 15473,
+  "perspective": 1.043,
+  "ratio": 0.9792,
+  "idleHeadPx": 32.9
+ },
+ {
+  "capture": "raw-before/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 7493,
+  "perspective": 1.044,
+  "ratio": 0.9793,
+  "idleHeadPx": 33
+ },
+ {
+  "capture": "raw-after/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 52442,
+  "perspective": 0.997,
+  "ratio": 1.0106,
+  "idleHeadPx": 31.2
+ },
+ {
+  "capture": "raw-after/sin-fins-core",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 52228,
+  "perspective": 1.001,
+  "ratio": 0.995,
+  "idleHeadPx": 31.9
+ },
+ {
+  "capture": "raw-after/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 31130,
+  "perspective": 1.014,
+  "ratio": 1.0077,
+  "idleHeadPx": 17.7
+ },
+ {
+  "capture": "raw-after/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 30672,
+  "perspective": 1.017,
+  "ratio": 1.0032,
+  "idleHeadPx": 30.1
+ },
+ {
+  "capture": "raw-after/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 30927,
+  "perspective": 1.018,
+  "ratio": 1.0035,
+  "idleHeadPx": 30.9
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 9933,
+  "perspective": 0.982,
+  "ratio": 1.0412,
+  "idleHeadPx": 10.5
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 4537,
+  "perspective": 0.984,
+  "ratio": 1.0387,
+  "idleHeadPx": 10.3
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "paine-dark-knight",
+  "direction": "up",
+  "frame": 4577,
+  "perspective": 0.986,
+  "ratio": 1.0353,
+  "idleHeadPx": 7
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "paine-dark-knight",
+  "direction": "up",
+  "frame": 6136,
+  "perspective": 0.986,
+  "ratio": 1.0356,
+  "idleHeadPx": 7.1
+ },
+ {
+  "capture": "raw-final/ffx2-vegnagun-shuyin",
+  "subject": "rikku-lady-luck",
+  "direction": "up",
+  "frame": 4531,
+  "perspective": 0.986,
+  "ratio": 1.051,
+  "idleHeadPx": 12.8
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 54890,
+  "perspective": 0.997,
+  "ratio": 1.0098,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 57140,
+  "perspective": 0.997,
+  "ratio": 1.0096,
+  "idleHeadPx": 31.6
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 52506,
+  "perspective": 0.998,
+  "ratio": 1.0088,
+  "idleHeadPx": 31.5
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 54290,
+  "perspective": 0.999,
+  "ratio": 1.0306,
+  "idleHeadPx": 20.7
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 56572,
+  "perspective": 0.999,
+  "ratio": 1.0303,
+  "idleHeadPx": 20.7
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 52201,
+  "perspective": 1.001,
+  "ratio": 0.9955,
+  "idleHeadPx": 31.8
+ },
+ {
+  "capture": "raw-f2/sin-fins-core",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 54094,
+  "perspective": 1.001,
+  "ratio": 1.0288,
+  "idleHeadPx": 20.4
+ },
+ {
+  "capture": "raw-f2/yunalesca",
+  "subject": "auron",
+  "direction": "down",
+  "frame": 35338,
+  "perspective": 1.012,
+  "ratio": 1.0096,
+  "idleHeadPx": 17.8
+ },
+ {
+  "capture": "raw-final/seymour-omnis",
+  "subject": "auron",
+  "direction": "up",
+  "frame": 10420,
+  "perspective": 1.014,
+  "ratio": 1.0082,
+  "idleHeadPx": 14.2
+ },
+ {
+  "capture": "raw-f2/yunalesca",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 34912,
+  "perspective": 1.017,
+  "ratio": 1.0026,
+  "idleHeadPx": 30
+ },
+ {
+  "capture": "raw-final/ffx2-fallen-aeons",
+  "subject": "paine-dark-knight",
+  "direction": "up",
+  "frame": 35164,
+  "perspective": 1.017,
+  "ratio": 1.0013,
+  "idleHeadPx": 12.2
+ },
+ {
+  "capture": "raw-f2/yunalesca",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 35188,
+  "perspective": 1.018,
+  "ratio": 1.0031,
+  "idleHeadPx": 31
+ },
+ {
+  "capture": "raw-final/seymour-omnis",
+  "subject": "wakka",
+  "direction": "down",
+  "frame": 28329,
+  "perspective": 1.018,
+  "ratio": 1.007,
+  "idleHeadPx": 26.3
+ },
+ {
+  "capture": "raw-final/seymour-omnis",
+  "subject": "wakka",
+  "direction": "up",
+  "frame": 28868,
+  "perspective": 1.02,
+  "ratio": 1.0066,
+  "idleHeadPx": 26.5
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 62924,
+  "perspective": 1.023,
+  "ratio": 0.9931,
+  "idleHeadPx": 21
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 72965,
+  "perspective": 1.023,
+  "ratio": 0.9933,
+  "idleHeadPx": 21
+ },
+ {
+  "capture": "raw-final/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 67045,
+  "perspective": 1.023,
+  "ratio": 0.9958,
+  "idleHeadPx": 19.6
+ },
+ {
+  "capture": "raw-final/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 76017,
+  "perspective": 1.023,
+  "ratio": 0.9946,
+  "idleHeadPx": 19.6
+ },
+ {
+  "capture": "raw-final/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 61810,
+  "perspective": 1.024,
+  "ratio": 0.993,
+  "idleHeadPx": 21
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 68079,
+  "perspective": 1.026,
+  "ratio": 0.9933,
+  "idleHeadPx": 20.5
+ },
+ {
+  "capture": "raw-f2/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 59784,
+  "perspective": 1.031,
+  "ratio": 0.9919,
+  "idleHeadPx": 23.1
+ },
+ {
+  "capture": "raw-final/ffx2-vegnagun-shuyin",
+  "subject": "yuna-white-mage",
+  "direction": "up",
+  "frame": 59101,
+  "perspective": 1.031,
+  "ratio": 0.9919,
+  "idleHeadPx": 23
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 2651,
+  "perspective": 1.038,
+  "ratio": 0.9758,
+  "idleHeadPx": 28.1
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 3902,
+  "perspective": 1.04,
+  "ratio": 0.9771,
+  "idleHeadPx": 28.7
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 15885,
+  "perspective": 1.04,
+  "ratio": 0.9791,
+  "idleHeadPx": 28.2
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "yuna",
+  "direction": "down",
+  "frame": 14050,
+  "perspective": 1.041,
+  "ratio": 0.9718,
+  "idleHeadPx": 29.9
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "yuna",
+  "direction": "up",
+  "frame": 14230,
+  "perspective": 1.041,
+  "ratio": 0.977,
+  "idleHeadPx": 28.7
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "tidus",
+  "direction": "down",
+  "frame": 11542,
+  "perspective": 1.043,
+  "ratio": 0.9821,
+  "idleHeadPx": 34.1
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 11711,
+  "perspective": 1.043,
+  "ratio": 0.979,
+  "idleHeadPx": 33
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 5771,
+  "perspective": 1.044,
+  "ratio": 0.9779,
+  "idleHeadPx": 33
+ },
+ {
+  "capture": "raw-f2/seymour-flux",
+  "subject": "tidus",
+  "direction": "up",
+  "frame": 13560,
+  "perspective": 1.044,
+  "ratio": 0.9779,
+  "idleHeadPx": 33
+ }
+]

@@ -16,6 +16,7 @@
 import type { AtbSnapshot, CombatantId, FFX2Combatant } from '../../battle/common/types.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from './dressphereIcons.ts';
 import { captionHtml, ffx2RowTagsHtml } from '../common/statusRows.ts';
+import { faceLadder } from '../common/partyFace.ts';
 import { faceLayersHtml } from '../common/portrait.ts';
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
@@ -55,6 +56,8 @@ export interface PartyRowOptions {
   actingId: CombatantId | null;
   /** Row index, for the cascade offset. */
   index: number;
+  /** The scene's art namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`): the head is cropped from the namespaced painting. Absent: the base art. */
+  artNamespace?: string;
 }
 
 /**
@@ -99,12 +102,13 @@ export interface PartyRowOptions {
  * Each `<img>` removes itself on a miss, so whichever layer is real wins and
  * nothing ever shows a broken image.
  */
-function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string): string {
-  const art = `${c.id}-${dressphere}`;
+function faceStackHtml(c: FFX2Combatant, dressphere: string, monogram: string, ns?: string): string {
+  // Inside an art namespace there are no portraits: the head is the crop of the namespaced idle painting (`faceLadder`).
+  const { art, portraits } = faceLadder(c.id, dressphere, ns);
   // The stacking itself lives in `ui/common/portrait.ts` so the prep screen's
   // roster — which draws Paine's initial where this draws her face — can adopt
   // it in one line (docs/handoff/fix3-ffx2-hud-prep.md).
-  const layers = faceLayersHtml([art, `${c.id}-x2`, c.id], art, c.name, {
+  const layers = faceLayersHtml(portraits, art, c.name, {
     className: 'ffx2stat__face-img',
   });
   return `<div class="ffx2stat__face" title="${dressphereLabel(dressphere)}" style="--ffx2-job:${dressphereColour(dressphere)}">
@@ -136,7 +140,7 @@ export function partyRowHtml(
   // a caption where a status takes the command away ("ASLEEP"). `ui/common/statusRows.ts`.
   const statuses = ffx2RowTagsHtml(c);
   return `<div class="ig-stat${acting}" data-actor-id="${c.id}" style="margin-right: calc(var(--ig-stat-step) * ${opts.index})">
-    ${faceStackHtml(c, dressphere, monogram)}
+    ${faceStackHtml(c, dressphere, monogram, opts.artNamespace)}
     <div class="ffx2stat__body">
       <div class="ffx2stat__top">
         <div class="ig-stat__name">${c.name}</div>${captionHtml('ffx2', c)}

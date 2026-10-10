@@ -40,6 +40,7 @@ import type { AbilityDef } from '../../../battle/common/types.ts';
 
 /** Ids, mirrored by `src/battle/ffx/ai/yojimbo-rules.ts` (the test suite pins them equal). */
 export const YOJIMBO_DAIGORO_ORDER = 'yojimbo-daigoro';
+export const YOJIMBO_SUMMON = 'yojimbo-summon';
 export const YOJIMBO_KOZUKA = 'yojimbo-kozuka';
 export const YOJIMBO_WAKIZASHI = 'yojimbo-wakizashi';
 export const YOJIMBO_ZANMATO = 'yojimbo-zanmato';
@@ -48,6 +49,31 @@ export const DAIGORO_ATTACK = 'daigoro-attack';
 // ---------------------------------------------------------------------------
 // Yojimbo (m288) — §3.1 [decompiled]
 // ---------------------------------------------------------------------------
+
+/**
+ * Row **4:144**, "Summon": his first turn (re-parity D-10, `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 3.2). No
+ * damage, one hit record, aimed at the summoner (Lady Ginnem, who has no behaviour at all). The record is the game's:
+ * monster magic 1, id 0x4090. Aimed at an ally so that the hit lands on Ginnem and not on Yojimbo himself.
+ */
+const summon: AbilityDef = {
+  id: YOJIMBO_SUMMON,
+  name: 'Summon',
+  game: 'ffx',
+  category: 'enemy',
+  mpCost: 0,
+  rank: 3, // the default of a command with no rank byte (note 1.4)
+  power: 0,
+  formula: 'none',
+  damageType: 'other',
+  element: ['none'],
+  targeting: 'single-ally',
+  hits: 1,
+  statusEffects: [],
+  removesStatuses: [],
+  flags: [],
+  canMiss: false,
+  messageTemplate: '{user} uses {ability}',
+};
 
 /**
  * Row **4:134**, "Daigoro" as Yojimbo's own action: **no damage, target slot
@@ -87,7 +113,8 @@ const daigoroOrder: AbilityDef = {
 /**
  * Row **4:130**: Strength, DmgCon **16**, one random character, physical, no
  * crit, no status [§3.1, `[decompiled]` + wiki "16", verified: 2 sources].
- * Opens at 25 % gauge (§4.1).
+ * Opens at 25 % gauge (§4.1). The script picks the victim itself (a draw only with two
+ * or more standing) and aims the row.
  */
 const kozuka: AbilityDef = {
   id: YOJIMBO_KOZUKA,
@@ -100,7 +127,7 @@ const kozuka: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy',
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -124,7 +151,7 @@ const wakizashi: AbilityDef = {
   formula: 'strength',
   damageType: 'physical',
   element: ['none'],
-  targeting: 'random-enemy',
+  targeting: 'single-enemy',
   hits: 1,
   statusEffects: [],
   removesStatuses: [],
@@ -198,6 +225,7 @@ const daigoroAttack: AbilityDef = {
 
 /** Every row this encounter ships, keyed by id. */
 export const YOJIMBO_ABILITIES: Record<string, AbilityDef> = {
+  [summon.id]: summon,
   [daigoroOrder.id]: daigoroOrder,
   [kozuka.id]: kozuka,
   [wakizashi.id]: wakizashi,

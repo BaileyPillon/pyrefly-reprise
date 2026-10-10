@@ -175,3 +175,29 @@ export function deriveOutcome(end) {
   if (end.final) return stalled('no results screen and no final outcome event');
   return { outcome: 'undecided', from: 'screen left the battle; the results screen is not read yet' };
 }
+
+// ---------------------------------------------------------------------------
+// PR-0353 (critic round 23, lane r392-trema): what the route does NOT script in Chapter XIII, and how long it lets that fight run.
+// Game case: FFX-2 only (Chapter XIII is the only chapter named); the helpers are shared critic tooling.
+// ---------------------------------------------------------------------------
+
+/**
+ * Chapters in which the route does not make its one scripted CHANGE (`route-fight.mjs`: after two picks it opens CHANGE, presses ArrowRight and Enter, to
+ * capture the Garment Grid menu and a real spherechange event). In Chapter XIII it is a play decision the chapter's line never makes: it landed on Lady Luck in
+ * every one of round 23's 26 attempts (Rikku's Alchemist stash, or a Dark Knight's Darkness, gone on the third turn), while the chapter's own tactic plays the
+ * spherechanges the fight wants (Rikku to Gunner for Target MP, an Itchy knight out and back). The engine bench does NOT show it costing a measurable share of
+ * wins (the advisor card's line, 200 seeds: 17 chapter wins without it and 11 with it at the human Wait split, 13 and 14 under Active: inside the noise), so it is
+ * removed as an uncontrolled variable, not as the cause of PR-0353 (docs/handoff/r392-trema.md). The Garment Grid menu is captured in every other FFX-2 chapter.
+ * `--nochange` / `NOCHANGE` still skips it anywhere.
+ */
+export const NO_SCRIPTED_CHANGE = Object.freeze(['ffx2-trema']);
+
+/** Is the route's scripted CHANGE made in `chapterId`? An explicit `--nochange` / `NOCHANGE` always says no. */
+export const scriptedChangeAllowed = (chapterId, nochange) => !nochange && !NO_SCRIPTED_CHANGE.includes(chapterId);
+
+/** The default per-attempt budget of a route, in ms: 15 minutes, and for the one fight that runs past it, Chapter XIII's two links (about 90 minutes of play in round 23's runs), 100 minutes. */
+export const DEFAULT_BUDGET_MS = 900000;
+export const LONG_FIGHT_BUDGET_MS = Object.freeze({ 'ffx2-trema': 6000000 });
+
+/** The attempt budget for a route: an explicit `--budget` wins, else the chapter's own, else {@link DEFAULT_BUDGET_MS}. */
+export const budgetFor = (chapterId, explicit) => (explicit !== undefined && explicit !== null && explicit !== '' ? Number(explicit) : (LONG_FIGHT_BUDGET_MS[chapterId] ?? DEFAULT_BUDGET_MS));

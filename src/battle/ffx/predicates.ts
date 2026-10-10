@@ -71,6 +71,18 @@ export function canAct(c: Combatant): boolean {
   return true;
 }
 
+/**
+ * The game's can-act gate for a **queued** command (`pp_BtlCanAct(chr, inBattle, notProvoked, notThreatened)`, VA 0x007b24a0), as every
+ * caller in the exe asks it: the counter queue (0x78d8d0), Cover (0x78eef0), the range check, Auto-Potion, Auto-Med, Auto-Phoenix and a
+ * script's own can-act read all pass 1, 1, 1. It is {@link canAct} and **not Threatened** either: a Threatened character still takes its
+ * TURN (the pair is released as the turn opens, so {@link canAct} does not look at Threaten), but until then it cannot counter, cover or
+ * take a command a script queues (re-parity: the boss scripts' gate `ai/game-rolls.ts#canQueue`, the enemy Cover `targeting.ts#coverOf`,
+ * the orders `orders.ts`). Provoke, Confuse and Berserk are the callers' own tests.
+ */
+export function canQueueAction(c: Combatant): boolean {
+  return canAct(c) && !has(c, 'threaten');
+}
+
 /** True when the combatant occupies the field, alive or KO'd. */
 export function onField(c: Combatant): boolean {
   return !c.removed && !has(c, 'eject');

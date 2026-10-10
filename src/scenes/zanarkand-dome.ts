@@ -34,6 +34,7 @@ import type { BackdropPalette } from '../engine/Backdrop.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { AssetReport, PaintedScene } from './demo.ts';
 import type { SceneSlots } from './index.ts';
+import { ZANARKAND_FORM_HEIGHTS } from './zanarkand-dome-giants.ts';
 import {
   mountScene,
   type SceneBuild,
@@ -183,7 +184,8 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [
   [0.9, 0, -6.2],
 ];
 // PR-0002 A (FFX only): the party held on its slots; Yunalesca where live's relax left her in most runs (x 2.76-2.85), clear of Auron.
-const STAGING = { holdParty: true, enemySpots: { yunalesca: [2.8, 0, -4.0] as [number, number, number] } };
+// r3943-int (FFX only, Chapter II; Bailey, 2026-10-09 14:10 EDT, "go with 3 for Yunalesca"): her first form at her wing tips, 2.577 units (`zanarkand-dome-giants.ts`); her second and third forms stay at the shared 4.1.
+const STAGING = { holdParty: true, enemySpots: { yunalesca: [2.8, 0, -4.0] as [number, number, number] }, formHeights: ZANARKAND_FORM_HEIGHTS };
 
 /**
  * The scene's default cut-out protection for a painted actor parked on

@@ -27,6 +27,7 @@ import {
   uiPortsRegistered,
 } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
+import { inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -230,6 +231,9 @@ export class BattleScreen extends Screen {
     const scene = await loadScene(chapter.sceneKey, this.app.renderer.camera);
     if (this.exited) return void scene.dispose();
     this.scene = scene;
+    // The scene's art namespace on the root, for the one place chrome is keyed on it: the experimental Leblanc room is pale, and its HUD takes more ink (`ui/ffx2/ffx2-hud.css`).
+    if (scene.slots.artNamespace) this.root.dataset['artNamespace'] = scene.slots.artNamespace;
+    else delete this.root.dataset['artNamespace'];
     if (this.opts.openingHurry) markOpeningHurried(scene.scene, () => ({ speed: this.presenter?.playbackSpeed ?? 'normal', menu: this.presenter?.snapshot()['awaitingMenu'] === true })); // PR-0341: a scene that stages its own arrival (Ch. IX) must not wait for an opening shot a hurried opening never shows; FOC371-01: its compressed arrival follows fast and skip, and is over by the first menu
     this.app.renderer.applyPalette(this.scene.palette);
     bindEyeCandyScene({ key: scene.key, game: chapter.game, scene: scene.scene, palette: sceneBackdropPalette(scene.scene) }); // eye-candy options round (`?fx=`)
@@ -274,7 +278,7 @@ export class BattleScreen extends Screen {
     this.spectacle = attachSpectacle({ game: chapter.game, renderer: this.app.renderer, scene: this.scene.scene, camera: this.app.renderer.camera, stage: this.stage, root: this.root });
 
     // --- HUD + ports -------------------------------------------------------
-    this.hud = createHud(chapter.game, () => this.stage, this.engine); // the field (FFX-2 Oversoul look); the engine (FF7's item counts)
+    this.hud = createHud(chapter.game, () => this.stage, this.engine, scene.slots.artNamespace, scene.slots.advisorCap, scene.slots.intentRoof, scene.slots.guideFolded); // the field (FFX-2 Oversoul look); the engine (FF7's item counts); the scene's art namespace (the experimental Leblanc chapter's party heads); the scene's cap on the FFX-2 advisor card; whether the FFX-2 intent slab hangs over the highest head (Chapter VI)
     if (this.hud) {
       this.hud.mount(this.root);
       this.hud.setProjector((id, anchor) => this.stage?.project(id, anchor) ?? null);
@@ -313,6 +317,7 @@ export class BattleScreen extends Screen {
       stage: this.stage,
       audio,
       textSpeed: this.app.save.settings.textSpeed,
+      ...(scene.slots.artNamespace ? { artNamespace: scene.slots.artNamespace } : {}), // the mid-battle lines show the experiment's own portraits
       // A `'skip'` run is e2e or the critic: no viewer, and a whole chapter to
       // finish inside a budget. Give the runner a clock that collapses instead
       // of the bare `setTimeout` it defaulted to, so a beat's waits cost a
@@ -323,7 +328,7 @@ export class BattleScreen extends Screen {
       sleep: (ms) => defaultSleep(this.opts.speed === 'skip' ? 0 : ms),
     });
 
-    this.momentOverlay = createMomentOverlay(this.root);
+    this.momentOverlay = createMomentOverlay(this.root, scene.slots.artNamespace); // the turn cut-in shows the experiment's own portraits
     if (this.opts.openingHurry) this.momentOverlay.hurry.arm();
 
     const registered = uiPortsRegistered();
@@ -417,21 +422,23 @@ export class BattleScreen extends Screen {
     if (!state) return;
     const boss = headlineEnemy(state, chapter.enemyGroupRef.bossId); // PR-0243
     if (!boss) return;
+    const ns = this.scene?.slots.artNamespace; // the scene's art namespace (the experimental Leblanc chapter): the card shows the paintings the field stages
     const party = state.activeIds
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => Boolean(c))
       // Both keys, not one. The card wants the character's own id to find her
       // portrait and the sprite key to find the painting the field is staging
       // — which in FFX-2 is her dressphere, and in FFX is the same string.
-      .map((c) => ({ id: c.id, artId: c.spriteKey || c.id, name: c.name }));
+      .map((c) => ({ id: c.id, artId: inArtNamespace(ns, c.spriteKey || c.id), name: c.name }));
 
     const banner = new BattleStartBanner({
       root: this.root,
       chapterNumber: chapter.number,
+      ...(chapter.experimental ? { experimental: true as const } : {}),
       location: chapter.location,
       bossName: boss.name,
       subline: chapter.subtitle,
-      artKey: boss.spriteKey || boss.id,
+      artKey: inArtNamespace(ns, boss.spriteKey || boss.id),
       backdropKey: chapter.sceneKey,
       party,
       game: chapter.game,

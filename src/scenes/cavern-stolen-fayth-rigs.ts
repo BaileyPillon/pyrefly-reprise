@@ -117,6 +117,19 @@ export function cavernRigsFor(aspect: number): Record<SceneRigName, CameraRig> &
   return out as Record<SceneRigName, CameraRig> & Record<string, CameraRig>;
 }
 
+/**
+ * Chapter IX on a phone (r3941-heights, FFX only): the party steps this far toward the lens so Kimahri's head clears the Zanmato gauge's lower rows. At the
+ * party's shared height 16 percent of him stood behind them; at his own height (1.304 of Tidus's painting, his body 1.211 of Tidus's) 42. A step on the floor,
+ * not a camera move: the 16:9 field, the camera and the fiends are untouched. Measured at 390x844 (`docs/handoff/r3941-heights.md`): a whole-party step of 1.0 or
+ * 1.5 moves the phone camera (the A-12 refit reads the party's places), 2.0 does not.
+ */
+export const CAVERN_PHONE_PARTY_STEP = 2.0;
+
+/** The party's slots for a screen of this aspect (width over height): `slots` as published, with the first three (the active party) nearer the lens on a phone. */
+export function cavernPartySlots(slots: ReadonlyArray<readonly [number, number, number]>, aspect: number): Array<[number, number, number]> {
+  return slots.map((s, i): [number, number, number] => [s[0], s[1], aspect < 1 && i < 3 ? s[2] + CAVERN_PHONE_PARTY_STEP : s[2]]);
+}
+
 /** The window's aspect when the scene is built; 16:9 with no window (a unit test, a worker). */
 export function viewportAspect(): number {
   if (typeof window === 'undefined') return CAVERN_DESIGN_ASPECT;

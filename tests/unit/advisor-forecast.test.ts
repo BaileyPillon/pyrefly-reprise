@@ -92,10 +92,10 @@ function baileysBoard(p1Step?: number, seed = 1): Board {
       yuna.hp = 0;
       yuna.alive = false;
       if (p1Step !== undefined) {
-        state.flags['seymour.p1Step'] = p1Step;
-        // Nobody "acted last", so neither enemy is in the alternation guard's
-        // pass branch and both answer with a real command.
-        state.flags['seymour.lastEnemyActor'] = 'nobody';
+        // Re-parity: the two actors read one shared state, the game's `s`, which is the old 0-based step plus 1
+        // (`research/re-ffx-ai-seymour.md` §2.3 and §2.4). At a given step the actor whose step it is answers
+        // with a real command and the other wastes its turn.
+        state.flags['seymour.cycle'] = p1Step + 1;
       }
       return { state, decision: { actorId: d.actorId, commands: d.commands }, options: { ffxContent: content } };
     }

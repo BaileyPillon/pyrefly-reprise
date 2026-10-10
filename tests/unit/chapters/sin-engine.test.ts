@@ -110,13 +110,13 @@ describe('registration: listed 2026-09-29 (D-279), reachable by id', () => {
 });
 
 describe('the clock [§5.4]', () => {
-  it('three pulls at FAR, then NEAR; the melee window passes with the mouth; Giga-Graviton on the 13th turn is a Game Over', () => {
+  it('three pulls at FAR, then NEAR; the melee window passes with the mouth; Giga-Graviton on the 12th turn is a Game Over (S-1 settled by the script, D-31)', () => {
     const e = newEngine(3);
     drive(e, () => defend());
     const log = e.state().log;
     const sinActs = log.filter((x) => x.type === 'turn-start' && x.actorId === SIN).length;
     expect(sinActs).toBe(GIGA_GRAVITON_TURN);
-    expect(GIGA_GRAVITON_TURN).toBe(13); // S-1 default, Bailey 2026-09-27
+    expect(GIGA_GRAVITON_TURN).toBe(12); // the script's own turn (re-parity AI lane C, D-31); the owner's placeholder was 13 (D-280)
     const drawn = log.filter((x) => x.type === 'action-start' && x.actorId === SIN && x.abilityId === 'overdrive-sin-drawn');
     expect(drawn).toHaveLength(3);
     const giga = log.filter((x) => x.type === 'action-start' && x.actorId === SIN && x.abilityId === 'overdrive-sin-giga-graviton');
@@ -129,31 +129,33 @@ describe('the clock [§5.4]', () => {
 
   it('the clock counts down one per Sin turn, and the ship closes after the third pull', () => {
     const e = newEngine(5);
-    const seen: Array<[number, unknown, unknown]> = [];
+    const seen: Array<[number, unknown, unknown, unknown]> = [];
     for (let i = 0; i < 2000; i++) {
       const d = e.nextDecision();
       if (d.kind === 'battle-over') break;
       if (d.kind === 'resolved' && d.events.some((x) => x.type === 'turn-start' && x.actorId === SIN)) {
-        seen.push([flag(e, 'sin.turn') as number, flag(e, 'sin.turnsLeft'), flag(e, 'airship.range')]);
+        seen.push([flag(e, 'sin.turn') as number, flag(e, 'sin.turnsLeft'), flag(e, 'airship.range'), flag(e, 'airship.distance')]);
       }
       if (d.kind === 'player-input') e.submit(defend());
     }
-    expect(seen.map((s) => s[0])).toEqual(Array.from({ length: 13 }, (_, i) => i + 1));
-    expect(seen.map((s) => s[1])).toEqual(Array.from({ length: 13 }, (_, i) => 12 - i));
+    expect(seen.map((s) => s[0])).toEqual(Array.from({ length: 12 }, (_, i) => i + 1));
+    expect(seen.map((s) => s[1])).toEqual(Array.from({ length: 12 }, (_, i) => 11 - i));
     expect(seen.slice(0, 2).every((s) => s[2] === 'far')).toBe(true);
     expect(seen.slice(2).every((s) => s[2] === 'near')).toBe(true);
+    // D-32: the distance is 3 through pull 1, 1 after pull 2, 0 after pull 3 (the flag is written when Sin's turn is decided).
+    expect(seen.slice(0, 4).map((s) => s[3])).toEqual([3, 1, 0, 0]);
   });
 
-  it('S-1 is one switch: Gestahl\'s reading ends on the 12th turn', () => {
+  it('S-1 is one switch: a bench can still play the owner\'s old placeholder, 13 turns', () => {
     expect(GIGA_GRAVITON_TURN_GESTAHL).toBe(12);
-    const e = newEngine(3, 12);
+    const e = newEngine(3, 13);
     drive(e, () => defend());
-    expect(e.state().log.filter((x) => x.type === 'turn-start' && x.actorId === SIN)).toHaveLength(12);
+    expect(e.state().log.filter((x) => x.type === 'turn-start' && x.actorId === SIN)).toHaveLength(13);
     expect(e.state().result?.outcome).toBe('defeat');
   });
 
   it('the mouth stages (presentation, our estimate): 0 through the pulls, 1-3, then 4 the turn before', () => {
-    expect([1, 2, 3, 4, 7, 10, 11, 12].map((n) => mouthStage(n, 13))).toEqual([0, 0, 0, 1, 2, 3, 3, 4]);
+    expect([1, 2, 3, 4, 7, 10, 11, 12].map((n) => mouthStage(n, 12))).toEqual([0, 0, 0, 1, 2, 3, 4, 4]);
   });
 });
 

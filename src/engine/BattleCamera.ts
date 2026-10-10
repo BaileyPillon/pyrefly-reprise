@@ -1,6 +1,6 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
-import { fitRigToSlice, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
+import { LinkFits, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
 
 export interface CameraRig {
   /** Camera world position. */
@@ -42,6 +42,7 @@ export class BattleCamera {
   private readonly fx = new TweenGroup();
 
   private readonly rigs = new Map<string, ResolvedRig>();
+  private readonly linkFits = new LinkFits();
   private readonly swayAmplitude: number;
   private readonly swaySpeed: number;
 
@@ -104,25 +105,26 @@ export class BattleCamera {
 
   get rigNames(): string[] { return [...this.rigs.keys()]; }
 
-  addRig(name: string, rig: CameraRig): void {
-    this.rigs.set(name, {
-      position: toVec(rig.position),
-      lookAt: toVec(rig.lookAt),
-      fov: rig.fov,
-      sway: rig.sway ?? 1,
-    });
+  /**
+   * Register (or replace) a rig. `continues`: it is the rig `name` going on (CHAPTER FRAMING's master planned from the fitted rig, and its put-back, `fx/mix/rigWatch.ts`), not the scene's own
+   * camera for the link it stages: the scene's own rig is what a link after a giant starts from, and ends the memory of the giant's phone fit; a continuation keeps it (`FrameFit.LinkFits`).
+   */
+  addRig(name: string, rig: CameraRig, continues = false): void {
+    const r: ResolvedRig = { position: toVec(rig.position), lookAt: toVec(rig.lookAt), fov: rig.fov, sway: rig.sway ?? 1 };
+    this.rigs.set(name, r);
+    if (!continues) this.linkFits.registered(name, r);
   }
 
   /** How a rig, pushed in by `push`, frames these figures (`FrameFit.ts`; A-11, A-1). */
-  frame(rig: string, push: number, subjects: ReadonlyArray<{ actor: unknown; min: number; floor?: number }>): FrameVerdict | null {
+  frame(rig: string, push: number, subjects: ReadonlyArray<{ actor: unknown; min: number; floor?: number }>, lens = false): FrameVerdict | null {
     const r = this.rigs.get(rig);
-    return r ? frameFit(this.camera, r, push, subjects as readonly FitSubject[]) : null;
+    return r ? frameFit(this.camera, r, push, subjects as readonly FitSubject[], lens) : null;
   }
 
-  /** A-12: dolly `rig` back until these figures fit a phone slice (`FrameFit.fitRigToSlice`). */
-  fitSlice(rig: string, slice: number, subjects: ReadonlyArray<{ actor: unknown; min: number }>, top = 0): boolean {
+  /** A-12: dolly `rig` back until these figures fit a phone slice (`FrameFit.fitRigToSlice`; a giant's fit is its link's own, `LinkFits`). */
+  fitSlice(rig: string, slice: number, subjects: ReadonlyArray<{ actor: unknown; min: number; shared?: boolean; giant?: boolean }>, top = 0): boolean {
     const r = this.rigs.get(rig);
-    return !!r && fitRigToSlice(this.camera, r, slice, subjects as readonly FitSubject[], top);
+    return !!r && this.linkFits.fit(this.camera, r, rig, slice, subjects as readonly FitSubject[], top);
   }
 
   /** A rig as the camera holds it, to pose a scratch camera on (`FrameFit.rigPose`). Read-only. */

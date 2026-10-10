@@ -125,7 +125,10 @@ describe('the new items (ffx2-combat-core §5.5)', () => {
     const mp = events.find((e) => e.type === 'mp-damage' && e.targetId === 'trema') as { amount: number } | undefined;
     expect(hit?.amount).toBeGreaterThanOrEqual(937);
     expect(hit?.amount).toBeLessThanOrEqual(1058);
-    expect(mp?.amount).toBe(Math.min(999, hit!.amount));
+    // Re-parity W3: the game's pipeline draws one variance per damage class (HP, then MP; research/re-ffx2-damage.md §2.5), so the
+    // MP number is its own roll of the same fixed 1000 (937..1058), cut to the 999 MP Trema has, not a copy of the HP number.
+    expect(mp?.amount).toBeGreaterThanOrEqual(937);
+    expect(mp?.amount).toBeLessThanOrEqual(999);
     expect(trema.mp).toBe(999 - mp!.amount);
     expect(rikku.hp).toBe(100 + hit!.amount);
   });

@@ -20,6 +20,12 @@
  * no-Haste line's 116/200, and it never calls Desperado
  * (`tests/unit/chapters/natus-shipped-bench.test.ts`).
  *
+ * **Re-parity note (2026-10-09, FFX only; `docs/handoff/re-parity-ai-seymour.md`):** the last claim no longer holds.
+ * Mortibody's own script scores every Shell, Haste, Reflect and Nul on the three active slots against `mod 4 + 4`, so
+ * Haste on two plus Shell on all three is a total of 5 and Desperado half the time he checks. The line still beats the
+ * other two (76 % against 56 % and 65 % on the 200-seed bench) and nothing here changed; the premise Bailey picked it on
+ * is his to re-decide (D-185).
+ *
  * 1. **An aeon on the field spends its one turn** [§4.3, verified: 4 sources:
  *    Natus Banishes it on his next turn]: its Overdrive on Natus when the
  *    gauge is full (Bahamut arrives full, B3 = b), else an attack on Natus.

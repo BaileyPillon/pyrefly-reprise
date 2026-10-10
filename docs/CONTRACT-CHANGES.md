@@ -6,6 +6,146 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-10 — The FFX turn order, status step and per-turn ticks (re-parity W2) meet the game-script lanes: byte counters under the scripts' openings, hooks around the ticks, and the game's can-act test in two (release candidate 2 base; FFX only; no shared contract file changed in shape)
+
+Branch `re-parity-w2`, merge of `origin/re-parity-rc1` (`931613a8`). Recorded because the entries below describe the same engine files from two sides and neither is right alone. `src/battle/common/types.ts`
+auto-merged (interfaces and optional members only: W2's `FFXCommandRecord` members, W1's plain-attack members, W3's FFX-2 records and `hopelessRetry`). Handoff: [re-parity-w2](handoff/re-parity-w2.md), "Merged onto release candidate 1". Game case: FFX only.
+
+- `ActorRuntime` and `FFXRuntime` (engine-private, `src/battle/ffx/runtime.ts`) are the union of both sides: W2's `icv`, `regenTicks`, `poolBaseHp`, `poolBaseMp` and the meaning of `ctb` (the game's byte, 0 to 255, counted down by the clock), the scripts'
+  `guardMark` (which replaces `damageCapPerHit`, `hpFloor` and `coversAllyId`) and `FFXRuntime.inReaction` and `formDiedAtSeq`.
+- `HitScope` (`hit-apply.ts`) carries W2's `rank` and `records` and the scripts' `touched`; a scope built by hand needs all three (`tests/unit/helpers/ffxStatus.ts` does).
+- `ticks.ts`: `onTurnStart(ctx, actor)` runs the start-of-turn tick, then the scripts' pre-turn hooks (`runPreTurn`), then Doom: the game's order (VA 0x00792a90 calls the tick, requests the scripts' pre-turn entry, then Doom's tick); the release-candidate line ran the hooks ahead of Regen's payout. `onTurnEnd(ctx, actor, resultsApplied = true)` runs a monster's `postPoison` hook right after a Poison tick that took
+  HP (`adapt/ticks.ts#endOfTurn` returns whether it did, a passed turn and a Poison byte of 0 included). The old turn queue's `normalise` stays gone: the scripts' opening writes (`ai/opening.ts`, `ai/possession-setup.ts`, `ai/macalania-rules.ts`) go on the byte
+  counters as they are, a counter pushed back is clamped at 255, and nothing is rebased afterwards (the old rebase only shifted every counter by the same amount, so it never changed an order; the boss sits at 0 in all of those fights but Yu Yevon's, where the clock now runs the extra ticks itself and counts them).
+- New `canQueueAction` (`predicates.ts`, re-exported from `state.ts`): the game's `pp_BtlCanAct` with the not-Threatened flag that every caller in the exe passes (counter queue, Cover, range check, Auto-Potion, Auto-Med, Auto-Phoenix). The boss scripts' `canQueue`,
+  the enemy Cover (`targeting.ts#coverOf`) and the orders (`orders.ts`) use it. `canAct`, the turn gate, stays W2's and does not refuse a Threatened character (the pair is released as its turn opens).
+- `adapt/status-apply.ts`: a Regen that lands in the hit that also kills its holder resets the holder's tick counter (the write-back runs before the death handler); the status itself is still never added to a dead target.
+- `ai/command-formula.ts#FORMULA_BYTE_OVERRIDES` gains record 0x6062 (Evrae's own Stone Gaze, which W2 attached to the ability by its status bytes); `tests/fixtures/parity/ffx/evrae-gaze-classes.json` gains the five records W2 moved (0x6062, 0x609e, 0x609f, 0x60d2, 0x60f6; numbers only).
+- The measurement harnesses read `PYREFLY_MEASURE_SEEDS` one way: a range `1-500` or a list `1,7,42`, default 1 to 12 (a bare number is that one seed, not a count), in `ffx-parity-measure.test.ts` and `ffx-parity-cause.test.ts`.
+
+## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
+
+Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is
+wrong alone. Handoff: [re-parity-rc1](handoff/re-parity-rc1.md) section 8. Game case: FFX only (Chapter XII; the FFX-2 and FF7 engines import none of these files).
+
+- The release line's `b5f0d26b` gave `ai/seymour-omnis-rules.ts` the pure `discAfterTurn(now, direction)` (a spell steps +1 along `DISC_RING`, a blow -1) and made `turnDisc` and `engine/tactics/advisor-omnis.ts#discTurnOf` both call it,
+  and re-seated the painted disc's quarters to that ring (`scenes/garden-of-pain-discs.ts`: `DISC_PAINTED_RING`, `quarterTurns`, `discGeometry`; `DISC_RING_ON_SCREEN` is Fire, Thunder, Water, Ice). Release candidate 1 (AI-Seymour, D-25) had reached the
+  same ring from the game's script. The merged module keeps the release line's `DISC_RING`, `discAfterTurn`, scene and advisor as they are.
+- Release candidate 1's rules sit on top, unchanged by the merge: `OMNIS_RESET_CYCLE` is `['fire', 'ice', 'water', 'lightning']` read by a counter that moves on first (the resets run Ice, Water, Thunder, Fire; the release line still had
+  GameFAQs' Water, Ice, Thunder, Fire, D-24), his affinity is written at each actor's turn start and no longer inside the action that turned a disc (D-30), he always casts four spells grouped by element (D-26), the reset turn casts none (D-27), and
+  `OmnisReadoutInput.living` and `volleyOf`'s second argument stay removed. `OMNIS_ASSUMPTIONS` keeps `ringOrder` and `resetCycle` as "sourced, no longer an assumption" and drops `discArt` (the painting is re-seated now), `aeonHoldsField`
+  and the rest of the old list. The readout's "Colour order: our estimate" words stay (Bailey's wording; stale now, listed in the handoff).
+
+## 2026-10-09 — AI lane C's nine hit scripts register on the one `onHit` runner: Evrae, Yojimbo, Isaaru's aeons, the Fins, Genais and the Core, Sin's face (release candidate 1; FFX only; no shared contract file changed)
+
+Branch `re-parity-rc1`. No file in the contract list changed. Recorded because the next entry (AI lane C's own, written against lane B's `hit-hooks.ts`) names modules that no longer exist. Handoff:
+[re-parity-rc1](handoff/re-parity-rc1.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- The nine script ids lane C registers (`evrae`, `yojimbo`, Grothia, Pterya, both Fins, Genais, the Core, Overdrive Sin) hang on `ai/hooks.ts#runOnHit` through `ai/hit-script.ts#registerHitScript`, as lane B's five do. `ai/hit-gates.ts#react`
+  queues through `ai/hit-script.ts#queueCounter`, the one first-in-first-out reaction queue with the aim as `requiresAlive` and nothing queued while a reaction resolves (`FFXRuntime.inReaction`), and keeps the script's own rule that an owner
+  with a reaction already waiting asks for no second one (it reads `peekReactions`). Where lane C's entry below says `hit-hooks.ts`, `hit-event.ts` or `FFXRuntime.reactions`, read these.
+- Each target hears an action right after its own hits (the one runner's order), where lane C's runner told every target after the last. It matters only for an action that reaches two scripts at once (link 3 of Chapter XVII: Genais and the Core),
+  where a hook's draw now falls before the later target's damage draws.
+- `ai/reactions.ts` loses `canCounter` (its last callers were the Evrae and Sin branches lane C removed; the Threaten rule is `ai/hooks.ts#canQueueCommand` for the drain and `ai/game-rolls.ts#canQueue` for the scripts' own gates), and
+  `collectBossCounters` has no producer left: it stays, returning none, as the seam `engine-end.ts#afterAction` runs first. `tests/unit/ffx-round04-engine.test.ts` now checks the call sites of those two guards.
+
+## 2026-10-09 (evening) — A scene may start its fights with the strategy guide folded: `SceneStaging.guideFolded`, `createHud`'s seventh argument, `StrategyGuide.startFolded`, `FFXBattleHud.startGuideFolded`, and the card's folded placement in the FFX solver (Chapters I and III only; FFX only; additive)
+
+Branch `r3943-int` (Bailey, 2026-10-09 17:45 EDT, "I'll go with all of your recommendations", on the options sheet's A2: at the start of Seymour Flux's and Braska's Final Aeon's fights the guide is folded to its `G` chip and the full NEXT BEST MOVE card stands in the guide's place; `G` opens the guide and the card is then the one-row tip). No file on the contract list changed; recorded because the scene staging type, `createHud`'s signature and the solver's input gain optional fields.
+
+- `src/scenes/types.ts`: `SceneStaging.guideFolded?: boolean` (copied by `stagingOf` when `true`). Set by `scenes/gagazet-giants.ts` (`GAGAZET_STAGING`) and `scenes/dreams-end-giants.ts` (`DREAMS_END_STAGING`) and by no other scene file.
+- `src/app/screens/BattleScreenWiring.ts`: `createHud(game, field?, engine?, artNamespace?, advisorCap?, intentRoof?, guideFolded?)`; for `game === 'ffx'` it calls `FFXBattleHud.startGuideFolded()` before the HUD is wrapped; the FFX-2 HUD ignores the argument. `BattleScreen` passes `scene.slots.guideFolded`.
+- `src/ui/common/StrategyGuide.ts`: `startFolded()`. A **starting state, not a setting**: the first frame's `update` folds the sheet (`visible = false`, `applyVisible`) and writes nothing to `Settings.guideVisible`, so the player's saved preference is never overwritten by the chapter and a player who has the guide off sees no difference; `G` (`setVisible`) opens it as ever and writes the player's answer, and a press before the first frame cancels the pending fold. Not applied on the upright phone (`html[data-phone-battle]`, set by `withPhoneLayout` before the first frame): the phone keeps its guide sheet. Where the guide state is stored: `Settings.guideVisible` in `SaveData.ts` (read once in `StrategyGuide`'s constructor, default on; written by `setVisible` only). `SaveData.ts` and the save schema are untouched.
+- `src/ui/ffx/hudSafeZones.ts`: `AdvisorZoneInput.guideChip?`, `chipSize?`, `badgeSize?`, `foldedFallback?` (the folded `G` chip, the advisor's `N` chip at its whole label and as the key-only badge, and the HUD's own measurement that the card does not fit the rail even printed bare at this decision, which asks for the tip: `FFXBattleHud.guardFoldedCard`); `AdvisorZone.chip?: { left; bottom; badge? }` (where the zone parks the `N` chip itself); `solveCard` is exported and gains two optional trailing parameters (`reserve`, `minHeight`) whose defaults are what it always used. Nothing sets the new input fields in any other fight and no other fight's zone changes.
+- `src/ui/ffx/advisorFolded.ts` (new): the folded placement: the card in the guide's rail (under the chip row, 4 grid px above the help slab's slot, 66 to 70 grid px tall) and nowhere else, at most the comfortable width, solved against the fighters where the shot rests, the `N` chip docked beside the `G` chip (the key-only badge where the whole label does not fit), and `underTheChipRow` for every pass that is not that placement. `src/ui/ffx/advisorChipSizes.ts` (new): the two sizes of the `N` chip, read off an unseen copy of it. `src/ui/ffx/advisorStrip.ts`: `advisorZone` tries the folded placement first when the input carries a `guideChip`, and otherwise runs its passes with the chip row as a band no box may cross; the HUD's declined-card chip dock does the same. `src/ui/ffx/hudPlacementKeys.ts`: `sizeKey`, and `panelPresence` counts the `guideChip`.
+- `src/ui/common/MoveAdvisor.ts` (shared with FFX-2): `fitCard` takes a tight effect line off again when the box turned out narrower or shorter than the one the line was kept in and it no longer fits (the fit `render` runs measures the card at the anchors' width and the HUD writes its box after it; the loop never re-rendered a card already on the last rung, so the line stayed, cut off at the foot, for the whole decision: Chapter III at 1024x768, 79 grid px of card in a box of 66). It changes a card only where that clipped line would otherwise have stayed.
+- Pinned by `tests/unit/ui-ffx-advisor-folded.test.ts` (the six measured boards: the card is the card, clear of the `G` chip, the `N` chip beside it, the rail at every decision, the cap), `ui-ffx-advisor-chip-sizes.test.ts`, `ui-strategy-guide-start-folded.test.ts`, `ui-ffx-guide-folded-scenes.test.ts`, `ui-move-advisor.test.ts` (the stale tight line) and `tests/e2e/advisor-present.spec.ts` (the first menu of both chapters at three shapes: the guide folded, the card and its chip clear of the `G`, scroll and PAUSE chips, `G` opens the guide and the card is the tip, `G` again and it is where it was, the next decision).
+
+## 2026-10-09 — The boss scripts of Chapters VIII, IX, XIV, XVII and XVIII follow the game's scripts: shared hit gates, a command-formula table, a formation opening and a reach table for Sin's distance 1 (re-parity AI lane C; FFX only; no shared contract file changed)
+
+Branch `re-parity-ai-ffx-c`, on lane B's hit events. No file in the contract list changed. Recorded because the engine's internal surface and the order in which a boss's events arrive change. Handoff:
+[re-parity-ai-evrae-yojimbo-isaaru-sin](handoff/re-parity-ai-evrae-yojimbo-isaaru-sin.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- New modules, none exported from `src/battle/ffx/index.ts`: `ai/hit-gates.ts` (`counterAllowed`, `react`, `reactionAim`, `frontIds`, `aeonHoldsField`: the gates between a boss's hook and the free action it asks for), `ai/opening.ts` (`applyBossOpening`: the formation start hook,
+  the boss's CTB 0 and each of the seven party counters +1), `ai/command-formula.ts` (the command's damage-formula byte from its game record: `formulaByteOf`, `gazeStepOf`, `isFormulaThree`, `FORMULA_BYTE_OVERRIDES`), `reach.ts` (`REACH_ZERO_COMMANDS`, `isReachZero`).
+- `targeting.ts#reachesFoesAtRange` also reads `state.flags['airship.distance']`: at 1 (Overdrive Sin after his second pull) only the game's reach-0 commands miss. The flag exists only in that battle (3, then 1, then 0); everywhere else the old FAR / NEAR gate decides as before.
+- Evrae's, Yojimbo's, Isaaru's and Sin's answers are `onHit` hooks now: `ai/reactions.ts#collectBossCounters` lost its Evrae and Sin branches (`collectSinCounters`, `collectOverdriveSinCounters`, `collectSinFinsCounters`, `collectSinGenaisCoreCounters` and the `SinCounter` type are gone;
+  `ai/sin-counters.ts` keeps only the liveness hook), its `statusAddedEnemyIds` parameter is gone (`engine-end.ts` no longer destructures `statusCounterable`), and `engine-end.ts` no longer calls `runEvraePhaseHooks`. `markEvraeRuntime` no longer sets `countsPartyTargetings`; the field and its counter in
+  `overdrive.ts#onTargeted` stay (a test pins them) and no script reads them.
+- `state.flags` keys: new `airship.distance`, `airship.hasteGuard`, `airship.delayCount`, `airship.delayAdvancesHaste` (a bench's override of the owner decision C-13), `sin.fin.negationGuard`, `sin.core.score`, `sin.core.guard`; `sin.fin.hits` counts hit events; removed
+  `airship.hasted`, `airship.targetings`, `sin.core.negationChance`, `sin.core.counterChanceBefore` and `sin.core.absorbedDrawsCounter`. The HUD-facing keys (`sin.turn`, `sin.turnsLeft`, `sin.fin.charged`, `sin.genais.shelled`, `sin.core.state`, `sin.negation.lastTaken`) are unchanged; `sin.gigaGravitonTurn` now defaults to 12.
+- Ability data: the game's caption dummies carry `hits: 0` (they raise no hit event), the do-nothing Gravija is aimed at the Fin, the Core's Gravija sets `extra.groupTarget` (lane B's key), Yojimbo's and Isaaru's Summon rows are new with command records (`command-records/enemies.ts`), and Cid's Agility is 11.
+- Draw order: a boss pick draws only with two or more candidates; the Fins', the Core's, Sin's, Yojimbo's, Isaaru's and Evrae's rolls are `GetRandomValue` (sixteen bits) reduced by the script's own `mod`, a draw on every hit event where the script takes one; the engine's one seeded stream still supplies all of it. Every seed-pinned
+  expectation downstream (six golden digests, the chapter and strategy tests) moved with it and was re-pinned with its cause.
+
+## 2026-10-09 — The FFX-2 engine rolls hits, critical hits, damage, statuses and theft through the proven kernels: `FFX2CommandRecord`, `FFX2MonsterRecord`, `AbilityDef.ffx2Record`, `EnemyDef.ffx2Record`, `EnemyFields.ffx2Record`, `AbilityCommand.gilSpent`, and the `src/battle/ffx2` exports that left (re-parity W3; FFX-2 only; additive for the contract file)
+
+Branch `re-parity`. `src/battle/common/types.ts` gains the interfaces `FFX2CommandRecord` (the game's own command row for one FFX-2 ability: the 14 fields the kernels read, the
+three status tables, and `pickOne` for a command that is several game rows of which the script picks one per cast) and `FFX2MonsterRecord` (the game's monster row: Accuracy, the
+two resist tables, the special-flag word, the species mask, the level^6 resist byte, the steal byte, the Pilfer Gil figure, the steal items, the Bribe slots, the monster's own
+Attack row and the rows it runs in place of an ability's own, `commands`), and the optional members `AbilityDef.ffx2Record`, `EnemyDef.ffx2Record` (the data) and `EnemyFields.ffx2Record` (the combatant's copy, made in `src/battle/ffx2/setup.ts`),
+and `AbilityCommand.gilSpent` (the gil a Lady Luck Bribe offers, `ActionRec+0xb0`). `src/data/ffx2/command-records/` holds the 240 records, `src/data/ffx2/monster-records/` the 33 monster rows (the 32 enemies and parts of the seven chapters and the first Paragon form),
+`src/battle/ffx2/fallback-records.ts` the 44 of the fallback table, and `research/re-ffx2-commands.md` says how each was matched and where our numbers differ. FFX and FF7 data never set
+the members and no code of theirs reads them. An ability without a record keeps working: the FFX-2 engine derives the same fields from the ability's own flags (`src/battle/ffx2/adapt/command.ts`).
+Handoff: [re-parity-w3](handoff/re-parity-w3.md). Game case: FFX-2 only (`ffx-engine-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/ffx2/index.ts` no longer exports `computeDamage`, `defenseTerm`, `magicBase`, `physicalBase`, `randomiserRoll`, `resolveAffinity`, `specialMagicBase` (the old float chain, `formulas.ts`,
+  deleted), `registerHit`, `cannotEvade` (`chain.ts`), `statusChanceLinear`, `statusChanceQuartic`, `statusChanceSextic` (`statuses.ts`) or the types `DamageContext` and `DamageResult`;
+  `critPercent` and `hitPercent` came back from `hit.ts` with the same signatures (now the kernels' odds); it gains `bumpChain`, `chainBefore`, `isRestorative`, `critProbability`,
+  `hitProbability`, `statusProbability` and `statusProbabilityBetween`. `src/battle/ffx2/aeon-effects.ts` and `resolve-targets.ts` are deleted, and so are the constants of the old
+  damage chain and hit check in `constants.ts` (and `ENEMY_BASE_ACCURACY`). Nothing outside `src/battle/ffx2`, `src/engine/tactics/advisor-roll.ts` and the tests imported the removed names.
+- `ResolveContext` (the FFX-2 resolver's context, `src/battle/ffx2/resolve-hp.ts`) gains optional `state` and `items`, so a Steal, Pilfer Gil or Bribe puts the item and the gil in the battle's flags;
+  `FFX2Engine` and the move simulator pass them. `Ffx2EngineOptions.immuneHitsSkipChain` is no longer read (the game's chain byte rises only when a positive HP number is applied, so an immune hit never
+  opens a window); it stays so callers compile.
+- The combatant's `chainCount` is the game's byte (the number of landed hits in the current chain, one higher than before for the same hit); the `chain` event still carries the counter the hit read, so
+  the HUD flourish is unchanged. The pause screen's "Chain xN" reads the byte.
+- Draw order of one FFX-2 action (the engine's seeded stream; `BattleEvent` shape unchanged): every target's hit roll first, then per strike, per target in ascending slot order, the variance, the critical roll
+  (only for a row that can crit), the MP and ATB variances, one status roll per status with a chance byte, the shatter roll (a Petrified target only), the theft rolls; `src/battle/ffx2/adapt/draws.ts` takes
+  one engine draw per kernel draw, so the advisor's roll policy (`src/battle/ffx2/simulate.ts`, `engine/tactics/advisor-roll.ts`) keeps working. Every seed-pinned FFX-2 expectation downstream (goldens, strategy
+  and chapter tests) moved with it and was re-pinned in the same commit with its cause. Adopting the game's own generator is a separate decision (plan P3) and is not made here.
+
+## 2026-10-09 — One `onHit` runner for both AI lanes: `ai/hooks.ts` is the registry, the reaction queue and the only runner; `hit-hooks.ts` and `hit-event.ts` are gone; `registerHitScript` is an adapter (release candidate 1; FFX only; no shared contract file changed)
+
+Branch `re-parity-rc1`. No file in the contract list changed. Recorded because the next two entries (AI-Seymour's and AI lane B's) each describe a hook of their own and, merged, there is one. Handoff:
+[re-parity-rc1](handoff/re-parity-rc1.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- The runner is `ai/hooks.ts#runOnHit`, called from `abilities.ts#finishTouched` over the tally `hit-apply.ts` keeps: once per action per target, after the target's last hit record and before the death check; each
+  target hears it right after its own hits, a follow-up row is not a second event, and a lethal hit on a script that `holdsDeath` waits for its hook (`hp.ts#dealDamage`'s `holdKo`, finished by `settleDeferredDeath`). The four
+  differences the lanes' handoffs list were settled in AI-Seymour's favour, as its handoff recommends; lane B's own runner told every target after the last one, which moves one seeded digest (Chapter III seed 7, link 5).
+- `src/battle/ffx/hit-hooks.ts` and `src/battle/ffx/hit-event.ts` are removed. `src/battle/ffx/index.ts` exports `registerScriptHooks` with the types `ScriptHooks`, `UsedCommand` and `HitReport`, and `registerHitScript` with the types
+  `HitEvent` and `HitHook` (`ai/hit-script.ts`: the shape AI lane B's five scripts were written against, registered on the same runner; `managesHp` is `holdsDeath`); it no longer exports `queueReaction`, `drainReactions` or the type
+  `Reaction`. Reactions are `ai/hooks.ts`'s one first-in-first-out queue (`queueReaction`, drained by `ai/reaction-drain.ts`); a reaction may carry `requiresAlive` (the game's queue refuses a command aimed at a combatant that is gone:
+  AI lane B's counters aim at the attacker), and `peekReactions` and `registeredHookScriptIds` are read-only views for the tests.
+- `FFXRuntime` (`state.ts`) loses `reactions` and `HitRuntime` and keeps `inReaction` and `formDiedAtSeq`. `inReaction` is set by `engine-end.ts#afterAction` for the whole reaction phase (the queued reactions, the older boss
+  counters, the equipment reactions): Yunalesca's and Yu Yevon's counters keep the engine's old rule that a counter never triggers another counter (`ai/hit-script.ts#queueCounter`); AI-Seymour's scripts chain on purpose and never read it.
+- `DamageEventInfo.deferKo` is `holdKo` (one name). A held KO the script is certain to refill, a form change or a part with a `reviveRule`, is not an overkill of anything (`hp.ts`, AI lane B's rule, which no AI-Seymour target meets).
+- Nothing else in the lanes' entries changes: `AbilityDef.extra.groupTarget` and `scriptAims` stay two different mechanisms, and the draw helpers stay two (`ai/game-rolls.ts` and `ai/script-random.ts`: the same two shapes, one draw of 16 bits
+  and the picker over the living and targetable in ascending actor order, mapped to the engine's one stream differently) until the game's own generators are adopted.
+
+## 2026-10-09 — A scene may name a height for one FORM of a boss: `SceneStaging.formHeights`, `PaintedActor.setWorldHeight`, `PartyStature.sceneOwnHeight` (Chapter II only; FFX only; additive)
+
+Branch `r3943-int` (Bailey, 2026-10-09 14:10 EDT, "go with 3 for Yunalesca": Lady Yunalesca's first form at her wing tips, picture 3 of the giants options study). No file on the contract list changed; recorded because the scene staging and the shared actor are read by every stage.
+
+- `src/scenes/types.ts`: `SceneStaging.formHeights?: Readonly<Record<string, number>>` (copied by `stagingOf`): a world height for one form of a boss, keyed by the art id the stage draws (`yunalesca-1`; `BattlePresenterArt.artIdFor` is `<combatant id>-<form index + 1>`), while that painting is up. A form with no entry stands at the stage's rule, a scene that names none gets what it always got, and `figureHeights` (per combatant) wins where both name one. Only `zanarkand-dome.ts` sets it (`zanarkand-dome-giants.ts`, from `data/ffx/form-stature.ts`).
+- `src/engine/PartyStature.ts`: `sceneOwnHeight(slots, id, artId)`, the one rule for "the scene's own height for this figure": `figureHeights[id]`, else `formHeights[artId]`, else undefined.
+- `src/engine/BattlePresenterStage.ts`: `add` reads it for the painting it stages; `setArt` (the form-change beat's call) calls the new private `fitFormHeight` before the poses load, **only when the scene names a height for the painting going out or the one coming in**, so every other swap (a spherechange, Braska's Final Aeon's second form, any form whose scene names none) is untouched. The numbers are `add`'s own (`figureHeight`, and the shadow and ring at 1.5 and 1.7 times `ringScale` for a fiend), so a form that goes back to the shared boss height gets today's height and radii bit for bit.
+- `src/engine/PaintedActor.ts`: `setWorldHeight(height, radii?)`. `worldHeight`, `shadowBaseRadius` and `ringBaseRadius` lose `readonly`; the method sets them, recomputes the head reference and the planes of the poses it holds, and does nothing for a height equal to the current one.
+- Pinned by `tests/unit/ffx-form-stature.test.ts` (13: the row, the arithmetic, the scene, the rule), `tests/unit/engine/stage-form-heights.test.ts` (10: the stage at staging and at the swap, bit for bit, and what stays as it was) and `tests/unit/engine/painted-actor-set-height.test.ts` (4: the real actor, the planes, the marks, the round trip).
+
+## 2026-10-09 — `AbilityDef.extra.scriptAims` replaces `distinctTargetsPerHit`; three Chapter VII runtime fields go and `ActorRuntime.guardMark` arrives; the FFX boss-script hook registry (re-parity AI-Seymour; FFX only)
+
+Branch `re-parity-ai-ffx`. No file in the contract list changed; recorded for the same reason as the entries below. `AbilityDef.extra` gains one documented key, `scriptAims: true`
+(`src/battle/ffx/scripted.ts` table), and loses `distinctTargetsPerHit`: a per-hit random row that carries it sends hit `h` to the `h`-th target the command names (the last
+when it names fewer), and a hit whose target is fallen or hidden is lost, as the exe's queue refuses the command (`targeting.ts#aimedTargetForHit`). It is how the compiled scripts
+aim: they pick the victim and queue the spell at it. Natus's four Multi-ra rows carried the old key and carry the new one, with Break, Flare and the Claw, Seymour's and the Guardians'
+Chapter VII spells and Anima's Pain; every other record resolves as before. `ActorRuntime` (`src/battle/ffx/state.ts`) loses `damageCapPerHit`, `hpFloor` and `coversAllyId`
+(Chapter VII's cap, floor and first-Guardian cover, which the game's script does not have) and gains `guardMark?: boolean` (the Guard status an enemy's script puts on an ally, read by
+`targeting.ts#coverOf`). New module `src/battle/ffx/ai/hooks.ts`: the registry of the game's script hooks (`onTargeted`, `onHit` once per action per target before the death check,
+`postPoison`, `preTurn`) and the reaction queue. The `onHit` report (`HitReport`) carries `hpBefore`, `lostHp` and, with the same definitions as the AI lane B hit event
+(`re-parity-ai-ffx-b`, `hit-hooks.ts#HitEvent`), `lastDamage` (`LastDamageTakenHP`: the action's HP results on the owner after the cap and before the clamp, overkill counted, a heal negative)
+and `affectsHp` (the command's HP class bit), so a script written for either lane's hook runs on the other's. `BattleEvent` shape unchanged; FFX-2 and FF7 never import any of it
+(`ffx2-atb-golden` and `ff7-golden` unchanged). Handoff: [re-parity-ai-seymour](handoff/re-parity-ai-seymour.md). Game case: FFX only.
+
 ## 2026-10-09 — The FFX engine takes its turn order, status infliction and per-turn ticks from the game's kernels: exports removed, runtime fields, two data requirements, one carry rule (re-parity W2; FFX only)
 
 Branch `re-parity-w2`. FFX-2 and FF7 import none of the modules below. Event shapes are unchanged.
@@ -33,6 +173,23 @@ Branch `re-parity-w2`. FFX-2 and FF7 import none of the modules below. Event sha
   the two differed (7 abilities of ours with a chance the record does not have, 148 recorded abilities and the party's Attack with a chance our data never authored) the
   record wins; `tests/unit/data-ffx-command-records.test.ts` pins the list. The doc comment that said the shatter chance was not repeated in the record is corrected.
 
+## 2026-10-09 — The FFX engine raises the game's `onHit` once per target per sub-action, and the boss AI of Chapters II and III follows the game's scripts (re-parity AI lane B; FFX only; no shared contract file changed)
+
+Branch `re-parity-ai-ffx-b`. No file in the contract list changed. Recorded because the engine's public surface and the order in which a boss's events arrive change. Handoff:
+[re-parity-ai-yunalesca-bfa](handoff/re-parity-ai-yunalesca-bfa.md). Game case: FFX only (FFX-2 and FF7 do not import these modules; `ffx2-atb-golden` and `ff7-golden` are unchanged).
+
+- `src/battle/ffx/index.ts` exports `registerHitScript`, `queueReaction`, `drainReactions` and the types `HitEvent`, `HitHook`, `Reaction` (`hit-hooks.ts`); `FFXRuntime` gains the optional members `reactions`, `inReaction` and
+  `formDiedAtSeq` (through `HitRuntime`). A boss's AI script registers an `onHit` hook under its script id; nothing else reads them, so a combatant whose script registers none behaves exactly as before.
+- The hook runs once per target per sub-action, after the action's last hit record on that target and before the death check (`hit-event.ts`, called from `abilities.ts#resolveAbility`). A target whose script `managesHp` is held at
+  0 HP while the hits land (`DamageEventInfo.deferKo`, set by `hit-apply.ts`), so the script decides refill or death. The free actions a hook asks for (counters) are run by `engine-end.ts#afterAction` once the action is done; a hit a
+  reaction lands queues nothing further. A Doublecast is two sub-actions, so two events.
+- `ai/index.ts` no longer exports `yuYevonCounter`, and `ai/reactions.ts#collectBossCounters` no longer answers for Yunalesca or Yu Yevon: both answer from their hooks (`ai/yunalesca.ts`, `ai/yu-yevon.ts`), for every action that
+  reached them, a miss included, and for an enemy-side attacker too (a Yu Pagoda's Power Wave on a Zombie Yu Yevon).
+- `AbilityDef.extra.groupTarget` (a recognised key, documented in `data/ffx/enemies/braskas-final-aeon-abilities.ts`): exactly the combatants the script named, whatever the row's own single or multi flag says
+  (`targeting.ts#resolveTargets`). Set on Gravija (the front line and himself, not his Pagodas) and Osmose.
+- Draw order: a boss pick (`findMatchingChr`) draws only with two or more candidates, a roll is `GetRandomValue` (sixteen bits) reduced by the script's own `mod`; the engine's one seeded stream still supplies both. Adopting the
+  game's own generators is a separate decision (plan P3). Every seed-pinned Chapter II and III expectation downstream (the two goldens, the strategy and chapter tests) moved with it and was re-pinned with its cause.
+
 ## 2026-10-08 — `FFXCommandRecord` gains the status bytes: `rank`, `chances`, `durations`, `extra`, `stage`, `buff` (re-parity W2; FFX only; additive)
 
 Branch `re-parity-w2`. `src/battle/common/types.ts`: `FFXCommandRecord` (the game's own command record on an FFX ability, `AbilityDef.record`) gains six optional members, all read from
@@ -42,6 +199,15 @@ Spellspring / the 9999 hit / always-critical / the two Overdrive multipliers). `
 four core abilities (`attack`, `defend`, `aeon-shield`, `aeon-boost`) carry theirs inline in `src/battle/ffx/registry.ts`. Six abilities of ours were attached to a record of the same name that did not carry their
 status payload and are re-attached by their status bytes (`evrae-stone-gaze` 0x6062, the three Sin gazes 0x609d/0x609e/0x609f, `power-wave-aeon` 0x60d2, `mind-blast-aeon` 0x60f6;
 `research/re-ffx-commands.md` section 7). FFX-2 and FF7 data never set the members and no code of theirs reads them. Game case: FFX only.
+
+## 2026-10-08 (night) — A giant's phone fit stays its link's own by the rig's line, not by where the rig stands: `BattleCamera.addRig`'s `continues`, `LinkFits.registered`, `BattleCameraLike.addRig` (Chapter XIII's Trema link; FFX-2 only in effect; additive)
+
+Branch `r3942-stage` (the verifier's finding on the repair of `b130ecf2`: on small phones Trema's link still stood the girls at 54 to 68 percent of live; handoff: [r3942-stage](handoff/r3942-stage.md), "Second repair"). No file on the contract list changed and nothing was narrowed; recorded because three shared engine signatures gain an optional argument or method.
+
+- `src/engine/BattleCamera.ts`: `addRig(name, rig, continues = false)`. `continues` says the rig is `name` going on (CHAPTER FRAMING's master planned from the fitted rig, its re-authored close rigs and today's rigs put back) and not the scene's own camera for the link it stages; a registration without it is recorded as the scene's own rig (`LinkFits.registered`) and ends what `LinkFits` kept of a giant's fit for that name. Every caller but `RigWatch` passes nothing, as before.
+- `src/engine/FrameFit.ts`: `LinkFits.registered(name, rig)` (new) and a changed rule in `LinkFits.fit`: the first version put the rig back to the pose between the presenter's two fits, and only while it stood within a thousandth of where the giant's fit left it, which CHAPTER FRAMING's plans broke (they move the rig 0.65 on a 360x740 phone, and 1.32 once the giant has gone), and that pose already holds the giant at 0.75 (on a 320x568 slice the girls 79 percent of live); now, while a giant's fit is outstanding and the line is unbroken, the next fit of the rig starts from the scene's own rig, however far CHAPTER FRAMING has moved it since, and never over a scene's own rig for a later link. The stored `after` pose is gone. A fit with no giant in the chain is `fitRigToSlice` exactly as before; a standalone `LinkFits` that never saw a scene rig falls back to the pose before the giant's fit.
+- `src/engine/fx/mix/rigWatch.ts`: `BattleCameraLike.addRig(name, rig, continues?)` and a private `put`, which `install` (the master, the close rigs, today's rigs put back with CHAPTER FRAMING off) and `dispose` use to pass `continues`. A fake camera whose `addRig` takes two arguments is unaffected.
+- Pinned by `tests/unit/frame-fit-link.test.ts` (20, with the measured drift, several plans in a row, a scene's own rig, a slim giant that the first fit counts, two giants, a retry), `giants-phone-link.test.ts` (8, the real `RigWatch` between the links, five phone slices) and `rigwatch-continues.test.ts` (5); mutation-checked: without the flag in `RigWatch.put` eight of them fail, restoring the pose between the two fits eight, never recording the scene's rig eight, a scene's rig not ending the memory one, the memory not consumed two; the first version's rule failed twelve of the earlier set.
 
 ## 2026-10-08 — `FFXPlainAttack`, `EnemyDef.plainAttack`, `EnemyFields.plainAttack`: an enemy's plain Attack on the game's own record (re-parity W1; FFX only; additive)
 
@@ -72,6 +238,112 @@ command record that the FFX parity kernels read and an ability's other fields do
 `research/re-ffx-commands.md` says how each was matched and where our numbers differ from the game's. FFX-2 and FF7 data never set the member and no code of theirs reads it. An
 ability without a record keeps working: the FFX engine derives the same fields from the ability's own flags (`src/battle/ffx/adapt/command.ts`). Handoff:
 [re-parity-w1](handoff/re-parity-w1.md). Game case: FFX only.
+
+## 2026-10-08 (later) — Wave 1's three rooms no longer name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` is removed (Chapters XI, XIII and XV; FFX-2 only; a withdrawal, nothing narrowed)
+
+Branch `r3942-stage` (Bailey's "Yes, original spacing": wave 1's fiends back on release 39.4.1's spots at the real sizes; handoff: [r3942-stage](handoff/r3942-stage.md), "Original spacing"). No file on the contract list changed and no type changed.
+
+- The entry "Three more FFX-2 rooms name `SceneStaging.advisorCap`" below is **withdrawn**: the Road to the Farplane, the Cloister and the Den of Woe stand their fiends where 39.4.1 did, at feet y 516 to 608 against the card's top at y 588 to 705 (the card at its usual size; measured on the live captures), so there is nothing to cap and the card prints what it always did. `src/scenes/advisor-cap.ts` and `FORWARD_FIEND_ADVISOR_CAP` are deleted.
+- `SceneStaging.advisorCap`, `stagingOf`'s copy of it, `createHud`'s fifth argument and the HUD's reading stay (additive, unchanged); no scene file names the field now (`tests/unit/ffx2-advisor-scene-cap.test.ts` pins that, as on `r3941-spacing`).
+
+
+## 2026-10-08 — A scene may hang the FFX-2 enemy-intent slab over the highest enemy's head: `SceneStaging.intentRoof`, `createHud`'s sixth argument (Chapter VI only; FFX-2 only; additive)
+
+Branch `r3941-spacing` (the Leblanc Syndicate at its real sizes on 39.4's spots, Bailey's "Old spacing, real sizes"; handoff: [r3941-spacing](handoff/r3941-spacing.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and the shared wiring function an optional argument, as for `advisorCap` below.
+
+- `src/scenes/types.ts`: `SceneStaging.intentRoof?: boolean` (copied by `stagingOf` when `true`): the FFX-2 enemy-intent slab hangs over the **highest** living enemy's head (at the acting enemy's x) instead of the acting enemy's own, so it covers no head it can clear when the fiends stand at different depths and real heights.
+- `src/app/screens/BattleScreenWiring.ts`: `createHud(game, field?, engine?, artNamespace?, advisorCap?, intentRoof?)` hands it to `new FFX2BattleHud({ intentRoof })`; `BattleScreen` passes `scene.slots.intentRoof`. `FFX2BattleHud.intentHead` is the one projector the slab and its placement solver read (`intentBoard.highestEnemyHead` is the roof); the placement solver is untouched.
+- `src/ui/common/EnemyIntent.ts` (shared with the FFX HUD): `EnemyIntentMountOptions.maxHeight?: () => number | null`, the most height in viewport px the whole panel may take now. `FFX2BattleHud.intentMaxHeight` answers it (`intentBoard.intentRoom`: the room between the lowest top the solver allows and the roof) only for a scene with `intentRoof`, and null otherwise; the panel then folds its body, in steps of 4 grid px and never under 36, until it fits, its MORE row counting what is hidden, a held J still lifting every cap. Absent, or null: the panel is exactly as it was (`tests/unit/ui-enemy-intent-fold.test.ts`; the FFX HUD never passes it).
+- Absent everywhere but Chapter VI's room (`tests/unit/ffx2-intent-roof.test.ts` pins that no other scene file names it), so every other chapter's slab is exactly as it was. The FFX HUD takes the argument and ignores it. The hidden experimental Leblanc chapter reuses the room and so reads it too.
+- Chapter VI's room **no longer names an `advisorCap`** (the entry below stays true for the field and its wiring, which the wave-2 rooms use): the fiends stand back where 39.4 stood them, 40 px above the card at its full height, so there is nothing to cap.
+
+## 2026-10-08 — The FFX-2 giants play their own camera and size: `engine/fx/mix/giants.ts`, `FFX2_GIANT_SHARE`, the painted rectangle in `fighterBoxes`, `RigWatch.install`'s `close` flag (Chapters IV, XI and XIII; FFX-2 only; additive)
+
+Branch `r3942-stage` (real sizes for the fiends, wave 2: the giants; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type was narrowed; recorded because shared presentation plumbing gains optional fields and arguments, all of them inert for every fight but Bahamut (Chapter IV), Paragon and Oversoul (XIII) and Anima (XI):
+
+- `src/data/ffx2/fiend-stature.ts`: three rows (`bahamut`, `paragon`, `x2-anima`), the girls' mean of Chapter IV (`ffx2-bahamut`, 17.48), `FFX2_GIANT_SHARE` (Bailey's pick: how much of its real height each giant stands at on a desktop and on a phone) and `ffx2GiantHeight`. Vegnagun and its parts are not in the table.
+- `src/engine/fx/mix/giants.ts` (new): the table of the three cameras, the giant exception to CHAPTER FRAMING's party-height floor (`GIANT_FLOOR` 0.45 of today's party height against 0.9, the overlap and cover limits widened to 0.4, for these three bosses on a desktop window only), and `decideGiant`. `Decision.giant?` and `FramingReport.giant?` (optional) say a plan plays a giant; the live check never swaps it; a resized window re-plans it (`SizeWatch` also watches a giant's fight).
+- `src/engine/fx/mix/rigWatch.ts`: `install(pose, on, close = true)`; a giant's camera leaves the close rigs (party, enemy, action) as the scene authored them.
+- `src/engine/ShotRules.ts`: on the upright phone the slice fit (A-12) holds a giant whole (`min` 1) and reserves `GIANT_PHONE_TOP` of the frame under the boss gauge and the intent strip; FFX (CTB) and every other fiend keep 0.75 and no reserve.
+- `src/ui/ffx2/intentBoard.ts`: `fighterBoxes(state, project, painted?)`, an optional third argument; for the three giants the enemy-intent card avoids the painted silhouette (`TargetingPort.rect`) in place of the head-to-feet estimate. `FFX2BattleHud` passes it. The FFX HUD does not call it.
+- Scenes: `scenes/giant-stage.ts` (new, `giantPhoneHeights`) publishes the giant in `SceneStaging.figureHeights` (an existing field) only when the phone battle HUD takes the window, and Chapter IV has a phone idle rig (`BEVELLE_PHONE_GIANT_IDLE`) and Chapter XI a phone camera for Anima's link (`ROAD_PHONE_ANIMA`). A desktop publishes nothing for them.
+- Pinned by `tests/unit/fx-mix-giants.test.ts`, `ffx2-fiend-stature.test.ts`, `giants-card-and-phone-fit.test.ts`, `chapters/giants-phone-scenes.test.ts` and `chapters/road-phone-camera.test.ts`. Chapter IX (`cavern-stolen-fayth-rigs.ts` and the rest of Yojimbo's room) is untouched by this wave.
+- **Repair round (the independent check of 2026-10-08; same branch, FFX-2 only in effect, additive):**
+  - `src/engine/FrameFit.ts`: `FitSubject.giant?` (optional) and `LinkFits` (new class, held by `BattleCamera`): a phone slice fit that holds a giant is its link's own, so the next link starts from the rig as it stood before it (Chapter XIII's Trema link had inherited Paragon's stand-back, the party 35 percent smaller than live). `CameraPort.fitSlice`'s subject type and `BattleCamera.fitSlice` gain the same optional `giant`; the three forwarders (`CameraPreset`, `ComfortCamera`, `TargetFrameHold`) follow by `Parameters<>` and are untouched. A fit with no giant in the chain is `fitRigToSlice` exactly as before.
+  - `src/engine/ShotRules.ts`: `fitPhone` fits the figures as every fight did first and, where a giant is staged, then its own fit (`giant: true`, whole, under `GIANT_PHONE_TOP`); `reveal` holds a giant whole with room, on a desktop and on a phone (B5 itself stays desktop only); new `opening(intro)`: the battle opens on the master where the scene's `intro` would cut a giant. `BattleMoments.battleStart` asks it.
+  - `src/engine/ShotFit.ts`: `GIANT_WHOLE_MIN` (0.97), `REVEAL_GIANT_ROOM` (0.1), `giantWholeSubject`; A-1's `ffx2Subjects` holds an enemy that is one of the giants to `GIANT_WHOLE_MIN` where every other fiend keeps 0.75, so a wait shot that would cut one falls back to the master.
+  - Pinned by `tests/unit/frame-fit-link.test.ts`, `giants-phone-link.test.ts` and `giants-reveal.test.ts` (all mutation-checked), `giants-card-and-phone-fit.test.ts` (two fits at a giant's battle start) and `r392-reveal-push.test.ts` (its stand-in boss is now a fiend that is no giant).
+
+## 2026-10-08 — (withdrawn the same day, see the entry above) Three more FFX-2 rooms name `SceneStaging.advisorCap`: `src/scenes/advisor-cap.ts` `FORWARD_FIEND_ADVISOR_CAP` (Chapters XI, XIII and XV; FFX-2 only; additive)
+
+Branch `r3942-stage` (real sizes for the fiends, wave 1; handoff: [r3942-stage](handoff/r3942-stage.md)). No file on the contract list changed and no type changed: the field `SceneStaging.advisorCap` and its wiring are the 2026-10-07 entry's below, and what is new is who names it.
+
+- `src/scenes/advisor-cap.ts` (new, one constant): `FORWARD_FIEND_ADVISOR_CAP = 52` grid px (130 px at 1600x900: the card's top at y 705, its usual two-line place; Chapter VI's `LEBLANC_ADVISOR_CAP` is 46, y 742, for feet at y 723). The Road to the Farplane (`road-to-the-farplane.ts`), the Cloister (`cloister-100.ts`) and the Den of Woe (`den-of-woe.ts`) put it in their staging, so their slots and the scene each builds publish it; the fiends of those rooms now stand beside the girls at their real height, with feet down to y 690, where the card at its full height (top y 588: a long recommendation, a downed girl) would have covered them.
+- Chapter XVI's Djose chamber (Ixion's feet at y 575) and every FFX scene name none; `tests/unit/ffx2-advisor-scene-cap.test.ts` pins the list of scene files that name the field.
+- Side effect, disclosed: in these three rooms the card prints fewer lines when its text is long (it keeps the head line, the move and its target), in every link of the room, the giants' included (Anima, Paragon and Oversoul).
+
+## 2026-10-07 — A scene may cap the FFX-2 move-advisor card: `SceneStaging.advisorCap`, `createHud`'s fifth argument (Chapter VI only; FFX-2 only; additive)
+
+Branch `r3941-stage` (real sizes for the fiends, Bailey's "Option 3: bosses forward"; handoff: [r3941-stage](handoff/r3941-stage.md)). No file on the contract list changed; recorded because the scene staging type gains an optional field and one shared wiring function an optional argument.
+
+- `src/scenes/types.ts`: `SceneStaging.advisorCap?: number` (copied by `stagingOf` when set): the most height, in HUD grid px, the FFX-2 move-advisor card may take in that scene. Chapter VI's fiends, bigger and nearer, stand down to the band the card hangs from (y 651 at its full height at 1600x900);
+  its cap (`LEBLANC_ADVISOR_CAP`, 46) lowers the card's top to y 742 so it prints fewer lines and passes under their feet, as it already passes under the girls'.
+- `src/app/screens/BattleScreenWiring.ts`: `createHud(game, field?, engine?, artNamespace?, advisorCap?)` hands it to `new FFX2BattleHud({ advisorCap })`; `BattleScreen` passes `scene.slots.advisorCap`. `FFX2BattleHud` starts every decision from the scene's cap (`resetAdvisorCap`) instead of from none;
+  `advisorLane.ts` is untouched (a cap only tightens within a decision, as before).
+- Absent everywhere but Chapter VI's room (`tests/unit/ffx2-advisor-scene-cap.test.ts` pins that no other scene file names it), so every other chapter's card is exactly as it was. The FFX HUD takes the argument and ignores it. The hidden experimental Leblanc chapter reuses the room and so reads the same cap.
+
+## 2026-10-07 — The FFX party stands at its real relative heights: `src/data/ffx/party-stature.ts`, `src/engine/PartyStature.ts`, one rule in `PaintedStage.add` (FFX only; additive)
+
+Branch `r3941-heights`. No file in the contract list changed; recorded because the stage's sizing of a party member gains a rule and a switch, and a data table joins `src/data/ffx/`. Handoff: [r3941-heights](handoff/r3941-heights.md); plan:
+[r3941-heights-review](plans/r3941-heights-review.md); the numbers and their source: `research/ffx-character-heights.md`.
+
+- `src/data/ffx/party-stature.ts` (new, pure data): `FFX_PARTY_STATURE` (`Record<CharacterId, { ratio, top, wiki }>`, Tidus 1; `ratio` is the only field the build reads), `ffxPartyStature(id)` (1 for any other id), `TIDUS_TOP`, `FFX_STATURE_BASIS`.
+- `src/engine/PartyStature.ts` (new, no `three`, no DOM but the page address): `partyStature(game, side, id)` (the table's ratio for one of the seven in an FFX battle on the party's side, else 1), `figureHeight({ shared, own, given, stature })`
+  (the actor's world height and the scale of its contact shadow and turn ring), `statureOff()` / `setStatureOff()` (`?stature=off`: the old equal heights, for same-build captures).
+- `src/engine/BattlePresenterStage.ts`: `add` sizes a combatant through `figureHeight`. For every figure that is not a hero in an FFX battle the numbers are the old ones bit for bit (`tests/unit/engine/party-stature.test.ts`); a height a scene names
+  (`SceneStaging.figureHeights`) or an arrival director hands `add` is the figure's own and carries no ratio. `src/scenes/via-purifico.ts` names Yuna (its `partyHeight` is her own 1.68), so Chapter XIV is unchanged.
+- No port, event or `PaintedActor` member changes: the actor already sizes every plane, mark and motion from the `worldHeight` it is given.
+- **Round 2 (Bailey's picks of the same day: "Row 3: real body height" and "Keep camera and bosses as before"; additive).** Kimahri's applied `ratio` is 1.304 (his datamined 1.211 stays in the row as `datamined`, with a `note`: both optional fields of
+  `PartyStature`, absent on the other six). The stage records the factor it drew a hero by on the actor (`PartyStature.STATURE_KEY`, `userData`; set only when it is not 1; `figureHeight` also returns `stature`), and every reader that decides where the
+  camera or a fiend stands reads the party at the shared height through the new `src/engine/SharedHeight.ts` (`statureOf`, `backToShared`): CHAPTER FRAMING and BOSS SCALE (`src/engine/fx/mix/planFig.ts`, new; `framing.ts` `visible(actors, planned)` and
+  `staging.ts` `planScale` use `planFigOf`), the phone's A-12 refit (`FrameFit.FitSubject.shared`, new optional field, set by `ShotRules.fitPhone`; carried on the `fitSlice` port types in `BattlePresenterPorts.ts` and `BattleCamera.ts`, which forward the subject as they always did), and the formation relaxation
+  (`PaintedStage.projectRect(id, cam, shared)` and `screenRects(shared)`, new optional parameters, default off). Without a key every one of them returns what it returned before, bit for bit. `src/scenes/cavern-stolen-fayth-rigs.ts`:
+  `cavernPartySlots(slots, aspect)` and `CAVERN_PHONE_PARTY_STEP` (the party's slots nearer the lens on a phone only; the published 16:9 slots are unchanged), called from `cavern-stolen-fayth.ts`.
+
+## 2026-10-06 (later) — The experimental Leblanc chapter is hidden: no board card, reached by its word (FFX-2 only; behaviour, no type changes)
+
+Branch `exp-leblanc`. `src/data/encounters.ts` (a contract file) changes in comments only: `EXPERIMENT_CHAPTERS` still lists the experiment and `getChapter` still finds it, but chapter select no longer builds a card for it
+(`chapterGrid.ts`'s `experiments` registry defaults to none), so the board is the eighteen again; typing the word on the board opens it, as "limit" opens FF7's (`app/screens/frontend/leblancDoor.ts`,
+the shared `WordDoor` of `secretDoor.ts`). Bailey: "put the experimental new chapter in the live build but make it hidden like you did with ff7"; the word "leblanc". Tests: `tests/unit/exp-leblanc-door.test.ts`.
+
+## 2026-10-06 — A Retry from a hopeless checkpoint: `EnemyGroupDef.hopelessRetry` (branch `r392-trema`, PR-0407; FFX-2 only in effect; additive)
+
+Critic round 23's finding PR-0407: a loss to Trema retries at Trema (TR5 b) in Paragon's end state, and with one girl standing there the engine measured 0 wins in 200 Retries. Handoff: [r392-trema](handoff/r392-trema.md).
+
+- `src/battle/common/types.ts`: `EnemyGroupDef.hopelessRetry?: { standing: number; answer: 'restore' | 'chapter-start' }`. Absent on every formation but Trema's link (`tests/unit/chapters/trema-hopeless-retry.test.ts`
+  pins that), so every other chain retries exactly as before. Read only by `app/screens/BattleChainCheckpoint.ts`: `checkpointAt` makes no checkpoint for `'chapter-start'` when fewer than `standing` of the party are on their feet in
+  the setup the link opens on, and `resumeSetup` gives a `'restore'` Retry the formation with `restoresPartyOnEntry: true` (the engine's own Save Sphere rule, `battle/ffx2/setup.ts`). The first entry into the link is never changed.
+- New exports in `BattleChainCheckpoint.ts`: `standingIn(setup)`, `hopelessAt(group, setup)`. The shipped answer is `TREMA_HOPELESS_RETRY` in `src/data/ffx2/enemies/trema.ts` (`'restore'`, adopted by Bailey on 2026-10-06 at 18:41 EDT, D-506;
+  `'carry'` is the old behaviour).
+
+## 2026-10-06 — The experimental Leblanc chapter: `ChapterId` 'exp-leblanc', `Chapter.number` 19, `EXPERIMENT_CHAPTERS`, `SceneStaging.artNamespace` (FFX-2 only; additive)
+
+Branch `exp-leblanc` (never merged, never deployed to production; the Cloudflare PREVIEW worker only). `src/data/encounters.ts` (a contract file) gains: `'exp-leblanc'` in `ChapterId` (and out of
+`ListedChapterId`, so it is in no `SaveData.chapters` table), `19` in `Chapter.number`, `EXPERIMENT_CHAPTERS` (the experiments with a card after the eighteen; `getChapter` finds them; `CHAPTERS` and
+`CHAPTER_IDS` stay the eighteen), and the `experimental` flag's comment (an experiment's attempts and clears go to `app/experiments/experimentRecords.ts`, never the save; FF7's is hidden and has its own
+flow, the FFX-2 preview has a card and plays through the chapters' own flow, `BattleScreenFlow.playChapter` handing it `experimentProgress` in place of the save). `src/scenes/types.ts` (`SceneStaging`):
+`artNamespace?`, the art namespace a scene's figures are read from (`src/data/art/artNamespace.ts`: the stage prefixes every art id it resolves; unset everywhere else, so every other chapter resolves
+exactly as before). The chapter record is Chapter VI's by reference with its own id, number, title and `sceneKey` (`src/data/chapter-exp-leblanc.ts`). Handoff: [exp-leblanc](handoff/exp-leblanc.md).
+Game case: FFX-2 only (the mechanism is shared plumbing, both games, with one user).
+
+## 2026-10-06 — REDUCE MOTION shortens the lunge; the boss reveal is measured through the lens shift: `CameraPort.frame`'s `lens`, `rigPose`/`frameFit`'s `lens`, `lungePlan`'s `LungeCtx` (release 39.2; both games for the lunge, FFX-2 desktop for the reveal; additive)
+
+Branch `r392-motion`. No file in the contract list changed; recorded because one shared port gains an optional argument. Handoff: [r392-motion](handoff/r392-motion.md).
+
+- `src/engine/BattlePresenterPorts.ts`: `CameraPort.frame?(rig, push, subjects, lens?)`: with `lens` true the rig is measured through the live camera's view offset too (the static lens shift CHAPTER FRAMING puts on the
+  picture, `fx/mix/framing.ts`). Absent or false is the measure as before, to the digit; `BattleCamera`, `PresetCamera`, `StillCamera` and `TargetFrameHold` forward it. `FrameFit.rigPose` / `frameFit` take the same optional `lens`.
+- `src/engine/motion/StrikeReach.ts`: `lungePlan` / `lungeDistance` take a `LungeCtx` (`{ stage, moments? }`: the old `{ stage }` still fits); with `moments.reducedMotion` true the solved lunge is cut to its start plus half of
+  what the solver added (`calmLunge`, `CALM_REACH_SHARE`). No port, event or engine field changes.
 
 ## 2026-10-05 — The strike reaches its target in every fight: `StageMotionPort.shape`, `ActionMotionPort.reachFor`, `EventCtx.burst`, `PaintedActor.poseShape` (release 39.1; both games; additive)
 

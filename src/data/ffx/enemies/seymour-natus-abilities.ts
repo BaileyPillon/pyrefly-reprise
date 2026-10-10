@@ -70,15 +70,14 @@ type Element4 = 'fire' | 'ice' | 'lightning' | 'water';
  *
  * One record with `hits: 2`, the Chapter VII precedent
  * (`seymour-anima-macalania-abilities.ts`, "Act three's two hits are one
- * record"): the engine re-picks the target per hit for `random-enemy`.
+ * record").
  *
- * **The two targets are two different members if possible** — the wiki Natus
- * page, "targeting two different party members if possible" `[single source]`,
- * which the preflight's review found (it corrected B7: this part is sourced,
- * not Bailey's call). `extra.distinctTargetsPerHit` makes the second pick
- * avoid the first when anyone else is standing (`targeting.ts#nextHitTargets`),
- * and falls back to the same member when nobody is. Chapter VII's Multi-ra has
- * no such key and keeps its two independent picks (Macalania C-3).
+ * **The two targets come from the script** (re-parity, `research/re-ffx-ai-seymour.md` section 4.3): it queues the
+ * row and its "2nd hit" twin as two commands at two *different* party slots when three or two members stand (the
+ * same member twice only when one is left), through a pair worked out by two coins (`ai/slot-pair.ts`).
+ * `extra.scriptAims` sends hit 1 to the first target the command names and hit 2 to the second
+ * (`targeting.ts#aimedTargetForHit`); this replaces the earlier `distinctTargetsPerHit` (the wiki's "two different
+ * members if possible"), which the script makes exact. The same key is on his Break and Flare and Mortibody's Claw.
  *
  * No shatter byte is printed for these rows (§3.1), so none is shipped.
  */
@@ -101,7 +100,7 @@ function multiRa(id: string, name: string, element: Element4): AbilityDef {
     flags: ['reflectable'],
     canReflect: true,
     canMiss: false,
-    extra: { distinctTargetsPerHit: true },
+    extra: { scriptAims: true },
     messageTemplate: `{user} casts ${name}`,
   };
 }
@@ -136,6 +135,7 @@ export const natusBreak: AbilityDef = {
   flags: ['reflectable'],
   canReflect: true,
   canMiss: false,
+  extra: { scriptAims: true },
   messageTemplate: '{user} casts Break',
 };
 
@@ -169,6 +169,7 @@ export const natusFlare: AbilityDef = {
   shatterChance: 10, // §3.1 [decompiled]
   canReflect: true,
   canMiss: false,
+  extra: { scriptAims: true },
   messageTemplate: '{user} casts Flare',
 };
 
@@ -243,6 +244,7 @@ export const mortibodyShatteringClaw: AbilityDef = {
   flags: ['shatter', 'can-target-dead'],
   shatterChance: 90, // §3.2 [verified: 2 sources]
   accuracy: 100, // §3.2 [decompiled]
+  extra: { scriptAims: true },
   messageTemplate: '{user} uses Shattering Claw',
 };
 
@@ -265,9 +267,9 @@ export const DESPERADO_STRIPS: readonly FFXStatusId[] = [
  * and it strips Shell, Protect, Reflect, the four Nul spells, Regen and Haste
  * [§3.2 decompiled + wiki (same 468-529, same list), verified: 2 sources].
  *
- * **When** it fires is the AI's rule, not this row's: Mortibody's next action
- * once all three active members are Hasted [§4.3, verified: 3 sources] —
- * `ai/seymour-natus-rules.ts#desperadoDue`.
+ * **When** it fires is the AI's rule, not this row's: the buff-count ladder of Mortibody's script (re-parity;
+ * `ai/seymour-natus-rules.ts#desperadoScore`, `research/re-ffx-ai-seymour.md` section 4.5), which Haste on all three
+ * active members always satisfies [§4.3, verified: 3 sources].
  */
 export const mortibodyDesperado: AbilityDef = {
   id: MORTIBODY_DESPERADO,

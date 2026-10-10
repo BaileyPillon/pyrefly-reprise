@@ -9,6 +9,7 @@ import type { AbilityDef, CombatantId, FFXCombatant, Targeting } from '../common
 import {
   type Ctx,
   alliesOf,
+  canQueueAction,
   enemies,
   friendlies,
   has,
@@ -19,6 +20,7 @@ import {
   targetable,
   tryActor,
 } from './state.ts';
+import { isReachZero } from './reach.ts';
 
 /**
  * **Reach — the airship range gate.** FFX only.
@@ -72,6 +74,8 @@ export function reachesFoesAtRange(ctx: Ctx, user: FFXCombatant, def: AbilityDef
   if (def.category === 'blackmagic' || def.category === 'whitemagic') return true;
   if (def.formula === 'lancet') return true;
   if (def.damageType === 'physical' && ctx.rt.actors.get(user.id)?.rangedWeapon === true) return true;
+  // Overdrive Sin after his second pull (BattleDistance 1, re-parity D-32): only the reach-0 commands stay out of range.
+  if (ctx.state.flags['airship.distance'] === 1) return !isReachZero(def);
   return false;
 }
 
@@ -195,6 +199,15 @@ export function resolveTargets(
   const randomFoes = foes.filter(randomPickable);
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && (def.flags.includes('can-target-dead') || isAlive(c)));
 
+  // A scripted group (the game's `performCommand(group, command)`): exactly the combatants the script named, whatever the
+  // row's own single or multi flag says [re-ffx-ai-yunalesca-bfa §1.4]. Only rows with `extra.groupTarget`: Yu Yevon's
+  // Gravija (the front line and himself, not his Pagodas), his and the Pagodas' Osmose, and the possessed aeons' specials
+  // the script aims at one actor or at the whole front line. It comes before the switch because the multi rows
+  // ('all', 'all-enemies') would otherwise ignore the list.
+  if (def.extra?.['groupTarget'] === true && chosen.length > 0) {
+    return chosen.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && onField(c) && isAlive(c));
+  }
+
   switch (def.targeting) {
     case 'self':
       return [user];
@@ -230,31 +243,55 @@ export function resolveTargets(
 }
 
 /**
- * The target of hit `h` of a per-hit-random action.
+ * The target of hit `h` of a per-hit-random action: a fresh pick from the same pool as
+ * `resolveTargets(ctx, user, def, [])`, one RNG draw.
  *
- * Identical to `resolveTargets(ctx, user, def, [])` — the same single RNG pick
- * from the same pool — for every record **without** `extra.distinctTargetsPerHit`.
- * With it, a hit after the first avoids the member the previous hit picked
- * when anyone else is standing, and falls back to the full pool when nobody
- * is: Seymour Natus's Multi-ra "targeting two different party members if
- * possible" [ffx-seymour-natus-highbridge §3.1, the preflight review's
- * correction, single source: wiki]. FFX only; Chapter VII's Multi-ra has no
- * such key and keeps its two independent picks (Macalania C-3).
+ * A row the script aims (`extra.scriptAims`) never comes through here: its hits go to the targets the script
+ * named, one by one ({@link aimedTargetForHit}).
  */
-export function nextHitTargets(
-  ctx: Ctx,
-  user: FFXCombatant,
-  def: AbilityDef,
-  hit: number,
-  previous: readonly FFXCombatant[],
-): FFXCombatant[] {
-  if (hit > 0 && def.extra?.['distinctTargetsPerHit'] === true && def.targeting === 'random-enemy') {
-    const crosses = reachesFoesAtRange(ctx, user, def);
-    const foes = crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : [];
-    const fresh = foes.filter((c) => randomPickable(c) && !previous.some((p) => p.id === c.id));
-    if (fresh.length > 0) return [ctx.rng.pick(fresh)];
-  }
+export function nextHitTargets(ctx: Ctx, user: FFXCombatant, def: AbilityDef): FFXCombatant[] {
   return resolveTargets(ctx, user, def, []);
+}
+
+/**
+ * **A row whose script names who it hits** (`AbilityDef.extra.scriptAims`; re-parity, FFX only).
+ *
+ * The record says "random character", but the game's scripts do not leave it to the record: they pick the victim
+ * themselves (`findMatchingChr`, or one of the three party slots) and queue the command *at* that actor
+ * (`performCommand(target, command)`), so the hits go where the script aimed them. A row that sets the key is
+ * resolved that way: hit `h` lands on the `h`-th target the command names (the last one when it names fewer), and
+ * a command that names nobody is the record's own random pick, as before. See {@link aimedTargetForHit}.
+ */
+export function scriptAimsAt(def: AbilityDef): boolean {
+  return def.extra?.['scriptAims'] === true;
+}
+
+/**
+ * Whom hit `hit` of a script-aimed row lands on: the target the command named for it, **if the game's queue would
+ * accept it** — on the field, targetable, and alive unless the command can target the dead (the exe's queue,
+ * `FUN_007ac9c0`, rejects any other with a "TARGET ERROR" and that command is dropped). Otherwise nobody: the hit is
+ * lost, which is how Natus's script loses half a Multi-ra when it aims the second half at a fallen third party slot.
+ */
+export function aimedTargetForHit(
+  ctx: Ctx,
+  def: AbilityDef,
+  chosen: readonly CombatantId[],
+  hit: number,
+): FFXCombatant[] {
+  const id = chosen[Math.min(hit, chosen.length - 1)];
+  const c = id === undefined ? undefined : tryActor(ctx, id);
+  if (!c || !onField(c) || !targetable(c)) return [];
+  if (!isAlive(c) && !def.flags.includes('can-target-dead')) return [];
+  return [c];
+}
+
+/** Every distinct target a script-aimed command names that the queue would accept (the `onTargeted` set). */
+export function aimedTargets(ctx: Ctx, def: AbilityDef, chosen: readonly CombatantId[]): FFXCombatant[] {
+  const out: FFXCombatant[] = [];
+  for (let h = 0; h < chosen.length; h++) {
+    for (const c of aimedTargetForHit(ctx, def, chosen, h)) if (!out.includes(c)) out.push(c);
+  }
+  return out;
 }
 
 /** True for the action class that either side's Cover intercepts. */
@@ -272,19 +309,23 @@ function coverable(def: AbilityDef): boolean {
  * are intercepted by a Guardian. **Magic is never covered.**"
  * [ffx-seymour-anima-macalania §2.3, verified: 2 sources]
  *
- * The relationship lives on {@link ActorRuntime.coversAllyId}, which the
- * encounter's own script sets at setup — no contract field, and no shipped
- * enemy outside that encounter sets it, so nothing else changes behaviour.
- * A dead coverer stops covering for free, because only living enemies are
- * considered.
+ * **The game's rule** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; the exe's cover routine 0x78eef0,
+ * run for every single-target physical command): the target is handed to **an ally that holds the Guard status and
+ * can act**, the one with the most HP when several do. Seymour's script is what puts the Guard on a Guardian: when
+ * a physical command names him, on one chosen by a coin that skips a sleeper (`ai/macalania-seymour.ts`); the
+ * Guardian's own script takes it off when it is next hit. The mark is {@link ActorRuntime.guardMark}. A holder
+ * that dies, falls asleep or is Threatened stops covering by that, and nobody else is ever a cover: no other
+ * enemy sets the mark, so no other battle changes.
  */
 function coverOf(ctx: Ctx, target: FFXCombatant, def: AbilityDef): FFXCombatant {
   if (!coverable(def) || target.side !== 'enemy') return target;
+  let best: FFXCombatant | undefined;
   for (const c of livingEnemies(ctx)) {
-    if (c.id === target.id || !targetable(c)) continue;
-    if (ctx.rt.actors.get(c.id)?.coversAllyId === target.id) return c;
+    if (c.id === target.id || !canQueueAction(c)) continue;
+    if (ctx.rt.actors.get(c.id)?.guardMark !== true) continue;
+    if (!best || c.hp > best.hp) best = c;
   }
-  return target;
+  return best ?? target;
 }
 
 /**

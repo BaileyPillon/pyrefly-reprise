@@ -1,0 +1,1674 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-07T04:00:15.093Z",
+ "build": {
+  "mainSha": "002928c4"
+ },
+ "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "The four lanes' claims reproduce on the production build, measured against live 39.1's own bytes, and nothing they touch got worse: Yuna stays whole through Bahamut's reveal in every one of 15 candidate runs from 1280x720 to 2560x1080 and with REDUCE MOTION on (smallest share 1.00; live 0.42 to 0.97 over 12 runs), Yojimbo holds one size at all seven menus (group scale 1.163, 251 to 262 px; live 216 to 285) and Bahamut too at 1600x900 (1.387 at all seven menus; live 1.00 to 1.408), a Trema Retry from one girl standing restores all three girls by Enter and by mouse (live replays Yuna alone) while two standing replay as entered and the first entry is unchanged, and REDUCE MOTION shortens the lunge (Chapter I 4.29 to 2.84, Chapter IV 3.04 to 2.14) with the setting off identical to live. At a 21:9 window the first plan is a coin flip between two sizes in both builds and the lock holds the candidate's (F392-06, polish; whole at every menu).",
+  "No critical defect and no regression found: all 18 chapters ran from the title to their outcome by real keys with 0 route failures, 0 console errors and 0 failed requests (15 victories cleared and still cleared after a reload; 3 defeats reached the results screen, one of them, Chapter XII, lost in its first run and won on the rerun); CHK-026 passes in 17 of 18 chapters (Chapters I and VII fixed against live), CHK-027 matches live's aggregate (0.58 snaps a minute on both, 1,102 jerks of 40 px or more against 1,092); the full unit suite passes (900 files, 13,326 tests); every painting, audio file, font and fx file is byte-identical to 39.1 and the art gates pass in Chromium and WebKit.",
+  "Disclosed, pre-existing and identical on live: F392-01 (CHK-027: KO cuts, jerks and double images in every chapter) and F392-03 (phone, Chapter IX: the Zanmato gauge card sits over Yojimbo, Daigoro and Ginnem). changedArea is FAIL because the size lane's own target, CHK-026 in all 18 chapters, is not met (Chapter V's two KO swaps, an invisible 0.4 px head step, F392-02) and CHK-027 fails everywhere; ship is SHIP because this build is better than live and nothing regressed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "The battle's first menu fills the window with no horizontal overflow at 1600x900, 2000x1012 and 390x844 in Chapters I and IV (and 1600x900 and 390x844 in Chapter IX), and the pause (real Esc, and a click on the PAUSE chip) owns the whole viewport (root 0,0,W,H; overflow none) at 1600x900, 2000x1012 and 390x844 in Chapters I and IV: the candidate's measures equal live 39.1's. The 463 captures the 18 route runs indexed (title, board, prep, scenes, menus, pause, results) were all asserted to the screen they show, none with a stale title root.",
+   "where": "both; Ch I, IV, IX; battle menu and pause",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/layout/layout-seymour-flux-cand-2000x1012.png",
+    "critic/reviews/002928c4-focused/results/layout/layout-ffx2-bahamut-cand-2000x1012.png",
+    "critic/reviews/002928c4-focused/results/layout/layout-ffx2-bahamut-cand-390x844-touch.png",
+    "critic/reviews/002928c4-focused/results/pause/pause-seymour-flux-cand-1600x900.png",
+    "critic/reviews/002928c4-focused/results/pause/pause-ffx2-bahamut-cand-2000x1012.png",
+    "critic/reviews/002928c4-focused/results/pause/pause-seymour-flux-cand-390x844-touch.png",
+    "critic/reviews/002928c4-focused/continuity/index.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 12,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-003",
+   "result": "FAIL",
+   "reason": "Smallest effective text, read off every text node under #ui at the first menu: 14.0 px in Chapters I and IV at 1600x900, 2000x1012 and 390x844, and 14 px in the pause at the three sizes, but three Zanmato-gauge band labels in Chapter IX (Daigoro, + Kozuka, + Wakizashi) draw at 12.2 px at 1600x900. Live 39.1 draws the same three at 12.2 px (identical measure): pre-existing, not introduced, polish (F392-04). Nothing clipped or truncated apart from the phone's icon-only PAUSE chip (its label is hidden by design, both builds).",
+   "where": "both; Ch I, IV, IX; battle menu and pause",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-cand-1600x900.json",
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-live391-1600x900.json",
+    "critic/reviews/002928c4-focused/results/pause/pause-seymour-flux-cand-1600x900.json",
+    "critic/reviews/002928c4-focused/results/pause/pause-ffx2-bahamut-cand-390x844-touch.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "Overlays leave with their decision on the paths the changed flows use: the first-turn coach mark takes Enter and is gone; in Chapters I, II, VII, IX and XII the route chose Attack, saw the target cursor and Escaped back to the menu with 0 reticles left (afterTargetCancel); Esc and P open and close the pause in all 18 runs and the chip opens it by mouse; the Trema defeat card goes away on RETRY (Enter and mouse) and the retry opens on the battle start card. The change adds or removes no overlay.",
+   "where": "both; route runs",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/seymour-flux-win-002928c4/16b-after-cancel.png",
+    "critic/reviews/002928c4-focused/results/mouse/mouse-pause-seymour-flux-cand-1600x900-4-back.png",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2-05-retry-open.png",
+    "critic/reviews/002928c4-focused/results/route-summary.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Panels against the painted actors, measured by projecting every figure's quad through the live camera and intersecting it with each HUD panel, candidate against live 39.1's bytes at the first menu: Chapter I (1600x900, 2000x1012, 390x844) identical (Tidus 34 percent under the command stack in both: the declared overlap); Chapter IV within 7 to 11 px of sway; Chapter IX the figures move with the held boss size and no panel covers more of any figure than on live. No new overlap.",
+   "where": "both; Ch I, IV, IX",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/layout/layout-diff.txt",
+    "critic/reviews/002928c4-focused/results/layout/layout-seymour-flux-cand-1600x900.png",
+    "critic/reviews/002928c4-focused/results/layout/layout-ffx2-bahamut-cand-1600x900.png",
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-cand-1600x900.png"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "No label truncated (text-overflow engaged) at any measured first menu: Seymour Flux, Mortiorchis, Yojimbo, Bahamut and the party names read in full at 1600x900, 2000x1012 and 390x844; counts equal live's.",
+   "where": "both; Ch I, IV, IX",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/layout/summary.txt"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Target selection read on a screenshot of the candidate (Chapter I, ATTACK chosen by real Enter): brackets and glow on Mortiorchis, the pointer, the TARGET Mortiorchis title, its name tag and the other panels dimmed; Esc returned to the menu with no reticle left in every chapter that opens one (afterTargetCancel). The targeting code is not touched by this release.",
+   "where": "FFX; Ch I and the route runs",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/seymour-flux-win-002928c4/16-target-single.png",
+    "critic/reviews/002928c4-focused/results/route-summary.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-011",
+   "result": "FAIL",
+   "reason": "Desktop: every enemy figure of the first menu is wholly in the frame (inView 1) at 1600x900 and 2000x1012 in Chapters I, IV and IX, and Yojimbo, Bahamut, Natus and Evrae keep their size from the first menu to the last (see CHK-021). Phone, Chapter IX: the Zanmato gauge card covers Yojimbo, Daigoro and Ginnem (the card stands over the figures at 390x844; only a faint ghost of Yojimbo's hat shows above it): live 39.1 is identical, so it is pre-existing and was reported by the boss-scale lane without a fix (F392-03).",
+   "where": "FFX Ch IX phone; both elsewhere",
+   "evidence": [
+    "critic/reviews/002928c4-focused/frames/phone-yojimbo-gauge-card-cand-vs-live391.jpg",
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-cand-390x844-touch.png",
+    "critic/reviews/002928c4-focused/results/boss-scale/summary.txt"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "No painting changed: the shipped manifest differs from live 39.1's in exactly three files (index.html, assets/index-BFTPT4o0.js, assets/worker-BRwmiwTC.js); all 3,845 art, audio, font and fx files are byte-identical. What changed is how approved paintings are sized: Yunalesca's hurt, attack and cast, drawn 23 to 33 percent smaller so that her head matches the idle's, read at gameplay size beside live 39.1's (a visible change that needs Bailey's eye, F392-07), and Yuna's and Rikku's victory and Yuna's critical, 1.5 to 2.5 percent larger.",
+   "where": "FFX only; Ch II, VII",
+   "evidence": [
+    "critic/reviews/002928c4-focused/frames/yunalesca-poses-cand-vs-live391.jpg",
+    "critic/reviews/002928c4-focused/results/gallery/cand-yunalesca.json",
+    "critic/reviews/002928c4-focused/results/artifact-diff.txt",
+    "critic/reviews/002928c4-focused/logs/pose-scale-check.log"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed",
+   "game": "ffx",
+   "chapter": "yunalesca; seymour-anima-macalania"
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "Posed and facing for the shot: Yunalesca's four poses stand on the idle's stance and face the party at the registered stances (gallery, 1:1), no pose mirrored or turned; across the 18 runs no standing figure's feet moved more than 1.5 px at a swap (limit 2 px), the tolerance for a pose swap being the check's own. Nothing changed for FFX-2 (no FFX-2 registration, sprite or manifest changed).",
+   "where": "both; harness swaps, Ch II poses",
+   "evidence": [
+    "critic/reviews/002928c4-focused/frames/yunalesca-poses-cand-vs-live391.jpg",
+    "critic/reviews/002928c4-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every flow was driven by real input from the title: Enter through the briefing, the board walked by ArrowRight/ArrowLeft to the card, Enter into prep, the scene read at one Enter a second or skipped by a held Enter, the menu, Attack and the target by key, Esc and P and a mouse click on the PAUSE chip to open the pause, a mouse click on the OPTIONS tab and on the REDUCE MOTION row (saved setting true), the same row by ArrowRight, and on the Trema defeat card both Enter and a mouse click on RETRY. The debug API set only the seed, the staged KO state at the end of Paragon, the auto tactic for fiend strikes and read-only probes; each is labelled in the records.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/mouse/mouse-pause-seymour-flux-cand-1600x900.json",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2.json",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2-click.json",
+    "critic/reviews/002928c4-focused/results/lunge/lunge-seymour-flux-cand-pause-1600x900.json"
+   ],
+   "mode": "automated (Playwright keyboard and mouse)",
+   "mandatory": true,
+   "minutes": 20,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture of mine asserts screen (and awaitingMenu, targeting where it matters) before it shoots, and an unasserted capture is not kept; my first Trema run threw on a null state, its screenshot was deleted and the script rewritten. The route driver's index of 463 captures has 0 unverified entries and no title root on any other screen.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/index.json",
+    "critic/reviews/002928c4-focused/scripts/fr-lib.mjs"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Candidate review before the deploy; live verification of the exact artifact is the live review's obligation. Recorded here for it: artifactHash 6f50f6a2d119bc8c50028f996304a4ba15b7f5b1588cae89a17d0d458f0ae4c4, 3848 files, 8324.6 MB; against live 39.1 only index.html, assets/index-BFTPT4o0.js (for index-B6DQPYhY.js) and assets/worker-BRwmiwTC.js (for worker-wevUmTGY.js) differ; the two flat-colour images the manifest lists as problems are the policy's intentionalFlatImages (Paine's empty eye-catch layers), identical in 39.1.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/002928c4-focused/artifact-manifest.json",
+    "critic/reviews/002928c4-focused/logs/artifact-manifest.log",
+    "critic/reviews/002928c4-focused/results/artifact-diff.txt"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 8,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The shared changes were exercised in both games and the same screens compared: REDUCE MOTION's lunge in Chapter I (FFX party and fiends) and Chapter IV (FFX-2 fiend; the girls have no run-in under it), the boss size lock in Chapter IX (FFX) and Chapter IV (FFX-2), the first menu and the pause in both; the FFX and FFX-2 first menus and pauses measure the same as live's.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/lunge/summary.txt",
+    "critic/reviews/002928c4-focused/results/boss-scale/summary.txt",
+    "critic/reviews/002928c4-focused/results/layout/layout-diff.txt"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Each change in its game, present where it should be and absent where it should not: REDUCE MOTION lunge, both games (shortened in Chapter I and in Chapter IV for the fiend; the FFX-2 girls play the house 1.4 in place, no run-in, as MotionGate always did). Bahamut reveal, FFX-2 desktop only (Yuna whole in Chapter IV at five sizes; Chapter I's opening camera z min 7.53 against live's 7.55 and the same opening length, Chapter IV on the phone identical to live's; research/ffx-vs-ffx2-presentation.md 2.3 marks the opening camera as ours, staged differently per game). Yojimbo's 1.15, FFX only (research/ffx-yojimbo.md names no on-screen proportion: Bailey's pick, D-500); the per-phase size lock, both: Yojimbo (FFX) and Bahamut (FFX-2) hold one size, Natus and Evrae are unchanged to within 1 px at their first three menus; at 2560x1080 the first plan is a coin flip between two sizes that the lock then holds, both whole at every menu (F392-06, polish). Trema's Retry rule, FFX-2 only (hopelessRetry is named by no other formation: grep of src/). Registration values, FFX only (the diff holds no FFX-2 registration, sprite or manifest change).",
+   "where": "both; per change",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/reveal/summary.tsv",
+    "critic/reviews/002928c4-focused/results/reveal-extra/seymour-flux-cand-1600x900.json",
+    "critic/reviews/002928c4-focused/results/boss-scale/summary.txt",
+    "critic/reviews/002928c4-focused/results/lunge/summary.txt",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2.json"
+   ],
+   "mode": "automated + visual",
+   "mandatory": true,
+   "minutes": 10,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-012",
+   "result": "PASS",
+   "reason": "The shipped art decodes and loads: art-derive verify (exact) PASS, 2,874 masters (593 WebP, 2,281 PNG, 2,704 pixel-compared), 0 problems; art-derive audit PASS (607 literal art names in the bundle, 0 dangling); art-browser-load PASS, 2,874 art files and 44 other images in Chromium 153 and WebKit 26.6, 0 failed, living portrait plates 20 of 20. No painting differs from live 39.1's (3,845 files byte-identical).",
+   "where": "both; the whole shipped set",
+   "evidence": [
+    "critic/reviews/002928c4-focused/logs/art-gates.log",
+    "critic/reviews/002928c4-focused/logs/art-browser-load.log",
+    "critic/reviews/002928c4-focused/results/art-browser-load.json",
+    "critic/reviews/002928c4-focused/results/artifact-diff.txt"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 8,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "No shipped path is dangling: art-derive audit found 0 names the build does not hold; no 404, no HTML served as an image or audio, no console error in any of my runs or the 18 route runs.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/002928c4-focused/logs/art-gates.log",
+    "critic/reviews/002928c4-focused/results/route-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "The artifact manifest decoded every image and audio file (3848 files, 8325 MB); its only two problems are Paine's two empty eye-catch layers, the policy's intentionalFlatImages, identical in 39.1's manifest.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/002928c4-focused/artifact-manifest.json",
+    "critic/reviews/002928c4-focused/logs/artifact-manifest.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 7,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "All 18 chapters ran from the title to their outcome by real keys with 0 route failures, 0 console errors, 0 failed requests: 15 victories went results, board, the chapter shown cleared and still cleared after a page reload (save kept); 3 defeats (ffx2-trema, seymour-omnis, yunalesca: II and XIII lose on live 39.1 as well, XII lost in its first run here, won on live 39.1 and won on my rerun: a real-time fight's run-to-run spread, numbers in F392-01) reached the defeat results screen. The staged Trema loss reached its defeat card and RETRY returned to Trema's battle start with no prep and no scene, by Enter and by mouse (CHK-023).",
+   "where": "both; every chapter",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/route-summary.json",
+    "critic/reviews/002928c4-focused/continuity/index.json",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2.json",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2-click.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Each change was seen working through the real presentation path, not only in its unit test: PaintedActor.lunge's asked distance, recorded on 22 real strikes, follows the player's REDUCE MOTION (Chapter I: 4.29 off, 2.84 on by the pause row; Chapter IV: Bahamut 3.04 off, 2.14 on, girls 0.60 after a run-in off, 1.40 in place on); the size lock is on the stage (Yojimbo group scale 1.163 and Bahamut 1.387 at all seven menus); the reveal keeps Yuna whole in the page's frames; and Trema's restored Retry comes out of the real GameFlow and engine in the browser (all three girls up at full HP and MP, Protect and Shell kept; live 39.1 replays Yuna alone).",
+   "where": "both; per change",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/lunge/summary.txt",
+    "critic/reviews/002928c4-focused/results/boss-scale/summary.txt",
+    "critic/reviews/002928c4-focused/results/reveal/summary.tsv",
+    "critic/reviews/002928c4-focused/results/trema/trema-live391-ko2.json",
+    "critic/reviews/002928c4-focused/results/trema/trema-cand-ko2.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed"
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "17 of 18 chapters PASS on this candidate, 1 FAILS: Chapter ffx2-vegnagun-shuyin (yuna hurt>ko x1.0405 31.5px; yuna ko>idle x0.9616 31.4px). Aggregate over the 18 chapters (164 minutes of battle, 11236 swaps, 56.9 to 59.7 fps): 2 swaps over the 3 percent head tolerance (live 39.1 round 23: 5), 0 standing feet moves over 2 px (live: 1, Chapter I 4.2 px), worst registered head 4 percent (live 5.2). Fixed against live: Chapter I (the swap that read 4.2 px reads 1.0 px), Chapter VII (Yuna and Rikku idle to victory x0.948 and x0.967 on live, x0.977 and x0.984 here), Chapter II (Yunalesca now judged by her registered head: worst 1.4 percent). The failing KO swaps follow the stage camera, not the table (the size lane's chart, 165 swaps): Chapter V's two are the same kind and size the lane saw (x1.03 to x1.04); Chapters III and XVII passed here and failed in the lane's runs (live round 23 failed XVII).",
+   "where": "both; all 18 chapters, battle, 1600x900",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/continuity-summary.json",
+    "critic/reviews/002928c4-focused/results/continuity-tables/compare.json",
+    "critic/reviews/002928c4-focused/results/continuity-tables/candidate-002928c4.txt",
+    "critic/reviews/002928c4-focused/continuity/ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1092-yuna-hurt-ko.jpg"
+   ],
+   "mode": "automated (continuity harness, real keys, GPU)",
+   "mandatory": true,
+   "minutes": 60,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed",
+   "game": "both",
+   "chapter": "all 18"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "FAILS in all 18 chapters, as on live 39.1: aggregate 0.58 snaps per minute of battle against 0.58 on live (limit 0.25; 96 snaps, nearly all a KO or defeat cut from standing to lying in one frame), 1102 jerks of 40 px or more against 1092 on live (worst 806.6 px against 807), 153 swaps with a double image of 0.40 or more against 161 (worst 0.463 against 0.446). Chapter by chapter the candidate is inside the run-to-run spread of live (the lane's own run on b8fcae0b and mine agree to the digit in Chapters I, II, IV, IX, X, XIV, XVIII); the one chapter that reads worse, XII, lost here and won on live (more KOs, a rerun of the chapter on a quieter machine won in 121 turns with live's numbers: 0.08 snaps a minute, worst jerk 103.9 px against 104.7). Nothing this release changes touches the KO cut or the crossfades, and Bailey's own sub-score caps are not at issue (a focused review carries none).",
+   "where": "both; all 18 chapters",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/continuity-summary.json",
+    "critic/reviews/002928c4-focused/results/continuity-tables/compare.json",
+    "critic/reviews/002928c4-focused/continuity/ffx2-bahamut-win-002928c4/continuity/strips/jerk-000-bahamut.jpg",
+    "critic/reviews/002928c4-focused/continuity/ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1092-yuna-hurt-ko.jpg"
+   ],
+   "mode": "automated (continuity harness, real keys, GPU)",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "002928c4 / dist-gate index-BFTPT4o0.js",
+   "targetVersion": "1c890c15a548a66bfb278580e72d8c228da334a730a5d03cd98dd8ea1b4948e1",
+   "environment": "candidate D:/pyrefly-r39-int 002928c4 (branch r392-int), production build dist-gate (BASE_PATH=/, bundle index-BFTPT4o0.js, 3848 files, artifactHash 6f50f6a2d119bc8c), vite preview 127.0.0.1:5617; \"live 39.1 bytes\" = dist-release (bundle index-B6DQPYhY.js, byte-identical to what https://echoesofspira.com serves) on 127.0.0.1:5618; headless Playwright Chromium, PYREFLY_BROWSER=gpu (RTX 5070 Ti); both previews stopped by PID, ports confirmed closed",
+   "game": "both",
+   "chapter": "all 18"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 488.6,
+    "swaps": 436,
+    "snapsPerMinute": 0.98,
+    "maxHeadJumpPct": 12.6,
+    "maxFeetShiftPx": 1,
+    "worstJerkPx": 348.8,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-flux-win-002928c4/continuity/strips/swap-289-yuna-idle-ko.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-062-tidus-hurt-ko.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-198-tidus-idle-ko.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-288-yuna-ko-idle.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-247-tidus-ko-idle.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-007-yuna-hurt-critical.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-280-yuna-critical-hurt.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-028-kimahri-idle-ready.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-150-auron-attack-follow.jpg",
+     "seymour-flux-win-002928c4/continuity/strips/swap-169-yuna-ready-item.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "yunalesca",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 633.8,
+    "swaps": 790,
+    "snapsPerMinute": 0.47,
+    "maxHeadJumpPct": 25.9,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 320.1,
+    "strips": 19,
+    "worstSwapStrips": [
+     "yunalesca-win-002928c4/continuity/strips/swap-862-tidus-hurt-ko.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-760-tidus-idle-ko.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-699-shiva-hurt-ko.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-847-auron-idle-ko.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-763-tidus-ko-idle.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-655-valefor-hurt-ko.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-203-tidus-attack-follow.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-255-tidus-ready-attack.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-541-yuna-hurt-critical.jpg",
+     "yunalesca-win-002928c4/continuity/strips/swap-657-yuna-critical-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1380.7,
+    "swaps": 1484,
+    "snapsPerMinute": 0.61,
+    "maxHeadJumpPct": 26.1,
+    "maxFeetShiftPx": 1.5,
+    "worstJerkPx": 556.8,
+    "strips": 10,
+    "worstSwapStrips": [
+     "braskas-final-aeon-win-002928c4/continuity/strips/swap-235-ifrit-hurt-ko.jpg",
+     "braskas-final-aeon-win-002928c4/continuity/strips/swap-450-shiva-hurt-ko.jpg",
+     "braskas-final-aeon-win-002928c4/continuity/strips/swap-520-valefor-hurt-ko.jpg",
+     "braskas-final-aeon-win-002928c4/continuity/strips/swap-918-possessed-valefor-hurt-ko.jpg",
+     "braskas-final-aeon-win-002928c4/continuity/strips/swap-1140-yuna-hurt-critical.jpg",
+     "braskas-final-aeon-win-002928c4/continuity/strips/swap-987-tidus-attack-follow.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 353.4,
+    "swaps": 380,
+    "snapsPerMinute": 0.17,
+    "maxHeadJumpPct": 9,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 172.6,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-382-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-365-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-330-paine-od-x2-warrior-armor-break-hurt.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-333-paine-hurt-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-295-paine-od-x2-warrior-armor-break-idle.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-289-paine-od-x2-warrior-armor-break-ready.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-364-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-273-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-181-rikku-ready-hurt.jpg",
+     "ffx2-bahamut-win-002928c4/continuity/strips/swap-186-rikku-hurt-ready.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1447.6,
+    "swaps": 1307,
+    "snapsPerMinute": 0.29,
+    "maxHeadJumpPct": 9.5,
+    "maxFeetShiftPx": 0.7,
+    "worstJerkPx": 806.6,
+    "strips": 19,
+    "worstSwapStrips": [
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1092-yuna-hurt-ko.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1116-yuna-ko-idle.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-605-paine-hurt-ready.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-603-paine-ready-hurt.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-487-rikku-ready-attack.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-389-rikku-attack-follow.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1098-rikku-hurt-ready.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1096-rikku-ready-hurt.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1113-rikku-idle-hurt.jpg",
+     "ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1285-rikku-hurt-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-leblanc",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 440.5,
+    "swaps": 600,
+    "snapsPerMinute": 0.27,
+    "maxHeadJumpPct": 28.8,
+    "maxFeetShiftPx": 0.6,
+    "worstJerkPx": 260.4,
+    "strips": 19,
+    "worstSwapStrips": [
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-041-fem-goon-hurt-ko.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-045-dr-goon-hurt-ko.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-039-fem-goon-cast-hurt.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-005-fem-goon-idle-cast.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-011-fem-goon-cast-idle.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-075-paine-item-ready.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-364-paine-follow-idle.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-420-paine-attack-follow.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-515-paine-od-x2-warrior-armor-break-hurt.jpg",
+     "ffx2-leblanc-win-002928c4/continuity/strips/swap-476-paine-od-x2-warrior-armor-break-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-anima-macalania",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 346.9,
+    "swaps": 378,
+    "snapsPerMinute": 1.04,
+    "maxHeadJumpPct": 25.7,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 214.5,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-290-shiva-hurt-ko.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-347-rikku-follow-idle.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-134-valefor-hurt-ko.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-052-rikku-attack-follow.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-007-yuna-critical-hurt.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-008-yuna-hurt-critical.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-382-seymour-macalania-idle-ko.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-384-rikku-idle-victory.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-282-anima-macalania-idle-ko.jpg",
+     "seymour-anima-macalania-win-002928c4/continuity/strips/swap-014-rikku-ready-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "evrae-airship",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 337.6,
+    "swaps": 458,
+    "snapsPerMinute": 0.53,
+    "maxHeadJumpPct": 1.6,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 266,
+    "strips": 20,
+    "worstSwapStrips": [
+     "evrae-airship-win-002928c4/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-320-tidus-idle-ko.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-014-rikku-ko-idle.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-006-rikku-follow-idle.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-319-tidus-ko-idle.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-324-tidus-ko-critical.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-264-kimahri-hurt-idle.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-416-kimahri-idle-hurt.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-004-rikku-attack-follow.jpg",
+     "evrae-airship-win-002928c4/continuity/strips/swap-472-kimahri-idle-victory.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "yojimbo-cavern",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 125.7,
+    "swaps": 119,
+    "snapsPerMinute": 0.48,
+    "maxHeadJumpPct": 4.8,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 75.5,
+    "strips": 20,
+    "worstSwapStrips": [
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-095-lulu-hurt-ko.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-024-kimahri-hurt-idle.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-003-kimahri-idle-hurt.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-118-kimahri-idle-victory.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-082-yuna-critical-hurt.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-083-yuna-hurt-critical.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-060-kimahri-idle-ready.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-031-yuna-ready-item.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-098-kimahri-ready-item.jpg",
+     "yojimbo-cavern-win-002928c4/continuity/strips/swap-062-yojimbo-idle-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-natus",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 215.3,
+    "swaps": 271,
+    "snapsPerMinute": 0.28,
+    "maxHeadJumpPct": 16.7,
+    "maxFeetShiftPx": 0.7,
+    "worstJerkPx": 161.9,
+    "strips": 19,
+    "worstSwapStrips": [
+     "seymour-natus-win-002928c4/continuity/strips/swap-276-seymour-natus-idle-ko.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-275-seymour-natus-ko-idle.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-006-kimahri-idle-hurt.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-009-kimahri-hurt-idle.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-222-tidus-attack-follow.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-121-tidus-ready-attack.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-194-yuna-hurt-critical.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-010-kimahri-idle-ready.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-146-auron-attack-follow.jpg",
+     "seymour-natus-win-002928c4/continuity/strips/swap-135-yuna-ready-item.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-fallen-aeons",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 916.8,
+    "swaps": 924,
+    "snapsPerMinute": 0.39,
+    "maxHeadJumpPct": 16.1,
+    "maxFeetShiftPx": 1.1,
+    "worstJerkPx": 287.8,
+    "strips": 19,
+    "worstSwapStrips": [
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-482-sandy-hurt-ko.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-517-cindy-hurt-ko.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-299-x2-shiva-hurt-ko.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-196-yuna-hurt-ko.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-611-mindy-hurt-ko.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-203-yuna-ko-idle.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-577-paine-ready-hurt.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-842-paine-attack-idle.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-861-yuna-idle-hurt.jpg",
+     "ffx2-fallen-aeons-win-002928c4/continuity/strips/swap-875-yuna-hurt-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-omnis",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 493.8,
+    "swaps": 600,
+    "snapsPerMinute": 0.73,
+    "maxHeadJumpPct": 8.7,
+    "maxFeetShiftPx": 1.5,
+    "worstJerkPx": 193.2,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-omnis-win-002928c4/continuity/strips/swap-603-wakka-hurt-ko.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-549-yuna-hurt-ko.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-145-auron-hurt-ko.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-126-yuna-hurt-critical.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-548-yuna-critical-hurt.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-020-wakka-idle-hurt.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-052-wakka-hurt-idle.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-136-wakka-hurt-critical.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-582-wakka-critical-hurt.jpg",
+     "seymour-omnis-win-002928c4/continuity/strips/swap-163-auron-ko-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-trema",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 355.5,
+    "swaps": 597,
+    "snapsPerMinute": 1.69,
+    "maxHeadJumpPct": 2.5,
+    "maxFeetShiftPx": 0.7,
+    "worstJerkPx": 232.9,
+    "strips": 19,
+    "worstSwapStrips": [
+     "ffx2-trema-win-002928c4/continuity/strips/swap-734-paine-hurt-ko.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-744-yuna-hurt-ko.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-155-paine-idle-idle.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-649-rikku-idle-ready.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-650-rikku-ready-idle.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-746-rikku-hurt-ko.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-382-rikku-attack-idle.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-111-yuna-ready-attack.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-279-paine-attack-follow.jpg",
+     "ffx2-trema-win-002928c4/continuity/strips/swap-015-paine-ready-attack.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "isaaru-via-purifico",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 263.6,
+    "swaps": 249,
+    "snapsPerMinute": 1.37,
+    "maxHeadJumpPct": 25.7,
+    "maxFeetShiftPx": 1.3,
+    "worstJerkPx": 190.2,
+    "strips": 20,
+    "worstSwapStrips": [
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-193-ifrit-hurt-ko.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-029-valefor-hurt-ko.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-101-pterya-hurt-ko.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-003-yuna-hurt-idle.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-001-yuna-idle-hurt.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-252-ixion-hurt-ko.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-060-grothia-hurt-ko.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-261-spathi-hurt-ko.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-043-shiva-attack-idle.jpg",
+     "isaaru-via-purifico-win-002928c4/continuity/strips/swap-259-shiva-ready-attack.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-den-of-woe",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 362.7,
+    "swaps": 448,
+    "snapsPerMinute": 0.83,
+    "maxHeadJumpPct": 3,
+    "maxFeetShiftPx": 1.2,
+    "worstJerkPx": 226.6,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-270-shade-gippal-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-457-shade-nooj-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-103-yuna-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-173-shade-baralai-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-122-yuna-ko-idle.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-152-yuna-hurt-item.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-150-yuna-item-hurt.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-321-yuna-idle-hurt.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-322-yuna-hurt-idle.jpg",
+     "ffx2-den-of-woe-win-002928c4/continuity/strips/swap-174-yuna-item-victory.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-ixion-djose",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 502.8,
+    "swaps": 446,
+    "snapsPerMinute": 0.24,
+    "maxHeadJumpPct": 16.8,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 174.7,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-025-rikku-idle-idle.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-002-rikku-idle-hurt.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-016-rikku-hurt-idle.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-214-paine-item-ready.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-447-x2-ixion-hurt-ko.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-387-paine-cast-ready.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-129-paine-ready-idle.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-128-paine-idle-ready.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-172-paine-cast-hurt.jpg",
+     "ffx2-ixion-djose-win-002928c4/continuity/strips/swap-173-paine-hurt-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "sin-fins-core",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 990.7,
+    "swaps": 1402,
+    "snapsPerMinute": 0.73,
+    "maxHeadJumpPct": 24.3,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 338.8,
+    "strips": 13,
+    "worstSwapStrips": [
+     "sin-fins-core-win-002928c4/continuity/strips/swap-526-right-fin-idle-cast.jpg",
+     "sin-fins-core-win-002928c4/continuity/strips/swap-411-left-fin-hurt-ko.jpg",
+     "sin-fins-core-win-002928c4/continuity/strips/swap-496-right-fin-cast-idle.jpg",
+     "sin-fins-core-win-002928c4/continuity/strips/swap-494-right-fin-idle-attack.jpg",
+     "sin-fins-core-win-002928c4/continuity/strips/swap-476-right-fin-attack-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 198.3,
+    "swaps": 347,
+    "snapsPerMinute": 0.3,
+    "maxHeadJumpPct": 6.2,
+    "maxFeetShiftPx": 1.1,
+    "worstJerkPx": 511.7,
+    "strips": 19,
+    "worstSwapStrips": [
+     "sin-face-win-002928c4/continuity/strips/swap-053-wakka-hurt-idle.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-102-wakka-idle-hurt.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-273-wakka-hurt-critical.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-269-wakka-critical-hurt.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-120-auron-attack-follow.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-099-lulu-idle-hurt.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-145-lulu-hurt-idle.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-389-lulu-critical-victory.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-138-auron-follow-idle.jpg",
+     "sin-face-win-002928c4/continuity/strips/swap-381-lulu-attack-critical.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 9854.3,
+  "counted": 11236,
+  "swaps": 11894,
+  "size": {
+   "judged": 10254,
+   "costumeSwaps": 9,
+   "sameArtSwaps": 973,
+   "costumeWorstHeadPct": 51.3,
+   "costumeWorstFeetPx": 32.7,
+   "maxHeadJumpPct": 28.8,
+   "maxHeadJumpPctRegistration": 4,
+   "headOverTolerance": 2,
+   "maxFeetShiftPx": 1.5,
+   "feetOverTolerance": 0,
+   "headMeasured": 10254,
+   "headRegistration": 7104,
+   "headSilhouette": 3150,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 96,
+   "snapsPerMinute": 0.58,
+   "hardCuts": 107,
+   "hardCutsPerMinute": 0.65,
+   "ghostSwaps": 9626,
+   "ghostFrames": 39973,
+   "worstGhostSeverity": 0.463,
+   "ghostOverFail": 153,
+   "jerks": 2880,
+   "worstJerkPx": 806.6,
+   "jerksOverFail": 1102,
+   "lowestIou": 0.006,
+   "maxCentroidShiftPx": 362.9
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "2 swap(s) change a head by more than the tolerance (worst 28.8 percent; 4 percent where the head is registered)"
+    ],
+    "note": "7104 of 10254 measured swaps had a registered head (tolerance 3 percent); 3150 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "0.58 snaps per minute is over 0.25",
+     "1102 jerk(s) of 40 px or more in one frame (worst 806.6 px)",
+     "153 swap(s) show a double image of severity 0.4 or more (worst 0.463)"
+    ]
+   }
+  },
+  "base": "http://127.0.0.1:5617/",
+  "date": "2026-10-07T03:07:56.561Z",
+  "liveBaseline": {
+   "source": "critic/rounds/round-23/continuity/continuity-summary.json (live 39.1, https://echoesofspira.com/, 2026-10-06)",
+   "checks": {
+    "CHK-026": {
+     "result": "FAIL",
+     "reasons": [
+      "5 swap(s) change a head by more than the tolerance (worst 28.7 percent; 5.2 percent where the head is registered)",
+      "1 swap(s) of a standing figure move its feet more than the tolerance (worst 4.2 px at 1600 wide)"
+     ],
+     "note": "7187 of 10500 measured swaps had a registered head (tolerance 3 percent); 3313 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+    },
+    "CHK-027": {
+     "result": "FAIL",
+     "reasons": [
+      "0.58 snaps per minute is over 0.25",
+      "1092 jerk(s) of 40 px or more in one frame (worst 807 px)",
+      "161 swap(s) show a double image of severity 0.4 or more (worst 0.446)"
+     ]
+    }
+   },
+   "size": {
+    "judged": 10500,
+    "costumeSwaps": 17,
+    "sameArtSwaps": 1030,
+    "costumeWorstHeadPct": 51.3,
+    "costumeWorstFeetPx": 45.6,
+    "maxHeadJumpPct": 28.7,
+    "maxHeadJumpPctRegistration": 5.2,
+    "headOverTolerance": 5,
+    "maxFeetShiftPx": 4.2,
+    "feetOverTolerance": 1,
+    "headMeasured": 10500,
+    "headRegistration": 7187,
+    "headSilhouette": 3313,
+    "headUnmeasured": 0
+   },
+   "motion": {
+    "snaps": 96,
+    "snapsPerMinute": 0.58,
+    "hardCuts": 102,
+    "hardCutsPerMinute": 0.62,
+    "ghostSwaps": 9858,
+    "ghostFrames": 41502,
+    "worstGhostSeverity": 0.446,
+    "ghostOverFail": 161,
+    "jerks": 3158,
+    "worstJerkPx": 807,
+    "jerksOverFail": 1092,
+    "lowestIou": 0.006,
+    "maxCentroidShiftPx": 361.9
+   },
+   "battleSeconds": 9948.9
+  },
+  "candidateRun": {
+   "build": "002928c4 dist-gate index-BFTPT4o0.js",
+   "size": "1600x900",
+   "seed": 1,
+   "browser": "headless Chromium, PYREFLY_BROWSER=gpu, RTX 5070 Ti",
+   "lanes": 5,
+   "fpsRange": [
+    56.9,
+    59.7
+   ]
+  },
+  "perChapter": [
+   {
+    "chapter": "seymour-flux",
+    "live": {
+     "c026": "FAIL",
+     "c027": "FAIL",
+     "snapsPerMinute": 1.01,
+     "jerks40": 31,
+     "doubleImages": 1,
+     "feetPx": 4.2,
+     "headRegPct": 2.5
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.98,
+     "jerks40": 37,
+     "doubleImages": 2,
+     "feetPx": 1,
+     "headRegPct": 2.5,
+     "fps": 58.7,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "yunalesca",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.48,
+     "jerks40": 67,
+     "doubleImages": 22,
+     "feetPx": 0.9,
+     "headRegPct": 1.3
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.47,
+     "jerks40": 92,
+     "doubleImages": 21,
+     "feetPx": 0.9,
+     "headRegPct": 1.4,
+     "fps": 58.6,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "braskas-final-aeon",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.62,
+     "jerks40": 112,
+     "doubleImages": 5,
+     "feetPx": 1.5,
+     "headRegPct": 1.8
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.61,
+     "jerks40": 120,
+     "doubleImages": 5,
+     "feetPx": 1.5,
+     "headRegPct": 2.1,
+     "fps": 59.1,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.17,
+     "jerks40": 25,
+     "doubleImages": 14,
+     "feetPx": 0.5,
+     "headRegPct": 1.1
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.17,
+     "jerks40": 23,
+     "doubleImages": 10,
+     "feetPx": 0.4,
+     "headRegPct": 0.8,
+     "fps": 57.9,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.25,
+     "jerks40": 61,
+     "doubleImages": 12,
+     "feetPx": 1.2,
+     "headRegPct": 1.3
+    },
+    "candidate": {
+     "c026": "FAIL",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.29,
+     "jerks40": 58,
+     "doubleImages": 17,
+     "feetPx": 0.7,
+     "headRegPct": 4,
+     "fps": 57.8,
+     "failing": [
+      "yuna hurt>ko x1.0405 31.5px",
+      "yuna ko>idle x0.9616 31.4px"
+     ]
+    }
+   },
+   {
+    "chapter": "ffx2-leblanc",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.28,
+     "jerks40": 34,
+     "doubleImages": 20,
+     "feetPx": 0.6,
+     "headRegPct": 1.7
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.27,
+     "jerks40": 38,
+     "doubleImages": 23,
+     "feetPx": 0.6,
+     "headRegPct": 2.4,
+     "fps": 59.7,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "seymour-anima-macalania",
+    "live": {
+     "c026": "FAIL",
+     "c027": "FAIL",
+     "snapsPerMinute": 1.08,
+     "jerks40": 27,
+     "doubleImages": 9,
+     "feetPx": 0.9,
+     "headRegPct": 5.2
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 1.04,
+     "jerks40": 29,
+     "doubleImages": 7,
+     "feetPx": 0.9,
+     "headRegPct": 2.3,
+     "fps": 57.3,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "evrae-airship",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.36,
+     "jerks40": 28,
+     "doubleImages": 3,
+     "feetPx": 0.9,
+     "headRegPct": 1.6
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.53,
+     "jerks40": 32,
+     "doubleImages": 4,
+     "feetPx": 0.9,
+     "headRegPct": 1.6,
+     "fps": 59.7,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "yojimbo-cavern",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.48,
+     "jerks40": 10,
+     "doubleImages": 0,
+     "feetPx": 0.8,
+     "headRegPct": 2
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.48,
+     "jerks40": 7,
+     "doubleImages": 0,
+     "feetPx": 0.9,
+     "headRegPct": 2.1,
+     "fps": 59.7,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "seymour-natus",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.28,
+     "jerks40": 43,
+     "doubleImages": 10,
+     "feetPx": 0.8,
+     "headRegPct": 0.6
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.28,
+     "jerks40": 43,
+     "doubleImages": 10,
+     "feetPx": 0.7,
+     "headRegPct": 2.2,
+     "fps": 59.7,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "ffx2-fallen-aeons",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.38,
+     "jerks40": 98,
+     "doubleImages": 1,
+     "feetPx": 0.7,
+     "headRegPct": 1.8
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.39,
+     "jerks40": 85,
+     "doubleImages": 2,
+     "feetPx": 1.1,
+     "headRegPct": 1.1,
+     "fps": 57.8,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "seymour-omnis",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.08,
+     "jerks40": 67,
+     "doubleImages": 0,
+     "feetPx": 1.6,
+     "headRegPct": 1.4
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.73,
+     "jerks40": 42,
+     "doubleImages": 0,
+     "feetPx": 1.5,
+     "headRegPct": 1.4,
+     "fps": 58.8,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "ffx2-trema",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 2.66,
+     "jerks40": 179,
+     "doubleImages": 1,
+     "feetPx": 0.7,
+     "headRegPct": 1.6
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 1.69,
+     "jerks40": 128,
+     "doubleImages": 0,
+     "feetPx": 0.7,
+     "headRegPct": 1.4,
+     "fps": 57.6,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "isaaru-via-purifico",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 1.39,
+     "jerks40": 43,
+     "doubleImages": 0,
+     "feetPx": 1.3,
+     "headRegPct": 0.4
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 1.37,
+     "jerks40": 54,
+     "doubleImages": 0,
+     "feetPx": 1.3,
+     "headRegPct": 0.4,
+     "fps": 57.6,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "ffx2-den-of-woe",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.97,
+     "jerks40": 37,
+     "doubleImages": 2,
+     "feetPx": 1.2,
+     "headRegPct": 1.8
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.83,
+     "jerks40": 39,
+     "doubleImages": 5,
+     "feetPx": 1.2,
+     "headRegPct": 1.8,
+     "fps": 59.1,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "ffx2-ixion-djose",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.15,
+     "jerks40": 23,
+     "doubleImages": 0,
+     "feetPx": 0.5,
+     "headRegPct": 1.1
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.24,
+     "jerks40": 36,
+     "doubleImages": 0,
+     "feetPx": 0.4,
+     "headRegPct": 1.1,
+     "fps": 56.9,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "sin-fins-core",
+    "live": {
+     "c026": "FAIL",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.72,
+     "jerks40": 171,
+     "doubleImages": 61,
+     "feetPx": 1,
+     "headRegPct": 3.3
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.73,
+     "jerks40": 201,
+     "doubleImages": 47,
+     "feetPx": 0.9,
+     "headRegPct": 2.3,
+     "fps": 58.7,
+     "failing": []
+    }
+   },
+   {
+    "chapter": "sin-face",
+    "live": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.3,
+     "jerks40": 36,
+     "doubleImages": 0,
+     "feetPx": 0.9,
+     "headRegPct": 1.6
+    },
+    "candidate": {
+     "c026": "PASS",
+     "c027": "FAIL",
+     "snapsPerMinute": 0.3,
+     "jerks40": 38,
+     "doubleImages": 0,
+     "feetPx": 1.1,
+     "headRegPct": 1.9,
+     "fps": 59.7,
+     "failing": []
+    }
+   }
+  ]
+ },
+ "targets": {
+  "required": 2,
+  "matched": 2,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "note": "Tiles of the plan's groups (fight, pause, phone, presentation) that this release can touch: \"Battle HUD, FFX-2\" (Chapter IV, Bahamut, a party menu open: the boss size lock and the reveal) and \"Battle start\" (the Chapter I boss banner: the opening camera). \"Battle HUD, FFX\" is untouched (identical to live 39.1 at three sizes) and not counted; the pause and phone tiles are untouched (the pause code is not in the diff; the phone is identical to live).",
+  "list": [
+   {
+    "tile": "Battle HUD, FFX-2",
+    "result": "matched",
+    "evidence": "critic/reviews/002928c4-focused/tile-battle-hud-ffx2.jpg",
+    "note": "Chapter IV, Yuna's White Magic menu, 1600x900: Ink & Gold with the FFX-2 pink accent, command stack right, party rows bottom right, enemy header top left, Bahamut whole and held at 1.387 at all seven menus; party-left, enemy-right is the accepted adaptation (D-167), the tile's mustRemain."
+   },
+   {
+    "tile": "Battle start",
+    "result": "matched",
+    "evidence": "critic/reviews/002928c4-focused/tile-battle-start.jpg",
+    "note": "Chapter I's boss-name banner at 1.0 s after the battle screen: cream plate, gold slash, the name, the tagline, the party chips and BATTLE START, as approved; the FFX opening camera is unchanged (z min 7.53 against live 7.55)."
+   }
+  ]
+ },
+ "issues": [
+  {
+   "id": "F392-01",
+   "severity": "major",
+   "title": "CHK-027 still FAILS in every chapter, as on live 39.1: pose changes snap, ghost and jerk",
+   "game": "both",
+   "chapter": "all 18 (aggregate)",
+   "confidence": "high",
+   "requirement": "CHK-027 (D-421); the owner's \"pose changes snapping around in a discontinuous half motion\"",
+   "expected": "At most 0.25 snaps per minute of battle, no jerk of 40 px or more in one frame, no double image of severity 0.40 or more.",
+   "observed": "Over 18 chapters and 164 minutes of battle at 1600x900 (56.9 to 59.7 fps), candidate against live 39.1 (round 23): 0.58 snaps a minute against 0.58 (96 snaps against 96), 1,102 jerks of 40 px or more against 1,092 (worst 806.6 px against 807, Vegnagun's tail), 153 swaps with a double image of 0.40 or more against 161 (worst 0.463 against 0.446). A KO still cuts a standing figure to a lying one in one frame (Chapter V, Yuna hurt to KO #1092: IoU 0.135, a snap); the boss's entrance pose still swaps in one frame (Chapter IV, Bahamut, head 172.6 px). Per chapter the candidate is inside live's run-to-run spread (snaps a minute: I 0.98/1.01, IV 0.17/0.17, VII 1.04/1.08, IX 0.48/0.48, XIII 1.69/2.66, XVII 0.73/0.72); Chapter XII's first run lost and read 0.73 against 0.08, its rerun won with 0.08.",
+   "repro": "cd D:/pyrefly-r39-int; PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<preview of dist-gate, ending in a slash> --evidence=<dir> --chapters=<ids> --tag=x   (seed 1, 1600x900, real keys from the title)",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/continuity-summary.json",
+    "critic/reviews/002928c4-focused/results/continuity-tables/compare.txt",
+    "critic/reviews/002928c4-focused/continuity/ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1092-yuna-hurt-ko.jpg",
+    "critic/reviews/002928c4-focused/continuity/ffx2-bahamut-win-002928c4/continuity/strips/jerk-000-bahamut.jpg"
+   ],
+   "where": "src/engine/PaintedActor.ts and the presenter's pose and KO cuts (suspected; not traced)",
+   "fix": "Give the KO collapse an in-between (a short blend or collapse frames) instead of a one-frame cut, and cut double images by shortening or replacing the pose crossfades; the largest single source is the KO and defeat cut.",
+   "acceptanceCheck": "continuity.mjs on the 18 chapters: snaps per minute 0.25 or less, no swap at 0.40 double-image severity, jerks under 40 px.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F392-02",
+   "severity": "polish",
+   "title": "CHK-026 still fails now and then on a KO swap: a head changes by up to 4 percent (3 allowed), invisibly, in Chapters V, XVII and III",
+   "game": "both",
+   "chapter": "ffx2-vegnagun-shuyin (this run); sin-fins-core and braskas-final-aeon (the lane's runs and live's)",
+   "confidence": "high",
+   "requirement": "CHK-026 (D-420, D-424)",
+   "expected": "At every pose swap a figure's head changes by at most 3 percent.",
+   "observed": "This run: 17 of 18 chapters PASS. Chapter V FAILS on two swaps of Yuna, her early KO in link 2: hurt to KO x1.0405 (head 10.5 px to 10.9 px: 0.4 px) and KO to idle x0.9616, registered heads, the lying plane against the standing one in the same frame; her four later KOs in the same run read x0.9959, x1.0099, x0.9918, x1.0076 and pass, as do live 39.1's two Yuna KOs in both live runs of the chapter (round 23 and mine: x0.998 to x1.008). Live passed because Yuna was not KO'd at that point of those two fights (a run-to-run difference of the real-time route); the r392-size lane saw the same kind of swap fail in Chapter V on builds with live's table (White Mage and Dark Knight KOs at x1.027 to x1.041) and in Chapter XVII (Yuna x1.0334, x0.9698, x0.9696, the same three live 39.1 failed in round 23), and a three-frame flash of the possessed Valefor's KO painting in Chapter III (mass x1.349); each of those chapters passed in other runs. The lane's chart of 165 KO swaps shows the head ratio is a function of the stage camera's perspective (x1.04 where the camera looks up, x0.97 where it converges), which no registration value fixes and which this release does not touch. Severity: the heads in question are 10 to 40 px and the pair is a KO cut that changes everything else in the frame, so a player cannot see it; it keeps CHK-026 failing (and would cap Bailey's sub-scores in a deep review). Chapter V on live 39.1's own bytes, run again by me (1,416 s of battle, 58.7 fps): CHK-026 PASS, registered head 1.1 percent, its two Yuna KOs x0.998 to x1.008 (round 23's run the same); it did not have the early KO that fails here.",
+   "repro": "continuity.mjs --chapters=ffx2-vegnagun-shuyin (or sin-fins-core) on the candidate; the failing swaps are listed in continuity.json under swaps with failHead.",
+   "evidence": [
+    "critic/reviews/002928c4-focused/continuity/ffx2-vegnagun-shuyin-win-002928c4/continuity/continuity.json",
+    "critic/reviews/002928c4-focused/results/continuity-tables/compare.txt",
+    "critic/reviews/002928c4-focused/continuity/ffx2-vegnagun-shuyin-win-002928c4/continuity/strips/swap-1092-yuna-hurt-ko.jpg"
+   ],
+   "where": "src/engine/PaintedActor.ts (PaintedRest.placePlane rolls the lying plane; the head box is not held per camera) (suspected)",
+   "fix": "The lane's option 1: emit each pose's registered head box with its scale and have PaintedActor rescale the active plane about its feet so the projected head box equals the idle's (needs Bailey's eye and a focused review: it touches the presenter's core); or decide that a KO swap is judged on the plane's own units (option 2).",
+   "acceptanceCheck": "CHK-026 PASS in 18 of 18 chapters over three runs, including a Chapter V and a Chapter XVII run in which a girl is KO'd.",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F392-03",
+   "severity": "major",
+   "title": "Phone, Chapter IX: the Zanmato gauge card sits over Yojimbo, Daigoro and Ginnem, so the fiends cannot be seen",
+   "game": "ffx",
+   "chapter": "yojimbo-cavern (390x844)",
+   "confidence": "high",
+   "requirement": "CHK-011 (every targetable enemy is visible); the lane's own disclosure (docs/handoff/r392-boss-scale.md, \"The phone\")",
+   "expected": "Yojimbo and his two fiends stand in the visible band between the gauge card and the party tiles.",
+   "observed": "At the first command menu at 390x844 the gauge card (the lane measured it at x 12 to 378, y 142 to 287, the band visible in the frame) stands over the fiends: my read of their painted boxes through the camera is Yojimbo x 249 to 337, y 136 to 265 (95 percent of it behind the card), Ginnem x 182 to 228, y 144 to 216 and Daigoro x 210 to 245, y 228 to 263 (both wholly behind it); only a faint ghost of his hat shows above the card. Live 39.1 draws the identical frame (same card, boxes within the camera's drift), and the boss size lock does not apply on the phone (k stays 1.00; 128.6 to 129.2 px against live's 128.3 to 128.7).",
+   "repro": "touch context 390x844, Chapter IX from the title, first menu; critic/reviews/002928c4-focused/scripts/layout.mjs --chapter=yojimbo-cavern --size=390x844 --touch=true",
+   "evidence": [
+    "critic/reviews/002928c4-focused/frames/phone-yojimbo-gauge-card-cand-vs-live391.jpg",
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-cand-390x844-touch.png",
+    "critic/reviews/002928c4-focused/results/boss-scale/summary.txt"
+   ],
+   "where": "src/ui/ffx/phone-hud-parts.css (the card's phone place), src/scenes/cavern-stolen-fayth-rigs.ts (phone rigs \"clear of the gauge\")",
+   "fix": "The lane's two frames, neither built: keep the card to the left 72 percent with the band labels reflowed, or a compact card (name, percent, bar and bands) with the field drawn lower; both change approved looks, so they need Bailey's look first (rule 9).",
+   "acceptanceCheck": "At 390x844 Yojimbo, Daigoro and Ginnem are at most 25 percent under any panel at every menu of Chapter IX (CHK-011).",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F392-04",
+   "severity": "polish",
+   "title": "The Zanmato gauge's band labels draw at 12.2 px, under the 14 px floor (Chapter IX, 1600x900)",
+   "game": "ffx",
+   "chapter": "yojimbo-cavern",
+   "confidence": "high",
+   "requirement": "CHK-003",
+   "expected": "Every text the player reads is at least 14 px effective.",
+   "observed": "Daigoro, + Kozuka and + Wakizashi are 12.2 px at 1600x900 (three nodes); everything else in the measured menus and pauses is 14.0 px or more. Identical on live 39.1.",
+   "repro": "layout.mjs --chapter=yojimbo-cavern --size=1600x900",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-cand-1600x900.json",
+    "critic/reviews/002928c4-focused/results/layout/layout-yojimbo-cavern-live391-1600x900.json"
+   ],
+   "where": "src/ui/ffx/zanmato-gauge.css (suspected)",
+   "fix": "Raise the band labels to the 14 px floor.",
+   "acceptanceCheck": "CHK-003 sweep: zero nodes under 14 px in Chapter IX at 1600x900 and 2000x1012."
+  },
+  {
+   "id": "F392-05",
+   "severity": "polish",
+   "title": "Chapter IV's reveal leaves Yuna whole but within 2 to 9 px of the left edge for about two seconds at 1280x720 and 1600x900, and within 3 to 8 px of the bottom edge at 2000x1012 and 2560x1080",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "confidence": "high",
+   "requirement": "D-493 (Yuna stays in frame); the lane's own note (docs/handoff/r392-motion.md, 'A smaller margin at small sizes')",
+   "expected": "Yuna whole in frame throughout, with room to spare.",
+   "observed": "Across 15 candidate runs (1280x720, 1600x900 with and without REDUCE MOTION, 2000x1012, 2560x1080) Yuna's smallest share is 1.000 with 0 frames under 99 percent; live 39.1 over 12 runs reads 0.43 at 1280x720, 0.42 at 1600x900, 0.83 at 2000x1012, 0.96 at 2560x1080 and 0.78 at 1600x900 with REDUCE MOTION on. Her painted box comes within 2 px (1280x720) and 3 to 9 px (1600x900; 15 px with REDUCE MOTION) of the left edge for about two seconds as the camera ends its push (within 25 px of it from about 7 to 10 s), and her feet within 4 to 6 px of the bottom edge at 2000x1012 and 3 to 8 px at 2560x1080 (9 runs).",
+   "repro": "reveal.mjs --chapter=ffx2-bahamut --size=1600x900 --tag=x (real keys, the scene read one Enter a second)",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/reveal/summary.tsv",
+    "critic/reviews/002928c4-focused/frames/reveal-push-1600x900-cand-vs-live391.jpg",
+    "critic/reviews/002928c4-focused/frames/reveal-push-2000x1012-cand-vs-live391.jpg"
+   ],
+   "where": "src/engine/ShotRules.ts wholePush",
+   "fix": "The lane named it: ask the push for half of what it asks now (one factor) to leave the girls the room the idle sway needs.",
+   "acceptanceCheck": "Yuna's box at least 20 px from every edge through the reveal at 1280x720, 1600x900, 2000x1012 and 2560x1080."
+  },
+  {
+   "id": "F392-06",
+   "severity": "polish",
+   "title": "At 21:9 (2560x1080) the first Bahamut plan is a coin flip between two sizes in both builds, and the candidate's lock holds the result for the whole fight",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut (2560x1080)",
+   "confidence": "high",
+   "requirement": "docs/handoff/r392-boss-scale.md ('The first plan is the 39.1 build's'; 'A lock is as good as the first plan: a first plan that lands on a transient state would keep that size for the phase'; ultrawide windows were not measured)",
+   "expected": "The first plan, and so the size the lock holds, is the same in every run.",
+   "observed": "At 2560x1080 the first plan lands on the full BOSS SCALE step (k 1.387, Bahamut 681 to 682 px at the settled first menu) or on step 0.7 (k 1.272, 624 to 626 px), in both builds. Live 39.1's first menu (the lane's harness: real keys, seed 1, menus settled) took the full step in 3 of 6 runs and step 0.7 in the rest, and it re-plans at every menu (menus 3 and 4 of its two four-menu runs: 628 to 629 and 486 to 500 px). The candidate's first plan took the full step in 1 of 7 harness runs; in the other 6 its tries read '1:x gate0.022 ... 0.7:ok' (the full step fails the HUD gate by 0.022), and the lock then keeps that k at every menu. Through the real reveal (one Enter a second, seed 1) the candidate held the larger size (688 to 690 px at the first menu) in 3 of 9 runs, two of them on a quiet machine, and the smaller (629 to 632 px) in the rest; live 39.1's reveal ends at 630 to 632 px in 6 of 6 runs. At 1024x768, 1280x720, 1600x900, 2000x1012 and 2560x1440 the two builds' first menus agree to within 4.2 px. In the larger case the entrance push cuts his painted box 60 to 68 px over the top edge for 1 to 2.5 seconds (both builds cut it 42 to 64 px at 1280x720 to 2000x1012; live's push at 21:9 cuts 2 to 6 px); he is whole at every menu in every run. The lane named the risk (a transient first plan is kept for the phase) and measured 1600x900 only.",
+   "repro": "reveal.mjs --chapter=ffx2-bahamut --size=2560x1080 --tag=x (real keys, the scene read one Enter a second; about one run in three), and bs-measure.mjs --chapter=ffx2-bahamut --size=2560x1080 --menus=4 --seed=1 on both builds (docs/handoff/r392-boss-scale-evidence/)",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/reveal-219c/summary.txt",
+    "critic/reviews/002928c4-focused/results/boss-scale-219/summary.txt",
+    "critic/reviews/002928c4-focused/results/boss-scale-219b/summary.txt",
+    "critic/reviews/002928c4-focused/results/boss-scale-sizes/summary.txt"
+   ],
+   "where": "src/engine/fx/mix/framing.ts decide and scaleLock.ts holdEarly: the first plan at this window shape is a coin flip between the full step and step 0.7 (suspected, not traced)",
+   "fix": "Let the first plan settle before it is held, or decide the HUD gate with a margin at ultrawide shapes; either size is whole at every menu, so it is polish.",
+   "acceptanceCheck": "Ten reveal runs at 2560x1080 hold one size, not a mix of 630 and 688 px.",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F392-07",
+   "severity": "suggestion",
+   "title": "Question for Bailey: Yunalesca's hurt, attack and cast are drawn 23 to 33 percent smaller (a visible change)",
+   "game": "ffx",
+   "chapter": "yunalesca",
+   "confidence": "high",
+   "requirement": "CHK-026 and Bailey's eye (CHK-B3); docs/handoff/r392-size.md section 3 (\"Needs Bailey's eye\")",
+   "expected": "Her head keeps its size across poses (the point of the change) and she still reads as the boss.",
+   "observed": "Her head now reads x0.99 of the idle's in all three poses (live 39.1: x1.48 hurt, x1.42 attack, x1.29 cast); the crouch of the hurt pose is two thirds as tall and the attack and cast no longer fill the tile: the picture is calmer and consistent, and the attack loses its sweep. The Chapter II harness run reads 600 swaps by registered head with a worst 1.4 percent (live read her by mass).",
+   "repro": "pose-gallery.mjs yunalesca --figure=yunalesca on both builds",
+   "evidence": [
+    "critic/reviews/002928c4-focused/frames/yunalesca-poses-cand-vs-live391.jpg"
+   ],
+   "where": "src/data/art/poseRegistrationFoes.ts (yunalesca-1: hurt 0.67, attack 0.70, cast 0.77)",
+   "fix": "Nothing to fix: Bailey picks between the head-matched poses (this build) and the bigger, more dramatic ones (live); the commit cf94064a can be dropped alone.",
+   "acceptanceCheck": "Bailey's yes or no on the three pictures."
+  },
+  {
+   "id": "F392-08",
+   "severity": "suggestion",
+   "title": "Question for Bailey: with REDUCE MOTION on, a long strike now stops part-way (half of the extra distance)",
+   "game": "both",
+   "chapter": "seymour-flux; ffx2-bahamut",
+   "confidence": "high",
+   "requirement": "D-492; docs/handoff/r392-motion.md \"Lunge choice for Bailey\"",
+   "expected": "REDUCE MOTION shortens the lunge.",
+   "observed": "Chapter I's Lance of Atrophy 4.29 off, 2.84 on; Seymour's other blows 1.93 and 1.91 off, 1.68 and 1.64 on; Chapter IV's Bahamut 3.04 off, 2.14 on (cap 2.9). A strike that needed the extra reach now stops short of its target by the missing half (the lane measured up to 149 px for the Lance); with the setting off nothing changed.",
+   "repro": "lunge.mjs --chapter=seymour-flux --setting=pause (and --setting=off)",
+   "evidence": [
+    "critic/reviews/002928c4-focused/results/lunge/summary.txt"
+   ],
+   "where": "src/engine/motion/StrikeReach.ts CALM_REACH_SHARE",
+   "fix": "None needed; CALM_REACH_SHARE = 0 caps the strike at the house 1.4 if Bailey prefers it.",
+   "acceptanceCheck": "Bailey's yes or no."
+  },
+  {
+   "id": "F392-09",
+   "severity": "suggestion",
+   "title": "Idea (needs Bailey's yes): a line on the defeat card that a Trema retry heals the girls",
+   "game": "ffx2",
+   "chapter": "ffx2-trema",
+   "confidence": "medium",
+   "requirement": "AGENTS.md rule 10 (ideas need a yes)",
+   "expected": "The player understands why the retry opens with the party back on their feet.",
+   "observed": "The defeat card (TURNS, ATTEMPTS, BEST, RETRY, CHAPTER SELECT) and the battle start card say nothing; the girls are simply up. Not a defect: the restore is silent by the lane's choice (copy was option c, not built).",
+   "repro": "trema.mjs --ko=2",
+   "evidence": [
+    "critic/reviews/002928c4-focused/frames/trema-retry-one-standing.jpg"
+   ],
+   "where": "src/app/screens/ResultsScreen (copy)",
+   "fix": "One line of copy, if Bailey wants it.",
+   "acceptanceCheck": "Bailey's yes, then a screenshot."
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Production build of 002928c4 (dist-gate, BASE_PATH=/, 3,848 files, artifactHash 6f50f6a2d119bc8c) against the byte-identical live 39.1 build (dist-release, same bundle as echoesofspira.com), headless Playwright Chromium on the GPU, one browser at a time except the harness lanes",
+   "Lane r392-motion: Chapter IV reveal, 15 candidate runs (1280x720 x1, 1600x900 x2 and x1 with REDUCE MOTION on, 2000x1012 x2, 2560x1080 x9) and 12 on live 39.1's bytes (6 of them at 2560x1080), real keys with the scene read one Enter a second, a per-frame recorder; the other six FFX-2 reveals at 1600x900 and Chapter IV at 1024x768 and on the phone; the FFX openings of Chapters I and IX; REDUCE MOTION by the pause row (keys and mouse) and by the OS preference, 22 recorded strikes in both games",
+   "Lane r392-boss-scale: the lane's own real-keys harness run by me on both builds, Chapters IX (7 menus at 1600x900, 3 on the phone), IV (7 at 1600x900; the first menus at 1024x768, 1280x720, 2000x1012 and 2560x1440; 7 candidate and 6 live runs at 2560x1080), X and VIII (3 each); Yojimbo's opening, first menus at three sizes and three chapters with layout, font and coverage measures",
+   "Lane r392-trema: Chapter XIII staged to one and to two girls standing at the end of Paragon, loss at Trema, RETRY by Enter and by a mouse click, on the candidate and (one standing) on live 39.1",
+   "Lane r392-size: the continuity harness on all 18 chapters of the plan on the candidate (9,854 s of battle, 56.9 to 59.7 fps, five parallel lanes), Yunalesca's poses at battle size beside live, Chapter VII's victory (the killing blow and the victory pose 0.2 s after it is drawn, beside live)",
+   "Data audit (the plan's dataAudit): every changed value traced to its record. The pose-scale table equals tools/posescale's records, each with its reason (pose-scale-check PASS): Yuna victory 0.784 to 0.804 and critical 0.967 to 0.977, Rikku victory 1.015, Yunalesca hurt 0.67, attack 0.70, cast 0.77. Trema's hopelessRetry (standing 2, restore) is Bailey's D-506 and the engine's own Save Sphere rule (battle/ffx2/setup.ts: HP and MP full, KO'd up, statuses left as they arrive, whether a Save Sphere clears them being unsourced); research/ffx2-trema.md 1.1 (no healing, no equipment change) still holds for the first entry. Yojimbo's 1.15 is Bailey's pick (research/ffx-yojimbo.md gives no on-screen proportion). The lunge constants (half of the extra, 2.9 cap) are design. No sourced game number changed.",
+   "Gates: tsc --noEmit clean (exit 0); the full unit suite passes (900 files and 13,326 tests passed, 5 files and 46 tests skipped, 0 failed, 377 s on four workers), and the 21 files of the four lanes and the checkpoint family pass on their own (372 tests); pose-scale-check PASS; orphans 24 (main's own, none a changed module); art-derive verify and audit PASS; art-browser-load PASS in Chromium and WebKit; manifest decoded"
+  ],
+  "reused": [
+   {
+    "what": "Round 23's continuity run of 18 chapters on live 39.1",
+    "from": "critic/rounds/round-23/continuity (base https://echoesofspira.com/, 1600x900, GPU, seed 1)",
+    "why": "the regression baseline for CHK-026 and CHK-027; the candidate was run with the same harness, seed, size and route, so the numbers compare chapter by chapter (the one live rerun, Chapter V, is mine)"
+   },
+   {
+    "what": "The r392-size lane's KO-swap analysis (165 swaps) and its two runs of Chapters III, V and XVII",
+    "from": "docs/handoff/r392-size.md section 4 on b8fcae0b",
+    "why": "the pose registration table and harness are byte-identical in the candidate (git diff b8fcae0b 002928c4 -- src/data/art tools/posescale critic/runner/lib/continuity-pure.mjs is empty); used only to say how often the KO-swap failures occur, never to pass a chapter"
+   }
+  ],
+  "notTested": [
+   "Real Safari, a real phone, a real gamepad, Firefox; 4K and 16:10 windows; TEXT SIZE other than 100",
+   "The pause menu's RESTART ENCOUNTER at Trema by keys (covered by tests/unit/pause-restart-*.test.ts, which I re-ran, not by a browser run)",
+   "A real-key win of Chapter XIII's two bosses on this build (the lane's 70-minute run was on its own branch; my harness run lost, as live 39.1's did) and the REDUCE MOTION + reveal pair at 4K",
+   "Audio (no audio file or routing changed), saves (SaveData.ts is not in the diff), the first-time-fan lens and a cold start (deep review only)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy (CHK-017: artifactHash 6f50f6a2d119bc8c; only index.html, the bundle and the advisor worker differ from 39.1), then the deep review owed on the live build: every chapter, the continuity harness again on live, the first-time-fan lens, and Bailey's eye on Yunalesca's three smaller poses and the REDUCE MOTION lunge (F392-07, F392-08).",
+ "elapsedMinutes": 175
+}

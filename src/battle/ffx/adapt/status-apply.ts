@@ -119,6 +119,12 @@ export function applyStatusStep(
     if (now === 0) {
       lose(id, cleanse);
     } else if (was === 0) {
+      // The write-back resets the holder's Regen tick counter when its Regen counter goes from 0 to something (`pp_BtlApplyHitRecords`,
+      // VA 0x0078f060, after the statuses are copied): a fresh Regen is paid for the ticks it has seen, not for the whole battle. Without
+      // the reset a counter that saturated long before pays maxHP + 100 on the first turn (and a Zombie takes it as damage). The reset
+      // belongs to the write-back, which runs before the death handler: it stands even when this hit's own damage already killed the
+      // target (the status itself is then never added; the oracle's 5,000 hits found it once the ability pool grew with release candidate 1).
+      if (id === 'regen') rtOf(ctx, target.id).regenTicks = 0;
       if (quiet(id)) return;
       const permanent = now === 255;
       const init: Partial<StatusInstance> = nul
@@ -126,10 +132,6 @@ export function applyStatusStep(
         : { turnsRemaining: permanent ? 255 : now, permanent };
       add(ctx, target, id, instanceOf(id, init, source), false);
       out.added.push(id);
-      // The write-back resets the holder's Regen tick counter when its Regen counter goes from 0 to something (`pp_BtlApplyHitRecords`,
-      // VA 0x0078f060, after the statuses are copied): a fresh Regen is paid for the ticks it has seen, not for the whole battle. Without
-      // the reset a counter that saturated long before pays maxHP + 100 on the first turn (and a Zombie takes it as damage).
-      if (id === 'regen') rtOf(ctx, target.id).regenTicks = 0;
     } else {
       // a cleansing command that took part of a finite counter off
       const inst = statusOf(target, id);

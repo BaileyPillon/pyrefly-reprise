@@ -6,9 +6,16 @@
    "words": "I'll go with all your recommendations",
    "note": "Bailey, 2026-09-25 ~01:40 EDT, taken as a yes to every recommendation in docs/concepts/chapters/isaaru/README.md and docs/plans/chapter-isaaru-review.md (O-1 A with the knee-length coat and sea-green sash repairs, O-2 B, O-3 A, O-4 C his sea-green edge on the Ifrit/Valefor/Bahamut paintings, B19 KO = the dissolve). Locked after the independent 1:1 judge docs/concepts/chapters/isaaru/production/JUDGE.md: isaaru idle 7.3, isaaru portrait 7.8, via-purifico 7.6, grothia idle/attack/overdrive 8.0/7.6/7.3, pterya 7.3/7.8/7.6, spathi 7.4/7.7/7.6. Grothia, Pterya and Spathi are derived from the approved D-089 ifrit, valefor and bahamut paintings (read only); a change to those sources does not change these files. Known and disclosed: the knot is ornamental, not a bow; Pterya idle inherits Valefor idle's straight-cut wing tip; the plate has no low parapet. FFX only, Chapter XIV. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-isaaru/.",
    "public/art/characters/isaaru/idle.png": {
-    "sha256": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
-    "mtime": "2026-09-25T04:15:22.815Z",
-    "approved": "2026-09-25"
+    "sha256": "796d0ce9a371dd48ff674568f89c86cc76ae09af0083c5027ed86fa602d459ea",
+    "mtime": "2026-10-07T12:33:37.455Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "c290bedc3f6fe743b9c778736aa2a50ef0ac28bd4030161dbcc69dea87e81945",
+     "mtime": "2026-09-25T04:15:22.815Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/isaaru/idle.png"
+    }
    },
    "public/art/portraits/isaaru.png": {
     "sha256": "b5fbc12c65b404fa4f2260fc19d39f642a2d5b27a981bf3bb65b15e43e25a529",
@@ -38,9 +45,16 @@
     }
    },
    "public/art/characters/grothia/overdrive.png": {
-    "sha256": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
-    "mtime": "2026-09-25T04:15:22.922Z",
-    "approved": "2026-09-25"
+    "sha256": "c7ca2753345134c8628a501343fb96e3180381c467661528370b43cb57107743",
+    "mtime": "2026-10-07T12:33:36.861Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "780b689239b529bff2cf1b2680f2193a217246f225c7866c18f462436cda4f66",
+     "mtime": "2026-09-25T04:15:22.922Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/grothia/overdrive.png"
+    }
    },
    "public/art/characters/pterya/idle.png": {
     "sha256": "182a2084a3ee0d35da0df17382a458771b61746450ab110b34eea129cc764ad2",
@@ -127,24 +141,52 @@
    "words": "I'll go with all your recommendations",
    "note": "Bailey, 2026-09-25 ~01:40 EDT, answering every Chapter XIII recommendation (O-1 A priest with the review's torn robe, O-2 A gold armoured beast, O-2b link staged, O-3 B Cloister 100 repaint; Review corrections applied; docs/concepts/chapters/trema/README.md, docs/plans/chapter-trema-review.md). Installed in 6896b272 (docs/concepts/chapters/trema/INSTALLED.md). Judge: docs/concepts/chapters/trema/production/JUDGE.md, independent 1:1 judge, bar 7, all five PASS (Trema idle 7.7, Trema cast 7.1, Paragon idle 7.7, Paragon cast 7.1, plate 7.6; worst: Trema cast shoulder-seam artefacts, Paragon cast light edge fringe and rigid pitch, the plate's banners carry no Yu Yevon likeness, which stays Bailey's call). The link (O-2b) is staging, not a painting, and is not in this set. FFX-2 only, Chapter XIII. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-25-trema/.",
    "public/art/characters/trema/idle.png": {
-    "sha256": "77b4cba2eb4b99fb803f678ac526d0685efd31704136f0bdc8fe7de0300f0903",
-    "mtime": "2026-09-25T04:16:55.145Z",
-    "approved": "2026-09-25"
+    "sha256": "3896c07b8d64c97d0f26cfe6e6fd10b8bc8a19f3f0411d31c758af546cf2d3d3",
+    "mtime": "2026-10-07T12:33:52.263Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "77b4cba2eb4b99fb803f678ac526d0685efd31704136f0bdc8fe7de0300f0903",
+     "mtime": "2026-09-25T04:16:55.145Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/trema/idle.png"
+    }
    },
    "public/art/characters/trema/cast.png": {
-    "sha256": "744cc1501f8e98be8f46974d162b4d0a1d48e957864b716161be87c50493e506",
-    "mtime": "2026-09-25T04:16:55.185Z",
-    "approved": "2026-09-25"
+    "sha256": "14d21a7cfdcc710bf1bc336816e87064c1420559d39d7ee4566455517f7e0fcd",
+    "mtime": "2026-10-07T12:33:52.142Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "744cc1501f8e98be8f46974d162b4d0a1d48e957864b716161be87c50493e506",
+     "mtime": "2026-09-25T04:16:55.185Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/trema/cast.png"
+    }
    },
    "public/art/characters/paragon/idle.png": {
-    "sha256": "0e3972b558c07d71c70eb60f4d71752ea9b91601e81293e39673146f65e569b9",
-    "mtime": "2026-09-25T04:16:55.232Z",
-    "approved": "2026-09-25"
+    "sha256": "a59653d44fde6afa5fbd19f57d736826e56b59871c3a15ed4583e4e6a6516cd1",
+    "mtime": "2026-10-07T12:33:43.542Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "0e3972b558c07d71c70eb60f4d71752ea9b91601e81293e39673146f65e569b9",
+     "mtime": "2026-09-25T04:16:55.232Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/paragon/idle.png"
+    }
    },
    "public/art/characters/paragon/cast.png": {
-    "sha256": "f2f2300b6f8f30e7a8021457de08cd625f7f68996b48dc99aa2f1e39d5312a7d",
-    "mtime": "2026-09-25T04:16:55.263Z",
-    "approved": "2026-09-25"
+    "sha256": "9f4f2578f6e81168e21f25a7c398548e7518448d66f3a4084ee6c2ebb1e8fe2c",
+    "mtime": "2026-10-07T12:33:43.414Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "f2f2300b6f8f30e7a8021457de08cd625f7f68996b48dc99aa2f1e39d5312a7d",
+     "mtime": "2026-09-25T04:16:55.263Z",
+     "approved": "2026-09-25",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/paragon/cast.png"
+    }
    },
    "public/art/backdrops/via-infinito.png": {
     "sha256": "82eedcd375055e10fa8d537b2b1f75b4d1d68575cdb3adffe319c9e7548b47fa",
@@ -156,14 +198,28 @@
    "words": "All your recommendations",
    "note": "Bailey, 2026-09-24, answering the driver's Yojimbo chapter recommendations (docs/plans/chapter-yojimbo-review.md B1-B10, docs/concepts/chapters/yojimbo/README.md O-1..O-5). Judge PASS for all four subjects: docs/concepts/chapters/yojimbo/production/JUDGE.md (Yojimbo 7.9, Daigoro 7.3, Ginnem 7.5, chamber 8.0). FFX only, Chapter IX. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo/.",
    "public/art/characters/yojimbo-cavern/idle.png": {
-    "sha256": "bc8f5c1ecc8fb0a0cfa0c5a20e6ec12f3f3de71678c91ce44584050525866c1f",
-    "mtime": "2026-09-24T16:42:29.000Z",
-    "approved": "2026-09-24"
+    "sha256": "d19850e3896770488f25d4a33790d2a8e17d5f971df287847baeac24fbf91e87",
+    "mtime": "2026-10-07T12:33:54.194Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "bc8f5c1ecc8fb0a0cfa0c5a20e6ec12f3f3de71678c91ce44584050525866c1f",
+     "mtime": "2026-09-24T16:42:29.000Z",
+     "approved": "2026-09-24",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yojimbo-cavern/idle.png"
+    }
    },
    "public/art/characters/daigoro/idle.png": {
-    "sha256": "b9d952d377c6a2d015edc919e91f4d9176e0e868324a19a1cefdc6805b6e49c8",
-    "mtime": "2026-09-24T16:42:30.000Z",
-    "approved": "2026-09-24"
+    "sha256": "b04ebae5b3c541850109a3e012b174054ba6a11c27dfb2ada4f1584dcd8fb9f6",
+    "mtime": "2026-10-07T12:33:35.915Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "b9d952d377c6a2d015edc919e91f4d9176e0e868324a19a1cefdc6805b6e49c8",
+     "mtime": "2026-09-24T16:42:30.000Z",
+     "approved": "2026-09-24",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/daigoro/idle.png"
+    }
    },
    "public/art/characters/ginnem/idle.png": {
     "sha256": "061d0021abc18af7263fa64923b2f6070f22de7ec0d61c673aa413f511971bee",
@@ -180,16 +236,37 @@
    "words": "I'll go with your recommendations for all",
    "note": "Bailey, 2026-09-24 ~14:40 EDT, answering every Chapter X recommendation (O-1 A, O-2 A + KO-and-revive strip, O-3 C night with the city lit, O-5 A; Review corrections applied). Judge: docs/concepts/chapters/natus/production/JUDGE.md (10 subjects, bar 7; 5 Natus subjects PASS). FFX only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-natus/.",
    "public/art/characters/seymour-natus/idle.png": {
-    "sha256": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4",
-    "mtime": "2026-09-24T18:49:37.328Z"
+    "sha256": "46635c1567196fecaca25dd04f51976ddec6e903e1b8b91cc51a26dc95591a54",
+    "mtime": "2026-10-07T12:33:50.351Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "c53d22c1cea6ad918570f033d8236ef29e574f32be7127bb6856e53b6c6ddcc4",
+     "mtime": "2026-09-24T18:49:37.328Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/seymour-natus/idle.png"
+    }
    },
    "public/art/characters/seymour-natus-ring/idle.png": {
-    "sha256": "bd6754303eb7c80abdbb96067786b44e7adefc73ed6e55490baa808890e6b87a",
-    "mtime": "2026-09-24T18:49:37.523Z"
+    "sha256": "daa05e9654f6cec906abd2a23b1991e184316e6ac935936e2ac335718f40a56e",
+    "mtime": "2026-10-07T12:33:50.228Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "bd6754303eb7c80abdbb96067786b44e7adefc73ed6e55490baa808890e6b87a",
+     "mtime": "2026-09-24T18:49:37.523Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/seymour-natus-ring/idle.png"
+    }
    },
    "public/art/characters/mortibody/idle.png": {
-    "sha256": "20b012ade63e04802114b28e6ef025ecb1b28fbe74aab96ed302cc60e9b88416",
-    "mtime": "2026-09-24T18:49:37.660Z"
+    "sha256": "01b31d49f0db4b29891e84d9fe938b7b74605a18477f8c1869efd5ca4e2051a5",
+    "mtime": "2026-10-07T12:33:39.884Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "20b012ade63e04802114b28e6ef025ecb1b28fbe74aab96ed302cc60e9b88416",
+     "mtime": "2026-09-24T18:49:37.660Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/mortibody/idle.png"
+    }
    },
    "public/art/backdrops/bevelle-highbridge.png": {
     "sha256": "3c8aebf46c531b644cf59dd868742fa3548871a0f844adea6dd64e555b411a4e",
@@ -204,12 +281,26 @@
    "words": "I'll go with your recommendations for all",
    "note": "Bailey, 2026-09-24 ~14:40 EDT, answering every Chapter XI recommendation (O-1 A armoured Sisters, O-2 B Ch.IV violet, O-3 A + B between-links shot, FA11 Anima approved on his word; Review corrections applied). Judge: docs/concepts/chapters/fallen-aeons/production/JUDGE.md (bar 7; sandy/x2-shiva/x2-anima/both road plates PASS, cindy and mindy cast paintings FAIL and excluded pending repaint). FFX-2 only. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-chapter-fallen-aeons/.",
    "public/art/characters/sandy/idle.png": {
-    "sha256": "80d6990c9ffd70392ab85db74846d8e65f5258653a47af490668e8657e43c037",
-    "mtime": "2026-09-24T19:06:26.968Z"
+    "sha256": "edba1b452c204dfbb2a7b3123e8ab325f1c866ea2b064bff1905bb78532b9d50",
+    "mtime": "2026-10-07T12:33:49.431Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "80d6990c9ffd70392ab85db74846d8e65f5258653a47af490668e8657e43c037",
+     "mtime": "2026-09-24T19:06:26.968Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/sandy/idle.png"
+    }
    },
    "public/art/characters/sandy/cast.png": {
-    "sha256": "85a695d47166a6c2f3d54d18d817cd7f541cd66ac1877eda9b2e8291397726fb",
-    "mtime": "2026-09-24T19:06:26.997Z"
+    "sha256": "4ade655c305acf2556ac08a93114b414422c7fab41297851a6db31d3bcad57b0",
+    "mtime": "2026-10-07T12:33:49.346Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "85a695d47166a6c2f3d54d18d817cd7f541cd66ac1877eda9b2e8291397726fb",
+     "mtime": "2026-09-24T19:06:26.997Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/sandy/cast.png"
+    }
    },
    "public/art/characters/x2-shiva/idle.png": {
     "sha256": "5a48ce74aee2eae908362749551a422c36e91c181002a6a122c2efb56318a219",
@@ -259,16 +350,30 @@
     "mtime": "2026-09-24T22:16:43.542Z"
    },
    "public/art/characters/mindy/cast.png": {
-    "sha256": "fe2204472e2958e7ef2fc2134df8e957a0d5567c83b368d9df386fd7f77f1339",
-    "mtime": "2026-09-24T21:01:28.462Z"
+    "sha256": "019b477f97596893fe631ed733a5c35ef0343f49d85cac283a2bbcaf7ce7b65a",
+    "mtime": "2026-10-07T12:33:39.683Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "fe2204472e2958e7ef2fc2134df8e957a0d5567c83b368d9df386fd7f77f1339",
+     "mtime": "2026-09-24T21:01:28.462Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/mindy/cast.png"
+    }
    }
   },
   "chapter:natus-cast:2026-09-24": {
    "words": "I'll go with all your recommendations",
    "note": "Bailey, 2026-09-24 ~19:20 EDT, answering the driver's recommendation to give Natus one hero cast painting (D-034 / D-045 precedent). Judge: docs/concepts/chapters/natus/production/JUDGE.md, 'Addendum 2026-09-24 (evening)' section, independent 1:1 judge PASS 7.4 (worst: the right-wrist neck and band, then the modest game-size read). FFX only, Chapter X. Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-natus-cast/.",
    "public/art/characters/seymour-natus/cast.png": {
-    "sha256": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
-    "mtime": "2026-09-24T23:29:40.642Z"
+    "sha256": "ae4b1f9e5b5cd6dbe255df3c191ac203dfc9df65ce3573de30cbc92417f7fd55",
+    "mtime": "2026-10-07T12:33:50.236Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "975fd8fd3cb1e4640234999a25a8889d7e72ec446a311715469c5023a584a419",
+     "mtime": "2026-09-24T23:29:40.642Z",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/seymour-natus/cast.png"
+    }
    }
   },
   "chapter:gippal:2026-09-25": {
@@ -294,9 +399,16 @@
    "words": "I'll go with your recommendations for all",
    "note": "Bailey's paintings pick A (docs/target/decisions.json), answered for r1 pixel repairs: Yojimbo's drawn blade and Daigoro's 30-degree bite, each judged 7.0 PASS at the bar in the re-judge appended to docs/concepts/chapters/yojimbo/casts/JUDGE.md (commit edec1037). FFX only, Chapter IX. Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/<subject>/cast-r1.png (never cast-r1-option-longer.png, which needs a separate yes). Backup: D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/. UPDATE 2026-09-24 ~20:00 EDT: Bailey, verbatim, answering (1) \"Yes install please\" (2) \"I'll go with your recommendation\" — the longer blade replaces the drawn-blade r1 for yojimbo-cavern/cast.png, judged LONGER-BLADE: PASS (docs/concepts/chapters/yojimbo/casts/JUDGE.md, 'The longer blade: 1:1 check and in-battle frame'; frame docs/concepts/chapters/yojimbo/casts/longer-blade-in-battle.jpg). Installed from D:/Tools/pyrefly-art-backup/candidates/2026-09-24-yojimbo-casts/yojimbo-cavern/cast-r1-option-longer.png. The superseded r1 hash (b67565f47e90fa58a53096e8156af2c695c02ae30e3e874937e8ec1509a9ac3f, approved 2026-09-24) is kept, not deleted, at D:/Tools/pyrefly-art-backup/approved/2026-09-24-yojimbo-casts/replaced-by-longer/. Daigoro's cast.png (r1, 30-degree bite) is untouched by this update.",
    "public/art/characters/daigoro/cast.png": {
-    "sha256": "97a32c4f2d6c39d7bbb569b2cdeb74f7514a0799b845b90a9ada7c04dda5ba60",
-    "mtime": "2026-09-24T19:05:18.963Z",
-    "approved": "2026-09-24"
+    "sha256": "1ebac5f7cd922f1275c969e0fe88c80eb37cbf10f5de7b2844f9bb7284cb8e5c",
+    "mtime": "2026-10-07T12:33:35.863Z",
+    "approved": "2026-10-07",
+    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "supersedes": {
+     "sha256": "97a32c4f2d6c39d7bbb569b2cdeb74f7514a0799b845b90a9ada7c04dda5ba60",
+     "mtime": "2026-09-24T19:05:18.963Z",
+     "approved": "2026-09-24",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/daigoro/cast.png"
+    }
    }
   }
  }

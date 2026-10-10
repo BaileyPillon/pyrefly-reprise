@@ -16,7 +16,6 @@ import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/ind
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { macalaniaBuild } from '../../../src/data/ffx/builds/macalania.ts';
 import { SEYMOUR_ANIMA_MACALANIA_ABILITIES } from '../../../src/data/ffx/enemies/seymour-anima-macalania-abilities.ts';
-import { PRE_SUMMON_DAMAGE_CAP } from '../../../src/battle/ffx/ai/macalania-rules.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { seymourAnimaMacalania } from '../../../src/engine/tactics/seymour-anima-macalania.ts';
 import { SEYMOUR_ANIMA_MACALANIA_GUIDE } from '../../../src/data/guides/seymour-anima-macalania.ts';
@@ -146,12 +145,22 @@ describe('Macalania — data', () => {
 });
 
 describe('Macalania — act one', () => {
-  // §5.2 [verified: 2 sources] — the board the player first sees is already
-  // buffed, staged as a scripted pre-turn sequence rather than three turns.
-  it('opens with Seymour Shelled and both Guardians Protected', () => {
+  // §5.2 [verified: 2 sources], read again from the game's own script (re-parity D-09, FFX only): nobody opens
+  // buffed. The start hook puts every monster first (counter 0, Seymour 1) and each Guardian's first turn is a real
+  // Protect, Seymour's a real Shell, so the buffs are in place when the party first gets a decision.
+  it('opens with nobody buffed; the first three enemy turns are Protect, Protect and Shell, before the party acts', () => {
     const engine = newEngine(1);
+    expect(cmb(engine, SEYMOUR).statuses['shell']).toBeUndefined();
+    for (const g of GUARDS) expect(cmb(engine, g).statuses['protect']).toBeUndefined();
+    drive(engine, () => cmb(engine, SEYMOUR).statuses['shell'] !== undefined, 10);
     expect(cmb(engine, SEYMOUR).statuses['shell']).toBeDefined();
     for (const g of GUARDS) expect(cmb(engine, g).statuses['protect']).toBeDefined();
+    const opening = engine
+      .state()
+      .log.filter((e: BattleEvent) => e.type === 'action-start')
+      .slice(0, 3)
+      .map((e) => (e.type === 'action-start' ? `${e.actorId}:${e.abilityId}` : ''));
+    expect(opening).toEqual(['guado-guardian-a:protect', 'guado-guardian-b:protect', 'seymour-macalania:shell']);
     // ...and Anima is not on the field.
     const anima = cmb(engine, ANIMA);
     expect(anima.removed).toBe(true);
@@ -190,25 +199,14 @@ describe('Macalania — act one', () => {
   });
 
   /**
-   * A-3, the half that measures the **cap** rather than the floor.
-   *
-   * **Measured, and worth writing down:** on the shipped board the cap can
-   * never bind. `PRE_SUMMON_DAMAGE_CAP` is 5,999, his pool is 6,000 and
-   * `PRE_SUMMON_HP_FLOOR` is 1, so `hpBefore - floor` is *also* 5,999 and the
-   * floor alone clamps every oversized blow to the same number. Removing the
-   * `damageCapPerHit` assignment entirely changes no observable value in this
-   * encounter — checked by deleting it and re-running this file. The cap is
-   * therefore belt-and-braces on this board, and a test that only swings at the
-   * shipped 6,000 pool cannot tell the two clamps apart, which is how the
-   * capability shipped untested.
-   *
-   * So the cap is pinned where it *can* bind: the pool is widened on purpose so
-   * the floor is out of the way, and the blow is still a **real action through
-   * the real chain** — `hp.ts#dealDamage` is the single funnel, so only a
-   * resolved command exercises it. The second half then puts the shipped 6,000
-   * back and asserts the board-level consequence.
+   * A-3, re-read from the game's own script (re-parity D-17, FFX only): **there is no cap and no floor.** The old
+   * engine clamped every blow to 5,999 and held him on 1 HP until the summon; the script does neither. A lethal
+   * blow lands whole (the ordinary 9,999 per-hit cap is the only one), his `onHit` runs before the death check,
+   * sees HP 0 and summons Anima, and the same hook puts him back on 6,000. Both halves are pinned here with a
+   * real blow through the real chain: on a widened pool the blow is the full 9,999 and he stays above the
+   * summon line; on his real 6,000 it is lethal, and what comes out is the summon, not a survivor on 1 HP.
    */
-  it('A-3: a single blow is clamped to the cap, and on the shipped pool leaves him on 1', () => {
+  it('A-3 (D-17): a blow is not clamped to 5,999; a lethal one is the summon, and he is back on 6,000', () => {
     const swing = (pool: number, str: number): ReturnType<typeof newEngine> => {
       const engine = newEngine(3);
       // Magic is never covered, but this party has no Blk Magic at all, so the
@@ -250,23 +248,28 @@ describe('Macalania — act one', () => {
       return Math.max(...hits.map((e) => (e.type === 'damage' ? e.amount : 0)));
     };
 
-    // 1. The cap, with the floor moved out of its way. Strength 400 is worth
-    //    well over 9,999 raw through `formulas.ts`, so what comes out is the
-    //    cap and nothing else.
+    // 1. A widened pool: Strength 400 is worth well over 9,999 raw through `formulas.ts`, so what comes out is the
+    //    ordinary per-hit cap, not 5,999, and he stands at 40,000 - 9,999 with no summon.
     const wide = swing(40_000, 400);
-    expect(biggestOn(wide)).toBe(PRE_SUMMON_DAMAGE_CAP);
-    expect(cmb(wide, SEYMOUR).alive).toBe(true);
+    expect(biggestOn(wide)).toBe(9_999);
+    expect(cmb(wide, SEYMOUR).hp).toBeLessThanOrEqual(40_000 - 9_999); // (the party's other swings in the same round land too)
+    expect(cmb(wide, SEYMOUR).hp).toBeGreaterThan(3_000);
+    expect(wide.state().flags['macalania.animaSummoned']).not.toBe(true);
 
-    // 2. The board-level consequence, on his real 6,000 pool: one blow that
-    //    would kill him several times over leaves him alive on exactly 1.
+    // 2. His real 6,000 pool: the same blow is lethal. It lands whole (9,999 is shown), the script sees HP 0 and
+    //    summons Anima, and he is put back on 6,000 at Magic 32 and untargetable.
     const real = swing(6000, 400);
-    expect(biggestOn(real)).toBeLessThanOrEqual(PRE_SUMMON_DAMAGE_CAP);
-    expect(cmb(real, SEYMOUR).hp).toBe(1);
+    expect(biggestOn(real)).toBe(9_999);
+    expect(real.state().flags['macalania.animaSummoned']).toBe(true);
+    expect(cmb(real, SEYMOUR).hp).toBe(6000);
+    expect(cmb(real, SEYMOUR).stats.maxHp).toBe(6000);
     expect(cmb(real, SEYMOUR).alive).toBe(true);
+    expect(cmb(real, SEYMOUR).flags.untargetable).toBe(true);
   });
 
-  // A-3. §5.2 [verified: 2 sources] — the HD clamp and floor.
-  it('A-3: across a whole real drive to the summon, he never drops below 1', () => {
+  // A-3. §5.2 [verified: 2 sources] — there is no HD clamp or floor any more (re-parity D-17): a decision never
+  // finds him at 0 HP, because the hook that sees HP 0 restores him before the next event.
+  it('A-3: across a whole real drive to the summon, no decision finds him below 1 HP', () => {
     const engine = newEngine(3);
     const seymour = cmb(engine, SEYMOUR);
     // The companion case above manufactures the one blow that measures the cap.
@@ -284,12 +287,14 @@ describe('Macalania — act one', () => {
 
   // §5.2 [verified: 2 sources] — the summon kills every living Guardian, and
   // Anima arrives on the field mid-battle.
-  it('the summon fires at 3,000, kills the Guardians and puts Anima on the field', () => {
+  it('the summon fires at 3,000 (inclusive) or on a lethal blow, kills the Guardians and puts Anima on the field', () => {
     const engine = newEngine(3);
     driveIntended(engine, () => engine.state().flags['macalania.animaSummoned'] === true);
     expect(engine.state().flags['macalania.animaSummoned']).toBe(true);
     expect(engine.state().flags['macalania.act']).toBe(2);
-    expect(cmb(engine, SEYMOUR).hp).toBeLessThanOrEqual(3000);
+    // He is put back on 6,000 at the summon (the script's own restoration, D-17), not left at the 3,000 line.
+    expect(cmb(engine, SEYMOUR).hp).toBe(6000);
+    expect(cmb(engine, SEYMOUR).stats.mag).toBe(32);
     for (const g of GUARDS) expect(cmb(engine, g).alive).toBe(false);
     const anima = cmb(engine, ANIMA);
     expect(anima.removed).toBe(false);
@@ -460,7 +465,10 @@ describe('Macalania — act three', () => {
     // game's infliction step, so the draws moved again; on seed 1 a Nul charge absorbs the first hit of both Multi- casts it sees and the
     // fight ends before one cast has landed both hits. Seed 3 is the first of seeds 1 to 30 whose act three has such a cast (checked by
     // running the engine; seeds 3 to 9, 11, 16, 18 to 21, 23, 25, 28 and 29 do).
-    const engine = newEngine(3);
+    // Seed 3 -> 1 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the two sets of changes move the draws again. Seed 1 is
+    // the first of seeds 1 to 40 whose act three has a cast that lands both hits (checked by running the engine; 2, 4 to 23, 25 to 31, 33, 34, 38
+    // to 40 do, and 3, 24, 32, 35 to 37 do not).
+    const engine = newEngine(1);
     driveIntended(engine, () => engine.state().flags['macalania.act'] === 3);
     expect(engine.state().flags['macalania.act']).toBe(3);
 

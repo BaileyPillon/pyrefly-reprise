@@ -49,7 +49,9 @@ describe('the stat blocks (research §3)', () => {
     expect(trema.level).toBe(99);
     expect(trema.stats).toMatchObject({ maxHp: 999999, maxMp: 999, str: 255, mag: 255, def: 255, mdef: 255, agi: 129, eva: 99, luck: 26 });
     expect(trema.autoStatuses).toEqual(['spellspring']);
-    for (const s of ['ko', 'poison', 'slow', 'stop', 'str-down', 'def-down', 'reflect', 'doom']) {
+    // Re-parity W3: 'reflect' left the list. Trema's game row resists Slow, Stop, the stat stages and Doom (255) but not the good
+    // statuses (Shell, Protect, Reflect, Regen, Haste), so Reflect is not immune (research/re-ffx2-commands.md §7).
+    for (const s of ['ko', 'poison', 'slow', 'stop', 'str-down', 'def-down', 'doom']) {
       expect(trema.immunities[s as keyof typeof trema.immunities], s).toBe(255);
     }
     expect(trema.affinities.gravity).toBe('immune');
@@ -71,20 +73,23 @@ describe('the stat blocks (research §3)', () => {
   });
 });
 
+// Re-parity W3 (FFX-2 only; reason "game-code parity"). This block used to pin the engine's own hit race for the Dark Knight's
+// Darkness against Trema's Evasion 99: 0 % without Rabite's Foot, 91 % with one (the plan's TR-G2 / TR9 b problem and its answer).
+// The game's command row for Darkness (0x307f) is accuracy formula 0: it never rolls, so Trema's Evasion has no say and the
+// answer to TR-G2 is that there was never a problem (research/re-ffx2-commands.md §4; listed for Bailey in the W3 handoff, since
+// the chapter's plan makes Rabite's Foot the key to this move). The engine now follows the row; what stays pinned is that the
+// move lands on every seed, with or without the accessory, and that its odds print as 100 %.
 describe('Darkness against Evasion 99 (TR-G2, TR9 b; run, not read)', () => {
-  it('0 % with no Rabite\'s Foot, 91 % with one, 100 % while his chain window is open', () => {
+  it("lands 100 % with or without Rabite's Foot: the game's row never rolls", () => {
     const b = board('trema');
     const yuna = b.unit('yuna');
     const t = b.unit('trema');
     const darkness = data.ABILITIES['x2-dark-knight-darkness']!;
     expect(yuna.stats.luck).toBe(111); // 11 + Rabite's Foot's 100
-    expect(hitPercent(yuna, t, darkness)).toBe(91);
+    expect(hitPercent(yuna, t, darkness)).toBe(100);
     const bare = { ...yuna, stats: { ...yuna.stats, luck: 11 } };
-    expect(hitPercent(bare, t, darkness)).toBe(0);
-    // A chained target cannot evade (resolve.ts checks cannotEvade before the roll): with no
-    // Rabite's Foot (0 %), Darkness still lands on every seed while his window is open.
+    expect(hitPercent(bare, t, darkness)).toBe(100);
     for (let seed = 1; seed <= 20; seed++) {
-      t.chainWindowTicks = 100;
       const before = t.hp;
       resolveAbility(b.resolveCtx(seed), bare, darkness, []);
       expect(t.hp, `seed ${seed}`).toBeLessThan(before);

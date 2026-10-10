@@ -109,12 +109,21 @@ export interface CureHint {
   html: string;
   /** The same rule in one short sentence: a second hint on the card, and the phone card. */
   short: string;
+  /**
+   * FFX-2's phone card on ONE row (R3942, Bailey 2026-10-08, "I'll go with all your recommendations": option 1 of the Chapter IV
+   * card pick): "Paine: Holy Water, Esuna, Remedy" beside the status chip. The chip says which status, so the row carries who and
+   * the whole cure list the sentence names (PR-0290) and none of its prose. Written to fit one row at 14.2 px from 360 px wide
+   * (`tests/unit/status-hint-one-line.test.ts`). Absent where a game's phone card keeps `short` (FFX: Game case, FFX-2 only).
+   */
+  line?: string;
 }
 
 type HintFn = (name: string, p: Pronouns) => string;
 interface HintRow {
   full: HintFn;
   short: HintFn;
+  /** FFX-2 only: the one-row form (`CureHint.line`). */
+  line?: HintFn;
 }
 
 const FFX_HINTS: Partial<Record<StatusId, HintRow>> = {
@@ -145,17 +154,21 @@ const FFX2_HINTS: Partial<Record<StatusId, HintRow>> = {
   sleep: {
     full: (n, p) => `<b>${n} is asleep:</b> ${p.their} gauge is frozen and ${p.they} cannot act. A hit, <b>Esuna</b> or a <b>Remedy</b> wakes ${p.them}.`,
     short: (n, p) => `<b>${n} is asleep:</b> gauge frozen, no turns. A hit, Esuna or a Remedy wakes ${p.them}.`,
+    // R3942 (FFX-2 phone, one row): what wakes her, the sentence's list ("a hit, Esuna, Remedy"); the chip says SLEEP.
+    line: (n) => `${n}: a hit, <b>Esuna</b>, <b>Remedy</b>`,
   },
   // §2.8 Silence: blocks White Magic, Black Magic and Arcana; "Cured by Echo Screen" (+ Esuna, Remedy).
   silence: {
     full: (n) => `<b>${n} is silenced:</b> no White Magic, Black Magic or Arcana. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
     // U2 (PR-0290, FFX-2 only): the phone card names the whole cure list the desktop card does, in one sentence.
     short: (n) => `${n} is silenced: <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
+    line: (n) => `${n}: <b>Echo Screen</b>, <b>Esuna</b>, <b>Remedy</b>`,
   },
   // §2.8 Curse: cannot spherechange; cured by Holy Water, Remedy, Esuna.
   curse: {
     full: (n, p) => `<b>${n} is cursed</b> and ${p.they} cannot change dresspheres. <b>Holy Water</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
     short: (n) => `${n} is cursed: <b>Holy Water</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
+    line: (n) => `${n}: <b>Holy Water</b>, <b>Esuna</b>, <b>Remedy</b>`,
   },
 };
 
@@ -167,7 +180,9 @@ export function cureHint(game: StatusGame, status: StatusId, name: string, id: s
   if (!row) return null;
   const n = escapeHtml(name);
   const p = pronounsOf(id);
-  return { status, label: LABELS[status] ?? status.toUpperCase(), html: row.full(n, p), short: row.short(n, p) };
+  const hint: CureHint = { status, label: LABELS[status] ?? status.toUpperCase(), html: row.full(n, p), short: row.short(n, p) };
+  if (row.line) hint.line = row.line(n, p);
+  return hint;
 }
 
 /** Statuses with a hint, per game, in the order the card lists them (tests). */

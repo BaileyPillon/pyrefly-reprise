@@ -51,8 +51,11 @@ export class MomentOverlay implements MomentsPort {
   /** The pending slab's resolver, so a cleared or replaced slab never strands its caller. */
   private slabDone: (() => void) | null = null;
   private disposed = false;
+  /** The scene's art namespace (the experimental Leblanc chapter): the turn cut-in shows the portraits the namespace has repainted. */
+  private readonly artNamespace: string | undefined;
 
-  constructor(root: HTMLElement) {
+  constructor(root: HTMLElement, artNamespace?: string) {
+    this.artNamespace = artNamespace;
     const doc = root.ownerDocument;
     this.el = doc.createElement('div');
     this.el.className = 'pf-mom';
@@ -170,7 +173,7 @@ export class MomentOverlay implements MomentsPort {
   /** The approved turn cut-in (PR-0005); see `TurnCutInLayer.ts`. */
   turnCutIn(req: TurnCutInRequest): Promise<void> {
     if (this.disposed) return Promise.resolve();
-    return playTurnCutIn(this.el, req);
+    return playTurnCutIn(this.el, this.artNamespace ? { ...req, artNamespace: this.artNamespace } : req);
   }
 
   // ---------------------------------------------------------------- vignette
@@ -217,7 +220,7 @@ export class MomentOverlay implements MomentsPort {
   }
 }
 
-/** Mount a fresh overlay inside `root`. */
-export function createMomentOverlay(root: HTMLElement): MomentOverlay {
-  return new MomentOverlay(root);
+/** Mount a fresh overlay inside `root`; `artNamespace` is the scene's (the experimental Leblanc chapter) or absent. */
+export function createMomentOverlay(root: HTMLElement, artNamespace?: string): MomentOverlay {
+  return new MomentOverlay(root, artNamespace);
 }

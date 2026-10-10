@@ -56,6 +56,12 @@ export { dealDamage, healOutsideChain, koActor, reviveActor, ejectActor, restore
 export { resolveAbility, mpCostFor, blockedBySilence } from './abilities.ts';
 export type { ResolveOptions } from './abilities.ts';
 export { advanceForm, hasNextForm } from './forms.ts';
+// The game's boss-script hooks: one registry and one runner (`ai/hooks.ts`, run once per action per target before the death
+// check by `abilities.ts#finishTouched`). `registerHitScript` is the same `onHit` handed a `HitEvent`, the shape Chapters II and III were written for.
+export { registerScriptHooks } from './ai/hooks.ts';
+export type { HitReport, ScriptHooks, UsedCommand } from './ai/hooks.ts';
+export { registerHitScript } from './ai/hit-script.ts';
+export type { HitEvent, HitHook } from './ai/hit-script.ts';
 export { summonAeon, dismissAeon, banishAeon, availableAeons, AEON_REVIVE_BATTLES } from './aeons.ts';
 export {
   addGauge,

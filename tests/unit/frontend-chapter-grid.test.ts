@@ -42,8 +42,10 @@ describe('the board', () => {
     // none with a COMING row of its own; Chapter VII (Macalania) left its lock
     // on 2026-09-29 (D-278).
     expect(LOCKED_CHAPTER_IDS.size).toBe(0);
+    // The eighteen and nothing else: the Leblanc preview (2026-10-06, FFX-2 only) is hidden, reached by its word, and has no card (`exp-leblanc-door.test.ts`).
     expect(tiles).toHaveLength(18);
     expect(tiles.filter((t) => t.playable)).toHaveLength(CHAPTERS.length);
+    expect(tiles.filter((t) => !t.chapter?.experimental)).toHaveLength(CHAPTERS.length);
     expect(tiles.filter((t) => t.kind === 'coming')).toEqual([]);
   });
 
@@ -61,6 +63,7 @@ describe('the board', () => {
     expect(groups[0]!.tiles[3]!.id).toBe('seymour-anima-macalania');
     expect(groups[0]!.tiles[3]!.playable).toBe(true);
     expect(groups[0]!.tiles.every((t) => t.playable)).toBe(true);
+    // The FFX-2 group ends with Ixion (XVI): the Leblanc preview has no card.
     expect(groups[1]!.tiles.map((t) => t.numeral)).toEqual(['IV', 'V', 'VI', 'XI', 'XIII', 'XV', 'XVI']);
     for (const group of groups) {
       const numbers = group.tiles.map((t) => t.number ?? Number.MAX_SAFE_INTEGER);
@@ -210,8 +213,8 @@ describe('the cursor', () => {
     // +1 crosses into the FFX-2 group.
     const fromLastFfx = tiles.findIndex((t) => t.id === 'sin-face');
     expect(tiles[stepSelection(tiles, fromLastFfx, 1)]!.id).toBe('ffx2-bahamut');
-    // Wrapping backwards from the first card lands on the last *playable* one
-    // — Ixion at Djose now, listed 2026-09-27 after Chapter XV in the FFX-2 group.
+    // Wrapping backwards from the first card lands on the last *playable* one:
+    // Ixion at Djose (listed 2026-09-27); the Leblanc preview has no card.
     expect(tiles[stepSelection(tiles, 0, -1)]!.id).toBe('ffx2-ixion-djose');
     for (let i = 0; i < tiles.length; i++) {
       if (!tiles[i]!.playable) continue;

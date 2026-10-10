@@ -135,6 +135,16 @@ export function chipObstacleEls(hud: HTMLElement): HTMLElement[] {
   return [...hud.querySelectorAll<HTMLElement>('.sgd__toggle'), ...doc.querySelectorAll<HTMLElement>('.battle-pause-chip')];
 }
 
+/**
+ * The key chips along the top of the stage that the advisor's one-row tip must keep off at **every** text size (`advisorTip.ts`; the designed card never meets them at 100 percent, which is
+ * why `chipObstacleEls` above asks for them only when TEXT SIZE has grown them): the guide's `G` chip and its scroll chip inside the HUD, and the screen's `PAUSE` chip. A hidden one measures zero
+ * and is skipped by the caller.
+ */
+export function topChipEls(hud: HTMLElement): HTMLElement[] {
+  const doc = hud.ownerDocument;
+  return [...hud.querySelectorAll<HTMLElement>('.sgd__toggle, .sgd__keys'), ...doc.querySelectorAll<HTMLElement>('.battle-pause-chip')];
+}
+
 /** Room the advisor's own chip needs above its card, grid px: its measured height plus the gap; 0 when it is not up, at 100 % or on the phone. */
 export function chipReserveOf(chipRect: { top: number; bottom: number } | null, gap: number, hud: HTMLElement): number {
   return chipRect && textSizeGrown(hud) ? chipRect.bottom - chipRect.top + gap : 0;
