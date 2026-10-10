@@ -207,8 +207,24 @@ export const STAT_STACK_MAX = 10;
 // Encounter-specific
 // ---------------------------------------------------------------------------
 
-/** Bahamut's deterministic 12-action loop. [ffx2-bahamut §2.1] `[verified: 2 sources]` */
+/**
+ * The Mega Flare countdown's number of steps, which is also the highest number the window shows. The game's steps are 150
+ * AI polls long (750 polls, 25.03 s of running clock at 29.97 steps a second); on this base one Bahamut turn stands for one
+ * step, because every AI timer is still counted in turns until lane W4 moves the clock onto the logic step
+ * (`research/re-ffx2-ai-bahamut-vegnagun.md` 2.2; `docs/handoff/re-parity-ai-ffx2-a.md` lists the timer rows).
+ */
 export const BAHAMUT_COUNTDOWN_START = 5;
+
+/** The polls in one countdown step (m168.src:92-141), for the W4 conversion: 5 steps x 150 = 750 polls. */
+export const BAHAMUT_POLLS_PER_COUNTDOWN_STEP = 150;
+
+/**
+ * Whether `searchr`, the weighted target search most boss scripts use, weighs the girls by the scene's start positions
+ * (`ai/script-rolls.ts`). The weight rule is proven against the exe; the live positions and the boss's facing are not tracked by
+ * this engine (note section 9, "Targets in practice", [L]), so the weights use the scene's start positions with the boss facing the party.
+ * Off, the search picks uniformly. Bailey's call; the handoff has the measurement of both.
+ */
+export const NEAR_WEIGHTED_TARGET_SEARCH = true;
 
 /**
  * Mega Flare's power: **14, the game's own row** (the monster-magic table, command 0x409c, `power` 14;
@@ -231,14 +247,20 @@ export const ENEMY_ATTACK_CONSTANT = 16;
  */
 
 /**
- * The Vegnagun head's cannon fail clock, counted in combined resolved turns of
- * {Head, Redoubt R, Redoubt L} from the Phase B transition.
- * [ffx2-vegnagun-shuyin §4.2.2] `[estimate]` — shipped default, not "Authentic".
+ * The Vegnagun head's cannon fail clock: **100**, the game's own count (re-parity AI lane FFX-2 a,
+ * `research/re-ffx2-ai-bahamut-vegnagun.md` 6.1 and finding 5; it was an estimate of 240). One counter shared by {Head, Redoubt R,
+ * Redoubt L}, raised by every phase-2 action poll of the three (not the Head's first and third), and the world ends on the Head's
+ * first poll that finds it at 100 or more. In the game a poll that counts is one that issues a command, so the unit is turns,
+ * the unit this engine counts in; what the 100 come to in seconds depends on how long each of their commands takes, which
+ * lane W4 owns (the clock in seconds is a structural change that waits for Bailey, `docs/plans/re-parity-ai-review.md` section 3).
  */
-export const HEAD_FIRE_AT_TURN = 240;
+export const HEAD_FIRE_AT_TURN = 100;
 
-/** Shuyin's lines 3..6 land at 48 / 96 / 144 / 192. §4.2.2 `[estimate]` */
-export const HEAD_LINE_INTERVAL = 48;
+/** Shuyin speaks at the clock's 20, 40, 60 and 80 (lines 3 to 6) before it reaches 100 (line 7). m290.src:212-262 */
+export const HEAD_LINE_INTERVAL = 20;
+
+/** Once, at the clock's 51, the Head speaks a line of Braska's in the game; our story binding for it is Auron's `auron-halfway` (stale, listed for Bailey). m290.src:264-274 */
+export const HEAD_HALFWAY_LINE_AT = 51;
 
 /** The Core charges three times, then fires Memento Mori. §4.1 */
 export const CORE_CHARGES_BEFORE_MEMENTO = 3;
