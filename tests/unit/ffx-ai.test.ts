@@ -15,12 +15,12 @@ import {
   chooseAiCommand,
   type Ctx,
   FFXContentRegistry,
-  applyStatus,
   resolveAbility,
   resolveTargets,
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { ability, enemy, setup } from './ffx-fixtures.test.ts';
+import { giveStatus } from './helpers/ffxStatus.ts';
 
 const BOSS_ABILITY_IDS = [
   'lance-of-atrophy',
@@ -146,7 +146,7 @@ describe('Seymour Flux (§4, as the game runs it)', () => {
   it('Full-Life prefers a zombified member, and whiffs on a living one', () => {
     const { ctx } = seymourCtx();
     const tidus = at(ctx, 'tidus');
-    applyStatus(ctx, undefined, tidus, { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(tidus, 'zombie');
     // The shared state at the mount's Full-Life step.
     ctx.state.flags['seymour.cycle'] = 2;
     const command = chooseAiCommand(ctx, at(ctx, 'mortiorchis'));
@@ -192,7 +192,7 @@ describe('Seymour Flux (§4, as the game runs it)', () => {
     const seymour = at(ctx, 'seymour-flux');
     const mount = at(ctx, 'mortiorchis');
     seymour.hp = 30000; ctx.state.flags['seymour.phase'] = 2; ctx.state.flags['seymour.cycle'] = 1;
-    applyStatus(ctx, undefined, seymour, { status: 'reflect', chance: 255, duration: 254 });
+    giveStatus(seymour, 'reflect');
     // The encounter's own record, not the player's Blk Magic `flare`: power 80,
     // `self`, `extra.selfTargetBounce`. Casting the player's row measured 927
     // on Yuna against §5.2's 1,900-2,100 band and made §5.3's self-damage case
@@ -270,7 +270,7 @@ describe('Yunalesca (§5)', () => {
     const { ctx } = yunalescaCtx(1);
     const boss = at(ctx, 'yunalesca');
     for (const id of ['tidus', 'yuna', 'auron']) {
-      applyStatus(ctx, undefined, at(ctx, id), { status: 'zombie', chance: 255, duration: 254 });
+      giveStatus(at(ctx, id), 'zombie');
     }
     ctx.rt.actors.get('yunalesca')!.ai['priv0004'] = 2;
     const picked = new Set<string>();
@@ -295,7 +295,7 @@ describe('Yunalesca (§5)', () => {
     ctx.rt.actors.get('yunalesca')!.ai['priv0004'] = 2;
     for (const id of ['tidus', 'yuna', 'auron']) {
       const c = at(ctx, id);
-      applyStatus(ctx, undefined, c, { status: 'zombie', chance: 255, duration: 254 });
+      giveStatus(c, 'zombie');
     }
     // KO one of them outright; the Zombie stays on the slot.
     const downed = at(ctx, 'auron');

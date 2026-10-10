@@ -10,7 +10,6 @@
 
 import type { FFXCombatant } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
-import { normalise } from './turnQueue.ts';
 
 /** Braska's Final Aeon's AI script ids (`ai/braskas-final-aeon.ts`). */
 function isBraskaScript(enemy: FFXCombatant): boolean {
@@ -47,11 +46,11 @@ export function advanceForm(ctx: Ctx, enemy: FFXCombatant): boolean {
   // Yunalesca's script rewrites the turn order at both changes: the boss acts next and every active party member is
   // pushed back one tick, so nobody acts between the transformation and its entry action [ffx-yunalesca §1.3 step A;
   // re-ffx-ai-yunalesca-bfa §2.10]. Braska's Final Aeon's transformation script writes no CTB at all (§3.7), so his
-  // order is left as it was and he returns to his turn when it comes.
+  // order is left as it was and he returns to his turn when it comes. The counters are the game's bytes (W2): a push
+  // back is clamped at 255.
   if (!isBraskaScript(enemy)) {
     rtOf(ctx, enemy.id).ctb = 0;
-    for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += 1;
-    normalise(ctx);
+    for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + 1);
 
     // Both cycle counters reset on a transition, and the entry turn is pending.
     const mem = rtOf(ctx, enemy.id).ai;
@@ -105,8 +104,7 @@ export function revealEnemy(ctx: Ctx, enemy: FFXCombatant, slot?: number, partyD
   delete enemy.statuses['ko'];
 
   rtOf(ctx, enemy.id).ctb = 0;
-  if (partyDelay !== 0) for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += partyDelay;
-  normalise(ctx);
+  if (partyDelay !== 0) for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + partyDelay);
 
   const event: Parameters<Ctx['emit']>[0] = { type: 'part-restored', partId: enemy.id, hp: enemy.hp };
   if (enemy.flags.partOf !== undefined) event.ownerId = enemy.flags.partOf;

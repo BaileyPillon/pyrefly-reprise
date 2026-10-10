@@ -214,6 +214,10 @@ describe('Evrae — the airship, run against the real engine', () => {
 
   it('§4.2 — an order is queued, not immediate, and the LAST one wins', () => {
     const engine = newEngine();
+    // Out of danger (re-parity W2, FFX only): the clean pair needs both order-givers alive and acting, and with the party defending
+    // from the first turn Evrae wins some openings (the opening counters are the game's 26 fixed draws now) before a pair turns up.
+    // This unit measures the order queue, not the fight.
+    makeInvincible(engine);
     let issued = 0;
     drive(
       engine,
@@ -542,15 +546,22 @@ describe('Evrae — the airship, run against the real engine', () => {
 
     // Slowproof / Ribbon are a 255 resistance byte; a chance-255 application
     // returns before `rollStatus` ever reads it, so the Slow lands anyway.
+    // Petrify is made impossible as well (re-parity W2, FFX only): the game walks the record's statuses in order, Petrify (2) before Slow
+    // (24), and a record that Petrify has taken refuses every later status (research/re-ffx-ctb-status.md section 6 and 12 correction 4),
+    // so on a target that is actually Petrified the Slow cannot land whatever its chance. The claim here is the Slowproof byte's.
     const proofed = runGaze((c) => {
       c.immunities['slow'] = 255;
+      c.immunities['petrify'] = 255;
     });
     expect(actives(proofed).every((c) => c.immunities['slow'] === 255)).toBe(true);
     expect(actives(proofed).some((c) => c.statuses['slow'] !== undefined)).toBe(true);
 
     // Auto-Haste is a *permanent* Haste, and `applyStatus` refuses to displace
     // one — which is exactly the one thing the wiki says stops this Slow.
+    // The Petrify rider must be able to land on whoever the script picks (re-parity, AI lane C merged with W2: the victim is the script's
+    // pick, and a member of this build wears a Petrify ward, so a pick of that member would show nothing): the ward is taken off.
     const hasted = runGaze((c) => {
+      c.immunities['petrify'] = 0;
       c.statuses['haste'] = {
         id: 'haste',
         turnsRemaining: 255,

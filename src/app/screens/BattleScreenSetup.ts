@@ -187,12 +187,16 @@ const FFX_CARRY_EXCLUDED: readonly StatusId[] = ['ko', 'critical', 'eject', 'def
  * The FFX status carry's half of a member or aeon: HP, MP, the statuses, and the pool ceilings they imply.
  *
  * - **Max HP x2 / Max MP x2** (a Stamina or Mana Tonic, a Mix) are a pool change while they are on
- *   (`statuses.ts#applyPoolDoubler`): the carried ceiling is the live, doubled one, so the status and its effect
- *   travel together, and when it comes off in the next link the engine halves back to the base (it used to sit on
- *   the undoubled base, clamp away the HP above it, and then halve the base: 2026-09-29, the card's seed 23).
- *   Without the status the ceiling is the live one too, never the previous link's build: after a seam that build
- *   holds the doubled ceiling, and a Tonic lost in link 2 (a KO; the engine has already halved the live pool) used
- *   to open link 3 doubled with no status (CHECK 3, C3-1: Auron 12,984 against 6,492).
+ *   (`statuses.ts#applyPoolFlags`). Re-parity W2 (FFX only): the member carries its BASE maxima and the status, and the next
+ *   link's engine rebuilds the doubled ones the way the game's party-stats builder does at battle start
+ *   (`statuses.ts#rebuildCarriedPools`, `pp_BtlApplyDoubleHpMp` with no new byte): the doubling is capped at 9,999 HP and 999 MP
+ *   without Break HP / MP Limit, so a doubled ceiling cannot be halved back to the base it came from, and the base has to travel.
+ *   The HP above the base survives (it is clamped under the doubled ceiling, which is the live one), and when the status comes
+ *   off in the next link the engine puts the base back (2026-09-29, the card's seed 23: it used to sit on the undoubled base
+ *   and clamp away the HP above it).
+ *   Without the status the ceiling is the live one, never the previous link's build: after a seam that build holds the base,
+ *   and a Tonic lost in link 2 (a KO; the engine has already restored the live pool) must open link 3 on the live base
+ *   (CHECK 3, C3-1: Auron 12,984 against 6,492).
  * - **SOS (`critical`)** is derived from the carried HP, like KO: under half of the ceiling and above 0. The setup
  *   then has nothing to correct, so a fresh engine (a checkpoint retry builds one) opens on any carried state.
  */
@@ -201,14 +205,16 @@ function carriedFfxState(
   live: FFXCombatant,
 ): { stats: FFXCombatant['stats']; hp: number; mp: number; statuses: Partial<Record<StatusId, StatusInstance>> } {
   const statuses = carriedFfxStatuses(live);
+  // The base maxima while a pool status is on (the template's: `stats` is the previous link's member, and its maxima are the base
+  // because they travel as the base), the live ones otherwise. HP and MP are clamped under the LIVE ceiling, the doubled one.
   const pools = {
     ...stats,
-    maxHp: statuses['max-hp-x2'] ? Math.max(stats.maxHp, live.stats.maxHp) : live.stats.maxHp,
-    maxMp: statuses['max-mp-x2'] ? Math.max(stats.maxMp, live.stats.maxMp) : live.stats.maxMp,
+    maxHp: statuses['max-hp-x2'] ? stats.maxHp : live.stats.maxHp,
+    maxMp: statuses['max-mp-x2'] ? stats.maxMp : live.stats.maxMp,
   };
-  const hp = clamp(live.hp, 0, pools.maxHp);
-  if (hp > 0 && hp * 2 < pools.maxHp) statuses.critical = { id: 'critical', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
-  return { stats: pools, hp, mp: clamp(live.mp, 0, pools.maxMp), statuses };
+  const hp = clamp(live.hp, 0, live.stats.maxHp);
+  if (hp > 0 && hp * 2 < live.stats.maxHp) statuses.critical = { id: 'critical', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+  return { stats: pools, hp, mp: clamp(live.mp, 0, live.stats.maxMp), statuses };
 }
 
 /**

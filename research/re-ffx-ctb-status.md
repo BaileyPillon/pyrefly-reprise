@@ -11,7 +11,7 @@ reads at run time, the CTB base table `ctb_base.bin` (530 bytes, SHA-256 starts 
 battle kernel folder of the same install's archive. Everything is written in our own words: no game code and no game
 text is reproduced here.
 
-| This note | Kernel (pure TypeScript, not wired into the engine yet) | Tests |
+| This note | Kernel (pure TypeScript; wired into the FFX engine in W2, see §15) | Tests |
 |---|---|---|
 | §1 the CTB base table, tick speed | `src/battle/ffx/kernel/ctb-table.ts`, `ctb.ts` | `tests/unit/parity-ffx-ctb.test.ts` |
 | §2 action rank, recovery, Haste and Slow on a value, revive | `kernel/ctb.ts` | same |
@@ -20,7 +20,8 @@ text is reproduced here.
 | §5 CTB damage: Delay, Threaten, delay immunity, the Haste and Slow commands | `kernel/ctb.ts` (re-exports `aftermath.ts`), `kernel/damage.ts` formula 0xd | `parity-ffx-ctb.test.ts`, `parity-ffx-hitdamage.test.ts` |
 | §6 status infliction and cleansing | `kernel/status-inflict.ts`, `kernel/status-types.ts` | `parity-ffx-status-inflict.test.ts` |
 | §7 extra statuses, shatter, Doom, stage buffs, Double HP and MP | `kernel/status-extra.ts`, `kernel/status-pool.ts` | `parity-ffx-status-inflict.test.ts`, `parity-ffx-status-pool.test.ts` |
-| §8 durations: where they come from and how they tick | (tables in `status-types.ts`; the tick functions are read, not ported) | |
+| §8 durations: where they come from and how they tick | tables in `status-types.ts`; the tick functions are ported in §14 | |
+| §14 the per-turn ticks: end of turn, start of turn (Regen), the Threaten link, Poison, Doom, action done | `kernel/turn-ticks.ts` | `tests/unit/parity-ffx-turn-ticks.test.ts` |
 | §9 every random draw, in one table | | |
 | §10 differences against the engine today | | |
 | §11 what the engine has to supply | | |
@@ -357,7 +358,7 @@ never counted down) and is used by every player-cast Haste, Slow, Shell, Protect
 the four Nul statuses carry **1**, which is one charge (their counters never tick); Sleep, Silence and Darkness from
 weapons and items are 3 to 8; monster abilities use anything from 1 to 99.
 
-**How they tick** (read, not ported; 0x007af390 and 0x007af4f0). The thirteen temporal counters have a behaviour byte
+**How they tick** (ported in §14; 0x007af390 and 0x007af4f0). The thirteen temporal counters have a behaviour byte
 in the table at VA 0x00c42464 (byte 3 of 13 records): Sleep 0xac, Silence 0xcc, Darkness 0xcc, Shell 0x14, Protect 0x14,
 Reflect 0x14, the four Nul 0x00, Regen 0x03, Haste 0x0c, Slow 0x8c. Bit 1 (value 1): the counter goes down at the
 **start of its holder's own turn**; bit 4 (value 4): at the **end of its holder's own turn**; bits 2 and 8 fire an
@@ -471,6 +472,243 @@ Break HP and MP Limit bits.
 3. What the scene value 0x1ad and the byte at VA 0x0112c9d1 stand for in the script hold.
 4. Whether an equipment-given Haste or Slow comes back after a Petrify zeroes the record's counters (the temporal auto
    word `Chr+0x62c` is not applied in the functions read here).
-5. When the Threaten status ends and what removes `Chr+0x5c5`.
+5. ~~When the Threaten status ends and what removes `Chr+0x5c5`.~~ Answered in §14.3: at the start of the next turn of either end of the pair, and by the death handler.
 6. Whether the engine's formation order of enemies is the game's monster slot order (it decides ties among enemies).
 7. The ranks, chances and durations in the engine's ability data against the game's command tables.
+
+## 14. The per-turn ticks: end of turn, start of turn, Regen, the Threaten link, Poison, Doom (ported in the W2 batch)
+
+Added 2026-10-08 (re-parity W2). **Game case: FFX only.** Kernel `src/battle/ffx/kernel/turn-ticks.ts`; tests
+`tests/unit/parity-ffx-turn-ticks.test.ts`; vectors `tests/fixtures/parity/ffx/turn_ticks_end.json`,
+`turn_ticks_start.json`, `turn_ticks_misc.json`. Same source note as the top of this file (FFX.exe build 25501027), read in
+Ghidra (decompile and disassembly), everything in our own words.
+
+### 14.0 How it was checked
+
+The real machine code of six functions was run in the emulator (the harness of §0), on generated inputs:
+
+| Function | VA | Vectors per round | Differences |
+|---|---|---:|---:|
+| end-of-turn status tick | 0x007af390 | 9,000 | 0 |
+| start-of-turn tick (Regen, stances, Threaten release) | 0x007af4f0 | 7,000 | 0 |
+| the Threaten release on its own (the death handler and the leave-the-field function call it) | 0x0078e410 (with 0x0078e460) | 3,000 | 0 |
+| Poison | 0x007afab0 | 5,000 | 0 |
+| Doom | 0x00799cd0 | 4,000 | 0 |
+| action done (recovery, end-of-turn tick, Poison marker) | 0x007b20e0 | 5,000 | 0 |
+
+Two rounds with different seeds (66,000 vectors in all, 0 differences). The animation and presentation callees (damage
+numbers, wake-up and recovery poses, the queue of a death or a Doom kill, the weak-HP refresh, the position maths of the
+Threaten pose) are replaced by recorders whose arguments are part of every vector; the death check
+(`pp_BtlDamageCheckDeath`) returns a scripted value; nothing else is replaced, so the real `pp_BtlSubHp`, the real
+character lookup, the real CTB delay and the real end-of-turn tick run. **Every character structure (31 of them) was
+filled with random bytes before each vector**, and only then were the fields the kernel models written, so a byte the
+code reads that the kernel does not model would have shown as a difference. The byte offsets each function changes were
+also recorded, over all vectors:
+
+| Function | Offsets written | Meaning |
+|---|---|---|
+| end of turn | 0x608-0x60d, 0x613, 0x614 (counters); 0x433, 0x50e, 0x50f | the eight ticking counters; the wake-up pose request |
+| start of turn | 0x5d0-0x5d3 (HP); 0x612 (Regen counter); 0x6d2; 0x616/0x617; 0x606-0x607 (Threaten bit); 0x5c5, 0x5c6; 0xdd0, 0xded | payouts; the actor's Regen count; tick counters; stances; the Threaten link; the damage-source id (the holder itself) |
+| Threaten release | 0x607, 0x5c5, 0x5c6 | the Threaten bit and the two link bytes of both ends |
+| Poison | 0x5d0-0x5d3; 0xdf8; 0x41c, 0x42b, 0x42c, 0x42e, 0xdd0, 0xded | HP; the skip flag cleared; presentation bookkeeping |
+| Doom | 0x5c8 | the countdown, and nothing else |
+| action done | 0x65c (CTB); 0x608-0x60d, 0x613, 0x614; 0xde4, 0xde6 (the queue index and count of the character); presentation | recovery; the end-of-turn tick |
+
+The repo keeps stratified subsets (890 vectors: end of turn 240, action done 160, start of turn 120, Threaten release 90,
+Poison 160, Doom 120) and the full sets stay under `D:\Tools\ffx-parity\kernel-check-turn-ticks\`. **Mutation check:** 50
+single changes to the kernel (a comparison off by one, a bit swapped, a clamp removed, a step dropped) were run against
+the repo tests; 46 were caught on the first run and the four survivors are two hand tests added (the tick counter's `& 0xff`:
+the game reads one byte; the slot-31 bounds check) and two changes that cannot alter any answer ("reset the tick counter only
+when a payout was made": a payout of `(x >> 8) + 100` is never 0 or less, so every holder that is reset is paid; and "the
+actor's start-of-turn event needs its table bit": only Regen has the start-of-turn count bit, and it also has the event bit).
+
+### 14.1 The end of a turn (VA 0x007af390)
+
+Called by the action-done function (§14.4) **after** the actor's recovery has been added to its CTB counter, so the Haste or
+Slow that runs out here still halved or doubled that last recovery. It does nothing to a character that is not on the field.
+Otherwise the thirteen counters of §6 are walked in order; a counter of **1 to 253** whose behaviour byte (§8) has **bit 4**
+counts down by one: Sleep, Silence, Darkness, Shell, Protect, Reflect, Haste, Slow. 254 ("until removed"), 255 (given by
+equipment) and 0 never move. Regen (bit 1 only) and the four Nul statuses (no bits) are untouched. A counter whose byte also
+has **bit 8** (Sleep, Silence, Darkness, Haste, Slow) fires a status event unless the character's silent flag (`Chr+0xdcb`)
+is on; the event is presentation (the status icon timer). After the loop:
+
+- a Sleep counter that was not 0 and now is wakes the sleeper (a pose request, action 0x1b) and the function **ends there**;
+- otherwise a Silence or a Darkness that went from not 0 to 0 asks for a recovery pose.
+
+Nothing else in the character is written. A Silence or Darkness that runs out therefore simply stops being a counter; the
+engine's `status-remove` event for it is the same fact.
+
+### 14.2 The start of a turn (VA 0x007af4f0)
+
+Called from the turn dispatcher (`pp_BtlTurnStart`, 0x00792a90) when **any** character's turn begins, before Doom (§14.5)
+and before the check for Sleep, Provoke, Berserk and Confuse. Its steps, in order:
+
+1. **If the actor is on the field and the turn is not a re-entered one** (`Chr+0x716` is 0; the byte is set to 1 when a
+   command is refused or a turn is handed over and the same turn is opened again, and cleared when the dispatcher is done):
+   - **Regen pays every holder.** The 31 character slots are walked in id order (party 0 to 7, aeons 8 to 0x11, monsters 0x14
+     to 0x1b). A slot whose Regen counter (`Chr+0x612`) is not 0, that is on the field, has **HP above 0**, is not dead
+     (`Chr+0xdcc`) and is not Petrified (`Chr+0xdce`, the Petrify bit copied when a hit record is written back) gets
+     `(Chr+0x6d2 * maxHP >> 8) + 100` (a 32-bit multiply and a logical shift; `Chr+0x6d2` is its own **tick counter**, the
+     number of clock ticks since its last payout or since its Regen began). A Zombie takes the amount as damage, anyone else
+     as healing; both are `pp_BtlSubHp`, `HP = clamp(HP - amount, 0, maxHP)`. A slot that met the conditions has its tick
+     counter reset to 0, and so does every holder that was paid (the amount is never 0 or less, so these are the same slots).
+   - **The actor's own start-of-turn counters** count down: a counter of 1 to 253 whose behaviour byte has **bit 1**. Only
+     Regen has it (0x03), and its bit 2 fires the status event. So Regen counts down at the start of its HOLDER's turns, after
+     the payouts of that same call: a Regen of 10 pays at 10 of its holder's own turn starts (and at every other turn start in
+     between).
+2. **Always, whatever the actor is doing:** Defend (extra bit 0x800), Guard (0x1000), Sentinel (0x2000), Shield (0x40) and
+   Boost (0x80) end on the actor, unless the equipment gives the stance (`Chr+0x62e`). Defend, Sentinel and Shield also ask for
+   a pose. This is the "until the user's next turn" rule of §7; the engine's `clearUntilNextTurnStatuses` is the same set.
+3. **Always:** the Threaten release of §14.3.
+
+The two guards in step 1 are `Chr+0xdc8` (on the field) and `Chr+0x716`; steps 2 and 3 run without them.
+
+**The tick counter** `Chr+0x6d2` is what the clock adds to: every call of the scheduler that ticks (§4) adds 1, saturating at
+255, to every character that has no queued action, is on the field, is not dead and is not Petrified. It is reset by the
+payout above and when a Regen counter goes from 0 to something (the hit-record write-back and the equipment refresh both do
+it). So a holder is paid for the ticks **it** has seen since its last payout, not for "the ticks since the last turn" of the
+field; the two agree whenever the holder was eligible for all of them.
+
+### 14.3 The Threaten link (VA 0x0078e410, 0x0078e460): answers open question 5
+
+A Threaten that lands makes a **pair**: the target's permanent word gets bit 0x800 and `Chr+0x5c5` names the user (§6); the
+write-back of the hit record then calls `fh_MsThreatProcess` (0x0078e460, Fahrenheit's name) with the bit set, which gives the
+USER bit 0x800 too and sets the user's `Chr+0x5c6` to the target. Both ends therefore carry the bit and name each other.
+
+It is released by `FUN_0078e410`, which runs at the end of **every** start-of-turn tick, in the death handler for the character
+that dies, and in the function that takes a character off the field. For a character with the bit, `Chr+0x5c6` not 0xff means
+it is the USER of a pair; otherwise it is the TARGET. In both cases the bit leaves BOTH ends, and both ends' two link bytes
+become 0xff. So **a Threaten ends at the start of whichever end's turn comes first** (the user's, normally, because the target
+was rescheduled to the user's own next counter, §5, and a party member sorts before a monster at a tie), and when either end
+dies or leaves the field. Nothing else ever ends it: it has no counter, and a status command that clears bit 11 from the
+record makes the write-back dissolve the link the same way (the bit is then clear).
+
+A character holding the bit as the TARGET (link byte `Chr+0x5c6` = 0xff) is frozen by the animation code (rate 0) until then.
+A target whose turn comes up first is released at that turn's start and **then takes its turn normally**: the game has no
+rule that makes a threatened character lose a turn; the delay is the whole of the effect.
+
+### 14.4 Poison and the action-done function (VA 0x007afab0, 0x007b20e0)
+
+The recovery after an action is added by `pp_BtlActionDone`: for the queue entry that ends the turn (the entry's second byte
+is 0) it does, **in this order**: `CTB += HasteSlow(tickSpeed(AGI) * max(rank, 1))` as a byte add (§2), then the end-of-turn
+tick of §14.1, then the MP and Overdrive costs, then the **Poison marker**. The marker (the byte at VA 0x0112c9e4) is set to
+the actor's id only when the call was made with its third argument non-zero, which only the results-applied function
+(`pp_BtlApplyResults`) does, i.e. after an action whose results were applied, **not after a passed turn**, and only when the
+actor has Poison (permanent bit 0x08), is not dead, is on the field and its `Chr+0xdf8` flag is clear (the flag a character
+has while it is leaving the field). A sleeper's turn is passed with an empty action (argument 0), so **a poisoned sleeper takes
+no Poison damage**. The rank of a passed turn is `Chr+0xde8` as the scheduler left it: it resets it to 3 every time the
+counter reaches 0 (§4), so a passed turn costs a rank-3 recovery. That settles the engine's `[estimate]` of 3.
+
+`pp_BtlPoisonTick` (0x007afab0) runs afterwards for each character and pays the one the marker names: damage
+`Chr+0x5ba * maxHP / 100`, an unsigned 32-bit multiply and divide (`Chr+0x5ba` is 25 for every one of the 18 player and aeon
+slots and the monster record's byte for a monster; for 25 the result equals `maxHP / 4` rounded down), through `pp_BtlSubHp`
+(clamped at 0). It clears the marker whoever it named and clears `Chr+0xdf8`.
+
+### 14.5 Doom (VA 0x00799cd0)
+
+Called by the turn dispatcher right after the start-of-turn tick. With the Doom extra bit (0x4000), a turn that is not
+re-entered and an action buffer to fill, a countdown (`Chr+0x5c8`) above 0 goes down by one; a countdown that is then 0 queues
+the **Doom kill** (command 0x3120, whose Death carries the marker 4 of §6) as the doomed character's own action against itself
+and the dispatcher stops there: the character does not take the turn it was given. A countdown that already stood at 0 kills
+at once. The countdown starts from `Chr+0x5c9` when Doom lands (§7): 5 for every party slot, the monster record's byte for a
+monster.
+
+### 14.6 The order of a turn, from the dispatcher
+
+`pp_BtlTurnStart` (0x00792a90), for the character whose turn the scheduler queued: the start-of-turn tick (§14.2) -> if the
+character is not dead and the battle is not over: Doom (§14.5; if it fires the turn is over) -> a character with a Sleep
+counter is passed (an empty action, whose end is the action-done call of §14.4 with no Poison marker) -> Provoke, then Berserk
+(0x200) or Confuse (0x100) take their automatic action -> otherwise the player's menu or the monster's script. Whatever action
+is taken ends in the action-done call, which charges the recovery, ticks the end-of-turn counters, and marks Poison.
+
+### 14.7 Differences against the engine before the W2 batch
+
+"Engine" is `src/battle/ffx/ticks.ts`, `statuses.ts` and `engine.ts` at `bd908802`.
+
+| # | What | Engine | Game | How often |
+|---|---|---|---|---|
+| T1 | Regen payout size | `elapsedTicks` (the field's CTB clock since the last turn start) for every holder | the holder's own tick counter (reset at its last payout or when its Regen began; saturating at 255; frozen while off the field, dead or Petrified) | a Regen cast mid-way between two turn starts, a revive, a petrified or off-field holder |
+| T2 | When Regen counts down | at the END of the holder's own turn (`DURATION_STATUSES`) | at the START of the holder's own turn, after the payout | every Regen |
+| T3 | Which counters tick at the end of a turn | Sleep, Silence, Darkness, Slow, Regen | Sleep, Silence, Darkness, Shell, Protect, Reflect, Haste, Slow (not Regen) | finite Shell, Protect, Reflect and Haste (monster spells) |
+| T4 | Poison on a passed turn | ticks (the pass path runs `afterAction`) | none: only after an action whose results were applied | a poisoned sleeper |
+| T5 | Doom's countdown | the ability's duration byte (a 254 placeholder) unless the enemy declares `doomTurns` | `Chr+0x5c9`: 5 for the party | every Doom on the party |
+| T6 | Doom with a counter already at 0 | not possible | kills at once | -- |
+| T7 | Threaten | the target stays in the queue, loses its turn if it comes first (`canAct`), and its counter is set to 0 at release | the target's counter was set at landing to the user's own next counter; a release at either end's turn start; the target then acts normally | every Threaten |
+| T8 | A KO'd user's Threaten | released at the target's next turn | released at once by the death handler | rare |
+| T9 | Equipment-given stances | Defend, Guard, Sentinel, Shield, Boost removed even when permanent | kept when `Chr+0x62e` has the bit | an aeon with a permanent Shield |
+
+### 14.8 Inputs these kernels need (engine side)
+
+Per character: on the field, dead, Petrified, the silent flag, re-entered turn (0 in the engine: it opens a turn once and a
+refused command keeps the same turn), HP and maximum HP, the permanent word (Zombie, Poison, Threaten bits), the thirteen
+counters, the extra word and the equipment-given extra word, the Regen tick counter, the two Threaten link bytes, the Doom
+countdown and the Poison percentage (25 for the party; the monster's own byte). For action done: the CTB counter, the rank of
+the action, Agility, and whether the action's results were applied.
+
+## 15. The engine wiring (W2): what the engine does now, and what it settled
+
+Added 2026-10-09 (re-parity W2). **Game case: FFX only.** The kernels of §1 to §8 and §14 are wired into the FFX engine
+(`src/battle/ffx/adapt/{ctb,slots,status,status-odds,status-apply,ticks,threaten}.ts`, `hit-apply.ts`, `turnQueue.ts`,
+`ticks.ts`, `statuses.ts`); `docs/handoff/re-parity-w2.md` has every kernel input and the engine value it comes from.
+Everything below is the engine's behaviour, proved against the kernels on generated input by
+`tests/unit/parity-ffx-engine-ctb-status.test.ts`, `parity-ffx-engine-status.test.ts` and `parity-ffx-engine-ticks.test.ts`.
+
+### 15.1 The differences of §10 and §14.7, and what the engine does with each
+
+| # | Settled how | Engine, after W2 |
+|---|---|---|
+| C1 | the game's tie key | the ready list is sorted by `(255 - AGI) * 256 + slot` for the party and the aeons and `slot + 0x10000` for a monster (`adapt/ctb.ts#tieKeyOf`); the slot is the game's (`adapt/slots.ts`) |
+| C2 | the kernel's recovery | `HasteSlow(tickSpeed(AGI) * max(rank, 1))` clamped to 0..255, added as a byte add; Haste and Slow cannot be on one character except through equipment, and then the kernel's rule decides |
+| C3 | the hit kernel | Delay Attack and Buster are added inside the hit with the target's tick speed and clamp to 0..255 |
+| C4 | the hit kernel | the formula-0xd amount (Haste, Slow) is zeroed when the status did not land (already held, resisted, immune, Petrified, Threatened), so the counter is moved only by a status that landed |
+| C5 | the opening kernel | First Strike on any slot that has the auto-ability (monsters have none: the exe zeroes a monster's auto-ability block), Haste halves and Slow doubles the start value of every slot that carries them |
+| C6 | the opening kernel | a normal start spends the 26 fixed draws in slot order (empty slots and the bench included), a preemptive or ambush start none; the draws come from the engine's one seeded stream until the game's own generators are adopted (plan P3) |
+| C7 | the stored base | a revived character's counter is the base stored at the opening (`ActorRuntime.icv`), never recomputed from its present Agility |
+| C8 | the hit kernel and the tick kernels | Threaten writes `delay + userCounter - targetCounter` into the target's counter when it lands and the pair is released by the start-of-turn tick (§14.3) or by the death or leave-the-field handler |
+| C9 | none needed | the tables agreed |
+| S1 | the infliction kernel | one draw per visited status that has a chance byte, in status order, `% 101` (Threaten `% 100`), spent whatever the odds; none for a cleansing command |
+| S2 | the infliction kernel | Death against a living Zombie reads the record's Zombie bit and a resistance of 254 |
+| S3 | `adapt/status.ts#resistBytesWith` | an enemy's Threaten byte is its live Threaten percent; 255 always lands, 0 never |
+| S4 | the infliction kernel | Confuse, Berserk, Provoke and Threaten remove one another |
+| S5 | the infliction kernel | Petrify wipes the thirteen counters, a permanent Haste or Slow included, and keeps the extra bits 0 to 5, 8 and 15 |
+| S6 | `kernel/turn-ticks.ts`, `adapt/ticks.ts` | Sleep, Silence, Darkness, Shell, Protect, Reflect, Haste and Slow count down at the END of the holder's turn, Regen at the START; the Nul statuses never |
+| S7 | the infliction kernel | a status cast on oneself with a finite duration lasts one extra turn |
+| S8 | `adapt/status.ts#doomStart` | Doom starts from 5 for every party slot and from the monster record's byte (`EnemyDef.doomTurns`) for a monster; only a Doom that lands asks for it, and an enemy that can be Doomed without carrying one is an error |
+| S9 | the pool kernel | Double HP and Double MP cap at 9,999 and 999, at 99,999 and 9,999 with Break HP Limit and Break MP Limit (the equipment abilities set `Chr+0x6be` bits 9 and 10), and removing the flag restores the stored base. A chain's later link hands the base maxima on with the status and the next battle rebuilds the doubled ones, as the party-stats builder does at battle start (the third argument "no new byte") |
+| S10 | none needed | the same in both |
+| S11 | the record's byte 0x2c | the shatter chance of a Petrified record's roll is the command record's byte (`FFXCommandRecord.shatter`), not the ability's own `shatterChance`, which only an ability with no record uses (`research/re-ffx-commands.md` section 7.4) |
+| T1 | the start-of-turn kernel | Regen pays every holder `(its own tick counter * maxHP >> 8) + 100` |
+| T2 | the start-of-turn kernel | Regen counts down at the start of its holder's turn, after the payouts |
+| T3 | the end-of-turn kernel | the eight ticking counters of §14.1 |
+| T4 | the action-done kernel | Poison is charged only after an action whose results were applied; a sleeper's passed turn takes none |
+| T5, T6 | the Doom kernel | the countdown starts from 5 (party) or the monster's byte; a countdown that is 0 kills at once |
+| T7, T8 | the Threaten kernels | the target keeps its place, is released at the start of whichever end's turn comes first and then acts normally; either end's death or leaving releases the pair at once |
+| T9 | the start-of-turn kernel | a stance the equipment gives (a permanent Shield, Boost, Defend, Guard or Sentinel) is not removed |
+
+### 15.2 What the wiring found
+
+1. **A KO runs the game's status reset.** The death handler calls the function at VA 0x0079a190, which clears the permanent
+   word but Death (so **Zombie too**), the thirteen counters, the extra word (so Scan and Eject too), the six stacks and the
+   buff byte. The engine's `SURVIVES_KO` list keeps `ko`, `scan`, `zombie` and `eject` on a member who dies, on the strength of
+   `research/ffx-yunalesca.md` section 15.2 number 29 (the Hellbiter weighting reads Zombie on KO'd slots). The two cannot both
+   hold for the character structure the script reads; this note does not settle which one the script reads, and the engine keeps
+   its list (this is PR-0217, D-214, still open). The infliction step is shown the word the exe would have for a dead character
+   (Death alone, `adapt/status.ts#recordOf`), so that Life on a KO'd member that the engine still shows as a Zombie stands it up
+   instead of killing it. Recommendation: have the Yunalesca AI lane check whether the Hellbiter weighting reads the permanent
+   word at all (or a copy taken before the reset), then drop Zombie and Scan from `SURVIVES_KO`.
+2. **Banish is an ordinary Eject command that lands on an aeon.** The Aeon Ribbon the engine's data gives every aeon is an
+   Eject-immunity byte of 255 in the extra-immune word; the Banish command (`extra.bypassesAeonRibbon`) is handed that word
+   without the Eject bit. Nothing else changed for Seymour's Banish.
+3. **A Petrified monster is shattered whatever its Eject immunity.** The record of a Petrified monster gets Death and Eject, and
+   the step's decision is carried out with `ejectActor(..., force = true)`.
+4. **A chain's later links are normal starts.** The engine's `'scripted'` start (no jitter) is not a game concept; each link of a
+   chain is a new battle, and its opening counters are the 26 draws.
+5. **The bench has counters.** Every party slot gets the draw and the start value the game gives it, reserve members included
+   (the old engine left them at 0 and subtracted nothing from them).
+6. **A weapon's status strikes are a set.** The weapon status bytes of a wielder are the per-status maxima of the strike
+   auto-abilities it has; a repeated strike on one item adds nothing (the engine's equipment model is a set).
+7. **A passed turn charges rank 3 because the scheduler leaves 3 there** (§14.4); it is no longer an `[estimate]`.
+8. **A record is walked in status order, and a Petrified record refuses the rest.** Evrae's Stone Gaze carries Petrify at 100 and Slow at 255; on a target the Petrify takes, the Slow (status 24, after Petrify's 2) never lands, whatever its chance, and a cleansing command works on a Petrified record only for Petrify itself, so a target that carried both Zombie (1) and Petrify would keep the Zombie. The game never lets Petrify share a record with the other permanent statuses, so no shipped case has both.
+9. **Kept as it was:** the aeon summon and dismissal counters (open question 2 of §13: the party's counters are frozen while an
+   aeon holds the field and the aeon enters at 0), the Auto-Life revive amount, Reflect and Cover (the engine's own business), and
+   the events' shape.

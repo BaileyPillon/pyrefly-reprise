@@ -166,8 +166,8 @@ describe('the loss rule', () => {
     const engine = engineOn(partyWithGuest({ control: 'ai', keepsPartyAlive: true }));
     durable(engine);
     knockOut(engine, ['tidus', 'yuna']);
-    // 24 decisions: well inside Natus's first phase (his Break, which petrifies the lone survivor and ends it for real, comes below 24,000 HP, about step 30).
-    for (let i = 0; i < 24; i++) {
+    // 12 decisions: well inside Natus's first phase (his Break, which petrifies the lone survivor and ends it for real, comes below 24,000 HP: about step 30 on the old turn order, step 22 on the game's own order since the W2 merge).
+    for (let i = 0; i < 12; i++) {
       const d = engine.nextDecision();
       expect(d.kind, `step ${i}`).not.toBe('battle-over');
       if (d.kind === 'player-input') engine.submit(attack(engine));

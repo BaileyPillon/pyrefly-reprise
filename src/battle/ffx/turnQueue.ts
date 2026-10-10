@@ -1,21 +1,25 @@
 /**
- * CTB — Conditional Turn-Based turn order [ffx-combat-core §1].
+ * CTB — Conditional Turn-Based turn order [ffx-combat-core §1], run by the game's own kernels (re-parity W2; FFX only).
  *
- * Every actor owns one integer counter; the lowest acts next. After acting the
- * counter grows by `baseCTB(agility) * rank`, halved under Haste and doubled
- * under Slow, and then the whole field is normalised by subtracting the new
- * minimum so "elapsed ticks" is well defined — which is what Regen is paid on.
+ * Every combatant owns one BYTE counter that the clock counts down; the one at 0 acts, ties go by the game's key
+ * (higher Agility first among the party and the aeons, then the monsters in formation order). After an action the counter
+ * grows by `HasteSlow(tickSpeed(AGI) * max(rank, 1))`. The arithmetic is `kernel/ctb*.ts` (proven against FFX.exe in
+ * `tests/unit/parity-ffx-ctb.test.ts`); `./adapt/ctb.ts` hands it the engine's combatants and this file is the engine's
+ * API over it. Regen's payout is the holder's own tick counter (`ActorRuntime.regenTicks`), counted by the same clock.
  */
 
-import type {
-  Command,
-  CombatantId,
-  FFXCombatant,
-  StatusId,
-  TurnPreview,
-} from '../common/types.ts';
-import { baseCtb, icvVariance, idiv } from './math.ts';
+import type { Command, CombatantId, FFXCombatant, StatusId, TurnPreview } from '../common/types.ts';
+import { tieKey } from './kernel/ctb.ts';
 import { letterTagsOf } from './letterTags.ts';
+import {
+  advanceClock,
+  charge,
+  nextReady,
+  openingCtb,
+  recoveryOf,
+  reviveCounter,
+} from './adapt/ctb.ts';
+import { slotOf } from './adapt/slots.ts';
 import {
   type Ctx,
   commandAbility,
@@ -30,45 +34,23 @@ import {
 } from './state.ts';
 
 /**
- * CTB tie-break priority when counters are equal [ffx-combat-core §1.6]:
- * Tidus -> Yuna -> Auron -> Kimahri -> Wakka -> Lulu -> Rikku -> the player's
- * aeon -> Cindy -> Sandy -> Mindy -> enemies -> Cid.
+ * The key the game sorts the ready characters by, smaller first: `(255 - AGI) * 256 + slot` for a party member or an
+ * aeon (higher Agility first, equal Agility to the lower slot) and `slot + 0x10000` for a monster, so every party member and
+ * aeon goes before every monster and the monsters go in formation order [`kernel/ctb.ts#tieKey`, VA 0x0078f000].
  */
-const CHARACTER_PRIORITY: readonly string[] = [
-  'tidus',
-  'yuna',
-  'auron',
-  'kimahri',
-  'wakka',
-  'lulu',
-  'rikku',
-  'seymour', // the guest of the hidden Sinspawn Gui chapter: the game's party actor 7, after Rikku (`research/re-ffx-ai-gui.md` section 5.7)
-];
-
-const MAGUS_PRIORITY: readonly string[] = ['cindy', 'sandy', 'mindy'];
-
-/** Lower sorts earlier. */
 export function tieBreakRank(ctx: Ctx, c: FFXCombatant): number {
-  const charIndex = CHARACTER_PRIORITY.indexOf(c.id);
-  if (charIndex >= 0) return charIndex;
-  if (c.side === 'aeon') {
-    const magus = MAGUS_PRIORITY.indexOf(c.id);
-    return magus >= 0 ? 8 + magus : 7;
-  }
-  if (c.id === 'cid') return 1000;
-  // Among enemies: formation order, which is boss-first then numbered ascending.
-  const enemyIndex = ctx.state.enemyIds.indexOf(c.id);
-  return 100 + (enemyIndex >= 0 ? enemyIndex : c.slot);
+  return tieKey(slotOf(ctx, c), c.stats.agi);
 }
 
 /**
  * Actors currently in the CTB queue.
  *
  * Membership is {@link inTurnQueue}, **not** {@link canAct}: §1.1's rule is
- * "living, non-Eject, non-Petrify". A sleeping or Threatened actor still owns a
- * counter and still reaches the front of the queue — it just loses the turn
- * when it gets there, which is the only place Sleep's duration is paid
- * [ffx-combat-core §1.1, §4.1].
+ * "living, non-Eject, non-Petrify". A sleeping actor still owns a counter and
+ * still reaches the front of the queue — it just loses the turn when it gets
+ * there, which is the only place Sleep's duration is paid [ffx-combat-core §1.1,
+ * §4.1]. (A Threatened one loses nothing: its counter was moved when the Threaten
+ * landed, and the pair is released at the start of the next turn of either end.)
  *
  * An actor marked `ActorRuntime.ordersOnly` is **on the field but owns no
  * counter**: Yojimbo's dog acts only when Yojimbo's own turn orders it
@@ -81,131 +63,41 @@ export function queueMembers(ctx: Ctx): FFXCombatant[] {
   );
 }
 
-/**
- * Recovery in ticks for an action of this rank.
- *
- * `recovery = baseCTB(agility) * rank`, then `floor(/2)` under Haste or `x2`
- * under Slow [ffx-combat-core §1.1, §1.4].
- */
+/** Recovery in ticks for an action of this rank: `HasteSlow(tickSpeed(AGI) * max(rank, 1))`, clamped to 0..255 [VA 0x0078d1d0]. */
 export function recoveryTicks(c: FFXCombatant, rank: number): number {
-  let recovery = baseCtb(c.stats.agi) * Math.max(1, rank);
-  if (has(c, 'haste')) recovery = idiv(recovery, 2);
-  else if (has(c, 'slow')) recovery = recovery * 2;
-  return recovery;
+  return recoveryOf(c, rank);
 }
 
-/** Subtract the field minimum from every counter; return how much was removed. */
-export function normalise(ctx: Ctx): number {
-  const members = queueMembers(ctx);
-  if (members.length === 0) return 0;
-  let min = Infinity;
-  for (const c of members) {
-    const v = rtOf(ctx, c.id).ctb;
-    if (v < min) min = v;
-  }
-  if (!Number.isFinite(min) || min <= 0) return 0;
-  for (const c of members) rtOf(ctx, c.id).ctb -= min;
-  return min;
+/**
+ * Run the clock until somebody is ready; return the ticks that took. (It used to subtract the field's minimum; the game
+ * counts every counter down instead, and the result for the characters who take part is the same.)
+ */
+export function advance(ctx: Ctx): number {
+  return advanceClock(ctx);
 }
 
-/** The actor whose turn is next, honouring the tie-break table. */
+/** The actor whose turn is next: the first ready character in the game's order. */
 export function nextActor(ctx: Ctx): FFXCombatant | undefined {
-  const members = queueMembers(ctx);
-  if (members.length === 0) return undefined;
-  let best: FFXCombatant | undefined;
-  let bestCtb = Infinity;
-  let bestRank = Infinity;
-  for (const c of members) {
-    const ctb = rtOf(ctx, c.id).ctb;
-    const rank = tieBreakRank(ctx, c);
-    if (ctb < bestCtb || (ctb === bestCtb && rank < bestRank)) {
-      best = c;
-      bestCtb = ctb;
-      bestRank = rank;
-    }
-  }
-  return best;
+  return nextReady(ctx);
 }
 
 /** Charge an actor for the action it just took. */
 export function chargeTurn(ctx: Ctx, id: CombatantId, rank: number): void {
   const c = tryActor(ctx, id);
   if (!c) return;
-  rtOf(ctx, id).ctb += recoveryTicks(c, rank);
+  charge(ctx, c, rank);
 }
 
-/**
- * Delay [ffx-combat-core §1.5]. Applied to the **target's** counter using the
- * **target's** base ticks. Enemies flagged `immune-to-delay` and Threatened
- * actors ignore both strengths.
- */
-export function applyDelay(ctx: Ctx, targetId: CombatantId, strength: 'weak' | 'strong'): boolean {
-  const c = tryActor(ctx, targetId);
-  if (!c) return false;
-  if (c.immunityFlags.includes('immune-to-delay')) return false;
-  if (has(c, 'threaten')) return false;
-  const base = baseCtb(c.stats.agi);
-  rtOf(ctx, targetId).ctb += strength === 'weak' ? idiv(base * 3, 2) : base * 3;
-  return true;
-}
-
-/**
- * Haste and Slow do not only change future recovery — applying one moves the
- * target's **current** counter at once [ffx-combat-core §1.4]. Haste uses the
- * `ctb` formula at base 8 with `heals` (halve the wait); Slow uses base 16
- * without it (double the wait).
- */
-export function onHasteApplied(ctx: Ctx, targetId: CombatantId): void {
-  const rt = rtOf(ctx, targetId);
-  rt.ctb -= idiv(rt.ctb * 8, 16);
-}
-
-/** Slow adds 100% of the current counter. */
-export function onSlowApplied(ctx: Ctx, targetId: CombatantId): void {
-  const rt = rtOf(ctx, targetId);
-  rt.ctb += idiv(rt.ctb * 16, 16);
-}
-
-/** A revived character re-enters with a rank-3 delay [ffx-combat-core §1.6]. */
+/** A revived character re-enters with the counter stored at battle start [VA 0x0078d530]. */
 export function onRevived(ctx: Ctx, targetId: CombatantId): void {
   const c = tryActor(ctx, targetId);
   if (!c) return;
-  rtOf(ctx, targetId).ctb = baseCtb(c.stats.agi) * 3;
+  reviveCounter(ctx, c);
 }
 
-/**
- * Opening counters [ffx-combat-core §1.9].
- *
- * Normal condition draws a jitter of `[0, ICV_VARIANCE[agi]]` off the nominal
- * `baseCTB * 3` for party members, and pushes enemies 0-10% *slower*.
- * `first-strike` keeps a character at 0 in every condition.
- */
+/** Opening counters [VA 0x0078ded0]; see {@link openingCtb}. */
 export function seedInitialCtb(ctx: Ctx, condition: 'normal' | 'preemptive' | 'ambush' | 'scripted'): void {
-  const draw = (c: FFXCombatant, isParty: boolean): number => {
-    const base = baseCtb(c.stats.agi);
-    if (condition === 'scripted') return isParty ? base * 3 : base * 3;
-    if (condition === 'preemptive') return isParty ? 0 : base * 3;
-    if (condition === 'ambush') return isParty ? base * 3 : 0;
-    if (isParty) {
-      const jitter = ctx.rng.int(0, icvVariance(c.stats.agi));
-      return base * 3 - jitter;
-    }
-    return idiv(base * 3 * 100, 100 - ctx.rng.int(0, 10));
-  };
-
-  for (const c of friendlies(ctx)) {
-    const hasFirstStrike =
-      c.equipment !== undefined &&
-      (c.equipment.weapon.autoAbilities.includes('first-strike') ||
-        c.equipment.armor.autoAbilities.includes('first-strike'));
-    let value = hasFirstStrike ? 0 : draw(c, true);
-    if (value > 0 && has(c, 'haste')) value = idiv(value, 2);
-    rtOf(ctx, c.id).ctb = value;
-  }
-  for (const c of enemies(ctx)) {
-    rtOf(ctx, c.id).ctb = draw(c, false);
-  }
-  normalise(ctx);
+  openingCtb(ctx, condition);
 }
 
 // ---------------------------------------------------------------------------

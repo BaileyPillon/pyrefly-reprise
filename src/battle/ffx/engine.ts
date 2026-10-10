@@ -19,7 +19,7 @@ import { buildBattle } from './setup.ts';
 import { availableCommands } from './commands.ts';
 import { revealForSensorAuto } from './sensor.ts';
 import { chargeForAction, actsAutomatically, berserkCommand, confusedCommand, executeCommand } from './execute.ts';
-import { nextActor, normalise, predictTurnOrder as predictOrder } from './turnQueue.ts';
+import { advance, nextActor, predictTurnOrder as predictOrder } from './turnQueue.ts';
 import { onTurnStart } from './ticks.ts';
 import { resolveDuePartRevivals } from './hp.ts';
 import { chooseAiCommand } from './ai/index.ts';
@@ -225,7 +225,7 @@ export class FFXEngine implements FFXBattleEngine {
     // [ffx-combat-core §9].
     revealForSensorAuto(ctx);
 
-    const elapsed = normalise(ctx);
+    const elapsed = advance(ctx);
     ctx.state.ticks += elapsed;
     // A Yu Pagoda that was destroyed comes back on a CTB-tick timer, not a
     // turn count, because a dead part takes no turns of its own
@@ -242,7 +242,7 @@ export class FFXEngine implements FFXBattleEngine {
     ctx.rt.currentActorId = actor.id;
     ctx.state.turn += 1;
     this.push({ type: 'turn-start', actorId: actor.id, turn: ctx.state.turn, elapsedTicks: elapsed });
-    onTurnStart(ctx, actor, elapsed);
+    onTurnStart(ctx, actor);
 
     // Doom may have killed the actor as its turn opened.
     if (!isAlive(actor)) {
@@ -255,9 +255,10 @@ export class FFXEngine implements FFXBattleEngine {
     // with it. This is the *only* place Sleep's duration is paid: §4.1 ticks it
     // "at the end of the victim's own action", and `runTurn(actor, null)` is
     // the pass path — it charges the rank-3 recovery and runs `afterAction`,
-    // which calls `onTurnEnd` -> `tickDurationStatuses`. Sleeping and
-    // Threatened actors therefore lose turns instead of leaving the battle
-    // [ffx-combat-core §1.1, §4.1, §4.2].
+    // which calls `onTurnEnd` -> the end-of-turn tick. A sleeper therefore loses
+    // its turns instead of leaving the battle [ffx-combat-core §1.1, §4.1]. (A Threatened
+    // target does not lose a turn in the game: the pair is released at the start
+    // of whichever end's turn comes first, `ticks.ts#onTurnStart`.)
     if (!canAct(actor)) {
       this.runTurn(actor, null);
       return;
@@ -287,21 +288,10 @@ export class FFXEngine implements FFXBattleEngine {
     const startIndex = ctx.state.log.length;
 
     if (command === null) {
-      // A deliberate pass still costs a rank-3 turn.
-      //
-      // **`3` is an `[estimate]`, not a sourced constant** (round 04 PR-0025).
-      // Reason for the value: 3 is the engine's own default action rank — the
-      // fallback `rankOf()` applies to any ability whose rank byte is 0
-      // [ffx-combat-core §1.3] and the rank the CTB forecast assumes for every
-      // actor [§1.6] — so a turn spent on nothing recovers exactly like the
-      // ordinary Attack that would otherwise have filled it. No section of
-      // `ffx-combat-core.md` states what a *skipped* turn costs; §1.1, §4.1 and
-      // §4.2 give the queue-membership and the Sleep/Threaten clocks, not this
-      // number. It is load-bearing — it sets how many ticks a 3-turn Sleep or a
-      // Threaten locks a target out for, and therefore how strong they are as
-      // tempo tools — so it is **an open question for Bailey**, logged in
-      // `docs/handoff/builda1-engine-status.md`. Left at its shipped value here
-      // deliberately: AGENTS.md hard rule 6 forbids inventing a replacement.
+      // A passed turn costs a rank-3 recovery, and that is the game's own number now (re-parity W2): the rank of the
+      // action in progress (`Chr+0xde8`) is whatever the scheduler left there, and the scheduler resets it to 3 every
+      // time a counter reaches 0 (VA 0x00790fb0), so an empty action charges the recovery of rank 3
+      // (`research/re-ffx-ctb-status.md` section 14.4). It was an `[estimate]` before (round 04 PR-0025).
       //
       // FFX only: this is the CTB recovery ladder. FFX-2's ATB engine has its
       // own wait model and is untouched.

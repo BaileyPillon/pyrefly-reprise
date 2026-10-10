@@ -18,6 +18,7 @@ layer already uses for the same ability).
 | §4 where our numbers and flags differ from the game's | the same test pins the number list |
 | §5 inputs the records do not carry | `src/battle/ffx/equipment.ts`, `tests/unit/data-ffx-command-records.test.ts` |
 | §6 an enemy's plain Attack | `EnemyDef.plainAttack`, `src/data/ffx/command-records/enemies.ts` |
+| §7 the status bytes: rank, chances, durations, extra word, stage buffs, buff flags (W2) | `tests/fixtures/parity/ffx/command_status.json`, the same data files |
 
 ## 1. The records, and how they were read
 
@@ -664,3 +665,79 @@ is nothing). Where the game says which record an enemy of ours uses, the enemy c
 Any other enemy that attacks with the generic command (a confused boss, an enemy whose script is not registered) keeps the
 reading the engine had before the wiring, derived from the ability's flags: it always hits and can crit. No sourced record is
 attached to those, so none is invented. In the shipped chapters only the possessed aeons use it.
+
+## 7. The status bytes of a record (re-parity W2)
+
+Batch W2 (the FFX turn order and status wiring) reads more of the same records: the CTB rank, the status chances and durations,
+the extra-status word, the stage buffs and the buff flags. Same tables, same 979 records (`tests/fixtures/parity/ffx/command_status.json`
+holds them, numbers only; `src/data/ffx/command-records/` carries the 452 that belong to an ability of ours and the engine's four core
+commands carry theirs in `src/battle/ffx/registry.ts`).
+
+| Offset | Meaning | Read by |
+|---|---|---|
+| 0x24 | the CTB rank (0 means 3) | the recovery after an action, Threaten's delay (`research/re-ffx-ctb-status.md` section 2) |
+| 0x2c | the shatter chance, in percent, against a Petrified record (section 7.4) | the extra-status step (section 7 of that note) |
+| 0x2e to 0x46 | the chance byte of each of the 25 regular statuses | the status infliction step (section 6 of that note) |
+| 0x47 to 0x53 | the duration byte of each of the 13 temporal statuses | the same |
+| 0x54 (u16) | the extra-status bits wanted (Distill 2/4/8/0x20, Shield 0x40, Boost 0x80, Eject 0x100, Auto-Life 0x200, Curse 0x400, Defend 0x800, Guard 0x1000, Sentinel 0x2000, Doom 0x4000, Scan 1) | the extra-status step (section 7 of that note) |
+| 0x56 (u16), 0x59 | the stage buffs: the six low bits (Cheer, Aim, Focus, Reflex, Luck, Jinx) and the stacks added | the stage-buff step |
+| 0x5a | the buff flags OR-ed into the target's buff byte unless it is Petrified: Double HP 1, Double MP 2, no MP cost (Spellspring) 4, always 9,999 8, always critical 0x10, Overdrive x1.5 0x20, Overdrive x2 0x40 | the hit-record write-back |
+
+Counts: 271 records carry a chance byte, 158 a duration byte, 55 an extra word, 10 a stage mask and 20 a buff byte (the stage mask never has
+a bit above the six stacks). Rank: 49 records carry 0, 641 carry 3, 133 carry 2, 78 carry 6, 32 carry 5, 22 carry 4, 11 carry 1, 7 carry 8, 4 carry 7, one carries 9 and one 10.
+Byte 0x58 is not read by the status code (144 records have a value; it belongs to the hit-reaction animation), byte 0x5b is always 0.
+The Sleep/Silence/Darkness durations of a weapon, item or monster move are 3 to 8, 254 means until removed, and the cleansing commands carry 254 in the duration
+slot of the statuses they remove (the counter is reduced by the duration, so 254 takes any finite counter to 0).
+
+**Cleansing.** A record with bit 5 of the damage flags (0x20) removes instead of inflicting, and the bytes mean "remove this": Esuna removes Petrify,
+Poison, Confuse, Berserk, Sleep, Silence, Darkness and Slow; Dispel the four Breaks, Shell, Protect, Reflect, the four Nuls, Regen, Haste and the Curse bit;
+Life, Full Life, Phoenix Down, Mega Phoenix and the revive Mixes carry a Death byte of 254, so **reviving is the cleanse of Death**, and on a Zombie it kills
+instead (`status-inflict.ts`).
+
+### 7.1 Ties re-resolved by the status bytes
+
+W1 attached a record of the same name by the five fields it read. Where several records agree on those and differ only in their status bytes, the right one
+is the record whose bytes are the statuses the ability inflicts. Six abilities moved (W1's other "tie, same fields" rows are identical in every byte, status bytes included):
+
+| Ability | W1 record | Now | Why |
+|---|---|---|---|
+| `evrae-stone-gaze` | 0x4038 (Petrify 50, no damage class) | 0x6062 | Petrify 100 and Slow 255 (duration 100), damage class CTB: the record `research/ffx-evrae-airship.md` section 3.1 describes |
+| `overdrive-sin-gaze-petrify` | 0x609d (Zombie 30) | 0x609e | the Petrify 30 gaze |
+| `overdrive-sin-gaze-confuse` | 0x609d | 0x609f | the Confuse 30 gaze |
+| `overdrive-sin-gaze-zombie` | 0x609d | 0x609d | (unchanged: the Zombie 30 gaze) |
+| `power-wave-aeon` | 0x608b (cleanses Zombie, Poison, the Breaks, Silence, Darkness, Slow) | 0x60d2 | the one that cleanses Zombie, Poison and Reflect |
+| `mind-blast-aeon` | 0x6081 (Confuse 50) | 0x60f6 | Confuse 50 and the Curse bit |
+
+Only `evrae-stone-gaze` changes a W1 field (damage flags 0 -> 2, damage class 0 -> 4); our ability keeps formula `none`, power 0, so no CTB damage is computed.
+
+### 7.2 Where the data of an ability and its record differ
+
+The engine now takes the record's bytes (they are the exe's inputs); `tests/unit/data-ffx-command-records.test.ts` lists every ability whose own status data differs:
+
+- **Provoke** carries a chance byte of 100 (ours 254) and **Threaten** 100 (ours 255): the byte only has to be non-zero for Threaten (its roll reads the target's own Threaten byte).
+- **Havoc Shot** inflicts Sleep, Silence and Darkness at 254 (ours 100); **Time Shot** also inflicts Slow at 100.
+- **Full Life** (Seymour Flux's) cleanses only Death; ours also removed Poison, Darkness, Silence, Sleep, Confuse, Berserk, Slow and Doom.
+- The **possessed Yojimbo's Zanmato** (0x60e2) is a fixed-power damage command with no Death byte (ours also inflicted Death 255).
+- **Evrae's Stone Gaze** slows for 100 (ours 254, until removed).
+- The **Distill** bits (Extract Power, Mana, Speed, Ability and the four Distillers) are in the records; the engine has no Distill status, so they are applied to the record and dropped when it is written back.
+
+### 7.3 Rank
+
+The game's rank differs from the rank our ability data carries on 17 abilities (the generic Attack, Defend and the aeons' Shield and Boost agree):
+the four Wakka reels (ours 3, game 4), `fury` (the marker: 5 against 0, which is 3), the nine aeon Attack rows (the six aeons' ours 1, the three Magus Sisters' ours 5, game 3: unreachable, the generic Attack serves every aeon),
+`passado` (3 against 5), `mix` (6 against 5; the shaped Mix has its own record), and `natus-flare` (5 against 3). The wiring takes the game's rank for every ability that has a record.
+
+### 7.4 Shatter
+
+Byte 0x2c of a record is the chance that a hit with this command shatters a target that is already Petrified (the status step draws once for a Petrified
+record whatever the command, and shatters it when `draw % 101 < byte`; `research/re-ffx-ctb-status.md` section 7). 182 of the 452 records in the three data
+files (and the party's Attack, which lives in the registry) carry a non-zero byte (all the Black Magic from Fira up and the Furies 10, the status Skills and most items 30 to 70, the Specials, Blitz Ace
+and the Shooting Stars 100, the reels and the Mixes 50, the party's Attack 30, Left Arm Strike 100) and the engine reads it from the record
+(`AbilityDef.record.shatter`); an ability with no record keeps its own `shatterChance`.
+
+W1 left this byte with the ability's own data and said section 4 would list where they differ. They differ on 155 abilities, and the list was not made, which is why
+the record is the source now. 148 abilities (and the party's Attack, 30) had a chance in the game's record that our data never authored. Nearly all are
+commands the party aims at an enemy, and a Petrified enemy is shattered by the Petrify itself, so they reach no shipped fight; the two enemy commands among them,
+the possessed Yojimbo's Daigoro (10) and Grothia's attack (10), can hit a Petrified party member. Seven abilities of ours carried a chance the game's record does not have (Guardian
+Blizzard and Thunder, Natus's Flare and the four Mortibody elemental casts, all 10 in ours and 0 in the game); they no longer shatter a Petrified member.
+`tests/unit/data-ffx-command-records.test.ts` pins both lists.

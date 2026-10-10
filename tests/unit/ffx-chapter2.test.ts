@@ -19,7 +19,6 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleState, Command, Decision, EnemyGroupDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import {
   FFXContentRegistry,
-  applyStatus,
   buildBattle,
   createFFXEngine,
   dealDamage,
@@ -29,6 +28,7 @@ import {
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
 import { zanarkandBuild } from '../../src/data/ffx/builds/zanarkand.ts';
+import { giveStatus } from './helpers/ffxStatus.ts';
 
 function liveContent(): FFXContentRegistry {
   const reg = new FFXContentRegistry();
@@ -282,8 +282,8 @@ describe('Death actually kills, and Zombie is what spares you (§5.3)', () => {
     for (const id of ['tidus', 'yuna', 'auron']) at(id).immunities['ko'] = 0;
     at('tidus').immunities['zombie'] = 0;
     at('yuna').immunities['zombie'] = 0;
-    applyStatus(ctx, undefined, at('tidus'), { status: 'zombie', chance: 255, duration: 254 });
-    applyStatus(ctx, undefined, at('yuna'), { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(at('tidus'), 'zombie');
+    giveStatus(at('yuna'), 'zombie');
 
     // Chance 100 fails only on a roll of exactly 100, so allow a retry rather
     // than asserting on a 1-in-101 edge.
@@ -306,7 +306,7 @@ describe('Death actually kills, and Zombie is what spares you (§5.3)', () => {
       for (const id of ['tidus', 'yuna', 'auron']) {
         at(id).immunities['ko'] = 0;
         at(id).immunities['zombie'] = 0;
-        if (keepZombie) applyStatus(ctx, undefined, at(id), { status: 'zombie', chance: 255, duration: 254 });
+        if (keepZombie) giveStatus(at(id), 'zombie');
       }
       resolveAbility(ctx, at('yunalesca'), megaDeath, []);
       return ['tidus', 'yuna', 'auron'].filter((id) => !at(id).alive).length;
@@ -324,7 +324,7 @@ describe('revival effects and Zombie (§4.2, §7.1)', () => {
     const { ctx, at } = realCtx(7);
     const tidus = at('tidus');
     tidus.immunities['zombie'] = 0;
-    applyStatus(ctx, undefined, tidus, { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(tidus, 'zombie');
     koActor(ctx, tidus);
     const phoenix = ctx.content.itemEffect('phoenix-down');
     if (!phoenix) throw new Error('phoenix-down missing');
@@ -338,7 +338,7 @@ describe('revival effects and Zombie (§4.2, §7.1)', () => {
     const { ctx, at } = realCtx(8);
     const auron = at('auron');
     auron.immunities['zombie'] = 0;
-    applyStatus(ctx, undefined, auron, { status: 'zombie', chance: 255, duration: 254 });
+    giveStatus(auron, 'zombie');
     const phoenix = ctx.content.itemEffect('phoenix-down');
     if (!phoenix) throw new Error('phoenix-down missing');
     resolveAbility(ctx, at('yuna'), { ...phoenix, category: 'item' }, ['auron']);

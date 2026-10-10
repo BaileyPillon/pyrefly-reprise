@@ -6,8 +6,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup } from '../../src/battle/common/types.ts';
 import {
-  applyDelay,
-  applyStatus,
   baseCtb,
   buildBattle,
   type Ctx,
@@ -15,10 +13,14 @@ import {
   nextActor,
   predictTurnOrder,
   recoveryTicks,
-  normalise,
+  resolveAbility,
 } from '../../src/battle/ffx/index.ts';
+import { advance } from '../../src/battle/ffx/turnQueue.ts';
+import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
+import { ScriptedRng } from './helpers/ffxEngineWiring.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { enemy, member, party, setup } from './ffx-fixtures.test.ts';
+import { giveStatus, inflict } from './helpers/ffxStatus.ts';
 
 function makeCtx(overrides: Partial<BattleSetup> = {}): Ctx {
   const s = setup(overrides);
@@ -82,67 +84,77 @@ describe('recovery is linear in rank (§1.3)', () => {
     const target = hasted.state.combatants['tidus'];
     if (!target) throw new Error('fixture');
     const plain = recoveryTicks(target as never, 3);
-    applyStatus(hasted, undefined, target as never, { status: 'haste', chance: 255, duration: 254 });
+    inflict(hasted, undefined, target as never, { status: 'haste', chance: 255, duration: 254 });
     expect(recoveryTicks(target as never, 3)).toBe(Math.floor(plain / 2));
 
     const slowed = makeCtx();
     const other = slowed.state.combatants['tidus'];
     if (!other) throw new Error('fixture');
-    applyStatus(slowed, undefined, other as never, { status: 'slow', chance: 255, duration: 254 });
+    inflict(slowed, undefined, other as never, { status: 'slow', chance: 255, duration: 254 });
     expect(recoveryTicks(other as never, 3)).toBe(plain * 2);
   });
 });
 
-describe('Haste and Slow move the current counter on application (§1.4)', () => {
-  it('Haste halves the pending wait, Slow doubles it', () => {
+describe('a Haste or Slow status landing does not move the current counter (§1.4)', () => {
+  // The game has no such code (research/re-ffx-ctb-status.md §5): the rescale is the CAST's own CTB damage, formula 0xd, which the
+  // hit applies; a status that arrives any other way (equipment, a monster move with no CTB class) leaves the counter alone.
+  // The cast itself is proven in parity-ffx-engine-ctb-status.test.ts.
+  it('Haste and Slow leave a pending wait of 30 at 30', () => {
     const ctx = makeCtx();
     const tidus = ctx.state.combatants['tidus'];
     if (!tidus) throw new Error('fixture');
-    // After normalisation the leading actor sits at 0, so give him a real wait.
     const tidusRt = ctx.rt.actors.get('tidus');
     if (tidusRt) tidusRt.ctb = 30;
-    applyStatus(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
-    expect(ctbOf(ctx, 'tidus')).toBe(15);
+    inflict(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
+    expect(ctbOf(ctx, 'tidus')).toBe(30);
 
     const ctx2 = makeCtx();
     const yuna = ctx2.state.combatants['yuna'];
     if (!yuna) throw new Error('fixture');
     const yunaRt = ctx2.rt.actors.get('yuna');
     if (yunaRt) yunaRt.ctb = 30;
-    applyStatus(ctx2, undefined, yuna as never, { status: 'slow', chance: 255, duration: 254 });
-    expect(ctbOf(ctx2, 'yuna')).toBe(60);
+    inflict(ctx2, undefined, yuna as never, { status: 'slow', chance: 255, duration: 254 });
+    expect(ctbOf(ctx2, 'yuna')).toBe(30);
   });
 
   it('Haste and Slow are mutually exclusive', () => {
     const ctx = makeCtx();
     const tidus = ctx.state.combatants['tidus'];
     if (!tidus) throw new Error('fixture');
-    applyStatus(ctx, undefined, tidus as never, { status: 'slow', chance: 255, duration: 254 });
-    applyStatus(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
+    inflict(ctx, undefined, tidus as never, { status: 'slow', chance: 255, duration: 254 });
+    inflict(ctx, undefined, tidus as never, { status: 'haste', chance: 255, duration: 254 });
     expect(tidus.statuses['slow']).toBeUndefined();
     expect(tidus.statuses['haste']).toBeDefined();
   });
 });
 
 describe('Delay (§1.5)', () => {
-  it('weak delay adds floor(base*3/2), strong adds base*3, using the target base', () => {
-    const ctx = makeCtx({
+  /** A battle whose rolls are scripted (a raw draw of 0 lands every hit), and the real Delay abilities. */
+  function delayCtx(over: Partial<BattleSetup> = {}): Ctx {
+    const s = setup(over);
+    return buildBattle(s, new ScriptedRng([0]), new FFXContentRegistry(), () => undefined);
+  }
+  const abilityOf = (id: string) => ALL_ABILITIES.find((a) => a.id === id)!;
+
+  it('weak delay adds floor(tick*3/2), strong adds tick*3, using the target\'s own tick speed (inside the hit, VA 0x0078e0f0)', () => {
+    const ctx = delayCtx({
       enemies: {
         id: 'g',
         game: 'ffx',
         enemies: [enemy({ id: 'dummy', stats: { ...enemy({ id: 'x' }).stats, agi: 20 } })],
       },
     });
-    normalise(ctx);
+    const tidus = ctx.state.combatants['tidus'] as never;
     const before = ctbOf(ctx, 'dummy');
-    applyDelay(ctx, 'dummy', 'weak');
-    expect(ctbOf(ctx, 'dummy')).toBe(before + Math.floor((10 * 3) / 2));
-    applyDelay(ctx, 'dummy', 'strong');
+    resolveAbility(ctx, tidus, abilityOf('delay-attack'), ['dummy']);
+    // The dummy's Agility 20 is a tick speed of 10: 10 * 3 / 2 = 15.
+    expect(ctbOf(ctx, 'dummy')).toBe(before + 15);
+    resolveAbility(ctx, tidus, abilityOf('delay-buster'), ['dummy']);
     expect(ctbOf(ctx, 'dummy')).toBe(before + 15 + 30);
   });
 
   it('does nothing to an immune-to-delay enemy', () => {
-    const ctx = makeCtx({
+    const ctx = delayCtx({
       enemies: {
         id: 'g',
         game: 'ffx',
@@ -150,8 +162,16 @@ describe('Delay (§1.5)', () => {
       },
     });
     const before = ctbOf(ctx, 'dummy');
-    expect(applyDelay(ctx, 'dummy', 'strong')).toBe(false);
+    resolveAbility(ctx, ctx.state.combatants['tidus'] as never, abilityOf('delay-buster'), ['dummy']);
     expect(ctbOf(ctx, 'dummy')).toBe(before);
+  });
+
+  it('is clamped to the byte: a counter near 255 stops there', () => {
+    const ctx = delayCtx();
+    const rt = ctx.rt.actors.get('dummy')!;
+    rt.ctb = 250;
+    resolveAbility(ctx, ctx.state.combatants['tidus'] as never, abilityOf('delay-buster'), ['dummy']);
+    expect(rt.ctb).toBe(255);
   });
 });
 
@@ -216,20 +236,25 @@ describe('predictTurnOrder (§1.6, visual-bible §3.2)', () => {
     const tidus = ctx.state.combatants['tidus'];
     if (!tidus) throw new Error('fixture');
     for (const status of ['poison', 'silence', 'darkness', 'slow', 'protect'] as const) {
-      applyStatus(ctx, undefined, tidus as never, { status, chance: 255, duration: 254 });
+      giveStatus(tidus as never, status);
     }
     const row = predictTurnOrder(ctx, 8).find((r) => r.actorId === 'tidus');
     expect(row?.statusIcons.length).toBe(3);
   });
 });
 
-describe('normalisation keeps counters small', () => {
-  it('subtracts the field minimum and reports it as elapsed ticks', () => {
+describe('the clock (VA 0x00790fb0)', () => {
+  it('counts every counter down together until the first reaches 0, and reports the ticks that took', () => {
     const ctx = makeCtx();
     for (const [, rt] of ctx.rt.actors) rt.ctb += 100;
-    const elapsed = normalise(ctx);
+    const onField = ['tidus', 'yuna', 'auron', 'dummy'];
+    const before = new Map(onField.map((id) => [id, ctbOf(ctx, id)]));
+    const elapsed = advance(ctx);
     expect(elapsed).toBeGreaterThan(0);
-    const min = Math.min(...[...ctx.rt.actors.values()].map((r) => r.ctb));
-    expect(min).toBe(0);
+    // Everybody on the field lost exactly the elapsed ticks, and the lowest is at 0.
+    for (const id of onField) expect(ctbOf(ctx, id)).toBe((before.get(id) as number) - elapsed);
+    expect(Math.min(...onField.map((id) => ctbOf(ctx, id)))).toBe(0);
+    // Somebody is ready now, so the clock does not move again.
+    expect(advance(ctx)).toBe(0);
   });
 });

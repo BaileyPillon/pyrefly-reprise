@@ -79,7 +79,9 @@ describe('Seymour Natus and Mortibody — the stat blocks and the formation [res
       expect(rows.SEYMOUR_NATUS_ABILITIES[id]).toMatchObject({ power: 36, hits: 2, rank: 3, targeting: 'random-enemy', canMiss: false });
       expect(rows.SEYMOUR_NATUS_ABILITIES[id]?.flags).toContain('reflectable');
     }
-    expect(rows.natusFlare).toMatchObject({ power: 60, rank: 5, shatterChance: 10, canMiss: false });
+    // Rank 3, not the 5 of §3.1 (re-parity W2, FFX only): the game's command record for Flare (0x6079) carries rank 3 and the data layer's
+    // `attachCommandRecords` replaces the ability's own rank with it (research/re-ffx-commands.md section 7.3, pinned by data-ffx-command-records).
+    expect(rows.natusFlare).toMatchObject({ power: 60, rank: 3, shatterChance: 10, canMiss: false });
     expect(rows.natusBreak.statusEffects).toEqual([{ status: 'petrify', chance: 254, duration: 254 }]);
     expect(rows.natusBreak.flags).toContain('reflectable');
     for (const r of [rows.mortibodyFire, rows.mortibodyBlizzard, rows.mortibodyThunder, rows.mortibodyWater]) {
@@ -285,11 +287,18 @@ describe('Mortibsorption — Mortibody drains Natus and comes back [§4.4, N-G1]
     makeInvincible(engine);
     const drains: number[] = [];
     for (let i = 0; i < 5; i++) {
-      actor(engine, MORT).hp = 1;
-      nextInput(engine);
-      const before = actor(engine, NATUS).hp;
-      engine.submit({ kind: 'attack', targets: [MORT] });
-      drains.push(before - actor(engine, NATUS).hp);
+      // An Attack can miss (the game's hit roll, re-parity W1), so the blow is repeated until the body falls and the drain fires, with
+      // Mortibody put back on 1 HP before each try (a turn in between may have healed it). The test is about the drain, not the roll.
+      let drained = 0;
+      for (let tries = 0; tries < 20 && drained === 0; tries++) {
+        actor(engine, MORT).hp = 1;
+        nextInput(engine);
+        actor(engine, MORT).hp = 1;
+        const before = actor(engine, NATUS).hp;
+        engine.submit({ kind: 'attack', targets: [MORT] });
+        drained = before - actor(engine, NATUS).hp;
+      }
+      drains.push(drained);
       expect(actor(engine, MORT).hp).toBe(actor(engine, MORT).stats.maxHp);
     }
     expect(drains).toEqual([4_000, 3_000, 2_000, 1_000, 1_000]);

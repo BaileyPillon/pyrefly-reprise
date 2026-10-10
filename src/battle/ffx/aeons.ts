@@ -10,8 +10,8 @@
 import type { CombatantId, FFXCombatant } from '../common/types.ts';
 import { type Ctx, friendlies, rtOf, tryActor } from './state.ts';
 import { ejectActor } from './hp.ts';
+import { releaseThreatenLink } from './adapt/threaten.ts';
 import { setGauge } from './overdrive.ts';
-import { normalise } from './turnQueue.ts';
 import { baseCtb } from './math.ts';
 import { duelLost, lockedMirrorOf } from './aeon-duel.ts';
 
@@ -78,7 +78,6 @@ export function summonAeon(ctx: Ctx, ownerId: CombatantId, aeonKey: string, gran
   }
   // The aeon enters on the summoner's turn, so it acts next.
   rtOf(ctx, aeon.id).ctb = 0;
-  normalise(ctx);
 
   ctx.emit({ type: 'summon', aeonId: aeonKey, combatantId: aeon.id, ownerId });
   if (grand) {
@@ -99,6 +98,8 @@ export function dismissAeon(ctx: Ctx, reason: 'command' | 'ko' | 'banished'): vo
   const aeon = tryActor(ctx, id);
   ctx.state.aeonId = null;
   if (aeon) {
+    // The aeon leaves the field: the function that takes a character off it dissolves its Threaten pair (VA 0x0078e410) [re-parity W2].
+    releaseThreatenLink(ctx, aeon);
     aeon.removed = true;
     if (aeon.aeon) {
       // A Grand Summon's temporary gauge is discarded, never banked.
@@ -110,7 +111,6 @@ export function dismissAeon(ctx: Ctx, reason: 'command' | 'ko' | 'banished'): vo
     }
   }
   thawParty(ctx);
-  normalise(ctx);
   ctx.emit({ type: 'dismiss', combatantId: id, reason });
 }
 

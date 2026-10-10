@@ -7,7 +7,6 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup, FFXCombatant } from '../../src/battle/common/types.ts';
 import {
   AEON_REVIVE_BATTLES,
-  applyStatus,
   banishAeon,
   buildBattle,
   type Ctx,
@@ -20,6 +19,7 @@ import {
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { ability, aeon, enemy, party, setup } from './ffx-fixtures.test.ts';
+import { giveStatus, inflict } from './helpers/ffxStatus.ts';
 
 function makeCtx(overrides: Partial<BattleSetup> = {}): { ctx: Ctx; events: BattleEvent[] } {
   const s = setup({
@@ -75,7 +75,7 @@ describe('summoning (§6.1)', () => {
     summonAeon(ctx, 'yuna', 'valefor');
     const valefor = at(ctx, 'valefor');
     valefor.hp = 1200;
-    applyStatus(ctx, undefined, valefor, { status: 'curse', chance: 255, duration: 254 });
+    giveStatus(valefor, 'curse');
     dismissAeon(ctx, 'command');
     summonAeon(ctx, 'yuna', 'valefor');
     expect(at(ctx, 'valefor').hp).toBe(1200);
@@ -86,9 +86,9 @@ describe('summoning (§6.1)', () => {
     const { ctx } = makeCtx();
     const valefor = at(ctx, 'valefor');
     for (const status of ['ko', 'zombie', 'petrify', 'eject', 'sleep', 'doom', 'power-break'] as const) {
-      expect(applyStatus(ctx, undefined, valefor, { status, chance: 254, duration: 254 })).toBe(false);
+      expect(inflict(ctx, undefined, valefor, { status, chance: 254, duration: 254 }), status).toBe(false);
     }
-    expect(applyStatus(ctx, undefined, valefor, { status: 'curse', chance: 254, duration: 254 })).toBe(true);
+    expect(inflict(ctx, undefined, valefor, { status: 'curse', chance: 254, duration: 254 })).toBe(true);
   });
 });
 
@@ -100,7 +100,7 @@ describe("Seymour's Banish (§6.1, ffx-seymour-flux §4.5)", () => {
     if (valefor.overdrive) valefor.overdrive.gauge = 80;
 
     // An ordinary Eject cannot touch it...
-    expect(applyStatus(ctx, undefined, valefor, { status: 'eject', chance: 254, duration: 255 })).toBe(false);
+    expect(inflict(ctx, undefined, valefor, { status: 'eject', chance: 254, duration: 255 })).toBe(false);
     // ...but Banish bypasses Aeon Ribbon entirely.
     banishAeon(ctx, 'valefor');
 
@@ -151,10 +151,10 @@ describe('Curse', () => {
     const { ctx } = makeCtx();
     summonAeon(ctx, 'yuna', 'valefor');
     const valefor = at(ctx, 'valefor');
-    applyStatus(ctx, undefined, valefor, { status: 'curse', chance: 255, duration: 254 });
+    giveStatus(valefor, 'curse');
     const before = valefor.overdrive?.gauge ?? 0;
     // A Boost stance would normally accelerate the gauge; Curse zeroes the gain.
-    applyStatus(ctx, undefined, valefor, { status: 'boost', chance: 255, duration: 1 });
+    inflict(ctx, undefined, valefor, { status: 'boost', chance: 255, duration: 1 });
     expect(valefor.overdrive?.gauge).toBe(before);
   });
 });

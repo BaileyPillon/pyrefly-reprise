@@ -400,10 +400,17 @@ describe('the second fight: Yuna, Auron and Seymour, the weaker rematch (RE 2.1,
   });
 
   it('the Stoic gauge fills only as monsters hurt him: floor(damage x 30 / max HP) + 1 a blow (RE 7.4)', () => {
-    const { ctx, log } = ctxOn(2, 3);
+    // The body's Attack is a physical blow that rolls to hit (on the game's draws since the W2 merge): the first seed from 3 on where it lands is the one this reads.
+    let seed = 3;
+    let found = ctxOn(2, seed);
+    for (; seed < 40; seed++) {
+      found = ctxOn(2, seed);
+      run(found.ctx, BODY_2, { kind: 'attack', targets: ['seymour'] });
+      if (U.damageTo(found.log, 'seymour').length > 0) break;
+    }
+    const { ctx, log } = found;
     const seymour = who(ctx, 'seymour');
-    expect(seymour.overdrive?.gauge).toBe(0);
-    run(ctx, BODY_2, { kind: 'attack', targets: ['seymour'] });
+    expect(U.damageTo(log, 'seymour').length, 'a seed where the Attack lands').toBeGreaterThan(0);
     const dmg = U.damageTo(log, 'seymour')[0]!;
     expect(dmg).toBeGreaterThan(80); // 105 to 118 against his Defense 25
     expect(seymour.overdrive?.gauge).toBe(Math.floor((dmg * 30) / 1_200) + 1);

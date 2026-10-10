@@ -17,9 +17,12 @@
  *   Pagodas die and revive repeatedly, so the tile relabelled repeatedly.
  * - **PR-0040 (polish)** — `state.ts` crossed the 400-line house limit
  *   (AGENTS.md hard rule 7) when the Threaten/Sleep repair landed.
- * - **PR-0025 (polish)** — the rank-3 recovery a denied turn is charged is not
- *   stated by any section the code cites, so it must read as an `[estimate]`
- *   with its reason (AGENTS.md hard rule 6).
+ * - **PR-0025 (polish)** — the rank-3 recovery a denied turn is charged was not
+ *   stated by any section the code cited, so it read as an `[estimate]` with
+ *   its reason (AGENTS.md hard rule 6). It is the game's own number since
+ *   re-parity W2 (the scheduler resets the rank to 3, VA 0x00790fb0;
+ *   `research/re-ffx-ctb-status.md` section 14.4), and the check below pins that
+ *   the comment says so instead.
  *
  * ## Which game
  *
@@ -194,7 +197,7 @@ describe('PR-0004 — a Threatened enemy cannot counterattack [ffx-combat-core �
   // AI lanes B and C) the producers it guarded were gone, and the rule moved with them to the two places a hook's free action
   // is gated now: the reaction drain refuses an owner that cannot act (`ai/hooks.ts#canQueueCommand`, Threaten among the
   // refusals, called by `ai/reaction-drain.ts`) and the scripts of AI lane C test the same state before they queue
-  // (`ai/game-rolls.ts#canQueue`, which is `canAct` and so refuses Threaten, called by `ai/hit-gates.ts`). The behaviour is
+  // (`ai/game-rolls.ts#canQueue`, which is `canQueueAction` (the game's `pp_BtlCanAct` with the not-Threatened flag every caller passes; `canAct`, the turn gate, no longer refuses Threaten since re-parity W2) and so refuses it, called by `ai/hit-gates.ts`). The behaviour is
   // pinned by the two tests above; this one keeps both guards from becoming call-less again.
   it('the Threaten guards of the boss reactions are actually called — a guard with no call site is the original defect', () => {
     const body = (text: string, name: string): string => {
@@ -208,8 +211,8 @@ describe('PR-0004 — a Threatened enemy cannot counterattack [ffx-combat-core �
     expect(body(hooks, 'canQueueCommand'), 'the drain gate no longer refuses a Threatened owner').toContain("s['threaten']");
     expect(callsOf(src('battle/ffx/ai/reaction-drain.ts'), 'canQueueCommand'), 'the drain never consults canQueueCommand: §4.2 is encoded but never consulted').toBeGreaterThan(0);
 
-    expect(body(src('battle/ffx/ai/game-rolls.ts'), 'canQueue'), 'canQueue no longer goes through canAct').toContain('canAct(');
-    expect(body(src('battle/ffx/predicates.ts'), 'canAct'), 'canAct no longer refuses a Threatened combatant').toContain("'threaten'");
+    expect(body(src('battle/ffx/ai/game-rolls.ts'), 'canQueue'), 'canQueue no longer goes through the can-act gate').toContain('canQueueAction(');
+    expect(body(src('battle/ffx/predicates.ts'), 'canQueueAction'), 'the can-act gate no longer refuses a Threatened combatant').toContain("'threaten'");
     expect(callsOf(src('battle/ffx/ai/hit-gates.ts'), 'canQueue'), 'the lane C scripts never consult canQueue: §4.2 is encoded but never consulted').toBeGreaterThan(0);
   });
 });
@@ -315,15 +318,16 @@ describe('PR-0040 — the house 400-line limit [AGENTS.md hard rule 7]', () => {
   });
 });
 
-describe('PR-0025 — the denied-turn recovery is labelled [estimate] [AGENTS.md hard rule 6]', () => {
-  it('the rank-3 charge in the pass path carries an [estimate] marker and its reason', () => {
+describe('PR-0025 — the denied-turn recovery is the exe\'s own rank 3 [AGENTS.md hard rule 6]', () => {
+  it('the rank-3 charge in the pass path cites where the game gets it, and is no longer an estimate', () => {
     const engine = src('battle/ffx/engine.ts');
     const at = engine.indexOf('chargeForAction(ctx, actor.id, 3)');
     expect(at, 'the denied-turn branch moved; re-point this check').toBeGreaterThan(0);
     // The comment block immediately above the charge.
     const preamble = engine.slice(Math.max(0, at - 1600), at);
-    expect(preamble).toContain('[estimate]');
-    expect(preamble.toLowerCase()).toContain('default action rank');
+    expect(preamble).toContain('re-ffx-ctb-status.md');
+    expect(preamble).toContain('0x00790fb0');
+    expect(preamble).toContain('was an `[estimate]` before');
   });
 });
 

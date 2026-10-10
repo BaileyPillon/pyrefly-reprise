@@ -264,8 +264,18 @@ function walk(chapterId: string, seeds: readonly number[], want: number, collect
 // Zombie, the raise refused, the Poison Fang card with "Leave Yuna down", the Holy Water cards on Kimahri and on Yuna, the Phoenix
 // Down with its Zombie warning) is the first sixteen decisions of seed 7 (the Poison Fang card is also decision 4 of seeds 21, 43
 // and 51). Nothing about the advisor changed: only which seed reaches the board.
-describe('Chapter 1, the board the gate reported (seed 7)', () => {
-  const seen = walk('seymour-flux', [7], 16, true);
+//
+// Re-pinned on the W2 branch before the merge, 2026-10-09 (re-parity W2, FFX only): the opening counters are the game's 26 fixed draws and
+// statuses roll through the game's infliction step, so the draws moved; on that branch (the old boss scripts) seed 8's eleven decisions held
+// the whole board and seed 1 supplied the other five.
+//
+// Re-pinned once more 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the two sets of changes move the draws again.
+// The same board is the first sixteen decisions of seed 14 (checked by running the engine over seeds 1 to 14: seeds 5, 9 and 11 miss only the
+// Poison Fang card that says "Leave Yuna down", the others miss more), and the timing sentence below needs a body on the floor that is not a
+// Zombie while a party-wide payload is next, which none of seeds 1 to 107 shows within twenty decisions; seeds 108, 110 and 277 do. Nothing
+// about the advisor changed: only which seed reaches the board.
+describe('Chapter 1, the board the gate reported (seed 14)', () => {
+  const seen = walk('seymour-flux', [14], 16, true);
 
   it('walks the decisions the gate named', () => {
     expect(seen.decisions).toBe(16);
@@ -357,15 +367,17 @@ describe('Chapter 1, the board the gate reported (seed 7)', () => {
     //      board with a body on the floor is answered, through `noteFault`;
     //   2. across the wide walk, the timing sentence still reaches the player
     //      through the **note** on its own, with no warning-channel escape.
-    expect(seen.faults, 'seed 7, decision by decision').toEqual([]);
+    expect(seen.faults, 'seed 14, decision by decision').toEqual([]);
     const wide = walk('seymour-flux', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 240, true);
     expect(wide.faults, 'twelve seeds, decision by decision').toEqual([]);
     // 2026-10-09 (re-parity AI-Seymour, FFX only): the timing sentence needs a body on the floor that is not a Zombie while a
     // party-wide payload is next, and the party now rarely falls (0.6 KOs a battle, was 4.4): none of seeds 1 to 12, and only
     // seeds 218, 494 and 500 of the first 520, each at its eighteenth decision. The existence check therefore reads seed 218's
     // first twenty decisions ("Ready To Annihilate lands first - take the hit, then raise Tidus"), which is fault free too.
-    const timing = walk('seymour-flux', [218], 20, true);
-    expect(timing.faults, 'seed 218, decision by decision').toEqual([]);
+    // 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the draws moved again, and the first seed of 1 to 700 whose first
+    // twenty decisions show the sentence is 108 (then 110 and 277), fault free as well; the sentence is the card's own, unchanged.
+    const timing = walk('seymour-flux', [108], 20, true);
+    expect(timing.faults, 'seed 108, decision by decision').toEqual([]);
     const inNote = timing.cards.filter((c) => /note="[^"]*then raise/.test(c));
     expect(inNote.length, 'a refused revive says when to spend it, in the note').toBeGreaterThan(0);
   });

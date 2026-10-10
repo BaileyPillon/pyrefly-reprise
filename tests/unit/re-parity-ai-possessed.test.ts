@@ -15,6 +15,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, Command, FFXCombatant } from '../../src/battle/common/types.ts';
+import { SeededRng } from '../../src/battle/common/rng.ts';
 import { chooseAiCommand, koActor, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { rtOf } from '../../src/battle/ffx/state.ts';
 import { seedInitialCtb } from '../../src/battle/ffx/turnQueue.ts';
@@ -270,7 +271,10 @@ describe('the opening and the fayth’s revival (A7, A8)', () => {
     for (const id of FIVE) {
       const t = fight(id);
       const seeded = fight(id);
-      seedInitialCtb(seeded.ctx, 'scripted'); // what the engine had before the possession opening
+      // What the engine had before the possession opening: the same 26 opening draws again (re-parity W2: the opening is the game's
+      // fixed draws now, not a jitter the old 'scripted' start left out), from the battle's own seed.
+      seeded.ctx.rng = new SeededRng(1);
+      seedInitialCtb(seeded.ctx, 'scripted');
       const ctb = (f: Fight, who: string): number => rtOf(f.ctx, who).ctb;
       expect(ctb(t, `possessed-${id}`), id).toBe(0);
       expect([ctb(t, 'yu-pagoda-left'), ctb(t, 'yu-pagoda-right')], id).toEqual([24, 24]);
@@ -281,6 +285,7 @@ describe('the opening and the fayth’s revival (A7, A8)', () => {
   it('Yu Yevon’s battle moves the Pagodas to 24 and the party one tick, and leaves his own counter to the engine', () => {
     const t = liveBattle('yu-yevon');
     const seeded = liveBattle('yu-yevon');
+    seeded.ctx.rng = new SeededRng(1); // the same 26 opening draws again (re-parity W2), from the battle's own seed
     seedInitialCtb(seeded.ctx, 'scripted');
     const ctb = (b: LiveBattle, who: string): number => rtOf(b.ctx, who).ctb;
     for (const pagoda of ['yu-pagoda-left', 'yu-pagoda-right']) expect(ctb(t, pagoda)).toBe(24);

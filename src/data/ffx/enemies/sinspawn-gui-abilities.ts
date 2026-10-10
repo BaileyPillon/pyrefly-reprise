@@ -7,7 +7,7 @@
  * - **Special 1** (0x6001): the head's whole turn. No formula, no hits, no damage: it names the body, and the body's `onTargeted` answers it (`ai/sinspawn-gui.ts`).
  *   `hits: 0` for the reason the other caption-style rows carry it: no hit record, so it can never run the body's `onHit`.
  * - **Venom** (0x6031): magic formula 3, power 24, always hits, damage type neither physical nor magical (Shell and Protect do not apply), **Poison 100 and Slow 100**, with Slow's duration
- *   byte 0, which the game writes as no counter at all: it strips Haste and slows no one (`statuses.ts#applyStatus`, a Slow with duration 0).
+ *   byte 0, which the game writes as no counter at all: it strips Haste and slows no one (the game's own status step, `kernel/status-inflict.ts#temporalStep`, writes Slow's counter 0 and clears Haste's).
  *
  * Every number is the game's own record, read from its battle kernel tables; the record words are `[game table]`. Our names are the game's command names; the banner wording is ours.
  */
@@ -66,8 +66,10 @@ export const guiVenom: AbilityDef = {
 
 /** The game's records for the two rows (`command-records/enemies.ts` merges them). */
 export const COMMAND_RECORDS_GUI: Readonly<Record<string, FFXCommandRecord>> = {
-  [GUI_SPECIAL_1_ID]: { id: 0x6001, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0 }, // Special 1
-  [GUI_VENOM_ID]: { id: 0x6031, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1 }, // Venom
+  [GUI_SPECIAL_1_ID]: { id: 0x6001, type: 0, flagsMisc: 0x2, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Special 1 (rank byte 3)
+  // Venom: rank byte 3; the chance bytes Poison 100 (status 3) and Slow 100 (status 24); Slow's DURATION byte is 0, so `durations` is empty (it lists non-zero bytes only) and the game's own status
+  // step (`kernel/status-inflict.ts#temporalStep`) writes Slow's counter 0 and clears Haste's: it strips Haste and slows no one, with no rule of ours.
+  [GUI_VENOM_ID]: { id: 0x6031, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1, rank: 3, chances: [[3, 100], [24, 100]] }, // Venom
 };
 
 export const SINSPAWN_GUI_ABILITIES: Readonly<Record<string, AbilityDef>> = {

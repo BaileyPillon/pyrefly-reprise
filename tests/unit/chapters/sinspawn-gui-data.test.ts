@@ -120,7 +120,9 @@ describe('the commands Gui uses (RE 4)', () => {
     const v = def(GUI_VENOM_ID);
     expect([v.formula, v.power, v.canMiss, v.damageType]).toEqual(['magic', 24, false, 'other']);
     expect(v.statusEffects).toEqual([{ status: 'poison', chance: 100, duration: 254 }, { status: 'slow', chance: 100, duration: 0 }]);
-    expect(COMMAND_RECORDS[GUI_VENOM_ID]).toEqual({ id: 0x6031, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1 });
+    // Since the W2 merge the record carries the game's chance bytes (Poison status 3 and Slow status 24, both 100) and rank 3; Slow's DURATION byte is 0, so no duration is listed and the kernel's status step does what the game does.
+    expect(COMMAND_RECORDS[GUI_VENOM_ID]).toEqual({ id: 0x6031, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1, rank: 3, chances: [[3, 100], [24, 100]] });
+    expect(COMMAND_RECORDS[GUI_VENOM_ID]?.durations).toBeUndefined();
   });
 
   it('Special 1 is the head\'s whole turn: no formula, no hit, record 0x6001', () => {

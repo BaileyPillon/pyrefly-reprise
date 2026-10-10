@@ -3,10 +3,16 @@
  *
  * Split out of `abilities.ts` (re-parity W1; **FFX only**). `adapt/hit.ts#resolveHit` runs the game's per-hit
  * pipeline (the Nul check, the hit roll, the base damage of every class, the modifier chain, the critical roll,
- * the cap) with the draws in the game's order. This module wraps that in the engine's own business around a hit:
- * Reflect and Cover, the events, the HP / MP / CTB application, revival, the drain heal, the Overdrive gauges, the
- * status rolls and removals, Delay, shatter and the scripted extras. None of that is the kernels' job (the status
- * rolls and the turn queue are batch W2).
+ * the status infliction, Delay and Threaten, the cap) with the draws in the game's order. This module wraps that in the
+ * engine's own business around a hit: Reflect and Cover, the events, the HP / MP / CTB application, revival, the drain
+ * heal, the Overdrive gauges and the scripted extras.
+ *
+ * **Statuses (re-parity W2).** The game keeps one hit record per target per action and every hit of the action edits it:
+ * the record starts as the target's status words as the action began, the infliction step reads the LIVE words
+ * (unchanged until the action is over) and edits the record, and the record is written back after the damage is applied.
+ * {@link HitScope.records} is that record. `adapt/status.ts#runStatusStep` is the game's infliction step, run from inside
+ * the hit pipeline where the game runs it (after the damage classes, so its draws follow theirs); `adapt/status-apply.ts`
+ * carries the record's changes out on the engine's combatant after the damage, with the events the engine always emitted.
  */
 
 import type { AbilityDef, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
@@ -16,11 +22,13 @@ import { type Ctx, has, hasFlag, isAlive, onField, rtOf } from './state.ts';
 import { type HitDraws } from './adapt/draws.ts';
 import { engineDamageClass } from './adapt/command.ts';
 import { resolveHit } from './adapt/hit.ts';
-import { weaponStatusStrikes } from './equipment.ts';
-import { applyMpDelta, dealDamage, ejectActor, healOutsideChain, koActor, reviveActor } from './hp.ts';
-import { banishAeon } from './aeons.ts';
-import { applyStatus, bouncesOffReflect, removeStatus, removeStatuses, rollStatus } from './statuses.ts';
-import { applyDelay } from './turnQueue.ts';
+import { applyMpDelta, dealDamage, healOutsideChain, reviveActor } from './hp.ts';
+import { bouncesOffReflect, removeStatus } from './statuses.ts';
+import { addCtb, tickSpeedOf } from './adapt/ctb.ts';
+import { PermBit, type StatusRecord } from './kernel/status-types.ts';
+import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
+import { type Before, applyStatusStep } from './adapt/status-apply.ts';
+import { buffByte, stackBytes } from './adapt/status.ts';
 import { redirectTarget, reflectBounceTarget } from './targeting.ts';
 import {
   onDamageDealt,
@@ -32,7 +40,14 @@ import {
 } from './overdrive.ts';
 import { runScriptedExtra } from './scripted.ts';
 import type { ResolveOptions } from './abilities.ts';
-import { percentRoll } from '../common/rng.ts';
+
+/** The game's hit record of one target for one action: the live words it reads, and the record its hits edit. */
+export interface ActionRecord {
+  /** The target's permanent word, counters and extra word as the action began (the infliction step's "already has it" reads). */
+  live: LiveStatus;
+  /** The record, after the target's earlier hits of this action. */
+  record: StatusRecord;
+}
 
 /** Everything the hits of one action share, and the two running figures they add to. */
 export interface HitScope {
@@ -49,6 +64,10 @@ export interface HitScope {
   hitIndex: number;
   /** Total HP damage dealt so far (positive only). */
   totalDealt: number;
+  /** The rank of the action in progress: Threaten's delay is made of the recovery this rank costs the user. */
+  rank: number;
+  /** The hit record of each target the action has touched, made when its first hit starts. */
+  records: Map<CombatantId, ActionRecord>;
   /**
    * The targets the hit records have landed on since their scripts last heard of it, with their HP before the
    * first record, the index of the last one and the running `LastDamageTakenHP` (the HP-class results after the cap
@@ -66,18 +85,19 @@ export interface Touched {
   lastDamage: number;
 }
 
-/** Statuses this action tries to land, including weapon strikes. */
-function statusApplications(
-  user: FFXCombatant,
-  def: AbilityDef,
-): Array<{ status: StatusId; chance: number; duration: number; stacks?: number }> {
-  const own = def.statusEffects.map((s) => ({ ...s }));
-  if (!hasFlag(def, 'inherits-weapon-properties')) return own;
-  for (const strike of weaponStatusStrikes(user)) {
-    if (own.some((s) => s.status === strike.status)) continue;
-    own.push({ status: strike.status, chance: strike.chance, duration: 254 });
+/** A new scope's empty record book. */
+export function newRecordBook(): Map<CombatantId, ActionRecord> {
+  return new Map();
+}
+
+/** The hit record of `target` for this action: the snapshot of its status words taken at its first hit. */
+function recordFor(scope: HitScope, target: FFXCombatant): ActionRecord {
+  let book = scope.records.get(target.id);
+  if (!book) {
+    book = { live: liveOf(target), record: recordOf(target) };
+    scope.records.set(target.id, book);
   }
-  return own;
+  return book;
 }
 
 /** Write the Nul counters the hit's Nul check ticked back onto the target's statuses, dropping a spent one. */
@@ -123,6 +143,11 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
 
   const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
   const targetRt = rtOf(ctx, target.id);
+  const book = recordFor(scope, target);
+  // What the status step starts from, before anything of this hit is applied: the record, and the stacks and buff flags
+  // the stage-buff step and the buff write-back change on the character itself.
+  const before: Before = { record: book.record, stacks: stackBytes(target), buff: buffByte(target) };
+  const made: { step?: StatusStepOutput } = {};
   const report = resolveHit(
     {
       // The damage chain alone may read another actor's stat block [ffx-seymour-flux §5.4] — see `ResolveOptions.statsUser`.
@@ -134,10 +159,18 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
       ...(options.timing ? { timing: options.timing } : {}),
       ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
       targetCtb: targetRt.ctb,
-      targetTick: targetRt.base,
+      targetTick: tickSpeedOf(target),
       isCounter: options.isCounter === true || hasFlag(def, 'is-counter'),
     },
     scope.draws,
+    // The infliction step, run by the pipeline once the hit has landed and its damage classes have drawn (`HitIo.status`).
+    (command) => {
+      made.step = runStatusStep(
+        { ctx, user, target, def: row, command, rank: scope.rank, live: book.live, record: book.record },
+        scope.draws.modulus,
+      );
+      return made.step.outcome;
+    },
   );
 
   // The Nul check: the game ticks the counters of a nullified hit, and only of that.
@@ -164,48 +197,39 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
 
   const [hpAmount, mpAmount, ctbAmount] = report.amounts;
   const crit = report.crit;
-  const heals = hasFlag(def, 'heals');
-  let resolvedAsRevival = false;
+  const step = made.step;
+  let skipHp = false;
 
-  // Revival effects (`heals` + `can-target-dead`: Life, Full-Life, Phoenix
-  // Down, Mega Phoenix) resolve here, never through the HP path below.
-  //
-  // - On a **KO'd** target they revive it. That includes a KO'd Zombie: the
-  //   reversal applies only to a *living* Zombie, and Zombie survives KO,
-  //   so the target comes back still Zombie [ffx-combat-core §4.2,
-  //   ffx-yunalesca §7.1, §15.2 #29]. Refusing to revive a KO'd Zombie —
-  //   what this code used to do — makes every zombified member who dies
-  //   permanently lost, which is exactly how Chapter 2 bled out in Form II.
-  // - On a **living Zombie** they kill it outright ("revival effects
-  //   instantly kill a living Zombie" — the `zombie` status contract).
-  if (heals && hasFlag(def, 'can-target-dead')) {
+  // The Death bit of the record decides the engine's two Death outcomes. A cleansing command (Life, Full-Life, Phoenix Down)
+  // takes it off a dead target (a revival) and puts it ON a Zombie, which kills it [`kernel/status-inflict.ts`, VA 0x0078ae00];
+  // the kernel has already zeroed the damage of a hit that newly kills (VA 0x0078c480).
+  const wasDead = (before.record.perm & PermBit.Death) !== 0;
+  const nowDead = step !== undefined && (step.result.record.perm & PermBit.Death) !== 0;
+  const revived = step !== undefined && wasDead && !nowDead;
+  const newlyDead = step !== undefined && !wasDead && nowDead;
+
+  // A revival stands the target up with the hit's restoring amount (half its maximum when the command computes none).
+  // A KO'd Zombie comes back still a Zombie; a revival never reaches an unrevivable target.
+  if (revived) {
+    skipHp = true;
     if (!isAlive(target) && onField(target)) {
-      resolvedAsRevival = true;
       const restore = Math.abs(hpAmount) || idiv(target.stats.maxHp, 2);
       if (reviveActor(ctx, target, restore, def.id)) {
         onHealDealt(ctx, user, target, restore);
       } else {
         ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
       }
-    } else if (has(target, 'zombie')) {
-      resolvedAsRevival = true;
-      const lethal = Math.max(target.hp, Math.abs(hpAmount));
-      dealDamage(ctx, target, lethal, {
-        sourceId: user.id,
-        element: scope.primaryElement,
-        crit: false,
-        hitIndex: scope.hitIndex,
-        hitCount: scope.totalHits,
-        ...holdKo,
-      });
-      scope.totalDealt += lethal;
     }
+  } else if (newlyDead && hasFlag(def, 'heals') && hasFlag(def, 'can-target-dead')) {
+    // A revival effect on a living Zombie kills it: no number, the KO is the effect (carried out with the statuses below).
+    skipHp = true;
   }
 
-  if (!resolvedAsRevival) {
-    // The CTB class. Haste/Slow's own CTB shift is applied by the status path, so the formula result only moves
-    // the counter for pure `ctb` actions.
-    if ((report.classes & 4) !== 0) targetRt.ctb = Math.max(0, targetRt.ctb + ctbAmount);
+  if (!skipHp) {
+    // The CTB class (Haste and Slow rescale the counter through their own formula-0xd amount; a Delay Attack or Buster adds
+    // its multiple of the target's tick speed): the live class bit 4 of the result word, applied as the exe's SubCtb does,
+    // `clamp(counter + amount, 0, 255)`.
+    if ((report.resultMask & 4) !== 0 && ctbAmount !== 0) addCtb(ctx, target, ctbAmount);
 
     // The MP class: restores (Ether) or drains (Osmose, Lancet), and the drainer gains what was taken.
     if ((report.classes & 2) !== 0 && mpAmount !== 0) {
@@ -234,7 +258,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         // physical hit"]. This is additive and it closes a soft-lock, not
         // just a fidelity gap: `state.ts canAct` drops a sleeper out of the
         // CTB queue entirely, and `ticks.ts onTurnEnd` is the only place
-        // `tickDurationStatuses` runs — so a sleeping actor never reaches a
+        // the counters tick — so a sleeping actor never reaches a
         // turn end and its 3-turn Sleep never counts down. Measured in
         // Chapter 3: one Yu Pagoda Curse put Tidus to sleep on turn 17 of a
         // 204-turn battle and he never acted again.
@@ -276,73 +300,19 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     }
   }
 
-  // Statuses, then removals, then delay — the decompile's order.
-  for (const app of statusApplications(user, row)) {
-    // Death is `ko` in this contract (there is no separate death status),
-    // and landing it must *kill* — HP to 0, a `ko` event, Auto-Life
-    // consulted — not merely attach a marker to a living combatant. The
-    // roll still goes through `rollStatus`, which is where a living
-    // Zombie's Death resistance is raised to 255: that is the whole of
-    // Mega Death's Zombie exception [ffx-yunalesca §5.3, §7.1].
-    if (app.status === 'ko') {
-      if (!isAlive(target)) continue;
-      if (rollStatus(ctx, target, 'ko', app.chance)) koActor(ctx, target, user.id);
-      continue;
+  // The statuses the infliction step put in the hit record, written back after the damage, in the decompile's order: the
+  // words and counters, the stage buffs, the buff flags, then a Death (Auto-Life, forms) or an Eject (the target leaves the
+  // field) the record carries. A petrified monster always shatters because Petrify on a monster puts Death and Eject in the
+  // record itself, and the shatter roll against an already petrified target is the step's own (`Cmd+0x2c`).
+  if (step) {
+    const applied = applyStatusStep(ctx, user, target, def, before, step);
+    book.record = step.result.record;
+    for (const status of applied.added) {
+      if (TACTICIAN_STATUSES.includes(status) && target.side === 'enemy') onFlatTrigger(ctx, user, 'tactician', 'tactician');
+      if (VICTIM_STATUSES.includes(status) && user.side === 'enemy') onFlatTrigger(ctx, target, 'victim', 'victim');
     }
-    if (applyStatus(ctx, user, target, app, def.id, { skipCtbShift: (report.classes & 4) !== 0 })) {
-      // Eject is not just a marker: it takes the target off the field, and
-      // it counts as defeated [ffx-combat-core §4.2].
-      if (app.status === 'eject') {
-        if (target.side === 'aeon') banishAeon(ctx, target.id);
-        else ejectActor(ctx, target, 'eject');
-      }
-      if (TACTICIAN_STATUSES.includes(app.status) && target.side === 'enemy') {
-        onFlatTrigger(ctx, user, 'tactician', 'tactician');
-      }
-      if (VICTIM_STATUSES.includes(app.status) && user.side === 'enemy') {
-        onFlatTrigger(ctx, target, 'victim', 'victim');
-      }
-    }
-  }
-  if (hasFlag(def, 'removes-statuses') && def.removesStatuses.length > 0) {
-    removeStatuses(ctx, target, def.removesStatuses, def.category === 'item' ? 'cured' : 'dispelled');
-  }
-  if (hasFlag(row, 'weak-delay')) applyDelay(ctx, target.id, 'weak');
-  if (hasFlag(row, 'strong-delay')) applyDelay(ctx, target.id, 'strong');
-
-  // Shatter a petrified target.
-  if (hasFlag(def, 'shatter') && has(target, 'petrify')) {
-    const shatterChance = def.shatterChance ?? 0;
-    if (shatterChance > 0 && percentRoll(ctx.rng) < shatterChance) {
-      ejectActor(ctx, target, 'shatter');
-    }
-  }
-
-  // **A petrified MONSTER always shatters** — no roll, no `shatter` flag
-  // needed on whatever petrified it [ffx-seymour-anima-macalania §2.2,
-  // verified: 2 sources: grayfox96's status-chance note + the FF Wiki
-  // strategy section]. The flagged path above is the *other* rule: a
-  // chance to shatter something that was **already** petrified, which is
-  // what Seymour's -ra spells carry at 10.
-  //
-  // Until this existed, Petrify was a dead end against an enemy. Rikku's
-  // Petrify Grenade and Kimahri's Stone Breath both apply `petrify` at
-  // chance 254 and neither carries the `shatter` flag, so a petrified
-  // Guado Guardian simply stood there: out of the turn queue
-  // (`predicates.ts#inTurnQueue` excludes Petrify) but still **alive**, so
-  // it went on Covering every physical aimed at Seymour and went on firing
-  // its 1,000 HP Auto-Potion counter. §7 row 2 — "Petrify the Guardians
-  // for an instant kill, at the cost of the overkill AP" — was unreachable
-  // and the tactic spent four turns finding that out.
-  //
-  // Draws no RNG, so a seeded run is unchanged wherever it does not fire, and it cannot fire in
-  // any shipped chapter: every FFX enemy this project ships outside Macalania carries
-  // `petrify: 255`. FFX-2 runs its own engine and is untouched [AGENTS.md rule 14].
-  if (target.side === 'enemy' && has(target, 'petrify') && onField(target)) {
-    ejectActor(ctx, target, 'shatter');
   }
 
   runScriptedExtra(ctx, user, def, target, hpAmount);
   scope.hitIndex++;
 }
-

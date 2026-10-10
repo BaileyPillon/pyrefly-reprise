@@ -12,7 +12,6 @@ import { byteRoll } from '../common/rng.ts';
 import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isAlive, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
-import { applyStatus } from './statuses.ts';
 import { chargeTurn } from './turnQueue.ts';
 import { isMenuMarker, minigameParams, rollDefaultMinigame, spendOverdrive } from './overdrive.ts';
 import { shapeOverdrive } from './overdriveShape.ts';
@@ -91,7 +90,9 @@ export function executeCommand(
     case 'defend': {
       const def = abilityOf(ctx, DEFEND_ABILITY_ID);
       ctx.emit({ type: 'action-start', actorId: actor.id, command, abilityId: DEFEND_ABILITY_ID, abilityName: 'Defend', targets: [actor.id] });
-      applyStatus(ctx, actor, actor, { status: 'defend', chance: 255, duration: 1 }, DEFEND_ABILITY_ID);
+      // Defend is a command like any other, with the game's own record (the Defend stance in the extra-status word): it
+      // runs through the same hit and status steps, aimed at the actor.
+      if (def) resolveAbility(ctx, actor, def, [actor.id]);
       ctx.emit({ type: 'action-end', actorId: actor.id });
       return { rank: rankOf(def), damageDealt: 0 };
     }

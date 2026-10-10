@@ -86,7 +86,7 @@ const magicBoosterApplies = (autoA: number, commandType: number): boolean =>
  *      `Chr+0x5ca`.
  *    Counters follow the same rules as {@link inflictStatus}: changed, immune, failed, and by the table classes.
  */
-export function inflictExtraStatus(input: ExtraInput, draw: () => number): ExtraResult {
+export function inflictExtraStatus(input: ExtraInput, draw: (modulus: number) => number): ExtraResult {
   const rec: StatusRecord = { perm: input.record.perm & 0xffff, counters: input.record.counters.slice(), extra: input.record.extra & 0xffff };
   const applied = (input.applied ?? new Array<number>(8).fill(0)).slice();
   const removed = (input.removed ?? new Array<number>(8).fill(0)).slice();
@@ -99,7 +99,7 @@ export function inflictExtraStatus(input: ExtraInput, draw: () => number): Extra
 
   if ((rec.perm & PermBit.Petrify) !== 0) {
     draws += 1;
-    if ((draw() & 0x7fffffff) % 101 < (cmd.shatter & 0xff)) {
+    if ((draw(101) & 0x7fffffff) % 101 < (cmd.shatter & 0xff)) {
       wanted |= ExtraBit.Eject;
       rec.perm |= PermBit.Death;
     }

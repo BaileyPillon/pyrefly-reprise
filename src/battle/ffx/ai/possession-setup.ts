@@ -15,7 +15,6 @@
 
 import type { FFXCombatant, FFXPartyBuild } from '../../common/types.ts';
 import { type Ctx, rtOf, tryActor } from '../state.ts';
-import { normalise } from '../turnQueue.ts';
 
 /** Copy the party aeon's stats onto the possessed one (a no-op for every other enemy). */
 export function mirrorPossessedAeon(c: FFXCombatant, party: FFXPartyBuild): void {
@@ -31,7 +30,11 @@ export function mirrorPossessedAeon(c: FFXCombatant, party: FFXPartyBuild): void
   if (form) form.hp = build.stats.maxHp;
 }
 
-/** The opening counters of a possession fight and of Yu Yevon's, after the engine seeded the usual ones. */
+/**
+ * The opening counters of a possession fight and of Yu Yevon's, after the engine seeded the usual ones (the game's 26 fixed
+ * opening draws, re-parity W2). The counters are the game's bytes and the clock counts each down, so the script's writes stand
+ * as they are (nothing is rebased; a counter pushed back is clamped at 255).
+ */
 export function applyPossessionOpening(ctx: Ctx): void {
   const enemies = ctx.state.enemyIds.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined);
   const aeon = enemies.find((c) => c.flags.isPart !== true && c.id.startsWith('possessed-'));
@@ -39,6 +42,5 @@ export function applyPossessionOpening(ctx: Ctx): void {
   if (aeon === undefined && yuYevon === undefined) return;
   if (aeon !== undefined) rtOf(ctx, aeon.id).ctb = 0;
   for (const part of enemies.filter((c) => c.flags.isPart === true)) rtOf(ctx, part.id).ctb = 24;
-  for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb += aeon !== undefined ? 2 : 1;
-  normalise(ctx);
+  for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + (aeon !== undefined ? 2 : 1));
 }

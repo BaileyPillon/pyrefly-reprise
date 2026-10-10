@@ -17,7 +17,7 @@
 
 import type { AbilityDef, AbilityId, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
 import { idiv } from './math.ts';
-import { type Ctx, has, hasFlag, stacks } from './state.ts';
+import { type Ctx, has, hasFlag, rankOf, stacks } from './state.ts';
 import type { TimingBonus } from './adapt/hit.ts';
 import { drawsOf } from './adapt/draws.ts';
 import { resolveElements } from './elements.ts';
@@ -28,7 +28,7 @@ import { resolveCommand } from './adapt/command.ts';
 import { aimedTargetForHit, aimedTargets, isPerHitRandom, nextHitTargets, resolveTargets, scriptAimsAt } from './targeting.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
-import { type HitScope, resolveOneHit } from './hit-apply.ts';
+import { type HitScope, newRecordBook, resolveOneHit } from './hit-apply.ts';
 
 /** Knobs the caller can override per resolution. */
 export interface ResolveOptions {
@@ -146,6 +146,8 @@ export function resolveAbility(
     totalHits: perHitRandom ? hitCount : hitCount * Math.max(1, targets.length),
     hitIndex: 0,
     totalDealt: 0,
+    rank: rankOf(def),
+    records: newRecordBook(),
     touched: new Map(),
   };
 

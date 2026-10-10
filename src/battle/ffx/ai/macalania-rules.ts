@@ -30,7 +30,6 @@
 
 import type { Ctx } from '../state.ts';
 import { rtOf, tryActor } from '../state.ts';
-import { normalise } from '../turnQueue.ts';
 
 // ---------------------------------------------------------------------------
 // Ids: duplicated from the data file on purpose, `src/battle/**` must not import `src/data/**`.
@@ -155,10 +154,10 @@ export function applyMacalaniaSetup(ctx: Ctx): void {
     anima.overdrive = { gauge: 0, mode: 'stoic', unlockedOverdriveIds: ['anima-oblivion'] };
   }
 
+  // The start hook's writes stand as they are on the game's byte counters (re-parity W2): nothing is rebased afterwards.
   for (const id of ctx.state.enemyIds) rtOf(ctx, id).ctb = 0;
   rtOf(ctx, SEYMOUR_ID).ctb = 1;
-  for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) rtOf(ctx, id).ctb += 2;
-  normalise(ctx);
+  for (const id of [...ctx.state.activeIds, ...ctx.state.reserveIds]) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + 2);
 }
 
 // ---------------------------------------------------------------------------

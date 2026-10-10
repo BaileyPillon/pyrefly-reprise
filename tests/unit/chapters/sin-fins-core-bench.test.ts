@@ -100,8 +100,11 @@ describe(`Chapter XVII bench smoke (${SMOKE} seeds; the full tables are behind P
   it('the sensible line never leaves a dry Auron Defending: short of the 12 MP a Break costs he drinks an Ether (the carried seam)', () => {
     // The link-3 cause (2026-09-29): links 1 and 2 leave Auron at 4 to 16 MP of 100 with Turbo Ethers in the bag;
     // the line used to Defend him for the rest of link 3, so the Core went unbroken, or Auron idle, on a carried party.
+    // Seed 4 -> 9 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the draws moved, and the seam (Auron short of 12 MP with an
+    // Ether in the bag, in link 3 with the Core still unbroken) now comes up on 4 of the first 16 seeds (9, 12, 13 and 14), not on seeds 1 to 4. None of
+    // the 16 leaves him Defending dry. Seed 9 stands in for 4 so that the sum below still needs one drink.
     let total = 0;
-    for (const seed of [1, 2, 3, 4]) {
+    for (const seed of [1, 2, 3, 9]) {
       const base = makeSensible();
       let dryDefends = 0;
       let drinks = 0;

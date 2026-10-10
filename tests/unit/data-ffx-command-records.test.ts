@@ -20,9 +20,10 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
-import { COMMAND_RECORDS, NO_COMMAND_RECORD } from '../../src/data/ffx/command-records/index.ts';
+import { COMMAND_RECORDS, NO_COMMAND_RECORD, RANK_CHANGES } from '../../src/data/ffx/command-records/index.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../../src/data/ffx/command-records/enemies.ts';
 import { possessedAeonGroups } from '../../src/data/ffx/enemies/braskas-final-aeon.ts';
+import { CORE_ABILITIES } from '../../src/battle/ffx/registry.ts';
 import { FORMULA_NUMBER, engineDamageClass } from '../../src/battle/ffx/adapt/command.ts';
 import { elementMask } from '../../src/battle/ffx/adapt/words.ts';
 
@@ -222,5 +223,218 @@ describe('what the adapter assumes of the data', () => {
       const formula = (a.record.flagsMisc >>> 3) & 7;
       if (formula === 1 || formula === 2) expect(a.accuracy, a.id).toBeDefined();
     }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------- the status bytes (re-parity W2)
+
+interface StatusFixture {
+  columns: string[];
+  rows: Array<[number, number, number, number, number, number, Array<[number, number]>, Array<[number, number]>]>;
+}
+
+const statusFixture = JSON.parse(
+  readFileSync(fileURLToPath(new URL('../fixtures/parity/ffx/command_status.json', import.meta.url)), 'utf8'),
+) as StatusFixture;
+const STATUS = new Map(statusFixture.rows.map((row) => [row[0], row]));
+
+const PERM_IDS = ['ko', 'zombie', 'petrify', 'poison', 'power-break', 'magic-break', 'armor-break', 'mental-break', 'confuse', 'berserk', 'provoke', 'threaten'];
+const TEMPORAL_IDS = ['sleep', 'silence', 'darkness', 'shell', 'protect', 'reflect', 'nultide', 'nulblaze', 'nulshock', 'nulfrost', 'regen', 'haste', 'slow'];
+const EXTRA_BITS: Readonly<Record<string, number>> = { scan: 0x1, shield: 0x40, boost: 0x80, eject: 0x100, 'auto-life': 0x200, curse: 0x400, defend: 0x800, guard: 0x1000, sentinel: 0x2000, doom: 0x4000 };
+const STAGE_BITS: Readonly<Record<string, number>> = { cheer: 1, aim: 2, focus: 4, reflex: 8, luck: 0x10, jinx: 0x20 };
+const BUFF_BITS: Readonly<Record<string, number>> = { 'max-hp-x2': 1, 'max-mp-x2': 2, 'mp-cost-zero': 4, 'damage-9999': 8, 'guaranteed-critical': 0x10, 'overdrive-x1_5': 0x20, 'overdrive-x2': 0x40 };
+const statusNumber = (status: string): number | null =>
+  PERM_IDS.includes(status) ? PERM_IDS.indexOf(status) : TEMPORAL_IDS.includes(status) ? 12 + TEMPORAL_IDS.indexOf(status) : null;
+const hexWord = (n: number): string => `0x${n.toString(16)}`;
+
+/**
+ * Where the statuses an ability's own data inflicts or removes differ from the game's record (the bytes the status
+ * kernels read for an ability that has a record). The wiring takes the RECORD's bytes: they are the exe's inputs. Each
+ * line is a sourced difference for Bailey, not something the wiring retunes.
+ */
+function statusDifferences(): string[] {
+  const found: string[] = [];
+  for (const a of ALL_ABILITIES) {
+    const r = a.record;
+    if (!r) continue;
+    const chance = new Map(r.chances ?? []);
+    const duration = new Map(r.durations ?? []);
+    const cleanses = (r.flagsDamage & 0x20) !== 0;
+    const covered = new Set<number>();
+    let extra = 0;
+    let stage = 0;
+    let buff = 0;
+    for (const s of a.statusEffects) {
+      const n = statusNumber(s.status);
+      if (n !== null) {
+        covered.add(n);
+        const g = chance.get(n);
+        if (g === undefined) found.push(`${a.id}: ${s.status} chance ${s.chance}, the record has no byte`);
+        else if (g !== s.chance) found.push(`${a.id}: ${s.status} chance ${s.chance}, record ${g}`);
+        if (n >= 12 && (duration.get(n - 12) ?? 0) !== s.duration) found.push(`${a.id}: ${s.status} duration ${s.duration}, record ${duration.get(n - 12) ?? 0}`);
+      } else if (EXTRA_BITS[s.status] !== undefined) extra |= EXTRA_BITS[s.status] as number;
+      else if (STAGE_BITS[s.status] !== undefined) stage |= STAGE_BITS[s.status] as number;
+      else if (BUFF_BITS[s.status] !== undefined) buff |= BUFF_BITS[s.status] as number;
+      else found.push(`${a.id}: ${s.status} has no place in the record`);
+    }
+    for (const s of a.removesStatuses) {
+      const n = statusNumber(s);
+      if (n !== null) {
+        covered.add(n);
+        if (!chance.has(n)) found.push(`${a.id}: removes ${s}, the record has no byte`);
+      } else if (EXTRA_BITS[s] !== undefined) extra |= EXTRA_BITS[s] as number;
+      else found.push(`${a.id}: removes ${s}, which has no place in the record`);
+    }
+    // Death is kept elsewhere in our data: a revival command (heals, can-target-dead) is the cleanse of the Death byte, and the
+    // instant killers carry the same byte as extra.deathChance (the engine's scripted roll, which this batch replaces by the record).
+    const revival = cleanses && chance.get(0) !== undefined && a.flags.includes('can-target-dead');
+    if (chance.has(0) && !covered.has(0) && (revival || a.extra?.['deathChance'] === chance.get(0))) covered.add(0);
+    for (const [n, byte] of chance) if (!covered.has(n)) found.push(`${a.id}: the record has a byte ${byte} for ${n < 12 ? PERM_IDS[n] : TEMPORAL_IDS[n - 12]}${cleanses ? ' (a cleanse)' : ''}, ours none`);
+    if (extra !== (r.extra ?? 0)) found.push(`${a.id}: extra bits ${hexWord(extra)}, record ${hexWord(r.extra ?? 0)}`);
+    if ((stage & 0x3f) !== (((r.stage?.[0] ?? 0)) & 0x3f)) found.push(`${a.id}: stage buffs ${hexWord(stage)}, record ${hexWord(r.stage?.[0] ?? 0)}`);
+    if (buff !== (r.buff ?? 0)) found.push(`${a.id}: buff flags ${hexWord(buff)}, record ${hexWord(r.buff ?? 0)}`);
+    if (cleanses !== (a.removesStatuses.length > 0) && !revival) found.push(`${a.id}: cleanse ${cleanses ? 'in the record' : 'not in the record'}, ours ${a.removesStatuses.length > 0 ? 'removes statuses' : 'none'}`);
+  }
+  return found;
+}
+
+const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
+  // The wiring takes the record's byte; Provoke 254 and Threaten 255 were ours. The Threaten command byte is only "non-zero":
+  // the roll reads the TARGET's Threaten byte (research/re-ffx-ctb-status.md section 6).
+  'provoke: provoke chance 254, record 100',
+  'threaten: threaten chance 255, record 100',
+  // Distill: the engine has no Distill status; the bits land in the record and are dropped when it is written back.
+  'extract-power: extra bits 0x0, record 0x2',
+  'extract-mana: extra bits 0x0, record 0x4',
+  'extract-speed: extra bits 0x0, record 0x8',
+  'extract-ability: extra bits 0x0, record 0x20',
+  'power-distiller: extra bits 0x0, record 0x2',
+  'mana-distiller: extra bits 0x0, record 0x4',
+  'speed-distiller: extra bits 0x0, record 0x8',
+  'ability-distiller: extra bits 0x0, record 0x20',
+  // Havoc Shot: the game's Sleep, Silence and Darkness bytes are 254 (lands unless immune), ours 100.
+  'havoc-shot: sleep chance 100, record 254',
+  'havoc-shot: silence chance 100, record 254',
+  'havoc-shot: darkness chance 100, record 254',
+  // Time Shot also slows, in the game.
+  'time-shot: the record has a byte 100 for slow, ours none',
+  // The record of Full Life (Seymour Flux's) revives and cleanses nothing else, and inflicts no Doom.
+  'full-life: removes poison, the record has no byte',
+  'full-life: removes darkness, the record has no byte',
+  'full-life: removes silence, the record has no byte',
+  'full-life: removes sleep, the record has no byte',
+  'full-life: removes confuse, the record has no byte',
+  'full-life: removes berserk, the record has no byte',
+  'full-life: removes slow, the record has no byte',
+  'full-life: extra bits 0x4000, record 0x0',
+  // The possessed Yojimbo's Zanmato is a damage command in the game (fixed power 200); it has no Death byte.
+  'possessed-yojimbo-zanmato: ko chance 255, the record has no byte',
+  // Evrae's Stone Gaze: the Slow it inflicts lasts 100 in the record, 254 ("until removed") in ours.
+  'evrae-stone-gaze: slow duration 254, record 100',
+];
+
+describe("the status bytes of the attached records are the game's table (re-parity W2)", () => {
+  it('the fixture holds all 979 records', () => {
+    expect(statusFixture.rows).toHaveLength(979);
+  });
+
+  it('every attached record carries its rank, chances, durations, extra word, stage buffs, buff flags and shatter chance word for word', () => {
+    const wrong: string[] = [];
+    const check = (name: string, record: NonNullable<(typeof ALL_ABILITIES)[number]['record']>): void => {
+      const row = STATUS.get(record.id);
+      if (!row) {
+        wrong.push(`${name}: no status row for 0x${record.id.toString(16)}`);
+        return;
+      }
+      const [, rank, extra, stageMask, stageAmount, buff, chances, durations] = row;
+      if (record.rank !== rank) wrong.push(`${name}: rank ${record.rank}, table ${rank}`);
+      if (JSON.stringify(record.chances ?? []) !== JSON.stringify(chances)) wrong.push(`${name}: chances`);
+      if (JSON.stringify(record.durations ?? []) !== JSON.stringify(durations)) wrong.push(`${name}: durations`);
+      if ((record.extra ?? 0) !== extra) wrong.push(`${name}: extra`);
+      if ((record.stage?.[0] ?? 0) !== stageMask || (record.stage?.[1] ?? 0) !== (stageMask === 0 ? 0 : stageAmount)) wrong.push(`${name}: stage buffs`);
+      if ((record.buff ?? 0) !== buff) wrong.push(`${name}: buff`);
+      const game = GAME.get(record.id);
+      if (game && (record.shatter ?? 0) !== field(game, 'shatter')) wrong.push(`${name}: shatter ${record.shatter ?? 0}, table ${field(game, 'shatter')}`);
+    };
+    for (const [abilityId, record] of Object.entries(COMMAND_RECORDS)) check(abilityId, record);
+    check('possessed plain Attack', POSSESSED_PLAIN_ATTACK.record);
+    expect(wrong).toEqual([]);
+  });
+
+  it("the engine's own core abilities (Attack, Defend, the aeons' Shield and Boost) carry the game's records, word for word", () => {
+    const expected: Record<string, number> = { attack: 0x3000, defend: 0x3021, 'aeon-shield': 0x3054, 'aeon-boost': 0x3055 };
+    for (const [id, recordId] of Object.entries(expected)) {
+      const a = CORE_ABILITIES.find((x) => x.id === id);
+      expect(a?.record?.id, id).toBe(recordId);
+      const record = a!.record!;
+      const row = GAME.get(recordId)!;
+      expect([record.type, record.flagsMisc, record.flagsDamage, record.damageClass], id).toEqual([
+        field(row, 'type'), field(row, 'flagsMisc'), field(row, 'flagsDamage'), field(row, 'damageClass'),
+      ]);
+      const [, rank, extra, stageMask, , buff, chances, durations] = STATUS.get(recordId)!;
+      expect(record.rank, id).toBe(rank);
+      expect(record.extra ?? 0, id).toBe(extra);
+      expect([record.stage?.[0] ?? 0, record.buff ?? 0, record.chances ?? [], record.durations ?? []], id).toEqual([stageMask, buff, chances, durations]);
+      expect(record.shatter ?? 0, id).toBe(field(row, 'shatter')); // the party's Attack shatters a Petrified target 30 times in 100
+      expect(a!.rank, id).toBe(rank === 0 ? 3 : rank); // the ability's own rank is the record's
+    }
+  });
+
+  /**
+   * The shatter chance (record byte 0x2c) is read from the record for every recorded command, as the other status bytes are
+   * (`adapt/status.ts#commandStatus`); `AbilityDef.shatterChance` is read only by an ability with no game record. Where the ability's own
+   * number differs from the record's: 7 abilities of ours carry a chance the game's record does not (it is 0 there), and 148 more (and the
+   * party's own Attack, 30, which lives in the registry) have a chance in the game's record that our data never authored. Only the first group can change a fight that ships: a Petrified party member
+   * is hit by enemy commands, and the enemy rows of the second group are the possessed Yojimbo's Daigoro (10) and Grothia's attack (10).
+   */
+  it("the shatter chance an ability's own data carries differs from its record's on these rows, and the record's is the one the engine reads", () => {
+    const overridden: string[] = [];
+    let added = 0;
+    for (const a of ALL_ABILITIES) {
+      if (!a.record) continue;
+      const ours = a.shatterChance ?? 0;
+      const game = a.record.shatter ?? 0;
+      if (ours === game) continue;
+      if (ours !== 0) overridden.push(`${a.id}: ${ours} -> ${game}`);
+      else added += 1;
+    }
+    expect(overridden.sort()).toEqual([
+      'guardian-blizzard: 10 -> 0',
+      'guardian-thunder: 10 -> 0',
+      'mortibody-blizzard: 10 -> 0',
+      'mortibody-fire: 10 -> 0',
+      'mortibody-thunder: 10 -> 0',
+      'mortibody-water: 10 -> 0',
+      'natus-flare: 10 -> 0',
+    ]);
+    expect(added).toBe(148);
+  });
+
+  it('the stage-buff mask has no bits above the six stacks, and an amount whenever it is set', () => {
+    for (const row of statusFixture.rows) {
+      expect(row[3] & ~0x3f, `0x${row[0].toString(16)}`).toBe(0);
+      if (row[3] !== 0) expect(row[4], `0x${row[0].toString(16)}`).toBeGreaterThan(0);
+    }
+  });
+
+  it("the statuses an ability's own data inflicts or removes differ from its record only where this list says so", () => {
+    expect(statusDifferences().sort()).toEqual([...KNOWN_STATUS_DIFFERENCES].sort());
+  });
+
+  /**
+   * The CTB rank of an ability is its record's rank byte (`attachCommandRecords`): the number the exe charges the recovery of. These are
+   * the abilities whose own rank differed (a raw 0 counts as 3, the game's rule); `research/re-ffx-commands.md` section 7.3. The six
+   * aeon Attack rows and `fury` (the menu marker) are never charged: the generic Attack serves every aeon, and the marker resolves to
+   * one of the spells.
+   */
+  it('the abilities whose rank the record replaced are these 17, with ours and the exe\'s', () => {
+    expect(RANK_CHANGES.map((c) => `${c.abilityId}: ${c.ours} -> ${c.game}`).sort()).toEqual(
+      [
+        'element-reels: 3 -> 4', 'attack-reels: 3 -> 4', 'status-reels: 3 -> 4', 'aurochs-reels: 3 -> 4', 'fury: 5 -> 3',
+        'valefor-attack: 1 -> 3', 'ifrit-attack: 1 -> 3', 'ixion-attack: 1 -> 3', 'shiva-attack: 1 -> 3', 'bahamut-attack: 1 -> 3',
+        'anima-attack: 1 -> 3', 'cindy-attack: 5 -> 3', 'sandy-attack: 5 -> 3', 'mindy-attack: 5 -> 3',
+        'passado: 3 -> 5', 'mix: 6 -> 5', 'natus-flare: 5 -> 3',
+      ].sort(),
+    );
   });
 });

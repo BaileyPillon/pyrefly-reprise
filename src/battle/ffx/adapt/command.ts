@@ -7,8 +7,7 @@
  * record (`src/data/ffx/command-records/`). This module builds the kernels' views of one ability:
  *
  * - **With a record** the type byte, the flag words and the damage classes are the game's. The Delay Attack and
- *   Delay Buster bits are cleared (the turn queue still applies those delays itself until batch W2 wires the CTB
- *   kernels; leaving them in would charge the delay twice).
+ *   Delay Buster bits stay in the word: the hit kernel applies the delay itself (re-parity W2).
  * - **Without one** (an ability of ours) the same fields are derived from the ability's own flags, exactly the
  *   facts the engine always read: the damage type, `crit-eligible`, `heals`, `drains`, the cap flags, and the old
  *   accuracy rule (`canMiss`, the accuracy byte, the user's side). The kernels then run on that derived command,
@@ -82,7 +81,7 @@ export interface ResolvedCommand {
   record: FFXCommandRecord;
   /** True when `record` was derived from the ability's flags (the ability has no game record). */
   derived: boolean;
-  /** `Cmd+0x1c` with the Delay Attack and Buster bits cleared (see the file header). */
+  /** `Cmd+0x1c`, Delay Attack and Delay Buster included. */
   flagsMisc: number;
   /** `Cmd+0x28`: the formula number. */
   formula: number;
@@ -129,6 +128,8 @@ function deriveRecord(def: AbilityDef, userSide: Side): FFXCommandRecord {
   if (flags.includes('piercing') || flags.includes('ignores-armored') || def.ignoresDefense === true) misc |= MISC_PIERCE_ARMOR;
   if (flags.includes('inherits-weapon-properties')) misc |= MISC_USES_WEAPON;
   if (flags.includes('misses-if-target-alive')) misc |= CMD_NO_EFFECT_ON_LIVING;
+  if (flags.includes('weak-delay')) misc |= MISC_DELAY_ATTACK;
+  if (flags.includes('strong-delay')) misc |= MISC_DELAY_BUSTER;
 
   let damage = def.damageType === 'physical' ? DMG_PHYSICAL : def.damageType === 'magical' ? DMG_MAGICAL : 0;
   if (flags.includes('crit-eligible')) damage |= CMD_CAN_CRIT;
@@ -160,7 +161,7 @@ export function resolveCommand(def: AbilityDef, user: CommandUser): ResolvedComm
   return {
     record,
     derived: own === undefined && (plain || def.record === undefined),
-    flagsMisc: record.flagsMisc & ~(MISC_DELAY_ATTACK | MISC_DELAY_BUSTER),
+    flagsMisc: record.flagsMisc,
     formula: FORMULA_NUMBER[def.formula],
     element: elementMask(def.element),
     accuracy: own?.accuracy ?? def.accuracy,

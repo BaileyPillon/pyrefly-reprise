@@ -9,7 +9,7 @@ import type { AbilityDef, CombatantId, FFXCombatant, Targeting } from '../common
 import {
   type Ctx,
   alliesOf,
-  canAct,
+  canQueueAction,
   enemies,
   friendlies,
   has,
@@ -331,7 +331,7 @@ function coverOf(ctx: Ctx, target: FFXCombatant, def: AbilityDef): FFXCombatant 
   if (!coverable(def) || target.side !== 'enemy') return target;
   let best: FFXCombatant | undefined;
   for (const c of livingEnemies(ctx)) {
-    if (c.id === target.id || !canAct(c)) continue;
+    if (c.id === target.id || !canQueueAction(c)) continue;
     if (ctx.rt.actors.get(c.id)?.guardMark !== true) continue;
     if (!best || c.hp > best.hp) best = c;
   }

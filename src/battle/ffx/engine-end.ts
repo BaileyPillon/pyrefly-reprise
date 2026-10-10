@@ -124,7 +124,8 @@ export function afterAction(
 
   drainScriptReactions(h); // what the equipment reactions set off
   ctx.rt.inReaction = false;
-  onTurnEnd(ctx, actor);
+  // Poison only follows an action whose results were applied: a passed turn (a sleeper's) passes `command` undefined.
+  onTurnEnd(ctx, actor, command !== undefined);
   drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook)
   rtOf(ctx, actor.id).turnsTaken += 1;
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;

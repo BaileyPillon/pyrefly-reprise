@@ -10,12 +10,16 @@
  *
  * Run on the real engine: the Tonic is a submitted command, the seams are `BattleScreenSetup.setupForNextLink`,
  * the KO is the engine's own KO wipe, and each next link is initialised by the engine.
+ *
+ * **Re-parity W2 (FFX only):** the doubled pool is the game's `pp_BtlApplyDoubleHpMp`, capped at 9,999 HP and 999 MP without Break HP
+ * and Break MP Limit (Auron's build wears neither), so "doubled" below is `min(2 * base, cap)`: Auron's 6,492 HP double to 9,999,
+ * not 12,984. A capped ceiling cannot be halved back to the base it came from, so the seam carries the BASE maxima with the status
+ * and the next link's engine rebuilds the doubled ones, as the game's party-stats builder does at battle start.
  */
 
 import { describe, expect, it } from 'vitest';
 import type { BattleEngine, BattleSetup, BattleState, Command, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
-import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/index.ts';
-import { clearStatusesOnKo } from '../../../src/battle/ffx/statuses.ts';
+import { FFXContentRegistry, createFFXEngine, koActor } from '../../../src/battle/ffx/index.ts';
 import type { Ctx } from '../../../src/battle/ffx/state.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { getChapter } from '../../../src/data/encounters.ts';
@@ -46,16 +50,19 @@ function drinkUntil(e: BattleEngine, itemId: string, status: Pool): void {
   }
 }
 
+/** The cap of a doubled pool without Break HP / Break MP Limit (`pp_BtlApplyDoubleHpMp`). */
+const HP_CAP = 9_999;
+const MP_CAP = 999;
+const doubled = (base: number, cap: number): number => Math.min(base * 2, cap);
+
 /**
- * Auron is KO'd in link 2 through the engine's own KO wipe (`statuses.ts#clearStatusesOnKo`, which halves a doubled
- * pool back through `applyPoolDoubler`). A real hit is not practical: under Defend the Right Fin never reaches him
- * in 400 turns (the link ends on its liveness escape), and his allies have no command that targets him for damage.
+ * Auron is KO'd in link 2 through the engine's own KO (`hp.ts#koActor`, whose wipe puts a doubled pool back to the base the runtime
+ * stored when the Tonic first took effect, `statuses.ts#applyPoolFlags`). A real hit is not practical: under Defend the Right Fin never
+ * reaches him in 400 turns (the link ends on its liveness escape), and his allies have no command that targets him for damage.
  */
-function koAuron(state: BattleState): void {
-  const auron = state.combatants['auron'] as FFXCombatant;
-  auron.hp = 0;
-  clearStatusesOnKo({ emit: () => undefined } as unknown as Ctx, auron);
-  auron.statuses['ko'] = { id: 'ko', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+function koAuron(e: BattleEngine): void {
+  const ctx = (e as unknown as { ctx: Ctx }).ctx;
+  koActor(ctx, ctx.state.combatants['auron'] as FFXCombatant);
 }
 
 /** Links 1 -> 2 -> 3 of Chapter XVII with a Tonic drunk in link 1; `lose` KOs Auron at the end of link 2. */
@@ -73,13 +80,13 @@ function tonicAcrossTwoSeams(itemId: string, status: Pool, lose: boolean): { bas
   const second = setupForNextLink(first, ENEMY_GROUPS_BY_ID['sin-right-fin']!, e1.state() as BattleState, 2);
   const e2 = engineOn(second);
   expect(live(e2, 'auron').statuses[status]).toBeDefined();
-  const end2 = structuredClone(e2.state()) as BattleState;
   if (lose) {
-    koAuron(end2);
-    const auron = end2.combatants['auron'] as FFXCombatant;
+    koAuron(e2);
+    const auron = live(e2, 'auron');
     expect(auron.statuses[status]).toBeUndefined();
     expect([auron.stats.maxHp, auron.stats.maxMp]).toEqual([base.maxHp, base.maxMp]);
   }
+  const end2 = structuredClone(e2.state()) as BattleState;
   const third = setupForNextLink(second, ENEMY_GROUPS_BY_ID['sin-genais-core']!, end2, 3);
   return { base, build3: third.party as FFXPartyBuild, e3: engineOn(third) };
 }
@@ -88,7 +95,7 @@ describe("Sin, C3-1: without its Tonic a member's ceiling at a seam is the live 
   it('a Stamina Tonic kept across both seams opens link 3 doubled, with its status', () => {
     const { base, e3 } = tonicAcrossTwoSeams('stamina-tonic', 'max-hp-x2', false);
     expect(live(e3, 'auron').statuses['max-hp-x2']).toBeDefined();
-    expect(live(e3, 'auron').stats.maxHp).toBe(base.maxHp * 2);
+    expect(live(e3, 'auron').stats.maxHp).toBe(doubled(base.maxHp, HP_CAP));
   });
 
   it('a Stamina Tonic lost in link 2 (a KO) opens link 3 at the base max HP, not the doubled one', () => {
@@ -101,7 +108,23 @@ describe("Sin, C3-1: without its Tonic a member's ceiling at a seam is the live 
   it('a Mana Tonic kept across both seams opens link 3 doubled, with its status', () => {
     const { base, e3 } = tonicAcrossTwoSeams('mana-tonic', 'max-mp-x2', false);
     expect(live(e3, 'auron').statuses['max-mp-x2']).toBeDefined();
-    expect(live(e3, 'auron').stats.maxMp).toBe(base.maxMp * 2);
+    expect(live(e3, 'auron').stats.maxMp).toBe(doubled(base.maxMp, MP_CAP));
+  });
+
+  it('a Stamina Tonic kept across both seams and lost in link 3 (a KO) puts back the base it doubled, not half of the capped ceiling', () => {
+    // Re-parity W2: Auron's 6,492 double to the cap of 9,999, which is no longer twice anything; the base travels with the status.
+    const { base, e3 } = tonicAcrossTwoSeams('stamina-tonic', 'max-hp-x2', false);
+    expect(live(e3, 'auron').stats.maxHp).toBe(doubled(base.maxHp, HP_CAP));
+    koAuron(e3);
+    expect(live(e3, 'auron').statuses['max-hp-x2']).toBeUndefined();
+    expect(live(e3, 'auron').stats.maxHp).toBe(base.maxHp);
+  });
+
+  it('a Mana Tonic kept across both seams and lost in link 3 (a KO) puts back the base max MP', () => {
+    const { base, e3 } = tonicAcrossTwoSeams('mana-tonic', 'max-mp-x2', false);
+    koAuron(e3);
+    expect(live(e3, 'auron').statuses['max-mp-x2']).toBeUndefined();
+    expect(live(e3, 'auron').stats.maxMp).toBe(base.maxMp);
   });
 
   it('a Mana Tonic lost in link 2 (a KO) opens link 3 at the base max MP, not the doubled one', () => {
