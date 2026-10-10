@@ -836,13 +836,13 @@ export interface EquipmentDef {
  * The increment column is documented per member.
  */
 export type OverdriveModeId =
-  /** Default. User takes damage from an enemy -> `damageReceived * 30 / maxHP` percent. */
+  /** Default. User takes damage from an enemy -> `damageReceived * 30 / maxHP + 1` points (the game divides, truncates, then adds 1). */
   | 'stoic'
-  /** User damages an enemy (not via items or Overdrives) -> `min(16, damageInflicted * 10 / estimatedDamage)` percent. */
+  /** User damages an enemy (not via items or Overdrives) -> `min(16, damageInflicted * 10 / estimatedDamage + 1)` points. */
   | 'warrior'
-  /** An ally takes damage -> `damageReceived * 20 / target.maxHP` percent. Strongest mode against multi-target bosses. */
+  /** An ally takes damage -> `damageReceived * 20 / target.maxHP + 1` points. Strongest mode against multi-target bosses. */
   | 'comrade'
-  /** User restores an ally's HP (counts even at full HP) -> `healedAmount * 16 / target.maxHP` percent. */
+  /** User restores an ally's HP -> `min(healedAmount, HP missing) * 16 / target.maxHP + 1` points (a heal at full HP still gives the 1). */
   | 'healer'
   /** User inflicts a status ailment on an enemy -> 16%. */
   | 'tactician'
@@ -1007,7 +1007,7 @@ export interface AeonFields {
    * stored value [ffx-combat-core §5.4]. `null` when not Grand Summoned.
    */
   temporaryOverdrive: number | null;
-  /** Battles remaining before a KO'd aeon can be summoned again. `AEON_REVIVE_BATTLES` ships as 3 [ffx-combat-core §6.1]. */
+  /** Battles remaining before a KO'd aeon can be summoned again: the game's count per aeon (`src/battle/ffx/aeon-gear.ts`; re-parity W5), counted down by each battle's own save. */
   reviveCountdown?: number;
 }
 

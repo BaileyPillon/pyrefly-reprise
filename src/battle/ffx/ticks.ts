@@ -16,7 +16,7 @@ import { type Ctx, has, isAlive, livingFriendlies, onField, spendItem, tryActor 
 import { refreshCriticalStatus } from './statuses.ts';
 import { doomTurn, endOfTurn, startOfTurn } from './adapt/ticks.ts';
 import { hasAuto } from './equipment.ts';
-import { onTurnStartGauge } from './overdrive.ts';
+import { gaugeOnTurn } from './gauge.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
 import { runSinLivenessHooks } from './ai/sin-counters.ts';
 import { runPostPoison, runPreTurn } from './ai/hooks.ts';
@@ -83,8 +83,8 @@ export function onTurnStart(ctx: Ctx, actor: FFXCombatant): void {
   // Doom counts down on the victim's own turn, even while asleep or skipping.
   if (doomTurn(ctx, actor)) return;
 
-  const soleSurvivor = actor.side !== 'enemy' && livingFriendlies(ctx).length === 1;
-  onTurnStartGauge(ctx, actor, soleSurvivor);
+  // The gauge's turn hook (Ally, Daredevil, Loner, Sufferer; `pp_BtlOdOnTurn`): the game runs it as the scheduler queues a turn.
+  gaugeOnTurn(ctx, actor);
 }
 
 /**

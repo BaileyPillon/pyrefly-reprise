@@ -28,7 +28,7 @@ export interface OverdriveModeDef {
   fillTrigger: string;
   /**
    * Plain-English formula for the gauge increment, e.g.
-   * `"damageReceived * 30 / maxHP"` (percentage points), or a flat percent
+   * `"damageReceived * 30 / maxHP + 1"` (percentage points: the game divides first, truncates, then adds 1, so a hit of any size gives at least 1; re-parity W5), or a flat percent
    * like `"16"`.
    */
   incrementFormula: string;
@@ -93,7 +93,7 @@ export const OVERDRIVE_MODES: Record<OverdriveModeId, OverdriveModeDef> = {
     id: 'stoic',
     name: 'Stoic',
     fillTrigger: 'user takes damage from an enemy',
-    incrementFormula: 'damageReceived * 30 / maxHP',
+    incrementFormula: 'damageReceived * 30 / maxHP + 1',
     learnTurnsByCharacter: { tidus: 0, yuna: 0, auron: 0, kimahri: 0, wakka: 0, lulu: 0, rikku: 0 },
     notes: 'Default mode for every character — everyone starts here, so it is not "learned" like the other 16.',
   },
@@ -102,7 +102,7 @@ export const OVERDRIVE_MODES: Record<OverdriveModeId, OverdriveModeDef> = {
     id: 'warrior',
     name: 'Warrior',
     fillTrigger: 'user damages an enemy (not via items or Overdrives)',
-    incrementFormula: 'damageInflicted * 10 / estimatedDamage, capped at 16',
+    incrementFormula: 'damageInflicted * 10 / estimatedDamage + 1, capped at 16',
     incrementCapPercent: 16,
     learnTurnsByCharacter: { tidus: 150, yuna: 200, auron: 100, kimahri: 120, wakka: 160, lulu: 300, rikku: 140 },
   },
@@ -111,7 +111,7 @@ export const OVERDRIVE_MODES: Record<OverdriveModeId, OverdriveModeDef> = {
     id: 'comrade',
     name: 'Comrade',
     fillTrigger: "an ally takes damage",
-    incrementFormula: 'damageReceived * 20 / target.maxHP',
+    incrementFormula: 'damageReceived * 20 / target.maxHP + 1',
     learnTurnsByCharacter: { tidus: 300, yuna: 240, auron: 220, kimahri: 100, wakka: 100, lulu: 100, rikku: 100 },
     notes: 'Strongest mode against multi-target bosses since every hit on any ally fills it.',
   },
@@ -119,8 +119,8 @@ export const OVERDRIVE_MODES: Record<OverdriveModeId, OverdriveModeDef> = {
   healer: {
     id: 'healer',
     name: 'Healer',
-    fillTrigger: "user restores an ally's HP (counts even at full HP)",
-    incrementFormula: 'healedAmount * 16 / target.maxHP',
+    fillTrigger: "user restores an ally's HP (only the HP actually restored counts, and a heal at full HP still gives the 1)",
+    incrementFormula: 'min(healedAmount, HP missing) * 16 / target.maxHP + 1',
     learnTurnsByCharacter: { tidus: 80, yuna: 60, auron: 200, kimahri: 100, wakka: 110, lulu: 170, rikku: 70 },
   },
 

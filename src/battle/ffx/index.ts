@@ -62,7 +62,8 @@ export { registerScriptHooks } from './ai/hooks.ts';
 export type { HitReport, ScriptHooks, UsedCommand } from './ai/hooks.ts';
 export { registerHitScript } from './ai/hit-script.ts';
 export type { HitEvent, HitHook } from './ai/hit-script.ts';
-export { summonAeon, dismissAeon, banishAeon, availableAeons, AEON_REVIVE_BATTLES } from './aeons.ts';
+export { summonAeon, dismissAeon, banishAeon, availableAeons } from './aeons.ts';
+export { AEON_GEAR, aeonGearOf } from './aeon-gear.ts';
 export {
   addGauge,
   setGauge,
@@ -79,9 +80,6 @@ export {
   DEGREES_PER_ROTATION,
   FURY_ANCHOR_BUDGET,
   FURY_MAX_CASTS,
-  AEON_FILL_MULT,
-  TACTICIAN_STATUSES,
-  VICTIM_STATUSES,
 } from './overdrive.ts';
 export { mortibsorption, MORTIORCHIS_MIN_MAX_HP, MORTIORCHIS_DECAY } from './scripted.ts';
 export { validTargets, resolveTargets, redirectTarget, reflectBounceTarget } from './targeting.ts';

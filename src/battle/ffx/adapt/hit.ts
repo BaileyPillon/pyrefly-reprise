@@ -89,12 +89,23 @@ export interface HitReport {
   affinity: Affinity;
   /** The Nul counters after the hit's Nul check (a covered counter below 0xfe lost one). */
   nul: NulCounters;
+  /** The record's byte 3 (VA 0x0078e630): bit 0 the hit missed, bit 1 a Nul, Shell or Protect turned it aside or reduced it. The outcome hook of the Overdrive gauge reads it. */
+  outcomeByte: number;
+  /** The record's un-varied HP base damage (+0x1c), computed for every outcome: the base an aeon's gauge gain reads when a monster hits it. */
+  base: number;
+  /** The command carries the "charges Overdrive" bit (`Cmd+0x1c` bit 24, VA 0x0078f060): a hit that deals damage fills a Warrior's and an aeon's gauge. An ability with no record: anything but an item or an Overdrive. */
+  chargesOverdrive: boolean;
+  /** The command carries the gauge-transfer bit (`Cmd+0x1c` bit 25: Entrust). */
+  transfers: boolean;
 }
 
 /** `Cmd+0x1c` bit 18: the command takes its formula, power and element from the weapon. */
 const USES_WEAPON = 0x40000;
 /** Result word bit: the hit was critical. */
 const RESULT_CRIT = 0x100;
+/** `Cmd+0x1c` bit 24: the command charges the user's Overdrive gauge (the Warrior and aeon gains); bit 25: it moves the user's gauge to the target (Entrust). */
+const CMD_CHARGES_OVERDRIVE = 0x01000000;
+const CMD_TRANSFERS_GAUGE = 0x02000000;
 
 /** The counter kind the hit check reads: 2 when the target has Evade & Counter and this is a physical single-target command aimed at someone else. */
 function counterKindOf(req: HitRequest, command: ResolvedCommand): number {
@@ -248,6 +259,12 @@ function execute(req: HitRequest, command: ResolvedCommand, io: HitIo): HitRepor
     capped: hp !== 0 && Math.abs(hp) >= cap,
     affinity,
     nul: out.nul,
+    outcomeByte: out.outcomeByte,
+    base: out.unvariedHpBase,
+    chargesOverdrive: command.derived
+      ? req.row.category !== 'item' && req.row.category !== 'overdrive'
+      : (command.flagsMisc & CMD_CHARGES_OVERDRIVE) !== 0,
+    transfers: (command.flagsMisc & CMD_TRANSFERS_GAUGE) !== 0,
   };
 }
 

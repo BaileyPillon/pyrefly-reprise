@@ -10,7 +10,7 @@
 
 import type { BattleResult, CombatantId, ItemDrop } from '../common/types.ts';
 import { type Ctx, has, isAlive, tryActor } from './state.ts';
-import { payVictorGauge } from './overdrive.ts';
+import { gaugeOnVictory } from './gauge.ts';
 import { idiv } from './math.ts';
 import { victoryBonusAp } from './aeon-duel.ts';
 
@@ -133,7 +133,7 @@ export function buildBattleResult(
   const { gil, drops } = earned;
   // A formation-level reward no enemy carries (Chapter XIV's 5,000 AP, B13 = a); 0 elsewhere.
   const ap = earned.ap + (outcome === 'victory' ? victoryBonusAp(ctx) : 0);
-  if (outcome === 'victory') payVictorGauge(ctx, ctx.state.activeIds);
+  if (outcome === 'victory') gaugeOnVictory(ctx); // `pp_BtlOdOnVictory`: every party member in the battle, dead or not, runs the Victor counter
 
   const result: BattleResult = {
     outcome,

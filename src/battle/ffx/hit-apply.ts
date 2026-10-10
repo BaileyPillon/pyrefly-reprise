@@ -25,20 +25,14 @@ import { resolveHit } from './adapt/hit.ts';
 import { applyMpDelta, dealDamage, healOutsideChain, reviveActor } from './hp.ts';
 import { bouncesOffReflect, removeStatus } from './statuses.ts';
 import { addCtb, tickSpeedOf } from './adapt/ctb.ts';
-import { PermBit, type StatusRecord } from './kernel/status-types.ts';
+import { PermBit, ResultCounter, type StatusRecord } from './kernel/status-types.ts';
 import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
 import { redirectTarget, reflectBounceTarget } from './targeting.ts';
-import {
-  onDamageDealt,
-  onDamageTaken,
-  onFlatTrigger,
-  onHealDealt,
-  TACTICIAN_STATUSES,
-  VICTIM_STATUSES,
-} from './overdrive.ts';
+import { gaugeOnHit, gaugeOnOutcome, gaugeTransfer } from './gauge.ts';
 import { runScriptedExtra } from './scripted.ts';
+import { resolveSteal, stealsItem } from './steal.ts';
 import type { ResolveOptions } from './abilities.ts';
 
 /** The game's hit record of one target for one action: the live words it reads, and the record its hits edit. */
@@ -129,7 +123,8 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
       scope.hitIndex++;
       return;
     }
-    onFlatTrigger(ctx, target, 'rook', 'rook');
+    // The reflecting target runs the outcome hook as a hit that a Shell, Protect or Nul turned aside (VA 0x00789030: Rook).
+    gaugeOnOutcome(ctx, user, target, 0, 2);
     target = bounced;
   }
   // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
@@ -173,11 +168,18 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     },
   );
 
+  // **The Overdrive gauge of this hit record** (`pp_BtlOdOnHpChange`, re-parity W5): the game runs it for every record, a miss
+  // and a nullified hit included, with the record's HP amount and its un-varied base damage, BEFORE the HP changes (a Healer
+  // reads the HP still missing; an aeon that is missed or whose Nul turned the blow aside still gains from the base damage).
+  // Entrust moves the whole gauge first (the transfer flag of the command; nothing else about the hit is its business).
+  if (report.outcome === 'hit' && report.transfers) gaugeTransfer(ctx, user, target);
+  gaugeOnHit(ctx, user, target, report.amounts[0], report.base, report.chargesOverdrive);
+
   // The Nul check: the game ticks the counters of a nullified hit, and only of that.
   if (report.outcome === 'nullified') {
     writeBackNul(ctx, target, report.nul);
     ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
-    onFlatTrigger(ctx, target, 'rook', 'rook');
+    gaugeOnOutcome(ctx, user, target, 0, report.outcomeByte); // Rook (byte 3, bit 1)
     scope.hitIndex++;
     return;
   }
@@ -190,7 +192,8 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
   }
   if (report.outcome === 'miss') {
     ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'evaded' });
-    onFlatTrigger(ctx, target, 'dancer', 'dancer');
+    gaugeOnOutcome(ctx, user, target, 0, report.outcomeByte); // Dancer (byte 3, bit 0)
+    if (stealsItem(def)) resolveSteal(ctx, user, target, true); // a Mug that missed: the roll is drawn, the steal is cancelled
     scope.hitIndex++;
     return;
   }
@@ -214,9 +217,7 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     skipHp = true;
     if (!isAlive(target) && onField(target)) {
       const restore = Math.abs(hpAmount) || idiv(target.stats.maxHp, 2);
-      if (reviveActor(ctx, target, restore, def.id)) {
-        onHealDealt(ctx, user, target, restore);
-      } else {
+      if (!reviveActor(ctx, target, restore, def.id)) {
         ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
       }
     }
@@ -266,13 +267,9 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
           removeStatus(ctx, target, 'sleep', 'expired');
         }
         scope.totalDealt += hpAmount;
-        onDamageTaken(ctx, target, hpAmount, user.side === 'enemy');
-        onDamageDealt(ctx, user, def, hpAmount);
         if (hasFlag(def, 'drains')) {
           healOutsideChain(ctx, user, hpAmount, 'drain', user.id);
         }
-      } else {
-        onHealDealt(ctx, user, target, -hpAmount);
       }
     } else if (((report.classes | engineDamageClass(def)) & 1) !== 0 && def.formula !== 'none' && isAlive(target)) {
       // **A connecting hit that computes to zero is still a hit, and FFX puts
@@ -300,17 +297,19 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     }
   }
 
+  // The outcome hook of the record (`pp_BtlOdOnOutcome`): after the HP, MP and CTB changed and before the statuses are written
+  // back. Its harmful-status count is the status step's result counter 7 (record byte 4, a signed byte); its outcome is the
+  // record's byte 3 (bit 1 when Shell or Protect reduced the hit).
+  const bad = step === undefined ? 0 : (step.result.applied[ResultCounter.Bad] ?? 0);
+  gaugeOnOutcome(ctx, user, target, (bad << 24) >> 24, report.outcomeByte);
+
   // The statuses the infliction step put in the hit record, written back after the damage, in the decompile's order: the
   // words and counters, the stage buffs, the buff flags, then a Death (Auto-Life, forms) or an Eject (the target leaves the
   // field) the record carries. A petrified monster always shatters because Petrify on a monster puts Death and Eject in the
   // record itself, and the shatter roll against an already petrified target is the step's own (`Cmd+0x2c`).
   if (step) {
-    const applied = applyStatusStep(ctx, user, target, def, before, step);
+    applyStatusStep(ctx, user, target, def, before, step);
     book.record = step.result.record;
-    for (const status of applied.added) {
-      if (TACTICIAN_STATUSES.includes(status) && target.side === 'enemy') onFlatTrigger(ctx, user, 'tactician', 'tactician');
-      if (VICTIM_STATUSES.includes(status) && user.side === 'enemy') onFlatTrigger(ctx, target, 'victim', 'victim');
-    }
   }
 
   runScriptedExtra(ctx, user, def, target, hpAmount);

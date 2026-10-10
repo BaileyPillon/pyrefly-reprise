@@ -13,6 +13,7 @@ import { clearStatusesOnKo, refreshCriticalStatus, removeStatus } from './status
 import { onRevived } from './turnQueue.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { releaseThreatenLink } from './adapt/threaten.ts';
+import { gaugeOnDeath } from './gauge.ts';
 
 /** Metadata for a `damage` event. */
 export interface DamageEventInfo {
@@ -222,6 +223,10 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
   // The death handler dissolves the Threaten pair the dying character is an end of (VA 0x0078c740 -> 0x0078e410), before
   // Auto-Life can stand it up again [re-parity W2].
   releaseThreatenLink(ctx, target);
+
+  // ...and runs the Overdrive gauge's death hook (Avenger, Slayer, Hero) whether or not Auto-Life then stands the character up:
+  // the killer is whoever's action it was, the victim itself for a tick (Poison, Doom) [re-parity W5; VA 0x0078c740 -> 0x007b0f80].
+  gaugeOnDeath(ctx, (sourceId !== undefined ? tryActor(ctx, sourceId) : undefined) ?? target, target);
 
   const autoLife = statusOf(target, 'auto-life');
   if (autoLife && !target.flags.noRevive) {

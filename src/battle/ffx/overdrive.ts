@@ -1,22 +1,23 @@
 /**
  * Overdrive gauges, modes and the timed-input protocol [ffx-combat-core §5].
  *
- * The gauge is **0-100 where one point is one percent**; every character
- * Overdrive costs the full 100. Aeons share the scale but fill at 5x, because
- * their `od_cost` is 20 rather than 100 [ffx-combat-core §6.5].
+ * The gauge is 0-100 as the HUD shows it, one point a percent of the bar. **The gains, the costs and the aeons' bar are the
+ * game's** (re-parity W5; FFX only): a party member's bar is 100 points wide, an aeon's is 20 (its gauge moves in steps of
+ * five here), and `./gauge.ts` runs the game's own hooks over the hit records, the deaths, the turns and the end of the battle.
+ * What stays in this file is the engine's way to set a gauge outright (an enemy script's variable, a Talk), the gauge that
+ * fills on being targeted, the ready test and the minigame protocol.
  */
 
 import type {
-  AbilityDef, AbilityId, CombatantId, FFXCombatant, ItemId, MinigameKind, MinigameResult, OverdriveModeId, StatusId,
+  AbilityDef, AbilityId, FFXCombatant, ItemId, MinigameKind, MinigameResult,
 } from '../common/types.ts';
-import { type Ctx, has, tryActor } from './state.ts';
-import { estimatedDamage } from './formulas.ts';
-import { hasAuto } from './equipment.ts';
+import { type Ctx, has } from './state.ts';
 import type { TimingBonus } from './formulas.ts';
 import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
 import { attackReelHits } from './reels.ts';
 import { defaultGrandSummonAeon } from './aeon-duel.ts';
 import { grandSummonEntries, mixPickerParams } from './pickerParams.ts';
+import { gaugeAdd, gaugePay } from './gauge.ts';
 
 /** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
 const ATTACK_REEL_SYMBOLS = new Set(['1-hit', '2-hit', 'miss', '1hit', '2hit']);
@@ -34,88 +35,12 @@ export {
 } from './fury.ts';
 export type { FuryTier } from './fury.ts';
 
-/** Aeon gauges fill 5x as fast, since their Overdrive costs one fifth as much. */
-export const AEON_FILL_MULT = 5;
-
-/** Statuses that satisfy Tactician's "inflicted an ailment" trigger [§5.1]. */
-export const TACTICIAN_STATUSES: readonly StatusId[] = [
-  'sleep',
-  'silence',
-  'darkness',
-  'poison',
-  'petrify',
-  'slow',
-  'zombie',
-  'power-break',
-  'magic-break',
-  'armor-break',
-  'mental-break',
-  'threaten',
-  'provoke',
-  'doom',
-];
-
-/** Statuses that satisfy Victim and Sufferer. Deliberately a shorter list. */
-export const VICTIM_STATUSES: readonly StatusId[] = [
-  'silence',
-  'sleep',
-  'doom',
-  'darkness',
-  'slow',
-  'poison',
-  'zombie',
-  'confuse',
-];
-
-/** Flat increments, in percent of the gauge [ffx-combat-core §5.1]. */
-const FLAT_INCREMENT: Readonly<Partial<Record<OverdriveModeId, number>>> = {
-  tactician: 16,
-  victim: 16,
-  dancer: 16,
-  avenger: 30,
-  slayer: 20,
-  hero: 20,
-  rook: 10,
-  victor: 20,
-  coward: 10,
-  ally: 3,
-  sufferer: 16,
-  daredevil: 5,
-  loner: 16,
-};
-
-/** Multipliers from equipment and mix flags. */
-function gaugeMultiplier(c: FFXCombatant): number {
-  let mult = 1;
-  if (hasAuto(c, 'triple-overdrive')) mult *= 3;
-  else if (hasAuto(c, 'double-overdrive')) mult *= 2;
-  if (has(c, 'overdrive-x1_5')) mult *= 1.5;
-  if (has(c, 'overdrive-x2')) mult *= 2;
-  if (c.side === 'aeon') mult *= AEON_FILL_MULT;
-  return mult;
-}
-
-/** Add to a combatant's gauge and emit the HUD event. */
+/** Add to a combatant's gauge and emit the HUD event: the game's gauge add for a party member or an aeon (`./gauge.ts#gaugeAdd`). */
 export function addGauge(ctx: Ctx, c: FFXCombatant, raw: number, cause: string): void {
-  const od = c.overdrive;
-  if (!od || raw <= 0) return;
-  // Curse stops the gauge filling at all; Shield zeroes an aeon's gain.
-  if (has(c, 'curse')) return;
-  if (c.side === 'aeon' && has(c, 'shield')) return;
-  if (hasAuto(c, 'overdrive-to-ap')) return;
-  if (hasAuto(c, 'sos-overdrive') && !has(c, 'critical')) return;
-
-  let gain = raw * gaugeMultiplier(c);
-  if (c.side === 'aeon' && has(c, 'boost')) gain *= 1.5;
-
-  const from = od.gauge;
-  const to = Math.max(0, Math.min(100, Math.floor(from + gain)));
-  if (to === from) return;
-  od.gauge = to;
-  ctx.emit({ type: 'overdrive-gauge', who: c.id, from, to, cause });
+  gaugeAdd(ctx, c, raw, cause);
 }
 
-/** Set a gauge outright (Talk zeroing Braska's Final Aeon, scripted fills). */
+/** Set a gauge outright (Talk zeroing Braska's Final Aeon, scripted fills, a fallen aeon). */
 export function setGauge(ctx: Ctx, c: FFXCombatant, value: number, cause: string): void {
   const od = c.overdrive;
   if (!od) return;
@@ -129,19 +54,13 @@ export function setGauge(ctx: Ctx, c: FFXCombatant, value: number, cause: string
 /**
  * **An enemy gauge that fills on being targeted**, not on being damaged.
  *
- * `onDamageTaken` below only fires on damage, and Macalania Anima's third clock
- * advances "every time she gets a turn **or is attacked**", Boost-independent —
- * a heal or a debuff aimed at her counts too [ffx-seymour-anima-macalania §3.4, §5.3]. Called from
- * `abilities.ts#resolveAbility` once the targets are resolved and before the
- * hit loop, so one action is one targeting however many hits it lands.
+ * Macalania Anima's third clock advances "every time she gets a turn **or is attacked**", Boost-independent — a heal or a debuff
+ * aimed at her counts too [ffx-seymour-anima-macalania §3.4, §5.3]. Called from `abilities.ts#resolveAbility` once the targets
+ * are resolved and before the hit loop, so one action is one targeting however many hits it lands.
  *
- * The amount comes from {@link ActorRuntime.gaugePerTargeting}, which only the
- * Macalania script sets, so this is inert in every other battle. The value
- * itself is an `[estimate]` (C-4) and is labelled as one in-product.
- *
- * Note what this does **not** do: `addGauge` applies Boost's x1.5 only for
- * `side === 'aeon'`, so an enemy under Boost gains nothing extra — which is
- * exactly Anima's canon Boost-independence. Do not "fix" that.
+ * The amount comes from {@link ActorRuntime.gaugePerTargeting}, which only the Macalania script sets, so this is inert in every
+ * other battle. The value itself is an `[estimate]` (C-4) and is labelled as one in-product. An enemy's gauge is a plain clamped
+ * sum (`./gauge.ts#gaugeAdd`), so Boost never changes it: exactly Anima's canon Boost-independence. Do not "fix" that.
  */
 export function onTargeted(ctx: Ctx, target: FFXCombatant, by: FFXCombatant): void {
   if (by.side === 'enemy' || target.side !== 'enemy') return;
@@ -151,81 +70,9 @@ export function onTargeted(ctx: Ctx, target: FFXCombatant, by: FFXCombatant): vo
   if (per > 0) addGauge(ctx, target, per, 'targeted');
 }
 
-/** Stoic and Comrade: someone took damage. */
-export function onDamageTaken(ctx: Ctx, victim: FFXCombatant, amount: number, fromEnemy: boolean): void {
-  if (amount <= 0 || !fromEnemy) return;
-  if (victim.side === 'aeon') {
-    addGauge(ctx, victim, (amount * 30) / Math.max(1, victim.stats.maxHp), 'aeon-damage');
-    return;
-  }
-  if (victim.overdrive?.mode === 'stoic') {
-    addGauge(ctx, victim, (amount * 30) / Math.max(1, victim.stats.maxHp), 'stoic');
-  }
-  for (const id of ctx.state.activeIds) {
-    if (id === victim.id) continue;
-    const ally = tryActor(ctx, id);
-    if (ally?.overdrive?.mode === 'comrade') {
-      addGauge(ctx, ally, (amount * 20) / Math.max(1, victim.stats.maxHp), 'comrade');
-    }
-  }
-}
-
-/** Warrior: the user damaged an enemy, not via an item or an Overdrive. */
-export function onDamageDealt(ctx: Ctx, user: FFXCombatant, def: AbilityDef, amount: number): void {
-  if (amount <= 0) return;
-  if (def.category === 'item' || def.category === 'overdrive') return;
-  if (user.side === 'aeon') {
-    addGauge(ctx, user, Math.min(16, (amount * 10) / estimatedDamage(user)), 'aeon-attack');
-    return;
-  }
-  if (user.overdrive?.mode !== 'warrior') return;
-  addGauge(ctx, user, Math.min(16, (amount * 10) / estimatedDamage(user)), 'warrior');
-}
-
-/** Healer: the user restored an ally's HP. Counts even at full HP. */
-export function onHealDealt(ctx: Ctx, user: FFXCombatant, target: FFXCombatant, amount: number): void {
-  if (amount <= 0 || user.overdrive?.mode !== 'healer') return;
-  addGauge(ctx, user, (amount * 16) / Math.max(1, target.stats.maxHp), 'healer');
-}
-
-/** A flat-increment mode fired. */
-export function onFlatTrigger(ctx: Ctx, c: FFXCombatant, mode: OverdriveModeId, cause: string): void {
-  if (c.overdrive?.mode !== mode) return;
-  const flat = FLAT_INCREMENT[mode];
-  if (flat === undefined) return;
-  addGauge(ctx, c, flat, cause);
-}
-
-/** Start-of-turn modes: Ally, Sufferer, Daredevil, Loner. */
-export function onTurnStartGauge(ctx: Ctx, c: FFXCombatant, soleSurvivor: boolean): void {
-  const mode = c.overdrive?.mode;
-  if (!mode) return;
-  switch (mode) {
-    case 'ally':
-      onFlatTrigger(ctx, c, 'ally', 'ally');
-      break;
-    case 'sufferer':
-      if (VICTIM_STATUSES.some((s) => has(c, s))) onFlatTrigger(ctx, c, 'sufferer', 'sufferer');
-      break;
-    case 'daredevil':
-      if (has(c, 'critical')) onFlatTrigger(ctx, c, 'daredevil', 'daredevil');
-      break;
-    case 'loner':
-      if (soleSurvivor) onFlatTrigger(ctx, c, 'loner', 'loner');
-      break;
-    default:
-      break;
-  }
-}
-
-/** Spend the gauge. Grand Summon's temporary pool is consumed first [§5.4]. */
+/** Spend the gauge: the cost is the whole bar, or a Grand Summon's held full gauge, whose stored gauge comes back [§5.4]. */
 export function spendOverdrive(ctx: Ctx, c: FFXCombatant): void {
-  if (c.aeon && c.aeon.temporaryOverdrive !== null && c.aeon.temporaryOverdrive >= 100) {
-    c.aeon.temporaryOverdrive = null;
-    ctx.emit({ type: 'overdrive-gauge', who: c.id, from: 100, to: c.overdrive?.gauge ?? 0, cause: 'grand-summon' });
-    return;
-  }
-  setGauge(ctx, c, 0, 'spent');
+  gaugePay(ctx, c);
 }
 
 /** True when this combatant may fire an Overdrive right now. */
@@ -461,12 +308,4 @@ export function timingBonusFrom(result: MinigameResult | undefined, def: Ability
     return { timeRemainingMs: result.reels.timeRemainingMs, timerMs };
   }
   return null;
-}
-
-/** Combatants whose gauge should be paid out when the battle is won (Victor). */
-export function payVictorGauge(ctx: Ctx, activeIds: readonly CombatantId[]): void {
-  for (const id of activeIds) {
-    const c = tryActor(ctx, id);
-    if (c) onFlatTrigger(ctx, c, 'victor', 'victor');
-  }
 }
