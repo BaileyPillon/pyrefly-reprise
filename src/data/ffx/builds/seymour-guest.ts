@@ -16,7 +16,7 @@
  * | Overdrive | **Requiem**, mode **Stoic**, gauge **0**, max 100 (it fills only as monsters hurt him) |
  *
  * The game's Seymour Armour carries Sensor, so he reveals every enemy he sees (the Scan panel) without a turn. Anima is not in play: he has no summon (RE §7.5).
- * He leaves with the fight; he has no results row and earns nothing (`FFXGuestSpec`).
+ * He counts like any member for the loss (`keepsPartyAlive`: the game loses the battle only when all three are at 0 HP, RE section 7.1); he leaves with the fight, has no results row and earns nothing (`FFXGuestSpec`).
  */
 
 import type { FFXMemberBuild } from '../../../battle/common/types.ts';
@@ -49,6 +49,6 @@ export function buildSeymourGuest(): FFXMemberBuild {
     },
     overdrive: { gauge: 0, mode: 'stoic', unlockedModes: ['stoic'], unlockedOverdriveIds: ['requiem'] },
     sphereGrid: { position: 'seymour-none', activatedNodeIds: [], sLv: 0, ap: 0, spheres: {} }, // no Sphere Grid, no menu (RE §7.2)
-    guest: { control: 'player' },
+    guest: { control: 'player', keepsPartyAlive: true }, // the battle is lost only when Yuna, Seymour AND Auron are all at 0 HP: nothing special-cases him in the game's death handler (RE 7.1, G-02)
   };
 }

@@ -6,7 +6,7 @@
  *
  * - **No element is better** against any part (RE section 3.1), so the guide's Fire advice is left out;
  * - the body goes **Attack, Attack, Demi**, not the guide's two alternating (RE section 5.2), and hurries once it is under a third of its HP in the first fight and from the start of the second;
- * - the head can be stopped only by a hit that does damage, so Lancet, which reaches it, does not stop the Venom (RE section 5.3);
+ * - the head is stopped only by a hit that does damage (a Scan reaches it and does nothing; Lancet drains HP, so it counts), RE section 5.3;
  * - **Power Break** lands on the body and halves the damage of its Attack: the guide does not say it, the rows do (RE section 3.2), so it is the one addition, and it is in the plan.
  *
  * **The party's numbers are not on these pages**: the party at the Ridge is an estimate (`data/ffx/builds/mushroom-rock.ts`). **Not modelled, so not promised:** the equipment the second body drops,
@@ -38,7 +38,7 @@ export const SINSPAWN_GUI_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Melee cannot reach it. Use a spell from Lulu or Wakka\'s attack. Kimahri\'s Lancet reaches it too, but it does no damage, so it will not stop the Venom.',
+      text: "Melee cannot reach it. Lulu's spells, Wakka's attack and Kimahri's Lancet can, and any of them that does damage stops the Venom.",
     },
     { t: 'h3', text: 'Arms' },
     {
@@ -56,7 +56,7 @@ export const SINSPAWN_GUI_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Power Break lands on the body and halves the damage of its strikes. Auron should cast it first.',
+      text: 'Power Break lands on the body and halves the damage of its strikes. Auron should cast it first, so he belongs in the party.',
     },
     { t: 'lead', text: 'The strategy:' },
     {

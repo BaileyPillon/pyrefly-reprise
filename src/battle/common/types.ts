@@ -2910,6 +2910,11 @@ export interface EnemyGroupDef {
    * results screen shows, as FFX-2's chains always did. Absent everywhere else, so every other FFX chain keeps its last result as before.
    */
   poolsChainSpoils?: boolean;
+  /**
+   * **A link fought on another plate of the chapter's scene** (the hidden Sinspawn Gui chapter's second fight, the ruined camp): `art/backdrops/<plate>.png`. The battle screen puts it on the scene's
+   * painting plane when the link opens (under a white pulse that covers the cut), on a first entry and on a checkpoint retry alike; a scene that cannot swap its plate ignores it. Absent everywhere else.
+   */
+  plate?: string;
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;
   timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)

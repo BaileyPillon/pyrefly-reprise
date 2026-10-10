@@ -23,7 +23,7 @@
 import type { EnemyDef, EnemyGroupDef, EnemyRewards, StatBlock, StatusId, StatusImmunities } from '../../../battle/common/types.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
 import {
-  GUI_ARM_IDS, GUI_ARM_LEFT_ID, GUI_ARM_RIGHT_ID, GUI_ARM_SCRIPT, GUI_BODY_2_ID, GUI_BODY_SCRIPT, GUI_GROUP_1_ID, GUI_GROUP_2_ID, GUI_HEAD_ID, GUI_HEAD_SCRIPT, GUI_ID,
+  GUI_ARM_IDS, GUI_ARM_LEFT_ID, GUI_ARM_RIGHT_ID, GUI_ARM_SCRIPT, GUI_BODY_2_ID, GUI_BODY_SCRIPT, GUI_GROUP_1_ID, GUI_GROUP_2_ID, GUI_HEAD_2_ART, GUI_HEAD_ID, GUI_HEAD_SCRIPT, GUI_ID, MUSHROOM_ROCK_RUINED_PLATE,
 } from '../sinspawn-gui-ids.ts';
 import { buildSeymourGuest } from '../builds/seymour-guest.ts';
 import { GUI_SPECIAL_1_ID, GUI_VENOM_ID } from './sinspawn-gui-abilities.ts';
@@ -64,7 +64,7 @@ function body(fight: 1 | 2): EnemyDef {
   return {
     id: second ? GUI_BODY_2_ID : GUI_ID,
     name: 'Sinspawn Gui',
-    spriteKey: GUI_ID, // the same painting both times: the rematch is the same body (a dimmer one is a later art pass)
+    spriteKey: second ? GUI_BODY_2_ID : GUI_ID, // the rematch is the same body after the beam: its own painting (dimmer, cracked), an art key of the same name
     slot: 0,
     stats: stats({ hp, mp: 30, str: second ? 15 : 29, def: 1, mag: 20, mdef: second ? 1 : 30, agi: 10, luck: 15, eva: 0, acc: 100 }), // RE §3.1 and §2.3; DEF 0 and MDF 0 read 1 in play
     hp,
@@ -72,7 +72,7 @@ function body(fight: 1 | 2): EnemyDef {
     affinities: {},
     immunities: { ...BODY_IMMUNITIES },
     immunityFlags: ['boss', 'immune-to-life', 'immune-to-delay', 'immune-to-bribe'], // record flags 0x04 and 0x07 (RE §3.1); boss: the party cannot escape (RE §2.2)
-    forms: [{ name: 'Sinspawn Gui', spriteKey: GUI_ID, hp }],
+    forms: [{ name: 'Sinspawn Gui', spriteKey: second ? GUI_BODY_2_ID : GUI_ID, hp }],
     aiScriptId: GUI_BODY_SCRIPT,
     // Fight 1 pays 400 / 600 AP; fight 2's script writes 0 / 0. Fight 1's init zeroes the drop chances; fight 2 keeps 3 Lv. 1 Key Spheres (6 on an Overkill, the engine doubles it) (RE §3.3).
     rewards: second ? rewards(0, 0, 1_000, 800, [{ itemId: 'lv-1-key-sphere', count: 3 }]) : rewards(400, 600, 1_000, 800),
@@ -92,7 +92,7 @@ function head(fight: 1 | 2): EnemyDef {
   return {
     id: GUI_HEAD_ID,
     name: 'Gui Head',
-    spriteKey: GUI_HEAD_ID,
+    spriteKey: fight === 2 ? GUI_HEAD_2_ART : GUI_HEAD_ID, // the second fight's head is cracked: its own painting
     slot: 1,
     stats: stats({ hp, mp: 200, str: 1, def: 1, mag: 1, mdef: 1, agi: 15, luck: 1, eva: 0, acc: 1 }),
     hp,
@@ -100,11 +100,11 @@ function head(fight: 1 | 2): EnemyDef {
     affinities: {},
     immunities: { ...HEAD_IMMUNITIES },
     immunityFlags: ['immune-to-delay', 'immune-to-bribe'],
-    forms: [{ name: 'Gui Head', spriteKey: GUI_HEAD_ID, hp }],
+    forms: [{ name: 'Gui Head', spriteKey: fight === 2 ? GUI_HEAD_2_ART : GUI_HEAD_ID, hp }],
     aiScriptId: GUI_HEAD_SCRIPT,
     rewards: rewards(48, 72, 200, 800), // its drop chances are zeroed by its own init (RE §3.3)
     abilityIds: [GUI_SPECIAL_1_ID],
-    flags: { isPart: true, partOf: GUI_ID, battleDistance: 1 },
+    flags: { isPart: true, partOf: fight === 2 ? GUI_BODY_2_ID : GUI_ID, battleDistance: 1 },
     sensorText: 'Strike it while it shakes.',
     scanText: SCAN_HEAD,
     threatenChance: 0,
@@ -113,7 +113,7 @@ function head(fight: 1 | 2): EnemyDef {
 }
 
 /** An arm: 800 HP, Armored by record, never acts, grows back. Two of them (actors 22 and 23). */
-function arm(id: string, slot: number): EnemyDef {
+function arm(id: string, slot: number, fight: 1 | 2): EnemyDef {
   return {
     id,
     name: 'Gui Arm',
@@ -129,7 +129,7 @@ function arm(id: string, slot: number): EnemyDef {
     aiScriptId: GUI_ARM_SCRIPT,
     rewards: rewards(37, 55, 300, 500), // paid again for every regrowth kill (RE §3.3); its drop chances are zeroed
     abilityIds: [],
-    flags: { isPart: true, partOf: GUI_ID },
+    flags: { isPart: true, partOf: fight === 2 ? GUI_BODY_2_ID : GUI_ID },
     sensorText: 'They armour the body.',
     scanText: SCAN_ARM,
     threatenChance: 0,
@@ -143,7 +143,7 @@ export const sinspawnGuiGroup1: EnemyGroupDef = {
   game: 'ffx',
   canEscape: false, // Escape and Flee are disabled by the formation script (RE §2.2)
   enemies: [body(1)],
-  parts: [head(1), arm(GUI_ARM_LEFT_ID, 2), arm(GUI_ARM_RIGHT_ID, 3)],
+  parts: [head(1), arm(GUI_ARM_LEFT_ID, 2, 1), arm(GUI_ARM_RIGHT_ID, 3, 1)],
   nextGroupId: GUI_GROUP_2_ID,
   bossId: GUI_ID,
   headline: 'Sinspawn Gui',
@@ -157,11 +157,12 @@ export const sinspawnGuiGroup2: EnemyGroupDef = {
   game: 'ffx',
   canEscape: false,
   enemies: [body(2)],
-  parts: [head(2), arm(GUI_ARM_LEFT_ID, 2), arm(GUI_ARM_RIGHT_ID, 3)],
+  parts: [head(2), arm(GUI_ARM_LEFT_ID, 2, 2), arm(GUI_ARM_RIGHT_ID, 3, 2)],
   bossId: GUI_BODY_2_ID,
   headline: 'Sinspawn Gui',
   lineUp: { joins: [buildSeymourGuest()], activeSlots: ['yuna', 'seymour', 'auron'], noSwitch: true }, // slots 1, 2, 3 (RE §2.1)
   poolsChainSpoils: true, // fight 1's AP and gil are paid with fight 2's (GameFAQs, `[single source]`)
+  plate: MUSHROOM_ROCK_RUINED_PLATE, // the second fight is fought in the ruined command center (research section 7; the beam has struck)
   checkpointOnEntry: true, // a defeat retries here, with the HP and MP the party carried in
   hopelessRetry: { standing: 2, answer: 'restore' }, // two of the three on their feet, or the retry opens with everyone up and full
   // "Challenge" is the game's cue here; our nearest existing cue is Seymour's own theme.

@@ -3,7 +3,7 @@
  *
  * The game's own command record 0x30E3 (the battle kernel's command table, FFX Steam HD build 25501027, read field by field): user 7 only (Seymour, the party actor after Rikku),
  * **formula 3 (magic against Magic Defense), power 40, one hit, all enemies, rank 4, Overdrive cost 100**, damage type magical (Shell halves it), can crit (and the equipment's crit
- * bonus), **no piercing flag** (an Armored arm takes a third), no element, no status, hit calculation 0 (always hits), reach 3 (it can target Gui's head). The gauge is Seymour's own:
+ * bonus), **no piercing flag on the command** (the RE note reads that as "an Armored arm takes a third", but the game's Armored rule also exempts a user with the Pierce auto-ability, and Seymour's staff carries Piercing: `kernel/modifiers.ts#armoredMod`, so every command he casts pierces and the arm takes it in full), no element, no status, hit calculation 0 (always hits), reach 3 (it can target Gui's head). The gauge is Seymour's own:
  * mode Stoic, start 0, max 100, filled only as monsters hurt him (the engine's own Stoic rule, the same code as any party member's).
  *
  * It is a plain command: **no timed input** (`minigame` absent), like an aeon's Overdrive, so the menu offers it when the gauge is full and the engine resolves it on the spot.

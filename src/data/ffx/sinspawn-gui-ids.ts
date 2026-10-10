@@ -10,10 +10,15 @@ export const SINSPAWN_GUI_ID = 'sinspawn-gui' as const;
 /** The chapter's scene key: the Mushroom Rock Road diorama (`../../scenes/mushroom-rock-road.ts`, a provisional plate). */
 export const MUSHROOM_ROCK_SCENE = 'mushroom-rock-road' as const;
 
+/** The second fight's plate: the same camp after the beam (`art/backdrops/mushroom-rock-road-ruined.png`; `EnemyGroupDef.plate`). */
+export const MUSHROOM_ROCK_RUINED_PLATE = 'mushroom-rock-road-ruined' as const;
+
 /** Combatant ids: the first fight's body, the second fight's body (the reanimated one), the head and the two arms (actors 20 to 23). */
 export const GUI_ID = 'sinspawn-gui' as const;
 export const GUI_BODY_2_ID = 'sinspawn-gui-2' as const;
 export const GUI_HEAD_ID = 'sinspawn-gui-head' as const;
+/** The art subject of the second fight's head (its combatant id is the same as the first's; the painting is the cracked one): `public/art/characters/sinspawn-gui-head-2`. */
+export const GUI_HEAD_2_ART = 'sinspawn-gui-head-2' as const;
 export const GUI_ARM_LEFT_ID = 'sinspawn-gui-arm-left' as const; // actor 22
 export const GUI_ARM_RIGHT_ID = 'sinspawn-gui-arm-right' as const; // actor 23
 export const GUI_ARM_IDS: readonly string[] = [GUI_ARM_LEFT_ID, GUI_ARM_RIGHT_ID];

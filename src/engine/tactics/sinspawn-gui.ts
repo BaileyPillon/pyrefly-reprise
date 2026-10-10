@@ -5,15 +5,17 @@
  *
  * ## The line, and where each rule comes from
  *
- * It is the **intended** line of `tests/unit/chapters/sinspawn-gui-bench.test.ts`, which wins 96 to 98 of 100 seeds in the first fight and every seed of the second on the real engine
- * (the bench prints the exact figures; the party estimate may move, the boss never does), written as a tactic rule for rule:
+ * It is the **intended** line of `tests/unit/chapters/sinspawn-gui-bench.test.ts`, which wins 196 of 200 seeds (98 percent) in the first fight and every seed of the second on the real engine and the
+ * default three (Tidus, Auron, Lulu; the bench prints the exact figures; the party estimate may move, the boss never does). **It is built around Auron's Power Break**: with him in the line-up it wins from
+ * 28 to 39 of 40 seeds, without him from 26 down to none (`docs/handoff/ch-gui.md`), which is why the chapter's tip and the guide tell the player to bring him. Rule for rule:
  *
  * 1. **Keep everyone up.** A Phoenix Down for a fallen member of the front line (a body Attack is 540 to 790, so a caster can fall in one blow); Cure, Hi-Potion or Potion for anyone under
  *    half; Esuna for the Venom's Poison (RE §4: poison on a permanent status).
  * 2. **Answer the head.** When it shakes (`gui.headState` = 3, the warning turn has passed) the next head turn is the Venom; **a damaging hit on it now stops it** (RE §5.3, §9 G-07). The head is
  *    out of reach of melee (RE §4, §9 G-09), so a spell, Wakka's weapon or Seymour's Fira does it: the first row that reaches it, Seymour's Fira first (it kills the second fight's 1,000-HP head).
- * 3. **Auron breaks the body's Power first.** Power Break **lands on the body and only the body** (RE §3.2: byte 0 on the body, 255 on the head and arms); the body's Attack is the fight's damage
- *    (RE §8: 618 to 698 against Defense 25). Measured on the bench: the first fight goes from about two wins in three to nearly every seed with that one turn.
+ * 3. **Auron breaks the body's Power first, in the first fight.** Power Break **lands on the body and only the body** (RE §3.2: byte 0 on the body, 255 on the head and arms); the body's Attack is the
+ *    fight's damage (RE §8: 618 to 698 against Defense 25). Measured on the bench: the first fight goes from about three wins in five to nearly every seed with that one turn. The second body's Attack is
+ *    about a sixth of that (Strength 15), so the guest hour spends no turn on it.
  * 4. **Tidus hands out Haste and Cheer** while the body is fresh (Jegged: "Haste on everyone", Cheer and Focus early; research §13) and then hits like everyone else.
  * 5. **Arms first, then the body.** The arms shield the body from every physical command while one lives (RE §5.4, G-08); they have 800 HP and regrow together on the body's 3rd or 4th turn once
  *    both are down (RE §5.5, G-10). Physical attackers hit the arm with the least HP; Lulu's spells go to an arm too in the first fight. Once both are down the body is open to everything.
@@ -110,8 +112,8 @@ export const sinspawnGui: Tactic = (actorId, commands, engine) => {
     if (stop) return stop;
   }
 
-  // 3. Auron: Power Break on the body, once.
-  if (actorId === 'auron' && !has(body, 'power-break')) {
+  // 3. Auron: Power Break on the first body, once.
+  if (actorId === 'auron' && body.id === SINSPAWN_GUI_BOSS_IDS[0] && !has(body, 'power-break')) {
     const breaker = onTarget(commands, 'ability', 'power-break', body.id);
     if (breaker) return breaker;
   }

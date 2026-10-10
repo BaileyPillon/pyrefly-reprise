@@ -159,7 +159,10 @@ export function onDamageTaken(ctx: Ctx, victim: FFXCombatant, amount: number, fr
     return;
   }
   if (victim.overdrive?.mode === 'stoic') {
-    addGauge(ctx, victim, (amount * 30) / Math.max(1, victim.stats.maxHp), 'stoic');
+    const raw = (amount * 30) / Math.max(1, victim.stats.maxHp);
+    // A guest in the party (the hidden Sinspawn Gui chapter's Seymour) gets the game's own count, `floor(damage x 30 / max HP) + 1` a damaging monster hit (research/re-ffx-ai-gui.md 7.4;
+    // `kernel/overdrive-hooks.ts#odOnHpChange`, which is not wired). Everyone else keeps this model, so no other chapter's gauge moves.
+    addGauge(ctx, victim, victim.guest !== undefined ? Math.floor(raw) + 1 : raw, 'stoic');
   }
   for (const id of ctx.state.activeIds) {
     if (id === victim.id) continue;

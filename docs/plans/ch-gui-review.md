@@ -125,3 +125,15 @@ a prefix of another). `wordKey` becomes "any door's word just continued". The un
 | Q5 | Which music plays at Mushroom Rock Road in the game, and which existing cue of ours fits (no new audio) | `research.md`, `docs/audio/THEMES.md` |
 | Q6 | The party's stats at this point (no source gives them in earlier chapters either) | `research.md`; else an `[estimate]` bounded by the nearest earlier build |
 | Q7 | The staging and presentation concept | the driver's pick from `concepts.md` |
+
+### 9.1 Answers, 2026-10-10 (the inputs landed: `research/re-ffx-ai-gui.md`, `research/ffx-sinspawn-gui.md`, the driver's concept pick)
+
+| # | Answer | Where it is built |
+|---|---|---|
+| Q1 | **Player-controlled, no Anima.** The field event adds him as a normal party member (actor 7); no script gives him AI, a forced command or a line. Row 7 of the party table: HP 1,200, MP 999, 20 / 25 / 35 / 100 / AGI 20 / LCK 18; a staff with Piercing and an armour with Sensor; Overdrive **Requiem** (Stoic, gauge 0 to 100; magic, power 40, all enemies); no summon. RE 7.1 to 7.5. | `FFXGuestSpec { control: 'player', keepsPartyAlive: true }`, `data/ffx/builds/seymour-guest.ts`, `abilities/overdrive-seymour.ts` |
+| Q2 | **Fight 2 only: Yuna (slot 1), Seymour (2), Auron (3), Switch disabled**; fight 1 is the player's own three of the six with Switch open. RE 2.1. | `EnemyGroupDef.lineUp` (`joins`, `activeSlots`, `noSwitch`), `battle/ffx/line-up.ts` |
+| Q3 | **Seymour counts like any member**: nothing in the death handler special-cases him; the battle is lost only when Yuna, Seymour and Auron are all at 0. RE 7.1, G-02. (The first build did not hold the loss open for him; `tests/unit/chapters/sinspawn-gui-rules.test.ts` caught it and `keepsPartyAlive: true` fixes it.) | `engine-end.ts#checkEnd` reads `guest.keepsPartyAlive` |
+| Q4 | **Four parts, one boss**: body (12,000 / 6,000 HP), head (4,000 / 1,000, out of melee reach), two Armored arms (800, no turns, regrow). Only the body has to fall. Immunities, drops and steals are RE 3.1 to 3.3; the hooks are RE 5. | `data/ffx/enemies/sinspawn-gui*.ts`, `battle/ffx/ai/sinspawn-gui*.ts` |
+| Q5 | **Existing cues only**: the dread theme for the Ridge, Seymour's own for the guest hour (the game's "Peril" and "Challenge" are named by role in `docs/audio/THEMES.md`, owed). | `chapter-sinspawn-gui.ts`, `THEMES.md` |
+| Q6 | **An estimate, labelled everywhere**: the floor of the midpoint of the game's start-of-game record and Macalania's preset, per stat. Kits are what the cited guides name for this fight. Not in the guide's numbers. A real save at Mushroom Rock Road read in the emulator would source it. | `data/ffx/builds/mushroom-rock.ts` |
+| Q7 | **Concept A, "Two Rounds on the Ridge"**, in slices (link 2 first, then link 1); the seam is a white-out and three plain lines of Tidus (no beam in real time); the arms' AP and gil farm is kept and never mentioned; no Anima; link 1's party prep is the player's three of six. | `story/scripts/sinspawn-gui.ts`, `chapter-sinspawn-gui.ts` |

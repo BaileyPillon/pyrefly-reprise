@@ -50,10 +50,19 @@ export const SINSPAWN_GUI: Chapter = {
   enemyGroupRef: sinspawnGuiGroup,
   scriptsRef: sinspawnGuiScripts,
   music: {
-    // Existing cues only (no new audio). Settled from the research when it lands; see `docs/audio/THEMES.md` "Owed cues for chapters not yet listed".
+    // Existing cues only (no new audio; Bailey judges audio by ear, rule 13). The game scores the first fight with "Peril" and the second with "Challenge" (research section 8.3); ours are the
+    // nearest cues we have, named as stand-ins in `docs/audio/THEMES.md` "Owed cues for chapters not yet listed": the dread theme for the Ridge, Seymour's own theme for the guest hour.
     scene: 'scene-gagazet',
-    battle: 'battle-ffx',
+    battle: 'boss-dread',
+    phase2: 'boss-seymour',
     victory: 'victory-ffx',
   },
-  sensorTexts: {},
+  // Duplicated from the enemy records' own `sensorText` (`./ffx/enemies/sinspawn-gui.ts`), as the `Chapter` contract asks; the second fight's body has the same line.
+  sensorTexts: {
+    'sinspawn-gui': 'Its arms are its guard.',
+    'sinspawn-gui-2': 'Its arms are its guard.',
+    'sinspawn-gui-head': 'Strike it while it shakes.',
+    'sinspawn-gui-arm-left': 'They armour the body.',
+    'sinspawn-gui-arm-right': 'They armour the body.',
+  },
 };

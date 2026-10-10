@@ -4,13 +4,14 @@
  * already up, that plays the chapter by keyboard as far as a person would and then hands the rest to the advisor's line (`autoBattle('intended')`).
  *
  *   PYREFLY_BROWSER=gpu node tools/gui-smoke.mjs [--base http://127.0.0.1:5190/] [--out docs/screenshots/ch-gui] [--tag desk] [--w 1600 --h 900] [--touch]
- *     [--seed 7] [--stop link2|win]
+ *     [--seed 7] [--stop link2|win] [--lose2] [--speed1 fast|skip]
  *
  * It does, in order: title, chapter select (the board has the eighteen cards and no card for the chapter), the typed word (read from
  * `src/app/screens/frontend/mushroomDoor.ts`, never retyped), party prep (and that it HOLDS after the word's last letter, M, which is the board's SELECT key), the
  * pre-battle scene, the first command menu (the four Gui parts on the field, the party, no placeholder figure), one real-key Attack (a party hit lands), then the advisor's line
  * at fast speed. It takes a screenshot at each of: the first menu, the head's warning, the arms down, the arms grown back, the seam into the second fight, the second
- * fight's first menu (Seymour in the line-up, Switch gone), and the results. `--stop link2` leaves the run at the second fight's first menu; `--stop win` plays to the results.
+ * fight's first menu (Seymour in the line-up, Switch gone), and the results. `--stop link2` leaves the run at the second fight's first menu; `--stop win` plays to the results;
+ * `--lose2` instead loses the second fight on purpose (the party only defends), takes RETRY on the defeat panel and checks that the retry opens on the second fight again (the checkpoint), on its first turns, with Seymour fresh.
  * Exit code 1 on a failed check. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -33,6 +34,8 @@ const H = Number(arg('--h', '900'));
 const TOUCH = flag('--touch');
 const SEED = Number(arg('--seed', '7'));
 const STOP = arg('--stop', 'win');
+const LOSE2 = flag('--lose2');
+const SPEED1 = arg('--speed1', 'fast'); // the first fight's playback speed: 'fast' to see its beats, 'skip' to get through it
 mkdirSync(OUT, { recursive: true });
 
 const { open, assertScreen, waitBattleMenu, waitFor } = await import(pathToFileURL(join(REPO, 'critic', 'runner', 'lib', 'lib.mjs')).href);
@@ -76,6 +79,7 @@ const field = () =>
       enemies: st.enemyIds.map((id) => ({ id, hp: c(id).hp, alive: c(id).alive })),
       active: st.activeIds,
       reserve: st.reserveIds,
+      hp: Object.fromEntries(st.activeIds.map((id) => [id, c(id).hp])),
       flags: { head: st.flags['gui.headState'], fight: st.flags['gui.fight'] },
       turn: st.turn,
     };
@@ -156,10 +160,10 @@ try {
   await shot('4-after-attack');
 
   // --- the advisor's line, fast, with a screenshot at each beat -----------------------------------------------------------------------------
-  await page.evaluate(() => {
-    window.__pyrefly.setBattleSpeed('fast');
+  await page.evaluate((speed) => {
+    window.__pyrefly.setBattleSpeed(speed);
     window.__pyrefly.autoBattle('intended');
-  });
+  }, SPEED1);
   const seen = new Set();
   const want = {
     head: { name: '5-head-warning', test: (st) => st.flags['gui.headState'] === 3 },
@@ -167,6 +171,7 @@ try {
     regrown: { name: '7-arms-regrown', test: (st) => st.log.some((e) => e.type === 'message' && /grow back/.test(e.text)) },
   };
   let link2 = false;
+  let seamShots = 0;
   const t0 = Date.now();
   for (let i = 0; Date.now() - t0 < 25 * 60_000; i++) {
     const sc = await screenNow();
@@ -178,6 +183,12 @@ try {
       for (const [k, src] of Object.entries(tests)) hits[k] = !!new Function('st', `return (${src})(st)`)(st);
       return { enemies: st.enemyIds, hits };
     }, Object.fromEntries(Object.entries(want).map(([k, v]) => [k, v.test.toString()])));
+    // The seam is a mid-battle beat: the battle root carries `battle-midbeat` while it plays. One shot at its start and one a few seconds in (the white-out and the second line).
+    if (seamShots < 2 && (await page.evaluate(() => !!document.querySelector('.battle-midbeat'))) && (await page.evaluate(() => window.__pyrefly.battleState?.()?.combatants?.['sinspawn-gui']?.alive === false))) {
+      await shot(`seam-${seamShots + 1}`);
+      seamShots++;
+      await page.waitForTimeout(3500);
+    }
     if (!probe.none) {
       for (const [k, hit] of Object.entries(probe.hits)) {
         if (hit && !seen.has(k)) {
@@ -186,8 +197,11 @@ try {
         }
       }
       if (probe.enemies.includes('sinspawn-gui-2')) {
-        // The second fight has begun: stop the advisor before its first decision so the first menu is a person's.
-        await page.evaluate(() => window.__pyrefly.battle()?.battlePresenter?.setAutoPlay(null));
+        // The second fight has begun: stop the advisor before its first decision so the first menu is a person's, and play it at a pace one can see.
+        await page.evaluate(() => {
+          window.__pyrefly.battle()?.battlePresenter?.setAutoPlay(null);
+          window.__pyrefly.setBattleSpeed('normal');
+        });
         link2 = true;
         break;
       }
@@ -202,19 +216,46 @@ try {
     log('field.2', f2);
     check('the guest hour opens on Yuna, Seymour and Auron with no bench', JSON.stringify([...f2.active].sort()) === JSON.stringify(['auron', 'seymour', 'yuna']) && f2.reserve.length === 0, f2);
     await shot('8-second-fight-first-menu');
-    if (STOP === 'win') {
+    if (LOSE2) {
+      await page.evaluate(() => {
+        window.__pyrefly.setBattleSpeed('skip');
+        window.__pyrefly.autoBattle('defend');
+      });
+      await waitFor('the defeat panel', async () => (await screenNow()) === 'results', { ms: 6 * 60_000, pollMs: 500 });
+      const panel = await page.evaluate(() => document.body.innerText);
+      check('the second fight can be lost: the defeat panel offers RETRY', /retry/i.test(panel), panel.slice(0, 160));
+      await page.waitForTimeout(1500);
+      await shot('11-defeat');
+      await page.keyboard.press('Enter'); // RETRY is the panel's default
+      await page.waitForTimeout(1500);
+      await assertScreen(page, 'battle', 120000);
+      await waitBattleMenu(page, 120000);
+      await page.waitForTimeout(2000);
+      const f3 = await field();
+      log('field.3', f3);
+      check('the retry opens on the second fight, not the first', f3.enemies.some((e) => e.id === 'sinspawn-gui-2') && f3.flags.fight === 2, f3);
+      check('the retry opens with Yuna, Seymour and Auron and no bench', JSON.stringify([...f3.active].sort()) === JSON.stringify(['auron', 'seymour', 'yuna']) && f3.reserve.length === 0, f3);
+      check('the retry opens the second fight afresh: its first turns, Seymour back at his full 1,200 (he joins fresh), the party on the HP it carried in (Yuna, who was not hurt, at hers)', f3.turn <= 2 && f3.hp.seymour === 1200 && f3.hp.yuna === 775, f3);
+      await shot('12-retry-first-menu');
+    }
+    if (STOP === 'win' && !LOSE2) {
       await page.evaluate(() => window.__pyrefly.autoBattle('intended'));
-      await waitFor('results', async () => (await screenNow()) === 'results', { ms: 15 * 60_000, pollMs: 500 }).catch(() => null);
-      const end = await screenNow();
-      check('the chapter reaches its results', end === 'results' || end === 'cutscene', end);
+      // The post scene (a cutscene) comes first and waits on the player; then the results.
+      await waitFor('the post scene or the results', async () => ['results', 'cutscene'].includes(await screenNow()), { ms: 15 * 60_000, pollMs: 500 }).catch(() => null);
+      let end = await screenNow();
+      check('the second fight is won and the chapter reaches its post scene', end === 'results' || end === 'cutscene', end);
       if (end === 'cutscene') {
+        await page.waitForTimeout(1500);
         await shot('9-post-scene');
         for (let guard = 0; (await screenNow()) === 'cutscene' && guard < 260; guard++) {
           await page.keyboard.press('Enter');
           await page.waitForTimeout(350);
         }
+        await waitFor('results', async () => (await screenNow()) === 'results', { ms: 60_000, pollMs: 500 }).catch(() => null);
+        end = await screenNow();
       }
-      await page.waitForTimeout(2500);
+      check('the chapter reaches its results', end === 'results', end);
+      await page.waitForTimeout(7000); // the counters count up; the shot is of the totals
       if ((await screenNow()) === 'results') await shot('10-results');
     }
   }

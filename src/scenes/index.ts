@@ -90,6 +90,8 @@ export interface LoadedScene {
   slots: SceneSlots;
   update(dt: number): void;
   setPixelScale(v: number): void;
+  /** Put another plate on the painting plane (`SceneBuild.swapBackdrop`); absent on a scene that cannot. */
+  swapBackdrop?(key: string): Promise<void>;
   /** Named beat, for the debug API. False when the scene knows no such name. */
   trigger(name: string): boolean;
   /**
@@ -368,6 +370,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       for (const p of build.particles) p.setPixelScale(v);
       for (const p of build.pixelScaled ?? []) p.setPixelScale(v);
     },
+    ...(build.swapBackdrop ? { swapBackdrop: (k: string): Promise<void> => build.swapBackdrop!(k) } : {}),
     trigger: () => false,
     hideOwnActors: () => {},
     showOwnActors: () => {},

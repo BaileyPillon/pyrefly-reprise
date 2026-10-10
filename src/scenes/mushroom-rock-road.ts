@@ -6,7 +6,7 @@ import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts'
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from './types.ts';
 import type { SceneSlots } from './index.ts';
-import { MUSHROOM_ROCK_SCENE } from '../data/ffx/sinspawn-gui-ids.ts';
+import { MUSHROOM_ROCK_RUINED_PLATE, MUSHROOM_ROCK_SCENE } from '../data/ffx/sinspawn-gui-ids.ts';
 
 // ---------------------------------------------------------------------------
 // Mushroom Rock Road, Operation Mi'ihen (FFX) — the hidden Sinspawn Gui chapter
@@ -25,15 +25,25 @@ import { MUSHROOM_ROCK_SCENE } from '../data/ffx/sinspawn-gui-ids.ts';
 // Kimahri there; here the build's `activeSlots` order, the guest last); the enemies stand on `ENEMY_SLOTS`, index = each record's `slot`
 // (`src/data/ffx/enemies/sinspawn-gui.ts`). No particles: nothing in the sources puts any in the air here (`pyreflyCanon.ts`).
 
-/** Plate pixels (`mushroom-rock-road.json`) and the row set on the floor. */
-export const MUSHROOM_PLATE = { w: 2688, h: 1536, floorRow: 0.89 } as const;
+/** Plate pixels (both plates are 2688 x 1536: `backdrops/mushroom-rock-road*.json`). */
+export const MUSHROOM_PLATE = { w: 2688, h: 1536 } as const;
 
-/** Painting plane: 34 wide at z -12, its floor row on the floor (y 0). */
-export const MUSHROOM_BACKDROP = (() => {
+/**
+ * Each plate's own look: **the row set on the floor** (y 0: the plate above it shows, the plate below it is under the 3D floor) and the rows sampled for the sky, the horizon, the ground and the
+ * fog. The camp's crane, cage and horizon sit high in the picture, so its floor row is the middle of the plate; the ruined camp's glassy fan and leaning posts sit lower, so its floor row is lower.
+ */
+export const MUSHROOM_PLATE_LOOK: Readonly<Record<string, { floorRow: number; bands: NonNullable<BackdropOptions['sampleBands']>; layer: { from: number; to: number } }>> = {
+  [MUSHROOM_ROCK_SCENE]: { floorRow: 0.5, bands: { sky: [0.0, 0.14], horizon: [0.3, 0.4], ground: [0.56, 0.9], key: [0.38, 0.5] }, layer: { from: 0.3, to: 0.5 } },
+  [MUSHROOM_ROCK_RUINED_PLATE]: { floorRow: 0.72, bands: { sky: [0.0, 0.14], horizon: [0.3, 0.4], ground: [0.74, 0.95], key: [0.42, 0.58] }, layer: { from: 0.42, to: 0.7 } },
+};
+
+/** Painting plane of one plate: 34 wide at z -12, its floor row on the floor (y 0). */
+export function plateGeometry(key: string): { width: number; height: number; distance: number; centreY: number } {
+  const look = MUSHROOM_PLATE_LOOK[key] ?? MUSHROOM_PLATE_LOOK[MUSHROOM_ROCK_SCENE]!;
   const width = 34;
   const height = width / (MUSHROOM_PLATE.w / MUSHROOM_PLATE.h);
-  return { width, height, distance: -12, centreY: height * (MUSHROOM_PLATE.floorRow - 0.5) } as const;
-})();
+  return { width, height, distance: -12, centreY: height * (look.floorRow - 0.5) };
+}
 
 /** The idle camera, which the parallax stack is solved for. */
 const CAMERA_REF: [number, number, number] = [0, 5.1, 17.6];
@@ -74,8 +84,24 @@ const ENEMY_HEIGHT = 2.43;
 /** Each enemy stays on its spot; the party is held on its slots. */
 const MUSHROOM_STAGING = {
   holdParty: true,
-  enemySpots: {} as Record<string, [number, number, number]>,
-  figureHeights: {} as Record<string, number>,
+  // PROVISIONAL composition for the provisional paintings (the overnight art run's picks): the body, the head high on its neck behind the body's shoulders (the body draws over its
+  // base), and one arm on each side. The two fights share the spots: the second fight's body and head are the same figures after the beam (their own paintings, the same ids' spots).
+  enemySpots: {
+    'sinspawn-gui': [3.0, 0, -2.8],
+    'sinspawn-gui-2': [3.0, 0, -2.8],
+    'sinspawn-gui-head': [3.1, 2.3, -3.7],
+    'sinspawn-gui-arm-left': [0.3, 0, -1.9],
+    'sinspawn-gui-arm-right': [5.8, 0, -2.0],
+  } as Record<string, [number, number, number]>,
+  // World heights, metres: the party stands 1.75. The body's design height is 3.3 times Tidus's (research/ffx-sinspawn-gui.md section 7; the in-battle size was not read, RE Q-13), so
+  // the figure here is an estimate for the framing, not a measure: 4.4 for the body as painted (a crouching quadruped), the head and the arms in the painting's own proportions.
+  figureHeights: {
+    'sinspawn-gui': 4.4,
+    'sinspawn-gui-2': 4.4,
+    'sinspawn-gui-head': 3.6,
+    'sinspawn-gui-arm-left': 3.3,
+    'sinspawn-gui-arm-right': 3.3,
+  } as Record<string, number>,
 } as const;
 
 /** The published slots, same shape every other scene exports. */
@@ -116,24 +142,37 @@ export const buildMushroomRockRoadScene: SceneFactory = async (opts: SceneBuildO
   const cameraRef = opts.cameraRef ?? CAMERA_REF;
   const url = artUrl(`art/backdrops/${MUSHROOM_ROCK_SCENE}.png`);
 
-  const backdropOptions = {
-    url,
-    width: MUSHROOM_BACKDROP.width,
-    distance: MUSHROOM_BACKDROP.distance,
-    centreY: MUSHROOM_BACKDROP.centreY,
-    cameraRef,
-    /** One masked band nearest the fighters (the rocks at the road's edge). */
-    layers: low ? [] : [{ from: 0.46, to: 0.84, feather: 0.1, featherBottom: 0.05, z: -14, opacity: 0.5 }],
-    /** `key` the lit rock band, `horizon` the sea line, `ground` the road. */
-    sampleBands: { sky: [0.0, 0.12], horizon: [0.52, 0.7], ground: [0.84, 0.97], key: [0.46, 0.6] },
-    ground: { size: 40, repeat: 5, tintMix: 0.36, luma: 0.42, fade: true, fadeCore: 0.3, center: [0.5, -3.5] as [number, number] },
-    fog: { near: 16, far: 44, colorMix: 0.16 },
-    fogPlanes: [{ z: -12, y: 0.8, width: 44, height: 4, opacity: 0.06, speed: 0.01, additive: true }],
-    background: 0x0b1420,
-  } satisfies BackdropOptions;
+  /** The options of one plate: its plane and the rows its look samples (`MUSHROOM_PLATE_LOOK`); the ground, fog and mist are the scene's. */
+  const optionsFor = (key: string): BackdropOptions => {
+    const look = MUSHROOM_PLATE_LOOK[key] ?? MUSHROOM_PLATE_LOOK[MUSHROOM_ROCK_SCENE]!;
+    const plane = plateGeometry(key);
+    return {
+      url: artUrl(`art/backdrops/${key}.png`),
+      width: plane.width,
+      distance: plane.distance,
+      centreY: plane.centreY,
+      cameraRef,
+      /** One masked band nearest the fighters. */
+      layers: low ? [] : [{ from: look.layer.from, to: look.layer.to, feather: 0.1, featherBottom: 0.05, z: -14, opacity: 0.5 }],
+      sampleBands: look.bands,
+      ground: { size: 40, repeat: 5, tintMix: 0.36, luma: 0.42, fade: true, fadeCore: 0.3, center: [0.5, -3.5] },
+      fog: { near: 16, far: 44, colorMix: 0.16 },
+      fogPlanes: [{ z: -12, y: 0.8, width: 44, height: 4, opacity: 0.06, speed: 0.01, additive: true }],
+      background: 0x0b1420,
+    };
+  };
+  const backdropOptions = optionsFor(MUSHROOM_ROCK_SCENE);
 
   let backdrop = await Backdrop.create(backdropOptions);
   backdrop.applyTo(group);
+  // The ruined plate for the second fight is fetched now, so the swap at the seam is a texture already in the browser's cache.
+  if (typeof Image !== 'undefined') {
+    try {
+      new Image().src = artUrl(`art/backdrops/${MUSHROOM_ROCK_RUINED_PLATE}.png`);
+    } catch {
+      /* a failed warm-up costs only a slower swap */
+    }
+  }
 
   const lights = new LightRig({
     palette: backdrop.palette,
@@ -185,6 +224,14 @@ export const buildMushroomRockRoadScene: SceneFactory = async (opts: SceneBuildO
     enemyHeight: ENEMY_HEIGHT,
     ...MUSHROOM_STAGING,
     palette: { ...MUSHROOM_PALETTE },
+    /** Another plate of the same layout on the painting plane (the ruined camp of the second fight); the caller covers the cut with a white pulse. */
+    async swapBackdrop(key: string): Promise<void> {
+      const next = await Backdrop.create(optionsFor(key));
+      const wasIn = backdrop.group.parent;
+      backdrop.dispose();
+      backdrop = next;
+      if (wasIn) backdrop.applyTo(wasIn);
+    },
     update(dt: number): void {
       backdrop.update(dt);
       lights.update(dt);

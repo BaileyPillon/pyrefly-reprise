@@ -674,6 +674,7 @@ a map row for a chapter that is not listed; the listing step moves it into the m
 |---|---|---|---|---|---|---|---|
 | XVII | `sin-fins-core` Sin: the Fins and the Core | FFX | `scene-fahrenheit` | `boss-evrae` | `victory-ffx` | **owed, stand-in in use**: Chapter VIII's scene and battle cues | the **assault** cue for links I to III: research `ffx-sin.md` §9.4 names "Assault" for every link but the head `[single source]`; a hymn-derived motif is canon ground (the Hymn is the plan), written fresh, never quoted; composed after the direction pick and judged by ear (rules 8, 13); D-209 |
 | XVIII | `sin-face` Sin: the Face | FFX | `scene-fahrenheit` | `boss-evrae` | `victory-ffx` | **owed, stand-in in use**: Chapter VIII's scene and battle cues | the **countdown** cue for link IV: no source names the head's track (S-21), and the sourced fact the brief must use is that link IV is a countdown; judged by ear (rule 13); D-209 |
+| EXP | `sinspawn-gui` Sinspawn Gui, Mushroom Rock Road (hidden; typed word `mushroom`; `ch-gui`, 2026-10-10) | FFX | `scene-gagazet` | fight 1 `boss-dread`, fight 2 `boss-seymour` | `victory-ffx` | **owed, stand-ins in use**: the dread theme for the Ridge, Seymour's own theme for the guest hour | two cues by role, never transcribed (rule 8): a tense, driving camp-under-threat battle cue for the first fight and an important-boss cue for the guest hour (research `ffx-sinspawn-gui.md` section 8.3 names the roles the original gives them); composed after the driver's pick and judged by ear (rules 9, 13) |
 
 ---
 
