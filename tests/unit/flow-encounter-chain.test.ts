@@ -224,7 +224,8 @@ describe('each boss fight is scored with its own cue — critic round 02 #02', (
   it('only ever names cues that exist', async () => {
     for (const chapter of CHAPTERS) {
       const { music } = await playChapter(chapter, 'skip');
-      for (const cue of music) expect(TRACKS[cue], `${cue} is not a composed track`).toBeDefined();
+      // 'stop' is not a cue: the last link's victory takes the battle theme out (`stopMusic`) under its sting, and the harness records that as the word 'stop'.
+      for (const cue of music) if (cue !== 'stop') expect(TRACKS[cue], `${cue} is not a composed track`).toBeDefined();
     }
   });
 });

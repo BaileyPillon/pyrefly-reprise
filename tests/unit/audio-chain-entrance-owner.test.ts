@@ -192,7 +192,8 @@ describe('PR-0129: the chain and the entrance scenes, played through', () => {
     // After the scene: never Jecht, and Yu Yevon's theme exactly once.
     expect(starts(log.slice(scene), 'boss-jecht')).toEqual([]);
     expect(starts(log, 'boss-yu-yevon')).toHaveLength(1);
-    expect(log.slice(scene).filter((e) => e.kind === 'stop')).toHaveLength(1); // the scene's own music(null)
+    // Two stops: the scene's own music(null), then the last link's victory taking Yu Yevon's theme out under its sting (only the last link of a chain plays the sting; it was 1 before 2026-10-10).
+    expect(log.slice(scene).filter((e) => e.kind === 'stop')).toHaveLength(2);
     // Jecht's theme is still the Braska's Final Aeon fight's, from link 1.
     expect(starts(log, 'boss-jecht')).toHaveLength(1);
     expect(starts(log, 'boss-jecht')[0]!.link).toBeLessThanOrEqual(1);
