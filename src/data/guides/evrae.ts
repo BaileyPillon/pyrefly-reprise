@@ -54,8 +54,8 @@ export const EVRAE_GUIDE: ChapterGuide = {
   hints: [
     {
       when: { labels: ['Pull back', 'Pull Back'] },
-      text: "Cid pulls the ship out of reach — Poison Breath and Swooping Scythe cannot land while it is FAR, and Cid's missiles only fire from out here",
-      cite: 'ffx-evrae-airship §4.1, §4.2',
+      text: "Cid pulls the ship out of reach — his melee, Stone Gaze and Poison Breath cannot land while it is FAR, and Cid's missiles only fire from out here",
+      cite: 'ffx-evrae-airship §4.1, §4.2; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.3',
     },
     {
       when: { labels: ['Close in', 'Close In'] },
