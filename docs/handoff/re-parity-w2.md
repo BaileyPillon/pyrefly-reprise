@@ -28,13 +28,13 @@ Commits (all on `re-parity-w2`; the table is the 2026-10-09 branch before the me
 | `939f0eb8` | `natus-bench`: the old midpoint party compares with "not behind" |
 | `e070c72a` | This note |
 | `06210431` | The note's list of deleted engine code names only what is gone (the head of the branch before the merge) |
-| `MERGE-SHA` | The merge of `origin/re-parity-rc1` (`931613a8`), conflicts resolved, the seams fixed and pinned, the goldens and the seed pins re-derived, this section |
+| `4197e783` | The merge of `origin/re-parity-rc1` (`931613a8`), conflicts resolved, the seams fixed and pinned, the goldens and the seed pins re-derived, this section |
 
 ## Merged onto release candidate 1 (RC2-W2, 2026-10-10)
 
 Bailey, 2026-10-09: "Your findings need to be implemented into live builds as the decompilation work progresses." and, 2026-10-10, "ok keep going please".
 This lane makes W2 the base of the next release candidate: `origin/re-parity-rc1` (`931613a8`, release candidate 1 folded into the release driver's final
-build `a74b2b8e`) is merged into `re-parity-w2` (`06210431`) by a real merge commit (`MERGE-SHA`; no rebase, no squash), the 19 conflicts resolved as the RC1
+build `a74b2b8e`) is merged into `re-parity-w2` (`06210431`) by a real merge commit (`4197e783`; no rebase, no squash), the 19 conflicts resolved as the RC1
 handoff said, and every W2 check run again on the merged tree. Pushed to `origin/re-parity-w2`; not deployed; no production build (D: has 2.9 GB free).
 **Game case (AGENTS.md rule 14): FFX only.** `ffx2-atb-golden`, `ffx2-hit-closes-menu`, `ffx2-menu-cancel-delay`, `chapters/den-of-woe-carry` and
 `ff7-golden` pass unchanged; the FFX-2 and FF7 engines reach none of the files this merge touched but `src/battle/common/types.ts` (interfaces and optional
@@ -145,6 +145,10 @@ Files: `D:\Tools\ffx-parity\rc2-w2\ffx-500-merged.json`, `ffx-12-merged.json`, `
   `party-face-manifest`, `chapters/yojimbo-content`, `chapters/leblanc-party-sprites`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapter-meta` (release candidate 1's run on the release art had 0 failures). **The other three were seed pins the merge moved**, re-pinned in
   the merge commit (M.3) and each green when run alone on the final tree: `strategy-guide` ("explains most", seed 42 to 1), `chapters/sin-fins-core-bench` (the Ether seam, seeds 1 to 4 to 1, 2, 3 and 9) and `chapters/evrae-breath-hold` (seed 8 to 3). The suite was not repeated: one run, as the brief asks.
 * Mutation checks of the new test file: 10 mutants of the seams, 10 caught, each restored byte for byte (sha1 checked).
+* **Nothing was lost from either side, proved by file sets** (`git diff --name-only`): the merge `4197e783` differs from release candidate 1 (`931613a8`) in 110 files = 95 of the 96 files W2 changed + 15 resolution files named here (the five AI modules
+  `ai/opening.ts`, `ai/possession-setup.ts`, `ai/macalania-rules.ts`, `ai/game-rolls.ts`, `ai/command-formula.ts`; `orders.ts`, `targeting.ts`; the gaze fixture; `evrae-breath-hold`, `sin-fins-core-bench`, `strategy-guide`, `re-parity-ai-bfa`, `re-parity-ai-possessed`, `re-parity-ai-yunalesca`;
+  the new merge test). The one W2 file that equals release candidate 1 is `tests/unit/ffx-parity-measure.test.ts`, where the scripts' seed parser is kept on purpose (M.1). It differs from W2 (`06210431`) in **every one of the 992 files release candidate 1 changed**, so no change of the
+  other side is missing either.
 
 ### M.7 Open items, and decisions for Bailey
 
