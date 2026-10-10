@@ -21,6 +21,7 @@ import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
 import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
 import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
+import { EXPERIMENT_DOOR_CHAPTER, EXPERIMENT_DOOR_WORD } from './frontend/experimentDoor.ts';
 import { ff7ExperimentReady } from '../experiments/ff7Flag.ts';
 import { experimentRecord } from '../experiments/experimentRecords.ts';
 
@@ -101,6 +102,7 @@ export class ChapterSelectScreen extends Screen {
   /** The secret door (Bailey's approved option A); fed by keys, taps and pad buttons, shows nothing. */
   private door = new SecretDoor();
   private leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD); // the second door, to the hidden Leblanc experiment (`frontend/leblancDoor.ts`): its word, typed; shows nothing either
+  private experimentDoor = new WordDoor(EXPERIMENT_DOOR_WORD); // the third door, to the hidden Experiment chapter (`frontend/experimentDoor.ts`): its word, typed; shows nothing either
   private wordKey = false; // a later letter of that word was just typed: the board leaves this frame's presses alone (the A of "leblanc" is `left`)
   private opening: ChapterId | null = null; // its last letter was just typed: the door opens on the next frame, which can take that press (C is START; see `handleInput`)
   private eyebrow: HTMLElement | null = null;
@@ -297,6 +299,7 @@ export class ChapterSelectScreen extends Screen {
   private armDoor(): void {
     this.door = new SecretDoor();
     this.leblancDoor = new WordDoor(EXP_LEBLANC_DOOR_WORD);
+    this.experimentDoor = new WordDoor(EXPERIMENT_DOOR_WORD);
     window.addEventListener('keydown', this.onDoorKey);
     this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');
     this.eyebrow?.addEventListener('click', this.onDoorTap);
@@ -314,6 +317,8 @@ export class ChapterSelectScreen extends Screen {
     if (this.door.feedKey(e.key, at) === 'open') this.openDoor();
     if (this.leblancDoor.feedKey(e.key, at) === 'open') this.opening = EXP_LEBLANC_DOOR_CHAPTER; // the board is shut from now (`confirm`, this handler); the door opens on the next frame
     if (this.leblancDoor.continued) this.wordKey = true;
+    if (this.experimentDoor.feedKey(e.key, at) === 'open') this.opening = EXPERIMENT_DOOR_CHAPTER; // the same, for the Experiment's word
+    if (this.experimentDoor.continued) this.wordKey = true;
   };
 
   private readonly onDoorTap = (): void => {

@@ -53,6 +53,7 @@ import { SIN_FINS_CORE } from './chapter-sin-fins-core.ts';
 import { SIN_FACE } from './chapter-sin-face.ts';
 import { UNLISTED_CHAPTERS } from './chapters-unlisted.ts';
 import { experimentalLeblanc } from './chapter-exp-leblanc.ts'; // the Leblanc preview (FFX-2 only; below)
+import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts'; // the Experiment, a hidden chapter (FFX-2 only; below)
 
 /**
  * Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden FF7 experiment `'ff7-guard-scorpion'`, 2026-09-27,
@@ -63,10 +64,11 @@ export type ChapterId =
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc'; // the last: the Leblanc preview (2026-10-06), hidden (no card; its word on chapter select, `app/screens/frontend/leblancDoor.ts`), never in `SaveData.chapters`
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc'
+  | 'ffx2-experiment'; // the last two: the Leblanc preview (2026-10-06) and the Experiment (2026-10-10), hidden (no card; each has its word on chapter select, `app/screens/frontend/leblancDoor.ts` and `experimentDoor.ts`), never in `SaveData.chapters`
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
-export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc'>;
+export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-experiment'>;
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -355,8 +357,8 @@ export const FFX2_LEBLANC: Chapter = {
 };
 
 export { SEYMOUR_ANIMA_MACALANIA, EVRAE_AIRSHIP, YOJIMBO_CAVERN, UNLISTED_CHAPTERS }; // the last: registered, not listed (`./chapters-unlisted.ts`)
-/** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card: the Leblanc preview, Chapter VI's mission in new paintings (FFX-2 only), reached by typing its word on chapter select. */
-export const EXPERIMENT_CHAPTERS: readonly Chapter[] = [experimentalLeblanc(FFX2_LEBLANC)] as const;
+/** Experiments found by `getChapter` but not in `CHAPTERS` (every count stays 18) and with no board card: the Leblanc preview, Chapter VI's mission in new paintings (FFX-2 only), and the Experiment, the Machine Faction's weapon with the upgrades the player chooses (FFX-2 only), each reached by typing its word on chapter select. */
+export const EXPERIMENT_CHAPTERS: readonly Chapter[] = [experimentalLeblanc(FFX2_LEBLANC), FFX2_EXPERIMENT] as const;
 
 /** All eighteen, in play order (IX listed 2026-09-24, X, XII, XIII, XIV 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29); an id in `LOCKED_CHAPTER_IDS` shows as COMING. */
 export const CHAPTERS: readonly Chapter[] = [

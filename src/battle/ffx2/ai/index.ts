@@ -34,6 +34,8 @@ import { paragonOversoulScript } from './paragon-oversoul.ts';
 import { denOfWoeScripts } from './den-of-woe.ts';
 // Ixion at Djose (FFX-2 Chapter 3 finale; registered, unlisted behind a switch).
 import { x2IxionScript } from './ixion.ts';
+// The Experiment at Djose Temple (FFX-2 Chapter 5; the hidden chapter "The Experiment"): one script per Special level.
+import { experimentScripts } from './experiment.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -71,6 +73,7 @@ const SCRIPTS: readonly AiScript[] = [
   tremaArenaScript,
   ...denOfWoeScripts,
   x2IxionScript,
+  ...experimentScripts,
   idleScript,
   basicAttackScript,
 ];

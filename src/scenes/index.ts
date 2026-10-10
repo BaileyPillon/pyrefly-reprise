@@ -36,6 +36,8 @@ import { buildGardenOfPainScene, GARDEN_OF_PAIN_SLOTS } from './garden-of-pain.t
 import { buildDenOfWoeScene, DEN_OF_WOE_SLOTS } from './den-of-woe.ts';
 import { buildDjoseChamberScene, DJOSE_CHAMBER_SLOTS } from './djose-chamber.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
+import { buildExperimentGroundsScene, EXPERIMENT_GROUNDS_SLOTS } from './experiment-grounds.ts'; // the Experiment's grounds (FFX-2 only, hidden chapter)
+import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
 import { buildHighbridgeScene, HIGHBRIDGE_SLOTS } from './highbridge.ts';
 import { buildViaPurificoScene, VIA_PURIFICO_SLOTS } from './via-purifico.ts';
 import { buildSector1ReactorScene, SECTOR1_SLOTS } from './sector1-reactor.ts';
@@ -184,6 +186,9 @@ SCENES.set('farplane', {
  */
 SCENES.set('leblanc-last-room', { key: 'leblanc-last-room', title: 'Chateau Leblanc — the Last Room',
   build: buildDemoScene, slots: LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
+/** The Experiment's fight (FFX-2 only, hidden chapter): the Machine Faction's grounds at Djose Temple, on a provisional plate (`./experiment-grounds.ts`, `data/experiment-plates.ts`). */
+SCENES.set(EXPERIMENT_GROUNDS_PLATE, { key: EXPERIMENT_GROUNDS_PLATE, title: "Djose Temple — the Machine Faction's grounds",
+  build: buildDemoScene, slots: EXPERIMENT_GROUNDS_SLOTS, placeholder: false });
 /** The experimental Leblanc chapter's room (FFX-2 only): the same room over its own plate and art namespace (`./exp-leblanc-last-room.ts`). */
 SCENES.set(EXP_LEBLANC_SCENE, { key: EXP_LEBLANC_SCENE, title: 'Chateau Leblanc — the Last Room (new art)',
   build: buildDemoScene, slots: EXP_LEBLANC_LAST_ROOM_SLOTS, placeholder: false });
@@ -277,6 +282,7 @@ export const SCENE_FACTORIES: Record<string, SceneFactory> = {
   'via-purifico': buildViaPurificoScene,
   'den-of-woe': buildDenOfWoeScene,
   [DJOSE_CHAMBER_PLATE]: buildDjoseChamberScene, // Chapter XVI (FFX-2 only); the provisional plate's key
+  [EXPERIMENT_GROUNDS_PLATE]: buildExperimentGroundsScene, // the Experiment (FFX-2 only, hidden chapter)
   'sector1-reactor': buildSector1ReactorScene, // FF7 only
 };
 
