@@ -1,6 +1,6 @@
 # Re-parity W5: the FFX Overdrive gauge, the aeons and Steal follow the game's code
 
-Status: **built, committed and pushed on branch `re-parity-w5` (from `origin/re-parity-w2` `919f2c78`, 2026-10-10); not merged into another branch, not deployed.** Track `re-parity`
+Status: **built, committed and pushed on branch `re-parity-w5` (the full suite did not finish and one seed pin, advisor-note, is open: sections 8 and 9) (from `origin/re-parity-w2` `919f2c78`, 2026-10-10); not merged into another branch, not deployed.** Track `re-parity`
 ([plan](../plans/re-parity.md), [paper preflight](../plans/re-parity-review.md)). Owner: Bailey. **Game case: FFX only** (AGENTS.md rule 14). FFX-2 and FF7 import none of the modules this
 batch touched; `ffx2-atb-golden` and `ff7-golden` pass unchanged, and no file under `src/battle/ffx2` or `src/data/ffx2` changed.
 
@@ -17,6 +17,8 @@ Commits (all on `re-parity-w5`; the last one is this note's own):
 | `ba76d164` | FFXEngine.init keeps the events a battle's build announces until the engine holds its context, so a link that opens with a member under half HP no longer throws (FFX only) |
 | `3ffb2907` | Engine-level parity tests for the FFX gauge, Steal and aeons; ffx-engine-golden re-baselined once ("game-code parity"), every moved link explained; Macalania A-8 re-pinned (FFX only) |
 | `6b3ba890` | The gauge parity test reaches Rook and Dancer (two mutants of the outcome hook survived a narrower sample); the aeons' chain test gets its own timeout (FFX only) |
+| `c9192b45` | Handoff for re-parity W5 and its notes: the status of each difference row, the CONTRACT-CHANGES entry, and the corrections to the notes that gave an aeon an equipment crit bonus of 0 and a wiped aeon 3 battles (FFX only; records only) |
+| (this commit) | The final text of this note: the full-suite state and the open items it leaves (FFX only; records only) |
 
 ## What the engine does now
 
@@ -40,7 +42,7 @@ Commits (all on `re-parity-w5`; the last one is this note's own):
   with Pickpocket, always with Master Thief). A Mug that missed draws the roll and the miss cancels the steal.
 * **One crash fixed on the way** (`engine.ts#init`): a battle that opens with a member under half HP (a chain's later link, no heal between) threw `init(setup) has not been called`, because
   `buildBattle` announces the member's Critical status before the engine holds its context. The engine now keeps what the build announces and logs it once the context exists. Found by
-  `chapters/isaaru-bench` after wiped aeons began to stay away (Yuna, with no aeon left, takes the hits and arrives hurt); `tests/unit/ffx-engine-init-critical.test.ts`.
+  `chapters/isaaru-bench` (the roster-order line, roughly one chain in seven of 200 seeds) once this batch changed how the chain plays out; the cause of the throw is older than this batch (the base's own runs never opened a link with a member under half HP and no Critical status); `tests/unit/ffx-engine-init-critical.test.ts`.
 
 ## 1. Every kernel input and its engine source
 
@@ -212,7 +214,21 @@ The only row beyond the sampling band of 12 seeds is Chapter IX.
 
 ## 8. Full suite
 
-@@SUITE@@
+One run of the whole unit suite (`--testTimeout=60000 --maxWorkers=4`, log `D:\Tools\ffx-parity\rc2-w5\fullsuite.log`) was started on the committed tree at 14:12 EDT. **The machine was saturated by other agents' runs (16 cores at 100 percent, about 90 node
+processes) and the suite crawled at 4 to 5 files a minute: **it had not finished when this note was written, and the lane stops at the push deadline**.** What it had reported: **242 of 1,016 files** (216 passed, 2 skipped, 24 failed).
+The 21 art-only files this worktree always has (no `public/art`) are all among the failures and are the only ones expected: `ui-portrait-face-crop`, `trema-ship-content`, `art-ref-defaults`, `pause-remake`, `isaaru-ship`, `den-of-woe-ship-content`, `chapter-meta-seymour-anima-macalania`,
+`chapter-meta-evrae`, `natus-ship-scene`, `natus-ship-content`, `leblanc-art`, `fallen-aeons-ship-content`, `chapter-meta-ffx2-leblanc`, `cutscene-story-poses`, `fallen-aeons-ship-scene`, `den-of-woe-ship-scene`, and five that fail on import for the missing `public/art/manifest.json`
+(`party-face-manifest`, `chapters/yojimbo-content`, `chapters/leblanc-party-sprites`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapter-meta`). **The three other failures so far:**
+
+* `advisor-note` ("still says when to spend a revive it is holding back"): a seed pin, not a regression of the advisor. Its existence check reads the first twenty decisions of Chapter I seed 108 for the sentence "then raise"; the pin has moved with every
+  batch that moved the draws (2026-09-19, 2026-10-09 AI-Seymour, 2026-10-10 W2). On this branch none of the seeds 1 to 700 shows the sentence with the card fault free (a scan, 20 decisions a seed). Four scans of seeds 701 to 2300 (one process per 400 seeds) were still running at 14:54 with no hit.
+  **Open: re-pin to the first seed that shows it (see open item 10).** The rest of that file passes.
+* `chapters/sin-fins-core-bench` ("the sensible line never leaves a dry Auron Defending"): a timeout under the load (60 s); run alone it passes (4 passed, 2 skipped).
+* `live-url-follows-host` (one of 14 failed in the suite): nothing to do with a battle; run alone it passes (14 of 14), so it was the load too.
+
+Evidence that does not depend on that run: `tsc --noEmit` clean; the 13 targeted files (the new engine-level tests, `ffx-aeons`, `ffx-engine-golden`, `chapters/macalania-engine`, `chapters/isaaru-bench`, the kernel files `parity-ffx-overdrive`, `parity-ffx-aeon-party`, `parity-ffx-steal-rewards`, `parity-ffx-aeon-stats`) pass, 174 tests;
+and an earlier run of the **305 test files that mention aeons, Overdrive or Steal** (2026-10-10 13:07, the first W5 agent's tree plus the golden still on the old table): its only non-art failures were the golden (re-baselined since), `macalania-engine` A-8 (re-pinned since) and `isaaru-bench` (the `init` crash, fixed since; it passes).
+The 12-seed measurement was re-run on the committed source and is byte-identical to the one measured before the commits.
 
 ## 9. Open items
 
@@ -227,6 +243,8 @@ The only row beyond the sampling band of 12 seeds is Chapter IX.
 7. **Revival's gauge gain**: Phoenix Down and Life run the Healer hook with the record's HP amount (the engine's restore of half the maximum HP when the record computes 0 is not shown to the hook).
 8. **`frozenPartyCtb` and `aeonStoredGauge`** are dead runtime fields (section 6).
 9. **No browser check** (no UI file changed; the worktree has no `public/art`): what a player sees is the Overdrive bars filling at other rates and an aeon's bar in steps of 5 percent (unchanged).
+10. **`advisor-note.test.ts` needs a new seed** (section 8): its existence check for the "then raise" sentence reads Chapter I seed 108, which no longer shows it; a scan of seeds 1 to 700 found none on this branch. The scan to re-pin it is a few minutes of CPU on a quiet machine: for seeds from 701 up, `walk('seymour-flux', [seed], 20, true)` until the faults are empty and a card note matches `/note="[^"]*then raise/`.
+11. **The rest of the full suite** (section 8) was not finished; run it once on a quiet machine: `node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --testTimeout=60000 --maxWorkers=4`.
 
 ## 10. Decisions for Bailey
 
