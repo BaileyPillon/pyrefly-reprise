@@ -1,7 +1,7 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 58 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 59 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
@@ -9,10 +9,46 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
-## 2026-10-09 · Release candidate 1: Final Fantasy X and X-2 battles from the game's own code (not live)
+## 2026-10-09 · Release 39.4.3 on echoesofspira.com
 
-Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, release 39.4.2, folded with the release driver's final build a74b2b8e into one tree and pushed to the branch; not deployed, no review run, no production build of the combined tree)
+Address: https://echoesofspira.com (main 931613a8, bundle KHicpkvR)
 
+- **Both:** this release is two builds in one tree. The presentation half is the real heights, the
+  real boss sizes, the folded guide, Yunalesca at her wing tips and Bailey's picked poses; the
+  battle-rules half is release candidate 1 of the work that reads the games' own programs: FFX's and
+  FFX-2's hit, critical-hit and damage rules, the compiled boss scripts of every FFX chapter, and
+  three of his answers (Sin's 12 turns, Evrae's Delay, Mega Flare at the game's power). The
+  presentation half moves no battle number, and the battle half changes no art, audio or save.
+- **Both:** the party stands at the real games' heights, measured from Bailey's own copies of FFX
+  and FFX-2: Kimahri is the tallest and Yuna and Rikku the shortest. Several first-wave bosses now
+  stand at their real sizes too, in the spots where they always stood, which is his pick "Old
+  spacing, real sizes": Trema, Isaaru's aeons, the Den of Woe shades, the Magus Sisters, Shiva and
+  Ixion.
+- **FFX:** the giants at Bailey's picked sizes. Seymour Flux is at 60 percent of his real size, with
+  Mortiorchis scaled with him (Chapter I); Braska's Final Aeon is at 75 percent, with the Yu Pagodas
+  behind him as the game arranges them (Chapter III); Seymour Natus is at his real size (Chapter X);
+  Sinspawn Genais and Sin's Core are at their real sizes, 20 percent bigger and 27 percent smaller
+  (Chapter XVII). No fiend stands nearer the party than before.
+- **FFX-2:** the giants. Bahamut (Chapter IV) and Paragon with Oversoul (Chapter XIII) are at their
+  real size on a desktop, with the camera drawn back to fit them, and at 70 percent on a phone;
+  Anima is at 70 percent (Chapter XI).
+- **FFX:** Lady Yunalesca's first form is drawn at her model's full height, wing tips included, so
+  she stands about as tall as the party (about 0.93 of it on a desktop and 1.02 on a phone; she was
+  about one and a half times it). This is Bailey's pick 3. Her second and third forms are unchanged.
+- **FFX:** Seymour Omnis's painted discs turn through the game's own ring, Fire, Ice, Water, Thunder
+  (the old order had Ice and Water swapped): a spell turns a disc one step forward and a physical
+  blow one step back. The rules behind it are in the Chapter XII line below.
+- **FFX:** in Chapters I and III on a desktop or laptop the strategy guide starts folded, so the
+  full NEXT BEST MOVE card has room beside the bigger bosses. Press G to open the guide; while it is
+  open the card becomes a one-line tip. This is Bailey's pick 2. Phones and the other chapters are
+  unchanged.
+- **FFX-2:** on a phone the cure hint card is a single line, so in Chapter IV it no longer covers
+  the girls.
+- **Both:** 112 of Bailey's 115 picked poses from the overnight art are in the game: the FFX heroes'
+  Defend paintings for Tidus, Wakka, Lulu and Kimahri (with Kimahri's broken horn) and 108 FFX-2
+  dressphere poses for Yuna, Rikku and Paine. Three of those 108 replace earlier approved paintings:
+  Yuna's White Mage hurt and knocked-out poses and Rikku's Dark Knight hurt pose; they await
+  Bailey's word (see Disclosed, presentation).
 - **FFX:** every attack, spell, item and Overdrive now decides whether it hits, whether it is a
   critical hit and how much damage it does the way the game's own program does, read from Bailey's
   Steam copy and checked against it: the game's accuracy formula for each command, its order of
@@ -96,7 +132,7 @@ Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, releas
   12th turn (the chapter used 13), Sin takes the first turn of the fight, after his second pull Use,
   items, Wakka's reels and the aeon Overdrives of reach 1 reach him while melee does not, and the
   Gaze counter rises on every hit from the first. **Now almost unwinnable for the built-in
-  auto-battle line: 3 of 500 seeds (124 on this candidate before the chapter's script went in, 151
+  auto-battle line: 3 of 500 seeds (124 on the candidate before the chapter's script went in, 151
   on 39.4.2).** Bailey chose to ship the game's 12 ("Ship 12, retune our line later") and to rework
   our own strategy line and the party preset in a later batch. The HUD clock opens at 12; the
   strategy guide card still says 13 (known stale text until that batch).
@@ -185,23 +221,22 @@ Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, releas
   girls they hit several times. Chapters IV (500), VI (491; 488) and XVI (500; 497) do not move for
   the shipped line (Chapter IV's side routes do: Mega Flare at the game's power 14 lets a party with
   no Shell or no Breaks live through it).
-- **Bailey's choices behind this candidate:** Chapter I stays 1:1 with the game's script ("Keep 1:1",
+- **Bailey's choices behind the battle rules:** Chapter I stays 1:1 with the game's script ("Keep 1:1",
   his answer twice, Cross Cleave never missing among it), and where the game's script and one of his
   earlier Seymour decisions that rested on an estimate disagree, the script stands ("Script wins").
   On 2026-10-09 he also chose, for the three questions the boss scripts raised: Sin's clock stays at
   the game's 12 turns and our own strategy line is reworked later ("Ship 12, retune our line later");
   delaying Evrae starts his Haste phase ("Turn it on"); Mega Flare uses the game's 14 ("Use 14 from
   the files").
-- **Both:** nothing else moved for the player in battle. FF7 is unchanged: its engine logs are byte for byte
-  the same, and no file its engine or data can reach changed except one shared type file, whose
-  additions are types only; the FFX engine reaches none of the FFX-2 batch's files either. This
-  candidate changed no art, audio or saves; the only interface edits are the Omnis readout strip, the
-  enemy-intent previews' texts, Sin's turn clock (it opens at 12 and no longer prints "our estimate"),
-  and the chances the FFX-2 battle menu and move advisor print. **It is built together with the
-  release driver's build** (the heroes' real heights, the real boss sizes and spacing, the folded
-  strategy guide, Bailey's 115 picked poses, the Omnis discs seated to the game's ring), which is
-  described in that build's own entry and moves no battle number: the combined tree plays every FFX
-  and FFX-2 chapter exactly as this candidate did, on all 500 seeds of each.
+- **Both:** apart from what is listed above, the battle rules moved nothing else for the player. FF7
+  is unchanged: its engine logs are byte for byte the same, and no file its engine or data can reach
+  changed except one shared type file, whose additions are types only; the FFX engine reaches none
+  of the FFX-2 batch's files either. The battle-rules half changed no art, audio or saves; its only
+  interface edits are the Omnis readout strip, the enemy-intent previews' texts, Sin's turn clock
+  (it opens at 12 and no longer prints "our estimate"), and the chances the FFX-2 battle menu and
+  move advisor print. The presentation half (the heights, the sizes, the folded guide, Bailey's
+  poses) moves no battle number: the combined tree plays every FFX and FFX-2 chapter exactly as the
+  battle-rules candidate did, on all 500 seeds of each.
 - **Disclosed, FFX:** Chapter I is now won by the shipped line on every test seed (one sourced rule,
   the Mortiorchis copying Flux's turn counter, is the whole move) and Chapter XII by 85 percent; the
   Omnis strip still prints "colour order: our estimate" although the ring and the reset order are both
@@ -225,6 +260,34 @@ Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, releas
   rows); no guide text was rewritten, so the Chapter IV guide card still prints the old Mega Flare
   figure ("1,152 becomes 192", from the 24); the printed chances, the Pilfer Gil banner and the
   pause screen's chain count had no real-input check in a browser yet.
+- **Disclosed, presentation:** the three replaced paintings (Yuna's White Mage hurt and knocked out,
+  Rikku's Dark Knight hurt) ship as Bailey picked them and **await his word**: keep the new ones or
+  restore the old, which are kept safe. Three more of his picks are held back: the Defend paintings
+  of Yuna and Rikku (FFX) and of Rikku's Dark Knight (FFX-2) drew about a third taller than the same
+  figure's ready pose, so Defend plays the ready painting, as on live, until the visual pass fixes
+  them. Five of the new knocked-out poses lie shorter than they should (0.53 to 0.68 of the idle
+  height: Paine Samurai, Rikku Alchemist, Rikku Berserker, Rikku White Mage and Paine Gunner). The
+  three weak Rikku rows (Dark Knight knocked out, Songstress follow and defend) were not installed;
+  new renders are being made. In Chapter III's later fights (links 2 to 4) the pagodas stand about
+  as tall as the possessed aeons: Bailey kept this as built, and the aeons get measured later. At
+  1440x900 and 1024x768 the Chapter I and III card prints one line less than at 1600x900.
+- **Disclosed by the focused review (F931-01 to F931-05; none is a regression against 39.4.2):**
+  F931-01 (major, feel): the motion-continuity check (CHK-027) fails in all five chapters played,
+  with knocked-out party members cutting hard to the lying pose, one-frame jerks of 40 px or more
+  and double-image pose swaps; it fails on the live game too and worse (jerks over 40 px: 24 and 33
+  live against 15 and 5 here, in Chapters IV and I). F931-02 (major, balance): Chapter XVIII is won
+  by 3 of 500 seeds of the built-in line and no real-input win was reached (the review's
+  advisor-driven routes lost at seeds 1 and 118); the 12-turn rule is Bailey's own choice, so it is
+  disclosed and not a defect of the build. F931-03 (polish): known stale texts, the guide cards of
+  Chapters I, III, VIII, IX, X, XVII and XVIII, the Chapter IV Mega Flare figure and the Omnis "our
+  estimate" label. F931-04 (polish): the three replaced paintings await Bailey and three Defend
+  paintings are held. F931-05 (polish): the unreleased title painting echo.webp ships unused, as it
+  did on live. Its two suggestions: the Paragon at 1600x900 is cropped by the frame at its head and
+  right (the colossus framing Bailey picked; it fits better at 2000x1012), and 61 modules are built
+  but wired to nothing, 37 of them the documented unwired FFX and FFX-2 kernels. The live check
+  added one observation: on a first-run profile the Auron coach card swallows the first Enter on the
+  command menu. The disclosures carried from earlier releases (see the 39.4.2 entry) were not
+  re-tested by this build's focused review.
 - **Still the old rules, FFX:** turn order, status infliction and durations, Delay and the per-turn
   ticks; the Overdrive gauge, Steal, Pilfer Gil, rewards, drops and the aeons' own stats; the order
   menu of Chapters VIII and XVII (the game offers one Trigger Command at a time, ours keeps "last
@@ -235,29 +298,55 @@ Address: none yet (branch re-parity-rc1: this candidate on main 00fc1bbf, releas
   Reflect bounce; the boss scripts of every FFX-2 chapter (Bahamut, Vegnagun and Shuyin, the Leblanc
   Syndicate, Fallen Aeons, Paragon and Trema, Den of Woe, Ixion); the game's own random number
   generators.
-- **How it was checked:** tsc clean; the FFX engine's whole-chain logs on 18 pinned seeds match
-  each lane's own record: 12 are byte for byte the earlier lanes' own, the six of Chapters VIII, IX
-  and XIV equal the boss-script lane's own to the byte, and one chain link of an earlier merge moved
-  two damage numbers with the merged hook order (explained and proved in
-  docs/handoff/re-parity-rc1.md); the FFX-2 batch and the fifth lane move none of them; the FF7 logs
-  pass unchanged; the FFX-2 engine's four golden logs (137 pinned replays) were re-baselined by its
-  batch, with their outcomes listed in docs/handoff/re-parity-w3.md, reproduced on the merged tree,
-  and had their Chapter IV rows (30 hashes of the main one, 3 and 12 in the other two) re-pinned once
-  for Mega Flare at the game's power 14, with the first differing event named; the full unit suite
-  once on the exact tree of the five merges (979 files, 15,289 tests; 3 failures that also failed on
-  the untouched 39.4.2 tree: art installed after that release and not yet registered); 500 seeds a chapter through every
-  FFX and every FFX-2 chain (the boss-script lane's five chapters equal its own run seed by seed,
-  outcome, party turns and engine turns, on all 2,500 seed-runs; the FFX-2 chapters keep every seed's
-  win or loss, Chapter IV moving only in turns with Mega Flare); a production build of the candidate
-  before the FFX-2 batch and the fifth lane were merged (bundle index-BcR9TGJ3.js); none of the
-  combined tree (the release driver cuts the final build). **After the release driver's build was
-  folded in:** tsc clean; all 18 FFX logs, the four FFX-2 goldens and the FF7 golden reproduce with
-  nothing re-pinned (the only battle code in that build is Omnis's disc ring, which this candidate
-  already had from the game's own script); the Omnis bench and 500 seeds a chapter through every FFX
-  and every FFX-2 chain equal the unfolded candidate on every seed; the full unit suite once on that
-  exact tree (1,010 files, 15,706 tests: 0 failures; the three art-drift failures are gone with the
-  final art). Details, the conflicts of the six merges and the decisions still open:
-  docs/handoff/re-parity-rc1.md.
+- **Not in this release:** release 39.5 (the second title screen, the CHANGELOG button and build
+  number on the title, the chapter-select alternates and the voices), the second game-rules build
+  (turn order, status and Overdrive), the visual and feel fixes, and the fixes to the stale guide
+  texts.
+- **Deploy notes:** it shipped under Bailey's owner override ("You can go ahead and ship it when
+  it's ready I'll be asleep") because 46 builds already owe a deep review and the deploy gate would
+  otherwise refuse; the focused review's SHIP came first. The deploy ran with the preflight tests
+  skipped (the full suite had run in the release tree) and the dirty tree allowed; 567 files were
+  uploaded (4,518 were already there) in 449 seconds and the Worker version is 2e1f0cb8.
+  docs/deploys.log records 2026-10-10T03:59:18Z, which is 23:59 EDT on 2026-10-09. The deep review
+  is owed on this build, which carries 46 earlier builds; it waits behind tonight's art run.
+- **How it was checked:** on the exact build that shipped (main 931613a8, dist bundle
+  index-KHicpkvR.js, 5,084 files): tsc clean (3,330 files); the full unit suite once in the release
+  tree, 1,003 files passed and 7 skipped, 15,645 tests, 0 failed; the presentation half by its own
+  lane on a74b2b8e (952 files, 14,104 tests, 0 failed). The battle-rules half by its own session,
+  before and after the fold: the FFX engine's whole-chain logs on 18 pinned seeds match each lane's
+  own record (12 byte for byte the earlier lanes' own, the six of Chapters VIII, IX and XIV equal
+  the boss-script lane's own to the byte, and one chain link of an earlier merge moved two damage
+  numbers with the merged hook order, explained and proved in docs/handoff/re-parity-rc1.md); the
+  FFX-2 engine's four golden logs (137 pinned replays) were re-baselined by its batch, with their
+  outcomes listed in docs/handoff/re-parity-w3.md, and had their Chapter IV rows (30 hashes of the
+  main one, 3 and 12 in the other two) re-pinned once for Mega Flare at power 14; the FF7 logs pass
+  unchanged; 500 seeds a chapter through every FFX and every FFX-2 chain. After the fold all 18 FFX
+  logs, the four FFX-2 goldens and the FF7 golden reproduce with nothing re-pinned, the Omnis bench
+  and the 500 seeds equal the unfolded candidate on every seed, and its full suite read 1,010 files
+  and 15,706 tests with 0 failures. A focused review of the exact build (about 150 minutes) said
+  SHIP, changed area FAIL (CHK-027 and Chapter XVIII, named above): every shipped art file equals
+  its master (art-derive verify and audit, verify-approved 916 ok, 0 mismatched, 0 missing), 24
+  first menus with a real attack at 1600x900 and 2000x1012 over nine chapters and 6 phone first
+  menus, five full real-UI fights with the continuity harness (FFX-2 IV and V won, FFX I won, II and
+  XVIII lost) beside the live game, and Chapter XVIII's 500 seeds; seven FFX chapters and four FFX-2
+  chapters were not played through and nine mandatory checks stay unverified, which the deep review
+  covers. The deploy compared 608 files byte for byte on both addresses. The live check (about 50
+  minutes) compared all 5,084 shipped files byte for byte and played FFX's Chapter I from the title
+  to a battle by real keys (attack and target, Escape, G, pause, the panels, the boss music, a
+  settings change surviving a reload) with 0 console errors and 0 responses of 400 or more, and said
+  PASS.
+
+![The seven heroes in one row in Chapter I's room, the old heights against the real games' heights](docs/screenshots/r3941-heights/lineup-before-after.jpg)
+
+*Both games: the seven heroes staged in one row at one depth in Chapter I's room under the scene's own camera, so height is the only thing that differs: the old heights in one half and the heights measured from Bailey's own copies of FFX and FFX-2 in the other.*
+
+![FFX: the first command menu of Chapters I, III, X and XVII, the live game against the giants at the picked sizes](docs/screenshots/r3942-giants-ffx/before-after.jpg)
+
+*FFX: the first command menu of the giants' chapters, the live game against the giants at Bailey's picked sizes: Seymour Flux with Mortiorchis, Braska's Final Aeon with the Yu Pagodas, Natus, and Sinspawn Genais and Sin's Core.*
+
+![FFX-2: the giants' chapters, the live game against the new sizes](docs/screenshots/r3942-stage/giants-x2-before-after.jpg)
+
+*FFX-2: the live game against the new sizes: Bahamut (Chapter IV) and Paragon with Oversoul (Chapter XIII) at their real size on a desktop with the camera drawn back, and Anima (Chapter XI) at 70 percent.*
 
 ## 2026-10-08 · Release 39.4.2 on echoesofspira.com
 
