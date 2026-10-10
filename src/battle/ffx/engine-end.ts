@@ -17,6 +17,7 @@ import { drainScriptReactions } from './ai/reaction-drain.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { counterInputs } from './counter-inputs.ts';
 import { aeonDuelLost, dismissAeon } from './aeons.ts';
+import { settleAeonRecovery } from './adapt/aeon-party.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
 
 /** What the end-of-turn helpers need from the facade. */
@@ -211,6 +212,9 @@ export function finish(h: EndHooks, outcome: BattleResult['outcome']): void {
   const ctx = h.ctx;
   if (ctx.state.result) return;
   const result = buildBattleResult(ctx, outcome, h.nextGroupId);
+  // The battle's own save counts down every fallen aeon's recovery (`FUN_00785fc0`; re-parity W5): the next link, or the next battle,
+  // meets the count one lower, and an aeon whose count reached 0 stands up at full HP and MP.
+  settleAeonRecovery(ctx);
   ctx.state.result = result;
   ctx.rt.finished = true;
   h.push(outcome === 'victory' ? { type: 'victory', result } : { type: 'defeat', result });

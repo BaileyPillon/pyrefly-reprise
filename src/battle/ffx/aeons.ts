@@ -2,35 +2,37 @@
  * Summoning, dismissal and Grand Summon [ffx-combat-core §6].
  *
  * An aeon **replaces the whole active party**: the party leaves the field and
- * every party CTB counter and status duration freezes until the aeon goes.
+ * every party CTB counter and status duration is parked until the aeon goes.
  * That is why `Side` has a third member — while `state.aeonId` is set, the aeon
  * is the only present friendly actor.
+ *
+ * **The transitions are the game's** (re-parity W5; FFX only): `adapt/aeon-party.ts` runs `kernel/aeon-party.ts` on the field as it
+ * stands and this module carries out what it decided. Nobody's counter changes on the way out or back (so the summoner keeps the
+ * recovery the Summon cost her; the old thaw gave her counter back as it was before the Summon), whoever a leaver provoked
+ * is released and a Threaten pair it was an end of is broken, the aeon acts next, a Grand Summon holds the aeon's gauge full, and a
+ * wiped aeon starts the recovery count its `ply_rom` record gives (`aeon-gear.ts`; settled battle by battle at the end of each
+ * battle, `adapt/aeon-party.ts#settleAeonRecovery`).
  */
 
 import type { CombatantId, FFXCombatant } from '../common/types.ts';
-import { type Ctx, friendlies, rtOf, tryActor } from './state.ts';
+import { type Ctx, rtOf, statusOf, tryActor } from './state.ts';
 import { ejectActor } from './hp.ts';
 import { releaseThreatenLink } from './adapt/threaten.ts';
+import { aeonSummonable, dismissOutcome, summonOutcome } from './adapt/aeon-party.ts';
+import { slotIfAny } from './adapt/od-world.ts';
+import { aeonGearOf } from './aeon-gear.ts';
+import { removeStatus } from './statuses.ts';
 import { setGauge } from './overdrive.ts';
-import { baseCtb } from './math.ts';
 import { duelLost, lockedMirrorOf } from './aeon-duel.ts';
 
 /**
- * Battles a KO'd aeon must sit out before it may be summoned again.
- * No source publishes a figure; 3 is the authored value [ffx-combat-core §6.1].
- */
-export const AEON_REVIVE_BATTLES = 3;
-
-/**
- * Aeons Yuna may summon right now. An aeon under an aeon duel's **mirror
- * lock** is not one (`./aeon-duel.ts`, Chapter XIV only; research
- * ffx-isaaru-bevelle §1.2 [verified: 2 sources]).
+ * Aeons Yuna may summon right now: HP above 0 and no recovery count left (`FUN_0079a080`). An aeon under an aeon duel's **mirror
+ * lock** is not one (`./aeon-duel.ts`, Chapter XIV only; research ffx-isaaru-bevelle §1.2 [verified: 2 sources]).
  */
 export function availableAeons(ctx: Ctx): FFXCombatant[] {
   const out: FFXCombatant[] = [];
   for (const [key, aeon] of ctx.rt.aeonRoster) {
-    if ((aeon.aeon?.reviveCountdown ?? 0) > 0) continue;
-    if (aeon.hp <= 0) continue;
+    if (!aeonSummonable(aeon)) continue;
     if (lockedMirrorOf(ctx, key) !== undefined) continue;
     out.push(aeon);
   }
@@ -40,18 +42,6 @@ export function availableAeons(ctx: Ctx): FFXCombatant[] {
 /** An aeon duel's sourced loss (`./aeon-duel.ts#duelLost`, B11 = a): no aeon out, none left to summon. */
 export function aeonDuelLost(ctx: Ctx): boolean {
   return duelLost(ctx, availableAeons(ctx).length);
-}
-
-/** Freeze the party's counters so they resume exactly where they left off. */
-function freezeParty(ctx: Ctx): void {
-  ctx.rt.frozenPartyCtb.clear();
-  for (const c of friendlies(ctx)) ctx.rt.frozenPartyCtb.set(c.id, rtOf(ctx, c.id).ctb);
-}
-
-/** Restore the frozen counters when the aeon leaves. */
-function thawParty(ctx: Ctx): void {
-  for (const [id, ctb] of ctx.rt.frozenPartyCtb) rtOf(ctx, id).ctb = ctb;
-  ctx.rt.frozenPartyCtb.clear();
 }
 
 /**
@@ -66,7 +56,14 @@ export function summonAeon(ctx: Ctx, ownerId: CombatantId, aeonKey: string, gran
   if (!aeon) return undefined;
   if ((aeon.aeon?.reviveCountdown ?? 0) > 0) return undefined;
 
-  freezeParty(ctx);
+  // The kernel decides on the field as it stands, the party still in it.
+  const owner = tryActor(ctx, ownerId);
+  const known = owner !== undefined && slotIfAny(ctx, owner) !== undefined && slotIfAny(ctx, aeon) !== undefined;
+  const outcome = known ? summonOutcome(ctx, aeon, owner, grand) : { aeonCtb: 0, held: grand, freed: [], recover: 0 };
+  for (const f of outcome.freed) {
+    if (f.provoke) removeStatus(ctx, f.c, 'provoke', 'cured');
+    if (f.threaten && statusOf(f.c, 'threaten')) removeStatus(ctx, f.c, 'threaten', 'expired');
+  }
 
   aeon.removed = false;
   aeon.alive = aeon.hp > 0;
@@ -74,13 +71,13 @@ export function summonAeon(ctx: Ctx, ownerId: CombatantId, aeonKey: string, gran
   ctx.state.aeonId = aeon.id;
   if (aeon.aeon) {
     aeon.aeon.ownerId = ownerId;
-    aeon.aeon.temporaryOverdrive = grand ? 100 : null;
+    aeon.aeon.temporaryOverdrive = outcome.held ? 100 : null;
   }
   // The aeon enters on the summoner's turn, so it acts next.
-  rtOf(ctx, aeon.id).ctb = 0;
+  rtOf(ctx, aeon.id).ctb = outcome.aeonCtb;
 
   ctx.emit({ type: 'summon', aeonId: aeonKey, combatantId: aeon.id, ownerId });
-  if (grand) {
+  if (outcome.held) {
     ctx.emit({ type: 'overdrive-gauge', who: aeon.id, from: aeon.overdrive?.gauge ?? 0, to: 100, cause: 'grand-summon' });
   }
   return aeon;
@@ -90,27 +87,30 @@ export function summonAeon(ctx: Ctx, ownerId: CombatantId, aeonKey: string, gran
  * Take the aeon off the field and give the party back.
  *
  * A re-summoned aeon in the same battle keeps its HP, MP and statuses; only a
- * KO (Banish included) zeroes the gauge [ffx-combat-core §6.5].
+ * KO (Banish included) zeroes the gauge [ffx-combat-core §6.5]. The party's counters are exactly as the game leaves them (the
+ * aeon's stay never moved one; the summoner is still paying the recovery of the Summon).
  */
 export function dismissAeon(ctx: Ctx, reason: 'command' | 'ko' | 'banished'): void {
   const id = ctx.state.aeonId;
   if (!id) return;
   const aeon = tryActor(ctx, id);
+  const wiped = reason !== 'command';
+  const outcome = aeon && slotIfAny(ctx, aeon) !== undefined ? dismissOutcome(ctx, aeon, wiped) : undefined;
   ctx.state.aeonId = null;
   if (aeon) {
     // The aeon leaves the field: the function that takes a character off it dissolves its Threaten pair (VA 0x0078e410) [re-parity W2].
     releaseThreatenLink(ctx, aeon);
     aeon.removed = true;
     if (aeon.aeon) {
-      // A Grand Summon's temporary gauge is discarded, never banked.
+      // A Grand Summon's temporary gauge is discarded, never banked (the held gauge is put back, VA 0x007b06b0).
       aeon.aeon.temporaryOverdrive = null;
     }
-    if (reason !== 'command') {
+    if (wiped) {
       setGauge(ctx, aeon, 0, 'aeon-ko');
-      if (aeon.aeon) aeon.aeon.reviveCountdown = AEON_REVIVE_BATTLES;
+      // The wipe starts the recovery count, one more than the record gives: the battle's own save counts it down once.
+      if (aeon.aeon) aeon.aeon.reviveCountdown = outcome?.recover ?? aeonGearOf(aeon).recovery + 1;
     }
   }
-  thawParty(ctx);
   ctx.emit({ type: 'dismiss', combatantId: id, reason });
 }
 
@@ -120,7 +120,7 @@ export function dismissAeon(ctx: Ctx, reason: 'command' | 'ko' | 'banished'): vo
  * Aeons are Eject-immune through the hidden Aeon Ribbon auto-ability; Banish
  * is modelled as an effect that **bypasses** that rather than as an ordinary
  * Eject roll. It leaves the aeon KO'd, so its gauge is zeroed and it is
- * unavailable for {@link AEON_REVIVE_BATTLES} afterwards.
+ * unavailable until its recovery count has run out (`aeon-gear.ts`).
  */
 export function banishAeon(ctx: Ctx, aeonId: CombatantId): void {
   const aeon = tryActor(ctx, aeonId);
@@ -129,13 +129,8 @@ export function banishAeon(ctx: Ctx, aeonId: CombatantId): void {
   dismissAeon(ctx, 'banished');
 }
 
-/** Called when the aeon's HP reaches 0: the summon ends, but it is not a wipe. */
+/** Called when the aeon's HP reaches 0: the summon ends, but it is not a wipe of the party. */
 export function onAeonDefeated(ctx: Ctx): void {
   if (!ctx.state.aeonId) return;
   dismissAeon(ctx, 'ko');
-}
-
-/** A revived or freshly-summoned aeon re-enters with a rank-3 delay. */
-export function aeonEntryDelay(aeon: FFXCombatant): number {
-  return baseCtb(aeon.stats.agi) * 3;
 }
