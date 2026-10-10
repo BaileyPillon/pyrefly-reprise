@@ -155,7 +155,7 @@ misses, so the enemy-hits-party situations now lean to those two modes (commit `
 | (c) the first other difference is a choice the gauge decides (rows O1 to O3): an aeon is without the Overdrive it had (Mega Flare, Hellfire become Attack; Sonic Wings for Energy Ray), Auron has his earlier | isaaru-via-purifico#1 and #7 links 2 and 3, seymour-anima-macalania#7, yunalesca#1 and #7 |
 | (d) a chain follows from the differences of its earlier links (HP, MP and gauges are carried; a member carried under half HP opens the next link with Critical) | braskas-final-aeon#1 and #7 links 5 to 7 |
 
-One outcome moves: isaaru-via-purifico#1 link 3 defeat -> victory; the other 17 keep theirs. One seed is one sample (section 7 has the rates). `ffx2-atb-golden` and `ff7-golden` unchanged.
+One outcome moves: isaaru-via-purifico#1 link 3 defeat -> victory; the other 17 keep theirs. One seed is one sample (section 7 has the rates). `ffx2-atb-golden` and `ff7-golden` unchanged (both run on the final tree: 2 files, 9 tests pass); no file with `ffx2` in its path changed in this branch.
 
 ## 6. Hand-kept mirrors and unwired kernels
 
@@ -215,14 +215,14 @@ The only row beyond the sampling band of 12 seeds is Chapter IX.
 ## 8. Full suite
 
 One run of the whole unit suite (`--testTimeout=60000 --maxWorkers=4`, log `D:\Tools\ffx-parity\rc2-w5\fullsuite.log`) was started on the committed tree at 14:12 EDT. **The machine was saturated by other agents' runs (16 cores at 100 percent, about 90 node
-processes) and the suite crawled at 4 to 5 files a minute: **it had not finished when this note was written, and the lane stops at the push deadline**.** What it had reported: **242 of 1,016 files** (216 passed, 2 skipped, 24 failed).
+processes) and the suite ran at 4 to 14 files a minute: **it had not finished when this note was written, and the lane stops at the push deadline**.** What it had reported: **409 of 1,016 files** (383 passed, 2 skipped, 24 failed).
 The 21 art-only files this worktree always has (no `public/art`) are all among the failures and are the only ones expected: `ui-portrait-face-crop`, `trema-ship-content`, `art-ref-defaults`, `pause-remake`, `isaaru-ship`, `den-of-woe-ship-content`, `chapter-meta-seymour-anima-macalania`,
 `chapter-meta-evrae`, `natus-ship-scene`, `natus-ship-content`, `leblanc-art`, `fallen-aeons-ship-content`, `chapter-meta-ffx2-leblanc`, `cutscene-story-poses`, `fallen-aeons-ship-scene`, `den-of-woe-ship-scene`, and five that fail on import for the missing `public/art/manifest.json`
 (`party-face-manifest`, `chapters/yojimbo-content`, `chapters/leblanc-party-sprites`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapter-meta`). **The three other failures so far:**
 
-* `advisor-note` ("still says when to spend a revive it is holding back"): a seed pin, not a regression of the advisor. Its existence check reads the first twenty decisions of Chapter I seed 108 for the sentence "then raise"; the pin has moved with every
-  batch that moved the draws (2026-09-19, 2026-10-09 AI-Seymour, 2026-10-10 W2). On this branch none of the seeds 1 to 700 shows the sentence with the card fault free (a scan, 20 decisions a seed). Four scans of seeds 701 to 2300 (one process per 400 seeds) were still running at 14:54 with no hit.
-  **Open: re-pin to the first seed that shows it (see open item 10).** The rest of that file passes.
+* `advisor-note` ("still says when to spend a revive it is holding back"): an existence check of a rare sentence (not traced to a regression of the advisor, but not shown to be none either). Its existence check reads the first twenty decisions of Chapter I seed 108 for the sentence "then raise"; the pin has moved with every
+  batch that moved the draws (2026-09-19, 2026-10-09 AI-Seymour, 2026-10-10 W2). On this branch none of the seeds 1 to 700 shows the sentence (a scan, 20 decisions a seed). Four more scans, seeds 701 to 2300, finished with no hit either: **0 of 2,300 seeds** show it in their first twenty decisions (the base showed it on 3 of the first 700), so a re-pin to another seed is not available and the existence check needs another design (open item 10).
+  **Open (see open item 10).** The rest of that file passes.
 * `chapters/sin-fins-core-bench` ("the sensible line never leaves a dry Auron Defending"): a timeout under the load (60 s); run alone it passes (4 passed, 2 skipped).
 * `live-url-follows-host` (one of 14 failed in the suite): nothing to do with a battle; run alone it passes (14 of 14), so it was the load too.
 
@@ -243,7 +243,7 @@ The 12-seed measurement was re-run on the committed source and is byte-identical
 7. **Revival's gauge gain**: Phoenix Down and Life run the Healer hook with the record's HP amount (the engine's restore of half the maximum HP when the record computes 0 is not shown to the hook).
 8. **`frozenPartyCtb` and `aeonStoredGauge`** are dead runtime fields (section 6).
 9. **No browser check** (no UI file changed; the worktree has no `public/art`): what a player sees is the Overdrive bars filling at other rates and an aeon's bar in steps of 5 percent (unchanged).
-10. **`advisor-note.test.ts` needs a new seed** (section 8): its existence check for the "then raise" sentence reads Chapter I seed 108, which no longer shows it; a scan of seeds 1 to 700 found none on this branch. The scan to re-pin it is a few minutes of CPU on a quiet machine: for seeds from 701 up, `walk('seymour-flux', [seed], 20, true)` until the faults are empty and a card note matches `/note="[^"]*then raise/`.
+10. **`advisor-note.test.ts` ("still says when to spend a revive it is holding back") fails and a re-pin is not available** (section 8): its existence check reads Chapter I seed 108 for the sentence "then raise" in the first twenty decisions; on this branch **none of the seeds 1 to 2,300 shows it** (the base showed it on 3 of the first 700; the party falls more often now, 1.1 KOs a battle against 0.5, so the cause is not fewer bodies on the floor, and it was not traced). Either the existence check walks more decisions or reads a hand-built board, or the cause is found first (is the "party-wide payload next" reading now different when a summoned aeon stands in front of the party? the Banish is the first thing that happens in that fight). The rest of that file passes. Scratch for the scans: `D:Toolsfx-parityc2-w5advscan*.log`.
 11. **The rest of the full suite** (section 8) was not finished; run it once on a quiet machine: `node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --testTimeout=60000 --maxWorkers=4`.
 
 ## 10. Decisions for Bailey
