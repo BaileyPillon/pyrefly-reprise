@@ -155,6 +155,13 @@ describe('the flag is the only way in: every other chain carries what it always 
    * equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again, and Chapter 6's first three equal `ffx2-hit-closes-menu.test.ts`'s. The old
    * hashes are in git at 029d49c7.
    *
+   * **Re-pinned 2026-10-10 for re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity").** No Den code changed; the AI of Chapter XI's links did: Shiva
+   * (`m167`: Triple Attack is three polls of Chain Attack, the late table chosen after the +3, +5 for every result applied) and the Magus Sisters (`m171` to
+   * `m173`: Delta Attack only from Cindy once both flags are up, Sandy 1/3 and Cindy 2/5 odds, Regen's counter 50, +5 for every result unguarded) take other
+   * moves and other draws, so all eight logs of each of those two chains moved. Chapters 5 and 6 are byte-identical (their eight each equal the old pins), so
+   * nothing outside the Road moved. Outcomes at D = 0: Shiva won eight of eight before and after; the Sisters won eight of eight before and six of eight now
+   * (seeds 4 and 7 are lost). The old hashes are in git at 931613a8.
+   *
    * **Re-pinned 2026-09-26 for the merge of `ffx2-engine-fixes-0926` (Bailey's D-193, option B;
    * FFX-2 only).** No Den code changed; the engine did. (1) IC-2: an all-target action hits each
    * target taken at its start once, and a target KO'd partway is skipped instead of its hits
@@ -167,8 +174,8 @@ describe('the flag is the only way in: every other chain carries what it always 
   const BASE = {
     ch5: ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912', 'bb8b6d116a180f6b', 'f00b58edda467499', '148ffcc77b0bb2cf', '981f66daf32dcc39', 'ce3a4f1ccf8f5e50'],
     ch6: ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682', 'ab962a9aebd13b0b', '8f58a5bbbd63b99f', 'a69a00370cad2018', '68a04a7acee4c629', '4a90f06e891eda74'],
-    ch11: ['1cf31b84232a2028', '78698b19c9da6fe4', '425a12408fed1577', '2db9b88958265675', '0be0a10a3ff1a1b8', '9396dea5031ab945', 'e3454b6ae228b93a', '8f9d6d3806248e42'],
-    sisters: ['c9c0381d20d062a4', '41d601787f5fa9c7', '4a174a2b875c6b3e', 'c959228873f683ae', '62cf1c4128a600f9', '6ab97f3448d1ccb2', '2e6d097ea744b4a5', '66c01343be68c8c1'],
+    ch11: ['4c5705008fe068ba', 'ecf95bb78f09731e', 'c6ab6c792d2e01af', 'e749c64aa9c1e7e8', '64704ec1079f365c', '9342a92ee2b61f8c', '0af35b94b0a51b1b', '6ce78ba94e616507'],
+    sisters: ['d9c84a73f4b7009d', '2502c84b272cc35f', 'db1f9c10bf201357', '696a33a6bb87c3ae', '6a39cb413f9a17cc', '4fba2882392fbd6b', '849ee4bac0115916', 'ea4387b8951e7c70'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

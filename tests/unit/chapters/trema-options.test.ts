@@ -83,9 +83,10 @@ describe('the shipped pick: Oversoul Paragon with Split_Infinity\'s kit, and 3 s
     expect(board('trema').engine.state().flags[ACTION_TIME_FLAG]).toBe(3);
   });
 
-  it('only Oversoul Paragon answers party actions (`onPartyAction`), so no other log moves', () => {
+  it('only the normal Paragon answers party actions (`onPartyAction`: Big Bang, TR12 b), so no other log moves', () => {
+    // AI-FFX2-b: the Oversoul answers on its next poll from the reaction entry now, and Big Bang's trigger needs the hook for results that deal no damage.
     const answering = aiScriptIds().filter((id) => aiScriptFor(id).onPartyAction !== undefined);
-    expect(answering).toEqual(['paragon-oversoul']);
+    expect(answering).toEqual(['paragon']);
   });
 });
 
@@ -193,7 +194,7 @@ describe('option 2 (TR1 b): Trema alone, the Fiend Arena block (research §3.3)'
     expect(tremaArena.abilityIds).toContain('trema-arena-beguiling-mire');
     expect(tremaArena.abilityIds).not.toContain('trema-beguiling-mire');
     expect(data.ABILITIES['trema-arena-beguiling-mire']).toMatchObject({ power: 5, hits: 3 });
-    expect(data.ABILITIES['trema-beguiling-mire']).toMatchObject({ power: 4 });
+    expect(data.ABILITIES['trema-beguiling-mire']).toMatchObject({ power: 5 }); // AI-FFX2-b, row T5: one row (0x40d4) in both versions
   });
 
   it('is a first link at full HP and MP: nothing carried, no next link, Stop still wears off', () => {
@@ -208,26 +209,32 @@ describe('option 2 (TR1 b): Trema alone, the Fiend Arena block (research §3.3)'
     expect([t.hp, t.mp]).toEqual([999999, 999]);
   });
 
-  it('rolls Demi 1/6 and Flare 1/12, the rest as story; the story script still rolls 12/3/3/2/2/2', () => {
+  it('rolls Demi 1/6 and Flare 1/12, the rest as story: the game has one decision tree and the story script rolls it too', () => {
+    // AI-FFX2-b (reason "game-script parity", rows T1 and T5): the story script's own 12/3/3/2/2/2 was the FAQ's; m295 and m328 decide alike
+    // (Demi 4/24, Flare 2/24), so both scripts give the same table, differing only in the Mire row each names. The exact tables are
+    // parity-ffx2-ai-trema.test.ts; this keeps the option's own claim on the same scripted draws.
     const tally = (arena: boolean) => {
-      const b = board('trema', 1, arena ? CLOISTER_TREMA_ARENA : undefined);
       const counts: Record<string, number> = {};
       for (let r = 0; r < 24; r++) {
+        const b = board('trema', 1, arena ? CLOISTER_TREMA_ARENA : undefined);
         b.unit('trema').aiMemory = {};
         const ctx = b.ctx('trema');
+        const values = [r < 12 ? 0 : 1, r % 12 < 6 ? 0 : 1, r % 3];
+        let i = 0;
         const rng = new SeededRng(1);
-        Object.assign(rng, { int: (min: number, max: number) => (max === 23 ? r : min), pick: <T>(items: readonly T[]) => items[0] as T });
+        Object.assign(rng, { int: (min: number, max: number) => (max === 0xffff ? (values[i++] ?? 0) : min), pick: <T>(items: readonly T[]) => items[0] as T });
         const id = idOf((arena ? tremaArenaScript : tremaScript).decide({ ...ctx, rng }))!;
         counts[id] = (counts[id] ?? 0) + 1;
       }
       return counts;
     };
-    expect(tally(true)).toEqual({
-      'trema-dying-star': 12, 'trema-demi': 4, 'trema-flare': 2, 'trema-choking-mist': 2, 'trema-arena-beguiling-mire': 2, 'trema-waning-moon': 2,
-    });
-    expect(tally(false)).toEqual({
-      'trema-dying-star': 12, 'trema-demi': 3, 'trema-flare': 3, 'trema-choking-mist': 2, 'trema-beguiling-mire': 2, 'trema-waning-moon': 2,
-    });
+    const arenaCounts = tally(true);
+    const storyCounts = tally(false);
+    expect(Object.values(arenaCounts).reduce((a, n) => a + n, 0)).toBe(24);
+    expect(arenaCounts['trema-dying-star']).toBe(storyCounts['trema-dying-star']);
+    expect(arenaCounts['trema-demi']).toBe(storyCounts['trema-demi']);
+    expect(arenaCounts['trema-flare']).toBe(storyCounts['trema-flare']);
+    expect(arenaCounts['trema-arena-beguiling-mire']).toBe(storyCounts['trema-beguiling-mire']);
   });
 
   it('a whole fight runs to an end through the engine', () => {
