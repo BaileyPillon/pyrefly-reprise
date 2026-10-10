@@ -17,6 +17,7 @@ import type {
   Command,
 } from '../common/types.ts';
 import { SeededRng } from '../common/rng.ts';
+import { stepsToMs } from './clock.ts';
 import type {
   AbilityRegistry,
   AiContext,
@@ -27,14 +28,16 @@ import type {
   GarmentGridRegistry,
 } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
-import { ATB_SPEED_MULTIPLIER, MENU_CANCEL_ONLY_DELAY_ABILITIES, STATUS_CLOCKS_HELD_AT, type AtbSpeed } from './constants.ts';
-import { ActingAbilities } from './menu-cancel.ts';
+import { ATB_BASE_VALUE } from './constants.ts';
+import { baseSpeedOf, type AtbSpeed } from './clock.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
-import { beginRecovery, buildSnapshot } from './gauges.ts';
+import { buildSnapshot } from './gauges.ts';
+import { bySlot, completeCommand } from './atb-engine.ts';
+import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './targeting.ts';
-import { aiContextFor, berserkTurnCommand, payStatusClocks, runAfterActionHooks } from './engineHooks.ts';
+import { aiContextFor, berserkTurnCommand, runAfterActionHooks } from './engineHooks.ts';
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
@@ -45,7 +48,6 @@ import {
   awaitsPlayerInput,
   canTakeTurn,
   clockHeldByMenu,
-  closesOpenMenu,
   DEFAULT_ATB_MODE,
   DEFAULT_WAIT_SPLIT,
   heldStillPending,
@@ -89,24 +91,20 @@ export class Ffx2EngineCore {
   protected held: HeldCommand | null = null;
   /** The girl whose open menu an enemy hit closed (item 4 A1, `active.ts` {@link closesOpenMenu}); cleared by the next decision. */
   protected hitClosed: CombatantId | null = null;
-  /** What each unit is resolving, for the menu-cancel correction (`menu-cancel.ts`, ON since 2026-09-26). */
-  protected readonly acting = new ActingAbilities();
   /**
-   * Ticks a `throughInput` step was handed but could not spend, because a ready
-   * enemy ended the sub-step loop so its events could be played. The `'waiting'`
-   * path asks for exactly `nextEventMs`, so nothing is left over there; under
-   * Active an enemy acting 10 ms into a 50 ms step would otherwise throw 40 ms of
-   * game time away. Carried to the next `throughInput` step; untouched by
-   * Wait-mode ticks, so a run that never opens a menu is bit-identical.
+   * The fraction of a logic step real time has handed the engine but it has not run yet (`tick` converts milliseconds to
+   * steps at 29.97 a second and keeps the remainder, so the clock never loses or invents time between calls).
    */
-  protected carriedTicks = 0;
+  protected stepCredit = 0;
   /**
-   * Game ticks per real tick, the Config ATB speed (§1.2, `constants.ts`).
-   * Applied only where real ms cross in (`tick`) and out (`'waiting'`, elapsed
-   * time), so the one global clock scales as one. Exactly `1` at Normal: the
-   * identity, so Normal is bit-for-bit the old engine (golden test).
+   * Whole steps a `throughInput` call was handed but could not spend, because a ready enemy ended the loop so its events
+   * could be played. The `'waiting'` path asks for exactly the steps it needs, so nothing is left over there; under Active an
+   * enemy acting 10 ms into a 50 ms call would otherwise throw 40 ms of game time away. Carried to the next `throughInput` call.
    */
-  protected atbRate = 1;
+  protected carriedSteps = 0;
+  /** The units in kernel-slot order, the order the game visits characters (cached; rebuilt when the unit list changes). */
+  protected ordered: Ffx2Unit[] = [];
+  /** The Config ATB speed; units a logic step takes off a gauge come from the game's table (`clock.ts`). */
   protected speed: AtbSpeed = 'normal';
   /** Config ATB mode (§1.5, `active.ts` {@link clockHeldByMenu}); Wait by default (D-029). */
   protected mode: AtbMode = DEFAULT_ATB_MODE;
@@ -117,7 +115,6 @@ export class Ffx2EngineCore {
   constructor(options: Ffx2EngineOptions = {}) {
     this.options = options;
     this.speed = options.atbSpeed ?? 'normal';
-    this.atbRate = ATB_SPEED_MULTIPLIER[this.speed];
     this.mode = options.atbMode ?? DEFAULT_ATB_MODE;
     this.split = options.waitSplit ?? DEFAULT_WAIT_SPLIT;
     this.abilities = chainRegistries(options.abilities, defaultAbilities);
@@ -130,15 +127,35 @@ export class Ffx2EngineCore {
     return buildSnapshot(actorOrder(this.units), this.elapsedMs);
   }
 
-  /** Regen and Poison payouts plus status expiries, for one sub-step. */
-  protected advanceStatusClocks(step: number): void {
-    payStatusClocks(this.units, step, (e) => this.emit(e), this.resolveCtx(), (u) => this.aiContext(u), this.heldClocks());
+  /** The units in kernel-slot order. */
+  protected slotOrder(): Ffx2Unit[] {
+    if (this.ordered.length !== this.units.length) this.ordered = bySlot(this.units);
+    return this.ordered;
   }
 
-  /** Status clocks the Config ATB speed holds (`constants.ts` STATUS_CLOCKS_HELD_AT; PR-0108, Sleep at Fast). */
-  protected heldClocks(): ReadonlySet<string> | undefined {
-    const held = STATUS_CLOCKS_HELD_AT[this.speed];
-    return held.size > 0 ? held : undefined;
+  /** Units a logic step takes off a gauge at the Config speed (70 / 95 / 120). */
+  protected baseSpeed(): number {
+    return baseSpeedOf(this.speed);
+  }
+
+  /**
+   * One logic step (`logic-step.ts`): the chain windows, the ATB process, the casts coming due, the status clocks. A cast that comes
+   * due fires here, as the unit that charged it; the engine decides every other command after the step.
+   */
+  protected runLogicStep(): void {
+    this.battleState.ticks += 1;
+    this.elapsedMs += stepsToMs(1);
+    logicStep({
+      step: this.battleState.ticks,
+      units: this.units,
+      ordered: this.slotOrder(),
+      baseSpeed: this.baseSpeed(),
+      emit: (e) => this.emit(e),
+      resolveCtx: () => this.resolveCtx(),
+      aiContext: (u) => this.aiContext(u),
+      fire: (u) => this.fireChargedCommand(u),
+      complete: (u) => completeCommand(u, u.gauge.costAtb, this.units),
+    });
   }
 
   /**
@@ -162,6 +179,10 @@ export class Ffx2EngineCore {
       const owner = this.units.find((u) => u.id === this.inputOwner);
       if (owner && ownsInput(owner)) return owner;
     }
+    // The game serves its ready list lowest recovery counter first (`atb-engine.ts runAtbProcess`, `Ffx2Gauge.readyKey`): whoever became
+    // ready first goes first, and of two that ran out in the same step the one that overshot further. `actorOrder` (party by slot, then
+    // enemies by slot) only breaks a tie between units with no place in the list.
+    let next: Ffx2Unit | undefined;
     for (const unit of actorOrder(this.units)) {
       if (!canTakeTurn(unit)) continue;
       // A held girl is not awaiting input — she has a command — so she is
@@ -170,9 +191,9 @@ export class Ffx2EngineCore {
         if (unit.id === this.inputOwner) continue;
         if (awaitsPlayerInput(unit, this.awaitingMinigame !== null)) continue;
       }
-      return unit;
+      if (next === undefined || unit.gauge.readyKey < next.gauge.readyKey) next = unit;
     }
-    return undefined;
+    return next;
   }
 
   /** The held command's owner, dropping the command if she can no longer take it. */
@@ -209,9 +230,11 @@ export class Ffx2EngineCore {
       rng: this.rng,
       emit: (e) => this.emit(e),
       breaksDamageLimit: (unit) => unit.aiMemory?.['bdl'] === true, // cached at her last gate recompute
-      timedAilmentDefaults: this.battleState.flags['timedAilmentDefaults'] === true, // `setup.ts`, from the group
       ...(this.options.immuneHitsSkipChain !== undefined ? { immuneHitsSkipChain: this.options.immuneHitsSkipChain } : {}), // IC-1 switch (no longer read)
       ...(this.options.namedTargetsOnly !== undefined ? { namedTargetsOnly: this.options.namedTargetsOnly } : {}), // Acta switch
+      onMenuClosed: (unit) => {
+        if (this.inputOwner === unit.id) this.hitClosed = unit.id; // a Delay hit closed her open menu (`apply_atb_damage`)
+      },
       state: this.battleState, // a stolen item goes to `inventory:<id>`, stolen gil to `stolenGil` (`steal.ts`)
       ...(this.options.items ? { items: this.options.items } : {}),
     };
@@ -287,8 +310,8 @@ export class Ffx2EngineCore {
       performCommand(this.env(), actor, command, false, before);
       return;
     }
-    // A flavour turn still consumes the ATB slot. [ffx2-vegnagun-shuyin §5]
-    beginRecovery(actor, 0);
+    // A flavour turn still consumes the ATB slot. [ffx2-vegnagun-shuyin §5] It plays no command of its own, so it waits the standard gauge.
+    completeCommand(actor, ATB_BASE_VALUE, this.units);
     this.emit({ type: 'action-end', actorId: actor.id });
     this.afterAction(actor, before);
   }
@@ -332,10 +355,6 @@ export class Ffx2EngineCore {
 
   protected emit(draft: EventDraft): void {
     this.drafts.push(draft);
-    this.acting.note(draft);
-    const onlyDelay = this.options.menuCancelOnlyDelayAbilities ?? MENU_CANCEL_ONLY_DELAY_ABILITIES;
-    const by = onlyDelay && draft.type === 'damage' ? { ability: this.abilities.get(this.acting.current(draft.sourceId) ?? '') } : undefined;
-    if (this.inputOwner && closesOpenMenu(draft, this.inputOwner, this.units, by)) this.hitClosed = this.inputOwner;
   }
 
   /** Stamp `seq`, append to the log, and hand the batch to the caller. */

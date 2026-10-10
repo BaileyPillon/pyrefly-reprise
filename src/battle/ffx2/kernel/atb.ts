@@ -4,8 +4,8 @@
  *
  * **Game case: FFX-2 only** (FFX is CTB; its timing is `src/battle/ffx/kernel/ctb*.ts`). Source: FFX-2.exe,
  * Steam build 25501027 (SHA-256 6EA7F142...CD69), image base 0x400000. Spec: `research/re-ffx2-atb-status.md`.
- * Pure, deterministic, no DOM, no engine types (AGENTS.md rule 1). NOT wired into the engine: the engine still
- * runs a fixed 3,000 ticks a second with a 4.16x fill cap (`ffx2/gauges.ts`). Randomness comes from a
+ * Pure, deterministic, no DOM, no engine types (AGENTS.md rule 1). Wired into the engine by
+ * re-parity W4 (`ffx2/atb-engine.ts`, `logic-step.ts`, `atb-open.ts`). Randomness comes from a
  * `draw(stream)` callback (`./rng.ts`).
  *
  * The parts, each a file under 400 lines:
@@ -22,9 +22,9 @@
  * **One logic step.** The game advances everything once per "logic step" (`pp_battle_logic_step`, 0x61e440), in
  * this order: the ATB process (recovery, thinking, ready, the requests), the action dispatcher (the charge
  * countdown), the status process (`./status-timers.ts`). The frame pacer measures real time in "fields" of 1/60 s
- * and plans one step per two fields (1/30 s), but it also runs one step when fewer than two fields have passed;
- * whether the PC build runs 30 or 60 steps a second depends on how often the platform loop calls the main frame
- * function, and static analysis has not settled it. Use {@link stepsToSeconds} with both before quoting a time.
+ * and plans one step per two fields; the PC build's fields run at 60 / 1.001 a second, so a step lasts 1/29.97 s
+ * (measured on the running game, `research/re-ffx2-timing-measured.md` section 3). Use {@link stepsToSeconds} with
+ * {@link FFX2_STEPS_PER_SECOND}.
  */
 
 export * from './atb-clock.ts';

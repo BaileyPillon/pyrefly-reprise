@@ -5,7 +5,7 @@
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), function
  * 0x006343a0 (`MsChrATBprocess`) and the code it runs per character, `./atb-gauge.ts` (0x00634b10) and
  * `./atb-clock.ts` (0x006349f0). Spec: `research/re-ffx2-atb-status.md` section 3. Pure, deterministic, no DOM;
- * not wired into the engine.
+ * wired into the engine by re-parity W4 (`ffx2/atb-engine.ts runAtbProcess`).
  *
  * What the function does, in order, once per logic step:
  *

@@ -34,9 +34,11 @@ import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
 import { attachedResult, hitsFromOutcome, requestLayout, rollDefault } from './minigames.ts';
 import { shapeLadyLuckSpin } from './reels.ts';
-import { beginCharge, beginRecovery, chargeTicksFor, extraRecoveryTicks } from './gauges.ts';
-import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from './constants.ts';
-import { actionTimeTicks } from './action-time.ts';
+import { ATB_BASE_VALUE } from './constants.ts';
+import { actionTimeSteps } from './action-time.ts';
+import { Ffx2AtbState } from './kernel/atb-gauge.ts';
+import { beginCharge, castTime, completeCommand } from './atb-engine.ts';
+import { commandCosts } from './adapt/command.ts';
 
 /** Everything `performCommand` needs from the engine. */
 export interface ExecEnv {
@@ -152,13 +154,20 @@ function sameAction(a: Command, b: Command): boolean {
 }
 
 /**
- * End the action: spend the gauge, close it out, and run the hooks. `plays` adds the battle's
- * action time (method check E4, `action-time.ts`; OFF unless a switch sets it) to what the actor
- * owes before the refill; a spherechange passes `false` (a Short change freezes everyone, §12.4).
+ * End the action: the command is complete (`MsCommandComplete`: the actor's recovery becomes the command's ATB cost over
+ * (AGI + 1)), close it out, and run the hooks. `plays` adds the battle's action time (method check E4, `action-time.ts`; OFF
+ * unless a switch sets it): the command then stays EXECUTING for that many logic steps before it completes (the step loop
+ * does it); a spherechange passes `false` (a Short change freezes everyone, §12.4).
  */
-function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, extraRecovery = 0, plays = true): void {
-  const acting = plays ? actionTimeTicks(env.options.actionTimeSeconds, env.state.flags) : 0;
-  beginRecovery(actor, extraRecovery + acting);
+function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, costAtb: number, plays = true): void {
+  const acting = plays ? actionTimeSteps(env.options.actionTimeSeconds, env.state.flags) : 0;
+  actor.gauge.costAtb = costAtb;
+  if (acting > 0) {
+    actor.gauge.executing = acting;
+    actor.gauge.state = Ffx2AtbState.Executing;
+  } else {
+    completeCommand(actor, costAtb, env.units);
+  }
   env.emit({ type: 'action-end', actorId: actor.id });
   env.emit({ type: 'atb', snapshot: env.snapshot() });
   env.afterAction(actor, startedAt);
@@ -179,6 +188,7 @@ export function performCommand(
   startedAt?: number,
 ): void {
   const before = startedAt ?? env.draftCount();
+  actor.gauge.state = Ffx2AtbState.Executing; // the command is chosen: the game's state 9 until it completes
 
   // L1 spherechange consumes the whole turn and has no charge bar. §4.2
   if (command.kind === 'spherechange') {
@@ -189,7 +199,7 @@ export function performCommand(
       { grids: env.grids, dresspheres: env.dresspheres, gridNodes: env.gridNodes },
       (e) => env.emit(e),
     );
-    finishAction(env, actor, before, 0, false);
+    finishAction(env, actor, before, ATB_BASE_VALUE, false);
     return;
   }
 
@@ -198,14 +208,15 @@ export function performCommand(
     performed.delete(actor);
     // Escape, Defend, Trigger and anything the registry does not know still
     // spend the turn rather than silently doing nothing.
-    finishAction(env, actor, before);
+    finishAction(env, actor, before, ATB_BASE_VALUE);
     return;
   }
 
-  // The purple charge bar runs before the ability fires, shortened by any
-  // "<skillset> wait down" gate bonus she has banked this battle. §1.1, §1.3
+  // The purple charge bar runs before the ability fires: the row's cast cost over (AGI + 1) units, shortened by any
+  // "<skillset> wait down" gate bonus she has banked this battle, and counted down at the caster's full tick. §1.1, §1.3
+  const costs = commandCosts(ability, actor);
   const waitDown = typeof actor.aiMemory?.['waitDown'] === 'number' ? actor.aiMemory['waitDown'] : 0;
-  const chargeTicks = alreadyCharged ? 0 : chargeTicksFor(ability, actor, waitDown);
+  const chargeTicks = alreadyCharged ? 0 : castTime(actor, costs.id, costs.costCast, waitDown);
   if (chargeTicks > 0) {
     env.emit({
       type: 'action-start',
@@ -223,6 +234,9 @@ export function performCommand(
   }
 
   if (needsMinigame(env, actor, ability, command)) {
+    // The overlay is her menu for a moment longer: she is still the ready actor (state 4) until the outcome comes back, so a player
+    // who backs out of it gets her menu again and her new command, as before; the re-submit of the same action runs it (EXECUTING).
+    actor.gauge.state = Ffx2AtbState.WaitCommand;
     env.setAwaiting(command, { actorId: actor.id, charged: alreadyCharged });
     env.emit({
       type: 'minigame-request',
@@ -286,8 +300,5 @@ export function performCommand(
     ...(gilSpent !== undefined ? { gilSpent } : {}),
   });
 
-  const recoveryValue = ability.flags.includes('2xrt')
-    ? ATB_DOUBLE_RECOVERY_VALUE
-    : (ability.recoveryTicks ?? ATB_BASE_VALUE);
-  finishAction(env, actor, before, extraRecoveryTicks(recoveryValue, actor.stats.agi));
+  finishAction(env, actor, before, costs.costAtb);
 }

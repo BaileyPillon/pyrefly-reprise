@@ -105,14 +105,14 @@ export function itemLabel(itemId: string): string {
  * only back the last-resort conversion from the tick counter, which both
  * engines always fill in.
  *
- * FFX-2's tick rate is exact (`TICK_RATE_BASE = 3000` ticks per second,
- * `ffx2-combat-core §1.2`). FFX's CTB tick has no wall-clock definition, so
+ * FFX-2's tick is the game's logic step: 29.97 a second (60 / 1.001 / 2, measured on the running game, re-parity W4,
+ * `research/re-ffx2-timing-measured.md` section 3; it was 3,000 ticks a second). FFX's CTB tick has no wall-clock definition, so
  * the rate below is measured: a 21-turn chapter-1 fight played at `fast` ran
  * 106 ticks in 34.6 s of wall clock (~326 ms/tick), and normal speed is
  * slower again. It is an **estimate**, used only when no real clock exists.
  */
 export const FFX_MS_PER_TICK = 400;
-export const FFX2_MS_PER_TICK = 1000 / 3000;
+export const FFX2_MS_PER_TICK = 1001 / 30; // 1000 / (60 / 1.001 / 2) = 33.3667 ms
 
 /**
  * A wall clock under this is not a play session — it is an automated run at

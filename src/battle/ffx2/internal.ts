@@ -27,7 +27,7 @@ import type {
   StatBlock,
   StatusId,
 } from '../common/types.ts';
-import type { AtbSpeed } from './constants.ts';
+import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
@@ -39,16 +39,54 @@ export type EventDraft = DistributiveOmit<BattleEvent, 'seq'>;
 /** Pushes an event draft onto the current action's event list. */
 export type Emit = (event: EventDraft) => void;
 
+/**
+ * The game's ATB character fields the contract's {@link FFX2Combatant.atb} has no place for (re-parity W4; FFX-2 only).
+ * Each one names the field of the game's character record it stands for (`research/re-ffx2-atb-status.md`); the
+ * recovery counter itself (`Chr+0x9d8`) is `atb.recovery`, the charge pair of the action record `atb.charging`.
+ */
+export interface Ffx2Gauge {
+  /** `Chr+0xe68`, the kernel's `Ffx2AtbState`: 0 idle, 1 recovering, 2 thinking, 3 ready, 4 a girl's menu is open, 5 a monster's script is asked, 7 confused, 8 berserk, 9 a command is queued or executing. */
+  state: number;
+  /** The kernel slot id (`Chr+0xc`): the party 0 to 14, the enemies 15 to 30, each side by its slot. Decides the visiting order and which stream a draw comes from. */
+  slot: number;
+  /** `Chr+0x9dc`: the largest value the recovery counter has been set to (the HUD's reference for a delayed bar). */
+  recoveryMax: number;
+  /** `Chr+0x9f4`: steps of thinking left after the recovery ended. Girls think 0; a monster thinks 30 for every fallen girl. */
+  thinking: number;
+  /** `Chr+0x9e0`: delay damage taken while executing, paid with the next recovery. */
+  carry: number;
+  /** Logic steps of action time left before the command completes (the E4 estimate, `action-time.ts`); 0 when the command ends the moment it resolves. */
+  executing: number;
+  /** The ATB cost (`Cmd+0x22`) of the command that is executing, which its completion turns into a recovery. */
+  costAtb: number;
+  /** The four speeds of the last step (`Chr+0x9f0`, `+0x9ec`, `+0x9e8`, `+0x9e4`); the status clocks read the first three. */
+  speeds: { raw: number; awake: number; active: number; tick: number };
+  /** `Chr+0x684`, `+0x688`: the Poison and Regen accumulators against their 16,000-unit period. */
+  poisonAcc: number;
+  regenAcc: number;
+  /**
+   * Logic steps left of the unit's HIT REACTION (`Chr+0xd98`): while it runs the tick is halved, unless the unit's row says hit
+   * reactions do not slow it. The reaction is a motion-system state, so its length is not a number in the exe: the engine starts
+   * it at `constants.ts` HIT_REACTION_STEPS when a damaging hit lands (measured, `research/re-ffx2-timing-measured.md` section 5).
+   */
+  hitReaction: number;
+  /**
+   * Where the unit stands in the READY LIST (`MsChrATBprocess`, exe 0x006343a0): `step * 64 + rank`, where `step` is the logic step it became
+   * ready in and `rank` its place in that step's list, which the game serves lowest recovery counter first (the most negative overshoot
+   * first, ties by slot). The engine hands out turns in this order, so two units that run out in the same step act in the game's order.
+   * `Number.MAX_SAFE_INTEGER` until the unit has been ready once.
+   */
+  readyKey: number;
+}
+
 /** Per-unit bookkeeping the engine needs and the contract has nowhere to put. */
 export interface Ffx2Unit extends FFX2Combatant {
-  /** Accumulated ticks toward the next Regen / Poison payout. */
-  statusTickAccumulator?: number;
+  /** The game's ATB character fields; `atb` carries the recovery counter and the HUD mirrors. */
+  gauge: Ffx2Gauge;
   /** Free-form AI memory, keyed by the script. Scripts own their own keys. */
   aiMemory?: Record<string, number | string | boolean>;
   /** Queued command waiting on the purple charge bar, mirrored from `atb.charging`. */
   pendingCommand?: Command | null;
-  /** Ticks the enemy still owes to its `thinkingPeriod` before it will choose. */
-  thinkingTicks?: number;
   /** Set on a special-dressphere part so the engine can restore the girl on defeat. */
   sdspOwnerId?: CombatantId;
   /** Set on a girl who is currently transformed; her parts hold the field. */
@@ -163,10 +201,8 @@ export interface Ffx2EngineOptions {
    */
   minigames?: boolean;
   /**
-   * The Config ATB speed (`constants.ts` {@link ATB_SPEED_MULTIPLIER}, §1.2).
-   * Default `'normal'`, which is bit-for-bit the engine as it was before the
-   * setting existed (`tests/unit/ffx2-atb-golden.test.ts`). Changeable
-   * mid-battle with `FFX2Engine.setAtbSpeed`.
+   * The Config ATB speed (`clock.ts`: Slow 70, Normal 95, Fast 120 units a logic step, the game's table; §1.2).
+   * Default `'normal'`. Changeable mid-battle with `FFX2Engine.setAtbSpeed`.
    */
   atbSpeed?: AtbSpeed;
   /**
@@ -198,10 +234,20 @@ export interface Ffx2EngineOptions {
   immuneHitsSkipChain?: boolean;
   /** `constants.ts` NAMED_TARGETS_ONLY (Acta Est Fabula on the Redoubts only), for a measurement run. */
   namedTargetsOnly?: boolean;
-  /** `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (only a Delay / Action-cancel hit closes a menu), for a measurement run. */
+  /**
+   * No longer read (re-parity W4): the game's rule is the only one now, a hit closes the menu when its ATB damage is positive
+   * (`constants.ts`, the menu-cancel note). Kept so callers that name it still compile.
+   */
   menuCancelOnlyDelayAbilities?: boolean;
   /** `constants.ts` SEPARATE_BATTLE_GAUGES (PR-0107, Chapter VI's Acts II and III), for a measurement run. */
   separateBattleGauges?: boolean;
+  /**
+   * Roll the preemptive / ambush result at the start of a `'normal'` battle (`MsCalcFirstAttack`, `kernel/atb-start.ts`),
+   * from the party's and the monsters' average Agility. Default **off**: no shipped encounter rolls it (the chapters are story
+   * battles, and whether the game presets their opening is not in the sources we have), so a `'normal'` opening is the
+   * random gauge alone, as before. `condition: 'preemptive'` and `'ambush'` are the game's PRESET results and always apply.
+   */
+  rollFirstAttack?: boolean;
   /** `constants.ts` LEBLANC_SCRIPT_SINIROTHX (PR-0106, Chapter VI's Leblanc), for a measurement run. */
   leblancScriptSinirothX?: boolean;
 }
@@ -232,7 +278,7 @@ export interface AiContext {
   rng: Rng;
   /** Live encounter flags, shared with story triggers. */
   flags: Record<string, number | string | boolean>;
-  /** Total ATB ticks elapsed this battle. */
+  /** Total logic steps elapsed this battle (29.97 a second, `clock.ts`). */
   ticks: number;
   ability(id: AbilityId): AbilityDef | undefined;
   /** Living, targetable party members (or SDSP parts). */

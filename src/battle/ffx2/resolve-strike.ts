@@ -35,15 +35,18 @@ import {
   statusAttacker,
   statusTarget,
 } from './adapt/inputs.ts';
-import { has, luckStage, statusWord1 } from './adapt/words.ts';
+import { has, luckStage, specialWord, statusWord1 } from './adapt/words.ts';
 import { bumpChain, chainBefore, chainMultiplier } from './chain.ts';
+import { HIT_REACTION_STEPS } from './constants.ts';
 import { rollCritical, type CritInput } from './kernel/crit.ts';
 import { elementLadder } from './kernel/element.ts';
 import { HitResult, determineHits } from './kernel/hit.ts';
 import { computeClassDamage } from './kernel/pipeline.ts';
-import { CLASS_HP, CLASS_MP, type PipelineHooks, type PipelineInput, type StatusPhaseOutcome } from './kernel/pipeline-types.ts';
+import { CLASS_ATB, CLASS_HP, CLASS_MP, type PipelineHooks, type PipelineInput, type StatusPhaseOutcome } from './kernel/pipeline-types.ts';
 import { settleDamage } from './kernel/settle.ts';
 import { SHATTER_SET_BITS, rollCommandStatuses, rollShatter } from './kernel/status.ts';
+import { magicCancel } from './kernel/atb-interrupt.ts';
+import { applyDelay, cancelCast } from './atb-engine.ts';
 import type { StatusOutcome, StatusResult } from './kernel/statusTypes.ts';
 import { afterRevive, applyHpDelta, heal, type ResolveContext } from './resolve-hp.ts';
 import { applyStatusResult, rollEngineRiders } from './resolve-status.ts';
@@ -179,6 +182,21 @@ function strike(env: Env, target: Ffx2Unit): number {
     const base = result ?? startStatusResult(target, false);
     result = { ...base, statusSet: (base.statusSet | SHATTER_SET_BITS) >>> 0 };
   }
+  // --- magic cancel: `Cmd+0x7a` is the chance that this hit aborts the cast the target has on the purple bar ----------------
+  const cancelChance = command.record.magicCancel ?? 0;
+  let cancelled = false;
+  if (cancelChance > 0) {
+    cancelled = magicCancel(
+      {
+        attackerId,
+        chance: cancelChance,
+        targetImmune: (specialWord(target) & 0x200) !== 0,
+        action: target.atb.charging !== null ? { type: 3, kind: 2, released: 0 } : { type: 0, kind: 0, released: 0 },
+        blockMask: 0,
+      },
+      critDraw(ctx.rng),
+    ).cancelled;
+  }
   // --- the Bribe reward, then the settled numbers (halving, Death replaces damage, the limit) ------------------
   if (command.bribe) applyBribeReward(env.theft, target);
   const resultSet = result?.statusSet ?? statusWord1(target);
@@ -204,6 +222,7 @@ function strike(env: Env, target: Ffx2Unit): number {
       if (hp > 0 && !noChain) {
         ctx.emit({ type: 'chain', targetId: target.id, count: before, multiplier: chainMultiplier(before) });
         bumpChain(target, before, classes.critical);
+        target.gauge.hitReaction = HIT_REACTION_STEPS; // the flinch halves the target's tick for a while (`atb-engine.ts kernelUnit`)
       }
       if (wasAlive) {
         ctx.emit({
@@ -237,6 +256,14 @@ function strike(env: Env, target: Ffx2Unit): number {
     } else if (moved < 0) {
       ctx.emit({ type: 'mp-heal', targetId: target.id, sourceId: user.id, amount: -moved });
     }
+  }
+  // The ATB class (Delay): the gauge of a target that is still standing is pushed back, and a menu it had open closes (`apply_atb_damage`).
+  if ((settled.flags & CLASS_ATB) !== 0 && settled.atb !== 0 && target.alive && !target.removed) {
+    if (applyDelay(target, settled.atb)) ctx.onMenuClosed?.(target);
+  }
+  if (cancelled && target.alive && target.atb.charging !== null) {
+    cancelCast(target, ctx.units);
+    ctx.emit({ type: 'action-end', actorId: target.id });
   }
   if (result !== undefined) applyStatusResult(ctx, user, target, ability, command, result);
   rollEngineRiders(ctx, user, target, ability, command);

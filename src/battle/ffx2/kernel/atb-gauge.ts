@@ -4,7 +4,7 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69). Spec:
  * `research/re-ffx2-atb-status.md` section 3. Pure and deterministic; randomness comes from a `draw(stream)`
- * callback (`./rng.ts`). Not wired into the engine.
+ * callback (`./rng.ts`). Wired into the engine by re-parity W4 (`ffx2/atb-engine.ts`).
  *
  * Exe addresses (live build):
  * - 0x00634110  MsATBgetRestTime: recovery after a command

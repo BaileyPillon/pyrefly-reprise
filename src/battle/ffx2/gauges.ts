@@ -1,77 +1,39 @@
 /**
- * FFX-2 ATB gauges — fill, charge (CTIM) and recovery (RECTIM).
+ * FFX-2 gauges as the HUD and the turn logic read them (re-parity W4; **FFX-2 only**).
  *
- * The decoded model [ffx2-combat-core §1.2]:
+ * The gauge itself is the GAME's (`atb-engine.ts`, on `kernel/atb*.ts`): a down-counter in the game's units that the
+ * character's speed pays each logic step. What lives here is what everything else asks of it: whether a unit is READY,
+ * the bar colour, and the HUD mirrors `AtbState.ticks`, `required` and `gauge` (`research/re-ffx2-atb-status.md` section 3).
  *
- * ```
- * ticks = floor(10000 * value / (agility + 1))     // the runway LENGTH
- * ```
+ * The HUD draws a bar `required` units long, where `required = floor(10000 * 70 / (AGI + 1))` is the standard wait (the Attack
+ * row's cost). A bar fills as the recovery counter falls: after a command whose cost is the standard one it fills from empty,
+ * after a cheaper command (a spell: 0) it starts full, after a dearer one it stays empty until the counter is inside the
+ * standard wait. That is "how much of a standard wait is paid", which is the only reading a command-dependent counter allows.
  *
- * consumed at a **fixed** 3000 ticks/s. Agility shortens the runway; it does
- * not speed the fill. That is the reading the HUD draws and the one
- * `visual-bible §4.3` specifies, so `AtbState.required` is a *length* and a
- * fast dressphere visibly gets a shorter bar.
- *
- * Haste and Slow are multipliers on the **global tick rate** (x1.05 / x0.5) —
- * they never touch the Agility stat. This is X-2's Haste and it shares nothing
- * with FFX's Haste (which halves CTB recovery); see `docs/CONTRACTS.md`
- * "Do not share status logic between the two games".
- *
- * The four-phase pipeline a unit walks per turn:
- * ```
- * [recovery owed] -> [ATB fill to `required`] -> [command] -> [CTIM] -> [execute]
- * ```
+ * Haste and Slow are the kernel's speeds (x21/20 and /2 of the Config speed); they never touch the Agility stat, and they
+ * share nothing with FFX's Haste (`docs/CONTRACTS.md`, "Do not share status logic between the two games").
  */
 
-import type { AbilityDef, AtbSnapshot, Command, FFX2Combatant } from '../common/types.ts';
-import {
-  ATB_BASE_VALUE,
-  ATB_INTERNAL_MAX_TICKS,
-  BAR_INTERNAL_MAX,
-  HASTE_TICK_MULTIPLIER,
-  SLOW_CHARGE_VALUE_MULTIPLIER,
-  SLOW_TICK_MULTIPLIER,
-  TICKS_PER_BAR,
-  TICK_RATE_BASE,
-} from './constants.ts';
+import type { AtbSnapshot, FFX2Combatant } from '../common/types.ts';
+import type { Ffx2Unit } from './internal.ts';
+import { ATB_BASE_VALUE, TICKS_PER_BAR } from './constants.ts';
+import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 
-/** Ticks a unit must accumulate for a gauge entry of `value`. §1.2 */
+/** Units of a cost `value` at an Agility: `floor(10000 * value / (agility + 1))`, the game's `cost * 10000 / (AGI + 1)`. */
 export function atbTicks(value: number, agility: number): number {
   return Math.floor((10000 * value) / (Math.max(0, agility) + 1));
 }
 
-/** `"<skillset> wait down"` / Turbo / Lv.2–Lv.3 reducers shorten the GAUGE. §1.3 */
+/** `"<skillset> wait down"` shortens a cast by a percent of the whole (`kernel/atb-gauge.ts` `chargeTime` does the arithmetic in the engine). */
 export function applyWaitDown(ticks: number, waitDownPercent: number): number {
   if (waitDownPercent <= 0) return ticks;
   return ticks - Math.floor((ticks * waitDownPercent) / 100);
 }
 
-/** Ticks -> milliseconds at the base rate. The presenter owns wall-clock time. */
-export function ticksToMs(ticks: number): number {
-  return (ticks / TICK_RATE_BASE) * 1000;
-}
-
-/** Milliseconds -> ticks at the base rate. */
-export function msToTicks(ms: number): number {
-  return (ms / 1000) * TICK_RATE_BASE;
-}
-
-/** Statuses that stop a gauge dead. §1.2 — Stop, Sleep, KO and Petrify all freeze it. */
+/** Statuses that stop a gauge dead: Stop, Sleep, KO and Petrify (the kernel gives these units a speed of 0). */
 export function isGaugeFrozen(c: FFX2Combatant): boolean {
   if (!c.alive || c.removed) return true;
   return Boolean(c.statuses.stop || c.statuses.sleep || c.statuses.petrify || c.statuses.ko);
-}
-
-/**
- * Per-combatant tick rate multiplier. 1.0 normally, x1.05 Hasted, x0.5 Slowed,
- * x0 frozen. Haste and Slow are mutually exclusive; Slow wins if both are
- * somehow present, matching the "gold bar" reading.
- */
-export function tickMultiplier(c: FFX2Combatant): number {
-  if (isGaugeFrozen(c)) return 0;
-  if (c.statuses.slow) return SLOW_TICK_MULTIPLIER;
-  if (c.statuses.haste) return HASTE_TICK_MULTIPLIER;
-  return 1;
 }
 
 /** Bar colour hint for the HUD. §1.1 — green normal, red hasted, gold slowed, white stopped. */
@@ -82,152 +44,48 @@ export function barState(c: FFX2Combatant): 'normal' | 'haste' | 'slow' | 'stop'
   return 'normal';
 }
 
-/** The baseline runway length for this combatant, in ticks. */
+/** The standard gauge of an Agility: the Attack row's cost over (AGI + 1), at least 1 so the HUD always has a bar. */
 export function baseRequired(agility: number): number {
   return Math.max(1, atbTicks(ATB_BASE_VALUE, agility));
 }
 
 /**
- * Extra recovery owed *beyond* the baseline runway.
- *
- * The research's `recoveryValue` (70 untagged, 140 for `2xRT`) is the whole
- * post-action gauge, and the baseline 70 **is** `required`. So an untagged or
- * `RT` action owes nothing extra and a `2xRT` action owes one more baseline
- * runway — which reproduces §1.4's 8.49 s at Agi 54 exactly. §1.4
+ * Is this unit READY for a decision: its gauge has run out, its thinking is over and it has been handed to its menu (a girl,
+ * state 4), its script (a monster, 5), its AI (6) or its Confusion or Berserk pick (7, 8). A unit that is executing a command
+ * (9), recovering or thinking is not; neither is one the clock cannot reach (dead, Stopped, asleep, petrified, ejected).
  */
-export function extraRecoveryTicks(recoveryValue: number, agility: number): number {
-  const extra = Math.max(0, recoveryValue - ATB_BASE_VALUE);
-  return atbTicks(extra, agility);
-}
-
-/** Charge (CTIM) length for an ability, honouring Slow's value doubling. §1.3 */
-export function chargeTicksFor(
-  ability: Pick<AbilityDef, 'chargeTicks'>,
-  c: FFX2Combatant,
-  waitDownPercent = 0,
-): number {
-  const value = (ability.chargeTicks ?? 0) * (c.statuses.slow ? SLOW_CHARGE_VALUE_MULTIPLIER : 1);
-  if (value <= 0) return 0;
-  return applyWaitDown(atbTicks(value, c.stats.agi), waitDownPercent);
-}
-
-/** Internal ceiling on accumulated ATB ticks. §1.2 — 416%, capped at 99 840. */
-export function atbCeiling(required: number): number {
-  return Math.min(required * BAR_INTERNAL_MAX, ATB_INTERNAL_MAX_TICKS);
-}
-
-/** True when a command may be issued: the green bar is completely full. §1.1 */
-export function isReady(c: FFX2Combatant): boolean {
+export function isReady(c: Ffx2Unit): boolean {
   if (isGaugeFrozen(c)) return false;
-  if (c.atb.charging) return false;
-  if (c.atb.recovery > 0) return false;
-  return c.atb.ticks >= c.atb.required;
+  const s = c.gauge.state;
+  return s >= Ffx2AtbState.Ready && s <= Ffx2AtbState.Berserk;
 }
 
-/** Recompute the HUD mirror `gauge` (0–100). */
-export function refreshGauge(c: FFX2Combatant): void {
-  const fill = c.atb.required > 0 ? c.atb.ticks / c.atb.required : 0;
+/** The fraction of the standard wait that is paid, 0 to 1 (the HUD's bar). A unit that is ready reads 1. */
+export function fillOf(c: Ffx2Unit): number {
+  if (isReady(c)) return 1;
+  if (c.gauge.state === Ffx2AtbState.Executing) return 0; // a unit on the purple bar, or playing its command, has spent its gauge
+  if (c.atb.required <= 0) return 0;
+  return Math.max(0, Math.min(1, 1 - Math.max(0, c.atb.recovery) / c.atb.required));
+}
+
+/** Recompute the HUD mirrors (`ticks`, `gauge`) from the recovery counter. */
+export function refreshGauge(c: Ffx2Unit): void {
+  const fill = fillOf(c);
+  c.atb.ticks = Math.round(fill * c.atb.required);
   c.atb.gauge = Math.min(100, Math.round(fill * 100));
 }
 
-/** Reset the gauge to empty for the next cycle, owing `extra` recovery ticks first. */
-export function beginRecovery(c: FFX2Combatant, extra: number): void {
-  c.atb.ticks = 0;
-  c.atb.recovery = Math.max(0, Math.round(extra));
-  c.atb.charging = null;
-  c.atb.required = baseRequired(c.stats.agi);
-  refreshGauge(c);
-}
-
-/** Start the purple charge bar for `command`. §1.1 */
-export function beginCharge(c: FFX2Combatant, command: Command, ticks: number): void {
-  c.atb.ticks = 0;
-  c.atb.charging = { commandRef: command, remainingTicks: ticks, totalTicks: ticks };
-  refreshGauge(c);
-}
-
-/**
- * Advance one combatant by `ticks` of global clock.
- *
- * Returns `'charge-complete'` when the purple bar emptied this step (the queued
- * command must now fire) and `'ready'` when the green bar filled this step.
- * Recovery is paid first, then charge, then fill — a unit never does two of
- * those in one step, which keeps the sub-stepping in `engine.tick` exact.
- */
-export function advanceGauge(c: FFX2Combatant, ticks: number): 'none' | 'ready' | 'charge-complete' {
-  const mult = tickMultiplier(c);
-  if (mult <= 0 || ticks <= 0) return 'none';
-  let remaining = ticks * mult;
-
-  if (c.atb.recovery > 0) {
-    const paid = Math.min(c.atb.recovery, remaining);
-    c.atb.recovery -= paid;
-    remaining -= paid;
-    if (remaining <= 0) return 'none';
-  }
-
-  if (c.atb.charging) {
-    c.atb.charging.remainingTicks -= remaining;
-    if (c.atb.charging.remainingTicks <= 0) {
-      c.atb.charging.remainingTicks = 0;
-      return 'charge-complete';
-    }
-    return 'none';
-  }
-
-  const wasReady = c.atb.ticks >= c.atb.required;
-  c.atb.ticks = Math.min(atbCeiling(c.atb.required), c.atb.ticks + remaining);
-  refreshGauge(c);
-  return !wasReady && c.atb.ticks >= c.atb.required ? 'ready' : 'none';
-}
-
-/**
- * Ticks of *global clock* until this combatant's next state change, or
- * `Infinity` when nothing will ever happen (frozen, or already ready).
- */
-export function ticksUntilNextEvent(c: FFX2Combatant): number {
-  const mult = tickMultiplier(c);
-  if (mult <= 0) return Infinity;
-  if (c.atb.recovery > 0) return c.atb.recovery / mult;
-  if (c.atb.charging) return Math.max(0, c.atb.charging.remainingTicks) / mult;
-  const missing = c.atb.required - c.atb.ticks;
-  if (missing <= 0) return 0;
-  return missing / mult;
-}
-
-/** Empty a percentage of the target's ATB **or** CTIM bar. §2.8 "Delay effect". */
-export function applyDelayEffect(c: FFX2Combatant, percent: number): void {
-  const fraction = Math.max(0, Math.min(100, percent)) / 100;
-  if (c.atb.charging) {
-    // CTIM cannot be *cancelled* by Delay, only shortened.
-    c.atb.charging.remainingTicks = Math.max(1, c.atb.charging.remainingTicks * (1 - fraction));
-    return;
-  }
-  c.atb.ticks = Math.max(0, c.atb.ticks * (1 - fraction));
-  refreshGauge(c);
-}
-
-/** A mid-CTIM action is cancelled outright and the ATB restarts from empty. §2.8 */
-export function applyActionCancel(c: FFX2Combatant): boolean {
-  if (!c.atb.charging) return false;
-  c.atb.charging = null;
-  c.atb.ticks = 0;
-  c.atb.recovery = 0;
-  refreshGauge(c);
-  return true;
-}
-
-/** Build the HUD snapshot. `required` lets the HUD draw a shorter runway. §1.2 */
-export function buildSnapshot(order: readonly FFX2Combatant[], elapsedMs: number): AtbSnapshot {
+/** Build the HUD snapshot. `required` lets the HUD draw a shorter runway for a faster character. §1.2 */
+export function buildSnapshot(order: readonly Ffx2Unit[], elapsedMs: number): AtbSnapshot {
   return {
     elapsedMs,
     bars: order.map((c) => ({
       actorId: c.id,
-      fill: c.atb.required > 0 ? c.atb.ticks / c.atb.required : 0,
+      fill: fillOf(c),
       required: c.atb.required,
       ready: isReady(c),
       charge: c.atb.charging
-        ? 1 - c.atb.charging.remainingTicks / Math.max(1, c.atb.charging.totalTicks)
+        ? 1 - Math.max(0, c.atb.charging.remainingTicks) / Math.max(1, c.atb.charging.totalTicks)
         : null,
       state: barState(c),
     })),
