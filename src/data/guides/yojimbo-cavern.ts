@@ -22,8 +22,9 @@
  * (§2.1), Doom count 5 (§2.1, [verified: 4 sources]), +3 % per targeting and
  * +2 % per attack (§4.1, [single source]), the 25 / 50 / 100 bands (§4.1,
  * [verified: 3 sources]), Zanmato 9,999 to the whole party (§3.1, [verified:
- * 4 sources]). The odds inside each band are our estimate (B2, D-050) and
- * the guide never states them.
+ * 4 sources]). The odds inside each band are the game's own script now
+ * [research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md §3.2, D-11, exact over all 65,536
+ * draws], which replaced the estimate of B2 / D-050: the phase note states them.
  */
 
 import type { ChapterGuide, GuideHint, GuideRule } from './types.ts';
@@ -82,7 +83,7 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
     {
       text: 'Lady Ginnem and Daigoro cannot be targeted. The dog bites only when Yojimbo orders it.',
       short: 'Ginnem and Daigoro cannot be targeted',
-      cite: 'ffx-yojimbo §2.5; B3 (our estimate)',
+      cite: 'ffx-yojimbo §2.5; re-ffx-ai-evrae-yojimbo-isaaru-sin §3.1, §3.4',
     },
   ],
 
@@ -126,8 +127,8 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
   phases: [
     {
       label: 'The Zanmato gauge',
-      note: 'Below 25 he only sends the dog. From 25 he adds Kozuka, from 50 Wakizashi, and at 100 Zanmato.',
-      cite: 'ffx-yojimbo §4.1',
+      note: 'Below 25 he only sends the dog. From 25 he adds Kozuka, one turn in four. From 50 Wakizashi joins it and each takes a fifth of his turns, the dog three fifths. From 80 each takes a quarter and the dog half. At 100, Zanmato.',
+      cite: 'ffx-yojimbo §4.1; re-ffx-ai-evrae-yojimbo-isaaru-sin §3.2',
     },
   ],
 };
