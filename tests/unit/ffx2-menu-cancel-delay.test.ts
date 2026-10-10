@@ -69,6 +69,9 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
   // **Chapter IV's six hashes (here and in ON below) were re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use
   // 14 from the files"; the first event that differs is Bahamut's first Mega Flare damage, see `ffx2-atb-golden.test.ts`, ninth re-pin); the
   // old ones are in git at 3663cd3a. Chapters V and VI did not move.
+  // **Chapter VI's twelve hashes (here and in ON below) were re-pinned again 2026-10-10 for re-parity AI lane C (FFX-2 only; reason "game-script
+  // parity")**: Acts I to III follow the game's own scripts and the Acts I and II enemies carry the game's stat rows, so every Chapter VI log moved
+  // (the first differing event is the opening gauge snapshot); Chapters IV and V did not move. The old Chapter VI hashes are in git at 931613a8.
   const PINNED: Record<string, string> = {
     'IV|active|1': 'b69f4a3f1b9b6b0a', 'IV|split|1': 'eef141fb06ebe8cc',
     'IV|active|2': '00b9babadbd69165', 'IV|split|2': '274ca68e176eacb7',
@@ -76,9 +79,9 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
     'V|active|1': '9cfe461ad465c311', 'V|split|1': '437c85e81ea08054',
     'V|active|2': 'e7b90b74c53c5a16', 'V|split|2': '94119b09f8fb5da3',
     'V|active|3': 'b84d244db178ad3e', 'V|split|3': 'e70d65bbd193fc3d',
-    'VI|active|1': '12d69326e68d09f2', 'VI|split|1': 'cd51b9dbeab47115',
-    'VI|active|2': '0eff8835d726e853', 'VI|split|2': '66d3ab577d1b1bcc',
-    'VI|active|3': 'b2cfa25eb31ec05a', 'VI|split|3': '6a75d9deb02fa7cf',
+    'VI|active|1': 'eaa6c9a522a45ab2', 'VI|split|1': '750b7080b68da4ef',
+    'VI|active|2': '8613bf541e0ee8ae', 'VI|split|2': '082458b787e4fedf',
+    'VI|active|3': 'c148b14c99b32bba', 'VI|split|3': 'ab60c95e6a571fca',
   };
   // Switch on (the default since 2026-09-26), recorded on branch `r20-menu-cancel` the same way; re-pinned 2026-10-09 for re-parity W3
   // (same cause as above; old hashes at 029d49c7).
@@ -91,9 +94,9 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
     'V|active|1': 'fe7ab95d0fbae673', 'V|split|1': '88e40db9940ac6e0',
     'V|active|2': '086e107f235fc649', 'V|split|2': 'a621da560e50e1e9',
     'V|active|3': '0e5f385c8dca4fa7', 'V|split|3': 'ec68335b5d29e5b9',
-    'VI|active|1': 'a77a0b4b1dcba113', 'VI|split|1': 'ca1c8bcd80dbf334',
-    'VI|active|2': '55c7f457cfc62c2a', 'VI|split|2': 'cad662e72aec12e9',
-    'VI|active|3': 'a4912c4e9de351d3', 'VI|split|3': '7c5a4a6680191cd7',
+    'VI|active|1': '1c28824f71017942', 'VI|split|1': '4fb239dd75b06c4e',
+    'VI|active|2': 'a52cb00d89558482', 'VI|split|2': '1e60b0804e2076c3',
+    'VI|active|3': 'b79b28bec29ebc37', 'VI|split|3': 'deed4ea264be3735',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 

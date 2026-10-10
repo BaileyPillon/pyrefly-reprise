@@ -155,6 +155,12 @@ describe('the flag is the only way in: every other chain carries what it always 
    * equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again, and Chapter 6's first three equal `ffx2-hit-closes-menu.test.ts`'s. The old
    * hashes are in git at 029d49c7.
    *
+   * **Chapter 6's eight re-pinned 2026-10-10 for re-parity AI lane C (FFX-2 only; reason "game-script parity").** The Syndicate's scripts are the
+   * game's own and Acts I and II carry the game's stat rows (`docs/handoff/re-parity-ai-ffx2-c.md`); all eight Chapter 6 logs moved, first at the
+   * opening gauge snapshot (new Agility for Ormi, Logos and the goons). Chapters 5, XI and the Sisters did not move, and with the old scripts and
+   * stats put back the eight Chapter 6 hashes are the old ones again (so the new results tally and per-stage sequence targets move nothing by
+   * themselves). The old hashes are in git at 931613a8.
+   *
    * **Re-pinned 2026-09-26 for the merge of `ffx2-engine-fixes-0926` (Bailey's D-193, option B;
    * FFX-2 only).** No Den code changed; the engine did. (1) IC-2: an all-target action hits each
    * target taken at its start once, and a target KO'd partway is skipped instead of its hits
@@ -166,7 +172,7 @@ describe('the flag is the only way in: every other chain carries what it always 
    */
   const BASE = {
     ch5: ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912', 'bb8b6d116a180f6b', 'f00b58edda467499', '148ffcc77b0bb2cf', '981f66daf32dcc39', 'ce3a4f1ccf8f5e50'],
-    ch6: ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682', 'ab962a9aebd13b0b', '8f58a5bbbd63b99f', 'a69a00370cad2018', '68a04a7acee4c629', '4a90f06e891eda74'],
+    ch6: ['7d06269b1bd1771e', '1e2a2b9be2c4a8f3', '4a2fd019741c9bf9', 'b16f960b0478dad9', '4e296f85f8ddbb59', 'ba0387a847b4daec', '4f65a1d3449e127b', '5b842271ebb81d20'],
     ch11: ['1cf31b84232a2028', '78698b19c9da6fe4', '425a12408fed1577', '2db9b88958265675', '0be0a10a3ff1a1b8', '9396dea5031ab945', 'e3454b6ae228b93a', '8f9d6d3806248e42'],
     sisters: ['c9c0381d20d062a4', '41d601787f5fa9c7', '4a174a2b875c6b3e', 'c959228873f683ae', '62cf1c4128a600f9', '6ab97f3448d1ccb2', '2e6d097ea744b4a5', '66c01343be68c8c1'],
   };

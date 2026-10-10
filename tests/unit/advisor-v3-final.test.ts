@@ -124,10 +124,13 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     return alive;
   };
 
-  it('C2-M1: a charging heal that lands in time is counted; the card names no second heal (Leblanc seed 74)', async () => {
+  // Re-parity AI lane C (FFX-2 only; reason "game-script parity"): seed 74 before the Syndicate followed the game's own scripts, seed 4 after (the first
+  // seed of 1 to 60 whose board is this one: a heal already charging on the girl the card would have healed again; 4, 5, 6 and 8 all have it,
+  // found by running the engine, rule 3). The rule the test checks is unchanged.
+  it('C2-M1: a charging heal that lands in time is counted; the card names no second heal (Leblanc seed 4)', async () => {
     let found: { ctx: DecisionContext; now: AdvisorView | null; before: AdvisorView | null; girl: CombatantId; snap: string } | null = null;
     try {
-      await runChapter(chapterById('ffx2-leblanc'), 74, (ctx) => {
+      await runChapter(chapterById('ffx2-leblanc'), 4, (ctx) => {
         const e = ctx.engine as unknown as FFX2Engine;
         const snap = JSON.stringify([e.state(), e.heldCommand()]);
         const { now, before } = cards(ctx);

@@ -224,10 +224,15 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // **Chapter IV's row re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use 14 from the files"; the first
   // event that differs is Bahamut's first Mega Flare damage; see `ffx2-atb-golden.test.ts`, ninth re-pin); the old row is in git at
   // 3663cd3a. Chapters V and VI did not move.
+  // **Chapter VI's row re-pinned 2026-10-10 for re-parity AI lane C (FFX-2 only; reason "game-script parity").** Acts I to III now follow the
+  // game's own scripts and the Acts I and II enemies carry the game's stat rows (`docs/handoff/re-parity-ai-ffx2-c.md`); the first event that
+  // differs is the opening gauge snapshot (Ormi's and Logos' new Agility change their bar lengths). Chapters IV and V did not move, and with the
+  // old scripts and stats put back the three hashes are the old ones again (ad3e5b13a4b416a2, ea6f77082eed6c19, a8449e5542467682), so the new
+  // engine plumbing (the results tally, per-stage sequence targets) moves nothing by itself. The old row is in git at 931613a8.
   const PINNED = [
     ['a290220ed81a53d9', 'd9f53eb0ed928677', '43393d7597f35b57'],
     ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912'],
-    ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682'],
+    ['7d06269b1bd1771e', '1e2a2b9be2c4a8f3', '4a2fd019741c9bf9'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {
