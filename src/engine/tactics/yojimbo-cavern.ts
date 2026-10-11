@@ -26,10 +26,12 @@
  *    the recovery of her Summon [re-ffx-overdrive-steal-aeons §4.7, row A3], so
  *    an aeon called at 80 had ten of his turns still to stand through before
  *    Zanmato, fell in about five, and Yuna, still in her recovery, could not
- *    call the next one in time. Measured on the same tree, 500 seeds:
- *    80 wins 307, 96 wins 495 (holdout 304 and 491; the 94 to 98 neighbours
- *    win 470 to 483, 92 wins 427; calling it after the heal instead of first
- *    wins 441). `docs/handoff/re-parity-w5.md` has the ladder.
+ *    call the next one in time. Measured on the same tree, 500 seeds (1 to 500,
+ *    then the holdout 501 to 1000): 80 wins 307 and 304, 96 wins 495 and 491;
+ *    the 94 to 98 neighbours win 470 to 491, 92 wins 427 and 411, 90 wins 352
+ *    and 366; calling it after the heal instead of first wins 441 and 442.
+ *    96 is the best rung of the ladder in both ranges, on a plateau and not a
+ *    cliff. `docs/handoff/re-parity-w5.md` has the whole ladder.
  * 2. **Revive** a downed member (`./common.ts#revive`).
  * 3. **Yuna heals** the lowest member under 45 % (Curaga when two are that
  *    low, Cura for one). A heal names no enemy, so it adds nothing to his
