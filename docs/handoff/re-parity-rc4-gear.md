@@ -18,9 +18,9 @@ The engine read gear in a narrower way than the game does. It took the **best** 
 | `94664425` | `adapt/auto-status.ts` wired: battle start, the sweep after every action and reaction, the Regen payout, revive, the fayth's Auto-Life, Petrify ending; 110 scenario traces `auto_traces.json`; `parity-ffx-engine-auto-status.test.ts` | E1 to E3 |
 | `75de9029` | `ffx-engine-golden` re-baselined once, each moved digest explained in the comment beside the table | goldens |
 | `8aa468d9` | The gear decode is shared between calls while the gear is unchanged; two function names I had written in comments without a source are removed; the prep screen's summed chips get a DOM test | no behaviour change |
-| (this note) | the handoff and the screenshot | docs |
+| `e29248bc`, `a916190a` and the commit of this note's last edit | the handoff and the screenshot | docs |
 
-The golden table is stale between `c495426e` and `75de9029` (the commit that moves it was split from the commit that re-pins it, so that there is one re-baseline for the whole lane, not two). The branch tip is green.
+The golden table is stale between `c495426e` and `75de9029` (the commit that moves it was split from the commit that re-pins it, so that there is one re-baseline for the whole lane, not two). The branch tip is green on everything this lane touches; the whole suite is in section 7.
 
 ## 2. The difference rows, what changed, proofs
 
@@ -119,7 +119,14 @@ Every other chapter is inside the band: I Flux 499 to 500; VIII Evrae 488 to 488
 2. **Chapter X (Seymour Omnis) is easier by 5 points** (436 to 462 of 500) because the party's critical and percent bonuses are now the game's. It is parity, not tuning; I disclose it because it is the one chapter whose win rate leaves the band.
 3. Nothing else needs your word. No new screen, no new content, nothing deployed.
 
-## 7. Open items
+## 7. The whole suite, once, at the tip (`a916190a`)
+
+`vitest run --maxWorkers=4`, TEMP and TMP on D:: **1,066 files passed, 24 failed, 16 skipped; 16,352 tests passed, 186 failed.** `tsc --noEmit` clean. The 186 are not this lane:
+
+- **183 failures in 22 files are the missing `public/art` of a worktree** (the portrait face crop 145, art references, the ship scenes and contents, the chapter-meta hero-art rows, the art manifests, the pause screen's plates and the cutscene poses), and **the same 22 files fail with the same 183 tests on `origin/re-parity-rc4-base` `f39cd57b`** (run on that commit with this tree switched to it and back).
+- **3 timeouts under the full-suite load** (15 s each): `chapters/sin-fins-core-bench.test.ts` (2 tests; it times out alone on the base commit too, at 20 s, on this loaded machine) and `advisor-floor.test.ts` Chapter III (passes alone on this branch in 7.9 s, and in 9.8 s on the base).
+
+## 8. Open items
 
 - **C5, C6, C8 not changed** (section 2). C6 waits on G03 open question 11 (which `weapon.bin` rows above 34 are gear in play).
 - **Timing of the SOS sweep.** The game runs it at the end of every action; whether a real action reaches it between two hits by a queue-failure route was not measured (FFX-G02 open question 13), so the engine switches the SOS set only at the end of an action.
@@ -128,7 +135,7 @@ Every other chapter is inside the band: I Flux 499 to 500; VIII Evrae 488 to 488
 - **Mirrors.** `ffx/estimate.ts` and `engine/tactics/advisor-roll.ts` read the same engine fields (the resistance bytes, `equipmentCrit`, the percent bytes through `simulate.ts` and `adapt/status.ts`), so they follow with no edit; none is stale. `node tools/orphans.mjs` lists none of the new modules (`kernel/drops.ts` and `kernel/gear-drop.ts` were already orphans).
 - A screenshot of the Stats tab after the change: `docs/screenshots/rc4-gear-prep-stats-yuna.png` (Yuna at Chapter I: Magic Def 39, "-15% taken"; the art is missing because worktrees lack `public/art`). The dev server I started on 5190 is stopped.
 
-## 8. Re-run
+## 9. Re-run
 
 ```
 node "D:/Final Fantasy/node_modules/typescript/bin/tsc" --noEmit
@@ -143,6 +150,6 @@ D:/Tools/ffx-parity/venv/Scripts/python.exe -I D:/Tools/ffx-parity/rc4-gear/gen_
 PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_OUT=after-500.json (same vitest) tests/unit/ffx-parity-measure.test.ts
 ```
 
-## 9. The player's changelog paragraph (FFX)
+## 10. The player's changelog paragraph (FFX)
 
 **Gear works the way the game's does.** Bonuses of one kind on a piece now add up: Magic Def +10% and +5% on Yuna's Blessed Ring is 15%, two HP +10% are HP +20%. Every weapon and every armour adds 3 to your critical chance, so a character wearing both has 6 and criticals land a little more often. Curse Ward now stops Curse completely, like Curseproof, and two Wards against the same status add together. Rikku's Shell Targe finally does what it says: while she is under half HP she gets Shell, and loses it again when she is healed; the Auto-Shell, Auto-Haste and other auto-statuses a character wears come back after a revive or when Petrify wears off. In Braska's Final Aeon, the Garden of Pain (Seymour Omnis) and the two Sin fights the party hits a little harder and a little more often.
