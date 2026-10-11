@@ -297,6 +297,7 @@ export function performCommand(
   // the strike (`steal.ts`), after the hit determination, like every other command.
   const gilSpent = 'gilSpent' in command ? command.gilSpent : undefined;
   resolveAbility(env.resolveCtx(), actor, fired, targets, {
+    ...('exactTargets' in command && command.exactTargets === true ? { exactTargets: true } : {}), // a script that names its targets exactly (AI-FFX2-b)
     ...(hits !== null ? { hitsOverride: hits } : {}),
     ...(gilSpent !== undefined ? { gilSpent } : {}),
   });

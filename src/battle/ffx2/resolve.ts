@@ -28,12 +28,13 @@ export function resolveAbility(
   user: Ffx2Unit,
   ability: AbilityDef,
   requested: readonly CombatantId[],
-  options: { isCounter?: boolean; hitsOverride?: number; gilSpent?: number; inSequence?: boolean } = {},
+  options: { isCounter?: boolean; hitsOverride?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
 ): number {
   const all = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
   // `extra.namedTargetsOnly` (`abilities-shuyin.ts`, Acta Est Fabula): an all-target row whose
   // source names its targets hits only the ids its caller named. Switch: `constants.ts`.
-  const namedOnly = ability.extra?.['namedTargetsOnly'] === true && (ctx.namedTargetsOnly ?? NAMED_TARGETS_ONLY);
+  // `exactTargets` (AI-FFX2-b): a scripted command that names its targets hits exactly them, whatever group the row can reach.
+  const namedOnly = options.exactTargets === true || (ability.extra?.['namedTargetsOnly'] === true && (ctx.namedTargetsOnly ?? NAMED_TARGETS_ONLY));
   const pool = namedOnly ? all.filter((u) => requested.includes(u.id)) : all;
   if (pool.length === 0) return 0;
 
@@ -65,6 +66,7 @@ export function resolveAbility(
   const reveals = sensorKind(ability);
   if (reveals) {
     resolveSensor(ctx.emit, user, pool, reveals);
+    for (const t of pool) ctx.onResult?.(t, user, ability); // a Scan or Libra is a result on each target (AI-FFX2-b)
     return 0;
   }
 

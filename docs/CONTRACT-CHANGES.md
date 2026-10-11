@@ -87,6 +87,15 @@ Branch `re-parity`. Game case: **FFX-2 only** (`src/battle/ffx2/**`, the FFX-2 d
 - `Ffx2EngineOptions.menuCancelOnlyDelayAbilities` and `immuneHitsSkipChain` are no longer read (the game's rules are the engine's), and `atbSpeed` means 70 / 95 / 120 units a step, not a multiplier of a 3,000-a-second clock.
 
 UI (`src/ui/common/resultsMath.ts`): `FFX2_MS_PER_TICK` is `1001 / 30` (the logic step) where it was `1000 / 3000`; the result screen's last-resort conversion of an FFX-2 tick count is therefore 100 times longer per tick, and equally exact.
+## 2026-10-10 — A scripted FFX-2 command may name its targets exactly: `AbilityCommand.exactTargets` (additive; FFX-2 only; AI lane FFX2-b)
+
+Branch `re-parity-ai-ffx2-b`. One optional field on a shared contract type, `src/battle/common/types.ts`. Handoff: [re-parity-ai-ffx2-b](handoff/re-parity-ai-ffx2-b.md). Game case: FFX-2 only (the FFX and FF7 engines never read it).
+
+- `AbilityCommand.exactTargets?: boolean`: the game queues an enemy's command with a target mask of the characters its script named, whatever group the row can reach, so a copied
+  all-party spell aimed "at the attacker alone" (the Oversoul Paragon's answer, row O9) must hit only the girl named in `targets`. Set, `resolveAbility` keeps only the named ids of the resolved
+  pool (`resolve.ts`, the same filter `extra.namedTargetsOnly` uses); omitted, the row's own targeting decides as before. `execute.ts` passes it through; `ai/paragon-oversoul.ts` is the only script that sets it.
+- Engine-internal, no contract file: `AiScript.onResult` (the reaction entry, run once per result applied to an enemy) and `ResolveContext.onResult`, called from `resolve-strike.ts` (each strike, each miss, a drain's
+  transfer to the drainer) and `resolve.ts` (a Scan or Libra). Inert for every script that does not define it.
 
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 

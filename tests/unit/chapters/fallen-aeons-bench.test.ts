@@ -14,7 +14,6 @@
 import { describe, expect, it } from 'vitest';
 import { driveChain, driveLink, LINES, type LineOptions } from '../helpers/fallenAeonsDrive.ts';
 import { ROAD_ANIMA, ROAD_SHIVA, ROAD_SISTERS } from '../../../src/data/ffx2/enemies/fallen-aeons-road.ts';
-import { AC_TRIGGER_FLAG } from '../../../src/battle/ffx2/ai/fallen-aeons.ts';
 
 const SEEDS = 200;
 const HUMAN_SEEDS = 40;
@@ -86,14 +85,9 @@ describe('Chapter XI benches (200 seeds, bench speed, Wait)', () => {
     expect(wins('2 Sisters', 'intended')).toBeGreaterThan(mindy ? (results.get(mindy[2])?.wins ?? Infinity) : Infinity);
   });
 
-  it('FA8 b (landed damage only) measured on the Sisters, for Bailey', () => {
-    const flags = { [AC_TRIGGER_FLAG]: 'damaged' };
-    const a = bench(ROAD_SISTERS, LINES.sistersDarknessDispel, SEEDS, { flags });
-    const b = bench(ROAD_SISTERS, LINES.sistersDarknessSpam, SEEDS, { flags });
-    row('2 Sisters', 'intended, under FA8 b', 'Wait, D=0', a);
-    row('2 Sisters', 'wrong, under FA8 b', 'Wait, D=0', b);
-    expect(a.unfinished + b.unfinished).toBe(0);
-  }, 300_000);
+  // (The FA8 b bench that stood here switched Chapter XI's "attacked" reading to landed damage only. Since re-parity AI-FFX2-b (FFX-2 only,
+  // reason "game-script parity") Shiva, Anima and the Sisters count every result applied to them, the game's own rule, so the switch no longer
+  // reaches them; only Ixion's script reads it.)
 
   it('the whole Road, intended lines, carrying the party through the Save Spheres', () => {
     let wins = 0;

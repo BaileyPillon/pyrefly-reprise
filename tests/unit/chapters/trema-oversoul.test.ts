@@ -1,7 +1,10 @@
 /**
- * Chapter XIII option 1 (TR7 b): **Oversoul Paragon**, built and OFF. The stat block, the rows and
- * the AI of `research/ffx2-trema.md` §12.2 (SinirothX's single-source script), each gap a named
- * estimate. Run against the shipped records and the real engine [hard rule 3]. **FFX-2 only.**
+ * Chapter XIII option 1 (TR7 b): **Oversoul Paragon**, shipped. The stat block and the rows of `research/ffx2-trema.md` §12.2, and the
+ * script's place in the engine. Run against the shipped records and the real engine [hard rule 3]. **FFX-2 only.**
+ *
+ * Re-parity AI-FFX2-b (reason "game-script parity"): the AI is the game's own script `o152` now (`research/re-ffx2-ai-fallen-trema.md` 6); its
+ * decision table is `tests/unit/parity-ffx2-ai-oversoul.test.ts`. The first build's script blocks that stood here (SinirothX's dump with a
+ * named estimate for every gap: answers at once, any cast waking the Demi loop, a 20 s idle limit as the only clock) are replaced by it.
  */
 
 import { afterEach, describe, expect, it } from 'vitest';
@@ -11,7 +14,7 @@ import { hitPercent } from '../../../src/battle/ffx2/hit.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
 import { abilityPerformedBy } from '../../../src/battle/ffx2/execute.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
-import { OVERSOUL_ESTIMATES, oversoulAttackClass, paragonOversoulScript } from '../../../src/battle/ffx2/ai/paragon-oversoul.ts';
+import { OVERSOUL_ESTIMATES, paragonOversoulScript } from '../../../src/battle/ffx2/ai/paragon-oversoul.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { paragon } from '../../../src/data/ffx2/enemies/paragon.ts';
 import { paragonOversoul } from '../../../src/data/ffx2/enemies/paragon-oversoul.ts';
@@ -40,15 +43,17 @@ describe('the Oversoul block and rows (§12.2)', () => {
     expect(cloisterParagonOversoulGroup.nextGroupId).toBe(CLOISTER_TREMA);
   });
 
-  it('every missing value is a named parameter at its declared default', () => {
+  it('the values that remain parameters are at their declared defaults (the game answered the rest)', () => {
+    // Re-parity AI-FFX2-b (FFX-2 only): finalImpactReducible is true (the row has the physical bit) and attackItchy false (the row has no
+    // status); answerTiming and attackBWakesOn are gone (the answer is made on the next poll, and only a heal that lands on him wakes the
+    // Demi loop). idleSeconds (structural) and lowHpActsEveryTurn (D-151, "it waits to be hit") stay as the owner left them.
     expect(OVERSOUL_ESTIMATES).toMatchObject({
       physicalHitPercent: 50, idleSeconds: 20, magicBelow: 0.4, finalBelow: 0.1, finalImpactHits: 14,
-      finalImpactReducible: false, agaOnAll: true, attackItchy: true, answerTiming: 'immediate',
-      attackBWakesOn: 'any-party-cast', lowHpActsEveryTurn: false, thinkingPeriod: 0,
+      finalImpactReducible: true, agaOnAll: true, attackItchy: false, lowHpActsEveryTurn: false, thinkingPeriod: 0,
     });
   });
 
-  it('its physicals roll the game\'s accuracy formula 2 (its Accuracy and Luck against the girl\'s Luck and Evasion), and cause Itchy; its magic never misses', () => {
+  it('its physicals roll the game\'s accuracy formula 2 (its Accuracy and Luck against the girl\'s Luck and Evasion), and cause nothing else; its magic never misses', () => {
     const b = fresh();
     const attack = ab('paragon-os-attack');
     expect(attack.canMiss).not.toBe(false); // hard rule 5: it rolls
@@ -67,7 +72,7 @@ describe('the Oversoul block and rows (§12.2)', () => {
     bare.stats.luck = 11; // a girl without the Rabite's Foot
     expect(hitPercent(p, bare, attack)).toBeCloseTo(race(11, bare.stats.eva), 6);
     expect(hitPercent(p, bare, attack)).toBeGreaterThan(90);
-    expect(attack.statusEffects).toEqual([{ status: 'itchy', chance: 255, duration: 0 }]);
+    expect(attack.statusEffects).toEqual([]); // the game's row 0x41da carries no status (AI-FFX2-b, O11; the FAQ's Itchy was one wiki line)
     for (const id of ['paragon-os-judgement', 'paragon-os-holy', 'paragon-os-firaga', 'paragon-os-ultima', 'paragon-os-demi']) {
       expect(ab(id).canMiss, id).toBe(false);
     }
@@ -100,13 +105,14 @@ describe('the Oversoul block and rows (§12.2)', () => {
   });
 });
 
-describe('its script (SinirothX, §12.2)', () => {
-  it('Oversouls first, then waits while nobody touches it', () => {
+describe('its script in the engine (the decision table is parity-ffx2-ai-oversoul.test.ts)', () => {
+  it('waits while nobody touches it, and plays the Oversoul line on its first poll', () => {
     const b = fresh();
     expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull();
     expect(b.events.some((e) => e.type === 'message' && /oversouls/.test(String(e.text)))).toBe(true);
     expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull();
     expect(paragonOversoulScript.counter).toBeUndefined(); // no Big Bang counter in this form
+    expect(paragonOversoulScript.onPartyAction).toBeUndefined(); // it answers on its next poll, from the reaction entry
   });
 
   it('left alone for the idle time: Judgement, Genesis or Big Bang; Dispel if anyone is Reflected', () => {
@@ -124,61 +130,6 @@ describe('its script (SinirothX, §12.2)', () => {
     b.unit('rikku').statuses.reflect = { ticksRemaining: null } as never;
     expect(idOf(paragonOversoulScript.decide(b.ctx('paragon')))).toBe('paragon-os-dispel');
   });
-
-  it('copies "Attack a" back at whoever hit it; answers Attack and Darkness with its own Attack', () => {
-    const b = fresh();
-    paragonOversoulScript.decide(b.ctx('paragon'));
-    const yuna = b.unit('yuna');
-    const hit = (id: string) => paragonOversoulScript.onPartyAction!(b.ctx('paragon'), yuna, { abilityId: id, aimedAtSelf: true });
-    expect(hit('x2-dark-knight-break')).toEqual({ kind: 'ability', id: 'x2-dark-knight-break', targets: ['yuna'] });
-    expect(hit('x2-dark-knight-attack')).toEqual({ kind: 'ability', id: 'paragon-os-attack', targets: ['yuna'] });
-    expect(hit('x2-dark-knight-darkness')).toEqual({ kind: 'ability', id: 'paragon-os-attack', targets: ['yuna'] });
-    expect(oversoulAttackClass(ab('x2-dark-knight-black-sky'))).toBe('other'); // "every Arcana except Black Sky"
-    yuna.statuses.reflect = { ticksRemaining: null } as never;
-    expect(ab('x2-black-mage-fire').flags).toContain('reflectable');
-    expect(idOf(hit('x2-black-mage-fire'))).toBe('paragon-os-attack'); // its copy would bounce back
-    expect(paragonOversoulScript.onPartyAction!(b.ctx('paragon'), yuna, { abilityId: 'x2-item-megalixir', aimedAtSelf: false })).toBeNull();
-  });
-
-  it('an "Attack b" brings Demi, turn after turn, until another attack hits it', () => {
-    const b = fresh();
-    paragonOversoulScript.decide(b.ctx('paragon'));
-    const rikku = b.unit('rikku');
-    expect(idOf(paragonOversoulScript.onPartyAction!(b.ctx('paragon'), rikku, { abilityId: 'x2-white-mage-cure', aimedAtSelf: false }))).toBe('paragon-os-demi');
-    expect(idOf(paragonOversoulScript.decide(b.ctx('paragon')))).toBe('paragon-os-demi');
-    expect(idOf(paragonOversoulScript.decide(b.ctx('paragon')))).toBe('paragon-os-demi');
-    paragonOversoulScript.onPartyAction!(b.ctx('paragon'), rikku, { abilityId: 'x2-alchemist-attack', aimedAtSelf: true });
-    expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull();
-    OVERSOUL_ESTIMATES.attackBWakesOn = 'aimed-at-paragon';
-    expect(paragonOversoulScript.onPartyAction!(b.ctx('paragon'), rikku, { abilityId: 'x2-white-mage-cure', aimedAtSelf: false })).toBeNull();
-  });
-
-  it('with answerTiming next-turn, the answer waits for its own turn', () => {
-    OVERSOUL_ESTIMATES.answerTiming = 'next-turn';
-    const b = fresh();
-    paragonOversoulScript.decide(b.ctx('paragon'));
-    expect(paragonOversoulScript.onPartyAction!(b.ctx('paragon'), b.unit('paine'), { abilityId: 'x2-dark-knight-break', aimedAtSelf: true })).toBeNull();
-    expect(paragonOversoulScript.decide(b.ctx('paragon'))).toEqual({ kind: 'ability', id: 'x2-dark-knight-break', targets: ['paine'] });
-    expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull();
-  });
-
-  it('below 4/10 a hit brings -aga spells or its Attack; below 1/10 Final Impact once, then the Ultima pool', () => {
-    const b = fresh();
-    paragonOversoulScript.decide(b.ctx('paragon'));
-    const p = b.unit('paragon');
-    const hit = (seed: number) => idOf(paragonOversoulScript.onPartyAction!(b.ctx('paragon', seed), b.unit('yuna'), { abilityId: 'x2-dark-knight-break', aimedAtSelf: true }));
-    p.hp = Math.floor(p.stats.maxHp * 0.3);
-    const seen = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(hit));
-    for (const id of seen) expect(['paragon-os-attack', 'paragon-os-firaga', 'paragon-os-blizzaga', 'paragon-os-thundaga', 'paragon-os-waterga']).toContain(id);
-    expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull(); // not hit since: it waits (lowHpActsEveryTurn false)
-    p.hp = Math.floor(p.stats.maxHp * 0.05);
-    expect(hit(1)).toBe('paragon-os-final-impact');
-    for (const s of [2, 3, 4, 5, 6]) {
-      expect(['paragon-os-ultima', 'paragon-os-holy', 'paragon-os-judgement', 'paragon-genesis', 'paragon-big-bang']).toContain(hit(s));
-    }
-    b.unit('paine').statuses.reflect = { ticksRemaining: null } as never;
-    expect(hit(7)).toBe('paragon-os-dispel');
-  });
 });
 
 describe('Oversoul Paragon through the engine', () => {
@@ -187,7 +138,12 @@ describe('Oversoul Paragon through the engine', () => {
     const i = r.log.findIndex((e) => e.type === 'action-start' && (e as { abilityId?: string }).abilityId === 'x2-dark-knight-darkness');
     expect(i).toBeGreaterThanOrEqual(0);
     expect(r.log.some((e) => e.type === 'counter' && (e as { abilityId?: string }).abilityId === 'paragon-big-bang')).toBe(false);
-    expect(r.log.some((e) => e.type === 'counter' && (e as { abilityId?: string }).abilityId === 'paragon-os-attack')).toBe(true);
+    // Re-parity AI-FFX2-b (reason "game-script parity"): it answers on its NEXT POLL, as an ordinary action of its own (the first build answered at
+    // once, as a counter): after the Darkness, a Normal Attack at a uniform girl.
+    expect(r.log.some((e) => e.type === 'counter')).toBe(false);
+    const answer = r.log.findIndex((e, j) => j > i && e.type === 'action-start' && (e as { actorId?: string }).actorId === 'paragon');
+    expect(answer).toBeGreaterThan(i);
+    expect((r.log[answer] as { abilityId?: string }).abilityId).toBe('paragon-os-attack');
     const b = fresh();
     expect(abilityPerformedBy(b.unit('yuna') as Ffx2Unit)).toBeUndefined();
   });

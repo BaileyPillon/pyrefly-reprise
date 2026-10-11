@@ -2,16 +2,22 @@
  * The random numbers and target searches an FFX-2 boss script uses, in the shapes the game's scripts use them
  * (`research/re-ffx2-ai-bahamut-vegnagun.md` sections 1.3 and 1.4). **FFX-2 only** [AGENTS.md rule 14].
  *
+ * One file for the three boss-AI lanes of re-parity (RC3 merged them; each section keeps its lane's shapes exactly, so each lane's
+ * decision-table tests enumerate the same draws): **section 1** the shared rolls (lanes a, b and c), **section 2** the near-weighted
+ * `searchr` and the scene table (lane a: Bahamut, the Vegnagun chain, Shuyin), **section 3** the helpers of lane b (Shiva, the Sisters,
+ * Anima, Paragon, the Oversoul, Trema), **section 4** the helpers of lane c (the Leblanc Syndicate, the Den of Woe, Ixion).
+ *
  * | Script call | Shape | Helper |
  * |---|---|---|
- * | `random() % n` | the low 16 bits of one draw, then the script's own `mod` | {@link scriptMod} |
- * | `searchr_nop(group, stat, word)` | the `(value mod n)`-th candidate in slot order; **no draw with fewer than 2 candidates** | {@link searchUniform} |
+ * | `random() % n` | the low 16 bits of one draw, then the script's own `mod` | {@link scriptMod} (`rng`), {@link scriptModCtx} (`ctx`) |
+ * | `searchr_nop(group, stat, word)` | the `(value mod n)`-th candidate in slot order; **no draw with fewer than 2 candidates** | {@link searchUniform}, {@link pickUniform}, {@link pickFrom} |
  * | `searchr(group, stat, word)` | `r = value mod W`, `W` the sum of the candidates' weights; the first candidate whose running sum reaches `r` (`r <= sum`, so the first slot owns one extra value) | {@link searchNear} |
  *
  * The game draws them from two global streams (2 for `random()`, 4 for every search); this engine has one seeded stream and
  * feeds all of them from it (adopting each game's own streams is a separate decision of Bailey's, plan P3). The search's raw
- * value is a 31-bit draw: the note does not record its width, and 31 bits keep the modulo bias of a three-way pick below one
- * in 700 million.
+ * value is a 31-bit draw (lanes a and b): the note does not record its width, and 31 bits keep the modulo bias of a three-way pick below one
+ * in 700 million. Lane c's {@link pickFrom} draws `int(0, n - 1)` instead (the same odds; the one difference between the lanes' search shapes, left
+ * as each lane tested it until the RNG batch gives them one stream and one shape).
  *
  * The weight of a candidate is `1 + floor(32768 / floor(cost + 1))`, `cost = (1 + d) x (1 + 2a)`, `d` the distance on the
  * ground plane between boss and girl and `a` the angle (0 to pi) between the boss's facing and the direction to her. It is
@@ -21,9 +27,14 @@
  * weights off and leaves the search uniform.
  */
 
-import type { Rng, StatusId } from '../../common/types.ts';
+import type { AbilityDef, Rng, StatusId } from '../../common/types.ts';
 import { NEAR_WEIGHTED_TARGET_SEARCH } from '../constants.ts';
-import type { Ffx2Unit } from '../internal.ts';
+import type { AiContext, Ffx2Unit } from '../internal.ts';
+import { resolveCommand } from '../adapt/command.ts';
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// 1. The shared rolls (lanes a, b, c)
+// ---------------------------------------------------------------------------------------------------------------------------------
 
 /** The raw value of a target search: the engine's 31-bit draw. */
 const SEARCH_DRAW_MAX = 0x7fffffff;
@@ -36,6 +47,11 @@ export function scriptValue(rng: Rng): number {
 /** `random() % n`, one draw. */
 export function scriptMod(rng: Rng, n: number): number {
   return scriptValue(rng) % n;
+}
+
+/** {@link scriptMod} for a script that holds the AI context (lane b's call shape): `random() mod n`, one draw from the context's generator. */
+export function scriptModCtx(ctx: AiContext, n: number): number {
+  return scriptMod(ctx.rng, n);
 }
 
 /** The candidates in the order the searches index them: the party's slots Yuna, Rikku, Paine, then any others; ties keep the given order. */
@@ -57,6 +73,10 @@ export function searchUniform<T extends Ffx2Unit>(rng: Rng, candidates: readonly
   if (ordered.length < 2) return ordered[0];
   return ordered[rng.int(0, SEARCH_DRAW_MAX) % ordered.length];
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// 2. The near-weighted search and the scene table (lane a)
+// ---------------------------------------------------------------------------------------------------------------------------------
 
 /** A place on the ground plane (the game's x and z). */
 export interface Placement {
@@ -137,4 +157,113 @@ export function searchNear<T extends Ffx2Unit>(rng: Rng, candidates: readonly T[
 /** The girls without `status`, in slot order (`searchr(.., stat, not)`'s candidates). */
 export function lacking<T extends Ffx2Unit>(girls: readonly T[], status: StatusId): T[] {
   return girls.filter((g) => !g.statuses[status]);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// 3. The helpers of lane b (Shiva, the Magus Sisters, Anima, Paragon, the Oversoul Paragon, Trema)
+//    - the reaction guard (`getreaction`) is false when the actor is the one who caused the result, or is stopped, asleep,
+//      petrified, confused, berserk or ejected;
+//    - a uniform target (`searchr_nop`, and the `searchr` pick stood in for it where the engine has no battle geometry) keeps the
+//      living, targetable members in slot order and takes the `(value mod n)`-th; with one candidate nothing is drawn.
+//    65,536 is not a multiple of 3, 5 or 6, so those residues are not exactly even: the game's bias is kept, not smoothed.
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+/** The party's living, targetable members in slot order (the order the target searches scan). */
+export function girlsInSlotOrder(ctx: AiContext): Ffx2Unit[] {
+  return [...ctx.party()].sort((a, b) => a.slot - b.slot);
+}
+
+/**
+ * A uniform pick among `candidates` (already filtered and in slot order): the `(draw mod n)`-th, no draw below two candidates,
+ * `undefined` for none. The target search of the scripts that use `searchr_nop`; the near-weighted `searchr` of Paragon's
+ * single-target Attacks needs positions and facing the engine does not model, so it is this pick too (the rows P3, listed).
+ */
+export function pickUniform<T>(ctx: AiContext, candidates: readonly T[]): T | undefined {
+  if (candidates.length === 0) return undefined;
+  if (candidates.length === 1) return candidates[0];
+  return candidates[ctx.rng.int(0, SEARCH_DRAW_MAX) % candidates.length];
+}
+
+/** A uniform living girl as a target list: one id, or no target. */
+export function pickGirl(ctx: AiContext): string[] {
+  const girl = pickUniform(ctx, girlsInSlotOrder(ctx));
+  return girl === undefined ? [] : [girl.id];
+}
+
+/** One target search whose answer the script throws away: it still draws, with two or more candidates (Final Impact's macro). */
+export function discardPick(ctx: AiContext, candidates: readonly unknown[]): void {
+  pickUniform(ctx, candidates);
+}
+
+/** Statuses that switch the reaction entry off (`getreaction`): stopped, asleep, petrified, confused, berserk, ejected. */
+const REACTION_OFF = ['stop', 'sleep', 'petrify', 'confuse', 'berserk', 'eject'] as const;
+
+/**
+ * `getreaction`: true unless the actor is the attacker itself, or is stopped, asleep, petrified, confused, berserk or ejected.
+ * Shiva and Anima test it; the Sisters, both Paragon scripts and Trema do not (1.2).
+ */
+export function reactionGuard(self: Ffx2Unit, source: Ffx2Unit): boolean {
+  if (self === source || self.id === source.id) return false;
+  if (self.removed) return false;
+  return !REACTION_OFF.some((s) => self.statuses[s] !== undefined);
+}
+
+/** A command row's damage flags masked with 3 (`getcominfo(cmd, 1)`): 1 physical only, 2 magical only, 0 neither. */
+export function damageBits(ability: AbilityDef, user: Ffx2Unit): number {
+  return resolveCommand(ability, user).record.flagsDamage & 3;
+}
+
+/** `floor(max / n)` of a unit's own maximum HP (the scripts' integer-division thresholds). */
+export function maxHpDiv(unit: Ffx2Unit, n: number): number {
+  return Math.floor(unit.stats.maxHp / n);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// 4. The helpers of lane c (the Leblanc Syndicate, the Den of Woe, Ixion)
+//    A target search keeps the girls that are alive and targetable (a petrified girl is alive), in slot order. With one candidate nothing
+//    is drawn; with two or more the pick is the `(value mod n)`-th candidate ({@link pickFrom}). `searchr` is weighted by closeness and
+//    facing, which needs positions the engine does not have, so it is the same uniform pick here. The common pair,
+//    `searchr(all girls, alive)` then `searchr(that set, stat, max or min)`, still makes its first search's draw when two or more girls
+//    live and throws the pick away; the second keeps every candidate tied for the extreme value and picks among the ties ({@link extremePick}).
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+/** The girls a search sees: alive and targetable, in slot order (Yuna, Rikku, Paine). The same list as {@link girlsInSlotOrder}. */
+export function girls(ctx: AiContext): Ffx2Unit[] {
+  return girlsInSlotOrder(ctx);
+}
+
+/** A search over `pool`: the `(value mod n)`-th candidate; nothing is drawn for fewer than two. */
+export function pickFrom<T>(rng: Rng, pool: readonly T[]): T | undefined {
+  if (pool.length === 0) return undefined;
+  if (pool.length === 1) return pool[0];
+  return pool[rng.int(0, pool.length - 1)];
+}
+
+/** The id of a search over `pool` as a one-target list, or an empty list ("nothing", value 255). */
+export function pickId(rng: Rng, pool: readonly Ffx2Unit[]): string[] {
+  const unit = pickFrom(rng, pool);
+  return unit === undefined ? [] : [unit.id];
+}
+
+/** The first search of a pair: made, and its pick thrown away. */
+export function discardedPick(rng: Rng, candidates: number): void {
+  if (candidates >= 2) rng.int(0, candidates - 1);
+}
+
+/**
+ * The pair for "the girl with the highest or lowest `key`": the first search over `pool` is made and discarded,
+ * then every candidate tied for the extreme is kept and one is picked.
+ */
+export function extremePick(rng: Rng, pool: readonly Ffx2Unit[], key: (unit: Ffx2Unit) => number, extreme: 'max' | 'min'): Ffx2Unit | undefined {
+  discardedPick(rng, pool.length);
+  if (pool.length === 0) return undefined;
+  const values = pool.map(key);
+  const best = extreme === 'max' ? Math.max(...values) : Math.min(...values);
+  return pickFrom(rng, pool.filter((_, i) => values[i] === best));
+}
+
+/** `extremePick` as a one-target list. */
+export function extremeId(rng: Rng, pool: readonly Ffx2Unit[], key: (unit: Ffx2Unit) => number, extreme: 'max' | 'min'): string[] {
+  const unit = extremePick(rng, pool, key, extreme);
+  return unit === undefined ? [] : [unit.id];
 }

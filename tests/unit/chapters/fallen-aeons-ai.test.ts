@@ -7,13 +7,10 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { Command } from '../../../src/battle/common/types.ts';
+
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
-import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
 import { AC } from '../../../src/battle/ffx2/ai/fallen-aeons.ts';
-import { DELTA_DISARMED_FLAG } from '../../../src/battle/ffx2/ai/magus-sisters.ts';
-import { aiHarness, aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
-import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
+import { aiHarness } from '../../../src/battle/ffx2/fixtures.ts';
 import { applyStatus } from '../../../src/battle/ffx2/statuses.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { ROAD_SHIVA, ROAD_SISTERS } from '../../../src/data/ffx2/enemies/fallen-aeons-road.ts';
@@ -22,75 +19,19 @@ import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts'
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { ctxFor, runStatusClocks, sisterCtx, sisterUnits } from '../helpers/fallenAeonsUnits.ts';
 
-describe('the Magus Sisters (§4.2)', () => {
+// Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity"). The blocks that stood here pinned the first build's Sisters (whichever sister polls first casts
+// Delta Attack, 3/4 Attack and 1/4 Razzia for Sandy, 1/4 each for Cindy, White Highwind only with all three alive, +5 once per party action) and Anima. The game's own
+// scripts replaced them; they are pinned, with the exact outcome tables, in parity-ffx2-ai-magus-sisters.test.ts and parity-ffx2-ai-fallen-aeons.test.ts. What stays here
+// is the Regen tick: a payout that heals a sister counts as a result of hers, a payout at full HP does not.
+describe('the Magus Sisters: a Regen tick that heals is a result (§4.2, M6)', () => {
   function harness(seed = 21) {
     const s = sisterUnits();
     const h = aiHarness(s.sandy, [s.cindy, s.mindy], 'magus-sisters', seed);
-    const script = aiScriptFor('magus-sisters');
-    const turn = (u: Ffx2Unit): Command | null => script.decide(sisterCtx(h.ctx, u));
-    return { ...s, h, script, turn };
+    return { ...s, h };
   }
 
-  it('Delta Attack needs all three alive and every counter at 100; it resets all three', () => {
-    const t = harness();
-    t.sandy.aiMemory = { [AC]: 100 };
-    t.cindy.aiMemory = { [AC]: 100 };
-    t.mindy.aiMemory = { [AC]: 99 };
-    expect((t.turn(t.sandy) as { id: string }).id).not.toBe('x2-magus-delta-attack');
-    t.mindy.aiMemory = { [AC]: 100 };
-    expect((t.turn(t.mindy) as { id: string }).id).toBe('x2-magus-delta-attack');
-    expect([t.sandy, t.cindy, t.mindy].map((u) => u.aiMemory?.[AC])).toEqual([0, 0, 0]);
-  });
-
-  it('the first kill disarms it for good', () => {
-    const t = harness();
-    t.mindy.alive = false;
-    t.mindy.hp = 0;
-    for (const u of [t.sandy, t.cindy]) u.aiMemory = { [AC]: 500 };
-    t.script.onTurnResolved?.(sisterCtx(t.h.ctx, t.sandy), t.sandy);
-    expect(t.h.flags[DELTA_DISARMED_FLAG]).toBe(true);
-    for (let i = 0; i < 50; i++) {
-      for (const u of [t.sandy, t.cindy]) expect((t.turn(u) as { id: string }).id).not.toBe('x2-magus-delta-attack');
-    }
-  });
-
-  it('Cindy guards on turn 1, runs Action 1 on turns 2-8, and guards again on turn 9 (SinirothX)', () => {
-    const t = harness();
-    const ids: string[] = [];
-    for (let i = 0; i < 17; i++) {
-      t.cindy.aiMemory = { ...t.cindy.aiMemory, [AC]: 0 };
-      ids.push((t.turn(t.cindy) as { id: string }).id);
-    }
-    const guards = ids.map((id, i) => (id === 'x2-cindy-not-so-mighty-guard' ? i + 1 : 0)).filter(Boolean);
-    expect(guards).toEqual([1, 9, 17]);
-    expect(new Set(ids.filter((id) => id !== 'x2-cindy-not-so-mighty-guard'))).toEqual(
-      new Set(['x2-cindy-camisade', 'x2-cindy-absorb', 'x2-cindy-demi', 'x2-cindy-regen']),
-    );
-  });
-
-  it('White Highwind only when all three are alive and below 1/4', () => {
-    const t = harness();
-    t.cindy.aiMemory = { turn: 1 };
-    for (const u of [t.sandy, t.cindy, t.mindy]) u.hp = Math.floor(u.stats.maxHp / 4) - 1;
-    expect((t.turn(t.cindy) as { id: string }).id).toBe('x2-cindy-white-highwind');
-    t.sandy.hp = t.sandy.stats.maxHp;
-    for (let i = 0; i < 30; i++) {
-      t.cindy.aiMemory = { turn: 1 };
-      expect((t.turn(t.cindy) as { id: string }).id).not.toBe('x2-cindy-white-highwind');
-    }
-  });
-
-  it('+5 when her turn passes, +5 more for Cindy\'s Absorb, +5 when a Regen tick heals her', () => {
+  it('+5 when a Regen tick heals her', () => {
     const t = harness(4);
-    const seen = new Set<string>();
-    for (let i = 0; i < 60; i++) {
-      t.cindy.aiMemory = { turn: 1, [AC]: 0 };
-      const id = (t.turn(t.cindy) as { id: string }).id;
-      seen.add(id);
-      expect(t.cindy.aiMemory[AC], id).toBe(id === 'x2-cindy-absorb' ? 10 : 5);
-    }
-    expect(seen.has('x2-cindy-absorb')).toBe(true);
-
     t.sandy.aiMemory = { [AC]: 0 };
     t.sandy.hp = 5000;
     applyStatus(t.sandy, { status: 'regen', chance: 254, duration: 0 });
@@ -132,24 +73,6 @@ describe('the Magus Sisters (§4.2)', () => {
     pay(340);
     expect(t.cindy.hp).toBe(t.cindy.stats.maxHp);
     expect(t.cindy.aiMemory[AC]).toBe(5);
-  });
-});
-
-describe('Anima (§4.3)', () => {
-  it('4/5 Stare, 1/5 Pain, +5 a turn, Oblivion at 100 and back to 0', () => {
-    const anima = aiUnit('x2-anima', 'enemy');
-    const h = aiHarness(anima, [], 'x2-anima', 31);
-    const counts: Record<string, number> = {};
-    for (let i = 0; i < 5000; i++) {
-      anima.aiMemory = { [AC]: 0 };
-      const id = h.run(1)[0]!;
-      counts[id] = (counts[id] ?? 0) + 1;
-      expect(anima.aiMemory[AC]).toBe(5);
-    }
-    expect(counts['x2-anima-pain']! / 5000).toBeCloseTo(0.2, 1);
-    anima.aiMemory = { [AC]: 100 };
-    expect(h.run(1)[0]).toBe('x2-anima-oblivion');
-    expect(anima.aiMemory[AC]).toBe(0);
   });
 });
 
