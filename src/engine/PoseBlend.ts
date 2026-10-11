@@ -20,6 +20,14 @@
  * 6. **The shape is injected.** Today's `quadInOut` by default; a symmetric `(u) => s` or a pair of curves
  *    ({@link BlendCurves}) per request, so a capped or stepped shape (FB-2) or the KO cross ({@link KO_CROSS})
  *    plugs in without touching this file again.
+ * 7. **The stepped dissolve is the actor's shape (FB-2, Bailey's P2-A, both games).** Two paintings that barely overlap
+ *    (Tidus attack to follow reads an IoU of 0.14, Rikku ready to attack 0.061, Sin's right fin 0.095) cannot be
+ *    dissolved plainly without a double image: at the middle of a plain blend each shows at about a half, which is
+ *    the 0.40 and 0.47 severities the harness reads. {@link STEPPED_DISSOLVE} never lets the lesser painting show more
+ *    than {@link STEPPED_CAP}, whatever the frame rate or the phase, and still has frames with both on (it is a blend,
+ *    not a cut): the new painting comes up to 0.30 under the old at full, then the two step to 0.30 and 0.70, then the
+ *    old one goes out and the new one comes in to 1. `PaintedActor` uses it for every pose change; `?poseblend=legacy`
+ *    restores today's plain dissolve for same-build A/B captures ({@link poseBlendLegacy}).
  *
  * The fades are written on the planes the caller hands in (`PaintedActor.slots`), the very fields the harness
  * probe and the twirl pin read, so nothing downstream changes.
@@ -44,6 +52,13 @@ export type BlendShape = (u: number) => number;
 export interface BlendCurves {
   readonly out: (u: number) => number;
   readonly inn: (u: number) => number;
+  /**
+   * The most the lesser of the two planes may show. While the outgoing plane shows more than this, the incoming one is held at
+   * no more than `max(its own starting fade, cap)`: a blend that starts with both planes already up (a request that turns a
+   * running blend round) cannot be pushed past the cap by the relative curves. The curves keep the rest of the promise by
+   * themselves: once the outgoing plane is at or under the cap, the lesser plane is.
+   */
+  readonly cap?: number;
 }
 
 /** What a request may carry beyond the painting and the length. */
@@ -68,6 +83,55 @@ export const KO_CROSS_PEAK = (3 - Math.sqrt(5)) / 2;
 /** The KO cross as plain numbers: the fades of the outgoing (`from = 1 - s`) and the incoming (`to = s * s`) painting at progress `s`. */
 export function koCross(s: number): { from: number; to: number } {
   return { from: KO_CROSS.out(s), to: KO_CROSS.inn(s) };
+}
+
+/** FB-2, the stepped dissolve: the most the lesser painting ever shows (Bailey's P2-A; `[ours]`, the sources give no blend length or shape). */
+export const STEPPED_CAP = 0.3;
+/**
+ * Where the step falls, as a share of the blend's length: 0.4 is 40 ms of the 100 ms the strips on the options page showed. A request keeps its own
+ * length (the party's 120 ms and the foes' 140 ms, `BattlePresenterStage`), so the step is at 48 and 56 ms there and the ramp after it 72 and 84.
+ */
+export const STEPPED_AT = 0.4;
+
+const ramp = (u: number): number => clamp01((u - STEPPED_AT) / (1 - STEPPED_AT));
+
+/**
+ * The stepped dissolve (FB-2; both games; one shape because the sources give none). From a standing start (outgoing at full, incoming at 0):
+ *
+ * - before the step the old painting stays whole and the new one comes up under 0.30 (linear);
+ * - at the step they trade, 1 and 0.30 to 0.30 and 0.70 (the sum of the two is one, so the body does not thin out at the step);
+ * - after it the old one goes out to 0 and the new one up to 1 (linear).
+ *
+ * The lesser painting is never above {@link STEPPED_CAP}, so the double image the harness reads (the lesser fade times one minus the overlap)
+ * is at most 0.30 times the share of the pair that does not overlap, under the check's 0.40 at any overlap, any frame rate and any phase;
+ * and the planes share the screen for most of the blend, so it is a blend and not a cut. Where two paintings overlap well the cap is
+ * nearly invisible; it is the pairs that barely overlap that it is for. The curves are relative to the planes' starting fades, so a
+ * request in mid-blend (the incoming plane re-pointed from 0, the outgoing one from wherever it is) steps from where it stands.
+ */
+export const STEPPED_DISSOLVE: BlendCurves = {
+  out: (u) => (u < STEPPED_AT ? 1 : STEPPED_CAP * (1 - ramp(u))),
+  inn: (u) => (u < STEPPED_AT ? STEPPED_CAP * (clamp01(u) / STEPPED_AT) : 1 - STEPPED_CAP + STEPPED_CAP * ramp(u)),
+  cap: STEPPED_CAP,
+};
+
+// ------------------------------------------------------------------ the kill switch
+
+let legacy: boolean | null = null;
+
+/** `?poseblend=legacy` (captures and A/B comparisons only): every pose change dissolves plainly again (`quadInOut`), as before FB-2. Read once, like the other URL switches' first look. */
+export function poseBlendLegacy(): boolean {
+  if (legacy === null) legacy = new URLSearchParams(globalThis.location?.search ?? '').get('poseblend') === 'legacy';
+  return legacy;
+}
+
+/** Tests: force the switch (`null` reads the address again). */
+export function setPoseBlendLegacy(value: boolean | null): void {
+  legacy = value;
+}
+
+/** The shape an actor's pose changes run on: the stepped dissolve, or today's plain one behind the switch. */
+export function poseBlendShape(): BlendShapeSpec {
+  return poseBlendLegacy() ? QUAD_IN_OUT : STEPPED_DISSOLVE;
 }
 
 /**
@@ -178,8 +242,12 @@ export class PoseBlend {
       return true;
     }
     const u = r.elapsed / r.duration;
-    from.fade = clamp01(r.fromStart * r.curves.out(u));
-    to.fade = clamp01(r.toStart + (1 - r.toStart) * r.curves.inn(u));
+    const fo = clamp01(r.fromStart * r.curves.out(u));
+    let ti = clamp01(r.toStart + (1 - r.toStart) * r.curves.inn(u));
+    const cap = r.curves.cap;
+    if (cap !== undefined && fo > cap) ti = Math.min(ti, Math.max(r.toStart, cap)); // the lesser plane stays under the cap even when it started above it
+    from.fade = fo;
+    to.fade = ti;
     return true;
   }
 
