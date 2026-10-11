@@ -13,6 +13,7 @@ import { clearStatusesOnKo, refreshCriticalStatus, removeStatus } from './status
 import { onRevived } from './turnQueue.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { releaseThreatenLink } from './adapt/threaten.ts';
+import { reviveAutoStatuses } from './adapt/auto-status.ts';
 import { gaugeOnDeath } from './gauge.ts';
 
 /** Metadata for a `damage` event. */
@@ -254,6 +255,7 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
     if (everlasting) {
       target.statuses['auto-life'] = { ...autoLife };
       rtOf(ctx, target.id).ctb = 0;
+      reviveAutoStatuses(ctx, target); // the equipment statuses the KO reset wiped come back with the revive, as in the branch below [re-parity RC4]
     } else {
       onRevived(ctx, target.id);
     }

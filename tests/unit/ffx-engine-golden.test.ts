@@ -229,24 +229,39 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * One outcome moved, on a seed nobody tuned: seymour-anima-macalania#7 victory -> defeat; the other 17 keep theirs. One seed is one sample: the 500-seed rates before and after, and the proof
  * that the Chapter VII move is a block of seeds and not a bias (the old generator on the same 500 seeds gives the old 488; seeds 501 to 1500 give 959 against 949), are in
  * docs/handoff/re-parity-rng.md. Nothing on the bosses or the party was tuned. The old values are in git history (the commit before the one that moved them).
+ * Re-baselined once 2026-10-11 by RC4 lane L1 (branch re-parity-rc4-gear; FFX only; lanes FFX-C and FFX-E, docs/handoff/re-parity-rc4-gear.md): ELEVEN of the 18 digests move and SEVEN are
+ * byte for byte what they were (seymour-flux#1 and #7, evrae-airship#1 and #7, seymour-natus#7, isaaru-via-purifico#1 and #7). Cause, proved by ablation (each row put back alone on the
+ * tree, all 18 run each time; with all three rows put back this file is 18/18 on the old values):
+ * (a) EQUIPMENT CRIT, 3 per worn piece (FFX-G03: every gear row carries 3; the engine gave the weapon's 3 and the armour's 0): yunalesca#1, braskas-final-aeon#1 and #7, seymour-anima-macalania#1
+ *     and #7, seymour-natus#1, seymour-omnis#1 and #7. The critical roll's window is 3 points wider for every Attack, so a roll that missed it before lands in it: Rikku's hit on Seymour at
+ *     event 95 of macalania#7 is 138 before and 277 now (a critical); Auron's on Natus at event 350 of natus#1 is 3,736 and 7,472; the first difference of macalania#1 is Rikku's hit
+ *     on Anima at event 410 (181, then 363).
+ * (b) PERCENTS SUMMED (FFX-G03: Strength +10 with +5 is 15, not 10): yunalesca#1 and #7, braskas-final-aeon#1 and #7, yojimbo-cavern#1 and #7, seymour-omnis#1 and #7 (the builds that wear two tiers of
+ *     one family: Yuna's Blessed Ring, Dream's End, the Garden of Pain). Magic Def +15 takes 15 percent off the Cure that lands on Yuna: yojimbo#1's first difference is her Cure on herself, 1,411
+ *     before and 1,332 now (event 118); yunalesca#7's is the 1,215 Yunalesca deals Yuna, 1,148 now.
+ * (c) The Auto-* / SOS statuses (lane FFX-E) move none of the 18: Rikku's SOS Shell (Macalania) is on only while she is under half HP, and on these two seeds she never is (the log adds
+ *     Critical to Yuna, Tidus and Auron, never to Rikku), so her Shell never switches; no other shipped build wears an Auto-* or SOS ability.
+ * braskas-final-aeon moves in all seven links of both seeds because the chain carries each member's HP, MP and gauge on. Every outcome stays what it was but one:
+ * seymour-anima-macalania#7 moves defeat -> victory (its first difference is the critical in (a)). One seed is one sample; the 500-seed rates before and after are in
+ * docs/handoff/re-parity-rc4-gear.md. Nothing on the bosses or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd362acf6:victory',
   'seymour-flux#7': '9f8aaa5c:victory',
-  'yunalesca#1': 'c694ec20:victory',
-  'yunalesca#7': 'a99a90c3:victory',
-  'braskas-final-aeon#1': '80341e61:victory fd35d884:victory 628979be:victory d2d251bc:victory 85cfdf48:victory cbdfb079:victory e8f733d0:victory',
-  'braskas-final-aeon#7': '84b8e5bd:victory 5049f58d:victory 558cd084:victory 6986be3f:victory 7d0914af:victory 86167c51:victory 8553b383:victory',
-  'seymour-anima-macalania#1': '7ef9b368:victory',
-  'seymour-anima-macalania#7': '29f126ed:defeat',
+  'yunalesca#1': '7760a32:victory',
+  'yunalesca#7': 'f6c5ff81:victory',
+  'braskas-final-aeon#1': '53e56b57:victory dc25be1c:victory 892df105:victory d87729b:victory c1883ec4:victory 8f612568:victory 7c815176:victory',
+  'braskas-final-aeon#7': 'eed22595:victory 8d75fead:victory 9482b803:victory 7e6d7449:victory 9b249f0d:victory 97592b14:victory f2f0106a:victory',
+  'seymour-anima-macalania#1': 'a6d9e71f:victory',
+  'seymour-anima-macalania#7': 'e9ae2f10:victory',
   'evrae-airship#1': 'e5ecff52:victory',
   'evrae-airship#7': '4740e2ef:victory',
-  'yojimbo-cavern#1': 'c72bb8ab:victory',
-  'yojimbo-cavern#7': '9f40902b:victory',
-  'seymour-natus#1': '409993aa:victory',
+  'yojimbo-cavern#1': '62272b5c:victory',
+  'yojimbo-cavern#7': 'af8241eb:victory',
+  'seymour-natus#1': '40514ec8:victory',
   'seymour-natus#7': '9e7c5b2:victory',
-  'seymour-omnis#1': '1d95ac3b:victory',
-  'seymour-omnis#7': '5089f63:victory',
+  'seymour-omnis#1': 'd2966784:victory',
+  'seymour-omnis#7': '30b6f82f:victory',
   'isaaru-via-purifico#1': '6990d85c:victory afd1cb7e:victory 13b0bd8a:victory',
   'isaaru-via-purifico#7': 'cec669c3:victory 78386a12:victory a36d68be:victory',
 };

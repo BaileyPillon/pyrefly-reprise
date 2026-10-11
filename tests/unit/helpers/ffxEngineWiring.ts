@@ -195,7 +195,9 @@ export function combatantOf(spec: SideSpec, id: string, side: 'party' | 'enemy')
     }),
     affinities,
     immunityFlags: flags,
-    equipment: { weapon, armor: { name: 'A', slots: 1, autoAbilities: [] } },
+    // The oracle's world puts the whole equipment crit on the weapon (`spec.equipCrit`); the armour carries none. (The game's gear rows carry 3 on each
+    // piece, which `equipmentCrit` now adds: an armour with no `bonusCrit` would give +3, so it is written out as 0 here.)
+    equipment: { weapon, armor: { name: 'A', slots: 1, autoAbilities: [], bonusCrit: 0 } },
   });
   c.hp = spec.hp;
   c.mp = spec.mp;

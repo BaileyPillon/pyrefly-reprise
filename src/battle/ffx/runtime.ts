@@ -8,6 +8,7 @@
  */
 
 import type { AbilityId, CombatantId, FFXCombatant, MinigameKind } from '../common/types.ts';
+import type { AutoState } from './kernel/auto-status.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -34,6 +35,12 @@ export interface ActorRuntime {
    */
   poolBaseHp?: number;
   poolBaseMp?: number;
+  /**
+   * The memory of the equipment auto-status machinery (`kernel/auto-status.ts`; re-parity RC4, FFX only): the words the last apply used, what it
+   * overwrote and the weak level it was made for. Present only on a party member whose gear gives an Auto-* or SOS status, and replaced as a whole
+   * (never changed in place) by `adapt/auto-status.ts`, so a forked context may share it.
+   */
+  auto?: AutoState;
   /** Active telegraph, mirrored into `TurnPreview.chargeStage` [visual-bible §3.13]. */
   charge: { name: string; turnsLeft: number; stage: 1 | 2 } | null;
   /** Live Threaten chance, a percent that may exceed 100 [ffx-combat-core §4.4]. */
