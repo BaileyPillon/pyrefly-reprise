@@ -9,10 +9,12 @@
   "obligations": [
     {
       "kind": "live",
-      "status": "superseded-unverified",
+      "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
-      "note": "never verified: the build was replaced by fcecfa74",
-      "at": "2026-10-11T14:44:38.146Z"
+      "result": "PASS",
+      "settledBy": "critic/reviews/2ae1a9e4-live.json",
+      "settledAt": "2026-10-11T12:50:00Z",
+      "note": "corrected by hand in the records pass of 2026-10-11: the fcecfa74 deploy archived this marker from a tree that did not yet hold the live review (commit 874f345a on rel-3945), so it wrote superseded-unverified; the review settled this obligation at 12:50Z, before the build was replaced at 14:44Z"
     },
     {
       "kind": "focused",
