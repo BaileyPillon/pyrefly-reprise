@@ -60,6 +60,8 @@ import { type RngSnapshot, sampleSnapshot } from '../common/streams.ts';
 import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
 import { activeScriptId, chooseAiCommand } from './ai/index.ts';
+import { forcedTurn } from './forced-turn.ts';
+import { keepsControlWhenProvoked } from './adapt/target-world.ts';
 import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
@@ -244,7 +246,9 @@ function dryRun(ctx: Ctx, enemyId: CombatantId, rngState?: RngSnapshot): DryRun 
   if (!self) return null;
   let command: Command | null = null;
   try {
-    command = chooseAiCommand(clone, self);
+    // A Provoked, Berserk or Confused enemy's turn is the game's forced attack and its script does not run (re-parity RC4 lane FFX-G; `forced-turn.ts`).
+    const forced = forcedTurn(clone, self);
+    command = forced.kind === 'attack' ? { kind: 'attack', targets: forced.targets } : forced.kind === 'dropped' ? null : chooseAiCommand(clone, self);
   } catch {
     // A half-written rotation must not take the panel — or the frame — down.
     // A silent null degrades to "unknown", which is what the panel prints.
@@ -420,7 +424,8 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
   }
 
   if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
-  if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack');
+  if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack, at the other side');
+  if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) out.push('Provoked — it spends its turn attacking whoever provoked it');
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;
 }

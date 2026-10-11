@@ -288,6 +288,31 @@ describe('the turn loop: a Provoked, Berserk or Confused actor\'s turn is the ga
   });
 });
 
+describe('the enemy-intent panel follows the forced turn', () => {
+  const stateOf = (id: string, over: Partial<StatusInstance> = {}): StatusInstance => ({ id: id as StatusInstance['id'], turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false, ...over });
+
+  function firstMenu(seed: number, afflict: (monster: FFXCombatant) => void) {
+    const reg = new FFXContentRegistry();
+    reg.addAbilities([...CORE_ABILITIES]);
+    const e = createFFXEngine({ content: reg });
+    e.init(setup({ seed, enemies: { id: 'one', game: 'ffx', enemies: [enemy({ id: 'e1', stats: stats({ hp: 99999, maxHp: 99999, agi: 5 }) })], canEscape: false } }));
+    afflict(e.state().combatants['e1'] as FFXCombatant);
+    for (let i = 0; i < 50; i++) if (e.nextDecision().kind === 'player-input') break;
+    return e;
+  }
+
+  it('a Provoked monster is shown attacking the provoker, with the target settled; a Confused one is shown with a random target of its own side', () => {
+    const provoked = firstMenu(3, (m) => { m.statuses['provoke'] = stateOf('provoke', { sourceId: 'auron' }); }).intent();
+    expect(provoked?.moveName).toBe('Attack');
+    expect(provoked?.confidence).toBe('scripted');
+    expect(provoked?.estimate?.perTarget.map((t) => t.targetId)).toEqual(['auron']);
+    expect(provoked?.notes.some((n) => n.startsWith('Provoked'))).toBe(true);
+    const confused = firstMenu(3, (m) => { m.statuses['confuse'] = stateOf('confuse'); }).intent();
+    expect(confused?.estimate?.perTarget.map((t) => t.targetId)).toEqual(['e1']); // alone on its side, it can only strike itself
+    expect(confused?.notes.some((n) => n.startsWith('Confused'))).toBe(true);
+  });
+});
+
 describe('the Tidus counters', () => {
   /** A board with Tidus, Yuna and Auron against one monster, nobody guarding. */
   function plain(): Board {
