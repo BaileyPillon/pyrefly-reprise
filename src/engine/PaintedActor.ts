@@ -56,6 +56,7 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { PoseBlend } from './PoseBlend.ts';
 import { cutoutShadow } from './ShadowCutout.ts';
 
@@ -1298,12 +1299,13 @@ export class PaintedActor extends Group {
   }
 
   private knockBack(ms: number, distance: number): Promise<void> {
-    return this.tweens.toAsync(1, 0, {
+    // r40-recoil (FC-1, `HitRecoil.ts`): an 80 ms eased push from where the figure is, then a spring home; progress 0 writes where it already is, so a hit-stop (dt 0) never teleports it.
+    const legacy = recoilLegacy();
+    const from = this.recoilOffset;
+    return this.tweens.toAsync(legacy ? 1 : 0, legacy ? 0 : 1, {
       durationMs: Math.max(1, ms),
-      easing: 'elasticOut',
-      onUpdate: (v) => {
-        this.recoilOffset = -v * distance;
-      },
+      easing: legacy ? 'elasticOut' : 'linear',
+      onUpdate: (v, p) => void (this.recoilOffset = legacy ? -v * distance : hitRecoilOffset(p, ms, distance, from)),
     });
   }
 
