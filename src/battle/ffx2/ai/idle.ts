@@ -1,6 +1,6 @@
 /**
  * What a boss script can say about a **flavour turn** (a poll whose `decide` returned null), on the logic-step clock (RC3;
- * **FFX-2 only** [AGENTS.md rule 14]). `engine-core.ts#runAiTurn` reads and clears the two memory keys after the call.
+ * **FFX-2 only** [AGENTS.md rule 14]). `flavour-turn.ts` (called from `engine-core.ts#runAiTurn`) reads and clears the memory keys after the call.
  *
  * - **`idleSteps`** ({@link idleFor}): the poll was one of the game's idle polls, and the script is next asked this many logic steps
  *   later. The game polls a ready monster every step and a script that counts polls counts steps, so a countdown of N polls is a wait of
