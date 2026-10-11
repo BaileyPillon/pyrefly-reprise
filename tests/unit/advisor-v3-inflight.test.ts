@@ -97,6 +97,15 @@ async function find(kind: Kind, bites: (ctx: DecisionContext, p: Pending, v2: Ad
           if (phase === 'follow') {
             const f = force(ctx, kind);
             if (f) {
+              // Re-parity W4 (FFX-2 only; reason "game-code parity"): a held Phoenix Down needs the girl who confirms it to be chained at that moment. At the game's
+              // gauge (long casts and recoveries, a boss that acts rarely against the girls' menus) no such board turned up in 250 seeds of Chapter V or in 40 seeds of
+              // each other chapter, so the hit that chained her is stood in for exactly as `advisor-v3-final.test.ts` does (`chainTheChooser`); the engine's hold and
+              // both cards are real. The other cases do not need it.
+              if (kind === 'phoenix') {
+                const u = ctx.state.combatants[ctx.decision.actorId] as unknown as { chainWindowTicks: number; chainCount: number };
+                u.chainWindowTicks = 90;
+                u.chainCount = Math.max(1, u.chainCount);
+              }
               phase = 'watch';
               by = ctx.decision.actorId;
               return f;
