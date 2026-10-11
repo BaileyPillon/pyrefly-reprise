@@ -249,6 +249,11 @@ Ward on Tidus and Yuna, none against Zombie).
 - **Does not apply:** Jegged's "the fight starts out of reach" is built as the three FAR pulls.
 - **Measured (existing):** sensible line 62/200 on the 13th turn, 7/200 on the 12th (`docs/handoff/chapter-sin.md`);
   advisor card 79/200 (39.5 %) at S-1 13 (`docs/handoff/r37-sin-advisor.md`). Not re-run.
+- **Update 2026-10-10 (CH-XVIII, re-parity; the sections above stand as written on 2026-10-03):** the clock is **12**, not "our estimate,
+  13": the game's own script fires Giga-Graviton on Sin's 12th turn (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 7.2), which
+  is the GameFAQs reading of the sources too (Gestahl). The guide text, the line and the preset were reworked for it: Lulu Doublecasts
+  Firaga (a Lulu ability the preset already grants), and the party starts in armour with the Stone, Confuse and Zombie Wards that this
+  section's preparation advice and section 6 item 6 both name. Measured: `docs/handoff/re-parity-ch18.md`.
 
 ## 8. Where Jegged disagrees with our sourced numbers
 
@@ -263,7 +268,7 @@ Our sources win (rule 6), the guide must not teach the Jegged version, and none 
 | Omnis | Shell helps against Ultima | no (type Other); 4 sources to 1 | `ffx-seymour-omnis` §5 |
 | Isaaru | Ice is best on Grothia | Ice is neutral | `ffx-isaaru-bevelle` I-7 |
 | Isaaru | Spathi counts 4 to 1 | 5 (wiki, GameFAQs) | I-5 |
-| Sin face | about 16 turns | 12th or 13th; our estimate 13th | `ffx-sin` S-1 |
+| Sin face | about 16 turns | 12th (the game's script; was "12th or 13th, our estimate 13th" until 2026-10-10) | `ffx-sin` S-1, `re-ffx-ai-evrae-yojimbo-isaaru-sin` 7.2 |
 
 ## 9. Summary for Bailey
 

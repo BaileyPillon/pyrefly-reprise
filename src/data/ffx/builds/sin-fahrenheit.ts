@@ -34,7 +34,7 @@
  * themselves (§1.2 `[verified: 3 sources]`), not into link 4.
  */
 
-import type { FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
+import type { AutoAbilityId, FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
 import { dreamsEndBuild } from './dreams-end.ts';
 import { gardenOfPainBuild } from './garden-of-pain.ts';
 
@@ -89,6 +89,66 @@ export const sinFinsCoreBuild: FFXPartyBuild = {
     }
     return out;
   }),
+  reserve: [...sinFahrenheitBuild.reserve],
+  aeons: sinFahrenheitBuild.aeons.map((a) => structuredClone(a)),
+  inventory: sinFahrenheitBuild.inventory.map((e) => ({ ...e })),
+};
+
+/**
+ * **Chapter XVIII's copy** ("Sin: the Face", link 4): the same rested party (the build above), **re-equipped against
+ * Gaze**. CH-XVIII, re-parity (Bailey 2026-10-09, "Ship 12, retune our line later (Recommended)": "rework our own
+ * strategy line and party preset so the chapter is winnable again; boss numbers stay real"). **Game case: FFX only.**
+ *
+ * What changes is the armour's auto-abilities and nothing else: every member's armour ends up with Stoneproof or
+ * Stone Ward, Confuseproof or Confuse Ward, and Zombieproof or Zombie Ward, the three statuses Overdrive Sin's Gaze
+ * can land. Stats, weapons, abilities, Overdrives, gauges, aeons, the bag and gil are the build above, to the digit.
+ *
+ * Why this and nothing else (every claim is a source, none is a number of ours):
+ *
+ * - **bover_87** tells the player to put on as much protection against Petrify, Confuse and Zombie as they can before
+ *   the fight (a Ward is enough to stop each one), and **Jegged** says the same in his own words: Stone, Confuse and
+ *   Zombie Wards, or Auto-Med with a stock of Remedies
+ *   (`research/ffx-sin.md` section 1.2 and section 8 row 9; `research/jegged-encounter-guides-ffx-b.md` section 6 item 6 and
+ *   section 7). The in-game guide's own page for this fight tells the player the same (`src/data/guides/docs/sin-face.ts`),
+ *   and there is no equipment screen in party prep to do it with: the preset is the player's gear.
+ * - The Ward arithmetic is `ffx-sin.md` section 5.4 `[verified: 2 sources + derived]`: a Ward is resistance 50, subtracted
+ *   from Gaze's 30 percent chance, so it can never land.
+ * - **Link 4 is where the player re-equips** (`ffx-sin.md` section 1.2 `[verified: 2 sources]`, section 7.3 item 3), which is why
+ *   this is a change to this chapter's copy and not to the build above: Chapter XVII is still the party straight out of
+ *   Sin's back, unchanged.
+ * - The slots are made by taking out **Death Ward** and **Auto-Med**. Overdrive Sin has no attack that kills: Gaze
+ *   is magic damage plus one of the three statuses, and Giga-Graviton is a scripted Game Over that the armour cannot stop
+ *   (Death 255 against a Ward's 50, and the script marks the loss itself: `ffx-sin.md` section 3.4 `[verified: 4 sources]`).
+ *   Auto-Med is Jegged's **other** answer to the same three statuses (a Remedy a status), which the Wards make
+ *   unnecessary; the Remedies stay in the bag. HP +20 percent and Yuna's Magic Defense +20 percent stay.
+ *
+ * Built by rule from the build above, not typed per member, so the Tetra pieces keep their own history in
+ * `./dreams-end.ts`; `tests/unit/re-parity-ch18.test.ts` pins the result member by member.
+ */
+const GAZE_GUARDS: ReadonlyArray<{ readonly ward: AutoAbilityId; readonly proof: AutoAbilityId }> = [
+  { ward: 'stone-ward', proof: 'stoneproof' },
+  { ward: 'confuse-ward', proof: 'confuseproof' },
+  { ward: 'zombie-ward', proof: 'zombieproof' },
+];
+/** The abilities the three Wards replace (see above). */
+const MADE_ROOM_FROM: readonly AutoAbilityId[] = ['death-ward', 'auto-med'];
+
+function reEquippedForGaze(m: FFXMemberBuild): FFXMemberBuild {
+  const out = structuredClone(m);
+  const armor = out.equipment.armor;
+  const kept = armor.autoAbilities.filter((a) => !MADE_ROOM_FROM.includes(a));
+  for (const g of GAZE_GUARDS) {
+    if (!kept.includes(g.ward) && !kept.includes(g.proof)) kept.push(g.ward);
+  }
+  if (kept.length > armor.slots) throw new Error(`sin-fahrenheit: ${out.id}'s armour needs ${kept.length} slots, has ${armor.slots}`);
+  armor.autoAbilities = kept;
+  return out;
+}
+
+export const sinFaceBuild: FFXPartyBuild = {
+  ...sinFahrenheitBuild,
+  members: sinFahrenheitBuild.members.map(reEquippedForGaze),
+  activeSlots: [...sinFahrenheitBuild.activeSlots],
   reserve: [...sinFahrenheitBuild.reserve],
   aeons: sinFahrenheitBuild.aeons.map((a) => structuredClone(a)),
   inventory: sinFahrenheitBuild.inventory.map((e) => ({ ...e })),
