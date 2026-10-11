@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-11 — Gear is read the way the game reads it: `EquipmentDef.bonusCrit` is the crit byte of EACH piece, and its default is the game's 3 (RC4 lane FFX-C, branch `re-parity-rc4-gear`; FFX only; additive, one meaning widened)
+
+Bailey, 2026-10-08: "It needs to be a 1:1 parity. this is very useful for our project."; 2026-10-10: "go full speed ahead please" and "ill go with all your recommendations". Source: `FFX-G03` (the real party stat builder, VA 0x007860f0, and gear loop, VA 0x0079c5f0, run with every one of the 134 auto-ability records alone and in pairs; 41,498 vectors, 0 mismatches). Game case: **FFX only**; `ffx2-atb-golden` and `ff7-golden` are unchanged.
+
+- `src/battle/common/types.ts` (contract file), `EquipmentDef.bonusCrit?`: the type does not change, its reading does. It was "weapon only, 0 when absent"; it is now the crit byte of the piece it sits on, **absent meaning 3** (every gear row of the game carries 3: all 153 rows of `weapon.bin`, 427 of the 428 of `shop_arms.bin`, all 86 of `buki_get.bin`). A weapon and an armour give 6, a weapon alone 3. Nothing authored needs editing: the weapons already say 3 and the armours now inherit it. A piece that says `bonusCrit: 0` still gives 0 (the test rigs that need a world without armour crit write it).
+- Doc comments only, in the same file: the pool abilities (`hp-N`, `mp-N`) add the SUM of every worn tier, and `curse-ward` is a full Curse immunity like `curseproof`. No member of the union was added or removed.
+- New engine-private modules, no contract: `battle/ffx/kernel/gear.ts` (+ `gear-table.ts`, the game's table as numbers), `battle/ffx/adapt/gear.ts` and `adapt/gear-ids.ts`; `battle/ffx/kernel/auto-status.ts` and `adapt/auto-status.ts` (lane FFX-E); `ActorRuntime.auto` (`runtime.ts`, optional, engine-private).
+- Readers that changed meaning with it, all engine-side: `equipment.ts#equipmentCrit`, `#bonusPercentFor`, `#offensiveBonusPercent`, `#defensiveBonusPercent` (sums), `#applyEquipmentToCombatant` (resistance bytes added and clamped to 255; Curse Ward 255), `effectiveStats.ts#effectivePool` (the builder's 32-bit arithmetic).
+
 ## 2026-10-11 — Each game draws from its own 68 random streams: `BattleRng` beside `Rng`, `SeededRng` gains `on`, `aux`, `fork` and `streamCount` (branch `re-parity-rng`; both games, as plumbing; additive)
 
 Bailey, 2026-10-09: "Adopt game streams (Recommended)" (D-648); 2026-10-10: "go full speed ahead please" and "ill go with all your recommendations". Plan: [re-parity-rng-review](plans/re-parity-rng-review.md); handoff: [re-parity-rng](handoff/re-parity-rng.md). Game case: **each game by its own code** (FFX and FFX-2 each draw from their own generator, stream map and seeding; FF7 keeps mulberry32 and imports none of the new files).

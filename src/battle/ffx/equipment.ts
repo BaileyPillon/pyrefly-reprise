@@ -4,6 +4,11 @@
  * Equipment in FFX **never changes a stat** — it grants auto-abilities only.
  * This module turns a combatant's two equipment slots into the numbers the
  * damage chain, the status roll and the battle-start setup need.
+ *
+ * **The decode is the game's** (re-parity RC4, lane FFX-C; FFX only): the percents of every worn ability are SUMMED (`kernel/gear.ts`, the party stat
+ * builder and the battle-start gear loop over the game's own auto-ability table), the equipment critical bonus is 3 per worn piece, the resistance bytes
+ * of the worn abilities are summed and clamped to 255 and a Curse Ward is a full immunity. `./adapt/gear.ts` is the translation from our ability ids; the
+ * functions below keep their old names and signatures.
  */
 
 import type {
@@ -15,6 +20,7 @@ import type {
   StatusId,
 } from '../common/types.ts';
 import { aeonGearOf } from './aeon-gear.ts';
+import { EXTRA_IMMUNITY_STATUS, STATUS_BY_NUMBER, familyPercent, gearOf, type GearFamily } from './adapt/gear.ts';
 
 /**
  * The structural slice of "someone wearing FFX gear".
@@ -48,90 +54,30 @@ export function bearerHasAuto(b: EquipmentBearer, id: AutoAbilityId): boolean {
 }
 
 /**
- * Sum of the weapon's and armour's bonus critical rates, in percentage points. An aeon wears fixed gear the engine does not
- * list: the game gives every aeon 6 (re-parity W5, `aeon-gear.ts`).
+ * The equipment critical bonus: the crit byte of each worn piece, added (re-parity RC4, FFX only). Every gear row of the game carries 3, so a weapon and an
+ * armour give 6 and a weapon alone 3 (`kernel/gear.ts`, FFX-G03 sections 1 and 4.2; read by the 47 commands that take the equipment bonus, among them the
+ * plain Attack). An aeon wears fixed gear the engine does not list: the game gives every aeon 6 (re-parity W5, `aeon-gear.ts`).
  */
 export function equipmentCrit(c: FFXCombatant): number {
   if (c.side === 'aeon') return aeonGearOf(c).critBonus;
-  const eq = c.equipment;
-  if (!eq) return 0;
-  return (eq.weapon.bonusCrit ?? 0) + (eq.armor.bonusCrit ?? 0);
+  return gearOf(c).crit;
 }
-
-const OFFENSE_PHYSICAL: ReadonlyArray<readonly [AutoAbilityId, number]> = [
-  ['strength-3', 3],
-  ['strength-5', 5],
-  ['strength-10', 10],
-  ['strength-20', 20],
-];
-const OFFENSE_MAGICAL: ReadonlyArray<readonly [AutoAbilityId, number]> = [
-  ['magic-3', 3],
-  ['magic-5', 5],
-  ['magic-10', 10],
-  ['magic-20', 20],
-];
-const DEFENSE_PHYSICAL: ReadonlyArray<readonly [AutoAbilityId, number]> = [
-  ['defense-3', 3],
-  ['defense-5', 5],
-  ['defense-10', 10],
-  ['defense-20', 20],
-];
-const DEFENSE_MAGICAL: ReadonlyArray<readonly [AutoAbilityId, number]> = [
-  ['magic-def-3', 3],
-  ['magic-def-5', 5],
-  ['magic-def-10', 10],
-  ['magic-def-20', 20],
-];
-
-/**
- * Pools are the one place where an auto-ability really does change a
- * `StatBlock` field: `maxHP = baseHP * (100+N) // 100`, `maxMP` likewise
- * [ffx-combat-core §9].
- */
-const POOL_HP: ReadonlyArray<readonly [AutoAbilityId, number]> = [
-  ['hp-5', 5],
-  ['hp-10', 10],
-  ['hp-20', 20],
-  ['hp-30', 30],
-];
-const POOL_MP: ReadonlyArray<readonly [AutoAbilityId, number]> = [
-  ['mp-5', 5],
-  ['mp-10', 10],
-  ['mp-20', 20],
-  ['mp-30', 30],
-];
 
 /**
  * The six `+N%` auto-ability families of §9, named the way a menu names them
  * rather than the way the damage chain consumes them.
  */
-export type BonusFamily = 'strength' | 'magic' | 'defense' | 'magic-def' | 'hp' | 'mp';
-
-const BONUS_TABLES: Readonly<Record<BonusFamily, ReadonlyArray<readonly [AutoAbilityId, number]>>> = {
-  strength: OFFENSE_PHYSICAL,
-  magic: OFFENSE_MAGICAL,
-  defense: DEFENSE_PHYSICAL,
-  'magic-def': DEFENSE_MAGICAL,
-  hp: POOL_HP,
-  mp: POOL_MP,
-};
-
-function bestPercent(c: EquipmentBearer, table: ReadonlyArray<readonly [AutoAbilityId, number]>): number {
-  let best = 0;
-  for (const [id, pct] of table) if (bearerHasAuto(c, id) && pct > best) best = pct;
-  return best;
-}
+export type BonusFamily = GearFamily;
 
 /**
- * Best `+N%` this bearer carries from one family, in percentage points, or 0.
+ * The `+N%` this bearer's gear gives one family, in percentage points, or 0 (re-parity RC4, FFX only).
  *
- * "Best", not "sum": the tiers of one family never stack, so Yuna's Blessed
- * Ring carrying both `magic-def-10` and `magic-def-5` is worth 10, not 15
- * [ffx-combat-core §9; the same `bestPercent` steps 8/9 of the damage chain
- * already use].
+ * **Summed, not "best of the family"**: the percents of all eight ability slots add, so Yuna's Blessed Ring carrying both `magic-def-10` and `magic-def-5`
+ * is worth 15, and two `hp-10` give HP +20 (`kernel/gear.ts`, FFX-G03 section 4.1). For the four damage families the number is the byte the party percent
+ * modifier reads, the low byte of the sum.
  */
 export function bonusPercentFor(b: EquipmentBearer, family: BonusFamily): number {
-  return bestPercent(b, BONUS_TABLES[family]);
+  return familyPercent(b, family);
 }
 
 /**
@@ -140,15 +86,15 @@ export function bonusPercentFor(b: EquipmentBearer, family: BonusFamily): number
  * gets neither [ffx-combat-core §2.4].
  */
 export function offensiveBonusPercent(c: FFXCombatant, type: DamageType): number {
-  if (type === 'physical') return bestPercent(c, OFFENSE_PHYSICAL);
-  if (type === 'magical') return bestPercent(c, OFFENSE_MAGICAL);
+  if (type === 'physical') return familyPercent(c, 'strength');
+  if (type === 'magical') return familyPercent(c, 'magic');
   return 0;
 }
 
 /** Step 9: defensive `+N%` auto-abilities on the target. */
 export function defensiveBonusPercent(c: FFXCombatant, type: DamageType): number {
-  if (type === 'physical') return bestPercent(c, DEFENSE_PHYSICAL);
-  if (type === 'magical') return bestPercent(c, DEFENSE_MAGICAL);
+  if (type === 'physical') return familyPercent(c, 'defense');
+  if (type === 'magical') return familyPercent(c, 'magic-def');
   return 0;
 }
 
@@ -206,62 +152,6 @@ export function weaponStatusStrikes(c: FFXCombatant): Array<{ status: StatusId; 
   return [...sums.entries()].map(([status, v]) => ({ status, chance: v.chance, duration: v.duration }));
 }
 
-/** Ribbon's protected list [ffx-combat-core §9]. Note it does NOT cover the Breaks or Death. */
-const RIBBON_STATUSES: readonly StatusId[] = [
-  'zombie',
-  'petrify',
-  'poison',
-  'confuse',
-  'berserk',
-  'provoke',
-  'sleep',
-  'silence',
-  'darkness',
-  'slow',
-  'doom',
-];
-
-/** Aeon Ribbon adds Death, all four Breaks, Scan and Eject on top of Ribbon's list. */
-const AEON_RIBBON_EXTRA: readonly StatusId[] = [
-  'ko',
-  'power-break',
-  'magic-break',
-  'armor-break',
-  'mental-break',
-  'scan',
-  'eject',
-];
-
-/** Proofs set that status's resistance byte to 255. */
-const PROOFS: ReadonlyArray<readonly [AutoAbilityId, StatusId]> = [
-  ['stoneproof', 'petrify'],
-  ['deathproof', 'ko'],
-  ['zombieproof', 'zombie'],
-  ['poisonproof', 'poison'],
-  ['sleepproof', 'sleep'],
-  ['silenceproof', 'silence'],
-  ['darkproof', 'darkness'],
-  ['slowproof', 'slow'],
-  ['confuseproof', 'confuse'],
-  ['berserkproof', 'berserk'],
-  ['curseproof', 'curse'],
-];
-
-/** Wards set that status's resistance byte to 50 — subtractive, not multiplicative. */
-const WARDS: ReadonlyArray<readonly [AutoAbilityId, StatusId]> = [
-  ['stone-ward', 'petrify'],
-  ['death-ward', 'ko'],
-  ['zombie-ward', 'zombie'],
-  ['poison-ward', 'poison'],
-  ['sleep-ward', 'sleep'],
-  ['silence-ward', 'silence'],
-  ['dark-ward', 'darkness'],
-  ['slow-ward', 'slow'],
-  ['confuse-ward', 'confuse'],
-  ['berserk-ward', 'berserk'],
-  ['curse-ward', 'curse'],
-];
-
 /** Elemental armour: ward -> resist, proof -> immune, eater -> absorb. */
 const ELEMENT_ARMOUR: ReadonlyArray<readonly [AutoAbilityId, ElementId, 'resist' | 'immune' | 'absorb']> = [
   ['fire-ward', 'fire', 'resist'],
@@ -282,23 +172,20 @@ const ELEMENT_ARMOUR: ReadonlyArray<readonly [AutoAbilityId, ElementId, 'resist'
  * Fold equipment into a combatant's resistance bytes and elemental affinities,
  * in place. Called once at battle start.
  *
- * Wards and Proofs **raise** a resistance byte, never lower one, so an enemy's
- * own 255 always wins.
+ * **The resistance bytes are the game's sums** (re-parity RC4, FFX only; `kernel/gear.ts`, FFX-G03 section 4.2): the byte of every worn ability is
+ * added per status and clamped to 255, so two Death Wards make 100 and a Ward with a Proof 255. An ability that gives a status its extra-immunity bit
+ * (the Ribbon's Doom, the Aeon Ribbon's Eject and Scan, **Curseproof and Curse Ward alike**) makes the wearer fully immune to it: 255. Nothing is raised
+ * "to a maximum" any more, and an Auto-Haste gives no Slow resistance of its own (the status rule refuses a Slow while a Haste counter is 255).
  */
 export function applyEquipmentToCombatant(c: FFXCombatant): void {
   if (!c.equipment) return;
-  const raise = (status: StatusId, value: number): void => {
-    if ((c.immunities[status] ?? 0) < value) c.immunities[status] = value;
-  };
-  for (const [id, status] of WARDS) if (hasAuto(c, id)) raise(status, 50);
-  for (const [id, status] of PROOFS) if (hasAuto(c, id)) raise(status, 255);
-  if (hasAuto(c, 'ribbon')) for (const s of RIBBON_STATUSES) raise(s, 255);
-  if (hasAuto(c, 'aeon-ribbon')) {
-    for (const s of RIBBON_STATUSES) raise(s, 255);
-    for (const s of AEON_RIBBON_EXTRA) raise(s, 255);
-  }
-  // Auto-Haste also makes the wearer immune to Slow [ffx-combat-core §1.4].
-  if (hasAuto(c, 'auto-haste')) raise('slow', 255);
+  const gear = gearOf(c);
+  gear.resist.forEach((byte, number) => {
+    if (byte === 0) return;
+    const status = STATUS_BY_NUMBER[number] as StatusId;
+    c.immunities[status] = Math.min(255, (c.immunities[status] ?? 0) + byte);
+  });
+  for (const [bit, status] of EXTRA_IMMUNITY_STATUS) if ((gear.immuneExtra & bit) !== 0) c.immunities[status] = 255;
   for (const [id, element, affinity] of ELEMENT_ARMOUR) {
     if (hasAuto(c, id)) c.affinities[element] = affinity;
   }

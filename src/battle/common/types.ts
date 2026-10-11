@@ -678,7 +678,7 @@ export type AutoAbilityId =
   | 'magic-def-5'
   | 'magic-def-10'
   | 'magic-def-20'
-  // --- pools: `maxHP = baseHP * (100+N) // 100`, clamped 9 999 ------------
+  // --- pools: `maxHP = baseHP + trunc(baseHP * N / 100)`, N the SUM of every worn tier (RC4), clamped 9 999 ---
   | 'hp-5'
   | 'hp-10'
   | 'hp-20'
@@ -767,7 +767,7 @@ export type AutoAbilityId =
   | 'confuseproof'
   | 'berserkproof'
   | 'curseproof'
-  // --- wards: set that status's resistance byte to 50 (subtractive) -------
+  // --- wards: add 50 to that status's resistance byte (subtractive). `curse-ward` is the exception: like `curseproof` it is a FULL Curse immunity (RC4) ---
   | 'stone-ward'
   | 'death-ward'
   | 'zombie-ward'
@@ -839,7 +839,11 @@ export interface EquipmentDef {
   slots: number;
   /** Filled slots, in display order. */
   autoAbilities: AutoAbilityId[];
-  /** Weapon only: bonus critical rate added when the action has `adds-equipment-crit`. 0–100 percentage points. */
+  /**
+   * The crit byte of this piece, added over the worn pieces when the action takes the equipment bonus (`adds-equipment-crit`), 0–100 percentage points.
+   * Absent means the game's 3, which every gear row carries (re-parity RC4, FFX only; `battle/ffx/kernel/gear.ts`): a weapon and an armour give 6, a weapon
+   * alone 3. Before RC4 only the weapon carried it and the armour gave 0.
+   */
   bonusCrit?: number;
 }
 

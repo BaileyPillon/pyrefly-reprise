@@ -10,7 +10,8 @@
  * §2.2): 31 -> 34 would be roughly +31 % damage, not +10 %.
  *
  * Exactly two fields of a {@link StatBlock} really do move: `maxHp` and
- * `maxMp`, via the `hp-N` / `mp-N` families, and those are the only rows
+ * `maxMp`, via the `hp-N` / `mp-N` families (the SUM of every worn tier, the
+ * party stat builder's arithmetic: re-parity RC4), and those are the only rows
  * whose `effective` differs from `base`. Everything else reports
  * `effective === base` plus the percentage and *where it lands*
  * ({@link StatBonusKind}) — which is what a prep menu needs in order to stop
@@ -22,8 +23,8 @@
  */
 
 import type { StatBlock } from '../common/types.ts';
-import { bearerHasAuto, bonusPercentFor, type BonusFamily, type EquipmentBearer } from './equipment.ts';
-import { idiv } from './math.ts';
+import { bonusPercentFor, type BonusFamily, type EquipmentBearer } from './equipment.ts';
+import { gearMaxHp, gearMaxMp } from './adapt/gear.ts';
 
 /** A member build or a live combatant — anything with stats and (maybe) gear. */
 export interface StatsBearer extends EquipmentBearer {
@@ -61,7 +62,7 @@ export interface EffectiveStatRow {
    * `tests/unit/ffx-effective-stats.test.ts` holds every shipped build to it.
    */
   effective: number;
-  /** Best `+N%` the gear carries for this row, 0 when none. */
+  /** The `+N%` the gear gives this row (the sum of the worn tiers), 0 when none. */
   bonusPercent: number;
   kind: StatBonusKind;
 }
@@ -71,23 +72,15 @@ export interface EffectiveStats {
   byKey: Record<EffectiveStatKey, EffectiveStatRow>;
 }
 
-/** §9: pools clamp at 9 999 / 999, or 99 999 / 9 999 with the Break limit ability. */
-const POOL_CAP = { hp: 9999, mp: 999 } as const;
-const POOL_BREAK_CAP = { hp: 99999, mp: 9999 } as const;
-
 /**
- * `maxHP = baseHP * (100+N) // 100`, clamped [ffx-combat-core §9].
+ * `maxHP = baseHP + trunc(baseHP * N / 100)`, clamped to 9 999 / 999 (99 999 / 9 999 with the Break limit ability) [ffx-combat-core §9].
  *
- * `//` is floor, so the truncation is deliberate and load-bearing: HP 1 375
- * with HP +5 % is 1 443, not 1 444. Uses the engine's own {@link idiv} rather
- * than a local `Math.floor` so there is one definition of `//` in the repo.
+ * **N is the SUM of the percents of every worn HP (or MP) ability** and the arithmetic is the game's, in 32-bit signed integers with a truncating division
+ * (re-parity RC4, FFX only; `kernel/gear.ts`, the party stat builder VA 0x007860f0). The truncation is deliberate and load-bearing: HP 1 375 with
+ * HP +5 % is 1 443, not 1 444.
  */
 export function effectivePool(member: StatsBearer, pool: 'hp' | 'mp'): number {
-  const base = pool === 'hp' ? member.stats.hp : member.stats.mp;
-  const pct = bonusPercentFor(member, pool);
-  const raised = idiv(base * (100 + pct), 100);
-  const breaks = bearerHasAuto(member, pool === 'hp' ? 'break-hp-limit' : 'break-mp-limit');
-  return Math.min(raised, breaks ? POOL_BREAK_CAP[pool] : POOL_CAP[pool]);
+  return pool === 'hp' ? gearMaxHp(member, member.stats.hp) : gearMaxMp(member, member.stats.mp);
 }
 
 /**
