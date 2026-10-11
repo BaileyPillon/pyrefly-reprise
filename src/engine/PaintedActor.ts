@@ -56,7 +56,7 @@ import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralA
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
-import { PoseBlend } from './PoseBlend.ts';
+import { PoseBlend, poseBlendShape } from './PoseBlend.ts';
 import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
@@ -683,7 +683,7 @@ export class PaintedActor extends Group {
     this.shadowAlphaTest = opts.shadowAlphaTest ?? 0.4;
     this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
-    this.blend = new PoseBlend(this.slots);
+    this.blend = new PoseBlend(this.slots, poseBlendShape()); // FB-2: the stepped dissolve (`?poseblend=legacy` = the plain one)
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
 

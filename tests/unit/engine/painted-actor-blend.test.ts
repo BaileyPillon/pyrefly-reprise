@@ -6,10 +6,16 @@
  * the way the game steps it (`PaintedStage.update(fieldDt, realDt)`: the field clock the hit-stop holds, the real one it never does), and every plane is
  * read as the harness reads it: its painting's name and its fade. The head is read through the plane the engine drew (the fixture's `headPx`), so the
  * head lock rides through the chain. The pure properties are `pose-blend.test.ts`.
+ *
+ * FB-2 (P2-A, both games): every pose change now runs on the stepped dissolve (`STEPPED_DISSOLVE`), and `?poseblend=legacy` restores the plain one. The
+ * mechanics under test (one owned blend, the real clock, no third painting, a reversal that moves no fade, the cuts) are the shape's neighbours, not the
+ * shape: both describes run under BOTH shapes, and the few numbers that are the shape's own (the first frame of a fresh blend, the per-frame smoothness
+ * of a reversal) are told apart by `LEGACY`. The shape's own tests are `pose-blend-stepped.test.ts` and `pose-blend-composite.test.ts`.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { HELD, PaintedActor, cameraAt, headPx, painting, reset, slotsOf, viewOf, type Actor } from './head-lock-fixture.ts';
 import { setPace, setPaceGame } from '../../../src/engine/pace.ts';
+import { STEPPED_CAP, setPoseBlendLegacy } from '../../../src/engine/PoseBlend.ts';
 import { stillActor } from '../../../src/engine/fx/mix/geometry.ts';
 
 const FRAME = 1000 / 60;
@@ -22,7 +28,11 @@ beforeEach(() => {
 afterEach(() => {
   reset();
   setPaceGame('other');
+  setPoseBlendLegacy(null);
 });
+
+/** The two shapes an actor's pose changes can run on: the stepped dissolve (the default) and the plain one behind `?poseblend=legacy`. */
+const SHAPES = [['stepped', false], ['legacy', true]] as const;
 
 /** Tidus as the stage stages him: the party faces +x; every pose is a real record's painting with its real registration (heads included). */
 function tidus(over: { crossfadeMs?: number } = {}): Actor {
@@ -68,7 +78,9 @@ function step(a: Actor, cam: ReturnType<typeof cameraAt>, fieldMs: number, realM
   a.updateMatrixWorld(true);
 }
 
-describe('the attack key chain on the real PaintedActor: ready > attack, then attack > follow 83 ms later, 40 ms hit-stop in the middle', () => {
+describe.each(SHAPES)('the attack key chain on the real PaintedActor, %s shape: ready > attack, then attack > follow 83 ms later, 40 ms hit-stop in the middle', (_name, LEGACY) => {
+  beforeEach(() => setPoseBlendLegacy(LEGACY));
+
   it('frame by frame: never a third painting, follow comes in from 0 (not at a third of the way), attack only fades, and the blend ends 120 ms of REAL time after the follow request', () => {
     const a = tidus();
     const cam = cameraAt(3);
@@ -95,7 +107,7 @@ describe('the attack key chain on the real PaintedActor: ready > attack, then at
     }
     // follow's first appearance is the first step of a fresh blend, not a pop at 0.37
     const firstFollow = rows.find((r) => (r.m['follow'] ?? 0) > 0)!;
-    expect(firstFollow.m['follow']!).toBeLessThan(0.1);
+    expect(firstFollow.m['follow']!).toBeLessThan(LEGACY ? 0.1 : 0.15); // (the stepped dissolve climbs linearly to its cap: 0.10 in the first frame)
     // attack is already the stronger painting when follow is asked for, and from then on it only falls
     const afterAsk = rows.filter((r) => r.f >= 5);
     expect(rows[4]!.m['attack']!).toBeGreaterThan(0.6);
@@ -183,7 +195,9 @@ describe('the attack key chain on the real PaintedActor: ready > attack, then at
   });
 });
 
-describe('the seam: realDt, the default, reversal, the cuts', () => {
+describe.each(SHAPES)('the seam, %s shape: realDt, the default, reversal, the cuts', (_name, LEGACY) => {
+  beforeEach(() => setPoseBlendLegacy(LEGACY));
+
   it('update(dt) with no second argument runs the blend on dt itself (every scene, portrait and title caller), and a frame of dt 0 then holds it: the default is the old behaviour', () => {
     const a = tidus();
     a.setPose('attack');
@@ -212,7 +226,9 @@ describe('the seam: realDt, the default, reversal, the cuts', () => {
     for (let f = 0; f < 12; f++) {
       step(a, cam, FRAME);
       const now = shown(a);
-      for (const k of ['idle', 'hurt']) expect(Math.abs((now[k] ?? 0) - (prev[k] ?? 0)), `${k}, frame ${f}`).toBeLessThan(0.2);
+      // the plain dissolve moves a plane a little each frame; the stepped one has its one step, and the lesser painting is never above its cap, reversal or not
+      if (LEGACY) for (const k of ['idle', 'hurt']) expect(Math.abs((now[k] ?? 0) - (prev[k] ?? 0)), `${k}, frame ${f}`).toBeLessThan(0.2);
+      else expect(Math.min(now['idle'] ?? 0, now['hurt'] ?? 0), `frame ${f}`).toBeLessThanOrEqual(STEPPED_CAP + 1e-9);
       prev = now;
     }
     expect(shown(a)).toEqual({ idle: 1 });
