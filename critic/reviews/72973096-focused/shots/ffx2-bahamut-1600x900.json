@@ -1,0 +1,103 @@
+{
+ "id": "ffx2-bahamut",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 703,
+    "y": 675,
+    "w": 434,
+    "h": 160,
+    "vis": true,
+    "t": "NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP 100% TO HIT + SHELL It puts She"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "battle-pause-chip ig ig--ffx2",
+    "x": 19,
+    "y": 18,
+    "w": 96,
+    "h": 24,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 1246,
+   "y": 418,
+   "w": 324,
+   "h": 191,
+   "vis": true
+  },
+  "nextBest": "NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP 100% TO HIT + SHELL It puts Shell on the party. N HIDE MOVES 116 BAHAMUT ACTS NEXT Attack SCRIPTED Physical non-elemental damage to one girl. DAMAG"
+ },
+ "actors": [
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna-white-mage"
+  },
+  {
+   "id": "bahamut",
+   "kind": "enemy",
+   "art": "ffx2-bahamut"
+  },
+  {
+   "id": "rikku",
+   "kind": "party",
+   "art": "rikku-dark-knight"
+  },
+  {
+   "id": "paine",
+   "kind": "party",
+   "art": "paine-warrior"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,113 @@
+{
+ "id": "ffx2-leblanc",
+ "size": "2000x1012",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": false,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 740,
+    "y": 770,
+    "w": 640,
+    "h": 169,
+    "vis": true,
+    "t": "NEXT BEST MOVE Rikku Grenade → all enemies IN ITEM 541–589 3 HITS KILLS NO MP 100% TO HIT "
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "battle-pause-chip ig ig--ffx2",
+    "x": 19,
+    "y": 18,
+    "w": 96,
+    "h": 24,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 1501,
+   "y": 395,
+   "w": 365,
+   "h": 290,
+   "vis": true
+  },
+  "nextBest": "NEXT BEST MOVE Rikku Grenade → all enemies IN ITEM 541–589 3 HITS KILLS NO MP 100% TO HIT Physical damage to all enemies. It finishes Fem-Goon with 565 damage. N HIDE MOVES 28 ORMI ACTS NEXT Shield Bash SCRI"
+ },
+ "actors": [
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna-gunner"
+  },
+  {
+   "id": "rikku",
+   "kind": "party",
+   "art": "rikku-thief"
+  },
+  {
+   "id": "paine",
+   "kind": "party",
+   "art": "paine-warrior"
+  },
+  {
+   "id": "ormi-entrance",
+   "kind": "enemy",
+   "art": "ormi"
+  },
+  {
+   "id": "dr-goon",
+   "kind": "enemy",
+   "art": "ffx2-dr-goon"
+  },
+  {
+   "id": "fem-goon",
+   "kind": "enemy",
+   "art": "ffx2-fem-goon"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

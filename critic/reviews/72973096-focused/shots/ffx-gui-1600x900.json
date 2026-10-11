@@ -1,0 +1,118 @@
+{
+ "id": "ffx-gui",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": false,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 400,
+    "y": 43,
+    "w": 295,
+    "h": 203,
+    "vis": true,
+    "t": "Tidus Haste → Tidus IN WHITE MAGIC 8 MP + HASTE Speeds the target’s turn up It puts Haste "
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "battle-pause-chip ig",
+    "x": 19,
+    "y": 18,
+    "w": 96,
+    "h": 24,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 76,
+   "y": 511,
+   "w": 451,
+   "h": 324,
+   "vis": true
+  },
+  "nextBest": ""
+ },
+ "actors": [
+  {
+   "id": "tidus",
+   "kind": "party",
+   "art": "tidus"
+  },
+  {
+   "id": "auron",
+   "kind": "party",
+   "art": "auron"
+  },
+  {
+   "id": "lulu",
+   "kind": "party",
+   "art": "lulu"
+  },
+  {
+   "id": "sinspawn-gui",
+   "kind": "enemy",
+   "art": "sinspawn-gui"
+  },
+  {
+   "id": "sinspawn-gui-head",
+   "kind": "enemy",
+   "art": "sinspawn-gui-head"
+  },
+  {
+   "id": "sinspawn-gui-arm-left",
+   "kind": "enemy",
+   "art": "sinspawn-gui-arm-left"
+  },
+  {
+   "id": "sinspawn-gui-arm-right",
+   "kind": "enemy",
+   "art": "sinspawn-gui-arm-right"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

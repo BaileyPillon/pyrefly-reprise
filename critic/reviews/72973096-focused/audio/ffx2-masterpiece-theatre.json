@@ -1,0 +1,200 @@
+{
+ "id": "ffx2-masterpiece-theatre",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"ffx2-masterpiece-theatre\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":18,\"elapsedTicks\":95453,\"elapsedMs\":31818,\"ap\":80,\"exp\":0,\"gil\":0,\"drops\":[{\"itemId\":\"x2-elixir\",\"count\":1},{\"itemId\":\"x2-elixir\",\"count\":1}],\"overkilled\":[],\"sphereLevelsGained\":{},\"levelsGained\":{}},\"",
+ "victorySfx": [
+  [
+   21.421333333333333,
+   "victory-fanfare",
+   "victory-fanfare",
+   "sprite"
+  ]
+ ],
+ "sfxNames": [
+  "battle-start>battle-start",
+  "v2:magic-charge-x2>v2:magic-charge-x2",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:protect>v2:protect",
+  "v2:status-applied>v2:status-applied",
+  "v2:hit-dagger>v2:hit-dagger",
+  "v2:hit-greatsword>v2:hit-greatsword",
+  "v2:hit-2>v2:hit-2",
+  "v2:cure-x2>v2:cure-x2",
+  "v2:flare-x2>v2:flare-x2",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies",
+  "v2:critical>v2:critical",
+  "v2:whiff>v2:whiff",
+  "v2:cure-3-x2>v2:cure-3-x2",
+  "victory-fanfare>victory-fanfare"
+ ],
+ "sfxN": 119,
+ "sfxTail": [
+  "21.090666666666667:v2:cure-3-x2:v2:cure-3-x2",
+  "21.21066666666667:v2:magic-charge-x2:v2:magic-charge-x2",
+  "21.32:v2:hit-heavy-enemy:v2:hit-heavy-enemy",
+  "21.341333333333335:v2:hit-dagger:v2:hit-dagger",
+  "21.36:v2:hit-2:v2:hit-2",
+  "21.392:v2:hit-2:v2:hit-2",
+  "21.4:v2:dissolve-pyreflies:v2:dissolve-pyreflies",
+  "21.421333333333333:victory-fanfare:victory-fanfare"
+ ],
+ "curAtEnd": null,
+ "playingAtEnd": null,
+ "musicTimeline": [
+  {
+   "t": 5675,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 6126,
+   "k": "battle|title|chapter-select:0.94",
+   "s": "battle",
+   "cur": "title",
+   "g": "0",
+   "f": "chapter-select:0.94"
+  },
+  {
+   "t": 14169,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 15575,
+   "k": "battle|boss-ffx2-aeon|title:0.45",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.45"
+  },
+  {
+   "t": 15755,
+   "k": "battle|boss-ffx2-aeon|title:0.06",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.06"
+  },
+  {
+   "t": 15890,
+   "k": "battle|boss-ffx2-aeon|title:0.01",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0.01",
+   "f": "title:0.01"
+  },
+  {
+   "t": 16019,
+   "k": "battle|boss-ffx2-aeon|title:0.00",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0.04",
+   "f": "title:0.00"
+  },
+  {
+   "t": 16470,
+   "k": "battle|boss-ffx2-aeon|",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 19616,
+   "k": "battle|boss-vegnagun|boss-ffx2-aeon:0.88",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "0",
+   "f": "boss-ffx2-aeon:0.88"
+  },
+  {
+   "t": 19767,
+   "k": "battle|boss-vegnagun|boss-ffx2-aeon:0.33",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "0",
+   "f": "boss-ffx2-aeon:0.33"
+  },
+  {
+   "t": 19914,
+   "k": "battle|boss-vegnagun|boss-ffx2-aeon:0.12",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "0",
+   "f": "boss-ffx2-aeon:0.12"
+  },
+  {
+   "t": 20064,
+   "k": "battle|boss-vegnagun|boss-ffx2-aeon:0.05",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "0",
+   "f": "boss-ffx2-aeon:0.05"
+  },
+  {
+   "t": 20216,
+   "k": "battle|boss-vegnagun|boss-ffx2-aeon:0.02",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "0.01",
+   "f": "boss-ffx2-aeon:0.02"
+  },
+  {
+   "t": 20433,
+   "k": "battle|boss-vegnagun|boss-ffx2-aeon:0.00",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "0.03",
+   "f": "boss-ffx2-aeon:0.00"
+  },
+  {
+   "t": 21116,
+   "k": "battle|boss-vegnagun|",
+   "s": "battle",
+   "cur": "boss-vegnagun",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 23663,
+   "k": "battle||boss-vegnagun:0.03",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-vegnagun:0.03"
+  },
+  {
+   "t": 23814,
+   "k": "battle||boss-vegnagun:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-vegnagun:0.00"
+  },
+  {
+   "t": 23979,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-ffx2-aeon.mp3",
+  "music/boss-vegnagun.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,634 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-11T03:56:03.903Z",
+  "build": {
+    "mainSha": "72973096"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect and no regression against live 931613a8 in the sampled changed area.",
+    "All four chapters played with real keys reached their destination (FFX I, III and FFX-2 IV, VI won; Chapter II lost as it did on 931613a8); the CTB engine fought 234 turns of Chapter III with 6 seams without error.",
+    "The fanfare plays once at the end of Chapter VI, the hidden Leblanc, the Experiment and Gui chains and in single-link fights (Flux, Sin, Ixion, Fallen Aeons); Chapter IV plays none by its own design (same on live).",
+    "The hidden words open the right chapters, leave the normal board at 18 cards, and the two new chapters write only the experiments key.",
+    "The disclosed majors (CHK-027 motion continuity, Chapter II route loss) are not introduced by this change and not regressions; the new chapters are brand-new features."
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 8,
+      "where": "FFX-2 IV, VI, hidden Leblanc, hidden Experiment; FFX I, Sin",
+      "reason": "Agents cannot hear (rule 13). Technical side only: the right file loads and loops (boss-bahamut in IV, boss-leblanc in VI and hidden leblanc, boss-ffx2-aeon in Ixion and the Fallen Aeons, boss-evrae, boss-seymour unchanged), one fanfare at the end of a chain; audio tests pass (120 tests in 5 files rerun here). tools/audio/qa.mjs --strict was not rerun. Bailey must judge the two new themes by ear.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 12,
+      "where": "FFX-2 IV, VI (1600x900, 2000x1012, 390x844), FFX I, II, III, VII, X, XVII, hidden Experiment and Gui (1600x900)",
+      "reason": "The battle screen fills the window at every size sampled; no full-screen layer covers the stage.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-1600x900-1-first-menu.png",
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-2000x1012-1-first-menu.png",
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-390x844-touch-1-first-menu.png"
+      ]
+    },
+    {
+      "id": "CHK-003",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 3,
+      "where": "first menus read by eye",
+      "reason": "Text read legibly by eye at 1600x900 and 2000x1012 but no legibility-floor measurement was made this pass.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-004",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 2,
+      "where": "first menus",
+      "reason": "The intent card and command rows show on every first menu, but G, E and N were not pressed in this pass and no panel was proved to name a pressable action.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-005",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 0,
+      "where": "n/a",
+      "reason": "The advisor on a broken board was not exercised here.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-006",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 0,
+      "where": "n/a",
+      "reason": "Transient overlays across a death or phase change were not examined beyond the full fights the continuity harness played (no stuck overlay seen in the strips looked at).",
+      "game": "both"
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 4,
+      "where": "17 first-menu captures",
+      "reason": "No raw ids or developer vocabulary in the captures (sampled, not exhaustive).",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-experiment-1600x900-1-first-menu.png",
+        "critic/reviews/72973096-focused/shots/ffx-gui-1600x900-1-first-menu.png"
+      ]
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 6,
+      "where": "FFX-2 IV at 1600x900, 2000x1012, 390x844; VI",
+      "reason": "In Chapter IV the Bahamut intent card sits on his right, clear of Yuna, Rikku and Paine; Bahamut is whole in frame at all three sizes and the girls are readable (on the phone they are small but whole). The guide panel covers none of the figures.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-1600x900-1-first-menu.png",
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-2000x1012-1-first-menu.png",
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-390x844-touch-1-first-menu.png",
+        "critic/reviews/72973096-focused/A-ffx2-battle.jpg"
+      ]
+    },
+    {
+      "id": "CHK-009",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 0,
+      "where": "n/a",
+      "reason": "Names read in full in the captures sampled (Fem-Goon, Dr. Goon, Sinspawn Gui, Gui Head); the phone strip and long names were not checked exhaustively.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-011",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 4,
+      "where": "FFX-2 IV, VI, hidden Experiment, FFX hidden Gui, FFX I, II, III",
+      "reason": "Every enemy in the order list was visible in the captures sampled: Bahamut, the three Syndicate members, the Experiment, Gui with head and both arms.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx-gui-1600x900-1-first-menu.png",
+        "critic/reviews/72973096-focused/shots/ffx2-leblanc-1600x900-1-first-menu.png"
+      ]
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 4,
+      "where": "sampled captures; art-derive audit",
+      "reason": "No fallback or placeholder face appeared in any capture; art-derive verify (3,778 masters, 0 problems) and audit (0 dangling names) pass on dist-gate. art-browser-load.mjs was not run here (the deploy runs it).",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-1600x900-1-first-menu.png"
+      ]
+    },
+    {
+      "id": "CHK-013",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 0,
+      "where": "n/a",
+      "reason": "New art (Sinspawn Gui parts, Seymour guest, Experiment, Yuna Wedding-Mage hurt and KO) was seen only in the sampled captures, not judged against the written rubric. verify-approved: 916 ok, 0 mismatched, 0 missing.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 90,
+      "where": "FFX I, III; FFX-2 IV, VI; hidden Experiment and Gui first menus",
+      "reason": "Every route used real Playwright keyboard input (touch viewport for the phone): the title, the board, the typed words, party prep, the cutscene, the first menu and an Attack with a target; four full fights were played to the end by the continuity harness with real keys. The debug API only set up state for the music and fanfare checks and for the hidden chapters run to the end (labelled debug-assisted).",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/continuity/continuity-summary.json"
+      ]
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 0,
+      "where": "all captures",
+      "reason": "Each first-menu capture asserted screen=battle and awaitingMenu: 0 failed assertions in 20 captures.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-1600x900.json",
+        "critic/reviews/72973096-focused/shots/ffx2-leblanc-1600x900.json"
+      ]
+    },
+    {
+      "id": "CHK-017",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 0,
+      "where": "dist-gate",
+      "reason": "The artifact was rebuilt here at 72973096 (bundle index-CEdItQg_, different from KHicpkvR) and its art proved; \"the live site as the live site\" belongs to the live review after the deploy.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-018",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 8,
+      "where": "dist-gate",
+      "reason": "art-derive audit PASS: 1,282 text files read, 0 dangling art names.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-bahamut-1600x900-1-first-menu.png"
+      ]
+    },
+    {
+      "id": "CHK-019",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 8,
+      "where": "dist-gate",
+      "reason": "art-derive verify PASS (every derived file equals its master), but the browser decode check (art-browser-load) was left to the deploy.",
+      "game": "both"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 10,
+      "where": "both games",
+      "reason": "The shared changes were sampled in both games: the CTB engine and the victory fanfare in FFX I, III (full win) and Sin; the ATB engine, fanfare and the new themes in FFX-2 IV and VI (full wins). Case: see CHK-021.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/audio/ffx2-leblanc.json",
+        "critic/reviews/72973096-focused/audio/seymour-flux.json",
+        "critic/reviews/72973096-focused/audio/sin-fins-core.json"
+      ]
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 10,
+      "where": "both games",
+      "reason": "CASE (from research/ and the code): W2 engine mechanics FFX only (src/battle/ffx/**; the FFX-2 AI file touched is the Experiment, FFX-2); Yuna Wedding-Mage poses FFX-2 only; The Experiment FFX-2 only (research/ffx2-experiment.md); Sinspawn Gui FFX only (research/ffx-sinspawn-gui.md, Seymour guest); Bahamut size FFX-2 only (FFX2_GIANT_SHARE, Ch IV); fanfare both (shared presenter); boss-bahamut and boss-leblanc FFX-2 only. Presence and absence: the Experiment word opened ffx2-masterpiece-theatre (game ffx2), mushroom opened sinspawn-gui (game ffx); FFX chapters kept boss-seymour, boss-evrae; the other FFX-2 chapters (Ixion, Fallen Aeons) still request boss-ffx2-aeon; the typed words limit, leblanc, experiment and mushroom each opened their own chapter and a wrong word did nothing; the board lists 18 cards and no hidden chapter.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/doors-1600x900.json",
+        "critic/reviews/72973096-focused/audio/ffx2-ixion-djose.json",
+        "critic/reviews/72973096-focused/audio/ffx2-fallen-aeons.json"
+      ]
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 0,
+      "where": "FFX I win, III win (6 seams), FFX-2 IV win, VI win (3 acts), FFX II loss",
+      "reason": "Wins reached results and the board again by real keys; the Chapter II defeat reached its real destination.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/continuity/continuity-summary.json"
+      ]
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 0,
+      "where": "all",
+      "reason": "Everything ran through the app, stage, presenter and HUD. The Experiment two-act chain and Gui two-link chain ran to victory through the presenter (debug-assisted autoplay) with one fanfare each.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/audio/ffx2-masterpiece-theatre.json",
+        "critic/reviews/72973096-focused/audio/sinspawn-gui.json"
+      ]
+    },
+    {
+      "id": "CHK-026",
+      "result": "PASS",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 55,
+      "where": "FFX I, II, III; FFX-2 IV, VI",
+      "reason": "The harness reads PASS in all five chapters (max head jump 12.1, 9.6, 20.5, 2.4, 25.6 percent; feet shift at most 1.4 px). The two large jumps are hurt-to-KO swaps measured by silhouette (0.2 percent where registered); 931613a8 read the same in Chapter I (12.1) and Chapter IV (9.5).",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/continuity/continuity-summary.json"
+      ]
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "mandatory": true,
+      "mode": "automated",
+      "minutes": 55,
+      "where": "FFX I, II, III; FFX-2 IV, VI",
+      "reason": "Motion continuity fails everywhere, as it did at 931613a8 and on live: snaps a minute 0.29 (I), 0.17 (IV), 0.49 (VI), 0.63 (II), 0.57 (III) against 931613a8 1.39 (I), 0.23 (IV), 0.39 (II); worst jerk 154, 256, 229, 270, 284 px. No chapter is worse than the earlier run except Chapter II (0.63 against 0.39 snaps; the fight was a defeat of 73 turns against a different route length), disclosed.",
+      "game": "both",
+      "evidence": [
+        "critic/reviews/72973096-focused/continuity/continuity-summary.json",
+        "critic/reviews/72973096-focused/continuity/ffx2-bahamut-win-72973096/continuity/continuity.json"
+      ]
+    },
+    {
+      "id": "CHK-B1",
+      "result": "UNVERIFIED",
+      "mandatory": true,
+      "mode": "manual",
+      "minutes": 0,
+      "where": "music",
+      "reason": "No agent can hear. The two new cues were verified by file request, music-player state and loop only; Bailey judges them by ear on docs/audio/audition.html.",
+      "game": "both"
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "seymour-flux",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 416.6,
+        "swaps": 310,
+        "snapsPerMinute": 0.29,
+        "maxHeadJumpPct": 12.1,
+        "maxFeetShiftPx": 0.8,
+        "worstJerkPx": 153.7,
+        "strips": 20,
+        "worstSwapStrips": [
+          "seymour-flux-win-72973096/continuity/strips/swap-003-yuna-critical-hurt.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-004-yuna-hurt-critical.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-011-kimahri-idle-ready.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-123-auron-attack-follow.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-076-yuna-ready-item.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-063-kimahri-ready-item.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-169-mortiorchis-idle-attack.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-175-mortiorchis-attack-idle.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-104-auron-follow-idle.jpg",
+          "seymour-flux-win-72973096/continuity/strips/swap-019-yuna-item-idle.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-bahamut",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 360.9,
+        "swaps": 362,
+        "snapsPerMinute": 0.17,
+        "maxHeadJumpPct": 9.6,
+        "maxFeetShiftPx": 0.4,
+        "worstJerkPx": 255.7,
+        "strips": 19,
+        "worstSwapStrips": [
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-200-paine-ready-critical.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-217-paine-critical-ready.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-353-paine-follow-idle.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-232-rikku-critical-cast.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-351-paine-attack-follow.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-347-paine-od-x2-warrior-armor-break-ready.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-251-paine-od-x2-warrior-armor-break-hurt.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-096-rikku-hurt-critical.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-254-paine-hurt-od-x2-warrior-armor-break.jpg",
+          "ffx2-bahamut-win-72973096/continuity/strips/swap-350-paine-ready-attack.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-leblanc",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 493.9,
+        "swaps": 598,
+        "snapsPerMinute": 0.49,
+        "maxHeadJumpPct": 20.5,
+        "maxFeetShiftPx": 0.7,
+        "worstJerkPx": 228.5,
+        "strips": 20,
+        "worstSwapStrips": [
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-041-fem-goon-hurt-ko.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-108-rikku-hurt-ko.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-052-dr-goon-hurt-ko.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-268-yuna-hurt-ko.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-039-fem-goon-cast-hurt.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-005-fem-goon-idle-cast.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-011-fem-goon-cast-idle.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-308-rikku-attack-follow.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-146-paine-item-ready.jpg",
+          "ffx2-leblanc-win-72973096/continuity/strips/swap-073-rikku-ready-attack.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "yunalesca",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 477.7,
+        "swaps": 469,
+        "snapsPerMinute": 0.63,
+        "maxHeadJumpPct": 2.4,
+        "maxFeetShiftPx": 0.9,
+        "worstJerkPx": 270.3,
+        "strips": 20,
+        "worstSwapStrips": [
+          "yunalesca-win-72973096/continuity/strips/swap-359-yuna-idle-ko.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-458-tidus-hurt-ko.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-436-tidus-idle-ko.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-480-auron-idle-ko.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-440-tidus-ko-idle.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-345-yuna-hurt-critical.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-173-tidus-ready-attack.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-251-tidus-attack-follow.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-357-yuna-critical-hurt.jpg",
+          "yunalesca-win-72973096/continuity/strips/swap-098-auron-attack-follow.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "braskas-final-aeon",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 1472.5,
+        "swaps": 1487,
+        "snapsPerMinute": 0.57,
+        "maxHeadJumpPct": 25.6,
+        "maxFeetShiftPx": 1.4,
+        "worstJerkPx": 284.1,
+        "strips": 12,
+        "worstSwapStrips": [
+          "braskas-final-aeon-win-72973096/continuity/strips/swap-243-shiva-hurt-ko.jpg",
+          "braskas-final-aeon-win-72973096/continuity/strips/swap-155-ifrit-hurt-ko.jpg",
+          "braskas-final-aeon-win-72973096/continuity/strips/swap-924-possessed-ifrit-hurt-ko.jpg",
+          "braskas-final-aeon-win-72973096/continuity/strips/swap-320-valefor-hurt-ko.jpg",
+          "braskas-final-aeon-win-72973096/continuity/strips/swap-909-possessed-valefor-hurt-ko.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 3221.6,
+    "counted": 3226,
+    "swaps": 3378,
+    "size": {
+      "judged": 3215,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 11,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 25.6,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1.4,
+      "feetOverTolerance": 0,
+      "headMeasured": 3215,
+      "headRegistration": 2147,
+      "headSilhouette": 1068,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 26,
+      "snapsPerMinute": 0.48,
+      "hardCuts": 27,
+      "hardCutsPerMinute": 0.5,
+      "ghostSwaps": 3133,
+      "ghostFrames": 11517,
+      "worstGhostSeverity": 0.46,
+      "ghostOverFail": 81,
+      "jerks": 1089,
+      "worstJerkPx": 284.1,
+      "jerksOverFail": 526,
+      "lowestIou": 0.03,
+      "maxCentroidShiftPx": 312.3
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "2147 of 3215 measured swaps had a registered head (tolerance 3 percent); 1068 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "0.48 snaps per minute is over 0.25",
+          "526 jerk(s) of 40 px or more in one frame (worst 284.1 px)",
+          "81 swap(s) show a double image of severity 0.4 or more (worst 0.46)"
+        ]
+      }
+    },
+    "base": "http://127.0.0.1:5471/pyrefly-reprise/",
+    "date": "2026-10-11T03:51:09.381Z"
+  },
+  "targets": {
+    "required": 2,
+    "matched": 0,
+    "failing": 0,
+    "unverified": 2,
+    "waiting": 0,
+    "note": "Two tiles touched (presentation A-ffx2-battle, chapters leblanc backdrop-c); composites made (A-ffx2-battle.jpg, leblanc-backdrop-c.jpg) but no match is claimed: A-ffx2-battle differs in layout by the owner-chosen Bahamut size, and backdrop-c was compared only through a first-menu capture."
+  },
+  "issues": [
+    {
+      "id": "F7297-01",
+      "severity": "major",
+      "category": "feel",
+      "confidence": "high",
+      "game": "both",
+      "chapter": "I, II, III, IV, VI",
+      "title": "Motion continuity (CHK-027) still fails: KO pose snaps and one-frame jerks of 150 to 284 px",
+      "expected": "At most 0.25 snaps a minute, no jerk of 40 px or more, no double image over 0.4 (policy).",
+      "observed": "Fails in all five chapters played; snaps a minute 0.17 to 0.63, worst jerk 154 to 284 px. Equal or better than 931613a8 in Chapters I and IV; Chapter II is 0.63 against 0.39 snaps.",
+      "repro": "node critic/runner/lib/continuity.mjs --base=<preview> --chapters=seymour-flux,ffx2-bahamut,ffx2-leblanc,yunalesca,braskas-final-aeon --tag=x (seed 1)",
+      "evidence": [
+        "critic/reviews/72973096-focused/continuity/continuity-summary.json",
+        "critic/reviews/72973096-focused/continuity/seymour-flux-win-72973096/continuity/strips/swap-003-yuna-critical-hurt.jpg"
+      ],
+      "requirement": "CHK-027 (D-421)",
+      "where": "pose swaps in the presenter (KO, hurt, cast frames)",
+      "fix": "blend or hold-frame the KO and attack pose swaps",
+      "acceptanceCheck": "CHK-027 PASS on the five chapters",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "F7297-02",
+      "severity": "major",
+      "category": "balance",
+      "confidence": "medium",
+      "game": "FFX",
+      "chapter": "II (Yunalesca)",
+      "title": "The real-UI advisor route lost Chapter II at seed 1 (73 turns) after the W2 engine change, as it did at 931613a8",
+      "expected": "A route that follows the advisor can win Chapter II.",
+      "observed": "The harness route was defeated at seed 1 (73 turns); 931613a8 lost the same chapter by the same route. The debug autoplay was not run on Chapter II here, so a change in difficulty from W2 is neither shown nor ruled out.",
+      "repro": "node critic/runner/lib/continuity.mjs --chapters=yunalesca --tag=x (seed 1)",
+      "evidence": [
+        "critic/reviews/72973096-focused/continuity/yunalesca-win-72973096/continuity/continuity.json"
+      ],
+      "requirement": "W2 re-parity must keep the chapters winnable",
+      "where": "src/battle/ffx/**",
+      "fix": "a win-rate measurement of Chapter II before and after W2 (suspected, not traced)",
+      "acceptanceCheck": "a human-pace route wins Chapter II",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "F7297-03",
+      "severity": "polish",
+      "category": "visual",
+      "confidence": "medium",
+      "game": "FFX-2",
+      "chapter": "XVII (Ixion, Djose)",
+      "title": "At 1600x900 the command menu overlaps Ixion on the right edge",
+      "expected": "The enemy is whole in frame, as Bahamut now is.",
+      "observed": "Ixion's head and body run under the command stack; not touched by this change and not compared with live.",
+      "repro": "first menu of Chapter XVII at 1600x900",
+      "evidence": [
+        "critic/reviews/72973096-focused/shots/ffx2-ixion-djose-1600x900-1-first-menu.png"
+      ],
+      "requirement": "CHK-008",
+      "where": "Ixion close view (giants.ts)",
+      "fix": "a desktop close view for Ixion like the one added for Bahamut",
+      "acceptanceCheck": "Ixion whole in frame at 1600x900 and 2000x1012"
+    },
+    {
+      "id": "F7297-04",
+      "severity": "suggestion",
+      "category": "target",
+      "confidence": "medium",
+      "game": "FFX-2",
+      "chapter": "IV (Bahamut)",
+      "title": "Chapter IV battle against the approved mockup A-ffx2-battle: layout still differs",
+      "expected": "The mockup puts a large Bahamut at the left, the girls in the middle, the menu on the right.",
+      "observed": "The build keeps Bahamut centre-right and smaller (the owner-chosen in-battle size, 0.66) with the Ink and Gold HUD of later decisions; not claimed matched.",
+      "repro": "first menu of Chapter IV at 1600x900",
+      "evidence": [
+        "critic/reviews/72973096-focused/A-ffx2-battle.jpg"
+      ],
+      "requirement": "targets.json presentation tile A-ffx2-battle",
+      "where": "giants.ts close views",
+      "fix": "ask Bailey whether the mockup or the size decision wins",
+      "acceptanceCheck": "Bailey names the target"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "dist-gate rebuilt at 72973096 (bundle index-CEdItQg_, not KHicpkvR); art-derive verify and audit PASS; verify-approved 916 ok / 0 / 0 (ROOT=D:/pyrefly-r39-int)",
+      "First menus with a real Attack at 1600x900: FFX I, II, III, VII (Natus), Sin fins; FFX-2 IV, VI, Fallen Aeons, Trema, Ixion; hidden Experiment and Gui; 2000x1012: FFX-2 IV, VI; 390x844 touch: FFX I, FFX-2 IV, VI",
+      "Typed words limit, leblanc, experiment, mushroom and a wrong word at chapter select; board lists 18 cards; hidden chapters write only pyrefly-reprise:experiments:v1",
+      "Four full real-key fights with the continuity harness: FFX I (win), III (win, 234 turns, 6 seams), FFX-2 IV (win), VI (win, 3 acts); FFX II (loss)",
+      "Music and fanfare via the music player state and network requests, debug-assisted: IV, VI, hidden leblanc, Experiment, Gui, FFX I, Sin, Ixion, Fallen Aeons",
+      "Data audit sample: Sinspawn Gui rows (HP 12,000/6,000, STR 29/15, MDF 30/0, head 4,000/1,000, arms 800, AGI, MAG, ACC, EVA, LCK) and the Experiment (HP 18,324, AGI 68, level 50, attack and defense tracks) against research; Flare rank note; 120 unit tests rerun (command records, CTB, damage parity, chain sting, one-music)",
+      "Browser: PYREFLY_BROWSER=gpu, headless Playwright from node, about 50 fps"
+    ],
+    "reused": [
+      {
+        "what": "Full unit suite and tsc",
+        "from": "driver validation of 72973096 (tsc clean; 379 audio and fanfare tests; 1033 files on 3d71c216)",
+        "why": "a critic runs no product gates"
+      }
+    ],
+    "notTested": [
+      "The full W2 data audit: the rewritten command-records files (about 900 changed lines) were not compared value by value with research/re-ffx-commands.md; only their tests were rerun",
+      "FFX chapters IV to XI, XVIII other than the first menus; FFX-2 V, VII to XIV in play; Yunalesca multi-phase real fight beyond the harness loss",
+      "Real-input play of the hidden Experiment and Gui to the end (autoplay only); the phone layouts of the hidden chapters",
+      "Overdrive in a real-input fight was not singled out (the harness plays whatever the advisor chooses); the new themes by ear",
+      "The A-ffx2-battle and Leblanc tiles beyond one composite each; live-build comparison runs of Chapter VI and III",
+      "art-browser-load (the deploy runs it)"
+    ]
+  },
+  "regressions": [],
+  "nextReview": "Live verification of the exact artifact after the deploy, then the deep review on the live build (the rest of the chapters, the full W2 data audit, Chapter II difficulty, the hidden chapters by real input to the end, the two themes by Bailey's ear).",
+  "elapsedMinutes": 170,
+  "notes": "Preview server on 127.0.0.1:5471 started twice and stopped each time by its listening PID; the port was confirmed closed. GPU mode throughout. No product code changed, nothing committed."
+}

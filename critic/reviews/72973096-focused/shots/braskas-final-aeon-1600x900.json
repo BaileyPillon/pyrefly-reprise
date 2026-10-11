@@ -1,0 +1,113 @@
+{
+ "id": "braskas-final-aeon",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": false,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": false,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 15,
+    "y": 118,
+    "w": 460,
+    "h": 175,
+    "vis": true,
+    "t": "NEXT BEST MOVE Tidus Stamina Tonic → the party IN ITEMS NO MP + MAX HP X2, CRITICAL Double"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "battle-pause-chip ig",
+    "x": 19,
+    "y": 18,
+    "w": 96,
+    "h": 24,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 76,
+   "y": 445,
+   "w": 469,
+   "h": 391,
+   "vis": true
+  },
+  "nextBest": "NEXT BEST MOVE Tidus Stamina Tonic → the party IN ITEMS NO MP + MAX HP X2, CRITICAL Doubles the whole party's maximum HP for the rest of the battle. It puts Max HP x2 on the party. N HIDE MOVES E ENEMY MOVE PA"
+ },
+ "actors": [
+  {
+   "id": "braskas-final-aeon",
+   "kind": "enemy",
+   "art": "braskas-final-aeon-1"
+  },
+  {
+   "id": "yu-pagoda-left",
+   "kind": "enemy",
+   "art": "yu-pagoda"
+  },
+  {
+   "id": "yu-pagoda-right",
+   "kind": "enemy",
+   "art": "yu-pagoda"
+  },
+  {
+   "id": "tidus",
+   "kind": "party",
+   "art": "tidus"
+  },
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna"
+  },
+  {
+   "id": "auron",
+   "kind": "party",
+   "art": "auron"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}
