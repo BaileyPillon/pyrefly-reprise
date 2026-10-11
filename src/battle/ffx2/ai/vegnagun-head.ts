@@ -40,7 +40,8 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem, speakTurn } from '../internal.ts';
+import { mem, setMem } from '../internal.ts';
+import { IDLE_UNTIL_WOKEN, WAKE_ON_ALIVE_CHANGE, idleFor, speakTurn } from './idle.ts';
 import { HEAD_FIRE_AT_TURN, HEAD_HALFWAY_LINE_AT, HEAD_LINE_INTERVAL } from '../constants.ts';
 import { scriptMod, searchUniform } from './script-rolls.ts';
 import { HEAD_CLOCK, HEAD_PHASE, REDOUBT_L, REDOUBT_R, REDOUBT_REVIVES, redoubtOf } from './vegnagun-redoubt.ts';
@@ -91,7 +92,7 @@ function phaseOne(ctx: AiContext): Command | null {
     const target = searchUniform(ctx.rng, ctx.party());
     return target ? { kind: 'ability', id: 'pallida-mors', targets: [target.id] } : null;
   }
-  if (alive.right || alive.left) return null; // one Redoubt left: idle
+  if (alive.right || alive.left) return idleFor(self, IDLE_UNTIL_WOKEN, WAKE_ON_ALIVE_CHANGE); // one Redoubt left: idle until a Redoubt falls or rises (row R4, RC3)
   ctx.flags[HEAD_PHASE] = 'B';
   ctx.flags['headClockRunning'] = true;
   self.flags.untargetable = false;

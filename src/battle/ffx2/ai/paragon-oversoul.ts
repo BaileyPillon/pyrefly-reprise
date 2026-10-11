@@ -48,16 +48,18 @@
  * The idle limit is the script's 1,200 idle polls (the 1,201st acts), 40.04 s of running clock at the measured 29.97 logic steps a
  * second. The game polls a ready monster every step, so a poll is a step: the limit is {@link OVERSOUL_IDLE_LIMIT_STEPS} logic steps
  * since the last result or the last idle action (the first build's 20 s of engine time, SinirothX's reading, is gone with the
- * 3,000-ticks-a-second clock; docs/handoff/re-parity-ai-ffx2-b.md, timer row "Oversoul idle limit"). The engine still asks a waiting
- * Oversoul at its own turns, not at every step, so an answer or the idle action comes at its next turn after the limit; the steps its
- * recoveries take are inside the window (the game does not poll during a recovery), which is at most a few seconds of 40.
- * The first poll spends no turn on the switch to the Oversoul block (O14): the "Paragon oversouls!" line plays and the poll goes on.
+ * 3,000-ticks-a-second clock; docs/handoff/re-parity-ai-ffx2-b.md, timer row "Oversoul idle limit"). The game polls every step; the engine
+ * cannot, so a waiting Oversoul sits out the steps that are left of the limit in one idle wait that a result landing on him cuts short
+ * (waitForHit, ai/idle.ts WAKE_ON_RESULT): his answer comes on the next logic step, as the game's next poll, and the idle action at the
+ * 1,201st step. The steps his recoveries take are inside the window (the game does not poll during a recovery), at most a few seconds of 40.
+ * The first poll spends no turn on the switch to the Oversoul block (O14)
  */
 
 import type { AbilityDef, Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
 import { discardPick, girlsInSlotOrder, pickGirl, scriptModCtx } from './script-rolls.ts';
+import { WAKE_ON_RESULT, idleFor } from './idle.ts';
 import { oversoulCommandClass } from './oversoul-lists.ts';
 
 /**
@@ -140,6 +142,16 @@ function idleElapsed(ctx: AiContext): boolean {
   return ctx.ticks - mem(ctx.self, K.quiet) >= OVERSOUL_IDLE_LIMIT_STEPS;
 }
 
+/**
+ * The idle poll: "the script waits one step and polls again" (o152.src). The game polls a ready monster every step, so it sees a result on the
+ * very next step and the idle limit at its 1,201st poll. The engine cannot poll every step, so he waits for exactly that: the steps that are
+ * left of the limit, cut short by a result landing on him (ai/idle.ts WAKE_ON_RESULT: the reaction entry has set his answer state, and he is
+ * polled again on the next logic step, not at the end of a recovery).
+ */
+function waitForHit(ctx: AiContext): null {
+  return idleFor(ctx.self, Math.max(1, OVERSOUL_IDLE_LIMIT_STEPS - (ctx.ticks - mem(ctx.self, K.quiet))), WAKE_ON_RESULT);
+}
+
 /** Row 3: MP is 0 -> `random() mod 2`: 0 Osmose, 1 Attack, each on a uniform girl. */
 function mpZeroTurn(ctx: AiContext): Command {
   const id = scriptModCtx(ctx, 2) === 0 ? 'x2-shared-osmose' : 'paragon-os-attack';
@@ -207,14 +219,14 @@ export const paragonOversoulScript: AiScript = {
       // After the first result the answer state is set, and rows 1 to 3 never clear it (as in the script): under 40 percent he then
       // acts on every poll, the script's own rule. D-151 does not speak to that; making the HP rows spend the state (one action
       // per hit) measured 406 wins of 500 against 193, so it is not done here and is listed for Bailey (handoff, decisions).
-      if (!elapsed) return null;
+      if (!elapsed) return waitForHit(ctx);
       stir(ctx);
     }
     if (hpBelow(self, OVERSOUL_ESTIMATES.finalBelow)) return hpRowB(ctx);
     if (hpBelow(self, OVERSOUL_ESTIMATES.magicBelow)) return hpRowA(ctx);
     if (self.mp <= 0) return mpZeroTurn(ctx);
     if (state === OS_NOTHING) {
-      if (!elapsed) return null; // the script waits one step and polls again
+      if (!elapsed) return waitForHit(ctx); // the script waits one step and polls again
       stir(ctx); // (a second stir when the gate above already took it)
       return idleTurn(ctx);
     }

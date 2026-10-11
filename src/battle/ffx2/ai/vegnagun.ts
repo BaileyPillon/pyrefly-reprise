@@ -26,7 +26,8 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem, speakTurn } from '../internal.ts';
+import { mem, setMem } from '../internal.ts';
+import { speakTurn } from './idle.ts';
 import { lacking, scriptMod, searchNear, searchUniform, spendSearchDraw, SCENES } from './script-rolls.ts';
 
 function girlsOf(ctx: AiContext): Ffx2Unit[] {

@@ -170,7 +170,7 @@ export function partyCountsOf(units: readonly Ffx2Unit[]): { count: number; stan
  */
 export function completeCommand(u: Ffx2Unit, costAtb: number, units: readonly Ffx2Unit[], idle = false): void {
   const counts = partyCountsOf(units);
-  // An idle wait (RC3, internal.ts AI_IDLE_STEPS) is not a command: the thinking time is a command's end, so a wait adds none.
+  // An idle wait (RC3, ai/idle.ts AI_IDLE_STEPS) is not a command: the thinking time is a command's end, so a wait adds none.
   const r = commandComplete(
     {
       dead: !u.alive,
@@ -185,6 +185,7 @@ export function completeCommand(u: Ffx2Unit, costAtb: number, units: readonly Ff
   );
   u.gauge.executing = 0;
   u.gauge.idleWait = false;
+  u.gauge.idleWake = 0;
   u.gauge.state = Ffx2AtbState.Idle;
   if (r.recovery === null) return;
   u.atb.recovery = r.recovery;
@@ -192,6 +193,16 @@ export function completeCommand(u: Ffx2Unit, costAtb: number, units: readonly Ff
   u.gauge.thinking = r.thinking ?? 0;
   u.gauge.carry = r.carry ?? 0;
   refreshGauge(u);
+}
+
+/**
+ * An event the waiting unit asked to be woken by has happened (RC3, `ai/idle.ts`): its idle wait ends now, so the next logic step makes it ready and
+ * its script is polled one step after the event, as the game's every-step poll would find it. A unit that is not idle-waiting, or did not ask for
+ * this event, is left alone.
+ */
+export function wakeIdle(u: Ffx2Unit, units: readonly Ffx2Unit[], mask: number): void {
+  if (u.gauge.idleWait !== true || ((u.gauge.idleWake ?? 0) & mask) === 0) return;
+  completeCommand(u, 0, units, true);
 }
 
 /**
@@ -272,6 +283,7 @@ export function dropAction(u: Ffx2Unit): void {
   u.pendingCommand = null;
   u.gauge.executing = 0;
   u.gauge.idleWait = false;
+  u.gauge.idleWake = 0;
   if (u.gauge.state === Ffx2AtbState.Executing) u.gauge.state = Ffx2AtbState.Idle;
 }
 

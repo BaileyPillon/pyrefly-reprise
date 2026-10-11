@@ -32,6 +32,7 @@ import type { Command, StatusId } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
 import { lacking, searchUniform } from './script-rolls.ts';
+import { IDLE_UNTIL_WOKEN, WAKE_ON_ALIVE_CHANGE, idleFor } from './idle.ts';
 
 export const REDOUBT_R = 'redoubt-r';
 export const REDOUBT_L = 'redoubt-l';
@@ -111,7 +112,9 @@ function redoubtScript(id: string, isRight: boolean): AiScript {
           ctx.flags[REDOUBT_REVIVES] = (typeof ctx.flags[REDOUBT_REVIVES] === 'number' ? ctx.flags[REDOUBT_REVIVES] : 0) + 1;
           return revive();
         }
-        return null;
+        // Phase 1, twin standing: the game's idle poll comes round every step, so the revive is queued within one step of the twin's fall (row R4,
+        // RC3): wait for any unit to fall or rise (ai/idle.ts WAKE_ON_ALIVE_CHANGE) instead of spending a turn of the Redoubt's own runway.
+        return idleFor(self, IDLE_UNTIL_WOKEN, WAKE_ON_ALIVE_CHANGE);
       }
       const turn = mem(self, 'turn') + 1;
       setMem(self, 'turn', turn);

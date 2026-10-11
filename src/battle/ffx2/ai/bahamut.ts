@@ -16,7 +16,7 @@
  *
  * **The countdown (rows B3, B4) is a timer row, on the logic step since RC3.** In the game it is five steps of 150 AI polls, 750 polls
  * (25.03 s of running clock), counted on every logic step he is ready, so Slow and Haste do not change it. The engine's clock is the
- * logic step now, so each countdown turn is an idle wait (internal.ts idleFor) of exactly the steps to the next window: the first poll
+ * logic step now, so each countdown turn is an idle wait (ai/idle.ts idleFor) of exactly the steps to the next window: the first poll
  * after the second Impulse is poll 1 and says nothing, the 5 shows at poll 150, the 4 at 300, the 3 at 450, the 2 at 600 and the 1 comes
  * with the cast at poll 750 (149 steps from poll 1 to poll 150, then 150 each). The unit sits the wait out executing, takes no recovery
  * and thinks nothing, so Slow, Haste, a fallen girl and his own gauge do not move it, and a Wait menu stops it with every other clock.
@@ -27,7 +27,8 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { idleFor, mem, setMem } from '../internal.ts';
+import { mem, setMem } from '../internal.ts';
+import { idleFor } from './idle.ts';
 import { BAHAMUT_COUNTDOWN_START, BAHAMUT_POLLS_PER_COUNTDOWN_STEP } from '../constants.ts';
 import { lacking, searchNear, SCENES } from './script-rolls.ts';
 

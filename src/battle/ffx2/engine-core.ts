@@ -27,14 +27,15 @@ import type {
   Ffx2Unit,
   GarmentGridRegistry,
 } from './internal.ts';
-import { AI_IDLE_STEPS, AI_POLL_COST, mem } from './internal.ts';
+import { mem } from './internal.ts';
+import { AI_IDLE_STEPS, AI_IDLE_WAKE, AI_POLL_COST, WAKE_ON_ALIVE_CHANGE, WAKE_ON_RESULT } from './ai/idle.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
 import { baseSpeedOf, type AtbSpeed } from './clock.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { buildSnapshot } from './gauges.ts';
-import { bySlot, completeCommand } from './atb-engine.ts';
+import { bySlot, completeCommand, wakeIdle } from './atb-engine.ts';
 import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
@@ -241,7 +242,9 @@ export class Ffx2EngineCore {
       ...(this.options.items ? { items: this.options.items } : {}),
       // The reaction entry of a script that defines one (AI-FFX2-b): once per result applied to an enemy. Absent scripts are untouched.
       onResult: (target, source, ability) => {
-        if (target.side === 'enemy') aiScriptFor(target.enemy?.aiScriptId).onResult?.(this.aiContext(target), source, ability);
+        if (target.side !== 'enemy') return;
+        aiScriptFor(target.enemy?.aiScriptId).onResult?.(this.aiContext(target), source, ability);
+        wakeIdle(target, this.units, WAKE_ON_RESULT); // a script waiting for a result is polled on the next step (RC3, ai/idle.ts)
       },
     };
   }
@@ -317,12 +320,14 @@ export class Ffx2EngineCore {
       return;
     }
     // A flavour turn still consumes the ATB slot. [ffx2-vegnagun-shuyin §5] It plays no command of its own, so it waits the standard gauge,
-    // unless the script said what the poll stood for (RC3, internal.ts AI_POLL_COST: a voice line's speak command, 60) or asked for an idle
+    // unless the script said what the poll stood for (RC3, ai/idle.ts AI_POLL_COST: a voice line's speak command, 60) or asked for an idle
     // wait (AI_IDLE_STEPS: a countdown of polls, one a logic step): then the unit sits it out executing and is ready the step it ends.
     const idleSteps = mem(actor, AI_IDLE_STEPS);
     const pollCost = mem(actor, AI_POLL_COST, ATB_BASE_VALUE);
+    const wake = mem(actor, AI_IDLE_WAKE);
     if (actor.aiMemory) {
       delete actor.aiMemory[AI_IDLE_STEPS];
+      delete actor.aiMemory[AI_IDLE_WAKE];
       delete actor.aiMemory[AI_POLL_COST];
     }
     if (idleSteps > 1) {
@@ -330,6 +335,7 @@ export class Ffx2EngineCore {
       actor.gauge.costAtb = 0;
       actor.gauge.executing = idleSteps - 1;
       actor.gauge.idleWait = true;
+      actor.gauge.idleWake = wake;
       actor.gauge.state = Ffx2AtbState.Executing;
     } else if (idleSteps === 1) {
       completeCommand(actor, 0, this.units, true); // polled again on the very next step
@@ -362,6 +368,8 @@ export class Ffx2EngineCore {
 
   protected flushSignal(startedAt: number, _actor: Ffx2Unit): void {
     const produced = this.drafts.slice(startedAt) as Array<{ type: string; [k: string]: unknown }>;
+    // A unit fell or was raised: whoever waited for that (a Redoubt for its twin, the Head for the second Redoubt) is polled on the next step.
+    if (produced.some((e) => e.type === 'ko' || e.type === 'revive')) for (const u of this.units) wakeIdle(u, this.units, WAKE_ON_ALIVE_CHANGE);
     evaluateTriggers(this.battleState, this.units, signalFromEvents(produced), (e) => this.emit(e));
     this.checkBattleEnd();
   }

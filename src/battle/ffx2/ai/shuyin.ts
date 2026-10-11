@@ -24,7 +24,8 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem, speakTurn } from '../internal.ts';
+import { mem, setMem } from '../internal.ts';
+import { speakTurn } from './idle.ts';
 import { scriptMod, searchNear, searchUniform, SCENES } from './script-rolls.ts';
 
 /** The pools, by the order of the pick: Jecht, Auron, Braska. */
