@@ -236,7 +236,25 @@ describe('the card never names a move the acting character cannot press', () => 
 // ---------------------------------------------------------- Bailey's board
 
 /** Chapter 1, mid-fight, with the board forced to the one on the screenshot. */
-function baileysBoard(seed = 1): {
+function baileysBoard(seed?: number): {
+  state: BattleState;
+  decision: { actorId: CombatantId; commands: AvailableCommand[] };
+  options: AdvisorOptions;
+} {
+  // Re-parity RNG lane (game streams, Bailey 2026-10-09): the board needs Kimahri and Tidus standing with no status when Tidus decides; the
+  // opening's hits are another deal now, so the default is the first seed that opens that way (seed 1 no longer does).
+  if (seed === undefined) {
+    for (let s = 1; s <= 60; s++) {
+      const board = boardAt(s);
+      const clean = (id: string): boolean => board.state.combatants[id]?.alive === true && Object.keys(board.state.combatants[id]?.statuses ?? {}).length === 0;
+      if (clean('kimahri') && clean('tidus')) return board;
+    }
+    throw new Error('no seed of 1 to 60 opens Chapter 1 with Kimahri and Tidus standing and clean');
+  }
+  return boardAt(seed);
+}
+
+function boardAt(seed: number): {
   state: BattleState;
   decision: { actorId: CombatantId; commands: AvailableCommand[] };
   options: AdvisorOptions;

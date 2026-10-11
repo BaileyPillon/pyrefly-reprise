@@ -158,6 +158,10 @@ describe('advisor v4 on the card (FFX)', () => {
     // board and still pick Hastega). Its first menu is a Zombie board either way, and the Zombie is Yuna's now (she is the healer): the pick
     // is Holy Water on her, which is the card's own rule (while Yuna is a Zombie the next Full-Life is a kill, not a heal: clear it now).
     // Nothing on the advisor, the boss or the party was tuned.
-    expect(picks).toEqual(['tidus: Hastega -> the party', 'tidus: Hastega -> the party', 'tidus: Holy Water -> Yuna']);
+    // Seeds 2 and 3 moved on 2026-10-11 (re-parity RNG lane, FFX only: each game draws from its own 68 streams, Bailey 2026-10-09 "Adopt game
+    // streams"; every seed is another deal of the same odds). Seed 1 still opens on an untouched board and picks Hastega. Seed 2's first menu is now a
+    // Zombie board with the Zombie on Kimahri (the card's own rule: clear it now, Holy Water on him), and on seed 3 Kimahri is the first to act
+    // (Mighty Guard on the party). Nothing on the advisor, the boss or the party was tuned.
+    expect(picks).toEqual(['tidus: Hastega -> the party', 'tidus: Holy Water -> Kimahri', 'kimahri: Mighty Guard -> the party']);
   }, 600_000);
 });

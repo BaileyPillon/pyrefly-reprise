@@ -221,26 +221,34 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * not (417 -> 255 and 644 -> 335 events a fight). No other digest moved: the Chapter IX line and W5 were already in the table above; Chapter XVIII's line and
  * party are not in this table (the Sin chapters stop at Isaaru); the guide rewrites are text; and the Orders and Talk menu changes (the airship offers one order at a
  * time, the third Talk only speaks) moved none of the 18 logs. Nothing on the boss or the party was tuned.
+ * All 18 digests re-baselined 2026-10-11 by the RNG lane (branch re-parity-rng; FFX only; reason "game RNG streams (Bailey 2026-10-09)": his pick "Adopt game streams (Recommended)"):
+ * the engine draws from FFX's own 68 streams, seeded from the run seed through the game's seeding routine, and every roll takes the stream the game gives it (a party member's own, every
+ * aeon's shared 27, a monster's slot + 8, plus 16 for the hit roll and 32 for status rolls; the scripts' GetRandomValue on 2 and their actor picker on 4; random-target hits on 5, a Reflect
+ * bounce on 6, Steal on 10 and 11), and Chapter VIII's scene and camera draws (Cid's captions, the voice replies, the Guided Missiles shot) are counted on stream 2. Every log moves because
+ * every roll is another deal of the same odds, which is the point; tests/unit/parity-ffx-rng-streams.test.ts is the proof that each draw is on the stream the table names, with a mutation check.
+ * One outcome moved, on a seed nobody tuned: seymour-anima-macalania#7 victory -> defeat; the other 17 keep theirs. One seed is one sample: the 500-seed rates before and after, and the proof
+ * that the Chapter VII move is a block of seeds and not a bias (the old generator on the same 500 seeds gives the old 488; seeds 501 to 1500 give 959 against 949), are in
+ * docs/handoff/re-parity-rng.md. Nothing on the bosses or the party was tuned. The old values are in git history (the commit before the one that moved them).
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'd0fa190d:victory',
-  'seymour-flux#7': '8bca8763:victory',
-  'yunalesca#1': '3476dd5:victory',
-  'yunalesca#7': '1e5be9d4:victory',
-  'braskas-final-aeon#1': '208173d8:victory 7ce233c2:victory 83e2d1e6:victory d790b12b:victory f533934b:victory e004400a:victory 1c1eaef9:victory',
-  'braskas-final-aeon#7': 'd1bc6e2:victory 3f923603:victory d55948af:victory e97ae0a6:victory 2f8294e9:victory c3b6257f:victory 3a654e47:victory',
-  'seymour-anima-macalania#1': 'cb8ff7fa:victory',
-  'seymour-anima-macalania#7': '77c0da0e:victory',
-  'evrae-airship#1': '96e55b09:victory',
-  'evrae-airship#7': '99a25fb5:victory',
-  'yojimbo-cavern#1': '28996218:victory',
-  'yojimbo-cavern#7': 'a2f8d812:victory',
-  'seymour-natus#1': '4e54c29b:victory',
-  'seymour-natus#7': '25becfa0:victory',
-  'seymour-omnis#1': 'f3c16c45:victory',
-  'seymour-omnis#7': 'c2a59197:victory',
-  'isaaru-via-purifico#1': 'd77cdbaf:victory 33e06f11:victory ee292b8b:victory',
-  'isaaru-via-purifico#7': '95ec44e3:victory 18c9be5f:victory 60e31feb:victory',
+  'seymour-flux#1': 'd362acf6:victory',
+  'seymour-flux#7': '9f8aaa5c:victory',
+  'yunalesca#1': 'c694ec20:victory',
+  'yunalesca#7': 'a99a90c3:victory',
+  'braskas-final-aeon#1': '80341e61:victory fd35d884:victory 628979be:victory d2d251bc:victory 85cfdf48:victory cbdfb079:victory e8f733d0:victory',
+  'braskas-final-aeon#7': '84b8e5bd:victory 5049f58d:victory 558cd084:victory 6986be3f:victory 7d0914af:victory 86167c51:victory 8553b383:victory',
+  'seymour-anima-macalania#1': '7ef9b368:victory',
+  'seymour-anima-macalania#7': '29f126ed:defeat',
+  'evrae-airship#1': 'e5ecff52:victory',
+  'evrae-airship#7': '4740e2ef:victory',
+  'yojimbo-cavern#1': 'c72bb8ab:victory',
+  'yojimbo-cavern#7': '9f40902b:victory',
+  'seymour-natus#1': '409993aa:victory',
+  'seymour-natus#7': '9e7c5b2:victory',
+  'seymour-omnis#1': '1d95ac3b:victory',
+  'seymour-omnis#7': '5089f63:victory',
+  'isaaru-via-purifico#1': '6990d85c:victory afd1cb7e:victory 13b0bd8a:victory',
+  'isaaru-via-purifico#7': 'cec669c3:victory 78386a12:victory a36d68be:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

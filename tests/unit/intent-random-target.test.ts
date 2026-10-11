@@ -87,7 +87,10 @@ beforeAll(async () => {
 
 describe('PR-0153: a rolled victim is shown as every candidate (both games)', () => {
   it('Chapter I: Lance of Atrophy lists all three members under a random target, still SCRIPTED as a move', () => {
-    const engine = firstMenu('seymour-flux');
+    // Re-parity RNG lane (game streams, Bailey 2026-10-09): the first seed whose first menu has all three members standing and the Lance coming,
+    // not seed 1 (the opening's hits are another deal now, and seed 1 opens with Kimahri already down, which is not the case under test).
+    let engine = firstMenu('seymour-flux');
+    for (let seed = 2; seed <= 40 && (livingParty(engine).length < 3 || engine.intent()?.moveName !== 'Lance of Atrophy'); seed++) engine = firstMenu('seymour-flux', seed);
     const intent = engine.intent();
     expect(intent?.moveName).toBe('Lance of Atrophy');
     expect(intent?.confidence).toBe('scripted');

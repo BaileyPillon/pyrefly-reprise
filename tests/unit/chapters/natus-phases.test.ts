@@ -153,7 +153,9 @@ describe('Phase 3 — Flare and Cura [§4.1, §4.3]', () => {
 
 describe('Banish, Desperado and Talk [§4.3, §6.2]', () => {
   it('an aeon gets exactly one turn, then Natus Banishes it', () => {
-    const engine = newEngine(14);
+    // Seed 1 (was 14; re-parity RNG lane, game streams: the deal moved). The script counts no aeon turns - it Banishes on Natus's next turn - so how many
+    // turns the aeon gets first is the CTB's business: one on seeds 1, 3, 4, 5, 8, 12 ... and two on 2, 6, 7, 9 ... of the first 40.
+    const engine = newEngine(1);
     makeInvincible(engine);
     drive(engine, (d) => {
       if (d.actorId === 'yuna' && !engine.state().aeonId && !engine.state().log.some((e) => e.type === 'summon')) {
