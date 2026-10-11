@@ -72,7 +72,10 @@ async function heldBoard(chapter: string, seed: number, itemId: string): Promise
 
 describe('advisor v3 final fix (FFX-2 only)', () => {
   for (const [chapter, seed, item] of [
-    ['ffx2-vegnagun-shuyin', 59, 'x2-mega-phoenix'],
+    // Re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script parity"): the Vegnagun board was seed 59; the Tail, the Leg, the Core, the Head and
+    // Shuyin follow the game's scripts now, which is a different replay of every seed, so the board was searched again over the seeds in order and
+    // is now seed 5 (the first on which the engine holds a Mega Phoenix the chapter line picks again). Same board, same rule.
+    ['ffx2-vegnagun-shuyin', 5, 'x2-mega-phoenix'],
     // Re-parity W3 (FFX-2 only; reason "game-code parity"): the Den of Woe board was seed 62; the game's draw order (hit rolls first, then
     // the variance and the critical per strike) is a different replay of every seed, so the board was searched again over the seeds in
     // order and is now seed 4 (the first on which the engine holds a Phoenix Down the chapter line picks again). Same board, same rule.
@@ -154,10 +157,10 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     expect(standing(ctx, top(now)!, girl)).toBeGreaterThanOrEqual(standing(ctx, top(before)!, girl));
   }, 600_000);
 
-  it('C2-M1: a heal held for a chain lock covers nobody; the save stays (Vegnagun seed 15)', async () => {
+  it('C2-M1: a heal held for a chain lock covers nobody; the save stays (Vegnagun seed 84)', async () => {
     let found: { now: AdvisorView | null; before: AdvisorView | null } | null = null;
     try {
-      await runChapter(chapterById('ffx2-vegnagun-shuyin'), 15, (ctx) => {
+      await runChapter(chapterById('ffx2-vegnagun-shuyin'), 84, (ctx) => {
         const { now, before } = cards(ctx);
         const held = (ctx.engine as unknown as FFX2Engine).heldCommand();
         if (held && idOf(held.command) === 'x2-megalixir' && idOf(top(before)) === 'x2-mega-potion') throw new Stop({ now, before });
@@ -171,6 +174,8 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     // Re-parity W3 (FFX-2 only; reason "game-code parity"): seed 52 under the old draw order, seed 15 under the game's (the first seed whose
     // board is this one: Paine's Megalixir held, the card's Mega-Potion without the rule). On the old board, measured with the held command
     // counted: X-Potion on Paine, and Yuna (at 401 HP) fell in 4 of 8 futures.
+    // Re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script parity", 2026-10-10): the Vegnagun chain follows the game's scripts now, which is a
+    // different replay of every seed; searched again over seeds 1 to 84 in order, the first seed with this board (and the card's Mega-Potion) is 84.
     expect(idOf(top(found!.now))).toBe('x2-mega-potion');
   }, 600_000);
 });

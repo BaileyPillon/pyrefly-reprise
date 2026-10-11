@@ -44,15 +44,16 @@ const v3Card = (ctx: DecisionContext): AdvisorView | null => {
 };
 const engineOf = (ctx: DecisionContext): FFX2Engine => ctx.engine as unknown as FFX2Engine;
 
-/** Follow the v3 card on `chapters` x `seeds` until `probe` returns something. */
+/** Follow the v3 card on `chapters` x seeds `first` to `seeds` until `probe` returns something. */
 async function search<T>(
   chapters: string[],
   seeds: number,
   probe: (ctx: DecisionContext, card: AdvisorView | null) => T | null,
   rig?: (ctx: DecisionContext) => void,
+  first = 1,
 ): Promise<T | null> {
   for (const id of chapters) {
-    for (let seed = 1; seed <= seeds; seed++) {
+    for (let seed = first; seed <= seeds; seed++) {
       try {
         await runChapter(chapterById(id), seed, (ctx) => {
           rig?.(ctx);
@@ -72,7 +73,11 @@ async function search<T>(
 
 describe('advisor v3 repair (FFX-2 only)', () => {
   it('FB1: a Mega-Potion that lands inside the projection is not advised again', async () => {
-    const found = await search(['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons'], 40, (ctx, card) => {
+    // Re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script parity", 2026-10-10): the Vegnagun chain follows the game's scripts now, which is a
+    // different replay of every seed, and this board (a charging Mega-Potion that lands inside the projection while the v3 card without the rule
+    // would say it again) no longer turns up in seeds 1 to 40 of Vegnagun or Fallen Aeons. Searched again over Vegnagun seeds 1 to 114 in order (and
+    // Fallen Aeons 1 to 100), the first seed with this board is 114, so the search starts there.
+    const found = await search(['ffx2-vegnagun-shuyin'], 114, (ctx, card) => {
       const p = pendingCommands(ctx).find((x) => idOf(x.command) === 'x2-mega-potion');
       if (!p) return null;
       const b = boardFor(ctx.state, ctx.decision.actorId, { ...ctx.advisorOptions, v3: true });
@@ -84,7 +89,7 @@ describe('advisor v3 repair (FFX-2 only)', () => {
       clearAdvisorCache();
       const without = buildAdvisorView(ctx.state, { actorId: ctx.decision.actorId, commands: ctx.decision.commands }, { ...ctx.advisorOptions, v3: true, v3Rules: { onItsWay: false } });
       return idOf(top(without)) === 'x2-mega-potion' ? { ctx, card, p } : null;
-    });
+    }, undefined, 114);
     expect(found, 'a board where a charging Mega-Potion lands inside the projection').not.toBeNull();
     expect(idOf(top(found!.card))).not.toBe('x2-mega-potion');
     expect(found!.card?.suggestions.some((s) => idOf(s.command) === 'x2-mega-potion')).toBe(false);
