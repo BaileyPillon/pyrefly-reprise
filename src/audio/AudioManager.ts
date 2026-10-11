@@ -23,8 +23,9 @@ import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sf
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import { hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
 import { SfxSprites } from './SfxSprites.ts';
-import { sfxGame, voiceKey } from './sfxV2/voicing.ts';
+import { sfxGame, voiceKey, type SfxGame } from './sfxV2/voicing.ts';
 import { isV2Key } from './sfxV2/cues.ts';
+import { packsFor } from './sfxV2/packs.ts';
 
 export interface AudioManagerOptions {
   masterVolume?: number;
@@ -111,8 +112,10 @@ export class AudioManager {
   private synthOnly: boolean;
   private manifest: AudioManifest | null = null;
   private manifestLoad: Promise<void> | null = null;
-  /** Both SFX sprites (the first bank and D-302's recorded set) and the play log (`SfxSprites.ts`). */
+  /** The SFX sprites (first bank, D-302's recorded set, the parity packs) and the play log (`SfxSprites.ts`). */
   private readonly sprites = new SfxSprites();
+  /** The parity packs the running chapter asked for, loaded once the context and the manifest exist (`loadParityPacks`). */
+  private wantedPacks: readonly string[] = [];
 
   constructor(options: AudioManagerOptions = {}) {
     this.masterVolume = options.masterVolume ?? 0.9;
@@ -398,7 +401,7 @@ export class AudioManager {
   warmSfx(): void {
     if (this.warmed || !this.ctx) return;
     this.warmed = true;
-    void this.loadManifest().then(() => this.ctx && this.sprites.load(this.ctx, this.manifest, this.baseUrl));
+    void this.loadManifest().then(() => this.ctx && this.sprites.load(this.ctx, this.manifest, this.baseUrl)).then(() => this.fetchWantedPacks());
     const names = this.warmupList();
     const worker = this.loader.getWorker();
     if (!worker) {
@@ -470,8 +473,9 @@ export class AudioManager {
   playSfx(name: string, options: PlaySfxOptions = {}): void {
     // A chapter's game voices the menu set (`sfxV2/voicing.ts`); a `v2:` key is D-302's recorded set,
     // which stands in with its first-bank cue until its sprite has decoded (`SfxSprites.pick`).
-    const voiced = voiceKey(name, sfxGame());
-    const v2 = isV2Key(voiced) ? this.sprites.pick(this.manifest, voiced) : { slice: null, fallback: null };
+    const game = sfxGame();
+    const voiced = voiceKey(name, game);
+    const v2 = isV2Key(voiced) ? this.sprites.pick(this.manifest, voiced, game) : { slice: null, fallback: null, via: null, gain: 1 };
     // Aliases (an ability's authored `sfxKey`) resolve to the real cue, so the
     // buffer cache is keyed once per sound, not once per name for it.
     const cue = v2.slice ? voiced : resolveSfx(v2.fallback ?? voiced);
@@ -484,13 +488,14 @@ export class AudioManager {
     const spriteCue = v2.slice ?? this.sprites.pick(this.manifest, cue).slice;
     const buffer = spriteCue ? spriteCue.buffer : this.getSfxBuffer(cue);
     if (!buffer) return;
-    this.sprites.record({ t: ctx.currentTime + Math.max(0, options.delay ?? 0), asked: name, played: cue, via: v2.slice ? 'v2' : spriteCue ? 'sprite' : 'synth', volume: options.volume ?? 1 });
+    this.sprites.record({ t: ctx.currentTime + Math.max(0, options.delay ?? 0), asked: name, played: cue, via: v2.slice ? (v2.via ?? 'v2') : spriteCue ? 'sprite' : 'synth', volume: options.volume ?? 1, ...(v2.slice && v2.gain !== 1 ? { trimDb: Math.round(200 * Math.log10(v2.gain)) / 10 } : {}) });
 
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.playbackRate.value = options.pitch ?? 1;
     const gain = ctx.createGain();
-    gain.gain.value = options.volume ?? 1;
+    // The caller's volume, times the P1 mix's per-cue trim for a v2 slice (`sfxV2/parityMix.ts`; 1 for everything else).
+    gain.gain.value = (options.volume ?? 1) * v2.gain;
     const panner = ctx.createStereoPanner();
     panner.pan.value = Math.max(-1, Math.min(1, options.pan ?? 0));
     source.connect(gain);
@@ -507,6 +512,31 @@ export class AudioManager {
       gain.disconnect();
       panner.disconnect();
     };
+  }
+
+  /**
+   * SFX parity: a chapter run of `game` starts. Fetch the game's core pack and the chapter's boss packs (those the
+   * manifest lists; none has to) and consult them first for `v2:` cues until {@link releaseParityPacks}. Never
+   * awaited and never throws: a pack that has not decoded yet leaves the v2 slice, then the first-bank cue, playing,
+   * so no cue is ever silent. Called by `sfxChapter` (`src/app/sfxGame.ts`), never at unlock, so the title, chapter
+   * select and FF7 load nothing. Game case: both, each game its own packs (`sfxV2/packs.ts`).
+   */
+  loadParityPacks(game: SfxGame, chapterId: string | null): void {
+    this.wantedPacks = packsFor(game, chapterId);
+    this.sprites.setActivePacks(this.wantedPacks);
+    this.fetchWantedPacks();
+  }
+
+  /** The chapter run ended: no pack is consulted until the next one (decoded buffers stay cached for a retry). */
+  releaseParityPacks(): void {
+    this.wantedPacks = [];
+    this.sprites.setActivePacks([]);
+  }
+
+  private fetchWantedPacks(): void {
+    if (!this.ctx || this.wantedPacks.length === 0) return; // not unlocked yet: `warmSfx` calls this once it is
+    const ctx = this.ctx;
+    void this.loadManifest().then(() => this.manifest && this.sprites.loadPacks(ctx, this.manifest, this.baseUrl, this.wantedPacks));
   }
 
   /**
@@ -602,7 +632,7 @@ export class AudioManager {
      * `0.0001` seconds into a fade that was scheduled to take minutes.
      */
     music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }> };
-    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null } };
+    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null }; parity: { packs: string[]; active: string[]; decoded: string[] } };
     /** The last plays: asked, played, from where (`SfxSprites.ts`); the hookup's proof without ears. */
     sfxLog: SfxSprites['log'];
     tracks: Array<{ name: string; about: string; cached: boolean; source: string | null }>;
@@ -625,6 +655,7 @@ export class AudioManager {
         sprite: !!this.manifest?.sfx,
         spriteDecoded: this.sprites.decoded.v1,
         v2: { cues: Object.keys(this.manifest?.sfxV2?.cues ?? {}).length, decoded: this.sprites.decoded.v2, game: sfxGame() },
+        parity: { packs: Object.keys(this.manifest?.sfxParity?.packs ?? {}), active: [...this.sprites.activePacks], decoded: this.sprites.decoded.packs },
       },
       tracks: trackNames().map((name) => ({
         name,

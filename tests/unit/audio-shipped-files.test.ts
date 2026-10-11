@@ -191,7 +191,8 @@ describe('the shipped audio manifest', () => {
     const total =
       Object.values(manifest!.music).reduce((sum, entry) => sum + (entry.bytes ?? 0), 0) +
       (manifest!.sfx!.bytes ?? 0) +
-      (manifest!.sfxV2?.bytes ?? 0); // D-302: the recorded set's second sprite counts too
+      (manifest!.sfxV2?.bytes ?? 0) + // D-302: the recorded set's second sprite counts too
+      Object.values(manifest!.sfxParity.packs).reduce((sum, pack) => sum + (pack.bytes ?? 0), 0); // SFX parity: every pack counts
     expect(total).toBeLessThan(AUDIO_BUDGET_BYTES);
   });
 });

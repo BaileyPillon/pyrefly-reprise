@@ -2092,5 +2092,8 @@
         "truePeakDb": -14.26
       }
     }
+  },
+  "sfxParity": {
+    "packs": {}
   }
 }
