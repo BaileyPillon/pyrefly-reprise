@@ -106,6 +106,9 @@ const COMPOSED: Record<string, Track> = {
  * and `boss-trema` (Chapter XIII's second phase), both over `boss-ffx2-aeon`;
  * FFX only: `boss-seymour-natus` (Chapter X) over `boss-seymour-macalania`, `boss-isaaru` (Chapter XIV) over `boss-yojimbo`, and
  * `boss-sin-assault` (Chapter XVII, links I to III) and `boss-sin-countdown` (Chapter XVIII) over `boss-evrae`.
+ *
+ * FF7 only, the same day: `boss-ff7-guard` (the hidden 'limit' chapter's Guard Scorpion, silent before). No FF7 score exists and `playMusic` refuses a key with
+ * no track, so its synth fallback (only if the MP3 cannot load) is the generic FFX battle bed `battle-ffx`: a cross-game fallback, named here on purpose.
  */
 const STAND_INS: Record<string, string> = {
   'boss-leblanc': 'boss-ffx2-aeon',
@@ -116,6 +119,7 @@ const STAND_INS: Record<string, string> = {
   'boss-isaaru': 'boss-yojimbo',
   'boss-sin-assault': 'boss-evrae',
   'boss-sin-countdown': 'boss-evrae',
+  'boss-ff7-guard': 'battle-ffx',
 };
 
 export const TRACKS: Record<string, Track> = { ...COMPOSED };

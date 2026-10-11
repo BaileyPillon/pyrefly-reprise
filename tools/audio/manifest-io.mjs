@@ -257,9 +257,11 @@ export const LOOP_DECIMALS = 6;
  * ship at LAME V0 like the music: 3.30 MB at q3 to 4.89 MB at V0, total 86.90 MB to 88.49 MB.
  * Raised from 90 MB to 100 MB under D-6xx (Bailey 2026-10-10 'Whatever you recommend for sound effects and music I'll go with those recommendations'; driver item 47e): the two ElevenLabs battle cues
  * (boss-leblanc and boss-bahamut, 2.93 MB) take the total from 87.09 MB to 90.02 MB.
+ * Raised from 100 MB to 105 MB for `boss-ff7-guard` (FF7-M1, batch 1, 2026-10-10): the six other batch-1 cues take the total to 99.85 MB and this one, 1.74 MB, to 101.59 MB,
+ * so 100 MB no longer holds; 105 MB is the round figure above it. The raise is the driver's call under Bailey's words 'ill go with all your recommendations' (the batch-1 picks).
  * qa.mjs, render.mjs and tests/unit/audio-shipped-files.test.ts all read this one constant.
  */
-export const AUDIO_BUDGET_BYTES = 100e6;
+export const AUDIO_BUDGET_BYTES = 105e6;
 
 export function secondsAtSample(sample, sampleRate) {
   return Number((sample / sampleRate).toFixed(LOOP_DECIMALS));

@@ -69,18 +69,24 @@ const manifest = read('public/audio/manifest.json') as { music: Record<string, E
 const v2 = read('docs/audio/music-v2-2026-09-30.json') as { cues: { cue: string; after: { sha256: string }; loop: { loopStart: number; loopEnd: number; duration: number } }[] };
 const RATE = 44100;
 
-/** The cue each new key plays, the composition it replaces (its synth fallback), and the chapters and links that play it. */
-const EXPECTED: Record<string, { game: string; replaces: string; chapters: Record<string, string[]> }> = {
+/**
+ * The cue each new key plays, the cue it replaced in the chapter (null: the hidden FF7 chapter was silent), the composition that is its synth fallback, and the
+ * chapters and links that play it.
+ */
+const EXPECTED: Record<string, { game: string; replaces: string | null; fallback: string; chapters: Record<string, string[]> }> = {
   'boss-ffx2-fallen-aeons': {
     game: 'FFX-2',
     replaces: 'boss-ffx2-aeon',
+    fallback: 'boss-ffx2-aeon',
     chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'] },
   },
-  'boss-trema': { game: 'FFX-2', replaces: 'boss-ffx2-aeon', chapters: { 'ffx2-trema': ['scene-bevelle-underground', 'boss-trema'] } },
-  'boss-seymour-natus': { game: 'FFX', replaces: 'boss-seymour-macalania', chapters: { 'seymour-natus': ['boss-seymour-natus'] } },
-  'boss-isaaru': { game: 'FFX', replaces: 'boss-yojimbo', chapters: { 'isaaru-via-purifico': ['boss-isaaru', 'boss-isaaru', 'boss-isaaru'] } },
-  'boss-sin-assault': { game: 'FFX', replaces: 'boss-evrae', chapters: { 'sin-fins-core': ['boss-sin-assault', 'boss-sin-assault', 'boss-sin-assault'] } },
-  'boss-sin-countdown': { game: 'FFX', replaces: 'boss-evrae', chapters: { 'sin-face': ['boss-sin-countdown'] } },
+  'boss-trema': { game: 'FFX-2', replaces: 'boss-ffx2-aeon', fallback: 'boss-ffx2-aeon', chapters: { 'ffx2-trema': ['scene-bevelle-underground', 'boss-trema'] } },
+  'boss-seymour-natus': { game: 'FFX', replaces: 'boss-seymour-macalania', fallback: 'boss-seymour-macalania', chapters: { 'seymour-natus': ['boss-seymour-natus'] } },
+  'boss-isaaru': { game: 'FFX', replaces: 'boss-yojimbo', fallback: 'boss-yojimbo', chapters: { 'isaaru-via-purifico': ['boss-isaaru', 'boss-isaaru', 'boss-isaaru'] } },
+  'boss-sin-assault': { game: 'FFX', replaces: 'boss-evrae', fallback: 'boss-evrae', chapters: { 'sin-fins-core': ['boss-sin-assault', 'boss-sin-assault', 'boss-sin-assault'] } },
+  'boss-sin-countdown': { game: 'FFX', replaces: 'boss-evrae', fallback: 'boss-evrae', chapters: { 'sin-face': ['boss-sin-countdown'] } },
+  // FF7 only: the hidden 'limit' chapter was silent; no FF7 score exists, so the synth fallback is the generic FFX battle bed (named in tracks/index.ts).
+  'boss-ff7-guard': { game: 'FF7', replaces: null, fallback: 'battle-ffx', chapters: { 'ff7-guard-scorpion': ['boss-ff7-guard'] } },
 };
 /** Cues of the record that are in this branch (the FF7 cue is not in every one). */
 const NEW = record.cues.map((c) => c.cue);
@@ -93,7 +99,7 @@ describe('batch 1 (2026-10-10): the record and the files', () => {
     expect(NEW).toEqual(Object.keys(EXPECTED).filter((k) => NEW.includes(k)));
     for (const c of record.cues) {
       expect(c.game, c.cue).toBe(EXPECTED[c.cue]!.game);
-      expect(c.replaces, c.cue).toBe(EXPECTED[c.cue]!.replaces);
+      expect(c.replaces ?? null, c.cue).toBe(EXPECTED[c.cue]!.replaces);
       expect(c.request.model_id, c.cue).toBe('music_v2_5');
     }
   });
@@ -128,7 +134,7 @@ describe('batch 1 (2026-10-10): the record and the files', () => {
       expect(hasTrack(c.cue), c.cue).toBe(true);
       expect(isStandIn(c.cue), `${c.cue} plays another cue's composition and has none of its own`).toBe(true);
       expect(trackNames(), c.cue).not.toContain(c.cue);
-      expect(getTrack(c.cue), c.cue).toBe(getTrack(c.replaces!));
+      expect(getTrack(c.cue), c.cue).toBe(getTrack(EXPECTED[c.cue]!.fallback));
     }
   });
 
@@ -145,7 +151,7 @@ describe('batch 1 (2026-10-10): the record and the files', () => {
     }
   });
 
-  it('stays inside the shipping budget (100 MB under Bailey\'s 2026-10-10 words), counting the sfx sprites', () => {
+  it('stays inside the shipping budget (100 MB under Bailey\'s 2026-10-10 words; 105 MB for the FF7 cue), counting the sfx sprites', () => {
     const shipped = Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0) + (manifest.sfx?.bytes ?? 0) + (manifest.sfxV2?.bytes ?? 0);
     expect(shipped).toBeLessThan(AUDIO_BUDGET_BYTES);
   });
@@ -173,16 +179,19 @@ describe('batch 1 (2026-10-10): the engine routes each chapter to its cue and no
     for (const cue of NEW) for (const [id, links] of Object.entries(EXPECTED[cue]!.chapters)) expect(await resolved(id), `${id} -> ${cue}`).toEqual(links);
   });
 
-  it('names the cue in the chapter record, its pre scene and its meta, and not the cue it replaced (Trema keeps the scene bed for Paragon)', () => {
+  it('names the cue in the chapter record, its pre scene and its meta, and not the cue it replaced (Trema keeps the scene bed for Paragon; the FF7 chapter is silent in its scene and has no meta)', () => {
     const chapterOf = (id: string) => allChapters().find((c) => c.id === id)!;
     for (const cue of NEW) {
       for (const id of Object.keys(EXPECTED[cue]!.chapters)) {
         const chapter = chapterOf(id);
         expect([chapter.music.battle, chapter.music.phase2], `${id} record`).toContain(cue);
-        expect(getChapterMeta(id)?.musicKeys, `${id} meta`).toContain(cue);
         const replaced = EXPECTED[cue]!.replaces;
-        expect(getChapterMeta(id)?.musicKeys, `${id} meta`).not.toContain(replaced);
-        expect([chapter.music.scene, chapter.music.battle, chapter.music.phase2], `${id} record`).not.toContain(replaced);
+        if (EXPECTED[cue]!.game !== 'FF7') {
+          // The hidden FF7 chapter has no meta.
+          expect(getChapterMeta(id)?.musicKeys, `${id} meta`).toContain(cue);
+          expect(getChapterMeta(id)?.musicKeys, `${id} meta`).not.toContain(replaced);
+        }
+        if (replaced) expect([chapter.music.scene, chapter.music.battle, chapter.music.phase2], `${id} record`).not.toContain(replaced);
       }
     }
     // The pre scenes that start the fight's cue themselves.

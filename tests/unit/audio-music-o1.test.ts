@@ -87,7 +87,7 @@ describe('music O1: every cue at LAME V0', () => {
     }
   });
 
-  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, 100 MB under D-6xx (2026-10-10), not the old 60', () => {
-    expect(AUDIO_BUDGET_BYTES).toBe(100e6);
+  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, 100 MB under D-6xx (2026-10-10), 105 MB for the FF7 cue of batch 1 (2026-10-10), not the old 60', () => {
+    expect(AUDIO_BUDGET_BYTES).toBe(105e6);
   });
 });

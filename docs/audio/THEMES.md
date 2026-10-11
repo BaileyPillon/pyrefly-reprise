@@ -595,6 +595,7 @@ actually matters — **the one thing the cue must leave behind**.
 | `boss-bahamut` | FFX-2 | **ElevenLabs** (Music `music_v2_5`, brief `BH-M4` take 1; AI; original, the driver's pick under Bailey's 2026-10-10 delegation; a piano lament at 76 bpm; the stereo gate was not measured) | n/a | n/a | n/a |
 | `boss-dread` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
 | `boss-evrae` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.704 | -7.5 | -0.7 |
+| `boss-ff7-guard` | FF7 | **ElevenLabs** (Music `music_v2_5`, brief `FF7-M1` take 1; AI; original, the driver's pick accepted by Bailey's 2026-10-10 words "ill go with all your recommendations"; a tense, mechanical 144 bpm machine pulse with rim clicks, swelling brass and metallic percussion, for the hidden Guard Scorpion fight; its synth fallback is the generic FFX bed `battle-ffx`, there being no FF7 score; the stereo gate was not measured) | n/a | n/a | n/a |
 | `boss-ffx2-aeon` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.3, seed 505, 8 steps) | 0.643 | -6.6 | -0.9 |
 | `boss-ffx2-fallen-aeons` | FFX-2 | **ElevenLabs** (Music `music_v2_5`, brief `XI-M1` take 1; AI; original, the driver's pick accepted by Bailey's 2026-10-10 words "ill go with all your recommendations"; a brass-and-drums duel at 150 bpm with a harp-led middle and a choir at the peaks, shared by Chapters XI and XVI; the stereo gate was not measured) | n/a | n/a | n/a |
 | `boss-isaaru` | FFX | **ElevenLabs** (Music `music_v2_5`, brief `XIV-M1` take 1; AI; original, the driver's pick accepted by Bailey's 2026-10-10 words "ill go with all your recommendations"; a fast, lavish duel at 160 bpm, a slow sacred opening into a harp-led rise and a brass-and-timpani finish; the stereo gate was not measured) | n/a | n/a | n/a |
@@ -692,6 +693,7 @@ The cue map above holds listed chapters only (`tools/audio/themes-audit.mjs` and
 | Ch | Chapter | Game | Scene | Battle | Victory | Status | Owed cue and decision |
 |---|---|---|---|---|---|---|---|
 | EXP | `sinspawn-gui` Sinspawn Gui, Mushroom Rock Road (hidden; typed word `mushroom`; `ch-gui`, 2026-10-10) | FFX | `scene-gagazet` | fight 1 `boss-dread`, fight 2 `boss-seymour` | `victory-ffx` | **owed, stand-ins in use**: the dread theme for the Ridge, Seymour's own theme for the guest hour | two cues by role, never transcribed (rule 8): a tense, driving camp-under-threat battle cue for the first fight and an important-boss cue for the guest hour (research `ffx-sinspawn-gui.md` section 8.3 names the roles the original gives them); composed after the driver's pick and judged by ear (rules 9, 13) |
+| EXP | `ff7-guard-scorpion` Guard Scorpion, No. 1 Reactor (hidden; typed word `limit`; FF7 only) | FF7 | none | `boss-ff7-guard` | none | **own battle cue** (the ElevenLabs take `boss-ff7-guard`, 2026-10-10; the chapter was silent before); the scene and the victory stay silent | Bailey's ear on `boss-ff7-guard`; no retail cue (rule 8) and no FF7 score exists, so its synth fallback is the generic FFX bed `battle-ffx`, a cross-game fallback named on purpose (rule 13) |
 
 ---
 
