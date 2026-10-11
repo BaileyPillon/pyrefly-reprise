@@ -25,7 +25,8 @@
  * he checks; the line still beat the other two (D-185). (2) 2026-10-10: Natus's Flare takes the game's rank 3 (record 0x6079; our data
  * had 5), so he casts it about every 30 ticks, not every 50, and this line wins 302 of 500 seeds, not 386. **Nothing in the
  * shipped line changed**; the measured options for it are the other ids of `NATUS_LINE` (`src/data/guides/natus-line.ts`,
- * `./seymour-natus-lines.ts`), Bailey's to pick.
+ * `./seymour-natus-lines.ts`). (3) 2026-10-10: Bailey picked `reflect` ("ill go with all your recommendations"; Bahamut alone, and Rikku Reflects
+ * Natus), which is the registered line now; the rules below are the `shipped` line, kept as the baseline and as the other ids' starting point.
  *
  * 1. **An aeon on the field spends its one turn** [§4.3, verified: 4 sources:
  *    Natus Banishes it on his next turn]: its Overdrive on Natus when the
@@ -222,7 +223,7 @@ function natusTurn(line: NatusLine, actorId: CombatantId, commands: AvailableCom
   return hitNatus(commands);
 }
 
-/** The registered tactic: the line `NATUS_LINE` names (`shipped` until Bailey picks another). */
+/** The registered tactic: the line `NATUS_LINE` names (`reflect`, Bailey's pick of 2026-10-10). */
 export const seymourNatus: Tactic = makeSeymourNatus(NATUS_LINE);
 
 export default seymourNatus;

@@ -4,9 +4,9 @@
  * seconds, that the switch is real and that every line does what its guide says. (`natus-line-pick.test.ts`, `PYREFLY_CHX_SWITCH=1`,
  * reloads the whole module graph per id to prove the registered tactic, the guide's NEXT line, the advisor and the pause tip all follow.)
  *
- * - **The shipped line is untouched.** The constant is `shipped`; the registered tactic and `makeSeymourNatus('shipped')` answer every
- *   menu of six whole battles exactly as a verbatim copy of the tactic as it stood before the options were built (`legacyShipped`
- *   below, from git `919f2c78`); the guide the game registers is the shipped guide; the pause tip is the shipped tip.
+ * - **The `shipped` line is untouched.** The constant is `reflect` since 2026-10-10 (Bailey’s pick); `shipped` stays as the measured baseline, and
+ *   `makeSeymourNatus('shipped')` answers every menu of six whole battles exactly as a verbatim copy of the tactic as it stood before the options were built
+ *   (`legacyShipped` below, from git `919f2c78`); the shipped guide text and tip are pinned as written.
  * - **Every line plays to the end** (victory or defeat) on the real engine, and does what it says in the log: Bahamut alone is sent;
  *   Rikku Reflects Natus and Mortibody's Cura bounces onto his guardians; Tidus Provokes Natus, Rikku Reflects Tidus, Natus's own
  *   spells land on Natus and nothing is summoned.
@@ -216,9 +216,9 @@ describe('Chapter X line switch (FFX only)', () => {
     else expect(NATUS_META.tip).toMatch(/Haste only Tidus and Auron/);
   });
 
-  // The one assertion a pick changes: the line is Bailey's to move (`src/data/guides/natus-line.ts`), and the two cases above follow it.
-  it('the shipped line stays live until Bailey picks another (his pick of 2026-09-25)', () => {
-    expect(NATUS_LINE).toBe('shipped');
+  // The one assertion a pick changes: the line is Bailey's to move (`src/data/guides/natus-line.ts`), and the two cases above follow it. Bailey picked `reflect` on 2026-10-10.
+  it('the live line is reflect (Bailey, 2026-10-10: "ill go with all your recommendations", the recommendation being reflect)', () => {
+    expect(NATUS_LINE).toBe('reflect');
   });
 
   for (const id of NATUS_LINE_IDS) {

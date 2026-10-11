@@ -18,8 +18,8 @@
 /** The lines. `shipped` is the line Bailey picked on 2026-09-25 (research strategy 7); the others are measured options. */
 export type NatusLineId = 'shipped' | 'bahamut' | 'reflect' | 'mirror';
 
-/** Which line is live. Bailey picks; `shipped` until he does. */
-export const NATUS_LINE: NatusLineId = 'shipped';
+/** Which line is live. Bailey picked `reflect` on 2026-10-10 ("ill go with all your recommendations", the recommendation being `reflect`: Bahamut alone, and Rikku Reflects Natus); the others stay as measured options. */
+export const NATUS_LINE: NatusLineId = 'reflect';
 
 /** Every line, in the order the handoff note lists them. */
 export const NATUS_LINE_IDS: readonly NatusLineId[] = ['shipped', 'bahamut', 'reflect', 'mirror'];
