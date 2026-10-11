@@ -31,7 +31,30 @@ the engine's turns: the timer rows wait for lane W4.
 | `a899385a` | the other tests that pin Chapter IV and V logs or win rates: `ffx2-hit-closes-menu`, `ffx2-menu-cancel-delay`, `den-of-woe-carry`, `ffx2-atb-speed`, two strategy bars |
 | `a536899c` | the three advisor-v3 boards re-searched on Vegnagun seeds (5, 84, 114) |
 | `f765cde5` | one more Core test, the one the mutation check asked for (three answers do not speak) |
-| (this note's own commit follows) | `docs/handoff/re-parity-ai-ffx2-a.md` |
+| `e7fc527d` | `docs/handoff/re-parity-ai-ffx2-a.md` |
+| (the resume pass, 2026-10-11) | `research/re-ffx2-ai-scene-positions.md` (new: the scene start positions behind `SCENES`, with their source), the R1 correction written into `research/re-ffx2-ai-bahamut-vegnagun.md`, and this section |
+
+## Resume pass, 2026-10-11 (what was checked again, and what changed)
+
+An earlier agent on this lane stopped on a usage limit after it had finished, committed and pushed everything above. This pass did not rebuild
+anything; it checked the finished work against the brief and the note, found no code defect, and closed two documentation gaps.
+
+* **Code against the note, row by row.** All seven AI modules were read against the note's tables (sections 2 to 7) and the differences list
+  (section 10): B1-B5, T1-T2, L1-L2, N1-N3, C1-C4, H1-H6, R1-R3, S1-S2 do what the table says, including the draw order (the script's `random()` first,
+  then the search), the "no draw below two candidates" rule, the sweeps' discarded search, and the lacking-the-status preference with its fallback.
+* **R1 re-read from the script text** (the Right Redoubt's and the Left's, reference only, nothing copied): the death entry sets the turn counter
+  (Right 1, Left 0) and the action entry adds 1 before it chooses, so the first phase-2 action is the Right's HP beam and the Left's MP beam. The note's
+  "Break first" is wrong and is now corrected in the note itself.
+* **The scene start positions behind the near-weighted search** (`ai/script-rolls.ts#SCENES`, 15 numbers) were compared with the four scenes' position
+  files: every number matches. They had no research note behind them (hard rule 6), so `research/re-ffx2-ai-scene-positions.md` now records them with
+  their source, and says what the files do not give (the start facing is `0 0 0 0`, and nothing says where anyone stands at a later poll).
+* **Re-run on the final tree:** `tsc --noEmit` clean; the 16 files that carry the lane (six `parity-ffx2-ai-*`, the three rewritten `ffx2-ai-*`,
+  `enemy-intent`, `intent-committed-cast`, `ffx2-atb-golden`, `ffx2-vegnagun-reflect-immunity`, `ffx2-bahamut-lone-healer`, and the unchanged
+  `ffx-engine-golden` and `ff7-golden`) pass, 225 tests; the nine re-baselined heavy files pass, 75 tests; the 12-seed measurement (Chapter IV 12 of 12,
+  Chapter V 8 of 12, per seed `WWWWWWWWWWWW` and `WLLLLWWWWWWW`) reproduces the recorded rows exactly.
+* **Owner decisions** were searched again (`DECISIONS.md`: Bahamut, Vegnagun, Shuyin, Redoubt, Bulwark, Node, Mega Flare, countdown, fail clock,
+  cannon, Curse, Absorb, Terror): none contradicts a row. D-193 (Acta Est Fabula heals only the two Redoubts) and D-251 (the lone-White-Mage stall) hold.
+* **No code file changed in this pass**, so the golden digests, the measurement and the mutation check above stand as recorded.
 
 ## What the engine does now
 
@@ -125,7 +148,7 @@ Two earlier design notes in the code were estimates, not decisions, and the scri
 
 1. **The near-weighted search's geometry (rows B5, T2, L2, S1).** The weight rule is proven against the exe (the note ran it in four geometries); the positions
    and facing at the moment of each poll are the note's open item "Targets in practice" [L], and this engine tracks neither. The stand-in is the scene's own
-   **start positions** (`PlayerPos` / `EnemyPos` of the scene files, numbers only; the Bahamut ones are the note's own worked example) with the boss facing the middle of
+   **start positions** (`PlayerPos` / `EnemyPos` of the scene files, numbers only, now recorded with their source in `research/re-ffx2-ai-scene-positions.md`; the Bahamut ones are also the note's own worked example) with the boss facing the middle of
    the party, which is that example's geometry. The weights it gives: Bahamut 631 / 349 / 349 (Yuna 47.6 %, Rikku 26.3 %, Paine 26.2 %); the Tail 30.8 / 37.5 / 31.7, the Leg 32.2 / 38.9 / 28.9 and Shuyin 48.4 / 26.7 / 25.0 (the first slot owns one
    extra value, the last one fewer). The girls do move in a real fight (a melee girl stands next to the boss; the boss turns to its target), so these are the
    odds at rest. `constants.ts#NEAR_WEIGHTED_TARGET_SEARCH = false` makes every one of those picks uniform again. **A decision for Bailey**; the ablation below says what it does.
@@ -296,7 +319,7 @@ event logs agree up to it.
   tactics' behaviour is unchanged.
 * `src/battle/ffx2/intent.ts:307`, the Bahamut note "The Mega Flare countdown is an action counter, not a clock - Slowing him slows it too": true of this engine until W4, false of the game (Slow and Haste do not change it). **Also in `intent.ts`** (the enemy-intent panel's player-facing notes; the previews themselves follow the new scripts because the panel dry-runs them): line 288, the Bulwark note "Answers whoever last struck the Core, by that hit's class", is now true only of Hostile activity detected (C3: the physical and magical answers go to the whole party; line 285, which says which answer follows which class of hit, is still right). Left as written: new player-visible wording needs Bailey's yes.
 * `research/ffx2-bahamut.md` lines 144, 490-491, 537, 566 and 570 (Shell halves Impulse, Magic Break scales it), `research/ffx2-vegnagun-shuyin.md` lines 272-274 (the Nodes change at 4), 778-783 (the Redoubt rotation and its first
-  action), 800-809 (the Yuna rule and the interrupts as per-turn chances), and `research/re-ffx2-ai-bahamut-vegnagun.md` row R1 (the Right's first phase-2 action is the HP beam, not Break: a death resets its counter).
+  action), 800-809 (the Yuna rule and the interrupts as per-turn chances), and `research/re-ffx2-ai-bahamut-vegnagun.md` row R1 (the Right's first phase-2 action is the HP beam, not Break: a death resets its counter; this one is corrected in the note since 2026-10-11).
 * Story bindings: `auron-halfway` is Auron's line and the game's line at the clock's 51 is Braska's; `farplane-voice` (Jecht's "Forget the lights up top. The leg's the job.") plays at each of the Leg's nine voice polls (capped at two a
   battle by `story/showCaps.ts`) where the game has Jecht, Auron and Braska in turn. Nothing was rewritten.
 
@@ -316,6 +339,7 @@ Everything else is in `src/battle/ffx2/ai/{bahamut,shuyin,vegnagun,vegnagun-body
 | `src/battle/ffx2/abilities-{core,shuyin,vegnagun}.ts` | a comment each, and `bulwark-bio` targets one girl (`single-enemy`) instead of all | none expected |
 | `src/data/ffx2/enemies/{bahamut-abilities,vegnagun-head,vegnagun-leg}.ts` | a comment; the Head starts `untargetable`; Nodes A and C start with Null Physical / Null Magic | none expected |
 | `src/story/registry.ts` | a comment only (the Head's lines are at the clock's 20/40/60/80 and 51) | none |
+| `research/re-ffx2-ai-bahamut-vegnagun.md`, `research/re-ffx2-ai-scene-positions.md` | the R1 correction (two short additions to the note); the positions note is new | none expected (no other lane edits these) |
 
 No file in `docs/CONTRACTS.md` changed, so there is no `docs/CONTRACT-CHANGES.md` entry. `ffx-engine-golden` and `ff7-golden` import nothing this lane changed.
 
@@ -329,7 +353,7 @@ No file in `docs/CONTRACTS.md` changed, so there is no `docs/CONTRACT-CHANGES.md
 6. **Stale text** (the list above) is for Bailey's yes: strategy guides, the two tactics modules' comments, `src/battle/ffx2/intent.ts:307`, three research files.
 7. **The advisor boards are rare now.** Three advisor-v3 tests find a board by running Chapter V over seeds; under the game's scripts the Mega Phoenix board is at seed 5, the Megalixir board at 84 and the charging-Mega-Potion board at 114 (found by a scratch search; the tests pin the seed). If Chapter V changes again they are searched again the same way.
 8. **Wait-split and release-17 rows of `ffx2-menu-cancel-delay`** were re-pinned from the final tree and attributed to the same first events as the Active arm, which was the one fingerprinted event by event; they were not fingerprinted separately.
-9. **R1 correction to the note.** The note says the Right Redoubt's first phase-2 action is Break. The script's own death entry sets its turn counter to 1 and the action entry adds 1 before it chooses, so the first action after the phase change is the HP beam (the Left starts at its MP beam). I read the Right Redoubt's script text on this machine to confirm it (reference only, nothing copied into the repo). The note should be corrected.
+9. **R1 correction to the note.** The note says the Right Redoubt's first phase-2 action is Break. The script's own death entry sets its turn counter to 1 and the action entry adds 1 before it chooses, so the first action after the phase change is the HP beam (the Left starts at its MP beam). I read the Right Redoubt's script text on this machine to confirm it (reference only, nothing copied into the repo), and read both Redoubts' text again on 2026-10-11. The note is corrected now (a paragraph under its section 6.2 and a flag on its row R1).
 
 ## Decisions for Bailey
 
