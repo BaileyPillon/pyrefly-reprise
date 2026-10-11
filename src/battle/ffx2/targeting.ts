@@ -13,8 +13,8 @@ import type {
   Command,
   Side,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
 import type { BattleRng } from '../common/streams.ts';
+import { NO_DRAWS } from './menu-rng.ts';
 import type {
   AbilityRegistry,
   DressphereRegistry,
@@ -24,23 +24,6 @@ import type {
 } from './internal.ts';
 import { adjacentNodes } from './garment-grids.ts';
 import { aimer } from './aim.ts';
-
-/** The menu's generator: it draws nothing a menu could see, whatever it is asked. */
-class NoDrawsRng extends SeededRng {
-  override next(): number {
-    return 0;
-  }
-
-  override int(min: number): number {
-    return min;
-  }
-
-  override pick<T>(items: readonly T[]): T {
-    return items[0] as T;
-  }
-}
-
-const NO_DRAWS = new NoDrawsRng(0);
 
 /** `aeon` never appears in X-2; party and enemy are the only two sides in play. */
 function isFriendly(a: Side, b: Side): boolean {
