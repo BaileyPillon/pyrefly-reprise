@@ -54,7 +54,7 @@
 | 1 | Doors made table-driven plus `fayth`; chapter 22 registered; scene key; the shot-director seam (inert); the dev-only plugin, probe and guards; tests | Sonnet lane in this worktree | paper preflight `fayth-3d-review.md` (PROCEED), tsc, targeted vitest, orphans |
 | 2 | Converter: `.dae.phyre` meshes and skeletons to `.glb`, textures to PNG, for Evrae, the Fahrenheit-deck stage and the active party (Tidus, Wakka, Rikku) | Sonnet lane, local tools under `D:\Tools\ffx-parity\assets\tools\` | the inventory and the format research |
 | 3 | The `ffx` skin in the scene; a static first render | Sonnet lane | phase 1 and 2 |
-| 4 | The FFX shot director with A and B from the camera data | Sonnet lane | the Ghidra camera lane, the recordings |
+| 4 | The FFX shot director with A and B from the camera data. **Done 2026-10-11:** 4a the replayer (`src/engine/ffxcam/`), 4b its wiring into `exp-fayth-deck` for both skins, variant B, the typical turn captured (`docs/handoff/fayth-3d.md`, "Phase 4b") | Sonnet lane | the Ghidra camera lane, the recordings |
 | 5 | Animations (motion format) | Sonnet lane | format decoded, or root motion only |
 | 6 | **Options round for Bailey**: the real game's shot beside `ffx` skin, painted A and painted B, same moments | main session | end state first, D-632 |
 | 7 | After his pick: polish, focused review, the release driver deploys the painted skin; the `ffx` skin stays on his PC | release driver | `critic-plan` (deep: focused before, deep after) |
