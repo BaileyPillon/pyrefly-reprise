@@ -14,8 +14,9 @@
  * - **The pivot is the toe edge**, not the stance. Turning about the stance dips the feet that lead the fall under the floor (the page lifted the figure by an
  *   amount it measured from the silhouette; the engine has no mask at KO time). Turning about the front-most near-floor point of the underside hull
  *   (`PoseMeta.ground`, measured for every painting) never sinks a boot and needs no lift. No hull: the stance. No stance: the plane's middle.
- * - **The slide aligns content-box middles**, the standing figure's once toppled with the lying painting's. The page chose its slide by silhouette overlap; a
- *   box is a cruder reading of the same thing.
+ * - **The slide aligns the heads** when both paintings have a registered head (what the eye and the harness follow: a fade-weighted head that has to travel
+ *   from the toppled head to the lying one is the biggest single step of a fall), else the content-box middles. The page chose its slide by silhouette
+ *   overlap; this is a cruder reading of the same thing.
  * - **80 degrees**, the middle of the plan's range; the lying painting takes over from there.
  */
 
@@ -40,8 +41,10 @@ export interface SlotTip {
   e: number;
   /** How far it has slid toward {@link SlotTip.target}, 0 to 1 (its own clock: a fall keeps sliding while it crosses, so the feet never skate faster than the check allows). */
   slide: number;
-  /** The x, in the inner frame, the toppled body's middle slides to (the lying painting's content middle), or null for no slide. */
+  /** The x, in the inner frame, the toppled body slides to (the lying painting's head, or its content middle: see {@link SlotTip.by}), or null for no slide. */
   target: number | null;
+  /** Which point of the toppled plane meets the target: its head (when it has a registered one; the target is then the lying painting's head) or the middle of its content. */
+  by: 'head' | 'middle';
 }
 
 /** The bits of a plane mesh {@link placeTipped} writes. `PaintedRest.placePlane` has just placed it upright. */
@@ -52,6 +55,7 @@ export interface TipMesh {
 }
 
 interface TipScale {
+  width: number;
   unitsPerPixel: number;
   anchorY: number;
   height: number;
@@ -63,6 +67,7 @@ interface TipMeta {
   width: number;
   stanceX?: number;
   ground?: GroundHull;
+  head?: readonly [number, number, number, number];
 }
 
 const clamp = (x: number, lo: number, hi: number): number => (x < lo ? lo : x > hi ? hi : x);
@@ -102,6 +107,14 @@ export function tipPivotX(centreX: number, meta: TipMeta, scale: TipScale, mirro
   return stance + side * Math.min(Math.abs(toe - stance), TOE_REACH_MAX * bodyH);
 }
 
+/** The x, in the inner frame, of the middle of a plane's head box (a plane at `pos`, rolled by `roll`), or undefined when it has no registered head. */
+export function headCentreX(head: readonly [number, number, number, number] | undefined, scale: Pick<TipScale, 'width' | 'height'>, mirror: 1 | -1, pos: { x: number; y: number }, roll: number): number | undefined {
+  if (!head) return undefined;
+  const lx = mirror * ((head[0] + head[2]) / 2 - 0.5) * scale.width;
+  const ly = (0.5 - (head[1] + head[3]) / 2) * scale.height;
+  return pos.x + lx * Math.cos(roll) - ly * Math.sin(roll);
+}
+
 /** The x of the middle of a plane's painted content, in the inner frame, for a plane at `pos` rolled by `roll` (a lying painting is rolled to rest, `PaintedRest.ts`). */
 export function contentCentreX(scale: Pick<TipScale, 'offsetY' | 'contentBox'>, mirror: 1 | -1, pos: { x: number; y: number }, roll: number): number {
   const b = scale.contentBox;
@@ -128,8 +141,11 @@ export function placeTipped(mesh: TipMesh, tip: SlotTip, meta: TipMeta, scale: T
   let slide = 0;
   if (tip.target !== null) {
     const b = scale.contentBox;
-    const middle = turn(-tip.side * tip.full, bx + (mirror * (b.x0 + b.x1)) / 2, (b.y0 + b.y1) / 2);
-    slide = clamp(tip.target - middle.x, -SLIDE_MAX * scale.height, SLIDE_MAX * scale.height) * tip.slide;
+    const h = tip.by === 'head' ? meta.head : undefined;
+    // the point of this plane that meets the target: its head, or the middle of its content
+    const at = h ? { x: bx + mirror * ((h[0] + h[2]) / 2 - 0.5) * scale.width, y: by + (0.5 - (h[1] + h[3]) / 2) * scale.height } : { x: bx + (mirror * (b.x0 + b.x1)) / 2, y: (b.y0 + b.y1) / 2 };
+    const met = turn(-tip.side * tip.full, at.x, at.y);
+    slide = clamp(tip.target - met.x, -SLIDE_MAX * scale.height, SLIDE_MAX * scale.height) * tip.slide;
   }
   const angle = -tip.side * tip.full * tip.e;
   const at = turn(angle, bx, by);

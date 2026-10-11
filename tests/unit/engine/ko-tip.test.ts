@@ -6,13 +6,13 @@
  * `PaintedActor` through the probe's corner maths is `ko-fall-actor.test.ts`.
  */
 import { describe, expect, it } from 'vitest';
-import { FOOT_ROW, SLIDE_MAX, TOE_REACH_MAX, TOPPLE_RAD, contentCentreX, headMiddleU, placeTipped, tipPivotX, tipSide, type SlotTip } from '../../../src/engine/KoTip.ts';
+import { FOOT_ROW, SLIDE_MAX, TOE_REACH_MAX, TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, placeTipped, tipPivotX, tipSide, type SlotTip } from '../../../src/engine/KoTip.ts';
 
 /** A standing plane 2 tall, 1 wide, its content filling it, centred at x 0.3, the feet at 0 (the plane's centre is 1 up). 100 px per unit, so a pixel is a hundredth. */
-const SCALE = { unitsPerPixel: 0.01, anchorY: 200, height: 2, offsetY: 1, contentBox: { x0: -0.5, x1: 0.5, y0: 0, y1: 2 } };
+const SCALE = { width: 1, unitsPerPixel: 0.01, anchorY: 200, height: 2, offsetY: 1, contentBox: { x0: -0.5, x1: 0.5, y0: 0, y1: 2 } };
 const META = { width: 100 };
 const mesh = (x = 0.3, scaleX = 1) => ({ position: { x, y: 1 }, rotation: { z: 0 }, scale: { x: scaleX } });
-const tip = (over: Partial<SlotTip> = {}): SlotTip => ({ side: 1, full: TOPPLE_RAD, e: 1, slide: 1, target: null, ...over });
+const tip = (over: Partial<SlotTip> = {}): SlotTip => ({ side: 1, full: TOPPLE_RAD, e: 1, slide: 1, target: null, by: 'middle', ...over });
 
 describe('which way a body falls', () => {
   it('toward the side of the KO painting its head lies on, read through the mirror', () => {
@@ -154,5 +154,40 @@ describe('the middle of a plane\'s content', () => {
     expect(contentCentreX(scale, -1, { x: 0.5, y: 0.3 }, 0)).toBeCloseTo(0.5 - 0.2, 12);
     // rolled by 90 degrees: the box's middle (0.2, 0.2 - 0.3 = -0.1 from the plane's middle) turns to (0.1, 0.2)
     expect(contentCentreX(scale, 1, { x: 0, y: 0 }, Math.PI / 2)).toBeCloseTo(0.1, 12);
+  });
+});
+
+describe('meeting at the head', () => {
+  /** The standing plane's head box sits at the top middle of the 1 by 2 plane (u 0.4 to 0.6, t 0.05 to 0.15): a point 0.8 above the plane's middle. */
+  const HEAD: readonly [number, number, number, number] = [0.4, 0.05, 0.6, 0.15];
+
+  it('the middle of a head box is read through the mirror and the roll', () => {
+    expect(headCentreX(HEAD, SCALE, 1, { x: 0.3, y: 1 }, 0)).toBeCloseTo(0.3, 12); // u 0.5: straight above the middle
+    const off: readonly [number, number, number, number] = [0.8, 0.4, 1, 0.6]; // the right edge, at the middle height
+    expect(headCentreX(off, SCALE, 1, { x: 0, y: 0 }, 0)).toBeCloseTo(0.4, 12);
+    expect(headCentreX(off, SCALE, -1, { x: 0, y: 0 }, 0)).toBeCloseTo(-0.4, 12);
+    // rolled a quarter turn counter-clockwise, a point 0.4 to the right of the middle is 0.4 above it: x 0
+    expect(headCentreX(off, SCALE, 1, { x: 0, y: 0 }, Math.PI / 2)).toBeCloseTo(0, 12);
+    expect(headCentreX(undefined, SCALE, 1, { x: 0, y: 0 }, 0)).toBeUndefined();
+  });
+
+  it('slides the toppled plane until its head is on the target (a target within the slide limit), and the other points go with it', () => {
+    const target = 0.5; // the toppled head would be 2.07 to the right; the slide is 1.57, inside 1.2 plane heights
+    const m = mesh(0.3);
+    placeTipped(m, tip({ target, by: 'head' }), { ...META, head: HEAD }, SCALE);
+    // the head's local point (0, +0.8 from the plane's middle) turned through the plane's rotation and placed at its position
+    const a = m.rotation.z;
+    const head = { x: m.position.x + 0 * Math.cos(a) - 0.8 * Math.sin(a), y: m.position.y + 0 * Math.sin(a) + 0.8 * Math.cos(a) };
+    expect(head.x).toBeCloseTo(target, 12);
+    expect(head.y).toBeGreaterThan(0); // above the floor: it was turned about the feet
+  });
+
+  it('is at the middle of the content when the plane has no head (or when the middle is asked for)', () => {
+    const noHead = mesh(0.3);
+    placeTipped(noHead, tip({ target: -0.8, by: 'head' }), META, SCALE);
+    const middle = mesh(0.3);
+    placeTipped(middle, tip({ target: -0.8, by: 'middle' }), { ...META, head: HEAD }, SCALE);
+    expect(noHead.position.x).toBeCloseTo(-0.8, 12);
+    expect(middle.position.x).toBeCloseTo(-0.8, 12);
   });
 });

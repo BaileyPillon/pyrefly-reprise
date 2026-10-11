@@ -108,9 +108,9 @@ export interface KoPose {
   /** The buckle (0..1) and lean the shader is given (`livingShader.ts`). */
   buckle: number;
   lean: number;
-  /** How far the standing plane has tipped, 0 upright to 1 fully toppled (always 0 for a run with no travel). */
+  /** How far the standing plane has tipped, 0 upright to 1 fully toppled (always 0 for a run with no travel). A fall's turn takes the hold and the cross; a revive's the cross and the rise. */
   tip: number;
-  /** How far it has slid along the floor toward the lying body's middle, 0 to 1 (always 0 for a run with no travel). It runs on past the tip: over the hold and the cross of a fall. */
+  /** How far it has slid along the floor toward the lying body's middle, 0 to 1 (always 0 for a run with no travel), in a straight line on the same clock as the turn. */
   slide: number;
 }
 
@@ -133,9 +133,10 @@ export interface KoRunOptions {
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 
 /**
- * How far a body has turned, over the hold (t, 0 to 1): the page's quadIn softened to half quadIn and half linear. A pure quadIn swings a head 47 px in
- * its last frame at the test camera (the check fails a step of 40); this peaks at 1.5 times the average speed instead of 2, and still starts slowly and
- * falls faster. `[ours]`, with the page's loop as the look it follows.
+ * How far a body has turned, over the whole of its fall (t, 0 to 1: the hold and the cross): the page's quadIn softened to half quadIn and half linear.
+ * A pure quadIn over the hold swung a head 47 to 70 px in its last frame at the test camera (the check fails a jerk of 40); turning on through the
+ * cross and peaking at 1.5 times the average speed instead of 2 keeps it down, and the turn still starts slowly and falls faster. `[ours]`, with the
+ * page's loop as the look it follows.
  */
 export const toppleEase = (t: number): number => {
   const x = clamp01(t);
@@ -215,25 +216,37 @@ export class KoRun {
     return s > 0 ? s : null;
   }
 
+  /**
+   * How far a travelling run is through its turn, 0 to 1, on one clock for the whole of it: a fall's over the hold AND the cross (the body is still turning
+   * as the lying painting comes in, so the head never stops dead at the cross), a revive's over the cross AND the rise (it starts getting up as it comes in).
+   */
+  private get turn(): number {
+    const o = this.opts;
+    return o.kind === 'fall' ? clamp01((this.hold + this.cross) / (o.holdMs + o.crossMs)) : clamp01((this.cross + this.rise) / (o.crossMs + o.riseMs));
+  }
+
   /** What the figure shows now. */
   get pose(): KoPose {
     const o = this.opts;
+    const fall = o.kind === 'fall';
+    // The turn and the slide of a travelling run (the plane tips and slides toward the lying body's middle); none otherwise.
+    const turn = o.travel ? this.turn : 0;
+    const tip = !o.travel ? 0 : fall ? toppleEase(turn) : riseEase(turn);
+    const slide = !o.travel ? 0 : fall ? turn : 1 - turn;
     switch (this.phase) {
       case 'hold': {
         const t = o.holdMs > 0 ? clamp01(this.hold / o.holdMs) : 0;
-        return { phase: 'hold', out: 1, inn: 0, buckle: o.buckle ? t * t : 0, lean: o.buckle ? KO_LEAN * t : 0, tip: o.travel ? toppleEase(t) : 0, slide: o.travel ? this.hold / (o.holdMs + o.crossMs) : 0 };
+        return { phase: 'hold', out: 1, inn: 0, buckle: o.buckle ? t * t : 0, lean: o.buckle ? KO_LEAN * t : 0, tip, slide };
       }
       case 'cross': {
         const c = koCross(clamp01(this.cross / o.crossMs));
-        const slide = o.kind === 'fall' ? (o.holdMs + this.cross) / (o.holdMs + o.crossMs) : 1; // a fall keeps sliding while it crosses; a revive starts toppled and in place
-        return { phase: 'cross', out: c.from, inn: c.to, buckle: o.buckle ? 1 : 0, lean: o.buckle ? KO_LEAN : 0, tip: o.travel ? 1 : 0, slide: o.travel ? slide : 0 };
+        // a fall's buckle is full from here; a revive's unwinds with its turn
+        const b = fall ? 1 : tip * tip;
+        const l = fall ? KO_LEAN : KO_LEAN * tip;
+        return { phase: 'cross', out: c.from, inn: c.to, buckle: o.buckle ? b : 0, lean: o.buckle ? l : 0, tip, slide };
       }
-      case 'rise': {
-        // The mirror of the fall: fast first, settling upright.
-        const r = clamp01(this.rise / o.riseMs);
-        const e = riseEase(r);
-        return { phase: 'rise', out: 0, inn: 1, buckle: o.buckle ? e * e : 0, lean: o.buckle ? KO_LEAN * e : 0, tip: e, slide: 1 - r };
-      }
+      case 'rise':
+        return { phase: 'rise', out: 0, inn: 1, buckle: o.buckle ? tip * tip : 0, lean: o.buckle ? KO_LEAN * tip : 0, tip, slide };
       default:
         return { phase: 'done', out: 0, inn: 1, buckle: 0, lean: 0, tip: 0, slide: 0 };
     }

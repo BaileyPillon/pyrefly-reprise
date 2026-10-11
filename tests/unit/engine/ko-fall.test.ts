@@ -204,14 +204,16 @@ describe('KoRun: the clock of a fall', () => {
     expect(fallRun('cut', 'ffx')).toBeNull();
   });
 
-  it('only a topple tips the standing painting: it turns more and more up to the end of the hold and is fully turned while it crosses', () => {
+  it('only a topple tips the standing painting: it turns more and more through the hold and on through the cross, and is fully turned as the cross ends', () => {
     const t = fallRun('topple', 'ffx')!;
-    const rows = play(t, 60, 400);
+    const rows = play(t, 60, 400).filter((r) => r.phase !== 'done');
+    expect(rows[0]!.tip).toBe(0);
+    for (let i = 1; i < rows.length; i++) expect(rows[i]!.tip).toBeGreaterThanOrEqual(rows[i - 1]!.tip);
     const holds = rows.filter((r) => r.phase === 'hold');
-    for (let i = 1; i < holds.length; i++) expect(holds[i]!.tip).toBeGreaterThanOrEqual(holds[i - 1]!.tip);
-    expect(holds[0]!.tip).toBe(0);
-    expect(holds.at(-1)!.tip).toBeGreaterThan(0.85);
-    for (const r of rows.filter((x) => x.phase === 'cross')) expect(r.tip).toBe(1);
+    expect(holds.at(-1)!.tip).toBeGreaterThan(0.6); // still turning as the lying painting comes in
+    expect(holds.at(-1)!.tip).toBeLessThan(0.95);
+    expect(rows.at(-1)!.tip).toBeGreaterThan(0.9);
+    expect(rows.at(-1)!.tip).toBeLessThanOrEqual(1);
     for (const mode of ['buckle-cross', 'cross', 'flip'] as const) for (const r of play(fallRun(mode, 'ffx')!, 60, 400)) expect(r.tip, mode).toBe(0);
   });
 
@@ -241,7 +243,7 @@ describe('KoRun: the clock of a fall', () => {
   });
 });
 
-describe('the turn and the slide have their own clocks, and no frame of either is faster than the check allows', () => {
+describe('the turn and the slide share one clock for the whole fall (and for the whole revive), and no frame of either is faster than the check allows', () => {
   it('the turn eases in (slow, then faster) and never runs at more than 1.5 times its average speed; a rise is the same turn run the other way, fast first', () => {
     expect(toppleEase(0)).toBe(0);
     expect(toppleEase(1)).toBe(1);
@@ -279,12 +281,17 @@ describe('the turn and the slide have their own clocks, and no frame of either i
     }
   });
 
-  it('a revive starts toppled and in place (slide 1) and slides back to where it stands over the rise (1 to 0)', () => {
+  it('a revive starts toppled and in place (slide near 1) and slides back to where it stands over the cross and the rise (1 to 0), in a straight line', () => {
     const rows = play(reviveRun(true), 60, 600);
-    for (const r of rows.filter((x) => x.phase === 'cross')) expect(r.slide).toBe(1);
+    const live = rows.filter((x) => x.phase !== 'done');
+    expect(live[0]!.slide).toBeGreaterThan(0.95);
+    const step = 1 / (REVIVE_MS / (1000 / 60));
+    for (let i = 1; i < live.length; i++) {
+      expect(live[i]!.slide).toBeLessThanOrEqual(live[i - 1]!.slide);
+      expect(live[i - 1]!.slide - live[i]!.slide).toBeLessThanOrEqual(step + 1e-9);
+    }
     const rise = rows.filter((x) => x.phase === 'rise');
-    for (let i = 1; i < rise.length; i++) expect(rise[i]!.slide).toBeLessThanOrEqual(rise[i - 1]!.slide);
-    expect(rise[0]!.slide).toBeGreaterThan(0.9);
+    expect(rise[0]!.slide).toBeGreaterThan(0.7);
     expect(rise.at(-1)!.slide).toBeLessThan(0.1);
     expect(rows.at(-1)!.slide).toBe(0);
     for (const mode of ['buckle-cross', 'cross', 'flip'] as const) for (const r of play(fallRun(mode, 'ffx')!, 60, 400)) expect(r.slide, mode).toBe(0);
@@ -306,13 +313,14 @@ describe('KoRun: the revive mirrors the fall', () => {
     }
   });
 
-  it('the cross is the same capped one (the lying painting 1 - s out, the standing one s squared in) with the standing painting already fully toppled and buckled; the rise then comes back upright, fast first', () => {
+  it('the cross is the same capped one (the lying painting 1 - s out, the standing one s squared in) with the standing painting toppled where the body lay and buckled; the rise then comes back upright, fast first', () => {
     const run = reviveRun(true);
     const rows = play(run, 60, 600);
     const cross = rows.filter((r) => r.phase === 'cross');
     expect(cross.length).toBeGreaterThanOrEqual(4);
     for (const r of cross) {
-      expect(r).toMatchObject({ tip: 1, buckle: 1 });
+      expect(r.tip).toBeGreaterThan(0.7); // toppled where the body lay, and already beginning to get up
+      expect(r.buckle).toBeGreaterThan(0.45);
       expect(lesser(r)).toBeLessThanOrEqual(KO_CROSS_PEAK + 1e-9);
     }
     const rise = rows.filter((r) => r.phase === 'rise');

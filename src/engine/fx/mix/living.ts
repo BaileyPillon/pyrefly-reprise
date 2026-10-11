@@ -2,7 +2,7 @@ import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type O
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
 import { KO_GIANTS, KO_MACHINES, fallRun, koFallOff, koMode, type KoMode, type KoRun } from '../../KoFall.ts';
 import { KoPuff } from '../../KoPuff.ts';
-import { TOPPLE_RAD, contentCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
+import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
 import { setMixPatch } from './patch.ts';
 
@@ -39,7 +39,7 @@ type Slot = {
   material: ShaderMaterial;
   fade: number;
   pose: string;
-  scale: { prone?: boolean; offsetY: number; width: number; contentBox: { x0: number; x1: number; y0: number; y1: number } };
+  scale: { prone?: boolean; offsetY: number; width: number; height: number; contentBox: { x0: number; x1: number; y0: number; y1: number } };
   meta: { head?: readonly [number, number, number, number] };
 };
 /** The run that is playing (a KO), and the planes it crosses: `stand` is the one that tips (when anything does) over `lying`; `side` is the way it falls (0: nothing tips). */
@@ -193,10 +193,17 @@ export class LivingFigure {
     }
   }
 
-  /** Where the lying body's middle is (x, the actor's frame): what the toppled body slides to and the dust goes up at. */
+  /** Where the lying body's middle is (x, the actor's frame): where the dust goes up. */
   private lyingCentre(p: Playing): number {
     const k = p.lying;
     return contentCentreX(k.scale, k.mesh.scale.x < 0 ? -1 : 1, k.mesh.position, k.mesh.rotation.z);
+  }
+
+  /** What the toppled body slides to: the lying painting's head when both paintings have a registered head (the point the eye follows), else its middle. */
+  private meeting(p: Playing): { target: number; by: 'head' | 'middle' } {
+    const k = p.lying;
+    const head = p.stand.meta.head ? headCentreX(k.meta.head, k.scale, k.mesh.scale.x < 0 ? -1 : 1, k.mesh.position, k.mesh.rotation.z) : undefined;
+    return head !== undefined ? { target: head, by: 'head' } : { target: this.lyingCentre(p), by: 'middle' };
   }
 
   update(ctx0: LifeCtx): void {
@@ -232,7 +239,7 @@ export class LivingFigure {
       play.from.fade = pose.out;
       play.to.fade = pose.inn;
       a.syncOpacity();
-      if (play.side !== 0) a.tipSlot(play.stand, { side: play.side, full: TOPPLE_RAD, e: pose.tip, slide: pose.slide, target: this.lyingCentre(play) });
+      if (play.side !== 0) a.tipSlot(play.stand, { side: play.side, full: TOPPLE_RAD, e: pose.tip, slide: pose.slide, ...this.meeting(play) });
       const size = play.run.takePuff();
       if (size !== null) {
         this.puff ??= new KoPuff(a as unknown as Object3D, a.height);
