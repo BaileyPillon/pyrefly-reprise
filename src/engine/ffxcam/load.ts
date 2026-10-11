@@ -23,12 +23,16 @@
  *   range:    { tag, variable, chr, distanceProp, pullBack: { value, distance }, moveIn: { value, distance } } | null }
  * ```
  *
+ * **`extents.json`** (optional, beside the index; format `ffxcam-extents/1`, `./extents.ts`): the characters' camHeight and camWidth from the game's own `.chr` files. Without it, or with a file that is not valid
+ * (one `console.warn`), the programs run on extents the scene measures from its models; nothing else is lost.
+ *
  * {@link buildFfxCameraPrograms} is the pure half (the shape checks, the programs through `./ir.ts`), so the tests and the checks against his folder run it without a network.
  *
  * Game case: FFX only.
  */
 
 import { ProgramBook, type ActionRow, type ActionStep, type ActionTable, type FfxCameraPrograms, type RangeMove, type RangeSpec } from './book.ts';
+import { parseExtents, type CharExtents } from './extents.ts';
 import { checkProgram, type Program } from './ir.ts';
 
 export const CAMERA_INDEX_FORMAT = 'ffxcam-index/1';
@@ -154,7 +158,7 @@ export function checkCameraIndex(raw: unknown): { files: readonly string[] } | {
  * The encounter's camera data from its parsed `index.json` and the program files it lists (`files`: the parsed JSON of each, by the path the index gave), or the first thing wrong, in a few words.
  * Pure: nothing is fetched or logged.
  */
-export function buildFfxCameraPrograms(rawIndex: unknown, files: ReadonlyMap<string, unknown>): { programs: FfxCameraPrograms } | { problem: string } {
+export function buildFfxCameraPrograms(rawIndex: unknown, files: ReadonlyMap<string, unknown>, extents: CharExtents = {}): { programs: FfxCameraPrograms } | { problem: string } {
   try {
     const index = readIndex(rawIndex);
     const programs: Program[] = [];
@@ -168,7 +172,7 @@ export function buildFfxCameraPrograms(rawIndex: unknown, files: ReadonlyMap<str
       programs.push(checked.program);
     }
     for (const [key, id] of Object.entries(index.tags)) if (!ids.has(id)) return bad(`tags["${key}"] names ${id}, which no listed file defines`);
-    const built: FfxCameraPrograms = { encounter: index.encounter, source: index.source, book: new ProgramBook(programs, index.tags, index.scripts), actions: index.actions, constants: index.constants, range: index.range };
+    const built: FfxCameraPrograms = { encounter: index.encounter, source: index.source, book: new ProgramBook(programs, index.tags, index.scripts), actions: index.actions, constants: index.constants, range: index.range, extents };
     return { programs: built };
   } catch (e) {
     if (e instanceof IndexProblem) return { problem: e.message };
@@ -222,6 +226,20 @@ export async function loadFfxCameraPrograms(encounter: string, fetcher: typeof f
       return warn(e instanceof IndexProblem ? e.message : `a program file could not be read (${String(e)})`);
     }
   }
-  const built = buildFfxCameraPrograms(rawIndex, files);
+  const built = buildFfxCameraPrograms(rawIndex, files, await loadExtents(base, encounter, fetcher));
   return 'programs' in built ? built.programs : warn(built.problem);
+}
+
+/** The folder's `extents.json`, or none: a missing file is the ordinary case (the scene measures its models); a file that is there and wrong is one warning and none. */
+async function loadExtents(base: string, encounter: string, fetcher: typeof fetch): Promise<CharExtents> {
+  try {
+    const res = await fetcher(`${base}extents.json`, { cache: 'no-store' });
+    if (!res.ok) return {};
+    const parsed = parseExtents(await res.json());
+    if ('extents' in parsed) return parsed.extents;
+    console.warn(`[ffx-local] ignoring extents.json for ${encounter}: ${parsed.problem}. The camera runs on the sizes of the models.`);
+  } catch {
+    /* no file, or not JSON: the models' own sizes */
+  }
+  return {};
 }

@@ -27,3 +27,20 @@ export const FAYTH_ROSTER: readonly RosterEntry[] = [
 
 /** The ids of the party's three on the field: Tidus's, Wakka's and Rikku's actors are the ones the camera frames (and the ones whose fall is the defeat). */
 export const FAYTH_ACTIVE_PARTY: readonly string[] = ['tidus', 'wakka', 'rikku'];
+
+/** Every player character the roster knows, in the order the party list takes them: whoever of these is on the field is the party. */
+export const FAYTH_PLAYERS: readonly string[] = ['tidus', 'wakka', 'rikku', 'auron', 'kimahri', 'lulu'];
+
+/** Evrae's combatant id: the one monster the camera frames. */
+export const FAYTH_BOSS = 'evrae';
+
+/**
+ * The roster with each player character's side set by who is on the field: those standing on the deck are the party, **in the order of their slots** (the programs' `Character#1..#3`, `FrontlineChars`), the
+ * rest the reserve in the table's order. The FFX engine's party is whoever is in the fight, and a switch (Lulu for Wakka) changes it, her place being the one he stood in; the table above is the starting line-up.
+ */
+export function rosterFor(onField: readonly string[]): readonly RosterEntry[] {
+  const entry = (id: string): RosterEntry => FAYTH_ROSTER.find((e) => e.id === id)!;
+  const party = onField.filter((id) => FAYTH_PLAYERS.includes(id)).map((id) => ({ ...entry(id), side: 'party' as const }));
+  const reserve = FAYTH_PLAYERS.filter((id) => !onField.includes(id)).map((id) => ({ ...entry(id), side: 'reserve' as const }));
+  return [...party, ...reserve, ...FAYTH_ROSTER.filter((e) => !FAYTH_PLAYERS.includes(e.id))];
+}

@@ -286,11 +286,14 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
   const sourceFiles = (dir: string): string[] =>
     readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? sourceFiles(join(dir, e.name)) : e.name.endsWith('.ts') ? [join(dir, e.name)] : []));
   const rel = (f: string): string => relative(REPO, f).split(sep).join('/');
+  /** Every .ts file under src/ with its text, read once for the whole block: the scans below run a score of times and each walked and read the tree (a slow machine timed them out). */
+  let sources: Array<{ path: string; text: string }> | null = null;
+  const allSources = (): Array<{ path: string; text: string }> => (sources ??= sourceFiles(join(REPO, 'src')).map((f) => ({ path: rel(f), text: readFileSync(f, 'utf8') })));
   /** The files under src/ that import `stem.ts`, statically (`from '...'`) or dynamically (`import('...')`). */
-  const importersOf = (stem: string): string[] =>
-    sourceFiles(join(REPO, 'src'))
-      .filter((f) => new RegExp(`from '[^']*${stem}\\.ts'|import\\('[^']*${stem}\\.ts'\\)`).test(readFileSync(f, 'utf8')))
-      .map(rel);
+  const importersOf = (stem: string): string[] => {
+    const re = new RegExp(`from '[^']*${stem}\\.ts'|import\\('[^']*${stem}\\.ts'\\)`);
+    return allSources().filter((src) => re.test(src.text)).map((src) => src.path);
+  };
 
   it('exp-fayth-camera.ts is imported by the deck scene alone, and exp-fayth-skin.ts by the deck scene and the camera glue', () => {
     expect(importersOf('exp-fayth-camera')).toEqual(['src/scenes/exp-fayth-deck.ts']);
@@ -323,9 +326,30 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
     expect(read('src', 'engine', 'ffx3d', 'ffxSky.ts')).toContain('export async function loadSkyAssets(manifest: FfxLocalManifest');
   });
 
+  it('the tracking modules (in-frame arithmetic, safety net, shot subjects, FAR fit, extents, live model box) are reached only from the camera folder, the models and the camera glue, so they inherit the dev gate', () => {
+    const inFolder = (f: string): boolean => f.startsWith('src/engine/ffxcam/');
+    /** The files under src/ that import `./stem.ts` (a sibling in the camera folder) or `.../ffxcam/stem.ts` (from outside it). */
+    const importers = (stem: string): string[] => {
+      const sibling = new RegExp(`from '\\./${stem}\\.ts'`);
+      const outside = new RegExp(`from '[^']*ffxcam/${stem}\\.ts'|import\\('[^']*ffxcam/${stem}\\.ts'\\)`);
+      return allSources()
+        .filter((src) => (inFolder(src.path) && sibling.test(src.text)) || outside.test(src.text))
+        .map((src) => src.path);
+    };
+    const CAM = 'src/engine/ffxcam/faythCamera.ts';
+    expect(importers('safetyNet')).toEqual([CAM]);
+    expect(importers('shotSubjects')).toEqual([CAM]);
+    expect(importers('farFit')).toEqual([CAM]);
+    expect(importers('framing').sort()).toEqual([CAM, 'src/engine/ffxcam/frames.ts', 'src/engine/ffxcam/safetyNet.ts']);
+    expect(importers('extents').sort()).toEqual(['src/engine/ffxcam/book.ts', 'src/engine/ffxcam/frames.ts', 'src/engine/ffxcam/load.ts']);
+    // nothing outside the camera folder reaches them but the models (the live box) and the glue: the modules sit behind the dev-gated imports
+    expect(importersOf('modelBox').sort()).toEqual(['src/engine/ffx3d/models.ts', 'src/scenes/exp-fayth-camera.ts']);
+    for (const stem of ['safetyNet', 'shotSubjects', 'farFit', 'framing', 'extents']) expect(importers(stem).filter((f) => !inFolder(f)), stem).toEqual([]);
+  });
+
   it("the camera loader is imported by the glue alone, and checks DEV before it fetches (the data is Bailey's transcription of FFX's scripts: rule 8)", () => {
-    const loaders = sourceFiles(join(REPO, 'src')).filter((f) => /from '[^']*ffxcam\/load\.ts'/.test(readFileSync(f, 'utf8')));
-    expect(loaders.map(rel)).toEqual(['src/scenes/exp-fayth-camera.ts']);
+    const loaders = allSources().filter((src) => /from '[^']*ffxcam\/load\.ts'/.test(src.text));
+    expect(loaders.map((src) => src.path)).toEqual(['src/scenes/exp-fayth-camera.ts']);
     const text = read('src', 'engine', 'ffxcam', 'load.ts');
     const dev = text.indexOf('if (!import.meta.env.DEV) return null');
     expect(dev).toBeGreaterThan(0);

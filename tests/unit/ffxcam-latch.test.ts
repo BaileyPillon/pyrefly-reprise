@@ -36,6 +36,7 @@ const programs: FfxCameraPrograms = {
   actions: { party: {}, monster: {}, items: {}, attack: {} },
   constants: {},
   range: null,
+  extents: {},
 };
 
 /** The battle camera's own rig: nowhere near the FFX eye. */

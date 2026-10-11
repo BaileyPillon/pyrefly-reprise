@@ -184,8 +184,31 @@ describe('the loader fetches nothing unless this is a dev server', () => {
     const programs = await loadFfxCameraPrograms('evrae', server(served(), log));
     expect(programs?.book.size).toBe(2);
     expect(programs?.actions.party['fire']?.command).toBe(12354);
-    expect(log.sort()).toEqual([`${BASE}index.json|no-store`, `${BASE}programs/a.json|no-store`, `${BASE}programs/b.json|no-store`].sort());
+    expect(log.sort()).toEqual([`${BASE}extents.json|no-store`, `${BASE}index.json|no-store`, `${BASE}programs/a.json|no-store`, `${BASE}programs/b.json|no-store`].sort());
     expect(warn).not.toHaveBeenCalled();
+  });
+
+  it("reads the characters' camera extents from extents.json beside the index; none (a 404) is an empty table and no warning", async () => {
+    vi.stubEnv('DEV', true);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const withFile = await loadFfxCameraPrograms('evrae', server(served({ [`${BASE}extents.json`]: { format: 'ffxcam-extents/1', chars: { '0': { height: 21, width: 7 }, '20': { height: 60, width: 90 } } } })));
+    expect(withFile?.extents).toEqual({ '0': { height: 21, width: 7 }, '20': { height: 60, width: 90 } });
+    const without = await loadFfxCameraPrograms('evrae', server(served()));
+    expect(without?.extents).toEqual({});
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('an extents.json that is there but wrong is ONE warning and an empty table; the programs still load', async () => {
+    vi.stubEnv('DEV', true);
+    for (const bad of [{ format: 'nope', chars: {} }, { format: 'ffxcam-extents/1', chars: { '0': { height: -1, width: 5 } } }]) {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const programs = await loadFfxCameraPrograms('evrae', server(served({ [`${BASE}extents.json`]: bad })));
+      expect(programs?.book.size).toBe(2);
+      expect(programs?.extents).toEqual({});
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(String(warn.mock.calls[0]?.[0])).toMatch(/extents.json/);
+      warn.mockRestore();
+    }
   });
 
   it('no folder behind the route (a 404) is null and quiet: the ordinary case for everyone but Bailey', async () => {

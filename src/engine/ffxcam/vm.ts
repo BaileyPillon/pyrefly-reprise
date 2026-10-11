@@ -45,6 +45,15 @@ export interface VmStats {
   readonly unknownQueries: Map<string, number>;
 }
 
+/** What a call is turned into by a {@link CallRewriter}: a name and its arguments. */
+export interface CallRewrite {
+  readonly name: string;
+  readonly args: readonly number[];
+}
+
+/** A hook the VM asks of every call before it runs it, with the call's evaluated arguments: a rewrite replaces the call, null leaves it (`./farFit.ts` is the one user). */
+export type CallRewriter = (name: string, args: readonly number[]) => CallRewrite | null;
+
 export interface VmOptions {
   readonly solver: CameraSolver;
   readonly book: ProgramBook;
@@ -54,6 +63,8 @@ export interface VmOptions {
   /** Where a one-off warning goes. Default: `console.warn` in a dev build, nowhere in a production one. */
   readonly warn?: (message: string) => void;
   readonly maxInstructions?: number;
+  /** Asked of every call before it runs (a fit of the data: a call's numbers changed, or the call replaced). */
+  readonly rewriteCall?: CallRewriter;
 }
 
 interface Thread {
@@ -89,6 +100,7 @@ export class CameraVm implements EvalEnv {
   private readonly onStart: ((program: Program, step: number) => void) | undefined;
   private readonly warnFn: (message: string) => void;
   private readonly maxInstructions: number;
+  private readonly rewriteCall: CallRewriter | undefined;
   private readonly warned = new Set<string>();
   private thread: Thread | null = null;
   private current: Thread | null = null; // the thread whose instruction is being evaluated (registers, private variables)
@@ -102,6 +114,7 @@ export class CameraVm implements EvalEnv {
     this.onStart = opts.onStart;
     this.warnFn = opts.warn ?? defaultWarn;
     this.maxInstructions = opts.maxInstructions ?? DEFAULT_MAX_INSTRUCTIONS;
+    this.rewriteCall = opts.rewriteCall;
   }
 
   // -------------------------------------------------------------- the thread
@@ -254,8 +267,13 @@ export class CameraVm implements EvalEnv {
   }
 
   private call(th: Thread, ins: CallIns): void {
-    const name = ins.op;
-    const a = ins.args.map((e) => this.eval(e));
+    let name = ins.op;
+    let a = ins.args.map((e) => this.eval(e));
+    const rewritten = this.rewriteCall?.(name, a);
+    if (rewritten) {
+      name = rewritten.name;
+      a = [...rewritten.args];
+    }
     switch (name) {
       case 'wait': {
         const n = Math.trunc(a[0] ?? 0);

@@ -32,6 +32,7 @@ import { Box3, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, NoColorSpace, 
 import { FFX_MODEL_LIFT } from './ffxStaging.ts';
 import { FFX_UNIT } from './ffxWorld.ts';
 import { ffxLocalUrl, type FfxLocalManifest } from './localAssets.ts';
+import { liveBoxOf, type WorldBox } from './modelBox.ts';
 import { applyPassState, passStateOf } from './passState.ts';
 
 /** One model: a root in world units that an actor can carry, and what the skin needs to fade and free it. */
@@ -43,6 +44,8 @@ export interface FfxModel {
   readonly height: number;
   /** How far it spreads sideways in the idle pose, world units: the larger of its box's x and z extents (what the FFX camera frames a figure by, `../ffxcam/frames.ts`). */
   readonly width: number;
+  /** Where its body is now, in the world (the bones' box widened by what the idle pose's vertices stand beyond them, `./modelBox.ts`); absent when the model has no skeleton. For the camera's tracking net. */
+  readonly box?: () => WorldBox | null;
   /** 1 is solid; below that every material is drawn blended at that opacity (a range shift's fade, a KO's). */
   setOpacity(alpha: number): void;
   dispose(): void;
@@ -316,11 +319,15 @@ async function loadActor(loader: Loader, id: string, file: string, heights: Reco
   root.position.y = lift;
   const tall = heights[id] ?? 0;
   const height = (tall > 0 ? tall : 18) * scale + lift;
+  // The width is measured before the live box brings the skeleton up to date, as it always was: the camera's fallback sizes (no `extents.json`) are these numbers, and a freshly posed Evrae spreads 2.6 times wider.
+  const width = spreadOf(root, height);
+  const live = liveBoxOf(root);
   return {
     id,
     root,
     height,
-    width: spreadOf(root, height),
+    width,
+    ...(live ? { box: live } : {}),
     setOpacity(alpha: number): void {
       const solid = alpha >= 0.999;
       for (const m of parts.materials) {

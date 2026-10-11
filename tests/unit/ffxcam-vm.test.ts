@@ -9,7 +9,8 @@
  * 3. **randomness**: a shot switch draws only from the PRESENTATION source, per stream, deterministically per seed, and the battle's RNG and `Math.random` are never touched;
  * 4. **camReq** is a tail call, and an unanswered tag changes nothing;
  * 5. **nothing throws**: an unknown call or query is counted, logged once and ignored; known no-ops are counted apart; a runaway program is stopped; a request chain is cut;
- * 6. the program book's candidate order (formation before common, the command's worker first).
+ * 6. the program book's candidate order (formation before common, the command's worker first);
+ * 7. **a call rewriter** (a fit of the data, `farFit.ts`): asked of every call before it runs with its evaluated arguments; it may turn the call into another (a name and arguments) or leave it; the programs themselves are untouched.
  *
  * Game case: FFX only.
  */
@@ -471,5 +472,47 @@ describe('the calls that write the rig', () => {
       r.vm.start(P);
       expect(r.solver.busy(0), name).toBe(true);
     }
+  });
+});
+
+describe('a call rewriter', () => {
+  const rigWith = (rewriteCall: NonNullable<ConstructorParameters<typeof CameraVm>[0]['rewriteCall']>, programs = [prog('p', [call('refSetPos', 87, -55, 55), call('camSetPolar', 0, 0, 100), ret()])]): { vm: CameraVm; programs: typeof programs } => {
+    const host = new TestHost();
+    const solver = new CameraSolver(host);
+    const book = new ProgramBook(programs, tagsOf({ 1: 'p' }), ['s']);
+    return { vm: new CameraVm({ solver, book, host, rewriteCall, warn: () => undefined }), programs };
+  };
+
+  it("can change a call's numbers: the program asked for one point and the camera went to another", () => {
+    const { vm, programs } = rigWith((name, args) => (name === 'refSetPos' && args[0] === 87 ? { name, args: [-20, args[1] ?? 0, 80] } : null));
+    vm.start(programs[0]!);
+    near(vm.pose().ref, [-20, -55, 80]);
+    near(vm.pose().eye, [80, -55, 80], 1e-9); // the polar eye is about the rewritten look-at
+  });
+
+  it('can turn a call into another call', () => {
+    const { vm, programs } = rigWith((name) => (name === 'refSetPos' ? { name: 'refSetPolar', args: [0, 0, 0] } : null));
+    vm.start(programs[0]!);
+    // refSetPolar is not a rig call here: it is unknown, logged once and ignored, so the look-at stays at the origin
+    near(vm.pose().ref, [0, 0, 0]);
+  });
+
+  it('is asked with the evaluated arguments, once per call, and null leaves the call as it is', () => {
+    const asked: Array<[string, number[]]> = [];
+    const P = prog('p', [set('battle:0x10', 7), call('refSetPos', { var: 'battle:0x10' }, 1, 2), call('camSetRoll', 0), ret()]);
+    const { vm } = rigWith((name, args) => {
+      asked.push([name, [...args]]);
+      return null;
+    }, [P]);
+    vm.start(P);
+    expect(asked).toEqual([['refSetPos', [7, 1, 2]], ['camSetRoll', [0]]]);
+    near(vm.pose().ref, [7, 1, 2]);
+  });
+
+  it('with no rewriter nothing changes', () => {
+    const P = prog('p', [call('refSetPos', 87, -55, 55), ret()]);
+    const r = rig([P]);
+    r.vm.start(P);
+    near(r.vm.pose().ref, [87, -55, 55]);
   });
 });

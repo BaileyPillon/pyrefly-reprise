@@ -10,6 +10,7 @@
  * 3. **The sink ordering through the real scene**: \`loadScene\` builds the three.js \`Scene\` and the \`BattleCamera\`; one frame in the game's order (the scene's update, which is the build's update then
  *    \`BattleCamera.update\`; the MAX mix's view offset; the render) draws the director's pose with no view offset, and not the battle camera's rig. Variant B draws the same shot with the azimuth clamped.
  * 4. **Dispose** takes the camera hook off the scene, unbinds the latch and removes the debug handle.
+ * 5. **The tracking switches** (`trackingSwitches`): the safety net, the FAR fit and the characters' own camHeight and camWidth are each turned off by one query word, for comparing with the bare replay.
  *
  * Game case: FFX only.
  */
@@ -22,7 +23,7 @@ import { azimuthDeg } from '../../../src/engine/ffxcam/variant.ts';
 import { FFX_NEAR_VIEW } from '../../../src/engine/ffx3d/ffxStaging.ts';
 import { ffxRig, worldPointToFfx } from '../../../src/engine/ffx3d/ffxWorld.ts';
 import { STUB_SHOT_DIRECTOR } from '../../../src/engine/ffxcam/stubDirector.ts';
-import { viewOf, type FaythCameraHandle } from '../../../src/scenes/exp-fayth-camera.ts';
+import { trackingSwitches, viewOf, type FaythCameraHandle } from '../../../src/scenes/exp-fayth-camera.ts';
 import type { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { buildExpFaythDeckScene } from '../../../src/scenes/exp-fayth-deck.ts';
 import { loadScene } from '../../../src/scenes/index.ts';
@@ -72,6 +73,7 @@ const INDEX = {
   actions: { party: {}, monster: {}, items: {}, attack: { party: { command: 12288, steps: [{ at: 'start', tags: [26], worker: false }] } } },
   constants: {},
   range: null,
+  extents: {},
 };
 const FILES: Record<string, unknown> = { 'index.json': INDEX, 'programs/default.json': DEFAULT_VIEW, 'programs/side.json': SIDE_VIEW };
 const CAMERA_PREFIX = '/__ffx-local/camera/evrae/';
@@ -309,4 +311,19 @@ describe('the sink ordering through the real scene', () => {
     close(eye, handle()!.latch.latest!.eye, 4);
     scene.dispose();
   }, 60_000);
+});
+
+describe('the tracking switches', () => {
+  it('all three aids are on by default, and anything but the right word leaves them on', () => {
+    expect(trackingSwitches('')).toEqual({ net: true, farFit: true, extents: true });
+    expect(trackingSwitches('?ffxnet=on&ffxfar=fit&ffxext=game&skin=ffx')).toEqual({ net: true, farFit: true, extents: true });
+    expect(trackingSwitches('?ffxnet=OFF')).toEqual({ net: true, farFit: true, extents: true });
+  });
+
+  it('each aid is turned off by its own word and by nothing else', () => {
+    expect(trackingSwitches('?ffxnet=off')).toEqual({ net: false, farFit: true, extents: true });
+    expect(trackingSwitches('?ffxfar=script')).toEqual({ net: true, farFit: false, extents: true });
+    expect(trackingSwitches('?ffxext=models')).toEqual({ net: true, farFit: true, extents: false });
+    expect(trackingSwitches('?ffxnet=off&ffxfar=script&ffxext=models')).toEqual({ net: false, farFit: false, extents: false });
+  });
 });

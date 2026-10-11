@@ -17,6 +17,7 @@
  * Pure. Game case: FFX only.
  */
 
+import type { CharExtents } from './extents.ts';
 import type { Program } from './ir.ts';
 
 /** The hook slot of the camera handler. Every `camReq` and every beat's own request goes to it. */
@@ -140,4 +141,6 @@ export interface FfxCameraPrograms {
   readonly constants: Readonly<Record<string, number>>;
   /** Null when the encounter has no range game. */
   readonly range: RangeSpec | null;
+  /** The characters' camera extents (`./extents.ts`), by FFX character number; empty when the folder has no `extents.json` (the scene then measures its own models). */
+  readonly extents: CharExtents;
 }

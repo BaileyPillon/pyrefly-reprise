@@ -79,6 +79,7 @@ const programs: FfxCameraPrograms = {
   },
   constants: {},
   range: { tag: 0, variable: 'battle:0x4', chr: 20, distanceProp: 30, pullBack: { value: 1, distance: 3 }, moveIn: { value: 2, distance: 0 } },
+  extents: {},
 };
 
 // ------------------------------------------------------------------ the fake world

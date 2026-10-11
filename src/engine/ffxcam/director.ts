@@ -37,7 +37,7 @@ import { PresentationRandom } from './host.ts';
 import type { Program } from './ir.ts';
 import type { CameraSink } from './sink.ts';
 import { CameraSolver } from './solver.ts';
-import { CameraVm } from './vm.ts';
+import { CameraVm, type CallRewriter } from './vm.ts';
 
 /** The tags the beats raise (SPEC 8.2). */
 export const TAG = { enter: 24, select: 25, normal: 28, accepted: 61, victory: 66, defeat: 67 } as const;
@@ -67,6 +67,8 @@ export interface DirectorOptions {
   /** Where one-off warnings go (the VM's and the sink's). Default: a dev `console.warn`. */
   readonly warn?: (message: string) => void;
   readonly onWrite?: (chrs: readonly number[], property: number, value: number) => void;
+  /** A fit of the data: asked of every call the programs make before it runs (`./farFit.ts`). */
+  readonly rewriteCall?: CallRewriter;
 }
 
 const own = <T>(table: Readonly<Record<string, T>>, key: string): T | undefined => (Object.hasOwn(table, key) ? table[key] : undefined);
@@ -98,7 +100,7 @@ export class FfxCameraDirector implements ShotDirector {
     this.warn = opts.warn ?? ((m) => (import.meta.env.DEV ? console.warn(m) : undefined));
     this.host = new FormationHost({ random: new PresentationRandom(opts.seed ?? 0), constants: opts.programs?.constants, onWrite: opts.onWrite });
     this.vm = opts.programs
-      ? new CameraVm({ solver: new CameraSolver(this.host), book: opts.programs.book, host: this.host, onStart: opts.onStart, warn: this.warn })
+      ? new CameraVm({ solver: new CameraSolver(this.host), book: opts.programs.book, host: this.host, onStart: opts.onStart, warn: this.warn, ...(opts.rewriteCall ? { rewriteCall: opts.rewriteCall } : {}) })
       : null;
   }
 
