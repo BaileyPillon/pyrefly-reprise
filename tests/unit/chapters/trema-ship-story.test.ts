@@ -131,9 +131,9 @@ describe('the registered record: LISTED (2026-09-25), with the ship layer on', (
     expect(CHAPTERS.at(-6)).toBe(FFX2_TREMA_SHIPPED); // Chapter XIV follows (listed the same day), then XV (2026-09-26), XVI (2026-09-27), XVII and XVIII (2026-09-29)
   });
 
-  it('with Trema alone the stand-in cue scores the only link, and the story takes the alone shape', () => {
+  it('with Trema alone his own cue (`boss-trema`, 2026-10-10) scores the only link, and the story takes the alone shape', () => {
     const ch = withTremaShip(ALONE_CHAPTER);
-    expect(ch.music.battle).toBe('boss-ffx2-aeon');
+    expect(ch.music.battle).toBe('boss-trema');
     expect(ch.scriptsRef.mid.some((t) => t.id === TREMA_LINK_SEAM)).toBe(false);
   });
 });

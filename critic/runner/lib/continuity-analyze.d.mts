@@ -8,5 +8,5 @@ export declare function causeOf(logEvents: { n: number; type?: string; [key: str
 export declare function analyzeRun(o: { meta: ProbeMeta; records: ProbeFrame[]; anchors: (Anchors | null)[]; cfg: ContinuityConfig }): {
   swaps: (SwapRow & { fi: number; from: number; to: number; startFrame: number })[]; jerks: (Jerk & { figure: string; fi: number; id: number })[]; summary: Summary & { run: Record<string, unknown> };
   perFigure: Record<string, Record<string, unknown>>; coverage: Record<string, unknown>; worst: { swaps: number[]; jerks: number[]; ghosts: number[] }; frameMs: number; cameraCuts: number[];
-  access: { trackAt(fi: number, n: number): { feet: [number, number] | null; head: [number, number] | null } | null; planeAt(fi: number, n: number, k: number): { feet: number[] | null; head: number[] | null } | null; recordAt(fi: number, n: number): unknown };
+  access: { trackAt(fi: number, n: number): { feet: [number, number] | null; head: [number, number] | null; centroid: [number, number] | null } | null; planeAt(fi: number, n: number, k: number): { feet: number[] | null; head: number[] | null; centroid: number[] | null } | null; recordAt(fi: number, n: number): unknown };
 };

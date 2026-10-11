@@ -98,11 +98,28 @@ const COMPOSED: Record<string, Track> = {
  *
  * FFX-2 only, 2026-10-10 (Bailey: "Whatever you recommend for sound effects and music I'll go with those recommendations"): two ElevenLabs takes ship
  * as cues of their own, `boss-leblanc` (Chapter VI and the hidden Leblanc chapter) and `boss-bahamut` (Chapter IV), so the shared `boss-ffx2-aeon`
- * stays with the Fallen Aeons, Ixion and the rest. The MP3 is what plays; if it cannot load, the synth fallback is the aeon composition they replace.
+ * stays with the rest. The MP3 is what plays; if it cannot load, the synth fallback is the aeon composition they replace.
+ *
+ * Batch 1, 2026-10-10 (Bailey: "ill go with all your recommendations", on the batch-1 music picks): six more ElevenLabs takes ship as cues of
+ * their own, each with the composition it replaces as its synth fallback (the MP3 is what plays):
+ * FFX-2 only: `boss-ffx2-fallen-aeons` (Chapter XI's three links and Chapter XVI's Ixion: the game plays the same track at both, so one cue)
+ * and `boss-trema` (Chapter XIII's second phase), both over `boss-ffx2-aeon`;
+ * FFX only: `boss-seymour-natus` (Chapter X) over `boss-seymour-macalania`, `boss-isaaru` (Chapter XIV) over `boss-yojimbo`, and
+ * `boss-sin-assault` (Chapter XVII, links I to III) and `boss-sin-countdown` (Chapter XVIII) over `boss-evrae`.
+ *
+ * FF7 only, the same day: `boss-ff7-guard` (the hidden 'limit' chapter's Guard Scorpion, silent before). No FF7 score exists and `playMusic` refuses a key with
+ * no track, so its synth fallback (only if the MP3 cannot load) is the generic FFX battle bed `battle-ffx`: a cross-game fallback, named here on purpose.
  */
 const STAND_INS: Record<string, string> = {
   'boss-leblanc': 'boss-ffx2-aeon',
   'boss-bahamut': 'boss-ffx2-aeon',
+  'boss-ffx2-fallen-aeons': 'boss-ffx2-aeon',
+  'boss-trema': 'boss-ffx2-aeon',
+  'boss-seymour-natus': 'boss-seymour-macalania',
+  'boss-isaaru': 'boss-yojimbo',
+  'boss-sin-assault': 'boss-evrae',
+  'boss-sin-countdown': 'boss-evrae',
+  'boss-ff7-guard': 'battle-ffx',
 };
 
 export const TRACKS: Record<string, Track> = { ...COMPOSED };

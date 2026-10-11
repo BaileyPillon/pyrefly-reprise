@@ -29,6 +29,7 @@ import { parseArgs } from './cli.mjs';
 import { anchorsForPoses, analyzeRun } from './continuity-analyze.mjs';
 import { createProbe } from './continuity-probe.mjs';
 import { loadPoseMeasure } from './continuity-silhouette.mjs';
+import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
 import { verdicts } from './continuity-pure.mjs';
 
@@ -129,10 +130,10 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     const eventCell = Math.max(0, Math.min(fr.length - 1, ev.n - st.first));
     const marks = fr.map((_, i) => res.access.trackAt(st.fi, st.first + i));
     const ref = swapEv ? res.access.planeAt(st.fi, ev.n, ev.from) : res.access.trackAt(st.fi, ev.n - 1);
-    const guide = { headY: ref?.head ? ref.head[1] : null, feetY: ref?.feet ? ref.feet[1] : null };
+    const guide = { headY: ref?.head ? ref.head[1] : null, feetY: ref?.feet ? ref.feet[1] : null, centroidY: ref?.centroid ? ref.centroid[1] : null };
     const caps = fr.map((_, i) => { const d = st.first + i - ev.n; return d === 0 ? (swapEv ? 'swap' : 'jerk') : d > 0 ? `+${d}` : `${d}`; });
     const title = swapEv
-      ? `${ev.figure}  ${ev.fromPose} to ${ev.toPose}  #${ev.id}  frame ${ev.n}${ev.head?.ratio != null ? `  head x${ev.head.ratio} (${ev.head.source})` : ''}${ev.feet?.standing ? `  feet ${ev.feet.px}px` : ''}${ev.outline ? `  IoU ${ev.outline.iou}` : ''}  ghost ${ev.ghost.frames} frames${ev.snap ? '  SNAP' : ev.hardCut ? '  cut' : ''}  [${w.label}]`
+      ? `${ev.figure}  ${ev.fromPose} to ${ev.toPose}  #${ev.id}  frame ${ev.n}${ev.head?.ratio != null ? `  head x${ev.head.ratio} (${ev.head.source})` : ''}${ev.feet?.standing ? `  feet ${ev.feet.px}px` : ''}${ev.outline ? `  IoU ${ev.outline.iou}` : ''}  ghost ${ev.ghost.frames} frames${ev.held?.frames >= HELD_MIN_FRAMES ? `  held ${ev.held.frames} frames` : ''}${ev.staged ? `  STAGED twirl ${ev.staged.step}/${ev.staged.of}` : ev.snap ? '  SNAP' : ev.hardCut ? '  cut' : ''}  [${w.label}]`
       : `${ev.figure}  jerk ${ev.px} px in one frame (${ev.part}; the move's own speed is ${ev.localPx} px)  frame ${ev.n}${ev.atSwap ? '  at a pose swap' : ''}`;
     const jpg = await composeStrip({ strip: st, frames: fr, marks, guide, title, captions: caps, eventCell });
     const file = `${w.label}-${String(ev.id).padStart(3, '0')}-${safe(ev.figure)}${swapEv ? `-${safe(ev.fromPose)}-${safe(ev.toPose)}` : ''}.jpg`;
@@ -215,6 +216,10 @@ export function aggregate(results, cfg) {
     ghostSwaps: sum((s) => s.motion.ghostSwaps), ghostFrames: sum((s) => s.motion.ghostFrames), worstGhostSeverity: max((s) => s.motion.worstGhostSeverity), ghostOverFail: sum((s) => s.motion.ghostOverFail),
     jerks: sum((s) => s.motion.jerks), worstJerkPx: max((s) => s.motion.worstJerkPx), jerksOverFail: sum((s) => s.motion.jerksOverFail),
     lowestIou: ok.reduce((m, r) => Math.min(m, r.summary.motion.lowestIou), 1), maxCentroidShiftPx: max((s) => s.motion.maxCentroidShiftPx),
+    // r40 instrument edits (b) and (c); a chapter summarised before them has none of these (counted as 0)
+    heldSwaps: sum((s) => s.motion.heldSwaps ?? 0), longestHeldFrames: max((s) => s.motion.longestHeldFrames ?? 0),
+    stagedChanges: sum((s) => s.motion.stagedChanges ?? 0), stagedSteps: sum((s) => s.motion.stagedSteps ?? 0),
+    stagedSnapsExcused: sum((s) => s.motion.stagedSnapsExcused ?? 0), jerksAtStaged: sum((s) => s.motion.jerksAtStaged ?? 0),
   };
   const whole = { battleSeconds: Math.round(battleSeconds * 10) / 10, counted: sum((s) => s.counted), swaps: sum((s) => s.swaps), size, motion };
   const unverifiedChapters = results.filter((r) => !r.summary || r.checks?.['CHK-026']?.result === 'UNVERIFIED').map((r) => r.chapter);

@@ -745,7 +745,7 @@ export class BattleScreen extends Screen {
 
     const fieldDt = this.spectacle?.stageDt(dt) ?? dt; // option C's hit-stop holds the field, never the engine or the HUD
     this.scene?.update(fieldDt);
-    updateLivingScene(fieldDt); // eye-candy option B: drift, weather, lamps (after the rig, before the render)
+    updateLivingScene(fieldDt, dt); // eye-candy option B: drift, weather, lamps (after the rig, before the render); the KO's cross runs on the real frame time (a hit-stop never freezes it)
     // Settle the enemy lane against the camera, before the player's first
     // decision and never during one.
     //
@@ -758,7 +758,7 @@ export class BattleScreen extends Screen {
     // nothing can be projected yet, so a slow first frame simply retries.
     this.settleFormation(dt);
     this.airship?.sync(this.engine?.state());
-    this.stage?.update(fieldDt);
+    this.stage?.update(fieldDt, dt); // the pose blends run on the real frame time: a hit-stop holds the field, never a half-mixed crossfade (FB-1)
     this.spectacle?.update(dt);
     // The HUD ticks on the same clock as the field, so its damage numerals
     // stop dead with everything else when a capture calls `App.stop()`.

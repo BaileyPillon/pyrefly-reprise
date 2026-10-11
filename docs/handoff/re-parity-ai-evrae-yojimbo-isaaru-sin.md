@@ -78,7 +78,7 @@ event from the first, also during the pulls, and fires only once the pulls are o
 | Rows | Verdict |
 |---|---|
 | D-01 to D-07, D-09 (Evrae, Cid) | Done in `a983131a`. D-02 is **built behind a switch, off** (owner decision C-13, section 8) |
-| **D-08 (orders: one Trigger Command at a time, Cancel while one is pending)** | **Not built.** It changes the party's menu, so it needs Bailey's yes first (AGENTS.md rule 9; section 8). Ours keeps "last order wins" and a redundant order still burns Cid's turn (C-7). Applies to Evrae and the Fins |
+| **D-08 (orders: one Trigger Command at a time, Cancel while one is pending)** | **Built on the lane MENUS branch (re-parity-ai-ffx), 2026-10-10, after Bailey's yes of 2026-10-09 ("Yes, match the game"); his OK of the before/after screenshots (`docs/screenshots/re-parity-menus/`) comes before any merge.** `ai/evrae-rules.ts#orderOnOffer`: Pull back at NEAR, Close in at FAR, Cancel while an order stands; a second or redundant order is refused; `REDUNDANT_ORDER_BURNS_TURN` and S-20 are gone. Applies to Evrae and the Fins |
 | D-10 to D-13 (Yojimbo), D-15 to D-17 (Isaaru) | Done in `c58f44ab` |
 | D-14 (the opening) | Done for Yojimbo, Isaaru's three, Genais and Sin's face |
 | D-18 (Isaaru's defeat) | Already the engine's outcome; nothing to change |
@@ -221,7 +221,7 @@ here: new text in a panel Bailey reads needs his yes first.
 
 ## 7. Not done, and what could not be sourced
 
-- **D-08**, the order menu (section 8).
+- ~~**D-08**, the order menu (section 8).~~ Built on the lane MENUS branch (see the D-08 row above).
 - **The exact reach table at distance 3.** Only Sin's distance 1 uses the game's reach classes (`reach.ts`, numbers only from the game's command table); at FAR (distance 3, Evrae and the Fins) the old category gate stays (spells, Lancet, Wakka, long-range rows).
   The table would also admit Doom, the aeons' Sonic Wings, Meteor Strike and the like at distance 3 and refuse Wakka's reels and Valefor's Energy Blast; those rows are untouched here.
 - **Non-damaging magic aimed at the Core while Genais is out** (Slow, Haste, Dispel ...): the game replaces any magical-type command with "Magic absorbed"; ours replaces the roll (no event effect) but the kernel still applies the status. Damaging spells are nullified correctly.
@@ -241,7 +241,7 @@ here: new text in a panel Bailey reads needs his yes first.
 3. **Chapter XVII is 31 points easier** (56 to 87 percent of seeds) and **Chapter IX 12 points easier** (85 to 97), from the script's own rules (section 4). Keep (recommended)? The rows that decide them are one constant each if you would rather have the old feel (`sin-genais-core.ts` Cura and counter rules; `yojimbo-rules.ts` odds), but each is less true to the game.
 4. **C-13 (Delay and Evrae's Haste phase).** The script has it: one Delay Buster or three Delay Attacks start the Haste phase with no HP lost (the wiki claim was true). The owner decision keeps it off. Turn it on (`DELAY_ADVANCES_HASTE_PHASE = true` in `evrae-rules.ts`, one line) for 1:1? The decision was made
    when the claim was unsourced.
-5. **D-08, the order menu:** the game offers one Trigger Command at a time (Pull back at NEAR, Move in at FAR, Cancel while one is pending) and no redundant order; ours keeps two rows with "last order wins". A visible menu change, so it needs your yes first (rule 9).
+5. **D-08, the order menu:** **answered "Yes, match the game" (2026-10-09) and built on the lane MENUS branch**: the game offers one Trigger Command at a time (Pull back at NEAR, Move in at FAR, Cancel while one is pending) and no redundant order. The before/after screenshots are in `docs/screenshots/re-parity-menus/`; nothing merges until Bailey has seen them.
 6. **Replaced placeholders:** D-050 / B2 (Yojimbo odds), D-266 / D-280 (Giga-Graviton turn), the Isaaru estimates O-5 and "no gauge gain", S-15, and S-1, S-8, S-12, S-19, S-25, S-27 (the Fin rules) are answered by the scripts and removed from the lists the code prints. Confirm they should stay replaced.
 7. **The shipped lines and advisor cards** for Chapters VIII, IX, XIV, XVII and XVIII are untouched (section 6); the guide text above needs a yes.
 

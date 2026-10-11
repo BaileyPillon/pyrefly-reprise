@@ -48,7 +48,7 @@ describe('registration', () => {
   it('is silent: no FFX or FFX-2 cue is borrowed, and no retail cue exists (rules 8, 13)', () => {
     const chapter = getChapter(ID)!;
     expect(chapter.music.scene).toBeNull();
-    expect(chapter.music.battle).toBeNull();
+    expect(chapter.music.battle).toBe('boss-ff7-guard'); // batch 1, 2026-10-10: the fight has an original cue; the scene is still silent
     expect(chapter.music.victory).toBeUndefined();
   });
 

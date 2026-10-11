@@ -10,15 +10,16 @@
  *
  * **Game case: FFX only** [AGENTS.md rule 14].
  *
- * Two sentences here are deliberately hedged, because the claims behind them
- * are **owner-approved assumptions, not canon**, and the guide is the one
- * surface in the game that makes explicit claims about mechanics to the player:
+ * Two sentences here used to be hedged, because the claims behind them were
+ * **owner-approved assumptions, not canon**; the game's own script settles both
+ * [research/re-ffx-ai-seymour.md §3.4 and §3.6, rows D-14 and the element index]:
  *
- * - Anima's gauge rate is an `[estimate]` (C-4), so the WATCH line says "filling"
- *   and never a number.
- * - The element order persisting into act three is `[single source]` (C-14), so
- *   the act-three phase note says the order "holds" rather than asserting it as
- *   published fact.
+ * - Anima's gauge rate was an `[estimate]` (C-4). It is +5 on each Pain and +5 for
+ *   every action that reaches her; her own turns and Boost add nothing. The WATCH
+ *   line says so.
+ * - The element order persisting into act three was `[single source]` (C-14). It is
+ *   Seymour's own index, which advances at every cast (Ice, Thunder, Water, Fire),
+ *   so act three carries on from act one. The act-three phase note says so.
  */
 
 import type { ChapterGuide } from './types.ts';
@@ -74,13 +75,13 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Poison Fang'] },
-      text: 'Poison is 600 a turn on him, a tenth of his bar — but only once the Guardians are dead, because Steal never disabled their Remedy',
-      cite: 'ffx-seymour-anima-macalania §1.1, §7 row 8',
+      text: 'Poison is 600 a turn on him, a tenth of his bar — but only once the Guardians are dead, because Steal never disabled their Remedy. His summon clears it, and so does his return',
+      cite: 'ffx-seymour-anima-macalania §1.1, §7 row 8; re-ffx-ai-seymour §3.5, §3.6',
     },
     {
       when: { labels: ['Banishing Blade', 'Magic Break'] },
-      text: 'Break his Magic and act three halves: Banishing Blade lands at a chance that ignores resistance outright and applies all four at once',
-      cite: 'ffx-seymour-anima-macalania §1.3, §7 row 7',
+      text: 'Break his Magic and his spells halve: Banishing Blade lands at a chance that ignores resistance outright and applies all four at once. His summon wipes the Break, and so does his return, so it counts in act three only if it lands after he is back',
+      cite: 'ffx-seymour-anima-macalania §1.3, §7 row 7; re-ffx-ai-seymour §3.5, §3.6',
     },
     {
       when: { labels: ['Haste'] },
@@ -104,8 +105,8 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Aerospark'] },
-      text: 'He opened the fight Shelled and this Yuna has no Dispel — Aerospark is the free aeon sub-command that strips it and doubles every spell aimed at him',
-      cite: 'ffx-seymour-anima-macalania §8.5, §7 row 4',
+      text: 'He casts Shell on his first turn and this Yuna has no Dispel — Aerospark is the free aeon sub-command that strips it and doubles every spell aimed at him',
+      cite: 'ffx-seymour-anima-macalania §8.5, §7 row 4; re-ffx-ai-seymour §3.4',
     },
     {
       when: { labels: ['Talk'] },
@@ -144,8 +145,8 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
     {
       name: '#',
       payload: 'Oblivion — sixteen hits across the field',
-      advice: 'Get Shield up. Her gauge is filling whether she acts or is targeted, and it is a race, not something to eat twice',
-      cite: 'ffx-seymour-anima-macalania §3.4, §6.3',
+      advice: 'Get Shield up. Her gauge gains 5 with each Pain and 5 with every action that reaches her; her own turns and Boost add nothing. It is a race, not something to eat twice',
+      cite: 'ffx-seymour-anima-macalania §3.4, §6.3; re-ffx-ai-seymour §3.6',
     },
   ],
 
@@ -165,8 +166,8 @@ export const SEYMOUR_ANIMA_MACALANIA_GUIDE: ChapterGuide = {
     {
       belowHpFraction: 0.5,
       label: 'Act 3 - alone',
-      note: 'Full health again, stronger magic, and the same spell twice in one turn. The published order holds, so the matching Nul still answers it.',
-      cite: 'ffx-seymour-anima-macalania §5.4, §12 C-14',
+      note: 'Full health again, stronger magic, and the same spell twice in one turn. His order carries on from act one, so the matching Nul still answers it.',
+      cite: 'ffx-seymour-anima-macalania §5.4; re-ffx-ai-seymour §3.4',
     },
   ],
 };

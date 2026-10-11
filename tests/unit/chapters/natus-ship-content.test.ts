@@ -81,12 +81,12 @@ describe('the pause card', () => {
   });
 });
 
-describe('music: B15, the named stand-in until a Natus cue is picked by ear', () => {
-  it("the record's battle cue is Chapter VII's, FFX only, and the story starts it before the battle", () => {
-    expect(SEYMOUR_NATUS.music.battle).toBe('boss-seymour-macalania');
+describe('music: B15, Natus has his own cue since 2026-10-10 (an ElevenLabs take; Chapter VII\'s `boss-seymour-macalania` was the named stand-in)', () => {
+  it("the record's battle cue is `boss-seymour-natus`, FFX only, and the story starts it before the battle", () => {
+    expect(SEYMOUR_NATUS.music.battle).toBe('boss-seymour-natus');
     expect(SEYMOUR_NATUS.music.scene).toBe('scene-gagazet');
     const pre = seymourNatusScripts.pre;
-    const cue = pre.findIndex((s) => s.type === 'music' && s.track === 'boss-seymour-macalania');
+    const cue = pre.findIndex((s) => s.type === 'music' && s.track === 'boss-seymour-natus');
     expect(cue).toBeGreaterThan(0);
     expect(cue).toBeLessThan(pre.findIndex((s) => s.type === 'battleStart'));
   });

@@ -108,7 +108,7 @@ const PRE: StoryScript = [
   beat(1000), // She does not answer. She raises her staff. So does he.
 
   // --- Link 1's card and lock line (B17) -------------------------------
-  music('boss-yojimbo', 1200), // B21 = b's stand-in boss cue, as the record has it
+  music('boss-isaaru', 1200), // his own cue since 2026-10-10 (B21 = b's stand-in was `boss-yojimbo`), as the record has it
   say('isaaru', 'Grothia! Close the way!'),
   say('yuna', "His Ifrit answers the same fayth. Mine won't come."),
   battleStart(),

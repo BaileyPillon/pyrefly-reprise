@@ -1,0 +1,91 @@
+{
+ "id": "ffx2-bahamut",
+ "size": "390x844",
+ "touch": true,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 8,
+    "y": 558,
+    "w": 374,
+    "h": 44,
+    "vis": true,
+    "t": "Shell → the party White Magic"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "battle-pause-chip ig ig--ffx2",
+    "x": 334,
+    "y": 10,
+    "w": 46,
+    "h": 46,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 297,
+    "y": 564,
+    "w": 77,
+    "h": 32,
+    "vis": true,
+    "t": "GUIDE"
+   }
+  ],
+  "cmd": {
+   "x": 8,
+   "y": 610,
+   "w": 374,
+   "h": 120,
+   "vis": true
+  },
+  "nextBest": ""
+ },
+ "actors": [
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna-white-mage"
+  },
+  {
+   "id": "rikku",
+   "kind": "party",
+   "art": "rikku-dark-knight"
+  },
+  {
+   "id": "paine",
+   "kind": "party",
+   "art": "paine-warrior"
+  },
+  {
+   "id": "bahamut",
+   "kind": "enemy",
+   "art": "ffx2-bahamut"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -857,10 +857,13 @@ export class PaintedStage implements BattleStage {
     });
   }
 
-  /** @param dt seconds. Drive from the screen's update loop. */
-  update(dt: number): void {
+  /**
+   * @param dt seconds. Drive from the screen's update loop.
+   * @param realDt the same frame's unscaled seconds (default `dt`): the actors' pose blends run on it, so a hit-stop that holds the field (`dt` 0) never freezes a crossfade half-mixed (FB-1, `PoseBlend.ts`).
+   */
+  update(dt: number, realDt: number = dt): void {
     for (const id of this.actors.keys()) this.placeAnchored(id);
-    for (const { actor } of this.actors.values()) actor.update(dt);
+    for (const { actor } of this.actors.values()) actor.update(dt, realDt);
     this.motion.update(dt); // RUN-IN: the camera truck and the smear's afterimages
     this.partRings.update(
       dt,

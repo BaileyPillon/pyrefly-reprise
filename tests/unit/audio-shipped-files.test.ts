@@ -187,11 +187,12 @@ describe('the shipped audio manifest', () => {
     }
   });
 
-  it('stays inside the shipping budget (100 MB under D-6xx, 2026-10-10; 90 MB since D-306, music and sfx sprite-v2 at LAME V0; 85 MB under D-292)', () => {
+  it('stays inside the shipping budget (105 MB for the FF7 cue of batch 1, driver item 53a of 2026-10-11 under Bailey\'s 23:05 words, superseding item 47e\'s 100 MB; 100 MB under D-6xx; 90 MB since D-306, music and sfx sprite-v2 at LAME V0; 85 MB under D-292)', () => {
     const total =
       Object.values(manifest!.music).reduce((sum, entry) => sum + (entry.bytes ?? 0), 0) +
       (manifest!.sfx!.bytes ?? 0) +
-      (manifest!.sfxV2?.bytes ?? 0); // D-302: the recorded set's second sprite counts too
+      (manifest!.sfxV2?.bytes ?? 0) + // D-302: the recorded set's second sprite counts too
+      Object.values(manifest!.sfxParity.packs).reduce((sum, pack) => sum + (pack.bytes ?? 0), 0); // SFX parity: every pack counts
     expect(total).toBeLessThan(AUDIO_BUDGET_BYTES);
   });
 });

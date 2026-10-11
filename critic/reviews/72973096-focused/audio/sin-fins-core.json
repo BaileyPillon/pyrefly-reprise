@@ -1,0 +1,194 @@
+{
+ "id": "sin-fins-core",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"sin-fins-core\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":114,\"elapsedTicks\":470,\"elapsedMs\":0,\"ap\":19800,\"exp\":0,\"gil\":20000,\"drops\":[{\"itemId\":\"return-sphere\",\"count\":1},{\"itemId\":\"mp-sphere\",\"count\":1}],\"overkilled\":[],\"sphereLevelsGained\":{\"tidus\":0,\"yuna\":0,\"auron\":",
+ "victorySfx": [
+  [
+   70.75733333333334,
+   "victory-fanfare",
+   "victory-fanfare",
+   "sprite"
+  ]
+ ],
+ "sfxNames": [
+  "v2:guard>v2:guard",
+  "v2:magic-charge>v2:magic-charge",
+  "v2:protect>v2:protect",
+  "v2:haste>v2:haste",
+  "v2:swing-staff>v2:swing-staff",
+  "v2:hit-staff>v2:hit-staff",
+  "v2:swing-sword>v2:swing-sword",
+  "v2:hit-sword>v2:hit-sword",
+  "v2:hit-katana>v2:hit-katana",
+  "v2:debuff-generic>v2:debuff-generic",
+  "v2:swing-katana>v2:swing-katana",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:status-applied>v2:status-applied",
+  "v2:cure-3>v2:cure-3",
+  "v2:buff-generic>v2:buff-generic",
+  "v2:swing-blitzball>v2:swing-blitzball",
+  "v2:hit-blitzball>v2:hit-blitzball",
+  "v2:counter>v2:counter",
+  "v2:thunder>v2:thunder",
+  "v2:item-use>v2:item-use",
+  "v2:critical>v2:critical",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies",
+  "explosion>explosion",
+  "v2:overdrive-full>v2:overdrive-full",
+  "v2:flare>v2:flare",
+  "v2:hit-1>v2:hit-1",
+  "v2:cure>v2:cure",
+  "v2:swing-doll>v2:swing-doll",
+  "v2:hit-doll>v2:hit-doll",
+  "v2:hit-2>v2:hit-2",
+  "v2:fire>v2:fire",
+  "v2:ice>v2:ice",
+  "v2:water>v2:water",
+  "victory-fanfare>victory-fanfare"
+ ],
+ "sfxN": 875,
+ "sfxTail": [
+  "70.312:v2:item-use:v2:item-use",
+  "70.34133333333334:v2:cure:v2:cure",
+  "70.37066666666666:v2:status-applied:v2:status-applied",
+  "70.392:v2:status-applied:v2:status-applied",
+  "70.54133333333333:v2:swing-sword:v2:swing-sword",
+  "70.66133333333333:v2:hit-sword:v2:hit-sword",
+  "70.73066666666666:v2:dissolve-pyreflies:v2:dissolve-pyreflies",
+  "70.75733333333334:victory-fanfare:victory-fanfare"
+ ],
+ "curAtEnd": null,
+ "playingAtEnd": null,
+ "musicTimeline": [
+  {
+   "t": 5803,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 10268,
+   "k": "battle|title|chapter-select:1.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": "chapter-select:1.00"
+  },
+  {
+   "t": 10803,
+   "k": "battle|title|chapter-select:0.05",
+   "s": "battle",
+   "cur": "title",
+   "g": "0",
+   "f": "chapter-select:0.05"
+  },
+  {
+   "t": 11522,
+   "k": "battle|title|chapter-select:0.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.14",
+   "f": "chapter-select:0.00"
+  },
+  {
+   "t": 13099,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 14272,
+   "k": "battle|boss-evrae|title:0.77",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "0",
+   "f": "title:0.77"
+  },
+  {
+   "t": 14428,
+   "k": "battle|boss-evrae|title:0.23",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "0",
+   "f": "title:0.23"
+  },
+  {
+   "t": 14567,
+   "k": "battle|boss-evrae|title:0.08",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "0",
+   "f": "title:0.08"
+  },
+  {
+   "t": 14722,
+   "k": "battle|boss-evrae|title:0.02",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "0",
+   "f": "title:0.02"
+  },
+  {
+   "t": 14866,
+   "k": "battle|boss-evrae|title:0.01",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "0.01",
+   "f": "title:0.01"
+  },
+  {
+   "t": 15026,
+   "k": "battle|boss-evrae|title:0.00",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "0.04",
+   "f": "title:0.00"
+  },
+  {
+   "t": 15638,
+   "k": "battle|boss-evrae|",
+   "s": "battle",
+   "cur": "boss-evrae",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 73098,
+   "k": "battle||boss-evrae:0.04",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-evrae:0.04"
+  },
+  {
+   "t": 73216,
+   "k": "battle||boss-evrae:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-evrae:0.00"
+  },
+  {
+   "t": 73367,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-evrae.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

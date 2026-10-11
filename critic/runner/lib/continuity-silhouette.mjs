@@ -19,6 +19,9 @@
 //                 false alarm there), and the mass was off by more than 25 percent for only 3 of the 9 poses whose head was.
 //                 A bounding box was tried first and rejected: one raised greatsword doubles it. A head and a mass are never
 //                 compared with each other.
+//   A third reading, the silhouette's CENTROID (`estimateCentroid`), is where a figure with no registration at all is followed from
+//   frame to frame (continuity-pure.mjs `figureTrack`, r40 instrument edit (a)): a stance read from a silhouette is the middle of the
+//   lowest thick part, and for a serpent, a floating aeon or a hanging fin that is whichever tip hangs lowest in that pose.
 //
 // Everything is in the painting's normalised coordinates (u across from the left, t down from the top, 0..1), so a 1x
 // master, a 2x master and the shipped WebP of either give the same answer.
@@ -110,6 +113,25 @@ export function estimateMass(m) {
   return n > 0 ? n / (m.w * m.h) : null;
 }
 
+/**
+ * The silhouette's centre of mass: where the solid part of the painting is, as the mean of its cells, normalised (u across from
+ * the left, t down from the top, 0..1). This is the point `outlineJump` calls the centroid of a silhouette (there it is measured on
+ * the screen grid), so a tracked centroid that steps at a hard cut steps by what the swap's `outline.centroidShiftPx` already reports.
+ * It is what a figure with NO registration is followed by (`figureTrack`'s centroid mode, r40 instrument edit (a)): the
+ * "lowest thick part" stance above is only trustworthy for a figure that stands on its feet, and a registration is the only thing
+ * that says which figures those are. Null for an empty mask.
+ */
+export function estimateCentroid(m) {
+  let n = 0, sx = 0, sy = 0;
+  for (let y = 0; y < m.h; y++) {
+    for (let x = 0; x < m.w; x++) {
+      if (!m.bits[y * m.w + x]) continue;
+      n++; sx += x + 0.5; sy += y + 0.5;
+    }
+  }
+  return n > 0 ? { u: sx / n / m.w, t: sy / n / m.h } : null;
+}
+
 // ------------------------------------------------------------------ the registration records
 
 /** The registration records file, or null when there is none. `subjects[subject].poses[pose]` = { head, size, stance, prone, ... }. */
@@ -146,7 +168,7 @@ export function anchorsFor({ url, mask, measure }) {
     // change of painting, and `subject` which dressphere or form it belongs to (a swap between two of them is a costume change, not a pose change).
     subject: sp?.subject ?? null, pose: sp?.pose ?? null, url: String(url ?? '').replace(/[?#].*$/, ''), mask, stale: Boolean(rec) && !fresh,
     prone: fresh ? Boolean(rec.prone) && !rec.standing : mask.srcW > mask.srcH * 1.15,
-    head: null, mass: estimateMass(mask), stance: null, stanceSrc: null,
+    head: null, mass: estimateMass(mask), centroid: estimateCentroid(mask), stance: null, stanceSrc: null,
   };
   if (fresh && Array.isArray(rec.head) && rec.head.length === 4) {
     const [w, h] = rec.size;

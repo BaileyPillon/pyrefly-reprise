@@ -633,8 +633,12 @@ Two inputs of the damage pipeline sit outside the command record. Both were chec
   `Chr+0x5d8` is the party-stats function (VA 0x0079c5f0), which zeroes it and adds the two equipped items' crit bytes. So a
   command with the equipment-bonus bit (flag word 2, bit 3) gives a monster no bonus at all, whatever its own crit byte says:
   Daigoro's attack (record 0x40b1, flag word 2 = 0xd, crit byte 20) has only the Luck terms, and the wiring supplies 0
-  for every enemy and aeon (`src/battle/ffx/equipment.ts#equipmentCrit` returns 0 for a combatant with no equipment). The
+  for every enemy (`src/battle/ffx/equipment.ts#equipmentCrit` returns 0 for a combatant with no equipment). The
   old engine read the byte instead, so that attack lost its 17% critical rate (a measured change, in the handoff).
+  **Correction, 2026-10-10 (re-parity W5; `research/re-ffx-overdrive-steal-aeons.md` section 4.6, run in the emulator for all ten aeons): for an AEON it is 6, not 0.**
+  `pp_BtlInitChr` builds an aeon's battle character with the same party-stats function as a party member's, and an aeon wears two fixed pieces of gear
+  with a crit byte of 3 each, so an aeon's critical chance on a command with the equipment-bonus bit is `Luck - target Luck + 6`. The same function gives nine
+  aeons Pierce and five of them Break Damage Limit. The wiring is `src/battle/ffx/aeon-gear.ts`; only the monster half of this bullet stands.
 - **The weapon command is Strength 16 for everyone.** `Chr+0x5c1` (the weapon formula) and `Chr+0x5c7` (its power) are set
   to 1 and 0x10 by the party-stats function and by the monster branch of `pp_BtlInitChr` alike, so a command that takes
   its formula and power from the weapon (record bit 18, 23 commands) always runs Strength 16, which is what the ability data

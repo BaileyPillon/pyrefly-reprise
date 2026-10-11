@@ -33,8 +33,10 @@
  * - `sceneKey: 'farplane'` — **placeholder**: the approved Farplane scene.
  *   The Road plate (O-3 A, with B between links) is painted and installed, but
  *   the Road scene that draws it (plan track T5) is not built.
- * - `music` — **FA15 a** (picked): `boss-ffx2-aeon` on all three links, field
- *   bed `scene-farplane`, and the FFX-2 fanfare.
+ * - `music` — **FA15 a** (picked): the aeon fight's cue on all three links, field
+ *   bed `scene-farplane`, and the FFX-2 fanfare. The cue is `boss-ffx2-fallen-aeons` since
+ *   2026-10-10 (an ElevenLabs take, shared with Ixion, Chapter XVI: the game plays the same
+ *   track at both); it was the shared `boss-ffx2-aeon` stand-in before that.
  * - `scriptsRef` — **placeholder**: a silent pre scene that opens the battle
  *   and a silent post scene that shows results. The beats and FA16's callouts
  *   are drafted in `docs/plans/fallen-aeons-story-draft.md`; this track does
@@ -78,7 +80,7 @@ export const FFX2_FALLEN_AEONS: Chapter = {
   scriptsRef: FALLEN_AEONS_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {
     scene: 'scene-farplane',
-    battle: 'boss-ffx2-aeon',
+    battle: 'boss-ffx2-fallen-aeons',
     victory: 'victory-ffx2',
   },
   sensorTexts: {

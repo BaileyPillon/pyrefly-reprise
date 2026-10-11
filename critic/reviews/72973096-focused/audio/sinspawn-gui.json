@@ -1,0 +1,212 @@
+{
+ "id": "sinspawn-gui",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"sinspawn-gui\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":21,\"elapsedTicks\":180,\"elapsedMs\":0,\"ap\":784,\"exp\":0,\"gil\":4000,\"drops\":[{\"itemId\":\"lv-1-key-sphere\",\"count\":6}],\"overkilled\":[\"sinspawn-gui-arm-left\",\"sinspawn-gui-head\",\"sinspawn-gui-arm-right\",\"sinspawn-gui-2\"],",
+ "victorySfx": [
+  [
+   24.261333333333333,
+   "victory-fanfare",
+   "victory-fanfare",
+   "sprite"
+  ]
+ ],
+ "sfxNames": [
+  "battle-start>battle-start",
+  "v2:magic-charge>v2:magic-charge",
+  "v2:haste>v2:haste",
+  "v2:counter>v2:counter",
+  "v2:thunder>v2:thunder",
+  "v2:swing-katana>v2:swing-katana",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:ko-fall>v2:ko-fall",
+  "v2:item-use>v2:item-use",
+  "v2:phoenix-down>v2:phoenix-down",
+  "v2:status-applied>v2:status-applied",
+  "v2:cure>v2:cure",
+  "v2:hit-katana>v2:hit-katana",
+  "v2:debuff-generic>v2:debuff-generic",
+  "v2:boss-roar>v2:boss-roar",
+  "v2:fire>v2:fire",
+  "v2:buff-generic>v2:buff-generic",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies",
+  "v2:flare>v2:flare",
+  "v2:hit-1>v2:hit-1",
+  "v2:swing-sword>v2:swing-sword",
+  "v2:critical>v2:critical",
+  "v2:hit-sword>v2:hit-sword",
+  "v2:whiff>v2:whiff",
+  "v2:swing-staff>v2:swing-staff",
+  "v2:hit-staff>v2:hit-staff",
+  "victory-fanfare>victory-fanfare"
+ ],
+ "sfxN": 272,
+ "sfxTail": [
+  "23.941333333333333:v2:hit-heavy-enemy:v2:hit-heavy-enemy",
+  "23.952:v2:status-applied:v2:status-applied",
+  "24:v2:magic-charge:v2:magic-charge",
+  "24.021333333333335:v2:cure:v2:cure",
+  "24.112:v2:magic-charge:v2:magic-charge",
+  "24.152:v2:fire:v2:fire",
+  "24.221333333333334:v2:dissolve-pyreflies:v2:dissolve-pyreflies",
+  "24.261333333333333:victory-fanfare:victory-fanfare"
+ ],
+ "curAtEnd": null,
+ "playingAtEnd": null,
+ "musicTimeline": [
+  {
+   "t": 5580,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 7269,
+   "k": "battle|title|chapter-select:0.67",
+   "s": "battle",
+   "cur": "title",
+   "g": "0",
+   "f": "chapter-select:0.67"
+  },
+  {
+   "t": 8634,
+   "k": "battle|title|chapter-select:0.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.4",
+   "f": "chapter-select:0.00"
+  },
+  {
+   "t": 10712,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 11448,
+   "k": "battle|boss-dread|title:1.00",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "1",
+   "f": "title:1.00"
+  },
+  {
+   "t": 11600,
+   "k": "battle|boss-dread|title:0.32",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "0",
+   "f": "title:0.32"
+  },
+  {
+   "t": 11762,
+   "k": "battle|boss-dread|title:0.09",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "0",
+   "f": "title:0.09"
+  },
+  {
+   "t": 11913,
+   "k": "battle|boss-dread|title:0.03",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "0",
+   "f": "title:0.03"
+  },
+  {
+   "t": 12048,
+   "k": "battle|boss-dread|title:0.01",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "0.01",
+   "f": "title:0.01"
+  },
+  {
+   "t": 12193,
+   "k": "battle|boss-dread|title:0.00",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "0.03",
+   "f": "title:0.00"
+  },
+  {
+   "t": 12949,
+   "k": "battle|boss-dread|",
+   "s": "battle",
+   "cur": "boss-dread",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 21413,
+   "k": "battle||boss-dread:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-dread:0.00"
+  },
+  {
+   "t": 21822,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  },
+  {
+   "t": 24192,
+   "k": "battle|boss-seymour|",
+   "s": "battle",
+   "cur": "boss-seymour",
+   "g": "0",
+   "f": ""
+  },
+  {
+   "t": 26428,
+   "k": "battle||boss-seymour:0.56",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-seymour:0.56"
+  },
+  {
+   "t": 26582,
+   "k": "battle||boss-seymour:0.01",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-seymour:0.01"
+  },
+  {
+   "t": 26739,
+   "k": "battle||boss-seymour:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-seymour:0.00"
+  },
+  {
+   "t": 26880,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-dread.mp3",
+  "music/boss-seymour.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

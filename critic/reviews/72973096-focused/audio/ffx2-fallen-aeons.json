@@ -1,0 +1,177 @@
+{
+ "id": "ffx2-fallen-aeons",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"ffx2-fallen-aeons\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":44,\"elapsedTicks\":251775,\"elapsedMs\":83925,\"ap\":54,\"exp\":23000,\"gil\":7000,\"drops\":[{\"itemId\":\"crystal-gloves\",\"count\":1},{\"itemId\":\"pixie-dust\",\"count\":1},{\"itemId\":\"faerie-earrings\",\"count\":1},{\"itemId\":\"faer",
+ "victorySfx": [
+  [
+   49.98133333333333,
+   "victory-fanfare",
+   "victory-fanfare",
+   "sprite"
+  ]
+ ],
+ "sfxNames": [
+  "v2:magic-charge-x2>v2:magic-charge-x2",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:shell>v2:shell",
+  "v2:status-applied>v2:status-applied",
+  "v2:swing-greatsword>v2:swing-greatsword",
+  "v2:hit-2>v2:hit-2",
+  "v2:item-use-x2>v2:item-use-x2",
+  "v2:cure-x2>v2:cure-x2",
+  "v2:hit-dagger>v2:hit-dagger",
+  "v2:hit-greatsword>v2:hit-greatsword",
+  "v2:ice-x2>v2:ice-x2",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies",
+  "v2:thunder-x2>v2:thunder-x2",
+  "v2:whiff>v2:whiff",
+  "v2:fire-x2>v2:fire-x2",
+  "v2:flare-x2>v2:flare-x2",
+  "v2:buff-generic-x2>v2:buff-generic-x2",
+  "v2:poison>v2:poison",
+  "v2:hit-gun>v2:hit-gun",
+  "v2:protect>v2:protect",
+  "v2:silence>v2:silence",
+  "v2:spherechange>v2:spherechange",
+  "v2:shot-gun>v2:shot-gun",
+  "v2:critical>v2:critical",
+  "victory-fanfare>victory-fanfare"
+ ],
+ "sfxN": 315,
+ "sfxTail": [
+  "49.30133333333333:v2:magic-charge-x2:v2:magic-charge-x2",
+  "49.44:v2:shot-gun:v2:shot-gun",
+  "49.48:v2:hit-gun:v2:hit-gun",
+  "49.541333333333334:v2:hit-2:v2:hit-2",
+  "49.93066666666667:v2:hit-2:v2:hit-2",
+  "49.96:v2:hit-2:v2:hit-2",
+  "49.970666666666666:v2:dissolve-pyreflies:v2:dissolve-pyreflies",
+  "49.98133333333333:victory-fanfare:victory-fanfare"
+ ],
+ "curAtEnd": null,
+ "playingAtEnd": null,
+ "musicTimeline": [
+  {
+   "t": 5641,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 6467,
+   "k": "battle|title|chapter-select:0.14",
+   "s": "battle",
+   "cur": "title",
+   "g": "0",
+   "f": "chapter-select:0.14"
+  },
+  {
+   "t": 6971,
+   "k": "battle|title|chapter-select:0.01",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.01",
+   "f": "chapter-select:0.01"
+  },
+  {
+   "t": 7401,
+   "k": "battle|title|chapter-select:0.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.16",
+   "f": "chapter-select:0.00"
+  },
+  {
+   "t": 8371,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 9550,
+   "k": "battle|boss-ffx2-aeon|title:0.69",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.69"
+  },
+  {
+   "t": 9712,
+   "k": "battle|boss-ffx2-aeon|title:0.11",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.11"
+  },
+  {
+   "t": 9849,
+   "k": "battle|boss-ffx2-aeon|title:0.03",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.03"
+  },
+  {
+   "t": 10002,
+   "k": "battle|boss-ffx2-aeon|title:0.00",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0.03",
+   "f": "title:0.00"
+  },
+  {
+   "t": 10447,
+   "k": "battle|boss-ffx2-aeon|",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 52149,
+   "k": "battle||boss-ffx2-aeon:1.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-ffx2-aeon:1.00"
+  },
+  {
+   "t": 52293,
+   "k": "battle||boss-ffx2-aeon:0.01",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-ffx2-aeon:0.01"
+  },
+  {
+   "t": 52446,
+   "k": "battle||boss-ffx2-aeon:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-ffx2-aeon:0.00"
+  },
+  {
+   "t": 52592,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-ffx2-aeon.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

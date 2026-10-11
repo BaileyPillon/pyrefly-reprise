@@ -52,7 +52,7 @@ export function runScriptedExtra(
 
   const gaugeGain = extra['overdriveGaugeGain'];
   if (typeof gaugeGain === 'number' && gaugeGain > 0) {
-    addGauge(ctx, target, gaugeGain, def.id);
+    addGauge(ctx, target, gaugeGain, def.id); // the game's gauge add for a party member or an aeon, a plain sum for an enemy's script gauge
   }
 
   // **Steal.** §7.8.1's roll, its per-monster counter and its message; see

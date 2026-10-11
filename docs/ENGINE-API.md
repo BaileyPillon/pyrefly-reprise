@@ -382,14 +382,14 @@ FF7, an aeon, a fiend or `?stature=off`.
 
 | Member | Meaning |
 | --- | --- |
-| `update(dt)` | **Every frame**, seconds. Drives tweens and every motion layer. |
-| `setPose(name, { immediate?, force? })`, `pose`, `poseNames` | Crossfade between poses — **and enter the matching life state**. See [Life](#life-the-pose-name-is-also-a-state). |
+| `update(dt, realDt = dt)` | **Every frame**, seconds. Drives tweens and every motion layer on `dt`; the pose crossfade runs on `realDt` (the unscaled frame time: a hit-stop that holds the field never freezes it, the pacing option never stretches it). |
+| `setPose(name, { immediate?, force? })`, `pose`, `poseNames`, `blending` | Crossfade between poses — **and enter the matching life state**. See [Life](#life-the-pose-name-is-also-a-state). One owned blend at a time (`src/engine/PoseBlend.ts`): a request in mid-blend keeps the stronger painting going out and re-points only the weaker plane, from 0. FB-2 (Bailey's P2-A, both games): the **stepped dissolve** (`STEPPED_DISSOLVE`) is built: the lesser painting never shows above 0.30 (the new one comes up to 0.30 under the old at full, the pair steps to 0.30 and 0.70 at 0.4 of the length, then the old one goes out and the new one comes in), so two paintings that barely overlap never read as a double image; the length stays the actor's `crossfadeMs` (120 party, 140 foes). **It ships OFF by default (driver decision 53b, 2026-10-11):** an actor runs the plain `quadInOut` dissolve, because the critic's harness reads the stepped shape's one-frame step as a jump (78 of 560 pose-swap pairs at 40 px or more against none; `docs/handoff/r40-blend-jerk.md`) until Bailey has seen new loops and picked. `?poseblend=stepped` turns the stepped shape on for the page (`?poseblend=plain` or `legacy` forces the plain one); the code default is `POSE_BLEND_STEPPED_DEFAULT` in `PoseBlend.ts`. |
 | `lifeState` | What the body is doing: `idle \| ready \| act \| guard \| hurt \| down \| victory`. |
 | `adoptPoses(map, initial?)` | Take already-loaded textures (a stand-in borrowing another actor's painting). Borrowed textures are never disposed by this actor. |
 | `reloadPose(name, url?)` | Re-read one pose from disk; used by the dev hot-swap. |
 | `flash(colour?, ms?, peak?)` | Additive hit flash, weighted by alpha. |
 | `lunge(distance?, ms?)` | Step forward along `facing` and settle. Promise. |
-| `recoil(ms?, distance?)`, `squash(ms?, amount?)`, `hop(height?, ms?)` | Promise-returning impact layers. |
+| `recoil(ms?, distance?)`, `squash(ms?, amount?)`, `hop(height?, ms?)` | Promise-returning impact layers. The knock-back inside `recoil` is `src/engine/HitRecoil.ts` (r40-recoil, FC-1): an 80 ms eased push from where the figure is, then a spring home with one overshoot under a tenth of the distance, over the caller's `ms`; progress 0 writes where the figure already is, so a hit-stop (field `dt` 0) never throws it. `?recoil=legacy` brings back the old `elasticOut` tween for A/B captures. |
 | `shake(amount?, ms?)` | Damped jitter in world units. |
 | `dissolveTo(v, ms?, colour?)` / `setDissolve(v)` | Pyrefly dissolve; 0 solid, 1 gone. KO and sending. |
 | `fadeTo(a, ms?, easing?)` / `setAlpha(a)` / `alpha` | Opacity, shadow included. |

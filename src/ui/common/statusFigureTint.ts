@@ -27,7 +27,7 @@ type ColourCell = Cell<{ set(c: number): unknown }>;
 /** The figure surface this needs; `PaintedActor` has all of it. */
 export interface TintFigure {
   setTint(colour: number | string): void;
-  update(dt: number): void;
+  update(dt: number, realDt?: number): void;
   traverse(fn: (o: unknown) => void): void;
   /** The one-shot moves (`PaintedActor.tweens`): run at the action pace even while frozen. */
   readonly tweens?: { update(dt: number): void };
@@ -208,10 +208,10 @@ export class StatusFigureTint {
         // The freeze: the figure's idle clock stands still while Stop holds it, except inside an
         // action that names it (or just after an event did); its one-shot moves run on, at the
         // pace `PaintedActor.update` gives them, so no presenter beat can wait on it (PR-0281).
-        entry.wrapper = (dt: number): void => {
-          if (!this.frozen(id, entry)) return entry.update(dt);
+        entry.wrapper = (dt: number, realDt: number = dt): void => {
+          if (!this.frozen(id, entry)) return entry.update(dt, realDt);
           fig.tweens?.update(dt * paceRate('action'));
-          entry.update(0);
+          entry.update(0, realDt); // the idle stands still; the pose blend (FB-1) runs on the real clock like any other one-shot move
         };
         fig.update = entry.wrapper;
       }

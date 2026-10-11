@@ -94,7 +94,7 @@ import { GAGAZET_AEON_ARM, armHighbridgeAeons } from './gagazet-aeon-arms.ts';
 import { macalaniaBuild } from './macalania.ts';
 
 /** The *Fahrenheit*'s orders to Cid [ffx-evrae-airship §4.2]: Chapter VIII only. */
-const AIRSHIP_ONLY: readonly string[] = ['pull-back', 'close-in'];
+const AIRSHIP_ONLY: readonly string[] = ['pull-back', 'close-in', 'cancel-order'];
 
 /** This fight's Talk table [ffx-seymour-natus-highbridge §6.2, verified: 4 sources]. */
 const TALKERS: readonly string[] = ['tidus', 'auron', 'yuna'];

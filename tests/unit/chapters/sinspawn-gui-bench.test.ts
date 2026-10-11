@@ -65,7 +65,8 @@ describe('the lines it must beat', () => {
     // eslint-disable-next-line no-console
     console.log(`GUI BENCH advisor without Power Break (${SEEDS} seeds): ${summarise(runs)}`);
     expect(withPb - rate(runs)).toBeGreaterThanOrEqual(0.1);
-  });
+    // Two 200-seed sweeps on the shared Overdrive gauge (re-parity W5, release candidate 2): about 14 s on the 39.4.4 engine, 20 to 25 s now, so the 15 s default is not enough.
+  }, 120_000);
 });
 
 describe('determinism', () => {

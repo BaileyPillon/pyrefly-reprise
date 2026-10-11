@@ -127,7 +127,8 @@ class Mix {
     });
   }
 
-  update(dt: number): void {
+  /** @param realDt the same frame's unscaled seconds (default `dt`): the KO's cross runs on it, so a hit-stop never freezes it (`KoFall.ts`). */
+  update(dt: number, realDt: number = dt): void {
     const t0 = performance.now();
     const parts = partsOn(liveGates(this.game));
     const tier = eyeCandy.tier;
@@ -191,7 +192,7 @@ class Mix {
       for (const a of actors) {
         let f = this.living.get(a);
         if (!f && (parts.breathing || parts.koCollapse)) this.living.set(a, (f = new LivingFigure(a)));
-        f?.update({ dt, game: this.game, breath: parts.breathing, collapse: parts.koCollapse, rm, grid });
+        f?.update({ dt, realDt, game: this.game, breath: parts.breathing, collapse: parts.koCollapse, rm, grid });
       }
     }
     // FFX-2: the spherechange's twirl-key slot (part of DRESSPHERE SHOT, not under REDUCE MOTION: a twirl is
@@ -319,8 +320,8 @@ export function bindMaxMix(b: MixBind): void {
 }
 
 /** Every frame, after the rig has placed the camera and before the render. */
-export function updateMaxMix(dt: number): void {
-  current?.update(dt);
+export function updateMaxMix(dt: number, realDt: number = dt): void {
+  current?.update(dt, realDt);
 }
 
 export function releaseMaxMix(): void {

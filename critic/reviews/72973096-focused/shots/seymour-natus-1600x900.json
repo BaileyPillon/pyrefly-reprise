@@ -1,0 +1,144 @@
+{
+ "id": "seymour-natus",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": false,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": false,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 517,
+    "y": 244,
+    "w": 457,
+    "h": 151,
+    "vis": true,
+    "t": "NEXT BEST MOVE Tidus Talk NO MP Talking to him is free power in this fight: +10 Strength f"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "ffx-sensor__chips",
+    "x": 1048,
+    "y": 118,
+    "w": 210,
+    "h": 70,
+    "vis": true,
+    "t": "FIRE ICE THUNDER WATER HOLY GRAV"
+   },
+   {
+    "cls": "ffx-sensor__chip ",
+    "x": 1048,
+    "y": 118,
+    "w": 67,
+    "h": 33,
+    "vis": true,
+    "t": "FIRE"
+   },
+   {
+    "cls": "ffx-sensor__chip-icon",
+    "x": 1053,
+    "y": 125,
+    "w": 18,
+    "h": 18,
+    "vis": true,
+    "t": ""
+   },
+   {
+    "cls": "ffx-sensor__chip ",
+    "x": 1120,
+    "y": 118,
+    "w": 67,
+    "h": 33,
+    "vis": true,
+    "t": "ICE"
+   },
+   {
+    "cls": "ffx-sensor__chip-icon",
+    "x": 1130,
+    "y": 125,
+    "w": 18,
+    "h": 18,
+    "vis": true,
+    "t": ""
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 76,
+   "y": 445,
+   "w": 469,
+   "h": 391,
+   "vis": true
+  },
+  "nextBest": "NEXT BEST MOVE Tidus Talk NO MP Talking to him is free power in this fight: +10 Strength for Tidus and Auron, +10 Magic Defense for Yuna. N HIDE MOVES E ENEMY MOVE PAUSE"
+ },
+ "actors": [
+  {
+   "id": "tidus",
+   "kind": "party",
+   "art": "tidus"
+  },
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna"
+  },
+  {
+   "id": "kimahri",
+   "kind": "party",
+   "art": "kimahri"
+  },
+  {
+   "id": "seymour-natus",
+   "kind": "enemy",
+   "art": "seymour-natus"
+  },
+  {
+   "id": "mortibody",
+   "kind": "enemy",
+   "art": "mortibody"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

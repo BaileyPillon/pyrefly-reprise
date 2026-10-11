@@ -1,0 +1,26 @@
+{
+ "sinspawn-gui": {
+  "keysBefore": [
+   "pyrefly-reprise:save:v1"
+  ],
+  "changed": [
+   "pyrefly-reprise:experiments:v1"
+  ]
+ },
+ "ffx2-masterpiece-theatre": {
+  "keysBefore": [
+   "pyrefly-reprise:save:v1"
+  ],
+  "changed": [
+   "pyrefly-reprise:experiments:v1"
+  ]
+ },
+ "seymour-flux": {
+  "keysBefore": [
+   "pyrefly-reprise:save:v1"
+  ],
+  "changed": [
+   "pyrefly-reprise:save:v1"
+  ]
+ }
+}

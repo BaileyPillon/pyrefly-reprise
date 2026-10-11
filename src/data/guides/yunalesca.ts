@@ -34,9 +34,9 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
       cite: 'ffx-yunalesca §10.5, §7.1',
     },
     {
-      text: 'Form I is a Darkness fight: she counters every landed physical hit with Blind, and Darkness drops physical accuracy to base/10. Cure it or stop swinging.',
-      short: 'Form I answers every physical hit with Blind',
-      cite: 'ffx-yunalesca §5.1, ffx-combat-core §4.2',
+      text: 'Form I is a Darkness fight: she answers every physical action that reaches her, a miss included, with Blind, unless the member she last picked is already blind; Darkness drops physical accuracy to base/10. Cure it or stop swinging.',
+      short: 'Form I answers every physical action with Blind',
+      cite: 'ffx-yunalesca §5.1, ffx-combat-core §4.2; re-ffx-ai-yunalesca-bfa §2.9',
     },
     {
       text: 'Summon only in Form III, and Overdrive on arrival. Aeons postpone Mega Death rather than dying to it, but Mind Blast Curses them on step one and a Cursed aeon can never Overdrive.',
@@ -53,8 +53,8 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Eye Drops'] },
-      text: 'Blind is her Form I counter to every landed physical hit, and it takes physical accuracy down to base/10 — the measured run blinded itself out of the fight, 18 hits to 21 misses',
-      cite: 'ffx-yunalesca §5.1',
+      text: 'Blind is her Form I counter to every physical action that reaches her, a miss included, and it takes physical accuracy down to base/10 — the measured run blinded itself out of the fight, 18 hits to 21 misses',
+      cite: 'ffx-yunalesca §5.1; re-ffx-ai-yunalesca-bfa §2.9',
     },
     {
       when: { labels: ['Dispel'] },
@@ -114,8 +114,8 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
     {
       formIndex: 0,
       label: 'Form I',
-      note: 'She counters every landed physical with Blind and every spell with Silence. Cure the counter or stop swinging; summoning here is a net loss, because Absorb heals her.',
-      cite: 'ffx-yunalesca §5.1, §10.6',
+      note: 'She answers every physical action that reaches her with Blind and every spell with Silence, misses included, and an item or special with Sleep; the Blind and the Silence are skipped while the member she last picked already has it. Cure the counter or stop swinging; summoning here is a net loss, because Absorb heals her.',
+      cite: 'ffx-yunalesca §5.1, §10.6; re-ffx-ai-yunalesca-bfa §2.9',
     },
     {
       formIndex: 1,

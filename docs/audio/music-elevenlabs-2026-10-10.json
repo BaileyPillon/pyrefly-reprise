@@ -3,9 +3,9 @@
   "source": "elevenlabs-music_v2_5",
   "words": "Whatever you recommend for sound effects and music I'll go with those recommendations (Bailey, 2026-10-10, about 18:20 EDT), accepting the driver's picks LB-M5 for Leblanc and BH-M4 for Bahamut",
   "gameCase": "FFX-2 only: the Bahamut fight of Chapter IV; the Leblanc fight of Chapter VI and the hidden Leblanc chapter. Every other chapter keeps its cue (boss-ffx2-aeon stays for the Fallen Aeons, Ixion, Trema and the Experiment); the Leblanc chateau scene bed (scene-bevelle-underground) is unchanged.",
-  "master": "The files are the lanes' staged masters (a gain to -16 LUFS and the loop cut), installed byte for byte; their manifest entries are the lanes' own (D:/Tools/pyrefly-scratch/2026-10-10/leblanc-audio-options/work/LB-M5-master.json and bahamut-music/stage/bh-m4.manifest-entry.json).",
+  "master": "The files are the lanes' staged masters (a gain to -16 LUFS and the loop cut), installed byte for byte; their manifest entries are the lanes' own (D:/Tools/pyrefly-scratch/2026-10-10/leblanc-audio-options/work/LB-M5-master.json and bahamut-music/stage/bh-m4.manifest-entry.json). On 2026-10-11 (driver item 53e, PR-0425) the cues whose stereo image failed the THEMES.md gate were narrowed in mid/side and re-encoded at LAME V4; for those, `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's staged master as first installed, and `stereoFix` points at docs/audio/music-stereo-53e-2026-10-11.json.",
   "synthFallback": "Both cues are stand-ins in src/audio/tracks/index.ts for boss-ffx2-aeon's score: it plays only when the MP3 cannot load. No new synth score was written.",
-  "notMeasured": "The stereo gate of THEMES.md and the headless browser proof were not run on these two files; agents cannot hear (rule 13), so the pick is a listening verdict nobody here made beyond Bailey's delegation.",
+  "notMeasured": "The stereo gate of THEMES.md was measured on 2026-10-11 and is pinned in docs/audio/music-stereo-53e-2026-10-11.json; the headless browser proof was not run on these two files; agents cannot hear (rule 13), so the pick is a listening verdict nobody here made beyond Bailey's delegation.",
   "cues": [
     {
       "cue": "boss-bahamut",
@@ -24,18 +24,48 @@
         "bytes": 1536462
       },
       "file": {
-        "bytes": 1379184,
-        "sha256": "f686324c3e55a047b89501c25bdc424e11b4335a19229510b5dd59d832742156"
+        "bytes": 1341547,
+        "sha256": "4627e4c81fd2cef5ae4ee2f5d5e4075dea10875ab325221a548aa17ab243b636"
       },
       "manifestEntry": {
         "file": "music/boss-bahamut.mp3",
         "loopStart": 12.671678,
         "loopEnd": 75.83644,
         "duration": 78.8364,
-        "bytes": 1379184,
-        "lufs": -16,
+        "bytes": 1341547,
+        "lufs": -16.0,
         "truePeakDb": -2.4,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1379184,
+        "sha256": "f686324c3e55a047b89501c25bdc424e11b4335a19229510b5dd59d832742156",
+        "manifestEntry": {
+          "file": "music/boss-bahamut.mp3",
+          "loopStart": 12.671678,
+          "loopEnd": 75.83644,
+          "duration": 78.8364,
+          "bytes": 1379184,
+          "lufs": -16,
+          "truePeakDb": -2.4,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.408,
+            "sideMid": -3.72,
+            "monoLoss": -1.54
+          },
+          "after": {
+            "corr": 0.703,
+            "sideMid": -7.5,
+            "monoLoss": -0.71
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       }
     },
     {
@@ -234,18 +264,48 @@
         "bytes": 3511725
       },
       "file": {
-        "bytes": 1554446,
-        "sha256": "f7ef671d2b880461b54096cf37d67d1c4fa08bcb3ba68091e30607ebedb00bf2"
+        "bytes": 1471333,
+        "sha256": "886579bde3051dbc6a2e5ec77770e09dffa76efd712aa8851ab654f7eabd6c05"
       },
       "manifestEntry": {
         "file": "music/boss-leblanc.mp3",
         "loopStart": 5.878753,
         "loopEnd": 76.122268,
         "duration": 79.1223,
-        "bytes": 1554446,
-        "lufs": -16,
-        "truePeakDb": -4,
+        "bytes": 1471333,
+        "lufs": -16.0,
+        "truePeakDb": -3.1,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1554446,
+        "sha256": "f7ef671d2b880461b54096cf37d67d1c4fa08bcb3ba68091e30607ebedb00bf2",
+        "manifestEntry": {
+          "file": "music/boss-leblanc.mp3",
+          "loopStart": 5.878753,
+          "loopEnd": 76.122268,
+          "duration": 79.1223,
+          "bytes": 1554446,
+          "lufs": -16,
+          "truePeakDb": -4,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.257,
+            "sideMid": -2.28,
+            "monoLoss": -2.02
+          },
+          "after": {
+            "corr": 0.697,
+            "sideMid": -7.46,
+            "monoLoss": -0.72
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       }
     }
   ]

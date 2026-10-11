@@ -154,6 +154,7 @@ export const COMMAND_RECORDS_PLAYER: Readonly<Record<string, FFXCommandRecord>> 
   'talk': { id: 0x3105, type: 0, flagsMisc: 0x81006, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Talk
   'fury': { id: 0x311d, type: 4, flagsMisc: 0x4001002, flagsDamage: 0x0, damageClass: 0, rank: 0 }, // Fury
   'pull-back': { id: 0x3107, type: 0, flagsMisc: 0x81006, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Pull back
+  'cancel-order': { id: 0x3108, type: 0, flagsMisc: 0x81006, flagsDamage: 0x0, damageClass: 0, rank: 3 }, // Cancel
   'valefor-attack': { id: 0x30cb, type: 0, flagsMisc: 0x501002a, flagsDamage: 0xd, damageClass: 1, shatter: 30, rank: 3 }, // Attack (picked by hand)
   'sonic-wings': { id: 0x30cc, type: 0, flagsMisc: 0x5012006, flagsDamage: 0xd, damageClass: 1, shatter: 30, rank: 2 }, // Sonic Wings
   'energy-ray': { id: 0x30ce, type: 0, flagsMisc: 0x44011006, flagsDamage: 0x0, damageClass: 1, shatter: 100, rank: 8 }, // Energy Ray

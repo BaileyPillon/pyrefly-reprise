@@ -1,0 +1,103 @@
+{
+ "id": "ffx2-trema",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 654,
+    "y": 681,
+    "w": 483,
+    "h": 154,
+    "vis": true,
+    "t": "NEXT BEST MOVE Paine Attack → Paragon 6,436–7,268 NO MP 100% TO HIT 95% CRIT Physical dama"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Oversoul!"
+   },
+   {
+    "cls": "battle-pause-chip ig ig--ffx2",
+    "x": 19,
+    "y": 18,
+    "w": 96,
+    "h": 24,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 1246,
+   "y": 351,
+   "w": 324,
+   "h": 258,
+   "vis": true
+  },
+  "nextBest": "NEXT BEST MOVE Paine Attack → Paragon 6,436–7,268 NO MP 100% TO HIT 95% CRIT Physical damage Most damage on the board — 6838 to Paragon. N HIDE MOVES PARAGON ACTS NEXT No action SCRIPTED Spends the turn and"
+ },
+ "actors": [
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna-dark-knight"
+  },
+  {
+   "id": "paragon",
+   "kind": "enemy",
+   "art": "paragon"
+  },
+  {
+   "id": "rikku",
+   "kind": "party",
+   "art": "rikku-alchemist"
+  },
+  {
+   "id": "paine",
+   "kind": "party",
+   "art": "paine-dark-knight"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

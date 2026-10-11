@@ -14,9 +14,10 @@
  *   used as installed, judge-locked);
  * - `scriptsRef` — the story (`src/story/scripts/ffx-isaaru.ts`, from
  *   `docs/plans/isaaru-story-draft.md`: B14 a, B15 a, B17);
- * - `music` — the record's own: B21's new "Still Water" cue is not sketched
- *   yet, so the stand-ins stay (`scene-gagazet` under the walk in,
- *   `boss-yojimbo` for the duel; FFX cues only).
+ * - `music` — the record's own: B21's "Still Water" cue is not written, so the scene
+ *   stand-in stays (`scene-gagazet` under the walk in) and the duel plays
+ *   `boss-isaaru`, an ElevenLabs take since 2026-10-10 (`boss-yojimbo` stood in
+ *   before; FFX cues only).
  *
  * **Listed** 2026-09-25 (Bailey: "All your recommendations", Chapter XIV as
  * is), as commit 5c8706d6 listed Chapter XIII: `./encounters.ts` puts this

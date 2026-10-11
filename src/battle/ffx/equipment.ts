@@ -14,6 +14,7 @@ import type {
   FFXCombatant,
   StatusId,
 } from '../common/types.ts';
+import { aeonGearOf } from './aeon-gear.ts';
 
 /**
  * The structural slice of "someone wearing FFX gear".
@@ -46,8 +47,12 @@ export function bearerHasAuto(b: EquipmentBearer, id: AutoAbilityId): boolean {
   return eq.weapon.autoAbilities.includes(id) || eq.armor.autoAbilities.includes(id);
 }
 
-/** Sum of the weapon's and armour's bonus critical rates, in percentage points. */
+/**
+ * Sum of the weapon's and armour's bonus critical rates, in percentage points. An aeon wears fixed gear the engine does not
+ * list: the game gives every aeon 6 (re-parity W5, `aeon-gear.ts`).
+ */
 export function equipmentCrit(c: FFXCombatant): number {
+  if (c.side === 'aeon') return aeonGearOf(c).critBonus;
   const eq = c.equipment;
   if (!eq) return 0;
   return (eq.weapon.bonusCrit ?? 0) + (eq.armor.bonusCrit ?? 0);

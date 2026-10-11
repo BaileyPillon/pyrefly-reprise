@@ -22,8 +22,8 @@
  *           Seymour, who says nothing. Tidus narrates (past tense, after the high, writing-bible §1.2).
  *
  * **Placeholders, labelled** (plan §3.1, §3.3, §3.6): the deck plate stands in for the deck over Bevelle at
- * dusk and for the Evenfall and Breaking Through plates (the art list); `scene-fahrenheit` and `boss-evrae`
- * stand in for the owed countdown cue (THEMES.md "Owed cues", S-21, D-209).
+ * dusk and for the Evenfall and Breaking Through plates (the art list); `scene-fahrenheit` is still a stand-in bed and the fight
+ * plays `boss-sin-countdown` (2026-10-10; `boss-evrae` stood in before; THEMES.md "Owed cues", S-21, D-209).
  *
  * **Not wired, named:** the plan puts the party callout at the mouth's third stage. No trigger condition reads
  * a flag, and the stage is a `message` from the AI, not an ability, so a stage-3 callout needs an AI-emitted
@@ -82,7 +82,7 @@ export const sinFaceScripts: ChapterScripts = {
     say('brother', 'I will... I will get you there!'),
     beat(1200),
     say('kimahri', 'Kimahri is ready.'),
-    music('boss-evrae', 900), // stand-in battle cue (THEMES.md, owed: the countdown cue)
+    music('boss-sin-countdown', 900), // the countdown cue (2026-10-10; THEMES.md; `boss-evrae` stood in before)
     shake(11, 700),
     say('tidus', "Hey, old man! I'm coming!", { emotion: 'determined' }),
     battleStart(),
