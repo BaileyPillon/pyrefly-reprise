@@ -1,0 +1,611 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-11T10:59:49.978Z",
+ "build": {
+  "mainSha": "2ae1a9e4"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: every FFX chapter played by real keys reaches its results screen with no page error; no crash, lock or lost progress.",
+  "The key risk is clear: after real key presses in Ch II, III, X and XVIII the advisor card appears within one frame, with long tasks and frame gaps equal to or lower than live (first N press worst gap 150-175 ms on the candidate against 164-345 ms on live).",
+  "Better than live: the Ch XVIII line wins debug-auto seeds 1-3 (live loses 3 of 3), Ch X wins 3 of 3 (live 2 of 3), Ch IX 3 of 3 (live 2 of 3); the Cancel and Talk menus match the game and passed on real keys at three sizes.",
+  "The only FAIL (CHK-027 motion, FOC3945-01) is the same on live and sits in presenter code this change does not touch: disclosed, not a regression.",
+  "FFX-2 sources are byte-identical to live and Ch IV, V and VI still play."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "NOT APPLICABLE",
+   "reason": "No full-screen layer added or changed; the one CSS edit removes a greyed-reason class from the airship order widget.",
+   "where": "FFX Ch VIII",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Airship Orders list and Braska command column read at the HUD floor at 1600x900, 2000x1012 and 390x844; the removed .ffx-airship-order__already rule left no unstyled text.",
+   "where": "FFX Ch VIII, III; battle menu",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/airship-2-pending-widget-after.jpg",
+    "critic/reviews/2ae1a9e4-focused/menus-2000x1012/airship-3-far-widget-after.jpg",
+    "critic/reviews/2ae1a9e4-focused/menus-390x844/airship-4-cancel-widget-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "Each panel that names an action can be pressed by the actor: Cancel is offered only to Tidus/Rikku while an order stands and Enter on it drops the order (ORDER chip leaves Cid, Pull back offered again, airship-5); the Talk row is greyed while a Talk waits and the cursor skips it.",
+   "where": "FFX Ch VIII, III",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json",
+    "critic/reviews/2ae1a9e4-focused/menus/airship-2-pending-widget-after.jpg",
+    "critic/reviews/2ae1a9e4-focused/menus/braska-1-talk-pending-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "reason": "Advisor card on the broken board: with Tidus down at FAR the card offers Phoenix Down to Tidus and warns Evrae acts before Tidus can; the card is present within one frame on every menu of Ch II, III, X, XVIII.",
+   "where": "FFX Ch VIII, II, III, X, XVIII",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus-2000x1012/airship-3-far-widget-after.jpg",
+    "critic/reviews/2ae1a9e4-focused/adv-cand"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "Escape from the Orders widget returns to the cascade; the widget does not linger after Cancel or after the order is sent (airship-5 shows the next menu clean).",
+   "where": "FFX Ch VIII",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "Added player copy reads in plain words (Cancel, Trigger, Cancelling costs, Turn now, Cid keeps his turn, guide cards); the only ids in new strings are research citations, which CHK-007 allows.",
+   "where": "FFX; guides and menus",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/airship-2-pending-widget-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Order list, advisor card and guide card do not cover the painted actors at 1600x900, 2000x1012 or 390x844 on the Evrae deck and in the Braska and Sin captures.",
+   "where": "FFX Ch VIII, III, XVIII",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/evrae-order-widget.jpg",
+    "critic/reviews/2ae1a9e4-focused/menus-390x844/airship-4-cancel-widget-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Names in full: Cancel, Close in, Pull back, Talk, Stamina Tonic, Phoenix Down, enemy names in the order strip; nothing clipped.",
+   "where": "FFX Ch VIII, III",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json",
+    "critic/reviews/2ae1a9e4-focused/menus/airship-2-pending-widget-after.jpg",
+    "critic/reviews/2ae1a9e4-focused/menus/braska-1-talk-pending-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "reason": "No targeting design touched.",
+   "where": "FFX",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "reason": "No painting added, replaced or re-sized; approvedArtCheck is false and verify-approved reports 0 missing.",
+   "where": "FFX",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Every check here uses real Playwright key presses (Enter, ArrowDown, n, q, Escape) on the production build: Orders and Cancel, Talk pending and third Talk, the advisor n toggle, and Enter-spam through whole fights of Ch XVIII, X, IX, VIII, III, II to the results screen with no page error. The debug API only set the chapter up. The winning lines were not played by hand (see coverage).",
+   "where": "FFX Ch II, III, VIII, IX, X, XVIII",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/play",
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json",
+    "critic/reviews/2ae1a9e4-focused/menus/airship-2-pending-widget-after.jpg",
+    "critic/reviews/2ae1a9e4-focused/menus/braska-1-talk-pending-after.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 20,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture waited on an asserted state: nextMenu() reads awaitingMenu and battleLog growth, captured states are read back (actor, range, order, Talk used and pending in capture-after.json); the Braska frame was taken only after Tidus was the actor. A stale first-actor assumption in the driver tool (Auron acts first on live and candidate alike) was patched in a scratch copy, not accepted silently.",
+   "where": "FFX",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Pre-deploy focused review: the exact-artifact and live verification belong to the live review after the deploy.",
+   "where": "both",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Game case FFX only (research/re-ffx-*.md: Cancel 0x3108, the +1 gauge rule, Sin 12th turn). FFX-2 untouched: git diff 72973096..2ae1a9e4 over src/battle/ffx2, src/ui/ffx2 and src/audio is empty; FFX-2 Ch IV, V and VI still play (debug-auto wins on seeds 1-3 for IV and VI, Ch V reaches results by real keys) with no page error.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/play"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Presence in FFX: Cancel and the one-order Orders widget in Ch VIII, Braska Talk grey and third Talk, Ch XVIII Sin line (debug-auto victory seeds 1-3, live loses 3 of 3), Ch X and IX lines. Absence in FFX-2: no ffx2 source changed; Ch IV, V, VI carry no Trigger, Orders or Talk rows from this change.",
+   "where": "both",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 4,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Real-key fights of Ch II, III, VIII, IX, X, XVIII (FFX) and Ch V (FFX-2) all reach the results screen. FFX-2 Ch IV did not finish in 280 s of Enter spam on a 116-turn ATB fight (a harness budget; the debug-auto run wins it).",
+   "where": "FFX Ch II, III, VIII, IX, X, XVIII; FFX-2 Ch IV, V",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/play"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "The advisor and menus are exercised through the real presenter and HUD path in the production bundle (real fights, real menus), not a stub.",
+   "where": "FFX",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/adv-cand"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Harness on the 5 changed FFX chapters: 2597 swaps judged, 0 heads over 3 percent where registered, 0 feet over tolerance; live passes too.",
+   "where": "FFX Ch VIII, III, X, IX, XVIII",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/continuity/continuity-summary.json",
+    "critic/reviews/2ae1a9e4-focused/continuity-live/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Four of five chapters fail the motion limits (jerks of 40 px or more, double-image swaps, snaps): Ch III 0.57 snaps per minute, 162 jerks, 19 ghosts; Ch VIII 39 jerks, 5 ghosts; Ch X 0.44 snaps per minute; Ch XVIII 34 jerks. Live fails the same way on Ch VIII (35 jerks, 4 ghosts), Ch X (1.11 snaps per minute) and Ch XVIII (39 jerks); no presenter, sprite, stage or scene code changed. Ch IX passes. A disclosed pre-existing failure, not a regression.",
+   "where": "FFX Ch VIII, III, X, IX, XVIII",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/continuity/continuity-summary.json",
+    "critic/reviews/2ae1a9e4-focused/continuity-live/continuity-summary.json",
+    "critic/reviews/2ae1a9e4-focused/continuity/evrae-airship-win-2ae1a9e4/continuity/strips/ghost-360-tidus-ready-attack.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 70,
+   "artifact": "2ae1a9e4 dist-gate",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+   "environment": "candidate D:/pyrefly-r3945 2ae1a9e4, dist-gate built there (npx vite build, base /pyrefly-reprise/), vite preview 127.0.0.1:5471 (PID 73692, stopped, port closed); headless Playwright Chromium from node, PYREFLY_BROWSER=gpu; live comparison on https://echoesofspira.com/ (72973096, 39.4.4, CECt6LNe)"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "evrae-airship",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 316,
+    "swaps": 400,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.1,
+    "maxFeetShiftPx": 1.1,
+    "worstJerkPx": 206.6,
+    "strips": 19,
+    "worstSwapStrips": [
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-006-rikku-follow-idle.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-246-kimahri-hurt-idle.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-249-kimahri-idle-hurt.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-004-rikku-attack-follow.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-429-kimahri-idle-victory.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-361-tidus-attack-follow.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-343-tidus-ready-attack.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-027-wakka-idle-hurt.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-029-wakka-hurt-idle.jpg",
+     "evrae-airship-win-2ae1a9e4/continuity/strips/swap-255-kimahri-idle-ready.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1693.5,
+    "swaps": 1838,
+    "snapsPerMinute": 0.57,
+    "maxHeadJumpPct": 25.6,
+    "maxFeetShiftPx": 1.4,
+    "worstJerkPx": 284.6,
+    "strips": 11,
+    "worstSwapStrips": [
+     "braskas-final-aeon-win-2ae1a9e4/continuity/strips/swap-260-shiva-hurt-ko.jpg",
+     "braskas-final-aeon-win-2ae1a9e4/continuity/strips/swap-129-ifrit-hurt-ko.jpg",
+     "braskas-final-aeon-win-2ae1a9e4/continuity/strips/swap-1104-possessed-ifrit-hurt-ko.jpg",
+     "braskas-final-aeon-win-2ae1a9e4/continuity/strips/swap-325-valefor-hurt-ko.jpg",
+     "braskas-final-aeon-win-2ae1a9e4/continuity/strips/swap-1089-possessed-valefor-hurt-ko.jpg",
+     "braskas-final-aeon-win-2ae1a9e4/continuity/strips/swap-895-yuna-hurt-critical.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-natus",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 136.2,
+    "swaps": 163,
+    "snapsPerMinute": 0.44,
+    "maxHeadJumpPct": 14,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 49.6,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-162-seymour-natus-idle-ko.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-006-kimahri-idle-hurt.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-009-kimahri-hurt-idle.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-018-yuna-hurt-critical.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-153-tidus-attack-follow.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-058-tidus-ready-attack.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-103-yuna-critical-hurt.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-010-kimahri-idle-ready.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-143-auron-attack-follow.jpg",
+     "seymour-natus-win-2ae1a9e4/continuity/strips/swap-012-rikku-ready-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "yojimbo-cavern",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 103,
+    "swaps": 95,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 4.8,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 38.9,
+    "strips": 19,
+    "worstSwapStrips": [
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-038-kimahri-hurt-idle.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-036-kimahri-idle-hurt.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-094-kimahri-idle-victory.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-002-kimahri-idle-ready.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-029-yuna-ready-item.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-003-kimahri-ready-item.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-053-yojimbo-idle-hurt.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-042-yojimbo-hurt-idle.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-093-lulu-idle-victory.jpg",
+     "yojimbo-cavern-win-2ae1a9e4/continuity/strips/swap-080-lulu-idle-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 165,
+    "swaps": 269,
+    "snapsPerMinute": 0.36,
+    "maxHeadJumpPct": 5.3,
+    "maxFeetShiftPx": 1.1,
+    "worstJerkPx": 322.3,
+    "strips": 19,
+    "worstSwapStrips": [
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-064-wakka-idle-hurt.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-068-wakka-hurt-idle.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-271-wakka-critical-hurt.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-208-wakka-hurt-critical.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-151-auron-attack-follow.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-203-lulu-idle-hurt.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-300-lulu-critical-victory.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-066-lulu-hurt-idle.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-126-auron-follow-idle.jpg",
+     "sin-face-win-2ae1a9e4/continuity/strips/swap-252-lulu-critical-ready.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 2413.7,
+  "counted": 2765,
+  "swaps": 2937,
+  "size": {
+   "judged": 2597,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 168,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 25.6,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.4,
+   "feetOverTolerance": 0,
+   "headMeasured": 2597,
+   "headRegistration": 1803,
+   "headSilhouette": 794,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 18,
+   "snapsPerMinute": 0.45,
+   "hardCuts": 20,
+   "hardCutsPerMinute": 0.5,
+   "ghostSwaps": 2503,
+   "ghostFrames": 11290,
+   "worstGhostSeverity": 0.415,
+   "ghostOverFail": 30,
+   "jerks": 768,
+   "worstJerkPx": 322.3,
+   "jerksOverFail": 237,
+   "lowestIou": 0.064,
+   "maxCentroidShiftPx": 311
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "1803 of 2597 measured swaps had a registered head (tolerance 3 percent); 794 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "0.45 snaps per minute is over 0.25",
+     "237 jerk(s) of 40 px or more in one frame (worst 322.3 px)",
+     "30 swap(s) show a double image of severity 0.4 or more (worst 0.415)"
+    ]
+   }
+  },
+  "base": "http://127.0.0.1:5471/pyrefly-reprise/",
+  "date": "2026-10-11T10:40:50.787Z"
+ },
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0,
+  "detail": "Evrae order/range widget (FFX): Bailey decided later (D-659) that Cid offers one order at a time with Cancel, so the build departs from the tile two-row sketch by his own word; the look, type floor and cost slab match. Tile text is stale (FOC3945-02). Composite: evrae-order-widget.jpg. No other approved tile touched."
+ },
+ "issues": [
+  {
+   "id": "FOC3945-01",
+   "severity": "major",
+   "title": "Motion continuity fails CHK-027 on four FFX chapters (jerks of 40 px or more, double-image pose swaps, some snaps)",
+   "game": "ffx",
+   "chapter": "evrae-airship, braskas-final-aeon, seymour-natus, sin-face",
+   "expected": "CHK-027 limits: 0.25 snaps per minute, no jerk of 40 px, no double image of 0.4 severity",
+   "observed": "Candidate: Ch VIII 39 jerks and 5 ghosts (worst 207 px), Ch III 162 jerks, 19 ghosts, 0.57 snaps per minute, Ch X 2 jerks, 6 ghosts, 0.44 snaps per minute, Ch XVIII 34 jerks (worst 322 px). Live 72973096: Ch VIII 35 jerks and 4 ghosts, Ch X 10 jerks, 11 ghosts, 1.11 snaps per minute, Ch XVIII 39 jerks (300 px). Ch III not rerun on live (code untouched).",
+   "repro": "node critic/runner/lib/continuity.mjs --base=<url> --chapters=<id> on the candidate and on live",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/continuity/continuity-summary.json",
+    "critic/reviews/2ae1a9e4-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027, RUBRIC 6a",
+   "where": "pose crossfade in the presenter and sprites (untouched by this change)",
+   "fix": "a pose-swap continuity track, outside this release",
+   "acceptanceCheck": "CHK-027 PASS on the five chapters",
+   "category": "feel",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC3945-02",
+   "severity": "polish",
+   "title": "Approved tile Evrae order/range widget (FFX) still describes two rows with a greyed Already near/far; the build shows one row",
+   "game": "ffx",
+   "chapter": "evrae-airship",
+   "expected": "tile text matches the build",
+   "observed": "the build shows one order at a time and Cancel while one stands, as Bailey decided (D-659, match the game); docs/target/targets.json still describes the earlier two-row design",
+   "repro": "compare docs/concepts/chapters/evrae/widget/a-far.png with menus/airship-3-far-widget-after.jpg (evrae-order-widget.jpg)",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/evrae-order-widget.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "RUBRIC 7",
+   "where": "docs/target/targets.json",
+   "fix": "record D-659 in the tile reaction and update the build text",
+   "acceptanceCheck": "tile text and build agree",
+   "category": "process",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC3945-03",
+   "severity": "suggestion",
+   "title": "tools/re-parity-menus-shots.mjs expects Tidus first in Chapter III; Auron acts first on live and candidate",
+   "game": "ffx",
+   "chapter": "braskas-final-aeon",
+   "expected": "the tool runs unchanged",
+   "observed": "throws expected Tidus first, got auron on both builds",
+   "repro": "node tools/re-parity-menus-shots.mjs --tag=after --scenario=braska",
+   "evidence": [
+    "critic/reviews/2ae1a9e4-focused/menus/capture-after.json"
+   ],
+   "confidence": "high",
+   "requirement": "tooling",
+   "where": "tools/re-parity-menus-shots.mjs line 310",
+   "fix": "defend until Tidus has the menu",
+   "acceptanceCheck": "the tool runs end to end",
+   "category": "process",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Production build of 2ae1a9e4 (dist-gate) at 1600x900, plus 2000x1012 and 390x844 for the Orders widget",
+   "Advisor response after real key presses, Ch II, III, X, XVIII, candidate vs live, 7 menus each (long tasks, frame gaps, card latency)",
+   "Cid Orders and Cancel, Braska Talk pending and third Talk by real keys, engine state read back",
+   "Real-key full fights to results: Ch II, III, VIII, IX, X, XVIII, FFX-2 Ch V",
+   "Debug-auto intended line in the bundle, seeds 1-3, candidate vs live: Ch XVIII, X, IX (FFX); Ch IV, VI (FFX-2 presence check)",
+   "Unit files re-run: re-parity-ch18, w5-yojimbo-line, menus, parity-ffx-ai-natus and hooks pass with --testTimeout=120000",
+   "Data audit: Cancel 0x3108, +1 gauge formulas and the Sin 12th turn against research/re-*.md",
+   "Continuity harness: 5 changed FFX chapters on the candidate, 3 on live"
+  ],
+  "reused": [
+   {
+    "what": "tsc and the full unit suite",
+    "from": "driver validation of this task (tsc clean, 260 files)",
+    "why": "not re-run in full; only the changed-area files were re-run"
+   }
+  ],
+  "notTested": [
+   "The 500-seed win-rate claims (relied on the driver and 24-seed unit tests; the browser sample is 3 seeds)",
+   "A human following the advisor through the Ch XVIII, X and IX lines by hand",
+   "Continuity on the other chapters (presenter code untouched)",
+   "Phone layout beyond the Orders widget",
+   "Audio (untouched)",
+   "Live deployment verification (after the deploy)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live verification of the exact artifact after the deploy; the deep review of this build is owed afterwards (shared combat core and FFX engine changed)",
+ "elapsedMinutes": 115
+}
