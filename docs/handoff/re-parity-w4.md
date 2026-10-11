@@ -455,6 +455,11 @@ The comments in each file say the same with the cause, in the style of the earli
   lock" searched the engine's boards for one where the old card would raise the same girl, and at the game's gauge none turns up (250 seeds of Chapter V, 40 of each other chapter); it now
   chains the girl who confirms it, as `advisor-v3-final` does, and the file passes (4 of 4, 33 s). `ffx-engine-golden` and `ff7-golden` pass unchanged; `ffx2-atb-golden`,
   `ffx2-hit-closes-menu`, `ffx2-menu-cancel-delay` and `den-of-woe-carry` pass on their new pins.
+- **Re-run on the final tree (`d98751ec` and the handoff, resumed session 2026-10-11 01:55 to 02:26, `--maxWorkers=4`, no `public/art`)**: tsc clean; the whole unit suite once: **1,018 files, 15,392 tests: 990 files and
+  15,109 tests passed, 7 files and 101 tests skipped, 1 todo, 21 files and 181 tests failed**, in 31.1 minutes. The 21 failing files are exactly the 21 art-only files listed above (every failure is an
+  `ENOENT` on `public/art` or an art-existence assertion; `advisor-v3-inflight` passes). The 13 engine-level, data and golden files (`parity-ffx2-engine-*` x9, `data-ffx2-command-records`,
+  `ffx2-atb-golden`, `ffx-engine-golden`, `ff7-golden`) pass 109 of 109 on their own in 31 s. The 12-seed measurement re-run gives the section 5 rows to the digit, and the 500-seed re-run (354 s) gives the same per-seed win/loss
+  letters as the stored `after-500.json` for all seven chapters (so the section 5 tables stand).
 - Before the full run, the test files the lane changed or added were run twice: 59 files on 2026-10-10 at 19:05 (638 tests passed, 1 failed: the magic-cancel recovery that `1b168572` fixed), and
   the 42 files changed since on 22:00 to 23:30, where the only failures were per-test timeouts on a machine running about sixty other node processes: `ffx2-ability-flags`, `den-of-woe-bench`, `fallen-aeons-bench`,
   `strategy-ffx2-bahamut`, `ffx2-ally-heal-accuracy`, `ffx2-atb-speed`, `fallen-aeons-ship-story`, and three files whose worker did not start in time (`trema-retry-flow`, `advisor-v3-final`, `ui-ffx2-battle-message`); every one of them passes in the full run above, the seven timed ones at 8 s, 378 s, 355 s, 80 s, 17 s, 7 s and 19 s). Two Charon
