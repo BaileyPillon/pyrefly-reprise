@@ -1,0 +1,124 @@
+{
+ "id": "ffx2-bahamut",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"ffx2-bahamut\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":70,\"elapsedTicks\":273843,\"elapsedMs\":91281,\"ap\":15,\"exp\":1300,\"gil\":1000,\"drops\":[{\"itemId\":\"gris-gris-bag\",\"count\":1}],\"overkilled\":[],\"sphereLevelsGained\":{},\"levelsGained\":{}},\"elapsedMs\":58520,\"links\":1,\"previe",
+ "victorySfx": [],
+ "sfxNames": [
+  "v2:magic-charge-x2>v2:magic-charge-x2",
+  "v2:debuff-generic-x2>v2:debuff-generic-x2",
+  "v2:swing-greatsword>v2:swing-greatsword",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:hit-2>v2:hit-2",
+  "v2:status-applied>v2:status-applied",
+  "v2:hit-greatsword>v2:hit-greatsword",
+  "v2:flare-x2>v2:flare-x2",
+  "v2:hit-1>v2:hit-1",
+  "v2:cure-x2>v2:cure-x2",
+  "v2:boss-roar-aeon>v2:boss-roar-aeon",
+  "v2:critical>v2:critical",
+  "v2:boss-overdrive-warning>v2:boss-overdrive-warning",
+  "v2:hit-dagger>v2:hit-dagger",
+  "v2:item-use-x2>v2:item-use-x2",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies"
+ ],
+ "sfxN": 174,
+ "sfxTail": [
+  "61.24:v2:item-use-x2:v2:item-use-x2",
+  "61.53066666666667:v2:magic-charge-x2:v2:magic-charge-x2",
+  "61.781333333333336:v2:cure-x2:v2:cure-x2",
+  "62.25066666666667:v2:swing-greatsword:v2:swing-greatsword",
+  "62.29066666666667:v2:hit-heavy-enemy:v2:hit-heavy-enemy",
+  "62.410666666666664:v2:hit-2:v2:hit-2",
+  "62.45066666666666:v2:hit-2:v2:hit-2",
+  "62.46666666666667:v2:dissolve-pyreflies:v2:dissolve-pyreflies"
+ ],
+ "curAtEnd": {
+  "name": "boss-bahamut",
+  "gain": 1
+ },
+ "playingAtEnd": "boss-bahamut",
+ "musicTimeline": [
+  {
+   "t": 6591,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 7302,
+   "k": "battle|title|chapter-select:1.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": "chapter-select:1.00"
+  },
+  {
+   "t": 17163,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 22488,
+   "k": "battle|boss-bahamut|title:1.00",
+   "s": "battle",
+   "cur": "boss-bahamut",
+   "g": "1",
+   "f": "title:1.00"
+  },
+  {
+   "t": 22611,
+   "k": "battle|boss-bahamut|title:0.25",
+   "s": "battle",
+   "cur": "boss-bahamut",
+   "g": "0",
+   "f": "title:0.25"
+  },
+  {
+   "t": 22773,
+   "k": "battle|boss-bahamut|title:0.04",
+   "s": "battle",
+   "cur": "boss-bahamut",
+   "g": "0",
+   "f": "title:0.04"
+  },
+  {
+   "t": 22925,
+   "k": "battle|boss-bahamut|title:0.01",
+   "s": "battle",
+   "cur": "boss-bahamut",
+   "g": "0.02",
+   "f": "title:0.01"
+  },
+  {
+   "t": 23076,
+   "k": "battle|boss-bahamut|title:0.00",
+   "s": "battle",
+   "cur": "boss-bahamut",
+   "g": "0.09",
+   "f": "title:0.00"
+  },
+  {
+   "t": 23403,
+   "k": "battle|boss-bahamut|",
+   "s": "battle",
+   "cur": "boss-bahamut",
+   "g": "1",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-bahamut.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

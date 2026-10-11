@@ -1,0 +1,3992 @@
+[
+ {
+  "file": "seymour-flux-win-72973096/00-title.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:21.177Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/01-briefing.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:22.829Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/03-card.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "seymour-flux",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:23.955Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/04-prep.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:26.470Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:32.033Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:33.726Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 385
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 1132
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1702
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 2175
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2616
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 3591
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 4206
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 5324
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 5675
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 6059
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:53.431Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:54.601Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/11-advisor.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:55.337Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:40:58.223Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:00.383Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:02.744Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:04.105Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:06.987Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/16-target-single.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 2,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:11.625Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:13.288Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/seq-party-action/",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Hastega)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 123
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 399
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 651
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 895
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1156
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1442
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1757
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2029
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2345
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2639
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:17.638Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:damage)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 92
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 364
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 686
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 948
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1217
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1492
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1738
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1991
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2366
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2621
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:27.011Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/23-midfight.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:41:34.389Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/31-results.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:48:37.281Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/33-after-confirm-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:48:40.565Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/34-board-after.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:49:58.104Z"
+ },
+ {
+  "file": "seymour-flux-win-72973096/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:50:01.988Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/00-title.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:51:47.231Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/01-briefing.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:51:48.861Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/03-card.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "ffx2-bahamut",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:51:52.146Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/04-prep.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:51:54.494Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/05-pre-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:51:59.931Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/05b-scene-esc.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:01.573Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/seq-transition-into-battle/",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 1470
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 1961
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 2433
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 2747
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 3856
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 4374
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 4791
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 5225
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 5740
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 6103
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:22.963Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/10-first-menu-coach.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": null
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:24.360Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/11-advisor.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:25.940Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/12-intent-E.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:29.875Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/13-guide-G.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:31.931Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/14-pause-Esc.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:34.804Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/14-pause-tab-next.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Rikku",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:36.177Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/14-pause-options.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:38.970Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/seq-party-action/",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Shell)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 74
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 371
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 625
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 956
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1240
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1547
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1827
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2087
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2356
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2658
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:48.530Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/23-midfight.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:52:59.281Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/seq-action-playing/",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:status-add)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 104
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 407
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 769
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1152
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1436
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2023
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2503
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2828
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 3196
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3694
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T02:53:11.018Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/31-results.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:01:06.582Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/33-after-confirm-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:01:10.977Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/34-board-after.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:01:42.087Z"
+ },
+ {
+  "file": "ffx2-bahamut-win-72973096/35-board-reload.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:01:48.786Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/00-title.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:15.303Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/01-briefing.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:17.088Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/03-card.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "ffx2-leblanc",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:20.952Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/04-prep.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:23.410Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/05-pre-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:29.203Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/05b-scene-esc.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:31.392Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/seq-transition-into-battle/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 4309
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 5233
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 5772
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 6202
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 6805
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 8757
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 9448
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 9811
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 10254
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 10608
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:56.836Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/10-first-menu-coach.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": null
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:57.781Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/11-advisor.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:02:59.319Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/12-intent-E.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:01.677Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/13-guide-G.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:04.238Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/14-pause-Esc.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:07.379Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/14-pause-tab-next.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Rikku",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:08.673Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/14-pause-options.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:11.781Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/16-target-single.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 3,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:16.508Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/16b-after-cancel.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:18.712Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/seq-party-action/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Grenade)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 163
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 702
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1065
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1406
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1840
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2293
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2771
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 3058
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 3425
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3873
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:27.184Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/21-change-open.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "CHANGE opened (Garment Grid)",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:35.883Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/seq-spherechange/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a spherechange chosen by real input",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 197
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 622
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 883
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1282
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2139
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2533
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2942
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 3368
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 3699
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 4028
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:40.844Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/23-midfight.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 4 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:44.702Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/seq-action-playing/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-end)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 212
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 723
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 2568
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 2912
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 3186
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 3490
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 3752
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 4020
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 4286
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 4547
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:03:51.576Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/seq-seam-2/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 1 -> 2 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 468
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 905
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1330
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1774
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2288
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2857
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 3248
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 3728
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:05:27.024Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/20-link-2.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 2 of 3",
+  "asserted": "screen=battle links=2",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:05:30.799Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/24-seam-2-first-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 2",
+  "asserted": "screen=battle awaitingMenu=true links=2",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 606,
+    "y": 681,
+    "w": 530,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Rikku Hi-Potion → Paine IN ITEM +628 NO MP 100% TO HIT Recovers 1000 HP. Puts 628 HP back."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:05:33.061Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/seq-seam-3/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 2 -> 3 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 146
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 540
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 895
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1246
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1626
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1988
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2375
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2756
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:07:51.984Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/20-link-3.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 3 of 3",
+  "asserted": "screen=battle links=3",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:07:55.706Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/24-seam-3-first-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 3",
+  "asserted": "screen=battle awaitingMenu=true links=3",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 606,
+    "y": 681,
+    "w": 530,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Rikku Attack → Logos 144–161 2 HITS NO MP 95% TO HIT 26% CRIT Physical damage Most damage on the board — 151 to Logos."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:07:57.590Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/31-results.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:11:59.737Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/33-after-confirm-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:12:02.828Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/34-board-after.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:02.229Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-72973096/35-board-reload.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:05.419Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/00-title.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:19.051Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/01-briefing.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:21.745Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/03-card.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "yunalesca",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:24.357Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/04-prep.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:26.877Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:33.676Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:13:37.069Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 3222
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 5365
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 6333
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 8025
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 9360
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 10337
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 10862
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 11925
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 12616
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 13362
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:17.286Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:19.385Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/11-advisor.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:25.440Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:29.715Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:32.705Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:37.113Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:39.010Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:43.196Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/16-target-single.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 1,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:52.264Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:14:55.796Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/seq-party-action/",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Hastega)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 378
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 814
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1359
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1700
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2258
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 3808
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 4590
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 5170
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 6135
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 6553
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:15:04.377Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-start)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 139
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 605
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1515
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 2007
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2600
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2907
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 3221
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 3759
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 4369
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 4990
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:15:14.813Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/23-midfight.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:15:17.226Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/28-bushido-overlay.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Shooting Star: BUSHIDO · ENTER THE SEQUENCE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:18:04.742Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/31-results.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a defeat",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:22:52.409Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/32-after-retry.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Enter (RETRY) on the defeat results screen",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:22:55.648Z"
+ },
+ {
+  "file": "yunalesca-win-72973096/33-retry-battle.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the retried fight, first menu",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:07.826Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/00-title.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:14.886Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/01-briefing.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:16.747Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/03-card.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "braskas-final-aeon",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:18.082Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/04-prep.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:20.612Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:26.251Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:28.499Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 334
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 776
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1257
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1620
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2027
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2436
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2782
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 3120
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 3467
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3834
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:45.320Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:48.506Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/11-advisor.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:49.637Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:51.974Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:53.728Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:55.950Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:57.003Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:23:59.699Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/16-target-single.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 3,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:24:03.774Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:24:05.511Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-party-action/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Stamina Tonic)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 111
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 344
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 599
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 845
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1149
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1394
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1738
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2056
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2443
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2748
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:24:11.645Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-start)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 74
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 341
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 604
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 895
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1142
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1405
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1757
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2033
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2510
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2918
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:24:17.144Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/23-midfight.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:24:20.553Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/25-doublecast.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after a Doublecast chosen by real input",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:27:16.377Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-seam-2/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 1 -> 2 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 62
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 436
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 800
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1167
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1536
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1896
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2314
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2687
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:37:54.819Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/20-link-2.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 2 of 7",
+  "asserted": "screen=battle links=2",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:37:58.641Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/24-seam-2-first-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 2",
+  "asserted": "screen=battle awaitingMenu=true links=2",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 20,
+    "y": 160,
+    "w": 361,
+    "h": 132
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Attack → Possessed Valefor NO MP Physical damage"
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:38:26.440Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/28-bushido-overlay.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Shooting Star: BUSHIDO · ENTER THE SEQUENCE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:38:31.848Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-seam-3/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 2 -> 3 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 64
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 429
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 796
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1163
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1548
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1915
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2279
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2648
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:38:50.246Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/20-link-3.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 3 of 7",
+  "asserted": "screen=battle links=3",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:38:53.895Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/24-seam-3-first-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 3",
+  "asserted": "screen=battle awaitingMenu=true links=3",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 20,
+    "y": 160,
+    "w": 361,
+    "h": 132
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Attack → Possessed Ifrit NO MP Physical damage"
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:39:00.273Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-seam-4/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 3 -> 4 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 70
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 438
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 822
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1187
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1556
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1923
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2288
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2673
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:39:14.991Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/20-link-4.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 4 of 7",
+  "asserted": "screen=battle links=4",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:39:18.628Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/24-seam-4-first-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 4",
+  "asserted": "screen=battle awaitingMenu=true links=4",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 20,
+    "y": 160,
+    "w": 361,
+    "h": 132
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Attack → Possessed Ixion NO MP Physical damage"
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:39:23.744Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/28-swordplay-overlay.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Energy Rain: SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:40:28.617Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-seam-5/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 4 -> 5 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 73
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 440
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 807
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1187
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1583
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1987
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2365
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2738
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:40:49.094Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/20-link-5.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 5 of 7",
+  "asserted": "screen=battle links=5",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:40:52.912Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/24-seam-5-first-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 5",
+  "asserted": "screen=battle awaitingMenu=true links=5",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 20,
+    "y": 160,
+    "w": 361,
+    "h": 132
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Attack → Possessed Shiva NO MP Physical damage"
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:40:58.984Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-seam-6/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 5 -> 6 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 67
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 416
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 799
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1151
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1504
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1874
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2233
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2600
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:44:52.883Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/20-link-6.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 6 of 7",
+  "asserted": "screen=battle links=6",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:44:56.549Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/24-seam-6-first-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 6",
+  "asserted": "screen=battle awaitingMenu=true links=6",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 20,
+    "y": 160,
+    "w": 361,
+    "h": 132
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Attack → Possessed Bahamut NO MP Physical damage"
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:45:04.215Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/seq-seam-7/",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 6 -> 7 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 56
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 404
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 756
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1120
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1487
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1855
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2231
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2613
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:47:43.618Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/20-link-7.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 7 of 7",
+  "asserted": "screen=battle links=7",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:47:47.561Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/24-seam-7-first-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 7",
+  "asserted": "screen=battle awaitingMenu=true links=7",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 17,
+    "y": 138,
+    "w": 366,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Candle of Life → Yu Yevon IN ITEMS NO MP + DOOM Inflicts Doom on an enemy. It puts Doom on Yu Yevon."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:47:57.145Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/31-results.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:50:02.163Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/33-after-confirm-scene.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:50:05.096Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/34-board-after.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:50:51.031Z"
+ },
+ {
+  "file": "braskas-final-aeon-win-72973096/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-11T03:50:54.355Z"
+ }
+]

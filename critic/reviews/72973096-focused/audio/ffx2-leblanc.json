@@ -1,0 +1,178 @@
+{
+ "id": "ffx2-leblanc",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"ffx2-leblanc\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":39,\"elapsedTicks\":128538,\"elapsedMs\":42846,\"ap\":14,\"exp\":1640,\"gil\":1590,\"drops\":[{\"itemId\":\"twist-headband\",\"count\":1},{\"itemId\":\"x2-potion\",\"count\":1},{\"itemId\":\"x2-potion\",\"count\":1},{\"itemId\":\"charm-bangle\",\"co",
+ "victorySfx": [
+  [
+   26.450666666666667,
+   "victory-fanfare",
+   "victory-fanfare",
+   "sprite"
+  ]
+ ],
+ "sfxNames": [
+  "v2:swing-greatsword>v2:swing-greatsword",
+  "v2:whiff>v2:whiff",
+  "v2:item-use-x2>v2:item-use-x2",
+  "v2:magic-charge-x2>v2:magic-charge-x2",
+  "v2:hit-2>v2:hit-2",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies",
+  "v2:critical>v2:critical",
+  "v2:hit-gun>v2:hit-gun",
+  "v2:swing-dagger>v2:swing-dagger",
+  "v2:hit-dagger>v2:hit-dagger",
+  "v2:hit-greatsword>v2:hit-greatsword",
+  "v2:debuff-generic-x2>v2:debuff-generic-x2",
+  "v2:ko-fall>v2:ko-fall",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:shot-gun>v2:shot-gun",
+  "v2:status-applied>v2:status-applied",
+  "v2:cure-x2>v2:cure-x2",
+  "victory-fanfare>victory-fanfare"
+ ],
+ "sfxN": 190,
+ "sfxTail": [
+  "26.12:v2:hit-dagger:v2:hit-dagger",
+  "26.192:v2:swing-greatsword:v2:swing-greatsword",
+  "26.250666666666667:v2:hit-heavy-enemy:v2:hit-heavy-enemy",
+  "26.381333333333334:v2:swing-dagger:v2:swing-dagger",
+  "26.421333333333333:v2:hit-dagger:v2:hit-dagger",
+  "26.421333333333333:v2:hit-dagger:v2:hit-dagger",
+  "26.432:v2:ko-fall:v2:ko-fall",
+  "26.450666666666667:victory-fanfare:victory-fanfare"
+ ],
+ "curAtEnd": null,
+ "playingAtEnd": null,
+ "musicTimeline": [
+  {
+   "t": 5666,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 7161,
+   "k": "battle|title|chapter-select:1.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": "chapter-select:1.00"
+  },
+  {
+   "t": 7999,
+   "k": "battle|title|chapter-select:0.01",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.01",
+   "f": "chapter-select:0.01"
+  },
+  {
+   "t": 8500,
+   "k": "battle|title|chapter-select:0.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.23",
+   "f": "chapter-select:0.00"
+  },
+  {
+   "t": 9106,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 10343,
+   "k": "battle|boss-leblanc|title:0.46",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.46"
+  },
+  {
+   "t": 10480,
+   "k": "battle|boss-leblanc|title:0.16",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.16"
+  },
+  {
+   "t": 10638,
+   "k": "battle|boss-leblanc|title:0.05",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.05"
+  },
+  {
+   "t": 10770,
+   "k": "battle|boss-leblanc|title:0.02",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0.01",
+   "f": "title:0.02"
+  },
+  {
+   "t": 10922,
+   "k": "battle|boss-leblanc|title:0.01",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0.02",
+   "f": "title:0.01"
+  },
+  {
+   "t": 11085,
+   "k": "battle|boss-leblanc|title:0.00",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0.06",
+   "f": "title:0.00"
+  },
+  {
+   "t": 11549,
+   "k": "battle|boss-leblanc|",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 28769,
+   "k": "battle||boss-leblanc:0.02",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-leblanc:0.02"
+  },
+  {
+   "t": 28920,
+   "k": "battle||boss-leblanc:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-leblanc:0.00"
+  },
+  {
+   "t": 29065,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-leblanc.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,148 @@
+{
+ "id": "ffx2-bahamut",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"ffx2-bahamut\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":70,\"elapsedTicks\":273843,\"elapsedMs\":91281,\"ap\":15,\"exp\":1300,\"gil\":1000,\"drops\":[{\"itemId\":\"gris-gris-bag\",\"count\":1}],\"overkilled\":[],\"sphereLevelsGained\":{},\"levelsGained\":{}},\"elapsedMs\":40823,\"links\":1,\"previe",
+ "victorySfx": [],
+ "sfxNames": [
+  "v2:magic-charge-x2>v2:magic-charge-x2",
+  "v2:debuff-generic-x2>v2:debuff-generic-x2",
+  "v2:swing-greatsword>v2:swing-greatsword",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:hit-2>v2:hit-2",
+  "v2:status-applied>v2:status-applied",
+  "v2:hit-greatsword>v2:hit-greatsword",
+  "v2:flare-x2>v2:flare-x2",
+  "v2:hit-1>v2:hit-1",
+  "v2:cure-x2>v2:cure-x2",
+  "v2:boss-roar-aeon>v2:boss-roar-aeon",
+  "v2:critical>v2:critical",
+  "v2:boss-overdrive-warning>v2:boss-overdrive-warning",
+  "v2:hit-dagger>v2:hit-dagger",
+  "v2:item-use-x2>v2:item-use-x2",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies"
+ ],
+ "sfxN": 174,
+ "sfxTail": [
+  "42.792:v2:item-use-x2:v2:item-use-x2",
+  "42.98133333333333:v2:magic-charge-x2:v2:magic-charge-x2",
+  "43.28:v2:cure-x2:v2:cure-x2",
+  "43.58133333333333:v2:swing-greatsword:v2:swing-greatsword",
+  "43.632:v2:hit-heavy-enemy:v2:hit-heavy-enemy",
+  "43.752:v2:hit-2:v2:hit-2",
+  "43.8:v2:hit-2:v2:hit-2",
+  "43.821333333333335:v2:dissolve-pyreflies:v2:dissolve-pyreflies"
+ ],
+ "curAtEnd": {
+  "name": "boss-ffx2-aeon",
+  "gain": 1
+ },
+ "playingAtEnd": "boss-ffx2-aeon",
+ "musicTimeline": [
+  {
+   "t": 6088,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "0",
+   "f": ""
+  },
+  {
+   "t": 6676,
+   "k": "battle|title|chapter-select:0.15",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": "chapter-select:0.15"
+  },
+  {
+   "t": 6808,
+   "k": "battle|title|chapter-select:0.08",
+   "s": "battle",
+   "cur": "title",
+   "g": "0",
+   "f": "chapter-select:0.08"
+  },
+  {
+   "t": 6958,
+   "k": "battle|title|chapter-select:0.04",
+   "s": "battle",
+   "cur": "title",
+   "g": "0",
+   "f": "chapter-select:0.04"
+  },
+  {
+   "t": 7379,
+   "k": "battle|title|chapter-select:0.01",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.01",
+   "f": "chapter-select:0.01"
+  },
+  {
+   "t": 7559,
+   "k": "battle|title|chapter-select:0.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.02",
+   "f": "chapter-select:0.00"
+  },
+  {
+   "t": 10159,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 16564,
+   "k": "battle|boss-ffx2-aeon|title:0.32",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.32"
+  },
+  {
+   "t": 16740,
+   "k": "battle|boss-ffx2-aeon|title:0.04",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0",
+   "f": "title:0.04"
+  },
+  {
+   "t": 16859,
+   "k": "battle|boss-ffx2-aeon|title:0.01",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0.01",
+   "f": "title:0.01"
+  },
+  {
+   "t": 17021,
+   "k": "battle|boss-ffx2-aeon|title:0.00",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "0.06",
+   "f": "title:0.00"
+  },
+  {
+   "t": 17318,
+   "k": "battle|boss-ffx2-aeon|",
+   "s": "battle",
+   "cur": "boss-ffx2-aeon",
+   "g": "1",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-ffx2-aeon.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

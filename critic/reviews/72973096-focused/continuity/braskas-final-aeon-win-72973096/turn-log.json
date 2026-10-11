@@ -1,0 +1,8231 @@
+[
+ {
+  "turn": 0,
+  "ms": 23,
+  "actor": "command:auron",
+  "want": {
+   "label": "Stamina Tonic",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Stamina Tonic",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:4066/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:60000/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 17,
+    "actor": "auron",
+    "did": "Stamina Tonic",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 6171,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:4066/9999",
+   "yuna:5130/9999",
+   "auron:6492/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:60000/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 25,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 11971,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hastega",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Hastega",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:5130/9999",
+   "auron:6492/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:60000/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 32,
+    "actor": "tidus",
+    "did": "Hastega",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 16557,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:5130/9999",
+   "auron:6492/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:60000/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 38,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 22545,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:4619/9999",
+   "auron:6492/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:58915/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 52,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 32819,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:6492/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:58915/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 69,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 35075,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Yu Pagoda A",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:6492/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:57791/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 77,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "yu-pagoda-left"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 40363,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:4103/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:57791/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 87,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 44784,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Yu Pagoda A",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:57791/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 94,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "yu-pagoda-left"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 53218,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Bahamut",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Bahamut",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:57791/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 108,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 58005,
+  "actor": "command:bahamut",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "braskas-final-aeon:57791/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 112,
+    "actor": "bahamut",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 67022,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:55950/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 139,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 72283,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Slow",
+   "target": "Yu Pagoda B",
+   "menu": "White Magic"
+  },
+  "took": "Slow",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:55950/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-right",
+   "wanted": "yu-pagoda-right",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 144,
+    "actor": "tidus",
+    "did": "Slow",
+    "targets": [
+     "yu-pagoda-right"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 76688,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:55950/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 148,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 78599,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:54878/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 154,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 82352,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:54878/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 161,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 87649,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9308/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:54878/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 165,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 93454,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:52160/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 185,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 98450,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:52160/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 189,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 103128,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:9465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49511/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 202,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 107933,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49511/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 213,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 111549,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Ifrit",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Ifrit",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49511/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 219,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 115879,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49511/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 223,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 127240,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8146/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50933/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 255,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 131868,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50933/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 260,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 135638,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50933/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 266,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 139411,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50933/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 272,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 141472,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:8465/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49436/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 279,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 147132,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Lulu",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Lulu",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49436/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 29,
+  "ms": 149783,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Stamina Tonic",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Stamina Tonic",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49436/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 290,
+    "actor": "lulu",
+    "did": "Stamina Tonic",
+    "targets": [
+     "lulu",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 155141,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49436/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 295,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 162514,
+  "actor": "command:auron",
+  "want": {
+   "label": "Tidus",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Tidus",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50936/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 32,
+  "ms": 166169,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9713/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50936/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 306,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 173096,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Soft",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Soft",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50936/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 319,
+    "actor": "lulu",
+    "did": "Soft",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 177105,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:50936/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 333,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 190982,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49215/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 343,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 194842,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Ixion",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Ixion",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49215/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 347,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 200456,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:49215/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 351,
+    "actor": "ixion",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 208228,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shiva",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Shiva",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:47120/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 371,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 212751,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:2266/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:47120/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 375,
+    "actor": "shiva",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 224891,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:5700/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:48163/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 406,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 236367,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Auron",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Auron",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:44910/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 44,
+  "ms": 239514,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:44910/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 417,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 45,
+  "ms": 244260,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8750/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:41736/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 436,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 47,
+  "ms": 260582,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9179/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:32491/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 459,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 49,
+  "ms": 275578,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8330/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:24932/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 487,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 51,
+  "ms": 287136,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Valefor",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": null,
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8330/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:16047/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 496,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 52,
+  "ms": 292323,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8330/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:16047/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 500,
+    "actor": "valefor",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 53,
+  "ms": 299614,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8330/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:14894/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 521,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 55,
+  "ms": 314788,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:7119/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 531,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 56,
+  "ms": 317416,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9215/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:5683/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 538,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "auron"
+    ]
+   },
+   {
+    "seq": 558,
+    "actor": "auron",
+    "did": "Remedy",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 57,
+  "ms": 328360,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Tidus",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Tidus",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9254/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:4183/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 58,
+  "ms": 331222,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9254/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:4183/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 564,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 59,
+  "ms": 335301,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9254/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:4183/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 568,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 60,
+  "ms": 340283,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9254/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:1216/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 581,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 61,
+  "ms": 345185,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9254/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:1216/60000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 585,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 62,
+  "ms": 356608,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Lulu",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Lulu",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:9626/9999",
+   "auron:9254/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:120000/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 594,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 64,
+  "ms": 368613,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8562/9999",
+   "auron:8165/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:116689/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 612,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "auron"
+    ]
+   },
+   {
+    "seq": 625,
+    "actor": "auron",
+    "did": "Remedy",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 65,
+  "ms": 382168,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:115189/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 636,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 66,
+  "ms": 387951,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Tidus",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Tidus",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:113753/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 67,
+  "ms": 392585,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:113753/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 643,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 68,
+  "ms": 399055,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:8957/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:115253/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 653,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 69,
+  "ms": 406623,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Lulu",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Lulu",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:115253/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 666,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 71,
+  "ms": 415602,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:112007/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 676,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 72,
+  "ms": 420056,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8562/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:8263/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:110390/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 688,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 74,
+  "ms": 431013,
+  "actor": "command:auron",
+  "want": {
+   "label": "Ether",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Ether",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:7480/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:9960/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:102615/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 702,
+    "actor": "auron",
+    "did": "Ether",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 75,
+  "ms": 437773,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:7480/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:9960/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:104115/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 720,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 77,
+  "ms": 448372,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:7480/9999",
+   "auron:9004/9999",
+   "wakka:6492/6492",
+   "lulu:9960/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:95176/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 750,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 79,
+  "ms": 464781,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6542/9999",
+   "auron:6886/9999",
+   "wakka:6492/6492",
+   "lulu:6548/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:90345/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 768,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 80,
+  "ms": 471831,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6542/9999",
+   "auron:6886/9999",
+   "wakka:6492/6492",
+   "lulu:6548/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:90247/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 780,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 81,
+  "ms": 480921,
+  "actor": "command:lulu",
+  "want": {
+   "label": "X-Potion",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9999/9999",
+   "auron:6886/9999",
+   "wakka:6492/6492",
+   "lulu:621/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:91747/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 799,
+    "actor": "lulu",
+    "did": "X-Potion",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 82,
+  "ms": 484882,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9999/9999",
+   "auron:6886/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:91747/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 805,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 83,
+  "ms": 490070,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9999/9999",
+   "auron:6886/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:88837/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 816,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 85,
+  "ms": 502854,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8931/9999",
+   "auron:9999/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:81062/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 835,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 87,
+  "ms": 515084,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Turbo Ether",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Turbo Ether",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8931/9999",
+   "auron:8967/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:73426/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 859,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 89,
+  "ms": 527831,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8931/9999",
+   "auron:8967/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:71550/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 874,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 90,
+  "ms": 532350,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9571/9999",
+   "auron:8967/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:71550/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 890,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 92,
+  "ms": 544137,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:5738/9999",
+   "auron:8967/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:62127/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 900,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 93,
+  "ms": 548813,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Braska's Final Aeon",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9710/9999",
+   "auron:8967/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:62127/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 910,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 95,
+  "ms": 561468,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:8579/9999",
+   "auron:7947/9999",
+   "wakka:6492/6492",
+   "lulu:8269/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:51227/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 935,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 96,
+  "ms": 571802,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:7497/9999",
+   "auron:8616/9999",
+   "wakka:6492/6492",
+   "lulu:6559/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:52727/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 960,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 98,
+  "ms": 584645,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6429/9999",
+   "auron:8616/9999",
+   "wakka:6492/6492",
+   "lulu:6559/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:43441/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 975,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 99,
+  "ms": 589683,
+  "actor": "command:auron",
+  "want": {
+   "label": "Ether",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Ether",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9999/9999",
+   "auron:8616/9999",
+   "wakka:6492/6492",
+   "lulu:6559/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:43441/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 983,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 101,
+  "ms": 602427,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:9999/9999",
+   "auron:8616/9999",
+   "wakka:6492/6492",
+   "lulu:6559/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:34015/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1000,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 102,
+  "ms": 609839,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6841/9999",
+   "auron:5721/9999",
+   "wakka:6492/6492",
+   "lulu:5572/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:34015/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1027,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 104,
+  "ms": 622884,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Lulu",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6841/9999",
+   "auron:5721/9999",
+   "wakka:6492/6492",
+   "lulu:5572/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:27690/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1037,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 105,
+  "ms": 627093,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6841/9999",
+   "auron:5721/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:27690/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1042,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 106,
+  "ms": 633308,
+  "actor": "command:lulu",
+  "want": {
+   "label": "X-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:5671/9999",
+   "auron:4672/9999",
+   "wakka:6492/6492",
+   "lulu:8223/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:26254/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1057,
+    "actor": "lulu",
+    "did": "X-Potion",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 107,
+  "ms": 643808,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:4536/9999",
+   "auron:8987/9999",
+   "wakka:6492/6492",
+   "lulu:6493/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:29254/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1082,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 108,
+  "ms": 650310,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:7595/9999",
+   "auron:7971/9999",
+   "wakka:6492/6492",
+   "lulu:4783/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:29254/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1100,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 110,
+  "ms": 667614,
+  "actor": "command:auron",
+  "want": {
+   "label": "Tidus",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Tidus",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6429/9999",
+   "auron:6963/9999",
+   "wakka:6492/6492",
+   "lulu:8216/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:28872/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 111,
+  "ms": 670535,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6429/9999",
+   "auron:6963/9999",
+   "wakka:6492/6492",
+   "lulu:8216/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:28872/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 1125,
+    "actor": "tidus",
+    "did": "Talk",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 112,
+  "ms": 677737,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:5177/9999",
+   "yuna:6429/9999",
+   "auron:6963/9999",
+   "wakka:6492/6492",
+   "lulu:8216/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:28872/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1138,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 114,
+  "ms": 689808,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Auron",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Auron",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:6429/9999",
+   "auron:6963/9999",
+   "wakka:6492/6492",
+   "lulu:8216/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:25568/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 115,
+  "ms": 692846,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:6429/9999",
+   "auron:6963/9999",
+   "wakka:6492/6492",
+   "lulu:8216/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:25568/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1149,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 116,
+  "ms": 697684,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:6429/9999",
+   "auron:6963/9999",
+   "wakka:6492/6492",
+   "lulu:8216/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:23946/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1160,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 118,
+  "ms": 717762,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Lulu",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:4955/9999",
+   "wakka:6492/6492",
+   "lulu:4836/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:19172/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "lulu",
+   "wanted": "lulu",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1196,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "lulu"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 119,
+  "ms": 721409,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:4955/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:19172/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1202,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   },
+   {
+    "seq": 1215,
+    "actor": "auron",
+    "did": "Remedy",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 120,
+  "ms": 730154,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:9153/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:19172/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1220,
+    "actor": "auron",
+    "did": "Mental Break",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 121,
+  "ms": 735086,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Tidus",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Tidus",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:9153/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:17628/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 122,
+  "ms": 739153,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:9153/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:17628/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1229,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 123,
+  "ms": 743328,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:9153/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:17628/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1234,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 124,
+  "ms": 748842,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Lulu",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Lulu",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:7733/9999",
+   "auron:9153/9999",
+   "wakka:6492/6492",
+   "lulu:9999/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:17628/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 1239,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 126,
+  "ms": 764563,
+  "actor": "command:auron",
+  "want": {
+   "label": "Tidus",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Tidus",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:6554/9999",
+   "auron:8129/9999",
+   "wakka:6492/6492",
+   "lulu:8196/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:9777/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 127,
+  "ms": 767574,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:6554/9999",
+   "auron:8129/9999",
+   "wakka:6492/6492",
+   "lulu:8196/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:9777/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 1267,
+    "actor": "tidus",
+    "did": "Talk",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 128,
+  "ms": 771027,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:6554/9999",
+   "auron:8129/9999",
+   "wakka:6492/6492",
+   "lulu:8196/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:9777/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1275,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 129,
+  "ms": 775669,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Auron",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Auron",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:8129/9999",
+   "wakka:6492/6492",
+   "lulu:8196/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:9777/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 130,
+  "ms": 778506,
+  "actor": "command:auron",
+  "want": {
+   "label": "Mental Break",
+   "target": "Braska's Final Aeon",
+   "menu": "Special"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:8129/9999",
+   "wakka:6492/6492",
+   "lulu:8196/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:9777/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "braskas-final-aeon",
+   "wanted": "braskas-final-aeon",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1288,
+    "actor": "lulu",
+    "did": "Doublecast: Firaga",
+    "targets": [
+     "braskas-final-aeon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 132,
+  "ms": 789065,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:8129/9999",
+   "wakka:6492/6492",
+   "lulu:8196/9999",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "braskas-final-aeon:658/120000",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1298,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 134,
+  "ms": 860934,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Valefor",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-valefor:1886/1886",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-valefor",
+   "wanted": "possessed-valefor",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 135,
+  "ms": 863300,
+  "actor": "command:auron",
+  "want": {
+   "label": "Shooting Star",
+   "target": "Possessed Valefor",
+   "menu": "Overdrive"
+  },
+  "took": "Shooting Star",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-valefor:1886/1886",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-valefor",
+   "wanted": "possessed-valefor",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 136,
+  "ms": 894782,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ifrit:2585/2585",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ifrit",
+   "wanted": "possessed-ifrit",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 137,
+  "ms": 896711,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ifrit:2585/2585",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ifrit",
+   "wanted": "possessed-ifrit",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 138,
+  "ms": 918233,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:2551/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 139,
+  "ms": 920086,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:2551/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 140,
+  "ms": 922153,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1118/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 141,
+  "ms": 926810,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1118/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 142,
+  "ms": 933063,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:2551/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 143,
+  "ms": 936615,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:4495/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:939/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 144,
+  "ms": 940831,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6258/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:939/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 145,
+  "ms": 947460,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6258/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:2551/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 146,
+  "ms": 949751,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6258/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1035/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 147,
+  "ms": 954835,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6258/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1035/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 148,
+  "ms": 963660,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1035/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 149,
+  "ms": 967732,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:5130/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1035/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 150,
+  "ms": 971198,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1035/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 151,
+  "ms": 980042,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Energy Rain",
+   "target": "all enemies",
+   "menu": "Overdrive"
+  },
+  "took": "Energy Rain",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:2551/2551",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 152,
+  "ms": 990118,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Ixion",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-ixion:1244/2551",
+   "yu-pagoda-left:2894/5000",
+   "yu-pagoda-right:2753/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-ixion",
+   "wanted": "possessed-ixion",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 153,
+  "ms": 1013481,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 154,
+  "ms": 1015342,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 155,
+  "ms": 1017503,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:473/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 156,
+  "ms": 1028109,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2914/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 157,
+  "ms": 1031464,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 158,
+  "ms": 1038808,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 159,
+  "ms": 1042633,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 160,
+  "ms": 1049497,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 161,
+  "ms": 1051360,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 162,
+  "ms": 1063754,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 163,
+  "ms": 1067731,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:5130/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 164,
+  "ms": 1071212,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 165,
+  "ms": 1080139,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3242/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 166,
+  "ms": 1083914,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4242/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 167,
+  "ms": 1088130,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 168,
+  "ms": 1091294,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 169,
+  "ms": 1094934,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 170,
+  "ms": 1101581,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 171,
+  "ms": 1110146,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 172,
+  "ms": 1113706,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:2282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 173,
+  "ms": 1116829,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 174,
+  "ms": 1120263,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 175,
+  "ms": 1128180,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 176,
+  "ms": 1131456,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:2282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 177,
+  "ms": 1137744,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 178,
+  "ms": 1141028,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 179,
+  "ms": 1144181,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Energy Rain",
+   "target": "all enemies",
+   "menu": "Overdrive"
+  },
+  "took": "Energy Rain",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 180,
+  "ms": 1154179,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:864/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 181,
+  "ms": 1168739,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 182,
+  "ms": 1172388,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:2282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 183,
+  "ms": 1175504,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 184,
+  "ms": 1178904,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 185,
+  "ms": 1182135,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 186,
+  "ms": 1185369,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:2282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 187,
+  "ms": 1195090,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:92/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 188,
+  "ms": 1198556,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1092/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 189,
+  "ms": 1201670,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2092/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 190,
+  "ms": 1205523,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2930/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 191,
+  "ms": 1212907,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2930/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 192,
+  "ms": 1214973,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Shiva",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2930/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-shiva",
+   "wanted": "possessed-shiva",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 193,
+  "ms": 1216995,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Elixir",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Elixir",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2930/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 194,
+  "ms": 1228451,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Energy Rain",
+   "target": "all enemies",
+   "menu": "Overdrive"
+  },
+  "took": "Energy Rain",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-shiva:2266/2266",
+   "yu-pagoda-left:3055/5000",
+   "yu-pagoda-right:3063/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 195,
+  "ms": 1258704,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 196,
+  "ms": 1260523,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 197,
+  "ms": 1262334,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 198,
+  "ms": 1266005,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 199,
+  "ms": 1272661,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 200,
+  "ms": 1279919,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 201,
+  "ms": 1281801,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:2254/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 202,
+  "ms": 1284196,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:989/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 203,
+  "ms": 1292334,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:4623/6492",
+   "yuna:4282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 204,
+  "ms": 1302265,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 205,
+  "ms": 1304131,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 206,
+  "ms": 1306039,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:2209/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 207,
+  "ms": 1309736,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:2209/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 208,
+  "ms": 1318198,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 209,
+  "ms": 1320538,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 210,
+  "ms": 1323719,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:3623/6492",
+   "yuna:3282/5130",
+   "auron:3623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 211,
+  "ms": 1327368,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:4623/6492",
+   "yuna:4282/5130",
+   "auron:4623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 212,
+  "ms": 1333750,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:4623/6492",
+   "yuna:4282/5130",
+   "auron:4623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 213,
+  "ms": 1335630,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:4623/6492",
+   "yuna:4282/5130",
+   "auron:4623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 214,
+  "ms": 1346455,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 215,
+  "ms": 1348449,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:2337/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 216,
+  "ms": 1350631,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:957/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 217,
+  "ms": 1358671,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Pray",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:2623/6492",
+   "yuna:2282/5130",
+   "auron:2623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 218,
+  "ms": 1362533,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2799/6492",
+   "yuna:2462/5130",
+   "auron:2806/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3657/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 219,
+  "ms": 1364503,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2799/6492",
+   "yuna:2462/5130",
+   "auron:2806/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3033/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 220,
+  "ms": 1369632,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2799/6492",
+   "yuna:2462/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:1563/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 221,
+  "ms": 1376051,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2799/6492",
+   "yuna:2462/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3149/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 222,
+  "ms": 1378132,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Pray",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:2799/6492",
+   "yuna:2462/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3149/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 223,
+  "ms": 1382300,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2980/6492",
+   "yuna:2627/5130",
+   "auron:1799/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:3149/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 224,
+  "ms": 1391747,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Energy Rain",
+   "target": "all enemies",
+   "menu": "Overdrive"
+  },
+  "took": "Energy Rain",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:1690/3657",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 225,
+  "ms": 1401379,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Possessed Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "possessed-bahamut:655/3657",
+   "yu-pagoda-left:3088/5000",
+   "yu-pagoda-right:3169/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "possessed-bahamut",
+   "wanted": "possessed-bahamut",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 226,
+  "ms": 1431639,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Candle of Life",
+   "target": "Yu Yevon",
+   "menu": "Items"
+  },
+  "took": "Candle of Life",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:99999/99999",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-yevon",
+   "wanted": "yu-yevon",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 227,
+  "ms": 1436143,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:99999/99999",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:5000/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-right",
+   "wanted": "yu-pagoda-right",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 228,
+  "ms": 1438513,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:99999/99999",
+   "yu-pagoda-left:5000/5000",
+   "yu-pagoda-right:2341/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 229,
+  "ms": 1440199,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1623/6492",
+   "yuna:1282/5130",
+   "auron:1623/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:99999/99999",
+   "yu-pagoda-left:4717/5000",
+   "yu-pagoda-right:2341/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 230,
+  "ms": 1448895,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:406/6492",
+   "yuna:513/5130",
+   "auron:406/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:93000/99999",
+   "yu-pagoda-left:3545/5000",
+   "yu-pagoda-right:2341/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 231,
+  "ms": 1453666,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:102/6492",
+   "yuna:205/5130",
+   "auron:102/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:83001/99999",
+   "yu-pagoda-left:886/5000",
+   "yu-pagoda-right:2341/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 232,
+  "ms": 1455409,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:102/6492",
+   "yuna:205/5130",
+   "auron:102/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:83001/99999",
+   "yu-pagoda-left:612/5000",
+   "yu-pagoda-right:2341/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-left",
+   "wanted": "yu-pagoda-left",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 233,
+  "ms": 1461102,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Yu Pagoda B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:102/6492",
+   "yuna:10/5130",
+   "auron:102/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:0/1886",
+   "ifrit:0/2585",
+   "ixion:0/2551",
+   "shiva:0/2266",
+   "bahamut:0/3657",
+   "yu-yevon:83001/99999",
+   "yu-pagoda-left:0/5000",
+   "yu-pagoda-right:2341/5000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yu-pagoda-right",
+   "wanted": "yu-pagoda-right",
+   "mismatch": false
+  }
+ }
+]

@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1131 decisions in all: 674 registry rows, 250 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 707 of the written decisions record a blanket yes.
+1212 decisions in all: 750 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 778 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1051 |
-| proposed | 14 |
+| adopted | 1131 |
+| proposed | 12 |
 | deferred | 5 |
 | rejected | 11 |
-| superseded | 50 |
-| **All** | **1131** |
+| superseded | 53 |
+| **All** | **1212** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 84 |
-| art | 263 |
-| visuals | 80 |
-| camera | 57 |
-| audio | 58 |
-| ui | 130 |
+| combat | 87 |
+| art | 265 |
+| visuals | 86 |
+| camera | 60 |
+| audio | 105 |
+| ui | 131 |
 | story | 16 |
-| chapters | 191 |
-| guide | 28 |
-| release | 44 |
+| chapters | 196 |
+| guide | 30 |
+| release | 47 |
 | hosting | 17 |
-| process | 94 |
+| process | 99 |
 | critic | 34 |
-| data | 9 |
-| tech | 8 |
+| data | 10 |
+| tech | 11 |
 | site | 18 |
-| **All** | **1131** |
+| **All** | **1212** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 526 |
-| FFX only | 330 |
-| FFX-2 only | 258 |
-| FF7 hidden experiment | 17 |
-| **All** | **1131** |
+| both games | 570 |
+| FFX only | 352 |
+| FFX-2 only | 272 |
+| FF7 hidden experiment | 18 |
+| **All** | **1212** |
 
 ## Standing rules in force
 
@@ -107,6 +107,8 @@ Each rule links to the decision that set it. A rule drops off this list when its
 - **A BEHIND THE SCENES page on how the game was made, HIDDEN until he approves it: not public facing and not in the game until he says so (both games)**: Behind the Scenes stays hidden (switched off, absent from the markup, not reachable in any public build) until Bailey explicitly approves the finished page. Decision [D-617](#d-617) (2026-10-08, both games).
 - **Each release gets a short note for players, written just before the deploy: the deploy refuses to go out without it, and the notes never mention the hidden chapter (both games; a standing release rule)**: Every release needs a short player-facing note (3 to 6 lines, each tagged FFX, FFX-2 or Both) in the changelog panel's data file before it is deployed; the deploy refuses without it, and the notes never name a hidden chapter or its secret word. Decision [D-624](#d-624) (2026-10-08, both games).
 - **Parity findings reach live builds as they land**: every finished decompilation lane goes into the next release candidate rather than a batch at the end, and each report separates what is decompiled, what is wired into the engine and what is live. Decision [D-654](#d-654) (2026-10-09, both games).
+- **ElevenLabs credits: keep a floor of 10,000 until the monthly reset on 2026-11-07; no top-up or plan change without asking, because that spends money (both games)**: Never let the ElevenLabs credits fall below 10,000 before the 2026-11-07 reset, and never top up or change the plan without asking Bailey first (AGENTS.md rule 11). Decision [D-711](#d-711) (2026-10-10, both games).
+- **Loop seams are judged by measurement (click ratio, level step, run-on error, the thresholds the Bahamut lane used), not by ear; he can flag any seam he hears (both games)**: A music loop seam is accepted or rejected by its measured click ratio, level step and run-on error (the Bahamut lane's thresholds), not by an agent's ear; Bailey can flag any seam he hears. Decision [D-716](#d-716) (2026-10-10, both games).
 
 ## Waiting on Bailey's yes
 
@@ -123,8 +125,6 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-258](#d-258) — Steam session part 2: the yes stands (D-205), but the time is still Bailey's to pick
 - [D-582](#d-582) — ElevenLabs tracks: ship them as he heard them (wide stereo, failing the project's stereo gate) or swap to the staged narrow versions; the driver's default is as heard and he has not chosen (both …
 - [D-633](#d-633) — NOT covered by his yes of 22:42:45, because the driver gave no recommendation first: the name of the Behind the Scenes page, which of his quotes appear, Yunalesca's first form, the art picks and his …
-- [D-644](#d-644) — The three approved paintings his picks replaced (Yuna White Mage hurt and knocked out, Rikku Dark Knight hurt): keep the new or restore the old: NOT decided; they ship as installed (FFX-2 only)
-- [D-662](#d-662) — Contribute the game-code findings to the biggest FFX and FFX-2 wikis as corrections: his question; the driver's plan (the RE session compiles the list, he reviews it, edits go up under his own …
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
@@ -3201,7 +3201,7 @@ Wednesday · 25 decisions
 - <a id="d-306"></a>**D-306** — Shipped-audio budget raised from 85 MB to 90 MB so the new SFX sprite (sprite-v2) ships at V0, the same encode quality as the music
   - Bailey: “I'll go with all of your recommendations please keep going” (blanket yes)
   - What changed: The shipped-audio budget is raised from 85 MB to 90 MB so the new sound-effect sprite (sprite-v2) ships at V0, the same encode quality as the music; the per-sprite size limit is raised only as far as V0 needs. Amends D-302. Both games. UPDATE, 2026-10-08 ~12:00 EDT: the 90 MB cap now holds music and effects only: the recorded voices have their own 20 MB line (D-593), and the chapter-select pair of release 39.5 ships at V4, not V0 (D-592). Music and effects stand at 89,828,137 of 90,000,000 bytes in r395-int.
-  - area audio · both games · adopted · delivery in progress · at ~18:30 EDT · see [D-592](#d-592), [D-593](#d-593) · refines [D-302](#d-302)
+  - area audio · both games · adopted · delivery in progress · at ~18:30 EDT · see [D-592](#d-592), [D-593](#d-593) · refines [D-302](#d-302) · partly replaced by [D-706](#d-706)
   - Source: Bailey, 2026-09-30 ~18:30 EDT, answering the driver's two recommendations (credits option O1, audio budget 90 MB) with: "I'll go with all of your …
 - <a id="d-307"></a>**D-307** — The battle-ffx and boss-vegnagun cues, which screen lower on the automated ear than the files they replace, stay as shipped by default; he has not listened yet and can still say revert
   - Bailey: “All your recommendations I’ll listen later I’m at work right now” (blanket yes)
@@ -4807,7 +4807,7 @@ Thursday · 48 decisions
 - <a id="d-598"></a>**D-598** — Bahamut (Chapter IV) and Paragon with Oversoul (Chapter XIII) are drawn at their real size with the special colossus framing on desktop and at 70 percent of real on phones (FFX-2 only)
   - Bailey: “go with your recommendations and restart the art run” (blanket yes)
   - What changed: Item 7 of 11: options 3 (desktop) and 4 (phone) of the FFX-2 giants study (D:/Tools/pyrefly-scratch/2026-10-08/giants/, overview.jpg and sheets/bahamut.jpg, paragon.jpg; A-0553), accepted. At 1600x900, on-screen ratio over the girls and the girls' height: Bahamut today 1.92 with the girls 294 px; option 3 3.83, girls 162 px (55 percent of today), the camera 1.8 times as far and 2.9 units higher, no extra painting edge; Paragon today 1.12, girls 279 px; option 3 4.24, girls 143 px (51 percent), 1.9 times as far and 2.4 higher. On a phone option 4 (70 percent of real height, the same solver) keeps the girls at 107 px (Bahamut) and 91 px (Paragon), where option 3 would leave 60 to 64 px, under the 80 px yardstick. Real ratios used: Bahamut 5.02 (its idle bones give only 3.32), Paragon 5.40, which may be an upper bound (the model is three times wider than tall). Oversoul is the same painting with the blue cast and needs nothing of its own. Not decided and not built: the extra-low heroic shot (it needs a taller Bevelle plate: 18 percent of the frame would be void for Bahamut, 8 percent for Paragon). The cost the build lane must fix: the next-move (intent) card lands on the boss, 20 percent of Bahamut in option 3. Being built by the day workflow's giants-x2-build lane on r3942-stage (A-0557); presentation only, so the engine digests must not change. Not live. UPDATE, 2026-10-08 13:07 EDT: the first build lane was interrupted at 13:01:47 and its untested work saved on r3942-giants-wip (A-0561); he asked for the restart (D-604) and it began at 13:04:32 from that branch (A-0562). UPDATE, 2026-10-08 ~23:00 EDT: built (ffc5e8d4 at 14:29; A-0567), checked twice and repaired twice (b130ecf2 to b8aa906f, A-0568; d674a9e2 at 22:23, A-0582); the Chapter IV phone hint card that now covers Yuna is D-631.
-  - area camera · FFX-2 · adopted · delivery in progress · see [D-319](#d-319), [D-493](#d-493), [D-574](#d-574), [D-601](#d-601), [D-631](#d-631) · refines [D-574](#d-574)
+  - area camera · FFX-2 · adopted · delivery in progress · see [D-319](#d-319), [D-493](#d-493), [D-574](#d-574), [D-601](#d-601), [D-631](#d-631) · refines [D-574](#d-574) · partly replaced by [D-681](#d-681)
   - Source: Bailey, 2026-10-08 11:55:56 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "go with your recommendations and …
 - <a id="d-599"></a>**D-599** — Anima (Chapter XI) is drawn at 70 percent of her real size on desktop and phone, so the girls stay readable (FFX-2 only)
   - Bailey: “go with your recommendations and restart the art run” (blanket yes)
@@ -5042,7 +5042,7 @@ Friday · 27 decisions
 - <a id="d-644"></a>**D-644** — The three approved paintings his picks replaced (Yuna White Mage hurt and knocked out, Rikku Dark Knight hurt): keep the new or restore the old: NOT decided; they ship as installed (FFX-2 only)
   - Bailey: “I’ll go with all of your recommendations” (blanket yes)
   - What changed: Nothing changed beyond D-636: his pick 1 stands, so release 39.4.3 ships the three new paintings, disclosed as F931-04. The driver gave no recommendation before his yes of 17:39:55 (“the three paintings your picks replace: a side-by-side picture is on its way”), so his yes does not decide it. The sheet replaced-three.jpg (old on the left, new on the right) went to him at about 17:55; the driver's recommendation then: keep Rikku Dark Knight hurt (clearly hurt, her full gear) and restore both Yuna White Mage paintings (the new ones lose her hood and change her staff, so they do not match her other White Mage paintings): “keep Rikku, restore both Yuna”. At 23:04 it told him they ship as he picked and that “restore both Yuna” tomorrow puts the old ones back. Art run #4 renders Yuna White Mage hurt and knocked out again with the hood up, in case he prefers those to both (A-0621). The old bytes are in the private art repo (commit 266768d) and in D:/Tools/pyrefly-art-backup/replaced/2026-10-09-picks.
-  - area art · FFX-2 · proposed · nothing to build · at ~17:39 EDT · see [D-636](#d-636), [D-661](#d-661) · refines [D-636](#d-636)
+  - area art · FFX-2 · superseded by [D-675](#d-675) · nothing to build · at ~17:39 EDT · see [D-636](#d-636), [D-661](#d-661) · refines [D-636](#d-636)
   - Source: Bailey, 2026-10-09 17:39 EDT (17:39:55 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “I’ll …
 - <a id="d-645"></a>**D-645** — Order of work: the presentation release in progress (r3943-int) is finished and deployed first, on his words at deploy time; the visual and feel pass and the decompiled mechanics follow it (both games)
   - Bailey: “I want a pass going over visual and feel as well as starting the implementation of the decompiled ffx/ffx-2 game mechanics into our project and a live build. Finish what you are working on now first. Give me bullet points of everything being worked on and when.”
@@ -5132,12 +5132,12 @@ Friday · 27 decisions
 - <a id="d-662"></a>**D-662** — Contribute the game-code findings to the biggest FFX and FFX-2 wikis as corrections: his question; the driver's plan (the RE session compiles the list, he reviews it, edits go up under his own account with his OK for each) awaits his yes (both games)
   - Bailey: “Can we make contributions to the biggest ffx/ffx-2 wikis about the inaccuracies? If we have it decompiled straight from the game that’s the best source right?”
   - What changed: Nothing changed: his question and the driver's answer (23:05:36 EDT) are all there is. The answer was yes, with three cautions: name the game version for each correction (the findings come from his Steam HD Remaster and the wikis often describe the original releases, where some rules differed); post only what is proven (checked by running the game's own function, or measured in the real game; anything only read in the code is marked lower confidence); and facts only, never decompiled code or text (his own project rule, and copyright). The biggest target is the Final Fantasy Wiki on Fandom; the detailed GameFAQs guides are not wikis, but their authors can be written to with corrections. The plan: the RE chat, which keeps the two battle-mechanics docs, compiles a correction list (what the wiki says with its link, what the game does, how it was proven, how sure); he reviews it; the edits go up under his own account (an agent cannot make accounts), the driver drafting wording and citations, with his OK for each public edit and the discussion page first for bigger claims. The driver asked “Want me to have that chat start the list tomorrow?” and he went to sleep without answering. Nothing is built or posted.
-  - area process · both games · proposed · nothing to build · at ~23:05 EDT · see [D-634](#d-634), [D-635](#d-635)
+  - area process · both games · superseded by [D-677](#d-677) · nothing to build · at ~23:05 EDT · see [D-634](#d-634), [D-635](#d-635)
   - Source: Bailey, 2026-10-09 23:05 EDT (23:05:03 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “Can …
 
 ### 2026-10-10
 
-Saturday · 12 decisions
+Saturday · 93 decisions
 
 - <a id="d-663"></a>**D-663** — Art generation is ON overnight, local ComfyUI only, until 10:00 EDT on 2026-10-10, queued by relevance, with the output on F: because D: had 3 GB free (both games)
   - Bailey: “Ok I'm going to sleep make sure you do as much local art generation as possible and as relevant as I'm sleeping”
@@ -5199,3 +5199,393 @@ Saturday · 12 decisions
   - What changed: At 01:05:11 EDT the driver took concept A with the concept's recommended answers: a Guest slab when Seymour joins; the seam between the rounds as painted stills with a white-out and a three-line Tidus interlude (no real-time beam); the arms' AP and Gil farm kept and never mentioned; a retry from link 2's entry state with the carried HP (hopelessRetry restores a hopeless entry); the existing camera rigs (D-318 is not adopted); link 1's party prep picks three of Tidus, Yuna, Auron, Kimahri, Wakka and Lulu (no Rikku); no Anima. Slice 1 is link 2 (Yuna, Auron and Seymour; Switch off; HP and MP carried; the weakened body); slice 2 is link 1 (the head's cycle, the arms' shield and their regeneration); if time runs short both links must still work, so polish is cut, not a link. Writing is original lines only (the writing bible; no game dialogue); music is existing cues only; art is provisional from art run #4 (Gui's four parts, the ridge camp and the ruined camp, Seymour in his human Macalania form as a party member). Items the research could not source stay out and are listed: Q-7 (Seymour's exact White Magic), Q-13 (Gui's size) and Q-14 (the party preset at the Ridge, which is the difficulty dial). He has not seen it and can overturn it.
   - area chapters · FFX · adopted · delivery in progress · at ~01:05 EDT · see [D-666](#d-666), [D-669](#d-669) · refines [D-666](#d-666)
   - Source: The driver, 2026-10-10 01:05 EDT (01:05:11 by the transcript's clock), in its message to the Gui lane, under D-669: Bailey, 2026-10-10 00:13 EDT …
+- <a id="d-675"></a>**D-675** — The three replaced paintings, per the driver's recommendation: RESTORE the old approved Yuna White Mage hurt and knocked-out paintings (hood up) and KEEP the new Rikku Dark Knight hurt (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 41a, answering D-644. His blanket yes took the driver's recommendation (“restore both Yuna, keep Rikku”). Done in the release tree by the integration lane: the old approved hurt and knocked-out paintings of Yuna White Mage (the 2026-10-07 repairs, hood up) are back, the old 1x master and sidecar taken from the private art repository's archive and the old size tiers from the local backup of replaced art, pinned so the new ones are superseded; verify-approved reads 916 ok, 0 mismatched, 0 missing; the driver looked at the before-and-after sheet; committed as b4863faf (13:30 EDT) and live in release 39.4.4. Rikku Dark Knight's hurt keeps its new painting. The other held and weak rows are unchanged. FFX-2 only (the dresspheres of Yuna and Rikku).
+  - area art · FFX-2 · adopted · delivery implemented · at ~12:55 EDT · see [D-644](#d-644), [D-636](#d-636), [D-637](#d-637) · refines [D-636](#d-636) · answers [D-644](#d-644)
+  - Source: NOW.md
+- <a id="d-676"></a>**D-676** — The Experiment (FFX-2) stays the game's own two-act rematch with no upgrade choice before the fight: the driver's delegated pick D-673 is now also his own yes (FFX-2 only)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 41b. D-673 was the driver's pick under his overnight delegation and differed from the upgrade-dial pitch he had accepted (D-667); the driver's recommendation to keep it, which he accepted here, makes it his. Built and merged: origin/ch-experiment 508debb9 (full suite 1,011 files and 15,842 tests green; desktop and phone real-input runs won both acts by the advisor's card), merged into the release branch as 847b97e1 (13:50 EDT) with the hidden chapters' registrations split into src/data/chapters-experiments.ts (1d57ec12); live and still hidden (the typed word) in release 39.4.4. The fight is easy (12 of 12 seeds), by the game's own rows and not tuned. Listing it on the chapter board still waits for his word (D-670). FFX-2 only.
+  - area chapters · FFX-2 · adopted · delivery implemented · at ~12:55 EDT · see [D-667](#d-667), [D-670](#d-670), [D-673](#d-673) · refines [D-673](#d-673)
+  - Source: Bailey, 2026-10-10 12:55 EDT (12:55:16 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “I'll …
+- <a id="d-677"></a>**D-677** — Start the wiki-corrections list: the RE chat compiles it from the decompiled game code, facts only, labelled by game version, proven items first; Bailey posts each edit himself (both games)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 41c, answering D-662. The RE chat (“Final Fantasy X/X-2 battle mechanics reverse engineering”) compiled the list: every item names the game and the exact build it was measured on and carries its proof, proven items first; nothing is posted anywhere and nothing leaves the machine, and Bailey posts every edit himself under his own account. Its draft (82 items, revised to 102 after an independent checker opened the cited note for each item) lives outside every repo at D:/Tools/ffx-parity/wiki-corrections/draft.md and was published as a Claude Doc, “Wiki corrections” (recreated on account #3 at about 22:55 EDT: https://claude.ai/code/artifact/6571fb21-bf6d-4937-ba2d-e5fda81e2683). His review and his own posts are still to come. Both games (each item is by game).
+  - area process · both games · adopted · delivery in progress · at ~12:55 EDT · see [D-662](#d-662), [D-634](#d-634) · answers [D-662](#d-662)
+  - Source: Bailey, 2026-10-10 12:55 EDT (12:55:16 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “I'll …
+- <a id="d-678"></a>**D-678** — A private searchable page of the decisions ledger (both games; records only)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 41d. An agent built the page from DECISIONS.md with search, filters and the links to every page the ledger cites (the Decisions Ledger, first published at about 14:00 EDT as artifact HDGUSWdwZZCxL8YdJaAvF8 on account #4 and republished on account #3 as PdUkSPcvw2pZUShENdACoG), regenerated by D:/Tools/pyrefly-scratch/2026-10-10/decisions-page/regen.mjs from origin/main; this records pass regenerated it with D-675 to D-750 and the three Claude Docs of the RE chat. Not covered by his yes, since no recommendation was given: the chapter-select loops A and C (his ears), the approval of Behind the Scenes (his review), listing the hidden chapters (after he plays them) and the update-off file (his own action). “republish all artifacts here” needed nothing on account #4 (all 36 pages were already there); on account #3 it was done at 21:39 (A-row). Records only; both games.
+  - area process · both games · adopted · delivery implemented · at ~12:55 EDT · see [D-639](#d-639), [D-643](#d-643), [D-670](#d-670) · refines [D-639](#d-639)
+  - Source: Bailey, 2026-10-10 12:55 EDT (12:55:16 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “I'll …
+- <a id="d-679"></a>**D-679** — Usage mode: “go full speed ahead”, NORMAL, because he has plenty of usage on several other accounts; he moves the chat to another account by hand when one runs out (both games)
+  - Bailey: “go full speed ahead please i have a ton of usage on several other accounts”
+  - What changed: Item 42 (the first line). The mode stays NORMAL by his word (D-621); agents never tighten it below. What it meant that afternoon and evening: the 5-hour window ran out in the middle of the afternoon (every lane died and was resumed after the reset) and the weekly allowance of account #4 ran out at about 18:59 EDT, so the chat moved to account #3 as he had said it would; the readings are in NOW.md.
+  - area process · both games · adopted · nothing to build · at ~13:59 EDT · see [D-621](#d-621) · refines [D-621](#d-621)
+  - Source: Bailey, 2026-10-10 13:59 EDT (13:59:07 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “go …
+- <a id="d-680"></a>**D-680** — Research the YouTube channel stefan_3d_ai: every video's transcript and description and the GitHub repositories they link, and report what could greatly improve the game (both games)
+  - Bailey: “go through all of this guys videos (transcripts and all) and including the descriptions of each youtube video which may include github repo links and see if theres anything relevant to us to greatly improve our game here. let me know what you find.”
+  - What changed: Item 42 (the second line). A research workflow listed the channel with yt-dlp (no video downloaded), triaged 346 videos by title, read 44 of them in full (transcripts and descriptions) and checked the linked repositories (50 GitHub links); a first read from the titles went to him at once. The report is the page “Stefan 3D AI Findings” (artifact DMNFMvsgTx3srHCX3qyhJ2 on account #4, republished on #3 as MviSoJPZHZMNdmjr5Un4BB). Its top findings: ElevenLabs sound effects v2, hiding swaps with contact frames and smears, a spell effects lab, cutting boss paintings into parts (SAM2), a pose review page, skeleton key poses, a Blender greybox for camera and depth, see-through layered idles. He picked the pilots in D-700.
+  - area tech · both games · adopted · delivery implemented · at ~14:14 EDT · see [D-700](#d-700)
+  - Source: Bailey, 2026-10-10 14:14 EDT (14:14:41 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “go …
+- <a id="d-681"></a>**D-681** — FFX-2 Chapter IV: Bahamut stands at his IN-BATTLE size, about 3.3 times the girls (the share 0.66 of his model) on desktop and phone, not at the full model size with the colossus framing (FFX-2 only)
+  - Bailey: “yes please fix for all i mentioned, and give me the report on that youtube channel i linked you to. is it relevant and can it benefit our game. there are github repos in the description of some of his youtube videos.”
+  - What changed: Item 42a, from “and bahamut looks absolutely massive...is that accurate?” and “yes please fix for all i mentioned”. The bones of Bahamut's idle span 58 of the model's 87.852 units, so his in-battle size is 0.66 of the model, about 3.3 times the girls (medium confidence); the lane (origin/fix-bahamut-size e4d5c641, 16:55 EDT) set that on a desktop and on a phone and gave the girls their size back (95 to 97 percent of the pre-giants look on a desktop, up from 55, and 82 on a phone). Disclosed: at 5:4 (1280x1024) the girls are at 92 percent and the intent card covers 39 percent of him. Merged as 9e59f737 (17:41 EDT); live in release 39.4.4; the focused review saw him whole in frame at 1600x900, 2000x1012 and 390x844. This replaces D-598's “real size, colossus framing” on a desktop for Bahamut only: Paragon and Anima are unchanged. FFX-2 only.
+  - area camera · FFX-2 · adopted · delivery implemented · at ~14:47 EDT · see [D-598](#d-598), [D-601](#d-601)
+  - Source: Bailey, 2026-10-10 14:47 EDT (14:47:21 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “yes …
+- <a id="d-682"></a>**D-682** — Use ElevenLabs for the music, starting with the Leblanc chapter and Bahamut, options on listening pages first; it is his go to spend ElevenLabs credits; an audit of every chapter follows (FFX-2 first)
+  - Bailey: “it sounds very arcade-y and like snes music again. you need to use eleven labs”
+  - What changed: Item 42b. His arcade-and-SNES complaint is about the timbre of the synth and SoundFont music itself, which is why every later row (D-685 and D-707 to D-710) replaces the synth cues with ElevenLabs originals. This row's first step: two options each for the Leblanc battle (LB-M4 and LB-M5) and Bahamut (BH-M4 and BH-M5) on the “Leblanc Music and Sound” page (DhhNyQCGTYacEQWhtnVuNL) and the “Bahamut Music” page (7TXeVmLM3pzKhHDc3hcbYv), and a music audit that found 3 of 26 cues were ElevenLabs, boss-ffx2-aeon shared by six FFX-2 chapters and the FF7 hidden chapter silent; the two picks (D-703, D-704) are live in release 39.4.4. Credits at the time: 104,136 of 131,000 left, reset 2026-11-07. FFX-2 first; the audit led to D-707.
+  - area audio · FFX-2 · adopted · delivery implemented · at ~14:47 EDT · see [D-521](#d-521), [D-539](#d-539), [D-540](#d-540), [D-685](#d-685), [D-707](#d-707) · refines [D-521](#d-521)
+  - Source: Bailey, 2026-10-10 14:47 EDT (14:47:21 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “yes …
+- <a id="d-683"></a>**D-683** — Sound effects for the Leblanc chapter: ElevenLabs candidates on the same page as the music (FFX-2)
+  - Bailey: “ok i'm playing the leblanc chapter and the music and sound effects are atrocious. it also sounds like 2 different sound tracks are playing at once?”
+  - What changed: Item 42c. The Leblanc sound effects were to come as ElevenLabs sound-effect candidates beside the music. After his next message (D-686: parity with the Steam game) the candidates waited for the parity spec (D-698); the spec is written (D:/Tools/pyrefly-scratch/2026-10-10/sfx-parity/spec.md, Leblanc first) and the plumbing is built (D-749) but nothing is generated, because the ElevenLabs API key's own credit limit blocks it (D-742). Not live.
+  - area audio · FFX-2 · adopted · delivery in progress · at ~14:40 EDT · see [D-684](#d-684), [D-686](#d-686), [D-698](#d-698) · refines [D-521](#d-521)
+  - Source: Bailey, 2026-10-10 14:40 EDT (14:40:04 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “ok …
+- <a id="d-684"></a>**D-684** — Fix the “two soundtracks at once” bug in BOTH games: the victory fanfare of every link of a chained fight no longer plays over the still-running battle theme; only the last link stings, with the theme faded out under it
+  - Bailey: “ok i'm playing the leblanc chapter and the music and sound effects are atrocious. it also sounds like 2 different sound tracks are playing at once?”
+  - What changed: Item 42d. Diagnosis (a workflow that reproduced it and proved it): the victory-fanfare played at the end of EVERY link of a chained fight over the running theme, three times in Chapter VI, in B major against the Bb-minor theme, heard as two soundtracks. The decision “both games or FFX-2 only, from the cause” went to both: it is shared audio routing and a bug fix (CHK-020), and the same flaw sat in the other chained fights (the Bevelle Final Aeon links, Isaaru, Sin's Fins, the Fallen Aeons and the Den of Woe), whose seam stings are removed; the FFX part is an inference that Bailey was told to check. The fix gives the chain a moreLinks flag and stops the music over 0.3 s on the last link only: f0098eb2 (18:35 EDT), four hunks plus three new tests, live in release 39.4.4 (the focused review heard one fanfare at the end of Chapter VI, the hidden Leblanc chapter, the Experiment and Gui). Still for his ear: B-minor sound effects against Bb-minor themes, boss-ffx2-aeon's hard loop seam, and the theme restarting after a pause (D-697). Both games.
+  - area audio · both games · adopted · delivery implemented · at ~14:40 EDT · see [D-697](#d-697), [D-701](#d-701)
+  - Source: Bailey, 2026-10-10 14:40 EDT (14:40:04 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “ok …
+- <a id="d-685"></a>**D-685** — Music: every encounter gets an ORIGINAL ElevenLabs track that closely resembles the mood and atmosphere of the real game's track at that fight, written in words (tempo, instruments, texture, mood), never copying a melody, motif or title; options on listening pages (both games)
+  - Bailey: “my suggestion for music and sound effects. make the sound effects a 1:1 parity of the ffx/ffx-2 remaster on steam that i have installed. for music create originals that closely resemble the mood and atmosphere of the songs playing at each respective encounter.”
+  - What changed: Item 43a. The mood briefs are in words only; no melody, motif or title is copied or fed to the generator (rule 8). His ear was to pick from listening pages (rule 13); on the same evening he delegated the picks to the driver (D-702). Progress: batch 1 made two options each for eight chapters (D-717 to D-723), batch 2 for every remaining synth cue is planned but blocked (D-738, D-742); LB-M5 and BH-M4 are live in 39.4.4, the rest wait for the next build. Both games, each chapter by its own game.
+  - area audio · both games · adopted · delivery in progress · at ~15:06 EDT · see [D-682](#d-682), [D-707](#d-707), [D-708](#d-708) · refines [D-682](#d-682)
+  - Source: Bailey, 2026-10-10 15:06 EDT (15:06:26 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “my …
+- <a id="d-686"></a>**D-686** — Sound effects: “1:1 parity” with his installed Steam remasters, done inside rule 8: the same events sound with the same timing, length, loudness balance and character, all MEASURED from his copy as facts, while the sounds themselves are ORIGINALS made with ElevenLabs text-to-SFX; decoded retail audio is never kept (both games)
+  - Bailey: “my suggestion for music and sound effects. make the sound effects a 1:1 parity of the ffx/ffx-2 remaster on steam that i have installed. for music create originals that closely resemble the mood and atmosphere of the songs playing at each respective encounter.”
+  - What changed: Item 43b. Bailey was told why the game's own files cannot be used (original assets only, rule 8; copyright). The same events, timing, length, loudness balance and brightness are taken as numbers from his installed game; retail audio is decoded in memory only, never kept and never used as a generator reference; the prompts are original words that name no game, place, character or composer. The spec (sfx-parity/spec.md, written by a workflow that finished at about 23:51 EDT) maps FFX and FFX-2 event by event; the plumbing is on origin/r40-sfx (5bc5aa8c, not merged, not live). Both games, each with its own sound set.
+  - area audio · both games · adopted · delivery in progress · at ~15:06 EDT · see [D-712](#d-712), [D-740](#d-740) · refines [D-521](#d-521)
+  - Source: Bailey, 2026-10-10 15:06 EDT (15:06:26 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “my …
+- <a id="d-687"></a>**D-687** — Decompile all FFX art and assets, plus the camera perspective and the camera angle changes during battle, then add a hidden experimental chapter with a 3D presentation of an encounter already in the game, opened by a code word at chapter select (FFX only; relayed)
+  - Bailey: “decompile all ffx art and assets as well as camera perspective and camera angles changes during battle then add an experimental new chapter with this 3d presentation of an encounter we already have in game. add as a new experimental chapter please that is hidden. with a code word i need to type in at the chapter select menu please.”
+  - What changed: Item 44a. Work on branch fayth-3d (cut from the release branch; on 2026-10-11 at 00:48 it merged the live 39.4.4 with no conflicts); the real FFX models and stage are extracted on his PC only (D:\Tools\ffx-parity\assets) and never enter a repo (rule 8). It gets a release slot after a focused review. FFX only (Evrae, Chapter VIII). This session's own lanes beyond this row have no ledger rows yet.
+  - area chapters · FFX · adopted · delivery in progress · at ~15:03 EDT · see [D-632](#d-632), [D-688](#d-688), [D-731](#d-731) · refines [D-632](#d-632)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720; decisions-to-record item 44) and verified against that …
+- <a id="d-688"></a>**D-688** — Where the version with real FFX models runs: BOTH versions: on Bailey's PC it loads the real FFX models and stage from his own extracted files through the local dev server only, and on the website it is our painted art; retail assets never go in the repo or on the site (FFX only; relayed)
+  - Bailey: “Both versions (Recommended)” (blanket yes)
+  - What changed: Item 44b. One chapter, two renderings: the real models on his PC through the local server only; the painted 2.5D version on echoesofspira.com, which still waits for his options pick (D-632, D-731). Rule 8 stays whole: nothing retail is committed or deployed. FFX only.
+  - area chapters · FFX · adopted · delivery in progress · at ~16:54 EDT · see [D-632](#d-632) · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720; decisions-to-record item 44) and verified against that …
+- <a id="d-689"></a>**D-689** — The first encounter in 3D is Evrae (FFX Chapter VIII) (FFX only; relayed)
+  - Bailey: “Evrae (Recommended)” (blanket yes)
+  - What changed: Item 44c. The hidden chapter is Evrae on the airship; it is numbered 22 by the driver's notes. FFX only (Chapter VIII).
+  - area chapters · FFX · adopted · delivery in progress · at ~16:54 EDT · see [D-687](#d-687) · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720; decisions-to-record item 44) and verified against that …
+- <a id="d-690"></a>**D-690** — The code word at chapter select for the 3D Evrae chapter is “fayth” (FFX only; relayed)
+  - Bailey: “fayth (Recommended)” (blanket yes)
+  - What changed: Item 44d. Typed on the chapter-select board like “leblanc”, “limit”, “experiment” and “mushroom”; no word may begin with, end with or contain another (a test pins it). FFX only.
+  - area chapters · FFX · adopted · delivery in progress · at ~16:54 EDT · see [D-687](#d-687), [D-670](#d-670) · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720; decisions-to-record item 44) and verified against that …
+- <a id="d-691"></a>**D-691** — The stale strategy-guide cards (Evrae's Stone Gaze, Yojimbo's odds, the Fins and Genais Negation and shell) get rewritten to match the game, drafted first and shown to him (FFX only; relayed)
+  - Bailey: “Draft, show me first (Recommended)” (blanket yes)
+  - What changed: Item 45a. The drafts were made (old text, new text, source and picture for each card), then shown before shipping, which led to 45b. FFX only.
+  - area guide · FFX · adopted · delivery implemented · at ~14:15 EDT · see [D-654](#d-654), [D-692](#d-692) · refines [D-654](#d-654)
+  - Source: Relayed by the RE session (“Final Fantasy X/X-2 battle mechanics reverse engineering”; decisions-to-record item 45) and verified against that chat's …
+- <a id="d-692"></a>**D-692** — Ship the named guide cards plus the extras (Seymour Flux, Macalania and Anima, Omnis, Yunalesca, Braska's Final Aeon and Yu Yevon, Evrae's Pull back line) in the next build, written to match the game's scripts (FFX only; relayed)
+  - Bailey: “Ship named + extras (Recommended)” (blanket yes)
+  - What changed: Item 45b. Branch re-parity-guide adaff30c (the drafts with before-and-after pictures); it goes into the next release candidate (RC2, branch rel-3945, being assembled by the RE session), not into 39.4.4. FFX only.
+  - area guide · FFX · adopted · delivery in progress · at ~17:01 EDT · see [D-691](#d-691) · refines [D-691](#d-691)
+  - Source: Relayed by the RE session (“Final Fantasy X/X-2 battle mechanics reverse engineering”; decisions-to-record item 45) and verified against that chat's …
+- <a id="d-693"></a>**D-693** — Chapter IX (Yojimbo): the summoner keeps her Summon's recovery when an aeon leaves, as the game does, so wins fall from 488 to 307 of 500 and our suggested line is reworked instead of the rule (FFX only; relayed)
+  - Bailey: “Keep 1:1, rework our line (Recommended)” (blanket yes)
+  - What changed: Item 45c (W5, row A3). The game's own rule stays; the shipped line, which summons an aeon right before Zanmato and leaned on the old, wrong reset, is reworked. In the next release candidate (RC2), not live. FFX only.
+  - area combat · FFX · adopted · delivery in progress · at ~17:01 EDT · see [D-654](#d-654), [D-655](#d-655) · refines [D-654](#d-654)
+  - Source: Relayed by the RE session (“Final Fantasy X/X-2 battle mechanics reverse engineering”; decisions-to-record item 45) and verified against that chat's …
+- <a id="d-694"></a>**D-694** — Chapter XVIII (Sin's face): keep the reworked line, Doublecast with Lulu's Firaga and the three Wards the guides recommend, which wins 500 of 500 seeds (it was 7), so the finale's hard rule stays and our line follows it (FFX only; relayed)
+  - Bailey: “Keep it, 500 of 500 (Recommended)” (blanket yes)
+  - What changed: Item 45d. This is the “retune our line later” that D-656 left open: Sin is down by about his 8th turn of 12. Branch re-parity-ch18 3a898729, independently checked PASS. In RC2, not live (39.4.4 still has 3 of 500 for the old line). FFX only.
+  - area combat · FFX · adopted · delivery in progress · at ~17:01 EDT · see [D-656](#d-656) · refines [D-656](#d-656)
+  - Source: Relayed by the RE session (“Final Fantasy X/X-2 battle mechanics reverse engineering”; decisions-to-record item 45) and verified against that chat's …
+- <a id="d-695"></a>**D-695** — Leblanc battle music is LB-M4 (brass-and-guitar strut), the first of the driver's pair M4 or M5 (FFX-2; SUPERSEDED minutes later by LB-M5)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46a. His blanket yes took the driver's first-listed option, LB-M4. Thirty-one seconds later he delegated the music picks (D-702) and the driver chose LB-M5 instead (D-703), for its sourced fit; LB-M4 stays on the listening page as the alternative. FFX-2 (Chapter VI and the hidden Leblanc chapter).
+  - area audio · FFX-2 · superseded by [D-703](#d-703) · nothing to build · at ~18:13 EDT · see [D-703](#d-703) · refines [D-682](#d-682)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+- <a id="d-696"></a>**D-696** — Bahamut battle music is BH-M4 (the piano lament), the first of the M4 and M5 pair (FFX-2 Chapter IV)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46b. Confirmed under his delegation as D-704 and installed: boss-bahamut (BH-M4) is live in release 39.4.4 (72973096). FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery implemented · at ~18:13 EDT · see [D-704](#d-704) · refines [D-682](#d-682)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+- <a id="d-697"></a>**D-697** — The B-minor sound effects against the Bb-minor theme clash is settled by the new ElevenLabs music and effects, not by retuning the pitched effects per chapter (both games)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46c. The clash was found with the two-soundtracks diagnosis (the synth effects sit a semitone off the Bb-minor themes). No retune is built; the answer is the originals of D-712 and D-707, so this closes when those land. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:13 EDT · see [D-684](#d-684), [D-712](#d-712) · refines [D-684](#d-684)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+- <a id="d-698"></a>**D-698** — The Leblanc sound-effect drafts wait for the parity spec (FFX-2)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46d. The spec was written overnight (D-686, D-712) and lists the Leblanc events first; no draft is made yet because the ElevenLabs key is out of credit (D-742). FFX-2.
+  - area audio · FFX-2 · adopted · delivery in progress · at ~18:13 EDT · see [D-683](#d-683), [D-686](#d-686) · refines [D-683](#d-683)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+- <a id="d-699"></a>**D-699** — The motion picks of the Visual and Feel Motion Options page: P1-B (fall, puff, land), P2-A (stepped dissolve), P3-80 (an 80 ms eased push), P4 stepped (keep) and P5 yes (all three harness changes as a separate commit measured before the fixes), with the P1 sub-questions as recommended (both games)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46e, one decision per pick (the parts below). The lanes of the overnight code workflow built them on branches, none merged or live: r40-instrument 45520602 (the continuity harness's three edits, landed first so no fix is measured against a changed ruler), r40-blend ce5b69a9 (the stepped dissolve), r40-ko e8ff358b (the fall, puff and land), r40-recoil a80ea6a0 (the push), integrated on r40-int (f52b1f75; 19 commits on 39.4.4, with three review lenses and a fixer). The integration review found two corrections: REDUCE MOTION stays a plain cut and its revive stays the actor's own blend (50bd2bf4), and the stepped dissolve costs the CHK-027 jerk reading, disclosed and pinned, the shape left as he picked it. Page: “Motion Options” (P74FGKBD3xUq9qjyMZP7z2 on account #4, 8DvGvTDhREmqnJ79eTRdnH on #3). Both games (shared presenter).
+  - area visuals · both games · adopted · delivery in progress · at ~18:13 EDT · see [D-646](#d-646), [D-645](#d-645) · refines [D-646](#d-646)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+  - <a id="d-699-p1-b"></a>**D-699/P1-B** — P1: knocked-out characters fall, puff and land instead of cutting to the lying pose (the page's option B)
+    - What changed: Dust is in and the revive mirrors the fall; REDUCE MOTION and the Steam capture take the page's defaults (REDUCE MOTION stays a cut). Built on r40-ko; not merged, not live. Both games.
+  - <a id="d-699-p2-a"></a>**D-699/P2-A** — P2: a pose change between paintings that barely overlap is a stepped dissolve (the lesser painting never shows above 0.30)
+    - What changed: Built on r40-blend; the integration review pinned its cost to the CHK-027 jerk reading and left the shape as picked. Not live. Both games.
+  - <a id="d-699-p3-80"></a>**D-699/P3-80** — P3: the push into a hit is an 80 ms eased push
+    - What changed: Built on r40-recoil; the driver was to confirm the mechanism on screen first. Not live. Both games.
+  - <a id="d-699-p4-stepped"></a>**D-699/P4-stepped** — P4: the twirl keeps its stepped look
+    - What changed: Keep; a small fix (FD-1) only. Not live. Both games.
+  - <a id="d-699-p5-yes"></a>**D-699/P5-yes** — P5: the continuity harness's three changes (an unregistered figure is followed by its centroid, a twirl's cuts count as one staged change, and a swap has 14 frames of evidence before it) land as their own commit, measured before any fix
+    - What changed: Landed on r40-instrument 45520602 and used by the 39.4.4 focused review. Critic tooling only; both games.
+- <a id="d-700"></a>**D-700** — The YouTube report's pilots 1, 2 and 5: ElevenLabs sound effects v2 for the parity sound effects; hiding pose swaps with contact frames, smears and held frames inside the visual and feel lanes; and a pose review page tool (both games)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46f. Pilot 1 is the whole SFX lane (D-712, D-749); pilot 2 folds into the motion lane (D-699: a swap is hidden by a contact frame, a smear or a held frame); pilot 5, the pose review page, is not built yet. The other findings are parked until he asks. Both games.
+  - area tech · both games · adopted · delivery in progress · at ~18:13 EDT · see [D-680](#d-680), [D-699](#d-699) · refines [D-680](#d-680)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+- <a id="d-701"></a>**D-701** — The FFX inter-link fanfare removal stands (inferred: he gave no objection; both games' seam stings are gone)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 46g, INFERRED by the driver and flagged to him: the fix of D-684 also removed the seam stings of the FFX chained fights; he was told and did not object. Live in 39.4.4. FFX (the FFX part of a both-games fix).
+  - area audio · FFX · adopted · delivery implemented · at ~18:13 EDT · see [D-684](#d-684) · refines [D-684](#d-684)
+  - Source: Bailey, 2026-10-10 18:13 EDT (18:13:40 by the transcript's clock; the driver's list gave about 18:05), in the Claude Code chat (the times are the …
+- <a id="d-702"></a>**D-702** — DELEGATION: the driver picks the music and the sound effects (it cannot hear, so it picks from the sourced mood briefs and measurements); every pick stays on a listening page so he can overrule it by ear at any time (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47a, recorded like D-512 to D-516. Rule 13 is unchanged: agents still cannot hear. From here every music and SFX pick below is the driver's, chosen by brief fit first and then by measurement (seam click ratio, loudness, tempo), installed, and left on its page for his overrule by code. D-737 widens it to installing without waiting. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-512](#d-512), [D-513](#d-513), [D-737](#d-737) · refines [D-685](#d-685)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-703"></a>**D-703** — DELEGATED PICK: the Leblanc battle music is LB-M5 (“Parade of the pleased”, brass-led), which SUPERSEDES LB-M4 (FFX-2 Chapter VI and the hidden Leblanc chapter)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47b. Why: the only sourced description of the real battle track is “upbeat, brassy, fast” and the brief asks for brass with no electric guitar; LB-M4 is guitar-led pop-rock, LB-M5 brass-led, with the longer loop (48 bars against 32) and both seams clean (click ratio 0.17 and 0.08). Installed as boss-leblanc by the integration lane (72973096, 18:59 EDT) and live in release 39.4.4, with the fanfare fix beside it. FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery implemented · at ~18:14 EDT · see [D-695](#d-695), [D-682](#d-682) · refines [D-702](#d-702) · replaces [D-695](#d-695)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-704"></a>**D-704** — DELEGATED PICK: the Bahamut battle music is BH-M4 (the piano-led ballad), confirming the pick of the same evening (FFX-2 Chapter IV)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47c. Why: the sourced track is a slow, sorrowful ballad whose arrangements are piano, violin and cello; BH-M4 was built from that brief and its seam measures clean. Installed as boss-bahamut in 72973096 and live in release 39.4.4. FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery implemented · at ~18:14 EDT · see [D-696](#d-696) · refines [D-696](#d-696)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-705"></a>**D-705** — LB-M5 and BH-M4 go into TONIGHT's release if the integration lane fits them before the focused review, otherwise into the next one (shared audio routing; both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47d. They fitted: the commit 72973096 is the head of the release, so both cues went through the focused review and the deploy of 39.4.4. Both games for the shared routing; the cues themselves are FFX-2.
+  - area release · both games · adopted · delivery implemented · at ~18:14 EDT · see [D-703](#d-703), [D-704](#d-704), [D-726](#d-726) · refines [D-702](#d-702)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-706"></a>**D-706** — The shipped-audio budget goes from 90 MB to 100 MB, making room for an original per encounter; it shrinks again as the shared stand-ins retire (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47e. Replaces D-306's 90 MB figure. AUDIO_BUDGET_BYTES is 100e6 in 72973096 (the build ships 90.02 MB of audio); the stand-ins that retire as originals land are boss-ffx2-aeon (4.07 MB) and scene-bevelle-underground (3.21 MB). The FF7 take would need 105 MB (a separate yes, branch r3945-music-ff7). Both games.
+  - area tech · both games · adopted · delivery implemented · at ~18:14 EDT · see [D-306](#d-306), [D-723](#d-723) · refines [D-702](#d-702)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-707"></a>**D-707** — Music scope: an original for EVERY encounter, in batches with the worst-fitting first; ONE original per distinct real-game track, shared where the game shares a track (“Challenge”: Seymour Flux and Yunalesca; “Aeons”: the Fallen Aeons and Ixion, with Bahamut the sourced exception) (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47f. Batch 1 ran at once, capped at 32,000 credits (it used about 19,800 over 15 takes, leaving 85,656 of 131,000; the key's own quota is what stopped the rest, D-742). Not covered by his words, so read conservatively by the driver: all chapters or the worst first; the driver went worst first (about 30,000 credits), as the cheaper reading. Each chapter keeps its own game's music. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-685](#d-685), [D-738](#d-738) · refines [D-685](#d-685)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-708"></a>**D-708** — Where the real track is electronic, synth or rock (“Challenge”, the Seymour fights, the Sin fights, the Experiment) the original is rendered with real instruments or a live band, not synths (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47g. Why: his arcade-and-SNES complaint and “use eleven labs”. Every prompt carries a clause “not chiptune, not SNES, not arcade, no synthesizers” and is linted against a banned-name list. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-682](#d-682) · refines [D-707](#d-707)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-709"></a>**D-709** — The Leblanc chateau scene bed (now the wrong cathedral-basement scene-bevelle-underground) gets its own original in batch 2: big-band swagger with a comic wink, at scene tempo (FFX-2)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47h. In the batch-2 plan (the field-bed prompts FB-M1 and FB-M2 were the two generations the key's quota refused). Not generated, not live. FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery in progress · at ~18:14 EDT · see [D-738](#d-738) · refines [D-707](#d-707)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-710"></a>**D-710** — Later music batches follow the same pick rule: the driver picks by brief fit first, then by measurement (seam click ratio, -16 LUFS, tempo near the brief), installs the pick and leaves the options page up for overrule (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47i. Applied to batch 1 (every recommended pick is its M1 option; D-717 to D-723) and planned for batch 2 (D-738).
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-717](#d-717) · refines [D-702](#d-702)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-711"></a>**D-711** — ElevenLabs credits: keep a floor of 10,000 until the monthly reset on 2026-11-07; no top-up or plan change without asking, because that spends money (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47j. A standing limit on the music and SFX work: batch 1 left 85,656 credits; batch 2 (about 48,000) and the SFX (about 15,000) fit above the floor (D-741). Both games.
+  - area process · both games · adopted · nothing to build · at ~18:14 EDT · see [D-540](#d-540), [D-741](#d-741) · refines [D-540](#d-540)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-712"></a>**D-712** — SFX method: parity of WHICH sound plays WHEN, for how long, how loud and where, taken from the game's own data and measured timing (facts only); every sound is an original made with ElevenLabs Sound Effects v2 from word descriptions; no retail audio is copied, sampled, kept or fed to a generator (both games, each game with its own sound set)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47k. The spec exists (sfx-parity/spec.md with the evidence maps for FFX and FFX-2 and a generation plan; its prompts name no game, place or character and are linted); nothing is generated yet (D-742). Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-686](#d-686), [D-740](#d-740) · refines [D-686](#d-686)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-713"></a>**D-713** — SFX order: the Leblanc chapter first, because he heard it there; then the sounds every chapter shares (hits, casts, items, menu cursor, confirm and cancel, knock-out, Overdrive or Trigger Command, victory); then each boss's signature sounds (both games, each its own set)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47l. FFX chapters get FFX's set and FFX-2 chapters FFX-2's. The generation plan follows this order; the plumbing that lets packs land by source is on r40-sfx (D-749). Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-712](#d-712) · refines [D-712](#d-712)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-714"></a>**D-714** — SFX picks: the driver picks each sound by measurement against the parity spec (duration, attack, loudness, frequency balance); a listening page stays up for overrule (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47m. The one pilot take made so far was rejected by measurement (r40-sfx 5bc5aa8c). Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-712](#d-712) · refines [D-712](#d-712)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-715"></a>**D-715** — The synth stand-in sounds retire one at a time as each event gets its recorded original; until then the synth fallback stays, so nothing goes silent (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47n. The friends' playtest of 2026-09-29 had already flagged missing attack sounds; the third source of D-749 is consulted first and the older sprite stays as the fallback. Both games.
+  - area audio · both games · adopted · delivery in progress · at ~18:14 EDT · see [D-749](#d-749), [D-746](#d-746) · refines [D-712](#d-712)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-716"></a>**D-716** — Loop seams are judged by measurement (click ratio, level step, run-on error, the thresholds the Bahamut lane used), not by ear; he can flag any seam he hears (both games)
+  - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
+  - What changed: Item 47o. Applied to every take: for example XI-M1 beat XVI-M1 on the seam (0.54 against 0.74) and the boss-evrae loop was re-cut at a measured 4.60 (D-725). Both games.
+  - area audio · both games · adopted · delivery implemented · at ~18:14 EDT · see [D-717](#d-717), [D-725](#d-725) · refines [D-702](#d-702)
+  - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
+- <a id="d-717"></a>**D-717** — DELEGATED PICK: XI-M1 (“Breathless ceremony”) is the battle music for the Fallen Aeons (FFX-2 Chapter XI) AND for Ixion (FFX-2 Chapter XVI): one cue for both, because the game plays the same “Aeons” track at both; XVI-M1 stays on the page as the alternative (FFX-2 only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48a. The one place the driver departs from the page's per-chapter pick, and its reply said so: XI-M1 beats XVI-M1 on the seam (click 0.54 against 0.74). Per D-707 (one original per distinct real-game track). It is one of the eight batch-1 cues (the “Music Options, Batch 1” page, LUgxDhyt2wb4QNEPNvmZjR on account #3). It is on origin/r3945-music (f270be77), merged into the motion integration branch r40-int (d4810fb2); not in release 39.4.4 and not live. The recommended option of every chapter is its M1. FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery in progress · at ~22:14 EDT · see [D-707](#d-707), [D-716](#d-716)
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-718"></a>**D-718** — DELEGATED PICK: XIII-M1 (“Stately march”) is the battle music for Trema, phase 2 (FFX-2 Chapter XIII) (FFX-2 only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48b. Loop 44.3 s, click ratio 0.12, -16.0 LUFS. It is one of the eight batch-1 cues (the “Music Options, Batch 1” page, LUgxDhyt2wb4QNEPNvmZjR on account #3). It is on origin/r3945-music (f270be77), merged into the motion integration branch r40-int (d4810fb2); not in release 39.4.4 and not live. The recommended option of every chapter is its M1. FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery in progress · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-719"></a>**D-719** — DELEGATED PICK: X-M1 (“Fallen nobleman”) is the battle music for Seymour Natus (FFX Chapter X) (FFX only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48c. Loop 43.6 s, click ratio 0.15. It is one of the eight batch-1 cues (the “Music Options, Batch 1” page, LUgxDhyt2wb4QNEPNvmZjR on account #3). It is on origin/r3945-music (f270be77), merged into the motion integration branch r40-int (d4810fb2); not in release 39.4.4 and not live. The recommended option of every chapter is its M1. FFX only.
+  - area audio · FFX · adopted · delivery in progress · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-720"></a>**D-720** — DELEGATED PICK: XIV-M1 (“Duel of the summoners”) is the battle music for Isaaru (FFX Chapter XIV) (FFX only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48d. Loop 66.0 s, click ratio 0.07. It is one of the eight batch-1 cues (the “Music Options, Batch 1” page, LUgxDhyt2wb4QNEPNvmZjR on account #3). It is on origin/r3945-music (f270be77), merged into the motion integration branch r40-int (d4810fb2); not in release 39.4.4 and not live. The recommended option of every chapter is its M1. FFX only.
+  - area audio · FFX · adopted · delivery in progress · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-721"></a>**D-721** — DELEGATED PICK: XVII-M1 (“Aerial charge”) is the battle music for Sin's Fins, Genais and the Core (FFX Chapter XVII) (FFX only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48e. Loop 35.1 s, click ratio 0.10. It is one of the eight batch-1 cues (the “Music Options, Batch 1” page, LUgxDhyt2wb4QNEPNvmZjR on account #3). It is on origin/r3945-music (f270be77), merged into the motion integration branch r40-int (d4810fb2); not in release 39.4.4 and not live. The recommended option of every chapter is its M1. FFX only.
+  - area audio · FFX · adopted · delivery in progress · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-722"></a>**D-722** — DELEGATED PICK: XVIII-M1 (“Against the clock”) is the battle music for Overdrive Sin, the Face (FFX Chapter XVIII) (FFX only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48f. Loop 48.0 s, click ratio 0.51. It is one of the eight batch-1 cues (the “Music Options, Batch 1” page, LUgxDhyt2wb4QNEPNvmZjR on account #3). It is on origin/r3945-music (f270be77), merged into the motion integration branch r40-int (d4810fb2); not in release 39.4.4 and not live. The recommended option of every chapter is its M1. FFX only.
+  - area audio · FFX · adopted · delivery in progress · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-723"></a>**D-723** — DELEGATED PICK: FF7-M1 (“Night infiltration”) is the battle music for Guard Scorpion in the hidden FF7 “limit” chapter, silent until now (FF7 only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48g. Loop 80.0 s, click ratio 0.16. Branch origin/r3945-music-ff7 (2ff075a1), stacked on r3945-music: it would take the audio budget to 105 MB, which needs the driver's own yes, so it waits. The FF7 chapter is the one hidden chapter with no music of its own so far. FF7 only.
+  - area audio · FF7 (hidden experiment) · adopted · delivery in progress · at ~22:14 EDT · see [D-706](#d-706)
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-724"></a>**D-724** — All of the batch-1 cues go into the NEXT build, with the synth fallback aliased to the cue each replaces (both games)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48h. “The next build” is release candidate 2 (rel-3945, assembled by the RE session) or, if the motion integration is green first, the build that merges it; the cues sit on r3945-music and r40-int. The alias keeps the old cue name playing the new file, so nothing goes silent. Both games (shared audio routing).
+  - area audio · both games · adopted · delivery in progress · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-725"></a>**D-725** — The Evrae battle cue (boss-evrae, FFX Chapter VIII) keeps its music but its loop point is re-cut, because its click ratio measured 4.60: a defect fix (FFX only)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48i. Re-cut in the same commit as the batch-1 cues (f270be77); not live. FFX only.
+  - area audio · FFX · adopted · delivery in progress · at ~22:14 EDT · see [D-716](#d-716)
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-726"></a>**D-726** — Tonight's release 39.4.4 deploys on the focused review's SHIP (both games)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48j. The focused review of 72973096 said SHIP (changed area FAIL; disclosed majors CHK-027 and the Chapter II route loss, neither a regression), and 39.4.4 went live at 00:43:53 EDT (04:43:53Z) on 2026-10-11. The deploy gate refused the first try at 00:21 (47 live builds owe a deep review), so it went out under his owner override (D-737; A-row). Both games.
+  - area audio · both games · adopted · delivery implemented · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-727"></a>**D-727** — Raising or removing the ElevenLabs API key's own credit limit is Bailey's to do, in his ElevenLabs settings; more generation (SFX, batch 2, the chateau bed) waits for it (both games)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 48k. The account has the credits (about 84,068 of 131,000 after the fanfare takes, reset 2026-11-07, floor 10,000 kept) but the key's own quota of 45,000 is used up: requests fail 401 quota_exceeded. Batch 2 needs the limit at 92,250 or more (107,250 with the SFX), or none. Nothing is generated until he does it; then one command runs the planned takes in priority order. Not done.
+  - area audio · both games · adopted · delivery not scheduled · at ~22:14 EDT
+  - Source: Bailey, 2026-10-10 22:14 EDT (22:14:59 by the transcript's clock; the driver's list gave about 22:10), in the Claude Code chat (the times are the …
+- <a id="d-728"></a>**D-728** — Chapter X line = “reflect”: send Bahamut alone, and Rikku casts Reflect on Natus so Mortibody's Cura bounces onto a guardian: 492 of 500 seeds, up from 302, plus the guide's Flare-cadence sentences (FFX only; relayed)
+  - Bailey: “Yes, deploy on SHIP (Recommended)” (blanket yes)
+  - What changed: Item 49a, from the question card's named build (“the 'reflect' line for Chapter X (98%)”). Natus has been harder since the W2 turn order (386 to 302 of 500 on the shipped line). Branch origin/re-parity-chx-options (4b510b19; handoff 342d636e). In RC2, not live (39.4.4 has the 302 of 500 line). FFX only.
+  - area combat · FFX · adopted · delivery in progress · see [D-654](#d-654), [D-655](#d-655) · refines [D-654](#d-654)
+  - Source: Relayed to the driver by the RE session (decisions-to-record item 49) and verified in that chat's own transcript: the question card was answered at …
+- <a id="d-729"></a>**D-729** — The two menu changes ship in RC2: Cid's Trigger Command offers one order at a time with Cancel, Braska's Talk row greys while a Talk is pending, and the third Talk is speech only; the “Cancel” and “Cid keeps his turn” labels stay as built (FFX only; relayed)
+  - Bailey: “Yes, deploy on SHIP (Recommended)” (blanket yes)
+  - What changed: Item 49b. The RE session treats his answer as “menus OK”, the go D-659 waited for after the before-and-after pictures (branch re-parity-ai-ffx 3c9efcc3 and e110db6e). The driver kept them OUT of 39.4.4 (RC2 only). FFX only (Chapters III, VIII and XVII).
+  - area ui · FFX · adopted · delivery in progress · see [D-659](#d-659) · refines [D-659](#d-659)
+  - Source: Relayed to the driver by the RE session (decisions-to-record item 49) and verified in that chat's own transcript: the question card was answered at …
+- <a id="d-730"></a>**D-730** — RC2 (Chapter XVIII + the guide cards + W5 with the Chapter IX line + the Chapter X reflect line + the menus) may deploy overnight on the focused review's SHIP: these are the owner's words for that deploy, usable as the override if the deep-debt cap refuses (content FFX; shared plumbing both games)
+  - Bailey: “Yes, deploy on SHIP (Recommended)” (blanket yes)
+  - What changed: Item 49c. RC2 is the branch rel-3945 the RE session is assembling on the deployed 72973096 (expected about 04:00 to 05:30 EDT); the motion branch r40-int and the SFX plumbing r40-sfx would merge in only if green. Not deployed. Content is FFX; the plumbing is shared (both games).
+  - area release · both games · adopted · delivery in progress · see [D-655](#d-655), [D-671](#d-671), [D-728](#d-728), [D-729](#d-729) · refines [D-655](#d-655)
+  - Source: Relayed to the driver by the RE session (decisions-to-record item 49) and verified in that chat's own transcript: the question card was answered at …
+- <a id="d-731"></a>**D-731** — Nothing of the fayth chapter goes live tonight: the painted web version ships only after Bailey sees the options and picks (end state first, D-632), then through the normal focused review (FFX only; relayed)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 50a. A blanket yes, spelled out by the fayth session: no deploy of the fayth chapter; the build in flight stays on branch fayth-3d (it merged the live 39.4.4 at 00:48 on 2026-10-11). FFX only.
+  - area release · FFX · adopted · delivery in progress · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720), on the fayth-3d track. In that chat he sent the same …
+- <a id="d-732"></a>**D-732** — Build order for the fayth track: the real FFX models on the deck (his PC only), FFX's camera programs replayed in the chapter, animations as a stretch, then a morning options page; NOT covered: recording the real game's camera, which takes over the screen and needs a window from him (FFX only; relayed)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 50b. The recording of the real game's camera stays on hold (the PCSX2 recording, A-0603, is held until the PC is free). FFX only.
+  - area camera · FFX · adopted · delivery in progress · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720), on the fayth-3d track. In that chat he sent the same …
+- <a id="d-733"></a>**D-733** — Both painted variants of D-632 are built for comparison: A with every FFX angle, and B with FFX timing and the angles kept near the front (FFX only; relayed)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 50c. Two test modes of the one chapter side by side, as D-632 required before anything ships. FFX only.
+  - area camera · FFX · adopted · delivery in progress · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720), on the fayth-3d track. In that chat he sent the same …
+- <a id="d-734"></a>**D-734** — The 17.5 GB of extracted FFX audio and video is KEPT as part of “all assets”, local, never in a repo; the D-drive emergency session moves it to L: with junctions and Bailey runs the move (FFX only; relayed)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 50d. Retail data stays on his machine only (rule 8; the public repo has none). The move is his command to run. FFX only.
+  - area data · FFX · adopted · delivery in progress · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720), on the fayth-3d track. In that chat he sent the same …
+- <a id="d-735"></a>**D-735** — The overnight cap for the fayth lane: stop launching agents at about 60 percent of the account's weekly allowance (FFX only; relayed)
+  - Bailey: “ill go with all your recommendations. i am going to sleep soon so please tell me what youwill get done over night.” (blanket yes)
+  - What changed: Item 50e. A usage limit for that lane that night (rule 15 pacing); the driver's own account was at 26 percent of its week at 00:58 EDT. FFX only.
+  - area process · FFX · adopted · delivery in progress · refines [D-687](#d-687)
+  - Source: Relayed by the fayth session (“FFX assets decompile and experimental chapter”, local_bcbd7720), on the fayth-3d track. In that chat he sent the same …
+- <a id="d-736"></a>**D-736** — Art generation is ON overnight, as needed and relevant: local ComfyUI only, CANDIDATES ONLY for the open, relevant gaps; nothing is installed or replaces approved art; he picks in the morning on a review page (both games)
+  - Bailey: “art on overnight as needed and relevant”
+  - What changed: Item 51 (AGENTS.md rule 12). The run is art run #6: the driver's art lane picks from GAPS.md, the held rows, the hidden chapters' missing art and the motion picks' needs; the runner waits on a PAUSE file while the reviews run their GPU harness (the live and deep review owns the file); renders go to D:/pyrefly-overnight-art; the README with the hold command is D:/Tools/pyrefly-overnight/README-1011.md. It replaces the “OFF unless he says otherwise” of D-663 for tonight. Game case per queue item.
+  - area art · both games · adopted · delivery in progress · at ~22:46 EDT · see [D-663](#d-663), [D-664](#d-664) · refines [D-663](#d-663)
+  - Source: Bailey, 2026-10-10 22:46 EDT (22:46:16 by the transcript's clock), in the Claude Code chat (the times are the session transcript's), verbatim: “art …
+- <a id="d-737"></a>**D-737** — The driver CHOOSES and INSTALLS all music and sound effects without waiting for Bailey to listen: the listening pages become FYI and he can still overrule any pick by its code (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52a. It reaffirms and widens D-702 (“you recommend and choose it please. this is extremely important”): the driver no longer waits for his ear before installing; rule 13 is unchanged (agents cannot hear), so picks stay by brief fit and measurement (D-710, D-714). Both games.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-702](#d-702)
+  - Source: docs/deploys.log
+- <a id="d-738"></a>**D-738** — Music batch 2: EVERY remaining synth or SoundFont cue gets an ElevenLabs original, aligned ones included, because his arcade-and-SNES complaint covers the synth timbre itself; one cue per distinct real-game track; the two victory fanfares (high priority); the Leblanc chateau, Bevelle Underground and other scene beds; the endings last (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52b. The cues: one cue for Flux, Yunalesca and Gui fight 2; Jecht; Yu Yevon; Vegnagun; Shuyin; Seymour and Anima; Evrae; Yojimbo; Omnis; Trema phase 1; the Den of Woe; Gui fight 1; the Experiment; then the fanfares (generated before the key ran out, D-744), the beds and the endings. Game case per cue (each by its chapter's game). The plan and a priority-ordered script are written (music-batch2/PLAN.md, tools/run_batch2.sh): 38 takes, about 47,250 credits, and generation is blocked by the key limit (D-742).
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-739"></a>**D-739** — Takes per cue: battle cues and fanfares get 2 options; scene beds and endings get 1, to fit the credits (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52c. Billing follows the requested length (13.75 credits a second), so a retake costs the same as the first take.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-740"></a>**D-740** — SFX: the full parity set, generated per the method of D-712 to D-715 and installed in the next builds; the Leblanc events first (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52d. The set is in the spec and the generation plan; the packs' plumbing is on r40-sfx (D-749); generation waits for the key (D-742).
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-741"></a>**D-741** — Credit plan: batch 2 about 48,000 plus the SFX about 15,000, out of 85,656 left, with the 10,000 floor kept; if short, battle cues and fanfares come before scene beds and endings (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52e. After the fanfare takes the account had 84,068 left; the plan fits above the floor of D-711 (the SFX share through the same key limit).
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-742"></a>**D-742** — STILL BLOCKED on Bailey: the ElevenLabs API key's own credit limit (274 credits left of its 45,000 at the end of batch 1, about 6 after the fanfare takes); raising or removing it is his own account setting, and generation starts the moment it is raised (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52f. Not done. Every request after the fanfare takes returned 401 quota_exceeded naming the key's quota, not the account's plan. The ask is in the morning summary.
+  - area audio · both games · adopted · delivery not scheduled · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-743"></a>**D-743** — DRIVER: the Paragon fight (FFX-2 Chapter XIII, phase 1) and the Bevelle Underground field bed share ONE original, because the real game plays the same track at both; it saves about 2,640 credits (FFX-2 only)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52g, under 52a, per D-707 (one original per distinct real-game track). Planned, not generated. FFX-2 only.
+  - area audio · FFX-2 · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-744"></a>**D-744** — DRIVER: the victory fanfares are VF-A2 for FFX and VX-A1 for FFX-2 (batch 2, generated before the key ran out); each plays once and then holds silence (“oneShot”); the integration lane checks how the victory cue is used before wiring it (both games, one fanfare each)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52h, under 52a. Staged and mastered (music-batch2); not wired and not live. FFX gets VF-A2 and FFX-2 gets VX-A1.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-745"></a>**D-745** — DRIVER: the SFX mix is P1: retail level ratios with the D-210 floor for FFX-2 party hits, cues capped at -14 LUFS; SaveData and the limiter are unchanged (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52i, under 52a, from the parity spec. Refined for FFX-2's party hits by D-750. On r40-sfx (5bc5aa8c); not live.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-210](#d-210)
+  - Source: docs/deploys.log
+- <a id="d-746"></a>**D-746** — DRIVER: HOLD rows, where the game files show no retail sound, KEEP today's sound rather than going silent (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52j, under 52a; the 56 low-confidence rows are held at today's level (applyLow false), including the cast wind-up (D-750). Both games.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-747"></a>**D-747** — DRIVER: the menu cursor and confirm use ONE tick, as in both games (retail id 1 for both), raised about 5 dB (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52k, under 52a. Data on r40-sfx; not live.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-748"></a>**D-748** — DRIVER: the FFX weapon swing and hit orientation, whose slot meanings are only inferred, is decided by measurement: the sharp, short transient is the hit and the longer whoosh is the swing; he can flag it if it sounds reversed (FFX only)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52l, under 52a. FFX only.
+  - area audio · FFX · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-749"></a>**D-749** — DRIVER: the SFX packs land through a third source, sfxParity.packs, consulted first with the v2 sprite as the fallback so nothing goes silent; the order is the core packs, then a repack of v2, then the boss packs, inside the audio budget (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52m, under 52a. Built on origin/r40-sfx (5bc5aa8c, 00:24 EDT on 2026-10-11): the third source, the P1 mix and one menu tick as data; the pilot's one take rejected by measurement. Not merged, not live.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log
+- <a id="d-750"></a>**D-750** — DRIVER: FFX-2's party hits keep TODAY's level, not the P1 floor (which would cut them about 6 dB to the level the friends' playtest heard as “no attack SFX”): the r40-sfx floors are set to -18 and -14.1 and the mix tool is re-run; the 56 low-confidence rows stay held at today's level (both games for the held rows, FFX-2 only for the hit floor)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 52n, under 52a, refining D-745. OWED on r40-sfx: set the floors, then re-run node tools/audio/sfx-parity-mix.mjs. Not merged.
+  - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
+  - Source: docs/deploys.log

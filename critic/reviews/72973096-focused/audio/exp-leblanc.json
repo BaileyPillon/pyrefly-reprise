@@ -1,0 +1,171 @@
+{
+ "id": "exp-leblanc",
+ "speed": "skip",
+ "mode": "debug-assisted (gotoChapter+auto intended)",
+ "done": true,
+ "result": "{\"chapterId\":\"exp-leblanc\",\"outcome\":\"victory\",\"result\":{\"outcome\":\"victory\",\"turns\":39,\"elapsedTicks\":128538,\"elapsedMs\":42846,\"ap\":14,\"exp\":1640,\"gil\":1590,\"drops\":[{\"itemId\":\"twist-headband\",\"count\":1},{\"itemId\":\"x2-potion\",\"count\":1},{\"itemId\":\"x2-potion\",\"count\":1},{\"itemId\":\"charm-bangle\",\"cou",
+ "victorySfx": [
+  [
+   27.36,
+   "victory-fanfare",
+   "victory-fanfare",
+   "sprite"
+  ]
+ ],
+ "sfxNames": [
+  "battle-start>battle-start",
+  "v2:swing-greatsword>v2:swing-greatsword",
+  "v2:whiff>v2:whiff",
+  "v2:item-use-x2>v2:item-use-x2",
+  "v2:magic-charge-x2>v2:magic-charge-x2",
+  "v2:hit-2>v2:hit-2",
+  "v2:dissolve-pyreflies>v2:dissolve-pyreflies",
+  "v2:critical>v2:critical",
+  "v2:hit-gun>v2:hit-gun",
+  "v2:swing-dagger>v2:swing-dagger",
+  "v2:hit-dagger>v2:hit-dagger",
+  "v2:hit-greatsword>v2:hit-greatsword",
+  "v2:debuff-generic-x2>v2:debuff-generic-x2",
+  "v2:ko-fall>v2:ko-fall",
+  "v2:hit-heavy-enemy>v2:hit-heavy-enemy",
+  "v2:shot-gun>v2:shot-gun",
+  "v2:status-applied>v2:status-applied",
+  "v2:cure-x2>v2:cure-x2",
+  "victory-fanfare>victory-fanfare"
+ ],
+ "sfxN": 191,
+ "sfxTail": [
+  "26.96:v2:hit-dagger:v2:hit-dagger",
+  "27.021333333333335:v2:swing-greatsword:v2:swing-greatsword",
+  "27.072:v2:hit-heavy-enemy:v2:hit-heavy-enemy",
+  "27.21066666666667:v2:swing-dagger:v2:swing-dagger",
+  "27.261333333333333:v2:hit-dagger:v2:hit-dagger",
+  "27.28:v2:hit-dagger:v2:hit-dagger",
+  "27.290666666666667:v2:ko-fall:v2:ko-fall",
+  "27.36:victory-fanfare:victory-fanfare"
+ ],
+ "curAtEnd": null,
+ "playingAtEnd": null,
+ "musicTimeline": [
+  {
+   "t": 5722,
+   "k": "battle|chapter-select|",
+   "s": "battle",
+   "cur": "chapter-select",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 7267,
+   "k": "battle|title|chapter-select:1.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": "chapter-select:1.00"
+  },
+  {
+   "t": 8471,
+   "k": "battle|title|chapter-select:0.00",
+   "s": "battle",
+   "cur": "title",
+   "g": "0.11",
+   "f": "chapter-select:0.00"
+  },
+  {
+   "t": 9923,
+   "k": "battle|title|",
+   "s": "battle",
+   "cur": "title",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 11118,
+   "k": "battle|boss-leblanc|title:0.68",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.68"
+  },
+  {
+   "t": 11279,
+   "k": "battle|boss-leblanc|title:0.20",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.20"
+  },
+  {
+   "t": 11409,
+   "k": "battle|boss-leblanc|title:0.07",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.07"
+  },
+  {
+   "t": 11561,
+   "k": "battle|boss-leblanc|title:0.02",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0",
+   "f": "title:0.02"
+  },
+  {
+   "t": 11757,
+   "k": "battle|boss-leblanc|title:0.00",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "0.02",
+   "f": "title:0.00"
+  },
+  {
+   "t": 12382,
+   "k": "battle|boss-leblanc|",
+   "s": "battle",
+   "cur": "boss-leblanc",
+   "g": "1",
+   "f": ""
+  },
+  {
+   "t": 29576,
+   "k": "battle||boss-leblanc:1.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-leblanc:1.00"
+  },
+  {
+   "t": 29710,
+   "k": "battle||boss-leblanc:0.02",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-leblanc:0.02"
+  },
+  {
+   "t": 29863,
+   "k": "battle||boss-leblanc:0.00",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": "boss-leblanc:0.00"
+  },
+  {
+   "t": 30018,
+   "k": "battle||",
+   "s": "battle",
+   "cur": "",
+   "g": "",
+   "f": ""
+  }
+ ],
+ "musicRequests": [
+  "manifest.json",
+  "music/title.mp3",
+  "music/chapter-select.mp3",
+  "music/boss-leblanc.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}
