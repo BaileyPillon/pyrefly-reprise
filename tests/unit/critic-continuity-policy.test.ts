@@ -34,7 +34,9 @@ describe('the continuity block of the policy', () => {
   it('is read whole by the harness: every number it uses is there', () => {
     const num = (v: unknown): void => expect(typeof v === 'number' && Number.isFinite(v), String(v)).toBe(true);
     for (const v of [c.minBattleSeconds, c.minSwaps, c.minFps, ...Object.values(c.size), ...Object.values(c.motion), ...Object.values(c.strips), ...Object.values(c.probe)]) num(v);
-    expect(c.strips).toMatchObject({ beforeFrames: 6, afterFrames: 6 });
+    // r40 instrument edit (c), Bailey 2026-10-10 (P5): a strip shows 14 frames before the event (it was 6) and 6 after, and the probe's ring holds all 20
+    expect(c.strips).toMatchObject({ beforeFrames: 14, afterFrames: 6 });
+    expect(c.probe['ringFrames']).toBeGreaterThanOrEqual(c.strips.beforeFrames + c.strips.afterFrames);
     expect(c.requiredFrom).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(continuityConfig()).toEqual(c);
   });
@@ -50,6 +52,22 @@ describe('the continuity block of the policy', () => {
       delete process.env['CONT_CFG'];
     }
     expect(continuityConfig().minFps).toBe(c.minFps);
+  });
+
+  it('switches the r40 instrument edits on, and each can be switched off for an old-versus-new run of one recording', () => {
+    // (a) a figure with no registration is followed by its centroid; (b) a twirl's cuts are one staged change
+    expect(c.tracking).toMatchObject({ unregistered: 'centroid' });
+    expect(c.staged).toMatchObject({ twirl: true });
+    expect(c.staged!.gapFrames).toBeGreaterThan(0);
+    process.env['CONT_CFG'] = '{"tracking":{"unregistered":"feet"},"staged":{"twirl":false}}';
+    try {
+      const o = continuityConfig();
+      expect(o.tracking!.unregistered).toBe('feet');
+      expect(o.staged!.twirl).toBe(false);
+      expect(o.staged!.gapFrames).toBe(c.staged!.gapFrames); // merged block by block
+    } finally {
+      delete process.env['CONT_CFG'];
+    }
   });
 
   it('puts both checks in the library as implemented, with a tool that exists', () => {

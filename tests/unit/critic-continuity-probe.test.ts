@@ -257,6 +257,25 @@ describe('the strips', () => {
     expect(r.encoded).toBe(12);
   });
 
+  it('cuts 14 frames before and 6 after (r40 instrument edit (c), the policy\'s numbers), and keeps all 20 even if the ring it was asked for is shorter', async () => {
+    const r = rig({ beforeFrames: 14, afterFrames: 6, ringFrames: 16 }); // 16 frames of ring would overwrite the oldest 4 cells of a 20-cell strip
+    r.probe.start();
+    for (let i = 0; i < 20; i++) await r.step();
+    r.actor.active = 1;
+    fades(r, 0, 1);
+    await r.step();
+    for (let i = 0; i < 5; i++) await r.step();
+    const s = r.probe.meta().strips[0]!;
+    expect(s.kind).toBe('swap');
+    expect(s.length).toBe(20);
+    expect(s.first).toBe(s.n - 14);
+    for (let i = 0; i < 24; i++) await r.step();
+    const done = r.probe.meta().strips[0]!;
+    expect(done.todo).toBe(0);
+    expect(done.have).toBe(20); // every cell is there: none was overwritten by a newer frame
+    expect(r.probe.stripFrames([done.id])[0]!.frames.every((d) => d === 'data:image/jpeg;base64,QUJD')).toBe(true);
+  });
+
   it('marks a frame that was gone (the battle had only just begun) instead of inventing it', async () => {
     const r = rig();
     r.probe.start();

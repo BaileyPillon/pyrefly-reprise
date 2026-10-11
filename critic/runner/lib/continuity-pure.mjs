@@ -19,6 +19,9 @@
 //
 // Game case: both (shared critic plumbing; a size jump or a snap is a defect in either game).
 
+import { heldPlateau } from './continuity-held.mjs';
+import { stagedStepOf } from './continuity-staged.mjs';
+
 export const FRAME_MS = 1000 / 60;
 
 // ------------------------------------------------------------------ geometry
@@ -142,10 +145,16 @@ export function planesOf(fig) {
  * Where a figure is on screen in one frame: its feet and its head, each the average of its two planes weighted
  * by how visible each is (so a crossfade glides between them rather than hopping at 50 percent), using the
  * anchors of the paintings. Null when no plane has anchors or the figure is not showing.
- * `anchors[k]` = { head: {u0,t0,u1,t1}|null (registered), mass: number|null, stance: {u,t}|null }.
+ * `anchors[k]` = { head: {u0,t0,u1,t1}|null (registered), mass: number|null, stance: {u,t}|null, centroid: {u,t}|null }.
+ *
+ * `byCentroid` (r40 instrument edit (a)) follows the silhouette's CENTROID instead, for a figure with no registration: the stance read from
+ * a silhouette is the middle of the lowest thick part, trustworthy only for a figure standing on its feet, and for a serpent, an aeon in
+ * the air or a hanging fin it is whichever tip hangs lowest in that pose (228 foe swaps of round 23 read 40 px or more of "feet" shift at
+ * a median 8.3 times the centroid's own shift, and held the top of the worst-jerk ranking: 807 px for a true shift of 102). In this mode
+ * `feet` and `head` are null and `centroid` is the weighted point; otherwise `centroid` is null.
  */
-export function figureTrack(fig, anchors) {
-  let wf = 0, fx = 0, fy = 0, wh = 0, hx = 0, hy = 0, headOk = true, seen = 0;
+export function figureTrack(fig, anchors, byCentroid = false) {
+  let wf = 0, fx = 0, fy = 0, wh = 0, hx = 0, hy = 0, wc = 0, cx = 0, cy = 0, headOk = true, seen = 0;
   for (const raw of fig.s) {
     const p = planeOf(raw);
     if (!p || p.fade <= 0.001) continue;
@@ -153,12 +162,16 @@ export function figureTrack(fig, anchors) {
     if (!an) { headOk = false; continue; }
     seen++;
     const H = unitSquareToQuad(p.q);
+    if (byCentroid) {
+      if (an.centroid) { const c = applyH(H, an.centroid.u, an.centroid.t); wc += p.fade; cx += c[0] * p.fade; cy += c[1] * p.fade; }
+      continue;
+    }
     if (an.stance) { const f = feetPoint(H, an.stance); wf += p.fade; fx += f[0] * p.fade; fy += f[1] * p.fade; }
     if (an.head) { const h = headCentre(H, an.head); wh += p.fade; hx += h[0] * p.fade; hy += h[1] * p.fade; } else headOk = false;
   }
-  if (!seen || (!wf && !wh)) return null;
+  if (!seen || (!wf && !wh && !wc)) return null;
   // The head is followed only while every plane that shows has a registered head: a head and a body centre are not one point.
-  return { feet: wf ? [fx / wf, fy / wf] : null, head: headOk && wh ? [hx / wh, hy / wh] : null };
+  return { feet: wf ? [fx / wf, fy / wf] : null, head: headOk && wh ? [hx / wh, hy / wh] : null, centroid: wc ? [cx / wc, cy / wc] : null };
 }
 
 // ------------------------------------------------------------------ swaps
@@ -175,8 +188,9 @@ export function figureTrack(fig, anchors) {
  * @param {number} o.k1600   px scale to a 1600-wide canvas
  * @param {boolean} o.camCut a camera cut or whip in [s-1, s+1]
  * @param {object} o.cfg     the policy's `continuity` thresholds
+ * @param {{from?:string, to?:string}} [o.names]  the planes' own pose names (a fallback for naming a twirl key when a painting says nothing about its file)
  */
-export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg }) {
+export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg, names }) {
   const f0 = frames[at];
   const planeIn = (fr, k) => (fr ? fr.fig.s.map(planeOf).find((p) => p && p.k === k) ?? null : null);
   // a plane re-pointed at another painting while it still shows has the old painting only in the frame before
@@ -190,13 +204,16 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
   // painting of the swap is a far-range painting and the other is not. Another subject (dressphere, form) or another range is a change of costume and place, not of pose.
   const farOf = (a) => /-far(?:\.|$)/.test(String(a?.url ?? '').split('/').pop() ?? '');
   const range = Boolean(aFrom?.url && aTo?.url && farOf(aFrom) !== farOf(aTo));
-  const costume = range || Boolean(aFrom?.subject && aTo?.subject && aFrom.subject !== aTo.subject);
+  // A step of the spherechange's twirl (a cut between a figure's `twirl-*` keys, or into the first or out of the last) is one STAGED costume change: its keys are cut by design
+  // (D-322, P4), so it is a costume swap and not a snap (continuity-staged.mjs; r40 instrument edit (b)).
+  const staged = stagedStepOf(aFrom, aTo, cfg, names);
+  const costume = range || Boolean(staged) || Boolean(aFrom?.subject && aTo?.subject && aFrom.subject !== aTo.subject);
   const sameArt = !costume && Boolean(aFrom?.url && aFrom.url === aTo?.url);
   const judged = !costume && !sameArt;
   const out = {
-    camCut: Boolean(camCut), costume, sameArt, range,
+    camCut: Boolean(camCut), costume, sameArt, range, staged,
     head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0,
-    snap: false, hardCut: false, failHead: false, failFeet: false,
+    held: { frames: 0, ms: 0, from: null }, snap: false, snapStaged: false, hardCut: false, failHead: false, failFeet: false,
   };
   if (!fromRaw || !toRaw) return { ...out, unmeasured: 'a plane of the swap was not recorded' };
   const Hf = unitSquareToQuad(fromRaw.q), Ht = unitSquareToQuad(toRaw.q);
@@ -257,9 +274,13 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg 
   out.ghost.peak = round(out.ghost.peak, 3);
   out.ghost.severity = round(out.ghost.severity, 3);
   out.hardCut = out.blendFrames === 0;
+  // r40 instrument edit (c): the longest stretch in which both paintings showed and their fades did not move (a frozen blend), read instead of inferred.
+  out.held = heldPlateau(frames, swap, cfg.motion.blendFadeMin, FRAME_MS);
   // A snap is a cut that shows: no in-between frame, and the picture jumps (the silhouette moved, or the head or the feet did).
+  // A staged cut (a step of the twirl) is that by design: it is kept as `snapStaged` so a reader sees what the classification excused.
   const visibleJump = (out.outline ? 1 - out.outline.iou >= cfg.motion.snapOutlineMin || out.outline.centroidShiftPx >= cfg.motion.snapCentroidMinPx : false) || out.failHead || out.failFeet;
-  out.snap = out.hardCut && visibleJump;
+  out.snap = out.hardCut && visibleJump && !staged;
+  out.snapStaged = out.hardCut && visibleJump && Boolean(staged);
   return out;
 }
 
@@ -269,7 +290,8 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 
 /**
  * Teleports and jerks on every frame of a move. `track` is one figure's samples in order, each
- * `{ n, t, feet:[x,y]|null, head:[x,y]|null, cam:[dx,dy] }` where `cam` is how far the camera alone moved the
+ * `{ n, t, feet:[x,y]|null, head:[x,y]|null, centroid?:[x,y]|null, cam:[dx,dy] }` (a figure with no registration has only a centroid, see
+ * `figureTrack`) where `cam` is how far the camera alone moved the
  * figure's world point since the previous sample (so the jump of the figure itself is the step minus `cam`).
  * Only consecutive frames count; a gap (the figure hid, the battle paused) resets.
  *
@@ -277,7 +299,7 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
  * of the neighbouring steps, never less than `jerkFloorPx`), does not open a dash that keeps half its speed for
  * `ballisticChain` frames, and the camera did not cut (its own shift under `cutPx`). Steps within `mergeFrames` of each
  * other are one event (a two-frame pop is one pop).
- * @returns {Array<{n:number, t:number, px:number, localPx:number, ratio:number, part:'feet'|'head', dx:number, dy:number}>}
+ * @returns {Array<{n:number, t:number, px:number, localPx:number, ratio:number, part:'feet'|'head'|'centroid', dx:number, dy:number}>}
  */
 export function detectJerks(track, k1600, cfg) {
   const m = cfg.motion;
@@ -286,7 +308,7 @@ export function detectJerks(track, k1600, cfg) {
     const a = track[j - 1], b = track[j];
     if (!a || !b || b.n !== a.n + 1) { steps.push(null); continue; }
     let best = null;
-    for (const part of ['feet', 'head']) {
+    for (const part of ['feet', 'head', 'centroid']) {
       if (!a[part] || !b[part]) continue;
       const dx = (b[part][0] - a[part][0] - b.cam[0]) * k1600, dy = (b[part][1] - a[part][1] - b.cam[1]) * k1600;
       const px = Math.hypot(dx, dy);
