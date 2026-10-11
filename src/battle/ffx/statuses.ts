@@ -162,12 +162,17 @@ export function refreshCriticalStatus(ctx: Ctx, target: FFXCombatant): void {
   }
 }
 
-/** Does this action bounce off the target's Reflect? [ffx-combat-core §4.2] */
+/**
+ * Is this command reflectable? **The game's record bit decides** (`Cmd+0x1c` bit 7, `research/re-ffx-targeting.md` section 1), per target, for a
+ * single-target and a multi-target command alike: Hastega, Slowga, the four Nul spells and the monster elementals bounce as well, and Dispel, Auto-Life,
+ * Demi, Ultima, every Fury, item and Overdrive do not. An ability with no game record keeps its own `reflectable` flag (never an item or an Overdrive).
+ */
+export function reflectableDef(def: AbilityDef): boolean {
+  if (def.record) return (def.record.flagsMisc & 0x80) !== 0;
+  return def.flags.includes('reflectable') && def.category !== 'item' && def.category !== 'overdrive';
+}
+
+/** Does this action bounce off the target's Reflect? (Where it lands is the target builder's: `target-build.ts`.) */
 export function bouncesOffReflect(def: AbilityDef, target: FFXCombatant): boolean {
-  if (!has(target, 'reflect')) return false;
-  if (!def.flags.includes('reflectable')) return false;
-  // Party-wide spells, Dispel, items, Overdrives and Mixes never bounce.
-  if (def.targeting === 'all-enemies' || def.targeting === 'all-allies' || def.targeting === 'all') return false;
-  if (def.category === 'item' || def.category === 'overdrive') return false;
-  return true;
+  return has(target, 'reflect') && reflectableDef(def);
 }

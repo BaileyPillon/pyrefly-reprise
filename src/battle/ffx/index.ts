@@ -82,7 +82,9 @@ export {
   FURY_MAX_CASTS,
 } from './overdrive.ts';
 export { mortibsorption, MORTIORCHIS_MIN_MAX_HP, MORTIORCHIS_DECAY } from './scripted.ts';
-export { validTargets, resolveTargets, redirectTarget, reflectBounceTarget } from './targeting.ts';
+export { validTargets, resolveTargets } from './targeting.ts';
+export { buildAction, buildAimedAction, provokedAim } from './target-build.ts';
+export { forcedTurn, forcedAttack } from './forced-turn.ts';
 export { availableCommands } from './commands.ts';
 // --- sensor / scan ---------------------------------------------------------
 export { partyHasSensor, revealForSensorAuto, revealTarget, sensorKind, weaknessesOf } from './sensor.ts';

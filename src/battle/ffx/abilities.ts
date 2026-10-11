@@ -13,6 +13,11 @@
  * (Slice & Dice, the Furies, Multi-ra) has no fixed target to run the hits against, so it stays hit by hit.
  * The arithmetic of one hit is the game's own, in `adapt/hit.ts`; what the engine does around a hit is
  * `hit-apply.ts`.
+ *
+ * **The targets are built once, before any hit** (re-parity RC4 lane FFX-G; the game's `pp_BtlBuildTargetHits`, `target-build.ts`): a random-target
+ * row deals its hits over the whole set (every pick first, stream 5), Cover (Guard, Sentinel) is decided per target, and a Reflecting target sends a
+ * reflectable command back (to the caster for a holder on the other side, to a random member of the other side for one on the caster's own).
+ * Each target then runs its hits in a row.
  */
 
 import type { AbilityDef, AbilityId, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
@@ -26,7 +31,11 @@ import { hasAuto, weaponElements } from './equipment.ts';
 import { ejectActor, settleDeferredDeath } from './hp.ts';
 import { listensToHit, runOnHit, runOnTargeted } from './ai/hooks.ts';
 import { resolveCommand } from './adapt/command.ts';
-import { aimedTargetForHit, aimedTargets, isPerHitRandom, nextHitTargets, resolveTargets, scriptAimsAt } from './targeting.ts';
+import { aimedTargets, isPerHitRandom, resolveTargets, scriptAimsAt } from './targeting.ts';
+import { buildAction, buildAimedAction, provokedAim } from './target-build.ts';
+import { bondAdd } from './kernel/cover.ts';
+import { bondOf, chainSlotOf } from './adapt/target-world.ts';
+import { gaugeOnOutcome } from './gauge.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
 import { type HitScope, newRecordBook, resolveOneHit } from './hit-apply.ts';
@@ -100,6 +109,7 @@ function finishTouched(scope: HitScope): void {
   const done = [...scope.touched.values()].sort((a, b) => a.last - b.last);
   scope.touched.clear();
   for (const { target, hpBefore, lastDamage } of done) {
+    tidusCounter(ctx, user, target, hpBefore);
     // A follow-up row (Blitz Ace's Last Hit) is part of the action its main row already announced: one `onHit` per action.
     if (scope.options.followUp !== true && listensToHit(target)) {
       const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
@@ -107,6 +117,21 @@ function finishTouched(scope: HitScope): void {
     }
     settleDeferredDeath(ctx, target, user.id);
   }
+}
+
+/**
+ * The per-target step's Tidus counter update (VA 0x00789740, read; `research/re-ffx-targeting.md` section 1.1): when Tidus (slot 0) acts on a
+ * party slot 1 to 7, that slot's counter goes up by one if the sum of its HP changes in the action is a net heal, and down by one (not below 0)
+ * if it is a net loss. The counters weigh into the Cover score (`kernel/cover.ts`).
+ */
+function tidusCounter(ctx: Ctx, user: FFXCombatant, target: FFXCombatant, hpBefore: number): void {
+  if (chainSlotOf(ctx, user) !== 0) return;
+  const slot = chainSlotOf(ctx, target);
+  if (slot === undefined || slot < 1 || slot > 7) return;
+  const net = target.hp - hpBefore;
+  const bond = bondOf(ctx);
+  if (net > 0) bondAdd(bond, slot, 1);
+  else if (net < 0) bond[slot] = Math.max(0, (bond[slot] ?? 0) - 1);
 }
 
 /**
@@ -126,16 +151,25 @@ export function resolveAbility(
   const perHitRandom = isPerHitRandom(def.targeting);
   const elements = resolveElements(user, def, weaponElements(user));
 
-  // A row the script aims (`extra.scriptAims`, re-parity) goes where the command names, hit by hit; no pick is drawn for it.
+  // A row the script aims (`extra.scriptAims`, re-parity) goes where the command names, one command per hit; no pick is drawn for it. Every other
+  // random-target row is a spread: its action carries the whole set and the hits are dealt over it (G6).
   const aimed = perHitRandom && scriptAimsAt(def) && chosenTargets.length > 0;
-  let targets = aimed ? aimedTargets(ctx, def, chosenTargets) : resolveTargets(ctx, user, def, chosenTargets);
+  const spread = perHitRandom && !aimed;
+  const rawNamed = aimed ? aimedTargets(ctx, def, chosenTargets) : resolveTargets(ctx, user, def, chosenTargets);
+  // A Provoked monster that keeps control of its script aims its single-target rows at the provoker (G9); any other Provoked monster never gets here.
+  const targets = provokedAim(ctx, user, def, rawNamed);
   if (targets.length === 0 && def.targeting !== 'self') return 0;
 
   // A gauge that fills on **being targeted** (a heal or a debuff counts) is paid here, once per action and
   // not again for a follow-up row, before any hit resolves. Inert unless `gaugePerTargeting` is set [overdrive.ts].
   if (options.followUp !== true) for (const t of targets) onTargeted(ctx, t, user);
   // The targets' scripts hear the command named them (`onTargeted`), before any damage. A follow-up row is the same action.
+  // This comes before the targets are built: a script's `onTargeted` may put the Guard on a Guardian that the Cover of this very action finds.
   if (options.followUp !== true) runOnTargeted(ctx, { def, user }, targets);
+
+  // The targets, built once, with the hits each takes.
+  const aimedChosen = targets === rawNamed ? chosenTargets : targets.map((t) => t.id);
+  const built = aimed ? buildAimedAction(ctx, user, def, aimedChosen, hitCount) : buildAction(ctx, user, def, targets, hitCount, spread);
 
   const scope: HitScope = {
     ctx,
@@ -152,18 +186,23 @@ export function resolveAbility(
     touched: new Map(),
   };
 
-  if (perHitRandom) {
-    // A fresh random target for every hit: the hit records of the whole action are in before any target's script hears of it. The target
-    // the action named above (one pick of stream 5) is hit 0's: the game draws one pick per hit and no more (`pp_BtlBuildTargetHits`).
-    const firstPick = targets;
-    for (let h = 0; h < hitCount; h++) {
-      targets = aimed ? aimedTargetForHit(ctx, def, chosenTargets, h) : h === 0 ? firstPick : nextHitTargets(ctx, user, def);
-      for (const target of targets) resolveOneHit(scope, target);
+  // A reflecting target's hits go elsewhere: the reflecting target runs the outcome hook once per hit, as a hit that a Shell, Protect or Nul
+  // turned aside (VA 0x00789030: Rook); hits with nobody left to land on are lost, and the engine says so as it always did.
+  for (const { holder, hits } of built.bounced) for (let k = 0; k < hits; k++) gaugeOnOutcome(ctx, user, holder, 0, 2);
+  for (const { holder, hits } of built.lost) {
+    for (let k = 0; k < hits; k++) {
+      ctx.emit({ type: 'miss', targetId: holder.id, sourceId: user.id, reason: 'nullified' });
+      scope.hitIndex++;
     }
+  }
+
+  if (perHitRandom) {
+    // A spread (or a script-aimed row): the hit records of the whole action are in before any target's script hears of it.
+    for (const { target, hits } of built.targets) for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
     finishTouched(scope);
   } else {
-    for (const target of targets) {
-      for (let h = 0; h < hitCount; h++) resolveOneHit(scope, target);
+    for (const { target, hits } of built.targets) {
+      for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
       finishTouched(scope);
     }
   }
@@ -173,7 +212,7 @@ export function resolveAbility(
   // [ffx-combat-core §9, `sensor.ts`]. The FFX data marks Scan with the `scan` status, which until now nothing read.
   const reveals = sensorKind(def);
   if (reveals) {
-    for (const target of targets) revealTarget(ctx, user.id, target, reveals);
+    for (const { target } of built.targets) revealTarget(ctx, user.id, target, reveals);
   }
 
   // Self-Destruct removes the user once the hits have landed.

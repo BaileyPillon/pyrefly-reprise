@@ -18,7 +18,7 @@
  *
  * * `onTargeted`: a command whose damage type is **physical** puts the **Guard** on a Guado Guardian (a coin, 48.97 %
  *   for Guardian A; a sleeper is skipped; with one Guardian left it is that one). The engine's cover routine then
- *   hands a single-target physical blow to a Guard holder that can act (`targeting.ts#coverOf`).
+ *   hands a single-target physical blow to a Guard holder that can act (`kernel/cover.ts`, run by the target builder).
  * * `onHit` (after the action's last hit on him, **before the death check**) and `postPoison` (after his own
  *   poison tick, which skips the "lost HP" test): while Anima has not come, **HP 0 or HP at or below 3,000 summons
  *   her** (`./macalania-acts.ts`). The script lets a lethal hit through and puts him back on his feet, so nothing

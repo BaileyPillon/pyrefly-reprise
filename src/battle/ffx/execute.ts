@@ -8,16 +8,15 @@
  */
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant } from '../common/types.ts';
-import { pickDrawn } from '../common/streams.ts';
-import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isAlive, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
 import { chargeTurn } from './turnQueue.ts';
 import { isMenuMarker, minigameParams, rollDefaultMinigame, spendOverdrive } from './overdrive.ts';
 import { gaugeOnEscape } from './gauge.ts';
 import { escapeRoll } from './kernel/rolls.ts';
-import { FfxStream, streamsOf } from './adapt/streams.ts';
-import { inActorOrder } from './ai/script-random.ts';
+import { streamsOf } from './adapt/streams.ts';
+import { forcedAttack } from './forced-turn.ts';
 import { shapeOverdrive } from './overdriveShape.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
@@ -353,33 +352,23 @@ export function chargeForAction(ctx: Ctx, actorId: CombatantId, rank: number): v
   chargeTurn(ctx, actorId, rank);
 }
 
-/** Berserk restricts the actor to an auto-attack [ffx-combat-core §4.2]. */
-export function berserkCommand(ctx: Ctx, actor: FFXCombatant): Command {
-  const foes = actor.side === 'enemy' ? ctx.state.activeIds : ctx.state.enemyIds;
-  const pool = foes.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && isAlive(c));
-  return { kind: 'attack', targets: forcedTarget(ctx, pool) };
-}
-
-/** Confuse attacks a random target on **either** side [ffx-combat-core §4.2]. */
-export function confusedCommand(ctx: Ctx, actor: FFXCombatant): Command {
-  const pool = [...ctx.state.activeIds, ...ctx.state.enemyIds]
-    .map((id) => tryActor(ctx, id))
-    .filter((c): c is FFXCombatant => c !== undefined && isAlive(c) && c.id !== actor.id);
-  return { kind: 'attack', targets: forcedTarget(ctx, pool) };
-}
-
 /**
- * The target of a forced single-target action (Berserk, Confuse): the game's picker over the candidates in ascending actor order, stream 4,
- * `value % count`, no draw with one candidate (`pp_BtlPickAutoTarget` calls `pp_BtlPickTarget` with stream 4, FFX.exe 0x007996d0).
+ * Berserk restricts the actor to an auto-attack at the opposite side [ffx-combat-core §4.2], and Confuse sends it at its own side, itself included
+ * (`forced-turn.ts`; the game's auto-target, FFX.exe 0x007996d0: one candidate by the picker on stream 4, none drawn with one). An empty set aims at
+ * nobody. The turn start (`engine.ts`) goes through `forcedTurn`, which also covers Provoke; these two stay as the single swing a test can ask for.
  */
-function forcedTarget(ctx: Ctx, pool: readonly FFXCombatant[]): CombatantId[] {
-  const picked = pickDrawn(ctx.rng.on(FfxStream.Picker), inActorOrder(ctx, pool));
-  return picked ? [picked.id] : [];
+export function berserkCommand(ctx: Ctx, actor: FFXCombatant): Command {
+  return forcedAttack(ctx, actor, false);
 }
 
-/** True when the actor cannot choose for itself this turn. */
+/** Confuse attacks a random target of **its own side, the actor included** (`forced-turn.ts`). */
+export function confusedCommand(ctx: Ctx, actor: FFXCombatant): Command {
+  return forcedAttack(ctx, actor, true);
+}
+
+/** True when the actor cannot choose for itself this turn: an AI actor, or one whose turn is forced (Provoke, Berserk, Confuse). */
 export function actsAutomatically(actor: FFXCombatant): boolean {
-  return actor.controller === 'ai' || has(actor, 'confuse');
+  return actor.controller === 'ai' || has(actor, 'confuse') || has(actor, 'berserk') || has(actor, 'provoke');
 }
 
 /** The ability id an Attack command resolves to. */

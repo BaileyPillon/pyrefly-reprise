@@ -15,11 +15,12 @@ import type {
 import type { BattleRng, RngSnapshot } from '../common/streams.ts';
 import { makeFfxRng } from './adapt/streams.ts';
 import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
-import { type Ctx, type EventInput, canAct, has, isAlive, livingFriendlies, tryActor } from './state.ts';
+import { type Ctx, type EventInput, canAct, isAlive, livingFriendlies, tryActor } from './state.ts';
 import { buildBattle } from './setup.ts';
 import { availableCommands } from './commands.ts';
 import { revealForSensorAuto } from './sensor.ts';
-import { chargeForAction, actsAutomatically, berserkCommand, confusedCommand, executeCommand } from './execute.ts';
+import { chargeForAction, executeCommand } from './execute.ts';
+import { forcedTurn } from './forced-turn.ts';
 import { advance, nextActor, predictTurnOrder as predictOrder } from './turnQueue.ts';
 import { onTurnStart } from './ticks.ts';
 import { resolveDuePartRevivals } from './hp.ts';
@@ -268,18 +269,21 @@ export class FFXEngine implements FFXBattleEngine {
       return;
     }
 
-    if (actsAutomatically(actor)) {
-      const command = has(actor, 'confuse')
-        ? confusedCommand(ctx, actor)
-        : has(actor, 'berserk')
-          ? berserkCommand(ctx, actor)
-          : chooseAiCommand(ctx, actor);
-      this.runTurn(actor, command);
+    // A Provoked, Berserk or Confused actor's turn is the game's forced attack (Provoke first, then Berserk, then Confuse): its script does not run and
+    // no menu opens. A Provoked monster that keeps control of its script, and every other actor, goes on to its script or its menu
+    // (re-parity RC4 lane FFX-G; `forced-turn.ts`).
+    const forced = forcedTurn(ctx, actor);
+    if (forced.kind === 'dropped') {
+      this.runTurn(actor, null);
+      return;
+    }
+    if (forced.kind === 'attack') {
+      this.runTurn(actor, { kind: 'attack', targets: forced.targets });
       return;
     }
 
-    if (has(actor, 'berserk')) {
-      this.runTurn(actor, berserkCommand(ctx, actor));
+    if (actor.controller === 'ai') {
+      this.runTurn(actor, chooseAiCommand(ctx, actor));
       return;
     }
 

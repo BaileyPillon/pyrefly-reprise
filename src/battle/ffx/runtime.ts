@@ -56,7 +56,7 @@ export interface ActorRuntime {
   /**
    * **The game's Guard status on an enemy** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; FFX only): a
    * single-target *physical* party action aimed at a monster is redirected to **an ally that holds Guard and can
-   * act** (the one with the most HP if several do) [`targeting.ts#coverOf`, the exe's cover routine 0x78eef0].
+   * act** (the one with the most HP if several do) [`kernel/cover.ts`, the exe's cover routine 0x78eef0].
    * Magic is never covered. A script sets it (Macalania's Seymour marks a Guado Guardian when a physical command
    * names him) and the holder's own script clears it when the holder is next hit. Kept off the status list on
    * purpose: nothing about it is shown to the player, and the damage chain never reads it.
@@ -195,4 +195,10 @@ export interface FFXRuntime {
   inReaction?: boolean;
   /** `state.nextSeq` when Yunalesca last changed form: a Doublecast whose first cast did it cancels the second (row Y6). */
   formDiedAtSeq?: number;
+  /**
+   * The seven Tidus counters (`pp_BtlBond`, VA 0x007845e0; re-parity RC4 lane FFX-G, **FFX only**), index 1 to 7 for the party slots: +1 when Tidus
+   * heals a party member or covers a monster's blow aimed at one, -1 (not below 0) when Tidus's action costs one HP. They weigh into the Cover score
+   * (`kernel/cover.ts`, `target-build.ts`). Absent until first needed; every battle starts them at 0 (open item: the game's array is global).
+   */
+  coverBond?: number[];
 }

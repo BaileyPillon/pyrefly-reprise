@@ -165,13 +165,10 @@ export const GAZE_THRESHOLD = 6;
 /**
  * **OWNER DECISION (C-14 / G-8), 2026-09-21: keep it.**
  *
- * Evrae's Haste is `affected_by_reflect` and self-targeted, and
- * `targeting.ts#reflectBounceTarget` picks a random living member of the
- * *opposite* side with no self-target special case — so Reflect on Evrae turns
- * its self-Haste into a **free Haste on a random party member**. No source
- * states it; it falls out of our own core [§6.5]. The owner chose to keep it,
- * so it is pinned by a test rather than left to chance. Suppressing it would be
- * a data change — drop `reflectable` from `evrae-haste` — not a code one.
+ * Evrae's Haste is `affected_by_reflect` and self-targeted, and the game's target builder sends a spell whose Reflect holder is on the caster's own
+ * side (the caster included) to a random member of the *opposite* side (`kernel/target-builder.ts`, stream 6; RC4 lane FFX-G) — so Reflect on Evrae
+ * turns its self-Haste into a **free Haste on a random party member**. The owner chose to keep it, and the exe does the same, so it is pinned by a
+ * test rather than left to chance. Suppressing it would be a data change — drop the record bit of `evrae-haste` — not a code one.
  */
 export const KEEP_REFLECTED_SELF_HASTE = true;
 
