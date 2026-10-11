@@ -125,6 +125,10 @@ Eleven chapters, nine of them identical to the seed (every outcome, party turn a
 - The "after" tables were measured on `26284b8d` (the two wiring commits); the later commit changes nothing a measurement can see (a guard for a Fury with no casts, the dry-run clone, tests, the golden file), which the golden at the head confirms.
 
 
+### The suite: all 1,103 test files at `4b0607b7`
+
+`npx tsc --noEmit` is clean. The whole suite ran in two parts with `--maxWorkers=4 --testTimeout=400000` (the first attempt, with the default 15 s, crawled: the PC had 16 logical CPUs at 100 percent and about 110 node processes from the other lanes, so 85 of 1,103 files finished in 20 minutes and two tests of `chapters/sin-fins-core-bench` timed out at 15 s; with the long timeout that file passes in 22 s and 24 s). Part one is `vitest related` over every changed source file: **457 files, 443 passed, 13 skipped, 1 failed** (5,457 tests passed). Part two is the other 646 files: **all passed** (11,482 tests). The one failure is `tests/unit/chapters/trema-ship-content.test.ts` "shipped kit on Trema: a Soul Spring drains him first, Three Stars follows, the Dark Knights use Darkness" (FFX-2, Chapter XIII; expected `x2-soul-spring`, got `x2-alchemist-stash-phoenix-down`): it fails identically on the unchanged base tree `f39cd57b` (run in the worktree `re-parity-w2`), so it is not this lane's. Art-only failures: none in this worktree (`public/art` is present). `node tools/orphans.mjs`: 36 orphaned modules before and after, none of this lane's.
+
 ## 6. Open items
 
 1. **The first pass's own draws are not modelled** (found while reading G01 section 3, not a row of the plan): the game calculates the menu record once for every target before the minigame, spending the user's mode 0 and mode 1 streams, and the recalculation draws again (G01 section 4.1: "Draws of the first pass are not reused"). The engine has no first pass, so the user's own streams sit that many draws behind the game's after an Overdrive. It changes which numbers later hits get, not any rule.
