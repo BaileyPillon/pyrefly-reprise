@@ -135,17 +135,41 @@ describe('the revive: the lying body crosses to the toppled figure, which stands
 });
 
 describe('what does not travel', () => {
-  it('REDUCE MOTION revives with a short cross and nothing turns: the standing plane is upright from the first frame', () => {
+  it('REDUCE MOTION revives as it did before FA-3 (the page never asked about it): the actor\'s own blend, no run of ours, nothing turns, no dust', () => {
     const r = downed('tidus', { rm: true });
     r.a.setPose('idle');
-    expect(r.living.last.rises).toBe(0);
-    for (let i = 0; i < 12; i++) {
+    expect(r.living.last).toMatchObject({ rises: 0, crosses: 0 }); // no run of ours: the fall under REDUCE MOTION was a cut, so no cross has played either
+    expect(r.a.blending, 'the actor\'s own blend is the one that runs').toBe(true);
+    for (let i = 0; i < 24; i++) {
       r.frame();
       expect(Math.abs(idle(r).mesh.rotation.z), `frame ${i}`).toBe(0);
+      expect(r.living.last.buckle).toBe(0);
     }
+    expect(r.a.blending).toBe(false);
     expect(Math.abs(lying(r.a).fade)).toBe(0);
     expect(idle(r).fade).toBe(1);
     expect(r.a.children.find((c) => c.name === 'ko-puff')).toBeUndefined();
+  });
+
+  it('REDUCE MOTION revive is byte-for-byte the revive of ?kofall=off (the actor\'s own blend, the fades frame by frame)', () => {
+    const run = (off: boolean): number[][] => {
+      const was = Object.getOwnPropertyDescriptor(globalThis, 'location');
+      if (off) Object.defineProperty(globalThis, 'location', { value: { search: '?kofall=off' }, configurable: true });
+      try {
+        const r = downed('tidus', { rm: true });
+        r.a.setPose('idle');
+        const rows: number[][] = [];
+        for (let i = 0; i < 24; i++) {
+          r.frame();
+          rows.push([lying(r.a).fade, idle(r).fade]);
+        }
+        return rows;
+      } finally {
+        if (was) Object.defineProperty(globalThis, 'location', was);
+        else delete (globalThis as { location?: unknown }).location;
+      }
+    };
+    expect(run(false)).toEqual(run(true));
   });
 
   it('a foe that is revived (or a figure that never topples) crosses without travel: the same cross, no turn, no dust', () => {

@@ -580,7 +580,7 @@ export class PaintedActor extends Group {
   private fallDrop = 0;
   /**
    * How much of that tilt and drop shows, 0 to 1 (default 1). KO COLLAPSE (`fx/mix/living.ts`) takes it to 0 while the standing plane is toppled by `KoTip`
-   * (the topple is the rotation: the tilt would double it) and under REDUCE MOTION (nothing moves but the fade), and puts it back when the run ends.
+   * (the topple is the rotation: the tilt would double it) and for a cross with no buckle (a standing painting already prone), and puts it back when the run ends.
    */
   fallGain = 1;
   /** 0 standing, 1 lying on its back ({@link lieDown}). */

@@ -22,10 +22,10 @@ export { patchLiving } from './livingShader.ts';
  *   (220 ms FFX, 170 ms FFX-2, inside today's KO beat), then the KO painting CROSSES IN over 75 ms on the
  *   capped curve (FA-1, PR-0378: it was a one-frame cut, EC-1001-09, and 78 of round 23's 96 snaps; how a KO
  *   plays and its clock are `KoFall.ts`). A human-scale party figure whose KO painting is a lying body also
- *   TOPPLES on the standing painting, toward the side the KO painting's head lies, and the cross runs under a
  *   dust puff (FA-2, the page's option B, `KoTip.ts`, `KoPuff.ts`). A figure whose standing painting is already
- *   flagged prone (a Sin fin, Vegnagun's tail) and REDUCE MOTION (no buckle, no tilt, nothing moves but the
- *   fade) cross at once. The revive mirrors the fall (FA-3): the lying painting crosses to the standing one already
+ *   flagged prone (a Sin fin, Vegnagun's tail) crosses at once, with no buckle. REDUCE MOTION stays a plain cut and
+ *   a revive under it stays the actor's own blend: the page recommends "stays a cut unless you say otherwise" and
+ *   Bailey took the page defaults. The revive mirrors the fall (FA-3): the lying painting crosses to the standing one already
  *   toppled, which stands up from the floor pivot in 395 ms, inside the presenter's revive wait. The Syndicate's
  *   yield, a held or a dismissed departure are left as they are (VP-1001-47).
  *
@@ -64,7 +64,7 @@ export interface Guts {
   facing: number;
   lieRoll: number;
   life: { state: string; posture: { breathe: number; tempo: number } } | null;
-  /** How much of the fall's own tilt and drop shows (`PaintedActor.fallGain`): 0 while a topple or REDUCE MOTION replaces it. */
+  /** How much of the fall's own tilt and drop shows (`PaintedActor.fallGain`): 0 while a topple replaces it, and for a cross with no buckle. */
   fallGain: number;
   height: number;
   setPose: (name: string, opts?: { immediate?: boolean; force?: boolean }) => void;
@@ -175,14 +175,15 @@ export class LivingFigure {
 
   /**
    * FA-3: a body that was down is asked for a standing pose. The actor's own blend stands aside (it cuts to the standing painting at once, as it does for a KO) and the
-   * run crosses the planes from the lying body: with travel (a human-scale party figure, not under REDUCE MOTION) to the standing painting already toppled where the body
-   * lay, which then stands up; without, only the short cross.
+   * run crosses the planes from the lying body: with travel (a human-scale party figure) to the standing painting already toppled where the body
+   * lay, which then stands up; without, only the short cross. Under REDUCE MOTION there is no run: the actor's own blend, as before FA-3.
    */
   private revive(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, orig: Guts['setPose'], ctx: LifeCtx): void {
     const a = this.a;
     const partySide = a.facing >= 0;
     const kind = partySide ? 'party' : departureKindOf(a.name);
-    if (kind === 'yields' || kind === 'held' || kind === 'dismissed' || koFallOff()) return orig.call(a, name, opts);
+    // REDUCE MOTION revives as it did before FA-3 (the page asked nothing about it): the actor's own blend, no run of ours.
+    if (kind === 'yields' || kind === 'held' || kind === 'dismissed' || ctx.rm || koFallOff()) return orig.call(a, name, opts);
     const from = a.slots[a.active]!;
     const keep = a.crossfadeMs;
     a.crossfadeMs = 0;
@@ -194,13 +195,13 @@ export class LivingFigure {
     const to = a.slots[a.active]!;
     // The actor ignored the request (a body on the ground ignores a hit's pose), or both planes draw one painting: nothing to cross.
     if (from === to || a.life?.state === 'down' || from.pose === to.pose) return;
-    const travel = !ctx.rm && from.scale.prone === true && to.scale.prone !== true && canTopple(a.name, partySide);
+    const travel = from.scale.prone === true && to.scale.prone !== true && canTopple(a.name, partySide);
     const side = travel ? tipSide(headMiddleU(from.meta.head), from.mesh.scale.x < 0 ? -1 : 1, partySide ? 1 : -1) : 0;
     this.begin({ run: reviveRun(travel), mode: travel ? 'topple' : 'cross', from, to, stand: to, lying: from, side });
     if (travel) this.last.rises++;
   }
 
-  /** Start a run: the standing painting stays up (the actor's cut put the KO painting at 1) and the run hands the fades over; the fall's own tilt goes where the topple or REDUCE MOTION replaces it. */
+  /** Start a run: the standing painting stays up (the actor's cut put the KO painting at 1) and the run hands the fades over; the fall's own tilt goes where the topple replaces it, and for a cross with no buckle. */
   private begin(p: Playing): void {
     const pose = p.run.pose;
     p.from.fade = pose.out;

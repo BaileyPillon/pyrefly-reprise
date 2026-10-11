@@ -131,8 +131,8 @@ describe('the from.scale.prone branch: a standing painting already flagged prone
   });
 });
 
-describe('REDUCE MOTION: a short cross that moves nothing (the page default), no longer a cut', () => {
-  it('a figure that would have buckled crosses at once, with no buckle at any frame', () => {
+describe('REDUCE MOTION: the KO stays a plain cut (the Motion Options page: "stays a cut unless you say otherwise"; Bailey took the page defaults)', () => {
+  it('a figure that would have buckled and crossed is on the KO painting at once, with no buckle and no cross at any frame', () => {
     const a = tidus();
     const living = new LivingFigure(a);
     const buckles: number[] = [];
@@ -144,11 +144,21 @@ describe('REDUCE MOTION: a short cross that moves nothing (the page default), no
       buckles.push(living.last.buckle);
       rows.push(shown(a));
     }
-    expect(living.last).toMatchObject({ cuts: 0, collapses: 0, crosses: 1 });
+    expect(living.last).toMatchObject({ cuts: 1, collapses: 0, crosses: 0, topples: 0 });
     expect(Math.max(...buckles)).toBe(0);
-    expect(rows[1]!['ko'] ?? 0).toBeGreaterThan(0);
-    for (const r of rows) expect(Math.min(r['idle'] ?? 0, r['ko'] ?? 0)).toBeLessThanOrEqual(KO_CROSS_PEAK + 1e-9);
-    expect(rows.at(-1)).toEqual({ ko: 1 });
+    for (const r of rows) expect(r, 'one painting at a time').toEqual({ ko: 1 }); // the actor's own cut: never a half-mix
+  });
+
+  it('a standing painting already flagged prone (Vegnagun tail) is a cut too under REDUCE MOTION; without it the same figure crosses', () => {
+    const a = tail();
+    const living = new LivingFigure(a);
+    const rows = ko(a, living, 8, { rm: true });
+    expect(living.last).toMatchObject({ cuts: 1, collapses: 0, crosses: 0 });
+    for (const r of rows) expect(r).toEqual({ ko: 1 });
+    const b = tail();
+    const l2 = new LivingFigure(b);
+    ko(b, l2, 8);
+    expect(l2.last).toMatchObject({ cuts: 0, crosses: 1 });
   });
 });
 

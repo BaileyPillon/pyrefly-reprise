@@ -15,8 +15,11 @@
  * - `buckle-cross` (FA-1, the defect fix): a KO painting that does not lie down (a colossus, a machine part, a pagoda, a standing foe) takes the same buckle and then
  *   the same capped cross instead of a cut. Nothing topples and nothing puffs.
  * - `cross` (FA-1): no buckle, only the cross. A figure whose standing painting is already flagged prone by its shape (Vegnagun's tail, a Sin fin,
- *   Overdrive Sin; the two largest jerks of round 23, 807 and 513 px, took this branch as a plain cut), and REDUCE MOTION (the page's default: a short
- *   fade that moves nothing; the buckle, the tilt, the topple and the puff are all off, the landing squash stays).
+ *   Overdrive Sin; the two largest jerks of round 23, 807 and 513 px, took this branch as a plain cut).
+ * - `cut` under REDUCE MOTION: it stays a cut, as it was before this lane (the page's default). The page recommends "REDUCE MOTION stays a cut unless you
+ *   say otherwise", its tile P1-RM-cut ("Keep the cut") is today's behaviour, and Bailey took "the page defaults" (2026-10-10). The short fade that
+ *   moves nothing (the page's P1-RM-cross tile) is a question the page asked and he did not answer, so it is not built. The landing squash is the
+ *   actor's own and plays as it always did; a revive under REDUCE MOTION is the actor's own blend, as it was before FA-3.
  * - `flip` and `cut`: today's behaviour, kept where a cross cannot work: a KO that has no painting of its own (the pose resolves to the one showing; the
  *   dressphere with no KO painting is laid down by `KoFallback`), where two layers of one painting would dim for a moment.
  *
@@ -90,8 +93,9 @@ export function canTopple(name: string, partySide: boolean): boolean {
 export function koMode(f: KoFacts): KoMode {
   if (f.legacy) return f.rm || f.samePlane || f.fromProne ? 'cut' : 'flip'; // what `living.ts` did before FA-1, exactly
   if (f.samePlane) return 'cut';
-  if (f.samePainting) return f.rm ? 'cut' : 'flip';
-  if (f.rm || f.fromProne) return 'cross';
+  if (f.rm) return 'cut'; // the page's default: REDUCE MOTION stays a cut (no buckle, no tilt, no topple, no puff, no fade)
+  if (f.samePainting) return 'flip';
+  if (f.fromProne) return 'cross';
   if (f.toProne && canTopple(f.name, f.partySide)) return 'topple';
   return 'buckle-cross';
 }
@@ -269,7 +273,7 @@ export function fallRun(mode: KoMode, game: KoGame): KoRun | null {
   }
 }
 
-/** The revive's run: with `travel` the lying body crosses to the toppled figure and stands up (FA-3); without, only the short cross (REDUCE MOTION, and figures that never topple). */
+/** The revive's run: with `travel` the lying body crosses to the toppled figure and stands up (FA-3); without, only the short cross (figures that never topple). REDUCE MOTION plays no run at all: the actor's own blend, as before FA-3. */
 export function reviveRun(travel: boolean): KoRun {
   return new KoRun({ kind: 'revive', holdMs: 0, crossMs: KO_CROSS_MS, riseMs: travel ? RISE_MS : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0 });
 }

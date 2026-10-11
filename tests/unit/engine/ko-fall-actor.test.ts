@@ -202,16 +202,19 @@ describe('what is left behind, and what is not played', () => {
     expect(most, 'the old KO tipped the group more than the topple does').toBeGreaterThan(0.05);
   });
 
-  it('REDUCE MOTION turns and slides nothing: the plane never rotates, the buckle never plays, no dust goes up', () => {
+  it('REDUCE MOTION stays a cut (the page default): the plane never rotates, the buckle never plays, no dust goes up, and the KO painting is up at once', () => {
     const r = rig('tidus', { rm: true });
     r.a.setPose('ko');
+    expect(lying(r.a).fade, 'the call frame is already the lying painting').toBe(1);
     for (let i = 0; i < 24; i++) {
       r.frame();
       expect(Math.abs(standing(r.a).mesh.rotation.z), `frame ${i}`).toBe(0);
       expect(r.living.last.buckle).toBe(0);
+      expect(lying(r.a).fade, `frame ${i}`).toBe(1);
+      expect(standing(r.a).fade, `frame ${i}`).toBe(0);
     }
     expect(r.a.children.find((c) => c.name === 'ko-puff')).toBeUndefined();
-    expect(r.living.last).toMatchObject({ topples: 0, crosses: 1, collapses: 0 });
+    expect(r.living.last).toMatchObject({ topples: 0, crosses: 0, collapses: 0, cuts: 1 });
   });
 
   it('a hit-stop holds the topple where it is (the field clock) and lets the cross run on (the real one)', () => {

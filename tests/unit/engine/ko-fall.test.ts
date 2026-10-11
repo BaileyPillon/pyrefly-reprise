@@ -57,8 +57,8 @@ describe('koMode: how a KO plays', () => {
     expect(koMode(facts({ name: 'overdrive-sin', partySide: false, fromProne: true, toProne: false }))).toBe('cross');
   });
 
-  it('REDUCE MOTION is a short cross with no movement (the page default), for every figure', () => {
-    for (const toProne of [true, false]) for (const partySide of [true, false]) expect(koMode(facts({ rm: true, toProne, partySide })), `${toProne} ${partySide}`).toBe('cross');
+  it('REDUCE MOTION stays a cut, for every figure: the Motion Options page recommends "stays a cut unless you say otherwise" and Bailey took the page defaults (P1-B, 2026-10-10)', () => {
+    for (const toProne of [true, false]) for (const partySide of [true, false]) for (const fromProne of [true, false]) expect(koMode(facts({ rm: true, toProne, partySide, fromProne })), `${toProne} ${partySide} ${fromProne}`).toBe('cut');
   });
 
   it('a KO with no painting of its own keeps what it had: nothing to play, or the buckle and a flip (two layers of one painting would dim for a moment)', () => {
@@ -184,7 +184,7 @@ describe('KoRun: the clock of a fall', () => {
     }
   });
 
-  it('cross mode (REDUCE MOTION, a prone standing painting) has no hold at all: the first frame is already crossing, nothing buckles, nothing tips, no puff', () => {
+  it('cross mode (a prone standing painting) has no hold at all: the first frame is already crossing, nothing buckles, nothing tips, no puff', () => {
     const run = fallRun('cross', 'ffx')!;
     run.step(1000 / 60, 1000 / 60);
     expect(run.pose.phase).toBe('cross');
@@ -332,7 +332,7 @@ describe('KoRun: the revive mirrors the fall', () => {
     expect(rows.at(-1)).toMatchObject({ phase: 'done', tip: 0, buckle: 0 });
   });
 
-  it('a revive with no travel (REDUCE MOTION, a figure that never topples) is only the short cross, 75 ms, and moves nothing', () => {
+  it('a revive with no travel (a figure that never topples) is only the short cross, 75 ms, and moves nothing', () => {
     const run = reviveRun(false);
     const rows = play(run, 60, 300);
     expect(rows.filter((r) => r.phase === 'rise')).toHaveLength(0);
