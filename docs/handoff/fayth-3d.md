@@ -46,6 +46,33 @@ Written 2026-10-10 ~18:50 EDT by the main session ("FFX assets decompile and exp
 - **Orphans:** 52 → 53; the new one is `localAssets.ts`, until phase 3 wires it.
 - **critic-plan:** DEEP (chapter-registry, battle-presenter, build-config). Focused review before the deploy, deep after.
 
+## Phase 3: DONE (2026-10-11 ~00:45 EDT; branch `fayth-3d`; FFX only): the `ffx` skin on `exp-fayth-deck`, the painted skin at FFX's staging, and the first pictures
+
+**What exists (all dev-server only; production, the website and every test get phase 1's scene unchanged):**
+
+| What | Where |
+|---|---|
+| The one transform: `world = FFX_UNIT * (x, -y, -z)`, `FFX_UNIT = 1.75 / 18.15 = 0.09642` (Tidus's 18.15 FFX units stand the painted Tidus's 1.75). The matrix, `ffxPoint`, `ffxDirection`, `yawToward`, the polar eye, the lens | `src/engine/ffx3d/ffxWorld.ts` (phase 4's camera sink takes `ffxWorldMatrix()`) |
+| Party slots, Evrae NEAR and FAR, the two default views as world rigs, the overview rig, **which stage meshes the battle draws** | `src/engine/ffx3d/ffxStaging.ts` |
+| glb loading (dynamic `import()` of three's `GLTFLoader`), unlit materials, weapons by bone, runtime scale, `shapeStage` | `src/engine/ffx3d/models.ts` |
+| The skin: models ride the painted actors' `inner` group, planes off, facing, alpha and scale follow | `src/engine/ffx3d/ffxSkin.ts` |
+| The scene glue: probe, `?skin=`, derived build (rigs, slots, pins, `sideFacing`, palette), painted layout at FFX's staging | `src/scenes/exp-fayth-skin.ts`, reached from `exp-fayth-deck.ts` through `import()` inside `import.meta.env.DEV` |
+| The director's optional `staging` (Evrae's spots and the NEAR / FAR rigs; no Hor+ stand-back or trim while set) | `src/scenes/evrae-airship-director.ts` (399 lines) |
+
+- **Skins.** A found manifest: the `ffx` skin. `?skin=painted`: the painted skin at FFX's staging (billboards at FFX's points, deck a quarter turn under the party's column, sky plate behind). `?skin=classic`: phase 1's scene. Nothing found and no switch: phase 1's scene, the very objects (a test pins the identity of `RIGS`). Chapter VIII's tables are never written (the build is derived; its getters stay getters).
+- **Production proof.** A production-mode Vite build of `exp-fayth-deck.ts` holds no skin code, no loader and no route string (`stageFaythSkin`, `loadFfxModels`, `FfxSkin`, `GLTFLoader` code and `__ffx-local` are absent; two words appear only in comments).
+- **Material.** Every material is rebuilt as an unlit `MeshBasicMaterial` (map, vertex colours, alpha-test, sidedness from the file; no fog). The texture is already shaded; unlit cannot go dark in our lights and shows what the file draws. Lit (the game's one directional character light) is a later question.
+- **The stage is not the whole file (the main finding).** The converted stage is the airship's whole exterior. Placed at x10 with no offset, the near camera sits inside its superstructure and the party stands under a roof. The PS2 captures of the same view (`D:\Tools\pcsx2-ffx\re\shots\b2_ev76_0.png`, local) show the party on a pale domed hull with a flat plate beside them and a dark box at the bottom-left corner. What reproduces it: the **deck meshes mirrored in y** (their surface lies at the walkmesh's height with the sign reversed, to 0.3 FFX units at all three slots) and nothing above them drawn; the sky bowl as is, on the camera. `FFX_STAGE_PARTS` records the names and the reasoning. Side by side at the exact view (960 px wide panels): the party's first slot lands within 5 px of the capture's figure, the plate's tips within 15 px, and the corner box is about 50 px narrower than the capture's. **Open:** the lateral registration is verified only by that frame and the walkmesh's outline; nothing says the real game mirrors those meshes.
+- **Evrae is not settled.** At x4 with idle frame 0 on `(-140, -35, 80)` its head lands about 3 world units (30 FFX) lower and left of the capture's and it reads about 1.3x too large. Origin, scale (medium confidence in the converter's notes) and pose all remain candidates. Its idle bounding box puts the origin mid-body, so the HUD's head anchor (`setWorldHeight`) uses the box top.
+- **The painted game's MAX mix fights the FFX camera.** CHAPTER FRAMING (default on) re-registers the `idle` rig (3 to 4 percent farther here) and puts a `camera.view` offset on the camera (-77, -43 px at 1920x1080). The pictures were taken with the three EYE CANDY looks off (`__pyrefly.app.save.setSettings({ fxLight: false, fxLiving: false, fxSpectacle: false })`); a mix-on picture is kept beside them. Phase 4b's sink must clear `camera.view` and run after the mix, or the chapter must opt out of CHAPTER FRAMING.
+- **FAR default view.** Through the numbers the party and Evrae are both outside the frame (the look-at stands 10.8 world units to the party's right where the half-width at their depth is 9.2; Evrae's FAR spot is 80 units off): the picture is the deck's bow and sky. Whether the real FAR view frames the party (another area record, another rule) is unread.
+- **The painted pose swap still runs on the hidden planes** (the director loads Evrae's FAR painting and warns once per swap that its pixel scale differs); harmless.
+
+**Pictures (local only; `D:\Tools\ffx-parity\shots\phase3\`, retail frames never in git):** `a-ffx-near-default.png` (and `-nohud`), `a2-ffx-near-default-mixon.png`, `b-painted-near-default.png` (and `-nohud`; the painted one is also at `docs/screenshots/fayth-3d/fayth-painted-ffx-staging-near.png`), `c-ffx-overview.png`, `d-ffx-far-default.png`, `cmp-near.png` (the PS2 frame beside ours), `capture.mjs` (the harness).
+
+**For phase 4b (camera replay):** apply the pose after `BattleCamera.update` and after the mix's lens shift; map with `ffxWorldMatrix()`; the vertical lens is kept (26.38 degrees at 1024); the scene already publishes the NEAR default as `intro`, `idle`, `action`, `enemy`, `party`, `victory` and the FAR default as the `-far` names, and `director.staging` hands the range director the same views.
+**For animations:** the skin already follows the actor's alpha and divides out its scale; a pose needs the clip mixer on the model root (the files are `evrae-anims.glb` and the per-actor idle only so far), and the KO fall rotates `inner`, so the model tips with it.
+
 ## In flight when the cap hit (may have stopped mid-work)
 
 1. **Phase 2 converter**: `D:\Tools\ffx-parity\assets\tools\phyre2gltf\` produces `assets\runtime\evrae\{stage,evrae,tidus,wakka,rikku}.glb` + `runtime\manifest.json` + `runtime\_checks\*.png`.

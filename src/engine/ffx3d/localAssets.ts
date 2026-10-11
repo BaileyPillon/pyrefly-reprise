@@ -111,3 +111,11 @@ export async function probeFfxLocal(): Promise<FfxLocalManifest | null> {
   console.warn(`[ffx-local] ignoring ${MANIFEST_PATH}: ${problem}. The chapter plays with its painted art.`);
   return null;
 }
+
+/**
+ * The URL of a file under the route, from a path relative to the manifest (`evrae/tidus.glb`): the one way the model loader (`./models.ts`) names a local file. It builds a string and asks for nothing; only the
+ * `ffx` skin calls it, after {@link probeFfxLocal} found the folder.
+ */
+export function ffxLocalUrl(path: string): string {
+  return `${import.meta.env.BASE_URL}${MANIFEST_PATH.slice(0, MANIFEST_PATH.lastIndexOf('/') + 1)}${path}`;
+}

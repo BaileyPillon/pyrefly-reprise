@@ -370,19 +370,22 @@ describe('FFX only [AGENTS.md rule 14]', () => {
   const dir = fileURLToPath(new URL('../../../src/scenes/', import.meta.url));
   /** The hidden Fayth chapter's scene (2026-10-10, FFX only) builds this same deck over Chapter VIII's plate with a camera director on it, so it is the second consumer of the deck factory besides Sin's `evrae-airship-sin.ts`. */
   const FAYTH_DECK = 'exp-fayth-deck.ts';
-  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK);
+  /** Its dev-server skins (phase 3: FFX's staging and Bailey's own models) take the deck's range director and stage it with FFX's numbers, so they read the director too; FFX only, reached only from the deck above. */
+  const FAYTH_SKIN = 'exp-fayth-skin.ts';
+  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK || f === FAYTH_SKIN);
 
   it('the scene files import nothing from FFX-2', () => {
     expect(mine.length).toBeGreaterThanOrEqual(7);
     expect(mine).toContain(FAYTH_DECK);
+    expect(mine).toContain(FAYTH_SKIN);
     for (const f of mine) {
       const src = readFileSync(`${dir}${f}`, 'utf8');
       expect(src, f).not.toMatch(/battle\/ffx2|data\/ffx2|ui\/ffx2/);
     }
   });
 
-  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception, and the Fayth chapter’s deck the second)', () => {
-    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts' && x !== FAYTH_DECK)) {
+  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception, and the Fayth chapter’s deck and its skins the others)', () => {
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts' && x !== FAYTH_DECK && x !== FAYTH_SKIN)) {
       expect(readFileSync(`${dir}${f}`, 'utf8'), f).not.toMatch(/evrae-airship/);
     }
   });
