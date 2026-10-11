@@ -212,6 +212,15 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * the old line calls Bahamut there (event 520), the new one defends; the new line never summons on this seed (Yojimbo falls before 96), the battle is a
  * victory both ways (577 and 560 events). Seed 7: the two logs are identical (neither line summons), so its digest keeps its value (a2f8d812).
  * No other digest moved: Chapter IX is the only chapter whose line changed. 7681d4e3 -> 28996218.
+ * Release candidate 2 (rel-3945: the live build 39.4.4 plus re-parity W5, Chapter XVIII, the guide rewrites, Chapter X's options and the two menu changes; FFX only;
+ * docs/handoff/re-parity-rc2.md). The merged tree was run against the table above, once: SIXTEEN of the 18 digests are byte for byte what they were, and TWO moved,
+ * seymour-natus#1 (dc26538f -> 4e54c29b) and #7 (cd5b1bcb -> 25becfa0), both still victories. Cause, proved by putting the one constant back: Chapter X's
+ * registered line is 'reflect' now (`NATUS_LINE` in src/data/guides/natus-line.ts, the re-parity-chx-options branch; Bailey took the recommendation on 2026-10-10: Bahamut
+ * alone, and Rikku Reflects Natus so Mortibody's Cura bounces). With the constant at 'shipped' this file is 18/18 on the old values; with 'reflect' the
+ * logs of both seeds are identical for the first 16 (seed 1) and 51 (seed 7) events and differ at Kimahri's switch, where Rikku comes in for the Reflect and Auron does
+ * not (417 -> 255 and 644 -> 335 events a fight). No other digest moved: the Chapter IX line and W5 were already in the table above; Chapter XVIII's line and
+ * party are not in this table (the Sin chapters stop at Isaaru); the guide rewrites are text; and the Orders and Talk menu changes (the airship offers one order at a
+ * time, the third Talk only speaks) moved none of the 18 logs. Nothing on the boss or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd0fa190d:victory',
@@ -226,8 +235,8 @@ const GOLDEN: Record<string, string> = {
   'evrae-airship#7': '99a25fb5:victory',
   'yojimbo-cavern#1': '28996218:victory',
   'yojimbo-cavern#7': 'a2f8d812:victory',
-  'seymour-natus#1': 'dc26538f:victory',
-  'seymour-natus#7': 'cd5b1bcb:victory',
+  'seymour-natus#1': '4e54c29b:victory',
+  'seymour-natus#7': '25becfa0:victory',
   'seymour-omnis#1': 'f3c16c45:victory',
   'seymour-omnis#7': 'c2a59197:victory',
   'isaaru-via-purifico#1': 'd77cdbaf:victory 33e06f11:victory ee292b8b:victory',
