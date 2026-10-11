@@ -123,6 +123,16 @@
  * still 10/10. The old hashes are in git at 3663cd3a. The same Chapter 4 rows moved in `ffx2-hit-closes-menu.test.ts` and
  * `ffx2-menu-cancel-delay.test.ts`.
  *
+ * **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. Every one of the sixty hashes moved, against the live build (39.4.4, the first differing event of every seed is the opening: W4's gauge rolls
+ * the first waits on the game's draws, see the tenth re-pin below) and against W4 alone. Against W4 alone the first differing event is: Chapter 4, Bahamut's
+ * very first action, the Curse's girl (lane a, rows B1 and B5: the near-weighted search draws one 31-bit value where the engine drew a float), on 14 of the 20
+ * D = 0 seeds and 8 of the 10 Active seeds, and on the others a later chain break or miss that follows from the same draw (seeds 5, 12, 14, 15, 19 and 6 at D = 0);
+ * Chapter 5, the Tail's first turn comes 9 steps earlier on 13 of 20 seeds (RC3: its opening voice poll is the speak command, ATB cost 60, not the standard 70) and
+ * the other seven differ a few events on, in who acts first after it. Outcomes: Chapter 4 D = 0 20/20 and the Active arm 10/10, as under W4 and on the live build;
+ * Chapter 5 D = 0 20/20 (it was 14/20 under lane a alone on the old clock, 20/20 under W4 and on the live build), and its Active arm is **5/10** (6/10 under W4
+ * alone, 1/10 under lane a alone on the old clock, 2/10 on the live build): the Head's Agility, the Nodes' starting colours and the Core's answers are the game's
+ * (lane a), and the menus now cost the girls the game's real waiting times (W4); measured, not tuned (docs/handoff/re-parity-rc3.md, 500 seeds of the shipped line).
+ * The Wait arm still equals the D = 0 arrays and a Wait engine switched to Active still equals the Active arrays (both asserted below).
  * **Re-pinned a tenth time, every array, for re-parity W4** (branch `re-parity`, 2026-10-10, FFX-2 only, reason "game-code parity";
  * `docs/handoff/re-parity-w4.md`). The engine clock is now the game's logic step (29.97 a second, measured on Bailey's running game
  * on 2026-10-09) and every gauge is the game's own counter: a command leaves `cost_atb x 10000 / (AGI + 1)` (a spell 0), a cast counts
@@ -160,33 +170,33 @@ const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
 /** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D0 = [
-  '12ca8c151d83539f', 'a99992b5510a6944', '52f256a555d719d1', 'b8146c45b4109c8e', 'fdb20e9b8ce3afd1',
-  '3621355d2817d0e9', '270115a474215b4a', '4f08d4ae769c427c', '457483ff8a921efd', 'ee7d7561e24effe0',
-  'eaa823dfe56b9a9b', '2ae7580b86bd843e', '21aa3de7d85c37f4', '7b3bd27483cf675c', 'af571d151b8d8c01',
-  'f5dc29993a51224c', 'b7ee3272094e7606', 'a3b34d50fee5d31a', '9bced22bc54fdaea', 'e5d8368c5b0e44eb',
+  '4c8ec7d92566a315', '2afad0a28b3c8251', '899e5c611bc0fd1b', 'f002437f9148721d', '3f3226ffca4c0ec3',
+  '6aaff52130788c4a', 'b5de4e8ba3b6534c', '75ee844bfd38a6d0', '427f3c0809fdf76f', '062f32b1cc249ff0',
+  'a66190b108c7f36f', '3f3ea772b201cdd4', 'ffa60d0d81fedf5a', '87ac4f457be323d2', '1d266c2e9e0c4b43',
+  '626d6c15d94419e4', 'f8669d77ee8f65e2', '6da28a75a8b0a1a1', '0471c4a59e938799', '2969b86e5f21195d',
 ];
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  '6d1c691a5d26f616', '90d3c35d81929e0a', '7eb1a3104a2b6de9', 'd6ffdca5257353cf', '97216ad5381bebf6',
-  'f99d3875deaa5023', '85f479b8477e014a', '4871698e7688e3d2', 'd7ffcf588bcb7e05', 'd47130bf0711355c',
-  'a965eddb7cf49501', '122248407aa8c582', '48ee74f687135ca6', '9c20eb70d121de6a', 'ede90bf21cc2e3ee',
-  '663007051b5c989c', 'd8fc57018795eccf', 'c8a9af121619285f', '00fb223bdec6c9a0', '965f002ed1aeb57d',
+  'b50eafc09c9ccfe8', '7772d77d0f2877d4', '71e00c81086abe68', '6ca39102a5f904bb', '42c8782faed8fb9f',
+  '8b6e6ea8d275e839', '9050fddcc37e99e0', '269a88428ecf8ccc', 'e63a12b2da32398e', '6934276a742ac3d9',
+  '42e3d1d30ee0541e', '469d6ed21cceaa06', '7633436743132813', 'af327c20a7b81fa9', 'f0759ee6ddde7d16',
+  '4e5d9fdd9ea47b86', '986961d0b31fcce7', 'df94248f368c89d9', '8aeefa0a78792d94', '8709c5a8eefcb93b',
 ];
 
 /** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D1500 = [
-  '2a67d64d6b7b4e0b', '02bad7fb34ce0631', '4c4cc3f27859c94b', '1d5ad74ba5939da6', 'c85df61816cef350',
-  '6a2d6592c584be6e', 'd75e9252114e2c3c', '9771af24d5c318f1', '0db04cdcfb65f41c', 'b5a2e6966d7a125b',
+  '7855b868b648c063', 'f5623d596fabcad2', '16ec70377e31a9ab', '682fc257e88371e5', 'c32a7acaa7e0e41b',
+  'ddac2995d39fad8c', 'bd3158b4160ded5d', '63a0df80d4210bdb', 'ef8691667e6f1cc3', 'e6c137da93742467',
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D1500 = [
-  '5510a1a4edcf279f', '93655528d4c4d8e3', '1eef844164a43698', 'fa30063f828e816b', '2984c0f384cd9c7f',
-  'aef0ba91c468c569', '15c0381ce67d8198', 'cd6c0f6555bf2c92', '40671ea5faa65c67', 'bfb594a3befe6ea5',
+  'ee98b37f2dbe9e0e', '0f28a08877f50773', '5035d6f5ed4dfb1d', '55d7789dd3e3ed11', '893302402727ad93',
+  'cba3778cc4a3e4f4', '33e312c7f1c5f156', 'c740bc1cd1cc4750', '1cbdd40c8d5b7f83', 'dc24b89c2cb21231',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
-/** One letter a seed, W a won chain and d a defeat (game-script parity, 2026-10-10; before it every seed won). */
-const CH5_D0_OUTCOMES = 'WddddWWWWWWWWdWWWWWd';
+/** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */
+const CH5_D0_OUTCOMES = 'WWWWWWWWWWWWWWWWWWWW';
 
 describe('FFX-2 golden event logs on the Active path (D = 1500 ms)', () => {
   it('chapter 4 and the chapter 5 chain, seeds 1-10, are byte-identical', () => {
@@ -202,7 +212,7 @@ describe('FFX-2 golden event logs at zero decision time (D = 0)', () => {
     expect(runs.every((r) => r.outcome === 'victory')).toBe(true);
   }, 120_000);
 
-  it('the whole chapter 5 chain, seeds 1-20, is byte-identical and wins 14/20 (game-script parity: it was 20/20)', () => {
+  it('the whole chapter 5 chain, seeds 1-20, is byte-identical and wins 20/20', () => {
     const runs = SEEDS.map((s) => driveChapter5(s, 0));
     expect(runs.map(logHash)).toEqual(CH5_D0);
     expect(runs.map((r) => (r.outcome === 'victory' ? 'W' : 'd')).join('')).toBe(CH5_D0_OUTCOMES);
@@ -229,7 +239,7 @@ describe('the Config ATB speed lever at Normal changes nothing (§1.2)', () => {
  * before its first decision must reproduce the Active `D = 1500` golden.
  */
 describe('FFX-2 golden event logs under Wait mode (D-029)', () => {
-  it('D = 1500 under Wait is byte-identical to D = 0, chapters 4 and 5, seeds 1-20, 20/20 and 14/20', () => {
+  it('D = 1500 under Wait is byte-identical to D = 0, chapters 4 and 5, seeds 1-20, 20/20 and 20/20', () => {
     const wait = { atbMode: 'wait' as const };
     const ch4 = SEEDS.map((s) => driveChapter4(s, 1500, wait));
     const ch5 = SEEDS.map((s) => driveChapter5(s, 1500, wait));

@@ -155,6 +155,12 @@ describe('the flag is the only way in: every other chain carries what it always 
    * equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again, and Chapter 6's first three equal `ffx2-hit-closes-menu.test.ts`'s. The old
    * hashes are in git at 029d49c7.
    *
+   * **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. No Den code changed in this test's sense; all thirty-two logs
+   * moved. Chapter 5's eight equal the atb golden's CH5_D0 seeds 1 to 8 again and Chapter 6's first three equal ffx2-hit-closes-menu's. Against W4 alone
+   * the first differing event is: Chapter 5, the Tail's first turn 9 steps earlier (the voice poll's 60); Chapter 6, the first Ormi / goon turn or the
+   * opening snapshot (lane c's rows and stats); Chapter XI, Shiva's moves (lane b: her roll is random() mod 4, the girl a separate pick, +5 for every result); the Sisters, Mindy's,
+   * Sandy's or Cindy's early moves (lane b: Mindy picks her girl then rolls mod 6, Sandy's Razzia is 1 in 3, Cindy's Camisade 2 in 5). All eight of each
+   * still win at D = 0.
    * **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity").** No Den code changed; the engine did: the clock is the
    * game's logic step and every gauge is the game's counter (recovery, cast, opening, thinking, Delay, status clocks), so all thirty-two logs
    * moved again. Chapter 5's eight equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again, and Chapter 6's first three equal
@@ -186,10 +192,10 @@ describe('the flag is the only way in: every other chain carries what it always 
    * event that differs is inside the Tail's link). Chapters 6 and XI and the Sisters did not move. The old Chapter 5 hashes are in git at 931613a8.
    */
   const BASE = {
-    ch5: ['6d1c691a5d26f616', '90d3c35d81929e0a', '7eb1a3104a2b6de9', 'd6ffdca5257353cf', '97216ad5381bebf6', 'f99d3875deaa5023', '85f479b8477e014a', '4871698e7688e3d2'],
-    ch6: ['2344c20a6bb8530d', '55aa7179d0b4a65c', '4ddd13646c3b9390', '062ebf51a69a5a5f', '9f8cf12c4c407c02', 'b712aee6e8d896a8', '11b8ec90655f6caf', 'b08b9d21310a79fb'],
-    ch11: ['e7846fbd46442b16', 'd9dbbc77f383af27', '9ab98d015dce5650', 'ab5e480c6e7ec9ab', 'e334d58d76473038', '8596114a9b7dfade', '429e3060370e5661', '29b9b1333e0d8d4f'],
-    sisters: ['d17b9de04beaee56', 'dc065e2ff109b974', 'f572038071e66f15', 'b0977683d700082d', 'cf52e7b016c6aa34', 'a11a73c9a50af8f8', '80fcedbb24aa46b9', '40b89ff67e1ef704'],
+    ch5: ['b50eafc09c9ccfe8', '7772d77d0f2877d4', '71e00c81086abe68', '6ca39102a5f904bb', '42c8782faed8fb9f', '8b6e6ea8d275e839', '9050fddcc37e99e0', '269a88428ecf8ccc'],
+    ch6: ['ec95ea116e4e151b', '537d9b63ec42e3b2', '527610137448cb33', '6842d8a87d3609a7', '30a2d0d2a7ee14d4', '790280331a906e2b', 'bd4a6058f2858ecc', '3a7789ec67b022bc'],
+    ch11: ['9edabbbe590c707d', '6dbada64288edecc', 'f85c0c7b358b7c6b', 'd7a5fa17df90f1ca', '5b90dab970527904', '567017c5c1227f1c', '95775ca3d38dfef1', '05da03aaf51770b9'],
+    sisters: ['2ef8a248591ea375', 'de6e081eaf8abb57', '2a334080a77465ec', '06642ae199cb58ca', '33be573d816f20fa', 'f10de5e7a57ac59e', '96f95eada70fb225', '41204b127a92f677'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

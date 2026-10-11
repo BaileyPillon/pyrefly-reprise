@@ -85,6 +85,22 @@ function runUnderMenu(engine: FFX2Engine, owner: CombatantId, ms: number, top?: 
 }
 
 /**
+ * RC3 (FFX-2 only; reason "game-script parity"): does the closed menu come back, with the battle still on, inside the 200 steps of 100 ms the
+ * three scenarios below allow? The same (formation, seed) is played again from its start (the engine is deterministic), because a candidate
+ * whose fight is over before her gauge runs out (the Syndicate's scripts are the game's own now) cannot show the menu returning.
+ */
+function menuReturns(extra: Partial<Ffx2EngineOptions>, groupId: string, seed: number, top?: boolean): boolean {
+  const { engine, menu } = engineAt(seed, extra, groupId, chateauBuild);
+  runUnderMenu(engine, menu.actorId, 60_000, top);
+  let again = engine.nextDecision();
+  for (let i = 0; i < 200 && again.kind !== 'player-input'; i++) {
+    if (again.kind === 'waiting') engine.tick(Math.min(100, again.nextEventMs), { throughInput: true });
+    again = engine.nextDecision();
+  }
+  return again.kind === 'player-input';
+}
+
+/**
  * The first Chapter VI formation and seed whose opening menu is closed by a Delay hit (Supercollider,
  * Huggles or Mach Fan) landing on the owner, she still standing and no status landing with it.
  */
@@ -95,7 +111,7 @@ function closedByDelayHit(extra: Partial<Ffx2EngineOptions>, top?: boolean) {
       const run = runUnderMenu(engine, menu.actorId, 60_000, top);
       const owner = engine.state().combatants[menu.actorId];
       if (run.closed && owner && owner.hp > 0 && !engine.state().result && !run.last.statused
-        && run.last.hitAbilities.some((a) => carriesMenuCancel(abilityOf(a)))) {
+        && run.last.hitAbilities.some((a) => carriesMenuCancel(abilityOf(a))) && menuReturns(extra, groupId, seed, top)) {
         return { seed, engine, menu, run };
       }
     }
@@ -210,14 +226,18 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // **Chapter IV's row re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use 14 from the files"; the first
   // event that differs is Bahamut's first Mega Flare damage; see `ffx2-atb-golden.test.ts`, ninth re-pin); the old row is in git at
   // 3663cd3a. Chapters V and VI did not move.
+  // **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. All nine are still victories and no menu is closed; Chapters IV and V equal the atb golden's seeds 1 to 3 again
+  // and Chapter VI equals chapters/den-of-woe-carry.test.ts ch6. Against W4 alone the first differing event is Bahamut's first Curse (Chapter IV, seeds
+  // 1 to 3: lane a), the Tail's first turn 9 steps earlier (Chapter V, seeds 1 to 3: the voice poll's 60) and, in Chapter VI, the opening gauge snapshot
+  // and the first goon or Ormi turn (lane c: Ormi's, Logos' and the goons' own Agility rows). The old hashes are in git at 931613a8 and bfb229a3.
   // **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity"):** the engine clock is the game's logic step, a command
   // leaves the game's recovery and its cast the game's charge, so every D = 0 log moved (all nine are still victories and no menu is closed).
   // They equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes
   // are in git at 931613a8.
   const PINNED = [
-    ['12ca8c151d83539f', 'a99992b5510a6944', '52f256a555d719d1'],
-    ['6d1c691a5d26f616', '90d3c35d81929e0a', '7eb1a3104a2b6de9'],
-    ['2344c20a6bb8530d', '55aa7179d0b4a65c', '4ddd13646c3b9390'],
+    ['4c8ec7d92566a315', '2afad0a28b3c8251', '899e5c611bc0fd1b'],
+    ['b50eafc09c9ccfe8', '7772d77d0f2877d4', '71e00c81086abe68'],
+    ['ec95ea116e4e151b', '537d9b63ec42e3b2', '527610137448cb33'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

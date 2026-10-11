@@ -64,19 +64,22 @@ describe('the test helper reads the sourced rows (no row is flagged here)', () =
 
 describe('the engine plays the game\'s rule: any hit of the ATB class closes a menu, no other does (pinned logs)', () => {
   // The default's logs, Chapters IV to VI at human pace (`ffx2ChapterDrive`, Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the
-  // top list), seeds 1 to 3. **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity")**: the clock is the game's
+  // top list), seeds 1 to 3. **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
+  // Against W4 alone the first differing event is Bahamut's first Curse (Chapter IV), the Tail's first turn 9 steps earlier or a gauge snapshot
+  // (Chapter V) and the opening snapshot or the first Ormi / goon turn (Chapter VI, lane c's stat rows); the split rows follow the same events.
+  // **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity")**: the clock is the game's
   // logic step and a command leaves the game's recovery and cast, so every log moved. The 18 before it were pinned 2026-10-09 for W3
   // (old hashes in git at 931613a8; the release-17 replay rows that stood beside them are gone with the option).
   const ON: Record<string, string> = {
-    'IV|active|1': '2a67d64d6b7b4e0b', 'IV|split|1': 'f00a7e807fc8c39d',
-    'IV|active|2': '02bad7fb34ce0631', 'IV|split|2': '993ad76bc6a10261',
-    'IV|active|3': '4c4cc3f27859c94b', 'IV|split|3': 'd867d0a659ab060e',
-    'V|active|1': '5510a1a4edcf279f', 'V|split|1': 'c93e613adeb21205',
-    'V|active|2': '93655528d4c4d8e3', 'V|split|2': 'd6d7846553cc849d',
-    'V|active|3': '1eef844164a43698', 'V|split|3': 'b8ce48b7a98af624',
-    'VI|active|1': '1f25fd2fff5825e2', 'VI|split|1': '29cffe5a65d56132',
-    'VI|active|2': '19ca5c3425399fe5', 'VI|split|2': '1758f2b0d701d3a1',
-    'VI|active|3': 'c35eee59b15c3950', 'VI|split|3': 'dd51b097ed093737',
+    'IV|active|1': '7855b868b648c063', 'IV|split|1': '18c492669a1cee98',
+    'IV|active|2': 'f5623d596fabcad2', 'IV|split|2': 'c8dd8c09b30714a3',
+    'IV|active|3': '16ec70377e31a9ab', 'IV|split|3': '2be8db622676d872',
+    'V|active|1': 'ee98b37f2dbe9e0e', 'V|split|1': 'be67bc323cafba72',
+    'V|active|2': '0f28a08877f50773', 'V|split|2': '575757b790f40559',
+    'V|active|3': '5035d6f5ed4dfb1d', 'V|split|3': 'a11f4d04daecb9bd',
+    'VI|active|1': '2b71fb0033710a0c', 'VI|split|1': '64ad3870203d2ce7',
+    'VI|active|2': '551288af1fd74ffb', 'VI|split|2': '78d80ec78a6f249b',
+    'VI|active|3': '15dbf59402b6f312', 'VI|split|3': '3046ec12c9073d95',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 

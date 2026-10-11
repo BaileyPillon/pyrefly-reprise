@@ -27,7 +27,7 @@ import type { BattleSetup, BattleState, Command, Decision, EnemyGroupDef } from 
 import { FFX2Engine, STEPS_PER_SECOND } from '../../src/battle/ffx2/index.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { findEnemyGroup, setupForChapter, setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
-import { CHAPTERS, type Chapter } from '../../src/data/encounters.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS, type Chapter } from '../../src/data/encounters.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
@@ -179,8 +179,8 @@ describe.skipIf(!MEASURE)('RE parity, FFX-2: the intended line in every FFX-2 ch
     await registerBattleContent();
     const rows: Row[] = [];
     const usage = new Map<string, Usage>();
-    for (const chapter of CHAPTERS.filter((c) => c.game === 'ffx2')) {
-      if (ONLY && !ONLY.includes(chapter.id)) continue;
+    // RC3: the hidden FFX-2 chapters (the Experiment, 'ffx2-masterpiece-theatre'; the Leblanc preview) are measured only when named in PYREFLY_MEASURE_CHAPTERS.
+    for (const chapter of [...CHAPTERS, ...EXPERIMENT_CHAPTERS].filter((c) => c.game === 'ffx2' && (ONLY ? ONLY.includes(c.id) : CHAPTERS.includes(c)))) {
       const runs: One[] = [];
       for (let seed = FIRST_SEED; seed <= LAST_SEED; seed += 1) runs.push(await playChain(chapter, seed, usage));
       rows.push({
