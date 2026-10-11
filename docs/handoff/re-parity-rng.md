@@ -33,7 +33,8 @@ engine, and the FFX-2 "before" is the RC3 engine. The "before" files are measure
 | `c03b21b7` | Part 4: the FFX-2 engine draws every roll from its stream | FFX-2 only |
 | `6b59fec7` | Part 5: `ffx2-atb-golden` and the seeded FFX-2 tests re-pinned once, same reason | FFX-2 only; tests only |
 | `946c6ca8` | `ffx2/targeting.ts` back under 400 lines: the menu's no-draw generator moves to `ffx2/menu-rng.ts` (a pure move) | FFX-2 only |
-| (later) | `FfxStream.Reels` comment corrected; this handoff | docs |
+| `ee64c146` | `FfxStream.Reels` comment corrected (it is named, not drawn); this handoff | docs |
+| (later) | the final-checks section of this note | docs |
 
 ## 3. How it is built
 
@@ -243,6 +244,18 @@ too, section 3 of `re-ffx-rng-hit.md`); the engine has nothing to persist either
 6. **Two FFX-2 strategy results moved** (`strategy-ffx2-leblanc` careless line, `strategy-ffx2-bahamut` mash line): both are a different deal of the same odds; the 500-seed rates are unchanged (Leblanc 500, Bahamut 500).
    No guide wording changes follow; say so if you want the guide's numbers refreshed.
 7. **Nothing deploys without your word.** This lane is branch-only; the plan classes it DEEP, so a deploy needs a focused review first and a deep review after.
+
+## 11b. Final checks (2026-10-11, on the pushed tree)
+
+- `tsc --noEmit`: exit 0. `node tools/orphans.mjs`: 36 orphans, all older than this lane; none of `common/streams.ts`, `ffx/adapt/streams.ts`, `ffx2/adapt/streams.ts`, `ffx/ai/airship-scenes.ts`, `ffx2/menu-rng.ts` or the test helpers is one.
+- **The whole suite, once** (`vitest run --maxWorkers=4`, JSON report `D:Toolsfx-parityngsuite-final.json`): 4,487 suites, 16,268 tests, 185 failed in **23 files**. **22 are art-only**: this worktree has no `public/art` (the paintings are gitignored and live on the main
+  tree's disk), so `art-ref-defaults`, `chapter-meta`, `chapter-meta-evrae`, `chapter-meta-ffx2-leblanc`, `chapter-meta-seymour-anima-macalania`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapters/den-of-woe-ship-content`, `chapters/den-of-woe-ship-scene`,
+  `chapters/experiment-scene`, `chapters/fallen-aeons-ship-content`, `chapters/fallen-aeons-ship-scene`, `chapters/isaaru-ship`, `chapters/leblanc-art`, `chapters/leblanc-party-sprites`, `chapters/natus-ship-content`, `chapters/natus-ship-scene`,
+  `chapters/trema-ship-content`, `chapters/yojimbo-content`, `cutscene-story-poses`, `party-face-manifest`, `pause-remake` and `ui-portrait-face-crop` (145 of the 185) fail on a missing painting or manifest and import neither engine's streams.
+  **The 23rd is `chapters/sin-fins-core-bench`**: two of its four smoke tests hit the 15 s default timeout under four workers (18.0 s and 17.3 s); run alone it passes, 4 of 4 (14.6 s and 15.0 s for those two, so they sit
+  right at the limit; the same 15 s-under-load class earlier lanes recorded in `r38-evrae.md`, and the first whole-suite run of this lane failed it the same way). The chapter's 500-seed measurement took the same wall time before and
+  after (480.8 s and 479.6 s), so the streams add no measurable cost to the FFX engine.
+- Pushed: branch `re-parity-rng` on `origin`. No deploy, no `main`, no `CHANGELOG.md`, NOW.md, ACTIONS or DECISIONS edits.
 
 ## 12. Re-run commands (from the repo root; Node 24; tools by path)
 
