@@ -168,6 +168,10 @@ import { join } from 'node:path';
 // neither is unread any more; the engine still has no weapon to take an element or a status from (`adapt/inputs.ts`).
 const UNREAD_ON_PURPOSE: Record<string, string> = {
   'long-range': "its one sourced reader is the Nodes' reach rule [ffx2-vegnagun-shuyin §3.2], a Chapter 5 mechanic nobody has built",
+  // AI-FFX2-b (FFX-2 only; reason "game-script parity"): the flag's one reader was the first-build Oversoul's rule "a spell cast at a Reflected
+  // girl is answered with Attack". The game's script has no such rule (it casts Dispel when any girl is Reflected: research/re-ffx2-ai-fallen-trema.md
+  // section 6.1), so the rule is gone, and the FFX-2 engine has no Reflect redirect of its own (the kernel's `pp_reflect_redirect` is not wired in).
+  reflectable: "its one reader was the first-build Oversoul's Reflect bounce, which the game's script does not have; the engine has no Reflect redirect",
 };
 
 describe('every X-2 ability flag has a reader in the X-2 engine', () => {
