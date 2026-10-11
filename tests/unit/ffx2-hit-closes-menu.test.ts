@@ -236,7 +236,7 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // are in git at 931613a8.
   const PINNED = [
     ['4c8ec7d92566a315', '2afad0a28b3c8251', '899e5c611bc0fd1b'],
-    ['b50eafc09c9ccfe8', '7772d77d0f2877d4', '71e00c81086abe68'],
+    ['f1c9597d56e6ee05', '6f275201b6f51165', 'cf3adea5aa65bbc8'],
     ['ec95ea116e4e151b', '537d9b63ec42e3b2', '527610137448cb33'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {

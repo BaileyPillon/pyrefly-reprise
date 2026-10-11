@@ -192,7 +192,7 @@ describe('the flag is the only way in: every other chain carries what it always 
    * event that differs is inside the Tail's link). Chapters 6 and XI and the Sisters did not move. The old Chapter 5 hashes are in git at 931613a8.
    */
   const BASE = {
-    ch5: ['b50eafc09c9ccfe8', '7772d77d0f2877d4', '71e00c81086abe68', '6ca39102a5f904bb', '42c8782faed8fb9f', '8b6e6ea8d275e839', '9050fddcc37e99e0', '269a88428ecf8ccc'],
+    ch5: ['f1c9597d56e6ee05', '6f275201b6f51165', 'cf3adea5aa65bbc8', '1983d88e8521224b', 'e789dc3ef980c257', '7a8e998c5f7fd028', '123695264b957662', '0e9779d96646cd20'],
     ch6: ['ec95ea116e4e151b', '537d9b63ec42e3b2', '527610137448cb33', '6842d8a87d3609a7', '30a2d0d2a7ee14d4', '790280331a906e2b', 'bd4a6058f2858ecc', '3a7789ec67b022bc'],
     ch11: ['9edabbbe590c707d', '6dbada64288edecc', 'f85c0c7b358b7c6b', 'd7a5fa17df90f1ca', '5b90dab970527904', '567017c5c1227f1c', '95775ca3d38dfef1', '05da03aaf51770b9'],
     sisters: ['2ef8a248591ea375', 'de6e081eaf8abb57', '2a334080a77465ec', '06642ae199cb58ca', '33be573d816f20fa', 'f10de5e7a57ac59e', '96f95eada70fb225', '41204b127a92f677'],

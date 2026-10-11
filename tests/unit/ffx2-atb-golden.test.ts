@@ -123,12 +123,13 @@
  * still 10/10. The old hashes are in git at 3663cd3a. The same Chapter 4 rows moved in `ffx2-hit-closes-menu.test.ts` and
  * `ffx2-menu-cancel-delay.test.ts`.
  *
- * **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. Every one of the sixty hashes moved, against the live build (39.4.4, the first differing event of every seed is the opening: W4's gauge rolls
+ * **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps, the Redoubts and the Head wait for the fall they are waiting for and are polled on the next step). Each branch had re-pinned these for itself; this is the one pin of the merged tree. Every one of the sixty hashes moved, against the live build (39.4.4, the first differing event of every seed is the opening: W4's gauge rolls
  * the first waits on the game's draws, see the tenth re-pin below) and against W4 alone. Against W4 alone the first differing event is: Chapter 4, Bahamut's
  * very first action, the Curse's girl (lane a, rows B1 and B5: the near-weighted search draws one 31-bit value where the engine drew a float), on 14 of the 20
  * D = 0 seeds and 8 of the 10 Active seeds, and on the others a later chain break or miss that follows from the same draw (seeds 5, 12, 14, 15, 19 and 6 at D = 0);
  * Chapter 5, the Tail's first turn comes 9 steps earlier on 13 of 20 seeds (RC3: its opening voice poll is the speak command, ATB cost 60, not the standard 70) and
- * the other seven differ a few events on, in who acts first after it. Outcomes: Chapter 4 D = 0 20/20 and the Active arm 10/10, as under W4 and on the live build;
+ * the other seven differ a few events on, in who acts first after it; later in the chain the Redoubts of link 4 are polled on the step after their twin falls (row R4),
+ * which moves the Chapter 5 chain's tail on every D = 0 seed and on five of the ten Active seeds (the pins before that edit, 382108ec, differ only there). Outcomes: Chapter 4 D = 0 20/20 and the Active arm 10/10, as under W4 and on the live build;
  * Chapter 5 D = 0 20/20 (it was 14/20 under lane a alone on the old clock, 20/20 under W4 and on the live build), and its Active arm is **5/10** (6/10 under W4
  * alone, 1/10 under lane a alone on the old clock, 2/10 on the live build): the Head's Agility, the Nodes' starting colours and the Core's answers are the game's
  * (lane a), and the menus now cost the girls the game's real waiting times (W4); measured, not tuned (docs/handoff/re-parity-rc3.md, 500 seeds of the shipped line).
@@ -178,10 +179,10 @@ const CH4_D0 = [
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  'b50eafc09c9ccfe8', '7772d77d0f2877d4', '71e00c81086abe68', '6ca39102a5f904bb', '42c8782faed8fb9f',
-  '8b6e6ea8d275e839', '9050fddcc37e99e0', '269a88428ecf8ccc', 'e63a12b2da32398e', '6934276a742ac3d9',
-  '42e3d1d30ee0541e', '469d6ed21cceaa06', '7633436743132813', 'af327c20a7b81fa9', 'f0759ee6ddde7d16',
-  '4e5d9fdd9ea47b86', '986961d0b31fcce7', 'df94248f368c89d9', '8aeefa0a78792d94', '8709c5a8eefcb93b',
+  'f1c9597d56e6ee05', '6f275201b6f51165', 'cf3adea5aa65bbc8', '1983d88e8521224b', 'e789dc3ef980c257',
+  '7a8e998c5f7fd028', '123695264b957662', '0e9779d96646cd20', 'b96f7a090a6b49b6', '7d8f3608a4662328',
+  '7467e7d60e50fcd7', 'eadc307c1b356396', '59146a2a4cfed390', 'cf1834e369f1deeb', '40f6b82bf11a444b',
+  'fb6dbe00a76b677c', '32e99c095569823f', 'b101674e44784a2a', '6d901793180b9b75', '018f6f02c9aaebb6',
 ];
 
 /** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
@@ -191,8 +192,8 @@ const CH4_D1500 = [
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D1500 = [
-  'ee98b37f2dbe9e0e', '0f28a08877f50773', '5035d6f5ed4dfb1d', '55d7789dd3e3ed11', '893302402727ad93',
-  'cba3778cc4a3e4f4', '33e312c7f1c5f156', 'c740bc1cd1cc4750', '1cbdd40c8d5b7f83', 'dc24b89c2cb21231',
+  'ee98b37f2dbe9e0e', '0f28a08877f50773', '6a64f438b0073f8a', '55d7789dd3e3ed11', 'e56496019df53d92',
+  'cba3778cc4a3e4f4', 'cf296ca3474d9717', '99278359751892c9', '2319fefdbf5b57e9', 'dc24b89c2cb21231',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */
