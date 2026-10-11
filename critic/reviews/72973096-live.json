@@ -1,0 +1,20 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-11T05:30:00.000Z",
+  "build": { "mainSha": "72973096", "bundle": "CECt6LNe", "artifactHash": "9c54b0964c6bd4d4778c605849d69efb0568871cd232e596c6a92efa4c4c14db" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true, "evidence": "verify-live --full against critic/artifacts/72973096.json: result PASS, liveManifest match, 5162 files compared, 0 mismatched, 0 missing, 0 wrongType, 0 errors; index.html identical once the Cloudflare analytics beacon is removed.", "game": "both", "environment": "node fetch, https://echoesofspira.com/, 2026-10-11", "automated": true, "minutes": 40 },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true, "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), real key presses, 1600x900, fresh context per run: title -> chapter-select asserted, then FFX-2 Bahamut (audioDebug playing boss-bahamut), hidden experiment/mushroom/leblanc doors, FFX Seymour each reached battle and a player menu and played 2-3 turns; cancel path, Escape/P pause and resume, H hide/restore all behaved; 0 console errors, 0 404s. Screenshots in docs/screenshots/live-72973096/.", "game": "both", "environment": "headless Chromium, real GPU args", "automated": true, "minutes": 6 },
+    { "id": "CHK-024", "result": "PASS", "mandatory": false, "evidence": "Lightweight only: H pressed in pause saved pausePanelsHidden=true; after page reload the setting was still true and the save updatedAt was unchanged. No progress made (no fight finished). Full upgrade matrix not run.", "game": "both", "environment": "headless Chromium", "automated": true, "minutes": 1 }
+  ],
+  "coverage": {
+    "tested": ["exact artifact, all 5162 files byte for byte", "FFX-2 Ch IV Bahamut to a player turn with 3 turns, cancel, pause, music name", "hidden doors experiment, mushroom, leblanc to a player turn", "FFX Seymour to a player turn with 3 turns and pause", "reload keeps a setting"],
+    "reused": [],
+    "notTested": ["full CHK-024 upgrade matrix", "fights played to an outcome and the chained-fight victory fanfare", "KO/hurt poses incl. Yuna Wedding-Mage", "Bahamut close views and phone rig", "boss-leblanc confirmed playing by name", "focused UNVERIFIED checks CHK-001, 003, 004, 005, 006, 009, 013, 019, B1"]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 41
+}
