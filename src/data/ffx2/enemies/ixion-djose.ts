@@ -46,8 +46,8 @@ export const DJOSE_ACTION_TIME_ON: boolean = true;
 export const DJOSE_ACTION_TIME_SECONDS = 3;
 const actionTime = DJOSE_ACTION_TIME_ON ? { actionTimeSeconds: DJOSE_ACTION_TIME_SECONDS } : {};
 
-/** "Aeons" plays in the fight `[single source: wiki OST]`; our original FFX-2 aeon cue stands in (rule 13). */
-const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-aeon' as const, fadeMs: 800 }];
+/** "Aeons" plays in the fight `[single source: wiki OST]`; our original FFX-2 aeon cue stands in (rule 13): `boss-ffx2-fallen-aeons`, the one Chapter XI plays (2026-10-10). */
+const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-fallen-aeons' as const, fadeMs: 800 }];
 
 /** Ixion, story version, bestiary #180 (§3.1). */
 export const x2Ixion: EnemyDef = {

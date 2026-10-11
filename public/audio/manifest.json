@@ -33,8 +33,8 @@
     },
     "boss-evrae": {
       "file": "music/boss-evrae.mp3",
-      "loopStart": 6.666667,
-      "loopEnd": 80,
+      "loopStart": 6.666213,
+      "loopEnd": 79.999546,
       "duration": 83,
       "bytes": 2719357,
       "lufs": -16.0,
@@ -49,6 +49,26 @@
       "bytes": 4069829,
       "lufs": -15.8,
       "truePeakDb": -1.7
+    },
+    "boss-ffx2-fallen-aeons": {
+      "file": "music/boss-ffx2-fallen-aeons.mp3",
+      "loopStart": 30.906009,
+      "loopEnd": 82.11161,
+      "duration": 85.1116,
+      "bytes": 1652754,
+      "lufs": -16.0,
+      "truePeakDb": -4.5,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-isaaru": {
+      "file": "music/boss-isaaru.mp3",
+      "loopStart": 16.61941,
+      "loopEnd": 82.623515,
+      "duration": 85.6235,
+      "bytes": 1684825,
+      "lufs": -16.0,
+      "truePeakDb": -3.6,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
@@ -89,6 +109,16 @@
       "truePeakDb": -1.5,
       "score": "90c06f737af9686a"
     },
+    "boss-seymour-natus": {
+      "file": "music/boss-seymour-natus.mp3",
+      "loopStart": 30.916667,
+      "loopEnd": 74.56229,
+      "duration": 77.5623,
+      "bytes": 1505505,
+      "lufs": -16.0,
+      "truePeakDb": -5.1,
+      "source": "elevenlabs-music_v2_5"
+    },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",
       "loopStart": 12.551406,
@@ -97,6 +127,36 @@
       "bytes": 3324154,
       "lufs": -15.9,
       "truePeakDb": -1.3
+    },
+    "boss-sin-assault": {
+      "file": "music/boss-sin-assault.mp3",
+      "loopStart": 58.528685,
+      "loopEnd": 93.64678,
+      "duration": 96.6468,
+      "bytes": 1768221,
+      "lufs": -16.0,
+      "truePeakDb": -3.8,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-sin-countdown": {
+      "file": "music/boss-sin-countdown.mp3",
+      "loopStart": 41.189864,
+      "loopEnd": 89.189025,
+      "duration": 92.189,
+      "bytes": 1719874,
+      "lufs": -16.0,
+      "truePeakDb": -1.8,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-trema": {
+      "file": "music/boss-trema.mp3",
+      "loopStart": 28.81458,
+      "loopEnd": 73.145374,
+      "duration": 76.1454,
+      "bytes": 1496328,
+      "lufs": -16.0,
+      "truePeakDb": -5.4,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-vegnagun": {
       "file": "music/boss-vegnagun.mp3",

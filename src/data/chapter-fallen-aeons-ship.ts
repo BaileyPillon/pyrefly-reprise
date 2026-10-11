@@ -12,7 +12,7 @@
  *   the installed O-3 A plate, with plate B between links (D-111, D-119);
  * - `scriptsRef` — the story (`src/story/scripts/ffx2-fallen-aeons.ts`, FA16 a, O-4 C, from
  *   `docs/plans/fallen-aeons-story-draft.md`);
- * - `music` — FA15 a as the record already has it (`boss-ffx2-aeon` on every link, the field bed
+ * - `music` — FA15 a as the record already has it (`boss-ffx2-fallen-aeons` on every link, the field bed
  *   `scene-farplane`, the FFX-2 fanfare), unchanged.
  *
  * **Listed** 2026-09-26 (Bailey, 2026-09-25: "All your recommendations", option A = 3 s of action

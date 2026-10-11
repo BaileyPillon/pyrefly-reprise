@@ -118,8 +118,8 @@ describe('the listing', () => {
     expect(ffx2IxionDjoseScripts.midScripts['ixion-recharge']).toEqual([]);
   });
 
-  it('music: the battle is the house aeon cue (the sourced mood of "Aeons"); every cue the chapter names exists', () => {
-    expect(FFX2_IXION_DJOSE.music).toEqual({ scene: 'scene-bevelle-underground', battle: 'boss-ffx2-aeon', victory: 'victory-ffx2' });
+  it('music: the battle is the aeon cue Chapter XI plays too (the sourced mood of "Aeons"; `boss-ffx2-fallen-aeons`, 2026-10-10); every cue the chapter names exists', () => {
+    expect(FFX2_IXION_DJOSE.music).toEqual({ scene: 'scene-bevelle-underground', battle: 'boss-ffx2-fallen-aeons', victory: 'victory-ffx2' });
     const cues = [...pre, ...post].filter((s): s is Extract<Step, { type: 'music' }> => s.type === 'music').map((s) => s.track);
     expect(cues).toEqual(['scene-bevelle-underground', null, 'scene-farplane', 'scene-bevelle-underground']);
     for (const c of [...cues, ...Object.values(FFX2_IXION_DJOSE.music)]) if (c) expect(hasTrack(c), c).toBe(true);

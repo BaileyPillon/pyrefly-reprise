@@ -51,7 +51,7 @@ describe('the registered record', () => {
     const { sceneKey: _a, scriptsRef: _b, ...rest } = FFX2_FALLEN_AEONS_SHIPPED;
     const { sceneKey: _c, scriptsRef: _d, ...base } = FFX2_FALLEN_AEONS;
     expect(rest).toEqual(base);
-    expect(FFX2_FALLEN_AEONS_SHIPPED.music).toEqual({ scene: 'scene-farplane', battle: 'boss-ffx2-aeon', victory: 'victory-ffx2' });
+    expect(FFX2_FALLEN_AEONS_SHIPPED.music).toEqual({ scene: 'scene-farplane', battle: 'boss-ffx2-fallen-aeons', victory: 'victory-ffx2' });
     expect(withFallenAeonsShip(FFX2_FALLEN_AEONS)).toEqual(FFX2_FALLEN_AEONS_SHIPPED);
   });
 });

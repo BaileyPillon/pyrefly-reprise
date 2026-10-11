@@ -44,11 +44,12 @@ const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
 /** Cues a later record replaced, and the bytes it moved the music total by. */
 const replacedLater = new Set(later.cues.map((c) => c.cue));
 const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
-// The two FFX-2 cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
+// The cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`, then the six of batch 1) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
 // `audio-music-elevenlabs-2026-10-10.test.ts` against `docs/audio/music-elevenlabs-2026-10-10.json`.
-const addedRecord = read('docs/audio/music-elevenlabs-2026-10-10.json') as { cues: { cue: string; file: { bytes: number } }[] };
-const addedCues = new Set(addedRecord.cues.map((c) => c.cue));
-const addedBytes = addedRecord.cues.reduce((sum, c) => sum + c.file.bytes, 0);
+// Batch 1 of the same day (`docs/audio/music-batch1-2026-10-10.json`, pinned by `audio-music-batch1-2026-10-10.test.ts`) added more of the same kind.
+const addedRecords = [read('docs/audio/music-elevenlabs-2026-10-10.json'), read('docs/audio/music-batch1-2026-10-10.json')] as { cues: { cue: string; file: { bytes: number } }[] }[];
+const addedCues = new Set(addedRecords.flatMap((r) => r.cues.map((c) => c.cue)));
+const addedBytes = addedRecords.reduce((total, r) => total + r.cues.reduce((sum, c) => sum + c.file.bytes, 0), 0);
 const proof = read('docs/audio/music-v2-2026-09-30-browser.json') as {
   cues: Record<string, { status: number; frameDiff: number; click: { wrapErrorOverP99: number }; level: { loopAddedJumpDb: number } }>;
   live: { label: string; ok: boolean }[];
@@ -97,9 +98,9 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
     expect(total).toBe(record.totals.musicBytesAfter + movedLater + addedBytes);
   });
 
-  it('kept every loop point and duration (except the cues a later record replaced)', () => {
+  it('kept every loop point and duration (except the cues a later record replaced, and boss-evrae, whose loop points batch 1 re-cut on 2026-10-10 and pins itself)', () => {
     for (const c of record.cues) {
-      if (replacedLater.has(c.cue)) continue;
+      if (replacedLater.has(c.cue) || c.cue === 'boss-evrae') continue;
       const m = manifest.music[c.cue]!;
       expect([m.loopStart, m.loopEnd, m.duration], c.cue).toEqual([c.loop.loopStart, c.loop.loopEnd, c.loop.duration]);
     }

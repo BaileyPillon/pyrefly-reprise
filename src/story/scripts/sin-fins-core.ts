@@ -31,8 +31,8 @@
  *
  * **Staging placeholders, labelled** (plan §3.1, §3.3): every beat plays on the deck plate (the chapter's
  * placeholder scene); the story plates (the cannon on a fin, the jump, Sinfall) are on the art list and
- * not picked, so those beats are words over the deck. **Music stand-ins** (plan §3.6, D-209, THEMES.md
- * "Owed cues"): `scene-fahrenheit` and `boss-evrae` stand in for the owed assault cue.
+ * not picked, so those beats are words over the deck. **Music** (plan §3.6, D-209, THEMES.md
+ * "Owed cues"): `scene-fahrenheit` is still a stand-in bed; the fight plays `boss-sin-assault` (2026-10-10; `boss-evrae` stood in before).
  *
  * **Not wired, named:** Cid's whoop as the ship moves waits on the order's own event from package F's Cid
  * script; the ask and his "wait" answer fire on the order itself.
@@ -112,7 +112,7 @@ export const sinFinsCoreScripts: ChapterScripts = {
     say('kimahri', 'Sky is falling toward it.'),
 
     // --- Beat 5 — the shine at the arm's base ----------------------------------
-    music('boss-evrae', 900), // stand-in battle cue (THEMES.md, owed: the assault cue)
+    music('boss-sin-assault', 900), // the assault cue (2026-10-10; THEMES.md; `boss-evrae` stood in before)
     shake(10, 700),
     camera('action', 600),
     say('cid', 'There! Something shines at the base of that arm!'),

@@ -14,8 +14,8 @@
  * - `scriptsRef` — the story (`src/story/scripts/ffx2-trema.ts`, TR13, TR14 a, TR15 out), in
  *   the shape's variant: the link seam and the kill link with a Paragon link, Trema's reveal in
  *   the pre scene without one;
- * - `music` — TR16 a as the record has it; with Trema alone, his stand-in cue
- *   (`boss-ffx2-aeon`) scores the first and only link.
+ * - `music` — TR16 a as the record has it; with Trema alone, his own cue
+ *   (`boss-trema`) scores the first and only link.
  *
  * **Listed** 2026-09-25 (Bailey: "I'll go with all your recommendations"): `./encounters.ts` puts
  * the result in `CHAPTERS` after Chapter IX, so chapter select shows it in the FFX-2 group.
@@ -31,8 +31,8 @@ import { tremaScriptsFor } from '../story/scripts/ffx2-trema.ts';
 /** The Cloister 100 scene's key (`src/scenes/index.ts`), which is also the plate's id. */
 export const TREMA_SCENE_KEY = 'via-infinito';
 
-/** Trema's cue in TR16 a: the stand-in until a `boss-trema` sketch is picked by ear (rule 13). */
-export const TREMA_STAND_IN_CUE = 'boss-ffx2-aeon';
+/** Trema's cue in TR16 a: `boss-trema`, an ElevenLabs take since 2026-10-10 (the export keeps the name it had when `boss-ffx2-aeon` stood in; rule 13). */
+export const TREMA_STAND_IN_CUE = 'boss-trema';
 
 /** A formation by id, from the FFX-2 data. */
 function findGroup(id: string): EnemyGroupDef | undefined {

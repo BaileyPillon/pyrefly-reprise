@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { TRACKS, hasTrack } from '../../src/audio/tracks/index.ts';
 import type { ChapterScripts, Step, StoryScript } from '../../src/story/dsl.ts';
 
@@ -45,20 +45,20 @@ const MANIFEST = join(REPO_ROOT, 'public', 'audio', 'manifest.json');
  * called from the `onPause` hook `BattleScreen` and `CutsceneScreen` already
  * hand the pause menu, so `PauseScreen.ts` itself did not have to be touched.
  *
- * The two that took its place are a **finding, not a to-do**. Once every boss
+ * The one that took its place is a **finding, not a to-do**. Once every boss
  * fight is scored with its own cue (critic round 02 #02), the five chapters
  * name five boss themes, five scene beds, two fanfares and two endings — and
  * nothing in a five-boss game is left for the generic FFX battle theme
- * (`battle-ffx`, "We can win this": there are no ordinary fights) or for the
- * generic approach bed (`boss-dread`, "Something is watching": every pre-scene
- * sets its own). Both are still heard from the pause menu's jukebox, which
- * lists `trackNames()` in full. Whether the FFX arc should gain a normal-battle
- * or approach cue is Bailey's call; parking them on a chapter's `music` field
- * to keep this test quiet would have hidden the question.
+ * (`battle-ffx`, "We can win this": there are no ordinary fights). It is still
+ * heard from the pause menu's jukebox, which lists `trackNames()` in full.
+ * Whether the FFX arc should gain a normal-battle cue is Bailey's call; parking
+ * it on a chapter's `music` field to keep this test quiet would have hidden the
+ * question. (`boss-dread`, the generic approach bed, left this list on 2026-10-10:
+ * the hidden Sinspawn Gui chapter plays it, and the walk below now visits the
+ * hidden experiments, which are reachable through `getChapter` like the unlisted ones.)
  */
 const KNOWN_UNWIRED = new Set([
   'battle-ffx',
-  'boss-dread',
 ]);
 
 // ---------------------------------------------------------------------------
@@ -111,8 +111,9 @@ function referencedCues(): Map<string, string[]> {
     sources.set(key, [...(sources.get(key) ?? []), where]);
   };
 
-  // Unlisted chapters (registered, reachable through getChapter) count too.
-  for (const chapter of [...CHAPTERS, ...UNLISTED_CHAPTERS]) {
+  // Unlisted chapters (registered, reachable through getChapter) count too, and so do the hidden experiments (typed words; also reachable through
+  // getChapter): since 2026-10-10 the FFX-2 Experiment's Act I is the last chapter that plays `boss-ffx2-aeon` (batch 1 moved the others off it).
+  for (const chapter of [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS]) {
     for (const [field, key] of Object.entries(chapter.music)) {
       if (typeof key === 'string') note(key, `${chapter.id}.music.${field}`);
     }

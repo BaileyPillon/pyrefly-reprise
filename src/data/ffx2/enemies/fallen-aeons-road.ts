@@ -14,8 +14,9 @@
  *   (`restoresPartyOnEntry` on links 2 and 3; F-1 is a `[conflict]`).
  * - **FA3 b**: a loss retries from the link that was lost. Links 2 and 3 carry
  *   the checkpoint flag above; the flow reads it (not wired in this track).
- * - **FA15**: `boss-ffx2-aeon` on all three links ("Aeons" plays in the aeon
- *   fights except Bahamut's, `[single source]`, plan Review R1).
+ * - **FA15**: one aeon cue on all three links ("Aeons" plays in the aeon
+ *   fights except Bahamut's, `[single source]`, plan Review R1): `boss-ffx2-fallen-aeons`
+ *   since 2026-10-10 (shared with Ixion, Chapter XVI), the shared `boss-ffx2-aeon` before.
  * - **FA19**: no Yojimbo link.
  *
  * Every stat is §3 with its tag, carried verbatim (rule 6).
@@ -35,7 +36,7 @@ export const FALLEN_AEONS_CHAIN_ORDER = [ROAD_SHIVA, ROAD_SISTERS, ROAD_ANIMA] a
 /** The §3 common list: Death, Petrify, Sleep, Silence, Darkness, Poison, Confuse, Berserk, Curse, Eject, Stop, Doom, Delay, Interrupt. */
 const AEON_COMMON: StatusImmunities = { ...STANDARD_AILMENT_IMMUNITY, stop: 255 };
 
-const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-aeon' as const, fadeMs: 800 }];
+const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-fallen-aeons' as const, fadeMs: 800 }];
 
 /**
  * **Action time on the Road's three links only** (Bailey, 2026-09-25, "All your recommendations",

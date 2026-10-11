@@ -17,7 +17,8 @@
  * - `sceneKey` — the Chamber of the Fayth on its **provisional plate**, option C2 (`./ixion-plates.ts`: not
  *   approved; Bailey's pick is owed; the swap is one line there).
  * - Ixion's painting — **look B, possessed violet** (D-268), `x2-ixion`.
- * - `music` — the fight plays the house FFX-2 aeon cue `boss-ffx2-aeon` ("Static Coronation"), the sourced mood
+ * - `music` — the fight plays the FFX-2 aeon cue `boss-ffx2-fallen-aeons` (an ElevenLabs take since 2026-10-10, the same cue as Chapter XI: the game plays
+ *   one track at both; "Static Coronation", `boss-ffx2-aeon`, played here before), the sourced mood
  *   of the game's "Aeons" (research §6.3, `[single source]`); the field bed is `scene-bevelle-underground`, the
  *   FFX-2 chapters' fallback bed (Chapter VI's precedent; the game's "The Machina Faction" has no cue of ours);
  *   the FFX-2 fanfare. The Abyss plays `scene-farplane` (the story script). Bailey's call by ear (rule 13).
@@ -54,7 +55,7 @@ export const FFX2_IXION_DJOSE: Chapter = {
   scriptsRef: ffx2IxionDjoseScripts,
   music: {
     scene: 'scene-bevelle-underground', // the FFX-2 fallback field bed (Chapter VI's precedent)
-    battle: 'boss-ffx2-aeon', // the sourced mood of "Aeons" (research §6.3)
+    battle: 'boss-ffx2-fallen-aeons', // the sourced mood of "Aeons" (research §6.3), the cue Chapter XI plays too
     victory: 'victory-ffx2',
   },
   sensorTexts: {
