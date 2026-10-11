@@ -84,12 +84,15 @@ export function createProbe(cfg, env) {
   };
 
   // ------------------------------------------------------------------ the frame ring and the strips
+  // The ring must hold every frame of a strip when its last frame arrives: `beforeFrames` before the event and `afterFrames` after it (r40 instrument edit (c)
+  // lengthened the before-window from 6 to 14). A ring shorter than that overwrites the oldest cells with the newest and the strip comes out with holes.
+  const RING = Math.max(cfg.ringFrames, (cfg.beforeFrames | 0) + (cfg.afterFrames | 0));
   const ensureRing = (canvas, rect) => {
     const w = Math.max(64, Math.round(rect.width * cfg.ringScale)), h = Math.max(64, Math.round(rect.height * cfg.ringScale));
     if (S.ringSize && S.ringSize[0] === w && S.ringSize[1] === h) return true;
     try {
       S.ring = []; S.ringFrame = [];
-      for (let i = 0; i < cfg.ringFrames; i++) { const c = doc.createElement('canvas'); c.width = w; c.height = h; S.ring.push({ c, x: c.getContext('2d') }); S.ringFrame.push(-1); }
+      for (let i = 0; i < RING; i++) { const c = doc.createElement('canvas'); c.width = w; c.height = h; S.ring.push({ c, x: c.getContext('2d') }); S.ringFrame.push(-1); }
       S.ringSize = [w, h];
       return true;
     } catch (e) { S.errors.push(`ring: ${String(e)}`); return false; }
@@ -97,9 +100,9 @@ export function createProbe(cfg, env) {
   const copyFrame = (canvas, n) => {
     if (!S.ringSize) return;
     const t = perf.now();
-    const slot = S.ring[n % cfg.ringFrames];
+    const slot = S.ring[n % RING];
     slot.x.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, S.ringSize[0], S.ringSize[1]);
-    S.ringFrame[n % cfg.ringFrames] = n;
+    S.ringFrame[n % RING] = n;
     S.copyMs += perf.now() - t; S.copies++;
   };
   const recAt = (n) => { for (let i = S.records.length - 1; i >= Math.max(0, S.records.length - 40); i--) if (S.records[i].n === n) return S.records[i]; return null; };
@@ -126,8 +129,8 @@ export function createProbe(cfg, env) {
     const scale = Math.min(1, cfg.cellHeight / ch), cellW = Math.max(8, Math.round(cw * scale)), cellH = Math.max(8, Math.round(ch * scale));
     const strip = { id: job.id, kind: job.kind, fi: job.fi, n: job.n, first, crop: [R1(cx), R1(cy), R1(cw), R1(ch)], ring: S.ringSize.slice(), cell: [cellW, cellH], view: v.slice(), frames: new Array(last - first + 1).fill(null), todo: 0, meta: job.meta || null };
     for (let n = first; n <= last; n++) {
-      const slot = S.ring[n % cfg.ringFrames];
-      if (S.ringFrame[n % cfg.ringFrames] !== n) continue; // the frame is gone (or the battle had not begun)
+      const slot = S.ring[n % RING];
+      if (S.ringFrame[n % RING] !== n) continue; // the frame is gone (or the battle had not begun)
       const c = doc.createElement('canvas'); c.width = cellW; c.height = cellH;
       c.getContext('2d').drawImage(slot.c, cx, cy, cw, ch, 0, 0, cellW, cellH);
       S.encodeQ.push({ strip, idx: n - first, c });

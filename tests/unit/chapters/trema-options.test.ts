@@ -210,7 +210,7 @@ describe('option 2 (TR1 b): Trema alone, the Fiend Arena block (research §3.3)'
     expect(g.carriesPartyState).toBeUndefined();
     expect(g.checkpointOnEntry).toBeUndefined();
     expect(g.timedAilmentDefaults).toBe(true);
-    expect(g.musicCues?.[0]?.track).toBe('boss-ffx2-aeon');
+    expect(g.musicCues?.[0]?.track).toBe('boss-trema');
     const t = board('trema', 1, CLOISTER_TREMA_ARENA).unit('trema');
     expect([t.hp, t.mp]).toEqual([999999, 999]);
   });

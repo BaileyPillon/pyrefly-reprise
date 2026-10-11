@@ -28,9 +28,9 @@
  *   `src/ui/common/chapterObjectives.ts` already answers.
  * - `snapshots` are the installed, judge-locked art (B22): the O-3 A plate,
  *   Isaaru's O-1 A idle, and Spathi (the Bahamut painting with his O-4 C mark).
- * - `musicKeys` are the cues the chapter plays: `scene-gagazet` and
- *   `boss-yojimbo`, both stand-ins until B21's "Still Water" is sketched and
- *   picked by ear (rule 13), and the shared `victory-ffx` fanfare.
+ * - `musicKeys` are the cues the chapter plays: `scene-gagazet` (a stand-in until
+ *   B21's "Still Water" is written and picked by ear, rule 13), `boss-isaaru` (his own
+ *   since 2026-10-10; `boss-yojimbo` stood in before) and the shared `victory-ffx` fanfare.
  *
  * **Listed** 2026-09-25 with the chapter itself: it sits in `./chapter-meta.ts`'s
  * `CHAPTER_META` after Chapter XIII's, as the chapter sits after Chapter XIII in `CHAPTERS`.
@@ -77,7 +77,7 @@ export const ISAARU_META: ChapterMeta = {
     { image: 'characters/spathi/idle.png', caption: 'his Bahamut, counting' },
   ],
   focalCharacterId: 'yuna',
-  musicKeys: ['scene-gagazet', 'boss-yojimbo', 'victory-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-isaaru', 'victory-ffx'],
 };
 
 export default ISAARU_META;

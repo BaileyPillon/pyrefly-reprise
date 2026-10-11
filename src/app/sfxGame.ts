@@ -9,13 +9,23 @@
  */
 
 import { getChapter, type ChapterId } from '../data/encounters.ts';
+import { audio } from '../audio/index.ts';
 import { setSfxGame } from '../audio/sfxV2/voicing.ts';
 
-/** Voice the effects for chapter `id` until the returned function runs (which also runs `release`). */
+/**
+ * Voice the effects for chapter `id` until the returned function runs (which also runs `release`).
+ *
+ * SFX parity: an FFX or FFX-2 chapter also asks the mixer for its parity packs (the game's core pack and the
+ * chapter's boss packs, `audio/sfxV2/packs.ts`) and gives them back at the end; the request is never awaited and
+ * a pack the manifest does not list is never fetched, so with no pack shipped this changes nothing.
+ */
 export function sfxChapter(id: ChapterId, release: () => void): () => void {
-  setSfxGame(getChapter(id)?.game ?? null);
+  const game = getChapter(id)?.game ?? null;
+  setSfxGame(game);
+  if (game === 'ffx' || game === 'ffx2') audio.loadParityPacks(game, id);
   return () => {
     setSfxGame(null);
+    audio.releaseParityPacks();
     release();
   };
 }

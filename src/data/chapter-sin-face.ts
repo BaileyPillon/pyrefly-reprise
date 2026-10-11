@@ -38,8 +38,8 @@
  *   to Evrae's deck painting.
  * - The enemy's art — head C repaired (the driver's pick): five mouth stages, shown by `sin.mouthStage`; the grey
  *   boss silhouette shows until the files are installed.
- * - `music` — **stand-in** FFX cues (`scene-fahrenheit`, `boss-evrae`), labelled, until the countdown cue is
- *   written and judged by Bailey's ear (rules 8 and 13; S-21).
+ * - `music` — the battle cue is `boss-sin-countdown` since 2026-10-10 (an ElevenLabs take; `boss-evrae` stood in
+ *   before); `scene-fahrenheit` is still a labelled stand-in bed. The countdown cue awaits Bailey's ear (rules 8 and 13; S-21).
  */
 
 import type { Chapter } from './encounters.ts';
@@ -67,9 +67,9 @@ export const SIN_FACE: Chapter = {
   enemyGroupRef: overdriveSinGroup,
   scriptsRef: sinFaceScripts,
   music: {
-    // STAND-IN FFX cues, labelled (THEMES.md never crosses the scores); S-21; D-279.
+    // The scene bed is a STAND-IN FFX cue, labelled (THEMES.md never crosses the scores); S-21; D-279. The battle cue is the countdown cue (2026-10-10).
     scene: 'scene-fahrenheit',
-    battle: 'boss-evrae',
+    battle: 'boss-sin-countdown',
     victory: 'victory-ffx',
   },
   // Duplicated from the enemy record's own `sensorText`, as the contract asks.

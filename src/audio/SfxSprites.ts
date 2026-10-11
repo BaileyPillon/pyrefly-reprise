@@ -1,12 +1,18 @@
 /**
- * The two pre-rendered SFX sprites and the choice between them.
+ * The pre-rendered SFX sprites and the choice between them: three sources, most specific first.
  *
- * The first sprite (`manifest.sfx`, `public/audio/sfx/sprite.mp3`) is the bank the game has always
- * played: every first-bank cue, rendered offline. The second (`manifest.sfxV2`,
- * `public/audio/sfx/sprite-v2.mp3`) is the recorded set of D-302 (`./sfxV2/cues.ts`), addressed as
- * `v2:<name>`. Both are fetched and decoded after unlock, in parallel, and neither is ever waited
- * for: a v2 cue asked for before its sprite has decoded plays its first-bank stand-in, and a
- * first-bank cue before the first sprite has decoded is synthesised (`AudioManager.playSfx`).
+ * 1. The parity packs (`manifest.sfxParity.packs`, `public/audio/sfx/parity-<pack>.mp3`, SFX parity 2026-10-10):
+ *    recorded originals cut by game and by boss (`./sfxV2/packs.ts`), fetched when a chapter run starts
+ *    (`loadPacks`, never at unlock, so the title, chapter select and FF7 load none) and consulted FIRST for a
+ *    `v2:` key, in the order the chapter listed them (boss packs before the game's core pack).
+ * 2. The v2 sprite (`manifest.sfxV2`, `public/audio/sfx/sprite-v2.mp3`), the recorded set of D-302
+ *    (`./sfxV2/cues.ts`), addressed as `v2:<name>`; it takes the P1 mix's per-cue trim (`./sfxV2/parityMix.ts`).
+ * 3. The first sprite (`manifest.sfx`, `public/audio/sfx/sprite.mp3`), the bank the game has always played:
+ *    every first-bank cue, rendered offline, and the stand-in for any v2 cue the sources above cannot supply.
+ *
+ * All are fetched and decoded in the background and none is ever waited for: a v2 cue asked for before its
+ * sprite has decoded plays its first-bank stand-in, and a first-bank cue before the first sprite has decoded
+ * is synthesised (`AudioManager.playSfx`). So a cue is never silent, whatever has or has not loaded.
  *
  * Also keeps the last few plays (what was asked, what played, from where) for the debug surface
  * (`AudioManager.debug().sfxLog`, `window.__pyrefly.audioDebug()`), which is how the hookup is
@@ -17,6 +23,7 @@
 
 import { hasPrerenderedSfx, resolveAudioUrl, type AudioManifest, type SfxCue, type SfxSprite } from './manifest.ts';
 import { isV2Key, v2Fallback, v2Name } from './sfxV2/cues.ts';
+import { parityGain, type TrimGame } from './sfxV2/parityMix.ts';
 
 export interface SpriteSlice {
   buffer: AudioBuffer;
@@ -30,9 +37,22 @@ export interface SfxPlayRecord {
   asked: string;
   /** The key that played (after voicing and fallback). */
   played: string;
-  /** Where the sound came from. */
-  via: 'v2' | 'sprite' | 'synth';
+  /** Where the sound came from: a parity pack, the v2 sprite, the first-bank sprite, or the synth. */
+  via: 'parity' | 'v2' | 'sprite' | 'synth';
   volume: number;
+  /** The P1 mix's trim in dB the v2 slice played with (`sfxV2/parityMix.ts`); absent when there was none. */
+  trimDb?: number;
+}
+
+/** What `pick` found for a key. */
+export interface SfxPick {
+  slice: SpriteSlice | null;
+  /** The first-bank cue to play instead when `slice` is null for a `v2:` key. */
+  fallback: string | null;
+  /** Which source `slice` came from; `null` when there is none. */
+  via: 'parity' | 'v2' | 'sprite' | null;
+  /** Linear gain the source asks on top of the caller's volume: the P1 trim for a v2 slice, 1 for the rest. */
+  gain: number;
 }
 
 const LOG_SIZE = 4000;
@@ -41,6 +61,11 @@ export class SfxSprites {
   private v1: AudioBuffer | null = null;
   private v2: AudioBuffer | null = null;
   private loading: Promise<void> | null = null;
+  /** Decoded parity packs by name, and the loads in flight (a pack is fetched once per page). */
+  private readonly packs = new Map<string, AudioBuffer>();
+  private readonly packLoads = new Map<string, Promise<void>>();
+  /** The packs the running chapter consults, in lookup order (`./sfxV2/packs.ts`); empty outside a chapter run. */
+  private active: readonly string[] = [];
   /** The first sprite's own load, which the first-bank cues (the title's press-start) wait on without waiting for the v2 set. */
   private firstBank: Promise<void> | null = null;
   readonly log: SfxPlayRecord[] = [];
@@ -68,18 +93,70 @@ export class SfxSprites {
   }
 
   /**
-   * The slice for `key`: a `v2:` key from the second sprite when it has decoded, otherwise `null`
-   * with `fallback` naming the first-bank cue to play instead; a first-bank cue from the first sprite
-   * when it has decoded.
+   * Fetch and decode the named parity packs (those the manifest lists and this page has not loaded yet). Never throws
+   * and is never awaited by a caller that plays sound: a pack that has not arrived leaves the v2 slice in charge.
    */
-  pick(manifest: AudioManifest | null, key: string): { slice: SpriteSlice | null; fallback: string | null } {
+  loadPacks(ctx: AudioContext, manifest: AudioManifest | null, baseUrl: string, names: readonly string[]): Promise<void> {
+    if (!manifest || typeof fetch !== 'function') return Promise.resolve();
+    const loads: Promise<void>[] = [];
+    for (const name of names) {
+      const sprite = manifest.sfxParity?.packs[name];
+      if (!sprite) continue;
+      let load = this.packLoads.get(name);
+      if (!load) {
+        load = (async () => {
+          try {
+            const response = await fetch(resolveAudioUrl(baseUrl, sprite.file));
+            if (!response.ok) return;
+            this.packs.set(name, await ctx.decodeAudioData(await response.arrayBuffer()));
+          } catch {
+            // The v2 slice or the first-bank stand-in covers it.
+          }
+        })();
+        this.packLoads.set(name, load);
+      }
+      loads.push(load);
+    }
+    return Promise.all(loads).then(() => undefined);
+  }
+
+  /** The packs the running chapter consults, in lookup order; `[]` ends the run (the decoded buffers stay cached). */
+  setActivePacks(names: readonly string[]): void {
+    this.active = names;
+  }
+
+  /**
+   * The slice for `key`.
+   *
+   * A `v2:` key: a parity pack's cue first (an active pack that has decoded and holds the name for this game, boss
+   * packs before core), then the v2 sprite's slice once it has decoded, otherwise `null` with `fallback` naming the
+   * first-bank cue to play instead. A first-bank cue: its slice from the first sprite when that has decoded.
+   *
+   * `game` is the chapter's game (`sfxGame()`); with none, no pack is consulted and no trim applies (rule 14: the
+   * title, chapter select and FF7 hear exactly what they always did).
+   */
+  pick(manifest: AudioManifest | null, key: string, game: TrimGame | null = null): SfxPick {
     if (isV2Key(key)) {
-      const cue = manifest?.sfxV2?.cues[v2Name(key)];
-      if (this.v2 && cue) return { slice: { buffer: this.v2, cue }, fallback: null };
-      return { slice: null, fallback: v2Fallback(key) };
+      const name = v2Name(key);
+      const parity = game ? this.parityHit(manifest, name, game) : null;
+      if (parity) return { slice: parity, fallback: null, via: 'parity', gain: 1 };
+      const cue = manifest?.sfxV2?.cues[name];
+      if (this.v2 && cue) return { slice: { buffer: this.v2, cue }, fallback: null, via: 'v2', gain: parityGain(game, name) };
+      return { slice: null, fallback: v2Fallback(key), via: null, gain: 1 };
     }
     const cue = this.v1 && hasPrerenderedSfx(manifest, key) ? manifest!.sfx!.cues[key]! : null;
-    return { slice: cue ? { buffer: this.v1!, cue } : null, fallback: null };
+    return { slice: cue ? { buffer: this.v1!, cue } : null, fallback: null, via: cue ? 'sprite' : null, gain: 1 };
+  }
+
+  private parityHit(manifest: AudioManifest | null, name: string, game: TrimGame): SpriteSlice | null {
+    for (const pack of this.active) {
+      const buffer = this.packs.get(pack);
+      const cue = manifest?.sfxParity?.packs[pack]?.cues[name];
+      if (!buffer || !cue) continue;
+      if (cue.game !== undefined && cue.game !== 'both' && cue.game !== game) continue;
+      return { buffer, cue };
+    }
+    return null;
   }
 
   /** Settles when the first sprite's load (not the v2 set's) has finished; at once when none has started. */
@@ -92,13 +169,21 @@ export class SfxSprites {
     if (this.log.length > LOG_SIZE) this.log.splice(0, this.log.length - LOG_SIZE);
   }
 
-  get decoded(): { v1: boolean; v2: boolean } {
-    return { v1: this.v1 !== null, v2: this.v2 !== null };
+  get decoded(): { v1: boolean; v2: boolean; packs: string[] } {
+    return { v1: this.v1 !== null, v2: this.v2 !== null, packs: [...this.packs.keys()] };
+  }
+
+  /** The packs the running chapter consults (`setActivePacks`). */
+  get activePacks(): readonly string[] {
+    return this.active;
   }
 
   clear(): void {
     this.v1 = null;
     this.v2 = null;
+    this.packs.clear();
+    this.packLoads.clear();
+    this.active = [];
     this.loading = null;
     this.firstBank = null;
     this.log.length = 0;

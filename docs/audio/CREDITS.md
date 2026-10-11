@@ -277,6 +277,55 @@ Sparse, melancholy solo piano piece at 58 BPM in A minor. A lone flute plays fou
 
 - **`boss-bahamut`** (Chapter IV's Bahamut fight): brief `BH-M4` ("Lament (piano)"), take 1, ElevenLabs Music v2.5, original; the driver's pick under Bailey's 2026-10-10 delegation ("Whatever you recommend for sound effects and music I'll go with those recommendations"). Raw take SHA-256 `fd10f1ba454fe7d1961949e4b71169237c4d5eb4019a6553b64ea61abd92abd1`; prompt and hashes in `docs/audio/music-elevenlabs-2026-10-10.json`.
 - **`boss-leblanc`** (Chapter VI's Leblanc fight and the hidden Leblanc chapter): brief `LB-M5` ("Parade of the pleased"), take 1, ElevenLabs Music v2.5, original; the driver's pick under the same delegation. Raw take SHA-256 `b8e43a22c6651b9bc11a806b63f52965562f0d6d11537113de40fa808e9871ae`; plan and hashes in the same record.
+- **Processing (2026-10-11, driver item 53e; PR-0425).** The shipped files of `boss-bahamut` and `boss-leblanc` are the takes as first installed with their side channel scaled down in mid/side so that they pass the stereo gate of `THEMES.md`, one gain back to -16 LUFS, and a LAME V4 re-encode; nothing else, and the loop points and length are the same to the sample. The figures and hashes, before and after: `docs/audio/music-stereo-53e-2026-10-11.json`.
+
+#### Batch 1 (2026-10-10)
+
+Bailey, 2026-10-10 about 22:10 EDT, on the driver's batch-1 music picks: "ill go with all your recommendations". Each take is ElevenLabs Music v2.5, take 1, original; the prompts name no composer, franchise, character or melody. Prompts, raw-take hashes and shipped-file hashes are also in `docs/audio/music-batch1-2026-10-10.json`.
+
+Processing (2026-10-11, driver item 53e; PR-0425): the shipped file of every cue below except `boss-ff7-guard`, which already passed, has its side channel scaled down in mid/side so that it passes the stereo gate of `THEMES.md`, one gain back to -16 LUFS (and, for `boss-sin-countdown`, a 0.63 dB look-ahead limiter on 13 samples), and a LAME V4 re-encode; nothing else, and the loop points and length are the same to the sample. The raw-take hashes are the takes as generated; the shipped-file hashes before and after are in `docs/audio/music-stereo-53e-2026-10-11.json`.
+
+- **`boss-ffx2-fallen-aeons`** (FFX-2): brief `XI-M1` ("Breathless ceremony"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `da3e96cfcf54716503eb8befd463ba98bc55f90f972b944c46332b52bba5d894`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Breathless, ceremonial, relentless cinematic orchestral battle music at 150 BPM in 4/4 in a minor key with a bright major lift in the chorus, a duel with a summoned god, wondrous and lavish. Driving brass and percussion lead: French horns and trumpets state a proud rising theme over taiko, timpani and snare while the strings race underneath in tireless eighth notes. In the middle section a solo harp plays a flowing, rising line over the racing strings, then a large wordless choir (open 'ah' and 'oh' vowels only, no words, no lyrics) joins at the peaks and the full orchestra lifts into the bright chorus. The piece never lets up and never rests. It opens with a short drum-and-brass call for about 6 seconds and falls back to the same driving texture at the end so it can repeat. Real acoustic orchestra, real harp, real percussion and real voices recorded in a large concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-trema`** (FFX-2): brief `XIII-M1` ("Stately march"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `46d1a1b020122470f70809853961c7e82fff3c9846cda165c1f2febcc6c262a2`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Solemn, institutional, quietly threatening cinematic orchestral music at 108 BPM in 4/4 in a minor key, a stately march with a cold edge, the music of a faction that has built itself from the ruins of a faith, written for a duel against an ancient priest who wants the past erased. A pipe organ and low strings carry a measured, formal marching figure with snare rolls and a low drum, brass chorales that sound sacred but cold, and a high, thin wordless choir (open vowels only, no words, no lyrics). It tightens bar by bar toward a restrained but heavy climax of full brass and timpani and then settles back to the opening march so it can repeat. Controlled, unemotional, relentless, commanding. Real pipe organ, real orchestra, snare and real voices recorded in a large stone hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-seymour-natus`** (FFX): brief `X-M1` ("Fallen nobleman"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `e1e9fec6539d2e7fe1caa7e3dd82c3d3b2529f21072628a75e2d91a4f0c76644`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Grand, heavy, relentless cinematic orchestral battle music at 132 BPM in 4/4 in a minor key, written for a colossal, tragic monster that was once a refined nobleman. Pounding low strings and timpani drive from the first bar, with huge low brass and a pipe organ low in the mix, and a descending, sorrowful string theme returns under the menace again and again. A large wordless choir (open vowels only, no words, no lyrics) swells in the climaxes. It builds in three waves, ends each wave on a held, tense chord, and never resolves; after the third wave it falls back to the pounding strings and timpani so it can repeat. Monstrous, tragic, enormous. Real acoustic orchestra, real pipe organ and real choir recorded in a vast hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-isaaru`** (FFX): brief `XIV-M1` ("Duel of the summoners"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `ef67442b2faaf7aa435a33ce99e1114e7df3bbb4465f646f19b0704aa802820c`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Breathless, lavish, ceremonial cinematic battle music at 160 BPM in 4/4, a duel between summoners and their summoned gods, wondrous and relentless. It opens with a slow sacred phrase on voices and strings for about 8 seconds, then a harp-led section plays a flowing, rising line over driving strings, and it finishes with a big brass-and-timpani statement in the final section before falling back to the sacred opening phrase so it can repeat. Brass and percussion lead, harp and strings race underneath, a wordless choir (open vowels only, no words, no lyrics) peaks at the climaxes, and it never lets up. Minor key with a bright major lift in the last section. Real acoustic orchestra, real harp and real voices recorded in a large concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-sin-assault`** (FFX): brief `XVII-M1` ("Aerial charge"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `2ac2939c7736023fa29e41e7d98eba8b6ac1bf3af1c9f2278b400dba47899f81`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Urgent, desperate, soaring cinematic orchestral battle music at 164 BPM in 4/4 in a minor key, an aerial attack on something the size of a mountain. A driving string ostinato in sixteenth notes, urgent French horn calls, pounding timpani and taiko; brass climbs over a sacred, hymn-like wordless choir (open vowels only, no words, no lyrics) that cuts in and out; flurries of harp and woodwinds like air rushing past. Heroic but desperate. Halfway through there is a held, tense pause of a few bars (low strings and a single tolling bell), then a charge back into the full orchestra. It opens with a horn call for about 6 seconds and returns to the driving string ostinato at the end so it can repeat. Real acoustic orchestra, real harp and real voices recorded in a large concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-sin-countdown`** (FFX): brief `XVIII-M1` ("Against the clock"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `f35fe7c5c2ad0924cfa2d70690be9adc2d7f432b89e5d7893af2fa2251ed4f9b`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Tense, ticking, final cinematic orchestral battle music at 140 BPM in 4/4 in a minor key, a fight against a clock. A relentless pulse on woodblock, pizzicato strings and low piano keeps time like a countdown from the very first bar; tension builds in the strings and brass over it; in the last third a sacred wordless choir (open vowels only, no words, no lyrics) enters, the pulse doubles in subdivision without changing tempo, and the full orchestra answers with hard timpani and brass. Desperate, grave, with no triumphant lift. It falls back to the bare ticking pulse at the end so it can repeat. Real acoustic orchestra, real woodblock, piano and real voices recorded in a large hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-ff7-guard`** (FF7): brief `FF7-M1` ("Night infiltration"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `0a88b4fc57572203f05f48aab825893c122a0756e28f674e05284f2dc059cc17`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Tense, rhythmic, mechanical cinematic music at 144 BPM in 4/4 in a minor key, the feeling of a night infiltration of a factory. A steady pulsing low-string and bass figure like a machine, a tight snare and rim-click pattern, sustained brass chords that swell and cut off, a rising string line, and metallic percussion such as struck steel and anvil. Urgency without panic: a repeating figure that grows layer by layer from sparse to full, then drops back to the bare pulse so it can repeat. Real instruments and real percussion recorded in a large studio. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop, no vocals.
+```
 
 ## What must appear in the game credits
 

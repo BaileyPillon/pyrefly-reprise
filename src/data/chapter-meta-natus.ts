@@ -25,8 +25,8 @@
  *   names none); each rule is one `src/ui/common/chapterObjectives.ts`
  *   already answers.
  * - `musicKeys` are the cues the chapter plays: `scene-gagazet` (the record's
- *   stand-in under the narration), `boss-seymour-macalania` (B15's stand-in,
- *   D-091, until a Natus cue is picked by ear) and the shared `victory-ffx`.
+ *   stand-in under the narration), `boss-seymour-natus` (his own since 2026-10-10;
+ *   B15's stand-in, `boss-seymour-macalania`, D-091, played before it) and the shared `victory-ffx`.
  *
  * **Listed** 2026-09-25 with the chapter itself: it sits in `./chapter-meta.ts`'s
  * `CHAPTER_META` after Chapter IX's, as the chapter sits after Chapter IX in `CHAPTERS`.
@@ -82,7 +82,7 @@ export const NATUS_META: ChapterMeta = {
     { image: 'characters/mortibody/idle.png', caption: 'Mortibody always comes back' },
   ],
   focalCharacterId: 'kimahri',
-  musicKeys: ['scene-gagazet', 'boss-seymour-macalania', 'victory-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-seymour-natus', 'victory-ffx'],
 };
 
 export default NATUS_META;

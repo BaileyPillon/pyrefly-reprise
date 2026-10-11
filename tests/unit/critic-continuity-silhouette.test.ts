@@ -8,7 +8,7 @@
  */
 import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
-import { anchorsFor, bboxRows, decodeMask, estimateMass, estimateStance, loadPoseMeasure, openMask, subjectPoseOf } from '../../critic/runner/lib/continuity-silhouette.mjs';
+import { anchorsFor, bboxRows, decodeMask, estimateCentroid, estimateMass, estimateStance, loadPoseMeasure, openMask, subjectPoseOf } from '../../critic/runner/lib/continuity-silhouette.mjs';
 import type { PoseMeasure } from '../../critic/runner/lib/continuity-silhouette.mjs';
 
 const W = 200, H = 300;
@@ -76,6 +76,24 @@ describe('reading a painting', () => {
     const m = await decodeMask(blank);
     expect(estimateStance(m)).toBeNull();
     expect(estimateMass(m)).toBeNull();
+    expect(estimateCentroid(m)).toBeNull();
+  });
+
+  it('takes the centroid: the centre of mass of everything solid, the blade included (r40 instrument edit (a))', async () => {
+    const m = await decodeMask(await painting({ blade: false }));
+    const c = estimateCentroid(m)!;
+    // the body (x 72..128, y 85..270) dominates and the head sits above it: centred across, a little above the painting's middle
+    expect(c.u).toBeGreaterThan(0.48);
+    expect(c.u).toBeLessThan(0.52);
+    expect(c.t).toBeGreaterThan(0.5);
+    expect(c.t).toBeLessThan(0.62);
+    // a blade hanging to the right pulls it right and down: it is the plain centre of mass, not the opened body's
+    const b = estimateCentroid(await decodeMask(await painting()))!;
+    expect(b.u).toBeGreaterThan(c.u);
+    expect(b.t).toBeGreaterThan(c.t);
+    // exact on a hand-made mask: the left half of a 16 x 16 grid is centred a quarter of the way across and half way down
+    const half = { w: 16, h: 16, bits: new Uint8Array(256).map((_, i) => ((i % 16) < 8 ? 1 : 0)) };
+    expect(estimateCentroid(half)).toEqual({ u: 0.25, t: 0.5 });
   });
 });
 
@@ -125,6 +143,17 @@ describe('where a painting\'s anchors come from', () => {
     expect(a.mass).toBeGreaterThan(0.1);
     expect(a.stanceSrc).toBe('silhouette');
     expect(a.stance!.u).toBeGreaterThan(0.47);
+    // and its centroid, the point a figure with no registration is followed by (r40 instrument edit (a))
+    expect(a.centroid!.u).toBeGreaterThan(0.45);
+    expect(a.centroid!.t).toBeGreaterThan(0.4);
+    expect(a.centroid!.t).toBeLessThan(a.stance!.t);
+  });
+
+  it('gives the centroid of a registered painting too (the mask is the same; the tracker decides whether to follow it)', async () => {
+    const mask = await decodeMask(await painting());
+    const a = anchorsFor({ url: '/art/characters/hero/attack.png', mask, measure: measure([W, H]) });
+    expect(a.stanceSrc).toBe('registration');
+    expect(a.centroid).not.toBeNull();
   });
 
   it('lays a wide painting down unless the registration says it stands (a lunge)', async () => {

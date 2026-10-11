@@ -23,7 +23,7 @@
  *   `heroArtFallback`, Yuna's FFX-2 speaker portrait, shows only if the plate is missing.
  * - `snapshots` are the installed chapter art: plate A (O-3 A), Cindy's approved cast
  *   (`chapter:fallen-aeons-casts:2026-09-24`) and the possessed Anima (O-2 B).
- * - `musicKeys`: FA15 a, the field bed `scene-farplane`, `boss-ffx2-aeon` on all three links, then
+ * - `musicKeys`: FA15 a, the field bed `scene-farplane`, `boss-ffx2-fallen-aeons` on all three links, then
  *   the FFX-2 fanfare.
  *
  * **Listed** 2026-09-26 with the chapter itself: it sits in `./chapter-meta.ts`'s `CHAPTER_META`
@@ -62,7 +62,7 @@ export const FALLEN_AEONS_META: ChapterMeta = {
     { image: 'characters/x2-anima/idle.png', caption: 'the last platform' },
   ],
   focalCharacterId: 'yuna',
-  musicKeys: ['scene-farplane', 'boss-ffx2-aeon', 'victory-ffx2'],
+  musicKeys: ['scene-farplane', 'boss-ffx2-fallen-aeons', 'victory-ffx2'],
 };
 
 export default FALLEN_AEONS_META;

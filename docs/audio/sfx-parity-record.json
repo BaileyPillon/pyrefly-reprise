@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "about": "What the SFX parity packs ship, and what was tried: per shipped cue the pick, its provenance (the exact request body, the character-cost the service reported, sha256 of the raw take and of the mastered file) and its measured level against the row. 'cues' is empty until the first pack ships. 'rejected' keeps the takes measurement turned down, so the same prompt is not paid for twice. Agents cannot hear (rule 13): every pick is by measurement against the spec row and stays open to Bailey's ear. Numbers and our own takes only; no retail id, name or audio is recorded here.",
+  "generator": {
+    "service": "ElevenLabs Sound Effects",
+    "model": "eleven_text_to_sound_v2",
+    "output": "mp3_44100_192",
+    "bodyKeys": [
+      "text",
+      "duration_seconds",
+      "prompt_influence",
+      "model_id"
+    ]
+  },
+  "cues": [],
+  "rejected": [
+    {
+      "date": "2026-10-10",
+      "pack": "ffx2-leblanc",
+      "cue": "swing-greatsword",
+      "specRow": "ffx2.lb.warrior.swing",
+      "take": "ffx2.lb.warrior.swing.v1",
+      "request": {
+        "text": "A heavy sword whoosh with a low thud, a short deep whump as a heavy blade carves the air. Close-miked, realistic sound design, no music, no voice.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 6,
+      "sha256Raw": "638122108612d76a1fdd7a42ae70e14a7752d34eb62b4620a86549e0d4be2178",
+      "sha256Mastered": "12eb34ead128e803db8cacafa8d0b8edfc4c8cb55a7fa9069bdf400d932a6bc8",
+      "measured": {
+        "activeMs": 365,
+        "attackMs": 70,
+        "lufs": -24.0,
+        "truePeakDb": -8.14,
+        "centroidHz": 74,
+        "bandsPct": [
+          98,
+          2,
+          0,
+          0,
+          0
+        ]
+      },
+      "target": {
+        "lenMs": 340,
+        "attackMs": 75,
+        "lufs": -24.0,
+        "centroidHz": 600,
+        "bandsPct": [
+          53,
+          32,
+          14,
+          0,
+          0
+        ]
+      },
+      "failedChecks": [
+        "centroid",
+        "bands"
+      ],
+      "reason": "Length, attack and level are on the row, but the take is a pure sub-bass thump: centroid 74 Hz against 600 Hz and 98 percent of its energy under 250 Hz against 53 percent, no whoosh at all. Further from the row than the synth cue it would replace (centroid 378 Hz). Not installed. The next try names the midrange first and uses the 'sharper and drier' variation."
+    }
+  ]
+}

@@ -40,11 +40,12 @@ const later = read('docs/audio/music-elevenlabs-2026-10-07.json') as {
 };
 const replacedLater = new Set(later.cues.map((c) => c.cue));
 const movedLater = later.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
-// The two FFX-2 cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
+// The cues added on 2026-10-10 (`boss-leblanc`, `boss-bahamut`, then the six of batch 1) are not in the 2026-09-30 reports: they ship as the raw ElevenLabs take at its own bitrate and are pinned by
 // `audio-music-elevenlabs-2026-10-10.test.ts` against `docs/audio/music-elevenlabs-2026-10-10.json`.
-const addedRecord = read('docs/audio/music-elevenlabs-2026-10-10.json') as { cues: { cue: string; file: { bytes: number } }[] };
-const addedCues = new Set(addedRecord.cues.map((c) => c.cue));
-const addedBytes = addedRecord.cues.reduce((sum, c) => sum + c.file.bytes, 0);
+// Batch 1 of the same day (`docs/audio/music-batch1-2026-10-10.json`, pinned by `audio-music-batch1-2026-10-10.test.ts`) added more of the same kind.
+const addedRecords = [read('docs/audio/music-elevenlabs-2026-10-10.json'), read('docs/audio/music-batch1-2026-10-10.json')] as { cues: { cue: string; file: { bytes: number } }[] }[];
+const addedCues = new Set(addedRecords.flatMap((r) => r.cues.map((c) => c.cue)));
+const addedBytes = addedRecords.reduce((total, r) => total + r.cues.reduce((sum, c) => sum + c.file.bytes, 0), 0);
 
 describe('music O1: every cue at LAME V0', () => {
   it('records every shipped cue, each reproduced byte for byte before the re-encode', () => {
@@ -86,7 +87,7 @@ describe('music O1: every cue at LAME V0', () => {
     }
   });
 
-  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, 100 MB under D-6xx (2026-10-10), not the old 60', () => {
-    expect(AUDIO_BUDGET_BYTES).toBe(100e6);
+  it('fits the raised shipping budget: 85 MB under D-292, 90 MB since D-306, 100 MB under D-6xx (2026-10-10), 105 MB for the FF7 cue of batch 1 (2026-10-10), not the old 60', () => {
+    expect(AUDIO_BUDGET_BYTES).toBe(105e6);
   });
 });

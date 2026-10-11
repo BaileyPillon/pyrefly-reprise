@@ -15,6 +15,10 @@
  * (`null`): the retail cue may never ship (rule 8, gs §11) and an original one
  * needs Bailey's ear (rule 13). `sceneKey` names the planned scene
  * (`src/scenes/sector1-reactor.ts`, not built; the painted loader stands in).
+ *
+ * 2026-10-10 (Bailey: "ill go with all your recommendations", the batch-1 music picks): the fight now plays `boss-ff7-guard`, an original ElevenLabs take
+ * (FF7-M1, "Night infiltration"; never a retail cue, rule 8); the scene stays silent (the pre script only starts the battle) and there is still no
+ * victory cue, so the presenter's own fade-out ends the music when the fight is won. Judged by ear later (rule 13).
  */
 
 import type { Chapter } from './encounters.ts';
@@ -36,6 +40,6 @@ export const FF7_GUARD_SCORPION: Chapter = {
   buildRef: sector1ReactorBuild,
   enemyGroupRef: guardScorpionGroup,
   scriptsRef: ff7GuardScorpionScripts,
-  music: { scene: null, battle: null },
+  music: { scene: null, battle: 'boss-ff7-guard' },
   sensorTexts: {},
 };

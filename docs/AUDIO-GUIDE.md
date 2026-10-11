@@ -282,6 +282,26 @@ Proof and levels: `tools/audio/sfx-v2-proof.mjs` (a production build, headless, 
 then the intended route) and `tools/audio/sfx-v2-levels.py` (the fight re-mixed as AudioManager mixes
 it). Handoff: `docs/handoff/sfx-v2.md`.
 
+### SFX parity (2026-10-10): the third source, the P1 mix, one menu tick
+
+Bailey, 2026-10-10: "make the sound effects a 1:1 parity of the ffx/ffx-2 remaster on steam that i have installed",
+then "i'll go with all your recommendations even as to music and sound effects" (decisions 47k to 47n, 52a, 52d, 52i
+to 52m). Parity is made of **measured facts, never retail audio** (rule 8): which event sounds, when, how long, how
+loud against its neighbours, how bright. The sounds themselves are ElevenLabs originals from written descriptions
+(`tools/audio/sfx-parity-lint.mjs` is the originality lint; `docs/audio/sfx-parity-record.json` the provenance).
+Handoff, pilot and what is left: `docs/handoff/sfx-parity.md`.
+
+| Who | Where | What it does |
+|---|---|---|
+| `manifest.sfxParity.packs` (`src/audio/manifest.ts`) | the manifest | the third source: recorded originals cut by game and by boss into packs (`sfx/parity-ffx2-core.mp3`, `parity-ffx2-leblanc.mp3`, ...), each its own sprite under the 5 MB gate and inside the 100 MB budget. `{ "packs": {} }` while none has shipped |
+| `src/audio/sfxV2/packs.ts` | `sfxChapter` | which packs a chapter run loads: the boss packs first, the game's `<game>-core` last; refuses another game's pack (rule 14) |
+| `src/audio/SfxSprites.ts` | `AudioManager.playSfx` | `pick` for a `v2:` key: an active, decoded parity pack that holds the name for this game, then the v2 slice, then the first-bank stand-in. Never awaited, so a cue is never silent. `audioDebug().sfxLog` says `via: 'parity'` for a pack cue |
+| `src/app/sfxGame.ts` | `BattleScreenFlow.runChapter` | an FFX or FFX-2 chapter asks `audio.loadParityPacks(game, chapterId)` and gives them back at the end; the title, chapter select and FF7 load none |
+| `src/audio/sfxV2/parityDerive.ts`, `parityTrims.ts`, `parityMix.ts`, `docs/audio/sfx-parity-mix.json`, `tools/audio/sfx-parity-mix.mjs` | the mixer | **the P1 mix (52i)** as data: one row per event with its retail-ratio level, the floor under the party's swings and blows (the recorded set's own class levels, -18 weapon and -14.1 impact, since 52n, so the FFX-2 party hits keep today's level; D-210's -24 and -20.1 would cut them about 6 dB), the -14 LUFS cap; the tool turns them into a trim in dB per (game, cue) (`parityTrims.ts`, generated; `--check` fails when stale) which `playSfx` applies to a v2 slice. A parity original is mastered to its own row and is never trimmed. HOLD rows (52j), rows the spec grades low, and cues no row names keep today's level. Move the floor or the cap in the JSON header and rerun the tool |
+| `src/audio/sfxV2/voicing.ts` | `playSfx` | **one tick (52k):** `confirm` plays the cursor's tick in a chapter (`v2:cursor-move` in FFX, `v2:cursor-move-x2` in FFX-2), and the P1 mix raises it about 5 dB |
+| `tools/audio/sfx-parity-sprite.py`, `sfx-parity-measure.mjs` | build | pack picked takes into a pack (LAME V0, 50 ms lead and gaps, true-peak trim loop) and merge `sfxParity.packs.<pack>` into the manifest (`--install`) |
+| `tools/audio/qa.mjs` | gate | audits every pack like the sprites (5 MB, -1 dBTP, no clipped samples) with each cue held to its recorded row level (`--only=sfx` runs the sprite audits alone) |
+
 ### Which key for which ability family
 
 | family | keys |

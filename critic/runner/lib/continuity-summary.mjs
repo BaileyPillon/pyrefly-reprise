@@ -5,6 +5,8 @@
 //
 // Game case: both (shared critic plumbing).
 
+import { HELD_MIN_FRAMES } from './continuity-held.mjs';
+
 const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 
 /**
@@ -36,6 +38,11 @@ export function summarize({ swaps, jerks, battleSeconds, cfg }) {
   const bySnapPose = {};
   for (const s of snaps) bySnapPose[s.toPose] = (bySnapPose[s.toPose] ?? 0) + 1;
   const jerkMid = jerks.filter((j) => !j.atSwap);
+  // r40 instrument edit (b): a step of the spherechange's twirl is a staged costume change, counted per CHANGE (its steps share `staged.seq`), not per step. The cuts it
+  // excused from the snap count (`stagedSnapsExcused`) and the jerks that fall at one of its steps (`jerksAtStaged`) are shown; the jerks stay in `jerks` and in the verdict.
+  const stagedSwaps = counted.filter((s) => s.staged);
+  // r40 instrument edit (c): a frozen blend, read from the fades (continuity-held.mjs)
+  const held = counted.filter((s) => s.held && s.held.frames >= HELD_MIN_FRAMES);
   const summary = {
     battleSeconds: round(battleSeconds, 1),
     swaps: swaps.length, counted: counted.length, excludedByCut: swaps.filter((s) => s.camCut).length, excludedNotShowing: swaps.filter((s) => s.notShowing).length,
@@ -55,6 +62,9 @@ export function summarize({ swaps, jerks, battleSeconds, cfg }) {
       maxCentroidShiftPx: round(counted.reduce((m, s) => (s.outline ? Math.max(m, s.outline.centroidShiftPx) : m), 0), 1),
       ghostSwaps: ghostSwaps.length, ghostFrames: counted.reduce((n, s) => n + s.ghost.frames, 0), worstGhostSeverity: round(counted.reduce((m, s) => Math.max(m, s.ghost.severity), 0), 3), ghostOverFail: ghostFail.length,
       jerks: jerks.length, jerksMidMove: jerkMid.length, worstJerkPx: round(jerks.reduce((m, j) => Math.max(m, j.px), 0), 1), jerksOverFail: jerks.filter((j) => j.px >= cfg.motion.jerkFailPx).length,
+      heldSwaps: held.length, longestHeldFrames: counted.reduce((m, s) => Math.max(m, s.held ? s.held.frames : 0), 0),
+      stagedChanges: new Set(stagedSwaps.map((s) => `${s.figure}|${s.staged.seq}`)).size, stagedSteps: stagedSwaps.length,
+      stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length,
     },
   };
   return { ...summary, checks: verdicts(summary, cfg) };
@@ -95,6 +105,7 @@ export function verdicts(s, cfg, run = {}) {
  * 40 percent head jump and a 119 px slide each outrank a mild ghost; a snap or a double image adds weight.
  */
 export function swapBadness(s, cfg) {
+  if (s.staged) return 0; // a step of the twirl is stagecraft (continuity-staged.mjs): never among the worst swaps a reviewer should open, only filler when nothing else is left
   const sized = !s.costume && !s.sameArt; // a costume change and a swap of one painting to itself are not judged on size or feet
   const head = sized && s.head && s.head.ratio !== null ? Math.abs(s.head.ratio - 1) * 100 / (s.head.source === 'registration' ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) : 0;
   const feet = sized && s.feet && s.feet.standing ? s.feet.px / (s.feet.source === 'registration' ? cfg.size.feetTolerancePx : cfg.size.feetTolerancePxCoarse) : 0;

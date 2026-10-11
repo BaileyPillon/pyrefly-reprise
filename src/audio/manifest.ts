@@ -32,13 +32,39 @@ export interface SfxCue {
   offset: number;
   /** How long to play, in seconds. */
   duration: number;
+  /**
+   * Parity-pack rows only (`sfxParity`, below): which game the cue belongs to (AGENTS.md rule 14). A pack is cut by
+   * game, so a cue that names a different game than the chapter playing it is never found. Absent: any game.
+   */
+  game?: ParityGame;
+  /** Parity-pack rows only: the mastered level (loudest 400 ms, K-weighted), which the audit holds to the row's target. */
+  lufs?: number;
+  /** Parity-pack rows only: the true peak after encoding, in dBTP. */
+  truePeakDb?: number;
+  /** Parity-pack rows only: the spec row this cue answers (`docs/audio/sfx-parity-plan.json`), for the record and the audit. */
+  specRow?: string;
+  /** Parity-pack rows only: ms from the cue's first sample to its first audible one, and to its peak (phase 2 timing). */
+  onsetMs?: number;
+  peakMs?: number;
 }
+
+/** The games a parity cue can belong to: one of the two, or both (the shared menu assets). */
+export type ParityGame = 'ffx' | 'ffx2' | 'both';
 
 export interface SfxSprite {
   file: string;
   duration: number;
   bytes?: number;
   cues: Record<string, SfxCue>;
+}
+
+/**
+ * The third SFX source (SFX parity, 2026-10-10; `docs/handoff/sfx-parity.md`): recorded originals measured against
+ * the games' own sound facts, cut into packs by game and by boss (`sfxV2/packs.ts`). A `v2:` cue is looked up here
+ * first, then in the v2 sprite, then in the first bank, so a cue is never silent. An empty `packs` changes nothing.
+ */
+export interface SfxParity {
+  packs: Record<string, SfxSprite>;
 }
 
 export interface AudioManifest {
@@ -48,6 +74,8 @@ export interface AudioManifest {
   sfx: SfxSprite | null;
   /** The recorded set of D-302 (`sfxV2/cues.ts`), a second sprite; `null` keeps every cue on the first. */
   sfxV2: SfxSprite | null;
+  /** The parity packs, consulted before `sfxV2`; `{ packs: {} }` when none has shipped. */
+  sfxParity: SfxParity;
 }
 
 export const EMPTY_MANIFEST: AudioManifest = {
@@ -56,6 +84,7 @@ export const EMPTY_MANIFEST: AudioManifest = {
   music: {},
   sfx: null,
   sfxV2: null,
+  sfxParity: { packs: {} },
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -89,7 +118,23 @@ export function parseManifest(raw: unknown): AudioManifest {
     music,
     sfx: parseSprite(raw.sfx),
     sfxV2: parseSprite(raw.sfxV2),
+    sfxParity: parseParity(raw.sfxParity),
   };
+}
+
+/** A pack name is lower-case words joined by dashes (`ffx2-core`, `ffx2-leblanc`): it becomes a file name and a map key. */
+const PACK_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function parseParity(value: unknown): SfxParity {
+  const packs: Record<string, SfxSprite> = {};
+  if (isRecord(value) && isRecord(value.packs)) {
+    for (const [name, pack] of Object.entries(value.packs)) {
+      if (!PACK_NAME.test(name)) continue;
+      const sprite = parseSprite(pack, true);
+      if (sprite) packs[name] = sprite;
+    }
+  }
+  return { packs };
 }
 
 function parseMusicEntry(value: unknown): MusicEntry | null {
@@ -115,7 +160,7 @@ function parseMusicEntry(value: unknown): MusicEntry | null {
   };
 }
 
-function parseSprite(value: unknown): SfxSprite | null {
+function parseSprite(value: unknown, rich = false): SfxSprite | null {
   if (!isRecord(value)) return null;
   if (typeof value.file !== 'string' || value.file.length === 0) return null;
   const duration = finitePositive(value.duration);
@@ -126,7 +171,7 @@ function parseSprite(value: unknown): SfxSprite | null {
     const offset = finitePositive(cue.offset);
     const dur = finitePositive(cue.duration);
     if (offset === null || dur === null || dur <= 0) continue;
-    cues[name] = { offset, duration: dur };
+    cues[name] = rich ? parseRichCue(cue, offset, dur) : { offset, duration: dur };
   }
   if (Object.keys(cues).length === 0) return null;
   return {
@@ -135,6 +180,26 @@ function parseSprite(value: unknown): SfxSprite | null {
     bytes: finitePositive(value.bytes) ?? undefined,
     cues,
   };
+}
+
+function finiteNumber(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+}
+
+/** A parity-pack cue keeps its record fields; the two older sprites' cues stay `{ offset, duration }` as they always were. */
+function parseRichCue(cue: Record<string, unknown>, offset: number, duration: number): SfxCue {
+  const out: SfxCue = { offset, duration };
+  if (cue.game === 'ffx' || cue.game === 'ffx2' || cue.game === 'both') out.game = cue.game;
+  const lufs = finiteNumber(cue.lufs);
+  if (lufs !== undefined) out.lufs = lufs;
+  const truePeakDb = finiteNumber(cue.truePeakDb);
+  if (truePeakDb !== undefined) out.truePeakDb = truePeakDb;
+  if (typeof cue.specRow === 'string' && cue.specRow.length > 0) out.specRow = cue.specRow;
+  const onsetMs = finitePositive(cue.onsetMs);
+  if (onsetMs !== null) out.onsetMs = onsetMs;
+  const peakMs = finitePositive(cue.peakMs);
+  if (peakMs !== null) out.peakMs = peakMs;
+  return out;
 }
 
 /** Is there a pre-rendered file for this track? */

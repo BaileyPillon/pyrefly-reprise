@@ -96,12 +96,12 @@ describe('registration: registered, reachable, listed (2026-09-26)', () => {
     expect(CHAPTERS.some((c) => c.id === 'ffx2-fallen-aeons')).toBe(true);
   });
 
-  it('three links in the sourced order, a Save Sphere before links 2 and 3, no escape, one aeon cue', () => {
+  it('three links in the sourced order, a Save Sphere before links 2 and 3, no escape, one aeon cue (batch 1, 2026-10-10: `boss-ffx2-fallen-aeons`, shared with Ixion)', () => {
     const groups = FALLEN_AEONS_CHAIN_ORDER.map((id) => data.ENEMY_GROUPS_BY_ID[id]!);
     expect(groups.map((g) => g.nextGroupId)).toEqual([ROAD_SISTERS, ROAD_ANIMA, undefined]);
     expect(groups.map((g) => g.restoresPartyOnEntry === true)).toEqual([false, true, true]);
     expect(groups.every((g) => g.canEscape === false)).toBe(true);
-    expect(groups.every((g) => g.musicCues?.[0]?.track === 'boss-ffx2-aeon')).toBe(true);
+    expect(groups.every((g) => g.musicCues?.[0]?.track === 'boss-ffx2-fallen-aeons')).toBe(true);
   });
 });
 

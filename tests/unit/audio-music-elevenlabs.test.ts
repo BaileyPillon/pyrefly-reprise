@@ -91,7 +91,9 @@ const o1 = read('docs/audio/music-o1-2026-09-30.json') as { cues: { cue: string;
 
 // The two FFX-2 cues of 2026-10-10 carry `source` too; their own record is docs/audio/music-elevenlabs-2026-10-10.json, pinned by `audio-music-elevenlabs-2026-10-10.test.ts`.
 const added = read('docs/audio/music-elevenlabs-2026-10-10.json') as { source: string; cues: { cue: string; file: { bytes: number } }[] };
-const addedBytes = added.cues.reduce((sum, c) => sum + c.file.bytes, 0);
+// ... and the six of batch 1, the same day (`docs/audio/music-batch1-2026-10-10.json`, pinned by `audio-music-batch1-2026-10-10.test.ts`).
+const batch1 = read('docs/audio/music-batch1-2026-10-10.json') as { source: string; cues: { cue: string; file: { bytes: number } }[] };
+const addedBytes = [added, batch1].reduce((total, r) => total + r.cues.reduce((sum, c) => sum + c.file.bytes, 0), 0);
 
 const RATE = 44100;
 const RUN_ON_SECONDS = 3;
@@ -122,9 +124,10 @@ describe('ElevenLabs music: the record', () => {
       .filter(([, entry]) => externalSource(entry) !== null)
       .map(([name]) => name)
       .sort();
-    expect(exempt).toEqual([...record.cues.map((c) => c.cue), ...added.cues.map((c) => c.cue)].sort());
+    expect(exempt).toEqual([...record.cues.map((c) => c.cue), ...added.cues.map((c) => c.cue), ...batch1.cues.map((c) => c.cue)].sort());
     for (const name of exempt) expect(manifest.music[name]!.source, name).toBe(record.source);
     expect(added.source, "the 2026-10-10 record names the same source").toBe(record.source);
+    expect(batch1.source, "the batch-1 record names the same source").toBe(record.source);
   });
 });
 

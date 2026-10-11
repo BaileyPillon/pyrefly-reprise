@@ -1,0 +1,860 @@
+{
+  "what": "The stereo gate on the nine ElevenLabs cues of 2026-10-10: measured, and the eight that failed it narrowed in mid/side (driver item 53e; finding PR-0425 of deep review round 24, build 72973096, which measured boss-bahamut and boss-leblanc)",
+  "words": "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important. (Bailey, 2026-10-10 23:05 EDT); the driver chose to fix the gate by measurement, not to stage a wide-versus-narrow listening choice",
+  "gameCase": "FFX-2: boss-bahamut (Chapter IV), boss-leblanc (Chapter VI and the hidden Leblanc chapter), boss-ffx2-fallen-aeons (Chapters XI and XVI), boss-trema (Chapter XIII phase 2). FFX: boss-seymour-natus (X), boss-isaaru (XIV), boss-sin-assault (XVII), boss-sin-countdown (XVIII). FF7: boss-ff7-guard (the hidden limit chapter), which passed already and is unchanged. Each cue plays only where its own record says; the fix changes the stereo image of the file and nothing a chapter routes to.",
+  "gate": {
+    "thresholds": {
+      "corr": [
+        0.6,
+        0.85
+      ],
+      "sideMid": [
+        -10,
+        -6
+      ],
+      "monoLossMin": -1
+    },
+    "source": "THEMES.md \"Since 2026-10-07 (ElevenLabs)\"; GATES in tools/audio/remaster-score.mjs",
+    "measuredWith": "tools/audio/stereo-gate.mjs, on the decoded MP3 (ffmpeg, 44.1 kHz stereo float, whole file): L/R Pearson correlation, side-to-mid 10 log10(mean S^2 / mean M^2) with S = (L-R)/2 and M = (L+R)/2, mono-sum loss 10 log10(mean M^2 / mean channel power). The round-24 auditor's script (critic/rounds/round-24/stereo-gate.mjs) gives the same figures: boss-bahamut 0.408, -3.72, -1.54 and boss-leblanc 0.257, -2.28, -2.02 were reproduced to the digit before anything was changed."
+  },
+  "method": {
+    "tool": "tools/audio/stereo-narrow.mjs",
+    "what": "Mid/side: M = (L+R)/2 is kept, S = (L-R)/2 is multiplied by one broadband gain below 1, L = M+gS, R = M-gS. It is instantaneous, so nothing moves in time: the length, the loop points and the 3 s run-on are the input's sample for sample (lag 0 against the original at 10 %, 50 % and the end of every file; the same frame count and gapless-header delay and padding). Then one linear gain to -16 LUFS (ffmpeg ebur128, as the lane pipelines measured it) and LAME V4 (-q:a 4), the encode the lanes used. The decoded MP3 is what is measured, and the side gain and the master gain are iterated until the encode reads side-to-mid -7.5 dB and -16.0 LUFS.",
+    "target": "side-to-mid -7.5 dB, which is correlation 0.70 and mono-sum loss -0.70 dB (all three follow from the side/mid power ratio r: corr = (1-r)/(1+r), loss = -10 log10(1+r)); the middle of the correlation and side windows, 1.5 dB from the nearest edge",
+    "source": "the shipped MP3, decoded once (no WAV or other lossless master exists: the lanes' masters are LAME V4 MP3s and the raw takes are 128 to 320 kbps MP3s); the loop crossfade and the run-on are built into it",
+    "limiter": "boss-sin-countdown only: the master gain (+2.1 dB) took its true peak to -0.47 dBTP, over the -1 dBTP gate, so a look-ahead limiter (the lane pipelines' own, 10 ms) at -1.7 dBFS acts on 13 samples, by at most 0.63 dB; the other seven needed none",
+    "reproduce": "node tools/audio/stereo-narrow.mjs --in=<dir of the pre-fix files> --out=<dir> --cue=<the eight> --install; then node tools/audio/stereo-gate.mjs <cue> ..."
+  },
+  "wideFiles": {
+    "where": "git 5c371dcd (public/audio/music/<cue>.mp3 at the r40 release candidate before this change) and D:/Tools/pyrefly-scratch/2026-10-10/stereo-53e/wide; each cue's `before.sha256` names its file",
+    "restore": "git show 5c371dcd:public/audio/music/<cue>.mp3 > public/audio/music/<cue>.mp3, then put that cue's `before.manifestEntry` back in the manifest and the older record's `file` and `manifestEntry` (its `laneFile`)"
+  },
+  "notMeasured": "Nobody has heard these files (AGENTS.md rule 13). The gate is a measurement and Bailey's ear can overrule it: the narrow files are less wide than the takes he was offered, and he may prefer the wide ones (the D-582 class of question).",
+  "cues": [
+    {
+      "cue": "boss-bahamut",
+      "game": "FFX-2",
+      "record": "docs/audio/music-elevenlabs-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1379184,
+        "sha256": "f686324c3e55a047b89501c25bdc424e11b4335a19229510b5dd59d832742156",
+        "decodedSamples": 3476687,
+        "manifestEntry": {
+          "file": "music/boss-bahamut.mp3",
+          "loopStart": 12.671678,
+          "loopEnd": 75.83644,
+          "duration": 78.8364,
+          "bytes": 1379184,
+          "lufs": -16.0,
+          "truePeakDb": -2.4,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.408,
+          "sideMid": -3.72,
+          "monoLoss": -1.54
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -2.4
+        },
+        "qa": {
+          "lufs": -16.05,
+          "truePeakDb": -2.42,
+          "seamStepOverAllowed": 0.324,
+          "seamFluxRatio": 1.0,
+          "clickRatio": 0.141,
+          "tilt": -11.2,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1341547,
+        "sha256": "4627e4c81fd2cef5ae4ee2f5d5e4075dea10875ab325221a548aa17ab243b636",
+        "decodedSamples": 3476687,
+        "manifestEntry": {
+          "file": "music/boss-bahamut.mp3",
+          "loopStart": 12.671678,
+          "loopEnd": 75.83644,
+          "duration": 78.8364,
+          "bytes": 1341547,
+          "lufs": -16.0,
+          "truePeakDb": -2.4,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.703,
+          "sideMid": -7.5,
+          "monoLoss": -0.71
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -2.4
+        },
+        "qa": {
+          "lufs": -16.04,
+          "truePeakDb": -2.38,
+          "seamStepOverAllowed": 0.186,
+          "seamFluxRatio": 1.0,
+          "clickRatio": 0.147,
+          "tilt": -11.0,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.6472,
+        "sideGainDb": -3.78,
+        "masterGainDb": 0.9,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 2,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-leblanc",
+      "game": "FFX-2",
+      "record": "docs/audio/music-elevenlabs-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1554446,
+        "sha256": "f7ef671d2b880461b54096cf37d67d1c4fa08bcb3ba68091e30607ebedb00bf2",
+        "decodedSamples": 3489292,
+        "manifestEntry": {
+          "file": "music/boss-leblanc.mp3",
+          "loopStart": 5.878753,
+          "loopEnd": 76.122268,
+          "duration": 79.1223,
+          "bytes": 1554446,
+          "lufs": -16.0,
+          "truePeakDb": -4.0,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.257,
+          "sideMid": -2.28,
+          "monoLoss": -2.02
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -4
+        },
+        "qa": {
+          "lufs": -16.24,
+          "truePeakDb": -4.03,
+          "seamStepOverAllowed": 0.152,
+          "seamFluxRatio": 0.41,
+          "clickRatio": 0.169,
+          "tilt": -4.9,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1471333,
+        "sha256": "886579bde3051dbc6a2e5ec77770e09dffa76efd712aa8851ab654f7eabd6c05",
+        "decodedSamples": 3489292,
+        "manifestEntry": {
+          "file": "music/boss-leblanc.mp3",
+          "loopStart": 5.878753,
+          "loopEnd": 76.122268,
+          "duration": 79.1223,
+          "bytes": 1471333,
+          "lufs": -16.0,
+          "truePeakDb": -3.1,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.697,
+          "sideMid": -7.46,
+          "monoLoss": -0.72
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -3.1
+        },
+        "qa": {
+          "lufs": -16.19,
+          "truePeakDb": -3.08,
+          "seamStepOverAllowed": 0.04,
+          "seamFluxRatio": 0.42,
+          "clickRatio": 0.15,
+          "tilt": -4.7,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.5482,
+        "sideGainDb": -5.22,
+        "masterGainDb": 1.5,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 2,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-ffx2-fallen-aeons",
+      "game": "FFX-2",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1652754,
+        "sha256": "a284ba794ebecae2611b0618f4ba5e442c991b8b184b00ca2b7ae0a3569a9107",
+        "decodedSamples": 3753422,
+        "manifestEntry": {
+          "file": "music/boss-ffx2-fallen-aeons.mp3",
+          "loopStart": 30.906009,
+          "loopEnd": 82.11161,
+          "duration": 85.1116,
+          "bytes": 1652754,
+          "lufs": -16.0,
+          "truePeakDb": -4.5,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.034,
+          "sideMid": -0.29,
+          "monoLoss": -2.87
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -4.5
+        },
+        "qa": {
+          "lufs": -16.2,
+          "truePeakDb": -4.52,
+          "seamStepOverAllowed": 0.402,
+          "seamFluxRatio": 0.63,
+          "clickRatio": 0.54,
+          "tilt": -5.3,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1521986,
+        "sha256": "d8b4ee7d731f3984f06d5697609fe1d5eead114ff6d6186070df9eca299a9c3a",
+        "decodedSamples": 3753422,
+        "manifestEntry": {
+          "file": "music/boss-ffx2-fallen-aeons.mp3",
+          "loopStart": 30.906009,
+          "loopEnd": 82.11161,
+          "duration": 85.1116,
+          "bytes": 1521986,
+          "lufs": -16.0,
+          "truePeakDb": -3.3,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.696,
+          "sideMid": -7.47,
+          "monoLoss": -0.72
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -3.3
+        },
+        "qa": {
+          "lufs": -16.17,
+          "truePeakDb": -3.27,
+          "seamStepOverAllowed": 0.21,
+          "seamFluxRatio": 0.63,
+          "clickRatio": 0.35,
+          "tilt": -5.0,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.4361,
+        "sideGainDb": -7.21,
+        "masterGainDb": 2.3,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 2,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-trema",
+      "game": "FFX-2",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1496328,
+        "sha256": "d13250a138a93a33c959ef3187c9df2d80b3801c69a63bc4dc202cf2b24b58b6",
+        "decodedSamples": 3358011,
+        "manifestEntry": {
+          "file": "music/boss-trema.mp3",
+          "loopStart": 28.81458,
+          "loopEnd": 73.145374,
+          "duration": 76.1454,
+          "bytes": 1496328,
+          "lufs": -16.0,
+          "truePeakDb": -5.4,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.054,
+          "sideMid": -0.47,
+          "monoLoss": -2.78
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -5.4
+        },
+        "qa": {
+          "lufs": -16.18,
+          "truePeakDb": -5.36,
+          "seamStepOverAllowed": 0.197,
+          "seamFluxRatio": 0.93,
+          "clickRatio": 0.124,
+          "tilt": -7.2,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1370303,
+        "sha256": "23103dc0fd54b31663d5fee3c0e4fa4489b1d79ff0893f43ebcd79b2d6ad2d05",
+        "decodedSamples": 3358011,
+        "manifestEntry": {
+          "file": "music/boss-trema.mp3",
+          "loopStart": 28.81458,
+          "loopEnd": 73.145374,
+          "duration": 76.1454,
+          "bytes": 1370303,
+          "lufs": -16.0,
+          "truePeakDb": -4.3,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.699,
+          "sideMid": -7.51,
+          "monoLoss": -0.71
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -4.3
+        },
+        "qa": {
+          "lufs": -16.13,
+          "truePeakDb": -4.32,
+          "seamStepOverAllowed": 0.308,
+          "seamFluxRatio": 0.94,
+          "clickRatio": 0.175,
+          "tilt": -7.0,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.4449,
+        "sideGainDb": -7.03,
+        "masterGainDb": 2.2,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 3,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-seymour-natus",
+      "game": "FFX",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1505505,
+        "sha256": "9b5143fe6c34d92226766a1e3e0780ee262954dc06a52d62e8f45c0e647d9111",
+        "decodedSamples": 3420497,
+        "manifestEntry": {
+          "file": "music/boss-seymour-natus.mp3",
+          "loopStart": 30.916667,
+          "loopEnd": 74.56229,
+          "duration": 77.5623,
+          "bytes": 1505505,
+          "lufs": -16.0,
+          "truePeakDb": -5.1,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.145,
+          "sideMid": -1.27,
+          "monoLoss": -2.42
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -5.1
+        },
+        "qa": {
+          "lufs": -16.16,
+          "truePeakDb": -5.12,
+          "seamStepOverAllowed": 0.096,
+          "seamFluxRatio": 0.54,
+          "clickRatio": 0.155,
+          "tilt": -6.1,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1415028,
+        "sha256": "a88549ab77b4f60713ba6d3b8ac10b3e780a2df413f7d6e5241cd9e8c84ba03c",
+        "decodedSamples": 3420497,
+        "manifestEntry": {
+          "file": "music/boss-seymour-natus.mp3",
+          "loopStart": 30.916667,
+          "loopEnd": 74.56229,
+          "duration": 77.5623,
+          "bytes": 1415028,
+          "lufs": -16.0,
+          "truePeakDb": -4.5,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.697,
+          "sideMid": -7.48,
+          "monoLoss": -0.71
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -4.5
+        },
+        "qa": {
+          "lufs": -16.12,
+          "truePeakDb": -4.53,
+          "seamStepOverAllowed": 0.175,
+          "seamFluxRatio": 0.53,
+          "clickRatio": 0.127,
+          "tilt": -5.9,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.488,
+        "sideGainDb": -6.23,
+        "masterGainDb": 1.9,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 2,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-isaaru",
+      "game": "FFX",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1684825,
+        "sha256": "404107c9c84771301bc81b6bcaa18543a1a07321303bb0ac2bab3018acb7013d",
+        "decodedSamples": 3775997,
+        "manifestEntry": {
+          "file": "music/boss-isaaru.mp3",
+          "loopStart": 16.61941,
+          "loopEnd": 82.623515,
+          "duration": 85.6235,
+          "bytes": 1684825,
+          "lufs": -16.0,
+          "truePeakDb": -3.6,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.08,
+          "sideMid": -0.7,
+          "monoLoss": -2.67
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -3.6
+        },
+        "qa": {
+          "lufs": -16.12,
+          "truePeakDb": -3.6,
+          "seamStepOverAllowed": 0.067,
+          "seamFluxRatio": 0.55,
+          "clickRatio": 0.066,
+          "tilt": -7.2,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1560574,
+        "sha256": "1da6b0b09130e0c607d8c7d7d9ed6b443f76059ff74759f21119e752b9956ea5",
+        "decodedSamples": 3775997,
+        "manifestEntry": {
+          "file": "music/boss-isaaru.mp3",
+          "loopStart": 16.61941,
+          "loopEnd": 82.623515,
+          "duration": 85.6235,
+          "bytes": 1560574,
+          "lufs": -16.0,
+          "truePeakDb": -3.1,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.697,
+          "sideMid": -7.47,
+          "monoLoss": -0.71
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -3.1
+        },
+        "qa": {
+          "lufs": -16.14,
+          "truePeakDb": -3.06,
+          "seamStepOverAllowed": 0.114,
+          "seamFluxRatio": 0.56,
+          "clickRatio": 0.095,
+          "tilt": -6.9,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.4571,
+        "sideGainDb": -6.8,
+        "masterGainDb": 2,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 2,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-sin-assault",
+      "game": "FFX",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1768221,
+        "sha256": "adebca3f5e9d18e56bad44cd910ac658deef4bdf4bdb923c4b60118dc01c7e27",
+        "decodedSamples": 4262123,
+        "manifestEntry": {
+          "file": "music/boss-sin-assault.mp3",
+          "loopStart": 58.528685,
+          "loopEnd": 93.64678,
+          "duration": 96.6468,
+          "bytes": 1768221,
+          "lufs": -16.0,
+          "truePeakDb": -3.8,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.186,
+          "sideMid": -1.64,
+          "monoLoss": -2.27
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -3.8
+        },
+        "qa": {
+          "lufs": -16.18,
+          "truePeakDb": -3.83,
+          "seamStepOverAllowed": 0.106,
+          "seamFluxRatio": 0.46,
+          "clickRatio": 0.096,
+          "tilt": -6.4,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1684168,
+        "sha256": "3526264875c236b9bfba64b9459c306d9fcbaef924b1f0b496dac95c8da950db",
+        "decodedSamples": 4262123,
+        "manifestEntry": {
+          "file": "music/boss-sin-assault.mp3",
+          "loopStart": 58.528685,
+          "loopEnd": 93.64678,
+          "duration": 96.6468,
+          "bytes": 1684168,
+          "lufs": -16.0,
+          "truePeakDb": -3.1,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.696,
+          "sideMid": -7.46,
+          "monoLoss": -0.72
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -3.1
+        },
+        "qa": {
+          "lufs": -16.17,
+          "truePeakDb": -3.11,
+          "seamStepOverAllowed": 0.149,
+          "seamFluxRatio": 0.47,
+          "clickRatio": 0.193,
+          "tilt": -6.1,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.5092,
+        "sideGainDb": -5.86,
+        "masterGainDb": 1.7,
+        "targetSideMidDb": -7.5,
+        "limiter": null,
+        "iterations": 2,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-sin-countdown",
+      "game": "FFX",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": true,
+      "before": {
+        "bytes": 1719874,
+        "sha256": "f81eb2779a89b50f5b0180adfa6a662fb1d756ebf931323709257a0d8fe2f246",
+        "decodedSamples": 4065536,
+        "manifestEntry": {
+          "file": "music/boss-sin-countdown.mp3",
+          "loopStart": 41.189864,
+          "loopEnd": 89.189025,
+          "duration": 92.189,
+          "bytes": 1719874,
+          "lufs": -16.0,
+          "truePeakDb": -1.8,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.081,
+          "sideMid": -0.7,
+          "monoLoss": -2.67
+        },
+        "stereoGate": {
+          "corr": false,
+          "sideMid": false,
+          "monoLoss": false
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -1.8
+        },
+        "qa": {
+          "lufs": -16.14,
+          "truePeakDb": -1.82,
+          "seamStepOverAllowed": 0.428,
+          "seamFluxRatio": 0.53,
+          "clickRatio": 0.514,
+          "tilt": -7.4,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1601601,
+        "sha256": "8c7b749f5b83b725199350398ff357ac87c77889e113c4733079320d076e5e25",
+        "decodedSamples": 4065536,
+        "manifestEntry": {
+          "file": "music/boss-sin-countdown.mp3",
+          "loopStart": 41.189864,
+          "loopEnd": 89.189025,
+          "duration": 92.189,
+          "bytes": 1601601,
+          "lufs": -16.0,
+          "truePeakDb": -1.5,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.698,
+          "sideMid": -7.5,
+          "monoLoss": -0.71
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -1.5
+        },
+        "qa": {
+          "lufs": -16.18,
+          "truePeakDb": -1.49,
+          "seamStepOverAllowed": 0.532,
+          "seamFluxRatio": 0.52,
+          "clickRatio": 0.632,
+          "tilt": -7.2,
+          "failures": []
+        }
+      },
+      "method": {
+        "sideGainLinear": 0.4572,
+        "sideGainDb": -6.8,
+        "masterGainDb": 2.1,
+        "targetSideMidDb": -7.5,
+        "limiter": {
+          "ceilingDbfs": -1.7,
+          "over": 13,
+          "reductionDb": 0.6268482618434147
+        },
+        "iterations": 3,
+        "encoder": "libmp3lame -q:a 4"
+      }
+    },
+    {
+      "cue": "boss-ff7-guard",
+      "game": "FF7",
+      "record": "docs/audio/music-batch1-2026-10-10.json",
+      "changed": false,
+      "before": {
+        "bytes": 1741096,
+        "sha256": "a3792eef97bdec5529af64a2393809810e0eea01c223f47c711ebd9018787798",
+        "decodedSamples": 4085451,
+        "manifestEntry": {
+          "file": "music/boss-ff7-guard.mp3",
+          "loopStart": 9.634422,
+          "loopEnd": 89.640612,
+          "duration": 92.6406,
+          "bytes": 1741096,
+          "lufs": -16.0,
+          "truePeakDb": -1.6,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.629,
+          "sideMid": -6.13,
+          "monoLoss": -0.95
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -1.6
+        },
+        "qa": {
+          "lufs": -16.05,
+          "truePeakDb": -1.59,
+          "seamStepOverAllowed": 0.34,
+          "seamFluxRatio": 0.99,
+          "clickRatio": 0.158,
+          "tilt": -6.3,
+          "failures": []
+        }
+      },
+      "after": {
+        "bytes": 1741096,
+        "sha256": "a3792eef97bdec5529af64a2393809810e0eea01c223f47c711ebd9018787798",
+        "decodedSamples": 4085451,
+        "manifestEntry": {
+          "file": "music/boss-ff7-guard.mp3",
+          "loopStart": 9.634422,
+          "loopEnd": 89.640612,
+          "duration": 92.6406,
+          "bytes": 1741096,
+          "lufs": -16.0,
+          "truePeakDb": -1.6,
+          "source": "elevenlabs-music_v2_5"
+        },
+        "stereo": {
+          "corr": 0.629,
+          "sideMid": -6.13,
+          "monoLoss": -0.95
+        },
+        "stereoGate": {
+          "corr": true,
+          "sideMid": true,
+          "monoLoss": true
+        },
+        "ebur128": {
+          "lufs": -16,
+          "truePeakDb": -1.6
+        },
+        "qa": {
+          "lufs": -16.05,
+          "truePeakDb": -1.59,
+          "seamStepOverAllowed": 0.34,
+          "seamFluxRatio": 0.99,
+          "clickRatio": 0.158,
+          "tilt": -6.3,
+          "failures": []
+        }
+      },
+      "why": "Already inside all three windows as rendered (0.629, -6.13 dB, -0.95 dB: the mono-sum loss by 0.05 dB), so the file is not touched; it is pinned here with the other eight."
+    }
+  ],
+  "totals": {
+    "changedCues": 8,
+    "bytesSavedByTheEight": 794597,
+    "musicBytesBefore": 93991302,
+    "musicBytesAfter": 93196705,
+    "shippedAudioBytesBefore": 101592631,
+    "shippedAudioBytesAfter": 100798034,
+    "budgetBytes": 105000000,
+    "qaFindings": 0
+  }
+}
