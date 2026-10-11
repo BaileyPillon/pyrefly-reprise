@@ -4,19 +4,21 @@
  * `resolve.ts` as a pure move (critic PR-0083 / F3; house rule 7). FFX-2 only.
  */
 
-import type { AbilityDef, BattleState, CombatantId, Rng } from '../common/types.ts';
+import type { AbilityDef, BattleState, CombatantId } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { AbilityRegistry, Emit, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { breakChain } from './chain.ts';
 import { applyStatus, removeStatus } from './statuses.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
 import { statusWord1 } from './adapt/words.ts';
+import { modDraw } from './adapt/draws.ts';
 import { resetGaugeOnKo } from './atb-engine.ts';
 import { hasAutoLife } from './kernel/status-timers-set.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
   abilities: AbilityRegistry;
-  rng: Rng;
+  rng: BattleRng;
   emit: Emit;
   /** A result was applied to `target` by `source`'s command `ability` (AI-FFX2-b): the engine hands it to the target's script `onResult`. Absent in unit fixtures. */
   onResult?(target: Ffx2Unit, source: Ffx2Unit, ability: AbilityDef): void;
@@ -54,7 +56,7 @@ export function applyHpDelta(
 
   // The knock-out routine runs first (`pp_ko_resolve`): the command in flight is dropped and the gauge is the whole standard
   // wait, which a revived unit then pays (`MsChrAtbInit(chr, 1, -1)`, one draw).
-  resetGaugeOnKo(target, ctx.units, () => ctx.rng.int(0, 63));
+  resetGaugeOnKo(target, ctx.units, modDraw(ctx.rng, 64)); // `& 0x3f` of a draw of the unit's own purpose-0 stream, as the kernel names it
 
   // Auto-Life (`pp_has_auto_life`): dead, not a character that leaves on death, Auto-Life on, and not ejected.
   if (hasAutoLife(true, false, statusWord1(target))) {

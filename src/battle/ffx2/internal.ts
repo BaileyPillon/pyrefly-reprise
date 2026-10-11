@@ -23,10 +23,10 @@ import type {
   GateColour,
   ItemDef,
   ItemId,
-  Rng,
   StatBlock,
   StatusId,
 } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
@@ -288,7 +288,7 @@ export interface CarriedPartyState {
 export interface AiContext {
   self: Ffx2Unit;
   units: Ffx2Unit[];
-  rng: Rng;
+  rng: BattleRng;
   /** Live encounter flags, shared with story triggers. */
   flags: Record<string, number | string | boolean>;
   /** Total logic steps elapsed this battle (29.97 a second, `clock.ts`). */

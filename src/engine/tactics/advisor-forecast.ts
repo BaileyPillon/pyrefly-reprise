@@ -57,7 +57,7 @@
 
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
 import { makeFfxRng } from '../../battle/ffx/adapt/streams.ts';
-import { SeededRng } from '../../battle/common/rng.ts';
+import { makeFfx2Rng } from '../../battle/ffx2/adapt/streams.ts';
 import { cloneStateForSim } from '../../battle/ffx/simulate.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from '../../battle/ffx/state.ts';
 import { getFFXRegistry, type FFXContentRegistry } from '../../battle/ffx/registry.ts';
@@ -217,7 +217,7 @@ function fromFFX(intent: FFXEnemyIntent): AdvisorIntent {
 function ffx2Forecast(state: Readonly<BattleState>, options: ForecastOptions): AdvisorIntent | null {
   const env = {
     state,
-    rng: new SeededRng(state.seed ^ (state.ticks + 1)),
+    rng: makeFfx2Rng(state.seed ^ (state.ticks + 1)),
     ...(options.ffx2?.abilities ? { abilities: options.ffx2.abilities } : {}),
     ...(options.ffx2?.items ? { items: options.ffx2.items } : {}),
   };

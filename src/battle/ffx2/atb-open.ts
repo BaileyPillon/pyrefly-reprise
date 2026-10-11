@@ -14,6 +14,8 @@
  */
 
 import type { BattleSetup } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
+import { modDraw } from './adapt/draws.ts';
 import type { Ffx2Unit } from './internal.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
 import { assignSlots, partyCountsOf } from './atb-engine.ts';
@@ -31,11 +33,6 @@ import {
   type Ffx2TrimChr,
 } from './kernel/atb-start.ts';
 
-/** The pieces of the engine's random stream the opening draws from (`Rng.int`). */
-export interface OpeningRng {
-  int(min: number, max: number): number;
-}
-
 /** How the opening is decided (the engine's options and the group's flags). */
 export interface OpeningOptions {
   /** `condition: 'scripted'` and not a separate battle: every wait whole, no trim. */
@@ -51,7 +48,7 @@ export function openBattleGauges(
   units: readonly Ffx2Unit[],
   condition: BattleSetup['condition'],
   options: OpeningOptions,
-  rng: OpeningRng,
+  rng: BattleRng,
 ): void {
   assignSlots(units);
   const ordered = [...units].sort((a, b) => a.gauge.slot - b.gauge.slot);
@@ -73,7 +70,7 @@ export function openBattleGauges(
         thinkingBaseArg: 0,
         thinking: { baseBefore: 0, partyCount: counts.count, partyStanding: counts.standing },
       },
-      () => rng.int(0, 63),
+      modDraw(rng, 64), // `& 0x3f` of a draw of each unit's own purpose-0 stream, which the kernel names (its thinking time draws nothing: the base is 0 in play)
     );
     u.atb.recovery = r.start;
     u.gauge.recoveryMax = r.full;
@@ -96,7 +93,7 @@ export function openBattleGauges(
     const monsters = sides.filter((u) => u.side === 'enemy').map((u) => statByte(u.stats.agi));
     const first = firstAttackRoll(
       { preset, firstStrikeCount: 0, partyAgi: averageAgi(party), monsterAgi: averageAgi(monsters) },
-      () => rng.int(0, 255),
+      modDraw(rng, 256), // `& 0xff`, twice, on the first-strike stream (1)
     );
     // 3. A preemptive strike or an ambush resets all 31 slots, one draw each, occupied or not.
     if (first.result === 1 || first.result === 2) {
@@ -107,7 +104,7 @@ export function openBattleGauges(
           ? { full: 0, lead: false, deadOrStone: false, recovery: 0 }
           : { full: u.gauge.recoveryMax, lead: false, deadOrStone: !u.alive || has(u, 'petrify'), recovery: u.atb.recovery };
       });
-      const next = applyFirstAttack(first.result, chrs, () => rng.int(0, 15));
+      const next = applyFirstAttack(first.result, chrs, modDraw(rng, 16)); // `& 0xf` of a draw of each slot's own stream
       for (const u of ordered) u.atb.recovery = next[u.gauge.slot] ?? u.atb.recovery;
     }
   }

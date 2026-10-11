@@ -11,9 +11,10 @@ import type {
   AvailableCommand,
   CombatantId,
   Command,
-  Rng,
   Side,
 } from '../common/types.ts';
+import { SeededRng } from '../common/rng.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type {
   AbilityRegistry,
   DressphereRegistry,
@@ -23,6 +24,23 @@ import type {
 } from './internal.ts';
 import { adjacentNodes } from './garment-grids.ts';
 import { aimer } from './aim.ts';
+
+/** The menu's generator: it draws nothing a menu could see, whatever it is asked. */
+class NoDrawsRng extends SeededRng {
+  override next(): number {
+    return 0;
+  }
+
+  override int(min: number): number {
+    return min;
+  }
+
+  override pick<T>(items: readonly T[]): T {
+    return items[0] as T;
+  }
+}
+
+const NO_DRAWS = new NoDrawsRng(0);
 
 /** `aeon` never appears in X-2; party and enemy are the only two sides in play. */
 function isFriendly(a: Side, b: Side): boolean {
@@ -52,13 +70,16 @@ export function alliesOf(units: readonly Ffx2Unit[], actor: Ffx2Unit, allowDead 
  * mode picks for us, which is what lets an AI script submit a command with an
  * empty target list. `random-enemy` / `random-ally` return the *pool* — the
  * resolver re-rolls per hit, because X-2 picks a fresh target each strike.
+ *
+ * A single-target row with no target named (a script's empty list, a placeholder) has no draw in the game, whose scripts and menu always
+ * name one; it is an engine stand-in on the engine-side stream (`BattleRng.aux`), which cannot move one of the game's.
  */
 export function resolveTargets(
   units: readonly Ffx2Unit[],
   actor: Ffx2Unit,
   ability: Pick<AbilityDef, 'targeting' | 'flags'>,
   requested: readonly CombatantId[],
-  rng: Rng,
+  rng: BattleRng,
 ): Ffx2Unit[] {
   const allowDead = ability.flags.includes('can-target-dead');
   const byId = (id: CombatantId): Ffx2Unit | undefined =>
@@ -80,18 +101,18 @@ export function resolveTargets(
     case 'single-enemy': {
       if (named.length > 0) return [named[0] as Ffx2Unit];
       const pool = opponentsOf(units, actor, allowDead);
-      return pool.length > 0 ? [rng.pick(pool)] : [];
+      return pool.length > 0 ? [rng.aux.pick(pool)] : [];
     }
     case 'single-ally': {
       if (named.length > 0) return [named[0] as Ffx2Unit];
       const pool = alliesOf(units, actor, allowDead);
-      return pool.length > 0 ? [rng.pick(pool)] : [];
+      return pool.length > 0 ? [rng.aux.pick(pool)] : [];
     }
     case 'single-any':
     default: {
       if (named.length > 0) return [named[0] as Ffx2Unit];
       const pool = units.filter((u) => isTargetable(u, allowDead));
-      return pool.length > 0 ? [rng.pick(pool)] : [];
+      return pool.length > 0 ? [rng.aux.pick(pool)] : [];
     }
   }
 }
@@ -131,15 +152,9 @@ export function validTargetIds(
     default:
       break;
   }
-  return resolveTargets(units, actor, ability, [], {
-    // A deterministic stand-in: `validTargets` must not consume the battle RNG,
-    // because the menu is rebuilt every time the player moves the cursor.
-    next: () => 0,
-    int: (min: number) => min,
-    pick: <T,>(items: readonly T[]) => items[0] as T,
-    seed: () => undefined,
-    currentSeed: 0,
-  } as Rng).map((u) => u.id);
+  // A deterministic stand-in: `validTargets` must not consume the battle RNG,
+  // because the menu is rebuilt every time the player moves the cursor.
+  return resolveTargets(units, actor, ability, [], NO_DRAWS).map((u) => u.id);
 }
 
 /**
@@ -392,8 +407,8 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
  * does not settle it. Rather than invent a damage row (hard rule 6) the turn
  * passes; only this function changes if the answer is "she swings anyway".
  */
-export function berserkCommand(actor: Ffx2Unit, ctx: MenuContext, rng: Rng): Command {
+export function berserkCommand(actor: Ffx2Unit, ctx: MenuContext, rng: BattleRng): Command {
   const attack = buildCommands(actor, ctx).find((row) => row.command.kind === 'attack');
   if (!attack || attack.validTargets.length === 0) return { kind: 'defend', targets: [] };
-  return { kind: 'attack', targets: [rng.pick(attack.validTargets)] };
+  return { kind: 'attack', targets: [rng.aux.pick(attack.validTargets)] }; // the sources do not name Berserk's stream: the engine-side one
 }

@@ -14,7 +14,7 @@
  *    the Bribe reward, the all-target halving and the damage limit, then Steal and Pilfer Gil; and the result is applied
  *    (HP with the chain counter, MP, statuses, the stolen item or gil).
  *
- * The engine keeps its one seeded stream: `adapt/draws.ts` takes one engine draw per kernel draw, in the order the
+ * The engine draws from FFX-2's own streams: `adapt/draws.ts` takes one draw of the stream the kernel names per kernel draw, in the order the
  * kernels ask. `adapt/inputs.ts` builds the kernel inputs from the units; `adapt/command.ts` the command row.
  * The ATB class is computed (its variance draw is consumed) but not applied: the ATB, charge and recovery path is
  * batch W4's.

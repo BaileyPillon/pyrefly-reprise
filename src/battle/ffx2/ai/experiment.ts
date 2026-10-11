@@ -24,6 +24,7 @@
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
+import { pickFrom, scriptMod, searchUniform } from './script-rolls.ts';
 import { EXPERIMENT_ACTIONS, UPGRADE_LEVELS, experimentScriptId, type UpgradeLevel } from '../../../data/ffx2/enemies/experiment-levels.ts';
 
 /** AI memory: where the cycle stands (the game's `turn`), and which of Special 3's three HP bands have fired (its `chestbeam`, 0 to 3). */
@@ -46,8 +47,8 @@ export const EXPERIMENT_SPECIAL_4_ROLL: readonly Move[] = ['lifeslicer', 'rocket
 export const EXPERIMENT_SPECIAL_3_BANDS: readonly number[] = [3, 2, 1];
 
 function randomGirl(ctx: AiContext): string[] {
-  const party = ctx.party();
-  return party.length > 0 ? [ctx.rng.pick(party).id] : [];
+  const girl = searchUniform(ctx.rng, ctx.party()); // `searchr_nop`: stream 4, the `(value mod n)`-th in slot order, no draw under two
+  return girl === undefined ? [] : [girl.id];
 }
 
 /** The living girl with the most HP; a tie is broken at random (the game breaks it by nearness). */
@@ -56,7 +57,7 @@ function highestHpGirl(ctx: AiContext): string[] {
   if (party.length === 0) return [];
   const top = Math.max(...party.map((g) => g.hp));
   const tied = party.filter((g) => g.hp === top);
-  return [(tied.length === 1 ? tied[0]! : ctx.rng.pick(tied)).id];
+  return [(pickFrom(ctx.rng, tied) ?? tied[0]!).id]; // stream 4, no draw with a single leader
 }
 
 function command(move: Move, special: UpgradeLevel, ctx: AiContext): Command {
@@ -95,7 +96,7 @@ function scriptFor(special: UpgradeLevel): AiScript {
       const self = ctx.self;
       if (ctx.party().length === 0) return null;
       if (special === 1) return command('attack', special, ctx);
-      if (special === 4) return command(EXPERIMENT_SPECIAL_4_ROLL[ctx.rng.int(0, 5)]!, special, ctx);
+      if (special === 4) return command(EXPERIMENT_SPECIAL_4_ROLL[scriptMod(ctx.rng, 6)]!, special, ctx) // `random() % 6`: the scripts' stream 2;
       if (special === 3) {
         const slice = special3Band(ctx);
         if (slice) return slice; // a Lifeslicer poll does not advance the cycle

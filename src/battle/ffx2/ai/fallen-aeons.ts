@@ -18,7 +18,7 @@
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
-import { pickGirl, reactionGuard, scriptModCtx } from './script-rolls.ts';
+import { pickGirl, reactionGuard, scriptModCtx, searchUniform } from './script-rolls.ts';
 
 /** AI memory key for the action counter. */
 export const AC = 'ac';
@@ -62,8 +62,8 @@ export function attackedHooks(by: number): Pick<AiScript, 'onTargeted' | 'onDama
 
 /** A random living party member, or nobody (Ixion's pick; the aeons here use {@link pickGirl}). */
 export function randomGirl(ctx: AiContext): string[] {
-  const party = ctx.party();
-  return party.length > 0 ? [ctx.rng.pick(party).id] : [];
+  const girl = searchUniform(ctx.rng, ctx.party()); // a uniform search: stream 4, no draw under two
+  return girl === undefined ? [] : [girl.id];
 }
 
 function use(id: string, targets: string[]): Command {

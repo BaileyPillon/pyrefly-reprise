@@ -13,7 +13,9 @@
  * Ammo). The rows this holds back are listed in `docs/handoff/re-parity-w3.md` for Bailey; physical rows follow the game.
  */
 
-import type { AbilityDef, FFX2CommandRecord, Rng } from '../../common/types.ts';
+import type { AbilityDef, FFX2CommandRecord } from '../../common/types.ts';
+import type { BattleRng } from '../../common/streams.ts';
+import { Ffx2ScriptStream } from './streams.ts';
 import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from '../constants.ts';
 import type { Ffx2Unit } from '../internal.ts';
 import type { HitCommand } from '../kernel/hit.ts';
@@ -296,12 +298,13 @@ function ridersWithoutSlot(ability: AbilityDef, derived: boolean): ResolvedComma
 
 /**
  * Which of a command's rows runs this cast: the index into `FFX2CommandRecord.pickOne`, drawn once (the game's script
- * picks one row of Russian Roulette's five, 1 in 5 each), or 0 with no draw for every other command.
+ * picks one row of Russian Roulette's five with `random() % 5`, `research/re-ffx2-ai-leblanc-den-ixion.md`: the low 16 bits of one
+ * draw of the scripts' stream 2), or 0 with no draw for every other command.
  */
-export function pickVariant(ability: AbilityDef, rng: Rng): number {
+export function pickVariant(ability: AbilityDef, rng: BattleRng): number {
   const rows = ability.ffx2Record?.pickOne;
   if (rows === undefined || rows.length < 2) return 0;
-  return rng.pick(rows.map((_, i) => i));
+  return rng.on(Ffx2ScriptStream.Random).int(0, 0xffff) % rows.length;
 }
 
 /**

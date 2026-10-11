@@ -22,7 +22,8 @@
  *   of the threshold the accuracy stored.
  */
 
-import type { BattleState, ItemDrop, Rng } from '../common/types.ts';
+import type { BattleState, ItemDrop } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { Emit, Ffx2Unit, ItemRegistry } from './internal.ts';
 import type { ResolvedCommand } from './adapt/command.ts';
 import { bribeRewardDraw, pilferGilDraw, stealItemDraw } from './adapt/draws.ts';
@@ -36,7 +37,7 @@ const GIL_CHANCE_BYTE = 255;
 /** What a theft needs from the engine. */
 export interface TheftEnv {
   state: BattleState | undefined;
-  rng: Rng;
+  rng: BattleRng;
   items: ItemRegistry | undefined;
   emit: Emit;
 }

@@ -21,6 +21,7 @@ import { registerAiScript } from '../../src/battle/ffx2/ai/index.ts';
 import { applyStatus } from '../../src/battle/ffx2/statuses.ts';
 import { completeCommand, kernelUnit } from '../../src/battle/ffx2/atb-engine.ts';
 import { openBattleGauges } from '../../src/battle/ffx2/atb-open.ts';
+import { SeededRng } from '../../src/battle/common/rng.ts';
 
 const noop = (costAtb: number, costCast: number): AbilityDef => ({
   id: `zz-adapt-${costAtb}-${costCast}`, name: 'adapter', game: 'ffx2', category: 'skill', mpCost: 0, power: 0, formula: 'none', damageType: 'other',
@@ -104,9 +105,15 @@ describe('the HUD bar fills against the standard wait (the Attack row at the uni
 
 describe('the opening asks the random stream for the ranges the game reduces to', () => {
   /** A stream that records every request and answers the top of the range. */
-  function recording(): { calls: string[]; rng: { int(a: number, z: number): number } } {
+  function recording(): { calls: string[]; rng: SeededRng } {
     const calls: string[] = [];
-    return { calls, rng: { int: (a, z) => (calls.push(`${a}..${z}`), z) } };
+    class Top extends SeededRng {
+      override int(a: number, z: number): number {
+        calls.push(`${a}..${z}`);
+        return z;
+      }
+    }
+    return { calls, rng: new Top(0) };
   }
   const repeat = (s: string, n: number): string[] => Array.from({ length: n }, () => s);
 
@@ -144,7 +151,7 @@ describe('the opening trim counts only the characters that are alive and in the 
       paine.stats = { ...paine.stats, agi: 255 };
       if (how === 'fallen') paine.alive = false;
       else paine.removed = true;
-      openBattleGauges(b.units, 'normal', { continuation: false, rollFirstAttack: false }, { int: () => 0 });
+      openBattleGauges(b.units, 'normal', { continuation: false, rollFirstAttack: false }, new (class extends SeededRng { override int(): number { return 0; } })(0));
       const living = b.units.filter((u) => u !== paine && u.alive);
       const starts = living.map((u) => Math.floor((32 * Math.floor((70 * 10000) / (u.stats.agi + 1))) / 128));
       const cut = Math.floor((2 * Math.min(...starts)) / 3);

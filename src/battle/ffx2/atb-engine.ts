@@ -13,6 +13,7 @@
  */
 
 import type { Command } from '../common/types.ts';
+import type { Ffx2Draw } from './kernel/rng.ts';
 import type { Ffx2Gauge, Ffx2Unit } from './internal.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
@@ -303,7 +304,7 @@ export function cancelCast(u: Ffx2Unit, units: readonly Ffx2Unit[]): void {
  * becomes the standard gauge, so a revived unit waits a whole recovery, the state goes to IDLE, and the call draws its one
  * value (from the unit's own stream) whether it uses it or not. A KO also clears the command queue.
  */
-export function resetGaugeOnKo(u: Ffx2Unit, units: readonly Ffx2Unit[], draw: () => number): void {
+export function resetGaugeOnKo(u: Ffx2Unit, units: readonly Ffx2Unit[], draw: Ffx2Draw): void {
   dropAction(u);
   u.gauge.hitReaction = 0;
   const counts = partyCountsOf(units);

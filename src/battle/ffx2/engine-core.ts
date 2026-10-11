@@ -16,7 +16,8 @@ import type {
   CombatantId,
   Command,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import type { BattleRng } from '../common/streams.ts';
+import { makeFfx2Rng } from './adapt/streams.ts';
 import { stepsToMs } from './clock.ts';
 import type {
   AbilityRegistry,
@@ -60,7 +61,7 @@ import {
 } from './active.ts';
 
 export class Ffx2EngineCore {
-  protected rng = new SeededRng(0);
+  protected rng: BattleRng = makeFfx2Rng(0);
   protected options: Ffx2EngineOptions;
   protected abilities: AbilityRegistry;
   protected dresspheres: DressphereRegistry;

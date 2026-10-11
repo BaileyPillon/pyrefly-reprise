@@ -12,6 +12,8 @@
  */
 
 import type { Rng } from '../../../src/battle/common/types.ts';
+import type { BattleRng } from '../../../src/battle/common/streams.ts';
+import { asBattleRng } from './oneStream.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import type { AiContext, EventDraft, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
@@ -20,16 +22,16 @@ import { abilityRegistryFrom } from '../../../src/battle/ffx2/index.ts';
 export const REGISTRY = abilityRegistryFrom(Object.values(data.ABILITIES));
 
 /** A stream that hands out the given values to `int`, then zeros. `pick` takes the next value modulo the list. */
-export function scriptedRng(values: readonly number[]): Rng {
+export function scriptedRng(values: readonly number[]): Rng & BattleRng {
   let i = 0;
   const next = (): number => values[i++] ?? 0;
-  return {
+  return asBattleRng({
     next: () => 0,
     int: (min: number, max: number) => Math.min(max, min + (next() % (max - min + 1))),
     pick: <T>(items: readonly T[]): T => items[next() % items.length] as T,
     seed: () => undefined,
     currentSeed: 0,
-  };
+  });
 }
 
 export interface Board {
@@ -40,7 +42,7 @@ export interface Board {
 }
 
 /** An AI context for `self` over `units` (the party is the living `side: 'party'` units, in the order given). */
-export function boardOf(self: Ffx2Unit, units: Ffx2Unit[], rng: Rng, ticks = 0): Board {
+export function boardOf(self: Ffx2Unit, units: Ffx2Unit[], rng: BattleRng, ticks = 0): Board {
   const events: EventDraft[] = [];
   const flags: Record<string, number | string | boolean> = {};
   const ctx: AiContext = {
@@ -90,12 +92,12 @@ class Stop extends Error {}
  * `mod 3` from `mod 4`, so a mutant that changes the modulus would survive (Sandy's odds did in the first mutation pass); over 120
  * classes the two give different shares. Picks branch over 6 equal classes, which is exact for 1, 2, 3 and 6 candidates.
  */
-export function exactTally(run: (rng: Rng) => string, modulus: number): Map<string, number> {
+export function exactTally(run: (rng: Rng & BattleRng) => string, modulus: number): Map<string, number> {
   const out = new Map<string, number>();
   const explore = (prefix: ReadonlyArray<{ value: number; p: number }>): void => {
     let i = 0;
     let want: 'roll' | 'pick' | null = null;
-    const rng: Rng = {
+    const rng = asBattleRng<Rng>({
       next: () => 0,
       int: (min: number, max: number) => {
         const entry = prefix[i++];
@@ -109,7 +111,7 @@ export function exactTally(run: (rng: Rng) => string, modulus: number): Map<stri
       },
       seed: () => undefined,
       currentSeed: 0,
-    };
+    });
     try {
       const key = run(rng);
       const p = prefix.reduce((w, e) => w * e.p, 1);

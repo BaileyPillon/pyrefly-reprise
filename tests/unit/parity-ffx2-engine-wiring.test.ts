@@ -135,12 +135,12 @@ describe('a command that is several game rows runs the one row the script picked
       Object.assign(sit.user, { g1: 0, g2: new Array<number>(24).fill(0), level: 99 });
       Object.assign(sit.targets[0] as object, { level: 1 });
       const { engine, oracle } = compare(sit, `roulette ${i}`);
-      expect(engine.asked[0], 'the pick is the first draw').toBe(4);
-      seenRows.add((sit.raws[0] as number) % 5);
+      expect(engine.asked[0], 'the pick is the first draw: random() on the scripts stream, 16 bits').toBe(0xffff);
+      seenRows.add(((sit.raws[0] as number) & 0xffff) % 5); // `random() % 5`: the low 16 bits of the draw, then the modulus
       // At most one of the five statuses ever lands in a cast (a union of the rows would land up to five).
       const gained = ['ko', 'curse', 'silence', 'petrify', 'poison'].filter((_, k) => ((engine.ends[0]?.g1 ?? 0) & [1, 0x100, 0x8, 0x2, 0x20][k]!) !== 0);
       expect(gained.length, `${gained.join(',')}`).toBeLessThanOrEqual(1);
-      expect(oracle.asked[0]).toBe(4);
+      expect(oracle.asked[0]).toBe(0xffff);
     }
     expect(seenRows.size).toBe(5);
   });

@@ -77,20 +77,34 @@ function stateOf(spec: SideSpec): OState {
   };
 }
 
+/**
+ * The roles of the draws a situation takes, in order, with the kernels run on `raws` (the values a real generator gave the engine) instead of
+ * the situation's scripted ones; `used` is how many of them the kernels consumed. A role is one of: row (a Roulette pick), hit, pick (a
+ * random-target pick), variance, crit, status, shatter, steal, stealSlot, pilfer, bribe, bribeSlot, rider (an engine status with no slot in the
+ * game's tables), and `ko:i` / `phase:i` for target `i` (its gauge reset after a knock-out, its Poison or Regen phase).
+ */
+export function oracleRoles(sit: Situation, raws: readonly number[]): { roles: string[]; used: number } {
+  const roles: string[] = [];
+  oracleRun(sit, { raws, roles });
+  return { roles, used: roles.length };
+}
+
 /** Play the situation through the kernels. */
-export function oracleRun(sit: Situation): Run {
+export function oracleRun(sit: Situation, opts: { raws?: readonly number[]; roles?: string[] } = {}): Run {
   const asked: number[] = [];
   const tokens: string[] = [];
   const flags: Record<string, number> = {};
   let cursor = 0;
-  const raw = (max: number): number => {
+  const raw = (max: number, role = ''): number => {
     asked.push(max);
-    return sit.raws[cursor++ % sit.raws.length] as number;
+    opts.roles?.push(role);
+    return opts.raws !== undefined ? (opts.raws[cursor++] ?? 0) : (sit.raws[cursor++ % sit.raws.length] as number);
   };
   // A command that is several game rows of which the script picks one (Russian Roulette): one draw, before anything else.
   let row = sit.def.ffx2Record!;
   const variants = row.pickOne;
-  if (variants !== undefined && variants.length > 1) row = variants[raw(variants.length - 1) % variants.length] as typeof row;
+  // The script's `random() % n`: the low 16 bits of one draw of stream 2, then the modulus (`adapt/command.ts#pickVariant`).
+  if (variants !== undefined && variants.length > 1) row = variants[(raw(0xffff, 'row') & 0xffff) % variants.length] as typeof row;
 
   // The row, with AGENTS.md rule 5 (magic never rolls) applied: a magical row the game rolls is held at formula 0.
   let misc = row.flagsMisc;
@@ -132,7 +146,7 @@ export function oracleRun(sit: Situation): Run {
         resistPetrify: t.resist1[1] as number, resistSextic: sit.targetSide === 'enemy' ? t.zantetsu : 0,
       };
     }),
-    (stream) => (stream === 5 ? raw(live.length - 1) : raw(hitMax)),
+    (stream) => (stream === 5 ? raw(live.length - 1, 'pick') : raw(hitMax, 'hit')),
   );
   determined.targets.forEach((r, i) => {
     if (r.bribe) {
@@ -195,12 +209,12 @@ export function oracleRun(sit: Situation): Run {
       records: { attackerF40: 0, attackerF44: 0, targetF44: 0 },
     };
     const classes = computeClassDamage(input, {
-      draw: () => raw(31),
+      draw: () => raw(31, 'variance'),
       rollCrit: () =>
         rollCritical(
           { canCrit: true, fixedChance: (row.flagsDamage & 8) !== 0, critByte: row.critByte, attackerSlot: userId, attackerLuck: user.luck, attackerLuckStage: user.g2[STAGE.luck] as number, targetLuck: t.luck, targetLuckStage: st.g2[STAGE.luck] as number, alwaysCritical: (user.g1 & 0x8000) !== 0 },
           0,
-          () => raw(99),
+          () => raw(99, 'crit'),
         ).critical,
     });
     if (!classes.gate) {
@@ -219,11 +233,11 @@ export function oracleRun(sit: Situation): Run {
         { id: tid, level: t.level, status1: st.g1, resist1: t.resist1, resist2: t.resist2, protectMask: 0, actionState: 0, activeBytes: st.g2, layerB: ZEROS, layerD: ZEROS },
         { chance1, chance2, amount2: table(row.statusTime), cleanse: (row.flagsDamage & 0x20) !== 0, usesWeapon: (misc & 0x10000) !== 0 },
         initialStatusResult({ appliedSet: st.g1, counters: st.g2, secondarySet: 0, secondaryBytes: ZEROS }, (misc & 0x800) !== 0, false),
-        () => raw(100),
+        () => raw(100, 'status'),
       );
       result = r.result; log = r.log; zeroAtb = r.zeroAtbDelta;
     }
-    const shatter = rollShatter((st.g1 & 2) !== 0, row.shatter, userId, () => raw(100));
+    const shatter = rollShatter((st.g1 & 2) !== 0, row.shatter, userId, () => raw(100, 'shatter'));
     if (shatter.shattered) {
       const base = result ?? initialStatusResult({ appliedSet: st.g1, counters: st.g2, secondarySet: 0, secondaryBytes: ZEROS }, false, false);
       result = { ...base, statusSet: (base.statusSet | SHATTER_SET_BITS) >>> 0 };
@@ -234,7 +248,7 @@ export function oracleRun(sit: Situation): Run {
       let tenStream = 0; // stream 10 is asked twice: the factor (% 11), then the dither (& 1)
       const reward = bribeReward(
         { bribeCommand: true, slots: [{ item: have > 0 ? 1 : 0, quantity: have }, { item: 0, quantity: 0 }], threshold: st.threshold },
-        (s) => raw(s === 11 ? 255 : tenStream++ === 0 ? 10 : 1),
+        (s) => (s === 11 ? raw(255, 'bribeSlot') : raw(tenStream++ === 0 ? 10 : 1, 'bribe')),
       );
       if (reward.itemId !== 0 && reward.quantity > 0) {
         const key = `inventory:${BRIBE_ITEM}`;
@@ -276,14 +290,14 @@ export function oracleRun(sit: Situation): Run {
     for (const app of sit.def.statusEffects) {
       if (app.status === 'delay-effect' || app.status === 'action-cancel') continue;
       const known = G1.includes(app.status) || G2.some((ids2) => ids2.includes(app.status));
-      if (!known && Math.round(app.chance) > 0) raw(100);
+      if (!known && Math.round(app.chance) > 0) raw(100, 'rider');
     }
     if (wasDead && !st.dead && st.hp > 0) { tokens.push(`revive:${i}`); st.g1 &= ~1; }
     if (any && row.power === 0 && log.some((l) => l.immune) && !log.some((l) => l.applied || l.removed)) tokens.push(`miss:${i}:immune`);
     if ((misc & 0x200) !== 0) {
       const r = stealItem(
         { stealCommand: true, commandId: row.id, chance: st.stolenFrom || hold.byte === 0 ? 0 : hold.byte, commonItem: hold.byte > 0 ? 1 : 0, commonQuantity: hold.byte > 0 ? Math.max(1, hold.commonCount) : 0, rareItem: hold.byte > 0 && hold.rareCount > 0 ? 1 : 0, rareQuantity: hold.byte > 0 ? Math.max(1, hold.rareCount) : 0 },
-        (s) => raw(s === 10 ? 254 : 255),
+        (s) => (s === 10 ? raw(254, 'steal') : raw(255, 'stealSlot')),
       );
       if (r.success && hold.byte > 0) {
         st.stolenFrom = true;
@@ -292,7 +306,7 @@ export function oracleRun(sit: Situation): Run {
       }
     }
     if ((row.flagsDamage & 0x100) !== 0) {
-      const r = stealGil({ stealsGil: true, chance: st.pilfered ? 0 : 255, gil: hold.gil }, (() => { let k = 0; return () => raw(k++ === 0 ? 254 : 100); })());
+      const r = stealGil({ stealsGil: true, chance: st.pilfered ? 0 : 255, gil: hold.gil }, (() => { let k = 0; return () => raw(k++ === 0 ? 254 : 100, 'pilfer'); })());
       if (r.success) { st.pilfered = true; flags['stolenGil'] = (flags['stolenGil'] ?? 0) + r.amount; }
     }
   }
@@ -301,7 +315,7 @@ export function oracleRun(sit: Situation): Run {
   function kill(i: number): void {
     const st = states[i] as OState;
     // Re-parity W4: the knock-out routine (`pp_ko_resolve`) re-initialises the gauge first, and `MsChrAtbInit` draws once (% 64).
-    raw(63);
+    raw(63, `ko:${i}`);
     st.dead = true;
     st.hp = 0;
     st.g1 |= 1; // the KO status
@@ -323,8 +337,8 @@ export function oracleRun(sit: Situation): Run {
     if ((next & 1) !== 0 && (prevG1 & 1) === 0 && !st.dead) kill(i);
     // Re-parity W4 (`MsSetStatus`, exe 0x00636c70): a Poison (group 1 bit 5) or Regen (group 2 slot 3) that has just appeared starts its
     // accumulator at a random phase, one draw % (16000 / 4 + 1), group 1 before group 2.
-    if ((next & 0x20) !== 0 && (prevG1 & 0x20) === 0) raw(4000);
-    if (((st.g2[3] as number) << 24 >> 24) > 0 && prevRegen === 0) raw(4000);
+    if ((next & 0x20) !== 0 && (prevG1 & 0x20) === 0) raw(4000, `phase:${i}`);
+    if (((st.g2[3] as number) << 24 >> 24) > 0 && prevRegen === 0) raw(4000, `phase:${i}`);
     if ((next & 0x400) !== 0 && (prevG1 & 0x400) === 0) st.removed = true;
     // the engine's own rule, which the game's code does not have (`statuses.ts applyStatus`, left for W4): Stop wipes Sleep, Confusion and Berserk
     if (prevStop === 0 && (st.g2[6] as number) !== 0) st.g1 &= ~(0x4 | 0x40 | 0x80);

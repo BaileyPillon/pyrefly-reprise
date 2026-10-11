@@ -3,13 +3,13 @@
  *
  * `Ffx2EngineOptions.rollFirstAttack` rolls the result at the start of a `'normal'` battle from the two sides' average Agility with two
  * draws of 0..255. The generated battles of `parity-ffx2-engine-atb.test.ts` roll in only a few dozen scenarios and a wrong range can
- * slip through them (a different modulus changes the draw but rarely the result), so this test replays the engine's own seeded stream by
+ * slip through them (a different modulus changes the draw but rarely the result), so this test replays the engine's own seeded streams by
  * hand, takes the two draws as the game does (`draw & 255`), asks the kernel for the result, and requires the engine's opening to agree on
  * every seed: a preemptive strike leaves the girls at exactly 0 (they are ready at once), no other result does. **Game case: FFX-2 only.**
  */
 
 import { describe, expect, it } from 'vitest';
-import { SeededRng } from '../../src/battle/common/rng.ts';
+import { makeFfx2Rng } from '../../src/battle/ffx2/adapt/streams.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { enemy, group, setup } from '../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
@@ -31,12 +31,13 @@ describe('the rolled preemptive / ambush result', () => {
       const girls = units.filter((u) => u.side === 'party');
       const agi = (u: Ffx2Unit): number => Math.max(0, Math.min(255, Math.round(u.stats.agi)));
 
-      // The engine's stream: one 0..63 draw for every unit at the start (the party first), then the two 0..255 draws of the roll.
-      const rng = new SeededRng(seed);
-      for (let i = 0; i < units.length; i++) rng.int(0, 63);
+      // The engine's streams: one 0..63 draw for every unit at the start, each on its own purpose-0 stream (a party slot + 20, a monster slot + 13),
+      // then the two 0..255 draws of the roll on the first-strike stream, stream 1.
+      const rng = makeFfx2Rng(seed);
+      for (const u of units) rng.on(u.side === 'party' ? 20 + u.gauge.slot : 13 + u.gauge.slot).int(0, 63);
       const first = firstAttackRoll(
         { preset: 0, firstStrikeCount: 0, partyAgi: averageAgi(girls.map(agi)), monsterAgi: averageAgi(units.filter((u) => u.side === 'enemy').map(agi)) },
-        () => rng.int(0, 255),
+        () => rng.on(1).int(0, 255),
       );
       // A preemptive strike resets every girl to exactly 0 (kind 0, `r = 0` for a girl) and the trim then takes nothing off; nothing else does that.
       const girlsReady = girls.every((g) => g.atb.recovery === 0);

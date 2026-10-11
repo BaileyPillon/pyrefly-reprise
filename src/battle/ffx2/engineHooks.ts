@@ -5,7 +5,8 @@
  * `Rng`. Byte-identical to the inline versions (`ffx2-atb-golden.test.ts`).
  */
 
-import type { BattleState, CombatantId, Command, Rng } from '../common/types.ts';
+import type { BattleState, CombatantId, Command } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './targeting.ts';
@@ -18,7 +19,7 @@ type Emit = (draft: EventDraft) => void;
 export function aiContextFor(
   self: Ffx2Unit,
   units: Ffx2Unit[],
-  rng: Rng,
+  rng: BattleRng,
   state: BattleState,
   abilities: AbilityRegistry,
   emit: Emit,
@@ -52,7 +53,7 @@ export function aiContextFor(
  * ordinary action banner and message path. FFX-2 only: FFX's Berserk is its own
  * status on its own engine.
  */
-export function berserkTurnCommand(actor: Ffx2Unit, menu: MenuContext, rng: Rng, emit: Emit): Command {
+export function berserkTurnCommand(actor: Ffx2Unit, menu: MenuContext, rng: BattleRng, emit: Emit): Command {
   const command = berserkCommand(actor, menu, rng);
   if (command.kind === 'defend') {
     emit({ type: 'action-start', actorId: actor.id, command, abilityName: 'Berserk', targets: [] });

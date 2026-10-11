@@ -21,6 +21,8 @@
 
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleState, Command, Rng } from '../../src/battle/common/types.ts';
+import type { BattleRng } from '../../src/battle/common/streams.ts';
+import { asBattleRng } from './helpers/oneStream.ts';
 import {
   FFX2Engine,
   abilityRegistryFrom,
@@ -73,18 +75,18 @@ const messages = (events: BattleEvent[]): string[] =>
   events.flatMap((e) => (e.type === 'message' ? [e.text] : []));
 
 /** An Rng that answers `int` from a script, so each branch of the roll is pinned. */
-function scripted(ints: number[]): Rng {
+function scripted(ints: number[]): Rng & BattleRng {
   const queue = [...ints];
-  return {
+  return asBattleRng<Rng>({
     next: () => 0,
     int: () => { const v = queue.shift(); if (v === undefined) throw new Error('unexpected draw'); return v; },
     pick: (xs) => xs[0]!,
     seed: () => {},
     currentSeed: 0,
-  };
+  });
 }
 
-function theftFixture(rng: Rng) {
+function theftFixture(rng: BattleRng) {
   const engine = engineFor(LEBLANC_ACT_III, 1);
   const units = (engine as unknown as { units: Ffx2Unit[] }).units;
   const state: BattleState = engine.state();

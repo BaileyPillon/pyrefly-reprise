@@ -27,7 +27,7 @@ import {
   garmentGridRegistryFrom,
   itemRegistryFrom,
 } from '../../src/battle/ffx2/index.ts';
-import { SeededRng } from '../../src/battle/common/rng.ts';
+import type { BattleRng } from '../../src/battle/common/streams.ts';
 import { predictFFX2EnemyIntent } from '../../src/battle/ffx2/intent.ts';
 import * as ffx2Data from '../../src/data/ffx2/index.ts';
 import { farplaneBuild } from '../../src/data/ffx2/builds/farplane.ts';
@@ -108,8 +108,8 @@ function committedSeed(): number {
 function predictWithoutCast(engine: FFX2Engine) {
   const state = structuredClone(engine.state());
   (state.combatants['shuyin'] as unknown as { atb: { charging: unknown } }).atb.charging = null;
-  const rng = new SeededRng(state.seed);
-  rng.restoreState((engine as unknown as { rng: SeededRng }).rng?.saveState?.() ?? state.seed);
+  const live = (engine as unknown as { rng: BattleRng }).rng;
+  const rng = live.fork(state.seed, live.saveState());
   return predictFFX2EnemyIntent({ state, rng, abilities: options().abilities, items: options().items, snapshot: engine.gaugeSnapshot() }, 'shuyin');
 }
 

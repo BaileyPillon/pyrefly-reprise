@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { SeededRng } from '../../src/battle/common/rng.ts';
+import { makeFfx2Rng } from '../../src/battle/ffx2/adapt/streams.ts';
 import type { AbilityDef, Command, StatusId } from '../../src/battle/common/types.ts';
 import { FFX2Engine, STEPS_PER_SECOND, STEP_MS, baseRequired, isReady } from '../../src/battle/ffx2/index.ts';
 import { enemy, group, setup } from '../../src/battle/ffx2/fixtures.ts';
@@ -234,10 +234,11 @@ describe('what a command leaves behind: recovery = cost_atb x 10000 / (AGI + 1),
 describe('the opening: ((draw & 63) + 32) x full / 128, then two thirds of the smallest wait off everyone', () => {
   it('matches the arithmetic written out here, with the engine\'s own seeded draws, party first', () => {
     const b = battle({ condition: 'normal', seed: 7 });
-    const rng = new SeededRng(7);
+    const rng = makeFfx2Rng(7);
     const order = ['yuna', 'rikku', 'paine', 'm0'];
+    const stream = [20, 21, 22, 28]; // each unit draws on its own purpose-0 stream: a party slot + 20, the first monster slot (15) + 13
     const full = order.map((id) => Math.floor((70 * 10000) / (b.u(id).stats.agi + 1)));
-    const start = order.map((_, i) => Math.floor((((rng.int(0, 63) & 63) + 32) * (full[i] as number)) / 128));
+    const start = order.map((_, i) => Math.floor((((rng.on(stream[i] as number).int(0, 63) & 63) + 32) * (full[i] as number)) / 128));
     const cut = Math.floor((2 * Math.min(...start)) / 3);
     order.forEach((id, i) => {
       expect(b.u(id).atb.recovery, id).toBe((start[i] as number) - cut);
@@ -247,9 +248,10 @@ describe('the opening: ((draw & 63) + 32) x full / 128, then two thirds of the s
 
   it('a preemptive strike: the girls start at 0 (ready in the first step), a monster at (113 + (draw & 15)) x full / 128', () => {
     const b = battle({ condition: 'preemptive', seed: 3 });
-    const rng = new SeededRng(3);
-    for (let i = 0; i < 4; i++) rng.int(0, 63); // the four opening draws
-    const draws = Array.from({ length: 31 }, () => rng.int(0, 15)); // the 31 resets, one a slot
+    const rng = makeFfx2Rng(3);
+    for (const s of [20, 21, 22, 28]) rng.on(s).int(0, 63); // the four opening draws, each on its own stream
+    const slotStream = (slot: number): number => (slot < 15 ? slot + 20 : slot + 13);
+    const draws = Array.from({ length: 31 }, (_, slot) => rng.on(slotStream(slot)).int(0, 15)); // the 31 resets, one a slot, each on its own stream
     expect(b.u('yuna').atb.recovery).toBe(0);
     expect(b.u('rikku').atb.recovery).toBe(0);
     expect(b.u('paine').atb.recovery).toBe(0);
@@ -386,8 +388,8 @@ describe('Delay and the knock-out', () => {
     yuna.atb.recovery = -3;
     yuna.gauge.hitReaction = 9;
     const units = Object.values(b.engine.state().combatants) as Ffx2Unit[];
-    const rng = new SeededRng(99);
-    const twin = new SeededRng(99);
+    const rng = makeFfx2Rng(99);
+    const twin = makeFfx2Rng(99);
     // A hit that takes all her HP: the engine's own KO path.
     applyHpDelta({ units, abilities: registry, rng, emit: () => undefined, breaksDamageLimit: () => false }, yuna, yuna.hp);
     expect(yuna.alive).toBe(false);
@@ -396,7 +398,8 @@ describe('Delay and the knock-out', () => {
     expect(yuna.gauge.state).toBe(0);
     expect(yuna.atb.recovery).toBe(Math.floor((70 * 10000) / (yuna.stats.agi + 1)));
     expect(yuna.gauge.recoveryMax).toBe(yuna.atb.recovery);
-    twin.int(0, 63); // the knock-out routine's single draw
-    expect(rng.int(0, 63)).toBe(twin.int(0, 63));
+    twin.on(20).int(0, 63); // the knock-out routine's single draw, on Yuna's own purpose-0 stream (party slot 0 + 20)
+    expect(rng.on(20).int(0, 63)).toBe(twin.on(20).int(0, 63));
+    for (let s = 0; s < 68; s++) if (s !== 20) expect(rng.states[s], `stream ${s}`).toBe(twin.states[s]); // and no other stream moved
   });
 });

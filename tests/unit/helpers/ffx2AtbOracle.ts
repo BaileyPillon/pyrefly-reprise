@@ -9,13 +9,13 @@
  * `logic-step.ts`, `status-clock.ts`, `lookahead.ts` or `gauges.ts`, so a wrong translation of an engine fact into a kernel
  * input shows up as a difference. The engine side is `ffx2AtbRig.ts`.
  *
- * Draws: the oracle draws from a `SeededRng` with the engine's seed, in the order the game asks: one value per character at
+ * Draws: the oracle draws from the game's streams (`makeFfx2Rng`) with the engine's seed, in the order the game asks: one value per character at
  * the battle's start (the party first), two for a rolled preemptive / ambush result, 31 for its resets, one per knock-out.
  *
  * **Game case: FFX-2 only.**
  */
 
-import { SeededRng } from '../../../src/battle/common/rng.ts';
+import { makeFfx2Rng } from '../../../src/battle/ffx2/adapt/streams.ts';
 import {
   FFX2_CLOCK_OPEN,
   FFX2_ATB_SPEED_TABLE,
@@ -89,7 +89,7 @@ const throwDraw = (): number => {
 };
 
 export function oracleRun(sc: Scenario, world: ScenarioWorld): Trace {
-  const rng = new SeededRng(sc.seed);
+  const rng = makeFfx2Rng(sc.seed); // the game's own streams: each draw is on the stream the kernel names
   const base = FFX2_ATB_SPEED_TABLE[{ slow: 0, normal: 1, fast: 2 }[sc.speed]] as number;
   const units: OUnit[] = world.units
     .map(
@@ -118,7 +118,7 @@ export function oracleRun(sc: Scenario, world: ScenarioWorld): Trace {
         chrId: u.slot, agi: u.agi, costAtb: 70, carry: 0, randomStart: sc.condition !== 'scripted', deadOrStone: false, lead: false,
         isMonster: u.side === 'enemy', aided: false, thinkingBaseArg: 0, thinking: { baseBefore: 0, partyCount: counts.count, partyStanding: counts.standing },
       },
-      () => rng.int(0, 63),
+      (stream) => rng.on(stream).int(0, 63),
     );
     u.recovery = r.start;
     u.recoveryMax = r.full;
@@ -129,14 +129,14 @@ export function oracleRun(sc: Scenario, world: ScenarioWorld): Trace {
     if (preset !== 0 || sc.roll) {
       const roll = firstAttackRoll(
         { preset, firstStrikeCount: 0, partyAgi: averageAgi(girls.map((g) => g.agi)), monsterAgi: averageAgi(monsters.map((m) => m.agi)) },
-        () => rng.int(0, 255),
+        (stream) => rng.on(stream).int(0, 255),
       );
       if (roll.result === 1 || roll.result === 2) {
         const chrs: Ffx2FirstAttackChr[] = Array.from({ length: 31 }, (_, id) => {
           const u = units.find((x) => x.slot === id);
           return u === undefined ? { full: 0, lead: false, deadOrStone: false, recovery: 0 } : { full: u.recoveryMax, lead: false, deadOrStone: false, recovery: u.recovery };
         });
-        const next = applyFirstAttack(roll.result, chrs, () => rng.int(0, 15));
+        const next = applyFirstAttack(roll.result, chrs, (stream) => rng.on(stream).int(0, 15));
         for (const u of units) u.recovery = next[u.slot] as number;
       }
     }
@@ -197,7 +197,7 @@ export function oracleRun(sc: Scenario, world: ScenarioWorld): Trace {
         chrId: u.slot, agi: u.agi, costAtb: 70, carry: u.carry, randomStart: false, deadOrStone: false, lead: false, isMonster: u.side === 'enemy', aided: false,
         thinkingBaseArg: -1, thinking: { baseBefore: 0, partyCount: counts.count, partyStanding: counts.standing },
       },
-      () => rng.int(0, 63),
+      (stream) => rng.on(stream).int(0, 63),
     );
     u.recovery = r.start;
     u.recoveryMax = r.full;

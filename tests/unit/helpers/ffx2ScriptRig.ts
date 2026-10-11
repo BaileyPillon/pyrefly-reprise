@@ -8,13 +8,15 @@
  */
 
 import type { Command, Rng } from '../../../src/battle/common/types.ts';
+import type { BattleRng } from '../../../src/battle/common/streams.ts';
+import { asBattleRng } from './oneStream.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import type { AiContext, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
 import { defaultAbilities } from '../../../src/battle/ffx2/abilities.ts';
 
 /** An `Rng` that returns queued values and records the `[min, max]` of every call. */
-export interface ScriptedRng extends Rng {
+export interface ScriptedRng extends Rng, BattleRng {
   /** Every `int` call so far, as `[min, max]`. */
   readonly calls: Array<[number, number]>;
   /** Values still queued. */
@@ -31,7 +33,7 @@ export function scripted(values: number[] = []): ScriptedRng {
   const rng: ScriptedRng = {
     calls,
     left: () => queue.length,
-    push: (...more) => {
+    push: (...more: number[]) => {
       queue.push(...more);
     },
     drain: () => {
@@ -50,8 +52,8 @@ export function scripted(values: number[] = []): ScriptedRng {
     },
     seed: () => undefined,
     currentSeed: 0,
-  };
-  return rng;
+  } as unknown as ScriptedRng;
+  return asBattleRng(rng);
 }
 
 /** A drawing-free sentinel: the bench uses it when a poll must make no draw at all. */

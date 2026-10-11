@@ -13,11 +13,10 @@
  * | `searchr_nop(group, stat, word)` | the `(value mod n)`-th candidate in slot order; **no draw with fewer than 2 candidates** | {@link searchUniform}, {@link pickUniform}, {@link pickFrom} |
  * | `searchr(group, stat, word)` | `r = value mod W`, `W` the sum of the candidates' weights; the first candidate whose running sum reaches `r` (`r <= sum`, so the first slot owns one extra value) | {@link searchNear} |
  *
- * The game draws them from two global streams (2 for `random()`, 4 for every search); this engine has one seeded stream and
- * feeds all of them from it (adopting each game's own streams is a separate decision of Bailey's, plan P3). The search's raw
- * value is a 31-bit draw (lanes a and b): the note does not record its width, and 31 bits keep the modulo bias of a three-way pick below one
- * in 700 million. Lane c's {@link pickFrom} draws `int(0, n - 1)` instead (the same odds; the one difference between the lanes' search shapes, left
- * as each lane tested it until the RNG batch gives them one stream and one shape).
+ * The game draws them from two global streams, 2 for `random()` and 4 for every search, and so does the engine now
+ * (`adapt/streams.ts`; Bailey 2026-10-09 "Adopt game streams"). The search's raw value is the generator's 31-bit draw; a pick is that
+ * value modulo the candidate count, along the candidates in slot order. The lanes wrote it in two shapes, `int(0, 2^31 - 1) % n` (lanes a and b)
+ * and `int(0, n - 1)` (lane c's {@link pickFrom}); on a stream of the game's generator the two are the same number.
  *
  * The weight of a candidate is `1 + floor(32768 / floor(cost + 1))`, `cost = (1 + d) x (1 + 2a)`, `d` the distance on the
  * ground plane between boss and girl and `a` the angle (0 to pi) between the boss's facing and the direction to her. It is
@@ -27,7 +26,9 @@
  * weights off and leaves the search uniform.
  */
 
-import type { AbilityDef, Rng, StatusId } from '../../common/types.ts';
+import type { AbilityDef, StatusId } from '../../common/types.ts';
+import type { BattleRng } from '../../common/streams.ts';
+import { Ffx2ScriptStream } from '../adapt/streams.ts';
 import { NEAR_WEIGHTED_TARGET_SEARCH } from '../constants.ts';
 import type { AiContext, Ffx2Unit } from '../internal.ts';
 import { resolveCommand } from '../adapt/command.ts';
@@ -40,12 +41,12 @@ import { resolveCommand } from '../adapt/command.ts';
 const SEARCH_DRAW_MAX = 0x7fffffff;
 
 /** `random()`: one draw of the shared stream, 0 to 0xFFFF. */
-export function scriptValue(rng: Rng): number {
-  return rng.int(0, 0xffff);
+export function scriptValue(rng: BattleRng): number {
+  return rng.on(Ffx2ScriptStream.Random).int(0, 0xffff);
 }
 
 /** `random() % n`, one draw. */
-export function scriptMod(rng: Rng, n: number): number {
+export function scriptMod(rng: BattleRng, n: number): number {
   return scriptValue(rng) % n;
 }
 
@@ -63,15 +64,15 @@ export function inSlotOrder<T extends Ffx2Unit>(list: readonly T[]): T[] {
 }
 
 /** A search whose result the script throws away still draws when it had two or more candidates (the Tail's sweeps). */
-export function spendSearchDraw(rng: Rng, candidateCount: number): void {
-  if (candidateCount >= 2) rng.int(0, SEARCH_DRAW_MAX);
+export function spendSearchDraw(rng: BattleRng, candidateCount: number): void {
+  if (candidateCount >= 2) rng.on(Ffx2ScriptStream.Search).int(0, SEARCH_DRAW_MAX);
 }
 
 /** `searchr_nop`: a uniform pick; `undefined` for no candidate (the game's "nothing"), no draw below two. */
-export function searchUniform<T extends Ffx2Unit>(rng: Rng, candidates: readonly T[]): T | undefined {
+export function searchUniform<T extends Ffx2Unit>(rng: BattleRng, candidates: readonly T[]): T | undefined {
   const ordered = inSlotOrder(candidates);
   if (ordered.length < 2) return ordered[0];
-  return ordered[rng.int(0, SEARCH_DRAW_MAX) % ordered.length];
+  return ordered[rng.on(Ffx2ScriptStream.Search).int(0, SEARCH_DRAW_MAX) % ordered.length];
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -146,10 +147,10 @@ export function pickIndexByWeights(raw: number, weights: readonly number[]): num
  * `searchr`: the near-weighted pick among `candidates` (already filtered to the living, targetable girls the script's test
  * keeps). `undefined` for no candidate, one candidate without a draw. With the weights off, a uniform pick.
  */
-export function searchNear<T extends Ffx2Unit>(rng: Rng, candidates: readonly T[], scene: Scene): T | undefined {
+export function searchNear<T extends Ffx2Unit>(rng: BattleRng, candidates: readonly T[], scene: Scene): T | undefined {
   const ordered = inSlotOrder(candidates);
   if (ordered.length < 2) return ordered[0];
-  const raw = rng.int(0, SEARCH_DRAW_MAX);
+  const raw = rng.on(Ffx2ScriptStream.Search).int(0, SEARCH_DRAW_MAX);
   if (!NEAR_WEIGHTED_TARGET_SEARCH) return ordered[raw % ordered.length];
   return ordered[pickIndexByWeights(raw, sceneWeights(scene, ordered.map((u) => u.slot)))];
 }
@@ -181,7 +182,7 @@ export function girlsInSlotOrder(ctx: AiContext): Ffx2Unit[] {
 export function pickUniform<T>(ctx: AiContext, candidates: readonly T[]): T | undefined {
   if (candidates.length === 0) return undefined;
   if (candidates.length === 1) return candidates[0];
-  return candidates[ctx.rng.int(0, SEARCH_DRAW_MAX) % candidates.length];
+  return candidates[ctx.rng.on(Ffx2ScriptStream.Search).int(0, SEARCH_DRAW_MAX) % candidates.length];
 }
 
 /** A uniform living girl as a target list: one id, or no target. */
@@ -233,28 +234,28 @@ export function girls(ctx: AiContext): Ffx2Unit[] {
 }
 
 /** A search over `pool`: the `(value mod n)`-th candidate; nothing is drawn for fewer than two. */
-export function pickFrom<T>(rng: Rng, pool: readonly T[]): T | undefined {
+export function pickFrom<T>(rng: BattleRng, pool: readonly T[]): T | undefined {
   if (pool.length === 0) return undefined;
   if (pool.length === 1) return pool[0];
-  return pool[rng.int(0, pool.length - 1)];
+  return pool[rng.on(Ffx2ScriptStream.Search).int(0, pool.length - 1)];
 }
 
 /** The id of a search over `pool` as a one-target list, or an empty list ("nothing", value 255). */
-export function pickId(rng: Rng, pool: readonly Ffx2Unit[]): string[] {
+export function pickId(rng: BattleRng, pool: readonly Ffx2Unit[]): string[] {
   const unit = pickFrom(rng, pool);
   return unit === undefined ? [] : [unit.id];
 }
 
 /** The first search of a pair: made, and its pick thrown away. */
-export function discardedPick(rng: Rng, candidates: number): void {
-  if (candidates >= 2) rng.int(0, candidates - 1);
+export function discardedPick(rng: BattleRng, candidates: number): void {
+  if (candidates >= 2) rng.on(Ffx2ScriptStream.Search).int(0, candidates - 1);
 }
 
 /**
  * The pair for "the girl with the highest or lowest `key`": the first search over `pool` is made and discarded,
  * then every candidate tied for the extreme is kept and one is picked.
  */
-export function extremePick(rng: Rng, pool: readonly Ffx2Unit[], key: (unit: Ffx2Unit) => number, extreme: 'max' | 'min'): Ffx2Unit | undefined {
+export function extremePick(rng: BattleRng, pool: readonly Ffx2Unit[], key: (unit: Ffx2Unit) => number, extreme: 'max' | 'min'): Ffx2Unit | undefined {
   discardedPick(rng, pool.length);
   if (pool.length === 0) return undefined;
   const values = pool.map(key);
@@ -263,7 +264,7 @@ export function extremePick(rng: Rng, pool: readonly Ffx2Unit[], key: (unit: Ffx
 }
 
 /** `extremePick` as a one-target list. */
-export function extremeId(rng: Rng, pool: readonly Ffx2Unit[], key: (unit: Ffx2Unit) => number, extreme: 'max' | 'min'): string[] {
+export function extremeId(rng: BattleRng, pool: readonly Ffx2Unit[], key: (unit: Ffx2Unit) => number, extreme: 'max' | 'min'): string[] {
   const unit = extremePick(rng, pool, key, extreme);
   return unit === undefined ? [] : [unit.id];
 }

@@ -38,7 +38,8 @@ import type {
   Decision,
   FFX2BattleEngine,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import type { RngSnapshot } from '../common/streams.ts';
+import { makeFfx2Rng } from './adapt/streams.ts';
 import type { Ffx2EngineOptions } from './internal.ts';
 import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
 import { isActionLocked } from './chain.ts';
@@ -66,7 +67,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
   // -- BattleEngine ---------------------------------------------------------
 
   init(setup: BattleSetup): void {
-    this.rng = new SeededRng(setup.seed);
+    this.rng = makeFfx2Rng(setup.seed);
     const built = buildState(setup, this.options, this.rng);
     this.battleState = built.state;
     this.units = built.units;
@@ -246,11 +247,11 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
    * One `structuredClone` of the whole mutable bundle (state, units, grid nodes, pending drafts,
    * the held command), so the aliasing between the units and the state survives; the registries
    * and options are shared read-only; the event log is copied shallowly (events are immutable
-   * JSON). The copy draws from **its own** `SeededRng(seed)`: nothing it does reaches this
+   * JSON). The copy draws from **its own** generator seeded `seed`: nothing it does reaches this
    * engine's state or random stream, and nothing in a battle calls it. `rngState` (tests only)
    * starts the copy's stream where this one stands, which is how its fidelity is proved.
    */
-  fork(seed: number, rngState?: number): FFX2Engine {
+  fork(seed: number, rngState?: RngSnapshot): FFX2Engine {
     const f = new FFX2Engine(this.options);
     const { log, ...rest } = this.battleState;
     const b = structuredClone({
@@ -268,8 +269,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     f.abilities = this.abilities;
     f.dresspheres = this.dresspheres;
     f.grids = this.grids;
-    f.rng = new SeededRng(seed);
-    if (rngState !== undefined) f.rng.restoreState(rngState);
+    f.rng = this.rng.fork(seed, rngState);
     [f.elapsedMs, f.inputOwner, f.hitClosed, f.carriedSteps, f.stepCredit] = [this.elapsedMs, this.inputOwner, this.hitClosed, this.carriedSteps, this.stepCredit];
     [f.speed, f.mode, f.split, f.level] = [this.speed, this.mode, this.split, this.level];
     return f;

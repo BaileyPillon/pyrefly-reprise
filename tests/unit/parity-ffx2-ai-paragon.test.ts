@@ -13,7 +13,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef, AbilityCommand, Command, Rng } from '../../src/battle/common/types.ts';
+import type { AbilityDef, AbilityCommand, Command } from '../../src/battle/common/types.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
 import { BIG_BANG_FLAG, PARAGON_OPTIONS, paragonScript } from '../../src/battle/ffx2/ai/paragon.ts';
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
@@ -182,7 +182,7 @@ describe('rows left as they are, and why', () => {
   it('the pick helper is the one the other scripts use: draws are 16-bit rolls and 31-bit picks, nothing else', () => {
     const p = paragonUnit();
     const seen: number[] = [];
-    const rng: Rng = scriptedRng([2, 1]);
+    const rng = scriptedRng([2, 1]);
     const real = rng.int;
     rng.int = (a: number, b: number) => (seen.push(b), real(a, b));
     paragonScript.decide(boardOf(p, [p, ...girls()], rng).ctx);

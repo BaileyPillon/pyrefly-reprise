@@ -12,7 +12,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef, AbilityCommand, Command, Rng } from '../../src/battle/common/types.ts';
+import type { AbilityDef, AbilityCommand, Command } from '../../src/battle/common/types.ts';
+import type { BattleRng } from '../../src/battle/common/streams.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
 import { AC } from '../../src/battle/ffx2/ai/fallen-aeons.ts';
 import { DELTA_DISARMED_FLAG, FLAG, RESET, TURN } from '../../src/battle/ffx2/ai/magus-sisters.ts';
@@ -51,8 +52,8 @@ describe('The Magus Sisters (m171, m172, m173): M1 to M7', () => {
     mindy.aiMemory = { ...memory.mindy };
     return { sandy, cindy, mindy, all: [sandy, cindy, mindy] };
   }
-  const board = (t: ReturnType<typeof trio>, rng: Rng) => boardOf(t.cindy, [...t.all, ...girls()], rng);
-  const poll = (t: ReturnType<typeof trio>, who: Ffx2Unit, rng: Rng) => script.decide(asSelf(board(t, rng), who));
+  const board = (t: ReturnType<typeof trio>, rng: BattleRng) => boardOf(t.cindy, [...t.all, ...girls()], rng);
+  const poll = (t: ReturnType<typeof trio>, who: Ffx2Unit, rng: BattleRng) => script.decide(asSelf(board(t, rng), who));
 
   it('M1: only Cindy casts Delta Attack, on her first poll with her counter at 100 and both flags up; Mindy and Sandy never do', () => {
     const t = trio({ sandy: { [AC]: 100, [FLAG]: 1 }, cindy: { [AC]: 100, [TURN]: 3 }, mindy: { [AC]: 100, [FLAG]: 1 } });

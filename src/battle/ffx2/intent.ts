@@ -41,7 +41,7 @@ import type {
   PortraitKey,
   StatusId,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import { type BattleRng, type RngSnapshot, sampleSnapshot } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
@@ -110,7 +110,7 @@ export interface EnemyIntent {
 export interface Ffx2IntentEnv {
   state: Readonly<BattleState>;
   /** The live RNG, read only for its stream position — never drawn from. */
-  rng: SeededRng;
+  rng: BattleRng;
   abilities?: AbilityRegistry;
   items?: ItemRegistry;
   /** `gaugeSnapshot()`, so the panel and the ATB bars name the same next actor. */
@@ -144,7 +144,7 @@ function deepCopy<T>(value: T): T {
 function cloneAiContext(
   env: Ffx2IntentEnv,
   selfId: CombatantId,
-  rngState: number,
+  rngState: RngSnapshot,
 ): { ctx: AiContext; events: EventDraft[]; self: Ffx2Unit } | null {
   const abilities = chainRegistries(env.abilities, defaultAbilities);
   const combatants = deepCopy(env.state.combatants) as Record<CombatantId, Ffx2Unit>;
@@ -154,8 +154,7 @@ function cloneAiContext(
 
   const flags = { ...env.state.flags };
   const events: EventDraft[] = [];
-  const rng = new SeededRng(env.state.seed);
-  rng.restoreState(rngState);
+  const rng = env.rng.fork(env.state.seed, rngState);
 
   const ctx: AiContext = {
     self,
@@ -178,7 +177,7 @@ interface DryRun {
   events: EventDraft[];
 }
 
-function dryRun(env: Ffx2IntentEnv, enemyId: CombatantId, rngState: number): DryRun | null {
+function dryRun(env: Ffx2IntentEnv, enemyId: CombatantId, rngState: RngSnapshot): DryRun | null {
   const built = cloneAiContext(env, enemyId, rngState);
   if (!built) return null;
   const scriptId = built.self.enemy?.aiScriptId;
@@ -591,7 +590,7 @@ export function predictFFX2EnemyIntent(
   };
   record(first);
   for (let i = 1; i < (committed ? 1 : samples); i++) {
-    const run = dryRun(env, enemyId, (base + Math.imul(i, 0x9e3779b1)) >>> 0);
+    const run = dryRun(env, enemyId, sampleSnapshot(base, i));
     if (run) record(run);
   }
 

@@ -50,7 +50,7 @@ export const basicAttackScript: AiScript = {
   decide(ctx) {
     const party = ctx.party();
     if (party.length === 0) return null;
-    return { kind: 'ability', id: 'attack', targets: [ctx.rng.pick(party).id] };
+    return { kind: 'ability', id: 'attack', targets: [ctx.rng.aux.pick(party).id] }; // a data-file stub, not a game script: the engine-side stream
   },
 };
 

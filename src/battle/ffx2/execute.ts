@@ -19,8 +19,8 @@ import type {
   BattleState,
   CombatantId,
   Command,
-  Rng,
 } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type {
   AbilityRegistry,
   DressphereRegistry,
@@ -44,7 +44,7 @@ import { commandCosts } from './adapt/command.ts';
 export interface ExecEnv {
   units: Ffx2Unit[];
   state: BattleState;
-  rng: Rng;
+  rng: BattleRng;
   options: Ffx2EngineOptions;
   abilities: AbilityRegistry;
   items?: ItemRegistry;
@@ -244,7 +244,7 @@ export function performCommand(
       who: actor.id,
       kind: ability.minigame as NonNullable<AbilityDef['minigame']>,
       // A Lady Luck spin also carries its seeded layout (stop order, strip phases): the overlay times the presses against it.
-      params: { ...(ability.extra ?? {}), abilityId: ability.id, ...requestLayout(ability, env.rng) },
+      params: { ...(ability.extra ?? {}), abilityId: ability.id, ...requestLayout(ability, env.rng.aux) },
     });
     return;
   }
@@ -270,7 +270,7 @@ export function performCommand(
   }
 
   const outcome = ability.minigame
-    ? (attachedResult(command) ?? rollDefault(ability.minigame, env.rng, ability))
+    ? (attachedResult(command) ?? rollDefault(ability.minigame, env.rng.aux, ability))
     : null;
   const hits = hitsFromOutcome(outcome);
 

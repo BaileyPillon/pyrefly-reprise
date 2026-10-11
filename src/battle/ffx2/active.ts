@@ -26,7 +26,8 @@
  * decision sheet 2026-09-25 item 4 A1); "any damage perturbs the bar" is not.
  */
 
-import type { AbilityDef, CombatantId, Command, Rng } from '../common/types.ts';
+import type { AbilityDef, CombatantId, Command } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { Ffx2Unit } from './internal.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
@@ -179,11 +180,11 @@ export function heldStillPending(unit: Ffx2Unit | undefined): boolean {
 export function withDefaultTimedInput(
   command: Command,
   ability: AbilityDef | undefined,
-  rng: Rng,
+  rng: BattleRng,
   minigamesOn: boolean,
 ): Command {
   if (!minigamesOn || !ability?.minigame || command.kind !== 'overdrive' || command.extra) return command;
-  const extra = rollDefault(ability.minigame, rng);
+  const extra = rollDefault(ability.minigame, rng.aux); // a stand-in for the player's input: the engine-side stream
   return extra ? { ...command, extra } : command;
 }
 

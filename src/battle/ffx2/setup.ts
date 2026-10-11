@@ -24,6 +24,7 @@ import type {
   StatBlock,
 } from '../common/types.ts';
 import { cloneData } from '../common/clone.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
@@ -265,7 +266,7 @@ export interface BuiltState {
 export function buildState(
   setup: BattleSetup,
   options: Ffx2EngineOptions,
-  rng: { int(a: number, b: number): number },
+  rng: BattleRng,
 ): BuiltState {
   if (setup.party.game !== 'ffx2') throw new Error('FFX2Engine: setup.party must be an FFX2PartyBuild');
   // **The battle owns its records**, for the same reason the FFX side does and

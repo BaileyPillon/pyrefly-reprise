@@ -17,6 +17,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { BattleEvent, FFX2PartyBuild, StatusId } from '../../../src/battle/common/types.ts';
 import { makeRng, type SeededRng } from '../../../src/battle/common/rng.ts';
+import { asBattleRng } from '../helpers/oneStream.ts';
 import { baseDamageAt, type BaseDamageInput } from '../../../src/battle/ffx2/kernel/damage.ts';
 import { GROUP1_STATUS, GROUP2_STATUS } from '../../../src/battle/ffx2/adapt/slots.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
@@ -258,7 +259,7 @@ function stub(opts: { hp?: number; maxHp?: number; party?: Girl[]; rng?: SeededR
   const self = { id: EXPERIMENT_ENEMY_ID, hp: opts.hp ?? 18324, stats: { maxHp: opts.maxHp ?? 18324 }, aiMemory: {} } as unknown as Ffx2Unit;
   const party = (opts.party ?? [{ id: 'yuna', hp: 1000 }, { id: 'rikku', hp: 1000 }, { id: 'paine', hp: 1000 }]) as unknown as Ffx2Unit[];
   const ctx = {
-    self, units: [], rng: (opts.rng ?? makeRng(7)) as unknown as AiContext['rng'], flags: {}, ticks: 0, ability: () => undefined, party: () => party, allies: () => [], emit: () => undefined,
+    self, units: [], rng: asBattleRng((opts.rng ?? makeRng(7)) as never) as unknown as AiContext['rng'], flags: {}, ticks: 0, ability: () => undefined, party: () => party, allies: () => [], emit: () => undefined,
   } as unknown as AiContext;
   return { ctx, self };
 }

@@ -12,7 +12,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef, AbilityCommand, Command, Rng } from '../../src/battle/common/types.ts';
+import type { AbilityDef, AbilityCommand, Command } from '../../src/battle/common/types.ts';
+import type { BattleRng } from '../../src/battle/common/streams.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
 import { AC, SHIVA_CHAIN } from '../../src/battle/ffx2/ai/fallen-aeons.ts';
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
@@ -46,12 +47,12 @@ describe('Shiva (m167): the order the script tests, F1 to F3', () => {
     shiva.aiMemory = { ...memory };
     return shiva;
   };
-  const decide = (memory: Record<string, number>, rng: Rng) => {
+  const decide = (memory: Record<string, number>, rng: BattleRng) => {
     const shiva = fresh(memory);
     const b = boardOf(shiva, [shiva, ...girls()], rng);
     return { c: cmd(script.decide(b.ctx)), shiva };
   };
-  const outcome = (memory: Record<string, number>) => (rng: Rng) => {
+  const outcome = (memory: Record<string, number>) => (rng: BattleRng) => {
     const { c, shiva } = decide(memory, rng);
     return `${c.id}|chain=${shiva.aiMemory?.[SHIVA_CHAIN] ?? 0}|ac=${shiva.aiMemory?.[AC] ?? 0}`;
   };
@@ -201,7 +202,7 @@ describe('Anima (m169): A1', () => {
   it('counter >= 100: counter 0, Oblivion on the party, no roll; else +5 and mod 5 = 0 is Pain (13,108 of 65,536), 1 to 4 the Anima Attack', () => {
     const anima = fresh({ [AC]: 100 });
     const b = boardOf(anima, [anima, ...girls()], scriptedRng([]));
-    b.ctx.rng.int = () => {
+    (b.ctx.rng as unknown as { int: () => number }).int = () => {
       throw new Error('Oblivion must not roll');
     };
     expect(script.decide(b.ctx)).toEqual({ kind: 'ability', id: 'x2-anima-oblivion', targets: [] });

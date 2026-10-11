@@ -24,7 +24,8 @@ import { statusLands, type StatusResult } from './kernel/statusTypes.ts';
 import { s8 } from './kernel/intops.ts';
 import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
 import { applyStatus, removeStatus } from './statuses.ts';
-import { FFX2_STATUS_ROM } from './kernel/status-timers-set.ts';
+import { FFX2_STATUS_ROM, startPhase } from './kernel/status-timers-set.ts';
+import { modDraw } from './adapt/draws.ts';
 
 /** The ability's own application of a status (its duration and stacks), else the record's amount, else "until cured". */
 function applicationFor(ability: AbilityDef, command: ResolvedCommand, status: StatusId, group2Index?: number): StatusApplication {
@@ -39,7 +40,7 @@ function addStatus(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, applic
   if (!instance) return;
   // `MsSetStatus` (exe 0x00636c70): a Poison or Regen that has just appeared starts its accumulator at a random phase, `draw % (16000 / 4 + 1)`.
   if (application.status === 'poison' || application.status === 'regen') {
-    const phase = ctx.rng.int(0, FFX2_STATUS_ROM.poisonTime / 4);
+    const phase = startPhase(modDraw(ctx.rng, FFX2_STATUS_ROM.poisonTime / 4 + 1), target.gauge.slot, FFX2_STATUS_ROM.poisonTime); // the afflicted unit's own purpose-0 stream
     if (application.status === 'poison') target.gauge.poisonAcc = phase;
     else target.gauge.regenAcc = phase;
   }
@@ -132,7 +133,8 @@ export function rollEngineRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ff
     const chance = Math.max(0, Math.min(255, Math.round(application.chance)));
     if (chance === 0) continue;
     const resist = target.immunities[application.status] ?? 0;
-    const roll = ctx.rng.int(0, 100);
+    // A rider with no slot in the game's 24-entry tables has no game roll: the engine's own, on the engine-side stream.
+    const roll = ctx.rng.aux.int(0, 100);
     if (!statusLands(chance, resist, roll, levelOf(user), levelOf(target))) continue;
     addStatus(ctx, user, target, application, ability.id);
   }
