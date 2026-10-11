@@ -27,6 +27,7 @@ import { ejectActor, settleDeferredDeath } from './hp.ts';
 import { listensToHit, runOnHit, runOnTargeted } from './ai/hooks.ts';
 import { resolveCommand } from './adapt/command.ts';
 import { aimedTargetForHit, aimedTargets, isPerHitRandom, nextHitTargets, resolveTargets, scriptAimsAt } from './targeting.ts';
+import { planSpreadHits } from './adapt/overdrive-result.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
 import { type HitScope, newRecordBook, resolveOneHit } from './hit-apply.ts';
@@ -64,6 +65,13 @@ export interface ResolveOptions {
    * else, so no other encounter changes. See `docs/CONTRACT-CHANGES.md`.
    */
   statsUser?: FFXCombatant;
+  /**
+   * The hits the game PLANS for a random-target Overdrive whose result may take some away (re-parity RC4 lane B; `adapt/overdrive-result.ts`):
+   * the menu record's full hit count, spread over the targets one pick at a time before the minigame ends. `hits` is then what is left
+   * after the result's removal (Slice and Dice's Fail, Lulu's Fury with fewer casts), taken one hit at a time from the targets holding the
+   * most (stream 16), and the rest land target by target in character order. Absent: the action plans exactly `hits`, hit by hit.
+   */
+  spreadHits?: number;
 }
 
 /** MP cost after Magic Booster, One MP Cost and Half MP Cost [ffx-combat-core §9]. */
@@ -137,6 +145,13 @@ export function resolveAbility(
   // The targets' scripts hear the command named them (`onTargeted`), before any damage. A follow-up row is the same action.
   if (options.followUp !== true) runOnTargeted(ctx, { def, user }, targets);
 
+  // An Overdrive that plans its hits over the targets before the result takes some away: the plan is made now, the picks and the removal
+  // drawing on the game's streams (5 and 16), the hits then land target by target.
+  const plan =
+    perHitRandom && !aimed && options.spreadHits !== undefined && options.spreadHits >= hitCount && targets[0] !== undefined
+      ? planSpreadHits(ctx, user, def, targets[0], options.spreadHits, hitCount)
+      : undefined;
+
   const scope: HitScope = {
     ctx,
     user,
@@ -152,7 +167,12 @@ export function resolveAbility(
     touched: new Map(),
   };
 
-  if (perHitRandom) {
+  if (plan) {
+    for (const { target, hits } of plan) {
+      for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
+      finishTouched(scope);
+    }
+  } else if (perHitRandom) {
     // A fresh random target for every hit: the hit records of the whole action are in before any target's script hears of it. The target
     // the action named above (one pick of stream 5) is hit 0's: the game draws one pick per hit and no more (`pp_BtlBuildTargetHits`).
     const firstPick = targets;
