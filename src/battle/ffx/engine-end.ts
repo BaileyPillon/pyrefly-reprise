@@ -11,6 +11,7 @@ import type { BattleEvent, BattleResult, Command, FFXCombatant } from '../common
 import { type Ctx, type EventInput, commandAbility, has, isAlive, rtOf, tryActor } from './state.ts';
 import { executeCommand } from './execute.ts';
 import { collectReactions, onTurnEnd } from './ticks.ts';
+import { sweepAutoStatuses } from './adapt/auto-status.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { drainScriptReactions } from './ai/reaction-drain.ts';
@@ -67,6 +68,10 @@ export function afterAction(
   // in every other battle.
   runMacalaniaPhaseHooks(ctx);
 
+  // The end of the action: the game's per-action sweep switches the SOS statuses of everyone whose weak level moved (`pp_BtlActionDone`, VA 0x007b20e0
+  // to 0x007af4b0; re-parity RC4, FFX only). It runs again after every reaction below, each of which is an action of its own, and after the turn's tick.
+  sweepAutoStatuses(ctx);
+
   // (Evrae's 1/3-HP self-Haste is an `onHit` hook now, `ai/evrae-counters.ts`: it runs for every action that reaches him,
   // a missed Guided Missiles included, so no phase hook is run from here any more.)
 
@@ -93,10 +98,12 @@ export function afterAction(
           cause: counter.cause,
         });
         executeCommand(ctx, counterActor, counter.command, true);
+        sweepAutoStatuses(ctx);
       }
     }
     // The reactions the boss scripts' hooks queued while the action resolved (re-parity, `ai/hooks.ts`), oldest first.
     drainScriptReactions(h);
+    sweepAutoStatuses(ctx);
 
     // Equipment reactions: Counterattack, Auto-Potion, Auto-Med, Auto-Phoenix.
     if (def) {
@@ -119,6 +126,7 @@ export function afterAction(
             : { kind: 'attack', targets: [reaction.targetId] },
           true,
         );
+        sweepAutoStatuses(ctx);
       }
     }
   }
@@ -128,6 +136,7 @@ export function afterAction(
   // Poison only follows an action whose results were applied: a passed turn (a sleeper's) passes `command` undefined.
   onTurnEnd(ctx, actor, command !== undefined);
   drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook)
+  sweepAutoStatuses(ctx); // the Poison tick toggles its victim's SOS statuses (VA 0x007afab0)
   rtOf(ctx, actor.id).turnsTaken += 1;
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;
   ctx.rt.currentActorId = null;

@@ -20,6 +20,7 @@ import {
   reviveCounter,
 } from './adapt/ctb.ts';
 import { slotOf } from './adapt/slots.ts';
+import { reviveAutoStatuses } from './adapt/auto-status.ts';
 import {
   type Ctx,
   commandAbility,
@@ -88,11 +89,15 @@ export function chargeTurn(ctx: Ctx, id: CombatantId, rank: number): void {
   charge(ctx, c, rank);
 }
 
-/** A revived character re-enters with the counter stored at battle start [VA 0x0078d530]. */
+/**
+ * A revived character re-enters with the counter stored at battle start, and its equipment statuses come back: the KO reset zeroed the counters, and
+ * the revive restores and applies them again at the weak level of the HP it rose with [VA 0x0078d530; re-parity RC4, FFX only].
+ */
 export function onRevived(ctx: Ctx, targetId: CombatantId): void {
   const c = tryActor(ctx, targetId);
   if (!c) return;
   reviveCounter(ctx, c);
+  reviveAutoStatuses(ctx, c);
 }
 
 /** Opening counters [VA 0x0078ded0]; see {@link openingCtb}. */

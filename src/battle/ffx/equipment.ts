@@ -201,25 +201,3 @@ export function damageCapFor(user: FFXCombatant, flags: readonly string[]): numb
   if (flags.includes('always-break-damage-limit')) return 99999;
   return hasAuto(user, 'break-damage-limit') ? 99999 : 9999;
 }
-
-/** The auto-abilities that grant a permanent status at battle start, stack 255. */
-export const AUTO_STATUS_ABILITIES: ReadonlyArray<readonly [AutoAbilityId, StatusId]> = [
-  ['auto-haste', 'haste'],
-  ['auto-protect', 'protect'],
-  ['auto-shell', 'shell'],
-  ['auto-regen', 'regen'],
-  ['auto-reflect', 'reflect'],
-];
-
-/** The SOS auto-abilities, applied at stack 255 while the wearer is in Critical. */
-export const SOS_STATUS_ABILITIES: ReadonlyArray<readonly [AutoAbilityId, StatusId]> = [
-  ['sos-haste', 'haste'],
-  ['sos-protect', 'protect'],
-  ['sos-shell', 'shell'],
-  ['sos-regen', 'regen'],
-  ['sos-reflect', 'reflect'],
-  ['sos-nulblaze', 'nulblaze'],
-  ['sos-nulfrost', 'nulfrost'],
-  ['sos-nulshock', 'nulshock'],
-  ['sos-nultide', 'nultide'],
-];
