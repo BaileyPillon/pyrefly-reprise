@@ -1,13 +1,77 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 59 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 60 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-11 · Release 39.4.4 on echoesofspira.com
+
+Address: https://echoesofspira.com (main 72973096, bundle CECt6LNe)
+
+- **FFX-2:** Chapter IV: Bahamut is drawn at his in-battle size, about 3.3 times the girls (0.66 of his
+  model), on a desktop and on a phone, where release 39.4.3 drew him at the full model size. The girls
+  are back to 95 to 97 percent of their pre-giants height on a desktop (they were at 55) and 82
+  percent on a phone. Paragon and Anima are unchanged.
+- **FFX-2:** two new battle themes, original music made with ElevenLabs: a slow piano lament for
+  Bahamut (Chapter IV) and a brass parade into a funk groove for the Leblanc Syndicate (Chapter VI and
+  the hidden Leblanc chapter). Nobody but Bailey can judge them by ear.
+- **Both:** the "two soundtracks at once" bug is fixed. In a fight that chains into more links the
+  victory fanfare used to play at the end of every link, over the theme that was still running, a
+  semitone off; now only the last link plays it, and the theme fades out under it. It touches every
+  chained fight: Chapter VI (FFX-2), the Fallen Aeons and the Den of Woe (FFX-2), Isaaru, Sin's Fins and
+  Braska's Final Aeon (FFX).
+- **FFX-2:** Yuna's White Mage hurt and knocked-out paintings are the old approved ones again, hood up,
+  at Bailey's word; Rikku's Dark Knight hurt keeps its new painting.
+- **FFX, every chapter:** who acts next and what a status does follow the game's own program: the
+  opening turn-order draws, the tick clock, Haste, Slow and Delay, one roll for each status a move can
+  cause, and the status timers. **Chapter X is harder:** Natus waits less after casting Flare, as in the
+  game, and the shipped line wins 302 of 500 seeds (386 before). Every other chapter stays inside the
+  sampling band; Chapter XVIII's built-in line still wins only 7 of 500 seeds.
+- **FFX, hidden chapter:** Sinspawn Gui at Mushroom Rock Road. Type `mushroom` on the chapter board; it
+  is not in the board's "of 18" and is not listed. Two fights as in Operation Mi'ihen: the arms and
+  head and body of Gui with the full party, then the weakened body with Yuna, Auron and Seymour on
+  your side. The numbers are the game's own rows; the party at the Ridge is an estimate. The art is
+  provisional.
+- **FFX-2, hidden chapter:** the Experiment (Djose Temple, "Masterpiece Theatre"). Type `experiment` on
+  the chapter board. The machine's two acts as the game has them, first at 1/1/1 and then at 5/5/5,
+  with no upgrade menu before the fight. It is easy, as it is in the game: its numbers are the game's
+  own and are not tuned. The art is provisional.
+- **Both:** the hidden words `limit` and `leblanc` still work, a wrong word still opens nothing, and
+  the two new chapters write only their own save key.
+- **Disclosed by the focused review (F7297-01 to F7297-04; none is a regression against 39.4.3):**
+  F7297-01 (major, feel): the motion-continuity check (CHK-027) still fails: knocked-out characters
+  snap to the lying pose and some frames jerk 150 to 284 px, as on 39.4.3 and the live game before it.
+  F7297-02 (major, balance): the review's advisor-driven route lost Chapter II at seed 1 after the new
+  turn order, as it did on 39.4.3. F7297-03 (polish): at 1600x900 the command menu overlaps Ixion on
+  the right edge. F7297-04 (suggestion): Chapter IV's layout still differs from the approved mockup.
+- **Not in this release:** the rest of the battle-rules work (the Overdrive and aeon batch, the reworked
+  Chapter IX, X and XVIII lines, the stale guide cards and the two menu changes, release candidate 2),
+  the visual and feel fixes, the other ElevenLabs themes and the sound-effect parity.
+- **Deploy notes:** it shipped under Bailey's owner override ("i'll go with all your recommendations
+  even as to music and sound effects. you recommend an dchoose it please. this is extremely
+  important.") because 47 builds already owe a deep review and the deploy gate refused the first try;
+  the focused review's SHIP came first. The deploy ran with the preflight tests skipped (the suites had
+  run in the release tree) and the dirty tree allowed; 58 files were uploaded (5,105 were already
+  there) in 65 seconds and the Worker version is b133fe36. docs/deploys.log records
+  2026-10-11T04:43:53Z, which is 00:43 EDT on 2026-10-11. The live check and the deep review are
+  owed on this build, which carries 47 earlier builds.
+- **How it was checked:** on the exact build that shipped (main 72973096, dist bundle
+  index-CECt6LNe.js): tsc clean (3,409 files); the full suite on the release branch before the
+  Bahamut size, the fanfare fix and the music went in read 1,020 files passed and 5 failed (6 of
+  16,149 tests, load timeouts and Windows file-lock races that pass alone), and the audio and fanfare
+  files after them 379 tests passed (two render timeouts pass alone); a focused review of the exact build (about 170 minutes) said SHIP, changed area FAIL
+  (CHK-027 and Chapter II, named above): art verified, verify-approved 916 ok, 20 first menus, the
+  typed words, and four fights played with real keys (Chapters I and III in FFX, IV and VI in FFX-2,
+  all won; Chapter II lost as before). The deploy compared 137 files on each address byte for byte.
+
+![Chapter IV against the approved mockup: Bahamut at his in-battle size](docs/screenshots/release-39.4.4/ffx2-battle-target-vs-build.jpg)
+
+*FFX-2, Chapter IV on the 39.4.4 candidate (right) against the approved mockup (left), 1600x900, from the focused review: Bahamut at his in-battle size with the girls readable. The layout still differs from the mockup (F7297-04).*
 
 ## 2026-10-09 · Release 39.4.3 on echoesofspira.com
 
