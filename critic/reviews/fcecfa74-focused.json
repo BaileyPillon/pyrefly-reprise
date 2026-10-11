@@ -1,0 +1,850 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-11T14:23:00.244Z",
+ "build": {
+  "mainSha": "fcecfa74"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "Better than live on every measured axis: snaps 0 against 0.2 to 0.4 per minute, jerks and over-40 jerks lower in all 5 chapters re-measured on live with the same instrument, worst ghost severity 0.34 to 0.38 against 0.38 to 0.44.",
+  "No critical defect and no regression against live; CHK-026 PASS in all 8 chapters; no console errors, no 4xx, no horizontal scroll at three sizes.",
+  "All changed cues route to their intended chapters and only those (13 chapters probed plus Trema phase 2), stereo gate passes, the Evrae seam click drops from 0.32 to 0.010; the owner ear is still owed for the new music.",
+  "CHK-027 majors (FOC40-01, FOC40-02) exist on live and are not introduced by this candidate: disclosed, carried to the next batch."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Routing and technical validity verified (each of 8 changed chapters requested its intended cue, 5 unchanged chapters kept theirs, stereo gate PASS on all 10 cues, Evrae seam 0.32 to 0.010 sample jump); heard and approved cannot be established by an agent (rule 13): the owner ear is owed.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/music-candidate.json",
+    "critic/reviews/fcecfa74-focused/trema.mjs"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 25,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "Battle frame fills the viewport at 1600x900, 2000x1012 and 390x844; no horizontal scroll.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/layout/layout.json",
+    "critic/reviews/fcecfa74-focused/layout/390x844-sin-fins-core.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 6,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "Phone shot read by eye (command menu, queue strip, party cards unclipped); the two desktop sizes were captured and checked for scroll and errors only.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/layout/390x844-sin-fins-core.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Not exercised beyond the first menu of three chapters; no overlay code changed.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-007",
+   "result": "UNVERIFIED",
+   "reason": "No player copy changed; not read beyond the screenshots.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "The dust puff over a KO draws under the HUD by construction (render order 12) but the strips were cropped to the figure; the HUD was not judged.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "reason": "Names untouched; not exercised.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-012",
+   "result": "NOT APPLICABLE",
+   "reason": "No painting or face changed (approvedArtCheck false).",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "reason": "No approved art or target tile changed; the change is motion, music and SFX.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "The continuity harness plays 8 chapters title to results with real Playwright keys; the debug API only set up KO/revive stills and the music routing probes.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 150,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every wait asserts screen/menu state or throws (lib.waitFor, route want()); the KO strips assert awaitingMenu before capture; the music probe records the screen per sample.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/kostrip.mjs"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Pre-deploy focused review of the candidate; the exact live artifact is the live verification after the deploy.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "Zero 4xx and zero console errors across 14 chapter loads and 3 layouts; each cue file named in the manifest was fetched; audio-shipped-files, cue-reachability and elevenlabs tests pass (rerun).",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/layout/layout.json",
+    "critic/reviews/fcecfa74-focused/music-candidate.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "All 9 new or re-cut mp3 decode and play (music state reached gain 1 in each); stereo gate PASS on all; audio folder 97 MB shipped, under the 105 MB budget.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/music-candidate.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "The KO fall/revive and the motion changes were exercised in both games (FFX Ch I and III, X-2 Ch V, VI, XI, XIII, XVIII) with the same shape; music in both games.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/ko/BEFORE-AFTER-ffx.jpg",
+    "critic/reviews/fcecfa74-focused/ko/BEFORE-AFTER-ffx2.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: both games (motion and SFX plumbing shared; research/status-display.md and ffx-vs-ffx2-presentation.md are silent on a KO pose, only the 220/170 ms buckle tempo is per game); music is per chapter. Presence: every changed chapter requests its cue; absence: FFX chapters never request an FFX-2 cue and vice versa; Ch VIII Evrae, Ch IV Yojimbo, Bahamut, Leblanc, Den of Woe unchanged. Data audit: git diff of src/data is music keys and comments only; no number changed.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/music-candidate.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Real-key routes reached their real destination: Ch I, V, VI, XI, XVIII victory, Ch III (Yunalesca) and XIII defeat, results and board again.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity-run.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "KO/revive and blends measured in the real presenter path during real fights (343 to 1,282 swaps per chapter); cues requested through the real chapter flow.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-025",
+   "result": "UNVERIFIED",
+   "reason": "The hidden FF7 chapter loaded and requested boss-ff7-guard through gotoChapter; that it stays hidden at chapter select and writes nothing to the save was not re-checked (the change touches only its music key).",
+   "game": "FF7 experiment",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Size continuity across pose changes holds in all 8 chapters (head jump within tolerance, feet shift at most 1.2 px); same on live.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 150,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Motion continuity: 0 snaps/min in all 8 chapters (live 0.21 to 0.42 in the 5 chapters re-measured) and fewer, smaller jerks than live in every chapter measured on both, but jerks of 40 px or more remain (5 to 177 per chapter) so the check still FAILS as it did on live. Instrument edits P5 a, b, c are in this build: the reading changed from round 24 (centroid tracking of unregistered figures, a twirl counted as one staged change, 14-frame strips), so the numbers are not comparable with round 24; live was re-measured with the same instrument for the comparison.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity/continuity-summary.json",
+    "critic/reviews/fcecfa74-focused/continuity-live/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 190,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Seven new cues and two re-cut ones are routed and technically valid; a verdict tied to exact cues needs the owner ear (choices were delegated to the driver, acceptance of beauty is not).",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/music-candidate.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 5,
+   "environment": "headless Playwright, PYREFLY_BROWSER=gpu (no black canvas), candidate dist-gate via vite preview :5400, 1600x900 / 2000x1012 / 390x844",
+   "artifactVersion": "fcecfa74",
+   "targetVersion": "ba8a7e74a9d6"
+  }
+ ],
+ "continuity": {
+  "candidate": {
+   "schema": "continuity-summary/1",
+   "chapters": [
+    {
+     "chapter": "seymour-flux",
+     "game": "ffx",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 341.4,
+     "swaps": 329,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 12.1,
+     "maxFeetShiftPx": 0.7,
+     "worstJerkPx": 73.5,
+     "strips": 18,
+     "worstSwapStrips": [
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-003-yuna-critical-hurt.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-163-yuna-hurt-critical.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-082-kimahri-idle-ready.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-060-kimahri-ready-idle.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-093-auron-attack-follow.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-117-yuna-ready-item.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-033-kimahri-ready-item.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-161-yuna-idle-hurt.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-165-mortiorchis-attack-idle.jpg",
+      "seymour-flux-win-fcecfa74/continuity/strips/swap-159-mortiorchis-idle-attack.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "ffx2-bahamut",
+     "game": "ffx2",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 290.9,
+     "swaps": 359,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 9.5,
+     "maxFeetShiftPx": 0.4,
+     "worstJerkPx": 86.4,
+     "strips": 19,
+     "worstSwapStrips": [
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-355-paine-ready-follow.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-317-paine-ready-critical.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-329-paine-critical-ready.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-322-paine-od-x2-warrior-armor-break-critical.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-025-paine-hurt-critical.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-311-rikku-critical-cast.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-212-rikku-cast-critical.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-352-paine-od-x2-warrior-armor-break-ready.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-305-paine-od-x2-warrior-armor-break-hurt.jpg",
+      "ffx2-bahamut-win-fcecfa74/continuity/strips/swap-193-rikku-hurt-critical.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "yunalesca",
+     "game": "ffx",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 491.3,
+     "swaps": 689,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 3.5,
+     "maxFeetShiftPx": 1,
+     "worstJerkPx": 149.6,
+     "strips": 19,
+     "worstSwapStrips": [
+      "yunalesca-win-fcecfa74/continuity/strips/swap-577-auron-idle-ko.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-284-tidus-ready-attack.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-471-yuna-hurt-critical.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-475-yuna-critical-hurt.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-247-tidus-attack-follow.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-429-yuna-item-critical.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-688-tidus-idle-ko.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-678-tidus-follow-critical.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-012-auron-attack-follow.jpg",
+      "yunalesca-win-fcecfa74/continuity/strips/swap-131-auron-critical-idle.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "ffx2-vegnagun-shuyin",
+     "game": "ffx2",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 873.4,
+     "swaps": 859,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 9,
+     "maxFeetShiftPx": 0.7,
+     "worstJerkPx": 98.3,
+     "strips": 18,
+     "worstSwapStrips": [
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-064-rikku-ko-idle.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-054-rikku-hurt-ko.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-756-yuna-hurt-ko.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-116-rikku-ready-attack.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-105-rikku-attack-follow.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-216-paine-ready-hurt.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-218-paine-hurt-ready.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-158-rikku-hurt-ready.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-155-rikku-ready-hurt.jpg",
+      "ffx2-vegnagun-shuyin-win-fcecfa74/continuity/strips/swap-025-paine-ready-critical.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "sin-face",
+     "game": "ffx",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 165.4,
+     "swaps": 301,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 5.3,
+     "maxFeetShiftPx": 1.1,
+     "worstJerkPx": 338.1,
+     "strips": 19,
+     "worstSwapStrips": [
+      "sin-face-win-fcecfa74/continuity/strips/swap-066-wakka-idle-hurt.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-109-wakka-hurt-idle.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-212-wakka-hurt-critical.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-243-wakka-critical-hurt.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-126-auron-attack-follow.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-245-wakka-hurt-ready.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-068-lulu-hurt-idle.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-104-lulu-idle-hurt.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-305-lulu-critical-victory.jpg",
+      "sin-face-win-fcecfa74/continuity/strips/swap-128-auron-follow-idle.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "braskas-final-aeon",
+     "game": "ffx",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 1380.1,
+     "swaps": 1509,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 25.6,
+     "maxFeetShiftPx": 1.2,
+     "worstJerkPx": 116.4,
+     "strips": 11,
+     "worstSwapStrips": [
+      "braskas-final-aeon-win-fcecfa74/continuity/strips/swap-257-shiva-hurt-ko.jpg",
+      "braskas-final-aeon-win-fcecfa74/continuity/strips/swap-1118-possessed-ifrit-hurt-ko.jpg",
+      "braskas-final-aeon-win-fcecfa74/continuity/strips/swap-130-ifrit-hurt-ko.jpg",
+      "braskas-final-aeon-win-fcecfa74/continuity/strips/swap-027-yuna-hurt-critical.jpg",
+      "braskas-final-aeon-win-fcecfa74/continuity/strips/swap-1159-tidus-ready-attack.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "ffx2-fallen-aeons",
+     "game": "ffx2",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 696.8,
+     "swaps": 675,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 15.6,
+     "maxFeetShiftPx": 1.1,
+     "worstJerkPx": 960.2,
+     "strips": 20,
+     "worstSwapStrips": [
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-313-sandy-hurt-ko.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-070-paine-ready-idle.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-340-cindy-hurt-ko.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-175-paine-idle-ready.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-186-x2-shiva-hurt-ko.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-317-mindy-hurt-ko.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-494-rikku-ready-hurt.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-497-rikku-hurt-ready.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-650-paine-follow-idle.jpg",
+      "ffx2-fallen-aeons-win-fcecfa74/continuity/strips/swap-673-paine-attack-follow.jpg"
+     ],
+     "unverified": null
+    },
+    {
+     "chapter": "ffx2-trema",
+     "game": "ffx2",
+     "checks": {
+      "CHK-026": "PASS",
+      "CHK-027": "FAIL"
+     },
+     "battleSeconds": 1155.4,
+     "swaps": 2029,
+     "snapsPerMinute": 0,
+     "maxHeadJumpPct": 2.7,
+     "maxFeetShiftPx": 1,
+     "worstJerkPx": 354.6,
+     "strips": 12,
+     "worstSwapStrips": [
+      "ffx2-trema-win-fcecfa74/continuity/strips/swap-413-yuna-critical-item.jpg",
+      "ffx2-trema-win-fcecfa74/continuity/strips/swap-123-rikku-follow-idle.jpg",
+      "ffx2-trema-win-fcecfa74/continuity/strips/swap-406-yuna-ko-critical.jpg",
+      "ffx2-trema-win-fcecfa74/continuity/strips/swap-339-yuna-hurt-critical.jpg",
+      "ffx2-trema-win-fcecfa74/continuity/strips/swap-006-yuna-follow-idle.jpg",
+      "ffx2-trema-win-fcecfa74/continuity/strips/swap-357-yuna-hurt-ko.jpg"
+     ],
+     "unverified": null
+    }
+   ],
+   "battleSeconds": 5394.7,
+   "counted": 6750,
+   "swaps": 6848,
+   "size": {
+    "judged": 6621,
+    "costumeSwaps": 0,
+    "sameArtSwaps": 129,
+    "costumeWorstHeadPct": 0,
+    "costumeWorstFeetPx": 0,
+    "maxHeadJumpPct": 25.6,
+    "maxHeadJumpPctRegistration": 0.3,
+    "headOverTolerance": 0,
+    "maxFeetShiftPx": 1.2,
+    "feetOverTolerance": 0,
+    "headMeasured": 6621,
+    "headRegistration": 4562,
+    "headSilhouette": 2059,
+    "headUnmeasured": 0
+   },
+   "motion": {
+    "snaps": 0,
+    "snapsPerMinute": 0,
+    "hardCuts": 0,
+    "hardCutsPerMinute": 0,
+    "ghostSwaps": 6379,
+    "ghostFrames": 25538,
+    "worstGhostSeverity": 0.378,
+    "ghostOverFail": 0,
+    "jerks": 1282,
+    "worstJerkPx": 960.2,
+    "jerksOverFail": 373,
+    "lowestIou": 0,
+    "maxCentroidShiftPx": 309.7,
+    "heldSwaps": 0,
+    "longestHeldFrames": 0,
+    "stagedChanges": 0,
+    "stagedSteps": 0,
+    "stagedSnapsExcused": 0,
+    "jerksAtStaged": 4
+   },
+   "checks": {
+    "CHK-026": {
+     "result": "PASS",
+     "reasons": [],
+     "note": "4562 of 6621 measured swaps had a registered head (tolerance 3 percent); 2059 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+    },
+    "CHK-027": {
+     "result": "FAIL",
+     "reasons": [
+      "373 jerk(s) of 40 px or more in one frame (worst 960.2 px)"
+     ]
+    }
+   },
+   "base": "http://127.0.0.1:5400/pyrefly-reprise/",
+   "date": "2026-10-11T13:37:34.653Z"
+  },
+  "liveComparison": {
+   "seymour-flux": {
+    "candidate": {
+     "snaps": 0,
+     "jerks": 22,
+     "jerksOver40": 5,
+     "worstJerkPx": 73.5,
+     "worstGhost": 0.34
+    },
+    "live2ae1a9e4": {
+     "snaps": 2,
+     "jerks": 35,
+     "jerksOver40": 8,
+     "worstJerkPx": 73.5,
+     "worstGhost": 0.375
+    }
+   },
+   "ffx2-bahamut": {
+    "candidate": {
+     "snaps": 0,
+     "jerks": 68,
+     "jerksOver40": 7,
+     "worstJerkPx": 86.4,
+     "worstGhost": 0.347
+    },
+    "live2ae1a9e4": {
+     "snaps": 1,
+     "jerks": 78,
+     "jerksOver40": 36,
+     "worstJerkPx": 113.5,
+     "worstGhost": 0.425
+    }
+   },
+   "yunalesca": {
+    "candidate": {
+     "snaps": 0,
+     "jerks": 169,
+     "jerksOver40": 28,
+     "worstJerkPx": 149.6,
+     "worstGhost": 0.357
+    },
+    "live2ae1a9e4": {
+     "snaps": 3,
+     "jerks": 234,
+     "jerksOver40": 80,
+     "worstJerkPx": 261.9,
+     "worstGhost": 0.414
+    }
+   },
+   "sin-face": {
+    "candidate": {
+     "snaps": 0,
+     "jerks": 86,
+     "jerksOver40": 31,
+     "worstJerkPx": 338.1,
+     "worstGhost": 0.339
+    },
+    "live2ae1a9e4": {
+     "snaps": 1,
+     "jerks": 111,
+     "jerksOver40": 54,
+     "worstJerkPx": 345.6,
+     "worstGhost": 0.398
+    }
+   },
+   "ffx2-fallen-aeons": {
+    "candidate": {
+     "snaps": 0,
+     "jerks": 86,
+     "jerksOver40": 26,
+     "worstJerkPx": 960.2,
+     "worstGhost": 0.358
+    },
+    "live2ae1a9e4": {
+     "snaps": 5,
+     "jerks": 137,
+     "jerksOver40": 47,
+     "worstJerkPx": 965.9,
+     "worstGhost": 0.444
+    }
+   }
+  },
+  "note": "instrument P5 a, b, c is in this build; live re-measured with the same instrument on 5 chapters; numbers are not comparable with round 24 (old instrument)"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC40-01",
+   "severity": "major",
+   "title": "Jerks of 40 px or more remain in every chapter measured (CHK-027 FAIL), fewer than live",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, yunalesca, ffx2-vegnagun-shuyin, sin-face, braskas-final-aeon, ffx2-fallen-aeons, ffx2-trema",
+   "expected": "no jerk of 40 px in one frame",
+   "observed": "Candidate over-40 jerks / live: Ch I 5/8, X-2 Ch V 7/36, Ch III 28/80, Ch XVIII 31/54, X-2 Ch XI 26/47; Ch VI 33, Ch XII 66 and X-2 Ch XIII 177 measured on the candidate only. Snaps 0 against 0.2 to 0.4 per minute on live. The KO and blend work reduces the class but does not remove it.",
+   "repro": "node critic/runner/lib/continuity.mjs on the candidate and on https://echoesofspira.com/ (seed 1, real keys, 1600x900, GPU)",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity/continuity-summary.json",
+    "critic/reviews/fcecfa74-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027 jerks under 40 px",
+   "where": "presenter pose, hit and aeon/summon motion (suspected, not traced)",
+   "fix": "triage the remaining 40 px+ events by cause (damage, action-start, summon arrivals) and take them one class at a time",
+   "acceptanceCheck": "CHK-027 over-40 count falls to 0 in the chapter",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC40-02",
+   "severity": "major",
+   "title": "X-2 Chapter XI (Fallen Aeons) has a 960 px single-frame jump, identical on live",
+   "game": "ffx2",
+   "chapter": "ffx2-fallen-aeons",
+   "expected": "no frame-to-frame jump of a tracked figure over 40 px",
+   "observed": "worst jerk 960.2 px on the candidate, 965.9 px on live (cause not traced; see the jerk strips)",
+   "repro": "node critic/runner/lib/continuity.mjs on the candidate and on https://echoesofspira.com/ (seed 1, real keys, 1600x900, GPU)",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/continuity/continuity-summary.json",
+    "critic/reviews/fcecfa74-focused/continuity-live/continuity-summary.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027 jerks under 40 px",
+   "where": "presenter pose, hit and aeon/summon motion (suspected, not traced)",
+   "fix": "triage the remaining 40 px+ events by cause (damage, action-start, summon arrivals) and take them one class at a time",
+   "acceptanceCheck": "CHK-027 over-40 count falls to 0 in the chapter",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC40-03",
+   "severity": "polish",
+   "title": "The debug gotoChapter run aborts at once if Enter is pressed while it starts, and after about 21 s with the coach brief up",
+   "game": "both",
+   "chapter": "seymour-flux",
+   "expected": "a debug-driven chapter keeps running",
+   "observed": "outcome aborted at 21.4 s on both candidate and live (a harness path, not a player path; real-key routes are unaffected)",
+   "repro": "node critic/runner/lib/continuity.mjs on the candidate and on https://echoesofspira.com/ (seed 1, real keys, 1600x900, GPU)",
+   "evidence": [
+    "critic/reviews/fcecfa74-focused/explore3.mjs"
+   ],
+   "confidence": "high",
+   "requirement": "tooling hygiene",
+   "where": "presenter pose, hit and aeon/summon motion (suspected, not traced)",
+   "fix": "triage the remaining 40 px+ events by cause (damage, action-start, summon arrivals) and take them one class at a time",
+   "acceptanceCheck": "CHK-027 over-40 count falls to 0 in the chapter",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "KO fall, puff, land and revive (before/after strips, FFX Tidus and FFX-2 Yuna, live vs candidate vs ?kofall=off)",
+   "continuity harness, real keys, 8 candidate chapters and 5 live chapters",
+   "music routing in 14 chapters including Trema phase 2 and the hidden FF7 chapter",
+   "stereo gate and Evrae seam by decoding",
+   "layout at 1600x900, 2000x1012, 390x844",
+   "audioDebug: sfxParity.packs empty, v2 slices decoded"
+  ],
+  "reused": [
+   {
+    "what": "tsc, full suite (1067 files), pose-blend, ko-fall, ko-revive, sfx-parity-mix, stereo-gate tests",
+    "from": "driver validation, plus a rerun of 6 audio and KO test files by this review (129 tests pass)",
+    "why": "unit-level numbers (P1 trims, one shared tick, 80 ms recoil curve, stepped dissolve numbers) are not browser-observable by an agent"
+   }
+  ],
+  "notTested": [
+   "?poseblend=stepped and ?recoil=legacy as browser A/B (unit tests only)",
+   "SFX trim levels and the shared tick by ear or by waveform in the browser",
+   "FB-1 attack key chain with hit-stop as a dedicated scripted run (covered only through the real-key fights)",
+   "REDUCE MOTION KO cut in the browser",
+   "Ten plan chapters on the continuity harness (Ch II, VII, IX, X, XIV, XVI and others) and the live baseline for Ch VI, XII, XIII",
+   "target composites (end-state-board) for the plan target groups",
+   "hidden FF7 chapter stays hidden / writes nothing to the save",
+   "the KO strips are debug-triggered (setPose at the first menu) and the X-2 framing caught a cut-in, so they are before/after stills, not a measurement"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live verification of the exact artifact after the deploy, then the deep review on the live build (carried deep: 2ae1a9e4)",
+ "elapsedMinutes": 235
+}

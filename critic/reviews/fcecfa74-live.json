@@ -1,0 +1,91 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-11T16:06:00Z",
+  "build": {
+    "mainSha": "fcecfa74",
+    "bundle": "CvOwYJX5",
+    "artifactHash": "dfbabd7ae7a1b0a35d915eb5b116896b894d6849b8cc05daee75d102c16e2057"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "critic/reviews/fcecfa74-live-verify.json",
+        "critic/reviews/fcecfa74-live-verify.mjs"
+      ],
+      "game": "both",
+      "chapter": "n/a",
+      "state": "live site files",
+      "mode": "automated",
+      "environment": "node fetch against https://echoesofspira.com/ with a cache-busting query",
+      "artifactVersion": "fcecfa74",
+      "minutes": 75,
+      "note": "verifyLive() from tools/artifact-manifest.mjs, --full (the marker plans a deep review), compared against critic/artifacts/2ae1a9e4.json for the changed set (10 added, 4 changed, 3 removed). All 5169 manifest files fetched live: 5169 checked, 0 mismatched, 0 missing, 0 wrong content type, 0 errors; the live manifest names artifact dfbabd7a. The browser-Accept page equals index.html once Cloudflare's Web Analytics beacon is removed (the rule the tool already allows). The tool's own CLI fetches sequentially and had not finished after about 50 minutes, so it was stopped and the same verifyLive function was run with the fetches prefetched 16 at a time (the function, the comparison and the hashes are unchanged)."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "critic/reviews/fcecfa74-live-smoke.json",
+        "critic/reviews/fcecfa74-live-smoke.mjs",
+        "critic/reviews/fcecfa74-live/ffx-shots/ko-1.png",
+        "critic/reviews/fcecfa74-live/ffx2-limit-shots/limit-action.png"
+      ],
+      "game": "both",
+      "chapter": "seymour-flux; ffx2-fallen-aeons; ffx2-ixion-djose; hidden FF7 'limit' chapter",
+      "state": "battle, command menu reached; KO and revive; pause",
+      "mode": "automated, headless Playwright, PYREFLY_BROWSER=gpu, 1600x900, fresh context",
+      "environment": "https://echoesofspira.com/?cb=<ts>; window.__pyrefly.build() = fcecfa74 / index-CvOwYJX5.js",
+      "artifactVersion": "fcecfa74",
+      "minutes": 40,
+      "note": "Every capture was preceded by assertScreen on the intended screen (title, chapter-select, party-prep, battle) and a wait for the command menu; chapter tiles were reached with real ArrowRight presses until the board's selectedId was the intended chapter. FFX Seymour Flux: attack with real Enter, cancel path (Enter, then Escape: Escape at the command menu opens the pause screen, which Escape closes); KO: Yuna and Kimahri set to 1 HP through the debug state, then real attacks until the enemy's own action KO'd Yuna (a ko event in the battle log, Tidus and Yuna down in the screenshot); revive through forceCommand phoenix-down (events action-start, status-remove, revive, action-end; HP 750, alive). Pause: Escape opens and closes, P opens and closes, H hides the panels (text 861 to 493) and restores (861). Music: Seymour requested boss-seymour, Fallen Aeons and Ixion both requested boss-ffx2-fallen-aeons (the shared cue), the hidden limit chapter requested boss-ff7-guard; each was fetched as prerendered /audio/music/<name>.mp3 and audioDebug().playing named it (no procedural fallback). Hidden 'limit' chapter: the word typed with real keys, Enters through to battle, one real attack in battle. 0 console errors, 0 4xx/5xx."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": [
+        "critic/reviews/fcecfa74-live-smoke.json"
+      ],
+      "game": "both",
+      "chapter": "n/a",
+      "state": "after reload",
+      "mode": "automated",
+      "environment": "headless Playwright, localStorage save key pyrefly-reprise:save:v1",
+      "artifactVersion": "fcecfa74",
+      "minutes": 3,
+      "note": "Lightweight: master volume set to 0.42 in the save, page reloaded, the save still read 0.42 with the same keys (version, chapters, unlocked, settings, seenCoach, flags). No chapter was cleared in the run, so progress was the setting only. The full upgrade matrix was not run."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact, all 5169 files",
+      "FFX Seymour Flux: attack, cancel, enemy-caused KO, revive, pause, H, P, Escape",
+      "Fallen Aeons and Ixion music request (shared cue)",
+      "hidden FF7 'limit' chapter door, music request, one attack",
+      "reload smoke (setting survives)",
+      "console errors and 4xx for the whole run"
+    ],
+    "reused": [],
+    "notTested": [
+      "the motion picks judged by eye (the fall, puff and land, FB-1 blend, 80 ms recoil): only still frames of the KO were looked at, no timing measurement",
+      "audio heard by ear: agents cannot hear; only the request, the fetch and the playing track name were checked",
+      "cues for Trema phase 2, Natus, Isaaru, Sin fins/core, Sin face and the Evrae loop re-cut",
+      "the revive was submitted through the debug forceCommand (not the item menu), and the KO's 1 HP setup used the debug state",
+      "the full upgrade matrix (CHK-024)",
+      "FFX-2 ATB chapters were reached and their music checked, but no FFX-2 KO or revive was played"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 135
+}
