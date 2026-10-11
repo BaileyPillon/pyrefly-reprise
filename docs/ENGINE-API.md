@@ -389,7 +389,7 @@ FF7, an aeon, a fiend or `?stature=off`.
 | `reloadPose(name, url?)` | Re-read one pose from disk; used by the dev hot-swap. |
 | `flash(colour?, ms?, peak?)` | Additive hit flash, weighted by alpha. |
 | `lunge(distance?, ms?)` | Step forward along `facing` and settle. Promise. |
-| `recoil(ms?, distance?)`, `squash(ms?, amount?)`, `hop(height?, ms?)` | Promise-returning impact layers. |
+| `recoil(ms?, distance?)`, `squash(ms?, amount?)`, `hop(height?, ms?)` | Promise-returning impact layers. The knock-back inside `recoil` is `src/engine/HitRecoil.ts` (r40-recoil, FC-1): an 80 ms eased push from where the figure is, then a spring home with one overshoot under a tenth of the distance, over the caller's `ms`; progress 0 writes where the figure already is, so a hit-stop (field `dt` 0) never throws it. `?recoil=legacy` brings back the old `elasticOut` tween for A/B captures. |
 | `shake(amount?, ms?)` | Damped jitter in world units. |
 | `dissolveTo(v, ms?, colour?)` / `setDissolve(v)` | Pyrefly dissolve; 0 solid, 1 gone. KO and sending. |
 | `fadeTo(a, ms?, easing?)` / `setAlpha(a)` / `alpha` | Opacity, shadow included. |
