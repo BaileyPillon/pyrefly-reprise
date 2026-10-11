@@ -258,7 +258,7 @@ export const LOOP_DECIMALS = 6;
  * Raised from 90 MB to 100 MB under D-6xx (Bailey 2026-10-10 'Whatever you recommend for sound effects and music I'll go with those recommendations'; driver item 47e): the two ElevenLabs battle cues
  * (boss-leblanc and boss-bahamut, 2.93 MB) take the total from 87.09 MB to 90.02 MB.
  * Raised from 100 MB to 105 MB for `boss-ff7-guard` (FF7-M1, batch 1, 2026-10-10): the six other batch-1 cues take the total to 99.85 MB and this one, 1.74 MB, to 101.59 MB,
- * so 100 MB no longer holds; 105 MB is the round figure above it. The raise is the driver's call under Bailey's words 'ill go with all your recommendations' (the batch-1 picks).
+ * so 100 MB no longer holds; 105 MB is the round figure above it. The raise is driver decision item 53a (2026-10-11, under item 52a), made under Bailey's 23:05 EDT words of 2026-10-10 'i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please.' (it reaffirms the batch-1 picks he made at 22:10 with 'ill go with all your recommendations'), and it supersedes item 47e's 100 MB.
  * qa.mjs, render.mjs and tests/unit/audio-shipped-files.test.ts all read this one constant.
  */
 export const AUDIO_BUDGET_BYTES = 105e6;

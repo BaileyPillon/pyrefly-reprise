@@ -58,7 +58,7 @@ export interface MusicEntryInput {
 /** Six. Four decimals is 4.4 samples at 44.1 kHz, which moves the loop seam. */
 export declare const LOOP_DECIMALS: number;
 
-/** The shipping budget for public/audio in bytes: 105 MB for the FF7 cue of batch 1 (2026-10-10, 'ill go with all your recommendations'; the driver's call); 100 MB under D-6xx (Bailey 2026-10-10 'Whatever you recommend for sound effects and music I'll go with those recommendations'; driver item 47e); 90 MB since D-306 (sfx sprite-v2 at LAME V0); 85 MB under D-292. */
+/** The shipping budget for public/audio in bytes: 105 MB for the FF7 cue of batch 1 (driver decision item 53a, 2026-10-11, under Bailey's 23:05 EDT words of 2026-10-10 'i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please.'; supersedes item 47e's 100 MB); 100 MB under D-6xx (Bailey 2026-10-10 'Whatever you recommend for sound effects and music I'll go with those recommendations'; driver item 47e); 90 MB since D-306 (sfx sprite-v2 at LAME V0); 85 MB under D-292. */
 export declare const AUDIO_BUDGET_BYTES: number;
 
 export declare function manifestPath(outRoot: string): string;
