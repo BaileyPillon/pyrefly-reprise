@@ -87,6 +87,16 @@ export function spendItem(ctx: Ctx, id: string): boolean {
   return true;
 }
 
+/**
+ * Give one of `id` back to the party bag (the action executor's refund, `0x007b0c20` with +1): the stack stops at 99, so a refund into
+ * a full stack is lost, and the new count is mirrored into `state.flags` like {@link spendItem}'s.
+ */
+export function refundItem(ctx: Ctx, id: string): void {
+  const left = Math.min(99, (ctx.rt.inventory.get(id) ?? 0) + 1);
+  ctx.rt.inventory.set(id, left);
+  ctx.state.flags[`inventory:${id}`] = left;
+}
+
 /** A fresh, empty {@link ActorRuntime} for a combatant. */
 export function makeActorRuntime(c: Combatant): ActorRuntime {
   return {

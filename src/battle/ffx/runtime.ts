@@ -8,6 +8,7 @@
  */
 
 import type { AbilityId, CombatantId, FFXCombatant, MinigameKind } from '../common/types.ts';
+import type { PendingItemReaction } from './adapt/reactions.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -188,4 +189,14 @@ export interface FFXRuntime {
   inReaction?: boolean;
   /** `state.nextSeq` when Yunalesca last changed form: a Doublecast whose first cast did it cancels the second (row Y6). */
   formDiedAtSeq?: number;
+  /**
+   * The item reactions the hits and the death checks of the action in progress have queued, in the order they were queued, each already
+   * paid for (re-parity RC4 lane F, `adapt/reactions.ts`): Auto-Med and Auto-Potion decided in a hit, Auto-Phoenix in a death check.
+   * `engine-end.ts#runItemReactions` runs them once the action is over and empties the list. Absent until first needed.
+   */
+  itemReactions?: PendingItemReaction[];
+  /** The characters that died since the list was last emptied: a record queued for one of them is lost too (`adapt/reactions.ts#cancelReactionsOf`). */
+  reactionDeaths?: Set<CombatantId>;
+  /** The item an item reaction paid for when it was queued: `execute.ts` takes that one use as already spent. */
+  prepaidItem?: string;
 }

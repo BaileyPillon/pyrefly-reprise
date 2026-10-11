@@ -300,7 +300,10 @@ export function executeCommand(
       ctx.emit({ type: 'message', text: `${actor.name} cannot use items`, kind: 'system' });
       return { rank: 0, rejected: true, damageDealt: 0 };
     }
-    if (!spendItem(ctx, command.id)) {
+    // An item reaction (Auto-Med, Auto-Potion, Auto-Phoenix) was paid for when its record was queued (`adapt/reactions.ts`): that one use is not spent again.
+    if (ctx.rt.prepaidItem === command.id) {
+      ctx.rt.prepaidItem = undefined;
+    } else if (!spendItem(ctx, command.id)) {
       ctx.emit({ type: 'message', text: 'No items left', kind: 'system' });
       return NOTHING;
     }

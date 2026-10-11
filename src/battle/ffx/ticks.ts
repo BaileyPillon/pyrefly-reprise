@@ -11,8 +11,8 @@
  * Overdrive gauge's turn hooks, the Omnis and Sin hooks and the equipment reactions.
  */
 
-import type { AbilityDef, CombatantId, FFXCombatant, ItemId } from '../common/types.ts';
-import { type Ctx, has, isAlive, livingFriendlies, onField, spendItem, tryActor } from './state.ts';
+import type { AbilityDef, CombatantId, FFXCombatant } from '../common/types.ts';
+import { type Ctx, isAlive, onField, tryActor } from './state.ts';
 import { refreshCriticalStatus } from './statuses.ts';
 import { doomTurn, endOfTurn, startOfTurn } from './adapt/ticks.ts';
 import { hasAuto } from './equipment.ts';
@@ -20,47 +20,6 @@ import { gaugeOnTurn } from './gauge.ts';
 import { ATTACK_ABILITY_ID } from './registry.ts';
 import { runSinLivenessHooks } from './ai/sin-counters.ts';
 import { runPostPoison, runPreTurn } from './ai/hooks.ts';
-
-/** Potions Auto-Potion reaches for, weakest first [ffx-combat-core §9]. */
-const AUTO_POTION_ORDER: readonly ItemId[] = ['potion', 'hi-potion', 'x-potion'];
-
-/** Revival items Auto-Phoenix reaches for. */
-const AUTO_PHOENIX_ORDER: readonly ItemId[] = ['phoenix-down', 'mega-phoenix'];
-
-/** Status cures Auto-Med reaches for, and what each fixes. */
-const AUTO_MED_ORDER: ReadonlyArray<readonly [ItemId, string]> = [
-  ['eye-drops', 'darkness'],
-  ['echo-screen', 'silence'],
-  ['antidote', 'poison'],
-  ['holy-water', 'zombie'],
-  ['remedy', 'any'],
-];
-
-/**
- * What a Remedy answers — the `'any'` row of {@link AUTO_MED_ORDER}.
- *
- * Auto-Med only fires **when the wearer actually has one of these**. Without
- * this list the `'any'` row matched unconditionally, so an Auto-Med wearer
- * threw a Remedy away on **every single hit that touched them**, healthy or
- * not: Auron carries Auto-Med in the Dream's End build and burned the whole
- * six-Remedy bag inside the first minute of Chapter 3, which mattered from the
- * moment item counts started carrying between links of the chain (see
- * `state.ts spendItem`). Petrify is on the list deliberately — Left-Arm Strike
- * carries `shatter 100`, so a Remedy on the turn the beam lands is the answer
- * `ffx-bfa-yu-yevon §4.4` names for a character without Stoneproof.
- */
-const REMEDY_CURES: readonly string[] = [
-  'darkness',
-  'silence',
-  'poison',
-  'zombie',
-  'petrify',
-  'sleep',
-  'confuse',
-  'berserk',
-  'slow',
-  'curse',
-];
 
 /**
  * Everything that happens as a combatant's turn opens, in the game's order (`pp_BtlTurnStart`, VA 0x00792a90): the start-of-turn
@@ -112,25 +71,16 @@ function counterAbilityFor(c: FFXCombatant, def: AbilityDef): string | undefined
   return undefined;
 }
 
-/** The first item in `order` the party actually has. */
-function firstAvailable(ctx: Ctx, order: readonly ItemId[]): ItemId | undefined {
-  for (const id of order) {
-    if ((ctx.rt.inventory.get(id) ?? 0) > 0) return id;
-  }
-  return undefined;
-}
-
-function consumeItem(ctx: Ctx, id: ItemId): boolean {
-  return spendItem(ctx, id);
-}
-
 /**
- * Automatic reactions after an action resolved: Counterattack, Magic Counter,
- * Auto-Potion, Auto-Med and Auto-Phoenix. All fire with `ctb = 0`, so they cost
- * no turn [ffx-combat-core §9].
+ * Automatic reactions after an action resolved: Counterattack and Magic Counter, all with `ctb = 0`, so they cost no turn
+ * [ffx-combat-core §9].
  *
- * Returns the counter-attacks to resolve; the engine runs them so that
- * `abilities.ts` does not have to import the turn loop.
+ * Returns the counter-attacks to resolve; the engine runs them so that `abilities.ts` does not have to import the turn loop.
+ *
+ * **Auto-Potion, Auto-Med and Auto-Phoenix are not decided here any more** (re-parity RC4, lane F; FFX only). The game decides each one
+ * where it happens, inside the hit (Auto-Med and Auto-Potion, after the hit's damage and the statuses it newly inflicted) or the death
+ * check (Auto-Phoenix), pays the item at once and runs the record when the action is over; that is
+ * `adapt/reactions.ts` and `engine-end.ts#runItemReactions`.
  */
 export function collectReactions(
   ctx: Ctx,
@@ -144,46 +94,11 @@ export function collectReactions(
   for (const id of affected) {
     const c = tryActor(ctx, id);
     if (!c || !onField(c)) continue;
-
-    // Auto-Potion: damage left the wearer below 50% of max HP.
-    if (isAlive(c) && hasAuto(c, 'auto-potion') && c.hp * 2 < c.stats.maxHp) {
-      const item = firstAvailable(ctx, AUTO_POTION_ORDER);
-      if (item && consumeItem(ctx, item)) {
-        out.push({ actorId: c.id, targetId: c.id, abilityId: item, cause: 'auto-potion' });
-        continue;
-      }
-    }
-    // Auto-Med: a curable ailment landed.
-    if (isAlive(c) && hasAuto(c, 'auto-med')) {
-      for (const [item, status] of AUTO_MED_ORDER) {
-        const wanted = status === 'any' ? REMEDY_CURES.some((st) => has(c, st as never)) : has(c, status as never);
-        if (!wanted) continue;
-        if ((ctx.rt.inventory.get(item) ?? 0) <= 0) continue;
-        if (consumeItem(ctx, item)) {
-          out.push({ actorId: c.id, targetId: c.id, abilityId: item, cause: 'auto-med' });
-          break;
-        }
-      }
-    }
     // Counterattack / Magic Counter, aimed back at the aggressor.
     const counter = counterAbilityFor(c, def);
     if (counter && isAlive(c) && isAlive(attacker) && attacker.id !== c.id) {
       out.push({ actorId: c.id, targetId: attacker.id, abilityId: ATTACK_ABILITY_ID, cause: counter });
     }
   }
-
-  // Auto-Phoenix: an ally is KO'd and the wearer did not die to the same blow.
-  for (const c of livingFriendlies(ctx)) {
-    if (!hasAuto(c, 'auto-phoenix')) continue;
-    const downed = ctx.state.activeIds
-      .map((id) => tryActor(ctx, id))
-      .find((a): a is FFXCombatant => a !== undefined && !isAlive(a) && onField(a));
-    if (!downed) continue;
-    const item = firstAvailable(ctx, AUTO_PHOENIX_ORDER);
-    if (item && consumeItem(ctx, item)) {
-      out.push({ actorId: c.id, targetId: downed.id, abilityId: item, cause: 'auto-phoenix' });
-    }
-  }
   return out;
 }
-

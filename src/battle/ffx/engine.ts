@@ -25,7 +25,7 @@ import { onTurnStart } from './ticks.ts';
 import { resolveDuePartRevivals } from './hp.ts';
 import { chooseAiCommand } from './ai/index.ts';
 import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
-import { afterAction, checkEnd, finish, type EndHooks } from './engine-end.ts';
+import { afterAction, checkEnd, finish, runItemReactions, type EndHooks } from './engine-end.ts';
 
 export { apForLevel } from './results.ts';
 
@@ -247,6 +247,8 @@ export class FFXEngine implements FFXBattleEngine {
     ctx.state.turn += 1;
     this.push({ type: 'turn-start', actorId: actor.id, turn: ctx.state.turn, elapsedTicks: elapsed });
     onTurnStart(ctx, actor);
+    // A death by the start-of-turn tick (a Zombie's Regen) queued its Auto-Phoenix in the death check; the game runs it before anyone acts.
+    runItemReactions(this.hooks());
 
     // Doom may have killed the actor as its turn opened.
     if (!isAlive(actor)) {
