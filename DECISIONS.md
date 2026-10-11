@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1212 decisions in all: 750 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 778 of the written decisions record a blanket yes.
+1218 decisions in all: 756 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 784 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1131 |
+| adopted | 1137 |
 | proposed | 12 |
 | deferred | 5 |
 | rejected | 11 |
 | superseded | 53 |
-| **All** | **1212** |
+| **All** | **1218** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 87 |
 | art | 265 |
-| visuals | 86 |
+| visuals | 88 |
 | camera | 60 |
-| audio | 105 |
+| audio | 108 |
 | ui | 131 |
 | story | 16 |
 | chapters | 196 |
 | guide | 30 |
-| release | 47 |
+| release | 48 |
 | hosting | 17 |
 | process | 99 |
 | critic | 34 |
 | data | 10 |
 | tech | 11 |
 | site | 18 |
-| **All** | **1212** |
+| **All** | **1218** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 570 |
+| both games | 576 |
 | FFX only | 352 |
 | FFX-2 only | 272 |
 | FF7 hidden experiment | 18 |
-| **All** | **1212** |
+| **All** | **1218** |
 
 ## Standing rules in force
 
@@ -130,7 +130,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11)
 
 ## Ledger
 
@@ -5367,7 +5367,7 @@ Saturday · 93 decisions
 - <a id="d-706"></a>**D-706** — The shipped-audio budget goes from 90 MB to 100 MB, making room for an original per encounter; it shrinks again as the shared stand-ins retire (both games)
   - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
   - What changed: Item 47e. Replaces D-306's 90 MB figure. AUDIO_BUDGET_BYTES is 100e6 in 72973096 (the build ships 90.02 MB of audio); the stand-ins that retire as originals land are boss-ffx2-aeon (4.07 MB) and scene-bevelle-underground (3.21 MB). The FF7 take would need 105 MB (a separate yes, branch r3945-music-ff7). Both games.
-  - area tech · both games · adopted · delivery implemented · at ~18:14 EDT · see [D-306](#d-306), [D-723](#d-723) · refines [D-702](#d-702)
+  - area tech · both games · adopted · delivery implemented · at ~18:14 EDT · see [D-306](#d-306), [D-723](#d-723) · refines [D-702](#d-702) · partly replaced by [D-751](#d-751)
   - Source: Bailey, 2026-10-10 18:14 EDT (18:14:11 by the transcript's clock; the driver's list gave about 18:20, but the message came 31 seconds after the …
 - <a id="d-707"></a>**D-707** — Music scope: an original for EVERY encounter, in batches with the worst-fitting first; ONE original per distinct real-game track, shared where the game shares a track (“Challenge”: Seymour Flux and Yunalesca; “Aeons”: the Fallen Aeons and Ixion, with Bahamut the sourced exception) (both games)
   - Bailey: “Whatever you recommend for sound effects and music I’ll go with those recommendations” (blanket yes)
@@ -5589,3 +5589,38 @@ Saturday · 93 decisions
   - What changed: Item 52n, under 52a, refining D-745. OWED on r40-sfx: set the floors, then re-run node tools/audio/sfx-parity-mix.mjs. Not merged.
   - area audio · both games · adopted · delivery in progress · at ~22:46 EDT · refines [D-737](#d-737)
   - Source: docs/deploys.log
+
+### 2026-10-11
+
+Sunday · 6 decisions
+
+- <a id="d-751"></a>**D-751** — DRIVER: the FF7-M1 cue (“Night infiltration”) for Guard Scorpion in the hidden FF7 “limit” chapter ships, and the shipped-audio budget goes from 100 MB to 105 MB, which supersedes D-706's 100 MB (the cue is FF7 only; the budget is both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 53a, under 52a (D-737). The seven batch-1 files come to 101.59 MB, so the 100 MB line of D-706 is passed and no stand-in can retire yet; the driver gave the yes that D-723 said it needed. AUDIO_BUDGET_BYTES is 105e6 (tools/audio/manifest-io.mjs; commit 96f3684a cites this item and his words in its comments). After the stereo narrowing of D-755 the shipped audio is 100,798,034 bytes of the 105 MB. LIVE in fcecfa74 (bundle CvOwYJX5, 2026-10-11T14:44:38Z): the live review typed the word “limit”, reached the FF7 fight and audioDebug named the prerendered boss-ff7-guard, not the synth fallback. FF7 only for the cue; both games for the budget.
+  - area audio · both games · adopted · delivery implemented · at ~01:05 EDT · see [D-706](#d-706), [D-723](#d-723), [D-737](#d-737) · refines [D-723](#d-723)
+  - Source: The driver's decision of 2026-10-11 ~01:05 EDT (item 53a of the driver's list, the driver's own clock), made under D-737 and after the overnight code …
+- <a id="d-752"></a>**D-752** — DRIVER: the P2-A stepped dissolve (D-699) is built but ships switched OFF by default; the plain dissolve plays until he picks again among P2-A at cap 0.30, P2-A at cap 0.39 and the plain dissolve (both games)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 53b, under 46e and 52a. Measured through the critic's own harness, the stepped dissolve reads 78 of 560 pose-swap pairs at a one-frame jump of 40 px or more, against 0 for the plain dissolve; a focused review would class that as a regression and hold the build, and the Motion Options page never showed that cost (docs/handoff/r40-blend-jerk.md). So PoseBlend runs the plain dissolve by default (fa906ed4); ?poseblend=stepped turns the stepped shape on for a same-build A/B and the shape stays whole. LIVE, off, in fcecfa74. The pick stays his: new loops of P2-A at cap 0.30, P2-A at cap 0.39 (18 of 560 pairs at 40 px) and the plain dissolve are coming on an options page. Both games (shared presenter).
+  - area visuals · both games · adopted · delivery implemented · at ~01:05 EDT · see [D-699](#d-699), [D-737](#d-737) · refines [D-699](#d-699)
+  - Source: The driver's decision of 2026-10-11 ~01:05 EDT (item 53b of the driver's list, the driver's own clock), made under D-699 (Bailey, 2026-10-10 18:13 …
+- <a id="d-753"></a>**D-753** — DRIVER: the REDUCE MOTION knock-down stays a plain cut, which is the Motion Options page's own default; a short cross is an open question for him (both games)
+  - Bailey: “I’ll go with all your recommendations” (blanket yes)
+  - What changed: Item 53c, under 46e. The page says “REDUCE MOTION stays a cut unless you say otherwise” and his accepted pick was “REDUCE MOTION and the Steam capture take the page defaults” (P1-B in D-699). An earlier lane commit had made it a 75 ms cross and called that the page default, which was false; 50bd2bf4 put the cut back and left the revive on the actor's own blend. LIVE in fcecfa74. A short cross is one line in koMode if he wants it; the focused review did not exercise the REDUCE MOTION cut in a browser (unit tests only). Both games.
+  - area visuals · both games · adopted · delivery implemented · at ~01:05 EDT · see [D-699](#d-699), [D-737](#d-737) · refines [D-699](#d-699)
+  - Source: The driver's decision of 2026-10-11 ~01:05 EDT (item 53c of the driver's list, the driver's own clock), made under D-699 (Bailey, 2026-10-10 18:13 …
+- <a id="d-754"></a>**D-754** — DRIVER: the victory fanfares of music batch 2 (VF-A2 for FFX, VX-A1 for FFX-2) are held until they are remade as an intro plus a loop, because the results screen may loop victory music; they go with batch 2 (game case per fanfare)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 53d, under 52a, refining D-744 (which had each fanfare play once and then hold silence, “oneShot”). The results screen may loop its victory music, so a one-shot take would end in silence there; remade as an intro plus a loop they ship with batch 2, which is blocked on the ElevenLabs key's own credit limit (D-742). Staged and mastered, not installed, not live. VF-A2 is FFX only, VX-A1 is FFX-2 only.
+  - area audio · both games · adopted · delivery not scheduled · at ~01:05 EDT · see [D-742](#d-742), [D-744](#d-744) · refines [D-744](#d-744)
+  - Source: The driver's decision of 2026-10-11 ~01:05 EDT (item 53d of the driver's list, the driver's own clock), made under D-737 and after the overnight code …
+- <a id="d-755"></a>**D-755** — DRIVER: the new ElevenLabs battle cues are narrowed in mid/side, just enough to pass the project's stereo gate (round 24, PR-0425: boss-bahamut correlation 0.41, boss-leblanc 0.26, against 0.60 to 0.85), with the loop points unchanged, and the two cues already live are corrected in the same build (game case per cue)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 53e (driver, about 06:30 EDT, under 52a). Round 24 measured the two cues live in 39.4.4 against the THEMES.md gate and both failed; measuring all nine ElevenLabs cues of 2026-10-10 showed eight failing (the batch-1 cues wider still, correlations 0.03 to 0.19) and boss-ff7-guard passing as rendered, which stays untouched. Each of the eight keeps its mid with the side channel scaled by one broadband gain (tools/audio/stereo-narrow.mjs), then -16 LUFS and a LAME V4 encode: correlation about 0.70, side-to-mid about -7.5 dB, mono-sum loss -0.71 dB, the decoded length, loop start and loop end identical to the sample (a248718f). Mono speakers (phones) lose less. LIVE in fcecfa74; the focused review decoded the cues and the gate passed. Nobody has heard the narrowed files (rule 13); his ear can still prefer the wide ones. The older wide tracks of D-582 (Seymour A, the chapter select, the title) are not touched. FFX-2: boss-bahamut, boss-leblanc, boss-ffx2-fallen-aeons, boss-trema. FFX: boss-seymour-natus, boss-isaaru, boss-sin-assault, boss-sin-countdown. FF7: boss-ff7-guard, unchanged.
+  - area audio · both games · adopted · delivery implemented · at ~06:30 EDT · see [D-582](#d-582), [D-737](#d-737) · refines [D-737](#d-737)
+  - Source: The driver's decision of 2026-10-11 ~06:30 EDT (item 53e of the driver's list, the driver's own clock), made under D-737 and after the overnight code …
+- <a id="d-756"></a>**D-756** — DRIVER: the motion, music and SFX build r40-rc follows RC2 on its own focused review, and if the deep-debt gate refuses it, its deploy override is Bailey's yes to the overnight plan that had the motion and music build following RC2 on SHIP (both games)
+  - Bailey: “i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.” (blanket yes)
+  - What changed: Item 53f. RC2 (2ae1a9e4, FFX) deployed first, at 07:24 EDT. r40-rc (fcecfa74 = RC2 plus the motion integration r40-int, the stepped dissolve off, the FF7 cue at 105 MB, r40-sfx with the 52n floors and the stereo fix) had its own focused review (235 minutes; ship SHIP, better than live on every measured axis, majors FOC40-01 and FOC40-02 disclosed and not introduced by it) and deployed at 2026-10-11T14:44:38Z (10:44 EDT) from D:/pyrefly-r40-rc, recorded in docs/deploys.log as override=owner with his 23:05 words (critic/pending/fcecfa74.json holds the quoted text). Live check PASS. Both games (shared presenter and audio routing).
+  - area release · both games · adopted · delivery implemented · at ~01:05 EDT · see [D-730](#d-730), [D-737](#d-737) · refines [D-730](#d-730)
+  - Source: The driver's decision of 2026-10-11 ~01:05 EDT (item 53f of the driver's list, the driver's own clock), made under D-737 and after the overnight code …
