@@ -79,14 +79,25 @@ describe('what the lever scales', () => {
     }
   });
 
-  it('is the same fight in game time: at zero decision time every speed wins the same chapter 4 and 5 seeds', () => {
+  // Re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script parity", 2026-10-10): Chapter 5's bosses follow the game's scripts now and the
+  // chain is lost on some seeds at Normal (`ffx2-atb-golden.test.ts` CH5_D0_OUTCOMES: 14 of 20 seeds are victories), so "every speed wins
+  // these Chapter 5 seeds" asserted a result the engine no longer promises, and a marginal chain does not end the same way seed by seed at
+  // a different speed (measured over seeds 1 to 20 at zero decision time: Slow wins 13, Normal 14, Fast 12, on different seeds, because the
+  // ticks fall on a different grid). What the lever promises is that the speed does not change how hard the fight is in game time: Chapter 4
+  // is still won on every one of these seeds at every speed, and Chapter 5's win count over seeds 1 to 20 stays within 4 of Normal's 14.
+  it('is the same fight in game time: at zero decision time every speed wins chapter 4 on the same seeds and keeps chapter 5 near Normal\'s 14 of 20', () => {
     for (const seed of [1, 2, 3, 7, 42]) {
       for (const speed of ['slow', 'fast'] as const) {
         expect(driveChapter4(seed, 0, { atbSpeed: speed }).outcome, `ch4 ${speed} ${seed}`).toBe('victory');
-        expect(driveChapter5(seed, 0, { atbSpeed: speed }).outcome, `ch5 ${speed} ${seed}`).toBe('victory');
       }
     }
-  }, 60_000);
+    const wins = (speed: AtbSpeed): number =>
+      Array.from({ length: 20 }, (_, i) => driveChapter5(i + 1, 0, { atbSpeed: speed }).outcome).filter((o) => o === 'victory').length;
+    expect(wins('normal'), 'normal is the golden: 14 of 20').toBe(14);
+    for (const speed of ['slow', 'fast'] as const) {
+      expect(Math.abs(wins(speed) - 14), `ch5 ${speed} wins`).toBeLessThanOrEqual(4);
+    }
+  }, 240_000);
 
   it('the Wait path asks for real milliseconds: Fast waits less, Slow waits more, for the same gauge', () => {
     const waits: Record<string, number> = {};

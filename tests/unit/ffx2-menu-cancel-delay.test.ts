@@ -69,13 +69,20 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
   // **Chapter IV's six hashes (here and in ON below) were re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use
   // 14 from the files"; the first event that differs is Bahamut's first Mega Flare damage, see `ffx2-atb-golden.test.ts`, ninth re-pin); the
   // old ones are in git at 3663cd3a. Chapters V and VI did not move.
+  // **Chapters IV and V re-pinned again 2026-10-10 for the boss AI (re-parity AI lane FFX-2 a, FFX-2 only; reason "game-script parity";
+  // `docs/handoff/re-parity-ai-ffx2-a.md`).** Bahamut, the Vegnagun chain and Shuyin follow the game's own scripts, so all twenty-four
+  // Chapter IV and V hashes moved (here and in ON below) and Chapter VI's twelve did not. Cause: Bahamut's very first action (the Curse's girl,
+  // now one 31-bit near-weighted search) and the Tail's first Tail Beam or the next roll after its opening sweep (whose search is thrown away
+  // but still draws) differ before any hit can land on an open menu (the first-difference table of the Active arm is in the handoff); the
+  // release-17 rule, the pace and the Wait split change only how an open menu closes, so every variant moves with it. ON's
+  // Active rows equal `ffx2-atb-golden.test.ts` CH4_D1500 / CH5_D1500 seeds 1 to 3 again. The old hashes are in git at 931613a8.
   const PINNED: Record<string, string> = {
-    'IV|active|1': 'b69f4a3f1b9b6b0a', 'IV|split|1': 'eef141fb06ebe8cc',
-    'IV|active|2': '00b9babadbd69165', 'IV|split|2': '274ca68e176eacb7',
-    'IV|active|3': 'cf097303e237c157', 'IV|split|3': '9adf489e36ac32b5',
-    'V|active|1': '9cfe461ad465c311', 'V|split|1': '437c85e81ea08054',
-    'V|active|2': 'e7b90b74c53c5a16', 'V|split|2': '94119b09f8fb5da3',
-    'V|active|3': 'b84d244db178ad3e', 'V|split|3': 'e70d65bbd193fc3d',
+    'IV|active|1': 'e2a65acfcdc0fd64', 'IV|split|1': '751230aaf7057f93',
+    'IV|active|2': 'b7377de7b2577b10', 'IV|split|2': 'b22a1bf219fed2f6',
+    'IV|active|3': 'bb8e2a68a7a6e6c5', 'IV|split|3': '58b66f5e27bbf949',
+    'V|active|1': 'c4e4d4dd985050b0', 'V|split|1': '659ab255874e59b0',
+    'V|active|2': '5c55eae573b8b52a', 'V|split|2': '84a80185bbe2bbd5',
+    'V|active|3': '8ed6b960462a4846', 'V|split|3': 'e18f39ecd78ec433',
     'VI|active|1': '12d69326e68d09f2', 'VI|split|1': 'cd51b9dbeab47115',
     'VI|active|2': '0eff8835d726e853', 'VI|split|2': '66d3ab577d1b1bcc',
     'VI|active|3': 'b2cfa25eb31ec05a', 'VI|split|3': '6a75d9deb02fa7cf',
@@ -85,12 +92,12 @@ describe('the default is ON; the option `false` replays release 17\'s logs, byte
   // All eighteen differ from release 17's: at human pace a plain hit lands on an open menu in each of
   // these runs. `ffx2-atb-golden.test.ts` holds the matching Active re-pin (same first two per chapter).
   const ON: Record<string, string> = {
-    'IV|active|1': '9d0cc3eb2f311ebd', 'IV|split|1': '11409ed21ed0de22',
-    'IV|active|2': 'a6512b1f55386411', 'IV|split|2': 'a7f0ad20ed99bb4d',
-    'IV|active|3': 'eb36f5accfb59945', 'IV|split|3': '528f12fc8ccb5fc8',
-    'V|active|1': 'fe7ab95d0fbae673', 'V|split|1': '88e40db9940ac6e0',
-    'V|active|2': '086e107f235fc649', 'V|split|2': 'a621da560e50e1e9',
-    'V|active|3': '0e5f385c8dca4fa7', 'V|split|3': 'ec68335b5d29e5b9',
+    'IV|active|1': '4d093c57312eb49a', 'IV|split|1': 'b331eec3eb1eac20',
+    'IV|active|2': '2a0b329a8eac4737', 'IV|split|2': '6b4a60bd00f30729',
+    'IV|active|3': 'ee3dfd37c6124d04', 'IV|split|3': '487058bad3d2903b',
+    'V|active|1': 'c6bb9bdd7c10acea', 'V|split|1': '498c6dd22577a7fc',
+    'V|active|2': 'd8b405191b8730ff', 'V|split|2': '633dccb281e0cd77',
+    'V|active|3': '7d21ce88f6094655', 'V|split|3': '55bafe9ee82e5a2c',
     'VI|active|1': 'a77a0b4b1dcba113', 'VI|split|1': 'ca1c8bcd80dbf334',
     'VI|active|2': '55c7f457cfc62c2a', 'VI|split|2': 'cad662e72aec12e9',
     'VI|active|3': 'a4912c4e9de351d3', 'VI|split|3': '7c5a4a6680191cd7',

@@ -230,6 +230,18 @@ describe('the shipped intended strategy beats Chapter 5 and completes the chain'
    * bar is 36 so ordinary tail variance does not flake it, and so that a
    * regression toward what this used to be — 0/40, defeat inside the first
    * link, and 23/40 once Darkness started paying for itself — goes red.
+   *
+   * **Re-baselined by the re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script
+   * parity", 2026-10-10; `docs/handoff/re-parity-ai-ffx2-a.md`).** The Tail, the Leg and
+   * its Nodes, the Core and its Bulwarks, the Head and its Redoubts and Shuyin follow
+   * the game's own scripts now, and this practice line wins this window **25/40** (losses
+   * at the Leg and at the Head; the shipped line over 500 contiguous seeds: 323, 64.6 %,
+   * where the base commit won 430, 86.0 %). Causes, by ablation, are in the handoff: the
+   * Head's own Agility (110, then 68; the table's 36 put back wins that link 248 of 248)
+   * and the Nodes' starting colours (a green and a yellow Node from the first moment).
+   * Nothing was tuned. The bar is a floor below the new count (about two standard
+   * deviations under 25 of 40), so a further regression still goes red; it is no longer
+   * "reliably winnable", and the handoff puts that to Bailey.
    */
   it('wins the great majority of forty contiguous chains', () => {
     const runs = Array.from({ length: 40 }, (_, i) => runChain(i + 1));
@@ -240,7 +252,7 @@ describe('the shipped intended strategy beats Chapter 5 and completes the chain'
       .map((x) => `${x.seed}: lost at ${x.r.links[x.r.links.length - 1]!.group}`);
     console.log(`seeds 1-40: ${wins} chains won; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 5 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(36);
+    expect(wins, 'Chapter 5 must stay winnable on the shipped line: the game-script floor is 20 of 40 (25 measured)').toBeGreaterThanOrEqual(20);
   });
 });
 

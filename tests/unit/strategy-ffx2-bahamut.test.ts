@@ -652,7 +652,12 @@ describe('each of the researched survival routes behaves as researched', () => {
     // **Mega Flare at the game's power 14** (release candidate 1, 2026-10-09; Bailey: "Use 14 from the files"): re-measured again,
     // 30, 21 and 30 of 30, and the three bars are floors below those wins (24, 15 and 20), as the researched routes are.
     ['Shell route (no Breaks at all)', lever({ shell: true, heal: true, breaks: false, darkness: true }), 24],
-    ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 15],
+    // **Re-parity AI lane FFX-2 a (FFX-2 only; reason "game-script parity", 2026-10-10):** Bahamut follows the game's script (Curse once, six
+    // actions a cycle, Attack by the near-weighted search to a girl without Poison); the Magic Break route is re-measured at 14 of 30 (it was 21;
+    // the Shell route and the heal-only route are still 30 of 30). Cause, by ablation: the near-weighted search alone is 5 of the 7 wins (19 of 30
+    // with every pick uniform again), the rest is the script's own rotation; with no Shell and no cure spells the girl he favours (Yuna, 47.6 %
+    // of his Attacks at the scene's start positions) is the one left unguarded. The bar is a floor below the new wins, as the others are.
+    ['Magic Break route (no Shell, no cure spells)', lever({ shell: false, heal: false, breaks: true, darkness: true }), 10],
     // Re-measured 2026-09-26 for IC-2: 27/30 -> 1/30. Its wins were the all-target wrap: Mega Flare
     // killed Rikku, wrapped its third hit onto Yuna and never touched Paine, so the Warrior was left
     // to finish him. Each girl now takes Mega Flare once and the White Mage is the one left, with no

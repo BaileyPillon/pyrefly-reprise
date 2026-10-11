@@ -224,9 +224,15 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // **Chapter IV's row re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use 14 from the files"; the first
   // event that differs is Bahamut's first Mega Flare damage; see `ffx2-atb-golden.test.ts`, ninth re-pin); the old row is in git at
   // 3663cd3a. Chapters V and VI did not move.
+  // **Chapters IV and V re-pinned again 2026-10-10 for the boss AI (re-parity AI lane FFX-2 a, FFX-2 only; reason "game-script parity";
+  // `docs/handoff/re-parity-ai-ffx2-a.md`).** Bahamut, the Vegnagun chain and Shuyin follow the game's own scripts: the first event that
+  // differs is Bahamut's first action (the Curse's girl, now a near-weighted search) in Chapter IV and, in Chapter V, the Tail's first Tail
+  // Beam or the next roll after its opening sweep. Rows 1 and 2 equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 again (all
+  // six still close no menu; Chapter V's seeds 2 and 3 are now defeats, as the golden pins). Chapter VI did not move. The old rows are in
+  // git at 931613a8.
   const PINNED = [
-    ['a290220ed81a53d9', 'd9f53eb0ed928677', '43393d7597f35b57'],
-    ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912'],
+    ['fce7463cc3a0d55e', '363278b55649d442', '28bd6263c0af1737'],
+    ['81400be4b36422f7', '078f7835c8636d5b', '1eecf2cf78cd7155'],
     ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
