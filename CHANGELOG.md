@@ -1,13 +1,156 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 60 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 62 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-11 · The motion and music build on echoesofspira.com
+
+Address: https://echoesofspira.com (main fcecfa74, bundle CvOwYJX5)
+
+- **Both:** a knocked-out party member now falls. The figure buckles, tips over toward the side it
+  lies on, the two paintings cross over under a puff of dust, and it lands. A revive plays it back:
+  the figure rises from the floor instead of showing two copies of itself for a moment. Foes, aeons
+  and giants get a short cross-fade. With REDUCE MOTION on, a knock-out stays a plain cut.
+- **Both:** a hit now pushes the figure back over 80 milliseconds from where it stands, instead of
+  throwing it the whole way on the hit's first frame; it holds still at contact during the hit-stop
+  and then moves.
+- **Both:** pose changes now run on the real clock, so a hit-stop or the pacing option no longer
+  freezes or stretches a blend. The double image on the attack and follow-through chain is shorter.
+- **Both, built but off:** Bailey's pick of the stepped dissolve (P2-A) is in the build and switched
+  off. The review's own measure reads it as 78 of 560 pose swaps jumping 40 pixels or more, against
+  none for the plain dissolve, and the options page never showed that cost. New clips of three
+  versions (the stepped dissolve at its cap of 0.30, at 0.39, and the plain one) are coming for his
+  pick.
+- **FFX-2:** two new battle themes, original music made with ElevenLabs: one for the Fallen Aeons
+  (Chapter XI) and Ixion (Chapter XVI), which share a track in the game, and one for Trema's second
+  phase (Chapter XIII).
+- **FFX:** four new battle themes: Seymour Natus (Chapter X), Isaaru (XIV), Sin's fins and core
+  (XVII) and Sin's face (XVIII). The Evrae theme (Chapter VIII) keeps its music, but its loop is
+  re-cut so it no longer clicks where it repeats.
+- **FF7, hidden chapter:** the Guard Scorpion fight in the `limit` chapter, silent until now, has
+  its own battle theme. The shipped audio budget goes from 100 MB to 105 MB to hold it.
+- **Both:** eight of the nine ElevenLabs battle themes (the Bahamut and Leblanc themes of 39.4.4 and six
+  of the new ones) are narrower in stereo, so they pass the project's stereo gate and lose less on
+  one small speaker or a phone; the FF7 theme already passed. The loop points are unchanged. Nobody
+  but Bailey can judge any of the new music by ear.
+- **Both:** sound-effect levels follow the games' measured balance (FFX-2's party hits keep today's
+  level), and the menu cursor and confirm share one tick, about 5 dB louder, inside a chapter. The
+  title, chapter select and the FF7 chapter keep their own.
+- **Disclosed by the focused review (FOC40-01 and FOC40-02; neither is introduced by this build or a
+  regression against the live one):** FOC40-01 (major, both games): the motion check CHK-027 still
+  fails: jerks of 40 pixels or more remain in every chapter measured, fewer than on the live build
+  (Chapter I 5 against 8, FFX-2 Chapter V 7 against 36, Chapter III 28 against 80, Chapter XVIII 31
+  against 54, FFX-2 Chapter XI 26 against 47), and knock-out snaps are 0 a minute against 0.2 to 0.4.
+  FOC40-02 (major, FFX-2): Chapter XI (Fallen Aeons) has a 960 pixel one-frame jump, 966 on the build
+  before. FOC40-03 (polish, a test-harness path only, not a player path).
+- **Not in this release:** the rest of the music (batch 2 and the victory fanfares as an intro plus a
+  loop) and the sound-effect packs, which wait for the ElevenLabs key's own credit limit; the stepped
+  dissolve (off, above); release candidate 3 and the random streams.
+- **Deploy notes:** it shipped under Bailey's owner override (his words of 2026-10-10 22:46 EDT,
+  "i'll go with all your recommendations even as to music and sound effects. you recommend an
+  dchoose it please. this is extremely important."; the deploy log calls them his 23:05 words)
+  because deep reviews are owed on earlier builds; the focused review's SHIP came first. The deploy
+  ran with the preflight tests skipped and the dirty tree allowed; 15 files were uploaded (5,155 were
+  already there) in 61 seconds, the Worker version is c95a0d2a, and 56 files were compared on each
+  address byte for byte. docs/deploys.log records 2026-10-11T14:44:38Z, which is 10:44 EDT. The deep
+  review is owed on this build, which carries the deep debt of 49 earlier builds.
+- **How it was checked:** tsc clean; the full suite on the release branch read 1,067 files with no
+  real failure (advisor-floor timeouts pass alone); a focused review of the exact build (235
+  minutes) said SHIP, changed area FAIL (CHK-027, above): on the same instrument the build is better
+  than the live one in every chapter re-measured, the changed themes route to their chapters and only
+  those, the stereo gate and the Evrae seam pass when decoded, and layout holds at three sizes. A
+  live check then verified all 5,169 files on echoesofspira.com byte for byte and played Seymour Flux
+  (an attack, a knock-out and a revive, pause), the Fallen Aeons and Ixion themes and the hidden
+  `limit` chapter with real keys: 0 console errors.
+
+![The knock-out and revive in FFX: the live build before (top two rows) and this build (bottom two)](docs/screenshots/release-r40-motion-music/ko-revive-before-after-ffx.jpg)
+
+*FFX, Seymour Flux, Tidus: frames about 50 milliseconds apart from the focused review, the live
+build before (knock-out, then revive) above this build (knock-out, then revive). On the live build the
+revive briefly shows two copies; here he rises from the floor, one figure the whole way.*
+
+![The knock-out and revive in FFX-2](docs/screenshots/release-r40-motion-music/ko-revive-before-after-ffx2.jpg)
+
+*FFX-2, Bahamut, Yuna: the same four rows. The strip's framing caught the cut-in, the big close-up
+in the first frames of rows 1 and 3; the fall itself is at the right-hand end.*
+
+## 2026-10-11 · Release candidate 2 (RC2) on echoesofspira.com
+
+Address: https://echoesofspira.com (main 2ae1a9e4, bundle Dh42HgH0)
+
+- **FFX, Chapter XVIII (Sin: the Face):** Sin's last attack comes on his twelfth turn, as in the
+  game, and the old way of fighting him ran out of time. The suggested line now has Lulu cast two
+  Firagas a turn with Doublecast, drinking a Turbo Ether when she runs low, and the party starts the
+  fight in armour that carries the Stone, Confuse and Zombie Wards, so Sin's Gaze no longer
+  petrifies, confuses or zombifies anyone. Following the card wins the fight with turns to spare
+  (every test fight, from 1 percent); skip the Wards or the Doublecast and it is a real race again. The
+  in-battle guide says twelve turns and explains the new steps.
+- **FFX, Chapter X (Seymour Natus):** Natus's Flare comes every third turn or so, as in the game,
+  and the old line, which sends all five aeons, lost guardians to it. The suggested line now sends
+  Bahamut alone for his Overdrive and has Rikku step in for one turn to put Reflect on Natus, so
+  Mortibody's Cura bounces onto one of you instead of healing him. Fights end in about 35 turns
+  instead of 57, with far fewer guardians falling (60 to 97 percent in test fights). The guide, the
+  pause tip and the move advisor all teach it.
+- **FFX, Overdrive bars, aeons and Steal (every chapter):** the bars follow the game's own rules:
+  every hit adds at least a point, a healer's bar counts only the hit points actually restored,
+  Shield stops a bar from filling and Boost doubles it, and an aeon's bar is a short one that fills
+  in steps of five percent. When an aeon leaves, Yuna still owes the recovery of her Summon, so she
+  no longer acts the instant it goes; a fallen aeon stays away as long as the game keeps it away and
+  returns at full health; aeons wear the gear the game gives them. Stealing uses the game's odds:
+  each steal from a monster is about half as likely as the one before, but never impossible. Chapter
+  VII (Anima and Macalania) is easier for it and Chapter II (Yunalesca) somewhat harder (99 to 94
+  percent). A battle that begins with a hurt party member no longer stops the game.
+- **FFX, Chapter IX (Yojimbo):** as hard as before, but it plays differently. Because Yuna now pays
+  for her Summon, she can no longer call an aeon in front of Zanmato and heal in the same breath.
+  The advice changed to match: call the aeon late, when Yojimbo's gauge reaches 96, and have the
+  party healed first. The guide and the move advisor say so.
+- **FFX, the strategy guide:** the cards for Evrae, Yojimbo, Seymour (Flux, Macalania, Omnis),
+  Yunalesca, Braska's Final Aeon and the Fins and Genais are rewritten from the game's own scripts:
+  how Evrae's Stone Gaze fills (and that a retreat does not clear it), the real odds inside each of
+  Yojimbo's gauge bands, how the game scores Negation on the Fins, that Genais starts inside its
+  shell and spends its first turn coming out, and the cycles and counters of the Seymour and
+  Yunalesca fights. Nothing about a fight changes; the words are more exact.
+- **FFX, the Orders and Talk menus:** on the airship (Chapters VIII and XVII), Cid is offered one
+  order at a time: Pull back when the ship is near, Close in when it is far, and Cancel while an
+  order is standing, which gives him his turn back. In the fight with Braska's Final Aeon
+  (Chapter III), Talk is greyed while a Talk is waiting on his turn, the third Talk is offered and
+  only speaks, and then the row is spent.
+- **FFX-2:** nothing changes: the FFX-2 sources are byte for byte what 39.4.4 shipped (a docs-only fix
+  to the theme table aside).
+- **Disclosed by the focused review (FOC3945-01 to FOC3945-03; none is a regression against 39.4.4):**
+  FOC3945-01 (major): the motion check (CHK-027) still fails on four FFX chapters: jerks of 40
+  pixels or more, double-image pose swaps and some knock-out snaps, the same as on the live build
+  and in presenter code this release does not touch. FOC3945-02 (polish, introduced by this build):
+  the approved Evrae order-widget tile still describes two rows, and the build shows one, as Bailey
+  decided. FOC3945-03 (suggestion): the menus screenshot tool expects Tidus first in Chapter III;
+  Auron acts first on the live build and on this one.
+- **Worth knowing:** the engine now simulates a fight 1.7 to 2.3 times slower on the new Overdrive
+  gauge. Nothing at one fight a time notices; the move advisor looks ahead by running the engine, and
+  the review saw the advice card appear within one frame after real key presses, no slower than
+  before. Chapter XVIII is now the easiest chapter for the suggested line.
+- **Not built yet:** Pilfer Gil, Nab Gil, Bribe, item drops, Double and Triple AP, gear drops and the
+  Magus Sisters.
+- **Deploy notes:** it shipped under Bailey's owner override (his answer to the question about the
+  overnight build, "Yes, deploy on SHIP (Recommended)") because deep reviews are owed on earlier
+  builds; the focused review's SHIP came first. The deploy ran with the preflight tests skipped and
+  the dirty tree allowed; 5 files were uploaded (5,158 were already there) in 62 seconds, the Worker
+  version is 3c39b7fd, and 46 files were compared on each address byte for byte. docs/deploys.log
+  records 2026-10-11T11:24:11Z, which is 07:24 EDT. It was live for three hours and twenty minutes,
+  until the motion and music build replaced it; the deep review it owed moved to that build.
+- **How it was checked:** tsc clean; the assembled branch's whole unit suite read 1,052 files with
+  1,014 passed, 22 of the 23 failing files art-only (the assembly tree had no art) and the 23rd the
+  theme table's test, fixed in the release; the FFX-2 and FF7 engine goldens held and the FFX one moved
+  two Natus digests on purpose. A focused review of the exact build (115 minutes) said SHIP, changed area FAIL (CHK-027,
+  above): every FFX chapter reached its results screen by real keys, the Chapter XVIII line won
+  where the live one lost and Chapter X won, and the menus passed on real keys at three sizes. A
+  live check then verified all 5,162 files byte for byte and played Chapter VIII (Evrae) with real
+  keys: the one-order widget, its cancel, pause, hide, music and a reload; 0 console errors.
 
 ## 2026-10-11 · Release 39.4.4 on echoesofspira.com
 
