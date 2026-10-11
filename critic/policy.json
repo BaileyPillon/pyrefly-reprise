@@ -62,8 +62,10 @@
       "snapOutlineMin": 0.05, "snapCentroidMinPx": 4, "snapsPerMinuteMax": 0.25,
       "jerkMinPx": 24, "jerkFloorPx": 2, "jerkRatio": 3, "jerkFailPx": 40, "localWindow": 5, "mergeFrames": 2, "ballisticChain": 3, "cutPx": 120
     },
-    "strips": { "worstSwaps": 10, "worstJerks": 5, "worstGhosts": 5, "beforeFrames": 6, "afterFrames": 6 },
-    "probe": { "ringScale": 0.6, "ringFrames": 16, "maxStrips": 1500, "cellHeight": 220, "encodePerFrame": 2, "jpegQuality": 0.65, "recentFrames": 14, "pendingFrames": 40, "jerkCandidatePx": 28, "jerkCandidateRatio": 3, "candidateWindow": 8 },
+    "strips": { "worstSwaps": 10, "worstJerks": 5, "worstGhosts": 5, "beforeFrames": 14, "afterFrames": 6 },
+    "tracking": { "unregistered": "centroid", "note": "r40 instrument edit (a), Bailey 2026-10-10 (P5): a figure none of whose paintings has a registered head or stance is followed frame to frame by its silhouette's centroid, not by the middle of the lowest thick part. 'feet' gives the earlier reading back (for an old-versus-new run on the same recording)." },
+    "staged": { "twirl": true, "gapFrames": 120, "note": "r40 instrument edit (b), Bailey 2026-10-10 (P4, P5): a swap with a twirl-* key on either side is one staged costume change, not a snap; steps of one figure that continue from each other within gapFrames are one change. false gives the earlier reading back." },
+    "probe": { "ringScale": 0.6, "ringFrames": 20, "maxStrips": 1500, "cellHeight": 220, "encodePerFrame": 2, "jpegQuality": 0.65, "recentFrames": 14, "pendingFrames": 40, "jerkCandidatePx": 28, "jerkCandidateRatio": 3, "candidateWindow": 8 },
     "caps": {
       "sizeFails": { "check": "CHK-026", "subScores": ["characterModels", "animation"], "max": 7.0 },
       "snaps": { "subScore": "animation", "max": 7.5 }

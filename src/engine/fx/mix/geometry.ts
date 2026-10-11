@@ -112,6 +112,8 @@ export type Actor = Object3D & {
   isPlaceholder?: boolean;
   pose?: string;
   lifeState?: string;
+  /** A pose crossfade is running (`PaintedActor.blending`: since FB-1 it is no tween in `tweens`). */
+  blending?: boolean;
   contentQuad?: (out?: [Vector3, Vector3, Vector3, Vector3]) => [Vector3, Vector3, Vector3, Vector3];
 };
 
@@ -123,7 +125,7 @@ export const UP = new Vector3(0, 1, 0);
  */
 export function stillActor(a: Actor): boolean {
   const busy = (a as unknown as { tweens?: { size?: number } }).tweens?.size ?? 0;
-  return busy === 0 && a.lifeState !== 'act';
+  return busy === 0 && a.blending !== true && a.lifeState !== 'act';
 }
 
 /** The subject id an actor paints (`characters/<id>/...`), else its name. */

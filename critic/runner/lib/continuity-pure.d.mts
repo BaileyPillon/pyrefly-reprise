@@ -3,7 +3,7 @@ export type Quad = number[]; // [x0,y0,x1,y1,x2,y2,x3,y3]: top-left, top-right, 
 export type Mat3 = number[]; // row-major 3x3
 export interface Box { u0: number; t0: number; u1: number; t1: number }
 export interface Mask { w: number; h: number; bits: Uint8Array | number[] }
-export interface Anchors { head: Box | null; mass: number | null; stance: { u: number; t: number } | null; stanceSrc: string | null; mask: Mask | null; prone: boolean; stale?: boolean; subject?: string | null; pose?: string | null; url?: string }
+export interface Anchors { head: Box | null; mass: number | null; centroid?: { u: number; t: number } | null; stance: { u: number; t: number } | null; stanceSrc: string | null; mask: Mask | null; prone: boolean; stale?: boolean; subject?: string | null; pose?: string | null; url?: string }
 export interface PlaneRec { k: number; fade: number; vis: boolean; q: number[] }
 export interface FigRec { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number] }
 export interface FrameOfFig { n: number; t: number; fig: FigRec }
@@ -17,11 +17,19 @@ export interface ContinuityConfig {
     jerkMinPx: number; jerkFloorPx: number; jerkRatio: number; jerkFailPx: number; localWindow: number; mergeFrames: number; ballisticChain: number; cutPx: number;
   };
   strips: { worstSwaps: number; worstJerks: number; worstGhosts: number; beforeFrames: number; afterFrames: number };
+  /** r40 instrument edit (a): 'centroid' (default) follows a figure with no registration by its silhouette's centroid, 'feet' gives the earlier reading back. */
+  tracking?: { unregistered?: 'centroid' | 'feet' };
+  /** r40 instrument edit (b): `twirl: false` gives the earlier reading of a twirl's cuts back; `gapFrames` is how far apart two steps of one change may be. */
+  staged?: { twirl?: boolean; gapFrames?: number };
   [key: string]: unknown;
 }
 
+/** A step of the spherechange's twirl (continuity-staged.mjs): `edge` says whether it is between two keys, into the first or out of the last; `seq`, `step` and `of` are set once the run's steps are grouped. */
+export interface StagedStep { kind: 'twirl'; edge: 'between-keys' | 'enters' | 'leaves'; from: string | null; to: string | null; seq?: number; step?: number; of?: number }
+/** The longest stretch in which both paintings of a swap showed and neither fade moved (continuity-held.mjs). */
+export interface Held { frames: number; ms: number; from: number | null }
 export interface SwapResult {
-  camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean;
+  camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean; staged: StagedStep | null; held: Held; snapStaged: boolean;
   head: { fromPx: number; toPx: number; ratio: number | null; source: 'registration' | 'silhouette'; metric: 'head' | 'mass' } | null;
   feet: { dx: number; dy: number; px: number; standing: boolean; source: string } | null;
   outline: { iou: number; centroidShiftPx: number; areaRatio: number | null } | null;
@@ -32,7 +40,7 @@ export interface SwapRow extends Partial<SwapResult> {
   id?: number; figure?: string; fromPose?: string; toPose?: string; n?: number; counted?: boolean; camCut?: boolean; notShowing?: boolean; snap?: boolean; hardCut?: boolean;
   ghost: SwapResult['ghost'];
 }
-export interface Jerk { n: number; t: number; px: number; localPx: number; ratio: number; part: 'feet' | 'head'; dx: number; dy: number; atSwap?: boolean; id?: number }
+export interface Jerk { n: number; t: number; px: number; localPx: number; ratio: number; part: 'feet' | 'head' | 'centroid'; dx: number; dy: number; atSwap?: boolean; id?: number; staged?: { kind: 'twirl'; seq?: number } }
 
 export declare const FRAME_MS: number;
 export declare function unitSquareToQuad(q: ArrayLike<number>): Mat3;
@@ -46,14 +54,14 @@ export declare function feetPoint(H: Mat3, stance: { u: number; t: number }): [n
 export declare function outlineJump(maskA: Mask, HA: Mat3, maskB: Mask, HB: Mat3, quadA: Quad, quadB: Quad, cells?: number): { iou: number; centroidShift: number; areaA: number; areaB: number } | null;
 export declare function planeOf(raw: unknown): PlaneRec | null;
 export declare function planesOf(fig: FigRec): { cur: PlaneRec | null; other: PlaneRec | null };
-export declare function figureTrack(fig: FigRec, anchors: (Anchors | null)[]): { feet: [number, number] | null; head: [number, number] | null } | null;
-export declare function analyzeSwap(o: { frames: FrameOfFig[]; at?: number; swap: { from: number; to: number }; anchors: (Anchors | null)[]; k1600: number; camCut: boolean; cfg: ContinuityConfig }): SwapResult;
-export declare function detectJerks(track: { n: number; t: number; feet: [number, number] | null; head: [number, number] | null; cam: [number, number] }[], k1600: number, cfg: ContinuityConfig): Jerk[];
+export declare function figureTrack(fig: FigRec, anchors: (Anchors | null)[], byCentroid?: boolean): { feet: [number, number] | null; head: [number, number] | null; centroid: [number, number] | null } | null;
+export declare function analyzeSwap(o: { frames: FrameOfFig[]; at?: number; swap: { from: number; to: number }; anchors: (Anchors | null)[]; k1600: number; camCut: boolean; cfg: ContinuityConfig; names?: { from?: string; to?: string } }): SwapResult;
+export declare function detectJerks(track: { n: number; t: number; feet: [number, number] | null; head: [number, number] | null; centroid?: [number, number] | null; cam: [number, number] }[], k1600: number, cfg: ContinuityConfig): Jerk[];
 export declare function median(a: number[]): number;
 export interface Summary {
   battleSeconds: number; swaps: number; counted: number; excludedByCut: number; excludedNotShowing: number; swapsPerMinute: number | null;
   size: { judged?: number; costumeSwaps?: number; sameArtSwaps?: number; costumeWorstHeadPct?: number; costumeWorstFeetPx?: number; headMeasured: number; headRegistration: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number };
-  motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number };
+  motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number; heldSwaps: number; longestHeldFrames: number; stagedChanges: number; stagedSteps: number; stagedSnapsExcused: number; jerksAtStaged: number };
   checks: Record<'CHK-026' | 'CHK-027', { result: 'PASS' | 'FAIL' | 'UNVERIFIED'; reasons: string[]; note?: string }>;
 }
 export declare function summarize(o: { swaps: SwapRow[]; jerks: Jerk[]; battleSeconds: number; cfg: ContinuityConfig }): Summary;
