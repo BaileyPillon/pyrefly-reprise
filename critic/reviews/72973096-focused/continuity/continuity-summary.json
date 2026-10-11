@@ -1,0 +1,191 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 416.6,
+   "swaps": 310,
+   "snapsPerMinute": 0.29,
+   "maxHeadJumpPct": 12.1,
+   "maxFeetShiftPx": 0.8,
+   "worstJerkPx": 153.7,
+   "strips": 20,
+   "worstSwapStrips": [
+    "seymour-flux-win-72973096/continuity/strips/swap-003-yuna-critical-hurt.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-004-yuna-hurt-critical.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-011-kimahri-idle-ready.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-123-auron-attack-follow.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-076-yuna-ready-item.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-063-kimahri-ready-item.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-169-mortiorchis-idle-attack.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-175-mortiorchis-attack-idle.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-104-auron-follow-idle.jpg",
+    "seymour-flux-win-72973096/continuity/strips/swap-019-yuna-item-idle.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 360.9,
+   "swaps": 362,
+   "snapsPerMinute": 0.17,
+   "maxHeadJumpPct": 9.6,
+   "maxFeetShiftPx": 0.4,
+   "worstJerkPx": 255.7,
+   "strips": 19,
+   "worstSwapStrips": [
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-200-paine-ready-critical.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-217-paine-critical-ready.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-353-paine-follow-idle.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-232-rikku-critical-cast.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-351-paine-attack-follow.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-347-paine-od-x2-warrior-armor-break-ready.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-251-paine-od-x2-warrior-armor-break-hurt.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-096-rikku-hurt-critical.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-254-paine-hurt-od-x2-warrior-armor-break.jpg",
+    "ffx2-bahamut-win-72973096/continuity/strips/swap-350-paine-ready-attack.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "ffx2-leblanc",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 493.9,
+   "swaps": 598,
+   "snapsPerMinute": 0.49,
+   "maxHeadJumpPct": 20.5,
+   "maxFeetShiftPx": 0.7,
+   "worstJerkPx": 228.5,
+   "strips": 20,
+   "worstSwapStrips": [
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-041-fem-goon-hurt-ko.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-108-rikku-hurt-ko.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-052-dr-goon-hurt-ko.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-268-yuna-hurt-ko.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-039-fem-goon-cast-hurt.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-005-fem-goon-idle-cast.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-011-fem-goon-cast-idle.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-308-rikku-attack-follow.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-146-paine-item-ready.jpg",
+    "ffx2-leblanc-win-72973096/continuity/strips/swap-073-rikku-ready-attack.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "yunalesca",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 477.7,
+   "swaps": 469,
+   "snapsPerMinute": 0.63,
+   "maxHeadJumpPct": 2.4,
+   "maxFeetShiftPx": 0.9,
+   "worstJerkPx": 270.3,
+   "strips": 20,
+   "worstSwapStrips": [
+    "yunalesca-win-72973096/continuity/strips/swap-359-yuna-idle-ko.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-458-tidus-hurt-ko.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-436-tidus-idle-ko.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-480-auron-idle-ko.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-440-tidus-ko-idle.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-345-yuna-hurt-critical.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-173-tidus-ready-attack.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-251-tidus-attack-follow.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-357-yuna-critical-hurt.jpg",
+    "yunalesca-win-72973096/continuity/strips/swap-098-auron-attack-follow.jpg"
+   ],
+   "unverified": null
+  },
+  {
+   "chapter": "braskas-final-aeon",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 1472.5,
+   "swaps": 1487,
+   "snapsPerMinute": 0.57,
+   "maxHeadJumpPct": 25.6,
+   "maxFeetShiftPx": 1.4,
+   "worstJerkPx": 284.1,
+   "strips": 12,
+   "worstSwapStrips": [
+    "braskas-final-aeon-win-72973096/continuity/strips/swap-243-shiva-hurt-ko.jpg",
+    "braskas-final-aeon-win-72973096/continuity/strips/swap-155-ifrit-hurt-ko.jpg",
+    "braskas-final-aeon-win-72973096/continuity/strips/swap-924-possessed-ifrit-hurt-ko.jpg",
+    "braskas-final-aeon-win-72973096/continuity/strips/swap-320-valefor-hurt-ko.jpg",
+    "braskas-final-aeon-win-72973096/continuity/strips/swap-909-possessed-valefor-hurt-ko.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 3221.6,
+ "counted": 3226,
+ "swaps": 3378,
+ "size": {
+  "judged": 3215,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 11,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 25.6,
+  "maxHeadJumpPctRegistration": 0.2,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 1.4,
+  "feetOverTolerance": 0,
+  "headMeasured": 3215,
+  "headRegistration": 2147,
+  "headSilhouette": 1068,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 26,
+  "snapsPerMinute": 0.48,
+  "hardCuts": 27,
+  "hardCutsPerMinute": 0.5,
+  "ghostSwaps": 3133,
+  "ghostFrames": 11517,
+  "worstGhostSeverity": 0.46,
+  "ghostOverFail": 81,
+  "jerks": 1089,
+  "worstJerkPx": 284.1,
+  "jerksOverFail": 526,
+  "lowestIou": 0.03,
+  "maxCentroidShiftPx": 312.3
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "2147 of 3215 measured swaps had a registered head (tolerance 3 percent); 1068 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "0.48 snaps per minute is over 0.25",
+    "526 jerk(s) of 40 px or more in one frame (worst 284.1 px)",
+    "81 swap(s) show a double image of severity 0.4 or more (worst 0.46)"
+   ]
+  }
+ },
+ "base": "http://127.0.0.1:5471/pyrefly-reprise/",
+ "date": "2026-10-11T03:51:09.381Z"
+}

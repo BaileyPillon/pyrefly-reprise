@@ -66,6 +66,8 @@ any of the six; all six bosses have one.
   (`src/data/ffx/builds/yojimbo-cavern.ts`, an upper bound, all `[estimate]`). Items: the Gagazet preset's bag less the two mountain Mega-Potions and the mountain's 20,000 gil. Doom is the switch `CAVERN_DOOM_PREP`, shipped `'not-learned'` (Bailey 2026-09-26).
 - **Applies as written:** bring Yuna's aeons. Our NEXT line already summons one at a gauge of 80 so Zanmato hits
   the aeon, which is the same advice with the reason Jegged leaves out.
+  **Updated 2026-10-10 (re-parity W5, Bailey's pick "Keep 1:1, rework our line"):** the line now summons the aeon on the turn the gauge reads 96, before any revive or heal, not at 80:
+  the game charges the summoner the recovery of her Summon, so an aeon called at 80 fell before Zanmato and Yuna could not call the next one in time. Jegged's advice (bring the aeons) is unchanged; the 96 is derived from the game's script (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 3.2), not from Jegged. Numbers: `docs/handoff/re-parity-w5.md`.
 - **Adaptation (our adaptation of Jegged):** Jegged's one concrete tip, Doom learned from the cavern's Ghost, is
   a preparation tip, not a battle tip. It matches `research/ffx-yojimbo.md` §5.3 row 1 (4 sources), but our
   shipped party did not learn it, so the guide's opening rule is the race (see `OPENING` in
@@ -249,6 +251,11 @@ Ward on Tidus and Yuna, none against Zombie).
 - **Does not apply:** Jegged's "the fight starts out of reach" is built as the three FAR pulls.
 - **Measured (existing):** sensible line 62/200 on the 13th turn, 7/200 on the 12th (`docs/handoff/chapter-sin.md`);
   advisor card 79/200 (39.5 %) at S-1 13 (`docs/handoff/r37-sin-advisor.md`). Not re-run.
+- **Update 2026-10-10 (CH-XVIII, re-parity; the sections above stand as written on 2026-10-03):** the clock is **12**, not "our estimate,
+  13": the game's own script fires Giga-Graviton on Sin's 12th turn (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 7.2), which
+  is the GameFAQs reading of the sources too (Gestahl). The guide text, the line and the preset were reworked for it: Lulu Doublecasts
+  Firaga (a Lulu ability the preset already grants), and the party starts in armour with the Stone, Confuse and Zombie Wards that this
+  section's preparation advice and section 6 item 6 both name. Measured: `docs/handoff/re-parity-ch18.md`.
 
 ## 8. Where Jegged disagrees with our sourced numbers
 
@@ -263,7 +270,7 @@ Our sources win (rule 6), the guide must not teach the Jegged version, and none 
 | Omnis | Shell helps against Ultima | no (type Other); 4 sources to 1 | `ffx-seymour-omnis` §5 |
 | Isaaru | Ice is best on Grothia | Ice is neutral | `ffx-isaaru-bevelle` I-7 |
 | Isaaru | Spathi counts 4 to 1 | 5 (wiki, GameFAQs) | I-5 |
-| Sin face | about 16 turns | 12th or 13th; our estimate 13th | `ffx-sin` S-1 |
+| Sin face | about 16 turns | 12th (the game's script; was "12th or 13th, our estimate 13th" until 2026-10-10) | `ffx-sin` S-1, `re-ffx-ai-evrae-yojimbo-isaaru-sin` 7.2 |
 
 ## 9. Summary for Bailey
 

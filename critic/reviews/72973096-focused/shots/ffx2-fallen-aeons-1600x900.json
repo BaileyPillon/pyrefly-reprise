@@ -1,0 +1,103 @@
+{
+ "id": "ffx2-fallen-aeons",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 408,
+    "y": 741,
+    "w": 585,
+    "h": 94,
+    "vis": true,
+    "t": "Paine Darkness → all enemies IN SKILL NO MP Damage to all enemies"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "battle-pause-chip ig ig--ffx2",
+    "x": 19,
+    "y": 18,
+    "w": 96,
+    "h": 24,
+    "vis": true,
+    "t": "PAUSE"
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 1246,
+   "y": 351,
+   "w": 324,
+   "h": 258,
+   "vis": true
+  },
+  "nextBest": ""
+ },
+ "actors": [
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna-white-mage"
+  },
+  {
+   "id": "rikku",
+   "kind": "party",
+   "art": "rikku-dark-knight"
+  },
+  {
+   "id": "paine",
+   "kind": "party",
+   "art": "paine-dark-knight"
+  },
+  {
+   "id": "x2-shiva",
+   "kind": "enemy",
+   "art": "x2-shiva"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

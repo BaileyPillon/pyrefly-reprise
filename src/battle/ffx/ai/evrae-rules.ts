@@ -32,7 +32,10 @@
  *       Cid: fires one of three Guided Missile volleys.
  *
  * A Trigger Command from Tidus or Rikku costs THAT CHARACTER'S TURN, is queued,
- * and is executed on CID'S NEXT TURN instead of a volley. Last order wins.
+ * and is executed on CID'S NEXT TURN instead of a volley. **One order is on offer at
+ * a time** ({@link orderOnOffer}): Pull back at NEAR, Close in at FAR, Cancel while an
+ * order is standing. No second or redundant order can be given, so "last order wins"
+ * has nothing to act on; Cancel is the only change of mind.
  * One course change therefore costs one party turn + one Cid turn + one volley.
  *
  * phase 2 at HP < 10,666 (the Haste phase, `v9` in his script): Evrae Hastes
@@ -68,15 +71,16 @@
  * | # | Decision | Switch |
  * |---|---|---|
  * | C-7 / G-1 | A Trigger Command is rank 3 | {@link ORDER_RANK} |
- * | C-7 / G-2 | A redundant order still burns Cid's turn (the game offers none: needs Bailey's yes, a menu change, row D-08) | {@link REDUNDANT_ORDER_BURNS_TURN} |
+ * | C-7 / G-2 | ~~A redundant order still burns Cid's turn~~ **superseded 2026-10-09** (re-parity row D-08, Bailey: "Yes, match the game"): the game offers one order at a time and no redundant one, so there is nothing to burn | {@link orderOnOffer} |
  * | C-14 / G-8 | **Keep** the Reflected self-Haste — it lands on a random party member | {@link KEEP_REFLECTED_SELF_HASTE} |
  * | C-13 / G-7 | Delaying Evrae advances the Haste phase (the script's rule, row D-02). The 2026-09-21 decision was not to ship it; **Bailey turned it on, 2026-10-09 ("Turn it on (Recommended)")** | {@link DELAY_ADVANCES_HASTE_PHASE} |
  * | C-4 | Threaten defaults to immune | `threatenChance: 0` in the data file |
  *
  * The two order ids are `'pull-back'` and `'close-in'`, exactly as the owner
- * named them. **Player-facing labels are deliberately NOT set here**: the order
- * widget is C-11, a new interface flavour that needs a mockup and Bailey's
- * approval before anything renders it [AGENTS.md rule 9].
+ * named them, and the third Trigger Command is `'cancel-order'` (the game's own
+ * "Cancel", re-parity row D-08). **Player-facing labels are deliberately NOT set
+ * here**: the order widget is C-11, a new interface flavour that needs a mockup
+ * and Bailey's approval before anything renders it [AGENTS.md rule 9].
  */
 
 import type { CombatantId, FFXCombatant, StatusId } from '../../common/types.ts';
@@ -98,6 +102,8 @@ export const CID_SCRIPT = 'cid-fahrenheit';
 /** The two Trigger Command ids [owner, 2026-09-21]. Labels come with the widget. */
 export const ORDER_PULL_BACK = 'pull-back';
 export const ORDER_CLOSE_IN = 'close-in';
+/** The third Trigger Command: drops the order that is standing (the game's "Cancel", command 0x3108). */
+export const ORDER_CANCEL = 'cancel-order';
 
 /** §4.2 [verified: 3 sources] — Tidus and Rikku, and only them. */
 export const ORDER_OWNERS: readonly CombatantId[] = ['tidus', 'rikku'];
@@ -147,13 +153,6 @@ export const CID_GUIDED_MISSILES = 'cid-guided-missiles';
 export const ORDER_RANK = 3;
 
 /**
- * **AUTHORED (C-7 / G-2).** Ordering "Close in" while already NEAR still
- * consumes Cid's turn, and therefore still costs a volley. `[derived]`; it is
- * the reading that keeps the cost honest.
- */
-export const REDUNDANT_ORDER_BURNS_TURN = true;
-
-/**
  * **The Stone Gaze counter** (C-1, now the script's own, rows D-03 and D-04): Evrae's `onHit` adds 2 for a command whose
  * damage-formula byte is 1 and 1 for one whose byte is 3 (`./command-formula.ts`), once per action that reaches him, a
  * miss included; his Attack slot becomes a Stone Gaze when the counter is **above 5** (`> 5`, so 6 and more), and firing
@@ -193,7 +192,6 @@ export const AIRSHIP_DELAY_SWITCH = 'airship.delayAdvancesHaste';
 /** The decisions, as data, so the guide and the end-state board can print them. */
 export const EVRAE_ASSUMPTIONS = [
   { id: 'C-7', claim: 'A Trigger Command is rank 3', value: ORDER_RANK },
-  { id: 'C-7b', claim: "A redundant order still burns Cid's turn (the game offers none)", value: REDUNDANT_ORDER_BURNS_TURN },
   { id: 'C-14', claim: 'Reflect turns the self-Haste into a free party Haste', value: KEEP_REFLECTED_SELF_HASTE },
   { id: 'C-13', claim: "Delaying Evrae advances the Haste phase (the script's rule: Delay Attack +1, Delay Buster +3, the phase starts at 3; on since 2026-10-09)", value: DELAY_ADVANCES_HASTE_PHASE },
 ] as const;
@@ -313,29 +311,61 @@ export function markEvraeRuntime(
 // The queued order — the whole fight turns on it
 // ---------------------------------------------------------------------------
 
-/** True when submitting this order id right now would be accepted. */
-export function airshipOrderAvailable(ctx: Ctx, talkerId: CombatantId): boolean {
+/**
+ * **The one Trigger Command the game has on the menu right now** (re-parity row D-08;
+ * `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section 2.6; Bailey, 2026-10-09: "Yes, match the game").
+ *
+ * The game adds and removes the three commands on Tidus and Rikku as the state moves, so at any moment exactly one is on
+ * the menu: **Pull back** while the ship is NEAR and nothing is standing, **Move in** (ours: Close in) while it is FAR and
+ * nothing is standing, **Cancel** while an order is standing (a command used removes itself; the pre-turn handlers of both
+ * characters re-add Cancel only while an order is pending; Cancel gives back Move in at FAR and Pull back at NEAR). There is
+ * no way to queue a second or a redundant order, and "last order wins" does not exist: Cancel is the only change of mind.
+ *
+ * Reads the published flags alone, so the engine, the order widget and the advisor all ask the same question. `null` when
+ * this is not an airship battle (no range flag).
+ */
+export function orderOnOffer(flags: Readonly<Record<string, unknown>>): string | null {
+  const range = flags[AIRSHIP_RANGE];
+  if (range !== 'near' && range !== 'far') return null;
+  const standing = flags[AIRSHIP_ORDER];
+  if (standing === 'near' || standing === 'far') return ORDER_CANCEL;
+  return range === 'near' ? ORDER_PULL_BACK : ORDER_CLOSE_IN;
+}
+
+/** True when this character may submit this order id right now, which is when it is the one on offer ({@link orderOnOffer}). */
+export function airshipOrderAvailable(ctx: Ctx, talkerId: CombatantId, orderId: string): boolean {
   if (!isEvraeBattle(ctx)) return false;
   // No pilot, no order: Overdrive Sin shares the gap but has no Trigger Command
   // (ffx-sin §3.5, verified: 3 sources) and no Cid in its formation.
   if (!tryActor(ctx, CID_ID)) return false;
-  // §4.2 [verified: 3 sources] — Tidus and Rikku, and only them. A redundant
-  // order stays legal on purpose: it is the cost that makes it a decision
-  // [REDUNDANT_ORDER_BURNS_TURN].
-  return ORDER_OWNERS.includes(talkerId);
+  // §4.2 [verified: 3 sources] — Tidus and Rikku, and only them.
+  if (!ORDER_OWNERS.includes(talkerId)) return false;
+  return orderOnOffer(ctx.state.flags) === orderId;
+}
+
+/** Why this order row is off the menu right now (its `disabledReason`): not this speaker's call, or one of the other two is on offer. */
+export function airshipOrderDisabledReason(ctx: Ctx, talkerId: CombatantId, orderId: string): string {
+  if (!isEvraeBattle(ctx) || !tryActor(ctx, CID_ID) || !ORDER_OWNERS.includes(talkerId)) return 'Not your call';
+  if (orderId === ORDER_CANCEL) return 'No order to cancel';
+  if (queuedOrder(ctx) !== null) return 'Order standing';
+  return orderId === ORDER_PULL_BACK ? 'Already far' : 'Already near';
 }
 
 /**
- * Queue an order. **Last order wins**, which falls straight out of a plain
- * assignment [§4.2, single source: wiki].
- *
- * It does **not** move the ship. Cid executes it on his next turn, in place of
- * a volley — that is the whole bargain.
+ * Queue an order. It does **not** move the ship: Cid executes it on his next turn, in place of a volley — that is the
+ * whole bargain. Refused unless it is the order on offer ({@link orderOnOffer}).
  */
 export function queueAirshipOrder(ctx: Ctx, talker: FFXCombatant, orderId: string): boolean {
-  if (!airshipOrderAvailable(ctx, talker.id)) return false;
-  const target: Range = orderId === ORDER_PULL_BACK ? 'far' : 'near';
-  ctx.state.flags[AIRSHIP_ORDER] = target;
+  if (orderId !== ORDER_PULL_BACK && orderId !== ORDER_CLOSE_IN) return false;
+  if (!airshipOrderAvailable(ctx, talker.id, orderId)) return false;
+  ctx.state.flags[AIRSHIP_ORDER] = orderId === ORDER_PULL_BACK ? 'far' : 'near';
+  return true;
+}
+
+/** Cancel the standing order: Cid's next turn is his own again (the volley, at FAR). Costs the speaker's turn; refused with none standing. */
+export function cancelAirshipOrder(ctx: Ctx, talker: FFXCombatant): boolean {
+  if (!airshipOrderAvailable(ctx, talker.id, ORDER_CANCEL)) return false;
+  ctx.state.flags[AIRSHIP_ORDER] = '';
   return true;
 }
 
@@ -345,15 +375,15 @@ export function queuedOrder(ctx: Ctx): Range | null {
   return v === 'far' || v === 'near' ? v : null;
 }
 
-/** Cid flies the manoeuvre. Consumes his turn whether or not the state changes. */
+/**
+ * Cid flies the manoeuvre, which consumes his turn. It is never redundant: it was the order on offer when given (the ship is
+ * on the other side of it), and Evrae's Haste-phase Scythe, the only thing that moves the ship before Cid's turn, clears it.
+ */
 export function applyQueuedOrder(ctx: Ctx): void {
   const order = queuedOrder(ctx);
   if (order === null) return;
   ctx.state.flags[AIRSHIP_ORDER] = '';
-  const redundant = airshipRange(ctx) === order;
-  if (!redundant || REDUNDANT_ORDER_BURNS_TURN) {
-    ctx.state.flags[AIRSHIP_RANGE] = order;
-  }
+  ctx.state.flags[AIRSHIP_RANGE] = order;
 }
 
 /** Statuses the encounter's own copy reads; exported so the test can assert them. */

@@ -18,12 +18,19 @@
  * (P-2 (b)), and a guide that said it would spoil the row. The Doom rule and
  * hint below come back only on the `'preloaded'` / `'learned-spent'` values.
  *
+ * **Reworked 2026-10-10 (re-parity W5, Bailey's pick "Keep 1:1, rework our line")**: the aeon rule and its hint say 96, not "high", and that
+ * Yuna waits after the Summon. The tactic they describe, `src/engine/tactics/yojimbo-cavern.ts`, now calls the aeon on the turn the gauge
+ * reads 96 (it used to call it at 80 and rely on Yuna acting again at once). 96 is a derived number and not a source's: Zanmato fires on a
+ * turn that starts at 100 [re-ffx-ai-evrae-yojimbo-isaaru-sin §3.2], his turn adds 2 and a cast of Lulu's adds 3 (§4.1); the measured ladder is
+ * in `docs/handoff/re-parity-w5.md`.
+ *
  * Every number is the research's: HP 33,000, Defense 80 and Magic Defense 0
  * (§2.1), Doom count 5 (§2.1, [verified: 4 sources]), +3 % per targeting and
  * +2 % per attack (§4.1, [single source]), the 25 / 50 / 100 bands (§4.1,
  * [verified: 3 sources]), Zanmato 9,999 to the whole party (§3.1, [verified:
- * 4 sources]). The odds inside each band are our estimate (B2, D-050) and
- * the guide never states them.
+ * 4 sources]). The odds inside each band are the game's own script now
+ * [research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md §3.2, D-11, exact over all 65,536
+ * draws], which replaced the estimate of B2 / D-050: the phase note states them.
  */
 
 import type { ChapterGuide, GuideHint, GuideRule } from './types.ts';
@@ -75,14 +82,14 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
       cite: 'ffx-yojimbo §2.1, §3.3, §5.3 row 4',
     },
     {
-      text: 'Once his gauge is high, put an aeon in front of him. Zanmato then hits the aeon, not the party.',
-      short: 'Gauge high: summon an aeon to take Zanmato',
-      cite: 'ffx-yojimbo §3.3, §5.3 row 3',
+      text: 'Call the aeon late. At 100 he uses Zanmato and an aeon in front of him takes it in place of the party, but until then every attack he makes lands on the aeon, so Yuna calls one only when his gauge reaches 96. She waits a long time afterwards, so have the party healed before then.',
+      short: 'Gauge 96: call an aeon to take Zanmato',
+      cite: 'ffx-yojimbo §3.3, §4.1, §5.3 row 3 (what the Summon costs Yuna: re-ffx-overdrive-steal-aeons §4.7)',
     },
     {
       text: 'Lady Ginnem and Daigoro cannot be targeted. The dog bites only when Yojimbo orders it.',
       short: 'Ginnem and Daigoro cannot be targeted',
-      cite: 'ffx-yojimbo §2.5; B3 (our estimate)',
+      cite: 'ffx-yojimbo §2.5; re-ffx-ai-evrae-yojimbo-isaaru-sin §3.1, §3.4',
     },
   ],
 
@@ -95,8 +102,8 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
     },
     {
       when: { kinds: ['summon'] },
-      text: 'His gauge is high: an aeon on the field takes Zanmato in place of the party',
-      cite: 'ffx-yojimbo §3.3, §5.3 row 3',
+      text: 'His gauge is at 96 or more, a turn and a cast from full: an aeon on the field takes Zanmato in place of the party',
+      cite: 'ffx-yojimbo §3.3, §4.1, §5.3 row 3',
     },
     {
       when: { labels: ['Curaga', 'Cura', 'Cure'] },
@@ -126,8 +133,8 @@ export const YOJIMBO_CAVERN_GUIDE: ChapterGuide = {
   phases: [
     {
       label: 'The Zanmato gauge',
-      note: 'Below 25 he only sends the dog. From 25 he adds Kozuka, from 50 Wakizashi, and at 100 Zanmato.',
-      cite: 'ffx-yojimbo §4.1',
+      note: 'Below 25 he only sends the dog. From 25 he adds Kozuka, one turn in four. From 50 Wakizashi joins it and each takes a fifth of his turns, the dog three fifths. From 80 each takes a quarter and the dog half. At 100, Zanmato.',
+      cite: 'ffx-yojimbo §4.1; re-ffx-ai-evrae-yojimbo-isaaru-sin §3.2',
     },
   ],
 };

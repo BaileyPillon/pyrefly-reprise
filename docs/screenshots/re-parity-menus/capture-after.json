@@ -1,0 +1,444 @@
+{
+ "tag": "after",
+ "url": "http://127.0.0.1:5291/",
+ "seed": 1,
+ "viewport": "1600x900",
+ "frames": [
+  {
+   "shot": "airship-1-near-widget-after.jpg",
+   "note": "Tidus, ship NEAR, no order standing: the Orders list",
+   "actor": "tidus",
+   "ticks": 0,
+   "range": "near",
+   "order": "",
+   "missiles": 3,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [],
+   "ctb": [
+    "tidus",
+    "rikku",
+    "evrae",
+    "wakka",
+    "cid",
+    "tidus"
+   ],
+   "rows": [],
+   "widget": [
+    {
+     "label": "Pull back",
+     "tag": "Trigger",
+     "disabled": false,
+     "selected": true
+    }
+   ],
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "airship-2-pending-menu-after.jpg",
+   "note": "Pull back is standing: the command menu (the Orders row)",
+   "actor": "rikku",
+   "ticks": 1,
+   "range": "near",
+   "order": "far",
+   "missiles": 3,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [],
+   "ctb": [
+    "rikku",
+    "evrae",
+    "wakka",
+    "cid",
+    "tidus",
+    "rikku"
+   ],
+   "rows": [
+    {
+     "label": "Orders",
+     "disabled": false,
+     "selected": true
+    },
+    {
+     "label": "Attack",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Special",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "White Magic",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Items",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Flee",
+     "disabled": true,
+     "selected": false
+    }
+   ],
+   "widget": null,
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "airship-2-pending-widget-after.jpg",
+   "note": "Pull back is standing: the Orders list",
+   "actor": "rikku",
+   "ticks": 1,
+   "range": "near",
+   "order": "far",
+   "missiles": 3,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [],
+   "ctb": [
+    "rikku",
+    "evrae",
+    "wakka",
+    "cid",
+    "tidus",
+    "rikku"
+   ],
+   "rows": [],
+   "widget": [
+    {
+     "label": "Cancel",
+     "tag": "Trigger",
+     "disabled": false,
+     "selected": true
+    }
+   ],
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "airship-3-far-widget-after.jpg",
+   "note": "ship FAR, no order standing: the Orders list",
+   "actor": "rikku",
+   "ticks": 21,
+   "range": "far",
+   "order": "",
+   "missiles": 3,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [
+    "ko"
+   ],
+   "ctb": [
+    "rikku",
+    "evrae",
+    "wakka",
+    "rikku",
+    "cid",
+    "evrae"
+   ],
+   "rows": [],
+   "widget": [
+    {
+     "label": "Close in",
+     "tag": "Trigger",
+     "disabled": false,
+     "selected": true
+    }
+   ],
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "airship-4-cancel-widget-after.jpg",
+   "note": "Pull back is standing: Cancel is the one order on offer",
+   "actor": "rikku",
+   "ticks": 1,
+   "range": "near",
+   "order": "far",
+   "missiles": 3,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [],
+   "ctb": [
+    "rikku",
+    "evrae",
+    "wakka",
+    "cid",
+    "tidus",
+    "rikku"
+   ],
+   "rows": [],
+   "widget": [
+    {
+     "label": "Cancel",
+     "tag": "Trigger",
+     "disabled": false,
+     "selected": true
+    }
+   ],
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "airship-5-after-cancel-widget-after.jpg",
+   "note": "after Cancel: nothing is standing and Pull back is on offer again",
+   "actor": "rikku",
+   "ticks": 31,
+   "range": "near",
+   "order": "",
+   "missiles": 3,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [
+    "ko"
+   ],
+   "ctb": [
+    "rikku",
+    "evrae",
+    "wakka",
+    "rikku",
+    "cid",
+    "evrae"
+   ],
+   "rows": [],
+   "widget": [
+    {
+     "label": "Pull back",
+     "tag": "Trigger",
+     "disabled": false,
+     "selected": true
+    }
+   ],
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "braska-0-first-menu-after.jpg",
+   "note": "Tidus, first turn: Talk is offered (the same on both builds)",
+   "actor": "tidus",
+   "ticks": 0,
+   "range": null,
+   "order": null,
+   "missiles": null,
+   "talkUsed": 0,
+   "talkPending": false,
+   "tidusStatuses": [],
+   "ctb": [
+    "tidus",
+    "braskas-final-aeon",
+    "yu-pagoda-right",
+    "auron",
+    "yu-pagoda-left",
+    "yuna"
+   ],
+   "rows": [
+    {
+     "label": "Talk",
+     "disabled": false,
+     "selected": true
+    },
+    {
+     "label": "Attack",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Special",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "White Magic",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Items",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Flee",
+     "disabled": true,
+     "selected": false
+    }
+   ],
+   "widget": null,
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "braska-1-talk-pending-after.jpg",
+   "note": "Talk is waiting on his next turn (1 of 2 used); Tidus has a menu first",
+   "actor": "tidus",
+   "ticks": 65,
+   "range": null,
+   "order": null,
+   "missiles": null,
+   "talkUsed": 1,
+   "talkPending": true,
+   "tidusStatuses": [
+    "haste",
+    "critical",
+    "zombie"
+   ],
+   "ctb": [
+    "tidus",
+    "yu-pagoda-left",
+    "auron",
+    "braskas-final-aeon",
+    "yuna",
+    "tidus"
+   ],
+   "rows": [
+    {
+     "label": "Talk",
+     "disabled": true,
+     "selected": false
+    },
+    {
+     "label": "Attack",
+     "disabled": false,
+     "selected": true
+    },
+    {
+     "label": "Special",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "White Magic",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Items",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Flee",
+     "disabled": true,
+     "selected": false
+    }
+   ],
+   "widget": null,
+   "help": "Physical damage"
+  },
+  {
+   "shot": "braska-2-third-talk-after.jpg",
+   "note": "two Talks used, none waiting: the third Talk",
+   "actor": "tidus",
+   "ticks": 96,
+   "range": null,
+   "order": null,
+   "missiles": null,
+   "talkUsed": 2,
+   "talkPending": false,
+   "tidusStatuses": [
+    "haste",
+    "critical",
+    "zombie"
+   ],
+   "ctb": [
+    "tidus",
+    "auron",
+    "tidus",
+    "yu-pagoda-right",
+    "braskas-final-aeon",
+    "yu-pagoda-left"
+   ],
+   "rows": [
+    {
+     "label": "Talk",
+     "disabled": false,
+     "selected": true
+    },
+    {
+     "label": "Attack",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Special",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "White Magic",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Items",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Flee",
+     "disabled": true,
+     "selected": false
+    }
+   ],
+   "widget": null,
+   "help": "A one-off action this encounter offers"
+  },
+  {
+   "shot": "braska-3-after-third-talk-after.jpg",
+   "note": "after the third Talk",
+   "actor": "tidus",
+   "ticks": 106,
+   "range": null,
+   "order": null,
+   "missiles": null,
+   "talkUsed": 3,
+   "talkPending": false,
+   "tidusStatuses": [
+    "haste",
+    "critical",
+    "zombie"
+   ],
+   "ctb": [
+    "tidus",
+    "yu-pagoda-right",
+    "braskas-final-aeon",
+    "yu-pagoda-left",
+    "yuna",
+    "auron"
+   ],
+   "rows": [
+    {
+     "label": "Talk",
+     "disabled": true,
+     "selected": false
+    },
+    {
+     "label": "Attack",
+     "disabled": false,
+     "selected": true
+    },
+    {
+     "label": "Special",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "White Magic",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Items",
+     "disabled": false,
+     "selected": false
+    },
+    {
+     "label": "Flee",
+     "disabled": true,
+     "selected": false
+    }
+   ],
+   "widget": null,
+   "help": "Physical damage"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+[
+ {
+  "shot": "evrae-next-card-before.jpg",
+  "note": "Tidus, first menu: the NEXT BEST MOVE card (Pull back) and the guide sheet",
+  "card": "NEXT BEST MOVE Tidus Pull back IN ORDERS NO MP Cid pulls the ship out of reach — Poison Breath and Swooping Scythe cannot land while it is FAR, and Cid's missiles only fire from out here."
+ },
+ {
+  "shot": "genais-sheet-before.jpg",
+  "note": "the guide sheet scrolled to Sinspawn Genais's opening paragraph",
+  "panelRect": {
+   "x": 53.3203125,
+   "y": 110,
+   "width": 330,
+   "height": 177.5
+  },
+  "paragraph": "Begin by killing Sinspawn Genais, which sits in front of Sin's core and absorbs any magic aimed straight at Sin. Unlike the Geneaux at Kilika Temple, this one starts out of its shell.",
+  "whole": true
+ }
+]

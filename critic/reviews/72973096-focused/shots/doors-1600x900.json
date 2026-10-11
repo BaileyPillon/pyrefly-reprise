@@ -1,0 +1,47 @@
+{
+ "ouh": {
+  "w": "ouh",
+  "before": "seymour-flux",
+  "afterWord": "{\"selectedIndex\":0,\"selectedId\":\"seymour-flux\",\"tiles\":18,\"coming\":[],\"cleared\":[],\"order\":[\"seymour-flux\",\"yunalesca\",\"braskas-final-aeon\",\"seymour-anima-macalania\",\"evrae-airship\",\"yojimbo-cavern\",\"seymour-natus\",\"seymour-omnis\",\"isaaru-via-purifico\",\"sin-fins-core\",\"sin-face\",\"ffx2-bahamut\",\"ffx2-vegnagun-shuyin\",\"ffx2-leblanc\",\"ffx2-fallen-aeons\",\"ffx2-trema\",\"ffx2-den-of-woe\",\"ffx2-ixion-djos",
+  "screenAfterWord": "chapter-select",
+  "screenAfterEnter": "party-prep",
+  "afterEnter": "{\"chapter\":\"seymour-flux\",\"game\":\"ffx\",\"tabs\":[\"chapter\",\"stats\",\"sphere-grid\",\"equipment\",\"items\",\"overdrive\"],\"tab\":\"chapter\",\"member\":\"tidus\",\"outcome\":null,\"panelsRegistered\":6}",
+  "consoleErrors": []
+ },
+ "limit": {
+  "w": "limit",
+  "before": "seymour-flux",
+  "afterWord": "{\"selectedIndex\":0,\"selectedId\":\"seymour-flux\",\"tiles\":18,\"coming\":[],\"cleared\":[],\"order\":[\"seymour-flux\",\"yunalesca\",\"braskas-final-aeon\",\"seymour-anima-macalania\",\"evrae-airship\",\"yojimbo-cavern\",\"seymour-natus\",\"seymour-omnis\",\"isaaru-via-purifico\",\"sin-fins-core\",\"sin-face\",\"ffx2-bahamut\",\"ffx2-vegnagun-shuyin\",\"ffx2-leblanc\",\"ffx2-fallen-aeons\",\"ffx2-trema\",\"ffx2-den-of-woe\",\"ffx2-ixion-djos",
+  "screenAfterWord": "chapter-select",
+  "screenAfterEnter": "battle",
+  "afterEnter": "{\"chapter\":\"ff7-guard-scorpion\",\"game\":\"ff7\",\"scene\":\"sector1-reactor\",\"scenePlaceholder\":false,\"preview\":false,\"links\":0,\"chainLength\":1,\"paused\":false,\"canPause\":true,\"canPauseOnCancel\":true,\"exitIntent\":null,\"playTimeMs\":0,\"hud\":true,\"rig\":\"idle\",\"actors\":[{\"id\":\"cloud\",\"side\":\"party\",\"art\":\"ff7-film-cloud\",\"pose\":\"idle\",\"placeholder\":false,\"facing\":1,\"mirrored\":false,\"life\":\"idle\"},{\"id\":\"barret\",\"side\":\"party\",\"art\":\"ff7-film-barret\",\"pose\":\"idle\",\"placeholder\":false,\"facing\":1,\"mirrored\":f",
+  "consoleErrors": []
+ },
+ "leblanc": {
+  "w": "leblanc",
+  "before": "seymour-flux",
+  "afterWord": "{\"chapter\":\"exp-leblanc\",\"game\":\"ffx2\",\"tabs\":[\"chapter\",\"dresspheres\",\"stats\",\"accessories\",\"items\"],\"tab\":\"chapter\",\"member\":\"yuna\",\"outcome\":null,\"panelsRegistered\":5}",
+  "screenAfterWord": "party-prep",
+  "screenAfterEnter": "cutscene",
+  "afterEnter": "{\"finished\":false,\"result\":null,\"paused\":false,\"cast\":[]}",
+  "consoleErrors": []
+ },
+ "experiment": {
+  "w": "experiment",
+  "before": "seymour-flux",
+  "afterWord": "{\"chapter\":\"ffx2-masterpiece-theatre\",\"game\":\"ffx2\",\"tabs\":[\"chapter\",\"dresspheres\",\"stats\",\"accessories\",\"items\"],\"tab\":\"chapter\",\"member\":\"yuna\",\"outcome\":null,\"panelsRegistered\":5}",
+  "screenAfterWord": "party-prep",
+  "screenAfterEnter": "cutscene",
+  "afterEnter": "{\"finished\":false,\"result\":null,\"paused\":false,\"cast\":[]}",
+  "consoleErrors": []
+ },
+ "mushroom": {
+  "w": "mushroom",
+  "before": "seymour-flux",
+  "afterWord": "{\"chapter\":\"sinspawn-gui\",\"game\":\"ffx\",\"tabs\":[\"chapter\",\"stats\",\"sphere-grid\",\"equipment\",\"items\",\"overdrive\"],\"tab\":\"chapter\",\"member\":\"tidus\",\"outcome\":null,\"panelsRegistered\":6}",
+  "screenAfterWord": "party-prep",
+  "screenAfterEnter": "cutscene",
+  "afterEnter": "{\"finished\":false,\"result\":null,\"paused\":false,\"cast\":[]}",
+  "consoleErrors": []
+ }
+}

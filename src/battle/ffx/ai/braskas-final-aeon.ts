@@ -24,6 +24,8 @@
  *
  * **Talk** sets a flag when it resolves and does nothing else then (row B7): the gauge is cleared, the pending Overdrive
  * cancelled and the turn spent on an empty action when his next turn starts. Two charges, battle-wide; the third is text.
+ * The menu follows the game ({@link bfaTalkState}; Bailey 2026-10-09, "Yes, match the game"): the row is greyed while a Talk
+ * waits on his turn, the third Talk is offered and only speaks, and then the row is spent.
  *
  * Phase 0 is the first form, phase 1 the second, and phase 2 latches once a hit leaves him below 60,000 (row B3).
  */
@@ -36,6 +38,7 @@ import { type HitEvent, registerHitScript } from './hit-script.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 const TALK_PENDING = 'bfa.talkPending';
+const TALK_USED = 'bfa.talkUsed';
 const FORM2_OPENED = 'bfa.form2Opened';
 const PHASE_2 = 'bfa.phase2';
 
@@ -189,9 +192,22 @@ function braskasHit(event: HitEvent): void {
   setBfaGauge(ctx, boss, next, powerWave ? 'power-wave' : 'hit');
 }
 
-/** Talk charges used so far: two, battle-wide. */
+/** Talk charges used so far: two, battle-wide, and the third Talk (which only speaks) counts too. */
 export function bfaTalkCharges(ai: AiContext): number {
-  return num(ai.ctx.state.flags as AiContext['memory'], 'bfa.talkUsed', 0);
+  return num(ai.ctx.state.flags as AiContext['memory'], TALK_USED, 0);
+}
+
+/**
+ * Where the Talk row stands (section 3.6, row B7). `'pending'`: a Talk waits on his next turn, and the game keeps Talk disabled
+ * for Tidus until he has lost that turn (its scene 3 re-enables it). `'spent'`: the third Talk has been spoken and the game
+ * removes the command. `'open'`: on offer, which includes the third Talk, offered for a turn that only speaks. Reads the
+ * published flags alone, so the menu and the intent preview ask the engine's own question.
+ */
+export type BfaTalkState = 'open' | 'pending' | 'spent';
+export function bfaTalkState(flags: Readonly<Record<string, unknown>>): BfaTalkState {
+  if (flags[TALK_PENDING] === true) return 'pending';
+  const used = flags[TALK_USED];
+  return typeof used === 'number' && used >= 3 ? 'spent' : 'open';
 }
 
 /**
@@ -200,7 +216,7 @@ export function bfaTalkCharges(ai: AiContext): number {
  */
 export function consumeBfaTalk(ai: AiContext): boolean {
   const used = bfaTalkCharges(ai);
-  ai.ctx.state.flags['bfa.talkUsed'] = used + 1;
+  ai.ctx.state.flags[TALK_USED] = used + 1;
   if (used >= 2) return false;
   ai.ctx.state.flags[TALK_PENDING] = true;
   return true;

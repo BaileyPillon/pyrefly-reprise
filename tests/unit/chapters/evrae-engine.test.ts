@@ -192,6 +192,10 @@ describe('Evrae — the airship, run against the real engine', () => {
     expect(flags['airship.phase']).toBe(1);
   });
 
+  /** The ids of the Trigger rows a decision has enabled: the order on offer. */
+  const onOffer = (d: Extract<Decision, { kind: 'player-input' }>): string[] =>
+    d.commands.filter((c) => c.command.kind === 'trigger' && c.enabled).map((c) => (c.command as { id: string }).id);
+
   it('§4.2 — only Tidus and Rikku are offered the orders, and the rest are not', () => {
     const engine = newEngine();
     const seen = new Map<string, boolean>();
@@ -203,70 +207,119 @@ describe('Evrae — the airship, run against the real engine', () => {
         }
         return defend();
       },
-      () => seen.size >= 4,
+      () => seen.size >= 6,
       200,
     );
+    // The opening: the ship NEAR and nothing standing, so Pull back is the one order on offer (re-parity row D-08).
     expect(seen.get('tidus:pull-back')).toBe(true);
-    expect(seen.get('tidus:close-in')).toBe(true);
+    expect(seen.get('tidus:close-in')).toBe(false);
+    expect(seen.get('tidus:cancel-order')).toBe(false);
     expect(seen.get('rikku:pull-back')).toBe(true);
+    expect(seen.get('rikku:close-in')).toBe(false);
+    expect(seen.get('rikku:cancel-order')).toBe(false);
     expect([...seen.keys()].some((k) => k.startsWith('wakka:'))).toBe(false);
   });
 
-  it('§4.2 — an order is queued, not immediate, and the LAST one wins', () => {
+  it('D-08 — one order at a time: queued, not immediate, and while it stands only Cancel is on offer', () => {
     const engine = newEngine();
-    // Out of danger (re-parity W2, FFX only): the clean pair needs both order-givers alive and acting, and with the party defending
-    // from the first turn Evrae wins some openings (the opening counters are the game's 26 fixed draws now) before a pair turns up.
-    // This unit measures the order queue, not the fight.
+    // Out of danger (re-parity W2, FFX only): with the party defending from the first turn Evrae wins some openings (the opening
+    // counters are the game's 26 fixed draws now) before an order-giver has a second turn. This unit measures the order queue, not the fight.
     makeInvincible(engine);
-    let issued = 0;
+    let issued = false;
     drive(
       engine,
       (d) => {
-        if (issued === 0 && d.actorId === 'tidus') {
-          issued = 1;
+        if (!issued && d.actorId === 'tidus') {
+          issued = true;
           return { kind: 'trigger', id: 'pull-back', targets: [] };
         }
         return defend();
       },
-      () => issued === 1,
+      () => issued,
       200,
     );
     // Queued: the ship has NOT moved yet.
     expect(engine.state().flags['airship.order']).toBe('far');
     expect(engine.state().flags['airship.range']).toBe('near');
 
-    // A second, opposite order before Cid acts collapses onto the first — run
-    // as a real second `trigger` submission, because a hand-written flag would
-    // pin nothing. The pair only counts when Cid has not flown in between, so
-    // the loop keeps trying pairs until it gets a clean one.
-    let collapsed = false;
-    let rangeAtFirstOrder = '';
-    let pending = false;
-    for (let i = 0; i < 400 && !collapsed; i++) {
+    // Until Cid flies it, each order owner is offered Cancel and nothing else: no second order, no redundant one, and
+    // "last order wins" has nothing to act on (the game removes the order's own command and the other is not on the menu).
+    let checked = 0;
+    for (let i = 0; i < 200 && engine.state().flags['airship.order'] === 'far'; i++) {
       const d = engine.nextDecision();
       if (d.kind === 'battle-over') break;
       if (d.kind !== 'player-input') continue;
-      const owner = d.actorId === 'tidus' || d.actorId === 'rikku';
-      const order = engine.state().flags['airship.order'];
-      if (owner && pending && order === 'far') {
-        engine.submit({ kind: 'trigger', id: 'close-in', targets: [] });
-        collapsed = true;
-        continue;
+      if (d.actorId === 'tidus' || d.actorId === 'rikku') {
+        expect(onOffer(d), `${d.actorId} while Pull back stands`).toEqual(['cancel-order']);
+        checked += 1;
+      } else {
+        expect(onOffer(d)).toEqual([]);
       }
-      if (owner) {
-        rangeAtFirstOrder = String(engine.state().flags['airship.range']);
-        engine.submit({ kind: 'trigger', id: 'pull-back', targets: [] });
-        pending = engine.state().flags['airship.order'] === 'far';
-        continue;
-      }
-      pending = pending && order === 'far';
       engine.submit(defend());
     }
-    expect(collapsed).toBe(true);
-    // One order is waiting, and it is the LAST one.
-    expect(engine.state().flags['airship.order']).toBe('near');
-    // ...and neither order has moved the ship yet.
-    expect(engine.state().flags['airship.range']).toBe(rangeAtFirstOrder);
+    expect(checked, 'an order owner had a turn while the order stood').toBeGreaterThan(0);
+  });
+
+  it("D-08 — Cancel drops the standing order, the ship stays, and the next owner is offered Pull back again", () => {
+    const engine = newEngine();
+    // Tidus orders Pull back on the first turn; the next owner to act before Cid has flown it (Rikku, on seed 1) cancels.
+    let ordered = false;
+    let cancelled = false;
+    drive(
+      engine,
+      (d) => {
+        const owner = d.actorId === 'tidus' || d.actorId === 'rikku';
+        if (!ordered && owner) {
+          ordered = true;
+          return { kind: 'trigger', id: 'pull-back', targets: [] };
+        }
+        if (ordered && !cancelled && owner && engine.state().flags['airship.order'] === 'far') {
+          cancelled = true;
+          return { kind: 'trigger', id: 'cancel-order', targets: [] };
+        }
+        return defend();
+      },
+      () => cancelled,
+      200,
+    );
+    expect(cancelled, 'an owner had a turn while the order stood').toBe(true);
+    expect(engine.state().flags['airship.order'], 'nothing is waiting on Cid any more').toBe('');
+    expect(engine.state().flags['airship.range'], 'and the ship has not moved').toBe('near');
+    expect(engine.state().log.some((e) => e.type === 'message' && /cancels the order/.test(e.text))).toBe(true);
+
+    // The next owner turn: nothing stands and the ship is NEAR, so Pull back is the one on offer again.
+    let afterOffer: string[] = [];
+    for (let i = 0; i < 200 && afterOffer.length === 0; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind !== 'player-input') continue;
+      if (d.actorId === 'tidus' || d.actorId === 'rikku') afterOffer = onOffer(d);
+      else engine.submit(defend());
+    }
+    expect(afterOffer).toEqual(['pull-back']);
+  });
+
+  it('D-08 — a second or a redundant order is refused: nothing is queued, and the turn says so', () => {
+    const engine = newEngine();
+    // Redundant: Close in while the ship is already NEAR, with nothing standing.
+    let d = engine.nextDecision();
+    while (d.kind !== 'player-input' || (d.actorId !== 'tidus' && d.actorId !== 'rikku')) {
+      if (d.kind === 'player-input') engine.submit(defend());
+      d = engine.nextDecision();
+    }
+    let events = engine.submit({ kind: 'trigger', id: 'close-in', targets: [] });
+    expect(engine.state().flags['airship.order']).toBe('');
+    expect(engine.state().flags['airship.range']).toBe('near');
+    expect(events.some((e) => e.type === 'message' && /cannot give that order/.test(e.text))).toBe(true);
+    // Cancel with nothing to cancel is refused the same way.
+    d = engine.nextDecision();
+    while (d.kind !== 'player-input' || (d.actorId !== 'tidus' && d.actorId !== 'rikku')) {
+      if (d.kind === 'player-input') engine.submit(defend());
+      d = engine.nextDecision();
+    }
+    events = engine.submit({ kind: 'trigger', id: 'cancel-order', targets: [] });
+    expect(engine.state().flags['airship.order']).toBe('');
+    expect(events.some((e) => e.type === 'message' && /cannot give that order/.test(e.text))).toBe(true);
   });
 
   it('§2.3, §4.6 — exactly three volleys, then one announcement, then silence', () => {

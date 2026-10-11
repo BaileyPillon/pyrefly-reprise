@@ -1,0 +1,144 @@
+{
+ "id": "seymour-flux",
+ "size": "1600x900",
+ "touch": false,
+ "steps": [
+  {
+   "shot": "1-first-menu",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "5-target",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  },
+  {
+   "shot": "6-strike",
+   "asserted": "battle",
+   "awaitingMenu": true,
+   "ok": true
+  }
+ ],
+ "fails": [],
+ "m0": {
+  "card": [
+   {
+    "cls": "mad__card",
+    "x": 15,
+    "y": 119,
+    "w": 487,
+    "h": 173,
+    "vis": true,
+    "t": "NEXT BEST MOVE Tidus Leave Kimahri down for now — a raise brings Kimahri back still a Zomb"
+   }
+  ],
+  "chips": [
+   {
+    "cls": "ig-banner__chip",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "ffx-sensor__chips",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "FIREICETHUNDERWATERHOLYGRAV"
+   },
+   {
+    "cls": "ffx-sensor__chip ",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "FIRE"
+   },
+   {
+    "cls": "ffx-sensor__chip-icon",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   },
+   {
+    "cls": "ffx-sensor__chip ",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "ICE"
+   },
+   {
+    "cls": "ffx-sensor__chip-icon",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": ""
+   }
+  ],
+  "guide": [
+   {
+    "cls": "phud-guide",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "vis": false,
+    "t": "Guide"
+   }
+  ],
+  "cmd": {
+   "x": 76,
+   "y": 445,
+   "w": 469,
+   "h": 391,
+   "vis": true
+  },
+  "nextBest": "NEXT BEST MOVE Tidus Leave Kimahri down for now — a raise brings Kimahri back still a Zombie, and Full-Life kills a Zombie outright. Hastega → the party IN WHITE MAGIC 30 MP Speeds the party’s turns up N HIDE "
+ },
+ "actors": [
+  {
+   "id": "tidus",
+   "kind": "party",
+   "art": "tidus"
+  },
+  {
+   "id": "yuna",
+   "kind": "party",
+   "art": "yuna"
+  },
+  {
+   "id": "kimahri",
+   "kind": "party",
+   "art": "kimahri"
+  },
+  {
+   "id": "seymour-flux",
+   "kind": "enemy",
+   "art": "seymour-flux-body"
+  },
+  {
+   "id": "mortiorchis",
+   "kind": "enemy",
+   "art": "mortiorchis"
+  }
+ ],
+ "keys": {},
+ "consoleErrors": [],
+ "notFound": []
+}

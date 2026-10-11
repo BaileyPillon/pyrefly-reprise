@@ -21,7 +21,7 @@ import { sinLeftFinGroup, sinRightFinGroup } from '../../../src/data/ffx/enemies
 import * as finData from '../../../src/data/ffx/enemies/sin-fins.ts';
 import * as coreData from '../../../src/data/ffx/enemies/sin-genais-core.ts';
 import { sinGenaisCoreGroup } from '../../../src/data/ffx/enemies/sin-genais-core.ts';
-import { sinFahrenheitBuild, sinFinsCoreBuild } from '../../../src/data/ffx/builds/sin-fahrenheit.ts';
+import { sinFaceBuild, sinFahrenheitBuild, sinFinsCoreBuild } from '../../../src/data/ffx/builds/sin-fahrenheit.ts';
 import * as ids from '../../../src/battle/ffx/ai/sin-ids.ts';
 import { NEGATION_MERCY, NEGATION_REMOVES, NEGATION_SPARES } from '../../../src/battle/ffx/ai/sin-negation.ts';
 import { SIN_FINS_ASSUMPTIONS } from '../../../src/battle/ffx/ai/sin-fins-rules.ts';
@@ -68,7 +68,8 @@ describe('the two records (D-270) and the rename (plan §1.4)', () => {
     expect(ch?.number).toBe(18);
     expect(ch?.title).toBe('Sin: the Face');
     expect(ch?.enemyGroupRef.id).toBe('overdrive-sin');
-    expect(ch?.buildRef).toBe(sinFahrenheitBuild);
+    // The rested party, re-equipped against Gaze for link 4 (CH-XVIII, re-parity); Chapter XVII keeps the build as it was.
+    expect(ch?.buildRef).toBe(sinFaceBuild);
     expect(getChapter('sin')).toBeUndefined();
   });
 
@@ -99,9 +100,10 @@ describe('the two records (D-270) and the rename (plan §1.4)', () => {
 
   it('Tidus and Rikku carry the orders to Cid in Chapter XVII only (§4 [verified: 4 sources])', () => {
     const orders = (b: typeof sinFahrenheitBuild, id: string): string[] =>
-      b.members.find((m) => m.id === id)!.learnedAbilityIds.filter((a) => a === 'pull-back' || a === 'close-in');
-    expect(orders(sinFinsCoreBuild, 'tidus')).toEqual(['pull-back', 'close-in']);
-    expect(orders(sinFinsCoreBuild, 'rikku')).toEqual(['pull-back', 'close-in']);
+      b.members.find((m) => m.id === id)!.learnedAbilityIds.filter((a) => a === 'pull-back' || a === 'close-in' || a === 'cancel-order');
+    // The three Trigger Commands (one on offer at a time, re-parity row D-08): Pull back, Close in and Cancel.
+    expect(orders(sinFinsCoreBuild, 'tidus')).toEqual(['pull-back', 'close-in', 'cancel-order']);
+    expect(orders(sinFinsCoreBuild, 'rikku')).toEqual(['pull-back', 'close-in', 'cancel-order']);
     expect(orders(sinFinsCoreBuild, 'auron')).toEqual([]);
     expect(orders(sinFahrenheitBuild, 'tidus')).toEqual([]);
     expect(sinFinsCoreBuild.activeSlots).toEqual(['tidus', 'yuna', 'auron']);

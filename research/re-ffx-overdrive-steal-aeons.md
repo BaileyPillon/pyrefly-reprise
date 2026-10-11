@@ -551,6 +551,35 @@ has been changed; these are what a wiring batch has to settle. All rows are **FF
 | A8 | `aeonEntryDelay` (exported, never called) says a freshly summoned aeon enters with a rank-3 delay; the game's counter for it is 0 | `aeons.ts` 138 to 141 | `baseCtb(agi) * 3` / 0 | dead code |
 | A9 | **Identical:** a KO'd aeon's gauge is zeroed (and only an aeon's), a wipe returns the party and is not a Game Over, HP and MP persist between battles, the aeon acts next after arrival, the Grand Summon's temporary gauge and the restore of the held one | | | |
 
+### 5.1 Status of each difference after re-parity W5 (2026-10-10; branch `re-parity-w5`, FFX only)
+
+| Row | Status | Where, and the proof |
+|---|---|---|
+| O1 rounding | **wired** | `gauge.ts#gaugeOnHit` runs `kernel/overdrive-hooks.ts#odOnHpChange` for every hit record, before the HP changes; `tests/unit/parity-ffx-engine-gauge.test.ts` |
+| O2 Healer | **wired** | the hook reads the HP still missing (`min(heal, missing) * 16 / maxHP + 1`) |
+| O3 aeon gauge | **wired** | the kernel sees the aeon's bar as 20 points; the engine keeps the percent (`adapt/od-world.ts`) |
+| O4 Shield, Boost | **wired** | `gaugeAdd` / the hooks go through `odAdd`: Shield zeroes and Boost doubles on any character |
+| O5 Avenger, Slayer, Hero, Coward, Tactician, Victim, Dancer, Rook | **wired** | `koActor` -> `gaugeOnDeath`, a party Flee -> `gaugeOnEscape`, the outcome hook reads the status step's result counter 7 and the record's byte 3; Rook on a Reflect bounce is read from the exe by the first W5 agent and not re-verified (no shipped build wears these modes) |
+| O6 SOS Overdrive, Overdrive to AP | SOS **wired**; the AP award is **not wired** | `awardAp` of the kernel is called but the engine has no AP ledger for it; the gauge stays still, as the game's does. Nothing ships it |
+| O7 modes fixed per build | unchanged | the learning counters are `0xffff` (never count) |
+| O8 | identical | |
+| S1 chance schedule | **wired** | `adapt/steal.ts` -> `kernel/steal-rewards.ts#stealItem`; `parity-ffx-engine-steal.test.ts` |
+| S2 a miss cancels a steal | **wired for Mug** (the roll is drawn, the steal is cancelled); Steal itself cannot miss (`canMiss: false`, the game's record) | |
+| S3 Pilfer Gil, Nab Gil, Bribe | **not built** (rule 10: no shipped chapter uses them) | kernel `stealGil` and the bribe resolver stay unwired |
+| S4 Bribe forgets the gil paid | **not built** | the data comment in `special-rikku.ts` is still the old formula |
+| S5 | identical | |
+| R1 item drops, R2 Gillionaire, R3 Double/Triple AP, R4 gear drops | **not built** (rule 10; the per-boss loot records were not read) | `kernel/drops.ts`, `kernel/gear-drop.ts` stay unwired; `kernel/ap-award.ts` is reached only through the gauge kernel |
+| R5 | unreachable | |
+| A1 stat rows | identical | `kernel/aeon-stats.ts` is proven against the authored rows by `parity-ffx-aeon-stats.test.ts` and is **not called by the engine** (the rows are already exact; the Sphere Grid bonus record and a battle counter do not exist in the engine) |
+| A2 recovery counts | **wired** | `aeon-gear.ts` (8, 12, 20, 20, 24, 24, 24, 30 x 3), a real countdown settled by each battle's save (`engine-end.ts` -> `adapt/aeon-party.ts#settleAeonRecovery`), carried to the next link (`BattleScreenSetup.ts#carryFfx`); `parity-ffx-engine-aeons.test.ts` |
+| A3 the summoner's recovery | **fixed** | no freeze and thaw: nobody's counter moves when an aeon comes or goes (`aeons.ts`, `kernel/aeon-party.ts`) |
+| A4 aeon equipment | **wired** | critical bonus 6, Pierce on nine, Break Damage Limit on five, Break HP and MP Limit on all (`aeon-gear.ts`, `adapt/words.ts`, `equipment.ts`) |
+| A5 | identical | |
+| A6 the Magus Sisters | **not built** (in no shipped chapter) | the kernel handles three aeons at once; the engine has one `aeonId` |
+| A7 dismiss revives a fallen sister | **not built** (Sisters only) | |
+| A8 `aeonEntryDelay` | **removed** (dead code) | |
+| A9 | identical | |
+
 ## 6. What the engine has to supply to call the kernels
 
 **Overdrive** (`kernel/overdrive*.ts`): per slot the mode, gauge and maximum (100 for the party, 20 for aeons), maximum HP and HP,

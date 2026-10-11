@@ -1,23 +1,17 @@
 import type { AvailableCommand, Command } from '../../battle/common/types.ts';
+import { ORDER_CANCEL, ORDER_CLOSE_IN, ORDER_PULL_BACK } from '../../battle/ffx/ai/evrae-rules.ts';
 import { RawInputWatcher, wireClicks, type UiButton } from './rawInput.ts';
 import { claimCancel, releaseCancel, releaseCancelAfterPress } from './cancelClaim.ts';
-import { airshipOrderRefusal } from '../../engine/tactics/airship-orders.ts';
 
 /**
  * The Evrae chapter's order widget — **THIS CHAPTER ONLY**.
  *
- * **Not an approved end state.** `docs/concepts/chapters/evrae/widget/options.json`
- * is Bailey's options round for O-3 (the order widget) and O-4 (reading NEAR vs
- * FAR without the HUD); Bailey has not picked. This file is built to the
- * orchestrator's recommendation — **option A's cascade-and-cost-preview widget**
- * — because a driver recommendation, not a Bailey pick, authored it
- * [AGENTS.md hard rule 9, "end state first"]. `docs/target/targets.json` records
- * this tile's `reaction.inferred` as "built to the driver's recommendation A +
- * C's staging, awaiting Bailey" and it is **never** marked approved. Option C's
- * half of the recommendation (re-staging the camera/backdrop for the NEAR/FAR
- * read with no persistent gauge) is scene-presentation work, not a HUD
- * element, and is owned by whoever wires `src/scenes/**` for this chapter —
- * see `docs/handoff/chapter-evrae-guide.md` for what is left open there.
+ * **Approved shape, one order at a time.** Bailey picked option A with C's staging on 2026-09-23 (D-032: the Trigger rows in the
+ * cascade, the cost preview, the ORDER chip), and on 2026-10-09 said "Yes, match the game" to the game's own rule: the airship
+ * offers **one order at a time** — Pull back while the ship is NEAR, Close in (the game's "Move in") while it is FAR, Cancel while
+ * an order is standing — so the widget lists exactly the rows the engine offers (`src/battle/ffx/ai/evrae-rules.ts#orderOnOffer`)
+ * and nothing greyed ("Already near/far" and "Ordered" are gone with the redundant order they refused). The cascade, the cost slab
+ * and the ORDER chip are as approved.
  *
  * **Mounts only for this encounter.** {@link AirshipOrderWidget.applies} is the
  * single gate: it is true only once `BattleState.flags['airship.range']` is a
@@ -26,16 +20,13 @@ import { airshipOrderRefusal } from '../../engine/tactics/airship-orders.ts';
  * other chapter's flags carry that key, so mounting this widget can never
  * change any other chapter's screen. The live command flow reaches it through
  * `./AirshipOrders.ts` (the integrator's wiring, `docs/handoff/chapter-evrae.md`):
- * the two Trigger rows fold into one "Orders" row in the cascade, and choosing
+ * the order rows fold into one "Orders" row in the cascade, and choosing
  * it opens this widget; Esc goes back (the caller's `onCancel`).
  *
  * **The cost is the whole design** (`special-orders-evrae.ts`'s own header):
- * an order costs the speaking character's turn, executes on Cid's next turn
- * in place of a missile volley, and last order wins if two are queued before
- * he acts [research/ffx-evrae-airship.md §4.2]. The row for the range the ship
- * is *already* in is disabled and reads "Already near" / "Already far" — the
- * state is stated in words at the only moment it can be changed, answering
- * §12.3's "readable without the HUD" bar for players who have the panel open.
+ * an order costs the speaking character's turn and executes on Cid's next turn
+ * in place of a missile volley [research/ffx-evrae-airship.md §4.2]. Cancel
+ * costs the turn alone, and gives Cid his next turn back.
  *
  * **14 px type floor.** This HUD is authored on the 640×360 grid every other
  * `src/ui/ffx/*.ts` component uses (`ffx-hud.css`'s own header) and scaled to
@@ -50,37 +41,34 @@ import { airshipOrderRefusal } from '../../engine/tactics/airship-orders.ts';
  * back to whatever the caller passed as `onCancel`.
  */
 
-export interface AirshipOrderRow {
-  id: 'pull-back' | 'close-in';
+type OrderId = typeof ORDER_PULL_BACK | typeof ORDER_CLOSE_IN | typeof ORDER_CANCEL;
+
+interface OrderRow {
+  id: OrderId;
   /**
-   * Player-facing label. Recommended copy, awaiting the same approval as the
-   * widget itself: `special-orders-evrae.ts`'s own header names **"Pull
-   * back"** and **"Close in"** over "Move in" (single-source and reads as the
-   * player moving).
+   * Player-facing label: **"Pull back"** and **"Close in"** over the game's "Move in"
+   * (`special-orders-evrae.ts`: D-020 Q9, the owner's own words), and the game's "Cancel".
    */
   label: string;
-  disabled: boolean;
-  /** Shown in place of a cost preview when `disabled` — "Already near/far". */
-  disabledReason?: string;
 }
 
-/** {@link AirshipOrderWidget.open}'s optional extras. */
+/** `open`'s optional extras. */
 export interface AirshipOrderOpenOptions {
-  /** The order already standing (`state.flags['airship.order']`); its row reads "Ordered". */
-  pending?: 'near' | 'far' | null;
   /** Called on Escape / X / Backspace. Without it, cancel does nothing (the widget must be answered). */
   onCancel?: () => void;
 }
 
-const ROWS: readonly Omit<AirshipOrderRow, 'disabled' | 'disabledReason'>[] = [
-  { id: 'pull-back', label: 'Pull back' },
-  { id: 'close-in', label: 'Close in' },
+/** The three orders in the order they are listed in (at most one is ever on offer). */
+const ROWS: readonly OrderRow[] = [
+  { id: ORDER_PULL_BACK, label: 'Pull back' },
+  { id: ORDER_CLOSE_IN, label: 'Close in' },
+  { id: ORDER_CANCEL, label: 'Cancel' },
 ];
 
 export class AirshipOrderWidget {
   readonly el: HTMLElement;
   private index = 0;
-  private rows: AirshipOrderRow[] = [];
+  private rows: OrderRow[] = [];
   private commands: AvailableCommand[] = [];
   /** `null` in a fight where Cid fires nothing (the Sin Fins, S-19): no pip strip and no volley in the cost. */
   private volleysLeft: number | null = 0;
@@ -105,35 +93,18 @@ export class AirshipOrderWidget {
   }
 
   /**
-   * `commands` is the two Trigger rows the engine already offers
-   * (`kind: 'trigger'`, `id: 'pull-back' | 'close-in'`) — this widget never
-   * invents a command, only presents the two legal ones with the copy and
-   * cost preview the raw menu row does not carry. `volleysLeft` drives the
-   * three-pip readout (`state.flags['airship.missilesLeft']`); `null` draws no
-   * pip strip and leaves the volley out of the cost, for a fight in which Cid
-   * fires nothing (the Sin Fins, research/ffx-sin.md §2.5 S-19; plan REVIEW
-   * must-change 4). Evrae always passes a number, so its widget is unchanged.
+   * `commands` is the Trigger rows the engine offers (`kind: 'trigger'`, `id: 'pull-back' | 'close-in' | 'cancel-order'`): the
+   * widget lists the **enabled** ones, which is the one on offer, with the copy and cost preview the raw menu row does not carry.
+   * It never invents a command. `volleysLeft` drives the three-pip readout (`state.flags['airship.missilesLeft']`); `null` draws
+   * no pip strip and leaves the volley out of the cost, for a fight in which Cid fires nothing (the Sin Fins, research/ffx-sin.md
+   * §2.5 S-19; plan REVIEW must-change 4). Evrae always passes a number, so its widget is unchanged.
    */
-  open(
-    commands: AvailableCommand[],
-    range: 'near' | 'far',
-    volleysLeft: number | null,
-    opts: AirshipOrderOpenOptions = {},
-  ): Promise<Command> {
-    this.commands = commands.filter((c) => c.command.kind === 'trigger');
+  open(commands: AvailableCommand[], volleysLeft: number | null, opts: AirshipOrderOpenOptions = {}): Promise<Command> {
+    this.commands = commands.filter((c) => c.enabled && c.command.kind === 'trigger');
+    this.rows = ROWS.filter((r) => this.commands.some((c) => c.command.kind === 'trigger' && c.command.id === r.id));
     this.volleysLeft = volleysLeft;
     this.onCancel = opts.onCancel ?? null;
-    // "Already near/far" for the range the ship is in, "Ordered" for the order
-    // standing (giving it again burns a turn for nothing: last order wins). One
-    // rule, shared with the move-advisor card (`engine/tactics/airship-orders.ts`).
-    const flags = { 'airship.range': range, 'airship.order': opts.pending ?? '' };
-    this.rows = ROWS.map((r) => {
-      const refusal = airshipOrderRefusal(flags, r.id);
-      const offered = this.commands.some((c) => c.command.kind === 'trigger' && c.command.id === r.id && c.enabled);
-      return { ...r, disabled: refusal !== null || !offered, disabledReason: refusal ?? undefined };
-    });
-    this.index = this.rows.findIndex((r) => !r.disabled);
-    if (this.index < 0) this.index = 0;
+    this.index = 0;
     this.el.hidden = false;
     this.render();
     this.watcher.attach();
@@ -149,12 +120,7 @@ export class AirshipOrderWidget {
   private onButton(b: UiButton): void {
     if (b === 'up' || b === 'down') {
       const n = this.rows.length;
-      let next = this.index;
-      for (let i = 0; i < n; i++) {
-        next = (next + (b === 'up' ? -1 : 1) + n) % n;
-        if (!this.rows[next]?.disabled) break;
-      }
-      this.index = next;
+      if (n > 0) this.index = (this.index + (b === 'up' ? -1 : 1) + n) % n;
       this.render();
     } else if (b === 'confirm') {
       this.choose(this.index);
@@ -190,7 +156,7 @@ export class AirshipOrderWidget {
 
   private choose(i: number): void {
     const row = this.rows[i];
-    if (!row || row.disabled) return;
+    if (!row) return;
     const cmd = this.commands.find((c) => c.command.kind === 'trigger' && c.command.id === row.id);
     if (!cmd) return;
     const owned = this.onCancel !== null;
@@ -205,16 +171,16 @@ export class AirshipOrderWidget {
   }
 
   /** A gold "ORDER" chip for `FFXBattleHud`/`CtbList` to dock on Cid's CTB tile — this widget draws it but never docks it itself, so wiring is one line in the integrator's commit rather than a dependency on `CtbList.ts`'s internals. */
-  static orderChipHtml(orderId: 'pull-back' | 'close-in'): string {
+  static orderChipHtml(orderId: typeof ORDER_PULL_BACK | typeof ORDER_CLOSE_IN): string {
     const label = ROWS.find((r) => r.id === orderId)?.label ?? orderId;
     return `<span class="ffx-airship-order__chip" title="${escapeHtml(label)} — Cid's next turn">ORDER</span>`;
   }
 
   /**
-   * Option A's two parts: the rows in the cascade (each tagged "Trigger", or
-   * why it is greyed), and under them the ivory cost slab for the highlighted
-   * order. An order forgoes Cid's next volley; it does not spend one from the
-   * rack (`evrae-rules.ts#applyQueuedOrder`), so the pips count the rack.
+   * Option A's two parts: the row on offer in the cascade (tagged "Trigger"), and
+   * under it the ivory cost slab for the highlighted order. An order forgoes Cid's
+   * next volley; it does not spend one from the rack (`evrae-rules.ts#applyQueuedOrder`),
+   * so the pips count the rack. Cancel costs the turn alone and gives Cid his turn back.
    */
   private render(): void {
     const volleys = this.volleysLeft;
@@ -224,25 +190,24 @@ export class AirshipOrderWidget {
     ).join('');
     const rows = this.rows
       .map((r, i) => {
-        const selected = i === this.index;
-        const cls = ['ig-cmd', 'ffx-cmd--trigger', selected ? 'ig-cmd--selected' : '', r.disabled ? 'ig-cmd--disabled' : '']
-          .filter(Boolean)
-          .join(' ');
-        const tag = r.disabled
-          ? `<span class="ffx-airship-order__already">${escapeHtml(r.disabledReason ?? '')}</span>`
-          : `<span class="ffx-airship-order__tag">Trigger</span>`;
-        return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${i})" data-ui-action="${i}"><span class="ffx-cmd--trigger__label">${escapeHtml(r.label)}</span>${tag}</div>`;
+        const cls = ['ig-cmd', 'ffx-cmd--trigger', i === this.index ? 'ig-cmd--selected' : ''].filter(Boolean).join(' ');
+        return `<div class="${cls}" style="margin-left:calc(var(--ig-cascade-step) * ${i})" data-ui-action="${i}"><span class="ffx-cmd--trigger__label">${escapeHtml(r.label)}</span><span class="ffx-airship-order__tag">Trigger</span></div>`;
       })
       .join('');
     const live = this.rows[this.index];
-    // No rack (the Sin Fins, S-19): the cost is the two turns, and nothing is left to count.
-    const cost = volleys === null ? "Turn now &middot; Cid's next turn" : "Turn now &middot; Cid's next turn &middot; 1 volley";
-    const left = volleys === null ? '' : `<span class="ffx-airship-order__left"><span class="ffx-airship-order__pips">${pips}</span>Volleys left ${volleys}</span>`;
-    const slab =
-      live && !live.disabled
-        ? `<div class="ffx-airship-order__slab"><span class="ffx-airship-order__slab-title">This order costs</span>` +
-          `<span class="ffx-airship-order__cost">${cost}</span>${left}</div>`
-        : '';
+    let slab = '';
+    if (live?.id === ORDER_CANCEL) {
+      slab =
+        `<div class="ffx-airship-order__slab"><span class="ffx-airship-order__slab-title">Cancelling costs</span>` +
+        `<span class="ffx-airship-order__cost">Turn now &middot; Cid keeps his turn</span></div>`;
+    } else if (live) {
+      // No rack (the Sin Fins, S-19): the cost is the two turns, and nothing is left to count.
+      const cost = volleys === null ? "Turn now &middot; Cid's next turn" : "Turn now &middot; Cid's next turn &middot; 1 volley";
+      const left = volleys === null ? '' : `<span class="ffx-airship-order__left"><span class="ffx-airship-order__pips">${pips}</span>Volleys left ${volleys}</span>`;
+      slab =
+        `<div class="ffx-airship-order__slab"><span class="ffx-airship-order__slab-title">This order costs</span>` +
+        `<span class="ffx-airship-order__cost">${cost}</span>${left}</div>`;
+    }
     this.el.innerHTML = rows + slab;
   }
 

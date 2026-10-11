@@ -107,10 +107,11 @@ function tidus(): FFXMemberBuild {
     mp: 60,
     // §9.4 [estimate]. **Slow is the fight's headline lever** (§6.3) and it
     // reaches at FAR; Delay Attack matters because Evrae is the only boss in
-    // the anthology that is not `immune-to-delay` (§5.6). `pull-back` and
-    // `close-in` are the Trigger Commands — §4.2 [verified: 3 sources] gives
-    // them to Tidus and Rikku, and only them.
-    learnedAbilityIds: ['cheer', 'provoke', 'haste', 'slow', 'delay-attack', 'flee', 'pull-back', 'close-in'],
+    // the anthology that is not `immune-to-delay` (§5.6). `pull-back`,
+    // `close-in` and `cancel-order` are the Trigger Commands (one of the three
+    // on offer at a time) — §4.2 [verified: 3 sources] gives them to Tidus and
+    // Rikku, and only them.
+    learnedAbilityIds: ['cheer', 'provoke', 'haste', 'slow', 'delay-attack', 'flee', 'pull-back', 'close-in', 'cancel-order'],
     equipment: {
       weapon: { name: 'Brotherhood', slots: 2, autoAbilities: ['strength-5'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
       armor: { name: "Seeker's Shield", slots: 2, autoAbilities: ['hp-10'] },
@@ -194,7 +195,7 @@ function rikku(): FFXMemberBuild {
     // `reflect` is C-14's setup — §9.4 `[single source: wiki]` has it reachable
     // via a Lv. 2 Key Sphere shortly after she joins. She is the second Trigger
     // Command owner.
-    learnedAbilityIds: ['steal', 'use', 'mix', 'reflect', 'flee', 'pull-back', 'close-in'],
+    learnedAbilityIds: ['steal', 'use', 'mix', 'reflect', 'flee', 'pull-back', 'close-in', 'cancel-order'],
     equipment: {
       weapon: { name: 'Rikku Claw', slots: 2, autoAbilities: ['strength-5'], bonusCrit: BASE_WEAPON_BONUS_CRIT },
       // §9.5 F-1 — **the one Stone Ward the party can afford**: 30 Softs at 50

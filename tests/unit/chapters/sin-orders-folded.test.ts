@@ -1,13 +1,13 @@
 /**
  * **The folded Orders row in Sin's Fin fights** (FFX only; CHECK 4 C4-2, re-tested after main's PR-0236 merged into
  * `chapter-sin`). CHECK 4 saw Tidus's ORDERS open onto two greyed rows ("Pull back: Already far", "Close in:
- * Ordered") at FAR with Close in already ordered. PR-0236 (shared airship plumbing, `ui/ffx/AirshipOrders.ts`)
- * greys the folded row itself.
+ * Ordered") at FAR with Close in already ordered. PR-0236 greyed the folded row itself; since 2026-10-09 (re-parity
+ * row D-08, "Yes, match the game") the airship offers one order at a time, so there is nothing to grey.
  *
  * This drives the real engine on the real Left and Right Fin formations (rule 3): on each of Tidus's turns with no
- * order standing he orders the other range, and on each of his turns with one standing (he can act again before
- * Cid carries it out) the folded row must be disabled with the reason "Ordered". Everyone else defends. The
- * standing-order case must actually occur, or the test proves nothing.
+ * order standing he orders the other range (the one order on offer), and on each of his turns with one standing (he
+ * can act again before Cid carries it out) the folded row must be enabled and be Cancel, the only order on offer.
+ * Everyone else defends. The standing-order case must actually occur, or the test proves nothing.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -25,7 +25,7 @@ function engineOn(group: typeof sinLeftFinGroup, seed: number): BattleEngine {
 }
 
 describe('the folded Orders row in the Fin fights (C4-2 after PR-0236)', () => {
-  it('Tidus with an order standing: Orders is greyed, reason "Ordered"; with none standing it is choosable', () => {
+  it('Tidus with an order standing: Orders is on offer and is Cancel; with none standing it is the other range', () => {
     const standing = { near: 0, far: 0 };
     let choosable = 0;
     for (const group of [sinLeftFinGroup, sinRightFinGroup]) {
@@ -46,8 +46,10 @@ describe('the folded Orders row in the Fin fights (C4-2 after PR-0236)', () => {
           const order = flags['airship.order'];
           if (order === 'near' || order === 'far') {
             standing[range as 'near' | 'far']++;
-            expect(folded!.enabled, `${group.id} seed ${seed} at ${String(range)}`).toBe(false);
-            expect(folded!.disabledReason).toBe('Ordered');
+            expect(folded!.enabled, `${group.id} seed ${seed} at ${String(range)}`).toBe(true);
+            expect(folded!.command, `${group.id} seed ${seed} at ${String(range)}`).toEqual({ kind: 'trigger', id: 'cancel-order', targets: [] });
+            const others = d.commands.filter((c) => c.command.kind === 'trigger' && (c.command as { id?: string }).id !== 'cancel-order');
+            expect(others.some((c) => c.enabled), 'no second order is on offer').toBe(false);
             e.submit(defend());
             continue;
           }

@@ -56,7 +56,7 @@
  */
 
 import type { AvailableCommand, BattleState, Command } from '../../battle/common/types.ts';
-import { baitsTheBreath, refusedAirshipOrder } from './airship-orders.ts';
+import { baitsTheBreath, isAirshipOrderId, refusedAirshipOrder } from './airship-orders.ts';
 
 /** Mirrors `ui/ffx/CommandMenuLogic.ts`'s `CATEGORY_LABEL`. */
 const FFX_CATEGORY_LABEL: Record<string, string> = {
@@ -114,12 +114,12 @@ export function onTheMenu(game: BattleState['game'], command: Command): boolean 
 }
 
 /**
- * {@link onTheMenu}, plus the rows a chapter's own widget greys out on this
- * board: Evrae's order widget refuses "Pull back" when the ship is already far
- * or already ordered far (and "Close in" likewise), though the engine keeps
- * them legal (`./airship-orders.ts`). A card that names a greyed row names
- * something the player cannot press. FFX only in effect; inert without the
- * airship flag. Also refused: a row that names Evrae while its breath is
+ * {@link onTheMenu}, plus the rows a chapter's own widget leaves off this
+ * board: Evrae's order widget offers one order at a time ("Pull back" at NEAR,
+ * "Close in" at FAR, "Cancel" while one stands), so an order row that is not
+ * the one on offer is not there to press (`./airship-orders.ts`). A card that
+ * names a missing row names something the player cannot press. FFX only in
+ * effect; inert without the airship flag. Also refused: a row that names Evrae while its breath is
  * charged and the ship is FAR (`./airship-orders.ts#baitsTheBreath`, §4.5):
  * pressable, but the one press the card must never ask for.
  */
@@ -153,8 +153,8 @@ function ffxChip(row: AvailableCommand): string {
   // Dropped by `buildTopRows`; `onTheMenu` is the gate that keeps it off the
   // card, and there is no submenu to name either way.
   if (kind === 'defend') return '';
-  // Evrae's two orders fold into one "Orders" row (`ui/ffx/AirshipOrders.ts`).
-  if (kind === 'trigger' && (row.command.id === 'pull-back' || row.command.id === 'close-in')) return 'Orders';
+  // Evrae's orders (the one on offer: Pull back, Close in or Cancel) fold into one "Orders" row (`ui/ffx/AirshipOrders.ts`).
+  if (kind === 'trigger' && isAirshipOrderId(row.command.id)) return 'Orders';
   if (FFX_DIRECT_KINDS.has(kind)) return '';
   return FFX_CATEGORY_LABEL[row.category] ?? capitalize(row.category);
 }

@@ -1416,7 +1416,7 @@ export function buildAdvisorView(
   // the menu currently in front of them — not a stale candidate, not a tactic's
   // re-aim, not a row that was greyed out between the simulation and here, and
   // not a row this game's command window does not paint at all ({@link
-  // pressable}: FFX drops Defend; Evrae's widget greys a redundant order).
+  // pressable}: FFX drops Defend; Evrae's widget offers only the order on offer).
   const pressed = ranked.filter(
     (c) =>
       (c.suggestion.source === 'tactic'

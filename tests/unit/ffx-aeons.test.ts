@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, BattleSetup, FFXCombatant } from '../../src/battle/common/types.ts';
 import {
-  AEON_REVIVE_BATTLES,
+  AEON_GEAR,
   banishAeon,
   buildBattle,
   type Ctx,
@@ -18,6 +18,7 @@ import {
   validTargets,
 } from '../../src/battle/ffx/index.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
+import { advance } from '../../src/battle/ffx/turnQueue.ts';
 import { ability, aeon, enemy, party, setup } from './ffx-fixtures.test.ts';
 import { giveStatus, inflict } from './helpers/ffxStatus.ts';
 
@@ -42,7 +43,10 @@ function at(ctx: Ctx, id: string): FFXCombatant {
 }
 
 describe('summoning (§6.1)', () => {
-  it('replaces the whole active party and freezes their counters', () => {
+  // Re-parity W5 (FFX only): the game's party transitions (kernel/aeon-party.ts, proven in parity-ffx-aeon-party.test.ts). Nobody's
+  // counter changes on the way out or back; the old thaw put every member's counter back as it was BEFORE the Summon, which erased
+  // the summoner's recovery (Yuna at Agility 20 is charged 30 for it and acted again at once when the aeon left).
+  it('replaces the whole active party and parks their counters: nothing moves on the way out or back', () => {
     const { ctx } = makeCtx();
     for (const id of ['tidus', 'yuna', 'auron']) {
       const rt = ctx.rt.actors.get(id);
@@ -50,15 +54,26 @@ describe('summoning (§6.1)', () => {
     }
     summonAeon(ctx, 'yuna', 'valefor');
     expect(ctx.state.aeonId).toBe('valefor');
+    expect(ctx.rt.actors.get('valefor')?.ctb).toBe(0); // the aeon acts next
 
-    // The party is off-stage, so its counters must not move.
+    // The party is off-stage, so the clock does not count it down: the aeon spends 40 ticks and the party still sits at 17.
+    ctx.rt.actors.get('valefor')!.ctb = 40;
+    advance(ctx);
     for (const id of ['tidus', 'yuna', 'auron']) {
-      ctx.rt.actors.get(id)!.ctb = 999;
+      expect(ctx.rt.actors.get(id)?.ctb, id).toBe(17);
     }
     dismissAeon(ctx, 'command');
     for (const id of ['tidus', 'yuna', 'auron']) {
-      expect(ctx.rt.actors.get(id)?.ctb).toBe(17);
+      expect(ctx.rt.actors.get(id)?.ctb, id).toBe(17);
     }
+  });
+
+  it('leaves the summoner paying the recovery of her Summon when the aeon goes', () => {
+    const { ctx } = makeCtx();
+    summonAeon(ctx, 'yuna', 'valefor');
+    ctx.rt.actors.get('yuna')!.ctb = 30; // the Summon action charges the summoner after the aeon has arrived
+    dismissAeon(ctx, 'command');
+    expect(ctx.rt.actors.get('yuna')?.ctb).toBe(30);
   });
 
   it('makes the aeon the only present friendly target', () => {
@@ -108,7 +123,8 @@ describe("Seymour's Banish (§6.1, ffx-seymour-flux §4.5)", () => {
     expect(valefor.removed).toBe(true);
     expect(valefor.alive).toBe(false);
     expect(valefor.overdrive?.gauge).toBe(0);
-    expect(valefor.aeon?.reviveCountdown).toBe(AEON_REVIVE_BATTLES);
+    // The wipe starts the count at one more than the record gives (Valefor 8): the battle's own save counts it down once.
+    expect(valefor.aeon?.reviveCountdown).toBe(AEON_GEAR['valefor']!.recovery + 1);
     expect(events.some((e) => e.type === 'dismiss' && e.reason === 'banished')).toBe(true);
   });
 });

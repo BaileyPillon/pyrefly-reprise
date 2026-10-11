@@ -26,7 +26,7 @@
 
 import type { CombatantId, FFXCombatant } from '../../common/types.ts';
 import { type ActorRuntime, type Ctx, rtOf, tryActor } from '../state.ts';
-import { AIRSHIP_ORDER, AIRSHIP_RANGE, ORDER_RANK, RANGED_WEAPON_ACTORS, REDUNDANT_ORDER_BURNS_TURN, markEvraeRuntime } from './evrae-rules.ts';
+import { AIRSHIP_ORDER, AIRSHIP_RANGE, ORDER_RANK, RANGED_WEAPON_ACTORS, markEvraeRuntime } from './evrae-rules.ts';
 import { AIRSHIP_COUNTS_TARGETINGS } from './overdrive-sin-rules.ts';
 import {
   SIN_CID_ID,
@@ -82,16 +82,11 @@ export const SIN_FINS_ASSUMPTIONS: ReadonlyArray<{ id: string; claim: string; va
     value: 'build',
   },
   {
-    id: 'S-20',
-    claim: "The game offers one Trigger Command at a time (Pull back at NEAR, Move in at FAR, Cancel while an order is pending); ours keeps two rows with 'last order wins' until Bailey says yes to a menu change (rule 9)",
-    value: false,
-  },
-  {
     id: 'aeon-reach-far',
     claim: "At FAR an aeon's physical does not reach the Fin and its magic does, as the engine's reach gate decides for Evrae (the exact reach table would also admit the aeons' special commands)",
     value: 'engine-reach-gate',
   },
-  { id: 'C-7', claim: "Carried from Evrae: an order is rank 3 and a redundant one still burns Cid's turn", value: { rank: ORDER_RANK, redundantBurns: REDUNDANT_ORDER_BURNS_TURN } },
+  { id: 'C-7', claim: 'Carried from Evrae: an order is rank 3', value: { rank: ORDER_RANK } },
 ];
 
 // ---------------------------------------------------------------------------

@@ -35,7 +35,9 @@ describe('The Highbridge build and the chapter registration', () => {
     expect(m('rikku').equipment.armor.autoAbilities).toContain('stone-ward');
     for (const id of ['tidus', 'auron', 'yuna']) expect(m(id).learnedAbilityIds).toContain('talk');
     for (const id of ['kimahri', 'wakka', 'lulu', 'rikku']) expect(m(id).learnedAbilityIds).not.toContain('talk');
-    for (const x of highbridgeBuild.members) expect(x.learnedAbilityIds).not.toContain('pull-back');
+    for (const x of highbridgeBuild.members) {
+      for (const order of ['pull-back', 'close-in', 'cancel-order']) expect(x.learnedAbilityIds, `${x.id} ${order}`).not.toContain(order);
+    }
     expect(highbridgeBuild.inventory).toEqual(fahrenheitBuild.inventory);
   });
 

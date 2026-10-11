@@ -10,6 +10,10 @@
  * §0.4 fences the whole encounter to FFX: the airship distance mechanic, the
  * Trigger Commands and the three-active/three-reserve bench "have no X-2
  * counterpart". Nothing here is true of FFX-2.
+ *
+ * **The Stone Gaze counter follows the game's own script** [research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md
+ * §2.5, rows D-03 and D-04]: it fills by the command's damage-formula class (+2, +1 or nothing), once per
+ * action, and clears only when a Gaze fires, not "when Evrae acts" as the wiki read it.
  */
 
 import type { ChapterGuide } from './types.ts';
@@ -50,8 +54,8 @@ export const EVRAE_GUIDE: ChapterGuide = {
   hints: [
     {
       when: { labels: ['Pull back', 'Pull Back'] },
-      text: "Cid pulls the ship out of reach — Poison Breath and Swooping Scythe cannot land while it is FAR, and Cid's missiles only fire from out here",
-      cite: 'ffx-evrae-airship §4.1, §4.2',
+      text: "Cid pulls the ship out of reach — his melee, Stone Gaze and Poison Breath cannot land while it is FAR, and Cid's missiles only fire from out here",
+      cite: 'ffx-evrae-airship §4.1, §4.2; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.3',
     },
     {
       when: { labels: ['Close in', 'Close In'] },
@@ -138,14 +142,14 @@ export const EVRAE_GUIDE: ChapterGuide = {
     {
       aboveHpFraction: 0.3334,
       label: 'Phase 1 - the range game',
-      note: "Pull back, farm the missile volleys, close in only to hit what does not reach from FAR. Stone Gaze's aggro counter builds on every hit landed on it — it resets when Evrae acts, so a quiet turn is never wasted.",
-      cite: 'ffx-evrae-airship §5.2, §5.3',
+      note: "Pull back, farm the missile volleys, close in only to hit what does not reach from FAR. Stone Gaze's counter fills once per action that reaches Evrae: 2 for a weapon swing or Wakka's reels, 1 for most spells (damage, Lancet, Shell, Protect, Reflect, Dispel), nothing for Cure spells, Haste, Slow, Cheer or items. Above 5, his next Attack turn is a Stone Gaze and the count clears. Only a Gaze clears it, so it carries on through a retreat.",
+      cite: 'ffx-evrae-airship §5.2, §5.3; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.3, §2.5',
     },
     {
       belowHpFraction: 0.3334,
       label: 'Phase 2 - do not poke it from FAR',
-      note: 'Swooping Scythe is live: any attack made at FAR drags the ship back to NEAR on its own. Get Reflect up before its self-Haste lands, and stop re-ordering the ship out — the only order worth a turn from here is the Poison Breath dodge.',
-      cite: 'ffx-evrae-airship §4.5, §5.4, §5.5',
+      note: 'Swooping Scythe is live: any attack made at FAR drags the ship back to NEAR on its own. Get Reflect up before its self-Haste lands, and stop re-ordering the ship out — the only order worth a turn from here is the Poison Breath dodge. The Stone Gaze count stops filling once he is Hasted, but anything above 5 still turns his next Attack into one more Gaze.',
+      cite: 'ffx-evrae-airship §4.5, §5.4, §5.5; re-ffx-ai-evrae-yojimbo-isaaru-sin §2.5',
     },
   ],
 };
