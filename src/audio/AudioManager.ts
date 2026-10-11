@@ -22,11 +22,13 @@ import { renderHallImpulse } from './dsp/hall.ts';
 import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import { hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
-import { SfxSprites, type SfxPick, type SpriteSlice } from './SfxSprites.ts';
+import { SfxSprites, type SfxPick } from './SfxSprites.ts';
+import { startSfxSource, type ParityVoice } from './sfxSource.ts';
 import { sfxGame, voiceKey, type SfxGame } from './sfxV2/voicing.ts';
 import { isV2Key } from './sfxV2/cues.ts';
 import { packsFor } from './sfxV2/packs.ts';
 import { beatDelaySeconds } from './sfxV2/beatTiming.ts';
+import { RETIRED_V2_CUES } from './sfxV2/retired.ts';
 
 export interface AudioManagerOptions {
   masterVolume?: number;
@@ -97,11 +99,7 @@ export interface PlaySfxOptions {
   beatMs?: number;
 }
 
-/** A parity cue that is playing (a looped bed, a long sample): the owner can end it. */
-export interface ParityVoice {
-  /** Fade out over `fade` seconds (default 0.15) and release the nodes. */
-  stop(fade?: number): void;
-}
+export type { ParityVoice };
 
 
 export class AudioManager {
@@ -537,54 +535,7 @@ export class AudioManager {
       ...(lead > 0 ? { leadMs: Math.round(lead * 1000) } : {}),
     });
     // The caller's volume, times the P1 mix's per-cue trim for a v2 slice (`sfxV2/parityMix.ts`; 1 for everything else).
-    this.startSource(ctx, buffer, spriteCue, (options.volume ?? 1) * v2.gain, options, delay, false);
-  }
-
-  /**
-   * Connect and start one buffer (or one slice of a sprite) on the effects bus: source -> gain -> panner -> dry bus and
-   * the shared hall send. The nodes release themselves when the source ends. Shared by `playSfx` and
-   * {@link playParityOnly}; the connections and parameters are exactly what `playSfx` always built.
-   */
-  private startSource(ctx: AudioContext, buffer: AudioBuffer, slice: SpriteSlice | null, level: number, options: PlaySfxOptions, delay: number, loop: boolean): ParityVoice {
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.playbackRate.value = options.pitch ?? 1;
-    const gain = ctx.createGain();
-    gain.gain.value = level;
-    const panner = ctx.createStereoPanner();
-    panner.pan.value = Math.max(-1, Math.min(1, options.pan ?? 0));
-    source.connect(gain);
-    gain.connect(panner);
-    // Dry to the bus, and a send into the shared hall so effects sit in the
-    // same room the music was mixed in.
-    panner.connect(this.sfxDry ?? this.sfxBus!);
-    if (this.sfxSend) panner.connect(this.sfxSend);
-    const when = ctx.currentTime + delay;
-    if (loop && slice) {
-      source.loop = true;
-      source.loopStart = slice.cue.offset;
-      source.loopEnd = slice.cue.offset + slice.cue.duration;
-    }
-    if (slice) source.start(when, slice.cue.offset, loop ? undefined : slice.cue.duration);
-    else source.start(when);
-    source.onended = () => {
-      source.disconnect();
-      gain.disconnect();
-      panner.disconnect();
-    };
-    return {
-      stop: (fade = 0.15) => {
-        const now = ctx.currentTime;
-        try {
-          gain.gain.cancelScheduledValues(now);
-          gain.gain.setValueAtTime(gain.gain.value, now);
-          gain.gain.linearRampToValueAtTime(0, now + Math.max(0.01, fade));
-          source.stop(now + Math.max(0.01, fade) + 0.02);
-        } catch {
-          /* already ended */
-        }
-      },
-    };
+    startSfxSource(ctx, { dry: this.sfxDry ?? this.sfxBus!, send: this.sfxSend }, buffer, spriteCue, (options.volume ?? 1) * v2.gain, options, delay, false);
   }
 
   /**
@@ -602,7 +553,7 @@ export class AudioManager {
     const delay = Math.max(0, options.delay ?? 0);
     this.sprites.record({ t: ctx.currentTime + delay, asked: events[0] ?? '', played: hit.name, via: 'parity', volume: options.volume ?? 1 });
     try {
-      return this.startSource(ctx, hit.slice.buffer, hit.slice, options.volume ?? 1, options, delay, options.loop === true);
+      return startSfxSource(ctx, { dry: this.sfxDry ?? this.sfxBus, send: this.sfxSend }, hit.slice.buffer, hit.slice, options.volume ?? 1, options, delay, options.loop === true);
     } catch {
       return null;
     }
@@ -726,7 +677,7 @@ export class AudioManager {
      * `0.0001` seconds into a fade that was scheduled to take minutes.
      */
     music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }> };
-    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null }; parity: { packs: string[]; active: string[]; decoded: string[] } };
+    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null; retired: number }; parity: { packs: string[]; active: string[]; decoded: string[] } };
     /** The last plays: asked, played, from where (`SfxSprites.ts`); the hookup's proof without ears. */
     sfxLog: SfxSprites['log'];
     tracks: Array<{ name: string; about: string; cached: boolean; source: string | null }>;
@@ -748,7 +699,7 @@ export class AudioManager {
         cues: this.manifest ? Object.keys(this.manifest.music).length : 0,
         sprite: !!this.manifest?.sfx,
         spriteDecoded: this.sprites.decoded.v1,
-        v2: { cues: Object.keys(this.manifest?.sfxV2?.cues ?? {}).length, decoded: this.sprites.decoded.v2, game: sfxGame() },
+        v2: { cues: Object.keys(this.manifest?.sfxV2?.cues ?? {}).length, decoded: this.sprites.decoded.v2, game: sfxGame(), retired: RETIRED_V2_CUES.length },
         parity: { packs: Object.keys(this.manifest?.sfxParity?.packs ?? {}), active: [...this.sprites.activePacks], decoded: this.sprites.decoded.packs },
       },
       tracks: trackNames().map((name) => ({

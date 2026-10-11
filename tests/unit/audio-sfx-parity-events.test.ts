@@ -20,7 +20,7 @@ import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { voiceBattle, type VoiceAsk } from '../../src/audio/sfxV2/battleVoice.ts';
 import { EVENT_HOOKS, EVENT_RULES, eventCueNames } from '../../src/audio/sfxV2/eventRules.ts';
-import { NO_RECORDING, eventPlan, matches, planFor, type EventGame, type Hook, type Selector } from '../../src/audio/sfxV2/eventCues.ts';
+import { NO_RECORDING, eventPlan, matches, planFor, type EventGame, type Hook, type Selector, type Unhooked } from '../../src/audio/sfxV2/eventCues.ts';
 import { FFX_UNHOOKED } from '../../src/audio/sfxV2/eventCuesFfx.ts';
 import { FFX2_UNHOOKED } from '../../src/audio/sfxV2/eventCuesFfx2.ts';
 import { FLOW_SLOTS } from '../../src/audio/sfxV2/flowSlots.ts';
@@ -38,7 +38,7 @@ const ROOT = resolve(import.meta.dirname, '../..');
 interface Row { id: string; game: 'ffx' | 'ffx2' | 'both'; wave: number; hold?: true; sharedWith?: string; pack?: string; secs?: number }
 const rows = (JSON.parse(readFileSync(join(ROOT, 'docs', 'audio', 'sfx-parity-rows.json'), 'utf8')) as { rows: Row[] }).rows;
 const GAMES: readonly EventGame[] = ['ffx', 'ffx2'];
-const UNHOOKED: Record<EventGame, Readonly<Record<string, string>>> = { ffx: FFX_UNHOOKED, ffx2: FFX2_UNHOOKED };
+const UNHOOKED: Record<EventGame, Readonly<Record<string, Unhooked>>> = { ffx: FFX_UNHOOKED, ffx2: FFX2_UNHOOKED };
 const ABILITIES: Record<EventGame, Record<string, AbilityDef>> = { ffx: FFX_ABILITIES as Record<string, AbilityDef>, ffx2: FFX2_ABILITIES as Record<string, AbilityDef> };
 const ITEMS: Record<EventGame, Record<string, unknown>> = { ffx: FFX_ITEMS as Record<string, unknown>, ffx2: FFX2_ITEMS as Record<string, unknown> };
 
@@ -79,9 +79,11 @@ describe('every spec row has a disposition', () => {
 
   it('lists no open row that is not a row, and gives every one a reason', () => {
     for (const g of GAMES) {
-      for (const [id, why] of Object.entries(UNHOOKED[g])) {
+      for (const [id, entry] of Object.entries(UNHOOKED[g])) {
         expect(byId.has(id), `${g}: ${id} is not a row`).toBe(true);
-        expect(why.length, id).toBeGreaterThan(8);
+        expect(entry.why.length, id).toBeGreaterThan(8);
+        if (entry.kind === 'flow') expect(flowRows.has(id), `${id} is listed as a flow row`).toBe(true);
+        if (entry.kind === 'menu') expect(byId.get(id)!.hold, `${id} is a menu key, not a held row`).toBeUndefined();
       }
     }
   });
@@ -156,7 +158,7 @@ function combatantIds(game: EventGame): Set<string> {
 }
 
 describe('every selector names something the game ships', () => {
-  const MOMENTS = new Set(['attack', 'cast', 'item', 'damage', 'heal', 'revive', 'miss', 'status', 'petrify-shatter', 'ko', 'summon', 'spherechange', 'overdrive', 'charge', 'form-change', 'counter', 'appear', 'overdrive-start', 'laser-charge', 'laser-fire', 'breath-attack']);
+  const MOMENTS = new Set(['attack', 'cast', 'item', 'damage', 'heal', 'revive', 'miss', 'status', 'petrify-shatter', 'ko', 'summon', 'spherechange', 'overdrive', 'charge', 'form-change', 'counter', 'appear', 'overdrive-start']);
   const many = <T,>(v: T | readonly T[]): readonly T[] => (Array.isArray(v) ? (v as readonly T[]) : [v as T]);
 
   for (const g of GAMES) {
@@ -213,7 +215,7 @@ function askFor(game: EventGame, at: Selector): { ask: VoiceAsk; key: string | n
   const first = <T,>(v: T | readonly T[] | undefined): T | undefined => (v === undefined ? undefined : Array.isArray(v) ? (v as readonly T[])[0] : (v as T));
   const side = first(at.side) ?? (at.weapon ? 'party' : 'enemy');
   const actor = at.actor || at.side || at.weapon ? { id: at.actor?.[0] ?? 'actor', side, weapon: at.weapon?.[0] ?? null, voice: null } : null;
-  const target = at.targetSide ? { id: 'target', side: first(at.targetSide)!, weapon: null, voice: null } : null;
+  const target = at.targetSide || at.targetVoice ? { id: 'target', side: first(at.targetSide) ?? 'enemy', weapon: null, voice: at.targetVoice ?? null } : null;
   const wantsAction = at.ability !== undefined || at.item !== undefined || at.command !== undefined || at.isItem !== undefined || at.tier !== undefined || at.bare === false;
   const abilityId = Array.isArray(at.ability) ? at.ability[0] : at.ability instanceof RegExp ? Object.keys(ABILITIES[game]).find((id) => (at.ability as RegExp).test(id)) : undefined;
   const action = at.bare === true || !wantsAction
@@ -391,6 +393,21 @@ describe('the plan never changes the stand-in', () => {
     const ormi: VoiceAsk = { game: 'ffx', moment: 'attack', actor: { id: 'ormi', side: 'enemy', weapon: null, voice: null }, target: null, action: { commandKind: 'attack', element: null, damageType: 'physical', family: null, isItem: false }, nth: 0 };
     expect(eventPlan(EVENT_RULES, ormi, 'v2:swing-katana')).toBe(NO_RECORDING);
     expect(eventPlan(EVENT_RULES, { ...ormi, game: 'ffx2' }, 'v2:swing-greatsword')?.events).toEqual(['swing-ormi']);
+  });
+});
+
+describe('a shipped pack names only originals the game knows how to ask for', () => {
+  it('holds only event cues of its game, stand-in names the voice asks for, menu keys and flow cues (vacuous while no pack ships)', () => {
+    const shipped = JSON.parse(readFileSync(join(ROOT, 'public', 'audio', 'manifest.json'), 'utf8')) as { sfxParity?: { packs?: Record<string, { cues: Record<string, { game?: string }> }> } };
+    const flow = new Set(FLOW_SLOTS.map((s) => s.cue));
+    for (const [pack, p] of Object.entries(shipped.sfxParity?.packs ?? {})) {
+      const game = pack.split('-')[0] as EventGame;
+      const events = eventCueNames(game);
+      for (const name of Object.keys(p.cues)) {
+        const known = events.has(name) || flow.has(name) || (V2_CUES[name] !== undefined && ['both', game].includes(V2_CUES[name]!.game));
+        expect(known, `${pack}/${name} is not a name any hook, flow slot or v2 stand-in of ${game} asks for`).toBe(true);
+      }
+    }
   });
 });
 

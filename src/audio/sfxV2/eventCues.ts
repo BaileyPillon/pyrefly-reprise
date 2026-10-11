@@ -55,6 +55,8 @@ export interface Selector {
   targetSide?: Many<Side>;
   /** The actor's combatant id (the data's id). */
   actor?: readonly string[];
+  /** The target's voice (FFX-2 enemies that cry and break as `aeon` or `machina`, `weapons.ts`). */
+  targetVoice?: 'aeon' | 'machina';
   /** The weapon a party actor swings. */
   weapon?: readonly Weapon[];
   /** The action's ability id, from the list or the pattern. */
@@ -132,6 +134,7 @@ export function matches(at: Selector, ask: VoiceAsk, key: string | null): boolea
   if (at.on !== undefined && (at.on === null ? key !== null : key !== `v2:${at.on}`)) return false;
   if (at.side !== undefined && !inMany(ask.actor?.side, at.side)) return false;
   if (at.targetSide !== undefined && !inMany(ask.target?.side, at.targetSide)) return false;
+  if (at.targetVoice !== undefined && ask.target?.voice !== at.targetVoice) return false;
   if (at.actor !== undefined && !(ask.actor && at.actor.includes(ask.actor.id))) return false;
   if (at.weapon !== undefined && !(ask.actor?.weapon && at.weapon.includes(ask.actor.weapon))) return false;
   const action = ask.action;
@@ -200,3 +203,13 @@ export function eventPlan(rules: Readonly<Record<EventGame, readonly EventRule[]
   if (hit) return hit;
   return key !== null && isV2Key(key) ? NO_RECORDING : null;
 }
+
+/** A row with no battle hook: a menu key, a flow slot a screen plays, or open (nothing to answer it yet). */
+export interface Unhooked {
+  kind: 'menu' | 'flow' | 'open';
+  why: string;
+}
+
+export const menu = (why = 'the key plays by its own name (voiceKey), not at a battle moment'): Unhooked => ({ kind: 'menu', why });
+export const flow = (why: string): Unhooked => ({ kind: 'flow', why });
+export const open = (why: string): Unhooked => ({ kind: 'open', why });

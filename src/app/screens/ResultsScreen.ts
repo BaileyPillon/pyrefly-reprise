@@ -270,12 +270,11 @@ export class ResultsScreen extends Screen {
 
   override update(dt: number): void {
     if (this.dismissed || this.silent) return;
-    if (this.revealMs >= COUNT_UP_MS) {
-      this.endTally(true);
-      return;
+    if (this.revealMs < COUNT_UP_MS) {
+      this.revealMs += dt * 1000;
+      this.refresh();
     }
-    this.revealMs += dt * 1000;
-    this.refresh();
+    if (this.revealMs >= COUNT_UP_MS) this.endTally(true); // the numbers have landed (a no-op after the first time)
   }
 
   override trigger(name: string): boolean {

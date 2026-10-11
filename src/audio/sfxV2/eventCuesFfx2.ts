@@ -13,7 +13,7 @@
  * `fem-goon`. The hidden Leblanc chapter plays the same groups.
  */
 
-import { atLanding, atOpening, hook, quiet, type Hook, type Selector } from './eventCues.ts';
+import { atLanding, atOpening, flow, hook, menu, open, type Hook, type Selector, type Unhooked } from './eventCues.ts';
 import { WEAPON_CUES, type Weapon } from './weapons.ts';
 
 const x = (row: string, cue: string, at: Selector, more: Parameters<typeof hook>[4] = {}): Hook => hook('ffx2', row, cue, at, more);
@@ -60,11 +60,8 @@ export const FFX2_HOOKS: readonly Hook[] = [
   ...weapons,
   x('ffx2.special.trigger', 'gun-burst', { moment: 'attack', on: 'gun-burst' }),
 
-  // ---- Bosses: Bahamut's Impulse, Vegnagun's ray and breath, the aeons' and the machine parts' roars, Shuyin's attack.
+  // ---- Bosses: Bahamut's Impulse, the aeons' and the machine parts' roars, Shuyin's attack and the machines' break.
   ...atLanding('ffx2', 'ffx2.boss.impulse', 'boss-impulse', { ability: ['x2-bahamut-impulse'] }),
-  x('ffx2.boss.ray', 'boss-ray', { moment: 'laser-charge', on: 'laser-charge' }),
-  quiet('ffx2', 'ffx2.boss.ray', { moment: 'laser-fire', on: 'laser-fire' }, ['boss-ray']),
-  x('ffx2.boss.breath', 'boss-breath', { moment: 'breath-attack', on: 'breath-attack' }),
   ...roar('ffx2.boss.bahamut', 'boss-bahamut', ['bahamut'], 'boss-roar-aeon'),
   ...roar('ffx2.boss.ixion', 'boss-ixion', ['x2-ixion'], 'boss-roar-aeon'),
   ...roar('ffx2.boss.shiva', 'boss-shiva', ['x2-shiva'], 'boss-roar-aeon'),
@@ -73,7 +70,7 @@ export const FFX2_HOOKS: readonly Hook[] = [
   ...roar('ffx2.boss.leg', 'boss-leg', ['vegnagun-leg'], 'machina-roar'),
   ...roar('ffx2.boss.head', 'boss-head', ['vegnagun-head'], 'machina-roar'),
   ...atOpening('ffx2', 'ffx2.boss.shuyin', 'boss-shuyin', { actor: ['shuyin'] }, ['attack']),
-  x('ffx2.boss.machina.ko', 'machina-destroy', { moment: 'ko', on: 'machina-destroy' }),
+  x('ffx2.boss.machina.ko', 'machina-destroy', { moment: 'ko', targetVoice: 'machina', on: 'machina-destroy' }),
 
   // ---- Chants, Specials, items, KO.
   x('ffx2.cast.chant', 'magic-charge-x2', { moment: 'cast', side: 'party', on: 'magic-charge-x2' }),
@@ -107,24 +104,24 @@ export const FFX2_HOOKS: readonly Hook[] = [
   x('ffx2.bio', 'bio', { moment: 'status', on: 'poison', ability: ['x2-dark-knight-bio', 'x2-bulwark-left-bio'] }),
 ];
 
-/** Every FFX-2 row with no hook, and why (see {@link FFX_UNHOOKED} for the three reasons). */
-const MENU = 'menu: the key plays by its own name (voiceKey), not at a battle moment';
-
-export const FFX2_UNHOOKED: Readonly<Record<string, string>> = {
-  'ffx2.ui.tick': 'menu: the cursor tick plays by its own name (voiceKey)',
-  'ffx2.ui.confirm': 'menu: confirm voices to the cursor tick in a chapter (decision 52k)',
-  'ffx2.ui.cancel': MENU,
-  'ffx2.ui.error': MENU,
-  'ffx2.ui.open': MENU,
-  'ffx2.ui.close': MENU,
-  'ffx2.ui.page': MENU,
-  'ffx2.flow.results': 'flow hook: the results tally (flowSlots.ts)',
-  'ffx2.flow.stingers': 'flow hook: the results tally (flowSlots.ts)',
-  'ffx2.flow.escape': 'open: the presenter plays no cue at the escape beat today; the row is low confidence',
-  'ffx2.esuna': 'open: removing a status plays no cue today, so there is no moment for it to answer',
-  'ffx2.dispel': 'open: removing a status plays no cue today, so there is no moment for it to answer',
-  'ffx2.boss.core': 'open: the spec names a Vegnagun "core" part; which of our combatants it is has not been established',
-  'ffx2.lb.sig.leblanc': 'open: the spec says do not wire until a move is tied to the slot (audition only)',
-  'ffx2.lb.sig.logos': 'open: the spec says do not wire until a move is tied to the slot (audition only)',
-  'ffx2.lb.sig.ormi': 'open: the spec says do not wire until a move is tied to the slot (audition only)',
+/** Every FFX-2 row with no battle hook, and why (see {@link FFX_UNHOOKED} for the three kinds). */
+export const FFX2_UNHOOKED: Readonly<Record<string, Unhooked>> = {
+  'ffx2.ui.tick': menu('the cursor tick plays by its own name (voiceKey)'),
+  'ffx2.ui.confirm': menu('confirm voices to the cursor tick in a chapter (decision 52k)'),
+  'ffx2.ui.cancel': menu(),
+  'ffx2.ui.error': menu(),
+  'ffx2.ui.open': menu(),
+  'ffx2.ui.close': menu(),
+  'ffx2.ui.page': menu(),
+  'ffx2.flow.results': flow('the results tally, ResultsScreen'),
+  'ffx2.flow.stingers': flow('the results tally, ResultsScreen'),
+  'ffx2.flow.escape': open('the presenter plays no cue at the escape beat today; the row is low confidence'),
+  'ffx2.esuna': open('removing a status plays no cue today, so there is no moment for it to answer'),
+  'ffx2.dispel': open('removing a status plays no cue today, so there is no moment for it to answer'),
+  'ffx2.boss.ray': open('no battle event raises the laser sfx cues today (the engines raise none), and which Vegnagun move is the Ray has not been established'),
+  'ffx2.boss.breath': open('no battle event raises the breath sfx cue today (the engines raise none), and which Vegnagun move is the breath has not been established'),
+  'ffx2.boss.core': open('the spec names a Vegnagun "core" part; which of our combatants it is has not been established'),
+  'ffx2.lb.sig.leblanc': open('the spec says do not wire until a move is tied to the slot (audition only)'),
+  'ffx2.lb.sig.logos': open('the spec says do not wire until a move is tied to the slot (audition only)'),
+  'ffx2.lb.sig.ormi': open('the spec says do not wire until a move is tied to the slot (audition only)'),
 };

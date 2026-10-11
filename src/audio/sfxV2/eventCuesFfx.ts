@@ -13,7 +13,7 @@
  * (`D:/Tools/pyrefly-scratch/2026-10-10/sfx-parity/spec.md` section 1.3).
  */
 
-import { atLanding, atOpening, hook, type Hook } from './eventCues.ts';
+import { atLanding, atOpening, flow, hook, menu, open, type Hook, type Unhooked } from './eventCues.ts';
 import { WEAPON_CUES, type Weapon } from './weapons.ts';
 
 const f = (row: string, cue: string, at: Parameters<typeof hook>[3], more: Parameters<typeof hook>[4] = {}): Hook => hook('ffx', row, cue, at, more);
@@ -164,25 +164,25 @@ export const FFX_HOOKS: readonly Hook[] = [
 ];
 
 /**
- * Every FFX row with no hook, and why: `menu` (the key is a menu key, played by name: `voiceKey`), `hold` (no retail
- * sound found, 52j: today's sound stays), or `open` (a moment or a decision it needs does not exist yet).
+ * Every FFX row with no battle hook, and why. `menu`: the key is a menu key, played by its own name (`voiceKey`). `flow`: a
+ * screen plays it (`flowSlots.ts`). `open`: a moment or a decision it needs does not exist yet, so the original would never
+ * be heard (the layout plan does not count it until it is hooked). Held rows (52j) are not listed: `sfx-parity-rows.json`
+ * marks them `hold`. `tests/unit/audio-sfx-parity-events.test.ts` fails when a row is in none of the places.
  */
-const MENU = 'menu: the key plays by its own name (voiceKey), not at a battle moment';
-
-export const FFX_UNHOOKED: Readonly<Record<string, string>> = {
-  'ffx.ui.tick': 'menu: the cursor and confirm tick plays by its own name (voiceKey, decision 52k)',
-  'ffx.ui.cancel': MENU,
-  'ffx.ui.error': MENU,
-  'ffx.ui.turn': MENU,
-  'ffx.ui.page': MENU,
-  'ffx.ui.open': MENU,
-  'ffx.esuna': 'open: removing a status plays no cue today, so there is no moment for it to answer',
-  'ffx.dispel': 'open: removing a status plays no cue today, so there is no moment for it to answer',
-  'ffx.flow.shatter': 'flow hook: the encounter opening (flowSlots.ts)',
-  'ffx.flow.fadein': 'flow hook: the encounter opening (flowSlots.ts)',
-  'ffx.steal.ok': 'open: the presenter raises no moment for the Steal result today (the ability has no effect id in the data)',
-  'ffx.cast.charge': 'open: Bailey decides whether the wind-up plays for the three characters retail gives it to (spec decision), so it stays shared',
-  'ffx.boss.chant.short': 'open: nothing ties a boss move to the short chant (retail family 33) in our data',
-  'ffx.boss.chant.long': 'open: nothing ties a boss move to the long chant (retail families 34 and 35) in our data',
-  'ffx.reels': 'open: the reels play inside the Overdrive minigame, not at a presenter moment',
+export const FFX_UNHOOKED: Readonly<Record<string, Unhooked>> = {
+  'ffx.ui.tick': menu('the cursor and confirm tick plays by its own name (voiceKey, decision 52k)'),
+  'ffx.ui.cancel': menu(),
+  'ffx.ui.error': menu(),
+  'ffx.ui.turn': menu(),
+  'ffx.ui.page': menu(),
+  'ffx.ui.open': menu(),
+  'ffx.flow.shatter': flow('the encounter opening, BattleScreen.enter'),
+  'ffx.flow.fadein': flow('the encounter opening, BattleScreen.enter'),
+  'ffx.esuna': open('removing a status plays no cue today, so there is no moment for it to answer'),
+  'ffx.dispel': open('removing a status plays no cue today, so there is no moment for it to answer'),
+  'ffx.steal.ok': open('the presenter raises no moment for the Steal result today (the ability has no effect id in the data)'),
+  'ffx.cast.charge': open('Bailey decides whether the wind-up plays for the three characters retail gives it to (spec decision), so it stays shared'),
+  'ffx.boss.chant.short': open('nothing ties a boss move to the short chant (retail family 33) in our data'),
+  'ffx.boss.chant.long': open('nothing ties a boss move to the long chant (retail families 34 and 35) in our data'),
+  'ffx.reels': open('the reels play inside the Overdrive minigame, not at a presenter moment'),
 };

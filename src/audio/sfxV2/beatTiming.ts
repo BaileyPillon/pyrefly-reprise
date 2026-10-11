@@ -28,28 +28,36 @@ export const MAX_BEAT_MS = 1500;
 
 /**
  * Ms from the cue's first sample to the moment that belongs on the beat: its peak, else (a cue measured only for
- * its onset) its first audible sample, else 0.
+ * its onset) its first audible sample; `null` for a cue with no timing at all (a pack written before phase 2).
  */
-export function leadMs(cue: CueTiming): number {
+export function leadMs(cue: CueTiming): number | null {
   const peak = cue.peakMs;
   if (typeof peak === 'number' && Number.isFinite(peak) && peak >= 0) return peak;
   const onset = cue.onsetMs;
   if (typeof onset === 'number' && Number.isFinite(onset) && onset >= 0) return onset;
-  return 0;
+  return null;
 }
 
 /**
  * Seconds to wait before starting `cue` so that its peak lands `beatMs` after now. 0 when no beat is ahead
- * (`undefined`, 0, negative or not a number: the cue starts on the ask, which is where phase 1 always put it).
+ * (`undefined`, 0, negative or not a number: the cue starts on the ask, which is where phase 1 always put it) and for
+ * a cue with no measured timing (nothing says where its peak is, so it is not moved).
  */
 export function beatDelaySeconds(cue: CueTiming, beatMs: number | undefined): number {
   if (typeof beatMs !== 'number' || !Number.isFinite(beatMs) || beatMs <= 0) return 0;
-  const ahead = Math.min(beatMs, MAX_BEAT_MS);
-  return Math.max(0, ahead - leadMs(cue)) / 1000;
+  const lead = leadMs(cue);
+  if (lead === null) return 0;
+  return Math.max(0, Math.min(beatMs, MAX_BEAT_MS) - lead) / 1000;
 }
 
-/** How late the peak lands when the swell is longer than the wait, in ms (0 when it lands on the beat or early). */
-export function peakLateMs(cue: CueTiming, beatMs: number | undefined): number {
-  if (typeof beatMs !== 'number' || !Number.isFinite(beatMs) || beatMs <= 0) return leadMs(cue);
-  return Math.max(0, leadMs(cue) - Math.min(beatMs, MAX_BEAT_MS));
+/**
+ * How late the cue's peak lands against the beat, ms: 0 when it lands on it, the shortfall when the swell is longer
+ * than the wait (it starts at once and its peak comes `lead - beat` after the beat). With no beat ahead the beat is
+ * now, so the peak lands `lead` late. `null` for a cue with no measured timing.
+ */
+export function peakLateMs(cue: CueTiming, beatMs: number | undefined): number | null {
+  const lead = leadMs(cue);
+  if (lead === null) return null;
+  const ahead = typeof beatMs === 'number' && Number.isFinite(beatMs) && beatMs > 0 ? Math.min(beatMs, MAX_BEAT_MS) : 0;
+  return Math.max(0, lead - ahead);
 }
