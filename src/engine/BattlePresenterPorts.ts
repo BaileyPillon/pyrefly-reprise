@@ -306,7 +306,14 @@ export interface CutsceneRunnerPort {
 
 /** The subset of `AudioManager` the presenter uses. */
 export interface AudioPort {
-  playSfx(key: string, opts?: { volume?: number; delay?: number; pan?: number }): void;
+  /**
+   * `events`, `coveredBy` and `beatMs` are SFX parity's (`audio/sfxV2/eventCues.ts`, `beatTiming.ts`): the recorded originals to look up, the
+   * originals whose playing silences this stand-in, and the ms ahead of the cue's beat. The mixer ignores them while no parity pack is listed.
+   */
+  playSfx(
+    key: string,
+    opts?: { volume?: number; delay?: number; pan?: number; events?: readonly string[]; coveredBy?: readonly string[]; beatMs?: number },
+  ): void;
   playMusic(key: string, opts?: { fade?: number }): Promise<void> | void;
   stopMusic(fade?: number): void;
 }

@@ -42,6 +42,10 @@ export interface SfxPlayRecord {
   volume: number;
   /** The P1 mix's trim in dB the v2 slice played with (`sfxV2/parityMix.ts`); absent when there was none. */
   trimDb?: number;
+  /** Phase 2: ms the mixer waited so the recorded original's peak landed on the beat the presenter named; absent when it started on the ask. */
+  leadMs?: number;
+  /** A stand-in that stayed silent because the recorded original that covers it was the one playing (`played` names that original). */
+  covered?: true;
 }
 
 /** What `pick` found for a key. */
@@ -133,12 +137,13 @@ export class SfxSprites {
    * first-bank cue to play instead. A first-bank cue: its slice from the first sprite when that has decoded.
    *
    * `game` is the chapter's game (`sfxGame()`); with none, no pack is consulted and no trim applies (rule 14: the
-   * title, chapter select and FF7 hear exactly what they always did).
+   * title, chapter select and FF7 hear exactly what they always did). `packs = false` skips the packs for a cue that
+   * asked for its recorded originals by event name instead (`pickEvent`): the stand-in is then today's v2 slice.
    */
-  pick(manifest: AudioManifest | null, key: string, game: TrimGame | null = null): SfxPick {
+  pick(manifest: AudioManifest | null, key: string, game: TrimGame | null = null, packs = true): SfxPick {
     if (isV2Key(key)) {
       const name = v2Name(key);
-      const parity = game ? this.parityHit(manifest, name, game) : null;
+      const parity = game && packs ? this.parityHit(manifest, name, game) : null;
       if (parity) return { slice: parity, fallback: null, via: 'parity', gain: 1 };
       const cue = manifest?.sfxV2?.cues[name];
       if (this.v2 && cue) return { slice: { buffer: this.v2, cue }, fallback: null, via: 'v2', gain: parityGain(game, name) };
@@ -146,6 +151,19 @@ export class SfxSprites {
     }
     const cue = this.v1 && hasPrerenderedSfx(manifest, key) ? manifest!.sfx!.cues[key]! : null;
     return { slice: cue ? { buffer: this.v1!, cue } : null, fallback: null, via: cue ? 'sprite' : null, gain: 1 };
+  }
+
+  /**
+   * The first recorded original `names` lists that an active, decoded pack holds for `game` (SFX parity, per event:
+   * `sfxV2/eventCues.ts`). The names are tried in order, each across the packs in lookup order, so a chain
+   * (`fire-3`, `fire-2`, `fire`) plays the closest original that exists. `null` when none is.
+   */
+  pickEvent(manifest: AudioManifest | null, names: readonly string[], game: TrimGame): { slice: SpriteSlice; name: string } | null {
+    for (const name of names) {
+      const slice = this.parityHit(manifest, name, game);
+      if (slice) return { slice, name };
+    }
+    return null;
   }
 
   private parityHit(manifest: AudioManifest | null, name: string, game: TrimGame): SpriteSlice | null {

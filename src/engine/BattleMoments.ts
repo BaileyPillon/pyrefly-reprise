@@ -35,6 +35,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { AudioPort, BattleStage, CameraPort, MomentsPort, PlaybackSpeed } from './BattlePresenterPorts.ts';
 import { sfxGame, stingerFor } from '../audio/sfxV2/voicing.ts';
 import { roarFor } from '../audio/sfxV2/weapons.ts';
+import { momentEvents } from '../audio/sfxV2/battleVoice.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
 import { fittedPush } from './ShotFit.ts';
@@ -217,9 +218,9 @@ export class BattleMoments {
     await this.move(rig, base);
   }
 
-  private cue(key: string, volume = 1): void {
+  private cue(key: string, volume = 1, events?: readonly string[]): void {
     try {
-      this.deps.audio?.playSfx(key, { volume });
+      this.deps.audio?.playSfx(key, events ? { volume, events } : { volume });
     } catch {
       /* audio is optional; a moment never fails for a missing cue */
     }
@@ -326,7 +327,8 @@ export class BattleMoments {
     const shot = this.shots.reveal(this.rigFor(bossId), MOMENT_PUSH.reveal);
     const rig = shot.rig;
     const g = sfxGame(); // D-302: the boss's own roar in a voiced chapter (`sfxV2/weapons.ts`), else today's
-    this.cue((g && roarFor(g, bossId)) || 'boss-roar', 0.9);
+    const roar = (g && roarFor(g, bossId)) || 'boss-roar';
+    this.cue(roar, 0.9, g ? momentEvents(g, 'appear', bossId, this.deps.stage.sideOf(bossId) ?? null, g && roarFor(g, bossId)) : undefined); // SFX parity: the boss's own recorded reveal, when a pack has it
     const push = this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.revealPush));
     const plate = bossName
       ? this.deps.moments?.nameSlab({
@@ -441,7 +443,9 @@ export class BattleMoments {
       return;
     }
     this.overdriveOpen = true;
-    this.cue(stingerFor(sfxGame()) ?? 'overdrive-full', 1); // D-302: the Overdrive / Special stinger
+    const game = sfxGame();
+    const stinger = stingerFor(game);
+    this.cue(stinger ?? 'overdrive-full', 1, game && stinger ? momentEvents(game, 'overdrive-start', actorId, this.deps.stage.sideOf(actorId) ?? null, stinger) : undefined); // D-302: the Overdrive / Special stinger; SFX parity: that character's own recorded opening, when a pack has it
     const bars = this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
     const shot = this.shots.fit(rig, MOMENT_PUSH.overdrive);
     void this.move(shot.rig, MOMENT_TIMING.actionIn);

@@ -9,6 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { parseManifest } from '../../src/audio/manifest.ts';
 import { sfxNames } from '../../src/audio/sfx/index.ts';
 import { V2_CUES, twin, v2Fallback, v2Name, isV2Key } from '../../src/audio/sfxV2/cues.ts';
+import { RETIRED_V2_CUES } from '../../src/audio/sfxV2/retired.ts';
 import { voiceKey, stingerFor } from '../../src/audio/sfxV2/voicing.ts';
 import { voiceBattle, type VoiceAsk, type VoiceActor } from '../../src/audio/sfxV2/battleVoice.ts';
 import { STATUS_CUES } from '../../src/audio/sfxV2/statusCues.ts';
@@ -31,9 +32,9 @@ const exists = (key: string | null | undefined): boolean => !!key && isV2Key(key
 const gameOf = (key: string): string => V2_CUES[v2Name(key)]!.game;
 
 describe('the v2 cue table and the shipped sprite', () => {
-  it('lists exactly the cues the v2 sprite holds, each with the same game', () => {
+  it('lists exactly the cues the v2 sprite holds, plus those the final repack retired (SFX parity), each with the same game', () => {
     expect(manifest.sfxV2).not.toBeNull();
-    expect(Object.keys(raw.sfxV2.cues).sort()).toEqual(Object.keys(V2_CUES).sort());
+    expect([...Object.keys(raw.sfxV2.cues), ...RETIRED_V2_CUES].sort()).toEqual(Object.keys(V2_CUES).sort());
     for (const [name, cue] of Object.entries(raw.sfxV2.cues)) expect(V2_CUES[name]!.game, name).toBe(cue.game);
   });
 
