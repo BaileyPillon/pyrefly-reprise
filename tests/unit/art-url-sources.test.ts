@@ -60,7 +60,8 @@ const CODE = new Map(ALL.map((f) => [f, codeLines(TEXT.get(f)!)] as const));
 const codeOf = (relative: string) => CODE.get(join(SRC, relative))!;
 
 describe('art URLs come from artUrl', () => {
-  const MAY_READ_THE_BASE = new Set(['engine/PaintedArt.ts', 'engine/ArtManifest.ts', 'audio/AudioManager.ts']);
+  // The last two are the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`): both return before any request unless `import.meta.env.DEV`, they name no art master, and nothing they read is shipped.
+  const MAY_READ_THE_BASE = new Set(['engine/PaintedArt.ts', 'engine/ArtManifest.ts', 'audio/AudioManager.ts', 'engine/ffx3d/localAssets.ts', 'engine/ffxcam/load.ts']);
 
   it('reads the source set it checks', () => {
     expect(ALL.length).toBeGreaterThan(400);

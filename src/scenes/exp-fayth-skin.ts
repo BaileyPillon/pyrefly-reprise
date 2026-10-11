@@ -21,7 +21,7 @@
  * Game case: FFX only.
  */
 
-import { Mesh, Vector3, type MeshBasicMaterial, type Object3D } from 'three';
+import { Color, Mesh, Scene, Vector3, type MeshBasicMaterial, type Object3D } from 'three';
 import { ATTACK_IMPACT } from '../engine/BattlePresenterActors.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { tapShotDirector, type BeatListener } from '../engine/ffx3d/beatTap.ts';
@@ -94,7 +94,7 @@ export function faythRigs(staging: FfxStaging): Record<string, CameraRig> {
  * The `ffx` skin's grade: neutral. The painted deck's palette (vignette, grain, a tilt-shift blur at the top and bottom of the frame, a cold shadow tint, bloom tuned for painted cloud) is the painted look;
  * the models and the stage are shown as their own textures draw them, with only a little bloom.
  */
-const FFX_SKIN_PALETTE: ScenePalette = { name: 'fayth-ffx', exposure: 1, bloomThreshold: 0.95, bloomStrength: 0.12, bloomRadius: 0.4, vignette: 0, grain: 0, tiltMaxBlur: 0 };
+const FFX_SKIN_PALETTE: ScenePalette = { name: 'fayth-ffx', exposure: 1, bloomThreshold: 1.0, bloomStrength: 0.12, bloomRadius: 0.4, vignette: 0, grain: 0, tiltMaxBlur: 0 };
 
 /** What the deck factory built, found again by the names and types it built them with. */
 interface PaintedParts {
@@ -162,6 +162,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
   let kind: FaythSkinKind = 'painted';
   let models: FfxModels | null = null;
   let clouds: FfxSky | null = null;
+  let clear: Color | null = null;
   let manifest: FfxLocalManifest | null = null;
   if (param !== 'painted') {
     manifest = await probeFfxLocal();
@@ -200,6 +201,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
           clouds = sea;
         } else sea.dispose();
       }
+      if (models.stage.background && assets) clear = new Color(...models.stage.background); // with the exported sky only: the colour goes with the bowl and the clouds
       build.group.add(models.stage.root);
       models.stage.sky?.scale.setScalar(0.5); // the bowl's radius (661 world units) is past the camera's far plane; it only carries a colour gradient, so a smaller bowl on the camera is the same sky
     }
@@ -230,6 +232,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
     update(dt: number): void {
       build.update(dt);
       skin.update(dt);
+      if (clear && build.group.parent instanceof Scene && build.group.parent.background !== clear) build.group.parent.background = clear; // the sky above the bowl is the colour the game clears to
       const range = animator ? airshipRangeDirectorOf(build.group) : null;
       if (animator && range) {
         if (lastRange !== null && range.current !== lastRange) animator.noteRange(FLYER, range.current);
@@ -258,7 +261,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
 }
 
 /** The beats an animator wants to hear: an action opening (its row, the ability, the lunge's lead), a blow landing, the action closing. */
-function listenerOf(animator: FfxAnimator): BeatListener {
+export function listenerOf(animator: FfxAnimator): BeatListener {
   return {
     open: (_beat, ctx) => animator.noteOpen(ctx.actor.id, { abilityId: ctx.action.abilityId, kind: ctx.action.kind, lead: ctx.ms(440 * ATTACK_IMPACT) / 1000 }), // the lunge's apex: where the blow lands
     impact: (_beat, ctx) => {

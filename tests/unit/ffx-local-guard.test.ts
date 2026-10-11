@@ -309,6 +309,20 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
     expect(deck.indexOf('return build;')).toBeGreaterThan(camera); // the branch is closed by the plain return: a production build drops it whole
   });
 
+  it('the motion, sky and material-state modules are reached only from the skin glue and the ffx3d folder, so they inherit the dev gate (the files they read are retail data: rule 8)', () => {
+    const SKIN = 'src/scenes/exp-fayth-skin.ts';
+    expect(importersOf('ffxClips')).toEqual([SKIN]);
+    expect(importersOf('ffxSky')).toEqual([SKIN]);
+    expect(importersOf('ffxAnimator').sort()).toEqual(['src/engine/ffx3d/ffxSkin.ts', SKIN]);
+    expect(importersOf('beatTap').sort()).toEqual(['src/scenes/exp-fayth-camera.ts', SKIN]);
+    expect(importersOf('clipSequencer')).toEqual(['src/engine/ffx3d/ffxAnimator.ts']);
+    expect(importersOf('clipMap').sort()).toEqual(['src/engine/ffx3d/clipSequencer.ts', 'src/engine/ffx3d/ffxAnimator.ts', 'src/engine/ffx3d/ffxClips.ts']);
+    expect(importersOf('passState')).toEqual(['src/engine/ffx3d/models.ts']);
+    // and what loads a file takes the probe's manifest, so it cannot be called without the probe having found the folder
+    expect(read('src', 'engine', 'ffx3d', 'ffxClips.ts')).toContain('export async function loadFfxClips(manifest: FfxLocalManifest');
+    expect(read('src', 'engine', 'ffx3d', 'ffxSky.ts')).toContain('export async function loadSkyAssets(manifest: FfxLocalManifest');
+  });
+
   it("the camera loader is imported by the glue alone, and checks DEV before it fetches (the data is Bailey's transcription of FFX's scripts: rule 8)", () => {
     const loaders = sourceFiles(join(REPO, 'src')).filter((f) => /from '[^']*ffxcam\/load\.ts'/.test(readFileSync(f, 'utf8')));
     expect(loaders.map(rel)).toEqual(['src/scenes/exp-fayth-camera.ts']);

@@ -18,7 +18,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FFX_MODEL_LIFT, FFX_STAGE_PARTS } from '../../src/engine/ffx3d/ffxStaging.ts';
 import { FFX_UNIT } from '../../src/engine/ffx3d/ffxWorld.ts';
 import type { FfxLocalManifest } from '../../src/engine/ffx3d/localAssets.ts';
-import { folderOf, idleFileOf, loadFfxModels, parsePoseHeights, parseWeapons, runtimeScaleOf, shapeStage, spreadOf, unlitMaterial } from '../../src/engine/ffx3d/models.ts';
+import { folderOf, idleFileOf, loadFfxModels, parsePoseHeights, parseWeapons, runtimeScaleOf, shapeStage, spreadOf, stageBackgroundOf, unlitMaterial } from '../../src/engine/ffx3d/models.ts';
 
 /** The URLs the stand-in loader was asked for, in order. */
 const asked: string[] = [];
@@ -352,5 +352,17 @@ describe('how far a model spreads (what the FFX camera frames a figure by)', () 
       expect(model.width, id).toBeCloseTo(model.height * 0.6, 9);
     }
     models.dispose();
+  });
+});
+
+describe('the colour the game clears the frame to', () => {
+  const camera = (name: string, bg: unknown): Record<string, unknown> => ({ m_name: name, m_bgColor: { m_elements: bg } });
+
+  it('is the three last numbers of the global camera\'s background colour', () => {
+    expect(stageBackgroundOf({ ffx: { cameras: [camera('persp', [0, 0.4, 0.4, 0.4]), camera('GlobalCamera', [30, 0.2, 0.25, 0.5])] } })).toEqual([0.2, 0.25, 0.5]);
+  });
+
+  it('is null for anything else: no global camera, a colour that is not four numbers, a channel out of range, no extras', () => {
+    for (const bad of [undefined, null, {}, { ffx: {} }, { ffx: { cameras: [] } }, { ffx: { cameras: [camera('persp', [0, 1, 1, 1])] } }, { ffx: { cameras: [camera('GlobalCamera', [0.2, 0.3, 0.4])] } }, { ffx: { cameras: [camera('GlobalCamera', [0, 2, 0.1, 0.1])] } }, { ffx: { cameras: [camera('GlobalCamera', [0, 'a', 0.1, 0.1])] } }, { ffx: { cameras: [{ m_name: 'GlobalCamera' }] } }]) expect(stageBackgroundOf(bad), JSON.stringify(bad)).toBeNull();
   });
 });

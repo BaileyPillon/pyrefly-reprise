@@ -26,7 +26,9 @@ import { EVRAE_AIRSHIP_DECK_RIGS, EVRAE_AIRSHIP_DECK_SLOTS, buildEvraeAirshipDec
 import { airshipRangeDirectorOf } from '../../../src/scenes/evrae-airship-director.ts';
 import { RANGE_STAGING } from '../../../src/scenes/evrae-airship-range.ts';
 import { buildExpFaythDeckScene } from '../../../src/scenes/exp-fayth-deck.ts';
-import { faythRigs, skinParam } from '../../../src/scenes/exp-fayth-skin.ts';
+import { animParam, faythRigs, listenerOf, skinParam } from '../../../src/scenes/exp-fayth-skin.ts';
+import { ATTACK_IMPACT } from '../../../src/engine/BattlePresenterActors.ts';
+import type { FfxAnimator } from '../../../src/engine/ffx3d/ffxAnimator.ts';
 import { loadScene } from '../../../src/scenes/index.ts';
 import type { SceneBuild } from '../../../src/scenes/types.ts';
 
@@ -156,6 +158,38 @@ describe('no manifest, no skin: phase 1 exactly', () => {
     expect(skinParam('?skin=')).toBeNull();
     expect(skinParam('')).toBeNull();
   });
+
+  it('reads the switch for the motions: off, or nothing', () => {
+    expect(animParam('?ffxanim=off')).toBe('off');
+    expect(animParam('?skin=painted&ffxanim=off')).toBe('off');
+    expect(animParam('?ffxanim=on')).toBeNull();
+    expect(animParam('?ffxanim=')).toBeNull();
+    expect(animParam('')).toBeNull();
+  });
+
+  it('tells the animator the beats it wants: the action opening (who, which ability, the painted pose, the apex of the lunge as the lead), a blow, the close', () => {
+    const calls: Array<[string, ...unknown[]]> = [];
+    const animator = {
+      noteOpen: (id: string, info: unknown) => calls.push(['open', id, info]),
+      noteImpact: (id: string) => calls.push(['impact', id]),
+      noteClose: (id: string) => calls.push(['close', id]),
+    } as unknown as FfxAnimator;
+    const listener = listenerOf(animator);
+    const ms = (base: number): number => base * 1.2; // the pacing option stretches the presenter's waits
+    listener.open!('actionOpen', { ms, actor: { id: 'evrae', side: 'enemy' }, targets: [], action: { kind: 'cast', abilityId: 'evrae-poison-breath' } } as never);
+    listener.impact!('impact', { actor: { id: 'evrae', side: 'enemy' }, target: { id: 'tidus', side: 'party' } } as never);
+    listener.impact!('impact', { target: { id: 'tidus', side: 'party' } } as never); // a blow with no known actor is not told
+    listener.close!('actionClose', { actor: { id: 'evrae', side: 'enemy' } } as never);
+    listener.close!('actionClose', {} as never);
+    expect(calls).toHaveLength(3);
+    expect(calls[0]![0]).toBe('open');
+    expect(calls[0]![1]).toBe('evrae');
+    const info = calls[0]![2] as { abilityId: string; kind: string; lead: number };
+    expect([info.abilityId, info.kind]).toEqual(['evrae-poison-breath', 'cast']);
+    expect(info.lead).toBeCloseTo((440 * ATTACK_IMPACT * 1.2) / 1000, 12); // 440 ms of lunge to its apex, at the live speed, in seconds
+    expect(calls[1]).toEqual(['impact', 'evrae']);
+    expect(calls[2]).toEqual(['close', 'evrae']);
+  });
 });
 
 describe('?skin=painted: the painted skin at FFX\'s staging', () => {
@@ -278,7 +312,7 @@ describe('the ffx skin (a found manifest; the models stood in)', () => {
     sky.add(bowl);
     stageRoot.add(deck, other, sky);
     const dispose = vi.fn();
-    return { models: { stage: { root: stageRoot, sky, dispose: () => {} }, actors: {}, problems: [], dispose }, dispose, stageRoot, sky, bowl, deck, other };
+    return { models: { stage: { root: stageRoot, sky, background: null, dispose: () => {} }, actors: {}, problems: [], dispose }, dispose, stageRoot, sky, bowl, deck, other };
   }
 
   it('hides the painted deck, sky plate, light pools and grit, adds the stage with only the deck (mirrored) and the sky drawn (the file colours brightened when there is no exported sky), and grades neutrally', async () => {

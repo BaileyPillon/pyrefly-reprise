@@ -53,6 +53,8 @@ export interface FfxStageModel {
   readonly root: Group;
   /** The vertex-coloured sky bowl (`sky` in the file), or null. It is meant to follow the camera. */
   readonly sky: Object3D | null;
+  /** The colour the game clears the frame to (the map's global camera, `m_bgColor`), as display values 0 to 1: the sky above the bowl. Null when the file does not say. */
+  readonly background: readonly [number, number, number] | null;
   dispose(): void;
 }
 
@@ -133,6 +135,20 @@ export function runtimeScaleOf(userData: unknown): number {
   const ffx = isRecord(userData) ? userData['ffx'] : undefined;
   const scale = isRecord(ffx) ? ffx['runtimeScale'] : undefined;
   return typeof scale === 'number' && Number.isFinite(scale) && scale > 0 ? scale : 1;
+}
+
+/**
+ * The colour the game clears the frame to, from the stage's scene extras (`{ ffx: { cameras: [{ m_name: 'GlobalCamera', m_bgColor: { m_elements: [?, r, g, b] } }] } }`): the three last of the four elements, display
+ * values in 0..1. Null when there is no global camera, or its colour is not four numbers with three in range.
+ */
+export function stageBackgroundOf(userData: unknown): readonly [number, number, number] | null {
+  const ffx = isRecord(userData) ? userData['ffx'] : undefined;
+  const cameras = isRecord(ffx) && Array.isArray(ffx['cameras']) ? (ffx['cameras'] as unknown[]) : [];
+  const global = cameras.find((c) => isRecord(c) && c['m_name'] === 'GlobalCamera');
+  const colour = isRecord(global) && isRecord(global['m_bgColor']) ? global['m_bgColor']['m_elements'] : undefined;
+  if (!Array.isArray(colour) || colour.length !== 4) return null;
+  const rgb = colour.slice(1) as unknown[];
+  return rgb.every((c) => typeof c === 'number' && Number.isFinite(c) && c >= 0 && c <= 1) ? [rgb[0] as number, rgb[1] as number, rgb[2] as number] : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -340,7 +356,7 @@ export async function loadFfxModels(manifest: FfxLocalManifest): Promise<FfxMode
       root.add(scene);
       root.scale.setScalar(runtimeScaleOf(scene.userData) * FFX_UNIT);
       const parts = unlit(scene);
-      return { root, sky: scene.getObjectByName('sky') ?? null, dispose: () => (root.removeFromParent(), freeAll(parts)) };
+      return { root, sky: scene.getObjectByName('sky') ?? null, background: stageBackgroundOf(scene.userData), dispose: () => (root.removeFromParent(), freeAll(parts)) };
     } catch (e) {
       problems.push(`stage: ${e instanceof Error ? e.message : String(e)}`);
       return null;
