@@ -267,18 +267,34 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * bag on. Proved by putting the lane's Overdrive files (abilities.ts, overdriveShape.ts) back: the digests are the same new values, so lane B moves none of the 18 (no golden line
  * sends Slice and Dice or a Fury at two enemies), and by putting the item-reaction files back: the other 17 pass and braskas-final-aeon#1 returns to the old digests above.
  * Nothing on the boss or the party was tuned.
+ * RC4 ASSEMBLY, re-baselined ONCE for the merged state 2026-10-11 (branch re-parity-rc4: the three lanes above merged, in the order gear, react, items; FFX only; docs/handoff/re-parity-rc4.md).
+ * The three paragraphs above each describe one lane against the base (the tables they came with are not kept); this is the table of all three together.
+ * FIFTEEN of the 18 digests move against the base and THREE are byte for byte what they were (seymour-natus#7, isaaru-via-purifico#1 and #7). One outcome moves:
+ * seymour-anima-macalania#7 defeat -> victory (the gear lane's critical bonus); the other 17 keep theirs. Who moves what, each proved by putting rows back on the merged tree and running
+ * all 18 (put the gear lane's two rows back, the equipment critical bonus of 3 per worn piece and the summed percents of the four damage families, and the file is 18/18 on exactly the values
+ * of the react and items lanes together: flux 33074c0e c3845a, yunalesca eced7435 ae1bbe58, braskas#1 4d93d0d0 96867650 eb8b7a8a 88ef63f8 3c10c054 4e0e8bde 2cb442aa, evrae f4927a78 b67a717e,
+ * and the base's values for every other digest; with only the crit row back, or only the percents row back, the attribution below):
+ *  - react only: seymour-flux#1 and #7, evrae-airship#7 (the random spread of Gems, Photon Spray and Power Shot, G6).
+ *  - gear only: seymour-anima-macalania#1 and #7 and seymour-natus#1 (critical bonus: put it back and all three return to the base), yojimbo-cavern#1 and #7 (summed percents: put them back and both
+ *    return to the base), braskas-final-aeon#7 (both rows), seymour-omnis#1 and #7 (both rows).
+ *  - gear and react together: yunalesca#1 and #7 (the gear rows, plus the Hastega bounce and Chapter II's new opening, G2), evrae-airship#1 (the spread reorders Evrae's rolls to f4927a78,
+ *    and the wider critical window then catches one of them: put the critical row back and it is f4927a78; the gear lane alone leaves this digest where it was).
+ *  - gear and items together: braskas-final-aeon#1, all seven links (the gear rows, plus Auron's Auto-Med no longer answering Petrify, F2: put the gear rows back and every link is the items
+ *    lane's value above).
+ * The three places where a lane had to be fitted to another (the dry-run clone copying the Tidus counters, the per-action sweep after an item reaction, the target builder dealing a planned
+ * Overdrive's hits before the result removes some) move none of the 18: each was switched off alone on the merged tree and all 18 digests below came out the same. Nothing on the bosses or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'd362acf6:victory',
-  'seymour-flux#7': '9f8aaa5c:victory',
-  'yunalesca#1': '7760a32:victory',
-  'yunalesca#7': 'f6c5ff81:victory',
-  'braskas-final-aeon#1': '53e56b57:victory dc25be1c:victory 892df105:victory d87729b:victory c1883ec4:victory 8f612568:victory 7c815176:victory',
+  'seymour-flux#1': '33074c0e:victory',
+  'seymour-flux#7': 'c3845a:victory',
+  'yunalesca#1': 'ef0b1f5a:victory',
+  'yunalesca#7': 'e75064e9:victory',
+  'braskas-final-aeon#1': '8bc2d45f:victory 37e83cbf:victory bd952081:victory c8b4d68f:victory 1106322a:victory 7f13b668:victory c0039a69:victory',
   'braskas-final-aeon#7': 'eed22595:victory 8d75fead:victory 9482b803:victory 7e6d7449:victory 9b249f0d:victory 97592b14:victory f2f0106a:victory',
   'seymour-anima-macalania#1': 'a6d9e71f:victory',
   'seymour-anima-macalania#7': 'e9ae2f10:victory',
-  'evrae-airship#1': 'e5ecff52:victory',
-  'evrae-airship#7': '4740e2ef:victory',
+  'evrae-airship#1': '4f323f6e:victory',
+  'evrae-airship#7': 'b67a717e:victory',
   'yojimbo-cavern#1': '62272b5c:victory',
   'yojimbo-cavern#7': 'af8241eb:victory',
   'seymour-natus#1': '40514ec8:victory',
