@@ -740,7 +740,7 @@ export class BattleScreen extends Screen {
 
     const fieldDt = this.spectacle?.stageDt(dt) ?? dt; // option C's hit-stop holds the field, never the engine or the HUD
     this.scene?.update(fieldDt);
-    updateLivingScene(fieldDt); // eye-candy option B: drift, weather, lamps (after the rig, before the render)
+    updateLivingScene(fieldDt, dt); // eye-candy option B: drift, weather, lamps (after the rig, before the render); the KO's cross runs on the real frame time (a hit-stop never freezes it)
     // Settle the enemy lane against the camera, before the player's first
     // decision and never during one.
     //

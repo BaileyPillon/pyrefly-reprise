@@ -1,5 +1,6 @@
 import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type ShaderMaterial, type Texture } from 'three';
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
+import { KO_GIANTS, KO_MACHINES, fallRun, koFallOff, koMode, type KoMode, type KoRun } from '../../KoFall.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
 import { setMixPatch } from './patch.ts';
 
@@ -16,9 +17,11 @@ export { patchLiving } from './livingShader.ts';
  *   0.8 times the period (VP-1001-49); a colossus breathes slowly (5 s) and deeper. REDUCE MOTION
  *   stills it (`gates.ts`).
  * - KO COLLAPSE: on a KO the knees give and the body sinks and tips forward on the standing painting
- *   (220 ms FFX, 170 ms FFX-2, inside today's KO beat), then a cut to the KO painting (EC-1001-09).
- *   Under REDUCE MOTION the KO is a plain cut to the KO painting. The Syndicate's yield, a held or a
- *   dismissed departure are left as they are (VP-1001-47).
+ *   (220 ms FFX, 170 ms FFX-2, inside today's KO beat), then the KO painting CROSSES IN over 75 ms on the
+ *   capped curve (FA-1, PR-0378: it was a one-frame cut, EC-1001-09, and 78 of round 23's 96 snaps; how a KO
+ *   plays and its clock are `KoFall.ts`). A figure whose standing painting is already flagged prone (a Sin fin,
+ *   Vegnagun's tail) and REDUCE MOTION (no buckle, no tilt, nothing moves but the fade) cross at once.
+ *   The Syndicate's yield, a held or a dismissed departure are left as they are (VP-1001-47).
  *
  * Attached by a scene walk, never by a hook in `PaintedActor` (over 400 lines, rule 7): the figure's
  * own vertex shader (the painted one, or LIVING PAINTINGS' sway) is patched by `onBeforeCompile`, its
@@ -28,6 +31,13 @@ export { patchLiving } from './livingShader.ts';
  */
 
 type Slot = { mesh: Mesh; material: ShaderMaterial; fade: number; pose: string; scale: { prone?: boolean } };
+/** The run that is playing (a KO), and the two planes it crosses. */
+interface Playing {
+  run: KoRun;
+  mode: KoMode;
+  from: Slot;
+  to: Slot;
+}
 export interface Guts {
   name: string;
   slots: [Slot, Slot];
@@ -50,6 +60,8 @@ interface SlotState {
 
 export interface LifeCtx {
   dt: number;
+  /** The same frame's unscaled seconds (default `dt`): the KO's cross runs on it, so a hit-stop never freezes a half-mixed pair of paintings (FB-1's lesson). */
+  realDt?: number;
   game: 'ffx' | 'ffx2';
   breath: boolean;
   collapse: boolean;
@@ -57,9 +69,9 @@ export interface LifeCtx {
   grid: [number, number];
 }
 
-const COLOSSUS = /^(braskas-final-aeon|seymour-natus|yojimbo|anima|x2-anima|seymour-omnis|ixion|x2-ixion|bahamut|ffx2-bahamut|evrae)/;
+const COLOSSUS = KO_GIANTS;
 /** Machines built of separately painted parts, and statues: a chest breath would part their seams. */
-const STILL = /^(vegnagun|sin-|overdrive-sin|yu-pagoda)/;
+const STILL = KO_MACHINES;
 
 export class LivingFigure {
   readonly a: Guts;
@@ -68,10 +80,9 @@ export class LivingFigure {
   private readonly colossus: boolean;
   private readonly still: boolean;
   private phase = Math.random();
-  private collapse = -1;
-  private hold: { from: Slot; to: Slot } | null = null;
+  private playing: Playing | null = null;
   private ctx: LifeCtx | null = null;
-  readonly last = { breath: 0, buckle: 0, collapses: 0, cuts: 0 };
+  readonly last = { breath: 0, buckle: 0, collapses: 0, cuts: 0, crosses: 0 };
 
   constructor(actor: object) {
     this.a = actor as Guts;
@@ -108,39 +119,42 @@ export class LivingFigure {
   private onSetPose(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, orig: Guts['setPose']): void {
     const a = this.a;
     const ctx = this.ctx;
-    if (name !== 'ko' && name !== 'dead') this.endCollapse();
+    if (name !== 'ko' && name !== 'dead') this.endRun();
     if (!ctx || !ctx.collapse || opts?.immediate || (name !== 'ko' && name !== 'dead') || a.life?.state === 'down') return orig.call(a, name, opts);
-    const kind = a.facing < 0 ? departureKindOf(a.name) : 'party';
+    const partySide = a.facing >= 0;
+    const kind = partySide ? 'party' : departureKindOf(a.name);
     if (kind === 'yields' || kind === 'held' || kind === 'dismissed') return orig.call(a, name, opts);
     const from = a.slots[a.active]!;
     const keep = a.crossfadeMs;
-    a.crossfadeMs = 0; // a cut, never a crossfade, to the KO painting
+    a.crossfadeMs = 0; // the actor's own blend stands aside: the KO is played here, plane by plane
     try {
       orig.call(a, name, opts);
     } finally {
       a.crossfadeMs = keep;
     }
     const to = a.slots[a.active]!;
-    if (ctx.rm || from === to || from.scale.prone) {
+    const mode = koMode({ rm: ctx.rm, samePlane: from === to, samePainting: from.pose === to.pose, fromProne: from.scale.prone === true, toProne: to.scale.prone === true, name: a.name, partySide, legacy: koFallOff() });
+    const run = fallRun(mode === 'topple' ? 'buckle-cross' : mode, ctx.game); // FA-2 gives the topple its travel
+    if (!run) {
       this.last.cuts++;
       return;
     }
-    // Buckle and sink on the standing painting, then cut to the KO painting (EC-1001-09).
+    // The standing painting stays up while the run plays (the actor's cut put the KO painting at 1); the run hands the fades over.
     from.fade = 1;
     to.fade = 0;
     a.syncOpacity();
-    this.hold = { from, to };
-    this.collapse = 0;
-    this.last.collapses++;
+    this.playing = { run, mode, from, to };
+    if (run.opts.buckle) this.last.collapses++;
+    if (run.opts.crossMs > 0) this.last.crosses++;
   }
 
-  private endCollapse(): void {
-    const h = this.hold;
-    this.collapse = -1;
-    this.hold = null;
-    if (h && h.to === this.a.slots[this.a.active]) {
-      h.to.fade = 1;
-      h.from.fade = 0;
+  /** Finish the run where it stands: the KO painting at full, the standing one gone, whatever phase it was in. */
+  private endRun(): void {
+    const p = this.playing;
+    this.playing = null;
+    if (p && p.to === this.a.slots[this.a.active]) {
+      p.to.fade = 1;
+      p.from.fade = 0;
       this.a.syncOpacity();
     }
   }
@@ -149,7 +163,7 @@ export class LivingFigure {
     const ctx = this.still ? { ...ctx0, breath: false } : ctx0;
     this.ctx = ctx;
     const a = this.a;
-    const live = ctx.breath || this.collapse >= 0;
+    const live = ctx.breath || this.playing !== null;
     if (live) {
       for (const s of a.slots) if (!this.states.has(s)) this.attach(s, ctx.grid);
     } else if (this.states.size) {
@@ -167,13 +181,16 @@ export class LivingFigure {
     const breath = ctx.breath ? (Math.sin(this.phase * 6.2831853) * 0.5 + 0.5) * amp : 0;
     let buckle = 0;
     let lean = 0;
-    if (this.collapse >= 0 && this.hold) {
-      this.collapse += ctx.dt * 1000;
-      const len = ctx.game === 'ffx2' ? 170 : 220;
-      const t = Math.min(1, this.collapse / len);
-      buckle = t * t;
-      lean = 0.05 * t;
-      if (this.collapse >= len) this.endCollapse();
+    const play = this.playing;
+    if (play) {
+      play.run.step(ctx.dt * 1000, (ctx.realDt ?? ctx.dt) * 1000);
+      const pose = play.run.pose;
+      buckle = pose.buckle;
+      lean = pose.lean;
+      play.from.fade = pose.out;
+      play.to.fade = pose.inn;
+      a.syncOpacity();
+      if (play.run.done) this.endRun();
     }
     for (const s of a.slots) {
       const st = this.states.get(s);
@@ -199,7 +216,7 @@ export class LivingFigure {
 
   /** Put the figure back as `PaintedActor` made it (the battle ended; the setPose wrapper stays, inert). */
   detach(): void {
-    this.endCollapse();
+    this.endRun();
     this.ctx = null;
     this.a.breatheAmp = this.saved.breatheAmp;
     for (const [s, st] of this.states) this.detachSlot(s, st);

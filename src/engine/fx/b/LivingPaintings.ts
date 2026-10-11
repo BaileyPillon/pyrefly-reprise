@@ -333,9 +333,9 @@ export function bindLivingScene(a: LivingBind): void {
 }
 
 /** Every frame, after the rig has placed the camera and before the render. */
-export function updateLivingScene(dt: number): void {
+export function updateLivingScene(dt: number, realDt: number = dt): void {
   current?.update(dt);
-  updateMaxMix(dt);
+  updateMaxMix(dt, realDt);
 }
 
 export function releaseLivingScene(): void {
