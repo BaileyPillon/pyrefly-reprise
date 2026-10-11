@@ -65,6 +65,13 @@ describe('the Core: voices [C1]', () => {
     expect(h.flags['coreAnswers']).toBe(8);
   });
 
+  it('does not speak for three answers: the voice waits for the fourth, and the count is left as it is', () => {
+    const { h } = liveCore();
+    h.flags['coreAnswers'] = 3;
+    expect(h.run(2)).toEqual(['charge-core', 'charge-core']);
+    expect(h.flags['coreAnswers']).toBe(3);
+  });
+
   it('speaks on two polls after its third Memento Mori, then forces the shot count to 8 and goes on', () => {
     const { h } = liveCore();
     expect(h.run(12).filter((id) => id === 'memento-mori')).toHaveLength(3); // three cycles of Charge x3 and Memento Mori
