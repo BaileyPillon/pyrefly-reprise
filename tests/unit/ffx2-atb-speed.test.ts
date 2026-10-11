@@ -1,24 +1,21 @@
 /**
  * **Config "ATB Mode and Speed": Slow / Normal / Fast.** FFX-2 only.
  *
- * `research/ffx2-combat-core.md` §1.2 `tickRate()`: the Config speed
- * multiplies the global tick rate by `0.53 / 0.71` (Slow, 0.746x), `1`
- * (Normal) or `0.53 / 0.42` (Fast, 1.262x) — derived from §2.8's
- * status-duration constants. The setting is an FFX-2 Config entry
- * (`research/ffx-vs-ffx2-presentation.md:278`); FFX's CTB has no tick rate.
+ * Re-parity W4: the setting is the game's own table, `rom.bin`'s `ATB_speed` (`kernel/atb-clock.ts`): 70, 95 or 120 UNITS
+ * come off every gauge each logic step (`research/re-ffx2-atb-status.md` section 1). The game's clock does not change:
+ * a logic step is 1/29.97 s at every setting, so Fast does not run the game's clock faster, it takes more off every gauge
+ * and every status clock each step (and Slow less). It used to be a multiplier of 0.746 / 1 / 1.262 on a 3,000-ticks-a-second
+ * clock, derived from the status durations of a single source. Animation time is not ATB time, so the chain window (a stand-in
+ * for the hit reaction, 2 s) is the same real time at every setting.
  *
- * What the lever scales is `docs/plans/ffx2-active-menu-review.md` §6: the
- * one global game clock — every gauge, every status clock, §1.7's chain
- * windows, the AI's clocks — runs faster or slower against real time, as one.
- * The fight in game time is the same fight; only the real time a player gets
- * per game second changes. Elapsed battle time stays real milliseconds.
- * Normal being byte-identical is `ffx2-atb-golden.test.ts`.
+ * Normal at zero decision time wins the same seeds as before: `ffx2-atb-golden.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
-import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
-import { ATB_SPEED_MULTIPLIER, CHAIN_WINDOW_TICKS, type AtbSpeed } from '../../src/battle/ffx2/constants.ts';
+import { FFX2Engine, STEPS_PER_SECOND, baseSpeedOf, type AtbSpeed } from '../../src/battle/ffx2/index.ts';
+import { CHAIN_WINDOW_TICKS } from '../../src/battle/ffx2/constants.ts';
 import type { CombatantId } from '../../src/battle/common/types.ts';
+import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 import { driveChapter4, driveChapter5, ffx2Options } from './helpers/ffx2ChapterDrive.ts';
@@ -37,19 +34,17 @@ function atMenu(speed?: AtbSpeed): { engine: FFX2Engine; owner: CombatantId } {
 }
 
 /** Chain Bahamut so he cannot act (§1.7): the clock then runs uninterrupted under the menu. */
-function holdTheBoss(engine: FFX2Engine): { chainWindowTicks: number } {
-  const boss = engine.state().combatants[engine.state().enemyIds[0]!] as unknown as { chainWindowTicks: number };
+function holdTheBoss(engine: FFX2Engine): Ffx2Unit {
+  const boss = engine.state().combatants[engine.state().enemyIds[0]!] as unknown as Ffx2Unit;
   boss.chainWindowTicks = CHAIN_WINDOW_TICKS;
   return boss;
 }
 
-describe('the Config ATB speed multipliers are the research’s own (§1.2)', () => {
-  it('Slow 0.53/0.71, Normal exactly 1, Fast 0.53/0.42', () => {
-    expect(ATB_SPEED_MULTIPLIER.slow).toBe(0.53 / 0.71);
-    expect(ATB_SPEED_MULTIPLIER.normal).toBe(1);
-    expect(ATB_SPEED_MULTIPLIER.fast).toBe(0.53 / 0.42);
-    expect(ATB_SPEED_MULTIPLIER.slow).toBeCloseTo(0.746, 3);
-    expect(ATB_SPEED_MULTIPLIER.fast).toBeCloseTo(1.262, 3);
+describe('the Config ATB speed is the game\'s table (rom.bin ATB_speed)', () => {
+  it('Slow 70, Normal 95, Fast 120 units a logic step', () => {
+    expect(baseSpeedOf('slow')).toBe(70);
+    expect(baseSpeedOf('normal')).toBe(95);
+    expect(baseSpeedOf('fast')).toBe(120);
   });
 
   it('defaults to Normal', () => {
@@ -59,34 +54,42 @@ describe('the Config ATB speed multipliers are the research’s own (§1.2)', ()
 
 describe('what the lever scales', () => {
   for (const speed of ['slow', 'normal', 'fast'] as const) {
-    it(`${speed}: one real second is ${ATB_SPEED_MULTIPLIER[speed]} x 3000 game ticks, and one real second of elapsed time`, () => {
+    it(`${speed}: one real second is 29.97 logic steps whatever the setting, and one real second of elapsed time; the gauge falls ${baseSpeedOf(speed)} units a step`, () => {
       const { engine } = atMenu(speed);
       holdTheBoss(engine);
-      const ticks0 = engine.state().ticks;
+      const steps0 = engine.state().ticks;
       const ms0 = engine.gaugeSnapshot().elapsedMs;
       for (let i = 0; i < 10; i++) engine.tick(50, { throughInput: true });
-      expect(engine.state().ticks - ticks0).toBeCloseTo(1500 * ATB_SPEED_MULTIPLIER[speed], 6);
-      expect(engine.gaugeSnapshot().elapsedMs - ms0).toBeCloseTo(500, 6);
+      // 500 ms is 14.985 steps. The part of a step left over from the walk to the menu is carried too, so the call runs 14 or
+      // 15 whole steps: never more than one step from the exact figure (nothing is lost or invented).
+      const ran = engine.state().ticks - steps0;
+      expect(Math.abs(ran - 0.5 * STEPS_PER_SECOND)).toBeLessThan(1);
+      expect(engine.gaugeSnapshot().elapsedMs - ms0).toBeCloseTo(ran * (1000 / STEPS_PER_SECOND), 6);
+      const unit = engine.state().combatants[engine.state().activeIds[1]!] as unknown as Ffx2Unit;
+      expect(unit.gauge.speeds.tick).toBe(baseSpeedOf(speed));
     });
   }
 
-  it('the chain window runs on the same global clock — 2 s at Normal, 2 / multiplier real seconds otherwise', () => {
+  it('the chain window is animation time, not ATB time: 60 steps (2 s) at every setting', () => {
     for (const speed of ['slow', 'normal', 'fast'] as const) {
       const { engine } = atMenu(speed);
       const boss = holdTheBoss(engine);
+      const before = boss.chainWindowTicks;
       for (let i = 0; i < 10; i++) engine.tick(50, { throughInput: true });
-      expect(boss.chainWindowTicks).toBeCloseTo(CHAIN_WINDOW_TICKS - 1500 * ATB_SPEED_MULTIPLIER[speed], 6);
+      expect(Math.abs(before - boss.chainWindowTicks - 0.5 * STEPS_PER_SECOND), speed).toBeLessThan(1);
     }
   });
 
-  it('is the same fight in game time: at zero decision time every speed wins the same chapter 4 and 5 seeds', () => {
+  it('at zero decision time every speed wins the same chapter 4 and 5 seeds as Normal', () => {
     for (const seed of [1, 2, 3, 7, 42]) {
+      const normal4 = driveChapter4(seed, 0).outcome;
+      const normal5 = driveChapter5(seed, 0).outcome;
       for (const speed of ['slow', 'fast'] as const) {
-        expect(driveChapter4(seed, 0, { atbSpeed: speed }).outcome, `ch4 ${speed} ${seed}`).toBe('victory');
-        expect(driveChapter5(seed, 0, { atbSpeed: speed }).outcome, `ch5 ${speed} ${seed}`).toBe('victory');
+        expect(driveChapter4(seed, 0, { atbSpeed: speed }).outcome, `ch4 ${speed} ${seed}`).toBe(normal4);
+        expect(driveChapter5(seed, 0, { atbSpeed: speed }).outcome, `ch5 ${speed} ${seed}`).toBe(normal5);
       }
     }
-  }, 60_000);
+  }, 120_000);
 
   it('the Wait path asks for real milliseconds: Fast waits less, Slow waits more, for the same gauge', () => {
     const waits: Record<string, number> = {};
@@ -101,17 +104,16 @@ describe('what the lever scales', () => {
     expect(waits['slow']!).toBeGreaterThan(waits['normal']!);
   });
 
-  it('setAtbSpeed changes the rate mid-battle, from the next tick', () => {
+  it('setAtbSpeed changes the units a step takes off from the next tick', () => {
     const { engine } = atMenu();
     holdTheBoss(engine);
-    const t0 = engine.state().ticks;
+    const unit = engine.state().combatants[engine.state().activeIds[1]!] as unknown as Ffx2Unit;
     engine.tick(100, { throughInput: true });
-    const normal = engine.state().ticks - t0;
+    expect(unit.gauge.speeds.tick).toBe(95);
     engine.setAtbSpeed('fast');
     expect(engine.atbSpeed()).toBe('fast');
-    const t1 = engine.state().ticks;
     engine.tick(100, { throughInput: true });
-    expect(engine.state().ticks - t1).toBeCloseTo(normal * ATB_SPEED_MULTIPLIER.fast, 6);
+    expect(unit.gauge.speeds.tick).toBe(120);
   });
 
   it('survives init, so a chained chapter keeps it across links', () => {

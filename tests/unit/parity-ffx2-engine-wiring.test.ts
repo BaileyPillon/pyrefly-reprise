@@ -322,15 +322,16 @@ describe('the generic Attack runs on the user\'s own row', () => {
   });
 });
 
-describe('the ATB pool the Delay class reads (computed here, applied by batch W4)', () => {
-  it('is the remaining charge and its total while the target charges, else the remaining recovery as both figures', () => {
+describe('the ATB pool the Delay class reads (applied by re-parity W4: `atb-engine.ts applyDelay`)', () => {
+  it('is the remaining charge and its total while the target charges, else the recovery counter and its maximum', () => {
     const u = aiUnit('u', 'enemy');
     u.atb.recovery = 40;
-    expect(atbPool(u)).toEqual({ current: 40, max: 40 });
+    u.gauge.recoveryMax = 90;
+    expect(atbPool(u)).toEqual({ current: 40, max: 90 });
     u.atb.charging = { abilityId: 'x', totalTicks: 900, remainingTicks: 300 } as never;
     expect(atbPool(u)).toEqual({ current: 300, max: 900 });
     u.atb.charging = { abilityId: 'x', totalTicks: 0, remainingTicks: 0 } as never; // a charge with no length falls back to the recovery
-    expect(atbPool(u)).toEqual({ current: 40, max: 40 });
+    expect(atbPool(u)).toEqual({ current: 40, max: 90 });
   });
 });
 

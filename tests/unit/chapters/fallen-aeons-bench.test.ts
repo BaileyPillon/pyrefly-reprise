@@ -69,7 +69,12 @@ describe('Chapter XI benches (200 seeds, bench speed, Wait)', () => {
   // wrong line at bench speed (Shiva 200 vs 194, Anima 200 vs 200 of 200): measured and disclosed in
   // docs/plans/fallen-aeons-bench.md, never tuned. The Sisters still separate the lines, so the
   // strict check stays there and the other two are pinned as "never worse".
-  it('the intended line is never worse than the credibly wrong one, and beats it on the Sisters', () => {
+  //
+  // **Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`).** At the game's gauge the Sisters forgive the
+  // wrong line too (Darkness spam, no Dispel): both lines clear 200 of 200 at bench speed, so the strict check is gone and every link is
+  // pinned as "never worse". The slower line that still separates is the Mindy-first alternative (Attack + Dispel, 89 of 200), asserted
+  // below. Measured, not tuned; disclosed for Bailey in the W4 handoff.
+  it('the intended line is never worse than the credibly wrong one on any link, and beats the Mindy-first alternative on the Sisters', () => {
     const wins = (link: string, kind: 'intended' | 'wrong') => {
       const c = cases.find((x) => x[0] === link && x[2].startsWith(kind));
       return c ? (results.get(c[2])?.wins ?? -1) : -1;
@@ -77,7 +82,8 @@ describe('Chapter XI benches (200 seeds, bench speed, Wait)', () => {
     for (const link of ['1 Shiva', '2 Sisters', '3 Anima']) {
       expect(wins(link, 'intended'), link).toBeGreaterThanOrEqual(wins(link, 'wrong'));
     }
-    expect(wins('2 Sisters', 'intended')).toBeGreaterThan(wins('2 Sisters', 'wrong'));
+    const mindy = cases.find((x) => x[0] === '2 Sisters' && x[2] === 'alternative: kill Mindy first with Attack + Dispel');
+    expect(wins('2 Sisters', 'intended')).toBeGreaterThan(mindy ? (results.get(mindy[2])?.wins ?? Infinity) : Infinity);
   });
 
   it('FA8 b (landed damage only) measured on the Sisters, for Bailey', () => {

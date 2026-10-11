@@ -101,7 +101,10 @@ function selfHealRun(party: FFX2PartyBuild, groupId: string, seed: number): Heal
   const ids = new Set(party.members.map((m) => m.id));
   const out: HealRun = { itemUses: 0, heals: 0, friendlyMisses: [] };
   let seen = 0;
-  for (let i = 0; i < 3000; i++) {
+  // Re-parity W4 (FFX-2 only): 3000 decisions became 1000. Chapter 4's self-healing party now outheals Bahamut at the game's pace and the run
+  // goes on to the cap (a decision is a logic step or a few, 0.6 ms, where the old engine jumped from event to event); 1000 decisions are
+  // 28,000 logic steps and still give the 200 heals the test asks for.
+  for (let i = 0; i < 1000; i++) {
     const d = engine.nextDecision() as Decision;
     const log = engine.state().log as BattleEvent[];
     for (; seen < log.length; seen++) {
@@ -142,6 +145,6 @@ describe('A3 — the engine never emits a party-to-party miss for a heal or item
       }
       expect(items + heals).toBeGreaterThan(200); // the driver really healed
       expect(misses).toEqual([]);
-    });
+    }, 120_000); // re-parity W4: chapter 4 is 14 s alone (1000 decisions a seed, 40 seeds); the 15 s default timed out under any load
   }
 });

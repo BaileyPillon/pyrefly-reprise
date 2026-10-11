@@ -194,6 +194,8 @@ describe('PR-0045 — a Berserked FFX-2 turn resolves without the player (§2.8)
     let guard = 0;
     while (!(decision.kind === 'player-input' && decision.actorId === 'yuna') && guard++ < 200) {
       if (decision.kind === 'waiting') engine.tick(decision.nextEventMs);
+      // Re-parity W4: with the game's opening gauges another girl can be first; she defends so that Yuna's menu comes up.
+      else if (decision.kind === 'player-input') engine.submit({ kind: 'defend', targets: [] });
       decision = engine.nextDecision();
     }
     expect(decision.kind === 'player-input' && decision.actorId).toBe('yuna');
@@ -208,9 +210,11 @@ describe('PR-0045 — a Berserked FFX-2 turn resolves without the player (§2.8)
       expect(resolved.events.some((e) => e.type === 'damage' && e.targetId !== 'yuna')).toBe(false);
     }
     // The gauge was spent, so the turn genuinely moved on and Berserk's own
-    // 133-tick clock can run out (§2.8 duration table): she is no longer the
-    // ready actor, and the engine's next decision is not hers.
-    expect((engine.state().combatants['yuna'] as Ffx2Unit).atb.ticks).toBe(0);
+    // timer (200,000 units) can run out: she is no longer the ready actor, and the engine's next decision is not hers.
+    // Re-parity W4: spent means her recovery counter is the whole standard wait again (a pass costs the Attack row's 70).
+    const spent = engine.state().combatants['yuna'] as Ffx2Unit;
+    expect(spent.atb.recovery).toBeGreaterThan(0);
+    expect(spent.gauge.state).not.toBe(4);
     const after = engine.nextDecision();
     expect(after.kind === 'player-input' && after.actorId === 'yuna').toBe(false);
   });

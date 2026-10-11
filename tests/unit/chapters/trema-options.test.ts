@@ -13,7 +13,7 @@ import { SeededRng } from '../../../src/battle/common/rng.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import {
-  ACTION_TIME_ALL_FFX2, ACTION_TIME_ESTIMATE_SECONDS, ACTION_TIME_FLAG, actionTimeSeconds, actionTimeTicks,
+  ACTION_TIME_ALL_FFX2, ACTION_TIME_ESTIMATE_SECONDS, ACTION_TIME_FLAG, actionTimeSeconds, actionTimeSteps,
 } from '../../../src/battle/ffx2/action-time.ts';
 import { aiScriptFor, aiScriptIds } from '../../../src/battle/ffx2/ai/index.ts';
 import { tremaArenaScript, tremaScript } from '../../../src/battle/ffx2/ai/trema.ts';
@@ -112,7 +112,7 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     expect(actionTimeSeconds(undefined, { [ACTION_TIME_FLAG]: 2 })).toBe(2);
     expect(actionTimeSeconds(3, { [ACTION_TIME_FLAG]: 2 })).toBe(3);
     expect(actionTimeSeconds(0, { [ACTION_TIME_FLAG]: 2 })).toBe(0);
-    expect(actionTimeTicks(1.5, {})).toBe(4500); // 3,000 ticks a second at Normal (§1.2)
+    expect(actionTimeSteps(1.5, {})).toBe(45); // 29.97 logic steps a second at every speed (re-parity W4): round(1.5 x 29.97)
     expect(ACTION_TIME_ESTIMATE_SECONDS).toBe(1.5);
   });
 
@@ -121,18 +121,18 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     const on = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 1.5 }, 4);
     const gaps = (s: number[]) => s.slice(1).map((t, i) => t - (s[i] ?? 0));
     expect(off).toHaveLength(4);
-    for (const [i, g] of gaps(on).entries()) expect(Math.abs(g - (gaps(off)[i] ?? 0) - 4500)).toBeLessThanOrEqual(1);
+    for (const [i, g] of gaps(on).entries()) expect(Math.abs(g - (gaps(off)[i] ?? 0) - 45)).toBeLessThanOrEqual(1); // 1.5 s = 45 logic steps
   });
 
   it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => {
     const group = { ...cloisterTremaGroup, actionTimeSeconds: 2 };
     const b = tremaTurns(group, {}, 3);
     const off = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 0 }, 3);
-    expect(Math.abs((b[1]! - b[0]!) - (off[1]! - off[0]!) - 6000)).toBeLessThanOrEqual(1);
+    expect(Math.abs((b[1]! - b[0]!) - (off[1]! - off[0]!) - 60)).toBeLessThanOrEqual(1); // 2 s = 60 logic steps
     expect(tremaTurns(group, { actionTimeSeconds: 0 }, 3)).toEqual(off);
-    // The shipped formation: 3 s, 9,000 ticks at Normal.
+    // The shipped formation: 3 s, 90 logic steps (the step is the same length at every speed).
     const shipped = tremaTurns(cloisterTremaGroup, {}, 3);
-    expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 9000)).toBeLessThanOrEqual(1);
+    expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 90)).toBeLessThanOrEqual(1);
   });
 
   it('other gauges keep filling while it plays out (Active), and the Wait hold stops it too', () => {
@@ -142,20 +142,24 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
       engine.init({ game: 'ffx2', party: viaInfinitoBuild, enemies: cloisterTremaGroup, triggers: [], seed: 3, condition: 'normal', canEscape: false });
       const unit = (id: string) => engine.state().combatants[id] as unknown as Ffx2Unit;
       let d = engine.nextDecision();
-      for (let i = 0; i < 2000 && !(unit('trema').atb.recovery > 0 && d.kind === 'player-input'); i++) {
+      for (let i = 0; i < 2000 && !(unit('trema').gauge.executing > 0 && d.kind === 'player-input'); i++) {
         d.kind === 'waiting' ? engine.tick(d.nextEventMs) : d.kind === 'player-input' ? engine.submit({ kind: 'defend', targets: [] }) : null;
         d = engine.nextDecision();
       }
       expect(d.kind).toBe('player-input'); // a girl's menu is open while Trema's action time runs
-      const owed = unit('trema').atb.recovery;
-      const girl = ['yuna', 'rikku', 'paine'].map(unit).find((u) => u.alive && u.atb.recovery === 0 && u.atb.ticks < u.atb.required && !u.atb.charging);
-      const before = girl?.atb.ticks ?? 0;
+      // Re-parity W4: the action time is the actor's own EXECUTING countdown (logic steps), not extra recovery.
+      const owed = unit('trema').gauge.executing;
+      const girl = ['yuna', 'rikku', 'paine'].map(unit).find((u) => u.alive && u.gauge.state === 1 && u.atb.recovery > 0 && !u.atb.charging);
+      const before = girl?.atb.recovery ?? 0;
+      const t0 = engine.state().ticks;
       engine.tick(100, { throughInput: true });
+      const ran = engine.state().ticks - t0;
       if (mode === 'active') {
-        expect(unit('trema').atb.recovery).toBeCloseTo(owed - 300, 6);
-        if (girl) expect(girl.atb.ticks).toBeGreaterThan(before);
+        expect(ran).toBeGreaterThan(0);
+        expect(unit('trema').gauge.executing).toBe(owed - ran);
+        if (girl) expect(girl.atb.recovery).toBeLessThan(before);
       } else {
-        expect(unit('trema').atb.recovery).toBe(owed); // Wait, whole-menu hold: nothing moves
+        expect(unit('trema').gauge.executing).toBe(owed); // Wait, whole-menu hold: nothing moves
       }
     }
   });
@@ -174,7 +178,9 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     if (!change) throw new Error('no spherechange offered');
     engine.submit(change.command);
     const girl = engine.state().combatants[d.actorId] as unknown as Ffx2Unit;
-    expect(girl.atb.recovery).toBe(0);
+    // The change ends her command with the Attack row's recovery and no action time (re-parity W4: it used to leave the bar at 0).
+    expect(girl.gauge.executing).toBe(0);
+    expect(girl.gauge.state).toBe(0);
   });
 
   it('is deterministic: the same seed gives the same log', () => {

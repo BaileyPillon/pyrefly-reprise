@@ -241,7 +241,7 @@ describe('the shipped intended strategy beats Chapter 5 and completes the chain'
     console.log(`seeds 1-40: ${wins} chains won; losses: ${lost.join(', ') || 'none'}`);
 
     expect(wins, 'Chapter 5 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(36);
-  });
+  }, 120_000); // re-parity W4: 9 s alone (a logic step at a time); the 15 s default timed out under a loaded run
 });
 
 /**

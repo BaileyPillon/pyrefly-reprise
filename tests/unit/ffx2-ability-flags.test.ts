@@ -26,7 +26,12 @@ import type { AvailableCommand, BattleEvent, Command } from '../../src/battle/co
 import * as data from '../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 
-const MAX_DECISIONS = 40_000;
+// Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`): 40,000 became 2,500. The line ends in a stalemate
+// when only Yuna is left: she is a White Mage with no Attack row, so the fallback below picks Vigor, and at the game's pace (Bahamut's
+// commands wait their own recorded costs, Mega Flare is power 14) she heals more than he hits. The old engine killed her; this one lets
+// her heal for ever, and 40,000 decisions of it took 36 s a battle. A Charon line that has not won in 2,500 decisions (65,000 logic
+// steps, 36 game minutes; the old line won in about 13 turns) is not winning.
+const MAX_DECISIONS = 2_500;
 const CHARON = 'x2-dark-knight-charon';
 const BAHAMUT = 'ffx2-bahamut';
 
@@ -132,8 +137,8 @@ describe('#11 Charon costs the caster the battle [ffx2-combat-core §2.3, §3.12
       expect(run.survivedOwnCast, `seed ${seed}: a Charon caster walked away from it`).toBe(0);
     }
     expect(casts, 'the line has to actually reach Charon for this to prove anything').toBeGreaterThan(0);
-    // A seeded 5-battle bench, not a unit test: ~2.2s alone, over budget under a loaded full-suite run.
-  }, 30_000);
+    // A seeded 5-battle bench, not a unit test: ~2.2s alone, over budget under a loaded full-suite run (re-parity W4: 90 s measured on a saturated machine, so 120 s).
+  }, 120_000);
 
   it('stops being the free answer to Chapter 4', () => {
     const results = Array.from({ length: 15 }, (_, i) => runCharonLine(i + 1));
@@ -148,8 +153,8 @@ describe('#11 Charon costs the caster the battle [ffx2-combat-core §2.3, §3.12
     // that; the ability is still real and still enormous, it simply costs what
     // §3.12 says it costs.
     expect(wins, 'spamming Charon must not be the chapter').toBeLessThan(15);
-    // A seeded 15-battle bench, not a unit test: ~5.2s alone, over vitest's 5000ms default under load.
-  }, 30_000);
+    // A seeded 15-battle bench, not a unit test: ~5.2s alone, over vitest's 5000ms default under load (re-parity W4: 160 s measured on a saturated machine, so 240 s).
+  }, 240_000);
 });
 
 /**

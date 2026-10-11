@@ -6,6 +6,7 @@
 
 import { afterEach, describe, expect, it } from 'vitest';
 import type { AbilityDef, Command } from '../../../src/battle/common/types.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 import { hitPercent } from '../../../src/battle/ffx2/hit.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
 import { abilityPerformedBy } from '../../../src/battle/ffx2/execute.ts';
@@ -112,11 +113,14 @@ describe('its script (SinirothX, §12.2)', () => {
     const b = fresh();
     paragonOversoulScript.decide(b.ctx('paragon'));
     const state = b.engine.state() as { ticks: number };
-    state.ticks += OVERSOUL_ESTIMATES.idleSeconds * 3000 - 1;
+    // Re-parity W4 (FFX-2 only): the engine's clock is the logic step (29.97 a second), not 3,000 ticks a second.
+    const idle = OVERSOUL_ESTIMATES.idleSeconds * STEPS_PER_SECOND;
+    const quiet = state.ticks;
+    state.ticks = quiet + idle - 1;
     expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull();
-    state.ticks += 1;
+    state.ticks = quiet + idle;
     expect(['paragon-os-judgement', 'paragon-genesis', 'paragon-big-bang']).toContain(idOf(paragonOversoulScript.decide(b.ctx('paragon'))));
-    state.ticks += OVERSOUL_ESTIMATES.idleSeconds * 3000;
+    state.ticks += idle;
     b.unit('rikku').statuses.reflect = { ticksRemaining: null } as never;
     expect(idOf(paragonOversoulScript.decide(b.ctx('paragon')))).toBe('paragon-os-dispel');
   });
