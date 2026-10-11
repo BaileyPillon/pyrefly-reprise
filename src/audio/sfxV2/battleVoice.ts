@@ -17,6 +17,8 @@
 import { twin } from './cues.ts';
 import { roarFor, WEAPON_CUES, type EnemyVoice, type Weapon } from './weapons.ts';
 import { STATUS_CUES } from './statusCues.ts';
+import { eventPlan, type EventPlan } from './eventCues.ts';
+import { EVENT_RULES } from './eventRules.ts';
 
 export type VoiceGame = 'ffx' | 'ffx2';
 
@@ -38,6 +40,12 @@ export interface VoiceAction {
   /** The landing family its data names (`families.ts`), if any. */
   family: string | null;
   isItem: boolean;
+  /** The ability row's id, when the action has one (the per-event hooks of `eventCues.ts` select by it). */
+  abilityId?: string | null;
+  /** The command's own id: the item an item command uses. */
+  commandId?: string | null;
+  /** FFX only: the spell tier the ability's `sfxKey` names (`fire-2` is 2, `firaga` 3); `null` when it names none. */
+  tier?: number | null;
 }
 
 export interface VoiceAsk {
@@ -61,6 +69,8 @@ export interface VoiceAsk {
   stage?: number;
   /** `spherechange`: the dressphere changed to. */
   to?: string;
+  /** How many landing cues (damage, heal, status, KO...) this action has already played; 0 for its first (`eventCues.ts` `landing`). */
+  landed?: number;
 }
 
 export interface Voiced {
@@ -181,3 +191,30 @@ export function voiceBattle(ask: VoiceAsk): Voiced | null {
       return v(twin(moment, game));
   }
 }
+
+/**
+ * The recorded originals this cue looks up (`eventCues.ts`), or `null` when the voice left the moment to the
+ * presenter's own first-bank cue and no hook names it. `key` is what {@link voiceBattle} answered for the same ask.
+ * It never changes which cue plays: with no parity pack listed, the plan is ignored.
+ */
+export function voiceEvents(ask: VoiceAsk, key: string | null): EventPlan | null {
+  return eventPlan(EVENT_RULES, ask, key);
+}
+
+/**
+ * The recorded originals a moment the event loop does not raise looks up: `appear` (the boss reveal, `BattleMoments.revealBoss`) and
+ * `overdrive-start` (an Overdrive or Special opening, `BattleMoments.overdriveStart`). `key` is the stand-in the moment layer chose
+ * for it (`roarFor`, `stingerFor`); `undefined` when no chapter voice answers (FF7, the title) so the caller passes nothing.
+ */
+export function momentEvents(
+  game: VoiceGame,
+  moment: 'appear' | 'overdrive-start',
+  actorId: string,
+  side: VoiceActor['side'],
+  key: string | null,
+): readonly string[] | undefined {
+  const ask: VoiceAsk = { game, moment, actor: { id: actorId, side, weapon: null, voice: null }, target: null, action: null, nth: 0 };
+  return voiceEvents(ask, key)?.events;
+}
+
+export type { EventPlan };
