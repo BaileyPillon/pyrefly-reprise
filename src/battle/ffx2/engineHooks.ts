@@ -11,6 +11,7 @@ import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './targeting.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { abilityPerformedBy } from './execute.ts';
+import { takeResults } from './results-tally.ts';
 
 type Emit = (draft: EventDraft) => void;
 
@@ -130,14 +131,31 @@ export function notifyEnemiesTargeted(
 }
 
 /**
+ * Tell every enemy that took results from this action how many, once (re-parity AI lane C; FFX-2 only). The game
+ * runs a monster's reaction entry once per result applied to it (a landing strike each; one for a miss; one for a
+ * no-effect result; never its own, `results-tally.ts`), and the two scripts that count them (Baralai's burst
+ * counter, Ixion's action counter) only read the counter on their next poll, so one report after the action is the
+ * same thing. The tally is emptied for every enemy whether or not its script listens, so it never carries over.
+ */
+export function notifyEnemiesResults(units: Ffx2Unit[], aiContext: (unit: Ffx2Unit) => AiContext): void {
+  for (const unit of units) {
+    if (unit.side !== 'enemy') continue;
+    const report = takeResults(unit);
+    if (report === undefined || !unit.alive) continue;
+    aiScriptFor(unit.enemy?.aiScriptId).onResults?.(aiContext(unit), report);
+  }
+}
+
+/**
  * The engine's post-action AI hooks, in their fixed order (moved out of `engine.ts#afterAction`,
- * house rule 7; byte-identical): `onDamaged`, `onTargeted`, every enemy's `onTurnResolved`,
+ * house rule 7; byte-identical): `onDamaged`, `onTargeted`, `onResults`, every enemy's `onTurnResolved`,
  * then the out-of-turn counters. `produced` is re-read before each step, as the inline code
  * did, so a hook that emits is seen by the steps after it.
  */
 export function runAfterActionHooks(produced: () => EventDraft[], actor: Ffx2Unit, env: CounterEnv): void {
   notifyEnemiesDamaged(produced(), actor, env.units, env.aiContext);
   notifyEnemiesTargeted(produced(), actor, env.units, env.aiContext);
+  notifyEnemiesResults(env.units, env.aiContext);
   for (const unit of env.units) {
     if (unit.side !== 'enemy') continue;
     aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(env.aiContext(unit), actor);

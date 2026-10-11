@@ -149,12 +149,19 @@ export const shadeGippalAbilities: AbilityDef[] = [
 /** Baralai (shade), §4.2. Actions `[SinirothX + wiki]`; AI `[verified: 2 sources]`. */
 export const shadeBaralaiAbilities: AbilityDef[] = [
   strike('x2-den-baralai-attack', 'Attack', 16, 'Baralai strikes {target}'), // DC 16
+  // Triple Attack is three Chain Attack commands, one strike each at three fixed girls (re-parity AI lane C, research
+  // `re-ffx2-ai-leblanc-den-ixion.md` 4.2, row D5): Yuna, Rikku, Paine, each falling back to the next living girl. The ability is the
+  // first command, `sequence` the other two, and `sequenceTargets` makes the AI's three girls the three strikes' targets
+  // (`resolve.ts`). Chain Attack never rolls to hit and cannot crit (command row 0x4100: DC 12, physical, no accuracy byte).
   {
     ...strike('x2-den-baralai-triple-attack', 'Triple Attack', 12, 'Baralai uses Triple Attack'), // DC 12 x3
     category: 'enemy',
-    targeting: 'random-enemy', // "3 random hits"
-    hits: 3,
+    flags: [],
+    canMiss: false,
+    extra: { sequence: ['x2-den-baralai-triple-attack-2', 'x2-den-baralai-triple-attack-3'], sequenceTargets: true },
   },
+  { ...strike('x2-den-baralai-triple-attack-2', 'Triple Attack', 12, 'Baralai strikes {target}'), category: 'enemy', flags: [], canMiss: false },
+  { ...strike('x2-den-baralai-triple-attack-3', 'Triple Attack', 12, 'Baralai strikes {target}'), category: 'enemy', flags: [], canMiss: false },
   {
     ...base,
     id: 'x2-den-baralai-glint',

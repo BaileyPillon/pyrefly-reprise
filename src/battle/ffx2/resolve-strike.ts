@@ -51,6 +51,7 @@ import type { StatusOutcome, StatusResult } from './kernel/statusTypes.ts';
 import { afterRevive, applyHpDelta, heal, type ResolveContext } from './resolve-hp.ts';
 import { applyStatusResult, rollEngineRiders } from './resolve-status.ts';
 import { applyBribeReward, applyPilferGil, applyStealItem, type TheftEnv } from './steal.ts';
+import { noteResult } from './results-tally.ts';
 
 /** What the caller of `resolveAbility` hands the strikes beyond the ability. */
 export interface StrikeOptions {
@@ -157,6 +158,7 @@ function strike(env: Env, target: Ffx2Unit): number {
     }
     return 0;
   }
+  noteResult(user, target); // the game's reaction entry runs once per result applied (`results-tally.ts`)
 
   // --- the status rolls: every status with a chance byte, group 1 then group 2 ---------------------------------
   const petrified = has(target, 'petrify');
@@ -368,6 +370,7 @@ export function runStrikes(
         });
         env.index += 1;
         ctx.onResult?.(target, user, ability); // a miss or a no-effect is one result for the whole command (AI-FFX2-b)
+        noteResult(user, target); // a miss resolves every remaining strike on the target at once: one result
         continue;
       }
       done[i] = (done[i] ?? 0) + 1;

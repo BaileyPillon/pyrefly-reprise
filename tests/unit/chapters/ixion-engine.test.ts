@@ -8,8 +8,8 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEvent } from '../../../src/battle/common/types.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
 import { aiScriptFor, registerAiScript } from '../../../src/battle/ffx2/ai/index.ts';
-import { AC, AC_TRIGGER_FLAG } from '../../../src/battle/ffx2/ai/fallen-aeons.ts';
-import { IXION_HAMMER_NEXT, IXION_RECHARGE_TRIGGER, IXION_SPLIT_FLAG, IXION_STEP } from '../../../src/battle/ffx2/ai/ixion.ts';
+import { AC } from '../../../src/battle/ffx2/ai/fallen-aeons.ts';
+import { IXION_HAMMER_NEXT, IXION_RECHARGE_TRIGGER, IXION_STEP } from '../../../src/battle/ffx2/ai/ixion.ts';
 import { aiHarness, aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import { mem, setMem, type Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
@@ -105,55 +105,51 @@ describe('the counter and the tell (research §4.2)', () => {
     expect(picks[15]).toBe('x2-ixion-recharge');
     expect(picks[16]).toBe('x2-ixion-thors-hammer');
     expect(acs[16]).toBe(0);
-    // IX-12: the cycle restarts at step 1 after the Hammer, our estimate.
+    // The Hammer leaves the cycle counter alone (I2); the 15th poll was an Aerospark, so the counter was 0 and the next poll is step 1.
     expect(['x2-ixion-attack', 'x2-ixion-thundara']).toContain(picks[17]);
     expect(h.emitted.filter((e) => e.type === 'script-trigger' && (e as { name: string }).name === IXION_RECHARGE_TRIGGER)).toHaveLength(1);
   });
 
-  it('+5 every time the party aims at him (FA8 a); landed damage only under the Chapter XI switch (FA8 b)', () => {
+  it('+5 for every RESULT another character applies to him (re-parity AI lane C, "game-script parity"; replaces FA8 a), nothing for the old per-action hooks', () => {
+    // m166.src:125-132: the reaction entry runs once per result applied; each landing strike, one for a miss and one for a no-effect
+    // result count, his own Recharge and any tick do not (`results-tally.ts`). The per-action FA8 a hooks (`onTargeted`, `onDamaged`)
+    // and the Chapter XI switch are not what the script does and he no longer has them.
     const self = ixionUnit();
     const h = aiHarness(self, [], 'x2-ixion');
     const script = aiScriptFor('x2-ixion');
-    script.onTargeted!(h.ctx, 'rikku');
-    script.onDamaged!(h.ctx, 'rikku', 500);
+    expect([script.onTargeted, script.onDamaged]).toEqual([undefined, undefined]);
+    script.onResults!(h.ctx, { count: 1, lastAttackerId: 'rikku' });
     expect(mem(self, AC)).toBe(5);
-    h.flags[AC_TRIGGER_FLAG] = 'damaged';
-    script.onTargeted!(h.ctx, 'rikku');
-    script.onDamaged!(h.ctx, 'rikku', 0);
-    expect(mem(self, AC)).toBe(5);
-    script.onDamaged!(h.ctx, 'rikku', 500);
-    expect(mem(self, AC)).toBe(10);
+    script.onResults!(h.ctx, { count: 3, lastAttackerId: 'rikku' }); // a three-hit action that lands
+    expect(mem(self, AC)).toBe(20);
   });
 
-  it('at 100 the next action is Recharge, whatever the cycle step; the one after is the Hammer', () => {
+  it('at 100 the next action is Recharge, whatever the cycle step; the one after is the Hammer, which leaves the cycle where it was (I2)', () => {
     const self = ixionUnit();
     const h = aiHarness(self, [], 'x2-ixion');
     setMem(self, IXION_STEP, 2);
     setMem(self, AC, 95);
-    aiScriptFor('x2-ixion').onTargeted!(h.ctx, 'paine');
+    aiScriptFor('x2-ixion').onResults!(h.ctx, { count: 1, lastAttackerId: 'paine' });
     expect(h.run(2)).toEqual(['x2-ixion-recharge', 'x2-ixion-thors-hammer']);
-    expect([mem(self, AC), mem(self, IXION_HAMMER_NEXT), mem(self, IXION_STEP)]).toEqual([0, 0, 0]);
+    // The Hammer zeroes AC and the energy flag but not the cycle counter: the Aerospark that was next is still next (the earlier
+    // build restarted the cycle at step 1, "our estimate", IX-12; the script answers it).
+    expect([mem(self, AC), mem(self, IXION_HAMMER_NEXT), mem(self, IXION_STEP)]).toEqual([0, 0, 2]);
+    expect(h.run(1)).toEqual(['x2-ixion-aerospark']);
   });
 
-  it('F-8: 3/4 : 1/4 by default (our estimate); the wiki\'s 2/3 : 1/3 behind the bench flag', () => {
-    const count = (wiki: boolean): number => {
-      const self = ixionUnit();
-      const h = aiHarness(self, [], 'x2-ixion', 11);
-      if (wiki) h.flags[IXION_SPLIT_FLAG] = 'wiki';
-      let thundara = 0, free = 0;
-      for (let i = 0; i < 3000; i++) {
-        setMem(self, AC, 0);
-        const id = h.run(1)[0];
-        if (id === 'x2-ixion-aerospark') continue;
-        free += 1;
-        if (id === 'x2-ixion-thundara') thundara += 1;
-      }
-      return thundara / free;
-    };
-    expect(count(false)).toBeGreaterThan(0.22);
-    expect(count(false)).toBeLessThan(0.28);
-    expect(count(true)).toBeGreaterThan(0.3);
-    expect(count(true)).toBeLessThan(0.37);
+  it('F-8: 3 Attack to 1 Thundara (`random() % 4`), the split of the script itself; the wiki 2 to 1 is not in the game', () => {
+    const self = ixionUnit();
+    const h = aiHarness(self, [], 'x2-ixion', 11);
+    let thundara = 0, free = 0;
+    for (let i = 0; i < 3000; i++) {
+      setMem(self, AC, 0);
+      const id = h.run(1)[0];
+      if (id === 'x2-ixion-aerospark') continue;
+      free += 1;
+      if (id === 'x2-ixion-thundara') thundara += 1;
+    }
+    expect(thundara / free).toBeGreaterThan(0.22);
+    expect(thundara / free).toBeLessThan(0.28);
   });
 });
 
@@ -238,7 +234,7 @@ describe('resolution in the FFX-2 engine', () => {
     expect(JSON.stringify(driveIxion('naive', 1).log)).not.toBe(JSON.stringify(driveIxion('naive', 2).log));
   });
 
-  it('in the engine, the party\'s actions feed the counter (FA8 a), and he recharges exactly when it reads 100', () => {
+  it('in the engine, the party\'s results feed the counter, and he recharges exactly when it reads 100', () => {
     // Watch the shipped script from inside the engine: the counter as he decides, and what he picks.
     const shipped = aiScriptFor('x2-ixion');
     const seen: Array<{ ac: number; own: number; pending: number; id: string | undefined }> = [];

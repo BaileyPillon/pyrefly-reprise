@@ -291,6 +291,14 @@ export function countersFor(unit: Ffx2Unit): string[] {
   if (script === 'vegnagun-head') {
     out.push('Counts every hit it takes toward Odi et Amo [ffx2-vegnagun §3.4]');
   }
+  // Re-parity AI lane C (FFX-2 only): both counters are the game's, one per RESULT applied to the monster by another
+  // character (a landing strike each; a miss or a no-effect result one), not one per action (`results-tally.ts`).
+  if (script === 'shade-baralai') {
+    out.push('Counts every result the party applies to him (each landing strike, a miss or a no-effect hit once); at 8 his next move is a Drill Shot at whoever hit him last [re-ffx2-ai-leblanc-den-ixion §4.2]');
+  }
+  if (script === 'x2-ixion') {
+    out.push('His action counter gains 5 for every result the party applies to him (a two-hit command that lands is 10, a miss 5) and 5 (Attack, Thundara) or 10 (Aerospark) for those moves of his own; at 100 he charges Recharge, then Thor’s Hammer, and it resets [re-ffx2-ai-leblanc-den-ixion §5]');
+  }
   return out;
 }
 

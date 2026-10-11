@@ -353,9 +353,13 @@ describe('A3 — the lose verifier', () => {
     expect(wonAt).toEqual(['D 1500 seed 15']);
   }, 600_000);
 
-  it('at D = 0 it no longer loses on every seed — recorded, not hidden (22 of 40 seeds win after W3; 8 of the first 12 after W4)', () => {
+  // **Re-parity AI lane C (FFX-2 only; reason "game-script parity").** With the Syndicate on the game's own scripts and stat rows the careless line
+  // wins 1 of the first 12 seeds at D = 0 (it won 9 of 12 under the W3 kernels and 0 of 12 before): Logos' Russian Roulette now comes on every
+  // fourth turn of Act II, Acts I and II hit harder and act faster (Ormi Act I Strength 80 and Agility 63, Logos Act II Agility 90), and No Love
+  // Lost no longer takes a step of Leblanc's cycle. Recorded, not hidden.
+  it('at D = 0 careless mashing wins few seeds: recorded, not hidden (1 of the first 12 under the scripts of the game)', () => {
     const wins = SEEDS.slice(0, 12).filter((seed) => runChain(seed, 0, careless).outcome === 'victory').length;
-    expect(wins).toBeGreaterThanOrEqual(5);
+    expect(wins).toBeLessThanOrEqual(3);
     console.log(`careless mashing, the whole mission at D = 0: ${wins}/12 wins`);
   }, 300_000);
 

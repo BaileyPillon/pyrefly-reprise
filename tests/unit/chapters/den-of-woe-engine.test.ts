@@ -72,11 +72,11 @@ describe('data, carried from research §3 (rule 6)', () => {
     for (const id of ['x2-den-gippal-bullseye', 'x2-den-gippal-potion-plus', 'x2-den-gippal-flash-bomb', 'x2-den-gippal-hush-grenade',
       'x2-den-baralai-looming-glacier', 'x2-den-baralai-drill-shot', 'x2-den-baralai-absorb', 'x2-den-baralai-silence',
       'x2-den-baralai-regen', 'x2-den-baralai-not-so-mighty-guard', 'x2-den-nooj-rippling-chroma', 'x2-den-nooj-greedy-aura',
-      'x2-den-nooj-lightfall']) {
+      'x2-den-nooj-lightfall', 'x2-den-baralai-triple-attack']) { // Re-parity AI lane C: Chain Attack (row 0x4100) never rolls to hit
       expect(ability(id).canMiss, id).toBe(false);
     }
     for (const id of ['x2-den-gippal-attack', 'x2-den-gippal-grinder', 'x2-den-gippal-mortar', 'x2-den-baralai-attack',
-      'x2-den-baralai-triple-attack', 'x2-den-baralai-glint', 'x2-den-nooj-attack']) {
+      'x2-den-baralai-glint', 'x2-den-nooj-attack']) {
       expect(ability(id).canMiss, id).not.toBe(false);
       expect(ability(id).damageType, id).toBe('physical');
     }

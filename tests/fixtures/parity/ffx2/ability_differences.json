@@ -77,7 +77,7 @@
   "x2-den-baralai-not-so-mighty-guard": ["recovery 70->80","cast 0->120"],
   "x2-den-baralai-regen": ["recovery 70->0","cast 0->60"],
   "x2-den-baralai-silence": ["recovery 70->60","cast 0->60"],
-  "x2-den-baralai-triple-attack": ["rolls true->false","crit true->false","recovery 70->0"],
+  "x2-den-baralai-triple-attack": ["recovery 70->0"],
   "x2-den-gippal-attack": ["recovery 70->100"],
   "x2-den-gippal-bullseye": ["recovery 70->0","cast 0->120"],
   "x2-den-gippal-flash-bomb": ["recovery 70->0","cast 0->80"],
