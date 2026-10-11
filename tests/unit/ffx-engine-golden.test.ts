@@ -229,13 +229,22 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * One outcome moved, on a seed nobody tuned: seymour-anima-macalania#7 victory -> defeat; the other 17 keep theirs. One seed is one sample: the 500-seed rates before and after, and the proof
  * that the Chapter VII move is a block of seeds and not a bias (the old generator on the same 500 seeds gives the old 488; seeds 501 to 1500 give 959 against 949), are in
  * docs/handoff/re-parity-rng.md. Nothing on the bosses or the party was tuned. The old values are in git history (the commit before the one that moved them).
+ * ONE digest re-baselined 2026-10-11 by RC4 lane L3 (branch re-parity-rc4-items; FFX only; item reactions, FFX-G02 sections 3.8 and 3.9): braskas-final-aeon#1
+ * (80341e61 fd35d884 628979be d2d251bc 85cfdf48 cbdfb079 e8f733d0 -> 4d93d0d0 96867650 eb8b7a8a 88ef63f8 3c10c054 4e0e8bde 2cb442aa), seven victories before and after; the
+ * other 17 digests are byte for byte what they were (braskas-final-aeon#7 included). Cause, event by event: the logs of link 1 are identical for 617 events and differ at the
+ * turn Jecht Beam lands Petrify on Auron (Tetra Bracer, Auto-Med). The old engine answered it at once with a Remedy (its Auto-Med list cured Petrify, Sleep, Confuse, Berserk,
+ * Slow and Curse as well as the four statuses the game names) and spent TWO Remedies for it; the game's Auto-Med answers only a Poison, Zombie, Darkness or Silence that the
+ * hit newly inflicted, so it does nothing here and the line's own Soft (Lulu) cures the Petrify on her turn. Links 2 to 7 follow because the chain carries each member's HP and
+ * bag on. Proved by putting the lane's Overdrive files (abilities.ts, overdriveShape.ts) back: the digests are the same new values, so lane B moves none of the 18 (no golden line
+ * sends Slice and Dice or a Fury at two enemies), and by putting the item-reaction files back: the other 17 pass and braskas-final-aeon#1 returns to the old digests above.
+ * Nothing on the boss or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd362acf6:victory',
   'seymour-flux#7': '9f8aaa5c:victory',
   'yunalesca#1': 'c694ec20:victory',
   'yunalesca#7': 'a99a90c3:victory',
-  'braskas-final-aeon#1': '80341e61:victory fd35d884:victory 628979be:victory d2d251bc:victory 85cfdf48:victory cbdfb079:victory e8f733d0:victory',
+  'braskas-final-aeon#1': '4d93d0d0:victory 96867650:victory eb8b7a8a:victory 88ef63f8:victory 3c10c054:victory 4e0e8bde:victory 2cb442aa:victory',
   'braskas-final-aeon#7': '84b8e5bd:victory 5049f58d:victory 558cd084:victory 6986be3f:victory 7d0914af:victory 86167c51:victory 8553b383:victory',
   'seymour-anima-macalania#1': '7ef9b368:victory',
   'seymour-anima-macalania#7': '29f126ed:defeat',

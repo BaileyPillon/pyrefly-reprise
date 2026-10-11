@@ -148,7 +148,7 @@ export function resolveAbility(
   // An Overdrive that plans its hits over the targets before the result takes some away: the plan is made now, the picks and the removal
   // drawing on the game's streams (5 and 16), the hits then land target by target.
   const plan =
-    perHitRandom && !aimed && options.spreadHits !== undefined && options.spreadHits >= hitCount && targets[0] !== undefined
+    perHitRandom && !aimed && options.spreadHits !== undefined && options.spreadHits >= hitCount && hitCount > 0 && targets[0] !== undefined
       ? planSpreadHits(ctx, user, def, targets[0], options.spreadHits, hitCount)
       : undefined;
 

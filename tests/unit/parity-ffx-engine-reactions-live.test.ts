@@ -12,6 +12,7 @@ import { describe, expect, it } from 'vitest';
 import { makeRng } from '../../src/battle/common/rng.ts';
 import type { AbilityDef, FFXCombatant } from '../../src/battle/common/types.ts';
 import { resolveAbility } from '../../src/battle/ffx/abilities.ts';
+import { cloneCtx } from '../../src/battle/ffx/intent.ts';
 import { runItemReactions } from '../../src/battle/ffx/engine-end.ts';
 import { type Ctx } from '../../src/battle/ffx/state.ts';
 import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
@@ -170,6 +171,14 @@ describe('Auto-Phoenix through a real death (FFX-G02 3.8)', () => {
     expect((b.byId.get('yuna') as FFXCombatant).alive).toBe(true);
     expect(bagOf(b, 'phoenix-down')).toBe(3);
   });
+  it('a victim whose Auto-Life cannot raise him (noRevive) still counts as having Auto-Life: nobody is sent with a Phoenix Down', () => {
+    const b = board([member('tidus', { wears: wears('phoenix') }), member('yuna', { hp: 30, autoLife: true })], { 'phoenix-down': 3 });
+    (b.byId.get('yuna') as FFXCombatant).flags.noRevive = true;
+    fire(b, wound(60), ['yuna']);
+    expect((b.byId.get('yuna') as FFXCombatant).alive).toBe(false);
+    expect(reactions(b)).toEqual([]);
+    expect(bagOf(b, 'phoenix-down')).toBe(3); // the death check found Auto-Life and never asked Auto-Phoenix
+  });
   it('the wearer who dies in the same blow cannot rescue (its queued record is cancelled; the Phoenix Down is lost)', () => {
     // the AoE-like case: Tidus (wearer) and Yuna both fall in one action; Yuna is checked first, Tidus (alive then) is queued to raise her, then Tidus dies
     const b = board([member('tidus', { wears: wears('phoenix'), hp: 30 }), member('yuna', { hp: 30 })], { 'phoenix-down': 3 });
@@ -179,6 +188,39 @@ describe('Auto-Phoenix through a real death (FFX-G02 3.8)', () => {
     expect(reactions(b)).toEqual([]);
     expect((b.byId.get('yuna') as FFXCombatant).alive).toBe(false);
     expect(bagOf(b, 'phoenix-down')).toBe(2); // paid when queued, lost with the rescuer
+  });
+});
+
+describe('a dry run on a copy of the battle cannot queue into the battle', () => {
+  it('cloneCtx copies the queued reactions and the death marks', () => {
+    const b = board([member('auron', { wears: wears('med') }), member('tidus')], { antidote: 3 });
+    fire(b, poison, ['auron']); // runs the reaction: the list is empty afterwards
+    b.ctx.rt.itemReactions = [{ kind: 'auto-med', userId: 'auron', targetId: 'auron', itemId: 'antidote', priority: 0x11, lost: false }];
+    b.ctx.rt.reactionDeaths = new Set(['tidus']);
+    const { ctx: copy } = cloneCtx(b.ctx);
+    copy.rt.itemReactions?.push({ kind: 'auto-potion', userId: 'tidus', targetId: 'tidus', itemId: 'potion', priority: 0x21, lost: false });
+    copy.rt.itemReactions?.[0] && (copy.rt.itemReactions[0].lost = true);
+    copy.rt.reactionDeaths?.add('auron');
+    expect(b.ctx.rt.itemReactions?.length).toBe(1);
+    expect(b.ctx.rt.itemReactions?.[0]?.lost).toBe(false);
+    expect([...(b.ctx.rt.reactionDeaths ?? [])]).toEqual(['tidus']);
+  });
+});
+
+describe('reactions that set off reactions end', () => {
+  it('a Zombie who wears Auto-Potion drinks until the potions kill him, then stops (each potion hurts him and asks for the next)', () => {
+    const d = damageOf(wound(30));
+    const b = board([member('auron', { wears: wears('potion'), hp: 1000 + Math.floor(d / 2) }), member('tidus')], { potion: 99 });
+    const c = b.byId.get('auron') as FFXCombatant;
+    c.statuses['zombie'] = { id: 'zombie', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    fire(b, wound(30), ['auron']);
+    const drunk = reactions(b).filter((r) => r.cause === 'auto-potion').length;
+    expect(drunk).toBeGreaterThan(1); // the chain ran
+    expect(c.alive).toBe(false); // and ended with his death, not with the cap
+    expect(drunk).toBeLessThan(62);
+    // one potion was queued by the blow that killed him and lost: paid, never used
+    expect(99 - bagOf(b, 'potion')).toBeGreaterThanOrEqual(drunk);
+    expect(b.ctx.rt.itemReactions?.length ?? 0).toBe(0);
   });
 });
 

@@ -227,6 +227,12 @@ describe('B5: a result takes hits away from a plan made over all the targets', (
     expect(one.byStream.get(5)).toBeUndefined(); // no pick is drawn under two candidates
     expect(one.byStream.get(16)?.length).toBe(7); // 16 - 9
   });
+  it('a Fury with no casts plans nothing: no hit, no pick, no removal draw', () => {
+    const got = engineHits(FURY, fury(0), 'lulu', 3, 55);
+    expect(got.hits).toEqual([0, 0, 0]);
+    expect(got.byStream.get(16)).toBeUndefined();
+    expect(got.byStream.get(5)?.length ?? 0).toBeLessThanOrEqual(1); // at most the one pick the action names its first target with
+  });
   it('Demi and Ultima Fury (every enemy, not random) give every enemy the casts, with no pick and no removal draw', () => {
     for (const id of ['demi-fury', 'ultima-fury']) {
       const got = engineHits(LULU2[id] as AbilityDef, fury(5), 'lulu', 3, 91);
@@ -249,4 +255,42 @@ describe('B5: a result takes hits away from a plan made over all the targets', (
       expect(differing).toBeGreaterThanOrEqual(atLeast);
     });
   }
+});
+
+describe('B1 end to end: Banishing Blade through the engine\'s own path', () => {
+  const blade = AURON['banishing-blade'] as AbilityDef;
+  const clean: MinigameResult = { kind: 'auron-sequence', sequence: { success: true, correctInputs: 7, timeRemainingMs: 0 } };
+  /** One clean Banishing Blade at a lone enemy that carries the Breaks in `carried` and is immune (255) to those in `immune`: the row it takes and the Breaks that land. */
+  function strike(carried: number[], immune: number[]): { power: number | undefined; breaks: string[]; damaged: boolean } {
+    const b = board('tidus', 1, 4242);
+    const foe = b.foes[0] as FFXCombatant;
+    for (const k of carried) foe.statuses[BREAK_IDS[k] as StatusId] = { id: BREAK_IDS[k] as StatusId, turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    for (const k of immune) foe.immunities[BREAK_IDS[k] as StatusId] = 255;
+    const shaped = shapeOverdrive(b.ctx, b.user, blade, clean);
+    const row = shaped.options.rowFor?.(foe);
+    resolveAbility(b.ctx, b.user, shaped.def, [foe.id], shaped.options);
+    const log = b.ctx.state.log;
+    return {
+      power: row?.power,
+      breaks: log.flatMap((e) => (e.type === 'status-add' ? [e.status] : [])),
+      damaged: log.some((e) => e.type === 'damage' && e.amount > 0),
+    };
+  }
+  it('every Break carried, or each one carried or immune: the (Immune) row (30 DmgCon for 28), and no Break is inflicted', () => {
+    expect(strike([], []).power).toBeUndefined(); // a plain target takes the success row and all four Breaks
+    expect(strike([], []).breaks.length).toBe(4);
+    for (const [carried, immune] of [[[0, 1, 2, 3], []], [[0, 1], [2, 3]], [[0], [1, 2, 3]], [[], [0, 1, 2, 3]]] as Array<[number[], number[]]>) {
+      const got = strike(carried, immune);
+      expect(got.power, `carried ${carried} immune ${immune}`).toBe(30);
+      expect(got.damaged).toBe(true);
+      expect(got.breaks).toEqual([]);
+    }
+  });
+  it('one Break still landing is enough for the success row (28 DmgCon): the others are carried or immune and only the rest land', () => {
+    for (const [carried, immune, lands] of [[[], [0], 3], [[2], [], 3], [[0], [1], 2], [[0, 1], [2], 1], [[0, 1, 2], [], 1]] as Array<[number[], number[], number]>) {
+      const got = strike(carried, immune);
+      expect(got.power, `carried ${carried} immune ${immune}`).toBeUndefined();
+      expect(got.breaks.length, `carried ${carried} immune ${immune}`).toBe(lands);
+    }
+  });
 });
