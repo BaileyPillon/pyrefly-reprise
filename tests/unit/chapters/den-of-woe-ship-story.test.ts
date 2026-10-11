@@ -82,26 +82,34 @@ describe('the story, on paper', () => {
 
 describe('the triggers, by running the engine (the intended line, bench speed)', () => {
   it('Baralai: his entrance once; the count-seven callout once, before his first Drill Shot', () => {
+    // Re-parity AI lane C (FFX-2 only; reason "game-script parity"): his burst counter counts RESULTS (each landing strike, one per miss,
+    // never his own Regen tick; m176.src:246-253), where the earlier build counted party actions and Regen payouts. The intended line
+    // kills him in about six big hits, so it no longer reaches seven; the callout and the Drill Shot are met by a line that hits
+    // him many times (all-out Darkness with no healer), which is what the game's counter rewards.
+    // RC3 (FFX-2 only): re-parity W4's gauge made the same point from the other side (the intended line has him down in about five of his turns); the
+    // slow credibly wrong line (magic into Baralai) is played as well, and the count-seven callout is proved on whichever of the three lines reaches it.
     let calls = 0;
-    for (const seed of SEEDS) {
-      let log: readonly BattleEvent[] = [];
-      driveLink(DEN_BARALAI, LINES.intended, seed, { triggers: S.mid, inspect: (e) => (log = e.state().log) });
-      const names = fired(log);
-      expect(names.filter((n) => n === 'baralai-entrance'), `seed ${seed}`).toHaveLength(1);
-      const count = names.filter((n) => n === BARALAI_COUNT_SEVEN).length;
-      expect(count, `seed ${seed}`).toBeLessThanOrEqual(1);
-      const drills = started(log, 'x2-den-baralai-drill-shot');
-      if (drills > 0) expect(count, `seed ${seed}`).toBe(1);
-      if (count) {
-        calls++;
-        const at = log.findIndex((e) => e.type === 'script-trigger' && (e as { name: string }).name === BARALAI_COUNT_SEVEN);
-        const firstDrill = log.findIndex((e) => e.type === 'action-start' && (e as { abilityId?: string }).abilityId === 'x2-den-baralai-drill-shot');
-        if (firstDrill >= 0) expect(at, `seed ${seed}`).toBeLessThan(firstDrill);
+    for (const line of [LINES.intended, LINES.magic, LINES.allOut]) {
+      for (const seed of SEEDS) {
+        let log: readonly BattleEvent[] = [];
+        driveLink(DEN_BARALAI, line, seed, { triggers: S.mid, inspect: (e) => (log = e.state().log) });
+        const names = fired(log);
+        expect(names.filter((n) => n === 'baralai-entrance'), `seed ${seed}`).toHaveLength(1);
+        const count = names.filter((n) => n === BARALAI_COUNT_SEVEN).length;
+        expect(count, `seed ${seed}`).toBeLessThanOrEqual(1);
+        const drills = started(log, 'x2-den-baralai-drill-shot');
+        if (drills > 0) expect(count, `seed ${seed}`).toBe(1);
+        if (count) {
+          calls++;
+          const at = log.findIndex((e) => e.type === 'script-trigger' && (e as { name: string }).name === BARALAI_COUNT_SEVEN);
+          const firstDrill = log.findIndex((e) => e.type === 'action-start' && (e as { abilityId?: string }).abilityId === 'x2-den-baralai-drill-shot');
+          if (firstDrill >= 0) expect(at, `seed ${seed}`).toBeLessThan(firstDrill);
+        }
       }
     }
     expect(calls).toBeGreaterThan(0);
     expect(DRILL_SHOT_AT - 1).toBe(7);
-    console.info(`[den story] Baralai: the count-seven callout in ${calls}/${SEEDS.length}`);
+    console.info(`[den story] Baralai: the count-seven callout in ${calls}/${SEEDS.length * 3}`);
   });
 
   it("Gippal: his entrance once; below a third once when he crosses it; the first Mortar's line once", () => {

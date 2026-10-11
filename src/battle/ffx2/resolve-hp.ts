@@ -4,23 +4,29 @@
  * `resolve.ts` as a pure move (critic PR-0083 / F3; house rule 7). FFX-2 only.
  */
 
-import type { BattleState, CombatantId, Rng } from '../common/types.ts';
+import type { AbilityDef, BattleState, CombatantId, Rng } from '../common/types.ts';
 import type { AbilityRegistry, Emit, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { breakChain } from './chain.ts';
 import { applyStatus, removeStatus } from './statuses.ts';
 import { AUTO_LIFE_REVIVE_FRACTION } from './constants.ts';
+import { statusWord1 } from './adapt/words.ts';
+import { resetGaugeOnKo } from './atb-engine.ts';
+import { hasAutoLife } from './kernel/status-timers-set.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
   abilities: AbilityRegistry;
   rng: Rng;
   emit: Emit;
+  /** A result was applied to `target` by `source`'s command `ability` (AI-FFX2-b): the engine hands it to the target's script `onResult`. Absent in unit fixtures. */
+  onResult?(target: Ffx2Unit, source: Ffx2Unit, ability: AbilityDef): void;
   breaksDamageLimit(unit: Ffx2Unit): boolean; // per girl: an accessory or a Garment Grid gate
-  timedAilmentDefaults?: boolean; // `EnemyGroupDef.timedAilmentDefaults` (`statuses.ts`, Chapter XIII)
   immuneHitsSkipChain?: boolean; // IC-1's switch: no longer read (the game's chain counter rises only on a positive HP hit)
   namedTargetsOnly?: boolean; // `extra.namedTargetsOnly` rows; absent = `constants.ts` NAMED_TARGETS_ONLY
   state?: BattleState; // the battle's flags: a stolen item goes to `inventory:<id>`, stolen gil to `stolenGil` (`steal.ts`)
   items?: ItemRegistry; // item names for the steal message
+  /** A hit's Delay damage closed this unit's open command menu (`apply_atb_damage`, re-parity W4); the engine drops the menu. */
+  onMenuClosed?(unit: Ffx2Unit): void;
 }
 
 /**
@@ -46,7 +52,12 @@ export function applyHpDelta(
   }
   if (!wasAlive) return;
 
-  if (target.statuses['auto-life']) {
+  // The knock-out routine runs first (`pp_ko_resolve`): the command in flight is dropped and the gauge is the whole standard
+  // wait, which a revived unit then pays (`MsChrAtbInit(chr, 1, -1)`, one draw).
+  resetGaugeOnKo(target, ctx.units, () => ctx.rng.int(0, 63));
+
+  // Auto-Life (`pp_has_auto_life`): dead, not a character that leaves on death, Auto-Life on, and not ejected.
+  if (hasAutoLife(true, false, statusWord1(target))) {
     removeStatus(target, 'auto-life');
     removeStatus(target, 'ko'); // a Death status that landed in the same hit is undone with the life it was spent on
     ctx.emit({ type: 'status-remove', targetId: target.id, status: 'auto-life', reason: 'consumed' });

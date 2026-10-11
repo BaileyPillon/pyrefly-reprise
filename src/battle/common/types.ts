@@ -310,12 +310,14 @@ export type FFXStatusId =
  * x1.25 not x1.5, Regen is ~3% max HP per tick, Auto-Life revives at 25%.
  * Engines must never share status *logic* across games, only the ids.
  *
- * Duration model: X-2 stores an integer `durationValue`; wall-clock seconds are
- * `durationValue * 0.53` at the default Normal ATB speed, scaled x2.0 while
- * Slow and x0.95 while Haste [ffx2-combat-core §2.8]. Store that as
- * {@link StatusInstance.ticksRemaining}. Statuses flagged `Infinite` in the
+ * Duration model (re-parity W4, the game's own clocks): a timed group 2 status (Shell, Protect, Reflect, Regen, Haste, Slow,
+ * Stop, Doom, the three immunities) holds a counter of 1 to 125 that loses one count for every 1,500 units (10,000 for
+ * Doom) its owner's speed banks ({@link StatusInstance.counter}), about 0.53 s a count at the Normal ATB speed, and a
+ * Slowed owner banks half as fast; Sleep, Confusion and Berserk hold a timer of 150,000 / 200,000 / 200,000 units that falls by
+ * the owner's raw speed ({@link StatusInstance.ticksRemaining}). Statuses flagged `Infinite` in the
  * source tables (Poison, Darkness, Silence, Petrify, Curse, Pointless, Itchy,
- * Auto-Life, Spellspring, every Up/Down stack) have no expiry at all.
+ * Auto-Life, Spellspring, every Up/Down stack) have no expiry at all. The hidden `delay-effect` and `action-cancel`
+ * are no longer statuses the engine rolls: a Delay is the command row's ATB damage class, a cancel its cancel chance.
  *
  * Persists after battle (the only four): `darkness`, `ko`, `petrify`, `poison`,
  * `pointless`, `silence`. Everything else is cleared on victory.
@@ -407,11 +409,19 @@ export interface StatusInstance {
    */
   turnsRemaining: number | null;
   /**
-   * FFX-2: remaining duration in ATB ticks (3000 ticks = 1 s at the default
-   * Normal speed). `null` = infinite. Unused by the FFX engine.
-   * [ffx2-combat-core §1.2, §2.8]
+   * FFX-2: remaining duration in the game's units (re-parity W4; one logic step takes 95 units at the Normal ATB speed).
+   * A group 1 timed status (Sleep, Confusion, Berserk): the timer, 150,000 or 200,000 when it lands. A group 2 timed status:
+   * `counter * 1,500 - accumulator` (Doom 10,000 a count). `null` = infinite. Unused by the FFX engine.
+   * [ffx2-combat-core §2.8; research/re-ffx2-atb-status.md section 6]
    */
   ticksRemaining: number | null;
+  /**
+   * FFX-2 (re-parity W4): a group 2 timed status' counter (`Chr+0x4b4+i`), 1 to 125. It loses one count for every 1,500
+   * units (10,000 for Doom) the owner's speed banks. Absent for every other status.
+   */
+  counter?: number;
+  /** FFX-2 (re-parity W4): the units banked toward the next count (`Chr+0x4cc+2i`, a signed 16-bit number). */
+  accumulator?: number;
   /**
    * Remaining charges, for the four Nul statuses. 1 by default; the SOS-Nul
    * auto-abilities are modelled as `permanent: true` instead of a high charge
@@ -1083,20 +1093,22 @@ export interface FFXGuestSpec {
 // ---------------------------------------------------------------------------
 
 /**
- * ATB gauge state [ffx2-combat-core §1.1–1.4].
+ * ATB gauge state [ffx2-combat-core §1.1–1.4; re-parity W4, FFX-2 only].
  *
- * The decoded model: `ticks = floor(10000 * value / (agility + 1))`, consumed at
- * a fixed **3000 ticks/second** (x0.5 under Slow, x1.05 under Haste). We ship
- * the **bar-LENGTH reading**: Agility shortens the runway, the fill rate is
- * global. One drawn bar is `TICKS_PER_BAR` = 24 000 ticks = 8.00 s.
+ * Since re-parity W4 the gauge is the GAME's: a down-counter in the game's own units (`research/re-ffx2-atb-status.md`).
+ * After a command ends, `recovery = cost_atb * 10000 / (agility + 1)` of that command's row; the counter falls by the
+ * character's speed (Slow 70, Normal 95, Fast 120 units a LOGIC STEP; Haste x21/20; Slow /2; halved in a hit reaction)
+ * and the character is ready once it is at or below 0. A logic step is 1/29.97 s (measured on the running game,
+ * `research/re-ffx2-timing-measured.md`). `ticks`, `required` and `gauge` are HUD mirrors of that counter; one drawn bar
+ * is `TICKS_PER_BAR` = 24 000 units.
  */
 export interface AtbState {
   /**
-   * Accumulated ticks toward the current gauge. A command may only be issued
-   * when `ticks >= required`. Range 0–99 840 (the internal 416% ceiling).
+   * HUD mirror: the part of a standard wait (`required`) already paid, `required - max(recovery, 0)` clamped to
+   * `0..required`. A character is READY when the engine's gauge state says so (`isReady`), not by this number.
    */
   ticks: number;
-  /** Ticks needed for this gauge entry: `floor(10000 * value / (agi + 1))`. */
+  /** The standard gauge in units: `floor(10000 * 70 / (agi + 1))` (the Attack row's cost). The HUD draws a bar this long. */
   required: number;
   /** Convenience mirror of `min(1, ticks / required)` scaled to 0–100 for the HUD. */
   gauge: number;
@@ -1104,14 +1116,14 @@ export interface AtbState {
   charging: {
     /** The command that is charging. Re-submitted verbatim when the charge completes. */
     commandRef: Command;
-    /** CTIM ticks left. Delay shortens it; **CTIM cannot be cancelled by Delay**, only by `action-cancel`. */
+    /** Units of the cast time left (`ActionRec+0xa8`); it falls by the caster's full tick. A Delay lengthens it, never cancels it. */
     remainingTicks: number;
-    /** Total CTIM ticks, for drawing the bar. */
+    /** The cast time in units (`ActionRec+0xac`), for drawing the bar. */
     totalTicks: number;
   } | null;
   /**
-   * Recovery ticks owed after execution before the ATB starts refilling again.
-   * `recoveryValue` 70 is the untagged baseline, 140 for `2xRT`.
+   * The recovery counter (`Chr+0x9d8`): units left to wait after the last command ended, or the overshoot of the last
+   * step once it is at or below 0 (a negative number, which only orders characters that become ready in the same step).
    */
   recovery: number;
 }
@@ -1174,7 +1186,7 @@ export interface FFX2Combatant extends Combatant {
   accessories: string[];
   /** Current chain count on this combatant as a *target*, 0–99. Multiplier is `1.40 + 0.05 * chain`. */
   chainCount: number;
-  /** Ticks until the chain window on this target expires. 2 s normally, 3 s after a critical hit. */
+  /** LOGIC STEPS until the chain window on this target expires: 2 s (60 steps) normally, 3 s (90) after a critical hit (re-parity W4; the name is the old tick unit). */
   chainWindowTicks: number;
   /** Present only when `side === 'enemy'`. */
   enemy?: EnemyFields;
@@ -1471,6 +1483,21 @@ export interface FFX2CommandRecord {
   element: number;
   /** `Cmd+0x78`: the species-killer mask. */
   killer: number;
+  /**
+   * `Cmd+0x22`: the ATB cost (re-parity W4). When the command ends, the user's recovery becomes `costAtb * 10000 / (AGI + 1)`
+   * (0 for the party's spells, whose wait is the cast). Always present on a record the game's tables gave us; a record
+   * written without it makes the engine use the ability's own `recoveryTicks`.
+   */
+  costAtb?: number;
+  /**
+   * `Cmd+0x24`: the cast cost (re-parity W4): `costCast * 10000 / (AGI + 1)` units of charge before the command fires. Only a
+   * row whose caster animation is a cast class (2 to 4) charges, so the data layer stores 0 for the one row that is not
+   * (the Alchemist's Mix, a menu stub). Always present on a record the game's tables gave us; a record written without it
+   * makes the engine use the ability's own `chargeTicks`.
+   */
+  costCast?: number;
+  /** `Cmd+0x7a`: the chance, of 100, that a hit of this command cancels the target's cast (`magic_cancel`). Absent means 0 (re-parity W4). */
+  magicCancel?: number;
   /** `Cmd+0x2f`: the group 1 status chance bytes by index (Death 0, Petrify 1, Sleep 2, Silence 3, Darkness 4, Poison 5, Confusion 6, Berserk 7, Curse 8, Defense 9, Eject 10...); an absent index is 0. */
   status1?: Readonly<Record<number, number>>;
   /** `Cmd+0x47`: the group 2 status chance bytes by index (Shell 0, Protect 1, Reflect 2, Regen 3, Haste 4, Slow 5, Stop 6, the seven stat stages 7 to 13, Doom 14...). */
@@ -1798,6 +1825,13 @@ export interface AbilityCommand {
    * `ActionRec+0xb0`). Omitted, a Bribe offers nothing and the game's rule makes it miss.
    */
   gilSpent?: number;
+  /**
+   * FFX-2 only (re-parity AI-FFX2-b): a scripted command that names its targets exactly. The game queues an enemy's command with
+   * a target mask of the characters its script named, whatever group the row can reach, so an all-party row copied "at the
+   * attacker alone" (the Oversoul Paragon's answer) hits only the girl named in `targets`. Omitted, the row's own targeting
+   * decides, as before; no other script sets it.
+   */
+  exactTargets?: boolean;
 }
 
 /** Use an item from the Item (or Use) menu. */
@@ -2381,7 +2415,7 @@ export interface BattleResult {
   outcome: 'victory' | 'defeat' | 'escape';
   /** Turns taken, 1-based count of `turn-start` events. */
   turns: number;
-  /** FFX: total CTB ticks elapsed. FFX-2: total ATB ticks (3000 = 1 s). */
+  /** FFX: total CTB ticks elapsed. FFX-2: total LOGIC STEPS (29.97 = 1 s; re-parity W4, it was 3000 ticks a second). */
   elapsedTicks: number;
   /** Wall-clock battle length in milliseconds, for the best-time record in `SaveData`. */
   elapsedMs: number;
@@ -2489,7 +2523,7 @@ export interface BattleState {
   turn: number;
   /**
    * Tick clock. FFX: total CTB ticks elapsed (normalised after each action).
-   * FFX-2: total ATB ticks, 3000 per second at the default speed.
+   * FFX-2: total LOGIC STEPS, 29.97 a second at every speed (re-parity W4; it was ATB ticks, 3000 a second).
    */
   ticks: number;
   /** Every event emitted so far, in order. `log[i].seq === i`. */
@@ -2952,8 +2986,8 @@ export interface EnemyGroupDef {
   plate?: string;
   /** FFX-2: the party enters with its statuses and worn dressphere, not only HP and MP (Trema); FFX too, statuses only (Sin links 2 and 3; CONTRACT-CHANGES). */
   carriesPartyState?: boolean;
-  timedAilmentDefaults?: boolean; // FFX-2: a duration-0 ailment row lasts §2.8's default, not until cured (Chapter XIII; CONTRACT-CHANGES)
-  actionTimeSeconds?: number; // FFX-2: seconds an action takes before its actor's gauge refills, an [estimate] (E4, `battle/ffx2/action-time.ts`; CONTRACT-CHANGES)
+  timedAilmentDefaults?: boolean; // FFX-2: NO LONGER READ (re-parity W4): the game's rows and clocks time every ailment (Sleep, Confusion, Berserk by timer, Stop and Slow by the row's counter)
+  actionTimeSeconds?: number; // FFX-2: seconds an action takes before its actor's recovery begins, an [estimate] (E4, `battle/ffx2/action-time.ts`; CONTRACT-CHANGES)
   /**
    * FFX-2: a chained link that the source makes a **separate battle** (Chapter VI's Acts II and III,
    * with puzzles and scenes between them), so its bars open at randomised fills (§1.6, `[single

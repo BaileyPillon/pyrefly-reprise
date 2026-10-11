@@ -138,8 +138,8 @@ describe('Wait + split under an open menu (chapter 4, seed 7)', () => {
 describe("Bailey's report: a chosen skill plays out while the next girl's top list is open", () => {
   /**
    * Find the moment he describes: a girl confirms a charged command and the
-   * very next decision is another girl's menu. Then give that menu 3 s on its
-   * top list.
+   * very next decision is another girl's menu. Then give that menu 6 s on its
+   * top list (3 s before re-parity W4).
    */
   function reportMoment(split: boolean): { charger: string; resolvedUnderMenu: boolean } | null {
     for (let seed = 1; seed <= 12; seed++) {
@@ -155,7 +155,9 @@ describe("Bailey's report: a chosen skill plays out while the next girl's top li
         if (!started || finished || next.kind !== 'player-input' || next.actorId === d.actorId) continue;
         engine.setMenuLevel('top');
         const from = engine.state().log.length;
-        for (let k = 0; k < 60; k++) engine.tick(50, { throughInput: true });
+        // Re-parity W4: a cast takes the game's length now (a 70-cost spell at Agility 73 is 100 steps, 3.3 s), so the second girl's top list
+        // is given 6 s, not 3: long enough for any cast of the chapter to come due.
+        for (let k = 0; k < 120; k++) engine.tick(50, { throughInput: true });
         const after = engine.state().log.slice(from);
         return { charger: d.actorId, resolvedUnderMenu: after.some((e) => e.type === 'action-end' && e.actorId === d.actorId) };
       }

@@ -42,6 +42,7 @@ import { ffx2EngineOptions, registerBattleContent } from '../../../src/app/scree
 import { findEnemyGroup, setupForChapter, setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS, CHAPTER_IDS, type Chapter } from '../../../src/data/encounters.ts';
 import type { AdvisorOptions } from '../../../src/engine/tactics/advisor.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 
 /** The house human pace for FFX-2 (see the module note). */
 export const HUMAN_PACE = { topMs: 500, heldMs: 1000 } as const;
@@ -90,7 +91,7 @@ export interface RunResult {
   refused: number;
   /** Decisions the driver answered with nothing and the fallback pressed. */
   fallbacks: number;
-  /** Game minutes (FFX-2 ticks / 3000 / 60; 0 for FFX). */
+  /** Game minutes (FFX-2 ticks / STEPS_PER_SECOND / 60; 0 for FFX). */
   minutes: number;
   /** Length of the final link's log, for the purity check. */
   finalLogLength: number;
@@ -178,7 +179,7 @@ export async function runChapter(chapter: Chapter, seed: number, driver: Driver)
     if (d.kind === 'resolved') continue;
     if (d.kind === 'battle-over') {
       out.outcome = d.result.outcome;
-      if (x2) out.minutes += engine.state().ticks / 3000 / 60;
+      if (x2) out.minutes += engine.state().ticks / STEPS_PER_SECOND / 60;
       out.finalLogLength = engine.state().log.length;
       out.finalLogDigest = digest(engine.state().log);
       if (out.outcome !== 'victory') break;

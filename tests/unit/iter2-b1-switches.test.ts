@@ -52,18 +52,15 @@ describe('PR-0106: the Leblanc script switch (FFX-2, Chapter VI)', () => {
     expect(LEBLANC_SCRIPT_SINIROTHX).toBe(true);
   });
 
-  it('OFF keeps the AUTHORED reading exactly: guard on turn 5, and every turn past 25 + uses', () => {
-    const picks = leblancTurns(40, false);
-    expect(picks[4]).toBe(GUARD);
-    expect(picks.slice(29, 34)).toEqual([GUARD, GUARD, GUARD, GUARD, GUARD]);
-  });
-
-  it('ON, SinirothX turn 5 is Fan Slap on a random girl (§19.3)', () => {
-    const picks = leblancTurns(12, true);
+  it('the switch is no longer read (re-parity AI lane C, reason "game-script parity"): the script of the game is the SinirothX reading, so OFF and ON play the same commands', () => {
+    // m253.src:151-163 casts Not-So-Mighty Guard on her first command and when the Guard counter reaches 25, never else; the wiki reading the OFF
+    // arm kept (a Guard on turn 5, then on every turn past 25 + uses) is not what the script does, so the arm is gone and the option is a dead
+    // switch like IC-1 (`Ffx2EngineOptions.leblancScriptSinirothX` stays so the older benches compile).
+    expect(leblancTurns(60, false)).toEqual(leblancTurns(60, true));
+    const picks = leblancTurns(12, false);
     expect(picks[0]).toBe(GUARD);
     expect(picks[1]).toBe('x2-leblanc-fan-slap');
-    expect(picks[4]).toBe('x2-leblanc-fan-slap');
-    expect(picks[9]).toBe('x2-leblanc-fan-slap'); // turn 10 = step 5 of the second loop
+    expect(picks[4]).not.toBe(GUARD); // turn 5 is the cycle's third step; No Love Lost on command 3 takes none of the cycle's steps
   });
 
   it('ON, the failsafe guard fires once, on turn 25 + uses: 29 with both henchmen (§19.2)', () => {

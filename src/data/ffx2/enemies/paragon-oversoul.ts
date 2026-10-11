@@ -191,6 +191,7 @@ export const paragonOversoul: EnemyDef = {
     'paragon-os-attack', 'paragon-os-judgement', 'paragon-genesis', 'paragon-big-bang', 'paragon-os-final-impact',
     'paragon-os-demi', 'paragon-os-firaga', 'paragon-os-blizzaga', 'paragon-os-thundaga', 'paragon-os-waterga',
     'paragon-os-holy', 'paragon-os-ultima', 'paragon-os-dispel',
+    'x2-shared-osmose', // the MP-0 branch's Osmose (row 0x317b, on this monster's own command list); a party ability, the same row
   ],
   // Our words over §12.2 (it waits, then answers in kind); not a game line.
   sensorText: 'It does nothing until you touch it. Then it gives back exactly what it was given.',

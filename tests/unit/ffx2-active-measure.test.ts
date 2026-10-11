@@ -38,7 +38,7 @@ import {
   dressphereRegistryFrom,
   garmentGridRegistryFrom,
   itemRegistryFrom,
-  ATB_SPEED_MULTIPLIER,
+  STEPS_PER_SECOND,
 } from '../../src/battle/ffx2/index.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
@@ -174,8 +174,8 @@ function runLink(engine: FFX2Engine, decisionMs: number, tally: Tally): string |
   }
 
   scoreEvents(tally, engine.state().log.slice(from), enemyIds);
-  // Real seconds: game ticks over the Config rate (§1.2).
-  tally.seconds += engine.state().ticks / 3000 / ATB_SPEED_MULTIPLIER[SPEED];
+  // Real seconds: logic steps at 29.97 a second, at every Config speed (re-parity W4: Fast takes more off each gauge per step, it does not run the clock faster).
+  tally.seconds += engine.state().ticks / STEPS_PER_SECOND;
   return outcome;
 }
 

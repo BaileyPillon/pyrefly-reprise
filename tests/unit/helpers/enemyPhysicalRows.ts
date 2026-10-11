@@ -83,6 +83,9 @@ export const PHYSICAL_BY_CHAPTER: Record<string, string[]> = {
   ],
   'ffx2-trema': [
     'paragon:paragon-os-attack',
+    // Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity", row O5): the Oversoul's Final Impact carries the physical damage bit in the game's
+    // row (0x41c4), so Protect halves it, and the pose follows the row: it draws the attack painting when the Oversoul has one, else cast as before.
+    'paragon:paragon-os-final-impact',
     'trema:trema-dying-star',
     'trema:trema-falling-leaf',
     'trema:trema-thundering-wave',

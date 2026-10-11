@@ -8,30 +8,35 @@
  * recommendation), or keep it as is"); the engine option `menuCancelOnlyDelayAbilities: false`
  * replays release 17's rule for measuring. **FFX-2 only** (AGENTS.md rule 14).
  *
- * Proven on the real engine (rule 3): with the option `false`, the logs are byte-identical to the
- * build before the switch existed (hashes taken from `d0d53cb4`); by default (on) they are the logs
- * re-pinned on 2026-09-26, Bahamut's plain hit leaves the menu open, and a sourced Delay ability
- * (Chapter VI) still closes it.
+ * Proven on the real engine (rule 3): by default (on) the logs are the ones pinned below, Bahamut's plain
+ * hit leaves the menu open, and a sourced Delay ability (Chapter VI) still closes it.
+ *
+ * **Re-parity W4 (2026-10-10; FFX-2 only, reason "game-code parity").** The switch, its option and `menu-cancel.ts` are deleted. The engine
+ * now applies the game's own rule (`apply_atb_damage`, exe 0x0061b620; `research/re-ffx2-atb-status.md`): a hit of the ATB class (Delay)
+ * pushes the target's gauge back and closes the menu it had open; no other hit does. That is the correction this file was written to
+ * pin, now not an option but the engine. What is gone with it: the "carriesMenuCancel reads the rows" block (the helper lives in
+ * `helpers/ffx2MenuCancel.ts`, for tests only), the `MENU_CANCEL_ONLY_DELAY_ABILITIES` pin, and the release-17 replay (the option is
+ * no longer read, the 18 hashes of it are not reproducible and are not kept). The 18 hashes of the default are re-pinned: the whole
+ * clock moved (the logic step, the game's recovery and cast times).
  */
 
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, BattleEvent, CombatantId, Decision, EnemyGroupDef } from '../../src/battle/common/types.ts';
 import { FFX2Engine, defaultAbilities } from '../../src/battle/ffx2/index.ts';
-import { MENU_CANCEL_ONLY_DELAY_ABILITIES } from '../../src/battle/ffx2/constants.ts';
-import { ActingAbilities, carriesMenuCancel } from '../../src/battle/ffx2/menu-cancel.ts';
 import type { Ffx2EngineOptions } from '../../src/battle/ffx2/internal.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_CHAIN_ORDER } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { driveChapter4, driveChapter5, driveChapter6, ffx2Options, logHash } from './helpers/ffx2ChapterDrive.ts';
+import { ActingAbilities, carriesMenuCancel } from './helpers/ffx2MenuCancel.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
 const ability = (id: string): AbilityDef | undefined =>
   (data.ABILITIES as Record<string, AbilityDef>)[id] ?? defaultAbilities.get(id);
 
-describe('carriesMenuCancel reads the sourced rows (no row is flagged here)', () => {
+describe('the test helper reads the sourced rows (no row is flagged here)', () => {
   it('the FFX-2 chapters\' Delay abilities carry it: Supercollider, Huggles, Mach Fan (Leblanc §4), Vita Brevis (Vegnagun §3.2)', () => {
     for (const id of ['x2-ormi-supercollider', 'x2-ormi-huggles', 'x2-leblanc-mach-fan', 'vita-brevis']) {
       expect(ability(id), id).toBeDefined();
@@ -57,63 +62,32 @@ describe('carriesMenuCancel reads the sourced rows (no row is flagged here)', ()
   });
 });
 
-describe('the default is ON; the option `false` replays release 17\'s logs, byte for byte', () => {
-  // Release 17's rule, from `d0d53cb4` (one row re-pinned for PR-0145, below), before the switch existed (`ffx2ChapterDrive`, human pace:
-  // Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the top list).
-  // **Re-pinned 2026-10-09 for re-parity W3 (FFX-2 only; reason "game-code parity").** The kernels decide every hit in the game's draw order,
-  // so every log moved, and `immuneHitsSkipChain: false` is no longer read (the game's chain byte rises only on a positive HP number, so an
-  // immune hit never opens a chain). These eighteen are therefore NOT release 17's logs any more: they are the current engine with the
-  // three release-17 options forced off (any damaging hit closes an open menu), pinned so that rule stays reproducible and distinct from the
-  // default. The old hashes are in git at 029d49c7. Chapter VI's split run of seed 3 moved once more (here and in ON below) when the monster
-  // rows by fight went in (`FFX2MonsterRecord.commands`: Ormi's Concussive Shock, power 4, in the first room; the Fem-Goon's own Attack row).
-  // **Chapter IV's six hashes (here and in ON below) were re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use
-  // 14 from the files"; the first event that differs is Bahamut's first Mega Flare damage, see `ffx2-atb-golden.test.ts`, ninth re-pin); the
-  // old ones are in git at 3663cd3a. Chapters V and VI did not move.
-  const PINNED: Record<string, string> = {
-    'IV|active|1': 'b69f4a3f1b9b6b0a', 'IV|split|1': 'eef141fb06ebe8cc',
-    'IV|active|2': '00b9babadbd69165', 'IV|split|2': '274ca68e176eacb7',
-    'IV|active|3': 'cf097303e237c157', 'IV|split|3': '9adf489e36ac32b5',
-    'V|active|1': '9cfe461ad465c311', 'V|split|1': '437c85e81ea08054',
-    'V|active|2': 'e7b90b74c53c5a16', 'V|split|2': '94119b09f8fb5da3',
-    'V|active|3': 'b84d244db178ad3e', 'V|split|3': 'e70d65bbd193fc3d',
-    'VI|active|1': '12d69326e68d09f2', 'VI|split|1': 'cd51b9dbeab47115',
-    'VI|active|2': '0eff8835d726e853', 'VI|split|2': '66d3ab577d1b1bcc',
-    'VI|active|3': 'b2cfa25eb31ec05a', 'VI|split|3': '6a75d9deb02fa7cf',
-  };
-  // Switch on (the default since 2026-09-26), recorded on branch `r20-menu-cancel` the same way; re-pinned 2026-10-09 for re-parity W3
-  // (same cause as above; old hashes at 029d49c7).
-  // All eighteen differ from release 17's: at human pace a plain hit lands on an open menu in each of
-  // these runs. `ffx2-atb-golden.test.ts` holds the matching Active re-pin (same first two per chapter).
+describe('the engine plays the game\'s rule: any hit of the ATB class closes a menu, no other does (pinned logs)', () => {
+  // The default's logs, Chapters IV to VI at human pace (`ffx2ChapterDrive`, Active 1.5 s a menu, and the Wait split 1.5 s / 0.5 s on the
+  // top list), seeds 1 to 3. **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
+  // Against W4 alone the first differing event is Bahamut's first Curse (Chapter IV), the Tail's first turn 9 steps earlier or a gauge snapshot
+  // (Chapter V) and the opening snapshot or the first Ormi / goon turn (Chapter VI, lane c's stat rows); the split rows follow the same events.
+  // **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity")**: the clock is the game's
+  // logic step and a command leaves the game's recovery and cast, so every log moved. The 18 before it were pinned 2026-10-09 for W3
+  // (old hashes in git at 931613a8; the release-17 replay rows that stood beside them are gone with the option).
   const ON: Record<string, string> = {
-    'IV|active|1': '9d0cc3eb2f311ebd', 'IV|split|1': '11409ed21ed0de22',
-    'IV|active|2': 'a6512b1f55386411', 'IV|split|2': 'a7f0ad20ed99bb4d',
-    'IV|active|3': 'eb36f5accfb59945', 'IV|split|3': '528f12fc8ccb5fc8',
-    'V|active|1': 'fe7ab95d0fbae673', 'V|split|1': '88e40db9940ac6e0',
-    'V|active|2': '086e107f235fc649', 'V|split|2': 'a621da560e50e1e9',
-    'V|active|3': '0e5f385c8dca4fa7', 'V|split|3': 'ec68335b5d29e5b9',
-    'VI|active|1': 'a77a0b4b1dcba113', 'VI|split|1': 'ca1c8bcd80dbf334',
-    'VI|active|2': '55c7f457cfc62c2a', 'VI|split|2': 'cad662e72aec12e9',
-    'VI|active|3': 'a4912c4e9de351d3', 'VI|split|3': '7c5a4a6680191cd7',
+    'IV|active|1': '7855b868b648c063', 'IV|split|1': '18c492669a1cee98',
+    'IV|active|2': 'f5623d596fabcad2', 'IV|split|2': 'c8dd8c09b30714a3',
+    'IV|active|3': '16ec70377e31a9ab', 'IV|split|3': '2be8db622676d872',
+    'V|active|1': 'ee98b37f2dbe9e0e', 'V|split|1': 'be67bc323cafba72',
+    'V|active|2': '0f28a08877f50773', 'V|split|2': '6390648ae2a7dfa5',
+    'V|active|3': '6a64f438b0073f8a', 'V|split|3': 'cfc887a14433a303',
+    'VI|active|1': '2b71fb0033710a0c', 'VI|split|1': '64ad3870203d2ce7',
+    'VI|active|2': '551288af1fd74ffb', 'VI|split|2': '78d80ec78a6f249b',
+    'VI|active|3': '15dbf59402b6f312', 'VI|split|3': '3046ec12c9073d95',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 
-  it('the switch ships ON (Bailey, 2026-09-26)', () => {
-    expect(MENU_CANCEL_ONLY_DELAY_ABILITIES).toBe(true);
-  });
-
-  it('Chapters IV, V and VI at human pace: `false` plays release 17\'s rule (any damaging hit closes a menu); the default and `true` play the re-pinned ones', () => {
+  it('Chapters IV, V and VI at human pace replay the pinned logs, byte for byte', () => {
     for (const [name, drive] of Object.entries(DRIVES)) {
       for (let seed = 1; seed <= 3; seed++) {
-        // Release 17 also predates D-242 (2026-09-27): IC-1 and PR-0106 were off, so they are forced off here.
-        const r17 = { menuCancelOnlyDelayAbilities: false, immuneHitsSkipChain: false, leblancScriptSinirothX: false };
-        expect(logHash(drive(seed, 1500, { atbMode: 'active', ...r17 })), `${name} active ${seed} r17`).toBe(PINNED[`${name}|active|${seed}`]);
-        expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true, ...r17 }, undefined, 500)), `${name} split ${seed} r17`).toBe(PINNED[`${name}|split|${seed}`]);
-        for (const on of [{}, { menuCancelOnlyDelayAbilities: true }] as Array<Partial<Ffx2EngineOptions>>) {
-          expect(logHash(drive(seed, 1500, { atbMode: 'active', ...on })), `${name} active ${seed}`).toBe(ON[`${name}|active|${seed}`]);
-          expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true, ...on }, undefined, 500)), `${name} split ${seed}`).toBe(ON[`${name}|split|${seed}`]);
-        }
-        expect(ON[`${name}|active|${seed}`]).not.toBe(PINNED[`${name}|active|${seed}`]);
-        expect(ON[`${name}|split|${seed}`]).not.toBe(PINNED[`${name}|split|${seed}`]);
+        expect(logHash(drive(seed, 1500, { atbMode: 'active' })), `${name} active ${seed}`).toBe(ON[`${name}|active|${seed}`]);
+        expect(logHash(drive(seed, 1500, { atbMode: 'wait', waitSplit: true }, undefined, 500)), `${name} split ${seed}`).toBe(ON[`${name}|split|${seed}`]);
       }
     }
   }, 120_000);
@@ -162,12 +136,12 @@ function hitsUnderMenu(engine: FFX2Engine, owner: CombatantId, ms: number): Land
   return landed;
 }
 
-describe('switch on: a plain hit leaves the menu open, a Delay ability closes it (Active)', () => {
+describe('a plain hit leaves the menu open, a Delay ability closes it (Active)', () => {
   it('Chapter IV: Bahamut\'s hits land on the owner and her menu stays open', () => {
     const group = data.ENEMY_GROUPS_BY_ID['ffx2-bahamut']!;
     let plain = 0;
     for (let seed = 1; seed <= 10; seed++) {
-      const { engine, menu } = engineAt(group, bevelleBuild, seed, { atbMode: 'active', menuCancelOnlyDelayAbilities: true });
+      const { engine, menu } = engineAt(group, bevelleBuild, seed, { atbMode: 'active' });
       for (const hit of hitsUnderMenu(engine, menu.actorId, 30_000)) {
         expect(anyDelay(hit), `seed ${seed}: ${hit.abilities.join(', ')}`).toBe(false);
         expect(hit.closedAfter, `seed ${seed}: ${hit.abilities.join(', ')} closed the menu`).toBe(false);
@@ -175,11 +149,6 @@ describe('switch on: a plain hit leaves the menu open, a Delay ability closes it
       }
     }
     expect(plain, 'no Bahamut hit landed under an open menu').toBeGreaterThan(0);
-
-    // The same seed with the option `false`: release 17's rule closes on the first such hit.
-    const { engine, menu } = engineAt(group, bevelleBuild, 1, { atbMode: 'active', menuCancelOnlyDelayAbilities: false });
-    const off = hitsUnderMenu(engine, menu.actorId, 30_000);
-    expect(off.some((h) => h.closedAfter)).toBe(true);
   });
 
   it('Chapter VI: a Delay ability that lands on the owner closes her menu; a plain one does not', () => {
@@ -188,7 +157,7 @@ describe('switch on: a plain hit leaves the menu open, a Delay ability closes it
     for (const groupId of LEBLANC_CHAIN_ORDER) {
       const group = data.ENEMY_GROUPS_BY_ID[groupId]!;
       for (let seed = 1; seed <= 40; seed++) {
-        const { engine, menu } = engineAt(group, chateauBuild, seed, { atbMode: 'active', menuCancelOnlyDelayAbilities: true });
+        const { engine, menu } = engineAt(group, chateauBuild, seed, { atbMode: 'active' });
         for (const hit of hitsUnderMenu(engine, menu.actorId, 60_000)) {
           const delay = anyDelay(hit);
           expect(hit.closedAfter, `${groupId} seed ${seed}: ${hit.abilities.join(', ')}`).toBe(delay);

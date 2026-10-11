@@ -35,6 +35,7 @@ import { driveChain as driveRoad, LINES as ROAD } from './helpers/fallenAeonsDri
 import { driveChapter as driveTrema, LINES as TREMA } from './helpers/tremaDrive.ts';
 import { FFX2_TREMA } from '../../src/data/chapter-ffx2-trema.ts';
 import type { FFX2PartyBuild } from '../../src/battle/common/types.ts';
+import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const SEEDS = Number(process.env['ENGINE_FIX_SEEDS'] ?? 200);
@@ -117,7 +118,7 @@ describe.skipIf(!MEASURE)('IC-1 / IC-2: every FFX-2 chapter, bench and human Wai
             const r = drive(seed, speed, extra);
             if (r.outcome === 'victory') wins += 1;
             if (r.outcome === undefined) unfinished += 1;
-            minutes += r.ticks / 3000 / 60;
+            minutes += r.ticks / STEPS_PER_SECOND / 60;
             const key = `${name}|${speed.name}|${arm}|${seed}`;
             const h = hashOf(r);
             hashes[key] = h;

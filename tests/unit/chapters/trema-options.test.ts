@@ -13,7 +13,7 @@ import { SeededRng } from '../../../src/battle/common/rng.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import {
-  ACTION_TIME_ALL_FFX2, ACTION_TIME_ESTIMATE_SECONDS, ACTION_TIME_FLAG, actionTimeSeconds, actionTimeTicks,
+  ACTION_TIME_ALL_FFX2, ACTION_TIME_ESTIMATE_SECONDS, ACTION_TIME_FLAG, actionTimeSeconds, actionTimeSteps,
 } from '../../../src/battle/ffx2/action-time.ts';
 import { aiScriptFor, aiScriptIds } from '../../../src/battle/ffx2/ai/index.ts';
 import { tremaArenaScript, tremaScript } from '../../../src/battle/ffx2/ai/trema.ts';
@@ -83,9 +83,10 @@ describe('the shipped pick: Oversoul Paragon with Split_Infinity\'s kit, and 3 s
     expect(board('trema').engine.state().flags[ACTION_TIME_FLAG]).toBe(3);
   });
 
-  it('only Oversoul Paragon answers party actions (`onPartyAction`), so no other log moves', () => {
+  it('only the normal Paragon answers party actions (`onPartyAction`: Big Bang, TR12 b), so no other log moves', () => {
+    // AI-FFX2-b: the Oversoul answers on its next poll from the reaction entry now, and Big Bang's trigger needs the hook for results that deal no damage.
     const answering = aiScriptIds().filter((id) => aiScriptFor(id).onPartyAction !== undefined);
-    expect(answering).toEqual(['paragon-oversoul']);
+    expect(answering).toEqual(['paragon']);
   });
 });
 
@@ -112,7 +113,7 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     expect(actionTimeSeconds(undefined, { [ACTION_TIME_FLAG]: 2 })).toBe(2);
     expect(actionTimeSeconds(3, { [ACTION_TIME_FLAG]: 2 })).toBe(3);
     expect(actionTimeSeconds(0, { [ACTION_TIME_FLAG]: 2 })).toBe(0);
-    expect(actionTimeTicks(1.5, {})).toBe(4500); // 3,000 ticks a second at Normal (§1.2)
+    expect(actionTimeSteps(1.5, {})).toBe(45); // 29.97 logic steps a second at every speed (re-parity W4): round(1.5 x 29.97)
     expect(ACTION_TIME_ESTIMATE_SECONDS).toBe(1.5);
   });
 
@@ -121,18 +122,18 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     const on = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 1.5 }, 4);
     const gaps = (s: number[]) => s.slice(1).map((t, i) => t - (s[i] ?? 0));
     expect(off).toHaveLength(4);
-    for (const [i, g] of gaps(on).entries()) expect(Math.abs(g - (gaps(off)[i] ?? 0) - 4500)).toBeLessThanOrEqual(1);
+    for (const [i, g] of gaps(on).entries()) expect(Math.abs(g - (gaps(off)[i] ?? 0) - 45)).toBeLessThanOrEqual(1); // 1.5 s = 45 logic steps
   });
 
   it('the formation\'s value turns it on for that battle alone, and the engine option wins', () => {
     const group = { ...cloisterTremaGroup, actionTimeSeconds: 2 };
     const b = tremaTurns(group, {}, 3);
     const off = tremaTurns(cloisterTremaGroup, { actionTimeSeconds: 0 }, 3);
-    expect(Math.abs((b[1]! - b[0]!) - (off[1]! - off[0]!) - 6000)).toBeLessThanOrEqual(1);
+    expect(Math.abs((b[1]! - b[0]!) - (off[1]! - off[0]!) - 60)).toBeLessThanOrEqual(1); // 2 s = 60 logic steps
     expect(tremaTurns(group, { actionTimeSeconds: 0 }, 3)).toEqual(off);
-    // The shipped formation: 3 s, 9,000 ticks at Normal.
+    // The shipped formation: 3 s, 90 logic steps (the step is the same length at every speed).
     const shipped = tremaTurns(cloisterTremaGroup, {}, 3);
-    expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 9000)).toBeLessThanOrEqual(1);
+    expect(Math.abs((shipped[1]! - shipped[0]!) - (off[1]! - off[0]!) - 90)).toBeLessThanOrEqual(1);
   });
 
   it('other gauges keep filling while it plays out (Active), and the Wait hold stops it too', () => {
@@ -142,20 +143,24 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
       engine.init({ game: 'ffx2', party: viaInfinitoBuild, enemies: cloisterTremaGroup, triggers: [], seed: 3, condition: 'normal', canEscape: false });
       const unit = (id: string) => engine.state().combatants[id] as unknown as Ffx2Unit;
       let d = engine.nextDecision();
-      for (let i = 0; i < 2000 && !(unit('trema').atb.recovery > 0 && d.kind === 'player-input'); i++) {
+      for (let i = 0; i < 2000 && !(unit('trema').gauge.executing > 0 && d.kind === 'player-input'); i++) {
         d.kind === 'waiting' ? engine.tick(d.nextEventMs) : d.kind === 'player-input' ? engine.submit({ kind: 'defend', targets: [] }) : null;
         d = engine.nextDecision();
       }
       expect(d.kind).toBe('player-input'); // a girl's menu is open while Trema's action time runs
-      const owed = unit('trema').atb.recovery;
-      const girl = ['yuna', 'rikku', 'paine'].map(unit).find((u) => u.alive && u.atb.recovery === 0 && u.atb.ticks < u.atb.required && !u.atb.charging);
-      const before = girl?.atb.ticks ?? 0;
+      // Re-parity W4: the action time is the actor's own EXECUTING countdown (logic steps), not extra recovery.
+      const owed = unit('trema').gauge.executing;
+      const girl = ['yuna', 'rikku', 'paine'].map(unit).find((u) => u.alive && u.gauge.state === 1 && u.atb.recovery > 0 && !u.atb.charging);
+      const before = girl?.atb.recovery ?? 0;
+      const t0 = engine.state().ticks;
       engine.tick(100, { throughInput: true });
+      const ran = engine.state().ticks - t0;
       if (mode === 'active') {
-        expect(unit('trema').atb.recovery).toBeCloseTo(owed - 300, 6);
-        if (girl) expect(girl.atb.ticks).toBeGreaterThan(before);
+        expect(ran).toBeGreaterThan(0);
+        expect(unit('trema').gauge.executing).toBe(owed - ran);
+        if (girl) expect(girl.atb.recovery).toBeLessThan(before);
       } else {
-        expect(unit('trema').atb.recovery).toBe(owed); // Wait, whole-menu hold: nothing moves
+        expect(unit('trema').gauge.executing).toBe(owed); // Wait, whole-menu hold: nothing moves
       }
     }
   });
@@ -174,7 +179,9 @@ describe('option 3 (E4): action time, the actor\'s own gauge waits for its actio
     if (!change) throw new Error('no spherechange offered');
     engine.submit(change.command);
     const girl = engine.state().combatants[d.actorId] as unknown as Ffx2Unit;
-    expect(girl.atb.recovery).toBe(0);
+    // The change ends her command with the Attack row's recovery and no action time (re-parity W4: it used to leave the bar at 0).
+    expect(girl.gauge.executing).toBe(0);
+    expect(girl.gauge.state).toBe(0);
   });
 
   it('is deterministic: the same seed gives the same log', () => {
@@ -193,7 +200,7 @@ describe('option 2 (TR1 b): Trema alone, the Fiend Arena block (research §3.3)'
     expect(tremaArena.abilityIds).toContain('trema-arena-beguiling-mire');
     expect(tremaArena.abilityIds).not.toContain('trema-beguiling-mire');
     expect(data.ABILITIES['trema-arena-beguiling-mire']).toMatchObject({ power: 5, hits: 3 });
-    expect(data.ABILITIES['trema-beguiling-mire']).toMatchObject({ power: 4 });
+    expect(data.ABILITIES['trema-beguiling-mire']).toMatchObject({ power: 5 }); // AI-FFX2-b, row T5: one row (0x40d4) in both versions
   });
 
   it('is a first link at full HP and MP: nothing carried, no next link, Stop still wears off', () => {
@@ -208,26 +215,32 @@ describe('option 2 (TR1 b): Trema alone, the Fiend Arena block (research §3.3)'
     expect([t.hp, t.mp]).toEqual([999999, 999]);
   });
 
-  it('rolls Demi 1/6 and Flare 1/12, the rest as story; the story script still rolls 12/3/3/2/2/2', () => {
+  it('rolls Demi 1/6 and Flare 1/12, the rest as story: the game has one decision tree and the story script rolls it too', () => {
+    // AI-FFX2-b (reason "game-script parity", rows T1 and T5): the story script's own 12/3/3/2/2/2 was the FAQ's; m295 and m328 decide alike
+    // (Demi 4/24, Flare 2/24), so both scripts give the same table, differing only in the Mire row each names. The exact tables are
+    // parity-ffx2-ai-trema.test.ts; this keeps the option's own claim on the same scripted draws.
     const tally = (arena: boolean) => {
-      const b = board('trema', 1, arena ? CLOISTER_TREMA_ARENA : undefined);
       const counts: Record<string, number> = {};
       for (let r = 0; r < 24; r++) {
+        const b = board('trema', 1, arena ? CLOISTER_TREMA_ARENA : undefined);
         b.unit('trema').aiMemory = {};
         const ctx = b.ctx('trema');
+        const values = [r < 12 ? 0 : 1, r % 12 < 6 ? 0 : 1, r % 3];
+        let i = 0;
         const rng = new SeededRng(1);
-        Object.assign(rng, { int: (min: number, max: number) => (max === 23 ? r : min), pick: <T>(items: readonly T[]) => items[0] as T });
+        Object.assign(rng, { int: (min: number, max: number) => (max === 0xffff ? (values[i++] ?? 0) : min), pick: <T>(items: readonly T[]) => items[0] as T });
         const id = idOf((arena ? tremaArenaScript : tremaScript).decide({ ...ctx, rng }))!;
         counts[id] = (counts[id] ?? 0) + 1;
       }
       return counts;
     };
-    expect(tally(true)).toEqual({
-      'trema-dying-star': 12, 'trema-demi': 4, 'trema-flare': 2, 'trema-choking-mist': 2, 'trema-arena-beguiling-mire': 2, 'trema-waning-moon': 2,
-    });
-    expect(tally(false)).toEqual({
-      'trema-dying-star': 12, 'trema-demi': 3, 'trema-flare': 3, 'trema-choking-mist': 2, 'trema-beguiling-mire': 2, 'trema-waning-moon': 2,
-    });
+    const arenaCounts = tally(true);
+    const storyCounts = tally(false);
+    expect(Object.values(arenaCounts).reduce((a, n) => a + n, 0)).toBe(24);
+    expect(arenaCounts['trema-dying-star']).toBe(storyCounts['trema-dying-star']);
+    expect(arenaCounts['trema-demi']).toBe(storyCounts['trema-demi']);
+    expect(arenaCounts['trema-flare']).toBe(storyCounts['trema-flare']);
+    expect(arenaCounts['trema-arena-beguiling-mire']).toBe(storyCounts['trema-beguiling-mire']);
   });
 
   it('a whole fight runs to an end through the engine', () => {

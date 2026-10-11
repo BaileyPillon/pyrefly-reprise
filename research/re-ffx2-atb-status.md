@@ -19,7 +19,7 @@ bytes, the party's commands) and `monmagic.bin` (567 rows of 136 bytes, the mons
 `new_uspc` and `jppc` copies of those two files hold identical cost fields. Everything is written in our own words: no game code
 and no game text is reproduced here.
 
-| This note | Kernel (pure TypeScript, not wired into the engine yet) | Tests |
+| This note | Kernel (pure TypeScript; wired into the engine by re-parity W4, 2026-10-10) | Tests |
 |---|---|---|
 | §3 speeds, recovery, thinking, charge, the state machine, the hand-off | `src/battle/ffx2/kernel/atb-clock.ts`, `atb-gauge.ts`, `atb-tick.ts` | `tests/unit/parity-ffx2-atb.test.ts` |
 | §4 battle start (init, first strike, opening trim) | `kernel/atb-start.ts` | same |
@@ -490,6 +490,8 @@ Additions:
 
 ## 8. Where the engine differs today
 
+**Historical since 2026-10-10:** this table describes the engine as it was on 2026-10-08. Re-parity W4 (branch `re-parity`, [docs/handoff/re-parity-w4.md](../docs/handoff/re-parity-w4.md)) wired the kernels in and closed every row but the action time of row 7 (the game plays an effect animation before the command ends; the engine resolves at once, `action-time.ts`).
+
 Measured on 2026-10-08 by running the engine's own functions (`atbTicks`, `baseRequired`, `advanceGauge`, `tickMultiplier`, `chargeTicksFor`, `durationToTicks`,
 `advanceStatuses`) and the kernels on the same inputs (temporary comparison test, archived as
 `D:\Tools\ffx-parity\kernel-check-atb\zz-tmp-ffx2-atb-divergence.test.ts.txt` with its output). Seconds are at the measured 29.97 steps a second (the 2026-10-08 draft gave 30 and 60, written "@30 / @60"; the 60 figures are gone);
@@ -537,3 +539,25 @@ measured rate; the rate no longer blocks wiring them.
 6. The debug switches (VA 0x00df68b8 to 0x00df68bf: skip Delay, freeze a gauge, zero the charge numbers, skip thinking; 0x00df68c6: no charge; and the
    debug-menu and environment-file writers of the base speed, §7) are off in play and not modelled.
 7. Player-side monsters (state 6, the AI request) were not decoded and cannot occur in the five chapters.
+
+## 10. What the engine reads from the command rows (re-parity W4; added 2026-10-10)
+
+Wiring the kernels into the engine needed two numbers of every command the seven chapters can run, which the damage rows of
+[re-ffx2-commands.md](re-ffx2-commands.md) did not carry: the ATB cost (`Cmd+0x22`) and the cast cost (`Cmd+0x24`), plus the byte that decides whether the
+row ever charges at all. They were read from the same Steam files as the rest of the row (`command.bin` for the party's commands and, with
+the item table, for the items; `monmagic.bin` for the monsters'), at the offsets §3 names, for the 205 rows of
+`tests/fixtures/parity/ffx2/command_rows.json` (24 items, 77 party commands, 104 monster commands). The fixture keeps numbers only
+(`costAtb`, `costCast`, `casterAnim`, `charges`); `tests/unit/data-ffx2-command-records.test.ts` pins every command record in the repo against it.
+
+* **Costs.** Every item costs 40 and 40. The party's commands: Attack 70 / 0; the spells 0 / 20 to 160 (Fire, Fira, Firaga 0 / 70 each); Steal 50 / 0; Trigger
+  Happy 120 / 0; the Warrior's four Breaks 0 / 70; the other costs listed in §3.3. The monsters' commands carry both costs on 135 of
+  567 rows (§3.3); of the 104 the chapters use, 29 distinct pairs (100 / 0 and 0 / 70 most often, 100 / 30 and 100 / 120 next). The five Russian
+  Roulette rows are 150 / 100 each, which is why the engine reads the first row's costs before the pick.
+* **Which rows charge.** Section 3.5 says a command of a cast class (2 to 4, chosen by the sequence class of the row) starts a charge. The class comes
+  from the row's caster-animation byte (`Cmd+0x0c`) through the start-of-command switch (`pp_cmd_start`): animations 2, 3, 4 and 0x24 are class 2; 0x15 to
+  0x1c, 0x1f to 0x21 class 2; 0x23, 0x29 and 0x2c to 0x2f class 3; the rest are not cast classes. One row has a cast cost and is not a cast class: the Alchemist's **Mix**
+  (0x3058, cast cost 80, caster animation 0, a menu stub), so its charge is stored as 0. The switch was read once from the disassembly and its table (VA 0x00d4abd8 on the live build) with the harness; it is **not** covered by an
+  emulator vector set like the kernels are, so it is the least proven part of this note.
+* **What a record without them does.** An ability built by the engine itself (the derived rows of `adapt/command.ts`) has no game row: it keeps its own
+  recovery value (70, or 140 for a `2xRT` ability) and its charge tier (16 / 26 / 39, §8 row 7), through the same `value * 10000 / (AGI + 1)`. No
+  command a chapter runs lacks a row since W3 (`tests/unit/data-ffx2-command-records.test.ts` counts them).

@@ -4,7 +4,7 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69). Spec:
  * `research/re-ffx2-atb-status.md` section 4. Pure, deterministic; randomness comes from a `draw(stream)`
- * callback (`./rng.ts`). Not wired into the engine (`ffx2/setup.ts` seeds `floor(required * rand(0, 60) / 100)`).
+ * callback (`./rng.ts`). Wired into the engine by re-parity W4 (`ffx2/atb-open.ts`, `atb-engine.ts`).
  *
  * Exe addresses (live build):
  * - 0x00634700  MsChrAtbInit: the full gauge, the random start, the mode byte

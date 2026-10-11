@@ -23,6 +23,7 @@ import { FFX2_TREMA } from '../../src/data/chapter-ffx2-trema.ts';
 import { driveChapter4, driveChapter5, driveChapter6, logHash } from './helpers/ffx2ChapterDrive.ts';
 import { driveChain, LINES as FA_LINES } from './helpers/fallenAeonsDrive.ts';
 import { driveChapter as driveTrema, LINES as TR_LINES, type DriveOptions as TremaOptions } from './helpers/tremaDrive.ts';
+import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const ONLY = (process.env['HIT_BENCH_ONLY'] ?? 'iv,v,vi,xi,xiii').split(',');
@@ -54,7 +55,7 @@ const ch456 = (drive: typeof driveChapter4) => (arm: ArmId, seed: number): Run =
     arm === 'bench' ? drive(seed, 0, { atbMode: 'wait', waitSplit: true })
     : arm === 'split' ? drive(seed, 1500, { atbMode: 'wait', waitSplit: true }, undefined, 500)
     : drive(seed, 1500, { atbMode: 'active' });
-  return { outcome: r.outcome, seconds: r.ticks / 3000, hash: logHash(r) };
+  return { outcome: r.outcome, seconds: r.ticks / STEPS_PER_SECOND, hash: logHash(r) };
 };
 
 const ch11 = (arm: ArmId, seed: number): Run => {
@@ -63,7 +64,7 @@ const ch11 = (arm: ArmId, seed: number): Run => {
     arm === 'bench' ? driveChain(lines, seed, { engine: { atbMode: 'wait', waitSplit: true } })
     : arm === 'split' ? driveChain(lines, seed, { decisionMs: 1500, topMs: 500, engine: { atbMode: 'wait', waitSplit: true } })
     : driveChain(lines, seed, { decisionMs: 1500, engine: { atbMode: 'active' } });
-  const seconds = r.links.reduce((a, l) => a + l.ticks, 0) / 3000;
+  const seconds = r.links.reduce((a, l) => a + l.ticks, 0) / STEPS_PER_SECOND;
   return { outcome: r.outcome, seconds, hash: `${r.outcome}:${r.links.map((l) => l.ticks).join(',')}` };
 };
 
@@ -76,7 +77,7 @@ const ch13 = (arm: ArmId, seed: number): Run => {
   const r = driveTrema(TR_LINES.kitIntended, seed, opts);
   const h = createHash('sha256');
   for (const l of r.links) h.update(JSON.stringify(l.log));
-  return { outcome: r.outcome, seconds: r.links.reduce((a, l) => a + l.ticks, 0) / 3000, hash: h.digest('hex').slice(0, 16) };
+  return { outcome: r.outcome, seconds: r.links.reduce((a, l) => a + l.ticks, 0) / STEPS_PER_SECOND, hash: h.digest('hex').slice(0, 16) };
 };
 
 const CHAPTERS: Array<{ id: string; name: string; run: (arm: ArmId, seed: number) => Run; seeds: Record<ArmId, number> }> = [

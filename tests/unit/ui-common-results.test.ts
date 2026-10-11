@@ -131,8 +131,8 @@ describe('clearTimeMs', () => {
     expect(formatClearTime(clearTimeMs(ffxResult, undefined, 'ffx'))).not.toBe('0:00');
   });
 
-  it('converts FFX-2 ticks at the exact 3000/s rate', () => {
-    expect(clearTimeMs({ elapsedMs: 0, elapsedTicks: 9_000 }, undefined, 'ffx2')).toBe(3_000);
+  it('converts FFX-2 ticks (logic steps, re-parity W4) at 29.97 a second: 3,000 steps is 100.1 s', () => {
+    expect(clearTimeMs({ elapsedMs: 0, elapsedTicks: 3_000 }, undefined, 'ffx2')).toBe(100_100);
   });
 
   it('ignores the sub-second wall clock of a `speed: skip` automated run', () => {

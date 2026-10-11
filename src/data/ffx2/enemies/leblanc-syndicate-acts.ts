@@ -28,20 +28,19 @@ import { attachMonsterRecords } from '../monster-records/index.ts';
 // Acts I and II. §2
 // ---------------------------------------------------------------------------
 //
-// **AUTHORED, and it is the one place this track had to author beyond the
-// owner's named approvals.** The Act I and Act II records publish only
-// Lv / HP / Def / MDef / Eva [§2]; Str, Mag, Agi, Luck and Accuracy are not
-// published for #220, #221 or #227. Rather than invent five numbers per enemy,
-// each earlier record **carries its own character's published Act III values**
-// for the unpublished fields, and ships the published ones as published. It is
-// the same person a few minutes earlier in the same mission, so it is the
-// smallest invention available — but it is an invention, it is labelled here
-// and in the handoff, and it is recorded as a question for the owner.
+// **Re-parity AI lane C (2026-10-10): these records are the game's own rows** (`monster.bin` rows 243, 244 and 249;
+// `research/re-ffx2-ai-leblanc-den-ixion.md` section 2, rows R1, K1 and K2). The Act I and Act II records used to carry
+// only the published Lv / HP / Def / MDef / Eva [§2] and borrow their Act III character's Str, Mag, Agi and MP; the rows
+// publish all of them, and Acts I and II Ormi and Act II Logos are quicker and (Ormi Act I) stronger than their Act III
+// selves: Agility 63 and 90 where Act III has 42 and 49. Each room also has its own scripts (`../../../battle/ffx2/ai/`):
+// Ormi's Acts I and II have no Concussive Blast, and Logos' Act II has no Hail of Bullets, so their lists do not carry them.
 
-function earlierRecord(
-  base: EnemyDef,
-  over: { id: string; name: string; level: number; hp: number; mp: number; def: number; mdef: number; eva?: number; exp: number; gil: number; slot: number },
-): EnemyDef {
+type EarlierOver = {
+  id: string; name: string; level: number; hp: number; mp: number; str: number; def: number; mag: number; mdef: number;
+  agi: number; eva?: number; exp: number; gil: number; slot: number; aiScriptId: string; abilityIds: string[];
+};
+
+function earlierRecord(base: EnemyDef, over: EarlierOver): EnemyDef {
   // Stolen gil is published for the Act III records only [§3]; the earlier
   // records do not inherit it (their steal tables are the authored carry above).
   const { stolenGil: _act3Only, ...rewards } = base.rewards;
@@ -57,68 +56,49 @@ function earlierRecord(
       ...base.stats,
       hp: over.hp,
       mp: over.mp,
+      str: over.str,
       def: over.def,
+      mag: over.mag,
       mdef: over.mdef,
+      agi: over.agi,
       eva: over.eva ?? base.stats.eva,
     }),
     forms: [{ name: over.name, spriteKey: base.spriteKey, hp: over.hp }],
+    aiScriptId: over.aiScriptId,
+    abilityIds: over.abilityIds,
     rewards: { ...rewards, exp: over.exp, gil: over.gil },
   };
 }
 
 /** Ormi #220 — Act I. Lv 19, 1,640 HP, **Def 120**, **MDef 4** [§2]. */
 const ormiEntrance = earlierRecord(ormiAct3, {
-  id: 'ormi-entrance', name: 'Ormi', level: 19, hp: 1640, mp: 45, def: 120, mdef: 4,
+  id: 'ormi-entrance', name: 'Ormi', level: 19, hp: 1640, mp: 40, str: 80, def: 120, mag: 20, mdef: 4, agi: 63,
   exp: 240, gil: 230, slot: 0, // §13 G9 — the wiki's per-enemy EXP/gil, not zero_six's doubled pair
+  aiScriptId: 'ffx2-leblanc-ormi-act1', abilityIds: ['x2-ormi-shield-bash', 'x2-ormi-supercollider', 'x2-ormi-huggles'],
 });
 
 /** Ormi #221 — Act II. Lv 19, 1,840 HP, **Def 121**, **MDef 8** [§2]. */
 const ormiLogosRoom = earlierRecord(ormiAct3, {
-  id: 'ormi-logos-room', name: 'Ormi', level: 19, hp: 1840, mp: 45, def: 121, mdef: 8,
+  id: 'ormi-logos-room', name: 'Ormi', level: 19, hp: 1840, mp: 42, str: 64, def: 121, mag: 24, mdef: 8, agi: 63,
   exp: 240, gil: 230, slot: 1,
+  aiScriptId: 'ffx2-leblanc-ormi-act2', abilityIds: ['x2-ormi-shield-bash', 'x2-ormi-supercollider', 'x2-ormi-huggles'],
 });
 
 /** Logos #227 — Act II. Lv 20, 1,432 HP, **Def 4**, **Eva 38** [§2]. */
 const logosRoom = earlierRecord(logosAct3, {
-  id: 'logos-room', name: 'Logos', level: 20, hp: 1432, mp: 70, def: 4, mdef: 18, eva: 38,
+  id: 'logos-room', name: 'Logos', level: 20, hp: 1432, mp: 64, str: 16, def: 4, mag: 26, mdef: 14, agi: 90, eva: 38,
   exp: 240, gil: 230, slot: 0,
+  aiScriptId: 'ffx2-leblanc-logos-act2', abilityIds: ['x2-logos-double-shot', 'x2-logos-russian-roulette'],
 });
 
 /**
- * Dr. Goon and Fem-Goon — Act I only. §4.6's table [single source].
+ * Dr. Goon and Fem-Goon — Act I only. §4.6's table [single source] for HP, MP, EXP, gil, steal, drop and ability list.
  *
- * **Verifier finding, fixed here: every stat field now carries its own
- * source note** — "scaled to nothing" named no section and covered fields
- * §4.6 does and does not publish alike. §4.6's table publishes, per enemy,
- * only **HP, MP, EXP, gil, steal, drop and ability list** [§4.6, single
- * source] — there is no Level column and no Str/Def/Mag/MDef/Agi/Luck/Eva
- * column for either goon. Both are immune only to **Curse** and both can be
- * bribed [§4.6].
- *
- * Fields below not in that table are **AUTHORED**, field by field:
- * - `level: 17` — two less than Act I Ormi's published 19 [§2], read as
- *   "rank and file standing beside their captain," not a source.
- * - `str / def / mag / mdef / agi / luck / eva` — no comparable record to
- *   borrow from (unlike Ormi/Logos's earlier acts, which reuse their own
- *   later Act III numbers; §2's earlier-record technique does not apply to
- *   an enemy with only one appearance). Authored low relative to the Act III
- *   trio, matching §4.6's own read that the goons "exist to make Act I's
- *   lesson legible, not to be a threat" (`leblanc-syndicate.ts` ai comment).
- *   Unsourced; a question for the owner alongside N1 in the handoff.
- * - `acc: 0` — see the Accuracy note below; AUTHORED routing, not a
- *   published number, for the Dr. Goon; genuinely unpublished for the
- *   Fem-Goon.
- *
- * **Accuracy.** Dr. Goon's `accuracy` *is* published, at **3** [§5.1] — and
- * that is precisely the value G1 says the hit model cannot digest: a literal 3
- * routes past `ENEMY_BASE_ACCURACY` (which only fires at 0) and gives him a
- * 0 % hit rate, so the Act I goon would never once connect. The record
- * therefore ships `acc: 0` to take the documented fallback, which is an
- * **AUTHORED routing decision, not the published number**, and it is a question
- * for the owner in the handoff. The Fem-Goon's Accuracy is not published at
- * all [§4.6 — absent from the table], so her `acc: 0` takes the same
- * blank-field convention the Syndicate's own six records use [§5.1, G1],
- * not the Dr. Goon's routing decision.
+ * **Re-parity AI lane C (2026-10-10): the level and the stat bytes are the game's rows** (`monster.bin` rows 135 and 138,
+ * `research/re-ffx2-ai-leblanc-den-ixion.md` section 2, rows K1 and K2): Dr. Goon is Lv 14 (Str 35, Def 6, MDef 6, Agi 56),
+ * Fem-Goon Lv 16 with 270 MP (Str 26, Def 5, Mag 8, MDef 10, Luck 4, Agi 62). The earlier build authored them far tougher
+ * (Lv 17, Def 30 and 20) because §4.6 published no such columns; the rows settle that. Both are immune only to **Curse**
+ * and both can be bribed [§4.6]; the steal byte is 255 (always) and Accuracy 95 (`../monster-records/`).
  *
  * The Dr. Goon's **rare steal is a Grenade** — base 200, 187-211 to every enemy
  * (§18 C18.1: the old "base 300" was the Lady Luck reel Primo Grenade). Steal
@@ -130,13 +110,11 @@ const drGoon: EnemyDef = {
   name: 'Dr. Goon',
   spriteKey: 'ffx2-dr-goon',
   slot: 1,
-  // hp/mp [§4.6, single source]; str/def/mag/mdef/agi/luck/eva AUTHORED, no
-  // comparable record — see the file header; acc: 0 is an AUTHORED routing
-  // decision around the published Accuracy 3, not the published number.
-  stats: statsOf({ hp: 232, mp: 41, str: 20, def: 30, mag: 10, mdef: 10, agi: 40, luck: 3, eva: 0, acc: 0 }),
+  // hp/mp [§4.6]; the rest is the game's row 135 (acc is set to 95 by the monster row, `attachMonsterRecords`).
+  stats: statsOf({ hp: 232, mp: 41, str: 35, def: 6, mag: 10, mdef: 6, agi: 56, luck: 3, eva: 0, acc: 0 }),
   hp: 232,
   mp: 41,
-  level: 17, // AUTHORED — see the file header; §4.6 publishes no Level column.
+  level: 14, // the game's row 135 (re-parity AI lane C, K1); §4.6 published no Level column
   affinities: {},
   immunities: { curse: 255 },
   immunityFlags: [],
@@ -167,14 +145,11 @@ const femGoon: EnemyDef = {
   name: 'Fem-Goon',
   spriteKey: 'ffx2-fem-goon',
   slot: 2,
-  // hp/mp [§4.6, single source]; str/def/mag/mdef/agi/luck/eva AUTHORED, no
-  // comparable record — see the file header; acc: 0 is genuinely unpublished
-  // for the Fem-Goon (not the Dr. Goon's routing decision) — the same
-  // blank-field convention as the Syndicate's own six records [§5.1, G1].
-  stats: statsOf({ hp: 167, mp: 172, str: 12, def: 20, mag: 30, mdef: 20, agi: 45, luck: 3, eva: 0, acc: 0 }),
+  // hp/mp [§4.6]; the rest is the game's row 138 (acc is set to 95 by the monster row, `attachMonsterRecords`).
+  stats: statsOf({ hp: 167, mp: 270, str: 26, def: 5, mag: 8, mdef: 10, agi: 62, luck: 4, eva: 0, acc: 0 }),
   hp: 167,
-  mp: 172,
-  level: 17, // AUTHORED — see the file header; §4.6 publishes no Level column.
+  mp: 270,
+  level: 16, // the game's row 138 (re-parity AI lane C, K2); §4.6 published no Level column
   affinities: {},
   immunities: { curse: 255 },
   immunityFlags: [],

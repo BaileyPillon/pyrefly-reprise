@@ -499,12 +499,19 @@ describe('the fight in the real engine', () => {
 });
 
 describe('the chapter through both acts', () => {
-  it('the shipped line wins Act I then Act II on every seed of a small bench, and nobody stays down', () => {
-    for (let seed = 1; seed <= 8; seed++) {
+  it('the shipped line wins Act I on every seed of a small bench and Act II on a share of them; a won chain is two logs', () => {
+    // RC3 (FFX-2 only; reason "game-code parity", re-parity W4's gauges): this said "wins both acts on every one of seeds 1 to 8" on the old clock, where
+    // the shipped line won Act II 35 of 40 on the Wait clock. On the game's logic step and gauges (a spell is a long cast, a command leaves its own
+    // recovery, the Experiment's own rows are unchanged: Rocket Launcher 100/60, Lifeslicer 180/100, Annihilator 100/210) it wins 24 of 40
+    // (tests/unit/chapters/experiment-bench.test.ts prints the table; seeds 1, 3, 6, 8 and 10 are the first five wins), measured, not tuned (D-410). Act I,
+    // the prototype that only strikes, is still won on every seed, so Act II always begins.
+    let wins = 0;
+    for (let seed = 1; seed <= 12; seed++) {
       const r = driveChapterWithTriggers(seed);
-      expect(r.outcome, `seed ${seed}`).toBe('victory');
-      expect(r.logs).toHaveLength(2);
+      expect(r.logs, `seed ${seed}: Act I is won and Act II begins`).toHaveLength(2);
+      if (r.outcome === 'victory') wins++;
     }
+    expect(wins, 'the shipped line still wins Act II on a share of the first twelve seeds (5 measured)').toBeGreaterThanOrEqual(3);
   });
 
   it("the seam trigger fires once, on Act I's fall, and never on Act II's: the bodies' ids differ", () => {

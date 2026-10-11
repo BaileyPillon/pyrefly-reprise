@@ -271,8 +271,10 @@ export function oracleRun(sit: Situation): Run {
       } else if (moved < 0) tokens.push(`mph:${i}:${-moved}`);
     }
     if (result !== undefined) applyBuffers(i, result);
-    // the engine's own statuses without a slot in the tables (Delay, Action-cancel): one landing draw each
+    // the engine's own statuses without a slot in the tables: one landing draw each. Re-parity W4: the hidden Delay effect and
+    // Action-cancel are not among them any more (a Delay is the row's ATB class, a cancel its Cmd+0x7a chance: run by the kernels).
     for (const app of sit.def.statusEffects) {
+      if (app.status === 'delay-effect' || app.status === 'action-cancel') continue;
       const known = G1.includes(app.status) || G2.some((ids2) => ids2.includes(app.status));
       if (!known && Math.round(app.chance) > 0) raw(100);
     }
@@ -298,6 +300,8 @@ export function oracleRun(sit: Situation): Run {
   /** The target dies: the chain breaks and the KO is reported (the engine's `applyHpDelta`). */
   function kill(i: number): void {
     const st = states[i] as OState;
+    // Re-parity W4: the knock-out routine (`pp_ko_resolve`) re-initialises the gauge first, and `MsChrAtbInit` draws once (% 64).
+    raw(63);
     st.dead = true;
     st.hp = 0;
     st.g1 |= 1; // the KO status
@@ -312,10 +316,15 @@ export function oracleRun(sit: Situation): Run {
     const st = states[i] as OState;
     const prevG1 = st.g1;
     const prevStop = st.g2[6] as number;
+    const prevRegen = (st.g2[3] as number) << 24 >> 24;
     const next = r.statusSet >>> 0;
     st.g1 = next & G1_MASK;
     st.g2 = [...r.counters];
     if ((next & 1) !== 0 && (prevG1 & 1) === 0 && !st.dead) kill(i);
+    // Re-parity W4 (`MsSetStatus`, exe 0x00636c70): a Poison (group 1 bit 5) or Regen (group 2 slot 3) that has just appeared starts its
+    // accumulator at a random phase, one draw % (16000 / 4 + 1), group 1 before group 2.
+    if ((next & 0x20) !== 0 && (prevG1 & 0x20) === 0) raw(4000);
+    if (((st.g2[3] as number) << 24 >> 24) > 0 && prevRegen === 0) raw(4000);
     if ((next & 0x400) !== 0 && (prevG1 & 0x400) === 0) st.removed = true;
     // the engine's own rule, which the game's code does not have (`statuses.ts applyStatus`, left for W4): Stop wipes Sleep, Confusion and Berserk
     if (prevStop === 0 && (st.g2[6] as number) !== 0) st.g1 &= ~(0x4 | 0x40 | 0x80);
