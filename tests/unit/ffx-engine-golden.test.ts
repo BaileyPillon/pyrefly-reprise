@@ -229,18 +229,32 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * One outcome moved, on a seed nobody tuned: seymour-anima-macalania#7 victory -> defeat; the other 17 keep theirs. One seed is one sample: the 500-seed rates before and after, and the proof
  * that the Chapter VII move is a block of seeds and not a bias (the old generator on the same 500 seeds gives the old 488; seeds 501 to 1500 give 959 against 949), are in
  * docs/handoff/re-parity-rng.md. Nothing on the bosses or the party was tuned. The old values are in git history (the commit before the one that moved them).
+ * SIX digests re-pinned once 2026-10-11 by RC4 lane FFX-G (branch re-parity-rc4-react; slices G-a and G-b, FFX only; docs/handoff/re-parity-rc4-react.md): the engine builds an action's
+ * targets once, as the game does (src/battle/ffx/target-build.ts: the random spread, Cover, the Reflect bounce) and a Provoked, Berserk or Confused actor's turn is a forced attack
+ * (forced-turn.ts). The other TWELVE are byte for byte what they were, and every outcome is still a victory. Causes, each proved by putting the one rule back and running this file:
+ *  - seymour-flux#1 (d362acf6 -> 33074c0e) and #7 (9f8aaa5c -> c3845a), evrae-airship#1 (e5ecff52 -> f4927a78) and #7 (4740e2ef -> b67a717e): the random spread (G6). The line throws Gems on
+ *    Chapter I (17 and 12 spread actions) and Evrae answers with Photon Spray (7 and 8) and Wakka's Power Shot; a random-target row now deals all its hits over the set first (stream 5,
+ *    a draw only with two or more candidates) and each target runs its hits in a row, where the engine picked a target per hit, interleaved with that hit's own draws. With the old per-hit
+ *    processing put back (a local switch, not committed) these four return to their old values and the other fourteen never move. Evrae's 10 and 22 reflected self-Hastes draw as before.
+ *  - yunalesca#1 (c694ec20 -> eced7435) and #7 (a99a90c3 -> ae1bbe58): the record bit decides what bounces (G2). Hastega reaches the whole party, a Reflecting member turns it back at a random
+ *    enemy, and in Chapter II that is Yunalesca, so the line's opening (Yuna's Reflect, then Tidus's Hastega) hasted her. The shipped line (src/engine/tactics/yunalesca.ts) now holds Yuna's
+ *    Reflect until Tidus's opening Hastega has landed and never casts Hastega through a Reflect. With the bounce put back to the old reading and the old tactic restored, both digests return to
+ *    their old values and the other sixteen never move. Her counters bounce back to her as before (she is the only monster, so "back to the caster" and a random enemy are the same pick).
+ *  - the twelve that did not move build nothing the new rules change: Braska's Final Aeon, Macalania, Omnis and Isaaru have no Guard holder, Reflect holder or multi-hit random row on the
+ *    line; Yojimbo's Daigoro bites are single-hit spreads (one pick, as before); Natus's bounces are same-side ones over the same candidates, drawn on the same stream.
+ * Nothing on the bosses or the party was tuned; one seed is one sample (the 500-seed rates are in docs/handoff/re-parity-rc4-react.md).
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'd362acf6:victory',
-  'seymour-flux#7': '9f8aaa5c:victory',
-  'yunalesca#1': 'c694ec20:victory',
-  'yunalesca#7': 'a99a90c3:victory',
+  'seymour-flux#1': '33074c0e:victory',
+  'seymour-flux#7': 'c3845a:victory',
+  'yunalesca#1': 'eced7435:victory',
+  'yunalesca#7': 'ae1bbe58:victory',
   'braskas-final-aeon#1': '80341e61:victory fd35d884:victory 628979be:victory d2d251bc:victory 85cfdf48:victory cbdfb079:victory e8f733d0:victory',
   'braskas-final-aeon#7': '84b8e5bd:victory 5049f58d:victory 558cd084:victory 6986be3f:victory 7d0914af:victory 86167c51:victory 8553b383:victory',
   'seymour-anima-macalania#1': '7ef9b368:victory',
   'seymour-anima-macalania#7': '29f126ed:defeat',
-  'evrae-airship#1': 'e5ecff52:victory',
-  'evrae-airship#7': '4740e2ef:victory',
+  'evrae-airship#1': 'f4927a78:victory',
+  'evrae-airship#7': 'b67a717e:victory',
   'yojimbo-cavern#1': 'c72bb8ab:victory',
   'yojimbo-cavern#7': '9f40902b:victory',
   'seymour-natus#1': '409993aa:victory',
