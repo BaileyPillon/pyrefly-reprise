@@ -30,6 +30,7 @@ import { PermBit, ResultCounter, type StatusRecord } from './kernel/status-types
 import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
+import { reactToHit } from './adapt/reactions.ts';
 import { gaugeOnHit, gaugeOnOutcome, gaugeTransfer } from './gauge.ts';
 import { runScriptedExtra } from './scripted.ts';
 import { resolveSteal, stealsItem } from './steal.ts';
@@ -188,6 +189,11 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
   const crit = report.crit;
   const step = made.step;
   let skipHp = false;
+  // What Auto-Med and Auto-Potion see of this hit (`adapt/reactions.ts#reactToHit`): the HP before it, the HP damage it dealt, and whether
+  // a physical blow woke a sleeper.
+  const hpBeforeHit = target.hp;
+  let hpDamage = 0;
+  let woke = false;
 
   // The Death bit of the record decides the engine's two Death outcomes. A cleansing command (Life, Full-Life, Phoenix Down)
   // takes it off a dead target (a revival) and puts it ON a Zombie, which kills it [`kernel/status-inflict.ts`, VA 0x0078ae00];
@@ -251,7 +257,9 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
         // 204-turn battle and he never acted again.
         if (def.damageType === 'physical' && has(target, 'sleep')) {
           removeStatus(ctx, target, 'sleep', 'expired');
+          woke = true;
         }
+        hpDamage = hpAmount;
         scope.totalDealt += hpAmount;
         if (hasFlag(def, 'drains')) {
           healOutsideChain(ctx, user, hpAmount, 'drain', user.id);
@@ -297,6 +305,9 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
     applyStatusStep(ctx, user, target, def, before, step);
     book.record = step.result.record;
   }
+  // The game's hit applier then asks the target's Auto-Med and Auto-Potion (FFX only, re-parity RC4 lane F): each one decided here, from this
+  // hit's HP damage and the statuses it newly inflicted, and paid for now; the reaction itself runs when the action is over.
+  reactToHit(ctx, target, { hpBefore: hpBeforeHit, hpDamage, before: before.record, after: step ? step.result.record : before.record, woke });
 
   runScriptedExtra(ctx, user, def, target, hpAmount);
   scope.hitIndex++;

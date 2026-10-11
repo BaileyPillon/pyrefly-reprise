@@ -209,6 +209,9 @@ export function cloneCtx(ctx: Ctx, rngState?: RngSnapshot): { ctx: Ctx; events: 
     overkilled: [...ctx.rt.overkilled],
     sensedIds: new Set(ctx.rt.sensedIds),
     pendingPartRevivals: ctx.rt.pendingPartRevivals.map((p) => ({ ...p })),
+    // The queued item reactions and the death marks (re-parity RC4 lane F): a copy, so a dry run's hits cannot queue into the battle's list.
+    ...(ctx.rt.itemReactions ? { itemReactions: ctx.rt.itemReactions.map((r) => ({ ...r })) } : {}),
+    ...(ctx.rt.reactionDeaths ? { reactionDeaths: new Set(ctx.rt.reactionDeaths) } : {}),
   };
 
   const rng = ctx.rng.fork(ctx.state.seed, rngState ?? ctx.rng.saveState());

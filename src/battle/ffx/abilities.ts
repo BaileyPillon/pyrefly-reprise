@@ -35,6 +35,7 @@ import { aimedTargets, isPerHitRandom, resolveTargets, scriptAimsAt } from './ta
 import { buildAction, buildAimedAction, provokedAim } from './target-build.ts';
 import { bondAdd } from './kernel/cover.ts';
 import { bondOf, chainSlotOf } from './adapt/target-world.ts';
+import { removePlannedHits } from './adapt/overdrive-result.ts';
 import { gaugeOnOutcome } from './gauge.ts';
 import { onTargeted } from './overdrive.ts';
 import { revealTarget, sensorKind } from './sensor.ts';
@@ -73,6 +74,13 @@ export interface ResolveOptions {
    * else, so no other encounter changes. See `docs/CONTRACT-CHANGES.md`.
    */
   statsUser?: FFXCombatant;
+  /**
+   * The hits the game PLANS for a random-target Overdrive whose result may take some away (re-parity RC4 lane B; `adapt/overdrive-result.ts`):
+   * the menu record's full hit count, spread over the targets one pick at a time before the minigame ends. `hits` is then what is left
+   * after the result's removal (Slice and Dice's Fail, Lulu's Fury with fewer casts), taken one hit at a time from the targets holding the
+   * most (stream 16), and the rest land target by target in character order. Absent: the action plans exactly `hits`, hit by hit.
+   */
+  spreadHits?: number;
 }
 
 /** MP cost after Magic Booster, One MP Cost and Half MP Cost [ffx-combat-core §9]. */
@@ -169,7 +177,13 @@ export function resolveAbility(
 
   // The targets, built once, with the hits each takes.
   const aimedChosen = targets === rawNamed ? chosenTargets : targets.map((t) => t.id);
-  const built = aimed ? buildAimedAction(ctx, user, def, aimedChosen, hitCount) : buildAction(ctx, user, def, targets, hitCount, spread);
+  // An Overdrive that plans its hits over the targets before the result takes some away (`ResolveOptions.spreadHits`, RC4 lane B): the builder
+  // deals the menu record's FULL hit count over the set first (every pick on stream 5), then the result removes the missing ones from the
+  // targets holding the most (stream 16, `adapt/overdrive-result.ts#removePlannedHits`), and the rest land target by target in character order.
+  const planned = spread && options.spreadHits !== undefined && options.spreadHits >= hitCount && hitCount > 0;
+  const plannedHits = planned ? (options.spreadHits as number) : hitCount;
+  const built = aimed ? buildAimedAction(ctx, user, def, aimedChosen, hitCount) : buildAction(ctx, user, def, targets, plannedHits, spread);
+  const plan = planned ? removePlannedHits(ctx, built.targets, plannedHits - hitCount) : undefined;
 
   const scope: HitScope = {
     ctx,
@@ -196,7 +210,13 @@ export function resolveAbility(
     }
   }
 
-  if (perHitRandom) {
+  if (plan) {
+    // A planned Overdrive (RC4 lane B): the hits left after the result's removal land target by target in character order.
+    for (const { target, hits } of plan) {
+      for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
+      finishTouched(scope);
+    }
+  } else if (perHitRandom) {
     // A spread (or a script-aimed row): the hit records of the whole action are in before any target's script hears of it.
     for (const { target, hits } of built.targets) for (let h = 0; h < hits; h++) resolveOneHit(scope, target);
     finishTouched(scope);

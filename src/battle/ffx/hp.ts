@@ -15,6 +15,7 @@ import { advanceForm, hasNextForm } from './forms.ts';
 import { releaseThreatenLink } from './adapt/threaten.ts';
 import { reviveAutoStatuses } from './adapt/auto-status.ts';
 import { gaugeOnDeath } from './gauge.ts';
+import { cancelReactionsOf, reactToDeath } from './adapt/reactions.ts';
 
 /** Metadata for a `damage` event. */
 export interface DamageEventInfo {
@@ -229,6 +230,10 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
   // the killer is whoever's action it was, the victim itself for a tick (Poison, Doom) [re-parity W5; VA 0x0078c740 -> 0x007b0f80].
   gaugeOnDeath(ctx, (sourceId !== undefined ? tryActor(ctx, sourceId) : undefined) ?? target, target);
 
+  // ...and cancels every record the dying character had queued (an Auto-Potion, an Auto-Med, an Auto-Phoenix it was to use), with no
+  // refund, before it asks about Auto-Life (VA 0x0078c740, re-parity RC4 lane F).
+  cancelReactionsOf(ctx, target.id);
+
   const autoLife = statusOf(target, 'auto-life');
   if (autoLife && !target.flags.noRevive) {
     // A **permanent** Auto-Life is the fayth's, and it is non-consumable:
@@ -276,6 +281,9 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
   if (sourceId !== undefined) event.sourceId = sourceId;
   ctx.emit(event);
   refreshCriticalStatus(ctx, target);
+
+  // Auto-Phoenix is tried only when there was no Auto-Life for the death check to queue (VA 0x007b2910 answers -1, then 0x007b27b0 runs).
+  if (autoLife === undefined) reactToDeath(ctx, target);
 
   if (target.flags.isPart) {
     target.removed = true;

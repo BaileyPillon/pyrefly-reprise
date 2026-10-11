@@ -258,6 +258,15 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  *  - the twelve that did not move build nothing the new rules change: Braska's Final Aeon, Macalania, Omnis and Isaaru have no Guard holder, Reflect holder or multi-hit random row on the
  *    line; Yojimbo's Daigoro bites are single-hit spreads (one pick, as before); Natus's bounces are same-side ones over the same candidates, drawn on the same stream.
  * Nothing on the bosses or the party was tuned; one seed is one sample (the 500-seed rates are in docs/handoff/re-parity-rc4-react.md).
+ * ONE digest re-baselined 2026-10-11 by RC4 lane L3 (branch re-parity-rc4-items; FFX only; item reactions, FFX-G02 sections 3.8 and 3.9): braskas-final-aeon#1
+ * (80341e61 fd35d884 628979be d2d251bc 85cfdf48 cbdfb079 e8f733d0 -> 4d93d0d0 96867650 eb8b7a8a 88ef63f8 3c10c054 4e0e8bde 2cb442aa), seven victories before and after; the
+ * other 17 digests are byte for byte what they were (braskas-final-aeon#7 included). Cause, event by event: the logs of link 1 are identical for 617 events and differ at the
+ * turn Jecht Beam lands Petrify on Auron (Tetra Bracer, Auto-Med). The old engine answered it at once with a Remedy (its Auto-Med list cured Petrify, Sleep, Confuse, Berserk,
+ * Slow and Curse as well as the four statuses the game names) and spent TWO Remedies for it; the game's Auto-Med answers only a Poison, Zombie, Darkness or Silence that the
+ * hit newly inflicted, so it does nothing here and the line's own Soft (Lulu) cures the Petrify on her turn. Links 2 to 7 follow because the chain carries each member's HP and
+ * bag on. Proved by putting the lane's Overdrive files (abilities.ts, overdriveShape.ts) back: the digests are the same new values, so lane B moves none of the 18 (no golden line
+ * sends Slice and Dice or a Fury at two enemies), and by putting the item-reaction files back: the other 17 pass and braskas-final-aeon#1 returns to the old digests above.
+ * Nothing on the boss or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd362acf6:victory',

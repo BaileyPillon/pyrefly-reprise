@@ -8,7 +8,9 @@
  */
 
 import type { BattleEvent, BattleResult, Command, FFXCombatant } from '../common/types.ts';
-import { type Ctx, type EventInput, commandAbility, has, isAlive, rtOf, tryActor } from './state.ts';
+import { type Ctx, type EventInput, commandAbility, has, isAlive, refundItem, rtOf, tryActor } from './state.ts';
+import { canActFacts } from './adapt/reactions.ts';
+import { reactionCanAct } from './kernel/reaction-items.ts';
 import { executeCommand } from './execute.ts';
 import { collectReactions, onTurnEnd } from './ticks.ts';
 import { sweepAutoStatuses } from './adapt/auto-status.ts';
@@ -44,6 +46,47 @@ export interface EndHooks {
  * the pause menu.
  */
 const STALEMATE_TURNS = 400;
+
+/** The most item reactions one pass will run (the game's record list holds 62); a Zombie wearer's potions would otherwise feed on themselves. */
+const MAX_ITEM_REACTIONS = 62;
+
+/**
+ * Run the item reactions the hits and the death checks queued, oldest first (re-parity RC4 lane F; FFX only; `adapt/reactions.ts`).
+ *
+ * Each record was paid for when it was queued, so it runs without spending the item again (`FFXRuntime.prepaidItem`). A record whose user
+ * died after it was queued is gone (the death check cancelled it and the item is lost). An Auto-Phoenix whose rescuer cannot act any
+ * more when its turn comes has its target emptied by the executor and the Phoenix Down refunded (VA 0x00792210), so it does nothing.
+ * Reactions that these set off (a Zombie wearer's potion is damage) queue behind them and run in this same call.
+ *
+ * `keepDeaths`: the characters that died during the action stay marked (a record queued for one of them later in the same action is
+ * lost too); the last call of an action clears the marks.
+ */
+export function runItemReactions(h: EndHooks, keepDeaths = false): void {
+  const ctx = h.ctx;
+  const queue = ctx.rt.itemReactions;
+  if (queue && queue.length > 0) {
+    const was = ctx.rt.inReaction;
+    ctx.rt.inReaction = true;
+    for (let ran = 0; queue.length > 0 && ran < MAX_ITEM_REACTIONS; ) {
+      const r = queue.shift()!;
+      const reactor = tryActor(ctx, r.userId);
+      if (r.lost || !reactor || !isAlive(reactor)) continue;
+      if (r.kind === 'auto-phoenix' && !reactionCanAct(canActFacts(reactor))) {
+        refundItem(ctx, r.itemId);
+        continue;
+      }
+      ran++;
+      h.push({ type: 'counter', actorId: r.userId, targetId: r.targetId, abilityId: r.itemId, cause: r.kind });
+      ctx.rt.prepaidItem = r.itemId;
+      executeCommand(ctx, reactor, { kind: 'item', id: r.itemId, targets: [r.targetId] }, true);
+      ctx.rt.prepaidItem = undefined;
+      sweepAutoStatuses(ctx); // each item reaction is an action of its own, and ends in the per-action sweep (RC4 lane FFX-E)
+    }
+    queue.length = 0; // the cap was hit if anything is left: it is dropped, not run
+    ctx.rt.inReaction = was;
+  }
+  if (!keepDeaths) ctx.rt.reactionDeaths = undefined;
+}
 
 /** Reactions, counters, ticks, triggers and the end check. */
 export function afterAction(
@@ -105,7 +148,7 @@ export function afterAction(
     drainScriptReactions(h);
     sweepAutoStatuses(ctx);
 
-    // Equipment reactions: Counterattack, Auto-Potion, Auto-Med, Auto-Phoenix.
+    // Equipment reactions: Counterattack and Magic Counter (the item reactions follow below).
     if (def) {
       for (const reaction of collectReactions(ctx, actor, def, damaged)) {
         const reactor = tryActor(ctx, reaction.actorId);
@@ -117,24 +160,20 @@ export function afterAction(
           abilityId: reaction.abilityId,
           cause: reaction.cause,
         });
-        const isItem = ctx.content.item(reaction.abilityId) !== undefined;
-        executeCommand(
-          ctx,
-          reactor,
-          isItem
-            ? { kind: 'item', id: reaction.abilityId, targets: [reaction.targetId] }
-            : { kind: 'attack', targets: [reaction.targetId] },
-          true,
-        );
+        executeCommand(ctx, reactor, { kind: 'attack', targets: [reaction.targetId] }, true);
         sweepAutoStatuses(ctx);
       }
     }
   }
 
+  // The item reactions the action's hits and deaths queued: Auto-Med, Auto-Potion, Auto-Phoenix (`adapt/reactions.ts`).
+  runItemReactions(h, true);
   drainScriptReactions(h); // what the equipment reactions set off
+  runItemReactions(h, true); // and what those set off
   ctx.rt.inReaction = false;
   // Poison only follows an action whose results were applied: a passed turn (a sleeper's) passes `command` undefined.
   onTurnEnd(ctx, actor, command !== undefined);
+  runItemReactions(h); // a death by the poison tick queues its Auto-Phoenix; the action is over, so the death marks go
   drainScriptReactions(h); // what the turn's poison tick set off (a postPoison hook)
   sweepAutoStatuses(ctx); // the Poison tick toggles its victim's SOS statuses (VA 0x007afab0)
   rtOf(ctx, actor.id).turnsTaken += 1;
