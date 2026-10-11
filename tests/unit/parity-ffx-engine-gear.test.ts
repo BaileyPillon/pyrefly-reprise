@@ -22,7 +22,7 @@ import { critCheck } from '../../src/battle/ffx/kernel/crit.ts';
 import { hitCheck } from '../../src/battle/ffx/kernel/hit.ts';
 import { noStatusOutcome } from '../../src/battle/ffx/kernel/aftermath.ts';
 import { calcHitDamage } from '../../src/battle/ffx/kernel/hitdamage.ts';
-import { applyEquipmentToCombatant, equipmentCrit } from '../../src/battle/ffx/equipment.ts';
+import { applyEquipmentToCombatant, bonusPercentFor, equipmentCrit } from '../../src/battle/ffx/equipment.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS } from '../../src/data/encounters.ts';
@@ -293,5 +293,31 @@ describe('the prep screens\' maximum HP and MP are the builder\'s', () => {
       expect(effectivePool(bearer, 'hp'), `${JSON.stringify(ids)} on ${base.hp}`).toBe(wantHp);
       expect(effectivePool(bearer, 'mp'), `${JSON.stringify(ids)} on ${base.mp}`).toBe(wantMp);
     }
+  });
+});
+
+// ------------------------------------------------------------------------------------------------ the shared answer follows the gear
+
+describe('the gear decode is shared between calls and follows every change of the gear', () => {
+  it('a list edited in place, replaced, or a crit byte changed gives the new answer at once', () => {
+    const c = {
+      side: 'party',
+      equipment: { weapon: { name: 'W', slots: 4, autoAbilities: ['strength-5'] as AutoAbilityId[] }, armor: { name: 'A', slots: 4, autoAbilities: [] as AutoAbilityId[] } },
+    } as unknown as FFXCombatant;
+    const eq = c.equipment as NonNullable<FFXCombatant['equipment']>;
+    expect(bonusPercentFor(c, 'strength')).toBe(5);
+    expect(equipmentCrit(c)).toBe(6);
+    eq.weapon.autoAbilities.push('strength-10'); // edited in place
+    expect(bonusPercentFor(c, 'strength')).toBe(15);
+    eq.weapon.autoAbilities[0] = 'strength-20'; // an element replaced in place
+    expect(bonusPercentFor(c, 'strength')).toBe(30);
+    eq.armor.autoAbilities = ['strength-3', 'hp-20']; // a list replaced
+    expect(bonusPercentFor(c, 'strength')).toBe(33);
+    expect(bonusPercentFor(c, 'hp')).toBe(20);
+    eq.weapon.bonusCrit = 10; // a crit byte changed
+    expect(equipmentCrit(c)).toBe(13);
+    eq.armor = { name: 'B', slots: 1, autoAbilities: [] }; // a piece replaced
+    expect(bonusPercentFor(c, 'strength')).toBe(30);
+    expect(equipmentCrit(c)).toBe(13);
   });
 });

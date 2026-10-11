@@ -54,9 +54,40 @@ export function gearItemsOf(b: EquipmentBearer): GearItem[] {
   }));
 }
 
-/** What the game's builder and gear loop make of the gear a bearer wears. A bearer with no gear gets all zeros. */
-export function gearOf(b: EquipmentBearer): GearResult {
-  return gearEffects(gearItemsOf(b), AUTO_ABILITY_RECORDS);
+const NO_GEAR: GearResult = gearEffects([], AUTO_ABILITY_RECORDS);
+
+interface Memo {
+  weapon: readonly AutoAbilityId[];
+  armor: readonly AutoAbilityId[];
+  weaponCrit: number;
+  armorCrit: number;
+  result: GearResult;
+}
+const memo = new WeakMap<object, Memo>();
+
+function sameIds(a: readonly AutoAbilityId[], b: readonly AutoAbilityId[]): boolean {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
+/**
+ * What the game's builder and gear loop make of the gear a bearer wears. A bearer with no gear gets all zeros. The answer is read-only: it is shared
+ * between calls while the two pieces still hold the same abilities and crit bytes (the damage chain asks for it several times a hit), and recomputed the
+ * moment either piece changes, whether its list was replaced or edited in place.
+ */
+export function gearOf(b: EquipmentBearer): Readonly<GearResult> {
+  const eq = b.equipment;
+  if (eq === undefined) return NO_GEAR;
+  const weaponCrit = eq.weapon.bonusCrit ?? GEAR_ROW_CRIT;
+  const armorCrit = eq.armor.bonusCrit ?? GEAR_ROW_CRIT;
+  const hit = memo.get(eq);
+  if (hit !== undefined && hit.weaponCrit === weaponCrit && hit.armorCrit === armorCrit && sameIds(hit.weapon, eq.weapon.autoAbilities) && sameIds(hit.armor, eq.armor.autoAbilities)) {
+    return hit.result;
+  }
+  const result = gearEffects(gearItemsOf(b), AUTO_ABILITY_RECORDS);
+  memo.set(eq, { weapon: [...eq.weapon.autoAbilities], armor: [...eq.armor.autoAbilities], weaponCrit, armorCrit, result });
+  return result;
 }
 
 /** The builder entries the engine's six `+N%` families are summed on. */

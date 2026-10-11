@@ -137,7 +137,7 @@ export function startAutoStatuses(ctx: Ctx, c: FFXCombatant): void {
   writeBack(ctx, c, st, before, applyAuto(before), true);
 }
 
-/** The SOS toggle for one character (`pp_BtlSosToggle`, VA 0x007af260). Returns true when it acted. */
+/** The SOS toggle for one character (VA 0x007af260). Returns true when it acted. */
 export function toggleAutoStatus(ctx: Ctx, c: FFXCombatant): boolean {
   const st = stateOf(ctx, c);
   if (st === undefined) return false;

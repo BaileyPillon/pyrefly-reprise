@@ -1,6 +1,6 @@
 /**
- * FFX gear: what the two worn pieces make of a party character (the party stat builder `pp_MsSetSaveParam`, VA 0x007860f0, and the
- * battle-start gear loop `pp_BtlSetChrGear`, VA 0x0079c5f0).
+ * FFX gear: what the two worn pieces make of a party character (the party stat builder, Fahrenheit's MsSetSaveParam, VA 0x007860f0, and the
+ * battle-start gear loop, VA 0x0079c5f0).
  *
  * **Game case: FFX only** (FFX-2 builds its characters from dresspheres and the garment grid). Source: FFX.exe, Steam build 25501027,
  * SHA-256 0537B2A1...686D, proven in `FFX-G03` (the real functions run in an x86-32 emulator with every one of the 134 auto-ability records
