@@ -39,7 +39,7 @@ export const KO_BUCKLE_MS: Readonly<Record<KoGame, number>> = { ffx: 220, ffx2: 
 export const KO_CROSS_MS = 75;
 /** The buckle's forward lean at full, the shader's `lean` input (`livingShader.ts`; the value `living.ts` always used). */
 export const KO_LEAN = 0.05;
-/** The revive's stand-up from the toppled pose, ms of field time (`quadOut`, as the plane's old rise was 320). */
+/** The revive's stand-up from the toppled pose, ms of field time (`riseEase`; the plane's old rise tween was 320 too). */
 export const RISE_MS = 320;
 /** The puff's size for a fall and for a revive (the page: 1 and 0.6). */
 export const PUFF_FALL = 1;
@@ -110,7 +110,7 @@ export interface KoPose {
   lean: number;
   /** How far the standing plane has tipped, 0 upright to 1 fully toppled (always 0 for a run with no travel). A fall's turn takes the hold and the cross; a revive's the cross and the rise. */
   tip: number;
-  /** How far it has slid along the floor toward the lying body's middle, 0 to 1 (always 0 for a run with no travel), in a straight line on the same clock as the turn. */
+  /** How far it has slid along the floor toward the lying body (its head, or its middle: `KoTip.SlotTip.by`), 0 to 1 (always 0 for a run with no travel), in a straight line on the same clock as the turn. */
   slide: number;
 }
 
@@ -229,7 +229,7 @@ export class KoRun {
   get pose(): KoPose {
     const o = this.opts;
     const fall = o.kind === 'fall';
-    // The turn and the slide of a travelling run (the plane tips and slides toward the lying body's middle); none otherwise.
+    // The turn and the slide of a travelling run (the plane tips and slides toward the lying body); none otherwise.
     const turn = o.travel ? this.turn : 0;
     const tip = !o.travel ? 0 : fall ? toppleEase(turn) : riseEase(turn);
     const slide = !o.travel ? 0 : fall ? turn : 1 - turn;
