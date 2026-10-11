@@ -364,3 +364,54 @@ describe('the real fight through the flow (the intended line, the real engine)',
     expect(retries.some((a) => a.fights[0]!.outcome === 'victory')).toBe(true);
   }, 120000);
 });
+
+/**
+ * The same finding with **no forced state** (round 24 carried PR-0407 "not re-tested": the link-2 carried state was not
+ * exercised). The run seed 73 on the kit-intended line is a real Oversoul Paragon win that leaves Yuna alone on her feet
+ * (Rikku and Paine knocked out in the fight itself), found by scanning run seeds 1 to 200 on the build of `r40-rc`
+ * bc373d58: 96 seeds win link 1, only seed 73 leaves one girl, and seeds 14, 76, 100, 138 and 194 leave two. Seeds are
+ * deterministic (seeded RNG), so a change to the engine moves this pin: pick
+ * the next seed that leaves one girl standing (scan run seeds with `play` on link 1 and read `opened[1]`), do not loosen it.
+ */
+describe('a real Paragon win that leaves one girl standing (run seed 73, nothing forced)', () => {
+  const ALONE_SEED = 73;
+  async function fromTheRealSeam(which: Answer, retries: number): Promise<Attempt[]> {
+    pinRunSeed(ALONE_SEED);
+    answer = which;
+    steps = [[{ kind: 'play' }, { kind: 'play' }], ...Array.from({ length: retries }, () => [{ kind: 'play' } as Step])];
+    choices = [...Array.from({ length: retries }, () => 'retry' as const), 'chapter-select'];
+    await run();
+    return attempts;
+  }
+  const alive = (g: Girl[]): string[] => g.filter((x) => x.alive && x.hp > 0).map((x) => x.id);
+
+  it("the first entry into Trema is the sourced carry: Paragon is won for real and only Yuna stands", async () => {
+    const [first] = await fromTheRealSeam('shipped', 1);
+    expect(first!.fights[0]).toMatchObject({ outcome: 'victory' }); // the real Paragon fight
+    expect(first!.onLinks).toEqual([1, 2]);
+    expect(alive(first!.opened[1]!.girls)).toEqual(['yuna']); // not touched by the PR-0407 rule: the first entry is never changed
+  }, 120000);
+
+  it("'carry' (what shipped until PR-0407): every Retry replays Yuna alone and is lost within a few menus", async () => {
+    const all = await fromTheRealSeam('carry', 4);
+    const retries = all.slice(1);
+    expect(retries).toHaveLength(4);
+    for (const a of retries) {
+      expect(a.onLinks).toEqual([2]);
+      expect(alive(a.opened[0]!.girls)).toEqual(['yuna']);
+    }
+    expect(retries.every((a) => a.fights[0]!.outcome === 'defeat' && a.fights[0]!.decisions <= 8)).toBe(true);
+  }, 120000);
+
+  it('shipped answer (D-506): every Retry opens at Trema with all three up at full HP, and a Retry can be won', async () => {
+    const all = await fromTheRealSeam('shipped', 6);
+    const retries = all.slice(1);
+    expect(retries.length).toBeGreaterThanOrEqual(1);
+    for (const a of retries) {
+      expect(a.onLinks).toEqual([2]); // at Trema, never back at Paragon
+      expect(alive(a.opened[0]!.girls)).toHaveLength(3);
+      for (const g of a.opened[0]!.girls) expect(g.hp).toBe(g.max);
+    }
+    expect(retries.some((a) => a.fights[0]!.outcome === 'victory')).toBe(true);
+  }, 240000);
+});
