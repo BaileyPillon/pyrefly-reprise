@@ -283,7 +283,13 @@ async function auditCue(name, entry) {
 
 // ------------------------------------------------------------------- sfx ---
 
-async function auditSprite(sfx, categoryTargets) {
+/**
+ * One sprite under the gates. `rowTargets` is for a parity pack (SFX parity, 2026-10-10): each cue there is mastered to
+ * its own row's target (a party swing at -24, a heal at -14), not to its class, so the measured level is held to the
+ * `lufs` the cue's manifest row records, within the same 3.5 dB; `tests/unit/audio-sfx-parity.test.ts` holds that
+ * recorded level to the row.
+ */
+async function auditSprite(sfx, categoryTargets, { rowTargets = false } = {}) {
   const file = path.join(AUDIO_DIR, sfx.file);
   const info = await stat(file);
   const { left, right } = await decode(file);
@@ -329,10 +335,14 @@ async function auditSprite(sfx, categoryTargets) {
     if (peak >= 0.9995) failures.push(`${name}: clips`);
     if (entry.onsetSec > 0.25)
       failures.push(`${name}: ${(entry.onsetSec * 1000).toFixed(0)} ms of dead air before the onset`);
-    const target = categoryTargets?.[span.category]?.lufs;
+    const target = rowTargets ? span.lufs : categoryTargets?.[span.category]?.lufs;
+    if (rowTargets && !Number.isFinite(span.lufs)) failures.push(`${name}: a parity cue must record its mastered level (lufs)`);
+    if (rowTargets && !['ffx', 'ffx2', 'both'].includes(span.game)) failures.push(`${name}: a parity cue must name its game (ffx, ffx2 or both)`);
     if (target !== undefined && Number.isFinite(loud) && Math.abs(loud - target) > 3.5) {
       failures.push(
-        `${name}: ${loud.toFixed(1)} LUFS against the ${span.category} target of ${target}`,
+        rowTargets
+          ? `${name}: ${loud.toFixed(1)} LUFS against the row target of ${target}`
+          : `${name}: ${loud.toFixed(1)} LUFS against the ${span.category} target of ${target}`,
       );
     }
   }
@@ -464,7 +474,7 @@ async function main() {
     for (const f of row.failures) log(`      - ${f}`);
   }
 
-  if (manifest.sfx && !only) {
+  if (manifest.sfx && (!only || only.includes('sfx'))) { // --only=sfx audits the sprites alone
     // Loaded lazily: the type-stripped import costs a second and is only
     // needed for the per-category loudness targets.
     let categoryTargets = null;
@@ -481,6 +491,15 @@ async function main() {
       log(`${key} sprite: ${s.cues.length} cues, ${s.duration.toFixed(1)}s, ${(s.bytes / 1e6).toFixed(2)} MB, peak ${s.truePeakDb.toFixed(2)} dBTP`);
       for (const f of s.failures) log(`      - ${f}`);
     }
+    // SFX parity: every pack under the same gates (5 MB each, -1 dBTP, no clipped samples), each cue held to its row.
+    report.sfxParity = { packs: {} };
+    for (const [name, pack] of Object.entries(manifest.sfxParity?.packs ?? {})) {
+      const s = (report.sfxParity.packs[name] = await auditSprite(pack, categoryTargets, { rowTargets: true }));
+      report.totalBytes += s.bytes;
+      log('');
+      log(`sfxParity pack ${name}: ${s.cues.length} cues, ${s.duration.toFixed(1)}s, ${(s.bytes / 1e6).toFixed(2)} MB, peak ${s.truePeakDb.toFixed(2)} dBTP`);
+      for (const f of s.failures) log(`      - ${f}`);
+    }
   }
 
   // Manifest vs disk.
@@ -491,7 +510,7 @@ async function main() {
     (f) => f !== 'manifest.json' && !isUnshippedPublicFile(`audio/${f}`),
   );
   const listed = new Set(Object.values(manifest.music).map((m) => m.file));
-  for (const s of [manifest.sfx, manifest.sfxV2]) if (s) listed.add(s.file);
+  for (const s of [manifest.sfx, manifest.sfxV2, ...Object.values(manifest.sfxParity?.packs ?? {})]) if (s) listed.add(s.file);
   for (const f of disk) {
     if (!listed.has(f)) report.manifest.problems.push(`orphan file not in the manifest: ${f}`);
   }
@@ -514,7 +533,8 @@ async function main() {
   log('');
   log(totalLine);
   const failed = report.cues.filter((c) => c.failures.length > 0);
-  log(`${failed.length} cue(s) with findings; ${(report.sfx?.failures.length ?? 0) + (report.sfxV2?.failures.length ?? 0)} sfx finding(s)`);
+  const packFindings = Object.values(report.sfxParity?.packs ?? {}).reduce((n, s) => n + s.failures.length, 0);
+  log(`${failed.length} cue(s) with findings; ${(report.sfx?.failures.length ?? 0) + (report.sfxV2?.failures.length ?? 0) + packFindings} sfx finding(s)`);
 
   if (jsonOut) {
     await writeFile(jsonOut, JSON.stringify(report, null, 2));

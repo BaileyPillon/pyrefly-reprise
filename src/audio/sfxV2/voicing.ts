@@ -30,10 +30,16 @@ export function sfxGame(): SfxGame | null {
   return game;
 }
 
-/** First-sprite keys that take the game's v2 twin whoever plays them: the menu set and the "a status landed" bell. */
+/**
+ * First-sprite keys that take the game's v2 twin whoever plays them: the menu set and the "a status landed" bell.
+ *
+ * `confirm` plays the cursor's tick (decision 52k, both games): in the Steam FFX and FFX-2 the menu cursor and the
+ * confirm are one sound (the same retail id in both games), so one cue serves both here, raised about 5 dB by the P1
+ * mix (`parityMix.ts`). The `confirm` cues stay in the v2 sprite until the final repack drops them.
+ */
 const AUTO: Readonly<Record<string, string>> = {
   'cursor-move': 'cursor-move',
-  confirm: 'confirm',
+  confirm: 'cursor-move',
   cancel: 'cancel',
   error: 'error',
   'menu-open': 'menu-open',
