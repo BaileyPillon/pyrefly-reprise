@@ -1,10 +1,10 @@
 {
   "source": "SFX parity spec 2026-10-10, section 1.2 proposal P1 (retail level ratios with the D-210 floor), rows from its generation plan, with each row's evidence grade from the spec tables. Numbers only: no retail ids, names or audio.",
-  "decision": "52i (driver, under 52a, accepted 2026-10-10): the mix is P1, cues capped at -14 LUFS, SaveData and the limiter unchanged",
+  "decision": "52i (driver, under 52a, accepted 2026-10-10): the mix is P1, cues capped at -14 LUFS, SaveData and the limiter unchanged. 52n (driver, under 52a, 2026-10-11): the floors are -18 (weapon) and -14.1 (impact), the class levels the FFX-2 party hits play at today, so they keep today's level rather than the D-210 floor (-24, -20.1) that would cut them about 6 dB to the level the 2026-09-29 friends' playtest heard as no attack SFX; applyLow stays false, so the 56 low-confidence rows (the cast wind-up among them) stay held at today's level",
   "rule": "A row target is its retail-ratio level (the measured retail level plus the game offset). A PARTY swing or blow (floor: weapon or impact) never goes below the D-210 floor, and nothing exceeds capLufs. A HOLD row (retailLufs null: the game files show no retail sound, 52j) keeps its cue at today level. So does a row whose evidence the spec grades low (a candidate, offered for Bailey to judge by ear; the FFX weapon swing/hit split, the cast wind-up, the KO fall and fiend dissolve are examples) unless applyLow is true. A cue several rows name takes the play-weighted mean of their applied targets (weight = max(freq, 1) plays a fight) until each row has its own recorded original.",
   "capLufs": -14,
   "tpCeilDbtp": -1.1,
-  "floors": {"weapon":-24,"impact":-20.1},
+  "floors": {"weapon":-18,"impact":-14.1},
   "applyLow": false,
   "rows": [
     {"id":"ffx.ui.tick","game":"ffx","cues":["cursor-move","confirm"],"retailLufs":-18.8,"floor":null,"confidence":"medium-high","freq":4},

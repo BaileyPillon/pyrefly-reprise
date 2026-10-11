@@ -17,6 +17,7 @@ import { SfxSprites } from '../../src/audio/SfxSprites.ts';
 import { V2_CUES } from '../../src/audio/sfxV2/cues.ts';
 import { rowTarget, type MixFile } from '../../src/audio/sfxV2/parityDerive.ts';
 import { BOSS_PACKS, PARITY_PACK_NAME, corePack, packsFor } from '../../src/audio/sfxV2/packs.ts';
+import { parityTrimDb } from '../../src/audio/sfxV2/parityMix.ts';
 import { setSfxGame } from '../../src/audio/sfxV2/voicing.ts';
 import { sfxChapter } from '../../src/app/sfxGame.ts';
 import { getChapter } from '../../src/data/encounters.ts';
@@ -36,7 +37,7 @@ const raw = {
   sfxV2: {
     file: 'sfx/sprite-v2.mp3',
     duration: 20,
-    cues: { 'hit-gun': { offset: 1, duration: 0.5 }, 'shot-gun': { offset: 2, duration: 0.5 }, fire: { offset: 3, duration: 0.5 } },
+    cues: { 'hit-gun': { offset: 1, duration: 0.5 }, 'shot-gun': { offset: 2, duration: 0.5 }, fire: { offset: 3, duration: 0.5 }, shell: { offset: 4, duration: 0.5 } },
   },
   sfxParity: {
     packs: {
@@ -142,10 +143,13 @@ describe('SfxSprites: parity pack, then v2 slice, then the first-bank cue', () =
     const { ctx } = stubLoading();
     const sprites = new SfxSprites();
     await sprites.load(ctx, manifest, '/');
-    const v2 = sprites.pick(manifest, 'v2:hit-gun', 'ffx2');
+    const trim = parityTrimDb('ffx2', 'shell');
+    expect(trim, 'the example cue is a real cut in the shipped table').toBeLessThan(-1);
+    const v2 = sprites.pick(manifest, 'v2:shell', 'ffx2');
     expect(v2.via).toBe('v2');
-    expect(v2.slice?.cue).toEqual({ offset: 1, duration: 0.5 });
-    expect(v2.gain).toBeCloseTo(10 ** (-6 / 20), 6); // the floor-held FFX-2 party blow
+    expect(v2.slice?.cue).toEqual({ offset: 4, duration: 0.5 });
+    expect(v2.gain).toBeCloseTo(10 ** (trim / 20), 6); // a retail-ratio cut (FFX-2 Shell)
+    expect(sprites.pick(manifest, 'v2:hit-gun', 'ffx2').gain).toBe(1); // the FFX-2 party blow keeps today's level (52n: the floor is the class level)
     expect(sprites.pick(manifest, 'v2:fire', 'ffx').gain).toBeCloseTo(10 ** (1 / 20), 6);
     expect(sprites.pick(manifest, 'v2:shot-gun', null).gain).toBe(1); // no chapter, no trim
     await sprites.loadPacks(ctx, manifest, '/', ['ffx2-core']);
@@ -254,15 +258,21 @@ function mixer(game: 'ffx' | 'ffx2' | null, packs: { name: string; buffer: unkno
 describe('the mixer plays the right source at the right level', () => {
   it('trims a v2 slice by the P1 mix and logs where it came from', () => {
     const { am, played } = mixer('ffx2');
-    am.playSfx('v2:hit-gun');
-    am.playSfx('v2:hit-gun', { volume: 0.5 });
+    const trim = parityTrimDb('ffx2', 'shell');
+    expect(trim, 'the example cue is a real cut in the shipped table').toBeLessThan(-1);
+    am.playSfx('v2:shell');
+    am.playSfx('v2:shell', { volume: 0.5 });
     expect(played).toHaveLength(2);
     expect((played[0]!.buffer as { id: string }).id).toBe('v2');
-    expect(played[0]!.gain).toBeCloseTo(10 ** (-6 / 20), 6);
-    expect(played[1]!.gain).toBeCloseTo(0.5 * 10 ** (-6 / 20), 6);
+    expect(played[0]!.gain).toBeCloseTo(10 ** (trim / 20), 6);
+    expect(played[1]!.gain).toBeCloseTo(0.5 * 10 ** (trim / 20), 6);
     const log = am.debug().sfxLog;
     expect(log.map((r) => r.via)).toEqual(['v2', 'v2']);
-    expect(log[0]!.trimDb).toBe(-6);
+    expect(log[0]!.trimDb).toBe(trim);
+    // The party's blow keeps today's level (52n): the same call takes no trim and logs none.
+    am.playSfx('v2:hit-gun');
+    expect(played[2]!.gain).toBeCloseTo(1, 6);
+    expect(am.debug().sfxLog[2]!.trimDb).toBeUndefined();
   });
 
   it('plays a parity original from its pack at its own level, untrimmed', () => {

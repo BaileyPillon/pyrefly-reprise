@@ -31,8 +31,8 @@ buses or the limiter; nothing ships a retail-derived byte; the audio total is un
 2. **The P1 mix (52i) as data.** `docs/audio/sfx-parity-mix.json` has one row per event that plays a v2 cue (162
    rows: id, game, cues, the retail-ratio level, whether the D-210 floor applies, the spec's evidence grade, plays per
    fight), `src/audio/sfxV2/parityDerive.ts` turns them into a trim in dB per (game, cue) with the cap (-14 LUFS), the
-   floors (weapon -24.0, impact -20.1) and the true-peak guard (-1.1 dBTP after a boost), and
-   `tools/audio/sfx-parity-mix.mjs` writes `src/audio/sfxV2/parityTrims.ts` (30 FFX and 23 FFX-2 trims;
+   floors (weapon -18.0, impact -14.1 since 52n; they were -24.0 and -20.1, D-210's level, as P1 was first accepted) and the true-peak guard (-1.1 dBTP after a boost), and
+   `tools/audio/sfx-parity-mix.mjs` writes `src/audio/sfxV2/parityTrims.ts` (30 FFX and 17 FFX-2 trims, 23 before 52n;
    `--check` fails when it is stale, and a unit test runs it). `playSfx` multiplies a v2 slice's gain by the trim; a
    parity original is mastered to its own row and is never trimmed. The sprite is not re-encoded.
 3. **HOLD rows keep today's sound (52j).** A row with no retail sound (28 rows: the miss whiff, the status bell, the
@@ -52,7 +52,11 @@ buses or the limiter; nothing ships a retail-derived byte; the audio total is un
 
 ## Choices the spec left open, and where to flip them
 
-* **The P1 floor puts the girls' hits 6 dB under today (FFX-2).** P1 is "retail ratios with the D-210 floor", and
+* **DECIDED (52n, driver, 2026-10-11, under 52a): the floors are -18 and -14.1, so the girls' hits keep today's level.** The paragraph below is the
+  choice as it stood when P1 was first accepted; the switch it describes has been made, `parityTrims.ts` regenerated (the six -6 dB cuts are gone:
+  `shot-gun`, `swing-dagger`, `hit-gun`, `hit-dagger`, `hit-greatsword`, `ko-fall`; `swing-greatsword` went from -0.3 to +0.1) and a test pins that no
+  FFX-2 party hit takes a cut. `applyLow` stays false. FFX-2 only for the hit floor; both games for the held rows.
+* **The P1 floor puts the girls' hits 6 dB under today (FFX-2).** (As first accepted; see the entry above.) P1 is "retail ratios with the D-210 floor", and
   the floor is D-210's level, which is today minus 6.02 dB: `shot-gun`, `swing-dagger`, `hit-gun`, `hit-dagger`,
   `hit-greatsword` and `ko-fall` all take about -6 dB, and `hit-heavy-enemy` -3.8 (FFX-2 enemy blows at the retail ratio).
   The 2026-09-29 friend's "no sound effects on attacks" was heard at D-210 with the old bus; D-293 raised the bus 6

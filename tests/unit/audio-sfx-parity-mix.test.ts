@@ -76,24 +76,42 @@ describe('the P1 trim table (52i)', () => {
   });
 });
 
-describe('the D-210 floor under the party (FFX-2 hits)', () => {
-  it('lifts the girls\' swings and blows to the floor and no lower, today minus 6.02 dB at most', () => {
-    expect(mix.floors).toEqual({ weapon: -24, impact: -20.1 });
-    for (const cue of ['shot-gun', 'swing-dagger']) expect(level('ffx2', cue), cue).toBeCloseTo(-24, 0);
-    for (const cue of ['hit-gun', 'hit-dagger', 'hit-greatsword', 'ko-fall']) expect(level('ffx2', cue), cue).toBeCloseTo(-20.1, 0);
-    // Nothing the floor protects goes lower than the floor.
+describe('the floor under the party (FFX-2 hits): today\'s level, not the D-210 floor (52n)', () => {
+  /** What the floors were under P1 as first accepted (52i): D-210's level, today minus 6.02 dB. 52n replaced them with today's class levels. */
+  const D210 = { weapon: -24, impact: -20.1 } as const;
+  const HITS = ['shot-gun', 'swing-dagger', 'hit-gun', 'hit-dagger', 'hit-greatsword'] as const;
+
+  it('the floors are the recorded set\'s class levels (-18 weapon, -14.1 impact), and applyLow stays off', () => {
+    expect(mix.floors).toEqual({ weapon: -18, impact: -14.1 });
+    expect(mix.applyLow).toBe(false);
+  });
+
+  it('NO CUT: the girls\' swings and blows, and their KO fall, play at today\'s level (no trim at all), where the D-210 floor cut each about 6 dB', () => {
+    for (const cue of [...HITS, 'ko-fall']) expect(PARITY_TRIMS_DB.ffx2[cue], `${cue} takes no trim`).toBeUndefined();
+    for (const cue of ['shot-gun', 'swing-dagger']) expect(level('ffx2', cue), cue).toBeCloseTo(-18, 0);
+    for (const cue of ['hit-gun', 'hit-dagger', 'hit-greatsword']) expect(level('ffx2', cue), cue).toBeCloseTo(-14.1, 0);
+    // Nothing the floor protects goes lower than the floor, and no party trim anywhere is a cut of even a decibel.
     for (const row of mix.rows.filter((r) => r.floor)) {
       const target = rowTarget(mix, row);
       if (target === null) continue;
       expect(target, row.id).toBeGreaterThanOrEqual(mix.floors[row.floor!] - 0.05);
     }
-    // And no trim anywhere is a deeper cut than the floor allows a party swing or blow.
-    for (const cue of ['shot-gun', 'swing-dagger', 'hit-gun', 'hit-dagger', 'hit-greatsword', 'ko-fall']) expect(PARITY_TRIMS_DB.ffx2[cue]!, cue).toBeGreaterThanOrEqual(-6.1);
+    for (const cue of [...HITS, 'swing-greatsword', 'ko-fall']) expect(PARITY_TRIMS_DB.ffx2[cue] ?? 0, cue).toBeGreaterThanOrEqual(-1);
   });
 
-  it('moves the floor with one number: raising it to today\'s class levels removes the cut', () => {
+  it('moves the floor with one number: the D-210 floor in its place brings the cut back (about -6 dB), and today\'s class levels remove it', () => {
+    const cut = deriveTrims({ ...mix, floors: D210 }, cues);
+    for (const cue of [...HITS, 'ko-fall']) expect(cut.ffx2[cue]!, `${cue} under the D-210 floor`).toBeLessThanOrEqual(-5.9);
     const kept = deriveTrims({ ...mix, floors: { weapon: -18, impact: -14.1 } }, cues);
-    for (const cue of ['shot-gun', 'swing-dagger', 'hit-gun', 'hit-dagger', 'hit-greatsword']) expect(kept.ffx2[cue], cue).toBeUndefined();
+    for (const cue of HITS) expect(kept.ffx2[cue], cue).toBeUndefined();
+    expect(kept.ffx2).toEqual(PARITY_TRIMS_DB.ffx2); // the shipped table is exactly this derivation
+  });
+
+  it('the floor is the party\'s alone: no FFX cue takes a floor either way (the one FFX floor row, the KO fall, is a held low row)', () => {
+    const ffxFloored = mix.rows.filter((r) => r.game === 'ffx' && r.floor);
+    expect(ffxFloored.map((r) => r.id)).toEqual(['ffx.ko.party']);
+    expect(ffxFloored.every((r) => r.confidence === 'low')).toBe(true);
+    expect(deriveTrims({ ...mix, floors: D210 }, cues).ffx).toEqual(PARITY_TRIMS_DB.ffx);
   });
 });
 
@@ -169,7 +187,9 @@ describe('one menu tick for cursor and confirm, about +5 dB (52k)', () => {
   });
 
   it('turns a trim into a linear gain', () => {
-    expect(parityGain('ffx2', 'hit-gun')).toBeCloseTo(10 ** (-6 / 20), 6);
+    expect(parityGain('ffx2', 'shell')).toBeCloseTo(10 ** (PARITY_TRIMS_DB.ffx2['shell']! / 20), 6);
+    expect(PARITY_TRIMS_DB.ffx2['shell']!).toBeLessThan(-1); // a real cut
+    expect(parityGain('ffx2', 'hit-gun')).toBe(1); // the party's blow keeps today's level (52n)
     expect(parityGain('ffx2', 'no-such-cue')).toBe(1);
     expect(parityGain('ffx', 'shot-gun')).toBe(1);
   });
