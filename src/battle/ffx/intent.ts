@@ -212,6 +212,9 @@ export function cloneCtx(ctx: Ctx, rngState?: RngSnapshot): { ctx: Ctx; events: 
     // The queued item reactions and the death marks (re-parity RC4 lane F): a copy, so a dry run's hits cannot queue into the battle's list.
     ...(ctx.rt.itemReactions ? { itemReactions: ctx.rt.itemReactions.map((r) => ({ ...r })) } : {}),
     ...(ctx.rt.reactionDeaths ? { reactionDeaths: new Set(ctx.rt.reactionDeaths) } : {}),
+    // The seven Tidus counters (re-parity RC4 lane FFX-G) are changed in place by Tidus's own actions: a copy, so that a dry run of his heal or his
+    // cover cannot move the counters the real battle's Cover scores read (found when the RC4 lanes were merged; `parity-ffx-rc4-merge.test.ts`).
+    ...(ctx.rt.coverBond ? { coverBond: [...ctx.rt.coverBond] } : {}),
   };
 
   const rng = ctx.rng.fork(ctx.state.seed, rngState ?? ctx.rng.saveState());
