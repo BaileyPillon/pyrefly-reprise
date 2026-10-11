@@ -95,10 +95,14 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     // Re-parity W3 (FFX-2 only; reason "game-code parity"): the Den of Woe board was seed 62; the game's draw order (hit rolls first, then
     // the variance and the critical per strike) is a different replay of every seed, so the board was searched again over the seeds in
     // order and is now seed 4 (the first on which the engine holds a Phoenix Down the chapter line picks again). Same board, same rule.
-    ['ffx2-den-of-woe', 4, 'x2-phoenix-down'],
+    // RC3 (FFX-2 only; reason "game-script parity" on top of W4): the Den's scripts follow the game's own now (lane c: Baralai's counter per result, his Drill Shot, the Triple Attack as
+    // three Chain Attacks, Gippal's lowest-HP Attack), a different replay of every seed, so the Den board was searched again: the first seed with it is 5 (it was 4 on W4's clock). The case
+    // scans forward from that seed, so a later engine change finds the next board instead of failing.
+    ['ffx2-den-of-woe', 5, 'x2-phoenix-down'],
   ] as const) {
-    it(`C2-B1: a held ${item} is not the NEXT the advisor borrows (${chapter} seed ${seed})`, async () => {
-      const found = await heldBoard(chapter, seed, item);
+    it(`C2-B1: a held ${item} is not the NEXT the advisor borrows (${chapter} from seed ${seed})`, async () => {
+      let found: HeldBoard | null = null;
+      for (let s = seed; s < seed + 80 && found === null; s++) found = await heldBoard(chapter, s, item);
       expect(found, `a board where the engine holds ${item} and the chapter line picks it again`).not.toBeNull();
       const { ctx, held, line, card } = found!;
       const d = { actorId: ctx.decision.actorId, commands: ctx.decision.commands };

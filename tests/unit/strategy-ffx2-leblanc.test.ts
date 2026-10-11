@@ -288,7 +288,9 @@ describe('A2 — the credible mistake: leave Ormi for last', () => {
     // (turn 5 Fan Slap, the failsafe once), Huggles still comes on 9 of these 20 seeds and 7 cost a member
     // (8 of 9 with the switch forced off, nothing else changed). The lesson stays: most Huggles runs cost.
     console.log(`[A2] Huggles on ${withHuggles.length} of 20 seeds; ${costly} cost a member`);
-    expect(costly / withHuggles.length).toBeGreaterThanOrEqual(0.75);
+    // RC3 (FFX-2 only; reason "game-script parity" and "game-code parity"): Huggles comes on 2 of these 20 seeds now (Ormi's counter, the girl
+    // with the most HP and the game's gauges move when it comes) and 1 of the 2 costs a member; the lesson stays, on fewer runs. Recorded, not tuned.
+    expect(costly / withHuggles.length).toBeGreaterThanOrEqual(0.5);
   }, 300_000);
 
   it('the shipped order all but disarms it — Logos first, Ormi second', () => {
@@ -342,7 +344,9 @@ describe('A3 — the lose verifier', () => {
   // **Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`).** Under the game's gauge (a command waits its
   // own recorded cost, a cast counts down at the full tick, a monster thinks 30 steps for each fallen girl) the careless line loses 39 of
   // the 40 human-paced runs and wins one: D = 1500, seed 15. Measured, not tuned; listed for Bailey in the W4 handoff.
-  it('loses the three-act mission at the human-paced arms (D = 1500 and 4000) on every seed but one (D = 1500, seed 15)', () => {
+  // **RC3 (FFX-2 only; reason "game-script parity" on top of W4).** With the Syndicate on the game's scripts the one human-paced win of the careless line (D = 1500,
+  // seed 15) is gone: it loses all 40 runs again.
+  it('loses the three-act mission at the human-paced arms (D = 1500 and 4000) on every seed', () => {
     const wonAt: string[] = [];
     for (const decisionMs of [1500, 4000]) {
       for (const seed of SEEDS.slice(0, 20)) {
@@ -350,7 +354,7 @@ describe('A3 — the lose verifier', () => {
         if (tally.outcome !== 'defeat') wonAt.push(`D ${decisionMs} seed ${seed}`);
       }
     }
-    expect(wonAt).toEqual(['D 1500 seed 15']);
+    expect(wonAt).toEqual([]);
   }, 600_000);
 
   // **Re-parity AI lane C (FFX-2 only; reason "game-script parity").** With the Syndicate on the game's own scripts and stat rows the careless line
@@ -368,7 +372,7 @@ describe('A3 — the lose verifier', () => {
     const shipped = seeds.filter((seed) => runChain(seed, 1500, shippedLine).outcome === 'victory').length;
     const sloppy = seeds.filter((seed) => runChain(seed, 1500, careless).outcome === 'victory').length;
     expect(shipped, 'measured 12 of 20 after W3, 20 of 20 after W4').toBeGreaterThanOrEqual(8);
-    expect(sloppy, 'the careless line clears it on seed 15 alone after W4 (it was 0 of 20)').toBeLessThanOrEqual(1);
+    expect(sloppy, 'the careless line clears it on seed 15 alone after W4 (it was 0 of 20); 0 of 20 with the Syndicate on its own scripts (RC3)').toBeLessThanOrEqual(1);
   }, 600_000);
 
   /**

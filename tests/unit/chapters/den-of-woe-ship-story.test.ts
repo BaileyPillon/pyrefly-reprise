@@ -86,8 +86,10 @@ describe('the triggers, by running the engine (the intended line, bench speed)',
     // never his own Regen tick; m176.src:246-253), where the earlier build counted party actions and Regen payouts. The intended line
     // kills him in about six big hits, so it no longer reaches seven; the callout and the Drill Shot are met by a line that hits
     // him many times (all-out Darkness with no healer), which is what the game's counter rewards.
+    // RC3 (FFX-2 only): re-parity W4's gauge made the same point from the other side (the intended line has him down in about five of his turns); the
+    // slow credibly wrong line (magic into Baralai) is played as well, and the count-seven callout is proved on whichever of the three lines reaches it.
     let calls = 0;
-    for (const line of [LINES.intended, LINES.allOut]) {
+    for (const line of [LINES.intended, LINES.magic, LINES.allOut]) {
       for (const seed of SEEDS) {
         let log: readonly BattleEvent[] = [];
         driveLink(DEN_BARALAI, line, seed, { triggers: S.mid, inspect: (e) => (log = e.state().log) });
@@ -107,7 +109,7 @@ describe('the triggers, by running the engine (the intended line, bench speed)',
     }
     expect(calls).toBeGreaterThan(0);
     expect(DRILL_SHOT_AT - 1).toBe(7);
-    console.info(`[den story] Baralai: the count-seven callout in ${calls}/${SEEDS.length * 2}`);
+    console.info(`[den story] Baralai: the count-seven callout in ${calls}/${SEEDS.length * 3}`);
   });
 
   it("Gippal: his entrance once; below a third once when he crosses it; the first Mortar's line once", () => {
