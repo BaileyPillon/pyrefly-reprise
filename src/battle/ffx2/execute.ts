@@ -227,6 +227,7 @@ export function performCommand(
       targets: command.targets,
     });
     beginCharge(actor, command, chargeTicks);
+    actor.gauge.costAtb = costs.costAtb; // a magic cancel ends THIS command (`atb-engine.ts cancelCast`): its own ATB cost is what the actor recovers by
     actor.pendingCommand = command;
     env.emit({ type: 'atb', snapshot: env.snapshot() });
     env.flushSignal(before, actor);

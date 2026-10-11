@@ -28,6 +28,14 @@ import { countUnits } from './statuses.ts';
 
 /** The unit as `MsStatusProcess` reads it, or `null` when no clock of it could move (no timed status, no Poison, no Regen). */
 function timerChr(u: Ffx2Unit): Ffx2TimerChr | null {
+  // The step loop asks about every unit every step, and most have nothing to clock: look before building the 24-entry tables.
+  let any = false;
+  for (const inst of Object.values(u.statuses) as StatusInstance[]) {
+    const slot = slotOf(inst.id);
+    if (slot === undefined) continue;
+    if (slot.group === 1 ? inst.ticksRemaining !== null && inst.ticksRemaining > 0 : inst.counter !== undefined) any = true;
+  }
+  if (!any && !has(u, 'poison') && !has(u, 'regen')) return null;
   const timers = new Array<number>(STATUS_COUNT).fill(0);
   const counters = new Array<number>(STATUS_COUNT).fill(0);
   const accumulators = new Array<number>(STATUS_COUNT).fill(0);

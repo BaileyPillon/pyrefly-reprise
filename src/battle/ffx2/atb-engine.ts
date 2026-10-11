@@ -62,6 +62,14 @@ export function bySlot(units: readonly Ffx2Unit[]): Ffx2Unit[] {
 
 /** `stop` state of the kernel (`MsStatCheckStop`): 4 asleep, 2 petrified, 1 Stopped. */
 export function stopStateOf(u: Ffx2Unit): number {
+  // The kernel's `stopState` reads two bits of the status word (Sleep 4, Petrify 2) and the Stop byte; the step loop asks for it for every
+  // unit several times a step, so the two bits are read straight off the unit instead of building the whole word (`stopStateOfWord` is the
+  // same answer through the kernel, pinned by `parity-ffx2-engine-atb-hand.test.ts`).
+  return (has(u, 'sleep') ? 4 : 0) | (has(u, 'petrify') ? 2 : 0) | (has(u, 'stop') ? 1 : 0);
+}
+
+/** {@link stopStateOf} through the kernel's `MsStatCheckStop` and the full status word: the slow, reference form. */
+export function stopStateOfWord(u: Ffx2Unit): number {
   return stopState({ status1: statusWord1(u), stopStage: has(u, 'stop') ? 1 : 0, condemned: false });
 }
 
