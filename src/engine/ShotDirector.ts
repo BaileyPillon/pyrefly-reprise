@@ -21,7 +21,7 @@
  * no release for it either.
  *
  * Pure types: no `three`, no DOM (the same rule as the presenter ports), so a director is testable in Node against the presenter's fakes. Game case: shared plumbing (both), inert until a scene
- * publishes a director; today only the hidden Fayth chapter (FFX only) does, and its director is a stub that declines every beat (`src/engine/ffxcam/stubDirector.ts`).
+ * publishes a director; today only the hidden Fayth chapter (FFX only) does: a stub that declines every beat (`src/engine/ffxcam/stubDirector.ts`), and on a dev server with Bailey's local camera folder FFX's own camera (`src/engine/ffxcam/faythCamera.ts`).
  */
 
 import type { AbilityId, CombatantId, CommandKind } from '../battle/common/types.ts';

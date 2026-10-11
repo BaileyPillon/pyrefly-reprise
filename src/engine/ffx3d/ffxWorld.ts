@@ -58,6 +58,16 @@ export function ffxPointTuple(p: Vec3): [number, number, number] {
   return [K * p[0], -K * p[1], -K * p[2]];
 }
 
+/** A point of the world, in FFX's frame: the inverse of {@link ffxPointTuple} (what the camera replay reads of a live actor). */
+export function worldPointToFfx(p: Vec3): [number, number, number] {
+  return [p[0] / K, -p[1] / K, -p[2] / K];
+}
+
+/** A length in world units, in FFX units (the inverse of {@link ffxLength}). */
+export function worldLengthToFfx(n: number): number {
+  return n / K;
+}
+
 /** A direction of FFX's frame, in the world: the rotation only, no scale. */
 export function ffxDirection(d: Vec3, out: Vector3 = new Vector3()): Vector3 {
   return out.set(d[0], -d[1], -d[2]);

@@ -14,7 +14,7 @@
  * What differs is the scene and the label:
  *
  * - `sceneKey` is `exp-fayth-deck` (`../scenes/exp-fayth-deck.ts`): Chapter VIII's deck over Chapter VIII's plate, publishing a camera director (`SceneStaging.shotDirector`). The director is a stub that
- *   declines every beat for now, so the chapter plays Chapter VIII's camera until the FFX shot table lands (`src/engine/ffxcam/`);
+ *   declines every beat, so the chapter plays Chapter VIII's camera, except on a dev server with Bailey's local camera folder, where FFX's own battle camera replaces it (`src/engine/ffxcam/`);
  * - the title is the working title below.
  *
  * **It is an experiment, not a listed chapter.** `experimental: true` sends its attempts, clears and play time to the experiments' own store (`../app/experiments/experimentRecords.ts`), never to the

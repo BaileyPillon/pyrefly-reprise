@@ -16,7 +16,7 @@ import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync,
 import { createServer, request, type IncomingHttpHeaders, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { tmpdir } from 'node:os';
-import { dirname, extname, join } from 'node:path';
+import { dirname, extname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolveConfig } from 'vite';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
@@ -278,5 +278,43 @@ describe('the probe does nothing unless import.meta.env.DEV', () => {
     expect(await probeFfxLocal()).toEqual(manifest);
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     expect(fetchSpy).toHaveBeenCalledWith(`${import.meta.env.BASE_URL}__ffx-local/manifest.json`, { cache: 'no-store' });
+  });
+});
+
+describe('the camera glue and the skin are reached only through a dev-gated dynamic import', () => {
+  const read = (...parts: string[]): string => readFileSync(join(REPO, ...parts), 'utf8');
+  const sourceFiles = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? sourceFiles(join(dir, e.name)) : e.name.endsWith('.ts') ? [join(dir, e.name)] : []));
+  const rel = (f: string): string => relative(REPO, f).split(sep).join('/');
+  /** The files under src/ that import `stem.ts`, statically (`from '...'`) or dynamically (`import('...')`). */
+  const importersOf = (stem: string): string[] =>
+    sourceFiles(join(REPO, 'src'))
+      .filter((f) => new RegExp(`from '[^']*${stem}\\.ts'|import\\('[^']*${stem}\\.ts'\\)`).test(readFileSync(f, 'utf8')))
+      .map(rel);
+
+  it('exp-fayth-camera.ts is imported by the deck scene alone, and exp-fayth-skin.ts by the deck scene and the camera glue', () => {
+    expect(importersOf('exp-fayth-camera')).toEqual(['src/scenes/exp-fayth-deck.ts']);
+    expect(importersOf('exp-fayth-skin').sort()).toEqual(['src/scenes/exp-fayth-camera.ts', 'src/scenes/exp-fayth-deck.ts']);
+  });
+
+  it('the deck scene imports both with import(), inside the import.meta.env.DEV branch, and statically imports neither', () => {
+    const deck = read('src', 'scenes', 'exp-fayth-deck.ts');
+    expect(deck).not.toMatch(/^import [^\n]*exp-fayth-(skin|camera)\.ts/m);
+    const dev = deck.indexOf('if (import.meta.env.DEV) {');
+    expect(dev).toBeGreaterThan(0);
+    const skin = deck.indexOf("await import('./exp-fayth-skin.ts')");
+    const camera = deck.indexOf("await import('./exp-fayth-camera.ts')");
+    expect(skin).toBeGreaterThan(dev);
+    expect(camera).toBeGreaterThan(dev);
+    expect(deck.indexOf('return build;')).toBeGreaterThan(camera); // the branch is closed by the plain return: a production build drops it whole
+  });
+
+  it("the camera loader is imported by the glue alone, and checks DEV before it fetches (the data is Bailey's transcription of FFX's scripts: rule 8)", () => {
+    const loaders = sourceFiles(join(REPO, 'src')).filter((f) => /from '[^']*ffxcam\/load\.ts'/.test(readFileSync(f, 'utf8')));
+    expect(loaders.map(rel)).toEqual(['src/scenes/exp-fayth-camera.ts']);
+    const text = read('src', 'engine', 'ffxcam', 'load.ts');
+    const dev = text.indexOf('if (!import.meta.env.DEV) return null');
+    expect(dev).toBeGreaterThan(0);
+    expect(text.indexOf('await fetcher(')).toBeGreaterThan(dev);
   });
 });

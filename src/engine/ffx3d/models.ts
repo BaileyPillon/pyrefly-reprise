@@ -21,7 +21,7 @@
  * Game case: FFX only (the files are FFX's).
  */
 
-import { Color, DoubleSide, Group, Mesh, MeshBasicMaterial, SkinnedMesh, type BufferGeometry, type Material, type Object3D, type Texture } from 'three';
+import { Box3, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, SkinnedMesh, Vector3, type BufferGeometry, type Material, type Object3D, type Texture } from 'three';
 import { FFX_UNIT } from './ffxWorld.ts';
 import { ffxLocalUrl, type FfxLocalManifest } from './localAssets.ts';
 
@@ -32,6 +32,8 @@ export interface FfxModel {
   readonly root: Group;
   /** How far its highest point stands above its origin in the idle pose, world units (the actor's height for the HUD's head anchors). */
   readonly height: number;
+  /** How far it spreads sideways in the idle pose, world units: the larger of its box's x and z extents (what the FFX camera frames a figure by, `../ffxcam/frames.ts`). */
+  readonly width: number;
   /** 1 is solid; below that every material is drawn blended at that opacity (a range shift's fade, a KO's). */
   setOpacity(alpha: number): void;
   dispose(): void;
@@ -234,6 +236,18 @@ async function loadScene(loader: Loader, path: string): Promise<Group> {
   return (await loader.loadAsync(ffxLocalUrl(path))).scene;
 }
 
+/** How far a model spreads sideways: the larger of its box's x and z extents, world units (the root's scale is applied). A box that cannot be measured (an empty model, a failed measure) gives `fallbackHeight * 0.6`. */
+export function spreadOf(root: Object3D, fallbackHeight: number): number {
+  try {
+    const size = new Box3().setFromObject(root).getSize(new Vector3());
+    const wide = Math.max(size.x, size.z);
+    if (Number.isFinite(wide) && wide > 0) return wide;
+  } catch {
+    /* an unmeasurable model is framed by its height */
+  }
+  return fallbackHeight * 0.6;
+}
+
 /** The model of one actor, posed, with its weapon in hand when it has one. Throws when the file itself will not load. */
 async function loadActor(loader: Loader, id: string, file: string, heights: Record<string, number>, weapon: WeaponEntry | undefined, problems: string[]): Promise<FfxModel> {
   let scene: Group;
@@ -271,6 +285,7 @@ async function loadActor(loader: Loader, id: string, file: string, heights: Reco
     id,
     root,
     height,
+    width: spreadOf(root, height),
     setOpacity(alpha: number): void {
       const solid = alpha >= 0.999;
       for (const m of parts.materials) {

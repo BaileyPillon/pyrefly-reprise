@@ -15,7 +15,7 @@
  *   same spots (`AirshipRangeDirector.staging`), so it moves Evrae between FFX's NEAR and FAR as it always has. `holdParty` keeps the relax step off the party.
  * - **Which way they face.** Bodies face each other along x: the party toward -x (Evrae), Evrae toward +x (`SceneStaging.sideFacing`, the switch FF7's reactor uses). A billboard is flat (the actors' interim yaw is off,
  *   `FfxSkin`), so seen from either side of the deck it is the same painting; the stage mirrors it to face the way the body faces, and seen from behind a mirrored plane reads as painted.
- * - **The camera.** `intro`, `idle`, `action`, `enemy`, `party` and `victory` are FFX's NEAR default view, the `-far` rigs its FAR default view, until phase 4b's camera replay drives them; `overview` is a wide
+ * - **The camera.** `intro`, `idle`, `action`, `enemy`, `party` and `victory` are FFX's NEAR default view, the `-far` rigs its FAR default view, until FFX's camera replay drives them (`./exp-fayth-camera.ts`, phase 4b); `overview` is a wide
  *   view of the whole fight for pictures. The range director installs the same NEAR / FAR views under `idle`, `action` and `enemy`. Vertical field of view 26.4 degrees, kept as the window widens.
  *
  * Game case: FFX only.
@@ -43,11 +43,15 @@ export function skinParam(search: string): 'painted' | 'classic' | null {
 type Mutable<T> = { -readonly [K in keyof T]: T[K] };
 
 /** `build` with some of its fields replaced. The getters (the backdrop that hot-swaps) are copied as getters, so the scene still reads the live one. */
-function derive(build: SceneBuild, over: Partial<Mutable<SceneBuild>>): SceneBuild {
+export function derive(build: SceneBuild, over: Partial<Mutable<SceneBuild>>): SceneBuild {
   const out = Object.defineProperties(Object.create(Object.getPrototypeOf(build)) as object, Object.getOwnPropertyDescriptors(build)) as Mutable<SceneBuild>;
   Object.assign(out, over);
   return out;
 }
+
+/** The skin each derived build carries (the camera's frames read the models' extents through it, `./exp-fayth-camera.ts`); a build with no skin has none. */
+const SKINS = new WeakMap<SceneBuild, FfxSkin>();
+export const skinOf = (build: SceneBuild): FfxSkin | null => SKINS.get(build) ?? null;
 
 const rig = (v: WorldRig): CameraRig => ({ position: [...v.position], lookAt: [...v.lookAt], fov: v.fov, sway: v.sway });
 
@@ -176,7 +180,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
   let camera: { getWorldPosition(target: Vector3): Vector3 } | null = null;
   const eye = new Vector3();
   const sky = models?.stage?.sky ?? null;
-  return derive(build, {
+  const derived = derive(build, {
     ...(kind === 'ffx' ? { palette: FFX_SKIN_PALETTE } : {}),
     rigs: faythRigs(staging) as SceneBuild['rigs'],
     partySlots: staging.partySlots,
@@ -197,4 +201,6 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
       build.dispose();
     },
   });
+  SKINS.set(derived, skin);
+  return derived;
 }

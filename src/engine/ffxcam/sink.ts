@@ -25,6 +25,11 @@ export interface CameraSink {
 export interface ThreeCameraSinkOptions {
   /** +1 (default) or -1: which way a positive FFX roll turns the picture. Open until a recording settles it. */
   readonly rollSign?: 1 | -1;
+  /**
+   * Clear the camera's view offset on every apply (default off). The painted game's MAX mix puts a lens shift on the camera (`camera.setViewOffset`, CHAPTER FRAMING, `fx/mix/framing.ts`) to keep the
+   * picture clear of its HUD panels; FFX's own shot fills the frame, so the hidden Fayth chapter clears it. The mix sets it again on the next frame, before the render, and the sink clears it again.
+   */
+  readonly clearViewOffset?: boolean;
 }
 
 /** FFX's up vector: Y points down, so up is negative y (screen block `S[0]` = (0, -1, 0)). */
@@ -37,6 +42,7 @@ export class ThreeCameraSink implements CameraSink {
   private readonly forward = new Vector3();
   private readonly up = new Vector3();
   private readonly rollSign: 1 | -1;
+  private readonly clearView: boolean;
   private hand = 1;
 
   constructor(
@@ -45,6 +51,7 @@ export class ThreeCameraSink implements CameraSink {
     options: ThreeCameraSinkOptions = {},
   ) {
     this.rollSign = options.rollSign ?? 1;
+    this.clearView = options.clearViewOffset === true;
     this.setTransform(ffxToWorld);
   }
 
@@ -56,6 +63,7 @@ export class ThreeCameraSink implements CameraSink {
 
   apply(pose: CameraPose): void {
     const cam = this.camera;
+    if (this.clearView && cam.view?.enabled) cam.clearViewOffset();
     this.eye.set(pose.eye[0], pose.eye[1], pose.eye[2]).applyMatrix4(this.toWorld);
     this.look.set(pose.ref[0], pose.ref[1], pose.ref[2]).applyMatrix4(this.toWorld);
     this.forward.subVectors(this.look, this.eye);

@@ -4,6 +4,7 @@
  *
  * Game case: FFX only.
  */
+import type { Camera, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import type { CameraPort, PlaybackSpeed } from '../../../src/engine/BattlePresenterPorts.ts';
 import type { ShotCtx, ShotSubject } from '../../../src/engine/ShotDirector.ts';
 import type { FrameClock } from '../../../src/engine/ffxcam/director.ts';
@@ -38,3 +39,23 @@ export function shotCtx(speed: PlaybackSpeed = 'normal'): ShotCtx {
 }
 
 export const subject = (id: string, side: ShotSubject['side']): ShotSubject => ({ id, side });
+
+/**
+ * The head of `WebGLRenderer.render` in three r186 (`WebGLRenderer.js`: update the scene's and the camera's matrices, call `scene.onBeforeRender`, then compute the frustum from the camera's
+ * `projectionMatrix` and `matrixWorldInverse`): a draw reads the camera after the hook. Records what each render saw of the camera.
+ */
+export class HeadOfRender {
+  readonly drawn: Array<{ position: number[]; fov: number; viewEnabled: boolean; inverse: number[] }> = [];
+  render(scene: Scene, camera: Camera): void {
+    if (scene.matrixWorldAutoUpdate) scene.updateMatrixWorld();
+    if (camera.parent === null && camera.matrixWorldAutoUpdate) camera.updateMatrixWorld();
+    scene.onBeforeRender(this as unknown as WebGLRenderer, scene, camera, null as never, null as never, null as never);
+    const cam = camera as PerspectiveCamera;
+    this.drawn.push({ position: cam.position.toArray(), fov: cam.fov, viewEnabled: cam.view?.enabled === true, inverse: cam.matrixWorldInverse.toArray() });
+  }
+  get last(): { position: number[]; fov: number; viewEnabled: boolean; inverse: number[] } {
+    const d = this.drawn[this.drawn.length - 1];
+    if (!d) throw new Error('nothing has been rendered');
+    return d;
+  }
+}

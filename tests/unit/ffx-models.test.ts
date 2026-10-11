@@ -12,13 +12,13 @@
  *
  * Game case: FFX only (the files are FFX's).
  */
-import { BufferGeometry, Color, DoubleSide, FrontSide, Group, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture } from 'three';
+import { BoxGeometry, BufferGeometry, Color, DoubleSide, FrontSide, Group, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture } from 'three';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { FFX_STAGE_PARTS } from '../../src/engine/ffx3d/ffxStaging.ts';
 import { FFX_UNIT } from '../../src/engine/ffx3d/ffxWorld.ts';
 import type { FfxLocalManifest } from '../../src/engine/ffx3d/localAssets.ts';
-import { folderOf, idleFileOf, loadFfxModels, parsePoseHeights, parseWeapons, runtimeScaleOf, shapeStage, unlitMaterial } from '../../src/engine/ffx3d/models.ts';
+import { folderOf, idleFileOf, loadFfxModels, parsePoseHeights, parseWeapons, runtimeScaleOf, shapeStage, spreadOf, unlitMaterial } from '../../src/engine/ffx3d/models.ts';
 
 /** The URLs the stand-in loader was asked for, in order. */
 const asked: string[] = [];
@@ -319,5 +319,35 @@ describe('the stage\'s parts', () => {
     scene.traverse((o) => {
       if (o instanceof Mesh) expect(o.visible).toBe(false);
     });
+  });
+});
+
+describe('how far a model spreads (what the FFX camera frames a figure by)', () => {
+  it("is the larger of the box's x and z extents, with the root's scale applied", () => {
+    const root = new Group();
+    root.add(new Mesh(new BoxGeometry(8, 15, 12), new MeshBasicMaterial())); // x 8, y 15, z 12
+    root.scale.setScalar(0.5);
+    expect(spreadOf(root, 99)).toBeCloseTo(6, 9); // z is the wider: 12 * 0.5
+    const other = new Group();
+    other.add(new Mesh(new BoxGeometry(20, 3, 4), new MeshBasicMaterial()));
+    expect(spreadOf(other, 99)).toBeCloseTo(20, 9);
+  });
+
+  it("is the height's 0.6 for a model that cannot be measured (nothing in it, or an empty geometry)", () => {
+    expect(spreadOf(new Group(), 10)).toBeCloseTo(6, 12);
+    const bare = new Group();
+    bare.add(new Mesh(new BufferGeometry(), new MeshBasicMaterial()));
+    expect(spreadOf(bare, 10)).toBeCloseTo(6, 12);
+  });
+
+  it("every loaded model carries it, finite and positive (here the fakes have no geometry, so the height's 0.6)", async () => {
+    stubFetch();
+    const models = await loadFfxModels(manifest);
+    for (const [id, model] of Object.entries(models.actors)) {
+      expect(Number.isFinite(model.width), id).toBe(true);
+      expect(model.width, id).toBeGreaterThan(0);
+      expect(model.width, id).toBeCloseTo(model.height * 0.6, 9);
+    }
+    models.dispose();
   });
 });

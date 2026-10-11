@@ -85,6 +85,11 @@ export class FfxSkin {
     return new Map([...this.bound].map(([id, b]) => [id, b.actor]));
   }
 
+  /** The model an actor of this id carries, or null: not taken yet, or a painted billboard (the painted skin at FFX's staging has none). The camera frames a figure by its extents (`../ffxcam/frames.ts`). */
+  modelOf(id: string): FfxModel | null {
+    return this.bound.get(id)?.model ?? null;
+  }
+
   /**
    * Once a frame, after the stage's own work: attach to any actor that is new, and make every model follow its actor's alpha and scale. Nothing to do before the host is mounted in a scene.
    * The painted skin at FFX's staging has no models and only lays its billboards flat.

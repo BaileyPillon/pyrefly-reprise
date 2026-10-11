@@ -30,6 +30,8 @@ import {
   ffxRig,
   ffxVerticalFov,
   ffxWorldMatrix,
+  worldLengthToFfx,
+  worldPointToFfx,
   yawToward,
   type Vec3,
 } from '../../src/engine/ffx3d/ffxWorld.ts';
@@ -199,5 +201,26 @@ describe('the stage the battle draws', () => {
     for (const name of ['FBXASC048_Shape0_2', 'FBXASC048_Shape0_10', 'FBXASC050_0Shape_4', 'FBXASC050_0Shape_8', 'FBXASC054_0Shape_5', 'polySurfaceShape3_1', 'polySurfaceShape6', 'polySurfaceShape5', 'polySurfaceShape5_x', 'pCylinderShape1', 'FBXASC04901_0Shape']) {
       expect(draws(name), name).toBe('hidden');
     }
+  });
+});
+
+describe("the inverse: a world point back in FFX's frame (what the camera replay reads of a live actor)", () => {
+  it('undoes the transform on every stand point: FFX to world to FFX', () => {
+    for (const p of [...FFX_PARTY_SLOTS, FFX_EVRAE_SPOTS.near, FFX_EVRAE_SPOTS.far, [0, 0, 0], [-95.97, -136.09, 333.64]] as Vec3[]) {
+      const w = ffxPoint(p);
+      near(worldPointToFfx([w.x, w.y, w.z]), p, 9);
+    }
+  });
+
+  it('is x / K, -y / K, -z / K by hand: the world floor of the fight (y 3.37466) is FFX y = -35, and a length divides by K', () => {
+    near(worldPointToFfx([-2.41047, 3.37466, -11.57025]), [-25, -35, 120], 4);
+    expect(worldLengthToFfx(1.75)).toBeCloseTo(18.15, 12);
+    expect(worldLengthToFfx(ffxLength(52.152))).toBeCloseTo(52.152, 12);
+  });
+
+  it('agrees with the matrix: applying the matrix and then the inverse is the identity', () => {
+    const m = ffxWorldMatrix();
+    const p = new Vector3(-140, -35, 80).applyMatrix4(m);
+    near(worldPointToFfx([p.x, p.y, p.z]), [-140, -35, 80], 9);
   });
 });

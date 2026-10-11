@@ -162,7 +162,7 @@ describe('?skin=painted: the painted skin at FFX\'s staging', () => {
   it('stands the party and Evrae at FFX\'s points, turns the bodies toward each other, and stages the range director with the same numbers', async () => {
     query('?skin=painted');
     const b = await build();
-    expect(fetched).toEqual([]); // a comparison mode: no manifest needed
+    expect(fetched).toEqual(['/__ffx-local/camera/evrae/index.json']); // a comparison mode: no manifest needed, only the camera folder is asked for (a 404 here: the stub stays)
     for (let i = 0; i < 3; i++) near(b.partySlots[i]!.toArray(), ffxPointTuple(FFX_PARTY_SLOTS[i]!), 12);
     expect(b.partySlots).toHaveLength(7); // three active, four reserve
     near(b.partySlots[0]!.toArray(), [-2.41047, 3.37466, -11.57025]);

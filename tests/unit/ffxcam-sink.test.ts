@@ -162,3 +162,35 @@ describe('a degenerate pose', () => {
     near(p.toArray(), [0, 1, -3], 1e-9);
   });
 });
+
+describe("the view offset (the painted game's MAX mix puts a lens shift on the camera)", () => {
+  it('is left alone by default', () => {
+    const c = cam();
+    c.setViewOffset(1920, 1080, -77, -43, 1920, 1080);
+    new ThreeCameraSink(c, flip()).apply(pose());
+    expect(c.view?.enabled).toBe(true);
+  });
+
+  it('is cleared on every apply with clearViewOffset: the mix sets it again each frame, the sink clears it again', () => {
+    const c = cam();
+    const sink = new ThreeCameraSink(c, flip(), { clearViewOffset: true });
+    for (let i = 0; i < 3; i++) {
+      c.setViewOffset(1920, 1080, -77, -43, 1920, 1080);
+      expect(c.view?.enabled).toBe(true);
+      sink.apply(pose());
+      expect(c.view?.enabled).toBe(false);
+    }
+    // the projection no longer carries the shift: its centre is the plain one
+    const plain = cam();
+    plain.updateProjectionMatrix();
+    expect(c.projectionMatrix.elements[8]).toBeCloseTo(plain.projectionMatrix.elements[8]!, 12);
+    expect(c.projectionMatrix.elements[9]).toBeCloseTo(plain.projectionMatrix.elements[9]!, 12);
+  });
+
+  it('with no view offset set, clearing is a no-op (the projection is not rebuilt for nothing)', () => {
+    const c = cam();
+    const sink = new ThreeCameraSink(c, flip(), { clearViewOffset: true });
+    sink.apply(pose());
+    expect(c.view).toBeNull();
+  });
+});

@@ -639,3 +639,66 @@ describe('the camera\'s own dice', () => {
     expect(battle.saveState()).toBe(before);
   });
 });
+
+describe('what the scene asks beyond the beats (phase 4b): the launch owed, busy, a scene running', () => {
+  it('launchOwed starts the open action\'s launch shot once, for an action that raised no impact, and says whether a program started', () => {
+    const f = fixture();
+    const ctx = shotCtx();
+    f.director.battleStart?.(startShot(ctx));
+    f.director.actionOpen?.(open(ctx, TIDUS, [EVRAE], 'fire'));
+    f.started.length = 0;
+    expect(f.director.launchOwed(ctx)).toBe(true);
+    expect(f.started).toEqual(['fire-shot']); // the spell's own shot, the worker of its command
+    expect(f.director.launchOwed(ctx)).toBe(false); // once
+    f.director.impact?.(hit(ctx, TIDUS, EVRAE, 0, 'fire'));
+    expect(f.started).toEqual(['fire-shot']); // and an impact after it does not launch again
+  });
+
+  it('launchOwed is false with nothing open, after an impact launched, with no launch step, or no handler for it', () => {
+    const f = fixture();
+    const ctx = shotCtx();
+    expect(f.director.launchOwed(ctx)).toBe(false); // no programs started yet, nothing open
+    f.director.battleStart?.(startShot(ctx));
+    expect(f.director.launchOwed(ctx)).toBe(false);
+    f.director.actionOpen?.(open(ctx, TIDUS, [EVRAE], 'fire'));
+    f.director.impact?.(hit(ctx, TIDUS, EVRAE, 0, 'fire'));
+    expect(f.director.launchOwed(ctx)).toBe(false); // the impact launched it
+    f.director.actionClose?.(closing(ctx));
+    f.director.actionOpen?.(open(ctx, TIDUS, [EVRAE], undefined, 'attack')); // a plain attack has no launch step
+    expect(f.director.launchOwed(ctx)).toBe(false);
+    f.director.actionClose?.(closing(ctx));
+    f.director.actionOpen?.(open(ctx, TIDUS, [EVRAE], 'cheer'));
+    f.started.length = 0;
+    expect(f.director.launchOwed(ctx)).toBe(false); // Cheer's launch tag has no worker program in the book
+    expect(f.started).toEqual([]);
+  });
+
+  it('launchOwed takes the playback context it is given: owed while skipping, the shot runs to its end at once', () => {
+    const f = fixture();
+    f.director.battleStart?.(startShot(shotCtx()));
+    f.director.actionOpen?.(open(shotCtx(), TIDUS, [EVRAE], 'fire'));
+    expect(f.director.launchOwed(shotCtx('skip'))).toBe(true);
+    expect(f.director.busy).toBe(false);
+    near(f.sink.last.eye, [0, 0, 300], 1e-9);
+  });
+
+  it('busy is true while a program runs or a move is armed, false at rest and with no programs; sceneRunning only while a range scene plays', () => {
+    const f = fixture();
+    const ctx = shotCtx();
+    expect(f.director.busy).toBe(false);
+    f.director.battleStart?.(startShot(ctx));
+    expect(f.director.busy).toBe(false); // a hard cut: nothing running
+    f.director.actionOpen?.(open(ctx, TIDUS, [EVRAE], 'fire')); // the cast's 20-step blend
+    expect(f.director.busy).toBe(true);
+    f.director.advance(2000);
+    expect(f.director.busy).toBe(false);
+    expect(f.director.sceneRunning).toBe(false);
+    f.director.rangeChange('pullBack', ctx);
+    expect(f.director.sceneRunning).toBe(true);
+    expect(f.director.busy).toBe(true);
+    for (let i = 0; i < 4; i++) f.director.advance(1000); // the 60-step scene is over (one update catches up at most 30 steps); Normal follows
+    expect(f.director.sceneRunning).toBe(false);
+    expect(fixture(null).director.busy).toBe(false);
+    expect(fixture(null).director.sceneRunning).toBe(false);
+  });
+});

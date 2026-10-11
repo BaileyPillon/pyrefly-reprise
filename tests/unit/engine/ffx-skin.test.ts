@@ -43,7 +43,7 @@ function model(id: string, height: number, scale = 0.09): FfxModel & { setOpacit
   const root = new Group();
   root.name = `ffx-${id}`;
   root.scale.setScalar(scale);
-  return { id, root, height, setOpacity: vi.fn(), dispose: vi.fn() } as FfxModel & { setOpacity: ReturnType<typeof vi.fn> };
+  return { id, root, height, width: height * 0.6, setOpacity: vi.fn(), dispose: vi.fn() } as FfxModel & { setOpacity: ReturnType<typeof vi.fn> };
 }
 
 const modelsOf = (...ms: FfxModel[]): FfxModels => ({ stage: null, actors: Object.fromEntries(ms.map((m) => [m.id, m])), problems: [], dispose: () => {} });
