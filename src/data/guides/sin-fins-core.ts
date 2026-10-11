@@ -7,9 +7,11 @@
  * **Game case: FFX only** [AGENTS.md rule 14; research/ffx-sin.md §0.3]: CTB, Cid's Trigger Command, the
  * airship range, Armor and Mental Break. Nothing here is true of FFX-2.
  *
- * **Estimates are labelled on the page, in plain words** (plan §3.4): the Negation chance is one guide's
- * formula built as named settings (S-12), and how Genais leaves its shell is our reading of the in-game Scan
- * text (S-2). The Fins opening far away is Gestahl's (S-8), the default.
+ * **The Negation score and how Genais leaves its shell are the game's own script now**
+ * [research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md §5.3 and §6.2, rows D-21 to D-24]. They replaced one guide's
+ * formula built as named settings (S-12) and our reading of the in-game Scan text (S-2), which the page used to
+ * label as estimates; the Fins opening far away (S-8) is the script's too (§5.1). The Haste, Protect and Cura
+ * claims below are as they were: the script agrees with each.
  *
  * Listed with its chapter on 2026-09-29 (D-279): the panel finds it by the four
  * boss ids once the chapter runs, through `./index.ts`'s `GUIDES`.
@@ -40,14 +42,14 @@ export const SIN_FINS_CORE_GUIDE: ChapterGuide = {
       cite: 'ffx-sin §5.1.2, §3.1, §8 row 2',
     },
     {
-      text: 'Armor Break opens every link. Close in, Break, then pull back. Up close, Negation can wipe your buffs and the Breaks; more buffs make it likelier. That chance is one guide\'s formula, built as settings we can change, not a measured fact.',
+      text: 'Armor Break opens every link. Close in, Break, then pull back. Up close, a hit can set off Negation, which wipes your buffs and the Breaks. The game scores what is on you (Shell and Reflect 1 each per member; Haste 3, 4 or 5 for one, two or three members; Protect 1 on the first member, 2 on the third, nothing on the middle one), plus 2 for Armor Break and 1 for Mental Break on the Fin, takes off 3 and rolls the rest: 1 in 16 a point on the Left Fin, 1 in 12 on the Right.',
       short: 'Break up close, then pull back',
-      cite: 'ffx-sin §8 rows 1 and 3, §5.1.3, §10 S-12',
+      cite: 'ffx-sin §8 rows 1 and 3, §5.1.3; re-ffx-ai-evrae-yojimbo-isaaru-sin §5.3, D-21, D-22',
     },
     {
-      text: 'Genais guards the Core: while it lives, magic at the Core is absorbed and blades cannot reach it. Hit Genais with physicals until it shells (a spell draws Waterga), then Fire into the shell. How it leaves the shell is our reading of its Scan text: healed to 12,000, it comes out next turn.',
+      text: 'Genais guards the Core: while it lives, blades cannot reach the Core, and while it is out of its shell, magic aimed at the Core is absorbed. It starts the fight shelled and comes out on its first turn. Hit it with physicals until it shells (a spell draws Waterga), then Fire into the shell. Healed above 12,000, it comes out again on its next turn.',
       short: 'Genais first: physicals, then Fire',
-      cite: 'ffx-sin §5.3.1, §2.2, §8 row 4, §10 S-2',
+      cite: 'ffx-sin §5.3.1, §2.2, §8 row 4; re-ffx-ai-evrae-yojimbo-isaaru-sin §6.1, §6.2, §6.5, D-23, D-24',
     },
     {
       text: 'Nothing heals between links. HP, MP and every status carry from the Left Fin to the Core, so heal before the kill, not after it.',

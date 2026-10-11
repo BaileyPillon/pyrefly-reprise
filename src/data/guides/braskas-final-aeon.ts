@@ -40,9 +40,9 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
       cite: 'ffx-bfa-yu-yevon §1.6',
     },
     {
-      text: 'The Yu Pagodas feed his gauge 20% per Power Wave. With both alive he Overdrives about every other turn; killing or slowing them is what makes the two Talk charges enough.',
+      text: 'The Yu Pagodas feed his gauge 20 a Power Wave, on top of 2 or 3 a turn of his own and 5 for every action that reaches him; the Overdrive comes the turn after it reads 100. Killing or slowing them is what makes the two Talk charges enough.',
       short: 'Suppress the Pagodas; they feed his Overdrive',
-      cite: 'ffx-bfa-yu-yevon §1.6',
+      cite: 'ffx-bfa-yu-yevon §1.6; re-ffx-ai-yunalesca-bfa §3.4, §3.5',
     },
     {
       text: 'Aeons are explicitly allowed here — he has a dedicated anti-aeon Overdrive precisely because the designers expected them. Shield cuts Jecht Bomber to a quarter.',
@@ -50,9 +50,9 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
       cite: 'ffx-bfa-yu-yevon §1.6',
     },
     {
-      text: 'Yu Yevon answers every damaging action with a 9,999 Curaga on himself, so do not hit him. Doom him with a Candle of Life, suppress the Pagodas, and let his own Gravija take 75% of his HP a cast.',
-      short: 'Never damage Yu Yevon. Doom him instead',
-      cite: 'ffx-bfa-yu-yevon §3.4.1, §3.5',
+      text: 'Yu Yevon answers every damaging action with a 9,999 Curaga on himself, but his own Gravija takes 75% of his current HP on most turns, so he soon has little left: a blow worth more than that ends him before the Curaga lands, and so does Doom from a Candle of Life. Suppress the Pagodas, whose Power Wave heals him 1,500 a cast.',
+      short: 'Yu Yevon: Doom, or one blow bigger than his HP',
+      cite: 'ffx-bfa-yu-yevon §3.4.1, §3.5; re-ffx-ai-yunalesca-bfa §4.2, §6.2, §6.3',
     },
   ],
 
@@ -146,8 +146,8 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
       bossId: 'braskas-final-aeon',
       aboveHpFraction: 0.5,
       label: 'Jecht',
-      note: 'Left-Arm Strike by default, Jecht Beam about one turn in four (Petrify at 100%). The Overdrive is Triumphant Grasp: two hits and a Zombie.',
-      cite: 'ffx-bfa-yu-yevon §1.6',
+      note: 'Left-Arm Strike by default, Jecht Beam one turn in three (Petrify at 100%; one in five in his second form’s first half, where Blade Blitz also comes two turns in five). The Overdrive is Triumphant Grasp: two hits and a Zombie.',
+      cite: 'ffx-bfa-yu-yevon §1.6; re-ffx-ai-yunalesca-bfa §3.4',
     },
     {
       bossId: 'braskas-final-aeon',
@@ -159,8 +159,8 @@ export const BRASKAS_FINAL_AEON_GUIDE: ChapterGuide = {
     {
       bossId: 'yu-yevon',
       label: 'Yu Yevon',
-      note: 'Every damaging action he takes is answered by a 9,999 Curaga on himself. Doom, Zombie and attrition all beat him; damage does not.',
-      cite: 'ffx-bfa-yu-yevon §3.2, §3.4.1, §3.5',
+      note: 'Every damaging action he takes is answered by a 9,999 Curaga on himself, but his own Gravija takes 75% of his current HP on most turns, so a blow worth more than what he has left ends him. Doom and Zombie beat him too: a Zombie turns each Curaga into damage until a Pagoda’s Power Wave strips it.',
+      cite: 'ffx-bfa-yu-yevon §3.2, §3.4.1, §3.5; re-ffx-ai-yunalesca-bfa §4.2, §6.2, §6.3',
     },
     {
       bossId: 'possessed-anima',

@@ -5,7 +5,9 @@
  * is a row that file asks for (Armor Break, the four Nul spells, Hastega, Curaga, Life, Phoenix
  * Down), and the `kinds` hints cover its switch to Wakka and its blows, so each hint explains the
  * command the player is being told to press. The tactic is the bench's intended line, which wins
- * 127 of 200 seeds on the approved build (`docs/plans/omnis-bench.md`).
+ * 169 of 200 seeds against the game's own script in the AI lane's bench (it won 127 against the
+ * old rules; `docs/handoff/re-parity-ai-seymour.md`; `omnis-ship-content.test.ts` reads 165 on the
+ * Garden of Pain build; `docs/plans/omnis-bench.md` holds the older table).
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. CTB, Nul spells, Armor Break, the party switch;
  * research §0.3: *X-2* has no Seymour fight.
@@ -13,8 +15,10 @@
  * Every number is the research's: HP 80,000 and Defense 180 (§1.1), the six and three attacks
  * and the 20,000 line (§4.4, verified: 4-5 sources), Ultima about 3,600 at this party's Magic
  * Defense and "keep HP above 4,000" (§3.3, §5 row 6), the affinity ladder (§4.2, verified: 5
- * sources). **Nothing here names the ring order or the reset cycle**, the two estimates B8 holds
- * the listing on. The two-Water quirk ships faithful and is disclosed here (B9, single source).
+ * sources). **Nothing here names the ring order or the reset cycle**: the game's script now has both
+ * [research/re-ffx-ai-seymour.md §5.2, §5.4: ring Fire, Ice, Water, Thunder; reset Ice, Water, Thunder,
+ * Fire], but the painted discs run another order (approved art), so the guide still leaves them out.
+ * The two-Water quirk is the script's own and is disclosed here for the four layouts it holds in (§5.3).
  */
 
 import type { ChapterGuide } from './types.ts';
@@ -27,9 +31,9 @@ export const SEYMOUR_OMNIS_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Each disc casts its own colour at the party, one spell each. A colour on three or four discs comes out as -ga; on one or two, as -ra. The quarter facing him is the one that counts.',
+      text: 'Every volley is four spells, one in the colour of each disc, however many of you are standing. A colour on three or four discs comes out as -ga; on one or two, as -ra. The quarter facing him is the one that counts.',
       short: 'Each disc casts its colour; three of one is -ga',
-      cite: 'ffx-seymour-omnis §4.1',
+      cite: 'ffx-seymour-omnis §4.1; re-ffx-ai-seymour §5.3, §5.4',
     },
     {
       text: 'Only Wakka can reach a disc with a blow, and it turns the disc a quarter one way; a spell turns it the other way. A disc takes no damage and never falls.',
@@ -47,9 +51,9 @@ export const SEYMOUR_OMNIS_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-omnis §4.4, §5 row 6',
     },
     {
-      text: 'The colours he shows are what he resists: one disc halves that element, two stop it, three or four heal him, and four of one colour leave him weak to its opposite. A quirk kept from the original: with exactly two Water discs he stops Fire instead of Water.',
+      text: 'The colours he shows are what he resists: one disc halves that element, two stop it, three or four heal him, and four of one colour leave him weak to its opposite. A quirk kept from the original: with exactly two Water discs and no pair of Fire or Ice he stops Fire instead of Water.',
       short: 'His colours resist; four of one open a weakness',
-      cite: 'ffx-seymour-omnis §4.2',
+      cite: 'ffx-seymour-omnis §4.2; re-ffx-ai-seymour §5.3',
     },
   ],
 
@@ -76,8 +80,8 @@ export const SEYMOUR_OMNIS_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Curaga'] },
-      text: 'His spells land one to a member and the last on anyone, so keep every member well above one -ga',
-      cite: 'ffx-seymour-omnis §3.3, §4.1',
+      text: 'With three or four discs of one colour his first three spells go to the first, second and third member and the last to anyone; in every other layout all four land on anyone, so keep every member well above one -ga',
+      cite: 'ffx-seymour-omnis §3.3, §4.1; re-ffx-ai-seymour §5.4',
     },
     {
       when: { labels: ['Life', 'Phoenix Down'] },

@@ -131,8 +131,9 @@ const HEAL_AT = 0.55;
 const HEAL_PARTY_AT = 0.55;
 
 /**
- * §6.5 — put Reflect up before the bar reaches 1/3 (10,667 of 32,000 = 0.333),
- * and not a turn earlier, because Reflect closes down {@link Slow}.
+ * §6.5 — put Reflect up before the bar reaches 1/3 (the game's Haste line is HP
+ * below 10,666 of 32,000, so the phase starts at 10,665; 0.333), and not a turn
+ * earlier, because Reflect closes down {@link Slow}.
  *
  * Measured: the window has to be wide. At 0.45 the reflecting character was
  * often already on the bench when it opened and the self-Haste landed on every
