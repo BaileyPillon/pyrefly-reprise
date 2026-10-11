@@ -17,7 +17,7 @@
       "loopStart": 12.671678,
       "loopEnd": 75.83644,
       "duration": 78.8364,
-      "bytes": 1379184,
+      "bytes": 1341547,
       "lufs": -16.0,
       "truePeakDb": -2.4,
       "source": "elevenlabs-music_v2_5"
@@ -65,9 +65,9 @@
       "loopStart": 30.906009,
       "loopEnd": 82.11161,
       "duration": 85.1116,
-      "bytes": 1652754,
+      "bytes": 1521986,
       "lufs": -16.0,
-      "truePeakDb": -4.5,
+      "truePeakDb": -3.3,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-isaaru": {
@@ -75,9 +75,9 @@
       "loopStart": 16.61941,
       "loopEnd": 82.623515,
       "duration": 85.6235,
-      "bytes": 1684825,
+      "bytes": 1560574,
       "lufs": -16.0,
-      "truePeakDb": -3.6,
+      "truePeakDb": -3.1,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-jecht": {
@@ -94,9 +94,9 @@
       "loopStart": 5.878753,
       "loopEnd": 76.122268,
       "duration": 79.1223,
-      "bytes": 1554446,
+      "bytes": 1471333,
       "lufs": -16.0,
-      "truePeakDb": -4.0,
+      "truePeakDb": -3.1,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-seymour": {
@@ -124,9 +124,9 @@
       "loopStart": 30.916667,
       "loopEnd": 74.56229,
       "duration": 77.5623,
-      "bytes": 1505505,
+      "bytes": 1415028,
       "lufs": -16.0,
-      "truePeakDb": -5.1,
+      "truePeakDb": -4.5,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-shuyin": {
@@ -143,9 +143,9 @@
       "loopStart": 58.528685,
       "loopEnd": 93.64678,
       "duration": 96.6468,
-      "bytes": 1768221,
+      "bytes": 1684168,
       "lufs": -16.0,
-      "truePeakDb": -3.8,
+      "truePeakDb": -3.1,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-sin-countdown": {
@@ -153,9 +153,9 @@
       "loopStart": 41.189864,
       "loopEnd": 89.189025,
       "duration": 92.189,
-      "bytes": 1719874,
+      "bytes": 1601601,
       "lufs": -16.0,
-      "truePeakDb": -1.8,
+      "truePeakDb": -1.5,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-trema": {
@@ -163,9 +163,9 @@
       "loopStart": 28.81458,
       "loopEnd": 73.145374,
       "duration": 76.1454,
-      "bytes": 1496328,
+      "bytes": 1370303,
       "lufs": -16.0,
-      "truePeakDb": -5.4,
+      "truePeakDb": -4.3,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-vegnagun": {

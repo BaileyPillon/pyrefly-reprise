@@ -277,10 +277,13 @@ Sparse, melancholy solo piano piece at 58 BPM in A minor. A lone flute plays fou
 
 - **`boss-bahamut`** (Chapter IV's Bahamut fight): brief `BH-M4` ("Lament (piano)"), take 1, ElevenLabs Music v2.5, original; the driver's pick under Bailey's 2026-10-10 delegation ("Whatever you recommend for sound effects and music I'll go with those recommendations"). Raw take SHA-256 `fd10f1ba454fe7d1961949e4b71169237c4d5eb4019a6553b64ea61abd92abd1`; prompt and hashes in `docs/audio/music-elevenlabs-2026-10-10.json`.
 - **`boss-leblanc`** (Chapter VI's Leblanc fight and the hidden Leblanc chapter): brief `LB-M5` ("Parade of the pleased"), take 1, ElevenLabs Music v2.5, original; the driver's pick under the same delegation. Raw take SHA-256 `b8e43a22c6651b9bc11a806b63f52965562f0d6d11537113de40fa808e9871ae`; plan and hashes in the same record.
+- **Processing (2026-10-11, driver item 53e; PR-0425).** The shipped files of `boss-bahamut` and `boss-leblanc` are the takes as first installed with their side channel scaled down in mid/side so that they pass the stereo gate of `THEMES.md`, one gain back to -16 LUFS, and a LAME V4 re-encode; nothing else, and the loop points and length are the same to the sample. The figures and hashes, before and after: `docs/audio/music-stereo-53e-2026-10-11.json`.
 
 #### Batch 1 (2026-10-10)
 
 Bailey, 2026-10-10 about 22:10 EDT, on the driver's batch-1 music picks: "ill go with all your recommendations". Each take is ElevenLabs Music v2.5, take 1, original; the prompts name no composer, franchise, character or melody. Prompts, raw-take hashes and shipped-file hashes are also in `docs/audio/music-batch1-2026-10-10.json`.
+
+Processing (2026-10-11, driver item 53e; PR-0425): the shipped file of every cue below except `boss-ff7-guard`, which already passed, has its side channel scaled down in mid/side so that it passes the stereo gate of `THEMES.md`, one gain back to -16 LUFS (and, for `boss-sin-countdown`, a 0.63 dB look-ahead limiter on 13 samples), and a LAME V4 re-encode; nothing else, and the loop points and length are the same to the sample. The raw-take hashes are the takes as generated; the shipped-file hashes before and after are in `docs/audio/music-stereo-53e-2026-10-11.json`.
 
 - **`boss-ffx2-fallen-aeons`** (FFX-2): brief `XI-M1` ("Breathless ceremony"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `da3e96cfcf54716503eb8befd463ba98bc55f90f972b944c46332b52bba5d894`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
 

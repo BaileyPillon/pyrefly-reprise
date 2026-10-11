@@ -3,7 +3,7 @@
   "source": "elevenlabs-music_v2_5",
   "words": "ill go with all your recommendations (Bailey, 2026-10-10, about 22:10 EDT), accepting the batch-1 music picks; standing since about 18:20 EDT: \"Whatever you recommend for sound effects and music I'll go with those recommendations\"",
   "gameCase": "FFX-2 only: Chapter XI (the Fallen Aeons) and Chapter XVI (Ixion) share one cue, boss-ffx2-fallen-aeons; Chapter XIII's second phase (Trema) has boss-trema. FFX only: Chapter X (Seymour Natus) has boss-seymour-natus, Chapter XIV (Isaaru) boss-isaaru, Chapter XVII (Sin's Fins, Genais and Core) boss-sin-assault and Chapter XVIII (Overdrive Sin, the Face) boss-sin-countdown. FF7 only: the hidden 'limit' chapter's Guard Scorpion has boss-ff7-guard. Every other chapter keeps its cue; boss-ffx2-aeon, boss-seymour-macalania, boss-yojimbo and boss-evrae stay in use (the Experiment's Act I, Chapters VII, IX and VIII), so no file is retired.",
-  "master": "The files are the batch-1 lane's staged masters (D:/Tools/pyrefly-scratch/2026-10-10/music-batch1/stage/music: one gain to -16 LUFS, a loop cut on whole bars at real attacks, a 3 s run-on, LAME V4), installed byte for byte (sha256 checked against the lane's work/master-<brief>.json); their manifest entries are the lane's own with the file renamed to the cue.",
+  "master": "The files are the batch-1 lane's staged masters (D:/Tools/pyrefly-scratch/2026-10-10/music-batch1/stage/music: one gain to -16 LUFS, a loop cut on whole bars at real attacks, a 3 s run-on, LAME V4), installed byte for byte (sha256 checked against the lane's work/master-<brief>.json); their manifest entries are the lane's own with the file renamed to the cue. On 2026-10-11 (driver item 53e, PR-0425) the cues whose stereo image failed the THEMES.md gate were narrowed in mid/side and re-encoded at LAME V4; for those, `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's staged master as first installed, and `stereoFix` points at docs/audio/music-stereo-53e-2026-10-11.json.",
   "synthFallback": "Each cue is a stand-in in src/audio/tracks/index.ts for the composition it replaces, which plays only when the MP3 cannot load. No new synth score was written. The FF7 cue replaces nothing (the chapter was silent) and no FF7 score exists, so its fallback is the generic FFX battle bed battle-ffx: a cross-game fallback, named on purpose.",
   "budget": {
     "before": 90024028,
@@ -12,7 +12,7 @@
     "limit": 105000000,
     "note": "The six cues of the first commit fit the 100 MB budget (99,851,535 bytes). The FF7 cue, 1,741,096 bytes, does not (101,592,631), so this commit raises the budget to 105 MB; the raise is the driver's call."
   },
-  "notMeasured": "The stereo gate of THEMES.md and the headless browser proof were not run on these files; agents cannot hear (rule 13), so the picks are the builder's recommendation from the briefs and the numbers, accepted by Bailey's words above, and his ear can overrule any of them.",
+  "notMeasured": "The stereo gate of THEMES.md was measured on 2026-10-11 and is pinned in docs/audio/music-stereo-53e-2026-10-11.json; the headless browser proof was not run on these files; agents cannot hear (rule 13), so the picks are the builder's recommendation from the briefs and the numbers, accepted by Bailey's words above, and his ear can overrule any of them.",
   "cues": [
     {
       "cue": "boss-ffx2-fallen-aeons",
@@ -38,18 +38,48 @@
         "creditsEstimated": 1320
       },
       "file": {
-        "bytes": 1652754,
-        "sha256": "a284ba794ebecae2611b0618f4ba5e442c991b8b184b00ca2b7ae0a3569a9107"
+        "bytes": 1521986,
+        "sha256": "d8b4ee7d731f3984f06d5697609fe1d5eead114ff6d6186070df9eca299a9c3a"
       },
       "manifestEntry": {
         "file": "music/boss-ffx2-fallen-aeons.mp3",
         "loopStart": 30.906009,
         "loopEnd": 82.11161,
         "duration": 85.1116,
-        "bytes": 1652754,
+        "bytes": 1521986,
         "lufs": -16.0,
-        "truePeakDb": -4.5,
+        "truePeakDb": -3.3,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1652754,
+        "sha256": "a284ba794ebecae2611b0618f4ba5e442c991b8b184b00ca2b7ae0a3569a9107",
+        "manifestEntry": {
+          "file": "music/boss-ffx2-fallen-aeons.mp3",
+          "loopStart": 30.906009,
+          "loopEnd": 82.11161,
+          "duration": 85.1116,
+          "bytes": 1652754,
+          "lufs": -16.0,
+          "truePeakDb": -4.5,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.034,
+            "sideMid": -0.29,
+            "monoLoss": -2.87
+          },
+          "after": {
+            "corr": 0.696,
+            "sideMid": -7.47,
+            "monoLoss": -0.72
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       },
       "master": {
         "take": 1,
@@ -91,18 +121,48 @@
         "creditsEstimated": 1320
       },
       "file": {
-        "bytes": 1496328,
-        "sha256": "d13250a138a93a33c959ef3187c9df2d80b3801c69a63bc4dc202cf2b24b58b6"
+        "bytes": 1370303,
+        "sha256": "23103dc0fd54b31663d5fee3c0e4fa4489b1d79ff0893f43ebcd79b2d6ad2d05"
       },
       "manifestEntry": {
         "file": "music/boss-trema.mp3",
         "loopStart": 28.81458,
         "loopEnd": 73.145374,
         "duration": 76.1454,
-        "bytes": 1496328,
+        "bytes": 1370303,
         "lufs": -16.0,
-        "truePeakDb": -5.4,
+        "truePeakDb": -4.3,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1496328,
+        "sha256": "d13250a138a93a33c959ef3187c9df2d80b3801c69a63bc4dc202cf2b24b58b6",
+        "manifestEntry": {
+          "file": "music/boss-trema.mp3",
+          "loopStart": 28.81458,
+          "loopEnd": 73.145374,
+          "duration": 76.1454,
+          "bytes": 1496328,
+          "lufs": -16.0,
+          "truePeakDb": -5.4,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.054,
+            "sideMid": -0.47,
+            "monoLoss": -2.78
+          },
+          "after": {
+            "corr": 0.699,
+            "sideMid": -7.51,
+            "monoLoss": -0.71
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       },
       "master": {
         "take": 1,
@@ -144,18 +204,48 @@
         "creditsEstimated": 1320
       },
       "file": {
-        "bytes": 1505505,
-        "sha256": "9b5143fe6c34d92226766a1e3e0780ee262954dc06a52d62e8f45c0e647d9111"
+        "bytes": 1415028,
+        "sha256": "a88549ab77b4f60713ba6d3b8ac10b3e780a2df413f7d6e5241cd9e8c84ba03c"
       },
       "manifestEntry": {
         "file": "music/boss-seymour-natus.mp3",
         "loopStart": 30.916667,
         "loopEnd": 74.56229,
         "duration": 77.5623,
-        "bytes": 1505505,
+        "bytes": 1415028,
         "lufs": -16.0,
-        "truePeakDb": -5.1,
+        "truePeakDb": -4.5,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1505505,
+        "sha256": "9b5143fe6c34d92226766a1e3e0780ee262954dc06a52d62e8f45c0e647d9111",
+        "manifestEntry": {
+          "file": "music/boss-seymour-natus.mp3",
+          "loopStart": 30.916667,
+          "loopEnd": 74.56229,
+          "duration": 77.5623,
+          "bytes": 1505505,
+          "lufs": -16.0,
+          "truePeakDb": -5.1,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.145,
+            "sideMid": -1.27,
+            "monoLoss": -2.42
+          },
+          "after": {
+            "corr": 0.697,
+            "sideMid": -7.48,
+            "monoLoss": -0.71
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       },
       "master": {
         "take": 1,
@@ -197,18 +287,48 @@
         "creditsEstimated": 1320
       },
       "file": {
-        "bytes": 1684825,
-        "sha256": "404107c9c84771301bc81b6bcaa18543a1a07321303bb0ac2bab3018acb7013d"
+        "bytes": 1560574,
+        "sha256": "1da6b0b09130e0c607d8c7d7d9ed6b443f76059ff74759f21119e752b9956ea5"
       },
       "manifestEntry": {
         "file": "music/boss-isaaru.mp3",
         "loopStart": 16.61941,
         "loopEnd": 82.623515,
         "duration": 85.6235,
-        "bytes": 1684825,
+        "bytes": 1560574,
         "lufs": -16.0,
-        "truePeakDb": -3.6,
+        "truePeakDb": -3.1,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1684825,
+        "sha256": "404107c9c84771301bc81b6bcaa18543a1a07321303bb0ac2bab3018acb7013d",
+        "manifestEntry": {
+          "file": "music/boss-isaaru.mp3",
+          "loopStart": 16.61941,
+          "loopEnd": 82.623515,
+          "duration": 85.6235,
+          "bytes": 1684825,
+          "lufs": -16.0,
+          "truePeakDb": -3.6,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.08,
+            "sideMid": -0.7,
+            "monoLoss": -2.67
+          },
+          "after": {
+            "corr": 0.697,
+            "sideMid": -7.47,
+            "monoLoss": -0.71
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       },
       "master": {
         "take": 1,
@@ -250,18 +370,48 @@
         "creditsEstimated": 1320
       },
       "file": {
-        "bytes": 1768221,
-        "sha256": "adebca3f5e9d18e56bad44cd910ac658deef4bdf4bdb923c4b60118dc01c7e27"
+        "bytes": 1684168,
+        "sha256": "3526264875c236b9bfba64b9459c306d9fcbaef924b1f0b496dac95c8da950db"
       },
       "manifestEntry": {
         "file": "music/boss-sin-assault.mp3",
         "loopStart": 58.528685,
         "loopEnd": 93.64678,
         "duration": 96.6468,
-        "bytes": 1768221,
+        "bytes": 1684168,
         "lufs": -16.0,
-        "truePeakDb": -3.8,
+        "truePeakDb": -3.1,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1768221,
+        "sha256": "adebca3f5e9d18e56bad44cd910ac658deef4bdf4bdb923c4b60118dc01c7e27",
+        "manifestEntry": {
+          "file": "music/boss-sin-assault.mp3",
+          "loopStart": 58.528685,
+          "loopEnd": 93.64678,
+          "duration": 96.6468,
+          "bytes": 1768221,
+          "lufs": -16.0,
+          "truePeakDb": -3.8,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.186,
+            "sideMid": -1.64,
+            "monoLoss": -2.27
+          },
+          "after": {
+            "corr": 0.696,
+            "sideMid": -7.46,
+            "monoLoss": -0.72
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       },
       "master": {
         "take": 1,
@@ -303,18 +453,48 @@
         "creditsEstimated": 1320
       },
       "file": {
-        "bytes": 1719874,
-        "sha256": "f81eb2779a89b50f5b0180adfa6a662fb1d756ebf931323709257a0d8fe2f246"
+        "bytes": 1601601,
+        "sha256": "8c7b749f5b83b725199350398ff357ac87c77889e113c4733079320d076e5e25"
       },
       "manifestEntry": {
         "file": "music/boss-sin-countdown.mp3",
         "loopStart": 41.189864,
         "loopEnd": 89.189025,
         "duration": 92.189,
-        "bytes": 1719874,
+        "bytes": 1601601,
         "lufs": -16.0,
-        "truePeakDb": -1.8,
+        "truePeakDb": -1.5,
         "source": "elevenlabs-music_v2_5"
+      },
+      "laneFile": {
+        "bytes": 1719874,
+        "sha256": "f81eb2779a89b50f5b0180adfa6a662fb1d756ebf931323709257a0d8fe2f246",
+        "manifestEntry": {
+          "file": "music/boss-sin-countdown.mp3",
+          "loopStart": 41.189864,
+          "loopEnd": 89.189025,
+          "duration": 92.189,
+          "bytes": 1719874,
+          "lufs": -16.0,
+          "truePeakDb": -1.8,
+          "source": "elevenlabs-music_v2_5"
+        }
+      },
+      "stereoFix": {
+        "record": "docs/audio/music-stereo-53e-2026-10-11.json",
+        "stereo": {
+          "before": {
+            "corr": 0.081,
+            "sideMid": -0.7,
+            "monoLoss": -2.67
+          },
+          "after": {
+            "corr": 0.698,
+            "sideMid": -7.5,
+            "monoLoss": -0.71
+          }
+        },
+        "what": "narrowed in mid/side to pass the THEMES.md stereo gate (driver item 53e, PR-0425); `file` and `manifestEntry` are the narrowed file's, `laneFile` is the lane's file before it"
       },
       "master": {
         "take": 1,
