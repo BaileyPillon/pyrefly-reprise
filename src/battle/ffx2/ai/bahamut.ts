@@ -14,18 +14,21 @@
  * So Curse comes once, at his very first action, and the loop is six actions: Attack, Attack, Attack, Impulse, Impulse, the
  * countdown, Mega Flare (rows B1, B2, B5). Nothing in it reads his HP, his status or the party's HP.
  *
- * **The countdown (rows B3, B4) is a timer row.** In the game it is five steps of 150 AI polls, 750 polls (25.03 s of running
- * clock), counted on every logic step he is ready, so Slow and Haste do not change it. Until lane W4 moves the engine's clock
- * onto the logic step the engine counts in turns, so here **one Bahamut turn stands for one step**: the first turn after the
- * second Impulse is a silent step, the next four show 5, 4, 3, 2 (one number at the end of each step) and the fifth shows 1
- * with the cast, which is the order of the scene's number windows. The five-turn length is the same as before; only what is
+ * **The countdown (rows B3, B4) is a timer row, on the logic step since RC3.** In the game it is five steps of 150 AI polls, 750 polls
+ * (25.03 s of running clock), counted on every logic step he is ready, so Slow and Haste do not change it. The engine's clock is the
+ * logic step now, so each countdown turn is an idle wait (internal.ts idleFor) of exactly the steps to the next window: the first poll
+ * after the second Impulse is poll 1 and says nothing, the 5 shows at poll 150, the 4 at 300, the 3 at 450, the 2 at 600 and the 1 comes
+ * with the cast at poll 750 (149 steps from poll 1 to poll 150, then 150 each). The unit sits the wait out executing, takes no recovery
+ * and thinks nothing, so Slow, Haste, a fallen girl and his own gauge do not move it, and a Wait menu stops it with every other clock.
+ * Only what is shown follows the scene's number windows: there is no 0 and the 1 comes with the cast. charge events keep turnsLeft as the
+ * turns until the cast.
  * shown moved (there is no 0 any more). `charge` events keep `turnsLeft` as the turns until the cast.
  */
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem } from '../internal.ts';
-import { BAHAMUT_COUNTDOWN_START } from '../constants.ts';
+import { idleFor, mem, setMem } from '../internal.ts';
+import { BAHAMUT_COUNTDOWN_START, BAHAMUT_POLLS_PER_COUNTDOWN_STEP } from '../constants.ts';
 import { lacking, searchNear, SCENES } from './script-rolls.ts';
 
 /** The turns of the countdown, counted from the one after the second Impulse: five steps, the last of them the cast. */
@@ -51,7 +54,8 @@ function countdownTurn(ctx: AiContext): Command | null {
       ctx.emit({ type: 'charge', enemyId: self.id, name: String(shown), turnsLeft: shown - 1, stage: shown <= 2 ? 2 : 1 });
       ctx.flags['bahamutCountdown'] = shown;
     }
-    return null; // the polls between the numbers issue nothing
+    // The polls between the numbers issue nothing: wait for the next window (poll 150, 300, ...; the first poll is poll 1, so 149 steps).
+    return idleFor(self, turn === 1 ? BAHAMUT_POLLS_PER_COUNTDOWN_STEP - 1 : BAHAMUT_POLLS_PER_COUNTDOWN_STEP);
   }
   setMem(self, 'countdownTurn', 0);
   setMem(self, 'megaArmed', 0);

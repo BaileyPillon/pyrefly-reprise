@@ -26,7 +26,7 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem } from '../internal.ts';
+import { mem, setMem, speakTurn } from '../internal.ts';
 import { lacking, scriptMod, searchNear, searchUniform, spendSearchDraw, SCENES } from './script-rolls.ts';
 
 function girlsOf(ctx: AiContext): Ffx2Unit[] {
@@ -50,7 +50,7 @@ export const vegnagunTailScript: AiScript = {
     if (mem(self, 'voice') === 0) {
       setMem(self, 'voice', 1);
       ctx.emit({ type: 'script-trigger', name: 'farplane-voice-braska', payload: { who: self.id } });
-      return null;
+      return speakTurn(self);
     }
     if (mem(self, 'sweep') === 0) {
       setMem(self, 'sweep', 1);
@@ -64,7 +64,7 @@ export const vegnagunTailScript: AiScript = {
       if (mem(self, 'voice') === 1) {
         setMem(self, 'voice', 2);
         ctx.emit({ type: 'script-trigger', name: 'vegnagun-tail-quarter', payload: { who: self.id } });
-        return null;
+        return speakTurn(self);
       }
     }
     const target = searchNear(ctx.rng, girlsOf(ctx), SCENES.tail);
@@ -108,7 +108,7 @@ export const vegnagunLegScript: AiScript = {
     const speaker = LEG_VOICE_POLLS.get(poll);
     if (speaker !== undefined) {
       ctx.emit({ type: 'script-trigger', name: 'farplane-voice', payload: { who: self.id, speaker, poll } });
-      return null;
+      return speakTurn(self);
     }
     const turn = mem(self, 'turn') + 1;
     if (turn >= 4) {

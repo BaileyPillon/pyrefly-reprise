@@ -35,6 +35,7 @@ import { applyStatus } from './statuses.ts';
 import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES } from './constants.ts';
 import { newGauge } from './atb-engine.ts';
 import { openBattleGauges } from './atb-open.ts';
+import { aiScriptFor } from './ai/index.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -293,6 +294,12 @@ export function buildState(
 
   for (const enemy of enemies.enemies) units.push(buildEnemy(enemy, false));
   for (const part of enemies.parts ?? []) units.push(buildEnemy(part, true));
+
+  // The scripts' init entries run before the first gauge is rolled (AiScript.init, RC3): the Vegnagun Head's Agility 110 (row H3).
+  for (const unit of units) {
+    const init = unit.side === 'enemy' ? aiScriptFor(unit.enemy?.aiScriptId).init : undefined;
+    if (init?.agi !== undefined) unit.stats = { ...unit.stats, agi: init.agi };
+  }
 
   const separate = enemies.opensAsSeparateBattle === true && (options.separateBattleGauges ?? SEPARATE_BATTLE_GAUGES);
   openBattleGauges(

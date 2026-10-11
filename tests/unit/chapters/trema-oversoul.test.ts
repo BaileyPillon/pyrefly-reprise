@@ -9,12 +9,11 @@
 
 import { afterEach, describe, expect, it } from 'vitest';
 import type { AbilityDef, Command } from '../../../src/battle/common/types.ts';
-import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 import { hitPercent } from '../../../src/battle/ffx2/hit.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
 import { abilityPerformedBy } from '../../../src/battle/ffx2/execute.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
-import { OVERSOUL_ESTIMATES, paragonOversoulScript } from '../../../src/battle/ffx2/ai/paragon-oversoul.ts';
+import { OVERSOUL_ESTIMATES, OVERSOUL_IDLE_LIMIT_STEPS, paragonOversoulScript } from '../../../src/battle/ffx2/ai/paragon-oversoul.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { paragon } from '../../../src/data/ffx2/enemies/paragon.ts';
 import { paragonOversoul } from '../../../src/data/ffx2/enemies/paragon-oversoul.ts';
@@ -46,9 +45,9 @@ describe('the Oversoul block and rows (§12.2)', () => {
   it('the values that remain parameters are at their declared defaults (the game answered the rest)', () => {
     // Re-parity AI-FFX2-b (FFX-2 only): finalImpactReducible is true (the row has the physical bit) and attackItchy false (the row has no
     // status); answerTiming and attackBWakesOn are gone (the answer is made on the next poll, and only a heal that lands on him wakes the
-    // Demi loop). idleSeconds (structural) and lowHpActsEveryTurn (D-151, "it waits to be hit") stay as the owner left them.
+    // Demi loop). lowHpActsEveryTurn (D-151, "it waits to be hit") stays as the owner left it; the idle limit is the script's own 1,200 polls (RC3).
     expect(OVERSOUL_ESTIMATES).toMatchObject({
-      physicalHitPercent: 50, idleSeconds: 20, magicBelow: 0.4, finalBelow: 0.1, finalImpactHits: 14,
+      physicalHitPercent: 50, magicBelow: 0.4, finalBelow: 0.1, finalImpactHits: 14,
       finalImpactReducible: true, agaOnAll: true, attackItchy: false, lowHpActsEveryTurn: false, thinkingPeriod: 0,
     });
   });
@@ -119,8 +118,8 @@ describe('its script in the engine (the decision table is parity-ffx2-ai-oversou
     const b = fresh();
     paragonOversoulScript.decide(b.ctx('paragon'));
     const state = b.engine.state() as { ticks: number };
-    // Re-parity W4 (FFX-2 only): the engine's clock is the logic step (29.97 a second), not 3,000 ticks a second.
-    const idle = OVERSOUL_ESTIMATES.idleSeconds * STEPS_PER_SECOND;
+    // RC3 (FFX-2 only): the engine's clock is the logic step (29.97 a second) and the limit is the script's 1,201st idle poll, one a step.
+    const idle = OVERSOUL_IDLE_LIMIT_STEPS;
     const quiet = state.ticks;
     state.ticks = quiet + idle - 1;
     expect(paragonOversoulScript.decide(b.ctx('paragon'))).toBeNull();

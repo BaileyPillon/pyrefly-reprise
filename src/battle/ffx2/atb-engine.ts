@@ -168,21 +168,23 @@ export function partyCountsOf(units: readonly Ffx2Unit[]): { count: number; stan
  * ATB cost over (AGI + 1) plus the delay it took while executing; a monster also waits 30 steps for every fallen girl. The
  * state goes back to IDLE, from where the next step starts the recovery. A dead unit is left alone.
  */
-export function completeCommand(u: Ffx2Unit, costAtb: number, units: readonly Ffx2Unit[]): void {
+export function completeCommand(u: Ffx2Unit, costAtb: number, units: readonly Ffx2Unit[], idle = false): void {
   const counts = partyCountsOf(units);
+  // An idle wait (RC3, internal.ts AI_IDLE_STEPS) is not a command: the thinking time is a command's end, so a wait adds none.
   const r = commandComplete(
     {
       dead: !u.alive,
       costAtb,
       agi: statByte(u.stats.agi),
       carry: u.gauge.carry,
-      thinking: { chrId: u.gauge.slot, base: 0, isMonster: u.side === 'enemy', partyCount: counts.count, partyStanding: counts.standing },
+      thinking: { chrId: u.gauge.slot, base: 0, isMonster: u.side === 'enemy' && !idle, partyCount: counts.count, partyStanding: counts.standing },
     },
     () => {
       throw new Error('the thinking base is 0 in play, so thinking draws nothing (research/re-ffx2-atb-status.md section 3.4)');
     },
   );
   u.gauge.executing = 0;
+  u.gauge.idleWait = false;
   u.gauge.state = Ffx2AtbState.Idle;
   if (r.recovery === null) return;
   u.atb.recovery = r.recovery;
@@ -269,6 +271,7 @@ export function dropAction(u: Ffx2Unit): void {
   u.atb.charging = null;
   u.pendingCommand = null;
   u.gauge.executing = 0;
+  u.gauge.idleWait = false;
   if (u.gauge.state === Ffx2AtbState.Executing) u.gauge.state = Ffx2AtbState.Idle;
 }
 

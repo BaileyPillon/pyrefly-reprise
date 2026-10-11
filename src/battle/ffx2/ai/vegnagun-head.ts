@@ -40,7 +40,7 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem } from '../internal.ts';
+import { mem, setMem, speakTurn } from '../internal.ts';
 import { HEAD_FIRE_AT_TURN, HEAD_HALFWAY_LINE_AT, HEAD_LINE_INTERVAL } from '../constants.ts';
 import { scriptMod, searchUniform } from './script-rolls.ts';
 import { HEAD_CLOCK, HEAD_PHASE, REDOUBT_L, REDOUBT_R, REDOUBT_REVIVES, redoubtOf } from './vegnagun-redoubt.ts';
@@ -72,17 +72,17 @@ function phaseOne(ctx: AiContext): Command | null {
     const stage = mem(self, 'jectFirst');
     if (stage === 0) {
       setMem(self, 'jectFirst', 1);
-      return null;
+      return speakTurn(self);
     }
     if (scriptMod(ctx.rng, 4) === 0) {
       if (stage === 1) {
         setMem(self, 'jectFirst', 2);
-        return null;
+        return speakTurn(self);
       }
       if (stage === 2) {
         setMem(self, 'jectFirst', 3);
         setMem(self, 'queuedSpeech', 1); // the second of two speak commands queued together: it runs without a poll
-        return null;
+        return speakTurn(self);
       }
     }
   }
@@ -176,6 +176,8 @@ function phaseTwoTalk(ctx: AiContext): 'spoke' | 'doom' | 'go-on' {
 
 export const vegnagunHeadScript: AiScript = {
   id: 'vegnagun-head',
+  /** The script's init writes Agility 110 before the first gauge (row H3, RC3): the opening wait is rolled on it, not on the table's 36. */
+  init: { agi: PHASE_ONE_AGILITY },
 
   decide(ctx: AiContext): Command | null {
     const self = ctx.self;
@@ -187,17 +189,19 @@ export const vegnagunHeadScript: AiScript = {
     const queued = mem(self, 'queuedSpeech');
     if (queued > 0) {
       setMem(self, 'queuedSpeech', queued - 1);
-      return null;
+      return speakTurn(self);
     }
     if (mem(self, 'opened') === 0) {
       setMem(self, 'opened', 1);
       ctx.emit({ type: 'script-trigger', name: 'shuyin-line-1', payload: { line: 1 } });
-      return null;
+      return speakTurn(self);
     }
     if (ctx.flags[HEAD_PHASE] !== 'B') return phaseOne(ctx);
 
     self.stats.agi = PHASE_TWO_AGILITY;
-    if (phaseTwoTalk(ctx) !== 'go-on') return null;
+    const talk = phaseTwoTalk(ctx);
+    if (talk === 'spoke') return speakTurn(self);
+    if (talk !== 'go-on') return null; // the cannon fires: the world ends
     const alive = pods(ctx);
     if (!alive.right && !alive.left) return actaEstFabula(ctx);
     return ladder(ctx);

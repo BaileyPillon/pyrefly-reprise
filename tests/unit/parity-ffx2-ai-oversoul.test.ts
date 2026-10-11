@@ -24,9 +24,8 @@ import { describe, expect, it } from 'vitest';
 import type { AbilityDef, AbilityCommand, Command } from '../../src/battle/common/types.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
 import { aiScriptFor } from '../../src/battle/ffx2/ai/index.ts';
-import { K, OS_COPY, OS_DEMI, OS_NORMAL, OVERSOUL_ESTIMATES, OVERSOUL_IDLE_POLLS, hpBelow, paragonOversoulScript as script } from '../../src/battle/ffx2/ai/paragon-oversoul.ts';
+import { K, OS_COPY, OS_DEMI, OS_NORMAL, OVERSOUL_ESTIMATES, OVERSOUL_IDLE_LIMIT_STEPS, OVERSOUL_IDLE_POLLS, hpBelow, paragonOversoulScript as script } from '../../src/battle/ffx2/ai/paragon-oversoul.ts';
 import { COPY_IDS, HEAL_BUFF_IDS, oversoulCommandClass } from '../../src/battle/ffx2/ai/oversoul-lists.ts';
-import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import { resolveAbility, type ResolveContext } from '../../src/battle/ffx2/resolve.ts';
@@ -40,7 +39,7 @@ const cmd = (c: Command | null): AbilityCommand => {
   return c as AbilityCommand;
 };
 const P = (count: number): number => count / 65536;
-const IDLE = OVERSOUL_ESTIMATES.idleSeconds * STEPS_PER_SECOND;
+const IDLE = OVERSOUL_IDLE_LIMIT_STEPS; // RC3: the script's 1,201st idle poll, counted in logic steps (it was 20 s of engine time)
 const MAX = 210000;
 
 function os(memory: Record<string, number | string | boolean> = {}, hp = MAX): Ffx2Unit {
@@ -304,8 +303,10 @@ describe('the first poll (O14) and the data', () => {
     expect(ab('paragon-os-final-impact')).toMatchObject({ damageType: 'physical', hits: 14 });
     expect(paragonOversoul.abilityIds).toContain('x2-shared-osmose');
     expect(ab('x2-shared-osmose').ffx2Record).toMatchObject({ id: 0x317b, damageClass: 2, formula: 9, power: 6 });
-    expect(OVERSOUL_ESTIMATES).toMatchObject({ finalImpactReducible: true, attackItchy: false, idleSeconds: 20, lowHpActsEveryTurn: false });
-    // O2, structural: the game's limit is 1,200 idle polls = 40.04 s at 29.97 steps a second; the build's is 20 s. The conversion the handoff quotes:
+    expect(OVERSOUL_ESTIMATES).toMatchObject({ finalImpactReducible: true, attackItchy: false, lowHpActsEveryTurn: false });
+    expect(OVERSOUL_ESTIMATES).not.toHaveProperty('idleSeconds');
+    // O2 (RC3): the game's limit is 1,200 idle polls = 1,200 logic steps = 40.04 s at 29.97 steps a second, and the 1,201st acts.
     expect(OVERSOUL_IDLE_POLLS * 0.033367).toBeCloseTo(40.04, 2);
+    expect(OVERSOUL_IDLE_LIMIT_STEPS).toBe(1201);
   });
 });

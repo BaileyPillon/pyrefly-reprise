@@ -30,6 +30,7 @@ import type {
 import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
+import { SPEAK_COMMAND_ATB_COST } from './constants.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -78,6 +79,12 @@ export interface Ffx2Gauge {
    * `Number.MAX_SAFE_INTEGER` until the unit has been ready once.
    */
   readyKey: number;
+  /**
+   * True while the unit sits out an IDLE WAIT: a script poll that issued nothing and asked not to be polled again for some logic steps
+   * (`idleFor` below; the countdown of Bahamut's Mega Flare is 750 polls, one a step). The wait is the same `executing` countdown the
+   * action time uses, but it is not a command: when it ends the unit is ready at once and nothing is added for fallen girls (RC3).
+   */
+  idleWait?: boolean;
 }
 
 /** Per-unit bookkeeping the engine needs and the contract has nowhere to put. */
@@ -299,6 +306,11 @@ export interface AiContext {
 export interface AiScript {
   id: string;
   decide(ctx: AiContext): Command | null;
+  /**
+   * Stats the script's init entry writes before the battle's first gauge is rolled (`setup.ts`; RC3, FFX-2 only). The game's scripts run init
+   * once at the start, so a number set there is the one the opening gauge uses (the Vegnagun Head's Agility 110, row H3).
+   */
+  init?: { agi?: number };
   /** Optional hook run after every resolved turn of *any* unit (fail clocks). */
   onTurnResolved?(ctx: AiContext, actor: Ffx2Unit): void;
   /**
@@ -359,4 +371,31 @@ export function mem(unit: Ffx2Unit, key: string, fallback = 0): number {
 export function setMem(unit: Ffx2Unit, key: string, value: number | string | boolean): void {
   if (!unit.aiMemory) unit.aiMemory = {};
   unit.aiMemory[key] = value;
+}
+
+/**
+ * AI-memory keys of a **flavour turn** (a poll whose `decide` returned null). `runAiTurn` reads and clears them after the call
+ * (RC3, FFX-2 only):
+ *
+ * - `idleSteps`: the poll was one of the game's idle polls and the script is next asked this many logic steps later. The game
+ *   polls a ready monster every step and a script that counts polls counts steps, so a countdown of N polls is a wait of N steps (Bahamut's
+ *   Mega Flare is 750 of them). The unit sits out the wait `executing`, takes no recovery of its own, and thinks nothing
+ *   (`Ffx2Gauge.idleWait`).
+ * - `pollCost`: the ATB cost (`Cmd+0x22`) of the command the poll stood for, e.g. the speak command of a voice line (60,
+ *   `SPEAK_COMMAND_ATB_COST`). The recovery is `cost x 10000 / (AGI + 1)` like any command's; with neither key the poll costs the
+ *   standard gauge (70).
+ */
+export const AI_IDLE_STEPS = 'idleSteps';
+export const AI_POLL_COST = 'pollCost';
+
+/** Ask the engine to poll `self` again `steps` logic steps from now, with nothing in between (see {@link AI_IDLE_STEPS}); the caller returns null. */
+export function idleFor(self: Ffx2Unit, steps: number): null {
+  setMem(self, AI_IDLE_STEPS, Math.max(0, Math.round(steps)));
+  return null;
+}
+
+/** A voice line: a flavour turn that stands for the game's speak command, recovering by its ATB cost (see {@link AI_POLL_COST}). */
+export function speakTurn(self: Ffx2Unit): null {
+  setMem(self, AI_POLL_COST, SPEAK_COMMAND_ATB_COST);
+  return null;
 }

@@ -57,6 +57,15 @@ export const TICKS_PER_BAR = 24000;
  */
 export const ATB_BASE_VALUE = 70;
 
+/**
+ * The ATB cost (Cmd+0x22) of the game's speak command, the command a boss script queues for a voice line: 60, so a voice poll recovers by
+ * 60 x 10000 / (AGI + 1) units (Leg 17,142 = 181 steps, Core 16,666 = 176, Tail 5,172 = 55, Head 5,405 = 57 in phase 1 and 8,695 = 92 in
+ * phase 2, Shuyin 4,477 = 48: the timer rows of docs/handoff/re-parity-ai-ffx2-a.md, from research/re-ffx2-ai-bahamut-vegnagun.md section 8).
+ * A voice line in our scripts is a flavour turn that stands for that command (RC3: the engine's default for a turn that played nothing is
+ * the standard gauge, ATB_BASE_VALUE, 70, which made every voice poll a sixth too long).
+ */
+export const SPEAK_COMMAND_ATB_COST = 60;
+
 /** The ATB cost an ability WITHOUT a game row stands for when it is tagged `2xRT` (Trigger Happy, Sentinel, every Dance; §1.4 `[estimate]`). */
 export const ATB_DOUBLE_RECOVERY_VALUE = 140;
 
@@ -175,13 +184,14 @@ export const STAT_STACK_MAX = 10;
 
 /**
  * The Mega Flare countdown's number of steps, which is also the highest number the window shows. The game's steps are 150
- * AI polls long (750 polls, 25.03 s of running clock at 29.97 steps a second); on this base one Bahamut turn stands for one
- * step, because every AI timer is still counted in turns until lane W4 moves the clock onto the logic step
- * (`research/re-ffx2-ai-bahamut-vegnagun.md` 2.2; `docs/handoff/re-parity-ai-ffx2-a.md` lists the timer rows).
+ * AI polls long (750 polls, 25.03 s of running clock at 29.97 steps a second). RC3: the engine's clock is the logic step now, so
+ * Bahamut's countdown turns are idle waits of 150 steps each (ai/bahamut.ts; the first poll after the second Impulse is poll 1, the
+ * first number comes at poll 150 and the cast at poll 750). research/re-ffx2-ai-bahamut-vegnagun.md 2.2;
+ * docs/handoff/re-parity-ai-ffx2-a.md, timer row B3.
  */
 export const BAHAMUT_COUNTDOWN_START = 5;
 
-/** The polls in one countdown step (m168.src:92-141), for the W4 conversion: 5 steps x 150 = 750 polls. */
+/** The polls in one countdown step (m168.src:92-141): 5 steps x 150 = 750 polls, one a logic step (RC3: read by ai/bahamut.ts). */
 export const BAHAMUT_POLLS_PER_COUNTDOWN_STEP = 150;
 
 /**
@@ -217,8 +227,8 @@ export const ENEMY_ATTACK_CONSTANT = 16;
  * `research/re-ffx2-ai-bahamut-vegnagun.md` 6.1 and finding 5; it was an estimate of 240). One counter shared by {Head, Redoubt R,
  * Redoubt L}, raised by every phase-2 action poll of the three (not the Head's first and third), and the world ends on the Head's
  * first poll that finds it at 100 or more. In the game a poll that counts is one that issues a command, so the unit is turns,
- * the unit this engine counts in; what the 100 come to in seconds depends on how long each of their commands takes, which
- * lane W4 owns (the clock in seconds is a structural change that waits for Bailey, `docs/plans/re-parity-ai-review.md` section 3).
+ * the unit this engine counts in; what the 100 come to in seconds is how long each of their commands takes, which is the game's own
+ * recovery and cast now that the clock is the logic step (RC3: re-parity W4's gauges, and the voice polls' 60, SPEAK_COMMAND_ATB_COST).
  */
 export const HEAD_FIRE_AT_TURN = 100;
 

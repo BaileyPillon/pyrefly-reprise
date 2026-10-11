@@ -27,6 +27,7 @@ import type {
   Ffx2Unit,
   GarmentGridRegistry,
 } from './internal.ts';
+import { AI_IDLE_STEPS, AI_POLL_COST, mem } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
 import { baseSpeedOf, type AtbSpeed } from './clock.ts';
@@ -34,6 +35,7 @@ import { defaultDresspheres } from './dresspheres.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { buildSnapshot } from './gauges.ts';
 import { bySlot, completeCommand } from './atb-engine.ts';
+import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './targeting.ts';
@@ -154,7 +156,7 @@ export class Ffx2EngineCore {
       resolveCtx: () => this.resolveCtx(),
       aiContext: (u) => this.aiContext(u),
       fire: (u) => this.fireChargedCommand(u),
-      complete: (u) => completeCommand(u, u.gauge.costAtb, this.units),
+      complete: (u) => completeCommand(u, u.gauge.costAtb, this.units, u.gauge.idleWait === true),
     });
   }
 
@@ -314,8 +316,26 @@ export class Ffx2EngineCore {
       performCommand(this.env(), actor, command, false, before);
       return;
     }
-    // A flavour turn still consumes the ATB slot. [ffx2-vegnagun-shuyin §5] It plays no command of its own, so it waits the standard gauge.
-    completeCommand(actor, ATB_BASE_VALUE, this.units);
+    // A flavour turn still consumes the ATB slot. [ffx2-vegnagun-shuyin §5] It plays no command of its own, so it waits the standard gauge,
+    // unless the script said what the poll stood for (RC3, internal.ts AI_POLL_COST: a voice line's speak command, 60) or asked for an idle
+    // wait (AI_IDLE_STEPS: a countdown of polls, one a logic step): then the unit sits it out executing and is ready the step it ends.
+    const idleSteps = mem(actor, AI_IDLE_STEPS);
+    const pollCost = mem(actor, AI_POLL_COST, ATB_BASE_VALUE);
+    if (actor.aiMemory) {
+      delete actor.aiMemory[AI_IDLE_STEPS];
+      delete actor.aiMemory[AI_POLL_COST];
+    }
+    if (idleSteps > 1) {
+      // "The next poll is idleSteps steps from now": the unit executes for idleSteps - 1 steps, the step after the last one it is ready.
+      actor.gauge.costAtb = 0;
+      actor.gauge.executing = idleSteps - 1;
+      actor.gauge.idleWait = true;
+      actor.gauge.state = Ffx2AtbState.Executing;
+    } else if (idleSteps === 1) {
+      completeCommand(actor, 0, this.units, true); // polled again on the very next step
+    } else {
+      completeCommand(actor, pollCost, this.units);
+    }
     this.emit({ type: 'action-end', actorId: actor.id });
     this.afterAction(actor, before);
   }

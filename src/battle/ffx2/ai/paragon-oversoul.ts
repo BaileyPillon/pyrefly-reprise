@@ -43,26 +43,31 @@
  * (and after the idle limit), not that. Setting the switch true is the game's own rule (O4 and O12), which also acts when
  * untouched; both are listed for Bailey with the measurement of a third reading (the HP rows spending the state).
  *
- * ## Timers (kept in their current units; for the W4 merge)
+ * ## Timers (RC3: on the logic-step clock, row O2)
  *
- * The idle limit is the script's 1,200 idle polls (the 1,201st acts), 40.04 s of running clock at the measured 29.97 logic steps
- * a second. This build keeps `idleSeconds` = 20 and counts it in engine ticks since the last result or the last idle action: moving
- * it onto the game's poll count is a structural change that waits for Bailey (`docs/plans/re-parity-ai-review.md` section 3).
+ * The idle limit is the script's 1,200 idle polls (the 1,201st acts), 40.04 s of running clock at the measured 29.97 logic steps a
+ * second. The game polls a ready monster every step, so a poll is a step: the limit is {@link OVERSOUL_IDLE_LIMIT_STEPS} logic steps
+ * since the last result or the last idle action (the first build's 20 s of engine time, SinirothX's reading, is gone with the
+ * 3,000-ticks-a-second clock; docs/handoff/re-parity-ai-ffx2-b.md, timer row "Oversoul idle limit"). The engine still asks a waiting
+ * Oversoul at its own turns, not at every step, so an answer or the idle action comes at its next turn after the limit; the steps its
+ * recoveries take are inside the window (the game does not poll during a recovery), which is at most a few seconds of 40.
  * The first poll spends no turn on the switch to the Oversoul block (O14): the "Paragon oversouls!" line plays and the poll goes on.
  */
 
 import type { AbilityDef, Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
-import { STEPS_PER_SECOND } from '../clock.ts';
 import { discardPick, girlsInSlotOrder, pickGirl, scriptModCtx } from './script-rolls.ts';
 import { oversoulCommandClass } from './oversoul-lists.ts';
 
 /**
- * The script's idle limit in polls: the 1,201st idle poll acts (`o152.src:130-143`), 40.04 s of running clock at the measured 29.97 logic
- * steps a second. Documentation for the structural change that waits for Bailey; nothing reads it (the build counts `idleSeconds`).
+ * The script's idle limit in polls: the 1,201st idle poll acts (o152.src:130-143), 40.04 s of running clock at the measured 29.97 logic
+ * steps a second. The game polls every step, so these are logic steps; {@link OVERSOUL_IDLE_LIMIT_STEPS} is what the engine compares.
  */
 export const OVERSOUL_IDLE_POLLS = 1200;
+
+/** Logic steps since the last result or idle action at which an untouched Oversoul acts: the 1,201st idle poll. */
+export const OVERSOUL_IDLE_LIMIT_STEPS = OVERSOUL_IDLE_POLLS + 1;
 
 /**
  * The values of the first build's research gaps that still matter. The game's script answered most of them; each line says which
@@ -75,10 +80,7 @@ export const OVERSOUL_ESTIMATES = {
    */
   physicalHitPercent: 50,
   /**
-   * **Structural, waits for Bailey.** Seconds of engine time before an untouched Paragon acts. The script's limit is 1,200 idle
-   * polls = 40.04 s of running clock at 29.97 steps a second; 20 s was SinirothX's reading. Counted since the last result.
-   */
-  idleSeconds: 20,
+   * (The idle limit is not a parameter any more: OVERSOUL_IDLE_POLLS, the script's own 1,200 polls, counted in logic steps; RC3.)
   /** The first HP line: strictly below 4/10 of max HP, in 32-bit float (O3, as the game). */
   magicBelow: 4 / 10,
   /** The second HP line: strictly below 1/10 of max HP. */
@@ -135,7 +137,7 @@ function stir(ctx: AiContext): void {
 }
 
 function idleElapsed(ctx: AiContext): boolean {
-  return ctx.ticks - mem(ctx.self, K.quiet) >= OVERSOUL_ESTIMATES.idleSeconds * STEPS_PER_SECOND;
+  return ctx.ticks - mem(ctx.self, K.quiet) >= OVERSOUL_IDLE_LIMIT_STEPS;
 }
 
 /** Row 3: MP is 0 -> `random() mod 2`: 0 Osmose, 1 Attack, each on a uniform girl. */

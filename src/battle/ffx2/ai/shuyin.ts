@@ -24,7 +24,7 @@
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
-import { mem, setMem } from '../internal.ts';
+import { mem, setMem, speakTurn } from '../internal.ts';
 import { scriptMod, searchNear, searchUniform, SCENES } from './script-rolls.ts';
 
 /** The pools, by the order of the pick: Jecht, Auron, Braska. */
@@ -76,7 +76,7 @@ export const shuyinScript: AiScript = {
   id: 'shuyin',
 
   decide(ctx: AiContext): Command | null {
-    if (tryVoiceLine(ctx)) return null;
+    if (tryVoiceLine(ctx)) return speakTurn(ctx.self);
 
     const self = ctx.self;
     const turn = mem(self, 'turn') + 1;
