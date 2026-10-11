@@ -288,6 +288,31 @@ describe('the turn loop: a Provoked, Berserk or Confused actor\'s turn is the ga
   });
 });
 
+describe('a Provoked monster that keeps control of its script (G9)', () => {
+  function board(): Board {
+    const r = lcg(5);
+    const b = randomBoard(r);
+    const proto = b.members[0] as Member;
+    const heroes: Member[] = ['tidus', 'yuna', 'auron'].map((id) => ({ ...proto, id, side: 'party', slot: PARTY_IDS.indexOf(id as never) }));
+    const natus: Member = { ...proto, id: 'm0', side: 'enemy', slot: 0x14, provokedBy: 'yuna', keeps: true };
+    b.members = [...heroes, natus];
+    for (const m of b.members) Object.assign(m, { dead: false, petrified: false, sleep: false, confuse: false, berserk: false, threaten: false, reflect: false, guard: false, sentinel: false, guardMark: false, untargetable: false, hp: 5000 });
+    return b;
+  }
+
+  it('aims its single-target and random rows at the provoker, and leaves its party-wide rows alone', () => {
+    const { ctx, events, byId } = contextOfBoard(board(), 4);
+    const natus = byId.get('m0')!;
+    resolveAbility(ctx, natus, abilityOfSpec({ kind: 'attack', hits: 2 }), ['tidus']);
+    resolveAbility(ctx, natus, abilityOfSpec({ kind: 'fury', hits: 5 }), []);
+    const single = events.filter((e) => e['type'] === 'damage').map((e) => e['targetId']);
+    expect(single, 'the single-target Attack (2 hits) and the random Fury (5 hits) all land on the provoker').toEqual(Array(7).fill('yuna'));
+    events.length = 0;
+    resolveAbility(ctx, natus, abilityOfSpec({ kind: 'sweep', hits: 1 }), []);
+    expect(events.filter((e) => e['type'] === 'damage').map((e) => e['targetId']).sort(), 'a party-wide row still reaches all three').toEqual(['auron', 'tidus', 'yuna']);
+  });
+});
+
 describe('the enemy-intent panel follows the forced turn', () => {
   const stateOf = (id: string, over: Partial<StatusInstance> = {}): StatusInstance => ({ id: id as StatusInstance['id'], turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false, ...over });
 
