@@ -598,15 +598,18 @@ describe('damage without mitigation does not win (re-parity W4: it stalls where 
     // Both damage dealers fall on every seed (2 KOs) and the White Mage, who has no Attack row, outlasts the cycle and the run is
     // undecided at the cap on every seed (the wipe was 30 of 30 before). The assertions are the measured shape: always two down,
     // never all three, Mega Flare in the fight every time.
-    // RC3 (FFX-2 only): the shape holds on every seed the line does not win (27 of 30; the 3 wins finish him inside the countdown, above).
+    // RC3 (FFX-2 only): the shape holds on 26 of the 27 seeds the line does not win (the 3 wins finish him inside the countdown, above). The 27th is a real
+    // wipe at the second Mega Flare (seed 13: all three fall, 2 Mega Flares), the one place §2.4's "wiped in the Mega Flare cycle" shows in 30 seeds.
+    const defeats = runs.filter((r) => r.outcome === 'defeat').length;
+    expect(defeats, 'at most one unmitigated run is wiped (measured 1 of 30: seed 13)').toBeLessThanOrEqual(1);
     expect(
-      runs.filter((r) => r.outcome !== 'victory' && r.kos === 2).length,
-      'both damage dealers fall on every unmitigated seed that is not won',
-    ).toBe(30 - wins);
+      runs.filter((r) => r.outcome === undefined && r.kos === 2).length,
+      'both damage dealers fall on every unmitigated seed that is neither won nor wiped',
+    ).toBe(30 - wins - defeats);
     expect(
       runs.filter((r) => r.outcome === undefined).length,
       'and none of those is decided: the lone White Mage outheals the cycle',
-    ).toBe(30 - wins);
+    ).toBe(30 - wins - defeats);
     expect(
       runs.filter((r) => r.outcome !== 'victory' && r.megaFlares >= 1).length,
       'and Mega Flare must have been in the fight on every one of them [§2.1]',

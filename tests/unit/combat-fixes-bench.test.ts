@@ -131,7 +131,10 @@ describe(`combat-fixes-0924 bench (${SEEDS} seeds a line; measured, not tuned)`,
           // once, so the lone survivor is the White Mage, who has no Attack row, and Bahamut does not
           // finish her inside the decision cap: the line never wins and never ends (200/200 undecided; it was 200 defeats
           // while the wrap sent Rikku's share of Mega Flare onto Yuna).
-          expect(row.wins).toBe(0);
+          // RC3 (FFX-2 only; reason "game-script parity" and "game-code parity"): 6 of 10 now win, because the countdown is the game's 25 s and the plain Attack
+          // finishes Bahamut inside it; the other 4 stall as before (undecided at the cap), and none is a defeat. Measured, not tuned.
+          expect(row.outcomes['defeat'] ?? 0).toBe(0);
+          expect(row.wins + (row.outcomes['unfinished'] ?? 0)).toBe(row.seeds);
           return;
         }
         expect(row.outcomes['unfinished'] ?? 0).toBe(0);
