@@ -96,7 +96,9 @@ no recording and no ears to judge it, it is left for the day a pack ships. The s
   4.89 MB), then `node tools/audio/sfx-parity-mix.mjs` (the trims come from the sprite's cues). A retired name stays in
   `V2_CUES` (the voice still asks for it, the mixer finds the original, the first-bank stand-in plays until the pack has decoded);
   `audio-sfx-v2.test.ts` keeps "the sprite plus the retired list is exactly `V2_CUES`" true. Empty today: no core pack ships.
-* `sfx-parity-sprite.py --install` now refuses a pack that would put the shipped audio over the budget and says how far.
+* `sfx-parity-sprite.py` now refuses (before anything is encoded) a cue whose name no hook, flow slot or v2 stand-in of the pack's game
+  asks for, or whose `specRow` is not the row the name answers (`tools/audio/sfx-parity-names.mjs --game <g>` lists the names), and
+  `--install` refuses a pack that would put the shipped audio over the budget and says how far. Smoke-tested with a synthetic take.
 
 ### The pin (what makes "inert" a fact)
 

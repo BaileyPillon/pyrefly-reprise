@@ -10,6 +10,7 @@
  * - the flow slots (`playParityOnly`, `startFlow`) play only a recorded original and are silent without one;
  * - outside a chapter (the title, chapter select, FF7) none of it applies (rule 14).
  */
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AudioManager, audio } from '../../src/audio/AudioManager.ts';
 import { parseManifest } from '../../src/audio/manifest.ts';
@@ -425,5 +426,27 @@ describe('the results tally (FFX-2: a loop while the numbers count, a stinger as
       root.remove();
       vi.restoreAllMocks();
     }
+  });
+});
+
+// ---------------------------------------------------------------- the encounter opening
+
+describe('the encounter opening (FFX: the field shatters into the fight)', () => {
+  // BattleScreen needs a stage, a scene and a presenter to stand up, so the wiring is checked in its source: the opening is
+  // started with the battle card and ended with the screen, and the flow table is what decides which game hears it.
+  const source = readFileSync('src/app/screens/BattleScreen.ts', 'utf8');
+
+  it('starts the encounter-open slots in enter(), before the card, and stops them in exit()', () => {
+    const start = source.indexOf("startFlow(audio, chapter.game, 'encounter-open')");
+    const card = source.indexOf('void this.showBattleStart().then(');
+    expect(start).toBeGreaterThan(0);
+    expect(start).toBeLessThan(card);
+    expect(source).toMatch(/this\.encounterSfx\.stop\(0\.25\);\s*this\.encounterSfx = NO_FLOW;/);
+  });
+
+  it('plays for FFX only: no slot answers FFX-2 or FF7 at that hook', () => {
+    expect(flowSlotsFor('ffx', 'encounter-open')).toHaveLength(2);
+    expect(flowSlotsFor('ffx2', 'encounter-open')).toHaveLength(0);
+    expect(flowSlotsFor('ff7', 'encounter-open')).toHaveLength(0);
   });
 });

@@ -107,6 +107,12 @@ def encode(x, work, name, q):
     return mp3
 
 
+def known_names(game):
+    """The names a game's packs may hold, from the hooks, the flow slots and the v2 stand-ins (tools/audio/sfx-parity-names.mjs)."""
+    out = subprocess.run(['node', os.path.join(HERE, 'sfx-parity-names.mjs'), '--game', game], capture_output=True, check=True, text=True).stdout
+    return json.loads(out)['names']
+
+
 def audio_budget():
     """AUDIO_BUDGET_BYTES, read from the one place it is set (tools/audio/manifest-io.mjs)."""
     src = open(os.path.join(HERE, 'manifest-io.mjs'), encoding='utf-8').read()
@@ -139,9 +145,16 @@ def main():
     if pack.get('pack') != a.pack:
         sys.exit(f'{a.picks} is for pack {pack.get("pack")}, not {a.pack}')
     game_of_pack = a.pack.split('-')[0]
+    names = known_names(game_of_pack)
     for c in pack['cues']:
         if c['game'] not in ('both', game_of_pack):
             sys.exit(f'{c["cue"]}: game {c["game"]} does not belong in pack {a.pack}')
+        # A cue nothing asks for is a sound that never plays: refuse the name, and a row the name does not answer.
+        entry = names.get(c['cue'])
+        if entry is None:
+            sys.exit(f'{c["cue"]}: no hook, flow slot or v2 stand-in of {game_of_pack} asks for this name (see tools/audio/sfx-parity-names.mjs --game {game_of_pack})')
+        if entry['rows'] and c['specRow'] not in entry['rows']:
+            sys.exit(f'{c["cue"]}: this name answers {entry["rows"]}, not {c["specRow"]}')
         c['_x'] = read(c['audio'])
     trims = {}
     for attempt in range(6):

@@ -15,6 +15,7 @@
  *   up another event's recording, and the headline cases resolve as the spec reads (Ormi's attack and blow, Auron's
  *   katana against a foe's swing, Fira after Fire, Cross Cleave's blows covered, the landing of Total Annihilation).
  */
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -408,6 +409,39 @@ describe('a shipped pack names only originals the game knows how to ask for', ()
         expect(known, `${pack}/${name} is not a name any hook, flow slot or v2 stand-in of ${game} asks for`).toBe(true);
       }
     }
+  });
+});
+
+describe('the names tool the packer checks a pack against', () => {
+  const names = (game: EventGame): Record<string, { kind: string; rows: string[] }> => {
+    const run = spawnSync(process.execPath, ['tools/audio/sfx-parity-names.mjs', '--game', game], { cwd: ROOT, encoding: 'utf8' });
+    expect(run.status, run.stderr).toBe(0);
+    return (JSON.parse(run.stdout) as { names: Record<string, { kind: string; rows: string[] }> }).names;
+  };
+
+  it("lists a game's hook cues with their rows, its flow cues, and the v2 stand-ins of that game, and no other game's", () => {
+    const x2 = names('ffx2');
+    expect(x2['swing-ormi']).toEqual({ kind: 'event', rows: ['ffx2.lb.ormi.attack'] });
+    expect(x2['fire-x2']).toEqual({ kind: 'event', rows: ['ffx2.fire'] });
+    expect(x2['results-loop']).toEqual({ kind: 'flow', rows: ['ffx2.flow.results'] });
+    expect(x2['cursor-move-x2']).toEqual({ kind: 'stand-in', rows: [] });
+    expect(x2['swing-katana']).toBeUndefined(); // an FFX cue
+    expect(x2['encounter-shatter']).toBeUndefined(); // an FFX flow cue
+    const x1 = names('ffx');
+    expect(x1['swing-katana']).toEqual({ kind: 'event', rows: ['ffx.weapon.katana.swing'] });
+    expect(x1['fire-3']?.rows).toEqual(['ffx.fire.t3']);
+    expect(x1['encounter-shatter']).toEqual({ kind: 'flow', rows: ['ffx.flow.shatter'] });
+    expect(x1['shot-gun']).toBeUndefined(); // an FFX-2 cue
+    expect(Object.keys(x1).length).toBeGreaterThan(120);
+  }, 120_000);
+
+  it("gives a name that is both a hook and a stand-in the hook's row", () => {
+    expect(names('ffx')['swing-sword']).toEqual({ kind: 'event', rows: ['ffx.weapon.sword.swing'] });
+  }, 120_000);
+
+  it('refuses a game that is not one', () => {
+    const run = spawnSync(process.execPath, ['tools/audio/sfx-parity-names.mjs', '--game', 'ff7'], { cwd: ROOT, encoding: 'utf8' });
+    expect(run.status).toBe(2);
   });
 });
 

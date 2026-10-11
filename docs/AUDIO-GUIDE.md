@@ -314,6 +314,7 @@ Nothing audible changes while `sfxParity.packs` is empty (`tests/unit/audio-sfx-
 | `SfxSprites.pickEvent`, `AudioManager.playSfx` (`events`, `coveredBy`, `beatMs`) | mixer | consults the packs for the named originals only; a covered stand-in stays silent; the log says `via: 'parity'`, `played: <name>`, `covered`, `leadMs` |
 | `beatTiming.ts`, `engine/StrikeBeat.ts` | mixer, presenter | phase 2: a recorded original starts `beatMs - peakMs` after the ask so its peak lands on the strike (255 ms after the swing is asked for) |
 | `flowSlots.ts`, `AudioManager.playParityOnly`, `sfxSource.ts` | `BattleScreen.enter`, `ResultsScreen` | the encounter shatter and fade-in (FFX) and the results loop and stingers (FFX-2): a recorded original or silence |
+| `tools/audio/sfx-parity-names.mjs`, `sfx-parity-sprite.py` | packing | the names a game's packs may hold (hook cues with their rows, flow cues, the game's v2 stand-ins); the packer refuses a cue whose name nothing asks for, or whose `specRow` is not the row its name answers, and a pack that would put the shipped audio over the budget |
 | `tools/audio/sfx-parity-layout.mjs` | planning | the packs, their qualities and the audio budget; the coverage of every row by chapter |
 | `tools/audio/sfx-parity-repack.mjs`, `sfx-v2-sprite.py --exclude`, `src/audio/sfxV2/retired.ts` | the final repack | which v2 stand-ins a core pack's originals have made unnecessary, and the sprite without them |
 

@@ -53,9 +53,12 @@ describe('the scripted fight plays exactly what it played before the parity inte
       for (const [sig, ids] of Object.entries(golden)) for (const id of ids) was.set(id, sig);
       const now = new Map<string, string>();
       for (const [sig, ids] of Object.entries(trace)) for (const id of ids) now.set(id, sig);
-      expect([...now.keys()].sort()).toEqual([...was.keys()].sort());
+      // Every scenario the golden holds must still exist and play the same. A scenario the golden does not hold (an ability or an
+      // enemy someone added to the data since) has no "before" to compare with, so it is not a change of what the game plays.
+      const missing = [...was.keys()].filter((id) => !now.has(id));
+      expect(missing.slice(0, 12), `${missing.length} recorded scenario(s) no longer exist (a renamed or removed ability or enemy: re-record, see the header)`).toEqual([]);
       const moved: string[] = [];
-      for (const [id, sig] of now) if (was.get(id) !== sig) moved.push(`${id}\n    was ${was.get(id)}\n    now ${sig}`);
+      for (const [id, sig] of was) if (now.get(id) !== sig) moved.push(`${id}\n    was ${sig}\n    now ${now.get(id)}`);
       expect(moved.slice(0, 12), `${moved.length} scenario(s) changed`).toEqual([]);
     }, 120_000);
   }
