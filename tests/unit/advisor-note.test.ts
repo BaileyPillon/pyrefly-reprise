@@ -376,14 +376,107 @@ describe('Chapter 1, the board the gate reported (seed 14)', () => {
     // first twenty decisions ("Ready To Annihilate lands first - take the hit, then raise Tidus"), which is fault free too.
     // 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the draws moved again, and the first seed of 1 to 700 whose first
     // twenty decisions show the sentence is 108 (then 110 and 277), fault free as well; the sentence is the card's own, unchanged.
-    const timing = walk('seymour-flux', [108], 20, true);
-    expect(timing.faults, 'seed 108, decision by decision').toEqual([]);
+    // 2026-10-10 (re-parity W5, FFX only): none of seeds 1 to 2,300 shows it within twenty decisions any more, and the advisor did not change.
+    // Cause, traced with the engine (the old thaw put back alone, nothing else): row A3, the summoner keeps the recovery of her Summon. On seed 108
+    // the two runs are the same for four decisions and differ at the fifth: with the old thaw Yuna acts again at once after Bahamut leaves (she calls
+    // Valefor and then Ifrit back to back), with the game's rule Tidus does. Seymour's second cycle then starts at decision 17 (it was 18), and Tidus is on the floor at
+    // the payload's turn only in the old run, so only the old run prints the sentence (decision 18). With the old thaw put back the scan finds it on
+    // 6 of seeds 1 to 700, every time at decision 18; with the game's rule on 0 of 2,300. The advisor, its threshold and its sentence did not change.
+    // The sentence needs Seymour below half his HP (the second cycle: "Auto-Attack Mode", then "Ready To Annihilate") while somebody who is not
+    // a Zombie is on the floor. With the game's Overdrive gauge and aeon rules (the summoner pays her Summon's recovery, the aeons' Overdrives
+    // come on the game's gains) the party reaches that point at decision 31 on average over seeds 1 to 300 (decision 30 with the old thaw put
+    // back), so the second cycle starts inside the first twenty decisions on 12 percent of the seeds (37 of 300; 53 of 300 with the old thaw) and a body is on the floor then on almost
+    // none. The sentence is still reached in real play: over seeds 1 to 400 and sixty decisions it appears once, on seed 184 at its 30th
+    // decision ("Ready To Annihilate lands first - take the hit, then raise Tidus"), so the existence check reads that seed's first 34. The
+    // board itself, free of any seed, is pinned by the describe block below.
+    const timing = walk('seymour-flux', [184], 34, true);
+    expect(timing.faults, 'seed 184, decision by decision').toEqual([]);
     const inNote = timing.cards.filter((c) => /note="[^"]*then raise/.test(c));
     expect(inNote.length, 'a refused revive says when to spend it, in the note').toBeGreaterThan(0);
-  });
+  }, 300_000);
 
   it('obeys the rule on every decision', () => {
     expect(seen.faults).toEqual([]);
+  });
+});
+
+// ------------------------------------- the timing sentence, on a board and not a lottery
+
+// The existence check above reads one seed, and a seed is a draw: it has been re-pinned after every batch that moved the draws (five times by
+// 2026-10-10), and the sentence appears about once in 400 battles, so re-pinning it is a lottery. This block pins the same behaviour on a board
+// that depends on no draw: a real opening decision of Chapter 1 (the real party, the real menus, the real log) cloned, one member who is neither
+// the actor nor Yuna put on the floor, and the log made to carry the second cycle's payload ("Ready To Annihilate", the `charge` event that
+// Seymour's script emits when the mount stops waiting). It is a hand-built state, said as such: it proves what the card says when the board
+// calls for the sentence, and the seed 184 walk above proves the board is reached in real play.
+describe('Chapter 1, a refused revive says when to spend it (a board built from a real opening)', () => {
+  interface Board {
+    seed: number;
+    state: BattleState;
+    actorId: string;
+    commands: AvailableCommand[];
+    options: AdvisorOptions;
+    downName: string;
+  }
+
+  function board(seed: number, withCharge: boolean): Board | null {
+    const { engine, options } = harnessFor('seymour-flux', seed);
+    let d: Decision = engine.nextDecision();
+    for (let i = 0; i < MAX_STEPS && d.kind !== 'player-input'; i += 1) {
+      if (d.kind === 'battle-over') return null;
+      if (d.kind === 'waiting') engine.tick?.(Math.max(1, d.nextEventMs));
+      d = engine.nextDecision();
+    }
+    if (d.kind !== 'player-input') return null;
+    const state = structuredClone(engine.state()) as BattleState;
+    const party = state.activeIds.map((id) => state.combatants[id]).filter((c): c is AnyCombatant => c !== undefined);
+    // The Zombie reading comes first by design (it has its own tests above), so a seed whose opening zombifies somebody is not this board.
+    if (party.some((c) => (c.statuses as Record<string, unknown>)['zombie'] !== undefined)) return null;
+    const down = party.find((c) => c.alive && c.id !== d.actorId && c.id !== 'yuna');
+    if (!down) return null;
+    down.hp = 0;
+    down.alive = false;
+    if (withCharge) {
+      (state.log as unknown as Array<Record<string, unknown>>).push({
+        type: 'charge',
+        enemyId: 'mortiorchis',
+        name: 'Ready To Annihilate',
+        turnsLeft: 0,
+        stage: 2,
+        seq: state.log.length,
+      });
+    }
+    return { seed, state, actorId: d.actorId, commands: d.commands, options, downName: down.name };
+  }
+
+  function view(b: Board): AdvisorView {
+    const v = buildAdvisorView(b.state, { actorId: b.actorId, commands: b.commands }, b.options);
+    expect(v, `seed ${b.seed}: the card exists`).not.toBeNull();
+    return v as AdvisorView;
+  }
+
+  const boards = (withCharge: boolean): Board[] =>
+    [1, 2, 3, 4, 5, 6, 7, 8].map((seed) => board(seed, withCharge)).filter((b): b is Board => b !== null);
+
+  it('says "take the hit, then raise" and names the body when the payload is next', () => {
+    const made = boards(true);
+    expect(made.length, 'enough seeds open on a board without a Zombie').toBeGreaterThanOrEqual(2);
+    for (const b of made) {
+      const v = view(b);
+      expect(v.note, `seed ${b.seed}, ${b.downName} on the floor`).toBe(
+        `Ready To Annihilate lands first — take the hit, then raise ${b.downName}`,
+      );
+      expect(noteFault(b.state, v), `seed ${b.seed}`).toBeNull();
+    }
+  });
+
+  it('says nothing of the kind on the same board when no payload is next', () => {
+    const made = boards(false);
+    expect(made.length).toBeGreaterThanOrEqual(2);
+    for (const b of made) {
+      const v = view(b);
+      expect(v.note, `seed ${b.seed}: no charge in the log`).not.toMatch(/then raise/);
+      expect(noteFault(b.state, v), `seed ${b.seed}`).toBeNull();
+    }
   });
 });
 
