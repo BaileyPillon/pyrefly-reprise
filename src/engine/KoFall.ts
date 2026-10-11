@@ -8,7 +8,7 @@
  * ({@link puffAt}). No `three`, no DOM, deterministic. The geometry of the topple is `KoTip.ts`; the driver is `fx/mix/living.ts`.
  *
  * The four ways ({@link KoMode}), from the page:
- * - `topple` (FA-2, option B): a human-scale party figure whose KO painting is a lying body. The buckle goes on as before and the standing painting
+ * - `topple` (FA-2, option B): a party character whose KO painting is a lying body. The buckle goes on as before and the standing painting
  *   also tips about its feet toward the side the KO painting's head lies (`KoTip.ts`); after the hold the two paintings cross over {@link KO_CROSS_MS}
  *   on the capped curve (`PoseBlend.KO_CROSS`: the standing one 1 - s, the lying one s squared, neither above 0.382) under a dust puff; the landing
  *   squash and shake follow at 300 ms as before (`PaintedActor.fall`).
@@ -30,7 +30,6 @@
  */
 
 import { koCross } from './PoseBlend.ts';
-import { Easing } from './Tween.ts';
 
 export type KoGame = 'ffx' | 'ffx2';
 
@@ -50,6 +49,8 @@ export const REVIVE_MS = KO_CROSS_MS + RISE_MS;
 
 /** Figures built for size: a buckle and a cross suit them, a topple would swing a plane the size of the screen. Same list `living.ts` breathes slowly by. */
 export const KO_GIANTS = /^(braskas-final-aeon|seymour-natus|yojimbo|anima|x2-anima|seymour-omnis|ixion|x2-ixion|bahamut|ffx2-bahamut|evrae)/;
+/** The aeons on the party's side (their art ids): summoned creatures, not characters, so a buckle and a cross suit them and a body toppling flat does not. The giants above are aeons too. */
+export const KO_AEONS = /^(valefor|ifrit|shiva|cindy|sandy|mindy)/;
 /** Machines built of separately painted parts, and statues: they never lie down, whatever shape their KO painting has (the aspect flag over-flags: `ProneLay.ts`). */
 export const KO_MACHINES = /^(vegnagun|sin-|overdrive-sin|yu-pagoda)/;
 
@@ -80,9 +81,9 @@ export function koFallOff(): boolean {
   return new URLSearchParams(globalThis.location?.search ?? '').get('kofall') === 'off';
 }
 
-/** Whether a figure may topple at all: party side, human scale, not a machine or a statue. */
+/** Whether a figure may topple at all: party side, a character (not an aeon, a giant, a machine or a statue). */
 export function canTopple(name: string, partySide: boolean): boolean {
-  return partySide && !KO_GIANTS.test(name) && !KO_MACHINES.test(name);
+  return partySide && !KO_GIANTS.test(name) && !KO_AEONS.test(name) && !KO_MACHINES.test(name);
 }
 
 /** How a KO plays: the one decision of this part. */
@@ -109,6 +110,8 @@ export interface KoPose {
   lean: number;
   /** How far the standing plane has tipped, 0 upright to 1 fully toppled (always 0 for a run with no travel). */
   tip: number;
+  /** How far it has slid along the floor toward the lying body's middle, 0 to 1 (always 0 for a run with no travel). It runs on past the tip: over the hold and the cross of a fall. */
+  slide: number;
 }
 
 export interface KoRunOptions {
@@ -128,6 +131,21 @@ export interface KoRunOptions {
 }
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
+
+/**
+ * How far a body has turned, over the hold (t, 0 to 1): the page's quadIn softened to half quadIn and half linear. A pure quadIn swings a head 47 px in
+ * its last frame at the test camera (the check fails a step of 40); this peaks at 1.5 times the average speed instead of 2, and still starts slowly and
+ * falls faster. `[ours]`, with the page's loop as the look it follows.
+ */
+export const toppleEase = (t: number): number => {
+  const x = clamp01(t);
+  return 0.5 * x + 0.5 * x * x;
+};
+/** The same turn run backwards for a rise (r, 0 to 1): fast first and settling upright, at most 1.5 times the average speed. 1 at the start, 0 at the end. */
+export const riseEase = (r: number): number => {
+  const x = clamp01(r);
+  return 1 - (1.5 * x - 0.5 * x * x);
+};
 
 /**
  * The clock of one KO or one revive: phases `hold` (the buckle and the topple, on the FIELD clock, so a hit-stop holds them), `cross` (REAL time: a
@@ -203,19 +221,21 @@ export class KoRun {
     switch (this.phase) {
       case 'hold': {
         const t = o.holdMs > 0 ? clamp01(this.hold / o.holdMs) : 0;
-        return { phase: 'hold', out: 1, inn: 0, buckle: o.buckle ? t * t : 0, lean: o.buckle ? KO_LEAN * t : 0, tip: o.travel ? Easing.quadIn(t) : 0 };
+        return { phase: 'hold', out: 1, inn: 0, buckle: o.buckle ? t * t : 0, lean: o.buckle ? KO_LEAN * t : 0, tip: o.travel ? toppleEase(t) : 0, slide: o.travel ? this.hold / (o.holdMs + o.crossMs) : 0 };
       }
       case 'cross': {
         const c = koCross(clamp01(this.cross / o.crossMs));
-        return { phase: 'cross', out: c.from, inn: c.to, buckle: o.buckle ? 1 : 0, lean: o.buckle ? KO_LEAN : 0, tip: o.travel ? 1 : 0 };
+        const slide = o.kind === 'fall' ? (o.holdMs + this.cross) / (o.holdMs + o.crossMs) : 1; // a fall keeps sliding while it crosses; a revive starts toppled and in place
+        return { phase: 'cross', out: c.from, inn: c.to, buckle: o.buckle ? 1 : 0, lean: o.buckle ? KO_LEAN : 0, tip: o.travel ? 1 : 0, slide: o.travel ? slide : 0 };
       }
       case 'rise': {
-        // The mirror of the fall's quadIn: fast first, settling upright (1 - quadOut(r) = (1 - r)^2).
-        const e = 1 - Easing.quadOut(clamp01(this.rise / o.riseMs));
-        return { phase: 'rise', out: 0, inn: 1, buckle: o.buckle ? e * e : 0, lean: o.buckle ? KO_LEAN * e : 0, tip: e };
+        // The mirror of the fall: fast first, settling upright.
+        const r = clamp01(this.rise / o.riseMs);
+        const e = riseEase(r);
+        return { phase: 'rise', out: 0, inn: 1, buckle: o.buckle ? e * e : 0, lean: o.buckle ? KO_LEAN * e : 0, tip: e, slide: 1 - r };
       }
       default:
-        return { phase: 'done', out: 0, inn: 1, buckle: 0, lean: 0, tip: 0 };
+        return { phase: 'done', out: 0, inn: 1, buckle: 0, lean: 0, tip: 0, slide: 0 };
     }
   }
 }

@@ -1,6 +1,8 @@
-import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type ShaderMaterial, type Texture } from 'three';
+import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type Object3D, type ShaderMaterial, type Texture } from 'three';
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
 import { KO_GIANTS, KO_MACHINES, fallRun, koFallOff, koMode, type KoMode, type KoRun } from '../../KoFall.ts';
+import { KoPuff } from '../../KoPuff.ts';
+import { TOPPLE_RAD, contentCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
 import { setMixPatch } from './patch.ts';
 
@@ -19,9 +21,11 @@ export { patchLiving } from './livingShader.ts';
  * - KO COLLAPSE: on a KO the knees give and the body sinks and tips forward on the standing painting
  *   (220 ms FFX, 170 ms FFX-2, inside today's KO beat), then the KO painting CROSSES IN over 75 ms on the
  *   capped curve (FA-1, PR-0378: it was a one-frame cut, EC-1001-09, and 78 of round 23's 96 snaps; how a KO
- *   plays and its clock are `KoFall.ts`). A figure whose standing painting is already flagged prone (a Sin fin,
- *   Vegnagun's tail) and REDUCE MOTION (no buckle, no tilt, nothing moves but the fade) cross at once.
- *   The Syndicate's yield, a held or a dismissed departure are left as they are (VP-1001-47).
+ *   plays and its clock are `KoFall.ts`). A human-scale party figure whose KO painting is a lying body also
+ *   TOPPLES on the standing painting, toward the side the KO painting's head lies, and the cross runs under a
+ *   dust puff (FA-2, the page's option B, `KoTip.ts`, `KoPuff.ts`). A figure whose standing painting is already
+ *   flagged prone (a Sin fin, Vegnagun's tail) and REDUCE MOTION (no buckle, no tilt, nothing moves but the
+ *   fade) cross at once. The Syndicate's yield, a held or a dismissed departure are left as they are (VP-1001-47).
  *
  * Attached by a scene walk, never by a hook in `PaintedActor` (over 400 lines, rule 7): the figure's
  * own vertex shader (the painted one, or LIVING PAINTINGS' sway) is patched by `onBeforeCompile`, its
@@ -30,13 +34,23 @@ export { patchLiving } from './livingShader.ts';
  * the RNG (rule 1). Game case: both, with the per-game tempo above.
  */
 
-type Slot = { mesh: Mesh; material: ShaderMaterial; fade: number; pose: string; scale: { prone?: boolean } };
-/** The run that is playing (a KO), and the two planes it crosses. */
+type Slot = {
+  mesh: Mesh;
+  material: ShaderMaterial;
+  fade: number;
+  pose: string;
+  scale: { prone?: boolean; offsetY: number; width: number; contentBox: { x0: number; x1: number; y0: number; y1: number } };
+  meta: { head?: readonly [number, number, number, number] };
+};
+/** The run that is playing (a KO), and the planes it crosses: `stand` is the one that tips (when anything does) over `lying`; `side` is the way it falls (0: nothing tips). */
 interface Playing {
   run: KoRun;
   mode: KoMode;
   from: Slot;
   to: Slot;
+  stand: Slot;
+  lying: Slot;
+  side: 0 | 1 | -1;
 }
 export interface Guts {
   name: string;
@@ -48,8 +62,12 @@ export interface Guts {
   facing: number;
   lieRoll: number;
   life: { state: string; posture: { breathe: number; tempo: number } } | null;
+  /** How much of the fall's own tilt and drop shows (`PaintedActor.fallGain`): 0 while a topple or REDUCE MOTION replaces it. */
+  fallGain: number;
+  height: number;
   setPose: (name: string, opts?: { immediate?: boolean; force?: boolean }) => void;
   syncOpacity: () => void;
+  tipSlot: (slot: Slot, tip: SlotTip | null) => void;
 }
 
 interface SlotState {
@@ -81,8 +99,9 @@ export class LivingFigure {
   private readonly still: boolean;
   private phase = Math.random();
   private playing: Playing | null = null;
+  private puff: KoPuff | null = null;
   private ctx: LifeCtx | null = null;
-  readonly last = { breath: 0, buckle: 0, collapses: 0, cuts: 0, crosses: 0 };
+  readonly last = { breath: 0, buckle: 0, collapses: 0, cuts: 0, crosses: 0, topples: 0 };
 
   constructor(actor: object) {
     this.a = actor as Guts;
@@ -119,11 +138,15 @@ export class LivingFigure {
   private onSetPose(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, orig: Guts['setPose']): void {
     const a = this.a;
     const ctx = this.ctx;
-    if (name !== 'ko' && name !== 'dead') this.endRun();
+    if (name !== 'ko' && name !== 'dead') {
+      this.endRun();
+      a.fallGain = 1; // the figure is up: its own fall tilt is its again
+    }
     if (!ctx || !ctx.collapse || opts?.immediate || (name !== 'ko' && name !== 'dead') || a.life?.state === 'down') return orig.call(a, name, opts);
     const partySide = a.facing >= 0;
     const kind = partySide ? 'party' : departureKindOf(a.name);
     if (kind === 'yields' || kind === 'held' || kind === 'dismissed') return orig.call(a, name, opts);
+    this.endRun(); // a run still playing (a revive a moment ago) is finished before this KO reads the planes
     const from = a.slots[a.active]!;
     const keep = a.crossfadeMs;
     a.crossfadeMs = 0; // the actor's own blend stands aside: the KO is played here, plane by plane
@@ -134,29 +157,46 @@ export class LivingFigure {
     }
     const to = a.slots[a.active]!;
     const mode = koMode({ rm: ctx.rm, samePlane: from === to, samePainting: from.pose === to.pose, fromProne: from.scale.prone === true, toProne: to.scale.prone === true, name: a.name, partySide, legacy: koFallOff() });
-    const run = fallRun(mode === 'topple' ? 'buckle-cross' : mode, ctx.game); // FA-2 gives the topple its travel
+    const run = fallRun(mode, ctx.game);
     if (!run) {
       this.last.cuts++;
       return;
     }
-    // The standing painting stays up while the run plays (the actor's cut put the KO painting at 1); the run hands the fades over.
-    from.fade = 1;
-    to.fade = 0;
-    a.syncOpacity();
-    this.playing = { run, mode, from, to };
-    if (run.opts.buckle) this.last.collapses++;
-    if (run.opts.crossMs > 0) this.last.crosses++;
+    // A body falls to the side its KO painting's head lies on (the way it faces when the painting has no registered head).
+    const side = run.opts.travel ? tipSide(headMiddleU(to.meta.head), to.mesh.scale.x < 0 ? -1 : 1, partySide ? 1 : -1) : 0;
+    this.begin({ run, mode, from, to, stand: from, lying: to, side });
+    if (run.opts.travel) this.last.topples++;
   }
 
-  /** Finish the run where it stands: the KO painting at full, the standing one gone, whatever phase it was in. */
+  /** Start a run: the standing painting stays up (the actor's cut put the KO painting at 1) and the run hands the fades over; the fall's own tilt goes where the topple or REDUCE MOTION replaces it. */
+  private begin(p: Playing): void {
+    const pose = p.run.pose;
+    p.from.fade = pose.out;
+    p.to.fade = pose.inn;
+    this.a.syncOpacity();
+    this.playing = p;
+    if (p.run.opts.travel || !p.run.opts.buckle) this.a.fallGain = 0;
+    if (p.run.opts.buckle) this.last.collapses++;
+    if (p.run.opts.crossMs > 0) this.last.crosses++;
+  }
+
+  /** Finish the run where it stands: the KO painting at full, the standing one upright and gone, whatever phase it was in. */
   private endRun(): void {
     const p = this.playing;
     this.playing = null;
-    if (p && p.to === this.a.slots[this.a.active]) {
+    if (!p) return;
+    if (p.side !== 0) this.a.tipSlot(p.stand, null);
+    if (p.to === this.a.slots[this.a.active]) {
       p.to.fade = 1;
       p.from.fade = 0;
       this.a.syncOpacity();
     }
+  }
+
+  /** Where the lying body's middle is (x, the actor's frame): what the toppled body slides to and the dust goes up at. */
+  private lyingCentre(p: Playing): number {
+    const k = p.lying;
+    return contentCentreX(k.scale, k.mesh.scale.x < 0 ? -1 : 1, k.mesh.position, k.mesh.rotation.z);
   }
 
   update(ctx0: LifeCtx): void {
@@ -181,17 +221,26 @@ export class LivingFigure {
     const breath = ctx.breath ? (Math.sin(this.phase * 6.2831853) * 0.5 + 0.5) * amp : 0;
     let buckle = 0;
     let lean = 0;
+    const realMs = (ctx.realDt ?? ctx.dt) * 1000;
+    this.puff?.update(realMs);
     const play = this.playing;
     if (play) {
-      play.run.step(ctx.dt * 1000, (ctx.realDt ?? ctx.dt) * 1000);
+      play.run.step(ctx.dt * 1000, realMs);
       const pose = play.run.pose;
       buckle = pose.buckle;
       lean = pose.lean;
       play.from.fade = pose.out;
       play.to.fade = pose.inn;
       a.syncOpacity();
+      if (play.side !== 0) a.tipSlot(play.stand, { side: play.side, full: TOPPLE_RAD, e: pose.tip, slide: pose.slide, target: this.lyingCentre(play) });
+      const size = play.run.takePuff();
+      if (size !== null) {
+        this.puff ??= new KoPuff(a as unknown as Object3D, a.height);
+        this.puff.start(size, this.lyingCentre(play), play.lying.scale.width * 0.8);
+      }
       if (play.run.done) this.endRun();
     }
+    const dir = play && play.side !== 0 ? play.side : a.facing >= 0 ? 1 : -1; // the buckle leans the way a toppling body falls, else forward
     for (const s of a.slots) {
       const st = this.states.get(s);
       if (!st) continue;
@@ -206,7 +255,7 @@ export class LivingFigure {
       st.u.mlLand.value.set(...rig.land);
       const sx = s.mesh.scale.x;
       st.u.mlSlot.value.set(Math.abs(s.mesh.scale.y / (sx || 1)), sx < 0 ? -1 : 1);
-      const fwd = (a.facing >= 0 ? 1 : -1) * (sx < 0 ? -1 : 1);
+      const fwd = dir * (sx < 0 ? -1 : 1);
       st.u.mlA.value.set(breath, Math.min(1, buckle), fwd, lean);
       st.u.mlOn.value = live && s.scale.prone !== true ? 1 : 0; // a prone plane (a KO painting) is never bent
     }
@@ -217,6 +266,9 @@ export class LivingFigure {
   /** Put the figure back as `PaintedActor` made it (the battle ended; the setPose wrapper stays, inert). */
   detach(): void {
     this.endRun();
+    this.a.fallGain = 1;
+    this.puff?.dispose();
+    this.puff = null;
     this.ctx = null;
     this.a.breatheAmp = this.saved.breatheAmp;
     for (const [s, st] of this.states) this.detachSlot(s, st);

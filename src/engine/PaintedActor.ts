@@ -57,6 +57,7 @@ import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedSha
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
 import { PoseBlend } from './PoseBlend.ts';
+import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
@@ -280,6 +281,8 @@ interface PlaneSlot {
   lock: number;
   /** D-510: the art subject of `painted` (`yuna`, `exp-leblanc-yuna`), so the lock only compares planes of one figure. */
   subject: string | null;
+  /** FA-2 and FA-3 (`KoTip.ts`): the KO fall (and the revive's rise) tips this plane about its feet; `placeSlot` applies it after every placement, so the head lock's per-frame `sizeSlot` keeps it. */
+  tip: SlotTip | null;
 }
 
 /** D-510: what every other pose's head is held to: the idle's head box, its sizing and its art subject (`PaintedActor.headRefOf`). */
@@ -574,6 +577,11 @@ export class PaintedActor extends Group {
   /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
   private fallTilt = 0;
   private fallDrop = 0;
+  /**
+   * How much of that tilt and drop shows, 0 to 1 (default 1). KO COLLAPSE (`fx/mix/living.ts`) takes it to 0 while the standing plane is toppled by `KoTip`
+   * (the topple is the rotation: the tilt would double it) and under REDUCE MOTION (nothing moves but the fade), and puts it back when the run ends.
+   */
+  fallGain = 1;
   /** 0 standing, 1 lying on its back ({@link lieDown}). */
   private lieRoll = 0;
   /** The tip back while lying, radians ({@link lieDown}). */
@@ -844,6 +852,7 @@ export class PaintedActor extends Group {
       base: UNSIZED,
       lock: 1,
       subject: null,
+      tip: null,
     };
   }
 
@@ -1924,6 +1933,13 @@ export class PaintedActor extends Group {
     const dx = this.poseShiftPx?.[slot.pose];
     if (dx) slot.mesh.position.x += dx * slot.scale.unitsPerPixel * (slot.mesh.scale.x < 0 ? -1 : 1);
     slot.mesh.position.x += this.registrationShift(slot);
+    if (slot.tip) placeTipped(slot.mesh, slot.tip, slot.meta, slot.scale); // FA-2: the KO's topple, on top of the placement above
+  }
+
+  /** FA-2 and FA-3 (`KoTip.ts`, called by `fx/mix/living.ts`): tip one plane about its feet (or put it upright with null) and place it again at once. */
+  tipSlot(slot: PlaneSlot, tip: SlotTip | null): void {
+    slot.tip = tip;
+    this.placeSlot(slot);
   }
 
   /**
@@ -2129,7 +2145,7 @@ export class PaintedActor extends Group {
     // forward is the body's facing, never the mirror.
     let ox = (this.lungeOffset + this.recoilOffset + lean * upright) * this.facing;
     let oy =
-      this.hopHeight + hover - (crouch + this.fallDrop * this.worldHeight * 0.05) * upright;
+      this.hopHeight + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
 
     if (this.shakeLeftMs > 0) {
       this.shakeLeftMs -= dt * 1000;
@@ -2150,7 +2166,7 @@ export class PaintedActor extends Group {
     const sway = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
     // Posture tilt is a *body* rotation (forward = the way the fighter is
     // turned, so it carries the facing), kept small and faded out with the pose.
-    const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
+    const bodyTilt = (tilt + this.fallTilt * this.fallGain * 0.3) * upright * -this.facing;
     this.inner.rotation.z = sway + bodyTilt + lie;
     this.inner.rotation.x = -this.lieTilt * this.lieRoll;
 

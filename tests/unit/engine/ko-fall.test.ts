@@ -16,6 +16,8 @@ import {
   PUFF_REVIVE,
   REVIVE_MS,
   RISE_MS,
+  riseEase,
+  toppleEase,
   canTopple,
   fallRun,
   koFallOff,
@@ -45,6 +47,7 @@ describe('koMode: how a KO plays', () => {
   it('machines and statues never topple, whatever shape their KO painting has; colossi and foes buckle and cross', () => {
     for (const name of ['vegnagun-leg', 'vegnagun-body', 'sin-left-fin', 'overdrive-sin', 'yu-pagoda']) expect(koMode(facts({ name, partySide: false })), name).toBe('buckle-cross');
     for (const name of ['braskas-final-aeon-1', 'seymour-natus', 'bahamut', 'ffx2-bahamut', 'ixion', 'evrae']) expect(koMode(facts({ name })), name).toBe('buckle-cross');
+    for (const name of ['valefor', 'ifrit', 'shiva', 'cindy', 'sandy', 'mindy']) expect(koMode(facts({ name })), `the aeon ${name}`).toBe('buckle-cross'); // a summoned creature does not fall flat like a character
     expect(canTopple('tidus', false)).toBe(false); // a foe
     expect(canTopple('tidus', true)).toBe(true);
   });
@@ -201,7 +204,7 @@ describe('KoRun: the clock of a fall', () => {
     expect(fallRun('cut', 'ffx')).toBeNull();
   });
 
-  it('only a topple tips the standing painting: quadIn up to the end of the hold, fully tipped while it crosses', () => {
+  it('only a topple tips the standing painting: it turns more and more up to the end of the hold and is fully turned while it crosses', () => {
     const t = fallRun('topple', 'ffx')!;
     const rows = play(t, 60, 400);
     const holds = rows.filter((r) => r.phase === 'hold');
@@ -238,6 +241,56 @@ describe('KoRun: the clock of a fall', () => {
   });
 });
 
+describe('the turn and the slide have their own clocks, and no frame of either is faster than the check allows', () => {
+  it('the turn eases in (slow, then faster) and never runs at more than 1.5 times its average speed; a rise is the same turn run the other way, fast first', () => {
+    expect(toppleEase(0)).toBe(0);
+    expect(toppleEase(1)).toBe(1);
+    expect(riseEase(0)).toBe(1);
+    expect(riseEase(1)).toBe(0);
+    let peakDown = 0;
+    let peakUp = 0;
+    for (let i = 1; i <= 1000; i++) {
+      const a = i / 1000;
+      peakDown = Math.max(peakDown, (toppleEase(a) - toppleEase(a - 0.001)) * 1000);
+      peakUp = Math.max(peakUp, (riseEase(a - 0.001) - riseEase(a)) * 1000);
+      expect(toppleEase(a)).toBeGreaterThanOrEqual(toppleEase(a - 0.001));
+      expect(riseEase(a)).toBeLessThanOrEqual(riseEase(a - 0.001));
+    }
+    expect(peakDown).toBeLessThanOrEqual(1.5 + 1e-6);
+    expect(peakUp).toBeLessThanOrEqual(1.5 + 1e-6);
+    expect(toppleEase(0.5)).toBeLessThan(0.5); // it starts slowly
+    expect(riseEase(0.5)).toBeLessThan(0.5); // a rise is more than half done by the middle
+    expect(toppleEase(-1)).toBe(0);
+    expect(toppleEase(2)).toBe(1);
+  });
+
+  it('a fall slides in a straight line from the first frame to the end of the cross, so the feet never skate faster than the whole slide over the hold and the cross', () => {
+    for (const game of ['ffx', 'ffx2'] as const) {
+      const run = fallRun('topple', game)!;
+      const rows = play(run, 60, 500).filter((r) => r.phase !== 'done');
+      expect(rows[0]!.slide).toBe(0);
+      const step = 1 / ((KO_BUCKLE_MS[game] + KO_CROSS_MS) / (1000 / 60));
+      for (let i = 1; i < rows.length; i++) {
+        expect(rows[i]!.slide).toBeGreaterThanOrEqual(rows[i - 1]!.slide);
+        expect(rows[i]!.slide - rows[i - 1]!.slide, `${game} frame ${i}`).toBeLessThanOrEqual(step + 1e-9);
+      }
+      expect(rows.at(-1)!.slide).toBeGreaterThan(0.8);
+      expect(rows.at(-1)!.slide).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it('a revive starts toppled and in place (slide 1) and slides back to where it stands over the rise (1 to 0)', () => {
+    const rows = play(reviveRun(true), 60, 600);
+    for (const r of rows.filter((x) => x.phase === 'cross')) expect(r.slide).toBe(1);
+    const rise = rows.filter((x) => x.phase === 'rise');
+    for (let i = 1; i < rise.length; i++) expect(rise[i]!.slide).toBeLessThanOrEqual(rise[i - 1]!.slide);
+    expect(rise[0]!.slide).toBeGreaterThan(0.9);
+    expect(rise.at(-1)!.slide).toBeLessThan(0.1);
+    expect(rows.at(-1)!.slide).toBe(0);
+    for (const mode of ['buckle-cross', 'cross', 'flip'] as const) for (const r of play(fallRun(mode, 'ffx')!, 60, 400)) expect(r.slide, mode).toBe(0);
+  });
+});
+
 describe('KoRun: the revive mirrors the fall', () => {
   it('a revive with travel is the cross, then the rise from the toppled pose: 395 ms, inside TIMING.revive, so the menu is never delayed (FA-3)', () => {
     expect(REVIVE_MS).toBe(KO_CROSS_MS + RISE_MS);
@@ -266,7 +319,7 @@ describe('KoRun: the revive mirrors the fall', () => {
     for (const r of rise) expect(r).toMatchObject({ out: 0, inn: 1 });
     for (let i = 1; i < rise.length; i++) expect(rise[i]!.tip).toBeLessThanOrEqual(rise[i - 1]!.tip);
     // quadOut mirrored: more than half the way up in the first third of the rise
-    expect(rise[Math.floor(rise.length / 3)]!.tip).toBeLessThan(0.5);
+    expect(rise[Math.floor(rise.length / 2)]!.tip).toBeLessThan(0.45);
     expect(rise.at(-1)!.tip).toBeLessThan(0.02);
     expect(rows.at(-1)).toMatchObject({ phase: 'done', tip: 0, buckle: 0 });
   });
