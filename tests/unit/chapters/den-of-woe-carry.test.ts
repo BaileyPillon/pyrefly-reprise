@@ -168,6 +168,11 @@ describe('the flag is the only way in: every other chain carries what it always 
    * now equal the re-pinned `ffx2-atb-golden.test.ts` CH5_D0 pins again; Chapter 6 moves on seed 3
    * only, Chapter XI's Road on six of eight and the Sisters on all eight (IC-2 alone: neither chain
    * casts Acta, and both OFF switches stay off). The old hashes are in git at bd4d1327.
+   *
+   * **Chapter 5's row re-pinned 2026-10-10 for the boss AI (re-parity AI lane FFX-2 a, FFX-2 only; reason "game-script parity";
+   * `docs/handoff/re-parity-ai-ffx2-a.md`).** No Den code changed; Chapter 5's bosses (the Tail, the Leg and its Nodes, the Core, the Head, the
+   * Redoubts and Shuyin) follow the game's own scripts now, so its eight equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again (the first
+   * event that differs is inside the Tail's link). Chapters 6 and XI and the Sisters did not move. The old Chapter 5 hashes are in git at 931613a8.
    */
   const BASE = {
     ch5: ['6d1c691a5d26f616', '90d3c35d81929e0a', '7eb1a3104a2b6de9', 'd6ffdca5257353cf', '97216ad5381bebf6', 'f99d3875deaa5023', '85f479b8477e014a', '4871698e7688e3d2'],

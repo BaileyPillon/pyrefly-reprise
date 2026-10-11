@@ -85,10 +85,11 @@ export function notifyEnemiesDamaged(
   units: Ffx2Unit[],
   aiContext: (unit: Ffx2Unit) => AiContext,
 ): void {
+  const hitCounts = damageHits(produced, actor);
   for (const [targetId, amount] of damageTotals(produced, actor)) {
     const unit = units.find((u) => u.id === targetId);
     if (!unit || unit.side !== 'enemy') continue;
-    aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(aiContext(unit), actor.id, amount);
+    aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(aiContext(unit), actor.id, amount, hitCounts.get(targetId) ?? 1);
   }
 }
 
@@ -192,6 +193,19 @@ function damageTotals(produced: EventDraft[], actor: Ffx2Unit): Map<CombatantId,
     totals.set(hit.targetId, (totals.get(hit.targetId) ?? 0) + hit.amount);
   }
   return totals;
+}
+
+/** How many separate HP-damaging results this action put on each target (the game's reaction entry runs once per result). */
+function damageHits(produced: EventDraft[], actor: Ffx2Unit): Map<CombatantId, number> {
+  const counts = new Map<CombatantId, number>();
+  for (const draft of produced) {
+    if (draft.type !== 'damage') continue;
+    const hit = draft as { targetId: CombatantId; amount: number };
+    if (!(hit.amount > 0)) continue;
+    if (hit.targetId === actor.id && actor.side === 'party') continue; // an HP cost is not a hit
+    counts.set(hit.targetId, (counts.get(hit.targetId) ?? 0) + 1);
+  }
+  return counts;
 }
 
 /** What {@link runCounters} needs from the engine. */

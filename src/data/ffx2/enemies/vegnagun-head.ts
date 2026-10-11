@@ -152,7 +152,7 @@ export const vegnagunHeadGroup: EnemyGroupDef = {
         'x2-vegnagun-pallida-mors', 'x2-vegnagun-odi-et-amo', 'x2-vegnagun-mors-certa',
         'x2-vegnagun-nemo-ante-mortem-beatus', 'x2-vegnagun-acta-est-fabula',
       ],
-      flags: { isBoss: true },
+      flags: { isBoss: true, untargetable: true }, // the script's init turns the cursor off; the Redoubts' deaths turn it on (ai/vegnagun-redoubt.ts)
       scanText:
         'Can revive both Redoubts. Whenever its HP drops it uses Nemo Ante Mortem Beatus, its strongest ability.',
     },

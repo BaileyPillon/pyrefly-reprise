@@ -1,87 +1,177 @@
 /**
- * Vegnagun — Head plus the two Redoubts (battle 4)
- * [ffx2-vegnagun-shuyin §4.2, §5.4].
+ * Vegnagun — the Head of link 4, with the cannon fail clock
+ * [research/re-ffx2-ai-bahamut-vegnagun.md section 6.1; re-parity AI lane FFX-2 a]. **FFX-2 only.**
+ * The decision table of the game's own script (`m290`), in our words; the Redoubts are `vegnagun-redoubt.ts`.
  *
- * This battle carries **the cannon fail clock**, and the clock is not a timer
- * in the data — it is a counter of **Shuyin's seven speech events**:
+ * **Init.** The Head starts untargetable with Agility 110 (the table's 36 is replaced by the script); in phase 2 it sets Agility to
+ * 68 at every poll (row H3). Its first poll is a voice line (Shuyin).
  *
- * | # | When | Effect |
+ * **Phase 1** (the phase flag is down), in order:
+ *
+ * | # | Condition | Poll |
  * |---|---|---|
- * | 1 | battle start | Head does nothing that turn |
- * | 2 | Phase B entry | Head + both Redoubts **begin counting turns** |
- * | 3–6 | every `LINE_INTERVAL` combined enemy turns | Head does nothing |
- * | 7 | `FIRE_AT_TURN` | **Game Over, bad ending** |
+ * | 1 | the Redoubts have revived each other twice, first time | a voice line (Jecht) |
+ * | 2 | same, later: `random() % 4 = 0` | stage 1 a line (Auron), stage 2 two lines back to back (Braska), stage 3 nothing; else the poll goes on |
+ * | 3 | both Redoubts alive | Pallida Mors at one girl (uniform) |
+ * | 4 | exactly one alive | nothing |
+ * | 5 | both dead | the phase flag goes up, the Head becomes targetable, Acta Est Fabula on both Redoubts (row H1) |
  *
- * Three rules that are easy to get wrong:
- * - **The clock does not start until Phase B.** Phase A is a dead end anyway —
- *   the Head is untargetable and does nothing while either Redoubt lives — so
- *   putting a player who stalls in Phase A on the clock is both unfaithful and
- *   the frustrating option.
- * - **Never draw a number.** The original hides the remaining time; the seven
- *   lines *are* the UI (§4.2.3).
- * - `head.hp <= 0` must resolve **before** the turn-count hook, so a killing
- *   blow landing in the same frame as the seventh line wins.
+ * **Phase 2.** Every poll: Agility 68. Then, the first that applies ends the poll:
  *
- * The constants live in `AbilityDef.extra.failTimer` on Acta Est Fabula — the
- * Phase B transition action — per `docs/CONTRACTS.md`: genuinely one-off
- * scripted rules go in `extra`, not on an ad-hoc `AbilityDef` boolean.
+ * 1. the first phase-2 poll: a voice line (Shuyin), no clock; the third: a voice line (Jecht), no clock;
+ * 2. the shared fail clock goes up by 1 (the Redoubts raise the same counter on every phase-2 poll of theirs);
+ * 3. the clock is 100 or more: the cannon fires and the world ends (the bad ending) (row H2);
+ * 4. the clock is 80, 60, 40 or 20 or more and that line is unspoken: it is spoken (Shuyin), highest first;
+ * 5. the clock is 51 or more, once: a line (Braska in the game; the story binding here is `auron-halfway`, stale);
+ * 6. HP below a fifth, once; HP below a half, once: a line each;
+ * 7. `random() % 5 = 0`, then `random() % 3` picks one of three more lines, each once: spoken if unspoken, else the poll goes on;
+ * 8. both Redoubts dead: Acta Est Fabula on them again;
+ * 9. the attack ladder, below.
+ *
+ * **The ladder** (strict "below" tests on integer thresholds, a fifth of his maximum HP and its multiples): in HP band 4 (below
+ * 1/5), 3 (below 2/5), 2 (below 3/5) or 1 (below 4/5), the first time the Head is in that band or a lower one that it has
+ * not paid yet (`canon` below the band number), Nemo Ante Mortem Beatus on the party and `canon` becomes the band number; a
+ * single hit through several bands pays only one Nemo and skips the rest (rows H4). Otherwise, with 15 or more hits taken
+ * since the last one (rows H5, every damaging result counts, phase 2 only): Odi Et Amo and the count restarts; else Mors Certa.
+ *
+ * The lines have no text in our story scripts beyond the ones bound by name (`shuyin-line-1` to `-7`, `jecht-no-overtime`,
+ * `auron-halfway`); the others play silent. Poll costs: one turn per poll, a timer row listed for lane W4.
  */
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
-import { HEAD_FIRE_AT_TURN, HEAD_LINE_INTERVAL } from '../constants.ts';
+import { HEAD_FIRE_AT_TURN, HEAD_HALFWAY_LINE_AT, HEAD_LINE_INTERVAL } from '../constants.ts';
+import { scriptMod, searchUniform } from './script-rolls.ts';
+import { HEAD_CLOCK, HEAD_PHASE, REDOUBT_L, REDOUBT_R, REDOUBT_REVIVES, redoubtOf } from './vegnagun-redoubt.ts';
 
-const REDOUBT_R = 'redoubt-r';
-const REDOUBT_L = 'redoubt-l';
-
-/** HP fractions that force Nemo Ante Mortem Beatus on the way down. §5.4 */
-const HP_THRESHOLDS = [0.8, 0.6, 0.4, 0.2];
+/** `stat_dex` the script writes: at the start, and at every phase-2 poll. */
+const PHASE_ONE_AGILITY = 110;
+const PHASE_TWO_AGILITY = 68;
+/** Hits the Head takes before its next Odi Et Amo. */
 const ODI_ET_AMO_HITS_TAKEN = 15;
 
-function redoubts(ctx: AiContext): Ffx2Unit[] {
-  return ctx.units.filter((u) => u.id === REDOUBT_R || u.id === REDOUBT_L);
+function pods(ctx: AiContext): { right: boolean; left: boolean; ids: string[] } {
+  const right = redoubtOf(ctx, REDOUBT_R);
+  const left = redoubtOf(ctx, REDOUBT_L);
+  return {
+    right: !!right && right.alive,
+    left: !!left && left.alive,
+    ids: [right, left].filter((u): u is Ffx2Unit => u !== undefined).map((u) => u.id),
+  };
 }
 
-/** True once both Redoubts have been downed at least once — the Phase B gate. */
-function inPhaseB(ctx: AiContext): boolean {
-  return ctx.flags['headPhase'] === 'B';
+function actaEstFabula(ctx: AiContext): Command {
+  return { kind: 'ability', id: 'acta-est-fabula', targets: pods(ctx).ids };
 }
 
-/** Timer settings, read from the ability's `extra` so data can retune them. */
-function timerSettings(ctx: AiContext): { fireAtTurn: number; lineInterval: number } {
-  const extra = ctx.ability('acta-est-fabula')?.extra?.['failTimer'];
-  if (extra && typeof extra === 'object') {
-    const t = extra as { fireAtTurn?: number; lineInterval?: number };
-    return {
-      fireAtTurn: t.fireAtTurn ?? HEAD_FIRE_AT_TURN,
-      lineInterval: t.lineInterval ?? HEAD_LINE_INTERVAL,
-    };
-  }
-  return { fireAtTurn: HEAD_FIRE_AT_TURN, lineInterval: HEAD_LINE_INTERVAL };
-}
-
-/** `Action1` from §5.4, in the source's own branch order. */
-function headAction1(ctx: AiContext): Command {
+/** Phase 1, past the first poll. */
+function phaseOne(ctx: AiContext): Command | null {
   const self = ctx.self;
-  const pods = redoubts(ctx);
-  if (pods.length > 0 && pods.every((p) => !p.alive)) {
-    return { kind: 'ability', id: 'acta-est-fabula', targets: pods.map((p) => p.id) };
+  if ((typeof ctx.flags[REDOUBT_REVIVES] === 'number' ? ctx.flags[REDOUBT_REVIVES] : 0) >= 2) {
+    const stage = mem(self, 'jectFirst');
+    if (stage === 0) {
+      setMem(self, 'jectFirst', 1);
+      return null;
+    }
+    if (scriptMod(ctx.rng, 4) === 0) {
+      if (stage === 1) {
+        setMem(self, 'jectFirst', 2);
+        return null;
+      }
+      if (stage === 2) {
+        setMem(self, 'jectFirst', 3);
+        setMem(self, 'queuedSpeech', 1); // the second of two speak commands queued together: it runs without a poll
+        return null;
+      }
+    }
   }
+  const alive = pods(ctx);
+  if (alive.right && alive.left) {
+    const target = searchUniform(ctx.rng, ctx.party());
+    return target ? { kind: 'ability', id: 'pallida-mors', targets: [target.id] } : null;
+  }
+  if (alive.right || alive.left) return null; // one Redoubt left: idle
+  ctx.flags[HEAD_PHASE] = 'B';
+  ctx.flags['headClockRunning'] = true;
+  self.flags.untargetable = false;
+  return actaEstFabula(ctx);
+}
 
-  const fraction = self.hp / Math.max(1, self.stats.maxHp);
-  const crossed = mem(self, 'thresholdsCrossed');
-  const next = HP_THRESHOLDS[crossed];
-  if (next !== undefined && fraction <= next) {
-    setMem(self, 'thresholdsCrossed', crossed + 1);
+/** The clock's spoken lines, highest first: the count, the memory key, the line's number (the story triggers `shuyin-line-3` to `-6`). */
+const CLOCK_LINES: ReadonlyArray<readonly [number, string, number]> = [0, 1, 2, 3].map((i) => {
+  const at = HEAD_LINE_INTERVAL * (4 - i);
+  return [at, `line${at}`, 6 - i] as const;
+});
+
+/** HP below `num/den` of the maximum, integer division as the script does it (`maxhp * num / den`). */
+function below(self: Ffx2Unit, num: number, den: number): boolean {
+  return self.hp < Math.floor((self.stats.maxHp * num) / den);
+}
+
+function ladder(ctx: AiContext): Command {
+  const self = ctx.self;
+  // Band number: 4 below 1/5, 3 below 2/5, 2 below 3/5, 1 below 4/5, 0 otherwise.
+  const bandNumber = below(self, 1, 5) ? 4 : below(self, 2, 5) ? 3 : below(self, 3, 5) ? 2 : below(self, 4, 5) ? 1 : 0;
+  if (bandNumber >= 1 && mem(self, 'canon') <= bandNumber - 1) {
+    setMem(self, 'canon', bandNumber);
     return { kind: 'ability', id: 'nemo-ante-mortem-beatus', targets: [] };
   }
-
-  if (mem(self, 'hitsTaken') >= ODI_ET_AMO_HITS_TAKEN) {
-    setMem(self, 'hitsTaken', 0);
+  if (mem(self, 'hangeki') >= ODI_ET_AMO_HITS_TAKEN) {
+    setMem(self, 'hangeki', 0);
     return { kind: 'ability', id: 'odi-et-amo', targets: [] };
   }
   return { kind: 'ability', id: 'mors-certa', targets: [] };
+}
+
+/** Phase 2, past the Agility write: whether this poll spoke, ended the world, or goes on to the Redoubt check and the ladder. */
+function phaseTwoTalk(ctx: AiContext): 'spoke' | 'doom' | 'go-on' {
+  const self = ctx.self;
+  const first = mem(self, 'phaseTwoPolls') + 1;
+  setMem(self, 'phaseTwoPolls', first);
+  if (first === 1) {
+    ctx.emit({ type: 'script-trigger', name: 'shuyin-line-2', payload: { line: 2 } });
+    return 'spoke';
+  }
+  if (first === 3) {
+    ctx.emit({ type: 'script-trigger', name: 'jecht-no-overtime', payload: {} });
+    return 'spoke';
+  }
+  const clock = (typeof ctx.flags[HEAD_CLOCK] === 'number' ? ctx.flags[HEAD_CLOCK] : 0) + 1;
+  ctx.flags[HEAD_CLOCK] = clock;
+  if (clock >= HEAD_FIRE_AT_TURN) {
+    ctx.emit({ type: 'script-trigger', name: 'shuyin-line-7', payload: { line: 7 } });
+    ctx.flags['badEnding'] = true;
+    return 'doom';
+  }
+  for (const [at, key, line] of CLOCK_LINES) {
+    if (clock >= at && mem(self, key) === 0) {
+      setMem(self, key, 1);
+      ctx.emit({ type: 'script-trigger', name: `shuyin-line-${line}`, payload: { line, clock } });
+      return 'spoke';
+    }
+  }
+  if (clock >= HEAD_HALFWAY_LINE_AT && mem(self, 'halfway') === 0) {
+    setMem(self, 'halfway', 1);
+    ctx.emit({ type: 'script-trigger', name: 'auron-halfway', payload: { turns: clock } });
+    return 'spoke';
+  }
+  if (below(self, 1, 5) && mem(self, 'lowLine') === 0) {
+    setMem(self, 'lowLine', 1);
+    return 'spoke';
+  }
+  if (below(self, 1, 2) && mem(self, 'halfLine') === 0) {
+    setMem(self, 'halfLine', 1);
+    return 'spoke';
+  }
+  if (scriptMod(ctx.rng, 5) === 0) {
+    const key = (['aloneLine', 'jectLine', 'braskaLine'] as const)[scriptMod(ctx.rng, 3)] ?? 'braskaLine';
+    if (mem(self, key) === 0) {
+      setMem(self, key, 1);
+      return 'spoke';
+    }
+  }
+  return 'go-on';
 }
 
 export const vegnagunHeadScript: AiScript = {
@@ -89,132 +179,33 @@ export const vegnagunHeadScript: AiScript = {
 
   decide(ctx: AiContext): Command | null {
     const self = ctx.self;
-    const s = mem(self, 'step');
-    setMem(self, 'step', s + 1);
-
-    if (!inPhaseB(ctx)) {
-      // --- PHASE A ---------------------------------------------------------
+    if (mem(self, 'started') === 0) {
+      setMem(self, 'started', 1);
+      self.stats.agi = PHASE_ONE_AGILITY;
       self.flags.untargetable = true;
-      if (s === 0) {
-        ctx.emit({ type: 'script-trigger', name: 'shuyin-line-1', payload: { line: 1 } });
-        return null;
-      }
-      const pods = redoubts(ctx);
-      const everyPodDowned = pods.length > 0 && pods.some((p) => !p.alive);
-      if (everyPodDowned) {
-        // The Redoubts have been downed once: enter Phase B on the next turn.
-        ctx.flags['headPhase'] = 'B';
-        setMem(self, 'step', 0);
-        return null;
-      }
-      return { kind: 'ability', id: 'pallida-mors', targets: [] };
     }
-
-    // --- PHASE B -----------------------------------------------------------
-    if (s === 0) {
-      self.flags.untargetable = false;
-      ctx.flags['headTurns'] = 0;
-      const pods = redoubts(ctx);
-      return { kind: 'ability', id: 'acta-est-fabula', targets: pods.map((p) => p.id) };
-    }
-    if (s === 1) {
-      ctx.emit({ type: 'script-trigger', name: 'shuyin-line-2', payload: { line: 2 } });
-      ctx.flags['headClockRunning'] = true;
+    const queued = mem(self, 'queuedSpeech');
+    if (queued > 0) {
+      setMem(self, 'queuedSpeech', queued - 1);
       return null;
     }
-    if (s === 3) {
-      ctx.emit({ type: 'script-trigger', name: 'jecht-no-overtime', payload: {} });
+    if (mem(self, 'opened') === 0) {
+      setMem(self, 'opened', 1);
+      ctx.emit({ type: 'script-trigger', name: 'shuyin-line-1', payload: { line: 1 } });
       return null;
     }
-    // A line slot swallows the Head's turn entirely. §4.2.1
-    if (ctx.flags['headLinePending'] === true) {
-      ctx.flags['headLinePending'] = false;
-      return null;
-    }
-    return headAction1(ctx);
+    if (ctx.flags[HEAD_PHASE] !== 'B') return phaseOne(ctx);
+
+    self.stats.agi = PHASE_TWO_AGILITY;
+    if (phaseTwoTalk(ctx) !== 'go-on') return null;
+    const alive = pods(ctx);
+    if (!alive.right && !alive.left) return actaEstFabula(ctx);
+    return ladder(ctx);
   },
 
-  /**
-   * The fail clock. Counts **every** resolved turn of the Head and both
-   * Redoubts, and only in Phase B. `head.hp <= 0` is checked first so a
-   * killing blow in the same frame as line 7 wins.
-   */
-  onTurnResolved(ctx: AiContext, actor: Ffx2Unit): void {
-    if (!ctx.flags['headClockRunning']) return;
-    if (!ctx.self.alive) return;
-    if (actor.id !== ctx.self.id && actor.id !== REDOUBT_R && actor.id !== REDOUBT_L) return;
-
-    const { fireAtTurn, lineInterval } = timerSettings(ctx);
-    const turns = (typeof ctx.flags['headTurns'] === 'number' ? ctx.flags['headTurns'] : 0) + 1;
-    ctx.flags['headTurns'] = turns;
-
-    if (turns === Math.floor(fireAtTurn / 2)) {
-      ctx.emit({ type: 'script-trigger', name: 'auron-halfway', payload: { turns } });
-    }
-    if (turns >= fireAtTurn) {
-      ctx.emit({ type: 'script-trigger', name: 'shuyin-line-7', payload: { line: 7 } });
-      ctx.flags['badEnding'] = true;
-      return;
-    }
-    if (turns % lineInterval === 0) {
-      const line = 3 + turns / lineInterval - 1;
-      ctx.emit({ type: 'script-trigger', name: `shuyin-line-${line}`, payload: { line } });
-      ctx.flags['headLinePending'] = true;
-    }
-  },
-
-  onDamaged(ctx: AiContext): void {
-    setMem(ctx.self, 'hitsTaken', mem(ctx.self, 'hitsTaken') + 1);
-  },
-};
-
-/**
- * Redoubts. Before Acta Est Fabula has touched it a Redoubt only revives its
- * twin; afterwards it runs a four-step rotation. Right is armoured against
- * physicals with **zero** magic defense and Left is the exact inverse, so the
- * intended play is to kill Right with magic and Left with physicals. §3.4
- */
-function redoubtScript(id: string, isRight: boolean): AiScript {
-  const twin = isRight ? REDOUBT_L : REDOUBT_R;
-  const rotation = isRight
-    ? ['lacrimosa-r', 'blind', 'flare', 'leg-break']
-    : ['lacrimosa-l', 'leg-slow', 'dispel', 'demi'];
-
-  return {
-    id,
-    decide(ctx: AiContext): Command | null {
-      const other = ctx.units.find((u) => u.id === twin);
-      if (ctx.flags['headPhase'] !== 'B') {
-        if (other && !other.alive) return { kind: 'ability', id: 'full-life', targets: [other.id] };
-        return null;
-      }
-      if (other && !other.alive) {
-        const steps = mem(ctx.self, 'sinceRevive');
-        if (steps >= 2) {
-          setMem(ctx.self, 'sinceRevive', 0);
-          return { kind: 'ability', id: 'full-life', targets: [other.id] };
-        }
-        setMem(ctx.self, 'sinceRevive', steps + 1);
-      }
-      const s = mem(ctx.self, 'step');
-      setMem(ctx.self, 'step', s + 1);
-      const abilityId = rotation[s % rotation.length] ?? rotation[0] ?? 'lacrimosa-r';
-      const party = ctx.party();
-      if (party.length === 0) return null;
-      const single = abilityId !== 'demi';
-      return { kind: 'ability', id: abilityId, targets: single ? [ctx.rng.pick(party).id] : [] };
-    },
-  };
-}
-
-export const vegnagunRedoubtRightScript = redoubtScript('vegnagun-redoubt-r', true);
-export const vegnagunRedoubtLeftScript = redoubtScript('vegnagun-redoubt-l', false);
-
-/** The data file ships one shared `aiScriptId`; the id decides which pod it is. */
-export const vegnagunRedoubtScript: AiScript = {
-  id: 'vegnagun-redoubt',
-  decide(ctx: AiContext): Command | null {
-    const isRight = ctx.self.id === REDOUBT_R || ctx.self.slot % 2 === 1;
-    return (isRight ? vegnagunRedoubtRightScript : vegnagunRedoubtLeftScript).decide(ctx);
+  /** Every separate HP-damaging result counts toward Odi Et Amo, in phase 2 only. */
+  onDamaged(ctx: AiContext, _sourceId, _amount: number, hits = 1): void {
+    if (ctx.flags[HEAD_PHASE] !== 'B') return;
+    setMem(ctx.self, 'hangeki', mem(ctx.self, 'hangeki') + hits);
   },
 };

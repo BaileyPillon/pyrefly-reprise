@@ -300,8 +300,12 @@ export interface AiScript {
   decide(ctx: AiContext): Command | null;
   /** Optional hook run after every resolved turn of *any* unit (fail clocks). */
   onTurnResolved?(ctx: AiContext, actor: Ffx2Unit): void;
-  /** Optional hook run when `self` takes damage (counter-attack scripts). */
-  onDamaged?(ctx: AiContext, sourceId: CombatantId | undefined, amount: number): void;
+  /**
+   * Optional hook run when `self` takes damage (counter-attack scripts), once per action with the total. `hits` is the
+   * number of separate HP-damaging results the action put on `self` (the game's reaction entry runs once per result, so
+   * a script that counts hits reads this; absent from older callers, meaning one).
+   */
+  onDamaged?(ctx: AiContext, sourceId: CombatantId | undefined, amount: number, hits?: number): void;
   /**
    * Optional hook run once per party action that was aimed at `self`, hit, miss,
    * immune or status-only alike (`engineHooks.ts#notifyEnemiesTargeted`). The

@@ -124,9 +124,8 @@ export { attachedResult, hitsFromOutcome, requestLayout, rollDefault, rollReelLa
 export { reelStripOf, resolveLadyLuckSpin, shapeLadyLuckSpin } from './reels.ts';
 export type { LadyLuckOutcome, LadyLuckTier, ShapedSpin } from './reels.ts';
 export { aiScriptFor, aiScriptIds, registerAiScript } from './ai/index.ts';
-export { bahamutStep } from './ai/bahamut.ts';
-export { bumpNodeCounter, nodeColour, syncNodeImmunity } from './ai/vegnagun.ts';
-export { classifyAttack } from './ai/vegnagun-body.ts';
+export { nodeColour, syncNodeImmunity } from './ai/vegnagun.ts';
+export { classifyDamageBits } from './ai/vegnagun-body.ts';
 
 // --- constants (tests and the debug API read these) ------------------------
 export * from './constants.ts';

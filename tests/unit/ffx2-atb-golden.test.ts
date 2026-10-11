@@ -137,6 +137,20 @@
  * the D = 0 arrays (20/20 in both chapters, no menu invalidated, held or refused) and the Wait engine switched to Active still equals
  * the Active arrays (both asserted below). The old hashes are in git at 931613a8. The same rows moved in
  * `ffx2-hit-closes-menu.test.ts`, `ffx2-menu-cancel-delay.test.ts` and `chapters/den-of-woe-carry.test.ts`.
+ * **Re-pinned a tenth time, every array, for the boss AI of Chapters IV and V** (re-parity AI lane FFX-2 a, branch `re-parity-ai-ffx2-a`, 2026-10-10,
+ * FFX-2 only, reason "game-script parity"; `docs/handoff/re-parity-ai-ffx2-a.md`). Bahamut, the Vegnagun chain and Shuyin now follow the game's own scripts
+ * (`research/re-ffx2-ai-bahamut-vegnagun.md` section 10), so every one of the sixty digests moved. Cause, found by fingerprinting the full event log of every
+ * seed before (the base commit's sources put back for the run) and after and comparing the logs event by event (the table is in the handoff). Chapter 4: on 22 of
+ * the 30 seeds (D = 0 seeds 1-4, 7-11, 13, 16-18 and 20; Active seeds 1-4 and 7-10) the first difference is Bahamut's very first action, the Curse's girl (now picked by the
+ * near-weighted search, one 31-bit draw, where the engine's pick was one float draw); on the other 8 the Curse lands on the same girl by chance and the first difference
+ * is the aim of a later Bahamut Attack (D = 0 seeds 5, 6, 12, 14, 15 and 19; Active seeds 5 and 6). (On those a status event's payload, a live status object,
+ * already differs earlier in the hash: that is the later divergence showing through, as in the ninth re-pin.) Chapter 5: every seed differs inside the Tail's link
+ * and nowhere earlier, either at the first Tail Beam's aim (near-weighted now; D = 0 seeds 1, 4, 8, 11-14, 17, 19; Active seeds 1, 2, 4-9) or at the next damage
+ * roll after the Tail's opening sweep, because that sweep runs a target search the script throws away, which draws once and moves every later roll one draw (D = 0 seeds
+ * 2, 3, 5-7, 9, 10, 15, 16, 18, 20; Active seeds 3 and 10). Outcomes: Chapter 4 is
+ * still 20/20 at D = 0 and 10/10 on the Active arm; Chapter 5 at D = 0 is 14/20 (it was 20/20; the losses are seeds 2, 3, 4, 5, 14 and 20) and its Active arm is
+ * 1/10 (seed 5; it was 2/10), which is the chain getting harder, measured and disclosed in the handoff (500 seeds of the shipped line: 430 to 323), not tuned. The
+ * Wait arm still equals the D = 0 arrays and the Wait engine switched to Active still equals the Active arrays (both asserted below). The old hashes are in git at 931613a8.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -171,6 +185,8 @@ const CH5_D1500 = [
   'aef0ba91c468c569', '15c0381ce67d8198', 'cd6c0f6555bf2c92', '40671ea5faa65c67', 'bfb594a3befe6ea5',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
+/** One letter a seed, W a won chain and d a defeat (game-script parity, 2026-10-10; before it every seed won). */
+const CH5_D0_OUTCOMES = 'WddddWWWWWWWWdWWWWWd';
 
 describe('FFX-2 golden event logs on the Active path (D = 1500 ms)', () => {
   it('chapter 4 and the chapter 5 chain, seeds 1-10, are byte-identical', () => {
@@ -186,10 +202,10 @@ describe('FFX-2 golden event logs at zero decision time (D = 0)', () => {
     expect(runs.every((r) => r.outcome === 'victory')).toBe(true);
   }, 120_000);
 
-  it('the whole chapter 5 chain, seeds 1-20, is byte-identical and still 20/20', () => {
+  it('the whole chapter 5 chain, seeds 1-20, is byte-identical and wins 14/20 (game-script parity: it was 20/20)', () => {
     const runs = SEEDS.map((s) => driveChapter5(s, 0));
     expect(runs.map(logHash)).toEqual(CH5_D0);
-    expect(runs.every((r) => r.outcome === 'victory')).toBe(true);
+    expect(runs.map((r) => (r.outcome === 'victory' ? 'W' : 'd')).join('')).toBe(CH5_D0_OUTCOMES);
   }, 120_000);
 });
 
@@ -213,13 +229,14 @@ describe('the Config ATB speed lever at Normal changes nothing (§1.2)', () => {
  * before its first decision must reproduce the Active `D = 1500` golden.
  */
 describe('FFX-2 golden event logs under Wait mode (D-029)', () => {
-  it('D = 1500 under Wait is byte-identical to D = 0, chapters 4 and 5, seeds 1-20, 20/20', () => {
+  it('D = 1500 under Wait is byte-identical to D = 0, chapters 4 and 5, seeds 1-20, 20/20 and 14/20', () => {
     const wait = { atbMode: 'wait' as const };
     const ch4 = SEEDS.map((s) => driveChapter4(s, 1500, wait));
     const ch5 = SEEDS.map((s) => driveChapter5(s, 1500, wait));
     expect(ch4.map(logHash)).toEqual(CH4_D0);
     expect(ch5.map(logHash)).toEqual(CH5_D0);
-    expect([...ch4, ...ch5].every((r) => r.outcome === 'victory')).toBe(true);
+    expect(ch4.every((r) => r.outcome === 'victory')).toBe(true);
+    expect(ch5.map((r) => (r.outcome === 'victory' ? 'W' : 'd')).join('')).toBe(CH5_D0_OUTCOMES);
     expect([...ch4, ...ch5].every((r) => r.invalidated === 0 && r.held === 0 && r.refused === 0)).toBe(true);
   }, 180_000);
 

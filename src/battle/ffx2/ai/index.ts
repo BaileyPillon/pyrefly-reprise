@@ -16,7 +16,8 @@ import { bahamutScript } from './bahamut.ts';
 import { shuyinScript } from './shuyin.ts';
 import { vegnagunLegScript, vegnagunNodeScript, vegnagunTailScript } from './vegnagun.ts';
 import { vegnagunBodyScript, vegnagunBulwarkScript } from './vegnagun-body.ts';
-import { vegnagunHeadScript, vegnagunRedoubtScript } from './vegnagun-head.ts';
+import { vegnagunHeadScript } from './vegnagun-head.ts';
+import { vegnagunRedoubtScript } from './vegnagun-redoubt.ts';
 // The Leblanc Syndicate (Chateau Leblanc, FFX-2 Ch. 2). **Not a registered
 // chapter** — the formations are reachable only from the unit suites and the
 // debug API — but the scripts have to be in this table or an enemy the tests

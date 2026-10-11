@@ -119,8 +119,8 @@ export const CHAPTER_KEYS = Object.keys(STORY_CHAPTERS) as ChapterKey[];
  *   slot, fires repeatedly).
  * - `battle/ffx2/ai/vegnagun-head.ts` — `shuyin-line-1` (phase A start),
  *   `shuyin-line-2` (phase B entry), `jecht-no-overtime` (phase B step 3),
- *   `auron-halfway` (half of `HEAD_FIRE_AT_TURN`), `shuyin-line-3`..`6` (every
- *   `HEAD_LINE_INTERVAL` turns) and `shuyin-line-7` (the cannon fires: the bad
+ *   `auron-halfway` (the clock's `HEAD_HALFWAY_LINE_AT`, 51), `shuyin-line-3`..`6` (the clock's 20, 40, 60
+ *   and 80, `HEAD_LINE_INTERVAL` apart) and `shuyin-line-7` (the cannon fires at 100: the bad
  *   ending).
  * - `battle/ffx2/ai/shuyin.ts` — `shuyin-taunt` above half HP, `shuyin-desperate` below it.
  *

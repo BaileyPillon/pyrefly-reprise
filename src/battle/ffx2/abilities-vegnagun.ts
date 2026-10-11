@@ -224,7 +224,7 @@ export const VEGNAGUN_ABILITIES: AbilityDef[] = [
     mpCost: 16,
     formula: 'none',
     damageType: 'other',
-    targeting: 'all-enemies',
+    targeting: 'single-enemy',
     statusEffects: [{ status: 'poison', chance: 100, duration: 0 }],
   }),
   def({
