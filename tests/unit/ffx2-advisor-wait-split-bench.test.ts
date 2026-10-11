@@ -30,6 +30,7 @@ import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts'
 import { buildAdvisorView, type AdvisorOptions } from '../../src/engine/tactics/advisor.ts';
 import { rowFor } from '../../src/engine/tactics/guide.ts';
 import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
+import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const SEEDS = Number(process.env['ADVISOR_BENCH_SEEDS'] ?? 40);
@@ -106,7 +107,7 @@ function driveChain(order: readonly string[], party: FFX2PartyBuild, seed: numbe
   let group: EnemyGroupDef = first;
   for (;;) {
     run.outcome = runLink(engine, driver, topMs, options, run);
-    run.minutes += engine.state().ticks / 3000 / 60;
+    run.minutes += engine.state().ticks / STEPS_PER_SECOND / 60;
     if (run.outcome !== 'victory') break;
     run.links += 1;
     const nextId = group.nextGroupId;

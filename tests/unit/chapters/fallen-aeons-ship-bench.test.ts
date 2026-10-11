@@ -25,6 +25,7 @@ import { FALLEN_AEONS_CHAIN_ORDER, ROAD_ANIMA, ROAD_SHIVA, ROAD_SISTERS } from '
 import { FFX2_FALLEN_AEONS } from '../../../src/data/chapter-ffx2-fallen-aeons.ts';
 import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 
 const SEEDS = 200;
 const HUMAN_SEEDS = 40;
@@ -37,7 +38,7 @@ const rows: string[] = [];
 
 interface Tally { wins: number; seeds: number; unfinished: number; minutes: number; lostAt: [number, number, number] }
 
-const minutesOf = (ticks: number): number => ticks / 3000 / 60;
+const minutesOf = (ticks: number): number => ticks / STEPS_PER_SECOND / 60;
 
 function chapter(opts: DriveOptions, seeds: number, lines: readonly [LineOptions, LineOptions, LineOptions] = INTENDED): Tally {
   const t: Tally = { wins: 0, seeds, unfinished: 0, minutes: 0, lostAt: [0, 0, 0] };

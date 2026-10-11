@@ -18,6 +18,7 @@ import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { djoseBuild } from '../../../src/data/ffx2/builds/djose.ts';
 import { DJOSE_ACTION_TIME_ON, DJOSE_ACTION_TIME_SECONDS, djoseIxionGroup } from '../../../src/data/ffx2/enemies/ixion-djose.ts';
 import { driveIxion, type IxionDriveOptions, type IxionLine, type IxionRun } from '../helpers/ixionDrive.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 
 const SEEDS = 200;
 const HUMAN: IxionDriveOptions = { decisionMs: 1500, topMs: 500, engine: { atbMode: 'wait', waitSplit: true } };
@@ -35,7 +36,7 @@ function measure(line: IxionLine, opts: IxionDriveOptions, seeds = SEEDS): Tally
   const t: Tally = { wins: 0, seeds, unfinished: 0, minutes: 0, ixionTurns: 0, partyTurns: 0, hammers: 0, fightsWithHammer: 0, hammerKos: 0, lossesAfterHammer: 0 };
   for (let seed = 1; seed <= seeds; seed++) {
     const r: IxionRun = driveIxion(line, seed, opts);
-    t.minutes += r.ticks / 3000 / 60;
+    t.minutes += r.ticks / STEPS_PER_SECOND / 60;
     t.ixionTurns += r.ixionTurns;
     t.partyTurns += r.partyTurns;
     t.hammers += r.hammers;

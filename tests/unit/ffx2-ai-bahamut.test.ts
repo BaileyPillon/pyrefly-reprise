@@ -12,7 +12,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { FFX2Engine, aiScriptFor, bahamutStep, defaultAbilities } from '../../src/battle/ffx2/index.ts';
+import { FFX2Engine, newGauge, aiScriptFor, bahamutStep, defaultAbilities } from '../../src/battle/ffx2/index.ts';
 import type { AiContext, EventDraft, Ffx2Unit } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
 import { SeededRng } from '../../src/battle/common/rng.ts';
@@ -26,7 +26,7 @@ function fakeUnit(id: string, side: 'party' | 'enemy'): Ffx2Unit {
     controller: side === 'party' ? 'player' : 'ai', alive: true, removed: false, slot: 0, flags: {},
     level: 24,
     atb: { ticks: 0, required: 10000, gauge: 0, charging: null, recovery: 0 },
-    accessories: [], chainCount: 0, chainWindowTicks: 0, aiMemory: {},
+    accessories: [], chainCount: 0, chainWindowTicks: 0, aiMemory: {}, gauge: newGauge(0),
   };
 }
 
