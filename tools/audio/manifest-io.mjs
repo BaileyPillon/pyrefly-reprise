@@ -255,9 +255,11 @@ export const LOOP_DECIMALS = 6;
  * 90 MB under D-306: Bailey, 2026-09-30, "I'll go with all of your recommendations please keep going",
  * accepting the driver's recommendation that the recorded set's second sprite (sfx/sprite-v2.mp3, D-302)
  * ship at LAME V0 like the music: 3.30 MB at q3 to 4.89 MB at V0, total 86.90 MB to 88.49 MB.
+ * Raised from 90 MB to 100 MB under D-6xx (Bailey 2026-10-10 'Whatever you recommend for sound effects and music I'll go with those recommendations'; driver item 47e): the two ElevenLabs battle cues
+ * (boss-leblanc and boss-bahamut, 2.93 MB) take the total from 87.09 MB to 90.02 MB.
  * qa.mjs, render.mjs and tests/unit/audio-shipped-files.test.ts all read this one constant.
  */
-export const AUDIO_BUDGET_BYTES = 90e6;
+export const AUDIO_BUDGET_BYTES = 100e6;
 
 export function secondsAtSample(sample, sampleRate) {
   return Number((sample / sampleRate).toFixed(LOOP_DECIMALS));

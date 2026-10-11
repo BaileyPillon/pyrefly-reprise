@@ -94,10 +94,16 @@ const COMPOSED: Record<string, Track> = {
 /**
  * Keys whose own track has not landed yet play an existing composition instead.
  * A key listed in COMPOSED always wins, so registering a real track retires its
- * stand-in automatically; delete the line here when it does. Empty now that
- * every key has its own composition — kept so a future key can land early.
+ * stand-in automatically; delete the line here when it does.
+ *
+ * FFX-2 only, 2026-10-10 (Bailey: "Whatever you recommend for sound effects and music I'll go with those recommendations"): two ElevenLabs takes ship
+ * as cues of their own, `boss-leblanc` (Chapter VI and the hidden Leblanc chapter) and `boss-bahamut` (Chapter IV), so the shared `boss-ffx2-aeon`
+ * stays with the Fallen Aeons, Ixion and the rest. The MP3 is what plays; if it cannot load, the synth fallback is the aeon composition they replace.
  */
-const STAND_INS: Record<string, string> = {};
+const STAND_INS: Record<string, string> = {
+  'boss-leblanc': 'boss-ffx2-aeon',
+  'boss-bahamut': 'boss-ffx2-aeon',
+};
 
 export const TRACKS: Record<string, Track> = { ...COMPOSED };
 for (const [key, target] of Object.entries(STAND_INS)) {

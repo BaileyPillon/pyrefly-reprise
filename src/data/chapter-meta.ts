@@ -320,7 +320,7 @@ const FFX2_BAHAMUT_META: ChapterMeta = {
     { image: 'characters/paine-warrior/idle.png', caption: "you don't get another option" },
   ],
   focalCharacterId: 'yuna-ffx2',
-  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon'],
+  musicKeys: ['scene-bevelle-underground', 'boss-bahamut'],
 };
 
 /**

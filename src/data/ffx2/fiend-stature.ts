@@ -6,7 +6,7 @@
  * Ixion of Chapter XVI (Djose). Nothing here is read by an FFX chapter (`data/ffx/fiend-stature.ts` is that game's table), and Vegnagun and its parts are not in it (one union
  * mesh, low confidence: they keep the approved staging of `scenes/farplane-colossus.ts`). **The three giants of wave 2 (Bahamut, Paragon and Anima) are in it with the rest, but
  * the stage does not stand them at these heights unasked**: how much of the real height each plays at, on a desktop and on a phone, is Bailey's pick ({@link FFX2_GIANT_SHARE},
- * 2026-10-08) and the camera that holds them is `engine/fx/mix/giants.ts`.
+ * 2026-10-08; Bahamut's again on 2026-10-10) and the camera that holds them is `engine/fx/mix/giants.ts`.
  *
  * Source: `research/ffx2-bahamut.md` §9, `research/ffx2-fallen-aeons.md` §12 and §13, `research/ffx2-trema.md` §14 and §15, `research/ffx2-gippal-den-of-woe.md` §12 and `research/ffx2-ixion-djose.md` §12 (the method, the
  * table, the caveats and what was not found; the lane's own report is `D:/Tools/rea/FINDINGS-sizes.md`, outside the repo). In short: the engine scale law read from the
@@ -56,7 +56,7 @@ export const FFX2_FIEND_STATURE: Readonly<Record<string, Ffx2FiendStature>> = {
   'shade-nooj': { model: 'm258', name: 'Nooj (shade)', raw: 20.913, scale: 1, height: 20.913, engine: 19 },
   'x2-ixion': { model: 'm166', name: 'Ixion', raw: 7.905, scale: 4, height: 31.62, engine: 32 },
   // Wave 2, the giants (research `ffx2-bahamut.md` §9, `ffx2-fallen-aeons.md` §13, `ffx2-trema.md` §15). Raw is the lane's table read to its two decimals (`real_H` / C), so each is good to 0.01 of 4.
-  // Default pose, wings and limbs spread: Bahamut's idle-pose bones span about 58 (not 87.8), which the picks below take into account (medium confidence; Anima and Paragon: high).
+  // Default pose, wings and limbs spread: Bahamut's idle-pose bones span about 58 (not 87.8), which the picks below stand him at (medium confidence; Anima and Paragon: high).
   bahamut: { model: 'm168', name: 'Bahamut', raw: 21.963, scale: 4, height: 87.852, engine: 55 },
   paragon: { model: 'm152', name: 'Paragon and Oversoul', raw: 23.573, scale: 4, height: 94.292, engine: 90 },
   'x2-anima': { model: 'm169', name: 'Anima', raw: 34.148, scale: 4, height: 136.592, engine: 138 },
@@ -99,15 +99,20 @@ export function ffx2FiendFigureHeights(ids: readonly string[], chapter: string, 
 }
 
 /**
- * **The giants' picks (Bailey, 2026-10-08, "go with your recommendations": `docs/handoff/r3942-stage.md`, the giants options sheet `giants-options-sheet.jpg`).** How much of its real
- * height each giant stands at, on a desktop window and on the upright phone. Bahamut (Chapter IV) and Paragon (Chapter XIII) stand at their real height on a desktop, framed by
- * the colossus camera of `engine/fx/mix/giants.ts` (option 3 of the options sheet), and at 0.7 of it on the phone (option 4: the phone cannot hold the girls smaller, and 0.7 is
- * also Bahamut's idle-bone height: 58 of 87.8, 0.66); Anima (Chapter XI) stands at 0.7 of her real height everywhere (option 4). `1` is the real height, so a share is
- * a fraction of the table's own figure, never an invented one. Presentation: no rule reads it. `[single source: own measurement]` for the real height; the share is a
- * staging pick.
+ * **The giants' picks.** How much of its real height each giant stands at, on a desktop window and on the upright phone. `1` is the real height, so a share is a fraction of the
+ * table's own figure, never an invented one. Presentation: no rule reads it.
+ *
+ * - **Bahamut (Chapter IV): 0.66 on a desktop and on the phone (Bailey, 2026-10-10, "yes please fix for all i mentioned": his in-battle size, with the camera able to come closer).**
+ *   0.66 is his idle-pose height over his default-pose height: the bones of his battle idle span about 58 of the model's 87.852 (`D:/Tools/rea/FINDINGS-sizes.md` §3: "for creatures
+ *   that spread in the default pose (Shiva, Bahamut, Valefor, Evrae, Flux), use the idle-bone figure"; `research/ffx2-bahamut.md` §9.3), 3.3 times the girls instead of 5.03.
+ *   `[single source: own measurement]`, **medium confidence**: idle bone origins, one reader, one build of the HD files, good to about 5 percent, and the painted figure is ours.
+ *   Before this, a desktop stood him at the full 5.03 (the colossus framing, the girls at 56 percent of the old look at 1600x900) and the phone at 0.7 (2026-10-08, "go with your recommendations": `docs/handoff/r3942-stage.md`).
+ * - **Paragon (Chapter XIII)** stands at his real height on a desktop, framed by the colossus camera of `engine/fx/mix/giants.ts` (option 3 of the giants options sheet), and at 0.7 of it
+ *   on the phone (option 4); **Anima (Chapter XI)** at 0.7 of her real height everywhere (option 4). Their idle-pose figures are measured and agree with the static ones (high confidence),
+ *   so they keep Bailey's 2026-10-08 picks.
  */
 export const FFX2_GIANT_SHARE: Readonly<Record<string, { readonly desktop: number; readonly phone: number }>> = {
-  bahamut: { desktop: 1, phone: 0.7 },
+  bahamut: { desktop: 0.66, phone: 0.66 },
   paragon: { desktop: 1, phone: 0.7 },
   'x2-anima': { desktop: 0.7, phone: 0.7 },
 };

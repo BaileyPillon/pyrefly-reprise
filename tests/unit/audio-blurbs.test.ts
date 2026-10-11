@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { toMidi, type Track } from '../../src/audio/score.ts';
-import { TRACKS, TRACK_BLURBS, TRACK_NOTES } from '../../src/audio/tracks/index.ts';
+import { TRACKS, TRACK_BLURBS, TRACK_NOTES, trackNames } from '../../src/audio/tracks/index.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const THEMES_MD = join(REPO_ROOT, 'docs', 'audio', 'THEMES.md');
@@ -136,11 +136,12 @@ const NOTE_ENTRIES = Object.entries(TRACK_NOTES);
 
 describe('TRACK_NOTES covers the score', () => {
   it('has exactly one note per composed track', () => {
-    expect(Object.keys(TRACK_NOTES).sort()).toEqual(Object.keys(TRACKS).sort());
+    // Composed tracks only: a stand-in key (`boss-leblanc`, `boss-bahamut`, 2026-10-10) plays another cue's composition and has no notes of its own.
+    expect(Object.keys(TRACK_NOTES).sort()).toEqual(trackNames().sort());
   });
 
   it('parsed the cue map — 21 rows, one per cue', () => {
-    expect([...CUE_MAP.keys()].sort()).toEqual(Object.keys(TRACKS).sort());
+    expect([...CUE_MAP.keys()].sort()).toEqual(trackNames().sort());
   });
 });
 

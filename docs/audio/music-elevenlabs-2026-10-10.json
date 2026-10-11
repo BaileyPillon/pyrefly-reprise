@@ -1,0 +1,252 @@
+{
+  "what": "Two ElevenLabs Music takes that ship as cues of their own (2026-10-10), FFX-2 only: boss-bahamut and boss-leblanc",
+  "source": "elevenlabs-music_v2_5",
+  "words": "Whatever you recommend for sound effects and music I'll go with those recommendations (Bailey, 2026-10-10, about 18:20 EDT), accepting the driver's picks LB-M5 for Leblanc and BH-M4 for Bahamut",
+  "gameCase": "FFX-2 only: the Bahamut fight of Chapter IV; the Leblanc fight of Chapter VI and the hidden Leblanc chapter. Every other chapter keeps its cue (boss-ffx2-aeon stays for the Fallen Aeons, Ixion, Trema and the Experiment); the Leblanc chateau scene bed (scene-bevelle-underground) is unchanged.",
+  "master": "The files are the lanes' staged masters (a gain to -16 LUFS and the loop cut), installed byte for byte; their manifest entries are the lanes' own (D:/Tools/pyrefly-scratch/2026-10-10/leblanc-audio-options/work/LB-M5-master.json and bahamut-music/stage/bh-m4.manifest-entry.json).",
+  "synthFallback": "Both cues are stand-ins in src/audio/tracks/index.ts for boss-ffx2-aeon's score: it plays only when the MP3 cannot load. No new synth score was written.",
+  "notMeasured": "The stereo gate of THEMES.md and the headless browser proof were not run on these two files; agents cannot hear (rule 13), so the pick is a listening verdict nobody here made beyond Bailey's delegation.",
+  "cues": [
+    {
+      "cue": "boss-bahamut",
+      "game": "FFX-2",
+      "brief": "BH-M4",
+      "name": "Lament (piano)",
+      "plays": "Chapter IV's Bahamut fight (the formation's start cue, the chapter's battle cue and the pre scene's music step)",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Tender, sorrowful cinematic orchestral music at 76 BPM in a minor key, intimate and restrained, written for a battle where the heroine must fight someone she loves. A solo grand piano carries a simple, aching, singing melody over gentle broken-chord accompaniment; a warm string orchestra enters softly, then a solo cello and a solo violin trade a mournful line. A soft heartbeat pulse of low strings and a muted timpani underneath, with no cymbals and no heroic brass. It swells slowly to a heartfelt, tearful peak with the full strings and a few sustained French horns, then recedes to the solo piano so it can repeat. Bittersweet, gentle, sad but dignified, never triumphant. Entirely real acoustic instruments recorded in a warm concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop, no vocals.",
+        "music_length_ms": 96000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "sha256": "fd10f1ba454fe7d1961949e4b71169237c4d5eb4019a6553b64ea61abd92abd1",
+        "bytes": 1536462
+      },
+      "file": {
+        "bytes": 1379184,
+        "sha256": "f686324c3e55a047b89501c25bdc424e11b4335a19229510b5dd59d832742156"
+      },
+      "manifestEntry": {
+        "file": "music/boss-bahamut.mp3",
+        "loopStart": 12.671678,
+        "loopEnd": 75.83644,
+        "duration": 78.8364,
+        "bytes": 1379184,
+        "lufs": -16,
+        "truePeakDb": -2.4,
+        "source": "elevenlabs-music_v2_5"
+      }
+    },
+    {
+      "cue": "boss-leblanc",
+      "game": "FFX-2",
+      "brief": "LB-M5",
+      "name": "Parade of the pleased",
+      "plays": "Chapter VI's Leblanc fight (the chapter's battle cue and the pre scene's music step) and the hidden Leblanc chapter, which is Chapter VI by reference",
+      "request": {
+        "composition_plan": {
+          "chunks": [
+            {
+              "text": "[Intro]",
+              "duration_ms": 5854,
+              "positive_styles": [
+                "164 BPM",
+                "bright major key",
+                "live brass band and rhythm section recorded in a big studio",
+                "upbeat, fast and proud",
+                "cheeky, strutting and pleased with itself",
+                "playful comedy",
+                "steady tempo",
+                "a pompous snare drum roll",
+                "a piccolo trumpet fanfare that announces itself"
+              ],
+              "negative_styles": [
+                "chiptune",
+                "8-bit",
+                "retro video game sound",
+                "arcade",
+                "synthesizer",
+                "electronic drum machine",
+                "vocals",
+                "lyrics",
+                "fade out",
+                "final chord",
+                "tempo change",
+                "ritardando",
+                "minor key",
+                "ominous",
+                "dark",
+                "menacing"
+              ],
+              "context_adherence": "high"
+            },
+            {
+              "text": "[Parade A]",
+              "duration_ms": 23415,
+              "positive_styles": [
+                "164 BPM",
+                "bright major key",
+                "live brass band and rhythm section recorded in a big studio",
+                "upbeat, fast and proud",
+                "cheeky, strutting and pleased with itself",
+                "playful comedy",
+                "steady tempo",
+                "bouncy parade march feel with tuba and bass in a bright oom-pah",
+                "trumpets and trombones play a proud strutting fanfare",
+                "snare and tambourine",
+                "glockenspiel sparkle"
+              ],
+              "negative_styles": [
+                "chiptune",
+                "8-bit",
+                "retro video game sound",
+                "arcade",
+                "synthesizer",
+                "electronic drum machine",
+                "vocals",
+                "lyrics",
+                "fade out",
+                "final chord",
+                "tempo change",
+                "ritardando",
+                "minor key",
+                "ominous",
+                "dark",
+                "menacing"
+              ],
+              "context_adherence": "high"
+            },
+            {
+              "text": "[Funk B]",
+              "duration_ms": 23415,
+              "positive_styles": [
+                "164 BPM",
+                "bright major key",
+                "live brass band and rhythm section recorded in a big studio",
+                "upbeat, fast and proud",
+                "cheeky, strutting and pleased with itself",
+                "playful comedy",
+                "steady tempo",
+                "the band slips into a funky groove",
+                "wah electric guitar scratching",
+                "electric piano",
+                "horn section punches",
+                "handclaps",
+                "sly and playful"
+              ],
+              "negative_styles": [
+                "chiptune",
+                "8-bit",
+                "retro video game sound",
+                "arcade",
+                "synthesizer",
+                "electronic drum machine",
+                "vocals",
+                "lyrics",
+                "fade out",
+                "final chord",
+                "tempo change",
+                "ritardando",
+                "minor key",
+                "ominous",
+                "dark",
+                "menacing"
+              ],
+              "context_adherence": "high"
+            },
+            {
+              "text": "[Fanfare returns]",
+              "duration_ms": 23415,
+              "positive_styles": [
+                "164 BPM",
+                "bright major key",
+                "live brass band and rhythm section recorded in a big studio",
+                "upbeat, fast and proud",
+                "cheeky, strutting and pleased with itself",
+                "playful comedy",
+                "steady tempo",
+                "the fanfare returns grander and slightly too pleased with itself",
+                "extra bars of horn flourish",
+                "cymbal crashes",
+                "full brass"
+              ],
+              "negative_styles": [
+                "chiptune",
+                "8-bit",
+                "retro video game sound",
+                "arcade",
+                "synthesizer",
+                "electronic drum machine",
+                "vocals",
+                "lyrics",
+                "fade out",
+                "final chord",
+                "tempo change",
+                "ritardando",
+                "minor key",
+                "ominous",
+                "dark",
+                "menacing"
+              ],
+              "context_adherence": "high"
+            },
+            {
+              "text": "[Turnaround]",
+              "duration_ms": 11707,
+              "positive_styles": [
+                "164 BPM",
+                "bright major key",
+                "live brass band and rhythm section recorded in a big studio",
+                "upbeat, fast and proud",
+                "cheeky, strutting and pleased with itself",
+                "playful comedy",
+                "steady tempo",
+                "a rising trumpet and snare run back into the fanfare",
+                "no ending, keeps the energy of the start"
+              ],
+              "negative_styles": [
+                "chiptune",
+                "8-bit",
+                "retro video game sound",
+                "arcade",
+                "synthesizer",
+                "electronic drum machine",
+                "vocals",
+                "lyrics",
+                "fade out",
+                "final chord",
+                "tempo change",
+                "ritardando",
+                "minor key",
+                "ominous",
+                "dark",
+                "menacing"
+              ],
+              "context_adherence": "high"
+            }
+          ]
+        },
+        "model_id": "music_v2_5"
+      },
+      "raw": {
+        "sha256": "b8e43a22c6651b9bc11a806b63f52965562f0d6d11537113de40fa808e9871ae",
+        "bytes": 3511725
+      },
+      "file": {
+        "bytes": 1554446,
+        "sha256": "f7ef671d2b880461b54096cf37d67d1c4fa08bcb3ba68091e30607ebedb00bf2"
+      },
+      "manifestEntry": {
+        "file": "music/boss-leblanc.mp3",
+        "loopStart": 5.878753,
+        "loopEnd": 76.122268,
+        "duration": 79.1223,
+        "bytes": 1554446,
+        "lufs": -16,
+        "truePeakDb": -4,
+        "source": "elevenlabs-music_v2_5"
+      }
+    }
+  ]
+}

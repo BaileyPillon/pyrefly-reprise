@@ -273,6 +273,11 @@ mastered. The prompt, as sent (`music_length_ms` 91000, `force_instrumental` tru
 Sparse, melancholy solo piano piece at 58 BPM in A minor. A lone flute plays four soft notes, then the piano answers with a slow rising phrase that never finishes, over gentle broken chords and one low string drone. Intimate, nostalgic, like a story that is already over being told anyway. Quiet dynamics, much silence and natural room reverb, no drums, no vocals. No fade-out; it ends unresolved on a held note.
 ```
 
+#### Two more takes (2026-10-10, FFX-2 only)
+
+- **`boss-bahamut`** (Chapter IV's Bahamut fight): brief `BH-M4` ("Lament (piano)"), take 1, ElevenLabs Music v2.5, original; the driver's pick under Bailey's 2026-10-10 delegation ("Whatever you recommend for sound effects and music I'll go with those recommendations"). Raw take SHA-256 `fd10f1ba454fe7d1961949e4b71169237c4d5eb4019a6553b64ea61abd92abd1`; prompt and hashes in `docs/audio/music-elevenlabs-2026-10-10.json`.
+- **`boss-leblanc`** (Chapter VI's Leblanc fight and the hidden Leblanc chapter): brief `LB-M5` ("Parade of the pleased"), take 1, ElevenLabs Music v2.5, original; the driver's pick under the same delegation. Raw take SHA-256 `b8e43a22c6651b9bc11a806b63f52965562f0d6d11537113de40fa808e9871ae`; plan and hashes in the same record.
+
 ## What must appear in the game credits
 
 Four entries, verbatim (the last two since music v2, 2026-09-30):

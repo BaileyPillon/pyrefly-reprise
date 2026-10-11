@@ -89,6 +89,10 @@ const v2 = read('docs/audio/music-v2-2026-09-30.json') as {
 };
 const o1 = read('docs/audio/music-o1-2026-09-30.json') as { cues: { cue: string; after: { bytes: number } }[] };
 
+// The two FFX-2 cues of 2026-10-10 carry `source` too; their own record is docs/audio/music-elevenlabs-2026-10-10.json, pinned by `audio-music-elevenlabs-2026-10-10.test.ts`.
+const added = read('docs/audio/music-elevenlabs-2026-10-10.json') as { source: string; cues: { cue: string; file: { bytes: number } }[] };
+const addedBytes = added.cues.reduce((sum, c) => sum + c.file.bytes, 0);
+
 const RATE = 44100;
 const RUN_ON_SECONDS = 3;
 const sha256 = (cue: string) =>
@@ -118,8 +122,9 @@ describe('ElevenLabs music: the record', () => {
       .filter(([, entry]) => externalSource(entry) !== null)
       .map(([name]) => name)
       .sort();
-    expect(exempt).toEqual(record.cues.map((c) => c.cue));
+    expect(exempt).toEqual([...record.cues.map((c) => c.cue), ...added.cues.map((c) => c.cue)].sort());
     for (const name of exempt) expect(manifest.music[name]!.source, name).toBe(record.source);
+    expect(added.source, "the 2026-10-10 record names the same source").toBe(record.source);
   });
 });
 
@@ -213,7 +218,7 @@ describe('ElevenLabs music: the whole', () => {
   it('moved the music total by exactly the bytes these cues changed, from the total music v2 pinned', () => {
     const total = Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0);
     const moved = record.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
-    expect(total).toBe(v2.totals.musicBytesAfter + moved);
+    expect(total).toBe(v2.totals.musicBytesAfter + moved + addedBytes);
   });
 
   it('is inside the shipping budget with the sfx sprites counted, and qa.mjs found nothing', () => {

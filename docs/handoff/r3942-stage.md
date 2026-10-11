@@ -505,3 +505,49 @@ At the target step the card docks under the target card when it fits above the t
 - Chapter XI's Anima link and Chapter XIII's Trema link were not surveyed; Firefox was not testable.
 - No ledger row (D-, A-), no NOW.md and no CHANGELOG entry were written by this lane: the decision and the build are the driver's to record.
 - The commit trailer says `Claude Sonnet 5.5` (the model that wrote it), as the earlier lanes' did, not the `Opus 5.5` line in this lane's brief.
+
+---
+
+# Wave 2, Bahamut at his in-battle size (2026-10-10; branch `fix-bahamut-size` from `origin/rel-3944` 1d57ec12)
+
+**Game case: FFX-2 only, Chapter IV** (rule 14): the Bevelle Underground fight, FFX-2's own Bahamut model (m168). FFX's Bahamut (Yuna's aeon, Spathi), Paragon, Anima and every other chapter are untouched (their tests pass unchanged). Presentation only: no `src/battle/**`, no enemy data, no golden file.
+
+**Bailey, 2026-10-10 (~14:45 EDT):** asked "and bahamut looks absolutely massive...is that accurate?". The answer: his model with the wings spread in the default pose is 87.852 units, 5.03 times the girls; the bones of his battle idle span about 58 (`D:/Tools/rea/FINDINGS-sizes.md` §3: "for creatures that spread in the default pose (Shiva, Bahamut, Valefor, Evrae, Flux), use the idle-bone figure"), about 3.3 times the girls; the build stood him at the full 5.03 on a desktop and at 0.7 on the phone. Bailey: "yes please fix for all i mentioned", accepting the recommendation to stand him at his in-battle size on desktop too, with the camera able to come closer.
+
+## What changed
+
+| Piece | File | What |
+|---|---|---|
+| The pick | `src/data/ffx2/fiend-stature.ts` | `FFX2_GIANT_SHARE.bahamut` is `{ desktop: 0.66, phone: 0.66 }` (58 over 87.852 = 0.6602; **medium confidence**, `[single source: own measurement]`: idle bone origins, one reader, one build of the HD files). World height 6.037 over girls of 1.82 on both (was 9.147 desktop, 6.403 phone). Paragon (1 / 0.7) and Anima (0.7 / 0.7) are unchanged |
+| The desktop camera | `src/engine/fx/mix/giants.ts` (Bahamut's `views`) | the pulled-back colossus camera (2.3, 4.88, 16.03: 1.8 times as far, 2.9 higher) is gone: the whole figure now fits under today's colossus master moved half a unit back and three degrees round, (0.8231, 2.1286, 9.6228) looking at (0.6082, 1.9066, -0.3725), fov 34, for windows from 1.28 to 2.45; a second view (0.3613, 1.8786, 10.1583) holds a 5:4 window (1.2 to 1.28), where the first cuts Yuna's box at the left edge. `stageGiant` is untouched: the girls spread 1.15 and he steps 0.56 right, **nobody stands nearer the party than before** (his z stays -5.8, the girls' 1.45 / 0.1 / -1.5). Paragon's and Anima's rows, the exception's constants (`GIANT_FLOOR` 0.45, cover 0.4, overlap 0.4) and every rule are unchanged |
+| The phone camera | `src/scenes/bevelle-underground.ts` (`BEVELLE_PHONE_GIANT_IDLE`) | re-solved for 6.037 with the options sheet's own phone solver (feet on y 445, his top on y 104 of the 520 field, no painting edge past today's, a pose within 4 degrees and 1.5 units of the live one): (0.3648, 3.4456, 15.3405) looking at (0.5283, 3.0071, 5.3515), fov 32. The A-12 slice fit and `GIANT_PHONE_TOP` are untouched |
+| Tests | `ffx2-fiend-stature`, `fx-mix-giants`, `chapters/giants-phone-scenes` | the picks, the heights (6.037 on both), the idle-bone arithmetic, the camera is close (z under 11, y under 2.5), nobody nearer, the two views and a 5:4 window, the phone height and rig; Paragon's and Anima's tests untouched |
+| Research | `research/ffx2-bahamut.md` §9.3 | the sentence that said "the build takes the full 87.85 on a desktop" now says what the build does since today |
+
+## The numbers (first command menu, seed 1, headless real-GPU Chromium; before = this branch before the change = live 39.4.3; "pre-giants" = 39.4.1, before wave 2)
+
+"On screen" is the standing height (feet to feet + world height, projected through the camera) of Bahamut over the girls' mean, as in the wave 2 table. Sheet: `docs/screenshots/r3942-stage/bahamut-size-before-after.jpg`.
+
+| | Bahamut over the girls, on screen | girls px (mean) | against pre-giants / live today | Bahamut px |
+|---|---|---|---|---|
+| 1600x900 before | 3.80 | 163 | 55 % / 100 % | 618 |
+| 1600x900 **after** | **2.06** | **280** | **95 % / 172 %** | 576 |
+| 2000x1012 before | 3.79 | 182 | 55 % / 100 % | 692 |
+| 2000x1012 **after** | **2.05** | **319** | **97 % / 175 %** | 655 |
+| 390x844 before | 2.65 | 98 | 75 % / 100 % | 260 |
+| 390x844 **after** | **2.42** | **107** | **82 % / 109 %** | 258 |
+
+In the world he is 3.32 times the girls (was 5.03 on a desktop, 3.52 on the phone). The pre-giants figures: the real 39.4.1 captures of wave 2 for 1600x900 (294 px girls, Bahamut 565, ratio 1.92) and 390x844 (131); 2000x1012 is this branch with the giants table emptied (329 px, Bahamut 647, 1.97; the same method at 1600x900 reads 296 and 569 against the real 294 and 565).
+
+Faces and bodies: no HUD panel touches any girl's face or body in the three after pictures (before: 4 percent of Yuna's body on the phone). The enemy-intent card stands on 0.0 percent of Bahamut's pixels at 1600x900 and 2000x1012 (the card avoids his silhouette, as before) and 2.5 percent on the phone (1.7 before).
+
+**Window shapes** (the giant plan's own report, `framing.giant` and the `tries` log; every one plays the giant, ok, gate 0): 1024x768, 1170x900 (1.3), 1280x1024 (1.25) and 1280x1066 (1.2, the narrow view), 1440x900, 1600x900, 1920x1080, 2000x1012, 2560x1080 (2.37) and 2646x1080 (2.45); the girls stand at 96 to 97 percent of the resting rig's girls at every shape of the main view and 92 percent in the narrow one. 3440x1440 (2.39) is proved offline only (the plate gate re-implemented in `D:/Tools/pyrefly-scratch/2026-10-10/bahamut-size/solver/gate.mjs`, which reproduced the game's own 0.005 refusal exactly). A first pose a little lower (up -0.1, pitch -0.5) gave the girls 1 px more and was refused by the plate gate at 2.37 (the top-left corner shows void), which is why the final one is a little higher and flatter.
+
+## Disclosed
+
+- **The 5:4 and squarer windows (1.2 to 1.28)**: the girls stand at 92 percent of the resting rig's, and the enemy-intent card lands on 39 percent of Bahamut's pixels at 1280x1024 (the known narrow-window limit of wave 2: the guide column, the card and the command stack cannot stand beside a figure that wide); the rest-gap log reads -67 px (Paine's box meets his painting; the boss covers 15 to 19 percent of her, under the exception's 0.4). Left as is: a shorter card for giants or a camera that stands back below 1.3 is the pick wave 2 already named.
+- **The phone**: the girls are 107 px, 82 percent of the pre-giants look (the 0.19 reserve under the boss gauge, `GIANT_PHONE_TOP`, is unchanged); his crown stands under the intent strip as it did.
+- **Medium confidence on the size itself**: idle-bone origins, not a posed silhouette; the painted figure is ours (a coiled body under raised wings), so 3.3 is a design height read from the model, good to about 5 percent.
+- The authored Mega Flare beat (`src/story/scripts/ffx2-bahamut.ts`, `camera('action')`) is untouched (still the cut-in wave 2 disclosed).
+- Not run: the deploy, a review workflow (`node tools/critic-plan.mjs` for `giants.ts` and a scene file: a focused review of the production candidate before any deploy), the PCSX2 check. No ledger row, NOW.md or CHANGELOG entry from this lane: the driver records them.
+- Evidence and tools (outside the repo): `D:/Tools/pyrefly-scratch/2026-10-10/bahamut-size/` (`cap.mjs` the capture, `probe2.mjs` the framing report at a window shape, `solver/` the wave 2 study's solver copied with the new share, `make-sheet.py`, `faces.py`, `cardcover.py`, the before / pregiants / after captures).

@@ -311,6 +311,9 @@ export async function charge(
   telegraphDone?.();
 }
 
+/** Seconds the battle theme takes to fade out under the last link's victory sting. */
+const VICTORY_THEME_OUT_S = 0.3;
+
 export async function victory(ctx: EventCtx): Promise<void> {
   const own = ctx.deps.actionMotion?.victory; // FF7: D1's win poses, then a hold in silence
   if (own) return void (await settled(ctx, own.call(ctx.deps.actionMotion, motionCtx(ctx)), MOMENT_GUARD_MS));
@@ -321,7 +324,12 @@ export async function victory(ctx: EventCtx): Promise<void> {
     await ctx.sleep(Math.max(TIMING.victory, fxVictory(ctx, 'hold')));
     return;
   }
-  cue(ctx, 'victory');
+  // The fanfare is the end-of-fight sting. A formation that chains on (Chapter VI Acts I and II) is a seam: the battle theme carries on into the next link, and the
+  // FFX fanfare (B major) laid over it (Bb minor) is a second tune a semitone off the first. The last link takes the theme out under the sting instead.
+  if (!ctx.moreLinks) {
+    ctx.deps.audio?.stopMusic(VICTORY_THEME_OUT_S);
+    cue(ctx, 'victory');
+  }
   for (const id of ctx.stage.staged()) {
     const side = ctx.stage.sideOf(id);
     if (side === 'party' || side === 'aeon') ctx.stage.actor(id)?.setPose('victory');

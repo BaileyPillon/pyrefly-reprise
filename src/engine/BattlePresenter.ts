@@ -342,7 +342,8 @@ export class BattlePresenter {
    * The CONTRACTS.md loop, start to finish. Returns how the battle ended; the
    * screen owns what happens next (chain, results, retry).
    */
-  async run(engine: BattleEngine, link: { headline?: string; bossId?: string } = {}): Promise<BattleOutcome> {
+  async run(engine: BattleEngine, link: { headline?: string; bossId?: string; moreLinks?: boolean } = {}): Promise<BattleOutcome> {
+    this.ctx.moreLinks = link.moreLinks === true; // the chain says whether another formation follows (`BattleEncounterChain`)
     // Ground the mid-burst row projection before a single event is played. The
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.

@@ -121,6 +121,11 @@ export const TIMING = {
 export interface EventCtx {
   readonly stage: BattleStage;
   readonly deps: PresenterDeps;
+  /**
+   * The encounter chains on after this formation (`EnemyGroupDef.nextGroupId`), set by `BattlePresenter.run`: its `victory` is a seam, not the end
+   * of the fight, so no end-of-fight sting plays over the battle theme that carries on into the next link (Chapter VI Acts I and II, 2026-10-10).
+   */
+  moreLinks?: boolean;
   sleep(ms: number): Promise<void>;
   /** Whoever is mid-action, so `action-end` can put them back to idle. */
   actingId: CombatantId | null;

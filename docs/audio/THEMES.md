@@ -592,10 +592,12 @@ actually matters — **the one thing the cue must leave behind**.
 | Cue | Game | Ships as | L/R corr | side/mid dB | mono-sum loss dB |
 |---|---|---|---|---|---|
 | `battle-ffx` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.71 | -7.5 | -0.7 |
+| `boss-bahamut` | FFX-2 | **ElevenLabs** (Music `music_v2_5`, brief `BH-M4` take 1; AI; original, the driver's pick under Bailey's 2026-10-10 delegation; a piano lament at 76 bpm; the stereo gate was not measured) | n/a | n/a | n/a |
 | `boss-dread` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
 | `boss-evrae` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.704 | -7.5 | -0.7 |
 | `boss-ffx2-aeon` | FFX-2 | **route N2** (ACE-Step 1.5 turbo, denoise 0.3, seed 505, 8 steps) | 0.643 | -6.6 | -0.9 |
 | `boss-jecht` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.718 | -7.5 | -0.7 |
+| `boss-leblanc` | FFX-2 | **ElevenLabs** (Music `music_v2_5`, brief `LB-M5` take 1; AI; original, the driver's pick under Bailey's 2026-10-10 delegation; a brass parade into a funk groove at 164 bpm in a bright major key; the stereo gate was not measured) | n/a | n/a | n/a |
 | `boss-seymour-macalania` | FFX | **route S** (sampled orchestra, measured hall, no AI) | 0.698 | -7.5 | -0.7 |
 | `boss-seymour` | FFX | **ElevenLabs** (Music `music_v2_5`, brief `boss-seymour-a` take 1; AI; the stereo gate fails, the narrow variant passes) | 0.293 | -2.6 | -1.9 |
 | `boss-shuyin` | FFX-2 | **route N2** (ACE-Step 1.5 xl, denoise 0.25, seed 505, 8 steps) | 0.65 | -6.7 | -0.8 |

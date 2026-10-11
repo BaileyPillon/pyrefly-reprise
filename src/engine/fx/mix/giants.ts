@@ -12,8 +12,11 @@ import type { Staging } from './staging.ts';
  * Chapters IV, XIII and XI stand at their real size and the camera is solved to hold them (the giants options sheet, `docs/screenshots/r3942-stage/giants-options-sheet.jpg`;
  * `docs/handoff/r3942-stage.md`):
  *
- * - **Bahamut** (Chapter IV, option 3): his real height, 5.03 times the girls (`data/ffx2/fiend-stature.ts`, `research/ffx2-bahamut.md` §9), the whole figure in the frame under
- *   a colossus camera 1.8 times as far from the girls and 2.9 higher than today's.
+ * - **Bahamut** (Chapter IV; **re-fit 2026-10-10**, Bailey: "yes please fix for all i mentioned"): his in-battle size, 0.66 of the model's default pose (the bones of his idle span about 58
+ *   of 87.852; medium confidence), 3.3 times the girls (`data/ffx2/fiend-stature.ts` {@link FFX2_GIANT_SHARE}, `research/ffx2-bahamut.md` §9.3). At 3.3 he no longer needs the
+ *   pulled-back colossus camera of the 2026-10-08 pick (option 3, his full 5.03: 1.8 times as far and 2.9 higher, the girls at 56 percent of today's): the camera is today's colossus
+ *   master moved half a unit back and three degrees round, a little higher and flatter, the whole figure in the frame and the girls at about 95 percent of the pre-giants look. The girls and he stand where they
+ *   always have (spread 1.15, he steps 0.56 right, no nearer the party than before); only his height and the camera changed.
  * - **Paragon and Oversoul** (Chapter XIII, option 3): his real height, 5.40 times the girls, the camera 1.9 times as far and 2.4 higher.
  * - **Anima** (Chapter XI, option 4): 0.7 of her real height (7.71 times the girls), the camera 1.7 times as far.
  *
@@ -22,7 +25,7 @@ import type { Staging } from './staging.ts';
  *
  * **The giant exception to the party-height floor.** CHAPTER FRAMING never lets a master make the party smaller than 90 percent of today's (`clearance.ts`, the judges' "Ch IV 170 -> 100
  * after a spherechange"). A whole real-size giant needs a camera that leaves the girls at about half of today's, so for **these three bosses on a desktop window**, and for nothing else,
- * the floor is {@link GIANT_FLOOR} of today's party height (the picks measure 55, 51 and 61 percent at 1600x900), a member may be covered by the boss up to {@link GIANT_COVER_MAX}
+ * the floor is {@link GIANT_FLOOR} of today's party height (Paragon's and Anima's picks measure 51 and 61 percent at 1600x900, Bahamut's re-fit about 95, so it does not lean on the exception), a member may be covered by the boss up to {@link GIANT_COVER_MAX}
  * of her box (today's plus 2 percent: the giant stands four to six units behind the girls and its coil or its wing passes behind a head: Paine's reads 23 percent in
  * Bahamut's view, 33 in Anima's) and by a nearer girl up to {@link GIANT_OVERLAP_MAX} (seen from three times as far the three girls stand in a column: Paragon's view reads 0.35 against
  * today's 0.27); everything else holds: every figure in view and clear of the panels. Where the floor would still be broken, where a window has no view proved (below), or where the painting's edge would show
@@ -75,8 +78,8 @@ export function giantPlate(plate: Plate | null, root: Object3D | null | undefine
 }
 
 /**
- * The giant exception: the party may stand down to this share of today's height under a giant's camera (the picks measure 55, 51 and 61 percent at 1600x900; the rule
- * for every other fight stays 0.9). Reads as a floor on `PartyRule.floorPx`.
+ * The giant exception: the party may stand down to this share of today's height under a giant's camera (Paragon's and Anima's picks measure 51 and 61 percent at 1600x900; Bahamut's
+ * 2026-10-08 pick measured 55 and his 2026-10-10 re-fit about 95; the rule for every other fight stays 0.9). Reads as a floor on `PartyRule.floorPx`.
  */
 export const GIANT_FLOOR = 0.45;
 
@@ -104,7 +107,16 @@ export const GIANT_ROWS: readonly GiantRow[] = [
     chapter: 'ffx2-bahamut',
     spread: 1.15,
     apart: 0.56,
-    views: [{ aspect: [1.2, 2.45], pos: [2.3, 4.8786, 16.0313], look: [2.0858, 4.0466, 6.0682], fov: 34 }],
+    // 2026-10-10: the in-battle size (0.66, 3.3 times the girls) under the camera the offline solver of the 2026-10-08 study finds for him once the plate gate is asked of every window shape
+    // up to 2.45 (back 0.5, up 0.15, pitch -1, yaw 3, slide 0.5 from the colossus master): 1600x900 girls 280 px (95 percent of the pre-giants look), he 579 px with his top 42 px down. The pick
+    // of 2026-10-08 (his full 5.03) stood at (2.3, 4.8786, 16.0313). A pose a little higher and flatter (up -0.1, pitch -0.5) gives the girls 1 px more and shows a sliver of void in the
+    // top-left corner of a 2.37 window (gate 0.005, which refuses the giant there). In a window narrower than 1.28 (5:4 and squarer-than-5:4) that camera cuts Yuna's box at the left edge
+    // (1280x1024 hides 13 percent of it, 1280x1066 27), so those shapes have a pose of their own, solved with the girls' boxes 2 percent inside the edge of a 1.2 window: back 1, yaw 4,
+    // slide 0, 1600x900-equivalent girls 267 px (91 percent of the pre-giants look).
+    views: [
+      { aspect: [1.2, 1.28], pos: [0.3613, 1.8786, 10.1583], look: [0.3209, 1.7438, 0.1593], fov: 34 },
+      { aspect: [1.28, 2.45], pos: [0.8231, 2.1286, 9.6228], look: [0.6082, 1.9066, -0.3725], fov: 34 },
+    ],
   },
   {
     id: 'paragon',
