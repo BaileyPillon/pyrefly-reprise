@@ -10,12 +10,13 @@
  * | damage variance, critical roll, Escape, the opening CTB | the roller's own, mode 0: party slot + 20, every aeon and party slot 7: 27, a monster slot + 8 (28 to 35) | `re-ffx-rng-hit.md` 2 |
  * | the hit-or-evade roll | the user's mode 1 (+ 16) | same |
  * | status infliction, extra statuses, shatter, Threaten | the user's mode 2 (+ 32) | same |
- * | steal success and amount, loot | 10; the rare slot 11 | `re-ffx-rng-hit.md` 2 |
+ * | steal success and amount | 10; the rare slot 11 (loot and drops are the engine's own model, on `BattleRng.aux`) | `re-ffx-rng-hit.md` 2 |
  * | a script's `GetRandomValue` | 2, `& 0xFFFF`; one stream for every script and actor | `re-ffx-rng-hit.md` 2, `re-ffx-ai-*.md` |
  * | a script's actor picker (`findMatchingChr`), and a Berserk or Confuse target | 4, `% candidates`, ascending actor order, no draw under two | `re-ffx-ai-*.md`; Berserk and Confuse: `pp_BtlPickAutoTarget` (0x007996d0) |
  * | the targets of a random-target command, one draw per hit | 5, the same picker | `pp_BtlBuildTargetHits` (0x0078ba70) |
  * | a Reflect bounce | 6, the same picker | same |
- * | Wakka's Attack Reels result | 19 | `re-ffx-rng-hit.md` 2 (the anchor map), `re-ffx-ai-evrae-yojimbo-isaaru-sin.md` (0x007b1b50 is the reel builder) |
+ * | Chapter VIII's scene and camera draws, the Fins' caption | 2, counted (`ai/airship-scenes.ts`) | the formation scripts |
+ * | Wakka's Attack Reels result | 19, **named but not drawn yet**: the engine takes the player's reel input from `BattleRng.aux` | `re-ffx-rng-hit.md` 2 (the anchor map), `re-ffx-ai-evrae-yojimbo-isaaru-sin.md` (0x007b1b50 is the reel builder) |
  *
  * A **run seed** is the game's seed product `k` (`kernel/rng.ts#seedProduct`, the clock byte taken as 1): the 68 states are then
  * what the game's own seeding routine leaves (`seedStates`).
@@ -41,7 +42,7 @@ export const FfxStream = {
   Steal: 10,
   /** The rare-slot roll: `value & 0xff`. */
   StealSlot: 11,
-  /** Wakka's Attack Reels result. */
+  /** Wakka's Attack Reels result. Named for the stream map; nothing draws it yet (the player's reel input is a stand-in on `BattleRng.aux`). */
   Reels: 19,
 } as const;
 
