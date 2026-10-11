@@ -44,7 +44,9 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
     ap += overkilled ? rewards.apOverkill : rewards.ap;
     gil += rewards.gil;
     for (const drop of rewards.drops) {
-      if (drop.chance === undefined || ctx.rng.int(1, 100) <= drop.chance) {
+      // The engine's own drop model (a percent chance per drop), not the game's (stream 10 against a chance byte, `kernel/drops.ts`, not wired):
+      // it draws from the engine-side stream so the battle's game streams end where the fight ended.
+      if (drop.chance === undefined || ctx.rng.aux.int(1, 100) <= drop.chance) {
         drops.push({ ...drop, count: overkilled ? Math.min(99, drop.count * OVERKILL_DROP_MULTIPLIER) : drop.count });
       }
     }

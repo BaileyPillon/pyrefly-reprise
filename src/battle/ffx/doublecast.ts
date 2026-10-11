@@ -21,8 +21,8 @@
  * only build that grants it is Chapter 3's `dreams-end`.
  *
  * Pure and deterministic like the rest of `battle/`: the one fallback pick uses
- * the battle's seeded RNG, exactly as `resolveTargets` does for an empty
- * aim.
+ * the battle's engine-side stream, exactly as `resolveTargets` does for an empty
+ * aim (the game draws nothing for a target the player chose).
  */
 
 import type { AbilityDef, CombatantId, FFXCombatant, Targeting } from '../common/types.ts';
@@ -114,7 +114,7 @@ export function aimFor(
   if (!submitted.every((id) => id === actor.id)) return submitted.slice();
   const legal = validTargets(ctx, actor, spell);
   if (legal.length === 0) return [];
-  return spell.targeting === 'all-enemies' ? legal : [ctx.rng.pick(legal)];
+  return spell.targeting === 'all-enemies' ? legal : [ctx.rng.aux.pick(legal)]; // a placeholder aim the player would have chosen: the engine-side stream
 }
 
 /** The biggest Black Magic spell this caster knows and can pay for twice. */

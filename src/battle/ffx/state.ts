@@ -18,7 +18,7 @@ import type {
   FFXCombatant,
   Side,
 } from '../common/types.ts';
-import type { SeededRng } from '../common/rng.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import type { ActorRuntime, FFXRuntime } from './runtime.ts';
 import { baseCtb } from './math.ts';
@@ -55,7 +55,8 @@ export type { ActorRuntime, FFXRuntime } from './runtime.ts';
 export interface Ctx {
   state: BattleState;
   rt: FFXRuntime;
-  rng: SeededRng;
+  /** The battle's random streams: FFX's own 68, drawn by number (`adapt/streams.ts`). */
+  rng: BattleRng;
   content: FFXContentRegistry;
   emit: (event: EventInput) => void;
 }

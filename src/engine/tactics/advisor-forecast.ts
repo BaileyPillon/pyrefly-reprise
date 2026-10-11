@@ -56,6 +56,7 @@
  */
 
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
+import { makeFfxRng } from '../../battle/ffx/adapt/streams.ts';
 import { SeededRng } from '../../battle/common/rng.ts';
 import { cloneStateForSim } from '../../battle/ffx/simulate.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from '../../battle/ffx/state.ts';
@@ -154,9 +155,9 @@ function ctxFromState(state: Readonly<BattleState>, content: FFXContentRegistry)
   return {
     state: clone,
     rt,
-    // Any position in the stream: `predictEnemyIntent` samples across it from
+    // Any position in FFX's streams: `predictEnemyIntent` samples across it from
     // whatever it is handed, and the live position is not in the state.
-    rng: new SeededRng(state.seed ^ (state.ticks + 1)),
+    rng: makeFfxRng(state.seed ^ (state.ticks + 1)),
     content,
     emit: () => {},
   };

@@ -85,6 +85,7 @@
 
 import type { CombatantId, FFXCombatant, StatusId } from '../../common/types.ts';
 import { type ActorRuntime, type Ctx, rtOf, tryActor } from '../state.ts';
+import { orderVoiceScene } from './airship-scenes.ts';
 
 // ---------------------------------------------------------------------------
 // Ids — duplicated from the data file on purpose: `src/battle/**` must not
@@ -359,6 +360,7 @@ export function queueAirshipOrder(ctx: Ctx, talker: FFXCombatant, orderId: strin
   if (orderId !== ORDER_PULL_BACK && orderId !== ORDER_CLOSE_IN) return false;
   if (!airshipOrderAvailable(ctx, talker.id, orderId)) return false;
   ctx.state.flags[AIRSHIP_ORDER] = orderId === ORDER_PULL_BACK ? 'far' : 'near';
+  orderVoiceScene(ctx, talker.id); // the voice reply is a scene that rolls on the scripts' stream
   return true;
 }
 

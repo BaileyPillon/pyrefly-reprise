@@ -12,7 +12,8 @@
 import type {
   BattleEvent, BattleResult, BattleSetup, BattleState, Command, Decision, FFXBattleEngine, FFXCombatant, TurnPreview,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import type { BattleRng, RngSnapshot } from '../common/streams.ts';
+import { makeFfxRng } from './adapt/streams.ts';
 import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import { type Ctx, type EventInput, canAct, has, isAlive, livingFriendlies, tryActor } from './state.ts';
 import { buildBattle } from './setup.ts';
@@ -32,7 +33,8 @@ export { apForLevel } from './results.ts';
 export interface FFXEngineSnapshot {
   state: BattleState;
   rt: Ctx['rt'];
-  rngState: number;
+  /** Where every stream stands (`BattleRng.saveState`): FFX's 68 streams and the engine-side one. */
+  rngState: RngSnapshot;
   setup: BattleSetup | null;
   awaitingInput: boolean;
 }
@@ -51,7 +53,7 @@ export interface FFXEngineOptions {
 
 export class FFXEngine implements FFXBattleEngine {
   private ctx: Ctx | null = null;
-  private rng: SeededRng;
+  private rng: BattleRng;
   private readonly options: FFXEngineOptions;
   private setup: BattleSetup | null = null;
   /** Events emitted since the current `submit` / `nextDecision` began. */
@@ -61,13 +63,13 @@ export class FFXEngine implements FFXBattleEngine {
 
   constructor(options: FFXEngineOptions = {}) {
     this.options = options;
-    this.rng = new SeededRng(0);
+    this.rng = makeFfxRng(0);
   }
 
   // -- BattleEngine ---------------------------------------------------------
 
   init(setup: BattleSetup): void {
-    this.rng = new SeededRng(setup.seed);
+    this.rng = makeFfxRng(setup.seed);
     this.setup = setup;
     this.buffer = [];
     this.awaitingInput = false;
@@ -143,16 +145,15 @@ export class FFXEngine implements FFXBattleEngine {
   /**
    * A private copy of this battle for the advisor's look-ahead (v4 prototype; the twin of
    * `FFX2Engine.fork`). One `structuredClone` of `ctx.state` (log copied shallowly) and `ctx.rt`, so
-   * their aliasing survives; content shared read-only; its **own** `SeededRng(seed)`, so nothing it
+   * their aliasing survives; content shared read-only; its **own** generator seeded `seed`, so nothing it
    * does reaches this battle. `rngState` (tests) starts at this stream's position: the fidelity proof.
    */
-  fork(seed: number, rngState?: number): FFXEngine {
+  fork(seed: number, rngState?: RngSnapshot): FFXEngine {
     const ctx = this.requireCtx();
     const f = new FFXEngine(this.options);
     const { log, ...rest } = ctx.state;
     const b = structuredClone({ state: rest, rt: ctx.rt });
-    f.rng = new SeededRng(seed);
-    if (rngState !== undefined) f.rng.restoreState(rngState);
+    f.rng = this.rng.fork(seed, rngState);
     f.setup = this.setup;
     f.awaitingInput = this.awaitingInput;
     f.buffer = [];
@@ -184,7 +185,7 @@ export class FFXEngine implements FFXBattleEngine {
    */
   static restore(snap: FFXEngineSnapshot, options: FFXEngineOptions = {}): FFXEngine {
     const f = new FFXEngine(options);
-    f.rng = new SeededRng(snap.state.seed);
+    f.rng = makeFfxRng(snap.state.seed);
     f.rng.restoreState(snap.rngState);
     f.setup = snap.setup;
     f.awaitingInput = snap.awaitingInput;

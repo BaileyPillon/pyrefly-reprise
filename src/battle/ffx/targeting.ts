@@ -21,6 +21,9 @@ import {
   tryActor,
 } from './state.ts';
 import { isReachZero } from './reach.ts';
+import { pickDrawn } from '../common/streams.ts';
+import { FfxStream } from './adapt/streams.ts';
+import { inActorOrder } from './ai/script-random.ts';
 
 /** `flagsMisc` bit 18: the command uses the weapon's properties (Wakka's weapon commands reach at range). */
 const MISC_USES_WEAPON_BIT = 0x40000;
@@ -228,9 +231,9 @@ export function resolveTargets(
     case 'all':
       return [...mates, ...foes];
     case 'random-enemy':
-      return randomFoes.length > 0 ? [ctx.rng.pick(randomFoes)] : [];
+      return randomHitTarget(ctx, randomFoes);
     case 'random-ally':
-      return mates.length > 0 ? [ctx.rng.pick(mates)] : [];
+      return randomHitTarget(ctx, mates);
     default:
       break;
   }
@@ -249,7 +252,17 @@ export function resolveTargets(
   // our estimate — research §2 names random-target attacks only).
   const fallback =
     def.targeting === 'single-ally' ? mates : def.targeting === 'single-any' ? [...randomFoes, ...mates] : randomFoes;
-  return fallback.length > 0 ? [ctx.rng.pick(fallback)] : [];
+  // No aim at all (a script's `targets: []`, a placeholder): the game has no draw for this, so it is an engine stand-in on the engine-side stream.
+  return fallback.length > 0 ? [ctx.rng.aux.pick(fallback)] : [];
+}
+
+/**
+ * The target of one hit of a random-target command: the game's picker over the candidates in ascending actor order, stream 5, `value % count`,
+ * no draw with one (`pp_BtlBuildTargetHits`, FFX.exe 0x0078ba70, calls `pp_BtlPickTarget`, 0x007acd40, once per hit).
+ */
+function randomHitTarget(ctx: Ctx, pool: readonly FFXCombatant[]): FFXCombatant[] {
+  const picked = pickDrawn(ctx.rng.on(FfxStream.RandomTarget), inActorOrder(ctx, pool));
+  return picked ? [picked] : [];
 }
 
 /**
@@ -382,5 +395,5 @@ export function reflectBounceTarget(ctx: Ctx, reflector: FFXCombatant): FFXComba
   // A foe that is never a random pick is never a bounce target either
   // (Chapter XII's discs; our estimate — research §2 names random-target attacks).
   const other = (reflector.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)).filter(randomPickable);
-  return other.length > 0 ? ctx.rng.pick(other) : undefined;
+  return pickDrawn(ctx.rng.on(FfxStream.Reflect), inActorOrder(ctx, other)); // the Reflect bounce: stream 6, the same picker
 }

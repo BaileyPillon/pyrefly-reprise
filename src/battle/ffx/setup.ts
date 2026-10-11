@@ -21,7 +21,7 @@ import type {
   StatusId,
   StatusInstance,
 } from '../common/types.ts';
-import type { SeededRng } from '../common/rng.ts';
+import type { BattleRng } from '../common/streams.ts';
 import { cloneData } from '../common/clone.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
@@ -232,7 +232,7 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
 /** Build the state and runtime for one battle. */
 export function buildBattle(
   setup: BattleSetup,
-  rng: SeededRng,
+  rng: BattleRng,
   content: FFXContentRegistry,
   emit: Ctx['emit'],
 ): Ctx {

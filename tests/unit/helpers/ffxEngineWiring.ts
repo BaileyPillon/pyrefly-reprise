@@ -9,6 +9,7 @@
  */
 
 import { SeededRng, makeRng } from '../../../src/battle/common/rng.ts';
+import type { BattleRng } from '../../../src/battle/common/streams.ts';
 import type {
   AbilityDef,
   Affinity,
@@ -206,7 +207,7 @@ export function combatantOf(spec: SideSpec, id: string, side: 'party' | 'enemy')
 export function contextOf(
   user: FFXCombatant,
   target: FFXCombatant,
-  rng: SeededRng,
+  rng: BattleRng,
   ctbOfTarget: number,
   others: readonly FFXCombatant[] = [],
 ): { ctx: Ctx; events: Array<Record<string, unknown>> } {

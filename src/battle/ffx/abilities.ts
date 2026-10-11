@@ -20,6 +20,7 @@ import { idiv } from './math.ts';
 import { type Ctx, has, hasFlag, rankOf, stacks } from './state.ts';
 import type { TimingBonus } from './adapt/hit.ts';
 import { drawsOf } from './adapt/draws.ts';
+import { streamsOf } from './adapt/streams.ts';
 import { resolveElements } from './elements.ts';
 import { hasAuto, weaponElements } from './equipment.ts';
 import { ejectActor, settleDeferredDeath } from './hp.ts';
@@ -141,7 +142,7 @@ export function resolveAbility(
     user,
     def,
     options,
-    draws: drawsOf(ctx.rng),
+    draws: drawsOf(ctx.rng, streamsOf(ctx, user)),
     primaryElement: elementFor(def.element.length > 0 ? def.element : elements),
     totalHits: perHitRandom ? hitCount : hitCount * Math.max(1, targets.length),
     hitIndex: 0,
@@ -152,9 +153,11 @@ export function resolveAbility(
   };
 
   if (perHitRandom) {
-    // A fresh random target for every hit: the hit records of the whole action are in before any target's script hears of it.
+    // A fresh random target for every hit: the hit records of the whole action are in before any target's script hears of it. The target
+    // the action named above (one pick of stream 5) is hit 0's: the game draws one pick per hit and no more (`pp_BtlBuildTargetHits`).
+    const firstPick = targets;
     for (let h = 0; h < hitCount; h++) {
-      targets = aimed ? aimedTargetForHit(ctx, def, chosenTargets, h) : nextHitTargets(ctx, user, def);
+      targets = aimed ? aimedTargetForHit(ctx, def, chosenTargets, h) : h === 0 ? firstPick : nextHitTargets(ctx, user, def);
       for (const target of targets) resolveOneHit(scope, target);
     }
     finishTouched(scope);

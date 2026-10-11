@@ -114,8 +114,9 @@ function sisterTurn(ai: AiContext, gauge: number): Command | null {
   }
   const target = randomLiving(ctx);
   const aim = target ? [target.id] : [];
+  // Which of her ordinary moves is the engine's own pick for the separate Magus Sister battles (row A2), not a script draw: the engine-side stream.
   const command: Command =
-    ordinary.length > 0 && gameMod(ctx, 100) < 50 ? use(ai, ctx.rng.pick(ordinary), aim) : { kind: 'attack', targets: aim };
+    ordinary.length > 0 && gameMod(ctx, 100) < 50 ? use(ai, ctx.rng.aux.pick(ordinary), aim) : { kind: 'attack', targets: aim };
   memory[GAUGE] = Math.min(100, gauge + gameMod(ctx, 10));
   return command;
 }

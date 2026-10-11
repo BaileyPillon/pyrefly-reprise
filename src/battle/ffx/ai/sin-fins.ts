@@ -29,6 +29,7 @@ import type { Command } from '../../common/types.ts';
 import { type HitEvent, registerHitScript } from './hit-script.ts';
 import { has, livingFriendlies } from '../state.ts';
 import { AIRSHIP_RANGE, airshipRange, applyQueuedOrder, queuedOrder } from './evrae-rules.ts';
+import { orderCaptionScene } from './airship-scenes.ts';
 import { gameMod } from './game-rolls.ts';
 import { aeonHoldsField, frontIds, react, reactionAim } from './hit-gates.ts';
 import { type AiContext, aiContextFor, registerAiScript, use } from './types.ts';
@@ -166,6 +167,7 @@ export function cidSinAi(ai: AiContext): Command | null {
   const ctx = ai.ctx;
   const order = queuedOrder(ctx);
   if (order === null) return null;
+  orderCaptionScene(ctx); // the pre-turn voice-line scene, one stream-2 draw (formations ssbt00_00 and ssbt01_00)
   applyQueuedOrder(ctx);
   ctx.emit({ type: 'message', text: order === 'far' ? 'The Fahrenheit pulls back' : 'The Fahrenheit closes in', kind: 'telegraph' });
   return null;

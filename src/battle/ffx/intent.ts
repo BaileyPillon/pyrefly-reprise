@@ -56,7 +56,7 @@ import type {
   PortraitKey,
   TurnPreview,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import { type RngSnapshot, sampleSnapshot } from '../common/streams.ts';
 import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
 import { activeScriptId, chooseAiCommand } from './ai/index.ts';
@@ -173,7 +173,7 @@ function deepCopy<T>(value: T): T {
  * after an action, never by an AI script, and they carry no mutable state (the
  * fired ids live in `firedTriggerIds`, which *is* copied).
  */
-export function cloneCtx(ctx: Ctx, rngState?: number): { ctx: Ctx; events: EventInput[] } {
+export function cloneCtx(ctx: Ctx, rngState?: RngSnapshot): { ctx: Ctx; events: EventInput[] } {
   const events: EventInput[] = [];
 
   const state = {
@@ -209,8 +209,7 @@ export function cloneCtx(ctx: Ctx, rngState?: number): { ctx: Ctx; events: Event
     pendingPartRevivals: ctx.rt.pendingPartRevivals.map((p) => ({ ...p })),
   };
 
-  const rng = new SeededRng(ctx.state.seed);
-  rng.restoreState(rngState ?? ctx.rng.saveState());
+  const rng = ctx.rng.fork(ctx.state.seed, rngState ?? ctx.rng.saveState());
 
   return {
     ctx: {
@@ -239,7 +238,7 @@ interface DryRun {
   self: FFXCombatant;
 }
 
-function dryRun(ctx: Ctx, enemyId: CombatantId, rngState?: number): DryRun | null {
+function dryRun(ctx: Ctx, enemyId: CombatantId, rngState?: RngSnapshot): DryRun | null {
   const { ctx: clone, events } = cloneCtx(ctx, rngState);
   const self = tryActor(clone, enemyId);
   if (!self) return null;
@@ -556,9 +555,9 @@ export function predictEnemyIntent(
   const first = dryRun(ctx, enemyId, base);
   if (!first) return null;
 
-  // Sampling: one run per RNG position, tallied by branch. The stride is the
-  // golden-ratio constant mulberry32 already advances its state by, so the
-  // samples are spread across the stream rather than clustered behind it.
+  // Sampling: one run per RNG position, tallied by branch. Sample 0 is the live
+  // position, so it is the roll the battle will really make; the others move every
+  // stream to a different, well-mixed word (`common/streams.ts#sampleSnapshot`).
   const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null; key: string }>();
   const firstKey = branchKey(ctx, first);
   const sampledTargets: CombatantId[][] = []; // PR-0153: whom each sample of this move aimed at
@@ -580,7 +579,7 @@ export function predictEnemyIntent(
   };
   record(first);
   for (let i = 1; i < samples; i++) {
-    const run = dryRun(ctx, enemyId, (base + Math.imul(i, 0x9e3779b1)) >>> 0);
+    const run = dryRun(ctx, enemyId, sampleSnapshot(base, i));
     if (run) record(run);
   }
 

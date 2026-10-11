@@ -171,7 +171,7 @@ describe('a dry run never touches the live battle', () => {
     clone.state.flags['seymour.cycle'] = 5;
     clone.rt.actors.get('seymour-flux')!.ai['scribble'] = 1;
     (clone.state.combatants['tidus'] as FFXCombatant).hp = 1;
-    clone.rng.int(0, 99);
+    clone.rng.on(2).int(0, 99);
     clone.emit({ type: 'message', text: 'never reaches the log', kind: 'system' });
 
     expect(fingerprint(ctx)).toBe(before);
