@@ -27,7 +27,12 @@
  *    than {@link STEPPED_CAP}, whatever the frame rate or the phase, and still has frames with both on (it is a blend,
  *    not a cut): the new painting comes up to 0.30 under the old at full, then the two step to 0.30 and 0.70, then the
  *    old one goes out and the new one comes in to 1. `PaintedActor` uses it for every pose change; `?poseblend=legacy`
- *    restores today's plain dissolve for same-build A/B captures ({@link poseBlendLegacy}).
+ *    restores today's plain dissolve for same-build A/B captures ({@link poseBlendLegacy}). **The cost, disclosed:** the step trades the two paintings'
+ *    weight in ONE frame (with the lesser painting capped under one half and the body never thinning, it cannot be done in fewer than a jump of
+ *    1 - 2 * cap = 0.40), so the continuity harness's fade-weighted tracked head and feet move about twice as far in that frame as under the plain dissolve,
+ *    and CHK-027 reads MORE jerks at pose swaps (64 key-chain and hurt pairs, 15 stepping 40 px or more against none; 560 swaps, 78 against none) while the
+ *    ghost metric falls (161 swaps at severity 0.40 or more to none, by construction of the cap). Bailey picked the shape from the ghost side; the jerk side is
+ *    `tests/unit/engine/pose-blend-jerk.test.ts` and `docs/handoff/r40-blend-jerk.md`.
  *
  * The fades are written on the planes the caller hands in (`PaintedActor.slots`), the very fields the harness
  * probe and the twirl pin read, so nothing downstream changes.
