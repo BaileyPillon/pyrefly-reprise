@@ -13,8 +13,9 @@
  *   installed under `public/art/pause/`, the screen shows `heroArtFallback`, an existing portrait.
  * - `snapshots` are existing, shipped stills only (the rule `ChapterSnapshot` states): the *Fahrenheit*'s deck,
  *   Bevelle, and portraits.
- * - `musicKeys` are the stand-in cues the records play (plan §3.6; THEMES.md "Owed cues"), labelled: agents
- *   cannot hear (rule 13), so the cues are the driver's stand-ins until Bailey judges the owed ones by ear.
+ * - `musicKeys` are the cues the records play (plan §3.6; THEMES.md "Owed cues"): the scene bed is the driver's labelled
+ *   stand-in, and the battle cues are the assault and countdown takes of 2026-10-10 (`boss-evrae` stood in before);
+ *   agents cannot hear (rule 13), so Bailey judges them by ear.
  *
  * The teach lines are the concept sheet's "What it teaches" (plan §3.4): range buys safety, not damage;
  * Armor Break opens every link; kill order is yours; a burst against a clock; Wards against Gaze. Quotes are
@@ -52,7 +53,7 @@ export const SIN_FINS_CORE_META: ChapterMeta = {
     { image: 'portraits/lulu.png', caption: 'her plan: the Hymn' },
   ],
   focalCharacterId: 'tidus',
-  musicKeys: ['scene-fahrenheit', 'boss-evrae', 'victory-ffx'], // stand-ins (THEMES.md, owed: the assault cue)
+  musicKeys: ['scene-fahrenheit', 'boss-sin-assault', 'victory-ffx'], // the scene bed is a stand-in (THEMES.md); the assault cue since 2026-10-10
   bossLine: 'Sin', // the first formation is the Left Fin; the chapter is about Sin
 };
 
@@ -85,7 +86,7 @@ export const SIN_FACE_META: ChapterMeta = {
     { image: 'portraits/auron.png', caption: 'he is waiting' },
   ],
   focalCharacterId: 'tidus',
-  musicKeys: ['scene-fahrenheit', 'boss-evrae', 'victory-ffx'], // stand-ins (THEMES.md, owed: the countdown cue, S-21)
+  musicKeys: ['scene-fahrenheit', 'boss-sin-countdown', 'victory-ffx'], // the scene bed is a stand-in (THEMES.md, S-21); the countdown cue since 2026-10-10
 };
 
 /** Both, in chapter order, for `./chapter-meta.ts#CHAPTER_META`. */

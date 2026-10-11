@@ -54,8 +54,11 @@ import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
+import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { PoseBlend, poseBlendShape } from './PoseBlend.ts';
+import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
 
 /** One painted pose: a URL now, a texture once it has loaded. */
@@ -279,6 +282,8 @@ interface PlaneSlot {
   lock: number;
   /** D-510: the art subject of `painted` (`yuna`, `exp-leblanc-yuna`), so the lock only compares planes of one figure. */
   subject: string | null;
+  /** FA-2 and FA-3 (`KoTip.ts`): the KO fall (and the revive's rise) tips this plane about its feet; `placeSlot` applies it after every placement, so the head lock's per-frame `sizeSlot` keeps it. */
+  tip: SlotTip | null;
 }
 
 /** D-510: what every other pose's head is held to: the idle's head box, its sizing and its art subject (`PaintedActor.headRefOf`). */
@@ -447,6 +452,8 @@ export class PaintedActor extends Group {
   private readonly inner = new Group();
   private readonly slots: [PlaneSlot, PlaneSlot];
   private active = 0;
+  /** FB-1: the one pose blend this actor owns (`PoseBlend.ts`); it writes both planes' fades on the real clock (`update`'s `realDt`). */
+  private readonly blend: PoseBlend;
 
   private readonly poses = new Map<string, PaintedTexture>();
   readonly poseUrls: PoseMap = {};
@@ -571,6 +578,11 @@ export class PaintedActor extends Group {
   /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
   private fallTilt = 0;
   private fallDrop = 0;
+  /**
+   * How much of that tilt and drop shows, 0 to 1 (default 1). KO COLLAPSE (`fx/mix/living.ts`) takes it to 0 while the standing plane is toppled by `KoTip`
+   * (the topple is the rotation: the tilt would double it) and for a cross with no buckle (a standing painting already prone), and puts it back when the run ends.
+   */
+  fallGain = 1;
   /** 0 standing, 1 lying on its back ({@link lieDown}). */
   private lieRoll = 0;
   /** The tip back while lying, radians ({@link lieDown}). */
@@ -680,6 +692,7 @@ export class PaintedActor extends Group {
     this.shadowAlphaTest = opts.shadowAlphaTest ?? 0.4;
     this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
+    this.blend = new PoseBlend(this.slots, poseBlendShape()); // the plain dissolve; FB-2's stepped one only behind `?poseblend=stepped` (off by default since 2026-10-11)
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
 
@@ -840,6 +853,7 @@ export class PaintedActor extends Group {
       base: UNSIZED,
       lock: 1,
       subject: null,
+      tip: null,
     };
   }
 
@@ -942,6 +956,11 @@ export class PaintedActor extends Group {
     return this.slots[this.active]!.pose;
   }
 
+  /** True while a pose crossfade runs (it is no tween in {@link PaintedActor.tweens}, so `stillActor` asks here). */
+  get blending(): boolean {
+    return this.blend.blending;
+  }
+
   /**
    * Release 39 (`ArtGovernor.ts`): every real painting this actor holds, once each (a pose that fell back to idle shares idle's), and
    * whether a plane is drawing it right now. A stand-in is left out: it has no master to swap in.
@@ -1006,10 +1025,10 @@ export class PaintedActor extends Group {
     if (already && !opts?.force) return;
 
     const from = this.active;
-    const to = from === 0 ? 1 : 0;
-    this.applyPose(to, resolved, next);
-
     if (opts?.immediate || this.crossfadeMs <= 0) {
+      const to = from === 0 ? 1 : 0;
+      this.blend.cancel();
+      this.applyPose(to, resolved, next);
       this.slots[to]!.fade = 1;
       this.slots[from]!.fade = 0;
       this.active = to;
@@ -1017,18 +1036,12 @@ export class PaintedActor extends Group {
       return;
     }
 
-    this.active = to;
-    const fromStart = this.slots[from]!.fade;
-    const toStart = this.slots[to]!.fade;
-    this.tweens.to(0, 1, {
-      durationMs: this.crossfadeMs,
-      easing: 'quadInOut',
-      onUpdate: (t) => {
-        this.slots[to]!.fade = toStart + (1 - toStart) * t;
-        this.slots[from]!.fade = fromStart * (1 - t);
-        this.syncOpacity();
-      },
-    });
+    // FB-1 (`PoseBlend.ts`): the blend is owned, not a loose tween. A request in mid-blend keeps the stronger plane going out and re-points only the weaker.
+    const plan = this.blend.request(resolved, this.crossfadeMs, from === 0 ? 0 : 1);
+    if (plan.same) return;
+    if (!plan.reversed) this.applyPose(plan.to, resolved, next);
+    this.active = plan.to;
+    this.syncOpacity();
   }
 
   /**
@@ -1161,7 +1174,8 @@ export class PaintedActor extends Group {
   private lockHead(slot: PlaneSlot): void {
     const ref = this.headRef;
     const head = slot.meta.head;
-    if (!ref || !head || !this.headViewed || !this.showFigure || slot.meta === this.reference || !slot.painted || slot.painted.placeholder || ref.subject === null || slot.subject !== ref.subject) {
+    // The reference itself is never held, unless it is tipped (FA-2 and FA-3: the idle toppled on the floor is seen from a different depth, and a revive crosses a lying body, whose head is held, to it).
+    if (!ref || !head || !this.headViewed || !this.showFigure || (slot.meta === this.reference && !slot.tip) || !slot.painted || slot.painted.placeholder || ref.subject === null || slot.subject !== ref.subject) {
       if (slot.lock !== 1) {
         slot.lock = 1;
         this.sizeSlot(slot, slot.base);
@@ -1295,12 +1309,13 @@ export class PaintedActor extends Group {
   }
 
   private knockBack(ms: number, distance: number): Promise<void> {
-    return this.tweens.toAsync(1, 0, {
+    // r40-recoil (FC-1, `HitRecoil.ts`): an 80 ms eased push from where the figure is, then a spring home; progress 0 writes where it already is, so a hit-stop (dt 0) never teleports it.
+    const legacy = recoilLegacy();
+    const from = this.recoilOffset;
+    return this.tweens.toAsync(legacy ? 1 : 0, legacy ? 0 : 1, {
       durationMs: Math.max(1, ms),
-      easing: 'elasticOut',
-      onUpdate: (v) => {
-        this.recoilOffset = -v * distance;
-      },
+      easing: legacy ? 'elasticOut' : 'linear',
+      onUpdate: (v, p) => void (this.recoilOffset = legacy ? -v * distance : hitRecoilOffset(p, ms, distance, from)),
     });
   }
 
@@ -1921,6 +1936,13 @@ export class PaintedActor extends Group {
     const dx = this.poseShiftPx?.[slot.pose];
     if (dx) slot.mesh.position.x += dx * slot.scale.unitsPerPixel * (slot.mesh.scale.x < 0 ? -1 : 1);
     slot.mesh.position.x += this.registrationShift(slot);
+    if (slot.tip) placeTipped(slot.mesh, slot.tip, slot.meta, slot.scale); // FA-2: the KO's topple, on top of the placement above
+  }
+
+  /** FA-2 and FA-3 (`KoTip.ts`, called by `fx/mix/living.ts`): tip one plane about its feet (or put it upright with null) and place it again at once. */
+  tipSlot(slot: PlaneSlot, tip: SlotTip | null): void {
+    slot.tip = tip;
+    this.placeSlot(slot);
   }
 
   /**
@@ -2078,9 +2100,13 @@ export class PaintedActor extends Group {
 
   // ------------------------------------------------------------------- update
 
-  /** @param dt seconds. Must be called every frame. */
-  update(dt: number): void {
+  /**
+   * @param dt seconds. Must be called every frame.
+   * @param realDt the same frame's unscaled seconds (default `dt`): the pose blend runs on it, so neither a hit-stop that holds the field (`dt` 0) nor the pacing option stretches or freezes a crossfade (FB-1).
+   */
+  update(dt: number, realDt: number = dt): void {
     this.tweens.update(dt * paceRate('action')); // the pacing option (`pace.ts`): one-shot moves only, never the idle
+    if (this.blend.advance(realDt * 1000)) this.syncOpacity(); // FB-1: the pose blend, on the real clock
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
@@ -2122,7 +2148,7 @@ export class PaintedActor extends Group {
     // forward is the body's facing, never the mirror.
     let ox = (this.lungeOffset + this.recoilOffset + lean * upright) * this.facing;
     let oy =
-      this.hopHeight + hover - (crouch + this.fallDrop * this.worldHeight * 0.05) * upright;
+      this.hopHeight + hover - (crouch + this.fallDrop * this.fallGain * this.worldHeight * 0.05) * upright;
 
     if (this.shakeLeftMs > 0) {
       this.shakeLeftMs -= dt * 1000;
@@ -2143,7 +2169,7 @@ export class PaintedActor extends Group {
     const sway = swayAmp ? Math.sin(this.clock * this.swaySpeed * TAU) * swayAmp : 0;
     // Posture tilt is a *body* rotation (forward = the way the fighter is
     // turned, so it carries the facing), kept small and faded out with the pose.
-    const bodyTilt = (tilt + this.fallTilt * 0.3) * upright * -this.facing;
+    const bodyTilt = (tilt + this.fallTilt * this.fallGain * 0.3) * upright * -this.facing;
     this.inner.rotation.z = sway + bodyTilt + lie;
     this.inner.rotation.x = -this.lieTilt * this.lieRoll;
 
@@ -2225,6 +2251,7 @@ export class PaintedActor extends Group {
 
   override dispose(): void {
     this.tweens.killAll();
+    this.blend.cancel();
     for (const slot of this.slots) {
       slot.mesh.geometry.dispose();
       slot.material.dispose();

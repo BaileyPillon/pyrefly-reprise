@@ -28,9 +28,12 @@
  * guide never gives them.
  */
 
-import type { ChapterGuide } from './types.ts';
+import { NATUS_LINE, type NatusLineId } from './natus-line.ts';
+import { NATUS_LINE_TEXT } from './natus-line-text.ts';
+import type { ChapterGuide, GuideRule } from './types.ts';
 
-export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
+/** The shipped line's guide (Bailey's wording of 2026-09-25); the other lines edit it (`./natus-line-text.ts`). */
+const SHIPPED_GUIDE: ChapterGuide = {
   id: 'seymour-natus',
   title: 'Seymour Natus',
   // Natus first (the battle ends when he falls, §4.5); Mortibody is his part.
@@ -145,5 +148,31 @@ export const SEYMOUR_NATUS_GUIDE: ChapterGuide = {
     },
   ],
 };
+
+/**
+ * The guide for one Chapter X line: the shipped guide, with that line's edits applied (`./natus-line-text.ts`). `shipped` returns the
+ * shipped guide itself. A line's hints go first, so for the same row they replace the shipped hint (the first match wins).
+ */
+export function natusGuideFor(id: NatusLineId): ChapterGuide {
+  const t = NATUS_LINE_TEXT[id];
+  if (!t.rules && !t.dropRules && !t.hints && !t.phases) return SHIPPED_GUIDE;
+  const dropped = new Set(t.dropRules ?? []);
+  const base = SHIPPED_GUIDE.rules;
+  const kept = base.flatMap((r, i) => (dropped.has(i) ? [] : [t.rules?.[i] ?? r]));
+  const appended = Object.keys(t.rules ?? {})
+    .map(Number)
+    .filter((i) => i >= base.length)
+    .sort((x, y) => x - y)
+    .map((i) => (t.rules as Record<number, GuideRule>)[i] as GuideRule);
+  return {
+    ...SHIPPED_GUIDE,
+    rules: [...kept, ...appended],
+    hints: [...(t.hints ?? []), ...SHIPPED_GUIDE.hints],
+    phases: (SHIPPED_GUIDE.phases ?? []).map((p, i) => ({ ...p, ...(t.phases?.[i] ?? {}) })),
+  };
+}
+
+/** The guide for the line `NATUS_LINE` names. */
+export const SEYMOUR_NATUS_GUIDE: ChapterGuide = natusGuideFor(NATUS_LINE);
 
 export default SEYMOUR_NATUS_GUIDE;

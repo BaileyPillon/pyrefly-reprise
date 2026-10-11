@@ -16,9 +16,11 @@
  *     refuses a sixth stack (and FFX-2's a stack past `STAT_STACK_MAX`), so
  *     Aim and Cheer on a capped party were recommended hundreds of times a
  *     fight.
- *  3. **The card recommended orders the widget refuses.** "Pull back" while
- *     already FAR (or already ordered FAR) is a row the order widget greys out
- *     as "Already far" / "Ordered": the player cannot press what the card says.
+ *  3. **The card recommended orders the player could not press.** "Pull back"
+ *     while already FAR (or already ordered FAR) was a row the order widget
+ *     greyed out as "Already far" / "Ordered". Since 2026-10-09 (re-parity row
+ *     D-08, "Yes, match the game") the airship offers one order at a time, so the
+ *     rule is "never an order that is not the one on offer".
  *
  * **Game case: FFX only** for 1 and 3 (the airship mechanic has no X-2
  * counterpart, research/ffx-evrae-airship.md §0.4). 2 is shared advisor
@@ -34,7 +36,7 @@ import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/
 import { fahrenheitBuild } from '../../../src/data/ffx/builds/fahrenheit.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { buildAdvisorView, clearAdvisorCache } from '../../../src/engine/tactics/advisor.ts';
-import { airshipOrderRefusal } from '../../../src/engine/tactics/airship-orders.ts';
+import { refusedAirshipOrder } from '../../../src/engine/tactics/airship-orders.ts';
 
 const content = new FFXContentRegistry();
 content.addAbilities(ALL_ABILITIES);
@@ -115,20 +117,23 @@ describe('Evrae: the card never recommends a turn that does nothing', () => {
     expect(capped).toBe(0);
   });
 
-  it('never tops an order the order widget greys out (Already near/far, Ordered)', () => {
+  it('never tops an order that is not the one on offer (the airship offers one order at a time)', () => {
     clearAdvisorCache();
     const engine = newEngine(2);
     const refused: string[] = [];
+    let orders = 0;
     followTheCard(
       engine,
-      (_d, top) => {
+      (d, top) => {
         if (top?.kind !== 'trigger') return;
-        const why = airshipOrderRefusal(engine.state().flags, top.id);
-        if (why) refused.push(`${top.id}: ${why}`);
+        orders += 1;
+        const offered = d.commands.some((c) => c.enabled && c.command.kind === 'trigger' && c.command.id === top.id);
+        if (refusedAirshipOrder(engine.state().flags, top) || !offered) refused.push(top.id);
       },
       4000,
     );
     expect(refused).toEqual([]);
+    expect(orders, 'the card does recommend an order in this fight').toBeGreaterThan(0);
   });
 
   it("puts Wakka's Attack on top at FAR when the chapter's line swings (research §4.3, tactic rule 10)", () => {
@@ -150,19 +155,22 @@ describe('Evrae: the card never recommends a turn that does nothing', () => {
   });
 });
 
-describe("Evrae: the order refusal is the widget's rule, stated once", () => {
-  it('refuses the range the ship is already in, and the order already standing', () => {
-    expect(airshipOrderRefusal({ 'airship.range': 'far', 'airship.order': '' }, 'pull-back')).toBe('Already far');
-    expect(airshipOrderRefusal({ 'airship.range': 'near', 'airship.order': '' }, 'close-in')).toBe('Already near');
-    expect(airshipOrderRefusal({ 'airship.range': 'near', 'airship.order': 'far' }, 'pull-back')).toBe('Ordered');
-    expect(airshipOrderRefusal({ 'airship.range': 'far', 'airship.order': 'near' }, 'close-in')).toBe('Ordered');
-    expect(airshipOrderRefusal({ 'airship.range': 'far', 'airship.order': '' }, 'close-in')).toBeNull();
-    expect(airshipOrderRefusal({ 'airship.range': 'near', 'airship.order': '' }, 'pull-back')).toBeNull();
+describe("Evrae: the one order on offer, stated once (the engine's rule, read by the card)", () => {
+  const order = (id: string): Command => ({ kind: 'trigger', id, targets: [] }) as Command;
+  const refused = (flags: Record<string, unknown>): string[] =>
+    ['pull-back', 'close-in', 'cancel-order'].filter((id) => refusedAirshipOrder(flags, order(id)));
+
+  it('offers Pull back at NEAR, Close in at FAR, and only Cancel while an order stands', () => {
+    expect(refused({ 'airship.range': 'near', 'airship.order': '' })).toEqual(['close-in', 'cancel-order']);
+    expect(refused({ 'airship.range': 'far', 'airship.order': '' })).toEqual(['pull-back', 'cancel-order']);
+    expect(refused({ 'airship.range': 'near', 'airship.order': 'far' })).toEqual(['pull-back', 'close-in']);
+    expect(refused({ 'airship.range': 'far', 'airship.order': 'near' })).toEqual(['pull-back', 'close-in']);
   });
 
   it('is silent in every battle without the airship flag (no other chapter changes)', () => {
-    expect(airshipOrderRefusal({}, 'pull-back')).toBeNull();
-    expect(airshipOrderRefusal({}, 'talk')).toBeNull();
+    expect(refused({})).toEqual([]);
+    expect(refusedAirshipOrder({}, order('talk'))).toBe(false);
+    expect(refusedAirshipOrder({ 'airship.range': 'far', 'airship.order': '' }, order('talk'))).toBe(false);
   });
 });
 

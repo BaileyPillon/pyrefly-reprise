@@ -17,7 +17,7 @@
       "loopStart": 12.671678,
       "loopEnd": 75.83644,
       "duration": 78.8364,
-      "bytes": 1379184,
+      "bytes": 1341547,
       "lufs": -16.0,
       "truePeakDb": -2.4,
       "source": "elevenlabs-music_v2_5"
@@ -33,13 +33,23 @@
     },
     "boss-evrae": {
       "file": "music/boss-evrae.mp3",
-      "loopStart": 6.666667,
-      "loopEnd": 80,
+      "loopStart": 6.666213,
+      "loopEnd": 79.999546,
       "duration": 83,
       "bytes": 2719357,
       "lufs": -16.0,
       "truePeakDb": -1.4,
       "score": "a660934bb598f632"
+    },
+    "boss-ff7-guard": {
+      "file": "music/boss-ff7-guard.mp3",
+      "loopStart": 9.634422,
+      "loopEnd": 89.640612,
+      "duration": 92.6406,
+      "bytes": 1741096,
+      "lufs": -16.0,
+      "truePeakDb": -1.6,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-ffx2-aeon": {
       "file": "music/boss-ffx2-aeon.mp3",
@@ -49,6 +59,26 @@
       "bytes": 4069829,
       "lufs": -15.8,
       "truePeakDb": -1.7
+    },
+    "boss-ffx2-fallen-aeons": {
+      "file": "music/boss-ffx2-fallen-aeons.mp3",
+      "loopStart": 30.906009,
+      "loopEnd": 82.11161,
+      "duration": 85.1116,
+      "bytes": 1521986,
+      "lufs": -16.0,
+      "truePeakDb": -3.3,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-isaaru": {
+      "file": "music/boss-isaaru.mp3",
+      "loopStart": 16.61941,
+      "loopEnd": 82.623515,
+      "duration": 85.6235,
+      "bytes": 1560574,
+      "lufs": -16.0,
+      "truePeakDb": -3.1,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
@@ -64,9 +94,9 @@
       "loopStart": 5.878753,
       "loopEnd": 76.122268,
       "duration": 79.1223,
-      "bytes": 1554446,
+      "bytes": 1471333,
       "lufs": -16.0,
-      "truePeakDb": -4.0,
+      "truePeakDb": -3.1,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-seymour": {
@@ -89,6 +119,16 @@
       "truePeakDb": -1.5,
       "score": "90c06f737af9686a"
     },
+    "boss-seymour-natus": {
+      "file": "music/boss-seymour-natus.mp3",
+      "loopStart": 30.916667,
+      "loopEnd": 74.56229,
+      "duration": 77.5623,
+      "bytes": 1415028,
+      "lufs": -16.0,
+      "truePeakDb": -4.5,
+      "source": "elevenlabs-music_v2_5"
+    },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",
       "loopStart": 12.551406,
@@ -97,6 +137,36 @@
       "bytes": 3324154,
       "lufs": -15.9,
       "truePeakDb": -1.3
+    },
+    "boss-sin-assault": {
+      "file": "music/boss-sin-assault.mp3",
+      "loopStart": 58.528685,
+      "loopEnd": 93.64678,
+      "duration": 96.6468,
+      "bytes": 1684168,
+      "lufs": -16.0,
+      "truePeakDb": -3.1,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-sin-countdown": {
+      "file": "music/boss-sin-countdown.mp3",
+      "loopStart": 41.189864,
+      "loopEnd": 89.189025,
+      "duration": 92.189,
+      "bytes": 1601601,
+      "lufs": -16.0,
+      "truePeakDb": -1.5,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-trema": {
+      "file": "music/boss-trema.mp3",
+      "loopStart": 28.81458,
+      "loopEnd": 73.145374,
+      "duration": 76.1454,
+      "bytes": 1370303,
+      "lufs": -16.0,
+      "truePeakDb": -4.3,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-vegnagun": {
       "file": "music/boss-vegnagun.mp3",
@@ -2022,5 +2092,8 @@
         "truePeakDb": -14.26
       }
     }
+  },
+  "sfxParity": {
+    "packs": {}
   }
 }

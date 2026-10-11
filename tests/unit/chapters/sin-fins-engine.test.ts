@@ -126,9 +126,10 @@ describe('setup: both Fin links open FAR with Cid at the helm (§4, S-8)', () =>
 
   // Re-parity (AI lane C, D-19 to D-22): the script settled S-8, S-12, S-19, S-25, S-27, the Negation slots and the Right Fin's
   // latch, so those left the list; what remains is what the script cannot say.
-  it('every estimate the Fins still carry is named (the seam line-up, S-20, aeon reach, C-7)', () => {
+  // S-20 (one Trigger Command at a time, Cancel while an order is pending) left the list on 2026-10-09: Bailey said "Yes, match the game".
+  it('every estimate the Fins still carry is named (the seam line-up, aeon reach, C-7)', () => {
     const ids = SIN_FINS_ASSUMPTIONS.map((a) => a.id);
-    expect(ids).toEqual(['seam-lineup', 'S-20', 'aeon-reach-far', 'C-7']);
+    expect(ids).toEqual(['seam-lineup', 'aeon-reach-far', 'C-7']);
   });
 });
 
@@ -141,14 +142,20 @@ describe('Cid without missiles (§2.5, S-19) and the orders (§4, [verified: 4 s
     expect(log.some((ev) => ev.type === 'message' && /missiles/i.test(ev.text))).toBe(false);
   });
 
-  it("the last order wins, and it moves the ship only on Cid's turn (Tidus's real trigger handlers)", () => {
+  it("an order moves the ship only on Cid's turn, and no second order can be queued over it (Tidus's real trigger handlers)", () => {
     const ctx = ctxOn('sin-left-fin', 2);
     const tidus = who(ctx, 'tidus');
+    // The Fins open FAR: Close in is the one order on offer (Pull back and Cancel are not), and only to Tidus and Rikku.
     expect(triggerHandler('close-in')!.available(ctx, tidus)).toBe(true);
+    expect(triggerHandler('pull-back')!.available(ctx, tidus)).toBe(false);
+    expect(triggerHandler('cancel-order')!.available(ctx, tidus)).toBe(false);
     expect(triggerHandler('close-in')!.available(ctx, who(ctx, 'yuna'))).toBe(false);
-    triggerHandler('close-in')!.apply(ctx, tidus);
-    triggerHandler('pull-back')!.apply(ctx, tidus);
-    triggerHandler('close-in')!.apply(ctx, tidus);
+    expect(triggerHandler('close-in')!.apply(ctx, tidus)).toBe(true);
+    // With Close in standing only Cancel is on offer, so Pull back and a second Close in are refused.
+    expect(triggerHandler('pull-back')!.apply(ctx, tidus)).toBe(false);
+    expect(triggerHandler('close-in')!.apply(ctx, tidus)).toBe(false);
+    expect(triggerHandler('cancel-order')!.available(ctx, tidus)).toBe(true);
+    expect(ctx.state.flags['airship.order']).toBe('near');
     expect(ctx.state.flags['airship.range']).toBe('far');
     expect(cidSinAi(aiContextFor(ctx, who(ctx, 'cid')))).toBeNull();
     expect(ctx.state.flags['airship.range']).toBe('near');

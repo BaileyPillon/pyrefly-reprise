@@ -31,9 +31,9 @@
  *   red-lit stone with the hallway behind) is picked and not painted. Chapter
  *   VII's temple is the staging the options frames were composed on. Not
  *   `bevelle-underground`: that is the FFX-2 arena (research §7).
- * - `music.battle: 'boss-yojimbo'` — **placeholder**, B21 = b's "reuse an
- *   existing boss cue" stand-in until the new HYMN-family cue ("Still Water")
- *   is sketched and picked by ear (rules 8 and 13). FFX cues only.
+ * - `music.battle: 'boss-isaaru'` — his own cue since 2026-10-10 (an ElevenLabs take;
+ *   B21 = b's "reuse an existing boss cue" stand-in, `boss-yojimbo`, played before it;
+ *   the HYMN-family "Still Water" cue is still not written; rules 8 and 13). FFX cues only.
  * - `scriptsRef` — **placeholder**: a silent pre scene that opens the battle
  *   and a silent post scene that shows results. The beats are drafted for
  *   Bailey in `docs/plans/isaaru-story-draft.md`; nothing is in `src/story`.
@@ -81,10 +81,10 @@ export const ISAARU_VIA_PURIFICO: Chapter = {
   enemyGroupRef: isaaruGrothiaGroup,
   scriptsRef: ISAARU_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {
-    // PLACEHOLDER — B21 = b's stand-in until the new cue is picked (O-6). FFX
+    // The battle cue is his own since 2026-10-10 (B21 = b's stand-in was `boss-yojimbo`); the scene bed is still a stand-in. FFX
     // cues only (THEMES.md never crosses the scores).
     scene: 'scene-gagazet',
-    battle: 'boss-yojimbo',
+    battle: 'boss-isaaru',
     victory: 'victory-ffx',
   },
   sensorTexts: {}, // Sensor- and Scan-immune, all four (research §3.4)

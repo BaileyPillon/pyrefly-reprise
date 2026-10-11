@@ -39,9 +39,9 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
       cite: 'ffx-seymour-flux §4.2, §5.2, §5.5',
     },
     {
-      text: 'Provoke, the four Breaks and Delay Attack are all dead rows here — both actors are immune, and a delay counters with party-wide Slowga.',
+      text: 'Provoke, the four Breaks and Delay Attack are all dead rows here — both actors are immune, and a Delay hit on the Mortiorchis is answered with party-wide Slowga.',
       short: 'Provoke, Breaks and Delay are dead rows here',
-      cite: 'ffx-seymour-flux §6 rows 19-21',
+      cite: 'ffx-seymour-flux §6 rows 19-21; re-ffx-ai-seymour §2.4, §2.5',
     },
   ],
 
@@ -83,8 +83,8 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Dispel'] },
-      text: 'Strip his Reflect and the next Flare detonates on him for ~1,734, then he burns two more turns recasting',
-      cite: 'ffx-seymour-flux §6 row 8',
+      text: 'Strip his Reflect and the next Flare, which he aims at himself, lands on him for ~1,734 with nothing to bounce it. He casts Reflect again only on his own next Reflect turn, and no HP line answers a Dispel',
+      cite: 'ffx-seymour-flux §6 row 8; re-ffx-ai-seymour §2.3, §2.5',
     },
     {
       when: { labels: ['Healing Water', 'Mega-Potion', 'Al Bhed Potion'] },
@@ -98,8 +98,8 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     },
     {
       when: { kinds: ['summon'] },
-      text: 'A summon is a shield before it is a burst — the party leaves the field with frozen counters, his answer is a zero-damage Banish, and the charge ladder stalls while the poison keeps ticking',
-      cite: 'ffx-seymour-flux §4.4.2, §6 row 15',
+      text: 'A summon is a shield before it is a burst — the party leaves the field with frozen counters, his answer is a zero-damage Banish, and his cycle stands still while the poison keeps ticking',
+      cite: 'ffx-seymour-flux §4.4.2, §6 row 15; re-ffx-ai-seymour §2.5',
     },
     {
       when: { labels: ['Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion'] },
@@ -117,14 +117,14 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     {
       name: 'Auto-Attack Mode',
       payload: 'Total Annihilation',
-      advice: 'Get Shell up — it is ~3,300-4,145 of magic across the party and Shell halves it',
-      cite: 'ffx-seymour-flux §5.2, §6 row 13',
+      advice: 'Get Shell up — it is ~3,300-4,145 of magic across the party and Shell halves it. This first warning comes once, when he drops below 35,000; after it only the ready notice comes round',
+      cite: 'ffx-seymour-flux §5.2, §6 row 13; re-ffx-ai-seymour §2.3, §2.5',
     },
     {
       name: 'Ready To Annihilate',
       payload: 'Total Annihilation, next turn',
-      advice: 'Shell now (Defend only halves physical hits, so it will not cut this), and top up anyone who would not survive ~4,300 — a summon stalls the ladder outright',
-      cite: 'ffx-seymour-flux §4.4.2, §5.2',
+      advice: 'Shell now (Defend only halves physical hits, so it will not cut this), and top up anyone who would not survive ~4,300 — a summon freezes his cycle outright',
+      cite: 'ffx-seymour-flux §4.4.2, §5.2; re-ffx-ai-seymour §2.4, §2.5',
     },
   ],
 
@@ -138,8 +138,8 @@ export const SEYMOUR_FLUX_GUIDE: ChapterGuide = {
     {
       belowHpFraction: 0.5,
       label: 'Phase 2',
-      note: 'Cross Cleave is gone; it is Flare and the Total Annihilation charge ladder from here, so Shell replaces Protect.',
-      cite: 'ffx-seymour-flux §4.4',
+      note: 'Cross Cleave is gone; from here it is a four-step cycle: his Flare, aimed at himself so it reaches you only by bouncing off his Reflect, the ready notice, his Reflect, then Total Annihilation. Shell replaces Protect.',
+      cite: 'ffx-seymour-flux §4.4; re-ffx-ai-seymour §2.3, §2.4',
     },
   ],
 };

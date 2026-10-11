@@ -95,9 +95,9 @@ describe('ElevenLabs music of 2026-10-10: the record and the files', () => {
     }
   });
 
-  it('is inside the shipping budget, which is 100 MB under Bailey\'s 2026-10-10 words', () => {
+  it('is inside the shipping budget, which was 100 MB under Bailey\'s 2026-10-10 words and is 105 MB since batch 1\'s FF7 cue', () => {
     const shipped = Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0) + (manifest.sfx?.bytes ?? 0) + (manifest.sfxV2?.bytes ?? 0);
-    expect(AUDIO_BUDGET_BYTES).toBe(100e6);
+    expect(AUDIO_BUDGET_BYTES).toBe(105e6);
     expect(shipped).toBeLessThan(AUDIO_BUDGET_BYTES);
   });
 });
@@ -127,8 +127,8 @@ describe('ElevenLabs music of 2026-10-10: the engine routes three FFX-2 encounte
     expect(await resolved('exp-leblanc')).toEqual(['boss-leblanc', 'boss-leblanc', 'boss-leblanc']);
   });
 
-  it('leaves every other chapter on its own cue: boss-ffx2-aeon stays for the Fallen Aeons and Ixion; no FFX chapter names a new cue', async () => {
-    for (const id of ['ffx2-fallen-aeons', 'ffx2-ixion-djose']) expect((await resolved(id)).every((cue) => cue === 'boss-ffx2-aeon'), id).toBe(true);
+  it('leaves every other chapter on its own cue: the Fallen Aeons and Ixion took the batch-1 aeon cue on the same day (audio-music-batch1-2026-10-10.test.ts); no FFX chapter names a new cue', async () => {
+    for (const id of ['ffx2-fallen-aeons', 'ffx2-ixion-djose']) expect((await resolved(id)).every((cue) => cue === 'boss-ffx2-fallen-aeons'), id).toBe(true);
     for (const chapter of [...CHAPTERS, ...EXPERIMENT_CHAPTERS]) {
       if (['ffx2-bahamut', 'ffx2-leblanc', 'exp-leblanc'].includes(chapter.id)) continue;
       expect((await resolved(chapter.id)).filter((cue) => NEW.includes(cue)), chapter.id).toEqual([]);

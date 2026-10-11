@@ -67,7 +67,7 @@ Rows are the note's section 9. "Done" means built, tested against the decision t
 | Rows | Verdict |
 |---|---|
 | Y1 to Y6 (Yunalesca) | Done in `7d0a7077` |
-| B1 to B7 (Braska's Final Aeon) | Done. B7's "the scene needs Tidus alive" is unreachable (Talk is Tidus's command); Talk's menu row stays usable while a Talk is pending (the game greys it until he has lost the turn) and is greyed for the third Talk (the game offers it and it only speaks) (section 8) |
+| B1 to B7 (Braska's Final Aeon) | Done. B7's "the scene needs Tidus alive" is unreachable (Talk is Tidus's command); Talk's menu row followed the game on the lane MENUS branch (2026-10-10, after Bailey's "Yes, match the game"): greyed while a Talk is pending, the third Talk offered and only speaking, then spent (section 8) |
 | P1 to P5 (the Pagodas) | Done |
 | V1 to V5 (Yu Yevon) | Done |
 | A3 to A8 (inside each possession link) | Done. A8's "+2 for the party" (the battle's start hook and the aeon's own init) is the note's inference and is built as such |
@@ -191,7 +191,7 @@ Chapters other than II and III: every golden digest is unchanged, so their event
    the cause is two rules, A7 (the fayth's revival acts next) and A8 (the opening order), and neither can be put back without being less true to the game.
 2. **Chapter II is 3.2 points harder** (96.6 percent of seeds, was 99.8) and its party KOs rose by 55 percent, from two script rules (above). Both are the game's.
 3. **Braska's Final Aeon and Provoke (D-129):** the script is read now (a Provoked boss aims a single-actor target at the provoker; Blade Blitz on the front line is not redirected). Ours redirects every target. Left alone under D-129; say if you want the script's rule.
-4. **Talk's menu row:** in the game Talk is greyed until his next turn once used, and the third Talk is offered and does nothing but speak. Ours keeps it usable between the first and second use and greys the third ("Nothing left to say"). A visible menu change, so it needs your yes first (AGENTS.md rule 9).
+4. **Talk's menu row:** **answered "Yes, match the game" (2026-10-09) and built on the lane MENUS branch**: in the game Talk is greyed until his next turn once used, and the third Talk is offered and does nothing but speak; ours now does the same (`ai/braskas-final-aeon.ts#bfaTalkState`), and the row is greyed with "Nothing left to say" once the third has been spoken (the game removes it). The before/after screenshots are in `docs/screenshots/re-parity-menus/`; nothing merges until Bailey has seen them.
 5. **The auto-battle line and the advisor card for Chapter III** still teach the old fight (section 6). They win 486 of 500; retuning them is a separate batch and needs your yes.
 
 ## 9. Full suite

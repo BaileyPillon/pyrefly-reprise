@@ -6,7 +6,10 @@
  * `../doc-types.ts`); `research/jegged-encounter-guides-ffx-b.md` section 6 holds the pages and every
  * difference. HP, Steal and Drops are the numbers this game uses (one drop each; the page's second,
  * doubled entry is not awarded here). The Core is a sub-heading of Genais's page, as it is there, so
- * the panel opens on Genais while he stands and on the Core after.
+ * the panel opens on Genais while he stands and on the Core after. One sentence differs from the page on
+ * purpose: Genais is said to start out of its shell, and the game's own script starts it inside the shell
+ * with its first turn spent coming out (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 6.1, D-23), so the
+ * paragraph says that, and that the Core's magic guard holds only while it is out.
  */
 
 import type { GuideDoc } from '../doc-types.ts';
@@ -69,7 +72,7 @@ export const SIN_FINS_CORE_DOC: GuideDoc = {
     { t: 'field', label: 'HP', value: '20,000' },
     {
       t: 'p',
-      text: "Begin by killing Sinspawn Genais, which sits in front of Sin's core and absorbs any magic aimed straight at Sin. Unlike the Geneaux at Kilika Temple, this one starts out of its shell.",
+      text: "Begin by killing Sinspawn Genais, which sits in front of Sin's core and absorbs any magic aimed straight at Sin while it is out of its shell. This one starts inside its shell and spends its first turn coming out.",
     },
     {
       t: 'p',

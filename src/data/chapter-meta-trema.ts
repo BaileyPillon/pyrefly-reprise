@@ -21,7 +21,7 @@
  * - `snapshots` are the installed, LOCKED art (TR18): the O-3 B plate and the O-1 A / O-2 A
  *   paintings (`docs/concepts/chapters/trema/INSTALLED.md`).
  * - `musicKeys`: TR16 a, `scene-bevelle-underground` (the walk down and Paragon) and
- *   `boss-ffx2-aeon` (the stand-in for Trema until a `boss-trema` is picked), then the FFX-2
+ *   `boss-trema` (Trema's own cue since 2026-10-10; `boss-ffx2-aeon` stood in before), then the FFX-2
  *   fanfare.
  *
  * **Listed** 2026-09-25 with the chapter itself: it sits last in `./chapter-meta.ts`'s
@@ -80,7 +80,7 @@ export function tremaMetaFor(shape: TremaShape): ChapterMeta {
       { image: 'characters/trema/idle.png', caption: 'the founder, robe torn' },
     ],
     focalCharacterId: 'yuna',
-    musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon', 'victory-ffx2'],
+    musicKeys: ['scene-bevelle-underground', 'boss-trema', 'victory-ffx2'],
   };
 }
 

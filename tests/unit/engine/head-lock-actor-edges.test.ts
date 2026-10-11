@@ -266,8 +266,8 @@ describe('the stage\'s pass (HeadLockStage.holdHeads)', () => {
     const at = (needle: string): number => src.indexOf(needle);
     const calls = src.split('holdHeads(').length - 1;
     expect(calls, 'one import and one call: "holdHeads(" is written once').toBe(1);
-    expect(at('actor.update(dt)')).toBeGreaterThan(-1);
-    expect(at('layProneFigures(')).toBeGreaterThan(at('actor.update(dt)'));
+    expect(at('actor.update(dt, realDt)')).toBeGreaterThan(-1); // FB-1: the stage hands each actor the field clock and the real one
+    expect(at('layProneFigures(')).toBeGreaterThan(at('actor.update(dt, realDt)'));
     expect(at('holdHeads(figures')).toBeGreaterThan(at('layProneFigures('));
   });
 

@@ -1,5 +1,6 @@
 /**
- * Steal — the roll, the counter and the item [ffx-combat-core §7.8.1].
+ * Steal — the roll, the counter and the item [ffx-combat-core §7.8.1]. **The roll is the game's** (re-parity W5): see
+ * `adapt/steal.ts`, which runs `kernel/steal-rewards.ts#stealItem`.
  *
  * **FFX only.** Stealing is an FFX Special command; FFX-2's Thief dressphere
  * has its own roll in its own engine, so nothing here is shared and nothing
@@ -13,7 +14,7 @@
  * rule 4 ("built but wired to nothing") in this subsystem, after Slots, Fury and
  * Talk.
  *
- * The decompiled model, verbatim from §7.8.1 `[verified: 2 sources]`:
+ * The decompiled model, verbatim from §7.8.1 `[verified: 2 sources]` (the kernel is that code to the byte):
  *
  * ```python
  * rng_steal    = rng(10) % 255                     # 0..254
@@ -25,14 +26,12 @@
  *
  * Two notes on the translation:
  *
- * - **The roll's range follows the data, not the decompile.** `EnemyFields.steal`
- *   declares `baseChance` as "a percentage 0-100" in `battle/common/types.ts`,
- *   and the three FFX bosses that carry a table were written to that contract
- *   (Seymour Flux `100`, "decompiled byte 255 = guaranteed, clamped to the
- *   0-100 contract range"). So the 0..254 roll becomes `rng.int(0, 99)` and
- *   `chance > roll` keeps §7.8.1's headline property exactly: a `100` table is
- *   **guaranteed on the first attempt**, then 50, 25, 12.5, 6.25, 3.1, 1.5, 0 —
- *   the same halving schedule, at the same eight-steal ceiling.
+ * - **The chance is the byte, not a percent** (re-parity W5; research note
+ *   `re-ffx-overdrive-steal-aeons.md` S1). `EnemyFields.steal.baseChance` is a percentage 0-100 in the data contract (every FFX boss
+ *   table says 100, "decompiled byte 255 = guaranteed, clamped to the 0-100 contract range"), which is the byte 255 on this scale.
+ *   The old roll halved the percent and drew `0..99`: 100, 50, 25, 12, 6, 3, 1, 0, 0 ... and could never steal again from the
+ *   eighth steal; the game halves the byte and draws `0..254`: 255, 127, 63, 31, 15, 7, 3, 1, 1 ... (100, 49.8, 24.7, 12.2, 5.9,
+ *   2.7, 1.2, 0.4, 0.4 percent), and never reaches 0.
  * - **Only a success advances the counter**, so a failed steal may be retried at
  *   unchanged odds. §7.8.1 settles this explicitly.
  */
@@ -40,10 +39,7 @@
 import type { AbilityDef, FFXCombatant, ItemDrop } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
 import { hasAuto } from './equipment.ts';
-
-/** Rarity thresholds out of 256 [§7.8.1]. Pickpocket is the published `[estimate]`. */
-const RARE_THRESHOLD = 32;
-const RARE_THRESHOLD_PICKPOCKET = 128;
+import { rollSteal } from './adapt/steal.ts';
 
 /**
  * True for the abilities that make an **item** steal roll.
@@ -71,30 +67,35 @@ function itemName(ctx: Ctx, drop: ItemDrop): string {
  * offers can never spend a turn in silence: a success announces the item, a
  * failed roll says so, and a monster with no steal table says so.
  *
+ * `missed` is a Mug whose hit missed: the game draws the success roll first and the miss cancels the steal, so the draw is made and
+ * nothing else happens (the `miss` event the hit emitted is the message).
+ *
  * Returns true when an item was taken.
  */
-export function resolveSteal(ctx: Ctx, user: FFXCombatant, target: FFXCombatant): boolean {
+export function resolveSteal(ctx: Ctx, user: FFXCombatant, target: FFXCombatant, missed = false): boolean {
   const table = target.enemy?.rewards.steal;
   if (!table) {
-    ctx.emit({ type: 'message', text: `Nothing to steal from ${target.name}`, kind: 'system' });
+    if (!missed) ctx.emit({ type: 'message', text: `Nothing to steal from ${target.name}`, kind: 'system' });
     return false;
   }
 
   const rt = rtOf(ctx, target.id);
-  // Integer halving on the *base*, keyed to successes only [§7.8.1 note 2].
-  const chance = Math.floor(Math.max(0, table.baseChance) / 2 ** Math.max(0, rt.stealCount));
-  if (!(chance > ctx.rng.int(0, 99))) {
+  // The success roll on stream 10 (`% 255`) and, after a success, the rarity roll on stream 11 (`& 0xff`): one engine draw each.
+  const outcome = rollSteal(
+    table,
+    rt.stealCount,
+    { pickpocket: hasAuto(user, 'pickpocket'), masterThief: hasAuto(user, 'master-thief') },
+    missed,
+    (stream) => (stream === 10 ? ctx.rng.int(0, 254) : ctx.rng.int(0, 255)),
+  );
+  if (missed) return false;
+  if (outcome === null) {
     ctx.emit({ type: 'message', text: 'Nothing was stolen!', kind: 'system' });
     return false;
   }
+  const drop = outcome === 'rare' ? table.rare : table.common;
 
-  // The rarity roll is independent of the counter and made only after the
-  // steal has already succeeded [§7.8.1 note 3].
-  const threshold = hasAuto(user, 'pickpocket') ? RARE_THRESHOLD_PICKPOCKET : RARE_THRESHOLD;
-  const rare = hasAuto(user, 'master-thief') || ctx.rng.int(0, 255) < threshold;
-  const drop = rare ? table.rare : table.common;
-
-  rt.stealCount += 1;
+  rt.stealCount = Math.min(255, rt.stealCount + 1);
   const count = Math.max(1, drop.count);
   const held = (ctx.rt.inventory.get(drop.itemId) ?? 0) + count;
   ctx.rt.inventory.set(drop.itemId, held);

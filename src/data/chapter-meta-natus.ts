@@ -25,14 +25,16 @@
  *   names none); each rule is one `src/ui/common/chapterObjectives.ts`
  *   already answers.
  * - `musicKeys` are the cues the chapter plays: `scene-gagazet` (the record's
- *   stand-in under the narration), `boss-seymour-macalania` (B15's stand-in,
- *   D-091, until a Natus cue is picked by ear) and the shared `victory-ffx`.
+ *   stand-in under the narration), `boss-seymour-natus` (his own since 2026-10-10;
+ *   B15's stand-in, `boss-seymour-macalania`, D-091, played before it) and the shared `victory-ffx`.
  *
  * **Listed** 2026-09-25 with the chapter itself: it sits in `./chapter-meta.ts`'s
  * `CHAPTER_META` after Chapter IX's, as the chapter sits after Chapter IX in `CHAPTERS`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
+import { NATUS_LINE } from './guides/natus-line.ts';
+import { NATUS_LINE_TEXT } from './guides/natus-line-text.ts';
 
 /** Chapter X — Seymour Natus, the north end of the Highbridge of Bevelle. */
 export const NATUS_META: ChapterMeta = {
@@ -72,14 +74,15 @@ export const NATUS_META: ChapterMeta = {
       rule: { kind: 'victory' },
     },
   ],
-  tip: 'He has no Defense, so every swing lands in full. Soften a stone guardian at once, and Haste only Tidus and Auron.',
+  // The shipped line's tip; a candidate line (`./guides/natus-line.ts`) teaches its own (`./guides/natus-line-text.ts`).
+  tip: NATUS_LINE_TEXT[NATUS_LINE].tip ?? 'He has no Defense, so every swing lands in full. Soften a stone guardian at once, and Haste only Tidus and Auron.',
   snapshots: [
     { image: 'backdrops/bevelle-highbridge.png', caption: 'the city lit at night' },
     { image: 'characters/seymour-natus/cast.png', caption: 'no longer a man' },
     { image: 'characters/mortibody/idle.png', caption: 'Mortibody always comes back' },
   ],
   focalCharacterId: 'kimahri',
-  musicKeys: ['scene-gagazet', 'boss-seymour-macalania', 'victory-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-seymour-natus', 'victory-ffx'],
 };
 
 export default NATUS_META;

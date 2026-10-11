@@ -14,6 +14,7 @@ import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
 import { chargeTurn } from './turnQueue.ts';
 import { isMenuMarker, minigameParams, rollDefaultMinigame, spendOverdrive } from './overdrive.ts';
+import { gaugeOnEscape } from './gauge.ts';
 import { shapeOverdrive } from './overdriveShape.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
@@ -55,6 +56,11 @@ function tryEscape(ctx: Ctx, actor: FFXCombatant, party: boolean): ExecutionResu
   const success = party ? true : byteRoll(ctx.rng) < 191;
   ctx.emit({ type: 'escape-attempt', actorId: actor.id, success, party });
   if (success && !party) ejectActor(ctx, actor, 'eject');
+  // A successful flee runs the gauge's escape hook for each character that fled (Coward; `pp_BtlOdOnEscape`, VA 0x007b1090).
+  if (success) {
+    const fled = party ? ctx.state.activeIds.map((id) => tryActor(ctx, id)) : [actor];
+    for (const c of fled) if (c && c.side !== 'enemy') gaugeOnEscape(ctx, c);
+  }
   return { rank: party ? 2 : 1, damageDealt: 0 };
 }
 

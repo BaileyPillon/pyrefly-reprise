@@ -1,0 +1,18 @@
+{
+ "result": "PASS",
+ "artifactHash": "dfbabd7ae7a1b0a35d915eb5b116896b894d6849b8cc05daee75d102c16e2057",
+ "liveManifest": "match",
+ "checked": 5169,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/index-CvOwYJX5.js",
+  "value": "public, max-age=0, must-revalidate"
+ }
+}

@@ -16,8 +16,8 @@
  *   with the Save Sphere's rule instead (`hopelessRetry`, PR-0407; see `TREMA_HOPELESS_RETRY`).
  *
  * Music, TR16 = a: Paragon under `scene-bevelle-underground` (the game plays "The Bevelle
- * Underground" there, research §6.3), Trema under `boss-ffx2-aeon`, the plan's named stand-in
- * until a `boss-trema` sketch is picked (O-6, rule 13).
+ * Underground" there, research §6.3), Trema under `boss-trema` (an ElevenLabs take since
+ * 2026-10-10; `boss-ffx2-aeon`, the plan's named stand-in, scored him before; O-6, rule 13).
  */
 
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
@@ -150,7 +150,7 @@ export const cloisterTremaGroup: EnemyGroupDef = {
   game: 'ffx2',
   enemies: [trema],
   canEscape: false,
-  musicCues: [{ at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 }], // TR16 = a, the stand-in for `boss-trema`
+  musicCues: [{ at: 'start', track: 'boss-trema', fadeMs: 800 }], // TR16 = a, Trema's own cue (2026-10-10; `boss-ffx2-aeon` stood in before)
   carriesPartyState: true, // "whatever state the Paragon fight left them" [verified: 5 sources]
   checkpointOnEntry: true, // TR5 = b
   ...tremaHopelessRetry(TREMA_HOPELESS_RETRY), // PR-0407: what a Retry opens on when fewer than two girls stand

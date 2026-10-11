@@ -134,13 +134,15 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     }
     if (marker?.kind === 'trigger') {
       // An exhausted or ineligible trigger row stays visible and says why —
+      // a Talk that waits on the boss's turn is greyed until he has taken it,
       // §1.6 offers a third Talk on purpose, and the Evrae orders belong to
-      // Tidus and Rikku alone. The reason comes from the trigger's own handler
-      // rather than from a hard-coded `id === 'talk'` [ai/index.ts].
+      // Tidus and Rikku alone, one of the three on offer at a time. The reason
+      // comes from the trigger's own handler rather than from a hard-coded
+      // `id === 'talk'` [ai/index.ts].
       const handler = triggerHandler(marker.id);
       if (handler && !handler.available(ctx, user)) {
         row.enabled = false;
-        row.disabledReason = handler.disabledReason;
+        row.disabledReason = typeof handler.disabledReason === 'function' ? handler.disabledReason(ctx, user) : handler.disabledReason;
       }
     }
     rows.push(row);

@@ -985,17 +985,13 @@
    so 14 real px is 6.22 grid px. Both sizes below clear it. */
 .ffx-airship-order .ig-cmd { width: 172px; }
 .ffx-airship-order .ffx-cmd--trigger__label { white-space: nowrap; flex: none; }
-.ffx-airship-order__tag, .ffx-airship-order__already {
+.ffx-airship-order__tag {
   margin-left: auto; white-space: nowrap; font-family: var(--ig-font-text); font-weight: 600;
   font-size: 6.22px; /* 14 at the 2.25x reference scale */
   letter-spacing: 0.06em; text-transform: none; color: rgba(11, 10, 18, 0.72);
 }
-.ffx-airship-order__already { font-style: italic; }
-/* PR-0236: a greyed order row is the flat #2a2a30 slab above (PR-0018), and its
-   reason kept the ivory-row ink (0.72 alpha on near-black: illegible). It takes
-   the disabled label's own colour, #d8d8de, about 10:1 on that slab. */
-.ffxhud .ig-cmd--disabled .ffx-airship-order__already,
-.ffxhud .ig-cmd--disabled .ffx-cmd--trigger__label { color: #d8d8de; }
+/* (The greyed "Already near/far" and "Ordered" reasons, PR-0236, are gone: the airship offers one order at a time, so the
+   widget lists only the row on offer and never a greyed one.) */
 /* The ivory cost slab under the rows (option A, step 3). */
 .ffx-airship-order__slab {
   display: flex; flex-direction: column; gap: 1.8px; width: 176px; margin-top: 2.7px;

@@ -46,9 +46,9 @@
  *   Chapter VIII's last narration stops, under the chapter's scene cue (the
  *   record's `music.scene`, a stand-in: no FFX Bevelle cue of ours exists).
  * - The Highbridge beats play over the picked plate (O-3 C, night, the city
- *   lit). The chapter's battle cue, `boss-seymour-macalania` (**B15's named
- *   stand-in** until a Natus cue is sketched and picked by ear, rules 8 and
- *   13), starts when Seymour comes through the gate and carries through
+ *   lit). The chapter's battle cue, `boss-seymour-natus` (his own since
+ *   2026-10-10; **B15's named stand-in**, `boss-seymour-macalania`, played
+ *   before it; rules 8 and 13), starts when Seymour comes through the gate and carries through
  *   `battleStart()`; the formation's own start cue names the same track, so
  *   the battle does not restart it.
  * - Natus's battle idle (the installed O-1 A painting) stands on the cutscene
@@ -81,8 +81,8 @@ import {
  * into `src/battle/**`, as in the other chapters.
  */
 const NATUS = 'seymour-natus';
-/** The chapter's battle cue, the B15 stand-in (see the file header). */
-const BATTLE_CUE = 'boss-seymour-macalania';
+/** The chapter's battle cue, his own since 2026-10-10 (see the file header). */
+const BATTLE_CUE = 'boss-seymour-natus';
 
 export const seymourNatusScripts: ChapterScripts = {
   pre: [

@@ -4,8 +4,9 @@
 // the stance of each, from the registration where there is one and from the silhouette where there is not.
 // `analyzeRun` is pure: it takes the probe's records, swap list and pose table plus those anchors and returns the swaps,
 // the jerks, the summary and the two checks' results. Nothing here touches a browser.
-import { FRAME_MS, analyzeSwap, detectJerks, distinctFirst, feetPoint, figureTrack, headCentre, planeOf, scale1600, summarize, unitSquareToQuad, verdicts, worstSwaps } from './continuity-pure.mjs';
+import { FRAME_MS, analyzeSwap, applyH, detectJerks, distinctFirst, feetPoint, figureTrack, headCentre, planeOf, scale1600, summarize, unitSquareToQuad, verdicts, worstSwaps } from './continuity-pure.mjs';
 import { anchorsFor, decodeMask } from './continuity-silhouette.mjs';
+import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
 
 /** The anchors of every pose in the probe's pose table (`poses[k] = { url, ... }`), by pose key; null for a pose with no painting. */
 export async function anchorsForPoses({ poses, fetchImage, measure }) {
@@ -59,16 +60,23 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
   for (const [i, list] of byFig) index.set(i, new Map(list.map((e, j) => [e.n, j])));
   const nearCut = (n) => cutFrames.has(n - 1) || cutFrames.has(n) || cutFrames.has(n + 1);
   const recordAt = (fi, n) => { const j = index.get(fi)?.get(n); return j === undefined ? null : byFig.get(fi)[j]; };
-  /** Where the figure's feet and head are in a frame (its two planes blended by how visible each is), or null. */
-  const trackAt = (fi, n) => { const e = recordAt(fi, n); return e ? figureTrack(e.fig, anchors) : null; };
-  /** Where one plane's own feet and head are in a frame, or null. */
+  // r40 instrument edit (a): a figure none of whose paintings has a registered head or stance (a foe or an aeon with no entry in the pose registration)
+  // is followed by its silhouette's centroid, not by the middle of the lowest thick part (see `figureTrack`). `tracking.unregistered: 'feet'` in the policy gives the old reading back.
+  const registered = new Set();
+  poses.forEach((p, k) => { const a = anchors[k]; if (a && (a.head || a.stanceSrc === 'registration')) registered.add(p.fig); });
+  const trackingMode = cfg.tracking?.unregistered ?? 'centroid';
+  const centroidFigs = new Set(trackingMode === 'centroid' ? figs.map((_, i) => i).filter((i) => !registered.has(i)) : []);
+  /** Where the figure is in a frame (its two planes blended by how visible each is): its feet and head, or its centroid when it has no registration; or null. */
+  const trackAt = (fi, n) => { const e = recordAt(fi, n); return e ? figureTrack(e.fig, anchors, centroidFigs.has(fi)) : null; };
+  /** Where one plane's own feet and head (or centroid, for a figure followed by it) are in a frame, or null. */
   const planeAt = (fi, n, k) => {
     const e = recordAt(fi, n);
     const p = e ? e.fig.s.map(planeOf).find((q) => q && q.k === k) : null;
     const an = anchors[k];
     if (!p || !an) return null;
     const H = unitSquareToQuad(p.q);
-    return { feet: an.stance ? feetPoint(H, an.stance) : null, head: an.head ? headCentre(H, an.head) : null };
+    if (centroidFigs.has(fi)) return { feet: null, head: null, centroid: an.centroid ? applyH(H, an.centroid.u, an.centroid.t) : null };
+    return { feet: an.stance ? feetPoint(H, an.stance) : null, head: an.head ? headCentre(H, an.head) : null, centroid: null };
   };
 
   // ---- swaps (every flip of which painting dominates a figure)
@@ -80,25 +88,31 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
     const list = byFig.get(sw.i) ?? [];
     const at = index.get(sw.i)?.get(sw.n);
     const base = { id: seq++, figure: figs[sw.i]?.id ?? String(sw.i), side: figs[sw.i]?.side ?? null, fromPose: poses[sw.from]?.pose, toPose: poses[sw.to]?.pose, n: sw.n, tMs: sw.t, fi: sw.i, from: sw.from, to: sw.to, cause: causeOf(meta.logEvents, sw.n) };
-    if (at === undefined || sw.a < 0.9) { swaps.push({ ...base, startFrame: sw.n, notShowing: true, counted: false, camCut: false, head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0, snap: false, hardCut: false, failHead: false, failFeet: false }); continue; }
+    const names = { from: poses[sw.from]?.pose, to: poses[sw.to]?.pose };
+    if (at === undefined || sw.a < 0.9) { swaps.push({ ...base, startFrame: sw.n, notShowing: true, counted: false, camCut: false, staged: stagedStepOf(anchors[sw.from], anchors[sw.to], cfg, names), head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0, snap: false, hardCut: false, failHead: false, failFeet: false }); continue; }
     // from where the incoming painting first showed (it cannot have been showing longer than the window) to a window after the flip
     let first = at;
     while (first > 0 && at - first < cfg.motion.windowFrames && list[first - 1].n === list[first].n - 1 && fadeOf(list[first - 1].fig, sw.to) > cfg.motion.blendFadeMin) first--;
     const frames = [];
     for (let j = first; j < Math.min(list.length, at + cfg.motion.windowFrames); j++) { if (frames.length && list[j].n !== frames[frames.length - 1].n + 1) break; frames.push(list[j]); }
-    const res = analyzeSwap({ frames, at: at - first, swap: { from: sw.from, to: sw.to }, anchors, k1600, camCut: nearCut(sw.n), cfg });
+    const res = analyzeSwap({ frames, at: at - first, swap: { from: sw.from, to: sw.to }, anchors, k1600, camCut: nearCut(sw.n), cfg, names });
     swaps.push({ ...base, startFrame: list[first].n, ...res, notShowing: false, counted: !res.camCut && !res.unmeasured });
   }
+  // r40 instrument edit (b): the steps of one twirl are one staged change (chained through every swap, counted or not, so a step under a camera cut does not split it)
+  groupStaged(swaps, cfg.staged?.gapFrames ?? STAGED_GAP_FRAMES);
 
-  // ---- jerks: every figure's feet and head on every frame
+  // ---- jerks: every figure's feet and head (or centroid) on every frame
   const jerks = [];
   for (const [i, list] of byFig) {
-    const track = list.map((e) => { const tr = figureTrack(e.fig, anchors); return tr ? { n: e.n, t: e.t, feet: tr.feet, head: tr.head, cam: e.fig.g } : null; });
-    const evs = detectJerks(track.map((s) => s ?? { n: -10, t: 0, feet: null, head: null, cam: [0, 0] }), k1600, cfg);
+    const byC = centroidFigs.has(i);
+    const track = list.map((e) => { const tr = figureTrack(e.fig, anchors, byC); return tr ? { n: e.n, t: e.t, feet: tr.feet, head: tr.head, centroid: tr.centroid, cam: e.fig.g } : null; });
+    const evs = detectJerks(track.map((s) => s ?? { n: -10, t: 0, feet: null, head: null, centroid: null, cam: [0, 0] }), k1600, cfg);
     const mine = swaps.filter((s) => s.fi === i);
     for (const e of evs) {
-      const atSwap = mine.some((s) => e.n >= s.startFrame - 1 && e.n <= s.n + 2);
-      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, cause: causeOf(meta.logEvents, e.n, 60) });
+      const near = (s) => e.n >= s.startFrame - 1 && e.n <= s.n + 2;
+      const atSwap = mine.some(near);
+      const stagedAt = mine.find((s) => s.staged && near(s));
+      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
     }
   }
   jerks.sort((a, b) => b.px - a.px).forEach((j, id) => { j.id = id; });
@@ -128,6 +142,9 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
     measuredWithRegistration: Object.entries(perFigure).filter(([, v]) => v.headRegistered > 0).map(([k]) => k),
     measuredFromSilhouetteOnly: Object.entries(perFigure).filter(([, v]) => v.headRegistered === 0).map(([k]) => k),
     posesWithAnchors: anchors.filter(Boolean).length, posesTotal: poses.length, staleRegistrationRecords: anchors.filter((a) => a?.stale).length,
+    // r40 instrument edit (a): who was followed by their centroid, and so whose jerks are not "feet" readings
+    tracking: trackingMode,
+    trackedByCentroid: [...centroidFigs].filter((i) => poses.some((p, k) => p.fig === i && anchors[k]?.centroid)).map((i) => figs[i]?.id ?? String(i)),
     poses: poses.map((p, k) => ({ figure: figs[p.fig]?.id ?? String(p.fig), pose: p.pose, url: p.url, head: anchors[k]?.head ? 'registration' : null, stance: anchors[k]?.stanceSrc ?? null, prone: anchors[k]?.prone ?? null })),
   };
 
