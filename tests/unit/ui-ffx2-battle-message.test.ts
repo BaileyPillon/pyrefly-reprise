@@ -135,13 +135,16 @@ describe('FFX2BattleHud draws battle messages (PR-0143)', () => {
     expect(nameOf(root)).toBe('Rikku');
     // Re-parity W3 (FFX-2 only; reason "game-code parity"): the old engine took the whole figure with no roll (1,500). The game's rule
     // (`kernel/steal.ts stealGil`, research/re-ffx2-hit-status.md section 5) takes between half and all of the enemy's figure, by a
-    // draw: this seed's draw gives 1,267. The banner must print exactly what the engine put in the party's gil.
+    // draw: this seed's draw gave 1,267 until the Syndicate's scripts followed the game's own (re-parity AI-FFX2-c, FFX-2 only; reason
+    // "game-script parity"): Ormi, Logos and Leblanc now spend a different number of draws before Rikku's turn, so the same seed's
+    // Pilfer Gil draw lands on 1,350 (the range check above is the rule; the exact figure is only a pin of the stream). The banner must
+    // print exactly what the engine put in the party's gil.
     const taken = engine.state().flags['stolenGil'];
     expect(typeof taken).toBe('number');
     expect(taken as number).toBeGreaterThanOrEqual(750);
     expect(taken as number).toBeLessThanOrEqual(1500);
     expect(chipOf(root)).toBe(`pilfered ${(taken as number).toLocaleString('en-US')} gil!`);
-    expect(taken).toBe(1267);
+    expect(taken).toBe(1350);
   });
 
   it('hides after the hold, and a new line restarts it', () => {
