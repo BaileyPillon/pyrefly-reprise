@@ -1,11 +1,14 @@
 // @vitest-environment jsdom
 /**
  * `AirshipOrders` — where the Evrae order widget meets the real FFX command
- * menu. FFX only (Chapter 8). Built to the driver's recommendation A + C,
- * INFERRED in docs/target/targets.json, never approved.
+ * menu. FFX only (Chapter 8). Option A with C's staging (Bailey, 2026-09-23,
+ * D-032), and since 2026-10-09 ("Yes, match the game", re-parity row D-08) one
+ * order at a time: the engine offers Pull back at NEAR, Close in at FAR and
+ * Cancel while an order stands, exactly one enabled, and the cascade folds the
+ * rows into one "Orders" row.
  *
  * Pins the three things the integration promises: every other battle's menu is
- * passed through untouched; in the Evrae battle the two order rows fold into
+ * passed through untouched; in the Evrae battle the order rows fold into
  * one "Orders" row that opens the widget (and cancel returns to the menu); and
  * Cid's CTB tile carries the ORDER chip only while an order stands.
  */
@@ -20,7 +23,16 @@ function row(label: string, command: Command, enabled = true): AvailableCommand 
 const attack = row('Attack', { kind: 'attack', targets: [] } as unknown as Command);
 const pull = (enabled = true) => row('Pull back', { kind: 'trigger', id: 'pull-back', targets: [] }, enabled);
 const close = (enabled = true) => row('Close in', { kind: 'trigger', id: 'close-in', targets: [] }, enabled);
+const cancel = (enabled = true) => row('Cancel', { kind: 'trigger', id: 'cancel-order', targets: [] }, enabled);
 const stateWith = (flags: Record<string, unknown>): BattleState => ({ flags } as unknown as BattleState);
+
+/** The rows the engine publishes to an order owner when `on` is the one on offer. */
+const owner = (on: 'pull-back' | 'close-in' | 'cancel-order'): AvailableCommand[] => [
+  pull(on === 'pull-back'),
+  close(on === 'close-in'),
+  cancel(on === 'cancel-order'),
+  attack,
+];
 
 describe('AirshipOrders.choose', () => {
   it('passes every other battle straight through: same array, no widget', async () => {
@@ -36,11 +48,11 @@ describe('AirshipOrders.choose', () => {
     expect(orders.el.hidden).toBe(true);
   });
 
-  it('folds the two orders into one "Orders" row, and opening it shows the widget', async () => {
+  it('folds the order rows into one "Orders" row, and opening it shows the one order on offer', async () => {
     const orders = new AirshipOrders();
     document.body.appendChild(orders.el);
     const menus: string[][] = [];
-    const promise = orders.choose([pull(), close(), attack], stateWith({ 'airship.range': 'near', 'airship.missilesLeft': 2 }), async (c) => {
+    const promise = orders.choose(owner('pull-back'), stateWith({ 'airship.range': 'near', 'airship.missilesLeft': 2 }), async (c) => {
       menus.push(c.map((x) => x.label));
       return c[0]!.command; // the player picks "Orders"
     });
@@ -48,8 +60,9 @@ describe('AirshipOrders.choose', () => {
     await Promise.resolve();
     expect(menus[0]).toEqual(['Orders', 'Attack']);
     expect(orders.el.hidden).toBe(false);
-    expect(orders.el.textContent).toMatch(/Already near/);
-    // Keyboard: Enter confirms the first live row, Pull back.
+    expect([...orders.el.querySelectorAll('.ffx-cmd--trigger__label')].map((e) => e.textContent)).toEqual(['Pull back']);
+    expect(orders.el.textContent).not.toMatch(/Already|Ordered/);
+    // Keyboard: Enter confirms the row on offer, Pull back.
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
     await expect(promise).resolves.toEqual({ kind: 'trigger', id: 'pull-back', targets: [] });
     orders.dispose();
@@ -59,7 +72,7 @@ describe('AirshipOrders.choose', () => {
     const orders = new AirshipOrders();
     document.body.appendChild(orders.el);
     let opens = 0;
-    const promise = orders.choose([pull(), close(), attack], stateWith({ 'airship.range': 'far' }), async (c) => {
+    const promise = orders.choose(owner('close-in'), stateWith({ 'airship.range': 'far' }), async (c) => {
       opens++;
       return opens === 1 ? c[0]!.command : c[1]!.command; // Orders, then Attack
     });
@@ -75,23 +88,28 @@ describe('AirshipOrders.choose', () => {
   it('drops the row on the turn of someone who cannot give an order (option A, step 1)', async () => {
     const orders = new AirshipOrders();
     let seen: string[] = [];
-    await orders.choose([pull(false), close(false), attack], stateWith({ 'airship.range': 'near' }), async (c) => {
+    await orders.choose([pull(false), close(false), cancel(false), attack], stateWith({ 'airship.range': 'near' }), async (c) => {
       seen = c.map((x) => x.label);
       return attack.command;
     });
     expect(seen).toEqual(['Attack']);
   });
 
-  it('marks the standing order "Ordered" instead of offering it twice', async () => {
+  it('while an order stands the Orders row is on offer and its one row is Cancel', async () => {
     const orders = new AirshipOrders();
     document.body.appendChild(orders.el);
-    void orders.choose([pull(), close(), attack], stateWith({ 'airship.range': 'near', 'airship.order': 'far' }), async (c) => c[0]!.command);
+    const menus: AvailableCommand[][] = [];
+    const promise = orders.choose(owner('cancel-order'), stateWith({ 'airship.range': 'near', 'airship.order': 'far' }), async (c) => {
+      menus.push(c);
+      return c[0]!.command; // Orders
+    });
     await Promise.resolve();
     await Promise.resolve();
-    expect(orders.el.textContent).toMatch(/Ordered/);
-    expect(orders.el.querySelectorAll('.ig-cmd--disabled').length).toBe(2);
-    orders.abandon();
-    expect(orders.el.hidden).toBe(true);
+    expect(menus[0]!.map((x) => [x.label, x.enabled])).toEqual([['Orders', true], ['Attack', true]]);
+    expect([...orders.el.querySelectorAll('.ffx-cmd--trigger__label')].map((e) => e.textContent)).toEqual(['Cancel']);
+    expect(orders.el.querySelectorAll('.ig-cmd--disabled')).toHaveLength(0);
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Enter' }));
+    await expect(promise).resolves.toEqual({ kind: 'trigger', id: 'cancel-order', targets: [] });
     orders.dispose();
   });
 });

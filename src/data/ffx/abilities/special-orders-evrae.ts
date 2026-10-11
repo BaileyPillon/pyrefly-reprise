@@ -19,12 +19,14 @@
  *
  * ---
  *
- * ## Two ids, not one id with a payload
+ * ## Two ids, not one id with a payload (and a third, Cancel)
  *
  * `TriggerCommand` is `{ kind: 'trigger', id: string, targets }` and has **no
  * `extra` field**; adding one would be a contract change for no gain. So the
  * direction is carried by the id itself: `'pull-back'` and `'close-in'`,
- * exactly as the owner named them on 2026-09-21.
+ * exactly as the owner named them on 2026-09-21. The game also has a third
+ * Trigger Command, Cancel, which drops the standing order; it is `'cancel-order'`
+ * and only one of the three is on offer at a time (`ai/evrae-rules.ts#orderOnOffer`).
  *
  * ## The labels (set at registration; see `name` below)
  *
@@ -39,10 +41,10 @@
  *
  * ## The cost is the whole design
  *
- * An order costs **that character's turn**, is executed on **Cid's next turn**
- * in place of a missile volley, and **last order wins** if two are issued
- * before he acts. One course change is therefore one party turn + one Cid turn
- * + one forgone volley — three resources for one boolean flip
+ * An order costs **that character's turn** and is executed on **Cid's next turn**
+ * in place of a missile volley; a second order cannot be queued over it (only
+ * Cancel is on offer while one stands). One course change is therefore one party
+ * turn + one Cid turn + one forgone volley — three resources for one boolean flip
  * [research/ffx-evrae-airship.md §4.2].
  *
  * **Rank 3 is `[estimate]`** — C-7. The manoeuvre has **no action row at all**
@@ -97,6 +99,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     'close-in',
     'Close in',
     "Menu marker only — submit a TriggerCommand with id:'close-in'. Queues the manoeuvre; Cid flies it on his next turn instead of firing a volley. Label per D-020 Q9.",
+  ),
+  // The game's own "Cancel" (command 0x3108; re-parity row D-08, Bailey 2026-10-09 "Yes, match the game"): on offer only while an
+  // order is standing, it drops that order. Rank 3 like the other two (every command these scripts use has rank 3).
+  'cancel-order': order(
+    'cancel-order',
+    'Cancel',
+    "Menu marker only — submit a TriggerCommand with id:'cancel-order'. Drops the standing order, so Cid's next turn is his own again. On offer only while an order is standing.",
   ),
 };
 

@@ -100,9 +100,10 @@ describe('the two records (D-270) and the rename (plan §1.4)', () => {
 
   it('Tidus and Rikku carry the orders to Cid in Chapter XVII only (§4 [verified: 4 sources])', () => {
     const orders = (b: typeof sinFahrenheitBuild, id: string): string[] =>
-      b.members.find((m) => m.id === id)!.learnedAbilityIds.filter((a) => a === 'pull-back' || a === 'close-in');
-    expect(orders(sinFinsCoreBuild, 'tidus')).toEqual(['pull-back', 'close-in']);
-    expect(orders(sinFinsCoreBuild, 'rikku')).toEqual(['pull-back', 'close-in']);
+      b.members.find((m) => m.id === id)!.learnedAbilityIds.filter((a) => a === 'pull-back' || a === 'close-in' || a === 'cancel-order');
+    // The three Trigger Commands (one on offer at a time, re-parity row D-08): Pull back, Close in and Cancel.
+    expect(orders(sinFinsCoreBuild, 'tidus')).toEqual(['pull-back', 'close-in', 'cancel-order']);
+    expect(orders(sinFinsCoreBuild, 'rikku')).toEqual(['pull-back', 'close-in', 'cancel-order']);
     expect(orders(sinFinsCoreBuild, 'auron')).toEqual([]);
     expect(orders(sinFahrenheitBuild, 'tidus')).toEqual([]);
     expect(sinFinsCoreBuild.activeSlots).toEqual(['tidus', 'yuna', 'auron']);
