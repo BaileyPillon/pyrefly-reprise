@@ -18,10 +18,12 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AbilityDef } from '../../src/battle/common/types.ts';
+import type { AbilityDef, BattleState, Command, FFXCombatant, StatusInstance } from '../../src/battle/common/types.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
-import { resolveAbility } from '../../src/battle/ffx/index.ts';
+import { CORE_ABILITIES, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { forcedTurn } from '../../src/battle/ffx/forced-turn.ts';
+import { buildAction } from '../../src/battle/ffx/target-build.ts';
+import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { reflectableDef } from '../../src/battle/ffx/statuses.ts';
 import {
   type AbilitySpec,
@@ -35,8 +37,9 @@ import {
   oracleForced,
   randomBoard,
 } from './helpers/ffxTargetBoard.ts';
+import { enemy, setup, stats } from './ffx-fixtures.test.ts';
 
-const KINDS: AbilitySpec['kind'][] = ['attack', 'attack', 'fire', 'cure', 'slowga', 'hastega', 'dispel', 'fury', 'fury', 'mix'];
+const KINDS: AbilitySpec['kind'][] = ['attack', 'attack', 'gouge', 'sweep', 'fire', 'cure', 'slowga', 'hastega', 'dispel', 'fury', 'fury', 'mix'];
 const CHAIN_STREAMS = new Set([4, 5, 6]);
 
 /** Hits the engine put on each combatant: one `damage` event per connecting hit (these abilities never miss), a `miss`/nullified per hit lost. */
@@ -63,6 +66,7 @@ describe('the engine builds an action\'s targets as the game does, on generated 
       const usersOnBoard = alive.filter((m) => !m.untargetable);
       if (usersOnBoard.length === 0) continue;
       const user = r.pick(usersOnBoard);
+      user.provokedBy = null; // a Provoked monster never reaches resolveAbility (its turn is the forced attack); the redirect of one that keeps control has its own tests
       // now and then the other side has been wiped out: a bounce off an ally then has nobody to land on, and the hits are lost
       if (r.chance(0.1)) for (const m of board.members) if (m.side !== user.side) Object.assign(m, { dead: true, hp: 0, reflect: false, sentinel: false, guard: false, guardMark: false });
       const spec: AbilitySpec = { kind: r.pick(KINDS), hits: r.int(1, 3) };
@@ -177,6 +181,110 @@ describe('the engine\'s forced turns are the game\'s, on generated boards', () =
     expect(seen.dropped).toBeGreaterThan(20);
     expect(seen.drawn).toBeGreaterThan(100);
     expect(seen.none).toBeGreaterThan(100);
+  });
+});
+
+describe('a spread deals its hits over the whole set and every member is a target', () => {
+  it('one hit over three enemies leaves two of them targets with no hit; the single hit goes to the one the stream-5 value picks', () => {
+    const r = lcg(11);
+    const board = randomBoard(r);
+    const proto = board.members[0] as Member;
+    const heroes: Member[] = ['tidus', 'yuna'].map((id) => ({ ...proto, id, side: 'party', slot: PARTY_IDS.indexOf(id as never) }));
+    const monsters: Member[] = ['m0', 'm1', 'm2'].map((id, i) => ({ ...proto, id, side: 'enemy', slot: 0x14 + i }));
+    board.members = [...heroes, ...monsters];
+    for (const m of board.members) Object.assign(m, { dead: false, petrified: false, sleep: false, confuse: false, berserk: false, threaten: false, reflect: false, guard: false, sentinel: false, guardMark: false, untargetable: false, provokedBy: null, hp: 5000 });
+    const { ctx, byId, rng } = contextOfBoard(board, 21);
+    const mirror = contextOfBoard(board, 21).rng;
+    const def = abilityOfSpec({ kind: 'fury', hits: 1 });
+    const pool = ['m0', 'm1', 'm2'].map((id) => byId.get(id)!);
+    const built = buildAction(ctx, byId.get('tidus')!, def, pool, 1, true);
+    expect(built.targets.map((t) => t.target.id)).toEqual(['m0', 'm1', 'm2']);
+    const chosen = ['m0', 'm1', 'm2'][mirror.draw(5) % 3];
+    expect(built.targets.map((t) => [t.target.id, t.hits])).toEqual(['m0', 'm1', 'm2'].map((id) => [id, id === chosen ? 1 : 0]));
+    void rng;
+  });
+});
+
+describe('the turn loop: a Provoked, Berserk or Confused actor\'s turn is the game\'s forced attack', () => {
+  const stateOf = (id: string, over: Partial<StatusInstance> = {}): StatusInstance => ({ id: id as StatusInstance['id'], turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false, ...over });
+  const defend = (): Command => ({ kind: 'defend', targets: [] });
+
+  /** An engine with Tidus, Yuna and Auron against two dummies; `ready` may afflict them before the first turn. */
+  function engineWith(seed: number, ready: (state: BattleState) => void) {
+    const reg = new FFXContentRegistry();
+    reg.addAbilities([...CORE_ABILITIES]);
+    const dummy = (id: string) => enemy({ id, stats: stats({ hp: 99999, maxHp: 99999, agi: 5 }) });
+    const e = createFFXEngine({ content: reg });
+    e.init(setup({ seed, enemies: { id: 'pair', game: 'ffx', enemies: [dummy('e1'), dummy('e2')], canEscape: false } }));
+    ready(e.state() as BattleState);
+    return e;
+  }
+
+  /** The first action of `who`: its command and targets, taken from the events (the party defends on every menu). */
+  function firstAction(e: ReturnType<typeof engineWith>, who: string): { abilityId?: string; targets: string[]; menus: number } {
+    let menus = 0;
+    for (let i = 0; i < 400; i++) {
+      const d = e.nextDecision();
+      if (d.kind === 'battle-over') break;
+      const events = d.kind === 'resolved' ? d.events : d.kind === 'player-input' ? [] : [];
+      for (const ev of events) {
+        if (ev.type === 'action-start' && ev.actorId === who) return { ...(ev.abilityId !== undefined ? { abilityId: ev.abilityId } : {}), targets: [...ev.targets], menus };
+      }
+      if (d.kind === 'player-input') {
+        if (d.actorId === who) menus += 1;
+        for (const ev of e.submit(defend())) {
+          if (ev.type === 'action-start' && ev.actorId === who) return { ...(ev.abilityId !== undefined ? { abilityId: ev.abilityId } : {}), targets: [...ev.targets], menus };
+        }
+      }
+    }
+    throw new Error(`${who} never acted`);
+  }
+
+  it('a Berserk party member swings at an enemy without opening a menu, and a Confused one at its own side, itself included', () => {
+    const seenSelf = new Set<string>();
+    for (let seed = 1; seed <= 24; seed++) {
+      const berserk = engineWith(seed, (s) => { s.combatants['tidus']!.statuses['berserk'] = stateOf('berserk'); });
+      const b = firstAction(berserk, 'tidus');
+      expect(b.menus, `seed ${seed}: Berserk opens no menu`).toBe(0);
+      expect(['e1', 'e2'], `seed ${seed}`).toContain(b.targets[0]);
+      const confused = engineWith(seed, (s) => { s.combatants['yuna']!.statuses['confuse'] = stateOf('confuse'); });
+      const c = firstAction(confused, 'yuna');
+      expect(c.menus, `seed ${seed}: Confuse opens no menu`).toBe(0);
+      expect(['tidus', 'yuna', 'auron'], `seed ${seed}: its own side`).toContain(c.targets[0]);
+      seenSelf.add(c.targets[0] as string);
+    }
+    expect(seenSelf, 'over 24 seeds a Confused Yuna swings at herself and at both friends').toEqual(new Set(['tidus', 'yuna', 'auron']));
+  });
+
+  it('a Provoked monster spends its turn attacking the provoker, whatever its script would have picked, and the Provoke of a dead provoker is cleared', () => {
+    for (let seed = 1; seed <= 12; seed++) {
+      const provoked = engineWith(seed, (s) => { s.combatants['e1']!.statuses['provoke'] = stateOf('provoke', { sourceId: 'auron' }); });
+      expect(firstAction(provoked, 'e1').targets, `seed ${seed}`).toEqual(['auron']);
+    }
+    const hits = new Set<string>();
+    for (let seed = 1; seed <= 30; seed++) {
+      const gone = engineWith(seed, (s) => {
+        const auron = s.combatants['auron'] as FFXCombatant;
+        auron.alive = false;
+        auron.hp = 0;
+        auron.statuses['ko'] = stateOf('ko');
+        s.combatants['e1']!.statuses['provoke'] = stateOf('provoke', { sourceId: 'auron' });
+      });
+      const a = firstAction(gone, 'e1');
+      hits.add(a.targets[0] as string);
+      expect(gone.state().combatants['e1']!.statuses['provoke'], `seed ${seed}: the bit is cleared`).toBeUndefined();
+    }
+    expect([...hits].sort(), 'with the provoker gone the monster acts as it would have: at a living member').toEqual(['tidus', 'yuna']);
+  });
+
+  it('Provoke first, then Berserk: a Provoked Berserk monster goes for the provoker, not for the pick Berserk would have made', () => {
+    for (let seed = 1; seed <= 12; seed++) {
+      const e = engineWith(seed, (s) => {
+        s.combatants['e1']!.statuses['provoke'] = stateOf('provoke', { sourceId: 'yuna' });
+        s.combatants['e1']!.statuses['berserk'] = stateOf('berserk');
+      });
+      expect(firstAction(e, 'e1').targets, `seed ${seed}`).toEqual(['yuna']);
+    }
   });
 });
 

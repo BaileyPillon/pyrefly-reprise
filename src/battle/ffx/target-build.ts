@@ -56,10 +56,8 @@ function someoneCovers(ctx: Ctx): boolean {
   return false;
 }
 
-/** Can the kernel change anything about these targets? (It cannot run at all for a user the game has no slot for: a test rig's.) */
-function needsKernel(ctx: Ctx, user: FFXCombatant, def: AbilityDef, raw: readonly FFXCombatant[], spread: boolean): boolean {
-  if (chainSlotOf(ctx, user) === undefined) return false;
-  if (spread) return true;
+/** Can Cover or Reflect change anything about these targets? (A spread is always built by the kernel: it deals the hits.) */
+function coverOrReflectMatters(ctx: Ctx, user: FFXCombatant, def: AbilityDef, raw: readonly FFXCombatant[]): boolean {
   if (isCoverable(def, user) && someoneCovers(ctx)) return true;
   return reflectableDef(def) && raw.some((t) => has(t, 'reflect'));
 }
@@ -69,10 +67,14 @@ function needsKernel(ctx: Ctx, user: FFXCombatant, def: AbilityDef, raw: readonl
  * count (for a spread, the number of hits to deal over the pool), `spread` whether the hits are dealt at random over the set.
  */
 export function buildAction(ctx: Ctx, user: FFXCombatant, def: AbilityDef, raw: readonly FFXCombatant[], hits: number, spread: boolean): BuiltAction {
-  if (!needsKernel(ctx, user, def, raw, spread)) {
+  const userSlot = chainSlotOf(ctx, user);
+  if (userSlot === undefined) {
+    // A user the game has no slot for (a test rig's) has no chain to run: its spread is dealt by hand, anything else is as named.
     return { targets: spread ? dealUnslotted(ctx, raw, hits) : raw.map((target) => ({ target, hits })), bounced: [], lost: [] };
   }
-  const userSlot = chainSlotOf(ctx, user) as number;
+  if (!spread && !coverOrReflectMatters(ctx, user, def, raw)) {
+    return { targets: raw.map((target) => ({ target, hits })), bounced: [], lost: [] };
+  }
   const world = chainWorld(ctx, user, def, true);
   let mask = 0;
   const outside: FFXCombatant[] = [];

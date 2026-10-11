@@ -96,7 +96,11 @@ export function randomBoard(r: ReturnType<typeof lcg>): Board {
   for (const id of party) members.push(status('party', id, PARTY_IDS.indexOf(id as never)));
   const monsters = r.int(1, 5);
   for (let i = 0; i < monsters; i++) members.push(status('enemy', `m${i}`, 0x14 + i));
-  // The user of a chain action is alive and fit, whatever else the board says.
+  // Now and then a member is Provoked (by another member): it cannot cover, and it is what the forced-turn tests act on.
+  for (const m of members) {
+    const others = members.filter((o) => o.id !== m.id);
+    if (!m.dead && others.length > 0 && r.chance(0.06)) m.provokedBy = r.pick(others).id;
+  }
   const bond = [0, 0, 0, 0, 0, 0, 0, 0].map((_, i) => (i === 0 ? 0 : r.chance(0.5) ? r.int(0, 2000) : 0));
   return { members, bond };
 }
@@ -184,7 +188,7 @@ export function contextOfBoard(board: Board, seed: number, activeOrder?: readonl
 
 /** What an ability does, in the game's terms. */
 export interface AbilitySpec {
-  kind: 'attack' | 'fire' | 'cure' | 'slowga' | 'hastega' | 'dispel' | 'fury' | 'mix';
+  kind: 'attack' | 'gouge' | 'sweep' | 'fire' | 'cure' | 'slowga' | 'hastega' | 'dispel' | 'fury' | 'mix';
   hits: number;
 }
 
@@ -205,6 +209,10 @@ export function abilityOfSpec(spec: AbilitySpec): AbilityDef {
   };
   switch (spec.kind) {
     case 'attack': return { ...base, id: 'attack', damageType: 'physical', targeting: 'single-enemy', flags: [] } as AbilityDef;
+    // a physical blow at one of the user's own side (a Confused swing): the user can be its own target, and Cover applies to it as to any single physical blow
+    case 'gouge': return { ...base, id: 'gouge', damageType: 'physical', targeting: 'single-ally', flags: [] } as AbilityDef;
+    // a physical blow at every enemy: not a single-target command, so never covered
+    case 'sweep': return { ...base, id: 'sweep', damageType: 'physical', targeting: 'all-enemies', flags: [] } as AbilityDef;
     case 'fire': return { ...base, id: 'fire', category: 'blackmagic', damageType: 'magical', targeting: 'single-enemy', flags: ['reflectable'] } as AbilityDef;
     case 'cure': return { ...base, id: 'cure', category: 'whitemagic', damageType: 'magical', targeting: 'single-ally', flags: ['reflectable'] } as AbilityDef;
     case 'slowga': return { ...base, id: 'slowga', category: 'blackmagic', damageType: 'magical', targeting: 'all-enemies', flags: ['reflectable'] } as AbilityDef;
