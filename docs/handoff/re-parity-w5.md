@@ -1,6 +1,6 @@
 # Re-parity W5: the FFX Overdrive gauge, the aeons and Steal follow the game's code
 
-Status: **built, committed and pushed on branch `re-parity-w5` (the full suite did not finish and one seed pin, advisor-note, is open: sections 8 and 9) (from `origin/re-parity-w2` `919f2c78`, 2026-10-10); not merged into another branch, not deployed.** Track `re-parity`
+Status: **finished, committed and pushed on branch `re-parity-w5` (from `origin/re-parity-w2` `919f2c78`, 2026-10-10 to 11): the gauge, Steal and aeons batch (sections 1 to 7), Bailey's Chapter IX answer (the line reworked, section 11), the advisor-note pin traced and settled (section 11.1) and the final suite and 500-seed table (sections 8 and 11.5); not merged into another branch, not deployed.** Track `re-parity`
 ([plan](../plans/re-parity.md), [paper preflight](../plans/re-parity-review.md)). Owner: Bailey. **Game case: FFX only** (AGENTS.md rule 14). FFX-2 and FF7 import none of the modules this
 batch touched; `ffx2-atb-golden` and `ff7-golden` pass unchanged, and no file under `src/battle/ffx2` or `src/data/ffx2` changed.
 
@@ -18,7 +18,10 @@ Commits (all on `re-parity-w5`; the last one is this note's own):
 | `3ffb2907` | Engine-level parity tests for the FFX gauge, Steal and aeons; ffx-engine-golden re-baselined once ("game-code parity"), every moved link explained; Macalania A-8 re-pinned (FFX only) |
 | `6b3ba890` | The gauge parity test reaches Rook and Dancer (two mutants of the outcome hook survived a narrower sample); the aeons' chain test gets its own timeout (FFX only) |
 | `c9192b45` | Handoff for re-parity W5 and its notes: the status of each difference row, the CONTRACT-CHANGES entry, and the corrections to the notes that gave an aeon an equipment crit bonus of 0 and a wiped aeon 3 battles (FFX only; records only) |
-| (this commit) | The final text of this note: the full-suite state and the open items it leaves (FFX only; records only) |
+| `2bcc6af1`, `e5ab3a7e` | The first agent's closing notes: the suite state at its push deadline and what the seed scans showed (FFX only; records only) |
+| `7a6db80d` | **Chapter IX (Yojimbo): Yuna calls the aeon when his gauge reads 96, before any revive or heal**, now that the summoner keeps her Summon's recovery (Bailey's pick "Keep 1:1, rework our line"); the tactic, its guide rule and hint, the bench's mirror, the golden for yojimbo-cavern#1, `re-parity-w5-yojimbo-line.test.ts` (FFX only) |
+| `1d94781e` | advisor-note: the timing sentence's existence check reads seed 184's first 34 decisions and the sentence is pinned on a board built from a real opening; the cause of the lost pin is row A3 (FFX only; tests) |
+| the commits after `1d94781e` (this session, W5-FINISH) | the Chapter IX candidate ladder as a committed measurement harness (`re-parity-w5-yojimbo-ladder.test.ts`), the dated updates in the two Jegged notes, the tactic's final ladder numbers, and this note (sections 8, 9, 10, 11 and the changelog paragraph rewritten) (FFX only) |
 
 ## What the engine does now
 
@@ -170,6 +173,9 @@ One outcome moves: isaaru-via-purifico#1 link 3 defeat -> victory; the other 17 
 
 ## 7. Measurement (the shipped `intendedStrategy`, whole chain, deterministic)
 
+**This is the first W5 measurement, taken before Chapter IX's line was reworked (its "after" is the line that shipped at `919f2c78`, which the game's rule broke).** Section 11.5 repeats the 500-seed run on the final tree: every row below is
+identical to the seed except Chapter IX, which reads 495 of 500 with the reworked line. Read this section for the causes of the other chapters' moves; read 11.5 for the final numbers.
+
 Harness: `tests/unit/ffx-parity-measure.test.ts` (the shipped `intendedStrategy` through each FFX chapter's whole chain). **Before = `919f2c78`** (the W2 base: its own 500-seed run, `D:\Tools\ffx-parity\rc2-w2\ffx-500-final.json`, and its 12-seed run
 `ffx-12-merged.json`); **after = this branch**. "sd" is the standard deviation of the difference of two samples of 500 (real = beyond 3, borderline = 2 to 3). The last four columns are ablations: the branch with
 **one row put back** by a temporary edit (restored byte for byte, SHA-1 checked), run on the same 500 seeds. "A3 back" = the old freeze and thaw of the party's counters when an aeon comes and goes (row A3, the summoner's
@@ -214,25 +220,22 @@ The only row beyond the sampling band of 12 seeds is Chapter IX.
 
 ## 8. Full suite
 
-One run of the whole unit suite (`--testTimeout=60000 --maxWorkers=4`, log `D:\Tools\ffx-parity\rc2-w5\fullsuite.log`) was started on the committed tree at 14:12 EDT. **The machine was saturated by other agents' runs (16 cores at 100 percent, about 90 node
-processes) and the suite ran at 4 to 14 files a minute: **it had not finished when this note was written, and the lane stops at the push deadline**.** What it had reported: **409 of 1,016 files** (383 passed, 2 skipped, 24 failed).
-The 21 art-only files this worktree always has (no `public/art`) are all among the failures and are the only ones expected: `ui-portrait-face-crop`, `trema-ship-content`, `art-ref-defaults`, `pause-remake`, `isaaru-ship`, `den-of-woe-ship-content`, `chapter-meta-seymour-anima-macalania`,
-`chapter-meta-evrae`, `natus-ship-scene`, `natus-ship-content`, `leblanc-art`, `fallen-aeons-ship-content`, `chapter-meta-ffx2-leblanc`, `cutscene-story-poses`, `fallen-aeons-ship-scene`, `den-of-woe-ship-scene`, and five that fail on import for the missing `public/art/manifest.json`
-(`party-face-manifest`, `chapters/yojimbo-content`, `chapters/leblanc-party-sprites`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapter-meta`). **The three other failures so far:**
+**Final run (2026-10-11, W5-FINISH): one run of the whole unit suite on the committed tree, `--maxWorkers=4 --testTimeout=120000`, log `D:\Tools\ffx-parity\rc3-w5b\fullsuite.log`: 1,022 files; 992 passed, 9 skipped, 21 failed; 15,196 tests passed, 181 failed, 103 skipped, 1 todo.**
+**The 21 failed files are the 21 art-only files this worktree always has (no `public/art`) and nothing else**, the same set the first agent listed: `ui-portrait-face-crop` (145 of its 152 tests), `trema-ship-content`, `art-ref-defaults`, `pause-remake` (it names `/art/backdrops/gagazet.png`, "does not resolve under public/"),
+`chapters/isaaru-ship`, `chapters/den-of-woe-ship-content`, `chapter-meta-seymour-anima-macalania`, `chapter-meta-evrae`, `chapters/natus-ship-scene`, `chapters/natus-ship-content`, `chapters/leblanc-art`, `chapters/fallen-aeons-ship-content`, `chapter-meta-ffx2-leblanc`, `cutscene-story-poses`,
+`chapters/fallen-aeons-ship-scene`, `chapters/den-of-woe-ship-scene`, and the five that fail on import for the missing `public/art/manifest.json` (`party-face-manifest`, `chapters/yojimbo-content`, `chapters/leblanc-party-sprites`, `chapters/chapters-6-7-8-enemy-sprite-manifest`, `chapter-meta`). Not fixed, by rule.
 
-* `advisor-note` ("still says when to spend a revive it is holding back"): an existence check of a rare sentence (not traced to a regression of the advisor, but not shown to be none either). Its existence check reads the first twenty decisions of Chapter I seed 108 for the sentence "then raise"; the pin has moved with every
-  batch that moved the draws (2026-09-19, 2026-10-09 AI-Seymour, 2026-10-10 W2). On this branch none of the seeds 1 to 700 shows the sentence (a scan, 20 decisions a seed). Four more scans, seeds 701 to 2300, finished with no hit either: **0 of 2,300 seeds** show it in their first twenty decisions (the base showed it on 3 of the first 700), so a re-pin to another seed is not available and the existence check needs another design (open item 10).
-  **Open (see open item 10).** The rest of that file passes.
-* `chapters/sin-fins-core-bench` ("the sensible line never leaves a dry Auron Defending"): a timeout under the load (60 s); run alone it passes (4 passed, 2 skipped).
-* `live-url-follows-host` (one of 14 failed in the suite): nothing to do with a battle; run alone it passes (14 of 14), so it was the load too.
+What the first agent's partial run (409 of 1,016 files, a saturated machine) had left open now passes: `advisor-note` (27 of 27, section 11.1), `chapters/sin-fins-core-bench` (6 tests, 2 skipped) and `live-url-follows-host` (14 of 14) were load timeouts and a pin, not defects. In the same run: `ffx-engine-golden` 18 of 18 (one digest re-baselined for Chapter IX's line,
+section 11.4; the first W5 re-baseline is section 5), `ffx2-atb-golden` 6 of 6 and `ff7-golden` 3 of 3 **unchanged**, `chapters/yojimbo-bench` 3 of 3 (intended line 196 of 200), `re-parity-w5-yojimbo-line` 4 of 4, and the new ladder harness is skipped without `PYREFLY_MEASURE=1` (9 skipped files in all).
 
-Evidence that does not depend on that run: `tsc --noEmit` clean; the 13 targeted files (the new engine-level tests, `ffx-aeons`, `ffx-engine-golden`, `chapters/macalania-engine`, `chapters/isaaru-bench`, the kernel files `parity-ffx-overdrive`, `parity-ffx-aeon-party`, `parity-ffx-steal-rewards`, `parity-ffx-aeon-stats`) pass, 174 tests;
-and an earlier run of the **305 test files that mention aeons, Overdrive or Steal** (2026-10-10 13:07, the first W5 agent's tree plus the golden still on the old table): its only non-art failures were the golden (re-baselined since), `macalania-engine` A-8 (re-pinned since) and `isaaru-bench` (the `init` crash, fixed since; it passes).
-The 12-seed measurement was re-run on the committed source and is byte-identical to the one measured before the commits.
+Other checks on the final tree: `tsc --noEmit` clean; `node tools/orphans.mjs`: 1,462 modules, 44 orphaned, the same 44 as before this lane (the 18 unwired FFX-2 kernels, 24 from `origin/main`, the 2 FFX kernels `drops.ts` and `gear-drop.ts`); no source file over 400 lines was added (the new file is a test).
+
+Evidence that does not depend on the full run: the 13 targeted W5 files (the new engine-level tests, `ffx-aeons`, `ffx-engine-golden`, `chapters/macalania-engine`, `chapters/isaaru-bench`, the kernel files `parity-ffx-overdrive`, `parity-ffx-aeon-party`, `parity-ffx-steal-rewards`, `parity-ffx-aeon-stats`) passed, 174 tests, before the Chapter IX work; and the nine Chapter IX files
+(`re-parity-w5-yojimbo-line`, `chapters/yojimbo-bench`, `-engine`, `-repair`, `-secret-objective`, `-callouts`, `re-parity-ai-yojimbo`, `presenter-recall-yojimbo`, `ffx-engine-golden`) passed alone, 113 tests, on 2026-10-11 01:59.
 
 ## 9. Open items
 
-1. **Chapter IX's line was designed around the bug** (decision 1 below). The shipped tactic summons an aeon "in front of Zanmato" and Yuna then acts at once; the game charges her the Summon's recovery.
+1. **Chapter IX's line was designed around the bug: DONE (section 11).** Bailey chose "Keep 1:1, rework our line"; the line now calls the aeon at gauge 96, first among Yuna's choices, and wins 495 of 500 (491 on the holdout). Open there: the 96 is derived and measured (a plateau of 94 to 98), not a source's number.
 2. **Overdrive to AP is not wired**: the gauge add converts the gain to AP in the kernel, but the engine has no AP ledger for it (the gauge stays still, as the game's does). No shipped build wears it.
 3. **Not built, rule 10 (no shipped chapter uses them)**: Pilfer Gil, Nab Gil, Bribe (the data comment in `special-rikku.ts` still forgets the gil already paid), item drops with the game's two slots and the
    overkill list, Gillionaire, Double and Triple AP, gear drops; the Magus Sisters (three aeons at once, the joint Delta Attack, the revive of a fallen sister on dismiss).
@@ -243,26 +246,142 @@ The 12-seed measurement was re-run on the committed source and is byte-identical
 7. **Revival's gauge gain**: Phoenix Down and Life run the Healer hook with the record's HP amount (the engine's restore of half the maximum HP when the record computes 0 is not shown to the hook).
 8. **`frozenPartyCtb` and `aeonStoredGauge`** are dead runtime fields (section 6).
 9. **No browser check** (no UI file changed; the worktree has no `public/art`): what a player sees is the Overdrive bars filling at other rates and an aeon's bar in steps of 5 percent (unchanged).
-10. **`advisor-note.test.ts` ("still says when to spend a revive it is holding back") fails and a re-pin is not available** (section 8): its existence check reads Chapter I seed 108 for the sentence "then raise" in the first twenty decisions; on this branch **none of the seeds 1 to 2,300 shows it** (the base showed it on 3 of the first 700; the party falls more often now, 1.1 KOs a battle against 0.5, so the cause is not fewer bodies on the floor, and it was not traced). Either the existence check walks more decisions or reads a hand-built board, or the cause is found first (is the "party-wide payload next" reading now different when a summoned aeon stands in front of the party? the Banish is the first thing that happens in that fight). The rest of that file passes. Scratch for the scans: `D:Toolsfx-parityc2-w5advscan*.log`.
-11. **The rest of the full suite** (section 8) was not finished; run it once on a quiet machine: `node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --testTimeout=60000 --maxWorkers=4`.
+10. **`advisor-note.test.ts`: DONE (section 11.1).** The cause is row A3 (the old thaw put back alone restores the sentence on 6 of seeds 1 to 700); the advisor did not change; the sentence is still reached under the game's rules (seed 184, decision 30). The existence check reads that seed's first 34 decisions and two new tests pin the card on a hand-built board.
+    Still open: the seed walk is a draw and will need a re-pin again after the next batch that moves the draws (the board tests are the stable pin).
+11. **The full suite: DONE (section 8).** One run, `--maxWorkers=4`, on the committed tree.
+12. **Chapter IX candidates D and E (Protect, Haste) are not shipped** (section 11.3): they win 500 of 500 but add casts no source asks for, and Haste makes the fight a stomp. They stay in the committed harness (`re-parity-w5-yojimbo-ladder.test.ts`).
 
 ## 10. Decisions for Bailey
 
-1. **Chapter IX's difficulty (the one real mover).** The game charges Yuna the full recovery of her Summon after the aeon leaves; our shipped Yojimbo line was built on the erased recovery and falls from 488 to 307 of 500
-   (97.6 to 61.4 percent). Options: (A) **keep the game's rule and rework Chapter IX's own line and party preset in a separate batch**, the way Chapter XVIII is being reworked (boss numbers untouched, every value sourced; the line can
-   keep the aeon in front of Zanmato but must pay for the Summon: heal before it, or summon earlier); (B) keep the game's rule and accept 61 percent for now; (C) put the old freeze and thaw back for the summoner only, which is not
-   the game and is not recommended. **Recommendation: A.** Nothing was retuned.
+1. **Chapter IX's difficulty: ANSWERED by Bailey, built (section 11).** The game charges Yuna the full recovery of her Summon after the aeon leaves; the old Yojimbo line fell from 488 to 307 of 500. His pick: "Keep 1:1, rework our line (Recommended)". Done: the line calls the aeon at gauge 96, before any revive or heal;
+   495 of 500 (99.0 percent), holdout 491 (98.2 percent), 12 of 12; Yojimbo, his odds, the party and row A3 untouched. Nothing for him to decide unless he wants the candidates D and E (item 5 below).
+1a. **The 96.** It is the best rung of a measured ladder and a number derived from the game's script (Zanmato fires on a turn that starts at 100; his turn adds 2), not a source's: no guide gives a gauge to summon at. The plateau is 94 to 98 (470 to 495 of 500). If he prefers the principled CTB-forecast version (485 and 483), it is one change (candidate B).
+1b. **Is 99 percent the right difficulty?** Before W5 the chapter won 488 of 500 (97.6 percent); the reworked line is the same to within the sampling band and a little easier at the margin. Nothing was tuned toward a rate. If he wants it harder or easier, the party preset is the lever, and that is his call.
 2. **The same rule moves three other chapters** (Chapter VII +19, X +40, II -18 of 500 attributable to it; XIV -24 offset by the aeon gauge's +33). Nothing to decide unless you want those rates reviewed; they follow the game.
 3. **Not built, rule 10** (no shipped chapter uses them): Pilfer Gil, Nab Gil, Bribe; the game's item drops (two slots, the overkill list), Gillionaire, Double and Triple AP, gear drops; the Magus Sisters. Build any of them? (Each needs a chapter that uses it; the per-boss
    loot records would need one more decompile pass first.)
 4. **Overdrive to AP** converts the gain to AP in the game; the engine has no AP ledger for it, so the gauge only stays still. No build wears it. Say if a chapter ever should.
 5. **Release note.** The crash fix in `FFXEngine.init` (a link that opens with a member under half HP) is a latent crash on the release line today (not seen in the base's own 500-seed runs, but reachable on any chain whose party arrives under half HP without the Critical status carried); it is worth carrying even if the rest waits.
+6. **advisor-note's seed walk (section 11.1)** is still a draw (seed 184, 34 decisions) and has been re-pinned six times; the two board tests beside it do not depend on a draw. Keep re-pinning it after each batch that moves the draws, or retire the walk once the RNG-streams batch lands and leave the board tests as the pin? Recommendation: keep it until that batch, then retire it if it moves.
+
+## 11. W5-FINISH (2026-10-11): the advisor-note pin, Chapter IX's line, the final suite and table
+
+Bailey's answer of 2026-10-10 about 17:00 EDT to the main session (his question and pick, verbatim): "The Overdrive/aeon batch (W5) is built. One game rule in it, 'the summoner keeps her Summon's recovery when an aeon leaves', drops Chapter IX (Yojimbo)
+from 488 to 307 wins in 500. Our suggested line summons an aeon right before Zanmato and relied on the old, wrong reset. What should happen?" -- **"Keep 1:1, rework our line (Recommended)"**, whose description reads: "Ship the game's rule, then rework our
+Chapter IX strategy line, as with Chapter XVIII. Yojimbo's numbers stay real." This section is that rework. **Game case: FFX only** (Chapter IX is FFX's CTB fight; the FFX-2 Yojimbo is a different fight). Yojimbo's script, odds, enemy data, row A3 and the party preset are untouched.
+
+### 11.1 advisor-note: why the sentence vanished, and where it stands now
+
+The check "still says when to spend a revive it is holding back" (`tests/unit/advisor-note.test.ts`) looks for one sentence of the move advisor's card in Chapter I (Seymour Flux): "Ready To Annihilate lands first - take the hit, then raise Tidus". It found it on 0 of 2,300 seeds after this batch.
+Traced with the engine (hard rule 3), not by reading code:
+
+* **The row is A3 and nothing else.** Putting the old thaw back alone (the summoner's recovery erased, every other W5 row on) restores the sentence on 6 of seeds 1 to 700 (108, 110, 277, 306, 325, 615, each at decision 18; the base `919f2c78` showed it on 3 of the first 700); the game's rule shows it on **0 of 2,300** in the first twenty decisions
+  (`D:\Tools\ffx-parity\rc3-w5\gated-a3back-1-700.txt`, `D:\Tools\ffx-parity\rc2-w5\advscan-*.log`).
+* **How, on seed 108** (`D:\Tools\ffx-parity\rc3-w5\trace108-now.txt` against `trace108-a3back.txt`, decision by decision with the card's note): both runs are the same for four decisions. At the fifth, with the old thaw Yuna acts again at once after Bahamut leaves (she calls Valefor and then Ifrit back to back); with the game's rule she
+  is charged her Summon's recovery and Tidus acts. Seymour's second cycle then starts one decision earlier (17, not 18), and **Tidus is on the floor at the payload's turn only in the old run**. The sentence needs two things at once: the payload's `charge` event ("Ready To Annihilate") in the log, and a body on the floor who is not a Zombie
+  (the card's Zombie reading comes first by design; Kimahri is a Zombie on the floor in this seed all along). Row A3 changes who acts after an aeon leaves, so it changes who is down when the payload comes.
+* **The advisor did not change, and it is not broken.** Its threshold, its reading of the log and its sentence are as they were; the engine's run of the fight is what moved. The sentence is **still reachable under the game's rules**: over seeds 1 to 400 and sixty decisions it appears once, on **seed 184 at its 30th decision** (`gated-now-1-400.txt`), and the test passes on that seed today.
+  So there was nothing to fix in the advisor and nothing to delete; two things were done to the test (commit `1d94781e`):
+  1. the existence check now reads **seed 184's first 34 decisions** (it was seed 108's first 20) and still asserts the note appears and that no decision in the walk breaks the advisor's rule;
+  2. the same behaviour is pinned **on a board that depends on no draw**: a real opening decision of Chapter I (real party, menus and log), cloned, one member who is neither the actor nor Yuna put on the floor, the log made to carry the payload's `charge` event; the card must say "take the hit, then raise <name>", and on the same board without the charge it must not. Two tests, up to eight seeds' openings each.
+* **A caution that stays open:** the walk on seed 184 is still a draw. It has been re-pinned after every batch that moved the draws (six times now); the next such batch (for example the RNG-streams batch) will probably move it again. The hand-built board is the stable pin; if the walk moves again, re-pin it from a scan in the same way or retire it in favour of the board.
+  I re-ran `advisor-note.test.ts` on this tree (27 of 27 pass). I did not repeat the 700-seed and 2,300-seed scans (each is 20 to 30 minutes on this machine); I read the saved traces and logs and checked the facts above against them.
+
+### 11.2 Chapter IX: the diagnosis, on real seeds
+
+Chapter IX on the first W5 tree: **307 of 500** (488 at `919f2c78`; with row A3 put back alone 488 again, so the whole drop is that one row). The old line: Lulu casts Fira, the others defend, Yuna revives, then heals anyone under
+45 percent, and **only when she has neither to do** calls an aeon once his gauge reads 80 or more. Traces of seeds 2 and 4 with that line (turn by turn: the party's HP, his gauge, who acted, every attack he made; `D:\Tools\ffx-parity\rc3-w5b\trace6.base.trace.txt`) show the two shapes of a loss:
+
+* **Seed 4 (wins at `919f2c78`, loses now): the aeon falls before Zanmato and Yuna is still in her recovery.** Yuna calls Bahamut at gauge 83. He stands through five of Yojimbo's turns (gauge 83 to 93; the hits on him are 419, 408, 1,371, 386 and 1,387, about 4,000 in all) and falls to a Wakizashi at 93. Ten of his turns lie between a gauge of 80 and
+  Zanmato, and an aeon does not last them. In the old engine Yuna then acted at once and called the next one; in the game she is charged the Summon's recovery, so her next turn comes **eight party turns after the Summon**, at gauge 98, with Yuna at 42 percent HP: the old order puts the Cura first, and Zanmato meets an open party with Yojimbo at 2,475 HP.
+* **Seed 2 (loses at `919f2c78` too): the summon is never reached.** From gauge 80 on, every turn of Yuna's goes to a Cura or a Phoenix Down (gauge 80, 87, 89, 99); the summon is the last item of her list, and Zanmato meets an open party with Yojimbo at 412 HP. This shape was already in the base; the new rule makes the first shape common.
+* **The tally over 500 seeds (the old line on the first W5 tree)**: 193 losses, and **all 193 have a Zanmato on an open party**; per seed 1.0 summons, 0.9 aeons that fell (0.3 of them to Zanmato itself, so 0.6 before it), 0.2 re-summons, 0.3 Zanmatos absorbed by an aeon against 0.4 that met an open party. 5.3 party KOs and 67.9 party turns a fight.
+* So the fault is the line's: it chose a gauge (80, research 4.1's "heightened" band, which is the band of his odds and not the clock of Zanmato) that is too early for an aeon that cannot be replaced, and it ranked the summon below the heal and the revive. Nothing about the boss was wrong.
+
+### 11.3 The candidates (all lines of ours; all measured on this tree: 12 seeds, 500 seeds (1 to 500) and the holdout (501 to 1000))
+
+Every row plays Chapter IX from `setupForChapter` with the stated Yuna line (Lulu, Kimahri and the aeon as before). The harness is committed: `tests/unit/re-parity-w5-yojimbo-ladder.test.ts`, run with `PYREFLY_MEASURE=1` (section 11.7). It reproduces the scratch lab that produced the first numbers seed for seed (the per-seed strings of all 14 lines at 12 seeds are equal; `old`, `t96` and `shipped` at 500 and at the
+holdout equal the lab's 307, 495 and 304, 491), and its `shipped` line (the real `intendedStrategy`) equals `t96` seed for seed at 12, 500 and the holdout. "Open Zanmato" is a loss whose Zanmato met no aeon.
+
+| Candidate | 12 | 500 | holdout | party turns | party KOs | losses with an open Zanmato (of losses), 500 |
+|---|---:|---:|---:|---:|---:|---:|
+| **old: the aeon at 80, after the revive and the heal** (the line as it was) | 6 | 307 | 304 | 67.9 | 5.3 | 193 of 193 |
+| **A. the aeon at 96, first among Yuna's choices (SHIPPED)** | **12** | **495** | **491** | 67.8 | 4.0 | 5 of 5 |
+| B. the aeon by the CTB forecast: from gauge 90, on the first Yuna turn after which Zanmato would come before her next one | 12 | 485 | 483 | 67.7 | 4.1 | 15 of 15 |
+| C. the aeon at 96, but after the revive and the heal (the old order) | 11 | 441 | 442 | 66.6 | 4.0 | 59 of 59 |
+| D. A, and Yuna casts Protect on Lulu, Yuna, Kimahri while she has nothing else to do | 12 | 500 | 500 | 63.8 | 0.7 | 0 |
+| E. A, and Yuna casts Haste on Lulu while she lacks it | 12 | 500 | 500 | 40.5 | 1.2 | 0 |
+
+The threshold ladder of A's rule (the aeon at that gauge or above, first among her choices):
+
+| Gauge | 90 | 92 | 94 | 95 | **96** | 97 | 98 | 99 | 100 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 12 seeds | 9 | 10 | 12 | 12 | **12** | 12 | 12 | 12 | 11 |
+| 500 seeds | 352 | 427 | 480 | 491 | **495** | 483 | 479 | 462 | 458 |
+| holdout | 366 | 411 | 470 | 479 | **491** | 482 | 480 | 465 | 455 |
+
+Reading it:
+
+* **The order matters as much as the gauge.** Calling the same 96 after the heal (C) wins 441, first wins 495: the window is one Yuna turn wide and a Cura spent in it leaves the party in front of Zanmato (seed 2's shape).
+* **The gauge has a window, not a cliff.** While an aeon stands only the aeon and Yojimbo act, so the gauge climbs 2 a turn: from 96 Zanmato is two ordinary turns away (96, 98, 100, then Zanmato), well inside what Bahamut lasts; from 90 it is five, which is about what he lasts (on the rungs 90 and 92, 0.2 and 0.1 aeons a seed fall before Zanmato, against none on 96); from 99 or 100 Yuna's turn often does not
+  fall in the window at all (38 and 42 of the losses are open Zanmatos). The rungs 94 to 98 win 470 to 495 of 500 across both ranges. **96 is the best rung in both ranges, and the margin over its neighbours (95 is 491 and 479; 97 is 483 and 482) is about the width of the sampling band, so read it as "the plateau is 94 to 98", not "96 is exact".**
+* **B, the principled version, loses to the plain rung** (485 and 483): the forecast adds his 2 and Lulu's 3 only, and it summons as early as 90 when Yuna's own next turn would be too late, which is the early side of the window. It is more code, and the plain rung asks the player nothing more than reading a number on the gauge widget.
+* **D and E are not shipped.** They win every seed, but they add casts of ours that no source asks for (Jegged has no battle advice for this fight; the research asks for a race, spells and an aeon), and Haste halves the fight (40 party turns), which turns the chapter into a stomp. The aim is a fair, winnable chapter, not a perfect one. They stay in the harness as the upper bound of what the party can do.
+* **A is the smallest change that fixes both shapes of a loss**: one threshold and one place in a list. Before W5 the chapter won 488 of 500 (97.6 percent); the reworked line wins 495 and 491 (99.0 and 98.2 percent): the same difficulty to within the sampling band, a little easier at the margin, with 4.0 party KOs a fight against 4.8.
+
+### 11.4 What ships (the tactic, the card, the guide, the bench)
+
+* `src/engine/tactics/yojimbo-cavern.ts`: Yuna's first choice is an aeon (Bahamut first, then Ifrit, Ixion, Shiva, Valefor) when his gauge reads 96 or more; then revive, heal under 45 percent, Doom if the menu has it, Lulu's Fira, everyone else defends; an aeon on the field defends. `SUMMON_AT_GAUGE = 96`. The header says which parts are sourced and which are derived.
+* **Sources for each step**: the aeon in front of Zanmato is strategy 3 of `research/ffx-yojimbo.md` 5.3 (wiki and GameFAQs, verified 2 sources; Jegged's one battle sentence is "use Yuna's Aeons"); Zanmato on a turn that starts at 100, +2 on his own turn and +3 on each action aimed at him are the game's script
+  (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 3.2 and 3.3, `research/ffx-yojimbo.md` 4.1); the Summon's recovery is `research/re-ffx-overdrive-steal-aeons.md` 4.7 and row A3. **The number 96 itself is derived and measured, not a source's**: no guide gives a gauge to summon at (Jegged does not mention the gauge at all; the wiki and GameFAQs notes say only to put
+  an aeon in front of Zanmato; a web search on 2026-10-11 found the same general advice and no timing). It is our adaptation, and the guide cites the script, not a guide. That is why the plateau is reported above.
+* **The advisor card** reads the guide: `src/data/guides/yojimbo-cavern.ts`. Rule 4 (was "Once his gauge is high, put an aeon in front of him. Zanmato then hits the aeon, not the party.") now reads: "Call the aeon late. At 100 he uses Zanmato and an aeon in front of him takes it in place of the party, but until then every attack he makes lands on the aeon, so Yuna calls one only when his gauge reaches 96. She waits a long time afterwards, so have the party healed before then." (short: "Gauge 96: call an aeon to take Zanmato"; cite `ffx-yojimbo 3.3, 4.1, 5.3 row 3`, and the Summon's cost `re-ffx-overdrive-steal-aeons 4.7`). The Summon hint now says "His gauge is at 96 or more, a turn and a cast from full: an aeon on the field takes Zanmato in place of the party". The walkthrough page and the chapter card say only "have an aeon out by then" and stay true.
+  The two Jegged notes (`research/jegged-encounter-guides-ffx-a.md`, `-b.md`) carry a dated update that the line moved from 80 to 96 and why.
+* `tests/unit/chapters/yojimbo-bench.test.ts` mirrors the line (196 of 200 on its 200 seeds, 98.0 percent); `tests/unit/re-parity-w5-yojimbo-line.test.ts` pins the order (95 raises, 96 and above summon, a body on the floor does not hold it back), the new line against the old line frozen in the test (24 seeds), and the guide's words.
+* **`ffx-engine-golden`: one digest moved because of this line, `yojimbo-cavern#1` 7681d4e3 -> 28996218** (the logs of the old and new line are identical for 519 events; at event 520 the old line calls Bahamut at gauge 93 and the new one defends; the new line never summons on this seed because Yojimbo falls before 96, and both are victories, 577 and 560 events). `yojimbo-cavern#7` keeps its digest (neither line summons), and no other
+  chapter's line changed. `ffx2-atb-golden` and `ff7-golden` are unchanged (section 11.6). Evidence: `D:\Tools\ffx-parity\rc3-w5\ch9-golden-diff.txt`.
+
+### 11.5 The final tree, 500 seeds and 12 seeds, every FFX chapter (the shipped `intendedStrategy`, the whole chain)
+
+Before = `919f2c78` (`D:\Tools\ffx-parity\rc2-w2\ffx-500-final.json`, `ffx-12-merged.json`); after = this branch's tip (`D:\Tools\ffx-parity\rc3-w5b\ffx-500-final.json`, `ffx-12-final.json`). "sd" is the standard deviation of the difference of two samples of 500 (real = beyond 3, borderline = 2 to 3). **Every row except Chapter IX is identical, seed for seed and in its turn
+and KO means, to the first W5 run of section 7** (checked mechanically: the per-seed strings and the means are equal), so the causes of section 7 stand and are not repeated in full here.
+
+| Chapter | 500 seeds: before -> after | change | sd | party turns before -> after | party KOs before -> after | 12 seeds before -> after | cause (section 7) |
+|---|---|---:|---:|---|---|---|---|
+| I Seymour Flux | 499 -> 493 | -6 | -2.1 borderline | 48.8 -> 48.4 | 0.5 -> 1.1 | 12 -> 12 | row A3 alone (Seymour Banishes the summoned aeon) |
+| II Yunalesca | 494 -> 469 | -25 | -4.2 **real** | 164.5 -> 158.1 | 12.7 -> 13.2 | 11 -> 12 | row A3 -18, the rest noise |
+| III Braska's Final Aeon | 478 -> 475 | -3 | -0.4 | 244.1 -> 239.0 | 5.5 -> 5.5 | 11 -> 12 | noise |
+| VII Anima and Macalania | 456 -> 488 | +32 | +4.4 **real** | 59.4 -> 55.7 | 5.2 -> 4.6 | 12 -> 12 | row A3 +19, the aeons' Overdrive gains +13 |
+| VIII Evrae | 490 -> 489 | -1 | -0.2 | 72.4 -> 72.3 | 0.8 -> 0.8 | 11 -> 11 | noise (no aeon; only gauge events differ) |
+| **IX Yojimbo** | **488 -> 495** | **+7** | +1.7 | 74.1 -> 67.8 | 4.8 -> 4.0 | 11 -> 12 | **row A3 took it to 307; the reworked line brings it to 495** (11.2 to 11.4) |
+| X Seymour Natus | 302 -> 342 | +40 | +2.6 borderline | 56.7 -> 51.7 | 5.4 -> 5.5 | 9 -> 10 | row A3 alone |
+| XII Seymour Omnis | 423 -> 423 | 0 | 0.0 | 102.7 -> 102.7 | 1.3 -> 1.3 | 10 -> 10 | none (no aeon) |
+| XIV Isaaru (3 links) | 431 -> 440 | +9 | +0.8 | 28.7 -> 38.0 | 2.7 -> 3.0 | 11 -> 11 | two real effects that cancel: A3 -24, the aeons' gauge +33 |
+| XVII Sin: Fins and Core | 446 -> 434 | -12 | -1.2 | 330.0 -> 327.4 | 2.7 -> 2.8 | 10 -> 9 | noise (the party's gauge side) |
+| XVIII Sin: Face (reworked on `re-parity-ch18`; reported only) | 7 -> 6 | -1 | -0.3 | 57.3 -> 57.1 | 2.9 -> 2.9 | 0 -> 0 | noise; the line is the other branch's |
+
+The 12-seed row of Chapter IX (12 of 12, 67.5 party turns, 3.8 KOs) equals the committed ladder's `shipped` line at 12 seeds. The holdout of the real line (501 to 1000) reads 491.
+
+### 11.6 The final suite and the other checks
+
+One run of the whole unit suite, once, at the end, on the committed tree: **992 of 1,022 files pass, 9 are skipped (the env-gated measurement harnesses), and the 21 that fail are exactly the 21 art-only files** (no `public/art` in a worktree). The list, the counts and what else was checked (tsc, orphans, the three goldens, the Chapter IX files) are section 8.
+`ffx-engine-golden` moved one digest, `yojimbo-cavern#1`, because of the line (explained in 11.4); `ffx2-atb-golden` and `ff7-golden` did not move. The measurement of every FFX chapter on the final tree, 500 and 12 seeds, is 11.5 above.
+
+### 11.7 Re-running the Chapter IX candidates
+
+```
+PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500   PYREFLY_YOJIMBO_LINES=old,t96,queue,t96late,t96Protect,t96Haste PYREFLY_MEASURE_OUT=ch9-500.json  node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --maxWorkers=4 --testTimeout=3000000 tests/unit/re-parity-w5-yojimbo-ladder.test.ts
+PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=501-1000 PYREFLY_YOJIMBO_LINES=old,t96,shipped                          PYREFLY_MEASURE_OUT=ch9-hold.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --maxWorkers=4 --testTimeout=3000000 tests/unit/re-parity-w5-yojimbo-ladder.test.ts
+```
+
+Each line takes about 2 to 6 minutes for 500 seeds on a quiet machine. The tables of this section are in `D:\Tools\ffx-parity\rc3-w5b\` (`cand-12`, `cand-500`, `cand-hold`, `ladder-test-*`, `ffx-500-final.json`, `ffx-12-final.json`) and, for the rungs measured earlier by the first agent, `D:\Tools\ffx-parity\rc3-w5\ch9-*.log`; the scratch lab that produced them first is in `D:\Tools\ffx-parity\rc3-w5\lab\` (outside the repository).
+
 
 ## How to re-run
 
 ```
 node "D:/Final Fantasy/node_modules/typescript/bin/tsc" --noEmit
-node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/parity-ffx-engine-gauge.test.ts tests/unit/parity-ffx-engine-steal.test.ts tests/unit/parity-ffx-engine-aeons.test.ts tests/unit/ffx-engine-init-critical.test.ts tests/unit/ffx-aeons.test.ts tests/unit/ffx-engine-golden.test.ts tests/unit/parity-ffx-overdrive.test.ts tests/unit/parity-ffx-aeon-party.test.ts tests/unit/parity-ffx-steal-rewards.test.ts
+node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/parity-ffx-engine-gauge.test.ts tests/unit/parity-ffx-engine-steal.test.ts tests/unit/parity-ffx-engine-aeons.test.ts tests/unit/ffx-engine-init-critical.test.ts tests/unit/ffx-aeons.test.ts tests/unit/ffx-engine-golden.test.ts tests/unit/parity-ffx-overdrive.test.ts tests/unit/parity-ffx-aeon-party.test.ts tests/unit/parity-ffx-steal-rewards.test.ts tests/unit/re-parity-w5-yojimbo-line.test.ts tests/unit/chapters/yojimbo-bench.test.ts tests/unit/advisor-note.test.ts
 PYREFLY_MEASURE=1 PYREFLY_MEASURE_OUT=out12.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run tests/unit/ffx-parity-measure.test.ts                                            # 12 seeds, about 25 s
 PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_OUT=out500.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --testTimeout=3000000 tests/unit/ffx-parity-measure.test.ts   # 500 seeds, about 13 minutes
 PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_CHAPTERS=sin-face PYREFLY_MEASURE_OUT=ch18.json node "D:/Final Fantasy/node_modules/vitest/vitest.mjs" run --testTimeout=3000000 tests/unit/ffx-parity-measure.test.ts   # one chapter
@@ -279,6 +398,5 @@ NOW.md, CHANGELOG.md, ACTIONS and DECISIONS are left to the main session.
 **FFX, every chapter (W5): the Overdrive bars, the aeons and Steal follow the game.** Every hit now adds at least one point to an Overdrive bar and the game works the rest out by dividing first, a healer's bar counts only the hit points actually restored, Shield stops a bar from
 filling and Boost doubles it on anyone, and an aeon's bar is a short one of twenty that fills in steps of five percent with the game's own gains. When an aeon leaves, Yuna still owes the recovery of her Summon, so she no longer acts the instant it goes. A fallen aeon stays
 away as long as the game keeps it away (Valefor 8 battles, Ifrit 12, Ixion and Shiva 20, Bahamut, Anima and Yojimbo 24, each Magus Sister 30) and returns at full health. Aeons wear the gear the game gives them: a little more chance to land a critical hit, Pierce on all but
-Valefor, and Bahamut, Anima and the Magus Sisters can pass the damage limit. Stealing uses the game's odds: each steal from a monster is about half as likely as the one before but never impossible. **Chapter IX (Yojimbo) is much harder**: Yuna can no longer summon an aeon in
-front of Zanmato and heal in the same breath, and the shipped line wins 307 of 500 seeds where it won 488. Chapters VII and X are somewhat easier and Chapter II somewhat harder for the same reason; the other chapters stay inside the sampling band. A battle that begins with a
+Valefor, and Bahamut, Anima and the Magus Sisters can pass the damage limit. Stealing uses the game's odds: each steal from a monster is about half as likely as the one before but never impossible. **Chapter IX (Yojimbo) is as hard as it was, but plays differently**: Yuna can no longer summon an aeon in front of Zanmato and heal in the same breath, because the Summon now costs her the recovery the game gives it. The advice for the fight changed to match: call the aeon late, when his gauge reaches 96, and have the party healed first; the guide and the advisor card say so. The reworked line wins 495 of 500 test fights (the old line, with the new rule, would have won 307; before the rule it won 488). Chapters VII and X are somewhat easier and Chapter II somewhat harder for the same reason; the other chapters stay inside the sampling band. A battle that begins with a
 hurt party member no longer stops the game.
