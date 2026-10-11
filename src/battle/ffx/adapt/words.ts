@@ -14,6 +14,7 @@
 import type { ElementId, FFXCombatant, StatusId } from '../../common/types.ts';
 import type { ElementAffinity, NulCounters } from '../kernel/element.ts';
 import { ExtraBit, PermBit } from '../kernel/status-types.ts';
+import { aeonGearOf } from '../aeon-gear.ts';
 import { defensiveBonusPercent, hasAuto, offensiveBonusPercent } from '../equipment.ts';
 import { has, statusOf } from '../predicates.ts';
 
@@ -127,24 +128,36 @@ export function specialWord(c: FFXCombatant): number {
   return word;
 }
 
-/** `Chr+0x6bc`, the bits the damage kernels read: 0x40 Magic Booster, 0x200 Alchemy, 0x2000 Pierce. */
+/**
+ * `Chr+0x6bc`, the bits the damage kernels read: 0x40 Magic Booster, 0x200 Alchemy, 0x2000 Pierce. An aeon's word is its fixed
+ * gear's (re-parity W5, `aeon-gear.ts`: 0x2001 for nine of the ten, Valefor 0x0001).
+ */
 export function autoWordA(c: FFXCombatant): number {
   let word = 0;
   if (hasAuto(c, 'magic-booster')) word |= 0x40;
   if (hasAuto(c, 'alchemy')) word |= 0x200;
   if (hasAuto(c, 'piercing')) word |= 0x2000;
+  if (c.side === 'aeon') word |= aeonGearOf(c).autoA;
   return word;
 }
 
 /**
- * `Chr+0x6be`: 0x200 Break HP Limit (the Double HP ceiling goes from 9,999 to 99,999), 0x400 Break MP Limit (999 to 9,999),
- * 0x800 Break Damage Limit (the damage cap). `research/re-ffx-ctb-status.md` section 7.
+ * `Chr+0x6be`: 0x1 Double Overdrive, 0x2 Triple Overdrive, 0x4 SOS Overdrive, 0x8 Overdrive to AP (the gauge add,
+ * `kernel/overdrive.ts`), 0x200 Break HP Limit (the Double HP ceiling goes from 9,999 to 99,999), 0x400 Break MP Limit (999 to
+ * 9,999), 0x800 Break Damage Limit (the damage cap). `research/re-ffx-ctb-status.md` section 7,
+ * `research/re-ffx-overdrive-steal-aeons.md` section 1.2. An aeon's gear gives it 0x600, and 0xe00 for Bahamut, Anima and the
+ * Magus Sisters (re-parity W5, `aeon-gear.ts`).
  */
 export function autoWordB(c: FFXCombatant): number {
   let word = 0;
+  if (hasAuto(c, 'double-overdrive')) word |= 0x1;
+  if (hasAuto(c, 'triple-overdrive')) word |= 0x2;
+  if (hasAuto(c, 'sos-overdrive')) word |= 0x4;
+  if (hasAuto(c, 'overdrive-to-ap')) word |= 0x8;
   if (hasAuto(c, 'break-hp-limit')) word |= 0x200;
   if (hasAuto(c, 'break-mp-limit')) word |= 0x400;
   if (hasAuto(c, 'break-damage-limit')) word |= 0x800;
+  if (c.side === 'aeon') word |= aeonGearOf(c).autoB;
   return word;
 }
 

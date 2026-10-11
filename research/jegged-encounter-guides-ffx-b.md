@@ -66,6 +66,8 @@ any of the six; all six bosses have one.
   (`src/data/ffx/builds/yojimbo-cavern.ts`, an upper bound, all `[estimate]`). Items: the Gagazet preset's bag less the two mountain Mega-Potions and the mountain's 20,000 gil. Doom is the switch `CAVERN_DOOM_PREP`, shipped `'not-learned'` (Bailey 2026-09-26).
 - **Applies as written:** bring Yuna's aeons. Our NEXT line already summons one at a gauge of 80 so Zanmato hits
   the aeon, which is the same advice with the reason Jegged leaves out.
+  **Updated 2026-10-10 (re-parity W5, Bailey's pick "Keep 1:1, rework our line"):** the line now summons the aeon on the turn the gauge reads 96, before any revive or heal, not at 80:
+  the game charges the summoner the recovery of her Summon, so an aeon called at 80 fell before Zanmato and Yuna could not call the next one in time. Jegged's advice (bring the aeons) is unchanged; the 96 is derived from the game's script (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` 3.2), not from Jegged. Numbers: `docs/handoff/re-parity-w5.md`.
 - **Adaptation (our adaptation of Jegged):** Jegged's one concrete tip, Doom learned from the cavern's Ghost, is
   a preparation tip, not a battle tip. It matches `research/ffx-yojimbo.md` §5.3 row 1 (4 sources), but our
   shipped party did not learn it, so the guide's opening rule is the race (see `OPENING` in

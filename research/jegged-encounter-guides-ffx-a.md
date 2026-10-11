@@ -371,6 +371,7 @@ a Gagazet preset minus Mighty Guard, White Wind and mountain gil; Kimahri arrive
 "decompiled + wiki + GameFAQs"; Jegged says "approximately 30,000", a rounding, not a conflict). NEXT is
 `src/engine/tactics/yojimbo-cavern.ts`: revive, Yuna heals, Kimahri Dooms if he has it, Lulu Fira, summon an
 aeon once the gauge reaches 80, everyone else defends.
+**Updated 2026-10-10 (re-parity W5):** the summon moved to the turn the gauge reads 96, ahead of the revive and the heal (the summoner keeps the recovery of her Summon in the game); see `docs/handoff/re-parity-w5.md`.
 
 **Applies as written.** Doom from a Ghost (research §5.3 strategy 1, where Jegged is one of the four
 sources already cited); Yuna's aeons as a fallback (§5.3 strategy 3).

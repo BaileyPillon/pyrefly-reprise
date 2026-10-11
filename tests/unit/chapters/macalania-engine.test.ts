@@ -468,7 +468,10 @@ describe('Macalania — act three', () => {
     // Seed 3 -> 1 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the two sets of changes move the draws again. Seed 1 is
     // the first of seeds 1 to 40 whose act three has a cast that lands both hits (checked by running the engine; 2, 4 to 23, 25 to 31, 33, 34, 38
     // to 40 do, and 3, 24, 32, 35 to 37 do not).
-    const engine = newEngine(1);
+    // Seed 1 -> 2 on 2026-10-10 (re-parity W5, FFX only): the steal roll is the game's byte, a wiped aeon's recovery count is the game's, and the Overdrive gauges
+    // follow the game's hooks, so the draws move again; seed 2 is the first of seeds 1 to 40 whose act three has a cast that lands both hits (checked by running the
+    // engine; 2, 3, 5, 7 to 10, 12, 13, 15, 18, 19, 21, 22, 24, 28, 30, 33 and 37 to 40 do, and 1, 4, 6, 11, 14, 16, 17, 20, 23, 25 to 27, 29, 31, 32, 34 to 36 do not).
+    const engine = newEngine(2);
     driveIntended(engine, () => engine.state().flags['macalania.act'] === 3);
     expect(engine.state().flags['macalania.act']).toBe(3);
 

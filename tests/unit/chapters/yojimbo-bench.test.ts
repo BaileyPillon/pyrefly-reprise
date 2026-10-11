@@ -22,8 +22,11 @@
  * - **intended** — Kimahri Dooms him if Doom is on his menu (strategy 1; it is
  *   not, on the shipped party); Lulu casts Fira every turn (strategy 4: Magic
  *   Defense 0 against Defense 80); Yuna keeps the party up and summons an aeon
- *   in front of Zanmato once the gauge reads 80 or more (strategy 3); nobody
- *   else feeds the gauge.
+ *   in front of Zanmato once the gauge reads 96 or more, before anything else
+ *   she could do (strategy 3; it read 80 and came after the heal until
+ *   re-parity W5, 2026-10-10: the game charges the summoner the recovery of
+ *   her Summon, so the line was reworked, `docs/handoff/re-parity-w5.md`);
+ *   nobody else feeds the gauge.
  * - **preloaded** — the intended line on the `'preloaded'` party (D-056, kept
  *   as a switch value): the Doom route, for comparison.
  * - **credibly wrong** — every member swings the physical Attack at him every
@@ -79,6 +82,13 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
   // An aeon on the field is there to stand in front of Zanmato.
   if (st.aeonId === actorId) return line === 'wrong' ? { kind: 'attack', targets: ['yojimbo'] } : defend;
 
+  // Strategy 3, first: the window is one Yuna turn wide, so no heal or revive is spent in it.
+  if (line !== 'wrong' && actorId === 'yuna' && gauge >= 96) {
+    for (const aeon of ['bahamut', 'ifrit', 'ixion', 'shiva', 'valefor']) {
+      if (row(commands, 'summon', aeon)) return { kind: 'summon', id: aeon, targets: [] };
+    }
+  }
+
   const care = upkeep(engine, actorId, commands);
   if (care) return care;
 
@@ -90,11 +100,6 @@ function choose(line: Line, engine: BattleEngine, actorId: string, commands: rea
     return { kind: 'overdrive', id: 'doom', targets: ['yojimbo'] };
   }
   if (actorId === 'lulu' && row(commands, 'ability', 'fira')) return { kind: 'ability', id: 'fira', targets: ['yojimbo'] };
-  if (actorId === 'yuna' && gauge >= 80) {
-    for (const aeon of ['bahamut', 'ifrit', 'ixion', 'shiva', 'valefor']) {
-      if (row(commands, 'summon', aeon)) return { kind: 'summon', id: aeon, targets: [] };
-    }
-  }
   return defend;
 }
 
