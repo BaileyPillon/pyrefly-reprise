@@ -41,6 +41,16 @@
       "truePeakDb": -1.4,
       "score": "a660934bb598f632"
     },
+    "boss-ff7-guard": {
+      "file": "music/boss-ff7-guard.mp3",
+      "loopStart": 9.634422,
+      "loopEnd": 89.640612,
+      "duration": 92.6406,
+      "bytes": 1741096,
+      "lufs": -16.0,
+      "truePeakDb": -1.6,
+      "source": "elevenlabs-music_v2_5"
+    },
     "boss-ffx2-aeon": {
       "file": "music/boss-ffx2-aeon.mp3",
       "loopStart": 12,

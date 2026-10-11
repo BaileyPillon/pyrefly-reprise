@@ -318,6 +318,12 @@ Urgent, desperate, soaring cinematic orchestral battle music at 164 BPM in 4/4 i
 Tense, ticking, final cinematic orchestral battle music at 140 BPM in 4/4 in a minor key, a fight against a clock. A relentless pulse on woodblock, pizzicato strings and low piano keeps time like a countdown from the very first bar; tension builds in the strings and brass over it; in the last third a sacred wordless choir (open vowels only, no words, no lyrics) enters, the pulse doubles in subdivision without changing tempo, and the full orchestra answers with hard timpani and brass. Desperate, grave, with no triumphant lift. It falls back to the bare ticking pulse at the end so it can repeat. Real acoustic orchestra, real woodblock, piano and real voices recorded in a large hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
 ```
 
+- **`boss-ff7-guard`** (FF7): brief `FF7-M1` ("Night infiltration"). The raw take is an MP3 (mp3_48000_320), 96.03 s, SHA-256 `0a88b4fc57572203f05f48aab825893c122a0756e28f674e05284f2dc059cc17`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Tense, rhythmic, mechanical cinematic music at 144 BPM in 4/4 in a minor key, the feeling of a night infiltration of a factory. A steady pulsing low-string and bass figure like a machine, a tight snare and rim-click pattern, sustained brass chords that swell and cut off, a rising string line, and metallic percussion such as struck steel and anvil. Urgency without panic: a repeating figure that grows layer by layer from sparse to full, then drops back to the bare pulse so it can repeat. Real instruments and real percussion recorded in a large studio. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop, no vocals.
+```
+
 ## What must appear in the game credits
 
 Four entries, verbatim (the last two since music v2, 2026-09-30):

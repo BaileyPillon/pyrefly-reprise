@@ -187,7 +187,7 @@ describe('the shipped audio manifest', () => {
     }
   });
 
-  it('stays inside the shipping budget (100 MB under D-6xx, 2026-10-10; 90 MB since D-306, music and sfx sprite-v2 at LAME V0; 85 MB under D-292)', () => {
+  it('stays inside the shipping budget (105 MB for the FF7 cue of batch 1, 2026-10-10; 100 MB under D-6xx; 90 MB since D-306, music and sfx sprite-v2 at LAME V0; 85 MB under D-292)', () => {
     const total =
       Object.values(manifest!.music).reduce((sum, entry) => sum + (entry.bytes ?? 0), 0) +
       (manifest!.sfx!.bytes ?? 0) +
