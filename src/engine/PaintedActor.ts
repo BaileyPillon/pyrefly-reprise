@@ -54,9 +54,9 @@ import { LIE_FLAT_TILT, lieOffset } from './LieFlat.ts';
 import { PAINTED_BLENDING, syncPaintedBloom } from './BloomMask.ts';
 import { noiseCanvas, paintPlaceholderFigure, radialCanvas } from './ProceduralArt.ts';
 import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedShader.ts';
+import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
-import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { PoseBlend } from './PoseBlend.ts';
 import { cutoutShadow } from './ShadowCutout.ts';
 
