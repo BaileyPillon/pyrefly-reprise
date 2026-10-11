@@ -89,7 +89,9 @@ describe('the presenter holds the frame under an open FFX-2 menu (Active)', () =
     const group = data.ENEMY_GROUPS_BY_ID['ffx2-bahamut'];
     if (!group) throw new Error('ffx2-bahamut missing');
     const engine = new FFX2Engine(ffx2Options());
-    engine.init({ game: 'ffx2', party: bevelleBuild, enemies: group, triggers: [], seed: 7, condition: 'normal', canEscape: false });
+    // Seed 7 -> 1 on 2026-10-11 (re-parity RNG lane, FFX-2 only; reason "game RNG streams": every seed is another deal of the same odds). The rig needs the first
+    // action played under the menu to bring the answered attack's camera cut back, which seeds 1, 2, 4, 5, 10, 11 and 12 do and 3, 6, 8 and 9 do not (timing of the harness).
+    engine.init({ game: 'ffx2', party: bevelleBuild, enemies: group, triggers: [], seed: 1, condition: 'normal', canEscape: false });
     const state = engine.state();
 
     const stage = new FakeStage([...state.activeIds], [...state.enemyIds]);

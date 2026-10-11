@@ -234,10 +234,11 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // leaves the game's recovery and its cast the game's charge, so every D = 0 log moved (all nine are still victories and no menu is closed).
   // They equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes
   // are in git at 931613a8.
+  // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. All nine are still victories and no menu is closed; they equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again.
   const PINNED = [
-    ['4c8ec7d92566a315', '2afad0a28b3c8251', '899e5c611bc0fd1b'],
-    ['f1c9597d56e6ee05', '6f275201b6f51165', 'cf3adea5aa65bbc8'],
-    ['ec95ea116e4e151b', '537d9b63ec42e3b2', '527610137448cb33'],
+    ['08332b98dd23c13e', 'b320e520bf125d9c', '3b1bae27af9363c1'],
+    ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e'],
+    ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

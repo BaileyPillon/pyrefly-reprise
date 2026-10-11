@@ -70,16 +70,17 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   // **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity")**: the clock is the game's
   // logic step and a command leaves the game's recovery and cast, so every log moved. The 18 before it were pinned 2026-10-09 for W3
   // (old hashes in git at 931613a8; the release-17 replay rows that stood beside them are gone with the option).
+  // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
   const ON: Record<string, string> = {
-    'IV|active|1': '7855b868b648c063', 'IV|split|1': '18c492669a1cee98',
-    'IV|active|2': 'f5623d596fabcad2', 'IV|split|2': 'c8dd8c09b30714a3',
-    'IV|active|3': '16ec70377e31a9ab', 'IV|split|3': '2be8db622676d872',
-    'V|active|1': 'ee98b37f2dbe9e0e', 'V|split|1': 'be67bc323cafba72',
-    'V|active|2': '0f28a08877f50773', 'V|split|2': '6390648ae2a7dfa5',
-    'V|active|3': '6a64f438b0073f8a', 'V|split|3': 'cfc887a14433a303',
-    'VI|active|1': '2b71fb0033710a0c', 'VI|split|1': '64ad3870203d2ce7',
-    'VI|active|2': '551288af1fd74ffb', 'VI|split|2': '78d80ec78a6f249b',
-    'VI|active|3': '15dbf59402b6f312', 'VI|split|3': '3046ec12c9073d95',
+    'IV|active|1': '9318b354f5ca9274', 'IV|split|1': '5a130a8b9471b3b4',
+    'IV|active|2': 'c325078b03484e03', 'IV|split|2': '6cd47cce9ff0c566',
+    'IV|active|3': '05f9575c5edc6a2d', 'IV|split|3': 'eacb29d3dc8dc52b',
+    'V|active|1': 'db1e80d7abded255', 'V|split|1': '7ba16a311c0ad6f7',
+    'V|active|2': '128eb3693b451727', 'V|split|2': '7655eae520d2cc4e',
+    'V|active|3': 'b75aa5e2ee54da92', 'V|split|3': '2855c3a5d5b95acf',
+    'VI|active|1': '7e74f53c3427ff72', 'VI|split|1': '8e3e646ff69c5295',
+    'VI|active|2': '9c161637372c7670', 'VI|split|2': '90ba2a636459997b',
+    'VI|active|3': '62eff16f98b3bf29', 'VI|split|3': '8cc46b1f690367b2',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 

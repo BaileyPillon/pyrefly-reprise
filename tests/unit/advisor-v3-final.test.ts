@@ -149,10 +149,13 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
 
   // Re-parity W4 (FFX-2 only; reason "game-code parity"): the Leblanc board was seed 74; the game's gauge is a different replay of every seed, so the board
   // was searched again over the seeds in order and is now seed 5 (the first on which the card used to say "one hit from down" behind a heal already charging).
-  it('C2-M1: a charging heal that lands in time is counted; the card names no second heal (Leblanc seed 5)', async () => {
+  // Re-parity RNG lane (game streams, Bailey 2026-10-09): the FFX-2 streams are another deal of every seed, so the board is searched again over the
+  // seeds in order (it was seed 5) and the first that shows it is used.
+  it('C2-M1: a charging heal that lands in time is counted; the card names no second heal (Leblanc, the first seed that shows the board)', async () => {
     let found: { ctx: DecisionContext; now: AdvisorView | null; before: AdvisorView | null; girl: CombatantId; snap: string } | null = null;
+    for (let seed = 1; seed <= 80 && found === null; seed++) {
     try {
-      await runChapter(chapterById('ffx2-leblanc'), 5, (ctx) => {
+      await runChapter(chapterById('ffx2-leblanc'), seed, (ctx) => {
         const e = ctx.engine as unknown as FFX2Engine;
         const snap = JSON.stringify([e.state(), e.heldCommand()]);
         const { now, before } = cards(ctx);
@@ -167,6 +170,7 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     } catch (e) {
       if (!(e instanceof Stop)) throw e;
       found = e.value as typeof found;
+    }
     }
     expect(found, 'a board where the card used to say "one hit from down" behind a heal already charging').not.toBeNull();
     const { ctx, now, before, girl, snap } = found!;

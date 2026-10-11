@@ -142,7 +142,8 @@ describe('FFX2BattleHud draws battle messages (PR-0143)', () => {
     expect(taken as number).toBeLessThanOrEqual(1500);
     expect(chipOf(root)).toBe(`pilfered ${(taken as number).toLocaleString('en-US')} gil!`);
     // Re-parity W4 (FFX-2 only): the gauges are the game's now and an earlier draw moved, so this seed's Pilfer draw gives 870 (it gave 1,267).
-    expect(taken).toBe(870);
+    // Game RNG streams (FFX-2 only; reason "game RNG streams", 2026-10-11): Pilfer Gil draws stream 10 now and the engine's other draws are on their own streams, so this seed's draw gives 1,230 (870 before).
+    expect(taken).toBe(1230);
   });
 
   it('hides after the hold, and a new line restarts it', () => {
