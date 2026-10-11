@@ -42,7 +42,7 @@
  *   scene, the same underworld family (research §6.1). O-3 picked B (the repainted plate) for
  *   Cloister 100; the scene that draws it (plan track T5) is not built.
  * - `music` — **TR16 a** (picked): Paragon under `scene-bevelle-underground`, Trema under
- *   `boss-ffx2-aeon` (the plan's stand-in until a `boss-trema` sketch is picked by ear).
+ *   `boss-trema` (an ElevenLabs take since 2026-10-10; it was `boss-ffx2-aeon`, the plan's stand-in, before).
  * - `scriptsRef` — **placeholder**: a silent pre scene that opens the battle and a silent post
  *   scene that shows results. The beats (TR13, TR14 a, TR15 out) are drafted in
  *   `docs/plans/trema-story-draft.md`; this track does not write `src/story`.
@@ -106,9 +106,9 @@ export function tremaFirstGroup(shape: TremaChapterShape, form: TremaParagonForm
   return form === 'oversoul' ? cloisterParagonOversoulGroup : cloisterParagonGroup;
 }
 
-/** The first link's music: "The Bevelle Underground" under Paragon (TR16 a); Trema's stand-in when he is alone. */
-function tremaBattleCue(shape: TremaChapterShape): 'scene-bevelle-underground' | 'boss-ffx2-aeon' {
-  return shape === 'trema-alone' ? 'boss-ffx2-aeon' : 'scene-bevelle-underground';
+/** The first link's music: "The Bevelle Underground" under Paragon (TR16 a); Trema's own cue when he is alone. */
+function tremaBattleCue(shape: TremaChapterShape): 'scene-bevelle-underground' | 'boss-trema' {
+  return shape === 'trema-alone' ? 'boss-trema' : 'scene-bevelle-underground';
 }
 
 /** Chapter 13 (registered, unlisted). */
@@ -133,7 +133,7 @@ export const FFX2_TREMA: Chapter = {
     scene: 'scene-bevelle-underground',
     // TR16 a: "The Bevelle Underground" scores Paragon (research §6.3); option 2 has no Paragon.
     battle: tremaBattleCue(TREMA_CHAPTER_SHAPE),
-    phase2: 'boss-ffx2-aeon', // TR16 a: the stand-in for `boss-trema`
+    phase2: 'boss-trema', // TR16 a: Trema's own cue (2026-10-10; `boss-ffx2-aeon` stood in before)
     victory: 'victory-ffx2',
   },
   sensorTexts: {

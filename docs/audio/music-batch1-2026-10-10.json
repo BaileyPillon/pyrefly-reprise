@@ -1,0 +1,375 @@
+{
+  "what": "Batch 1 of the ElevenLabs Music options (2026-10-10): 6 takes that ship as cues of their own, and boss-evrae's loop points re-cut",
+  "source": "elevenlabs-music_v2_5",
+  "words": "ill go with all your recommendations (Bailey, 2026-10-10, about 22:10 EDT), accepting the batch-1 music picks; standing since about 18:20 EDT: \"Whatever you recommend for sound effects and music I'll go with those recommendations\"",
+  "gameCase": "FFX-2 only: Chapter XI (the Fallen Aeons) and Chapter XVI (Ixion) share one cue, boss-ffx2-fallen-aeons; Chapter XIII's second phase (Trema) has boss-trema. FFX only: Chapter X (Seymour Natus) has boss-seymour-natus, Chapter XIV (Isaaru) boss-isaaru, Chapter XVII (Sin's Fins, Genais and Core) boss-sin-assault and Chapter XVIII (Overdrive Sin, the Face) boss-sin-countdown. Every other chapter keeps its cue; boss-ffx2-aeon, boss-seymour-macalania, boss-yojimbo and boss-evrae stay in use (the Experiment's Act I, Chapters VII, IX and VIII), so no file is retired.",
+  "master": "The files are the batch-1 lane's staged masters (D:/Tools/pyrefly-scratch/2026-10-10/music-batch1/stage/music: one gain to -16 LUFS, a loop cut on whole bars at real attacks, a 3 s run-on, LAME V4), installed byte for byte (sha256 checked against the lane's work/master-<brief>.json); their manifest entries are the lane's own with the file renamed to the cue.",
+  "synthFallback": "Each cue is a stand-in in src/audio/tracks/index.ts for the composition it replaces, which plays only when the MP3 cannot load. No new synth score was written.",
+  "notMeasured": "The stereo gate of THEMES.md and the headless browser proof were not run on these files; agents cannot hear (rule 13), so the picks are the builder's recommendation from the briefs and the numbers, accepted by Bailey's words above, and his ear can overrule any of them.",
+  "cues": [
+    {
+      "cue": "boss-ffx2-fallen-aeons",
+      "game": "FFX-2",
+      "brief": "XI-M1",
+      "name": "Breathless ceremony",
+      "replaces": "boss-ffx2-aeon",
+      "plays": "Chapter XI's three links (the formations' start cues and the chapter's battle cue) and Chapter XVI's Ixion fight (the formation's start cue and the chapter's battle cue): one cue, because the game plays the same track at both (the driver's accepted rule 47f). XVI-M1 was not installed.",
+      "line": "Brass and drums lead at 150 BPM, a harp-led middle, a choir at the peaks: the breathless, ceremonial duel the game's own aeon track is described as.",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Breathless, ceremonial, relentless cinematic orchestral battle music at 150 BPM in 4/4 in a minor key with a bright major lift in the chorus, a duel with a summoned god, wondrous and lavish. Driving brass and percussion lead: French horns and trumpets state a proud rising theme over taiko, timpani and snare while the strings race underneath in tireless eighth notes. In the middle section a solo harp plays a flowing, rising line over the racing strings, then a large wordless choir (open 'ah' and 'oh' vowels only, no words, no lyrics) joins at the peaks and the full orchestra lifts into the bright chorus. The piece never lets up and never rests. It opens with a short drum-and-brass call for about 6 seconds and falls back to the same driving texture at the end so it can repeat. Real acoustic orchestra, real harp, real percussion and real voices recorded in a large concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "sha256": "da3e96cfcf54716503eb8befd463ba98bc55f90f972b944c46332b52bba5d894",
+        "bytes": 3841005,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "yskpP54AgoQqeUpP1e1g",
+        "generatedUtc": "2026-10-10T22:22:29.465Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1652754,
+        "sha256": "a284ba794ebecae2611b0618f4ba5e442c991b8b184b00ca2b7ae0a3569a9107"
+      },
+      "manifestEntry": {
+        "file": "music/boss-ffx2-fallen-aeons.mp3",
+        "loopStart": 30.906009,
+        "loopEnd": 82.11161,
+        "duration": 85.1116,
+        "bytes": 1652754,
+        "lufs": -16.0,
+        "truePeakDb": -4.5,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "master": {
+        "take": 1,
+        "bpm": 149.98,
+        "bars": 32,
+        "introSec": 30.906,
+        "loopSec": 51.206,
+        "gainDb": -4.3,
+        "dynamics": null,
+        "xfadeSec": 0.4,
+        "xfadeLaw": "equal-power",
+        "clickRatio": 0.54,
+        "fluxRatio": 0.63,
+        "stepOk": true
+      },
+      "pick": "(a) Fit: Written straight from the brief: brass and drums lead, harp-led middle, choir at the peaks, 150 BPM. Brief: breathless, ceremonial, relentless, wondrous; about 150 BPM (inferred). Measured 150.0 BPM against 150 asked. XI-M2: The brief's second direction (darker, for aeons that have fallen): slower and sorrowful, not the breathless ceremony the track is described as. (b) Seam: Click ratio 0.54, under 1.0 (XI-M2: 0.07). (c) Loop: Loop 51.2 s (32 bars), longer than XI-M2's 36.4 s. (d) Loudness: -16.0 LUFS (XI-M2: -16.0). Judged from the brief's words and the measurements; nobody has heard it, so Bailey's ear can overrule it."
+    },
+    {
+      "cue": "boss-trema",
+      "game": "FFX-2",
+      "brief": "XIII-M1",
+      "name": "Stately march",
+      "replaces": "boss-ffx2-aeon",
+      "plays": "Chapter XIII's second phase, Trema himself (the second formation's start cue and the chapter's phase 2 cue; with Trema alone, his only link). Paragon's link keeps `scene-bevelle-underground`.",
+      "line": "A cold, measured march at 108 BPM: pipe organ, snare and low strings, sacred-sounding brass chorales, a thin choir; an institution that has outlived its faith.",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Solemn, institutional, quietly threatening cinematic orchestral music at 108 BPM in 4/4 in a minor key, a stately march with a cold edge, the music of a faction that has built itself from the ruins of a faith, written for a duel against an ancient priest who wants the past erased. A pipe organ and low strings carry a measured, formal marching figure with snare rolls and a low drum, brass chorales that sound sacred but cold, and a high, thin wordless choir (open vowels only, no words, no lyrics). It tightens bar by bar toward a restrained but heavy climax of full brass and timpani and then settles back to the opening march so it can repeat. Controlled, unemotional, relentless, commanding. Real pipe organ, real orchestra, snare and real voices recorded in a large stone hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "sha256": "46d1a1b020122470f70809853961c7e82fff3c9846cda165c1f2febcc6c262a2",
+        "bytes": 3841005,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "ozexJvCPbwj3lPLgYaEB",
+        "generatedUtc": "2026-10-10T22:31:52.903Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1496328,
+        "sha256": "d13250a138a93a33c959ef3187c9df2d80b3801c69a63bc4dc202cf2b24b58b6"
+      },
+      "manifestEntry": {
+        "file": "music/boss-trema.mp3",
+        "loopStart": 28.81458,
+        "loopEnd": 73.145374,
+        "duration": 76.1454,
+        "bytes": 1496328,
+        "lufs": -16.0,
+        "truePeakDb": -5.4,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "master": {
+        "take": 1,
+        "bpm": 108.28,
+        "bars": 20,
+        "introSec": 28.815,
+        "loopSec": 44.331,
+        "gainDb": -5.3,
+        "dynamics": null,
+        "xfadeSec": 0.554,
+        "xfadeLaw": "equal-power",
+        "clickRatio": 0.124,
+        "fluxRatio": 0.93,
+        "stepOk": true
+      },
+      "pick": "(a) Fit: Written straight from the brief: a stately organ-and-snare march, cold brass chorales, a thin choir, 108 BPM. Brief: solemn, institutional, a stately march with a cold edge; about 108 BPM (inferred). Measured 108.3 BPM against 108 asked. XIII-M2: A heavier, slower reading (a sacred chorale turned hostile at 92 BPM): towering, but further from a stately march. (b) Seam: Click ratio 0.12, under 1.0 (XIII-M2: 0.67). (c) Loop: Loop 44.3 s (20 bars), shorter than XIII-M2's 45.2 s. (d) Loudness: -16.0 LUFS (XIII-M2: -16.0). Judged from the brief's words and the measurements; nobody has heard it, so Bailey's ear can overrule it."
+    },
+    {
+      "cue": "boss-seymour-natus",
+      "game": "FFX",
+      "brief": "X-M1",
+      "name": "Fallen nobleman",
+      "replaces": "boss-seymour-macalania",
+      "plays": "Chapter X's Seymour Natus fight (the chapter's battle cue and the pre scene's music step).",
+      "line": "Grand, heavy and relentless at 132 BPM: pounding strings and timpani, low brass and organ, a sorrowful descending string theme, a choir in three waves.",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Grand, heavy, relentless cinematic orchestral battle music at 132 BPM in 4/4 in a minor key, written for a colossal, tragic monster that was once a refined nobleman. Pounding low strings and timpani drive from the first bar, with huge low brass and a pipe organ low in the mix, and a descending, sorrowful string theme returns under the menace again and again. A large wordless choir (open vowels only, no words, no lyrics) swells in the climaxes. It builds in three waves, ends each wave on a held, tense chord, and never resolves; after the third wave it falls back to the pounding strings and timpani so it can repeat. Monstrous, tragic, enormous. Real acoustic orchestra, real pipe organ and real choir recorded in a vast hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "sha256": "e1e9fec6539d2e7fe1caa7e3dd82c3d3b2529f21072628a75e2d91a4f0c76644",
+        "bytes": 3841005,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "Hy8nNUXJDzOmJeTHNBuw",
+        "generatedUtc": "2026-10-10T22:33:01.350Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1505505,
+        "sha256": "9b5143fe6c34d92226766a1e3e0780ee262954dc06a52d62e8f45c0e647d9111"
+      },
+      "manifestEntry": {
+        "file": "music/boss-seymour-natus.mp3",
+        "loopStart": 30.916667,
+        "loopEnd": 74.56229,
+        "duration": 77.5623,
+        "bytes": 1505505,
+        "lufs": -16.0,
+        "truePeakDb": -5.1,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "master": {
+        "take": 1,
+        "bpm": 131.97,
+        "bars": 24,
+        "introSec": 30.917,
+        "loopSec": 43.646,
+        "gainDb": -4.7,
+        "dynamics": null,
+        "xfadeSec": 0.455,
+        "xfadeLaw": "equal-power",
+        "clickRatio": 0.155,
+        "fluxRatio": 0.54,
+        "stepOk": true
+      },
+      "pick": "(a) Fit: Inside the 120 to 140 BPM reading (132) and built from the brief: pounding strings and timpani, organ, a sorrowful string theme, a choir. Brief: grand, heavy, relentless, tragic, monstrous; 120 to 140 BPM (a reading, not sourced). Measured 132.0 BPM against 132 asked. X-M2: The brief's second direction, a courtly waltz that grows monstrous: 3/4 at 112 BPM, outside the 120 to 140 BPM reading. (b) Seam: Click ratio 0.15, under 1.0 (X-M2: 0.35). (c) Loop: Loop 43.6 s (24 bars), shorter than X-M2's 70.7 s. (d) Loudness: -16.0 LUFS (X-M2: -16.0). Judged from the brief's words and the measurements; nobody has heard it, so Bailey's ear can overrule it."
+    },
+    {
+      "cue": "boss-isaaru",
+      "game": "FFX",
+      "brief": "XIV-M1",
+      "name": "Duel of the summoners",
+      "replaces": "boss-yojimbo",
+      "plays": "Chapter XIV's three Isaaru links (the chapter's battle cue and the pre scene's music step).",
+      "line": "Fast and lavish at 160 BPM: a slow sacred opening, a harp-led rising line over racing strings, a big brass-and-timpani finish, a choir at the peaks.",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Breathless, lavish, ceremonial cinematic battle music at 160 BPM in 4/4, a duel between summoners and their summoned gods, wondrous and relentless. It opens with a slow sacred phrase on voices and strings for about 8 seconds, then a harp-led section plays a flowing, rising line over driving strings, and it finishes with a big brass-and-timpani statement in the final section before falling back to the sacred opening phrase so it can repeat. Brass and percussion lead, harp and strings race underneath, a wordless choir (open vowels only, no words, no lyrics) peaks at the climaxes, and it never lets up. Minor key with a bright major lift in the last section. Real acoustic orchestra, real harp and real voices recorded in a large concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "sha256": "ef67442b2faaf7aa435a33ce99e1114e7df3bbb4465f646f19b0704aa802820c",
+        "bytes": 3841005,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "B4UNzu8YS5Nztb1yNnbO",
+        "generatedUtc": "2026-10-10T22:33:31.262Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1684825,
+        "sha256": "404107c9c84771301bc81b6bcaa18543a1a07321303bb0ac2bab3018acb7013d"
+      },
+      "manifestEntry": {
+        "file": "music/boss-isaaru.mp3",
+        "loopStart": 16.61941,
+        "loopEnd": 82.623515,
+        "duration": 85.6235,
+        "bytes": 1684825,
+        "lufs": -16.0,
+        "truePeakDb": -3.6,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "master": {
+        "take": 1,
+        "bpm": 159.99,
+        "bars": 44,
+        "introSec": 16.619,
+        "loopSec": 66.004,
+        "gainDb": -3.2,
+        "dynamics": null,
+        "xfadeSec": 0.375,
+        "xfadeLaw": "equal-power",
+        "clickRatio": 0.066,
+        "fluxRatio": 0.55,
+        "stepOk": true
+      },
+      "pick": "(a) Fit: Written from the brief: a slow sacred opening, a harp-led rising line, a brass-and-timpani finish, 160 BPM (inside 150 to 170). Brief: breathless, lavish, ceremonial, relentless, wondrous; about 150 to 170 BPM (inferred). Measured 160.0 BPM against 160 asked. XIV-M2: The brief's second direction, hushed and sacred at 116 BPM: reverent, but slower than the breathless duel the words describe. (b) Seam: Click ratio 0.07, under 1.0 (XIV-M2: 0.54). (c) Loop: Loop 66.0 s (44 bars), shorter than XIV-M2's 74.5 s. (d) Loudness: -16.0 LUFS (XIV-M2: -16.0). Judged from the brief's words and the measurements; nobody has heard it, so Bailey's ear can overrule it."
+    },
+    {
+      "cue": "boss-sin-assault",
+      "game": "FFX",
+      "brief": "XVII-M1",
+      "name": "Aerial charge",
+      "replaces": "boss-evrae",
+      "plays": "Chapter XVII's three links, Sin's Fins, Genais and Core (the chapter's battle cue and the pre scene's music step).",
+      "line": "Urgent and soaring at 164 BPM: driving sixteenth-note strings, horn calls, brass over a choir that cuts in and out, a held pause and a charge back.",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Urgent, desperate, soaring cinematic orchestral battle music at 164 BPM in 4/4 in a minor key, an aerial attack on something the size of a mountain. A driving string ostinato in sixteenth notes, urgent French horn calls, pounding timpani and taiko; brass climbs over a sacred, hymn-like wordless choir (open vowels only, no words, no lyrics) that cuts in and out; flurries of harp and woodwinds like air rushing past. Heroic but desperate. Halfway through there is a held, tense pause of a few bars (low strings and a single tolling bell), then a charge back into the full orchestra. It opens with a horn call for about 6 seconds and returns to the driving string ostinato at the end so it can repeat. Real acoustic orchestra, real harp and real voices recorded in a large concert hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "sha256": "2ac2939c7736023fa29e41e7d98eba8b6ac1bf3af1c9f2278b400dba47899f81",
+        "bytes": 3841005,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "cwdGAZIXlmmQgnGQUjdl",
+        "generatedUtc": "2026-10-10T22:34:38.519Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1768221,
+        "sha256": "adebca3f5e9d18e56bad44cd910ac658deef4bdf4bdb923c4b60118dc01c7e27"
+      },
+      "manifestEntry": {
+        "file": "music/boss-sin-assault.mp3",
+        "loopStart": 58.528685,
+        "loopEnd": 93.64678,
+        "duration": 96.6468,
+        "bytes": 1768221,
+        "lufs": -16.0,
+        "truePeakDb": -3.8,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "master": {
+        "take": 1,
+        "bpm": 164.02,
+        "bars": 24,
+        "introSec": 58.529,
+        "loopSec": 35.118,
+        "gainDb": -3.8,
+        "dynamics": null,
+        "xfadeSec": 0.366,
+        "xfadeLaw": "equal-power",
+        "clickRatio": 0.096,
+        "fluxRatio": 0.46,
+        "stepOk": true
+      },
+      "pick": "(a) Fit: Written from the brief: driving sixteenth-note strings, horn calls, a hymn-like choir that cuts in and out, 164 BPM (inside 150 to 170). Brief: urgent, desperate, heroic, soaring; a sacred hymn-like thread is canon-grounded; about 150 to 170 BPM (inferred). Measured 164.0 BPM against 164 asked. XVII-M2: The brief's second direction, bigger and heavier with organ and a live drum kit at 148 BPM: just under the 150 to 170 BPM reading. (b) Seam: Click ratio 0.10, under 1.0 (XVII-M2: 0.62). (c) Loop: Loop 35.1 s (24 bars), shorter than XVII-M2's 77.8 s. (d) Loudness: -16.0 LUFS (XVII-M2: -16.0). Judged from the brief's words and the measurements; nobody has heard it, so Bailey's ear can overrule it."
+    },
+    {
+      "cue": "boss-sin-countdown",
+      "game": "FFX",
+      "brief": "XVIII-M1",
+      "name": "Against the clock",
+      "replaces": "boss-evrae",
+      "plays": "Chapter XVIII's Overdrive Sin, the Face (the chapter's battle cue and the pre scene's music step).",
+      "line": "A ticking countdown at 140 BPM: woodblock, pizzicato and low piano keep time from the first bar, tension builds, a choir joins and the orchestra answers.",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Tense, ticking, final cinematic orchestral battle music at 140 BPM in 4/4 in a minor key, a fight against a clock. A relentless pulse on woodblock, pizzicato strings and low piano keeps time like a countdown from the very first bar; tension builds in the strings and brass over it; in the last third a sacred wordless choir (open vowels only, no words, no lyrics) enters, the pulse doubles in subdivision without changing tempo, and the full orchestra answers with hard timpani and brass. Desperate, grave, with no triumphant lift. It falls back to the bare ticking pulse at the end so it can repeat. Real acoustic orchestra, real woodblock, piano and real voices recorded in a large hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "sha256": "f35fe7c5c2ad0924cfa2d70690be9adc2d7f432b89e5d7893af2fa2251ed4f9b",
+        "bytes": 3841005,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "x6tYk8W7ABXdurPyJeTi",
+        "generatedUtc": "2026-10-10T22:35:05.961Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1719874,
+        "sha256": "f81eb2779a89b50f5b0180adfa6a662fb1d756ebf931323709257a0d8fe2f246"
+      },
+      "manifestEntry": {
+        "file": "music/boss-sin-countdown.mp3",
+        "loopStart": 41.189864,
+        "loopEnd": 89.189025,
+        "duration": 92.189,
+        "bytes": 1719874,
+        "lufs": -16.0,
+        "truePeakDb": -1.8,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "master": {
+        "take": 1,
+        "bpm": 140.0,
+        "bars": 28,
+        "introSec": 41.19,
+        "loopSec": 47.999,
+        "gainDb": -2.2,
+        "dynamics": null,
+        "xfadeSec": 0.429,
+        "xfadeLaw": "equal-power",
+        "clickRatio": 0.514,
+        "fluxRatio": 0.53,
+        "stepOk": true
+      },
+      "pick": "(a) Fit: Ticks from the first bar and tightens, with the choir late, at 140 BPM: the brief as written. Brief: tense, ticking, final, desperate; a countdown; moderate to fast (a reading). Measured 140.0 BPM against 140 asked. XVIII-M2: The brief's second direction: a whispered tick for the first third, then a full-orchestra explosion, at 120 BPM. (b) Seam: Click ratio 0.51, under 1.0 (XVIII-M2: 0.77). (c) Loop: Loop 48.0 s (28 bars), shorter than XVIII-M2's 66.0 s. (d) Loudness: -16.0 LUFS (XVIII-M2: -16.0). Judged from the brief's words and the measurements; nobody has heard it, so Bailey's ear can overrule it."
+    }
+  ],
+  "evraeRecut": {
+    "cue": "boss-evrae",
+    "game": "FFX",
+    "plays": "Chapter VIII (Evrae on the Fahrenheit) keeps this cue; Chapters XVII and XVIII no longer use it.",
+    "change": "The manifest's loopStart and loopEnd only: the MP3 is untouched, both points move 20 samples (0.45 ms) earlier, so the loop period stays 3,234,000 samples.",
+    "why": "The loop starts on a hard downbeat attack that follows a quiet bar (-23.5 dB, then -15.4 dB). The wrap equals the file's own step at that bar line (the browser proof of music v2 measured wrapStep 0.32224 against the file's own 0.32244, wrapErrorOverP99 0.21), so it was seamless as the music goes; the click ratio of 4.60 is that attack measured against its quiet surroundings. Both points now sit just before the attack, so the step at the wrap is the ordinary step between two quiet samples.",
+    "tool": "D:/Tools/pyrefly-scratch/2026-10-10/music-batch1/tools (loopkit.slide_for_wrap and batchloop.seam_metrics, run with python -I on the shipped MP3 decoded by ffmpeg; the same decode the browser proof matched to 0 frames)",
+    "before": {
+      "loopStartSample": 294000,
+      "loopEndSample": 3528000,
+      "loopStart": 6.666667,
+      "loopEnd": 80.0,
+      "clickRatio": 4.596,
+      "wrapStep": 0.3224,
+      "localP99Step": 0.0702,
+      "splicedClickRatio": 4.621,
+      "splicedWrapStep": 0.3222,
+      "levelBeforeDb": -23.54,
+      "levelAfterDb": -15.36,
+      "rmsDbJumpAcrossWrap": 8.36
+    },
+    "after": {
+      "loopStartSample": 293980,
+      "loopEndSample": 3527980,
+      "loopStart": 6.666213,
+      "loopEnd": 79.999546,
+      "clickRatio": 0.017,
+      "wrapStep": 0.0012,
+      "localP99Step": 0.0702,
+      "splicedClickRatio": 0.019,
+      "splicedWrapStep": 0.0013,
+      "levelBeforeDb": -23.5,
+      "levelAfterDb": -15.41,
+      "rmsDbJumpAcrossWrap": 8.28
+    },
+    "periodSamples": 3234000,
+    "decodedFrames": 3660300,
+    "manifestBefore": {
+      "loopStart": 6.666667,
+      "loopEnd": 80
+    },
+    "manifestAfter": {
+      "loopStart": 6.666213,
+      "loopEnd": 79.999546
+    }
+  }
+}

@@ -210,8 +210,12 @@ describe('each boss fight is scored with its own cue — critic round 02 #02', (
     // sixth out of the FFX-2 material entirely. So the test is simply that a
     // chapter's cues all carry its own game's marker, plus the shared scene
     // beds that name the chapter's own location.
-    const ffx2Only = ['boss-ffx2-aeon', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'];
-    const ffxOnly = ['boss-seymour', 'boss-yunalesca', 'boss-jecht', 'boss-yu-yevon', 'victory-ffx', 'ending-ffx', 'battle-ffx'];
+    const ffx2Only = ['boss-ffx2-aeon', 'boss-ffx2-fallen-aeons', 'boss-trema', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'];
+    const ffxOnly = [
+      'boss-seymour', 'boss-yunalesca', 'boss-jecht', 'boss-yu-yevon', 'victory-ffx', 'ending-ffx', 'battle-ffx',
+      // Batch 1, 2026-10-10: the FFX takes (Chapters X, XIV, XVII, XVIII).
+      'boss-seymour-natus', 'boss-isaaru', 'boss-sin-assault', 'boss-sin-countdown',
+    ];
     for (const chapter of CHAPTERS) {
       const { music } = await playChapter(chapter, 'skip');
       const forbidden = chapter.game === 'ffx' ? ffx2Only : ffxOnly;

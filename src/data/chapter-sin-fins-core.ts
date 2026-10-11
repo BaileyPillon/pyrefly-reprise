@@ -35,8 +35,9 @@
  *   `sin-back` painting waits for it. A missing plate falls back to Evrae's deck painting.
  * - The enemies' art — the driver's picks (Fin A both arms, Genais A, Core A), by `spriteKey`; the grey boss
  *   silhouette shows until the files are installed.
- * - `music` — **stand-in** FFX cues, labelled (agents cannot hear, rule 13): the owed assault cue is Bailey's
- *   to judge by ear (plan §3.6, D-209).
+ * - `music` — the battle cue is `boss-sin-assault` since 2026-10-10 (an ElevenLabs take; the stand-in was
+ *   Chapter VIII's `boss-evrae`), the scene bed is still a stand-in, labelled (agents cannot hear, rule 13):
+ *   the assault cue is Bailey's to judge by ear (plan §3.6, D-209).
  */
 
 import type { Chapter } from './encounters.ts';
@@ -64,9 +65,9 @@ export const SIN_FINS_CORE: Chapter = {
   enemyGroupRef: sinLeftFinGroup,
   scriptsRef: sinFinsCoreScripts,
   music: {
-    // STAND-IN FFX cues, labelled, until the owed assault cue (plan §3.6; D-279: the driver's stand-ins).
+    // The scene bed is a STAND-IN FFX cue, labelled (plan §3.6; D-279: the driver's stand-ins); the battle cue is the assault cue (2026-10-10).
     scene: 'scene-fahrenheit',
-    battle: 'boss-evrae',
+    battle: 'boss-sin-assault',
     victory: 'victory-ffx',
   },
   // Duplicated from each enemy record's own `sensorText`, as the contract asks.

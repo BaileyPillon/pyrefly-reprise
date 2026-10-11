@@ -19,7 +19,7 @@
  *   `heroArtFallback` is Ixion's look B idle (D-268, approved `bailey:2026-09-27-ixion`).
  * - `snapshots`: the Chamber's stand-in plate (`./ixion-plates.ts`, PROVISIONAL, not approved), Ixion's cast pose
  *   (the Recharge glow, locked with look B) and Rikku's FFX-2 portrait (approved).
- * - `musicKeys`: the field bed, the house aeon cue ("Aeons", §6.3), the FFX-2 fanfare.
+ * - `musicKeys`: the field bed, the aeon cue ("Aeons", §6.3: `boss-ffx2-fallen-aeons`, shared with Chapter XI), the FFX-2 fanfare.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -52,7 +52,7 @@ export const IXION_DJOSE_META: ChapterMeta = {
     { image: 'portraits/rikku-x2.png', caption: "this can't be happening" },
   ],
   focalCharacterId: 'yuna',
-  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon', 'victory-ffx2'],
+  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-fallen-aeons', 'victory-ffx2'],
 };
 
 export default IXION_DJOSE_META;

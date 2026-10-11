@@ -26,9 +26,10 @@
  *   (`src/scenes/highbridge.ts`) on the installed O-3 C plate (night, the
  *   city lit, D-095), with Natus's turning ring (O-1 A, D-093). Not
  *   `bevelle-underground`: that is the FFX-2 Bahamut arena (research §0.3).
- * - `music.battle: 'boss-seymour-macalania'` — **B15's named stand-in**
- *   (D-091, Chapter VII's cue) until a Natus cue is sketched and picked by ear
- *   (rules 8 and 13). `music.scene: 'scene-gagazet'` stays the stand-in under
+ * - `music.battle: 'boss-seymour-natus'` — his own cue since 2026-10-10 (an
+ *   ElevenLabs take; B15's named stand-in, Chapter VII's `boss-seymour-macalania`,
+ *   D-091, played before it; Bailey's ear is still owed, rules 8 and 13).
+ *   `music.scene: 'scene-gagazet'` stays the stand-in under
  *   the narration (no FFX Bevelle cue of ours exists; THEMES.md never crosses
  *   the scores).
  * - `scriptsRef` — the story (`src/story/scripts/seymour-natus.ts`) from
@@ -62,10 +63,10 @@ export const SEYMOUR_NATUS: Chapter = {
   enemyGroupRef: seymourNatusGroup,
   scriptsRef: seymourNatusScripts, // docs/plans/natus-story-draft.md (B11 = a)
   music: {
-    // B15's stand-in (D-091) until the new cue is picked by ear (O-6). FFX cues
-    // only (THEMES.md never crosses the scores).
+    // The battle cue is his own since 2026-10-10 (B15's stand-in, D-091, was Chapter VII's cue); the scene bed is still
+    // a stand-in. FFX cues only (THEMES.md never crosses the scores).
     scene: 'scene-gagazet',
-    battle: 'boss-seymour-macalania',
+    battle: 'boss-seymour-natus',
     victory: 'victory-ffx',
   },
   // research §1.5 and §2.3, in our own words (the enemy records carry the same lines).
