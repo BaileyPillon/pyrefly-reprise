@@ -419,7 +419,7 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
     if (left > 0) out.push(`Talk cancels that Overdrive and costs him his next turn (the gauge clears when it starts) — ${left} charge${left === 1 ? '' : 's'} left [ffx-bfa-yu-yevon §1.6, re-ffx-ai-yunalesca-bfa §3.6]`);
   }
 
-  if (has(enemy, 'confuse')) out.push('Confused — it strikes a random side, so this prediction is a guess');
+  if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
   if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack');
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;

@@ -64,7 +64,9 @@ export interface BuiltTargets {
   covers: Array<{ holder: number; covered: number }>;
   /** The covered targets whose `+0x6dd` byte was cleared. */
   clearedCovered: number[];
-  /** Hits that bounced into nothing (a same-side holder with no legal opposite target), per reflecting slot. */
+  /** Every bounce, in ascending slot order of the holder: the hits it had when it reflected and the slot they landed on (0xff when nothing was left to land on). */
+  bounces: Array<{ holder: number; landing: number; hits: number }>;
+  /** The bounces that landed nowhere (a same-side holder with no legal opposite target): those hits are lost. */
   lost: Array<{ holder: number; hits: number }>;
 }
 
@@ -138,6 +140,7 @@ export function buildTargetHits(
   let reflected = 0;
   const lastAttacker: number[] = [];
   const lost: BuiltTargets['lost'] = [];
+  const bounces: BuiltTargets['bounces'] = [];
   for (let i = 0; i < SLOT_COUNT; i++) {
     if (!hasBit(mask, i)) continue;
     let landing = i;
@@ -148,12 +151,14 @@ export function buildTargetHits(
         // The holder is on the user's own side: the spell goes to a random member of the opposite side.
         const candidates = legalSet(world, user, isMonsterSlot(i) ? 'party' : 'monster', cmdId, cmd);
         landing = pickOne(candidates, TargetStream.Reflect, pick);
+        bounces.push({ holder: i, landing, hits: hits[i] ?? 0 });
         if (landing !== 0xff) hits[landing] = b((hits[landing] ?? 0) + (hits[i] ?? 0));
         else lost.push({ holder: i, hits: hits[i] ?? 0 });
         hits[i] = 0;
       } else {
         // The holder is on the other side: the spell goes back to the user, always.
         landing = user;
+        bounces.push({ holder: i, landing, hits: hits[i] ?? 0 });
         hits[user] = b((hits[user] ?? 0) + (hits[i] ?? 0));
         hits[i] = 0;
       }
@@ -176,6 +181,7 @@ export function buildTargetHits(
     lastAttacker,
     covers,
     clearedCovered,
+    bounces,
     lost,
   };
 }

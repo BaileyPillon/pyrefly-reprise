@@ -4,8 +4,9 @@
  * Split out of `abilities.ts` (re-parity W1; **FFX only**). `adapt/hit.ts#resolveHit` runs the game's per-hit
  * pipeline (the Nul check, the hit roll, the base damage of every class, the modifier chain, the critical roll,
  * the status infliction, Delay and Threaten, the cap) with the draws in the game's order. This module wraps that in the
- * engine's own business around a hit: Reflect and Cover, the events, the HP / MP / CTB application, revival, the drain
- * heal, the Overdrive gauges and the scripted extras.
+ * engine's own business around a hit: the events, the HP / MP / CTB application, revival, the drain heal, the Overdrive
+ * gauges and the scripted extras. **Cover and Reflect are not here any more** (re-parity RC4 lane FFX-G): the game decides
+ * both once, when an action's targets are built (`target-build.ts`), so a hit is run against the target it was built for.
  *
  * **Statuses (re-parity W2).** The game keeps one hit record per target per action and every hit of the action edits it:
  * the record starts as the target's status words as the action began, the infliction step reads the LIVE words
@@ -23,13 +24,12 @@ import { type HitDraws } from './adapt/draws.ts';
 import { engineDamageClass } from './adapt/command.ts';
 import { resolveHit } from './adapt/hit.ts';
 import { applyMpDelta, dealDamage, healOutsideChain, reviveActor } from './hp.ts';
-import { bouncesOffReflect, removeStatus } from './statuses.ts';
+import { removeStatus } from './statuses.ts';
 import { addCtb, tickSpeedOf } from './adapt/ctb.ts';
 import { PermBit, ResultCounter, type StatusRecord } from './kernel/status-types.ts';
 import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
-import { redirectTarget, reflectBounceTarget } from './targeting.ts';
 import { gaugeOnHit, gaugeOnOutcome, gaugeTransfer } from './gauge.ts';
 import { runScriptedExtra } from './scripted.ts';
 import { resolveSteal, stealsItem } from './steal.ts';
@@ -110,23 +110,9 @@ function writeBackNul(ctx: Ctx, target: FFXCombatant, nul: { tide: number; blaze
   }
 }
 
-/** Resolve one hit on `rawTarget`. The engine's Reflect, Cover and Provoke come first, as they always did. */
-export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
+/** Resolve one hit on `target`, the target the action's targets were built for (`target-build.ts`). */
+export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
   const { ctx, user, def, options } = scope;
-  let target = redirectTarget(ctx, user, rawTarget, def);
-
-  // Reflect bounces a single-target reflectable spell to the other side.
-  if (bouncesOffReflect(def, target)) {
-    const bounced = reflectBounceTarget(ctx, target);
-    if (!bounced) {
-      ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
-      scope.hitIndex++;
-      return;
-    }
-    // The reflecting target runs the outcome hook as a hit that a Shell, Protect or Nul turned aside (VA 0x00789030: Rook).
-    gaugeOnOutcome(ctx, user, target, 0, 2);
-    target = bounced;
-  }
   // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
   let seen = scope.touched.get(target.id);
   if (seen) seen.last = scope.hitIndex;

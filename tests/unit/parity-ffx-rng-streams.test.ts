@@ -276,7 +276,7 @@ describe('the other rolls: the table above, role by role', () => {
     expect(taps).toEqual([PICKER]);
   });
 
-  it('Berserk and Confuse pick their target with stream 4, along the actors in ascending order; one candidate draws nothing', async () => {
+  it('Berserk and Confuse pick their target with stream 4, along the candidates in ascending order (Berserk the opposite side, Confuse its own, the actor in it); one candidate draws nothing', async () => {
     const { berserkCommand, confusedCommand } = await import('../../src/battle/ffx/execute.ts');
     const rng = makeFfxRng(21);
     const mirror = makeFfxRng(21);
@@ -292,9 +292,12 @@ describe('the other rolls: the table above, role by role', () => {
     expect(taps).toEqual([PICKER]);
     expect(cmd.targets).toEqual([['tidus', 'yuna', 'auron'][mirror.draw(PICKER) % 3]]);
     taps.length = 0;
-    const cmd2 = confusedCommand(ctx, actor);
+    // a Confused monster swings at its own side, itself included: alone, that is one candidate and no draw
+    expect(confusedCommand(ctx, actor).targets).toEqual(['boss']);
+    expect(taps).toEqual([]);
+    // a Confused party member's pool is its own side with itself in it: auron, tidus, yuna in list order, ordered by actor number: tidus, yuna, auron
+    const cmd2 = confusedCommand(ctx, party[2]!);
     expect(taps).toEqual([PICKER]);
-    // the pool of a Confuse is both sides but the actor: auron, tidus, yuna in list order, ordered by actor number: tidus, yuna, auron
     expect(cmd2.targets).toEqual([['tidus', 'yuna', 'auron'][mirror.draw(PICKER) % 3]]);
     taps.length = 0;
     ctx.state.activeIds = ['tidus'];
@@ -303,7 +306,7 @@ describe('the other rolls: the table above, role by role', () => {
     expect(taps).toEqual([]);
   });
 
-  it('every hit of a random-target command draws stream 5 first, and lands on the (value % count)-th candidate in actor order', () => {
+  it('a random-target command deals every hit on stream 5 first, each to the (value % count)-th candidate in actor order, and then each target runs its hits', () => {
     const def = ALL_ABILITIES.find((a) => a.targeting === 'random-enemy' && a.hits >= 4 && a.record !== undefined) as AbilityDef;
     expect(def).toBeDefined();
     const rng = makeFfxRng(33);
@@ -320,30 +323,42 @@ describe('the other rolls: the table above, role by role', () => {
     expect(fives).toHaveLength(def.hits);
     const ordered = ['tidus', 'wakka', 'rikku']; // ascending actor number: Tidus 0, Wakka 4, Rikku 6
     const landed = events.filter((e) => e['type'] === 'damage' || e['type'] === 'miss').map((e) => e['targetId']);
-    expect(landed.slice(0, def.hits)).toEqual(fives.map((t) => ordered[t.value % 3]));
-    // each hit's own pick comes before its own draws, and the draws between two picks are the boss's own (monster slot 0x14: 28, 44, 60)
+    // the game deals all the hits first and then runs the targets in slot order: each target takes as many hits as picks chose it
+    const expected = ordered.flatMap((id) => fives.filter((t) => ordered[t.value % 3] === id).map(() => id));
+    expect(landed.slice(0, def.hits)).toEqual(expected);
+    // every pick comes before any hit's own draws, and the draws after them are the boss's own (monster slot 0x14: 28, 44, 60)
     const own = new Set([streamFor(0x14, 0, false), streamFor(0x14, 1, false), streamFor(0x14, 2, false)]);
-    expect(taps[0]!.stream).toBe(RANDOM_TARGET);
-    for (const t of taps) if (t.stream !== RANDOM_TARGET) expect(own.has(t.stream)).toBe(true);
+    expect(taps.slice(0, def.hits).every((t) => t.stream === RANDOM_TARGET)).toBe(true);
+    for (const t of taps.slice(def.hits)) expect(own.has(t.stream)).toBe(true);
   });
 
-  it('a Reflect bounce draws stream 6 over the other side in actor order, and nothing with one candidate', async () => {
-    const { reflectBounceTarget } = await import('../../src/battle/ffx/targeting.ts');
+  it('a Reflect bounce off a holder on the caster\'s own side draws stream 6 over the other side in actor order, and nothing with one candidate; one off the other side draws nothing', async () => {
+    const { buildAction } = await import('../../src/battle/ffx/target-build.ts');
+    const def = ALL_ABILITIES.find((a) => a.targeting === 'single-enemy' && a.record !== undefined && (a.record.flagsMisc & 0x80) !== 0) as AbilityDef;
+    expect(def).toBeDefined();
     const rng = makeFfxRng(8);
     const mirror = makeFfxRng(8);
     const taps: number[] = [];
     const sit = randomSituation(makeRng(3), POOL);
-    const reflector = combatantOf(sit.target, 'boss', 'enemy');
-    const party = ['lulu', 'yuna', 'auron'].map((id) => combatantOf(sit.target, id, 'party'));
-    const { ctx } = contextOf(reflector, party[0]!, rng, 0, party.slice(1));
-    ctx.state.activeIds = party.map((p) => p.id);
+    const caster = combatantOf(sit.user, 'lulu', 'party');
+    const holder = combatantOf(sit.target, 'yuna', 'party');
+    holder.statuses['reflect'] = { id: 'reflect', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    const bosses = ['boss-c', 'boss-a', 'boss-b'].map((id) => combatantOf(sit.target, id, 'enemy')); // formation order is slot order: 0x14, 0x15, 0x16
+    const { ctx } = contextOf(caster, holder, rng, 0, bosses);
     rng.tap = (stream) => taps.push(stream);
-    const bounced = reflectBounceTarget(ctx, reflector);
+    const built = buildAction(ctx, caster, def, [holder], 1, false);
     expect(taps).toEqual([REFLECT]);
-    expect(bounced?.id).toBe(['yuna', 'auron', 'lulu'][mirror.draw(REFLECT) % 3]);
+    expect(built.targets.map((t) => t.target.id)).toEqual([['boss-c', 'boss-a', 'boss-b'][mirror.draw(REFLECT) % 3]]);
+    expect(built.bounced.map((b) => b.holder.id)).toEqual(['yuna']);
     taps.length = 0;
-    ctx.state.activeIds = ['lulu'];
-    expect(reflectBounceTarget(ctx, reflector)?.id).toBe('lulu');
+    ctx.state.enemyIds = ['boss-a'];
+    expect(buildAction(ctx, caster, def, [holder], 1, false).targets.map((t) => t.target.id)).toEqual(['boss-a']);
+    expect(taps).toEqual([]);
+    // a holder on the other side from the caster sends it back to the caster: no draw at all
+    const reflecting = bosses[0]!;
+    reflecting.statuses['reflect'] = { id: 'reflect', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    ctx.state.enemyIds = ['boss-c', 'boss-a', 'boss-b'];
+    expect(buildAction(ctx, caster, def, [reflecting], 1, false).targets.map((t) => t.target.id)).toEqual(['lulu']);
     expect(taps).toEqual([]);
   });
 
