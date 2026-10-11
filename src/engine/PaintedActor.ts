@@ -1173,7 +1173,8 @@ export class PaintedActor extends Group {
   private lockHead(slot: PlaneSlot): void {
     const ref = this.headRef;
     const head = slot.meta.head;
-    if (!ref || !head || !this.headViewed || !this.showFigure || slot.meta === this.reference || !slot.painted || slot.painted.placeholder || ref.subject === null || slot.subject !== ref.subject) {
+    // The reference itself is never held, unless it is tipped (FA-2 and FA-3: the idle toppled on the floor is seen from a different depth, and a revive crosses a lying body, whose head is held, to it).
+    if (!ref || !head || !this.headViewed || !this.showFigure || (slot.meta === this.reference && !slot.tip) || !slot.painted || slot.painted.placeholder || ref.subject === null || slot.subject !== ref.subject) {
       if (slot.lock !== 1) {
         slot.lock = 1;
         this.sizeSlot(slot, slot.base);

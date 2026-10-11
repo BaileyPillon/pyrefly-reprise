@@ -1,6 +1,6 @@
 import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type Object3D, type ShaderMaterial, type Texture } from 'three';
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
-import { KO_GIANTS, KO_MACHINES, fallRun, koFallOff, koMode, type KoMode, type KoRun } from '../../KoFall.ts';
+import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
 import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
@@ -25,7 +25,9 @@ export { patchLiving } from './livingShader.ts';
  *   TOPPLES on the standing painting, toward the side the KO painting's head lies, and the cross runs under a
  *   dust puff (FA-2, the page's option B, `KoTip.ts`, `KoPuff.ts`). A figure whose standing painting is already
  *   flagged prone (a Sin fin, Vegnagun's tail) and REDUCE MOTION (no buckle, no tilt, nothing moves but the
- *   fade) cross at once. The Syndicate's yield, a held or a dismissed departure are left as they are (VP-1001-47).
+ *   fade) cross at once. The revive mirrors the fall (FA-3): the lying painting crosses to the standing one already
+ *   toppled, which stands up from the floor pivot in 395 ms, inside the presenter's revive wait. The Syndicate's
+ *   yield, a held or a dismissed departure are left as they are (VP-1001-47).
  *
  * Attached by a scene walk, never by a hook in `PaintedActor` (over 400 lines, rule 7): the figure's
  * own vertex shader (the painted one, or LIVING PAINTINGS' sway) is patched by `onBeforeCompile`, its
@@ -101,7 +103,7 @@ export class LivingFigure {
   private playing: Playing | null = null;
   private puff: KoPuff | null = null;
   private ctx: LifeCtx | null = null;
-  readonly last = { breath: 0, buckle: 0, collapses: 0, cuts: 0, crosses: 0, topples: 0 };
+  readonly last = { breath: 0, buckle: 0, collapses: 0, cuts: 0, crosses: 0, topples: 0, rises: 0 };
 
   constructor(actor: object) {
     this.a = actor as Guts;
@@ -138,11 +140,14 @@ export class LivingFigure {
   private onSetPose(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, orig: Guts['setPose']): void {
     const a = this.a;
     const ctx = this.ctx;
+    const down = a.life?.state === 'down';
     if (name !== 'ko' && name !== 'dead') {
       this.endRun();
       a.fallGain = 1; // the figure is up: its own fall tilt is its again
     }
-    if (!ctx || !ctx.collapse || opts?.immediate || (name !== 'ko' && name !== 'dead') || a.life?.state === 'down') return orig.call(a, name, opts);
+    if (!ctx || !ctx.collapse || opts?.immediate) return orig.call(a, name, opts);
+    if (name !== 'ko' && name !== 'dead') return down ? this.revive(name, opts, orig, ctx) : orig.call(a, name, opts);
+    if (down) return orig.call(a, name, opts);
     const partySide = a.facing >= 0;
     const kind = partySide ? 'party' : departureKindOf(a.name);
     if (kind === 'yields' || kind === 'held' || kind === 'dismissed') return orig.call(a, name, opts);
@@ -168,6 +173,33 @@ export class LivingFigure {
     if (run.opts.travel) this.last.topples++;
   }
 
+  /**
+   * FA-3: a body that was down is asked for a standing pose. The actor's own blend stands aside (it cuts to the standing painting at once, as it does for a KO) and the
+   * run crosses the planes from the lying body: with travel (a human-scale party figure, not under REDUCE MOTION) to the standing painting already toppled where the body
+   * lay, which then stands up; without, only the short cross.
+   */
+  private revive(name: string, opts: { immediate?: boolean; force?: boolean } | undefined, orig: Guts['setPose'], ctx: LifeCtx): void {
+    const a = this.a;
+    const partySide = a.facing >= 0;
+    const kind = partySide ? 'party' : departureKindOf(a.name);
+    if (kind === 'yields' || kind === 'held' || kind === 'dismissed' || koFallOff()) return orig.call(a, name, opts);
+    const from = a.slots[a.active]!;
+    const keep = a.crossfadeMs;
+    a.crossfadeMs = 0;
+    try {
+      orig.call(a, name, opts);
+    } finally {
+      a.crossfadeMs = keep;
+    }
+    const to = a.slots[a.active]!;
+    // The actor ignored the request (a body on the ground ignores a hit's pose), or both planes draw one painting: nothing to cross.
+    if (from === to || a.life?.state === 'down' || from.pose === to.pose) return;
+    const travel = !ctx.rm && from.scale.prone === true && to.scale.prone !== true && canTopple(a.name, partySide);
+    const side = travel ? tipSide(headMiddleU(from.meta.head), from.mesh.scale.x < 0 ? -1 : 1, partySide ? 1 : -1) : 0;
+    this.begin({ run: reviveRun(travel), mode: travel ? 'topple' : 'cross', from, to, stand: to, lying: from, side });
+    if (travel) this.last.rises++;
+  }
+
   /** Start a run: the standing painting stays up (the actor's cut put the KO painting at 1) and the run hands the fades over; the fall's own tilt goes where the topple or REDUCE MOTION replaces it. */
   private begin(p: Playing): void {
     const pose = p.run.pose;
@@ -186,6 +218,7 @@ export class LivingFigure {
     this.playing = null;
     if (!p) return;
     if (p.side !== 0) this.a.tipSlot(p.stand, null);
+    if (p.run.opts.kind === 'revive') this.a.fallGain = 1; // the figure is up again
     if (p.to === this.a.slots[this.a.active]) {
       p.to.fade = 1;
       p.from.fade = 0;
