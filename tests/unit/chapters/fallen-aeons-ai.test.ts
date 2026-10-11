@@ -9,7 +9,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Command } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
-import { payStatusClocks } from '../../../src/battle/ffx2/engineHooks.ts';
 import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
 import { AC } from '../../../src/battle/ffx2/ai/fallen-aeons.ts';
 import { DELTA_DISARMED_FLAG } from '../../../src/battle/ffx2/ai/magus-sisters.ts';
@@ -21,7 +20,7 @@ import { ROAD_SHIVA, ROAD_SISTERS } from '../../../src/data/ffx2/enemies/fallen-
 import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
-import { ctxFor, sisterCtx, sisterUnits } from '../helpers/fallenAeonsUnits.ts';
+import { ctxFor, runStatusClocks, sisterCtx, sisterUnits } from '../helpers/fallenAeonsUnits.ts';
 
 describe('the Magus Sisters (§4.2)', () => {
   function harness(seed = 21) {
@@ -97,39 +96,40 @@ describe('the Magus Sisters (§4.2)', () => {
     applyStatus(t.sandy, { status: 'regen', chance: 254, duration: 0 });
     const { ctx } = ctxFor([t.sandy]);
     let heals = 0;
+    // Re-parity W4: the game's Regen pays max HP / 32 every 16,000 units on its own phase (169 steps at 95 from phase 0), one logic step at a time.
     for (let i = 0; i < 400 && heals === 0; i++) {
       const before = t.sandy.hp;
-      payStatusClocks([t.sandy], 50, () => undefined, ctx, (u) => sisterCtx(t.h.ctx, u));
+      runStatusClocks([t.sandy], 1, ctx, { aiContext: (u) => sisterCtx(t.h.ctx, u) });
       if (t.sandy.hp > before) heals += 1;
     }
     expect(heals).toBe(1);
     expect(t.sandy.aiMemory[AC]).toBe(5);
   });
 
-  it('a Regen payout at full HP heals nothing and adds nothing; two payouts in one clock step add 5 each', () => {
+  it('a Regen payout at full HP heals nothing and adds nothing; each payout that heals adds 5', () => {
     const t = harness(5);
     applyStatus(t.cindy, { status: 'regen', chance: 254, duration: 0 });
     const { ctx } = ctxFor([t.cindy]);
-    const interval = 9000; // STATUS_TICK_INTERVAL_TICKS: one payout every 3 s
-    const pay = (step: number) => payStatusClocks([t.cindy], step, () => undefined, ctx, (u) => sisterCtx(t.h.ctx, u));
+    // Re-parity W4: one payout every 16,000 units: 169 logic steps at 95 from phase 0, then every 168 or 169. Two payouts fit in 340 steps, three in 507.
+    const pay = (steps: number) => runStatusClocks([t.cindy], steps, ctx, { aiContext: (u) => sisterCtx(t.h.ctx, u) });
 
     t.cindy.aiMemory = { [AC]: 0 };
     t.cindy.hp = t.cindy.stats.maxHp;
-    pay(interval * 3); // three payouts, all at full HP
+    pay(507); // three payouts, all at full HP
     expect(t.cindy.aiMemory[AC]).toBe(0);
 
     t.cindy.aiMemory = { [AC]: 0 };
-    t.cindy.statusTickAccumulator = 0;
+    t.cindy.gauge.regenAcc = 0;
     t.cindy.hp = 1000;
-    pay(interval * 2); // two payouts, both with room
+    pay(340); // two payouts, both with room
     expect(t.cindy.aiMemory[AC]).toBe(10);
 
     // Two payouts, but the first tops her up: only the first counts.
-    const per = Math.floor(t.cindy.stats.maxHp * 0.03);
+    const per = (t.cindy.stats.maxHp * 8) >>> 8;
     t.cindy.aiMemory = { [AC]: 0 };
-    t.cindy.statusTickAccumulator = 0;
+    t.cindy.gauge.regenAcc = 0;
     t.cindy.hp = t.cindy.stats.maxHp - Math.floor(per / 2);
-    pay(interval * 2);
+    pay(340);
     expect(t.cindy.hp).toBe(t.cindy.stats.maxHp);
     expect(t.cindy.aiMemory[AC]).toBe(5);
   });

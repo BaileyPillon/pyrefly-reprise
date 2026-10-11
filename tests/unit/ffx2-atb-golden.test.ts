@@ -122,6 +122,21 @@
  * the run: that is the later divergence showing through, not an earlier one.) Outcomes: D = 0 still 20/20 and the Active D = 1500 arm
  * still 10/10. The old hashes are in git at 3663cd3a. The same Chapter 4 rows moved in `ffx2-hit-closes-menu.test.ts` and
  * `ffx2-menu-cancel-delay.test.ts`.
+ *
+ * **Re-pinned a tenth time, every array, for re-parity W4** (branch `re-parity`, 2026-10-10, FFX-2 only, reason "game-code parity";
+ * `docs/handoff/re-parity-w4.md`). The engine clock is now the game's logic step (29.97 a second, measured on Bailey's running game
+ * on 2026-10-09) and every gauge is the game's own counter: a command leaves `cost_atb x 10000 / (AGI + 1)` (a spell 0), a cast counts
+ * down `cost_cast x 10000 / (AGI + 1)` at the full tick, the opening is `((draw & 63) + 32) x full / 128` with the two-thirds trim,
+ * monsters think, a hit of the ATB class pushes a gauge back, and the status clocks are the game's counters of 1,500 and timers of
+ * 150,000 units. Every seeded replay is a different replay, so all sixty hashes moved. Outcomes: chapter 4 D = 0 still 20/20 and the
+ * Active D = 1500 arm still 10/10; chapter 5 D = 0 still 20/20 and its Active D = 1500 arm is **6/10** (it was 2/10 after W3, 4/10
+ * before it): the same menus now cost the girls the game's real waiting times, so a human who takes 1.5 s a menu is no longer behind
+ * a boss whose casts were far too fast; measured, not tuned (seeds 1 to 10, `docs/handoff/re-parity-w4.md`). The turns are handed out in
+ * the game's ready-list order too (lowest recovery counter first), which is why this is 6 and not the 8 an earlier build of the same
+ * gauges gave. The Wait arm still equals
+ * the D = 0 arrays (20/20 in both chapters, no menu invalidated, held or refused) and the Wait engine switched to Active still equals
+ * the Active arrays (both asserted below). The old hashes are in git at 931613a8. The same rows moved in
+ * `ffx2-hit-closes-menu.test.ts`, `ffx2-menu-cancel-delay.test.ts` and `chapters/den-of-woe-carry.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -129,31 +144,31 @@ import { driveChapter4, driveChapter5, logHash } from './helpers/ffx2ChapterDriv
 
 const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
-/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. */
+/** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D0 = [
-  'a290220ed81a53d9', 'd9f53eb0ed928677', '43393d7597f35b57', '8cdf72d78e13acac', '74aa901a0269b60c',
-  'f6ca4e8f1d4e17e9', 'de7d89150562ebfc', '6526987b853aa90b', '1b566511e2607e68', '80b7a34d0faf851d',
-  '83be46d662ffff0d', '300eef3110e142ee', '8d13369305102774', 'c8501122121e7f40', '3e1c64f4b60028f1',
-  '58ce81702003f8b8', '775fcf62cfea435d', 'ac201729bcfca0d0', '0401f0f78e5a6349', '5f5444cdb499810c',
+  '12ca8c151d83539f', 'a99992b5510a6944', '52f256a555d719d1', 'b8146c45b4109c8e', 'fdb20e9b8ce3afd1',
+  '3621355d2817d0e9', '270115a474215b4a', '4f08d4ae769c427c', '457483ff8a921efd', 'ee7d7561e24effe0',
+  'eaa823dfe56b9a9b', '2ae7580b86bd843e', '21aa3de7d85c37f4', '7b3bd27483cf675c', 'af571d151b8d8c01',
+  'f5dc29993a51224c', 'b7ee3272094e7606', 'a3b34d50fee5d31a', '9bced22bc54fdaea', 'e5d8368c5b0e44eb',
 ];
 
-/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. */
+/** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  '88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912', 'bb8b6d116a180f6b', 'f00b58edda467499',
-  '148ffcc77b0bb2cf', '981f66daf32dcc39', 'ce3a4f1ccf8f5e50', '3c51cf8a32e30bc1', '7bc68c669e93b536',
-  '372b31a6e349a4b2', '23e9ef99f55f7b4d', 'c1e5ddbe497e7bb1', '90a1a511c1b72ed7', '988b08ad9e9704ce',
-  '1be7a7c703ab276c', '27861fbd7785c3ec', '1e6cb91c9aad13a1', '0de629f7406b7ae7', '8f11ee3a5c01b80b',
+  '6d1c691a5d26f616', '90d3c35d81929e0a', '7eb1a3104a2b6de9', 'd6ffdca5257353cf', '97216ad5381bebf6',
+  'f99d3875deaa5023', '85f479b8477e014a', '4871698e7688e3d2', 'd7ffcf588bcb7e05', 'd47130bf0711355c',
+  'a965eddb7cf49501', '122248407aa8c582', '48ee74f687135ca6', '9c20eb70d121de6a', 'ede90bf21cc2e3ee',
+  '663007051b5c989c', 'd8fc57018795eccf', 'c8a9af121619285f', '00fb223bdec6c9a0', '965f002ed1aeb57d',
 ];
 
-/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. */
+/** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D1500 = [
-  '9d0cc3eb2f311ebd', 'a6512b1f55386411', 'eb36f5accfb59945', 'a0c65dac5c5298c2', '828308635a6ea19a',
-  '1caae7994234f660', '0cd14edaad2850ea', '7a54e0aa051b05e6', '7089ea68fb09c627', 'f8f1a6a304ff81f8',
+  '2a67d64d6b7b4e0b', '02bad7fb34ce0631', '4c4cc3f27859c94b', '1d5ad74ba5939da6', 'c85df61816cef350',
+  '6a2d6592c584be6e', 'd75e9252114e2c3c', '9771af24d5c318f1', '0db04cdcfb65f41c', 'b5a2e6966d7a125b',
 ];
-/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. */
+/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D1500 = [
-  'fe7ab95d0fbae673', '086e107f235fc649', '0e5f385c8dca4fa7', '27f0ba458ef29418', 'f99dbb8f52d027b8',
-  'e5a308fa035c2f86', '307a9ba9b9b1cc31', '77e8a90788c9d86a', '2eeeb5a2d3acdb4f', 'ea70f26303229136',
+  '5510a1a4edcf279f', '93655528d4c4d8e3', '1eef844164a43698', 'fa30063f828e816b', '2984c0f384cd9c7f',
+  'aef0ba91c468c569', '15c0381ce67d8198', 'cd6c0f6555bf2c92', '40671ea5faa65c67', 'bfb594a3befe6ea5',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 

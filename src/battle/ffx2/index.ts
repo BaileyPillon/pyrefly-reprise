@@ -38,24 +38,23 @@ export type {
   ItemRegistry,
 } from './internal.ts';
 
-// --- gauges ----------------------------------------------------------------
+// --- the clock and the gauges (re-parity W4) ----------------------------------
+export { STEPS_PER_SECOND, STEP_MS, baseSpeedOf, msToSteps, secondsToSteps, stepsToMs } from './clock.ts';
 export {
-  applyDelayEffect,
-  applyActionCancel,
   atbTicks,
   applyWaitDown,
   barLengthFraction,
   barState,
   baseRequired,
   buildSnapshot,
-  chargeTicksFor,
-  extraRecoveryTicks,
+  fillOf,
+  isGaugeFrozen,
   isReady,
-  msToTicks,
-  ticksToMs,
-  ticksUntilNextEvent,
-  tickMultiplier,
+  refreshGauge,
 } from './gauges.ts';
+export { stepsUntilNextEvent } from './lookahead.ts';
+export { newGauge } from './atb-engine.ts';
+export type { Ffx2Gauge } from './internal.ts';
 
 // --- chain -----------------------------------------------------------------
 export {
@@ -75,19 +74,19 @@ export { critProbability, hitProbability, statusProbability, statusProbabilityBe
 
 // --- statuses --------------------------------------------------------------
 export {
-  advanceStatuses,
   applyStatus,
   canAct,
   clearAfterBattle,
+  countUnits,
   DISPEL_REMOVES,
-  durationToTicks,
   ESUNA_CURES,
   INFINITE_STATUSES,
+  isTimedGroup2,
   PERSISTS_AFTER_BATTLE,
   removeStatus,
   statLevel,
-  ticksUntilStatusEvent,
 } from './statuses.ts';
+export { advanceStatusClocks } from './status-clock.ts';
 
 // --- sensor / scan ---------------------------------------------------------
 export { resolveSensor, revealTarget, sensorKind, weaknessesOf } from './sensor.ts';

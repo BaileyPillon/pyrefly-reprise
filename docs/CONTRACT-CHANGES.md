@@ -60,6 +60,34 @@ changes, additively; every other change is in modules no other chapter imports. 
   `tests/unit/ffx2-experiment-door.test.ts` with the real `Input`, board and party prep. No word may begin with, end with or contain another: limit, leblanc, mushroom (the Gui lane's), experiment.
 - Four lines in `tests/unit/exp-leblanc.test.ts` and `exp-leblanc-door.test.ts` assumed `EXPERIMENT_CHAPTERS` was exactly the Leblanc preview; they filter by id now, byte for byte as the `ch-gui` lane changed them.
 
+## 2026-10-10 — FFX-2's clock is the game's logic step and every gauge is the game's counter: `AtbState` means a down-counter in the game's units, `StatusInstance` gains `counter` and `accumulator`, `FFX2CommandRecord` gains `costAtb`, `costCast` and `magicCancel`, and `chainWindowTicks`, `elapsedTicks` and `BattleState.ticks` count logic steps (re-parity W4; FFX-2 only; additive except the meanings and the removed engine exports)
+
+Branch `re-parity`. Game case: **FFX-2 only** (`src/battle/ffx2/**`, the FFX-2 data layer and one UI constant; the FFX engine, the FF7 engine and their goldens import none of it and did not move). Handoff: [re-parity-w4](handoff/re-parity-w4.md). Research: `research/re-ffx2-timing-measured.md`
+(the measured 29.97 steps a second), `research/re-ffx2-atb-status.md` sections 3 to 6 and 8 (the kernels), `research/re-ffx2-commands.md` (the cost fields).
+
+`src/battle/common/types.ts` (every change is a new optional field or a changed meaning; no field was removed):
+
+- `AtbState.recovery` is the game's recovery counter (`Chr+0x9d8`): the units a character still has to wait after its last command, falling by its speed each logic step and at or below 0 when it is ready. `ticks`, `required` and `gauge` stay, as HUD mirrors of that
+  counter (`required` is the standard wait, `floor(10000 * 70 / (AGI + 1))`; the bar fills as `1 - recovery / required`). `charging.remainingTicks` and `totalTicks` are the cast time in units, counted down at the caster's full tick.
+- `StatusInstance.counter?` (a group 2 timed status' counter, 1 to 125) and `StatusInstance.accumulator?` (the units banked toward the next count). `ticksRemaining` is in the game's units (a Sleep, Confusion or Berserk timer of 150,000 / 200,000 / 200,000; a group 2 status
+  holds `counter * 1,500 - accumulator`, Doom 10,000 a count) where it used to be ticks of a 3,000-a-second clock.
+- `FFX2CommandRecord.costAtb?` (`Cmd+0x22`: the recovery the command leaves, `costAtb * 10000 / (AGI + 1)`), `costCast?` (`Cmd+0x24`: the cast, `costCast * 10000 / (AGI + 1)`, charged only by a row whose caster animation is a cast class) and `magicCancel?` (`Cmd+0x7a`). A record
+  without them makes the engine use the ability's own `recoveryTicks` and `chargeTicks` (the old tiers).
+- `FFX2Combatant.chainWindowTicks` counts logic steps (2 s is 60, 3 s after a critical is 90); `BattleResult.elapsedTicks` and `BattleState.ticks` count logic steps (29.97 = 1 s) in FFX-2. FFX is unchanged.
+- `EnemyGroupDef.timedAilmentDefaults` stays in the type and in the four Chapter XIII formations that carry it, and is no longer read: every ailment is timed by the game's clock (Sleep, Confusion and Berserk by their timers, Stop, Slow and the rest by the command row's counter; a derived row with no amount gets 125).
+
+`src/battle/ffx2` (the engine's own surface; not in the contract list, recorded because tests and the presenter import it):
+
+- New: `clock.ts` (`STEPS_PER_SECOND`, `STEP_MS`, `msToSteps`, `stepsToMs`, `secondsToSteps`, `baseSpeedOf`), `atb-engine.ts`, `atb-open.ts`, `logic-step.ts`, `status-clock.ts`, `lookahead.ts`; `Ffx2Unit.gauge` (`Ffx2Gauge`: state, slot, recoveryMax, thinking, carry,
+  executing, costAtb, speeds, poisonAcc, regenAcc, hitReaction, readyKey), required on every unit (`newGauge(slot)`); `Ffx2EngineOptions.rollFirstAttack?`. `nextActor` serves the game's ready list (`readyKey`: the step a unit became ready, then the lowest recovery counter first, ties by slot) where it used to serve the party first, then the enemies, each by slot; `intent.ts` names the next enemy the same way (`gaugeSteps`, exported from `lookahead.ts`).
+- Removed from the `ffx2` index and from `constants.ts` (all replaced; the compiler names every user): `TICK_RATE_BASE`, `ATB_SPEED_MULTIPLIER`, `STATUS_CLOCKS_HELD_AT`, `BAR_INTERNAL_MAX`, `ATB_INTERNAL_MAX_TICKS`, the Haste and Slow tick multipliers, `SLOW_CHARGE_VALUE_MULTIPLIER`, the
+  duration and Poison and Regen constants (`REGEN_FRACTION`, `POISON_FRACTION`, `STATUS_TICK_INTERVAL_TICKS`, `TICKS_PER_DURATION_UNIT`), `MENU_CANCEL_ONLY_DELAY_ABILITIES` and `menu-cancel.ts`; `msToTicks`, `ticksToMs`, `tickMultiplier`, `ticksUntilNextEvent`, `chargeTicksFor`,
+  `extraRecoveryTicks`, `applyDelayEffect`, `applyActionCancel`; `durationToTicks`, `advanceStatuses`, `ticksUntilStatusEvent`, `AILMENT_DEFAULT_DURATION`; `payStatusClocks`, `notifyRegen` (the engine hooks); `active.ts` `closesOpenMenu`, `substepTicks`, `soonestEventTicks`;
+  `Ffx2Unit.statusTickAccumulator` and `thinkingTicks`; the fifth argument of `applyStatus`. Added: `stepsUntilNextEvent`, `advanceStatusClocks`, `countUnits`, `isTimedGroup2`, `fillOf`, `isReady`, `isGaugeFrozen`, `refreshGauge`, `newGauge`.
+- `Ffx2EngineOptions.menuCancelOnlyDelayAbilities` and `immuneHitsSkipChain` are no longer read (the game's rules are the engine's), and `atbSpeed` means 70 / 95 / 120 units a step, not a multiplier of a 3,000-a-second clock.
+
+UI (`src/ui/common/resultsMath.ts`): `FFX2_MS_PER_TICK` is `1001 / 30` (the logic step) where it was `1000 / 3000`; the result screen's last-resort conversion of an FFX-2 tick count is therefore 100 times longer per tick, and equally exact.
+
 ## 2026-10-09 (late) — The release line and release candidate 1 in one tree: Omnis's discs are stepped by the one pure `discAfterTurn` on the game's ring, and the reset order, the affinity timing and the four spells stay the game's script (release candidate 1 folded into r3943-int; FFX only; no shared contract file changed)
 
 Branch `re-parity-rc1`, merge of `a74b2b8e` (the release driver's final content, `origin/r3943-int`). No file in the contract list changed by the merge. Recorded because the entries below describe the same Omnis module from two sides and neither is

@@ -8,42 +8,21 @@
  * anywhere under `src/battle/`** — see `docs/ARCHITECTURE.md` "Layering rule".
  */
 
+import { STEPS_PER_SECOND } from './clock.ts';
+
 // ---------------------------------------------------------------------------
 // Time
 // ---------------------------------------------------------------------------
 
-/** Ticks consumed per second at Config ATB speed = Normal. §1.2 `[single source]` */
-export const TICK_RATE_BASE = 3000;
-
-/** FFX-2's Config "ATB Mode and Speed" speed setting (`research/ffx-vs-ffx2-presentation.md:278`). */
-export type AtbSpeed = 'slow' | 'normal' | 'fast';
-
-/**
- * Config ATB speed multiplies the global tick rate — §1.2's `tickRate()`
- * verbatim: `cfgMul = slow ? 0.53 / 0.71 : fast ? 0.53 / 0.42 : 1`, i.e.
- * Slow 0.746x, Normal 1x, Fast 1.262x, derived from §2.8's status-duration
- * constants (0.71 / 0.53 / 0.42 s per duration unit at Slow / Normal / Fast).
- * `[single source]`. Kept as the research's own quotients, never rounded, so
- * the three settings reproduce §2.8's seconds exactly. FFX-2 only: FFX's CTB
- * has no tick rate.
+/*
+ * Re-parity W4 (FFX-2 only): the engine's clock is the game's logic step (`./clock.ts`: 29.97 a second, measured), and
+ * the Config ATB speed is the game's speed table (Slow 70, Normal 95, Fast 120 units a step, `kernel/atb-clock.ts`). The
+ * old 3,000-ticks-a-second clock, its Config multipliers (x0.746 / 1 / x1.262), the Haste x1.05 and Slow x0.5 tick rates,
+ * the 4.16x bank and the status-duration conversion (0.53 s a unit) are the kernels' own integer operations now. PR-0108
+ * ("Sleep never wakes at the Fast speed") needs no switch: the timer lands exactly on 0 at a speed of 120 or 60 and
+ * the game never looks at it again (`kernel/status-timers.ts`), which is also why a Hasted sleeper at Fast does wake.
  */
-export const ATB_SPEED_MULTIPLIER: Readonly<Record<AtbSpeed, number>> = {
-  slow: 0.53 / 0.71,
-  normal: 1,
-  fast: 0.53 / 0.42,
-};
-
-/**
- * PR-0108: at Config ATB SPEED = **Fast**, a sleeping unit never wakes on its own; at Slow and Normal
- * Sleep runs its clock [§1.5 and §2.8, `[single source: Split Infinity G1004]`; Bailey approved the ATB
- * SPEED row "fine if it's faithful"]. The statuses whose clocks the engine holds at each speed; a
- * hit still wakes a sleeper as before. FFX-2 only: FFX's CTB has no ATB speed.
- */
-export const STATUS_CLOCKS_HELD_AT: Readonly<Record<AtbSpeed, ReadonlySet<string>>> = {
-  slow: new Set(),
-  normal: new Set(),
-  fast: new Set(['sleep']),
-};
+export type { AtbSpeed } from './clock.ts';
 
 /**
  * PR-0106's switch, **ON** since Bailey's word of 2026-09-27 (D-242, plan §8 Q4; built OFF by iter2-b1):
@@ -67,36 +46,25 @@ export const LEBLANC_SCRIPT_SINIROTHX = true;
  */
 export const SEPARATE_BATTLE_GAUGES = false;
 
-/** One *drawn* full HUD bar. 24 000 ticks = 8.00 s of runway. §1.2 `[single source]` */
+/** One *drawn* full HUD bar: 24,000 units (8.43 s of the Normal speed). Presentation only. */
 export const TICKS_PER_BAR = 24000;
 
 /**
- * The gauge "value" of an untagged action — the baseline post-action runway.
- * The sheet's default recovery value, and the anchor every worked turn period
- * in §1.2 uses (`Agi 42, value 70 -> 16 279 ticks -> 5.42 s`).
- * §1.4 `[single source]`
+ * The cost of the command that sets every character's STANDARD gauge: Attack (command 0x302d, ATB cost 70 in the game's
+ * table). A character's opening wait, the HUD's bar length (`AtbState.required`) and the wait after a turn that played no
+ * command of its own (an AI script that declined, an Escape, a Defend) are all this cost over (AGI + 1).
+ * `kernel/atb-start.ts` `FFX2_START_COMMAND_ID`; `research/re-ffx2-atb-status.md` section 4.
  */
 export const ATB_BASE_VALUE = 70;
 
-/** `2xRT` doubles the baseline. Trigger Happy, Sentinel, every Dance. §1.4 `[estimate]` */
+/** The ATB cost an ability WITHOUT a game row stands for when it is tagged `2xRT` (Trigger Happy, Sentinel, every Dance; §1.4 `[estimate]`). */
 export const ATB_DOUBLE_RECOVERY_VALUE = 140;
 
-/** Drawn bar clamps at 100%; the internal gauge is simulated to 416%. §1.2 */
-export const BAR_INTERNAL_MAX = 4.16;
-
-/** Absolute internal tick ceiling (~33.3 s). §1.2 `[single source]` */
-export const ATB_INTERNAL_MAX_TICKS = 99840;
-
-/** Haste raises the global tick rate by 5%. NOT double. §1.2 `[verified: 2 sources]` */
-export const HASTE_TICK_MULTIPLIER = 1.05;
-
-/** Slow halves the global tick rate. §1.2 `[verified: 2 sources]` */
-export const SLOW_TICK_MULTIPLIER = 0.5;
-
-/** Slow also doubles the CTIM *value*, on top of halving the rate — net x4. §1.3 */
-export const SLOW_CHARGE_VALUE_MULTIPLIER = 2;
-
-/** Charge-value tiers. §1.3 `[estimate]` — the ratios are the load-bearing part. */
+/**
+ * The cast cost an ability WITHOUT a game row stands for (`AbilityDef.chargeTicks`, the old tiers): the same formula the
+ * game's `cost_cast` goes through (`value * 10000 / (AGI + 1)` units), so a derived row keeps the length it always had.
+ * §1.3 `[estimate]` for the tiers; the rows the game's tables gave us carry their own.
+ */
 export const CHARGE_VALUE_INSTANT = 0;
 export const CHARGE_VALUE_SHORT = 16;
 export const CHARGE_VALUE_MEDIUM = 26;
@@ -106,11 +74,24 @@ export const CHARGE_VALUE_LONG = 39;
 // Chain (§1.7)
 // ---------------------------------------------------------------------------
 
-/** Chain window after a normal hit: 2 s. `[verified: 2 sources]` */
-export const CHAIN_WINDOW_TICKS = 2 * TICK_RATE_BASE;
+/*
+ * The chain window stands in for the game's HIT REACTION (a motion-system state the exe holds no length for: re-parity W3
+ * handoff section 7). It stays the 2 s and 3 s the old engine used, now in logic steps (29.97 a second): 60 and 90.
+ */
+/**
+ * How long a hit reaction halves the tick: **15 logic steps (0.5 s)**, MEASURED on the running game (2026-10-09,
+ * `research/re-ffx2-timing-measured.md` section 5): after a weak Delay hit a girl's tick read 49 (99 halved) for 14 steps in two cases and 15
+ * in the third, which is what makes her 4,000 units take 48 steps. The reaction is a motion-system state, so no number in the exe says
+ * how long it lasts for another hit; this is one command's measurement used for every damaging hit (a listed open item). The 2 s of the
+ * chain window below is a different clock: how long the chain counter lives.
+ */
+export const HIT_REACTION_STEPS = 15;
 
-/** Chain window after a **critical** hit: 3 s. `[verified: 2 sources]` */
-export const CHAIN_WINDOW_TICKS_CRIT = 3 * TICK_RATE_BASE;
+/** Chain window after a normal hit: 2 s = 60 logic steps. `[verified: 2 sources]` */
+export const CHAIN_WINDOW_TICKS = Math.round(2 * STEPS_PER_SECOND);
+
+/** Chain window after a **critical** hit: 3 s = 90 logic steps. `[verified: 2 sources]` */
+export const CHAIN_WINDOW_TICKS_CRIT = Math.round(3 * STEPS_PER_SECOND);
 
 /** `chainMult = CHAIN_BASE + CHAIN_STEP * chainNumber`. `[verified: 2 sources]` */
 export const CHAIN_BASE = 1.4;
@@ -147,45 +128,30 @@ export const IMMUNE_HITS_SKIP_CHAIN = true;
  */
 export const NAMED_TARGETS_ONLY = true;
 
-/**
- * The menu-cancel correction, **ON** (`research/ffx2-combat-core.md` §9.2, commit `ea05f877`,
- * `[verified: 2 sources]`: Split_Infinity G1041 Delay effect / G1042 Action-cancel). Release 17 built
- * "an enemy hit closes an open command menu" (decision sheet 2026-09-25 item 4 A1) from §1.1's
- * wording; §9.2 corrects §1.1: only an ability carrying a **Delay effect** (DELEF) or
- * **Action-cancel** (ACTIC) closes the menu, not every hit. `active.ts` `closesOpenMenu` asks the
- * hitting ability (`menu-cancel.ts` `carriesMenuCancel`: the `weak-delay` / `strong-delay` flags or
- * a `delay-effect` / `action-cancel` status row, all from the sourced data rows). Turned on by
- * Bailey, 2026-09-26 ("I'll take all your recommendations", answering "menu correction on (my
- * recommendation), or keep it as is"); it replaces decision item 4 A1. Measured in
- * `docs/plans/ffx2-engine-fixes-2026-09-26.md` §9.3; no boss number changes.
- * `Ffx2EngineOptions.menuCancelOnlyDelayAbilities` overrides it for a measurement run (`false`
- * replays release 17's rule). FFX-2 only.
+/*
+ * The menu-cancel correction (Bailey, 2026-09-26: only a Delay command closes an open menu, `research/ffx2-combat-core.md`
+ * §9.2) is the game's own rule since re-parity W4: a hit closes the menu when its ATB damage is positive
+ * (`apply_atb_damage`, `kernel/atb-interrupt.ts`), which only the commands with the Delay bits (or an ATB damage class) deal.
+ * The switch `MENU_CANCEL_ONLY_DELAY_ABILITIES` and the option `menuCancelOnlyDelayAbilities` that replayed release 17's
+ * "every hit closes it" are gone with `menu-cancel.ts`.
  */
-export const MENU_CANCEL_ONLY_DELAY_ABILITIES = true;
 
 // ---------------------------------------------------------------------------
 // Statuses (§2.8)
 // ---------------------------------------------------------------------------
 
-/**
- * `seconds = durationValue * 0.53` at Config ATB speed = Normal, so
- * `ticks = durationValue * 0.53 * 3000`. §2.8 `[single source]`
+/*
+ * Re-parity W4 (FFX-2 only): the status clocks are the game's (`kernel/status-timers.ts`, `status-clock.ts`): a timed
+ * group 2 status holds a counter that loses one count for every 1,500 units its owner's speed banks (Doom 10,000), Sleep,
+ * Confusion and Berserk a timer of 150,000 / 200,000 / 200,000 units on the raw speed, and Poison and Regen pay
+ * `(8 * max HP) >> 8` every 16,000 units. The old conversion (0.53 s a unit, x2.0 on a Slowed owner, x0.95 on a
+ * Hasted one) and the Poison and Regen estimate (3% of max HP every 3 s) are gone with the 3,000-ticks-a-second clock.
  */
-export const SECONDS_PER_DURATION_UNIT = 0.53;
-export const TICKS_PER_DURATION_UNIT = SECONDS_PER_DURATION_UNIT * TICK_RATE_BASE;
 
-/** Remaining duration scales x2.0 on a Slowed unit, x0.95 on a Hasted one. §2.8 */
-export const DURATION_SCALE_SLOW = 2.0;
-export const DURATION_SCALE_HASTE = 0.95;
-
-/** Regen / Poison payout interval. §2.3 gives the 3% but never the period. `[estimate]` */
-export const STATUS_TICK_INTERVAL_TICKS = 3 * TICK_RATE_BASE;
-
-/** Regen and Poison both move ~3% of max HP per interval. §2.3 `[verified: 2 sources]` */
-export const REGEN_FRACTION = 0.03;
-export const POISON_FRACTION = 0.03;
-
-/** Auto-Life revives at 25% of max HP. §2.3 `[verified: 2 sources]` */
+/**
+ * Auto-Life revives at 25% of max HP: the game's own row for the revive it queues (command 0x3025: HP class, formula 7,
+ * power 4 of 16; `research/re-ffx2-atb-status.md` section 6.7). §2.3 `[verified: 2 sources]`
+ */
 export const AUTO_LIFE_REVIVE_FRACTION = 0.25;
 
 /** Up/Down stack ceiling. §2.8 `[verified: 2 sources]` */

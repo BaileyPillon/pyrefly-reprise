@@ -144,9 +144,10 @@ describe('the presenter holds the frame under an open FFX-2 menu (Active)', () =
     expect(openedAt).toBeGreaterThanOrEqual(0);
     await until(() => held.holding);
     expect(held.holding).toBe(true);
-    // Let the clock run under the menu until something has played there.
+    // Let the clock run under the menu until something has played there. Re-parity W4: a second of game time is 30 logic steps
+    // (it was 3,000 ticks), and Bahamut now acts at the game's pace, so the pump is given more room to reach his first move.
     const ticks0 = engine.state().ticks;
-    await until(() => stage.calls.slice(openedAt).some((c) => c.startsWith('impact:')) && engine.state().ticks > ticks0 + 3000, 200_000);
+    await until(() => stage.calls.slice(openedAt).some((c) => c.startsWith('impact:')) && engine.state().ticks > ticks0 + 30, 2_000_000);
     const underMenu = stage.calls.slice(openedAt);
     expect(underMenu.some((c) => c.startsWith('impact:'))).toBe(true);
     const framing = underMenu.filter((c) => /^camera(!?:(?!shake|release)|:push|:roll|:punch)/.test(c));

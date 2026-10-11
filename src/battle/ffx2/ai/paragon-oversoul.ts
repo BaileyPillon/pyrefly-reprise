@@ -31,7 +31,7 @@
 import type { AbilityDef, Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
-import { TICK_RATE_BASE } from '../constants.ts';
+import { STEPS_PER_SECOND } from '../clock.ts';
 
 /**
  * The missing values of research §12.2, one named parameter each; the data rows read the ones
@@ -211,7 +211,7 @@ export const paragonOversoulScript: AiScript = {
     if (memo[K.demi] === true) return respond(ctx, 'demi', '', '');
     const low = self.hp < self.stats.maxHp * OVERSOUL_ESTIMATES.magicBelow;
     if (low && OVERSOUL_ESTIMATES.lowHpActsEveryTurn) return respond(ctx, 'attack', '', '');
-    if (ctx.ticks - mem(self, K.quietSince) >= OVERSOUL_ESTIMATES.idleSeconds * TICK_RATE_BASE) {
+    if (ctx.ticks - mem(self, K.quietSince) >= OVERSOUL_ESTIMATES.idleSeconds * STEPS_PER_SECOND) {
       stir(ctx);
       return idleTurn(ctx);
     }

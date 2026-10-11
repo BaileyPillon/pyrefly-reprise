@@ -46,6 +46,7 @@ import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } f
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { canAct } from './statuses.ts';
+import { gaugeSteps } from './lookahead.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
@@ -487,13 +488,19 @@ function enemyOrder(env: Ffx2IntentEnv): CombatantId[] {
   return enemies
     .slice()
     .sort((a, b) => {
-      // Ready first, then whoever's gauge is fullest — the same reading the
-      // player is getting off the bars themselves (`visual-bible` §4.3).
+      // Ready first, in the game's ready-list order (`Ffx2Gauge.readyKey`); then whoever's gauge runs out first, by the steps its counter
+      // still needs at its own speed (re-parity W4: a fuller bar is not a sooner one once every command waits its own cost); then, when no
+      // speed is known yet (before the first step), whoever's gauge is fullest — the same reading the player is getting off the bars
+      // themselves (`visual-bible` §4.3).
       const ba = bars.get(a.id);
       const bb = bars.get(b.id);
       const ra = ba?.ready === true ? 1 : 0;
       const rb = bb?.ready === true ? 1 : 0;
       if (ra !== rb) return rb - ra;
+      if (ra === 1) return a.gauge.readyKey - b.gauge.readyKey;
+      const ea = gaugeSteps(a, a.gauge.speeds.tick);
+      const eb = gaugeSteps(b, b.gauge.speeds.tick);
+      if (ea !== eb) return ea < eb ? -1 : 1;
       return (bb?.fill ?? 0) - (ba?.fill ?? 0);
     })
     .map((u) => u.id);

@@ -685,14 +685,18 @@ function bulwarkIntentAtLink3(): ReturnType<FFX2Engine['intent']> {
 }
 
 describe('PR-0123: the badge and the Odds table agree on the shipped rotation', () => {
-  it('Chapter 5 link 3, seed 1: the Bulwark rolls Protect at its own 29%, not Regen\'s 38%', () => {
+  it('Chapter 5 link 3, seed 1: the Bulwark rolls Shell at its own 25%, not the likeliest branch (Protect, 42%)', () => {
+    // Re-parity W4 (FFX-2 only): with the game's clock and gauges the same seed reaches link 3 in a different state, and the
+    // rolled move there is Shell (it was Protect at 29%, with Regen 38%). The claim is unchanged: the badge names the move the
+    // engine will roll and the table gives THAT move its own percent, whichever branch is the likeliest.
     const intent = bulwarkIntentAtLink3();
     expect(intent?.enemyId).toBe('bulwark-r');
-    expect(intent?.moveName).toBe('Protect');
+    expect(intent?.moveName).toBe('Shell');
     expect(intent?.confidence).toBe('likely');
     const sum = intent!.branches.reduce((n, b) => n + b.percent, 0);
     expect(sum).toBe(100);
     const match = intent!.branches.find((b) => b.label === intent!.moveName);
-    expect(match?.percent).toBe(29);
+    expect(match?.percent).toBe(25);
+    expect(Math.max(...intent!.branches.map((b) => b.percent))).toBeGreaterThan(match!.percent); // not the likeliest branch
   });
 });

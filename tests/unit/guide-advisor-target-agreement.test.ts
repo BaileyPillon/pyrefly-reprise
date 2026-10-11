@@ -290,9 +290,10 @@ describe('the guide and the advisor never disagree about who a command hits', ()
   it('an all-enemies command reads "all enemies" on both panels (Chapter 5 opener)', () => {
     const group = VEGNAGUN_CHAIN_ORDER[0]!;
     const engine = newFfx2Engine(group, farplaneBuild);
-    // Black Sky is the chapter's very first decision (raw index 2).
+    // Black Sky is Paine's first decision. Re-parity W4: it used to be the chapter's very first (raw index 2); with the game's opening
+    // gauges the other girls act first, so the walk is longer (the label it pins is unchanged).
     const watch: Watch = { id: 'x2-dark-knight-black-sky', seenLabel: null };
-    const result = walkFfx2(engine, 3, watch);
+    const result = walkFfx2(engine, 12, watch);
     expect(result.decisions).toBeGreaterThan(0);
     expect(result.mismatches).toEqual([]);
     expect(watch.seenLabel).toBe('all enemies');

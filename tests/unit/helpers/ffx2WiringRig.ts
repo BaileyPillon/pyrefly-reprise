@@ -11,7 +11,6 @@
 
 import { SeededRng, makeRng } from '../../../src/battle/common/rng.ts';
 import type { AbilityDef, ElementId, EnemyRewards, StatusId } from '../../../src/battle/common/types.ts';
-import { TICKS_PER_DURATION_UNIT } from '../../../src/battle/ffx2/constants.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 
@@ -214,10 +213,11 @@ export function engineUnit(spec: SideSpec, id: string, side: 'party' | 'enemy', 
   unit.hp = spec.hp;
   unit.mp = spec.mp;
   unit.alive = !spec.dead;
+  // A timed group 2 status holds the game's counter (re-parity W4: one count is 1,500 units; Doom 10,000, which no situation here times).
   const put = (status: StatusId, stacks: number, counter: number | null): void => {
     unit.statuses[status] = {
-      id: status, turnsRemaining: null, ticksRemaining: counter === null ? null : counter * TICKS_PER_DURATION_UNIT,
-      charges: null, stacks, permanent: false,
+      id: status, turnsRemaining: null, ticksRemaining: counter === null ? null : counter * 1500,
+      charges: null, stacks, permanent: false, ...(counter === null ? {} : { counter, accumulator: 0 }),
     };
   };
   G1.forEach((status, i) => { if (status !== null && ((spec.g1 >>> i) & 1) !== 0) put(status, 0, null); });

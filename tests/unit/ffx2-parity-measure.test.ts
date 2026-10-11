@@ -24,7 +24,7 @@
 import { writeFileSync } from 'node:fs';
 import { describe, it } from 'vitest';
 import type { BattleSetup, BattleState, Command, Decision, EnemyGroupDef } from '../../src/battle/common/types.ts';
-import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { FFX2Engine, STEPS_PER_SECOND } from '../../src/battle/ffx2/index.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { findEnemyGroup, setupForChapter, setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS, type Chapter } from '../../src/data/encounters.ts';
@@ -167,7 +167,7 @@ async function playChain(chapter: Chapter, seed: number, usage: Map<string, Usag
     partyTurns += 1;
     engine.submit(intendedStrategy(d.actorId, d.commands, engine as never) ?? fallback(d));
   }
-  return { outcome, link1Won, partyTurns, engineTurns, minutes: ticks / 3000 / 60, partyKos };
+  return { outcome, link1Won, partyTurns, engineTurns, minutes: ticks / STEPS_PER_SECOND / 60, partyKos }; // re-parity W4: the engine's clock is the logic step, 29.97 a second (it was 3,000 ticks a second)
 }
 
 function mean(xs: readonly number[]): number {

@@ -7,70 +7,12 @@
 
 import type { BattleState, CombatantId, Command, Rng } from '../common/types.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
-import { advanceStatuses } from './statuses.ts';
-import { applyHpDelta, heal, resolveAbility, type ResolveContext } from './resolve.ts';
+import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './targeting.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { abilityPerformedBy } from './execute.ts';
 
 type Emit = (draft: EventDraft) => void;
-
-/** Regen and Poison payouts plus status expiries, for one sub-step. */
-export function payStatusClocks(
-  units: Ffx2Unit[],
-  step: number,
-  emit: Emit,
-  ctx: ResolveContext,
-  aiContext?: (unit: Ffx2Unit) => AiContext,
-  held?: ReadonlySet<string>,
-): void {
-  for (const unit of units) {
-    if (!unit.alive) continue;
-    const hpBefore = unit.hp;
-    const payouts: number[] = [];
-    const delta = advanceStatuses(unit, step, emit, (amount) => payouts.push(amount), held);
-    if (delta > 0) {
-      emit({
-        type: 'damage',
-        targetId: unit.id,
-        amount: delta,
-        element: 'none',
-        crit: false,
-        hitIndex: 0,
-        hitCount: 1,
-      });
-      applyHpDelta(ctx, unit, delta);
-    } else if (delta < 0) {
-      heal(ctx, unit, -delta, 'regen');
-    }
-    if (payouts.length > 0 && unit.side === 'enemy' && aiContext) notifyRegen(unit, hpBefore, payouts, aiContext);
-  }
-}
-
-/**
- * Tell a script once per Regen payout that **healed** (Chapter XI's Sisters:
- * "AC += 5 ... when Regen heals her", research ffx2-fallen-aeons §4.2). A payout
- * that lands at full HP heals nothing and is not counted; two payouts in one
- * clock step count twice. HP is walked payout by payout from the step's start,
- * so a step that tops her up counts only the payouts that still had room.
- * Poison in the same step is ignored here (no Sister takes Poison). Only a
- * script that defines `onRegen` reacts, so every earlier chapter is unchanged.
- */
-function notifyRegen(
-  unit: Ffx2Unit,
-  hpBefore: number,
-  payouts: readonly number[],
-  aiContext: (unit: Ffx2Unit) => AiContext,
-): void {
-  const onRegen = aiScriptFor(unit.enemy?.aiScriptId).onRegen;
-  if (!onRegen) return;
-  let hp = hpBefore;
-  for (const amount of payouts) {
-    const gained = Math.min(unit.stats.maxHp, hp + amount) - hp;
-    hp += gained;
-    if (gained > 0) onRegen(aiContext(unit), gained);
-  }
-}
 
 export function aiContextFor(
   self: Ffx2Unit,

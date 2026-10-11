@@ -47,6 +47,10 @@ interface Row {
   shatter: number;
   element: number;
   killer: number;
+  /** `Cmd+0x22` and `Cmd+0x24`, and whether the row's caster animation is a cast class (re-parity W4): a row that is not never charges. */
+  costAtb: number;
+  costCast: number;
+  charges: boolean;
   status1: Sparse;
   status2: Sparse;
   statusTime: Sparse;
@@ -97,6 +101,8 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
     shatter: record.shatter,
     element: record.element,
     killer: record.killer,
+    costAtb: record.costAtb,
+    costCast: record.costCast,
     status1: sparse(record.status1),
     status2: sparse(record.status2),
     statusTime: sparse(record.statusTime),
@@ -115,6 +121,8 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
     shatter: want.shatter,
     element: want.element,
     killer: want.killer,
+    costAtb: want.costAtb,
+    costCast: want.charges ? want.costCast : 0, // a row whose caster animation is not a cast class (Mix, a menu stub) never charges
     status1: want.status1,
     status2: want.status2,
     statusTime: want.statusTime,
@@ -192,6 +200,8 @@ describe('FFX-2 command records are the game\'s rows', () => {
     expectIsRow('roulette', roulette); // the record itself is the first row
     // Each row carries exactly one status chance, so the command inflicts at most one per cast.
     for (const variant of roulette.pickOne ?? []) expect(Object.keys(variant.status1 ?? {}).length).toBe(1);
+    // ...and the five rows cost the same, which is why the engine reads the first row's costs before the pick (`adapt/command.ts commandCosts`).
+    for (const variant of roulette.pickOne ?? []) expect([variant.costAtb, variant.costCast]).toEqual([roulette.costAtb, roulette.costCast]);
   });
 
   it('every fallback record equals its row', () => {
@@ -215,6 +225,40 @@ describe('FFX-2 command records are the game\'s rows', () => {
     }
     const unreachable = Object.keys(FFX2_COMMAND_RECORDS).filter((id) => data.ABILITIES[id] === undefined && defaultAbilities.get(id) === undefined);
     expect(unreachable).toEqual([]);
+  });
+});
+
+describe('what a command costs (re-parity W4): the ATB cost sets the recovery, the cast cost the charge', () => {
+  it('the rows the chapters lean on: Attack 70 / 0, Fire 0 / 70, an item 40 / 40, Steal 50 / 0, Trigger Happy 120 / 0, the Warrior Breaks 0 / 70', () => {
+    const cost = (id: number): [number | undefined, number | undefined] => {
+      const r = rowOf(id);
+      return [r?.costAtb, r?.charges ? r.costCast : 0];
+    };
+    expect(cost(0x302d)).toEqual([70, 0]);
+    expect(cost(0x30a5)).toEqual([0, 70]);
+    expect(cost(0x2000)).toEqual([40, 40]);
+    expect(cost(0x30bf)).toEqual([50, 0]);
+    expect(cost(0x3032)).toEqual([120, 0]);
+    for (const id of [0x3065, 0x3066, 0x3067, 0x3068]) expect(cost(id), `0x${id.toString(16)}`).toEqual([0, 70]);
+  });
+
+  it('the Alchemist Mix row says 80 but its caster animation (0) is not a cast class, so it never charges; every other row with a cast cost does', () => {
+    const rows = Object.entries(ROWS).filter(([, r]) => r.costCast > 0 && !r.charges).map(([k, r]) => `${k} ${r.name}`);
+    expect(rows).toEqual(['0x3058 Mix']);
+  });
+
+  it('every record the engine can run carries both costs (a record without them would fall back to the ability old tier)', () => {
+    const all = [
+      ...Object.entries(FFX2_COMMAND_RECORDS),
+      ...Object.entries(FALLBACK_RECORDS),
+      ...Object.entries(MONSTER_RECORDS).flatMap(([k, m]) => [
+        ...(m.plainAttack !== undefined ? [[`${k} attack`, m.plainAttack] as const] : []),
+        ...Object.entries(m.commands ?? {}).map(([c, r]) => [`${k} ${c}`, r] as const),
+      ]),
+    ];
+    const bare = all.filter(([, r]) => r.costAtb === undefined || r.costCast === undefined).map(([k]) => k);
+    expect(bare).toEqual([]);
+    expect(all.length).toBeGreaterThan(250);
   });
 });
 
@@ -334,6 +378,9 @@ describe('where an ability\'s own numbers differ from its record (the record win
       const gameRolls = accuracyFormula(r.flagsMisc) !== 0;
       if (ownRolls !== gameRolls) d.push(`rolls ${ownRolls}->${gameRolls}`);
       if (((derived.flagsDamage & 4) !== 0) !== ((r.flagsDamage & 4) !== 0)) d.push(`crit ${(derived.flagsDamage & 4) !== 0}->${(r.flagsDamage & 4) !== 0}`);
+      // The ATB cost and the cast cost (re-parity W4): the ability's own recovery value (70, 140 for 2xRT) and charge tier, against the row's.
+      if ((derived.costAtb ?? 70) !== (r.costAtb ?? 70)) d.push(`recovery ${derived.costAtb ?? 70}->${r.costAtb ?? 70}`);
+      if ((derived.costCast ?? 0) !== (r.costCast ?? 0)) d.push(`cast ${derived.costCast ?? 0}->${r.costCast ?? 0}`);
       // The damage limit: only whether the row forces 99999 (0x80) matters; a forced 9999 and the default are the same for an attacker without
       // Break Damage Limit. A move our data says breaks the limit but whose row lacks the bit still breaks it (the cast's authored flag
       // stands in for a monster's word, `resolve-strike.ts`); the list says which.

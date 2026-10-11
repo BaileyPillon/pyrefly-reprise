@@ -50,6 +50,8 @@ async function search<T>(
   seeds: number,
   probe: (ctx: DecisionContext, card: AdvisorView | null) => T | null,
   rig?: (ctx: DecisionContext) => void,
+  /** Re-parity W4: the command to submit instead of the card's top, after the probe has looked (null = the card's top). */
+  choose?: (ctx: DecisionContext) => Command | null,
 ): Promise<T | null> {
   for (const id of chapters) {
     for (let seed = 1; seed <= seeds; seed++) {
@@ -59,7 +61,7 @@ async function search<T>(
           const card = v3Card(ctx);
           const hit = probe(ctx, card);
           if (hit !== null) throw new Stop(hit);
-          return top(card);
+          return choose?.(ctx) ?? top(card);
         });
       } catch (e) {
         if (e instanceof Stop) return e.value as T;
@@ -84,6 +86,17 @@ describe('advisor v3 repair (FFX-2 only)', () => {
       clearAdvisorCache();
       const without = buildAdvisorView(ctx.state, { actorId: ctx.decision.actorId, commands: ctx.decision.commands }, { ...ctx.advisorOptions, v3: true, v3Rules: { onItsWay: false } });
       return idOf(top(without)) === 'x2-mega-potion' ? { ctx, card, p } : null;
+    }, undefined, (ctx) => {
+      // Re-parity W4 (FFX-2 only; reason "game-code parity"): at the game's gauge the party is rarely hurt enough, at the moment a Mega-Potion
+      // is charging, for the card to want a second one (no such board in 120 seeds of either chapter). The board is rigged to the state the
+      // check described: whoever can confirms a Mega-Potion on the weakest of a party an enemy has just taken down to 30 percent. The
+      // charge, the projection, the card and its rule are all the engine's own; only the beating is stood in for.
+      if (pendingCommands(ctx).some((x) => idOf(x.command) === 'x2-mega-potion')) return null;
+      const row = ctx.decision.commands.find((c) => c.enabled && c.command.kind === 'item' && idOf(c.command) === 'x2-mega-potion' && c.validTargets.length > 0);
+      if (!row) return null;
+      for (const c of Object.values(ctx.state.combatants)) if (c.side === 'party' && c.alive) (c as { hp: number }).hp = Math.floor(c.stats.maxHp * 0.3);
+      const weakest = [...row.validTargets].sort((a, b) => (ctx.state.combatants[a]?.hp ?? 0) - (ctx.state.combatants[b]?.hp ?? 0))[0]!;
+      return { ...row.command, targets: [weakest] } as Command;
     });
     expect(found, 'a board where a charging Mega-Potion lands inside the projection').not.toBeNull();
     expect(idOf(top(found!.card))).not.toBe('x2-mega-potion');
