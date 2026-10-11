@@ -206,6 +206,12 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  *     carried under half HP opens the next link with the Critical status.
  * Every outcome stays a victory but one: isaaru-via-purifico#1 link 3 moves defeat -> victory. One seed is one sample; the 500-seed rates are in
  * docs/handoff/re-parity-w5.md. Nothing on the boss or the party was tuned.
+ * yojimbo-cavern#1 re-pinned once more 2026-10-10 (re-parity W5, Chapter IX's line reworked after Bailey's pick "Keep 1:1, rework our line"; FFX only):
+ * the line now calls its aeon on the turn Yojimbo's gauge reads 96, before any revive or heal (it was 80, after them; src/engine/tactics/yojimbo-cavern.ts).
+ * Seed 1: the logs of the old line and the new one on the same engine are identical for 519 events and differ at the turn where Yuna meets a gauge of 93:
+ * the old line calls Bahamut there (event 520), the new one defends; the new line never summons on this seed (Yojimbo falls before 96), the battle is a
+ * victory both ways (577 and 560 events). Seed 7: the two logs are identical (neither line summons), so its digest keeps its value (a2f8d812).
+ * No other digest moved: Chapter IX is the only chapter whose line changed. 7681d4e3 -> 28996218.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': 'd0fa190d:victory',
@@ -218,7 +224,7 @@ const GOLDEN: Record<string, string> = {
   'seymour-anima-macalania#7': '77c0da0e:victory',
   'evrae-airship#1': '96e55b09:victory',
   'evrae-airship#7': '99a25fb5:victory',
-  'yojimbo-cavern#1': '7681d4e3:victory',
+  'yojimbo-cavern#1': '28996218:victory',
   'yojimbo-cavern#7': 'a2f8d812:victory',
   'seymour-natus#1': 'dc26538f:victory',
   'seymour-natus#7': 'cd5b1bcb:victory',
