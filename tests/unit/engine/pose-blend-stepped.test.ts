@@ -7,18 +7,22 @@
  * at 30 / 60 / 120 / 144 fps and 400 random phases the lesser plane is never above 0.30 and at least one frame has both above 0.02; and over random request
  * sequences (a request in mid-blend, a reversal, a burst) the cap still holds. The real `PaintedActor` through the same shape, read the way the harness reads
  * it, and the composite of the two planes as pixels, are `pose-blend-composite.test.ts`.
+ *
+ * Decision 53b (2026-10-11): the shape ships OFF by default (`POSE_BLEND_STEPPED_DEFAULT`); an actor runs the plain dissolve unless `?poseblend=stepped` says otherwise. The
+ * shape tests above drive `STEPPED_DISSOLVE` directly, so they are unchanged; the last describe pins the default and the switch.
  */
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Easing } from '../../../src/engine/Tween.ts';
 import {
   PoseBlend,
+  POSE_BLEND_STEPPED_DEFAULT,
   QUAD_IN_OUT,
   STEPPED_AT,
   STEPPED_CAP,
   STEPPED_DISSOLVE,
-  poseBlendLegacy,
   poseBlendShape,
-  setPoseBlendLegacy,
+  poseBlendStepped,
+  setPoseBlendStepped,
   type BlendPlane,
   type BlendShapeSpec,
 } from '../../../src/engine/PoseBlend.ts';
@@ -355,20 +359,47 @@ describe('the stepped dissolve: properties over random request sequences', () =>
 
 // ---------------------------------------------------------------- the switch
 
-describe('?poseblend=legacy: the switch and the default', () => {
-  it('an actor\'s shape is the stepped dissolve, and the legacy switch gives the plain quadInOut back', () => {
-    setPoseBlendLegacy(null);
-    expect(poseBlendLegacy()).toBe(false); // no address in a test: the default
-    expect(poseBlendShape()).toBe(STEPPED_DISSOLVE);
-    setPoseBlendLegacy(true);
-    expect(poseBlendLegacy()).toBe(true);
+afterEach(() => {
+  vi.unstubAllGlobals();
+  setPoseBlendStepped(null);
+});
+
+describe('?poseblend=stepped: the default is the plain dissolve (decision 53b, 2026-10-11), the stepped shape is one switch away', () => {
+  it('the default constant is OFF, and with no address (a test has none) an actor\'s shape is today\'s plain quadInOut', () => {
+    expect(POSE_BLEND_STEPPED_DEFAULT).toBe(false);
+    setPoseBlendStepped(null);
+    expect(poseBlendStepped()).toBe(false);
     expect(poseBlendShape()).toBe(QUAD_IN_OUT);
     expect(QUAD_IN_OUT).toBe(Easing.quadInOut);
-    setPoseBlendLegacy(null);
-    expect(poseBlendShape()).toBe(STEPPED_DISSOLVE);
   });
 
-  it('the legacy shape reproduces the plain dissolve exactly (so the switch is a true A/B): the incoming fade is quadInOut of the progress', () => {
+  it('the switch gives the stepped dissolve (the same object the shape tests above run), and null gives the default back', () => {
+    setPoseBlendStepped(true);
+    expect(poseBlendStepped()).toBe(true);
+    expect(poseBlendShape()).toBe(STEPPED_DISSOLVE);
+    setPoseBlendStepped(false);
+    expect(poseBlendShape()).toBe(QUAD_IN_OUT);
+    setPoseBlendStepped(null);
+    expect(poseBlendShape()).toBe(QUAD_IN_OUT);
+  });
+
+  it('the address: ?poseblend=stepped turns it on; plain, the old legacy, another value or nothing leave the default (off); it is read once until a test resets it', () => {
+    const at = (search: string): boolean => {
+      vi.stubGlobal('location', { search });
+      setPoseBlendStepped(null);
+      return poseBlendStepped();
+    };
+    expect(at('?poseblend=stepped')).toBe(true);
+    expect(at('?x=1&poseblend=stepped')).toBe(true);
+    expect(at('?poseblend=plain')).toBe(false);
+    expect(at('?poseblend=legacy')).toBe(false);
+    expect(at('?poseblend=nonsense')).toBe(false);
+    expect(at('')).toBe(false);
+    vi.stubGlobal('location', { search: '?poseblend=stepped' });
+    expect(poseBlendStepped(), 'read once: the address changing under a running page does not flip it').toBe(false);
+  });
+
+  it('the plain shape reproduces the plain dissolve exactly (so the switch is a true A/B): the incoming fade is quadInOut of the progress', () => {
     const rig = new Rig([1, 0], QUAD_IN_OUT);
     rig.request('attack', 120);
     rig.step(30);

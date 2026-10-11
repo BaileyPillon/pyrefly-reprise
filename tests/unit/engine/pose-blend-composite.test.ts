@@ -10,7 +10,7 @@
  *    (the pixel form of the harness's `ghost.peak`, and the pixel severity matches the harness's within a hair), and the share of the overlap the figure still
  *    covers never dips below a stated floor: a plain dissolve's middle frame leaves a quarter of the body showing the background through (0.75 covered), the
  *    stepped dissolve never less than 0.79.
- * 3. **It can fail.** The same matrix on today's plain dissolve (`?poseblend=legacy`) reads severity 0.40 or more at IoU 0.061 and a dip to 0.75.
+ * 3. **It can fail.** The same matrix on today's plain dissolve (the default since decision 53b; `?poseblend=stepped` turns the stepped one on) reads severity 0.40 or more at IoU 0.061 and a dip to 0.75.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -18,7 +18,7 @@ import { resolve } from 'node:path';
 import { OneFactor, OneMinusSrcAlphaFactor, SrcAlphaFactor, ZeroFactor, CustomBlending } from 'three';
 import { PaintedActor, painting, reset, slotsOf, type Actor } from './head-lock-fixture.ts';
 import { PAINTED_BLENDING } from '../../../src/engine/BloomMask.ts';
-import { STEPPED_CAP, setPoseBlendLegacy } from '../../../src/engine/PoseBlend.ts';
+import { STEPPED_CAP, setPoseBlendStepped } from '../../../src/engine/PoseBlend.ts';
 import { analyzeSwap } from '../../../critic/runner/lib/continuity-pure.mjs';
 import type { Anchors, ContinuityConfig, FrameOfFig } from '../../../critic/runner/lib/continuity-pure.mjs';
 
@@ -26,7 +26,7 @@ const CFG = (JSON.parse(readFileSync(resolve(__dirname, '..', '..', '..', 'criti
 
 afterEach(() => {
   reset();
-  setPoseBlendLegacy(null);
+  setPoseBlendStepped(null);
 });
 
 // ---------------------------------------------------------------- silhouettes and the pixel compositor
@@ -269,7 +269,7 @@ describe.each([[120], [140]])('the stepped dissolve on the real PaintedActor, %i
 
   for (const target of IOUS) {
     it(`IoU ${target}: severity under 0.40 (and under ${STEPPED_CAP} x (1 - IoU)), no snap, a blend frame in every run, the lesser painting\'s pixels never above ${STEPPED_CAP}, the overlap covered at ${FLOOR} or more`, () => {
-      setPoseBlendLegacy(false);
+      setPoseBlendStepped(true);
       const r = matrix(tidus(ms), target);
       expect(r.severity).toBeLessThan(CHECK_LIMIT);
       expect(r.severity).toBeLessThanOrEqual(STEPPED_CAP * (1 - r.iou) + 0.002); // the cap, in the harness's own units
@@ -281,8 +281,8 @@ describe.each([[120], [140]])('the stepped dissolve on the real PaintedActor, %i
       expect(Math.abs(r.pixelSeverity - r.severity), 'the pixels and the plane fades give the harness the same number').toBeLessThan(0.015);
     }, 60_000);
 
-    it(`IoU ${target}, the guard: today's plain dissolve (?poseblend=legacy) reads ${target <= 0.14 ? 'a severity of 0.40 or more' : 'a dip under the floor'}, so the same checks can fail`, () => {
-      setPoseBlendLegacy(true);
+    it(`IoU ${target}, the guard: today's plain dissolve (the default) reads ${target <= 0.14 ? 'a severity of 0.40 or more' : 'a dip under the floor'}, so the same checks can fail`, () => {
+      setPoseBlendStepped(false);
       const r = matrix(tidus(ms), target);
       expect(r.minCovered).toBeLessThan(FLOOR); // the middle of a plain dissolve: 0.75
       expect(r.worstGhost).toBeGreaterThan(0.45);

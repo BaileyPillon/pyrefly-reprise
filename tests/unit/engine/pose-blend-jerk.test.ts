@@ -1,7 +1,11 @@
 /**
  * FB-2 DISCLOSURE (visual-and-feel pass, r40-int fixer, 2026-10-11; both games): what the stepped dissolve costs the harness's CHK-027 jerk reading.
  *
- * Finding (the integration review): the stepped dissolve (Bailey's P2-A) is the actor's shape for every pose change. It moves the weight between the two
+ * Status (decision 53b, 2026-10-11): the stepped dissolve is built and pinned here, but OFF by default (`?poseblend=stepped` turns it on), because of exactly the
+ * reading below; every actor runs the plain dissolve until Bailey has seen new loops and picked. `swap()` sets the switch itself, so this file reads both shapes whatever
+ * the default is.
+ *
+ * Finding (the integration review): the stepped dissolve (Bailey's P2-A) was the actor's shape for every pose change. It moves the weight between the two
  * paintings in ONE frame at its step (1.00 / 0.21 to 0.29 / 0.71), so the harness's tracked head and feet, which are the FADE-WEIGHTED mean of the planes that
  * show (`figureTrack`), jump about twice as far in a single frame as under the plain dissolve, which spreads the same displacement over six or seven frames.
  * CHK-027 therefore reads MORE jerks at pose swaps than the plain dissolve did, where the plan (section 4) expected the count to fall. This is not a code bug: it
@@ -29,12 +33,12 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { PaintedActor, cameraAt, painting, reset, viewOf } from './head-lock-fixture.ts';
 import { CFG, FRAME, anchors, record } from './ko-fall-fixture.ts';
-import { PoseBlend, STEPPED_CAP, STEPPED_DISSOLVE, setPoseBlendLegacy, type BlendPlane } from '../../../src/engine/PoseBlend.ts';
+import { PoseBlend, STEPPED_CAP, STEPPED_DISSOLVE, setPoseBlendStepped, type BlendPlane } from '../../../src/engine/PoseBlend.ts';
 import { detectJerks, figureTrack } from '../../../critic/runner/lib/continuity-pure.mjs';
 
 afterEach(() => {
   reset();
-  setPoseBlendLegacy(null);
+  setPoseBlendStepped(null);
 });
 
 const EPS = 1e-9;
@@ -94,7 +98,7 @@ const CHARACTERS = ['tidus', 'auron', 'kimahri', 'lulu', 'rikku', 'wakka', 'yuna
 
 /** One pose change at 60 fps, the production-like camera: the biggest single-frame step of the harness's fade-weighted tracked head or feet, and the jerk events it flags. */
 function swap(subject: string, from: string, to: string, plain: boolean): { worst: number; jerks: number } {
-  setPoseBlendLegacy(plain);
+  setPoseBlendStepped(!plain);
   const a = new PaintedActor({ name: subject, worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
   const poses: Record<string, ReturnType<typeof painting>> = {};
   for (const p of new Set(['idle', from, to])) poses[p] = painting(subject, p);

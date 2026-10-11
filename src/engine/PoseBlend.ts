@@ -20,18 +20,19 @@
  * 6. **The shape is injected.** Today's `quadInOut` by default; a symmetric `(u) => s` or a pair of curves
  *    ({@link BlendCurves}) per request, so a capped or stepped shape (FB-2) or the KO cross ({@link KO_CROSS})
  *    plugs in without touching this file again.
- * 7. **The stepped dissolve is the actor's shape (FB-2, Bailey's P2-A, both games).** Two paintings that barely overlap
- *    (Tidus attack to follow reads an IoU of 0.14, Rikku ready to attack 0.061, Sin's right fin 0.095) cannot be
- *    dissolved plainly without a double image: at the middle of a plain blend each shows at about a half, which is
- *    the 0.40 and 0.47 severities the harness reads. {@link STEPPED_DISSOLVE} never lets the lesser painting show more
- *    than {@link STEPPED_CAP}, whatever the frame rate or the phase, and still has frames with both on (it is a blend,
- *    not a cut): the new painting comes up to 0.30 under the old at full, then the two step to 0.30 and 0.70, then the
- *    old one goes out and the new one comes in to 1. `PaintedActor` uses it for every pose change; `?poseblend=legacy`
- *    restores today's plain dissolve for same-build A/B captures ({@link poseBlendLegacy}). **The cost, disclosed:** the step trades the two paintings'
- *    weight in ONE frame (with the lesser painting capped under one half and the body never thinning, it cannot be done in fewer than a jump of
- *    1 - 2 * cap = 0.40), so the continuity harness's fade-weighted tracked head and feet move about twice as far in that frame as under the plain dissolve,
- *    and CHK-027 reads MORE jerks at pose swaps (64 key-chain and hurt pairs, 15 stepping 40 px or more against none; 560 swaps, 78 against none) while the
- *    ghost metric falls (161 swaps at severity 0.40 or more to none, by construction of the cap). Bailey picked the shape from the ghost side; the jerk side is
+ * 7. **The stepped dissolve is built and OFF by default (FB-2, Bailey's P2-A, both games; the default switched off by the driver, 2026-10-11, decision 53b).**
+ *    Two paintings that barely overlap (Tidus attack to follow reads an IoU of 0.14, Rikku ready to attack 0.061, Sin's right fin 0.095) cannot be
+ *    dissolved plainly without a double image: at the middle of a plain blend each shows at about a half, which is the 0.40 and 0.47 severities the
+ *    harness reads. {@link STEPPED_DISSOLVE} never lets the lesser painting show more than {@link STEPPED_CAP}, whatever the frame rate or the phase, and
+ *    still has frames with both on (it is a blend, not a cut): the new painting comes up to 0.30 under the old at full, then the two step to 0.30 and
+ *    0.70, then the old one goes out and the new one comes in to 1. **The cost, disclosed:** the step trades the two paintings' weight in ONE frame (with
+ *    the lesser painting capped under one half and the body never thinning, it cannot be done in fewer than a jump of 1 - 2 * cap = 0.40), so the
+ *    continuity harness's fade-weighted tracked head and feet move about twice as far in that frame as under the plain dissolve, and CHK-027 reads MORE
+ *    jerks at pose swaps (64 key-chain and hurt pairs, 15 stepping 40 px or more against none; 560 swaps, 78 against none) while the ghost metric falls
+ *    (161 swaps at severity 0.40 or more to none, by construction of the cap). A focused review would class that as a regression, and the Motion Options
+ *    page never showed it, so **`PaintedActor` runs the plain dissolve ({@link QUAD_IN_OUT}, as before FB-2) until Bailey picks again** (the stepped
+ *    shape at the cap of 0.30, the stepped shape at 0.39, or the plain one). The stepped shape stays whole and one switch away: `?poseblend=stepped`
+ *    ({@link poseBlendStepped}), or flip {@link POSE_BLEND_STEPPED_DEFAULT}. Bailey picked the shape from the ghost side; the jerk side is
  *    `tests/unit/engine/pose-blend-jerk.test.ts` and `docs/handoff/r40-blend-jerk.md`.
  *
  * The fades are written on the planes the caller hands in (`PaintedActor.slots`), the very fields the harness
@@ -119,24 +120,37 @@ export const STEPPED_DISSOLVE: BlendCurves = {
   cap: STEPPED_CAP,
 };
 
-// ------------------------------------------------------------------ the kill switch
+// ------------------------------------------------------------------ the switch
 
-let legacy: boolean | null = null;
+/**
+ * Whether an actor's pose changes run on the stepped dissolve when nothing says otherwise. **false** since 2026-10-11 (decision 53b): the stepped shape
+ * (Bailey's P2-A) is built and pinned, but it reads 78 of 560 pose-swap pairs at a 40 px or larger one-frame jump on the critic's harness against 0 for the
+ * plain dissolve, so it ships switched off until Bailey has seen new loops and picked (`docs/handoff/r40-blend-jerk.md`). Turning it on is this one constant.
+ */
+export const POSE_BLEND_STEPPED_DEFAULT = false;
 
-/** `?poseblend=legacy` (captures and A/B comparisons only): every pose change dissolves plainly again (`quadInOut`), as before FB-2. Read once, like the other URL switches' first look. */
-export function poseBlendLegacy(): boolean {
-  if (legacy === null) legacy = new URLSearchParams(globalThis.location?.search ?? '').get('poseblend') === 'legacy';
-  return legacy;
+let stepped: boolean | null = null;
+
+/**
+ * `?poseblend=stepped` turns the stepped dissolve (FB-2, P2-A) on for the page; `?poseblend=plain` (or the old `legacy`) turns it off whatever the default;
+ * without the parameter {@link POSE_BLEND_STEPPED_DEFAULT} rules. Read once, like the other URL switches' first look.
+ */
+export function poseBlendStepped(): boolean {
+  if (stepped === null) {
+    const value = new URLSearchParams(globalThis.location?.search ?? '').get('poseblend');
+    stepped = value === 'stepped' ? true : value === 'plain' || value === 'legacy' ? false : POSE_BLEND_STEPPED_DEFAULT;
+  }
+  return stepped;
 }
 
 /** Tests: force the switch (`null` reads the address again). */
-export function setPoseBlendLegacy(value: boolean | null): void {
-  legacy = value;
+export function setPoseBlendStepped(value: boolean | null): void {
+  stepped = value;
 }
 
-/** The shape an actor's pose changes run on: the stepped dissolve, or today's plain one behind the switch. */
+/** The shape an actor's pose changes run on: today's plain dissolve by default, the stepped dissolve behind the switch. */
 export function poseBlendShape(): BlendShapeSpec {
-  return poseBlendLegacy() ? QUAD_IN_OUT : STEPPED_DISSOLVE;
+  return poseBlendStepped() ? STEPPED_DISSOLVE : QUAD_IN_OUT;
 }
 
 /**

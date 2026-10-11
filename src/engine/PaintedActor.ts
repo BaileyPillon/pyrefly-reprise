@@ -692,7 +692,7 @@ export class PaintedActor extends Group {
     this.shadowAlphaTest = opts.shadowAlphaTest ?? 0.4;
     this.bloomMasked = opts.bloomMask !== false;
     this.slots = [this.makeSlot(renderOrder), this.makeSlot(renderOrder)];
-    this.blend = new PoseBlend(this.slots, poseBlendShape()); // FB-2: the stepped dissolve (`?poseblend=legacy` = the plain one)
+    this.blend = new PoseBlend(this.slots, poseBlendShape()); // the plain dissolve; FB-2's stepped one only behind `?poseblend=stepped` (off by default since 2026-10-11)
     for (const s of this.slots) this.inner.add(s.mesh);
     this.add(this.inner);
 

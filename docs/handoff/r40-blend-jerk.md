@@ -1,5 +1,7 @@
 # r40-blend-jerk: what the stepped dissolve costs the CHK-027 jerk reading (FB-2, P2-A; disclosure)
 
+**UPDATE 2026-10-11 (r40-rc, driver decision 53b): the stepped dissolve now ships OFF by default.** `PaintedActor` runs the plain dissolve; the stepped shape is whole and one switch away (`?poseblend=stepped`, or `POSE_BLEND_STEPPED_DEFAULT` in `src/engine/PoseBlend.ts`). The tests pin both: the default (plain), the switch (stepped), the shape's own numbers and the jerk bounds. Bailey gets new loops (P2-A at cap 0.30, P2-A at cap 0.39, the plain dissolve) and the pick stays his; the question at the end of this note is still open, and until he answers the plain dissolve plays. Everything below measures the stepped shape: read "the actor's shape" and "the default" as "the shape behind the switch".
+
 Date 2026-10-11. Written by the r40-int fixer for the release driver; branch `r40-int`. No browser, no server, no Playwright was used: every number below is the REAL
 `PaintedActor` and the harness's own `figureTrack` / `detectJerks` with `critic/policy.json`'s thresholds, read in vitest. Nothing here has been looked at on a screen.
 
@@ -17,7 +19,7 @@ the live build, where plan section 4 expected the count to fall.
 committed as a test (`tests/unit/engine/pose-blend-jerk.test.ts`). 8 characters (Tidus, Auron, Kimahri, Lulu, Rikku, Wakka, Yuna, Paine's Warrior), 60 fps, 120 ms blend,
 the production-like camera (7.7 up, 9.9 back):
 
-| Set | Pairs | Jerk events, stepped | plain (`?poseblend=legacy`) | Pairs with a single-frame step of 40 px or more, stepped | plain |
+| Set | Pairs | Jerk events, stepped (`?poseblend=stepped`) | plain (the default now) | Pairs with a single-frame step of 40 px or more, stepped | plain |
 |---|---|---|---|---|---|
 | Every ordered pair of idle, ready, attack, follow, hurt, cast, defend, victory, item | 560 | 260 | 10 | 78 | 0 |
 | The 64 key-chain and hurt pairs (the committed test) | 64 | 38 | 2 | 15 | 0 |
@@ -57,7 +59,7 @@ Not done, and why:
 "Pose changes between paintings that barely overlap no longer show two half-strength bodies: the new painting comes up under the old one, the two trade at a step, and the
 old one goes out. The cost is on the critic's side: the continuity check CHK-027 reads that step as a small jump of the tracked head and feet at pose swaps (about twice the
 size of the plain dissolve's per-frame move, 15 of 64 key-chain and hurt pairs above 40 px against none), so its jerk count at swaps rises while its double-image count falls
-from 161 swaps to none by construction (the cap bounds it; the focused review is to confirm it). `?poseblend=legacy` plays the old dissolve for a same-build A/B."
+from 161 swaps to none by construction (the cap bounds it; the focused review is to confirm it). `?poseblend=stepped` plays the stepped dissolve for a same-build A/B; it is off by default."
 
 Plan section 4's expectation ("the jerk count falls") does not hold for the swaps with FB-2 on; the knock-back (FC-1) and the KO (FA-1 to FA-3) are what are built to move it down, unmeasured on the harness yet. The sub-score caps
 hang on CHK-026 and on snaps per minute (`critic/RUBRIC.md` 6a), not on CHK-027 jerks, so this does not bring a cap back; the deep review should read the strips (it is the composite
@@ -66,8 +68,8 @@ the eye sees, which the harness does not read) before it scores the animation su
 ## The question for Bailey (one, with the numbers above)
 
 "The stepped dissolve you picked removes the double image (161 swaps to none, by construction) but the critic reads its one-frame step as a jump, about twice the plain dissolve's (15 of 64 attack-chain
-and hurt pairs above 40 px against none). Keep it as it is (the default), raise the lesser painting's cap from 0.30 to 0.39 so the step is smaller (a different picture from the loops
-you saw: I would show you new loops first), or go back to the plain dissolve (the double image returns on 161 swaps)?" Until he answers, FB-2 stays as picked.
+and hurt pairs above 40 px against none). Keep it as it is (turn it on), raise the lesser painting's cap from 0.30 to 0.39 so the step is smaller (a different picture from the loops
+you saw: I would show you new loops first), or go back to the plain dissolve (the double image returns on 161 swaps)?" Until he answers, the plain dissolve plays (decision 53b); FB-2 is built, pinned and one switch away.
 
 Suggested ledger text for the driver (not edited here: the ledgers are the driver's): an OPEN decision row "P2-A's jerk cost (FB-2): keep / raise cap / plain", with this file as
 its evidence, and an action row for this fix (a test, a comment, this note; no engine change).
