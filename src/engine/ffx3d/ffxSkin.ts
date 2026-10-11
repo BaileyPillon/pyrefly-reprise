@@ -13,8 +13,8 @@
  *   `PaintedActor` keeps both private and the stage never passes `figure: false`; this chapter-local write, like the range director's `rimOf` and `keepUpright`, avoids growing that 2,254-line shared file for one hidden
  *   chapter (house rule 7), and `tests/unit/ffx-skin.test.ts` pins that the fields are still there.
  * - **The interim yaw is off** (`setInterimYaw(0)`): that turn is for flat paintings, and a model has its own facing: each faces the other side's stand point, as FFX does at the start of a fight.
- * - **Alpha and scale follow the actor.** The range director fades Evrae with `setAlpha` and sets the actor's scale for the FAR painting; the model takes the alpha and divides the scale out, so it stays the size
- *   its file says.
+ * - **Alpha and scale follow the actor.** The range director fades Evrae with `setAlpha` and sets the actor's scale for the FAR painting; the model takes the alpha (and the painted figure's dissolve, so a
+ *   sent fiend fades as it comes apart) and divides the scale out, so it stays the size its file says.
  * - **The actor's height is the model's**, how far its highest point stands above its origin, so the HUD's head anchors land on the model, not on a painting of another height. (A figure whose origin is not at
  *   its feet, Evrae's, anchors at its top rather than its crown: the HUD's plates are a later question.)
  *
@@ -25,6 +25,7 @@
 
 import { Group, Object3D, Vector3 } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
+import type { FfxAnimator } from './ffxAnimator.ts';
 import type { FfxStaging } from './ffxStaging.ts';
 import type { FfxModel, FfxModels } from './models.ts';
 
@@ -71,6 +72,8 @@ export interface FfxSkinOptions {
   /** The loaded models, or null for the painted skin at FFX's staging (billboards only). */
   readonly models: FfxModels | null;
   readonly staging: FfxStaging;
+  /** Moves the models: each is handed to it as it is attached and it is advanced once a frame. Without one the models hold the idle pose (phase 3). */
+  readonly animator?: FfxAnimator;
 }
 
 export class FfxSkin {
@@ -92,9 +95,9 @@ export class FfxSkin {
 
   /**
    * Once a frame, after the stage's own work: attach to any actor that is new, and make every model follow its actor's alpha and scale. Nothing to do before the host is mounted in a scene.
-   * The painted skin at FFX's staging has no models and only lays its billboards flat.
+   * The painted skin at FFX's staging has no models and only lays its billboards flat. `dt` (seconds) advances the animator, when there is one.
    */
-  update(): void {
+  update(dt = 0): void {
     const scene = this.opts.host.parent;
     if (!scene) return;
     const ids = this.opts.models ? Object.keys(this.opts.models.actors) : PAINTED_IDS;
@@ -105,6 +108,7 @@ export class FfxSkin {
       if (!have || have.actor !== actor) this.attach(id, actor);
       else this.follow(have);
     }
+    this.opts.animator?.update(dt);
   }
 
   private attach(id: string, actor: PaintedActor): void {
@@ -120,6 +124,7 @@ export class FfxSkin {
     actor.setWorldHeight(model.height);
     this.faceOpponents(id, actor, model);
     parts.inner.add(model.root);
+    this.opts.animator?.add({ id, root: model.root, read: () => ({ pose: actor.pose, life: actor.lifeState }) });
     const baseScale = model.root.scale.x;
     this.bound.set(id, { actor, model, baseScale, alpha: -1 });
     this.follow(this.bound.get(id)!);
@@ -144,7 +149,8 @@ export class FfxSkin {
   private follow(b: Bound): void {
     const { actor, model } = b;
     if (!model) return;
-    const alpha = actor.visible ? actor.alpha : 0;
+    const dissolve = Number.isFinite(actor.dissolveLevel) ? Math.min(1, Math.max(0, actor.dissolveLevel)) : 0; // a sent fiend comes apart into pyreflies (the painted figure's shader): the model fades with it
+    const alpha = actor.visible ? actor.alpha * (1 - dissolve) : 0;
     if (alpha !== b.alpha) {
       b.alpha = alpha;
       model.root.visible = alpha > 0.002;

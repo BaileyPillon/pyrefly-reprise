@@ -22,11 +22,17 @@
  */
 
 import { Mesh, Vector3, type MeshBasicMaterial, type Object3D } from 'three';
+import { ATTACK_IMPACT } from '../engine/BattlePresenterActors.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
+import { tapShotDirector, type BeatListener } from '../engine/ffx3d/beatTap.ts';
+import { FfxAnimator } from '../engine/ffx3d/ffxAnimator.ts';
+import { loadFfxClips } from '../engine/ffx3d/ffxClips.ts';
+import { FfxSky, bakeBowl, loadSkyAssets } from '../engine/ffx3d/ffxSky.ts';
 import { FfxSkin } from '../engine/ffx3d/ffxSkin.ts';
 import { FFX_SKY_GAIN, FFX_STAGE_PARTS, ffxFaythStaging, type FfxStaging } from '../engine/ffx3d/ffxStaging.ts';
-import { probeFfxLocal } from '../engine/ffx3d/localAssets.ts';
+import { probeFfxLocal, type FfxLocalManifest } from '../engine/ffx3d/localAssets.ts';
 import { loadFfxModels, shapeStage, type FfxModels } from '../engine/ffx3d/models.ts';
+import { paceRate } from '../engine/pace.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { WorldRig } from '../engine/ffx3d/ffxWorld.ts';
 import { airshipRangeDirectorOf } from './evrae-airship-director.ts';
@@ -38,6 +44,11 @@ export type FaythSkinKind = 'ffx' | 'painted';
 export function skinParam(search: string): 'painted' | 'classic' | null {
   const v = new URLSearchParams(search).get('skin');
   return v === 'painted' || v === 'classic' ? v : null;
+}
+
+/** The query switch for the motions: `?ffxanim=off` keeps the models in their idle pose (phase 3's), for comparing; anything else, or nothing, animates them when the folder has the clips. */
+export function animParam(search: string): 'off' | null {
+  return new URLSearchParams(search).get('ffxanim') === 'off' ? 'off' : null;
 }
 
 type Mutable<T> = { -readonly [K in keyof T]: T[K] };
@@ -52,6 +63,13 @@ export function derive(build: SceneBuild, over: Partial<Mutable<SceneBuild>>): S
 /** The skin each derived build carries (the camera's frames read the models' extents through it, `./exp-fayth-camera.ts`); a build with no skin has none. */
 const SKINS = new WeakMap<SceneBuild, FfxSkin>();
 export const skinOf = (build: SceneBuild): FfxSkin | null => SKINS.get(build) ?? null;
+
+/** The beats the animator listens to, by the derived build that carries it (the camera glue wraps its own director with the same listener, `./exp-fayth-camera.ts`). */
+const TAPS = new WeakMap<SceneBuild, BeatListener>();
+export const tapOf = (build: SceneBuild): BeatListener | null => TAPS.get(build) ?? null;
+
+/** The actor the airship's range flights move (the range director's subject). */
+const FLYER = 'evrae';
 
 const rig = (v: WorldRig): CameraRig => ({ position: [...v.position], lookAt: [...v.lookAt], fov: v.fov, sway: v.sway });
 
@@ -143,8 +161,10 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
   if (param === 'classic') return build;
   let kind: FaythSkinKind = 'painted';
   let models: FfxModels | null = null;
+  let clouds: FfxSky | null = null;
+  let manifest: FfxLocalManifest | null = null;
   if (param !== 'painted') {
-    const manifest = await probeFfxLocal();
+    manifest = await probeFfxLocal();
     if (!manifest) return build; // no folder: exactly phase 1
     models = await loadFfxModels(manifest);
     for (const problem of models.problems) console.warn(`[ffx-local] ${problem}`);
@@ -168,7 +188,18 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
     if (models?.stage) {
       const shaped = shapeStage(models.stage.root, FFX_STAGE_PARTS);
       if (shaped.drawn === 0) console.warn('[ffx-local] the stage has none of the parts the battle draws (a renamed file?): no stage');
-      for (const mesh of shaped.sky) for (const m of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) (m as MeshBasicMaterial).color.setScalar(FFX_SKY_GAIN);
+      const assets = manifest ? await loadSkyAssets(manifest) : null;
+      // The bowl as the game shades it (`tone(texel * vertex colour)`) with the cloud sea under the ship; without the exported sky, the converter's colours brightened as the first pictures had them.
+      if (!(assets && models.stage.sky && bakeBowl(models.stage.sky, assets.sidecar.texel) > 0)) {
+        for (const mesh of shaped.sky) for (const m of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) (m as MeshBasicMaterial).color.setScalar(FFX_SKY_GAIN);
+      }
+      if (assets) {
+        const sea = new FfxSky(assets.textures, staging.partySlots[0]!.y);
+        if (sea.count > 0) {
+          build.group.add(sea.group);
+          clouds = sea;
+        } else sea.dispose();
+      }
       build.group.add(models.stage.root);
       models.stage.sky?.scale.setScalar(0.5); // the bowl's radius (661 world units) is past the camera's far plane; it only carries a colour gradient, so a smaller bowl on the camera is the same sky
     }
@@ -176,7 +207,13 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
     layPainted(parts, staging, build.particles);
   }
 
-  const skin = new FfxSkin({ host: build.group, models, staging });
+  // The motions: the clip table and the clips, when the folder has them (no clipmap, or none of the files loading, is phase 3's still models).
+  let animator: FfxAnimator | null = null;
+  if (models && manifest && animParam(typeof location === 'undefined' ? '' : location.search) !== 'off') animator = await animatorFor(manifest, models);
+  const skin = new FfxSkin({ host: build.group, models, staging, ...(animator ? { animator } : {}) });
+  const tap: BeatListener | null = animator && listenerOf(animator);
+  if (animator) (globalThis as { __ffxanim?: FfxAnimator }).__ffxanim = animator; // the debug handle (this module is dev-server only)
+  let lastRange: 'near' | 'far' | null = null;
   let camera: { getWorldPosition(target: Vector3): Vector3 } | null = null;
   const eye = new Vector3();
   const sky = models?.stage?.sky ?? null;
@@ -192,15 +229,52 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
     },
     update(dt: number): void {
       build.update(dt);
-      skin.update();
-      if (sky && sky.parent && camera) sky.position.copy(sky.parent.worldToLocal(camera.getWorldPosition(eye))); // the sky bowl rides the camera
+      skin.update(dt);
+      const range = animator ? airshipRangeDirectorOf(build.group) : null;
+      if (animator && range) {
+        if (lastRange !== null && range.current !== lastRange) animator.noteRange(FLYER, range.current);
+        lastRange = range.current;
+      }
+      if (camera) {
+        camera.getWorldPosition(eye);
+        if (sky && sky.parent) sky.position.copy(sky.parent.worldToLocal(eye.clone())); // the sky bowl rides the camera
+        clouds?.update(dt, eye); // and the cloud sea, horizontally
+      }
     },
     dispose(): void {
+      const g = globalThis as { __ffxanim?: FfxAnimator };
+      if (animator && g.__ffxanim === animator) delete g.__ffxanim; // not a newer scene's handle
+      animator?.dispose();
+      clouds?.dispose();
       skin.dispose();
       models?.dispose();
       build.dispose();
     },
+    ...(tap ? { shotDirector: tapShotDirector(build.shotDirector, tap) } : {}), // every beat is also told to the animator; the director's own answers are unchanged
   });
   SKINS.set(derived, skin);
+  if (tap) TAPS.set(derived, tap);
   return derived;
+}
+
+/** The beats an animator wants to hear: an action opening (its row, the ability, the lunge's lead), a blow landing, the action closing. */
+function listenerOf(animator: FfxAnimator): BeatListener {
+  return {
+    open: (_beat, ctx) => animator.noteOpen(ctx.actor.id, { abilityId: ctx.action.abilityId, kind: ctx.action.kind, lead: ctx.ms(440 * ATTACK_IMPACT) / 1000 }), // the lunge's apex: where the blow lands
+    impact: (_beat, ctx) => {
+      if (ctx.actor) animator.noteImpact(ctx.actor.id);
+    },
+    close: (_beat, ctx) => {
+      if (ctx.actor) animator.noteClose(ctx.actor.id);
+    },
+  };
+}
+
+/** The animator for the loaded models, or null when the folder has no clip table or none of the animation files loaded (each problem is warned once). */
+async function animatorFor(manifest: FfxLocalManifest, models: FfxModels): Promise<FfxAnimator | null> {
+  const found = await loadFfxClips(manifest, Object.keys(models.actors));
+  if (!found) return null;
+  for (const problem of found.problems) console.warn(`[ffx-local] ${problem}`);
+  const animator = new FfxAnimator({ map: found.map, clips: found.clips, rate: () => paceRate('action') });
+  return Object.keys(models.actors).some((id) => animator.canAnimate(id)) ? animator : null;
 }

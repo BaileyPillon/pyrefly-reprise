@@ -281,7 +281,7 @@ describe('the ffx skin (a found manifest; the models stood in)', () => {
     return { models: { stage: { root: stageRoot, sky, dispose: () => {} }, actors: {}, problems: [], dispose }, dispose, stageRoot, sky, bowl, deck, other };
   }
 
-  it('hides the painted deck, sky plate, light pools and grit, adds the stage with only the deck (mirrored) and the sky (brightened) drawn, and grades neutrally', async () => {
+  it('hides the painted deck, sky plate, light pools and grit, adds the stage with only the deck (mirrored) and the sky drawn (the file colours brightened when there is no exported sky), and grades neutrally', async () => {
     serve(true);
     const s = standIn();
     fake.models = s.models;

@@ -55,6 +55,21 @@ export const FFX_STAGE_PARTS = {
   sky: [/^FBXASC0490_\dShape$/],
 } as const;
 
+/**
+ * **How far above its origin each model is drawn, in FFX units** (the `ffx` skin; `[ours: fitted]`, not a number from the files). Evrae's origin is mid-body (its idle pose runs from 14.6 below it to 19.6 above, times
+ * the game's factor of 4) and the formation stands it at the floor's height (`FFX_EVRAE_SPOTS`, y -35). Drawn there, with the party and the deck exactly where the PS2 capture of the same view has them, its head
+ * and mane land about 30 units **too low**: the capture's golden mane arc and claws sit that much higher in the frame, in every phase of its idle tried. What fits:
+ *
+ * - **The PS2 capture overlaid** (`b2_ev76_0.png`, the NEAR default view): with Evrae lifted 30 units at the game's factor of 4, the mane's arc, the claws and the body's trunk lie over the capture's in two idle phases;
+ *   at 41 (its feet's bind-pose depth), 50 or 58 (its lowest point in the idle) the arc is above the capture's and the head leaves the frame; at 0 it is below.
+ * - **The camera data agrees**: the Photon Spray shot aims at y -72 at Evrae's far spot, 37 above the floor; its head sits about 12 above its origin, so the origin is some 25 to 30 above the floor.
+ * - **The scale is not what is wrong.** The parts measure as the capture shows them at x4 (the head 7 file units long, a hand 3 to 4: 28 and 12 to 16 units, against about 33 and 20 read off the capture), the game's own
+ *   block says base 4.0, and the arc and claws overlay at that size; the "1.3 times too large" of the first pictures was a body drawn too low and too near.
+ *
+ * How the game really places a monster (a ground offset in the data, the animation's own translation) is not read. **Open.**
+ */
+export const FFX_MODEL_LIFT: Readonly<Record<string, number>> = { evrae: 30 };
+
 /** How much brighter the sky bowl's material is drawn than its texture and vertex colour say: the stage's cloud floor is dark navy as the file stores it and the capture's is pale lavender (**an estimate**, Open: 6 turns the file's navy into the capture's slate; the capture's lavender cloud texture is not in the converted file). */
 export const FFX_SKY_GAIN = 6;
 

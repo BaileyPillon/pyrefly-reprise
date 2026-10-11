@@ -15,7 +15,7 @@
 import { BoxGeometry, BufferGeometry, Color, DoubleSide, FrontSide, Group, Mesh, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture } from 'three';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { FFX_STAGE_PARTS } from '../../src/engine/ffx3d/ffxStaging.ts';
+import { FFX_MODEL_LIFT, FFX_STAGE_PARTS } from '../../src/engine/ffx3d/ffxStaging.ts';
 import { FFX_UNIT } from '../../src/engine/ffx3d/ffxWorld.ts';
 import type { FfxLocalManifest } from '../../src/engine/ffx3d/localAssets.ts';
 import { folderOf, idleFileOf, loadFfxModels, parsePoseHeights, parseWeapons, runtimeScaleOf, shapeStage, spreadOf, unlitMaterial } from '../../src/engine/ffx3d/models.ts';
@@ -209,7 +209,10 @@ describe('the loader', () => {
 
     const evrae = models.actors['evrae']!;
     expect(evrae.root.scale.x).toBeCloseTo(4 * FFX_UNIT, 15); // Evrae is drawn at x4
-    expect(evrae.height).toBeCloseTo(19.642 * 4 * FFX_UNIT, 12); // the box top above its origin (the creature's origin is mid-body), at x4
+    expect(evrae.height).toBeCloseTo((19.642 * 4 + FFX_MODEL_LIFT['evrae']!) * FFX_UNIT, 12); // the box top above its origin (the creature's origin is mid-body), at x4, and the model's lift
+    expect(evrae.root.position.y).toBeCloseTo(30 * FFX_UNIT, 12); // drawn 30 FFX units above its origin: the fit to the PS2 capture
+    expect(tidus.root.position.y).toBe(0); // the party stands at its origin
+    expect(Object.keys(FFX_MODEL_LIFT)).toEqual(['evrae']);
     expect(models.actors['wakka']!.root.getObjectByName('SkeletonNode_22')!.children).toHaveLength(0); // the weapon's bone is not there: unarmed, the rest stands
 
     expect(models.stage!.root.scale.x).toBeCloseTo(10 * FFX_UNIT, 15); // the stage is drawn at x10

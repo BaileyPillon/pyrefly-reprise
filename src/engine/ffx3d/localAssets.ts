@@ -53,7 +53,7 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
  * A path the manifest may name: relative to the manifest, inside the route. No scheme or drive letter, no absolute path, no backslash, no parent step, no empty step, and none of the characters that
  * would change what a URL means when the path is appended to it (`%`, `?`, `#`, NUL).
  */
-function isManifestPath(v: unknown): v is string {
+export function isManifestPath(v: unknown): v is string {
   if (typeof v !== 'string' || v === '' || v.length > 260) return false;
   if (/[\\:%?#\0]/.test(v) || v.startsWith('/') || v.endsWith('/')) return false;
   return v.split('/').every((step) => step !== '' && step !== '.' && step !== '..');

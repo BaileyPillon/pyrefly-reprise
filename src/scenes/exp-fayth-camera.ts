@@ -29,11 +29,12 @@ import { loadFfxCameraPrograms } from '../engine/ffxcam/load.ts';
 import { FAYTH_ACTIVE_PARTY } from '../engine/ffxcam/roster.ts';
 import { ThreeCameraSink } from '../engine/ffxcam/sink.ts';
 import { ffxCamVariantOf, variantFilter, type FfxCamVariant } from '../engine/ffxcam/variant.ts';
+import { tapShotDirector } from '../engine/ffx3d/beatTap.ts';
 import { FFX_NEAR_VIEW } from '../engine/ffx3d/ffxStaging.ts';
 import { ffxWorldMatrix } from '../engine/ffx3d/ffxWorld.ts';
 import type { FfxSkin } from '../engine/ffx3d/ffxSkin.ts';
 import { airshipRangeDirectorOf } from './evrae-airship-director.ts';
-import { derive, skinOf } from './exp-fayth-skin.ts';
+import { derive, skinOf, tapOf } from './exp-fayth-skin.ts';
 import type { SceneBuild } from './types.ts';
 
 /** The encounter's folder under the dev route's `camera/` (`D:\Tools\ffx-parity\assets\runtime\camera\evrae\`). */
@@ -116,8 +117,9 @@ export async function stageFaythCamera(base: SceneBuild, skinned: SceneBuild): P
   };
   if (import.meta.env.DEV) (globalThis as { __ffxcam?: FaythCameraHandle }).__ffxcam = { camera, latch, variant, target: () => target };
 
+  const tap = tapOf(skinned); // the skin's animator listens to the same beats (`./exp-fayth-skin.ts`): the camera's answers go through it unchanged
   return derive(skinned, {
-    shotDirector: camera.shotDirector,
+    shotDirector: tap ? tapShotDirector(camera.shotDirector, tap) : camera.shotDirector,
     bindCamera(c) {
       skinned.bindCamera?.(c);
       unbind();

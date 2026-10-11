@@ -14,23 +14,32 @@
  *
  * ## The material (chosen by looking, `docs/handoff/fayth-3d.md` phase 3)
  *
- * Every material is rebuilt as an **unlit `MeshBasicMaterial`**: the diffuse texture and, where the file has them, the vertex colours, cut out by `alphaTest` where the file asks for a mask, double-sided where it says so,
- * and **not fogged** (the scene's fog is tuned for the painted world's units). The game's own shader lights a character with one soft directional light and the HD stage with baked vertex colour; the texture is
- * already shaded by hand, so unlit is the faithful first answer and the one that cannot go dark in our lights. A lit look is a later question for Bailey (`docs/plans/fayth-3d.md`, phase 5).
+ * Every material is rebuilt as an **unlit `MeshBasicMaterial`**: the diffuse texture and, where the file has them, the vertex colours, cut out by `alphaTest` where the file asks for a mask, and **not fogged**
+ * (the scene's fog is tuned for the painted world's units). The game's own shader lights a character with one soft directional light and the HD stage with baked vertex colour; the texture is already shaded by
+ * hand, so unlit is the faithful first answer and the one that cannot go dark in our lights. A lit look is a later question for Bailey (`docs/plans/fayth-3d.md`, phase 5).
+ *
+ * Phase 5a added two things, both measured against the game's own data and the PS2 capture:
+ *
+ * - **The game's own render state** (`./passState.ts`): single or double sided, blended or not, from the effect variant's shader pass (`extras.ffx.pass`). Evrae's wing membrane is a cut-out whose survivors are
+ *   alpha blended, which the glb's mask alone drew as opaque magenta; every actor is single sided; the stage is except its `DOUBLE_SIDED` variants.
+ * - **Textures are display values.** The game's shader writes `tone(texture * colour)` straight to the backbuffer (no sRGB decode and encode), and this game's composer chain does not re-encode what three.js
+ *   decodes, so the textures are marked `NoColorSpace` and shown as authored. With the decode on, Evrae, the party and the hull read about half as bright as the PS2 capture.
  *
  * Game case: FFX only (the files are FFX's).
  */
 
-import { Box3, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, SkinnedMesh, Vector3, type BufferGeometry, type Material, type Object3D, type Texture } from 'three';
+import { Box3, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, NoColorSpace, SkinnedMesh, Vector3, type BufferGeometry, type Material, type Object3D, type Texture } from 'three';
+import { FFX_MODEL_LIFT } from './ffxStaging.ts';
 import { FFX_UNIT } from './ffxWorld.ts';
 import { ffxLocalUrl, type FfxLocalManifest } from './localAssets.ts';
+import { applyPassState, passStateOf } from './passState.ts';
 
 /** One model: a root in world units that an actor can carry, and what the skin needs to fade and free it. */
 export interface FfxModel {
   readonly id: string;
   /** Scaled to the world, facing +Z, standing at its own origin: parent it to the actor and turn it with `rotation.y`. */
   readonly root: Group;
-  /** How far its highest point stands above its origin in the idle pose, world units (the actor's height for the HUD's head anchors). */
+  /** How far its highest point stands above its origin in the idle pose, world units, with the model's lift (`FFX_MODEL_LIFT`) (the actor's height for the HUD's head anchors). */
   readonly height: number;
   /** How far it spreads sideways in the idle pose, world units: the larger of its box's x and z extents (what the FFX camera frames a figure by, `../ffxcam/frames.ts`). */
   readonly width: number;
@@ -131,8 +140,10 @@ export function runtimeScaleOf(userData: unknown): number {
 // ---------------------------------------------------------------------------
 
 /**
- * The unlit material for a loaded one: the diffuse map and tint, vertex colours when the mesh has them, the file's own cut-out threshold and sidedness, no fog. A material that is blended in the file stays blended and
- * does not write depth. Reads only the fields a glTF material has, so it takes the loader's `MeshStandardMaterial` and nothing else is needed.
+ * The unlit material for a loaded one: the diffuse map and tint, vertex colours when the mesh has them, the file's own cut-out threshold, no fog. Sidedness, blending and depth are the **game's own state for
+ * the material** when the file carries it (`extras.ffx.pass`, `./passState.ts`: an alpha-enabled variant is a cut-out whose survivors are blended, which is Evrae's see-through wing; every actor and most of the
+ * stage are single sided); a file without it keeps the glTF material's own sidedness and blending (a blended one does not write depth). Reads only the fields a glTF material has, so it takes the loader's
+ * `MeshStandardMaterial` and nothing else is needed. The state is kept in `userData.ffxPass` for the stage's mirrored meshes (`shapeStage`).
  */
 export function unlitMaterial(src: Material): MeshBasicMaterial {
   const s = src as Material & { map?: Texture | null; color?: Color };
@@ -148,8 +159,14 @@ export function unlitMaterial(src: Material): MeshBasicMaterial {
     depthWrite: src.depthWrite,
     fog: false,
   });
-  material.userData['baseTransparent'] = src.transparent;
-  if (material.map) material.map.anisotropy = 8; // the renderer clamps it to what the card has
+  const state = passStateOf(src.userData);
+  applyPassState(material, state);
+  material.userData['ffxPass'] = state;
+  material.userData['baseTransparent'] = material.transparent;
+  if (material.map) {
+    material.map.anisotropy = 8; // the renderer clamps it to what the card has
+    material.map.colorSpace = NoColorSpace; // the game's textures are display values (its shader writes `tone(texture * colour)` as it is): not decoded, so the chain shows them as authored
+  }
   return material;
 }
 
@@ -279,8 +296,10 @@ async function loadActor(loader: Loader, id: string, file: string, heights: Reco
       problems.push(`${id}: weapon not attached (${e instanceof Error ? e.message : String(e)})`);
     }
   }
+  const lift = (FFX_MODEL_LIFT[id] ?? 0) * FFX_UNIT; // Evrae stands above its origin (`FFX_MODEL_LIFT`): the model is drawn there, and its head anchor with it
+  root.position.y = lift;
   const tall = heights[id] ?? 0;
-  const height = (tall > 0 ? tall : 18) * scale;
+  const height = (tall > 0 ? tall : 18) * scale + lift;
   return {
     id,
     root,
