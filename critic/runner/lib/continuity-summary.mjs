@@ -103,6 +103,23 @@ export function verdicts(s, cfg, run = {}) {
 }
 
 /**
+ * The line a report carries for the continuity harness (PR-0450: "a next-round report line per instrument"): how many chapters, how much battle, the frame rates it ran at, how many
+ * chapters the dedicated harness ran (only those are scored: a probe attached to a capture route read a loaded host, round 25), both verdicts with their reasons, and the jerks that
+ * happened under the Save Sphere's wash and were not counted.
+ * @param {{ battleSeconds: number, chapters?: Array<{ fps?: number | null, dedicated?: boolean | null }>, checks: Record<string, { result: string, reasons?: string[] }>, motion?: { jerksCovered?: number, worstCoveredJerkPx?: number } }} s the run's aggregate
+ */
+export function continuityReportLine(s) {
+  const rows = s.chapters ?? [];
+  const fps = rows.map((r) => r.fps).filter((v) => Number.isFinite(v));
+  const fpsText = fps.length ? `${Math.min(...fps)} to ${Math.max(...fps)} fps` : 'frame rate not read';
+  const dedicated = rows.filter((r) => r.dedicated === true).length;
+  const verdict = (c) => (c ? `${c.result}${c.reasons && c.reasons.length ? ` (${c.reasons.join('; ')})` : ''}` : 'not read');
+  const covered = s.motion && s.motion.jerksCovered ? `; ${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) under the Save Sphere's wash are not counted` : '';
+  const unscored = dedicated < rows.length ? `; ${rows.length - dedicated} chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored` : '';
+  return `continuity harness (CHK-026/CHK-027): ${rows.length} chapter(s), ${s.battleSeconds} s of battle, ${fpsText}, ${dedicated} of ${rows.length} run by the dedicated harness; CHK-026 ${verdict(s.checks['CHK-026'])}; CHK-027 ${verdict(s.checks['CHK-027'])}${covered}${unscored}`;
+}
+
+/**
  * The worst `n` swaps, most broken first. A swap's badness is its largest exceedance of the thresholds, so a
  * 40 percent head jump and a 119 px slide each outrank a mild ghost; a snap or a double image adds weight.
  */

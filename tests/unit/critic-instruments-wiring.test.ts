@@ -58,6 +58,11 @@ describe('the deep review reaches the instruments', () => {
     expect(a.prompt).toMatch(/busy host or a broken protocol is not an idle-host number/);
   });
 
+  it('has the continuity agent hand back the report line of the harness', async () => {
+    const h = (await prompts(ARGS)).find((c) => c.label === 'continuity-harness')!;
+    expect(h.prompt).toContain('reportLine (the "REPORT LINE:" the harness printed last, copied whole)');
+  });
+
   it('tells the capture owner that the inline continuity probe is gone', async () => {
     const c = (await prompts(ARGS)).find((x) => x.label === 'capture-owner')!;
     expect(c.prompt).toMatch(/Do not pass --continuity to route\.mjs/);
@@ -85,5 +90,6 @@ describe('what the prompts name exists and is written down where a reviewer read
   it('has the sweep and the cold load print the line the report carries', () => {
     expect(read('critic/runner/lib/sweep.mjs')).toContain('console.log(`REPORT LINE: ${out.reportLine}`)');
     expect(read('critic/runner/lib/coldload.mjs')).toContain('console.log(`REPORT LINE: ${reportLine}`)');
+    expect(read('critic/runner/lib/continuity.mjs')).toContain('console.log(`REPORT LINE: ${summary.reportLine}`)');
   });
 });

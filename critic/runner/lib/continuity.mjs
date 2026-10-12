@@ -31,7 +31,7 @@ import { createProbe } from './continuity-probe.mjs';
 import { loadPoseMeasure } from './continuity-silhouette.mjs';
 import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
-import { verdicts } from './continuity-pure.mjs';
+import { continuityReportLine, verdicts } from './continuity-pure.mjs';
 import { washPolicy } from './continuity-wash.mjs';
 import { CONTINUITY_BUDGET_MS, continuityBudgetFor } from './route-pure.mjs';
 
@@ -202,6 +202,7 @@ export async function runContinuity(argv) {
   // PR-0398: a retry of one chapter used to overwrite the whole review's summary with its own; `--summary=<file>` names the file (a run that is not the whole review should not use the default)
   fs.writeFileSync(path.join(evidence, args.summary ?? 'continuity-summary.json'), JSON.stringify(summary, null, 1));
   console.log(JSON.stringify({ checks: summary.checks, size: summary.size, motion: summary.motion }, null, 1));
+  console.log(`REPORT LINE: ${summary.reportLine}`);
   return summary;
 }
 
@@ -234,7 +235,8 @@ export function aggregate(results, cfg) {
   const checks = verdicts(whole, cfg, {});
   // a chapter that could not be verified keeps the whole run from passing, but never hides another chapter's failure
   for (const id of ['CHK-026', 'CHK-027']) if (checks[id].result === 'PASS' && unverifiedChapters.length) checks[id] = { result: 'UNVERIFIED', reasons: [`not verified in: ${unverifiedChapters.join(', ')}`] };
-  return { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, checks };
+  const out = { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, checks };
+  return { ...out, reportLine: continuityReportLine(out) }; // PR-0450: one line for the report, with the frame rates and how many chapters the dedicated harness ran
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

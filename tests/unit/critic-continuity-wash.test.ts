@@ -16,6 +16,7 @@ import { aggregate, continuityConfig } from '../../critic/runner/lib/continuity.
 import type { ChapterResult } from '../../critic/runner/lib/continuity.mjs';
 import { createProbe } from '../../critic/runner/lib/continuity-probe.mjs';
 import type { ProbeConfig, ProbeFrame, ProbeMeta } from '../../critic/runner/lib/continuity-probe.mjs';
+import { continuityReportLine } from '../../critic/runner/lib/continuity-pure.mjs';
 import type { Anchors, ContinuityConfig, Jerk } from '../../critic/runner/lib/continuity-pure.mjs';
 import { WASH_MIN_COVER, WASH_SELECTOR, tagWash, washCover, washOverStep, washPolicy, washReport, washTable } from '../../critic/runner/lib/continuity-wash.mjs';
 
@@ -418,6 +419,25 @@ describe('the whole run\'s aggregate', () => {
     const inline: ChapterResult = { ...chapter('seymour-flux', 0, 0, 0), probe: { fps: 46 } }; // an older file: no `dedicated`
     const rows = aggregate([fa, inline, { chapter: 'broken', summary: null }], CFG).chapters;
     expect(rows.map((r) => [r.chapter, r.jerksCovered, r.fps, r.dedicated])).toEqual([['ffx2-fallen-aeons', 4, 59.6, true], ['seymour-flux', 0, 46, null], ['broken', 0, null, null]]);
+  });
+
+  it('prints one report line: the chapters, the battle, the frame rates, how many the dedicated harness ran, both verdicts with their reasons, and the jerks the wash covered (PR-0450)', () => {
+    const rows: ChapterResult[] = [{ ...chapter('ffx2-fallen-aeons', 0, 4, 967.7), probe: { fps: 59.6 }, dedicated: true }, { ...chapter('seymour-flux', 1, 0, 0), probe: { fps: 46 }, dedicated: true }];
+    const line = aggregate(rows, CFG).reportLine;
+    expect(line).not.toContain('\n');
+    expect(line).toContain('continuity harness (CHK-026/CHK-027): 2 chapter(s), 600 s of battle, 46 to 59.6 fps, 2 of 2 run by the dedicated harness');
+    expect(line).toContain('CHK-026 PASS;');
+    expect(line).toContain('CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame (worst 50 px))');
+    expect(line).toContain("4 jerk(s) (worst 967.7 px) under the Save Sphere's wash are not counted");
+    expect(line).not.toContain('not scored');
+  });
+
+  it('says so when a chapter was not run by the dedicated harness (an older file, or a failed run), and when no frame rate was read', () => {
+    const line = aggregate([{ ...chapter('seymour-flux', 0, 0, 0), probe: { fps: 59 } }, { chapter: 'broken', summary: null }], CFG).reportLine;
+    expect(line).toContain('0 of 2 run by the dedicated harness');
+    expect(line).toContain('2 chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored');
+    expect(line).toContain('59 to 59 fps');
+    expect(continuityReportLine({ battleSeconds: 0, checks: {} })).toBe('continuity harness (CHK-026/CHK-027): 0 chapter(s), 0 s of battle, frame rate not read, 0 of 0 run by the dedicated harness; CHK-026 not read; CHK-027 not read');
   });
 
   it('counts a chapter summarised before the edit as having none', () => {

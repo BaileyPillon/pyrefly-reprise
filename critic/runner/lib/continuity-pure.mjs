@@ -355,4 +355,4 @@ export function median(a) {
 
 // ------------------------------------------------------------------ summary and verdicts
 // (in continuity-summary.mjs, split out to keep this file under 400 lines; re-exported so nothing that imports it changes)
-export { summarize, verdicts, swapBadness, distinctFirst, worstSwaps } from './continuity-summary.mjs';
+export { summarize, verdicts, swapBadness, distinctFirst, worstSwaps, continuityReportLine } from './continuity-summary.mjs';

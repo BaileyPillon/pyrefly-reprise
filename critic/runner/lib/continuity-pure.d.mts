@@ -69,5 +69,6 @@ export interface Summary {
 export declare function summarize(o: { swaps: SwapRow[]; jerks: Jerk[]; coveredJerks?: Jerk[]; battleSeconds: number; cfg: ContinuityConfig }): Summary;
 export declare function verdicts(s: Pick<Summary, 'battleSeconds' | 'counted' | 'size' | 'motion'>, cfg: ContinuityConfig, run?: { fps?: number | null; error?: string | null }): Summary['checks'];
 export declare function swapBadness(s: SwapRow, cfg: ContinuityConfig): number;
+export declare function continuityReportLine(s: { battleSeconds: number; chapters?: { fps?: number | null; dedicated?: boolean | null }[]; checks: Record<string, { result: string; reasons?: string[] }>; motion?: { jerksCovered?: number; worstCoveredJerkPx?: number } }): string;
 export declare function distinctFirst<T>(list: T[], key: (x: T) => string, n: number): T[];
 export declare function worstSwaps(swaps: SwapRow[], n: number, cfg: ContinuityConfig): SwapRow[];

@@ -8,5 +8,6 @@ export declare function aggregate(results: ChapterResult[], cfg: ContinuityConfi
   size: Record<string, number>; motion: Record<string, number | null>;
   checks: Record<'CHK-026' | 'CHK-027', { result: string; reasons: string[] }>;
   chapters: ({ chapter: string; jerksCovered: number; fps: number | null; dedicated: boolean | null } & Record<string, unknown>)[];
+  reportLine: string;
 };
 export declare function runContinuity(argv: string[]): Promise<unknown>;
