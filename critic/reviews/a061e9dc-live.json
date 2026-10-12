@@ -1,0 +1,38 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-12T07:40:00Z",
+  "build": { "mainSha": "a061e9dc", "bundle": "Chs9J3OY", "artifactHash": "506dafe97789f6855c14d83d2da9b75db95e58da2ee745d9e2ff5885d7fd6e83" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "verifyLive() from tools/artifact-manifest.mjs run with --full semantics (all 5169 shipped files, 16-way parallel prefetch, no --changed-from because the review is deep) against critic/artifacts/a061e9dc.json at https://echoesofspira.com/ -> {result: PASS, artifactHash: 506dafe97789f6855c14d83d2da9b75db95e58da2ee745d9e2ff5885d7fd6e83, liveManifest: match, checked: 5169, mismatched: [], missing: [], wrongType: [], errors: []}; index.html as a browser receives it is identical once Cloudflare's one Web Analytics beacon is removed. Full output: critic/artifacts/a061e9dc-verify-live.json. (The stock sequential CLI was started first and stopped after ~40 min as too slow; the parallel run uses the same verifyLive function with a prefetching fetchImpl.)" },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), 1600x900, fresh context per run, cache-busted URL, real key presses. assertScreen/waitBattleMenu throw on timeout. FFX Ch II: chapter-select header read back as 'II Lady Yunalesca' before Enter, then party-prep -> battle -> awaitingMenu (first menu with tutorial guide, screenshot ffx-ch2-menu.png). FFX-2 Ch IV: header read back as 'IV Bahamut' before Enter, battle opening screenshot (ffx2-ch4-opening.png) shows the painted backdrop with no pipe slabs, ATB gauges running with the 'gauges running / a command holds them' callout; four Attack turns driven with real Enter presses, battleLog grew 8->8->18->18->28 and every turn returned to awaitingMenu (no stall; ffx2-after-turns.png shows filled/partial ATB bars, Curse status guide, advisor). Pause: P -> screen 'pause', H hid panels (text 3200->2855) and H restored, Escape resumed to battle, P/P toggled back to battle. Cancel path: Escape from the command menu returned to the menu. Music: audioDebug showed playing boss-yunalesca (FFX) and boss-bahamut (FFX-2) from the prerendered manifest (manifest:true, v2 decoded true), and the network log fetched /audio/music/*.mp3 (title, chapter-select, scene, boss, pause) plus sfx sprite.mp3 and sprite-v2.mp3: not the procedural fallback. 0 console errors, 0 responses >= 400, 0 image/audio responses served as text/html across both contexts.",
+      "reason": "A first smoke run selected the wrong chapter (ArrowRight x3 landed on Chapter III because the board now has 18 tiles and Ch IV sits in the X-2 row); the assertion caught it, that run was discarded, and the script was changed to read the selected header. Reviewer harness error, not a game defect." },
+    { "id": "CHK-024", "result": "PASS", "mandatory": false,
+      "evidence": "Lightweight reload smoke on the FFX-2 context: set masterVolume 0.8->0.42 in localStorage key pyrefly-reprise:save:v1, reloaded, waited for __pyreflyReady, read masterVolume back as 0.42; page returned to the title screen.",
+      "reason": "No chapter-clear progress was made (no victory reached in this lean pass, so the save's chapter progress stayed at its initial state); only the setting round-trip was proven. The full upgrade matrix is not part of this pass." }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: all 5169 shipped files byte-compared with live, content types, live manifest match",
+      "title -> chapter-select -> party-prep -> battle for FFX Ch II (Yunalesca) and FFX-2 Ch IV (Bahamut), selected chapter asserted by header",
+      "FFX-2 Ch IV opening camera at 1600x900 (no pipe slabs), ATB gauges fill and four real turns without stall",
+      "FFX Ch II first menu; pause P/H/Escape; cancel path from the command menu",
+      "prerendered music playing in both games (audioDebug and network log)",
+      "settings reload persistence; console and 404 sweep"
+    ],
+    "reused": [],
+    "notTested": [
+      "full upgrade matrix (CHK-024 full)",
+      "chapter-clear progress persistence across reload (no victory reached)",
+      "FFX Ch II real Attack turn: the first Enter presses were absorbed by the first-time tutorial guide, log stayed at 1 (not a stall; the FFX-2 chapter proved turn flow); FFX CTB turns beyond the first menu",
+      "the content-level claims of r41/RC3/RC4 (W4 clock, boss scripts, per-game RNG streams, FFX gear/reactions/auto-items) beyond byte identity: they belong to the deep review",
+      "other chapters, win/loss/retry, phone layout"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 62
+}
