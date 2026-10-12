@@ -270,7 +270,8 @@ export async function playFight(r) {
     pick.took = took;
     pick.engineHp = Object.values(s?.battle?.combatants ?? {}).map((c) => `${c.id}:${c.hp}/${c.maxHp}`);
     const tg = await targetsUp(page);
-    if (!allTargetShot && tg.n >= 2 && tg.lit >= 2) { allTargetShot = true; await snap('22-target-all.png', `multi-target selection (${adv?.label} -> ${adv?.target})`, { screen: 'battle', targeting: true }, { lit: `${tg.lit}/${tg.n}` }); }
+    // PR-0450 (c): the state is what the HUD showed (reticles lit, read just above), not what the advisor card said it would be; the card's words are kept as a note
+    if (!allTargetShot && tg.n >= 2 && tg.lit >= 2) { allTargetShot = true; await snap('22-target-all.png', `multi-target selection read from the HUD: ${tg.lit} of ${tg.n} reticles lit (the advisor card named ${adv?.label ?? 'nothing'} -> ${adv?.target ?? 'nothing'})`, { screen: 'battle', targeting: true }, { lit: `${tg.lit}/${tg.n}` }); }
     pick.target = noteTarget(await chooser.confirmTarget(adv?.target ?? null), adv);
     rec.picks.push(pick);
     if (!attackSeq) { attackSeq = true; await seq('seq-party-action', 10, 180, `a party command resolving (${took})`); } else await page.waitForTimeout(600);

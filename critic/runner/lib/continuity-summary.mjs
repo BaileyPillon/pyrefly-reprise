@@ -12,11 +12,12 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 /**
  * The chapter's numbers and the two checks' results.
  * @param {Array} swaps  analysed swaps (each `{ ...analyzeSwap, figure, from, to, n, t, atSwapJerk?, counted }`)
- * @param {Array} jerks  detected jerks
+ * @param {Array} jerks  detected jerks, the ones the player can see (r43: a jerk under the Save Sphere's wash is in `coveredJerks`, not here)
+ * @param {Array} [coveredJerks] jerks excused because their step happened under the wash (continuity-wash.mjs): counted and shown, never judged
  * @param {number} battleSeconds seconds a battle was the screen being played (not paused)
  * @param {object} cfg   the policy's `continuity` block
  */
-export function summarize({ swaps, jerks, battleSeconds, cfg }) {
+export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg }) {
   const counted = swaps.filter((s) => s.counted);
   const minutes = battleSeconds / 60;
   // CHK-026 judges a change of POSE: a swap between two dresspheres or two forms (`costume`) and a swap between two pose names that draw one painting
@@ -65,6 +66,7 @@ export function summarize({ swaps, jerks, battleSeconds, cfg }) {
       heldSwaps: held.length, longestHeldFrames: counted.reduce((m, s) => Math.max(m, s.held ? s.held.frames : 0), 0),
       stagedChanges: new Set(stagedSwaps.map((s) => `${s.figure}|${s.staged.seq}`)).size, stagedSteps: stagedSwaps.length,
       stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length,
+      jerksCovered: coveredJerks.length, worstCoveredJerkPx: round(coveredJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
     },
   };
   return { ...summary, checks: verdicts(summary, cfg) };
@@ -96,7 +98,7 @@ export function verdicts(s, cfg, run = {}) {
   const basis = `${s.size.headRegistration} of ${s.size.headMeasured} measured swaps had a registered head (tolerance ${cfg.size.headTolerancePct} percent); ${s.size.headSilhouette} were read by the figure's mass (tolerance ${cfg.size.headTolerancePctCoarse} percent, whole-figure jumps only); ${s.size.headUnmeasured} had no reading`;
   return {
     'CHK-026': { result: result(size), reasons: unverified.length ? unverified : size, note: basis },
-    'CHK-027': { result: result(motion), reasons: unverified.length ? unverified : motion },
+    'CHK-027': { result: result(motion), reasons: unverified.length ? unverified : motion, ...(s.motion.jerksCovered ? { note: `${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) happened under the Save Sphere's wash and are not counted (continuity.wash in the policy; they are listed in the report)` } : {}) },
   };
 }
 

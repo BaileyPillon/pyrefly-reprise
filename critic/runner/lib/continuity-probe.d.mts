@@ -3,17 +3,21 @@ export interface ProbeConfig {
   ringScale: number; ringFrames: number; maxStrips: number; cellHeight: number; encodePerFrame: number; jpegQuality: number;
   recentFrames: number; jerkCandidatePx: number; jerkCandidateRatio: number; candidateWindow: number;
   beforeFrames: number; afterFrames: number; cutPx: number;
+  /** r43: the element whose opacity is recorded as `w` while it is up (the Save Sphere's wash); null or absent reads nothing. */
+  washSelector?: string | null;
 }
 export interface ProbeEnv { window: unknown; document: unknown; performance: { now(): number } }
 export interface ProbeFigure { id: string; side: string | null; kind: string | null; artId: string | null }
 export interface ProbePose { fig: number; pose: string; url: string | null; w: number; h: number }
 export interface ProbeSwap { n: number; t: number; i: number; from: number; to: number; a: number }
-export interface ProbeFrame { n: number; t: number; f: { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number] }[] }
+export interface ProbeFrame { n: number; t: number; f: { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number] }[]; /** r43: the wash element's opacity in this frame, present only while the Save Sphere card is up. */ w?: number }
 export interface ProbeStripMeta { id: number; kind: 'swap' | 'jerk'; fi: number; n: number; first: number; crop: number[]; ring: number[]; cell: number[]; view: number[]; meta: unknown; todo: number; have: number; length: number }
 export interface ProbeMeta {
   version: number; figs: ProbeFigure[]; poses: ProbePose[]; swaps: ProbeSwap[]; logEvents: { n: number; i: number; type?: string; [key: string]: unknown }[]; view: number[] | null; errors: string[];
   stats: { frames: number; battleFrames: number; battleSeconds: number; maxDtMs: number; slowFrames: number; fps: number | null; copyMsMean: number | null };
   strips: ProbeStripMeta[];
+  /** r43: what the probe read of the wash (null when the card never showed): its selector, its background alpha (null when unreadable), the frames it was up and its highest opacity. */
+  wash?: { selector: string; alpha: number | null; frames: number; maxOpacity: number; error: string | null } | null;
 }
 export interface Probe {
   records: ProbeFrame[]; swaps: ProbeSwap[]; strips: unknown[]; errors: string[];

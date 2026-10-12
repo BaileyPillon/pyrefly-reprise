@@ -9,6 +9,10 @@
 // `actor.slots` (the two textured planes: `pose`, `fade`, `meta`, `mesh`, `painted.url`), `actor.active`, `actor._alpha`,
 // `actor.poseUrls`; the stage's `opts.camera` and `opts.canvas`; and `window.__pyrefly.battleState().log`.
 //
+// One more thing is read, from the page and not from the engine: the opacity of the Save Sphere's wash (`cfg.washSelector`), an HTML veil in front of the canvas that
+// the frame ring cannot copy (r43, docs/handoff/r41-aeonjump.md). It is recorded as `w` on the frame record while the card is up, and its background alpha once in
+// `meta.wash`, so the node side can tell a jerk the player sees from one that happens under the veil (continuity-wash.mjs). A policy selector of null reads nothing.
+//
 // What it records, once per rendered frame while a battle is the screen being played (it runs right after the game's
 // own frame, via `app.nextFrame()`, so what it reads is what that frame drew):
 //   - per visible figure, each plane: pose, fade, and the screen position (CSS px) of the painting's four corners,
@@ -35,6 +39,7 @@ export function createProbe(cfg, env) {
     records: [], swaps: [], logEvents: [], logSeen: 0, errors: [],
     ring: [], ringFrame: [], ringSize: null, jobs: [], strips: [], encodeQ: [], idle: null,
     battleMs: 0, battleFrames: 0, maxDt: 0, slowFrames: 0, lastT: 0, copyMs: 0, copies: 0, vpPrev: null, stripId: 0,
+    wash: null,
   };
 
   // ------------------------------------------------------------------ geometry
@@ -81,6 +86,41 @@ export function createProbe(cfg, env) {
     let f = S.fs.get(fi);
     if (!f) { f = { shown: -1, lastFlip: -1e9, w: null, bottom: null, steps: [] }; S.fs.set(fi, f); }
     return f;
+  };
+
+  // ------------------------------------------------------------------ the Save Sphere's wash
+  // The alpha of a CSS colour: the 4th number of rgba(...) / rgb(r g b / a), 1 for rgb(...), 0 for transparent, null for a form it cannot read (the node side then treats the
+  // veil as hiding nothing, so a jerk under it stays counted).
+  const alphaOf = (css) => {
+    const c = String(css == null ? '' : css).trim().toLowerCase();
+    if (c === 'transparent') return 0;
+    const m = /^rgba?\(([^)]*)\)$/.exec(c);
+    if (!m) return null;
+    const p = m[1].split(/[\s,/]+/).filter(Boolean);
+    if (p.length < 4) return p.length === 3 ? 1 : null;
+    const a = p[3].endsWith('%') ? parseFloat(p[3]) / 100 : parseFloat(p[3]);
+    return Number.isFinite(a) ? Math.min(1, Math.max(0, a)) : null;
+  };
+  // The wash element's computed opacity in this frame (what the frame drew: the probe runs right after it), or null when the card is not up. A failure here never stops the
+  // probe or voids its verdicts (it is not in `errors`): it is kept in `meta.wash.error` and the veil simply counts for nothing.
+  const readWash = () => {
+    if (!cfg.washSelector) return null;
+    try {
+      const el = doc.querySelector(cfg.washSelector);
+      if (!el) return null;
+      const cs = win.getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return null;
+      const o = parseFloat(cs.opacity);
+      if (!Number.isFinite(o)) return null;
+      if (!S.wash) S.wash = { selector: cfg.washSelector, alpha: alphaOf(cs.backgroundColor), frames: 0, maxOpacity: 0, error: null };
+      S.wash.frames++;
+      if (o > S.wash.maxOpacity) S.wash.maxOpacity = o;
+      return R3(Math.min(1, Math.max(0, o)));
+    } catch (e) {
+      if (!S.wash) S.wash = { selector: cfg.washSelector, alpha: null, frames: 0, maxOpacity: 0, error: null };
+      if (!S.wash.error) S.wash.error = String(e && e.message ? e.message : e).slice(0, 160);
+      return null;
+    }
   };
 
   // ------------------------------------------------------------------ the frame ring and the strips
@@ -240,7 +280,8 @@ export function createProbe(cfg, env) {
       figs.push({ i: fi, a: R3(alpha), act, s: slots, g });
     }
     S.vpPrev = vp;
-    if (figs.length) S.records.push({ n, t, f: figs });
+    const washNow = readWash();
+    if (figs.length) S.records.push(washNow === null ? { n, t, f: figs } : { n, t, f: figs, w: washNow });
 
     // the battle log: hits, spells, outcomes, with the frame they arrived in
     try {
@@ -278,6 +319,7 @@ export function createProbe(cfg, env) {
   S.drain = (max) => { const out = S.records.splice(0, max); return { records: out, left: S.records.length }; };
   S.meta = () => ({
     version: S.version, figs: S.figs, poses: S.poses, swaps: S.swaps, logEvents: S.logEvents, view: S.view, errors: S.errors,
+    wash: S.wash ? { selector: S.wash.selector, alpha: S.wash.alpha, frames: S.wash.frames, maxOpacity: R3(S.wash.maxOpacity), error: S.wash.error } : null,
     stats: { frames: S.frames, battleFrames: S.battleFrames, battleSeconds: R3(S.battleMs / 1000), maxDtMs: R1(S.maxDt), slowFrames: S.slowFrames, fps: S.battleMs > 0 ? R1((S.battleFrames * 1000) / S.battleMs) : null, copyMsMean: S.copies ? R3(S.copyMs / S.copies) : null },
     strips: S.strips.map((s) => ({ id: s.id, kind: s.kind, fi: s.fi, n: s.n, first: s.first, crop: s.crop, ring: s.ring, cell: s.cell, view: s.view, meta: s.meta, todo: s.todo, have: s.frames.filter(Boolean).length, length: s.frames.length })),
   });
