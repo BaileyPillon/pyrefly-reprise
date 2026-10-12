@@ -4,8 +4,8 @@
  *
  * **Game case: FFX-2 only** (FFX is CTB and has its own tick tables in `src/battle/ffx/kernel/ctb*.ts`). Source:
  * FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), image base 0x400000. Spec:
- * `research/re-ffx2-atb-status.md`. Pure, deterministic, no DOM, no engine types (AGENTS.md rule 1). Not wired
- * into the engine: the engine still counts a fixed 3,000 ticks a second (`ffx2/gauges.ts`).
+ * `research/re-ffx2-atb-status.md`. Pure, deterministic, no DOM, no engine types (AGENTS.md rule 1). Wired into the
+ * engine by re-parity W4 (`ffx2/atb-engine.ts`, `logic-step.ts`, `clock.ts`).
  *
  * Exe addresses (live build):
  * - 0x006349f0  MsChrSetDecTime: Haste, Slow, the stop states and the halving into four speed values
@@ -17,11 +17,10 @@
  *
  * **Units.** The game counts recovery, charge and status accumulators in its own units and subtracts a
  * per-step amount (95 at the Normal setting). Nothing in the exe converts that to seconds. A "logic step" is one
- * pass of `pp_battle_logic_step` (0x0061e440); the frame pacer (0x00606900) measures real time in "fields" of
- * 1/60 s and plans one step per two fields (1/30 s), but it also runs one step when fewer than two fields have
- * elapsed, so whether the PC build runs 30 or 60 steps a second depends on how often the platform loop calls the
- * main frame function, which static analysis did not settle (see {@link STEPS_PER_SECOND_CANDIDATES}). Every
- * function here works in steps and units only.
+ * pass of `pp_battle_logic_step` (0x0061e440); the frame pacer (0x00606900) plans one step per two display fields, and
+ * the PC build's fields run at 60 / 1.001 a second: **29.97 logic steps a second, measured on the running game on
+ * 2026-10-09** (`research/re-ffx2-timing-measured.md` section 3; {@link FFX2_STEPS_PER_SECOND}). Every function here works
+ * in steps and units only; {@link stepsToSeconds} takes the rate.
  */
 
 import { at, s8, sdiv } from './intops.ts';
@@ -72,10 +71,17 @@ export const FFX2_THINKING_TICK = 1;
 /** Largest value any recovery or charge counter is clamped to. */
 export const FFX2_ATB_COUNTER_MAX = 99999;
 
-/** Logic steps per second candidates for the PC build (anchor map section 0): not settled statically. */
+/** Logic steps a second on the PC build: 60 / 1.001 / 2 (measured: `research/re-ffx2-timing-measured.md` section 3). */
+export const FFX2_STEPS_PER_SECOND = 60 / 1.001 / 2;
+
+/**
+ * The two rates the static analysis could not tell apart before the measurement (anchor map section 0). The kernel tests
+ * still run their arithmetic at both, because they check the arithmetic, not the rate; the engine uses
+ * {@link FFX2_STEPS_PER_SECOND}.
+ */
 export const STEPS_PER_SECOND_CANDIDATES = [30, 60] as const;
 
-/** Logic steps to seconds at `stepsPerSecond` (30 or 60; see {@link STEPS_PER_SECOND_CANDIDATES}). */
+/** Logic steps to seconds at `stepsPerSecond` (pass {@link FFX2_STEPS_PER_SECOND}). */
 export function stepsToSeconds(steps: number, stepsPerSecond: number): number {
   return steps / stepsPerSecond;
 }

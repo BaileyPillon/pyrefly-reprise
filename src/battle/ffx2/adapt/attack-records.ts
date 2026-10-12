@@ -17,25 +17,25 @@
 import type { FFX2CommandRecord } from '../../common/types.ts';
 
 /** 0x302c: Attack */
-const ROW_302C: FFX2CommandRecord = { id: 0x302c, category: 0, flagsTarget: 0x433, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
+const ROW_302C: FFX2CommandRecord = { id: 0x302c, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x433, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
 
 /** 0x302d: Attack */
-const ROW_302D: FFX2CommandRecord = { id: 0x302d, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
+const ROW_302D: FFX2CommandRecord = { id: 0x302d, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
 
 /** 0x302e: Attack */
-const ROW_302E: FFX2CommandRecord = { id: 0x302e, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 8, hits: 2, shatter: 50, element: 0, killer: 0 };
+const ROW_302E: FFX2CommandRecord = { id: 0x302e, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 8, hits: 2, shatter: 50, element: 0, killer: 0 };
 
 /** 0x302f: Attack */
-const ROW_302F: FFX2CommandRecord = { id: 0x302f, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
+const ROW_302F: FFX2CommandRecord = { id: 0x302f, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
 
 /** 0x3030: Attack */
-const ROW_3030: FFX2CommandRecord = { id: 0x3030, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
+const ROW_3030: FFX2CommandRecord = { id: 0x3030, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
 
 /** 0x3031: Attack */
-const ROW_3031: FFX2CommandRecord = { id: 0x3031, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
+const ROW_3031: FFX2CommandRecord = { id: 0x3031, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x20010052, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 50, element: 0, killer: 0 };
 
 /** 0x312f: Attack */
-const ROW_312F: FFX2CommandRecord = { id: 0x312f, category: 0, flagsTarget: 0x33, flagsMisc: 0x10012, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 100, element: 0, killer: 0 };
+const ROW_312F: FFX2CommandRecord = { id: 0x312f, costAtb: 70, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x10012, flagsDamage: 0x5, damageClass: 1, formula: 0, critByte: 0, accuracy: 0, power: 16, hits: 1, shatter: 100, element: 0, killer: 0 };
 
 /** The Attack record by the dressphere the girl wears. A dressphere not listed uses the sword family's. */
 const BY_DRESSPHERE: Readonly<Record<string, FFX2CommandRecord>> = {

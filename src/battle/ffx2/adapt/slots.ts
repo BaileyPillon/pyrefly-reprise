@@ -48,12 +48,18 @@ export function group2Index(status: StatusId): number | undefined {
   return i < 0 ? undefined : i;
 }
 
+/** The slot of every engine status, built once from the two tables above (the step loop asks for it for every status of every unit). */
+const SLOT_OF = new Map<StatusId, { group: 1 | 2; index: number }>();
+GROUP1_STATUS.forEach((status, index) => {
+  if (status !== null && !SLOT_OF.has(status)) SLOT_OF.set(status, { group: 1, index });
+});
+GROUP2_STATUS.forEach((statuses, index) => {
+  for (const status of statuses) if (!SLOT_OF.has(status)) SLOT_OF.set(status, { group: 2, index });
+});
+
 /** Where a status lives: `{ group, index }`, or `undefined` for a status the game keeps nowhere in these tables. */
 export function slotOf(status: StatusId): { group: 1 | 2; index: number } | undefined {
-  const g1 = group1Index(status);
-  if (g1 !== undefined) return { group: 1, index: g1 };
-  const g2 = group2Index(status);
-  return g2 === undefined ? undefined : { group: 2, index: g2 };
+  return SLOT_OF.get(status);
 }
 
 /** True for a group 2 slot that holds a stage (a signed -10 to +10 step count). */

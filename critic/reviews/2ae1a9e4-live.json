@@ -1,0 +1,20 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-11T12:50:00Z",
+  "build": {"mainSha": "2ae1a9e4", "bundle": "Dh42HgH0", "artifactHash": "55e101798e96ce068f24cd388dc716c088e96fba499491b8f577282f124343ea"},
+  "verdicts": {"deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed"},
+  "checks": [
+    {"id": "CHK-017", "result": "PASS", "mandatory": true, "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/2ae1a9e4.json --url https://echoesofspira.com/ --changed-from critic/artifacts/72973096.json --full (run in D:/pyrefly-r3945, where the manifest lives) -> {result: PASS, liveManifest: match, checked: 5162, mismatched: [], missing: [], wrongType: [], errors: []}", "reason": "Every shipped file byte-identical with the right content type."},
+    {"id": "CHK-016", "result": "PASS", "mandatory": true, "evidence": "Headless Playwright PYREFLY_BROWSER=gpu 1600x900 fresh contexts. Title -> chapter-select by real Enter; Chapter VIII evrae-airship (entered via gotoChapter) asserted battle/command:tidus/awaitingMenu before input; Orders one-order Pull back widget, Esc cancel path, queued order, Cancel offered on next actor's menu; P/H/Esc pause flow; boss-evrae.mp3 and pause.mp3 prerendered playing; 0 console errors, 0 404s.", "reason": "Only the Cid order flow of the named changes was exercised; other changes not tested."},
+    {"id": "CHK-024", "result": "PASS", "mandatory": false, "evidence": "Master volume 0.8->1.0 via real keys plus Chapter VIII cleared via autoBattle; after reload the save chapters were identical and masterVolume 1 read back.", "reason": "Lightweight only; full upgrade matrix not run."}
+  ],
+  "coverage": {
+    "tested": ["full artifact identity (5162 files)", "title to chapter-select real input", "Chapter VIII Orders menu: one-order widget, cancel path, positive path, Cancel on next actor", "pause P / hide H / resume Esc", "prerendered music fetch and playing", "settings and progress reload persistence", "console and 404 sweep"],
+    "reused": [],
+    "notTested": ["full CHK-024 upgrade matrix", "Chapter XVIII re-parity (500 of 500)", "strategy guide cards", "W5 per-hit Overdrive gauge, aeons, Steal; Ch IX aeon at gauge 96", "Chapter X reflect line", "Braska's Talk greyed while a Cid order is pending", "chapter reached by debug gotoChapter rather than card navigation"]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 75
+}

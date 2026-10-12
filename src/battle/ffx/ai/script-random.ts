@@ -2,9 +2,8 @@
  * The random numbers an FFX boss script draws, in the shapes the game's scripts use them
  * (`research/re-ffx-ai-seymour.md` section 1.3). **FFX only** [AGENTS.md rule 14].
  *
- * The scripts have exactly two sources of chance, and the engine's single seeded stream feeds
- * both of them (adopting the game's own stream map is a separate decision of Bailey's, plan
- * P3; nothing here assumes it):
+ * The scripts have exactly two sources of chance, and each has its own stream in the game, which the engine draws from
+ * (re-parity RNG lane; Bailey 2026-10-09 "Adopt game streams", D-648): `GetRandomValue` is stream 2, the picker is stream 4:
  *
  * | Script call | Shape | Helper |
  * |---|---|---|
@@ -18,6 +17,7 @@
 
 import type { FFXCombatant } from '../../common/types.ts';
 import type { Ctx } from '../state.ts';
+import { FfxStream } from '../adapt/streams.ts';
 
 /** The values `GetRandomValue()` can return: `rng & 0xFFFF`. */
 export const SCRIPT_VALUES = 0x10000;
@@ -28,9 +28,9 @@ export const COIN_TRUE_COUNT = 32_095;
 /** A raw draw of the picker: the engine's 31-bit value. */
 const PICKER_RANGE_MAX = 0x7fffffff;
 
-/** `GetRandomValue()`: one draw of the shared stream, 0 to 0xFFFF. */
+/** `GetRandomValue()`: one draw of the shared script stream (stream 2), 0 to 0xFFFF. */
 export function scriptValue(ctx: Pick<Ctx, 'rng'>): number {
-  return ctx.rng.int(0, 0xffff);
+  return ctx.rng.on(FfxStream.Script).int(0, 0xffff);
 }
 
 /** `GetRandomValue() mod n`, one draw. */
@@ -84,7 +84,7 @@ export function pickerIndex(raw: number, count: number): number {
  * candidates. Spend it, and return nothing.
  */
 export function drawPicker(ctx: Pick<Ctx, 'rng'>, candidateCount: number): void {
-  if (candidateCount >= 2) ctx.rng.int(0, PICKER_RANGE_MAX);
+  if (candidateCount >= 2) ctx.rng.on(FfxStream.Picker).int(0, PICKER_RANGE_MAX);
 }
 
 /**
@@ -97,5 +97,5 @@ export function pickMatching<T extends FFXCombatant>(ctx: Pick<Ctx, 'rng' | 'sta
   if (candidates.length === 0) return undefined;
   const ordered = inActorOrder(ctx, candidates);
   if (ordered.length === 1) return ordered[0];
-  return ordered[pickerIndex(ctx.rng.int(0, PICKER_RANGE_MAX), ordered.length)];
+  return ordered[pickerIndex(ctx.rng.on(FfxStream.Picker).int(0, PICKER_RANGE_MAX), ordered.length)];
 }

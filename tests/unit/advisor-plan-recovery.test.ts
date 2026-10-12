@@ -44,6 +44,35 @@ function wasteful(commands: readonly AvailableCommand[]): Command | null {
   return { ...worst.command, targets: [worst.validTargets[0]!] } as Command;
 }
 
+/** Five wasteful turns, not ten: Chapter 1 is lost outright in six decisions of wasteful play. */
+const WASTEFUL_PREFIX = 5;
+
+/**
+ * The first seed from `from` whose fight survives the wasteful prefix (a prefix that ends the fight before the card is consulted is not a recovery
+ * test). Re-parity RNG lane (game streams, Bailey 2026-10-09): the deal moved again, so the seed is found, not named.
+ */
+function survivingSeed(chapterId: string, from: number): number {
+  for (let seed = from; seed < from + 80; seed++) {
+    const { engine } = harnessFor(chapterId, seed);
+    let decisions = 0;
+    for (let i = 0; i < MAX_STEPS; i += 1) {
+      const d: Decision = engine.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind === 'waiting') {
+        engine.tick?.(Math.max(1, (d as { nextEventMs: number }).nextEventMs));
+        continue;
+      }
+      if (d.kind !== 'player-input') continue;
+      decisions += 1;
+      if (decisions > WASTEFUL_PREFIX) return seed;
+      const chosen = wasteful(d.commands);
+      if (!chosen) break;
+      engine.submit(chosen);
+    }
+  }
+  throw new Error(`${chapterId}: no seed from ${from} survives ${WASTEFUL_PREFIX} wasteful turns`);
+}
+
 describe('the card takes over a fight that was already going badly', () => {
   for (const chapterId of CHAPTER_IDS) {
     it(`${chapterId} (${gameOf(chapterId)}): answers every turn and resolves`, () => {
@@ -53,11 +82,12 @@ describe('the card takes over a fight that was already going badly', () => {
       // Chapter 1 runs seed 1 now (2026-10-09, re-parity W2, FFX only): the opening counters are the game's 26 fixed draws, so seed 11 is over
       // inside the five wasteful turns (4 decisions). Seed 1 is the first of seeds 1 to 30 that survives them (9 decisions); only seeds 2
       // and 10 besides do, which is how hard the chapter punishes five wasted turns.
-      const { engine, options } = harnessFor(chapterId, chapterId === 'seymour-flux' ? 1 : 5);
+      // Chapter 1: the first seed that survives the prefix (it was seed 1 on the 2026-10-09 deal, seed 11 before it); the rest seed 5.
+      const { engine, options } = harnessFor(chapterId, chapterId === 'seymour-flux' ? survivingSeed(chapterId, 1) : 5);
       // Five, not ten: Chapter 1 is lost outright in six decisions of wasteful
       // play, and a prefix that ends the fight before the card is consulted is
       // not a recovery test.
-      const PREFIX = 5;
+      const PREFIX = WASTEFUL_PREFIX;
       let decisions = 0;
       let silent = 0;
       const illegal: string[] = [];

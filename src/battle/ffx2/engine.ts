@@ -38,23 +38,21 @@ import type {
   Decision,
   FFX2BattleEngine,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import type { RngSnapshot } from '../common/streams.ts';
+import { makeFfx2Rng } from './adapt/streams.ts';
 import type { Ffx2EngineOptions } from './internal.ts';
-import { ATB_SPEED_MULTIPLIER, type AtbSpeed } from './constants.ts';
-import { advanceChainWindows, isActionLocked } from './chain.ts';
-import { advanceGauge, msToTicks, ticksToMs } from './gauges.ts';
+import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
+import { isActionLocked } from './chain.ts';
+import { isReady } from './gauges.ts';
+import { stepsUntilNextEvent } from './lookahead.ts';
 import { buildCommands } from './targeting.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';
-import { actorOrder } from './results.ts';
 import {
   allTargetsGone,
   clockHeldByMenu,
   inputStillValid,
-  nextEventTicks,
-  soonestEventTicks,
-  substepTicks,
   type AtbMode,
   type HeldCommand,
   type MenuLevel,
@@ -62,14 +60,14 @@ import {
 } from './active.ts';
 import { Ffx2EngineCore } from './engine-core.ts';
 
-/** Sub-steps per `tick()` call. A generous bound, never a normal exit path. */
-const TICK_SUBSTEP_LIMIT = 512;
+/** Rounding slack when milliseconds become whole logic steps (a call handed exactly the time to an event must reach it). */
+const STEP_EPSILON = 1e-6;
 
 export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, BattleEngine {
   // -- BattleEngine ---------------------------------------------------------
 
   init(setup: BattleSetup): void {
-    this.rng = new SeededRng(setup.seed);
+    this.rng = makeFfx2Rng(setup.seed);
     const built = buildState(setup, this.options, this.rng);
     this.battleState = built.state;
     this.units = built.units;
@@ -80,8 +78,9 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.awaitingBy = null;
     this.inputOwner = null;
     this.held = null;
-    this.acting.clear();
-    this.carriedTicks = 0;
+    this.carriedSteps = 0;
+    this.stepCredit = 0;
+    this.ordered = [];
     this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
     this.flush();
   }
@@ -93,7 +92,6 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
    */
   setAtbSpeed(speed: AtbSpeed): void {
     this.speed = speed;
-    this.atbRate = ATB_SPEED_MULTIPLIER[speed];
   }
 
   atbSpeed(): AtbSpeed { return this.speed; }
@@ -187,9 +185,11 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
       return { kind: 'resolved', events: this.flush() };
     }
 
-    // Real ms until the next event: game ticks over the Config rate (§1.2).
-    const ms = ticksToMs(nextEventTicks(this.units, this.heldClocks())) / this.atbRate;
-    return { kind: 'waiting', nextEventMs: Math.max(1, Math.round(ms)) };
+    // Real ms until the soonest event any clock can produce: logic steps at 29.97 a second, less the part of a step the
+    // clock already holds. Rounded UP, so that a call handed exactly this long reaches the event.
+    const steps = stepsUntilNextEvent(this.units, this.baseSpeed());
+    const need = Number.isFinite(steps) ? Math.max(1, steps) : 1;
+    return { kind: 'waiting', nextEventMs: Math.max(1, Math.ceil(stepsToMs(need - this.stepCredit))) };
   }
 
   submit(command: Command): BattleEvent[] {
@@ -247,11 +247,11 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
    * One `structuredClone` of the whole mutable bundle (state, units, grid nodes, pending drafts,
    * the held command), so the aliasing between the units and the state survives; the registries
    * and options are shared read-only; the event log is copied shallowly (events are immutable
-   * JSON). The copy draws from **its own** `SeededRng(seed)`: nothing it does reaches this
+   * JSON). The copy draws from **its own** generator seeded `seed`: nothing it does reaches this
    * engine's state or random stream, and nothing in a battle calls it. `rngState` (tests only)
    * starts the copy's stream where this one stands, which is how its fidelity is proved.
    */
-  fork(seed: number, rngState?: number): FFX2Engine {
+  fork(seed: number, rngState?: RngSnapshot): FFX2Engine {
     const f = new FFX2Engine(this.options);
     const { log, ...rest } = this.battleState;
     const b = structuredClone({
@@ -269,11 +269,9 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     f.abilities = this.abilities;
     f.dresspheres = this.dresspheres;
     f.grids = this.grids;
-    f.rng = new SeededRng(seed);
-    if (rngState !== undefined) f.rng.restoreState(rngState);
-    f.acting.copyFrom(this.acting);
-    [f.elapsedMs, f.inputOwner, f.hitClosed, f.carriedTicks] = [this.elapsedMs, this.inputOwner, this.hitClosed, this.carriedTicks];
-    [f.atbRate, f.speed, f.mode, f.split, f.level] = [this.atbRate, this.speed, this.mode, this.split, this.level];
+    f.rng = this.rng.fork(seed, rngState);
+    [f.elapsedMs, f.inputOwner, f.hitClosed, f.carriedSteps, f.stepCredit] = [this.elapsedMs, this.inputOwner, this.hitClosed, this.carriedSteps, this.stepCredit];
+    [f.speed, f.mode, f.split, f.level] = [this.speed, this.mode, this.split, this.level];
     return f;
   }
 
@@ -293,9 +291,9 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
   /**
    * Advance the real-time clock by `ms` and return everything that resolved.
    *
-   * Sub-steps to the next scheduled event rather than applying `ms` in one go,
-   * so a status expiry, a chain break and a gauge filling inside the same step
-   * land in the right order. Returns as soon as something needs handling —
+   * The clock is the game's LOGIC STEP (29.97 a second, `clock.ts`): `ms` becomes whole steps (the remainder is kept for the
+   * next call) and each step runs the game's order (`logic-step.ts`), so a status expiry, a chain break and a gauge running
+   * out inside the same call land in the right order. Returns as soon as something needs handling —
    * otherwise the clock would run past a player's input.
    *
    * **Active ATB (FFX-2 only, `active.ts`).** With `opts.throughInput` a girl
@@ -310,37 +308,20 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     // Wait (D-029, `active.ts`): an open menu holds the clock; with the split, below its top list only.
     if (this.clockHeld()) return this.flush();
     const throughInput = opts?.throughInput === true;
-    // Real ms become game ticks at the Config ATB speed (§1.2 `tickRate`).
-    let remaining = msToTicks(Math.max(0, ms)) * this.atbRate;
+    // Real ms become logic steps; the part of a step left over waits for the next call.
+    this.stepCredit += msToSteps(Math.max(0, ms));
+    let remaining = Math.floor(this.stepCredit + STEP_EPSILON);
+    this.stepCredit = Math.max(0, this.stepCredit - remaining);
     if (throughInput) {
-      remaining += this.carriedTicks;
-      this.carriedTicks = 0;
+      remaining += this.carriedSteps;
+      this.carriedSteps = 0;
     }
-    let guard = 0;
 
-    while (remaining > 0.0001 && guard++ < TICK_SUBSTEP_LIMIT) {
-      const step = throughInput
-        ? substepTicks(remaining, soonestEventTicks(this.units, this.heldClocks()))
-        : Math.min(remaining, Math.max(1, nextEventTicks(this.units, this.heldClocks())));
-      remaining -= step;
-      this.elapsedMs += ticksToMs(step) / this.atbRate;
-      this.battleState.ticks += step;
-
-      advanceChainWindows(this.units, step, (e) => this.emit(e));
-      this.advanceStatusClocks(step);
-
-      let readyChanged = false;
-      for (const unit of actorOrder(this.units)) {
-        const outcome = advanceGauge(unit, step);
-        if (outcome === 'charge-complete') {
-          this.fireChargedCommand(unit);
-          readyChanged = true;
-        } else if (outcome === 'ready') {
-          readyChanged = true;
-        }
-      }
-
-      if (readyChanged) this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
+    while (remaining > 0) {
+      remaining -= 1;
+      const readyBefore = this.readyMask();
+      this.runLogicStep();
+      if (this.readyMask() !== readyBefore) this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
       if (this.checkBattleEnd()) break;
 
       const actor = this.nextActor(throughInput);
@@ -359,9 +340,14 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     }
 
     // Whatever an early break left unspent is owed to the next Active step.
-    if (throughInput) this.carriedTicks = remaining > 0.0001 ? remaining : 0;
+    if (throughInput) this.carriedSteps = remaining > 0 ? remaining : 0;
 
     return this.flush();
+  }
+
+  /** Which units are ready right now, one bit each, so a step can tell the HUD when that changed. */
+  private readyMask(): number {
+    return this.units.reduce((mask, u, i) => (isReady(u) ? mask | (1 << (i % 30)) : mask), 0);
   }
 }
 

@@ -16,9 +16,9 @@
 
 import type { AbilityDef, AnyCombatant, BattleEvent, BattleState, GameId, ItemDef } from '../../battle/common/types.ts';
 import type { SfxAsk, SfxVoice } from '../../engine/BattlePresenterSfx.ts';
-import { voiceBattle, type VoiceAction, type VoiceActor, type VoiceGame } from '../../audio/sfxV2/battleVoice.ts';
+import { voiceBattle, voiceEvents, type VoiceAction, type VoiceActor, type VoiceAsk, type VoiceGame } from '../../audio/sfxV2/battleVoice.ts';
 import { FFX2_ENEMY_VOICES, FFX_WEAPON_TYPES, ffx2Weapon } from '../../audio/sfxV2/weapons.ts';
-import { familyOfFfx2Ability, familyOfSfxKey } from '../../audio/sfxV2/families.ts';
+import { familyOfFfx2Ability, familyOfSfxKey, tierOfSfxKey } from '../../audio/sfxV2/families.ts';
 import { CHARACTERS as FFX_CHARACTERS } from '../../data/ffx/characters/index.ts';
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
 import { ITEMS as FFX2_ITEMS } from '../../data/ffx2/index.ts';
@@ -57,7 +57,16 @@ function actionOf(game: VoiceGame, ask: SfxAsk, rows: Rows): VoiceAction | null 
   const def = isItem ? (effectOf(a.command.id ? items[a.command.id] : undefined, rows) ?? (a.abilityId ? rows(a.abilityId) : undefined)) : a.abilityId ? rows(a.abilityId) : undefined;
   const element = def?.element.find((e) => e !== 'none') ?? null;
   const family = game === 'ffx' ? familyOfSfxKey(def?.sfxKey) : familyOfFfx2Ability(def?.id ?? a.abilityId);
-  return { commandKind: kind, element, damageType: def?.damageType ?? null, family, isItem };
+  return {
+    commandKind: kind,
+    element,
+    damageType: def?.damageType ?? null,
+    family,
+    isItem,
+    abilityId: a.abilityId ?? def?.id ?? null,
+    commandId: a.command.id ?? null,
+    tier: game === 'ffx' ? tierOfSfxKey(def?.sfxKey) : null,
+  };
 }
 
 /** The voice a chapter of `game` hands its presenter, or `null` (FF7 and anything else: no voice). */
@@ -67,7 +76,7 @@ export function sfxVoiceFor(game: GameId, state?: () => BattleState | null): Sfx
   return (ask) => {
     const s = state?.() ?? null;
     const e = ask.event as (BattleEvent & { element?: string; crit?: boolean; status?: string; stage?: number; to?: string }) | null;
-    const voiced = voiceBattle({
+    const voiceAsk: VoiceAsk = {
       game,
       moment: ask.moment,
       actor: actorOf(game, s, ask.actorId),
@@ -80,7 +89,15 @@ export function sfxVoiceFor(game: GameId, state?: () => BattleState | null): Sfx
       departure: ask.departure,
       ...(typeof e?.stage === 'number' ? { stage: e.stage } : {}),
       ...(e?.to ? { to: e.to } : {}),
-    });
-    return voiced ? { key: voiced.key, ...(voiced.gain !== undefined ? { gain: voiced.gain } : {}) } : null;
+      landed: ask.landed,
+    };
+    const voiced = voiceBattle(voiceAsk);
+    const plan = voiceEvents(voiceAsk, voiced?.key ?? null); // SFX parity: the recorded originals to look up; never changes the stand-in
+    if (!voiced && !plan) return null;
+    return {
+      ...(voiced ? { key: voiced.key } : {}),
+      ...(voiced?.gain !== undefined ? { gain: voiced.gain } : {}),
+      ...(plan ? { events: plan.events, ...(plan.coveredBy ? { coveredBy: plan.coveredBy } : {}) } : {}),
+    };
   };
 }

@@ -201,26 +201,28 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
 /**
  * Roll a default outcome when the UI cannot run the minigame — AI, auto-battle
  * or a deterministic test. This is an engine convenience, **not** the game's
- * model: Slots in particular is fully player-controlled [ffx-combat-core §5.6].
+ * model: Slots in particular is fully player-controlled [ffx-combat-core §5.6]. So every draw here is a stand-in for what the player would
+ * do and comes from the engine-side stream (`BattleRng.aux`), which can never move one of the game's 68 streams (the game's own reel
+ * builder, stream 19, is not modelled: the player's stops decide the reels).
  */
 export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDef, user: FFXCombatant): MinigameResult {
   const timerMs = timerMsFor(def);
   switch (kind) {
     case 'tidus-timing': {
-      const success = ctx.rng.int(0, 99) < 75;
+      const success = ctx.rng.aux.int(0, 99) < 75;
       return {
         kind,
-        timing: { success, timeRemainingMs: success ? ctx.rng.int(0, timerMs) : 0, timerMs },
+        timing: { success, timeRemainingMs: success ? ctx.rng.aux.int(0, timerMs) : 0, timerMs },
       };
     }
     case 'auron-sequence': {
-      const success = ctx.rng.int(0, 99) < 75, seqLen = ((def.extra?.['minigameParams'] as { sequence?: unknown[] } | undefined)?.sequence ?? []).length || 7; // this Overdrive's own length (PR-0308)
+      const success = ctx.rng.aux.int(0, 99) < 75, seqLen = ((def.extra?.['minigameParams'] as { sequence?: unknown[] } | undefined)?.sequence ?? []).length || 7; // this Overdrive's own length (PR-0308)
       return {
         kind,
         sequence: {
           success,
-          correctInputs: success ? seqLen : ctx.rng.int(0, seqLen - 1),
-          timeRemainingMs: success ? ctx.rng.int(0, timerMs) : 0,
+          correctInputs: success ? seqLen : ctx.rng.aux.int(0, seqLen - 1),
+          timeRemainingMs: success ? ctx.rng.aux.int(0, timerMs) : 0,
         },
       };
     }
@@ -234,7 +236,7 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       // convenience, not the game's model — Slots is fully player-controlled.
       const authored = (def.extra?.['reelSymbols'] ?? def.extra?.['reelStrip']) as string[] | undefined;
       const strip = (authored && authored.length > 0 ? authored : ['1-hit', '2-hit', 'miss']).slice();
-      const symbols: [string, string, string] = [ctx.rng.pick(strip), ctx.rng.pick(strip), ctx.rng.pick(strip)];
+      const symbols: [string, string, string] = [ctx.rng.aux.pick(strip), ctx.rng.aux.pick(strip), ctx.rng.aux.pick(strip)];
       const three = symbols[0] === symbols[1] && symbols[1] === symbols[2];
       // `hits` is **Attack Reels only** (`types.ts`); on any other set it used
       // to come back 0 and overwrite the resolved shot's own hit count.
@@ -249,7 +251,7 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       // Roll the *input*, not the outcome: a swept angle inside the published
       // 15-rotation budget, then let `degreesPerCast` decide how many casts
       // that buys at this Magic and tier.
-      const sweptDegrees = ctx.rng.int(Math.floor(FURY_ANCHOR_BUDGET / 3), FURY_ANCHOR_BUDGET);
+      const sweptDegrees = ctx.rng.aux.int(Math.floor(FURY_ANCHOR_BUDGET / 3), FURY_ANCHOR_BUDGET);
       return { kind, fury: { sweptDegrees, casts: furyCastsFor(def, user.stats.mag, sweptDegrees) } };
     }
     case 'rikku-mix': {
@@ -261,7 +263,7 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       // over the whole bag would return "no recipe" almost every time and hand
       // the player a spent gauge, which is the bug this replaces.
       const pairs = mixablePairs(ctx);
-      const chosen = pairs.length > 0 ? ctx.rng.pick(pairs) : undefined;
+      const chosen = pairs.length > 0 ? ctx.rng.aux.pick(pairs) : undefined;
       return {
         kind,
         mix: chosen
@@ -285,7 +287,7 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       // 'jump' }`.
       return { kind, rage: { rageId: def.id } };
     case 'gunner-trigger':
-      return { kind, trigger: { hits: ctx.rng.int(4, 16) } };
+      return { kind, trigger: { hits: ctx.rng.aux.int(4, 16) } };
     case 'yuna-grand-summon':
       return { kind, grandSummon: { aeonId: defaultGrandSummonAeon(ctx) } }; // was always '': gauge spent, no aeon
     default:

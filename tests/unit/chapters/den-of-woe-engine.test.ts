@@ -25,8 +25,8 @@ import {
 } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
 import { denOfWoeKit } from '../../../src/data/ffx2/builds/den-of-woe.ts';
 import { CHAPTERS, CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
-import { ability, ctxFor, girlsAt } from '../helpers/fallenAeonsUnits.ts';
-import { INFINITE_STATUSES, advanceStatuses, durationToTicks } from '../../../src/battle/ffx2/statuses.ts';
+import { ability, ctxFor, girlsAt, runStatusClocks } from '../helpers/fallenAeonsUnits.ts';
+import { INFINITE_STATUSES } from '../../../src/battle/ffx2/statuses.ts';
 import { DEN_GUARD_DURATION, DEN_REGEN_DURATION, DEN_STOP_DURATION } from '../../../src/data/ffx2/enemies/den-of-woe-abilities.ts';
 
 type Damage = Extract<BattleEvent, { type: 'damage' }>;
@@ -72,11 +72,11 @@ describe('data, carried from research §3 (rule 6)', () => {
     for (const id of ['x2-den-gippal-bullseye', 'x2-den-gippal-potion-plus', 'x2-den-gippal-flash-bomb', 'x2-den-gippal-hush-grenade',
       'x2-den-baralai-looming-glacier', 'x2-den-baralai-drill-shot', 'x2-den-baralai-absorb', 'x2-den-baralai-silence',
       'x2-den-baralai-regen', 'x2-den-baralai-not-so-mighty-guard', 'x2-den-nooj-rippling-chroma', 'x2-den-nooj-greedy-aura',
-      'x2-den-nooj-lightfall']) {
+      'x2-den-nooj-lightfall', 'x2-den-baralai-triple-attack']) { // Re-parity AI lane C: Chain Attack (row 0x4100) never rolls to hit
       expect(ability(id).canMiss, id).toBe(false);
     }
     for (const id of ['x2-den-gippal-attack', 'x2-den-gippal-grinder', 'x2-den-gippal-mortar', 'x2-den-baralai-attack',
-      'x2-den-baralai-triple-attack', 'x2-den-baralai-glint', 'x2-den-nooj-attack']) {
+      'x2-den-baralai-glint', 'x2-den-nooj-attack']) {
       expect(ability(id).canMiss, id).not.toBe(false);
       expect(ability(id).damageType, id).toBe('physical');
     }
@@ -197,25 +197,29 @@ describe('the shades\' actions (§4)', () => {
     baralai.mp = 100;
     const { ctx } = ctxFor([baralai, ...party], 2);
     resolveAbility(ctx, baralai, ability('x2-den-baralai-looming-glacier'), ['rikku']);
-    expect(party[1]!.statuses.stop!.ticksRemaining).toBe(durationToTicks(DEN_STOP_DURATION));
+    // Re-parity W4: a duration is a COUNTER of the game's 1,500-unit counts (the old test converted it at 0.53 s a unit).
+    // Looming Glacier has the game's own command row, whose Stop amount is 126: the counter byte holds 125 at most (66 s at Normal), so
+    // the authored 100 [estimate] is not what plays; the clock below runs the 125 out.
+    expect(party[1]!.statuses.stop!.counter).toBe(125);
+    expect(party[1]!.statuses.stop!.ticksRemaining).toBe(125 * 1500);
     expect(DEN_STOP_DURATION).toBe(100);
     resolveAbility(ctx, baralai, ability('x2-den-baralai-not-so-mighty-guard'), []);
     for (const s of ['protect', 'shell', 'regen'] as const) {
-      expect(baralai.statuses[s]!.ticksRemaining, s).toBe(durationToTicks(DEN_GUARD_DURATION));
+      // The game's row: Protect and Shell carry amount 126 (held to the byte's 125), its Regen 50; not the authored 100.
+      expect(baralai.statuses[s]!.counter, s).toBe(s === 'regen' ? 50 : 125);
       expect(baralai.statuses[s]!.permanent, s).toBe(false);
     }
     delete baralai.statuses.regen;
     resolveAbility(ctx, baralai, ability('x2-den-baralai-regen'), []);
-    expect(baralai.statuses.regen!.ticksRemaining).toBe(durationToTicks(DEN_REGEN_DURATION));
+    expect(baralai.statuses.regen!.counter).toBe(DEN_REGEN_DURATION);
     expect([DEN_GUARD_DURATION, DEN_REGEN_DURATION]).toEqual([100, 50]);
-    // Run the clock: the Regen spell's 50 units go first, then the Guard's 100, then Stop's.
+    // Run the game's clock: 100 counts of 1,500 units at 95 a logic step is 1,579 steps; the Regen spell's 50 go first, then the Guard's 100, then Stop's.
     const removed: string[] = [];
     const emit = (e: { type: string }) => {
       if (e.type === 'status-remove') removed.push(`${(e as Removed).targetId}:${(e as Removed).status}`);
     };
     resolveAbility(ctx, baralai, ability('x2-den-baralai-not-so-mighty-guard'), []);
-    advanceStatuses(baralai, durationToTicks(DEN_GUARD_DURATION)! + 1, emit);
-    advanceStatuses(party[1]!, durationToTicks(DEN_STOP_DURATION)! + 1, emit);
+    runStatusClocks([baralai, party[1]!], Math.ceil((125 * 1500) / 95) + 1, ctx, { emit });
     expect(baralai.statuses.protect ?? baralai.statuses.shell ?? baralai.statuses.regen).toBeUndefined();
     expect(party[1]!.statuses.stop).toBeUndefined();
     expect(removed.sort()).toEqual(['rikku:stop', 'shade-baralai:protect', 'shade-baralai:regen', 'shade-baralai:shell']);

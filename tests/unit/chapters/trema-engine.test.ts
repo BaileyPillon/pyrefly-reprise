@@ -18,7 +18,7 @@ import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts'
 import { checkpointAt, resumeSetup } from '../../../src/app/screens/BattleChainCheckpoint.ts';
 import { CHAPTER_IDS, getChapter } from '../../../src/data/encounters.ts';
 import { ABILITY_REGISTRY, board } from '../helpers/tremaUnits.ts';
-import { runCounters } from '../../../src/battle/ffx2/engineHooks.ts';
+import { runAfterActionHooks } from '../../../src/battle/ffx2/engineHooks.ts';
 import { group, newEngine } from '../helpers/tremaDrive.ts';
 
 const A = (id: string) => {
@@ -39,7 +39,7 @@ function actWith(engine: ReturnType<typeof newEngine>, pick: (actor: string) => 
   throw new Error('no menu');
 }
 
-describe('Big Bang, the immediate counter (TR12 b; AiScript.counter)', () => {
+describe('Big Bang, the immediate counter (TR12 b; AiScript.onPartyAction since re-parity AI-FFX2-b)', () => {
   function paragonEngine() {
     const engine = newEngine();
     engine.setSeed(4);
@@ -74,7 +74,10 @@ describe('Big Bang, the immediate counter (TR12 b; AiScript.counter)', () => {
     expect(all.slice(bang).some((e) => e.type === 'counter' && (e as { actorId: string }).actorId === 'paragon')).toBe(true);
   });
 
-  it('the counter costs Paragon no ATB and needs a hit; only scripts with `counter` answer', () => {
+  it('the counter costs Paragon no ATB and needs a result of a command with neither damage bit; only scripts that define the hook answer', () => {
+    // Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity"): the trigger is any result of a command whose damage bits are neither
+    // physical nor magical (Darkness, Scan, Steal, items, a miss of any of them), read off the command row, not "a damaging hit of class none";
+    // the hook is onPartyAction (asked after every party action, hit or not), the old counter hook (damage > 0) is gone. Timing is TR12 b, kept.
     const b = board('paragon');
     const p = b.unit('paragon');
     const atb = { ...p.atb };
@@ -82,15 +85,27 @@ describe('Big Bang, the immediate counter (TR12 b; AiScript.counter)', () => {
       units: b.units, abilities: ABILITY_REGISTRY, attackClass: 'none', aiContext: (u: typeof p) => b.ctx(u.id),
       resolveCtx: () => b.resolveCtx(3), emit: (e: unknown) => { b.events.push(e as never); },
     };
-    runCounters([], b.unit('yuna'), env);
-    expect(b.events.some((e) => e['abilityId'] === 'paragon-big-bang')).toBe(false);
-    runCounters([{ type: 'damage', targetId: 'paragon', sourceId: 'yuna', amount: 5000, element: 'none', crit: false, hitIndex: 0, hitCount: 1 }], b.unit('yuna'), env);
-    expect(b.events.some((e) => e['abilityId'] === 'paragon-big-bang')).toBe(true);
+    const acted = (abilityId: string, aimed: boolean, extra: Array<Record<string, unknown>> = []) => [
+      { type: 'action-start', actorId: 'yuna', abilityId, abilityName: abilityId, targets: aimed ? ['paragon'] : ['trema'], command: { kind: 'ability', id: abilityId, targets: [] } },
+      ...extra,
+    ] as never;
+    const bang = () => b.events.some((e) => e['abilityId'] === 'paragon-big-bang');
+    const hit = { type: 'damage', targetId: 'paragon', sourceId: 'yuna', amount: 5000, element: 'none', crit: false, hitIndex: 0, hitCount: 1 };
+    runAfterActionHooks(() => acted('x2-dark-knight-darkness', false), b.unit('yuna'), env);
+    expect(bang(), 'not aimed at him').toBe(false);
+    runAfterActionHooks(() => acted('x2-dark-knight-attack', true, [hit]), b.unit('yuna'), env);
+    expect(bang(), 'a physical command').toBe(false);
+    runAfterActionHooks(() => acted('x2-dark-knight-darkness', true, [hit]), b.unit('yuna'), env);
+    expect(bang()).toBe(true);
     expect(p.atb).toEqual(atb);
-    // An MP-only hit counts too (the wiki: a Mana Spring drain still draws Big Bang).
+    // A result that does no damage counts: a Scan (a miss would too).
     b.events.length = 0;
-    runCounters([{ type: 'mp-damage', targetId: 'paragon', sourceId: 'yuna', amount: 50 }], b.unit('yuna'), env);
-    expect(b.events.some((e) => e['abilityId'] === 'paragon-big-bang')).toBe(true);
+    runAfterActionHooks(() => acted('x2-gun-mage-scan', true), b.unit('yuna'), env);
+    expect(bang()).toBe(true);
+    // An MP-only hit counts too (the wiki: a Mana Spring drain still draws Big Bang): a Soul Spring is a command of neither bit.
+    b.events.length = 0;
+    runAfterActionHooks(() => acted('x2-item-soul-spring', true, [{ type: 'mp-damage', targetId: 'paragon', sourceId: 'yuna', amount: 50 }]), b.unit('yuna'), env);
+    expect(bang()).toBe(true);
   });
 
   it('a plain Attack (Protect reduces it) never draws Big Bang', () => {

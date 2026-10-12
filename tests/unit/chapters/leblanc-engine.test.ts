@@ -254,45 +254,23 @@ describe('A5 — No Love Lost', () => {
     expect(picks).not.toContain('x2-nll-1');
   });
 
-  it('turn 1 and turn 5 are Not-So-Mighty Guard (the wiki transcription of turn 5; the SinirothX Fan Slap is the OFF switch of PR-0106, §19.3), turn 2 is Fan Slap [§5.3]', () => {
+  it('command 1 is Not-So-Mighty Guard and command 2 is Fan Slap; command 5 is NOT a second Guard (the wiki reading of turn 5): the script casts it only on the 25th ordinary turn [m253, re-parity AI lane C]', () => {
+    // Re-parity AI lane C (FFX-2 only; reason "game-script parity"): the game's script casts Not-So-Mighty Guard on all monsters on her
+    // first command and when its Guard counter reaches 25, and at no other time (m253.src:151-163); the wiki's "turn 5 repeats turn 1" and
+    // the AUTHORED "every turn past 25 + uses" readings are the script's other, wrong, readings. The full command order is walked in
+    // `tests/unit/parity-ffx2-ai-leblanc.test.ts`.
     const picks = leblancTurns(6, true);
     expect(picks[0]).toBe('x2-leblanc-not-so-mighty-guard');
     expect(picks[1]).toBe('x2-leblanc-fan-slap');
-    expect(picks[4]).toBe('x2-leblanc-not-so-mighty-guard');
+    expect(picks[4]).not.toBe('x2-leblanc-not-so-mighty-guard');
   });
 
-  it('the `25 + uses` failsafe, AUTHORED reading (every turn past 25 + uses; §19.2 finds no source for it; the SinirothX once-only reading is the OFF switch of PR-0106) [§5.3]', () => {
-    // Four uses by turn 27, so `turn > 25 + uses` opens at turn 30. The two
-    // overrides are listed in the source in this order, so a later `[8x - 5]`
-    // turn (35, 43 …) still takes No Love Lost rather than the failsafe.
-    //
-    // **Verifier finding, fixed here.** The loop below used to recompute
-    // `turn % 8 === 3` inline and compare the picks against that — the exact
-    // predicate `leblancScript` itself evaluates (`NO_LOVE_LOST_PERIOD = 8`,
-    // `NO_LOVE_LOST_PHASE = 3`), so it was asserting the script's own
-    // decision against a second copy of the same formula rather than against
-    // the source. A wrong period or phase in the script would have moved
-    // both sides together and the test would still pass. Turns 30-40 are
-    // now spelled out as the concrete sequence [§4.5, §5.3]: only turn 35
-    // (the next `[8x - 5]` turn after the failsafe opens) fires No Love
-    // Lost; every other turn in the window is the failsafe's Not-So-Mighty
-    // Guard.
-    const picks = leblancTurns(40, true);
-    expect(picks[29]).toBe('x2-leblanc-not-so-mighty-guard');
-    const expected = [
-      'x2-leblanc-not-so-mighty-guard', // 30
-      'x2-leblanc-not-so-mighty-guard', // 31
-      'x2-leblanc-not-so-mighty-guard', // 32
-      'x2-leblanc-not-so-mighty-guard', // 33
-      'x2-leblanc-not-so-mighty-guard', // 34
-      'x2-nll-1', // 35 — the next [8x - 5] turn
-      'x2-leblanc-not-so-mighty-guard', // 36
-      'x2-leblanc-not-so-mighty-guard', // 37
-      'x2-leblanc-not-so-mighty-guard', // 38
-      'x2-leblanc-not-so-mighty-guard', // 39
-      'x2-leblanc-not-so-mighty-guard', // 40
-    ];
-    expect(picks.slice(29, 40)).toEqual(expected);
+  it('the second Not-So-Mighty Guard is command 29 (25 ordinary turns plus the four No Love Losts before it), once, and nothing after it repeats it [m253]', () => {
+    const picks = leblancTurns(60, true);
+    const guards = picks.map((p, i) => (p === 'x2-leblanc-not-so-mighty-guard' ? i + 1 : 0)).filter(Boolean);
+    expect(guards).toEqual([1, 29]);
+    // The turns after the second Guard are the cycle and No Love Lost, as before: command 35 is the next No Love Lost.
+    expect(picks[34]).toBe('x2-nll-1');
   });
 
   it('E5 — one action, three stages, resolved from one turn [preflight E5]', () => {

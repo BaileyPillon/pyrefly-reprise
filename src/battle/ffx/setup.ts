@@ -21,11 +21,12 @@ import type {
   StatusId,
   StatusInstance,
 } from '../common/types.ts';
-import type { SeededRng } from '../common/rng.ts';
+import type { BattleRng } from '../common/streams.ts';
 import { cloneData } from '../common/clone.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
-import { applyEquipmentToCombatant, AUTO_STATUS_ABILITIES, hasAuto } from './equipment.ts';
+import { applyEquipmentToCombatant } from './equipment.ts';
+import { startAutoStatuses } from './adapt/auto-status.ts';
 import { rebuildCarriedPools, refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
@@ -232,7 +233,7 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
 /** Build the state and runtime for one battle. */
 export function buildBattle(
   setup: BattleSetup,
-  rng: SeededRng,
+  rng: BattleRng,
   content: FFXContentRegistry,
   emit: Ctx['emit'],
 ): Ctx {
@@ -353,14 +354,15 @@ export function buildBattle(
     const c = state.combatants[id] as FFXCombatant | undefined;
     if (!c) continue;
     applyEquipmentToCombatant(c);
-    for (const [ability, status] of AUTO_STATUS_ABILITIES) {
-      if (hasAuto(c, ability) && c.statuses[status] === undefined) {
-        c.statuses[status] = permanentStatus(status);
-      }
-    }
     refreshCriticalStatus(ctx, c);
   }
   rebuildCarriedPools(ctx); // a chain's later links arrive with Double HP / Double MP on: their stats are the base maxima
+  // The gear loop's last word: the Auto-* statuses go on at battle start, and the SOS ones with them for a member who starts under half HP
+  // (the game's apply, `pp_BtlInitChr`; re-parity RC4, FFX only). After the pools, because the weak level is read off the final maxima.
+  for (const id of [...state.activeIds, ...state.reserveIds]) {
+    const c = state.combatants[id] as FFXCombatant | undefined;
+    if (c) startAutoStatuses(ctx, c);
+  }
 
   seedInitialCtb(ctx, setup.condition ?? 'normal');
   applyPossessionOpening(ctx); // the possession fights' and Yu Yevon's opening counters [ai/possession-setup.ts]

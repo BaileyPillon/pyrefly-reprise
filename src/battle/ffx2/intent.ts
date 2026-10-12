@@ -41,11 +41,13 @@ import type {
   PortraitKey,
   StatusId,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import { type BattleRng, type RngSnapshot, sampleSnapshot } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { BAHAMUT_COUNTDOWN_START } from './constants.ts';
 import { canAct } from './statuses.ts';
+import { gaugeSteps } from './lookahead.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
@@ -108,7 +110,7 @@ export interface EnemyIntent {
 export interface Ffx2IntentEnv {
   state: Readonly<BattleState>;
   /** The live RNG, read only for its stream position — never drawn from. */
-  rng: SeededRng;
+  rng: BattleRng;
   abilities?: AbilityRegistry;
   items?: ItemRegistry;
   /** `gaugeSnapshot()`, so the panel and the ATB bars name the same next actor. */
@@ -142,7 +144,7 @@ function deepCopy<T>(value: T): T {
 function cloneAiContext(
   env: Ffx2IntentEnv,
   selfId: CombatantId,
-  rngState: number,
+  rngState: RngSnapshot,
 ): { ctx: AiContext; events: EventDraft[]; self: Ffx2Unit } | null {
   const abilities = chainRegistries(env.abilities, defaultAbilities);
   const combatants = deepCopy(env.state.combatants) as Record<CombatantId, Ffx2Unit>;
@@ -152,8 +154,7 @@ function cloneAiContext(
 
   const flags = { ...env.state.flags };
   const events: EventDraft[] = [];
-  const rng = new SeededRng(env.state.seed);
-  rng.restoreState(rngState);
+  const rng = env.rng.fork(env.state.seed, rngState);
 
   const ctx: AiContext = {
     self,
@@ -176,7 +177,7 @@ interface DryRun {
   events: EventDraft[];
 }
 
-function dryRun(env: Ffx2IntentEnv, enemyId: CombatantId, rngState: number): DryRun | null {
+function dryRun(env: Ffx2IntentEnv, enemyId: CombatantId, rngState: RngSnapshot): DryRun | null {
   const built = cloneAiContext(env, enemyId, rngState);
   if (!built) return null;
   const scriptId = built.self.enemy?.aiScriptId;
@@ -288,6 +289,14 @@ export function countersFor(unit: Ffx2Unit): string[] {
   }
   if (script === 'vegnagun-head') {
     out.push('Counts every hit it takes toward Odi et Amo [ffx2-vegnagun §3.4]');
+  }
+  // Re-parity AI lane C (FFX-2 only): both counters are the game's, one per RESULT applied to the monster by another
+  // character (a landing strike each; a miss or a no-effect result one), not one per action (`results-tally.ts`).
+  if (script === 'shade-baralai') {
+    out.push('Counts every result the party applies to him (each landing strike, a miss or a no-effect hit once); at 8 his next move is a Drill Shot at whoever hit him last [re-ffx2-ai-leblanc-den-ixion §4.2]');
+  }
+  if (script === 'x2-ixion') {
+    out.push('His action counter gains 5 for every result the party applies to him (a two-hit command that lands is 10, a miss 5) and 5 (Attack, Thundara) or 10 (Aerospark) for those moves of his own; at 100 he charges Recharge, then Thor’s Hammer, and it resets [re-ffx2-ai-leblanc-den-ixion §5]');
   }
   return out;
 }
@@ -487,13 +496,19 @@ function enemyOrder(env: Ffx2IntentEnv): CombatantId[] {
   return enemies
     .slice()
     .sort((a, b) => {
-      // Ready first, then whoever's gauge is fullest — the same reading the
-      // player is getting off the bars themselves (`visual-bible` §4.3).
+      // Ready first, in the game's ready-list order (`Ffx2Gauge.readyKey`); then whoever's gauge runs out first, by the steps its counter
+      // still needs at its own speed (re-parity W4: a fuller bar is not a sooner one once every command waits its own cost); then, when no
+      // speed is known yet (before the first step), whoever's gauge is fullest — the same reading the player is getting off the bars
+      // themselves (`visual-bible` §4.3).
       const ba = bars.get(a.id);
       const bb = bars.get(b.id);
       const ra = ba?.ready === true ? 1 : 0;
       const rb = bb?.ready === true ? 1 : 0;
       if (ra !== rb) return rb - ra;
+      if (ra === 1) return a.gauge.readyKey - b.gauge.readyKey;
+      const ea = gaugeSteps(a, a.gauge.speeds.tick);
+      const eb = gaugeSteps(b, b.gauge.speeds.tick);
+      if (ea !== eb) return ea < eb ? -1 : 1;
       return (bb?.fill ?? 0) - (ba?.fill ?? 0);
     })
     .map((u) => u.id);
@@ -575,7 +590,7 @@ export function predictFFX2EnemyIntent(
   };
   record(first);
   for (let i = 1; i < (committed ? 1 : samples); i++) {
-    const run = dryRun(env, enemyId, (base + Math.imul(i, 0x9e3779b1)) >>> 0);
+    const run = dryRun(env, enemyId, sampleSnapshot(base, i));
     if (run) record(run);
   }
 
@@ -601,8 +616,14 @@ export function predictFFX2EnemyIntent(
   // charge is the count the *next* turn will announce, one lower — printing it
   // beside the guide's would put two countdowns for one move on screen.
   const loggedCharge = emittedCharge ? newestChargeFor(env.state, enemyId) : undefined;
-  const liveCharge = loggedCharge ?? emittedCharge;
   const script = unit.enemy?.aiScriptId ?? '';
+  // Bahamut's first countdown turn after the second Impulse is silent (the first step of the count shows no number, as in the game),
+  // so the dry run emits nothing; the panel still says Mega Flare is on its way (re-parity AI lane FFX-2 a, row B4).
+  const silentCount =
+    !def && !emittedCharge && script === 'ffx2-bahamut' && unit.aiMemory?.['megaArmed'] === 1
+      ? { name: '', turnsLeft: BAHAMUT_COUNTDOWN_START - (typeof unit.aiMemory['countdownTurn'] === 'number' ? unit.aiMemory['countdownTurn'] : 0), stage: 1 as const }
+      : undefined;
+  const liveCharge = loggedCharge ?? emittedCharge ?? silentCount;
   const payload = CHARGE_PAYLOAD[script];
   const charge: IntentCharge | null = liveCharge
     ? {

@@ -1,0 +1,436 @@
+{
+ "ffxAndReload": {
+  "build": {
+   "sha": "fcecfa74",
+   "bundle": "index-CvOwYJX5.js"
+  },
+  "ffxEnemies": [
+   "seymour-flux",
+   "mortiorchis"
+  ],
+  "ffxAudio": {
+   "playing": "boss-seymour",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-seymour",
+     "gain": 1
+    },
+    "fading": []
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": "ffx"
+    },
+    "parity": {
+     "packs": [],
+     "active": [
+      "ffx-flux",
+      "ffx-core"
+     ],
+     "decoded": []
+    }
+   },
+   "cachedTracks": [
+    [
+     "scene-gagazet",
+     "prerendered"
+    ],
+    [
+     "boss-seymour",
+     "prerendered"
+    ]
+   ]
+  },
+  "ffxNetAudio": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+   "https://echoesofspira.com/audio/music/boss-seymour.mp3"
+  ],
+  "ffxAction": {
+   "b": {
+    "l": 14
+   },
+   "a": {
+    "l": 19
+   }
+  },
+  "ffxCancel": "pause",
+  "koTurns": 1,
+  "koEvents": 1,
+  "koVictim": "yuna",
+  "revive": {
+   "events": [
+    "action-start",
+    "status-remove",
+    "revive",
+    "action-end"
+   ],
+   "hp": 750,
+   "alive": true
+  },
+  "pauseEsc": "pause",
+  "hide": {
+   "len0": 861,
+   "lenH": 493,
+   "lenR": 861,
+   "scr": "pause"
+  },
+  "afterEsc": "battle",
+  "pauseP": "pause",
+  "afterP": "battle",
+  "ffxAudioLater": {
+   "playing": "boss-seymour",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-seymour",
+     "gain": 0.07322221994400024
+    },
+    "fading": [
+     {
+      "name": "pause",
+      "gain": 0.0013657057425007224
+     }
+    ]
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": "ffx"
+    },
+    "parity": {
+     "packs": [],
+     "active": [
+      "ffx-flux",
+      "ffx-core"
+     ],
+     "decoded": []
+    }
+   },
+   "cachedTracks": [
+    [
+     "boss-seymour",
+     "prerendered"
+    ]
+   ]
+  },
+  "lsKeys": [
+   "pyrefly-reprise:save:v1"
+  ],
+  "reloadBefore": {
+   "vol": 0.42,
+   "keys": [
+    "version",
+    "updatedAt",
+    "chapters",
+    "unlocked",
+    "settings",
+    "seenCoach",
+    "flags"
+   ]
+  },
+  "reloadAfter": {
+   "vol": 0.42,
+   "keys": [
+    "version",
+    "updatedAt",
+    "chapters",
+    "unlocked",
+    "settings",
+    "seenCoach",
+    "flags"
+   ]
+  },
+  "faEnemies": [
+   "yojimbo",
+   "ginnem",
+   "daigoro"
+  ],
+  "faAudio": {
+   "playing": "boss-yojimbo",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-yojimbo",
+     "gain": 1
+    },
+    "fading": []
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": "ffx"
+    },
+    "parity": {
+     "packs": [],
+     "active": [
+      "ffx-core"
+     ],
+     "decoded": []
+    }
+   },
+   "cachedTracks": [
+    [
+     "boss-yojimbo",
+     "prerendered"
+    ]
+   ]
+  },
+  "faNet": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+   "https://echoesofspira.com/audio/music/boss-yojimbo.mp3"
+  ],
+  "ixEnemies": [
+   "yojimbo",
+   "ginnem",
+   "daigoro"
+  ],
+  "ixAudio": {
+   "playing": "boss-yojimbo",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-yojimbo",
+     "gain": 1
+    },
+    "fading": []
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": "ffx"
+    },
+    "parity": {
+     "packs": [],
+     "active": [
+      "ffx-core"
+     ],
+     "decoded": []
+    }
+   },
+   "cachedTracks": [
+    [
+     "boss-yojimbo",
+     "prerendered"
+    ]
+   ]
+  },
+  "ixNet": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+   "https://echoesofspira.com/audio/music/boss-yojimbo.mp3"
+  ],
+  "limitAfterWord": "chapter-select",
+  "limitScreen": {
+   "s": "battle",
+   "g": 10
+  },
+  "limitAudio": {
+   "playing": "boss-ff7-guard",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-ff7-guard",
+     "gain": 0.0029281761962920427
+    },
+    "fading": [
+     {
+      "name": "chapter-select",
+      "gain": 0.034150946885347366
+     }
+    ]
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": null
+    },
+    "parity": {
+     "packs": [],
+     "active": [],
+     "decoded": []
+    }
+   },
+   "cachedTracks": []
+  },
+  "limitNet": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/boss-ff7-guard.mp3"
+  ],
+  "consoleErrors": [],
+  "notFound": []
+ },
+ "ffx2AndLimit": {
+  "faEnemies": [
+   "x2-shiva"
+  ],
+  "faAudio": {
+   "playing": "boss-ffx2-fallen-aeons",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-ffx2-fallen-aeons",
+     "gain": 1
+    },
+    "fading": []
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": "ffx2"
+    },
+    "parity": {
+     "packs": [],
+     "active": [
+      "ffx2-aeons",
+      "ffx2-core"
+     ],
+     "decoded": []
+    }
+   },
+   "cachedTracks": []
+  },
+  "faNet": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/scene-farplane.mp3",
+   "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3"
+  ],
+  "ixEnemies": [
+   "x2-ixion"
+  ],
+  "ixAudio": {
+   "playing": "boss-ffx2-fallen-aeons",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-ffx2-fallen-aeons",
+     "gain": 1
+    },
+    "fading": []
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": "ffx2"
+    },
+    "parity": {
+     "packs": [],
+     "active": [
+      "ffx2-aeons",
+      "ffx2-core"
+     ],
+     "decoded": []
+    }
+   },
+   "cachedTracks": []
+  },
+  "ixNet": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+   "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3"
+  ],
+  "limitAfterWord": "chapter-select",
+  "limitScreen": {
+   "s": "battle",
+   "g": 9
+  },
+  "limitAudio": {
+   "playing": "boss-ff7-guard",
+   "muted": false,
+   "music": {
+    "current": {
+     "name": "boss-ff7-guard",
+     "gain": 0.009998401626944542
+    },
+    "fading": [
+     {
+      "name": "chapter-select",
+      "gain": 0.010001598857343197
+     }
+    ]
+   },
+   "prerendered": {
+    "manifest": true,
+    "cues": 35,
+    "sprite": true,
+    "spriteDecoded": true,
+    "v2": {
+     "cues": 100,
+     "decoded": true,
+     "game": null
+    },
+    "parity": {
+     "packs": [],
+     "active": [],
+     "decoded": []
+    }
+   },
+   "cachedTracks": []
+  },
+  "limitNet": [
+   "https://echoesofspira.com/audio/music/title.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite.mp3",
+   "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+   "https://echoesofspira.com/audio/music/chapter-select.mp3",
+   "https://echoesofspira.com/audio/music/boss-ff7-guard.mp3"
+  ],
+  "consoleErrors": [],
+  "notFound": []
+ }
+}

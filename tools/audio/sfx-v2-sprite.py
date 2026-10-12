@@ -8,9 +8,14 @@ lead, 50 ms gaps, LAME VBR through ffmpeg with the gapless header), and writes t
 the game reads as `sfxV2` (src/audio/manifest.ts): {file, bytes, duration, quality, cues{offset,
 duration, category, lufs, truePeakDb, game}}.
 
-  python tools/audio/sfx-v2-sprite.py --work <dir> [--q 0] [--install]
+  python tools/audio/sfx-v2-sprite.py --work <dir> [--q 0] [--exclude <file.json>] [--install]
 
 --q       libmp3lame -q:a (VBR quality; 0 = V0)
+--exclude the final repack of SFX parity (spec 5.1 item 5): a JSON file {"exclude": [cue names]} written by
+          `node tools/audio/sfx-parity-repack.mjs --write --exclude-out <file>`; those cues are left out of the
+          sprite because a recorded original in the game's core pack replaces every use of them. A name the set
+          does not hold is an error. Afterwards: `node tools/audio/sfx-parity-mix.mjs` (the trims come from the
+          sprite's cues) and `node tools/audio/qa.mjs --only=sfx`.
 --install copy the MP3 to public/audio/sfx/sprite-v2.mp3 and merge the fragment into
           public/audio/manifest.json (key `sfxV2`; nothing else in the manifest is touched)
 
@@ -100,10 +105,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--work', required=True)
     ap.add_argument('--q', default='0')
+    ap.add_argument('--exclude')
     ap.add_argument('--install', action='store_true')
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
     measure = json.load(open(os.path.join(SET, 'measure.json')))
+    if a.exclude:
+        exclude = json.load(open(a.exclude, encoding='utf-8'))['exclude']
+        unknown = [k for k in exclude if k not in measure]
+        if unknown:
+            raise SystemExit(f'--exclude names cues the set does not hold: {unknown}')
+        measure = {k: v for k, v in measure.items() if k not in set(exclude)}
+        print(f'excluding {len(exclude)} retired cue(s); {len(measure)} remain')
     trims = {}
     for attempt in range(6):
         x, cues = pack(measure, trims)

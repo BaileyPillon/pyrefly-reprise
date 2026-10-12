@@ -5,77 +5,21 @@
  * `Rng`. Byte-identical to the inline versions (`ffx2-atb-golden.test.ts`).
  */
 
-import type { BattleState, CombatantId, Command, Rng } from '../common/types.ts';
+import type { BattleState, CombatantId, Command } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
-import { advanceStatuses } from './statuses.ts';
-import { applyHpDelta, heal, resolveAbility, type ResolveContext } from './resolve.ts';
+import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './targeting.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { abilityPerformedBy } from './execute.ts';
+import { takeResults } from './results-tally.ts';
 
 type Emit = (draft: EventDraft) => void;
-
-/** Regen and Poison payouts plus status expiries, for one sub-step. */
-export function payStatusClocks(
-  units: Ffx2Unit[],
-  step: number,
-  emit: Emit,
-  ctx: ResolveContext,
-  aiContext?: (unit: Ffx2Unit) => AiContext,
-  held?: ReadonlySet<string>,
-): void {
-  for (const unit of units) {
-    if (!unit.alive) continue;
-    const hpBefore = unit.hp;
-    const payouts: number[] = [];
-    const delta = advanceStatuses(unit, step, emit, (amount) => payouts.push(amount), held);
-    if (delta > 0) {
-      emit({
-        type: 'damage',
-        targetId: unit.id,
-        amount: delta,
-        element: 'none',
-        crit: false,
-        hitIndex: 0,
-        hitCount: 1,
-      });
-      applyHpDelta(ctx, unit, delta);
-    } else if (delta < 0) {
-      heal(ctx, unit, -delta, 'regen');
-    }
-    if (payouts.length > 0 && unit.side === 'enemy' && aiContext) notifyRegen(unit, hpBefore, payouts, aiContext);
-  }
-}
-
-/**
- * Tell a script once per Regen payout that **healed** (Chapter XI's Sisters:
- * "AC += 5 ... when Regen heals her", research ffx2-fallen-aeons §4.2). A payout
- * that lands at full HP heals nothing and is not counted; two payouts in one
- * clock step count twice. HP is walked payout by payout from the step's start,
- * so a step that tops her up counts only the payouts that still had room.
- * Poison in the same step is ignored here (no Sister takes Poison). Only a
- * script that defines `onRegen` reacts, so every earlier chapter is unchanged.
- */
-function notifyRegen(
-  unit: Ffx2Unit,
-  hpBefore: number,
-  payouts: readonly number[],
-  aiContext: (unit: Ffx2Unit) => AiContext,
-): void {
-  const onRegen = aiScriptFor(unit.enemy?.aiScriptId).onRegen;
-  if (!onRegen) return;
-  let hp = hpBefore;
-  for (const amount of payouts) {
-    const gained = Math.min(unit.stats.maxHp, hp + amount) - hp;
-    hp += gained;
-    if (gained > 0) onRegen(aiContext(unit), gained);
-  }
-}
 
 export function aiContextFor(
   self: Ffx2Unit,
   units: Ffx2Unit[],
-  rng: Rng,
+  rng: BattleRng,
   state: BattleState,
   abilities: AbilityRegistry,
   emit: Emit,
@@ -109,7 +53,7 @@ export function aiContextFor(
  * ordinary action banner and message path. FFX-2 only: FFX's Berserk is its own
  * status on its own engine.
  */
-export function berserkTurnCommand(actor: Ffx2Unit, menu: MenuContext, rng: Rng, emit: Emit): Command {
+export function berserkTurnCommand(actor: Ffx2Unit, menu: MenuContext, rng: BattleRng, emit: Emit): Command {
   const command = berserkCommand(actor, menu, rng);
   if (command.kind === 'defend') {
     emit({ type: 'action-start', actorId: actor.id, command, abilityName: 'Berserk', targets: [] });
@@ -143,10 +87,11 @@ export function notifyEnemiesDamaged(
   units: Ffx2Unit[],
   aiContext: (unit: Ffx2Unit) => AiContext,
 ): void {
+  const hitCounts = damageHits(produced, actor);
   for (const [targetId, amount] of damageTotals(produced, actor)) {
     const unit = units.find((u) => u.id === targetId);
     if (!unit || unit.side !== 'enemy') continue;
-    aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(aiContext(unit), actor.id, amount);
+    aiScriptFor(unit.enemy?.aiScriptId).onDamaged?.(aiContext(unit), actor.id, amount, hitCounts.get(targetId) ?? 1);
   }
 }
 
@@ -187,14 +132,31 @@ export function notifyEnemiesTargeted(
 }
 
 /**
+ * Tell every enemy that took results from this action how many, once (re-parity AI lane C; FFX-2 only). The game
+ * runs a monster's reaction entry once per result applied to it (a landing strike each; one for a miss; one for a
+ * no-effect result; never its own, `results-tally.ts`), and the two scripts that count them (Baralai's burst
+ * counter, Ixion's action counter) only read the counter on their next poll, so one report after the action is the
+ * same thing. The tally is emptied for every enemy whether or not its script listens, so it never carries over.
+ */
+export function notifyEnemiesResults(units: Ffx2Unit[], aiContext: (unit: Ffx2Unit) => AiContext): void {
+  for (const unit of units) {
+    if (unit.side !== 'enemy') continue;
+    const report = takeResults(unit);
+    if (report === undefined || !unit.alive) continue;
+    aiScriptFor(unit.enemy?.aiScriptId).onResults?.(aiContext(unit), report);
+  }
+}
+
+/**
  * The engine's post-action AI hooks, in their fixed order (moved out of `engine.ts#afterAction`,
- * house rule 7; byte-identical): `onDamaged`, `onTargeted`, every enemy's `onTurnResolved`,
+ * house rule 7; byte-identical): `onDamaged`, `onTargeted`, `onResults`, every enemy's `onTurnResolved`,
  * then the out-of-turn counters. `produced` is re-read before each step, as the inline code
  * did, so a hook that emits is seen by the steps after it.
  */
 export function runAfterActionHooks(produced: () => EventDraft[], actor: Ffx2Unit, env: CounterEnv): void {
   notifyEnemiesDamaged(produced(), actor, env.units, env.aiContext);
   notifyEnemiesTargeted(produced(), actor, env.units, env.aiContext);
+  notifyEnemiesResults(env.units, env.aiContext);
   for (const unit of env.units) {
     if (unit.side !== 'enemy') continue;
     aiScriptFor(unit.enemy?.aiScriptId).onTurnResolved?.(env.aiContext(unit), actor);
@@ -250,6 +212,19 @@ function damageTotals(produced: EventDraft[], actor: Ffx2Unit): Map<CombatantId,
     totals.set(hit.targetId, (totals.get(hit.targetId) ?? 0) + hit.amount);
   }
   return totals;
+}
+
+/** How many separate HP-damaging results this action put on each target (the game's reaction entry runs once per result). */
+function damageHits(produced: EventDraft[], actor: Ffx2Unit): Map<CombatantId, number> {
+  const counts = new Map<CombatantId, number>();
+  for (const draft of produced) {
+    if (draft.type !== 'damage') continue;
+    const hit = draft as { targetId: CombatantId; amount: number };
+    if (!(hit.amount > 0)) continue;
+    if (hit.targetId === actor.id && actor.side === 'party') continue; // an HP cost is not a hit
+    counts.set(hit.targetId, (counts.get(hit.targetId) ?? 0) + 1);
+  }
+  return counts;
 }
 
 /** What {@link runCounters} needs from the engine. */

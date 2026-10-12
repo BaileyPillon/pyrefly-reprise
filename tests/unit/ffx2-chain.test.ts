@@ -15,6 +15,10 @@
  * and the windows are unchanged; `chainCount` is now the number of landed hits (it was the count the last hit carried,
  * one less), a Stopped or Petrified target reads 0, and an evadable hit on a target inside its window is forced to
  * land by the hit kernel (the window stands in for the game's hit-reaction state, an open item in the W3 handoff).
+ *
+ * **Re-parity W4 (FFX-2 only; reason "game-code parity").** The windows count LOGIC STEPS (29.97 a second): 2 s is 60 steps and 3 s is 90,
+ * where it was 6,000 and 9,000 ticks of the old 3,000-a-second clock. The multipliers, the cap and the rules are unchanged; the
+ * hit reaction itself (the ATB tick halved for 15 steps) is `gauge.hitReaction`, tested in `parity-ffx2-engine-atb-hand.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -33,7 +37,7 @@ import {
   isActionLocked,
   isChained,
   ticksUntilChainBreak,
-  TICK_RATE_BASE,
+  STEPS_PER_SECOND,
 } from '../../src/battle/ffx2/index.ts';
 import type { AbilityDef, FFX2Combatant } from '../../src/battle/common/types.ts';
 import { chainAdjusted } from '../../src/battle/ffx2/kernel/apply.ts';
@@ -118,8 +122,8 @@ describe('chainBefore / bumpChain — building a chain', () => {
   });
 
   it('opens a 2 s window, or 3 s after a critical', () => {
-    expect(CHAIN_WINDOW_TICKS).toBe(2 * TICK_RATE_BASE);
-    expect(CHAIN_WINDOW_TICKS_CRIT).toBe(3 * TICK_RATE_BASE);
+    expect(CHAIN_WINDOW_TICKS).toBe(Math.round(2 * STEPS_PER_SECOND));
+    expect(CHAIN_WINDOW_TICKS_CRIT).toBe(Math.round(3 * STEPS_PER_SECOND));
     const t = target();
     land(t);
     expect(t.chainWindowTicks).toBe(CHAIN_WINDOW_TICKS);

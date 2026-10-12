@@ -10,6 +10,8 @@
  * percent formulas and to ATB damage, hit reactions do not slow it); type machine; neutral to every element but Gravity (null); steal chance byte 255 (always succeeds once), Turbo Ether x1 common and
  * x2 rare (item 0x2005), Pilfer Gil 5,000; no Bribe slot; Zantetsu byte 180 (moot: the special word disables it).
  *
+ * The plain Attack row carries its costs (`costAtb` 100, `costCast` 0: `Cmd+0x22`, `Cmd+0x24`; `experiment_rows.json`) as the other bosses' do since re-parity W4 (RC3).
+ *
  * Confidence: [verified: the game's own table, pinned by `tests/unit/chapters/experiment-engine.test.ts` against `tests/fixtures/parity/ffx2/experiment_rows.json`].
  */
 
@@ -29,7 +31,7 @@ const EXPERIMENT_ROW: FFX2MonsterRecord = {
   stealGil: 5000,
   steal: [0x2005, 0x1, 0x2005, 0x2],
   bribe: [0x0, 0x0, 0x0, 0x0],
-  plainAttack: { id: 0x41da, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 },
+  plainAttack: { id: 0x41da, costAtb: 100, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 },
 };
 
 /** Keyed `group id / enemy id`, as `attachMonsterRecords` reads them. */

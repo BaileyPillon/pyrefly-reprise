@@ -135,6 +135,11 @@ export function statusPool(all: readonly AbilityDef[]): AbilityDef[] {
     .map((a) => ({ ...a, targeting: singleTarget(a.targeting) }));
 }
 
+/** Does a Reflect on the target turn this command back? The game's record bit decides (`Cmd+0x1c` bit 7; RC4 lane FFX-G), the pool's abilities all carry a record. */
+function bouncesOffReflect(def: AbilityDef): boolean {
+  return def.record !== undefined && (def.record.flagsMisc & 0x80) !== 0;
+}
+
 /** The single-target form of a targeting value. */
 function singleTarget(t: AbilityDef['targeting']): AbilityDef['targeting'] {
   switch (t) {
@@ -239,7 +244,7 @@ export function randomStatusSituation(rng: SeededRng, pool: readonly AbilityDef[
     words.autoPerm = 0;
   }
   // Things the engine does around a hit that the kernels do not: a reflectable spell bounces off Reflect, a physical hit wakes a sleeper.
-  if (def.flags.includes('reflectable')) words.counters[5] = 0;
+  if (bouncesOffReflect(def)) words.counters[5] = 0;
   if (def.damageType === 'physical') words.counters[0] = 0;
   const resist = new Array<number>(25).fill(0);
   for (let i = 0; i < 25; i++) if (chance(rng, 0.12)) resist[i] = pickOf(rng, [50, 100, 254, 255, 255]);
@@ -263,7 +268,7 @@ export function randomStatusSituation(rng: SeededRng, pool: readonly AbilityDef[
     strikes: [],
     // One hit for a reflectable spell (a Reflect landed by one hit bounces the next) and for a physical one (a Sleep landed by one hit is
     // woken by the next): both are the engine's own business around a hit.
-    hits: def.flags.includes('reflectable') || def.damageType === 'physical' ? 1 : rng.int(1, 3),
+    hits: bouncesOffReflect(def) || def.damageType === 'physical' ? 1 : rng.int(1, 3),
     extraNear: EXTRA_IDS.reduce((m, [, bit]) => ((extraImmune & bit) === 0 && chance(rng, 0.1) ? m | bit : m), 0),
     // Monsters have no equipment, so no auto-ability block (the exe zeroes it); a party target may wear the two.
     breakHp: !targetMonster && chance(rng, 0.3),

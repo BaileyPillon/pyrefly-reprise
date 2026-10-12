@@ -16,6 +16,7 @@ import { victoryPoseOf } from './VictoryPose.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { sendCompanions } from './SentCompanions.ts';
 import { armContact, meetContact, releaseContact, type LungeContact } from './ContactBeat.ts';
+import { LUNGE_MS } from './StrikeBeat.ts';
 import { blowPose, impactAtApex, windUpLeads } from './KeyPoses.ts';
 import { armOdKey, endOdKey, menuBlocks, odApex, odOpensAction, showOdOnOpen, telegraphUp } from './KeySlots.ts'; // r37 slots: a move's own key painting, the boss telegraph painting (empty until installed)
 import { telegraphHold } from './TelegraphHold.ts'; // r38 keys (FFX only): the boss's telegraph painting held before Flux's and Braska's headline moves
@@ -84,7 +85,7 @@ export async function actionStart(
     const contact = (): LungeContact => (windUp ? impactAtApex(ctx, event.actorId, armContact(ctx, event.actorId)) : armContact(ctx, event.actorId));
     if (!motion?.ownsWindUp?.(event)) {
       const plan = lungePlan(ctx, event, motion, blowPose(windUp), burst);
-      void Promise.all([actor?.lunge(plan.distance, 440, contact(), plan.house), actor?.squash(260, 0.45)]); // FF7: its painted keys
+      void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact(), plan.house), actor?.squash(260, 0.45)]); // FF7: its painted keys
     }
   } else if (pose === 'cast') {
     cue(ctx, 'cast', { volume: 0.7 });

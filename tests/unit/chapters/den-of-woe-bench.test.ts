@@ -83,16 +83,25 @@ describe('Chapter XV benches (200 seeds, bench speed, Wait)', () => {
     }
   }
 
-  it('the intended line beats both credibly wrong ones on every shade but one', () => {
-    for (const [link] of LINKS) {
-      const at = (n: number) => wins.get(`${link}|${NAMED[n]![0]}`) ?? -1;
-      expect(at(0), link).toBeGreaterThan(at(3));
-      // Gippal alone, fought fresh, is the exception (den-of-woe-bench.md): since main's spherechange
+  // **Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`).** The game's gauge (a command waits its own
+  // recorded cost, a monster thinks 30 steps for each fallen girl) makes Baralai and Gippal easy for every line that heals at all, and
+  // moves Nooj: measured on 200 seeds, intended / without the prep / magic / all-out win Baralai 200 / 200 / 165 / 200, Gippal
+  // 200 / 200 / 200 / 200 and Nooj 103 / 199 / 83 / 196. So the old "beats both wrong lines on every shade" holds as "no worse" on Baralai
+  // and Gippal (ties), and at Nooj the intended line still beats the magic line but the Lightfall prep now costs more than it saves: the
+  // prep-free variant (199) and even all-out (196) clear him more often than the intended line (103). Recorded, not hidden, and listed for
+  // Bailey: the strategy guide's Lightfall advice is a question for him, not retuned here. The whole Den (below) keeps its order.
+  it('the intended line is no worse than the credibly wrong ones on Baralai and Gippal, and beats the magic line on Nooj (Lightfall prep: recorded)', () => {
+    const at = (link: string, n: number) => wins.get(`${link}|${NAMED[n]![0]}`) ?? -1;
+    for (const [link] of LINKS.slice(0, 2)) {
+      expect(at(link, 0), link).toBeGreaterThanOrEqual(at(link, 3));
+      // Gippal alone, fought fresh, is the exception to the magic comparison (den-of-woe-bench.md): since main's spherechange
       // fix (accessories kept across a change), the magic line's silenced White Mage falls back to
-      // Gunner with her bangle's HP and outlasts him more often (162 vs 157 of 200). The whole Den
-      // still punishes it: 0 of 200, lost at Baralai.
-      if (!link.startsWith('2')) expect(at(0), link).toBeGreaterThanOrEqual(at(2));
+      // Gunner with her bangle's HP and outlasts him as often as the intended line does. The whole Den still punishes it.
+      if (!link.startsWith('2')) expect(at(link, 0), link).toBeGreaterThanOrEqual(at(link, 2));
     }
+    const nooj = LINKS[2]![0];
+    expect(at(nooj, 0), nooj).toBeGreaterThan(at(nooj, 2));
+    expect(at(nooj, 1), 'the prep-free intended line clears Nooj at least as often as the prep line').toBeGreaterThanOrEqual(at(nooj, 0));
   });
 
   it('the whole Den, carried (GP3 a), a loss retrying from Baralai (GP4 a)', () => {

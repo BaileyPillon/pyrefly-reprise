@@ -15,10 +15,11 @@ import {
   RepeatWrapping,
   Vector3,
   type Material,
+  type PerspectiveCamera,
 } from 'three';
 import { artBudget } from '../engine/ArtDevice.ts';
 import { Backdrop, type BackdropOptions } from '../engine/Backdrop.ts';
-import type { CameraRig } from '../engine/BattleCamera.ts';
+import type { BattleCamera, CameraRig } from '../engine/BattleCamera.ts';
 import { makePillar } from '../engine/Diorama.ts';
 import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import {
@@ -35,7 +36,7 @@ import { ScenePalettes } from '../engine/ScenePalettes.ts';
 import type { SceneSlots } from './index.ts';
 import { addPlateDim, type PlateDimSpec } from './plateDim.ts';
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
-import { bracketScale } from './frameBracket.ts';
+import { bracketCamera, bracketScale, bracketedX, type BracketCamera } from './frameBracket.ts';
 import { viewportAspect } from './cavern-stolen-fayth-rigs.ts';
 import { giantPhoneHeights } from './giant-stage.ts';
 import type {
@@ -113,6 +114,12 @@ export const BEVELLE_PLATE_WINGS = {
  * are as they were (the slot was solved to 0.014 of headroom).
  */
 export const BEVELLE_PLATE_DIM: PlateDimSpec = { at: [0.503, 0.14], radius: [0.095, 0.05], keep: 0.45 };
+
+/** The two foreground conduits, `[x, z, radius, height]` (the rig-table tests and `tests/unit/r41-ch4cam.test.ts` read where they stand). */
+export const BEVELLE_CONDUITS: ReadonlyArray<readonly [number, number, number, number]> = [
+  [-7.9, -5.0, 0.58, 17],
+  [8.9, -6.8, 0.6, 18],
+];
 
 /** The plate's plane and the rig table, exported for `tests/unit/plate-wings.test.ts`. */
 export const BEVELLE_UNDERGROUND_BACKDROP = BACKDROP;
@@ -2016,10 +2023,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
    * at every rig, and both lose their cap, because the cap is only ever seen
    * when the pipe is failing to run anywhere.
    */
-  for (const [x, z, r, h] of [
-    [-7.9, -5.0, 0.58, 17],
-    [8.9, -6.8, 0.6, 18],
-  ] as Array<[number, number, number, number]>) {
+  for (const [x, z, r, h] of BEVELLE_CONDUITS) {
     const conduit = makePillar({
       height: h,
       radius: r,
@@ -2031,7 +2035,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       cap: false,
     });
     conduit.position.set(x * bracketNow, 0, z);
-    conduit.userData['bracketX'] = { base: x, offset: 0 }; // moved outward with the window's width (`frameBracket.ts`, PR-0344)
+    conduit.userData['bracketX'] = { base: x, offset: 0, z, r }; // moved outward with the window's width (`frameBracket.ts`, PR-0344) and with a camera that pulls back (PR-0421)
     group.add(conduit);
     props.push(conduit);
 
@@ -2078,7 +2082,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
        * when it was widest and blackest.
        */
       lamp.position.set(x * bracketNow + (x < 0 ? r * 1.5 : -r * 1.5), 1.9 + i * 2.2, z + r * 0.55);
-      lamp.userData['bracketX'] = { base: x, offset: x < 0 ? r * 1.5 : -r * 1.5 };
+      lamp.userData['bracketX'] = { base: x, offset: x < 0 ? r * 1.5 : -r * 1.5, z, r };
       lamp.renderOrder = 4;
       lamp.name = 'conduit-lamp';
       group.add(lamp);
@@ -2172,6 +2176,10 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
   // -------------------------------------------------------------------- loop
   let clock = 0;
   const phoneGiants = giantPhoneHeights(['bahamut'], 'ffx2-bahamut', BEVELLE_GIRLS_HEIGHT);
+  /** The battle camera's own lens, once the loaded scene has bound it (`bindCamera`); null in a debug screen or a test, where the pipes stand as they were placed. */
+  let viewCam: PerspectiveCamera | null = null;
+  /** True while the pipes have been moved by the camera, so the frame that stops it puts them back. */
+  let bracketFollowing = false;
   const build: SceneBuild = {
     group,
     get backdrop(): Backdrop {
@@ -2185,6 +2193,9 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
     // r3942-stage wave 2 (FFX-2 only): on the upright phone Bahamut stands at 0.7 of his real height (`giant-stage.ts`); a desktop publishes none (CHAPTER FRAMING sizes him with his camera, `fx/mix/giants.ts`).
     ...(phoneGiants ? { figureHeights: phoneGiants } : {}),
     palette: { ...PALETTE },
+    bindCamera(camera: BattleCamera | null): void {
+      viewCam = camera?.camera ?? null;
+    },
     update(dt: number): void {
       clock += dt;
       backdrop.update(dt);
@@ -2192,13 +2203,16 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       for (const p of particles) p.update(dt);
 
       // The bracketing pipes stay at the frame's edge when the window is wider than 16:9 (PR-0344: they stood in the picture as a dark
-      // slab at 21:9); the window can be resized while a battle is up.
+      // slab at 21:9); the window can be resized while a battle is up. And when the camera pulls back (PR-0421: Chapter IV's opening stands 16.4 back, where they were two dark slabs,
+      // x 0 to 190 and x 1350 to 1470 at 1600x900), they follow it out to the edge. Not on the phone, whose slice never showed them (`phoneGiants`).
       const bracket = bracketScale(viewportAspect());
-      if (bracket !== bracketNow) {
+      const view: BracketCamera | null = viewCam && phoneGiants['bahamut'] === undefined ? bracketCamera(viewCam) : null;
+      if (bracket !== bracketNow || view || bracketFollowing) {
         bracketNow = bracket;
+        bracketFollowing = view !== null;
         for (const m of props) {
-          const b = m.userData['bracketX'] as { base: number; offset: number } | undefined;
-          if (b) m.position.x = b.base * bracket + b.offset;
+          const b = m.userData['bracketX'] as { base: number; offset: number; z: number; r: number } | undefined;
+          if (b) m.position.x = bracketedX(b.base, b.z, b.r, b.base * bracket, view) + b.offset;
         }
       }
 

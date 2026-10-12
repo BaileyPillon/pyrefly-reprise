@@ -84,12 +84,13 @@ describe('effectiveStats — the ten rows the Stats tab renders', () => {
     expect(byKey.maxMp).toMatchObject({ base: 115, effective: 115, bonusPercent: 0 });
   });
 
-  it('picks the best tier of a family, never the sum — Yuna wears magic-def-10 AND magic-def-5', () => {
+  it('SUMS the tiers of a family — Yuna wears magic-def-10 AND magic-def-5, and the game gives her 15 (re-parity RC4, FFX-G03 section 4.1)', () => {
     // Blessed Ring: ['magic-def-10', 'magic-def-5', 'zombie-ward'].
-    // §9's tiers do not stack, so this is 10, not 15.
+    // The party stat builder adds the percent of every worn ability to the entry it names (the first reading of §9, "tiers never stack", was wrong:
+    // the game's builder and gear loop were run with both tiers on one piece and gave the sum).
     const yuna = member('yuna');
     expect(yuna.equipment.armor.autoAbilities).toEqual(expect.arrayContaining(['magic-def-10', 'magic-def-5']));
-    expect(effectiveStats(yuna).byKey.mdef).toMatchObject({ base: 39, effective: 39, bonusPercent: 10, kind: 'mitigation' });
+    expect(effectiveStats(yuna).byKey.mdef).toMatchObject({ base: 39, effective: 39, bonusPercent: 15, kind: 'mitigation' });
   });
 
   it("reads Lulu's Moogle as Magic +10% and her Bangle as Magic Def +10%", () => {

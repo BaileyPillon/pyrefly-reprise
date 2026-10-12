@@ -12,13 +12,13 @@
  *   only when two or more remain, as `draw mod count` along the survivors in ascending actor order, and with none
  *   returns 255 (no target). {@link pickActor} is that pick.
  *
- * **The engine draws both from its one seeded stream** (`ctx.rng`, mulberry32); adopting the game's own generators and
- * their stream map is a separate decision for Bailey (`docs/plans/re-parity.md` P3), so a seed here replays this engine,
- * not the game. What matches the game is each roll's range and reduction, which rolls are taken and in what order.
+ * **The engine draws both from the game's own streams** (`ctx.rng.on(2)` and `ctx.rng.on(4)`, `adapt/streams.ts`; Bailey 2026-10-09
+ * "Adopt game streams"): each roll's stream, range and reduction, which rolls are taken and in what order are the game's.
  */
 
 import type { CombatantId, FFXCombatant } from '../../common/types.ts';
 import { type Ctx, canQueueAction, friendlies, has, isAlive, targetable } from '../state.ts';
+import { FfxStream } from '../adapt/streams.ts';
 
 /**
  * The game's actor ids for the party and the aeons: party 0 to 7, aeons 8 to 17, monsters 20 and up in formation order
@@ -39,7 +39,7 @@ export function actorNumber(ctx: Ctx, id: CombatantId): number {
 
 /** `GetRandomValue()`: sixteen bits. */
 export function gameRandom(ctx: Ctx): number {
-  return ctx.rng.int(0, 0xffff);
+  return ctx.rng.on(FfxStream.Script).int(0, 0xffff);
 }
 
 /** `GetRandomValue() mod m`, the form every script uses it in. */
@@ -55,7 +55,7 @@ export function pickActor(ctx: Ctx, pool: readonly FFXCombatant[]): FFXCombatant
   if (pool.length === 0) return undefined;
   if (pool.length === 1) return pool[0];
   const ordered = [...pool].sort((a, b) => actorNumber(ctx, a.id) - actorNumber(ctx, b.id));
-  return ordered[ctx.rng.int(0, ordered.length - 1)];
+  return ordered[ctx.rng.on(FfxStream.Picker).int(0, ordered.length - 1)];
 }
 
 /** `-14 FrontlineChars`: every non-monster actor in the battle (the aeon alone while one holds the field). */

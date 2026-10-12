@@ -27,8 +27,10 @@ import {
   withStatBonus,
   defaultDresspheres,
   FFX2Engine,
+  baseRequired,
 } from '../../src/battle/ffx2/index.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/index.ts';
+import { newGauge } from '../../src/battle/ffx2/atb-engine.ts';
 import { bevelleParty, group, bahamutEnemy } from '../../src/battle/ffx2/fixtures.ts';
 import type { EventDraft } from '../../src/battle/ffx2/index.ts';
 
@@ -52,7 +54,7 @@ function girl(gridId: string, dressphere = 'gunner', level = 24): Ffx2Unit {
       abilitiesLearned: {},
     },
     atb: { ticks: 999, required: 1000, gauge: 99, charging: null, recovery: 0 },
-    accessories: [], chainCount: 0, chainWindowTicks: 0,
+    accessories: [], chainCount: 0, chainWindowTicks: 0, gauge: newGauge(0),
   };
 }
 
@@ -141,12 +143,32 @@ describe('performSpherechange', () => {
     expect(yuna.stats.str).toBeGreaterThan(baseStr);
   });
 
-  it('consumes the whole turn: the ATB is spent and refills from empty', () => {
+  it('consumes the whole turn: no charge is left and the standard gauge follows the Agility of the new dressphere', () => {
+    // Re-parity W4: the function used to zero the unit's gauge itself. The recovery is now the game's counter, set by the
+    // command's completion (`finishAction`, 70 x 10000 / (AGI + 1) with the Agility of the NEW dressphere; the cost is
+    // unsourced, the Attack row's); the engine-level check is the next test.
     const yuna = girl('vanguard');
+    yuna.atb.charging = { commandRef: { kind: 'attack', targets: [] }, remainingTicks: 5, totalTicks: 9 };
     change(yuna, 'warrior', 1);
-    expect(yuna.atb.ticks).toBe(0);
-    expect(yuna.atb.gauge).toBe(0);
     expect(yuna.atb.charging).toBeNull();
+    expect(yuna.atb.required).toBe(baseRequired(yuna.stats.agi));
+  });
+
+  it('through the engine the change leaves the Attack-row recovery at the new Agility', () => {
+    const engine = new FFX2Engine();
+    engine.init({ game: 'ffx2', party: bevelleParty(24, 'vanguard'), enemies: group('t', [bahamutEnemy()]), triggers: [], seed: 7, condition: 'preemptive' });
+    let decision = engine.nextDecision();
+    for (let i = 0; i < 200 && decision.kind === 'waiting'; i++) {
+      engine.tick(decision.nextEventMs);
+      decision = engine.nextDecision();
+    }
+    if (decision.kind !== 'player-input') throw new Error('no menu');
+    const row = decision.commands.find((c) => c.command.kind === 'spherechange' && c.enabled);
+    expect(row).toBeDefined();
+    engine.submit(row!.command);
+    const u = engine.state().combatants[decision.actorId] as unknown as Ffx2Unit;
+    expect(u.atb.recovery).toBe(Math.floor((70 * 10000) / (u.stats.agi + 1)));
+    expect(u.gauge.state).toBe(0); // IDLE: the next step starts the recovery
   });
 
   it('refuses a node that is not one link away', () => {
@@ -239,7 +261,11 @@ describe('the command menu offers only legal spherechanges', () => {
       seed: 7,
       condition: 'preemptive',
     });
-    const decision = engine.nextDecision();
+    let decision = engine.nextDecision();
+    for (let i = 0; i < 200 && decision.kind === 'waiting'; i++) {
+      engine.tick(decision.nextEventMs);
+      decision = engine.nextDecision();
+    }
     expect(decision.kind).toBe('player-input');
     if (decision.kind !== 'player-input') return;
     const rows = decision.commands.filter((c) => c.command.kind === 'spherechange');

@@ -18,7 +18,7 @@ import type {
   FFXCombatant,
   Side,
 } from '../common/types.ts';
-import type { SeededRng } from '../common/rng.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { FFXContentRegistry } from './registry.ts';
 import type { ActorRuntime, FFXRuntime } from './runtime.ts';
 import { baseCtb } from './math.ts';
@@ -55,7 +55,8 @@ export type { ActorRuntime, FFXRuntime } from './runtime.ts';
 export interface Ctx {
   state: BattleState;
   rt: FFXRuntime;
-  rng: SeededRng;
+  /** The battle's random streams: FFX's own 68, drawn by number (`adapt/streams.ts`). */
+  rng: BattleRng;
   content: FFXContentRegistry;
   emit: (event: EventInput) => void;
 }
@@ -84,6 +85,16 @@ export function spendItem(ctx: Ctx, id: string): boolean {
   ctx.rt.inventory.set(id, left);
   ctx.state.flags[`inventory:${id}`] = left;
   return true;
+}
+
+/**
+ * Give one of `id` back to the party bag (the action executor's refund, `0x007b0c20` with +1): the stack stops at 99, so a refund into
+ * a full stack is lost, and the new count is mirrored into `state.flags` like {@link spendItem}'s.
+ */
+export function refundItem(ctx: Ctx, id: string): void {
+  const left = Math.min(99, (ctx.rt.inventory.get(id) ?? 0) + 1);
+  ctx.rt.inventory.set(id, left);
+  ctx.state.flags[`inventory:${id}`] = left;
 }
 
 /** A fresh, empty {@link ActorRuntime} for a combatant. */

@@ -118,7 +118,7 @@ export function performSpherechange(
   }
 
   refreshDerivedStats(unit, deps);
-  unit.atb.ticks = 0;
+  // The change ends the command (`finishAction` sets the recovery); the new dressphere's Agility sets the standard gauge the HUD draws.
   unit.atb.required = baseRequired(unit.stats.agi);
   unit.atb.charging = null;
   refreshGauge(unit);

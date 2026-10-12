@@ -279,20 +279,25 @@ describe('the guide and the advisor never disagree about who a command hits', ()
     // puts the first Holy Water on Tidus himself again, the premise this test was written on (seeds 12 and 25 do too; it goes to Kimahri on seeds
     // 10, 21, 24, 27, 36, 41, 49, 50 and 59 and to Yuna on seed 3; the other seeds of 1 to 60 reach none inside six steps). The label is the rule's
     // witness, not the rule.
-    const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, 2);
-    const watch: Watch = { id: 'holy-water', seenLabel: null };
-    const result = walkFfx(engine, content, 6, watch);
-    expect(result.decisions).toBeGreaterThan(0);
-    expect(result.mismatches).toEqual([]);
+    // 2026-10-11 (re-parity RNG lane, FFX only: each game draws from its own 68 streams, so every seed is another deal): the first seed of 1 to 60 whose
+    // opening puts the first Holy Water on Tidus is used (seed 2 sends it to Kimahri now). Every seed visited on the way must agree on both panels as well.
+    let watch: Watch = { id: 'holy-water', seenLabel: null };
+    for (let seed = 1; seed <= 60 && watch.seenLabel !== 'Tidus'; seed++) {
+      const { engine, content } = newFfxEngine('seymour-flux', gagazetBuild, seed);
+      watch = { id: 'holy-water', seenLabel: null };
+      const result = walkFfx(engine, content, 6, watch);
+      expect(result.mismatches, `seed ${seed}`).toEqual([]);
+    }
     expect(watch.seenLabel).toBe('Tidus');
   });
 
   it('an all-enemies command reads "all enemies" on both panels (Chapter 5 opener)', () => {
     const group = VEGNAGUN_CHAIN_ORDER[0]!;
     const engine = newFfx2Engine(group, farplaneBuild);
-    // Black Sky is the chapter's very first decision (raw index 2).
+    // Black Sky is Paine's first decision. Re-parity W4: it used to be the chapter's very first (raw index 2); with the game's opening
+    // gauges the other girls act first, so the walk is longer (the label it pins is unchanged).
     const watch: Watch = { id: 'x2-dark-knight-black-sky', seenLabel: null };
-    const result = walkFfx2(engine, 3, watch);
+    const result = walkFfx2(engine, 12, watch);
     expect(result.decisions).toBeGreaterThan(0);
     expect(result.mismatches).toEqual([]);
     expect(watch.seenLabel).toBe('all enemies');

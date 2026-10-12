@@ -14,6 +14,7 @@
 import type { AbilityDef, FFXCombatant, StatusApplication, StatusId, StatusInstance } from '../../../src/battle/common/types.ts';
 import type { Ctx } from '../../../src/battle/ffx/index.ts';
 import { drawsOf } from '../../../src/battle/ffx/adapt/draws.ts';
+import { streamsOf } from '../../../src/battle/ffx/adapt/streams.ts';
 import { type HitScope, newRecordBook, resolveOneHit } from '../../../src/battle/ffx/hit-apply.ts';
 
 /** Put `status` on `target` by hand: a plain instance (254 turns, "until removed"), overridable. */
@@ -58,7 +59,7 @@ export function inflict(ctx: Ctx, user: FFXCombatant | undefined, target: FFXCom
     user: user ?? target,
     def,
     options: {},
-    draws: drawsOf(ctx.rng),
+    draws: drawsOf(ctx.rng, streamsOf(ctx, user ?? target)),
     primaryElement: 'none',
     totalHits: 1,
     hitIndex: 0,

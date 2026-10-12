@@ -14,6 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup, bahamutEnemy, bevelleParty, enemy, group } from '../../src/battle/ffx2/fixtures.ts';
 import type { BattleEvent, Decision } from '../../src/battle/common/types.ts';
+import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 
 /** Drive a whole battle, always attacking the first legal target. */
 function playOut(seed: number, maxSteps = 4000): { engine: FFX2Engine; events: BattleEvent[] } {
@@ -117,7 +118,7 @@ describe('the playback protocol', () => {
     // One absurdly long tick stops at the first thing that resolved rather
     // than burning the whole 60 s, so no turn is ever skipped.
     engine.tick(60000);
-    expect(engine.state().ticks).toBeLessThan(60 * 3000);
+    expect(engine.state().ticks).toBeLessThan(60 * STEPS_PER_SECOND);
 
     // Keep ticking and a player turn arrives, never having been jumped over.
     let decision = engine.nextDecision();

@@ -127,7 +127,9 @@ export const magusSistersAbilities: AbilityDef[] = [
     damageType: 'other',
     element: ['none'],
     targeting: 'single-ally',
-    statusEffects: [{ status: 'regen', chance: 254, duration: 0 }],
+    // Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity", row M7): the game's Regen counter is 50 (row 0x30b6, statusTime 50),
+    // 50 counts of 1,500 units at 95 a step = 790 steps = 26.4 s and four ticks; it used to last until cured or Dispelled.
+    statusEffects: [{ status: 'regen', chance: 254, duration: 50 }],
     canMiss: false,
     messageTemplate: 'Cindy casts Regen',
   },
@@ -141,9 +143,10 @@ export const magusSistersAbilities: AbilityDef[] = [
     element: ['none'],
     targeting: 'all-allies', // "Protect, Shell and Regen on all three sisters"
     statusEffects: [
+      // Protect and Shell carry counter 126, which never counts down (it stays until Dispelled); Regen carries 50 (M7, as above).
       { status: 'protect', chance: 254, duration: 0 },
       { status: 'shell', chance: 254, duration: 0 },
-      { status: 'regen', chance: 254, duration: 0 },
+      { status: 'regen', chance: 254, duration: 50 },
     ],
     canMiss: false,
     messageTemplate: 'Cindy uses Not-So-Mighty Guard',

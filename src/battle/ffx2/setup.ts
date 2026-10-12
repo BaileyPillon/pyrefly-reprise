@@ -24,15 +24,19 @@ import type {
   StatBlock,
 } from '../common/types.ts';
 import { cloneData } from '../common/clone.ts';
+import type { BattleRng } from '../common/streams.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
 import { accessoryAutoStatuses, accessoryImmunities, withPoolStatuses } from './kit.ts';
 import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
-import { baseRequired, refreshGauge } from './gauges.ts';
+import { baseRequired } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { applyStatus } from './statuses.ts';
 import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES } from './constants.ts';
+import { newGauge } from './atb-engine.ts';
+import { openBattleGauges } from './atb-open.ts';
+import { aiScriptFor } from './ai/index.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -118,6 +122,7 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
       abilitiesLearned: member.abilitiesLearned,
     },
     atb: emptyAtb(stats.agi),
+    gauge: newGauge(),
     accessories: [...member.accessories],
     chainCount: 0,
     chainWindowTicks: 0,
@@ -153,11 +158,11 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
     misleadingSensor: enemy.misleadingSensor,
     level: enemy.level ?? 1,
     atb: emptyAtb(stats.agi),
+    gauge: newGauge(),
     accessories: [],
     chainCount: 0,
     chainWindowTicks: 0,
     aiMemory: {},
-    thinkingTicks: 0,
     enemy: {
       aiScriptId: enemy.aiScriptId,
       formIndex: 0,
@@ -181,7 +186,15 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
 function applyAutoStatuses(unit: Ffx2Unit, ids: EnemyDef['autoStatuses']): void {
   if (!ids || ids.length === 0) return;
   unit.autoStatuses = [...ids];
-  for (const id of ids) applyStatus(unit, { status: id, chance: 255, duration: 0 }, unit.id);
+  for (const id of ids) {
+    const instance = applyStatus(unit, { status: id, chance: 255, duration: 0 }, unit.id);
+    // A permanent source holds the status for good (`Chr+0x4fc`): it carries no clock, whatever the status would time out to.
+    if (instance) {
+      instance.ticksRemaining = null;
+      delete instance.counter;
+      delete instance.accumulator;
+    }
+  }
 }
 
 /** Restore a girl from the previous link of a chain. CONTRACT-CHANGES §6. */
@@ -212,29 +225,6 @@ function restoreAtSaveSphere(unit: Ffx2Unit): void {
   unit.mp = unit.stats.maxMp;
   unit.alive = true;
   delete unit.statuses.ko;
-}
-
-/**
- * Opening ATB fill. §1.6: normal battles start every bar at a randomised level;
- * a pre-emptive strike fills the party's, an ambush fills the enemies'.
- */
-function seedOpeningGauges(
-  units: Ffx2Unit[], condition: BattleSetup['condition'], rng: { int(a: number, b: number): number }, separate = false,
-): void {
-  for (const unit of units) {
-    if (condition === 'preemptive') {
-      unit.atb.ticks = unit.side === 'party' ? unit.atb.required : 0;
-    } else if (condition === 'ambush') {
-      unit.atb.ticks = unit.side === 'enemy' ? unit.atb.required : 0;
-    } else if (condition === 'scripted' && !separate) {
-      // A continuation opens at zero; a link the source makes a separate battle (PR-0107,
-      // `EnemyGroupDef.opensAsSeparateBattle`) rolls its fills like any normal battle below.
-      unit.atb.ticks = 0;
-    } else {
-      unit.atb.ticks = Math.floor((unit.atb.required * rng.int(0, 60)) / 100);
-    }
-    refreshGauge(unit);
-  }
 }
 
 /**
@@ -276,7 +266,7 @@ export interface BuiltState {
 export function buildState(
   setup: BattleSetup,
   options: Ffx2EngineOptions,
-  rng: { int(a: number, b: number): number },
+  rng: BattleRng,
 ): BuiltState {
   if (setup.party.game !== 'ffx2') throw new Error('FFX2Engine: setup.party must be an FFX2PartyBuild');
   // **The battle owns its records**, for the same reason the FFX side does and
@@ -306,8 +296,19 @@ export function buildState(
   for (const enemy of enemies.enemies) units.push(buildEnemy(enemy, false));
   for (const part of enemies.parts ?? []) units.push(buildEnemy(part, true));
 
+  // The scripts' init entries run before the first gauge is rolled (AiScript.init, RC3): the Vegnagun Head's Agility 110 (row H3).
+  for (const unit of units) {
+    const init = unit.side === 'enemy' ? aiScriptFor(unit.enemy?.aiScriptId).init : undefined;
+    if (init?.agi !== undefined) unit.stats = { ...unit.stats, agi: init.agi };
+  }
+
   const separate = enemies.opensAsSeparateBattle === true && (options.separateBattleGauges ?? SEPARATE_BATTLE_GAUGES);
-  seedOpeningGauges(units, setup.condition, rng, separate);
+  openBattleGauges(
+    units,
+    setup.condition,
+    { continuation: setup.condition === 'scripted' && !separate, rollFirstAttack: options.rollFirstAttack === true },
+    rng,
+  );
 
   const combatants: BattleState['combatants'] = {};
   for (const unit of units) combatants[unit.id] = unit;
@@ -330,7 +331,6 @@ export function buildState(
     flags: {
       ...(setup.chained || options.chained ? { chained: true } : {}),
       ...(enemies.nextGroupId ? { nextGroupId: enemies.nextGroupId } : {}),
-      ...(enemies.timedAilmentDefaults ? { timedAilmentDefaults: true } : {}), // `statuses.ts`, Chapter XIII
       ...(enemies.actionTimeSeconds ? { actionTimeSeconds: enemies.actionTimeSeconds } : {}), // `action-time.ts` (E4), OFF
       canEscape: setup.canEscape ?? enemies.canEscape ?? false,
       // PR-0106's switch, read by `ai/leblanc-syndicate.ts`; absent (OFF) leaves every state as it was.

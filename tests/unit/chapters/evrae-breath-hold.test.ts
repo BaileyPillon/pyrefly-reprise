@@ -89,15 +89,20 @@ describe('Evrae: a charged breath at FAR is never answered by naming Evrae (§4.
     void held;
   }, 300_000);
 
-  it('seed 3, following the card, meets the real board and answers it with the line', () => {
+  it('the first seed that meets the board, following the card, answers it with the line', () => {
+    // Seed 3 -> found by search on 2026-10-11 (re-parity RNG lane, FFX only: the game's own streams are another deal of every seed): the first seed of
+    // 1 to 60 whose battle holds for a charged breath at all is used; the rule (the card answers that board with the line and never names Evrae) is the card's, unchanged.
     // Seed 8 -> 3 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the opening counters are the game's 26 fixed draws and
     // statuses roll through the game's infliction step, so the draws moved and seed 8's battle no longer holds for a charged breath at all (0 of
     // its menus). Seed 3 is the first of seeds 1 to 14 that meets the board (12 menus; seed 7 meets it on 10), with nothing wrong on it. The rule
     // (the card answers that board with the line and never names Evrae) is the card's, unchanged.
-    clearAdvisorCache();
-    const engine = newEngine(3);
     let held = 0;
     const bad: string[] = [];
+    for (let seed = 1; seed <= 60 && held === 0; seed++) {
+    held = 0;
+    bad.length = 0;
+    clearAdvisorCache();
+    const engine = newEngine(seed);
     for (let i = 0; i < 60_000; i++) {
       const d = engine.nextDecision();
       if (d.kind === 'battle-over') break;
@@ -110,6 +115,7 @@ describe('Evrae: a charged breath at FAR is never answered by naming Evrae (§4.
         if (view?.suggestions[0]?.source !== 'tactic') bad.push(`${d.actorId}: top ${view?.suggestions[0]?.label}`);
       }
       engine.submit(view?.suggestions[0]?.command ?? { kind: 'defend', targets: [] });
+    }
     }
     expect(bad).toEqual([]);
     expect(held).toBeGreaterThan(0);

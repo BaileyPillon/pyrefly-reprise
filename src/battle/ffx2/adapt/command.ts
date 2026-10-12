@@ -13,7 +13,10 @@
  * Ammo). The rows this holds back are listed in `docs/handoff/re-parity-w3.md` for Bailey; physical rows follow the game.
  */
 
-import type { AbilityDef, FFX2CommandRecord, Rng } from '../../common/types.ts';
+import type { AbilityDef, FFX2CommandRecord } from '../../common/types.ts';
+import type { BattleRng } from '../../common/streams.ts';
+import { Ffx2ScriptStream } from './streams.ts';
+import { ATB_BASE_VALUE, ATB_DOUBLE_RECOVERY_VALUE } from '../constants.ts';
 import type { Ffx2Unit } from '../internal.ts';
 import type { HitCommand } from '../kernel/hit.ts';
 import type { PipelineCommand } from '../kernel/pipeline-types.ts';
@@ -45,6 +48,8 @@ export const FORMULA_NUMBER: Readonly<Record<string, number>> = {
 export const MISC_DARKNESS = 0x40;
 export const MISC_ABSORB = 0x100;
 export const MISC_STEAL_ITEM = 0x200;
+export const MISC_DELAY_WEAK = 0x1000;
+export const MISC_DELAY_STRONG = 0x2000;
 export const MISC_RANDOM_TARGETS = 0x4000;
 export const MISC_USES_WEAPON = 0x10000;
 export const MISC_NEEDS_DEAD = 0x40000;
@@ -172,6 +177,9 @@ export function deriveRecord(ability: AbilityDef): FFX2CommandRecord {
   if (ability.targeting === 'random-enemy' || ability.targeting === 'random-ally') misc |= MISC_RANDOM_TARGETS;
   if (flags.includes('inherits-weapon-properties')) misc |= MISC_USES_WEAPON;
   if (flags.includes('misses-if-target-alive')) misc |= MISC_NEEDS_DEAD;
+  // A Delay command is the ATB damage class: the game's weak (4,000) and strong (8,000) Delay bits of `Cmd+0x14` (re-parity W4).
+  if (flags.includes('weak-delay')) misc |= MISC_DELAY_WEAK;
+  if (flags.includes('strong-delay')) misc |= MISC_DELAY_STRONG;
   if (!damaging && typeof extra['stealAttempt'] === 'string') misc |= MISC_STEAL_ITEM;
 
   let dmg = 0;
@@ -239,10 +247,32 @@ export function deriveRecord(ability: AbilityDef): FFX2CommandRecord {
     shatter: flags.includes('shatter') ? clampByte(ability.shatterChance ?? 0) : 0,
     element: elementMask(ability.element),
     killer: 0,
+    // Costs (re-parity W4): the ability's own values stand for the row's. The recovery value (70, or 140 for `2xRT`) and the
+    // charge value (the old tiers) go through the same `value * 10000 / (AGI + 1)` the game's `cost_atb` and `cost_cast` do.
+    costAtb: flags.includes('2xrt') ? ATB_DOUBLE_RECOVERY_VALUE : (ability.recoveryTicks ?? ATB_BASE_VALUE),
+    costCast: ability.chargeTicks ?? 0,
     ...(Object.keys(status1).length > 0 ? { status1 } : {}),
     ...(Object.keys(status2).length > 0 ? { status2 } : {}),
     ...(Object.keys(statusTime).length > 0 ? { statusTime } : {}),
   };
+}
+
+/** What a command costs its user in ATB: the command's id (the cast-speed entries name it), its recovery and its cast cost. */
+export interface CommandCosts {
+  id: number;
+  costAtb: number;
+  costCast: number;
+}
+
+/**
+ * The costs of the row `user` runs when it uses `ability` (the first row of a roulette: its variants share one cost). A
+ * record written without costs stands in with the ability's own recovery and charge values, like a derived row.
+ */
+export function commandCosts(ability: AbilityDef, user: Ffx2Unit): CommandCosts {
+  const record = resolveCommand(ability, user).record;
+  if (record.costAtb !== undefined && record.costCast !== undefined) return { id: record.id, costAtb: record.costAtb, costCast: record.costCast };
+  const own = deriveRecord(ability);
+  return { id: record.id, costAtb: record.costAtb ?? own.costAtb ?? ATB_BASE_VALUE, costCast: record.costCast ?? own.costCast ?? 0 };
 }
 
 /** A sparse index-to-byte map as the kernels' 24-entry table. */
@@ -253,11 +283,13 @@ function table(sparse: Readonly<Record<number, number>> | undefined): number[] {
 }
 
 /**
- * The statuses of a derived ability that have no slot in the game's tables (the engine's hidden Delay effect and
- * Action-cancel, Shattering): the engine rolls those itself with the same landing rule.
+ * The statuses of an ability that have no slot in the game's tables (Shattering): the engine rolls those itself with the same
+ * landing rule. The engine's hidden Delay effect and Action-cancel are not among them any more (re-parity W4): a Delay is the
+ * row's ATB damage class (the Delay bits of `Cmd+0x14`), a cancel its `Cmd+0x7a` chance, both run by the kernels.
  */
 function ridersWithoutSlot(ability: AbilityDef, derived: boolean): ResolvedCommand['engineRiders'] {
   return ability.statusEffects.filter((app) => {
+    if (app.status === 'delay-effect' || app.status === 'action-cancel') return false;
     if (slotOf(app.status) === undefined) return true;
     // A derived cleanse cannot also inflict: the kernels run one mode per command.
     return derived && ability.flags.includes('removes-statuses') && ability.removesStatuses.length > 0;
@@ -266,12 +298,13 @@ function ridersWithoutSlot(ability: AbilityDef, derived: boolean): ResolvedComma
 
 /**
  * Which of a command's rows runs this cast: the index into `FFX2CommandRecord.pickOne`, drawn once (the game's script
- * picks one row of Russian Roulette's five, 1 in 5 each), or 0 with no draw for every other command.
+ * picks one row of Russian Roulette's five with `random() % 5`, `research/re-ffx2-ai-leblanc-den-ixion.md`: the low 16 bits of one
+ * draw of the scripts' stream 2), or 0 with no draw for every other command.
  */
-export function pickVariant(ability: AbilityDef, rng: Rng): number {
+export function pickVariant(ability: AbilityDef, rng: BattleRng): number {
   const rows = ability.ffx2Record?.pickOne;
   if (rows === undefined || rows.length < 2) return 0;
-  return rng.pick(rows.map((_, i) => i));
+  return rng.on(Ffx2ScriptStream.Random).int(0, 0xffff) % rows.length;
 }
 
 /**

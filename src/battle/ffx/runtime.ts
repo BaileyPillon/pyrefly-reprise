@@ -8,6 +8,8 @@
  */
 
 import type { AbilityId, CombatantId, FFXCombatant, MinigameKind } from '../common/types.ts';
+import type { AutoState } from './kernel/auto-status.ts';
+import type { PendingItemReaction } from './adapt/reactions.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -34,6 +36,12 @@ export interface ActorRuntime {
    */
   poolBaseHp?: number;
   poolBaseMp?: number;
+  /**
+   * The memory of the equipment auto-status machinery (`kernel/auto-status.ts`; re-parity RC4, FFX only): the words the last apply used, what it
+   * overwrote and the weak level it was made for. Present only on a party member whose gear gives an Auto-* or SOS status, and replaced as a whole
+   * (never changed in place) by `adapt/auto-status.ts`, so a forked context may share it.
+   */
+  auto?: AutoState;
   /** Active telegraph, mirrored into `TurnPreview.chargeStage` [visual-bible §3.13]. */
   charge: { name: string; turnsLeft: number; stage: 1 | 2 } | null;
   /** Live Threaten chance, a percent that may exceed 100 [ffx-combat-core §4.4]. */
@@ -49,7 +57,7 @@ export interface ActorRuntime {
   /**
    * **The game's Guard status on an enemy** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; FFX only): a
    * single-target *physical* party action aimed at a monster is redirected to **an ally that holds Guard and can
-   * act** (the one with the most HP if several do) [`targeting.ts#coverOf`, the exe's cover routine 0x78eef0].
+   * act** (the one with the most HP if several do) [`kernel/cover.ts`, the exe's cover routine 0x78eef0].
    * Magic is never covered. A script sets it (Macalania's Seymour marks a Guado Guardian when a physical command
    * names him) and the holder's own script clears it when the holder is next hit. Kept off the status list on
    * purpose: nothing about it is shown to the player, and the damage chain never reads it.
@@ -188,4 +196,20 @@ export interface FFXRuntime {
   inReaction?: boolean;
   /** `state.nextSeq` when Yunalesca last changed form: a Doublecast whose first cast did it cancels the second (row Y6). */
   formDiedAtSeq?: number;
+  /**
+   * The seven Tidus counters (`pp_BtlBond`, VA 0x007845e0; re-parity RC4 lane FFX-G, **FFX only**), index 1 to 7 for the party slots: +1 when Tidus
+   * heals a party member or covers a monster's blow aimed at one, -1 (not below 0) when Tidus's action costs one HP. They weigh into the Cover score
+   * (`kernel/cover.ts`, `target-build.ts`). Absent until first needed; every battle starts them at 0 (open item: the game's array is global).
+   */
+  coverBond?: number[];
+  /**
+   * The item reactions the hits and the death checks of the action in progress have queued, in the order they were queued, each already
+   * paid for (re-parity RC4 lane F, `adapt/reactions.ts`): Auto-Med and Auto-Potion decided in a hit, Auto-Phoenix in a death check.
+   * `engine-end.ts#runItemReactions` runs them once the action is over and empties the list. Absent until first needed.
+   */
+  itemReactions?: PendingItemReaction[];
+  /** The characters that died since the list was last emptied: a record queued for one of them is lost too (`adapt/reactions.ts#cancelReactionsOf`). */
+  reactionDeaths?: Set<CombatantId>;
+  /** The item an item reaction paid for when it was queued: `execute.ts` takes that one use as already spent. */
+  prepaidItem?: string;
 }
