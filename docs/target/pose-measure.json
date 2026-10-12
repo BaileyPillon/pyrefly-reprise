@@ -13387,10 +13387,8 @@
      ],
      "stance": {
       "row": 1019.0,
-      "src": "silhouette",
-      "x": 863.0,
-      "x0": 702.0,
-      "x1": 1024.0
+      "src": "hand",
+      "x": 515
      },
      "standing": true
     },
@@ -13420,10 +13418,8 @@
      ],
      "stance": {
       "row": 1019.0,
-      "src": "silhouette",
-      "x": 859.5,
-      "x0": 695.0,
-      "x1": 1024.0
+      "src": "hand",
+      "x": 515
      },
      "standing": true
     },
@@ -13433,12 +13429,6 @@
       0.5
      ],
      "baseline": 1019.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
@@ -13449,10 +13439,8 @@
      ],
      "stance": {
       "row": 1019.0,
-      "src": "silhouette",
-      "x": 859.5,
-      "x0": 695.0,
-      "x1": 1024.0
+      "src": "hand",
+      "x": 515
      },
      "standing": true,
      "stature": 1.0
@@ -13483,10 +13471,8 @@
      ],
      "stance": {
       "row": 1019.0,
-      "src": "silhouette",
-      "x": 859.5,
-      "x0": 695.0,
-      "x1": 1024.0
+      "src": "hand",
+      "x": 515
      },
      "standing": true
     }
@@ -13518,10 +13504,8 @@
      ],
      "stance": {
       "row": 775.0,
-      "src": "silhouette",
-      "x": 505.0,
-      "x0": 180.0,
-      "x1": 830.0
+      "src": "hand",
+      "x": 491
      },
      "standing": true
     },
@@ -13551,10 +13535,8 @@
      ],
      "stance": {
       "row": 929.0,
-      "src": "silhouette",
-      "x": 89.5,
-      "x0": 29.0,
-      "x1": 150.0
+      "src": "hand",
+      "x": 491
      },
      "standing": true
     },
@@ -13564,12 +13546,6 @@
       0.5
      ],
      "baseline": 929.0,
-     "head": [
-      0.0,
-      0.0,
-      1.0,
-      1.0
-     ],
      "prone": false,
      "scale": 1.0,
      "scaleSrc": "reference",
@@ -13580,10 +13556,8 @@
      ],
      "stance": {
       "row": 929.0,
-      "src": "silhouette",
-      "x": 89.5,
-      "x0": 29.0,
-      "x1": 150.0
+      "src": "hand",
+      "x": 491
      },
      "standing": true,
      "stature": 1.0
@@ -13614,10 +13588,8 @@
      ],
      "stance": {
       "row": 929.0,
-      "src": "silhouette",
-      "x": 89.5,
-      "x0": 29.0,
-      "x1": 150.0
+      "src": "hand",
+      "x": 491
      },
      "standing": true
     }
