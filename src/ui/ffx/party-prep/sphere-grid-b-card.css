@@ -29,7 +29,7 @@
   .sgb-kicker {
     font-family: var(--ig-font-display);
     font-weight: 700;
-    font-size: 6px; /* 15 */
+    font-size: max(6px, var(--stage-floor-frame, 0px)); /* 15 */
     letter-spacing: 0.32em;
     text-transform: uppercase;
     color: var(--ig-gold-on-paper);
@@ -68,7 +68,7 @@
     padding: 2.8px 0; /* 7 */
     border-top: 0.4px solid rgba(11, 10, 18, 0.14);
     font-family: var(--ig-font-text);
-    font-size: 6.2px; /* 15.5 */
+    font-size: max(6.2px, var(--stage-floor-frame, 0px)); /* 15.5 */
   }
   .sgb-row b {
     font-family: var(--ig-font-numeral);
@@ -81,7 +81,7 @@
     padding: 4px 5.6px; /* 10 14 */
     font-family: var(--ig-font-display);
     font-weight: 700;
-    font-size: 5.6px; /* 14 */
+    font-size: max(5.6px, var(--stage-floor-frame, 0px)); /* 14 */
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--ig-gold);
@@ -106,7 +106,7 @@
   .sgb-note {
     margin: 4px 0 0; /* 10 */
     font-family: var(--ig-font-text);
-    font-size: 5.4px; /* 13.5 */
+    font-size: max(5.4px, var(--stage-floor-frame, 0px)); /* 13.5 */
     line-height: 1.35;
     color: #5a5566;
   }
@@ -145,9 +145,13 @@
   .sgb-legend > * {
     transform: skewX(var(--ig-skew-inverse, 12deg));
   }
+  /* The legend's three type sizes carry the line height the browser gave them at the authored size (7 grid px for all three: the
+     font's ascent and descent are rounded to whole px, so the floor's few hundredths of a px would otherwise cost every line a
+     whole px and push the gold line into START BATTLE, 1600x900 measured). */
   .sgb-kicker--gold {
     color: var(--ig-gold);
-    font-size: 5.2px; /* 13 */
+    font-size: max(5.2px, var(--stage-floor-frame, 0px)); /* 13 */
+    line-height: 7px;
   }
   .sgb-legend__grid {
     display: grid;
@@ -161,7 +165,8 @@
     gap: 2.4px; /* 6 */
     font-family: var(--ig-font-display);
     font-weight: 700;
-    font-size: 5.4px; /* 13.5 */
+    font-size: max(5.4px, var(--stage-floor-frame, 0px)); /* 13.5 */
+    line-height: 7px;
     letter-spacing: 0.04em;
     color: var(--ig-paper);
     white-space: nowrap;
@@ -182,7 +187,8 @@
     margin-top: 3.2px; /* 8 */
     font-family: var(--ig-font-display);
     font-weight: 700;
-    font-size: 5.2px; /* 13 */
+    font-size: max(5.2px, var(--stage-floor-frame, 0px)); /* 13 */
+    line-height: 7px;
     color: #fff0a8;
   }
 
@@ -209,7 +215,7 @@
     transform: skewX(var(--ig-skew-inverse, 12deg));
     font-family: var(--ig-font-display);
     font-weight: 700;
-    font-size: 6px; /* 15 */
+    font-size: max(6px, var(--stage-floor-frame, 0px)); /* 15 */
     letter-spacing: 0.04em;
     color: var(--ig-paper);
     padding-bottom: 0.8px;

@@ -1,0 +1,53 @@
+/*
+ * The 14 px floor for the two letterboxed screens that were authored in 640x360 grid px: party prep and results
+ * (CHK-003; PR-0356, round 25: the prep hint strip, the roster-slot role and the sphere-grid key chips at 11.7 to 12 px,
+ * the results sub-lines at 12.2 to 13.3 px).
+ *
+ * Game case: both. Prep and results are shared screens; the FFX panels (`.ffxprep-*`, `.sgb-*`, `.sgx-*`) and the FFX-2
+ * panels (`.x2prep-*`) take the same variables in their own sheets, each with the size its own game authored.
+ *
+ * Why it exists. Each screen sits in a `LetterboxStage` (`createStage`), which scales the 640x360 grid by
+ * `min(w / 640, h / 360)` (2.5 at 1600x900, ~2.81 at 2000x1012, 2.0 at 1280x720) and publishes that number as
+ * `--lb-scale`. A size authored at 4.89 grid px is 12.2 px at 1600x900 and 9.8 px at 1280x720. A flat px raise cannot
+ * serve every window (the same value would be ~4x too large at 3840x2160), so the floor is applied to the RENDERED
+ * size, the way `hud-floor.css`, `move-advisor.css` and `chapter-panel.css` already do: a floor variable is 14.1 px
+ * divided by the stage scale, and a label is `max(its authored size, var(--the-floor, 0px))`. At the scale a size was
+ * authored for, or wider, the floor sits at or under the authored size and nothing changes; below it the label grows
+ * only as far as it must. 14.1, not 14: Chromium rounds a computed size at a scale to one decimal, and a probe that
+ * reads 13.99 is a fail (the same margin `hud-floor.css` keeps).
+ *
+ * Two variables, two gates (both are 0 px outside their query, so `max(authored, 0)` is the authored size there):
+ *   --stage-floor        from a 1280x720 window: the prep shell, the prep panels, the results page.
+ *   --stage-floor-frame  from a 1600x900 window: the Sphere Grid, which was drawn on a 1600x900 frame and packs a 120-px
+ *                        legend and a 161-px card with no slack; below the frame the floor would grow its text 30 percent
+ *                        and run the legend into the START BATTLE button, so the grid keeps its authored sizes there.
+ *
+ * Why the media queries. Below a 1280x720 window the stage is drawn at under 2x (a tablet, a phone in landscape) and the
+ * floor would grow every label past what the 640x360 board can hold: 23 grid px at the phone's 0.61x, which would wreck
+ * the layout that PR-0295's lane is redrawing. The CHAPTER tab's phone page publishes its own `--lb-scale: 1` under
+ * 600 px wide and is outside both queries as well. A window of 1280x720 or more is always at 2.0x or more
+ * (`min(w / 640, h / 360)`), so everything authored at 7.05 grid px or more clears 14.1 px there on its own; only the
+ * labels below that carry the `max()`. The same holds for 2.5x and 5.64 grid px in the frame sheets.
+ *
+ * `tests/unit/r43-text-floor-css.test.ts` evaluates the arithmetic at the CHK-002 viewports and fails on a bare size.
+ */
+
+.prep__stage,
+.rres__stage {
+  --stage-floor: 0px;
+  --stage-floor-frame: 0px;
+}
+
+@media (min-width: 1280px) and (min-height: 720px) {
+  .prep__stage,
+  .rres__stage {
+    --stage-floor: calc(14.1px / var(--lb-scale, 1));
+  }
+}
+
+@media (min-width: 1600px) and (min-height: 900px) {
+  .prep__stage,
+  .rres__stage {
+    --stage-floor-frame: calc(14.1px / var(--lb-scale, 1));
+  }
+}

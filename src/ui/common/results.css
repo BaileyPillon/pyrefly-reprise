@@ -11,7 +11,13 @@
  *
  * Chapter 4 keeps `--silent` [writing-bible §5.4]: the page stops
  * celebrating — no gold, no quip, the portrait sunk into the ink.
+ *
+ * Type floor (CHK-003, PR-0356): a size under 7.05 grid px is `max(its size,
+ * var(--stage-floor, 0px))`, 14.1 px read back into grid px (`stage-floor.css`,
+ * imported below, so the variable is defined wherever this sheet is loaded).
  */
+
+@import './stage-floor.css';
 
 .rres {
   position: absolute;
@@ -119,7 +125,7 @@
   position: absolute;
   left: 620.44px; /* 1396 */
   top: 26.67px; /* 60 */
-  font-size: 6.22px; /* 14 */
+  font-size: max(6.22px, var(--stage-floor, 0px)); /* 14 */
   font-weight: 700;
   letter-spacing: 0.34em;
   color: var(--ig-accent, #e3b94a);
@@ -150,7 +156,7 @@
   padding: 2.67px 6.22px; /* 6 14 */
   background: var(--ig-ink, #0b0a12);
   color: var(--ig-accent, #e3b94a);
-  font-size: 5.78px; /* 13 */
+  font-size: max(5.78px, var(--stage-floor, 0px)); /* 13 */
   font-weight: 700;
   letter-spacing: 0.34em;
 }
@@ -196,7 +202,7 @@
   padding: 1.33px 3.56px; /* 3 8 */
   background: var(--ig-ink, #0b0a12);
   color: var(--ig-accent, #e3b94a);
-  font-size: 5.33px; /* 12 */
+  font-size: max(5.33px, var(--stage-floor, 0px)); /* 12 */
   font-weight: 700;
   letter-spacing: 0.24em;
   white-space: nowrap;
@@ -237,7 +243,7 @@
 }
 .rres__k {
   width: 66.67px; /* 150 */
-  font-size: 6.22px; /* 14 */
+  font-size: max(6.22px, var(--stage-floor, 0px)); /* 14 */
   font-weight: 700;
   letter-spacing: 0.3em;
   color: var(--ig-accent-on-paper, #b8862a); /* gold darkened for paper */
@@ -271,7 +277,7 @@
 }
 .rres__d {
   margin-left: auto;
-  font-size: 6.67px; /* 15 */
+  font-size: max(6.67px, var(--stage-floor, 0px)); /* 15 */
   letter-spacing: 0.1em;
   color: #5b5566;
 }
@@ -335,7 +341,7 @@
   height: 13.33px;
 }
 .rres__party--tight .rres__member-name {
-  font-size: 6.22px; /* 14 */
+  font-size: max(6.22px, var(--stage-floor, 0px)); /* 14 */
 }
 .rres__party--tight .rres__member-detail {
   display: none;
@@ -389,7 +395,7 @@
    this member's progression stands now that the battle's award is banked. */
 .rres__member-detail {
   margin-top: 0.44px; /* 1 */
-  font-size: 4.89px; /* 11 */
+  font-size: max(4.89px, var(--stage-floor, 0px)); /* 11 */
   font-weight: 700;
   letter-spacing: 0.12em;
   color: #7b7486;
@@ -405,7 +411,7 @@
 }
 .rres__member-ap small {
   margin-left: 2.67px; /* 6 */
-  font-size: 5.78px; /* 13 */
+  font-size: max(5.78px, var(--stage-floor, 0px)); /* 13 */
   letter-spacing: 0.2em;
   color: var(--ig-accent-on-paper, #b8862a);
 }
@@ -415,7 +421,7 @@
   padding: 1.33px 3.56px; /* 3 8 */
   background: var(--ig-ink, #0b0a12);
   color: var(--ig-accent, #e3b94a);
-  font-size: 5.33px; /* 12 */
+  font-size: max(5.33px, var(--stage-floor, 0px)); /* 12 */
   font-weight: 700;
   letter-spacing: 0.2em;
 }
@@ -435,7 +441,7 @@
   padding: 5.33px 9.78px; /* 12 22 */
   background: var(--ig-paper, #f4f1e8);
   color: var(--ig-ink, #0b0a12);
-  font-size: 6.22px; /* 14 */
+  font-size: max(6.22px, var(--stage-floor, 0px)); /* 14 */
   font-weight: 700;
   letter-spacing: 0.3em;
   transform: skewX(-12deg);
@@ -461,7 +467,7 @@
   background: transparent;
   border: 0.89px solid #6c6579; /* 2 */
   color: #cfc8bb;
-  font-size: 6.22px; /* 14 */
+  font-size: max(6.22px, var(--stage-floor, 0px)); /* 14 */
   font-weight: 700;
   letter-spacing: 0.3em;
   transform: skewX(-12deg);

@@ -96,7 +96,7 @@
 .frg__eyebrow {
   font-family: var(--ig-font-display, sans-serif);
   font-weight: 700;
-  font-size: calc(13px * var(--pyr-ts, 1));
+  font-size: calc(14px * var(--pyr-ts, 1));
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--ig-gold, #e3b94a);
@@ -141,7 +141,7 @@
   margin-top: 10px;
   font-family: var(--ig-font-display, sans-serif);
   font-weight: 700;
-  font-size: calc(12px * var(--pyr-ts, 1));
+  font-size: calc(14px * var(--pyr-ts, 1));
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(244, 241, 232, 0.72);
@@ -167,9 +167,9 @@
     padding: 12px 16px;
     box-sizing: border-box; /* a phone: the whole slab stays inside 390 px */
   }
-  .frg__eyebrow { font-size: calc(11px * var(--pyr-ts, 1)); }
+  .frg__eyebrow { font-size: calc(14px * var(--pyr-ts, 1)); }
   .frg__quote { font-size: calc(21px * var(--pyr-ts, 1)); margin: 6px 0 4px; }
-  .frg__line { font-size: calc(13.5px * var(--pyr-ts, 1)); }
-  .frg__act { font-size: calc(13px * var(--pyr-ts, 1)); margin-top: 7px; }
-  .frg__skip { font-size: calc(10px * var(--pyr-ts, 1)); }
+  .frg__line { font-size: calc(14px * var(--pyr-ts, 1)); }
+  .frg__act { font-size: calc(14px * var(--pyr-ts, 1)); margin-top: 7px; }
+  .frg__skip { font-size: calc(14px * var(--pyr-ts, 1)); }
 }
