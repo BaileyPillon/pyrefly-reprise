@@ -277,24 +277,46 @@ describe('FFXBattleHud mounts it and feeds it', () => {
 describe('zanmato-gauge.css: CHK-003 type floor at every checked viewport', () => {
   const sheet = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'ffx', 'zanmato-gauge.css'), 'utf8');
   const landscape = sheet.split('/* -------------------------------------------------------------------- phone */')[0]!;
-  const sizes = [...landscape.matchAll(/font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1]));
-  /** frame 1440 -> grid 640, then `LetterboxStage.ts`'s min(w / 640, h / 360). */
-  const effective = (px: number, w: number, h: number): number => px * (640 / 1440) * Math.min(w / 640, h / 360);
+  // Each landscape size, bare ("30px") or floored ("max(11px, var(--zg-floor, 0px))", PR-0356).
+  const decls = [...landscape.matchAll(/font-size:\s*(max\(\s*)?([\d.]+)px(,\s*var\(--zg-floor, 0px\)\s*\))?/g)].map((m) => ({
+    px: Number(m[2]),
+    floored: m[1] !== undefined && m[3] !== undefined,
+  }));
+  /** `--hud-floor` is 14.1 px over the stage scale (hud-floor.css); a frame px is 640/1440 grid px; `--zg-floor` is 2.25 hud-floors. */
+  const effective = (d: { px: number; floored: boolean }, w: number, h: number): number => {
+    const scale = Math.min(w / 640, h / 360);
+    const gateOpen = w >= 1280 && h >= 720;
+    const frameFloor = d.floored && gateOpen ? (14.1 * 2.25) / scale : 0;
+    return Math.max(d.px, frameFloor) * (640 / 1440) * scale;
+  };
 
-  // The two viewports `ffx-hud-css-type-floor.test.ts` holds the in-stage HUD to 12 px at.
-  for (const [w, h] of [[1600, 900], [2000, 1012]] as const) {
-    it(`every landscape font-size clears 12 px at ${w}x${h}`, () => {
-      expect(sizes.length).toBeGreaterThan(5);
-      for (const px of sizes) expect(effective(px, w, h), `${px}px`).toBeGreaterThanOrEqual(12);
+  it('wraps every landscape size under 17.6 frame px in the floor, and declares the floor itself', () => {
+    expect(decls.length).toBeGreaterThan(5);
+    // 17.6 frame px is where a 1280x720 window (scale 2) puts the floor: anything smaller must carry it.
+    for (const d of decls) if (d.px < 17.6) expect(d.floored, `${d.px}px`).toBe(true);
+    expect(sheet).toContain('--zg-floor: calc(var(--hud-floor, 0px) * 2.25);');
+    expect(sheet).toMatch(/@media \(min-width: 1280px\) and \(min-height: 720px\) \{\s*\.ffx-zg:not\(\.ffx-zg--phone\)/);
+  });
+
+  // CHK-002's own viewports that the HUD stage draws at 2x or more (the floor is off below a 1280x720 window, as before).
+  for (const [w, h] of [[1280, 720], [1600, 900], [2000, 1012], [2560, 1080], [3840, 2160]] as const) {
+    it(`every landscape font-size clears 14 px at ${w}x${h} (PR-0356)`, () => {
+      expect(decls.length).toBeGreaterThan(5);
+      for (const d of decls) expect(effective(d, w, h), `${d.px}px`).toBeGreaterThanOrEqual(14.05);
     });
   }
+
+  it('below a 1280x720 window the gauge keeps its authored sizes (the floor is off)', () => {
+    const small = decls.find((d) => d.px === 11)!;
+    expect(effective(small, 1024, 768)).toBeCloseTo(11 * (640 / 1440) * 1.6, 5);
+  });
 
   it('at 1280x720 nothing in the gauge is smaller than the smallest in-stage label the FFX HUD already ships', () => {
     // The whole 640x360 HUD draws at 2x there, so 12 px is not its floor; parity is.
     const hud = readFileSync(join(HERE, '..', '..', 'src', 'ui', 'ffx', 'ffx-hud.css'), 'utf8');
     const hudMin = Math.min(...[...hud.matchAll(/\.ffxhud [^{}]*\{[^{}]*font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1])));
     expect(hudMin).toBeGreaterThan(0);
-    for (const px of sizes) expect(effective(px, 1280, 720), `${px}px`).toBeGreaterThanOrEqual(hudMin * 2);
+    for (const d of decls) expect(effective(d, 1280, 720), `${d.px}px`).toBeGreaterThanOrEqual(hudMin * 2);
   });
 
   it('every phone font-size is at least 12 CSS px', () => {

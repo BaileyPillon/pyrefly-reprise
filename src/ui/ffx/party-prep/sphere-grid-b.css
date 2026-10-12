@@ -67,7 +67,7 @@
     gap: 17.6px; /* 44 */
   }
   .prep[data-tab='sphere-grid'] .prep__tab {
-    font-size: 6.8px; /* 17 */
+    font-size: max(6.8px, var(--stage-floor-frame, 0px)); /* 17 */
     letter-spacing: 0.3em;
     padding-bottom: 3.2px; /* 8 */
     border-bottom-width: 1.2px; /* 3 */
@@ -177,7 +177,7 @@
     bottom: 2.4px; /* 6 */
     transform: skewX(var(--ig-skew-inverse, 12deg));
     font-family: var(--ig-font-numeral);
-    font-size: 6.8px; /* 17 */
+    font-size: max(6.8px, var(--stage-floor-frame, 0px)); /* 17 */
     font-weight: 700;
     color: var(--ig-gold);
   }
@@ -212,7 +212,7 @@
   .sgb .ffxprep-sg__slv {
     font-family: var(--ig-font-display);
     font-weight: 700;
-    font-size: 6.4px; /* 16 */
+    font-size: max(6.4px, var(--stage-floor-frame, 0px)); /* 16 */
     letter-spacing: 0.16em;
     color: var(--ig-gold);
   }
@@ -240,7 +240,7 @@
     min-width: 17.6px;
     box-sizing: border-box;
     padding: 0 6.4px; /* 16 */
-    font-size: 6px; /* 15 */
+    font-size: max(6px, var(--stage-floor-frame, 0px)); /* 15 */
     letter-spacing: 0.18em;
     color: var(--ig-paper);
     background: transparent;

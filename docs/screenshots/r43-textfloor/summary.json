@@ -1,0 +1,1900 @@
+{
+ "battle-ch1-sensor-1280x720": {
+  "before": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch1-sensor-1600x900": {
+  "before": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch1-sensor-2000x1012": {
+  "before": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch1-sensor-2560x1440": {
+  "before": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch1-sensor-3840x2160": {
+  "before": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch12-1024x768": {
+  "before": {
+   "steps": 1,
+   "minEff": 7.68,
+   "underTotal": 18,
+   "underWorstStep": 18,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 7.68,
+   "underTotal": 15,
+   "underWorstStep": 15,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": [
+   {
+    "step": "first-menu",
+    "eff": 7.68,
+    "text": "Colour order: our estimate",
+    "at": "div.ffx-omr__frame > div.ffx-omr__strip > small.ffx-omr__note"
+   },
+   {
+    "step": "first-menu",
+    "eff": 8.32,
+    "text": "Discs facing him",
+    "at": "div.ffx-omr__frame > div.ffx-omr__strip > h4"
+   },
+   {
+    "step": "first-menu",
+    "eff": 8.32,
+    "text": "Absorbs",
+    "at": "div.ffx-omr__aff > span.ffx-omr__row > i"
+   },
+   {
+    "step": "first-menu",
+    "eff": 8.32,
+    "text": "Weak",
+    "at": "div.ffx-omr__aff > span.ffx-omr__row > i"
+   },
+   {
+    "step": "first-menu",
+    "eff": 8.32,
+    "text": "Enemy intent",
+    "at": "div.ffx-omr__frame > div.ffx-omr__intent > h4"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.6,
+    "text": "Fire",
+    "at": "div.ffx-omr__strip > div.ffx-omr__grid > span.ffx-omr__chip"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.6,
+    "text": "Fire",
+    "at": "div.ffx-omr__strip > div.ffx-omr__grid > span.ffx-omr__chip"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.6,
+    "text": "Fire",
+    "at": "div.ffx-omr__strip > div.ffx-omr__grid > span.ffx-omr__chip"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.6,
+    "text": "Fire",
+    "at": "div.ffx-omr__strip > div.ffx-omr__grid > span.ffx-omr__chip"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.6,
+    "text": "Fire",
+    "at": "div.ffx-omr__aff > span.ffx-omr__row > em.ffx-omr__el"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.6,
+    "text": "Ice",
+    "at": "div.ffx-omr__aff > span.ffx-omr__row > em.ffx-omr__el"
+   },
+   {
+    "step": "first-menu",
+    "eff": 12.16,
+    "text": "Every disc shows : four next. He absorbs Fire an",
+    "at": "div.ffx-omr__frame > div.ffx-omr__intent > p"
+   },
+   {
+    "step": "first-menu",
+    "eff": 12.16,
+    "text": "Fire",
+    "at": "div.ffx-omr__intent > p > b"
+   },
+   {
+    "step": "first-menu",
+    "eff": 12.16,
+    "text": "Firaga",
+    "at": "div.ffx-omr__intent > p > b"
+   },
+   {
+    "step": "first-menu",
+    "eff": 12.16,
+    "text": "weak to Ice",
+    "at": "div.ffx-omr__intent > p > b"
+   }
+  ]
+ },
+ "battle-ch12-1280x720": {
+  "before": {
+   "steps": 1,
+   "minEff": 9.6,
+   "underTotal": 14,
+   "underWorstStep": 14,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch12-1600x900": {
+  "before": {
+   "steps": 1,
+   "minEff": 12,
+   "underTotal": 5,
+   "underWorstStep": 5,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch12-2000x1012": {
+  "before": {
+   "steps": 1,
+   "minEff": 13.49,
+   "underTotal": 1,
+   "underWorstStep": 1,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch12-3840x2160": {
+  "before": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch12-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch9-1024x768": {
+  "before": {
+   "steps": 1,
+   "minEff": 7.82,
+   "underTotal": 5,
+   "underWorstStep": 5,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 7.82,
+   "underTotal": 4,
+   "underWorstStep": 4,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": [
+   {
+    "step": "first-menu",
+    "eff": 7.82,
+    "text": "Daigoro",
+    "at": "div.ffx-zg__bar > i.ffx-zg__seg > span"
+   },
+   {
+    "step": "first-menu",
+    "eff": 7.82,
+    "text": "+ Kozuka",
+    "at": "div.ffx-zg__bar > i.ffx-zg__seg > span"
+   },
+   {
+    "step": "first-menu",
+    "eff": 7.82,
+    "text": "+ Wakizashi",
+    "at": "div.ffx-zg__bar > i.ffx-zg__seg > span"
+   },
+   {
+    "step": "first-menu",
+    "eff": 9.96,
+    "text": "Next: Daigoro",
+    "at": "div.ffx-zg__frame > div.ffx-zg__panel > div.ffx-zg__now"
+   }
+  ]
+ },
+ "battle-ch9-1280x720": {
+  "before": {
+   "steps": 1,
+   "minEff": 9.78,
+   "underTotal": 5,
+   "underWorstStep": 5,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch9-1600x900": {
+  "before": {
+   "steps": 1,
+   "minEff": 12.22,
+   "underTotal": 3,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch9-2000x1012": {
+  "before": {
+   "steps": 1,
+   "minEff": 13.74,
+   "underTotal": 3,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch9-3840x2160": {
+  "before": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "battle-ch9-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "board-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 10,
+   "underTotal": 4,
+   "underWorstStep": 4,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 2,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "pause-ffx-1280x720": {
+  "before": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "pause-ffx-1600x900": {
+  "before": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "pause-ffx-2000x1012": {
+  "before": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "pause-ffx-3840x2160": {
+  "before": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "pause-ffx-390x844": {
+  "before": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 8,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-1024x768 [prep-ffx (all tabs but Sphere Grid)]": {
+  "before": {
+   "steps": 5,
+   "minEff": 7.82,
+   "underTotal": 241,
+   "underWorstStep": 88,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 7.82,
+   "underTotal": 226,
+   "underWorstStep": 85,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": [
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "▲ ▼",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > b"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "PARTY · TABS · ·",
+    "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "◀ ▶",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > b"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "ENTER",
+    "at": "div.prep__hint > span.prep__hint-act > b"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "BEGINS THE BATTLE",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "ESC",
+    "at": "div.prep__hint > span.prep__hint-act > b"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "BACK",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "· SCROLL",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "PG UP / PG DN",
+    "at": "div.prep__hint > span > b"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "WARRIOR",
+    "at": "div.prep__slots > div.prep__slot > div.prep__slot-role"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "SUMMONER",
+    "at": "div.prep__slots > div.prep__slot > div.prep__slot-role"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 7.82,
+    "text": "STOIC",
+    "at": "div.prep__slots > div.prep__slot > div.prep__slot-role"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 9.25,
+    "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+    "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 30",
+    "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 32",
+    "at": "div.prep__roster > div.prep__member > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 25",
+    "at": "div.prep__roster > div.prep__member > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 35",
+    "at": "div.prep__roster > div.prep__member > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 30",
+    "at": "div.prep__roster > div.prep__member > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 30",
+    "at": "div.prep__roster > div.prep__member > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "S.LV 42",
+    "at": "div.prep__roster > div.prep__member > span.prep__member-lv"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "CHAPTER",
+    "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "STATS",
+    "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "SPHERE GRID",
+    "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "EQUIPMENT",
+    "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "ITEMS",
+    "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "OVERDRIVE",
+    "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "HP 2420/2420 · MP 115/115",
+    "at": "div.prep__slot > div > div.prep__slot-sub"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "HP 1500/1500 · MP 270/270",
+    "at": "div.prep__slot > div > div.prep__slot-sub"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 10.67,
+    "text": "HP 2310/2310 · MP 130/130",
+    "at": "div.prep__slot > div > div.prep__slot-sub"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 11.38,
+    "text": "PARTY PREP",
+    "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label"
+   },
+   {
+    "step": "tab1-chapter",
+    "eff": 12.8,
+    "text": "START BATTLE",
+    "at": "div.prep__stage.lb-stage > div.prep__start > span"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "▲ ▼",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > b"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "PARTY · TABS · ·",
+    "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "◀ ▶",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > b"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "ENTER",
+    "at": "div.prep__hint > span.prep__hint-act > b"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "BEGINS THE BATTLE",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "ESC",
+    "at": "div.prep__hint > span.prep__hint-act > b"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "BACK",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "WARRIOR",
+    "at": "div.prep__slots > div.prep__slot > div.prep__slot-role"
+   },
+   {
+    "step": "tab2-stats",
+    "eff": 7.82,
+    "text": "SUMMONER",
+    "at": "div.prep__slots > div.prep__slot > div.prep__slot-role"
+   }
+  ]
+ },
+ "prep-ffx-1024x768 [prep-ffx (Sphere Grid tab)]": {
+  "before": {
+   "steps": 2,
+   "minEff": 7.49,
+   "underTotal": 166,
+   "underWorstStep": 98,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 7.49,
+   "underTotal": 160,
+   "underWorstStep": 95,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": [
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.49,
+    "text": "M",
+    "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto > span.ffxprep-sg__key"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.49,
+    "text": "H",
+    "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help > span.ffxprep-sg__key"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.68,
+    "text": "1 S.LV",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.68,
+    "text": "1 PER 4",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "▲ ▼",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > b"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "PARTY · TABS · ·",
+    "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "◀ ▶",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > b"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "ENTER",
+    "at": "div.prep__hint > span.prep__hint-act > b"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "BEGINS THE BATTLE",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "ESC",
+    "at": "div.prep__hint > span.prep__hint-act > b"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 7.82,
+    "text": "BACK",
+    "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.32,
+    "text": "What the colours mean",
+    "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-kicker.sgb-kicker--gold"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.32,
+    "text": "Gold line: walked ground, 1 S.Lv per 4 steps",
+    "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-legend__gold"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.32,
+    "text": "CLICK",
+    "at": "div.sgx-viz > span.sgx-t > span.sgx-pointer"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.32,
+    "text": ": SELECT",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.32,
+    "text": "AGAIN / ENTER",
+    "at": "div.sgx-viz > span.sgx-t > span.sgx-pointer"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.32,
+    "text": ": DO IT",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Enter or click again does the same.",
+    "at": "div.sgb-card > div.sgb-card__in > p.sgb-note.ffxprep-sg__caption"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "HP",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "MP",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Strength",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Defense",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Magic",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Magic Def",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Agility",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Ability",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Lock (key)",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.64,
+    "text": "Not yet taken",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.96,
+    "text": "Walk and activate",
+    "at": "div.sgb-card > div.sgb-card__in > button.sgb-go"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.96,
+    "text": "STR +2 · 1 POWER SPHERE",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t.sgx-t--wide"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.96,
+    "text": "Reopen any time with",
+    "at": "div.sgx-in > div.sgx-foot > span.sgx-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 8.96,
+    "text": "?",
+    "at": "div.sgx-foot > span.sgx-chip > span.sgx-btn.sgx-btn--dark"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.25,
+    "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+    "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "AUTO-LEARN",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "WALK",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__walk"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "−",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "+",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "CENTRE",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "?",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "Selected node",
+    "at": "div.sgb-card > div.sgb-card__in > div.sgb-kicker"
+   }
+  ]
+ },
+ "prep-ffx-1280x720 [prep-ffx (all tabs but Sphere Grid)]": {
+  "before": {
+   "steps": 5,
+   "minEff": 9.78,
+   "underTotal": 171,
+   "underWorstStep": 43,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 6,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-1280x720 [prep-ffx (Sphere Grid tab)]": {
+  "before": {
+   "steps": 2,
+   "minEff": 9.36,
+   "underTotal": 139,
+   "underWorstStep": 81,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 9.36,
+   "underTotal": 117,
+   "underWorstStep": 70,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": [
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.36,
+    "text": "M",
+    "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto > span.ffxprep-sg__key"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.36,
+    "text": "H",
+    "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help > span.ffxprep-sg__key"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "1 S.LV",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 9.6,
+    "text": "1 PER 4",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.4,
+    "text": "What the colours mean",
+    "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-kicker.sgb-kicker--gold"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.4,
+    "text": "Gold line: walked ground, 1 S.Lv per 4 steps",
+    "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-legend__gold"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.4,
+    "text": "CLICK",
+    "at": "div.sgx-viz > span.sgx-t > span.sgx-pointer"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.4,
+    "text": ": SELECT",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.4,
+    "text": "AGAIN / ENTER",
+    "at": "div.sgx-viz > span.sgx-t > span.sgx-pointer"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.4,
+    "text": ": DO IT",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Enter or click again does the same.",
+    "at": "div.sgb-card > div.sgb-card__in > p.sgb-note.ffxprep-sg__caption"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "HP",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "MP",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Strength",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Defense",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Magic",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Magic Def",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Agility",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Ability",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Lock (key)",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 10.8,
+    "text": "Not yet taken",
+    "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 11.2,
+    "text": "Walk and activate",
+    "at": "div.sgb-card > div.sgb-card__in > button.sgb-go"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 11.2,
+    "text": "STR +2 · 1 POWER SPHERE",
+    "at": "div.sgx-step > div.sgx-viz > span.sgx-t.sgx-t--wide"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 11.2,
+    "text": "Reopen any time with",
+    "at": "div.sgx-in > div.sgx-foot > span.sgx-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 11.2,
+    "text": "?",
+    "at": "div.sgx-foot > span.sgx-chip > span.sgx-btn.sgx-btn--dark"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "AUTO-LEARN",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "WALK",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__walk"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "−",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "+",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "CENTRE",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "?",
+    "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Selected node",
+    "at": "div.sgb-card > div.sgb-card__in > div.sgb-kicker"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Power",
+    "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Speed",
+    "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Mana",
+    "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Ability",
+    "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Fortune",
+    "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "Keys",
+    "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "First time on the Sphere Grid",
+    "at": "div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker"
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "eff": 12,
+    "text": "What you spend here goes into this chapter's fig",
+    "at": "div.sgx-slab.sgx-card > div.sgx-in > div.sgx-note"
+   }
+  ]
+ },
+ "prep-ffx-1600x900 [prep-ffx (all tabs but Sphere Grid)]": {
+  "before": {
+   "steps": 5,
+   "minEff": 12,
+   "underTotal": 69,
+   "underWorstStep": 15,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-1600x900 [prep-ffx (Sphere Grid tab)]": {
+  "before": {
+   "steps": 2,
+   "minEff": 11.7,
+   "underTotal": 56,
+   "underWorstStep": 31,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-2000x1012 [prep-ffx (all tabs but Sphere Grid)]": {
+  "before": {
+   "steps": 5,
+   "minEff": 12,
+   "underTotal": 65,
+   "underWorstStep": 13,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-2000x1012 [prep-ffx (Sphere Grid tab)]": {
+  "before": {
+   "steps": 2,
+   "minEff": 12,
+   "underTotal": 26,
+   "underWorstStep": 14,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-3840x2160 [prep-ffx (all tabs but Sphere Grid)]": {
+  "before": {
+   "steps": 5,
+   "minEff": 12,
+   "underTotal": 15,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-3840x2160 [prep-ffx (Sphere Grid tab)]": {
+  "before": {
+   "steps": 2,
+   "minEff": 12,
+   "underTotal": 6,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 2,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx-first-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 10,
+   "underTotal": 4,
+   "underWorstStep": 4,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx2-1280x720": {
+  "before": {
+   "steps": 5,
+   "minEff": 9.78,
+   "underTotal": 181,
+   "underWorstStep": 55,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 6,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx2-1600x900": {
+  "before": {
+   "steps": 5,
+   "minEff": 12,
+   "underTotal": 67,
+   "underWorstStep": 15,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx2-2000x1012": {
+  "before": {
+   "steps": 5,
+   "minEff": 12,
+   "underTotal": 65,
+   "underWorstStep": 13,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx2-3840x2160": {
+  "before": {
+   "steps": 5,
+   "minEff": 12,
+   "underTotal": 15,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 5,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "prep-ffx2-first-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 10,
+   "underTotal": 4,
+   "underWorstStep": 4,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx-1024x768": {
+  "before": {
+   "steps": 1,
+   "minEff": 7.82,
+   "underTotal": 18,
+   "underWorstStep": 18,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 7.82,
+   "underTotal": 18,
+   "underWorstStep": 18,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": [
+   {
+    "step": "results",
+    "eff": 7.82,
+    "text": "S.LV 39 · 1,231/1,386 AP",
+    "at": "div.rres__member > div.rres__member-text > div.rres__member-detail"
+   },
+   {
+    "step": "results",
+    "eff": 7.82,
+    "text": "S.LV 40 · 1,295/1,485 AP",
+    "at": "div.rres__member > div.rres__member-text > div.rres__member-detail"
+   },
+   {
+    "step": "results",
+    "eff": 7.82,
+    "text": "S.LV 25 · 0/442 AP · no full turn taken · no AP",
+    "at": "div.rres__member > div.rres__member-text > div.rres__member-detail"
+   },
+   {
+    "step": "results",
+    "eff": 8.53,
+    "text": "NEW BEST",
+    "at": "div.rres__head > div.rres__rule-row > span.rres__tag"
+   },
+   {
+    "step": "results",
+    "eff": 8.53,
+    "text": "+9 S.Lv",
+    "at": "div.rres__member-text > div.rres__member-line > span.rres__level-up"
+   },
+   {
+    "step": "results",
+    "eff": 8.53,
+    "text": "+8 S.Lv",
+    "at": "div.rres__member-text > div.rres__member-line > span.rres__level-up"
+   },
+   {
+    "step": "results",
+    "eff": 9.25,
+    "text": "RESULTS · 0:08",
+    "at": "div.rres__page > div.rres__head > div.rres__chip"
+   },
+   {
+    "step": "results",
+    "eff": 9.25,
+    "text": "AP",
+    "at": "div.rres__member > span.rres__member-ap > small"
+   },
+   {
+    "step": "results",
+    "eff": 9.25,
+    "text": "AP",
+    "at": "div.rres__member > span.rres__member-ap > small"
+   },
+   {
+    "step": "results",
+    "eff": 9.25,
+    "text": "AP",
+    "at": "div.rres__member > span.rres__member-ap > small"
+   },
+   {
+    "step": "results",
+    "eff": 9.95,
+    "text": "MT. GAGAZET — THE PROMINENCE",
+    "at": "div.rres__stage.lb-stage > div.rres__caption > span.rres__cap-loc"
+   },
+   {
+    "step": "results",
+    "eff": 9.95,
+    "text": "· CLEARED",
+    "at": "div.rres__stage.lb-stage > div.rres__caption > span.rres__cap-end"
+   },
+   {
+    "step": "results",
+    "eff": 9.95,
+    "text": "AP",
+    "at": "div.rres__ledger.rres__ledger--normal > div.rres__line > div.rres__k"
+   },
+   {
+    "step": "results",
+    "eff": 9.95,
+    "text": "GIL",
+    "at": "div.rres__ledger.rres__ledger--normal > div.rres__line > div.rres__k"
+   },
+   {
+    "step": "results",
+    "eff": 9.95,
+    "text": "ITEMS",
+    "at": "div.rres__ledger.rres__ledger--normal > div.rres__line > div.rres__k"
+   },
+   {
+    "step": "results",
+    "eff": 9.95,
+    "text": "CONFIRM ▸",
+    "at": "div.rres__page > div.rres__confirm > span"
+   },
+   {
+    "step": "results",
+    "eff": 10.67,
+    "text": "×3 PARTY",
+    "at": "div.rres__ledger.rres__ledger--normal > div.rres__line > div.rres__d"
+   },
+   {
+    "step": "results",
+    "eff": 12.8,
+    "text": "...Okay. Next one.",
+    "at": "div.rres__page > div.rres__head > div.rres__quip"
+   }
+  ]
+ },
+ "results-ffx-1280x720": {
+  "before": {
+   "steps": 1,
+   "minEff": 9.78,
+   "underTotal": 17,
+   "underWorstStep": 17,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14.1,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx-1600x900": {
+  "before": {
+   "steps": 1,
+   "minEff": 12.23,
+   "underTotal": 6,
+   "underWorstStep": 6,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14.1,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx-2000x1012": {
+  "before": {
+   "steps": 1,
+   "minEff": 13.75,
+   "underTotal": 3,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14.1,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx-3840x2160": {
+  "before": {
+   "steps": 1,
+   "minEff": 29.34,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 29.34,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx2-1280x720": {
+  "before": {
+   "steps": 1,
+   "minEff": 9.78,
+   "underTotal": 17,
+   "underWorstStep": 17,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14.1,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx2-1600x900": {
+  "before": {
+   "steps": 1,
+   "minEff": 12.23,
+   "underTotal": 4,
+   "underWorstStep": 4,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14.1,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx2-2000x1012": {
+  "before": {
+   "steps": 1,
+   "minEff": 13.75,
+   "underTotal": 3,
+   "underWorstStep": 3,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14.1,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 1,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx2-3840x2160": {
+  "before": {
+   "steps": 1,
+   "minEff": 29.34,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 29.34,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ },
+ "results-ffx2-390x844": {
+  "before": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "after": {
+   "steps": 1,
+   "minEff": 14,
+   "underTotal": 0,
+   "underWorstStep": 0,
+   "error": null
+  },
+  "newOverprint": 0,
+  "newCut": 0,
+  "stillUnder": []
+ }
+}

@@ -22,6 +22,11 @@
   inset: 0;
   z-index: 40;
   pointer-events: none;
+  /* The 14 px floor (CHK-003, PR-0356) in this card's own space: the cards are drawn at 1600x900 sizes and scaled by 0.4 into
+     the 640x360 stage, so a frame px is 0.4 grid px and the frame floor (`--stage-floor-frame`, `stage-floor.css`: 14.1 px in
+     grid px, on from a 1600x900 window, the frame the Sphere Grid was drawn at) is 2.5x that here. Zero below that window and on
+     the phone, where the card is not in the stage (`max(its size, 0)` is its size). */
+  --sgx-floor: calc(var(--stage-floor-frame, 0px) * 2.5);
 }
 .sgx-layer--card {
   pointer-events: auto;
@@ -51,7 +56,7 @@
   font-family: var(--ig-font-display);
   font-weight: 700;
   letter-spacing: 0.32em;
-  font-size: 15px;
+  font-size: max(15px, var(--sgx-floor, 0px));
   color: var(--ig-gold-on-paper);
   text-transform: uppercase;
 }
@@ -68,7 +73,7 @@
   font-family: var(--ig-font-display);
   font-weight: 700;
   letter-spacing: 0.22em;
-  font-size: 16px;
+  font-size: max(16px, var(--sgx-floor, 0px));
   line-height: normal;
   padding: 10px 22px;
   border: 2px solid var(--ig-ink);
@@ -90,7 +95,7 @@
   border-color: var(--ig-gold);
 }
 .sgx-btn--small {
-  font-size: 13px;
+  font-size: max(13px, var(--sgx-floor, 0px));
   padding: 6px 14px;
 }
 .sgx-layer--keys .sgx-btn--chosen {
@@ -144,7 +149,7 @@
 .sgx-step p {
   margin: 0;
   font-family: var(--ig-font-text);
-  font-size: 16.5px;
+  font-size: max(16.5px, var(--sgx-floor, 0px));
   line-height: 1.45;
   color: #2a2733;
 }
@@ -183,22 +188,22 @@
   position: absolute;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 12px;
+  font-size: max(12px, var(--sgx-floor, 0px));
   color: #f4f1e8;
   white-space: nowrap;
 }
 .sgx-t--wide {
-  font-size: 14px;
+  font-size: max(14px, var(--sgx-floor, 0px));
   white-space: normal;
   top: 22px !important;
 }
 .sgx-step:nth-child(3) .sgx-t {
-  font-size: 13px;
+  font-size: max(13px, var(--sgx-floor, 0px));
 }
 .sgx-note {
   margin-top: 16px;
   font-family: var(--ig-font-text);
-  font-size: 15px;
+  font-size: max(15px, var(--sgx-floor, 0px));
   color: #5a5566;
 }
 .sgx-foot {
@@ -213,13 +218,13 @@
   gap: 6px;
   font-family: var(--ig-font-display);
   font-weight: 700;
-  font-size: 14px;
+  font-size: max(14px, var(--sgx-floor, 0px));
   letter-spacing: 0.08em;
   color: #5a5566;
 }
 .sgx-q {
   padding: 2px 9px;
-  font-size: 14px;
+  font-size: max(14px, var(--sgx-floor, 0px));
   cursor: default;
 }
 
@@ -231,7 +236,7 @@
 .ffxprep-sg__key {
   margin-left: 0.7em;
   padding: 0.25em 0.5em 0.2em;
-  font-size: 0.78em;
+  font-size: max(0.78em, var(--stage-floor-frame, 0px));
   letter-spacing: 0.08em;
   border: 1px solid currentColor;
   opacity: 0.8;
@@ -273,7 +278,7 @@
   padding: 14px 26px 14px 34px;
 }
 .sgx-result .sgx-kicker {
-  font-size: 13px;
+  font-size: max(13px, var(--sgx-floor, 0px));
 }
 .sgx-gain {
   display: flex;
@@ -290,7 +295,7 @@
 }
 .sgx-line {
   font-family: var(--ig-font-text);
-  font-size: 16.5px;
+  font-size: max(16.5px, var(--sgx-floor, 0px));
   line-height: 1.5;
   color: #2a2733;
 }
