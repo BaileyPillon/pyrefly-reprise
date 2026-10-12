@@ -1,13 +1,134 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 62 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 64 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-12 · Release 42 (r42): the games' own battle rules on echoesofspira.com
+
+Address: https://echoesofspira.com (main a061e9dc, bundle Chs9J3OY)
+
+- **FFX-2, battle time and gauges (every chapter):** fights keep time the way the game does, read from
+  Bailey's Steam copy: a clock of about 30 steps a second, the three ATB speeds, each command leaving
+  its own recovery (an attack, an item, and a spell's wait is its cast), the game's cast times (Fire,
+  Fira and Firaga all take about six seconds at Rikku's speed), randomised opening gauges, Delay hits
+  that push a gauge back and close an open menu, and Haste, Slow, Shell, Protect, Regen, Sleep, Doom
+  and Poison wearing off on the game's own counters. Most fights come out a quarter to a third
+  shorter, because the clock no longer waits for animations.
+- **FFX-2, Bahamut, Vegnagun and Shuyin (Chapters IV and V):** they fight by the game's own scripts.
+  Bahamut casts Curse once as his first move and then repeats a six-move cycle; after the second
+  Impulse he stands still for 25 seconds while the numbers 5, 4, 3, 2 and 1 count down to the Mega
+  Flare (Slow and Haste do not change the wait). Vegnagun's Leg has three Nodes in three colours from
+  the start, the Head wakes only when both Redoubts are down and acts much faster, a Redoubt raises
+  its fallen twin a heartbeat after it falls, and Shuyin stops to speak more often and no longer picks
+  on Yuna.
+- **FFX-2, Shiva, the Magus Sisters, Anima, Paragon and Trema (Chapters XI and XIII):** Shiva's Triple
+  Attack is three separate attacks, and Shiva and Anima charge their big moves with every hit and miss
+  that lands on them. Only Cindy casts Delta Attack, and only once Mindy and Sandy are charged. The
+  Oversoul Paragon answers on its next turn, sends a copied spell back at whoever cast it, waits 40
+  seconds untouched, and a party that keeps hitting it keeps it from answering, which makes Chapter
+  XIII much easier (about 70 fights in 100 won on our practice line, 43 before). Trema's two fights
+  share one set of odds.
+- **FFX-2, Leblanc, the Den of Woe and Ixion (Chapters VI, XV and XVI):** the Syndicate follows the
+  game's scripts: Ormi's Concussive Blast belongs to the last room, Logos fires Hail of Bullets a
+  quarter of the time there, Russian Roulette has five outcomes, and Leblanc's Guard goes up on her
+  first turn and again much later. In the Den of Woe, Baralai counts every hit and answers at eight,
+  and Gippal aims his low-HP Attack at the girl with the least HP; Ixion's count rises five a hit or a
+  miss. With the new gauges the Den of Woe is won on every try of our practice line (about 1 in 2
+  before); Leblanc and Ixion are won as often as before.
+- **FFX-2, the hidden Experiment:** it keeps working at the game's pace and is harder: a girl's cast
+  now takes the game's time, and on the builder's test bench it is won 380 times in 500, where it was
+  500.
+- **FFX, luck (every chapter):** battles now draw their luck the way the game does. The game keeps 68
+  separate random-number streams: each party member rolls on their own, all the aeons share one, each
+  monster has its own, and hit rolls, status rolls, steals, the monsters' decisions, random targets
+  and Reflect bounces each have a stream of their own. A battle starts from the game's own seeding
+  routine, so the luck inside a fight is a different but fair deal of the same odds. Chapter VIII also
+  counts the voice lines and camera shots the real fight rolls for. Nothing about the bosses or your
+  party changed.
+- **FFX-2, luck (Chapters IV to XVI):** the same for FFX-2 with its own 68 streams: one per character
+  for damage, hit and status rolls, plus shared ones for first strikes, random targets, theft and the
+  bosses' scripts. Every fight is a different but fair deal of the same odds, and the chapters keep
+  their win rates.
+- **FFX, gear (every chapter):** bonuses of one kind on a piece now add up (Magic Def +10% and +5% on
+  Yuna's Blessed Ring is 15%, two HP +10% are HP +20%). Every weapon and every armour adds 3 to your
+  critical chance. Curse Ward stops Curse completely and two Wards against the same status add
+  together. Rikku's Shell Targe gives her Shell while she is under half HP and takes it away when she
+  is healed, and auto-statuses come back after a revive or when Petrify wears off. In the Garden of
+  Pain (Seymour Omnis), Braska's Final Aeon and the two Sin fights the party hits a little harder and
+  more often, and the Garden of Pain is noticeably easier.
+- **FFX, targets and Reflect (every chapter):** a spell aimed at an enemy wearing Reflect comes back
+  at whoever cast it, and a Reflect on your own side sends the spell to a random enemy; that now
+  includes Hastega, Slowga and the Nul spells, so a Haste meant for a Reflecting party member goes
+  across to an enemy. Guard and Sentinel cover for whoever is best placed, once for the whole attack.
+  Multi-hit random attacks choose all their targets up front. A Confused fighter strikes only its own
+  side, a Berserk one only the other side, and a Provoked monster spends its turn on whoever provoked
+  it, unless it is one of the few that keep their own head. Chapter II's recommended opening changed
+  with it: Tidus casts Hastega before Yuna puts Reflect up.
+- **FFX, Auto-Med, Auto-Potion, Auto-Phoenix and two Overdrives:** Auto-Med reaches for a cure only
+  when a hit gives you Poison, Zombie, Darkness or Silence you did not already have, and no longer
+  burns a Remedy on Petrify, Sleep, Confuse, Berserk, Slow or Curse. Auto-Potion drinks at half HP or
+  below, after a hit that took HP off, and is lost if the same blow knocks the character out.
+  Auto-Phoenix raises a fallen friend once, with a Phoenix Down only, using the first able wearer in
+  party order. Each now spends one item, not two. Auron's Banishing Blade, Shooting Star and Dragon
+  Fang take their stronger strike against a foe that already has the status they would inflict, and
+  Slice & Dice and Lulu's Fury spread their hits over the foes first.
+- **Disclosed by the focused review (FOC42-01 to FOC42-03):** FOC42-01 (major, both games, carried,
+  not introduced by this build): the motion check CHK-027 still fails, with 173 jerks of 40 pixels or
+  more, mostly at camera cuts, the same as the live build (Chapter IV 3 against 11 before). FOC42-02
+  (polish, FFX-2): Bahamut's on-screen note about the countdown is out of date (Slow does not slow it)
+  and will be rewritten. FOC42-03 (polish): the difficulty shifts above: the hidden Experiment is
+  harder, and Chapter XIII and Chapter XII (Omnis) are easier.
+- **Not in this release:** the key orders for Bushido, Swordplay and Fury, the Mix chart, FFX-2 chain
+  windows and menu changes (accepted, not built); the new music batch and the retail sound-effect
+  packs, which wait for the ElevenLabs key's own credit limit.
+- **Deploy notes:** shipped at 02:19 EDT on 2026-10-12 (docs/deploys.log: 2026-10-12T06:19:38Z) under
+  Bailey's owner override (his words of 23:08 EDT on 2026-10-11 in the reverse-engineering chat: "ok
+  keep going ill go with all your recommendations please", answering its first item) because deep
+  reviews are owed on earlier builds; the focused review's SHIP came first. The deploy compared the
+  live files with the build byte for byte. A live check was still running when this was written; the
+  deep review is owed (round 25 judged fcecfa74 and could not settle the debt without Bailey).
+- **How it was checked:** tsc clean; the full suite read 1107 files (17,205 tests) with no failure; a
+  focused review of the exact build (about 100 minutes) said SHIP, changed area PASS: Chapters IV,
+  XIII, XV, II and XII were played with real keys, Bahamut's 25-second Mega Flare countdown ran inside
+  a real fight to victory, and the move advisor answered in 3 to 6 milliseconds.
+
+## 2026-10-11 · Release 41 (r41) on echoesofspira.com
+
+Address: https://echoesofspira.com (main 455c524c, bundle CFPPHeRS)
+
+- **FFX-2, Chapter IV (Bahamut):** the opening shot no longer shows two dark slabs down the sides of
+  the picture. They were the two foreground pipes of the Bevelle scene, which the wide opening camera
+  pulled into the frame; they now follow the pull-back out to the edge. Bahamut stays whole and the
+  girls readable in every frame of the move, on a desktop at three sizes and on a phone. A thin strip
+  (3 to 6 percent) still shows on the right edge, and the right pipe stands in for a moment mid-move.
+- **Both, behind the scenes:** the hooks for the games' own sound effects at each moment (the
+  encounter opening, the results loop and ping, flow sounds) are in, and silent: the review played the
+  same cues as the live build in an FFX fight and an FFX-2 fight. Nothing sounds different yet.
+- **FFX-2, Trema (Chapter XIII):** a Paragon win that leaves one girl standing is now covered by tests
+  through the whole flow. No change to the game.
+- **Disclosed by the focused review (neither is introduced by this build):** FOC41-01 (major, both
+  games): the motion check CHK-027 still fails, with jerks of 40 pixels or more (Chapter IV 11,
+  Chapter I 5), the same as the live build. FOC41-02 (polish, FFX-2): the right-edge strip above.
+  FOC41-03 (polish): a test-harness path only.
+- **Deploy notes:** shipped at 23:29 EDT on 2026-10-11 (docs/deploys.log: 2026-10-12T03:29:33Z) under
+  Bailey's owner override (his words of about 23:10 EDT: "ok keep going ill go with all your
+  recommendations please") because deep reviews are owed on earlier builds; the focused review's SHIP
+  came first. Its live check was skipped to save usage, and r42 replaced it 2 hours 50 minutes later.
+- **How it was checked:** tsc clean; the full suite read 1061 files with no failure; a focused review
+  (about 95 minutes) played the Chapter IV opening at four window sizes with real keys and compared
+  the sound log of one FFX and one FFX-2 fight with the live build.
+
+![Chapter IV opening on the live build before: two dark slabs down the sides](docs/screenshots/r41-ch4cam/before-1600x900.jpg)
+
+![Chapter IV opening in this build: the slabs are gone](docs/screenshots/r41-ch4cam/after-1600x900.jpg)
+
+*FFX-2, Chapter IV, the opening hold at 1600 by 900: the live build before (top) and this build (bottom).*
 
 ## 2026-10-11 · The motion and music build on echoesofspira.com
 
