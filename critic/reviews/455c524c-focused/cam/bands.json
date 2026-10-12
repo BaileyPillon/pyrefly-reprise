@@ -1,0 +1,32 @@
+{
+ "1600x900": {
+  "frames": 630,
+  "maxL": 0.115,
+  "maxR": 0.17875,
+  "framesOver3pct": 455
+ },
+ "2000x1012": {
+  "frames": 587,
+  "maxL": 0.1585,
+  "maxR": 0.19,
+  "framesOver3pct": 492
+ },
+ "1280x1024": {
+  "frames": 629,
+  "maxL": 0.0,
+  "maxR": 0.015625,
+  "framesOver3pct": 0
+ },
+ "390x844": {
+  "frames": 627,
+  "maxL": 0.041025641025641026,
+  "maxR": 0.04871794871794872,
+  "framesOver3pct": 128
+ },
+ "live-1600x900": {
+  "frames": 709,
+  "maxL": 0.114375,
+  "maxR": 0.1325,
+  "framesOver3pct": 458
+ }
+}
