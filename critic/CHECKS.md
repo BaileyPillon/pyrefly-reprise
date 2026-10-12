@@ -143,16 +143,33 @@ small sizes). At each size measure: the painting's `getBoundingClientRect`
 equals the viewport rect exactly (**exception, D-070, Bailey 2026-09-24:** a plate
 carrying `.pause__plate--slid` is option B, slid under the dark falloff on the
 chrome side on purpose; for it, check instead that the uncovered side is the
-feathered falloff, never a hard bar, and that the face stays wholly on screen); `currentSrc` is the 2x master above roughly
+feathered falloff, never a hard bar, and that the face stays wholly on screen;
+**exception, D-450, Bailey 2026-10-05, release 39.1 B10:** in a window wider than
+the 2x master can be drawn at, `framePlate` never magnifies it past 1.25x (3,360 px:
+3840x2160 and 3440x1440 are the cases), the plate carries `.pause__plate--capped`
+and stops short of the window on purpose behind a feathered edge, and the page
+past it is `.pause__art--extended::before`, the same painting blurred and darkened,
+which fills the window; for it, check instead that `.pause__art` is the window,
+carries `pause__art--extended` with `--pu-ext-url` set, that the pseudo-element's
+box covers the window (it is the window plus 3 percent a side), that the plate was
+not magnified past 1.25x or softened, and that the edge is the feathered falloff
+and not a hard bar. Measured at 3840x2160 on origin/main 5a4c92b1, which the fix
+lane leaves as it is (PR-0391, `tools/text-floor-sweep.mjs --screens=pause-ffx`): plate 3393x1939 at (-16, -8),
+extension 4070x2290 over a 3840x2160 `.pause__art`, no sideways scroll (at 3440x1440:
+plate 3393x1939 at (-16, -109), extension 3646x1526 over a 3440x1440 `.pause__art`); the
+round-25 reading "plate not full-bleed" measured the plate alone); `currentSrc` is the 2x master above roughly
 1600 css px; `documentElement.scrollWidth === clientWidth`; the only transform
 between the `<img>` and the document is the drift's own matrix (any layer scale
 means text is being resampled). Then look at the screenshot: no bars, no soft
 edges on type.
 **AUTOMATE:** yes, partly covered. `tests/unit/pause-fullbleed.test.ts` exists
 and asserts the stylesheet mounts `.pause` at `position: fixed; inset: 0` and
-never blurs the painting; that is the source-level half. The live half does not
-exist. Add a case to `tests/e2e/pause.spec.ts`: loop the six sizes with a fresh
-context and assert `rect === viewport` and the `currentSrc` tier.
+never blurs the painting; that is the source-level half. The live half:
+`tools/text-floor-sweep.mjs --screens=pause-ffx` records, per tab and window size
+in a fresh browser, the plate's rect, `currentSrc` and classes, `.pause__art`'s box
+and classes, the extension pseudo-element's box and filter, and the sideways
+scroll (the round-25 "plate not full-bleed" at 3840x2160 is the capped case above,
+not a defect). It is a tool, not yet a case in `tests/e2e/pause.spec.ts`.
 **SCOPE:** every layer meant to own the window: pause, photo mode, cutscene
 letterbox, results, title, chapter select, and any future overlay. Also the
 resolution contract behind it: **a plate authored below the display's pixel
@@ -172,18 +189,25 @@ real page, and with one viewport in the suite the arithmetic could not be caught
 either: a fixed px value inside a scaled stage is only wrong once the stage
 scale is known.
 **THE CHECK:** at each of the six viewports in CHK-002, walk every text node
-under the active screen root, take `getComputedStyle(el).fontSize`, and report
-the smallest and the count under 14 css px. Separately, check clipping: each
+under the active screen root, take `getComputedStyle(el).fontSize` **times the
+scale of every ancestor** (transform, `scale`, `zoom`: a 4.89 px size inside the
+640x360 stage drawn at 2.5x is the 12.2 px the player reads), and report the
+smallest and the count under 14 css px. Separately, check clipping: each
 text box's `right` against its container's, and `scrollWidth` vs `clientWidth`
 (a clipped strip does not move `documentElement.scrollWidth`, so the page-level
 scroll check passes while the text is cut off). Then read the screenshot at 100
 percent and confirm you could read it from a sofa.
 **Pass/fail:** zero elements under 14px, zero clipped, and the screenshot reads.
-**AUTOMATE:** yes, partly covered. `tests/unit/pause-fullbleed.test.ts` already
+**AUTOMATE:** yes, covered at both levels. `tests/unit/pause-fullbleed.test.ts`
 has "declares no font-size a player could not read" and "floors every clamp()ed
-type token at 14px", both over the CSS source. The live measurement does not
-exist for any screen. Add a legibility sweep in `tests/e2e/` that runs the walk
-above per screen and fails on the first element under the floor.
+type token at 14px", and `tests/unit/r43-text-floor-css.test.ts` (PR-0356, round
+25) reads the prep, results, first-run-guide, Sphere Grid and Chapter XII sheets
+the same way: every size under 7.05 grid px is `max(its size, var(--stage-floor))`
+and the arithmetic is evaluated at the viewports. The live walk is
+`tools/text-floor-sweep.mjs` (the in-page probe is `tools/text-floor-probe.mjs`):
+a fresh browser per window size and screen, real keys and pointer clicks, one
+JPEG and one JSON per step with the minimum, the count under the floor, text boxes
+that overprint and text cut by its own box. It is a tool, not yet an e2e spec.
 **SCOPE:** every screen in both games: battle HUD, CTB list, party status,
 advisor card, strategy guide, enemy intent, prep tabs, results, chapter select,
 cutscene dialogue, polaroid captions, save slots, controls hints.
@@ -376,15 +400,19 @@ to a machine the DOM is perfect.
 Flux, Braska's Final Aeon, Mortiorchis, Yu Pagoda, Vegnagun Head, Lady Luck),
 for every label element assert `scrollWidth <= clientWidth + 1`, and assert that
 where `text-overflow: ellipsis` is declared it is never engaged. Measure at 1280
-and at 3840, because a fluid layout can truncate at either end. Then read the
-CTB list and the caption strip in a screenshot.
+and at 3840, because a fluid layout can truncate at either end (PR-0391: the FFX
+Sensor card's six affinity chips, opened with `I`, are one row of seven 10 px
+columns at 3840x2160 and print over each other, "FIR CHU CE WA HO GRAV"; five
+columns at 2560x1440; `tools/text-floor-sweep.mjs --screens=battle-ch1-sensor`
+reads the chips' boxes). Then read the CTB list and the caption strip in a screenshot.
 **AUTOMATE:** yes. **No such test exists**: a grep of `tests/` for
 `scrollWidth`/`clientWidth` finds nothing, and `pause-fullbleed.test.ts` only
 asserts the caption CSS *permits* wrapping (`-webkit-line-clamp`), not that no
 caption is clipped. Add `tests/e2e/label-fit.spec.ts`.
 **SCOPE:** CTB list, party rows, command menu rows and item counts, advisor move
 labels, guide headings, prep tabs, results rows, chapter select cards, save
-slots, dressphere names. Any future localisation multiplies every one of them.
+slots, dressphere names, the Sensor card's affinity chips. Any future
+localisation multiplies every one of them.
 
 ---
 
