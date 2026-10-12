@@ -64,7 +64,7 @@ describe('prepareCloudflareUpload and _headers', () => {
       writeFileSync(full, body);
     }
   };
-  const base = { 'index.html': '<h1>x</h1>', 'assets/index-Abc123.js': 'js', 'artifact-manifest.json': '{}' };
+  const base = { 'index.html': '<h1>x</h1>', 'assets/index-Abc12345.js': 'js', 'artifact-manifest.json': '{}' };
   const prepare = (manifestPaths: string[], kind: 'workers' | 'pages' = 'workers') => prepareCloudflareUpload({ dist: dir, manifest: listed(...manifestPaths), manifestName: 'artifact-manifest.json', kind, deps });
 
   beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'pyrefly-headers-')); logs.length = 0; });
@@ -72,32 +72,51 @@ describe('prepareCloudflareUpload and _headers', () => {
 
   it('lets the vetted _headers ship: listed in the artifact, never counted as an uploaded file', () => {
     tree({ ...base, _headers: PROPOSED });
-    const report = prepare(['index.html', 'assets/index-Abc123.js', '_headers']);
+    const report = prepare(['index.html', 'assets/index-Abc12345.js', '_headers']);
     expect(report.ok).toBe(true);
     expect(report.fileCount).toBe(3);
     expect(logs.join('\n')).toMatch(/vetted _headers ships: Cloudflare reads it and never serves it, so the live check does not download it/);
     expect(existsSync(join(dir, '_headers'))).toBe(true); // the gate never deletes
   });
 
+  it('refuses a vetted _headers when a file under assets/ has no content hash in its name (PR-0396): a year of immutable would pin a visitor to it', () => {
+    tree({ ...base, _headers: PROPOSED, 'assets/logo.svg': '<svg/>', 'assets/sub/pic.png': 'png' });
+    expect(() => prepare(['index.html', 'assets/index-Abc12345.js', 'assets/logo.svg', 'assets/sub/pic.png', '_headers'])).toThrow(/not fit for the Cloudflare upload/);
+    const text = logs.join('\n');
+    expect(text).toMatch(/dist-release\/_headers would cache 2 file\(s\) for a year whose names carry no content hash, e\.g\. assets\/logo\.svg, assets\/sub\/pic\.png/);
+    expect(text).not.toMatch(/not the vetted file/);
+  });
+
+  it('lets the live build\'s names through, and an unhashed file elsewhere (the art, the page) is not the rule\'s business', () => {
+    tree({ ...base, _headers: PROPOSED, 'assets/index-DiS-CYp9.css': 'css', 'assets/worker-CJvtQ5Pf.js': 'js', 'art/backdrops/road-to-the-farplane.webp': 'webp' });
+    const report = prepare(['index.html', 'assets/index-Abc12345.js', 'assets/index-DiS-CYp9.css', 'assets/worker-CJvtQ5Pf.js', 'art/backdrops/road-to-the-farplane.webp', '_headers']);
+    expect(report.ok).toBe(true);
+  });
+
+  it('without a _headers the names under assets/ are nobody\'s business (the gate only guards the long cache)', () => {
+    tree({ ...base, 'assets/logo.svg': '<svg/>' });
+    expect(prepare(['index.html', 'assets/index-Abc12345.js', 'assets/logo.svg']).ok).toBe(true);
+  });
+
   it('refuses a _headers that is not the vetted one, and says why', () => {
     tree({ ...base, _headers: '/*\n  X-Test: 1\n' });
-    expect(() => prepare(['index.html', 'assets/index-Abc123.js', '_headers'])).toThrow(/not fit for the Cloudflare upload/);
+    expect(() => prepare(['index.html', 'assets/index-Abc12345.js', '_headers'])).toThrow(/not fit for the Cloudflare upload/);
     expect(logs.join('\n')).toMatch(/dist-release\/_headers is not the vetted file: .*pattern "\/\*" is not vetted/);
   });
 
   it('refuses a vetted _headers the artifact manifest does not list, and a manifest entry with no file', () => {
     tree({ ...base, _headers: PROPOSED });
-    expect(() => prepare(['index.html', 'assets/index-Abc123.js'])).toThrow(/not fit/);
+    expect(() => prepare(['index.html', 'assets/index-Abc12345.js'])).toThrow(/not fit/);
     expect(logs.join('\n')).toMatch(/would be uploaded that the artifact manifest does not list, e\.g\. _headers/);
     logs.length = 0;
     rmSync(join(dir, '_headers'));
-    expect(() => prepare(['index.html', 'assets/index-Abc123.js', '_headers'])).toThrow(/not fit/);
+    expect(() => prepare(['index.html', 'assets/index-Abc12345.js', '_headers'])).toThrow(/not fit/);
     expect(logs.join('\n')).toMatch(/the artifact manifest lists would not be uploaded, e\.g\. _headers/);
   });
 
   it('still refuses _redirects and .assetsignore, beside a vetted _headers', () => {
     tree({ ...base, _headers: PROPOSED, _redirects: '/a /b 301\n', '.assetsignore': 'x\n' });
-    expect(() => prepare(['index.html', 'assets/index-Abc123.js', '_headers'])).toThrow(/not fit/);
+    expect(() => prepare(['index.html', 'assets/index-Abc12345.js', '_headers'])).toThrow(/not fit/);
     const text = logs.join('\n');
     expect(text).toMatch(/dist-release holds (?:.assetsignore, _redirects|_redirects, .assetsignore): Cloudflare reads those as configuration/);
     expect(text).not.toMatch(/_headers is not the vetted/);
@@ -105,10 +124,10 @@ describe('prepareCloudflareUpload and _headers', () => {
 
   it('applies the same rule to a Pages upload: _headers vetted, _routes.json refused', () => {
     tree({ ...base, _headers: PROPOSED });
-    expect(prepare(['index.html', 'assets/index-Abc123.js', '_headers'], 'pages').ok).toBe(true);
+    expect(prepare(['index.html', 'assets/index-Abc12345.js', '_headers'], 'pages').ok).toBe(true);
     logs.length = 0;
     tree({ '_routes.json': '{}' });
-    expect(() => prepare(['index.html', 'assets/index-Abc123.js', '_headers'], 'pages')).toThrow(/not fit/);
+    expect(() => prepare(['index.html', 'assets/index-Abc12345.js', '_headers'], 'pages')).toThrow(/not fit/);
     expect(logs.join('\n')).toMatch(/dist-release holds _routes\.json/);
   });
 });

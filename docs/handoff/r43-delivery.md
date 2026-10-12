@@ -44,3 +44,50 @@ synth-only; joining an in-flight warm; a newer run; the cues surviving the scene
 the end of a run; an older run cannot end a newer hold; the cap of three), `tests/unit/chapter-music-warm.test.ts` (11, including the real
 `GameFlow` calling the warm before prep, the scene and the fight and releasing at the end, FFX and FFX-2). Mutation check: with the hold
 disabled three of the fourteen fail.
+
+## 2. PR-0396: the year-long cache for content-hashed files
+
+**Problem (round 25).** `curl -I https://echoesofspira.com/assets/index-CvOwYJX5.js` read `public, max-age=0, must-revalidate`: every
+return visit asked the server about every file, including bundles whose names change with their content.
+
+**What was already built (release 39, 44dc6dca) and what was missing.** The upload gate already accepted exactly one `_headers`
+(`checkHeadersFile`, `VETTED_HEADERS` in `tools/deploy-host.mjs`: the pattern `/assets/*` with `Cache-Control: public, max-age=31536000,
+immutable`, nothing else), listed it in the artifact and skipped it in the live byte check (`HOST_READ_FILES` in
+`tools/artifact-manifest.mjs`). The file itself was never added ("here is the proposed file for the driver to review", r39-int.md), so
+the live site never had the rule. Cloudflare's Workers static assets have no header setting in the wrangler config (`assets` takes a
+directory, `html_handling`, `not_found_handling`, `run_worker_first`); `_headers` in the assets directory is the supported way, and the
+Worker stays assets-only (no script, no per-request cost).
+
+**Change.**
+- `public/_headers` (new): the vetted rule, with comments. `.gitattributes` pins it to LF, so its bytes (which the artifact hashes) do not
+  depend on the machine that checks it out.
+- `tools/cache-class.mjs` (+ `.d.mts`, new): the classification. A file is **content-hashed** only when it sits under `assets/` **and**
+  is named `<name>-<8 base64url characters>.<ext>`, the way Vite names what it emits. Both conditions are needed: the live art has 23
+  names that end in a dash and eight characters (`art/backdrops/road-to-the-farplane.webp`, `via-infinito`, `od-slice-and-dice`) and
+  must not be cached for a year. `classifyCache(path)` gives `immutable` or `revalidate` (the host's default: `index.html`, the art, audio,
+  fonts, depth maps, the artifact manifest); `cacheFromHeaders` reads a `_headers` text the way Cloudflare does (`*` is a splat that
+  matches slashes too); `unhashedUnderRule` lists what the rule would cache that is not hashed.
+- `prepareCloudflareUpload` (`tools/deploy-cloudflare.mjs`): a shipped `_headers` must still be the vetted one, and now every file its rule
+  matches must be content-hashed, or the deploy stops ("would cache 1 file(s) for a year whose names carry no content hash, e.g.
+  assets/logo.svg"). So a `public/assets/logo.svg` can never be pinned for a year to a visitor.
+
+**How the byte-for-byte check is unaffected** (read before the change, `tools/artifact-manifest.mjs` `verifyLive`): it fetches each
+selected file from the live address with a cache-busting `?v=<time>` and compares the sha256 with the artifact manifest; headers do not
+change a file's bytes, and a fetch from Node has no cache. `_headers` is listed and hashed in the artifact like any file, never counted
+as an uploaded file, and never downloaded (`HOST_READ_FILES`; no address serves it). The hashed files cannot be stale under `immutable`:
+a new build changes their names, and `index.html`, which names them, keeps the default. `verifyLive` already reports what the first
+hashed bundle was served with (`assetCacheControl`), so the next live check records whether the rule applied.
+
+**Proof without a deploy (the real Cloudflare asset runtime, locally).** `wrangler dev` 4.147.0 (the pinned one, workerd, no login, state
+and logs on D:) on a probe directory holding this `_headers`: it printed "Parsed 1 valid header rule", and
+`/` and `/art/backdrops/road-to-the-farplane.webp` came back `public, max-age=0, must-revalidate`; `/assets/index-Chs9J3OY.js` came back
+`public, max-age=31536000, immutable`, also with a `?v=` query; `/_headers` was 404; with CRLF line endings the result was the same. The one
+unhashed file placed under `assets/` (`logo.svg`) was cached for a year too: that is exactly the case the new gate check stops.
+The deploy itself is the proof that counts: the checks are below.
+
+**Tests.** `tests/unit/cache-class.test.ts` (43): the classification table (the four live hashed files; 24 real plain paths including the
+look-alike art names; the path forms; folder and shape both needed), the splat matching, `public/_headers` being the vetted file and making
+exactly the classifier's immutable files immutable, and a **real Vite build** (a page with a script, a style sheet, a lazy chunk, a worker
+and an imported image) whose five emitted files are all under `assets/`, all hashed, and all matched by the shipped rule, with
+`index.html` the one file outside. `tests/unit/deploy-headers.test.ts` (+3, fixture hash lengthened to a real 8 characters): the gate
+refuses an unhashed file under the rule, passes the live names and the look-alike art, and does not care without a `_headers`.
