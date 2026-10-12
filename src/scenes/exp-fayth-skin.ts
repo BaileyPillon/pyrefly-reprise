@@ -21,22 +21,23 @@
  * Game case: FFX only.
  */
 
-import { Color, Mesh, Scene, Vector3, type MeshBasicMaterial, type Object3D } from 'three';
+import { Color, Scene, Vector3, type MeshBasicMaterial, type Object3D } from 'three';
 import { ATTACK_IMPACT } from '../engine/BattlePresenterActors.ts';
-import type { CameraRig } from '../engine/BattleCamera.ts';
 import { tapShotDirector, type BeatListener } from '../engine/ffx3d/beatTap.ts';
 import { FfxAnimator } from '../engine/ffx3d/ffxAnimator.ts';
 import { loadFfxClips } from '../engine/ffx3d/ffxClips.ts';
 import { FfxSky, bakeBowl, loadSkyAssets } from '../engine/ffx3d/ffxSky.ts';
 import { FfxSkin } from '../engine/ffx3d/ffxSkin.ts';
-import { FFX_SKY_GAIN, FFX_STAGE_PARTS, ffxFaythStaging, type FfxStaging } from '../engine/ffx3d/ffxStaging.ts';
+import { FFX_SKY_GAIN, FFX_STAGE_PARTS, ffxFaythStaging } from '../engine/ffx3d/ffxStaging.ts';
 import { probeFfxLocal, type FfxLocalManifest } from '../engine/ffx3d/localAssets.ts';
 import { loadFfxModels, shapeStage, type FfxModels } from '../engine/ffx3d/models.ts';
 import { paceRate } from '../engine/pace.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
-import type { WorldRig } from '../engine/ffx3d/ffxWorld.ts';
 import { airshipRangeDirectorOf } from './evrae-airship-director.ts';
+import { derive, faythRigs, layPainted, paintedParts, sizeEvrae, type PaintedParts } from './exp-fayth-stage.ts';
 import type { SceneBuild } from './types.ts';
+
+export { derive, faythRigs }; // the shared staging helpers (`./exp-fayth-stage.ts`); the tests and the camera glue import them from here
 
 export type FaythSkinKind = 'ffx' | 'painted';
 
@@ -51,15 +52,6 @@ export function animParam(search: string): 'off' | null {
   return new URLSearchParams(search).get('ffxanim') === 'off' ? 'off' : null;
 }
 
-type Mutable<T> = { -readonly [K in keyof T]: T[K] };
-
-/** `build` with some of its fields replaced. The getters (the backdrop that hot-swaps) are copied as getters, so the scene still reads the live one. */
-export function derive(build: SceneBuild, over: Partial<Mutable<SceneBuild>>): SceneBuild {
-  const out = Object.defineProperties(Object.create(Object.getPrototypeOf(build)) as object, Object.getOwnPropertyDescriptors(build)) as Mutable<SceneBuild>;
-  Object.assign(out, over);
-  return out;
-}
-
 /** The skin each derived build carries (the camera's frames read the models' extents through it, `./exp-fayth-camera.ts`); a build with no skin has none. */
 const SKINS = new WeakMap<SceneBuild, FfxSkin>();
 export const skinOf = (build: SceneBuild): FfxSkin | null => SKINS.get(build) ?? null;
@@ -71,78 +63,11 @@ export const tapOf = (build: SceneBuild): BeatListener | null => TAPS.get(build)
 /** The actor the airship's range flights move (the range director's subject). */
 const FLYER = 'evrae';
 
-const rig = (v: WorldRig): CameraRig => ({ position: [...v.position], lookAt: [...v.lookAt], fov: v.fov, sway: v.sway });
-
-/** The scene's rigs: FFX's NEAR default view under every near name, its FAR default under every `-far` name, and the overview. A fresh object: Chapter VIII's `RIGS` is shared and never touched. */
-export function faythRigs(staging: FfxStaging): Record<string, CameraRig> {
-  const { near, far } = staging.views;
-  return {
-    intro: rig(near),
-    idle: rig(near),
-    action: rig(near),
-    enemy: rig(near),
-    party: rig(near),
-    victory: rig(near),
-    'idle-far': rig(far),
-    'action-far': rig(far),
-    'enemy-far': rig(far),
-    overview: rig(staging.overview),
-  };
-}
-
 /**
  * The `ffx` skin's grade: neutral. The painted deck's palette (vignette, grain, a tilt-shift blur at the top and bottom of the frame, a cold shadow tint, bloom tuned for painted cloud) is the painted look;
  * the models and the stage are shown as their own textures draw them, with only a little bloom.
  */
 const FFX_SKIN_PALETTE: ScenePalette = { name: 'fayth-ffx', exposure: 1, bloomThreshold: 1.0, bloomStrength: 0.12, bloomRadius: 0.4, vignette: 0, grain: 0, tiltMaxBlur: 0 };
-
-/** What the deck factory built, found again by the names and types it built them with. */
-interface PaintedParts {
-  readonly sky: Object3D | null;
-  readonly deck: Object3D | null;
-  readonly pools: readonly Mesh[];
-}
-
-function paintedParts(build: SceneBuild): PaintedParts {
-  const { group } = build;
-  return {
-    sky: group.getObjectByName('sky-roll') ?? null,
-    deck: group.getObjectByName('airship-deck') ?? null,
-    pools: group.children.filter((c): c is Mesh => c instanceof Mesh), // the three light pools under the party: the only meshes the deck factory hangs straight on the group
-  };
-}
-
-/**
- * The painted skin at FFX's staging: the deck turned a quarter so its rail runs along the party's column on Evrae's side, and set on the floor the party stands on; the sky plate behind the party, as seen
- * from FFX's NEAR camera; the light pools under the party's feet. The cloud sheets and the haze (painted for the other camera, drawn behind the rail) and the wind-borne grit are hidden.
- */
-function layPainted(parts: PaintedParts, staging: FfxStaging, particles: readonly Object3D[]): void {
-  const slots = staging.partySlots.slice(0, 3);
-  const centre = slots.reduce((sum, s) => sum.add(s), new Vector3()).multiplyScalar(1 / slots.length);
-  const nearest = Math.min(...slots.map((s) => s.x));
-  for (const p of particles) p.visible = false;
-  parts.pools.forEach((pool, i) => {
-    const s = slots[i];
-    if (s) pool.position.set(s.x, s.y + 0.02, s.z);
-  });
-  const { deck, sky } = parts;
-  if (deck) {
-    deck.rotation.y = Math.PI / 2; // the rail (local -z) faces -x, toward Evrae
-    deck.position.set(nearest + 0.5, centre.y, centre.z); // its edge stands 2.2 beyond the party's nearest slot
-    deck.traverse((o) => {
-      if (o instanceof Mesh && o.renderOrder < 0) o.visible = false; // the painted air (cloud sheets and haze) belongs to the other camera
-    });
-  }
-  if (sky) {
-    // 80 world units down the NEAR camera's view line, facing it: wide enough (the plate is 90 wide, scaled 1.8) to fill the frame at 16:9 with its roll.
-    const cam = new Vector3(...staging.views.near.position);
-    const aim = new Vector3(...staging.views.near.lookAt).sub(cam).normalize();
-    const at = cam.clone().addScaledVector(aim, 80);
-    sky.position.copy(at);
-    sky.rotation.y = Math.atan2(cam.x - at.x, cam.z - at.z);
-    sky.scale.setScalar(1.8);
-  }
-}
 
 /** Hide everything painted that the `ffx` skin replaces: the plate and sky, the deck and rail, the light pools, the grit. */
 function hidePainted(parts: PaintedParts, particles: readonly Object3D[]): void {
@@ -213,6 +138,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
   let animator: FfxAnimator | null = null;
   if (models && manifest && animParam(typeof location === 'undefined' ? '' : location.search) !== 'off') animator = await animatorFor(manifest, models);
   const skin = new FfxSkin({ host: build.group, models, staging, ...(animator ? { animator } : {}) });
+  const evrae = kind === 'painted' ? sizeEvrae() : null; // the painted skin draws Evrae as tall as the game frames him, as the website's scene does (`./exp-fayth-stage.ts`)
   const tap: BeatListener | null = animator && listenerOf(animator);
   if (animator) (globalThis as { __ffxanim?: FfxAnimator }).__ffxanim = animator; // the debug handle (this module is dev-server only)
   let lastRange: 'near' | 'far' | null = null;
@@ -232,6 +158,7 @@ export async function stageFaythSkin(build: SceneBuild): Promise<SceneBuild> {
     update(dt: number): void {
       build.update(dt);
       skin.update(dt);
+      evrae?.(build.group);
       if (clear && build.group.parent instanceof Scene && build.group.parent.background !== clear) build.group.parent.background = clear; // the sky above the bowl is the colour the game clears to
       const range = animator ? airshipRangeDirectorOf(build.group) : null;
       if (animator && range) {

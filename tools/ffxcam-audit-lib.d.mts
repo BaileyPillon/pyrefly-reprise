@@ -30,7 +30,7 @@ export interface AuditBeat {
 /** One record as the page writes it (the parts the arithmetic reads). */
 export interface AuditRecord {
   seed?: number;
-  cfg?: { ids?: string[] };
+  cfg?: { ids?: string[]; /** The website table camera's whole-fight shot ids (the default views, the scenes, the victory, the defeat): its record names them, the programs' ids are the default. */ wholeFight?: string[] };
   programs: string[];
   beats: AuditBeat[];
   frames: number[][];

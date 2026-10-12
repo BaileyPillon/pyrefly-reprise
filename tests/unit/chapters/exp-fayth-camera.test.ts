@@ -122,24 +122,26 @@ afterAll(() => {
 
 const close = (got: readonly number[], want: readonly number[], digits = 5): void => want.forEach((w, i) => expect(got[i], `component ${i}`).toBeCloseTo(w, digits));
 
-describe('the director is published only when programs load', () => {
-  it('?skin=painted with no camera folder: the stub stays, nothing is hooked, nothing is left on globalThis', async () => {
+describe("FFX's director is published only when programs load (else the website's table camera)", () => {
+  it("?skin=painted with no camera folder: the website's table camera is published instead of FFX's (hooked at render), and FFX's handle is not there", async () => {
     query('?skin=painted');
     const b = await build();
-    expect(b.shotDirector).toBe(STUB_SHOT_DIRECTOR);
-    expect(handle()).toBeUndefined();
+    expect(b.shotDirector).toBeDefined();
+    expect(b.shotDirector).not.toBe(STUB_SHOT_DIRECTOR);
+    expect(handle()).toBeUndefined(); // __ffxcam is FFX's programs'; the table camera's is __ffxtable
     expect(fetched).toEqual([`${CAMERA_PREFIX}index.json`]); // it asked once, and got a 404
     const scene = new Scene();
     const hook = scene.onBeforeRender;
     scene.add(b.group);
     b.bindCamera!({ camera: new PerspectiveCamera() } as never);
-    expect(scene.onBeforeRender).toBe(hook); // the skin's own bindCamera: no render hook
+    expect(scene.onBeforeRender).not.toBe(hook); // the table camera is written at the head of the render
   }, 60_000);
 
-  it('no skin staged (no models, no ?skin=): the camera folder is not even asked for, and the build is the stub\'s', async () => {
+  it("no skin staged (no models, no ?skin=): the camera folder is not even asked for, and the build is the website's table camera", async () => {
     serve(FILES);
     const b = await build();
-    expect(b.shotDirector).toBe(STUB_SHOT_DIRECTOR);
+    expect(b.shotDirector).not.toBe(STUB_SHOT_DIRECTOR);
+    expect(b.sideFacing).toEqual({ party: -1, enemy: 1 }); // the painted skin at FFX's staging
     expect(fetched).toEqual(['/__ffx-local/manifest.json']); // the model probe only
     expect(handle()).toBeUndefined();
   }, 60_000);
@@ -152,12 +154,12 @@ describe('the director is published only when programs load', () => {
     expect(fetched).toEqual([]);
   }, 60_000);
 
-  it('data that is there but wrong is null with one warning, and the stub stays', async () => {
+  it('data that is there but wrong is null with one warning, and the table camera plays instead', async () => {
     serve({ ...FILES, 'index.json': { ...INDEX, format: 'ffxcam-index/9' } });
     query('?skin=painted');
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const b = await build();
-    expect(b.shotDirector).toBe(STUB_SHOT_DIRECTOR);
+    expect(b.shotDirector).not.toBe(STUB_SHOT_DIRECTOR);
     expect(warn).toHaveBeenCalledTimes(1);
     expect(String(warn.mock.calls[0]![0])).toContain('ignoring the camera data for evrae');
     warn.mockRestore();

@@ -183,6 +183,16 @@ export class FfxCameraDirector implements ShotDirector {
     return this.vm ? !this.vm.idle : false;
   }
 
+  /** The logic steps the camera has run (0 with no programs). */
+  get steps(): number {
+    return this.vm?.steps ?? 0;
+  }
+
+  /** The id of the program on the camera thread, or undefined. */
+  get programId(): string | undefined {
+    return this.vm?.programId;
+  }
+
   /** A range scene (Pull back, Move in) is playing. While it is, a beat's request would cut it short, so the scene holds its beats back until it is over (`FaythCamera`). */
   get sceneRunning(): boolean {
     return this.sceneOpen;

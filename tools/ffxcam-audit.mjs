@@ -6,7 +6,7 @@
  *
  * Playwright's fake clock paces the page: every `requestAnimationFrame` frame is exactly 16 ms of virtual time, so a run is repeatable and does not depend on how fast the machine draws. The fight is the
  * ordinary battle (nothing is forced) unless `--far` starts the airship at its far range, which covers the FAR state without waiting for Cid's order. A dev server on `--port` with Bailey's local
- * models and camera folder is required; without them the chapter plays its painted camera and there is nothing to audit (the run says so and writes nothing).
+ * models and camera folder is required for FFX's own camera; the website's table camera is audited with `--query=ffxcam=table` (no folder needed), and `--stub --query=skin=classic` audits the camera the chapter had before it (Chapter VIII's, read off the three.js camera).
  *
  * Retail frames are never made here (no screenshots); the records hold numbers only and live outside git (`D:\Tools\ffx-parity\shots\tracking\`). Stop the dev server by its port when done.
  *
@@ -66,10 +66,11 @@ await page.evaluate((s) => {
   window.__pyrefly.setSeed(s);
   void window.__pyrefly.gotoChapter('exp-fayth', { skipCutscenes: true, seed: s });
 }, seed);
-await pumpUntil(() => page.evaluate(() => !!globalThis.__ffxcam && !!window.__pyrefly.battle()?.scene), 'the camera handle (is the dev server serving Bailey\'s local camera folder?)');
+const stub = arg('stub') === 'true'; // the stub scene's own camera (Chapter VIII's, `?skin=classic`): no handle to wait for
+await pumpUntil(() => page.evaluate((st) => (st || !!(globalThis.__ffxcam ?? globalThis.__ffxtable)) && !!window.__pyrefly.battle()?.scene, stub), 'the camera handle (is the dev server serving Bailey\'s local camera folder, or is the query ffxcam=table?)');
 
 // The recorder goes on before the opening's first beat is asked for (the scene is built; the battle's first beat comes a few frames later).
-await page.evaluate(`(${installAudit.toString()})(${JSON.stringify({ strategy, boxEvery, ids, keepFrames: true })})`);
+await page.evaluate(`(${installAudit.toString()})(${JSON.stringify({ strategy, boxEvery, ids, keepFrames: true, stub })})`);
 if (far) await pumpUntil(() => page.evaluate(() => !!window.__pyrefly.battleState()), 'the battle state').then(() => page.evaluate(() => { window.__pyrefly.battleState().flags['airship.range'] = 'far'; }));
 
 // From here on virtual time moves only when we say so.

@@ -3,8 +3,8 @@
  * **The hidden Fayth chapter's skins on its scene** (`src/scenes/exp-fayth-deck.ts` and `exp-fayth-skin.ts`; FFX only; dev server only). The deck factory is run for real under jsdom (a no-op 2D context and
  * an art manifest that lists no backdrops: the shape of `exp-fayth-scene.test.ts`), once per case, and what it hands the battle is read. What this file pins:
  *
- * 1. **No manifest, no skin: exactly phase 1.** With nothing behind the dev route (a 404, as for every test, the website and a dev server without the folder) the factory returns the build as Chapter VIII's
- *    deck made it: its own `RIGS` object, its slots and pins, no `bindCamera`, the director on its painted staging. A manifest that is found but whose files all fail to load changes nothing either.
+ * 1. **No manifest, no skin: exactly phase 1.** With nothing behind the dev route (a 404, as for every test, the website and a dev server without the folder) the skin glue returns the build it was given, as Chapter VIII's
+ *    deck made it (the factory then publishes the website's table camera on the painted skin: `exp-fayth-table.test.ts`): its own `RIGS` object, its slots and pins, no `bindCamera`, the director on its painted staging. A manifest that is found but whose files all fail to load changes nothing either.
  *    `?skin=classic` forces the same even with the folder there, and does not ask for the manifest.
  * 2. **`?skin=painted` is the painted skin at FFX's staging**: the party's slots and Evrae's pin at FFX's numbers through the one transform, the bodies turned toward each other, the camera rigs FFX's NEAR
  *    and FAR default views, the range director staged with the same spots and rigs, the deck and the sky plate laid under and behind the party. **Chapter VIII's tables are never written**: its `RIGS`, its
@@ -22,11 +22,12 @@ import { FFX_EVRAE_SPOTS, FFX_PARTY_SLOTS, FFX_SKY_GAIN } from '../../../src/eng
 import { ffxPointTuple, ffxRig } from '../../../src/engine/ffx3d/ffxWorld.ts';
 import { FFX_NEAR_VIEW, FFX_FAR_VIEW } from '../../../src/engine/ffx3d/ffxStaging.ts';
 import type { FfxModels } from '../../../src/engine/ffx3d/models.ts';
-import { EVRAE_AIRSHIP_DECK_RIGS, EVRAE_AIRSHIP_DECK_SLOTS, buildEvraeAirshipDeckScene } from '../../../src/scenes/evrae-airship-deck.ts';
+import { EVRAE_AIRSHIP_DECK_RIGS, EVRAE_AIRSHIP_DECK_SLOTS, EVRAE_DECK_PLATE, buildEvraeAirshipDeckScene, makeAirshipDeckScene } from '../../../src/scenes/evrae-airship-deck.ts';
+import { STUB_SHOT_DIRECTOR } from '../../../src/engine/ffxcam/stubDirector.ts';
 import { airshipRangeDirectorOf } from '../../../src/scenes/evrae-airship-director.ts';
 import { RANGE_STAGING } from '../../../src/scenes/evrae-airship-range.ts';
 import { buildExpFaythDeckScene } from '../../../src/scenes/exp-fayth-deck.ts';
-import { animParam, faythRigs, listenerOf, skinParam } from '../../../src/scenes/exp-fayth-skin.ts';
+import { animParam, faythRigs, listenerOf, skinParam, stageFaythSkin } from '../../../src/scenes/exp-fayth-skin.ts';
 import { ATTACK_IMPACT } from '../../../src/engine/BattlePresenterActors.ts';
 import type { FfxAnimator } from '../../../src/engine/ffx3d/ffxAnimator.ts';
 import { loadScene } from '../../../src/scenes/index.ts';
@@ -79,6 +80,9 @@ async function build(): Promise<SceneBuild> {
 }
 const query = (q: string): void => window.history.replaceState({}, '', `/${q}`);
 
+/** Phase 1's scene as the deck factory builds it (Chapter VIII's deck with the stub director): what the skin glue is handed, and hands back untouched when nothing is found. */
+const phase1 = () => makeAirshipDeckScene({ key: EVRAE_DECK_PLATE, staging: { shotDirector: STUB_SHOT_DIRECTOR } })();
+
 beforeAll(() => {
   vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (this: HTMLCanvasElement) {
     return noopContext(this) as never;
@@ -109,7 +113,10 @@ const near = (got: readonly number[], want: readonly number[], digits = 5): void
 
 describe('no manifest, no skin: phase 1 exactly', () => {
   it('returns Chapter VIII\'s build as it was made: its own rigs object, its slots and pins, no camera hook, the director on its painted staging', async () => {
-    const b = await build();
+    const base = await phase1();
+    builds.push(base);
+    const b = await stageFaythSkin(base);
+    expect(b).toBe(base); // nothing was derived
     expect(b.rigs).toBe(EVRAE_AIRSHIP_DECK_RIGS); // the very object: nothing was derived
     expect(b.partySlots.slice(0, 3).map((v) => v.toArray())).toEqual(EVRAE_AIRSHIP_DECK_SLOTS.party);
     expect(b.enemySlots.map((v) => v.toArray())).toEqual(EVRAE_AIRSHIP_DECK_SLOTS.enemy);
@@ -134,7 +141,10 @@ describe('no manifest, no skin: phase 1 exactly', () => {
     serve(true);
     fake.models = { stage: null, actors: {}, problems: ['stage: 404', 'tidus: 404'], dispose: () => {} } satisfies FfxModels;
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const b = await build();
+    const base = await phase1();
+    builds.push(base);
+    const b = await stageFaythSkin(base);
+    expect(b).toBe(base);
     expect(fake.loads).toBe(1);
     expect(b.rigs).toBe(EVRAE_AIRSHIP_DECK_RIGS);
     expect(b.bindCamera).toBeUndefined();
@@ -256,7 +266,7 @@ describe('?skin=painted: the painted skin at FFX\'s staging', () => {
     expect(RANGE_STAGING.near.evrae).toEqual(evraeBefore);
     expect(RANGE_STAGING.near.rigs.idle.position).toEqual(nearIdleBefore);
     expect(JSON.stringify(EVRAE_AIRSHIP_DECK_SLOTS)).toBe(slotsBefore);
-    query('');
+    query('?skin=classic');
     const plain = await build();
     expect(plain.rigs).toBe(EVRAE_AIRSHIP_DECK_RIGS);
     expect(airshipRangeDirectorOf(plain.group)!.staging).toBeNull(); // a Chapter VIII scene built after it is untouched

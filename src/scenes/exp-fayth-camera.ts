@@ -24,22 +24,19 @@
  */
 
 import { Scene, type PerspectiveCamera } from 'three';
-import { PaintedActor } from '../engine/PaintedActor.ts';
-import { FaythCamera, type FaythCameraWorld } from '../engine/ffxcam/faythCamera.ts';
-import type { CameraActor } from '../engine/ffxcam/frames.ts';
+import { FaythCamera } from '../engine/ffxcam/faythCamera.ts';
 import { PoseLatch, hookBeforeRender } from '../engine/ffxcam/latch.ts';
 import { loadFfxCameraPrograms } from '../engine/ffxcam/load.ts';
-import { FAYTH_ACTIVE_PARTY } from '../engine/ffxcam/roster.ts';
 import { ThreeCameraSink } from '../engine/ffxcam/sink.ts';
 import { ffxCamVariantOf, variantFilter, type FfxCamVariant } from '../engine/ffxcam/variant.ts';
 import { tapShotDirector } from '../engine/ffx3d/beatTap.ts';
 import { FFX_FAR_VIEW, FFX_NEAR_VIEW, FFX_PARTY_SLOTS } from '../engine/ffx3d/ffxStaging.ts';
 import { ffxWorldMatrix } from '../engine/ffx3d/ffxWorld.ts';
-import type { FfxSkin } from '../engine/ffx3d/ffxSkin.ts';
-import type { WorldBox } from '../engine/ffx3d/modelBox.ts';
-import { airshipRangeDirectorOf } from './evrae-airship-director.ts';
 import { derive, skinOf, tapOf } from './exp-fayth-skin.ts';
+import { viewOf, worldOf } from './exp-fayth-world.ts';
 import type { SceneBuild } from './types.ts';
+
+export { viewOf }; // the camera's read of a battle actor (its tests import it from here)
 
 /** The encounter's folder under the dev route's `camera/` (`D:\Tools\ffx-parity\assets\runtime\camera\evrae\`). */
 const CAMERA_ENCOUNTER = 'evrae';
@@ -53,9 +50,6 @@ export function trackingSwitches(search: string): { net: boolean; farFit: boolea
   return { net: q.get('ffxnet') !== 'off', farFit: q.get('ffxfar') !== 'script', extents: q.get('ffxext') !== 'models' };
 }
 
-/** An actor fainter than this is not drawn for the camera's purposes (Evrae faded out in a range shift). */
-const SHOWN_ALPHA = 0.05;
-
 /** What the debug handle `globalThis.__ffxcam` holds (dev server only). */
 export interface FaythCameraHandle {
   readonly camera: FaythCamera;
@@ -65,55 +59,6 @@ export interface FaythCameraHandle {
   readonly variant: FfxCamVariant;
   /** The three.js camera the pose is written on, once the battle camera is bound. */
   readonly target: () => PerspectiveCamera | null;
-}
-
-/**
- * How a battle actor is read by the camera: live, so a lunging figure is followed. `model()`: the `ffx` skin's model of this actor, whose extents are the figure's (asked each time: the skin attaches a model a frame
- * after the actor appears) and whose `box()`, when it has one, is where its body is; null for a painted billboard, which is framed by its painting. `shown` is false while the actor is faded out or hidden.
- */
-export function viewOf(actor: PaintedActor, model: () => { height: number; width: number; box?: () => WorldBox | null } | null): CameraActor {
-  return {
-    get position() {
-      return actor.position;
-    },
-    get facingDir() {
-      return actor.facingDir;
-    },
-    get height() {
-      return model()?.height ?? actor.height * actor.scale.y;
-    },
-    get width() {
-      return model()?.width ?? actor.poseSize[0] * actor.scale.x;
-    },
-    get shown() {
-      return actor.visible && actor.alpha > SHOWN_ALPHA;
-    },
-    box() {
-      return model()?.box?.() ?? null;
-    },
-  };
-}
-
-/** The scene's world as the camera reads it: the actors among the scene's children (found by name, as `FfxSkin` finds them), the range director's range, the party's fall. */
-function worldOf(build: SceneBuild, skin: FfxSkin | null, aspect: () => number): FaythCameraWorld {
-  const range = airshipRangeDirectorOf(build.group);
-  const views = new Map<PaintedActor, CameraActor>();
-  const find = (id: string): PaintedActor | undefined => build.group.parent?.children.find((c): c is PaintedActor => c instanceof PaintedActor && c.name === id);
-  return {
-    actor(id) {
-      const actor = find(id);
-      if (!actor) return undefined;
-      let view = views.get(actor);
-      if (!view) views.set(actor, (view = viewOf(actor, () => skin?.modelOf(id) ?? null)));
-      return view;
-    },
-    range: () => (range ? { current: range.current, shifting: range.shifting } : null),
-    aspect,
-    partyFallen() {
-      const party = FAYTH_ACTIVE_PARTY.map(find).filter((a): a is PaintedActor => a !== undefined);
-      return party.length > 0 && party.every((a) => a.pose === 'ko');
-    },
-  };
 }
 
 /**
@@ -135,7 +80,7 @@ export async function stageFaythCamera(base: SceneBuild, skinned: SceneBuild): P
   const camera = new FaythCamera({
     programs: aids.extents ? programs : { ...programs, extents: {} },
     sink: latch,
-    world: worldOf(skinned, skinOf(skinned), () => target?.aspect ?? 16 / 9),
+    world: worldOf(skinned, (id) => skinOf(skinned)?.modelOf(id) ?? null, () => target?.aspect ?? 16 / 9),
     seed: Number.isFinite(seed) ? seed : 1,
     homes: { near: FFX_NEAR_VIEW, far: FFX_FAR_VIEW },
     net: aids.net,

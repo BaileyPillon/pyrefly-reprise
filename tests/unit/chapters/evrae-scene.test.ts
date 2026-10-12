@@ -374,7 +374,10 @@ describe('FFX only [AGENTS.md rule 14]', () => {
   const FAYTH_SKIN = 'exp-fayth-skin.ts';
   /** Its camera (phase 4b: FFX's own battle camera on a dev server) reads the same director's current range and shift to play Pull back and Move in; FFX only, reached only from the deck above. */
   const FAYTH_CAMERA = 'exp-fayth-camera.ts';
-  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK || f === FAYTH_SKIN || f === FAYTH_CAMERA);
+  /** The website's version (phase 6: the painted skin with the table camera) and the world both cameras read use the same director's range, shift and actors; FFX only, reached only from the deck above. */
+  const FAYTH_TABLE = 'exp-fayth-table.ts';
+  const FAYTH_WORLD = 'exp-fayth-world.ts';
+  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK || f === FAYTH_SKIN || f === FAYTH_CAMERA || f === FAYTH_TABLE || f === FAYTH_WORLD);
 
   it('the scene files import nothing from FFX-2', () => {
     expect(mine.length).toBeGreaterThanOrEqual(7);
@@ -387,8 +390,8 @@ describe('FFX only [AGENTS.md rule 14]', () => {
     }
   });
 
-  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception, and the Fayth chapter’s deck, its skins and its camera the others)', () => {
-    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts' && x !== FAYTH_DECK && x !== FAYTH_SKIN && x !== FAYTH_CAMERA)) {
+  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception, and the Fayth chapter’s deck, its skins, its cameras and the world they read the others)', () => {
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts' && x !== FAYTH_DECK && x !== FAYTH_SKIN && x !== FAYTH_CAMERA && x !== FAYTH_TABLE && x !== FAYTH_WORLD)) {
       expect(readFileSync(`${dir}${f}`, 'utf8'), f).not.toMatch(/evrae-airship/);
     }
   });

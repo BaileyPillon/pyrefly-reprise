@@ -2,17 +2,19 @@
 /**
  * **The hidden Fayth chapter's scene, built for real** (`src/scenes/exp-fayth-deck.ts`; FFX only): the Fahrenheit's deck over Chapter VIII's plate, publishing the stub shot director.
  *
+ * **Since the website's table camera (phase 6) the default scene is the painted skin at FFX's staging with the table director**; phase 1's scene (Chapter VIII's deck with the stub director) is `?skin=classic`.
+ *
  * `loadScene` runs the real `SceneFactory` and the real `fromSceneBuild` under jsdom (a no-op 2D context and an art manifest that lists no backdrops, so the loader goes straight to the placeholder
  * plate, no image decode, no network: the shape of `leblanc-scene.test.ts`), and the test reads what the battle stage is handed. What it pins:
  *
- * 1. **The director reaches the stage**: `LoadedScene.slots.shotDirector` is the stub (`SceneStaging.shotDirector` through `stagingOf`), which is where `PaintedStage` reads it.
+ * 1. **The director reaches the stage**: `LoadedScene.slots.shotDirector` is the table camera's (`SceneStaging.shotDirector` through `stagingOf`), which is where `PaintedStage` reads it; with `?skin=classic` it is the stub.
  * 2. **No other scene publishes one**: Chapter VIII's own deck and Sin's two plates carry none, so every other chapter's camera is exactly what it was.
  * 3. **It is Chapter VIII's deck otherwise**: the same slots, heights and pins, the same NEAR / FAR range director on the scene (the airship mechanic is inherited), the same palette.
  *
  * What the scene looks like is not under test here (the browser pass is).
  */
 import { PerspectiveCamera } from 'three';
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { STUB_SHOT_DIRECTOR } from '../../../src/engine/ffxcam/stubDirector.ts';
@@ -62,13 +64,27 @@ afterAll(() => {
   vi.restoreAllMocks();
 });
 
+const query = (q: string): void => window.history.replaceState({}, '', `/${q}`);
+
 describe('exp-fayth-deck, built through loadScene', () => {
-  it('is a real scene whose staging carries the stub director, the one the battle stage reads', async () => {
+  afterEach(() => query(''));
+
+  it('is a real scene whose staging carries the table director (every beat has a handler), the one the battle stage reads', async () => {
     const scene = await stage('exp-fayth-deck');
     expect(scene.key).toBe('exp-fayth-deck');
     expect(scene.placeholder).toBe(false);
-    expect(scene.slots.shotDirector).toBe(STUB_SHOT_DIRECTOR);
+    expect(scene.slots.shotDirector).toBeDefined();
+    expect(scene.slots.shotDirector).not.toBe(STUB_SHOT_DIRECTOR);
+    for (const beat of ['battleStart', 'turnStart', 'actionOpen', 'impact', 'actionClose', 'overdriveStart', 'overdriveEnd', 'telegraph', 'formChange', 'victory'] as const) expect(typeof scene.slots.shotDirector![beat], beat).toBe('function');
+    expect(scene.slots.sideFacing).toEqual({ party: -1, enemy: 1 }); // the painted skin at FFX's staging
     expect(() => scene.update(0.016)).not.toThrow();
+  }, 60_000);
+
+  it("?skin=classic is phase 1's scene: its staging carries the stub director", async () => {
+    query('?skin=classic');
+    const scene = await stage('exp-fayth-deck');
+    expect(scene.slots.shotDirector).toBe(STUB_SHOT_DIRECTOR);
+    expect(scene.slots.sideFacing).toBeUndefined();
   }, 60_000);
 
   it('no other scene publishes a director: Chapter VIII\'s deck and both of Sin\'s plates carry none', async () => {
@@ -79,7 +95,8 @@ describe('exp-fayth-deck, built through loadScene', () => {
     }
   }, 60_000);
 
-  it('is Chapter VIII\'s deck otherwise: the same slots, heights and pins, the same palette, and the NEAR / FAR range director on the scene', async () => {
+  it("?skin=classic is Chapter VIII's deck otherwise: the same slots, heights and pins, the same palette, and the NEAR / FAR range director on the scene", async () => {
+    query('?skin=classic');
     const fayth = await stage('exp-fayth-deck');
     const evrae = await stage('evrae-airship-deck');
     const { shotDirector: _director, ...rest } = fayth.slots;
@@ -90,5 +107,18 @@ describe('exp-fayth-deck, built through loadScene', () => {
     expect(airshipRangeDirectorOf(fayth.scene), 'the airship mechanic is inherited').not.toBeNull();
     expect(airshipRangeDirectorOf(fayth.scene)).not.toBe(airshipRangeDirectorOf(evrae.scene)); // its own director, per scene
     expect(fayth.battleCamera.rigName).toBe(evrae.battleCamera.rigName);
+  }, 60_000);
+
+  it("the default scene is Chapter VIII's deck too, at FFX's staging: the same heights, pins and palette, Evrae and the party moved to FFX's spots, the range director staged with them", async () => {
+    const fayth = await stage('exp-fayth-deck');
+    const evrae = await stage('evrae-airship-deck');
+    const { shotDirector: _director, ...rest } = fayth.slots;
+    expect(rest.holdParty).toBe(true);
+    expect(rest.partyHeight).toBe(evrae.slots.partyHeight);
+    expect(rest.enemyHeight).toBe(evrae.slots.enemyHeight);
+    expect(Object.keys(rest.enemySpots ?? {}).sort()).toEqual(['cid', 'evrae']);
+    expect(rest.party).not.toEqual(evrae.slots.party); // FFX's slots, not Chapter VIII's
+    expect(fayth.palette).toEqual(evrae.palette); // the painted palette: the website's version is the painted skin
+    expect(airshipRangeDirectorOf(fayth.scene)!.staging, 'the range director plays FFX\'s NEAR and FAR spots').not.toBeNull();
   }, 60_000);
 });

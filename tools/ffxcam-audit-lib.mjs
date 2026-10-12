@@ -49,6 +49,7 @@ export function openActions(beats) {
 /** One record into per-frame verdicts. */
 export function analyse(rec, file = '', seen = SEEN_MIN) {
   const IDS = rec.cfg?.ids ?? DEFAULT_IDS;
+  const whole = rec.cfg?.wholeFight ? new Set(rec.cfg.wholeFight) : DEFAULT_VIEW_PROGRAMS; // the table camera's record names its own whole-fight shots
   const C = layout(IDS.length);
   const opens = openActions(rec.beats);
   const frames = rec.frames;
@@ -66,7 +67,7 @@ export function analyse(rec, file = '', seen = SEEN_MIN) {
       frac[id] = f[C.fr + 2 * k];
       app[id] = f[C.fr + 2 * k + 1];
     });
-    const defaultRule = !open || DEFAULT_VIEW_PROGRAMS.has(program);
+    const defaultRule = !open || whole.has(program);
     const asked = defaultRule ? IDS : [open.actor, ...open.targets];
     const subjects = asked.filter((id) => IDS.includes(id) && frac[id] >= 0);
     const best = subjects.length ? Math.max(...subjects.map((id) => frac[id])) : null;

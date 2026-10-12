@@ -59,6 +59,14 @@ describe('the verdict of a frame', () => {
     expect(DEFAULT_VIEW_PROGRAMS.has(DEFAULT)).toBe(true);
   });
 
+  it('the website\'s table camera names its own whole-fight shots in the record (`cfg.wholeFight`), and the default-view rule follows them, not the programs\' ids', () => {
+    // only Rikku is in frame in each: the whole party counts for a default view, only the actor and its target (Tidus and Evrae) for an action's shot
+    const rec: AuditRecord = { seed: 1, cfg: { ids: IDS, wholeFight: ['d002', 'c001'] }, programs: ['d002', 'a009', DEFAULT], beats, frames: [row(0, 0, 0, [0, 0, 0.5, 0]), row(16, 1, 0, [0, 0, 0.5, 0]), row(32, 2, 0, [0, 0, 0.5, 0])] };
+    const rows = analyse(rec);
+    expect(rows.map((r) => r.rule)).toEqual(['default', 'action', 'action']); // a table default view, an action's shot, and a program id the table does not know
+    expect(rows.map((r) => r.lost)).toEqual([false, true, true]);
+  });
+
   it('with no action open (a turn start) the default rule holds even for another program', () => {
     const rec = record([beat('turnStart', 'tidus')], [row(0, 1, 0, [0, 0, 0, 0.4])]);
     expect(analyse(rec)[0]?.rule).toBe('default');

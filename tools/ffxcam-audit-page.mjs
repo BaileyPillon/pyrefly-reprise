@@ -3,7 +3,7 @@
  * self-contained (no closure over Node scope) and records, every rendered frame, what the camera showed and where every figure stood, so the report is computed afterwards in Node
  * (`tools/ffxcam-audit-report.mjs`) and can be recomputed with other thresholds, or replayed through the safety net, without playing the fight again.
  *
- * It reads only what the dev page already holds: the `__ffxcam` debug handle (the director, the pose latch), the battle's actors (the scene's children, named by combatant id, each carrying its model
+ * It reads only what the dev page already holds: the `__ffxcam` debug handle (FFX's programs: the director, the pose latch) or the `__ffxtable` one (the website's table camera), the battle's actors (the scene's children, named by combatant id, each carrying its model
  * under `inner`) and the lens. It imports the one in-frame definition from the game's own source (`src/engine/ffxcam/framing.ts`, served by the dev server) so the audit and the safety net can never
  * disagree about what "in frame" means. No retail data is here: the harness runs against Bailey's local models and camera folder and writes its records to `D:\Tools\ffx-parity\shots\tracking\`.
  *
@@ -18,11 +18,47 @@ export async function installAudit(cfg) {
   const framing = await import('/src/engine/ffxcam/framing.ts');
   const world = await import('/src/engine/ffx3d/ffxWorld.ts');
   const K = world.FFX_UNIT;
-  const h = globalThis.__ffxcam;
-  const vm = h.camera.director.vm;
-  const latch = h.latch;
-  const scene = window.__pyrefly.battle().scene.scene;
+  /**
+   * The stub scene's camera as a handle the sampler can read (`cfg.stub`: the scene the chapter had before the table camera, `?skin=classic`: Chapter VIII's camera, which the presenter's own shot grammar moves). There is
+   * no director and no latch: the pose is read off the three.js camera each frame, in FFX's frame (the eye, a look-at 100 units ahead, the roll of its up vector against the horizon, its field of view), and the
+   * beats are the stub shot director's, wrapped by the sampler like any other.
+   */
+  function stubHandle(loaded, V, K) {
+    const cam = loaded.battleCamera.camera;
+    const frame = { n: 0 };
+    const toFfx = (v) => [v.x / K, -v.y / K, -v.z / K];
+    const f = new V();
+    const q = new V();
+    return {
+      camera: { shotDirector: loaded.slots.shotDirector, net: null, director: { get steps() { return frame.n; }, programId: undefined, vm: null } }, // the "steps" are the sampled frames
+      net: null,
+      target: () => cam,
+      latch: {
+        get shown() {
+          frame.n++; // read once per sampled frame
+          cam.updateMatrixWorld();
+          cam.getWorldDirection(f);
+          const pos = cam.getWorldPosition(q.clone());
+          const up = new V(0, 1, 0).applyQuaternion(cam.quaternion);
+          const flat = new V(0, 1, 0).addScaledVector(f, -f.y).normalize();
+          const roll = Math.atan2(flat.clone().cross(up).dot(f), flat.dot(up));
+          return { eye: toFfx(pos), ref: toFfx(pos.clone().addScaledVector(f, 100 * K)), roll, fovDeg: cam.fov };
+        },
+      },
+    };
+  }
+  const loaded = window.__pyrefly.battle().scene;
+  const scene = loaded.scene;
   const V = scene.position.constructor;
+  const stub = cfg.stub === true;
+  const h = stub ? stubHandle(loaded, V, K) : (globalThis.__ffxcam ?? globalThis.__ffxtable); // FFX's programs (`__ffxcam`), the website's table camera (`__ffxtable`), or the stub scene's own camera (`cfg.stub`)
+  const dir = h.camera.director;
+  const vm = dir.vm ?? null; // null for the table camera and the stub
+  const latch = h.latch;
+  if (!vm && !stub) {
+    const [{ EVRAE_SHOTS }, { TableDirector }] = await Promise.all([import('/src/data/ffx/camera/evrae-shots.ts'), import('/src/engine/ffxcam/tableDirector.ts')]);
+    cfg.wholeFight = [...TableDirector.wholeFightShots(EVRAE_SHOTS)]; // the shots that are views of the whole fight (the report's default rule)
+  }
 
   const A = (window.__audit = {
     cfg,
@@ -54,7 +90,7 @@ export async function installAudit(cfg) {
 
   // ---- beats: wrap the camera's shot director so each beat is logged with its actor and targets
   const sd = h.camera.shotDirector;
-  const stepNow = () => vm.steps;
+  const stepNow = () => dir.steps;
   for (const beat of ['battleStart', 'turnStart', 'actionOpen', 'impact', 'actionClose', 'overdriveStart', 'overdriveEnd', 'telegraph', 'formChange', 'victory']) {
     const orig = sd[beat];
     sd[beat] = (ctx) => {
@@ -64,22 +100,30 @@ export async function installAudit(cfg) {
     };
   }
 
-  // ---- program starts, with the request that caused each (a camReq tail call has none)
-  let lastReq = null;
-  const origRequest = vm.request.bind(vm);
-  vm.request = (req) => {
-    lastReq = { tags: [...req.tags], command: req.command ?? null };
-    try {
-      return origRequest(req);
-    } finally {
-      lastReq = null;
-    }
-  };
-  const origStart = vm.start.bind(vm);
-  vm.start = (program) => {
-    A.starts.push({ t: Math.round(performance.now()), step: stepNow(), program: program.id, req: lastReq, beat: A.beats.length - 1 });
-    return origStart(program);
-  };
+  // ---- program starts, with the request that caused each (a camReq tail call has none); the table camera's are its shot starts, with the beat that asked
+  if (vm) {
+    let lastReq = null;
+    const origRequest = vm.request.bind(vm);
+    vm.request = (req) => {
+      lastReq = { tags: [...req.tags], command: req.command ?? null };
+      try {
+        return origRequest(req);
+      } finally {
+        lastReq = null;
+      }
+    };
+    const origStart = vm.start.bind(vm);
+    vm.start = (program) => {
+      A.starts.push({ t: Math.round(performance.now()), step: stepNow(), program: program.id, req: lastReq, beat: A.beats.length - 1 });
+      return origStart(program);
+    };
+  } else if (!stub) {
+    const origStart = dir.start.bind(dir);
+    dir.start = (id, why) => {
+      A.starts.push({ t: Math.round(performance.now()), step: stepNow(), program: id, req: { why }, beat: A.beats.length - 1 });
+      return origStart(id, why);
+    };
+  }
 
   // ---- the figures' boxes (the animated model, every vertex), cached between samples
   const cache = new Map();
@@ -189,12 +233,12 @@ export async function installAudit(cfg) {
         A.xcheck.samples++;
         A.xcheck.sum += d;
         if (d > A.xcheck.maxDiff) A.xcheck.maxDiff = d;
-        if (d > 0.05 && A.xcheck.bad.length < 40) A.xcheck.bad.push({ frame: A.frameNo, id: ids[q], ours: +framing.visibleFraction(shown, b.ffx, cam.aspect).toFixed(3), camera: +fractionThroughCamera(cam, b.world, framing.LATTICE).toFixed(3), steps: vm.steps, eye: shown.eye.map((n) => +n.toFixed(2)), camPos: cam.position.toArray().map((n) => +n.toFixed(3)), view: !!cam.view?.enabled, boxAge: A.frameNo % cfg.boxEvery });
+        if (d > 0.05 && A.xcheck.bad.length < 40) A.xcheck.bad.push({ frame: A.frameNo, id: ids[q], ours: +framing.visibleFraction(shown, b.ffx, cam.aspect).toFixed(3), camera: +fractionThroughCamera(cam, b.world, framing.LATTICE).toFixed(3), steps: dir.steps, eye: shown.eye.map((n) => +n.toFixed(2)), camPos: cam.position.toArray().map((n) => +n.toFixed(3)), view: !!cam.view?.enabled, boxAge: A.frameNo % cfg.boxEvery });
       }
     }
     const netState = { idle: 0, in: 1, hold: 2, out: 3 }[A.net?.state ?? 'idle'] ?? 0;
     const range = window.__pyrefly.battleState()?.flags?.['airship.range'] === 'far' ? 1 : 0;
-    const row = [A.frameNo, Math.round(performance.now()), vm.steps, intern(vm.programId ?? '-'), A.beats.length - 1, ...fr, ...shown.eye.map((n) => +n.toFixed(2)), ...shown.ref.map((n) => +n.toFixed(2)), +shown.roll.toFixed(4), +shown.fovDeg.toFixed(3), ...boxes, netState, range];
+    const row = [A.frameNo, Math.round(performance.now()), dir.steps, intern(dir.programId ?? '-'), A.beats.length - 1, ...fr, ...shown.eye.map((n) => +n.toFixed(2)), ...shown.ref.map((n) => +n.toFixed(2)), +shown.roll.toFixed(4), +shown.fovDeg.toFixed(3), ...boxes, netState, range];
     if (cfg.keepFrames) A.frames.push(row);
   };
 
@@ -210,7 +254,8 @@ export async function installAudit(cfg) {
       if (A.beats.length > 0 && cfg.sample !== false) sample();
       const state = window.__pyrefly.battleState();
       if (state?.outcome && A.outcome === null) A.outcome = state.outcome;
-      if (!globalThis.__ffxcam || globalThis.__ffxcam.camera !== h.camera) {
+      const live = stub ? h : (globalThis.__ffxcam ?? globalThis.__ffxtable);
+      if (stub ? !window.__pyrefly.battle()?.scene : !live || live.camera !== h.camera) {
         A.finished = true;
         return;
       }

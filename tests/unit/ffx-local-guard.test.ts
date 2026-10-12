@@ -300,16 +300,28 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
     expect(importersOf('exp-fayth-skin').sort()).toEqual(['src/scenes/exp-fayth-camera.ts', 'src/scenes/exp-fayth-deck.ts']);
   });
 
-  it('the deck scene imports both with import(), inside the import.meta.env.DEV branch, and statically imports neither', () => {
+  it("the deck scene imports the skin and the camera glue with import(), inside the import.meta.env.DEV branch, and the website's table scene with import() after it; none is a static import", () => {
     const deck = read('src', 'scenes', 'exp-fayth-deck.ts');
-    expect(deck).not.toMatch(/^import [^\n]*exp-fayth-(skin|camera)\.ts/m);
+    expect(deck).not.toMatch(/^import [^\n]*exp-fayth-(skin|camera|table)\.ts/m);
     const dev = deck.indexOf('if (import.meta.env.DEV) {');
     expect(dev).toBeGreaterThan(0);
     const skin = deck.indexOf("await import('./exp-fayth-skin.ts')");
     const camera = deck.indexOf("await import('./exp-fayth-camera.ts')");
+    const table = deck.lastIndexOf("await import('./exp-fayth-table.ts')");
     expect(skin).toBeGreaterThan(dev);
     expect(camera).toBeGreaterThan(dev);
-    expect(deck.indexOf('return build;')).toBeGreaterThan(camera); // the branch is closed by the plain return: a production build drops it whole
+    // the branch's closing brace: the production path (the table scene, with no condition) comes after it, so a production build drops the branch whole and keeps the table
+    let depth = 0;
+    let end = -1;
+    for (let i = deck.indexOf('{', dev); i < deck.length; i++) {
+      if (deck[i] === '{') depth++;
+      else if (deck[i] === '}' && --depth === 0) {
+        end = i;
+        break;
+      }
+    }
+    expect(end).toBeGreaterThan(camera);
+    expect(table).toBeGreaterThan(end);
   });
 
   it('the motion, sky and material-state modules are reached only from the skin glue and the ffx3d folder, so they inherit the dev gate (the files they read are retail data: rule 8)', () => {
@@ -326,7 +338,7 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
     expect(read('src', 'engine', 'ffx3d', 'ffxSky.ts')).toContain('export async function loadSkyAssets(manifest: FfxLocalManifest');
   });
 
-  it('the tracking modules (in-frame arithmetic, safety net, shot subjects, FAR fit, extents, live model box) are reached only from the camera folder, the models and the camera glue, so they inherit the dev gate', () => {
+  it("the modules that hold FFX's own numbers or run its programs (the FAR fit, the extents, the VM and its book, solver, host, loader) are reached only from the programs' side; the website's scene and the table camera import none of them as values", () => {
     const inFolder = (f: string): boolean => f.startsWith('src/engine/ffxcam/');
     /** The files under src/ that import `./stem.ts` (a sibling in the camera folder) or `.../ffxcam/stem.ts` (from outside it). */
     const importers = (stem: string): string[] => {
@@ -336,15 +348,26 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
         .filter((src) => (inFolder(src.path) && sibling.test(src.text)) || outside.test(src.text))
         .map((src) => src.path);
     };
-    const CAM = 'src/engine/ffxcam/faythCamera.ts';
-    expect(importers('safetyNet')).toEqual([CAM]);
-    expect(importers('shotSubjects')).toEqual([CAM]);
-    expect(importers('farFit')).toEqual([CAM]);
-    expect(importers('framing').sort()).toEqual([CAM, 'src/engine/ffxcam/frames.ts', 'src/engine/ffxcam/safetyNet.ts']);
+    // what is shared and numbers only (the net, whom a shot is for) is reached from the shared camera core
+    expect(importers('shotSubjects')).toEqual(['src/engine/ffxcam/cameraCore.ts']);
+    expect(importers('safetyNet').sort()).toEqual(['src/engine/ffxcam/cameraCore.ts', 'src/engine/ffxcam/faythCamera.ts', 'src/engine/ffxcam/tableCamera.ts']);
+    // what is the programs' side: the FAR fit by the programs' camera alone, the extents by the data's shapes and the loader
+    expect(importers('farFit')).toEqual(['src/engine/ffxcam/faythCamera.ts']);
     expect(importers('extents').sort()).toEqual(['src/engine/ffxcam/book.ts', 'src/engine/ffxcam/frames.ts', 'src/engine/ffxcam/load.ts']);
-    // nothing outside the camera folder reaches them but the models (the live box) and the glue: the modules sit behind the dev-gated imports
-    expect(importersOf('modelBox').sort()).toEqual(['src/engine/ffx3d/models.ts', 'src/scenes/exp-fayth-camera.ts']);
-    for (const stem of ['safetyNet', 'shotSubjects', 'farFit', 'framing', 'extents']) expect(importers(stem).filter((f) => !inFolder(f)), stem).toEqual([]);
+    expect(importers('director')).toEqual(['src/engine/ffxcam/faythCamera.ts']);
+    expect(importers('load')).toEqual(['src/scenes/exp-fayth-camera.ts']);
+    expect(importersOf('modelBox').sort()).toEqual(['src/engine/ffx3d/models.ts', 'src/scenes/exp-fayth-world.ts']); // the live box of a model: the `ffx` skin's (the world module names its type only)
+    // and the website's side imports none of the programs' side as a value (a type import is erased by the build)
+    const PROGRAMS_SIDE = ['vm', 'director', 'book', 'load', 'formation', 'calls', 'ir', 'recipe', 'extents', 'farFit', 'faythCamera', 'solver', 'stepper'];
+    const SITE = ['src/engine/ffxcam/tableDirector.ts', 'src/engine/ffxcam/tableCamera.ts', 'src/engine/ffxcam/cameraCore.ts', 'src/engine/ffxcam/plateFit.ts', 'src/engine/ffxcam/plate.ts', 'src/engine/ffxcam/safetyNet.ts', 'src/engine/ffxcam/shotSubjects.ts', 'src/engine/ffxcam/framing.ts', 'src/engine/ffxcam/frames.ts', 'src/engine/ffxcam/variant.ts', 'src/engine/ffxcam/latch.ts', 'src/engine/ffxcam/sink.ts', 'src/engine/ffxcam/roster.ts', 'src/scenes/exp-fayth-table.ts', 'src/scenes/exp-fayth-stage.ts', 'src/scenes/exp-fayth-world.ts', 'src/data/ffx/camera/evrae-shots.ts', 'src/data/ffx/camera/shotTypes.ts'];
+    for (const file of SITE) {
+      const src = allSources().find((s) => s.path === file);
+      expect(src, file).toBeDefined();
+      for (const m of src!.text.matchAll(/^import\s+(?!type\b)[\s\S]*?from\s+'([^']+)'/gm)) {
+        const stem = m[1]!.split('/').pop()!.replace(/\.ts$/, '');
+        expect(PROGRAMS_SIDE.includes(stem), `${file} imports ${m[1]} as a value`).toBe(false);
+      }
+    }
   });
 
   it("the camera loader is imported by the glue alone, and checks DEV before it fetches (the data is Bailey's transcription of FFX's scripts: rule 8)", () => {
