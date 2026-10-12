@@ -79,6 +79,10 @@ export const YUNALESCA_DOC: GuideDoc = {
     },
     {
       t: 'p',
+      text: "One catch: don't Haste a Reflecting character. Hastega, Slowga and the Nul spells bounce off Reflect, so a Hastega cast through it lands on Yunalesca. Haste the party first, then raise Reflect.",
+    },
+    {
+      t: 'p',
       text: 'Armour that blocks Silence, Darkness and Confuse is good, but think twice about blocking Zombie: you want at least one character to keep it.',
     },
     { t: 'list', label: 'Steal', items: ['Stamina Tablet (common)', 'Farplane Wind (rare)'] },

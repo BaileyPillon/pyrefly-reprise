@@ -73,8 +73,8 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Hastega'] },
-      text: 'Haste buys the turns the Holy Water rhythm needs: cure, heal, and still be standing when the next Hellbiter lands',
-      cite: 'ffx-yunalesca §10.2, §6',
+      text: 'Haste buys the turns the Holy Water rhythm needs: cure, heal, and still be standing when the next Hellbiter lands. Cast it before Reflect goes up, never through it: do not Haste a Reflecting character',
+      cite: 'ffx-yunalesca §10.2, §6; re-ffx-targeting (Hastega bounces off Reflect)',
     },
     {
       when: { labels: ['Defend'] },
