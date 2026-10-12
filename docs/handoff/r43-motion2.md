@@ -3,7 +3,7 @@
 Date 2026-10-12. Written by the r43-motion2 lane for the release driver; branch `r43-motion2` (off `origin/main` 5a4c92b1). No ledger, NOW.md or CHANGELOG was edited here (they are the
 driver's); suggested text is at the end. Nothing was looked at on a screen for Part A: every number below is the REAL `PaintedActor`, the REAL registration rows and the
 harness's own `analyzeSwap` / `figureTrack` / `detectJerks` with `critic/policy.json`'s thresholds, read in vitest at 60 fps (the paintings' own alpha through the harness's
-`decodeMask` where `public/art` is there). Part B (the entrance options page) is not in the game and not on this branch.
+`decodeMask` where `public/art` is there). Part B (the entrance options page) is not in the game and not on this branch: "Boss Entrance Options", https://claude.ai/artifact/JLHSSDGreL9RovYzotsbaU (private), four looks (E-POP, E-FADE, E-RISE, E-PYRE) on Overdrive Sin of Chapter XVIII, three loops each, recorded from a scratch build of this branch with a scratch driver (`tools/zz-entrance-capture.tmp.mjs`, untracked) that hides the boss's actor and plays one look on its own alpha, scale, position, accent glow and dissolve; the page and clips live in the git-ignored `critic/scratch/entrance-options-2026-10-12/`. Nothing of it is built into the game; a pick approves the look only.
 
 **Game case (rule 14).** The charge swap and the fins' registration are **FFX only** (Evrae is Chapter VIII, Sin's fins Chapter XVII; the range director is
 `BattleScreenAirship.ts`'s and its header says FFX only; FFX-2 has no counterpart). The new `PoseSwapOptions.blend` on `PaintedActor.loadPoses` / `adoptPoses` is shared plumbing
