@@ -316,3 +316,28 @@ Switches (dev server): `?ffxnet=off` (no net), `?ffxfar=script` (the script's FA
   - It owns the Ghidra servers (:8089 FFX). Its rules: GET only via curl.exe, no MCP tools, no connect_instance, never start or stop the servers.
   - It owns `D:\Tools\rea` and `ffx-parity\ai\` (read-only for us).
 - **Camera-lab** ("Game perspective mockups"): send it a line when the `BattleMoments` seam lands.
+
+## State at 2026-10-12 00:50 EDT (main session)
+
+- **Head:** `origin/fayth-3d` 581569ae; main session validated tsc clean and 48 files / 766 tests.
+- **Bailey's decisions** (2026-10-11 ~23:05, blanket yes, recorded by the driver as item 57):
+  - the website version is painted B;
+  - it ships via the focused review, then the driver deploys behind "fayth";
+  - Cid's missiles keep the safety net's Evrae shot until the pods are drawn;
+  - the 20-minute real-game session runs only when Bailey says the PC is free.
+- **Usage:** account #3 read 89% weekly at 00:49. The focused review is DEFERRED to fresh allowance, so the driver's release tonight keeps what is left.
+- **NEXT, in order:**
+  1. Merge the driver's next live sha into fayth-3d, then validate.
+  2. Focused review of the production candidate (critic/runner/focused.js; critic-plan says DEEP: focused before, live and deep after). Disclose:
+     - the HUD is laid out for the old rest camera;
+     - Evrae's moves hold the camera;
+     - five shots are left out because the painted sky cannot hold them;
+     - the painted deck reads as a slab in the Pull back's wide frames.
+  3. Ask the driver for the deploy on SHIP.
+  4. Capture prep for the real-game session (an Evrae save, a read-only camera sampler at CAMERA.md 1.4's addresses, a runbook), then the session when Bailey says go.
+  5. Polish:
+     - draw the missile pods (then drop the net's Cid override);
+     - Evrae's height fit;
+     - the HUD against the 3D poses;
+     - an extended painted sky to restore the five left-out shots.
+- **Bailey's launcher:** `D:\Toolsfx-parity\options\play-fayth.cmd` (port 5281; an unchecked comparison page `options\index.html` was left by a stopped agent).
