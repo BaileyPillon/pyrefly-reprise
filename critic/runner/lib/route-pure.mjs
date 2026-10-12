@@ -36,7 +36,21 @@ export const slugOf = (name) => String(name ?? '').toLowerCase().replace(/['’]
  * `roster` is `{ enemyIds, names: { [id]: displayName } }` read from the live
  * battle state; `domIds` are the ids on screen right now (the reticles).
  * Order: exact display name, name plus trailing letter (through the letter
- * rule), then the old slug prefix match (FFX-2 rows and ids that spell the name).
+ * rule), then the id that IS the name's slug, then the one id that starts the
+ * slug or that the slug starts (FFX-2 rows and ids that spell the name).
+ *
+ * PR-0397 (round 25, minor, carried from round 24 and fired in two reviews):
+ * the last step used to take the FIRST id in screen order that began with the
+ * slug or that the slug began with, so "Yuna" (a party member, who is not in
+ * `enemyIds` and so never reaches the display-name step) resolved to
+ * "yunalesca" whenever the boss's reticle came first, and the route spent its
+ * Phoenix Downs on Lady Yunalesca (15, 11 and 8 times in three lost runs of
+ * Chapter II) while `run.json` said the target was "yuna". The id equal to the
+ * slug now wins before any prefix is looked at, and a prefix that fits two
+ * different ids is not a name: the answer is null (unresolved), which
+ * `confirmTarget` records in `targetMismatches` and plays as "confirm what is
+ * lit", never as a guess. Game case: both (shared critic plumbing); the case
+ * that fired it is FFX Chapter II (party ids `yuna`, boss `yunalesca`).
  */
 export function resolveTargetId(name, roster, domIds) {
   const raw = String(name ?? '').trim();
@@ -57,7 +71,10 @@ export function resolveTargetId(name, roster, domIds) {
   }
   const slug = slugOf(raw);
   if (!slug) return null;
-  return domIds.find((id) => id.startsWith(slug) || slug.startsWith(id)) ?? null;
+  const ids = domIds.filter((id) => typeof id === 'string' && id !== '');
+  if (ids.includes(slug)) return slug; // the id that is the name, before any prefix is looked at (PR-0397: "yuna", not "yunalesca")
+  const near = [...new Set(ids.filter((id) => id.startsWith(slug) || slug.startsWith(id)))]; // the same id on a reticle and on a plate is one id
+  return near.length === 1 ? near[0] : null; // two different ids fit: the name does not say which, so it is unresolved, not the first on screen
 }
 
 /** A visible command stack whose rows are all disabled: nothing a player can choose. */
@@ -195,9 +212,41 @@ export const NO_SCRIPTED_CHANGE = Object.freeze(['ffx2-trema']);
 /** Is the route's scripted CHANGE made in `chapterId`? An explicit `--nochange` / `NOCHANGE` always says no. */
 export const scriptedChangeAllowed = (chapterId, nochange) => !nochange && !NO_SCRIPTED_CHANGE.includes(chapterId);
 
-/** The default per-attempt budget of a route, in ms: 15 minutes, and for the one fight that runs past it, Chapter XIII's two links (about 90 minutes of play in round 23's runs), 100 minutes. */
+/**
+ * The default per-attempt budget of a route, in ms: 15 minutes, and for the fights that run past it a budget of their own.
+ *   - PR-0353 (round 23): Chapter XIII's two links (about 90 minutes of play in round 23's runs), 100 minutes. FFX-2 only.
+ *   - PR-0433 (round 25): three FFX fights that were still progressing when the 15 minutes ran out, which the route then called "stalled": Chapter II
+ *     (Lady Yunalesca, three forms; cut at turn 136 with her at 9,104 of 60,000 HP), Chapter III (Braska's Final Aeon; cut at turn 120) and Chapter XVII
+ *     (Sin's fins and core; cut at link 2). Their wins took 16, 32 and 19 minutes with a longer budget on an idle host, and Chapter II took more than 50 minutes
+ *     on a host that was running eight browsers, so 50 minutes: above the longest idle-host win, and still a cap (the stall watchdog in route-fight.mjs ends a
+ *     fight that makes no battle event for two minutes after three recoveries, whatever the budget).
+ * The keys are chapter ids as `route.mjs` takes them. Game case: Chapter XIII FFX-2 only; the three PR-0433 chapters FFX only (shared plumbing, chosen per chapter).
+ */
 export const DEFAULT_BUDGET_MS = 900000;
-export const LONG_FIGHT_BUDGET_MS = Object.freeze({ 'ffx2-trema': 6000000 });
+export const LONG_FIGHT_MS = 3000000;
+export const LONG_FIGHT_BUDGET_MS = Object.freeze({ 'ffx2-trema': 6000000, yunalesca: LONG_FIGHT_MS, 'braskas-final-aeon': LONG_FIGHT_MS, 'sin-fins-core': LONG_FIGHT_MS });
 
 /** The attempt budget for a route: an explicit `--budget` wins, else the chapter's own, else {@link DEFAULT_BUDGET_MS}. */
 export const budgetFor = (chapterId, explicit) => (explicit !== undefined && explicit !== null && explicit !== '' ? Number(explicit) : (LONG_FIGHT_BUDGET_MS[chapterId] ?? DEFAULT_BUDGET_MS));
+
+/**
+ * PR-0450 (d), round 25: the continuity probe is no longer part of the capture route. The capture owner ran `route.mjs --continuity` beside other work and its numbers
+ * disagreed with the dedicated harness's on the same chapter (Chapter I: a head 41.8 percent off and feet 48 px off, at 46 fps and with no pose registration, against
+ * 12.1 percent and 0.8 px at 59.6 fps), so inline numbers are not scored. `continuity.mjs` is the one entry: it passes the registration, runs one chapter after another
+ * alone, and marks the route it starts with `CONT_DEDICATED=1`. A route started any other way with `--continuity` stops before it opens a browser.
+ * @returns {string | null} null when the probe may attach, else the sentence that says why not
+ */
+export function inlineProbeRefusal(args, env) {
+  if (!args || !args.continuity) return null;
+  if (env && env.CONT_DEDICATED === '1') return null;
+  return 'route.mjs --continuity is only for continuity.mjs (PR-0450 d): a probe attached to a capture route reads a loaded host and no pose registration, and its numbers are not scored. '
+    + 'Run the dedicated harness alone on an idle host: PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=<ids>';
+}
+
+/**
+ * The dedicated continuity harness (`continuity.mjs`) gives every chapter 30 minutes, and used to pass that to the route as an explicit `--budget`, so the
+ * long-fight table above never reached it: round 25's Chapter III had 1,733 s of battle inside a 1,800 s cap. It now gives a chapter the longer of the two;
+ * an explicit `--budget` still wins.
+ */
+export const CONTINUITY_BUDGET_MS = 1800000;
+export const continuityBudgetFor = (chapterId, explicit) => (explicit !== undefined && explicit !== null && explicit !== '' ? Number(explicit) : Math.max(CONTINUITY_BUDGET_MS, LONG_FIGHT_BUDGET_MS[chapterId] ?? 0));

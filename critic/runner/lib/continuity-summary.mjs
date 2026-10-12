@@ -12,11 +12,12 @@ const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 /**
  * The chapter's numbers and the two checks' results.
  * @param {Array} swaps  analysed swaps (each `{ ...analyzeSwap, figure, from, to, n, t, atSwapJerk?, counted }`)
- * @param {Array} jerks  detected jerks
+ * @param {Array} jerks  detected jerks, the ones the player can see (r43: a jerk under the Save Sphere's wash is in `coveredJerks`, not here)
+ * @param {Array} [coveredJerks] jerks excused because their step happened under the wash (continuity-wash.mjs): counted and shown, never judged
  * @param {number} battleSeconds seconds a battle was the screen being played (not paused)
  * @param {object} cfg   the policy's `continuity` block
  */
-export function summarize({ swaps, jerks, battleSeconds, cfg }) {
+export function summarize({ swaps, jerks, coveredJerks = [], battleSeconds, cfg }) {
   const counted = swaps.filter((s) => s.counted);
   const minutes = battleSeconds / 60;
   // CHK-026 judges a change of POSE: a swap between two dresspheres or two forms (`costume`) and a swap between two pose names that draw one painting
@@ -65,6 +66,7 @@ export function summarize({ swaps, jerks, battleSeconds, cfg }) {
       heldSwaps: held.length, longestHeldFrames: counted.reduce((m, s) => Math.max(m, s.held ? s.held.frames : 0), 0),
       stagedChanges: new Set(stagedSwaps.map((s) => `${s.figure}|${s.staged.seq}`)).size, stagedSteps: stagedSwaps.length,
       stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length,
+      jerksCovered: coveredJerks.length, worstCoveredJerkPx: round(coveredJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
     },
   };
   return { ...summary, checks: verdicts(summary, cfg) };
@@ -96,8 +98,25 @@ export function verdicts(s, cfg, run = {}) {
   const basis = `${s.size.headRegistration} of ${s.size.headMeasured} measured swaps had a registered head (tolerance ${cfg.size.headTolerancePct} percent); ${s.size.headSilhouette} were read by the figure's mass (tolerance ${cfg.size.headTolerancePctCoarse} percent, whole-figure jumps only); ${s.size.headUnmeasured} had no reading`;
   return {
     'CHK-026': { result: result(size), reasons: unverified.length ? unverified : size, note: basis },
-    'CHK-027': { result: result(motion), reasons: unverified.length ? unverified : motion },
+    'CHK-027': { result: result(motion), reasons: unverified.length ? unverified : motion, ...(s.motion.jerksCovered ? { note: `${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) happened under the Save Sphere's wash and are not counted (continuity.wash in the policy; they are listed in the report)` } : {}) },
   };
+}
+
+/**
+ * The line a report carries for the continuity harness (PR-0450: "a next-round report line per instrument"): how many chapters, how much battle, the frame rates it ran at, how many
+ * chapters the dedicated harness ran (only those are scored: a probe attached to a capture route read a loaded host, round 25), both verdicts with their reasons, and the jerks that
+ * happened under the Save Sphere's wash and were not counted.
+ * @param {{ battleSeconds: number, chapters?: Array<{ fps?: number | null, dedicated?: boolean | null }>, checks: Record<string, { result: string, reasons?: string[] }>, motion?: { jerksCovered?: number, worstCoveredJerkPx?: number } }} s the run's aggregate
+ */
+export function continuityReportLine(s) {
+  const rows = s.chapters ?? [];
+  const fps = rows.map((r) => r.fps).filter((v) => Number.isFinite(v));
+  const fpsText = fps.length ? `${Math.min(...fps)} to ${Math.max(...fps)} fps` : 'frame rate not read';
+  const dedicated = rows.filter((r) => r.dedicated === true).length;
+  const verdict = (c) => (c ? `${c.result}${c.reasons && c.reasons.length ? ` (${c.reasons.join('; ')})` : ''}` : 'not read');
+  const covered = s.motion && s.motion.jerksCovered ? `; ${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) under the Save Sphere's wash are not counted` : '';
+  const unscored = dedicated < rows.length ? `; ${rows.length - dedicated} chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored` : '';
+  return `continuity harness (CHK-026/CHK-027): ${rows.length} chapter(s), ${s.battleSeconds} s of battle, ${fpsText}, ${dedicated} of ${rows.length} run by the dedicated harness; CHK-026 ${verdict(s.checks['CHK-026'])}; CHK-027 ${verdict(s.checks['CHK-027'])}${covered}${unscored}`;
 }
 
 /**
