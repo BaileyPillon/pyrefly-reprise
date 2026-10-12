@@ -21,7 +21,8 @@ import { orderSfxForWarmup, warmSfxViaWorker } from './SfxWarmer.ts';
 import { renderHallImpulse } from './dsp/hall.ts';
 import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
-import { hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
+import { hasPrerenderedMusic, hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
+import { MusicWarmHold } from './MusicWarm.ts';
 import { SfxSprites, type SfxPick } from './SfxSprites.ts';
 import { startSfxSource, type ParityVoice } from './sfxSource.ts';
 import { sfxGame, voiceKey, type SfxGame } from './sfxV2/voicing.ts';
@@ -135,6 +136,8 @@ export class AudioManager {
   private readonly sprites = new SfxSprites();
   /** The parity packs the running chapter asked for, loaded once the context and the manifest exist (`loadParityPacks`). */
   private wantedPacks: readonly string[] = [];
+  /** The cues a chapter run warmed and has not yet played: an eviction leaves them decoded (`warmMusic`, PR-0373). */
+  private readonly warmHold = new MusicWarmHold();
 
   constructor(options: AudioManagerOptions = {}) {
     this.masterVolume = options.masterVolume ?? 0.9;
@@ -367,8 +370,44 @@ export class AudioManager {
     if (this.current) this.fadeOutSlot(this.current, fade);
     this.current = { name, source, gain, ramp };
     // A decoded 90 second cue is ~30 MB of float samples. Keep the one
-    // playing and the one most likely next; let the rest go.
-    this.loader.evict(name, options.upcoming ?? []);
+    // playing and the one most likely next; let the rest go. The likely next
+    // are the ones the caller names, then the ones a chapter run warmed and
+    // has not played yet (PR-0373): without them this start would throw away
+    // the boss and victory cues fetched for it. A cue still on its way, or
+    // that never had a file, is not in the cache and takes no place in it.
+    this.warmHold.played(name);
+    const owed = this.warmHold.keep(name).filter((cue) => this.loader.has(cue));
+    this.loader.evict(name, [...(options.upcoming ?? []), ...owed]);
+  }
+
+  /**
+   * PR-0373: a chapter run starts (its card was just confirmed on the board). Fetch and decode these cues now, in the
+   * order given (scene, boss, victory), so that none waits on a fetch when the run asks for it. Plays nothing and changes
+   * nothing that plays or when. Never awaited, never throws, never blocks input: the pre-rendered manifest is read first,
+   * then each cue is fetched after the one before it. A cue with no rendered file is left alone (synthesising one early
+   * is a render, not a fetch), and with the audio still locked nothing is fetched. The cues are kept decoded until they
+   * are played or the returned function is called when the run ends (see `MusicWarm.ts`). Only the cues it is given.
+   */
+  warmMusic(names: readonly string[]): () => void {
+    const token = this.warmHold.begin(names.filter((name) => hasTrack(name)));
+    void this.fetchWarm(token, names);
+    return () => this.warmHold.release(token);
+  }
+
+  private async fetchWarm(token: number, names: readonly string[]): Promise<void> {
+    const ctx = this.ctx;
+    if (!ctx || this.synthOnly) return;
+    try {
+      await this.loadManifest();
+      for (const name of names) {
+        // A newer run, the end of this one, or a rebuilt context stops the fetching at the next cue.
+        if (!this.warmHold.isCurrent(token) || this.ctx !== ctx) return;
+        if (!hasTrack(name) || !hasPrerenderedMusic(this.manifest, name) || this.loader.has(name)) continue;
+        await this.loader.load(ctx, name).catch(() => undefined);
+      }
+    } catch {
+      /* a warm is a favour to the player, never a failure */
+    }
   }
 
   stopMusic(fade = 0.8): void {
@@ -676,7 +715,7 @@ export class AudioManager {
      * fade — a track can already be `current` while its gain is still near
      * `0.0001` seconds into a fade that was scheduled to take minutes.
      */
-    music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }> };
+    music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }>; held: string[] };
     prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null; retired: number }; parity: { packs: string[]; active: string[]; decoded: string[] } };
     /** The last plays: asked, played, from where (`SfxSprites.ts`); the hookup's proof without ears. */
     sfxLog: SfxSprites['log'];
@@ -693,6 +732,7 @@ export class AudioManager {
       music: {
         current: this.current ? { name: this.current.name, gain: this.current.gain.gain.value } : null,
         fading: this.fading.map((s) => ({ name: s.name, gain: s.gain.gain.value })),
+        held: this.warmHold.held(),
       },
       prerendered: {
         manifest: this.manifest !== null,
