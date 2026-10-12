@@ -170,7 +170,12 @@ describe('the tactic, on the real engine', () => {
     // Soul Spring twice, a Phoenix Down and the Stamina Tonic); the tactic's own order (Soul Spring, Tonic, Three Stars, then the heals)
     // is unchanged, only how many picks fit before Three Stars moved. A window of the test, not a game number; nothing was tuned.
     const picks = picksOn('ffx2-cloister-trema', 24, FFX2_TREMA.buildRef as FFX2PartyBuild);
-    expect(picks.find((p) => p.actor === 'rikku')?.id).toBe('x2-soul-spring');
+    // Game RNG streams (re-parity RC4 base, FFX-2 only): on seed 1 Trema's opening now knocks Yuna down before Rikku's first turn, so her first pick
+    // is the Phoenix Down that raises her (the tactic's own first rule) and the Soul Spring is the pick after it. The tactic's order is unchanged:
+    // her first pick that is not that revive is the Soul Spring, and it comes before Three Stars. A seed's story, not a game number.
+    const rikku = picks.filter((p) => p.actor === 'rikku').map((p) => p.id);
+    expect(rikku.find((id) => id !== 'x2-alchemist-stash-phoenix-down')).toBe('x2-soul-spring');
+    expect(rikku.indexOf('x2-soul-spring')).toBeLessThan(rikku.indexOf('x2-three-stars'));
     expect(picks.some((p) => p.id === 'x2-three-stars')).toBe(true);
     expect(picks.some((p) => p.id === 'x2-gunner-target-mp')).toBe(false);
     expect(picks.some((p) => p.id === 'x2-dark-knight-darkness')).toBe(true);

@@ -1438,7 +1438,6 @@
   ],
   "v2:magic-charge-x2@0.7+-#510": [
    "ability:imp:paragon-os-dispel",
-   "ability:imp:paragon-os-final-impact",
    "ability:imp:trema-waning-moon",
    "ability:imp:x2-alchemist-chemist",
    "ability:imp:x2-alchemist-elementalist",
@@ -1544,7 +1543,6 @@
    "ability:imp:x2-white-mage-lv2",
    "ability:imp:x2-white-mage-lv3",
    "ability:yuna:paragon-os-dispel",
-   "ability:yuna:paragon-os-final-impact",
    "ability:yuna:trema-waning-moon",
    "ability:yuna:x2-alchemist-chemist",
    "ability:yuna:x2-alchemist-elementalist",
@@ -2031,6 +2029,8 @@
   "v2:magic-charge-x2@0.7+-#510 v2:hit-gun@0.8+-#890 v2:hit-gun@0.8+-#1080": [
    "ability:yuna:paragon-attack-drain",
    "ability:yuna:paragon-attack-pierce",
+   "ability:yuna:paragon-os-attack",
+   "ability:yuna:paragon-os-final-impact",
    "ability:yuna:trema-dying-star",
    "ability:yuna:trema-falling-leaf",
    "ability:yuna:trema-thundering-wave",
@@ -2108,7 +2108,6 @@
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:hit-gun@0.8+-#890 v2:hit-gun@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270": [
    "ability:yuna:paragon-attack-itchy",
-   "ability:yuna:paragon-os-attack",
    "ability:yuna:x2-machina-maw-anti-magic-shell",
    "ability:yuna:x2-machina-maw-anti-power-shell",
    "ability:yuna:x2-machina-maw-blind-shell",
@@ -2146,6 +2145,8 @@
   "v2:magic-charge-x2@0.7+-#510 v2:hit-heavy-enemy@0.8+-#890 v2:hit-heavy-enemy@0.8+-#1080": [
    "ability:imp:paragon-attack-drain",
    "ability:imp:paragon-attack-pierce",
+   "ability:imp:paragon-os-attack",
+   "ability:imp:paragon-os-final-impact",
    "ability:imp:trema-dying-star",
    "ability:imp:trema-falling-leaf",
    "ability:imp:trema-thundering-wave",
@@ -2223,7 +2224,6 @@
   ],
   "v2:magic-charge-x2@0.7+-#510 v2:hit-heavy-enemy@0.8+-#890 v2:hit-heavy-enemy@0.8+-#1080 v2:debuff-generic-x2@0.5+-#1270": [
    "ability:imp:paragon-attack-itchy",
-   "ability:imp:paragon-os-attack",
    "ability:imp:x2-machina-maw-anti-magic-shell",
    "ability:imp:x2-machina-maw-anti-power-shell",
    "ability:imp:x2-machina-maw-blind-shell",

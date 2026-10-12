@@ -13,6 +13,13 @@
  *
  * The second half pins the mixer: with no pack, `playSfx` with the new options does what it does without them.
  *
+ * Four FFX-2 scenarios were moved by hand in the golden when the re-parity RC3 data came in (`r42-rc`, FFX-2 only; reason
+ * "game-code parity", `docs/handoff/re-parity-rc3.md` lane b): the Oversoul Paragon's Attack and Final Impact, by the party actor
+ * and by a foe. `OVERSOUL_ESTIMATES.attackItchy` is false now (the Attack inflicts nothing, so the debuff cue is gone) and
+ * `finalImpactReducible` is true (Final Impact is physical, so its hits make hit cues). The cause is the ability data, not the
+ * presenter: with those two values put back the old golden passes in full for both games, and the FFX scenarios (1,070) are
+ * untouched. Only those four ids changed group; nothing else in the file was re-recorded.
+ *
  * To re-record after a DELIBERATE change to the presenter's own timing or to a cue choice: check the old tree out
  * into a scratch worktree, copy `helpers/sfxFight.ts` and this file in, run
  * `SFX_PIN_WRITE=<path> node node_modules/vitest/vitest.mjs run tests/unit/audio-sfx-parity-pin.test.ts`, and review
