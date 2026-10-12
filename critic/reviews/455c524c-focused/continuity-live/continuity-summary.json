@@ -1,0 +1,88 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 296.5,
+   "swaps": 358,
+   "snapsPerMinute": 0,
+   "maxHeadJumpPct": 9.5,
+   "maxFeetShiftPx": 0.4,
+   "worstJerkPx": 52,
+   "strips": 19,
+   "worstSwapStrips": [
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-263-paine-critical-ready.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-268-paine-ready-critical.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-259-paine-hurt-critical.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-257-paine-critical-hurt.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-357-paine-follow-idle.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-180-rikku-critical-cast.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-212-rikku-cast-critical.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-354-paine-attack-follow.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-350-paine-od-x2-warrior-armor-break-ready.jpg",
+    "ffx2-bahamut-win-live-fcecfa74/continuity/strips/swap-214-rikku-critical-hurt.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 296.5,
+ "counted": 358,
+ "swaps": 358,
+ "size": {
+  "judged": 358,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 0,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 9.5,
+  "maxHeadJumpPctRegistration": 0.2,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 0.4,
+  "feetOverTolerance": 0,
+  "headMeasured": 358,
+  "headRegistration": 237,
+  "headSilhouette": 121,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 0,
+  "snapsPerMinute": 0,
+  "hardCuts": 0,
+  "hardCutsPerMinute": 0,
+  "ghostSwaps": 358,
+  "ghostFrames": 1388,
+  "worstGhostSeverity": 0.346,
+  "ghostOverFail": 0,
+  "jerks": 63,
+  "worstJerkPx": 52,
+  "jerksOverFail": 6,
+  "lowestIou": 0.123,
+  "maxCentroidShiftPx": 107.1,
+  "heldSwaps": 0,
+  "longestHeldFrames": 0,
+  "stagedChanges": 0,
+  "stagedSteps": 0,
+  "stagedSnapsExcused": 0,
+  "jerksAtStaged": 0
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "237 of 358 measured swaps had a registered head (tolerance 3 percent); 121 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "6 jerk(s) of 40 px or more in one frame (worst 52 px)"
+   ]
+  }
+ },
+ "base": "https://echoesofspira.com/",
+ "date": "2026-10-12T01:11:33.115Z"
+}
