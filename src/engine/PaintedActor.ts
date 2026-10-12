@@ -64,6 +64,15 @@ import { cutoutShadow } from './ShadowCutout.ts';
 /** One painted pose: a URL now, a texture once it has loaded. */
 export type PoseMap = Record<string, string>;
 
+/**
+ * How a replaced pose set reaches a figure that is on screen (r43-motion2, both games; `PaintedActor.loadPoses` and `adoptPoses`).
+ * `blend` is for a set swapped under a figure the player is looking at (the range director's charge painting, a boss in the middle of its
+ * action): see {@link PaintedActor.showPoseSet}. Left out it is what the loader has always done.
+ */
+export interface PoseSwapOptions {
+  blend?: boolean;
+}
+
 /** A pose seen without showing it (`PaintedActor.poseShape`): its painted box in the world, and what its alpha is read from (`motion/Silhouette.ts`). */
 export interface PoseShape {
   corners: [Vector3, Vector3, Vector3, Vector3];
@@ -877,8 +886,10 @@ export class PaintedActor extends Group {
    * Load a `{ pose: url }` map. Every entry resolves — a missing PNG becomes a
    * placeholder with a console warning — so this never rejects.
    */
-  async loadPoses(poses: PoseMap, initial?: string): Promise<void> {
-    const names = Object.keys(poses);
+  async loadPoses(poses: PoseMap, initial?: string, opts?: PoseSwapOptions): Promise<void> {
+    // `blend`: only the paintings that change are loaded, so a plane that shows one of the others goes on showing exactly what it shows
+    const names = Object.keys(poses).filter((n) => !opts?.blend || this.poseUrls[n] !== poses[n]);
+    if (opts?.blend && !names.length) return; // nothing changed
     // One texture per file (r35, D-315): a pose that falls back to idle shares idle's texture
     // instead of uploading the same pixels again, which a 2x master would make four times dearer.
     const byUrl = new Map<string, Promise<PaintedTexture>>();
@@ -897,7 +908,29 @@ export class PaintedActor extends Group {
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
-    if (first) this.setPose(first, { immediate: true, force: true });
+    if (first) this.showPoseSet(first, opts?.blend === true);
+  }
+
+  /**
+   * Put `first` up after a pose set was replaced. By default at once and forced, as the loader always has (a stand-in swapped for the real painting keeps
+   * the pose NAME and changes the texture under it; the range director's range change does it behind the figure's own fade).
+   *
+   * With `blend` (r43-motion2, both games; round 25's three boss cast-to-idle hard cuts): the figure is on screen in the middle of an action, and the
+   * forced cut threw away the pose the presenter had put it in (Evrae's Inhale and each Fin's "Core gathers energy." swap the IDLE slot for the charge
+   * painting while the figure shows `cast`: a whole-silhouette change in one frame, 346 px for the Right Fin). The planes that show a replaced painting
+   * take the new one where they stand (same name, same fade: nothing moves on screen), then `first` comes up through the actor's own blend like every
+   * other pose change. A figure already resting on `first` takes the new painting in place: it is one name, so there is nothing to blend between.
+   */
+  private showPoseSet(first: string, blend: boolean): void {
+    if (!blend) {
+      this.setPose(first, { immediate: true, force: true });
+      return;
+    }
+    this.slots.forEach((slot, i) => {
+      const now = this.poses.get(slot.pose);
+      if (now && slot.painted !== now) this.applyPose(i, slot.pose, now);
+    });
+    this.setPose(first, { force: true });
   }
 
   /**
@@ -909,8 +942,8 @@ export class PaintedActor extends Group {
    * Several names may point at the same {@link PaintedTexture}; that is exactly
    * what a state falling back to `idle` looks like.
    */
-  adoptPoses(poses: Record<string, PaintedTexture>, initial?: string): void {
-    const names = Object.keys(poses);
+  adoptPoses(poses: Record<string, PaintedTexture>, initial?: string, opts?: PoseSwapOptions): void {
+    const names = Object.keys(poses).filter((n) => !opts?.blend || this.poses.get(n) !== poses[n]);
     if (!names.length) return;
     for (const name of names) {
       const tex = poses[name]!;
@@ -921,7 +954,7 @@ export class PaintedActor extends Group {
     this.pickReference();
     this.resize();
     const first = initial ?? (this.poses.has('idle') ? 'idle' : names[0]);
-    if (first) this.setPose(first, { immediate: true, force: true });
+    if (first) this.showPoseSet(first, opts?.blend === true);
   }
 
   /** Re-load one pose from disk; used by the dev hot-swap watcher. */

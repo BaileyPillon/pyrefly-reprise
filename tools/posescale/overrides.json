@@ -28,6 +28,34 @@
   },
   "charge-far": {
    "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
+  },
+  "idle": {
+   "stance": [
+    515,
+    0
+   ],
+   "why": "the canvas middle, like the fin's attack (see its why)"
+  },
+  "idle-near": {
+   "stance": [
+    515,
+    0
+   ],
+   "why": "the canvas middle, like the fin's attack (see its why)"
+  },
+  "attack": {
+   "stance": [
+    515,
+    0
+   ],
+   "why": "Same rule as the Right Fin's attack (r43-motion2): the NEAR paintings share one canvas, registered by construction, so every one stands at its canvas middle and no plane is slid. The hem rule read this fin's attack only 3.5 px off the idle's."
+  },
+  "charge-near": {
+   "stance": [
+    515,
+    0
+   ],
+   "why": "the canvas middle, like the fin's attack (see its why)"
   }
  },
  "sin-right-fin": {
@@ -36,6 +64,34 @@
   },
   "charge-far": {
    "skip": "the far range: the airship director swaps it in and sizes and places it itself (evrae-airship-director.ts)"
+  },
+  "idle": {
+   "stance": [
+    491,
+    0
+   ],
+   "why": "the canvas middle, like the fin's attack (see its why)"
+  },
+  "idle-near": {
+   "stance": [
+    491,
+    0
+   ],
+   "why": "the canvas middle, like the fin's attack (see its why)"
+  },
+  "attack": {
+   "stance": [
+    491,
+    0
+   ],
+   "why": "Sin's fins are no feet-standing figures: each NEAR painting is a warp of the idle on the idle's own canvas (sidecar registrationVsIdle dx 0, dy 0), registered by construction. The hem rule read this attack at x 505 against the idle's 89.5 and slid it 416 px left of where it was painted: idle to attack overlapped 0.12 where the paintings overlap 0.77 (round 25: a 346 px cast-to-idle snap and 36 double images). Every NEAR painting of a fin stands at its canvas middle, so no plane is slid (r43-motion2)."
+  },
+  "charge-near": {
+   "stance": [
+    491,
+    0
+   ],
+   "why": "the canvas middle, like the fin's attack (see its why)"
   }
  },
  "lulu": {
