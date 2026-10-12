@@ -121,7 +121,10 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
     seen = { target, hpBefore: target.hp, last: scope.hitIndex, lastDamage: 0 };
     scope.touched.set(target.id, seen);
   }
-  const holdKo = holdsDeathForHook(target) ? { holdKo: true as const } : {};
+  // The death check waits for the target's LAST hit of the action, whatever the target is (RC5 lane FFX-D; FFX-G02 section 3.12): a hit only clamps HP at 0,
+  // the statuses are copied back, and `abilities.ts#finishTouched` runs the check once the target's hits are in. `seen.lastDamage` below is the overkill
+  // counter's input (this hit's HP value is added before `dealDamage` reads it).
+  const scriptHeld = holdsDeathForHook(target);
 
   const row = options.rowFor?.(target) ?? def; // this target's row: DmgCon and rider (od5); draws nothing
   const targetRt = rtOf(ctx, target.id);
@@ -204,7 +207,7 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
   const newlyDead = step !== undefined && !wasDead && nowDead;
 
   // A revival stands the target up with the hit's restoring amount (half its maximum when the command computes none).
-  // A KO'd Zombie comes back still a Zombie; a revival never reaches an unrevivable target.
+  // A KO clears Zombie (`statuses.ts#SURVIVES_KO`, RC5), so a raised member comes back clean; a revival never reaches an unrevivable target.
   if (revived) {
     skipHp = true;
     if (!isAlive(target) && onField(target)) {
@@ -241,7 +244,9 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
         ...(report.capped ? { capped: true } : {}),
-        ...holdKo,
+        holdKo: true,
+        scriptHeld,
+        actionDamage: seen.lastDamage,
       });
       if (hpAmount > 0) {
         // A physical hit WAKES a sleeper [ffx-combat-core §4.2; the shipped
@@ -286,7 +291,9 @@ export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
         crit,
         hitIndex: scope.hitIndex,
         hitCount: scope.totalHits,
-        ...holdKo,
+        holdKo: true,
+        scriptHeld,
+        actionDamage: seen.lastDamage,
       });
     }
   }

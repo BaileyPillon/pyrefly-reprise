@@ -371,7 +371,7 @@ export function oracle(sit: Situation, opt: OracleOptions = {}): Outcome {
         v.autoLife = false;
         v.dead = false; // revived by the queued Auto-Life; it is not part of the item reactions
         v.hp = Math.max(1, Math.floor(v.maxHp / 4));
-        v.words = { perm: v.words.perm & 2, counters: new Array<number>(13).fill(0), extra: v.words.extra }; // the KO reset keeps Zombie (the engine's reading) and Eject
+        v.words = { perm: 0, counters: new Array<number>(13).fill(0), extra: v.words.extra & 0x100 }; // the KO reset clears Zombie and Scan with the rest (RC5); only the Eject marker stays (the engine's stand-in for the separate ejected flag)
       } else if (stock(0x2006) >= 1) {
         const order = mut === 'phoenix-descends' ? [...sit.members].reverse() : sit.members;
         const holders = [...order].filter((x) => !x.bench).sort((a, b) => (mut === 'phoenix-descends' ? b.slot - a.slot : a.slot - b.slot));
