@@ -1,54 +1,47 @@
 /**
  * Ixion at Djose Temple (the FFX-2 Chapter 3 finale). **FFX-2 only** [AGENTS.md rule 14].
  *
- * Research `research/ffx2-ixion-djose.md` §4.2 `[SinirothX]`, prose matching on the wiki:
+ * **Re-parity AI lane C (2026-10-10): the script is the game's own** (`m166`, read in
+ * `research/re-ffx2-ai-leblanc-den-ixion.md` section 5, rows I1 to I5 of section 8). Three hidden variables, all 0 at
+ * the start: the action counter (AC), the energy flag and the cycle counter. Each poll, in this order:
  *
- * ```
- * Basic pattern:
- * (1) 3/4 Normal Attack, 1/4 Thundara on all characters
- * (2) 3/4 Normal Attack, 1/4 Thundara on all characters
- * (3) Aerospark
- * (4) back to (1)
- * Action Count (AC):
- *   +5 when Ixion performs an attack   (+10 when it is Aerospark)
- *   +5 when Ixion is hit by an attack
- *   AC >= 100:  (1) Recharge
- *               (2) AC = 0 and Thor's Hammer
- * ```
+ * 1. AC at least 100 and the energy flag clear: the flag is set and he uses **Recharge** on himself.
+ * 2. AC at least 100 and the flag set: the flag is cleared, **AC goes to 0** and he uses **Thor's Hammer** on the party.
+ * 3. AC below 100: the cycle counter gains 1. When it reaches 3 it goes back to 0, AC gains 10 and he uses
+ *    **Aerospark** on a living girl.
+ * 4. Otherwise (the counter is 1 or 2): AC gains 5, then `random() % 4`: 0 is **Thundara** on the party, else an
+ *    **Attack** on a living girl. (3 Attack to 1 Thundara; the wiki's 2 to 1 is not what the script does.)
  *
- * - The shape, the counter's increments and "Thor's Hammer is the next action after Recharge" are
- *   `[verified: 2 sources]` / `[verified: 3 sources]`. Recharge and Thor's Hammer are **two consecutive
- *   Ixion actions** (C3), so the party gets its ATB turns in between: that window is the tell.
- * - **F-8 `[conflict]`, settled for the build as 3/4 : 1/4, our estimate** (§4.3): the wiki's 2/3 : 1/3
- *   stays one flag away for the bench, `state.flags.ixionThundaraSplit = 'wiki'`.
- * - **"Hit" (Q4)**: the counter shares Chapter XI's machinery (`./fallen-aeons.ts`): FA8 a, every hostile
- *   action aimed at him, hit or miss, with `fallenAeonsAcTrigger = 'damaged'` as the switch to landed
- *   damage only. The research leans FA8 a for consistency with Chapter XI.
- * - **Unsourced (IX-12), labelled our estimate where a choice is forced:** Recharge and Thor's Hammer add
- *   nothing to the counter (the second zeroes it anyway; Anima's Oblivion precedent); after Thor's Hammer
- *   the cycle **restarts at step 1** (the research's own fallback); multi-hit and chain hits are not a
- *   question here, because the counter hears one notice per party action.
+ * AC is read before the poll's own gain. **Rows 1 and 2 leave the cycle counter alone**, so after the Hammer the cycle
+ * carries on from where it was (our earlier "restart at step 1" was an estimate the script answers). The reaction
+ * entry adds **5 to AC for every result another character applies to him**: each landing strike (a two-hit command
+ * that lands is 10), one for a miss however many strikes it had, one for a no-effect result, a Steal or a status move
+ * included; never his own Recharge, never a tick (`results-tally.ts`, `AiScript.onResults`). It replaces the earlier
+ * "+5 once per party action aimed at him". Hits taken between Recharge and the Hammer are lost with the reset; hits
+ * taken after the Hammer's poll count towards the next cycle. His MP (9,999) is read by nothing: "Recharge" is the
+ * telegraph, not a refill.
+ *
+ * Kept as the earlier build had them: Attack and Aerospark pick a girl uniformly where the game weights by closeness and
+ * facing (needs positions, `script-rolls.ts`); the action time (`DJOSE_ACTION_TIME_SECONDS`, D-269) waits for batch W4.
  */
 
 import type { Command } from '../../common/types.ts';
 import type { AiScript } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
-import { AC, AC_OVERDRIVE, acOf, attackedHooks, bumpAc, randomGirl } from './fallen-aeons.ts';
+import { AC, AC_OVERDRIVE, acOf, bumpAc } from './fallen-aeons.ts';
+import { girls, pickId, scriptMod } from './script-rolls.ts';
 
-/** AI memory: where the basic cycle stands (0, 1, 2 = steps 1, 2, 3). */
+/** AI memory: where the basic cycle stands (0, 1, 2: the counter before this poll's gain; 2 means Aerospark is next). */
 export const IXION_STEP = 'ixionStep';
-/** AI memory: 1 once Recharge has gone off, until Thor's Hammer follows. */
+/** AI memory: the energy flag, 1 once Recharge has gone off, until Thor's Hammer follows. */
 export const IXION_HAMMER_NEXT = 'ixionHammerNext';
 /** The `script-trigger` name emitted as he picks Recharge (the story layer's hook for the tell). */
 export const IXION_RECHARGE_TRIGGER = 'ixion-recharge';
 
-/** The bench flag for F-8's other reading: `'wiki'` is 2/3 : 1/3 (the FF Wiki's prose). */
-export const IXION_SPLIT_FLAG = 'ixionThundaraSplit';
-
-/** +5 per attack, +10 for Aerospark, +5 when attacked (§4.2). */
+/** AC gained by an Attack or a Thundara poll, by an Aerospark poll, and per result he receives (m166.src:100-132). */
 export const IXION_AC_PER_ACTION = 5;
 export const IXION_AC_AEROSPARK = 10;
-export const IXION_AC_WHEN_ATTACKED = 5;
+export const IXION_AC_PER_RESULT = 5;
 
 function use(id: string, targets: string[]): Command {
   return { kind: 'ability', id, targets };
@@ -58,29 +51,31 @@ export const x2IxionScript: AiScript = {
   id: 'x2-ixion',
   decide(ctx) {
     const self = ctx.self;
-    // (2) AC = 0 and Thor's Hammer, the action after Recharge [verified: 3 sources].
-    if (mem(self, IXION_HAMMER_NEXT) === 1) {
+    // Rows 1 and 2: AC read before this poll's own gain. They leave the cycle counter alone.
+    if (acOf(self) >= AC_OVERDRIVE) {
+      if (mem(self, IXION_HAMMER_NEXT) === 0) {
+        setMem(self, IXION_HAMMER_NEXT, 1);
+        ctx.emit({ type: 'script-trigger', name: IXION_RECHARGE_TRIGGER, payload: { who: self.id } });
+        return use('x2-ixion-recharge', []);
+      }
       setMem(self, IXION_HAMMER_NEXT, 0);
       setMem(self, AC, 0);
-      setMem(self, IXION_STEP, 0); // IX-12: restart the cycle at step 1, our estimate
       return use('x2-ixion-thors-hammer', []);
     }
-    // (1) Recharge at AC >= 100; the "Recharge" line is the only warning the game gives.
-    if (acOf(self) >= AC_OVERDRIVE) {
-      setMem(self, IXION_HAMMER_NEXT, 1);
-      ctx.emit({ type: 'script-trigger', name: IXION_RECHARGE_TRIGGER, payload: { who: self.id } });
-      return use('x2-ixion-recharge', []);
-    }
-    const step = mem(self, IXION_STEP);
-    setMem(self, IXION_STEP, (step + 1) % 3);
-    if (step === 2) {
+    // Rows 3 and 4: the cycle counter gains 1 and, at 3, goes back to 0 with the Aerospark.
+    const counter = mem(self, IXION_STEP) + 1;
+    if (counter >= 3) {
+      setMem(self, IXION_STEP, 0);
       bumpAc(self, IXION_AC_AEROSPARK);
-      return use('x2-ixion-aerospark', randomGirl(ctx));
+      return use('x2-ixion-aerospark', pickId(ctx.rng, girls(ctx)));
     }
-    // Steps 1 and 2: F-8. SinirothX 3/4 : 1/4 (our estimate); the wiki 2/3 : 1/3 behind the bench flag.
-    const thundara = ctx.flags[IXION_SPLIT_FLAG] === 'wiki' ? ctx.rng.int(0, 2) === 2 : ctx.rng.int(0, 3) === 3;
+    setMem(self, IXION_STEP, counter);
     bumpAc(self, IXION_AC_PER_ACTION);
-    return thundara ? use('x2-ixion-thundara', []) : use('x2-ixion-attack', randomGirl(ctx));
+    if (scriptMod(ctx.rng, 4) === 0) return use('x2-ixion-thundara', []);
+    return use('x2-ixion-attack', pickId(ctx.rng, girls(ctx)));
   },
-  ...attackedHooks(IXION_AC_WHEN_ATTACKED),
+  /** The reaction entry: +5 to AC for every result another character applies to him. */
+  onResults(ctx, report) {
+    bumpAc(ctx.self, IXION_AC_PER_RESULT * report.count);
+  },
 };

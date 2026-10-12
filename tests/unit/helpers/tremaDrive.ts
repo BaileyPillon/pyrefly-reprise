@@ -21,6 +21,7 @@ import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts'
 import { ffx2Options } from './ffx2ChapterDrive.ts';
 import { fallback, knightTurn, rikkuTurn, units, type LineOptions } from './tremaLines.ts';
 import { nightmareTurn } from './tremaNightmare.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 export { LINES, type LineOptions } from './tremaLines.ts';
 
 export interface LinkRun {
@@ -72,7 +73,7 @@ function summarise(engine: FFX2Engine, outcome: string | undefined, startTicks: 
   return {
     outcome,
     ticks,
-    minutes: ticks / 3000 / 60,
+    minutes: ticks / STEPS_PER_SECOND / 60,
     count: (id) => log.filter((e) => e.type === 'action-start' && (e as { abilityId?: string }).abilityId === id).length,
     blocked: log.filter((e) => e.type === 'message' && /lacks the MP|no MP left/.test((e as { text: string }).text)).length,
     log,

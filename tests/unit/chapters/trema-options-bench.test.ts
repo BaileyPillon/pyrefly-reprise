@@ -32,6 +32,7 @@ import { viaInfinitoNightmareKitBuild } from '../../../src/data/ffx2/builds/via-
 import { CLOISTER_PARAGON_OVERSOUL, CLOISTER_TREMA_ARENA } from '../../../src/data/ffx2/enemies/trema-options.ts';
 import { driveChapter4, driveChapter5, driveChapter6 } from '../helpers/ffx2ChapterDrive.ts';
 import { driveChain as driveFallenAeons, LINES as FA_LINES } from '../helpers/fallenAeonsDrive.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 
 const SEEDS = 200;
 const HUMAN_SEEDS = 40;
@@ -161,7 +162,7 @@ describe('Option 3 (E4), global: Chapters 4, 5, 6 and XI at their intended lines
       const r = drive(seed, decisionMs, { actionTimeSeconds: seconds || undefined, atbMode: topMs !== undefined ? 'wait' : 'active', waitSplit: topMs !== undefined }, undefined, topMs);
       if (r.outcome === 'victory') t.wins += 1;
       if (r.outcome === undefined) t.unfinished += 1;
-      t.minutes += r.ticks / 3000 / 60;
+      t.minutes += r.ticks / STEPS_PER_SECOND / 60;
     }
     return t;
   }
@@ -184,7 +185,7 @@ describe('Option 3 (E4), global: Chapters 4, 5, 6 and XI at their intended lines
         const r = driveFallenAeons(lines, seed, { engine: { actionTimeSeconds: seconds || undefined } });
         if (r.outcome === 'victory') bt.wins += 1;
         if (r.outcome === undefined) bt.unfinished += 1;
-        bt.minutes += r.links.reduce((m, l) => m + l.ticks / 3000 / 60, 0);
+        bt.minutes += r.links.reduce((m, l) => m + l.ticks / STEPS_PER_SECOND / 60, 0);
       }
       grow('Ch11 Fallen Aeons', seconds, 'bench D=0', bt);
       const ht: Tally = { wins: 0, seeds: HUMAN_SEEDS, unfinished: 0, minutes: 0 };
@@ -192,7 +193,7 @@ describe('Option 3 (E4), global: Chapters 4, 5, 6 and XI at their intended lines
         const r = driveFallenAeons(lines, seed, { decisionMs: HUMAN, topMs: 500, engine: { atbMode: 'wait', waitSplit: true, actionTimeSeconds: seconds || undefined } });
         if (r.outcome === 'victory') ht.wins += 1;
         if (r.outcome === undefined) ht.unfinished += 1;
-        ht.minutes += r.links.reduce((m, l) => m + l.ticks / 3000 / 60, 0);
+        ht.minutes += r.links.reduce((m, l) => m + l.ticks / STEPS_PER_SECOND / 60, 0);
       }
       grow('Ch11 Fallen Aeons', seconds, 'human Wait split', ht);
     }

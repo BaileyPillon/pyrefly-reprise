@@ -354,7 +354,10 @@ describe('the real fight through the flow (the intended line, the real engine)',
     const all = await retriesFromOneStanding(5);
     const retries = all.slice(1).flatMap((a) => a.fights);
     expect(retries.length).toBe(5);
-    expect(retries.every((f) => f.outcome === 'defeat' && f.decisions <= 8)).toBe(true);
+    // Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`): "a few menus" was 8. The game's own recovery
+    // after each command (`cost_atb x 10000 / (AGI + 1)`) and the full-tick casts pace one girl alone differently; the five Retries
+    // on their seeds ran 12, 0, 8, 3 and 6 menus, every one still a defeat, which is the round-23 loop this pins.
+    expect(retries.every((f) => f.outcome === 'defeat' && f.decisions <= 12)).toBe(true);
   }, 120000);
 
   it("shipped answer: the same Retries start from three girls on their feet, and one of them wins", async () => {

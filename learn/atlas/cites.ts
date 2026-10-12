@@ -334,8 +334,11 @@ const ABILITY_OVERRIDE_CITES: Record<ListedChapterId, Record<string, string>> = 
   'seymour-omnis': {},
   // Every Chapter XIV ability id is prefixed with its aeon's name and defined in the chapter's own file.
   'isaaru-via-purifico': {},
-  // Every Paragon and Trema ability id is `paragon-`/`trema-`-prefixed (no shared reuse).
-  'ffx2-trema': {},
+  // Every Paragon and Trema ability id is `paragon-`/`trema-`-prefixed, except the Oversoul's Osmose (the MP-0 branch's refill,
+  // the shared party row 0x317b, added to its command list by AI-FFX2-b).
+  'ffx2-trema': {
+    'x2-shared-osmose': 'research/re-ffx2-ai-fallen-trema.md §6.1 (src/data/ffx2/enemies/paragon-oversoul.ts, reusing the shared Osmose)',
+  },
   // Every Chapter XV ability id is `x2-den-`-prefixed and defined in the chapter's own ability file.
   'ffx2-den-of-woe': {},
   // Every Chapter XVI ability id is `x2-ixion-`-prefixed and defined in the chapter's own ability file.

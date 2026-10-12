@@ -26,6 +26,15 @@ const LEG_IMMUNITIES = {
   reflect: 255, // §3.2 — "as Tail plus Reflect"
 };
 
+/**
+ * The Nodes start in three colours (m284 to m286 init): A red (Null Physical), B green, C yellow (Null Magic). The script keeps the
+ * colour from its first poll on (`ai/vegnagun.ts`); the status the colour grants is laid on here so a hit before that first poll meets it.
+ */
+const NODE_START_STATUS: Record<string, EnemyDef['autoStatuses']> = {
+  'node-a': ['null-physical'],
+  'node-c': ['null-magic'],
+};
+
 function node(id: string, name: string, slot: number): EnemyDef {
   return {
     id,
@@ -56,6 +65,7 @@ function node(id: string, name: string, slot: number): EnemyDef {
     immunityFlags: [],
     forms: [{ name, spriteKey: 'vegnagun-node', hp: 300000 }],
     aiScriptId: 'vegnagun-node',
+    ...(NODE_START_STATUS[id] ? { autoStatuses: NODE_START_STATUS[id] } : {}),
     rewards: {
       ap: 10,
       apOverkill: 10,

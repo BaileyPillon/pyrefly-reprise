@@ -71,7 +71,7 @@ export const SIN_CORE_ASSUMPTIONS: ReadonlyArray<{ id: string; claim: string; va
   { id: 'S-15', claim: 'Genais absorbs magic aimed at the Core only while it is OUT of its shell; the script has no absorption in the shell (three secondary sources said otherwise)', value: 'out-of-shell' },
   { id: 'cura-per-hit-event', claim: 'Cura answers every hit event on shelled Genais except the Core\'s Gravija: a miss and a status-only action too; it does not chain (the Cura is a reaction)', value: 'every-event' },
   { id: 'counter-step', claim: 'The Fire, Blizzard, Thunder, Water cycle moves only when an element fires; a Negation does not advance it', value: true },
-  { id: 'reflect-bounce', claim: "The Core's party-wide counters never bounce (engine rule, statuses.ts#bouncesOffReflect; research §2.3 says they do: open)", value: 'engine' },
+  { id: 'reflect-bounce', claim: "The Core's party-wide counters bounce off a Reflecting target, per target, as research §2.3 says (the game's record bit decides: statuses.ts#reflectableDef; RC4 lane FFX-G; it was an engine rule that they never did)", value: 'record-bit' },
   { id: 'liveness-lag', claim: "A Genais KO inside the counter phase (Zombie + Cura) is picked up at the end of that same action (`ticks.ts#onTurnEnd` runs the hook again after the counters), before the next menu", value: 'same-action' },
 ];
 

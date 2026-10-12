@@ -6,7 +6,7 @@
  * Self" [research/ffx-seymour-natus-highbridge.md §2.1 row 3:59, §4.2,
  * verified: 3 sources]. Provoke is landable on him [§1.3, verified: 2 sources],
  * and before this repair the shared Provoke redirect
- * (`targeting.ts#redirectTarget`) sent every enemy action to the provoker,
+ * (the old `targeting.ts#redirectTarget`, now `target-build.ts#provokedAim`) sent every enemy action to the provoker,
  * self-buffs included: the Protect landed on Tidus, or, with Tidus Reflected,
  * bounced onto Mortibody. Provoke "forces the enemy to target the provoker"
  * [ffx-combat-core §4.2]; an action the enemy aims at itself or its own side

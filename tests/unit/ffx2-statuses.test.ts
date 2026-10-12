@@ -1,37 +1,42 @@
 /**
- * X-2 status semantics [research/ffx2-combat-core.md §2.8, §2.6a].
+ * X-2 status semantics [research/ffx2-combat-core.md §2.8, §2.6a; research/re-ffx2-atb-status.md §6].
  *
  * The rule this file exists to enforce: **the two engines share status ids and
- * nothing else** (`docs/CONTRACTS.md`, engine agents). In X-2, Haste is a x1.05
- * tick rate rather than FFX's halved CTB recovery, Berserk is x1.25 rather than
- * x1.5, Regen pays ~3% of max HP on a real-time interval rather than on every
- * unit's turn boundary, and duration is an integer `durationValue` converted at
- * 0.53 s per unit rather than a count of the victim's own turns.
+ * nothing else** (`docs/CONTRACTS.md`, engine agents). In X-2, Haste is the
+ * Config speed x21/20 (95 -> 99 units a logic step), Slow halves it, Berserk is
+ * x1.25 rather than x1.5, Regen pays max HP / 32 every 16,000 units on its own
+ * random phase rather than on every unit's turn boundary, and a duration is a
+ * COUNTER of 1,500 units (Doom 10,000) that the character's speed pays, not a
+ * count of the victim's own turns.
+ *
+ * **Re-parity W4 (2026-10-10; FFX-2 only, reason "game-code parity").** The clocks are the game's: `status-clock.ts` runs
+ * `MsStatusProcess` once per logic step. The old tests converted a duration at 0.53 s a unit and ticked a 3,000-a-second clock
+ * with a 3% payout; they are replaced by the same questions asked of the game's counters. The hand-worked step counts are in
+ * `parity-ffx2-engine-atb-hand.test.ts`; the generated proof against the kernels is `parity-ffx2-engine-atb.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
 import {
-  advanceStatuses,
+  advanceStatusClocks,
   applyStatus,
   canAct,
   clearAfterBattle,
   DISPEL_REMOVES,
-  durationToTicks,
   ESUNA_CURES,
   FFX2Engine,
   INFINITE_STATUSES,
+  newGauge,
   PERSISTS_AFTER_BATTLE,
   removeStatus,
-  REGEN_FRACTION,
-  POISON_FRACTION,
   statLevel,
   hitProbability,
   statusProbability,
-  STATUS_TICK_INTERVAL_TICKS,
-  TICKS_PER_DURATION_UNIT,
-  ticksUntilStatusEvent,
+  stepsUntilNextEvent,
 } from '../../src/battle/ffx2/index.ts';
 import type { EventDraft, Ffx2Unit } from '../../src/battle/ffx2/index.ts';
+import { freshSpeeds } from '../../src/battle/ffx2/atb-engine.ts';
+import type { ResolveContext } from '../../src/battle/ffx2/resolve-hp.ts';
+import { SeededRng } from '../../src/battle/common/rng.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
 import type { AbilityDef, BattleEvent } from '../../src/battle/common/types.ts';
 
@@ -44,27 +49,54 @@ function unit(maxHp = 1000): Ffx2Unit {
     level: 24,
     atb: { ticks: 0, required: 10000, gauge: 0, charging: null, recovery: 0 },
     accessories: [], chainCount: 0, chainWindowTicks: 0,
+    gauge: newGauge(0),
   };
 }
 
-describe('duration is an integer value, converted at 0.53 s per unit', () => {
-  it('reproduces the sheet’s own anchor: durationValue 20 -> 10.6 s', () => {
-    // Which is exactly how long an in-game Hero Drink's Invincible lasts.
-    expect(TICKS_PER_DURATION_UNIT).toBeCloseTo(1590, 5);
-    const ticks = durationToTicks(20);
-    expect(ticks).toBe(31800);
-    expect((ticks ?? 0) / 3000).toBeCloseTo(10.6, 5);
+/**
+ * Run the game's status process on one unit for `steps` logic steps at the Normal speed, the speeds as the ATB process would
+ * have written them just before it each step. Returns the HP the unit lost (negative when Regen healed it).
+ */
+function runSteps(u: Ffx2Unit, steps: number, emit: (e: EventDraft) => void = () => {}): number {
+  const before = u.hp;
+  const ctx: ResolveContext = { units: [u], abilities: { get: () => undefined }, rng: new SeededRng(1), emit, breaksDamageLimit: () => false };
+  for (let i = 0; i < steps; i++) {
+    u.gauge.speeds = freshSpeeds(u, 95, false);
+    advanceStatusClocks([u], emit, ctx);
+  }
+  return before - u.hp;
+}
+
+describe('a duration is a counter of the game\'s units (1,500 a count, Doom 10,000), loaded when the status lands', () => {
+  it('a timed status takes the command\'s amount as its counter: Shell with 20 is 20 counts = 30,000 units, nothing banked yet', () => {
+    const u = unit();
+    const shell = applyStatus(u, { status: 'shell', chance: 254, duration: 20 });
+    expect(shell?.counter).toBe(20);
+    expect(shell?.accumulator).toBe(0);
+    expect(shell?.ticksRemaining).toBe(20 * 1500);
   });
 
-  it('converts the published duration values', () => {
-    // §2.8: Sleep 97 -> 51.4 s; Berserk/Confuse 133 -> 70.5 s; Slow 100 -> 53.0 s.
-    expect((durationToTicks(97) ?? 0) / 3000).toBeCloseTo(51.4, 1);
-    expect((durationToTicks(133) ?? 0) / 3000).toBeCloseTo(70.5, 1);
-    expect((durationToTicks(100) ?? 0) / 3000).toBeCloseTo(53.0, 1);
+  it('the counter is held to 1..125 (the game\'s byte); an application with no amount is "until cured" and has no clock', () => {
+    const u = unit();
+    expect(applyStatus(u, { status: 'protect', chance: 254, duration: 500 })?.counter).toBe(125);
+    const v = unit();
+    const forever = applyStatus(v, { status: 'protect', chance: 254, duration: 0 });
+    expect(forever?.counter).toBeUndefined();
+    expect(forever?.ticksRemaining).toBeNull();
   });
 
-  it('treats a duration of 0 as infinite', () => {
-    expect(durationToTicks(0)).toBeNull();
+  it('Sleep, Confusion and Berserk keep their own timers whatever the command said: 150,000, 200,000 and 200,000 units', () => {
+    const u = unit();
+    expect(applyStatus(u, { status: 'sleep', chance: 254, duration: 97 })?.ticksRemaining).toBe(150_000);
+    expect(applyStatus(u, { status: 'confuse', chance: 254, duration: 5 })?.ticksRemaining).toBe(200_000);
+    expect(applyStatus(u, { status: 'berserk', chance: 254, duration: 133 })?.ticksRemaining).toBe(200_000);
+  });
+
+  it('Doom counts in 10,000s and sits on its last count until the unit is KO\'d', () => {
+    const u = unit();
+    const doom = applyStatus(u, { status: 'doom', chance: 254, duration: 5 });
+    expect(doom?.counter).toBe(5);
+    expect(doom?.ticksRemaining).toBe(5 * 10_000);
   });
 });
 
@@ -80,23 +112,23 @@ describe('infinite statuses never expire', () => {
   });
 
   it('applies them with no remaining ticks and survives a long clock', () => {
-    const u = unit();
-    const instance = applyStatus(u, { status: 'poison', chance: 254, duration: 100 });
+    const u = unit(1_000_000);
+    const instance = applyStatus(u, { status: 'darkness', chance: 254, duration: 100 });
     expect(instance?.ticksRemaining).toBeNull();
     expect(instance?.permanent).toBe(true);
-    advanceStatuses(u, 3000 * 600, () => {});
-    expect(u.statuses.poison).toBeDefined();
+    runSteps(u, 3000 * 600 / 100); // 18,000 steps, well past any timer
+    expect(u.statuses.darkness).toBeDefined();
   });
 
-  it('expires a timed status and emits `status-remove` with reason `expired`', () => {
+  it('expires a timed status and emits `status-remove` with reason `expired` (Haste with 50 counts: 75,000 units at 99 a step = 758 steps)', () => {
     const u = unit();
-    applyStatus(u, { status: 'haste', chance: 254, duration: 50 }); // 26.5 s
+    applyStatus(u, { status: 'haste', chance: 254, duration: 50 });
     const events: EventDraft[] = [];
-    advanceStatuses(u, 3000 * 20, (e) => events.push(e));
+    runSteps(u, 700, (e) => events.push(e));
     expect(u.statuses.haste).toBeDefined();
     expect(events.some((e) => e.type === 'status-tick')).toBe(true);
 
-    advanceStatuses(u, 3000 * 10, (e) => events.push(e));
+    runSteps(u, 100, (e) => events.push(e));
     expect(u.statuses.haste).toBeUndefined();
     const removed = events.find((e) => e.type === 'status-remove') as
       | Extract<BattleEvent, { type: 'status-remove' }>
@@ -104,51 +136,45 @@ describe('infinite statuses never expire', () => {
     expect(removed?.reason).toBe('expired');
   });
 
-  it('drains x2.0 slower on a Slowed unit and x0.95 faster on a Hasted one', () => {
+  it('drains at half rate on a Slowed unit (47 a step against 95)', () => {
     const slowed = unit();
-    applyStatus(slowed, { status: 'slow', chance: 254, duration: 1000 });
+    applyStatus(slowed, { status: 'slow', chance: 254, duration: 125 });
     applyStatus(slowed, { status: 'protect', chance: 254, duration: 50 });
     const normal = unit();
     applyStatus(normal, { status: 'protect', chance: 254, duration: 50 });
 
-    advanceStatuses(slowed, 3000 * 30, () => {});
-    advanceStatuses(normal, 3000 * 30, () => {});
-    // 26.5 s of Protect: gone after 30 s at normal speed; the Slowed unit's
-    // remaining duration drains at half rate, so 53 s of wall clock for her.
+    runSteps(slowed, 800);
+    runSteps(normal, 800);
+    // 50 counts = 75,000 units: gone after 790 steps at 95 a step; the Slowed unit has paid only 800 x 47 = 37,600.
     expect(normal.statuses.protect).toBeUndefined();
     expect(slowed.statuses.protect).toBeDefined();
   });
 });
 
-describe('Regen and Poison [§2.3]', () => {
-  it('both move ~3% of max HP per interval', () => {
-    expect(REGEN_FRACTION).toBe(0.03);
-    expect(POISON_FRACTION).toBe(0.03);
-  });
-
-  it('Poison damages and Regen heals, in units of 3% max HP', () => {
+describe('Regen and Poison [research/re-ffx2-atb-status.md §6]', () => {
+  it('both move (8 x max HP) >> 8 = max HP / 32 every 16,000 units, on their own phase', () => {
     const poisoned = unit(1000);
     applyStatus(poisoned, { status: 'poison', chance: 254, duration: 0 });
-    expect(advanceStatuses(poisoned, STATUS_TICK_INTERVAL_TICKS, () => {})).toBe(30);
+    expect(runSteps(poisoned, 169)).toBe(31); // phase 0: 16,001 units = 169 steps at 95
 
     const regen = unit(1000);
+    regen.hp = 400;
     applyStatus(regen, { status: 'regen', chance: 254, duration: 50 });
-    expect(advanceStatuses(regen, STATUS_TICK_INTERVAL_TICKS, () => {})).toBe(-30);
+    expect(runSteps(regen, 169)).toBe(-31);
   });
 
-  it('is inert while Stopped — Stop freezes both tickers', () => {
+  it('is inert while Stopped: Stop freezes both tickers', () => {
     const u = unit(1000);
     applyStatus(u, { status: 'poison', chance: 254, duration: 0 });
     applyStatus(u, { status: 'stop', chance: 254, duration: 100 });
-    expect(advanceStatuses(u, STATUS_TICK_INTERVAL_TICKS * 4, () => {})).toBe(0);
+    expect(runSteps(u, 169 * 4)).toBe(0);
   });
 
   it('accumulates partial intervals rather than dropping them', () => {
     const u = unit(1000);
     applyStatus(u, { status: 'poison', chance: 254, duration: 0 });
-    const half = STATUS_TICK_INTERVAL_TICKS / 2;
-    expect(advanceStatuses(u, half, () => {})).toBe(0);
-    expect(advanceStatuses(u, half, () => {})).toBe(30);
+    expect(runSteps(u, 84)).toBe(0);
+    expect(runSteps(u, 85)).toBe(31);
   });
 });
 
@@ -301,17 +327,21 @@ describe('after the battle', () => {
   });
 });
 
-describe('the tick scheduler sees status work coming', () => {
-  it('reports Infinity when nothing is pending', () => {
-    expect(ticksUntilStatusEvent(unit())).toBe(Infinity);
+describe('the look-ahead sees status work coming (steps until the soonest clock event)', () => {
+  it('reports Infinity when nothing is pending (a unit whose menu is open, with no status)', () => {
+    const u = unit();
+    u.gauge.state = 4;
+    expect(stepsUntilNextEvent([u], 95)).toBe(Infinity);
   });
 
-  it('reports the soonest expiry, scaled by Haste or Slow', () => {
+  it('reports the soonest expiry, sooner for a Hasted unit (99 a step) than a plain one (95)', () => {
     const u = unit();
+    u.gauge.state = 4;
     applyStatus(u, { status: 'protect', chance: 254, duration: 100 });
-    const plain = ticksUntilStatusEvent(u);
-    applyStatus(u, { status: 'haste', chance: 254, duration: 1000 });
-    expect(ticksUntilStatusEvent(u)).toBeLessThan(plain);
+    const plain = stepsUntilNextEvent([u], 95);
+    expect(plain).toBe(Math.floor((100 * 1500) / 95)); // the whole bank of 100 counts, at the plain 95 units a step
+    applyStatus(u, { status: 'haste', chance: 254, duration: 125 });
+    expect(stepsUntilNextEvent([u], 95)).toBeLessThan(plain);
   });
 });
 

@@ -91,14 +91,12 @@ describe.skipIf(!MEASURE)('Chapter XV options for Bailey (human speed, 200 seeds
   }
 
   it('what the options sheet claims', () => {
-    const at = (kit: number, prep: boolean): number => first.get(`${KITS[kit]![0]}, ${prep ? 'with the Lightfall prep' : 'no prep'}`) ?? -1;
-    // M1 at the sheet's speed: on the shipped kit the prep costs wins. With both options on it edges
-    // ahead on the first try here only; the speed sweep below shows that is one point, not a rule.
-    expect(at(0, false)).toBeGreaterThan(at(0, true));
-    expect(at(3, true)).toBeGreaterThan(at(3, false));
-    // Every option beats the shipped chapter, and both together beat either alone.
-    for (const k of [1, 2, 3]) expect(Math.max(at(k, true), at(k, false))).toBeGreaterThan(at(0, true));
-    expect(at(3, true)).toBeGreaterThan(Math.max(at(1, true), at(1, false), at(2, true), at(2, false)));
+    // Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`): the sheet's four ranking claims (no prep beats
+    // prep on the shipped kit; prep edges ahead with both options; every option beats the chapter as first shipped; both together beat either
+    // alone) were true at the old gauge, where the Den was a 47 percent fight. At the game's gauge the Den is won 72 to 100 times of 100 in every
+    // cell (the Chapter V kit with the prep is the only one under 90; the handoff has the 100-seed table), no prep is still the better line on
+    // the Chapter V kit (96 against 72), and the strict comparisons that fell are the saturated ones: the shipped kit with the prep 198 against
+    // 200 without it. The table is the measurement and it is printed; the claims are recorded in the handoff, not asserted.
     console.log([
       '| Kit, line | Den, human Wait split (first try) | Den, bench | Den, Active 1.5 s | Nooj fresh, human | Within 1 / 3 / 5 tries, retry from Baralai (GP4 a) | Within 1 / 3 / 5 tries, retry from the lost link (GP4 b) |',
       '|---|---:|---:|---:|---:|---|---|',
@@ -116,7 +114,7 @@ describe.skipIf(!MEASURE)('Chapter XV options for Bailey (human speed, 200 seeds
 const SPEEDS: Array<[number, number]> = [[1000, 300], [1500, 500], [2500, 800]];
 
 describe.skipIf(!MEASURE)('Chapter XV, the Lightfall prep across human speeds (PYREFLY_MEASURE=1)', () => {
-  it('no prep is the lean: it wins or ties everywhere but one point', () => {
+  it('the Lightfall prep across human speeds, recorded (no ranking asserted since re-parity W4)', () => {
     const rows: string[] = [];
     const firstTry = new Map<string, number>();
     const five = new Map<string, number>();
@@ -143,27 +141,22 @@ describe.skipIf(!MEASURE)('Chapter XV, the Lightfall prep across human speeds (P
         rows.push(`| ${ms / 1000} s / ${top / 1000} s | ${kitName} | ${cells.join(' | ')} |`);
       }
     }
-    const f = (ms: number, k: number, prep: boolean): number => firstTry.get(`${ms}|${k}|${prep}`) ?? -1;
-    // On the shipped kit, Hero Drinks alone and levels alone, no prep wins at every speed.
-    for (const [ms] of SPEEDS) for (const k of [0, 1, 2]) expect(f(ms, k, false), `${ms} kit ${k}`).toBeGreaterThan(f(ms, k, true));
-    // Under both kit options, no prep wins the first try at 1.0 s and 2.5 s ...
-    expect(f(1000, 3, false)).toBeGreaterThan(f(1000, 3, true));
-    expect(f(2500, 3, false)).toBeGreaterThan(f(2500, 3, true));
-    // ... and within five tries (from Baralai) at every speed, the 1.5 s point included, where the
-    // prep's only first-try lead sits (the re-check's minor 4: 1.0 s and 2.5 s asserted too).
-    for (const [ms] of SPEEDS) expect(five.get(`${ms}|false`)!, `${ms} within 5`).toBeGreaterThanOrEqual(five.get(`${ms}|true`)!);
-    // 'Both' stays the best kit at every speed, with either line.
-    for (const [ms] of SPEEDS) {
-      const best = Math.max(f(ms, 3, true), f(ms, 3, false));
-      for (const k of [0, 1, 2]) expect(best, `${ms} kit ${k}`).toBeGreaterThan(Math.max(f(ms, k, true), f(ms, k, false)));
-    }
+    // Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`): the five ranking claims this test asserted (no prep wins at
+    // every speed on three kits; no prep wins the first try at 1.0 s and 2.5 s with both options; within five tries; 'both' is the best kit at every
+    // speed) described a Den that was a 47 percent fight. At the game's gauge most cells sit at 90 to 100 of 100 and differ by noise, and the
+    // first strict comparison to fail was `1.0 s, + 3 Hero Drinks: 192 against 194` of 200. The table is the measurement; it is printed and no ranking is asserted.
+    void firstTry;
+    void five;
     console.log(['| Menu / top list | Kit | Prep | No prep |', '|---|---|---:|---:|', ...rows].join('\n'));
   }, 1_800_000);
 });
 
 describe('the options harness (always runs)', () => {
   it('a retry reseeds and, from the lost shade, replays the entry state; the first try is the plain Den', () => {
-    const party = KITS[3]![1];
+    // Re-parity W4 (FFX-2 only; reason "game-code parity"): the harness check used the shipped kit (Hero Drinks and +8 levels), which at the
+    // game's gauge clears the Den on the first try on every seed (30 of 30 measured); the Chapter V kit still loses a first try now and then
+    // (seeds 4, 6, 26 and 30 of the first 30 with the prep), so it can show that a later try clears.
+    const party = KITS[0]![1];
     const line = lineFor(true, party);
     for (let seed = 1; seed <= 4; seed++) {
       const plain = driveDen(line, seed, { party }).outcome === 'victory';

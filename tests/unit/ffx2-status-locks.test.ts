@@ -12,9 +12,9 @@
  * - FFX pays a duration "by 1 at the **end of the victim's own action**"
  *   (`ffx-combat-core.md` §4.1), so a status that denies turns denies its own
  *   clock unless the turn still arrives.
- * - FFX-2 durations are **wall-clock**: §2.8's table gives Sleep 97 units
- *   (51.4 s) and Stop 60-126 units, and `advanceStatuses` runs over every unit
- *   on every step regardless of whose gauge is full. Sleep's own row says "ATB
+ * - FFX-2 durations are **wall-clock**: the game pays a Sleep timer of 150,000 units and a Stop counter of up to 125
+ *   counts of 1,500 (re-parity W4, `status-clock.ts`), and `MsStatusProcess` runs over every unit
+ *   on every logic step regardless of whose gauge is full. Sleep's own row says "ATB
  *   frozen" and its duration is "time **and/or** hit"; Stop's says "Agility 0,
  *   ATB frozen". The gauge stops; the clock does not.
  *
@@ -26,9 +26,11 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { FFX2Engine, advanceStatuses, applyStatus, canAct } from '../../src/battle/ffx2/index.ts';
+import { FFX2Engine, advanceStatusClocks, applyStatus, canAct, newGauge } from '../../src/battle/ffx2/index.ts';
 import type { EventDraft, Ffx2Unit } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
+import { freshSpeeds } from '../../src/battle/ffx2/atb-engine.ts';
+import { SeededRng } from '../../src/battle/common/rng.ts';
 import type { Command, StatusId } from '../../src/battle/common/types.ts';
 
 function unit(id: string): Ffx2Unit {
@@ -40,16 +42,20 @@ function unit(id: string): Ffx2Unit {
     level: 24,
     atb: { ticks: 0, required: 10000, gauge: 0, charging: null, recovery: 0 },
     accessories: [], chainCount: 0, chainWindowTicks: 0,
+    gauge: newGauge(0),
   };
 }
 
 const sink = (): EventDraft[] => [];
 
-function runDown(u: Ffx2Unit, status: StatusId, stepTicks = 500, maxSteps = 4000): number {
+/** Logic steps (Normal speed, the status process alone) until `status` is gone, or `maxSteps`. */
+function runDown(u: Ffx2Unit, status: StatusId, maxSteps = 4000): number {
   const drafts: EventDraft[] = sink();
+  const ctx = { units: [u], abilities: { get: () => undefined }, rng: new SeededRng(1), emit: (e: EventDraft) => drafts.push(e), breaksDamageLimit: () => false };
   let steps = 0;
   while (u.statuses[status] !== undefined && steps < maxSteps) {
-    advanceStatuses(u, stepTicks, (e) => drafts.push(e));
+    u.gauge.speeds = freshSpeeds(u, 95, false);
+    advanceStatusClocks([u], (e) => drafts.push(e), ctx);
     steps += 1;
   }
   return steps;
@@ -123,5 +129,5 @@ describe('Threaten is FFX content and stays out of FFX-2 (rule 14)', () => {
       permanent: false,
     };
     expect(canAct(u), 'an FFX status must not lock an FFX-2 unit out').toBe(true);
-  });
+  }, 60_000); // a cold dynamic import of the whole FFX-2 data layer: the 15 s default timed out under a loaded run
 });

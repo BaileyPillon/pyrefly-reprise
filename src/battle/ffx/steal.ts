@@ -40,6 +40,7 @@ import type { AbilityDef, FFXCombatant, ItemDrop } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
 import { hasAuto } from './equipment.ts';
 import { rollSteal } from './adapt/steal.ts';
+import { FfxStream } from './adapt/streams.ts';
 
 /**
  * True for the abilities that make an **item** steal roll.
@@ -86,7 +87,7 @@ export function resolveSteal(ctx: Ctx, user: FFXCombatant, target: FFXCombatant,
     rt.stealCount,
     { pickpocket: hasAuto(user, 'pickpocket'), masterThief: hasAuto(user, 'master-thief') },
     missed,
-    (stream) => (stream === 10 ? ctx.rng.int(0, 254) : ctx.rng.int(0, 255)),
+    (stream) => ctx.rng.on(stream).int(0, stream === FfxStream.Steal ? 254 : 255),
   );
   if (missed) return false;
   if (outcome === null) {

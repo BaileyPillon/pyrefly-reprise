@@ -444,6 +444,11 @@ All Redoubt picks are `searchr_nop` (uniform; the "not" variants pick among girl
 turn counter set to 1 (Right, m291.src:188-201) or 0 (Left, m292.src:167-180); if the twin is also dead, the Head's cursor
 flag is switched on at once (the Head becomes targetable at the second death, before it polls). Reaction, menu, targeted: empty.
 
+*Corrected 2026-10-11 (lane AI-FFX2-a, read from the Right Redoubt's script text and the Left's):* phase 2 can only begin after both Redoubts have
+died and the Head has revived them, and each death set that Redoubt's turn counter (Right 1, Left 0) while the action entry adds 1 before it
+chooses. So the **first** phase-2 action is the Right's turn 2, the HP beam (not Break), and the Left's turn 1, the MP beam. Break comes round
+on the Right's next cycle, after Flare. Row R1 below says "Break first"; read it with this correction.
+
 ## 7. Link 5: Shuyin (m260; scene wegn01_225)
 
 Record: HP 23,850, MP 210, Lv 58, STR 47, DEF 132, MAG 42, MDEF 92, AGI 133, ACC 95, EVA 22, LCK 14; permanent Use-MP0 status.
@@ -555,7 +560,7 @@ Row key: *game* = this note; *ours* = file:line in `src/battle/ffx2/`.
 | H4 | Nemo thresholds | strict below; one Nemo per band, skipped bands are not paid back (m290.src:360-445) | `<=` fractions, one Nemo per crossed band in order (`ai/vegnagun-head.ts:39,72-78`) | |
 | H5 | Hit counter | every applied HP-damaging result in phase 2 (m290.src:467-477) | per damage event (`ai/vegnagun-head.ts:166-168`) | check per-hit |
 | H6 | Pallida Mors target | one living girl, uniform (m290.src:145-146) | passes no target (`ai/vegnagun-head.ts:110`) | check how the engine fills an empty target for a single-target ability |
-| R1 | Redoubt cycle | Right: Break, HP beam, Blind, Flare, and the first phase-2 action is Break (m291.src:74-113); Left: MP beam, Slow, Dispel, Demi (m292.src:74-104) | Right starts with the HP beam, Break last (`ai/vegnagun-head.ts:179-181`), as the research file does (research/ffx2-vegnagun-shuyin.md:778-781); the Left order matches | the Right's first action is wrong, the cycle is the same four moves shifted by one |
+| R1 | Redoubt cycle | Right: Break, HP beam, Blind, Flare, and the first phase-2 action is Break (m291.src:74-113) **(corrected 2026-10-11: the death entry makes the first phase-2 action the HP beam, see the note under section 6.2)**; Left: MP beam, Slow, Dispel, Demi (m292.src:74-104) | Right starts with the HP beam, Break last (`ai/vegnagun-head.ts:179-181`), as the research file does (research/ffx2-vegnagun-shuyin.md:778-781); the Left order matches | the Right's first action is wrong, the cycle is the same four moves shifted by one |
 | R2 | Redoubt picks | status moves prefer a girl lacking the status (m291.src:77-107, m292.src:82-92) | uniform (`ai/vegnagun-head.ts:205`) | |
 | R3 | Redoubt turn counter | advances on the revive poll too, so a revive uses up one place of the four (the Flare place is only delayed one poll); death resets it to 1 (Right) or 0 (Left) (m291.src:68,190, m292.src:68,169) | a revive does not advance the rotation and death does not reset it (`ai/vegnagun-head.ts:199-201`); the research file already says the step is skipped unless it is Flare or Demi (research/ffx2-vegnagun-shuyin.md:782-783) | rotation after a revive or a death differs from the game and from the research file |
 | R4 | Phase 1 idle | no command: polled every step, revive reacts within one step (m291.src:53-64) | null turn spends a normal turn (`ai/vegnagun-head.ts:188-189`) | revive latency |

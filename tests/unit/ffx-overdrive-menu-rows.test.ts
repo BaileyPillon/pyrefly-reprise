@@ -96,6 +96,28 @@ function turnFor(engine: Engine, who: string, maxSteps = 4_000): Extract<Decisio
   throw new Error(`${who} never acted`);
 }
 
+/**
+ * The first seed of 1 to 60 on which every one of `who` gets a turn before the battle ends. These fights are played by a party that only Defends,
+ * so which seed gives an actor a turn is the deal's business (re-parity RNG lane, 2026-10-11: each game draws from its own 68 streams, so every seed is
+ * another deal), not the menu's: the seed is found, not named.
+ */
+function seedWhereActing(groupId: string, build: FFXPartyBuild, who: readonly string[], prep: (engine: Engine, who: string) => void = (e, w) => frontWithFullGauge(e, w)): number {
+  for (let seed = 1; seed <= 60; seed++) {
+    const ok = who.every((w) => {
+      try {
+        const engine = newEngine(groupId, seed, build);
+        prep(engine, w);
+        turnFor(engine, w);
+        return true;
+      } catch {
+        return false;
+      }
+    });
+    if (ok) return seed;
+  }
+  throw new Error(`no seed of 1 to 60 gives ${who.join(', ')} a turn`);
+}
+
 /** Submit `command` and return only the events it produced. */
 function submitAndRead(engine: Engine, command: Command): BattleEvent[] {
   const before = engine.state().log.length;
@@ -208,7 +230,7 @@ describe("#05 Wakka's Slots resolve to a shot [ffx-combat-core §5.6]", () => {
   });
 
   it('a perfect Attack Reels lands twelve hits in the engine', () => {
-    const engine = newEngine('seymour-flux', 11, gagazetBuild);
+    const engine = newEngine('seymour-flux', seedWhereActing('seymour-flux', gagazetBuild, ['wakka'], (e, w) => frontWithFullGauge(e, w, ['attack-reels'])), gagazetBuild);
     frontWithFullGauge(engine, 'wakka', ['attack-reels']);
     const decision = turnFor(engine, 'wakka');
     const row = decision.commands.find((c) => c.category === 'overdrive')!;
@@ -370,7 +392,7 @@ describe('#12 Trigger Commands fire from the player command list', () => {
   });
 
   it('gives Tidus no line here, and says so instead of eating his turn', () => {
-    const engine = newEngine('seymour-flux', 3, gagazetBuild);
+    const engine = newEngine('seymour-flux', seedWhereActing('seymour-flux', gagazetBuild, ['tidus'], () => undefined), gagazetBuild);
     const decision = turnFor(engine, 'tidus');
     const talk = decision.commands.find((c) => c.label === 'Talk');
     // §4.7 lists Kimahri and Yuna and nobody else.
@@ -394,7 +416,7 @@ describe('every offered row is submittable as offered', () => {
    * the state, because that is what the presenter animates: a row that produces
    * no events produces no feedback either.
    */
-  function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[], seed = 3): void {
+  function assertEveryRowDoesSomething(groupId: string, build: FFXPartyBuild, front: string[], seed = seedWhereActing(groupId, build, front)): void {
     for (const who of front) {
       // One engine per row: submitting a row changes the board, and the point
       // is what each row does from the same starting position.
@@ -437,7 +459,8 @@ describe('every offered row is submittable as offered', () => {
     // Seed 3 -> 1 on 2026-10-09 (re-parity AI-Seymour, FFX only): everyone else only Defends, and on seed 3 Seymour Flux's script (the
     // game's own, research/re-ffx-ai-seymour.md D-01 to D-08) puts Kimahri on the floor before his first turn, so the probe
     // ends before he is asked. Seed 1 lets Wakka, Lulu and Kimahri all act; nothing about the menu rows changed.
-    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri'], 1);
+    // Seed 1 -> the first seed that lets all three act (2026-10-11, re-parity RNG lane: the deal moved again).
+    assertEveryRowDoesSomething('seymour-flux', gagazetBuild, ['wakka', 'lulu', 'kimahri']);
   });
 
   // Three named actors on one board is what let Rikku's `Steal`, `Use` and

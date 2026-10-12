@@ -166,7 +166,10 @@ describe('the tactic, on the real engine', () => {
   });
 
   it('shipped kit on Trema: a Soul Spring drains him first, Three Stars follows, the Dark Knights use Darkness', () => {
-    const picks = picksOn('ffx2-cloister-trema', 16, FFX2_TREMA.buildRef as FFX2PartyBuild);
+    // RC3: the window is 24 picks, it was 16. On the merged tree Three Stars is Rikku's fifth turn, the 18th pick on seed 1 (after a
+    // Soul Spring twice, a Phoenix Down and the Stamina Tonic); the tactic's own order (Soul Spring, Tonic, Three Stars, then the heals)
+    // is unchanged, only how many picks fit before Three Stars moved. A window of the test, not a game number; nothing was tuned.
+    const picks = picksOn('ffx2-cloister-trema', 24, FFX2_TREMA.buildRef as FFX2PartyBuild);
     expect(picks.find((p) => p.actor === 'rikku')?.id).toBe('x2-soul-spring');
     expect(picks.some((p) => p.id === 'x2-three-stars')).toBe(true);
     expect(picks.some((p) => p.id === 'x2-gunner-target-mp')).toBe(false);

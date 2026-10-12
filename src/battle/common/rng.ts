@@ -9,6 +9,10 @@
  * avalanche for its size and a three-line body. It is not cryptographic and does
  * not need to be.
  *
+ * **The FFX and FFX-2 engines no longer draw from this** (re-parity RNG lane, Bailey 2026-10-09 "Adopt game streams"): each game
+ * has its own 68 streams, `streams.ts`. A `SeededRng` is the one-stream {@link BattleRng}: FF7 uses it, and so does everything that
+ * stands in for a game generator (a preview's `RollPolicyRng`, a test's scripted generator).
+ *
  * Usage rules for engine agents:
  * - Never call `Math.random()` anywhere under `src/battle/`.
  * - Draw in a fixed order. Reordering draws changes replays even at the same
@@ -18,6 +22,7 @@
  *   rather than scaling {@link Rng.next} by hand.
  */
 
+import type { BattleRng, RngSnapshot } from './streams.ts';
 import type { Rng } from './types.ts';
 
 /** Force a value into an unsigned 32-bit integer, the state domain mulberry32 wants. */
@@ -34,7 +39,7 @@ function toUint32(n: number): number {
  * rng.seed(12345);  // rewind: the same draws come back
  * ```
  */
-export class SeededRng implements Rng {
+export class SeededRng implements Rng, BattleRng {
   /** Live 32-bit state. Advances on every draw. */
   private state: number;
   /** The seed this generator was last seeded with. */
@@ -126,8 +131,31 @@ export class SeededRng implements Rng {
   }
 
   /** Restore a snapshot from {@link saveState}. */
-  restoreState(state: number): void {
+  restoreState(state: RngSnapshot): void {
+    if (typeof state !== 'number') throw new TypeError('SeededRng: a one-stream snapshot is a single number');
     this.state = toUint32(state);
+  }
+
+  /** A one-stream generator has one stream ({@link BattleRng.streamCount}). */
+  get streamCount(): number {
+    return 1;
+  }
+
+  /** A one-stream generator is every stream at once ({@link BattleRng.on}). */
+  on(_stream: number): Rng {
+    return this;
+  }
+
+  /** The engine-side stream is this one too ({@link BattleRng.aux}). */
+  get aux(): Rng {
+    return this;
+  }
+
+  /** A generator of the same kind seeded `seed`, standing at `state` when one is given ({@link BattleRng.fork}). */
+  fork(seed: number, state?: RngSnapshot): SeededRng {
+    const f = new SeededRng(seed);
+    if (state !== undefined) f.restoreState(state);
+    return f;
   }
 }
 

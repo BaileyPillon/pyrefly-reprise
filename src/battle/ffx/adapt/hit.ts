@@ -284,8 +284,8 @@ export function resolveHit(req: HitRequest, draws: HitDraws, status?: (command: 
   const critInput = critCheckInputOf(req, command);
   return execute(req, command, {
     draw: draws.variance,
-    hit: () => hitCheck(hitInput, draws.percent),
-    crit: () => critCheck(critInput, 0, draws.percent).crit,
+    hit: () => hitCheck(hitInput, draws.hit),
+    crit: () => critCheck(critInput, 0, draws.crit).crit,
     ...(status ? { status: () => status(command) } : {}),
   });
 }

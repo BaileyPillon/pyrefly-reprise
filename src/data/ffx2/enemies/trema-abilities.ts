@@ -95,7 +95,9 @@ export const tremaAbilities: AbilityDef[] = [
     ...threeHits,
     id: 'trema-beguiling-mire',
     name: 'Beguiling Mire',
-    power: 4, // DC 4 x3 (the Fiend Arena block's 5 x3 is not this fight), Stop chance 120 [SinirothX]
+    // Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity", row T5): the game has ONE row for this move (0x40d4, power 5 x3,
+    // formula 1 base 95, Stop chance 120) in both versions; the engine has read the row since W3, this is the ability to match it.
+    power: 5, // DC 5 x3 (row 0x40d4; the FAQ's 4 was the story dump's), Stop chance 120
     // No duration value is published: the group's `timedAilmentDefaults` gives Stop §2.8's 100 (53 s) `[estimate]`.
     statusEffects: [{ status: 'stop', chance: 120, duration: 0 }],
     messageTemplate: 'Trema uses Beguiling Mire',

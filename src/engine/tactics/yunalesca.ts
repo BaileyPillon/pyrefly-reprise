@@ -196,7 +196,19 @@ export const yunalesca: Tactic = (actorId, commands, engine) => {
       //    is immune to all three (§5.1, §10.4). The supporter's own actions
       //    target allies, which never provoke a counter, so she needs none.
       //    Dispelling Slap strips it, so this re-applies as needed.
-      const bare = living.find((c) => c.id !== actorId && !has(c, 'reflect'));
+      //
+      //    **Hastega goes first.** The game's target builder turns a spell back
+      //    off every Reflect holder it is aimed at, party-wide spells included
+      //    (Hastega and the Nul spells carry the record's reflectable bit; RC4
+      //    lane FFX-G, `research/re-ffx-targeting.md` section 1), so a Hastega
+      //    cast through our own Reflect would haste *her*. The opening Hastega
+      //    is Tidus's first turn (step 4 below) and the supporter holds her
+      //    Reflect until it has landed; if Tidus cannot cast it, she does not wait.
+      const hasteFirst =
+        !living.some((c) => has(c, 'reflect')) &&
+        living.some((c) => !has(c, 'haste')) &&
+        living.some((c) => c.id === 'tidus' && c.id !== actorId && (c as FFXCombatant).learnedAbilityIds.includes('hastega'));
+      const bare = hasteFirst ? undefined : living.find((c) => c.id !== actorId && !has(c, 'reflect'));
       const reflect = bare && row(commands, ['Reflect'], bare.id);
       if (reflect && bare) return aim(reflect, bare.id);
       // 3. Nothing left to support: **Defend**, do not swing.
@@ -234,7 +246,8 @@ export const yunalesca: Tactic = (actorId, commands, engine) => {
 
     // 4. Attackers: Haste the party once — more swings between Absorbs is the
     //    whole race. Dispelling Slap strips it from one member at a time.
-    if (living.some((c) => !has(c, 'haste'))) {
+    //    Never through a Reflect: Hastega bounces off every holder (see step 2).
+    if (living.some((c) => !has(c, 'haste')) && !living.some((c) => has(c, 'reflect'))) {
       const haste = row(commands, ['Hastega']);
       if (haste) return aim(haste);
     }

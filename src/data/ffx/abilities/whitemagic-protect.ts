@@ -14,8 +14,8 @@
  * has no explicit reflect column for them. Reflect itself is `single-any`
  * (see its own doc comment). The four Nul spells are **not** reflectable:
  * sourced 2026-09-21 as `all-allies` (party-wide), same as Hastega/Slowga in
- * the sibling file, per `bouncesOffReflect`'s "party-wide spells... never
- * bounce" rule (`src/battle/ffx/statuses.ts`).
+ * the sibling file. (The engine used to refuse to bounce any party-wide spell; the game's record bit decides, per target, and the Nul spells do carry
+ * it since RC4 lane FFX-G: `reflectableDef` in `src/battle/ffx/statuses.ts`. The flag here stays what it was; the record rules.)
  *
  * `damageType: 'other'` is used throughout this file (rather than
  * `'magical'`) for every ability, matching this codebase's established

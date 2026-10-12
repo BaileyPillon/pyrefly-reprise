@@ -13,20 +13,25 @@
  * Bahamut's plain hit leaves the menu open. What happens after a close is unchanged: no delay is
  * applied (A2 is unsourced), she is offered a fresh menu at once, and a racing confirm is refused.
  * Proven on the real engine (rule 3). The switch's own tests are in `ffx2-menu-cancel-delay.test.ts`.
+ *
+ * **Re-parity W4 (2026-10-10; FFX-2 only, reason "game-code parity").** The switch and `active.ts` `closesOpenMenu` are gone: the engine
+ * applies the game's own rule (`apply_atb_damage`, exe 0x0061b620), which closes a menu when a hit of the ATB class (Delay) lands on its
+ * owner and for nothing else. The `closesOpenMenu` block is deleted (the function does not exist); the engine-level tests below are
+ * unchanged in what they claim, and `tests/unit/helpers/ffx2MenuCancel.ts` tells them which abilities are the Delay ones. The nine D = 0 hashes
+ * are re-pinned (the whole clock moved: the logic step, the game's recovery and cast times).
  */
 
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, BattleEvent, CombatantId, Command, Decision, FFX2Combatant, FFX2PartyBuild } from '../../src/battle/common/types.ts';
 import { FFX2Engine, defaultAbilities } from '../../src/battle/ffx2/index.ts';
-import { closesOpenMenu } from '../../src/battle/ffx2/active.ts';
 import { isActionLocked } from '../../src/battle/ffx2/chain.ts';
-import { ActingAbilities, carriesMenuCancel } from '../../src/battle/ffx2/menu-cancel.ts';
-import type { EventDraft, Ffx2EngineOptions, Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
+import type { Ffx2EngineOptions, Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_CHAIN_ORDER } from '../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { driveChapter4, driveChapter5, driveChapter6, ffx2Options, logHash } from './helpers/ffx2ChapterDrive.ts';
+import { ActingAbilities, carriesMenuCancel } from './helpers/ffx2MenuCancel.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
@@ -80,6 +85,22 @@ function runUnderMenu(engine: FFX2Engine, owner: CombatantId, ms: number, top?: 
 }
 
 /**
+ * RC3 (FFX-2 only; reason "game-script parity"): does the closed menu come back, with the battle still on, inside the 200 steps of 100 ms the
+ * three scenarios below allow? The same (formation, seed) is played again from its start (the engine is deterministic), because a candidate
+ * whose fight is over before her gauge runs out (the Syndicate's scripts are the game's own now) cannot show the menu returning.
+ */
+function menuReturns(extra: Partial<Ffx2EngineOptions>, groupId: string, seed: number, top?: boolean): boolean {
+  const { engine, menu } = engineAt(seed, extra, groupId, chateauBuild);
+  runUnderMenu(engine, menu.actorId, 60_000, top);
+  let again = engine.nextDecision();
+  for (let i = 0; i < 200 && again.kind !== 'player-input'; i++) {
+    if (again.kind === 'waiting') engine.tick(Math.min(100, again.nextEventMs), { throughInput: true });
+    again = engine.nextDecision();
+  }
+  return again.kind === 'player-input';
+}
+
+/**
  * The first Chapter VI formation and seed whose opening menu is closed by a Delay hit (Supercollider,
  * Huggles or Mach Fan) landing on the owner, she still standing and no status landing with it.
  */
@@ -90,7 +111,7 @@ function closedByDelayHit(extra: Partial<Ffx2EngineOptions>, top?: boolean) {
       const run = runUnderMenu(engine, menu.actorId, 60_000, top);
       const owner = engine.state().combatants[menu.actorId];
       if (run.closed && owner && owner.hp > 0 && !engine.state().result && !run.last.statused
-        && run.last.hitAbilities.some((a) => carriesMenuCancel(abilityOf(a)))) {
+        && run.last.hitAbilities.some((a) => carriesMenuCancel(abilityOf(a))) && menuReturns(extra, groupId, seed, top)) {
         return { seed, engine, menu, run };
       }
     }
@@ -110,14 +131,22 @@ describe('the menu-cancel correction: a Delay hit closes the open menu, a plain 
     expect(plain, 'no plain Bahamut hit landed under an open menu').toBeGreaterThan(0);
   });
 
-  it('Active: the Delay hit closes it, and she is offered a fresh menu at once (no delay: A2 is not built)', () => {
+  it('Active: the Delay hit closes it AND pushes her gauge back (the game sets the counter to the Delay value, 4,000 or 8,000); the menu returns when it has run out', () => {
     const { engine, menu } = closedByDelayHit({ atbMode: 'active' });
     expect(engine.inputValid(menu.actorId)).toBe(false);
-    const again = engine.nextDecision();
+    const girl = engine.state().combatants[menu.actorId] as unknown as Ffx2Unit;
+    // Re-parity W4: this used to say "no delay applied (A2 unsourced), she is offered a fresh menu at once". `apply_atb_damage` (exe
+    // 0x0061b620) sets a ready girl's counter to the Delay value and sends her back to IDLE (measured on the running game, 2026-10-09).
+    expect(girl.gauge.state).not.toBe(4);
+    expect(girl.atb.recovery).toBeGreaterThan(2_000);
+    expect(girl.atb.recovery).toBeLessThanOrEqual(8_000 + 200);
+    let again = engine.nextDecision();
+    for (let i = 0; i < 400 && again.kind !== 'player-input'; i++) {
+      if (again.kind === 'waiting') engine.tick(Math.min(100, again.nextEventMs), { throughInput: true });
+      again = engine.nextDecision();
+    }
     expect(again.kind).toBe('player-input');
-    if (again.kind !== 'player-input') return;
-    expect(again.actorId).toBe(menu.actorId); // still ready: her bar was not touched
-    expect(engine.inputValid(again.actorId)).toBe(true);
+    if (again.kind === 'player-input') expect(engine.inputValid(again.actorId)).toBe(true);
   });
 
   it('Active: a confirm that races the Delay hit is refused and spends nothing', () => {
@@ -141,10 +170,14 @@ describe('the menu-cancel correction: a Delay hit closes the open menu, a plain 
     expect(hers).toEqual([]);
   });
 
-  it('Wait split at the top-level list: the same close by a Delay hit; the fresh menu starts held until the HUD reports its top list', () => {
+  it('Wait split at the top-level list: the same close by a Delay hit; the fresh menu (when her gauge has run out) starts held until the HUD reports its top list', () => {
     const { engine, menu } = closedByDelayHit({ atbMode: 'wait', waitSplit: true }, true);
     expect(engine.inputValid(menu.actorId)).toBe(false);
-    const again = engine.nextDecision();
+    let again = engine.nextDecision();
+    for (let i = 0; i < 400 && again.kind !== 'player-input'; i++) {
+      if (again.kind === 'waiting') engine.tick(Math.min(100, again.nextEventMs), { throughInput: true });
+      again = engine.nextDecision();
+    }
     expect(again.kind).toBe('player-input');
     expect(engine.menuLevel()).toBe('deep');
     expect(engine.clockHeld()).toBe(true);
@@ -183,37 +216,6 @@ describe('the menu-cancel correction: a Delay hit closes the open menu, a plain 
   });
 });
 
-describe('closesOpenMenu: what counts as a hit (our reading, preflight §3)', () => {
-  const units = [
-    { id: 'yuna', side: 'party' },
-    { id: 'rikku', side: 'party' },
-    { id: 'boss', side: 'enemy' },
-  ] as unknown as Ffx2Unit[];
-  const hit = (over: Partial<Extract<EventDraft, { type: 'damage' }>>): EventDraft =>
-    ({ type: 'damage', targetId: 'yuna', sourceId: 'boss', amount: 100, element: 'none', crit: false, hitIndex: 0, hitCount: 1, ...over }) as EventDraft;
-
-  it('an enemy blow that deals damage to the owner closes her menu (the rule before the ability check)', () => {
-    expect(closesOpenMenu(hit({}), 'yuna', units)).toBe(true);
-  });
-  it('with the ability check the engine passes (the switch on): only a Delay or Action-cancel ability closes it', () => {
-    const mega = abilityOf('mega-flare') ?? abilityOf('attack');
-    expect(closesOpenMenu(hit({}), 'yuna', units, { ability: mega })).toBe(false);
-    expect(closesOpenMenu(hit({}), 'yuna', units, { ability: undefined })).toBe(false);
-    for (const id of ['x2-ormi-supercollider', 'x2-ormi-huggles', 'x2-leblanc-mach-fan']) {
-      expect(closesOpenMenu(hit({}), 'yuna', units, { ability: abilityOf(id) }), id).toBe(true);
-      expect(closesOpenMenu(hit({ amount: 0 }), 'yuna', units, { ability: abilityOf(id) }), `${id} immune`).toBe(false);
-    }
-  });
-  it('an immune or absorbed blow, a status tick, her own HP cost, an ally\'s blow and a blow on someone else do not', () => {
-    expect(closesOpenMenu(hit({ amount: 0 }), 'yuna', units)).toBe(false);
-    expect(closesOpenMenu(hit({ amount: -50 }), 'yuna', units)).toBe(false);
-    expect(closesOpenMenu(hit({ sourceId: undefined }), 'yuna', units)).toBe(false);
-    expect(closesOpenMenu(hit({ sourceId: 'rikku' }), 'yuna', units)).toBe(false);
-    expect(closesOpenMenu(hit({ targetId: 'rikku' }), 'yuna', units)).toBe(false);
-    expect(closesOpenMenu({ type: 'miss', targetId: 'yuna', sourceId: 'boss' } as unknown as EventDraft, 'yuna', units)).toBe(false);
-  });
-});
-
 describe('zero decision time is untouched (every golden and D = 0 bench)', () => {
   // Pinned from the build before this change: the 40-seed bench's D = 0 aggregate hashes were
   // identical before and after (preflight §7), so these per-seed hashes are the pre-change logs.
@@ -224,10 +226,19 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // **Chapter IV's row re-pinned again 2026-10-09 for Mega Flare at the game's power 14** (Bailey: "Use 14 from the files"; the first
   // event that differs is Bahamut's first Mega Flare damage; see `ffx2-atb-golden.test.ts`, ninth re-pin); the old row is in git at
   // 3663cd3a. Chapters V and VI did not move.
+  // **Re-pinned once for the merged state of release candidate 3** (branch re-parity-rc3, 2026-10-11, FFX-2 only; reasons "game-code parity" and "game-script parity"; docs/handoff/re-parity-rc3.md): re-parity W4's logic-step engine, gauges and status clocks and the three boss-AI lanes (a: Bahamut, the Vegnagun chain, Shuyin; b: the Fallen Aeons, the Magus Sisters, Paragon, the Oversoul, Trema; c: the Leblanc Syndicate, the Den of Woe, Ixion) are in one tree, with the AI lanes' timer rows put on the logic-step clock (Bahamut's countdown is 750 steps, a voice poll recovers by the speak command's 60 instead of 70, the Vegnagun Head's Agility 110 is rolled into its first gauge, the Oversoul idles 1,201 steps). Each branch had re-pinned these for itself; this is the one pin of the merged tree. All nine are still victories and no menu is closed; Chapters IV and V equal the atb golden's seeds 1 to 3 again
+  // and Chapter VI equals chapters/den-of-woe-carry.test.ts ch6. Against W4 alone the first differing event is Bahamut's first Curse (Chapter IV, seeds
+  // 1 to 3: lane a), the Tail's first turn 9 steps earlier (Chapter V, seeds 1 to 3: the voice poll's 60) and, in Chapter VI, the opening gauge snapshot
+  // and the first goon or Ormi turn (lane c: Ormi's, Logos' and the goons' own Agility rows). The old hashes are in git at 931613a8 and bfb229a3.
+  // **Re-pinned 2026-10-10 for re-parity W4 (FFX-2 only; reason "game-code parity"):** the engine clock is the game's logic step, a command
+  // leaves the game's recovery and its cast the game's charge, so every D = 0 log moved (all nine are still victories and no menu is closed).
+  // They equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again. The old hashes
+  // are in git at 931613a8.
+  // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. All nine are still victories and no menu is closed; they equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 and `chapters/den-of-woe-carry.test.ts` ch6 again.
   const PINNED = [
-    ['a290220ed81a53d9', 'd9f53eb0ed928677', '43393d7597f35b57'],
-    ['88a170d44b71a764', 'c93b226ef0d2fd71', '6bda191adef38912'],
-    ['ad3e5b13a4b416a2', 'ea6f77082eed6c19', 'a8449e5542467682'],
+    ['08332b98dd23c13e', 'b320e520bf125d9c', '3b1bae27af9363c1'],
+    ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e'],
+    ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

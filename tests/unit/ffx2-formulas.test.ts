@@ -22,7 +22,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { SeededRng } from '../../src/battle/common/rng.ts';
-import { hitPercent } from '../../src/battle/ffx2/index.ts';
+import { hitPercent, newGauge } from '../../src/battle/ffx2/index.ts';
 import { resolveAbility } from '../../src/battle/ffx2/resolve.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import { baseDamage } from '../../src/battle/ffx2/kernel/damage.ts';
@@ -38,7 +38,7 @@ function stats(partial: Partial<StatBlock>): StatBlock {
   };
 }
 
-function combatant(level: number, s: Partial<StatBlock>, extra: Partial<FFX2Combatant> = {}, id = 'c', side: 'party' | 'enemy' = 'enemy'): FFX2Combatant {
+function combatant(level: number, s: Partial<StatBlock>, extra: Partial<FFX2Combatant> = {}, id = 'c', side: 'party' | 'enemy' = 'enemy'): Ffx2Unit {
   const full = stats(s);
   return {
     id, name: id, side, spriteKey: id,
@@ -47,7 +47,7 @@ function combatant(level: number, s: Partial<StatBlock>, extra: Partial<FFX2Comb
     controller: 'ai', alive: true, removed: false, slot: 0, flags: {},
     level,
     atb: { ticks: 0, required: 10000, gauge: 0, charging: null, recovery: 0 },
-    accessories: [], chainCount: 0, chainWindowTicks: 0,
+    accessories: [], chainCount: 0, chainWindowTicks: 0, gauge: newGauge(0),
     ...extra,
   };
 }

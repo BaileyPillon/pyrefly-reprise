@@ -68,12 +68,12 @@ describe('Chapter XI option A: 3 s of action time on the Road links only (FFX-2 
     expect(x2Anima.stats.agi).toBe(133);
   });
 
-  it("each of Shiva's turns lands exactly 3 s (9,000 ticks) later than with the switch forced off", () => {
+  it("each of Shiva's turns lands exactly 3 s (90 logic steps) later than with the switch forced off", () => {
     const on = shivaTurns(undefined);
     const off = shivaTurns(0);
     expect(on.length).toBe(6);
     expect(off.length).toBe(6);
-    for (let i = 1; i < on.length; i++) expect((on[i]! - on[i - 1]!) - (off[i]! - off[i - 1]!)).toBe(9000);
+    for (let i = 1; i < on.length; i++) expect((on[i]! - on[i - 1]!) - (off[i]! - off[i - 1]!)).toBe(90);
   });
 
   it('is deterministic: the same seed gives the same Sisters log', () => {

@@ -56,7 +56,9 @@ function evraeEngine() {
     // actors in the same order and the Phoenix Down revives Tidus at 632 before the Al Bhed Potion's 1000 (checked by running the engine).
     // Seed 3 -> 2 on 2026-10-10 (re-parity W2 merged onto release candidate 1, FFX only): the two sets of changes move the draws again; on the
     // merged line seed 2 is the first of seeds 1 to 60 that does it (6, 10, 17, 22 and 27 also do), as it was on the release-candidate line alone.
-    seed: 2,
+    // Seed 2 -> 3 on 2026-10-11 (re-parity RNG lane, FFX only: each game draws from its own 68 streams, so every seed is another deal): seed 3 is the first of
+    // seeds 1 to 150 that does it (7, 14, 21, 25 and 31 also do; 33 of 150), checked by running the engine.
+    seed: 3,
     condition: 'normal',
     canEscape: false,
   } as never);
@@ -87,7 +89,7 @@ const OPENING: Array<{ actorId: CombatantId; command: Command }> = [
 ];
 
 describe('PR-0156: the party row never reads HP above maximum', () => {
-  it('Chapter VIII seed 2, revive then Al Bhed Potion: no row over its maximum, through the real presenter', async () => {
+  it('Chapter VIII seed 3, revive then Al Bhed Potion: no row over its maximum, through the real presenter', async () => {
     const engine = evraeEngine();
     const drawn: string[] = [];
     let peakTidus = 0;

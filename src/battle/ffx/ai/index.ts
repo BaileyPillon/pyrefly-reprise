@@ -273,5 +273,6 @@ export function chooseAiCommand(ctx: Ctx, self: FFXCombatant): Command | null {
   // an auto-attack [ffx-combat-core §4.2]. An enemy's fallback aims at the party's side, as it always did;
   // a guest in the party (an AI guest with no script) aims at the enemy side, never at his own.
   const targets = self.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx);
-  return { kind: 'attack', targets: targets.length > 0 ? [ctx.rng.pick(targets).id] : [] };
+  // An unscripted combatant: no script, so no game draw to match. The pick is an engine stand-in on the engine-side stream.
+  return { kind: 'attack', targets: targets.length > 0 ? [ctx.rng.aux.pick(targets).id] : [] };
 }

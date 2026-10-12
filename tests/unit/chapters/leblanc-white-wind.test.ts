@@ -38,6 +38,7 @@ import { applyStatus } from '../../../src/battle/ffx2/statuses.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_ACT_III } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 
 const REGISTRY = abilityRegistryFrom(Object.values(data.ABILITIES));
 const WHITE_WIND = 'x2-leblanc-white-wind';
@@ -196,7 +197,7 @@ describe('PR-0086 on the real engine: a seeded Act III where Leblanc reaches Whi
           cmd = { ...row.command, targets: ['leblanc'] } as Command;
         }
         if (engine.submit(cmd).length === 0) engine.submit({ kind: 'defend', targets: [] } as Command);
-        if (engine.state().ticks / 3000 > 240) break;
+        if (engine.state().ticks / STEPS_PER_SECOND > 240) break;
       }
       const log = engine.state().log as unknown as Array<Record<string, unknown>>;
       for (let i = 0; i < log.length; i++) {

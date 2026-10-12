@@ -26,6 +26,7 @@ import { type TickChr, doomTick, endOfTurnTick, poisonMarked, poisonTick, startO
 import { dealDamage, healOutsideChain, koActor } from '../hp.ts';
 import { removeStatus } from '../statuses.ts';
 import { type Ctx, enemies, friendlies, has, onField, rtOf, statusOf } from '../state.ts';
+import { toggleAutoStatus } from './auto-status.ts';
 import { SLOT_COUNT, combatantAtSlot, slotOf } from './slots.ts';
 import { EXTRA_STATUS_BIT, TEMPORAL_STATUS_IDS, givenExtraWord, temporalCounters } from './status.ts';
 import { applyThreatenRelease, emptyTickChr, overlayThreaten } from './threaten.ts';
@@ -111,6 +112,12 @@ export function startOfTurn(ctx: Ctx, actor: FFXCombatant): void {
   for (const reset of result.resets) {
     const holder = combatantAtSlot(ctx, reset);
     if (holder) rtOf(ctx, holder.id).regenTicks = 0;
+  }
+  // The payout toggles its holder's SOS statuses straight after (VA 0x007af4f0 to 0x007af260; re-parity RC4, FFX only): a Regen that healed
+  // a wearer past half is what takes the SOS set off.
+  for (const payout of result.payouts) {
+    const holder = combatantAtSlot(ctx, payout.slot);
+    if (holder) toggleAutoStatus(ctx, holder);
   }
 
   // The actor's own start-of-turn counters (Regen), then the stances that last until its next turn.

@@ -3,15 +3,18 @@
  * `docs/plans/chapter-gippal-review.md` §9). **FFX-2 only.** A transcription
  * check: each test walks the source's table, and the weights are measured over
  * many draws at fixed seeds.
+ *
+ * Re-parity AI lane C (2026-10-10; reason "game-script parity"): the scripts are now the game's own
+ * (`research/re-ffx2-ai-leblanc-den-ixion.md` 4.2 to 4.4). The one-third lines are integer (`HP < max / 3`), Baralai's
+ * low-HP move is an extra command and his counter counts results; the decision tables of the new rules are walked in
+ * `tests/unit/parity-ffx2-ai-den.test.ts`, and the cases below that the script no longer answers that way are re-pinned.
  */
 
 import { describe, expect, it } from 'vitest';
 import { aiHarness, aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
-import type { EventDraft, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
-import { notifyEnemiesDamaged } from '../../../src/battle/ffx2/engineHooks.ts';
+import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
 import { DRILL_SHOT_AT, GIPPAL_CYCLE, MEM, NOOJ_CYCLE } from '../../../src/battle/ffx2/ai/den-of-woe.ts';
-import { shadeBaralai } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
 
 function shade(id: string, maxHp: number, mp = 999): Ffx2Unit {
   const u = aiUnit(id, 'enemy', maxHp);
@@ -44,14 +47,14 @@ describe('Gippal (§4.1)', () => {
     expect(share('x2-den-gippal-potion-plus')).toBe(0);
   });
 
-  it('"below 1/3" is strict: 4,934 keeps the cycle, 4,933 turns to the random set', () => {
+  it('"below 1/3" is `HP < max / 3` in integers (re-parity D8): 4,933 keeps the cycle, 4,932 turns to the random set', () => {
     const keep = shade('shade-gippal', 14800);
-    keep.hp = 4934;
+    keep.hp = 4933;
     const k = aiHarness(keep, [], 'shade-gippal', 23).run(600);
     expect(k).not.toContain('x2-den-gippal-mortar');
     expect(k).not.toContain('x2-den-gippal-potion-plus');
     const turn = shade('shade-gippal', 14800);
-    turn.hp = 4933;
+    turn.hp = 4932;
     const h = aiHarness(turn, [], 'shade-gippal', 23);
     const t = h.run(600);
     expect(t).toContain('x2-den-gippal-mortar');
@@ -93,7 +96,7 @@ describe('Baralai (§4.2)', () => {
     ]);
   });
 
-  it('Looming Glacier picks the highest-MP girl not in Stop, else the highest MP', () => {
+  it('Looming Glacier picks the highest-MP girl not in Stop; with every girl in Stop the target is left to the engine (D6)', () => {
     const b = shade('shade-baralai', 12220, 720);
     b.aiMemory = { [MEM.cycle]: 3 };
     const h = aiHarness(b, [], 'shade-baralai', 33);
@@ -108,54 +111,48 @@ describe('Baralai (§4.2)', () => {
     rikku.statuses.stop = { id: 'stop' } as never;
     paine.statuses.stop = { id: 'stop' } as never;
     b.aiMemory = { [MEM.cycle]: 3 };
-    expect(aiScriptFor('shade-baralai').decide(h.ctx)).toMatchObject({ targets: ['yuna'] });
+    expect(aiScriptFor('shade-baralai').decide(h.ctx)).toMatchObject({ targets: [] }); // "nothing": the engine turns it into the nearest living girl
   });
 
-  it('the counter: +1 per damaging action (GP11 a), and at 8 Drill Shot on the last attacker, then 0', () => {
+  it('the counter counts results (D3): +1 per result, 7 results keep the cycle, the 8th sends the next poll to the Drill Shot on the latest attacker, then 0', () => {
     const b = shade('shade-baralai', 12220, 720);
-    b.enemy = { aiScriptId: 'shade-baralai', formIndex: 0, forms: [], rewards: shadeBaralai.rewards };
     const h = aiHarness(b, [], 'shade-baralai', 34);
-    const at = (u: Ffx2Unit) => ({ ...h.ctx, self: u });
-    const hit = (by: string, amount: number): EventDraft[] =>
-      [{ type: 'damage', targetId: 'shade-baralai', sourceId: by, amount, element: 'none', crit: false, hitIndex: 0, hitCount: 1 },
-        { type: 'damage', targetId: 'shade-baralai', sourceId: by, amount, element: 'none', crit: false, hitIndex: 1, hitCount: 2 }];
-    const party = h.ctx.units.filter((u) => u.side === 'party');
-    for (let i = 0; i < DRILL_SHOT_AT - 1; i++) notifyEnemiesDamaged(hit('paine', 100), party[2]!, h.ctx.units, at);
-    expect(b.aiMemory?.[MEM.hits]).toBe(7); // two hits in one action count once
-    expect(h.run(1)).toEqual(['x2-den-baralai-attack']);
-    notifyEnemiesDamaged(hit('rikku', 0), party[1]!, h.ctx.units, at); // a zero hit is not damage
+    const script = aiScriptFor('shade-baralai');
+    script.onResults!(h.ctx, { count: DRILL_SHOT_AT - 1, lastAttackerId: 'paine' }); // seven results (two hits of one action are two)
     expect(b.aiMemory?.[MEM.hits]).toBe(7);
-    notifyEnemiesDamaged(hit('rikku', 50), party[1]!, h.ctx.units, at);
-    const drill = aiScriptFor('shade-baralai').decide(h.ctx);
+    expect(h.run(1)).toEqual(['x2-den-baralai-attack']);
+    script.onResults!(h.ctx, { count: 1, lastAttackerId: 'rikku' });
+    const drill = script.decide(h.ctx);
     expect(drill).toMatchObject({ id: 'x2-den-baralai-drill-shot', targets: ['rikku'] });
     expect(b.aiMemory?.[MEM.hits]).toBe(0);
   });
 
-  it('a Regen payout that heals him counts too ("or when his HP changes")', () => {
+  it('a Regen payout that heals him is not a result (D3), but it is his latest "attacker": the Drill Shot then goes to himself (D4)', () => {
     const b = shade('shade-baralai', 12220, 720);
     const h = aiHarness(b, [], 'shade-baralai', 35);
+    aiScriptFor('shade-baralai').onResults!(h.ctx, { count: DRILL_SHOT_AT, lastAttackerId: 'rikku' });
     aiScriptFor('shade-baralai').onRegen?.(h.ctx, 360);
-    expect(b.aiMemory?.[MEM.hits]).toBe(1);
+    expect(b.aiMemory?.[MEM.hits]).toBe(DRILL_SHOT_AT);
+    expect(aiScriptFor('shade-baralai').decide(h.ctx)).toMatchObject({ id: 'x2-den-baralai-drill-shot', targets: ['shade-baralai'] });
   });
 
-  it('below a third, 1 turn in 4: Regen; then Not-So-Mighty Guard while Regen holds; Absorb when MP <= 59', () => {
-    const count = (mp: number, regen: boolean) => {
+  it('below a third, 1 poll in 4 queues the low-HP move AND the normal move (D1, D2): Regen, or Absorb under 60 MP; Guard needs Reflect', () => {
+    // A fresh poll returns the low-HP move 1 time in 4, and the next call returns the normal command queued with it: so over many calls
+    // one command in five is the low-HP move (0.25 / 1.25), and none of them is a Guard.
+    const count = (mp: number) => {
       const b = shade('shade-baralai', 12220, mp);
       b.hp = 4000;
-      if (regen) b.statuses.regen = { id: 'regen' } as never;
-      const ids = aiHarness(b, [], 'shade-baralai', 36).run(4000);
+      b.stats.maxMp = 999;
+      const ids = aiHarness(b, [], 'shade-baralai', 36).run(5000);
       return (id: string) => ids.filter((x) => x === id).length / ids.length;
     };
-    expect(count(720, false)('x2-den-baralai-regen')).toBeCloseTo(0.25, 1);
-    expect(count(720, true)('x2-den-baralai-not-so-mighty-guard')).toBeCloseTo(0.25, 1);
-    expect(count(720, true)('x2-den-baralai-regen')).toBe(0);
-    const poor = count(59, false);
+    expect(count(720)('x2-den-baralai-regen')).toBeCloseTo(0.2, 1);
+    expect(count(720)('x2-den-baralai-not-so-mighty-guard')).toBe(0); // only a monster with Reflect casts it
+    const poor = count(59);
     expect(poor('x2-den-baralai-regen')).toBe(0);
-    // The branch's quarter only: 59 MP is still 20 or more, so step 5 stays Silence.
-    expect(poor('x2-den-baralai-absorb')).toBeCloseTo(0.25, 1);
-    expect(poor('x2-den-baralai-silence')).toBeGreaterThan(0);
+    expect(poor('x2-den-baralai-absorb')).toBeGreaterThan(0.15);
     const above = shade('shade-baralai', 12220, 720);
-    above.hp = 4074; // 3 x 4,074 = 12,222: not below a third
+    above.hp = 4073; // not below 12,220 / 3 = 4,073 in integers
     expect(aiHarness(above, [], 'shade-baralai', 37).run(400)).not.toContain('x2-den-baralai-regen');
   });
 });

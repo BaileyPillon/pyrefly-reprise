@@ -6,7 +6,7 @@
  * 0.4 percent). `kernel/steal-rewards.ts#stealItem` is the game's function (VA 0x0078b760, proven in
  * `tests/unit/parity-ffx-steal-rewards.test.ts`): the success roll `draw(stream 10) % 255 < chance`, which a miss cancels AFTER the
  * draw; on success the rarity roll `draw(stream 11) & 0xff` below 0x20 (0x80 with Pickpocket, always with Master Thief) takes the rare
- * item, and the monster's chance halves. The engine keeps one seeded stream, so each kernel draw is one engine draw already
+ * item, and the monster's chance halves. Each kernel draw is one draw of the stream the kernel names (10, then 11), already
  * reduced the way the kernel reduces it.
  *
  * - **The chance byte**: an enemy's `steal.stealRate` when its record carries the byte, else its `baseChance` percent on the byte

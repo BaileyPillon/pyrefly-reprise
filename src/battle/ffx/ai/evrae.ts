@@ -18,6 +18,7 @@
 import type { Command } from '../../common/types.ts';
 import { type Ctx, rtOf, tryActor } from '../state.ts';
 import { randomLiving } from './game-rolls.ts';
+import { missileCameraShot, orderCaptionScene } from './airship-scenes.ts';
 import { type AiContext, registerAiScript, use } from './types.ts';
 import {
   AIRSHIP_BREATH_CHARGED,
@@ -151,6 +152,7 @@ export const cidAi = (ai: AiContext): Command | null => {
 
   if (queuedOrder(ctx) !== null) {
     const order = queuedOrder(ctx);
+    orderCaptionScene(ctx); // his pre-turn voice-line scene (one stream-2 draw), before the turn runs
     applyQueuedOrder(ctx);
     ctx.emit({
       type: 'message',
@@ -166,6 +168,7 @@ export const cidAi = (ai: AiContext): Command | null => {
   if (left > 0) {
     ai.memory['missilesLeft'] = left - 1;
     ctx.state.flags[AIRSHIP_MISSILES] = left - 1;
+    missileCameraShot(ctx); // the volley's camera shot picks with one stream-2 draw
     return use(ai, CID_GUIDED_MISSILES, [EVRAE_ID]);
   }
 

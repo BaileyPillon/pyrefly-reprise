@@ -15,7 +15,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEngine, Command, Decision } from '../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
-import type { SeededRng } from '../../src/battle/common/rng.ts';
+import type { BattleRng, RngSnapshot } from '../../src/battle/common/streams.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
@@ -24,7 +24,7 @@ import { boardFor } from '../../src/engine/tactics/advisor-v3.ts';
 import { chapterById, fallbackCommand, HUMAN_PACE, runChapter } from '../../critic/bench/advisor-v3/drive.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
-const rngOf = (e: FFX2Engine): number => (e as unknown as { rng: SeededRng }).rng.saveState();
+const rngOf = (e: FFX2Engine): RngSnapshot => (e as unknown as { rng: BattleRng }).rng.saveState();
 const line = (e: BattleEngine, d: Input): Command => intendedStrategy(d.actorId, d.commands, e as never) ?? fallbackCommand(d);
 
 async function engineAt(chapterId: string, seed: number): Promise<FFX2Engine> {
@@ -87,7 +87,7 @@ describe('FFX2Engine.fork (advisor v3, FFX-2 only)', () => {
     play(a);
     play(b);
     expect(logOf(a)).toBe(logOf(b));
-    expect(rngOf(real)).toBe(before);
+    expect(rngOf(real)).toEqual(before);
     expect(logOf(real)).toBe(log);
   }, 300_000);
 
