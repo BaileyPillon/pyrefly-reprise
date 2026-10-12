@@ -340,4 +340,4 @@ Switches (dev server): `?ffxnet=off` (no net), `?ffxfar=script` (the script's FA
      - Evrae's height fit;
      - the HUD against the 3D poses;
      - an extended painted sky to restore the five left-out shots.
-- **Bailey's launcher:** `D:\Toolsfx-parity\options\play-fayth.cmd` (port 5281; an unchecked comparison page `options\index.html` was left by a stopped agent).
+- **Bailey's launcher:** `D:\Tools\ffx-parity\options\play-fayth.cmd` (port 5281; an unchecked comparison page `options\index.html` was left by a stopped agent).
