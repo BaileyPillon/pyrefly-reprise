@@ -1,0 +1,502 @@
+{
+ "what": "tools/delivery-proof.mjs on `vite preview` servers (BASE_PATH=/) of two builds, headless Chromium (PYREFLY_BROWSER=gpu), 1600x900, one fresh profile per run, real key presses (Enter on the title, ArrowRight and Enter on the board, Enter in party prep, Enter through the scene), the HTTP cache disabled so a refetch cannot hide. Fast = 100 Mbit/s, 20 ms; mid = 25 Mbit/s, 40 ms. Times are ms.",
+ "builds": {
+  "before": "the live build a061e9dc (bundle index-Chs9J3OY.js), from D:/pyrefly-r42-rc/dist-release",
+  "after": "this branch, built from the work tree (bundle index-DZIrKCYq.js); every art, audio, font and depth-map file is byte-identical to the live build, the page, the bundle and _headers differ"
+ },
+ "pr0373_music": {
+  "after_fast_link_chapter_2": {
+   "link": "fast",
+   "screensMsAfterFirstInput": [
+    [
+     "title",
+     -6070
+    ],
+    [
+     "chapter-select",
+     401
+    ],
+    [
+     "party-prep",
+     16409
+    ],
+    [
+     "cutscene",
+     18925
+    ],
+    [
+     "battle",
+     69399
+    ]
+   ],
+   "cardConfirmedMsAfterFirstInput": 16353,
+   "battleStartedMsAfterFirstInput": 69396,
+   "musicRequests": [
+    {
+     "file": "title.mp3",
+     "startMsAfterCardConfirm": -16182,
+     "endMsAfterCardConfirm": -15173,
+     "MB": 2.33,
+     "servedFromCache": false
+    },
+    {
+     "file": "chapter-select.mp3",
+     "startMsAfterCardConfirm": -15961,
+     "endMsAfterCardConfirm": -15077,
+     "MB": 2.11,
+     "servedFromCache": false
+    },
+    {
+     "file": "scene-zanarkand-dome.mp3",
+     "startMsAfterCardConfirm": 20,
+     "endMsAfterCardConfirm": 1042,
+     "MB": 3.94,
+     "servedFromCache": false
+    },
+    {
+     "file": "boss-yunalesca.mp3",
+     "startMsAfterCardConfirm": 1558,
+     "endMsAfterCardConfirm": 2200,
+     "MB": 3.06,
+     "servedFromCache": false
+    },
+    {
+     "file": "victory-ffx.mp3",
+     "startMsAfterCardConfirm": 2601,
+     "endMsAfterCardConfirm": 2995,
+     "MB": 2.32,
+     "servedFromCache": false
+    }
+   ],
+   "musicRequestedInTheFiveSecondsBeforeBattleStartOrAfter": [],
+   "mixerAtTheFirstSpokenLine": {
+    "ready": true,
+    "playing": "scene-zanarkand-dome",
+    "held": [
+     "boss-yunalesca",
+     "victory-ffx"
+    ],
+    "cached": [
+     "scene-zanarkand-dome",
+     "boss-yunalesca",
+     "victory-ffx"
+    ]
+   },
+   "mixerAtBattleStart": {
+    "ready": true,
+    "playing": "boss-yunalesca",
+    "held": [
+     "victory-ffx"
+    ],
+    "cached": [
+     "boss-yunalesca",
+     "victory-ffx"
+    ]
+   },
+   "consoleErrors": []
+  },
+  "before_fast_link_chapter_2": {
+   "link": "fast",
+   "screensMsAfterFirstInput": [
+    [
+     "title",
+     -6071
+    ],
+    [
+     "chapter-select",
+     431
+    ],
+    [
+     "party-prep",
+     11130
+    ],
+    [
+     "cutscene",
+     13651
+    ],
+    [
+     "battle",
+     63484
+    ]
+   ],
+   "cardConfirmedMsAfterFirstInput": 11070,
+   "battleStartedMsAfterFirstInput": 62916,
+   "musicRequests": [
+    {
+     "file": "title.mp3",
+     "startMsAfterCardConfirm": -10882,
+     "endMsAfterCardConfirm": -9870,
+     "MB": 2.33,
+     "servedFromCache": false
+    },
+    {
+     "file": "chapter-select.mp3",
+     "startMsAfterCardConfirm": -10665,
+     "endMsAfterCardConfirm": -9775,
+     "MB": 2.11,
+     "servedFromCache": false
+    },
+    {
+     "file": "scene-zanarkand-dome.mp3",
+     "startMsAfterCardConfirm": 2577,
+     "endMsAfterCardConfirm": 3268,
+     "MB": 3.94,
+     "servedFromCache": false
+    },
+    {
+     "file": "boss-yunalesca.mp3",
+     "startMsAfterCardConfirm": 51523,
+     "endMsAfterCardConfirm": 53455,
+     "MB": 3.06,
+     "servedFromCache": false
+    }
+   ],
+   "musicRequestedInTheFiveSecondsBeforeBattleStartOrAfter": [
+    "boss-yunalesca.mp3"
+   ],
+   "mixerAtBattleStart": {
+    "ready": true,
+    "playing": "scene-zanarkand-dome",
+    "held": null,
+    "cached": [
+     "scene-zanarkand-dome"
+    ]
+   },
+   "consoleErrors": []
+  },
+  "after_mid_link_chapter_2": {
+   "link": "mid",
+   "screensMsAfterFirstInput": [
+    [
+     "title",
+     -6073
+    ],
+    [
+     "chapter-select",
+     443
+    ],
+    [
+     "party-prep",
+     41689
+    ],
+    [
+     "cutscene",
+     44235
+    ],
+    [
+     "battle",
+     95274
+    ]
+   ],
+   "cardConfirmedMsAfterFirstInput": 41648,
+   "battleStartedMsAfterFirstInput": 94719,
+   "musicRequests": [
+    {
+     "file": "title.mp3",
+     "startMsAfterCardConfirm": -41422,
+     "endMsAfterCardConfirm": -37237,
+     "MB": 2.33,
+     "servedFromCache": false
+    },
+    {
+     "file": "chapter-select.mp3",
+     "startMsAfterCardConfirm": -41232,
+     "endMsAfterCardConfirm": -37367,
+     "MB": 2.11,
+     "servedFromCache": false
+    },
+    {
+     "file": "scene-zanarkand-dome.mp3",
+     "startMsAfterCardConfirm": 17,
+     "endMsAfterCardConfirm": 3100,
+     "MB": 3.94,
+     "servedFromCache": false
+    },
+    {
+     "file": "boss-yunalesca.mp3",
+     "startMsAfterCardConfirm": 3606,
+     "endMsAfterCardConfirm": 6920,
+     "MB": 3.06,
+     "servedFromCache": false
+    },
+    {
+     "file": "victory-ffx.mp3",
+     "startMsAfterCardConfirm": 7343,
+     "endMsAfterCardConfirm": 8998,
+     "MB": 2.32,
+     "servedFromCache": false
+    }
+   ],
+   "musicRequestedInTheFiveSecondsBeforeBattleStartOrAfter": [],
+   "mixerAtTheFirstSpokenLine": {
+    "ready": true,
+    "playing": "scene-zanarkand-dome",
+    "held": [
+     "boss-yunalesca",
+     "victory-ffx"
+    ],
+    "cached": [
+     "scene-zanarkand-dome"
+    ]
+   },
+   "mixerAtBattleStart": {
+    "ready": true,
+    "playing": "boss-yunalesca",
+    "held": [
+     "victory-ffx"
+    ],
+    "cached": [
+     "boss-yunalesca",
+     "victory-ffx"
+    ]
+   },
+   "consoleErrors": []
+  },
+  "before_mid_link_chapter_2": {
+   "link": "mid",
+   "screensMsAfterFirstInput": [
+    [
+     "title",
+     -6070
+    ],
+    [
+     "chapter-select",
+     413
+    ],
+    [
+     "party-prep",
+     38212
+    ],
+    [
+     "cutscene",
+     40741
+    ],
+    [
+     "battle",
+     91909
+    ]
+   ],
+   "cardConfirmedMsAfterFirstInput": 38170,
+   "battleStartedMsAfterFirstInput": 91236,
+   "musicRequests": [
+    {
+     "file": "title.mp3",
+     "startMsAfterCardConfirm": -37953,
+     "endMsAfterCardConfirm": -33861,
+     "MB": 2.33,
+     "servedFromCache": false
+    },
+    {
+     "file": "chapter-select.mp3",
+     "startMsAfterCardConfirm": -37785,
+     "endMsAfterCardConfirm": -34078,
+     "MB": 2.11,
+     "servedFromCache": false
+    },
+    {
+     "file": "scene-zanarkand-dome.mp3",
+     "startMsAfterCardConfirm": 2568,
+     "endMsAfterCardConfirm": 6533,
+     "MB": 3.94,
+     "servedFromCache": false
+    },
+    {
+     "file": "boss-yunalesca.mp3",
+     "startMsAfterCardConfirm": 52731,
+     "endMsAfterCardConfirm": 57116,
+     "MB": 3.06,
+     "servedFromCache": false
+    }
+   ],
+   "musicRequestedInTheFiveSecondsBeforeBattleStartOrAfter": [
+    "boss-yunalesca.mp3"
+   ],
+   "mixerAtTheFirstSpokenLine": {
+    "ready": true,
+    "playing": "chapter-select",
+    "held": null,
+    "cached": [
+     "title",
+     "chapter-select"
+    ]
+   },
+   "mixerAtBattleStart": {
+    "ready": true,
+    "playing": "scene-zanarkand-dome",
+    "held": null,
+    "cached": [
+     "scene-zanarkand-dome"
+    ]
+   },
+   "consoleErrors": []
+  }
+ },
+ "pr0405_prefetch_before_the_first_input": {
+  "note": "six seconds on the title with no input, then Enter; the title's own files are the first nine requests listed under defer",
+  "live_r42": {
+   "requests": 50,
+   "MB": 66.68,
+   "artRequests": 41,
+   "artMB": 64.5,
+   "list": [
+    "/ 0 MB",
+    "/art/title/keyart.2x.webp 0.75 MB",
+    "/assets/index-Chs9J3OY.js 1.25 MB",
+    "/assets/index-DiS-CYp9.css 0.07 MB",
+    "/art/manifest.json 0 MB",
+    "/fonts/chakra-petch/ChakraPetch-Bold-700.woff2 0.01 MB",
+    "/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2 0.04 MB",
+    "/fonts/chakra-petch/ChakraPetch-Regular-400.woff2 0.01 MB",
+    "/fonts/exo2/Exo2-Variable-wght.woff2 0.04 MB",
+    "/art/backdrops/gagazet.webp 4.07 MB",
+    "/art/characters/mortiorchis/idle.png 0.97 MB",
+    "/art/characters/seymour-flux-body/idle.png 0.98 MB",
+    "/art/portraits/tidus.webp 0.9 MB",
+    "/art/portraits/yuna.webp 0.8 MB",
+    "/art/portraits/kimahri.png 1.21 MB",
+    "/art/portraits/auron.webp 0.8 MB",
+    "/art/portraits/rikku.webp 0.9 MB",
+    "/art/portraits/wakka.webp 0.91 MB",
+    "/art/portraits/lulu.webp 0.84 MB",
+    "/art/portraits/yuna-x2.webp 0.97 MB",
+    "/art/portraits/rikku-x2.webp 1.05 MB",
+    "/art/portraits/paine.webp 0.89 MB",
+    "/art/characters/yuna-white-mage/idle.png 0.48 MB",
+    "/art/characters/rikku-dark-knight/idle.png 1.08 MB",
+    "/art/characters/paine-warrior/idle.png 0.46 MB",
+    "/art/characters/paine-dark-knight/idle.png 0.81 MB",
+    "/art/characters/yuna-gunner/idle.png 0.56 MB",
+    "/art/characters/rikku-thief/idle.png 0.7 MB",
+    "/art/characters/yuna-dark-knight/idle.png 0.72 MB",
+    "/art/characters/rikku-alchemist/idle.png 0.64 MB",
+    "/art/backdrops/zanarkand-dome.webp 3.97 MB",
+    "/art/characters/yunalesca-1/idle.png 1.02 MB",
+    "/art/backdrops/dreams-end.webp 3.24 MB",
+    "/art/characters/braskas-final-aeon-1/idle.png 1.23 MB",
+    "/art/backdrops/macalania-temple.webp 4.32 MB",
+    "/art/characters/anima/idle.png 0.95 MB",
+    "/art/backdrops/evrae-airship-deck.webp 3.42 MB",
+    "/art/characters/evrae/idle.png 0.88 MB",
+    "/art/backdrops/cavern-stolen-fayth.webp 2.7 MB",
+    "/art/characters/yojimbo-cavern/idle.png 0.6 MB",
+    "/art/backdrops/bevelle-highbridge.webp 4.28 MB",
+    "/art/characters/seymour-natus/idle.png 0.89 MB",
+    "/art/backdrops/garden-of-pain.webp 3.29 MB",
+    "/art/characters/seymour-omnis/idle.webp 0.73 MB",
+    "/art/backdrops/via-purifico.webp 3.27 MB",
+    "/art/characters/isaaru/idle.png 0.63 MB",
+    "/art/backdrops/sin-fahrenheit-flight.webp 2.72 MB",
+    "/art/characters/sin-left-fin/idle.png 1.38 MB",
+    "/art/backdrops/sin-fahrenheit-bevelle.webp 3.17 MB",
+    "/art/characters/overdrive-sin/idle.png 1.07 MB"
+   ],
+   "firstArtRequestAfterTheFirstInputMs": 184,
+   "enterToBoardMs": 446
+  },
+  "default_mode_now": {
+   "requests": 50,
+   "MB": 66.68,
+   "artRequests": 41,
+   "artMB": 64.5,
+   "list": [
+    "/ 0 MB",
+    "/art/title/keyart.2x.webp 0.75 MB",
+    "/assets/index-DZIrKCYq.js 1.25 MB",
+    "/assets/index-DiS-CYp9.css 0.07 MB",
+    "/fonts/chakra-petch/ChakraPetch-Regular-400.woff2 0.01 MB",
+    "/art/manifest.json 0 MB",
+    "/fonts/chakra-petch/ChakraPetch-Bold-700.woff2 0.01 MB",
+    "/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2 0.04 MB",
+    "/fonts/exo2/Exo2-Variable-wght.woff2 0.04 MB",
+    "/art/backdrops/gagazet.webp 4.07 MB",
+    "/art/characters/mortiorchis/idle.png 0.97 MB",
+    "/art/characters/seymour-flux-body/idle.png 0.98 MB",
+    "/art/portraits/tidus.webp 0.9 MB",
+    "/art/portraits/yuna.webp 0.8 MB",
+    "/art/portraits/kimahri.png 1.21 MB",
+    "/art/portraits/auron.webp 0.8 MB",
+    "/art/portraits/rikku.webp 0.9 MB",
+    "/art/portraits/wakka.webp 0.91 MB",
+    "/art/portraits/lulu.webp 0.84 MB",
+    "/art/portraits/yuna-x2.webp 0.97 MB",
+    "/art/portraits/rikku-x2.webp 1.05 MB",
+    "/art/portraits/paine.webp 0.89 MB",
+    "/art/characters/yuna-white-mage/idle.png 0.48 MB",
+    "/art/characters/rikku-dark-knight/idle.png 1.08 MB",
+    "/art/characters/paine-warrior/idle.png 0.46 MB",
+    "/art/characters/paine-dark-knight/idle.png 0.81 MB",
+    "/art/characters/yuna-gunner/idle.png 0.56 MB",
+    "/art/characters/rikku-thief/idle.png 0.7 MB",
+    "/art/characters/yuna-dark-knight/idle.png 0.72 MB",
+    "/art/characters/rikku-alchemist/idle.png 0.64 MB",
+    "/art/backdrops/zanarkand-dome.webp 3.97 MB",
+    "/art/characters/yunalesca-1/idle.png 1.02 MB",
+    "/art/backdrops/dreams-end.webp 3.24 MB",
+    "/art/characters/braskas-final-aeon-1/idle.png 1.23 MB",
+    "/art/backdrops/macalania-temple.webp 4.32 MB",
+    "/art/characters/anima/idle.png 0.95 MB",
+    "/art/backdrops/evrae-airship-deck.webp 3.42 MB",
+    "/art/characters/evrae/idle.png 0.88 MB",
+    "/art/backdrops/cavern-stolen-fayth.webp 2.7 MB",
+    "/art/characters/yojimbo-cavern/idle.png 0.6 MB",
+    "/art/backdrops/bevelle-highbridge.webp 4.28 MB",
+    "/art/characters/seymour-natus/idle.png 0.89 MB",
+    "/art/backdrops/garden-of-pain.webp 3.29 MB",
+    "/art/characters/seymour-omnis/idle.webp 0.73 MB",
+    "/art/backdrops/via-purifico.webp 3.27 MB",
+    "/art/characters/isaaru/idle.png 0.63 MB",
+    "/art/backdrops/sin-fahrenheit-flight.webp 2.72 MB",
+    "/art/characters/sin-left-fin/idle.png 1.38 MB",
+    "/art/backdrops/sin-fahrenheit-bevelle.webp 3.17 MB",
+    "/art/characters/overdrive-sin/idle.png 1.07 MB"
+   ],
+   "firstArtRequestAfterTheFirstInputMs": 154,
+   "enterToBoardMs": 425
+  },
+  "first": {
+   "requests": 15,
+   "MB": 11.1,
+   "artRequests": 6,
+   "artMB": 8.92,
+   "list": [
+    "/ 0 MB",
+    "/art/title/keyart.2x.webp 0.75 MB",
+    "/assets/index-DZIrKCYq.js 1.25 MB",
+    "/assets/index-DiS-CYp9.css 0.07 MB",
+    "/fonts/chakra-petch/ChakraPetch-Regular-400.woff2 0.01 MB",
+    "/art/manifest.json 0 MB",
+    "/fonts/chakra-petch/ChakraPetch-Bold-700.woff2 0.01 MB",
+    "/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2 0.04 MB",
+    "/fonts/exo2/Exo2-Variable-wght.woff2 0.04 MB",
+    "/art/backdrops/gagazet.webp 4.07 MB",
+    "/art/characters/mortiorchis/idle.png 0.97 MB",
+    "/art/characters/seymour-flux-body/idle.png 0.98 MB",
+    "/art/portraits/tidus.webp 0.9 MB",
+    "/art/portraits/yuna.webp 0.8 MB",
+    "/art/portraits/kimahri.png 1.21 MB"
+   ],
+   "firstArtRequestAfterTheFirstInputMs": 2,
+   "enterToBoardMs": 401
+  },
+  "defer": {
+   "requests": 9,
+   "MB": 2.17,
+   "artRequests": 0,
+   "artMB": 0,
+   "list": [
+    "/ 0 MB",
+    "/art/title/keyart.2x.webp 0.75 MB",
+    "/assets/index-DZIrKCYq.js 1.25 MB",
+    "/assets/index-DiS-CYp9.css 0.07 MB",
+    "/fonts/chakra-petch/ChakraPetch-Regular-400.woff2 0.01 MB",
+    "/art/manifest.json 0 MB",
+    "/fonts/chakra-petch/ChakraPetch-Bold-700.woff2 0.01 MB",
+    "/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2 0.04 MB",
+    "/fonts/exo2/Exo2-Variable-wght.woff2 0.04 MB"
+   ],
+   "firstArtRequestAfterTheFirstInputMs": 4,
+   "enterToBoardMs": 1539
+  }
+ },
+ "aborted_requests": "every run, live build included, lists two or three art requests with status 200 and an error text: the idle lane cancels loads in flight when something urgent is asked for (net::ERR_ABORTED); they are not failures"
+}
