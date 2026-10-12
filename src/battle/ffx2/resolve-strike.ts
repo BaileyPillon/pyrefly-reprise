@@ -14,7 +14,7 @@
  *    the Bribe reward, the all-target halving and the damage limit, then Steal and Pilfer Gil; and the result is applied
  *    (HP with the chain counter, MP, statuses, the stolen item or gil).
  *
- * The engine keeps its one seeded stream: `adapt/draws.ts` takes one engine draw per kernel draw, in the order the
+ * The engine draws from FFX-2's own streams: `adapt/draws.ts` takes one draw of the stream the kernel names per kernel draw, in the order the
  * kernels ask. `adapt/inputs.ts` builds the kernel inputs from the units; `adapt/command.ts` the command row.
  * The ATB class is computed (its variance draw is consumed) but not applied: the ATB, charge and recovery path is
  * batch W4's.
@@ -35,19 +35,23 @@ import {
   statusAttacker,
   statusTarget,
 } from './adapt/inputs.ts';
-import { has, luckStage, statusWord1 } from './adapt/words.ts';
+import { has, luckStage, specialWord, statusWord1 } from './adapt/words.ts';
 import { bumpChain, chainBefore, chainMultiplier } from './chain.ts';
+import { HIT_REACTION_STEPS } from './constants.ts';
 import { rollCritical, type CritInput } from './kernel/crit.ts';
 import { elementLadder } from './kernel/element.ts';
 import { HitResult, determineHits } from './kernel/hit.ts';
 import { computeClassDamage } from './kernel/pipeline.ts';
-import { CLASS_HP, CLASS_MP, type PipelineHooks, type PipelineInput, type StatusPhaseOutcome } from './kernel/pipeline-types.ts';
+import { CLASS_ATB, CLASS_HP, CLASS_MP, type PipelineHooks, type PipelineInput, type StatusPhaseOutcome } from './kernel/pipeline-types.ts';
 import { settleDamage } from './kernel/settle.ts';
 import { SHATTER_SET_BITS, rollCommandStatuses, rollShatter } from './kernel/status.ts';
+import { magicCancel } from './kernel/atb-interrupt.ts';
+import { applyDelay, cancelCast } from './atb-engine.ts';
 import type { StatusOutcome, StatusResult } from './kernel/statusTypes.ts';
 import { afterRevive, applyHpDelta, heal, type ResolveContext } from './resolve-hp.ts';
 import { applyStatusResult, rollEngineRiders } from './resolve-status.ts';
 import { applyBribeReward, applyPilferGil, applyStealItem, type TheftEnv } from './steal.ts';
+import { noteResult } from './results-tally.ts';
 
 /** What the caller of `resolveAbility` hands the strikes beyond the ability. */
 export interface StrikeOptions {
@@ -154,6 +158,7 @@ function strike(env: Env, target: Ffx2Unit): number {
     }
     return 0;
   }
+  noteResult(user, target); // the game's reaction entry runs once per result applied (`results-tally.ts`)
 
   // --- the status rolls: every status with a chance byte, group 1 then group 2 ---------------------------------
   const petrified = has(target, 'petrify');
@@ -179,6 +184,21 @@ function strike(env: Env, target: Ffx2Unit): number {
     const base = result ?? startStatusResult(target, false);
     result = { ...base, statusSet: (base.statusSet | SHATTER_SET_BITS) >>> 0 };
   }
+  // --- magic cancel: `Cmd+0x7a` is the chance that this hit aborts the cast the target has on the purple bar ----------------
+  const cancelChance = command.record.magicCancel ?? 0;
+  let cancelled = false;
+  if (cancelChance > 0) {
+    cancelled = magicCancel(
+      {
+        attackerId,
+        chance: cancelChance,
+        targetImmune: (specialWord(target) & 0x200) !== 0,
+        action: target.atb.charging !== null ? { type: 3, kind: 2, released: 0 } : { type: 0, kind: 0, released: 0 },
+        blockMask: 0,
+      },
+      critDraw(ctx.rng),
+    ).cancelled;
+  }
   // --- the Bribe reward, then the settled numbers (halving, Death replaces damage, the limit) ------------------
   if (command.bribe) applyBribeReward(env.theft, target);
   const resultSet = result?.statusSet ?? statusWord1(target);
@@ -193,6 +213,7 @@ function strike(env: Env, target: Ffx2Unit): number {
   if (ability.extra?.['cannotKill'] === true && hp > 0 && hp >= target.hp) hp = Math.max(0, target.hp - 1); // Bullseye
 
   // --- apply: HP (with the chain), MP, then statuses, then theft -----------------------------------------------
+  let drained = false; // an HP or MP transfer went back to the user (a drain's own result, below)
   const wasAlive = target.alive;
   const index = env.index;
   env.index += 1;
@@ -204,6 +225,7 @@ function strike(env: Env, target: Ffx2Unit): number {
       if (hp > 0 && !noChain) {
         ctx.emit({ type: 'chain', targetId: target.id, count: before, multiplier: chainMultiplier(before) });
         bumpChain(target, before, classes.critical);
+        target.gauge.hitReaction = HIT_REACTION_STEPS; // the flinch halves the target's tick for a while (`atb-engine.ts kernelUnit`)
       }
       if (wasAlive) {
         ctx.emit({
@@ -220,7 +242,10 @@ function strike(env: Env, target: Ffx2Unit): number {
         });
       }
       applyHpDelta(ctx, target, hp, user.id);
-      if (command.absorbs && hp > 0) heal(ctx, user, hp, 'drain');
+      if (command.absorbs && hp > 0) {
+        heal(ctx, user, hp, 'drain');
+        drained = true;
+      }
     }
   }
   if ((settled.flags & CLASS_MP) !== 0 && settled.mp !== 0) {
@@ -232,11 +257,22 @@ function strike(env: Env, target: Ffx2Unit): number {
       if (command.absorbs) {
         const userBefore = user.mp;
         user.mp = Math.min(user.stats.maxMp, userBefore + moved);
-        if (user.mp > userBefore) ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: user.mp - userBefore });
+        if (user.mp > userBefore) {
+          ctx.emit({ type: 'mp-heal', targetId: user.id, sourceId: target.id, amount: user.mp - userBefore });
+          drained = true;
+        }
       }
     } else if (moved < 0) {
       ctx.emit({ type: 'mp-heal', targetId: target.id, sourceId: user.id, amount: -moved });
     }
+  }
+  // The ATB class (Delay): the gauge of a target that is still standing is pushed back, and a menu it had open closes (`apply_atb_damage`).
+  if ((settled.flags & CLASS_ATB) !== 0 && settled.atb !== 0 && target.alive && !target.removed) {
+    if (applyDelay(target, settled.atb)) ctx.onMenuClosed?.(target);
+  }
+  if (cancelled && target.alive && target.atb.charging !== null) {
+    cancelCast(target, ctx.units);
+    ctx.emit({ type: 'action-end', actorId: target.id });
   }
   if (result !== undefined) applyStatusResult(ctx, user, target, ability, command, result);
   rollEngineRiders(ctx, user, target, ability, command);
@@ -247,6 +283,10 @@ function strike(env: Env, target: Ffx2Unit): number {
   }
   if (command.stealsItem) applyStealItem(env.theft, command, user, target);
   if (command.stealsGil) applyPilferGil(env.theft, user, target);
+  // The reaction entry (AI-FFX2-b): the result is in. A drain's transfer is a result of its own, delivered to the drainer with the
+  // drainer as the source (`research/re-ffx2-ai-fallen-trema.md` 1.2); the strike itself is a result on its target.
+  ctx.onResult?.(target, user, ability);
+  if (drained) ctx.onResult?.(user, user, ability);
   return hp;
 }
 
@@ -329,6 +369,8 @@ export function runStrikes(
           reason: result.result === HitResult.NoEffect ? 'immune' : 'evaded',
         });
         env.index += 1;
+        ctx.onResult?.(target, user, ability); // a miss or a no-effect is one result for the whole command (AI-FFX2-b)
+        noteResult(user, target); // a miss resolves every remaining strike on the target at once: one result
         continue;
       }
       done[i] = (done[i] ?? 0) + 1;

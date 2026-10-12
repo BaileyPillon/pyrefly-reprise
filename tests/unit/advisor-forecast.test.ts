@@ -70,7 +70,21 @@ interface Board {
  * up — and `p1Step` pinned, which is the only thing standing between a test and
  * a named step of Seymour's real six-step cycle.
  */
-function baileysBoard(p1Step?: number, seed = 1): Board {
+function baileysBoard(p1Step?: number, seed?: number): Board {
+  // Re-parity RNG lane (game streams, Bailey 2026-10-09): the board needs Kimahri and Tidus standing, with no status on either, when Tidus decides. Seed 1 no longer opens that way
+  // (the opening's hits are another deal), so the default is the first seed that does.
+  if (seed === undefined) {
+    for (let s = 1; s <= 60; s++) {
+      const board = boardAt(p1Step, s);
+      const standing = (id: string): boolean => board.state.combatants[id]?.alive === true && Object.keys(board.state.combatants[id]?.statuses ?? {}).length === 0;
+      if (standing('kimahri') && standing('tidus')) return board;
+    }
+    throw new Error('no seed of 1 to 60 opens Chapter 1 with Kimahri and Tidus standing and clean');
+  }
+  return boardAt(p1Step, seed);
+}
+
+function boardAt(p1Step: number | undefined, seed: number): Board {
   const content = ffxContent();
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
   engine.init({

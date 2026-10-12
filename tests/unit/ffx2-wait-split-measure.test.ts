@@ -21,6 +21,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Ffx2EngineOptions } from '../../src/battle/ffx2/internal.ts';
 import { driveChapter4, driveChapter5, driveChapter6, type DriveResult } from './helpers/ffx2ChapterDrive.ts';
+import { STEPS_PER_SECOND } from '../../src/battle/ffx2/clock.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const SEEDS = Array.from({ length: 40 }, (_, i) => i + 1);
@@ -71,7 +72,7 @@ describe.skipIf(!MEASURE)('Wait split: chapters 4, 5, 6, forty seeds per arm (PY
             arm.label,
             `${arm.d} ms`,
             `${wins}/${SEEDS.length}`,
-            median(runs.map((r) => r.ticks / 3000)).toFixed(1),
+            median(runs.map((r) => r.ticks / STEPS_PER_SECOND)).toFixed(1),
             runs.reduce((a, r) => a + r.invalidated, 0),
             runs.reduce((a, r) => a + r.held, 0),
             runs.reduce((a, r) => a + r.refused, 0),

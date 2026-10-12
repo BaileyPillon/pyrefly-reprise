@@ -344,7 +344,7 @@ export const STATUSES_CORE: Record<string, FFXStatusDef> = {
     durationModel: 'battle-254',
     defaultTurns: 254,
     tickEffect:
-      'Bounces one incoming targeted Black/White Magic spell back at the caster\'s side. Does NOT bounce party-wide spells (Demi, Ultima), Dispel, Auto-Life, items, Overdrives, or Mixes.',
+      'Turns back a targeted Black/White Magic spell: straight at the caster when the Reflect holder is on the other side, at a random member of the other side when the holder is on the caster\'s own side. Works on each target of a party-wide Hastega, Slowga or Nul spell too. Does NOT bounce Demi, Ultima, Dispel, Auto-Life, items, Overdrives, or Mixes.',
     curedBy: ['Dispel', 'Purifying Salt', 'Aerospark'],
     clearedByKo: true,
     clearedByPetrify: true,

@@ -8,13 +8,15 @@
  */
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant } from '../common/types.ts';
-import { byteRoll } from '../common/rng.ts';
-import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isAlive, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
 import { chargeTurn } from './turnQueue.ts';
 import { isMenuMarker, minigameParams, rollDefaultMinigame, spendOverdrive } from './overdrive.ts';
 import { gaugeOnEscape } from './gauge.ts';
+import { escapeRoll } from './kernel/rolls.ts';
+import { streamsOf } from './adapt/streams.ts';
+import { forcedAttack } from './forced-turn.ts';
 import { shapeOverdrive } from './overdriveShape.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
@@ -46,14 +48,18 @@ export interface ExecutionResult {
 
 const NOTHING: ExecutionResult = { rank: 3, damageDealt: 0 };
 
-/** Escape: `rng & 255 < 191`, i.e. 74.6% [ffx-combat-core §1.8]. */
+/**
+ * Escape: `draw & 255 < 191`, i.e. 74.6% [ffx-combat-core §1.8]. The roll is spent first, from the escaper's own mode 0 stream, even in a battle
+ * that cannot be escaped (`research/re-ffx-rng-hit.md` section 6; `kernel/rolls.ts#escapeRoll`). Flee (the whole party) draws nothing here.
+ */
 function tryEscape(ctx: Ctx, actor: FFXCombatant, party: boolean): ExecutionResult {
+  const rolled = party ? true : escapeRoll(ctx.rt.canEscape ? 0 : 1, () => ctx.rng.on(streamsOf(ctx, actor).damage).int(0, 255));
   if (!ctx.rt.canEscape) {
     ctx.emit({ type: 'message', text: "Can't escape!", kind: 'system' });
     return { rank: 1, damageDealt: 0 };
   }
   // Flee always succeeds and ends the battle; Escape is per-character.
-  const success = party ? true : byteRoll(ctx.rng) < 191;
+  const success = rolled;
   ctx.emit({ type: 'escape-attempt', actorId: actor.id, success, party });
   if (success && !party) ejectActor(ctx, actor, 'eject');
   // A successful flee runs the gauge's escape hook for each character that fled (Coward; `pp_BtlOdOnEscape`, VA 0x007b1090).
@@ -293,7 +299,10 @@ export function executeCommand(
       ctx.emit({ type: 'message', text: `${actor.name} cannot use items`, kind: 'system' });
       return { rank: 0, rejected: true, damageDealt: 0 };
     }
-    if (!spendItem(ctx, command.id)) {
+    // An item reaction (Auto-Med, Auto-Potion, Auto-Phoenix) was paid for when its record was queued (`adapt/reactions.ts`): that one use is not spent again.
+    if (ctx.rt.prepaidItem === command.id) {
+      ctx.rt.prepaidItem = undefined;
+    } else if (!spendItem(ctx, command.id)) {
       ctx.emit({ type: 'message', text: 'No items left', kind: 'system' });
       return NOTHING;
     }
@@ -346,24 +355,23 @@ export function chargeForAction(ctx: Ctx, actorId: CombatantId, rank: number): v
   chargeTurn(ctx, actorId, rank);
 }
 
-/** Berserk restricts the actor to an auto-attack [ffx-combat-core §4.2]. */
+/**
+ * Berserk restricts the actor to an auto-attack at the opposite side [ffx-combat-core §4.2], and Confuse sends it at its own side, itself included
+ * (`forced-turn.ts`; the game's auto-target, FFX.exe 0x007996d0: one candidate by the picker on stream 4, none drawn with one). An empty set aims at
+ * nobody. The turn start (`engine.ts`) goes through `forcedTurn`, which also covers Provoke; these two stay as the single swing a test can ask for.
+ */
 export function berserkCommand(ctx: Ctx, actor: FFXCombatant): Command {
-  const foes = actor.side === 'enemy' ? ctx.state.activeIds : ctx.state.enemyIds;
-  const pool = foes.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && isAlive(c));
-  return { kind: 'attack', targets: pool.length > 0 ? [ctx.rng.pick(pool).id] : [] };
+  return forcedAttack(ctx, actor, false);
 }
 
-/** Confuse attacks a random target on **either** side [ffx-combat-core §4.2]. */
+/** Confuse attacks a random target of **its own side, the actor included** (`forced-turn.ts`). */
 export function confusedCommand(ctx: Ctx, actor: FFXCombatant): Command {
-  const pool = [...ctx.state.activeIds, ...ctx.state.enemyIds]
-    .map((id) => tryActor(ctx, id))
-    .filter((c): c is FFXCombatant => c !== undefined && isAlive(c) && c.id !== actor.id);
-  return { kind: 'attack', targets: pool.length > 0 ? [ctx.rng.pick(pool).id] : [] };
+  return forcedAttack(ctx, actor, true);
 }
 
-/** True when the actor cannot choose for itself this turn. */
+/** True when the actor cannot choose for itself this turn: an AI actor, or one whose turn is forced (Provoke, Berserk, Confuse). */
 export function actsAutomatically(actor: FFXCombatant): boolean {
-  return actor.controller === 'ai' || has(actor, 'confuse');
+  return actor.controller === 'ai' || has(actor, 'confuse') || has(actor, 'berserk') || has(actor, 'provoke');
 }
 
 /** The ability id an Attack command resolves to. */

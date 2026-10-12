@@ -761,18 +761,34 @@ describe('the card prints less rather than hiding the bottom of itself', () => {
  * card, and reads the answer off the DOM the player would be looking at.
  */
 describe('the FFX HUD’s own card, on a real Chapter 1 board', () => {
-  function chapterOneBoard(p1Step: number): {
-    state: BattleState;
-    actorId: string;
-    commands: AvailableCommand[];
-  } {
+  type OneBoard = { state: BattleState; actorId: string; commands: AvailableCommand[] };
+
+  /**
+   * Chapter 1 with Tidus deciding and Kimahri standing: the first seed of 1 to 60 that opens that way, with no status on either (re-parity RNG lane,
+   * 2026-10-11: each game draws from its own 68 streams, so every seed is another deal; seed 1 no longer opens with Kimahri up).
+   */
+  function chapterOneBoard(p1Step: number): OneBoard {
+    for (let seed = 1; seed <= 60; seed++) {
+      let board: OneBoard;
+      try {
+        board = chapterOneBoardAt(p1Step, seed);
+      } catch {
+        continue; // this seed gives Tidus no decision inside 80 steps
+      }
+      const clean = (id: string): boolean => board.state.combatants[id]?.alive === true && Object.keys(board.state.combatants[id]?.statuses ?? {}).length === 0;
+      if (clean('kimahri') && clean('tidus')) return board;
+    }
+    throw new Error('no seed of 1 to 60 opens Chapter 1 with Kimahri and Tidus standing and clean');
+  }
+
+  function chapterOneBoardAt(p1Step: number, seed: number): OneBoard {
     const engine = createFFXEngine({ autoResolveMinigames: true });
     engine.init({
       game: 'ffx',
       party: gagazetBuild,
       enemies: seymourFluxGroup,
       triggers: [],
-      seed: 1,
+      seed,
       condition: 'normal',
       canEscape: false,
     });

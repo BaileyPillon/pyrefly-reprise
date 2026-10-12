@@ -4,9 +4,8 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), image base
  * 0x400000. Spec: `research/re-ffx2-atb-status.md` section 6. Pure, deterministic, no DOM, no engine types
- * (AGENTS.md rule 1). Not wired into the engine: the engine gives each status a duration in seconds
- * (`ffx2/statuses.ts`). Everything is counted in the game's units per logic step (see `./atb-clock.ts` for the
- * speeds and for the 30-or-60-steps-a-second caveat).
+ * (AGENTS.md rule 1). Wired into the engine by re-parity W4 (`ffx2/status-clock.ts`, `statuses.ts`).
+ * Everything is counted in the game's units per logic step (see `./atb-clock.ts` for the speeds and the 29.97 steps a second).
  *
  * Exe addresses (live build):
  * - 0x00636e80  MsStatusProcess: all 31 characters, once per logic step, after the ATB process and the actions

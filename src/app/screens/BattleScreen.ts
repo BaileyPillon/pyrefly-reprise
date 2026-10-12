@@ -20,6 +20,7 @@ import { ff7Standing } from './ff7Standing.ts';
 import { addExperimentPlayTime } from '../experiments/experimentRecords.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
+import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
 import { BattlePresenter, type AutoStrategy, type BattleOutcome } from '../../engine/BattlePresenter.ts';
 import {
   createDamageNumbers,
@@ -185,6 +186,8 @@ export class BattleScreen extends Screen {
   private pauseChip: HTMLElement | null = null;
   /** The approved battle-start boss card while it is up. See {@link showBattleStart}. */
   private battleStartBanner: BattleStartBanner | null = null;
+  /** SFX parity: the encounter's opening sounds, ended with the screen (`audio/sfxV2/flowSlots.ts`). */
+  private encounterSfx: FlowHandle = NO_FLOW;
 
   /**
    * Set by {@link exit}. `App.replace` can tear this screen down while `enter()`
@@ -405,6 +408,7 @@ export class BattleScreen extends Screen {
     // Run the encounter without blocking `enter()`, so the first frame draws.
     // The approved battle-start card goes up first and the fight waits behind
     // it (critic round 02 #10).
+    this.encounterSfx = startFlow(audio, chapter.game, 'encounter-open'); // SFX parity: the field shatters into the fight (FFX's rows `ffx.flow.*`); silent with no recorded original
     void this.showBattleStart().then(() => this.runEncounter());
   }
 
@@ -921,6 +925,8 @@ export class BattleScreen extends Screen {
 
   override exit(): void {
     this.exited = true;
+    this.encounterSfx.stop(0.25);
+    this.encounterSfx = NO_FLOW;
     this.offSceneScale?.();
     this.offSceneScale = null;
     setPaceGame('other'); // a cutscene or the board after the fight is never paced (`pace.ts`)

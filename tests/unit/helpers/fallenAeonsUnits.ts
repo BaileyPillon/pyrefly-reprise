@@ -6,10 +6,11 @@
 
 import type { AbilityDef } from '../../../src/battle/common/types.ts';
 import { SeededRng } from '../../../src/battle/common/rng.ts';
-import { abilityRegistryFrom } from '../../../src/battle/ffx2/index.ts';
+import { abilityRegistryFrom, advanceStatusClocks } from '../../../src/battle/ffx2/index.ts';
+import { freshSpeeds } from '../../../src/battle/ffx2/atb-engine.ts';
 import type { ResolveContext } from '../../../src/battle/ffx2/resolve.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
-import type { AiContext, EventDraft, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
+import type { AiContext, Emit, EventDraft, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import { sandy } from '../../../src/data/ffx2/enemies/magus-sisters.ts';
 
@@ -27,6 +28,23 @@ export function ctxFor(units: Ffx2Unit[], seed = 1): { ctx: ResolveContext; even
     ctx: { units, abilities: REGISTRY, rng: new SeededRng(seed), emit: (e) => events.push(e), breaksDamageLimit: () => false },
     events,
   };
+}
+
+/**
+ * Run the game's status process (`status-clock.ts`) `steps` logic steps over `units`: each step first writes the speeds the ATB process
+ * would have (Normal 95 by default, with Haste, Slow and the stop states), then pays every status clock. Re-parity W4 (FFX-2 only).
+ */
+export function runStatusClocks(
+  units: Ffx2Unit[],
+  steps: number,
+  ctx: ResolveContext,
+  opts: { emit?: Emit; aiContext?: (unit: Ffx2Unit) => AiContext; baseSpeed?: number } = {},
+): void {
+  const emit = opts.emit ?? ctx.emit;
+  for (let i = 0; i < steps; i++) {
+    for (const u of units) u.gauge.speeds = freshSpeeds(u, opts.baseSpeed ?? 95, false);
+    advanceStatusClocks(units, emit, ctx, opts.aiContext);
+  }
 }
 
 export function girlsAt(hp: number, mp: number): Ffx2Unit[] {

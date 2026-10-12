@@ -24,6 +24,7 @@ import type { AiContext, EventDraft, Ffx2Unit } from './internal.ts';
 import { SeededRng } from '../common/rng.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { defaultAbilities } from './abilities.ts';
+import { newGauge } from './atb-engine.ts';
 
 /** A girl at a given level in a given dressphere. Stats are derived, not passed. */
 export function member(
@@ -196,6 +197,7 @@ export function aiUnit(id: string, side: 'party' | 'enemy', maxHp = 1000, slot =
     flags: {},
     level: 48,
     atb: { ticks: 0, required: 10000, gauge: 0, charging: null, recovery: 0 },
+    gauge: newGauge(slot),
     accessories: [],
     chainCount: 0,
     chainWindowTicks: 0,

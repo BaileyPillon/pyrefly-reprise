@@ -146,6 +146,26 @@ describe('Stats panel', () => {
     expect(mpRow.querySelector('.ffxprep-stat__base')).toBeNull();
     expect(mpRow.querySelector('.ffxprep-stat__bonus')).toBeNull();
   });
+
+  it('SUMS two tiers of one family (re-parity RC4: the game adds every worn percent): Magic Def +10 and +5 read -15% taken, Strength +10 and +5 read +15% dmg, two HP +10 read 1000 -> 1200 (+20%)', () => {
+    const build = makeFakePartyBuild();
+    const yuna = build.members.find((m) => m.id === 'tidus')!;
+    yuna.stats = { ...yuna.stats, hp: 1000, maxHp: 1200 };
+    yuna.equipment = {
+      weapon: { name: 'Staff', slots: 4, autoAbilities: ['strength-10', 'strength-5', 'hp-10'] },
+      armor: { name: 'Blessed Ring', slots: 4, autoAbilities: ['magic-def-10', 'magic-def-5', 'hp-10'] },
+    };
+    const root = mountPanel(makeStatsPanel(), build, 'tidus');
+    const rowFor = (label: string): HTMLElement => {
+      const key = [...root.querySelectorAll('.ffxprep-stat__k')].find((k) => k.textContent?.trim() === label.toUpperCase() || k.textContent?.trim() === label)!;
+      return key.closest('.ffxprep-stat') as HTMLElement;
+    };
+    const bonus = (label: string): string => rowFor(label).querySelector('.ffxprep-stat__bonus')?.textContent?.trim() ?? '';
+    expect(bonus('Magic Def')).toBe('−15% taken');
+    expect(bonus('Strength')).toBe('+15% dmg');
+    expect(bonus('HP')).toBe('+20%');
+    expect(rowFor('HP').querySelector('.ffxprep-stat__v')!.textContent).toBe('1200');
+  });
 });
 
 describe('Sphere Grid panel', () => {

@@ -9,10 +9,8 @@ import type { AbilityDef, CombatantId, FFXCombatant, Targeting } from '../common
 import {
   type Ctx,
   alliesOf,
-  canQueueAction,
   enemies,
   friendlies,
-  has,
   isAlive,
   livingEnemies,
   livingFriendlies,
@@ -112,7 +110,7 @@ export function reachesTarget(ctx: Ctx, user: FFXCombatant, def: AbilityDef, tar
 }
 
 /** False for a combatant a random pick must skip (`CombatantFlags.neverRandomTarget`). */
-function randomPickable(c: FFXCombatant): boolean {
+export function randomPickable(c: FFXCombatant): boolean {
   return c.flags.neverRandomTarget !== true;
 }
 
@@ -227,10 +225,12 @@ export function resolveTargets(
       return pickAll(mates);
     case 'all':
       return [...mates, ...foes];
+    // A random-target row's action carries the whole set. The picks (one per hit) are made by the target builder once the action's targets
+    // are built (`target-build.ts`, the game's pp_BtlBuildTargetHits), not here.
     case 'random-enemy':
-      return randomFoes.length > 0 ? [ctx.rng.pick(randomFoes)] : [];
+      return randomFoes;
     case 'random-ally':
-      return mates.length > 0 ? [ctx.rng.pick(mates)] : [];
+      return mates;
     default:
       break;
   }
@@ -249,18 +249,8 @@ export function resolveTargets(
   // our estimate — research §2 names random-target attacks only).
   const fallback =
     def.targeting === 'single-ally' ? mates : def.targeting === 'single-any' ? [...randomFoes, ...mates] : randomFoes;
-  return fallback.length > 0 ? [ctx.rng.pick(fallback)] : [];
-}
-
-/**
- * The target of hit `h` of a per-hit-random action: a fresh pick from the same pool as
- * `resolveTargets(ctx, user, def, [])`, one RNG draw.
- *
- * A row the script aims (`extra.scriptAims`) never comes through here: its hits go to the targets the script
- * named, one by one ({@link aimedTargetForHit}).
- */
-export function nextHitTargets(ctx: Ctx, user: FFXCombatant, def: AbilityDef): FFXCombatant[] {
-  return resolveTargets(ctx, user, def, []);
+  // No aim at all (a script's `targets: []`, a placeholder): the game has no draw for this, so it is an engine stand-in on the engine-side stream.
+  return fallback.length > 0 ? [ctx.rng.aux.pick(fallback)] : [];
 }
 
 /**
@@ -302,85 +292,4 @@ export function aimedTargets(ctx: Ctx, def: AbilityDef, chosen: readonly Combata
     for (const c of aimedTargetForHit(ctx, def, chosen, h)) if (!out.includes(c)) out.push(c);
   }
   return out;
-}
-
-/** True for the action class that either side's Cover intercepts. */
-function coverable(def: AbilityDef): boolean {
-  return def.damageType === 'physical' && def.targeting === 'single-enemy';
-}
-
-/**
- * **Enemy Cover** — the mirror image of Guard/Sentinel, and until the Macalania
- * encounter it simply did not exist: `redirectTarget` opened with
- * `if (attacker.side !== 'enemy') return target`, so a party-side action was
- * never redirected at all.
- *
- * "While at least one Guardian lives, **physical** attacks targeted at Seymour
- * are intercepted by a Guardian. **Magic is never covered.**"
- * [ffx-seymour-anima-macalania §2.3, verified: 2 sources]
- *
- * **The game's rule** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; the exe's cover routine 0x78eef0,
- * run for every single-target physical command): the target is handed to **an ally that holds the Guard status and
- * can act**, the one with the most HP when several do. Seymour's script is what puts the Guard on a Guardian: when
- * a physical command names him, on one chosen by a coin that skips a sleeper (`ai/macalania-seymour.ts`); the
- * Guardian's own script takes it off when it is next hit. The mark is {@link ActorRuntime.guardMark}. A holder
- * that dies, falls asleep or is Threatened stops covering by that, and nobody else is ever a cover: no other
- * enemy sets the mark, so no other battle changes.
- */
-function coverOf(ctx: Ctx, target: FFXCombatant, def: AbilityDef): FFXCombatant {
-  if (!coverable(def) || target.side !== 'enemy') return target;
-  let best: FFXCombatant | undefined;
-  for (const c of livingEnemies(ctx)) {
-    if (c.id === target.id || !canQueueAction(c)) continue;
-    if (ctx.rt.actors.get(c.id)?.guardMark !== true) continue;
-    if (!best || c.hp > best.hp) best = c;
-  }
-  return best ?? target;
-}
-
-/**
- * Guard / Sentinel interception, enemy Cover, and Provoke redirection.
- *
- * A Guard user intercepts **all single-target physical attacks** aimed at the
- * other two members [ffx-combat-core §4.2]. Provoke forces an enemy to target
- * the provoker. Going the other way, an enemy may cover an ally — see
- * {@link coverOf}.
- */
-export function redirectTarget(
-  ctx: Ctx,
-  attacker: FFXCombatant,
-  target: FFXCombatant,
-  def: AbilityDef,
-): FFXCombatant {
-  if (attacker.side !== 'enemy') return coverOf(ctx, target, def);
-
-  if (coverable(def)) {
-    for (const c of livingFriendlies(ctx)) {
-      if (c.id === target.id) continue;
-      if (has(c, 'guard') || has(c, 'sentinel')) return c;
-    }
-  }
-  // Provoke forces the enemy to target the provoker [ffx-combat-core §4.2]; an
-  // action it aims at **itself** targets no one on the other side, so it stays
-  // put. Sourced for Seymour Natus, whose 24,000 Protect counter is decompiled
-  // as "Counter Self" [ffx-seymour-natus-highbridge §2.1, verified: 3 sources];
-  // the general reading is ours. Every other Provoke-landable FFX enemy in our
-  // data is Braska's Final Aeon, whose only self action is the form-change cue.
-  if (has(attacker, 'provoke') && target.id !== attacker.id) {
-    const inst = attacker.statuses['provoke'];
-    const provoker = inst?.sourceId ? tryActor(ctx, inst.sourceId) : undefined;
-    if (provoker && isAlive(provoker) && targetable(provoker)) return provoker;
-  }
-  return target;
-}
-
-/**
- * Where a reflected spell lands: a random living member of the side opposite
- * the reflector [ffx-combat-core §4.2].
- */
-export function reflectBounceTarget(ctx: Ctx, reflector: FFXCombatant): FFXCombatant | undefined {
-  // A foe that is never a random pick is never a bounce target either
-  // (Chapter XII's discs; our estimate — research §2 names random-target attacks).
-  const other = (reflector.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)).filter(randomPickable);
-  return other.length > 0 ? ctx.rng.pick(other) : undefined;
 }

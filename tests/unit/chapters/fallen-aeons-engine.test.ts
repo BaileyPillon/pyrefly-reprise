@@ -10,11 +10,8 @@
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent } from '../../../src/battle/common/types.ts';
 import { resolveAbility } from '../../../src/battle/ffx2/resolve.ts';
-import { notifyEnemiesTargeted, notifyEnemiesDamaged } from '../../../src/battle/ffx2/engineHooks.ts';
 import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
-import { AC, AC_TRIGGER_FLAG } from '../../../src/battle/ffx2/ai/fallen-aeons.ts';
-import { aiHarness, aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
-import type { EventDraft, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
+import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
 import * as ffxData from '../../../src/data/ffx/index.ts';
 import {
@@ -191,81 +188,7 @@ describe('FA-G1 and FA-G2: the two new effects', () => {
   });
 });
 
-describe('Shiva\'s action counter (§4.1)', () => {
-  it('AC 0-64: Kick 1/2, Blizzaga 1/4, Heavenly Strike 1/4; +3 on each of her own actions', () => {
-    const counts: Record<string, number> = {};
-    const shiva = aiUnit('x2-shiva', 'enemy');
-    const h = aiHarness(shiva, [], 'x2-shiva', 11);
-    for (let i = 0; i < 4000; i++) {
-      shiva.aiMemory = { [AC]: 0 };
-      const id = h.run(1)[0]!;
-      counts[id] = (counts[id] ?? 0) + 1;
-      expect(shiva.aiMemory[AC]).toBe(3);
-    }
-    expect(Object.keys(counts).sort()).toEqual(['x2-shiva-blizzaga', 'x2-shiva-heavenly-strike', 'x2-shiva-kick']);
-    expect(counts['x2-shiva-kick']! / 4000).toBeCloseTo(0.5, 1);
-    expect(counts['x2-shiva-blizzaga']! / 4000).toBeCloseTo(0.25, 1);
-  });
-
-  it('AC 65-99 swaps Kick for Blizzaga 1/2 and Triple Attack 1/4', () => {
-    const shiva = aiUnit('x2-shiva', 'enemy');
-    const h = aiHarness(shiva, [], 'x2-shiva', 12);
-    const seen = new Set<string>();
-    for (let i = 0; i < 400; i++) {
-      shiva.aiMemory = { [AC]: 65 };
-      seen.add(h.run(1)[0]!);
-    }
-    expect([...seen].sort()).toEqual(['x2-shiva-blizzaga', 'x2-shiva-heavenly-strike', 'x2-shiva-triple-attack']);
-  });
-
-  it('34 of her own turns with no hits reach 100, then Diamond Dust and back to 0', () => {
-    const shiva = aiUnit('x2-shiva', 'enemy');
-    const h = aiHarness(shiva, [], 'x2-shiva', 13);
-    const ids = h.run(35);
-    expect(ids.slice(0, 34)).not.toContain('x2-shiva-diamond-dust');
-    expect(ids[34]).toBe('x2-shiva-diamond-dust');
-    expect(shiva.aiMemory?.[AC]).toBe(0);
-  });
-});
-
-describe('"when attacked" (FA8, a sourced conflict)', () => {
-  function hitDrafts(kind: 'miss' | 'damage' | 'immune'): EventDraft[] {
-    if (kind === 'damage') return [{ type: 'damage', targetId: 'x2-shiva', sourceId: 'rikku', amount: 300, element: 'none', crit: false, hitIndex: 0, hitCount: 1 }];
-    return [{ type: 'miss', targetId: 'x2-shiva', sourceId: 'rikku', reason: kind === 'miss' ? 'evaded' : 'immune' }];
-  }
-
-  it('reading a (shipped): every party action aimed at her adds 5, a miss and an immune hit included', () => {
-    for (const kind of ['miss', 'immune', 'damage'] as const) {
-      const shiva = aiUnit('x2-shiva', 'enemy');
-      shiva.enemy = { aiScriptId: 'x2-shiva', formIndex: 0, forms: [], rewards: x2Shiva.rewards };
-      const rikku = aiUnit('rikku', 'party');
-      const h = aiHarness(shiva, [], 'x2-shiva');
-      const at = (u: Ffx2Unit) => ({ ...h.ctx, self: u });
-      notifyEnemiesTargeted(hitDrafts(kind), rikku, [shiva, rikku], at);
-      notifyEnemiesDamaged(hitDrafts(kind), rikku, [shiva, rikku], at);
-      expect(shiva.aiMemory?.[AC], kind).toBe(5);
-    }
-  });
-
-  it('reading b (the bench switch): only landed damage adds 5', () => {
-    for (const [kind, want] of [['miss', 0], ['damage', 5]] as const) {
-      const shiva = aiUnit('x2-shiva', 'enemy');
-      shiva.enemy = { aiScriptId: 'x2-shiva', formIndex: 0, forms: [], rewards: x2Shiva.rewards };
-      const rikku = aiUnit('rikku', 'party');
-      const h = aiHarness(shiva, [], 'x2-shiva');
-      h.flags[AC_TRIGGER_FLAG] = 'damaged';
-      const at = (u: Ffx2Unit) => ({ ...h.ctx, self: u });
-      notifyEnemiesTargeted(hitDrafts(kind), rikku, [shiva, rikku], at);
-      notifyEnemiesDamaged(hitDrafts(kind), rikku, [shiva, rikku], at);
-      expect(shiva.aiMemory?.[AC] ?? 0, kind).toBe(want);
-    }
-  });
-
-  it('an enemy action never counts as her being attacked', () => {
-    const shiva = aiUnit('x2-shiva', 'enemy');
-    shiva.enemy = { aiScriptId: 'x2-shiva', formIndex: 0, forms: [], rewards: x2Shiva.rewards };
-    const h = aiHarness(shiva, [], 'x2-shiva');
-    notifyEnemiesTargeted(hitDrafts('damage'), shiva, [shiva], (u) => ({ ...h.ctx, self: u }));
-    expect(shiva.aiMemory?.[AC] ?? 0).toBe(0);
-  });
-});
+// Re-parity AI-FFX2-b (FFX-2 only; reason "game-script parity"). The two blocks that stood here pinned the first build's Shiva (a counter of +3 per
+// poll with fixed quarters, one 3-hit Triple Attack, +5 once per party action aimed at her under the sourced conflict FA8 a and b). The game's own
+// script (m167) replaced them: three polls of Chain Attack, the table chosen after the +3, and +5 for every result applied to her, guarded. They are
+// pinned, with the exact outcome tables, in tests/unit/parity-ffx2-ai-fallen-aeons.test.ts.

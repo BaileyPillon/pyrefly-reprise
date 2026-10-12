@@ -171,7 +171,7 @@ describe('the engine request carries each Overdrive\'s own parameters', () => {
   });
 
   it.each(BUSHIDO_IDS)('the engine\'s own roll for %s reports a full run as that Overdrive\'s length, not 7', (id) => {
-    const ctx = { rng: { int: () => 0 } } as never; // 0 < 75: the success branch
+    const ctx = { rng: { aux: { int: () => 0 } } } as never; // 0 < 75: the success branch (the minigame stand-in draws on the engine-side stream)
     const r = rollDefaultMinigame(ctx, 'auron-sequence', AURON[id]!, member({ id: 'auron' }) as never);
     expect(r.kind === 'auron-sequence' && r.sequence.correctInputs).toBe(LENGTH[id]);
   });

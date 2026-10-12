@@ -9,7 +9,6 @@
 
 import type { ElementId, FFX2Combatant, StatusId } from '../../common/types.ts';
 import type { Ffx2Unit } from '../internal.ts';
-import { TICKS_PER_DURATION_UNIT } from '../constants.ts';
 import { statLevel } from '../statuses.ts';
 import { GROUP1_STATUS, GROUP2_STATUS, STAGE_FIRST, STAGE_LAST, isStageSlot } from './slots.ts';
 
@@ -64,8 +63,8 @@ export function statusWord1(unit: FFX2Combatant): number {
 }
 
 /**
- * The group 2 bytes as the game keeps them in the result buffer (`Chr+0x4b4`, `Res+0x38`): for a timed status the
- * counter (the remaining time in the game's units of 0.53 s, 1 to 125, 0 = off), for a stage the signed step count.
+ * The group 2 bytes as the game keeps them in the result buffer (`Chr+0x4b4`, `Res+0x38`): for a timed status its counter
+ * (one count per 1,500 units of its owner's speed, 1 to 125, 0 = off; a status held for good reads 125), for a stage the signed step count.
  */
 export function group2Counters(unit: FFX2Combatant): number[] {
   return GROUP2_STATUS.map((statuses, i) => {
@@ -76,8 +75,7 @@ export function group2Counters(unit: FFX2Combatant): number[] {
     const status = statuses[0];
     const instance = status === undefined ? undefined : unit.statuses[status];
     if (!instance) return 0;
-    if (instance.ticksRemaining === null) return 125;
-    return Math.max(1, Math.min(125, Math.round(instance.ticksRemaining / TICKS_PER_DURATION_UNIT)));
+    return instance.counter ?? 125;
   });
 }
 
@@ -150,15 +148,13 @@ export function speciesMask(unit: FFX2Combatant): number {
 }
 
 /**
- * The ATB pool the Delay class damages (`pp_atb_pool`): the charge while it runs, else the recovery. The engine keeps
- * the remaining recovery only, so the recovery's maximum is that figure. (The ATB class is computed but not applied here:
- * the ATB, charge and recovery path is batch W4.)
+ * The ATB pool the ATB damage class reads (`pp_atb_pool`): the charge (remaining, maximum) while a cast runs, else the
+ * recovery (remaining, maximum), both floored at 0. The class's number is applied to it (`atb-engine.ts applyDelay`).
  */
-export function atbPool(unit: FFX2Combatant): { current: number; max: number } {
+export function atbPool(unit: Ffx2Unit): { current: number; max: number } {
   const charging = unit.atb.charging;
   if (charging !== null && charging.totalTicks > 0) return { current: Math.max(0, charging.remainingTicks | 0), max: charging.totalTicks | 0 };
-  const recovery = Math.max(0, unit.atb.recovery | 0);
-  return { current: recovery, max: recovery };
+  return { current: Math.max(0, unit.atb.recovery | 0), max: Math.max(0, unit.gauge.recoveryMax | 0) };
 }
 
 export { STAGE_FIRST, STAGE_LAST };

@@ -22,10 +22,13 @@ import { renderHallImpulse } from './dsp/hall.ts';
 import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import { hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
-import { SfxSprites } from './SfxSprites.ts';
+import { SfxSprites, type SfxPick } from './SfxSprites.ts';
+import { startSfxSource, type ParityVoice } from './sfxSource.ts';
 import { sfxGame, voiceKey, type SfxGame } from './sfxV2/voicing.ts';
 import { isV2Key } from './sfxV2/cues.ts';
 import { packsFor } from './sfxV2/packs.ts';
+import { beatDelaySeconds } from './sfxV2/beatTiming.ts';
+import { RETIRED_V2_CUES } from './sfxV2/retired.ts';
 
 export interface AudioManagerOptions {
   masterVolume?: number;
@@ -80,7 +83,23 @@ export interface PlaySfxOptions {
   pitch?: number;
   /** Seconds to wait before the cue fires. */
   delay?: number;
+  /**
+   * SFX parity, per event (`sfxV2/eventCues.ts`): the recorded originals to look up for this cue, in order, in the
+   * running chapter's parity packs. Given (even empty), the packs are consulted for these names ONLY, so a stand-in
+   * that many events share never plays another event's recording; the first one a decoded pack holds plays instead of
+   * the stand-in. Absent: the key is looked up by its own name, as before. Ignored outside a chapter (no game).
+   */
+  events?: readonly string[];
+  /** Originals (by name) whose playing covers this cue: when one is the original playing, this stand-in stays silent. */
+  coveredBy?: readonly string[];
+  /**
+   * Phase 2 timing: ms from this ask to the beat the cue's peak belongs on. A recorded original with a measured
+   * `peakMs` starts `beatMs - peakMs` later so its peak lands on the beat (`sfxV2/beatTiming.ts`); nothing else is moved.
+   */
+  beatMs?: number;
 }
+
+export type { ParityVoice };
 
 
 export class AudioManager {
@@ -475,10 +494,25 @@ export class AudioManager {
     // which stands in with its first-bank cue until its sprite has decoded (`SfxSprites.pick`).
     const game = sfxGame();
     const voiced = voiceKey(name, game);
-    const v2 = isV2Key(voiced) ? this.sprites.pick(this.manifest, voiced, game) : { slice: null, fallback: null, via: null, gain: 1 };
+    // SFX parity, per event: the recorded originals this cue asks for (only in a chapter run, rule 14). Given, the packs
+    // are consulted for those names alone; a stand-in that another original covers stays silent (`coveredBy`).
+    const events = game ? options.events : undefined;
+    const hit = game && events && events.length > 0 ? this.sprites.pickEvent(this.manifest, events, game) : null;
+    if (game && events && !hit && options.coveredBy) {
+      const covering = this.sprites.pickEvent(this.manifest, options.coveredBy, game);
+      if (covering) {
+        this.sprites.record({ t: (this.ctx?.currentTime ?? 0) + Math.max(0, options.delay ?? 0), asked: name, played: covering.name, via: 'parity', volume: 0, covered: true });
+        return;
+      }
+    }
+    const v2: SfxPick = hit
+      ? { slice: hit.slice, fallback: null, via: 'parity', gain: 1 }
+      : isV2Key(voiced)
+        ? this.sprites.pick(this.manifest, voiced, game, events === undefined)
+        : { slice: null, fallback: null, via: null, gain: 1 };
     // Aliases (an ability's authored `sfxKey`) resolve to the real cue, so the
     // buffer cache is keyed once per sound, not once per name for it.
-    const cue = v2.slice ? voiced : resolveSfx(v2.fallback ?? voiced);
+    const cue = hit ? hit.name : v2.slice ? voiced : resolveSfx(v2.fallback ?? voiced);
     if (cue === undefined) throw new Error(`Unknown sfx "${name}"`);
     const ctx = this.ctx;
     if (!ctx || !this.sfxBus) return;
@@ -488,30 +522,41 @@ export class AudioManager {
     const spriteCue = v2.slice ?? this.sprites.pick(this.manifest, cue).slice;
     const buffer = spriteCue ? spriteCue.buffer : this.getSfxBuffer(cue);
     if (!buffer) return;
-    this.sprites.record({ t: ctx.currentTime + Math.max(0, options.delay ?? 0), asked: name, played: cue, via: v2.slice ? (v2.via ?? 'v2') : spriteCue ? 'sprite' : 'synth', volume: options.volume ?? 1, ...(v2.slice && v2.gain !== 1 ? { trimDb: Math.round(200 * Math.log10(v2.gain)) / 10 } : {}) });
-
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.playbackRate.value = options.pitch ?? 1;
-    const gain = ctx.createGain();
+    // Phase 2: a recorded original starts so that its peak lands on the beat the presenter named (`beatMs`); nothing else moves.
+    const lead = v2.via === 'parity' && v2.slice ? beatDelaySeconds(v2.slice.cue, options.beatMs) : 0;
+    const delay = Math.max(0, options.delay ?? 0) + lead;
+    this.sprites.record({
+      t: ctx.currentTime + delay,
+      asked: name,
+      played: cue,
+      via: v2.slice ? (v2.via ?? 'v2') : spriteCue ? 'sprite' : 'synth',
+      volume: options.volume ?? 1,
+      ...(v2.slice && v2.gain !== 1 ? { trimDb: Math.round(200 * Math.log10(v2.gain)) / 10 } : {}),
+      ...(lead > 0 ? { leadMs: Math.round(lead * 1000) } : {}),
+    });
     // The caller's volume, times the P1 mix's per-cue trim for a v2 slice (`sfxV2/parityMix.ts`; 1 for everything else).
-    gain.gain.value = (options.volume ?? 1) * v2.gain;
-    const panner = ctx.createStereoPanner();
-    panner.pan.value = Math.max(-1, Math.min(1, options.pan ?? 0));
-    source.connect(gain);
-    gain.connect(panner);
-    // Dry to the bus, and a send into the shared hall so effects sit in the
-    // same room the music was mixed in.
-    panner.connect(this.sfxDry ?? this.sfxBus);
-    if (this.sfxSend) panner.connect(this.sfxSend);
-    const when = ctx.currentTime + Math.max(0, options.delay ?? 0);
-    if (spriteCue) source.start(when, spriteCue.cue.offset, spriteCue.cue.duration);
-    else source.start(when);
-    source.onended = () => {
-      source.disconnect();
-      gain.disconnect();
-      panner.disconnect();
-    };
+    startSfxSource(ctx, { dry: this.sfxDry ?? this.sfxBus!, send: this.sfxSend }, buffer, spriteCue, (options.volume ?? 1) * v2.gain, options, delay, false);
+  }
+
+  /**
+   * SFX parity flow hooks (`sfxV2/flowSlots.ts`): play a recorded original and nothing else. The first of `events`
+   * a decoded, active pack holds plays (looped inside its slice when `loop`); with none there is no sound at all,
+   * because these moments have never had one (the encounter's shatter and fade-in, the results tally). Returns a
+   * handle to stop it, or `null` when nothing played. Only in a chapter run (rule 14), never throws.
+   */
+  playParityOnly(events: readonly string[], options: PlaySfxOptions & { loop?: boolean } = {}): ParityVoice | null {
+    const game = sfxGame();
+    const ctx = this.ctx;
+    if (!game || !ctx || !this.sfxBus) return null;
+    const hit = this.sprites.pickEvent(this.manifest, events, game);
+    if (!hit) return null;
+    const delay = Math.max(0, options.delay ?? 0);
+    this.sprites.record({ t: ctx.currentTime + delay, asked: events[0] ?? '', played: hit.name, via: 'parity', volume: options.volume ?? 1 });
+    try {
+      return startSfxSource(ctx, { dry: this.sfxDry ?? this.sfxBus, send: this.sfxSend }, hit.slice.buffer, hit.slice, options.volume ?? 1, options, delay, options.loop === true);
+    } catch {
+      return null;
+    }
   }
 
   /**
@@ -632,7 +677,7 @@ export class AudioManager {
      * `0.0001` seconds into a fade that was scheduled to take minutes.
      */
     music: { current: { name: string; gain: number } | null; fading: Array<{ name: string; gain: number }> };
-    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null }; parity: { packs: string[]; active: string[]; decoded: string[] } };
+    prerendered: { manifest: boolean; cues: number; sprite: boolean; spriteDecoded: boolean; v2: { cues: number; decoded: boolean; game: string | null; retired: number }; parity: { packs: string[]; active: string[]; decoded: string[] } };
     /** The last plays: asked, played, from where (`SfxSprites.ts`); the hookup's proof without ears. */
     sfxLog: SfxSprites['log'];
     tracks: Array<{ name: string; about: string; cached: boolean; source: string | null }>;
@@ -654,7 +699,7 @@ export class AudioManager {
         cues: this.manifest ? Object.keys(this.manifest.music).length : 0,
         sprite: !!this.manifest?.sfx,
         spriteDecoded: this.sprites.decoded.v1,
-        v2: { cues: Object.keys(this.manifest?.sfxV2?.cues ?? {}).length, decoded: this.sprites.decoded.v2, game: sfxGame() },
+        v2: { cues: Object.keys(this.manifest?.sfxV2?.cues ?? {}).length, decoded: this.sprites.decoded.v2, game: sfxGame(), retired: RETIRED_V2_CUES.length },
         parity: { packs: Object.keys(this.manifest?.sfxParity?.packs ?? {}), active: [...this.sprites.activePacks], decoded: this.sprites.decoded.packs },
       },
       tracks: trackNames().map((name) => ({

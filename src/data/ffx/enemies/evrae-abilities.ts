@@ -288,10 +288,9 @@ const outOfBreathRange: AbilityDef = {
  * §3.3 note 1 demands.
  *
  * **`reflectable` is the whole of C-14 and the owner chose to keep it.**
- * `targeting.ts#reflectBounceTarget` picks a random living member of the
- * *opposite* side with no self-target special case, so Reflect on Evrae turns
- * this row into a free Haste on a random party member. Dropping the flag is the
- * one-line way to suppress it, and it would be a data decision, not a code one.
+ * the target builder (`kernel/target-builder.ts`) sends a spell whose Reflect holder is on the caster's own side, the caster included, to a random member
+ * of the *opposite* side, so Reflect on Evrae turns this row into a free Haste on a random party member. Dropping the flag is the one-line way
+ * to suppress it, and it would be a data decision, not a code one.
  */
 const haste: AbilityDef = {
   id: 'evrae-haste',

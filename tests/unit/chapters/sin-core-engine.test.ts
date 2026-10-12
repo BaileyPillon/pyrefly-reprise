@@ -229,7 +229,9 @@ describe('Waterga on the caster [§3.2 "the caster", verified: 4 sources; REVIEW
     }
   });
 
-  it('a Waterga bounced off a Reflected caster lands on Genais (absorbed) or the Core (0 while Genais lives), by seed', () => {
+  it('a Waterga turned back by a Reflected caster goes back to Genais (absorbed), who cast it, on every seed (RC4 lane FFX-G: a holder on the other side sends it to the caster, no draw)', () => {
+    // It used to land on Genais or the Core by seed: the engine drew a random member of Genais's side. The game's target builder sends a spell whose Reflect
+    // holder is on the other side from the caster back to the caster, always (FFX.exe 0x0078ba70, `research/re-ffx-targeting.md` section 1).
     const seen = new Set<string>();
     for (const seed of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
       const e = engine(seed, ['lulu', 'wakka', 'auron']);
@@ -240,13 +242,13 @@ describe('Waterga on the caster [§3.2 "the caster", verified: 4 sources; REVIEW
       turnOf(e, 'auron');
       const landed = counterHits(since(e, at), G, 'sin-genais-waterga');
       expect(landed).toHaveLength(1);
-      expect([G, C]).toContain(landed[0]);
+      expect(landed[0], `seed ${seed}`).toBe(G);
       seen.add(landed[0]!);
-      if (landed[0] === C) expect(live(e, C).hp).toBe(core);
+      expect(live(e, C).hp).toBe(core);
       // The bounce is not "aimed at" either of them: nothing answers it (label `reflect-bounce`).
       expect(counters(since(e, at), C)).toEqual([]);
     }
-    expect(seen).toEqual(new Set([G, C]));
+    expect(seen).toEqual(new Set([G]));
   });
 });
 

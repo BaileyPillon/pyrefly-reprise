@@ -298,8 +298,8 @@ export const mortibodyDesperado: AbilityDef = {
  *
  * Its own record rather than the player's `cura`: that row is
  * `crit-eligible`, and §3.2 prints no crit byte for this one. A Reflect on
- * Natus bounces it to a party member (research §6.3 strategy 5,
- * `targeting.ts#reflectBounceTarget`).
+ * Natus bounces it to a party member (research §6.3 strategy 5; the target
+ * builder, `kernel/target-builder.ts`: a holder on the caster's own side sends it to a random member of the other side).
  */
 export const mortibodyCura: AbilityDef = {
   id: MORTIBODY_CURA,

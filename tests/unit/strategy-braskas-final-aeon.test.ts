@@ -39,8 +39,10 @@ const MAX_DECISIONS = 40_000;
  * 28,254 of 120,000), as it loses seeds 18 and 23 of the first forty. Braska's Final Aeon runs the game's own script (the
  * gauge's fixed arithmetic, the game's move tables) and the Yu Pagodas return with the damage they absorbed; the 500-seed
  * line is 486 wins, against 488 before (14 losses, all on link 1, against 12). A seed pin that moved with the rules.
+ * Seed 3 became 1 on 2026-10-11 (re-parity RNG lane, FFX only: each game draws from its own 68 streams, so every seed is another deal of the same odds):
+ * seed 3 now loses link 1, as about one seed in twenty does (39 of the first 40 win; the loss is seed 3), and the other three keep their pins.
  */
-const SEEDS = [3, 7, 42, 20260916];
+const SEEDS = [1, 7, 42, 20260916];
 
 /**
  * Braska's Final Aeon → Valefor → Ifrit → Ixion → Shiva → Bahamut → Yu Yevon,

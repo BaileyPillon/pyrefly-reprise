@@ -5,8 +5,9 @@
  * Source: FFX.exe, Steam build 25501027, SHA-256 0537B2A1...686D, image base 0x400000. Spec:
  * `research/re-ffx-rng-hit.md`. Pure, deterministic, no DOM, no engine types (AGENTS.md rule 1).
  *
- * Not wired into the engine yet: the engine still draws from `common/rng.ts` (mulberry32). Kernels
- * take a `draw()` callback, so wiring can feed them either generator.
+ * Wired into the engine since the RNG lane (Bailey 2026-10-09, "Adopt game streams"): `adapt/streams.ts` holds the 68 states in a
+ * `GameStreams` and seeds them from the run seed through {@link seedStates}; the kernels still take a `draw()` callback, so a test
+ * can feed them a scripted value as well.
  *
  * Exe addresses (all FFX.exe):
  * - 0x007988f0  battle RNG, next value of one of 68 streams

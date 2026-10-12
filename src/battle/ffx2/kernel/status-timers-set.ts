@@ -5,7 +5,7 @@
  *
  * **Game case: FFX-2 only.** Source: FFX-2.exe, Steam build 25501027 (SHA-256 6EA7F142...CD69), image base
  * 0x400000. Spec: `research/re-ffx2-atb-status.md` section 6. Pure, deterministic, no DOM, no engine types
- * (AGENTS.md rule 1). Not wired into the engine. Randomness comes from a `draw(stream)` callback (`./rng.ts`).
+ * (AGENTS.md rule 1). Wired into the engine by re-parity W4 (`ffx2/status-clock.ts`, `statuses.ts`). Randomness comes from a `draw(stream)` callback (`./rng.ts`).
  *
  * Exe addresses (live build):
  * - 0x00636c70  MsSetStatus: recompute after any change

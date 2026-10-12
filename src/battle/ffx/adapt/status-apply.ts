@@ -36,6 +36,7 @@ import {
   type StatusStepOutput,
 } from './status.ts';
 import { autoWordB } from './words.ts';
+import { reviveAutoStatuses } from './auto-status.ts';
 
 /** What a combatant's statuses were when the hit began: the words the record started from, the stacks and the buff flags. */
 export interface Before {
@@ -198,6 +199,8 @@ export function applyStatusStep(
     koActor(ctx, target, user.id);
     out.killed = true;
   }
+  // A Petrify that ends re-applies the equipment statuses its landing wiped (the Petrify process, VA 0x0078e150; re-parity RC4, FFX only).
+  if (target.alive && (before.record.perm & PermBit.Petrify) !== 0 && (after.perm & PermBit.Petrify) === 0) reviveAutoStatuses(ctx, target);
   if (target.alive) refreshCriticalStatus(ctx, target);
   return out;
 }

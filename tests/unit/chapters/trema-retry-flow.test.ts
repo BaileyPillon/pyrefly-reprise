@@ -354,7 +354,10 @@ describe('the real fight through the flow (the intended line, the real engine)',
     const all = await retriesFromOneStanding(5);
     const retries = all.slice(1).flatMap((a) => a.fights);
     expect(retries.length).toBe(5);
-    expect(retries.every((f) => f.outcome === 'defeat' && f.decisions <= 8)).toBe(true);
+    // Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`): "a few menus" was 8. The game's own recovery
+    // after each command (`cost_atb x 10000 / (AGI + 1)`) and the full-tick casts pace one girl alone differently; the five Retries
+    // on their seeds ran 12, 0, 8, 3 and 6 menus, every one still a defeat, which is the round-23 loop this pins.
+    expect(retries.every((f) => f.outcome === 'defeat' && f.decisions <= 12)).toBe(true);
   }, 120000);
 
   it("shipped answer: the same Retries start from three girls on their feet, and one of them wins", async () => {
@@ -363,4 +366,66 @@ describe('the real fight through the flow (the intended line, the real engine)',
     expect(retries.every((a) => standing(a.opened[0]!.girls) === 3 && a.onLinks[0] === 2)).toBe(true);
     expect(retries.some((a) => a.fights[0]!.outcome === 'victory')).toBe(true);
   }, 120000);
+});
+
+/**
+ * The same finding with **no forced state** (round 24 carried PR-0407 "not re-tested": the link-2 carried state was not
+ * exercised). A real Oversoul Paragon win on the kit-intended line that leaves Yuna alone on her feet (Rikku and Paine
+ * knocked out in the fight itself). Seeds are deterministic (seeded RNG), so a change to the engine moves this pin: scan run
+ * seeds with `play` on link 1, read `opened[1]`, and pick the next seed that leaves one girl standing; do not loosen it.
+ *
+ * Re-pinned on the combined release candidate `r42-rc` (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`
+ * and `re-parity-rc3.md`). Run seed 73 was found on `r40-rc` bc373d58 (96 of run seeds 1 to 200 won link 1; only seed 73 left
+ * one girl, and seeds 14, 76, 100, 138 and 194 left two). Under the game's logic step and recovery (`cost_atb x 10000 / (AGI + 1)`,
+ * casts counted at the full tick), the Oversoul's rewritten script and the game's own random streams a seeded replay is a
+ * different replay, and seed 73 now wins Paragon with all three girls on their feet. The same scan on `r42-rc`, run seeds 1 to
+ * 5400: 4,161 win link 1 (48 percent before, 77 percent now), 4,017 of them leave three girls standing, 138 leave two and
+ * **6 leave one** (seeds 3543, 4053, 4404, 4518 and 4624 leave Yuna alone; seed 4559 leaves Paine). Seed 3543 is the first.
+ * The Retry rule (fewer than two standing means the Save Sphere's rule) is not changed by this.
+ */
+describe('a real Paragon win that leaves one girl standing (run seed 3543, nothing forced)', () => {
+  const ALONE_SEED = 3543;
+  async function fromTheRealSeam(which: Answer, retries: number): Promise<Attempt[]> {
+    pinRunSeed(ALONE_SEED);
+    answer = which;
+    steps = [[{ kind: 'play' }, { kind: 'play' }], ...Array.from({ length: retries }, () => [{ kind: 'play' } as Step])];
+    choices = [...Array.from({ length: retries }, () => 'retry' as const), 'chapter-select'];
+    await run();
+    return attempts;
+  }
+  const alive = (g: Girl[]): string[] => g.filter((x) => x.alive && x.hp > 0).map((x) => x.id);
+
+  it("the first entry into Trema is the sourced carry: Paragon is won for real and only Yuna stands", async () => {
+    const [first] = await fromTheRealSeam('shipped', 1);
+    expect(first!.fights[0]).toMatchObject({ outcome: 'victory' }); // the real Paragon fight
+    expect(first!.onLinks).toEqual([1, 2]);
+    expect(alive(first!.opened[1]!.girls)).toEqual(['yuna']); // not touched by the PR-0407 rule: the first entry is never changed
+  }, 120000);
+
+  it("'carry' (what shipped until PR-0407): every Retry replays Yuna alone and is lost (the round-23 loop)", async () => {
+    const all = await fromTheRealSeam('carry', 4);
+    const retries = all.slice(1);
+    expect(retries).toHaveLength(4);
+    for (const a of retries) {
+      expect(a.onLinks).toEqual([2]);
+      expect(alive(a.opened[0]!.girls)).toEqual(['yuna']);
+    }
+    // Re-parity W4 (FFX-2 only; reason "game-code parity", `docs/handoff/re-parity-w4.md`): "a few menus" was 8. A command now leaves its OWN
+    // recovery (`cost_atb x 10000 / (AGI + 1)`: an item 40, an Attack 70, a spell 0 plus its cast counted at the full tick) where every command
+    // left 70, so one girl alone is paced differently and gets more menus before the same defeat. The four Retries on this seed ran 3, 22, 2 and
+    // 12 menus, every one still a defeat; the eight Retries on each of the six one-girl run seeds (3543, 4053, 4404, 4518, 4559, 4624) ran 0 to 22 menus, 48 of 48 defeats.
+    expect(retries.every((a) => a.fights[0]!.outcome === 'defeat' && a.fights[0]!.decisions <= 22)).toBe(true);
+  }, 120000);
+
+  it('shipped answer (D-506): every Retry opens at Trema with all three up at full HP, and a Retry can be won', async () => {
+    const all = await fromTheRealSeam('shipped', 6);
+    const retries = all.slice(1);
+    expect(retries.length).toBeGreaterThanOrEqual(1);
+    for (const a of retries) {
+      expect(a.onLinks).toEqual([2]); // at Trema, never back at Paragon
+      expect(alive(a.opened[0]!.girls)).toHaveLength(3);
+      for (const g of a.opened[0]!.girls) expect(g.hp).toBe(g.max);
+    }
+    expect(retries.some((a) => a.fights[0]!.outcome === 'victory')).toBe(true);
+  }, 240000);
 });

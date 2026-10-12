@@ -1,0 +1,1633 @@
+{
+ "format": 1,
+ "about": "The SFX parity plan's rows (numbers and our own row ids only; no retail id, name or audio): one per event the recorded originals answer. 'secs' is the longest requested take length of the row (the mastered cue lands within 20 percent of it); 'pack' is the parity pack the row's cue ships in (src/audio/sfxV2/packs.ts says which chapter loads which pack; a row in 'ffx2-core' ships with every FFX-2 chapter); 'game: both' rows are the four menu assets both games share, packed into each game's core pack; 'hold' rows have no retail sound and no recording (decision 52j: today's sound stays); 'sharedWith' rows are served by another row's asset. Extracted once from the plan of 2026-10-10 (spec 2.2, gen-plan.json); tools/audio/sfx-parity-layout.mjs reads it, tests/unit/audio-sfx-parity-events.test.ts checks every row is hooked, held, a menu key or listed as open.",
+ "rows": [
+  {
+   "id": "ffx.ui.tick",
+   "game": "both",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ui.cancel",
+   "game": "both",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ui.error",
+   "game": "both",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ui.turn",
+   "game": "both",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 0.6,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ui.page",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ui.open",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 1.6,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.flow.shatter",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 3.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.flow.fadein",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "ambience",
+   "secs": 7.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.steal.ok",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 0.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.sword.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.sword.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.katana.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.6,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.katana.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.spear.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.spear.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.staff.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.staff.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.blitz.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.blitz.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.doll.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.doll.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.claw.swing",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.weapon.claw.hit",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.cast.charge",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.fire.t1",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.fire.t2",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.fire.t3",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ice.t1",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ice.t2",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ice.t3",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.thunder.t1",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.8,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.thunder.t2",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.8,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.thunder.t3",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.4,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.water.t1",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.water.t2",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.water.t3",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.holy",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 4.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.flare",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.demi",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 5.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ultima",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 5.5,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.cure.t1",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.cure.t2",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.cure.t3",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.life",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.life.full",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.regen",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.4,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.dispel",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.esuna",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.haste",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.slow",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.protect",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.shell",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.reflect",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.buff",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.debuff",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.poison",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.sleep",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.silence",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.8,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.darkness",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.item.ether",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.item.elixir",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.item.remedy",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.item.grenade",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 1.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ko.party",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 2.4,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.ko.fiend",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 3.4,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.overdrive.tidus",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 2.6,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.overdrive.auron",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 1.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.overdrive.lulu",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 1.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.overdrive.wakka",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 6.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.summon",
+   "game": "ffx",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 3.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.boss.appear.evrae",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.boss.appear.flux",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.4,
+   "pack": "ffx-flux"
+  },
+  {
+   "id": "ffx.boss.appear.lady",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.9,
+   "pack": "ffx-lady"
+  },
+  {
+   "id": "ffx.boss.chant.short",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 3.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.boss.chant.long",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 9.7,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.boss.flux.cleave",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 7.5,
+   "pack": "ffx-flux"
+  },
+  {
+   "id": "ffx.boss.flux.annihilation",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 7.5,
+   "pack": "ffx-flux"
+  },
+  {
+   "id": "ffx.boss.flux.banish",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 2.8,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.boss.flux.attack",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "impact",
+   "secs": 0.7,
+   "pack": "ffx-flux"
+  },
+  {
+   "id": "ffx.boss.lady.hellbiter",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 5.0,
+   "pack": "ffx-lady"
+  },
+  {
+   "id": "ffx.boss.lady.megadeath",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 8.0,
+   "pack": "ffx-lady"
+  },
+  {
+   "id": "ffx.boss.lady.mindblast",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 6.4,
+   "pack": "ffx-lady"
+  },
+  {
+   "id": "ffx.boss.lady.metamorph",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 13.7,
+   "pack": "ffx-lady"
+  },
+  {
+   "id": "ffx.boss.fa.beam",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.4,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.boss.fa.bomber",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 3.0,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.boss.fa.grasp",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 11.5,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.boss.fa.sword",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 9.0,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.boss.fa.shot",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 14.5,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.boss.fa.wave",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 8.5,
+   "pack": "ffx-final-aeon"
+  },
+  {
+   "id": "ffx.breath.fire",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 1.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.breath.stone",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 5.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.breath.bad",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 4.6,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.breath.aqua",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 4.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.explosion",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "impact",
+   "secs": 2.9,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.dark.death",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 3.1,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.dark.drain",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 2.8,
+   "pack": "ffx-lady"
+  },
+  {
+   "id": "ffx.dark.osmose",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 3.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.dark.doom",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 7.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.dark.meteor",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 7.2,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.enemy.berserk",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 2.8,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.enemy.confuse",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 2.4,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.enemy.curse",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 2.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.petrify",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 1.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.scan",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "spell",
+   "secs": 6.3,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.valefor",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 6.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.ifrit",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 7.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.ixion",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 6.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.shiva",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 11.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.bahamut",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 4.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.anima",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 5.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.yojimbo",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 14.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.aeon.sisters",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 6.5,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.reels",
+   "game": "ffx",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.0,
+   "pack": "ffx-core"
+  },
+  {
+   "id": "ffx.hold.menu-close",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.ctb-tick",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.ctb-shift",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.escape",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.victory",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.coin-tick",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.status-bell",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.impact-generic",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.critical",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.whiff",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.guard",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.counter",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.stop",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.steal-fail",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.overdrive-full",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.summon-depart",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx.hold.phase-shift",
+   "game": "ffx",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.lb.gunner.swing",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "weapon",
+   "secs": 0.7,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.lb.gunner.hit",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 2.4,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.lb.thief.swing",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "weapon",
+   "secs": 0.6,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.lb.thief.hit",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 2.7,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.lb.warrior.swing",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "weapon",
+   "secs": 0.5,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.lb.warrior.hit",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 1.9,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.lb.ormi.attack",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 1.3,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.logos.attack",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 2.3,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.leblanc.attack",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 1.0,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.goon.attack",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 0.6,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.fgoon.attack",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 1.5,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.sig.leblanc",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "spell",
+   "secs": 0.9,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.sig.logos",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "spell",
+   "secs": 1.1,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.lb.sig.ormi",
+   "game": "ffx2",
+   "wave": 1,
+   "cat": "impact",
+   "secs": 1.2,
+   "pack": "ffx2-leblanc"
+  },
+  {
+   "id": "ffx2.ui.tick",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.tick"
+  },
+  {
+   "id": "ffx2.ui.confirm",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.tick"
+  },
+  {
+   "id": "ffx2.ui.cancel",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.cancel"
+  },
+  {
+   "id": "ffx2.ui.error",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.error"
+  },
+  {
+   "id": "ffx2.ui.open",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.turn"
+  },
+  {
+   "id": "ffx2.ui.close",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.cancel"
+  },
+  {
+   "id": "ffx2.ui.page",
+   "game": "ffx2",
+   "wave": 2,
+   "sharedWith": "ffx.ui.tick"
+  },
+  {
+   "id": "ffx2.cast.chant",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 0.8,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.special.trigger",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 0.7,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.special.dressup",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "flourish",
+   "secs": 1.2,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.flow.results",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 6.0,
+   "loop": true,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.flow.stingers",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "ui",
+   "secs": 0.6,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.ko.party",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "impact",
+   "secs": 0.6,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.item.use",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 0.5,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.flow.escape",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "weapon",
+   "secs": 1.2,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.fire",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.9,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.ice",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.9,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.thunder",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.1,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.water",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.1,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.holy",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.0,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.flare",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 4.8,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.cure",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.4,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.cura",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.3,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.curaga",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.3,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.life",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.3,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.haste",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 2.5,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.slow",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 12.0,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.protect",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.2,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.shell",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 0.8,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.reflect",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 3.1,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.regen",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 4.2,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.esuna",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 6.8,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.dispel",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 11.5,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.autolife",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.7,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.drain",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 4.6,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.death",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.4,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.bio",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 0.5,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.sleep",
+   "game": "ffx2",
+   "wave": 2,
+   "cat": "spell",
+   "secs": 1.7,
+   "pack": "ffx2-core"
+  },
+  {
+   "id": "ffx2.boss.machina.ko",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "impact",
+   "secs": 2.8,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.boss.ray",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 3.2,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.boss.impulse",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 4.4,
+   "pack": "ffx2-bahamut"
+  },
+  {
+   "id": "ffx2.boss.breath",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 7.5,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.boss.bahamut",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 3.4,
+   "pack": "ffx2-bahamut"
+  },
+  {
+   "id": "ffx2.boss.ixion",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.4,
+   "pack": "ffx2-aeons"
+  },
+  {
+   "id": "ffx2.boss.shiva",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 2.4,
+   "pack": "ffx2-aeons"
+  },
+  {
+   "id": "ffx2.boss.anima",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 4.0,
+   "pack": "ffx2-aeons"
+  },
+  {
+   "id": "ffx2.boss.shuyin",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 5.5,
+   "pack": "ffx2-shuyin"
+  },
+  {
+   "id": "ffx2.boss.tail",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 5.5,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.boss.leg",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 5.0,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.boss.core",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 6.0,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.boss.head",
+   "game": "ffx2",
+   "wave": 3,
+   "cat": "flourish",
+   "secs": 7.0,
+   "pack": "ffx2-machina"
+  },
+  {
+   "id": "ffx2.hold.critical",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.miss",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.spherechange",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.chain",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.battle-start",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.turn-ready",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.status-bell",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.full-life",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.silence",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.stop",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.petrify",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.fiend-ko",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.explosion",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.blast",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.guard",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.counter",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.phase-shift",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.warning",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  },
+  {
+   "id": "ffx2.hold.gauge",
+   "game": "ffx2",
+   "wave": 0,
+   "hold": true
+  }
+ ]
+}

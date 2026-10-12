@@ -1,0 +1,1383 @@
+[
+ {
+  "turn": 0,
+  "ms": 26,
+  "actor": "idle",
+  "want": {
+   "label": "Shell",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:511/690",
+   "rikku:1648/1839",
+   "paine:1706/1706",
+   "bahamut:8400/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 35,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3632,
+  "actor": "play:action-start",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:320/690",
+   "rikku:1030/1839",
+   "paine:1067/1706",
+   "bahamut:8400/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 64,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 9600,
+  "actor": "command:paine",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:320/690",
+   "rikku:1030/1839",
+   "paine:1067/1706",
+   "bahamut:8400/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 88,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 18971,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:200/690",
+   "rikku:415/1839",
+   "paine:667/1706",
+   "bahamut:7749/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 155,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 30420,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:200/690",
+   "rikku:896/1839",
+   "paine:667/1706",
+   "bahamut:7749/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 186,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 35869,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:200/690",
+   "rikku:896/1839",
+   "paine:667/1706",
+   "bahamut:7591/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 212,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 39084,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:200/690",
+   "rikku:896/1839",
+   "paine:667/1706",
+   "bahamut:7591/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 229,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 47717,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:667/1839",
+   "paine:667/1706",
+   "bahamut:7225/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 277,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 56445,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:667/1839",
+   "paine:667/1706",
+   "bahamut:7073/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 330,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 59630,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:667/1839",
+   "paine:667/1706",
+   "bahamut:7073/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 340,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 64100,
+  "actor": "command:paine",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:647/690",
+   "rikku:1148/1839",
+   "paine:667/1706",
+   "bahamut:7073/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 357,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 77773,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:615/690",
+   "rikku:877/1839",
+   "paine:598/1706",
+   "bahamut:6407/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 427,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 83130,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Magic Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:615/690",
+   "rikku:877/1839",
+   "paine:598/1706",
+   "bahamut:6407/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 451,
+    "actor": "paine",
+    "did": "Magic Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 89956,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:615/690",
+   "rikku:877/1839",
+   "paine:1054/1706",
+   "bahamut:6245/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 493,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 96120,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:615/690",
+   "rikku:648/1839",
+   "paine:1054/1706",
+   "bahamut:5872/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 530,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 99422,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:615/690",
+   "rikku:648/1839",
+   "paine:1054/1706",
+   "bahamut:5872/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 547,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 110004,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:428/690",
+   "rikku:1138/1839",
+   "paine:1054/1706",
+   "bahamut:5711/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 618,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 112767,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:428/690",
+   "rikku:1138/1839",
+   "paine:1054/1706",
+   "bahamut:5711/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 628,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 116064,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:428/690",
+   "rikku:1138/1839",
+   "paine:1054/1706",
+   "bahamut:5711/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 638,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 129662,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:168/690",
+   "rikku:302/1839",
+   "paine:690/1706",
+   "bahamut:5145/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 729,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 133036,
+  "actor": "command:paine",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:168/690",
+   "rikku:302/1839",
+   "paine:690/1706",
+   "bahamut:5145/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 742,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 137719,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:168/690",
+   "rikku:302/1839",
+   "paine:690/1706",
+   "bahamut:5145/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 759,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 149064,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:168/690",
+   "rikku:563/1839",
+   "paine:690/1706",
+   "bahamut:4651/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 830,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 152353,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:168/690",
+   "rikku:563/1839",
+   "paine:690/1706",
+   "bahamut:4651/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 847,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 160723,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:613/690",
+   "rikku:563/1839",
+   "paine:690/1706",
+   "bahamut:4495/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 887,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 163505,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:613/690",
+   "rikku:563/1839",
+   "paine:690/1706",
+   "bahamut:4495/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 904,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 172735,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:613/690",
+   "rikku:334/1839",
+   "paine:690/1706",
+   "bahamut:4157/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 927,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 187002,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:598/690",
+   "rikku:757/1839",
+   "paine:659/1706",
+   "bahamut:3941/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1009,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 190033,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:598/690",
+   "rikku:757/1839",
+   "paine:659/1706",
+   "bahamut:3941/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1015,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 192534,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:598/690",
+   "rikku:757/1839",
+   "paine:659/1706",
+   "bahamut:3941/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1024,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 205199,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:598/690",
+   "rikku:528/1839",
+   "paine:981/1706",
+   "bahamut:3218/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1109,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 208503,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:598/690",
+   "rikku:528/1839",
+   "paine:981/1706",
+   "bahamut:3218/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1119,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 215502,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:411/690",
+   "rikku:991/1839",
+   "paine:981/1706",
+   "bahamut:3047/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1161,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 222504,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:411/690",
+   "rikku:659/1839",
+   "paine:981/1706",
+   "bahamut:2552/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1211,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 225230,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cura",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:411/690",
+   "rikku:659/1839",
+   "paine:981/1706",
+   "bahamut:2552/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1221,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 237946,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:542/1839",
+   "paine:384/1706",
+   "bahamut:2352/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1307,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 240645,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:542/1839",
+   "paine:384/1706",
+   "bahamut:2352/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1317,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 245048,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:542/1839",
+   "paine:384/1706",
+   "bahamut:2352/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1337,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 258483,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Bahamut",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:1313/1839",
+   "paine:384/1706",
+   "bahamut:1076/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "bahamut",
+   "wanted": "bahamut",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1399,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 263030,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:1313/1839",
+   "paine:384/1706",
+   "bahamut:1076/8400"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1431,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 266196,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:1313/1839",
+   "paine:384/1706",
+   "bahamut:810/8400"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1444,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "bahamut"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 275766,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Bahamut",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:161/690",
+   "rikku:1084/1839",
+   "paine:1384/1706",
+   "bahamut:168/8400"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

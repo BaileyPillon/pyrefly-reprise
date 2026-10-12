@@ -112,7 +112,7 @@ describe('the triggers, by running the engine (intended lines, bench speed)', ()
     expect(wins).toBeGreaterThan(0);
     expect(stops).toBeGreaterThan(0);
     console.info(`[fallen-aeons story] Shiva: ${wins}/${SHIVA_SEEDS.length} wins; Stop landed in ${stops}`);
-  });
+  }, 60_000); // re-parity W4: 10.6 s alone (the 15 s default timed out under a loaded run); a step is now run one at a time, 23 us each
 
   it('the Sisters: the entrance once; the first fall once, after the first KO, and only if one falls', () => {
     let falls = 0;

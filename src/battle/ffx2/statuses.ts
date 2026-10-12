@@ -1,20 +1,17 @@
 /**
- * FFX-2 status semantics [ffx2-combat-core §2.8, §2.6a].
+ * FFX-2 status semantics [ffx2-combat-core §2.8, §2.6a; re-parity W4].
  *
  * **Nothing here is shared with `battle/ffx/statuses`.** The ids overlap; the
- * rules do not. In X-2 Haste is a x1.05 tick rate (FFX halves CTB recovery),
- * Berserk is x1.25 (FFX x1.5), Regen pays ~3% of max HP on a real-time interval
- * (FFX pays on every unit's turn boundary), and duration is stored as an
- * integer `durationValue` converted at 0.53 s per unit.
+ * rules do not. In X-2 Haste is 95 -> 99 units a logic step (FFX halves CTB recovery),
+ * Berserk is x1.25 (FFX x1.5), Regen pays (8 x max HP) >> 8 every 16,000 units (FFX pays on
+ * every unit's turn boundary), and a duration is the game's own clock.
  *
- * Duration model:
- * ```
- * ticks = durationValue * 0.53 * 3000          // Config ATB speed = Normal
- * ```
- * and the remaining duration then drains at x2.0 on a Slowed unit and x0.95 on
- * a Hasted one. A status with no duration value is `Infinite` and never expires
- * (Poison, Darkness, Silence, Petrify, Curse, Pointless, Itchy, Auto-Life,
- * Spellspring, every Up/Down stack).
+ * Duration model (the game's, `kernel/status-timers.ts`): a timed GROUP 2 status (Shell, Protect, Reflect, Regen, Haste,
+ * Slow, Stop, Doom, the three immunities) holds a counter of 1 to 125, set from the command row's amount, that loses one
+ * count for every 1,500 units its owner's speed banks (Doom 10,000); a GROUP 1 status with a timer (Sleep 150,000,
+ * Confusion and Berserk 200,000 units) falls by the owner's raw speed. A status with no duration is `Infinite` and never
+ * expires (Poison, Darkness, Silence, Petrify, Curse, Pointless, Itchy, Auto-Life, Spellspring, every Up/Down stack). The
+ * clocks run in `status-clock.ts`; this file only starts them.
  */
 
 import type {
@@ -23,17 +20,11 @@ import type {
   StatusId,
   StatusInstance,
 } from '../common/types.ts';
-import type { Emit, Ffx2Unit } from './internal.ts';
 import { withPoolStatuses } from './kit.ts';
-import {
-  DURATION_SCALE_HASTE,
-  DURATION_SCALE_SLOW,
-  POISON_FRACTION,
-  REGEN_FRACTION,
-  STATUS_TICK_INTERVAL_TICKS,
-  STAT_STACK_MAX,
-  TICKS_PER_DURATION_UNIT,
-} from './constants.ts';
+import { STAT_STACK_MAX } from './constants.ts';
+import { isStageSlot, slotOf } from './adapt/slots.ts';
+import { FFX2_STATUS_ROM } from './kernel/status-timers-set.ts';
+import { STATUS2_INFO } from './kernel/statusTypes.ts';
 
 /** Statuses the source tables flag `Infinite` — they have no expiry at all. §2.8 */
 export const INFINITE_STATUSES: readonly StatusId[] = [
@@ -107,29 +98,16 @@ const EXCLUSIVE: ReadonlyArray<readonly [StatusId, StatusId]> = [
   ['slow', 'haste'],
 ];
 
-/**
- * The duration an **ailment row with no duration value** lasts when its battle opts in
- * (`EnemyGroupDef.timedAilmentDefaults`, Chapter XIII; method check E1). Without it, `duration: 0`
- * reads as "until cured" (the Leblanc and Chapter XI precedent, `[estimate]`), which made Beguiling
- * Mire's Stop last the whole fight although §2.8 lists Stop, Slow, Sleep, Confuse and Berserk as
- * **timed** `[verified: 2 sources]`. Values, §2.8 "Published duration values":
- * - Sleep 97 and Berserk / Confuse 133: the tables' own **global defaults** `[single source]`;
- * - Stop 100: no global default is published; 100 is what five of the eight published Stop
- *   sources carry (Borrowed Time, Congealed Honey, Still Wing, Stop Missile, Stop Spark) `[estimate]`;
- * - Slow 100: every published Slow source carries 100 `[estimate]` (no global default either).
- */
-export const AILMENT_DEFAULT_DURATION: Readonly<Partial<Record<StatusId, number>>> = {
-  sleep: 97,
-  berserk: 133,
-  confuse: 133,
-  stop: 100,
-  slow: 100,
-};
+/** Units one count of a group 2 timed status is worth: 1,500, or 10,000 for Doom (`kernel/statusTypes.ts` flag words 0x4 and 0x8). 0 for a slot that never counts. */
+export function countUnits(group2Index: number): number {
+  const flags = STATUS2_INFO[group2Index] ?? 0;
+  if ((flags & 8) !== 0) return FFX2_STATUS_ROM.countValue[1] ?? 0;
+  return (flags & 4) !== 0 ? (FFX2_STATUS_ROM.countValue[0] ?? 0) : 0;
+}
 
-/** `durationValue` -> ticks at Config ATB speed = Normal. §2.8 */
-export function durationToTicks(durationValue: number): number | null {
-  if (durationValue <= 0) return null;
-  return Math.round(durationValue * TICKS_PER_DURATION_UNIT);
+/** True for a group 2 slot that counts (Shell ... Slow, Stop, Doom, the three immunities); a stat stage never does. */
+export function isTimedGroup2(group2Index: number): boolean {
+  return !isStageSlot(group2Index) && countUnits(group2Index) > 0;
 }
 
 /** Current level of a stacking Up/Down status, 0–10. §2.8 */
@@ -138,11 +116,27 @@ export function statLevel(c: FFX2Combatant, id: StatusId): number {
   return inst ? Math.max(0, Math.min(STAT_STACK_MAX, inst.stacks)) : 0;
 }
 
-/** How fast this unit's status durations drain. §2.8 */
-function durationRate(c: FFX2Combatant): number {
-  if (c.statuses.slow) return 1 / DURATION_SCALE_SLOW;
-  if (c.statuses.haste) return 1 / DURATION_SCALE_HASTE;
-  return 1;
+/** A group 2 counter is 1 to 125 (`kernel/statusGroup2.ts` `COUNTER_MAX`). */
+const COUNTER_MAX = 125;
+
+/**
+ * The game's clock for a status that lands now (`MsSetStatus` loads it when the bit appears):
+ *
+ * - a group 1 status with a timer (Sleep, Confusion, Berserk) gets its `off_count` whatever the command that inflicted it
+ *   said, the one timer the game keeps for it;
+ * - a timed group 2 status gets the command's amount as its counter (clamped to 1..125). An application with no amount
+ *   (`duration` 0) is "until cured": no clock, as every authored ability without a duration always meant.
+ */
+function clockFor(id: StatusId, duration: number): Pick<StatusInstance, 'ticksRemaining' | 'counter' | 'accumulator'> {
+  const slot = slotOf(id);
+  if (slot === undefined) return { ticksRemaining: null };
+  if (slot.group === 1) {
+    const timer = FFX2_STATUS_ROM.offCount[slot.index] ?? 0;
+    return { ticksRemaining: timer > 0 ? timer : null };
+  }
+  if (!isTimedGroup2(slot.index) || duration <= 0) return { ticksRemaining: null };
+  const counter = Math.max(1, Math.min(COUNTER_MAX, Math.round(duration)));
+  return { ticksRemaining: counter * countUnits(slot.index), counter, accumulator: 0 };
 }
 
 /**
@@ -155,8 +149,6 @@ export function applyStatus(
   application: StatusApplication,
   sourceId?: string,
   sourceAbilityId?: string,
-  /** The battle's `timedAilmentDefaults` (see {@link AILMENT_DEFAULT_DURATION}); absent everywhere else. */
-  timedAilmentDefaults = false,
 ): StatusInstance | null {
   const id = application.status;
   const stacking = application.stacks !== undefined && application.stacks > 0;
@@ -175,11 +167,10 @@ export function applyStatus(
   }
 
   const infinite = INFINITE_STATUSES.includes(id);
-  const fallback = timedAilmentDefaults && application.duration <= 0 ? AILMENT_DEFAULT_DURATION[id] : undefined;
   const instance: StatusInstance = {
     id,
     turnsRemaining: null,
-    ticksRemaining: infinite ? null : durationToTicks(fallback ?? application.duration),
+    ...(infinite ? { ticksRemaining: null } : clockFor(id, application.duration)),
     charges: null,
     stacks: application.stacks ?? 0,
     permanent: infinite,
@@ -204,76 +195,6 @@ export function removeStatus(target: FFX2Combatant, id: StatusId): boolean {
   if (!target.statuses[id]) return false;
   delete target.statuses[id];
   return true;
-}
-
-/** Ticks until this unit's soonest status expiry, or `Infinity`. */
-export function ticksUntilStatusEvent(c: Ffx2Unit, held?: ReadonlySet<string>): number {
-  const rate = durationRate(c);
-  if (rate <= 0) return Infinity;
-  let soonest = Infinity;
-  for (const key of Object.keys(c.statuses) as StatusId[]) {
-    const inst = c.statuses[key];
-    if (!inst || inst.ticksRemaining === null || held?.has(key)) continue;
-    const t = inst.ticksRemaining / rate;
-    if (t < soonest) soonest = t;
-  }
-  // Regen and Poison pay out on a fixed real-time interval while they are on.
-  if ((c.statuses.regen || c.statuses.poison) && !c.statuses.stop) {
-    const owed = STATUS_TICK_INTERVAL_TICKS - (c.statusTickAccumulator ?? 0);
-    if (owed < soonest) soonest = Math.max(0, owed);
-  }
-  return soonest;
-}
-
-/**
- * Advance one unit's statuses by `ticks` of global clock: expiries, and the
- * Regen / Poison payout. Both are inert while Stopped. §2.3, §2.8
- *
- * Returns the signed HP delta to apply (positive = damage), so the caller owns
- * KO handling and event ordering.
- */
-export function advanceStatuses(
-  c: Ffx2Unit,
-  ticks: number,
-  emit: Emit,
-  /** Called once per Regen payout, in order, with that payout's HP (Chapter XI's Sisters count them). */
-  onRegenPayout?: (amount: number) => void,
-  /** Statuses whose clocks do not run (`constants.ts` STATUS_CLOCKS_HELD_AT: Sleep at Fast, PR-0108). */
-  held?: ReadonlySet<string>,
-): number {
-  if (ticks <= 0 || !c.alive) return 0;
-  const rate = durationRate(c);
-
-  for (const key of Object.keys(c.statuses) as StatusId[]) {
-    const inst = c.statuses[key];
-    if (!inst || inst.ticksRemaining === null || inst.permanent || held?.has(key)) continue;
-    inst.ticksRemaining -= ticks * rate;
-    if (inst.ticksRemaining > 0) {
-      emit({ type: 'status-tick', targetId: c.id, status: key, remaining: Math.round(inst.ticksRemaining) });
-      continue;
-    }
-    delete c.statuses[key];
-    emit({ type: 'status-remove', targetId: c.id, status: key, reason: 'expired' });
-  }
-
-  if (c.statuses.stop) return 0;
-  if (!c.statuses.regen && !c.statuses.poison) {
-    c.statusTickAccumulator = 0;
-    return 0;
-  }
-
-  c.statusTickAccumulator = (c.statusTickAccumulator ?? 0) + ticks;
-  let delta = 0;
-  while (c.statusTickAccumulator >= STATUS_TICK_INTERVAL_TICKS) {
-    c.statusTickAccumulator -= STATUS_TICK_INTERVAL_TICKS;
-    if (c.statuses.poison) delta += Math.max(1, Math.floor(c.stats.maxHp * POISON_FRACTION));
-    if (c.statuses.regen) {
-      const regen = Math.max(1, Math.floor(c.stats.maxHp * REGEN_FRACTION));
-      delta -= regen;
-      onRegenPayout?.(regen);
-    }
-  }
-  return delta;
 }
 
 /** Clear everything the end of a battle clears. §2.8 */

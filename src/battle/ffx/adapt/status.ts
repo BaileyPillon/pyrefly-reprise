@@ -305,7 +305,7 @@ export interface StatusStepOutput {
 
 /**
  * One hit's status step: `pp_BtlInflictStatus` then `pp_BtlInflictExtraStatus` over the hit record, drawing from `draw`
- * (one engine draw per kernel draw, already reduced to the modulus the kernel applies).
+ * (one draw of the user's mode 2 stream per kernel draw, already reduced to the modulus the kernel applies).
  */
 export function runStatusStep(input: StatusStepInput, draw: (modulus: number) => number): StatusStepOutput {
   const { ctx, user, target, def, command, live, record, rank } = input;

@@ -4,8 +4,9 @@
  * Split out of `abilities.ts` (re-parity W1; **FFX only**). `adapt/hit.ts#resolveHit` runs the game's per-hit
  * pipeline (the Nul check, the hit roll, the base damage of every class, the modifier chain, the critical roll,
  * the status infliction, Delay and Threaten, the cap) with the draws in the game's order. This module wraps that in the
- * engine's own business around a hit: Reflect and Cover, the events, the HP / MP / CTB application, revival, the drain
- * heal, the Overdrive gauges and the scripted extras.
+ * engine's own business around a hit: the events, the HP / MP / CTB application, revival, the drain heal, the Overdrive
+ * gauges and the scripted extras. **Cover and Reflect are not here any more** (re-parity RC4 lane FFX-G): the game decides
+ * both once, when an action's targets are built (`target-build.ts`), so a hit is run against the target it was built for.
  *
  * **Statuses (re-parity W2).** The game keeps one hit record per target per action and every hit of the action edits it:
  * the record starts as the target's status words as the action began, the infliction step reads the LIVE words
@@ -23,13 +24,13 @@ import { type HitDraws } from './adapt/draws.ts';
 import { engineDamageClass } from './adapt/command.ts';
 import { resolveHit } from './adapt/hit.ts';
 import { applyMpDelta, dealDamage, healOutsideChain, reviveActor } from './hp.ts';
-import { bouncesOffReflect, removeStatus } from './statuses.ts';
+import { removeStatus } from './statuses.ts';
 import { addCtb, tickSpeedOf } from './adapt/ctb.ts';
 import { PermBit, ResultCounter, type StatusRecord } from './kernel/status-types.ts';
 import { type LiveStatus, type StatusStepOutput, liveOf, recordOf, runStatusStep } from './adapt/status.ts';
 import { type Before, applyStatusStep } from './adapt/status-apply.ts';
 import { buffByte, stackBytes } from './adapt/status.ts';
-import { redirectTarget, reflectBounceTarget } from './targeting.ts';
+import { reactToHit } from './adapt/reactions.ts';
 import { gaugeOnHit, gaugeOnOutcome, gaugeTransfer } from './gauge.ts';
 import { runScriptedExtra } from './scripted.ts';
 import { resolveSteal, stealsItem } from './steal.ts';
@@ -110,23 +111,9 @@ function writeBackNul(ctx: Ctx, target: FFXCombatant, nul: { tide: number; blaze
   }
 }
 
-/** Resolve one hit on `rawTarget`. The engine's Reflect, Cover and Provoke come first, as they always did. */
-export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
+/** Resolve one hit on `target`, the target the action's targets were built for (`target-build.ts`). */
+export function resolveOneHit(scope: HitScope, target: FFXCombatant): void {
   const { ctx, user, def, options } = scope;
-  let target = redirectTarget(ctx, user, rawTarget, def);
-
-  // Reflect bounces a single-target reflectable spell to the other side.
-  if (bouncesOffReflect(def, target)) {
-    const bounced = reflectBounceTarget(ctx, target);
-    if (!bounced) {
-      ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
-      scope.hitIndex++;
-      return;
-    }
-    // The reflecting target runs the outcome hook as a hit that a Shell, Protect or Nul turned aside (VA 0x00789030: Rook).
-    gaugeOnOutcome(ctx, user, target, 0, 2);
-    target = bounced;
-  }
   // The record lands on `target` (a miss included): its script hears of it after the last one (`onHit`, once per action).
   let seen = scope.touched.get(target.id);
   if (seen) seen.last = scope.hitIndex;
@@ -202,6 +189,11 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
   const crit = report.crit;
   const step = made.step;
   let skipHp = false;
+  // What Auto-Med and Auto-Potion see of this hit (`adapt/reactions.ts#reactToHit`): the HP before it, the HP damage it dealt, and whether
+  // a physical blow woke a sleeper.
+  const hpBeforeHit = target.hp;
+  let hpDamage = 0;
+  let woke = false;
 
   // The Death bit of the record decides the engine's two Death outcomes. A cleansing command (Life, Full-Life, Phoenix Down)
   // takes it off a dead target (a revival) and puts it ON a Zombie, which kills it [`kernel/status-inflict.ts`, VA 0x0078ae00];
@@ -265,7 +257,9 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
         // 204-turn battle and he never acted again.
         if (def.damageType === 'physical' && has(target, 'sleep')) {
           removeStatus(ctx, target, 'sleep', 'expired');
+          woke = true;
         }
+        hpDamage = hpAmount;
         scope.totalDealt += hpAmount;
         if (hasFlag(def, 'drains')) {
           healOutsideChain(ctx, user, hpAmount, 'drain', user.id);
@@ -311,6 +305,9 @@ export function resolveOneHit(scope: HitScope, rawTarget: FFXCombatant): void {
     applyStatusStep(ctx, user, target, def, before, step);
     book.record = step.result.record;
   }
+  // The game's hit applier then asks the target's Auto-Med and Auto-Potion (FFX only, re-parity RC4 lane F): each one decided here, from this
+  // hit's HP damage and the statuses it newly inflicted, and paid for now; the reaction itself runs when the action is over.
+  reactToHit(ctx, target, { hpBefore: hpBeforeHit, hpDamage, before: before.record, after: step ? step.result.record : before.record, woke });
 
   runScriptedExtra(ctx, user, def, target, hpAmount);
   scope.hitIndex++;

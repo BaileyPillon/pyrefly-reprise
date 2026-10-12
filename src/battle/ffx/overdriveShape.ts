@@ -13,6 +13,8 @@ import { type Ctx, abilityOf, spendItem } from './state.ts';
 import type { ResolveOptions } from './abilities.ts';
 import { FURY_MAX_CASTS, furyCastsFor, timingBonusFrom } from './overdrive.ts';
 import { resolveReelSpin } from './reels.ts';
+import { ridersAllSpent } from './adapt/overdrive-result.ts';
+import { isPerHitRandom } from './targeting.ts';
 
 /** Keys that belong to the success row only: Blitz Ace's "Last Hit" finisher (row 274) [§5.3]. */
 const SUCCESS_ONLY_KEYS = ['finisherPower', 'finisherHits', 'finisherAppliesOnSuccessOnly'] as const;
@@ -48,21 +50,16 @@ export function rowFromExtra(def: AbilityDef, row: 'fail' | 'immune'): AbilityDe
 const DELAY_FLAGS: readonly string[] = ['weak-delay', 'strong-delay'];
 
 /**
- * Is `target` immune to **all** of `def`'s rider (od5)? A rider is the record's
- * `statusEffects` plus a weak/strong Delay flag: Dragon Fang weak Delay, Shooting
- * Star Eject, Banishing Blade all four Breaks (§5.5, research note Q2 item 1,
- * `[verified: 3 sources]`). Immune = resistance 255 for a status, the
- * `immune-to-delay` flag for Delay, read off the target's own data. **All four**
- * Breaks for Banishing Blade and **per target** are our estimates, Bailey's picks
- * [estimate, Bailey D-310, D-311; `research/ffx-overdrive-input-rules-2026-09-30.md`
- * Q2 items 2 and 3]. A record with no rider (Tornado) is never immune. Reads only;
- * no RNG draw. **FFX only.**
+ * Does the first pass newly inflict **none** of `def`'s riders on `target`, so that a clean Bushido takes its (Immune) row for it?
+ * The game decides **per target** from the target's first-pass record (byte 0x16, a count of riders newly inflicted;
+ * `kernel/overdrive-result.ts#ridersLanding`, `FFX-G01` section 4.3): Shooting Star's Eject is spent when the target is immune to Eject
+ * **or already carries it**; Dragon Fang's weak Delay when the target is delay-immune; Banishing Blade's four Breaks when **every** Break
+ * is either immune (resistance 255) or already carried (one immune Break is not enough). A record with no rider (Tornado) is never
+ * immune. Reads only; no RNG draw. A Petrified target does not follow these rules in the game (unmapped) and is not special-cased here.
+ * **FFX only.**
  */
 export function immuneToRider(def: AbilityDef, target: FFXCombatant): boolean {
-  const delay = def.flags.some((f) => DELAY_FLAGS.includes(f));
-  if (def.statusEffects.length === 0 && !delay) return false;
-  if (delay && !target.immunityFlags.includes('immune-to-delay')) return false;
-  return def.statusEffects.every((s) => (target.immunities[s.status] ?? 0) >= 255);
+  return ridersAllSpent(def, target);
 }
 
 /**
@@ -95,6 +92,9 @@ export function shapeOverdrive(
   if (!result) return { def, options };
 
   if (result.kind === 'tidus-timing' || result.kind === 'auron-sequence') {
+    // A random-target move (Slice and Dice) has its menu record's hits spread over the targets first; the result only takes some away
+    // (`ResolveOptions.spreadHits`, `kernel/overdrive-result.ts`).
+    if (isPerHitRandom(def.targeting)) options.spreadHits = def.hits;
     const success = result.kind === 'tidus-timing' ? result.timing.success : result.sequence.success;
     if (!success) {
       const failId = def.extra?.['failAbilityId'];
@@ -140,7 +140,8 @@ export function shapeOverdrive(
     // [CONTRACT-CHANGES decision 9, ffx-combat-core §5.7].
     const swept = result.fury.sweptDegrees;
     const casts = swept > 0 ? furyCastsFor(def, user.stats.mag, swept) : Math.max(0, result.fury.casts);
-    return { def, options: { ...options, hits: Math.min(FURY_MAX_CASTS, casts) } };
+    // The game plans all sixteen hits over the targets and takes away the casts it was not given (`ResolveOptions.spreadHits`).
+    return { def, options: { ...options, hits: Math.min(FURY_MAX_CASTS, casts), ...(isPerHitRandom(def.targeting) ? { spreadHits: def.hits } : {}) } };
   }
 
   if (result.kind === 'kimahri-rage') {

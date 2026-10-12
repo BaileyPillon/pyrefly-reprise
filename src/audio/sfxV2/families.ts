@@ -59,6 +59,21 @@ export function familyOfSfxKey(sfxKey: string | undefined): string | null {
   return V1_FAMILIES[cue] ?? null;
 }
 
+/** The spell-tier ladders (Fire / Fira / Firaga ...): alias cue -> tier. Only these families have per-tier recorded originals. */
+const TIERED_ALIAS = /^(?:fire|ice|lightning|water|cure)-([23])$/;
+
+/**
+ * FFX: the spell tier the ability's or item's `sfxKey` names, 2 or 3 (`sfx-fira-cast` is 2, `sfx-firaga-cast` 3), or
+ * `null` for tier 1 and for every sound that is not an elemental or Cure ladder. Read through the same alias table as
+ * {@link familyOfSfxKey}, so the data's own naming picks the tier. FFX-2's rows carry no `sfxKey` and have no tiers.
+ */
+export function tierOfSfxKey(sfxKey: string | undefined): number | null {
+  if (!sfxKey) return null;
+  const cue = Object.prototype.hasOwnProperty.call(SFX_ALIASES, sfxKey) ? SFX_ALIASES[sfxKey]! : sfxKey;
+  const m = TIERED_ALIAS.exec(cue);
+  return m ? Number(m[1]) : null;
+}
+
 /** FFX-2 abilities by id whose landing the element and damage type alone would not tell. */
 const FFX2_ID_FAMILIES: ReadonlyArray<[RegExp, string]> = [
   [/(^|-)(curaga|full-cure)$/, 'cure-3'],

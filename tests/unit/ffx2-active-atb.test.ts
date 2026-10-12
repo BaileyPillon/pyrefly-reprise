@@ -22,7 +22,8 @@ import {
   garmentGridRegistryFrom,
   itemRegistryFrom,
 } from '../../src/battle/ffx2/index.ts';
-import { msToTicks } from '../../src/battle/ffx2/gauges.ts';
+import { msToSteps } from '../../src/battle/ffx2/clock.ts';
+import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import type {
   AvailableCommand,
   BattleEvent,
@@ -185,8 +186,8 @@ describe('Active ATB — the clock runs under an open command menu (FFX-2 only)'
     // played) is carried into the next one.
     const handed = fed.reduce((a, b) => a + b, 0);
     expect(handed).toBeCloseTo(2000, 6);
-    expect(after - before).toBeGreaterThan(msToTicks(2000) * 0.98);
-    expect(after - before).toBeLessThanOrEqual(msToTicks(2000) + 1);
+    expect(after - before).toBeGreaterThan(msToSteps(2000) * 0.98);
+    expect(after - before).toBeLessThanOrEqual(msToSteps(2000) + 1);
   });
 
   it('moves at least one gauge, and keeps the menu open while it does', async () => {
@@ -231,7 +232,7 @@ describe('Active ATB — the clock runs under an open command menu (FFX-2 only)'
     await pump(engine, actorId, { forMs: 2000 });
 
     // One step's worth may still be owed as carry when the pump stops.
-    expect(engine.state().ticks - before).toBeGreaterThan(msToTicks(2000 - MAX_STEP_MS));
+    expect(engine.state().ticks - before).toBeGreaterThan(msToSteps(2000 - MAX_STEP_MS));
   });
 
   it('lets an enemy take its turn while the menu is open, and leaves the menu open', async () => {
@@ -288,21 +289,31 @@ describe('Active ATB — the clock runs under an open command menu (FFX-2 only)'
 });
 
 describe('Active ATB — the input owner (preflight §4.2)', () => {
-  /** Fill every ready girl's bar so more than one is queued at once. */
+  /**
+   * Every standing girl is READY with her menu offered (gauge state 4: re-parity W4 — ready is a state of the game's gauge, not a full
+   * bar), so more than one is queued at once.
+   */
   function makeAllReady(engine: FFX2Engine): void {
     const state = engine.state();
     for (const id of state.activeIds) {
-      const c = state.combatants[id];
-      if (!c || !('atb' in c)) continue;
-      const atb = (c as { atb: { ticks: number; required: number; recovery: number } }).atb;
-      atb.recovery = 0;
-      atb.ticks = atb.required;
+      const c = state.combatants[id] as unknown as Ffx2Unit | undefined;
+      if (!c || !('atb' in c) || !c.alive) continue;
+      c.atb.recovery = 0;
+      c.gauge.state = 4;
     }
   }
 
   it('executes the command as the girl whose menu was open, not as whoever sorts first', () => {
-    const engine = newEngine(CH4, 7);
-    const first = runToInput(engine);
+    // Re-parity W4: the first menu of seed 7 is Yuna's (slot 0) now that the opening gauge and the girls' real recovery decide who is
+    // first, which would make this case a tautology; the first seed (from 7 up) whose first menu is NOT the lowest slot's is used.
+    let seed = 7;
+    let engine = newEngine(CH4, seed);
+    let first = runToInput(engine);
+    while (first === engine.state().activeIds[0] && seed < 60) {
+      seed += 1;
+      engine = newEngine(CH4, seed);
+      first = runToInput(engine);
+    }
 
     // Everyone is ready now. `actorOrder` sorts party by slot, so without the
     // input-owner lock the lowest slot would steal the command.
@@ -311,8 +322,8 @@ describe('Active ATB — the input owner (preflight §4.2)', () => {
     const lowestSlot = state.activeIds[0];
     expect(lowestSlot).toBeDefined();
     // Without this the case is a tautology on any seed whose first menu owner
-    // *is* slot 0 (measured: yuna at seeds 1 and 3, paine at seed 7) — it would
-    // pass with the input-owner lock deleted. Seed 7 is pinned for that reason.
+    // *is* slot 0 (the seed scan above picks one that is not) — it would
+    // pass with the input-owner lock deleted.
     expect(first).not.toBe(lowestSlot);
 
     const events = engine.submit({ kind: 'defend', targets: [] } as Command);

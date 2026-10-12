@@ -221,26 +221,88 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * not (417 -> 255 and 644 -> 335 events a fight). No other digest moved: the Chapter IX line and W5 were already in the table above; Chapter XVIII's line and
  * party are not in this table (the Sin chapters stop at Isaaru); the guide rewrites are text; and the Orders and Talk menu changes (the airship offers one order at a
  * time, the third Talk only speaks) moved none of the 18 logs. Nothing on the boss or the party was tuned.
+ * All 18 digests re-baselined 2026-10-11 by the RNG lane (branch re-parity-rng; FFX only; reason "game RNG streams (Bailey 2026-10-09)": his pick "Adopt game streams (Recommended)"):
+ * the engine draws from FFX's own 68 streams, seeded from the run seed through the game's seeding routine, and every roll takes the stream the game gives it (a party member's own, every
+ * aeon's shared 27, a monster's slot + 8, plus 16 for the hit roll and 32 for status rolls; the scripts' GetRandomValue on 2 and their actor picker on 4; random-target hits on 5, a Reflect
+ * bounce on 6, Steal on 10 and 11), and Chapter VIII's scene and camera draws (Cid's captions, the voice replies, the Guided Missiles shot) are counted on stream 2. Every log moves because
+ * every roll is another deal of the same odds, which is the point; tests/unit/parity-ffx-rng-streams.test.ts is the proof that each draw is on the stream the table names, with a mutation check.
+ * One outcome moved, on a seed nobody tuned: seymour-anima-macalania#7 victory -> defeat; the other 17 keep theirs. One seed is one sample: the 500-seed rates before and after, and the proof
+ * that the Chapter VII move is a block of seeds and not a bias (the old generator on the same 500 seeds gives the old 488; seeds 501 to 1500 give 959 against 949), are in
+ * docs/handoff/re-parity-rng.md. Nothing on the bosses or the party was tuned. The old values are in git history (the commit before the one that moved them).
+ * Re-baselined once 2026-10-11 by RC4 lane L1 (branch re-parity-rc4-gear; FFX only; lanes FFX-C and FFX-E, docs/handoff/re-parity-rc4-gear.md): ELEVEN of the 18 digests move and SEVEN are
+ * byte for byte what they were (seymour-flux#1 and #7, evrae-airship#1 and #7, seymour-natus#7, isaaru-via-purifico#1 and #7). Cause, proved by ablation (each row put back alone on the
+ * tree, all 18 run each time; with all three rows put back this file is 18/18 on the old values):
+ * (a) EQUIPMENT CRIT, 3 per worn piece (FFX-G03: every gear row carries 3; the engine gave the weapon's 3 and the armour's 0): yunalesca#1, braskas-final-aeon#1 and #7, seymour-anima-macalania#1
+ *     and #7, seymour-natus#1, seymour-omnis#1 and #7. The critical roll's window is 3 points wider for every Attack, so a roll that missed it before lands in it: Rikku's hit on Seymour at
+ *     event 95 of macalania#7 is 138 before and 277 now (a critical); Auron's on Natus at event 350 of natus#1 is 3,736 and 7,472; the first difference of macalania#1 is Rikku's hit
+ *     on Anima at event 410 (181, then 363).
+ * (b) PERCENTS SUMMED (FFX-G03: Strength +10 with +5 is 15, not 10): yunalesca#1 and #7, braskas-final-aeon#1 and #7, yojimbo-cavern#1 and #7, seymour-omnis#1 and #7 (the builds that wear two tiers of
+ *     one family: Yuna's Blessed Ring, Dream's End, the Garden of Pain). Magic Def +15 takes 15 percent off the Cure that lands on Yuna: yojimbo#1's first difference is her Cure on herself, 1,411
+ *     before and 1,332 now (event 118); yunalesca#7's is the 1,215 Yunalesca deals Yuna, 1,148 now.
+ * (c) The Auto-* / SOS statuses (lane FFX-E) move none of the 18: Rikku's SOS Shell (Macalania) is on only while she is under half HP, and on these two seeds she never is (the log adds
+ *     Critical to Yuna, Tidus and Auron, never to Rikku), so her Shell never switches; no other shipped build wears an Auto-* or SOS ability.
+ * braskas-final-aeon moves in all seven links of both seeds because the chain carries each member's HP, MP and gauge on. Every outcome stays what it was but one:
+ * seymour-anima-macalania#7 moves defeat -> victory (its first difference is the critical in (a)). One seed is one sample; the 500-seed rates before and after are in
+ * docs/handoff/re-parity-rc4-gear.md. Nothing on the bosses or the party was tuned.
+ * SIX digests re-pinned once 2026-10-11 by RC4 lane FFX-G (branch re-parity-rc4-react; slices G-a and G-b, FFX only; docs/handoff/re-parity-rc4-react.md): the engine builds an action's
+ * targets once, as the game does (src/battle/ffx/target-build.ts: the random spread, Cover, the Reflect bounce) and a Provoked, Berserk or Confused actor's turn is a forced attack
+ * (forced-turn.ts). The other TWELVE are byte for byte what they were, and every outcome is still a victory. Causes, each proved by putting the one rule back and running this file:
+ *  - seymour-flux#1 (d362acf6 -> 33074c0e) and #7 (9f8aaa5c -> c3845a), evrae-airship#1 (e5ecff52 -> f4927a78) and #7 (4740e2ef -> b67a717e): the random spread (G6). The line throws Gems on
+ *    Chapter I (17 and 12 spread actions) and Evrae answers with Photon Spray (7 and 8) and Wakka's Power Shot; a random-target row now deals all its hits over the set first (stream 5,
+ *    a draw only with two or more candidates) and each target runs its hits in a row, where the engine picked a target per hit, interleaved with that hit's own draws. With the old per-hit
+ *    processing put back (a local switch, not committed) these four return to their old values and the other fourteen never move. Evrae's 10 and 22 reflected self-Hastes draw as before.
+ *  - yunalesca#1 (c694ec20 -> eced7435) and #7 (a99a90c3 -> ae1bbe58): the record bit decides what bounces (G2). Hastega reaches the whole party, a Reflecting member turns it back at a random
+ *    enemy, and in Chapter II that is Yunalesca, so the line's opening (Yuna's Reflect, then Tidus's Hastega) hasted her. The shipped line (src/engine/tactics/yunalesca.ts) now holds Yuna's
+ *    Reflect until Tidus's opening Hastega has landed and never casts Hastega through a Reflect. With the bounce put back to the old reading and the old tactic restored, both digests return to
+ *    their old values and the other sixteen never move. Her counters bounce back to her as before (she is the only monster, so "back to the caster" and a random enemy are the same pick).
+ *  - the twelve that did not move build nothing the new rules change: Braska's Final Aeon, Macalania, Omnis and Isaaru have no Guard holder, Reflect holder or multi-hit random row on the
+ *    line; Yojimbo's Daigoro bites are single-hit spreads (one pick, as before); Natus's bounces are same-side ones over the same candidates, drawn on the same stream.
+ * Nothing on the bosses or the party was tuned; one seed is one sample (the 500-seed rates are in docs/handoff/re-parity-rc4-react.md).
+ * ONE digest re-baselined 2026-10-11 by RC4 lane L3 (branch re-parity-rc4-items; FFX only; item reactions, FFX-G02 sections 3.8 and 3.9): braskas-final-aeon#1
+ * (80341e61 fd35d884 628979be d2d251bc 85cfdf48 cbdfb079 e8f733d0 -> 4d93d0d0 96867650 eb8b7a8a 88ef63f8 3c10c054 4e0e8bde 2cb442aa), seven victories before and after; the
+ * other 17 digests are byte for byte what they were (braskas-final-aeon#7 included). Cause, event by event: the logs of link 1 are identical for 617 events and differ at the
+ * turn Jecht Beam lands Petrify on Auron (Tetra Bracer, Auto-Med). The old engine answered it at once with a Remedy (its Auto-Med list cured Petrify, Sleep, Confuse, Berserk,
+ * Slow and Curse as well as the four statuses the game names) and spent TWO Remedies for it; the game's Auto-Med answers only a Poison, Zombie, Darkness or Silence that the
+ * hit newly inflicted, so it does nothing here and the line's own Soft (Lulu) cures the Petrify on her turn. Links 2 to 7 follow because the chain carries each member's HP and
+ * bag on. Proved by putting the lane's Overdrive files (abilities.ts, overdriveShape.ts) back: the digests are the same new values, so lane B moves none of the 18 (no golden line
+ * sends Slice and Dice or a Fury at two enemies), and by putting the item-reaction files back: the other 17 pass and braskas-final-aeon#1 returns to the old digests above.
+ * Nothing on the boss or the party was tuned.
+ * RC4 ASSEMBLY, re-baselined ONCE for the merged state 2026-10-11 (branch re-parity-rc4: the three lanes above merged, in the order gear, react, items; FFX only; docs/handoff/re-parity-rc4.md).
+ * The three paragraphs above each describe one lane against the base (the tables they came with are not kept); this is the table of all three together.
+ * FIFTEEN of the 18 digests move against the base and THREE are byte for byte what they were (seymour-natus#7, isaaru-via-purifico#1 and #7). One outcome moves:
+ * seymour-anima-macalania#7 defeat -> victory (the gear lane's critical bonus); the other 17 keep theirs. Who moves what, each proved by putting rows back on the merged tree and running
+ * all 18 (put the gear lane's two rows back, the equipment critical bonus of 3 per worn piece and the summed percents of the four damage families, and the file is 18/18 on exactly the values
+ * of the react and items lanes together: flux 33074c0e c3845a, yunalesca eced7435 ae1bbe58, braskas#1 4d93d0d0 96867650 eb8b7a8a 88ef63f8 3c10c054 4e0e8bde 2cb442aa, evrae f4927a78 b67a717e,
+ * and the base's values for every other digest; with only the crit row back, or only the percents row back, the attribution below):
+ *  - react only: seymour-flux#1 and #7, evrae-airship#7 (the random spread of Gems, Photon Spray and Power Shot, G6).
+ *  - gear only: seymour-anima-macalania#1 and #7 and seymour-natus#1 (critical bonus: put it back and all three return to the base), yojimbo-cavern#1 and #7 (summed percents: put them back and both
+ *    return to the base), braskas-final-aeon#7 (both rows), seymour-omnis#1 and #7 (both rows).
+ *  - gear and react together: yunalesca#1 and #7 (the gear rows, plus the Hastega bounce and Chapter II's new opening, G2), evrae-airship#1 (the spread reorders Evrae's rolls to f4927a78,
+ *    and the wider critical window then catches one of them: put the critical row back and it is f4927a78; the gear lane alone leaves this digest where it was).
+ *  - gear and items together: braskas-final-aeon#1, all seven links (the gear rows, plus Auron's Auto-Med no longer answering Petrify, F2: put the gear rows back and every link is the items
+ *    lane's value above).
+ * The three places where a lane had to be fitted to another (the dry-run clone copying the Tidus counters, the per-action sweep after an item reaction, the target builder dealing a planned
+ * Overdrive's hits before the result removes some) move none of the 18: each was switched off alone on the merged tree and all 18 digests below came out the same. Nothing on the bosses or the party was tuned.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': 'd0fa190d:victory',
-  'seymour-flux#7': '8bca8763:victory',
-  'yunalesca#1': '3476dd5:victory',
-  'yunalesca#7': '1e5be9d4:victory',
-  'braskas-final-aeon#1': '208173d8:victory 7ce233c2:victory 83e2d1e6:victory d790b12b:victory f533934b:victory e004400a:victory 1c1eaef9:victory',
-  'braskas-final-aeon#7': 'd1bc6e2:victory 3f923603:victory d55948af:victory e97ae0a6:victory 2f8294e9:victory c3b6257f:victory 3a654e47:victory',
-  'seymour-anima-macalania#1': 'cb8ff7fa:victory',
-  'seymour-anima-macalania#7': '77c0da0e:victory',
-  'evrae-airship#1': '96e55b09:victory',
-  'evrae-airship#7': '99a25fb5:victory',
-  'yojimbo-cavern#1': '28996218:victory',
-  'yojimbo-cavern#7': 'a2f8d812:victory',
-  'seymour-natus#1': '4e54c29b:victory',
-  'seymour-natus#7': '25becfa0:victory',
-  'seymour-omnis#1': 'f3c16c45:victory',
-  'seymour-omnis#7': 'c2a59197:victory',
-  'isaaru-via-purifico#1': 'd77cdbaf:victory 33e06f11:victory ee292b8b:victory',
-  'isaaru-via-purifico#7': '95ec44e3:victory 18c9be5f:victory 60e31feb:victory',
+  'seymour-flux#1': '33074c0e:victory',
+  'seymour-flux#7': 'c3845a:victory',
+  'yunalesca#1': 'ef0b1f5a:victory',
+  'yunalesca#7': 'e75064e9:victory',
+  'braskas-final-aeon#1': '8bc2d45f:victory 37e83cbf:victory bd952081:victory c8b4d68f:victory 1106322a:victory 7f13b668:victory c0039a69:victory',
+  'braskas-final-aeon#7': 'eed22595:victory 8d75fead:victory 9482b803:victory 7e6d7449:victory 9b249f0d:victory 97592b14:victory f2f0106a:victory',
+  'seymour-anima-macalania#1': 'a6d9e71f:victory',
+  'seymour-anima-macalania#7': 'e9ae2f10:victory',
+  'evrae-airship#1': '4f323f6e:victory',
+  'evrae-airship#7': 'b67a717e:victory',
+  'yojimbo-cavern#1': '62272b5c:victory',
+  'yojimbo-cavern#7': 'af8241eb:victory',
+  'seymour-natus#1': '40514ec8:victory',
+  'seymour-natus#7': '9e7c5b2:victory',
+  'seymour-omnis#1': 'd2966784:victory',
+  'seymour-omnis#7': '30b6f82f:victory',
+  'isaaru-via-purifico#1': '6990d85c:victory afd1cb7e:victory 13b0bd8a:victory',
+  'isaaru-via-purifico#7': 'cec669c3:victory 78386a12:victory a36d68be:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {

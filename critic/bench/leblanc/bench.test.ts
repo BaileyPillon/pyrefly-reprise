@@ -46,6 +46,7 @@ import { chateauBuild } from '../../../src/data/ffx2/builds/chateau.ts';
 import { LEBLANC_CHAIN_ORDER } from '../../../src/data/ffx2/enemies/leblanc-syndicate.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 
 const MEASURE = process.env['PYREFLY_MEASURE'] === '1';
 const MAX_DECISIONS = 30_000;
@@ -144,7 +145,7 @@ function runLink(engine: FFX2Engine, decisionMs: number, tally: Tally): string |
   }
 
   scoreEvents(tally, engine.state().log.slice(from), enemyIds);
-  tally.seconds += engine.state().ticks / 3000;
+  tally.seconds += engine.state().ticks / STEPS_PER_SECOND;
   return outcome;
 }
 

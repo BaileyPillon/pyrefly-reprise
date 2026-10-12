@@ -3,6 +3,7 @@ import '../../ui/common/results-fit.css';
 import { Screen } from '../Screen.ts';
 import type { InputSnapshot } from '../Input.ts';
 import { audio } from '../../audio/index.ts';
+import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
 import type { BattleResult } from '../../battle/common/types.ts';
 import { getChapter, type ChapterId } from '../../data/encounters.ts';
 import { experimentRecord } from '../experiments/experimentRecords.ts';
@@ -103,6 +104,11 @@ export class ResultsScreen extends Screen {
   /** FF7's rows carry no house clear-time chip, NEW BEST or party-count tag (the FF7 purist review, item 7). */
   private readonly ff7: boolean;
   private ledger: LedgerLine[] = [];
+  /** SFX parity (FFX-2's rows `ffx2.flow.*`, `audio/sfxV2/flowSlots.ts`): the tally's loop, which ends when the numbers do. Silent with no pack. */
+  private tally: FlowHandle = NO_FLOW;
+  private tallyOver = false;
+  /** The chapter's game, for the flow slots (FF7 has none). */
+  private readonly gameId: string;
 
   private revealMs = 0;
   private dismissed = false;
@@ -119,6 +125,7 @@ export class ResultsScreen extends Screen {
     this.victory = opts.result.outcome === 'victory';
 
     const game = chapter?.buildRef.game ?? 'ffx'; // FF7 pays EXP (and AP to Materia), like FFX-2's EXP ledger
+    this.gameId = game;
     this.awardUnit = game === 'ffx' ? 'AP' : 'EXP';
     this.clearMs = clearTimeMs(opts.result, opts.elapsedMs, game);
     this.ff7 = game === 'ff7';
@@ -159,10 +166,21 @@ export class ResultsScreen extends Screen {
 
     this.refresh();
     audio.playSfx(this.victory && !this.silent ? 'menu-open' : 'menu-close');
+    if (this.victory && !this.silent) this.tally = startFlow(audio, this.gameId, 'results-count'); // SFX parity: the loop while the numbers count (a recorded original only)
     void this.app.fade('clear', 400);
   }
 
+  /** The numbers have landed (or the screen is leaving): end the tally's loop, and sound one stinger per counted line. */
+  private endTally(landed: boolean): void {
+    if (this.tallyOver) return;
+    this.tallyOver = true;
+    this.tally.stop(0.12);
+    this.tally = NO_FLOW;
+    if (landed && this.victory && !this.silent) startFlow(audio, this.gameId, 'results-line', this.ledger.filter((l) => l.kind === 'count').length);
+  }
+
   override exit(): void {
+    this.endTally(false);
     this.stage?.destroy();
     this.phoneQuery?.removeEventListener?.('change', this.onLayoutChange);
     window.removeEventListener('resize', this.onResize);
@@ -251,9 +269,12 @@ export class ResultsScreen extends Screen {
   }
 
   override update(dt: number): void {
-    if (this.dismissed || this.silent || this.revealMs >= COUNT_UP_MS) return;
-    this.revealMs += dt * 1000;
-    this.refresh();
+    if (this.dismissed || this.silent) return;
+    if (this.revealMs < COUNT_UP_MS) {
+      this.revealMs += dt * 1000;
+      this.refresh();
+    }
+    if (this.revealMs >= COUNT_UP_MS) this.endTally(true); // the numbers have landed (a no-op after the first time)
   }
 
   override trigger(name: string): boolean {

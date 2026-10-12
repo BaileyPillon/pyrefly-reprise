@@ -26,12 +26,13 @@ describe('Vegnagun (Tail) — the simplest boss in the chain [§5.1]', () => {
     ]);
   });
 
-  it('fires its one HP trigger below a quarter HP, and only once', () => {
+  it('sweeps once more below a quarter HP, then speaks on a poll of its own, and only once', () => {
     const tail = unit('vegnagun-tail', 'enemy', 34200);
     const h = harness(tail);
     h.run(4);
     tail.hp = Math.floor(34200 / 5);
     expect(h.run(1)).toEqual(['noli-me-tangere']);
+    expect(h.run(1)).toEqual([null]); // Jecht's line is the next poll, not part of the sweep
     expect(h.emitted.some((e) => e.type === 'script-trigger')).toBe(true);
     // Still below a quarter — but the trigger is spent.
     expect(h.run(1)).toEqual(['tail-beam']);
@@ -72,11 +73,13 @@ describe('Vegnagun (Leg) — the 26-step table [§5.2]', () => {
 });
 
 describe('the Nodes’ colour machine [§3.2]', () => {
-  it('advances RED -> GREEN -> YELLOW -> RED every four counts', () => {
+  it('advances RED -> GREEN -> YELLOW -> RED, four actions in each colour', () => {
     const node = unit('node-a', 'enemy', 300000);
     const h = harness(node, [unit('vegnagun-leg', 'enemy', 18220)], 'vegnagun-node');
     expect(nodeColour(node)).toBe('red');
     h.run(4);
+    expect(nodeColour(node)).toBe('red'); // the fifth poll changes it
+    h.run(1);
     expect(nodeColour(node)).toBe('green');
     h.run(4);
     expect(nodeColour(node)).toBe('yellow');
@@ -91,17 +94,16 @@ describe('the Nodes’ colour machine [§3.2]', () => {
     expect(node.statuses['null-magic']).toBeUndefined();
 
     const h = harness(node, [], 'vegnagun-node');
-    h.run(8); // through GREEN into YELLOW
+    h.run(9); // through GREEN into YELLOW
     expect(nodeColour(node)).toBe('yellow');
     expect(node.statuses['null-magic']).toBeDefined();
     expect(node.statuses['null-physical']).toBeUndefined();
   });
 
   it('casts its GREEN support on the LEG, never on itself', () => {
-    const node = unit('node-a', 'enemy', 300000);
+    const node = unit('node-b', 'enemy', 300000); // B starts green
     const leg = unit('vegnagun-leg', 'enemy', 18220, 1);
     const h = harness(node, [leg], 'vegnagun-node');
-    h.run(4); // move to GREEN
     const script = aiScriptFor('vegnagun-node');
     const command = script.decide(h.ctx);
     expect(command && 'targets' in command ? command.targets : []).toEqual(['vegnagun-leg']);
@@ -116,9 +118,10 @@ describe('Vegnagun (Body / Core) [§4.1]', () => {
     return { core, right, left, h: harness(core, [right, left]) };
   };
 
-  it('charges three times, then fires Memento Mori, then resets', () => {
+  it('speaks first, then charges three times, fires Memento Mori, and resets', () => {
     const { h } = makeCore();
-    expect(h.run(8)).toEqual([
+    expect(h.run(9)).toEqual([
+      null, // the Core's opening voice
       'charge-core', 'charge-core', 'charge-core', 'memento-mori',
       'charge-core', 'charge-core', 'charge-core', 'memento-mori',
     ]);
@@ -126,14 +129,14 @@ describe('Vegnagun (Body / Core) [§4.1]', () => {
 
   it('telegraphs the charge with a countdown the HUD can draw', () => {
     const { h } = makeCore();
-    h.run(4);
+    h.run(5); // the voice, then Charge x3 and Memento Mori
     const charges = h.emitted.filter((e) => e.type === 'charge');
     expect(charges.map((c) => (c as { turnsLeft: number }).turnsLeft)).toEqual([2, 1, 0, 0]);
   });
 
   it('spends a turn reviving a downed Bulwark — killing one BUYS a turn', () => {
     const { right, h } = makeCore();
-    h.run(1); // one charge banked
+    h.run(2); // the opening voice, then one charge banked
     right.alive = false;
     right.hp = 0;
     expect(h.run(1)).toEqual(['full-life']);

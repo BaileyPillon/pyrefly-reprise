@@ -9,6 +9,7 @@
  */
 
 import { SeededRng, makeRng } from '../../../src/battle/common/rng.ts';
+import type { BattleRng } from '../../../src/battle/common/streams.ts';
 import type {
   AbilityDef,
   Affinity,
@@ -194,7 +195,9 @@ export function combatantOf(spec: SideSpec, id: string, side: 'party' | 'enemy')
     }),
     affinities,
     immunityFlags: flags,
-    equipment: { weapon, armor: { name: 'A', slots: 1, autoAbilities: [] } },
+    // The oracle's world puts the whole equipment crit on the weapon (`spec.equipCrit`); the armour carries none. (The game's gear rows carry 3 on each
+    // piece, which `equipmentCrit` now adds: an armour with no `bonusCrit` would give +3, so it is written out as 0 here.)
+    equipment: { weapon, armor: { name: 'A', slots: 1, autoAbilities: [], bonusCrit: 0 } },
   });
   c.hp = spec.hp;
   c.mp = spec.mp;
@@ -206,7 +209,7 @@ export function combatantOf(spec: SideSpec, id: string, side: 'party' | 'enemy')
 export function contextOf(
   user: FFXCombatant,
   target: FFXCombatant,
-  rng: SeededRng,
+  rng: BattleRng,
   ctbOfTarget: number,
   others: readonly FFXCombatant[] = [],
 ): { ctx: Ctx; events: Array<Record<string, unknown>> } {

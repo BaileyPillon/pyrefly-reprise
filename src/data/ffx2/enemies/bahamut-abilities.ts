@@ -3,6 +3,9 @@
  * owns the AI rotation logic (`aiScriptId: 'ffx2-bahamut'`); this file exists
  * so it has the exact researched script and every constant in one place.
  *
+ * **Superseded by the game's own script (re-parity AI lane FFX-2 a; `ai/bahamut.ts` has the table): Curse comes once, at his
+ * first action, and the loop is six actions, Attack x3, Impulse x2, the countdown and Mega Flare.** The old text follows.
+ *
  * **The fixed 12-action loop, verbatim** [§2.1, verified: 2 sources —
  * decompile-derived AI transcription, corroborated by the prose battle
  * description]. No RNG branches, no HP thresholds — purely turn-counted:

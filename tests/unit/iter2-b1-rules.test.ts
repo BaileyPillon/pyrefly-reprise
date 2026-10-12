@@ -7,14 +7,21 @@
  *   Game Over", `[verified: 2 sources]`), with no enemy action after it.
  * - PR-0108: at Config ATB SPEED = FAST a sleeping unit never wakes on its own (§1.5 and §2.8,
  *   `[single source: Split Infinity G1004]`); at Normal, Sleep still expires.
+ *
+ * **Re-parity W4 (2026-10-10; FFX-2 only, reason "game-code parity").** PR-0108 is no longer a rule the engine states, it is
+ * what the game's own arithmetic does: a Sleep timer is 150,000 units and falls by the raw speed (70 / 95 / 120) each logic step, and
+ * the game only looks for an expiry when the timer goes BELOW 0, so at Fast it lands exactly on 0 (1,250 steps of 120) and stays
+ * (`kernel/status-timers.ts`; `research/re-ffx2-atb-status.md` section 6). The tests below run that through the engine. The PR-0107
+ * opening bands are re-stated in the game's own terms: the counter starts at ((draw & 63) + 32) / 128 of a full wait, then the
+ * trim, so what remains to wait is 0 to 75 percent of a full wait (it used to be a bar filled 0 to 60 percent).
  */
 
 import { describe, expect, it } from 'vitest';
 import type { BattleEvent, StatusInstance } from '../../src/battle/common/types.ts';
-import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { FFX2Engine, STEP_MS } from '../../src/battle/ffx2/index.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import { bahamutSetup } from '../../src/battle/ffx2/fixtures.ts';
-import { durationToTicks } from '../../src/battle/ffx2/statuses.ts';
+import { applyStatus } from '../../src/battle/ffx2/statuses.ts';
 import { SEPARATE_BATTLE_GAUGES, type AtbSpeed } from '../../src/battle/ffx2/constants.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx2/index.ts';
 import { chateauBuild } from '../../src/data/ffx2/builds/chateau.ts';
@@ -50,36 +57,35 @@ describe('PR-0145: all three petrified is a Game Over (FFX-2)', () => {
   });
 });
 
-describe('PR-0108: Sleep has no timed expiry at Fast (FFX-2)', () => {
-  function sleeper(speed: AtbSpeed): Ffx2Unit {
+describe('PR-0108: Sleep has no timed expiry at Fast (FFX-2): the arithmetic of the game', () => {
+  /** A Sleep on Yuna with Bahamut asleep too (so nothing else happens), run for `steps` logic steps one call each. */
+  function sleeper(speed: AtbSpeed, steps: number): Ffx2Unit {
     const engine = new FFX2Engine({ atbSpeed: speed, atbMode: 'active' });
     engine.init(bahamutSetup(3));
     const yuna = girls(engine)[0]!;
-    // A Sleep with 30 ticks left: 10 ms of game time at Normal.
-    yuna.statuses.sleep = inst('sleep', 30);
-    engine.tick(20, { throughInput: true });
-    engine.tick(20, { throughInput: true });
+    applyStatus(yuna, { status: 'sleep', chance: 255, duration: 0 });
+    const boss = Object.values(engine.state().combatants).find((c) => c.side === 'enemy') as Ffx2Unit;
+    applyStatus(boss, { status: 'sleep', chance: 255, duration: 0 });
+    (boss.statuses.sleep as StatusInstance).ticksRemaining = 2_000_000_000; // the boss stays out of it
+    expect(yuna.statuses.sleep?.ticksRemaining).toBe(150_000);
+    for (let i = 0; i < steps; i++) engine.tick(STEP_MS, { throughInput: true });
     return yuna;
   }
 
-  it('at Normal the Sleep wears off on its clock', () => {
-    expect(sleeper('normal').statuses.sleep).toBeUndefined();
+  it('at Normal the Sleep wears off on its clock (150,000 units at 95 a step: 1,579 steps)', () => {
+    expect(sleeper('normal', 1578).statuses.sleep).toBeDefined();
+    expect(sleeper('normal', 1580).statuses.sleep).toBeUndefined();
   });
 
-  it('at Fast the same Sleep outlasts its Normal duration', () => {
-    const yuna = sleeper('fast');
+  it('at Fast the same Sleep outlasts it: 150,000 at 120 a step lands exactly on 0 after 1,250 steps and is never looked at again', () => {
+    const yuna = sleeper('fast', 2000);
     expect(yuna.statuses.sleep).toBeDefined();
-    expect(yuna.statuses.sleep?.ticksRemaining).toBe(30);
+    expect(yuna.statuses.sleep?.ticksRemaining).toBe(0);
   });
 
-  it('a real Sleep row (duration 97) still runs at Slow', () => {
-    expect(durationToTicks(97)).toBeGreaterThan(0);
-    const engine = new FFX2Engine({ atbSpeed: 'slow', atbMode: 'active' });
-    engine.init(bahamutSetup(3));
-    const yuna = girls(engine)[0]!;
-    yuna.statuses.sleep = inst('sleep', 30);
-    engine.tick(100, { throughInput: true });
-    expect(yuna.statuses.sleep).toBeUndefined();
+  it('at Slow it still runs out (150,000 at 70 a step: 2,143 steps)', () => {
+    expect(sleeper('slow', 2100).statuses.sleep).toBeDefined();
+    expect(sleeper('slow', 2200).statuses.sleep).toBeUndefined();
   });
 });
 
@@ -94,17 +100,18 @@ describe('PR-0107: Chapter VI Acts II and III open as separate battles, an OFF s
     // A chained link, as `setupForNextLink` hands it on: condition 'scripted'.
     engine.init({ game: 'ffx2', party: chateauBuild, enemies: group, triggers: [], seed, condition: 'scripted', canEscape: false });
     const units = Object.values(engine.state().combatants) as Ffx2Unit[];
-    const fills = units.map((u) => u.atb.ticks / u.atb.required);
+    // What remains to wait, as a fraction of the unit's own full wait (the game's counter against its maximum).
+    const fills = units.map((u) => u.atb.recovery / u.gauge.recoveryMax);
     return { fills };
   }
 
   for (const act of [LEBLANC_ACT_II, LEBLANC_ACT_III]) {
-    it(`${act}: across seeds 1-20 the fills lie in 0-60 % and are not all zero`, () => {
+    it(`${act}: across seeds 1-20 the wait that remains lies in 0-75 % of a full wait and is not all the same`, () => {
       const all: number[] = [];
       for (let seed = 1; seed <= 20; seed++) all.push(...opening(act, seed).fills);
       expect(Math.min(...all)).toBeGreaterThanOrEqual(0);
-      expect(Math.max(...all)).toBeLessThanOrEqual(0.6);
-      expect(all.filter((f) => f > 0).length).toBeGreaterThan(all.length / 2);
+      expect(Math.max(...all)).toBeLessThan(0.75); // (63 + 32) / 128 = 0.742 of a full wait, before the trim
+      expect(new Set(all.map((f) => f.toFixed(6))).size).toBeGreaterThan(all.length / 2);
     });
     it(`${act}: across seeds 1-20 the first actor varies`, () => {
       const firsts = new Set<string>();
@@ -122,8 +129,8 @@ describe('PR-0107: Chapter VI Acts II and III open as separate battles, an OFF s
       }
       expect(firsts.size).toBeGreaterThan(1);
     });
-    it(`${act}: without the flag the continuation opens at zero, as before`, () => {
-      expect(opening(act, 5, true).fills.every((f) => f === 0)).toBe(true);
+    it(`${act}: without the flag the continuation opens with every wait whole, as before`, () => {
+      expect(opening(act, 5, true).fills.every((f) => f === 1)).toBe(true);
     });
   }
 

@@ -45,7 +45,7 @@ export function def(seed: Seed): AbilityDef {
 /** Status ids stripped by the game's several buff-wipes. */
 export const BUFF_WIPE = ['shell', 'protect', 'reflect', 'regen', 'haste'] as const;
 
-/** The shared actions plus Bahamut's twelve-action loop. */
+/** The shared actions plus Bahamut's moves (his loop is `ai/bahamut.ts`: Curse once, then six actions). */
 export const CORE_ABILITIES: AbilityDef[] = [
   // --- generic -------------------------------------------------------------
   def({

@@ -56,10 +56,12 @@ import type {
   PortraitKey,
   TurnPreview,
 } from '../common/types.ts';
-import { SeededRng } from '../common/rng.ts';
+import { type RngSnapshot, sampleSnapshot } from '../common/streams.ts';
 import type { Ctx, EventInput, FFXRuntime } from './state.ts';
 import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from './state.ts';
 import { activeScriptId, chooseAiCommand } from './ai/index.ts';
+import { forcedTurn } from './forced-turn.ts';
+import { keepsControlWhenProvoked } from './adapt/target-world.ts';
 import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
@@ -173,7 +175,7 @@ function deepCopy<T>(value: T): T {
  * after an action, never by an AI script, and they carry no mutable state (the
  * fired ids live in `firedTriggerIds`, which *is* copied).
  */
-export function cloneCtx(ctx: Ctx, rngState?: number): { ctx: Ctx; events: EventInput[] } {
+export function cloneCtx(ctx: Ctx, rngState?: RngSnapshot): { ctx: Ctx; events: EventInput[] } {
   const events: EventInput[] = [];
 
   const state = {
@@ -207,10 +209,15 @@ export function cloneCtx(ctx: Ctx, rngState?: number): { ctx: Ctx; events: Event
     overkilled: [...ctx.rt.overkilled],
     sensedIds: new Set(ctx.rt.sensedIds),
     pendingPartRevivals: ctx.rt.pendingPartRevivals.map((p) => ({ ...p })),
+    // The queued item reactions and the death marks (re-parity RC4 lane F): a copy, so a dry run's hits cannot queue into the battle's list.
+    ...(ctx.rt.itemReactions ? { itemReactions: ctx.rt.itemReactions.map((r) => ({ ...r })) } : {}),
+    ...(ctx.rt.reactionDeaths ? { reactionDeaths: new Set(ctx.rt.reactionDeaths) } : {}),
+    // The seven Tidus counters (re-parity RC4 lane FFX-G) are changed in place by Tidus's own actions: a copy, so that a dry run of his heal or his
+    // cover cannot move the counters the real battle's Cover scores read (found when the RC4 lanes were merged; `parity-ffx-rc4-merge.test.ts`).
+    ...(ctx.rt.coverBond ? { coverBond: [...ctx.rt.coverBond] } : {}),
   };
 
-  const rng = new SeededRng(ctx.state.seed);
-  rng.restoreState(rngState ?? ctx.rng.saveState());
+  const rng = ctx.rng.fork(ctx.state.seed, rngState ?? ctx.rng.saveState());
 
   return {
     ctx: {
@@ -239,13 +246,15 @@ interface DryRun {
   self: FFXCombatant;
 }
 
-function dryRun(ctx: Ctx, enemyId: CombatantId, rngState?: number): DryRun | null {
+function dryRun(ctx: Ctx, enemyId: CombatantId, rngState?: RngSnapshot): DryRun | null {
   const { ctx: clone, events } = cloneCtx(ctx, rngState);
   const self = tryActor(clone, enemyId);
   if (!self) return null;
   let command: Command | null = null;
   try {
-    command = chooseAiCommand(clone, self);
+    // A Provoked, Berserk or Confused enemy's turn is the game's forced attack and its script does not run (re-parity RC4 lane FFX-G; `forced-turn.ts`).
+    const forced = forcedTurn(clone, self);
+    command = forced.kind === 'attack' ? { kind: 'attack', targets: forced.targets } : forced.kind === 'dropped' ? null : chooseAiCommand(clone, self);
   } catch {
     // A half-written rotation must not take the panel — or the frame — down.
     // A silent null degrades to "unknown", which is what the panel prints.
@@ -420,8 +429,9 @@ function notesFor(ctx: Ctx, enemy: FFXCombatant): string[] {
     if (left > 0) out.push(`Talk cancels that Overdrive and costs him his next turn (the gauge clears when it starts) — ${left} charge${left === 1 ? '' : 's'} left [ffx-bfa-yu-yevon §1.6, re-ffx-ai-yunalesca-bfa §3.6]`);
   }
 
-  if (has(enemy, 'confuse')) out.push('Confused — it strikes a random side, so this prediction is a guess');
-  if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack');
+  if (has(enemy, 'confuse')) out.push('Confused — it strikes one of its own side, itself included, so this prediction is a guess');
+  if (has(enemy, 'berserk')) out.push('Berserk — it can only auto-attack, at the other side');
+  if (has(enemy, 'provoke') && !keepsControlWhenProvoked(enemy)) out.push('Provoked — it spends its turn attacking whoever provoked it');
   if (has(enemy, 'threaten')) out.push('Threatened — it cannot act or counter at all [ffx-combat-core §4.4]');
   return out;
 }
@@ -556,9 +566,9 @@ export function predictEnemyIntent(
   const first = dryRun(ctx, enemyId, base);
   if (!first) return null;
 
-  // Sampling: one run per RNG position, tallied by branch. The stride is the
-  // golden-ratio constant mulberry32 already advances its state by, so the
-  // samples are spread across the stream rather than clustered behind it.
+  // Sampling: one run per RNG position, tallied by branch. Sample 0 is the live
+  // position, so it is the roll the battle will really make; the others move every
+  // stream to a different, well-mixed word (`common/streams.ts#sampleSnapshot`).
   const tally = new Map<string, { count: number; label: string; abilityId: AbilityId | null; key: string }>();
   const firstKey = branchKey(ctx, first);
   const sampledTargets: CombatantId[][] = []; // PR-0153: whom each sample of this move aimed at
@@ -580,7 +590,7 @@ export function predictEnemyIntent(
   };
   record(first);
   for (let i = 1; i < samples; i++) {
-    const run = dryRun(ctx, enemyId, (base + Math.imul(i, 0x9e3779b1)) >>> 0);
+    const run = dryRun(ctx, enemyId, sampleSnapshot(base, i));
     if (run) record(run);
   }
 

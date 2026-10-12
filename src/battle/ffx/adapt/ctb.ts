@@ -14,9 +14,8 @@
  * - **Who takes part** is what the engine already called the queue: a combatant on the field that is not dead, not
  *   Petrified and does not wait to be ordered about (`ActorRuntime.ordersOnly`). Nothing queued, no script hold, no
  *   pause: the engine runs every action to its end before the next turn is chosen.
- * - **Draws.** One engine draw per kernel draw, already in the range the kernel reduces to (`int(0, modulus - 1)`), so
- *   the seeded stream and the advisor's roll policy keep working; adopting the game's generator is the separate
- *   decision of `docs/plans/re-parity.md` (P3).
+ * - **Draws.** One draw per kernel draw, of the stream the kernel names (`adapt/streams.ts`: each slot's own, 27 for the aeons), already in
+ *   the range the kernel reduces to (`int(0, modulus - 1)`), so the advisor's roll policy keeps working.
  *
  * Inputs and where each comes from: `docs/handoff/re-parity-w2.md`, section 1.
  */
@@ -180,7 +179,7 @@ export function openingCtb(ctx: Ctx, condition: 'normal' | 'preemptive' | 'ambus
       isAeon: isAeonSlot(slot),
     });
   }
-  const result = initialCtb(startTypeOf(condition), slots, (_stream, modulus) => ctx.rng.int(0, modulus - 1));
+  const result = initialCtb(startTypeOf(condition), slots, (stream, modulus) => ctx.rng.on(stream).int(0, modulus - 1));
   for (let slot = 0; slot < SLOT_COUNT; slot++) {
     const c = combatantAtSlot(ctx, slot);
     if (!c) continue;

@@ -26,13 +26,13 @@
  * decision sheet 2026-09-25 item 4 A1); "any damage perturbs the bar" is not.
  */
 
-import type { AbilityDef, CombatantId, Command, Rng } from '../common/types.ts';
-import type { EventDraft, Ffx2Unit } from './internal.ts';
-import { isActionLocked, ticksUntilChainBreak } from './chain.ts';
-import { isReady, ticksUntilNextEvent } from './gauges.ts';
+import type { AbilityDef, CombatantId, Command } from '../common/types.ts';
+import type { BattleRng } from '../common/streams.ts';
+import type { Ffx2Unit } from './internal.ts';
+import { isActionLocked } from './chain.ts';
+import { isReady } from './gauges.ts';
 import { rollDefault } from './minigames.ts';
-import { canAct, ticksUntilStatusEvent } from './statuses.ts';
-import { carriesMenuCancel } from './menu-cancel.ts';
+import { canAct } from './statuses.ts';
 
 /**
  * FFX-2's Config "ATB Mode" (§1.5). `'wait'` is the default (D-029): the clock
@@ -119,8 +119,8 @@ export function awaitsPlayerInput(unit: Ffx2Unit, minigamePending: boolean): boo
 }
 
 /**
- * Whether this unit could hold an open command menu: ready, able to act, and
- * not an enemy still thinking — {@link canTakeTurn} **without** the chain lock.
+ * Whether this unit could hold an open command menu: ready (its recovery is over and its thinking too; an enemy that is still
+ * thinking is not ready, the kernel keeps it in THINK), and able to act — {@link canTakeTurn} **without** the chain lock.
  *
  * The difference is the whole of critic round 08 PR-0076 / PR-0080. §1.7 says a
  * chained target *"cannot start executing its own action"*; it does not say she
@@ -131,9 +131,7 @@ export function awaitsPlayerInput(unit: Ffx2Unit, minigamePending: boolean): boo
  * {@link HeldCommand}), never *owning* the menu.
  */
 export function ownsInput(unit: Ffx2Unit): boolean {
-  if (!isReady(unit) || !canAct(unit)) return false;
-  if (unit.side === 'enemy' && (unit.thinkingTicks ?? 0) > 0) return false;
-  return true;
+  return isReady(unit) && canAct(unit);
 }
 
 /**
@@ -182,11 +180,11 @@ export function heldStillPending(unit: Ffx2Unit | undefined): boolean {
 export function withDefaultTimedInput(
   command: Command,
   ability: AbilityDef | undefined,
-  rng: Rng,
+  rng: BattleRng,
   minigamesOn: boolean,
 ): Command {
   if (!minigamesOn || !ability?.minigame || command.kind !== 'overdrive' || command.extra) return command;
-  const extra = rollDefault(ability.minigame, rng);
+  const extra = rollDefault(ability.minigame, rng.aux); // a stand-in for the player's input: the engine-side stream
   return extra ? { ...command, extra } : command;
 }
 
@@ -217,42 +215,12 @@ export function inputStillValid(
   return awaitsPlayerInput(unit, minigamePending);
 }
 
-/**
- * **An enemy hit closes an open menu** (decision sheet 2026-09-25 item 4, **A1**;
- * Bailey, 2026-09-25: *"I'll go with all your recommendations"*). FFX-2 only.
- *
- * `research/ffx2-combat-core.md` §1.1: *"being hit while the command menu is open
- * cancels the menu and delays the turn"*; §1.5, Active `[single source: Split
- * Infinity G0913]`: *"An enemy hit landing while a menu is open **closes the menu
- * and applies Delay effect** to that character's ATB."* The **close** is built;
- * the **delay** (A2) is not: no source gives its size for a plain hit (§2.8's
- * "predetermined percentage" is per ability), so she keeps her full bar and is
- * offered a fresh menu. Reachable only while the clock runs under a menu: Active,
- * and Wait's split at the top-level list (§1.5); a held clock lets no enemy act.
- *
- * **A hit is our reading** (`docs/plans/ffx2-hit-closes-menu-review.md` §3): a
- * `'damage'` draft with `amount > 0` on the menu's owner whose `sourceId` is an
- * enemy. A miss, an immune or absorbed blow, a status tick, her own HP cost and a
- * Confused ally's blow do not close it.
- *
- * **Corrected by §9.2** (`research/ffx2-combat-core.md`, commit `ea05f877`): §1.1's wording comes
- * from Split_Infinity's Delay-effect example (G1041), and only Delay or Action-cancel abilities close
- * a menu. Built as the switch `constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES (ON since 2026-09-26, Bailey) (`menu-cancel.ts`):
- * with `onlyDelay` given, the hit must also come from such an ability.
+/*
+ * **A hit that deals Delay damage closes an open menu** (decision sheet 2026-09-25 item 4, **A1**, corrected by §9.2 and kept by
+ * Bailey on 2026-09-26): that is the game's own `apply_atb_damage` now (re-parity W4, `atb-engine.ts applyDelay`), which sets the
+ * target's recovery back, puts it in IDLE and closes its menu when the ATB damage of a hit is positive. Only the commands with
+ * the Delay bits or an ATB damage class deal any. The engine hears of it through `ResolveContext.onMenuClosed`.
  */
-export function closesOpenMenu(
-  draft: EventDraft,
-  owner: CombatantId,
-  units: readonly Ffx2Unit[],
-  onlyDelay?: { ability: AbilityDef | undefined },
-): boolean {
-  if (draft.type !== 'damage' || draft.targetId !== owner || draft.amount <= 0 || !draft.sourceId) return false;
-  const source = draft.sourceId;
-  if (!units.some((u) => u.id === source && u.side === 'enemy')) return false;
-  // The menu-cancel correction (`constants.ts` MENU_CANCEL_ONLY_DELAY_ABILITIES, ON since 2026-09-26; §9.2): when
-  // the engine passes `onlyDelay`, only a hit whose ability carries Delay or Action-cancel closes it.
-  return onlyDelay === undefined || carriesMenuCancel(onlyDelay.ability);
-}
 
 /**
  * Every target this command named is gone.
@@ -282,41 +250,4 @@ export function allTargetsGone(
     const unit = units.find((u) => u.id === id);
     return !unit || unit.removed || !unit.alive;
   });
-}
-
-/**
- * How big the next sub-step may be.
- *
- * `soonest` is ticks until the next scheduled state change anywhere, or
- * `Infinity` when nothing is scheduled at all. Under `throughInput` that last
- * case is reachable in a way it never was before — every unit ready or frozen
- * while a menu is open — and clamping it to one tick would burn the sub-step
- * budget without advancing the clock, so an idle stretch is consumed whole.
- */
-export function substepTicks(remaining: number, soonest: number): number {
-  if (!Number.isFinite(soonest) || soonest <= 0) return remaining;
-  return Math.min(remaining, soonest);
-}
-
-/**
- * Ticks until the soonest scheduled state change anywhere on the field, or
- * `Infinity` when nothing at all is scheduled. Only Active's sub-stepping
- * reads the raw value ({@link substepTicks}); every other caller wants the
- * clamped {@link nextEventTicks}. Moved out of `engine.ts` (400-line cap).
- */
-export function soonestEventTicks(units: readonly Ffx2Unit[], held?: ReadonlySet<string>): number {
-  let soonest = ticksUntilChainBreak(units);
-  for (const unit of units) {
-    if (!unit.alive && unit.side === 'party') continue;
-    if (isReady(unit)) continue;
-    soonest = Math.min(soonest, ticksUntilNextEvent(unit), ticksUntilStatusEvent(unit, held));
-  }
-  return soonest;
-}
-
-/** {@link soonestEventTicks}, floored at one tick so a step always advances. */
-export function nextEventTicks(units: readonly Ffx2Unit[], held?: ReadonlySet<string>): number {
-  const soonest = soonestEventTicks(units, held);
-  if (!Number.isFinite(soonest) || soonest <= 0) return 1;
-  return soonest;
 }

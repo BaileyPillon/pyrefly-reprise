@@ -19,7 +19,9 @@ The measured `lufs` and `truePeakDb` come from the project's own meter (sfx-pari
 pack decodes to. A cue whose decoded slice reads over -1.1 dBTP is trimmed by the overshoot and the pack re-encoded,
 until none does (the same loop sfx-v2-sprite.py runs). The packs together stay inside the audio budget
 (manifest-io.mjs AUDIO_BUDGET_BYTES) and each under the 5 MB sprite gate; both are re-checked by tools/audio/qa.mjs
-and tests/unit/audio-sfx-parity.test.ts.
+and tests/unit/audio-sfx-parity.test.ts. The packer enforces the budget itself: --install refuses a pack that would put
+the shipped audio (music, both sprites, every pack, the manifest) over it, and says how far over. `node
+tools/audio/sfx-parity-layout.mjs` plans the whole set against the budget before any pack is made.
 
 Needs numpy and ffmpeg (no soundfile or scipy). Game case (AGENTS.md rule 14): the packing is shared plumbing (both);
 a pack is one game's (its name starts `ffx-` or `ffx2-`), and every cue names its own game.
@@ -105,6 +107,29 @@ def encode(x, work, name, q):
     return mp3
 
 
+def known_names(game):
+    """The names a game's packs may hold, from the hooks, the flow slots and the v2 stand-ins (tools/audio/sfx-parity-names.mjs)."""
+    out = subprocess.run(['node', os.path.join(HERE, 'sfx-parity-names.mjs'), '--game', game], capture_output=True, check=True, text=True).stdout
+    return json.loads(out)['names']
+
+
+def audio_budget():
+    """AUDIO_BUDGET_BYTES, read from the one place it is set (tools/audio/manifest-io.mjs)."""
+    src = open(os.path.join(HERE, 'manifest-io.mjs'), encoding='utf-8').read()
+    m = re.search(r'AUDIO_BUDGET_BYTES\s*=\s*([0-9.]+(?:e[0-9]+)?)', src)
+    if not m:
+        sys.exit('manifest-io.mjs: AUDIO_BUDGET_BYTES not found')
+    return int(float(m.group(1)))
+
+
+def shipped_with(man, pack, pack_bytes):
+    """Bytes the shipped audio would be with `pack` at `pack_bytes`: music, both sprites, every other pack, the manifest."""
+    total = sum(e.get('bytes', 0) for e in man.get('music', {}).values())
+    total += (man.get('sfx') or {}).get('bytes', 0) + (man.get('sfxV2') or {}).get('bytes', 0)
+    total += sum(p.get('bytes', 0) for name, p in man.get('sfxParity', {}).get('packs', {}).items() if name != pack)
+    return total + pack_bytes + os.path.getsize(os.path.join(ROOT, 'public', 'audio', 'manifest.json'))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--pack', required=True)
@@ -120,9 +145,16 @@ def main():
     if pack.get('pack') != a.pack:
         sys.exit(f'{a.picks} is for pack {pack.get("pack")}, not {a.pack}')
     game_of_pack = a.pack.split('-')[0]
+    names = known_names(game_of_pack)
     for c in pack['cues']:
         if c['game'] not in ('both', game_of_pack):
             sys.exit(f'{c["cue"]}: game {c["game"]} does not belong in pack {a.pack}')
+        # A cue nothing asks for is a sound that never plays: refuse the name, and a row the name does not answer.
+        entry = names.get(c['cue'])
+        if entry is None:
+            sys.exit(f'{c["cue"]}: no hook, flow slot or v2 stand-in of {game_of_pack} asks for this name (see tools/audio/sfx-parity-names.mjs --game {game_of_pack})')
+        if entry['rows'] and c['specRow'] not in entry['rows']:
+            sys.exit(f'{c["cue"]}: this name answers {entry["rows"]}, not {c["specRow"]}')
         c['_x'] = read(c['audio'])
     trims = {}
     for attempt in range(6):
@@ -162,11 +194,20 @@ def main():
     print(f'parity pack {a.pack} q{a.q}: {len(cues)} cues, {frag["duration"]:.1f} s, {frag["bytes"]} bytes')
     if frag['bytes'] >= 5e6:
         sys.exit(f'{a.pack}: {frag["bytes"]} bytes is over the 5 MB sprite gate; cut the pack in two')
+    man_path = os.path.join(ROOT, 'public', 'audio', 'manifest.json')
+    with open(man_path, encoding='utf-8') as f:
+        man = json.load(f)
+    budget = audio_budget()
+    would_be = shipped_with(man, a.pack, frag['bytes'])
+    print(f'shipped audio with this pack: {would_be / 1e6:.2f} MB of the {budget / 1e6:.0f} MB budget')
+    over = would_be > budget
+    if over:
+        message = f'{a.pack}: installing it puts the shipped audio {(would_be - budget) / 1e6:.2f} MB over the {budget / 1e6:.0f} MB budget; plan the set with tools/audio/sfx-parity-layout.mjs, repack the v2 sprite, or ship it at -q:a 3'
+        if a.install:
+            sys.exit(message)
+        print('WARNING: ' + message)
     if a.install:
         shutil.copyfile(mp3, os.path.join(ROOT, 'public', 'audio', 'sfx', f'parity-{a.pack}.mp3'))
-        man_path = os.path.join(ROOT, 'public', 'audio', 'manifest.json')
-        with open(man_path, encoding='utf-8') as f:
-            man = json.load(f)
         man.setdefault('sfxParity', {}).setdefault('packs', {})[a.pack] = frag
         with open(man_path, 'w', encoding='utf-8', newline='\n') as f:
             f.write(json.dumps(man, indent=2, ensure_ascii=False) + '\n')
