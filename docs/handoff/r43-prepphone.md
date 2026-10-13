@@ -89,3 +89,11 @@ this lane's (the 36 are older, e.g. `src/ui/ffx2/PartyPrep.ts`, the unwired stan
 
 `docs/screenshots/r43-prepphone/scripts/` (Playwright scripts, with a README): serve the branch and a pristine origin/main export on two ports, set `PREP_BASE`, `PREP_WT`, `PYREFLY_BROWSER=gpu` and a `TEMP` that is not C:, run `run-final.sh`, then `finalize.mjs`.
 Create `D:/Tools/pyrefly-overnight/PAUSE` first and remove it after (the GPU protocol), and stop every server by its PID.
+
+## Follow-up in r45-rc: the first-run chevron over the MORE BELOW cue (FOC44A-01 of the focused review of 7758791e; both games)
+
+On a first launch on a phone, step 2 of the guided first run stands its slab above START BATTLE and draws its DOWN chevron 40 px above the button (`firstRunView.ts` `place`); the MORE BELOW cue (`.prep__phone-cue`, fixed 84 px up from the bottom) stands in the same place, so the chevron
+hid the cue's middle letters on every page that scrolls and on the Chapter page. `src/ui/coach/first-run.css` now hides the cue while step 2 is up (`#ui:has(> .frg[data-step='2']) .prep__phone-cue { visibility: hidden }`, beside FOC43-01's rule for the desktop hint strip); nothing moves, no
+text changes size, and the cue is back by itself when the guide is skipped or ends. Unit proof: `tests/unit/r45-prep-cue-first-run.test.ts` (11). Real browser (headless Chromium, 390x844 touch, a fresh profile, real taps, the dev server of the r45-rc tree; FFX Chapter I and FFX-2 Chapter IV): with the guide
+up at step 2 the cue (`is-visible`, opacity 1) computes `visibility: hidden`, words included, on the Chapter page, Items and Stats, while the chevron's box (177, 742, 36 x 22) still lies over the cue's (112, 727, 166 x 33) as before; after the skip the cue computes `visible` again. The crops
+(`docs/screenshots/r45/foc44a-01-after-chapter-page.png` and `foc44a-01-after-stacked-items-page.png`, the bottom 284 px of the 390x844 screen, FFX Chapter I) show the chevron alone above START BATTLE where the review's crop shows it printed over "MORE BELOW".
