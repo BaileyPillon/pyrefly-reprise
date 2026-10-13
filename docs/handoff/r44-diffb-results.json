@@ -1,0 +1,207 @@
+{
+ "what": "DIFF-B re-measured on branch r44-diffb-thumbs with the options page harness (critic/bench/r44-diffb/), 200 seeds per cell, seeds 1 to 200",
+ "pace": {
+  "house": "Wait split, 0.5 s on the top list with the clock running, 1.0 s held in a submenu",
+  "instant": "no time on any menu"
+ },
+ "drivers": {
+  "card-before": "the card with the rule off (AdvisorOptions.lineFirst false = the card of r43-rc)",
+  "card": "the shipped card (the rule on)",
+  "line": "intendedStrategy, the options page's \"line\""
+ },
+ "cells": [
+  {
+   "chapter": "ffx2-den-of-woe",
+   "pace": "house",
+   "driver": "card",
+   "wins": 200,
+   "seeds": 200,
+   "rate": 100.0,
+   "wilson95": [
+    98.1,
+    100.0
+   ],
+   "decisionsPerRun": 33.0,
+   "gameMinutesPerRun": 1.11
+  },
+  {
+   "chapter": "ffx2-den-of-woe",
+   "pace": "house",
+   "driver": "card-before",
+   "wins": 200,
+   "seeds": 200,
+   "rate": 100.0,
+   "wilson95": [
+    98.1,
+    100.0
+   ],
+   "decisionsPerRun": 33.0,
+   "gameMinutesPerRun": 1.11
+  },
+  {
+   "chapter": "ffx2-den-of-woe",
+   "pace": "house",
+   "driver": "line",
+   "wins": 199,
+   "seeds": 200,
+   "rate": 99.5,
+   "wilson95": [
+    97.2,
+    99.9
+   ],
+   "decisionsPerRun": 32.1,
+   "gameMinutesPerRun": 1.08
+  },
+  {
+   "chapter": "ffx2-trema",
+   "pace": "house",
+   "driver": "card",
+   "wins": 127,
+   "seeds": 200,
+   "rate": 63.5,
+   "wilson95": [
+    56.6,
+    69.9
+   ],
+   "decisionsPerRun": 157.7,
+   "gameMinutesPerRun": 8.53
+  },
+  {
+   "chapter": "ffx2-trema",
+   "pace": "house",
+   "driver": "card-before",
+   "wins": 91,
+   "seeds": 200,
+   "rate": 45.5,
+   "wilson95": [
+    38.7,
+    52.4
+   ],
+   "decisionsPerRun": 116.1,
+   "gameMinutesPerRun": 6.24
+  },
+  {
+   "chapter": "ffx2-trema",
+   "pace": "house",
+   "driver": "line",
+   "wins": 127,
+   "seeds": 200,
+   "rate": 63.5,
+   "wilson95": [
+    56.6,
+    69.9
+   ],
+   "decisionsPerRun": 157.7,
+   "gameMinutesPerRun": 8.53
+  },
+  {
+   "chapter": "ffx2-trema",
+   "pace": "instant",
+   "driver": "card",
+   "wins": 147,
+   "seeds": 200,
+   "rate": 73.5,
+   "wilson95": [
+    67.0,
+    79.1
+   ],
+   "decisionsPerRun": 166.0,
+   "gameMinutesPerRun": 8.3
+  },
+  {
+   "chapter": "ffx2-trema",
+   "pace": "instant",
+   "driver": "card-before",
+   "wins": 122,
+   "seeds": 200,
+   "rate": 61.0,
+   "wilson95": [
+    54.1,
+    67.5
+   ],
+   "decisionsPerRun": 143.0,
+   "gameMinutesPerRun": 7.12
+  },
+  {
+   "chapter": "ffx2-trema",
+   "pace": "instant",
+   "driver": "line",
+   "wins": 147,
+   "seeds": 200,
+   "rate": 73.5,
+   "wilson95": [
+    67.0,
+    79.1
+   ],
+   "decisionsPerRun": 166.0,
+   "gameMinutesPerRun": 8.3
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "pace": "house",
+   "driver": "card",
+   "wins": 191,
+   "seeds": 200,
+   "rate": 95.5,
+   "wilson95": [
+    91.7,
+    97.6
+   ],
+   "decisionsPerRun": 92.7,
+   "gameMinutesPerRun": 3.56
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "pace": "house",
+   "driver": "card-before",
+   "wins": 191,
+   "seeds": 200,
+   "rate": 95.5,
+   "wilson95": [
+    91.7,
+    97.6
+   ],
+   "decisionsPerRun": 92.7,
+   "gameMinutesPerRun": 3.56
+  },
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "pace": "house",
+   "driver": "line",
+   "wins": 187,
+   "seeds": 200,
+   "rate": 93.5,
+   "wilson95": [
+    89.2,
+    96.2
+   ],
+   "decisionsPerRun": 95.4,
+   "gameMinutesPerRun": 3.7
+  }
+ ],
+ "chaptersVandXV": {
+  "seedsWithIdenticalRowBeforeAndAfter": {
+   "ffx2-vegnagun-shuyin": 200,
+   "ffx2-den-of-woe": 200
+  },
+  "of": 200
+ },
+ "chapterXIII": {
+  "house": {
+   "seedsGained": 56,
+   "seedsLost": 20,
+   "afterOutcomeEqualsLineOutcome": 200,
+   "of": 200
+  },
+  "instant": {
+   "seedsGained": 39,
+   "seedsLost": 14,
+   "afterOutcomeEqualsLineOutcome": 200,
+   "of": 200
+  }
+ },
+ "agreement": {
+  "before": "66 of 2,978 decisions differ (2.2 %, 30 seeds, house pace; the options page: 156 of 6,364, 2.5 %, 60 seeds)",
+  "after": "0 of 6,024 decisions differ (40 seeds, house pace); the card is the line on every decision of tests/unit/advisor-line-first.test.ts"
+ }
+}

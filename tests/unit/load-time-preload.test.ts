@@ -23,8 +23,11 @@ import { getChapter } from '../../src/data/encounters.ts';
 import { preloadBattle } from '../../src/app/screens/battlePreload.ts';
 import { boardArtUrls, briefingArtUrls } from '../../src/app/screens/frontendWarm.ts';
 import { buildChapterTiles } from '../../src/app/screens/frontend/chapterGrid.ts';
+import { aheadCards, PLATE_AHEAD } from '../../src/app/screens/frontend/boardAhead.ts';
 import { asideHtml } from '../../src/app/screens/frontend/chapterCards.ts';
 import { resetImageWarm } from '../../src/app/imageWarm.ts';
+import { setThumbArt } from '../../src/engine/ArtShipped.ts';
+import strip from '../../src/data/art/strip-art.json';
 
 beforeEach(() => {
   prewarmed.length = 0;
@@ -90,38 +93,71 @@ describe('front-end warm lists', () => {
     expect(urls.some((u) => u.endsWith('art/backdrops/dreams-end.png'))).toBe(true);
   });
 
-  it('the board: the opening card is waited on; every other card\'s faces come first after it', () => {
-    const { first, rest } = boardArtUrls(save as never);
-    const all = new Set([...first, ...rest]);
-    expect(first.length).toBeGreaterThan(0);
-    expect(new Set(first).size).toBe(first.length);
-    expect(rest.some((u) => first.includes(u))).toBe(false);
-    const tiles = buildChapterTiles(save as never);
-    const opening = tiles.find((t) => t.playable)!;
-    expect(first).toContain(first.find((u) => u.endsWith(`art/backdrops/${opening.sceneKey}.png`)));
-    for (const m of asideHtml(opening, null).matchAll(/\bsrc="([^"]+)"/g)) expect(first).toContain(m[1]!);
-    // No other card's plate is waited on (round 11 verification: 21 MB held a cold board).
-    for (const t of tiles) {
-      if (t !== opening && t.sceneKey && t.sceneKey !== opening.sceneKey) {
-        expect(first.some((u) => u.endsWith(`art/backdrops/${t.sceneKey}.png`))).toBe(false);
+  /** The map a production build inserts: a WebP for a scene, a PNG for a boss (`tools/art-thumbs.mjs`). */
+  const thumbMap = (): Record<string, string> =>
+    Object.fromEntries(strip.masters.map((m) => [m, m.replace(/\.png$/, m.startsWith('art/backdrops/') ? '.thumb.webp' : '.thumb.png')]));
+  const SMALL = /\.thumb\.(?:webp|png)$/;
+
+  it("the board: the opening card is waited on; the strips' small copies lead the rest, then every other card's faces", () => {
+    setThumbArt(thumbMap());
+    try {
+      const { first, rest } = boardArtUrls(save as never);
+      const all = new Set([...first, ...rest]);
+      expect(first.length).toBeGreaterThan(0);
+      expect(new Set(first).size).toBe(first.length);
+      expect(rest.some((u) => first.includes(u))).toBe(false);
+      const tiles = buildChapterTiles(save as never);
+      const opening = tiles.find((t) => t.playable)!;
+      expect(first).toContain(first.find((u) => u.endsWith(`art/backdrops/${opening.sceneKey}.png`)));
+      for (const m of asideHtml(opening, null).matchAll(/\bsrc="([^"]+)"/g)) expect(first).toContain(m[1]!);
+      // The rail's strips are the small copies (one scene and one boss a card), the opening card's own first, and they lead the rest:
+      // a few MB for the whole rail, painted before anything the cursor has not reached.
+      const small = rest.filter((u) => SMALL.test(u));
+      expect(small).toHaveLength(strip.masters.length);
+      expect(rest.slice(0, small.length)).toEqual(small);
+      expect(small[0]).toMatch(new RegExp(`art/backdrops/${opening.sceneKey}\.thumb\.webp$`));
+      // No other card's plate is waited on (round 11 verification: 21 MB held a cold board), and none beyond a press or two of the cursor is asked for at all.
+      const near = new Set(aheadCards(tiles, tiles.indexOf(opening), PLATE_AHEAD).map((i) => tiles[i]!.id));
+      for (const t of tiles) {
+        if (t === opening || !t.sceneKey || t.sceneKey === opening.sceneKey) continue;
+        const full = `art/backdrops/${t.sceneKey}.png`;
+        expect(first.some((u) => u.endsWith(full))).toBe(false);
+        expect(rest.some((u) => u.endsWith(full)), `${t.id} is ${near.has(t.id) ? 'near' : 'far'}`).toBe(near.has(t.id));
       }
-    }
-    // Every face is warmed, and the other cards' faces lead the rest, ahead of any backdrop.
-    const firstBackdrop = rest.findIndex((u) => u.includes('art/backdrops/'));
-    let faces = 0;
-    for (const t of tiles) {
-      for (const m of asideHtml(t, null).matchAll(/\bsrc="([^"]+)"/g)) {
-        faces++;
-        expect(all.has(m[1]!)).toBe(true);
-        if (!first.includes(m[1]!)) expect(rest.indexOf(m[1]!)).toBeLessThan(firstBackdrop);
+      expect(near.size).toBeGreaterThanOrEqual(3);
+      // Every face is warmed, and the other cards' faces come before the first full plate, behind the strips.
+      const firstPlate = rest.findIndex((u) => u.includes('art/backdrops/') && !SMALL.test(u));
+      expect(firstPlate).toBeGreaterThan(small.length);
+      let faces = 0;
+      for (const t of tiles) {
+        for (const m of asideHtml(t, null).matchAll(/\bsrc="([^"]+)"/g)) {
+          faces++;
+          expect(all.has(m[1]!)).toBe(true);
+          if (!first.includes(m[1]!)) expect(rest.indexOf(m[1]!), `${t.id}'s face is behind the strips`).toBeGreaterThanOrEqual(small.length);
+        }
       }
+      // Chapter VIII's Wakka and Rikku are among them (round 11's grey busts).
+      const evrae = tiles.find((t) => t.id === 'evrae-airship');
+      if (evrae) {
+        const html = asideHtml(evrae, null);
+        for (const m of html.matchAll(/\bsrc="([^"]+)"/g)) expect(all.has(m[1]!)).toBe(true);
+      }
+      expect(faces).toBeGreaterThan(6);
+    } finally {
+      setThumbArt(undefined);
     }
-    // Chapter VIII's Wakka and Rikku are among them (round 11's grey busts).
-    const evrae = tiles.find((t) => t.id === 'evrae-airship');
-    if (evrae) {
-      const html = asideHtml(evrae, null);
-      for (const m of html.matchAll(/\bsrc="([^"]+)"/g)) expect(all.has(m[1]!)).toBe(true);
+  });
+
+  it('with no thumbnails in the build (dev, the unit suite, PYREFLY_ART_THUMBS=off) the strips ask for the full pictures, as before', () => {
+    setThumbArt(null);
+    try {
+      const { first, rest } = boardArtUrls(save as never);
+      expect([...first, ...rest].some((u) => SMALL.test(u))).toBe(false);
+      const tiles = buildChapterTiles(save as never);
+      const withStrip = tiles.find((t) => t.id === 'ffx2-trema')!;
+      expect(rest.some((u) => u.endsWith(`art/backdrops/${withStrip.sceneKey}.png`))).toBe(true);
+    } finally {
+      setThumbArt(undefined);
     }
-    expect(faces).toBeGreaterThan(6);
   });
 });

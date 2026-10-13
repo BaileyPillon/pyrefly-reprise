@@ -15,6 +15,8 @@
 //   --shot=PATH             a screenshot of the board once it has settled
 //   --shotEarly=PATH        a screenshot of the board --shotEarlyAt=MS (default 1500) after it is up, before it has settled
 //   --query=a=b&c=d         more query parameters on the address (e.g. prefetch=now|first|defer, the front end's prefetch mode)
+//   --viewport=WxH --dpr=N  the window (default 1600x900 at 1x); --mobile adds the phone flags (touch, a mobile user agent)
+//   --labelDir=DIR          unused here; see docs/handoff/r44-thumbs.md for how the thumbnail measurements were run
 //
 // Writes the JSON (requests with start, end, bytes and bucket; inputs; screens; images; audio snapshots; a summary) and prints the summary.
 // Servers are the caller's: `vite preview --outDir <build>` with BASE_PATH=/ on a port; stop it by its PID when done.
@@ -35,6 +37,7 @@ const right = Number(arg('right', '1'));
 const stage = arg('stage', 'battle');
 const cacheOff = arg('cache', 'off') === 'off';
 const settleMs = Number(arg('settle', '4000'));
+const mash = Number(arg('mash', '0')); // > 0: the --right=N presses come this many ms apart (a hand on the arrow key is about 250), sampled at +60 ms each and in full after the last
 const cursorAt = Number(arg('cursorAt', '-1')); // >= 0: press the arrows this many ms after the board is up, before it has finished loading
 const out = arg('out', '');
 const shot = arg('shot', '');
@@ -43,6 +46,9 @@ const shotEarlyAt = Number(arg('shotEarlyAt', '1500'));
 const briefingMs = Number(arg('briefingMs', '600')); // how long Auron's briefing is left up before it is skipped (a first launch, --coach=on)
 const query = arg('query', ''); // extra query parameters, e.g. prefetch=first
 const label = arg('label', `${linkName}-${coach}`);
+const [viewW, viewH] = arg('viewport', '1600x900').split('x').map(Number);
+const dpr = Number(arg('dpr', '1'));
+const mobile = process.argv.includes('--mobile');
 
 const LINKS = {
   none: null,
@@ -60,6 +66,7 @@ function bucket(u) {
   if (p.startsWith('assets/')) return 'code';
   if (p.startsWith('fonts/')) return 'fonts';
   if (p.startsWith('art/title/')) return 'art/title';
+  if (/\.thumb\.(?:webp|png)$/.test(p)) return 'art/thumbs';
   if (p === 'art/manifest.json' || p.endsWith('.json')) return 'json';
   if (p.startsWith('art/')) return `art/${p.split('/')[1]}`;
   if (p.startsWith('audio/music/')) return 'audio/music';
@@ -80,7 +87,7 @@ function pageProbe() {
     (e) => {
       const el = e.target;
       if (el && el.tagName === 'IMG') {
-        T.imgs.push({ t: now(), src: el.currentSrc || el.src, board: !!el.closest?.('.fe-cselect'), screen: window.__pyrefly?.screen?.() ?? null });
+        T.imgs.push({ t: now(), src: el.currentSrc || el.src, board: !!el.closest?.('.fe-cselect'), rail: !!el.closest?.('.fe-rail'), hero: !!el.closest?.('.fe-hero'), screen: window.__pyrefly?.screen?.() ?? null });
       }
     },
     true,
@@ -106,7 +113,7 @@ function pageProbe() {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const mode = resolveBrowserMode();
 const browser = await chromium.launch({ headless: true, args: currentChromiumArgs() });
-const context = await browser.newContext({ viewport: { width: 1600, height: 900 }, deviceScaleFactor: 1 });
+const context = await browser.newContext({ viewport: { width: viewW, height: viewH }, deviceScaleFactor: dpr, ...(mobile ? { isMobile: true, hasTouch: true } : {}) });
 await context.addInitScript(pageProbe);
 const page = await context.newPage();
 const cdp = await context.newCDPSession(page);
@@ -164,6 +171,21 @@ async function waitScreen(name, timeoutMs, press) {
   return false;
 }
 
+/** The new card's images that are not yet there: the plate, the faces. */
+const pendingNow = () =>
+  page.evaluate(() => {
+    const faces = [...document.querySelectorAll('.fe-aside .fe-party__face, .fe-aside [class*=face]')];
+    const imgs = [...document.querySelectorAll('.fe-aside img, .fe-cselect__board img')];
+    // r44-thumbs: what the plate shows. Each picture of the plate is a slot: the full picture painted ('full'), its small copy under it ('soft': a plate
+    // that has not loaded yet, shown soft instead of empty), or nothing ('blank'). Before r44 a plate that had not loaded was blank.
+    const slots = [...document.querySelectorAll('.fe-hero .cs-art > img:not([data-lazy-ph])')].map((full) => {
+      if (full.hasAttribute('data-lazy-src') === false && full.complete && full.naturalWidth > 0) return 'full';
+      const under = full.previousElementSibling;
+      return under && under.hasAttribute('data-lazy-ph') && under.complete && under.naturalWidth > 0 ? 'soft' : 'blank';
+    });
+    return { imgs: imgs.length, pending: imgs.filter((i) => i.hasAttribute('data-lazy-src') || !i.complete || i.naturalWidth === 0).length, faces: faces.length, blank: slots.filter((s) => s === 'blank').length, soft: slots.filter((s) => s === 'soft').length, slots: slots.length };
+  });
+
 async function moveCursor() {
   // Cursor moves: what is on the new card the moment it lands (grey busts), and when it has arrived.
   result.cursor = [];
@@ -171,16 +193,14 @@ async function moveCursor() {
     const tPress = Date.now();
     await page.keyboard.press('ArrowRight');
     const samples = [];
-    for (const wait of [60, 250, 800, 2000]) {
+    const quick = mash > 0 && i < right - 1; // a hand on the key: look once at +60 ms and press again
+    for (const wait of quick ? [60] : [60, 250, 800, 2000]) {
       await sleep(Math.max(0, tPress + wait - Date.now()));
-      samples.push({ afterMs: wait, ...(await page.evaluate(() => {
-        const faces = [...document.querySelectorAll('.fe-aside .fe-party__face, .fe-aside [class*=face]')];
-        const imgs = [...document.querySelectorAll('.fe-aside img, .fe-cselect__board img')];
-        return { imgs: imgs.length, pending: imgs.filter((i) => i.hasAttribute('data-lazy-src') || !i.complete || i.naturalWidth === 0).length, faces: faces.length };
-      })) });
+      samples.push({ afterMs: wait, ...(await pendingNow()) });
     }
     result.cursor.push({ tPress, samples });
-    await sleep(500);
+    if (quick) await sleep(Math.max(0, tPress + mash - Date.now()));
+    else await sleep(500);
   }
 }
 
@@ -336,6 +356,23 @@ if (boardAt !== null) {
   const boardImgs = proof.imgs.filter((i) => i.board && i.t >= boardAt);
   const late = (ms) => boardImgs.filter((i) => i.t - boardAt > ms);
   summary.boardImages = { loadedAfterBoardUp: boardImgs.length, later500ms: late(500).length, later2s: late(2000).length, lastAtMs: boardImgs.length ? Math.round(Math.max(...boardImgs.map((i) => i.t)) - boardAt) : null };
+  // r44-thumbs: the rail's strips. Every rail image is counted once (by its first load); "painted" is the moment its picture loaded into the strip.
+  const railLoads = new Map();
+  for (const i of proof.imgs) if (i.rail && !railLoads.has(i.src)) railLoads.set(i.src, i.t);
+  const railTimes = [...railLoads.values()].sort((a, b) => a - b);
+  const railStats = await page.evaluate(() => {
+    const imgs = [...document.querySelectorAll('.fe-rail img')];
+    return { imgs: imgs.length, painted: imgs.filter((i) => i.complete && i.naturalWidth > 0).length, waiting: imgs.filter((i) => i.hasAttribute('data-lazy-src')).length, thumbs: imgs.filter((i) => /\.thumb\./.test(i.currentSrc || i.getAttribute('src') || '')).length };
+  }).catch(() => null);
+  summary.strips = {
+    ...(railStats ?? {}),
+    firstPaintedAfterBoardUpMs: railTimes.length ? Math.round(railTimes[0] - boardAt) : null,
+    allPaintedAfterBoardUpMs: railTimes.length ? Math.round(railTimes[railTimes.length - 1] - boardAt) : null,
+    allPaintedAfterEnterMs: railTimes.length ? Math.round(railTimes[railTimes.length - 1] - firstInput) : null,
+    paintedBeforeBoardUp: railTimes.filter((x) => x <= boardAt).length,
+    paintedWithin500msOfBoardUp: railTimes.filter((x) => x - boardAt <= 500).length,
+    distinctPictures: railLoads.size,
+  };
   const puts = proof.puts.filter((p) => p.t >= boardAt);
   summary.putUps = { total: puts.length, later500ms: puts.filter((p) => p.t - boardAt > 500).length, lastAtMs: puts.length ? Math.round(Math.max(...puts.map((p) => p.t)) - boardAt) : null };
   const afterEnter = finished.filter((r) => r.end > firstInput);
@@ -346,7 +383,21 @@ if (boardAt !== null) {
   const cs = result.requests.find((r) => r.path.endsWith('/audio/music/chapter-select.mp3'));
   if (cs) summary.chapterSelectMusic = { startAfterEnterMs: Math.round(cs.start - firstInput), endAfterEnterMs: cs.end ? Math.round(cs.end - firstInput) : null, MB: MB(cs.bytes) };
 }
-if (result.cursor?.length) summary.cursor = result.cursor.map((c) => c.samples.map((x) => ({ afterMs: x.afterMs, pending: x.pending, imgs: x.imgs })));
+{
+  // What the whole session fetched, by kind of art: the small copies, and the full backdrops and boss paintings (which are the strips before r44 and the plates after).
+  const full = (r) => /^art\/(?:backdrops|characters)\//.test(r.path.replace(/^\/+/, '')) && !/\.thumb\./.test(r.path);
+  summary.totals = {
+    allFinishedMB: MB(sum(finished)),
+    artMB: MB(sum(finished.filter(art))),
+    thumbnailsMB: MB(sum(finished.filter((r) => /\.thumb\./.test(r.path)))),
+    thumbnailRequests: finished.filter((r) => /\.thumb\./.test(r.path)).length,
+    fullBackdropAndBossMB: MB(sum(finished.filter(full))),
+    fullBackdropAndBossRequests: finished.filter(full).length,
+    byBucket: tally(finished),
+  };
+  summary.viewport = { width: viewW, height: viewH, dpr, mobile };
+}
+if (result.cursor?.length) summary.cursor = result.cursor.map((c) => c.samples.map((x) => ({ afterMs: x.afterMs, pending: x.pending, imgs: x.imgs, blank: x.blank, soft: x.soft, slots: x.slots })));
 if (result.tConfirm) {
   const music =result.requests.filter((r) => r.bucket === 'audio/music' && r.start >= result.tConfirm - 1 && !r.failed);
   summary.musicAtAndAfterConfirm = music.map((r) => ({ cue: r.path.split('/').pop(), startMsAfterConfirm: Math.round(r.start - result.tConfirm), endMsAfterConfirm: r.end ? Math.round(r.end - result.tConfirm) : null, MB: MB(r.bytes), cache: r.cache }));

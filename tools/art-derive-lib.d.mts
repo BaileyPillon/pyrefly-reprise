@@ -1,5 +1,7 @@
 /** Types for `tools/art-derive-lib.mjs` (release 38, "r38-bytes"): lossless WebP derived from the shipped painted art. */
 
+import type { ThumbPlan } from './art-thumb-apply.mjs';
+
 export type ArtScope = 'off' | 'partial' | 'safe' | 'exact' | 'all';
 export type ArtAlpha = 'opaque' | 'binary' | 'translucent';
 export type ArtKind = 'webp' | 'png' | 'copy';
@@ -66,6 +68,8 @@ export interface ArtPlan {
   ms: number;
   counts: { webp: number; png: number; copy: number };
   bytes: { masters: number; shipped: number; saved: number };
+  /** The strip thumbnails (`tools/art-thumbs.mjs`), when the build derives them: applied beside the masters and listed in `art/derived.json`. */
+  thumbs?: ThumbPlan;
 }
 
 export function planArtDerivation(options: {
@@ -77,4 +81,4 @@ export function planArtDerivation(options: {
 }): Promise<ArtPlan>;
 export function shippedList(plan: ArtPlan): string[];
 export function derivedReport(plan: ArtPlan): { version: number; files: Array<{ path: string; kind: ArtKind; shipped?: string; master: number; bytes: number; rgba?: string; alpha?: ArtAlpha; hidden?: number; note?: string }> } & Record<string, unknown>;
-export function applyPlan(outDir: string, plan: ArtPlan): { webp: number; png: number; skipped: string[] };
+export function applyPlan(outDir: string, plan: ArtPlan): { webp: number; png: number; skipped: string[]; thumbs?: { written: number; bytes: number } };

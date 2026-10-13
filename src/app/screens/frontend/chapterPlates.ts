@@ -22,7 +22,7 @@
  * which is what its own registry entry names.
  */
 
-import { artUrl } from '../../../engine/PaintedArt.ts';
+import { artThumbUrl, artUrl } from '../../../engine/PaintedArt.ts';
 import { inArtNamespace } from '../../../data/art/artNamespace.ts';
 import type { ChapterTile } from './chapterGrid.ts';
 
@@ -270,6 +270,16 @@ function placed(p: Placement, focus: readonly [number, number]): string {
  * The painted art for a plate (`'hero'`) or a card (`'card'`): the scene,
  * then each boss painting over it. An image that fails to load removes itself,
  * so a missing file never shows a broken-image glyph.
+ *
+ * **A card is a strip about 260 x 35 px (r44-thumbs, both games), so it asks for the small copy of each painting** (`artThumbUrl`: the
+ * build's thumbnail when it made one, the full picture when it did not); the plate asks for the full picture, as it always did. A card
+ * image whose small copy is not the full picture also names the full one (`data-lazy-full`), which `lazyPlates.ts` falls back to if the
+ * small copy cannot be loaded, so a strip is never left blank for a thumbnail that failed.
+ *
+ * **A plate shows the small copy at once, under the full picture** (`data-lazy-ph`): the full picture is fetched when the card is selected
+ * (or a press ahead of it), and a hand that scans the list faster than a 4 MB file arrives would otherwise see an empty plate. The small copy
+ * is the strip's own, already loaded; `lazyPlates.ts` `put` takes it away the moment the full picture is up, so a plate that has loaded is
+ * the plate it always was, and one that has not is soft instead of empty.
  */
 export function plateArtHtml(
   tile: Pick<ChapterTile, 'id' | 'sceneKey' | 'silhouetteKeys' | 'title'>,
@@ -278,17 +288,29 @@ export function plateArtHtml(
   const comp = compositionFor(tile);
   // Deferred and put up decoded (`lazyPlates.ts`, r29 PR-0221): a rail card in the idle lane,
   // the hero at urgent, demoted when the cursor moves on.
-  const src = 'data-lazy-src';
+  const lazy = (path: string): string => {
+    const whole = artUrl(path);
+    const shown = where === 'card' ? artThumbUrl(path) : whole;
+    return `data-lazy-src="${shown}"${shown === whole ? '' : ` data-lazy-full="${whole}"`}`;
+  };
+  /** The small copy under a plate's full picture (none on a card, and none where the build made no small copy). */
+  const holder = (cls: string, path: string, style: string): string => {
+    const small = artThumbUrl(path);
+    return where === 'hero' && small !== artUrl(path)
+      ? `<img class="${cls} cs-art__ph" data-lazy-ph src="${small}" alt="" aria-hidden="true" style="${style}" draggable="false" onerror="this.remove()">`
+      : '';
+  };
+  const sceneStyle = `object-position:${comp.scene[where]}`;
   const scene = tile.sceneKey
-    ? `<img class="cs-art__scene" ${src}="${artUrl(`art/backdrops/${tile.sceneKey}.png`)}" alt="" ` +
-      `style="object-position:${comp.scene[where]}" draggable="false" onerror="this.remove()">`
+    ? `${holder('cs-art__scene', `art/backdrops/${tile.sceneKey}.png`, sceneStyle)}<img class="cs-art__scene" ${lazy(`art/backdrops/${tile.sceneKey}.png`)} alt="" ` +
+      `style="${sceneStyle}" draggable="false" onerror="this.remove()">`
     : '';
   const bosses = comp.layers
     .map((layer) => {
       const at = where === 'hero' ? layer.hero : layer.card;
       if (!at) return '';
-      const url = artUrl(`art/characters/${layer.key}/idle.png`);
-      return `<img class="cs-art__boss" ${src}="${url}" alt="" style="${placed(at, layer.focus)}" draggable="false" onerror="this.remove()">`;
+      const path = `art/characters/${layer.key}/idle.png`;
+      return `${holder('cs-art__boss', path, placed(at, layer.focus))}<img class="cs-art__boss" ${lazy(path)} alt="" style="${placed(at, layer.focus)}" draggable="false" onerror="this.remove()">`;
     })
     .join('');
   return `<div class="cs-art cs-art--${where}" style="--glow:${comp.glow}">${scene}${bosses}</div>`;
