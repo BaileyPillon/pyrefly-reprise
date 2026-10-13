@@ -1,6 +1,7 @@
 # Re-parity RC6-CH2: Chapter II's line after the KO rule, and the Auto-Life icon (FOC43-04)
 
-Status: **built, tested and committed on branch `re-parity-rc6-ch2` (from `origin/r43-rc`, `7b2582e7` = the build live since 2026-10-13 05:56Z); pushed to `origin/re-parity-rc6-ch2`; not merged, not deployed** (2026-10-13).
+Status: **built, tested and committed on branch `re-parity-rc6-ch2` (from `origin/r43-rc`, `7b2582e7` = the build live since 2026-10-13 05:56Z); pushed to `origin/re-parity-rc6-ch2`; not merged to main, not deployed** (2026-10-13).
+**Rebased-by-merge onto the newest base (2026-10-13, release driver's request):** `origin/r45-rc` (`d5bf2206`, the audio build) merged in as `db3e296d` (a merge, clean, no conflicts; the merge brings no battle code, only music keys, art thumbnails, entrance and prep-screen work). After it: `tsc` clean; `ffx-engine-golden`, `ffx2-atb-golden`, `ff7-golden` unchanged and green; the RC6 tests, `strategy-chapter2`, `ffx-chapter2`, `strategy-braskas-final-aeon`, `re-parity-ai-yunalesca`, `presenter-ko-wipe-chapter3`, `ffx-statuses`, `ffx2-statuses` and the guide and strategy-guide tests (37 files, 438 tests) all pass. The numbers below were measured before the merge and the merge touches nothing they depend on.
 **Game case: FFX only, both parts** (AGENTS.md rule 14). Part 1: Chapter II (Yunalesca), her Zombie, Hellbiter and Mega Death are FFX's. Part 2: the permanent Auto-Life flag exists only in the FFX engine (`src/battle/ffx`); the FFX-2 engine takes a
 KO'd unit's statuses without an event and FF7's emits no status events. `ffx2-atb-golden` and `ff7-golden` pass unchanged.
 
