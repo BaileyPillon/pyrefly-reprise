@@ -103,7 +103,7 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     follow: { scale: 1.074, stanceX: 344.5, upright: true, head: [0.5323, 0.1, 0.6407, 0.1912] },
     hurt: { scale: 0.804, stanceX: 221.0, head: [0.2869, 0.0955, 0.4363, 0.1745] },
     idle: { stanceX: 424.0, head: [0.4247, 0.0642, 0.543, 0.1256] },
-    item: { scale: 0.752, stanceX: 235.5, feetRow: 1136.0, head: [0.3033, 0.0877, 0.4561, 0.1631] },
+    item: { stanceX: 238.5, feetRow: 1134.0, head: [0.3081, 0.0884, 0.4588, 0.1634] },
     ko: { scale: 0.529, head: [0.1053, 0.1203, 0.2565, 0.2767] },
     ready: { scale: 1.245, stanceX: 287.0, head: [0.3175, 0.1597, 0.4254, 0.2179] },
     sleep: { stanceX: 354.0, head: [0.5498, 0.1279, 0.7051, 0.2182] },
