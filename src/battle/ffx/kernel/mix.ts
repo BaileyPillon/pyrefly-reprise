@@ -29,7 +29,7 @@
  */
 
 import { type BagState, bagChange } from './bag.ts';
-import { MIX_FIRST_RESULT, MIX_GROUP_OF_ITEM, MIX_GROUP_ROWS, MIX_ITEM_COUNT, MIX_RESULT_COUNT } from './mix-table.ts';
+import { MIX_FIRST_RESULT, MIX_GROUP_OF_ITEM, MIX_GROUP_ROWS, MIX_ITEM_COUNT, MIX_ITEM_IDS, MIX_RESULT_COUNT, MIX_RESULT_IDS } from './mix-table.ts';
 
 /** The Mix command: not an ingredient. */
 export const MIX_COMMAND_ID = 0x311e;
@@ -69,6 +69,22 @@ export function mixResultCommand(itemA: number, itemB: number): number {
 export function mixCommandIndex(command: number): number | undefined {
   const n = command - MIX_FIRST_RESULT;
   return n >= 0 && n < MIX_RESULT_COUNT ? n : undefined;
+}
+
+const ITEM_NUMBER: ReadonlyMap<string, number> = new Map(MIX_ITEM_IDS.map((id, index) => [id, 0x2000 + index]));
+
+/** The item id (0x2000 + index) of an item of ours, or `undefined` when the chart has no such item. */
+export function mixItemNumber(itemId: string): number | undefined {
+  return ITEM_NUMBER.get(itemId);
+}
+
+/** The ability id two of our items make (`mix-ultra-potion` for two Potions), or `undefined` when either is not an item of the chart. */
+export function mixResultAbilityId(itemA: string, itemB: string): string | undefined {
+  const a = mixItemNumber(itemA);
+  const b = mixItemNumber(itemB);
+  if (a === undefined || b === undefined) return undefined;
+  const index = mixCommandIndex(mixResultCommand(a, b));
+  return index === undefined ? undefined : MIX_RESULT_IDS[index];
 }
 
 /** What the resolver reads of the record, the flags and the bag. */

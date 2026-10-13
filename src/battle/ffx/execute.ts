@@ -8,7 +8,7 @@
  */
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant } from '../common/types.ts';
-import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isSubmenuMarker, rankOf, rtOf, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
 import { applyMpDelta, ejectActor } from './hp.ts';
 import { chargeTurn } from './turnQueue.ts';
@@ -18,6 +18,8 @@ import { escapeRoll } from './kernel/rolls.ts';
 import { streamsOf } from './adapt/streams.ts';
 import { forcedAttack } from './forced-turn.ts';
 import { shapeOverdrive } from './overdriveShape.ts';
+import { payForItem } from './item-use.ts';
+import { type MixOutcome, mixFailed } from './mix.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -234,6 +236,7 @@ export function executeCommand(
 
   let options: ResolveOptions = {};
   let finisher: AbilityDef | undefined;
+  let mix: MixOutcome | undefined;
 
   if (command.kind === 'overdrive') {
     const kind = def.minigame;
@@ -280,7 +283,10 @@ export function executeCommand(
     def = shaped.def;
     options = shaped.options;
     finisher = shaped.finisher;
+    mix = shaped.mix;
     ctx.rt.pendingMinigame = null;
+    // A Mix that found nobody to aim at has already cost both ingredients; it spends no gauge and no hit (`mix.ts`).
+    if (mix?.failed) return mixFailed(ctx);
     // The Mix selector survived the shaping, so no pair in the bag has a
     // recipe. `types.ts` names this case ("`null` when the pair has no recipe
     // — *Mix failed!*"), and the alternative is what shipped: a `formula:
@@ -293,25 +299,10 @@ export function executeCommand(
   }
 
   if (command.kind === 'item') {
-    // An aeon has no Item command [ffx-combat-core §6.2]; `commands.ts` offers
-    // none, and one that arrives anyway is refused with the turn kept (PR-0155).
-    if (actor.side === 'aeon') {
-      ctx.emit({ type: 'message', text: `${actor.name} cannot use items`, kind: 'system' });
-      return { rank: 0, rejected: true, damageDealt: 0 };
-    }
-    // An item reaction (Auto-Med, Auto-Potion, Auto-Phoenix) was paid for when its record was queued (`adapt/reactions.ts`): that one use is not spent again.
-    if (ctx.rt.prepaidItem === command.id) {
-      ctx.rt.prepaidItem = undefined;
-    } else if (!spendItem(ctx, command.id)) {
-      ctx.emit({ type: 'message', text: 'No items left', kind: 'system' });
-      return NOTHING;
-    }
-    const item = ctx.content.item(command.id);
-    if (item) def = { ...def, targeting: item.targeting, name: item.name, category: 'item' };
-    if (command.gilSpent !== undefined) {
-      options = { ...options, gilSpent: Math.min(command.gilSpent, ctx.rt.gil) };
-      ctx.rt.gil = Math.max(0, ctx.rt.gil - (command.gilSpent ?? 0));
-    }
+    const paid = payForItem(ctx, actor, command, def, options);
+    if (!paid.ok) return paid.result;
+    def = paid.def;
+    options = paid.options;
   }
 
   // A two-actor rig where the stat block and the turn slot belong to different
@@ -328,6 +319,8 @@ export function executeCommand(
 
   const cost = mpCostFor(actor, def);
   if (cost > 0) applyMpDelta(ctx, actor, cost, actor.id);
+  // A Mix's targets are the game's auto-target's, not the command's (the player does not aim a Mix).
+  const aim = mix !== undefined && mix.targets.length > 0 ? mix.targets : command.targets;
 
   ctx.emit({
     type: 'action-start',
@@ -335,12 +328,12 @@ export function executeCommand(
     command,
     abilityId: def.id,
     abilityName: def.name,
-    targets: command.targets.slice(),
+    targets: aim.slice(),
   });
 
   if (command.kind === 'overdrive') spendOverdrive(ctx, actor);
 
-  let damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
+  let damageDealt = resolveAbility(ctx, actor, def, aim, options);
   // Blitz Ace's success-only "Last Hit" (row 274, 24 x 1) lands after the volley, in the same action [§5.3].
   if (finisher) damageDealt += resolveAbility(ctx, actor, finisher, command.targets, { ...options, followUp: true });
   ctx.emit({ type: 'action-end', actorId: actor.id });

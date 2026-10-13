@@ -21,6 +21,7 @@
  */
 
 import type { AbilityDef, AbilityId, ItemDef, ItemId } from '../common/types.ts';
+import { mixResultAbilityId } from './kernel/mix.ts';
 
 /** Id of the basic Attack command's ability record. */
 export const ATTACK_ABILITY_ID = 'attack';
@@ -154,9 +155,12 @@ export class FFXContentRegistry {
     }
   }
 
-  /** The mix two ingredients make, or `undefined` for a pair with no recipe. */
+  /**
+   * The mix two ingredients make. The game's table is complete (re-parity RC7, `kernel/mix.ts`): any two of its 112 items make one of the 64 results, so the
+   * chart answers first; only an id the chart does not know falls to the recipes registered by hand, and a pair with neither gives `undefined`.
+   */
   mixResult(a: ItemId, b: ItemId): AbilityId | undefined {
-    return this.mixes.get(mixKey(a, b));
+    return mixResultAbilityId(a, b) ?? this.mixes.get(mixKey(a, b));
   }
 
   /** Every ingredient pair this registry can resolve, as `[a, b, resultId]`. */

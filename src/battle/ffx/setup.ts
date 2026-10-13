@@ -27,6 +27,7 @@ import type { FFXContentRegistry } from './registry.ts';
 import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { applyEquipmentToCombatant } from './equipment.ts';
 import { startAutoStatuses } from './adapt/auto-status.ts';
+import { stockAfter } from './adapt/bag.ts';
 import { rebuildCarriedPools, refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
@@ -345,7 +346,8 @@ export function buildBattle(
   }
 
   for (const entry of party.inventory) {
-    rt.inventory.set(entry.itemId, (rt.inventory.get(entry.itemId) ?? 0) + entry.count);
+    // The game's bag: a stack stops at 99, so the same item listed twice (or a link's carried count and the build's) never passes it (`adapt/bag.ts`).
+    rt.inventory.set(entry.itemId, stockAfter(rt.inventory, entry.itemId, entry.count).count);
   }
 
   // Equipment folds into resistances and affinities, then grants its permanent
