@@ -9,10 +9,12 @@
   "obligations": [
     {
       "kind": "live",
-      "status": "superseded-unverified",
+      "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
-      "note": "never verified: the build was replaced by 2ae1a9e4",
-      "at": "2026-10-11T11:24:11.935Z"
+      "result": "PASS",
+      "settledBy": "critic/reviews/72973096-live.json",
+      "settledAt": "2026-10-11T05:30:00.000Z",
+      "note": "corrected by hand in the records pass of 2026-10-11: the 2ae1a9e4 deploy archived this marker from a tree that did not hold the live review (it was in the deep-review tree, settled there at 05:30Z), so it wrote superseded-unverified; the review settled this obligation before the build was replaced at 11:24Z"
     },
     {
       "kind": "focused",

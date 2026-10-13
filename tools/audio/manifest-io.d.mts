@@ -91,8 +91,21 @@ export declare function musicEntry(input: MusicEntryInput): ManifestMusicEntry;
 export declare function setMusicEntryText(
   text: string,
   name: string,
-  entry: { file: string; [key: string]: string | number | undefined },
+  entry: { file: string; [key: string]: string | number | boolean | undefined },
 ): string;
+
+/**
+ * Add one music entry to the manifest's text in the key order the house writer uses (`localeCompare` on the cue name), leaving every other byte as it
+ * was. Throws when the cue is already there. Callers hold the manifest lock.
+ */
+export declare function addMusicEntryText(
+  text: string,
+  name: string,
+  entry: { file: string; [key: string]: string | number | boolean | undefined },
+): string;
+
+/** Take one music entry out of the manifest's text, leaving every other byte as it was. Throws when the cue is not there. Callers hold the manifest lock. */
+export declare function removeMusicEntryText(text: string, name: string): string;
 
 /**
  * The `source` an entry names when its MP3 was made outside the score (the ElevenLabs takes of 2026-10-07), else

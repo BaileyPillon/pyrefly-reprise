@@ -1,0 +1,603 @@
+{
+ "what": "Bailey's 2026-10-12 art picks installed in the hard-link art mirror D:/pyrefly-art-r44 (worktree D:/pyrefly-r44-art, branch r44-art): the driver's recommended picks on the Art Picks, Oct 12 page, RWM-KO-1, RAL-KO-1 and RBS-KO-1 (Rikku White Mage, Alchemist and Berserker, knocked down; FFX-2 only) and YUNA-ITEM-1 (Yuna's item pose; FFX only). All four replace an approved painting.",
+ "words": "Bailey, 2026-10-12 about 23:15 EDT, verbatim: \"I\u2019ll go with all of your recommendations\", and then: \"Install\" (decisions 61a and 61b of the Art Picks, Oct 12 page).",
+ "recommendation": "the driver's recommended pick (the first of each block) for each of the four slots.",
+ "gameCase": "RIKKU-WM-ko, RIKKU-AL-ko, RIKKU-BS-ko: FFX-2 only. YUNA-ITEM: FFX only.",
+ "poses": 4,
+ "method": {
+  "mirror": "D:/pyrefly-art-r44 is a hard-link mirror of D:/pyrefly-r39-int/public/art (5,316 files, 12,436,220,680 bytes, every file the same inode as the shared tree). Each replaced file was written beside the old one and renamed over it (a new inode in the mirror only); manifest.json was given its own inode as well (same bytes). The shared tree was proved unchanged (every file the same inode, size and mtime as before; the 20 originals the same sha256 as the backup).",
+  "installer": "D:/Tools/pyrefly-scratch/2026-10-12/r44-art-install/install_r44.mjs (adapted from the 2026-10-09 install_picks.mjs), then residecar.mjs for the final sidecars",
+  "tierRecipe": "RealESRGAN_x4plus_anime_6B on the CPU (tiles 384, overlap 24), alpha by Lanczos; tools/gen/hires-alpha-fix/alphafix.py repair(ka 0.4, d0 2.0, d1 3.5, feather 1.0, ring 6); 2x = reduce_half of the repaired 4x; 3x derived by tools/hires-install.mjs derive3; no SDXL refine pass (the 2026-10-09 recipe; no ComfyUI job was queued)",
+  "library": "D:/Tools/pyrefly-art-backup/hires-picks-2026-10-12",
+  "headReading": "by landmarks on gridded crops of the idle and the pose (a KO turned head-up): see each row's registration.cues and the scaleNote of its sidecar; the Art Picks page's hair-top-to-chin estimate (about 1.0 of the idle's head for the three KOs) reads 0.97 to 1.0 where the face cues read 0.87 to 0.97"
+ },
+ "rows": [
+  {
+   "slot": "RIKKU-WM-ko",
+   "pick": "RWM-KO-1",
+   "subject": "rikku-white-mage",
+   "pose": "ko",
+   "game": "FFX-2",
+   "gameCase": "FFX-2 only: Rikku White Mage's knocked-down pose",
+   "replacesApproved": true,
+   "candidate": {
+    "night": "2026-10-11",
+    "key": "t6-p-ko-wm-cand-101",
+    "path": "D:/pyrefly-overnight-art/2026-10-11/rikku-white-mage/ko/t6-p-ko-wm-cand-101.png",
+    "sidecar": "D:/pyrefly-overnight-art/2026-10-11/rikku-white-mage/ko/t6-p-ko-wm-cand-101.json",
+    "sha256": "54126079f78e5dc19dbc0405ed46da80fe1787a853186ebbb6b1cb8cf4c58e96"
+   },
+   "size": [
+    1219,
+    632
+   ],
+   "files": {
+    "1x": {
+     "bytes": 608784,
+     "sha256": "54126079f78e5dc19dbc0405ed46da80fe1787a853186ebbb6b1cb8cf4c58e96"
+    },
+    "json": {
+     "bytes": 5506,
+     "sha256": "1fb35e6a3673998131301eb9f633ca2c634dd8acada68cd99d2aeccadfd4762d"
+    },
+    "2x": {
+     "bytes": 1869584,
+     "sha256": "14e418f9066cf42a539c54597b4492ed11d19728a4e67d91169bd654b35db46a"
+    },
+    "3x": {
+     "bytes": 5257952,
+     "sha256": "863a64c3203049b7bedca5dfabbfd023ff7a5896b568ebbb975618dd22d51e63"
+    },
+    "4x": {
+     "bytes": 5468017,
+     "sha256": "3486f57caf81c6cf8a89e145363287e34c1be4f72afca02b359b62eff9c53172"
+    }
+   },
+   "replaces": {
+    "files": {
+     "1x": {
+      "bytes": 447496,
+      "sha256": "39db706f2c0cb4bd3ec36666e84e040e94059ef648712bbd979e12e630198193"
+     },
+     "json": {
+      "bytes": 4260,
+      "sha256": "5377aec35bb0f5069aa2062f002cd22001004de6f74ef2800d1cc46af71c4ca3"
+     },
+     "2x": {
+      "bytes": 1435422,
+      "sha256": "e16888885051e6c840d3ec963a07fe62f9584a624855ea2b30c45f21a8676e0b"
+     },
+     "3x": {
+      "bytes": 3966093,
+      "sha256": "f77daa75a5c4e0bb1620d3ac44c83f51684d4bbedda9db927abe92cb100f2613"
+     },
+     "4x": {
+      "bytes": 4241722,
+      "sha256": "a55edcfb34377e458f927bd228d1892199fb962cb1f6042c654573ed86a9e9c1"
+     }
+    },
+    "archive": "D:/Tools/pyrefly-art-repo archive/2026-10-12-install-before (1x and sidecar; commit f5c649a, pushed)",
+    "tiers": "D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install (all five files; MANIFEST.json and README.md there)"
+   },
+   "registration": {
+    "reading": 0.966,
+    "readingMethod": "geometric mean of three face-size ratios: eye spacing, face-skin area, face-skin height (finalize_r44.py)",
+    "cues": {
+     "eye": 1.077,
+     "area": 1.074,
+     "height": 0.96
+    },
+    "cueMean": 1.0355,
+    "sidecarScale": 0.966,
+    "scaleSrc": "noise",
+    "tableScale": 0.988,
+    "koProjection": 0.978,
+    "oldReading": 0.588,
+    "anchor": [
+     1017.0,
+     210.0
+    ],
+    "headBox": [
+     969.4,
+     181.0,
+     1064.6,
+     239.0
+    ],
+    "stance": null,
+    "stature": null,
+    "onScreenAtGameScale": {
+     "new": {
+      "scale": 0.988,
+      "heightOverIdle": 0.5,
+      "lengthOverIdle": 0.99,
+      "hangsBelowGroundPx": -1.8,
+      "plantRow": 616,
+      "baselineRow": 613,
+      "size": [
+       1219,
+       632
+      ]
+     },
+     "old": {
+      "scale": 0.601,
+      "heightOverIdle": 0.252,
+      "lengthOverIdle": 0.629,
+      "hangsBelowGroundPx": -0.4,
+      "plantRow": 513,
+      "baselineRow": 512,
+      "size": [
+       1272,
+       529
+      ]
+     },
+     "idleHeightBBox": 1185
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9995123780945236,
+     "alpha_mad": 0.3940136134624481,
+     "ssim_gray": 0.9882535481523046,
+     "ssim_vis": 0.9773224673522642,
+     "rim_bias": 0.8278125524520874,
+     "rim_mad": 5.919653415679932,
+     "rim_specks": 0,
+     "alpha_islands": 1
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999956709511624,
+     "ssim_gray": 0.9780874907067737,
+     "rim_bias": -5.496496677398682,
+     "rim_mad": 11.82143783569336,
+     "rim_specks": 1066,
+     "alpha_islands": 1
+    },
+    "seconds": 52.4,
+    "recipe": "RealESRGAN_x4plus_anime_6B.pth (tiles 384, overlap 24, fp32 on the CPU) on the colour, the alpha by Lanczos; then tools/gen/hires-alpha-fix/alphafix.py repair({'ka': 0.4, 'd0': 2.0, 'd1': 3.5, 'feather': 1.0, 'ring': 6}); 2x = reduce_half of the repaired 4x; 3x is derived by tools/hires-install.mjs derive3 from the 4x; no SDXL refine pass (the 2026-10-09 picks install recipe)"
+   }
+  },
+  {
+   "slot": "RIKKU-AL-ko",
+   "pick": "RAL-KO-1",
+   "subject": "rikku-alchemist",
+   "pose": "ko",
+   "game": "FFX-2",
+   "gameCase": "FFX-2 only: Rikku Alchemist's knocked-down pose",
+   "replacesApproved": true,
+   "candidate": {
+    "night": "2026-10-11",
+    "key": "t6-p-ko-ra-cand-101",
+    "path": "D:/pyrefly-overnight-art/2026-10-11/rikku-alchemist/ko/t6-p-ko-ra-cand-101.png",
+    "sidecar": "D:/pyrefly-overnight-art/2026-10-11/rikku-alchemist/ko/t6-p-ko-ra-cand-101.json",
+    "sha256": "26bfd58eb642ef636aea57d67f39f67d43ba80d2fa88280aa0288458c8e52787"
+   },
+   "size": [
+    1194,
+    544
+   ],
+   "files": {
+    "1x": {
+     "bytes": 481558,
+     "sha256": "26bfd58eb642ef636aea57d67f39f67d43ba80d2fa88280aa0288458c8e52787"
+    },
+    "json": {
+     "bytes": 5499,
+     "sha256": "66eb059e9968ce87559e00467a08cce36e9d5a90b1f3585ee5818b0773396cc0"
+    },
+    "2x": {
+     "bytes": 1548206,
+     "sha256": "93c94205f72a38e228d1f4b1ecde3859f4a33c8dcc8d48394ca17e182949cd25"
+    },
+    "3x": {
+     "bytes": 4247513,
+     "sha256": "5decca8427d388a9b7e3a27ef5e55409610da9309b245c36cdfe0bac745f52cb"
+    },
+    "4x": {
+     "bytes": 4461827,
+     "sha256": "a4b57463b356f6448dcf59c995fd8737a105b932896c3c60295a7ff3945bf3bc"
+    }
+   },
+   "replaces": {
+    "files": {
+     "1x": {
+      "bytes": 543208,
+      "sha256": "170db99607bdff839b5593cc840eec962050a1f55a19daebeaab5e1ec200d135"
+     },
+     "json": {
+      "bytes": 4128,
+      "sha256": "063ec02ae1c85e002c98429814b605b46e738a1fc569d13ab9111a1862c5ea58"
+     },
+     "2x": {
+      "bytes": 1639118,
+      "sha256": "647ee79c8fc455fb85d3b77b42a5dccb52ba3666c6ebe3196a8752a2141cf632"
+     },
+     "3x": {
+      "bytes": 4496014,
+      "sha256": "3792e70a28b019abe442b476b6a38056ba69e9812f57f0d37a7ba9d4963f81b4"
+     },
+     "4x": {
+      "bytes": 4789007,
+      "sha256": "69026cda673676dc44a745a54d2fdc210e56b32f9ee0892f0f1e5e90b8f27a99"
+     }
+    },
+    "archive": "D:/Tools/pyrefly-art-repo archive/2026-10-12-install-before (1x and sidecar; commit f5c649a, pushed)",
+    "tiers": "D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install (all five files; MANIFEST.json and README.md there)"
+   },
+   "registration": {
+    "reading": 0.892,
+    "readingMethod": "geometric mean of three face-size ratios: eye spacing, face-skin area, face-skin height (finalize_r44.py)",
+    "cues": {
+     "eye": 1.12,
+     "area": 1.196,
+     "height": 1.053
+    },
+    "cueMean": 1.1215,
+    "sidecarScale": 0.892,
+    "scaleSrc": "noise",
+    "tableScale": 0.912,
+    "koProjection": 0.978,
+    "oldReading": 0.5,
+    "anchor": [
+     999.0,
+     240.0
+    ],
+    "headBox": [
+     956.4,
+     207.5,
+     1041.6,
+     272.5
+    ],
+    "stance": null,
+    "stature": null,
+    "onScreenAtGameScale": {
+     "new": {
+      "scale": 0.912,
+      "heightOverIdle": 0.402,
+      "lengthOverIdle": 0.912,
+      "hangsBelowGroundPx": -0.5,
+      "plantRow": 528,
+      "baselineRow": 527,
+      "size": [
+       1194,
+       544
+      ]
+     },
+     "old": {
+      "scale": 0.511,
+      "heightOverIdle": 0.239,
+      "lengthOverIdle": 0.529,
+      "hangsBelowGroundPx": 0.0,
+      "plantRow": 560,
+      "baselineRow": 560,
+      "size": [
+       1216,
+       576
+      ]
+     },
+     "idleHeightBBox": 1162
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9993576357965506,
+     "alpha_mad": 0.4359513819217682,
+     "ssim_gray": 0.9893911201676432,
+     "ssim_vis": 0.9777952495557622,
+     "rim_bias": 0.736354410648346,
+     "rim_mad": 5.347762584686279,
+     "rim_specks": 0,
+     "alpha_islands": 1
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999943135508085,
+     "ssim_gray": 0.9752041871489662,
+     "rim_bias": -4.8140950202941895,
+     "rim_mad": 11.322883605957031,
+     "rim_specks": 870,
+     "alpha_islands": 1
+    },
+    "seconds": 49.8,
+    "recipe": "RealESRGAN_x4plus_anime_6B.pth (tiles 384, overlap 24, fp32 on the CPU) on the colour, the alpha by Lanczos; then tools/gen/hires-alpha-fix/alphafix.py repair({'ka': 0.4, 'd0': 2.0, 'd1': 3.5, 'feather': 1.0, 'ring': 6}); 2x = reduce_half of the repaired 4x; 3x is derived by tools/hires-install.mjs derive3 from the 4x; no SDXL refine pass (the 2026-10-09 picks install recipe)"
+   }
+  },
+  {
+   "slot": "RIKKU-BS-ko",
+   "pick": "RBS-KO-1",
+   "subject": "rikku-berserker",
+   "pose": "ko",
+   "game": "FFX-2",
+   "gameCase": "FFX-2 only: Rikku Berserker's knocked-down pose",
+   "replacesApproved": true,
+   "candidate": {
+    "night": "2026-10-11",
+    "key": "t6-p-ko-rb-cand-101",
+    "path": "D:/pyrefly-overnight-art/2026-10-11/rikku-berserker/ko/t6-p-ko-rb-cand-101.png",
+    "sidecar": "D:/pyrefly-overnight-art/2026-10-11/rikku-berserker/ko/t6-p-ko-rb-cand-101.json",
+    "sha256": "78c649322e825ba040a366d478ecdfd4125f76c193a9588313a84e0d551ab65f"
+   },
+   "size": [
+    1221,
+    552
+   ],
+   "files": {
+    "1x": {
+     "bytes": 475265,
+     "sha256": "78c649322e825ba040a366d478ecdfd4125f76c193a9588313a84e0d551ab65f"
+    },
+    "json": {
+     "bytes": 5438,
+     "sha256": "5f34116dec712dcb3f35c957d429d2a50f217bb7742762b9c04514e592db0743"
+    },
+    "2x": {
+     "bytes": 1570600,
+     "sha256": "a8f7ca2f22f9313f6083cde5bd102d45a8746fb5e3d19553fc4df36b0920ea4c"
+    },
+    "3x": {
+     "bytes": 4318085,
+     "sha256": "324ff9c0ef5b658ab51063ef2df0d13daacd01522fef8f08b91d0cc6c4110c34"
+    },
+    "4x": {
+     "bytes": 4554398,
+     "sha256": "cbf045ee12f6a771cbeadd1d1ed60108a345be4878533d16e6640bbfbb4ecc2b"
+    }
+   },
+   "replaces": {
+    "files": {
+     "1x": {
+      "bytes": 541358,
+      "sha256": "5634504844f1969a97c0959e317cb96a6ac7ea38339feb820682186c6d43fa53"
+     },
+     "json": {
+      "bytes": 4122,
+      "sha256": "780bb6e7b90940e29cc3a7468d1d58eb95f7ccc79ffa644af81fa72278da3aaf"
+     },
+     "2x": {
+      "bytes": 1573937,
+      "sha256": "9fe38ef67d400a981de7a5ed90d1e3b2e784801a5b226c4300b2947059f5b193"
+     },
+     "3x": {
+      "bytes": 4210956,
+      "sha256": "25cb8dc61e00b899f6fdb17401cc904706eb86decfe23def89125ab4f11d0eef"
+     },
+     "4x": {
+      "bytes": 4495310,
+      "sha256": "9d9e72e938b81f0850533611d6978119c46a0224749c6ca261fadde1030db20b"
+     }
+    },
+    "archive": "D:/Tools/pyrefly-art-repo archive/2026-10-12-install-before (1x and sidecar; commit f5c649a, pushed)",
+    "tiers": "D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install (all five files; MANIFEST.json and README.md there)"
+   },
+   "registration": {
+    "reading": 0.866,
+    "readingMethod": "geometric mean of three face-size ratios: eye spacing, face-skin area, face-skin height (finalize_r44.py)",
+    "cues": {
+     "eye": 1.2,
+     "area": 1.281,
+     "height": 1.0
+    },
+    "cueMean": 1.1541,
+    "sidecarScale": 0.866,
+    "scaleSrc": "noise",
+    "tableScale": 0.885,
+    "koProjection": 0.978,
+    "oldReading": 0.526,
+    "anchor": [
+     1032.0,
+     282.0
+    ],
+    "headBox": [
+     974.3,
+     250.8,
+     1089.7,
+     313.2
+    ],
+    "stance": null,
+    "stature": null,
+    "onScreenAtGameScale": {
+     "new": {
+      "scale": 0.885,
+      "heightOverIdle": 0.388,
+      "lengthOverIdle": 0.886,
+      "hangsBelowGroundPx": 0.0,
+      "plantRow": 536,
+      "baselineRow": 536,
+      "size": [
+       1221,
+       552
+      ]
+     },
+     "old": {
+      "scale": 0.538,
+      "heightOverIdle": 0.209,
+      "lengthOverIdle": 0.584,
+      "hangsBelowGroundPx": 0.0,
+      "plantRow": 478,
+      "baselineRow": 478,
+      "size": [
+       1321,
+       494
+      ]
+     },
+     "idleHeightBBox": 1187
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9992937088652588,
+     "alpha_mad": 0.460271954536438,
+     "ssim_gray": 0.9877702243387254,
+     "ssim_vis": 0.9708784209405003,
+     "rim_bias": 0.6056849360466003,
+     "rim_mad": 5.17950963973999,
+     "rim_specks": 0,
+     "alpha_islands": 0
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999902723013252,
+     "ssim_gray": 0.9761632929947766,
+     "rim_bias": -4.204952239990234,
+     "rim_mad": 10.775296211242676,
+     "rim_specks": 766,
+     "alpha_islands": 0
+    },
+    "seconds": 52.9,
+    "recipe": "RealESRGAN_x4plus_anime_6B.pth (tiles 384, overlap 24, fp32 on the CPU) on the colour, the alpha by Lanczos; then tools/gen/hires-alpha-fix/alphafix.py repair({'ka': 0.4, 'd0': 2.0, 'd1': 3.5, 'feather': 1.0, 'ring': 6}); 2x = reduce_half of the repaired 4x; 3x is derived by tools/hires-install.mjs derive3 from the 4x; no SDXL refine pass (the 2026-10-09 picks install recipe)"
+   }
+  },
+  {
+   "slot": "YUNA-ITEM",
+   "pick": "YUNA-ITEM-1",
+   "subject": "yuna",
+   "pose": "item",
+   "game": "FFX",
+   "gameCase": "FFX only: Yuna's item pose (the FFX summoner, Chapter I; no dressphere)",
+   "replacesApproved": true,
+   "candidate": {
+    "night": "2026-10-12",
+    "key": "y12-cand-113",
+    "path": "D:/pyrefly-overnight-art/2026-10-12-yuna-item/yuna/item/y12-cand-113.png",
+    "sidecar": "D:/pyrefly-overnight-art/2026-10-12-yuna-item/yuna/item/y12-cand-113.json",
+    "sha256": "9ba097c27c138f4cd0939824887d0579b0a5621594b701b4b485e47c11c21dca"
+   },
+   "size": [
+    832,
+    1160
+   ],
+   "files": {
+    "1x": {
+     "bytes": 718266,
+     "sha256": "9ba097c27c138f4cd0939824887d0579b0a5621594b701b4b485e47c11c21dca"
+    },
+    "json": {
+     "bytes": 6350,
+     "sha256": "a2c1cfa2d8b1b4373ddb5f21a311836bcecfa07d7ad0f950784f3d4fc33be8b8"
+    },
+    "2x": {
+     "bytes": 2230973,
+     "sha256": "07d8f07f3fb1e7d1d11778521799ab590176616c6fe78b109b4b3f49f3fd6ebb"
+    },
+    "3x": {
+     "bytes": 6218547,
+     "sha256": "c965a925dec9a2fe00dcf9319faf0449e6d3b70ab5a68d7f8170e1c27c693525"
+    },
+    "4x": {
+     "bytes": 6611746,
+     "sha256": "d3120c5e26a8893e2c06c6aa61c53b16d84c9fe3afc3eff849a4d314d83c73ce"
+    }
+   },
+   "replaces": {
+    "files": {
+     "1x": {
+      "bytes": 925412,
+      "sha256": "d57e0b71c071c4c0dab559a756b7fc12c63b29de5e6dfb9a9f8c9c5543d06f27"
+     },
+     "json": {
+      "bytes": 1956,
+      "sha256": "05272f2ac8034d837a2a1c2fcfa4a1ca398eb2995a90e7234d5c29ba34b6e722"
+     },
+     "2x": {
+      "bytes": 2737706,
+      "sha256": "f5c58aadfd5e903427a95585be3df1155571bccb0144aa9401abb9b6e6c35c1d"
+     },
+     "3x": {
+      "bytes": 6004539,
+      "sha256": "09981ba8815ea02b0e3aa357edb4e65f46520ba32a0af44542170f55e4fa2628"
+     },
+     "4x": {
+      "bytes": 9026950,
+      "sha256": "70274cfbdf3ce6225ed5f4d367795a77653f397a7e6b5e66dbc5c1dfa0ed1038"
+     }
+    },
+    "archive": "D:/Tools/pyrefly-art-repo archive/2026-10-12-install-before (1x and sidecar; commit f5c649a, pushed)",
+    "tiers": "D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install (all five files; MANIFEST.json and README.md there)"
+   },
+   "registration": {
+    "reading": 0.758,
+    "readingMethod": "calibrated on the replaced painting (same head to within 1 percent; its posescale reading 0.752)",
+    "cues": {
+     "eye": 1.2,
+     "area": 1.271,
+     "height": 1.147
+    },
+    "cueMean": 1.2049,
+    "sidecarScale": 0.758,
+    "scaleSrc": "noise",
+    "tableScale": null,
+    "koProjection": null,
+    "oldReading": 0.752,
+    "anchor": [
+     319.0,
+     146.0
+    ],
+    "headBox": [
+     256.3,
+     102.5,
+     381.7,
+     189.5
+    ],
+    "stance": {
+     "row": 1134.0,
+     "src": "silhouette",
+     "x": 238.5,
+     "x0": 40.0,
+     "x1": 437.0
+    },
+    "stature": 0.819,
+    "onScreenAtGameScale": {
+     "new": {
+      "scale": 0.758,
+      "heightOverIdle": 0.819,
+      "lengthOverIdle": 0.594,
+      "hangsBelowGroundPx": 5.1,
+      "plantRow": 1134.0,
+      "baselineRow": 1144,
+      "size": [
+       832,
+       1160
+      ]
+     },
+     "old": {
+      "scale": 0.752,
+      "heightOverIdle": 0.815,
+      "lengthOverIdle": 0.584,
+      "hangsBelowGroundPx": 6.1,
+      "plantRow": 1136.0,
+      "baselineRow": 1148,
+      "size": [
+       827,
+       1164
+      ]
+     },
+     "idleHeightBBox": 1044
+    }
+   },
+   "tiers": {
+    "model": "RealESRGAN_x4plus_anime_6B.pth",
+    "qc": {
+     "alpha_iou": 0.9995202178841359,
+     "alpha_mad": 0.3443329930305481,
+     "ssim_gray": 0.9874538080565565,
+     "ssim_vis": 0.9724516263180601,
+     "rim_bias": 0.3033665120601654,
+     "rim_mad": 4.771936893463135,
+     "rim_specks": 0,
+     "alpha_islands": 2
+    },
+    "qcBeforeRepair": {
+     "alpha_iou": 0.9999960971326883,
+     "ssim_gray": 0.9837111676510522,
+     "rim_bias": -2.551509380340576,
+     "rim_mad": 8.47836685180664,
+     "rim_specks": 267,
+     "alpha_islands": 2
+    },
+    "seconds": 78.6,
+    "recipe": "RealESRGAN_x4plus_anime_6B.pth (tiles 384, overlap 24, fp32 on the CPU) on the colour, the alpha by Lanczos; then tools/gen/hires-alpha-fix/alphafix.py repair({'ka': 0.4, 'd0': 2.0, 'd1': 3.5, 'feather': 1.0, 'ring': 6}); 2x = reduce_half of the repaired 4x; 3x is derived by tools/hires-install.mjs derive3 from the 4x; no SDXL refine pass (the 2026-10-09 picks install recipe)"
+   }
+  }
+ ],
+ "sheets": "docs/screenshots/r44-art/ (rikku-*-ko.jpg, yuna-item.jpg, yuna-item-height-alternative.jpg, heads-at-game-scale.jpg, sheet-numbers.json)"
+}

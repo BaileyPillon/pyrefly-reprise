@@ -64,7 +64,10 @@ const plan = planRetirement({
   cues: V2_CUES,
   core: { ffx: packs['ffx-core']?.cues, ffx2: packs['ffx2-core']?.cues },
   uses,
+  already: Object.keys(V2_CUES).filter((name) => !sprite.has(name)),
 });
+// The list the build keeps: the cues already out of the sprite and the ones this plan takes out now.
+const retiredAll = [...new Set([...plan.already, ...plan.retired])].sort();
 
 const fmt = (list) => `[${list.map((n) => `'${n}'`).join(', ')}]`;
 const text = `/**
@@ -77,7 +80,7 @@ const text = `/**
  * pack ships.
  */
 
-export const RETIRED_V2_CUES: readonly string[] = ${plan.retired.length === 0 ? '[]' : fmt(plan.retired)};
+export const RETIRED_V2_CUES: readonly string[] = ${retiredAll.length === 0 ? '[]' : fmt(retiredAll)};
 `;
 
 if (flag('--check')) {
@@ -92,13 +95,14 @@ if (flag('--check')) {
   console.log(`v2 sprite: ${sprite.size} cues, ${((manifest.sfxV2?.bytes ?? 0) / 1e6).toFixed(2)} MB`);
   console.log(`core packs shipped: ${['ffx-core', 'ffx2-core'].filter((p) => packs[p]).join(', ') || 'none'}`);
   console.log(`retire ${plan.retired.length}: ${plan.retired.join(', ') || '(nothing)'}  -> gives back about ${(saved / 1e6).toFixed(2)} MB`);
+  if (plan.already.length > 0) console.log(`already out of the sprite (retired.ts keeps them): ${plan.already.join(', ')}`);
   const reasons = {};
   for (const [name, why] of Object.entries(plan.kept)) (reasons[why.replace(/^(ffx2?) /, '$1 ').replace(/\(.*\)/, '').trim()] ??= []).push(name);
   for (const [why, names] of Object.entries(reasons)) console.log(`keep ${names.length} (${why}): ${names.slice(0, 12).join(', ')}${names.length > 12 ? ', ...' : ''}`);
   if (flag('--write')) {
     writeFileSync(OUT, text);
     const exclude = value('--exclude-out');
-    if (exclude) writeFileSync(exclude, `${JSON.stringify({ exclude: plan.retired }, null, 1)}\n`);
+    if (exclude) writeFileSync(exclude, `${JSON.stringify({ exclude: retiredAll }, null, 1)}\n`);
     console.log(`wrote src/audio/sfxV2/retired.ts${exclude ? ` and ${exclude}` : ''}`);
   }
 }

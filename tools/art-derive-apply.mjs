@@ -8,6 +8,8 @@
 import { copyFileSync, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
+import { applyThumbs, thumbReport } from './art-thumb-apply.mjs';
+
 /** Where `applyPlan` writes the record of what was derived (inside the build output, so it ships and is hashed). */
 export const DERIVED_REPORT = 'art/derived.json';
 
@@ -21,12 +23,16 @@ const RULES = {
   exact: 'A master ships as WebP only if every decoder draws it the same from the WebP as from the PNG: it is opaque, or its alpha is only 0 and 255 with no colour left under alpha 0. Every other master ships as a PNG, recompressed at maximum effort with the colour under alpha 0 kept.',
 };
 
-/** The record shipped as `art/derived.json`: no clock, so a build of the same inputs is the same bytes. */
+/**
+ * The record shipped as `art/derived.json`: no clock, so a build of the same inputs is the same bytes. `plan.thumbs` (the strip thumbnails,
+ * `art-thumbs.mjs`) adds the `thumbs` section; a plan without one has none and reads exactly as before r44.
+ */
 export function derivedReport(plan) {
   return {
     version: 1, tool: 'tools/art-derive.mjs', encoder: plan.encoder, ...(plan.pngEncoder ? { pngEncoder: plan.pngEncoder } : {}), scope: plan.scope, ...(RULES[plan.scope] ? { rule: RULES[plan.scope] } : {}), counts: plan.counts, bytes: plan.bytes,
     note: 'Every art PNG the build ships, and what it shipped as. kind webp: the master PNG is not shipped, `shipped` is its lossless WebP; kind png: the shipped PNG is the master recompressed (the same decoded RGBA, colour under alpha 0 included); kind copy: the master\'s own bytes. `rgba` is the sha256 of the decoded 8-bit RGBA of the master, which the shipped file decodes to (proved at build and by tools/art-derive.mjs verify). `alpha` is the master\'s transparency class and `hidden` how many fully transparent texels of it still carry colour.',
     files: plan.entries.map((e) => ({ path: e.rel, kind: e.kind, ...(e.kind === 'webp' ? { shipped: e.shippedRel } : {}), master: e.masterBytes, bytes: e.shippedBytes, ...(e.rgba ? { rgba: e.rgba } : {}), ...(e.alpha ? { alpha: e.alpha } : {}), ...(e.alpha && e.hidden !== undefined ? { hidden: e.hidden } : {}), ...(e.note ? { note: e.note } : {}) })),
+    ...(plan.thumbs ? { thumbs: thumbReport(plan.thumbs) } : {}),
   };
 }
 
@@ -58,6 +64,8 @@ export function applyPlan(outDir, plan) {
     }
   }
   if (plan.entries.length === 0) return applied; // a checkout without the art (it is gitignored): nothing derived, nothing to record
+  // The strip thumbnails (`art-thumbs.mjs`) are written beside the masters they were made from, before the record that lists them.
+  if (plan.thumbs) applied.thumbs = applyThumbs(outDir, plan.thumbs);
   const kept = new Set(applied.skipped);
   const report = derivedReport({ ...plan, entries: plan.entries.filter((e) => !kept.has(e.rel)) });
   const file = join(outDir, DERIVED_REPORT);

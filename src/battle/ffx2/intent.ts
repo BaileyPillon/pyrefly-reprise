@@ -312,8 +312,10 @@ function notesFor(env: Ffx2IntentEnv, unit: Ffx2Unit): string[] {
     // — the count *after* the turn it is predicting — and `bahamutCountdown` is
     // the last value actually emitted, one higher. Two different numbers for the
     // same countdown on one panel is worse than one, so this keeps the rule and
-    // drops the figure.
-    out.push('The Mega Flare countdown is an action counter, not a clock — Slowing him slows it too [ffx2-bahamut §2.1]');
+    // drops the step count. The rule (re-parity RC5): the wait is a fixed 750
+    // logic steps (about 25 s) of the game's own clock, so Slow, Haste, speed and
+    // a fallen girl leave it alone.
+    out.push('The Mega Flare countdown is a fixed wait of about 25 seconds on the game’s own clock — Slow, Haste and a fallen girl do not change it [re-ffx2-ai-bahamut-vegnagun B3]');
   }
   if (script === 'vegnagun-head' && flags['headClockRunning']) {
     const turns = typeof flags['headTurns'] === 'number' ? flags['headTurns'] : 0;

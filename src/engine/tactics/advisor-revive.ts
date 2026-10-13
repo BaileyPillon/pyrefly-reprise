@@ -207,12 +207,15 @@ export function capabilityLoss(state: Readonly<BattleState>, fallenId: Combatant
  *
  * Three readings, cheapest first, and none of them needs the live engine:
  *
- *  * **Still a Zombie.** Zombie survives KO in this engine on purpose
- *    (`battle/ffx/statuses.ts` `SURVIVES_KO`), so a raised body comes back
- *    still wearing it, and a living Zombie is exactly what the Mortiorchis's
- *    Full-Life is looking for — 100% of max HP as damage plus a guaranteed
- *    Death [ffx-seymour-flux §3.3, §4.8]. `seymour-flux.ts` step 4 leaves that
- *    body on the floor for the same reason.
+ *  * **Still a Zombie.** Until re-parity RC5 Zombie survived a KO in this
+ *    engine (`battle/ffx/statuses.ts` `SURVIVES_KO`), so a raised body came
+ *    back still wearing it, and a living Zombie is exactly what the
+ *    Mortiorchis's Full-Life is looking for — 100% of max HP as damage plus a
+ *    guaranteed Death [ffx-seymour-flux §3.3, §4.8]. The game's KO reset clears
+ *    Zombie (FFX-G02 §3.2), so since RC5 a body on the floor is never a Zombie
+ *    and this reading cannot arise on an engine board; it is kept because it is
+ *    a pure reading of whatever board it is handed (the unit boards build one by
+ *    hand), and it still guards a revive aimed at a LIVING Zombie.
  *  * **A payload landing this turn.** A charge counter at zero or one is the
  *    Total Annihilation / Mega Flare case: the raise resolves, the sweep lands,
  *    they are back on the floor having cost a turn.

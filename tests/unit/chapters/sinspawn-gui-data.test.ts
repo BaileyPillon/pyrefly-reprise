@@ -163,9 +163,9 @@ describe('the formations (RE 2.1, 2.2)', () => {
     expect(sinspawnGuiGroup1.lineUp).toBeUndefined();
   });
 
-  it('the music: the dread theme for the Ridge, Seymour\'s own for the guest hour, both existing cues (no new audio)', () => {
-    expect(sinspawnGuiGroup1.musicCues?.[0]?.track).toBe('boss-dread');
-    expect(sinspawnGuiGroup2.musicCues?.[0]?.track).toBe('boss-seymour');
+  it("the music: the first fight's own original for the Ridge, the \"Challenge\" original Chapter II shares for the guest hour (2026-10-12, music batch 2; the dread theme and Seymour's own stood in before)", () => {
+    expect(sinspawnGuiGroup1.musicCues?.[0]?.track).toBe('boss-gui');
+    expect(sinspawnGuiGroup2.musicCues?.[0]?.track).toBe('boss-challenge');
     const chapter = getChapter('sinspawn-gui')!;
     for (const key of [chapter.music.scene, chapter.music.battle, chapter.music.phase2, chapter.music.victory, ...SINSPAWN_GUI_META.musicKeys]) expect(TRACKS[key as string], String(key)).toBeDefined();
   });

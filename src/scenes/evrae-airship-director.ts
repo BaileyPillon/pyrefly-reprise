@@ -209,7 +209,9 @@ export class AirshipRangeDirector {
     const charged = this.subject.chargedOf(state);
     if (charged === this.charged) return;
     this.charged = charged;
-    if (this.chargeUrls[this.range] && this.shiftMs < 0) void this.placeEvrae(this.range);
+    // The figure is on screen here, usually in the middle of the very action that lit or spent the charge (`cast`): its idle slot changes under it and
+    // it goes to idle through the actor's own blend, not by a cut (r43-motion2, round 25's three boss cast-to-idle hard cuts).
+    if (this.chargeUrls[this.range] && this.shiftMs < 0) void this.placeEvrae(this.range, true);
   }
 
   /**
@@ -326,8 +328,11 @@ export class AirshipRangeDirector {
     else void cam.moveTo(current, RANGE_SHIFT_MS.cameraMs, 'cubicInOut');
   }
 
-  /** Swap Evrae's paintings to `range`'s and put it on that range's spot. */
-  private async placeEvrae(range: AirshipRange): Promise<void> {
+  /**
+   * Swap Evrae's paintings to `range`'s and put it on that range's spot. `soft`: the figure is showing (a charge lit or spent, no range shift in
+   * flight), so the new idle comes up through its blend ({@link PaintedActor.loadPoses}); a bind or a range shift runs behind the figure's own alpha and cuts.
+   */
+  private async placeEvrae(range: AirshipRange, soft = false): Promise<void> {
     const actor = this.evrae;
     if (!actor) return;
     if (actor.lifeState === 'down') return;
@@ -339,7 +344,7 @@ export class AirshipRangeDirector {
       const map: Record<string, string> = {};
       for (const p of FAR_POSES) map[p] = far;
       if (charge) map['idle'] = charge; // a Fin's lit core; same crop as idle-far, so the size holds
-      await actor.loadPoses(map, 'idle');
+      await actor.loadPoses(map, 'idle', soft ? { blend: true } : undefined);
       // While FAR is the reference pose the actor sizes it to the boss height
       // (and clamps its long side), so measure what it did and correct to the
       // subject's FAR width (Evrae: NEAR's pixel scale times EVRAE_FAR_HEAD_RATIO).
@@ -352,7 +357,7 @@ export class AirshipRangeDirector {
       const map: Record<string, string> = {};
       for (const p of FAR_POSES) if (near[p]) map[p] = near[p]!;
       if (charge) map['idle'] = charge;
-      await actor.loadPoses(map, 'idle');
+      await actor.loadPoses(map, 'idle', soft ? { blend: true } : undefined);
       actor.scale.setScalar(nearScale);
     }
     const spot = this.spotOf(range); // read after the loads: a window that changed shape while they ran (`restand`) has moved NEAR's spot

@@ -107,9 +107,9 @@ export function experimentEnemy(levels: ExperimentLevels, who: 'prototype' | 'fu
   };
 }
 
-/** Music: the house FFX-2 cues, no new audio. Act I is the lighter bed, Act II the mechanised cue (`docs/audio/THEMES.md` rows 17 and 18). Bailey's call by ear (rule 13). */
-const ACT_I_CUE = [{ at: 'start' as const, track: 'boss-ffx2-aeon' as const, fadeMs: 800 }];
-const ACT_II_CUE = [{ at: 'start' as const, track: 'boss-vegnagun' as const, fadeMs: 1400 }];
+/** Music: `boss-experiment`, one ElevenLabs original for both acts since 2026-10-12 (music batch 2, FFX-2 only; Act I played `boss-ffx2-aeon` and Act II `boss-vegnagun` before). Act II asks for the same cue, which carries on. */
+const ACT_I_CUE = [{ at: 'start' as const, track: 'boss-experiment' as const, fadeMs: 800 }];
+const ACT_II_CUE = [{ at: 'start' as const, track: 'boss-experiment' as const, fadeMs: 1400 }];
 
 /** Act I: the prototype at 1 / 1 / 1. It chains to Act II. */
 export const experimentActOneGroup: EnemyGroupDef = attachMonsterRecords({

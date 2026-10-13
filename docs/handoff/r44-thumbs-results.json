@@ -1,0 +1,943 @@
+{
+ "what": "Chapter-board strip thumbnails (r44-thumbs): measurements of the live site, the base build (r43-rc 7b2582e7, local) and the new build, headless Chromium on the real GPU (PYREFLY_BROWSER=gpu), 1600x900 at 1x unless noted, HTTP cache off, real key presses, the link emulated through the DevTools protocol (fast: 100 Mbit/s, 20 ms; slow: 1.6 Mbit/s, 150 ms). tools/delivery-proof.mjs; raw runs under D:/Tools/pyrefly-scratch/r44-results.",
+ "bytes_fast_6s_title": [
+  {
+   "build": "live site",
+   "beforeFirstInputMB": 45.28,
+   "beforeFirstInputArtMB": 43.07,
+   "beforeFirstInputRequests": 42,
+   "sessionMB": 129.11,
+   "sessionArtMB": 114.81,
+   "thumbnailsMB": 0,
+   "fullBackdropsAndBossesMB": 101.1,
+   "fullBackdropsAndBossesRequests": 66,
+   "stripsPaintedBeforeBoardUp": 13,
+   "allStripsPaintedAfterBoardUpMs": 8637
+  },
+  {
+   "build": "base build (r43-rc)",
+   "beforeFirstInputMB": 66.68,
+   "beforeFirstInputArtMB": 64.5,
+   "beforeFirstInputRequests": 50,
+   "sessionMB": 129.04,
+   "sessionArtMB": 114.78,
+   "thumbnailsMB": 0,
+   "fullBackdropsAndBossesMB": 101.08,
+   "fullBackdropsAndBossesRequests": 66,
+   "stripsPaintedBeforeBoardUp": 23,
+   "allStripsPaintedAfterBoardUpMs": 3924
+  },
+  {
+   "build": "new, reach 0 (?ahead=0)",
+   "beforeFirstInputMB": 34.62,
+   "beforeFirstInputArtMB": 32.44,
+   "beforeFirstInputRequests": 66,
+   "sessionMB": 70.02,
+   "sessionArtMB": 55.77,
+   "thumbnailsMB": 11.71,
+   "fullBackdropsAndBossesMB": 30.35,
+   "fullBackdropsAndBossesRequests": 31,
+   "stripsPaintedBeforeBoardUp": 36,
+   "allStripsPaintedAfterBoardUpMs": -1
+  },
+  {
+   "build": "new, reach 1 (the default)",
+   "beforeFirstInputMB": 48.86,
+   "beforeFirstInputArtMB": 46.68,
+   "beforeFirstInputRequests": 72,
+   "sessionMB": 83.75,
+   "sessionArtMB": 69.49,
+   "thumbnailsMB": 11.71,
+   "fullBackdropsAndBossesMB": 44.07,
+   "fullBackdropsAndBossesRequests": 37,
+   "stripsPaintedBeforeBoardUp": 36,
+   "allStripsPaintedAfterBoardUpMs": -1
+  },
+  {
+   "build": "new, reach 2 (?ahead=2)",
+   "beforeFirstInputMB": 57.39,
+   "beforeFirstInputArtMB": 55.21,
+   "beforeFirstInputRequests": 78,
+   "sessionMB": 93.08,
+   "sessionArtMB": 78.82,
+   "thumbnailsMB": 11.71,
+   "fullBackdropsAndBossesMB": 53.41,
+   "fullBackdropsAndBossesRequests": 43,
+   "stripsPaintedBeforeBoardUp": 36,
+   "allStripsPaintedAfterBoardUpMs": -1
+  }
+ ],
+ "strips_painted": [
+  {
+   "build": "live site",
+   "fast6000": {
+    "paintedBeforeBoardUp": 13,
+    "allPaintedAfterBoardUpMs": 8637,
+    "allPaintedAfterEnterMs": 9050,
+    "enterToBoardMs": 414
+   },
+   "fast500": {
+    "paintedBeforeBoardUp": 1,
+    "allPaintedAfterBoardUpMs": 14578,
+    "allPaintedAfterEnterMs": 15995,
+    "enterToBoardMs": 1418
+   },
+   "mobile": {
+    "paintedBeforeBoardUp": 14,
+    "allPaintedAfterBoardUpMs": 9945,
+    "allPaintedAfterEnterMs": 10369,
+    "enterToBoardMs": 423
+   }
+  },
+  {
+   "build": "base build (r43-rc)",
+   "fast6000": {
+    "paintedBeforeBoardUp": 23,
+    "allPaintedAfterBoardUpMs": 3924,
+    "allPaintedAfterEnterMs": 4341,
+    "enterToBoardMs": 417
+   },
+   "fast500": {
+    "paintedBeforeBoardUp": 2,
+    "allPaintedAfterBoardUpMs": 9365,
+    "allPaintedAfterEnterMs": 9954,
+    "enterToBoardMs": 589
+   },
+   "mobile": {
+    "paintedBeforeBoardUp": 22,
+    "allPaintedAfterBoardUpMs": 4636,
+    "allPaintedAfterEnterMs": 5052,
+    "enterToBoardMs": 416
+   }
+  },
+  {
+   "build": "new (reach 1)",
+   "fast6000": {
+    "paintedBeforeBoardUp": 36,
+    "allPaintedAfterBoardUpMs": -1,
+    "allPaintedAfterEnterMs": 394,
+    "enterToBoardMs": 395
+   },
+   "fast500": {
+    "paintedBeforeBoardUp": 2,
+    "allPaintedAfterBoardUpMs": 2611,
+    "allPaintedAfterEnterMs": 3264,
+    "enterToBoardMs": 653
+   },
+   "mobile": {
+    "paintedBeforeBoardUp": 36,
+    "allPaintedAfterBoardUpMs": -14,
+    "allPaintedAfterEnterMs": 393,
+    "enterToBoardMs": 406
+   }
+  }
+ ],
+ "plate_on_cursor_moves": {
+  "short-cursor": {
+   "label": "Enter at 0.5 s, first press 1.5 s after the board, 3 presses 2.5 s apart",
+   "plate": {
+    "live": [
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     }
+    ],
+    "base": [
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "new reach 0": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     }
+    ],
+    "new reach 1": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "new reach 2": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ]
+   },
+   "sessionMB": {
+    "live": 138.31,
+    "base": 140.32,
+    "new reach 0": 94.55,
+    "new reach 1": 102.55,
+    "new reach 2": 110.89
+   }
+  },
+  "long-cursor": {
+   "label": "6 s on the title, first press 1.5 s after the board, 6 presses 2.5 s apart",
+   "plate": {
+    "live": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "base": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "new reach 0": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     }
+    ],
+    "new reach 1": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "new reach 2": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ]
+   },
+   "sessionMB": {
+    "live": 156.3,
+    "base": 156.22,
+    "new reach 0": 129.19,
+    "new reach 1": 134.95,
+    "new reach 2": 142.91
+   }
+  },
+  "mash6000": {
+   "label": "6 s on the title, 8 presses 250 ms apart",
+   "plate": {
+    "live": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "base": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     }
+    ],
+    "new reach 0": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     }
+    ],
+    "new reach 1": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     }
+    ],
+    "new reach 2": [
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 0,
+      "pending": 0
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     },
+     {
+      "blank": 0,
+      "soft": 1,
+      "pending": 1
+     }
+    ]
+   },
+   "sessionMB": {
+    "live": 124.06,
+    "base": 125.44,
+    "new reach 0": 97.82,
+    "new reach 1": 110.22,
+    "new reach 2": 118.52
+   }
+  },
+  "mash500": {
+   "label": "Enter at 0.5 s, 8 presses 250 ms apart",
+   "plate": {
+    "live": [
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     }
+    ],
+    "base": [
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 2
+     }
+    ],
+    "new reach 0": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 3
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     }
+    ],
+    "new reach 1": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 3
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 5
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 1,
+      "soft": 0,
+      "pending": 2
+     }
+    ],
+    "new reach 2": [
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 2
+     },
+     {
+      "blank": 0,
+      "soft": 2,
+      "pending": 3
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 5
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 2,
+      "soft": 0,
+      "pending": 4
+     },
+     {
+      "blank": 1,
+      "soft": 0,
+      "pending": 2
+     }
+    ]
+   },
+   "sessionMB": {
+    "live": 126.49,
+    "base": 126.46,
+    "new reach 0": 101.62,
+    "new reach 1": 112.76,
+    "new reach 2": 121.18
+   }
+  }
+ },
+ "slow_link_1_6_mbit": {
+  "live site": {
+   "receivedBeforeFirstInputMB": 2.79,
+   "enterToBoardMs": 1411,
+   "musicEndAfterEnterMs": 89002,
+   "artMBBy120s": 12.35,
+   "thumbnailsMBBy120s": 0
+  },
+  "base build (r43-rc)": {
+   "receivedBeforeFirstInputMB": 3.26,
+   "enterToBoardMs": 1388,
+   "musicEndAfterEnterMs": 81277,
+   "artMBBy120s": 12.34,
+   "thumbnailsMBBy120s": 0
+  },
+  "new (reach 1)": {
+   "receivedBeforeFirstInputMB": 3.26,
+   "enterToBoardMs": 1395,
+   "musicEndAfterEnterMs": 81601,
+   "artMBBy120s": 13.23,
+   "thumbnailsMBBy120s": 0.89
+  }
+ },
+ "strips_and_plate_vs_live_reduced_motion": {
+  "1600x900@1": {
+   "rail": {
+    "meanAbsDiff": 0.6109996780823614,
+    "psnrDb": 40.63575518817672,
+    "p99AbsDiff": 11,
+    "maxAbsDiff": 70,
+    "shareOfChannelsChanged": 0.19213530445979743
+   },
+   "plate": {
+    "meanAbsDiff": 0,
+    "psnrDb": 99,
+    "maxAbsDiff": 0,
+    "shareOfChannelsChanged": 0
+   },
+   "stripsThatAreThumbnails": 36,
+   "plateImagesThatAreThumbnails": 0
+  },
+  "1600x900@2": {
+   "rail": {
+    "meanAbsDiff": 0.5630867531620032,
+    "psnrDb": 41.09694389505873,
+    "p99AbsDiff": 10,
+    "maxAbsDiff": 91,
+    "shareOfChannelsChanged": 0.18550540340941368
+   },
+   "plate": {
+    "meanAbsDiff": 0,
+    "psnrDb": 99,
+    "maxAbsDiff": 0,
+    "shareOfChannelsChanged": 0
+   },
+   "stripsThatAreThumbnails": 36,
+   "plateImagesThatAreThumbnails": 0
+  },
+  "390x844@3": {
+   "rail": {
+    "meanAbsDiff": 0.6804125209286453,
+    "psnrDb": 38.223573413534865,
+    "p99AbsDiff": 12,
+    "maxAbsDiff": 188,
+    "shareOfChannelsChanged": 0.201328902325879
+   },
+   "plate": {
+    "meanAbsDiff": 0,
+    "psnrDb": 99,
+    "maxAbsDiff": 0,
+    "shareOfChannelsChanged": 0
+   },
+   "stripsThatAreThumbnails": 36,
+   "plateImagesThatAreThumbnails": 0
+  },
+  "390x844@1": {
+   "rail": {
+    "meanAbsDiff": 0.7106740090219791,
+    "psnrDb": 39.519703973036485,
+    "p99AbsDiff": 12,
+    "maxAbsDiff": 92,
+    "shareOfChannelsChanged": 0.21317184950571072
+   },
+   "plate": {
+    "meanAbsDiff": 0,
+    "psnrDb": 99,
+    "maxAbsDiff": 0,
+    "shareOfChannelsChanged": 0
+   },
+   "stripsThatAreThumbnails": 36,
+   "plateImagesThatAreThumbnails": 0
+  }
+ }
+}

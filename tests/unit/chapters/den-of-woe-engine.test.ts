@@ -288,7 +288,7 @@ describe('registration: registered, reachable, listed (2026-09-26)', () => {
     expect(groups.some((g) => g.restoresPartyOnEntry === true)).toBe(false);
     expect(groups.map((g) => g.carriesFullPartyState === true)).toEqual([false, true, true]);
     expect(groups.every((g) => g.canEscape === false)).toBe(true);
-    expect(groups.every((g) => g.musicCues?.[0]?.track === 'boss-shuyin')).toBe(true);
+    expect(groups.every((g) => g.musicCues?.[0]?.track === 'boss-den-of-woe')).toBe(true); // the Den's own original since 2026-10-12 (music batch 2); `boss-shuyin` stood in
   });
 
   it('every ability a shade names is in the shipped table', () => {

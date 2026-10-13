@@ -7,6 +7,7 @@
 import { FRAME_MS, analyzeSwap, applyH, detectJerks, distinctFirst, feetPoint, figureTrack, headCentre, planeOf, scale1600, summarize, unitSquareToQuad, verdicts, worstSwaps } from './continuity-pure.mjs';
 import { anchorsFor, decodeMask } from './continuity-silhouette.mjs';
 import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
+import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
 
 /** The anchors of every pose in the probe's pose table (`poses[k] = { url, ... }`), by pose key; null for a pose with no painting. */
 export async function anchorsForPoses({ poses, fetchImage, measure }) {
@@ -116,9 +117,14 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
     }
   }
   jerks.sort((a, b) => b.px - a.px).forEach((j, id) => { j.id = id; });
+  // r43 (FOC40-02): a jerk whose step happened under the Save Sphere's wash carries what was over it (`wash`) and, when the policy excuses it, `covered`: it stays in `jerks` (so the
+  // report shows it) and is left out of the summary, the verdict and the worst-jerk strips, as a jerk under a camera cut never gets that far (continuity-wash.mjs).
+  const wash = washPolicy(cfg);
+  tagWash(jerks, { records, alpha: meta.wash?.alpha ?? null, policy: wash });
+  const visibleJerks = jerks.filter((j) => !j.covered), coveredJerks = jerks.filter((j) => j.covered);
 
   const battleSeconds = meta.stats?.battleSeconds ?? 0;
-  const summary = summarize({ swaps, jerks, battleSeconds, cfg });
+  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, battleSeconds, cfg });
   const run = { fps: meta.stats?.fps ?? null, error: meta.errors?.length ? meta.errors[0] : null };
   summary.checks = verdicts(summary, cfg, run);
   summary.run = { fps: run.fps, maxDtMs: meta.stats?.maxDtMs ?? null, slowFrames: meta.stats?.slowFrames ?? null, frames: meta.stats?.battleFrames ?? null, probeErrors: meta.errors?.length ?? 0 };
@@ -150,10 +156,10 @@ export function analyzeRun({ meta, records, anchors, cfg }) {
 
   const worst = {
     swaps: worstSwaps(swaps, cfg.strips.worstSwaps, cfg).map((s) => s.id),
-    jerks: distinctFirst(jerks, (j) => `${j.figure}|${j.atSwap}|${j.part}`, cfg.strips.worstJerks).map((j) => j.id),
+    jerks: distinctFirst(visibleJerks, (j) => `${j.figure}|${j.atSwap}|${j.part}`, cfg.strips.worstJerks).map((j) => j.id),
   };
   const taken = new Set(worst.swaps);
   const ghostly = swaps.filter((s) => s.counted && s.ghost.frames > 0 && !taken.has(s.id)).sort((a, b) => b.ghost.severity - a.ghost.severity);
   worst.ghosts = distinctFirst(ghostly, (s) => `${s.figure}|${s.fromPose}|${s.toPose}`, cfg.strips.worstGhosts).map((s) => s.id);
-  return { swaps, jerks, summary, perFigure, coverage, worst, frameMs: FRAME_MS, cameraCuts: [...cutFrames].sort((x, y) => x - y), access: { trackAt, planeAt, recordAt } };
+  return { swaps, jerks, summary, perFigure, coverage, worst, frameMs: FRAME_MS, cameraCuts: [...cutFrames].sort((x, y) => x - y), wash: washReport({ records, meta, policy: wash, jerks }), access: { trackAt, planeAt, recordAt } };
 }

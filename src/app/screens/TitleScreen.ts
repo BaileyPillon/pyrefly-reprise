@@ -11,7 +11,7 @@ import { MoteField } from './frontend/motes.ts';
 import { titleMarkup, upgradeTitlePlanes } from './frontend/titleMarkup.ts';
 import { revealTitleWhenDecoded } from './frontend/titleReveal.ts';
 import { readSetting } from '../SaveData.ts';
-import { holdForNextScreen, warmFrontEnd } from './frontendWarm.ts';
+import { beginFrontEndWarm, holdForNextScreen, prefetchModeFrom, startFrontEndWarm } from './frontendWarm.ts';
 import { briefingDue } from './raiseBriefing.ts';
 
 /**
@@ -99,8 +99,8 @@ export class TitleScreen extends Screen {
     // The 2688px master, once the manifest says it is on disk. Never awaited:
     // the 1x plate is already decoding and the screen is correct without it.
     void upgradeTitlePlanes(this.root);
-    // The briefing's and the board's paintings, while the title waits for a key (PR-0065).
-    warmFrontEnd(this.app, briefingDue(this.app));
+    // The briefing's and the board's paintings (PR-0065) start at the player's first key or pointer input, not when the title appears (PR-0405, `?prefetch=`).
+    beginFrontEndWarm(this.app, () => briefingDue(this.app), prefetchModeFrom(window.location.search));
 
     const motes = this.root.querySelector('.fe-title__motes');
     if (motes instanceof HTMLElement) {
@@ -201,6 +201,8 @@ export class TitleScreen extends Screen {
     this.advancing = true;
     // PR-0326: the cue plays from its sprite or not at all; the first press used to be the arcade synth.
     void audio.playSfxFromSprite('battle-start');
+    // PR-0405: the press that leaves the title is the first input when it came by a pad or a trigger (a key or a click has started this already).
+    startFrontEndWarm(this.app, briefingDue(this.app));
     // PR-0065: the next screen's paintings first, so the wipe clears onto them (ceilinged).
     await holdForNextScreen(this.app, briefingDue(this.app));
     await playWipe(this.app.uiRoot, {

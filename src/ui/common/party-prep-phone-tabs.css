@@ -1,0 +1,362 @@
+/*
+ * PR-0295 at phone width, option PREP-A "one long page" (Bailey, 2026-10-12, D-781; both games: the prep shell and its
+ * eight tab panels are shared). Target: the PREP-A frames of critic/scratch/prep-phone-options-2026-10-12/, kept beside
+ * the build in docs/screenshots/r43-prepphone/. Driven by `src/app/screens/party-prep/phonePrep.ts`, which keeps
+ * `data-phone="page"` on `.prep` for the six tab ids that have no phone page of their own (stats, equipment, items,
+ * overdrive, dresspheres, accessories: FFX Stats, Equipment, Items, Overdrive; FFX-2 Dresspheres, Stats, Accessories,
+ * Items) and marks the page `is-scrolled` once it has moved. The sections inside the page are
+ * `prep-phone-sections.css` and `prep-phone-parts.css`.
+ *
+ * The recipe is the CHAPTER and SPHERE GRID pages' (`party-prep-phone.css`, `sphere-grid-b-phone.css`): under 600 CSS
+ * px the stage stops being a scaled 640x360 board, one CSS px is one CSS px, `.prep` scrolls and START BATTLE is pinned
+ * to the bottom with a MORE BELOW cue. Two things are new and are what PREP-A asks for: the tab strip and the row of
+ * faces are pinned to the top while the page scrolls under them (a flex column, not the grid those two use, because a
+ * sticky grid item cannot leave its own grid area), and the roster the desktop board draws down the left is the row of
+ * faces: round heads for FFX's seven, three leaning name tabs for FFX-2's three girls.
+ *
+ * Everything is inside `@media (max-width: 599px)` and keyed on `.prep[data-phone='page']`, so every desktop size, the
+ * CHAPTER tab and the SPHERE GRID tab keep what they have by construction. Nothing a player reads is under 14 CSS px
+ * (CHK-003) and every control is 44 px or taller, except the seven round heads of FFX, which share one row and so are
+ * about 45 px at 390, 40 px at 360 and 35 px at 320 (the narrowest width the page is checked at).
+ */
+
+@media (max-width: 599px) {
+  .prep[data-phone='page'] {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* `body` says `touch-action: none` for the game canvas; this page is a scroller of its own and a finger has to
+       be able to move it. */
+    touch-action: pan-y;
+    pointer-events: auto;
+    scrollbar-width: none;
+    background: #04060b;
+  }
+  .prep[data-phone='page']::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* One flex column that wraps: the eyebrow and the corner label share the first line, everything else is a full line.
+     A flex item's containing block is the whole container, so the pinned strip and faces can stay while the page runs. */
+  .prep[data-phone='page'] > .prep__stage {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100%;
+    transform: none !important;
+    --lb-scale: 1 !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    /* Room under the last section for the pinned START BATTLE dock. */
+    padding-bottom: 92px;
+    box-sizing: border-box;
+    /* Its own stacking context, so the fixed ground below can sit under the in-flow page (z-index -1). */
+    z-index: 0;
+  }
+  .prep[data-phone='page'] > .prep__stage > * {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  /* The ground stays put while the page moves over it. */
+  .prep[data-phone='page'] .prep__wash,
+  .prep[data-phone='page'] .prep__veil {
+    position: fixed;
+    z-index: -1;
+  }
+  .prep[data-phone='page'] .prep__wash {
+    filter: blur(6px) brightness(0.28) saturate(0.6);
+  }
+
+  /* What the stacked page does not show: the desktop controls line, the long location line (the corner keeps game and
+     numeral) and the three field slots (the faces above are the party). */
+  .prep[data-phone='page'] .prep__hint,
+  .prep[data-phone='page'] .prep__where,
+  .prep[data-phone='page'] .prep__slots {
+    display: none;
+  }
+
+  /* ---------------------------------------------------------- top strip */
+  .prep[data-phone='page'] .prep__eyebrow {
+    position: static;
+    order: 1;
+    flex: 1 1 auto;
+    padding: 18px 0 8px 16px;
+    gap: 8px;
+  }
+  .prep[data-phone='page'] .prep__eyebrow-rule {
+    width: 18px;
+    height: 1.5px;
+  }
+  .prep[data-phone='page'] .prep__eyebrow-label {
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.2em;
+  }
+  .prep[data-phone='page'] .prep__phone-where {
+    display: block;
+    order: 2;
+    flex: 0 0 auto;
+    align-self: center;
+    padding: 18px 16px 8px 8px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    color: rgba(244, 241, 232, 0.62);
+    white-space: nowrap;
+  }
+
+  /* ------------------------------------------------- pinned: the tab strip */
+  /* One row, its own horizontal scroller, faded at the right where it runs on. Every tab stays reachable by touch, and
+     `phonePrep.ts` keeps the open one in view. 45 px: the tab, with the open one's rule under it. */
+  .prep[data-phone='page'] .prep__tabs {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    order: 3;
+    box-sizing: border-box;
+    height: 45px;
+    align-items: stretch;
+    gap: 18px;
+    padding: 0 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    /* The strip scrolls sideways under a finger; a vertical swipe on it still moves the page. */
+    touch-action: pan-x pan-y;
+    pointer-events: auto;
+    -webkit-mask-image: linear-gradient(to right, #000 82%, transparent);
+    mask-image: linear-gradient(to right, #000 82%, transparent);
+  }
+  .prep[data-phone='page'] .prep__tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .prep[data-phone='page'] .prep__tab {
+    flex: none;
+    box-sizing: border-box;
+    min-height: 45px;
+    padding: 14px 0 15px;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    border-bottom-width: 2px;
+  }
+  /* Room after the last tab, so the strip can bring a late tab to the left edge. */
+  .prep[data-phone='page'] .prep__tab:last-child {
+    margin-right: 200px;
+  }
+
+  /* ----------------------------------------------- pinned: the row of faces */
+  .prep[data-phone='page'] .prep__roster {
+    position: sticky;
+    top: 45px;
+    left: 0;
+    z-index: 4;
+    order: 4;
+    box-sizing: border-box;
+    height: 65px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    pointer-events: auto;
+  }
+  /* Once content has passed under the bar it gets a solid ground, a rule and a shadow (the strip's fade would show the
+     page through a solid ground, so it is off). */
+  .prep[data-phone='page'].is-scrolled .prep__tabs,
+  .prep[data-phone='page'].is-scrolled .prep__roster {
+    background: #04060b;
+  }
+  .prep[data-phone='page'].is-scrolled .prep__tabs {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .prep[data-phone='page'].is-scrolled .prep__roster {
+    border-bottom: 1px solid rgba(244, 241, 232, 0.14);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  /* FFX: round heads, the seven of them in a row; the selected one is ringed in the accent. The name and the level stay
+     in the markup for a screen reader and are not drawn: opacity 0 inside the head's own clip (a 1 px clipped box would
+     read as cut and overprinting text to every text sweep, and display none would take the name from the button). */
+  .prep[data-phone='page']:not(.ig--ffx2) .prep__member {
+    position: relative;
+    /* 46 px a head, shrinking together to fit the row (about 45 px at 390, 40 at 360, 35 at 320) and kept round. */
+    flex: 0 1 46px;
+    min-width: 0;
+    width: auto;
+    height: auto;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0;
+    gap: 0;
+    border: 2px solid rgba(244, 241, 232, 0.28);
+    border-radius: 50%;
+    background: #1a1526;
+    overflow: hidden;
+    transform: none;
+  }
+  .prep[data-phone='page']:not(.ig--ffx2) .prep__member > * {
+    transform: none;
+  }
+  .prep[data-phone='page']:not(.ig--ffx2) .prep__member--sel {
+    border: 3px solid var(--ig-accent);
+    background: #1a1526;
+    box-shadow:
+      0 0 0 2px rgba(11, 10, 18, 0.85),
+      0 0 14px color-mix(in srgb, var(--ig-accent) 50%, transparent);
+  }
+  .prep[data-phone='page']:not(.ig--ffx2) .prep__member .prep__face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-size: 18px;
+  }
+  .prep[data-phone='page']:not(.ig--ffx2) .prep__member-name,
+  .prep[data-phone='page']:not(.ig--ffx2) .prep__member-lv {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  /* FFX-2: three name tabs leaning right, each a face, the name and her level; the selected one is ivory. */
+  .prep[data-phone='page'].ig--ffx2 .prep__member {
+    /* 34 px at 390 and wider; a small phone (down to 320) draws the face smaller so the name keeps its room. */
+    --prph-face: max(28px, min(34px, 9.4vw));
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    min-height: 46px;
+    height: auto;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 4px 8px 4px 5px;
+    display: grid;
+    grid-template-columns: var(--prph-face) minmax(0, 1fr);
+    grid-template-areas:
+      'face name'
+      'face lv';
+    align-items: center;
+    column-gap: 7px;
+    row-gap: 0;
+    border: 0;
+    border-right: 3px solid rgba(244, 241, 232, 0.55);
+    background: var(--ig-ink-panel);
+  }
+  .prep[data-phone='page'].ig--ffx2 .prep__member--sel {
+    background: var(--ig-paper);
+    color: var(--ig-ink);
+    border-right-color: var(--ig-accent);
+  }
+  .prep[data-phone='page'].ig--ffx2 .prep__member .prep__face {
+    grid-area: face;
+    width: var(--prph-face);
+    height: var(--prph-face);
+    margin: 0;
+    font-size: 14px;
+  }
+  .prep[data-phone='page'].ig--ffx2 .prep__member-name {
+    grid-area: name;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* 20 px from 385 px wide, down to 16 px at 308 and under: never under the 14 px floor. */
+    font-size: clamp(16px, 5.2vw, 20px);
+    line-height: 1;
+  }
+  .prep[data-phone='page'].ig--ffx2 .prep__member-lv {
+    grid-area: lv;
+    margin: 2px 0 0;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  /* ---------------------------------------- the sheet is a plain column */
+  .prep[data-phone='page'] .prep__sheet {
+    position: static;
+    order: 5;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--ig-paper);
+    transform: none;
+    box-shadow: none;
+  }
+  .prep[data-phone='page'] .prep__sheet-inner {
+    transform: none;
+  }
+
+  /* ---------------------------------------- START BATTLE, pinned bottom */
+  .prep[data-phone='page'] .prep__phone-dock {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 92px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to top, #04060b 60%, rgba(4, 6, 11, 0));
+  }
+  .prep[data-phone='page'] .prep__start {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    z-index: 3;
+    justify-content: center;
+    padding: 14px 0;
+    font-size: 14px;
+    letter-spacing: 0.24em;
+  }
+  .prep[data-phone='page'] .prep__start > span {
+    gap: 10px;
+  }
+  .prep[data-phone='page'] .prep__start-tri {
+    border-top-width: 6px;
+    border-bottom-width: 6px;
+    border-left-width: 9px;
+  }
+
+  .prep[data-phone='page'] .prep__phone-cue {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 84px;
+    z-index: 4;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+  .prep[data-phone='page'] .prep__phone-cue.is-visible {
+    opacity: 1;
+  }
+  .prep[data-phone='page'] .prep__phone-cue > span {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--ig-accent, #e3b94a);
+    background: rgba(11, 10, 18, 0.88);
+    border: 1px solid color-mix(in srgb, var(--ig-accent, #e3b94a) 50%, transparent);
+  }
+}

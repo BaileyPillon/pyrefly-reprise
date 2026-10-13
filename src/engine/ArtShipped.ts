@@ -30,10 +30,19 @@
  *
  * The lookup is synchronous on purpose: `artUrl` is called while markup is built and before the art manifest has loaded, so a
  * mapping that waited for a fetch would hand the browser a PNG that is no longer there.
+ *
+ * **Strip thumbnails (r44-thumbs, both games).** The chapter board's rail strips paint a master at about 260 x 35 px, and the full file is
+ * 1 to 6 MB. For each master the build derives a small copy of (`tools/art-thumbs.mjs`, named by `src/data/art/strip-art.json`),
+ * {@link thumbArtUrl} maps a master's URL to it: `art/backdrops/gagazet.png` to `art/backdrops/gagazet.thumb.webp`, a figure's
+ * `idle.png` to `idle.thumb.png`. The build inserts the map as the constant `__PYREFLY_ART_THUMBS__`. A master the map does not name (dev, the
+ * unit suite, `PYREFLY_ART_THUMBS=off`, a master the tool refused) maps to {@link shippedArtUrl}: **the full picture, never a missing file.**
+ * A thumbnail name is not a master's, derived or otherwise, so {@link logicalArtUrl} leaves it alone.
  */
 
 /** Inserted by `tools/art-derive-plugin.mjs` (a Vite `define`): the master PNG paths this build ships as WebP. */
 declare const __PYREFLY_ART_WEBP__: readonly string[] | undefined;
+/** Inserted by the same plugin: the master PNG path to the strip thumbnail this build ships for it (`art/backdrops/x.png` to `art/backdrops/x.thumb.webp`). */
+declare const __PYREFLY_ART_THUMBS__: Readonly<Record<string, string>> | undefined;
 
 /** `art/<...>.png` as the path of a URL ends, with or without the base path before it. */
 const ART_PNG = /(?:^|\/)(art\/.+)\.png$/;
@@ -106,4 +115,45 @@ export function setShippedArt(paths: Iterable<string> | null | undefined): void 
 /** Is this master shipped as WebP in the running build? */
 export function isShippedAsWebp(masterPath: string): boolean {
   return shipped()?.has(masterPath) === true;
+}
+
+type ThumbMap = Readonly<Record<string, string>>;
+let thumbsForced: ThumbMap | null | undefined;
+let thumbsBuilt: ThumbMap | null | undefined;
+
+/** The thumbnail map in force: a test's own, else the build's, else `null` (every URL maps to its full picture). */
+function thumbs(): ThumbMap | null {
+  if (thumbsForced !== undefined) return thumbsForced;
+  if (thumbsBuilt === undefined) {
+    const map = typeof __PYREFLY_ART_THUMBS__ !== 'undefined' ? __PYREFLY_ART_THUMBS__ : undefined;
+    thumbsBuilt = map && Object.keys(map).length > 0 ? map : null;
+  }
+  return thumbsBuilt;
+}
+
+/**
+ * The URL of the small copy of the master `url` names, when this build derived one; otherwise {@link shippedArtUrl}, the full picture the
+ * site serves for it. Either form of the master's name is read (`x.png`, or the derived `x.webp` when the build ships it so), the path before
+ * `art/` (the base) and any `?query` or `#hash` are kept, and the answer is a file that exists in the build that made the map.
+ * The caller must be showing the picture small: the board's rail strips (`chapterPlates.ts`). A plate drawn large asks for `artUrl`.
+ */
+export function thumbArtUrl(url: string): string {
+  const [path, rest] = splitUrl(url);
+  const logical = logicalArtUrl(path);
+  const map = thumbs();
+  const m = map === null ? null : ART_PNG.exec(decodeAt(logical));
+  const thumb = m ? map![`${m[1]}.png`] : undefined;
+  if (!m || thumb === undefined) return shippedArtUrl(url);
+  const plain = decodeAt(logical);
+  return `${plain.slice(0, plain.length - m[1]!.length - '.png'.length)}${thumb}${rest}`;
+}
+
+/** Is there a strip thumbnail for this master (`art/<...>.png`) in the running build? */
+export function hasThumbArt(masterPath: string): boolean {
+  return thumbs()?.[masterPath] !== undefined;
+}
+
+/** Pin the strip-thumbnail map (tests, and the debug console); `null` pins "none", `undefined` goes back to the build's map. */
+export function setThumbArt(map: ThumbMap | null | undefined): void {
+  thumbsForced = map;
 }

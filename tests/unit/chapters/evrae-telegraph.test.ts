@@ -43,9 +43,10 @@ function fakeDeck(): AirshipDeck {
   } as unknown as AirshipDeck;
 }
 
-/** Just enough of a `PaintedActor` to watch which paintings it is handed. */
+/** Just enough of a `PaintedActor` to watch which paintings it is handed, and how (`opts`: the blend the director asks for, r43-motion2). */
 function fakeActor() {
   const loads: Array<Record<string, string>> = [];
+  const asked: Array<{ blend?: boolean } | undefined> = [];
   const actor = {
     pose: 'idle',
     u: { rimStrength: { value: 0.7 } },
@@ -54,11 +55,12 @@ function fakeActor() {
     scale: new Vector3(1, 1, 1),
     poseSize: [10, 10] as [number, number],
     setAlpha(): void {},
-    async loadPoses(map: Record<string, string>): Promise<void> {
+    async loadPoses(map: Record<string, string>, _initial?: string, opts?: { blend?: boolean }): Promise<void> {
       loads.push({ ...map });
+      asked.push(opts);
     },
   };
-  return { actor, loads, idle: (): string => loads[loads.length - 1]?.['idle'] ?? '' };
+  return { actor, loads, asked, idle: (): string => loads[loads.length - 1]?.['idle'] ?? '' };
 }
 
 const flags = (range: 'near' | 'far', charged: boolean) => ({
@@ -99,6 +101,23 @@ describe('the Inhale telegraph', () => {
     director.sync(flags('near', false));
     await settle();
     expect(idle()).toMatch(/\/idle\.png$/);
+  });
+
+  it("swaps the charge painting through the actor's blend, and nothing else is (r43-motion2: the cast-to-idle hard cut of round 25): a bind and a range shift cut behind the figure's own fade", async () => {
+    const director = new AirshipRangeDirector(fakeDeck(), new LightRig({ palette, shadows: false }));
+    const { actor, asked } = fakeActor();
+    await director.bindEvrae(actor as never);
+    expect(asked, 'the bind is a plain load').toEqual([undefined]);
+
+    director.sync(flags('near', true)); // lit in the middle of the Inhale action: the figure is on screen
+    await settle();
+    director.sync(flags('near', false)); // spent
+    await settle();
+    expect(asked.slice(1)).toEqual([{ blend: true }, { blend: true }]);
+
+    director.setRange('far', { immediate: true }); // a range change runs behind the alpha fade: a cut
+    await settle();
+    expect(asked.slice(3)).toEqual([undefined]);
   });
 
   it('keeps the FAR painting at FAR: the charge is a NEAR read (the breath whiffs out of range, §3.3 note 4)', async () => {

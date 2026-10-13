@@ -78,7 +78,12 @@ Rules that keep this honest:
    what it advanced past.
 2. **Events are ordered and numbered.** Every `BattleEvent` carries a monotonic
    `seq`, unique for the whole battle, and `state().log[i].seq === i`. The
-   presenter plays them in order and never reorders or drops one.
+   presenter plays them in order and never reorders or drops one. One stated
+   exception, presentation only: a `status-add` that the same action's KO wipe
+   takes (a `status-remove` with reason `ko`: FFX's death check) is consumed
+   with that removal and plays no beat, because the player is never shown a
+   status that is gone the moment it lands (`BattlePresenterKoWipe.ts`). The
+   events themselves are unchanged, and both stay in the trace.
 3. **Events are pure data.** No functions, no class instances, JSON-serialisable.
    e2e tests snapshot them; the debug API prints them.
 4. **The presenter owns timing.** `wait`, `camera`, `vfx` and `sfx` events are

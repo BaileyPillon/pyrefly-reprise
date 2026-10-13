@@ -17,6 +17,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { AUDIO_BUDGET_BYTES, externalSource } from '../../tools/audio/manifest-io.mjs';
+import { batch2Added, batch2Cues, batch2MusicMoved, batch2Replaced, batch2Retired } from './helpers/musicBatch2.ts';
 
 const read = (p: string) => JSON.parse(readFileSync(new URL(`../../${p}`, import.meta.url), 'utf8'));
 const manifest = read('public/audio/manifest.json') as {
@@ -49,21 +50,22 @@ const addedBytes = addedRecords.reduce((total, r) => total + r.cues.reduce((sum,
 
 describe('music O1: every cue at LAME V0', () => {
   it('records every shipped cue, each reproduced byte for byte before the re-encode', () => {
-    expect(report.cues.map((c) => c.cue).sort()).toEqual(Object.keys(manifest.music).filter((k) => !addedCues.has(k)).sort());
+    // Batch 2 (2026-10-12) added nine cues and took three of these out of the shipped set.
+    expect(report.cues.map((c) => c.cue).sort()).toEqual([...Object.keys(manifest.music).filter((k) => !addedCues.has(k) && !batch2Added.has(k)), ...batch2Retired].sort());
     for (const c of report.cues) expect(c.q5ReproducesShipped, `${c.cue} twin`).toBe(true);
   });
 
   it('ships the files the record measured, except the ones music v2 and the ElevenLabs install replaced (each pinned by its own record)', () => {
     for (const c of report.cues) {
-      if (!replacedByV2.has(c.cue) && !replacedLater.has(c.cue)) expect(manifest.music[c.cue]?.bytes, `${c.cue} bytes`).toBe(c.after.bytes);
+      if (!replacedByV2.has(c.cue) && !replacedLater.has(c.cue) && !batch2Replaced.has(c.cue) && !batch2Retired.has(c.cue)) expect(manifest.music[c.cue]?.bytes, `${c.cue} bytes`).toBe(c.after.bytes);
     }
     const total = Object.values(manifest.music).reduce((a, m) => a + m.bytes, 0);
-    expect(total).toBe(v2.totals.musicBytesAfter + movedLater + addedBytes);
+    expect(total).toBe(v2.totals.musicBytesAfter + movedLater + addedBytes + batch2MusicMoved);
   });
 
   it('has not slipped back to q5: at least 200 kbps average, no encoder wall', () => {
     for (const [cue, m] of Object.entries(manifest.music)) {
-      if (addedCues.has(cue)) continue; // a raw take at its own bitrate (about 140 to 160 kbps), not a V0 re-encode
+      if (addedCues.has(cue) || batch2Cues.has(cue)) continue; // a take at its own bitrate (about 100 to 160 kbps), not a V0 re-encode
       expect((m.bytes * 8) / m.duration, `${cue} average bitrate`).toBeGreaterThan(200_000);
     }
     for (const c of report.cues) {

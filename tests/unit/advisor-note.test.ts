@@ -278,8 +278,12 @@ function walk(chapterId: string, seeds: readonly number[], want: number, collect
 // the same odds. The same board (Yuna down and a Zombie, the raise refused, the Poison Fang and Holy Water cards, the revive caution) is the first sixteen decisions of
 // seed 6 (found by running the engine over seeds 1 to 400: 40 of them show all seven conditions of this block; the first is 6), and the timing sentence below
 // is reached on seed 970 (the first of seeds 1 to 1500 that shows it within 34 decisions, fault free; one seed in 1500). Nothing about the advisor changed.
-describe('Chapter 1, the board the gate reported (seed 6)', () => {
-  const seen = walk('seymour-flux', [6], 16, true);
+// Re-pinned 2026-10-12 (re-parity RC5, lane FFX-D, FFX only; a KO clears Zombie, FFX-G02 section 3.2, Bailey's yes of 2026-10-11 "Close D-214 / PR-0217"): no body on the floor is a Zombie any more, so the
+// gate's board (Yuna down and a Zombie, the raise refused as "still a Zombie", "Leave Yuna down" over a Poison Fang) cannot arise from the engine. What is left of it is rule (a), (b) and (e): a revive
+// shown with its caution on the move and an empty note, a Holy Water card whose note is the Zombie reading (a LIVING Zombie and the Mortiorchis's Full-Life), and no fault at any decision. They are the first
+// sixteen decisions of seed 98 (found by running the engine over seeds 1 to 300: 3 of them show all three, fault free; the first is 98; no seed shows a refusal for a Zombie body). Nothing about the advisor changed.
+describe('Chapter 1, the board the gate reported (seed 98)', () => {
+  const seen = walk('seymour-flux', [98], 16, true);
 
   it('walks the decisions the gate named', () => {
     expect(seen.decisions).toBe(16);
@@ -303,27 +307,17 @@ describe('Chapter 1, the board the gate reported (seed 6)', () => {
     expect(offending, 'a cure instruction over a card with no cure on it').toEqual([]);
   });
 
-  it('answers for the ally on the floor when the pick is neither a revive nor a cure', () => {
-    // The two decisions the gate filed as correctly silent are Bailey's own
-    // board: Yuna face-down and zombied, the raise refused because Full-Life
-    // hunts the zombied body [ffx-seymour-flux §4.8], and the card picking a
-    // thrown item. The refusal is still right; the silence was not.
-    //
-    // Keyed off what the card says, not off `seen.cards[1]` — the pin that
-    // made three of these go red when Kimahri got his Talk row back.
-    const answered = seen.cards.filter((c) => /note="Leave [^"]*still a Zombie/.test(c));
-    expect(answered.length, 'the body on the floor is spoken for').toBeGreaterThan(0);
-    for (const card of answered) {
-      expect(card, 'the answer only ever rides above a pick that is not the raise').not.toMatch(
-        /Phoenix Down|Mega Phoenix/,
-      );
+  it('never refuses a raise as "still a Zombie": a KO clears Zombie, so no body on the floor wears it', () => {
+    // Bailey's own board (Yuna face-down and zombied, the raise refused because Full-Life hunts the zombied body [ffx-seymour-flux §4.8], the card picking
+    // a thrown item) was a product of the engine keeping Zombie on the dead. The game's KO reset clears it (FFX-G02 §3.2), so the engine no longer
+    // builds that board and the refusal never fires; the card's reading of a body that IS a Zombie stays, as a pure function of whatever board it is
+    // handed (advisor-ownership.test.ts builds one by hand). What this pins is the engine's side: no card refuses a raise for a Zombie body, and no
+    // raise carries a Zombie caution.
+    expect(seen.cards.filter((c) => /note="Leave [^"]*still a Zombie/.test(c))).toEqual([]);
+    for (const card of seen.cards.filter((c) => /Phoenix Down|Mega Phoenix/.test(c))) {
+      expect(card, 'a raise is never cautioned for a Zombie body').not.toMatch(/warns: [^:]*Zombie/);
       expect(card, 'and never asks for a cure the card is not showing').not.toMatch(/cure the Zombie first/);
     }
-    // Bailey's screenshot, decision for decision.
-    expect(
-      seen.cards.some((c) => /Poison Fang/.test(c) && /note="Leave Yuna down/.test(c)),
-      'the Poison Fang card now says what is happening to Yuna',
-    ).toBe(true);
   });
 
   /**
@@ -340,7 +334,7 @@ describe('Chapter 1, the board the gate reported (seed 6)', () => {
     // sentence, printed once, beside the move it is about.
     const raises = seen.cards.filter((c) => /Phoenix Down|Mega Phoenix/.test(c) && /warns: /.test(c));
     expect(raises.length).toBeGreaterThan(0);
-    expect(raises.some((c) => /warns: [^:]*Zombie/.test(c))).toBe(true);
+    expect(raises.some((c) => /warns: [^:]*Zombie/.test(c)), 'no raised body is a Zombie since RC5').toBe(false);
     for (const card of raises) expect(card).toMatch(/note=""/);
   });
 
@@ -433,8 +427,10 @@ describe('Chapter 1, a refused revive says when to spend it (a board built from 
     if (d.kind !== 'player-input') return null;
     const state = structuredClone(engine.state()) as BattleState;
     const party = state.activeIds.map((id) => state.combatants[id]).filter((c): c is AnyCombatant => c !== undefined);
-    // The Zombie reading comes first by design (it has its own tests above), so a seed whose opening zombifies somebody is not this board.
-    if (party.some((c) => (c.statuses as Record<string, unknown>)['zombie'] !== undefined)) return null;
+    // The Zombie reading comes first by design (it has its own tests above), so a seed whose opening zombifies somebody is not this board. Nor is one
+    // whose opening already has somebody on the floor: the card would be raising THAT body, with the timing caution on the move and an empty note (rule a).
+    // Until re-parity RC5 a body on the floor was a Zombie whenever the boss had zombified it, so the Zombie clause alone kept those seeds out; a KO clears Zombie now.
+    if (party.some((c) => (c.statuses as Record<string, unknown>)['zombie'] !== undefined || !c.alive)) return null;
     const down = party.find((c) => c.alive && c.id !== d.actorId && c.id !== 'yuna');
     if (!down) return null;
     down.hp = 0;

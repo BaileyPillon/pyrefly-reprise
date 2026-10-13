@@ -361,8 +361,8 @@ describe('ffx2-leblanc — beats in canon order [ffx2-leblanc-syndicate §9.2]',
     const tracks = chapter.post.filter((s) => s.type === 'music').map((s) => s.track);
     expect(tracks).toContain('scene-farplane');
     const preTracks = chapter.pre.filter((s) => s.type === 'music').map((s) => s.track);
-    // 2026-10-10: the fight plays its own cue, `boss-leblanc` (an ElevenLabs take), instead of Chapter 4's `boss-ffx2-aeon`; the scene bed is still Chapter 4's.
-    expect(preTracks).toEqual(['scene-bevelle-underground', 'boss-leblanc']);
+    // 2026-10-10: the fight plays its own cue, `boss-leblanc` (an ElevenLabs take), instead of Chapter 4's `boss-ffx2-aeon`; 2026-10-12 (music batch 2): the scene bed is the chateau's own, `scene-chateau-leblanc`, no longer Chapter 4's.
+    expect(preTracks).toEqual(['scene-chateau-leblanc', 'boss-leblanc']);
     expect(preTracks).not.toContain('scene-farplane');
   });
 

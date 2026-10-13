@@ -50,11 +50,11 @@ export const SINSPAWN_GUI: Chapter = {
   enemyGroupRef: sinspawnGuiGroup,
   scriptsRef: sinspawnGuiScripts,
   music: {
-    // Existing cues only (no new audio; Bailey judges audio by ear, rule 13). The game scores the first fight with "Peril" and the second with "Challenge" (research section 8.3); ours are the
-    // nearest cues we have, named as stand-ins in `docs/audio/THEMES.md` "Owed cues for chapters not yet listed": the dread theme for the Ridge, Seymour's own theme for the guest hour.
+    // The game scores the first fight with "Peril" and the second with "Challenge" (research section 8.3). Since 2026-10-12 (music batch 2, FFX only) each is an ElevenLabs original: `boss-gui` for
+    // the Ridge and `boss-challenge`, the one cue the game plays for this fight, Yunalesca and Seymour Flux, for the guest hour (Chapter I keeps `boss-seymour`, which Bailey chose by ear).
     scene: 'scene-gagazet',
-    battle: 'boss-dread',
-    phase2: 'boss-seymour',
+    battle: 'boss-gui',
+    phase2: 'boss-challenge',
     victory: 'victory-ffx',
   },
   // Duplicated from the enemy records' own `sensorText` (`./ffx/enemies/sinspawn-gui.ts`), as the `Chapter` contract asks; the second fight's body has the same line.

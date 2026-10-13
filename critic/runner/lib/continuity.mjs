@@ -31,7 +31,9 @@ import { createProbe } from './continuity-probe.mjs';
 import { loadPoseMeasure } from './continuity-silhouette.mjs';
 import { HELD_MIN_FRAMES } from './continuity-held.mjs';
 import { composeStrip } from './continuity-strips.mjs';
-import { verdicts } from './continuity-pure.mjs';
+import { continuityReportLine, verdicts } from './continuity-pure.mjs';
+import { washPolicy } from './continuity-wash.mjs';
+import { CONTINUITY_BUDGET_MS, continuityBudgetFor } from './route-pure.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..', '..');
@@ -53,9 +55,10 @@ export function continuityConfig(root = ROOT) {
 /**
  * How long one chapter's fight may run (ms) before the route gives up on it. Release 39's round 22 ended Ch III, V, XI, XII and XVII mid-fight at 900 s (a Braska gauntlet,
  * the Fallen Aeons and the Sin chapters take 13 to 20 minutes at the route's pace, PR-0339), so a long fight was measured for its first quarter only. 30 minutes covers them;
- * a fight still going then is cut and the chapter says so (`run.json` outcome 'stalled').
+ * a fight still going then is cut and the chapter says so (`run.json` outcome 'stalled'). PR-0433 (round 25): a chapter with a long-fight budget of its own (route-pure.mjs
+ * LONG_FIGHT_BUDGET_MS: II, III and XVII 50 minutes, XIII 100) gets that when it is longer; round 25's Chapter III had 1,733 s of battle inside this 1,800 s.
  */
-export const DEFAULT_BUDGET_MS = 1800000;
+export const DEFAULT_BUDGET_MS = CONTINUITY_BUDGET_MS;
 
 const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40);
 
@@ -64,7 +67,8 @@ const safe = (s) => String(s ?? 'x').replace(/[^a-z0-9._-]+/gi, '-').slice(0, 40
  * returns the chapter's result (it is safe to call twice: the second call returns the first's answer).
  */
 export async function attachProbe({ page, outDir, chapter, game, base, mode, poseMeasurePath, cfg = continuityConfig(), log = console.log }) {
-  const probeCfg = { ...cfg.probe, beforeFrames: cfg.strips.beforeFrames, afterFrames: cfg.strips.afterFrames, cutPx: cfg.motion.cutPx };
+  // r43: `washSelector` has the probe record the Save Sphere wash's opacity on the frames it is up (continuity-wash.mjs); a policy selector of null reads nothing
+  const probeCfg = { ...cfg.probe, beforeFrames: cfg.strips.beforeFrames, afterFrames: cfg.strips.afterFrames, cutPx: cfg.motion.cutPx, washSelector: washPolicy(cfg).selector };
   await page.evaluate(`(${createProbe})(${JSON.stringify(probeCfg)}, { window, document, performance })`);
   await page.evaluate(() => window.__cont.start());
   let done = null;
@@ -145,6 +149,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
   const checks = res.summary.checks;
   const out = {
     schema: 'continuity/1', chapter, game, base, mode, date: new Date().toISOString(),
+    dedicated: process.env.CONT_DEDICATED === '1', // PR-0450 (d): only the dedicated harness's numbers are scored; the chapter row of the summary shows the frame rate it ran at
     view: meta.view, probe: { ...meta.stats, errors: meta.errors.slice(0, 5), eventSource: 'the engine state read from window.__pyrefly (plane fades and corners per frame); no engine hook' },
     poseMeasure: measure ? { path: measure.path, sha256: measure.sha256, subjects: measure.count } : null,
     anchorNotes: notes, coverage: res.coverage, perFigure: res.perFigure, summary: res.summary, checks,
@@ -152,6 +157,7 @@ async function finishProbe({ page, outDir, chapter, game, base, mode, poseMeasur
     swaps: res.swaps.map(({ fi, from, to, ...rest }) => rest),
     jerks: res.jerks.map(({ fi, ...rest }) => rest),
     cameraCuts: { note: 'frames in which the camera alone moved a figure by the cut line or more (a cut or a whip); swaps and jerks that fall with one are left out', count: res.cameraCuts.length, frames: res.cameraCuts.slice(0, 200) },
+    wash: { note: 'the wash of the Save Sphere card (an HTML veil the canvas strips cannot show): where it was up, and the jerks whose step happened under it. A jerk with covered:true is excused by continuity.wash in the policy and is not in the summary or the verdict; every jerk in this file carries the wash over its step when there was one.', ...res.wash },
     battleLog: { events: meta.logEvents.length, byType: meta.logEvents.reduce((m, e) => ((m[e.type] = (m[e.type] ?? 0) + 1), m), {}) },
   };
   fs.writeFileSync(path.join(dir, 'continuity.json'), JSON.stringify(out, null, 1));
@@ -166,7 +172,8 @@ function runRoute({ chapter, goal, base, evidence, size, budget, seed, tag, pose
     const a = [path.join(HERE, 'route.mjs'), chapter, goal, `--base=${base}`, `--evidence=${evidence}`, `--size=${size}`, `--budget=${budget}`, `--seed=${seed}`, '--continuity'];
     if (tag) a.push(`--tag=${tag}`);
     if (poseMeasure) a.push(`--pose-measure=${poseMeasure}`);
-    const child = spawn(process.execPath, a, { stdio: 'inherit', env: process.env });
+    // CONT_DEDICATED=1 is what lets route.mjs accept --continuity (PR-0450 d): the probe runs only under this harness, which passes the registration and plays alone
+    const child = spawn(process.execPath, a, { stdio: 'inherit', env: { ...process.env, CONT_DEDICATED: '1' } });
     child.on('exit', (code) => resolve(code));
   });
 }
@@ -184,7 +191,7 @@ export async function runContinuity(argv) {
   const cfg = continuityConfig();
   const results = [];
   for (const chapter of chapters) {
-    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: args.budget ?? DEFAULT_BUDGET_MS, seed: args.seed ?? 1, tag: args.tag, poseMeasure });
+    if (!args['only-aggregate']) await runRoute({ chapter, goal, base, evidence, size: args.size ?? '1600x900', budget: continuityBudgetFor(chapter, args.budget), seed: args.seed ?? 1, tag: args.tag, poseMeasure });
     const dir = [chapter, goal, args.tag].filter(Boolean).join('-');
     const file = path.join(evidence, dir, 'continuity', 'continuity.json');
     results.push(fs.existsSync(file) ? { ...JSON.parse(fs.readFileSync(file, 'utf8')), dir } : { chapter, error: 'the route wrote no continuity.json', checks: { 'CHK-026': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] }, 'CHK-027': { result: 'UNVERIFIED', reasons: ['the route wrote no continuity.json'] } } });
@@ -195,6 +202,7 @@ export async function runContinuity(argv) {
   // PR-0398: a retry of one chapter used to overwrite the whole review's summary with its own; `--summary=<file>` names the file (a run that is not the whole review should not use the default)
   fs.writeFileSync(path.join(evidence, args.summary ?? 'continuity-summary.json'), JSON.stringify(summary, null, 1));
   console.log(JSON.stringify({ checks: summary.checks, size: summary.size, motion: summary.motion }, null, 1));
+  console.log(`REPORT LINE: ${summary.reportLine}`);
   return summary;
 }
 
@@ -215,6 +223,7 @@ export function aggregate(results, cfg) {
     snaps: sum((s) => s.motion.snaps), snapsPerMinute: per(sum((s) => s.motion.snaps)), hardCuts: sum((s) => s.motion.hardCuts), hardCutsPerMinute: per(sum((s) => s.motion.hardCuts)),
     ghostSwaps: sum((s) => s.motion.ghostSwaps), ghostFrames: sum((s) => s.motion.ghostFrames), worstGhostSeverity: max((s) => s.motion.worstGhostSeverity), ghostOverFail: sum((s) => s.motion.ghostOverFail),
     jerks: sum((s) => s.motion.jerks), worstJerkPx: max((s) => s.motion.worstJerkPx), jerksOverFail: sum((s) => s.motion.jerksOverFail),
+    jerksCovered: sum((s) => s.motion.jerksCovered ?? 0), worstCoveredJerkPx: max((s) => s.motion.worstCoveredJerkPx ?? 0), // r43: under the Save Sphere's wash (an older chapter summary has none)
     lowestIou: ok.reduce((m, r) => Math.min(m, r.summary.motion.lowestIou), 1), maxCentroidShiftPx: max((s) => s.motion.maxCentroidShiftPx),
     // r40 instrument edits (b) and (c); a chapter summarised before them has none of these (counted as 0)
     heldSwaps: sum((s) => s.motion.heldSwaps ?? 0), longestHeldFrames: max((s) => s.motion.longestHeldFrames ?? 0),
@@ -226,7 +235,8 @@ export function aggregate(results, cfg) {
   const checks = verdicts(whole, cfg, {});
   // a chapter that could not be verified keeps the whole run from passing, but never hides another chapter's failure
   for (const id of ['CHK-026', 'CHK-027']) if (checks[id].result === 'PASS' && unverifiedChapters.length) checks[id] = { result: 'UNVERIFIED', reasons: [`not verified in: ${unverifiedChapters.join(', ')}`] };
-  return { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, checks };
+  const out = { schema: 'continuity-summary/1', chapters: results.map((r) => ({ chapter: r.chapter, game: r.game ?? null, checks: Object.fromEntries(Object.entries(r.checks ?? {}).map(([k, v]) => [k, v.result])), battleSeconds: r.summary?.battleSeconds ?? null, swaps: r.summary?.counted ?? null, snapsPerMinute: r.summary?.motion?.snapsPerMinute ?? null, maxHeadJumpPct: r.summary?.size?.maxHeadJumpPct ?? null, maxFeetShiftPx: r.summary?.size?.maxFeetShiftPx ?? null, worstJerkPx: r.summary?.motion?.worstJerkPx ?? null, jerksCovered: r.summary?.motion?.jerksCovered ?? 0, fps: r.probe?.fps ?? null, dedicated: r.dedicated ?? null, strips: (r.strips ?? []).filter((s) => s.file).length, worstSwapStrips: (r.strips ?? []).filter((s) => s.file && s.kind === 'swap').slice(0, 10).map((s) => `${r.dir ?? r.chapter}/continuity/${s.file}`), unverified: r.unverified ?? null })), ...whole, checks };
+  return { ...out, reportLine: continuityReportLine(out) }; // PR-0450: one line for the report, with the frame rates and how many chapters the dedicated harness ran
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

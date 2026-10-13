@@ -193,14 +193,21 @@
     }
    },
    "public/art/characters/yuna/item.png": {
-    "sha256": "d57e0b71c071c4c0dab559a756b7fc12c63b29de5e6dfb9a9f8c9c5543d06f27",
-    "mtime": "2026-10-07T12:33:59.148Z",
-    "approved": "2026-10-07",
-    "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+    "sha256": "9ba097c27c138f4cd0939824887d0579b0a5621594b701b4b485e47c11c21dca",
+    "mtime": "2026-10-13T03:33:32.673Z",
+    "approved": "2026-10-12",
+    "replacedBy": "bailey:2026-10-12 (Art Picks, Oct 12, decisions 61a and 61b; Bailey 2026-10-12 about 23:15 EDT, verbatim \"I’ll go with all of your recommendations\" and then \"Install\", accepting the driver's recommended pick YUNA-ITEM-1; FFX only)",
     "supersedes": {
-     "sha256": "df46dc0e3ceda08dc962ad9b9e4bf68e6147a03aac8a2e4dec915945a7a0ea35",
-     "mtime": "2026-09-18T09:14:35.314Z",
-     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna/item.png"
+     "sha256": "d57e0b71c071c4c0dab559a756b7fc12c63b29de5e6dfb9a9f8c9c5543d06f27",
+     "mtime": "2026-10-07T12:33:59.148Z",
+     "approved": "2026-10-07",
+     "replacedBy": "bailey:2026-10-07 (art repairs D-462; Bailey 2026-10-07 ~08:30 EDT, verbatim \"yes install the 555 repairs, go with your recommendations\")",
+     "supersedes": {
+      "sha256": "df46dc0e3ceda08dc962ad9b9e4bf68e6147a03aac8a2e4dec915945a7a0ea35",
+      "mtime": "2026-09-18T09:14:35.314Z",
+      "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-07-repairs-before-install/characters/yuna/item.png"
+     },
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-12-install-before/characters/yuna/item.png (sidecar there too; tiers: D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install)"
     }
    },
    "public/art/characters/yuna/ko.png": {
@@ -8190,9 +8197,16 @@
     "approved": "2026-10-09"
    },
    "public/art/characters/rikku-alchemist/ko.png": {
-    "sha256": "170db99607bdff839b5593cc840eec962050a1f55a19daebeaab5e1ec200d135",
-    "mtime": "2026-10-09T15:41:05.779Z",
-    "approved": "2026-10-09"
+    "sha256": "26bfd58eb642ef636aea57d67f39f67d43ba80d2fa88280aa0288458c8e52787",
+    "mtime": "2026-10-13T03:33:32.657Z",
+    "approved": "2026-10-12",
+    "replacedBy": "bailey:2026-10-12 (Art Picks, Oct 12, decisions 61a and 61b; Bailey 2026-10-12 about 23:15 EDT, verbatim \"I’ll go with all of your recommendations\" and then \"Install\", accepting the driver's recommended pick RAL-KO-1; FFX-2 only)",
+    "supersedes": {
+     "sha256": "170db99607bdff839b5593cc840eec962050a1f55a19daebeaab5e1ec200d135",
+     "mtime": "2026-10-09T15:41:05.779Z",
+     "approved": "2026-10-09",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-12-install-before/characters/rikku-alchemist/ko.png (sidecar there too; tiers: D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install)"
+    }
    },
    "public/art/characters/rikku-alchemist/follow.png": {
     "sha256": "d4174727fdffad8206069c0f3e56dcabaeddb2aec92715e9b87f9406f5518a34",
@@ -8235,9 +8249,16 @@
     "approved": "2026-10-09"
    },
    "public/art/characters/rikku-white-mage/ko.png": {
-    "sha256": "39db706f2c0cb4bd3ec36666e84e040e94059ef648712bbd979e12e630198193",
-    "mtime": "2026-10-09T15:41:06.089Z",
-    "approved": "2026-10-09"
+    "sha256": "54126079f78e5dc19dbc0405ed46da80fe1787a853186ebbb6b1cb8cf4c58e96",
+    "mtime": "2026-10-13T03:33:32.649Z",
+    "approved": "2026-10-12",
+    "replacedBy": "bailey:2026-10-12 (Art Picks, Oct 12, decisions 61a and 61b; Bailey 2026-10-12 about 23:15 EDT, verbatim \"I’ll go with all of your recommendations\" and then \"Install\", accepting the driver's recommended pick RWM-KO-1; FFX-2 only)",
+    "supersedes": {
+     "sha256": "39db706f2c0cb4bd3ec36666e84e040e94059ef648712bbd979e12e630198193",
+     "mtime": "2026-10-09T15:41:06.089Z",
+     "approved": "2026-10-09",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-12-install-before/characters/rikku-white-mage/ko.png (sidecar there too; tiers: D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install)"
+    }
    },
    "public/art/characters/rikku-white-mage/critical.png": {
     "sha256": "9ed675d02e986e2a0ba17023c134bbc46d586b3b87b88ebc112d3a24fd54c9c4",
@@ -8322,9 +8343,16 @@
     "approved": "2026-10-09"
    },
    "public/art/characters/rikku-berserker/ko.png": {
-    "sha256": "5634504844f1969a97c0959e317cb96a6ac7ea38339feb820682186c6d43fa53",
-    "mtime": "2026-10-09T15:41:06.721Z",
-    "approved": "2026-10-09"
+    "sha256": "78c649322e825ba040a366d478ecdfd4125f76c193a9588313a84e0d551ab65f",
+    "mtime": "2026-10-13T03:33:32.666Z",
+    "approved": "2026-10-12",
+    "replacedBy": "bailey:2026-10-12 (Art Picks, Oct 12, decisions 61a and 61b; Bailey 2026-10-12 about 23:15 EDT, verbatim \"I’ll go with all of your recommendations\" and then \"Install\", accepting the driver's recommended pick RBS-KO-1; FFX-2 only)",
+    "supersedes": {
+     "sha256": "5634504844f1969a97c0959e317cb96a6ac7ea38339feb820682186c6d43fa53",
+     "mtime": "2026-10-09T15:41:06.721Z",
+     "approved": "2026-10-09",
+     "backup": "D:/Tools/pyrefly-art-repo/archive/2026-10-12-install-before/characters/rikku-berserker/ko.png (sidecar there too; tiers: D:/Tools/pyrefly-art-backup/replaced/2026-10-12-install)"
+    }
    },
    "public/art/characters/rikku-berserker/victory.png": {
     "sha256": "d72477d5512f7f752c380b2a372266bb933a71509d87efe4b3f2f572a8ea86c1",

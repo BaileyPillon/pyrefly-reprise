@@ -214,11 +214,12 @@ export const seymourFlux: Tactic = (actorId, commands, engine) => {
   // cost the same single turn. Cure before the mount's turn and its Full-Life
   // whiffs outright on a living non-Zombie (`misses-if-target-alive`, §3.3) —
   // one party turn for one enemy turn. Let it land and the same party turn buys
-  // a Phoenix Down that brings the member back at half HP **still zombified**
-  // (Zombie survives KO here on purpose: `statuses.ts SURVIVES_KO`, following
-  // ffx-yunalesca §15.2 #29 over ffx-combat-core §4.2's summary column), so the
-  // cure still has to be paid for afterwards and the trade becomes two party
-  // turns for one of theirs.
+  // a Phoenix Down that brings the member back at half HP — and, before re-parity
+  // RC5, **still zombified** (Zombie survived a KO here, `statuses.ts SURVIVES_KO`,
+  // following ffx-yunalesca §15.2 #29 over ffx-combat-core §4.2's summary
+  // column). The game's KO reset clears Zombie (FFX-G02 §3.2) and so does the
+  // engine now: the raised member comes back clean, and the Full-Life only
+  // finds a Zombie that is still alive.
   //
   // Holy Water first, Remedy only once the seven Holy Waters are gone; they are
   // the same cure (ffx-combat-core §4.2) and §7.8 stocks seven and three.

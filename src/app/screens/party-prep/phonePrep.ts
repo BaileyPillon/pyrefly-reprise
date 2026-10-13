@@ -19,14 +19,29 @@
  * and the cue), keeps the cue honest on scroll and resize, and keeps the
  * browser's own PageUp / PageDown from scrolling the page a second time on
  * top of the CHAPTER tab's L1 / R1 paging (`pageChapterColumns`).
+ *
+ * PR-0295 (PREP-A, Bailey 2026-10-12, D-781; both games): the eight heavy tabs
+ * (FFX Stats, Equipment, Items, Overdrive; FFX-2 Dresspheres, Stats, Accessories,
+ * Items) take the same recipe, with `data-phone="page"` on `.prep` as the hook
+ * this module keeps (`party-prep-phone-tabs.css`, `prep-phone-sections.css`, `prep-phone-parts.css`):
+ * the tab bar and the faces stay pinned while the page scrolls under them, so
+ * this module also marks the page `is-scrolled` (the bar gets a solid ground
+ * once content passes under it) and keeps the open tab in view in the strip.
  */
 
 import '../../../ui/common/party-prep-phone.css';
+import '../../../ui/common/party-prep-phone-tabs.css';
+import '../../../ui/common/prep-phone-sections.css';
+import '../../../ui/common/prep-phone-parts.css';
 import type { Chapter } from '../../../data/encounters.ts';
+import { isPhonePageTab } from '../../../ui/common/prepPhoneKit.ts';
 import { chapterNumeral } from '../../../ui/common/roman.ts';
 
 /** The width the stacked layout takes over below. Mirrors the CSS media query. */
 export const PHONE_PREP_QUERY = '(max-width: 599px)';
+
+/** How far the page scrolls before the pinned bar gets its solid ground (PR-0295). */
+const SCROLLED_PX = 40;
 
 export interface PhonePrep {
   /** The shell switched tab (null: its own fallback sheet). */
@@ -69,26 +84,47 @@ export function installPhonePrep(prep: HTMLElement, stage: HTMLElement, chapter:
   const mq = typeof window.matchMedia === 'function' ? window.matchMedia(PHONE_PREP_QUERY) : null;
   const update = (): void => {
     cue.classList.toggle('is-visible', hasMoreBelow(prep));
+    prep.classList.toggle('is-scrolled', prep.scrollTop > SCROLLED_PX);
   };
   const onKey = (e: KeyboardEvent): void => {
-    // The CHAPTER tab pages the page itself on L1 / R1 (PageUp / PageDown);
-    // the browser's default scroll of the same key would move it twice.
-    if (prep.dataset['tab'] !== 'chapter' || !mq?.matches) return;
+    // The CHAPTER tab pages the page itself on L1 / R1 (PageUp / PageDown), and so do
+    // the stacked tabs (PR-0295); the browser's default scroll of the same key would move it twice.
+    if ((prep.dataset['tab'] !== 'chapter' && prep.dataset['phone'] !== 'page') || !mq?.matches) return;
     if (e.code === 'PageDown' || e.code === 'PageUp') e.preventDefault();
+  };
+  // The open tab in the pinned strip: the tab before it starts at the left edge, so the one the player came from and
+  // the next one are both in reach (the strip is a swipeable scroller, the tabs run past the width).
+  const placeTab = (): void => {
+    if (!mq?.matches || prep.dataset['phone'] !== 'page') return;
+    const strip = stage.querySelector<HTMLElement>('.prep__tabs');
+    const on = strip?.querySelector<HTMLElement>('.prep__tab[aria-selected="true"]');
+    if (!strip || !on) return;
+    const edge = (on.previousElementSibling as HTMLElement | null) ?? on;
+    strip.scrollLeft = Math.max(0, edge.offsetLeft - 16);
+  };
+  // Crossing the 600 px line (a window dragged narrower, a tablet turned upright): the open tab goes back into view.
+  const onQuery = (): void => {
+    placeTab();
+    update();
   };
   prep.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update, { passive: true });
   window.addEventListener('keydown', onKey);
+  mq?.addEventListener?.('change', onQuery);
   // Fonts and the panel's own content settle after mount and change the
   // stacked page's height; the stage is `height: auto` there, so watch it.
   const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(update) : null;
   ro?.observe(stage);
+  void document.fonts?.ready.then(placeTab);
 
   return {
     setTab(id) {
       if (id) prep.dataset['tab'] = id;
       else delete prep.dataset['tab'];
+      if (isPhonePageTab(id)) prep.dataset['phone'] = 'page';
+      else delete prep.dataset['phone'];
       prep.scrollTop = 0;
+      placeTab();
       update();
       window.requestAnimationFrame(update);
     },
@@ -97,6 +133,7 @@ export function installPhonePrep(prep: HTMLElement, stage: HTMLElement, chapter:
       prep.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
       window.removeEventListener('keydown', onKey);
+      mq?.removeEventListener?.('change', onQuery);
       ro?.disconnect();
     },
   };

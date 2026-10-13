@@ -46,6 +46,8 @@ export const HELD_FADE_S = 1.5;
 export class PyreflyStage {
   readonly emitter: PyreflyEmitter;
   private readonly tracked = new Map<string, DissolveSource>();
+  /** Figures whose dissolve level is an entrance's (E-PYRE, `entrance/StageEntrances.ts`), not a death's: they release no rising motes. */
+  private readonly hushed = new Set<DissolveSource>();
   private readonly quad: [Vector3, Vector3, Vector3, Vector3] = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
   private readonly lens: ParticleField | null;
   private readonly held: Array<{ field: Object3D & { setOpacity?(v: number): void }; releasedBy: string; opacity: number; t: number | null }> = [];
@@ -78,6 +80,8 @@ export class PyreflyStage {
 
   /** A combatant has left the field: its release stops, its lights stay, and anything it held back comes up. */
   leave(id: string): void {
+    const gone = this.tracked.get(id);
+    if (gone) this.hushed.delete(gone);
     this.tracked.delete(id);
     for (const h of this.held) if (h.releasedBy === id && h.t === null) h.t = 0;
   }
@@ -85,6 +89,17 @@ export class PyreflyStage {
   /** Who is tracked (tests, debug). */
   get trackedIds(): string[] {
     return [...this.tracked.keys()];
+  }
+
+  /** Is this combatant tracked for the pyrefly dissolve? (The entrance puts its sweep style back to that when it is whole.) */
+  tracks(id: string): boolean {
+    return this.tracked.has(id);
+  }
+
+  /** E-PYRE: mute (or not) a figure's death release while its dissolve level is an entrance's; the gather's motes are spawned into {@link emitter} by `StageEntrances`. */
+  hush(actor: DissolveSource, on: boolean): void {
+    if (on) this.hushed.add(actor);
+    else this.hushed.delete(actor);
   }
 
   /**
@@ -97,6 +112,7 @@ export class PyreflyStage {
     if (alive) for (const h of this.held) if (h.t === null && !alive(h.releasedBy)) h.t = 0;
     const dens = TIER_DENSITY[this.tier()] ?? 0;
     for (const actor of this.tracked.values()) {
+      if (this.hushed.has(actor)) continue;
       const d = actor.dissolveLevel;
       if (d <= 0 || d >= 1 || dens <= 0) continue;
       this.release(actor, d, dens, dt);
@@ -190,6 +206,7 @@ export class PyreflyStage {
 
   dispose(): void {
     this.tracked.clear();
+    this.hushed.clear();
     this.emitter.dispose();
     this.lens?.dispose();
   }

@@ -28,8 +28,10 @@ import type { AutoStrategy } from '../../engine/BattlePresenter.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { StubChapterSelect, StubCutscene, StubResults } from './BattleScreenFlowStubs.ts';
 import { clearTimeMs } from '../../ui/common/resultsMath.ts';
+import { resultsCueFor, resultsScreenSilent, startResultsMusic, type ResultsMusicHandle } from './resultsMusic.ts'; // the win's and the loss's cue (music batch 2)
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts';
+import { musicChapter } from '../chapterMusicWarm.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { holdIdleLane } from '../imageWarm.ts';
 import { entryCardWait } from './entryCard.ts';
@@ -305,7 +307,7 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
-    const release = sfxChapter(id, holdIdleLane()); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice
+    const release = musicChapter(id, sfxChapter(id, holdIdleLane())); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
     return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(() => { release(); endRun(); });
@@ -485,11 +487,12 @@ export class GameFlow {
     previousBestMs?: number | null,
   ): Promise<ResultsChoice> {
     this.step = 'results';
-    // Chapter 4's results screen comes up silent: no pose, no fanfare.
-    const silent = chapter.music.victory === undefined;
-    if (!silent && outcome.outcome === 'victory' && chapter.music.victory) {
-      void audio.playMusic(chapter.music.victory, { fade: 0.4 }).catch(() => {});
-    }
+    // Chapter 4's results screen comes up silent: no pose, no tally flourish. It has a quiet cue of its own since 2026-10-12, so the silence is its own rule, not the absence of a cue.
+    const silent = resultsScreenSilent(chapter);
+    // The music of the screen (`resultsMusic.ts`, music batch 2): a win's cue starts now, as it always did (its battle screen is gone already: the post scene replaced it). A loss's cue waits
+    // for the swap below, because the battle screen's exit stops the music and would cut a cue asked for before it; it ends when the player chooses, so it never plays over a RETRY.
+    const cue = resultsCueFor(chapter, outcome.outcome);
+    let music: ResultsMusicHandle | null = cue?.kind === 'victory' ? startResultsMusic(audio, cue) : null;
     let choice: ResultsChoice = 'continue';
     const opts: ResultsScreenOptions = {
       chapter,
@@ -511,7 +514,9 @@ export class GameFlow {
       swapped = this.show(screen);
     });
     if (!(await swapped)) return choice;
+    if (cue?.kind === 'defeat') music = startResultsMusic(audio, cue);
     await screen.done;
+    music?.end();
     return choice;
   }
 }

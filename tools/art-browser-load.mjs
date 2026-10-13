@@ -9,7 +9,8 @@
  * prints nothing, so no HTTP-status or console-error gate could see it. This is the whole-set check, with no sample and no exemption:
  *
  *  - every art file of the build: for each master in `art/derived.json` the file that ships for it (a derived WebP, a recompressed PNG,
- *    or the master's own PNG), and every other image the build ships (the lossy `.2x.webp` pause and title plates, the depth maps);
+ *    or the master's own PNG), every strip thumbnail the record lists (r44-thumbs: it must load at the size the record gives), and every
+ *    other image the build ships (the lossy `.2x.webp` pause and title plates, the depth maps);
  *  - each is loaded the way the game loads art, an `<img>` with `onload` / `onerror` (as `livingParts.loadPlateImages` does), then a full
  *    `decode()`, in each engine (WebKit and Chromium by default, Firefox when asked);
  *  - an art file passes only if it decodes and its width and height are its MASTER's (read from the PNG header in `public/art`); the
@@ -68,12 +69,13 @@ const walk = (root) => {
 
 /**
  * What a build must load. `art`: every master of `art/derived.json` with the file that ships for it (`rel`), its kind and its master's
- * size. `others`: every other image file of the build. `problems`: a master the record lacks, a record of a master that is not in `public/art`,
- * a file the record says ships and the build does not hold, or no record at all.
+ * size. `thumbs`: every strip thumbnail the record lists, with the size the record gives it. `others`: every other image file of the build.
+ * `problems`: a master the record lacks, a record of a master that is not in `public/art`, a file the record says ships and the build does
+ * not hold, or no record at all.
  */
 export function planLoads({ distDir, publicDir }) {
   const recordFile = join(distDir, DERIVED_REPORT);
-  if (!existsSync(recordFile)) return { art: [], others: [], problems: [`${DERIVED_REPORT} is missing from the build: not a build that derived its art`] };
+  if (!existsSync(recordFile)) return { art: [], thumbs: [], others: [], problems: [`${DERIVED_REPORT} is missing from the build: not a build that derived its art`] };
   const record = JSON.parse(readFileSync(recordFile, 'utf8'));
   const masters = new Map(listMasterPngs(publicDir).map((m) => [m.rel, m]));
   const problems = [];
@@ -93,9 +95,18 @@ export function planLoads({ distDir, publicDir }) {
     art.push({ rel, master: f.path, kind: f.kind, width: size?.width ?? null, height: size?.height ?? null });
   }
   for (const rel of masters.keys()) if (!listed.has(rel)) problems.push(`${rel}: art/derived.json has no entry for it`);
-  const have = new Set(art.map((a) => a.rel));
+  const thumbs = [];
+  for (const f of record.thumbs?.files ?? []) {
+    if (f.kind === 'none' || !f.thumb) continue;
+    if (!existsSync(join(distDir, f.thumb))) {
+      problems.push(`${f.thumb}: art/derived.json says this thumbnail ships for ${f.path}, and the build does not hold it`);
+      continue;
+    }
+    thumbs.push({ rel: f.thumb, master: f.path, kind: 'thumb', width: f.width ?? null, height: f.height ?? null });
+  }
+  const have = new Set([...art, ...thumbs].map((a) => a.rel));
   const others = walk(distDir).filter((rel) => IMAGE.test(rel) && !have.has(rel)).map((rel) => ({ rel, master: null, kind: 'other', width: null, height: null }));
-  return { art, others, problems };
+  return { art, thumbs, others, problems };
 }
 
 /** The plates of the build's `art/portrait-parts/manifest.json`, one per plate and scale, each part with the file that ships for it (null: none). */
@@ -119,7 +130,7 @@ export function problemOf(item, row) {
   if (!row) return 'was never loaded (the page stopped before it)';
   if (!row.ok) return row.why;
   if (!(row.w > 0 && row.h > 0)) return `decoded to ${row.w}x${row.h}`;
-  if (item.width !== null && (row.w !== item.width || row.h !== item.height)) return `loaded at ${row.w}x${row.h}, but its master is ${item.width}x${item.height}`;
+  if (item.width !== null && (row.w !== item.width || row.h !== item.height)) return `loaded at ${row.w}x${row.h}, but its ${item.kind === 'thumb' ? 'record says' : 'master is'} ${item.width}x${item.height}`;
   return null;
 }
 
@@ -244,9 +255,9 @@ export async function verifyArtLoads({ distDir, publicDir, engines = DEFAULT_ENG
   const t0 = Date.now();
   for (const e of engines) if (!ENGINES.includes(e)) throw new Error(`unknown engine ${e}: expected ${ENGINES.join(', ')}`);
   const plan = planLoads({ distDir, publicDir });
-  const items = [...plan.art, ...plan.others];
+  const items = [...plan.art, ...plan.thumbs, ...plan.others];
   const problems = [...plan.problems];
-  const checked = { art: plan.art.length, others: plan.others.length, webp: 0, png: 0, copy: 0 };
+  const checked = { art: plan.art.length, thumbs: plan.thumbs.length, others: plan.others.length, webp: 0, png: 0, copy: 0 };
   for (const a of plan.art) checked[a.kind === 'webp' ? 'webp' : a.kind === 'png' ? 'png' : 'copy']++;
   const report = { ok: false, checked, engines: {}, problems, ms: 0, items, rows: {} };
   if (plan.art.length === 0) {
@@ -294,7 +305,7 @@ export async function verifyArtLoads({ distDir, publicDir, engines = DEFAULT_ENG
 export function formatLoadReport(r) {
   const c = r.checked;
   const names = Object.keys(r.engines);
-  const lines = [`art-browser-load: ${r.ok ? 'PASS' : 'FAIL'}: ${c.art} art file(s) (${c.webp} WebP, ${c.png} recompressed PNG, ${c.copy} PNG as shipped) and ${c.others} other image(s) in ${names.length ? names.join(' and ') : 'no engine'}, ${(r.ms / 1000).toFixed(0)} s`];
+  const lines = [`art-browser-load: ${r.ok ? 'PASS' : 'FAIL'}: ${c.art} art file(s) (${c.webp} WebP, ${c.png} recompressed PNG, ${c.copy} PNG as shipped)${c.thumbs ? `, ${c.thumbs} strip thumbnail(s)` : ''} and ${c.others} other image(s) in ${names.length ? names.join(' and ') : 'no engine'}, ${(r.ms / 1000).toFixed(0)} s`];
   for (const [name, e] of Object.entries(r.engines)) {
     lines.push(e.unavailable ? `  ${name}: NOT RUN (${e.unavailable})` : `  ${name} ${e.version}: ${e.loaded} of ${e.files} loaded and decoded at the master's size, ${e.failed} failed; portrait plates living ${e.plates.living} of ${e.plates.total}; ${(e.ms / 1000).toFixed(0)} s`);
   }

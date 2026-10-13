@@ -123,7 +123,7 @@ function finishTouched(scope: HitScope): void {
       const affectsHp = (resolveCommand(def, user).record.damageClass & 1) !== 0;
       runOnHit(ctx, { def, user }, target, { hpBefore, lostHp: target.hp < hpBefore, lastDamage, affectsHp });
     }
-    settleDeferredDeath(ctx, target, user.id);
+    settleDeferredDeath(ctx, target, user.id, lastDamage);
   }
 }
 

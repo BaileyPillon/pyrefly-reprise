@@ -23,7 +23,7 @@ import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { parseManifest } from '../../src/audio/manifest.ts';
-import { getTrack, hasTrack, trackNames } from '../../src/audio/tracks/index.ts';
+import { getTrack, hasTrack, isRetiredMusic, trackNames } from '../../src/audio/tracks/index.ts';
 import { sfxNames } from '../../src/audio/sfx/index.ts';
 import { tempoCurveOf } from '../../src/audio/tempo.ts';
 // @ts-expect-error -- the render tooling is plain .mjs with no declarations.
@@ -61,7 +61,9 @@ describe('the shipped audio manifest', () => {
       expect(entry.loopEnd, `${name} loopEnd runs past the file`).toBeLessThanOrEqual(
         entry.duration!,
       );
-      expect(entry.loopEnd - entry.loopStart, `${name} loop body is too short`).toBeGreaterThan(5);
+      // A one-shot (a defeat cue, 2026-10-12) plays once and holds about 2 s of silence that the player loops: its loop region is that silence.
+      const oneShot = (raw.music[name] as { oneShot?: boolean }).oneShot === true;
+      expect(entry.loopEnd - entry.loopStart, `${name} loop body is too short`).toBeGreaterThan(oneShot ? 1 : 5);
     }
   });
 
@@ -84,6 +86,11 @@ describe('the shipped audio manifest', () => {
 
   it('resolves every cue and effect the game can ask for', () => {
     for (const name of trackNames()) {
+      // A retired composition (batch 2, 2026-10-12) has no MP3 and no entry on purpose; it is only the synth fallback of the cues over it.
+      if (isRetiredMusic(name)) {
+        expect(manifest!.music[name], `the retired cue "${name}" still has a pre-render`).toBeUndefined();
+        continue;
+      }
       expect(manifest!.music[name], `no pre-render for the cue "${name}"`).toBeDefined();
     }
     for (const name of sfxNames()) {

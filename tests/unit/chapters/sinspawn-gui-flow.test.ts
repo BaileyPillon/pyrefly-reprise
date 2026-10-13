@@ -70,13 +70,14 @@ describe('the chain: two fights, no results screen between them', () => {
     expect(scripts.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('the Ridge is scored by the dread theme and the guest hour by Seymour\'s own, each from the formation\'s own cue', async () => {
-    expect(cueForGroup(chapter, sinspawnGuiGroup1, 'first').track).toBe('boss-dread');
-    expect(cueForGroup(chapter, sinspawnGuiGroup2, 'next').track).toBe('boss-seymour');
+  it("the Ridge is scored by its own original and the guest hour by the \"Challenge\" original Chapter II shares, each from the formation's own cue (2026-10-12, music batch 2)", async () => {
+    expect(cueForGroup(chapter, sinspawnGuiGroup1, 'first').track).toBe('boss-gui');
+    expect(cueForGroup(chapter, sinspawnGuiGroup2, 'next').track).toBe('boss-challenge');
     const { music } = await play(1);
-    expect(music[0]).toBe('boss-dread');
-    expect(music).toContain('boss-seymour');
-    expect(music.filter((cue) => cue === 'boss-dread')).toHaveLength(1);
+    expect(music[0]).toBe('boss-gui');
+    expect(music).toContain('boss-challenge');
+    expect(music.filter((cue) => cue === 'boss-gui')).toHaveLength(1);
+    expect(music).not.toContain('boss-seymour'); // Chapter I's, which Bailey chose by ear, is not borrowed any more
   });
 
   it('the spoils are paid together: both bodies\' gil, the Key Spheres, and a row for everyone who fought in either fight', async () => {

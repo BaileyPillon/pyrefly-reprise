@@ -60,6 +60,7 @@ import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
 import { StallWatch } from './BattleScreenStall.ts';
 import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
 import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
+import { framingPlanOwed } from '../../engine/fx/mix/MaxMix.ts'; // FOC44A-05: the boss entrance waits for CHAPTER FRAMING's plan
 import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
 import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
 import { defaultSettings } from '../SaveData.ts';
@@ -262,6 +263,7 @@ export class BattleScreen extends Screen {
       sceneKey: this.scene.key,
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
+      planOwed: framingPlanOwed, // FOC44A-05: a boss is let in only once CHAPTER FRAMING's plan (Paragon's giant size) has landed on it (`entrance/StageEntrances.ts`)
       cameraPreset: battleCameraPreset(chapter.game), // fb2-0929: `calm` by default (D-291), `?cam=current` for the old camera (CameraPreset.ts)
     });
 
@@ -273,6 +275,9 @@ export class BattleScreen extends Screen {
     if (this.exited) return this.releaseParts();
     this.preview = this.engine === null;
     this.startParty = this.engine ? [...this.engine.state().activeIds] : [];
+    // E-PYRE (decision 61e): the enemy and aeon figures this field builds wait unseen and gather into it when the opening begins (`BattleMoments.battleStart`). A preview has no opening to let
+    // them in, and FF7 is not Spira (no pyreflies: `pyreflyCanon.ts`), so both keep every figure on the field from the frame it is built.
+    this.stage.setEntrances(!this.preview && chapter.game !== 'ff7');
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
     if (this.exited) return this.releaseParts();

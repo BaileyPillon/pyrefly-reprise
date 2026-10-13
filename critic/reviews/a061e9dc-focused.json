@@ -1,0 +1,670 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-12T05:58:51.151Z",
+ "build": {
+  "mainSha": "a061e9dc"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "PASS",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression against the live build: five chapters (FFX-2 IV, XIII, XV; FFX II, XII) played by real keys at 59 to 60 fps with no stall, no console error and no 404; the ATB HUD, cast bars and Bahamut's 25 s countdown all ran to Mega Flare and victory.",
+  "Advisor response after a real key press is 3 to 6 ms, level with live (2 to 7 ms); the full vitest suite (17,205 tests) and tsc are clean.",
+  "The only major, CHK-027 jerks at camera cuts, is the same as live and carried; the stale Bahamut intent note and the difficulty shifts are disclosed."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "No music changed; agents cannot hear (rule 13). SFX cue plumbing pinned by the golden test audio-sfx-parity-pin, which passed in the full suite.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-002",
+   "result": "UNVERIFIED",
+   "reason": "Only 1600x900 was run: no UI layout file changed (src/ui touched only resultsMath.ts, a constant), so 2000x1012 and 390x844 were not re-captured.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-003",
+   "result": "NOT APPLICABLE",
+   "reason": "No text or layout change in a player-facing panel except the Reflect help text and advisor-forecast wording; legibility of the advisor and guide panels seen at 1600x900 in 11-advisor.png.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/yunalesca-win-a061e9dc/11-advisor.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "reason": "The advisor named Hastega with its menu path (IN WHITE MAGIC, 30 MP) in Ch II, and Bahamut Attack with damage ranges in Ch IV; the actor could press it.",
+   "game": "both",
+   "chapter": "yunalesca, ffx2-bahamut",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/yunalesca-win-a061e9dc/11-advisor.png",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/23-midfight.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-005",
+   "result": "UNVERIFIED",
+   "reason": "Advisor on a broken board (wiped or no-MP party) not driven this round; the unit tests advisor-v3 and advisor-forecast, re-pinned in this candidate, pass.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "reason": "Real-key runs of five chapters went menu, target pick, cancel, pause, results, board with no stuck overlay.",
+   "game": "both",
+   "chapter": "five chapters",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/16b-after-cancel.png",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/35-board-reload.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-007",
+   "result": "FAIL",
+   "reason": "The Bahamut enemy-intent note (src/battle/ffx2/intent.ts:307; the ALSO line reads \"The Mega Flare countdown is an action counter.\") is stale after W4 and RC3 (the countdown is the game's 25 s clock). Known to the builder; polish, disclosed.",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/23-midfight.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Ch IV mid-fight: the advisor slab, boss strip and party plates clear the painted figures at 1600x900.",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/23-midfight.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Names shown in full in the Ch II and Ch IV screens read.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/yunalesca-win-a061e9dc/11-advisor.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "reason": "No art changed (approvedArtCheck false); dist-gate art is the same masters.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Ch IV, XIII, XV (FFX-2) and Ch II, XII (FFX) played from the title with real keys through menu, target, pause, results, board and reload, with the ATB HUD drawing, no stall and zero console errors or 404s. Advisor response after a real N press: 3 to 6 ms on the candidate in Ch IV, I and XIII, 2 to 7 ms on the live site (no regression).",
+   "game": "both",
+   "chapter": "ffx2-bahamut, ffx2-trema, ffx2-den-of-woe, yunalesca, seymour-omnis",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/run.json",
+    "critic/reviews/a061e9dc-focused/cand-probe-3.json",
+    "critic/reviews/a061e9dc-focused/live-probe-3.json",
+    "critic/reviews/a061e9dc-focused/cand-probe-12.json",
+    "critic/reviews/a061e9dc-focused/live-probe-12.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "The harness asserts the screen before every capture (assertScreen); no capture came from a failed wait.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/index.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Pre-deploy candidate; the exact-artifact check belongs to the live review after the deploy.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "No blank frames or unreadable images in the screenshots read; run.json notFound is empty for all five chapters; art audit is left to the deploy (no art change).",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-trema-win-a061e9dc/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Both games were played: FFX (Ch II, XII) and FFX-2 (Ch IV, XIII, XV); both reach results and the board.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/seymour-omnis-win-a061e9dc/run.json",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-den-of-woe-win-a061e9dc/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: W4 clock, game status clocks and the boss scripts are FFX-2 only (src/battle/ffx2, src/data/ffx2); RC4 gear, reactions, Reflect bounce and target builder are FFX only (src/battle/ffx, src/data/ffx); the per-game RNG streams are both (src/battle/common, each game its own 68 streams). git diff 455c524c..a061e9dc touches no ffx2 file for RC4 and no ffx file for W4, and the FFX-2 HUD showed the ATB gauge and cast bars while FFX showed CTB order. Sources: research/re-ffx2-atb-status.md, research/re-ffx-targeting.md.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/yunalesca-win-a061e9dc/11-advisor.png",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/23-midfight.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Every chapter reached its real destination by keys: victory to results to the board for Ch IV, XIII, XV, XII; Ch II lost (route plays naively) and reached the retry battle; same outcome as the live-build baseline fcecfa74.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/yunalesca-win-a061e9dc/33-retry-battle.png",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-trema-win-a061e9dc/31-results.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "The engine fights went through the real presenter path in all five chapters (battle-log.json has atb, action, damage, status events), not a staging hook.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/battle-log.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "reason": "Continuity harness over the 5 chapters: 3,901 judged swaps, 0 head or feet over tolerance; max registered head jump 0.2 percent, max feet shift 1.5 px.",
+   "game": "both",
+   "chapter": "five chapters",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 53,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "173 jerks of 40 px or more in one frame in 2,578 s of battle (worst 354.7 px, Trema, the same figure as live baseline fcecfa74 at 354.6; Yunalesca worst 149.6 identical); every worst one inspected is a camera cut at a pose swap. 0 snaps per minute. Counts: Ch IV 3 (r41 live 11, fcecfa74 7), Trema 91 (fcecfa74 177), Yunalesca 55 (fcecfa74 28), Den of Woe 14 and Omnis 10 (no baseline). Same class as the disclosed FOC41-01.",
+   "game": "both",
+   "chapter": "five chapters",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/continuity-summary.json",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-den-of-woe-win-a061e9dc/continuity/strips/jerk-000-yuna.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 53,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  },
+  {
+   "id": "CHK-B1",
+   "result": "NOT APPLICABLE",
+   "reason": "No music or mix change.",
+   "game": "both",
+   "chapter": "see reason",
+   "state": "battle",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "environment": "headless Playwright Chromium, PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate via vite preview :5431 (stopped), real keys from the title, 1600x900",
+   "artifactVersion": "a061e9dc",
+   "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 268.3,
+    "swaps": 300,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 9.6,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 76.8,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-286-paine-od-x2-warrior-armor-break-ready.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-084-rikku-hurt-critical.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-260-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-016-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-018-paine-hurt-cast.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-229-paine-hurt-idle.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-086-rikku-critical-idle.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-149-rikku-hurt-idle.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-107-rikku-idle-hurt.jpg",
+     "ffx2-bahamut-win-a061e9dc/continuity/strips/swap-067-rikku-hurt-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-trema",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 962.9,
+    "swaps": 1772,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 2.3,
+    "maxFeetShiftPx": 1.1,
+    "worstJerkPx": 354.7,
+    "strips": 13,
+    "worstSwapStrips": [
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-835-rikku-follow-idle.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-075-yuna-follow-idle.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-033-yuna-attack-follow.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-841-paine-ready-hurt.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-433-rikku-attack-follow.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-1024-yuna-idle-item.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-341-yuna-cast-ready.jpg",
+     "ffx2-trema-win-a061e9dc/continuity/strips/swap-1053-yuna-item-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-den-of-woe",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 221.3,
+    "swaps": 275,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 2.8,
+    "maxFeetShiftPx": 0.8,
+    "worstJerkPx": 224,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-151-shade-gippal-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-284-shade-nooj-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-078-shade-baralai-hurt-ko.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-228-rikku-critical-cast.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-015-paine-ready-hurt.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-010-paine-hurt-ready.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-255-rikku-item-critical.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-103-yuna-hurt-idle.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-250-yuna-idle-hurt.jpg",
+     "ffx2-den-of-woe-win-a061e9dc/continuity/strips/swap-227-rikku-ready-critical.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "yunalesca",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 667,
+    "swaps": 975,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 25.9,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 149.6,
+    "strips": 19,
+    "worstSwapStrips": [
+     "yunalesca-win-a061e9dc/continuity/strips/swap-965-auron-idle-ko.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-926-wakka-ko-idle.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-977-wakka-hurt-ko.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-915-wakka-idle-ko.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-214-tidus-ready-attack.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-247-tidus-attack-follow.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-454-yuna-hurt-critical.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-456-yuna-critical-hurt.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-705-wakka-idle-hurt.jpg",
+     "yunalesca-win-a061e9dc/continuity/strips/swap-813-wakka-hurt-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-omnis",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 458.6,
+    "swaps": 600,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 8.7,
+    "maxFeetShiftPx": 1.5,
+    "worstJerkPx": 65.1,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-288-yuna-hurt-critical.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-105-wakka-idle-hurt.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-008-wakka-hurt-idle.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-057-wakka-critical-hurt.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-145-wakka-hurt-critical.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-069-auron-attack-follow.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-256-auron-critical-idle.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-259-yuna-ready-item.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-228-yuna-idle-hurt.jpg",
+     "seymour-omnis-win-a061e9dc/continuity/strips/swap-200-yuna-hurt-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 2578.1,
+  "counted": 3922,
+  "swaps": 3951,
+  "size": {
+   "judged": 3901,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 21,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 25.9,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.5,
+   "feetOverTolerance": 0,
+   "headMeasured": 3901,
+   "headRegistration": 2743,
+   "headSilhouette": 1158,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 3840,
+   "ghostFrames": 15475,
+   "worstGhostSeverity": 0.375,
+   "ghostOverFail": 0,
+   "jerks": 744,
+   "worstJerkPx": 354.7,
+   "jerksOverFail": 173,
+   "lowestIou": 0.049,
+   "maxCentroidShiftPx": 131.4,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "2743 of 3901 measured swaps had a registered head (tolerance 3 percent); 1158 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "173 jerk(s) of 40 px or more in one frame (worst 354.7 px)"
+    ]
+   }
+  },
+  "base": "http://127.0.0.1:5431/pyrefly-reprise/",
+  "date": "2026-10-12T05:29:50.839Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC42-01",
+   "severity": "major",
+   "title": "Jerks of 40 px or more remain (CHK-027 FAIL), as on live",
+   "game": "both",
+   "chapter": "ffx2-bahamut, ffx2-trema, ffx2-den-of-woe, yunalesca, seymour-omnis",
+   "expected": "no jerk over 40 px in one frame",
+   "observed": "173 jerks over 40 px across five chapters; worst 354.7 px (Trema) and 149.6 px (Yunalesca) equal the fcecfa74 baseline; the Den of Woe worst (224 px) is a camera cut at a pose swap. Counts scale with fight length; Ch IV improved (3 against 11), Yunalesca rose (55 against 28 on a longer baseline-unlike fight).",
+   "repro": "node critic/runner/lib/continuity.mjs --chapters=<ids> on dist-gate, seed 1, GPU",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/continuity-summary.json",
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-den-of-woe-win-a061e9dc/continuity/strips/jerk-000-yuna.jpg"
+   ],
+   "confidence": "high that they exist, medium on the live comparison (live 455c524c was not re-run for Trema, Yunalesca)",
+   "requirement": "RUBRIC 6a, D-421",
+   "where": "presenter pose swap at camera cuts (not touched by this candidate)",
+   "fix": "carried from FOC41-01",
+   "acceptanceCheck": "continuity harness shows no jerk over 40 px",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "FOC42-02",
+   "severity": "polish",
+   "title": "Stale Bahamut intent note after the W4 clock",
+   "game": "ffx2",
+   "chapter": "ffx2-bahamut",
+   "expected": "the note matches the 25 s idle countdown",
+   "observed": "ALSO line reads \"The Mega Flare countdown is an action counter.\" (intent.ts:307, pinned by enemy-intent.test.ts); the builder says Slow no longer slows it",
+   "repro": "Ch IV, E then the intent panel",
+   "evidence": [
+    "critic/reviews/a061e9dc-focused/continuity/ffx2-bahamut-win-a061e9dc/23-midfight.png"
+   ],
+   "confidence": "medium (text read from the screenshot and the handoff, not retyped)",
+   "requirement": "CHK-007",
+   "where": "src/battle/ffx2/intent.ts:307",
+   "fix": "reword with Bailey's yes (the builder left it)",
+   "acceptanceCheck": "note matches the research",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "FOC42-03",
+   "severity": "polish",
+   "title": "Difficulty moved by the parity work (disclose, not a defect)",
+   "game": "both",
+   "chapter": "ffx2-trema, ffx2-experiment, seymour-omnis, yunalesca",
+   "expected": "the announcement says so",
+   "observed": "builder numbers (not re-run here): the hidden Experiment 500 to 380 wins is harder; Chapter XIII easier; Omnis 436 to 462; Yunalesca opening is Hastega then Reflect; fights a quarter to a third shorter. The full vitest suite (1107 files, 17,205 tests, which include the benches) passed.",
+   "repro": "tests/unit bench files",
+   "evidence": [],
+   "confidence": "medium",
+   "requirement": "owner disclosure",
+   "where": "src/battle/ffx2 and ffx",
+   "fix": "disclose in the announcement",
+   "acceptanceCheck": "announcement lists them",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "continuity harness (real keys, 1600x900, GPU) on ffx2-bahamut, ffx2-trema, ffx2-den-of-woe, yunalesca, seymour-omnis: 2,578 s of battle, to results and the board",
+   "advisor response by real N press, candidate against live, Ch IV, I, XIII",
+   "full vitest (1107 files) and tsc --noEmit",
+   "git diff folders for game separation (CHK-021)",
+   "idle Mega Flare window read from the battle log of the Ch IV run"
+  ],
+  "reused": [
+   {
+    "what": "500-seed win-rate tables and RC3/RC4 difficulty numbers",
+    "from": "docs/handoff/re-parity-rc3.md, re-parity-rc4.md and the benches in the full suite",
+    "why": "a sampled review, not a sweep; the benches passed"
+   }
+  ],
+  "notTested": [
+   "2000x1012 and 390x844 layouts (no UI change)",
+   "live re-run of Trema, Yunalesca and Den of Woe continuity (compared with fcecfa74 and r41 baselines)",
+   "FFX Omnis gear, Reflect and Cover outcomes by the player (covered by unit tests only)",
+   "audio by ear",
+   "the Bahamut enemy HP bar while idle-waiting at an explicit frame (the bar read full in the mid-fight capture; the gauge snapshot shows 0 only for a charging or executing unit)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "live verification of the exact artifact after the deploy, then the deep review on the live build (shared combat core, presenter, audio files)",
+ "elapsedMinutes": 100
+}
