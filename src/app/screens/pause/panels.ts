@@ -1,5 +1,5 @@
 /**
- * What the five non-member tabs put where the meters were.
+ * What the six non-member tabs put where the meters were (ACCESSIBILITY, PR-0032, the sixth).
  *
  * `docs/concepts/pause-until-dawn/options.json` → `preservedFunctions` is the
  * checklist this file answers: **every function the old pause screen had, and

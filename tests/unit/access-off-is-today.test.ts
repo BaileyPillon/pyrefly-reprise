@@ -116,10 +116,26 @@ describe('the two new stylesheets match nothing while both settings are off', ()
   /** Every selector (not keyframe stops, not at-rules) of a stylesheet, one per comma. */
   function selectorsOf(css: string): string[] {
     const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    /** A selector list split on its top-level commas only (`:is(.a, .b)` stays whole). */
+    const split = (list: string): string[] => {
+      const out: string[] = [];
+      let depth = 0;
+      let cur = '';
+      for (const ch of list) {
+        if (ch === '(' || ch === '[') depth++;
+        if (ch === ')' || ch === ']') depth--;
+        if (ch === ',' && depth === 0) {
+          out.push(cur.trim());
+          cur = '';
+        } else cur += ch;
+      }
+      out.push(cur.trim());
+      return out;
+    };
     return [...bare.matchAll(/(?:^|\})\s*([^{}@\s][^{}]*)\{/g)]
       .map((m) => m[1]!.trim())
       .filter((s) => !/^[\d%,.\s]+$/.test(s) && !/^(from|to)$/.test(s))
-      .flatMap((g) => g.split(',').map((s) => s.trim()))
+      .flatMap(split)
       .filter(Boolean);
   }
 

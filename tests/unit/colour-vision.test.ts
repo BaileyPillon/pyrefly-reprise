@@ -4,7 +4,8 @@
  * simulation of colour blindness, each with a second cue besides colour. One block per group, and one for the table:
  *
  *   tints     FFX only    Berserk and Curse tint on the painted fighter        second cue: B or C over the head
- *   target    FFX only    targeting bracket and plate: ally and self           second cue: a diamond, a plus or a ring on the corners
+ *   target    both games  targeting bracket and plate: ally and self           second cue: a diamond, a plus or a ring on the corners
+ *                         (the round's page tagged it FFX; FFX-2's HUD draws the same corners, plate and pool, so it is both)
  *   numerals  both games  the heal and MP damage numbers                       second cue: "+" on a heal (printed today), "MP" on an MP numeral
  *   gates     FFX-2 only  the Garment Grid gates                               second cue: the gate's letter R, G, B or Y
  *
@@ -131,8 +132,8 @@ describe('the table, scored with the round\'s simulation', () => {
     }
   });
 
-  it('the games: tints and target are FFX, numerals both, gates FFX-2 (AGENTS.md rule 14)', () => {
-    expect(CVD_GAME).toEqual({ tints: 'ffx', target: 'ffx', numerals: 'both', gates: 'ffx2' });
+  it('the games: tints FFX, target and numerals both, gates FFX-2 (AGENTS.md rule 14)', () => {
+    expect(CVD_GAME).toEqual({ tints: 'ffx', target: 'both', numerals: 'both', gates: 'ffx2' });
   });
 
   it('simulate: the round\'s own check that a hue really does collapse (Berserk red against Curse brown under protan)', () => {
@@ -271,9 +272,9 @@ describe('tints: Berserk and Curse on the painted fighter (FFX only)', () => {
   });
 });
 
-// ===================================================================== target (FFX only)
+// ===================================================================== target (both games)
 
-describe('target: the bracket, plate and label of who the cursor is on (FFX only)', () => {
+describe('target: the bracket, plate and label of who the cursor is on (both games)', () => {
   const css = read('src/ui/common/colour-vision.css');
   const today = read('src/ui/ffx/ffx-hud.css');
 
@@ -288,8 +289,8 @@ describe('target: the bracket, plate and label of who the cursor is on (FFX only
   });
 
   it('under a mode the ally and self marks take the mode\'s colours (bracket, plate, ALL label); enemy is not recoloured', () => {
-    expect(css).toMatch(/html\[data-colour-vision\] \.ffxhud \.ffx-target--ally \{ --ffx-mark: var\(--cvd-target-ally\); \}/);
-    expect(css).toMatch(/html\[data-colour-vision\] \.ffxhud \.ffx-target--self \{ --ffx-mark: var\(--cvd-target-self\); \}/);
+    expect(css).toMatch(/html\[data-colour-vision\] :is\(\.ffxhud, \.ffx2hud\) \.ffx-target--ally \{ --ffx-mark: var\(--cvd-target-ally\); \}/);
+    expect(css).toMatch(/html\[data-colour-vision\] :is\(\.ffxhud, \.ffx2hud\) \.ffx-target--self \{ --ffx-mark: var\(--cvd-target-self\); \}/);
     expect(css).toMatch(/\.ffx-target__plate--ally \{ --ffx-plate-mark: var\(--cvd-target-ally\); \}/);
     expect(css).toMatch(/\.ffx-target__plate--self \{ --ffx-plate-mark: var\(--cvd-target-self\); \}/);
     expect(css).toMatch(/\.ffx-target__all--ally \{ --ffx-all-mark: var\(--cvd-target-ally\); \}/);
@@ -315,15 +316,16 @@ describe('target: the bracket, plate and label of who the cursor is on (FFX only
     light.apply({ ids: ['kimahri'], mode: 'single', side: null, accent: 'self', colour: hexToInt(cvdColour('target', 'self', 'blue-yellow')) });
     expect(painted.at(-1)).toBe(0xf4f1e8);
     const hud = read('src/ui/ffx/FFXBattleHud.ts');
-    expect(hud, 'only the FFX HUD declares a colour; FFX-2\'s HUD does not').toMatch(/colour: hexToInt\(cvdColour\('target', kind, cvd\)\)/);
-    expect(read('src/ui/ffx2/FFX2BattleHud.ts')).not.toContain('cvdColour');
+    expect(hud, 'the FFX HUD declares the colour').toMatch(/colour: hexToInt\(cvdColour\('target', kind, cvd\)\)/);
+    expect(read('src/ui/ffx2/FFX2BattleHud.ts'), 'and so does FFX-2\'s, except for its own pink accent').toMatch(/accent === 'ffx2' \? \{\} : \{ colour: hexToInt\(cvdColour\('target', accent, cvd\)\) \}/);
   });
 
-  it('every rule is under html[data-colour-vision] and the FFX hud: FFX-2\'s reticle and plates are not touched, OFF matches nothing', () => {
-    expect(css).not.toContain('.ffx2hud');
+  it('every rule is under html[data-colour-vision] and one of the two HUDs: FFX-2\'s own pink flower reticle and TARGET plate are not touched, OFF matches nothing', () => {
+    expect(css).not.toContain('ffx2-tplate');
+    expect(css).not.toContain('ffx-target__flower');
     const selectors = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(?:^|\})\s*([^{}@\s][^{}]*)\{/g)].map((m) => m[1]!.trim()).filter((s) => s.includes('ffx-target'));
     expect(selectors.length).toBeGreaterThan(8);
-    for (const s of selectors) expect(s, s).toMatch(/^html\[data-colour-vision\] \.ffxhud /);
+    for (const s of selectors) expect(s, s).toMatch(/^html\[data-colour-vision\] :is\(\.ffxhud, \.ffx2hud\) /);
   });
 });
 

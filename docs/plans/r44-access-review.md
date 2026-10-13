@@ -24,7 +24,8 @@ lower peak and keep them opaque for the swap", the four colour groups and their 
 | flash sources 1, 2, 9, 10, 13 | FFX only (summon, boss form change, group bracket, party card, Overdrive timing flash) |
 | flash sources 3, 11, 16, 21, 22 | FFX-2 only (Spherechange, girl's card, Save Sphere of Chapter XI, ready gauge, chain veil) |
 | flash sources 4 to 8, 12, 14, 15, 17 to 20 | both (shared presenter, stage, HUD pulse, cut-ins, cutscene, eye-candy rules) |
-| colour group `tints` (Berserk, Curse) and `target` (ally, self) | FFX only |
+| colour group `tints` (Berserk, Curse) | FFX only (FFX-2 has no Berserk look, and its Curse is a grey darkening) |
+| colour group `target` (ally, self) | both: the round's page tagged it FFX, but FFX-2's HUD draws the same `.ffx-target--*` corners, name plate and pool in the same colours (seen in play), so the change is true to both |
 | colour group `numerals` (heal, MP) | both (one `DamageNumbers` serves both HUDs) |
 | colour group `gates` (Garment Grid) | FFX-2 only |
 

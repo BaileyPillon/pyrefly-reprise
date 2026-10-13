@@ -8,7 +8,8 @@
  *
  * Only the four groups move; the other seven the round measured shrink but stay readable or already carry
  * a word, so they are not touched. Game case per group (AGENTS.md rule 14):
- *   target    FFX only   the bracket, plate and ALL label of `ffx-hud.css` under `.ffxhud` (FFX-2's reticle and plates are theirs)
+ *   target    both games the bracket, plate and ALL label of `ffx-hud.css`: FFX-2's HUD draws the same `.ffx-target--ally|self|enemy` corners and name plate
+ *                        (under `.ffx2hud`, beside its own pink flower reticle and TARGET plate, which carry no side colour)
  *   numerals  both games `damage-numbers.css`: one `DamageNumbers` serves both HUDs
  *   gates     FFX-2 only the Garment Grid pips of party prep (`x2prep-gate`); the Spherechange wheel and flourish are drawn
  *                        in TS (`SpherechangeWheel.ts`, `SpherechangeFlourish.ts`) from the same table
@@ -16,19 +17,19 @@
  *                        head is a mark (`statusMarks.ts`), styled at the end of this file
  */
 
-/* ----------------------------------------------------------------- target (FFX only) */
+/* --------------------------------------------------------------- target (both games) */
 
 /* Ally and self colours move; enemy keeps its gold in both modes. */
-html[data-colour-vision] .ffxhud .ffx-target--ally { --ffx-mark: var(--cvd-target-ally); }
-html[data-colour-vision] .ffxhud .ffx-target--self { --ffx-mark: var(--cvd-target-self); }
-html[data-colour-vision] .ffxhud .ffx-target__plate--ally { --ffx-plate-mark: var(--cvd-target-ally); }
-html[data-colour-vision] .ffxhud .ffx-target__plate--self { --ffx-plate-mark: var(--cvd-target-self); }
-html[data-colour-vision] .ffxhud .ffx-target__all--ally { --ffx-all-mark: var(--cvd-target-ally); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--ally { --ffx-mark: var(--cvd-target-ally); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--self { --ffx-mark: var(--cvd-target-self); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__plate--ally { --ffx-plate-mark: var(--cvd-target-ally); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__plate--self { --ffx-plate-mark: var(--cvd-target-self); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__all--ally { --ffx-all-mark: var(--cvd-target-ally); }
 
 /* The second cue: a tick on each corner of the bracket that differs by side. A diamond for an enemy, a plus
    for an ally, a ring for yourself. It sits inside the L, in the bracket's own colour, and takes the corner's
    ink shadow and the dim of a bracket that is not the one aimed at. The name plate keeps its name and letter. */
-html[data-colour-vision] .ffxhud .ffx-target__c::after {
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c::after {
   content: '';
   position: absolute;
   box-sizing: border-box;
@@ -36,20 +37,20 @@ html[data-colour-vision] .ffxhud .ffx-target__c::after {
   height: 7px;
   pointer-events: none;
 }
-html[data-colour-vision] .ffxhud .ffx-target__c--tl::after { left: 6px; top: 6px; }
-html[data-colour-vision] .ffxhud .ffx-target__c--tr::after { right: 6px; top: 6px; }
-html[data-colour-vision] .ffxhud .ffx-target__c--bl::after { left: 6px; bottom: 6px; }
-html[data-colour-vision] .ffxhud .ffx-target__c--br::after { right: 6px; bottom: 6px; }
-html[data-colour-vision] .ffxhud .ffx-target--enemy .ffx-target__c::after {
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--tl::after { left: 6px; top: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--tr::after { right: 6px; top: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--bl::after { left: 6px; bottom: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--br::after { right: 6px; bottom: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--enemy .ffx-target__c::after {
   background: var(--ffx-mark);
   transform: rotate(45deg) scale(0.86);
 }
-html[data-colour-vision] .ffxhud .ffx-target--ally .ffx-target__c::after {
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--ally .ffx-target__c::after {
   background:
     linear-gradient(var(--ffx-mark), var(--ffx-mark)) center / 100% 2px no-repeat,
     linear-gradient(var(--ffx-mark), var(--ffx-mark)) center / 2px 100% no-repeat;
 }
-html[data-colour-vision] .ffxhud .ffx-target--self .ffx-target__c::after {
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--self .ffx-target__c::after {
   border: 2px solid var(--ffx-mark);
   border-radius: 50%;
 }

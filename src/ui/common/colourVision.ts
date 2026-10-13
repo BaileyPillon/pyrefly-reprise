@@ -11,7 +11,7 @@
  * | group      | what it is                                        | game  | closest pair today (type)   | second cue, any mode but OFF            |
  * |------------|---------------------------------------------------|-------|-----------------------------|-----------------------------------------|
  * | `tints`    | Berserk and Curse tint on the painted fighter     | FFX   | 2.9 Berserk/Curse (protan)  | the status's initial over the head (B, C) |
- * | `target`   | targeting bracket and plate: enemy, ally, self    | FFX   | 6.2 ally/self (tritan)      | a diamond, a plus or a ring on the corners |
+ * | `target`   | targeting bracket and plate: enemy, ally, self    | both  | 6.2 ally/self (tritan)      | a diamond, a plus or a ring on the corners |
  * | `numerals` | the heal and MP damage numbers                    | both  | 8.2 heal/MP (tritan)        | `+` on a heal (already printed), `MP` on an MP number |
  * | `gates`    | Garment Grid gates: Spherechange wheel, grid pips | FFX-2 | 8.9 green/yellow (protan)   | the gate's letter R, G, B or Y          |
  *
@@ -37,7 +37,7 @@ export type CvdGroup = 'tints' | 'target' | 'numerals' | 'gates';
 /** AGENTS.md rule 14: which game each group belongs to, from where its colour lives in the code. */
 export const CVD_GAME: Readonly<Record<CvdGroup, 'ffx' | 'ffx2' | 'both'>> = Object.freeze({
   tints: 'ffx', // `statusLooks.ts` FFX table (FFX-2's Curse is a grey darkening, and FFX-2 has no Berserk look)
-  target: 'ffx', // `ffx-hud.css` `.ffxhud .ffx-target*`; FFX-2's reticle and plates have their own chrome
+  target: 'both', // `ffx-hud.css` `.ffx-target*`: the round's page tagged it FFX, but FFX-2's HUD draws the same corners, name plate and pool in the same colours (under `.ffx2hud`; seen in play, `docs/handoff/r44-access.md`)
   numerals: 'both', // `damage-numbers.css`: both games' numerals come out of one `DamageNumbers`
   gates: 'ffx2', // the Garment Grid: Spherechange wheel, flourish and the party-prep grid pips
 });

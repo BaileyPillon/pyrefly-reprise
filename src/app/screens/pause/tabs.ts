@@ -83,7 +83,7 @@ export function memberTabDot(c: AnyCombatant): boolean {
  * `activeIds` is the field order, left to right, and the first of them is the
  * tab the screen opens on — "the active party member first". With no battle
  * under the pause (a cutscene) there are no member tabs at all and the strip
- * is the five fixed ones, which is also what makes the screen safe to open
+ * is the six fixed ones, which is also what makes the screen safe to open
  * over a scene.
  */
 export function buildTabs(state: Readonly<BattleState> | null): PauseTab[] {
