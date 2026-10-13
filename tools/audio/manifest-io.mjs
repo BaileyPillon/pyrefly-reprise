@@ -324,7 +324,7 @@ export function externalSource(entry) {
 }
 
 /** The keys of a music entry, in the order the manifest writes them; anything else follows in the order given. */
-const ENTRY_KEY_ORDER = ['file', 'loopStart', 'loopEnd', 'duration', 'bytes', 'lufs', 'truePeakDb', 'score', 'source'];
+const ENTRY_KEY_ORDER = ['file', 'loopStart', 'loopEnd', 'duration', 'bytes', 'lufs', 'truePeakDb', 'score', 'source', 'oneShot'];
 
 /**
  * A number the way the stored manifest prints it. The two level fields are floats whatever their value, so they
@@ -349,23 +349,88 @@ function entryNumberText(key, value) {
 export function setMusicEntryText(text, name, entry) {
   const eol = text.includes('\r\n') ? '\r\n' : '\n';
   const lines = text.split(eol);
+  const { start, end } = entryRange(lines, name);
+  lines.splice(start, end - start + 1, `    "${name}": {`, ...entryBodyLines(name, entry), lines[end]);
+  return lines.join(eol);
+}
+
+/** The first and last line of one music entry's block (its opening line and its `}` or `},`), or a thrown error. */
+function entryRange(lines, name) {
   const start = lines.indexOf(`    "${name}": {`);
   if (start < 0) throw new Error(`the manifest has no music entry "${name}"`);
   let end = start + 1;
   while (end < lines.length && !/^ {4}},?$/.test(lines[end])) end++;
   if (end >= lines.length) throw new Error(`the manifest entry "${name}" never closes`);
+  return { start, end };
+}
 
+/** The `"key": value` lines of an entry, without the opening and closing lines. A boolean prints as `true` or `false` (`oneShot`). */
+function entryBodyLines(name, entry) {
   const keys = [
     ...ENTRY_KEY_ORDER.filter((k) => entry[k] !== undefined),
     ...Object.keys(entry).filter((k) => !ENTRY_KEY_ORDER.includes(k) && entry[k] !== undefined),
   ];
-  const body = keys.map((key, i) => {
+  return keys.map((key, i) => {
     const value = entry[key];
-    if (typeof value !== 'string' && typeof value !== 'number') throw new Error(`entry "${name}": "${key}" must be a string or a number`);
-    const printed = typeof value === 'string' ? JSON.stringify(value) : entryNumberText(key, value);
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
+      throw new Error(`entry "${name}": "${key}" must be a string, a number or a boolean`);
+    }
+    const printed = typeof value === 'string' ? JSON.stringify(value) : typeof value === 'boolean' ? String(value) : entryNumberText(key, value);
     return `      "${key}": ${printed}${i < keys.length - 1 ? ',' : ''}`;
   });
-  lines.splice(start, end - start + 1, `    "${name}": {`, ...body, lines[end]);
+}
+
+/** The line numbers of the music block's entries, in file order: `{ name, start, end }` (the block ends at the `  },` that closes `"music"`). */
+function musicEntries(lines) {
+  const open = lines.indexOf('  "music": {');
+  if (open < 0) throw new Error('the manifest has no "music" block');
+  const entries = [];
+  for (let i = open + 1; i < lines.length && lines[i] !== '  },'; i++) {
+    const found = /^ {4}"([^"]+)": \{$/.exec(lines[i]);
+    if (!found) continue;
+    const { end } = entryRange(lines, found[1]);
+    entries.push({ name: found[1], start: i, end });
+    i = end;
+  }
+  return entries;
+}
+
+/**
+ * Add one music entry to the manifest's text, in the key order `mergeIntoManifest` writes (`localeCompare` on the cue name), and leave every
+ * other byte exactly as it was: the entry before it gains its comma if it had none, the line endings stay. Throws when the cue is already there
+ * (`setMusicEntryText` replaces). Callers hold the manifest lock.
+ */
+export function addMusicEntryText(text, name, entry) {
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  const lines = text.split(eol);
+  const entries = musicEntries(lines);
+  if (entries.some((e) => e.name === name)) throw new Error(`the manifest already has a music entry "${name}"`);
+  const after = entries.find((e) => e.name.localeCompare(name) > 0);
+  const block = [`    "${name}": {`, ...entryBodyLines(name, entry), after ? '    },' : '    }'];
+  if (after) {
+    lines.splice(after.start, 0, ...block);
+  } else {
+    const last = entries[entries.length - 1];
+    if (last) lines[last.end] = '    },';
+    lines.splice(last ? last.end + 1 : lines.indexOf('  "music": {') + 1, 0, ...block);
+  }
+  return lines.join(eol);
+}
+
+/**
+ * Take one music entry out of the manifest's text, leaving every other byte as it was (when it was the last entry, the one before it loses its
+ * comma). Throws when the cue is not there. Callers hold the manifest lock.
+ */
+export function removeMusicEntryText(text, name) {
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  const lines = text.split(eol);
+  const entries = musicEntries(lines);
+  const at = entries.findIndex((e) => e.name === name);
+  if (at < 0) throw new Error(`the manifest has no music entry "${name}"`);
+  const { start, end } = entries[at];
+  const wasLast = at === entries.length - 1;
+  lines.splice(start, end - start + 1);
+  if (wasLast && at > 0) lines[entries[at - 1].end] = '    }';
   return lines.join(eol);
 }
 
