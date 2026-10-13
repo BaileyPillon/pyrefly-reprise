@@ -162,6 +162,11 @@ describe('advisor v4 on the card (FFX)', () => {
     // streams"; every seed is another deal of the same odds). Seed 1 still opens on an untouched board and picks Hastega. Seed 2's first menu is now a
     // Zombie board with the Zombie on Kimahri (the card's own rule: clear it now, Holy Water on him), and on seed 3 Kimahri is the first to act
     // (Mighty Guard on the party). Nothing on the advisor, the boss or the party was tuned.
-    expect(picks).toEqual(['tidus: Hastega -> the party', 'tidus: Holy Water -> Kimahri', 'kimahri: Mighty Guard -> the party']);
+    // Seeds 1 and 3 moved on 2026-10-12 (re-parity RC5, lane FFX-D, FFX only; a KO clears Zombie, FFX-G02 section 3.2, Bailey 2026-10-11 "Close D-214 / PR-0217"; ablation: with the engine's old
+    // SURVIVES_KO and bridge put back alone the old picks return, with any of the other three RC5 rules put back alone they do not). Both open the same way (the opening events were read): Lance of Atrophy zombifies a member and the
+    // Mortiorchis's Full-Life kills the Zombie it finds (Kimahri on seed 1, Tidus on seed 3), so the first menu has somebody on the floor. That body used to stay a Zombie, so the card left it down ("Full-Life hunts the zombied body") and the search preferred Hastega
+    // and Mighty Guard; a KO takes the Zombie away now, so standing him up is the best move the search finds: Mega Phoenix on the party ("Stands Kimahri back up", then "Stands Tidus back up").
+    // Seed 2 is unchanged (the Zombie is alive on Kimahri: Holy Water). Nothing on the advisor, the boss or the party was tuned.
+    expect(picks).toEqual(['tidus: Mega Phoenix -> the party', 'tidus: Holy Water -> Kimahri', 'kimahri: Mega Phoenix -> the party']);
   }, 600_000);
 });

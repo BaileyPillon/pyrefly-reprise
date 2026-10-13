@@ -14,16 +14,20 @@ import { autoWordB } from './adapt/words.ts';
 import { type Ctx, has, rtOf, statusOf } from './state.ts';
 
 /**
- * Statuses a KO does **not** clear.
+ * Statuses a KO does **not** clear (re-parity RC5 lane FFX-D; FFX only).
  *
- * `zombie` is here deliberately: `ffx-combat-core §4.2`'s summary column reads
- * "cleared by KO: yes", but `ffx-yunalesca §15.2 #29` states from the decompiled
- * AI that "a KO'd but still zombified active member still contributes its full
- * 30" — the Form II/III Hellbiter weighting reads Zombie on KO'd slots, which
- * would be dead code otherwise. We follow the encounter document, which is the
- * more specific source, and keep the list in one place so it can be flipped.
+ * The game's KO reset (VA 0x0079a190, `kernel/death-check.ts#koReset`) clears the whole permanent word but Death, every counter, the whole extra
+ * word and the stage stacks, so **Zombie and Scan go with everything else** (4,000 emulated vectors). Two markers stay because they are not
+ * status words in the game: `ko` (the death check sets the Death bit again after the reset) and `eject` (the engine's marker for the separate
+ * "ejected" flag, `Chr+0xdcd`, which the reset does not touch; the Eject extra bit itself is wiped like the rest).
+ *
+ * Until RC5 this list also kept `zombie` and `scan`, on the strength of `ffx-yunalesca §15.2 #29` ("a KO'd but still zombified member still
+ * contributes its full 30" to Hellbiter's weighting). That reading is overturned: the weighting reads the Zombie bit of the three slots with no
+ * liveness test, and a KO takes the bit away at the moment of death, so it counts living zombies only (`research/ffx-yunalesca.md`, note of
+ * 2026-10-12 under section 15.2). It answers Bailey's open decision PR-0217 / D-214 ("close D-214: a KO clears Zombie and Scan, per the exe",
+ * 2026-10-11). `tests/unit/parity-ffx-engine-death.test.ts` pins every status the engine can hold against the kernel.
  */
-export const SURVIVES_KO: readonly StatusId[] = ['ko', 'scan', 'zombie', 'eject'];
+export const SURVIVES_KO: readonly StatusId[] = ['ko', 'eject'];
 
 /** Wipe a combatant's statuses, keeping the ones in `keep`. */
 function wipeStatuses(ctx: Ctx, target: FFXCombatant, keep: readonly StatusId[], reason: 'ko' | 'overwritten'): void {

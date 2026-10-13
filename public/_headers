@@ -1,0 +1,10 @@
+# Read by Cloudflare when the site is deployed (tools/cloudflare/wrangler.jsonc), never served. Vetted by the upload gate
+# (tools/deploy-host.mjs checkHeadersFile): this one rule and nothing else may ship.
+#
+# Vite names every file it emits under assets/ with a hash of its content (index-<hash>.js, index-<hash>.css, worker-<hash>.js),
+# so a bundle never changes under its name and can be cached for a year without revalidating. index.html, which names the
+# bundle, and everything without a hash in its name (the painted art, the audio, the fonts, the depth maps) keep Cloudflare's
+# default, public, max-age=0, must-revalidate with an ETag: asked about on every visit, answered 304 when unchanged.
+# tools/cache-class.mjs classifies the paths; the deploy gate refuses a file under assets/ whose name carries no hash.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

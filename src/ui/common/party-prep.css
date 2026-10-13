@@ -13,7 +13,13 @@
  * Scoping (docs/CONTRACT-CHANGES.md decision 10): this is a consumer
  * stylesheet, so it declares no bare `.ig-*` rules — only `.prep*` classes,
  * reading the shared layer through its custom properties.
+ *
+ * Type floor (CHK-003, PR-0356): a size under 7.05 grid px is `max(its size,
+ * var(--stage-floor, 0px))`, 14.1 px read back into grid px (`stage-floor.css`,
+ * imported below, so the variable is defined wherever this sheet is loaded).
  */
+
+@import './stage-floor.css';
 
 .prep {
   position: absolute;
@@ -82,7 +88,7 @@
   position: absolute;
   right: 28.44px; /* 64 */
   top: 20.44px; /* 46 */
-  font-size: 5.78px; /* 13 */
+  font-size: max(5.78px, var(--stage-floor, 0px)); /* 13 */
   font-weight: 700;
   letter-spacing: 0.3em;
   color: rgba(244, 241, 232, 0.7);
@@ -179,7 +185,7 @@
 .prep__member-lv {
   margin-left: auto;
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 6.67px; /* 15 */
+  font-size: max(6.67px, var(--stage-floor, 0px)); /* 15 */
   font-weight: 700;
   color: var(--ig-accent, #e3b94a);
   white-space: nowrap;
@@ -198,7 +204,7 @@
   gap: 17.78px; /* 40 */
 }
 .prep__tab {
-  font-size: 6.67px; /* 15 */
+  font-size: max(6.67px, var(--stage-floor, 0px)); /* 15 */
   font-weight: 700;
   letter-spacing: 0.22em;
   color: rgba(244, 241, 232, 0.6);
@@ -266,7 +272,7 @@
   border-bottom: 0;
 }
 .prep__stat-k {
-  font-size: 5.78px; /* 13 */
+  font-size: max(5.78px, var(--stage-floor, 0px)); /* 13 */
   font-weight: 700;
   letter-spacing: 0.24em;
   color: var(--ig-accent-on-paper, #b8862a);
@@ -292,7 +298,7 @@
   position: absolute;
   left: 231.11px; /* 520 */
   top: 213.33px; /* 480 */
-  font-size: 4.89px; /* 11 */
+  font-size: max(4.89px, var(--stage-floor, 0px)); /* 11 */
   letter-spacing: 0.22em;
   color: rgba(244, 241, 232, 0.55);
 }
@@ -386,14 +392,14 @@
 .prep__slot-sub {
   margin-top: 1.78px; /* 4 */
   font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
-  font-size: 6.67px; /* 15 */
+  font-size: max(6.67px, var(--stage-floor, 0px)); /* 15 */
   font-weight: 700;
   color: #2a2533;
   white-space: nowrap;
 }
 .prep__slot-role {
   margin-left: auto;
-  font-size: 4.89px; /* 11 */
+  font-size: max(4.89px, var(--stage-floor, 0px)); /* 11 */
   font-weight: 700;
   letter-spacing: 0.24em;
   color: var(--ig-accent-on-paper, #b8862a);

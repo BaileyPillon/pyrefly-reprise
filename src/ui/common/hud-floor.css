@@ -80,9 +80,16 @@ html:not([data-phone-battle]) .ffxhud .ffx-sensor__chip { height: var(--sensor-c
 html:not([data-phone-battle]) .ffxhud .ffx-sensor:not(.ffx-sensor--folded) {
   top: max(0px, calc(166px + var(--ffx-sensor-dy, 0px) + var(--ffx-sensor-py, 0px) - clamp(0px, (var(--hud-floor) - 5.6px) * 20, calc(3 * var(--sensor-chip-h) + 4px - 28px))));
 }
-/* Three columns at 1600x900 as authored; two where the floored type no longer fits three ("THUNDER"). */
+/*
+ * Three columns at 1600x900 as authored; two where the floored type no longer fits three ("THUNDER").
+ * The column's minimum follows the chip's RENDERED type, the larger of its authored 6 px and the floor, not the floor alone
+ * (PR-0391, round 25: at 3840x2160 the floor is 2.35 grid px, so `auto-fit` made seven 10-px columns for six chips and
+ * "THUNDER" (24 px of type) printed over "ICE" and "WATER": "FIR CHU CE WA HO GRAV"; at 2560x1440 it made five). With the
+ * authored size as the base the count is three wherever the floor is under 6 px, which is every window from 2.35x up, and the
+ * rule is unchanged below it, where the floor is the larger term.
+ */
 html:not([data-phone-battle]) .ffxhud .ffx-sensor__chips {
-  grid-template-columns: repeat(auto-fit, minmax(calc(var(--hud-floor) * 4.2), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(calc(max(6px, var(--hud-floor)) * 4.2), 1fr));
 }
 /*
  * Seymour Natus's pinned card (`--ffx-sensor-pin`, 1 while the colossus master's place stands the card at the top of the stage; `engine/fx/mix/sensorPin.ts`;
@@ -136,7 +143,16 @@ html:not([data-phone-battle]) .sgd .sgd__toggle b,
 html:not([data-phone-battle]) .sgd .sgd__toggle span,
 html:not([data-phone-battle]) .sgd .sgd__keys,
 html:not([data-phone-battle]) .sgd .sgd__keys b,
-html:not([data-phone-battle]) .sgd .sgd__keys span { font-size: max(5.7px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__keys span,
+/* The document-head classes added with the Jegged-style guide ("Boss Battle", "In Game Description:", "HP:", "Helpful Hint"): 14.25 px at
+   1600x900 and so never flagged there, 11.4 px at 1280x720 (round-25 follow-up, PR-0356's class). */
+html:not([data-phone-battle]) .sgd .sgd__tag,
+html:not([data-phone-battle]) .sgd .sgd__lead,
+html:not([data-phone-battle]) .sgd .sgd__flabel,
+html:not([data-phone-battle]) .sgd .sgd__thead,
+html:not([data-phone-battle]) .sgd .sgd__hint-kind { font-size: max(5.7px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__h3 { font-size: max(6.8px, var(--hud-floor)); }
+html:not([data-phone-battle]) .sgd .sgd__lname { font-size: max(7px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__title { font-size: max(8px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__arrow { font-size: max(6px, var(--hud-floor)); }
 html:not([data-phone-battle]) .sgd .sgd__cmd { font-size: max(9px, var(--hud-floor)); }

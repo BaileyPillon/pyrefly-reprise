@@ -13,6 +13,9 @@
  * `--ffx2-job` is the dressphere's colour from `dressphereIcons.ts`, set
  * inline per element; on the ivory sheet it is used as an edge and a tile
  * wash rather than as text, which at 6-8px would not hold contrast.
+ *
+ * Type floor (CHK-003, PR-0356; FFX-2 only): a size under 7.05 grid px is
+ * `max(its size, var(--stage-floor, 0px))` (`src/ui/common/stage-floor.css`).
  */
 
 /*
@@ -84,7 +87,7 @@
   height: 16px;
   flex: none;
   font-family: var(--ig-font-display);
-  font-size: 7px;
+  font-size: max(7px, var(--stage-floor, 0px));
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #12101c;
@@ -120,7 +123,7 @@
 }
 .x2prep-line b {
   font-family: var(--ig-font-display);
-  font-size: 6px;
+  font-size: max(6px, var(--stage-floor, 0px));
   font-weight: 700;
   letter-spacing: 0.2em;
   color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
@@ -152,7 +155,7 @@
   width: 13px;
   height: 13px;
   font-family: var(--ig-font-display);
-  font-size: 6px;
+  font-size: max(6px, var(--stage-floor, 0px));
   font-weight: 700;
   letter-spacing: 0.02em;
   color: #12101c;
@@ -175,7 +178,7 @@
 .x2prep-grid__name b {
   font-family: var(--ig-font-display);
   font-style: normal;
-  font-size: 6px;
+  font-size: max(6px, var(--stage-floor, 0px));
   letter-spacing: 0.2em;
   color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
   margin-right: 6px;
@@ -259,7 +262,7 @@
 }
 .x2prep-stat__k {
   font-family: var(--ig-font-display);
-  font-size: 6.5px;
+  font-size: max(6.5px, var(--stage-floor, 0px));
   font-weight: 700;
   letter-spacing: 0.1em;
   opacity: 0.65;
@@ -293,7 +296,7 @@
 }
 .x2prep-cmp__row--head .x2prep-cmp__cell {
   font-family: var(--ig-font-display);
-  font-size: 6px;
+  font-size: max(6px, var(--stage-floor, 0px));
   letter-spacing: 0.06em;
 }
 .x2prep-cmp__name {
@@ -305,7 +308,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   font-family: var(--ig-font-display);
-  font-size: 7px;
+  font-size: max(7px, var(--stage-floor, 0px));
   font-weight: 700;
 }
 /* The dressphere's own job colour, as a two-letter chip — the same vocabulary
@@ -321,12 +324,12 @@
   background: var(--ffx2-job);
   color: var(--ig-ink);
   font-style: normal;
-  font-size: 6px;
+  font-size: max(6px, var(--stage-floor, 0px));
 }
 .x2prep-cmp__cell {
   text-align: center;
   font-family: var(--ig-font-numeral);
-  font-size: 7px;
+  font-size: max(7px, var(--stage-floor, 0px));
 }
 .x2prep-delta--up {
   color: #2f7a46;

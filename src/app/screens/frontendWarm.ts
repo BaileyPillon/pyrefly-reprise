@@ -8,6 +8,7 @@
  * The title screen waits for a key, so it is where this starts: whatever the
  * next screen shows first (the briefing's two paintings on a first launch,
  * otherwise the board's opening card and every card's faces), then the rest.
+ * Since r43 (PR-0405) it starts at the player's first key or pointer input, not when the title appears: see {@link armFrontEndWarm}.
  *
  * Each screen waits for its own set before it goes up, with a ceiling so a
  * slow network delays a screen and never holds it. The screen right after the
@@ -29,8 +30,9 @@ import type { App } from '../App.ts';
 import { loadArtManifest } from '../../engine/ArtManifest.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { untilWarm, warmImages } from '../imageWarm.ts';
-import { asideHtml, heroHtml, railHtml } from './frontend/chapterCards.ts';
-import { buildChapterTiles, groupChapterTiles, type ChapterTile } from './frontend/chapterGrid.ts';
+import { asideHtml, cardHtml, heroHtml } from './frontend/chapterCards.ts';
+import { buildChapterTiles, type ChapterTile } from './frontend/chapterGrid.ts';
+import { aheadCards, cursorOrder, plateAheadFrom } from './frontend/boardAhead.ts';
 
 /**
  * Longest the briefing or the board waits for its paintings. On a first launch
@@ -94,37 +96,85 @@ function faceLayers(tile: ChapterTile): { top: string[]; lower: string[] } {
 }
 
 /**
+ * The plate reach in force: how many presses from the cursor a card has its full plate fetched ahead of it. The address can name one
+ * (`?ahead=N`, for the measurements); the default is `PLATE_AHEAD` (`./frontend/boardAhead.ts`).
+ */
+export function currentPlateReach(): number {
+  return plateAheadFrom(typeof location === 'undefined' ? '' : location.search);
+}
+
+/** A card's plate: its scene backdrop (the wash behind the board) and every painting its hero markup shows, all at full size. */
+function plateUrls(tile: ChapterTile, index: number): string[] {
+  // The plate's small copies (`data-lazy-ph`, shown under the full pictures) are the strips' own files, not part of what a plate waits for.
+  const plate = heroHtml(tile, index).replace(/<img\b[^>]*\bdata-lazy-ph\b[^>]*>/g, '');
+  return [...(tile.sceneKey ? [artUrl(`art/backdrops/${tile.sceneKey}.png`)] : []), ...srcsIn(plate)];
+}
+
+/**
+ * The full plates of the cards nearest the cursor, one list a card, nearest first (r44-thumbs): what is fetched ahead of the cursor now that
+ * the rail's strips are small copies and the whole board's full pictures are no longer fetched. `reach` is how many presses away a card
+ * still counts (`PLATE_AHEAD`); the selected card's own plate is not in it, because it is loaded at urgent when it is shown. The first card
+ * is the one a hand reaches for next (on to the right), and the board gives its plate a lane of its own (`ChapterSelectScreen.refresh`).
+ */
+export function platesAheadByCard(tiles: readonly ChapterTile[], selected: number, reach: number = currentPlateReach()): string[][] {
+  return aheadCards(tiles, selected, reach).map((i) => (tiles[i] ? plateUrls(tiles[i]!, i) : []));
+}
+
+/** The same plates as one list, nearest card first. */
+export function platesAhead(tiles: readonly ChapterTile[], selected: number, reach: number = currentPlateReach()): string[] {
+  return platesAheadByCard(tiles, selected, reach).flat();
+}
+
+/**
+ * Asks for the plates of the cards a press from the cursor (r44-thumbs, {@link platesAheadByCard}); the board calls it each time it shows a
+ * card. The first card's plate, the one a hand reaches for next (on to the right), goes in `lane`: `normal` once the cursor has moved, so it
+ * is ahead of the idle queue that holds every other card's faces; `idle` when the board opens, because the first paint's own set and the
+ * first input's music have the pipe then (on a 1.6 Mbit/s link the music finished 2.5 s later when this plate was asked for at the opening).
+ * The rest of the window waits its turn in the idle lane.
+ */
+export function warmPlatesAhead(tiles: readonly ChapterTile[], selected: number, lane: 'normal' | 'idle'): void {
+  platesAheadByCard(tiles, selected).forEach((urls, k) => void warmImages(urls, k === 0 ? lane : 'idle'));
+}
+
+/**
  * The board's paintings: `first` is what its first paint shows and waits for
  * (the opening card's plate, silhouettes and faces); `rest` is everything else,
- * most urgent first: every other card's faces (what the cursor reaches next;
- * round 11 caught Chapter VIII's Wakka and Rikku as grey busts), the stacked
- * body layers under the FFX-2 portraits, then the rail and the other plates.
+ * most urgent first: the rail's strips (r44-thumbs: small copies of each card's
+ * two paintings, nearest the cursor first, a few MB for the whole rail), then
+ * for each other card nearest the cursor first its faces (what the cursor reaches
+ * next; round 11 caught Chapter VIII's Wakka and Rikku as grey busts) and, for the
+ * cards a press or two away, its full plate; then the stacked body layers under
+ * the FFX-2 portraits.
  *
  * Only the opening card is waited on: waiting for every card's faces too was
  * 21 MB, which held a cold board at 100 Mbit/s to its ceiling (round 11
- * verification). The rest loads while the player reads the first card.
+ * verification). The rest loads while the player reads the first card. Before
+ * r44 the rest also held every other card's full plate and the full 4-6 MB
+ * painting under every strip: 90 of the board's 110 MB.
  */
-export function boardArtUrls(save: Parameters<typeof buildChapterTiles>[0]): { first: string[]; rest: string[] } {
+export function boardArtUrls(
+  save: Parameters<typeof buildChapterTiles>[0],
+  reach: number = currentPlateReach(),
+): { first: string[]; rest: string[] } {
   const tiles = buildChapterTiles(save);
   let selected = tiles.findIndex((t) => t.playable);
   if (selected < 0) selected = 0;
-  const plate = (tile: ChapterTile, index: number): string[] => [
-    ...(tile.sceneKey ? [artUrl(`art/backdrops/${tile.sceneKey}.png`)] : []),
-    ...srcsIn(heroHtml(tile, index)),
-  ];
   const head = tiles[selected];
   const headFaces = head ? faceLayers(head) : { top: [], lower: [] };
-  const first = [...(head ? plate(head, selected) : []), ...headFaces.top];
-  const others = tiles.map((t, i) => [t, i] as const).filter(([, i]) => i !== selected);
-  const otherFaces = others.map(([t]) => faceLayers(t));
-  const rail = srcsIn(railHtml(groupChapterTiles(tiles), tiles, selected));
+  const first = [...(head ? plateUrls(head, selected) : []), ...headFaces.top];
+  // Every other card, nearest the cursor first. A COMING card is never reached by the cursor, so it goes last, but its strip is still painted.
+  const reached = cursorOrder(tiles, selected);
+  const nearest = [...reached, ...tiles.map((_, i) => i).filter((i) => i !== selected && !reached.includes(i))];
+  const faces = new Map(nearest.map((i) => [i, faceLayers(tiles[i]!)] as const));
+  const ahead = new Set(aheadCards(tiles, selected, reach));
+  // The strips: the selected card's, then outward from it. Each is read off the card's own markup, as the board mounts it.
+  const rail = [selected, ...nearest].flatMap((i) => (tiles[i] ? srcsIn(cardHtml(tiles[i]!, i, i === selected)) : []));
   const seen = new Set(first);
   const rest = [
-    ...otherFaces.flatMap((f) => f.top),
-    ...headFaces.lower,
-    ...otherFaces.flatMap((f) => f.lower),
     ...rail,
-    ...others.flatMap(([t, i]) => plate(t, i)),
+    ...nearest.flatMap((i) => [...faces.get(i)!.top, ...(ahead.has(i) ? plateUrls(tiles[i]!, i) : [])]),
+    ...headFaces.lower,
+    ...nearest.flatMap((i) => faces.get(i)!.lower),
   ].filter((u) => !seen.has(u) && (seen.add(u), true));
   return { first: [...new Set(first)], rest };
 }
@@ -146,6 +196,108 @@ export function warmFrontEnd(app: Pick<App, 'save'>, briefingDue: boolean): void
       /* a harness without chapters: the screens load their own art */
     }
   });
+}
+
+/**
+ * What the next screen needs for its first paint, and nothing beyond it: the briefing's two paintings when it is due, else the
+ * board's opening card with its faces. A screen waits for these (ceilinged, {@link holdForNextScreen}); the rest of the board does not.
+ */
+function warmNextScreen(app: Pick<App, 'save'>, briefingDue: boolean): void {
+  if (briefingDue) void warmImages(briefingArtUrls());
+  void loadArtManifest().then(() => {
+    try {
+      void warmImages(boardArtUrls(app.save).first);
+    } catch {
+      /* a harness without chapters: the screens load their own art */
+    }
+  });
+}
+
+/**
+ * When the title asks for the briefing's and the board's paintings (PR-0405, round 25).
+ *
+ *   `now`    as soon as the title is up: the next screen's first paint, then every other card's art (r42 and before).
+ *   `first`  the next screen's first paint as soon as the title is up; the rest of the board at the player's first input.
+ *   `defer`  nothing until the player's first input; the press that leaves the title then holds for the next screen's first paint.
+ *
+ * The address can name one (`?prefetch=now|first|defer`, for the measurements and for switching a mode on); the default is
+ * {@link DEFAULT_PREFETCH_MODE}, `now`: what the live build does. Measured on a 100 Mbit/s link against the live build, `defer` made the board arrive
+ * a second later after the press and Auron's briefing come up a second late, and `first` kept the press as fast but left the board's rail strips empty for
+ * several seconds for a player who had sat on the title (they finish about 5 s later), neither of which may happen on a fast link, and neither helped a slow
+ * one (the idle lane already keeps the rest of the board behind the opening card there). `docs/handoff/r43-delivery.md` holds the numbers; one constant here
+ * (and nothing else) turns `first` or `defer` on for everyone.
+ */
+export type PrefetchMode = 'now' | 'first' | 'defer';
+
+export const PREFETCH_MODES: readonly PrefetchMode[] = ['now', 'first', 'defer'];
+
+/** The mode in force when the address names none. */
+export const DEFAULT_PREFETCH_MODE: PrefetchMode = 'now';
+
+/** The mode a page address names (`?prefetch=`), else `fallback`. */
+export function prefetchModeFrom(search: string, fallback: PrefetchMode = DEFAULT_PREFETCH_MODE): PrefetchMode {
+  const value = new URLSearchParams(search).get('prefetch');
+  return PREFETCH_MODES.find((mode) => mode === value) ?? fallback;
+}
+
+/**
+ * What counts as the player's first input: a key, a press, a touch, a wheel, or the pointer moving.
+ * (A gamepad raises no DOM event; the title's own start press reaches {@link startFrontEndWarm} directly.)
+ */
+export const FIRST_INPUT_EVENTS = ['keydown', 'pointerdown', 'pointermove', 'touchstart', 'wheel'] as const;
+
+/** The listeners of the one pending {@link armFrontEndWarm}, so arming twice (the title entered again) never stacks them. */
+let pendingArm: (() => void) | null = null;
+
+/**
+ * The paintings wait for the player's first key or pointer input, not for the title to appear (PR-0405).
+ *
+ * Round 25 measured 29.7 MB of art arriving in the 4.5 seconds after the title was ready (121 MB in the first 24 s) before anyone had
+ * touched anything. The briefing's and the board's paintings now start at the first key, press, touch, wheel or pointer movement
+ * anywhere in the front end, or at the press that leaves the title ({@link startFrontEndWarm}), whichever comes first. A session with no
+ * input at all (a tab left open, a script that only looks) fetches none of them.
+ *
+ * Nothing waits on this that did not wait before: the title's hold for the next screen's first paint ({@link holdForNextScreen},
+ * ceilinged at {@link FRONTEND_WARM_CEILING_MS}) is what the press that leaves the title waits for. Game case: both (one shared front end).
+ *
+ * Returns the function that cancels the wait.
+ */
+export function armFrontEndWarm(
+  app: Pick<App, 'save'>,
+  briefingDue: () => boolean,
+  target: Pick<EventTarget, 'addEventListener' | 'removeEventListener'> | null = typeof window === 'undefined' ? null : window,
+): () => void {
+  pendingArm?.();
+  if (!target) return () => undefined;
+  const fire = (): void => startFrontEndWarm(app, briefingDue());
+  const disarm = (): void => {
+    for (const type of FIRST_INPUT_EVENTS) target.removeEventListener(type, fire, { capture: true });
+    if (pendingArm === disarm) pendingArm = null;
+  };
+  for (const type of FIRST_INPUT_EVENTS) target.addEventListener(type, fire, { capture: true, passive: true });
+  pendingArm = disarm;
+  return disarm;
+}
+
+/** Start the front end's paintings now, and stop waiting for an input to do it (the first input has come). */
+export function startFrontEndWarm(app: Pick<App, 'save'>, briefingDue: boolean): void {
+  pendingArm?.();
+  warmFrontEnd(app, briefingDue);
+}
+
+/** The title's side of it: what to ask for now and what to leave for the first input, by {@link PrefetchMode}. Returns the function that cancels the wait. */
+export function beginFrontEndWarm(
+  app: Pick<App, 'save'>,
+  briefingDue: () => boolean,
+  mode: PrefetchMode = DEFAULT_PREFETCH_MODE,
+  target?: Pick<EventTarget, 'addEventListener' | 'removeEventListener'> | null,
+): () => void {
+  if (mode === 'now') {
+    startFrontEndWarm(app, briefingDue());
+    return () => undefined;
+  }
+  if (mode === 'first') warmNextScreen(app, briefingDue());
+  return armFrontEndWarm(app, briefingDue, target);
 }
 
 /** How long a screen may still wait: what the title left of it, else the whole ceiling. */

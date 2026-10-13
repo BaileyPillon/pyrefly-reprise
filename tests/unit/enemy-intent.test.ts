@@ -589,7 +589,9 @@ describe('FFX-2 intent', () => {
     for (const row of intent!.estimate!.perTarget) expect(row.amount).toBeGreaterThan(0);
     // One countdown, one number: the note carries the rule and not a second,
     // one-higher figure read off the last charge that actually fired.
-    expect(intent!.notes.join(' ')).toContain('action counter, not a clock');
+    // The wait is a fixed 750 logic steps (about 25 s): Slow, Haste and a fallen girl do not move it, so the note must not promise otherwise.
+    expect(intent!.notes.join(' ')).toContain('fixed wait of about 25 seconds');
+    expect(intent!.notes.join(' ')).not.toMatch(/slows it too|action counter/);
     expect(intent!.notes.join(' ')).not.toMatch(/countdown at d/);
   });
 

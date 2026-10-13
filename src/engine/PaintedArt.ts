@@ -1,7 +1,7 @@
 import { CanvasTexture, ImageLoader, LinearFilter, LinearMipmapLinearFilter, SRGBColorSpace, Texture, TextureLoader } from 'three';
 import { artScalesFor, pixelUrlFor, scaleOfUrl } from './ArtTier.ts';
 import { fallbackScale } from './ArtBudget.ts';
-import { shippedArtUrl } from './ArtShipped.ts';
+import { shippedArtUrl, thumbArtUrl } from './ArtShipped.ts';
 import { loadArtManifest, manifestKnowsAsset } from './ArtManifest.ts';
 import { fetchWithOneRetry, retryPause } from './fetchRetry.ts';
 import { parseArtFacing, type ArtFacing } from './BattlePresenterActors.ts';
@@ -96,6 +96,17 @@ export function setPaintedAnisotropy(n: number): void {
 export function artUrl(path: string): string {
   const base = import.meta.env.BASE_URL || '/';
   return shippedArtUrl(`${base.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`);
+}
+
+/**
+ * The URL of the small copy of a painting, for a picture drawn small: the chapter board's rail strips (r44-thumbs, both games). A master
+ * the build made a thumbnail for (`src/data/art/strip-art.json`, `tools/art-thumbs.mjs`) comes back as that file, which is the master
+ * resized to fit a strip at 2x and stored losslessly; every other path, and every build without a thumbnail for it (dev, the unit suite,
+ * `PYREFLY_ART_THUMBS=off`), comes back as {@link artUrl} does, the full picture. A plate drawn large must keep asking for {@link artUrl}.
+ */
+export function artThumbUrl(path: string): string {
+  const base = import.meta.env.BASE_URL || '/';
+  return thumbArtUrl(`${base.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`);
 }
 
 /**

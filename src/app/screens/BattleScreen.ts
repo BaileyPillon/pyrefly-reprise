@@ -273,6 +273,9 @@ export class BattleScreen extends Screen {
     if (this.exited) return this.releaseParts();
     this.preview = this.engine === null;
     this.startParty = this.engine ? [...this.engine.state().activeIds] : [];
+    // E-PYRE (decision 61e): the enemy and aeon figures this field builds wait unseen and gather into it when the opening begins (`BattleMoments.battleStart`). A preview has no opening to let
+    // them in, and FF7 is not Spira (no pyreflies: `pyreflyCanon.ts`), so both keep every figure on the field from the frame it is built.
+    this.stage.setEntrances(!this.preview && chapter.game !== 'ff7');
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
     if (this.exited) return this.releaseParts();

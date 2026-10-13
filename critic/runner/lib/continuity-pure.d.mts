@@ -21,6 +21,8 @@ export interface ContinuityConfig {
   tracking?: { unregistered?: 'centroid' | 'feet' };
   /** r40 instrument edit (b): `twirl: false` gives the earlier reading of a twirl's cuts back; `gapFrames` is how far apart two steps of one change may be. */
   staged?: { twirl?: boolean; gapFrames?: number };
+  /** r43 (FOC40-02): `excuse: true` tags a jerk whose step happened under the Save Sphere's wash as covered and leaves it out of the numbers (it ships false until the owner's yes: the definition of a jerk is his); `minCover` is how much of the picture the veil must hide; a null `selector` stops the probe reading the wash. */
+  wash?: { excuse?: boolean; minCover?: number; selector?: string | null };
   [key: string]: unknown;
 }
 
@@ -40,7 +42,7 @@ export interface SwapRow extends Partial<SwapResult> {
   id?: number; figure?: string; fromPose?: string; toPose?: string; n?: number; counted?: boolean; camCut?: boolean; notShowing?: boolean; snap?: boolean; hardCut?: boolean;
   ghost: SwapResult['ghost'];
 }
-export interface Jerk { n: number; t: number; px: number; localPx: number; ratio: number; part: 'feet' | 'head' | 'centroid'; dx: number; dy: number; atSwap?: boolean; id?: number; staged?: { kind: 'twirl'; seq?: number } }
+export interface Jerk { n: number; t: number; px: number; localPx: number; ratio: number; part: 'feet' | 'head' | 'centroid'; dx: number; dy: number; atSwap?: boolean; id?: number; staged?: { kind: 'twirl'; seq?: number }; /** r43: what was over the step (the wash element's opacity and the cover it gave), when a wash was up on either frame. */ wash?: { opacity: number; cover: number; frames: [number, number] }; /** r43: the step happened under the wash and the policy excuses it. */ covered?: boolean }
 
 export declare const FRAME_MS: number;
 export declare function unitSquareToQuad(q: ArrayLike<number>): Mat3;
@@ -61,11 +63,12 @@ export declare function median(a: number[]): number;
 export interface Summary {
   battleSeconds: number; swaps: number; counted: number; excludedByCut: number; excludedNotShowing: number; swapsPerMinute: number | null;
   size: { judged?: number; costumeSwaps?: number; sameArtSwaps?: number; costumeWorstHeadPct?: number; costumeWorstFeetPx?: number; headMeasured: number; headRegistration: number; headSilhouette: number; headUnmeasured: number; maxHeadJumpPct: number; maxHeadJumpPctRegistration: number; headOverTolerance: number; feetMeasured: number; maxFeetShiftPx: number; feetOverTolerance: number };
-  motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number; heldSwaps: number; longestHeldFrames: number; stagedChanges: number; stagedSteps: number; stagedSnapsExcused: number; jerksAtStaged: number };
+  motion: { snaps: number; snapsPerMinute: number | null; hardCuts: number; hardCutsPerMinute: number | null; snapsByToPose: Record<string, number>; lowestIou: number; maxCentroidShiftPx: number; ghostSwaps: number; ghostFrames: number; worstGhostSeverity: number; ghostOverFail: number; jerks: number; jerksMidMove: number; worstJerkPx: number; jerksOverFail: number; heldSwaps: number; longestHeldFrames: number; stagedChanges: number; stagedSteps: number; stagedSnapsExcused: number; jerksAtStaged: number; jerksCovered?: number; worstCoveredJerkPx?: number };
   checks: Record<'CHK-026' | 'CHK-027', { result: 'PASS' | 'FAIL' | 'UNVERIFIED'; reasons: string[]; note?: string }>;
 }
-export declare function summarize(o: { swaps: SwapRow[]; jerks: Jerk[]; battleSeconds: number; cfg: ContinuityConfig }): Summary;
+export declare function summarize(o: { swaps: SwapRow[]; jerks: Jerk[]; coveredJerks?: Jerk[]; battleSeconds: number; cfg: ContinuityConfig }): Summary;
 export declare function verdicts(s: Pick<Summary, 'battleSeconds' | 'counted' | 'size' | 'motion'>, cfg: ContinuityConfig, run?: { fps?: number | null; error?: string | null }): Summary['checks'];
 export declare function swapBadness(s: SwapRow, cfg: ContinuityConfig): number;
+export declare function continuityReportLine(s: { battleSeconds: number; chapters?: { fps?: number | null; dedicated?: boolean | null }[]; checks: Record<string, { result: string; reasons?: string[] }>; motion?: { jerksCovered?: number; worstCoveredJerkPx?: number } }): string;
 export declare function distinctFirst<T>(list: T[], key: (x: T) => string, n: number): T[];
 export declare function worstSwaps(swaps: SwapRow[], n: number, cfg: ContinuityConfig): SwapRow[];

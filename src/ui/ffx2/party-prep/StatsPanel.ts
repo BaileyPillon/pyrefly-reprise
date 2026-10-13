@@ -9,6 +9,8 @@ import type { FFX2MemberBuild, FFX2PartyBuild } from '../../../battle/common/typ
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
 import { dressphereStats } from '../../../battle/ffx2/dressphere-stats.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from '../dressphereIcons.ts';
+import { appendPhoneHost, phoneKeys, readOpen } from '../../common/prepPhoneFold.ts';
+import { x2StatsPhoneHtml } from './phoneViews.ts';
 import './party-prep.css';
 
 function escapeHtml(s: string): string {
@@ -66,6 +68,7 @@ function deltaChip(delta: number): string {
 export function makeStatsPanel(): PrepPanel {
   let build: FFX2PartyBuild | null = null;
   let bodyEl: HTMLElement | null = null;
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
 
   const render = (memberId: string): void => {
     const member: FFX2MemberBuild | undefined = build?.members.find((m) => m.id === memberId);
@@ -83,6 +86,26 @@ export function makeStatsPanel(): PrepPanel {
     // Every dressphere she owns, against the one she is wearing. Sorted the way
     // the build lists them so the order is stable between visits.
     const others = member.owned.filter((id) => id !== worn);
+    if (phoneEl) {
+      phoneEl.innerHTML = x2StatsPhoneHtml(
+        {
+          who: { name: member.name, level: member.level, dressphere: worn },
+          worn: { label: dressphereLabel(worn) },
+          stats: STAT_ROWS.map((r) => ({ label: r.label, value: wornStats[r.key] })),
+          others: others.map((id) => {
+            const st = dressphereStats(id, member.level);
+            return {
+              id,
+              abbr: dressphereAbbr(id),
+              colour: dressphereColour(id),
+              label: dressphereLabel(id),
+              cells: STAT_ROWS.map((r) => ({ label: r.label, now: wornStats[r.key], delta: st[r.key] - wornStats[r.key] })),
+            };
+          }),
+        },
+        readOpen(phoneEl),
+      );
+    }
     const compare = others
       .map((id) => {
         const st = dressphereStats(id, member.level);
@@ -114,12 +137,15 @@ export function makeStatsPanel(): PrepPanel {
       // `--stack`: full-width rows, not `.x2prep`'s two columns — see the CSS.
       root.innerHTML = '<div class="x2prep x2prep--stack"></div>';
       bodyEl = root.querySelector('.x2prep');
+      phoneEl = appendPhoneHost(root);
       render(ctx.memberId);
     },
     unmount() {
       build = null;
       bodyEl = null;
+      phoneEl = null;
     },
     selectMember: render,
+    handleInput: (input) => phoneKeys(input, phoneEl),
   };
 }

@@ -1,0 +1,248 @@
+{
+ "what": "FOC43-01 in a real browser (headless Chromium, SwiftShader, a fresh profile = a first launch, real key presses and pointer clicks, the dev server of this tree): the prep hint strip while the first-run slab is up, and after the guide is skipped with Esc",
+ "when": "2026-10-13T06:19:37.028Z",
+ "build": "r44a-rc working tree, the first-run fix uncommitted at the time of the run",
+ "note": "font-size is the computed size in the 640x360 stage grid: 7.05 x 2 = 14.1 px at 1280x720 and 5.64 x 2.5 = 14.1 px at 1600x900, unchanged by the fix. acts[].hitByAct is whether a real pointer at the centre of the strip's two buttons reaches the button (false while the strip is hidden).",
+ "runs": [
+  {
+   "size": "1280x720",
+   "error": null,
+   "consoleErrors": [],
+   "steps": {
+    "chapterGuideUp": {
+     "visibility": "hidden",
+     "fontSizePx": "7.05px",
+     "rect": [
+      462,
+      427,
+      818,
+      38
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "frgInDom": true,
+     "frgStep": "2",
+     "frgDisplay": "block",
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": false
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": false
+      }
+     ],
+     "viewport": [
+      1280,
+      720
+     ]
+    },
+    "sphereGuideUp": {
+     "visibility": "hidden",
+     "fontSizePx": "7.05px",
+     "rect": [
+      19,
+      694,
+      626,
+      20
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+     "frgInDom": true,
+     "frgStep": "2",
+     "frgDisplay": "block",
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": false
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": false
+      }
+     ],
+     "viewport": [
+      1280,
+      720
+     ]
+    },
+    "screenAfterEsc": "party-prep",
+    "sphereGuideSkipped": {
+     "visibility": "visible",
+     "fontSizePx": "7.05px",
+     "rect": [
+      19,
+      694,
+      626,
+      20
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+     "frgInDom": false,
+     "frgStep": null,
+     "frgDisplay": null,
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": true
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": true
+      }
+     ],
+     "viewport": [
+      1280,
+      720
+     ]
+    },
+    "chapterGuideSkipped": {
+     "visibility": "visible",
+     "fontSizePx": "7.05px",
+     "rect": [
+      462,
+      427,
+      818,
+      38
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "frgInDom": false,
+     "frgStep": null,
+     "frgDisplay": null,
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": true
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": true
+      }
+     ],
+     "viewport": [
+      1280,
+      720
+     ]
+    }
+   }
+  },
+  {
+   "size": "1600x900",
+   "error": null,
+   "consoleErrors": [],
+   "steps": {
+    "chapterGuideUp": {
+     "visibility": "hidden",
+     "fontSizePx": "5.64px",
+     "rect": [
+      578,
+      533,
+      873,
+      20
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "frgInDom": true,
+     "frgStep": "2",
+     "frgDisplay": "block",
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": false
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": false
+      }
+     ],
+     "viewport": [
+      1600,
+      900
+     ]
+    },
+    "sphereGuideUp": {
+     "visibility": "hidden",
+     "fontSizePx": "5.64px",
+     "rect": [
+      24,
+      868,
+      626,
+      20
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+     "frgInDom": true,
+     "frgStep": "2",
+     "frgDisplay": "block",
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": false
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": false
+      }
+     ],
+     "viewport": [
+      1600,
+      900
+     ]
+    },
+    "screenAfterEsc": "party-prep",
+    "sphereGuideSkipped": {
+     "visibility": "visible",
+     "fontSizePx": "5.64px",
+     "rect": [
+      24,
+      868,
+      626,
+      20
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK",
+     "frgInDom": false,
+     "frgStep": null,
+     "frgDisplay": null,
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": true
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": true
+      }
+     ],
+     "viewport": [
+      1600,
+      900
+     ]
+    },
+    "chapterGuideSkipped": {
+     "visibility": "visible",
+     "fontSizePx": "5.64px",
+     "rect": [
+      578,
+      533,
+      873,
+      20
+     ],
+     "text": "▲ ▼ PARTY · ◀ ▶ TABS · ENTER BEGINS THE BATTLE · ESC BACK · PG UP / PG DN SCROLL",
+     "frgInDom": false,
+     "frgStep": null,
+     "frgDisplay": null,
+     "acts": [
+      {
+       "text": "ENTER BEGINS THE BATTLE",
+       "hitByAct": true
+      },
+      {
+       "text": "ESC BACK",
+       "hitByAct": true
+      }
+     ],
+     "viewport": [
+      1600,
+      900
+     ]
+    }
+   }
+  }
+ ]
+}

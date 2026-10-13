@@ -1,0 +1,292 @@
+{
+ "battle-ch12-1366x768": {
+  "error": null,
+  "steps": [
+   {
+    "step": "first-menu",
+    "nText": 96,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "battle-ch12-1440x900": {
+  "error": null,
+  "steps": [
+   {
+    "step": "first-menu",
+    "nText": 100,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "battle-ch9-1366x768": {
+  "error": null,
+  "steps": [
+   {
+    "step": "first-menu",
+    "nText": 73,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "battle-ch9-1440x900": {
+  "error": null,
+  "steps": [
+   {
+    "step": "first-menu",
+    "nText": 74,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "prep-ffx-1366x768": {
+  "error": null,
+  "steps": [
+   {
+    "step": "tab1-chapter",
+    "nText": 71,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 6,
+    "cut": 0
+   },
+   {
+    "step": "tab2-stats",
+    "nText": 78,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "nText": 115,
+    "minEff": 9.98,
+    "under14": 47,
+    "overlaps": 9,
+    "cut": 0
+   },
+   {
+    "step": "tab3-sphere-grid-card-closed",
+    "nText": 84,
+    "minEff": 9.98,
+    "under14": 34,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab4-equipment",
+    "nText": 61,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab5-items",
+    "nText": 110,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab6-overdrive",
+    "nText": 59,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "prep-ffx-1440x900": {
+  "error": null,
+  "steps": [
+   {
+    "step": "tab1-chapter",
+    "nText": 71,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab2-stats",
+    "nText": 78,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab3-sphere-grid",
+    "nText": 115,
+    "minEff": 10.53,
+    "under14": 40,
+    "overlaps": 16,
+    "cut": 0
+   },
+   {
+    "step": "tab3-sphere-grid-card-closed",
+    "nText": 84,
+    "minEff": 10.53,
+    "under14": 29,
+    "overlaps": 7,
+    "cut": 0
+   },
+   {
+    "step": "tab4-equipment",
+    "nText": 61,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab5-items",
+    "nText": 110,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab6-overdrive",
+    "nText": 59,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "prep-ffx2-1366x768": {
+  "error": null,
+  "steps": [
+   {
+    "step": "tab1-chapter",
+    "nText": 58,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 6,
+    "cut": 0
+   },
+   {
+    "step": "tab2-dresspheres",
+    "nText": 68,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab3-stats",
+    "nText": 182,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab4-accessories",
+    "nText": 48,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab5-items",
+    "nText": 59,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "prep-ffx2-1440x900": {
+  "error": null,
+  "steps": [
+   {
+    "step": "tab1-chapter",
+    "nText": 58,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab2-dresspheres",
+    "nText": 68,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab3-stats",
+    "nText": 182,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab4-accessories",
+    "nText": 48,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   },
+   {
+    "step": "tab5-items",
+    "nText": 59,
+    "minEff": 14,
+    "under14": 0,
+    "overlaps": 0,
+    "cut": 0
+   }
+  ]
+ },
+ "results-ffx-1366x768": {
+  "error": null,
+  "steps": [
+   {
+    "step": "results",
+    "nText": 31,
+    "minEff": 14.1,
+    "under14": 0,
+    "overlaps": 2,
+    "cut": 0
+   }
+  ]
+ },
+ "results-ffx-1440x900": {
+  "error": null,
+  "steps": [
+   {
+    "step": "results",
+    "nText": 31,
+    "minEff": 14.1,
+    "under14": 0,
+    "overlaps": 2,
+    "cut": 0
+   }
+  ]
+ }
+}

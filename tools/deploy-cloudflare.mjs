@@ -23,6 +23,7 @@ import { join } from 'node:path';
 import process from 'node:process';
 
 import { verifyLive } from './artifact-manifest.mjs';
+import { unhashedUnderRule } from './cache-class.mjs';
 import { HOSTS, checkHeadersFile, checkUploadLimits, compareUploadSet, listUploadFiles, siteNameFor, wranglerConfigFor } from './deploy-host.mjs';
 import {
   WRANGLER_STDIO,
@@ -116,8 +117,9 @@ export function checkCloudflareLogin({ root, deps } = {}) {
  * is written into it). The throwaway `dist-release/.git` (Vite keeps it, the GitHub deploy recreates
  * it) is removed first: a Workers upload would send it, proved with a 26 MiB file hidden there. Then
  * the files wrangler would send for this kind must fit the limits and equal the artifact manifest
- * exactly, or the live byte check could never match. Returns the limits report; fails the deploy
- * otherwise.
+ * exactly, or the live byte check could never match. A shipped `_headers` must be the vetted one,
+ * and every file its long-cache rule matches must carry a content hash in its name (PR-0396,
+ * `tools/cache-class.mjs`). Returns the limits report; fails the deploy otherwise.
  */
 export function prepareCloudflareUpload({ dist, manifest, manifestName, kind = 'workers', deps } = {}) {
   const d = withDeps(deps);
@@ -134,9 +136,18 @@ export function prepareCloudflareUpload({ dist, manifest, manifestName, kind = '
   const refused = [];
   for (const name of configFiles) {
     if (name !== '_headers') { refused.push(name); continue; }
-    const bad = checkHeadersFile(d.readFileSync(join(dist, name), 'utf8'));
-    if (bad.length) problems.push(`dist-release/_headers is not the vetted file: ${bad.join('; ')}`);
-    else vetted.push(name);
+    const text = d.readFileSync(join(dist, name), 'utf8');
+    const bad = checkHeadersFile(text);
+    if (bad.length) {
+      problems.push(`dist-release/_headers is not the vetted file: ${bad.join('; ')}`);
+      continue;
+    }
+    vetted.push(name);
+    // PR-0396: a year of `immutable` is safe only for a file whose NAME changes with its content (tools/cache-class.mjs).
+    const unhashed = unhashedUnderRule(text, files.map((file) => file.path));
+    if (unhashed.length) {
+      problems.push(`dist-release/_headers would cache ${unhashed.length} file(s) for a year whose names carry no content hash, e.g. ${unhashed.slice(0, 3).join(', ')}: a new build under the same name would never reach a returning visitor (only assets/<name>-<hash>.<ext> may be matched)`);
+    }
   }
   if (refused.length) {
     problems.push(`dist-release holds ${refused.join(', ')}: Cloudflare reads those as configuration and never serves them, so the live check could not match them (only a vetted _headers is supported)`);

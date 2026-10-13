@@ -60,6 +60,7 @@ import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { paceFactor } from './pace.ts';
 import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
+import { koWipedStatuses } from './BattlePresenterKoWipe.ts';
 import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
@@ -261,9 +262,15 @@ export class BattlePresenter {
   private playing: Promise<void> = Promise.resolve();
 
   private async playBurst(events: BattleEvent[]): Promise<PlayResult> {
+    const wiped = koWipedStatuses(events); // a status the action's own KO wipe takes is never shown (`BattlePresenterKoWipe.ts`)
     for (let i = 0; i < events.length; i++) {
       if (this.aborted) return { dropped: events.length - i };
       const event = events[i]!;
+      if (wiped.has(i)) { // neither beat plays and the HUD is not told; the rows still drop what the wipe took
+        if (event.type === 'status-remove') this.presentVitals(event);
+        this.trace.push({ seq: event.seq, type: event.type, ms: 0 });
+        continue;
+      }
 
       // The HUD gets first look at every event so it can raise a transient. A blow whose spell or shot is still on its
       // way (SKILL TRAVEL, r38-motion) is shown to it when the blow lands instead: its numeral and HP rows wait.

@@ -1,0 +1,216 @@
+{
+ "rikku-white-mage/ko": {
+  "idle": {
+   "scale": 1.0,
+   "heightOverIdle": 1.0,
+   "lengthOverIdle": 0.509,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 1197,
+   "baselineRow": 1197,
+   "size": [
+    626,
+    1213
+   ]
+  },
+  "ko NEW (installed)": {
+   "scale": 0.988,
+   "heightOverIdle": 0.5,
+   "lengthOverIdle": 0.99,
+   "hangsBelowGroundPx": -1.8,
+   "plantRow": 616,
+   "baselineRow": 613,
+   "size": [
+    1219,
+    632
+   ]
+  },
+  "ko OLD (replaced)": {
+   "scale": 0.601,
+   "heightOverIdle": 0.252,
+   "lengthOverIdle": 0.629,
+   "hangsBelowGroundPx": -0.4,
+   "plantRow": 513,
+   "baselineRow": 512,
+   "size": [
+    1272,
+    529
+   ]
+  }
+ },
+ "rikku-alchemist/ko": {
+  "idle": {
+   "scale": 1.0,
+   "heightOverIdle": 1.0,
+   "lengthOverIdle": 0.438,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 1178,
+   "baselineRow": 1178,
+   "size": [
+    541,
+    1194
+   ]
+  },
+  "ko NEW (installed)": {
+   "scale": 0.912,
+   "heightOverIdle": 0.402,
+   "lengthOverIdle": 0.912,
+   "hangsBelowGroundPx": -0.5,
+   "plantRow": 528,
+   "baselineRow": 527,
+   "size": [
+    1194,
+    544
+   ]
+  },
+  "ko OLD (replaced)": {
+   "scale": 0.511,
+   "heightOverIdle": 0.239,
+   "lengthOverIdle": 0.529,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 560,
+   "baselineRow": 560,
+   "size": [
+    1216,
+    576
+   ]
+  }
+ },
+ "rikku-berserker/ko": {
+  "idle": {
+   "scale": 1.0,
+   "heightOverIdle": 1.0,
+   "lengthOverIdle": 0.441,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 1199,
+   "baselineRow": 1199,
+   "size": [
+    555,
+    1215
+   ]
+  },
+  "ko NEW (installed)": {
+   "scale": 0.885,
+   "heightOverIdle": 0.388,
+   "lengthOverIdle": 0.886,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 536,
+   "baselineRow": 536,
+   "size": [
+    1221,
+    552
+   ]
+  },
+  "ko OLD (replaced)": {
+   "scale": 0.538,
+   "heightOverIdle": 0.209,
+   "lengthOverIdle": 0.584,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 478,
+   "baselineRow": 478,
+   "size": [
+    1321,
+    494
+   ]
+  }
+ },
+ "yuna/item": {
+  "idle": {
+   "scale": 1.0,
+   "heightOverIdle": 1.0,
+   "lengthOverIdle": 0.739,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 1060,
+   "baselineRow": 1060,
+   "size": [
+    803,
+    1075
+   ]
+  },
+  "ready (approved)": {
+   "scale": 1.245,
+   "heightOverIdle": 1.058,
+   "lengthOverIdle": 0.825,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 903,
+   "baselineRow": 903,
+   "size": [
+    708,
+    911
+   ]
+  },
+  "item OLD (replaced)": {
+   "scale": 0.752,
+   "heightOverIdle": 0.815,
+   "lengthOverIdle": 0.584,
+   "hangsBelowGroundPx": 6.1,
+   "plantRow": 1136.0,
+   "baselineRow": 1148,
+   "size": [
+    827,
+    1164
+   ]
+  },
+  "item NEW (installed)": {
+   "scale": 0.758,
+   "heightOverIdle": 0.819,
+   "lengthOverIdle": 0.594,
+   "hangsBelowGroundPx": 5.1,
+   "plantRow": 1134.0,
+   "baselineRow": 1144,
+   "size": [
+    832,
+    1160
+   ]
+  }
+ },
+ "yuna/item-alternative-0.925": {
+  "idle": {
+   "scale": 1.0,
+   "heightOverIdle": 1.0,
+   "lengthOverIdle": 0.739,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 1060,
+   "baselineRow": 1060,
+   "size": [
+    803,
+    1075
+   ]
+  },
+  "ready (approved)": {
+   "scale": 1.245,
+   "heightOverIdle": 1.058,
+   "lengthOverIdle": 0.825,
+   "hangsBelowGroundPx": 0.0,
+   "plantRow": 903,
+   "baselineRow": 903,
+   "size": [
+    708,
+    911
+   ]
+  },
+  "item NEW (installed)": {
+   "scale": 0.758,
+   "heightOverIdle": 0.819,
+   "lengthOverIdle": 0.594,
+   "hangsBelowGroundPx": 5.1,
+   "plantRow": 1134.0,
+   "baselineRow": 1144,
+   "size": [
+    832,
+    1160
+   ]
+  },
+  "item NEW at 0.925 (NOT installed)": {
+   "scale": 0.925,
+   "heightOverIdle": 0.999,
+   "lengthOverIdle": 0.725,
+   "hangsBelowGroundPx": 6.2,
+   "plantRow": 1134.0,
+   "baselineRow": 1144,
+   "size": [
+    832,
+    1160
+   ]
+  }
+ }
+}

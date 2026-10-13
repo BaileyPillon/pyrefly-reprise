@@ -34,6 +34,9 @@
  *    to agree, so a line naming a move this character does not own is either
  *    turned into the switch that hands the turn to whoever does ({@link
  *    handOff}) or dropped for the simulated ranking.
+ *    **On Chapter XIII's board (FFX-2 only, DIFF-B) the line is the top row, full stop**: it outranks
+ *    the lethal-save override, the proved save, the revive priority and the other re-orderings below,
+ *    when the actor can press it (`./advisor-line.ts`, measured: the card-follower 45.5 % -> 63.5 %).
  * 2. **Otherwise every legal row is simulated and scored.** Each candidate is
  *    resolved on a throwaway copy of the battle by `src/battle/<game>/simulate.ts` —
  *    the engine's real damage chain — and {@link scoreOutcome} turns the result
@@ -138,6 +141,7 @@ import { changeSuggestion, changeSuggestions, lockedToChange, sameChange } from 
 import { holdingForTheBreath } from './airship-orders.ts';
 import type { InFlightSource } from './advisor-inflight.ts';
 import { alreadyOnItsWay, boardFor, heldFor, sourceOf, v3On, withRaiseFirst } from './advisor-v3.ts';
+import { lineFirstOn } from './advisor-line.ts';
 import { provedSave } from './advisor-lethal.ts';
 import { coveredFacts, coveredHeals, discountCovered, type Covered } from './advisor-covered.ts';
 import { isSelfOrder, scopeWord, targetDisplayName } from './targetLabel.ts';
@@ -307,6 +311,12 @@ export interface AdvisorOptions {
   v3?: boolean;
   /** Measurement only (tests, scorecard ablations): one v3 rule off. The HUD never passes it. */
   v3Rules?: { onItsWay?: boolean; provedSave?: boolean; covered?: boolean };
+  /**
+   * **DIFF-B** (FFX-2 only, Chapter XIII only; `./advisor-line.ts`): the card's top row is the
+   * chapter's own line. On or off for this call; the default is `ADVISOR_LINE_FIRST`. Measurement
+   * and tests only: the HUD never passes it, and a board of any other chapter ignores it.
+   */
+  lineFirst?: boolean;
   /**
    * **Advisor v4** (`./advisor-v4/`, FFX only in the game): the look-ahead's pick, put on top of
    * the card when it is one of the rows this card priced; the row keeps its own numbers and
@@ -1213,6 +1223,8 @@ export function buildAdvisorView(
   if (!actor || board.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
   const planner = given.planner !== false;
   const v3 = v3On(given);
+  // DIFF-B (FFX-2, Chapter XIII only): the chapter's line is the card's top row (`./advisor-line.ts`).
+  const lineFirst = lineFirstOn(board, given);
   // v3 reads the held command off the engine itself: the HUD never passed it (method check §1).
   const held = v3 ? heldFor(given) : [];
   const keyed: AdvisorOptions = held.length > 0 && !given.queued ? { ...given, queued: () => held } : given;
@@ -1223,7 +1235,11 @@ export function buildAdvisorView(
   // that *has* moved cannot share a key [`./advisor-plan.ts#cacheKeyFor`].
   // A held command (PR-0076) is set without an event, so `nextSeq` cannot see
   // it: a board carrying one is never served from the cache.
-  const cacheKey = planner && !given.v3Rules && !given.lift && queuedFrom(keyed).length === 0 ? cacheKeyFor(board, decision.actorId) : null;
+  // An explicit `lineFirst` (a measurement switching the rule on or off) never shares a cache entry.
+  const cacheKey =
+    planner && !given.v3Rules && !given.lift && given.lineFirst === undefined && queuedFrom(keyed).length === 0
+      ? cacheKeyFor(board, decision.actorId)
+      : null;
   if (cacheKey) {
     const hit = PLAN_CACHE.get(cacheKey);
     if (hit && hit.commands === decision.commands && hit.v3 === v3) return hit.view;
@@ -1359,7 +1375,9 @@ export function buildAdvisorView(
   // only when it beats the line by a ratio [`./advisor-plan.ts#beatsPrior`], and
   // when it does, the sentence names the long plan in the same breath, so the
   // card and the strategy panel are never teaching different fights.
-  const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner);
+  // DIFF-B reads the line off the live board, as the measured player did; every other chapter's line
+  // is read off the board the card is ranked on, as it always was.
+  const tactic = tacticSuggestion(state, decision, candidates, sim, intent, planner, lineFirst ? board : state);
   if (tactic) cover(tactic);
   if (tactic && planner) {
     const ev = evaluate(
@@ -1507,8 +1525,14 @@ export function buildAdvisorView(
   // Advisor v4's pick on top (`AdvisorOptions.lift`); absent from this card, the card stands.
   // PR-0269: on a race board a stable party's heal gives way to damage (`./advisor-race.ts`).
   const lifted = given.lift ? provedFirst.find((c) => sameCommand(c.suggestion.command, given.lift!)) ?? null : planner ? raceLift(state, provedFirst, intent) : null;
-  const ordered = lifted ? [lifted, ...provedFirst.filter((c) => c !== lifted)] : provedFirst;
+  const cardOrder = lifted ? [lifted, ...provedFirst.filter((c) => c !== lifted)] : provedFirst;
   if (lifted && given.lift) override = lifted !== tactic ? lifted : null; // a race lift keeps its own sentence
+  // **DIFF-B** (FFX-2, Chapter XIII only): the chapter's line is the top row, over the lethal-save
+  // override, the proved save, the revive priority, the race lift, the inert and the already-on-its-way
+  // demotions above. It must still pass the hard gate: a line this actor cannot press stays off the card.
+  const lineTop = lineFirst && tactic !== null && pressed.includes(tactic) ? tactic : null;
+  const ordered = lineTop ? [lineTop, ...cardOrder.filter((c) => c !== lineTop)] : cardOrder;
+  if (lineTop) override = null; // no row below the line is "instead of the long plan" any more
 
   const shown: Candidate[] = [ordered[0]!];
   /** A revive this board was offered, priced, and refused. See {@link noteFor}. */
@@ -1851,10 +1875,12 @@ function tacticSuggestion(
   sim: Sim,
   intent: AdvisorIntent | null,
   planner: boolean,
+  /** The board the line is read off: the card's own, unless DIFF-B reads the live board (`./advisor-line.ts`). */
+  lineBoard: Readonly<BattleState> = state,
 ): Candidate | null {
   let command: Command | null = null;
   try {
-    command = recommendedCommand(state, decision);
+    command = recommendedCommand(lineBoard, decision);
   } catch {
     return null;
   }

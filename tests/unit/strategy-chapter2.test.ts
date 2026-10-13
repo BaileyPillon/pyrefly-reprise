@@ -35,6 +35,14 @@ const MAX_DECISIONS = 30_000;
  */
 const SEEDS = [3, 7, 42, 20260916];
 
+/**
+ * The seeds the shipped line WINS on (the first block below). Re-pinned 2026-10-12 (re-parity RC5, lane FFX-D, FFX only; Bailey 2026-10-11 "Close D-214 / PR-0217: a KO clears Zombie and
+ * Scan, per the exe; report Chapter II's 500-seed change"): a KO clears Zombie now, a zombified member who dies comes back clean when raised and no longer counts toward Hellbiter's weight, and the
+ * line wins 398 of 500 seeds (79.6 percent, was 476, 95.2 percent; nothing on the boss or the party was tuned, docs/handoff/re-parity-rc5.md). Seeds 3, 7 and 20260916 now lose. The other two blocks
+ * (the wrong tactics stay punished) keep `SEEDS`: they assert defeats and every one of those four still loses.
+ */
+const WIN_SEEDS = [1, 2, 4, 42];
+
 function newEngine(seed: number, party: FFXPartyBuild = zanarkandBuild) {
   const content = new FFXContentRegistry();
   content.addAbilities(ALL_ABILITIES);
@@ -163,7 +171,7 @@ function runIntended(seed: number): Run {
  *      form's counter.
  */
 describe('the shipped intended strategy beats Chapter 2', () => {
-  for (const seed of SEEDS) {
+  for (const seed of WIN_SEEDS) {
     it(`wins against Yunalesca and walks all three forms (seed ${seed})`, () => {
       const r = runIntended(seed);
       // Printed so a failure shows *how* it lost, not just that it did.
@@ -182,9 +190,15 @@ describe('the shipped intended strategy beats Chapter 2', () => {
    *
    * Measured 39/40 here and on the windows starting at 101 and at 1001, and
    * 1,574/1,600 over the first 1,600 seeds, before the aeon-targeting rule above;
-   * 37/40 here since (seeds 1, 2 and 32 lose). The bar is set at 36 so ordinary
+   * 37/40 here since (seeds 1, 2 and 32 lose). The bar was 36 so ordinary
    * tail variance does not flake it, and so that any regression toward the
    * coin-flip this used to be (it was 13/40 on the same window) goes red.
+   *
+   * Re-pinned 2026-10-12 (re-parity RC5, FFX only): a KO clears Zombie (the game's
+   * status reset), the line wins 398 of 500 seeds (79.6 percent) and 30 of these forty.
+   * The bar is now 27: two standard errors under the 500-seed rate for forty seeds
+   * (31.8 - 5.1), still far from the coin flip (20) and from the 13/40 of the old
+   * broken engine, so a real regression still goes red.
    */
   it('wins the great majority of forty contiguous seeds', () => {
     const results = Array.from({ length: 40 }, (_, i) => runIntended(i + 1));
@@ -195,7 +209,7 @@ describe('the shipped intended strategy beats Chapter 2', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 2 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(36);
+    expect(wins, 'Chapter 2 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(27);
     expect(
       results.every((r) => r.formsReached === 3),
       'every run must walk all three forms',

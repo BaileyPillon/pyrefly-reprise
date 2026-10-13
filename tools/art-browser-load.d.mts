@@ -9,9 +9,9 @@ export interface LoadItem {
   rel: string;
   /** The master PNG it ships for (null for an image that is not a master). */
   master: string | null;
-  /** `webp`, `png` (recompressed), `copy` (the master's own bytes) or `other`. */
+  /** `webp`, `png` (recompressed), `copy` (the master's own bytes), `thumb` (a strip thumbnail, r44-thumbs) or `other`. */
   kind: string;
-  /** The master's size (null for `other`): the shipped file must decode to exactly this. */
+  /** The master's size (a thumbnail's, as the record gives it; null for `other`): the shipped file must decode to exactly this. */
   width: number | null;
   height: number | null;
 }
@@ -30,7 +30,7 @@ export interface LoadPlate {
 }
 
 export function pngSize(file: string): { width: number; height: number } | null;
-export function planLoads(options: { distDir: string; publicDir: string }): { art: LoadItem[]; others: LoadItem[]; problems: string[] };
+export function planLoads(options: { distDir: string; publicDir: string }): { art: LoadItem[]; thumbs: LoadItem[]; others: LoadItem[]; problems: string[] };
 export function platesOf(distDir: string, art: readonly LoadItem[]): LoadPlate[];
 /** Why one file failed in one engine, or null when it loaded and decoded at its master's size. */
 export function problemOf(item: LoadItem, row: LoadRow | null | undefined): string | null;
@@ -58,7 +58,7 @@ export interface LoadEngineReport {
 
 export interface ArtLoadResult {
   ok: boolean;
-  checked: { art: number; others: number; webp: number; png: number; copy: number };
+  checked: { art: number; thumbs: number; others: number; webp: number; png: number; copy: number };
   engines: Record<string, LoadEngineReport>;
   problems: string[];
   ms: number;

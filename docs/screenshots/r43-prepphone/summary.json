@@ -1,0 +1,5937 @@
+{
+ "sha": "98bcc847",
+ "generated": "2026-10-13T03:50:33.743Z",
+ "runs": {
+  "build-390x844": {
+   "w": 390,
+   "h": 844,
+   "mode": "build",
+   "tag": "build",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 961,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1131,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 34,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 73,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1408,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 27,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 961,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 42,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 82,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1138,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 32,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 37,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=39 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":715} sections 366"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=707 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=sphere-grid selected=SPHERE GRID"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=57 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":780,\"w\":376.6278076171875,\"h\":50} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=equipment selected=EQUIPMENT"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=34 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":638} sections 366"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=620 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=73 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":1316} sections 366"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "items: a touch drag scrolls the page to its end (564 of 564)",
+     "ok": true,
+     "detail": "scrollTop=564 max=564"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=734 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "items: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=overdrive selected=OVERDRIVE"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=27 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":418} sections 366"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=400 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=dresspheres selected=DRESSPHERES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=42 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":677} sections 366"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=659 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=82 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":1046} sections 366"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: a touch drag scrolls the page to its end (294 of 294)",
+     "ok": true,
+     "detail": "scrollTop=294 max=294"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=744 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=accessories selected=ACCESSORIES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=32 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":532} sections 366"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=524 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=37 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 390/390 prep 390/390"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":390,\"b\":618} sections 366"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":390,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":390,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=600 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":782,\"w\":375.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "build-430x932": {
+   "w": 430,
+   "h": 932,
+   "mode": "build",
+   "tag": "build",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 2,
+     "overlapsUnderDock": 2,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 961,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1131,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 34,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 73,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1408,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 27,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 941,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 42,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 82,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1138,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 32,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 37,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=39 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 2 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":715} sections 406"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=707 start.t=870"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=sphere-grid selected=SPHERE GRID"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=57 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":868,\"w\":416.6278076171875,\"h\":50} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=equipment selected=EQUIPMENT"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=34 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":638} sections 406"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=620 start.t=870"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=73 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":1316} sections 406"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "items: a touch drag scrolls the page to its end (476 of 476)",
+     "ok": true,
+     "detail": "scrollTop=476 max=476"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=822 start.t=870"
+    },
+    {
+     "game": "FFX",
+     "name": "items: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=overdrive selected=OVERDRIVE"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=27 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":418} sections 406"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=400 start.t=870"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=dresspheres selected=DRESSPHERES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=42 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":677} sections 406"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=659 start.t=870"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=82 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":1046} sections 406"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: a touch drag scrolls the page to its end (206 of 206)",
+     "ok": true,
+     "detail": "scrollTop=206 max=206"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=832 start.t=870"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=accessories selected=ACCESSORIES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=32 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":532} sections 406"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=524 start.t=870"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=37 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 430/430 prep 430/430"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":430,\"b\":618} sections 406"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":430,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":430,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=600 start.t=870"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":870,\"w\":415.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "build-360x740": {
+   "w": 360,
+   "h": 740,
+   "mode": "build",
+   "tag": "build",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 2,
+     "overlapsUnderDock": 2,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1003,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 2,
+     "overlapsUnderDock": 2,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 826,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1131,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 34,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 740,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 73,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1408,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 27,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 740,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1017,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 43,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 769,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 82,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1138,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 32,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 740,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 37,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 740,
+     "clientHeight": 740,
+     "scrollW": 360,
+     "clientW": 360
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=39 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 2 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=39 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 2 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":734} sections 336"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: a touch drag scrolls the page to its end (86 of 86)",
+     "ok": true,
+     "detail": "scrollTop=86 max=86"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=640 start.t=678"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=sphere-grid selected=SPHERE GRID"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=57 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":676,\"w\":346.6278076171875,\"h\":50} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=equipment selected=EQUIPMENT"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=34 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":638} sections 336"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=620 start.t=678"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=73 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":1316} sections 336"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "items: a touch drag scrolls the page to its end (668 of 668)",
+     "ok": true,
+     "detail": "scrollTop=668 max=668"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=630 start.t=678"
+    },
+    {
+     "game": "FFX",
+     "name": "items: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=overdrive selected=OVERDRIVE"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=27 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":418} sections 336"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=400 start.t=678"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=dresspheres selected=DRESSPHERES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=43 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":677} sections 336"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: a touch drag scrolls the page to its end (29 of 29)",
+     "ok": true,
+     "detail": "scrollTop=29 max=29"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the page scrolls only 29 px here, less than the 40 px eyebrow, so the bar rides up by 29 and is not yet pinned",
+     "ok": true,
+     "detail": "strip.t=11 roster.t=56"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=630 start.t=678"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=82 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":1046} sections 336"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: a touch drag scrolls the page to its end (398 of 398)",
+     "ok": true,
+     "detail": "scrollTop=398 max=398"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=640 start.t=678"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=accessories selected=ACCESSORIES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=32 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":551} sections 336"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=543 start.t=678"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=37 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 360/360 prep 360/360"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":360,\"b\":618} sections 336"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":360,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":360,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=600 start.t=678"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":678,\"w\":345.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "build-320x640": {
+   "w": 320,
+   "h": 640,
+   "mode": "build",
+   "tag": "build",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1078,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 826,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 3,
+     "overlapsUnderDock": 3,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1196,
+     "clientHeight": 640,
+     "scrollW": 348,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 35,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 730,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 73,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1408,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 27,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1037,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 43,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 826,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 82,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 3,
+     "overlapsUnderDock": 3,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1158,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 32,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 643,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 710,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=39 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=39 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":734} sections 296"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: a touch drag scrolls the page to its end (186 of 186)",
+     "ok": true,
+     "detail": "scrollTop=186 max=186"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=540 start.t=578"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=sphere-grid selected=SPHERE GRID"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=57 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no sideways scroll",
+     "ok": false,
+     "detail": "doc 320/320 prep 348/320"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 3 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":576,\"w\":306.6278076171875,\"h\":50} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=equipment selected=EQUIPMENT"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=35 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":638} sections 296"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: a touch drag scrolls the page to its end (90 of 90)",
+     "ok": true,
+     "detail": "scrollTop=90 max=90"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=530 start.t=578"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=73 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":1316} sections 296"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "items: a touch drag scrolls the page to its end (768 of 768)",
+     "ok": true,
+     "detail": "scrollTop=768 max=768"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=530 start.t=578"
+    },
+    {
+     "game": "FFX",
+     "name": "items: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=overdrive selected=OVERDRIVE"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=27 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":418} sections 296"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=400 start.t=578"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=dresspheres selected=DRESSPHERES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=43 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 1 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":734} sections 296"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: a touch drag scrolls the page to its end (186 of 186)",
+     "ok": true,
+     "detail": "scrollTop=186 max=186"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=530 start.t=578"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=82 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 3 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":1066} sections 296"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: a touch drag scrolls the page to its end (518 of 518)",
+     "ok": true,
+     "detail": "scrollTop=518 max=518"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=540 start.t=578"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=accessories selected=ACCESSORIES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=32 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":551} sections 296"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=543 start.t=578"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 320/320 prep 320/320"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":320,\"b\":618} sections 296"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":320,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":320,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: a touch drag scrolls the page to its end (70 of 70)",
+     "ok": true,
+     "detail": "scrollTop=70 max=70"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=530 start.t=578"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":578,\"w\":305.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "build-599x900": {
+   "w": 599,
+   "h": 900,
+   "mode": "build",
+   "tag": "build",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1131,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 34,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 73,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1408,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 27,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 37,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 42,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 82,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1138,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 32,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 37,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 900,
+     "clientHeight": 900,
+     "scrollW": 599,
+     "clientW": 599
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=38 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":715} sections 575"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=707 start.t=838"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=sphere-grid selected=SPHERE GRID"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=57 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":836,\"w\":585.6278076171875,\"h\":50} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=equipment selected=EQUIPMENT"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=34 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":638} sections 575"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=620 start.t=838"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=73 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":1316} sections 575"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "items: a touch drag scrolls the page to its end (508 of 508)",
+     "ok": true,
+     "detail": "scrollTop=508 max=508"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=790 start.t=838"
+    },
+    {
+     "game": "FFX",
+     "name": "items: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=overdrive selected=OVERDRIVE"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=27 min=14 under=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":418} sections 575"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=400 start.t=838"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=chapter selected=CHAPTER"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: keeps its own phone page (no data-phone)",
+     "ok": true,
+     "detail": "data-phone=null"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=37 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=dresspheres selected=DRESSPHERES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=42 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":641} sections 575"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=623 start.t=838"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=stats selected=STATS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=82 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":1046} sections 575"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: a touch drag scrolls the page to its end (238 of 238)",
+     "ok": true,
+     "detail": "scrollTop=238 max=238"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the strip and faces stay pinned while it scrolls, on a solid ground",
+     "ok": true,
+     "detail": "strip.t=0 roster.t=45 is-scrolled=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the last row ends above START BATTLE at the end of the page",
+     "ok": true,
+     "detail": "last.b=800 start.t=838"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: MORE BELOW at the top, gone at the end",
+     "ok": true,
+     "detail": "top=true end=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=accessories selected=ACCESSORIES"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=32 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":532} sections 575"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=524 start.t=838"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: opened by a touch tap",
+     "ok": true,
+     "detail": "data-tab=items selected=ITEMS"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: takes the stacked page (data-phone=page)",
+     "ok": true,
+     "detail": "data-phone=page"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no text under 14 px (offscreen text included)",
+     "ok": true,
+     "detail": "n=37 min=14 under=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "doc 599/599 prep 599/599"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no overprinting or cut text (text that scrolls under the pinned START BATTLE or MORE BELOW is not counted; 0 such)",
+     "ok": true,
+     "detail": "overlaps=0 cut=0 "
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the page fills the width (sections 12 px in from each edge)",
+     "ok": true,
+     "detail": "host {\"l\":0,\"t\":150,\"r\":599,\"b\":618} sections 575"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the strip is 45 px and the faces row 65 px, one above the other, full width",
+     "ok": true,
+     "detail": "strip {\"l\":0,\"t\":40,\"r\":599,\"b\":85} roster {\"l\":0,\"t\":85,\"r\":599,\"b\":150}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: fits one screen with START BATTLE below it",
+     "ok": true,
+     "detail": "last.b=600 start.t=838"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: START BATTLE is on screen, uncovered and 44 px or taller",
+     "ok": true,
+     "detail": "{\"x\":7.111198902130127,\"y\":838,\"w\":584.777587890625,\"h\":46} covered=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "base-320x640": {
+   "w": 320,
+   "h": 640,
+   "mode": "base",
+   "tag": "base",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1078,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 73,
+     "minPx": 2.44,
+     "under14": 73,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 3,
+     "overlapsUnderDock": 3,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1196,
+     "clientHeight": 640,
+     "scrollW": 348,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 56,
+     "minPx": 2.44,
+     "under14": 56,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 105,
+     "minPx": 2.44,
+     "under14": 105,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 54,
+     "minPx": 2.44,
+     "under14": 54,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "overlapsUnderDock": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1037,
+     "clientHeight": 640,
+     "scrollW": 320,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 63,
+     "minPx": 2.44,
+     "under14": 63,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 177,
+     "minPx": 2.44,
+     "under14": 177,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 43,
+     "minPx": 2.44,
+     "under14": 43,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 54,
+     "minPx": 2.44,
+     "under14": 54,
+     "overlaps": 0,
+     "overlapsUnderDock": 0,
+     "cut": 0,
+     "underList": [
+      "2.44px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.44px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.44px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.44px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.44px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 640,
+     "clientHeight": 640,
+     "scrollW": 330,
+     "clientW": 320
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "base-390x844": {
+   "w": 390,
+   "h": 844,
+   "mode": "base",
+   "tag": "base",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 961,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 73,
+     "minPx": 2.98,
+     "under14": 73,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1131,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 56,
+     "minPx": 2.98,
+     "under14": 56,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 105,
+     "minPx": 2.98,
+     "under14": 105,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 54,
+     "minPx": 2.98,
+     "under14": 54,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 961,
+     "clientHeight": 844,
+     "scrollW": 390,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 63,
+     "minPx": 2.98,
+     "under14": 63,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 177,
+     "minPx": 2.98,
+     "under14": 177,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 43,
+     "minPx": 2.98,
+     "under14": 43,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 54,
+     "minPx": 2.98,
+     "under14": 54,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "2.98px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "2.98px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "2.98px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "2.98px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "2.98px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 844,
+     "clientHeight": 844,
+     "scrollW": 402,
+     "clientW": 390
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "base-430x932": {
+   "w": 430,
+   "h": 932,
+   "mode": "base",
+   "tag": "base",
+   "rows": [
+    {
+     "game": "FFX",
+     "tab": "chapter",
+     "texts": 39,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 2,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 961,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "stats",
+     "texts": 73,
+     "minPx": 3.29,
+     "under14": 73,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "sphere-grid",
+     "texts": 57,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 1131,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "equipment",
+     "texts": 56,
+     "minPx": 3.29,
+     "under14": 56,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "items",
+     "texts": 105,
+     "minPx": 3.29,
+     "under14": 105,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX",
+     "tab": "overdrive",
+     "texts": 54,
+     "minPx": 3.29,
+     "under14": 54,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WARRIOR @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "chapter",
+     "texts": 38,
+     "minPx": 14,
+     "under14": 0,
+     "overlaps": 1,
+     "cut": 0,
+     "underList": [],
+     "scrollHeight": 941,
+     "clientHeight": 932,
+     "scrollW": 430,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "dresspheres",
+     "texts": 63,
+     "minPx": 3.29,
+     "under14": 63,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "stats",
+     "texts": 177,
+     "minPx": 3.29,
+     "under14": 177,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "accessories",
+     "texts": 43,
+     "minPx": 3.29,
+     "under14": 43,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    },
+    {
+     "game": "FFX-2",
+     "tab": "items",
+     "texts": 54,
+     "minPx": 3.29,
+     "under14": 54,
+     "overlaps": 0,
+     "cut": 0,
+     "underList": [
+      "3.29px ▲ ▼ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px PARTY · TABS · · @ div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+      "3.29px ◀ ▶ @ div.prep__stage.lb-stage > div.prep__hint > b",
+      "3.29px ENTER @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BEGINS THE BATTLE @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px ESC @ div.prep__hint > span.prep__hint-act > b",
+      "3.29px BACK @ div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+      "3.29px WHITE MAGE @ div.prep__slots > div.prep__slot > div.prep__slot-role"
+     ],
+     "scrollHeight": 932,
+     "clientHeight": 932,
+     "scrollW": 443,
+     "clientW": 430
+    }
+   ],
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "input-390x844": {
+   "w": 390,
+   "h": 844,
+   "tag": "input",
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "tab stats: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"stats\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "tab equipment: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"equipment\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "tab items: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"items\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "tab overdrive: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"overdrive\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "faces: a tap on each of the 7 selects that member, the page names her, and the section left open stays open",
+     "ok": true,
+     "detail": "0:Tidus 1:Yuna 2:Kimahri 3:Auron 4:Wakka 5:Lulu 6:Rikku"
+    },
+    {
+     "game": "FFX",
+     "name": "faces: every number on the phone page equals the one on the board for each member",
+     "ok": true,
+     "detail": "labels ten stats"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats DEFENSE (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats DEFENSE (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats HP · MP (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats HP · MP (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats: a tap on the ivory body of an open section leaves it open",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "tab strip: a touch swipe along it scrolls the tabs sideways",
+     "ok": true,
+     "detail": "scrollLeft 0 -> 275 (width 802 in 390)"
+    },
+    {
+     "game": "FFX",
+     "name": "tab strip: the last tab (overdrive) is reachable by touch after the swipe",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "Overdrive: a tap equips stoic (was warrior); the EQUIPPED tag, the board's row and the digest agree",
+     "ok": true,
+     "detail": "{\"phone\":[\"stoic\"],\"tag\":\"EQUIPPED\",\"board\":[\"stoic\"],\"digest\":\"Stoic equipped\"}"
+    },
+    {
+     "game": "FFX",
+     "name": "Overdrive: the chosen mode is still equipped after another face and back",
+     "ok": true,
+     "detail": "[\"stoic\"]"
+    },
+    {
+     "game": "FFX",
+     "name": "page: a touch drag scrolls the items page and the strip and faces stay pinned",
+     "ok": true,
+     "detail": "{\"top\":327,\"scrolled\":true,\"strip\":0,\"roster\":45}"
+    },
+    {
+     "game": "FFX",
+     "name": "page: a tap on a pinned face works while the page is scrolled",
+     "ok": true,
+     "detail": "selected 1 (Yuna)"
+    },
+    {
+     "game": "FFX",
+     "name": "page: a drag back to the top clears the pinned bar's ground",
+     "ok": true,
+     "detail": "{\"top\":0,\"scrolled\":false}"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Down and Up walk the party, and the phone page follows",
+     "ok": true,
+     "detail": "0 -> 1 -> 0"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Right and Left walk the tabs",
+     "ok": true,
+     "detail": "stats -> sphere-grid -> stats"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Tab (Triangle) opens every folded section, and once none is folded it folds them all",
+     "ok": true,
+     "detail": "2 open of 4 -> 4 -> 0"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: PageDown pages the items page (a screen of its own content, or to its end) and PageUp pages it back; the browser does not scroll it a second time",
+     "ok": true,
+     "detail": "scrollTop 0 -> 564 -> 0 (max 564)"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Esc leaves the prep screen (back to the chapter board)",
+     "ok": true,
+     "detail": "screen=chapter-select"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "START BATTLE (a touch tap on the pinned button, from the equipment page) begins the fight",
+     "ok": true,
+     "detail": "screen party-prep -> cutscene in 404 ms"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab dresspheres: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"dresspheres\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab stats: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"stats\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab accessories: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"accessories\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab items: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"items\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "faces: a tap on each of the 3 selects that member, the page names her, and the section left open stays open",
+     "ok": true,
+     "detail": "0:Yuna 1:Rikku 2:Paine"
+    },
+    {
+     "game": "FFX-2",
+     "name": "faces: every number on the phone page equals the one on the board for each member",
+     "ok": true,
+     "detail": "labels ten stats"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats GUNNER (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats GUNNER (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats WORN (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats WORN (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres GARMENT GRID (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres GARMENT GRID (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres ALSO OWNED (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres ALSO OWNED (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres LEARNED (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres LEARNED (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Accessories SLOT 1 (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Accessories SLOT 1 (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab strip: a touch swipe along it scrolls the tabs sideways",
+     "ok": true,
+     "detail": "scrollLeft 95 -> 328 (width 718 in 390)"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab strip: the last tab (items) is reachable by touch after the swipe",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "page: a touch drag scrolls the stats page and the strip and faces stay pinned",
+     "ok": true,
+     "detail": "{\"top\":294,\"scrolled\":true,\"strip\":0,\"roster\":45}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "page: a tap on a pinned face works while the page is scrolled",
+     "ok": true,
+     "detail": "selected 1 (Rikku)"
+    },
+    {
+     "game": "FFX-2",
+     "name": "page: a drag back to the top clears the pinned bar's ground",
+     "ok": true,
+     "detail": "{\"top\":0,\"scrolled\":false}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Down and Up walk the party, and the phone page follows",
+     "ok": true,
+     "detail": "0 -> 1 -> 0"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Right and Left walk the tabs",
+     "ok": true,
+     "detail": "stats -> accessories -> stats"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Tab (Triangle) opens every folded section, and once none is folded it folds them all",
+     "ok": true,
+     "detail": "1 open of 10 -> 10 -> 0"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: PageDown pages the stats page (a screen of its own content, or to its end) and PageUp pages it back; the browser does not scroll it a second time",
+     "ok": true,
+     "detail": "scrollTop 0 -> 618 -> 0 (max 2166)"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Esc leaves the prep screen (back to the chapter board)",
+     "ok": true,
+     "detail": "screen=chapter-select"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "START BATTLE (a touch tap on the pinned button, from the accessories page) begins the fight",
+     "ok": true,
+     "detail": "screen party-prep -> cutscene in 404 ms"
+    }
+   ]
+  },
+  "input-430x932": {
+   "w": 430,
+   "h": 932,
+   "tag": "input",
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "tab stats: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"stats\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "tab equipment: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"equipment\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "tab items: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"items\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "tab overdrive: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"overdrive\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX",
+     "name": "faces: a tap on each of the 7 selects that member, the page names her, and the section left open stays open",
+     "ok": true,
+     "detail": "0:Tidus 1:Yuna 2:Kimahri 3:Auron 4:Wakka 5:Lulu 6:Rikku"
+    },
+    {
+     "game": "FFX",
+     "name": "faces: every number on the phone page equals the one on the board for each member",
+     "ok": true,
+     "detail": "labels ten stats"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats DEFENSE (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats DEFENSE (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats HP · MP (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats HP · MP (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX",
+     "name": "Stats: a tap on the ivory body of an open section leaves it open",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "tab strip: a touch swipe along it scrolls the tabs sideways",
+     "ok": true,
+     "detail": "scrollLeft 0 -> 315 (width 802 in 430)"
+    },
+    {
+     "game": "FFX",
+     "name": "tab strip: the last tab (overdrive) is reachable by touch after the swipe",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "Overdrive: a tap equips stoic (was warrior); the EQUIPPED tag, the board's row and the digest agree",
+     "ok": true,
+     "detail": "{\"phone\":[\"stoic\"],\"tag\":\"EQUIPPED\",\"board\":[\"stoic\"],\"digest\":\"Stoic equipped\"}"
+    },
+    {
+     "game": "FFX",
+     "name": "Overdrive: the chosen mode is still equipped after another face and back",
+     "ok": true,
+     "detail": "[\"stoic\"]"
+    },
+    {
+     "game": "FFX",
+     "name": "page: a touch drag scrolls the items page and the strip and faces stay pinned",
+     "ok": true,
+     "detail": "{\"top\":327,\"scrolled\":true,\"strip\":0,\"roster\":45}"
+    },
+    {
+     "game": "FFX",
+     "name": "page: a tap on a pinned face works while the page is scrolled",
+     "ok": true,
+     "detail": "selected 1 (Yuna)"
+    },
+    {
+     "game": "FFX",
+     "name": "page: a drag back to the top clears the pinned bar's ground",
+     "ok": true,
+     "detail": "{\"top\":0,\"scrolled\":false}"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Down and Up walk the party, and the phone page follows",
+     "ok": true,
+     "detail": "0 -> 1 -> 0"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Right and Left walk the tabs",
+     "ok": true,
+     "detail": "stats -> sphere-grid -> stats"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Tab (Triangle) opens every folded section, and once none is folded it folds them all",
+     "ok": true,
+     "detail": "2 open of 4 -> 4 -> 0"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: PageDown pages the items page (a screen of its own content, or to its end) and PageUp pages it back; the browser does not scroll it a second time",
+     "ok": true,
+     "detail": "scrollTop 0 -> 476 -> 0 (max 476)"
+    },
+    {
+     "game": "FFX",
+     "name": "keys: Esc leaves the prep screen (back to the chapter board)",
+     "ok": true,
+     "detail": "screen=chapter-select"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "START BATTLE (a touch tap on the pinned button, from the equipment page) begins the fight",
+     "ok": true,
+     "detail": "screen party-prep -> cutscene in 422 ms"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab dresspheres: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"dresspheres\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab stats: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"stats\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab accessories: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"accessories\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab items: a tap opens it, with its phone page",
+     "ok": true,
+     "detail": "{\"tab\":\"items\",\"phone\":\"page\",\"hosts\":1}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "faces: a tap on each of the 3 selects that member, the page names her, and the section left open stays open",
+     "ok": true,
+     "detail": "0:Yuna 1:Rikku 2:Paine"
+    },
+    {
+     "game": "FFX-2",
+     "name": "faces: every number on the phone page equals the one on the board for each member",
+     "ok": true,
+     "detail": "labels ten stats"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats GUNNER (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats GUNNER (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats WORN (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Stats WORN (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres GARMENT GRID (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres GARMENT GRID (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres ALSO OWNED (folded): one tap on the header opens the section",
+     "ok": true,
+     "detail": "open false -> true, aria=true, body shown=true, digest shown=false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres ALSO OWNED (folded): a second tap puts it back",
+     "ok": true,
+     "detail": "open true -> false"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres LEARNED (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Dresspheres LEARNED (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Accessories SLOT 1 (open): one tap on the header folds the section",
+     "ok": true,
+     "detail": "open true -> false, aria=false, body shown=false, digest shown=true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "Accessories SLOT 1 (open): a second tap puts it back",
+     "ok": true,
+     "detail": "open false -> true"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab strip: a touch swipe along it scrolls the tabs sideways",
+     "ok": true,
+     "detail": "scrollLeft 95 -> 288 (width 718 in 430)"
+    },
+    {
+     "game": "FFX-2",
+     "name": "tab strip: the last tab (items) is reachable by touch after the swipe",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "page: a touch drag scrolls the stats page and the strip and faces stay pinned",
+     "ok": true,
+     "detail": "{\"top\":206,\"scrolled\":true,\"strip\":0,\"roster\":45}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "page: a tap on a pinned face works while the page is scrolled",
+     "ok": true,
+     "detail": "selected 1 (Rikku)"
+    },
+    {
+     "game": "FFX-2",
+     "name": "page: a drag back to the top clears the pinned bar's ground",
+     "ok": true,
+     "detail": "{\"top\":0,\"scrolled\":false}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Down and Up walk the party, and the phone page follows",
+     "ok": true,
+     "detail": "0 -> 1 -> 0"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Right and Left walk the tabs",
+     "ok": true,
+     "detail": "stats -> accessories -> stats"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Tab (Triangle) opens every folded section, and once none is folded it folds them all",
+     "ok": true,
+     "detail": "1 open of 10 -> 10 -> 0"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: PageDown pages the stats page (a screen of its own content, or to its end) and PageUp pages it back; the browser does not scroll it a second time",
+     "ok": true,
+     "detail": "scrollTop 0 -> 706 -> 0 (max 2078)"
+    },
+    {
+     "game": "FFX-2",
+     "name": "keys: Esc leaves the prep screen (back to the chapter board)",
+     "ok": true,
+     "detail": "screen=chapter-select"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "START BATTLE (a touch tap on the pinned button, from the accessories page) begins the fight",
+     "ok": true,
+     "detail": "screen party-prep -> cutscene in 417 ms"
+    }
+   ]
+  },
+  "webkit-390x844": {
+   "w": 390,
+   "h": 844,
+   "tag": "webkit",
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "chapter: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: its own phone page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no text under 14 px",
+     "ok": true,
+     "detail": "n=39 min=14"
+    },
+    {
+     "game": "FFX",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "stats: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no text under 14 px",
+     "ok": true,
+     "detail": "n=38 min=14"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX",
+     "name": "stats: fits one screen above START BATTLE",
+     "ok": true,
+     "detail": "last.b=707 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: its own phone page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no text under 14 px",
+     "ok": true,
+     "detail": "n=57 min=14"
+    },
+    {
+     "game": "FFX",
+     "name": "sphere-grid: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no text under 14 px",
+     "ok": true,
+     "detail": "n=34 min=14"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX",
+     "name": "equipment: fits one screen above START BATTLE",
+     "ok": true,
+     "detail": "last.b=620 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "items: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "items: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "items: no text under 14 px",
+     "ok": true,
+     "detail": "n=73 min=14"
+    },
+    {
+     "game": "FFX",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX",
+     "name": "items: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX",
+     "name": "items: pinned strip and faces at the end of the page (sticky)",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":0,\"r\":390,\"b\":45},{\"l\":0,\"t\":45,\"r\":390,\"b\":110}]"
+    },
+    {
+     "game": "FFX",
+     "name": "items: the last row ends above START BATTLE at the end",
+     "ok": true,
+     "detail": "last.b=734 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no text under 14 px",
+     "ok": true,
+     "detail": "n=27 min=14"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX",
+     "name": "overdrive: fits one screen above START BATTLE",
+     "ok": true,
+     "detail": "last.b=400 start.t=782"
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: its own phone page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no text under 14 px",
+     "ok": true,
+     "detail": "n=38 min=14"
+    },
+    {
+     "game": "FFX-2",
+     "name": "chapter: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no text under 14 px",
+     "ok": true,
+     "detail": "n=42 min=14"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "dresspheres: fits one screen above START BATTLE",
+     "ok": true,
+     "detail": "last.b=659 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no text under 14 px",
+     "ok": true,
+     "detail": "n=82 min=14"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: pinned strip and faces at the end of the page (sticky)",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":0,\"r\":390,\"b\":45},{\"l\":0,\"t\":45,\"r\":390,\"b\":110}]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "stats: the last row ends above START BATTLE at the end",
+     "ok": true,
+     "detail": "last.b=744 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no text under 14 px",
+     "ok": true,
+     "detail": "n=32 min=14"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "accessories: fits one screen above START BATTLE",
+     "ok": true,
+     "detail": "last.b=524 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: opened by a tap",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: the stacked page",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no text under 14 px",
+     "ok": true,
+     "detail": "n=37 min=14"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: no sideways scroll",
+     "ok": true,
+     "detail": "[[390,390],[390,390]]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: strip 45 px, faces 65 px under it",
+     "ok": true,
+     "detail": "[{\"l\":0,\"t\":40,\"r\":390,\"b\":85},{\"l\":0,\"t\":85,\"r\":390,\"b\":150}]"
+    },
+    {
+     "game": "FFX-2",
+     "name": "items: fits one screen above START BATTLE",
+     "ok": true,
+     "detail": "last.b=600 start.t=782"
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "sphere-build-390x844": {
+   "w": 390,
+   "h": 844,
+   "tag": "sphere-build",
+   "checks": [
+    {
+     "name": "Sphere Grid opened by a tap, with no stacked page",
+     "ok": true,
+     "detail": "{\"tab\":\"sphere-grid\",\"phone\":null}"
+    },
+    {
+     "name": "the + button zooms the map by touch",
+     "ok": true,
+     "detail": "69bbeb0b12 -> c90258bc94"
+    },
+    {
+     "name": "CENTRE answers a tap (no error)",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "name": "a tap on a head of the Sphere Grid page switches the member",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "name": "START BATTLE is on screen and uncovered",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":780,\"w\":376.6278076171875,\"h\":50}"
+    },
+    {
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "sphere-base-390x844": {
+   "w": 390,
+   "h": 844,
+   "tag": "sphere-base",
+   "checks": [
+    {
+     "name": "Sphere Grid opened by a tap, with no stacked page",
+     "ok": true,
+     "detail": "{\"tab\":\"sphere-grid\",\"phone\":null}"
+    },
+    {
+     "name": "the + button zooms the map by touch",
+     "ok": true,
+     "detail": "c82b72f93f -> 5c65e338d1"
+    },
+    {
+     "name": "CENTRE answers a tap (no error)",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "name": "a tap on a head of the Sphere Grid page switches the member",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "name": "START BATTLE is on screen and uncovered",
+     "ok": true,
+     "detail": "{\"x\":6.686086177825928,\"y\":780,\"w\":376.6278076171875,\"h\":50}"
+    },
+    {
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  },
+  "desktop-input-1600x900": {
+   "w": 1600,
+   "h": 900,
+   "checks": [
+    {
+     "game": "FFX",
+     "name": "1600x900: a mouse click opens stats; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":1,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: a mouse click opens equipment; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":2,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: a mouse click opens items; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":3,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: a mouse click opens overdrive; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":4,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: a click on a roster row moves the member",
+     "ok": true,
+     "detail": "prep:member-0 -> prep:member-1"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: Up walks the party back",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: the desktop board's mode row still equips its mode on click()",
+     "ok": true,
+     "detail": "[\"stoic\"]"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: the hidden phone page follows the desktop board",
+     "ok": true,
+     "detail": "[\"stoic\"]"
+    },
+    {
+     "game": "FFX",
+     "name": "1600x900: Esc goes back",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: a mouse click opens dresspheres; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":1,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: a mouse click opens stats; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":2,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: a mouse click opens accessories; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":3,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: a mouse click opens items; the phone page is not shown",
+     "ok": true,
+     "detail": "{\"n\":4,\"shown\":0,\"phoneAttr\":\"page\",\"overflowY\":\"hidden\"}"
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: a click on a roster row moves the member",
+     "ok": true,
+     "detail": "prep:member-0 -> prep:member-1"
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: Up walks the party back",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "1600x900: Esc goes back",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "game": "FFX-2",
+     "name": "no page errors",
+     "ok": true,
+     "detail": ""
+    }
+   ]
+  }
+ }
+}

@@ -20,6 +20,11 @@
  * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` picks what is derived (default `exact`); `off` makes the plugin a no-op (the PNGs
  * ship as before): the switch for a live problem.
  *
+ * It also derives the chapter board's strip thumbnails (r44-thumbs, `art-thumbs.mjs`): the plan joins the same pass, the map of
+ * which masters have one is inserted as the constant `__PYREFLY_ART_THUMBS__` (`src/engine/ArtShipped.ts` `thumbArtUrl`), and
+ * `applyPlan` writes the files and lists them in `art/derived.json`. `PYREFLY_ART_THUMBS=off` ships none (the strips show the full
+ * paintings again); `PYREFLY_ART_WEBP=off` ships none either.
+ *
  * Game case: both (shared build plumbing).
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -27,12 +32,13 @@ import { join, resolve } from 'node:path';
 import process from 'node:process';
 
 import { applyPlan, planArtDerivation, resolveCache, resolveScope, shippedList, webpName } from './art-derive-lib.mjs';
+import { STRIP_LIST, planThumbs, resolveThumbSwitch, thumbMap } from './art-thumbs.mjs';
 
 /** `art/<...>.png` as it sits in a page, behind any base path. */
 const ART_PNG_NAME = /(?<![\w-])art\/[A-Za-z0-9_@.\-/]+?\.png(?![\w])/g;
 
-/** @param {{ scope?: string, cacheDir?: string, jobs?: number }} [options] */
-export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCache(), jobs } = {}) {
+/** @param {{ scope?: string, cacheDir?: string, jobs?: number, thumbs?: string, thumbList?: string }} [options] */
+export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCache(), jobs, thumbs = resolveThumbSwitch(), thumbList } = {}) {
   let plan = null;
   let shipped = new Set();
   let outDir = 'dist';
@@ -43,13 +49,20 @@ export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCac
     async config(user) {
       const root = resolve(user.root ?? process.cwd());
       const publicDir = user.publicDir === false ? null : resolve(root, user.publicDir ?? 'public');
-      if (scope === 'off' || publicDir === null) return { define: { __PYREFLY_ART_WEBP__: '[]' } };
+      if (scope === 'off' || publicDir === null) return { define: { __PYREFLY_ART_WEBP__: '[]', __PYREFLY_ART_THUMBS__: '{}' } };
       plan = await planArtDerivation({ publicDir, cacheDir, scope, ...(jobs ? { jobs } : {}), log: (m) => console.log(m) });
       const list = shippedList(plan);
       shipped = new Set(list);
       const mb = (n) => `${(n / 1e6).toFixed(1)} MB`;
       console.log(`[pyrefly-art-derive] scope ${scope}: ${plan.counts.webp} lossless WebP, ${plan.counts.png} recompressed PNG, ${plan.counts.copy} unchanged; art ${mb(plan.bytes.masters)} -> ${mb(plan.bytes.shipped)} (saves ${mb(plan.bytes.saved)})`);
-      return { define: { __PYREFLY_ART_WEBP__: JSON.stringify(list) } };
+      // The strip thumbnails: planned in the same pass, so the map the bundle reads names exactly the files `applyPlan` will write.
+      const listFile = thumbList ?? resolve(root, STRIP_LIST);
+      const off = thumbs === 'off' ? 'PYREFLY_ART_THUMBS=off' : existsSync(listFile) ? false : `no strip list at ${STRIP_LIST}`;
+      plan.thumbs = await planThumbs({ publicDir, cacheDir, listFile, ...(jobs ? { jobs } : {}), off, log: (m) => console.log(m) });
+      const map = thumbMap(plan.thumbs);
+      const made = Object.keys(map).length;
+      console.log(plan.thumbs.off ? `[pyrefly-art-derive] strip thumbnails: none (${plan.thumbs.off})` : `[pyrefly-art-derive] strip thumbnails: ${made} of ${plan.thumbs.entries.length} masters, ${mb(plan.thumbs.entries.reduce((n, e) => n + (e.bytes ?? 0), 0))} from ${mb(plan.thumbs.entries.reduce((n, e) => n + (e.masterBytes ?? 0), 0))}`);
+      return { define: { __PYREFLY_ART_WEBP__: JSON.stringify(list), __PYREFLY_ART_THUMBS__: JSON.stringify(map) } };
     },
     configResolved(config) {
       outDir = resolve(config.root, config.build.outDir);
@@ -64,7 +77,7 @@ export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCac
       const html = readFileSync(page, 'utf8');
       const named = html.replace(ART_PNG_NAME, (name) => (shipped.has(name) ? webpName(name) : name));
       if (named !== html) writeFileSync(page, named);
-      console.log(`[pyrefly-art-derive] applied to ${outDir}: ${done.webp} WebP written and their PNGs left out, ${done.png} PNG recompressed${named !== html ? ', index.html names the served files' : ''}`);
+      console.log(`[pyrefly-art-derive] applied to ${outDir}: ${done.webp} WebP written and their PNGs left out, ${done.png} PNG recompressed${done.thumbs ? `, ${done.thumbs.written} strip thumbnails written` : ''}${named !== html ? ', index.html names the served files' : ''}`);
     },
   };
 }

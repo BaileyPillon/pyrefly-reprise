@@ -14,6 +14,21 @@
   inset: 0;
   pointer-events: none;
   color: var(--ig-paper);
+  --zg-floor: 0px;
+}
+/*
+ * The 14 px floor (CHK-003; PR-0356: "Daigoro", "+ Kozuka" and "+ Wakizashi" printed at 12.2 px at 1600x900, 13.7 at
+ * 2000x1012). The landscape frame is the mockup's 1440x810 scaled by 640/1440 into the HUD stage, which the window scales by
+ * `--lb-scale`; a frame px is 0.444 grid px, so the stage's floor (`--hud-floor`, `hud-floor.css`: 14.1 px in grid px) is 2.25x
+ * that here, and a landscape label is `max(its size, var(--zg-floor, 0px))`. At 1600x900 the floor is 12.7 frame px (11 grows to
+ * 12.7), at 2000x1012 11.3, at 3840x2160 5.3 (nothing changes). Below a 1280x720 window the floor is off, as before: the
+ * strip's neighbours were laid out for the authored sizes and a 4:3 window would collide with them. The phone gauge has its
+ * own sizes (`phone-hud-parts.css`, 14 px) and never reads the variable. FFX only, Chapter IX only.
+ */
+@media (min-width: 1280px) and (min-height: 720px) {
+  .ffx-zg:not(.ffx-zg--phone) {
+    --zg-floor: calc(var(--hud-floor, 0px) * 2.25);
+  }
 }
 .ffx-zg__frame {
   position: absolute;
@@ -34,7 +49,7 @@
 .ffx-zg__name { font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; font-size: 30px; color: var(--ig-paper); }
 .ffx-zg__pct { margin-left: auto; font-family: var(--ig-font-numeral); font-weight: 700; font-size: 24px; color: #e8a0a0; }
 .ffx-zg__chip { margin-left: auto; padding: 4px 10px 5px; background: var(--ig-blood); color: var(--ig-paper);
-  font-family: var(--ig-font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  font-family: var(--ig-font-display); font-weight: 700; font-size: max(12px, var(--zg-floor, 0px)); letter-spacing: 0.22em; text-transform: uppercase;
   box-shadow: 0 0 16px rgba(176,42,42,0.8); }
 .ffx-zg__bar { position: relative; height: 14px; margin-top: 16px; }
 .ffx-zg__seg { position: absolute; top: 0; height: 14px; display: block; background: rgba(176,42,42,0.16);
@@ -42,10 +57,10 @@
 .ffx-zg__seg b { position: absolute; inset: 0 auto 0 0; display: block; background: linear-gradient(to right, #7c1c1c, var(--ig-blood));
   transition: width 320ms ease-out; }
 .ffx-zg__seg span { position: absolute; left: 2px; top: 18px; white-space: nowrap; font-family: var(--ig-font-display); font-weight: 700;
-  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,241,232,0.62); }
+  font-size: max(11px, var(--zg-floor, 0px)); letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,241,232,0.62); }
 .ffx-zg__seg::before { content: ''; position: absolute; right: -2px; top: -5px; width: 2px; height: 24px; background: var(--ig-gold); opacity: 0.8; }
 .ffx-zg__seg:last-child::before { display: none; }
-.ffx-zg__now { margin-top: 26px; font-family: var(--ig-font-text); font-size: 14px; color: rgba(244,241,232,0.78); }
+.ffx-zg__now { margin-top: 26px; font-family: var(--ig-font-text); font-size: max(14px, var(--zg-floor, 0px)); color: rgba(244,241,232,0.78); }
 .ffx-zg__panel--full { border-left-color: #e04040; box-shadow: 0 0 0 1px rgba(224,64,64,0.6), 0 0 34px rgba(176,42,42,0.55); }
 .ffx-zg__panel--full .ffx-zg__seg b { background: linear-gradient(to right, #c23232, #ff5a4a); box-shadow: 0 0 12px rgba(255,90,74,0.8); }
 .ffx-zg__panel--full .ffx-zg__now { color: #ffb0a8; font-weight: 600; }
@@ -62,7 +77,7 @@
 .ffx-zg__banner span { position: relative; display: inline-block; padding: 6px 40px 8px; background: rgba(11,10,18,0.86);
   font-family: var(--ig-font-serif); font-style: italic; font-weight: 700; font-size: 46px; color: var(--ig-paper);
   border-bottom: 3px solid var(--ig-blood); }
-.ffx-zg__banner small { display: block; margin-top: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: 12px;
+.ffx-zg__banner small { display: block; margin-top: 6px; font-family: var(--ig-font-display); font-weight: 700; font-size: max(12px, var(--zg-floor, 0px));
   letter-spacing: 0.26em; text-transform: uppercase; color: #ffb0a8; text-shadow: 0 1px 4px #000; }
 
 /* -------------------------------------------------------------------- phone */

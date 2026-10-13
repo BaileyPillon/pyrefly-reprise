@@ -92,16 +92,13 @@ export function buffByte(c: FFXCombatant): number {
 /**
  * A combatant's status words as the hit record starts from them.
  *
- * One bridge, for a dead member: the exe's death handler runs the status reset (VA 0x0079a190), which clears the whole
- * permanent word but Death, so a KO'd character never carries Zombie in the game. The engine keeps Zombie on a KO'd member
- * (`SURVIVES_KO`, its reading of the Yunalesca script, which the AI lane owns), and a record that said "dead and Zombie"
- * would make the cleansing kernel treat Life as the Zombie-killing Life and leave a KO'd member down for good. The infliction
- * step is therefore shown the word the exe would have: Death alone.
+ * A dead member carries no Zombie here, as in the game: the death handler's status reset (VA 0x0079a190) clears the whole permanent word
+ * but Death (`statuses.ts#SURVIVES_KO`, re-parity RC5). Until RC5 the engine kept Zombie on a KO'd member and this function dropped it
+ * from the record by hand, so that the cleansing kernel would not treat Life as the Zombie-killing Life; the reset makes the bridge
+ * unnecessary, and a record built from a dead member is simply Death.
  */
 export function recordOf(c: FFXCombatant): StatusRecord {
-  let perm = permWord(c);
-  if ((perm & PermBit.Death) !== 0) perm &= ~PermBit.Zombie;
-  return { perm, counters: temporalCounters(c), extra: extraWord(c) };
+  return { perm: permWord(c), counters: temporalCounters(c), extra: extraWord(c) };
 }
 
 /** The statuses given by equipment or the fayth (stack 255): they cannot be cleansed, and a stance that is given is not dropped at the next turn. */

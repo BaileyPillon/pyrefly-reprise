@@ -114,6 +114,23 @@ node tools/screenshot.mjs [--out=PATH] [--screen=NAME] [--frames=N]
 ```
 With no `--url` it starts its own `vite preview`, so run `npm run build` first.
 
+### Text-floor sweep (CHK-003, CHK-002, CHK-009)
+
+```
+PYREFLY_BROWSER=gpu node tools/text-floor-sweep.mjs --base=http://127.0.0.1:5198/ \
+    --out=docs/screenshots/<lane>/after --sizes=1600x900,2000x1012,3840x2160 \
+    --screens=prep-ffx,prep-ffx2,results-ffx,pause-ffx,battle-ch9,battle-ch12,battle-ch1-sensor [--touch=1] [--floor=14] [--strict=1]
+```
+`--strict=1` exits 1 when any step has text under the floor or a screen could not be reached (CHK-003's pass and fail).
+A fresh browser per window size and screen (CHK-002), the screen reached by real keys and pointer clicks (title, board, Enter,
+Esc; a battle through `gotoChapter`), then every visible text node is walked (`tools/text-floor-probe.mjs`): font-size times the
+scale of every ancestor (the 640x360 stage drawn at 2.5x prints 4.89 px as 12.2), the count under the floor, text boxes that
+overprint, text cut by its own box. One JPEG and one JSON per step (`prep-ffx` steps through every tab, `pause-ffx` through
+every tab of the strip with the plate and its D-450 extension recorded, `battle-ch1-sensor` opens the Sensor card and records
+the six affinity chips). Point `--base` at a `vite` dev server (`--host 127.0.0.1`; a private `cacheDir` and no HMR keep it
+quiet) or a `vite preview`; stop it by PID afterwards. Screens: `prep-ffx`, `prep-ffx2`, `results-ffx`, `results-ffx2`,
+`pause-ffx`, `pause-ffx2`, `battle-ch1`, `battle-ch1-sensor`, `battle-ch9` (Yojimbo's gauge), `battle-ch12` (Omnis's strip).
+
 ### Art-watch gallery
 
 ```

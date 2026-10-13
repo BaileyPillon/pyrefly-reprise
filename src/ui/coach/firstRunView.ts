@@ -163,12 +163,14 @@ export class FirstRunLayer {
     if (this.shown !== n || (n !== 3 && this.quote !== quote)) {
       this.shown = n;
       this.quote = quote;
-      this.el.dataset['step'] = String(n);
       this.mark.className = n === 3 ? 'frg__ring' : 'frg__spot';
       this.slab.innerHTML = n === 3 ? '' : slabHtml(step, quote);
       this.slab.style.display = n === 3 ? 'none' : '';
     }
     this.el.style.display = '';
+    // `data-step` is the step that is on screen NOW (`hide()` takes it away), because the stylesheets read it: the party prep's hint
+    // strip hides under step 2's slab (`first-run.css`, FOC43-01). Written only when it changes: this runs every frame.
+    if (this.el.dataset['step'] !== String(n)) this.el.dataset['step'] = String(n);
     const pad = n === 3 ? 6 : 0;
     px(this.mark, { left: target.left - pad, top: target.top - pad, width: target.width + 2 * pad, height: target.height + 2 * pad });
     const phone = phoneLayout();
@@ -182,6 +184,7 @@ export class FirstRunLayer {
 
   hide(): void {
     this.el.style.display = 'none';
+    delete this.el.dataset['step']; // nothing is up: no stylesheet may act on a step that is not on screen
   }
 
   get step(): number {

@@ -96,7 +96,7 @@
 .frg__eyebrow {
   font-family: var(--ig-font-display, sans-serif);
   font-weight: 700;
-  font-size: calc(13px * var(--pyr-ts, 1));
+  font-size: calc(14px * var(--pyr-ts, 1));
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--ig-gold, #e3b94a);
@@ -141,7 +141,7 @@
   margin-top: 10px;
   font-family: var(--ig-font-display, sans-serif);
   font-weight: 700;
-  font-size: calc(12px * var(--pyr-ts, 1));
+  font-size: calc(14px * var(--pyr-ts, 1));
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(244, 241, 232, 0.72);
@@ -149,6 +149,21 @@
 }
 .frg__skip b {
   color: var(--ig-gold, #e3b94a);
+}
+
+/*
+ * What step 2's slab covers on the party prep (FOC43-01, the focused review of 7b2582e7). The slab is placed by script from START
+ * BATTLE's box (`firstRunView.ts` `place`), so no rule on the prep can keep the prep's hint strip (`.prep__hint`, 14 px since
+ * r43-textfloor) clear of it at every size: at 1280x720 the strip's last words wrapped half under the slab's top edge, and on the
+ * Sphere Grid tab at 1440x900 and 1600x900 the slab cut the strip at "ESC BA". While the slab is up the strip is hidden whole instead.
+ * Its words are the slab's own ("Start the battle", "Esc skip the guide": the guide takes that Esc, which never goes BACK), and the
+ * spot has already dimmed everything but START BATTLE. `visibility`, so nothing moves and the strip's two buttons take no press while
+ * they are hidden. No text is made smaller: the strip keeps its 14 px floor. `data-step` is on the layer only while a step is on
+ * screen (`FirstRunLayer.draw` and `hide`) and the layer is removed when the guide ends, so the strip is back by itself.
+ * Game case: both (the prep screen and its hint strip are shared).
+ */
+#ui:has(> .frg[data-step='2']) .prep__hint {
+  visibility: hidden;
 }
 
 /* Pointer or touch wording, the swap the coach line's foot uses (coach-taps.css). */
@@ -167,9 +182,9 @@
     padding: 12px 16px;
     box-sizing: border-box; /* a phone: the whole slab stays inside 390 px */
   }
-  .frg__eyebrow { font-size: calc(11px * var(--pyr-ts, 1)); }
+  .frg__eyebrow { font-size: calc(14px * var(--pyr-ts, 1)); }
   .frg__quote { font-size: calc(21px * var(--pyr-ts, 1)); margin: 6px 0 4px; }
-  .frg__line { font-size: calc(13.5px * var(--pyr-ts, 1)); }
-  .frg__act { font-size: calc(13px * var(--pyr-ts, 1)); margin-top: 7px; }
-  .frg__skip { font-size: calc(10px * var(--pyr-ts, 1)); }
+  .frg__line { font-size: calc(14px * var(--pyr-ts, 1)); }
+  .frg__act { font-size: calc(14px * var(--pyr-ts, 1)); margin-top: 7px; }
+  .frg__skip { font-size: calc(14px * var(--pyr-ts, 1)); }
 }

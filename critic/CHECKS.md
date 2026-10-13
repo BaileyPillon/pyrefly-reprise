@@ -143,16 +143,37 @@ small sizes). At each size measure: the painting's `getBoundingClientRect`
 equals the viewport rect exactly (**exception, D-070, Bailey 2026-09-24:** a plate
 carrying `.pause__plate--slid` is option B, slid under the dark falloff on the
 chrome side on purpose; for it, check instead that the uncovered side is the
-feathered falloff, never a hard bar, and that the face stays wholly on screen); `currentSrc` is the 2x master above roughly
+feathered falloff, never a hard bar, and that the face stays wholly on screen;
+**exception, D-450, Bailey 2026-10-05, release 39.1 B10:** in a window wider than
+the 2x master can be drawn at, `framePlate` never magnifies it past 1.25x (3,360 px:
+3840x2160 and 3440x1440 are the cases), the plate carries `.pause__plate--capped`
+and stops short of the window on purpose behind a feathered edge, and the page
+past it is `.pause__art--extended::before`, the same painting blurred and darkened,
+which fills the window; for it, check instead that `.pause__art` is the window,
+carries `pause__art--extended` with `--pu-ext-url` set, that the pseudo-element's
+box covers the window (it is the window plus 3 percent a side), that the plate was
+not magnified past 1.25x or softened, and that the edge is the feathered falloff
+and not a hard bar. Measured at 3840x2160 on origin/main 5a4c92b1, which the fix
+lane leaves as it is (PR-0391, `tools/text-floor-sweep.mjs --screens=pause-ffx`): plate 3393x1939 at (-16, -8),
+extension 4070x2290 over a 3840x2160 `.pause__art`, no sideways scroll (at 3440x1440:
+plate 3393x1939 at (-16, -109), extension 3646x1526 over a 3440x1440 `.pause__art`); the
+round-25 reading "plate not full-bleed" measured the plate alone); `currentSrc` is the 2x master above roughly
 1600 css px; `documentElement.scrollWidth === clientWidth`; the only transform
 between the `<img>` and the document is the drift's own matrix (any layer scale
 means text is being resampled). Then look at the screenshot: no bars, no soft
 edges on type.
 **AUTOMATE:** yes, partly covered. `tests/unit/pause-fullbleed.test.ts` exists
 and asserts the stylesheet mounts `.pause` at `position: fixed; inset: 0` and
-never blurs the painting; that is the source-level half. The live half does not
-exist. Add a case to `tests/e2e/pause.spec.ts`: loop the six sizes with a fresh
-context and assert `rect === viewport` and the `currentSrc` tier.
+never blurs the painting; that is the source-level half. The live half:
+`tools/text-floor-sweep.mjs --screens=pause-ffx` records, per tab and window size
+in a fresh browser, the plate's rect, `currentSrc` and classes, `.pause__art`'s box
+and classes, the extension pseudo-element's box and filter, and the sideways
+scroll (the round-25 "plate not full-bleed" at 3840x2160 is the capped case above,
+not a defect). It is a tool, not yet a case in `tests/e2e/pause.spec.ts`.
+**LIVE INSTRUMENT (r43, PR-0450 b):** `PYREFLY_BROWSER=gpu node critic/runner/lib/sweep.mjs matrix --base=<url> --evidence=<dir>` runs the six sizes
+each in a fresh browser, reads the plate's rect, `currentSrc`, scale chain and page width with the pause open (asserted: a pause that did not open is UNVERIFIED and no plate
+is read off the wrong screen), and sweeps the command menu and the pause for CHK-003 at the same sizes; it prints one report line. Round 25's `pause-matrix.mjs` swept
+an 11 px floor, recorded no minimum and ran Chapter I only; it is retired.
 **SCOPE:** every layer meant to own the window: pause, photo mode, cutscene
 letterbox, results, title, chapter select, and any future overlay. Also the
 resolution contract behind it: **a plate authored below the display's pixel
@@ -172,18 +193,30 @@ real page, and with one viewport in the suite the arithmetic could not be caught
 either: a fixed px value inside a scaled stage is only wrong once the stage
 scale is known.
 **THE CHECK:** at each of the six viewports in CHK-002, walk every text node
-under the active screen root, take `getComputedStyle(el).fontSize`, and report
-the smallest and the count under 14 css px. Separately, check clipping: each
+under the active screen root, take `getComputedStyle(el).fontSize` **times the
+scale of every ancestor** (transform, `scale`, `zoom`: a 4.89 px size inside the
+640x360 stage drawn at 2.5x is the 12.2 px the player reads), and report the
+smallest and the count under 14 css px. Separately, check clipping: each
 text box's `right` against its container's, and `scrollWidth` vs `clientWidth`
 (a clipped strip does not move `documentElement.scrollWidth`, so the page-level
 scroll check passes while the text is cut off). Then read the screenshot at 100
 percent and confirm you could read it from a sofa.
 **Pass/fail:** zero elements under 14px, zero clipped, and the screenshot reads.
-**AUTOMATE:** yes, partly covered. `tests/unit/pause-fullbleed.test.ts` already
+**AUTOMATE:** yes, covered at both levels. `tests/unit/pause-fullbleed.test.ts`
 has "declares no font-size a player could not read" and "floors every clamp()ed
-type token at 14px", both over the CSS source. The live measurement does not
-exist for any screen. Add a legibility sweep in `tests/e2e/` that runs the walk
-above per screen and fails on the first element under the floor.
+type token at 14px", and `tests/unit/r43-text-floor-css.test.ts` (PR-0356, round
+25) reads the prep, results, first-run-guide, Sphere Grid and Chapter XII sheets
+the same way: every size under 7.05 grid px is `max(its size, var(--stage-floor))`
+and the arithmetic is evaluated at the viewports. The live walk is
+`tools/text-floor-sweep.mjs` (the in-page probe is `tools/text-floor-probe.mjs`):
+a fresh browser per window size and screen, real keys and pointer clicks, one
+JPEG and one JSON per step with the minimum, the count under the floor, text boxes
+that overprint and text cut by its own box. It is a tool, not yet an e2e spec.
+**LIVE INSTRUMENT (r43, PR-0450 b):** `PYREFLY_BROWSER=gpu node critic/runner/lib/sweep.mjs <battle|phone|prep|matrix> --base=<url> --evidence=<dir>` (promoted from the
+round-25 chief's `sweep14.mjs`): the floor is **14 css px** (`--floor`), every surface records the smallest text and the count under the floor and the clipped or ellipsised
+names (CHK-009 on the same walk), `battle` visits all 18 chapters at 1600x900, `phone` four chapters at 390x844 with touch, `prep` Chapter I and Chapter IV at both sizes
+through every prep tab, and a surface it could not reach (a pause that did not open, a menu that was not awaiting input, a chapter that did not load) is UNVERIFIED with the
+reason and named in the report line, never a pass. Each run prints `REPORT LINE:` for the review's report.
 **SCOPE:** every screen in both games: battle HUD, CTB list, party status,
 advisor card, strategy guide, enemy intent, prep tabs, results, chapter select,
 cutscene dialogue, polaroid captions, save slots, controls hints.
@@ -376,15 +409,19 @@ to a machine the DOM is perfect.
 Flux, Braska's Final Aeon, Mortiorchis, Yu Pagoda, Vegnagun Head, Lady Luck),
 for every label element assert `scrollWidth <= clientWidth + 1`, and assert that
 where `text-overflow: ellipsis` is declared it is never engaged. Measure at 1280
-and at 3840, because a fluid layout can truncate at either end. Then read the
-CTB list and the caption strip in a screenshot.
+and at 3840, because a fluid layout can truncate at either end (PR-0391: the FFX
+Sensor card's six affinity chips, opened with `I`, are one row of seven 10 px
+columns at 3840x2160 and print over each other, "FIR CHU CE WA HO GRAV"; five
+columns at 2560x1440; `tools/text-floor-sweep.mjs --screens=battle-ch1-sensor`
+reads the chips' boxes). Then read the CTB list and the caption strip in a screenshot.
 **AUTOMATE:** yes. **No such test exists**: a grep of `tests/` for
 `scrollWidth`/`clientWidth` finds nothing, and `pause-fullbleed.test.ts` only
 asserts the caption CSS *permits* wrapping (`-webkit-line-clamp`), not that no
 caption is clipped. Add `tests/e2e/label-fit.spec.ts`.
 **SCOPE:** CTB list, party rows, command menu rows and item counts, advisor move
 labels, guide headings, prep tabs, results rows, chapter select cards, save
-slots, dressphere names. Any future localisation multiplies every one of them.
+slots, dressphere names, the Sensor card's affinity chips. Any future
+localisation multiplies every one of them.
 
 ---
 
@@ -639,6 +676,10 @@ run pointed at the live URL after the deploy. Add a base-URL override mode to
 `playwright.config.ts` and run the suite against the live origin post-deploy.
 **SCOPE:** fonts, audio, art, the generated manifest, deep links, service of
 `index.html`, and anything built from `import.meta.env.BASE_URL`.
+**COLD LOAD (r43, PR-0450 a):** "first load under 5 seconds" is measured by `PYREFLY_BROWSER=gpu node critic/runner/lib/coldload.mjs --base=<url> --evidence=<dir>` (promoted
+from the round-25 chief's `coldload.mjs`), never by a script written for the round: three unthrottled cold loads and one at 1.6 Mbps / 150 ms, each in a fresh browser with the HTTP
+cache switched off before the one navigation, timed from the navigation, ready when the title answers its first key, the host's CPU sampled before each run so a busy host is named
+in the line. Round 25's `delivery.mjs` loaded the page twice and started its clock after `__pyreflyReady`: its number was a warm second load.
 
 ---
 
@@ -860,7 +901,7 @@ new two-way game branch lands.
 5. **UNVERIFIED, never PASS,** when the harness saw under 60 s of battle or under 8 counted swaps, ran under 30 fps, or its probe failed. A chapter it cannot run stays in the output with its cause.
 6. Where the head is registered, a build that applies the same table passes by construction: the check then proves the table is applied at every swap (no pose missed, no mirror, yaw or lunge undoing it), not that the table is right. The independent evidence is the transition strips (CHK-027) and the first-time-fan lens of every deep review.
 7. **What is judged (r391).** A change of *pose*. A pose is keyed by the figure, its name AND the painting its plane draws (`slot.painted.url`): a dressphere change or a boss's next form re-points the same pose name (`idle`) at another painting, and the earlier key (name only) kept reading the first painting's head, feet and outline for every later one, so round 22's FFX-2 numbers (Paine's registered feet 20 px off at every swap, Yuna idle to ready 1.38) were partly the harness's. A swap between paintings of two different subjects (a dressphere's art folder, a boss's form: `costume`) is staged by its own sequence (the spherechange's twirl) and a swap between two pose names that draw one and the same painting (`sameArt`: a pose that falls back to the idle's, so the size cannot change and what moves is the pose state's own recoil or lean, CHK-027's jerks) are both counted and shown (`size.costumeSwaps`, `costumeWorstHeadPct`, `costumeWorstFeetPx`, `sameArtSwaps`) and kept out of the 3 percent, 30 percent, 2 px and 6 px judgements. Different heads across a girl's dresspheres (an estimated 15 to 30 percent) are a content decision for the owner, not something this check can fix.
-**AUTOMATE:** done. `critic/runner/lib/continuity.mjs` (the chapter loop, the aggregate and `attachProbe`, used by `route.mjs --continuity`), `continuity-probe.mjs` (runs in the page), `continuity-silhouette.mjs`, `continuity-pure.mjs` (with `continuity-summary.mjs`, the summary and the verdicts, `continuity-staged.mjs`, a twirl's cuts as one staged change, and `continuity-held.mjs`, a frozen blend), `continuity-analyze.mjs` and `continuity-strips.mjs`; the thresholds, caps and probe settings are the `continuity` block of `critic/policy.json`. Held by `tests/unit/critic-continuity-pure.test.ts` (known answers for the geometry, the swaps and the verdicts), `critic-continuity-silhouette.test.ts`, `critic-continuity-probe.test.ts` (the probe run against a fake page), `critic-continuity-contract.test.ts` (every engine field the probe reads, pinned to the source: no engine hook was added, so the harness also measures a build that is already live), `critic-continuity-runners.test.ts` (what `deep.js` and `focused.js` ask for) and `critic-continuity-policy.test.ts` (the block, the caps and the aggregate) and `critic-continuity-instrument.test.ts` (the three r40 instrument edits, on synthetic frames). Not automated: whether the registered heads are right, and how a swap looks (the strips and the fan lens), which a person reads.
+**AUTOMATE:** done. `critic/runner/lib/continuity.mjs` (the chapter loop, the aggregate and `attachProbe`, used by `route.mjs --continuity`, which stops unless this harness started the route: PR-0450 d, r43), `continuity-probe.mjs` (runs in the page), `continuity-silhouette.mjs`, `continuity-pure.mjs` (with `continuity-summary.mjs`, the summary and the verdicts, `continuity-staged.mjs`, a twirl's cuts as one staged change, and `continuity-held.mjs`, a frozen blend), `continuity-analyze.mjs` and `continuity-strips.mjs`; the thresholds, caps and probe settings are the `continuity` block of `critic/policy.json`. Held by `tests/unit/critic-continuity-pure.test.ts` (known answers for the geometry, the swaps and the verdicts), `critic-continuity-silhouette.test.ts`, `critic-continuity-probe.test.ts` (the probe run against a fake page), `critic-continuity-contract.test.ts` (every engine field the probe reads, pinned to the source: no engine hook was added, so the harness also measures a build that is already live), `critic-continuity-runners.test.ts` (what `deep.js` and `focused.js` ask for) and `critic-continuity-policy.test.ts` (the block, the caps and the aggregate) and `critic-continuity-instrument.test.ts` (the three r40 instrument edits, on synthetic frames). Not automated: whether the registered heads are right, and how a swap looks (the strips and the fan lens), which a person reads.
 **SCOPE:** both games and every chapter; party figures, aeons and enemies, in battle. Not covered: pose changes in cutscenes, a figure drawn by no plane (Vegnagun's parts), a pause portrait. A new figure or pose set needs its registration (`tools/posescale/`) to be judged at 3 percent; until then it is read by mass.
 
 ---
@@ -881,6 +922,7 @@ new two-way game branch lands.
    - **(a) A figure with no registration is followed by its centroid.** A figure none of whose paintings has a registered head or stance (a foe or an aeon with no entry in `docs/target/pose-measure.json`) used to be followed by the middle of the lowest thick part of its silhouette, which is trustworthy only for a figure standing on its feet; for a serpent, an aeon in the air or a hanging fin it is whichever tip hangs lowest in that pose. In round 23, 228 foe swaps read 40 px or more of "feet" shift at a median 8.3 times the centroid's own shift, and the worst-jerk ranking (807, 513, 332 px) was these. Such a figure is now followed by the centroid of its painting's solid part (`jerks[].part` is `centroid`; `coverage.trackedByCentroid` lists them). Nothing is registered and no painting moves: this is a reading change. The CHK-026 feet reading of a swap is unchanged. A figure with even one registered pose keeps its feet and head; there is no signal for "not standing" in an unregistered painting, so every figure with none is followed this way. `continuity.tracking.unregistered: "feet"` gives the old reading back.
    - **(b) A swap between a figure's `twirl-*` keys is one staged costume change.** The FFX-2 spherechange plays a figure's `twirl-start`, `twirl-going`, `twirl-mid`, `twirl-forming` and `twirl-end` as a stepped sequence of cuts by design (D-322; kept stepped, P4, 2026-10-10), and the harness read every cut as an idle-to-idle snap (15 of round 23's 96 snaps, 14 in Chapter XIII). A swap with a twirl key on either side (between two keys, into the first, out of the last: `staged.edge`) is a `costume` swap (kept out of the size and feet judgements) and not a snap; the cut it would have been is kept as `snapStaged`. The steps of one change share `staged.seq` and are counted once (`motion.stagedChanges`, with `stagedSteps` and `stagedSnapsExcused`); a staged swap never competes for a place among the worst swaps. The jerks that fall at a step are tagged `staged` and counted (`jerksAtStaged`) but NOT excused: whether the twirl's own key-to-key jumps may be that large is FD-1 step 1's question, not this edit's. `continuity.staged.twirl: false` gives the old reading back.
    - **(c) A swap has 14 frames of evidence before it.** The strips show 14 frames before the event (it was 6) in two rows, the probe's frame ring holds all 20 cells of a strip (`continuity.probe.ringFrames` 20, and never less than the strip's length), and each swap carries `held` (see the double image above). A 1500-strip chapter now holds about 1.7 times the strip data in the page (about 330 MB of encoded cells against 190 MB); `CONT_CFG='{"probe":{"maxStrips":900}}'` keeps the old budget if a page runs short.
+8. **The Save Sphere's wash (r43, docs/handoff/r41-aeonjump.md, FOC40-02; FFX-2 Chapter XI only in effect).** The card between the links of the Road washes the whole frame, HUD included, to a pale lilac white (`.ssphere__wash`, `rgba(246, 240, 250, 0.74)` at full opacity: it hides 74 percent of the picture) and restages the next link under it; Anima's plan lands about 0.6 s later, still under the wash, and her head climbs about 900 px in one frame. The probe copies the canvas and the wash is HTML, so the harness counted a pop the player sees only through the veil (960 px in the r41 trace, 967.7 px in round 25's dedicated run), and that single outlier is the run's headline worst jerk and the first of its worst-jerk strips (it does not decide the chapter: round 25's Chapter XI has 15 more jerks of 40 px or more, so CHK-027 fails there with or without it). The probe now records the wash element's computed opacity on every frame it is up (`w` on the frame record, its background alpha once in `meta.wash`), and a jerk whose step (frame n-1 to n) was under a wash carries it (`jerks[].wash`, with the cover it gave; the chapter's `wash` block holds the spans of frames the wash was up and `jerksUnderWash`). **The excuse is OFF until the owner's yes (`continuity.wash.excuse: false` in the policy).** The definition of a jerk is the owner's (D-420 to D-426); r41-aeonjump listed this excuse as an option "neither built (rule 10: ideas need a yes)", about 26 percent of the picture still shows through the veil at full opacity, and no yes of his is recorded. So every jerk is counted as before, the wash only shown on the ones it was over. When he says yes, `excuse: true` (his words and date quoted in the policy note, which a test asks for, a D-row in the ledger, and the `minCover` he picks: **0.7**, opacity times alpha on both frames, means the wash essentially all the way up; 0.5 would excuse a half-faded veil too) tags a jerk whose step was under a wash that hides at least `minCover` as `covered` and leaves it out of the summary, the verdict and the worst-jerk strips; it then stays in `continuity.json` `jerks` with the wash over it, in `summary.motion.jerksCovered` and `worstCoveredJerkPx`, in the chapter's `wash` block and in a `note` on the CHK-027 result, and a jerk while the wash is fading in or out (a cover under `minCover`), on the card's first frame, or with an alpha the probe could not read stays counted. `CONT_CFG='{"wash":{"excuse":true}}'` runs that what-if for one run without touching the policy; `selector: null` stops the probe reading the page.
 **AUTOMATE:** done, with CHK-026 (same harness, same tests). The harness is a required evidence step of every deep review (`deep.js`, phase Continuity over every listed chapter, then the first-time-fan lens) and of a focused review whose plan lists either check (`focused.js`, step 3b); the plan lists them for the presenter, the stage, the figures, the camera, the scenes' registry, the paintings, the asset loader and a new chapter. Not automated: what a double image or a snap *feels* like (CHK-B2, Bailey's own play), and whether a scripted cut (the KO collapse) is wanted: the check reports it, the owner decides.
 **SCOPE:** both games, every chapter, in battle. A scripted cut is still counted (the KO collapse cuts to the lying painting by design, EC-1001-09: its strips show it, and a build that blends it passes). Not covered: motion in cutscenes and on the pause screen, effects drawn by no plane (spell light, damage numbers), camera motion itself (a camera cut only excuses a swap or a jerk that falls with it).
 
