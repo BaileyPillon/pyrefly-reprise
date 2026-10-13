@@ -164,6 +164,15 @@ describe('an Overdrive needs a full gauge and no Curse when it starts', () => {
     expect(run({ id: 'tidus', side: 'party' }).started).toBe(false);
   });
 
+  it('an enemy has no Overdrive cost: its script owns the bar, so a command submitted as an Overdrive starts with the gauge empty', () => {
+    const rig = rigOf([{ id: 'boss', side: 'enemy', gauge: 0, mode: 'stoic' }, { id: 'tidus', side: 'party' }]);
+    const boss = rig.byId.get('boss')!;
+    rig.ctx.rt.currentActorId = 'boss';
+    const result = executeCommand(rig.ctx, boss, { kind: 'overdrive', id: odAny.id, targets: ['tidus'] }, true);
+    expect(startedEvents(rig.events)).toBe(1);
+    expect(result.rank).toBeGreaterThan(0);
+  });
+
   it('an aeon\'s bar is 20 points wide: its full bar starts, one point short does not', () => {
     expect(run({ id: 'valefor', side: 'aeon', gauge: 100 }).started).toBe(true);
     expect(run({ id: 'valefor', side: 'aeon', gauge: 95 })).toEqual({ fizzled: true, started: false, gauge: 95 });
@@ -216,6 +225,15 @@ describe('no retarget: a named target that is gone, dead or out of reach is drop
     const reaction = strike([party(), far], { kind: 'attack', targets: ['boss'] }, (rig) => void (rig.ctx.rt.inReaction = true));
     expect(reaction.result).toEqual({ rank: 3, damageDealt: 0 });
     expect(reaction.messages).toEqual([]);
+    // A player-controlled actor whose turn it is not (a counter the engine runs for it) does not keep anybody's turn open either.
+    const other = strike([party(), far], { kind: 'attack', targets: ['boss'] }, (rig) => void (rig.ctx.rt.currentActorId = 'someone-else'));
+    // (strike() sets the current actor itself, so ask the executor directly)
+    const rigB = rigOf([party(), far]);
+    rigB.ctx.rt.currentActorId = 'someone-else';
+    const away = executeCommand(rigB.ctx, rigB.byId.get('tidus')!, { kind: 'attack', targets: ['boss'] }, true);
+    expect(away).toEqual({ rank: 3, damageDealt: 0 });
+    expect(rigB.events.filter((e) => e['type'] === 'message')).toEqual([]);
+    expect(other.started).toBe(false);
     // Magic reaches a distant foe.
     expect(strike([party(), far], { kind: 'ability', id: 'fire', targets: ['boss'] }).started).toBe(true);
   });
@@ -229,6 +247,8 @@ describe('no retarget: a named target that is gone, dead or out of reach is drop
     const picked = strike([party(), { id: 'boss', side: 'enemy' }, { id: 'e2', side: 'enemy' }], { kind: 'ability', id: 'fire', targets: [] });
     expect(picked.started).toBe(true);
     expect(picked.mpPaid).toBe(4);
+    const struck = new Set(picked.rig.events.filter((e) => e['type'] === 'damage').map((e) => e['targetId']));
+    expect(struck.size).toBe(1); // one legal target drawn, not the whole set
   });
 
   it('an item is spent only when the command starts; one paid for in advance comes back when it does not', () => {
