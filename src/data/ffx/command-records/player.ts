@@ -234,4 +234,26 @@ export const COMMAND_RECORDS_PLAYER: Readonly<Record<string, FFXCommandRecord>> 
   'mix-nega-burst': { id: 0x30a9, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Nega Burst
   'mix-black-hole': { id: 0x30aa, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Black Hole
   'mix-sunburst': { id: 0x30ab, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x80, damageClass: 1, rank: 6 }, // Sunburst
+  // The 21 Mix results the data layer lacked (re-parity RC7, lane FFX-H): rows 0x308d to 0x30a8, read from the same table (`mixes/abilities-ordnance-2.ts`)
+  'mix-pineapple': { id: 0x308d, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x4, damageClass: 1, shatter: 50, rank: 6 }, // Pineapple
+  'mix-blaster-mine': { id: 0x3091, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x4, damageClass: 1, shatter: 50, rank: 6, chances: [[12, 150], [13, 150], [14, 150]], durations: [[0, 3], [1, 3], [2, 3]] }, // Blaster Mine
+  'mix-hazardous-shell': { id: 0x3092, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x4, damageClass: 1, shatter: 50, rank: 6, chances: [[3, 150], [12, 254], [13, 254], [14, 254]], durations: [[0, 4], [1, 4], [2, 4]] }, // Hazardous Shell
+  'mix-calamity-bomb': { id: 0x3093, type: 4, flagsMisc: 0x4011006, flagsDamage: 0x4, damageClass: 1, shatter: 50, rank: 6, chances: [[3, 254], [4, 50], [5, 50], [6, 50], [7, 50], [12, 254], [13, 254], [14, 254]], durations: [[0, 5], [1, 5], [2, 5]] }, // Calamity Bomb
+  'mix-heat-blaster': { id: 0x3095, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Heat Blaster
+  'mix-brimstone': { id: 0x3098, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 150], [12, 150], [13, 150], [14, 150]], durations: [[0, 3], [1, 3], [2, 3]] }, // Brimstone
+  'mix-snow-flurry': { id: 0x309a, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Snow Flurry
+  'mix-icefall': { id: 0x309b, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Icefall
+  'mix-winter-storm': { id: 0x309c, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Winter Storm
+  'mix-black-ice': { id: 0x309d, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 150], [12, 150], [13, 150], [14, 150]], durations: [[0, 3], [1, 3], [2, 3]] }, // Black Ice
+  'mix-krysta': { id: 0x309e, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 254], [4, 50], [5, 50], [6, 50], [7, 50], [12, 254], [13, 254], [14, 254]], durations: [[0, 3], [1, 3], [2, 3]] }, // Krysta
+  'mix-thunderbolt': { id: 0x309f, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Thunderbolt
+  'mix-rolling-thunder': { id: 0x30a0, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Rolling Thunder
+  'mix-lightning-bolt': { id: 0x30a1, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Lightning Bolt
+  'mix-electroshock': { id: 0x30a2, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 150], [12, 150], [13, 150], [14, 150]], durations: [[0, 3], [1, 3], [2, 3]] }, // Electroshock
+  'mix-thunderblast': { id: 0x30a3, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 254], [4, 50], [5, 50], [6, 50], [7, 50], [12, 254], [13, 254], [14, 254]], durations: [[0, 3], [1, 3], [2, 3]] }, // Thunderblast
+  'mix-waterfall': { id: 0x30a4, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Waterfall
+  'mix-flash-flood': { id: 0x30a5, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Flash Flood
+  'mix-tidal-wave': { id: 0x30a6, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6 }, // Tidal Wave
+  'mix-aqua-toxin': { id: 0x30a7, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 150], [12, 150], [13, 150], [14, 150]], durations: [[0, 3], [1, 3], [2, 3]] }, // Aqua Toxin
+  'mix-dark-rain': { id: 0x30a8, type: 4, flagsMisc: 0x4019006, flagsDamage: 0x0, damageClass: 1, rank: 6, chances: [[3, 254], [4, 50], [5, 50], [6, 50], [7, 50], [12, 254], [13, 254], [14, 254]], durations: [[0, 3], [1, 3], [2, 3]] }, // Dark Rain
 };

@@ -60,6 +60,8 @@ interface Row {
   meanPartyTurns: number;
   meanEngineTurns: number;
   meanPartyKos: number;
+  /** Mean number of Rikku Mix actions per seed over the whole chain (an action whose ability id starts with `mix-`); RC7 lane FFX-H added it. */
+  meanMixUses: number;
   /** One letter per seed, in seed order: W won every link, L lost, U unresolved (for paired before and after comparisons). */
   perSeed: string;
   seedList: string;
@@ -73,6 +75,7 @@ interface One {
   partyTurns: number;
   engineTurns: number;
   partyKos: number;
+  mixUses: number;
 }
 
 /** What the golden test plays when the strategy has no pick: the first enabled Attack, else the first enabled row. */
@@ -81,6 +84,13 @@ function fallback(d: Input): Command {
   if (!row) return { kind: 'defend', targets: [] } as Command;
   const t = row.validTargets[0];
   return { ...row.command, targets: t ? [t] : [] } as Command;
+}
+
+/** Rikku's Mix results that were used: the action-start events whose ability id is a `mix-` result (RC7 lane FFX-H). */
+function mixUsesOf(state: Readonly<BattleState>): number {
+  let n = 0;
+  for (const e of state.log) if (e.type === 'action-start' && typeof e.abilityId === 'string' && e.abilityId.startsWith('mix-')) n += 1;
+  return n;
 }
 
 function partyKosOf(state: Readonly<BattleState>): number {
@@ -105,12 +115,14 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
   let partyTurns = 0;
   let engineTurns = 0;
   let partyKos = 0;
+  let mixUses = 0;
   for (let step = 0; step < MAX_STEPS; step += 1) {
     const d = engine.nextDecision();
     if (d.kind === 'resolved' || d.kind === 'waiting') continue;
     if (d.kind === 'battle-over') {
       engineTurns += d.result.turns;
       partyKos += partyKosOf(engine.state() as Readonly<BattleState>);
+      mixUses += mixUsesOf(engine.state() as Readonly<BattleState>);
       outcome = String(d.result.outcome);
       if (link === 1) link1Won = outcome === 'victory';
       if (outcome !== 'victory' || !group.nextGroupId || link >= MAX_LINKS) break;
@@ -126,7 +138,7 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
     partyTurns += 1;
     engine.submit(intendedStrategy(d.actorId, d.commands, engine as never) ?? fallback(d));
   }
-  return { outcome, link1Won, partyTurns, engineTurns, partyKos };
+  return { outcome, link1Won, partyTurns, engineTurns, partyKos, mixUses };
 }
 
 function mean(xs: readonly number[]): number {
@@ -150,6 +162,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX: the intended line in every FFX chapte
         meanPartyTurns: mean(runs.map((r) => r.partyTurns)),
         meanEngineTurns: mean(runs.map((r) => r.engineTurns)),
         meanPartyKos: mean(runs.map((r) => r.partyKos)),
+        meanMixUses: mean(runs.map((r) => r.mixUses)),
         perSeed: runs.map((r) => (r.outcome === 'victory' ? 'W' : r.outcome === 'defeat' ? 'L' : 'U')).join(''),
         seedList: SEEDS.length > 24 ? `${SEEDS[0]}-${SEEDS[SEEDS.length - 1]}` : SEEDS.join(','),
         detail: runs.map((r, i) => ({ seed: SEEDS[i] as number, ...r })),
