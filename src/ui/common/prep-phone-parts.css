@@ -1,0 +1,259 @@
+/*
+ * PR-0295 at phone width, option PREP-A "one long page" (Bailey, 2026-10-12, D-781; both games): the second half of the
+ * stacked prep page's sections. `prep-phone-sections.css` has the host, the name line, the folding sections, the stat rows
+ * and the dressphere rows; this sheet has what goes inside a section's ivory body for the other tabs: the gear slots
+ * (FFX Equipment), the bag (both Items tabs), the Overdrive modes (the one control on these tabs), the dresspheres' lines,
+ * chips and Garment Grid strip, and the notes under a page. Markup: `src/ui/common/prepPhoneKit.ts` and the per-tab views.
+ *
+ * Everything is inside the phone query and keyed on `.prep[data-phone='page']`, like its sibling, so a desktop size is
+ * untouched. Nothing a player reads is under 14 CSS px (CHK-003), and every row a finger can press is at least 44 px tall.
+ */
+
+@media (max-width: 599px) {
+  /* ------------------------------------------------------------ gear slots */
+  .prep[data-phone='page'] .prph-slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    border-bottom: 1px solid var(--prph-rule);
+  }
+  .prep[data-phone='page'] .prph-slot:last-child {
+    border-bottom: 0;
+  }
+  .prep[data-phone='page'] .prph-dot {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid var(--ig-ink);
+  }
+  .prep[data-phone='page'] .prph-slot.is-on .prph-dot {
+    background: var(--ig-accent-deep);
+    border-color: var(--ig-accent-deep);
+    box-shadow:
+      0 0 0 2px var(--ig-paper),
+      0 0 0 3px var(--ig-accent-deep);
+  }
+  .prep[data-phone='page'] .prph-ab {
+    font-family: var(--ig-font-display);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+  }
+  .prep[data-phone='page'] .prph-slot.is-empty .prph-ab {
+    font-weight: 500;
+    opacity: 0.62;
+  }
+  .prep[data-phone='page'] .prph-fx {
+    margin-left: auto;
+    text-align: right;
+    font-family: var(--ig-font-numeral);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: color-mix(in srgb, var(--ig-ink) 70%, transparent);
+  }
+
+  /* ----------------------------------------------------------- the bag */
+  .prep[data-phone='page'] .prph-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 40px;
+    border-bottom: 1px solid var(--prph-rule);
+    font-family: var(--ig-font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .prep[data-phone='page'] .prph-item:last-child {
+    border-bottom: 0;
+  }
+  .prep[data-phone='page'] .prph-item__name {
+    min-width: 0;
+  }
+  .prep[data-phone='page'] .prph-item__qty {
+    flex: none;
+    font-family: var(--ig-font-numeral);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--prph-acc-text);
+  }
+  .prep[data-phone='page'] .prph-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 12px 10px;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 9px 12px 9px 14px;
+    background: var(--ig-ink-panel);
+    border-left: 4px solid var(--ig-accent);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  }
+  .prep[data-phone='page'] .prph-bar__v {
+    font-family: var(--ig-font-numeral);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--ig-paper);
+  }
+
+  /* ------------------------------------------- Overdrive modes (a control) */
+  .prep[data-phone='page'] .prph-modes {
+    padding: 4px 0;
+  }
+  .prep[data-phone='page'] .prph-mode {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 48px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--prph-rule);
+    font-family: var(--ig-font-display);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .prep[data-phone='page'] .prph-mode.is-sel {
+    background: var(--ig-accent);
+    color: var(--ig-ink);
+    border-bottom-color: transparent;
+  }
+  .prep[data-phone='page'] .prph-mode__tag {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+  .prep[data-phone='page'] .prph-blurb {
+    margin: 8px 0 0;
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--prph-soft);
+  }
+
+  /* ----------------------------------------- dresspheres: lines, chips, grid */
+  .prep[data-phone='page'] .prph-line {
+    margin: 0;
+    padding: 10px 0 4px;
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ig-ink);
+  }
+  .prep[data-phone='page'] .prph-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 0 2px;
+  }
+  .prep[data-phone='page'] .prph-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    box-sizing: border-box;
+    padding: 4px 11px;
+    border: 1.5px solid var(--ig-ink);
+    border-radius: 16px;
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+  .prep[data-phone='page'] .prph-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0 2px;
+  }
+  .prep[data-phone='page'] .prph-node {
+    width: 14px;
+    height: 14px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid var(--ig-ink);
+    opacity: 0.45;
+  }
+  .prep[data-phone='page'] .prph-node.is-here {
+    opacity: 1;
+    background: var(--ig-accent-deep);
+    border-color: var(--ig-accent-deep);
+  }
+  .prep[data-phone='page'] .prph-gates {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+  }
+  .prep[data-phone='page'] .prph-gate {
+    width: 12px;
+    height: 12px;
+    box-sizing: border-box;
+    transform: rotate(45deg);
+    border: 2px solid var(--ig-ink);
+    opacity: 0.55;
+  }
+  .prep[data-phone='page'] .prph-gate.is-passed {
+    opacity: 1;
+    box-shadow: 0 0 0 2px var(--ig-accent-deep);
+  }
+  .prep[data-phone='page'] .prph-gate.is-red {
+    background: #c93a42;
+  }
+  .prep[data-phone='page'] .prph-gate.is-green {
+    background: #75913a;
+  }
+  .prep[data-phone='page'] .prph-gate.is-blue {
+    background: #3a78be;
+  }
+  .prep[data-phone='page'] .prph-gate.is-yellow {
+    background: var(--ig-gold);
+  }
+  .prep[data-phone='page'] .prph-owned {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    padding: 8px 0 2px;
+  }
+  .prep[data-phone='page'] .prph-own {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--ig-font-serif);
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* ------------------------------------------------------ notes and empties */
+  .prep[data-phone='page'] .prph-note {
+    margin: 6px 16px 0;
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.4;
+    color: rgba(244, 241, 232, 0.72);
+  }
+  .prep[data-phone='page'] .prph-empty {
+    margin: 12px 16px;
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    line-height: 1.4;
+    color: rgba(244, 241, 232, 0.72);
+  }
+}

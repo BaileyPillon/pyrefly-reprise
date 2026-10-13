@@ -1,0 +1,380 @@
+/*
+ * PR-0295 at phone width, option PREP-A "one long page" (Bailey, 2026-10-12, D-781; both games): the sections inside the
+ * stacked prep page. The page itself (the pinned tab strip and faces, the dock, the cue) is `party-prep-phone-tabs.css`;
+ * the markup is `src/ui/common/prepPhoneKit.ts` and the per-tab views `src/ui/ffx/party-prep/phoneViews.ts` and
+ * `src/ui/ffx2/party-prep/phoneViews.ts`. Target: the PREP-A frames of critic/scratch/prep-phone-options-2026-10-12/.
+ *
+ * Each panel draws its desktop markup as it always did and a hidden host (`.prph`) beside it. Outside the phone query the
+ * host is `display: none`; inside it, on a stacked page, the host shows and every other child of the panel's container is
+ * hidden. Every desktop size is untouched by construction, and so are the CHAPTER and SPHERE GRID tabs (they never get
+ * `data-phone='page'`).
+ *
+ * Colours are the Ink & Gold tokens (`--ig-*`, so FFX is gold and FFX-2 pink with no rule of its own): Bailey's PREP-A pick
+ * approves the layout only, so a shade the page drew that the tokens lack is mapped to the nearest token, and each of those is
+ * listed in docs/handoff/r43-prepphone.md ("Where the build differs"):
+ *   - small accent text on ivory (the "+10% dmg" notes, the bag's counts): the page drew #7f5c0a gold and #9c3267 pink, deepened
+ *     to 5.4:1 on the ivory; this is `--ig-accent-deep` (#a67c16 gold, #b8437e pink), which reads 3.4:1 (gold) on the ivory,
+ *     the same as the approved on-paper accent the rest of the app prints small labels in. The page's shades are the one-line
+ *     switch on `--prph-acc-text` below;
+ *   - the up and down counts on a dark plate: the page drew pale green and red (#7fd09a, #f08a8a); the tokens have neither,
+ *     so the counts are ivory and the arrows carry the direction (`--prph-good`, `--prph-bad`);
+ *   - the deltas inside an ivory body keep the two literals the shipped FFX-2 Stats tab already prints them in (#2f7a46,
+ *     #a5323a), which no token has either;
+ *   - the section plate is `--ig-ink-panel` (0.84, the page drew 0.90) and the stuck bar's ground is #04060b, which the CHAPTER
+ *     page already uses (the page drew #05070c).
+ *
+ * Nothing a player reads is under 14 CSS px (CHK-003), and every row a finger can press is at least 44 px tall.
+ */
+
+.prph {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  /* The host shows; the panel's own desktop markup (a sibling of it) does not. */
+  .prep[data-phone='page'] .prep__panel > :not(.prph) {
+    display: none;
+  }
+  .prep[data-phone='page'] .prph {
+    display: block;
+    padding: 0 0 8px;
+    --prph-rule: color-mix(in srgb, var(--ig-ink) 14%, transparent);
+    --prph-soft: color-mix(in srgb, var(--ig-ink) 66%, transparent);
+    --prph-dim: rgba(244, 241, 232, 0.66);
+    /* Small accent text on ivory: the deep accent token (gold; pink under .ig--ffx2). The page drew #7f5c0a and #9c3267 (5.4:1). */
+    --prph-acc-text: var(--ig-accent-deep);
+    /* Up and down on an ivory body (the shipped FFX-2 Stats literals), then on a dark plate (ivory: the tokens have no green or red). */
+    --prph-up: #2f7a46;
+    --prph-down: #a5323a;
+    --prph-good: var(--ig-paper);
+    --prph-bad: var(--ig-paper);
+  }
+
+  /* ----------------------------------------------------------- the name line */
+  .prep[data-phone='page'] .prph-who {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-height: 40px;
+    padding: 2px 16px 6px;
+  }
+  .prep[data-phone='page'] .prph-who em {
+    font-family: var(--ig-font-serif);
+    font-size: 30px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ig-paper);
+  }
+  .prep[data-phone='page'] .prph-who > span {
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    color: var(--ig-accent);
+  }
+  .prep[data-phone='page'] .prph-who b {
+    font-family: var(--ig-font-numeral);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ig-paper);
+  }
+  .prep[data-phone='page'] .prph-who .prph-job {
+    margin-left: auto;
+    align-self: center;
+    padding: 4px 8px;
+    letter-spacing: 0.1em;
+    background: color-mix(in srgb, var(--ig-accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ig-accent) 55%, transparent);
+  }
+
+  /* ----------------------------------------------------------------- sections */
+  .prep[data-phone='page'] .prph-sec {
+    margin: 0 12px 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  }
+  /* Label, aside and chevron on the first line; the title and then the digest each take a line of their own. */
+  .prep[data-phone='page'] .prph-sec__h {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 4px;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 9px 12px 9px 14px;
+    background: var(--ig-ink-panel);
+    border-left: 4px solid var(--ig-accent);
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .prep[data-phone='page'] .prph-k {
+    grid-column: 1;
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.14em;
+    color: var(--ig-accent);
+    text-transform: uppercase;
+  }
+  .prep[data-phone='page'] .prph-ks {
+    grid-column: 2;
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    color: var(--prph-dim);
+    text-transform: uppercase;
+  }
+  .prep[data-phone='page'] .prph-t {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--ig-font-serif);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ig-paper);
+  }
+  /* What a folded section says instead of its body: its numbers, in one line. */
+  .prep[data-phone='page'] .prph-dg {
+    display: none;
+    grid-column: 1 / -1;
+    font-family: var(--ig-font-numeral);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    color: var(--ig-paper);
+  }
+  .prep[data-phone='page'] .prph-sec:not(.is-open) .prph-dg {
+    display: block;
+  }
+  /* The fold chevron: down when folded, up when open. */
+  .prep[data-phone='page'] .prph-chev {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--ig-accent);
+  }
+  .prep[data-phone='page'] .prph-sec.is-open .prph-chev {
+    border-top: 0;
+    border-bottom: 8px solid var(--ig-accent);
+  }
+  .prep[data-phone='page'] .prph-sec__b {
+    display: none;
+    box-sizing: border-box;
+    padding: 4px 14px 12px;
+    background: var(--ig-paper);
+    color: var(--ig-ink);
+  }
+  .prep[data-phone='page'] .prph-sec.is-open .prph-sec__b {
+    display: block;
+  }
+
+  /* ------------------------------------------------------------- stat rows */
+  .prep[data-phone='page'] .prph-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 46px;
+    border-bottom: 1px solid var(--prph-rule);
+  }
+  .prep[data-phone='page'] .prph-row:last-child {
+    border-bottom: 0;
+  }
+  .prep[data-phone='page'] .prph-l {
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.14em;
+    color: var(--prph-soft);
+    text-transform: uppercase;
+  }
+  .prep[data-phone='page'] .prph-v {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+  }
+  .prep[data-phone='page'] .prph-base {
+    font-family: var(--ig-font-numeral);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+    color: color-mix(in srgb, var(--ig-ink) 64%, transparent);
+  }
+  .prep[data-phone='page'] .prph-base::after {
+    content: '\2192';
+    margin-left: 6px;
+  }
+  .prep[data-phone='page'] .prph-n {
+    font-family: var(--ig-font-numeral);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--ig-ink);
+  }
+  .prep[data-phone='page'] .prph-bonus {
+    font-family: var(--ig-font-text);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--prph-acc-text);
+  }
+
+  /* Two columns of the same kind of row (the worn block of FFX-2's Stats tab), and the cells of a dressphere's numbers. */
+  .prep[data-phone='page'] .prph-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+  }
+  .prep[data-phone='page'] .prph-grid .prph-row {
+    min-height: 42px;
+  }
+  .prep[data-phone='page'] .prph-grid .prph-row:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .prep[data-phone='page'] .prph-grid .prph-n {
+    font-size: 26px;
+  }
+  .prep[data-phone='page'] .prph-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 38px;
+    border-bottom: 1px solid var(--prph-rule);
+  }
+  .prep[data-phone='page'] .prph-cell:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .prep[data-phone='page'] .prph-cell .prph-l {
+    letter-spacing: 0.12em;
+  }
+  .prep[data-phone='page'] .prph-cell .prph-v {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .prep[data-phone='page'] .prph-cell .prph-v em {
+    font-family: var(--ig-font-numeral);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--prph-soft);
+  }
+  .prep[data-phone='page'] .prph-delta {
+    font-family: var(--ig-font-numeral);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .prep[data-phone='page'] .prph-delta.is-up {
+    color: var(--prph-up);
+  }
+  .prep[data-phone='page'] .prph-delta.is-dn {
+    color: var(--prph-down);
+  }
+  .prep[data-phone='page'] .prph-delta.is-eq {
+    opacity: 0.6;
+  }
+
+  /* ---------------------------------------------- the sub-heading and the rows */
+  .prep[data-phone='page'] .prph-sub {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 12px 8px;
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.18em;
+    color: var(--prph-dim);
+    text-transform: uppercase;
+  }
+  .prep[data-phone='page'] .prph-sub::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(244, 241, 232, 0.16);
+  }
+  /* A dressphere row: its tile, its name and how many stats it raises and lowers, in its own job colour. */
+  .prep[data-phone='page'] .prph-sec--row {
+    margin-bottom: 6px;
+  }
+  .prep[data-phone='page'] .prph-sec--row .prph-sec__h {
+    grid-template-columns: auto minmax(0, 1fr) auto 18px;
+    min-height: 48px;
+    padding: 6px 12px;
+    border-left-color: var(--job, var(--ig-accent));
+  }
+  .prep[data-phone='page'] .prph-sec--row .prph-chev {
+    grid-column: 4;
+  }
+  .prep[data-phone='page'] .prph-sec--row .prph-sec__b {
+    padding: 8px 14px 10px;
+  }
+  .prep[data-phone='page'] .prph-nm {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--ig-font-serif);
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ig-paper);
+  }
+  .prep[data-phone='page'] .prph-ud {
+    white-space: nowrap;
+    font-family: var(--ig-font-numeral);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ig-paper);
+  }
+  .prep[data-phone='page'] .prph-ud__up {
+    color: var(--prph-good);
+  }
+  .prep[data-phone='page'] .prph-ud__dn {
+    color: var(--prph-bad);
+  }
+  .prep[data-phone='page'] .prph-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-family: var(--ig-font-display);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    background: var(--job);
+    color: var(--tile-ink, var(--ig-ink));
+  }
+}
