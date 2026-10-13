@@ -381,6 +381,18 @@ export interface BattleStage {
    */
   arrive?(id: CombatantId, clock: ArrivalClock): Promise<ActorHandle | undefined>;
   /**
+   * E-PYRE (decision 61e; `entrance/StageEntrances.ts`): the opening has begun, so let in the enemy and aeon figures the stage built for this fight and is
+   * holding unseen, each by its own entrance (pyreflies gathering into it; a plain fade for a living person or a machine; nothing under REDUCE MOTION but a
+   * short fade). `instant` (a hurried opening, `'skip'` speed): they are simply there. Resolves when the last one is whole; the opening does not wait for it.
+   * Optional and additive: a stage without it (a test fake) never holds a figure, and every figure is on the field from the frame it is built, as before.
+   */
+  enter?(clock: Pick<ArrivalClock, 'instant'>): Promise<void>;
+  /**
+   * The opening is over. `now` (a hurried or skipped opening): every figure still held or playing its entrance is whole at once. Otherwise an entrance still playing
+   * carries on to its end (nothing waits for it, so the first menu is never delayed) and a figure that has not begun yet begins. Optional and additive, as {@link enter}.
+   */
+  settleEntrances?(now?: boolean): void;
+  /**
    * Does this combatant have a painting of its **own** for `pose`, not a
    * fallback (`BattlePresenterArt.resolvePoseMap` points a missing pose at the
    * nearest one there is)? Optional and additive (iter2 attack-pose,

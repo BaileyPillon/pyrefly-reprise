@@ -263,6 +263,9 @@ export class BattleMoments {
     this.shots.fitPhone();
     const intro = this.shots.opening(this.pick('intro', 'idle')); // FFX-2 giants: the master, where the scene's intro would cut one (`ShotRules.opening`)
     this.cut(intro);
+    // E-PYRE (decision 61e): the enemy and aeon figures the stage is holding unseen come in now, beside the party's slide, and nothing waits for them:
+    // a hurried or skipped opening shows them at once, and the opening's end lands any that is still on its way (`settleEntrances` below).
+    this.enterFigures();
     if (this.skipping) {
       this.cut(this.pick('idle'));
       if (opts.bossId) this.revealed.add(opts.bossId);
@@ -280,6 +283,28 @@ export class BattleMoments {
       // Whatever happened — an abort mid-reveal, a scene with no rigs, a
       // throw out of the art layer — the player gets their HUD back.
       this.setHudVisible(true);
+      this.settleFigures();
+    }
+  }
+
+  /** E-PYRE: let the held enemy figures in (see `BattleStage.enter`). A moment never fails for a figure: a stage that throws here is a stage that shows its figures. */
+  private enterFigures(): void {
+    try {
+      void this.deps.stage.enter?.({ instant: this.skipping || this.hurry })?.catch(() => undefined);
+    } catch {
+      this.settleFigures(true);
+    }
+  }
+
+  /**
+   * E-PYRE: the opening is over. A hurried or skipped one lands every figure at once; otherwise an entrance still playing carries on to its end beside the first
+   * menu, which it never delays, and a figure that has not begun begins (see `BattleStage.settleEntrances`).
+   */
+  private settleFigures(now = this.hurry || this.skipping): void {
+    try {
+      this.deps.stage.settleEntrances?.(now);
+    } catch {
+      /* nothing to settle */
     }
   }
 

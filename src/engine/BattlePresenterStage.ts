@@ -45,6 +45,7 @@ import type { SpellFxLayer } from './spellfx/SpellFxLayer.ts';
 import { StageMotion } from './motion/StageMotion.ts'; // r38-motion RUN-IN's field: painted spans, camera truck, smear
 import { profileOfActor } from './motion/Silhouette.ts'; // r391-reach: a painting's rows, for the strike
 import { PyreflyStage } from './PyreflyStage.ts';
+import { StageEntrances, type EntranceActor } from './entrance/StageEntrances.ts'; // E-PYRE: the boss entrance (decision 61e)
 import { PhaseLighting, type GradeTarget } from './PhaseLighting.ts';
 import { phaseForFlags, phaseForFormation } from './phaseCanon.ts';
 import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
@@ -159,6 +160,10 @@ export class PaintedStage implements BattleStage {
   readonly motion: StageMotion;
   /** A-5 / A-6 / D-225: the dissolve's lights, the lens band and held motes (`PyreflyStage.ts`). */
   private readonly pyreflies: PyreflyStage;
+  /** E-PYRE (decision 61e): the enemy and aeon figures this field builds wait unseen for the opening to let them in; off until the screen turns it on (`setEntrances`). */
+  private entrances: StageEntrances | null = null;
+  /** True while {@link stage} builds the field: the figures `add` makes then are held for their entrance. */
+  private staging = false;
   /** D-224 phase lighting: the presenter's `lighting` port (`BattlePresenterPhase.ts`). */
   readonly lighting: PhaseLighting;
   /** A-8: the floor's luma, which sets how strong a contact shadow must be to read on it (`ContactShadow.ts`). */
@@ -284,7 +289,12 @@ export class PaintedStage implements BattleStage {
     const live = [...ids]
       .map((id) => state.combatants[id])
       .filter((c): c is AnyCombatant => !!c && !c.flags.hidden && !c.removed);
-    await Promise.all(live.map((c) => this.add(c)));
+    this.staging = true; // E-PYRE: the enemies and aeons built in this call are held for the opening (`add`)
+    try {
+      await Promise.all(live.map((c) => this.add(c)));
+    } finally {
+      this.staging = false;
+    }
     // Only after every actor exists: the solver needs each fiend's real world
     // height, which is not known until its idle painting has loaded.
     this.applyFormation();
@@ -379,6 +389,7 @@ export class PaintedStage implements BattleStage {
     this.opts.scene.add(actor);
     actor.still = () => this.opts.comfort?.().reduceMotion === true;
     if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
+    if (this.staging && !anchor && c.side !== 'party') this.entrances?.hold(actor, c.id); // before it can be drawn: no frame shows it whole
     // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
     if (!anchor && !actor.levitates) attachFootOcclusion(actor.shadow, contactShadowStyle(this.groundLuma));
     this.actors.set(c.id, {
@@ -722,6 +733,43 @@ export class PaintedStage implements BattleStage {
     return actor;
   }
 
+  /**
+   * E-PYRE (decision 61e): hold the enemy and aeon figures this field builds unseen until the opening lets them in (`enter`), or stop. The battle screen turns it on for a real
+   * fight of FFX or FFX-2 and leaves it off for a preview (no opening ever lets a figure in) and for FF7 (not Spira: no pyreflies); every other stage never holds a figure.
+   */
+  setEntrances(on: boolean): void {
+    if (!on) {
+      this.entrances?.settle(true);
+      this.entrances = null;
+      return;
+    }
+    if (this.entrances) return;
+    this.entrances = new StageEntrances({
+      spawn: (m) => this.pyreflies.emitter.spawn(m),
+      hush: (a: EntranceActor, hushed) => this.pyreflies.hush(a as unknown as Parameters<PyreflyStage['hush']>[0], hushed),
+      tracked: (id) => this.pyreflies.tracks(id),
+      comfort: () => this.opts.comfort?.() ?? { reduceMotion: false, lowEffects: false },
+      reduceFlashes: () => this.opts.reduceFlashes?.() === true,
+      cameraAt: () => this.opts.camera.position,
+      tier: () => this.spellFx.quality,
+    });
+  }
+
+  /** `BattleStage.enter`: the opening has begun. */
+  enter(clock: Pick<ArrivalClock, 'instant'>): Promise<void> {
+    return this.entrances?.enter(clock.instant) ?? Promise.resolve();
+  }
+
+  /** `BattleStage.settleEntrances`: the opening is over. */
+  settleEntrances(now = true): void {
+    this.entrances?.settle(now);
+  }
+
+  /** For the debug snapshot and the tests: who is held and who is playing which entrance. */
+  entranceSnapshot(): ReturnType<StageEntrances['snapshot']> {
+    return this.entrances?.snapshot() ?? { held: [], playing: [] };
+  }
+
   removeCombatant(id: CombatantId): void {
     const undo = this.arrivalCleanups.get(id);
     this.arrivalCleanups.delete(id);
@@ -729,6 +777,7 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged) return;
     this.actors.delete(id);
+    this.entrances?.forget(id);
     this.pyreflies.leave(id);
     disposeFootOcclusion(staged.actor.shadow);
     this.partRings.remove(id);
@@ -884,6 +933,7 @@ export class PaintedStage implements BattleStage {
     const paced = dt * paceRate('action'); // the pacing option (`pace.ts`): sparks and spell effects keep step with the actors
     this.hits.update(paced, this.opts.camera);
     this.spellFx.update(paced);
+    this.entrances?.update(realDt); // E-PYRE: after the actors, before the motes: this frame's gather motes are in the emitter the next line moves
     this.pyreflies.update(dt, (id) => this.lastState?.combatants[id]?.alive !== false);
     // D-224: Evrae's range is a flag only its encounter sets (FFX, Ch VIII).
     const range = phaseForFlags(this.lastState?.flags);
@@ -937,6 +987,7 @@ export class PaintedStage implements BattleStage {
     this.hits.dispose();
     this.unhookSpellFx();
     this.spellFx.dispose();
+    this.entrances?.dispose();
     this.pyreflies.dispose();
     this.lighting.dispose();
     this.art.dispose();
