@@ -3,7 +3,7 @@
   "source": "elevenlabs-music_v2_5",
   "words": "Bailey, 2026-10-10 23:05 EDT: \"i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.\"; 2026-10-12: \"I'll go with all of your recommendations\" (driver items 47, 52, 53, 58 and 61 in D:/Tools/pyrefly-scratch/2026-10-07/decisions-to-record.md). \"For music create originals that closely resemble the mood and atmosphere of the songs playing at each respective encounter\" and \"you need to use eleven labs\"",
   "gameCase": "Per cue, from the chapters' own records (rule 14). FFX only: victory-ffx, defeat-ffx, boss-challenge (Chapter II and the hidden Sinspawn Gui fight 2), boss-jecht, boss-yu-yevon, boss-seymour-macalania, boss-evrae, boss-yojimbo, boss-seymour-omnis (XII), boss-gui (hidden Sinspawn Gui fight 1), scene-gagazet, scene-zanarkand-dome, scene-dreams-end, scene-macalania-temple, scene-fahrenheit, ending-ffx. FFX-2 only: victory-ffx2, victory-bahamut (Chapter IV), defeat-ffx2, boss-vegnagun, boss-shuyin, boss-den-of-woe (XV), boss-experiment (hidden), scene-chateau-leblanc (Chapter VI and the hidden Leblanc preview), scene-bevelle-underground (which also carries the Paragon fight), scene-farplane, ending-ffx2. Not touched, by Bailey's ear (58d): boss-seymour (Chapter I) and chapter-select.",
-  "master": "The files are the batch-2 lane's staged masters (D:/Tools/pyrefly-scratch/2026-10-10/music-batch2/stage/music): cut on whole bars at real attacks with an equal-power crossfade, a 3 s run-on past the loop end, one gain to -16 LUFS, the side channel narrowed in mid/side just enough to pass the stereo gate of THEMES.md (loop points unchanged), LAME V4. Installed byte for byte (sha256 checked against the lane's work/master-<brief>.json), with the lane's own manifest entries and the file renamed to the cue. A victory cue is an intro plus a loop in one file (the fanfare or resolve of 6.5 to 8 s, then the body that loops): the manifest's loopStart is where the body begins and loopEnd where it ends.",
+  "master": "The files are the batch-2 lane's staged masters (D:/Tools/pyrefly-scratch/2026-10-10/music-batch2/stage/music): cut on whole bars at real attacks with an equal-power crossfade, a 3 s run-on past the loop end, one gain to -16 LUFS, the side channel narrowed in mid/side just enough to pass the stereo gate of THEMES.md (loop points unchanged), LAME V4. Installed byte for byte (sha256 checked against the lane's work/master-<brief>.json), with the lane's own manifest entries and the file renamed to the cue. A victory cue is an intro plus a loop in one file (the fanfare or resolve of 6.5 to 8 s, then the body that loops): the manifest's loopStart is where the body begins and loopEnd where it ends (except the three results loops, below). Three results loops were re-cut on 2026-10-13 (FOC45-02, branch r46-audio2): see each cue's `recut` (both loop points moved together by whole beats into the body so the loop closes on body music, not on a fade into the gap after the fanfare); the other 24 files are untouched.",
   "oneShots": "defeat-ffx and defeat-ffx2 play once: the file holds the cue, a raised-cosine fade to digital silence and 2 s of silence, and its manifest loop is that silence (loopStart where the silence begins, loopEnd the file's end) because the music player always loops; the entry carries `oneShot: true` (the game ignores the field; qa.mjs does not flag the short loop body of an entry that has it).",
   "synthFallback": "Each new cue is a stand-in in src/audio/tracks/index.ts for the composition it replaces (the MP3 is what plays; the synth plays only if the MP3 cannot load). victory-bahamut and defeat-ffx fall back to `pause` and defeat-ffx2 to `scene-farplane`, because the results cues replace nothing. An in-place cue keeps its own composition as its fallback. The three retired compositions (boss-ffx2-aeon, boss-dread, boss-yunalesca) stay in the repo as the fallback of the cues over them.",
   "retired": [
@@ -55,7 +55,7 @@
   ],
   "totals": {
     "musicBytesBefore": 93196705,
-    "musicBytesAfter": 60100771,
+    "musicBytesAfter": 60036383,
     "replacedInPlace": 18,
     "newCues": 9,
     "retiredFiles": 3
@@ -73,7 +73,7 @@
       "replaces": [
         "victory-ffx"
       ],
-      "plays": "The results screen of every FFX chapter (1 to 3, 7 to 14, 17, 18) and the hidden Sinspawn Gui chapter, on a win: a fanfare opening of 7.9 s into a 26.7 s results body that loops (loopStart where the body begins). Only the last link of an encounter reaches the results screen, so only the last link stings.",
+      "plays": "The results screen of every FFX chapter (1 to 3, 7 to 14, 17, 18) and the hidden Sinspawn Gui chapter, on a win: a fanfare opening of 8.5 s into a 26.7 s results body that loops (the loop closes one beat into the body since 2026-10-13, see `recut`). Only the last link of an encounter reaches the results screen, so only the last link stings.",
       "fallback": "victory-ffx",
       "request": {
         "model_id": "music_v2_5",
@@ -92,16 +92,16 @@
         "creditsEstimated": 660
       },
       "file": {
-        "bytes": 634232,
-        "sha256": "43613591a157329af26b4b0e94a46dca4b8a33e4b87a107c4d903516e104dcbd"
+        "bytes": 643980,
+        "sha256": "26ef5683b88aed4693d0d0dd2543dc556ee84395cbe12a1773172cd0c005aec5"
       },
       "manifestEntry": {
         "file": "music/victory-ffx.mp3",
-        "loopStart": 7.901587,
-        "loopEnd": 34.58737,
-        "duration": 37.5874,
-        "bytes": 634232,
-        "lufs": -16,
+        "loopStart": 8.457596,
+        "loopEnd": 35.143379,
+        "duration": 38.1434,
+        "bytes": 643980,
+        "lufs": -16.0,
         "truePeakDb": -4.4,
         "source": "elevenlabs-music_v2_5"
       },
@@ -121,10 +121,10 @@
       "master": {
         "bpm": 107.92,
         "bars": 12,
-        "introSec": 7.902,
+        "introSec": 8.458,
         "loopSec": 26.686,
-        "clickRatio": 0.033,
-        "fluxRatio": 0.417,
+        "clickRatio": 0.259,
+        "fluxRatio": 0.261,
         "stepOk": true,
         "xfadeSec": 0.556,
         "xfadeLaw": "equal-power",
@@ -132,22 +132,92 @@
       },
       "stereo": {
         "before": {
-          "corr": 0.392,
-          "sideMid": -3.55,
+          "corr": 0.39,
+          "sideMid": -3.53,
           "monoLoss": -1.59
         },
         "after": {
-          "corr": 0.702,
-          "sideMid": -7.5,
-          "monoLoss": -0.7
+          "corr": 0.703,
+          "sideMid": -7.49,
+          "monoLoss": -0.71
         },
         "pass": true,
         "passedAsRendered": false,
         "action": "narrowed",
-        "sideGainDb": -3.95
+        "sideGainDb": -3.97
       },
       "why": "Heard at every FFX win (chapters 1 to 3 and 7 to 14, 17, 18 and the FFX hidden chapters). Remade as a fanfare opening of 6 to 9 s into a loopable results-screen body (decisions 53d, 58f); VF-A2 stays as the one-shot fallback.",
-      "reason": "(a) Fit: Warm brass, timpani and harp fanfare into an easy walking processional: the brass register the shipped cue is described in (relief more than triumph), in a form that loops. Measured 107.9 BPM against 108 asked. VF-L1: Hymn-like fanfare (horns, strings, bells, harp) into a calm choir-and-strings rest: sincere and grateful, further from brass. (measured 100.3 BPM) VF-A2: One-shot fallback from run 1 (warm horns, timpani and harp, one held chord, then silence); never recommended while a loop exists. (b) Seam: Click ratio 0.03, under 1.0. VF-L1 click 0.74. (c) Length: Loop 26.7 s (12 bars), intro 7.9 s. Spec: intro 7.9 s (want 6 to 9), loop 26.7 s (want 20 to 40). VF-L1 loop 28.7 s, intro 8.8 s. VF-A2 8.8 s, plays once. (d) Loudness: -16.0 LUFS. VF-L1: -16.0. VF-A2: -16.0. Project stereo gate: correlation 0.39 to 0.70, side/mid -3.5 to -7.5 dB, mono loss -1.59 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+      "reason": "(a) Fit: Warm brass, timpani and harp fanfare into an easy walking processional: the brass register the shipped cue is described in (relief more than triumph), in a form that loops. Measured 107.9 BPM against 108 asked. VF-L1: Hymn-like fanfare (horns, strings, bells, harp) into a calm choir-and-strings rest: sincere and grateful, further from brass. (measured 100.3 BPM) VF-A2: One-shot fallback from run 1 (warm horns, timpani and harp, one held chord, then silence); never recommended while a loop exists. (b) Seam: Click ratio 0.03, under 1.0. VF-L1 click 0.74. (c) Length: Loop 26.7 s (12 bars), intro 7.9 s. Spec: intro 7.9 s (want 6 to 9), loop 26.7 s (want 20 to 40). VF-L1 loop 28.7 s, intro 8.8 s. VF-A2 8.8 s, plays once. (d) Loudness: -16.0 LUFS. VF-L1: -16.0. VF-A2: -16.0. Project stereo gate: correlation 0.39 to 0.70, side/mid -3.5 to -7.5 dB, mono loss -1.59 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code.",
+      "recut": {
+        "date": "2026-10-13",
+        "branch": "r46-audio2",
+        "finding": "FOC45-02 of the focused review of d5bf2206",
+        "why": "The finished loop ended every pass in a fade to near silence and re-entered at full level: the chain fades the last beat before the loop end into the audio just before the loop start, and for a results loop that audio is the near-silent gap after the fanfare. Measured on the decoded file, 50 ms before the wrap against 50 ms after: +24.2 dB (200 ms against 200 ms: +18.7 dB).",
+        "what": "Same take, same bar grid, same mastering (one gain to -16 LUFS, the stereo gate, LAME V4, the 3 s run-on), same equal-power crossfade; both loop points moved together by whole beats into the body (+0.556 s) so the audio before the loop start is body music, not the gap. The first pass is the same sound; only where the loop closes and re-enters moved. Searched over every beat offset and bar count with the lane's own seam gates (click ratio, spectral flux, wrap step) and the level step; the chosen pair is a whole number of bars, phrase-aligned where the take allows.",
+        "before": {
+          "file": {
+            "bytes": 634232,
+            "sha256": "43613591a157329af26b4b0e94a46dca4b8a33e4b87a107c4d903516e104dcbd"
+          },
+          "manifestEntry": {
+            "file": "music/victory-ffx.mp3",
+            "loopStart": 7.901587,
+            "loopEnd": 34.58737,
+            "duration": 37.5874,
+            "bytes": 634232,
+            "lufs": -16,
+            "truePeakDb": -4.4,
+            "source": "elevenlabs-music_v2_5"
+          },
+          "master": {
+            "bpm": 107.92,
+            "bars": 12,
+            "introSec": 7.902,
+            "loopSec": 26.686,
+            "clickRatio": 0.033,
+            "fluxRatio": 0.417,
+            "stepOk": true,
+            "xfadeSec": 0.556,
+            "xfadeLaw": "equal-power",
+            "gainDb": -3.4
+          },
+          "stereo": {
+            "before": {
+              "corr": 0.392,
+              "sideMid": -3.55,
+              "monoLoss": -1.59
+            },
+            "after": {
+              "corr": 0.702,
+              "sideMid": -7.5,
+              "monoLoss": -0.7
+            },
+            "pass": true,
+            "passedAsRendered": false,
+            "action": "narrowed",
+            "sideGainDb": -3.95
+          }
+        },
+        "wrapBefore": {
+          "pre50": -53.6,
+          "post50": -29.4,
+          "step50": 24.2,
+          "pre200": -40.2,
+          "post200": -21.5,
+          "step200": 18.7,
+          "clickRatio": 0.078
+        },
+        "wrapAfter": {
+          "pre50": -20.2,
+          "post50": -19.9,
+          "step50": 0.3,
+          "pre200": -19.5,
+          "post200": -20.3,
+          "step200": -0.8,
+          "clickRatio": 0.196
+        },
+        "earOwed": "Measured only (rule 13): nobody has heard the new wrap. If the owner prefers the earlier loop, the previous files are in git history (r45-rc d5bf2206)."
+      }
     },
     {
       "cue": "victory-ffx2",
@@ -160,7 +230,7 @@
       "replaces": [
         "victory-ffx2"
       ],
-      "plays": "The results screen of every FFX-2 chapter except IV (5, 6, 11, 13, 15, 16) and the hidden Leblanc preview and Experiment, on a win: a fanfare opening of 7.8 s into a 38.0 s results body that loops.",
+      "plays": "The results screen of every FFX-2 chapter except IV (5, 6, 11, 13, 15, 16) and the hidden Leblanc preview and Experiment, on a win: a fanfare opening of 8.3 s into a 32.0 s results body that loops.",
       "fallback": "victory-ffx2",
       "request": {
         "model_id": "music_v2_5",
@@ -179,17 +249,17 @@
         "creditsEstimated": 660
       },
       "file": {
-        "bytes": 986317,
-        "sha256": "8e1d4ace3c6905631795d87b20f73aa01a97cb609cd424df9b17a8dd7e1a0f75"
+        "bytes": 875248,
+        "sha256": "6c1a03595dd9c6432e4d6bd51657249009974e31349eb60898e1139c97d69240"
       },
       "manifestEntry": {
         "file": "music/victory-ffx2.mp3",
-        "loopStart": 7.765125,
-        "loopEnd": 45.763832,
-        "duration": 48.7638,
-        "bytes": 986317,
-        "lufs": -16,
-        "truePeakDb": -4.2,
+        "loopStart": 8.264218,
+        "loopEnd": 40.263152,
+        "duration": 43.2632,
+        "bytes": 875248,
+        "lufs": -16.0,
+        "truePeakDb": -4.3,
         "source": "elevenlabs-music_v2_5"
       },
       "before": {
@@ -206,35 +276,105 @@
         }
       },
       "master": {
-        "bpm": 120,
-        "bars": 19,
-        "introSec": 7.765,
-        "loopSec": 37.999,
-        "clickRatio": 0.04,
-        "fluxRatio": 0.247,
+        "bpm": 120.0,
+        "bars": 16,
+        "introSec": 8.264,
+        "loopSec": 31.999,
+        "clickRatio": 0.163,
+        "fluxRatio": 0.225,
         "stepOk": true,
         "xfadeSec": 0.5,
         "xfadeLaw": "equal-power",
-        "gainDb": -4.2
+        "gainDb": -4.1
       },
       "stereo": {
         "before": {
-          "corr": 0.811,
-          "sideMid": -9.82,
+          "corr": 0.81,
+          "sideMid": -9.8,
           "monoLoss": -0.43
         },
         "after": {
           "corr": 0.776,
-          "sideMid": -9,
-          "monoLoss": -0.5
+          "sideMid": -8.99,
+          "monoLoss": -0.52
         },
         "pass": true,
         "passedAsRendered": true,
         "action": "left alone",
-        "sideGainDb": 0.83
+        "sideGainDb": 0.81
       },
       "why": "Heard at every FFX-2 win (chapters 5, 6, 11, 13, 15, 16 and the FFX-2 hidden chapters; Chapter IV has its own, below). Remade as a fanfare opening of 6 to 9 s into a loopable results-screen body (decisions 53d, 58f); VX-A1 stays as the one-shot fallback.",
-      "reason": "(a) Fit: Cheeky live brass, snare roll, piano flourish and glockenspiel into a light medium-swing groove: the \"that was fun\" brass fanfare the shipped cue is described as, in a form that loops. Measured 120.0 BPM against 120 asked. VX-L2: Light, sparkling pizzicato, flutes, harp and celesta fanfare into a breezy pizzicato bounce: lighter and less brassy. (measured 126.0 BPM) VX-A1: One-shot fallback from run 1 (bright live brass, snare-roll build, piano flourish, then silence); never recommended while a loop exists. (b) Seam: Click ratio 0.04, under 1.0. VX-L2 click 0.25. (c) Length: Loop 38.0 s (19 bars), intro 7.8 s. Spec: intro 7.8 s (want 6 to 9), loop 38.0 s (want 20 to 40). VX-L2 loop 38.1 s, intro 7.2 s. VX-A1 6.6 s, plays once. (d) Loudness: -16.0 LUFS. VX-L2: -16.0. VX-A1: -16.0. Project stereo gate: correlation 0.81 to 0.78, side/mid -9.8 to -9.0 dB, mono loss -0.43 to -0.52 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+      "reason": "(a) Fit: Cheeky live brass, snare roll, piano flourish and glockenspiel into a light medium-swing groove: the \"that was fun\" brass fanfare the shipped cue is described as, in a form that loops. Measured 120.0 BPM against 120 asked. VX-L2: Light, sparkling pizzicato, flutes, harp and celesta fanfare into a breezy pizzicato bounce: lighter and less brassy. (measured 126.0 BPM) VX-A1: One-shot fallback from run 1 (bright live brass, snare-roll build, piano flourish, then silence); never recommended while a loop exists. (b) Seam: Click ratio 0.04, under 1.0. VX-L2 click 0.25. (c) Length: Loop 38.0 s (19 bars), intro 7.8 s. Spec: intro 7.8 s (want 6 to 9), loop 38.0 s (want 20 to 40). VX-L2 loop 38.1 s, intro 7.2 s. VX-A1 6.6 s, plays once. (d) Loudness: -16.0 LUFS. VX-L2: -16.0. VX-A1: -16.0. Project stereo gate: correlation 0.81 to 0.78, side/mid -9.8 to -9.0 dB, mono loss -0.43 to -0.52 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code.",
+      "recut": {
+        "date": "2026-10-13",
+        "branch": "r46-audio2",
+        "finding": "FOC45-02 of the focused review of d5bf2206",
+        "why": "The finished loop ended every pass in a fade to near silence and re-entered at full level: the chain fades the last beat before the loop end into the audio just before the loop start, and for a results loop that audio is the near-silent gap after the fanfare. Measured on the decoded file, 50 ms before the wrap against 50 ms after: +12.8 dB (200 ms against 200 ms: -1.0 dB).",
+        "what": "Same take, same bar grid, same mastering (one gain to -16 LUFS, the stereo gate, LAME V4, the 3 s run-on), same equal-power crossfade; both loop points moved together by whole beats into the body (+0.499 s) so the audio before the loop start is body music, not the gap. The first pass is the same sound; only where the loop closes and re-enters moved. Searched over every beat offset and bar count with the lane's own seam gates (click ratio, spectral flux, wrap step) and the level step; the chosen pair is a whole number of bars, phrase-aligned where the take allows.",
+        "before": {
+          "file": {
+            "bytes": 986317,
+            "sha256": "8e1d4ace3c6905631795d87b20f73aa01a97cb609cd424df9b17a8dd7e1a0f75"
+          },
+          "manifestEntry": {
+            "file": "music/victory-ffx2.mp3",
+            "loopStart": 7.765125,
+            "loopEnd": 45.763832,
+            "duration": 48.7638,
+            "bytes": 986317,
+            "lufs": -16,
+            "truePeakDb": -4.2,
+            "source": "elevenlabs-music_v2_5"
+          },
+          "master": {
+            "bpm": 120,
+            "bars": 19,
+            "introSec": 7.765,
+            "loopSec": 37.999,
+            "clickRatio": 0.04,
+            "fluxRatio": 0.247,
+            "stepOk": true,
+            "xfadeSec": 0.5,
+            "xfadeLaw": "equal-power",
+            "gainDb": -4.2
+          },
+          "stereo": {
+            "before": {
+              "corr": 0.811,
+              "sideMid": -9.82,
+              "monoLoss": -0.43
+            },
+            "after": {
+              "corr": 0.776,
+              "sideMid": -9,
+              "monoLoss": -0.5
+            },
+            "pass": true,
+            "passedAsRendered": true,
+            "action": "left alone",
+            "sideGainDb": 0.83
+          }
+        },
+        "wrapBefore": {
+          "pre50": -40.3,
+          "post50": -27.5,
+          "step50": 12.8,
+          "pre200": -25.6,
+          "post200": -26.7,
+          "step200": -1.0,
+          "clickRatio": 0.034
+        },
+        "wrapAfter": {
+          "pre50": -14.0,
+          "post50": -15.8,
+          "step50": -1.8,
+          "pre200": -15.4,
+          "post200": -16.6,
+          "step200": -1.2,
+          "clickRatio": 0.348
+        },
+        "earOwed": "Measured only (rule 13): nobody has heard the new wrap. If the owner prefers the earlier loop, the previous files are in git history (r45-rc d5bf2206)."
+      }
     },
     {
       "cue": "defeat-ffx",
@@ -387,7 +527,7 @@
       "mode": "new",
       "brief": "vb-a",
       "replaces": "none (the Chapter IV results screen is silent today)",
-      "plays": "Chapter IV's results screen (FFX-2, Bahamut), on a win: a quiet, bittersweet resolve of 6.5 s into a 25.3 s body that loops, under a results screen that stays silent in every other way (no pose, no tally flourish, no quips).",
+      "plays": "Chapter IV's results screen (FFX-2, Bahamut), on a win: a quiet, bittersweet resolve of 8.9 s into a 25.3 s body that loops, under a results screen that stays silent in every other way (no pose, no tally flourish, no quips).",
       "fallback": "pause",
       "request": {
         "model_id": "music_v2_5",
@@ -406,27 +546,27 @@
         "creditsEstimated": 550
       },
       "file": {
-        "bytes": 514225,
-        "sha256": "710b76e2428f4630a5b5c7fb953f5aa2b515d7ca9eb64f1b17050aa28b8976dd"
+        "bytes": 551158,
+        "sha256": "91c7ca402218bb6962c9ea2ccb4485ac0b6f5fdf3de954d8b23cb8050d437900"
       },
       "manifestEntry": {
         "file": "music/victory-bahamut.mp3",
-        "loopStart": 6.516236,
-        "loopEnd": 31.79839,
-        "duration": 34.7984,
-        "bytes": 514225,
-        "lufs": -16,
-        "truePeakDb": -1.9,
+        "loopStart": 8.884535,
+        "loopEnd": 34.156848,
+        "duration": 37.1568,
+        "bytes": 551158,
+        "lufs": -16.0,
+        "truePeakDb": -2.7,
         "source": "elevenlabs-music_v2_5"
       },
       "before": null,
       "master": {
         "bpm": 75.97,
         "bars": 8,
-        "introSec": 6.516,
-        "loopSec": 25.282,
-        "clickRatio": 0.022,
-        "fluxRatio": 1,
+        "introSec": 8.885,
+        "loopSec": 25.272,
+        "clickRatio": 0.583,
+        "fluxRatio": 0.413,
         "stepOk": true,
         "xfadeSec": 0.79,
         "xfadeLaw": "equal-power",
@@ -434,22 +574,92 @@
       },
       "stereo": {
         "before": {
-          "corr": 0.334,
-          "sideMid": -3,
-          "monoLoss": -1.76
+          "corr": 0.361,
+          "sideMid": -3.27,
+          "monoLoss": -1.68
         },
         "after": {
-          "corr": 0.699,
-          "sideMid": -7.5,
-          "monoLoss": -0.7
+          "corr": 0.696,
+          "sideMid": -7.43,
+          "monoLoss": -0.72
         },
         "pass": true,
         "passedAsRendered": false,
         "action": "narrowed",
-        "sideGainDb": -4.5
+        "sideGainDb": -4.2
       },
       "why": "Decision 58e. Chapter IV's results screen comes up silent today (no pose, no fanfare: BattleScreenFlow.showResults); the Bahamut brief calls the fight a loss Yuna inflicts on herself, so the cue is a quiet, bittersweet resolve, not a fanfare. Same 6 to 9 s opening into a loopable body.",
-      "reason": "(a) Fit: Piano-led (76 BPM, the same family as the Bahamut battle ballad): a solo piano's aching phrase opens into a warm chord, then soft broken chords and a consoling cello line. Measured 76.0 BPM against 76 asked. VB-B: Strings, solo oboe and a lone wordless voice (72 BPM): hushed and hymn-like, then harp and piano ripples under a simple oboe-and-violin phrase. (measured 72.6 BPM) (b) Seam: Click ratio 0.02, under 1.0. VB-B click 0.56. (c) Length: Loop 25.3 s (8 bars), intro 6.5 s. Spec: intro 6.5 s (want 6 to 9), loop 25.3 s (want 20 to 40). VB-B loop 26.5 s, intro 7.6 s. (d) Loudness: -16.0 LUFS. VB-B: -16.0. Project stereo gate: correlation 0.33 to 0.70, side/mid -3.0 to -7.5 dB, mono loss -1.76 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+      "reason": "(a) Fit: Piano-led (76 BPM, the same family as the Bahamut battle ballad): a solo piano's aching phrase opens into a warm chord, then soft broken chords and a consoling cello line. Measured 76.0 BPM against 76 asked. VB-B: Strings, solo oboe and a lone wordless voice (72 BPM): hushed and hymn-like, then harp and piano ripples under a simple oboe-and-violin phrase. (measured 72.6 BPM) (b) Seam: Click ratio 0.02, under 1.0. VB-B click 0.56. (c) Length: Loop 25.3 s (8 bars), intro 6.5 s. Spec: intro 6.5 s (want 6 to 9), loop 25.3 s (want 20 to 40). VB-B loop 26.5 s, intro 7.6 s. (d) Loudness: -16.0 LUFS. VB-B: -16.0. Project stereo gate: correlation 0.33 to 0.70, side/mid -3.0 to -7.5 dB, mono loss -1.76 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code.",
+      "recut": {
+        "date": "2026-10-13",
+        "branch": "r46-audio2",
+        "finding": "FOC45-02 of the focused review of d5bf2206",
+        "why": "The finished loop ended every pass in a fade to near silence and re-entered at full level: the chain fades the last beat before the loop end into the audio just before the loop start, and for a results loop that audio is the near-silent gap after the fanfare. Measured on the decoded file, 50 ms before the wrap against 50 ms after: +23.1 dB (200 ms against 200 ms: +24.4 dB).",
+        "what": "Same take, same bar grid, same mastering (one gain to -16 LUFS, the stereo gate, LAME V4, the 3 s run-on), same equal-power crossfade; both loop points moved together by whole beats into the body (+2.368 s) so the audio before the loop start is body music, not the gap. The first pass is the same sound; only where the loop closes and re-enters moved. Searched over every beat offset and bar count with the lane's own seam gates (click ratio, spectral flux, wrap step) and the level step; the chosen pair is a whole number of bars, phrase-aligned where the take allows.",
+        "before": {
+          "file": {
+            "bytes": 514225,
+            "sha256": "710b76e2428f4630a5b5c7fb953f5aa2b515d7ca9eb64f1b17050aa28b8976dd"
+          },
+          "manifestEntry": {
+            "file": "music/victory-bahamut.mp3",
+            "loopStart": 6.516236,
+            "loopEnd": 31.79839,
+            "duration": 34.7984,
+            "bytes": 514225,
+            "lufs": -16,
+            "truePeakDb": -1.9,
+            "source": "elevenlabs-music_v2_5"
+          },
+          "master": {
+            "bpm": 75.97,
+            "bars": 8,
+            "introSec": 6.516,
+            "loopSec": 25.282,
+            "clickRatio": 0.022,
+            "fluxRatio": 1,
+            "stepOk": true,
+            "xfadeSec": 0.79,
+            "xfadeLaw": "equal-power",
+            "gainDb": 4.7
+          },
+          "stereo": {
+            "before": {
+              "corr": 0.334,
+              "sideMid": -3,
+              "monoLoss": -1.76
+            },
+            "after": {
+              "corr": 0.699,
+              "sideMid": -7.5,
+              "monoLoss": -0.7
+            },
+            "pass": true,
+            "passedAsRendered": false,
+            "action": "narrowed",
+            "sideGainDb": -4.5
+          }
+        },
+        "wrapBefore": {
+          "pre50": -36.2,
+          "post50": -13.1,
+          "step50": 23.1,
+          "pre200": -35.3,
+          "post200": -10.9,
+          "step200": 24.4,
+          "clickRatio": 0.005
+        },
+        "wrapAfter": {
+          "pre50": -29.8,
+          "post50": -29.2,
+          "step50": 0.5,
+          "pre200": -29.9,
+          "post200": -28.9,
+          "step200": 1.1,
+          "clickRatio": 0.665
+        },
+        "earOwed": "Measured only (rule 13): nobody has heard the new wrap. If the owner prefers the earlier loop, the previous files are in git history (r45-rc d5bf2206)."
+      }
     },
     {
       "cue": "boss-challenge",

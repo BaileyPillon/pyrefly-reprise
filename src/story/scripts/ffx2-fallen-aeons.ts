@@ -150,6 +150,10 @@ const POST: StoryScript = [
   say('yuna-x2', 'Rest now. All of you.'), // 18
   say('rikku-x2', 'Flowers? Down here?'), // 19
   results(),
+  // `showResults()` (`BattleScreenFlow.ts`) starts `victory-ffx2` on its own once the tally shows and it replaces
+  // the Glen's bed above, which then never came back: the cue looped on under lines 20 to 23 (FOC45-01's gap in
+  // another FFX-2 script). The scene has its own cue, so it is put back as the scene resumes past the tally.
+  music('scene-farplane', 900),
   // PR-0133 (D-211): each of the trio stands on the plate for their own line, in the one spot
   // right of the box (`app/screens/cutsceneFigures.ts`), as Chapters XII and XIV stand theirs.
   showActor('leblanc', { ms: 500, facing: -1 }),

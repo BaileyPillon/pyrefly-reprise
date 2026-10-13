@@ -113,6 +113,13 @@ export const ffx2BahamutScripts: ChapterScripts = {
     // The tally comes up inside the silence, with nothing attached to it.
     results(true),
 
+    // `showResults()` (`src/app/screens/BattleScreenFlow.ts`) starts this chapter's own results cue,
+    // `victory-bahamut` (the quiet resolve, r45-audio), on its own once the tally shows, and the
+    // `music(null, 700)` above only reaches the results() marker. It looped on under every line below
+    // (FOC45-01 of the focused review of d5bf2206), against this chapter's own rule that the scene after
+    // the tally is silent. Cut it right as the scene resumes past the tally, as the FFX posts do.
+    music(null, 300),
+
     say('rikku-x2', '...Yunie.'),
     say('yuna-x2', "I'm fine. Let's find the machine."),
 
