@@ -72,7 +72,13 @@ apart. Beyond that:
 - Not merged, not deployed, no review run: `critic-plan` says DEEP; the focused review before a deploy and the deep review after it are the driver's. NOW.md, the decisions and actions ledgers (a row for the PREP-A pick, item 59a, and the delivery
   state of D-781) and the targets tile are the records lane's; nothing here edits them.
 - A real device was not available: every proof is emulated (Chromium touch emulation at 390x844 and 430x932, Playwright's WebKit for layout). The real-phone feel (momentum scroll, the keyboard's absence) is for Bailey.
-- The full `npm test` was not run (the brief named tsc, the prep and layout test files and the orphan check); the prep, CSS-sheet, ink-and-gold and text-floor-adjacent test files pass (see the commits), tsc is clean, `node tools/orphans.mjs` lists nothing new.
+- The Playwright e2e specs (`npm run test:e2e`) were not run. The roster-row and tab clicks of `tests/e2e/party-prep-pointer.spec.ts` are repeated at 1600x900 by `proof-desktop-input.mjs` (18 of 18); START BATTLE by a real tap is covered at the phone size (the proof's last check of each game).
+
+## Verified
+
+On the code of `e0f66efa` (the later commits are docs, frames and scripts only): `node node_modules/typescript/bin/tsc --noEmit -p .` clean; the **whole unit suite** (`vitest run`, six shards at `--maxWorkers=2`, each under its own timeout, TEMP and TMP on D:) passes:
+1110 test files passed (13 skipped), 17,283 tests passed (72 skipped, 1 todo), 0 failed; the lane's own files are `prep-phone-views.test.ts` (25), `prep-phone-page.test.ts` (20) and `prep-phone-shell.test.ts` (27); `node tools/orphans.mjs`: 1560 modules, 36 orphaned, none of them
+this lane's (the 36 are older, e.g. `src/ui/ffx2/PartyPrep.ts`, the unwired standalone menu); a `git merge-tree` of the branch against `origin/main`, `origin/r43-rc`, `origin/r43-textfloor`, `origin/r43-motion2`, `origin/r43-delivery` and `origin/r43-critic-tools` reports no conflict.
 
 ## How to re-run the proof
 
