@@ -400,6 +400,14 @@ describe('the record of what ships and what was turned down', () => {
     expect(JSON.stringify(record)).not.toMatch(/[A-Za-z]:[\\/]|\.(?:wav|flac|fsb|vbf)\b/);
   });
 
+  it('is credited: CREDITS.md carries every shipped cue\'s raw-take hash and its prompt as sent', () => {
+    const credits = readFileSync(join(ROOT, 'docs', 'audio', 'CREDITS.md'), 'utf8');
+    for (const c of record.cues) {
+      expect(credits, `CREDITS.md does not carry the raw take's hash of ${c.pack}/${c.cue}`).toContain(c.sha256Raw);
+      expect(credits, `CREDITS.md does not carry the prompt of ${c.pack}/${c.cue} as sent`).toContain(String(c.request['text']));
+    }
+  });
+
   it('keeps a rejected take out of the manifest', () => {
     expect(record.rejected.length).toBeGreaterThan(0);
     for (const r of record.rejected) {

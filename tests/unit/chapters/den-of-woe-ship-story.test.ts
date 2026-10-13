@@ -41,8 +41,8 @@ describe('the registered record', () => {
     const { sceneKey: _a, scriptsRef: _b, ...rest } = FFX2_DEN_OF_WOE_SHIPPED;
     const { sceneKey: _c, scriptsRef: _d, ...base } = FFX2_DEN_OF_WOE;
     expect(rest).toEqual(base);
-    // GP16 as the record has it: the stand-in cue until a Den cue is picked by ear (rule 13).
-    expect(FFX2_DEN_OF_WOE_SHIPPED.music).toEqual({ scene: 'scene-bevelle-underground', battle: 'boss-shuyin', victory: 'victory-ffx2' });
+    // GP16 as the record has it: the Den's own original since 2026-10-12 (music batch 2); `boss-shuyin` stood in until then.
+    expect(FFX2_DEN_OF_WOE_SHIPPED.music).toEqual({ scene: 'scene-bevelle-underground', battle: 'boss-den-of-woe', victory: 'victory-ffx2' });
     expect(withDenOfWoeShip(FFX2_DEN_OF_WOE)).toEqual(FFX2_DEN_OF_WOE_SHIPPED);
   });
 });

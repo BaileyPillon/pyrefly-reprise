@@ -47,10 +47,11 @@
  * - **Music keys, resolved by the integrator (2026-09-22).** No dedicated cue
  *   exists (named nowhere in `docs/plans/music-modern-sound.md` or
  *   `docs/audio/THEMES.md`); per the brief ("if none is named, the cue
- *   chapter 4 uses"), this file calls Chapter 4's `scene-bevelle-underground`
+ *   chapter 4 uses"), this file called Chapter 4's `scene-bevelle-underground`
  *   / `boss-ffx2-aeon` for the scene/battle beds and `scene-farplane` for the
  *   beat-14 hush — real, already-registered `MUSIC_KEYS`, not invented ones.
- *   A future music track can compose this chapter's own cues instead.
+ *   Its own cues have since landed: `boss-leblanc` (2026-10-10) and
+ *   `scene-chateau-leblanc` (2026-10-12); the hush is still `scene-farplane`.
  * - **Every `sfx()` and `fx()` key used here already exists** in the banks, so
  *   nothing new is owed on that side.
  * - **Combatant ids.** The enemy data files do not exist yet, so the ids the
@@ -174,10 +175,9 @@ const mid: MidBattleTrigger[] = [
 
 export const ffx2LeblancScripts: ChapterScripts = {
   pre: [
-    // No dedicated chateau cue exists yet (named nowhere in `docs/plans/
-    // music-modern-sound.md` or `docs/audio/THEMES.md`) — integrator's
-    // fallback to Chapter 4's scene cue, `src/data/encounters.ts`'s class doc.
-    music('scene-bevelle-underground', 1200),
+    // The chateau's own bed since 2026-10-12 (music batch 2, FFX-2 only): big-band swagger with a comic wink. Chapter 4's `scene-bevelle-underground`,
+    // a cathedral basement, played here before (the integrator's fallback; `src/data/encounters.ts`'s class doc).
+    music('scene-chateau-leblanc', 1200),
     camera('idle', 0),
     fade('clear', 900),
 

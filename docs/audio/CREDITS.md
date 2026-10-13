@@ -143,6 +143,120 @@ and eleven Wikimedia Commons files. Not used at all: Sonniss GDC bundles, Freeso
 need an account), BBC Sound Effects (its licence excludes this use). No retail game audio was used as
 a source or as a reference.
 
+### SFX parity originals (`public/audio/sfx/parity-*.mp3`, generated 2026-10-13, installed on branch `r45-audio`)
+
+Bailey, 2026-10-10 23:05 EDT: "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important."; 2026-10-12: "I'll go with all of your recommendations" (driver items 47k to 47n, 52d, 52i to 52n and 58c). The driver installed the loose set of the generation run (the 7 picks that passed every check and the 11 that came within 1.5 times the tolerance), 18 cues in 6 packs. Each is an original made with ElevenLabs Sound Effects (model `eleven_text_to_sound_v2`, text only: the request body is `text`, `duration_seconds`, `prompt_influence` and `model_id`), mastered by our own tools (`tools/audio/sfx-parity-sprite.py`, `sfx-parity-measure.mjs`). No retail audio was read, copied, sampled, kept or fed to the generator; each prompt passed the project lint (`tools/audio/sfx-parity-lint.mjs`: no game, place, character, composer or model named). Made on the project's ElevenLabs account (Creator tier). Prompts, raw-take hashes and mastered-file hashes are also in `docs/audio/sfx-parity-record.json`, with the 295 takes that measurement turned down.
+
+Packs: `ffx-core` (q3, 329,971 bytes, 8 cues); `ffx2-core` (q3, 184,746 bytes, 6 cues); `ffx-lady` (q5, 111,935 bytes, 1 cue); `ffx2-bahamut` (q5, 20,096 bytes, 1 cue); `ffx2-machina` (q5, 13,852 bytes, 1 cue); `ffx2-shuyin` (q5, 29,881 bytes, 1 cue).
+
+- **`ffx-core` / `cursor-move`** (row `ffx.ui.tick`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `da5ae23cd4a3194a7c9866a58d3da2e793976068e0d81721f5e1f19b67fe45bf`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx-core` / `swing-katana`** (row `ffx.weapon.katana.swing`, near, take `ffx.weapon.katana.swing.v1`): the raw take SHA-256 `503a07d7fc27fe2abe2713e908effb2f0675c0fd5dd5db188cc94cd45a5377cc`, the mastered file `1f373ab427b50aee9473676f247bec9d8bf5b4f60f10d3e698e1aded06ef7b39`. The prompt, as sent (`duration_seconds` 0.6, `prompt_influence` 0.6):
+
+```
+A fast sharp katana draw-cut, a thin high-speed whoosh with a bright blade hiss and some low body, medium attack. About half a second. Close-miked, realistic sound design, no music, no voice.
+```
+
+- **`ffx-core` / `fire-2`** (row `ffx.fire.t2`, strict, take `ffx.fire.t2.v1`): the raw take SHA-256 `ec5181410fde75585abc37fef6e4eb0098ab96fb18c26c099da1a9a3a3c2569e`, the mastered file `ab306d02816867142a263d5ed9b5ce0a3628f0bbde87e0f86b3d4877593292c1`. The prompt, as sent (`duration_seconds` 2.3, `prompt_influence` 0.5):
+
+```
+A stronger fire spell, a deep roaring blaze that swells quickly with a thick rolling rumble, crackling embers and a long fading roar. About two seconds, low-heavy. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx-core` / `water`** (row `ffx.water.t1`, strict, take `ffx.water.t1.v4`): the raw take SHA-256 `e579234f096679ec9c8f19270004b7661c0005d1047ecf749fe70ca13d4539b7`, the mastered file `40be5f47b7a2ca13c7e6d820beeaa00158a2c9683e1263437796a02932415e36`. The prompt, as sent (`duration_seconds` 2.2, `prompt_influence` 0.5):
+
+```
+A water spell, a rushing surge that swells and crashes with a bubbly splashing body and a soft spray, ending in trickling droplets. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: brighter and airier, more shimmer.
+```
+
+- **`ffx-core` / `shell`** (row `ffx.shell`, near, take `ffx.shell.v1`): the raw take SHA-256 `88680ada5a9d01eeef2f721be208c55ca6977bcb6d983f1bbd17ae8ca7772010`, the mastered file `c43b76c1c07f1a01b3d2b7d382a6804751749b90ca3452ee02f1ead26616ff8d`. The prompt, as sent (`duration_seconds` 2, `prompt_influence` 0.5):
+
+```
+A veil of light magic, a bright high icy-silver shimmer curtain with airy sparkling hiss and a glass tinkle, descending softly. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx-core` / `buff-generic`** (row `ffx.buff`, near, take `ffx.buff.v2`): the raw take SHA-256 `0cf807b45fa0faf6b274c1865714bb611d3b3de2db5999a1266b9d0a20301170`, the mastered file `1027957d17a0d0ffb4631846c34c0afea48dc2aadd94c48df98b3c2cf75a59b9`. The prompt, as sent (`duration_seconds` 2.1, `prompt_influence` 0.5):
+
+```
+A gentle blessing magic, a bright airy upward shimmer with fine glittering sparkles. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.
+```
+
+- **`ffx-core` / `darkness`** (row `ffx.darkness`, strict, take `ffx.darkness.v1`): the raw take SHA-256 `fbeae34407d604ee8e27bc4c5e9f911a1c54463b98b6a578bdd76383b6f79878`, the mastered file `f2ca63d02f24b984d8c88bf262b2c8c8bc802c1ada604e34be1a674a29e80ec5`. The prompt, as sent (`duration_seconds` 1.3, `prompt_influence` 0.5):
+
+```
+A blinding dark magic, a deep low swell like a heavy curtain falling, thick and dim, with a short sudden close. About one second. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx-lady` / `lady-metamorph`** (row `ffx.boss.lady.metamorph`, near, take `ffx.boss.lady.metamorph.v1`): the raw take SHA-256 `b71edbc7f1e663c5046d555f0645b5a15fe7588a2fe734b1fdf92c77fdb8b2ac`, the mastered file `6041afd361b1d6a7224027b2f826008898a1d0cc5e89a8e1e113e8958213746f`. The prompt, as sent (`duration_seconds` 13.7, `prompt_influence` 0.4):
+
+```
+A monstrous transformation, a very long slow rising swell of grinding, stretching and warping tones that finally erupts and settles. About twelve seconds. Cinematic sound design, no music, no voice.
+```
+
+- **`ffx-core` / `meteor`** (row `ffx.dark.meteor`, strict, take `ffx.dark.meteor.v1`): the raw take SHA-256 `7db3066a1159963bb46d1083b343830b50f80e84945e328ecbd3ab9fd5781040`, the mastered file `208839e251cdd1293ae0cc5af69f0e9cfce03dd6fe03fef45efff61234c67dc3`. The prompt, as sent (`duration_seconds` 7.2, `prompt_influence` 0.4):
+
+```
+A meteor crashing down, a long rising whistle and rumble of an incoming rock erupting into a colossal impact and rolling debris. About six seconds. Cinematic sound design, no music, no voice.
+```
+
+- **`ffx2-core` / `hit-dagger`** (row `ffx2.lb.thief.hit`, near, take `ffx2.lb.thief.hit.v2`): the raw take SHA-256 `6351bfef7463b05bc28b1c360726896cac1616c732076c91d426d00838a39527`, the mastered file `047437c60b730c44255729c51db346d6e4503409c8fef68d890f5f89d161d914`. The prompt, as sent (`duration_seconds` 2.7, `prompt_influence` 0.6):
+
+```
+A flurry of five quick bursts of fine crackling static, very high and sparkling, one after another, building slowly to the loudest at the end. Close-miked, realistic sound design, no music, no voice.
+```
+
+- **`ffx2-core` / `cursor-move-x2`** (row `ffx2.ui.tick`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `da5ae23cd4a3194a7c9866a58d3da2e793976068e0d81721f5e1f19b67fe45bf`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx2-core` / `confirm-x2`** (row `ffx2.ui.confirm`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `da5ae23cd4a3194a7c9866a58d3da2e793976068e0d81721f5e1f19b67fe45bf`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx2-core` / `menu-page-x2`** (row `ffx2.ui.page`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `5f211abfd2a220dfa75d25e0909ae78c42fd94aa3af5cdebaebb0874839b908c`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx2-core` / `flare-x2`** (row `ffx2.flare`, strict, take `ffx2.flare.v1`): the raw take SHA-256 `61986c3cfe52cc7b8ff7518f34b2042e50955c488e712b400b32d83cca74b648`, the mastered file `e39dc87efd1c09de5f054d42d862e5c853a919b1111f35a4bb0b1c6e42e750e6`. The prompt, as sent (`duration_seconds` 4.8, `prompt_influence` 0.5):
+
+```
+A massive energy detonation, a very deep sub-bass swell building for nearly three seconds into a thunderous boom, with pulsing low rumble. About four and a half seconds. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx2-core` / `cura-x2`** (row `ffx2.cura`, near, take `ffx2.cura.v2`): the raw take SHA-256 `8222ee05608195a964d57c1ad2925196c685f48958cde7661451b94039cdae78`, the mastered file `de829f28b09f070a85235f37755f2d076833d4c9592d312c676f2a66c6571606`. The prompt, as sent (`duration_seconds` 3.3, `prompt_influence` 0.5):
+
+```
+A fuller healing spell, a warm mid glow with soft chimes blooming and gently circling. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.
+```
+
+- **`ffx2-machina` / `machina-destroy`** (row `ffx2.boss.machina.ko`, strict, take `ffx2.boss.machina.ko.v2`): the raw take SHA-256 `03291e73ed19943cb306ff6aa7380511b42f10fa386e5513db7061dba58b88db`, the mastered file `c2388b6b6240029179a47713f1f81cf45a3d10b7a6c4c5733ef37495923c75a9`. The prompt, as sent (`duration_seconds` 2.8, `prompt_influence` 0.6):
+
+```
+A giant machine dying, a deep groaning mechanical collapse with a heavy clang-rumble and fading metallic ringing. About two and a half seconds. Close-miked, realistic sound design, no music, no voice. Variation: heavier, with more low body.
+```
+
+- **`ffx2-bahamut` / `boss-bahamut`** (row `ffx2.boss.bahamut`, strict, take `ffx2.boss.bahamut.v2`): the raw take SHA-256 `e24a5fc314b2515a1ad28816584390ca463256a14e2297c302b74d19697941ef`, the mastered file `8fe51ef241649fb64e0753ccc6e7f3739b5caa31c5fb3a222d88521fea3a0665`. The prompt, as sent (`duration_seconds` 3.4, `prompt_influence` 0.5):
+
+```
+A giant dragon-like beast's solid lunging attack, a full mid whooshing roar rising for almost a second into a thudding strike. About three seconds. Light and clear, mid-pitched, with a crisp edge and no deep bass. Cinematic sound design, no music, no voice.
+```
+
+- **`ffx2-shuyin` / `boss-shuyin`** (row `ffx2.boss.shuyin`, near, take `ffx2.boss.shuyin.v1`): the raw take SHA-256 `e7d8c711848e58898d2867da16405596e69c6573631460abdfcf63a6965dbca4`, the mastered file `9b320b7fef3d3dedac56f996867a577b3ae134c0d6f608a3af19b51aae1c0add`. The prompt, as sent (`duration_seconds` 5.5, `prompt_influence` 0.4):
+
+```
+A dark swordsman's long sweeping attack, six heavy low slashes and whooshes in a flowing sequence with a deep resonant undertone. About five seconds. Cinematic sound design, no music, no voice.
+```
+
 ### Per cue: `scene-macalania-temple` (Chapter VII, FFX only, 2026-09-29)
 
 "The Frozen Temple", original (rule 8): the score is
@@ -325,6 +439,174 @@ Tense, ticking, final cinematic orchestral battle music at 140 BPM in 4/4 in a m
 
 ```
 Tense, rhythmic, mechanical cinematic music at 144 BPM in 4/4 in a minor key, the feeling of a night infiltration of a factory. A steady pulsing low-string and bass figure like a machine, a tight snare and rim-click pattern, sustained brass chords that swell and cut off, a rising string line, and metallic percussion such as struck steel and anvil. Urgency without panic: a repeating figure that grows layer by layer from sparse to full, then drops back to the bare pulse so it can repeat. Real instruments and real percussion recorded in a large studio. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop, no vocals.
+```
+
+#### Batch 2 (2026-10-12)
+
+Bailey, 2026-10-10 23:05 EDT: "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important."; 2026-10-12: "I'll go with all of your recommendations". Each take is ElevenLabs Music v2.5, original; the prompts name no composer, franchise, character or melody. Prompts, raw-take hashes and shipped-file hashes are also in `docs/audio/music-batch2-2026-10-12.json`.
+
+Processing (the lane, 2026-10-12): the shipped file of every cue below is cut on whole bars at a real attack with an equal-power crossfade and a 3 s run-on (a one-shot: the cue, a raised-cosine fade and 2 s of silence), one gain to -16 LUFS, the side channel scaled down in mid/side just enough to pass the stereo gate of `THEMES.md` (the loop points do not move), and a LAME V4 encode; nothing else. The raw-take hashes are the takes as generated.
+
+- **`victory-ffx`** (FFX): brief `VF-L2` ("Relief and brass, then a walking processional"). The raw take is an MP3 (mp3_48000_320), 48.03 s, take 1, SHA-256 `544b14e3d74e4e3460d670abc27d9fe563e740773526dedc9afb82063960af86`. The prompt, as sent (`music_length_ms` 48000, `force_instrumental` true):
+
+```
+A warm, sincere orchestral victory fanfare that settles into a gentle, loopable processional, at 108 BPM in 4/4 in a bright major key, relief more than triumph. For the first seven seconds: a short snare roll lifts into a section of French horns and trumpets playing a noble, open fanfare figure over timpani and a sweeping harp, and the orchestra lands on one clear, held major chord that rings out. Then, without a pause and without changing key or tempo, the music settles into a calm, steady, walking processional that lasts for the rest of the piece: pizzicato basses and soft snare brushes keep an easy stride, a solo trumpet and a solo horn trade a simple, dignified, hopeful tune, warm strings and a harp answer, and a soft timpani marks the downbeats. It never builds to a climax and never ends: it keeps the same easy stride so that it can repeat. Sincere and grateful, a little weary, never boastful. Real acoustic orchestra and real percussion recorded in a warm hall. No vocals. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`victory-ffx2`** (FFX-2): brief `VX-L1` ("Brass swagger, then a bouncing groove"). The raw take is an MP3 (mp3_48000_320), 48.03 s, take 1, SHA-256 `9a6082b2230010879e648d4ab78528ea4abbf729bc32aaa99a35d094357369df`. The prompt, as sent (`music_length_ms` 48000, `force_instrumental` true):
+
+```
+A short, bright, cheeky victory fanfare that settles into a light, bouncy, loopable groove, at 120 BPM in 4/4 in a bright major key. For the first seven seconds: a snare roll builds, live trumpets and trombones play a swaggering fanfare figure, a piano flourish runs up, a glockenspiel sparkles, and the band lands on one clean, happy major chord. Then, without a pause and without changing key or tempo, it settles straight into a light, bouncing, medium-swing groove that lasts for the rest of the piece: an upright bass walks, a drummer plays brushes and a light ride cymbal, a piano comps bright chords, a muted trumpet and a flute trade a catchy, playful, singing figure, and pizzicato strings and a vibraphone add sparkle. It never builds to a climax and never ends: it keeps the same groove so that it can repeat. Breezy, optimistic and a little cheeky, the feeling of counting the loot after a successful caper. Real recorded instruments in a room full of players. No vocals. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`defeat-ffx`** (FFX): brief `DF-A` ("The stillness after a fall"). The raw take is an MP3 (mp3_48000_320), 10.03 s, take 2, SHA-256 `0879a0bd507ae177d2155bb66919f7b5755751e782e511212bd1e37894482ba6`. The prompt, as sent (`music_length_ms` 10000, `force_instrumental` false):
+
+```
+A short, sombre, slow orchestral cue of defeat lasting about eight seconds, at about 52 BPM in a minor key. Hushed low strings sink slowly, a solitary French horn plays one falling line, a deep bell tolls once, and a small wordless choir (open vowels only, no words, no lyrics) breathes a single dark chord that fades away into a long, natural silence. Grave, resigned, quiet sorrow: the stillness after a fall. Never loud, no drums, no climax, no resolution. Real acoustic instruments in a large stone hall with a long natural reverb tail. It does not loop and does not repeat: it simply decays to silence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop. Let the cue last a full nine seconds, with a slow, long, natural decay, so that the last notes are still faintly audible near the end.
+```
+
+- **`defeat-ffx2`** (FFX-2): brief `DX-A` ("A rueful sigh"). The raw take is an MP3 (mp3_48000_320), 8.04 s, take 1, SHA-256 `ad7cace524f9b16d38e9a8029709f4f9bfbe21bad80eef09844d13560b585722`. The prompt, as sent (`music_length_ms` 8000, `force_instrumental` true):
+
+```
+A short, soft, wistful cue of defeat lasting about eight seconds, at about 60 BPM in a minor key: a solo piano plays a slow, sighing, falling phrase, a solo cello and a warm string section sink gently beneath it, a flute breathes one drooping note, and a harp glissando slides down and fades into silence. Sad but gentle and a little rueful, like a sigh after a plan has gone wrong, not tragic. Never loud, no drums, no climax. Real acoustic instruments in a warm hall with a natural reverb tail. It does not loop: it decays to silence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`victory-bahamut`** (FFX-2): brief `VB-A` ("Piano resolve"). The raw take is an MP3 (mp3_48000_320), 40.03 s, take 1, SHA-256 `ae685dd5f8c9242b58ec3d59d3c70889c712761141681b7c20ced62afc3b9a7b`. The prompt, as sent (`music_length_ms` 40000, `force_instrumental` true):
+
+```
+A quiet, bittersweet cue of resolve after a sorrowful victory, at 76 BPM in 4/4 in a minor key that opens toward the major. For the first eight seconds: a solo grand piano plays a slow, aching, rising phrase that opens out into a warm chord, a warm string section swells softly under it, and a solo cello answers; there is no brass fanfare, no timpani roll and no triumph, only acceptance and tenderness, as if someone has set down a heavy burden. Then, without a pause and without changing key or tempo, the music settles into a quiet, steady, loopable passage that lasts for the rest of the piece: the piano plays soft, broken chords, strings hold long, warm chords, a solo cello sings a simple, consoling line, and a muted timpani marks a very quiet heartbeat every other bar. It never builds to a climax and never ends: it stays in the same hushed texture so that it can repeat. Bittersweet, tender and dignified, never loud, never triumphant. Real acoustic instruments recorded in a warm hall. No vocals. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-challenge`** (FFX): brief `CH-A` ("Cold machine pressure"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `c722b7b34c3c8249f405293cb379b0be18415eedfcfd8c78305d188507fe4d61`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Cold, relentless, oppressive cinematic battle music at 158 BPM in 4/4 in a minor key over a single low pedal, written for an enemy that is not trying to be understood. A hard, clipped, repeating low-string and bassoon ostinato with syncopated off-beat accents that keep the pulse from settling, dry hammered anvils and struck metal plates, a taiko-like low drum, and short angular stabs on low brass; cold, sustained choir-like voices (open vowels only, no words, no lyrics) float high above and never form a chord. No tune, only a short mechanical figure that repeats and grows. It starts at full pressure at once after a short four-bar intro, holds one high level, adds a new layer every half minute without changing key, and never resolves or builds to a triumphant release; it falls back to the bare ostinato at the end so it can repeat. Inhuman, unsympathetic, tense. Real acoustic orchestra and real percussion. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-jecht`** (FFX): brief `JE-A` ("Raw and defiant"). The raw take is an MP3 (mp3_48000_320), 96.07 s, take 1, SHA-256 `478808de2767ef27340cb91381f8996f4ac30ee1bcce75b8023be2558fae09e3`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Heavy, raw, defiant instrumental rock-metal battle music at 140 BPM in 4/4 in a minor key. Thick downtuned distorted electric guitars play a blunt, repeating low riff, a live drummer plays double-kick bursts and a hard snare, a growling bass guitar doubles the riff, and a short, aching string line sits underneath and surfaces in the quieter bars. Loud and personal rather than epic, angry and grieving at once, with a half-time breakdown in the middle before the riff returns. It opens with a four-bar riff intro and falls back to the main riff at the end so it can repeat. No vocals. Real recorded instruments in a live room. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no pop.
+```
+
+- **`boss-yu-yevon`** (FFX): brief `YY-A` ("Processional finale"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `0f24584279cf2b835337e4a005dec02c0cee91f1c178a6ca588e9f54910f7f51`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Vast, solemn, inevitable cinematic orchestral music at 96 BPM in 4/4 in a minor key, processional rather than frantic, the music of a final confrontation that cannot be won by force. A large mixed choir sings open vowels (no words, no lyrics) over deep sustained strings and low brass chorales, slow timpani sound on every other beat, and bells toll. It rises in long slow waves to one huge choral climax and recedes without resolving, so that it can repeat. Majestic, sorrowful, final. Real orchestra, real bells and a real choir recorded in a vast stone hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-vegnagun`** (FFX-2): brief `VG-A` ("A machine the size of a building"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `44cc7c7e68d4d3556018fcabd6ac0848235ac9b92704253dcb8d74737c6229c3`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Urgent, colossal, relentless cinematic battle music at 164 BPM in 4/4 in a minor key, the sound of a machine the size of a building waking up. A pounding low-string and bassoon ostinato in constant note lengths, thunderous taiko and timpani on every beat, snarling low brass, heavy hammered anvils and steel, and a large choir shouting short open vowels in unison like a siren (no words, no lyrics). Energy climbs in three escalating waves with no relief, the last with a rapid tightening pulse like a countdown. It opens with the ostinato alone for about 4 seconds and falls back to it so it can repeat. Menacing and awe-struck, heavy rather than heroic. Real acoustic orchestra and real percussion. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-shuyin`** (FFX-2): brief `SH-A` ("Grief with a pulse"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `b3bf22c1a3b918a57e5f17b34e7978a170b16a04a5f351f5daa3a92bc4161efe`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Slow, grieving, dirge-like cinematic orchestral music at 68 BPM in a minor key, with a steady low pulse underneath, for a last duel against a man who only wants to disappear. A solo piano and a string orchestra carry a long, aching, bittersweet line that is quietly distorted in places, as if a love song were being played at a funeral; a muted timpani heartbeat, low harp notes, and a distant solo female voice singing open vowels with no words. It rises slowly, never loud for long, and returns to near-silence so it can repeat. Tragic, tender, resigned, not heroic. Real acoustic instruments and a real voice. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-seymour-macalania`** (FFX): brief `SA-A` ("Polite and wrong"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `12b12df5907628e535e7ca9217c672c9ec74bb9392e063240bbdd5e0595201be`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Courteous, ceremonial, quietly menacing cinematic orchestral music at 126 BPM in 4/4 in a minor key, polite and slightly wrong. A string orchestra and a solo oboe state a graceful, formal theme over a harpsichord and pizzicato basses, low brass chorales, and a struck bell that rings like a temple; the cadences sound religious but resolve somewhere slightly off. It enters composed and confident, rises once to a full orchestra swell with a tolling bell, and returns to composure so it can repeat. No triumphant release. Real acoustic instruments, real harpsichord and bell, no choir. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-evrae`** (FFX): brief `EV-A` ("A ship at speed"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `0ef0a9e907a6e7861ffb9125ab4cf7b90e7478ec29b5169adfd3568b8df6dff3`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Propulsive, airborne, mechanical cinematic battle music at 144 BPM in 4/4 in a minor key, forward motion rather than aggression, the feeling of a great ship under attack. Driving eighth notes in the low strings and bass, engine-room percussion (taiko, snare and struck metal pipes), metallic pulses, a low sustained drone that reads as altitude, open fourths and fifths with air in the middle of the mix, and a short, two-bar horn-and-string figure that repeats. It opens with the engine pulse alone for about 4 seconds and falls back to it so it can repeat. No choir, no organ. Steady, urgent and wide, never sacred. Real acoustic orchestra and percussion. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-yojimbo`** (FFX): brief `YO-A` ("A duel in a held breath"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `5f6791db44a0116bc060f8f47f26a64288445e4708e49dbc8918eaa14ee3af71`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Wistful, dignified, melancholy cinematic music at 72 BPM in 4/4 in a minor key, restrained and lyrical, a character theme played during a duel rather than a boss theme. A solo cello and a solo violin carry a long, singing, aching line over felt piano and a soft string bed; a quiet pulse of pizzicato basses, no drums for the first half, then a muted frame drum and low strings join without ever becoming loud. Grief held under tight control, with one brief crack of feeling in the middle before composure returns, and it settles back to the felt piano so it can repeat. Real acoustic instruments in a warm hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-seymour-omnis`** (FFX): brief `OM-A` ("The long reckoning"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `ee103bff7704a93b311d44218a287428d00f85df9cfad313ae5bdd3b6978eca7`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Climactic, grandiose, relentless cinematic orchestral battle music at 156 BPM in 4/4 in a minor key, a long final reckoning with a villain who is past all courtesy. A pipe organ and a full string orchestra play a driving, rhythmic theme with heavy low brass, pounding timpani, and a hard live drum kit under the orchestra; the theme returns in bigger and bigger forms through four distinct sections, and a large wordless choir (open vowels only, no words, no lyrics) enters in the final third. Dark, menacing, magnificent, with a short held pause before the last section. It falls back to the organ-and-strings figure at the end so it can repeat. Real organ, orchestra, drums and choir. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-den-of-woe`** (FFX-2): brief `DW-A` ("Old comrades in the dark"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `4db9136257ab09f4b9fc84de560342f778a5e14c3dbe365e2b84b009f1596f48`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Haunted, despairing, bitter cinematic orchestral music at 104 BPM in 4/4 in a minor key, a battle in a dark hall against old comrades turned enemies. A solo piano and a string orchestra play a tense, restless pattern over a slow low pulse of cellos and basses, with dissonant held chords in the violas and muted brass, a distant tolling bell, and a thin wordless voice (open vowels only, no words, no lyrics) that appears briefly. It builds to a bitter, aching climax and falls back to the piano so it can repeat. Grief with an edge. Real acoustic instruments and a real voice. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-gui`** (FFX): brief `G1-A` ("A camp under threat"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `71a2049126fbc882309e2fe4ff378c74eba68338dbe5d688f5f7e3dc658bc9c9`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Tense, driving, urgent cinematic orchestral battle music at 144 BPM in 4/4 in a minor key, a camp under threat from something huge. Pulsing low strings and timpani, tremolo strings in the middle register, sharp brass stabs, a restless snare pattern, and a short repeating rising figure in the violins; the tension never releases and the music rises in two big waves. It opens with the pulsing low strings alone for about 4 seconds and falls back to them so it can repeat. Dread and urgency, not triumph. Real acoustic orchestra. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`boss-experiment`** (FFX-2): brief `EX-A` ("Strange machine"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `c29a37f3732da8cf15aa56f7f75a4279258fde93ef14f65d5f9569a6455a0915`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` true):
+
+```
+Energetic, tense, slightly mechanical cinematic battle music at 152 BPM in 4/4 in a minor key, a fight against a strange experimental machine. Driving low strings and a live drum kit, punchy brass stabs, a bright, fast piano figure, metallic percussion, and a bridge that thins to bass and pulse before the full band crashes back. Playful menace in the first half; in the second half the rhythm stutters and slips as the machine goes out of control, and it settles back to the driving strings and kit so it can repeat. Real recorded instruments. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-chateau-leblanc`** (FFX-2): brief `CB-1` ("Swagger with a wink"). The raw take is an MP3 (mp3_48000_320), 90 s, take 1, SHA-256 `30d6114e91e81e8f8c9b10f6946bc2f71bdb404d74c8b153cfcca47690ea35b3`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` true):
+
+```
+Swaggering, cheeky, comic big-band music at 108 BPM in a major key with a medium swing feel, the theme of a pompous villainess strutting through her own mansion. A live big band: trumpets and trombones play punchy, syncopated horn stabs and a strutting unison line, saxophones answer in smooth thirds, a clarinet adds a comic squeal, a walking upright bass, a piano comping, and a drummer playing brushes that turn to sticks on the stabs. The horn section keeps playing one extra bar before the band catches up, and there are two or three cheeky stop-time breaks where everyone halts for a beat and starts again. Playful, self-important and a little ridiculous, never sinister. It opens with a four-bar drum-and-bass strut and falls back to it so it can repeat. Real recorded instruments, a room full of players. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-bevelle-underground`** (FFX-2): brief `BU-2` ("The gears engage"). The raw take is an MP3 (mp3_48000_320), 96.03 s, take 1, SHA-256 `f161a2f676169f56825ec415a0746b77170b4f38c5ba6888e0b826687f8e855e`. The prompt, as sent (`music_length_ms` 96000, `force_instrumental` false):
+
+```
+Tense, mechanical, ritual music at 108 BPM in 4/4 in a minor key, a machine room hidden under a cathedral that wakes when it is disturbed, so that it can sit under a quiet scene and also carry a fight. A steady ticking pulse of woodblock, muted pizzicato basses and a low piano note keeps time like a mechanism; a pipe organ plays a heavy, repeating ostinato; low brass sound sacred but cold; in the middle of the piece snare and timpani hit squarely on the beat like gears meshing, low strings drive in tight eighth notes, and bowed metal plates and struck anvils ring out; thin high voices (open vowels only, no words, no lyrics) appear briefly at the peak. It tightens in two waves to a restrained but massive climax and settles back to the organ and the ticking pulse so that it can repeat. Controlled, cold and relentless, never heroic. Real organ, orchestra, percussion and voices recorded in a large stone space. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-gagazet`** (FFX): brief `GA-1` ("The mountain does not care"). The raw take is an MP3 (mp3_48000_320), 90.03 s, take 1, SHA-256 `317843268ba549cec218dfc8ca186e86bcd679fccbe2a615071b282c8ec40c1e`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` true):
+
+```
+Cold, vast, indifferent music at 72 BPM in a minor key, a high mountain trail in wind and snow. A solo French horn plays slow, sparse, open phrases over a deep sustained cello drone and bowed low strings, a distant alto flute answers, a few bell-like chimes and a triangle ring in the thin air, and the pulse is only a barely audible low drum every other bar. Nothing rushes and nothing consoles; the mountain does not care. It opens with the drone alone for about 8 seconds and returns to it so it can repeat. Real acoustic horn, cello, flute and percussion recorded in a very large, cold hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-zanarkand-dome`** (FFX): brief `ZD-1` ("Warmth remembered"). The raw take is an MP3 (mp3_48000_320), 90.03 s, take 1, SHA-256 `291e9784e7a9d9ba1e99329d9ad5fdd0464e78355376eaf6e11b4cb40994302d`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` true):
+
+```
+Warm, remembered, bittersweet nocturne at 48 BPM in a minor key, slow and spacious. A solo piano plays gentle, singing phrases with a great deal of silence between them, a warm string orchestra holds long soft chords underneath, a solo cello answers the piano in the gaps, and single harp notes fall like drops. No percussion at all. It feels like a warm room that someone has just left: gentle, kind and very sad, the warmth of a memory, which is worse than cold. It opens with the solo piano alone for about 8 seconds and returns to it so it can repeat. Real acoustic piano, strings, cello and harp recorded in a warm hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-dreams-end`** (FFX): brief `DE-1` ("Unmoored"). The raw take is an MP3 (mp3_48000_320), 90.03 s, take 1, SHA-256 `26d2c3bbb868c917151f53d8a6933a7caf5c2d537c37d70dc75c588e1b995cb0`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` false):
+
+```
+Unmoored, dreamlike, weightless music at 76 BPM with no clear home key, a place made of memory. A celesta and a vibraphone play bent, wandering figures, soft strings move in parallel chords that slide without ever settling, bowed glasses hum, a harp plays harmonics, and a distant wordless female voice (open vowels only, no words, no lyrics) floats in and out. The pulse is only suggested by a very soft, slow, muted low drum. Gently wrong and slightly sad, with nothing to hold on to. It opens with the bowed glasses alone for about 8 seconds and returns to them so it can repeat. Real acoustic instruments and a real voice recorded in a very large, resonant hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-macalania-temple`** (FFX): brief `MT-1` ("Ice pretending to be masonry"). The raw take is an MP3 (mp3_48000_320), 90.03 s, take 1, SHA-256 `6862aeebf335d6add26f10976a0a2be905e8a9035b6379f50fff0e32fbe813f8`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` true):
+
+```
+Cold, still, glittering music at 56 BPM in a minor key, a temple of ice. Glockenspiel and crotales drip single notes like water falling from icicles, an alto flute plays slow, sparse phrases, strings hold very soft stacked open fourths and fifths, a harp plays harmonics, and a bowed vibraphone shimmers under a low sustained drone. Beautiful, silent and uneasy, ice pretending to be masonry. No percussion beat at all, only the slow drip. It opens with the drips and the drone alone for about 8 seconds and returns to them so it can repeat. Real acoustic instruments recorded in a large, cold stone hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-fahrenheit`** (FFX): brief `FH-1` ("No time and no way back"). The raw take is an MP3 (mp3_48000_320), 90.03 s, take 1, SHA-256 `ef1bd54e853e28a1e177f93c137fefcb5ec0e3cea35af773113e691f5d9d0889`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` true):
+
+```
+Urgent, contained, restless music at 104 BPM in 4/4 in a minor key, a ship in flight with no way back. Tremolo violins hold a nervous shimmer, a piano plays steady open fifths, a deep taiko plays a slow heartbeat, a low sustained drone like distant engines, and a solo horn calls once in a while across the open air. Wide and spare, anxious but controlled, with no time to stop and nowhere to go. It opens with the drone and the heartbeat for about 6 seconds and returns to them so it can repeat. Real acoustic orchestra, piano and taiko. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`scene-farplane`** (FFX-2): brief `FP-1` ("Rest without forgetting"). The raw take is an MP3 (mp3_48000_320), 90.03 s, take 1, SHA-256 `8491594d9b0bcfb139d301a4a8e5d66b7aa4c5f1cc7e5e719d43bc9073c18d50`. The prompt, as sent (`music_length_ms` 90000, `force_instrumental` false):
+
+```
+Peaceful, distant, wistful music at 92 BPM in a major key built on open stacked fourths and fifths, a place where the departed rest in warm light. A soft piano plays slow, gentle arpeggios, a string orchestra holds long, warm, quiet chords, a harp adds slow ripples, and a far-off wordless soprano (open vowels only, no words, no lyrics) sings long phrases from a great distance. Restful but not forgetful: a faint ache under the calm. No percussion. It opens with the piano alone for about 6 seconds and returns to it so it can repeat. Real acoustic instruments and a real voice recorded in a large, soft hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`ending-ffx`** (FFX): brief `EN-FFX` ("Permission to stop"). The raw take is an MP3 (mp3_48000_320), 100.03 s, take 1, SHA-256 `7fa352b24ef9618e32ba6af77be1c8f91edb0deedea059f232a54d22d942ba16`. The prompt, as sent (`music_length_ms` 100000, `force_instrumental` true):
+
+```
+A slow, hopeful farewell at 58 BPM. It begins in a minor key with a solo piano playing a simple, patient, singing line; warm strings, a solo cello, a French horn and a flute join one by one, and the orchestra rises slowly around the piano until at the end the harmony turns to the major key like a door opening. No drums until a soft timpani roll under the climax. Hopeful grief, tender and grateful, the feeling of being allowed to stop at last. It falls back to the opening solo piano so it can repeat. Real acoustic piano and orchestra recorded in a warm hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.
+```
+
+- **`ending-ffx2`** (FFX-2): brief `EN-FFX2` ("A gentler goodbye"). The raw take is an MP3 (mp3_48000_320), 100.03 s, take 1, SHA-256 `114376b2ae12e8d9883ad7dca335a2fa26af7aa2007c3c884f89338592627a07`. The prompt, as sent (`music_length_ms` 100000, `force_instrumental` false):
+
+```
+A warm, gentle, bittersweet goodbye at 84 BPM in 4/4 in a major key. A piano and a fingerpicked acoustic guitar carry a flowing, singing accompaniment, a string section swells softly, a drummer plays brushes, an upright bass walks underneath, a flute plays a tender countermelody, and a lone wordless female voice hums (no words, no lyrics). It begins quietly, grows to a full band, and in the last section the whole harmony lifts up a whole step for a bright, hopeful finish before it settles back to the piano and guitar so it can repeat. Kind, wistful and unhurried. Real recorded instruments in a warm room. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no pop.
 ```
 
 ## What must appear in the game credits

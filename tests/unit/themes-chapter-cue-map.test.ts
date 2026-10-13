@@ -61,7 +61,7 @@ describe('the chapter cue map in THEMES.md', () => {
 
   it('fails a row whose cues differ from the chapter data', () => {
     const rows = parseChapterCueMap(THEMES).map((r) =>
-      r.id === 'ffx2-den-of-woe' ? { ...r, battle: ['boss-den-of-woe'] } : r,
+      r.id === 'ffx2-den-of-woe' ? { ...r, battle: ['boss-shuyin'] } : r, // the stand-in it had until 2026-10-12
     );
     const failures = auditChapterCueMap(CHAPTERS, rows);
     expect(failures.map((f) => f.id)).toEqual(['ffx2-den-of-woe']);

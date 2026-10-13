@@ -34,8 +34,8 @@ import { seymourOmnisScripts } from '../story/scripts/seymour-omnis.ts';
 /** The Garden of Pain scene's key (`src/scenes/index.ts`), which is also the plate's id. */
 export const OMNIS_SCENE_KEY = 'garden-of-pain';
 
-/** The stand-in cues until B18's own cue is sketched and picked (see the module note). */
-export const OMNIS_STAND_IN_CUES = { scene: 'scene-dreams-end', battle: 'boss-seymour' } as const;
+/** The chapter's cues: the Dream's End scene bed (a stand-in) and, since 2026-10-12, his own battle original (Chapter I's `boss-seymour` stood in before; music batch 2, FFX only). */
+export const OMNIS_STAND_IN_CUES = { scene: 'scene-dreams-end', battle: 'boss-seymour-omnis' } as const;
 
 /** `chapter` with the ship layer on: scene, story and music. */
 export function withOmnisShip(chapter: Chapter): Chapter {

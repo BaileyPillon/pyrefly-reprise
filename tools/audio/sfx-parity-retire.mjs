@@ -37,6 +37,9 @@ function recorded(core, name, game) {
 export function planRetirement(input) {
   const retired = [];
   const kept = {};
+  // The names already out of the sprite (an earlier repack took them): they stay retired. Without them a second run, on the repacked sprite, would plan
+  // nothing and the generated list would lose them (found 2026-10-12, the first repack).
+  const already = [...(input.already ?? [])].sort();
   for (const name of [...input.sprite].sort()) {
     const cue = input.cues[name];
     if (!cue) {
@@ -64,7 +67,7 @@ export function planRetirement(input) {
     if (why === null) retired.push(name);
     else kept[name] = why;
   }
-  return { retired, kept };
+  return { retired, kept, already };
 }
 
 /** Bytes the repack gives back: the retired cues' share of the sprite, by their length (the sprite is one VBR stream). */

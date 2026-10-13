@@ -12,6 +12,6 @@ export type { LoopedBuffer } from './MusicLoader.ts';
 export { renderTrack, renderNotes } from './render.ts';
 export type { RenderedTrack, RenderOptions } from './render.ts';
 export { INSTRUMENTS, INSTRUMENT_NOTES, getInstrument, instrumentNames, hasInstrument } from './instruments.ts';
-export { TRACKS, TRACK_BLURBS, getTrack, hasTrack, trackNames } from './tracks/index.ts';
+export { RETIRED_MUSIC_CUES, TRACKS, TRACK_BLURBS, getTrack, hasTrack, isRetiredMusic, trackNames } from './tracks/index.ts';
 export { SFX, SFX_ALIASES, getSfx, hasSfx, renderSfx, renderSfxBank, renderMontage, resolveSfx, sfxNames } from './sfx/index.ts';
 export * from './score.ts';

@@ -23,7 +23,8 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
-import { TRACKS, hasTrack } from '../../src/audio/tracks/index.ts';
+import { TRACKS, hasTrack, isRetiredMusic } from '../../src/audio/tracks/index.ts';
+import { resultsCueFor, resultsScreenSilent } from '../../src/app/screens/resultsMusic.ts';
 import type { ChapterScripts, Step, StoryScript } from '../../src/story/dsl.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
@@ -120,6 +121,9 @@ function referencedCues(): Map<string, string[]> {
     const fromScripts = new Set<string>();
     collectFromScripts(chapter.scriptsRef, fromScripts);
     for (const key of fromScripts) note(key, `${chapter.id} script`);
+    // The results screen's own cue for a loss (music batch 2): named by `resultsMusic.ts`, not by a literal `playMusic` call.
+    const defeat = resultsCueFor(chapter, 'defeat');
+    if (defeat) note(defeat.cue, `${chapter.id} results (defeat)`);
   }
 
   const fromScreens = new Set<string>();
@@ -135,8 +139,12 @@ const MANIFEST_CUES = Object.keys(
 );
 
 describe('every shipped cue is reachable', () => {
-  it('renders exactly the cues the track index composes', () => {
-    expect(MANIFEST_CUES.slice().sort()).toEqual(Object.keys(TRACKS).sort());
+  it('renders exactly the cues the track index composes, except the retired compositions (batch 2, 2026-10-12): composed, unshipped, and only a synth fallback now', () => {
+    expect(MANIFEST_CUES.slice().sort()).toEqual(Object.keys(TRACKS).filter((key) => !isRetiredMusic(key)).sort());
+    for (const key of Object.keys(TRACKS).filter(isRetiredMusic)) {
+      expect(MANIFEST_CUES, `${key} is retired but still in the manifest`).not.toContain(key);
+      expect(REFERENCED.has(key), `${key} is retired but ${REFERENCED.get(key)?.join(', ')} still asks for it`).toBe(false);
+    }
   });
 
   it('names every cue in the manifest from an encounter, a script or a screen', () => {
@@ -174,15 +182,17 @@ describe('every cue the game asks for exists', () => {
 
 describe('the victory fanfares are wired per game', () => {
   it.each(CHAPTERS.filter((c) => c.music.victory !== undefined))(
-    '$id plays its own game\'s fanfare',
+    '$id plays its own game\'s fanfare (Chapter IV, the quiet resolve of its own)',
     (chapter) => {
-      expect(chapter.music.victory).toBe(chapter.game === 'ffx' ? 'victory-ffx' : 'victory-ffx2');
+      const fanfare = chapter.game === 'ffx' ? 'victory-ffx' : 'victory-ffx2';
+      expect(chapter.music.victory).toBe(chapter.id === 'ffx2-bahamut' ? 'victory-bahamut' : fanfare);
     },
   );
 
-  it('leaves chapter 4 silent, and only chapter 4', () => {
-    const silent = CHAPTERS.filter((c) => c.music.victory === undefined).map((c) => c.id);
-    expect(silent).toEqual(['ffx2-bahamut']);
+  it("keeps chapter 4's results screen silent, and only chapter 4's: a quiet cue of its own since 2026-10-12 (batch 2), but no pose, no tally flourish, no quips", () => {
+    expect(CHAPTERS.filter((c) => c.music.victory === undefined).map((c) => c.id)).toEqual([]);
+    expect(CHAPTERS.filter((c) => resultsScreenSilent(c)).map((c) => c.id)).toEqual(['ffx2-bahamut']);
+    expect(resultsCueFor(CHAPTERS.find((c) => c.id === 'ffx2-bahamut')!, 'victory')?.cue).toBe('victory-bahamut');
   });
 
   it('plays the FFX ending where the FFX story ends, as chapter 5 does for FFX-2', () => {

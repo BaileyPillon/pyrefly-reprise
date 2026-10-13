@@ -93,7 +93,7 @@ export interface ChapterMusic {
    * Victory fanfare, played by `BattleScreenFlow.showResults`. FFX chapters use
    * `victory-ffx` ("Relief, not triumph"), FFX-2 chapters `victory-ffx2`
    * ("That was fun") — the cue map in `docs/audio/THEMES.md` §"The cue map"
-   * rows 15 and 20. Chapter 4 is deliberately silent — see its record.
+   * rows 15 and 20. Chapter 4's screen is deliberately silent, its cue a quiet one — see its record.
    */
   victory?: MusicKey;
   /** The post-scene cue when the script sets none. Every script does (each opens with `music(null)`), so this is absent everywhere. */
@@ -184,8 +184,8 @@ export const YUNALESCA: Chapter = {
     // One cue through all three forms: the rite does not change its mind
     // [docs/audio/THEMES.md cue map row 7, "a rite that will finish with or
     // without you"]. Her forms are form-changes inside one formation, not a
-    // chain, so there is no second cue to switch to.
-    battle: 'boss-yunalesca',
+    // chain, so there is no second cue to switch to. Since 2026-10-12: `boss-challenge`, the game's one "Challenge" track, shared with Gui fight 2 (batch 2, FFX only).
+    battle: 'boss-challenge',
     victory: 'victory-ffx',
   },
   sensorTexts: {
@@ -230,8 +230,9 @@ export const BRASKAS_FINAL_AEON: Chapter = {
  * Chapter 4.
  *
  * Uniquely, this fight has **no victory pose and no fanfare** — the Results
- * screen comes up silent [writing-bible §5.4], which is why `music.victory` is
- * absent rather than set to a track.
+ * screen comes up silent [writing-bible §5.4]: no pose, no tally flourish, no quips.
+ * Since 2026-10-12 it has a victory *cue*, `victory-bahamut` (batch 2, PR-0410): a quiet resolve, not a
+ * fanfare; `silent` follows `isSilentResultsChapter` now, not an absent `music.victory`.
  */
 export const FFX2_BAHAMUT: Chapter = {
   id: 'ffx2-bahamut',
@@ -253,7 +254,7 @@ export const FFX2_BAHAMUT: Chapter = {
     // "Yuna's Ballad" — the one aeon fight with its own leitmotif rather than a
     // boss theme [bahamut.ts:114; THEMES.md cue map row 17].
     battle: 'boss-bahamut',
-    // No `victory`: the flourish is suppressed for this chapter.
+    victory: 'victory-bahamut', // the quiet resolve under its silent results screen: no fanfare (2026-10-12)
   },
   sensorTexts: {
     bahamut: 'An aeon that once fought alongside Yuna.',
@@ -313,14 +314,14 @@ export const FFX2_VEGNAGUN_SHUYIN: Chapter = {
  * the whole mission rather than nothing at all. Recorded as a gap, not a
  * silent guess.
  *
- * `music`: no dedicated cues exist for this chapter yet
- * (`docs/plans/music-modern-sound.md` and `docs/audio/THEMES.md` name none).
- * Per the integrator's brief, this falls back to the cues Chapter 4 uses —
- * `scene-bevelle-underground` and `boss-ffx2-aeon` — rather than inventing a
- * new `MusicKey`/track pair, which would need real composition and a
- * `docs/audio/THEMES.md` cue-map row this track cannot author. `victory-ffx2`
- * is the real, already-shipped FFX-2 victory fanfare (D-018: this chapter
- * ships its flourish, unlike Chapter 4's suppressed one).
+ * `music`: this chapter began on the cues Chapter 4 uses, `scene-bevelle-underground`
+ * and `boss-ffx2-aeon`, rather than a new `MusicKey`/track pair that would have needed
+ * real composition (the integrator's brief; `docs/audio/THEMES.md` named none). Since
+ * 2026-10-10 the battle is Leblanc's own cue (`boss-leblanc`), and since 2026-10-12 the
+ * scene is the chateau's own bed (`scene-chateau-leblanc`, batch 2): both ElevenLabs
+ * originals, FFX-2 only, shared with the hidden Leblanc chapter. `victory-ffx2` is the
+ * FFX-2 victory fanfare (D-018: this chapter ships its flourish, unlike Chapter 4's
+ * suppressed one).
  */
 export const FFX2_LEBLANC: Chapter = {
   id: 'ffx2-leblanc',
@@ -339,8 +340,8 @@ export const FFX2_LEBLANC: Chapter = {
   enemyGroupRef: leblancEntranceGroup,
   scriptsRef: ffx2LeblancScripts,
   music: {
-    // Fallback to Chapter 4's cues — see the class doc above.
-    scene: 'scene-bevelle-underground',
+    // The chateau's own bed since 2026-10-12 (batch 2, FFX-2 only, shared with the hidden Leblanc chapter); Chapter 4's cathedral basement played here before.
+    scene: 'scene-chateau-leblanc',
     battle: 'boss-leblanc',
     victory: 'victory-ffx2',
   },

@@ -20,6 +20,8 @@ export interface RetireInput {
   core: Readonly<Record<RetireGame, Readonly<Record<string, CoreCue>> | undefined>>;
   /** Every use observed per game. */
   uses: Readonly<Record<RetireGame, readonly Use[]>>;
+  /** Cue names a repack has already taken out of the sprite (the key space minus the sprite): they stay retired. */
+  already?: readonly string[] | undefined;
 }
 
 export interface RetirePlan {
@@ -27,6 +29,8 @@ export interface RetirePlan {
   retired: string[];
   /** Cue name -> why it stays. */
   kept: Record<string, string>;
+  /** The names that were already out of the sprite when the plan was made, sorted: retired too, but giving no bytes back now. */
+  already?: string[];
 }
 
 export function planRetirement(input: RetireInput): RetirePlan;

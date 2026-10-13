@@ -10,7 +10,6 @@
 export const PARITY_TRIMS_DB: Readonly<Record<'ffx' | 'ffx2', Readonly<Record<string, number>>>> = {
   ffx: {
     'breath-attack': 0.9,
-    'buff-generic': -1.9,
     'cancel': 1.3,
     'confirm': 5.2,
     'cure': -4.1,
@@ -38,7 +37,6 @@ export const PARITY_TRIMS_DB: Readonly<Record<'ffx' | 'ffx2', Readonly<Record<st
     'summon': -2.5,
     'thunder': -3.6,
     'turn-ready': 0.6,
-    'water': -1.6,
   },
   ffx2: {
     'cancel-x2': 1.3,

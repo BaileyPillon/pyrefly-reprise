@@ -61,10 +61,10 @@ describe('Chapter VII ship layer', () => {
     const entry = manifest.music[MACALANIA_SCENE_CUE_PLANNED]!;
     expect(entry.file).toBe('music/scene-macalania-temple.mp3');
     expect(existsSync(join(REPO, 'public/audio', entry.file))).toBe(true);
-    // Beat 12 (the walk) to beat 56 at 56 bpm, and the 3 s run-on of the shipped layout.
-    expect(Math.round(entry.loopStart * 44100)).toBe(567000);
-    expect(Math.round(entry.loopEnd * 44100)).toBe(2646000);
-    expect(entry.duration).toBe(entry.loopEnd + 3);
+    // Since 2026-10-12 the file is an ElevenLabs original (music batch 2, MT-1), cut on bars of its own take with the 3 s run-on of the shipped layout; the score's beat 12 to beat 56
+    // at 56 bpm (samples 567000 to 2646000) was the render it replaced, and the batch's own test pins this file.
+    for (const seconds of [entry.loopStart, entry.loopEnd]) expect(Math.abs(seconds * 44100 - Math.round(seconds * 44100))).toBeLessThan(0.5);
+    expect(Math.abs(entry.duration - (entry.loopEnd + 3))).toBeLessThan(0.001);
     expect(Math.abs(entry.lufs + 16)).toBeLessThanOrEqual(0.2);
     expect(entry.truePeakDb).toBeLessThanOrEqual(-1);
   });

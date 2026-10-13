@@ -26,8 +26,8 @@
  *   plate's fallback). `heroArtFallback`, Paine's FFX-2 plate, shows only if the plate is missing.
  * - `snapshots` are the installed chapter art: the O-3 A plate, Gippal's shade (judge-locked) and
  *   Nooj's shade (D-182, Bailey's option A).
- * - `musicKeys`: GP16 as the record has it, the field bed, the stand-in `boss-shuyin`, the FFX-2
- *   fanfare.
+ * - `musicKeys`: GP16 as the record has it, the field bed, `boss-den-of-woe` (the stand-in
+ *   `boss-shuyin` before 2026-10-12), the FFX-2 fanfare.
  *
  * **Listed** 2026-09-26 with the chapter itself: it sits in `./chapter-meta.ts`'s `CHAPTER_META`
  * after Chapter XIV's, as the chapter sits after Chapter XIV in `CHAPTERS`.
@@ -68,7 +68,7 @@ export const DEN_OF_WOE_META: ChapterMeta = {
     { image: 'characters/nooj-shade/idle.png', caption: 'the last to rise' },
   ],
   focalCharacterId: 'paine',
-  musicKeys: ['scene-bevelle-underground', 'boss-shuyin', 'victory-ffx2'],
+  musicKeys: ['scene-bevelle-underground', 'boss-den-of-woe', 'victory-ffx2'],
 };
 
 export default DEN_OF_WOE_META;

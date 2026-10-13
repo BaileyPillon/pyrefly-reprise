@@ -43,7 +43,7 @@ const FFMPEG =
   process.env.PYREFLY_FFMPEG ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe';
 
 const { renderTrack } = await import('../../src/audio/render.ts');
-const { getTrack, trackNames } = await import('../../src/audio/tracks/index.ts');
+const { getTrack, isRetiredMusic, trackNames } = await import('../../src/audio/tracks/index.ts');
 const { renderSfxWith, sfxNames, getSfxDesign } = await import('../../src/audio/sfx/index.ts');
 const { CATEGORY_RULES } = await import('../../src/audio/sfx/design.ts');
 const { pitchToFreq, effectiveJitterMs, performanceKey } = await import('../../src/audio/score.ts');
@@ -526,7 +526,7 @@ async function main() {
     ? only.split(',').map((s) => s.trim()).filter(Boolean)
     : sfxOnly
       ? []
-      : trackNames();
+      : trackNames().filter((name) => !isRetiredMusic(name)); // a retired composition (music batch 2, 2026-10-12) has no MP3 on purpose: render it only when named with --only
 
   for (const name of wantMusic) {
     if (!trackNames().includes(name)) {

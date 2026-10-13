@@ -77,7 +77,7 @@ export const SEYMOUR_OMNIS_META: ChapterMeta = {
     { image: 'characters/mortiphasm/idle.png', caption: 'four colours, one disc' },
   ],
   focalCharacterId: 'yuna',
-  musicKeys: ['scene-dreams-end', 'boss-seymour', 'victory-ffx'],
+  musicKeys: ['scene-dreams-end', 'boss-seymour-omnis', 'victory-ffx'],
 };
 
 export default SEYMOUR_OMNIS_META;

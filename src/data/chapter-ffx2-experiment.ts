@@ -57,8 +57,8 @@ export const FFX2_EXPERIMENT: Chapter = {
   scriptsRef: ffx2ExperimentScripts,
   music: {
     scene: 'scene-bevelle-underground', // the FFX-2 chapters' field bed (the game's Machine Faction theme has no cue of ours)
-    battle: 'boss-ffx2-aeon', // Act I, the lighter bed (`docs/audio/THEMES.md` row 17)
-    phase2: 'boss-vegnagun', // Act II, the mechanised cue: "Something enormous, and nobody is driving" (row 18), the out-of-control act
+    battle: 'boss-experiment', // both acts, one original since 2026-10-12 (music batch 2, FFX-2 only): Act I played `boss-ffx2-aeon` and Act II `boss-vegnagun` before
+    phase2: 'boss-experiment', // the same cue: it carries on across the act change instead of restarting
     victory: 'victory-ffx2',
   },
   sensorTexts: {
