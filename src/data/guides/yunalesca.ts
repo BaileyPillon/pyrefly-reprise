@@ -19,14 +19,14 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Keep one Zombie. Form III opens with Mega Death, and a zombified member is immune to it — cure all three and the active party is wiped from full health.',
+      text: 'Keep one Zombie. Form III opens with Mega Death, and a zombified member is immune to it — cure all three and the active party is wiped from full health. Never cure the last Zombie while a Mega Death is due: cure, heal, then let the next Hellbiter re-apply it. A knock-out takes the Zombie away too, so a raised ally is a plain target again until Hellbiter lands on him.',
       short: 'Keep one Zombie alive for Mega Death',
-      cite: 'ffx-yunalesca §10.1',
+      cite: 'ffx-yunalesca §10.1, §10.2, §15.2',
     },
     {
-      text: 'Never cure the last Zombie while a Mega Death is due. Cure, heal, then let the next Hellbiter re-apply it.',
-      short: 'Never cure the last Zombie with Mega Death due',
-      cite: 'ffx-yunalesca §10.2',
+      text: "For Form III, bring Wakka in for Tidus. Tidus, Yuna and Auron wear Zombie Ward, which blocks about half of every Hellbiter; Wakka wears none, so Hellbiter always zombifies him, and his Death Ward gives a plain Wakka an even chance against Mega Death. Tidus has already cast Hastega and Cheer by then.",
+      short: 'Form III: Wakka replaces Tidus as the Zombie carrier',
+      cite: 'ffx-yunalesca §10.1, §10.8, §10.10; re-ffx-ai-yunalesca-bfa §2.12',
     },
     {
       text: 'Dispel her Regen off your Zombies — healing damages a Zombie, so her Regen is a slow execution rather than a gift.',
@@ -46,6 +46,11 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
   ],
 
   hints: [
+    {
+      when: { kinds: ['switch'] },
+      text: 'Wakka takes Tidus’s turn: Hellbiter lands on him every time, where Zombie Ward turns away about half of the Hellbiters aimed at Tidus, Yuna and Auron, and the Zombie is what lives through Mega Death',
+      cite: 'ffx-yunalesca §10.1, §10.10; re-ffx-ai-yunalesca-bfa §2.12',
+    },
     {
       when: { labels: ['Holy Water', 'Remedy'], targetHas: 'zombie' },
       text: 'Cure {target} now — but only because somebody else is still carrying the Zombie that survives Mega Death',
@@ -83,7 +88,7 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
     },
     {
       when: { labels: ['Phoenix Down', 'Life', 'Mega Phoenix', 'Full-Life'] },
-      text: 'Stand {target} up — and single-target only while anyone living is a Zombie, because a revival effect kills a living Zombie outright',
+      text: 'Stand {target} up — he returns plain, not zombified, until the next Hellbiter lands; and single-target only while anyone living is a Zombie, because a revival effect kills a living Zombie outright',
       cite: 'ffx-yunalesca §7.1, §15.2',
     },
     {
@@ -126,7 +131,7 @@ export const YUNALESCA_GUIDE: ChapterGuide = {
     {
       formIndex: 2,
       label: 'Form III',
-      note: 'Mega Death opens the form and recurs on her cycle. Only a Zombie survives it. Aeons postpone it and Overdrive on arrival, before Mind Blast Curses them.',
+      note: 'Mega Death opens the form and recurs on her cycle. Only a Zombie survives it. Wakka takes Tidus’s place here, because Hellbiter always lands on him. Aeons postpone it and Overdrive on arrival, before Mind Blast Curses them.',
       cite: 'ffx-yunalesca §5.3, §10.6',
     },
   ],

@@ -171,6 +171,13 @@ party for the Form I counters (§10.4, "the canonical Form-I answer"); Yuna is t
 - *Name of the buff-strip.* Jegged calls it Punch; our research and engine use the decompiled name
   Dispelling Slap (§3, §4.2). Not verified which name the HD game shows; use "Dispelling Slap
   (Jegged calls it Punch)" if the guide mentions it.
+- *Update 2026-10-13 (re-parity RC6, FFX only): Zombie Ward and Wakka.* Jegged's armour advice ("do not block Zombie, keep at least one
+  character a Zombie") is followed, but our three actives carry Zombie Ward from Mt. Gagazet (`src/data/ffx/builds/zanarkand.ts`; the
+  build has no equipment screen), which turns away about half of every Hellbiter. Since a KO takes the Zombie away (RC5; the game's reset),
+  the line lost its sustain and fell from 476 to 398 wins of 500. The shipped line now has Tidus hand his first Form III turn to Wakka,
+  who wears no Zombie Ward (and a Death Ward): 453 and 457 of 500 on two blocks of seeds. **No guide names this swap**: it is derived from
+  Jegged's armour rule plus the armour in the preset and measured, and the guide page says so by being a paragraph of ours after Jegged's
+  armour line. `docs/handoff/re-parity-rc6-ch2.md` has the candidates and the numbers.
 
 **Where we disagree.** Nowhere on Zombie, Hellbiter or Mega Death. Jegged does not mention aeons;
 ours holds every aeon for Form III and Overdrives on arrival (§10.6, tactic header), an addition not a
