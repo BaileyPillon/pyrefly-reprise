@@ -30,6 +30,7 @@ import type { BattleRng } from '../common/streams.ts';
 import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
+import type { Ffx2AutoLayer } from './adapt/auto-layer.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -112,6 +113,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   gilPilfered?: boolean;
   /** `EnemyDef.autoStatuses`, kept so a Dispel can leave them alone (`resolve.ts`). */
   autoStatuses?: StatusId[];
+  /** A girl's automatic-status layer: the auto-ability rows she holds, the kept and SOS sets and the effective layer (`adapt/auto-layer.ts`, `auto-layer.ts`; re-parity X2-D). Absent when she holds no row. */
+  autoLayer?: Ffx2AutoLayer;
   /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */

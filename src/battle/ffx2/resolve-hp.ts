@@ -29,6 +29,15 @@ export interface ResolveContext {
   items?: ItemRegistry; // item names for the steal message
   /** A hit's Delay damage closed this unit's open command menu (`apply_atb_damage`, re-parity W4); the engine drops the menu. */
   onMenuClosed?(unit: Ffx2Unit): void;
+  /**
+   * The engine's queue of counters (re-parity X2-D, `applied.ts`): a result applied to a girl who holds Counterattack, Evade & Counter
+   * or Magic Counter may set one off; the engine plays it after the action. `pending` is how many she already has waiting. Absent in
+   * unit fixtures: then no counter is ever queued.
+   */
+  counters?: {
+    pending(target: Ffx2Unit): number;
+    queue(target: Ffx2Unit, source: Ffx2Unit, cause: 'counterattack' | 'evade-and-counter' | 'magic-counter'): void;
+  };
 }
 
 /**

@@ -28,7 +28,7 @@ export function resolveAbility(
   user: Ffx2Unit,
   ability: AbilityDef,
   requested: readonly CombatantId[],
-  options: { isCounter?: boolean; hitsOverride?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
+  options: { isCounter?: boolean; counterCause?: string; hitsOverride?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
 ): number {
   const all = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
   // `extra.namedTargetsOnly` (`abilities-shuyin.ts`, Acta Est Fabula): an all-target row whose
@@ -66,7 +66,7 @@ export function resolveAbility(
   const reveals = sensorKind(ability);
   if (reveals) {
     resolveSensor(ctx.emit, user, pool, reveals);
-    for (const t of pool) ctx.onResult?.(t, user, ability); // a Scan or Libra is a result on each target (AI-FFX2-b)
+    for (const t of pool) ctx.onResult?.(t, user, ability); // a Scan or Libra is a result on each target (AI-FFX2-b); it changes no HP, so no SOS check or counter
     return 0;
   }
 
@@ -78,6 +78,7 @@ export function resolveAbility(
   let total = runStrikes(ctx, user, ability, command, pool, {
     ...(hitsOverride > 0 ? { hitsOverride } : {}),
     ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
+    ...(options.isCounter ? { system: true } : {}),
   });
 
   // **`destroys-user`** [ffx2-combat-core §2.3, §3.12 row "Charon"].
@@ -156,7 +157,7 @@ export function resolveAbility(
         actorId: user.id,
         targetId: first.id,
         abilityId: ability.id,
-        cause: 'script',
+        cause: options.counterCause ?? 'script',
       });
     }
   }

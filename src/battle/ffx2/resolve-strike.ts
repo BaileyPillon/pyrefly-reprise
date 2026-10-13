@@ -52,6 +52,7 @@ import { afterRevive, applyHpDelta, heal, type ResolveContext } from './resolve-
 import { applyStatusResult, rollEngineRiders } from './resolve-status.ts';
 import { applyBribeReward, applyPilferGil, applyStealItem, type TheftEnv } from './steal.ts';
 import { noteResult } from './results-tally.ts';
+import { afterAppliedToSelf, landedOf, reportApplied } from './applied.ts';
 
 /** What the caller of `resolveAbility` hands the strikes beyond the ability. */
 export interface StrikeOptions {
@@ -59,6 +60,8 @@ export interface StrikeOptions {
   hitsOverride?: number;
   /** The gil offered: a Bribe's amount, Spare Change's gil (`ActionRec+0xb0`). */
   gilSpent?: number;
+  /** The action is a counter (a system action): its results set off no counter (`Chr+0x15c1` is not 1). */
+  system?: boolean;
 }
 
 /** The three save-record fields the base formulas 0xd, 0x16 and 0x17 read: not pinned in the game's code, 0. */
@@ -106,6 +109,8 @@ interface Env {
   /** Next `hitIndex`. */
   index: number;
   theft: TheftEnv;
+  /** A counter's strikes: system kind, so no counter answers them. */
+  system: boolean;
 }
 
 /**
@@ -214,12 +219,12 @@ function strike(env: Env, target: Ffx2Unit): number {
 
   // --- apply: HP (with the chain), MP, then statuses, then theft -----------------------------------------------
   let drained = false; // an HP or MP transfer went back to the user (a drain's own result, below)
+  const hpImmune = (settled.flags & CLASS_HP) !== 0 && (command.pipeline.damageClass & CLASS_HP) !== 0 && (settled.surviving & CLASS_HP) === 0 && settled.blocked > 0;
   const wasAlive = target.alive;
   const index = env.index;
   env.index += 1;
   if ((settled.flags & CLASS_HP) !== 0) {
-    const immune = (command.pipeline.damageClass & CLASS_HP) !== 0 && (settled.surviving & CLASS_HP) === 0 && settled.blocked > 0;
-    if (immune) {
+    if (hpImmune) {
       ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'immune' });
     } else {
       if (hp > 0 && !noChain) {
@@ -285,8 +290,8 @@ function strike(env: Env, target: Ffx2Unit): number {
   if (command.stealsGil) applyPilferGil(env.theft, user, target);
   // The reaction entry (AI-FFX2-b): the result is in. A drain's transfer is a result of its own, delivered to the drainer with the
   // drainer as the source (`research/re-ffx2-ai-fallen-trema.md` 1.2); the strike itself is a result on its target.
-  ctx.onResult?.(target, user, ability);
-  if (drained) ctx.onResult?.(user, user, ability);
+  reportApplied(ctx, env.ids, { target, source: user, ability }, command, { landed: landedOf(settled, hpImmune), missed: false, system: env.system });
+  if (drained) afterAppliedToSelf(ctx, user, ability);
   return hp;
 }
 
@@ -348,6 +353,7 @@ export function runStrikes(
     hitCount,
     index: 0,
     theft,
+    system: options.system === true,
   };
 
   const done = targets.map(() => 0);
@@ -369,7 +375,7 @@ export function runStrikes(
           reason: result.result === HitResult.NoEffect ? 'immune' : 'evaded',
         });
         env.index += 1;
-        ctx.onResult?.(target, user, ability); // a miss or a no-effect is one result for the whole command (AI-FFX2-b)
+        reportApplied(ctx, ids, { target, source: user, ability }, command, { landed: false, missed: result.result !== HitResult.NoEffect, system: env.system }); // a miss or a no-effect is one result for the whole command (AI-FFX2-b)
         noteResult(user, target); // a miss resolves every remaining strike on the target at once: one result
         continue;
       }

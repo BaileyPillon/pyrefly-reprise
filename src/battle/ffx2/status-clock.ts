@@ -25,6 +25,7 @@ import { FFX2_STATUS_ROM, statusProcess, type Ffx2TimerChr, type Ffx2TimerResult
 import { STATUS_COUNT } from './kernel/statusTypes.ts';
 import { applyHpDelta, heal, type ResolveContext } from './resolve-hp.ts';
 import { countUnits } from './statuses.ts';
+import { AUTO_LAYER_OWNER, checkAutoLayer, reassertAutoLayer } from './auto-layer.ts';
 
 /** The unit as `MsStatusProcess` reads it, or `null` when no clock of it could move (no timed status, no Poison, no Regen). */
 function timerChr(u: Ffx2Unit): Ffx2TimerChr | null {
@@ -84,10 +85,20 @@ function timerChr(u: Ffx2Unit): Ffx2TimerChr | null {
   };
 }
 
-function remove(u: Ffx2Unit, status: StatusId, emit: Emit): void {
-  if (u.statuses[status] === undefined) return;
+function remove(u: Ffx2Unit, status: StatusId, emit: Emit, ctx: ResolveContext): void {
+  const instance = u.statuses[status];
+  if (instance === undefined) return;
+  // The clock of an applied status ran out while her automatic-status layer holds the same status: it stays, now the layer's alone.
+  if (u.autoStatuses?.includes(status)) {
+    Object.assign(instance, { ticksRemaining: null, sourceAbilityId: AUTO_LAYER_OWNER });
+    delete instance.counter;
+    delete instance.accumulator;
+    return;
+  }
   delete u.statuses[status];
   emit({ type: 'status-remove', targetId: u.id, status, reason: 'expired' });
+  // A Haste or Slow gone: the layer's Slow or Haste, which the status recompute had cleared, shows again.
+  if (status === 'haste' || status === 'slow') reassertAutoLayer(ctx, u);
 }
 
 /** Tell a script once per Regen payout that healed (Chapter XI's Sisters: +5 when Regen heals her, research ffx2-fallen-aeons §4.2). */
@@ -125,11 +136,11 @@ function apply(u: Ffx2Unit, r: Ffx2TimerResult, emit: Emit, ctx: ResolveContext,
   // The expiries, in the order the kernel reports them: group 1, then group 2.
   for (const i of events.expiredGroup1) {
     const status = GROUP1_STATUS[i];
-    if (status !== null && status !== undefined) remove(u, status, emit);
+    if (status !== null && status !== undefined) remove(u, status, emit, ctx);
   }
   for (const { index } of events.expiredGroup2) {
     const status = GROUP2_STATUS[index]?.[0];
-    if (status !== undefined) remove(u, status, emit);
+    if (status !== undefined) remove(u, status, emit, ctx);
   }
 
   // The Poison or Regen payout: damage through the ordinary HP path (it can KO), or healing.
@@ -143,10 +154,14 @@ function apply(u: Ffx2Unit, r: Ffx2TimerResult, emit: Emit, ctx: ResolveContext,
       heal(ctx, u, -tick.amount, 'regen');
       notifyRegen(u, before, -tick.amount, aiContext);
     }
+    checkAutoLayer(ctx, u); // a payout is a result the engine builds itself, and it reaches the SOS check (note FFX2-G04 3.3)
   }
 
   // Doom ran out: Death is queued on the victim (command 0x3026, chance 255). The engine plays it at once.
-  if (events.doom && u.alive) applyHpDelta(ctx, u, u.hp);
+  if (events.doom && u.alive) {
+    applyHpDelta(ctx, u, u.hp);
+    checkAutoLayer(ctx, u);
+  }
 }
 
 /**

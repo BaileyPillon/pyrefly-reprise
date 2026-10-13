@@ -39,6 +39,7 @@ import { actionTimeSteps } from './action-time.ts';
 import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { beginCharge, castTime, completeCommand } from './atb-engine.ts';
 import { commandCosts } from './adapt/command.ts';
+import { rebuildAutoLayer } from './auto-layer.ts';
 
 /** Everything `performCommand` needs from the engine. */
 export interface ExecEnv {
@@ -193,12 +194,14 @@ export function performCommand(
   // L1 spherechange consumes the whole turn and has no charge bar. §4.2
   if (command.kind === 'spherechange') {
     performed.delete(actor);
-    performSpherechange(
+    const changed = performSpherechange(
       actor,
       command,
       { grids: env.grids, dresspheres: env.dresspheres, gridNodes: env.gridNodes },
       (e) => env.emit(e),
     );
+    // The new dressphere lists other auto-abilities: the character is rebuilt and the layer copied again, forced (re-parity X2-D).
+    if (changed) rebuildAutoLayer({ emit: (e) => env.emit(e), rng: env.rng }, actor);
     finishAction(env, actor, before, ATB_BASE_VALUE, false);
     return;
   }

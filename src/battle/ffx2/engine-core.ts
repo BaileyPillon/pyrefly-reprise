@@ -39,7 +39,7 @@ import { bySlot, completeCommand, wakeIdle } from './atb-engine.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './targeting.ts';
-import { aiContextFor, berserkTurnCommand, runAfterActionHooks } from './engineHooks.ts';
+import { aiContextFor, berserkTurnCommand, runAfterActionHooks, runPartyCounters, type PendingCounter } from './engineHooks.ts';
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
@@ -93,6 +93,8 @@ export class Ffx2EngineCore {
   protected held: HeldCommand | null = null;
   /** The girl whose open menu an enemy hit closed (item 4 A1, `active.ts` {@link closesOpenMenu}); cleared by the next decision. */
   protected hitClosed: CombatantId | null = null;
+  /** The counters the action in flight set off, played after it (`applied.ts`, `engineHooks.ts#runPartyCounters`; re-parity X2-D). */
+  protected counterQueue: PendingCounter[] = [];
   /**
    * The fraction of a logic step real time has handed the engine but it has not run yet (`tick` converts milliseconds to
    * steps at 29.97 a second and keeps the remainder, so the clock never loses or invents time between calls).
@@ -237,6 +239,10 @@ export class Ffx2EngineCore {
       onMenuClosed: (unit) => {
         if (this.inputOwner === unit.id) this.hitClosed = unit.id; // a Delay hit closed her open menu (`apply_atb_damage`)
       },
+      counters: {
+        pending: (target) => this.counterQueue.filter((c) => c.target === target).length,
+        queue: (target, source, cause) => this.counterQueue.push({ target, source, cause }),
+      },
       state: this.battleState, // a stolen item goes to `inventory:<id>`, stolen gil to `stolenGil` (`steal.ts`)
       ...(this.options.items ? { items: this.options.items } : {}),
       // The reaction entry of a script that defines one (AI-FFX2-b): once per result applied to an enemy. Absent scripts are untouched.
@@ -337,10 +343,13 @@ export class Ffx2EngineCore {
   /** Post-action bookkeeping: AI hooks (`runAfterActionHooks`), then story triggers and battle end. */
   protected afterAction(actor: Ffx2Unit, startedAt: number): void {
     const cls = this.battleState.flags['lastAttackClass'];
-    runAfterActionHooks(() => this.drafts.slice(startedAt), actor, {
+    const env = {
       units: this.units, abilities: this.abilities, attackClass: typeof cls === 'string' ? cls : 'none',
-      aiContext: (u) => this.aiContext(u), resolveCtx: () => this.resolveCtx(), emit: (e) => this.emit(e),
-    });
+      aiContext: (u: Ffx2Unit) => this.aiContext(u), resolveCtx: () => this.resolveCtx(), emit: (e: EventDraft) => this.emit(e),
+    };
+    runAfterActionHooks(() => this.drafts.slice(startedAt), actor, env);
+    // The counters this action set off (a Berserker's Counterattack, Magic Counter, Evade & Counter), played before the battle-end check.
+    runPartyCounters(this.counterQueue, { ...env, mark: () => this.drafts.length, since: (from: number) => this.drafts.slice(from) });
     this.flushSignal(startedAt, actor);
   }
 
