@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1247 decisions in all: 785 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 811 of the written decisions record a blanket yes.
+1273 decisions in all: 811 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 831 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1165 |
+| adopted | 1190 |
 | proposed | 13 |
 | deferred | 5 |
 | rejected | 11 |
-| superseded | 53 |
-| **All** | **1247** |
+| superseded | 54 |
+| **All** | **1273** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 94 |
-| art | 265 |
-| visuals | 89 |
+| combat | 97 |
+| art | 270 |
+| visuals | 90 |
 | camera | 64 |
-| audio | 113 |
-| ui | 134 |
+| audio | 118 |
+| ui | 137 |
 | story | 16 |
 | chapters | 196 |
 | guide | 31 |
-| release | 51 |
-| hosting | 17 |
-| process | 102 |
+| release | 53 |
+| hosting | 18 |
+| process | 105 |
 | critic | 35 |
 | data | 11 |
-| tech | 11 |
+| tech | 14 |
 | site | 18 |
-| **All** | **1247** |
+| **All** | **1273** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 589 |
-| FFX only | 365 |
-| FFX-2 only | 275 |
+| both games | 608 |
+| FFX only | 368 |
+| FFX-2 only | 279 |
 | FF7 hidden experiment | 18 |
-| **All** | **1247** |
+| **All** | **1273** |
 
 ## Standing rules in force
 
@@ -131,7 +131,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13)
 
 ## Ledger
 
@@ -512,8 +512,8 @@ Saturday · 53 decisions
   - Source: docs/target/targets.json, group cast, tile "Tidus, battle poses"
 - **Picture** (cast) — Approved: Yuna, battle poses
   - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
-  - Delivery: Built, and failing its target in critic/rounds/round-04.json at bc2571c.
-  - area art · FFX · adopted · delivery implemented
+  - Delivery: Built, and failing its target in critic/rounds/round-04.json at bc2571c. 2026-10-12: her item pose was replaced on his word “Install” (YUNA-ITEM-1, D-797): black boots, darker hair, lilac hem; one eye came out purple instead of blue, disclosed on the picks page. Live since 7758791e; the pin cast:yuna in approved-hashes moved to the new file with the old record inside.
+  - area art · FFX · adopted · delivery implemented · see [D-797](#d-797)
   - Source: docs/target/targets.json, group cast, tile "Yuna, battle poses"
 - **Picture** (cast) — Approved: Auron, battle poses
   - Bailey: “i approve everything you listed in the end state board” (his words for the whole group of pictures)
@@ -2359,8 +2359,8 @@ Friday · 175 decisions
   - Source: docs/target/targets.json, group pause, tile "Living portrait feel (both)"
 - **Picture** (polish) — Approved: Chapter select v2: victory ribbon, boss on its scene
   - Bailey: “I'll go with C a victory ribbon / All recommendations” (blanket yes)
-  - Delivery: Target/build pairs: docs/screenshots/chapter-select-c/pair-&lt;1600|1280|2000|390&gt;-&lt;new|two&gt;-&lt;ch1|ch8&gt;.jpg (real keys, clicks and taps from the title; capture-report.json has the geometry checks). Deviations from the mockup, all from the README critique: sash at the plate's top-left (off the boss), best time on the card ribbon, flat higher-contrast pips, strip height taken from the plate, touch wording on a phone.
-  - area ui · both games · adopted · delivery implemented
+  - Delivery: Target/build pairs: docs/screenshots/chapter-select-c/pair-&lt;1600|1280|2000|390&gt;-&lt;new|two&gt;-&lt;ch1|ch8&gt;.jpg (real keys, clicks and taps from the title; capture-report.json has the geometry checks). Deviations from the mockup, all from the README critique: sash at the plate's top-left (off the boss), best time on the card ribbon, flat higher-contrast pips, strip height taken from the plate, touch wording on a phone. 2026-
+  - area ui · both games · adopted · delivery implemented · see [D-801](#d-801)
   - Source: docs/target/targets.json, group polish, tile "Chapter select v2: victory ribbon, boss on its scene"
 
 ### 2026-09-26
@@ -2659,8 +2659,8 @@ Saturday · 62 decisions
   - Source: docs/target/targets.json, group cast, tile "Leblanc Syndicate male goon hurt pose: c4 accepted"
 - **Picture** (pause) — Approved: Accessibility settings: option C, rows plus a first-launch comfort card (both)
   - Bailey: “Yes I’ll go with your recommendations for all” (blanket yes)
-  - Note: docs/concepts/accessibility-2026-09-26/README.md's three options (A rows only, B its own ACCESSIBILITY tab, C A's rows plus a one-time comfort card at first launch); C was recommended because REDUCE FLASHES and TEXT SIZE only fully help when set before the first flash and the first line of dialogue. docs/target/decisions.json D-220. Save-data class (new Settings fields): a deep review before deploy and the CHK-024 up
-  - area ui · both games · adopted · delivery not scheduled · see [D-220](#d-220)
+  - Delivery: 2026-10-13: a later pick, OPT-B with NO-KEYS (2026-10-12, D-799), is built on origin/r44-access (29bc04a8) and not live: a ninth pause tab ACCESSIBILITY with TEXT SIZE, REDUCE MOTION, REDUCE FLASHES (default off, 22 flash sources), LOW EFFECTS and COLOUR VISION; no key remapping. It adds two settings to the save, so a deep review of the candidate comes before any deploy (D-811). Option C’s one-time first-launch comfo
+  - area ui · both games · adopted · delivery in progress · see [D-220](#d-220), [D-799](#d-799), [D-811](#d-811)
   - Source: docs/target/targets.json, group pause, tile "Accessibility settings: option C, rows plus a first-launch comfort card (both)"
 - **Picture** (fight) — Approved: Spell and skill effects: option B accepted
   - Bailey: “i'll go with all your recommendations, i love it.” (blanket yes)
@@ -2989,8 +2989,8 @@ Monday · 15 decisions
   - Source: Bailey, 2026-09-28 ~22:45 EDT, choosing "Your pick (Recommended)" for the driver's question: "Rikku's and Paine's Songstress paintings ...: may I go …
 - **Picture** (audio) — Approved: Score and sound effects
   - Bailey: “I'm not sure, they all sound pretty good and less snes music BUT they sound kind of tinny and hollow? Why? It almost sounds good. It's close to good. That goes for all 3 samples, a, b, and c.”
-  - Note: Approved as the direction: the themes and the sampled-orchestra palette stay. Bailey’s verdict by ear on 19 Sep 2026 was “Right direction, keep refining” (docs/audio/OWNER-VERDICT.md), so refinement continues. No score out of 10 is on record, so the critic’s audio category stays unverified for listening quality. Listen at docs/audio/audition.html.
-  - area visuals · both games · adopted · nothing to build · see [D-278](#d-278)
+  - Delivery: 2026-10-13: his score for the generated music is 7 out of 10 and the music stays as installed (D-804, D-809). Batch 1 is live since fcecfa74; batch 2 (27 cues) is wired on r45-rc d5bf2206, in its focused review and not live; 18 recorded sound effects ride with it.
+  - area visuals · both games · adopted · nothing to build · see [D-804](#d-804), [D-809](#d-809), [D-278](#d-278)
   - Source: docs/target/targets.json, group audio, tile "Score and sound effects"
 - **Picture** (chapters) — Approved: Sin: the Fins and the Core, Chapter XVII (FFX)
   - Bailey: “Your picks (Recommended)” (blanket yes)
@@ -5642,8 +5642,8 @@ Sunday · 29 decisions
   - Source: Bailey, 2026-10-11 about 23:10 EDT (the driver's log; the driver's list first said about 21:20 EDT, after the driver's evening summary, but the same …
 - <a id="d-760"></a>**D-760** — The ElevenLabs API key's own credit limit (a quota of 45,000 with none left, although the account has 84,062 of 131,000) is his to raise to at least 105,000, or to remove, in his ElevenLabs settings; the driver cannot change account settings, and generation starts when it is raised (both games)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
-  - What changed: Item 55c. Read live at about 12:20 EDT on 2026-10-11 with D:/Tools/pyrefly-scratch/2026-10-11/eleven-key-limit.mjs (A-0670): the key's own quota 45,000 with 0 left; the account 84,062 of 131,000 left, resetting 2026-11-07; raising the key's cap costs nothing extra. The driver advised at least 105,000, or none. Not done, and still his on 2026-10-12: music batch 2 (run_batch2.sh), the defeat and Chapter IV victory cues (D-784) and the sound-effect generation per sfx-parity/gen-plan.json all wait for it.
-  - area audio · both games · adopted · delivery not scheduled · see [D-727](#d-727), [D-742](#d-742), [D-784](#d-784) · refines [D-742](#d-742)
+  - What changed: Item 55c. Read live at about 12:20 EDT on 2026-10-11 with D:/Tools/pyrefly-scratch/2026-10-11/eleven-key-limit.mjs (A-0670): the key's own quota 45,000 with 0 left; the account 84,062 of 131,000 left, resetting 2026-11-07; raising the key's cap costs nothing extra. The driver advised at least 105,000, or none. Not done, and still his on 2026-10-12: music batch 2 (run_batch2.sh), the defeat and Chapter IV victory cues (D-784) and the sound-effect generation per sfx-parity/gen-plan.json all wait for it. Refresh 2026-10-13: done by him, twice (D-806): raised to 105,000 on 2026-10-12 at 23:59, then removed on 2026-10-13; music batch 2, the defeat and Chapter IV victory cues and the sound-effect generation ran in between (A-0707 to A-0710).
+  - area audio · both games · adopted · delivery implemented · see [D-727](#d-727), [D-742](#d-742), [D-784](#d-784) · refines [D-742](#d-742)
   - Source: Bailey, 2026-10-11 about 23:10 EDT (the driver's log; the driver's list first said about 21:20 EDT, after the driver's evening summary, but the same …
 - <a id="d-761"></a>**D-761** — A restart of the PC, whenever convenient, to shrink the page file (83 GB allocated at the 13:50 reading, C: down to 1.9 to 3 GB) is his to do (both games)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
@@ -5672,8 +5672,8 @@ Sunday · 29 decisions
   - Source: Relayed by the RE session ("Final Fantasy X/X-2 battle mechanics reverse engineering"), and VERIFIED in its transcript f039686d (the text of its item …
 - <a id="d-766"></a>**D-766** — D-214 and PR-0217 close: a KO clears Zombie and Scan, per the game's executable; Chapter II's 500-seed change is reported (FFX only; relayed)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
-  - What changed: Item 56.5, from the RE wiring plan section 7. The RC4 handoff does not list a KO clearing Zombie and Scan, so it is treated as not built in a061e9dc. D-214's GameFAQs reading for PR-0217 gives way to the executable's rule when it ships; the Chapter II 500-seed result is reported with it. FFX only.
-  - area combat · FFX · adopted · delivery not scheduled · at ~23:08 EDT · see [D-214](#d-214), [D-634](#d-634) · refines [D-214](#d-214)
+  - What changed: Item 56.5, from the RE wiring plan section 7. The RC4 handoff does not list a KO clearing Zombie and Scan, so it is treated as not built in a061e9dc. D-214's GameFAQs reading for PR-0217 gives way to the executable's rule when it ships; the Chapter II 500-seed result is reported with it. FFX only. Refresh 2026-10-13: live since 7b2582e7 as RC5 (D-787); Chapter II falls from 476 to 398 of 500, disclosed as FOC43-07.
+  - area combat · FFX · adopted · delivery implemented · at ~23:08 EDT · see [D-214](#d-214), [D-634](#d-634) · refines [D-214](#d-214)
   - Source: Relayed by the RE session ("Final Fantasy X/X-2 battle mechanics reverse engineering"), and VERIFIED in its transcript f039686d (the text of its item …
 - <a id="d-767"></a>**D-767** — Mix gets the full chart, the 21 missing results, and nearest-family effects for those; no new art unless he asks (FFX only; relayed)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
@@ -5702,8 +5702,8 @@ Sunday · 29 decisions
   - Source: Relayed by the RE session ("Final Fantasy X/X-2 battle mechanics reverse engineering"), and VERIFIED in its transcript f039686d (the text of its item …
 - <a id="d-772"></a>**D-772** — Add one strategy-guide line: do not Haste a Reflecting character (FFX only; relayed)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
-  - What changed: Item 56.11. Not written yet: neither src nor the strategy guide holds the line in a061e9dc; research/ffx-combat-core.md section 4.2 and the guide's Reflect wording are still stale (RC4 open item 5). Written in our words with the Jegged-following rule.
-  - area guide · FFX · adopted · delivery not scheduled · at ~23:08 EDT · see [D-691](#d-691), [D-771](#d-771) · refines [D-691](#d-691)
+  - What changed: Item 56.11. Not written yet: neither src nor the strategy guide holds the line in a061e9dc; research/ffx-combat-core.md section 4.2 and the guide's Reflect wording are still stale (RC4 open item 5). Written in our words with the Jegged-following rule. Refresh 2026-10-13: written and live since 7b2582e7 (f7565e00): Chapter II's guide and the Hastega hint say not to Haste a Reflecting character.
+  - area guide · FFX · adopted · delivery implemented · at ~23:08 EDT · see [D-691](#d-691), [D-771](#d-771) · refines [D-691](#d-691)
   - Source: Relayed by the RE session ("Final Fantasy X/X-2 battle mechanics reverse engineering"), and VERIFIED in its transcript f039686d (the text of its item …
 - <a id="d-773"></a>**D-773** — Leave the max HP of Lulu (700), Auron (2,000) and Kimahri (1,250) as they are, because the source note does not say whether that column is before the +10 percent armour (FFX only; relayed)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
@@ -5712,8 +5712,8 @@ Sunday · 29 decisions
   - Source: Relayed by the RE session ("Final Fantasy X/X-2 battle mechanics reverse engineering"), and VERIFIED in its transcript f039686d (the text of its item …
 - <a id="d-774"></a>**D-774** — Rewrite the false Bahamut hint: Slow does not slow the Mega Flare countdown, which is a fixed 750 logic steps (FFX-2 only; relayed)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
-  - What changed: Item 56.13. Not done in a061e9dc: the r42 focused review found the Bahamut intent note still stale (FOC42-02, polish, src/battle/ffx2/intent.ts line 307). Goes into the next release candidate. FFX-2 only.
-  - area ui · FFX-2 · adopted · delivery not scheduled · at ~23:08 EDT · see [D-658](#d-658), [D-762](#d-762) · refines [D-658](#d-658)
+  - What changed: Item 56.13. Not done in a061e9dc: the r42 focused review found the Bahamut intent note still stale (FOC42-02, polish, src/battle/ffx2/intent.ts line 307). Goes into the next release candidate. FFX-2 only. Refresh 2026-10-13: live since 7b2582e7 (f06c9294): Bahamut's enemy-intent note no longer says Slow slows the countdown, and the live check saw the corrected note on screen.
+  - area ui · FFX-2 · adopted · delivery implemented · at ~23:08 EDT · see [D-658](#d-658), [D-762](#d-762) · refines [D-658](#d-658)
   - Source: Relayed by the RE session ("Final Fantasy X/X-2 battle mechanics reverse engineering"), and VERIFIED in its transcript f039686d (the text of its item …
 - <a id="d-775"></a>**D-775** — The website version of the hidden Fayth chapter uses painted variant B: FFX's camera timing and framing, with the angles kept within 35 degrees of the near default view; variant A is rejected because the paintings turn edge-on at side angles (FFX only; relayed)
   - Bailey: “ok keep going ill go with all your recommendations please” (blanket yes)
@@ -5743,7 +5743,7 @@ Sunday · 29 decisions
 
 ### 2026-10-12
 
-Monday · 6 decisions
+Monday · 22 decisions
 
 - <a id="d-780"></a>**D-780** — An Owner Checks page is built overnight: a guided session of about 15 minutes for him (a fight on his phone, one with a gamepad, a slow-network reload, and a 1-to-10 listening score for the music and the new themes), which supplies CHK-B1, CHK-B2 and the real-device checks no agent can, so the deep-review debt can settle (both games)
   - Bailey: “im going to sleep now, ill go with all your recommendations including for sound effects and music.” (blanket yes)
@@ -5752,13 +5752,13 @@ Monday · 6 decisions
   - Source: Bailey, 2026-10-12 about 00:05 EDT (the driver's clock), in the Claude Code chat, verbatim: “im going to sleep now, ill go with all your …
 - <a id="d-781"></a>**D-781** — The party-prep phone layout (PR-0295, about 3 px text on a 390 by 844 phone) gets mockup options first; nothing is built before his pick (both games)
   - Bailey: “im going to sleep now, ill go with all your recommendations including for sound effects and music.” (blanket yes)
-  - What changed: Item 58b. End state first (AGENTS.md rule 9). Deferred for usage: the mockups were not made by 02:30 EDT on 2026-10-12 (the weekly allowance on account #3 read 90 percent); they go to a fresh account or the weekly reset.
-  - area ui · both games · adopted · delivery not scheduled · see [D-646](#d-646) · refines [D-646](#d-646)
+  - What changed: Item 58b. End state first (AGENTS.md rule 9). Deferred for usage: the mockups were not made by 02:30 EDT on 2026-10-12 (the weekly allowance on account #3 read 90 percent); they go to a fresh account or the weekly reset. Refresh 2026-10-13: the mockups were made (the "Prep on a Phone" page, PREP-A, B and C) and he picked PREP-A (D-786); it is built and live since 7758791e.
+  - area ui · both games · adopted · delivery implemented · see [D-646](#d-646) · refines [D-646](#d-646)
   - Source: Bailey, 2026-10-12 about 00:05 EDT (the driver's clock), in the Claude Code chat, verbatim: “im going to sleep now, ill go with all your …
 - <a id="d-782"></a>**D-782** — DRIVER: the sound-effect packs fit the 105 MB budget this way: the ffx-core and core packs at q3 (under the 5 MB sprite gate), the boss packs at q5, a v2 repack, and the longest beds shortened as needed; applied when generation is unblocked (both games)
   - Bailey: “im going to sleep now, ill go with all your recommendations including for sound effects and music.” (blanket yes)
-  - What changed: Item 58c (sound, delegated). The q3 and q5 levers were the ones the r41 sound lane said needed his yes (4.15 MB of headroom against 9.7 MB of planned packs). Waiting for the ElevenLabs key limit (D-760); nothing generated or installed.
-  - area audio · both games · adopted · delivery not scheduled · see [D-737](#d-737), [D-749](#d-749), [D-760](#d-760) · refines [D-737](#d-737)
+  - What changed: Item 58c (sound, delegated). The q3 and q5 levers were the ones the r41 sound lane said needed his yes (4.15 MB of headroom against 9.7 MB of planned packs). Waiting for the ElevenLabs key limit (D-760); nothing generated or installed. Refresh 2026-10-13: the key limit is gone (D-806). The loose set of 18 recorded sound effects is wired in six packs on r45-rc d5bf2206 (lane r45-audio), in its focused review and not live; the eight retakes are D-810.
+  - area audio · both games · adopted · delivery in progress · see [D-737](#d-737), [D-749](#d-749), [D-760](#d-760) · refines [D-737](#d-737)
   - Source: Bailey, 2026-10-12 about 00:05 EDT (the driver's clock), in the Claude Code chat, verbatim: “im going to sleep now, ill go with all your …
 - <a id="d-783"></a>**D-783** — DRIVER: the D-582 cues (the Seymour battle theme and the chapter-select music, which he chose "as heard" by ear) stay as he chose; the narrowed variants are not swapped in, because his own ear outranks the delegation (both games)
   - Bailey: “im going to sleep now, ill go with all your recommendations including for sound effects and music.” (blanket yes)
@@ -5767,11 +5767,146 @@ Monday · 6 decisions
   - Source: Bailey, 2026-10-12 about 00:05 EDT (the driver's clock), in the Claude Code chat, verbatim: “im going to sleep now, ill go with all your …
 - <a id="d-784"></a>**D-784** — DRIVER: a defeat cue and a Chapter IV victory cue (PR-0410) are made with ElevenLabs once the key is unblocked, inside the budget (game case per cue)
   - Bailey: “im going to sleep now, ill go with all your recommendations including for sound effects and music.” (blanket yes)
-  - What changed: Item 58e (sound, delegated). Waiting for the ElevenLabs key limit (D-760). The Chapter IV victory cue is FFX-2 only; the defeat cue's game case is decided from the sources when it is made.
-  - area audio · both games · adopted · delivery not scheduled · see [D-737](#d-737), [D-760](#d-760) · refines [D-737](#d-737)
+  - What changed: Item 58e (sound, delegated). Waiting for the ElevenLabs key limit (D-760). The Chapter IV victory cue is FFX-2 only; the defeat cue's game case is decided from the sources when it is made. Refresh 2026-10-13: made in music batch 2 and wired on r45-rc d5bf2206, not live: defeat cues DF-A (FFX) and DX-A (FFX-2) play once after the results screen, and VB-A is Chapter IV's victory cue (victory-bahamut).
+  - area audio · both games · adopted · delivery in progress · see [D-737](#d-737), [D-760](#d-760) · refines [D-737](#d-737)
   - Source: Bailey, 2026-10-12 about 00:05 EDT (the driver's clock), in the Claude Code chat, verbatim: “im going to sleep now, ill go with all your …
 - <a id="d-785"></a>**D-785** — DRIVER: music batch 2 also replaces the stand-in scene beds and the Chapter XII and XV battle cues (PR-0099), and remakes the victory fanfares as an intro plus a loop (game case per cue)
   - Bailey: “im going to sleep now, ill go with all your recommendations including for sound effects and music.” (blanket yes)
-  - What changed: Item 58f (sound, delegated). Waiting for the ElevenLabs key limit (D-760). NOT covered by this yes, because no recommendation was made, so they need his yes under rule 10: the critic's other round-25 proposals (warming the cues on the board, long cache headers, REDUCE FLASHES, colour-vision and key-remap options, deferring the board's art prefetch), the FFX-2 human-pace difficulty options (PR-0227) and the pose-colour question (PR-0436).
-  - area audio · both games · adopted · delivery not scheduled · see [D-737](#d-737), [D-754](#d-754), [D-760](#d-760) · refines [D-754](#d-754)
+  - What changed: Item 58f (sound, delegated). Waiting for the ElevenLabs key limit (D-760). NOT covered by this yes, because no recommendation was made, so they need his yes under rule 10: the critic's other round-25 proposals (warming the cues on the board, long cache headers, REDUCE FLASHES, colour-vision and key-remap options, deferring the board's art prefetch), the FFX-2 human-pace difficulty options (PR-0227) and the pose-colour question (PR-0436). Refresh 2026-10-13: made in music batch 2 (27 cues picked) and wired on r45-rc d5bf2206, not live: the stand-in scene beds are replaced, Chapter XII and Chapter XV get battle cues of their own, and the victory fanfares are an intro plus a loop. His 7 out of 10 and the yes to keep the music are D-804 and D-809.
+  - area audio · both games · adopted · delivery in progress · see [D-737](#d-737), [D-754](#d-754), [D-760](#d-760) · refines [D-754](#d-754)
   - Source: Bailey, 2026-10-12 about 00:05 EDT (the driver's clock), in the Claude Code chat, verbatim: “im going to sleep now, ill go with all your …
+- <a id="d-786"></a>**D-786** — The phone party-prep layout is PREP-A: one long page with a pinned tab bar and folding sections that keep a one-line digest, from the Prep on a Phone page; his pick approves the layout only (both games; PR-0295)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59a. Built as lane r43-prepphone (06c4c94e) and live since 7758791e (bundle CKOVah7-, 07:06 EDT on 2026-10-13). The eight heavy party-prep tabs (FFX Stats, Equipment, Items and Overdrive; FFX-2 Dresspheres, Stats, Accessories and Items) drew the desktop board at 0.61 scale on a phone with text from 2.98 px; each is now one scrolling column with a tab strip and a row of faces pinned, folding sections that keep a one-line digest of their numbers when folded, and START BATTLE pinned with the MORE BELOW cue. Measured by the lane at 390x844, 430x932, 360x740, 320x640 and 599x900: the smallest text is 14 px and no element is under 14 px on all eight tabs. The focused review closed FOC43-11 (the 2.98 px finding) and the live check read 0 under 14 px on the phone prep pages of FFX Chapter I and FFX-2 Chapter IV. The desktop prep is unchanged (18 of 19 frames identical to the previous build; the 19th is the Sphere Grid's animated map). Four shades the Ink & Gold tokens lack are the nearest tokens, recorded as a deviation (his pick approves the layout only); whether he wants the mockup page's deeper shades instead is open: the driver recommends the page's shades for all four and sent the comparison sheet on 2026-10-13 (a one-line switch each; not live). The four tabs the mockup page had no frame for (FFX Items, FFX Overdrive, FFX-2 Dresspheres, FFX-2 Items) went to him on a sheet at about 11:10 on 2026-10-13. The driver made two commitments of its own alongside his yes (not recommendations): show him those four tabs (done) and include the one-line fix that lets the FFX Overdrive mode rows take a mouse click on a desktop (done, bb0eb4e8, live since 7758791e).
+  - area ui · both games · adopted · delivery implemented · see [D-781](#d-781), [D-646](#d-646) · refines [D-781](#d-781)
+  - Source: src/ui/common
+- <a id="d-787"></a>**D-787** — Chapter II and the Zombie rule: ACCEPT. RC5 ships with the game's rule that a KO clears Zombie and Scan; Yunalesca falls from about 95 to about 80 percent on our line until the line is reworked (FFX only)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59b. Live since 7b2582e7 (bundle 1ntEYvFO, 01:56 EDT on 2026-10-13); his words were the owner override of that deploy. RC5 (origin/re-parity-rc5, ad46309b, the RE session's lane FFX-D, FFX only): a KO clears Zombie and Scan with everything but Death, the death check runs after the target's last hit, Auto-Life goes at the moment of death with its revive taken from the base maximum, and overkill is counted per action (ffx-engine-golden re-baselined once: 12 of 18 digests move). With it, Chapter II's guide gains one line (do not Haste a Reflecting character, D-772) and Bahamut's enemy note stops saying Slow slows the Mega Flare countdown (FFX-2 only, D-774). Chapter II falls from 476 to 398 of 500 on the 500-seed practice line (95.2 to 79.6 percent); the focused review disclosed it as FOC43-07 (major, accepted). A presentation fix rides with it (both games, shared presenter; today only FFX's death check emits the pair): a status the KO wipe takes in the action that landed it plays no beat, where Chapter III's Curse had played five pairs, about 1.5 s. Not live: RC6 (origin/re-parity-rc6-ch2, ff6d017b, on 7b2582e7), which fixes FOC43-04 (Tidus's Auto-Life icon missing for 1.28 s after the Curse) in the engine and reworks the Chapter II line (the RE session's Wakka switch, 398 to 453 of 500).
+  - area combat · FFX · adopted · delivery implemented · see [D-214](#d-214), [D-766](#d-766), [D-771](#d-771), [D-772](#d-772), [D-774](#d-774) · refines [D-766](#d-766)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-788"></a>**D-788** — The overnight art: the driver picks the best knocked-down candidate for Rikku White Mage, Alchemist and Berserker from art run #6 and shows him before anything is installed; Dark Knight and Songstress are not picked, they were test batches (FFX-2 only)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59c. Done the same evening: the private "Art Picks, Oct 12" page showed the driver's picks RWM-KO-1, RAL-KO-1 and RBS-KO-1 (and YUNA-ITEM-1, D-794) beside the approved paintings, and nothing was installed until his "Install" at about 23:15 (D-796). Dark Knight and Songstress were left out as asked; their next candidates came from art run #7 (D-803).
+  - area art · FFX-2 · adopted · delivery implemented · see [D-637](#d-637), [D-675](#d-675), [D-796](#d-796) · refines [D-736](#d-736)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-789"></a>**D-789** — Preload each chapter's scene, boss and victory music when its card is confirmed on the board (PR-0373; both games)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59d. Live since 7b2582e7 (0bc90ccc, lane r43-delivery). At the confirm the chapter's scene bed, its first formation's theme and its victory sting are fetched and decoded one at a time in that order behind prep, and kept decoded until played (up to four cues, about 140 MB, until the scene cue starts; three after); a cancel releases them. The live check of 2026-10-13 found the mechanism works (the scene file is requested 27 to 51 ms after the confirm, held, released on cancel) but its aim is not met on the measuring link: the scene cue was playing at the first spoken line in 2 of 9 fast-route runs and 0 of 6 human-pace runs, because the first key starts 11.5 MB of other audio and the board and battle art loads at the same time (LV43-2, polish, not a regression). He had been told it starts on time; the real result went to him with the recommendation of D-807 (the scene cue goes first). The focused review also logged FOC43-05 (the held cues cost +0.26 GB of memory transiently).
+  - area audio · both games · adopted · delivery implemented · see [D-646](#d-646), [D-807](#d-807) · refines [D-646](#d-646)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-790"></a>**D-790** — Content-hashed assets get a year-long immutable cache header on the Cloudflare deploy; nothing else does (PR-0396; both games)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59e. Live since 7b2582e7 (705b5a54 and the repeat-load check 65c731c3, lane r43-delivery): a file whose name carries its content hash is served with a year-long immutable cache header, and the deploy stops if the rule would match a file whose name carries no hash. The live check read it on the deployed site: the four hashed bundle files answer 200 with public, max-age=31536000, immutable (and still do with ?v=1 added); art, audio and manifests answer max-age=0, must-revalidate with an ETag; /_headers answers 404; a second visit and an F5 reload sent no request for either hashed file (tools/repeat-load-check.mjs). The page itself carries the revalidate header but no ETag at any Workers address (LV43-1, informational, platform behaviour not introduced by this build), so the checklist's conditional-request check for the page cannot be met as written.
+  - area hosting · both games · adopted · delivery implemented · see [D-646](#d-646) · refines [D-646](#d-646)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-791"></a>**D-791** — Defer the board's art prefetch to the first key press (PR-0405; both games)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59f. Withdrawn by the driver at about 20:30 EDT on 2026-10-12 after measuring (D-795, item 60): the code is built behind a switch (?prefetch=now|first|defer, 410b5713 in lane r43-delivery) and ships OFF in 7b2582e7, so nothing a player sees changed.
+  - area tech · both games · superseded by [D-795](#d-795) · nothing to build · see [D-795](#d-795) · refines [D-646](#d-646)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-792"></a>**D-792** — REDUCE FLASHES, a colour-vision setting and a key-remap row in Options (PR-0032) get a MOCKUP first, since they are new screens (both games)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59g. The mockup step is done: the private "Options Screen Additions" page showed OPT-A and OPT-B (recommended: OPT-B with no key remapping), and he picked OPT-B with NO-KEYS the same night (D-799). The build is lane r44-access (29bc04a8): done, not live, and it waits for a deep review of the candidate because it adds two settings to the save (D-811).
+  - area ui · both games · adopted · delivery in progress · see [D-202](#d-202), [D-220](#d-220), [D-285](#d-285), [D-799](#d-799) · refines [D-202](#d-202)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-793"></a>**D-793** — FFX-2 human-pace difficulty in Chapters V, XIII and XV (PR-0227): the driver prepares MEASURED options with no hand-tuned boss numbers, and he picks (FFX-2 only)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59h. Done: the private "FFX-2 Difficulty Options" page measured the options at the house human pace over 200 seeds per chapter and recommended DIFF-B for Chapter XIII only; he picked it the same night (D-798) and it is live since 7758791e. No boss, party, kit or timer number was hand-tuned.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-410](#d-410), [D-798](#d-798) · refines [D-410](#d-410)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-794"></a>**D-794** — Yuna's item pose is repainted to match the other poses (PR-0436); candidates are shown before any install (FFX only: FFX Yuna, the Chapter I summoner)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 59i. Candidates were shown on the private "Art Picks, Oct 12" page before any install, with the driver's recommendation YUNA-ITEM-1 (black boots, darker hair, lilac hem); installed on his word (D-797).
+  - area art · FFX · adopted · delivery implemented · see [D-797](#d-797), [D-646](#d-646) · refines [D-646](#d-646)
+  - Source: Bailey, 2026-10-12 about 17:50 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-795"></a>**D-795** — DRIVER: recommendation 59f is withdrawn: deferring the board's art prefetch (PR-0405) was built and measured and does not help, so it ships switched OFF; thumbnails for the strips or a lane rule for the music would help and each needs his yes (both games)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 60, the driver's own call at about 20:30 EDT on 2026-10-12 after measuring on r43-delivery (410b5713). With the prefetch deferred the board's chapter strips stay empty for about 9 s instead of 3.9 s on a fast link, and on a slow link it does not help: the first input's music takes 81 s either way at 1.6 Mbit/s. The code stays, behind ?prefetch=now|first|defer and OFF by default (live since 7b2582e7). What would actually help is thumbnails for the strips (he said yes the same night, D-801) or a lane rule for the music (his yes on 2026-10-13, D-807).
+  - area tech · both games · adopted · delivery implemented · see [D-791](#d-791), [D-801](#d-801), [D-807](#d-807) · refines [D-646](#d-646) · replaces [D-791](#d-791)
+  - Source: The release driver, 2026-10-12 about 20:30 EDT (the driver's clock), after measuring; these are the driver's words, not his. It withdraws one …
+- <a id="d-796"></a>**D-796** — INSTALL the three Rikku knocked-down paintings from art run #6: RWM-KO-1 (White Mage), RAL-KO-1 (Alchemist) and RBS-KO-1 (Berserker); the old files are backed up first (FFX-2 only)
+  - Bailey: “I’ll go with all of your recommendations / Install” (blanket yes)
+  - What changed: Item 61a. Installed by lane r44-art (cba2b49d) in a hard-linked mirror of the release art, so the release tree kept its old bytes; live since 7758791e. Rikku's fall now lies 0.99, 0.91 and 0.89 of the idle's height long (it was 0.63, 0.53 and 0.58). Tiers 2x, 3x and 4x were made for each and the approved-hashes pins moved to the new files with the old record kept inside (verify-approved: 916 ok, 0 mismatched, 0 missing); the old files are in the private art repo (archive/2026-10-12-install-before) and a local backup folder. Chapter VI's art snapshot takes the new White Mage and Alchemist hashes; the hidden Leblanc chapter stays frozen at release 39.3's pose set. The live check saw the Alchemist knock-out in a fight (debug-assisted); the White Mage and Berserker paintings were not tested in a fight.
+  - area art · FFX-2 · adopted · delivery implemented · see [D-788](#d-788), [D-675](#d-675) · refines [D-788](#d-788)
+  - Source: Bailey, 2026-10-12 about 23:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations” and then …
+- <a id="d-797"></a>**D-797** — INSTALL YUNA-ITEM-1 as FFX Yuna's item pose (black boots, darker hair, lilac hem); an approved painting replaced on his yes, the old one backed up (FFX only)
+  - Bailey: “I’ll go with all of your recommendations / Install” (blanket yes)
+  - What changed: Item 61b; it corrects item 59i's game case (FFX, not FFX-2). Installed by lane r44-art (cba2b49d) the same way as the Rikku paintings (D-796) and live since 7758791e. Reading 0.758, calibrated on the painting it replaces (the new head overlays the old one's to within 1 percent at the same pixel scale); at the game's scale it stands 0.819 of the idle's height with her head the idle's size and the feet registered (the old item stood 0.815): a leaning pose, so no decision was needed on height. The driver disclosed on the page that one eye came out purple instead of blue. The pin in approved-hashes (cast:yuna) moved to the new hash with the old inside; the old files are in the private art repo and the local backup folder. The live check did not play it in a fight.
+  - area art · FFX · adopted · delivery implemented · see [D-794](#d-794), [D-796](#d-796) · refines [D-794](#d-794)
+  - Source: Bailey, 2026-10-12 about 23:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations” and then …
+- <a id="d-798"></a>**D-798** — DIFF-B for Chapter XIII only: the move advisor card's top row is the chapter's own line (human-pace win rate 45.5 to about 63.5 percent); no rule, boss or party number changes; Chapters V and XV stay as they are (FFX-2 only)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 61c. Live since 7758791e (323a861b, lane r44-diffb-thumbs; PR-0227): on a Chapter XIII board the card's top row is the line, read off the live board, over the lethal-save override, the proved save, the revive priority and the already-on-its-way drop, and only when the line's row passes the same hard gate as always. At the house human pace the card-follower goes from 91 of 200 to 127 of 200 wins (45.5 to 63.5 percent) and at instant decisions from 122 to 147 (61.0 to 73.5); Chapters V and XV give the same result row in all 200 seeds. ADVISOR_LINE_FIRST is the whole change off in one edit. The focused review measured it over 165 decisions; the live check did not play the Chapter XIII card, and the board where DIFF-B puts an attack over a heal is not yet tested.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-793](#d-793), [D-410](#d-410) · refines [D-793](#d-793)
+  - Source: Bailey, 2026-10-12 about 23:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-799"></a>**D-799** — OPT-B: a new ACCESSIBILITY tab in Options with REDUCE FLASHES and the colour-vision setting, scoped to the four colour groups that collapse; NO-KEYS: key remapping is left out for now (both games)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 61d. Built as lane r44-access (origin/r44-access, 29bc04a8; not live). A ninth pause tab, ACCESSIBILITY, right after OPTIONS, with one COMFORT column of TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS and COLOUR VISION (TEXT SIZE, REDUCE MOTION and LOW EFFECTS move there from OPTIONS). REDUCE FLASHES (default off) softens 22 flash sources: a lower peak, white turned warm ivory, durations unchanged, a dimming left alone, a white wash of 600 ms or more kept as an ivory cover. COLOUR VISION (off, red-green or blue-yellow) changes only the four groups that collapse under a colour-blindness simulation; its ally and self marks reach FFX-2 as well. Key remapping is not built (NO-KEYS). It adds two additive fields to the save (reduceFlashes and colourVision; SAVE_VERSION not bumped), so it is the save-data class and ships only after a deep review of the candidate (D-811). The lane's own hex values, shapes, initials and gate letters are its proposals, not his picks; the before and after images are owed to him.
+  - area ui · both games · adopted · delivery in progress · see [D-202](#d-202), [D-220](#d-220), [D-792](#d-792), [D-811](#d-811) · refines [D-792](#d-792)
+  - Source: Bailey, 2026-10-12 about 23:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-800"></a>**D-800** — E-PYRE: bosses and aeons that pop in over one frame (Anima at the Fallen Aeons seam, Overdrive Sin, Paragon) arrive as pyreflies gathering; the fallback is E-FADE if it cannot be made to read well; his pick approves the look only (both games, case per boss)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 61e. Live since 7758791e (ae495dc8 and the proof 63fa3e59, lane r44-entrance; PR-0380). 89 figures in 21 chapters: fiends, the unsent and aeons gather over 900 ms from pyreflies (a reversed pyrefly dissolve, motes flying into the edge, a short gold flash on the landing frame); 26 humans and machina fade in over 300 ms (E-FADE); REDUCE MOTION gets a plain 200 ms fade and LOW EFFECTS drops the motes. The stage holds each figure unseen until the opening lets it in, so the one-frame size step of Overdrive Sin (391 px), Paragon (254) and Anima (176) is 0; time added before the first menu: none. Game case per boss: Anima at the Fallen Aeons seam is FFX-2 (Chapter XI), Paragon is FFX-2 (Chapter XIII), Overdrive Sin is FFX (Chapter XVIII). It plays at every fight opening, broader than the three bosses he named, and there is no gather sound yet; Yojimbo, Vegnagun's rings, Omnis's discs and FF7 were left alone. The focused review: two of the three entrance jerks are gone (Sin 341 px, Anima 967 px); Paragon's size step still lands on a visible figure when Enter is pressed in the first second or the machine is slow (FOC44A-05, major, inside the new feature, never worse than live), fixed in r45-rc d5bf2206 (0 pops against 1 in the control) and not live. Seen live: FFX Chapter XVIII and FFX-2 Chapter XI from the title to the first menu, and Chapter XI on a 390x844 touch phone.
+  - area visuals · both games · adopted · delivery implemented · see [D-646](#d-646), [D-699](#d-699) · refines [D-646](#d-646)
+  - Source: Bailey, 2026-10-12 about 23:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+- <a id="d-801"></a>**D-801** — YES to thumbnails for the chapter board's strips, derived from the approved paintings, with the full pictures loaded when needed, to speed up slow connections (both games)
+  - Bailey: “I’ll go with all of your recommendations” (blanket yes)
+  - What changed: Item 61f. Live since 7758791e (fb1f3445, d5c05893, 97da6f03, a687437b and the reach set in 5c2421e9, lane r44-diffb-thumbs). The rail strips paint small copies of their 36 paintings (768 px wide scenes, 576 px tall bosses), made at build time from the approved masters by a rule, lossless and proved against the master resized by the rule; the plate shows the strip's small copy until the full picture is up; the plates of the cards two presses from the cursor are fetched ahead. Measured on a real build: the strips' files go from 79.0 MB to 11.7 MB and the board's session from 129.0 MB to 83.8 MB (93.1 MB with the two-ahead reach); every strip is painted before the board is up (the unchanged build was 3.9 s later, the live site 8.6 s); the plate is the live site's picture in every pixel; the first input's music on a 1.6 Mbit/s link is unchanged (81.6 s against 81.3 s). The live check saw 36 of 36 strips painted as thumbnails at 1600x900 and on a 390x844 touch phone, with the selected plate sharp. Costs disclosed: a fast scan shows soft plates for about 0.4 s (FOC44A-03, polish regression); about 12 MB more before any input (FOC44A-04); the faces (13.7 MB) are not thumbnailed.
+  - area tech · both games · adopted · delivery implemented · see [D-795](#d-795), [D-183](#d-183) · refines [D-795](#d-795)
+  - Source: Bailey, 2026-10-12 about 23:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I’ll go with all of your recommendations”, answering the …
+
+### 2026-10-13
+
+Tuesday · 10 decisions
+
+- <a id="d-802"></a>**D-802** — The Claude app restart (for the imported chat list) waits for him: "do not restart until I wake up"; it supersedes his earlier "Wait for the jobs" pick (both games; process)
+  - Bailey: “actually do not restart until I wake up.”
+  - What changed: Item 62a. The import chat was told and had unregistered its restart task (at 00:05 on 2026-10-13); no restart happened that night. He asked for it himself at about 11:40 on 2026-10-13: “ok pause your work and restart all claude code instances please”; the four desktop apps were restarted by a runner that waits until the driver chat is idle (RESULT: OK, signed in), and he released the work at about 12:05 with “ok you may resume now” (A-0719). Those two sentences are in the driver's notes and in no queued item, so they have no row of their own yet.
+  - area process · both games · adopted · delivery implemented · see [D-643](#d-643), [D-679](#d-679), [D-761](#d-761) · refines [D-679](#d-679)
+  - Source: Bailey, 2026-10-13 about 00:55 EDT (the driver's clock), in the Claude Code chat, verbatim: “actually do not restart until I wake up.” Item 62a of …
+- <a id="d-803"></a>**D-803** — Overnight local art generation continues: art run #6's queue for the gaps still open; candidates only, nothing installed, paused whenever a review uses the GPU (game case per queue item)
+  - Bailey: “continue local art generation over night please.”
+  - What changed: Item 62b (AGENTS.md rule 12). Art run #7 ran from about 00:40 to its 09:30 deadline on 2026-10-13: a queue of 553 renders plus 32 promoted from the gated batches, 585 candidates in all, every one candidates only and none installed (A-0714). It waited on the pause file while a review held the GPU. The Songstress defend pilot read as a guard but with the costume drifting, so the gated batches were promoted anyway and the drift is flagged on the review. The review page is owed to him (D-805).
+  - area art · both games · adopted · delivery implemented · see [D-736](#d-736), [D-805](#d-805) · refines [D-736](#d-736)
+  - Source: Bailey, 2026-10-13 about 00:55 EDT (the driver's clock), in the Claude Code chat, verbatim: “continue local art generation over night please.” Item …
+- <a id="d-804"></a>**D-804** — His verdict by ear on the generated music of batches 1 and 2: "I like all the music 7/10", the first listening score on record for the music (both games)
+  - Bailey: “I like all the music 7/10”
+  - What changed: Item 63a. The Score and sound effects tile had no score out of ten, so the critic's audio category stayed unverified for listening quality; for the music there is now one: 7. The driver's reading (inferred, not his words): the music stays as installed and no cue is replaced on this verdict; 7 out of 10 leaves room, so a later pass may raise single cues, but no credits go to music now. D-809 records his yes to that reading. The sound effects have no score yet.
+  - area audio · both games · adopted · nothing to build · see [D-737](#d-737), [D-809](#d-809) · refines [D-737](#d-737)
+  - Source: Bailey, 2026-10-13 late morning, in the Claude Code chat, verbatim: “I like all the music 7/10”. Item 63a of the driver's list (three separate …
+- <a id="d-805"></a>**D-805** — The order of his two morning items: the art review page first, then the PREP-A tabs that had no mockup (with the token-or-page shade question)
+  - Bailey: “the art review page then prep-a tabs”
+  - What changed: Item 63b. The run #7 art review: four curators judged the 585 candidates (Rikku, the Sinspawn Gui chapter, people and aeons, the Experiment); two groups are complete, the people-and-aeons group has 7 of its 12 slots judged and the Experiment group is marked partial, and the "Art Picks, Oct 13" page is not built yet (open slots, then one builder agent). The PREP-A tabs: the sheet of the four tabs with no mockup went to him at about 11:10 and the shade comparison followed (D-786); he has not picked a shade.
+  - area process · both games · adopted · delivery in progress · see [D-786](#d-786), [D-803](#d-803) · refines [D-803](#d-803)
+  - Source: Bailey, 2026-10-13 late morning, in the Claude Code chat, verbatim: “the art review page then prep-a tabs”. Item 63b of the driver's list: the order …
+- <a id="d-806"></a>**D-806** — He removed the ElevenLabs key's own credit limit himself ("ok it's done"); the key works, the 10,000-credit reserve stands and agents stop at 14,000 (both games)
+  - Bailey: “ok it's done”
+  - What changed: Item 63c. He asked how to remove the key limit; the driver opened the key's Edit panel in the browser pane and he made the change himself before the steps were written out. Probe at about 11:00 EDT: the key works; the account has 24,077 credits left until 2026-11-07. This was the second change: his words of 23:59 on 2026-10-12, “ok the changes to elevenlabs is done”, raised the limit to 105,000, which the music and sound-effect generation used up at about 00:44 (A-0707). Of the credits, the 10,000 reserve stands, so agents stop at 14,000.
+  - area process · both games · adopted · delivery implemented · see [D-742](#d-742), [D-760](#d-760) · refines [D-760](#d-760)
+  - Source: Bailey, 2026-10-13 late morning, in the Claude Code chat, verbatim: “ok it's done”. Item 63c of the driver's list; the driver's probe after it read …
+- <a id="d-807"></a>**D-807** — The scene cue goes first (LV43-2): at the card confirm the opening scene's music downloads first and the rest of the warm after it (both games; shared loading plumbing)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 64a. The driver's words to him: “The proper fix is to let that music download first, which needs your yes. I recommend it.” Lane r46-scenecue (origin/r46-scenecue, from r45-rc d5bf2206) is in progress: only measurement tooling so far (an HTTP/2 static server for a built site and a real-key route harness, 77f5896e); no product code yet, and the plan classes it deep with its paper preflight not yet written. Findings to weigh before building: Chapter I's script opens with silence by design, so LV43-2 cannot apply to it; the scene cues in r45-rc are 1.1 to 1.5 MB against 2.9 to 3.9 MB in the build the live check measured, so r45 may close part of the gap and should be measured live first; the browser's fetch priority is already high, so only ordering (the scene cue alone first, the rest after) can help.
+  - area audio · both games · adopted · delivery in progress · see [D-789](#d-789), [D-795](#d-795) · refines [D-789](#d-789)
+  - Source: Bailey, 2026-10-13 about 11:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I'll go with all of your recommendations”. A blanket …
+- <a id="d-808"></a>**D-808** — The audio build r45-rc (d5bf2206) deploys when the critic's focused verdict is SHIP, then the live check; these words are the owner override for that deploy (both games)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 64b. The driver's words to him: “If the verdict is ship, I deploy it and run the live check.” The candidate r45-rc d5bf2206 is r44a-rc 7758791e plus r45-audio (the 27 music picks of batch 2 and 18 sound effects in six packs) plus the FOC44A-05 Paragon fix and the FOC44A-01 first-run chevron fix; the full suite read 1,146 files and 17,914 tests passed and the audio is 68.23 MB of the 105 MB budget. Its focused review was paused at the 11:40 app restart with no verdict: done are the gates, the music routing in 14 chapters, the victory and defeat cues, 16 of 18 sound effects and both fixes; open are the first menus of seven chapters, the defeat and retry paths, the extra Paragon pairs and the WebKit audio decode. Not live.
+  - area release · both games · adopted · delivery in progress · see [D-737](#d-737), [D-804](#d-804) · refines [D-737](#d-737)
+  - Source: Bailey, 2026-10-13 about 11:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I'll go with all of your recommendations”. A blanket …
+- <a id="d-809"></a>**D-809** — The music stays as installed after his 7 out of 10; no ElevenLabs credits go to music now (both games)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 64c. Nothing is regenerated or replaced on his 7/10 (D-804); the credits stay for the sound-effect retakes only (D-810).
+  - area audio · both games · adopted · nothing to build · see [D-804](#d-804), [D-810](#d-810) · refines [D-804](#d-804)
+  - Source: Bailey, 2026-10-13 about 11:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I'll go with all of your recommendations”. A blanket …
+- <a id="d-810"></a>**D-810** — Sound effects: only the eight queued retakes (348 credits) go out; no further retake round until the driver has checked the method; the 10,000-credit reserve stays (both games)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 64d. Done: the eight retakes ran for 348 credits; ffx.water.t3 failed and stays "near", and ffx2.boss.shuyin came out "near" with a closer take (v3) than the one wired in r45-rc (v1); the rest were unchanged. The account had 23,723 credits afterwards, above the 14,000 floor. The listening page ("Sound Effect Picks": today's cue against the best take, three choices per row) is not built: its data is ready (64 rows plus the 18 installed, 82 level-matched pairs, the driver's picks 29 new, 24 keep and 11 retry). Two rounds of retakes already failed on most rows, so there is no further round without a method check.
+  - area audio · both games · adopted · delivery implemented · see [D-782](#d-782), [D-809](#d-809) · refines [D-782](#d-782)
+  - Source: Bailey, 2026-10-13 about 11:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I'll go with all of your recommendations”. A blanket …
+- <a id="d-811"></a>**D-811** — The ACCESSIBILITY tab ships only after the critic's deep review of the candidate, because it saves two new settings (both games)
+  - Bailey: “I'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 64e. The branch r44-access (29bc04a8) is built; the candidate r44b = r44a plus that branch gets a deep review of the candidate (deep-release-tree) before any deploy, as the save-data class requires. The review is not started. NOT covered by this yes, because the driver had given him no recommendation yet: the PREP-A shade choice (the sheet was being captured), Sin's Right Fin attack-painting lift (FOC43-09; options first), the Chapter II Wakka switch (the RE chat asks him) and the app restart (his own word).
+  - area release · both games · adopted · delivery in progress · see [D-799](#d-799), [D-792](#d-792) · refines [D-799](#d-799)
+  - Source: Bailey, 2026-10-13 about 11:15 EDT (the driver's clock), in the Claude Code chat, verbatim: “I'll go with all of your recommendations”. A blanket …

@@ -1,13 +1,127 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 64 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 66 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-13 · Release 44a (r44a): party prep on a phone, bosses that gather from pyreflies, and a lighter chapter board
+
+Address: https://echoesofspira.com (main 7758791e, bundle CKOVah7-)
+
+- **Both, party prep on a phone:** the eight heavy tabs (FFX Stats, Equipment, Items and Overdrive; FFX-2
+  Dresspheres, Stats, Accessories and Items) used to draw the desktop board shrunk into a band across the
+  screen, with letters about 3 pixels tall on a 390 by 844 phone. Each is now one long page you scroll: the
+  tab bar and the faces stay pinned, the sections fold and keep a one-line summary of their numbers when
+  folded, and START BATTLE stays at the bottom. Nothing on any of the eight tabs is under 14 pixels at five
+  phone sizes, and the desktop screens look the same as before. Four small accent shades use the nearest
+  Ink & Gold colours for now; the four tabs the mockup had no picture for went to Bailey to look at.
+- **Both, bosses and aeons arrive from pyreflies:** the figure that used to be on the field whole from the
+  first frame, then jump to its full size in one frame, now gathers out of pyreflies over about 0.9 seconds
+  (fiends, the unsent and aeons) or fades in over 0.3 seconds (people and machines). 89 figures in 21
+  chapters; the first menu comes at exactly the same time as before. The size jumps of Overdrive Sin
+  (FFX, Chapter XVIII), Paragon (FFX-2, Chapter XIII) and Anima at the Fallen Aeons seam (FFX-2, Chapter XI)
+  are gone from the motion check. It plays at every fight opening, not only those three, and has no sound
+  yet. REDUCE MOTION gives a plain 0.2-second fade.
+- **FFX-2, Chapter XIII (Paragon and Trema):** the Move Advice card now puts the chapter's own plan on top.
+  A player who follows the card at a human pace wins about 63.5 times in 100 on our practice line, where it
+  was 45.5; Chapters V and XV and every number on a boss or a party member are unchanged.
+- **Both, the chapter board:** the strips on the chapter list paint small copies of their paintings (made when
+  the game is built, from the same approved pictures), and the big picture loads when you stop on a card. The
+  strips' files go from 79 to 12 MB and a board session from 129 to about 93 MB; every strip is painted
+  before the board is up. The pictures you see are the same.
+- **FFX-2, Rikku, and FFX, Yuna:** Rikku's three knocked-down paintings (White Mage, Alchemist and Berserker)
+  replace the old ones, and a fallen Rikku now lies about 0.9 to 1.0 of her standing height long where it
+  was about 0.5 to 0.6 (FFX-2 only). FFX Yuna's item pose is repainted (black boots, darker hair, lilac
+  hem); one eye came out purple instead of blue (FFX only).
+- **Both, two small fixes:** on a first launch the party prep's hint strip no longer runs under the first-run
+  guide, and the FFX Overdrive mode rows on the party prep take a mouse click on a desktop.
+- **Disclosed by the focused review:** FOC44A-05 (major, both games, inside the new entrance, not worse than
+  the last build): Paragon's size step can still show on a visible figure when Enter is pressed in the first
+  second or the machine is slow; the fix is already built for the next build. FOC43-06 (major, carried):
+  jerks of 40 pixels or more remain in the motion check, 67 against 63 on the last build (the Sin and
+  Anima entrance jerks are gone). FOC44A-03 (polish): a fast scan down the chapter list shows soft plates
+  for about 0.4 seconds. FOC44A-01 (polish): on a phone's first launch the guide's chevron sits over the
+  MORE BELOW cue; fixed in the next build. FOC44A-02 (polish): two differences from the last build too small to
+  see on a desktop. FOC44A-04 (suggestion): about 12 MB more is downloaded before the first key.
+- **Not in this release:** the ACCESSIBILITY tab (REDUCE FLASHES and a colour-vision setting), built but
+  waiting for a deep review because it adds two settings to the save; the new music and sound effects, in
+  review; the Chapter II Wakka turn and the scene-music-first change.
+- **Deploy notes:** shipped at 07:06 EDT on 2026-10-13 (docs/deploys.log: 2026-10-13T11:06:09Z) under Bailey's
+  owner override (his words of about 23:15 EDT on 2026-10-12: "I’ll go with all of your recommendations", and
+  "Install" for the four paintings) because deep reviews are owed on earlier builds; the focused review's
+  SHIP came first. The deploy compared the live files with the build byte for byte, and a live check then
+  found all 5,205 files identical, opened the party prep of FFX Chapter I on a first launch, played the boss
+  entrances of FFX Chapter XVIII and FFX-2 Chapter XI to the first menu by real keys (Chapter XI on a phone
+  too) and found no console error. The deep review is owed.
+- **How it was checked:** tsc clean; the full suite read 1,153 files (17,813 tests) with no failure; a
+  focused review of the exact build (about 230 minutes) measured the eight phone tabs at five widths, the
+  entrance in 10 chapters, the move advice over 165 decisions and the thumbnails against the live site.
+
+![Paragon's entrance on the live build before: the figure is small, then jumps to full size in one frame](docs/screenshots/r44-entrance/paragon-before.jpg)
+
+![Paragon's entrance in this build: a golden figure gathers from pyreflies](docs/screenshots/r44-entrance/paragon-after.jpg)
+
+![FFX Stats tab of the party prep on a 390 by 844 phone: the target (left) beside this build (right)](docs/screenshots/r43-prepphone/pairs/390x844/A-ffx-stats.jpg)
+
+*Top and middle: eight consecutive frames each of Paragon's opening in FFX-2 Chapter XIII, the last build above and this build below. Bottom: the FFX Stats tab of the party prep on a phone, the approved target beside the build.*
+
+## 2026-10-13 · Release 43 (r43): the game's own KO rules, a 14-pixel text floor and faster repeat loads
+
+Address: https://echoesofspira.com (main 7b2582e7, bundle 1ntEYvFO)
+
+- **FFX, knock-outs (every chapter):** a KO clears Zombie and Scan, as the game's own status reset does. The
+  death check now runs after the target's last hit of an action, so a multi-hit attack no longer lets a dead
+  character be raised in the middle of it; Auto-Life is removed at the moment of death and its revive
+  comes from the base maximum; and overkill counts the damage of the whole action. **Chapter II is harder
+  because of the Zombie rule:** on our practice line the wins fall from 476 to 398 in 500 (about 95 to about
+  80 in 100), and Bailey accepted that until the line is reworked. Chapter III is unchanged at 479 in 500.
+- **FFX, Chapter II guide, and FFX-2, Bahamut's note:** the guide gains one line, do not Haste a Reflecting
+  character (the spell bounces off Reflect and lands on Yunalesca). Bahamut's on-screen note no longer says
+  Slow slows the Mega Flare countdown: it is a fixed wait of about 25 seconds that Slow, Haste and speed leave
+  alone (FFX-2 only).
+- **Both, a fix for the new KO rule:** a status that lands on a character who the same action knocks out now
+  plays no flash, sound, message or icon; Chapter III's Curse had played five such beats, about 1.5 seconds.
+  (Today only FFX's death check produces the pair.)
+- **Both, text you can read:** the party prep, the results screens, the first-run guide, the Chapter IX and XII
+  battle screens and the Sensor chips now use text of 14 pixels or more at 1280 by 720, 1600 by 900, 2000 by
+  1012 and 3840 by 2160. Still under the floor: the FFX Sphere Grid tab below 1600 by 900, windows as small
+  as 1024 by 768, and the heavy party-prep tabs on a phone (fixed in the next release).
+- **FFX, bosses on the airship and Sin (Chapters VIII and XVII):** Evrae's Inhale and the Left and Right Fins
+  no longer cut from casting to standing in a single frame, and the Right Fin no longer slides.
+- **Both, loading:** when you confirm a chapter's card the game starts fetching its scene, boss and victory
+  music and keeps it ready until it plays, and files named with their content (the bundle, the style sheet,
+  the workers) are cached for a year, so a repeat visit asks for none of them. On the live site the scene
+  music was still not playing at the first spoken line in most of our measured runs (2 of 9 fast runs, 0 of
+  6 at a human pace): the music is requested at once but competes with the art. The fix, fetching it first,
+  is built next.
+- **Disclosed by the focused review:** FOC43-06 (major, carried): the motion check still finds jerks of 40
+  pixels or more, 94 against 174 on the last build in Chapter XVII. FOC43-07 (major): Chapter II is harder,
+  above. FOC43-11 (major, carried): on a phone the heavy party-prep tabs draw their text from 3 pixels
+  (fixed in release 44a). FOC43-01 (polish): on a first launch the party prep's hint strip runs under the
+  first-run guide (fixed in release 44a). FOC43-04 (polish): Tidus's Auto-Life icon is missing for a moment
+  after the Curse (fix built for a later build).
+- **Not in this release:** the Right Fin's attack painting, which still stands 154 painting pixels above its
+  idle (needs Bailey's yes).
+- **Deploy notes:** shipped at 01:56 EDT on 2026-10-13 (docs/deploys.log: 2026-10-13T05:56:02Z) under Bailey's
+  owner override (his words of about 17:50 EDT on 2026-10-12: "I’ll go with all of your recommendations",
+  which accepted the Chapter II change) because deep reviews are owed on earlier builds; the focused
+  review's SHIP came first. The deploy compared the live files with the build byte for byte, and a live
+  check then found all 5,169 files identical, played FFX Chapter I and FFX-2 Chapter IV by real keys, ran
+  the six cache checks and found no console error. The deep review is owed.
+- **How it was checked:** tsc clean; the full suite read 1,121 files with no failure; a focused review of the
+  exact build (about 250 minutes) played Chapters I, III, VIII and XVII from the title and ran Chapter II over
+  500 seeds on both builds.
+
+![Chapter XII first menu at 1280 by 720 on the last build: small battle text](docs/screenshots/r43-textfloor/before/battle-ch12-1280x720-first-menu.jpg)
+
+![Chapter XII first menu at 1280 by 720 in this build: text of 14 pixels or more](docs/screenshots/r43-textfloor/after/battle-ch12-1280x720-first-menu.jpg)
+
+*FFX, Chapter XII (Seymour Omnis), the first menu at 1280 by 720: the last build (top) and this build (bottom).*
 
 ## 2026-10-12 · Release 42 (r42): the games' own battle rules on echoesofspira.com
 

@@ -8,7 +8,7 @@
   "waiting": [
     {
       "title": "Phone layout.",
-      "why": "At 390 × 844 every screen except pause is a letterboxed strip. It needs options before a build. UPDATED 2026-09-25: the battle HUD's own options round is answered (option B, the compact rail; D-140, presentation group tile 'Battle HUD on a phone (both)'); the pause screen and the party-prep card are separately tracked tiles."
+      "why": "At 390 × 844 every screen except pause is a letterboxed strip. It needs options before a build. UPDATED 2026-09-25: the battle HUD's own options round is answered (option B, the compact rail; D-140, presentation group tile 'Battle HUD on a phone (both)'); the pause screen and the party-prep card are separately tracked tiles. UPDATED 2026-10-13: the party prep's eight heavy tabs (FFX Stats, Equipment, Items, Overdrive; FFX-2 Dresspheres, Stats, Accessories, Items) are one long page on a phone since 7758791e (PREP-A, D-786); the shade choice for four small accents is open (D-805)."
     },
     {
       "title": "Move advisor, enemy next-move panel and defeat screen.",
@@ -19,8 +19,8 @@
       "why": "They come to you as each chapter’s research is fact-checked."
     },
     {
-      "title": "A score out of ten for the audio, next time you listen.",
-      "why": "Your verdict was “Right direction, keep refining”. A number lets the critic’s audio category use your listening score; without one it stays unverified."
+      "title": "A score out of ten for the sound effects, next time you listen.",
+      "why": "The music has one: 7 out of 10 (2026-10-13, \"I like all the music 7/10\", D-804), which lets the critic's audio category use a listening score for the music. The sound effects have none yet; the \"Sound Effect Picks\" listening page is owed (its data is ready, the page is not built)."
     },
     {
       "title": "The product brief.",
@@ -299,7 +299,7 @@
           "build": "Yuna's shipped poses in chapter 1.",
           "hashes": "cast:yuna",
           "delivery": "implemented",
-          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c."
+          "deliveryNote": "Built, and failing its target in critic/rounds/round-04.json @ bc2571c. 2026-10-12: her item pose was replaced on his word “Install” (YUNA-ITEM-1, D-797): black boots, darker hair, lilac hem; one eye came out purple instead of blue, disclosed on the picks page. Live since 7758791e; the pin cast:yuna in approved-hashes moved to the new file with the old record inside."
         },
         {
           "label": "Auron, battle poses",
@@ -974,7 +974,7 @@
           "label": "Accessibility settings: option C, rows plus a first-launch comfort card (both)",
           "src": "docs/concepts/accessibility-2026-09-26/sheet.jpg",
           "state": "approved",
-          "delivery": "not-scheduled",
+          "delivery": "in-progress",
           "game": "both",
           "gameNote": "Both: the settings and their runtime effects (text size, motion, flashes, remap) are shared plumbing across the pause screen, SaveData, Input and both games' presenters (CHK-020); the FFX-2 HUD (ffx2hud) still needs its own 130% layout pass.",
           "note": "docs/concepts/accessibility-2026-09-26/README.md's three options (A rows only, B its own ACCESSIBILITY tab, C A's rows plus a one-time comfort card at first launch); C was recommended because REDUCE FLASHES and TEXT SIZE only fully help when set before the first flash and the first line of dialogue. docs/target/decisions.json D-220. Save-data class (new Settings fields): a deep review before deploy and the CHK-024 upgrade matrix, not a focused-only pass. Not yet built.",
@@ -990,12 +990,19 @@
               "all four settings (TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, CONTROLS remap) off by default",
               "the card appears once, at first launch, and never again"
             ],
-            "mustChange": [],
-            "undecided": [
-              "the card's exact wording (README question 2) — asked, not yet confirmed word for word"
+            "mustChange": [
+              "2026-10-12 (D-799, OPT-B with NO-KEYS): the settings live in their own ACCESSIBILITY tab (one COMFORT column), not as rows in the SETTINGS column; REDUCE FLASHES and a COLOUR VISION setting are in; key remapping is left out for now"
             ],
-            "inferred": []
-          }
+            "undecided": [
+              "the card's exact wording (README question 2) — asked, not yet confirmed word for word",
+              "whether option C’s one-time first-launch comfort card is still wanted next to the OPT-B tab: not asked, not built"
+            ],
+            "inferred": [],
+            "named": [
+              "I’ll go with all of your recommendations (2026-10-12 about 23:15, OPT-B with NO-KEYS; D-799)"
+            ]
+          },
+          "deliveryNote": "2026-10-13: a later pick, OPT-B with NO-KEYS (2026-10-12, D-799), is built on origin/r44-access (29bc04a8) and not live: a ninth pause tab ACCESSIBILITY with TEXT SIZE, REDUCE MOTION, REDUCE FLASHES (default off, 22 flash sources), LOW EFFECTS and COLOUR VISION; no key remapping. It adds two settings to the save, so a deep review of the candidate comes before any deploy (D-811). Option C’s one-time first-launch comfort card is not built."
         }
       ]
     },
@@ -1245,7 +1252,7 @@
           "label": "Score and sound effects",
           "state": "approved",
           "empty": "Listen, don't look",
-          "note": "Approved as the direction: the themes and the sampled-orchestra palette stay. Bailey’s verdict by ear on 19 Sep 2026 was “Right direction, keep refining” (docs/audio/OWNER-VERDICT.md), so refinement continues. No score out of 10 is on record, so the critic’s audio category stays unverified for listening quality. Listen at docs/audio/audition.html.",
+          "note": "Approved as the direction: the themes and the sampled-orchestra palette stay. Bailey’s verdict by ear on 19 Sep 2026 was “Right direction, keep refining” (docs/audio/OWNER-VERDICT.md), so refinement continues. On 2026-10-13 he scored the generated music 7 out of 10 by ear (\"I like all the music 7/10\", D-804), the first listening score on record for the music; the sound effects have none, so the critic’s audio category stays unverified for their listening quality. Listen at docs/audio/audition.html.",
           "approved": "Bailey, 19 Sep 2026",
           "reaction": {
             "date": "2026-09-28",
@@ -1254,7 +1261,8 @@
             "liked": [
               "all three sketches 'sound pretty good'",
               "'less snes music'",
-              "'close to good' / 'almost sounds good'"
+              "'close to good' / 'almost sounds good'",
+              "all the generated music, 7 out of 10 (2026-10-13, by ear; D-804)"
             ],
             "disliked": [
               "'tinny and hollow', all three samples a, b and c"
@@ -1269,9 +1277,15 @@
             ],
             "inferred": [
               "keep the Direction B sound that reads as less SNES (the agent's reading of 'less snes music', not a requirement Bailey named)",
-              "the measured causes (L/R phase decorrelation from the AI decode and the render's hall; a midrange-heavy spectrum with a thin floor and little above 6 kHz) are what Bailey hears as tinny and hollow: a measurement-based hypothesis only, agents cannot hear (rule 13)"
+              "the measured causes (L/R phase decorrelation from the AI decode and the render's hall; a midrange-heavy spectrum with a thin floor and little above 6 kHz) are what Bailey hears as tinny and hollow: a measurement-based hypothesis only, agents cannot hear (rule 13)",
+              "the driver reads 7 out of 10 as: the music stays as installed and no cue is replaced on this verdict; a later pass may raise single cues (the driver’s reading; he confirmed only that the music stays, D-809)"
+            ],
+            "named": [
+              "I like all the music 7/10 (2026-10-13, by ear, on the generated music of batches 1 and 2; D-804)",
+              "the music stays as installed after the 7/10; no credits go to music now (his yes of 2026-10-13, D-809)"
             ]
-          }
+          },
+          "deliveryNote": "2026-10-13: his score for the generated music is 7 out of 10 and the music stays as installed (D-804, D-809). Batch 1 is live since fcecfa74; batch 2 (27 cues) is wired on r45-rc d5bf2206, in its focused review and not live; 18 recorded sound effects ride with it."
         }
       ]
     },
@@ -2037,7 +2051,7 @@
           "game": "both",
           "build": "Option C as the mockups show, with the boss painted on its own scene (the Evrae capture's treatment) on the plate and every card in place of the pause hero plates, the fixed list (all cards always in place, FFX then FFX-2, the selected card lit in place with the gold frame, numeral block and notch), the numeral column beside the names, the Coming Chapter VII in number order, the VICTORY sash and card ribbon on beaten chapters, the progress strip \"N of M beaten\" counting listed chapters only, and the phone as one scrolling column.",
           "delivery": "implemented",
-          "deliveryNote": "Target/build pairs: docs/screenshots/chapter-select-c/pair-<1600|1280|2000|390>-<new|two>-<ch1|ch8>.jpg (real keys, clicks and taps from the title; capture-report.json has the geometry checks). Deviations from the mockup, all from the README critique: sash at the plate's top-left (off the boss), best time on the card ribbon, flat higher-contrast pips, strip height taken from the plate, touch wording on a phone.",
+          "deliveryNote": "Target/build pairs: docs/screenshots/chapter-select-c/pair-<1600|1280|2000|390>-<new|two>-<ch1|ch8>.jpg (real keys, clicks and taps from the title; capture-report.json has the geometry checks). Deviations from the mockup, all from the README critique: sash at the plate's top-left (off the boss), best time on the card ribbon, flat higher-contrast pips, strip height taken from the plate, touch wording on a phone. 2026-10-12 (D-801): the rail strips now paint small derived copies of their 36 paintings and the plate shows the small copy until the full picture is up (strip files 79.0 to 11.7 MB; the plate is the same picture in every pixel); live since 7758791e.",
           "reaction": {
             "date": "2026-09-25",
             "words": "I'll go with C a victory ribbon / All recommendations",
