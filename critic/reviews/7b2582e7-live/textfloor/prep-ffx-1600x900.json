@@ -1,0 +1,8455 @@
+{
+ "scene": "prep-ffx",
+ "w": 1600,
+ "h": 900,
+ "base": "https://echoesofspira.com/?cb=1791871915",
+ "seed": 1,
+ "floor": 14,
+ "steps": [
+  {
+   "label": "tab1-chapter",
+   "file": "prep-ffx-1600x900-tab1-chapter.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "chapter",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 71,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      114,
+      141.6,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      167.2,
+      140.4,
+      54.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      345.9,
+      146.6,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      124.5,
+      219.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      178.2,
+      218.1,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 32",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      357.7,
+      224.3,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      135.4,
+      297.1,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      189.3,
+      295.8,
+      81.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      368.8,
+      302.1,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      146.6,
+      374.8,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Auron",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      200.5,
+      373.6,
+      61.4,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 35",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      379.7,
+      379.8,
+      49.2,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      155.1,
+      452.5,
+      19.6,
+      30
+     ]
+    },
+    {
+     "text": "Wakka",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      211.6,
+      451.3,
+      65.7,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      390.3,
+      457.5,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      169.8,
+      530.3,
+      12.5,
+      30
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      222.7,
+      529,
+      45.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      401.4,
+      535.3,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      179.6,
+      608,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      233.8,
+      606.8,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 42",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      412.7,
+      613,
+      49.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      833.3,
+      124.4,
+      148,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1025.7,
+      124.4,
+      126.7,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1196.8,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1308,
+      124.4,
+      124.9,
+      22.5
+     ]
+    },
+    {
+     "text": "FFX",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__game",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.5,
+      187.2,
+      39.4,
+      20
+     ]
+    },
+    {
+     "text": "·",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__dot",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      663.8,
+      187.2,
+      3.4,
+      20
+     ]
+    },
+    {
+     "text": "I",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__numeral",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      676.1,
+      187.2,
+      8.6,
+      20
+     ]
+    },
+    {
+     "text": "Seymour Flux",
+     "at": "div.prepchap__colwrap > div.prepchap__col > h2.cpanel__title",
+     "fs": 18.67,
+     "scale": 2.5,
+     "eff": 46.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.5,
+      206.6,
+      231.7,
+      55
+     ]
+    },
+    {
+     "text": "The Prominence",
+     "at": "div.prepchap__colwrap > div.prepchap__col > div.cpanel__subtitle",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.5,
+      262.5,
+      176.1,
+      20
+     ]
+    },
+    {
+     "text": "The Ronso died holding this gate, and Seymour is",
+     "at": "div.prepchap__colwrap > div.prepchap__col > p.cpanel__blurb",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      615.5,
+      292.5,
+      337,
+      78.3
+     ]
+    },
+    {
+     "text": "the Prominence, at last",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      628.2,
+      405.9,
+      80,
+      36.9
+     ]
+    },
+    {
+     "text": "unhurried, always unhurried",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      740,
+      406.9,
+      87.9,
+      36.4
+     ]
+    },
+    {
+     "text": "the machine beneath him",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      870.4,
+      407.1,
+      61.4,
+      35.6
+     ]
+    },
+    {
+     "text": "OBJECTIVES",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__head > span.cpanel__head-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      982.3,
+      196.1,
+      125.4,
+      20
+     ]
+    },
+    {
+     "text": "Holy Water a Zombie before Full-Life lands",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1009.5,
+      236.3,
+      270.3,
+      17.5
+     ]
+    },
+    {
+     "text": "Survive Total Annihilation",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1009.5,
+      262.9,
+      160.9,
+      17.5
+     ]
+    },
+    {
+     "text": "Defeat Seymour Flux",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1009.5,
+      289.6,
+      132.1,
+      17.5
+     ]
+    },
+    {
+     "text": "TIP",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      997,
+      334.5,
+      33.7,
+      20
+     ]
+    },
+    {
+     "text": "Bio him turn one — it deals a straight percentag",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-text",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1041.8,
+      331.8,
+      222.5,
+      98.6
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "· SCROLL",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1203.6,
+      533.3,
+      247.6,
+      20
+     ]
+    },
+    {
+     "text": "PG UP / PG DN",
+     "at": "div.prep__hint > span > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1235.8,
+      533.3,
+      138.8,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.8,
+      767.3,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      63.5,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2420/2420 · MP 115/115",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      179.1,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      415.4,
+      772.3,
+      86.9,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      595.1,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 1500/1500 · MP 270/270",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      183.6,
+      20
+     ]
+    },
+    {
+     "text": "SUMMONER",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      864.8,
+      772.3,
+      106.3,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.7,
+      767.3,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.8,
+      749.5,
+      95.2,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2310/2310 · MP 130/130",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.8,
+      790,
+      179.6,
+      20
+     ]
+    },
+    {
+     "text": "STOIC",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1383.3,
+      772.3,
+      56.6,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab2-stats",
+   "file": "prep-ffx-1600x900-tab2-stats.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "stats",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 78,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      114,
+      141.6,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      167.2,
+      140.4,
+      54.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      345.9,
+      146.6,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      124.5,
+      219.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      178.2,
+      218.1,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 32",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      357.7,
+      224.3,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      135.4,
+      297.1,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      189.3,
+      295.8,
+      81.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      368.8,
+      302.1,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      146.6,
+      374.8,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Auron",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      200.5,
+      373.6,
+      61.4,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 35",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      379.7,
+      379.8,
+      49.2,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      155.1,
+      452.5,
+      19.6,
+      30
+     ]
+    },
+    {
+     "text": "Wakka",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      211.6,
+      451.3,
+      65.7,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      390.3,
+      457.5,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      169.8,
+      530.3,
+      12.5,
+      30
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      222.7,
+      529,
+      45.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      401.4,
+      535.3,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      179.6,
+      608,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      233.8,
+      606.8,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 42",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      412.7,
+      613,
+      49.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      722.9,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      833.3,
+      124.4,
+      148,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1025.7,
+      124.4,
+      126.7,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1196.8,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1308,
+      124.4,
+      124.9,
+      22.5
+     ]
+    },
+    {
+     "text": "HP",
+     "at": "div.ffxprep-stats > div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      232.1,
+      26.4,
+      20
+     ]
+    },
+    {
+     "text": "2200",
+     "at": "div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__vs > span.ffxprep-stat__base",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      825.9,
+      229.6,
+      35.3,
+      22.5
+     ]
+    },
+    {
+     "text": "2420",
+     "at": "div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      891.5,
+      217.1,
+      68.8,
+      42.5
+     ]
+    },
+    {
+     "text": "+10%",
+     "at": "div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__vs > span.ffxprep-stat__bonus",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      967.7,
+      232.1,
+      38.8,
+      17.5
+     ]
+    },
+    {
+     "text": "MP",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1059.8,
+      232.1,
+      27.9,
+      20
+     ]
+    },
+    {
+     "text": "115",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1411.8,
+      217.1,
+      39.1,
+      42.5
+     ]
+    },
+    {
+     "text": "STRENGTH",
+     "at": "div.ffxprep-stats > div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      280.2,
+      101.8,
+      20
+     ]
+    },
+    {
+     "text": "31",
+     "at": "div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      896.6,
+      265.2,
+      28.1,
+      42.5
+     ]
+    },
+    {
+     "text": "+10% dmg",
+     "at": "div.ffxprep-stat.ffxprep-stat--boosted > span.ffxprep-stat__vs > span.ffxprep-stat__bonus",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      932.3,
+      280.2,
+      74.2,
+      17.5
+     ]
+    },
+    {
+     "text": "DEFENSE",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1059.8,
+      280.2,
+      88.1,
+      20
+     ]
+    },
+    {
+     "text": "20",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1416.6,
+      265.2,
+      34.3,
+      42.5
+     ]
+    },
+    {
+     "text": "MAGIC",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      328.2,
+      61.3,
+      20
+     ]
+    },
+    {
+     "text": "16",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      977.9,
+      313.2,
+      28.6,
+      42.5
+     ]
+    },
+    {
+     "text": "MAGIC DEF",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1059.8,
+      328.2,
+      106.1,
+      20
+     ]
+    },
+    {
+     "text": "18",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1421.7,
+      313.2,
+      29.2,
+      42.5
+     ]
+    },
+    {
+     "text": "AGILITY",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      376.2,
+      76.9,
+      20
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      971.6,
+      361.2,
+      34.8,
+      42.5
+     ]
+    },
+    {
+     "text": "LUCK",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1059.8,
+      376.2,
+      50.8,
+      20
+     ]
+    },
+    {
+     "text": "18",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1421.7,
+      361.2,
+      29.2,
+      42.5
+     ]
+    },
+    {
+     "text": "EVASION",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      424.2,
+      83.7,
+      20
+     ]
+    },
+    {
+     "text": "22",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      973.6,
+      409.2,
+      32.9,
+      42.5
+     ]
+    },
+    {
+     "text": "ACCURACY",
+     "at": "div.ffxprep-stats > div.ffxprep-stat > span.ffxprep-stat__k",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1059.8,
+      424.2,
+      103.1,
+      20
+     ]
+    },
+    {
+     "text": "24",
+     "at": "div.ffxprep-stat > span.ffxprep-stat__vs > span.ffxprep-stat__v",
+     "fs": 13.33,
+     "scale": 2.5,
+     "eff": 33.33,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1416.4,
+      409.2,
+      34.5,
+      42.5
+     ]
+    },
+    {
+     "text": "Equipment grants auto-abilities, not stat points",
+     "at": "div.prep__sheet-inner.prep__sheet-inner--panel > div.prep__panel > div.ffxprep-stats__note",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      460.5,
+      741.6,
+      17.5
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.8,
+      767.3,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      63.5,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2420/2420 · MP 115/115",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      179.1,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      415.4,
+      772.3,
+      86.9,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      595.1,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 1500/1500 · MP 270/270",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      183.6,
+      20
+     ]
+    },
+    {
+     "text": "SUMMONER",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      864.8,
+      772.3,
+      106.3,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.7,
+      767.3,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.8,
+      749.5,
+      95.2,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2310/2310 · MP 130/130",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.8,
+      790,
+      179.6,
+      20
+     ]
+    },
+    {
+     "text": "STOIC",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1383.3,
+      772.3,
+      56.6,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab3-sphere-grid",
+   "file": "prep-ffx-1600x900-tab3-sphere-grid.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "sphere-grid",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 115,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "Fortune",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "share": 0.39
+    },
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "1",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "share": 0.53
+    },
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "Keys",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "share": 0.54
+    },
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "4·2·1·1",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "share": 0.53
+    },
+    {
+     "a": "AUTO-LEARN",
+     "b": "First time on the Sphere Grid",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto | div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker",
+     "share": 0.4
+    },
+    {
+     "a": "M",
+     "b": "First time on the Sphere Grid",
+     "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto > span.ffxprep-sg__key | div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker",
+     "share": 0.56
+    },
+    {
+     "a": "WALK",
+     "b": "First time on the Sphere Grid",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__walk | div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker",
+     "share": 0.6
+    },
+    {
+     "a": "−",
+     "b": "First time on the Sphere Grid",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn | div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker",
+     "share": 0.6
+    },
+    {
+     "a": "+",
+     "b": "First time on the Sphere Grid",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn | div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker",
+     "share": 0.6
+    },
+    {
+     "a": "STR 31",
+     "b": "TWICE",
+     "at": "div.sgb-card__in > div.sgb-card__top > div.sgb-big | div.sgx-steps > div.sgx-step > h3",
+     "share": 0.41
+    },
+    {
+     "a": "Path",
+     "b": "AGAIN / ENTER",
+     "at": "div.sgb-rows > div.sgb-row > span | div.sgx-viz > span.sgx-t > span.sgx-pointer",
+     "share": 0.92
+    },
+    {
+     "a": "Tidus after",
+     "b": "Click a node to select it; click it again, or pr",
+     "at": "div.sgb-rows > div.sgb-row > span | div.sgx-step > p > span.sgx-pointer",
+     "share": 0.58
+    },
+    {
+     "a": "Walk and activate",
+     "b": "Click a node to select it; click it again, or pr",
+     "at": "div.sgb-card > div.sgb-card__in > button.sgb-go | div.sgx-step > p > span.sgx-pointer",
+     "share": 0.47
+    }
+   ],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      671,
+      747,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      671,
+      770,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      671,
+      807.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      671,
+      858.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      706.8,
+      858.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      190,
+      108,
+      112.1,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      346.1,
+      108,
+      74.1,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      464.2,
+      108,
+      165.9,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      674.1,
+      108,
+      141.4,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      859.5,
+      108,
+      74.9,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      978.3,
+      108,
+      139.6,
+      22.5
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.sgb-face.sgb-face--sel > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.9,
+      190,
+      13.2,
+      30
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-rail > div.sgb-face.sgb-face--sel > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      122.2,
+      214,
+      17.8,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.4,
+      270,
+      14.3,
+      30
+     ]
+    },
+    {
+     "text": "32",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.9,
+      294,
+      17.1,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.2,
+      350,
+      14.6,
+      30
+     ]
+    },
+    {
+     "text": "25",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.9,
+      374,
+      17,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.2,
+      430,
+      14.6,
+      30
+     ]
+    },
+    {
+     "text": "35",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.7,
+      454,
+      17.3,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      67.6,
+      510,
+      19.8,
+      30
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.2,
+      534,
+      17.8,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      71.2,
+      590,
+      12.7,
+      30
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.2,
+      614,
+      17.8,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      69.9,
+      670,
+      15.2,
+      30
+     ]
+    },
+    {
+     "text": "42",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.4,
+      694,
+      17.6,
+      20
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.ffxprep-sg__head > div.sgb-title > span.ffxprep-sg__who",
+     "fs": 13.6,
+     "scale": 2.5,
+     "eff": 34,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      180,
+      164.7,
+      69.1,
+      42.5
+     ]
+    },
+    {
+     "text": "S.LV",
+     "at": "div.ffxprep-sg__head > div.sgb-title > span.ffxprep-sg__slv",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      263,
+      182.2,
+      48.7,
+      20
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-title > span.ffxprep-sg__slv > b.ffxprep-sg__slv-n",
+     "fs": 11.2,
+     "scale": 2.5,
+     "eff": 28,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      317.7,
+      172.2,
+      29.3,
+      35
+     ]
+    },
+    {
+     "text": "→",
+     "at": "div.sgb-title > span.ffxprep-sg__slv > span.sgb-after",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      347,
+      182.2,
+      30.2,
+      20
+     ]
+    },
+    {
+     "text": "28",
+     "at": "span.ffxprep-sg__slv > span.sgb-after > i.sgb-after-n",
+     "fs": 11.2,
+     "scale": 2.5,
+     "eff": 28,
+     "color": "rgb(242, 194, 30)",
+     "rect": [
+      377.2,
+      172.2,
+      29,
+      35
+     ]
+    },
+    {
+     "text": "AUTO-LEARN",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      587.1,
+      175.2,
+      120.2,
+      20
+     ]
+    },
+    {
+     "text": "M",
+     "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto > span.ffxprep-sg__key",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      726.7,
+      175.2,
+      12.5,
+      20
+     ]
+    },
+    {
+     "text": "WALK",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__walk",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      799.6,
+      176,
+      51.2,
+      20
+     ]
+    },
+    {
+     "text": "−",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      901.8,
+      176,
+      11.2,
+      20
+     ]
+    },
+    {
+     "text": "+",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      963.9,
+      176,
+      11.2,
+      20
+     ]
+    },
+    {
+     "text": "CENTRE",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1026,
+      176,
+      73.6,
+      20
+     ]
+    },
+    {
+     "text": "?",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1150.5,
+      175.2,
+      11.1,
+      20
+     ]
+    },
+    {
+     "text": "H",
+     "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help > span.ffxprep-sg__key",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1181,
+      175.2,
+      11,
+      20
+     ]
+    },
+    {
+     "text": "Selected node",
+     "at": "div.sgb-card > div.sgb-card__in > div.sgb-kicker",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1297.9,
+      186,
+      180.9,
+      20
+     ]
+    },
+    {
+     "text": "Strength +2",
+     "at": "div.sgb-card__in > div.sgb-card__top > div.sgb-name",
+     "fs": 13.6,
+     "scale": 2.5,
+     "eff": 34,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      207,
+      137.8,
+      42.5
+     ]
+    },
+    {
+     "text": "STR 31",
+     "at": "div.sgb-card__in > div.sgb-card__top > div.sgb-big",
+     "fs": 18.4,
+     "scale": 2.5,
+     "eff": 46,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      248.1,
+      129.4,
+      57.5
+     ]
+    },
+    {
+     "text": "→ 33",
+     "at": "div.sgb-card__top > div.sgb-big > em",
+     "fs": 18.4,
+     "scale": 2.5,
+     "eff": 46,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1427.3,
+      248.1,
+      103,
+      57.5
+     ]
+    },
+    {
+     "text": "Sphere",
+     "at": "div.sgb-rows > div.sgb-row > span",
+     "fs": 6.2,
+     "scale": 2.5,
+     "eff": 15.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      325.6,
+      49.4,
+      17.5
+     ]
+    },
+    {
+     "text": "Power · 12 → 11",
+     "at": "div.sgb-rows > div.sgb-row > b",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1430,
+      323.1,
+      110.9,
+      22.5
+     ]
+    },
+    {
+     "text": "Path",
+     "at": "div.sgb-rows > div.sgb-row > span",
+     "fs": 6.2,
+     "scale": 2.5,
+     "eff": 15.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      364.6,
+      32.5,
+      17.5
+     ]
+    },
+    {
+     "text": "2 steps · 2 S.Lv",
+     "at": "div.sgb-rows > div.sgb-row > b",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1433.2,
+      362.1,
+      107.7,
+      22.5
+     ]
+    },
+    {
+     "text": "Tidus after",
+     "at": "div.sgb-rows > div.sgb-row > span",
+     "fs": 6.2,
+     "scale": 2.5,
+     "eff": 15.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      403.6,
+      76.8,
+      17.5
+     ]
+    },
+    {
+     "text": "S.Lv 28",
+     "at": "div.sgb-rows > div.sgb-row > b",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1488.4,
+      401.1,
+      52.5,
+      22.5
+     ]
+    },
+    {
+     "text": "Walk and activate",
+     "at": "div.sgb-card > div.sgb-card__in > button.sgb-go",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1314.4,
+      457,
+      189.8,
+      20
+     ]
+    },
+    {
+     "text": "Enter or click again does the same.",
+     "at": "div.sgb-card > div.sgb-card__in > p.sgb-note.ffxprep-sg__caption",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(90, 85, 102)",
+     "rect": [
+      1297.9,
+      499.5,
+      178.7,
+      36.5
+     ]
+    },
+    {
+     "text": "Power",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      225,
+      816.7,
+      46.7,
+      20
+     ]
+    },
+    {
+     "text": "12",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      279.7,
+      814.2,
+      17.8,
+      25
+     ]
+    },
+    {
+     "text": "Speed",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      337.4,
+      816.7,
+      48.1,
+      20
+     ]
+    },
+    {
+     "text": "8",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      393.5,
+      814.2,
+      11.4,
+      25
+     ]
+    },
+    {
+     "text": "Mana",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      444.9,
+      816.7,
+      40.5,
+      20
+     ]
+    },
+    {
+     "text": "8",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      493.4,
+      814.2,
+      11.4,
+      25
+     ]
+    },
+    {
+     "text": "Ability",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      544.8,
+      816.7,
+      50,
+      20
+     ]
+    },
+    {
+     "text": "4",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      602.7,
+      814.2,
+      11.4,
+      25
+     ]
+    },
+    {
+     "text": "Fortune",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      654.1,
+      816.7,
+      60.1,
+      20
+     ]
+    },
+    {
+     "text": "1",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      722.2,
+      814.2,
+      7.3,
+      25
+     ]
+    },
+    {
+     "text": "Keys",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      769.5,
+      816.7,
+      37.7,
+      20
+     ]
+    },
+    {
+     "text": "4·2·1·1",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      815.1,
+      814.2,
+      50.7,
+      25
+     ]
+    },
+    {
+     "text": "What the colours mean",
+     "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-kicker.sgb-kicker--gold",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1306.4,
+      603.5,
+      209.8,
+      37.5
+     ]
+    },
+    {
+     "text": "HP",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      646.4,
+      20.1,
+      20
+     ]
+    },
+    {
+     "text": "MP",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      646.4,
+      21.6,
+      20
+     ]
+    },
+    {
+     "text": "Strength",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      668.9,
+      63.9,
+      20
+     ]
+    },
+    {
+     "text": "Defense",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      668.9,
+      59.6,
+      20
+     ]
+    },
+    {
+     "text": "Magic",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      691.4,
+      42.4,
+      20
+     ]
+    },
+    {
+     "text": "Magic Def",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      691.4,
+      72.1,
+      20
+     ]
+    },
+    {
+     "text": "Agility",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      713.9,
+      46.8,
+      20
+     ]
+    },
+    {
+     "text": "Ability",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      713.9,
+      47,
+      20
+     ]
+    },
+    {
+     "text": "Lock (key)",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      736.4,
+      75.5,
+      20
+     ]
+    },
+    {
+     "text": "Not yet taken",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      736.4,
+      99.4,
+      20
+     ]
+    },
+    {
+     "text": "Gold line: walked ground, 1 S.Lv per 4 steps",
+     "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-legend__gold",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(255, 240, 168)",
+     "rect": [
+      1272.7,
+      761.9,
+      243.6,
+      37.5
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      24,
+      868,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      61.4,
+      868,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      157.3,
+      868,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      279.1,
+      868,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      339.3,
+      868,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      559.5,
+      868,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      595.6,
+      868,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8.8,
+     "scale": 2.5,
+     "eff": 22,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1293,
+      814,
+      240,
+      30
+     ]
+    },
+    {
+     "text": "First time on the Sphere Grid",
+     "at": "div.sgx-slab.sgx-card > div.sgx-in > div.sgx-kicker",
+     "fs": 15,
+     "scale": 1,
+     "eff": 15,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      620.5,
+      184,
+      376.5,
+      20
+     ]
+    },
+    {
+     "text": "Spend Tidus's Sphere Levels before the fight",
+     "at": "div.sgx-slab.sgx-card > div.sgx-in > div.sgx-title",
+     "fs": 40,
+     "scale": 1,
+     "eff": 40,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      620.5,
+      209,
+      616.9,
+      48
+     ]
+    },
+    {
+     "text": "1",
+     "at": "div.sgx-step > h3 > b",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      620.5,
+      291,
+      12.5,
+      26
+     ]
+    },
+    {
+     "text": "MOVE",
+     "at": "div.sgx-steps > div.sgx-step > h3",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      640.9,
+      291,
+      74,
+      26
+     ]
+    },
+    {
+     "text": "1 S.LV",
+     "at": "div.sgx-step > div.sgx-viz > span.sgx-t",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      741.5,
+      332,
+      37,
+      18
+     ]
+    },
+    {
+     "text": "1 PER 4",
+     "at": "div.sgx-step > div.sgx-viz > span.sgx-t",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      647.5,
+      332,
+      48.4,
+      18
+     ]
+    },
+    {
+     "text": "A step onto a new node costs . Walking back over",
+     "at": "div.sgx-steps > div.sgx-step > p",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      620.5,
+      411,
+      239.8,
+      90.8
+     ]
+    },
+    {
+     "text": "1 S.Lv",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      620.5,
+      411,
+      228.9,
+      42.9
+     ]
+    },
+    {
+     "text": "4",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      620.5,
+      482.8,
+      10.5,
+      19
+     ]
+    },
+    {
+     "text": "2",
+     "at": "div.sgx-step > h3 > b",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      894.5,
+      291,
+      16.3,
+      26
+     ]
+    },
+    {
+     "text": "ACTIVATE",
+     "at": "div.sgx-steps > div.sgx-step > h3",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      918.8,
+      291,
+      127.5,
+      26
+     ]
+    },
+    {
+     "text": "STR +2 · 1 POWER SPHERE",
+     "at": "div.sgx-step > div.sgx-viz > span.sgx-t.sgx-t--wide",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      969.5,
+      348,
+      123.5,
+      36
+     ]
+    },
+    {
+     "text": "Stand on a node and spend the sphere it asks for",
+     "at": "div.sgx-steps > div.sgx-step > p",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      894.5,
+      411,
+      229.3,
+      138.6
+     ]
+    },
+    {
+     "text": "Power",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      1031.2,
+      434.9,
+      50.1,
+      19
+     ]
+    },
+    {
+     "text": "Mana",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      997.9,
+      458.8,
+      43.8,
+      19
+     ]
+    },
+    {
+     "text": "Speed",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      979.4,
+      482.8,
+      48,
+      19
+     ]
+    },
+    {
+     "text": "Ability",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      934.3,
+      506.7,
+      51.2,
+      19
+     ]
+    },
+    {
+     "text": "Keys",
+     "at": "div.sgx-step > p > b",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      1084.8,
+      506.7,
+      37.5,
+      19
+     ]
+    },
+    {
+     "text": "3",
+     "at": "div.sgx-step > h3 > b",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1168.5,
+      291,
+      16.9,
+      26
+     ]
+    },
+    {
+     "text": "CLICK",
+     "at": "div.sgx-step > h3 > span.sgx-pointer",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1193.3,
+      291,
+      80,
+      26
+     ]
+    },
+    {
+     "text": "TWICE",
+     "at": "div.sgx-steps > div.sgx-step > h3",
+     "fs": 20,
+     "scale": 1,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1273.3,
+      291,
+      94.2,
+      26
+     ]
+    },
+    {
+     "text": "CLICK",
+     "at": "div.sgx-viz > span.sgx-t > span.sgx-pointer",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1269.5,
+      344,
+      39.5,
+      18
+     ]
+    },
+    {
+     "text": ": SELECT",
+     "at": "div.sgx-step > div.sgx-viz > span.sgx-t",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1308.9,
+      344,
+      58.5,
+      18
+     ]
+    },
+    {
+     "text": "AGAIN / ENTER",
+     "at": "div.sgx-viz > span.sgx-t > span.sgx-pointer",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1269.5,
+      366,
+      100.8,
+      18
+     ]
+    },
+    {
+     "text": ": DO IT",
+     "at": "div.sgx-step > div.sgx-viz > span.sgx-t",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1370.3,
+      366,
+      42.6,
+      18
+     ]
+    },
+    {
+     "text": "Click a node to select it; click it again, or pr",
+     "at": "div.sgx-step > p > span.sgx-pointer",
+     "fs": 16.5,
+     "scale": 1,
+     "eff": 16.5,
+     "color": "rgb(42, 39, 51)",
+     "rect": [
+      1168.5,
+      411,
+      235.4,
+      90.8
+     ]
+    },
+    {
+     "text": "What you spend here goes into this chapter's fig",
+     "at": "div.sgx-slab.sgx-card > div.sgx-in > div.sgx-note",
+     "fs": 15,
+     "scale": 1,
+     "eff": 15,
+     "color": "rgb(90, 85, 102)",
+     "rect": [
+      620.5,
+      568.5,
+      759.1,
+      36
+     ]
+    },
+    {
+     "text": "Got it",
+     "at": "div.sgx-in > div.sgx-foot > button.sgx-btn.sgx-btn--dark",
+     "fs": 16,
+     "scale": 1,
+     "eff": 16,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      644.5,
+      638.5,
+      70.4,
+      21
+     ]
+    },
+    {
+     "text": "Show me on the grid",
+     "at": "div.sgx-in > div.sgx-foot > button.sgx-btn",
+     "fs": 16,
+     "scale": 1,
+     "eff": 16,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      780.8,
+      638.5,
+      242.9,
+      21
+     ]
+    },
+    {
+     "text": "Reopen any time with",
+     "at": "div.sgx-in > div.sgx-foot > span.sgx-chip",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(90, 85, 102)",
+     "rect": [
+      1065.7,
+      640,
+      168.4,
+      18
+     ]
+    },
+    {
+     "text": "?",
+     "at": "div.sgx-foot > span.sgx-chip > span.sgx-btn.sgx-btn--dark",
+     "fs": 14.1,
+     "scale": 1,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1251.1,
+      640,
+      11,
+      18
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab3-sphere-grid-card-closed",
+   "file": "prep-ffx-1600x900-tab3-sphere-grid-card-closed.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "sphere-grid",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 84,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "Fortune",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "share": 0.39
+    },
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "1",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "share": 0.53
+    },
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "Keys",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "share": 0.54
+    },
+    {
+     "a": "The tabs are for later. Start the battle.",
+     "b": "4·2·1·1",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer | div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "share": 0.53
+    }
+   ],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      671,
+      747,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      671,
+      770,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      671,
+      807.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      671,
+      858.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      706.8,
+      858.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      190,
+      108,
+      112.1,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      346.1,
+      108,
+      74.1,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      464.2,
+      108,
+      165.9,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      674.1,
+      108,
+      141.4,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      859.5,
+      108,
+      74.9,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      978.3,
+      108,
+      139.6,
+      22.5
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.sgb-face.sgb-face--sel > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.9,
+      190,
+      13.2,
+      30
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-rail > div.sgb-face.sgb-face--sel > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      122.2,
+      214,
+      17.8,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.4,
+      270,
+      14.3,
+      30
+     ]
+    },
+    {
+     "text": "32",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.9,
+      294,
+      17.1,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.2,
+      350,
+      14.6,
+      30
+     ]
+    },
+    {
+     "text": "25",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.9,
+      374,
+      17,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      70.2,
+      430,
+      14.6,
+      30
+     ]
+    },
+    {
+     "text": "35",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.7,
+      454,
+      17.3,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      67.6,
+      510,
+      19.8,
+      30
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.2,
+      534,
+      17.8,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      71.2,
+      590,
+      12.7,
+      30
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.2,
+      614,
+      17.8,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.sgb-face > span.sgb-face__img > span.sgb-face__init",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgba(244, 241, 232, 0.5)",
+     "rect": [
+      69.9,
+      670,
+      15.2,
+      30
+     ]
+    },
+    {
+     "text": "42",
+     "at": "div.sgb-rail > div.sgb-face > b.sgb-face__lv",
+     "fs": 6.8,
+     "scale": 2.5,
+     "eff": 17,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      122.4,
+      694,
+      17.6,
+      20
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.ffxprep-sg__head > div.sgb-title > span.ffxprep-sg__who",
+     "fs": 13.6,
+     "scale": 2.5,
+     "eff": 34,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      180,
+      164.7,
+      69.1,
+      42.5
+     ]
+    },
+    {
+     "text": "S.LV",
+     "at": "div.ffxprep-sg__head > div.sgb-title > span.ffxprep-sg__slv",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      263,
+      182.2,
+      48.7,
+      20
+     ]
+    },
+    {
+     "text": "30",
+     "at": "div.sgb-title > span.ffxprep-sg__slv > b.ffxprep-sg__slv-n",
+     "fs": 11.2,
+     "scale": 2.5,
+     "eff": 28,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      317.7,
+      172.2,
+      29.3,
+      35
+     ]
+    },
+    {
+     "text": "→",
+     "at": "div.sgb-title > span.ffxprep-sg__slv > span.sgb-after",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      347,
+      182.2,
+      30.2,
+      20
+     ]
+    },
+    {
+     "text": "28",
+     "at": "span.ffxprep-sg__slv > span.sgb-after > i.sgb-after-n",
+     "fs": 11.2,
+     "scale": 2.5,
+     "eff": 28,
+     "color": "rgb(242, 194, 30)",
+     "rect": [
+      377.2,
+      172.2,
+      29,
+      35
+     ]
+    },
+    {
+     "text": "AUTO-LEARN",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      587.1,
+      175.2,
+      120.2,
+      20
+     ]
+    },
+    {
+     "text": "M",
+     "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__auto > span.ffxprep-sg__key",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      726.7,
+      175.2,
+      12.5,
+      20
+     ]
+    },
+    {
+     "text": "WALK",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__walk",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      799.6,
+      176,
+      51.2,
+      20
+     ]
+    },
+    {
+     "text": "−",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      901.8,
+      176,
+      11.2,
+      20
+     ]
+    },
+    {
+     "text": "+",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      963.9,
+      176,
+      11.2,
+      20
+     ]
+    },
+    {
+     "text": "CENTRE",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1026,
+      176,
+      73.6,
+      20
+     ]
+    },
+    {
+     "text": "?",
+     "at": "div.ffxprep-sg__head > div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1150.5,
+      175.2,
+      11.1,
+      20
+     ]
+    },
+    {
+     "text": "H",
+     "at": "div.sgb-tools > button.ffxprep-sg__btn.ffxprep-sg__help > span.ffxprep-sg__key",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1181,
+      175.2,
+      11,
+      20
+     ]
+    },
+    {
+     "text": "Selected node",
+     "at": "div.sgb-card > div.sgb-card__in > div.sgb-kicker",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1297.9,
+      186,
+      180.9,
+      20
+     ]
+    },
+    {
+     "text": "Strength +2",
+     "at": "div.sgb-card__in > div.sgb-card__top > div.sgb-name",
+     "fs": 13.6,
+     "scale": 2.5,
+     "eff": 34,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      207,
+      137.8,
+      42.5
+     ]
+    },
+    {
+     "text": "STR 31",
+     "at": "div.sgb-card__in > div.sgb-card__top > div.sgb-big",
+     "fs": 18.4,
+     "scale": 2.5,
+     "eff": 46,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      248.1,
+      129.4,
+      57.5
+     ]
+    },
+    {
+     "text": "→ 33",
+     "at": "div.sgb-card__top > div.sgb-big > em",
+     "fs": 18.4,
+     "scale": 2.5,
+     "eff": 46,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1427.3,
+      248.1,
+      103,
+      57.5
+     ]
+    },
+    {
+     "text": "Sphere",
+     "at": "div.sgb-rows > div.sgb-row > span",
+     "fs": 6.2,
+     "scale": 2.5,
+     "eff": 15.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      325.6,
+      49.4,
+      17.5
+     ]
+    },
+    {
+     "text": "Power · 12 → 11",
+     "at": "div.sgb-rows > div.sgb-row > b",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1430,
+      323.1,
+      110.9,
+      22.5
+     ]
+    },
+    {
+     "text": "Path",
+     "at": "div.sgb-rows > div.sgb-row > span",
+     "fs": 6.2,
+     "scale": 2.5,
+     "eff": 15.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      364.6,
+      32.5,
+      17.5
+     ]
+    },
+    {
+     "text": "2 steps · 2 S.Lv",
+     "at": "div.sgb-rows > div.sgb-row > b",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1433.2,
+      362.1,
+      107.7,
+      22.5
+     ]
+    },
+    {
+     "text": "Tidus after",
+     "at": "div.sgb-rows > div.sgb-row > span",
+     "fs": 6.2,
+     "scale": 2.5,
+     "eff": 15.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1297.9,
+      403.6,
+      76.8,
+      17.5
+     ]
+    },
+    {
+     "text": "S.Lv 28",
+     "at": "div.sgb-rows > div.sgb-row > b",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1488.4,
+      401.1,
+      52.5,
+      22.5
+     ]
+    },
+    {
+     "text": "Walk and activate",
+     "at": "div.sgb-card > div.sgb-card__in > button.sgb-go",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1314.4,
+      457,
+      189.8,
+      20
+     ]
+    },
+    {
+     "text": "Enter or click again does the same.",
+     "at": "div.sgb-card > div.sgb-card__in > p.sgb-note.ffxprep-sg__caption",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(90, 85, 102)",
+     "rect": [
+      1297.9,
+      499.5,
+      178.7,
+      36.5
+     ]
+    },
+    {
+     "text": "Power",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      225,
+      816.7,
+      46.7,
+      20
+     ]
+    },
+    {
+     "text": "12",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      279.7,
+      814.2,
+      17.8,
+      25
+     ]
+    },
+    {
+     "text": "Speed",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      337.4,
+      816.7,
+      48.1,
+      20
+     ]
+    },
+    {
+     "text": "8",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      393.5,
+      814.2,
+      11.4,
+      25
+     ]
+    },
+    {
+     "text": "Mana",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      444.9,
+      816.7,
+      40.5,
+      20
+     ]
+    },
+    {
+     "text": "8",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      493.4,
+      814.2,
+      11.4,
+      25
+     ]
+    },
+    {
+     "text": "Ability",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      544.8,
+      816.7,
+      50,
+      20
+     ]
+    },
+    {
+     "text": "4",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      602.7,
+      814.2,
+      11.4,
+      25
+     ]
+    },
+    {
+     "text": "Fortune",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      654.1,
+      816.7,
+      60.1,
+      20
+     ]
+    },
+    {
+     "text": "1",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      722.2,
+      814.2,
+      7.3,
+      25
+     ]
+    },
+    {
+     "text": "Keys",
+     "at": "div.ffxprep-sg.sgb > div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      769.5,
+      816.7,
+      37.7,
+      20
+     ]
+    },
+    {
+     "text": "4·2·1·1",
+     "at": "div.ffxprep-sg__pouch > span.ffxprep-sg__sphere.sgb-pouch-chip > b",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      815.1,
+      814.2,
+      50.7,
+      25
+     ]
+    },
+    {
+     "text": "What the colours mean",
+     "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-kicker.sgb-kicker--gold",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1306.4,
+      603.5,
+      209.8,
+      37.5
+     ]
+    },
+    {
+     "text": "HP",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      646.4,
+      20.1,
+      20
+     ]
+    },
+    {
+     "text": "MP",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      646.4,
+      21.6,
+      20
+     ]
+    },
+    {
+     "text": "Strength",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      668.9,
+      63.9,
+      20
+     ]
+    },
+    {
+     "text": "Defense",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      668.9,
+      59.6,
+      20
+     ]
+    },
+    {
+     "text": "Magic",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      691.4,
+      42.4,
+      20
+     ]
+    },
+    {
+     "text": "Magic Def",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      691.4,
+      72.1,
+      20
+     ]
+    },
+    {
+     "text": "Agility",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      713.9,
+      46.8,
+      20
+     ]
+    },
+    {
+     "text": "Ability",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      713.9,
+      47,
+      20
+     ]
+    },
+    {
+     "text": "Lock (key)",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1307.5,
+      736.4,
+      75.5,
+      20
+     ]
+    },
+    {
+     "text": "Not yet taken",
+     "at": "div.sgb-legend > div.sgb-legend__grid > span.sgb-chip",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1440,
+      736.4,
+      99.4,
+      20
+     ]
+    },
+    {
+     "text": "Gold line: walked ground, 1 S.Lv per 4 steps",
+     "at": "div.ffxprep-sg.sgb > div.sgb-legend > div.sgb-legend__gold",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(255, 240, 168)",
+     "rect": [
+      1272.7,
+      761.9,
+      243.6,
+      37.5
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      24,
+      868,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      61.4,
+      868,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      157.3,
+      868,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      279.1,
+      868,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      339.3,
+      868,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      559.5,
+      868,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      595.6,
+      868,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8.8,
+     "scale": 2.5,
+     "eff": 22,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1293,
+      814,
+      240,
+      30
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab4-equipment",
+   "file": "prep-ffx-1600x900-tab4-equipment.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "equipment",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 61,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      114,
+      141.6,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      167.2,
+      140.4,
+      54.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      345.9,
+      146.6,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      124.5,
+      219.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      178.2,
+      218.1,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 32",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      357.7,
+      224.3,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      135.4,
+      297.1,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      189.3,
+      295.8,
+      81.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      368.8,
+      302.1,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      146.6,
+      374.8,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Auron",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      200.5,
+      373.6,
+      61.4,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 35",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      379.7,
+      379.8,
+      49.2,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      155.1,
+      452.5,
+      19.6,
+      30
+     ]
+    },
+    {
+     "text": "Wakka",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      211.6,
+      451.3,
+      65.7,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      390.3,
+      457.5,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      169.8,
+      530.3,
+      12.5,
+      30
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      222.7,
+      529,
+      45.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      401.4,
+      535.3,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      179.6,
+      608,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      233.8,
+      606.8,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 42",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      412.7,
+      613,
+      49.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.85)",
+     "rect": [
+      722.9,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      833.3,
+      124.4,
+      148,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1025.7,
+      124.4,
+      126.7,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1196.8,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1308,
+      124.4,
+      124.9,
+      22.5
+     ]
+    },
+    {
+     "text": "Weapon",
+     "at": "div.ffxprep-gear > div.ffxprep-gear__name > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      616.8,
+      223,
+      74.7,
+      20
+     ]
+    },
+    {
+     "text": "Baroque Sword",
+     "at": "div.ffxprep-equipment > div.ffxprep-gear > div.ffxprep-gear__name",
+     "fs": 10,
+     "scale": 2.5,
+     "eff": 25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      706.5,
+      215.5,
+      140.2,
+      30
+     ]
+    },
+    {
+     "text": "Strength +10%",
+     "at": "div.ffxprep-gear > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      634.3,
+      263,
+      121.5,
+      20
+     ]
+    },
+    {
+     "text": "Armor",
+     "at": "div.ffxprep-gear > div.ffxprep-gear__name > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      616.8,
+      318,
+      58.8,
+      20
+     ]
+    },
+    {
+     "text": "Glorious Shield",
+     "at": "div.ffxprep-equipment > div.ffxprep-gear > div.ffxprep-gear__name",
+     "fs": 10,
+     "scale": 2.5,
+     "eff": 25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      690.6,
+      310.5,
+      141.6,
+      30
+     ]
+    },
+    {
+     "text": "HP +10%",
+     "at": "div.ffxprep-gear > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      634.3,
+      358,
+      71,
+      20
+     ]
+    },
+    {
+     "text": "Zombie Ward",
+     "at": "div.ffxprep-gear > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      750.3,
+      358,
+      107.1,
+      20
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.8,
+      767.3,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      63.5,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2420/2420 · MP 115/115",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      179.1,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      415.4,
+      772.3,
+      86.9,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      595.1,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 1500/1500 · MP 270/270",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      183.6,
+      20
+     ]
+    },
+    {
+     "text": "SUMMONER",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      864.8,
+      772.3,
+      106.3,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.7,
+      767.3,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.8,
+      749.5,
+      95.2,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2310/2310 · MP 130/130",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.8,
+      790,
+      179.6,
+      20
+     ]
+    },
+    {
+     "text": "STOIC",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1383.3,
+      772.3,
+      56.6,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab5-items",
+   "file": "prep-ffx-1600x900-tab5-items.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "items",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 110,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      114,
+      141.6,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      167.2,
+      140.4,
+      54.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      345.9,
+      146.6,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      124.5,
+      219.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      178.2,
+      218.1,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 32",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      357.7,
+      224.3,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      135.4,
+      297.1,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      189.3,
+      295.8,
+      81.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      368.8,
+      302.1,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      146.6,
+      374.8,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Auron",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      200.5,
+      373.6,
+      61.4,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 35",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      379.7,
+      379.8,
+      49.2,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      155.1,
+      452.5,
+      19.6,
+      30
+     ]
+    },
+    {
+     "text": "Wakka",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      211.6,
+      451.3,
+      65.7,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      390.3,
+      457.5,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      169.8,
+      530.3,
+      12.5,
+      30
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      222.7,
+      529,
+      45.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      401.4,
+      535.3,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      179.6,
+      608,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      233.8,
+      606.8,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 42",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      412.7,
+      613,
+      49.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      833.3,
+      124.4,
+      148,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1025.7,
+      124.4,
+      126.7,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1196.8,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1308,
+      124.4,
+      124.9,
+      22.5
+     ]
+    },
+    {
+     "text": "27 kinds",
+     "at": "div.prep__sheet-inner.prep__sheet-inner--panel > div.prep__panel > div.ffxprep-items__head",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      215.5,
+      95.2,
+      22.5
+     ]
+    },
+    {
+     "text": "278 in the bag",
+     "at": "div.prep__panel > div.ffxprep-items__head > span",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1287.3,
+      215.5,
+      163.6,
+      22.5
+     ]
+    },
+    {
+     "text": "Potion",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      249.3,
+      63.8,
+      25
+     ]
+    },
+    {
+     "text": "×45",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      988.1,
+      249.3,
+      32.6,
+      25
+     ]
+    },
+    {
+     "text": "Hi-Potion",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      249.3,
+      93,
+      25
+     ]
+    },
+    {
+     "text": "×30",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1418.4,
+      249.3,
+      32.5,
+      25
+     ]
+    },
+    {
+     "text": "X-Potion",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      284.3,
+      85.7,
+      25
+     ]
+    },
+    {
+     "text": "×4",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      998.6,
+      284.3,
+      22.1,
+      25
+     ]
+    },
+    {
+     "text": "Mega-Potion",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      284.3,
+      125.6,
+      25
+     ]
+    },
+    {
+     "text": "×4",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1428.9,
+      284.3,
+      22.1,
+      25
+     ]
+    },
+    {
+     "text": "Phoenix Down",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      319.3,
+      138.2,
+      25
+     ]
+    },
+    {
+     "text": "×30",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      988.1,
+      319.3,
+      32.5,
+      25
+     ]
+    },
+    {
+     "text": "Mega Phoenix",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      319.3,
+      137.6,
+      25
+     ]
+    },
+    {
+     "text": "×2",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1429.8,
+      319.3,
+      21.1,
+      25
+     ]
+    },
+    {
+     "text": "Holy Water",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      354.3,
+      108.2,
+      25
+     ]
+    },
+    {
+     "text": "×7",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1000.8,
+      354.3,
+      19.8,
+      25
+     ]
+    },
+    {
+     "text": "Remedy",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      354.3,
+      80.4,
+      25
+     ]
+    },
+    {
+     "text": "×3",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1429.5,
+      354.3,
+      21.4,
+      25
+     ]
+    },
+    {
+     "text": "Soft",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      389.3,
+      42.4,
+      25
+     ]
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      991.6,
+      389.3,
+      29,
+      25
+     ]
+    },
+    {
+     "text": "Antidote",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      389.3,
+      84.7,
+      25
+     ]
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1421.9,
+      389.3,
+      29,
+      25
+     ]
+    },
+    {
+     "text": "Eye Drops",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      424.3,
+      100.7,
+      25
+     ]
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      991.6,
+      424.3,
+      29,
+      25
+     ]
+    },
+    {
+     "text": "Echo Screen",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      424.3,
+      123.5,
+      25
+     ]
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1421.9,
+      424.3,
+      29,
+      25
+     ]
+    },
+    {
+     "text": "Ether",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      459.3,
+      54,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×5",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      999.3,
+      459.3,
+      21.4,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Turbo Ether",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      459.3,
+      115.7,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×1",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1433,
+      459.3,
+      17.9,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Elixir",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      494.3,
+      49.4,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×2",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      999.6,
+      494.3,
+      21.1,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Al Bhed Potion",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      494.3,
+      145,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×17",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1424,
+      494.3,
+      27,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Grenade",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      529.3,
+      82.7,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×17",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      993.7,
+      529.3,
+      27,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Frag Grenade",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      529.3,
+      132.4,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×4",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1428.9,
+      529.3,
+      22.1,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Fire Gem",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      564.3,
+      87.3,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      991.6,
+      564.3,
+      29,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Ice Gem",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      564.3,
+      79,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1421.9,
+      564.3,
+      29,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Lightning Gem",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      599.3,
+      142.9,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      991.6,
+      599.3,
+      29,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Water Gem",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      599.3,
+      107.3,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1421.9,
+      599.3,
+      29,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Poison Fang",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      634.3,
+      120.4,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×5",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      999.3,
+      634.3,
+      21.4,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Light Curtain",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      634.3,
+      129.5,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×6",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1429.2,
+      634.3,
+      21.8,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Lunar Curtain",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      669.3,
+      135.2,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×6",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      998.9,
+      669.3,
+      21.8,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Star Curtain",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1045.7,
+      669.3,
+      120.9,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×6",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1429.2,
+      669.3,
+      21.8,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Healing Water",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      704.3,
+      138.2,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×4",
+     "at": "div.ffxprep-items.ffxprep-items--two-col > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      998.6,
+      704.3,
+      22.1,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.8,
+      767.3,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      63.5,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2420/2420 · MP 115/115",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      179.1,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      415.4,
+      772.3,
+      86.9,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      595.1,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 1500/1500 · MP 270/270",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      183.6,
+      20
+     ]
+    },
+    {
+     "text": "SUMMONER",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      864.8,
+      772.3,
+      106.3,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.7,
+      767.3,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.8,
+      749.5,
+      95.2,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2310/2310 · MP 130/130",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.8,
+      790,
+      179.6,
+      20
+     ]
+    },
+    {
+     "text": "STOIC",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1383.3,
+      772.3,
+      56.6,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab6-overdrive",
+   "file": "prep-ffx-1600x900-tab6-overdrive.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "overdrive",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 59,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "I · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      951.9,
+      51.1,
+      577,
+      20
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      114,
+      141.6,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      167.2,
+      140.4,
+      54.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      345.9,
+      146.6,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      124.5,
+      219.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      178.2,
+      218.1,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 32",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      357.7,
+      224.3,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      135.4,
+      297.1,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      189.3,
+      295.8,
+      81.6,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      368.8,
+      302.1,
+      48.9,
+      20
+     ]
+    },
+    {
+     "text": "A",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      146.6,
+      374.8,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Auron",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      200.5,
+      373.6,
+      61.4,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 35",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      379.7,
+      379.8,
+      49.2,
+      20
+     ]
+    },
+    {
+     "text": "W",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      155.1,
+      452.5,
+      19.6,
+      30
+     ]
+    },
+    {
+     "text": "Wakka",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      211.6,
+      451.3,
+      65.7,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      390.3,
+      457.5,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "L",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      169.8,
+      530.3,
+      12.5,
+      30
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      222.7,
+      529,
+      45.5,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 30",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      401.4,
+      535.3,
+      49.7,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      179.6,
+      608,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      233.8,
+      606.8,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "S.LV 42",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      412.7,
+      613,
+      49.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      833.3,
+      124.4,
+      148,
+      22.5
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1025.7,
+      124.4,
+      126.7,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1196.8,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "OVERDRIVE",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1308,
+      124.4,
+      124.9,
+      22.5
+     ]
+    },
+    {
+     "text": "Swordplay",
+     "at": "div.ffxprep-overdrive > div.ffxprep-od-name > b",
+     "fs": 13,
+     "scale": 2.5,
+     "eff": 32.5,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      615.4,
+      215.5,
+      124.8,
+      40
+     ]
+    },
+    {
+     "text": "Stoic",
+     "at": "div.ffxprep-mode-list > div.ffxprep-mode-row > span.ffxprep-mode-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      625.4,
+      276.8,
+      62.3,
+      25
+     ]
+    },
+    {
+     "text": "Warrior",
+     "at": "div.ffxprep-mode-list > div.ffxprep-mode-row.ffxprep-mode-row--selected > span.ffxprep-mode-row__name",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      625.4,
+      314.3,
+      98,
+      25
+     ]
+    },
+    {
+     "text": "EQUIPPED",
+     "at": "div.ffxprep-mode-list > div.ffxprep-mode-row.ffxprep-mode-row--selected > span.ffxprep-mode-row__tag",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1355.9,
+      316.8,
+      85,
+      20
+     ]
+    },
+    {
+     "text": "Charges from damage dealt.",
+     "at": "div.prep__panel > div.ffxprep-overdrive > div.ffxprep-mode-blurb",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.4,
+      360.5,
+      257,
+      25
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.8,
+      767.3,
+      13,
+      30
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      63.5,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2420/2420 · MP 115/115",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      179.1,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      415.4,
+      772.3,
+      86.9,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      595.1,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 1500/1500 · MP 270/270",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      183.6,
+      20
+     ]
+    },
+    {
+     "text": "SUMMONER",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      864.8,
+      772.3,
+      106.3,
+      20
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.7,
+      767.3,
+      14.5,
+      30
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.8,
+      749.5,
+      95.2,
+      37.5
+     ]
+    },
+    {
+     "text": "HP 2310/2310 · MP 130/130",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.8,
+      790,
+      179.6,
+      20
+     ]
+    },
+    {
+     "text": "STOIC",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      1383.3,
+      772.3,
+      56.6,
+      20
+     ]
+    }
+   ]
+  }
+ ],
+ "error": null,
+ "consoleErrors": []
+}

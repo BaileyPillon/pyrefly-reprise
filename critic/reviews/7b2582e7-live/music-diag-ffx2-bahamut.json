@@ -1,0 +1,176 @@
+{
+ "review": "live-music-diag",
+ "sha": "7b2582e7",
+ "browserMode": "gpu",
+ "chapter": "ffx2-bahamut",
+ "startedAt": "2026-10-13T06:38:28.896Z",
+ "timeline": {
+  "msUnlockToConfirm": 2999,
+  "msConfirmToFirstLine": 6768,
+  "playingAtFirstLine": null
+ },
+ "byKind": {
+  "music": {
+   "requests": 3,
+   "finishedBeforeFirstLine": 0,
+   "megabytesFinished": 0
+  },
+  "sfx-sprite": {
+   "requests": 3,
+   "finishedBeforeFirstLine": 1,
+   "megabytesFinished": 0
+  },
+  "art": {
+   "requests": 39,
+   "finishedBeforeFirstLine": 33,
+   "megabytesFinished": 3.5
+  },
+  "font": {
+   "requests": 3,
+   "finishedBeforeFirstLine": 3,
+   "megabytesFinished": 0.1
+  },
+  "code": {
+   "requests": 1,
+   "finishedBeforeFirstLine": 0,
+   "megabytesFinished": 0
+  },
+  "other": {
+   "requests": 0,
+   "finishedBeforeFirstLine": 0,
+   "megabytesFinished": 0
+  }
+ },
+ "musicAndSprites": [
+  {
+   "kind": "sfx-sprite",
+   "url": "/audio/manifest.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2839,
+   "doneMs": -2708,
+   "bytes": 8136
+  },
+  {
+   "kind": "music",
+   "url": "/audio/music/title.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2706,
+   "doneMs": null,
+   "bytes": null
+  },
+  {
+   "kind": "sfx-sprite",
+   "url": "/audio/sfx/sprite.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2706,
+   "doneMs": null,
+   "bytes": null
+  },
+  {
+   "kind": "sfx-sprite",
+   "url": "/audio/sfx/sprite-v2.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2706,
+   "doneMs": null,
+   "bytes": null
+  },
+  {
+   "kind": "music",
+   "url": "/audio/music/chapter-select.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2308,
+   "doneMs": null,
+   "bytes": null
+  },
+  {
+   "kind": "music",
+   "url": "/audio/music/scene-bevelle-underground.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 41,
+   "doneMs": null,
+   "bytes": null
+  }
+ ],
+ "largestArt": [
+  {
+   "kind": "art",
+   "url": "/art/pause/ch4-ffx2-bahamut.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 41,
+   "doneMs": 6423,
+   "bytes": 938386
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/paine.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 41,
+   "doneMs": 6125,
+   "bytes": 890541
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/lulu.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2817,
+   "doneMs": -1306,
+   "bytes": 838411
+  },
+  {
+   "kind": "art",
+   "url": "/art/characters/yuna-white-mage/idle.png",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -138,
+   "doneMs": 2476,
+   "bytes": 478401
+  },
+  {
+   "kind": "art",
+   "url": "/art/characters/paine-warrior/idle.png",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 41,
+   "doneMs": 2876,
+   "bytes": 462507
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/kimahri.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -2301,
+   "doneMs": -2150,
+   "bytes": 2315
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/auron.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -1687,
+   "doneMs": -1547,
+   "bytes": 2122
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/lulu.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -1072,
+   "doneMs": -933,
+   "bytes": 1809
+  }
+ ],
+ "megabytesFinishedAfterUnlockBeforeFirstLine": 3.5,
+ "status": "ran"
+}

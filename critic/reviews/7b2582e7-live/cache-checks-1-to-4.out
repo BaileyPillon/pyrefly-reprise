@@ -1,0 +1,84 @@
+date: 2026-10-13T06:02:23Z
+### 1. every content-hashed file gets the year-long rule
+BUNDLE=assets/index-1ntEYvFO.js
+CSS=assets/index-BL8SFVzM.css
+WORKERS=assets/worker-DJqiQx36.js assets/worker-DMCfy01R.js
+== assets/index-1ntEYvFO.js
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+Cache-Control: public, max-age=31536000, immutable
+== assets/index-BL8SFVzM.css
+HTTP/1.1 200 OK
+Content-Type: text/css
+Cache-Control: public, max-age=31536000, immutable
+== assets/worker-DJqiQx36.js
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+Cache-Control: public, max-age=31536000, immutable
+== assets/worker-DMCfy01R.js
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+Cache-Control: public, max-age=31536000, immutable
+### 2. everything else keeps the host's default (revalidated)
+== /
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+== /art/title/keyart.webp
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "450a52a6d0e7d4bea1742ac1073a1c03"
+== /art/backdrops/road-to-the-farplane.webp
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "aa87d40130b9ae543f0f831cef9630bf"
+== /art/manifest.json
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "320051c64bb0f6fc4896e58e8cd69c71"
+== /audio/manifest.json
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "b8380d19cd51f169d59b09add3d2d5fb"
+== /artifact-manifest.json
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "a103e6bdb94af292cfe72002748747a0"
+### 3. the query string does not change the rule; _headers is not served
+BUNDLE?v=1:
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=31536000, immutable
+/_headers status:
+404
+### 4. a conditional request for the page still works
+ETAG=
+conditional status:
+200
+unconditional status:
+200
+### extra: the page's headers in full, and the bundle's
+HTTP/1.1 200 OK
+Date: Tue, 13 Oct 2026 06:02:33 GMT
+Content-Type: text/html
+Connection: keep-alive
+CF-Cache-Status: HIT
+Cache-Control: public, max-age=0, must-revalidate
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=FnnDYthK1qTuZ6mR0VOhPkvyFJXNVp9DAiXmOJUGnPefxk%2BhZkcWMMhZQBhOxHnTpD6MfFYrh%2BAfFrbzgZpZ2IuWqkWc3vOqx%2FKEGpxrc6i0SbfD5hXj7lLoWex9v4JSRr9Ikw%3D%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a49c22d5c92aefa6-MIA
+alt-svc: h3=":443"; ma=86400
+
+--
+HTTP/1.1 200 OK
+Date: Tue, 13 Oct 2026 06:02:33 GMT
+Content-Type: text/javascript
+Connection: keep-alive
+CF-Cache-Status: HIT
+Cache-Control: public, max-age=31536000, immutable
+ETag: "ce72a368818119e85a54ba61c228d0d2"
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=0Ta7VVEZ4NHenINUAD7nMLigvclBwywQRxgAXBarbrmHCQwudAzxBFA%2Bk0cy9IfxMwG0rOtVeRmKEUhywmbp9geI%2B1qIUhyD16B160jRIbdVX3bu%2FGr8W%2BeqO6JfC6Uiz88LOg%3D%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a49c22d99f1895d2-MIA
+alt-svc: h3=":443"; ma=86400
+

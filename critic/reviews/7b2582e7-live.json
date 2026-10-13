@@ -1,0 +1,60 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-13T06:43:37.273Z",
+  "build": {
+    "mainSha": "7b2582e7",
+    "bundle": "1ntEYvFO",
+    "artifactHash": "3541fa88a9b12fd522376fed69a2ea6469aa58135e1245c90ca63025743c2935"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "verifyLive() from tools/artifact-manifest.mjs run with --full semantics (all 5169 downloadable files of the 5170-file artifact; _headers is a host-read file no address serves) against critic/artifacts/7b2582e7.json at https://echoesofspira.com/ with a cache-busting ?v= on every file: result PASS, liveManifest match, checked 5169, mismatched 0, missing 0, wrongType 0, errors 0; artifactHash 3541fa88a9b12fd522376fed69a2ea6469aa58135e1245c90ca63025743c2935; index.html as a browser receives it: identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it); assetCacheControl assets/index-1ntEYvFO.js = \"public, max-age=31536000, immutable\". 16-way prefetch with a 48-file lookahead window (bodies dropped as used: the build is 10,320 MB and the host had about 6 GB free), 10320 MB fetched in 1954 s. Full output: critic/artifacts/7b2582e7-verify-live.json; wrapper critic/reviews/7b2582e7-live-verify.mjs. Against the previous build (a061e9dc) the artifact adds _headers, assets/index-1ntEYvFO.js, assets/index-BL8SFVzM.css, assets/worker-DMCfy01R.js, changes index.html and drops the three old bundle files (404 live now, as expected); the other 5,165 files are byte-identical with it."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu, 1600x900, fresh context per run, cache-busted URL, real key presses; every capture preceded by assertScreen / waitBattleMenu (a timeout throws, nothing is shot from the wrong screen). FFX Chapter I: title, first-run briefing skipped, board with card seymour-flux read back from the screen state, party-prep, opening scene, battle awaitingMenu (enemies seymour-flux and mortiorchis, boss-seymour playing from the prerendered manifest, mean luminance 85.8), three real Attack turns (log 9->18, 19->23, 29->39), cancel path (Enter then Escape back to the same menu), a KO (Kimahri) and a Phoenix Down, Escape pause / H hide and restore (779->438->779 chars) / Escape resume / P / P. FFX-2 Chapter IV: card ffx2-bahamut read back, party-prep, opening scene, first menu (enemy bahamut, boss-bahamut playing, luminance 67.5, the corrected Mega Flare note on screen), pause / H / resume / P / P (1819->1436->1819). Text floors: 0 elements under 14 px at 1600x900 in all 16 steps of tools/text-floor-sweep.mjs (prep every tab in both games, results in both games, Chapter IX and XII first menus). Scene cue at the first spoken line (PR-0373), measured after the byte comparison had finished: scene cue playing at the first line in fast route 2 of 9 (Chapter I 0/3, Chapter II 2/3, FFX-2 Chapter IV 0/3); human pace (3 s on the board, 3 s on prep) 0 of 6 (Chapter I 0/2, Chapter II 0/2, FFX-2 Chapter IV 0/2): NOT MET on this machine's link (LV43-2, polish): the warm fires at the confirm (scene file requested +27 to +51 ms in every run) but the cue shares an effective ~2 MB/s pipe with the 11.5 MB of audio the first key unlocked (title, SFX sprites, chapter-select) and the board and battle art loads (all in flight together in the CDP log; which of them takes the bandwidth was not isolated), so it arrives after the first line in most runs; cancel path of the card confirm works: warm hold [\"scene-gagazet\",\"boss-seymour\",\"victory-ffx\"] in prep, [] after backing out to the board, the next chapter's own cues held after that. Console errors 0, responses >= 400 0 in the smoke, music and progress runs (the text-floor sweep recorded console errors only: 0 in all six scenes); 0 images or audio answered as text/html. The six docs/handoff/r43-delivery.md section 5 checks: 1 PASS, 2 PASS for art, audio and manifests but the page has no ETag, 3 PASS, 4 PASS, 5 not met as written (no ETag on the page to send; 200 not 304), 6 PASS (repeat-load-check, visit and reload).",
+      "reason": "Two reviewer-harness errors were caught by the assertions and fixed before the reported runs: the first-run briefing after the title (my script expected the board), and a KO step that wiped the party (my script expected a live battle). Neither is a game defect. My own 16-way download shared the link with the first runs, so the scene-music timing was taken again after it had finished."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on the live build: (a) masterVolume 0.8 -> 0.42 in pyrefly-reprise:save:v1, reload, volume 0.42, save byte-identical, title screen; (b) in a separate context Chapter I won (debug-API auto-play to the intended outcome, results Victory / NEW BEST, left with a real Enter), the save held chapters[\"seymour-flux\"] = {cleared: true, bestTimeMs: 85233, bestTurns: 78, attempts: 1}, masterVolume set to 0.37, reload: the chapter record identical, volume 0.37, save byte-identical (736 bytes), title screen.",
+      "reason": "The full upgrade matrix (a save from the previous build migrating forward, truncated storage, the reset flow) is not part of this pass; the Chapter I win that produced the progress came from the debug API, not from real input."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: all 5169 downloadable files byte-identical with live, content types, live artifact-manifest.json match, the page as a browser receives it",
+      "the six docs/handoff/r43-delivery.md section 5 cache checks (hashed files immutable, everything else revalidated, ?v=1, /_headers 404, conditional page request, repeat-load-check visit and reload)",
+      "FFX Chapter I and FFX-2 Chapter IV from the title by real keys to the first menu; FFX three Attack turns, cancel, KO and Phoenix Down; pause, H hide, resume and P in both games",
+      "text floors at 1600x900: first-run briefing, prep every tab in both games, results in both games, Chapter IX and XII first menus, the two first-menu HUDs: 0 under 14 px",
+      "the chapter's scene cue at the first spoken line on an otherwise idle link (fast route 2 of 9 (Chapter I 0/3, Chapter II 2/3, FFX-2 Chapter IV 0/3); human pace (3 s on the board, 3 s on prep) 0 of 6 (Chapter I 0/2, Chapter II 0/2, FFX-2 Chapter IV 0/2): the acceptance is not met here, LV43-2), why it is late (CDP network log of what shares the pipe), and the cancel path of the card confirm",
+      "the corrected Bahamut intent note (FFX-2) on screen",
+      "settings reload and progress reload (Chapter I clear), console and 404 sweep"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full upgrade matrix (CHK-024 full)",
+      "a chapter win by real input: the Chapter I win, the results screens and the Chapter IX and XII menus were reached through the debug API",
+      "the content of this release beyond byte identity and the screens above: RC5 engine rules (a KO clears Zombie and Scan, the death check after the last hit, Auto-Life at the moment of death, overkill per action), Chapter II guide line, Evrae and Sin fin paintings and registration, a status taken by the KO wipe at normal and fast speed; they belong to the deep review",
+      "text floors at other sizes (2000x1012, 3840x2160) and on a phone",
+      "other chapters, a controlled defeat and retry, audio by ear (the playing state was read from AudioManager.debug and the network log; nothing was listened to), Safari, a real controller"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 47,
+  "notes": "Cache checks (r43-delivery.md section 5, 2026-10-13 06:02 UTC): 1 PASS (assets/index-1ntEYvFO.js, index-BL8SFVzM.css, worker-DJqiQx36.js, worker-DMCfy01R.js each 200 + public, max-age=31536000, immutable); 2 PASS for art, audio and manifests (public, max-age=0, must-revalidate + ETag), the page / has the header but NO ETag; 3 PASS (?v=1 still immutable); 4 PASS (/_headers 404); 5 NOT MET as written (no ETag on the page, so the conditional request got 200 not 304); 6 PASS (tools/repeat-load-check.mjs: the second visit and the F5 reload sent no request for either hashed file). LV43-2 (audio timing, polish): PR-0373 works (the scene file is requested at the card confirm, held, released on cancel) but its acceptance is not met on this machine's link: fast route 2 of 9 (Chapter I 0/3, Chapter II 2/3, FFX-2 Chapter IV 0/3); human pace (3 s on the board, 3 s on prep) 0 of 6 (Chapter I 0/2, Chapter II 0/2, FFX-2 Chapter IV 0/2); the first key starts 11.5 MB of other audio and the board and battle art loads run at the same time, so the 3 MB scene bed (requested +27 to +51 ms after the confirm) arrives after the first line in most runs; not a regression, nothing broken. LV43-1 (informational): the page is served without ETag or Last-Modified on echoesofspira.com, on the Worker's workers.dev address and on three older preview Workers (which have no _headers rule: their bundles answer max-age=0, must-revalidate), so it is platform behaviour for HTML, not introduced by this build; the checklist's checks 2 and 4 should expect no validator for /. The deep review of this build is still owed."
+}

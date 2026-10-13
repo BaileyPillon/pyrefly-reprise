@@ -1,0 +1,6060 @@
+{
+ "scene": "prep-ffx2",
+ "w": 1600,
+ "h": 900,
+ "base": "https://echoesofspira.com/?cb=1791871915",
+ "seed": 1,
+ "floor": 14,
+ "steps": [
+  {
+   "label": "tab1-chapter",
+   "file": "prep-ffx2-1600x900-tab1-chapter.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "chapter",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 58,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      998.8,
+      51.1,
+      530.1,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      108.4,
+      141.6,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      162.1,
+      140.4,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 23",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      354,
+      146.6,
+      36.6,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      119.1,
+      219.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      173.2,
+      218.1,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 24",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      364.5,
+      224.3,
+      37.1,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      130.5,
+      297.1,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      184.3,
+      295.8,
+      53.8,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      376.2,
+      302.1,
+      36.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "DRESSPHERES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      158.9,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      926.2,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "ACCESSORIES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1036.6,
+      124.4,
+      152.3,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1233.4,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "FFX-2",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__game",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      615.5,
+      187.2,
+      62.7,
+      20
+     ]
+    },
+    {
+     "text": "·",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__dot",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      687.1,
+      187.2,
+      3.4,
+      20
+     ]
+    },
+    {
+     "text": "IV",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__numeral",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      699.3,
+      187.2,
+      22.5,
+      20
+     ]
+    },
+    {
+     "text": "Bahamut",
+     "at": "div.prepchap__colwrap > div.prepchap__col > h2.cpanel__title",
+     "fs": 18.67,
+     "scale": 2.5,
+     "eff": 46.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.5,
+      206.6,
+      153.9,
+      55
+     ]
+    },
+    {
+     "text": "Something She Named",
+     "at": "div.prepchap__colwrap > div.prepchap__col > div.cpanel__subtitle",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.5,
+      262.5,
+      245,
+      20
+     ]
+    },
+    {
+     "text": "Two years on, the aeon Yuna once called by name ",
+     "at": "div.prepchap__colwrap > div.prepchap__col > p.cpanel__blurb",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      615.5,
+      292.5,
+      325.9,
+      78.3
+     ]
+    },
+    {
+     "text": "Limbo, a thousand years dark",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      630.8,
+      406.6,
+      75.5,
+      53
+     ]
+    },
+    {
+     "text": "nobody is home",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      746,
+      406.6,
+      77.2,
+      19.5
+     ]
+    },
+    {
+     "text": "you don't get another option",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      864.6,
+      407,
+      72.8,
+      35.7
+     ]
+    },
+    {
+     "text": "OBJECTIVES",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__head > span.cpanel__head-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      982.3,
+      196.1,
+      125.4,
+      20
+     ]
+    },
+    {
+     "text": "Survive a Mega Flare",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1009.5,
+      236.3,
+      131.8,
+      17.5
+     ]
+    },
+    {
+     "text": "Land a 5-hit Chain Attack",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1009.5,
+      262.9,
+      157.9,
+      17.5
+     ]
+    },
+    {
+     "text": "Defeat Bahamut",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1009.5,
+      289.6,
+      103.5,
+      17.5
+     ]
+    },
+    {
+     "text": "TIP",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-label",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      997,
+      334.5,
+      33.7,
+      20
+     ]
+    },
+    {
+     "text": "Magic Break first, five stacks — it caps Mega Fl",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-text",
+     "fs": 5.6,
+     "scale": 2.5,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      1041.8,
+      331.8,
+      225.1,
+      78.3
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "· SCROLL",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1203.6,
+      533.3,
+      247.6,
+      20
+     ]
+    },
+    {
+     "text": "PG UP / PG DN",
+     "at": "div.prep__hint > span > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      1235.8,
+      533.3,
+      138.8,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.3,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 23 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      162.4,
+      20
+     ]
+    },
+    {
+     "text": "WHITE MAGE",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      383.4,
+      772.3,
+      118.9,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      594.6,
+      767.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      67.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 24 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      162.9,
+      20
+     ]
+    },
+    {
+     "text": "DARK KNIGHT",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      842.2,
+      772.3,
+      128.9,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.8,
+      767.3,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.7,
+      749.5,
+      62.7,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 25 · 9 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.7,
+      790,
+      156.6,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1353,
+      772.3,
+      86.9,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab2-dresspheres",
+   "file": "prep-ffx2-1600x900-tab2-dresspheres.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "dresspheres",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 68,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      998.8,
+      51.1,
+      530.1,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      108.4,
+      141.6,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      162.1,
+      140.4,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 23",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      354,
+      146.6,
+      36.6,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      119.1,
+      219.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      173.2,
+      218.1,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 24",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      364.5,
+      224.3,
+      37.1,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      130.5,
+      297.1,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      184.3,
+      295.8,
+      53.8,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      376.2,
+      302.1,
+      36.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "DRESSPHERES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      722.9,
+      124.4,
+      158.9,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      926.2,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "ACCESSORIES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1036.6,
+      124.4,
+      152.3,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1233.4,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "WM",
+     "at": "div.x2prep > div.x2prep-worn > span.x2prep-worn__tile",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      620.3,
+      224.3,
+      30.8,
+      22.5
+     ]
+    },
+    {
+     "text": "White Mage",
+     "at": "div.x2prep > div.x2prep-worn > span.x2prep-worn__name",
+     "fs": 13,
+     "scale": 2.5,
+     "eff": 32.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      670.7,
+      215.5,
+      138.6,
+      40
+     ]
+    },
+    {
+     "text": "Pray · Vigor · White Magic · Item",
+     "at": "div.x2prep > div.x2prep-worn > span.x2prep-note.x2prep-worn__cmds",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      824.3,
+      223,
+      282.2,
+      25
+     ]
+    },
+    {
+     "text": "LV 23",
+     "at": "div.x2prep > div.x2prep-worn > span.x2prep-worn__lv",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1401.9,
+      221.8,
+      49.3,
+      27.5
+     ]
+    },
+    {
+     "text": "LEARNED",
+     "at": "div.x2prep__col > div.x2prep-line > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      615.7,
+      285.5,
+      88.2,
+      20
+     ]
+    },
+    {
+     "text": "7/16 · 40 AP banked · next Life 30 AP",
+     "at": "div.x2prep > div.x2prep__col > div.x2prep-line",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      278,
+      367.6,
+      55
+     ]
+    },
+    {
+     "text": "Cure",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      633.2,
+      358,
+      38.6,
+      20
+     ]
+    },
+    {
+     "text": "Shell",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      716.8,
+      358,
+      41.3,
+      20
+     ]
+    },
+    {
+     "text": "Protect",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      803,
+      358,
+      62.3,
+      20
+     ]
+    },
+    {
+     "text": "Esuna",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      910.3,
+      358,
+      50.4,
+      20
+     ]
+    },
+    {
+     "text": "Cura",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      633.2,
+      403,
+      38.4,
+      20
+     ]
+    },
+    {
+     "text": "Vigor",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      716.6,
+      403,
+      43.8,
+      20
+     ]
+    },
+    {
+     "text": "Dispel",
+     "at": "div.x2prep__col > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      805.5,
+      403,
+      51.8,
+      20
+     ]
+    },
+    {
+     "text": "GARMENT GRID",
+     "at": "div.x2prep-grid > div.x2prep-grid__name > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1053.5,
+      285.5,
+      145,
+      20
+     ]
+    },
+    {
+     "text": "Protection Halo",
+     "at": "div.x2prep__col > div.x2prep-grid > div.x2prep-grid__name",
+     "fs": 10,
+     "scale": 2.5,
+     "eff": 25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1213.4,
+      278,
+      145.5,
+      30
+     ]
+    },
+    {
+     "text": "DEF +5, MDEF +5",
+     "at": "div.x2prep-grid > div.x2prep-grid__strip > span.x2prep-note",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1303.2,
+      318,
+      122.6,
+      50
+     ]
+    },
+    {
+     "text": "ALSO OWNED",
+     "at": "div.x2prep__col > div.x2prep-line > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1053.5,
+      403,
+      125.4,
+      20
+     ]
+    },
+    {
+     "text": "9",
+     "at": "div.x2prep > div.x2prep__col > div.x2prep-line",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1193.9,
+      395.5,
+      17.9,
+      27.5
+     ]
+    },
+    {
+     "text": "GN",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1059.1,
+      436.8,
+      21.2,
+      20
+     ]
+    },
+    {
+     "text": "TH",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1099.8,
+      436.8,
+      19.8,
+      20
+     ]
+    },
+    {
+     "text": "WR",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1137.7,
+      436.8,
+      23.9,
+      20
+     ]
+    },
+    {
+     "text": "BM",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1178.4,
+      436.8,
+      22.7,
+      20
+     ]
+    },
+    {
+     "text": "SG",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1219.6,
+      436.8,
+      20.3,
+      20
+     ]
+    },
+    {
+     "text": "DK",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1259.4,
+      436.8,
+      20.7,
+      20
+     ]
+    },
+    {
+     "text": "GM",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1298.3,
+      436.8,
+      22.8,
+      20
+     ]
+    },
+    {
+     "text": "AL",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1340.4,
+      436.8,
+      18.7,
+      20
+     ]
+    },
+    {
+     "text": "FF",
+     "at": "div.x2prep__col > div.x2prep-owned > span.x2prep-owned__tile",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(18, 16, 28)",
+     "rect": [
+      1380.8,
+      436.8,
+      17.9,
+      20
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.3,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 23 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      162.4,
+      20
+     ]
+    },
+    {
+     "text": "WHITE MAGE",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      383.4,
+      772.3,
+      118.9,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      594.6,
+      767.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      67.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 24 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      162.9,
+      20
+     ]
+    },
+    {
+     "text": "DARK KNIGHT",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      842.2,
+      772.3,
+      128.9,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.8,
+      767.3,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.7,
+      749.5,
+      62.7,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 25 · 9 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.7,
+      790,
+      156.6,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1353,
+      772.3,
+      86.9,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab3-stats",
+   "file": "prep-ffx2-1600x900-tab3-stats.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "stats",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 182,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      998.8,
+      51.1,
+      530.1,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      108.4,
+      141.6,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      162.1,
+      140.4,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 23",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      354,
+      146.6,
+      36.6,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      119.1,
+      219.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      173.2,
+      218.1,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 24",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      364.5,
+      224.3,
+      37.1,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      130.5,
+      297.1,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      184.3,
+      295.8,
+      53.8,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      376.2,
+      302.1,
+      36.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "DRESSPHERES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      158.9,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      926.2,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "ACCESSORIES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1036.6,
+      124.4,
+      152.3,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1233.4,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.x2prep.x2prep--stack > div.x2prep-line > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      615.7,
+      223,
+      46.8,
+      20
+     ]
+    },
+    {
+     "text": "Lv 23 · wearing White Mage",
+     "at": "div.prep__panel > div.x2prep.x2prep--stack > div.x2prep-line",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      677.5,
+      215.5,
+      281.6,
+      27.5
+     ]
+    },
+    {
+     "text": "HP",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      260.5,
+      25.1,
+      20
+     ]
+    },
+    {
+     "text": "690",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      731.1,
+      255.5,
+      35.7,
+      27.5
+     ]
+    },
+    {
+     "text": "MP",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      786.8,
+      260.5,
+      26.8,
+      20
+     ]
+    },
+    {
+     "text": "130",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      906.8,
+      255.5,
+      31.1,
+      27.5
+     ]
+    },
+    {
+     "text": "STR",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      957.9,
+      260.5,
+      35.3,
+      20
+     ]
+    },
+    {
+     "text": "9",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1097.2,
+      255.5,
+      11.8,
+      27.5
+     ]
+    },
+    {
+     "text": "MAG",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1129,
+      260.5,
+      39.1,
+      20
+     ]
+    },
+    {
+     "text": "69",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1256.5,
+      255.5,
+      23.6,
+      27.5
+     ]
+    },
+    {
+     "text": "DEF",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1300.1,
+      260.5,
+      35.3,
+      20
+     ]
+    },
+    {
+     "text": "12",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1432.6,
+      255.5,
+      18.6,
+      27.5
+     ]
+    },
+    {
+     "text": "MDEF",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      293,
+      49.9,
+      20
+     ]
+    },
+    {
+     "text": "131",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      740.3,
+      288,
+      26.5,
+      27.5
+     ]
+    },
+    {
+     "text": "AGI",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      786.8,
+      293,
+      30.6,
+      20
+     ]
+    },
+    {
+     "text": "52",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      915.4,
+      288,
+      22.5,
+      27.5
+     ]
+    },
+    {
+     "text": "ACC",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      957.9,
+      293,
+      36.4,
+      20
+     ]
+    },
+    {
+     "text": "100",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1077.4,
+      288,
+      31.6,
+      27.5
+     ]
+    },
+    {
+     "text": "EVA",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1129,
+      293,
+      34.4,
+      20
+     ]
+    },
+    {
+     "text": "5",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1268.7,
+      288,
+      11.4,
+      27.5
+     ]
+    },
+    {
+     "text": "LUCK",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__k",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1300.1,
+      293,
+      48,
+      20
+     ]
+    },
+    {
+     "text": "10",
+     "at": "div.x2prep-stats > div.x2prep-stat > span.x2prep-stat__v",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1431.6,
+      288,
+      19.6,
+      27.5
+     ]
+    },
+    {
+     "text": "HP",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      801.3,
+      339.3,
+      21.3,
+      20
+     ]
+    },
+    {
+     "text": "MP",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      868.1,
+      339.3,
+      22.8,
+      20
+     ]
+    },
+    {
+     "text": "STR",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      932.2,
+      339.3,
+      29.7,
+      20
+     ]
+    },
+    {
+     "text": "MAG",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      998,
+      339.3,
+      33.2,
+      20
+     ]
+    },
+    {
+     "text": "DEF",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1067.3,
+      339.3,
+      29.7,
+      20
+     ]
+    },
+    {
+     "text": "MDEF",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.6,
+      339.3,
+      42.2,
+      20
+     ]
+    },
+    {
+     "text": "AGI",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1204.6,
+      339.3,
+      25.3,
+      20
+     ]
+    },
+    {
+     "text": "ACC",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1269.5,
+      339.3,
+      30.7,
+      20
+     ]
+    },
+    {
+     "text": "EVA",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1338,
+      339.3,
+      28.9,
+      20
+     ]
+    },
+    {
+     "text": "LUCK",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row.x2prep-cmp__row--head > span.x2prep-cmp__cell",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1399.8,
+      339.3,
+      40.3,
+      20
+     ]
+    },
+    {
+     "text": "GN",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      620.4,
+      374.3,
+      20.6,
+      20
+     ]
+    },
+    {
+     "text": "Gunner",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      373,
+      60.3,
+      22.5
+     ]
+    },
+    {
+     "text": "▲279",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      791.4,
+      373,
+      41.1,
+      22.5
+     ]
+    },
+    {
+     "text": "▼74",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      863,
+      373,
+      33.1,
+      22.5
+     ]
+    },
+    {
+     "text": "▲42",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.6,
+      373,
+      34.8,
+      22.5
+     ]
+    },
+    {
+     "text": "▼43",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      997.1,
+      373,
+      35.1,
+      22.5
+     ]
+    },
+    {
+     "text": "▲20",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1064.8,
+      373,
+      34.7,
+      22.5
+     ]
+    },
+    {
+     "text": "▼99",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1132.4,
+      373,
+      34.7,
+      22.5
+     ]
+    },
+    {
+     "text": "▲1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1205.8,
+      373,
+      22.9,
+      22.5
+     ]
+    },
+    {
+     "text": "▲23",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1267.7,
+      373,
+      34.4,
+      22.5
+     ]
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1340.9,
+      373,
+      22.9,
+      22.5
+     ]
+    },
+    {
+     "text": "▲5",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1407.1,
+      373,
+      25.8,
+      22.5
+     ]
+    },
+    {
+     "text": "TH",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      621.1,
+      409.3,
+      19.3,
+      20
+     ]
+    },
+    {
+     "text": "Thief",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      408,
+      42.6,
+      22.5
+     ]
+    },
+    {
+     "text": "▲320",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      790.3,
+      408,
+      43.4,
+      22.5
+     ]
+    },
+    {
+     "text": "▼51",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      863.8,
+      408,
+      31.3,
+      22.5
+     ]
+    },
+    {
+     "text": "▲34",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.5,
+      408,
+      35.1,
+      22.5
+     ]
+    },
+    {
+     "text": "▼33",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      997.3,
+      408,
+      34.7,
+      22.5
+     ]
+    },
+    {
+     "text": "▲14",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1066.2,
+      408,
+      32,
+      22.5
+     ]
+    },
+    {
+     "text": "▼75",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1133.5,
+      408,
+      32.4,
+      22.5
+     ]
+    },
+    {
+     "text": "▲8",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1204.1,
+      408,
+      26.4,
+      22.5
+     ]
+    },
+    {
+     "text": "▲10",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1268.9,
+      408,
+      31.9,
+      22.5
+     ]
+    },
+    {
+     "text": "▲14",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1336.4,
+      408,
+      32,
+      22.5
+     ]
+    },
+    {
+     "text": "▲16",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1404.1,
+      408,
+      31.6,
+      22.5
+     ]
+    },
+    {
+     "text": "WR",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      619,
+      444.3,
+      23.3,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Warrior",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      443,
+      61.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲443",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      789.8,
+      443,
+      44.2,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼67",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      863.2,
+      443,
+      32.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲53",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.8,
+      443,
+      34.5,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼43",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      997.1,
+      443,
+      35.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲86",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1064.6,
+      443,
+      35.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼123",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1129.8,
+      443,
+      39.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1204.4,
+      443,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1272,
+      443,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "—",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--same",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1347.7,
+      443,
+      9.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1407.1,
+      443,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "BM",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      619.6,
+      479.3,
+      22.1,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Black Mage",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      478,
+      95.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼23",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      794.8,
+      478,
+      34.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲11",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      865.3,
+      478,
+      28.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      935.6,
+      478,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲4",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1001.4,
+      478,
+      26.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼5",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1069.3,
+      478,
+      25.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼5",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1136.8,
+      478,
+      25.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1205.8,
+      478,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1273.4,
+      478,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1340.9,
+      478,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "—",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--same",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1415.2,
+      478,
+      9.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "SG",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      620.8,
+      514.3,
+      19.7,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Songstress",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      513,
+      94.6,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼16",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      796.2,
+      513,
+      31.6,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼23",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      862.3,
+      513,
+      34.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      934.2,
+      513,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼20",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      997.3,
+      513,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼5",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1069.3,
+      513,
+      25.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼89",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1132.2,
+      513,
+      35.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲3",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1204.3,
+      513,
+      26,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1272,
+      513,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲5",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1339.5,
+      513,
+      25.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1408.5,
+      513,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "DK",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      620.6,
+      549.3,
+      20.1,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Dark Knight",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      548,
+      98.5,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲788",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      790.9,
+      548,
+      42.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲25",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      862.4,
+      548,
+      34.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲58",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.6,
+      548,
+      34.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼21",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      999,
+      548,
+      31.3,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲108",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1061.7,
+      548,
+      41,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼49",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1132.1,
+      548,
+      35.2,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼14",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1201.3,
+      548,
+      32,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1272,
+      548,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼3",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1339.4,
+      548,
+      26,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "—",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--same",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1415.2,
+      548,
+      9.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "GM",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      619.6,
+      584.3,
+      22.2,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Gun Mage",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      583,
+      82.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲150",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      791.8,
+      583,
+      40.3,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼24",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      862.1,
+      583,
+      34.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲48",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.3,
+      583,
+      35.5,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼3",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1001.6,
+      583,
+      26,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲15",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1066.5,
+      583,
+      31.3,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼66",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1132.4,
+      583,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1205.8,
+      583,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲20",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1267.5,
+      583,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1339.5,
+      583,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "—",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--same",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1415.2,
+      583,
+      9.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "AL",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      621.6,
+      619.3,
+      18.1,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Alchemist",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      618,
+      82.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲195",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      792,
+      618,
+      40,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼84",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      861.8,
+      618,
+      35.5,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲39",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.7,
+      618,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼55",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      997.5,
+      618,
+      34.2,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲16",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1066.4,
+      618,
+      31.6,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼120",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1129.6,
+      618,
+      40.2,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "—",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--same",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1212.6,
+      618,
+      9.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲20",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1267.5,
+      618,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼2",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1339.5,
+      618,
+      25.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1408.5,
+      618,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "FF",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__name > i",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      622,
+      654.3,
+      17.3,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Floral Fallal",
+     "at": "div.x2prep-cmp > div.x2prep-cmp__row > span.x2prep-cmp__name",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      653.2,
+      653,
+      94.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲279",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      791.4,
+      653,
+      41.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼74",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      863,
+      653,
+      33.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲42",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      929.6,
+      653,
+      34.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼43",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      997.1,
+      653,
+      35.1,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲20",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1064.8,
+      653,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼99",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1132.4,
+      653,
+      34.7,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1205.8,
+      653,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲23",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1267.7,
+      653,
+      34.4,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▼1",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--down",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(165, 50, 58)",
+     "rect": [
+      1340.9,
+      653,
+      22.9,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "▲5",
+     "at": "div.x2prep-cmp__row > span.x2prep-cmp__cell > span.x2prep-delta.x2prep-delta--up",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(47, 122, 70)",
+     "rect": [
+      1407.1,
+      653,
+      25.8,
+      22.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "The dressphere and the level are the stats — all",
+     "at": "div.prep__panel > div.x2prep.x2prep--stack > div.x2prep-note.x2prep-foot",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      448,
+      823.6,
+      25
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.3,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 23 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      162.4,
+      20
+     ]
+    },
+    {
+     "text": "WHITE MAGE",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      383.4,
+      772.3,
+      118.9,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      594.6,
+      767.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      67.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 24 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      162.9,
+      20
+     ]
+    },
+    {
+     "text": "DARK KNIGHT",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      842.2,
+      772.3,
+      128.9,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.8,
+      767.3,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.7,
+      749.5,
+      62.7,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 25 · 9 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.7,
+      790,
+      156.6,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1353,
+      772.3,
+      86.9,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab4-accessories",
+   "file": "prep-ffx2-1600x900-tab4-accessories.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "accessories",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 48,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      998.8,
+      51.1,
+      530.1,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      108.4,
+      141.6,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      162.1,
+      140.4,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 23",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      354,
+      146.6,
+      36.6,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      119.1,
+      219.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      173.2,
+      218.1,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 24",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      364.5,
+      224.3,
+      37.1,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      130.5,
+      297.1,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      184.3,
+      295.8,
+      53.8,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      376.2,
+      302.1,
+      36.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "DRESSPHERES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      158.9,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      926.2,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "ACCESSORIES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1036.6,
+      124.4,
+      152.3,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1233.4,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "SLOT 1",
+     "at": "div.ffxprep-gear > div.ffxprep-gear__name > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      615.7,
+      223,
+      64.6,
+      20
+     ]
+    },
+    {
+     "text": "Circlet",
+     "at": "div.x2prep > div.ffxprep-gear > div.ffxprep-gear__name",
+     "fs": 10,
+     "scale": 2.5,
+     "eff": 25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      695.3,
+      215.5,
+      65.2,
+      30
+     ]
+    },
+    {
+     "text": "MAG +10, MDEF +10",
+     "at": "div.ffxprep-gear > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      633.2,
+      263,
+      157.5,
+      20
+     ]
+    },
+    {
+     "text": "SLOT 2",
+     "at": "div.ffxprep-gear > div.ffxprep-gear__name > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1053.5,
+      223,
+      67.5,
+      20
+     ]
+    },
+    {
+     "text": "Mythril Gloves",
+     "at": "div.x2prep > div.ffxprep-gear > div.ffxprep-gear__name",
+     "fs": 10,
+     "scale": 2.5,
+     "eff": 25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1136,
+      215.5,
+      138.5,
+      30
+     ]
+    },
+    {
+     "text": "DEF +20",
+     "at": "div.ffxprep-gear > div.ffxprep-chips > span.ffxprep-chip",
+     "fs": 6.5,
+     "scale": 2.5,
+     "eff": 16.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1071,
+      263,
+      68.5,
+      20
+     ]
+    },
+    {
+     "text": "Accessories stop working inside a special dressp",
+     "at": "div.prep__panel > div.x2prep > div.x2prep-note.x2prep-foot",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      320.5,
+      484.7,
+      25
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.3,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 23 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      162.4,
+      20
+     ]
+    },
+    {
+     "text": "WHITE MAGE",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      383.4,
+      772.3,
+      118.9,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      594.6,
+      767.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      67.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 24 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      162.9,
+      20
+     ]
+    },
+    {
+     "text": "DARK KNIGHT",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      842.2,
+      772.3,
+      128.9,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.8,
+      767.3,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.7,
+      749.5,
+      62.7,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 25 · 9 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.7,
+      790,
+      156.6,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1353,
+      772.3,
+      86.9,
+      20
+     ]
+    }
+   ]
+  },
+  {
+   "label": "tab5-items",
+   "file": "prep-ffx2-1600x900-tab5-items.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "items",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 59,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      607,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 27,
+     "scale": 1,
+     "eff": 27,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      676,
+      630,
+      209.9,
+      33
+     ]
+    },
+    {
+     "text": "The tabs are for later. Start the battle.",
+     "at": "div.frg__in > div.frg__line > span.frg__pointer",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      676,
+      667.5,
+      290,
+      20
+     ]
+    },
+    {
+     "text": "Esc",
+     "at": "div.frg__in > span.frg__skip > b.frg__pointer",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      676,
+      718.3,
+      35.8,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      711.8,
+      718.3,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 7.11,
+     "scale": 2.5,
+     "eff": 17.78,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      155.5,
+      48.9,
+      176.7,
+      22.5
+     ]
+    },
+    {
+     "text": "IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__where",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgba(244, 241, 232, 0.7)",
+     "rect": [
+      998.8,
+      51.1,
+      530.1,
+      20
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__member.prep__member--sel > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      108.4,
+      141.6,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      162.1,
+      140.4,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 23",
+     "at": "div.prep__roster > div.prep__member.prep__member--sel > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      354,
+      146.6,
+      36.6,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      119.1,
+      219.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      173.2,
+      218.1,
+      58.2,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 24",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      364.5,
+      224.3,
+      37.1,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__member > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      130.5,
+      297.1,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      184.3,
+      295.8,
+      53.8,
+      32.5
+     ]
+    },
+    {
+     "text": "LV 25",
+     "at": "div.prep__roster > div.prep__member > span.prep__member-lv",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      376.2,
+      302.1,
+      36.5,
+      20
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      577.8,
+      124.4,
+      100.7,
+      22.5
+     ]
+    },
+    {
+     "text": "DRESSPHERES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      722.9,
+      124.4,
+      158.9,
+      22.5
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      926.2,
+      124.4,
+      66,
+      22.5
+     ]
+    },
+    {
+     "text": "ACCESSORIES",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      1036.6,
+      124.4,
+      152.3,
+      22.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1233.4,
+      124.4,
+      66.8,
+      22.5
+     ]
+    },
+    {
+     "text": "Potion",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      219.3,
+      63.8,
+      25
+     ]
+    },
+    {
+     "text": "×60",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1418.4,
+      219.3,
+      32.9,
+      25
+     ]
+    },
+    {
+     "text": "Hi-Potion",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      254.3,
+      93,
+      25
+     ]
+    },
+    {
+     "text": "×20",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1419,
+      254.3,
+      32.2,
+      25
+     ]
+    },
+    {
+     "text": "Phoenix Down",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      289.3,
+      138.2,
+      25
+     ]
+    },
+    {
+     "text": "×20",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1419,
+      289.3,
+      32.2,
+      25
+     ]
+    },
+    {
+     "text": "Ether",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      324.3,
+      54,
+      25
+     ]
+    },
+    {
+     "text": "×10",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1422.2,
+      324.3,
+      29,
+      25
+     ]
+    },
+    {
+     "text": "Remedy",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      359.3,
+      80.4,
+      25
+     ]
+    },
+    {
+     "text": "×8",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1429.2,
+      359.3,
+      22.1,
+      25
+     ]
+    },
+    {
+     "text": "Holy Water",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      394.3,
+      108.2,
+      25
+     ]
+    },
+    {
+     "text": "×5",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1429.9,
+      394.3,
+      21.4,
+      25
+     ]
+    },
+    {
+     "text": "Lunar Curtain",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      429.3,
+      135.2,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×4",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1429.2,
+      429.3,
+      22.1,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Light Curtain",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      615.7,
+      464.3,
+      129.5,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "×3",
+     "at": "div.ffxprep-items > div.ffxprep-item-row > span.ffxprep-item-row__qty",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1429.8,
+      464.3,
+      21.4,
+      25
+     ],
+     "clipped": true
+    },
+    {
+     "text": "GIL",
+     "at": "div.prep__panel > div.x2prep-line > b",
+     "fs": 6,
+     "scale": 2.5,
+     "eff": 15,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      615.7,
+      433,
+      31.7,
+      20
+     ]
+    },
+    {
+     "text": "10,000",
+     "at": "div.prep__sheet-inner.prep__sheet-inner--panel > div.prep__panel > div.x2prep-line",
+     "fs": 9,
+     "scale": 2.5,
+     "eff": 22.5,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      662.4,
+      425.5,
+      73.4,
+      27.5
+     ]
+    },
+    {
+     "text": "▲ ▼",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      577.8,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "PARTY · TABS · ·",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__hint",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      615.2,
+      533.3,
+      498,
+      20
+     ]
+    },
+    {
+     "text": "◀ ▶",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      711.1,
+      533.3,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "ENTER",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      832.9,
+      533.3,
+      60.2,
+      20
+     ]
+    },
+    {
+     "text": "BEGINS THE BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      893,
+      533.3,
+      188,
+      20
+     ]
+    },
+    {
+     "text": "ESC",
+     "at": "div.prep__hint > span.prep__hint-act > b",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(247, 182, 217)",
+     "rect": [
+      1113.3,
+      533.3,
+      36.1,
+      20
+     ]
+    },
+    {
+     "text": "BACK",
+     "at": "div.prep__stage.lb-stage > div.prep__hint > span.prep__hint-act",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      1149.4,
+      533.3,
+      54.2,
+      20
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1295.9,
+      659.5,
+      208.6,
+      25
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      126.3,
+      767.3,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      191.1,
+      749.5,
+      57.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 23 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      191.1,
+      790,
+      162.4,
+      20
+     ]
+    },
+    {
+     "text": "WHITE MAGE",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      383.4,
+      772.3,
+      118.9,
+      20
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      594.6,
+      767.3,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      659.9,
+      749.5,
+      67.9,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 24 · 10 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      659.9,
+      790,
+      162.9,
+      20
+     ]
+    },
+    {
+     "text": "DARK KNIGHT",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      842.2,
+      772.3,
+      128.9,
+      20
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1063.8,
+      767.3,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 12.44,
+     "scale": 2.5,
+     "eff": 31.1,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1128.7,
+      749.5,
+      62.7,
+      37.5
+     ]
+    },
+    {
+     "text": "LV 25 · 9 DRESSPHERES",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      1128.7,
+      790,
+      156.6,
+      20
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(184, 67, 126)",
+     "rect": [
+      1353,
+      772.3,
+      86.9,
+      20
+     ]
+    }
+   ]
+  }
+ ],
+ "error": null,
+ "consoleErrors": []
+}

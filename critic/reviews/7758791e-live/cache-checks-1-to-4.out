@@ -1,0 +1,51 @@
+date: 2026-10-13T11:40:09Z
+### 1. every content-hashed file gets the year-long rule
+BUNDLE=assets/index-CKOVah7-.js
+CSS=assets/index-B-8CEurV.css
+WORKERS=assets/worker-DI6jnt6D.js assets/worker-DJqiQx36.js
+== assets/index-CKOVah7-.js
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+Cache-Control: public, max-age=31536000, immutable
+== assets/index-B-8CEurV.css
+HTTP/1.1 200 OK
+Content-Type: text/css
+Cache-Control: public, max-age=31536000, immutable
+== assets/worker-DI6jnt6D.js
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+Cache-Control: public, max-age=31536000, immutable
+== assets/worker-DJqiQx36.js
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+Cache-Control: public, max-age=31536000, immutable
+### 2. everything else keeps the host's default (revalidated)
+== /
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+== /art/title/keyart.webp
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "450a52a6d0e7d4bea1742ac1073a1c03"
+== /art/backdrops/road-to-the-farplane.webp
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "aa87d40130b9ae543f0f831cef9630bf"
+== /art/manifest.json
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "320051c64bb0f6fc4896e58e8cd69c71"
+== /audio/manifest.json
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "b8380d19cd51f169d59b09add3d2d5fb"
+== /artifact-manifest.json
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "2b61af6cd32b4a2fbd60a0dd76f426f1"
+### 3. the query string does not change the rule, and _headers itself is not served
+bundle ?v=1: Cache-Control: public, max-age=31536000, immutable
+/_headers: 404
+### 4. a conditional request for the page
+page ETag: ''
+no ETag on the page: a conditional request cannot be sent

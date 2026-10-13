@@ -1,0 +1,526 @@
+{
+ "review": "live-board",
+ "sha": "7b2582e7",
+ "browserMode": "gpu",
+ "viewport": "1600x900",
+ "startedAt": "2026-10-13T06:37:39.417Z",
+ "cards": {
+  "seymour-flux": {
+   "screen": "chapter-select",
+   "selected": "seymour-flux",
+   "msSinceBoardOpened": 6076,
+   "imgsAt3s": {
+    "n": 25,
+    "notLoaded": [
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     }
+    ]
+   },
+   "imgsAt6s": {
+    "n": 25,
+    "notLoaded": [
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     }
+    ],
+    "sample": [
+     {
+      "alt": "",
+      "src": "backdrops/gagazet.webp",
+      "complete": true,
+      "w": 2688
+     },
+     {
+      "alt": "",
+      "src": "mortiorchis/idle.png",
+      "complete": true,
+      "w": 1201
+     },
+     {
+      "alt": "",
+      "src": "seymour-flux-body/idle.png",
+      "complete": true,
+      "w": 750
+     },
+     {
+      "alt": "",
+      "src": "backdrops/gagazet.webp",
+      "complete": true,
+      "w": 2688
+     },
+     {
+      "alt": "",
+      "src": "seymour-flux-body/idle.png",
+      "complete": true,
+      "w": 750
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "backdrops/dreams-end.webp",
+      "complete": true,
+      "w": 2688
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     }
+    ]
+   }
+  },
+  "ffx2-bahamut": {
+   "screen": "chapter-select",
+   "selected": "ffx2-bahamut",
+   "msSinceBoardOpened": 13825,
+   "imgsAt3s": {
+    "n": 28,
+    "notLoaded": [
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     }
+    ]
+   },
+   "imgsAt6s": {
+    "n": 29,
+    "notLoaded": [
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     }
+    ],
+    "sample": [
+     {
+      "alt": "",
+      "src": "backdrops/bevelle-underground.webp",
+      "complete": true,
+      "w": 2688
+     },
+     {
+      "alt": "",
+      "src": "ffx2-bahamut/idle.png",
+      "complete": true,
+      "w": 1024
+     },
+     {
+      "alt": "",
+      "src": "backdrops/gagazet.webp",
+      "complete": true,
+      "w": 2688
+     },
+     {
+      "alt": "",
+      "src": "seymour-flux-body/idle.png",
+      "complete": true,
+      "w": 750
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "backdrops/dreams-end.webp",
+      "complete": true,
+      "w": 2688
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     },
+     {
+      "alt": "",
+      "src": "",
+      "complete": true,
+      "w": 0
+     }
+    ]
+   }
+  }
+ },
+ "status": "ran",
+ "consoleErrors": [],
+ "notFound": []
+}

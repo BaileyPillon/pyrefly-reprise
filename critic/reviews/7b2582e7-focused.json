@@ -1,0 +1,1020 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-13T05:33:39.223Z",
+  "build": {
+    "mainSha": "7b2582e7"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect and no regression at major or critical severity against live a061e9dc: Chapters I (twice, normal and fast), III (all seven links, 25.9 minutes), VIII and XVII (both against live) were played from the title to the results and the board by real keys, 58.8 to 59.7 fps, no stall in the candidate, no 404 or HTML-for-media, and the full suite (17,581 tests) and tsc are clean.",
+    "The fixes do what they claim in the production bundle: Evrae's Inhale no longer hard-cuts (live 1 hard cut, candidate 0; the swap blends over 7 frames); the Right Fin's 25 double images over the 0.40 bar fall to 0 and its swaps' outline overlap rises from 0.097 to 0.37; the KO-wipe pairs are silent (12 of 12 wiped events took 0 ms, the Curse on Tidus in Chapter III's last link played no flash, line or icon, and its Auto-Life consumption, revive and Critical still played); the text floor holds at 1600x900, 2000x1012 and 3840x2160 on every screen swept, and at 390x844 on the board, the CHAPTER and Sphere Grid tabs, results and the pause; the Chapter II number the brief discloses reproduces exactly (476 to 398 of 500).",
+    "What does not hold is carried, minor or disclosed: the phone's heavy prep tabs are still about 3 px (PR-0295, a carried major, the same on live to the element), the FFX Sphere Grid tab is still under 14 px below 1600x900 (improved, not regressed), the first-launch hint strip now runs under the first-run slab (new, polish), the permanent Auto-Life icon leaves Tidus's row early after the Curse (polish), and CHK-027's jerks of 40 px or more remain (carried, fewer than live)."
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "result": "UNVERIFIED",
+      "reason": "The routing half holds: every music file a chapter asks for returned 200 audio/mpeg, each is asked for once before the battle (Chapter I candidate: scene at -16 ms and boss and victory at +2.8 s after the prep screen, held and decoded by +4.4 s, the scene cue current when the script cues it, the boss cue at the battle start, the victory cue at the results), nothing 404, no console error. Nothing was heard (rule 13) and no cue, file or mix changed, so the audition half stays Bailey's.",
+      "game": "both",
+      "chapter": "seymour-flux, evrae-airship",
+      "state": "party-prep to results",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-cand/delivery.json",
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-live/delivery.json",
+        "critic/reviews/7b2582e7-focused/continuity/evrae-airship-win-7b2582e7/audio-debug.jsonl",
+        "critic/reviews/7b2582e7-focused/continuity-live/evrae-airship-win-live-a061e9dc/audio-debug.jsonl"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 12,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "The pause (unchanged by the candidate) holds the geometry at the six windows in fresh browsers, read by the new matrix instrument (390x844, 1280x720, 1600x900, 2000x1012, 2560x1080, 3840x2160) and my own sweeps (390x844, 1600x900, 3840x2160): the plate covers the window or is option B slid under the dark falloff (D-070, 1280x720 to 2560x1080), and at 3840x2160 it is the capped plate (3,382 x 1,933 at (-10.5, -5.5), never past 1.25x) over a 3840x2160 `.pause__art--extended` (D-450); `currentSrc` is the 2x master at every size; `scrollWidth` equals `clientWidth` at all six. Geometry read, the pause frames not read at 1280x720, 2000x1012 and 2560x1080; the prep and results pages are letterboxed stages, not window layers.",
+      "game": "both",
+      "chapter": "seymour-flux",
+      "state": "pause",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/instruments/gaps/sweep/out-matrix.json",
+        "critic/reviews/7b2582e7-focused/textfloor/pause-ffx-1600x900.json",
+        "critic/reviews/7b2582e7-focused/textfloor/pause-ffx-3840x2160.json",
+        "critic/reviews/7b2582e7-focused/textfloor/pause-ffx-390x844.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 10,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-003",
+      "result": "FAIL",
+      "reason": "Zero elements under 14 px at 1600x900, 2000x1012 and 3840x2160 on every screen swept in both games (prep, results, Chapter IX's gauge, Chapter XII's discs, the Sensor chips, the pause, the board), at 1280x720 on everything but the FFX Sphere Grid tab (the smallest there 9.36 px, 70 elements with the first-time card up, 47 with it closed; 1440x900 29 and 40, smallest 10.53; live has 81 at 1280x720), and at 390x844 on the board, the CHAPTER and Sphere Grid tabs, results and the pause. The pass criterion is zero, so the check FAILS for two things, neither a regression: that Sphere Grid tab between 1280x720 and 1599x899, the builder's disclosed residual, improved and not regressed (FOC43-02); and the eight heavy prep tabs at 390x844 (FFX Stats, Equipment, Items, Overdrive; FFX-2 Dresspheres, Stats, Accessories, Items), 43 to 177 elements each from 2.98 px, measured by real pointer clicks on the candidate and on live and found the same (FOC43-11, PR-0295, outside the change's 1280x720 claim). The strategy guide at 1024x768 to 2000x1012 reads 14.1 px or more with no cut (guide probe).",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut, yojimbo-cavern, seymour-omnis",
+      "state": "party-prep, results, first menu",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/summary-table.txt",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1280x720.json",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1280x720-tab3-sphere-grid.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1440x900.json",
+        "critic/reviews/7b2582e7-focused/textfloor/battle-ch9-1280x720-first-menu.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/battle-ch12-1280x720-first-menu.jpg",
+        "critic/reviews/7b2582e7-focused/guide2/guide-probe.json",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs/prep-ffx-390x844.json",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs/prep-ffx2-390x844.json",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs-live/prep-ffx-390x844.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 40,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-004",
+      "result": "NOT APPLICABLE",
+      "reason": "No advisor behaviour changed: advisor-revive.ts and tactics/seymour-flux.ts changed comments only (git diff a061e9dc..HEAD); the advice cards read at the first menus of Chapters I, II, III, VIII, XVII and FFX-2 IV name legal enabled actions as before.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch2-fast-route/yunalesca-win-7b2582e7/13-guide-G.png"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 2,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-005",
+      "result": "PASS",
+      "reason": "RC5 changes the board the advisor reads (a dead member is no longer a Zombie): advisor-note (27), advisor-v4-card (3), strategy-chapter2 (13) and ffx-chapter2 (15) pass re-pinned in the full suite on 7b2582e7, and the Chapter II first menu on screen recommends Hastega on the party first, as the guide's new line says.",
+      "game": "ffx",
+      "chapter": "yunalesca, seymour-flux",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch2-fast-route/yunalesca-win-7b2582e7/13-guide-G.png",
+        "critic/reviews/7b2582e7-focused/ko/ch1-normal-route/seymour-flux-win-7b2582e7/16b-after-cancel.png"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 5,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "reason": "A status line and a row icon die with the status: in every KO the observer saw (Chapter I nine, Chapter III seventeen, and Tidus's Curse death check) no status line or icon stayed for a status that died with its target; the status-line text of the Curse never appeared. The Auto-Life icon is the exception in the other direction, leaving Tidus's row 125 ms early (FOC43-04).",
+      "game": "ffx",
+      "chapter": "seymour-flux, braskas-final-aeon",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3/ko-analysis.txt",
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3/analysis.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 40,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "reason": "The two new texts read as player meaning, read on screen in the production bundle: FFX-2 Chapter IV's enemy-intent panel says \"The Mega Flare countdown is a fixed wait of about 25 seconds on the game’s own clock — Slow, Haste and a fallen girl do not change it\" (the research citation in the source is not shown to the player), and Chapter II's guide, read from the guide card's own DOM, says \"One catch: don't Haste a Reflecting character. Hastega, Slowga and the Nul spells bounce off Reflect, so a Hastega cast through it lands on Yunalesca. Haste the party first, then raise Reflect.\" No raw id or debug word in either.",
+      "game": "both",
+      "chapter": "ffx2-bahamut, yunalesca",
+      "state": "battle, first menu",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ffx2-bahamut-note-route/ffx2-bahamut-win-7b2582e7/run.json",
+        "critic/reviews/7b2582e7-focused/ko/ch2-fast/ko-data.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 6,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "reason": "The enlarged labels do not cover a figure or each other where read: Chapter IX's gauge and Chapter XII's disc strip at 1280x720 (frames) beside the actors and the first-turn card; the Sensor card at 1600x900 to 3840x2160. Chapter IX's \"KOZUKA+ WAKIZASHI\" sit flush at 1280x720 (legible).",
+      "game": "ffx",
+      "chapter": "yojimbo-cavern, seymour-omnis, seymour-flux",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/battle-ch9-1280x720-first-menu.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/battle-ch12-1280x720-first-menu.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/compare/zanmato-labels.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 8,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "reason": "Names read in full on the screens swept: the roster, the stat labels, the results ledger, the three gauge labels, the six element chips of the Sensor card in two rows of three at 2560x1440 and 3840x2160. The probe's cut-text flag on THUNDER at every size is the chip's own box by a pixel; the word is whole on screen.",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/compare/sensor-2560.png",
+        "critic/reviews/7b2582e7-focused/textfloor/compare/sensor-3840.png",
+        "critic/reviews/7b2582e7-focused/textfloor/results-ffx-1280x720-results.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 6,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-010",
+      "result": "NOT APPLICABLE",
+      "reason": "No targeting or selection code or sheet changed.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 1,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-013",
+      "result": "UNVERIFIED",
+      "reason": "No painting file changed (art, audio, fonts and depth maps are byte-identical to live: manifest diff). The fins' staging did change: their attack and cast paintings no longer slide. The silhouettes as drawn say so (Right Fin outline overlap 0.097 to 0.37, centre shift 320 to 362 px to 96 to 116 px, Evrae's Inhale blends), but I did not see the Fins' attack at full frame: my screenshot series landed after the action. The approved-art hashes were not required (approvedArtCheck false).",
+      "game": "ffx",
+      "chapter": "sin-fins-core, evrae-airship",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/fins-compare-xvii.json",
+        "critic/reviews/7b2582e7-focused/fins-compare-viii.json",
+        "critic/reviews/7b2582e7-focused/continuity/sin-fins-core-win-7b2582e7/continuity/strips/jerk-000-right-fin.jpg",
+        "critic/reviews/7b2582e7-focused/compare/evrae-idle-vs-charge.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 15,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Every route run is real Playwright keys and clicks from the title (Enter through the board, card, prep, scene, menus, targets, pause with Esc and P, results); the debug API set up only the labelled hooks: the seed, and (Chapter III links 1 to 6) the skip speed. The text sweeps reach the prep and board by real keys and pointer clicks, the battle and results screens through gotoChapter (a layout check, not a capability claim). The fast-forward key was R, held by real keyboard input.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch1-normal-route/seymour-flux-win-7b2582e7/run.json",
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3-route/braskas-final-aeon-win-7b2582e7/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 120,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every capture is gated on a read-back state: the sweeps assert the screen and the awaited menu (assertScreen, waitBattleMenu), the route asserts each state; the one failed wait, the route's 30-post-scene slot (PR-0431, the scene is at a different slot), is recorded unverified in every run's fails and was never shot as the wrong screen. The observer's screenshots at a pair were late and are not claimed as the burst.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch1-normal-route/seymour-flux-win-7b2582e7/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 3,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "reason": "Pre-deploy candidate: the exact-artifact check belongs to the live review. Prepared: the candidate manifest (5,170 files, 3541fa88a9b12fd5) against live's a061e9dc manifest shows only the new bundle, style sheet, worker and _headers added, index.html changed and the three old bundle files removed, every other file byte-identical.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/manifest-diff-vs-live.json",
+        "critic/reviews/7b2582e7-focused/candidate-artifact-manifest.json",
+        "critic/reviews/7b2582e7-focused/live-manifest-a061e9dc.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 5,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "reason": "Reused with its dependency argument: every art, audio, font and depth-map file of the candidate has the same sha256 as live's manifest, which was decode-checked at its deploy (two intentionally flat images listed); no asset was added. The route runs' network lists show no 404 and no image or audio answered as HTML.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/manifest-diff-vs-live.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 4,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "The shared screens got the same work in both games: party prep (FFX CHAPTER, Stats, Equipment, Items and Overdrive tabs, FFX-2's five tabs) and results are 14 px or more at 1280x720 and up in both, and the phone's heavy prep tabs are equally short in both (FOC43-11); the first-run guide is one component; the difference is the written one (the Sphere Grid is FFX and is the one tab short between 1280x720 and 1599x899, FOC43-02; the Garment Grid untouched).",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/summary-table.txt",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx2-1280x720-tab3-stats.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/results-ffx2-1280x720-results.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 8,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Cases written and proved: text floors both games (Sphere Grid, Chapter IX, XII and the Sensor chips FFX only); fins and Evrae FFX only (Chapters VIII and XVII, `AirshipRangeDirector` is FFX); RC5 KO rules FFX only (the diff to src/battle/ffx2, src/data/ffx2, ff7 is intent.ts alone, and ffx2-atb-golden and ff7-golden pass unchanged); the Bahamut note FFX-2 only (read on screen in FFX-2 Chapter IV, absent from FFX's panels); the KO-wipe skip is shared plumbing and only FFX's engine emits the pair (grep), the FFX-2 route still plays its status lines.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ffx2-bahamut-note-route/ffx2-bahamut-win-7b2582e7/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 10,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "reason": "The win path reached its real destination by real input in the chapters the change touches: Chapter I (three runs: title, board, card, prep, scene, fight, results, confirm, post scene, board, reload with the clear kept), Chapter III (seven links, results, board), Chapters VIII and XVII (fight, results, board, reload). Not exercised: a defeat and the retry (the Chapter II and FFX-2 Bahamut routes were cut by their budgets), and the route's post-battle scene slot reads unverified in every run (PR-0431, a slot mismatch of the harness).",
+      "game": "both",
+      "chapter": "seymour-flux, braskas-final-aeon, evrae-airship, sin-fins-core",
+      "state": "title to board",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch1-normal-route/seymour-flux-win-7b2582e7/run.json",
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3-route/braskas-final-aeon-win-7b2582e7/run.json",
+        "critic/reviews/7b2582e7-focused/continuity/evrae-airship-win-7b2582e7/run.json",
+        "critic/reviews/7b2582e7-focused/continuity/sin-fins-core-win-7b2582e7/run.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 90,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "reason": "The changed subsystems were exercised through the real presentation path and read back: the KO-wipe skip inside the real BattleScreen and presenter of the production bundle (trace and HUD), the music warm through the real GameFlow (mixer snapshots and the request list), the blend through the real Airship director (the harness's per-frame record). Each unit test has its runtime counterpart in a route run here.",
+      "game": "both",
+      "chapter": "braskas-final-aeon, seymour-flux, evrae-airship, sin-fins-core",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3/ko-analysis.txt",
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-cand/delivery.json",
+        "critic/reviews/7b2582e7-focused/fins-compare-xvii.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 90,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-026",
+      "result": "PASS",
+      "reason": "Size continuity across pose changes, candidate and live alike: Chapter VIII 383 of 383 swaps judged by registered head, max head jump 0.1 percent, feet 1.1 px; Chapter XVII 1,350 judged (93 by mass, 4.8 percent at most; live up to 24.2 percent by mass), registered 0.2 percent, feet 1.4 px; 0 over tolerance in either. The head is read from the registration where one exists (so for the two fins it proves the changed table is applied, not that it is right).",
+      "game": "ffx",
+      "chapter": "evrae-airship, sin-fins-core",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/continuity/continuity-summary.json",
+        "critic/reviews/7b2582e7-focused/continuity-live/continuity-summary.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 60,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "reason": "Fails on jerks of 40 px or more as live does, with fewer of them: Chapter VIII 25 against 23 (the two extra are Tidus's: six at 41 to 48 px against live's four at 47 to 64 px), Chapter XVII 94 against 174; the aggregate 119 against 197 (worst 298.5 against 403.7 px). The fixes are measured: snaps and hard cuts 0 in the candidate (live Chapter VIII 1, snaps per minute 0.16), double images of 0.40 or more 0 against 25 on live (all the Right Fin's). The Save Sphere wash excuse is OFF in critic/policy.json (continuity.wash.excuse false), as the brief expects.",
+      "game": "ffx",
+      "chapter": "evrae-airship, sin-fins-core",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/continuity/continuity-summary.json",
+        "critic/reviews/7b2582e7-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/7b2582e7-focused/fins-compare-viii.json",
+        "critic/reviews/7b2582e7-focused/fins-compare-xvii.json",
+        "critic/reviews/7b2582e7-focused/continuity/evrae-airship-win-7b2582e7/continuity/strips/jerk-000-kimahri.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 60,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    },
+    {
+      "id": "CHK-B1",
+      "result": "UNVERIFIED",
+      "reason": "No sound or music was judged: agents cannot hear (rule 13), and no cue or mix changed; the held cues change only when a file is fetched.",
+      "game": "both",
+      "chapter": "see reason",
+      "state": "battle",
+      "evidence": [],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 1,
+      "environment": "headless Chromium from node (Playwright), PYREFLY_BROWSER=gpu (59 to 60 fps, no black canvas), candidate dist-gate (BASE_PATH=/) via vite preview 127.0.0.1:5461 (stopped), real keys from the title where the route plays; 1600x900 unless a size is named",
+      "artifactVersion": "7b2582e7",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98"
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "evrae-airship",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 365.3,
+        "swaps": 469,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 0.1,
+        "maxFeetShiftPx": 1.1,
+        "worstJerkPx": 107.3,
+        "jerksCovered": 0,
+        "fps": 59.6,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-014-rikku-ko-idle.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-006-rikku-follow-idle.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-308-kimahri-idle-hurt.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-237-kimahri-hurt-idle.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-004-rikku-attack-follow.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-476-kimahri-idle-victory.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-370-tidus-attack-follow.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-327-tidus-ready-attack.jpg",
+          "evrae-airship-win-7b2582e7/continuity/strips/swap-181-wakka-idle-hurt.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "sin-fins-core",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 1196.4,
+        "swaps": 1809,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 4.8,
+        "maxFeetShiftPx": 1.4,
+        "worstJerkPx": 298.5,
+        "jerksCovered": 0,
+        "fps": 59.1,
+        "dedicated": true,
+        "strips": 24,
+        "worstSwapStrips": [
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-926-kimahri-hurt-idle.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-541-tidus-attack-follow.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-284-wakka-idle-hurt.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-287-wakka-hurt-idle.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-622-auron-critical-idle.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-902-rikku-idle-ready.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-751-lulu-idle-hurt.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-497-lulu-idle-victory.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-814-lulu-hurt-idle.jpg",
+          "sin-fins-core-win-7b2582e7/continuity/strips/swap-180-yuna-idle-hurt.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 1561.7,
+    "counted": 2278,
+    "swaps": 2340,
+    "size": {
+      "judged": 1733,
+      "costumeSwaps": 1,
+      "sameArtSwaps": 544,
+      "costumeWorstHeadPct": 19.1,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 4.8,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1.4,
+      "feetOverTolerance": 0,
+      "headMeasured": 1733,
+      "headRegistration": 1640,
+      "headSilhouette": 93,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 1705,
+      "ghostFrames": 6634,
+      "worstGhostSeverity": 0.383,
+      "ghostOverFail": 0,
+      "jerks": 371,
+      "worstJerkPx": 298.5,
+      "jerksOverFail": 119,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.014,
+      "maxCentroidShiftPx": 196.3,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "1640 of 1733 measured swaps had a registered head (tolerance 3 percent); 93 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "119 jerk(s) of 40 px or more in one frame (worst 298.5 px)"
+        ]
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 1561.7 s of battle, 59.1 to 59.6 fps, 2 of 2 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (119 jerk(s) of 40 px or more in one frame (worst 298.5 px))",
+    "base": "http://127.0.0.1:5461/",
+    "date": "2026-10-13T04:23:22.391Z",
+    "liveBaseline": {
+      "schema": "continuity-summary/1",
+      "chapters": [
+        {
+          "chapter": "evrae-airship",
+          "game": "ffx",
+          "checks": {
+            "CHK-026": "PASS",
+            "CHK-027": "FAIL"
+          },
+          "battleSeconds": 367.5,
+          "swaps": 470,
+          "snapsPerMinute": 0.16,
+          "maxHeadJumpPct": 0.1,
+          "maxFeetShiftPx": 1.1,
+          "worstJerkPx": 107.3,
+          "jerksCovered": 0,
+          "fps": 59.7,
+          "dedicated": true,
+          "strips": 19,
+          "worstSwapStrips": [
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-014-rikku-ko-idle.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-006-rikku-follow-idle.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-234-kimahri-idle-hurt.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-237-kimahri-hurt-idle.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-004-rikku-attack-follow.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-476-kimahri-idle-victory.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-329-tidus-attack-follow.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-328-tidus-ready-attack.jpg",
+            "evrae-airship-win-live-a061e9dc/continuity/strips/swap-236-wakka-idle-hurt.jpg"
+          ],
+          "unverified": null
+        },
+        {
+          "chapter": "sin-fins-core",
+          "game": "ffx",
+          "checks": {
+            "CHK-026": "PASS",
+            "CHK-027": "FAIL"
+          },
+          "battleSeconds": 1266.6,
+          "swaps": 1999,
+          "snapsPerMinute": 0,
+          "maxHeadJumpPct": 24.2,
+          "maxFeetShiftPx": 1,
+          "worstJerkPx": 403.7,
+          "jerksCovered": 0,
+          "fps": 58.8,
+          "dedicated": true,
+          "strips": 28,
+          "worstSwapStrips": [
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-627-right-fin-cast-idle.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-592-right-fin-hurt-attack.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-690-right-fin-idle-attack.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-757-right-fin-idle-cast.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-696-right-fin-attack-idle.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-790-yuna-hurt-critical.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-589-tidus-attack-follow.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-047-tidus-ready-attack.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-362-wakka-idle-hurt.jpg",
+            "sin-fins-core-win-live-a061e9dc/continuity/strips/swap-288-wakka-hurt-idle.jpg"
+          ],
+          "unverified": null
+        }
+      ],
+      "battleSeconds": 1634.1,
+      "counted": 2469,
+      "swaps": 2544,
+      "size": {
+        "judged": 1923,
+        "costumeSwaps": 2,
+        "sameArtSwaps": 544,
+        "costumeWorstHeadPct": 50.9,
+        "costumeWorstFeetPx": 0,
+        "maxHeadJumpPct": 24.2,
+        "maxHeadJumpPctRegistration": 0.2,
+        "headOverTolerance": 0,
+        "maxFeetShiftPx": 1.1,
+        "feetOverTolerance": 0,
+        "headMeasured": 1923,
+        "headRegistration": 1766,
+        "headSilhouette": 157,
+        "headUnmeasured": 0
+      },
+      "motion": {
+        "snaps": 1,
+        "snapsPerMinute": 0.04,
+        "hardCuts": 1,
+        "hardCutsPerMinute": 0.04,
+        "ghostSwaps": 1857,
+        "ghostFrames": 7215,
+        "worstGhostSeverity": 0.411,
+        "ghostOverFail": 25,
+        "jerks": 492,
+        "worstJerkPx": 403.7,
+        "jerksOverFail": 197,
+        "jerksCovered": 0,
+        "worstCoveredJerkPx": 0,
+        "lowestIou": 0.014,
+        "maxCentroidShiftPx": 363.3,
+        "heldSwaps": 0,
+        "longestHeldFrames": 0,
+        "stagedChanges": 0,
+        "stagedSteps": 0,
+        "stagedSnapsExcused": 0,
+        "jerksAtStaged": 0
+      },
+      "checks": {
+        "CHK-026": {
+          "result": "PASS",
+          "reasons": [],
+          "note": "1766 of 1923 measured swaps had a registered head (tolerance 3 percent); 157 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+        },
+        "CHK-027": {
+          "result": "FAIL",
+          "reasons": [
+            "197 jerk(s) of 40 px or more in one frame (worst 403.7 px)",
+            "25 swap(s) show a double image of severity 0.4 or more (worst 0.411)"
+          ]
+        }
+      },
+      "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 1634.1 s of battle, 58.8 to 59.7 fps, 2 of 2 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (197 jerk(s) of 40 px or more in one frame (worst 403.7 px); 25 swap(s) show a double image of severity 0.4 or more (worst 0.411))",
+      "base": "https://echoesofspira.com/",
+      "date": "2026-10-13T04:23:22.709Z"
+    },
+    "note": "Chapters VIII and XVII only, candidate 7b2582e7 (this object) against live a061e9dc (liveBaseline), seed 1, the dedicated harness on the GPU. The other plan chapters were not run (neither a pose, stage nor scene registry changed apart from the two fins and Evrae's charge swap)."
+  },
+  "targets": {
+    "required": 3,
+    "matched": 3,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0
+  },
+  "issues": [
+    {
+      "id": "FOC43-06",
+      "severity": "major",
+      "title": "Jerks of 40 px or more remain in Chapters VIII and XVII (CHK-027 FAIL), as on live, fewer of them",
+      "game": "ffx",
+      "chapter": "evrae-airship, sin-fins-core",
+      "expected": "no jerk of 40 px or more in one frame (RUBRIC 6a, D-421)",
+      "observed": "Chapter XVII: 94 jerks of 40 px or more in 1,196 s (worst 298.5 px, the Right Fin at a pose swap) against 174 in 1,267 s on live a061e9dc (worst 403.7 px); Chapter VIII: 25 against 23 (worst 107.3 px in both; the two extra are Tidus's: six at 41 to 48 px against live's four at 47 to 64 px). The Right Fin's swaps are still seven-frame cross-fades between paintings about 100 px apart (outline overlap 0.37, double image 0.29, under the 0.40 bar). The count reads the registration table the change also edited, so part of the fall is the table agreeing with the paintings; the silhouette numbers are the independent half.",
+      "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=evrae-airship,sin-fins-core --tag=<x>, seed 1, 1600x900 (the evidence folder holds both builds)",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/continuity/continuity-summary.json",
+        "critic/reviews/7b2582e7-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/7b2582e7-focused/fins-compare-xvii.json",
+        "critic/reviews/7b2582e7-focused/fins-compare-viii.json",
+        "critic/reviews/7b2582e7-focused/continuity/sin-fins-core-win-7b2582e7/continuity/strips/jerk-000-right-fin.jpg"
+      ],
+      "confidence": "high that they exist and are fewer than live; medium on the Right Fin share (the two fights differ by 26 turns)",
+      "requirement": "RUBRIC 6a, CHK-027",
+      "where": "presenter pose swaps at KO, revive and range changes (not touched by this candidate), the fins' plant offset (FOC43-09)",
+      "fix": "carried from FOC41-01 and FOC42-01: blend or stage the KO and revive cuts and the range swap; the fins' plant row (FOC43-09)",
+      "acceptanceCheck": "the continuity harness shows no jerk of 40 px or more on Chapters VIII and XVII",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-07",
+      "severity": "major",
+      "title": "Chapter II is harder: wins fall from 476 to 398 of 500 (95.2 to 79.6 percent) by the Zombie rule, accepted by Bailey; Chapter I's opening takes about five more party turns",
+      "game": "ffx",
+      "chapter": "yunalesca, seymour-flux",
+      "expected": "the game's own KO reset: a KO clears Zombie and Scan (re-parity RC5, closes D-214 / PR-0217), accepted with \"I'll go with all of your recommendations\" (2026-10-12 about 17:50 EDT)",
+      "observed": "Reproduced to the digit by running the shipped intended line over seeds 1 to 500 on live's source and on the candidate: live 476 wins, 145.0 party turns, 13.7 party KOs; candidate 398 wins (101 losses, 1 unresolved), 159.1 turns, 14.6 KOs. The builder's 12-seed table has Chapter I at 48.0 to 53.3 party turns and every other chapter unchanged. Not a defect: a deliberate fidelity change with a disclosed cost.",
+      "repro": "PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_CHAPTERS=yunalesca vitest run tests/unit/ffx-parity-measure.test.ts (on each tree)",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ch2-500.json",
+        "critic/reviews/7b2582e7-focused/ch2-500-live.json"
+      ],
+      "confidence": "high",
+      "requirement": "AGENTS.md rule 6 (sourced data) and rule 14; Bailey's accepted recommendation",
+      "where": "src/battle/ffx/statuses.ts SURVIVES_KO, kernel/death-check.ts",
+      "fix": "none needed; if Bailey wants it nearer 95 percent the builder's options are (b) study the lost fights and rework the line, or (c) a hint (a new screen: mockup first)",
+      "acceptanceCheck": "the announcement names the fall; a deep review reads Chapter II by real keys end to end",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-11",
+      "severity": "major",
+      "title": "On a phone the heavy party-prep tabs draw their text from 2.98 px: FFX Stats, Equipment, Items, Overdrive; FFX-2 Dresspheres, Stats, Accessories, Items (PR-0295, carried; the same on live)",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut (party prep, 390x844 touch)",
+      "expected": "text of 14 px or more on every prep tab at 390x844 (CHK-003; the phone layout of party prep, D-781: mockup options first, nothing built before Bailey's pick)",
+      "observed": "Every strip tab of both games measured at 390x844 with touch by real pointer clicks, candidate and live. Candidate, elements under 14 px: FFX CHAPTER 0, Stats 73, Sphere Grid 0, Equipment 56, Items 105, Overdrive 54; FFX-2 CHAPTER 0, Dresspheres 63, Stats 177, Accessories 43, Items 54; smallest 2.98 px on every heavy tab (a desktop frame drawn a third of the width: the frame shows the Stats tab as a miniature the player cannot read). Live: CHAPTER and Sphere Grid 4 each (10 px), Stats 77, Equipment 60, Items 109, Overdrive 58; Dresspheres 67, Stats 181, Accessories 47, Items 58. The candidate neither introduces nor worsens it (it fixes the CHAPTER tab's four and the slab); its floor starts at 1280x720 and the builder leaves the phone to another lane.",
+      "repro": "PYREFLY_BROWSER=gpu node tools/text-floor-sweep.mjs --base=<url> --out=<dir> --sizes=390x844 --screens=prep-ffx,prep-ffx2 --touch=1 (candidate and https://echoesofspira.com/)",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs/prep-ffx-390x844-tab2-stats.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs/prep-ffx2-390x844-tab3-stats.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs-live/prep-ffx-390x844-tab2-stats.jpg",
+        "critic/reviews/7b2582e7-focused/phone-prep-cand/seymour-flux-tab1.jpg",
+        "critic/reviews/7b2582e7-focused/phone-prep-live/seymour-flux-tab1.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs/prep-ffx-390x844.json",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs-live/prep-ffx-390x844.json",
+        "critic/reviews/7b2582e7-focused/instruments/gaps/sweep/out-prep.json",
+        "critic/reviews/7b2582e7-focused/instruments-live/gaps/sweep/out-prep.json"
+      ],
+      "confidence": "high (both builds measured the same way, and the frames read)",
+      "requirement": "CHK-003, PR-0295 (round 25: carried, raised from polish)",
+      "where": "the phone layout of src/ui/ffx/party-prep and src/ui/ffx2/party-prep (--stage-floor is 0 below 1280x720: docs/handoff/r43-textfloor.md)",
+      "fix": "the party-prep phone layout: mockup options for Bailey first (D-781); not a font-size change inside the miniature frame",
+      "acceptanceCheck": "0 elements under 14 px on every strip tab of both games at 390x844 (text-floor-sweep prep-ffx and prep-ffx2 with --touch=1)",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-01",
+      "severity": "polish",
+      "title": "First launch: the prep hint strip grows to 14 px and runs under the first-run guide slab",
+      "game": "both (CHAPTER tab at 1280x720); ffx (Sphere Grid tab)",
+      "chapter": "seymour-flux, ffx2-bahamut (party prep)",
+      "expected": "the strip \"PARTY, TABS, ENTER BEGINS THE BATTLE, ESC BACK, PG UP / PG DN SCROLL\" reads whole beside the first-run slab, as on live",
+      "observed": "At 1280x720 on the CHAPTER tab (both games) \"SCROLL\" wraps to a second line that sits half under the slab's top edge. At 1440x900 and 1600x900 on the Sphere Grid tab the strip is cut by the slab at \"ENTER BEGINS THE BATTL\" and \"ESC BA\". On live the strip is whole beside the slab in the same states (the builder's before frames of the pristine tree). First launch only; the slab goes away after the guide.",
+      "repro": "fresh profile; tools/text-floor-sweep.mjs --screens=prep-ffx --sizes=1280x720,1440x900,1600x900 (or Enter twice from the title, the Chapter I card, Enter, stay on CHAPTER at 1280x720, click SPHERE GRID at 1440x900)",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1280x720-tab1-chapter.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1600x900-tab3-sphere-grid-card-closed.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1440x900-tab3-sphere-grid-card-closed.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/compare/before_prep-ffx-1280x720-tab1-chapter.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/compare/before_prep-ffx-1600x900-tab3-sphere-grid-card-closed.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor-live/prep-ffx-1280x720-tab1-chapter.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor-live/prep-ffx-1600x900-tab3-sphere-grid-card-closed.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor-live/prep-ffx-1440x900-tab3-sphere-grid-card-closed.jpg"
+      ],
+      "confidence": "high (read on the frames; the live reference is my own run of live a061e9dc with the same tool, textfloor-live/, and it agrees with the builder's before frames)",
+      "requirement": "CHK-003 (clipping), CHK-008",
+      "where": "src/ui/common/party-prep.css .prep__hint (absolute at 231 grid px, no width cap, font-size max(4.89px, var(--stage-floor)), tracking 0.22em) against src/ui/coach/first-run.css",
+      "fix": "keep the strip whole at the floor: cap its width at the slab's left edge with nowrap and a tighter tracking at the floor, or lift the slab above the strip while the guide is up",
+      "acceptanceCheck": "text-floor-sweep prep-ffx and prep-ffx2 on a fresh profile at 1280x720, 1440x900 and 1600x900: every word of the strip is on screen and none sits under the slab",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-02",
+      "severity": "polish",
+      "title": "The FFX Sphere Grid tab is under the 14 px floor from 1280x720 to 1599x899",
+      "game": "ffx",
+      "chapter": "seymour-flux (party prep, Sphere Grid)",
+      "expected": "no text under 14 px (CHK-003)",
+      "observed": "1280x720: 70 elements under 14 px with the first-time card up, 47 with it closed, smallest 9.36 px (the M and H key chips), the shared tab strip included; 1440x900: 40 and 29, smallest 10.53 px; 1600x900 and up: 0. Live has 81 at 1280x720 (58 with the card closed; 51 and 40 at 1440x900), measured here with the same tool, so this is improved, not regressed. The builder's disclosed residual: the grid and its 120 px legend were drawn on a 1600x900 frame with no slack.",
+      "repro": "tools/text-floor-sweep.mjs --screens=prep-ffx --sizes=1280x720,1440x900",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1280x720-tab3-sphere-grid.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1280x720.json",
+        "critic/reviews/7b2582e7-focused/textfloor/prep-ffx-1440x900.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-003, PR-0356 (carried)",
+      "where": "src/ui/ffx/party-prep/sphere-grid-b.css, -b-card.css, -help.css (--stage-floor-frame gated from 1600x900)",
+      "fix": "a larger legend and card for the grid below 1600 wide (a layout job, per the builder), not a bigger floor",
+      "acceptanceCheck": "0 elements under 14 px on the Sphere Grid tab at 1280x720 and 1440x900",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-03",
+      "severity": "polish",
+      "title": "On a phone the first-run slab on the board covers one more chapter row",
+      "game": "both",
+      "chapter": "chapter select (390x844)",
+      "expected": "the slab at 14 px leaves the board as legible as before",
+      "observed": "At 390x844 the slab's text is 14 px, so it is taller and covers the Chapter VII row while it is up; the phone prep slab is a little taller and fits. First launch only, tap to dismiss; the board, the CHAPTER and Sphere Grid prep tabs, results and the pause are 14 px at the smallest on the phone (the heavy prep tabs are carried: FOC43-11).",
+      "repro": "tools/text-floor-sweep.mjs --screens=board,prep-ffx-first --sizes=390x844 --touch=1 on a fresh profile",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/textfloor/compare/board-390-pair.jpg",
+        "critic/reviews/7b2582e7-focused/textfloor/compare/prep-390-pair.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-003",
+      "where": "src/ui/coach/first-run.css phone block (10 to 13.5 up to 14 px)",
+      "fix": "none needed; if wanted, a tighter slab on the phone",
+      "acceptanceCheck": "the board's first row after the slab stays the second chapter",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-04",
+      "severity": "polish",
+      "title": "After the Curse sequence the permanent Auto-Life icon is missing from the row until the burst ends (the observation the brief named)",
+      "game": "ffx",
+      "chapter": "braskas-final-aeon (the Yu Yevon link)",
+      "expected": "the row keeps the permanent Auto-Life icon, or loses it when the Auto-Life is consumed and gets it back when it is granted",
+      "observed": "Yu Pagoda's Curse kills Tidus; the Auto-Life revive plays (consumption 115 ms, revive 625 ms). Tidus's row loses the Auto-Life icon at the burst's first status event, 125 ms before the consumption plays, and shows it again at the action's end: 1.28 s without the icon while the figure's halo is drawn. Every link boundary also blinks the three rows' icons off and on for 75 to 110 ms. Cause not traced (suspected: the shown row takes the engine's live statuses at the first status event of the action, and the engine had already consumed the Auto-Life); I cannot say whether the old presenter did the same, because live's engine does not emit this sequence.",
+      "repro": "ko-route.mjs braskas-final-aeon win (the stock route, normal speed in the last link), then ko-analyze.mjs: autoLifeIconTransitions",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3/ko-analysis.txt",
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3/analysis.json",
+        "critic/reviews/7b2582e7-focused/ko/ch3-plan3/ko-data.json"
+      ],
+      "confidence": "high that it happens, low on the cause",
+      "requirement": "CHK-006 (overlay lifetime)",
+      "where": "src/engine/BattlePresenterVitals.ts projectState and the HUD row sync, suspected",
+      "fix": "trace the early loss; keep the icon until its own removal event plays",
+      "acceptanceCheck": "Tidus's row shows the Auto-Life icon until the status-remove plays and again from the revive",
+      "introducedByCandidate": "unknown",
+      "regressionVsLive": "unknown",
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-05",
+      "severity": "polish",
+      "title": "The chapter's three music cues are held decoded from the card confirm: more memory in party prep and a higher transient, not measured on a phone",
+      "game": "both",
+      "chapter": "seymour-flux (measured), every chapter",
+      "expected": "the warm costs no memory a phone cannot spare",
+      "observed": "Candidate against live, Chapter I, one pair of runs: the renderer holds about 1.25 GB through party prep and the scene against about 0.95 GB on live, and peaks at 1.56 GB at +3 s after the confirm against 1.30 GB (+0.26 GB, +20 percent); the browser total peaks at 2.45 against 2.28 GB; the two builds already differ by 0.28 GB at the title, so the net held-cue cost is within the noise of the pair; the transient is not. Up to four decoded cues (about 140 MB) are held until the scene cue starts, three after. Desktop only.",
+      "repro": "ko-route.mjs seymour-flux win --budget=40000 on each build; delivery-analyze.mjs and ko-mem.json",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-live/ko-mem.json",
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-cand/ko-mem.json",
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-cand/delivery.json",
+        "critic/reviews/7b2582e7-focused/ko/ch1-mem-live/delivery.json"
+      ],
+      "confidence": "medium (one pair of runs, a busy host)",
+      "requirement": "delivery (RUBRIC 6)",
+      "where": "src/audio/AudioManager.ts warmMusic, src/audio/MusicWarm.ts",
+      "fix": "if a phone shows pressure, warm the scene cue first and the others behind the scene's first line; the deep review should measure a phone-sized tab",
+      "acceptanceCheck": "peak tab memory at the confirm no more than live's peak plus one cue on a constrained device",
+      "introducedByCandidate": true,
+      "regressionVsLive": "unknown",
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-08",
+      "severity": "polish",
+      "title": "The stock route's post-battle scene capture reads unverified in every run (PR-0431, carried; critic tooling)",
+      "game": "both",
+      "chapter": "every route run (seymour-flux shown)",
+      "expected": "the route's 30-post-scene capture is taken where the scene plays",
+      "observed": "Every route run in this review records the same fail in run.json: 30-post-scene.png unverified, \"screen wanted cutscene got results\": the scene is asserted at a slot where it has not started (it plays after the results Confirm). Harness only; no product effect.",
+      "repro": "node critic/runner/lib/route.mjs seymour-flux win --base=<url> --evidence=<dir>",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch1-normal-route/seymour-flux-win-7b2582e7/run.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-016",
+      "where": "critic/runner/lib/route.mjs (the post-scene slot), left open by r43-critic-tools",
+      "fix": "assert the scene after the results Confirm, as r43-critic-tools' notes say",
+      "acceptanceCheck": "a route run records no unverified capture",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-12",
+      "severity": "polish",
+      "title": "Two blind spots in the new critic instruments: sweep prep never reaches FFX Equipment, Items and Overdrive, and coldload reads the first-run briefing's 20 s timeout as the title's answer (critic tooling; same on both builds)",
+      "game": "both",
+      "chapter": "critic tooling (sweep prep, coldload)",
+      "expected": "sweep prep measures every tab of the prep screen; coldload's \"the first Enter must move the title on\" reads the title's own answer",
+      "observed": "sweep.mjs prep steps tabs with the right arrow, and on the FFX Sphere Grid tab that key moves the grid's own cursor: FFX tabs 2 to 6 are all the Sphere Grid (166 elements, 0 under) and Equipment, Items and Overdrive (56, 105 and 54 elements under 14 px at 390x844) are never measured, with nothing in the output saying so; its FFX phone count (73) is low by those 215. coldload.mjs presses Enter at the title and polls the screen name; on a fresh profile the first Enter opens Auron's briefing (.coach-brief, within 0.4 s) while the screen still reads title, and the briefing closes itself 20.0 s later, so the instrument reports \"Enter to the board\" as 20.4 s (candidate) and 21.4 s (live), a number that is the briefing's timeout. Checked with title-enter-probe.mjs: an Enter at once and after a 5 s pause both 20.4 s on the candidate; the briefing seen at 394 ms and gone at 20,431 ms.",
+      "repro": "node critic/runner/lib/sweep.mjs prep --base=<url> --evidence=<dir> (compare its FFX tab count with tools/text-floor-sweep.mjs --screens=prep-ffx --sizes=390x844 --touch=1); node critic/runner/lib/coldload.mjs --base=<url> --evidence=<dir> --runs=1 --throttle=off; title-enter-probe.mjs in the evidence folder",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/instruments/gaps/sweep/out-prep.json",
+        "critic/reviews/7b2582e7-focused/textfloor-phone-tabs/prep-ffx-390x844.json",
+        "critic/reviews/7b2582e7-focused/instruments/gaps/coldload/out.json",
+        "critic/reviews/7b2582e7-focused/instruments-live/gaps/coldload/out.json",
+        "critic/reviews/7b2582e7-focused/title-enter-probe-cand.json",
+        "critic/reviews/7b2582e7-focused/title-enter-probe-live.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-016 (a capture must say what it did not reach)",
+      "where": "critic/runner/lib/sweep.mjs sweepPrepTabs (the ArrowRight step), critic/runner/lib/coldload.mjs measureCold (the Enter check)",
+      "fix": "step the tabs by the strip buttons (data-action prep:tab:<name>) as tools/text-floor-sweep.mjs does, record each tab's name and fail the surface when two tabs read alike; in coldload accept .coach-brief as the answer, or press Enter again as the stock route does and time that",
+      "acceptanceCheck": "the FFX prep sweep lists CHAPTER, STATS, SPHERE GRID, EQUIPMENT, ITEMS, OVERDRIVE by name; the cold-load report line carries the title's answer, not 20 s",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-09",
+      "severity": "suggestion",
+      "title": "The Right Fin's attack and cast paintings still plant 154 painting px above its idle (the builder's open question; needs Bailey's yes)",
+      "game": "ffx",
+      "chapter": "sin-fins-core",
+      "expected": "a swap between the Right Fin's poses is a change of pose, not a slide",
+      "observed": "After the registration fix the Right Fin's idle, attack and cast swaps blend over 7 frames with a median outline overlap 0.37, a centre shift of 96 to 116 px and a double image of 0.29 (live: 0.097, 320 to 362 px, 0.41 and 25 swaps over the 0.40 bar). The rest is the engine planting each painting's lowest opaque row on the ground; the attack's is higher. Lifting it is a visible change to a painting Bailey approved (2026-10-02, D-325).",
+      "repro": "continuity harness, Chapter XVII; fins-compare.mjs",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/fins-compare-xvii.json"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-027 item 3 (under its bar), rule 10: ideas need a yes",
+      "where": "src/engine/PaintedArt.ts measureAlpha (the plant), tools/posescale (a hand feetRow for the fins' attack)",
+      "fix": "options first with a before and after strip, as the builder recommends; no build without Bailey's yes",
+      "acceptanceCheck": "Right Fin idle to attack overlap about 0.77",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC43-10",
+      "severity": "suggestion",
+      "title": "Owed after the deploy: the year-long cache can only be proved on the deployed site; and one critic-route check was not exercised",
+      "game": "both",
+      "chapter": "delivery, critic tooling",
+      "expected": "the six checks of docs/handoff/r43-delivery.md section 5 pass on https://echoesofspira.com (hashed files immutable, everything else revalidating, /_headers 404, 304 on a conditional page request, verify-live assetCacheControl, tools/repeat-load-check.mjs); the stock Chapter II route aims no Phoenix Down at Yunalesca (PR-0397)",
+      "observed": "The rule matches exactly the four hashed files of the candidate and nothing else, the gate and unit tests pass, live still serves max-age=0 today (the premise). The Chapter II route here made 25 turns in its 10-minute budget and no member died, so no Phoenix Down was used: the fixed target resolution (critic-route-r43, 18 tests) was not exercised on the stock route.",
+      "repro": "the six commands of r43-delivery.md section 5; route.mjs yunalesca win to a death",
+      "evidence": [
+        "critic/reviews/7b2582e7-focused/ko/ch2-fast-route/yunalesca-win-7b2582e7/phoenix-analysis.json",
+        "critic/reviews/7b2582e7-focused/manifest-diff-vs-live.json"
+      ],
+      "confidence": "n/a (owed)",
+      "requirement": "CHK-017, PR-0396, PR-0397",
+      "where": "public/_headers, tools/deploy-cloudflare.mjs, critic/runner/lib/route-pure.mjs resolveTargetId",
+      "fix": "run them after the deploy (live review) and in the deep review (a Chapter II run long enough to lose a member)",
+      "acceptanceCheck": "all six checks PASS; a Chapter II run uses Phoenix Down on party members only",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "tools/text-floor-sweep.mjs of the candidate: prep FFX and FFX-2 (every tab), results FFX and FFX-2, Chapter IX and XII first menus at 1280x720, 1600x900, 2000x1012 and 3840x2160; prep at 1440x900; the Sensor card at 1600x900, 2000x1012, 2560x1440 and 3840x2160; the board, prep first tab, results and pause (8 tabs) at 390x844 with touch; the pause at 1600x900 and 3840x2160; frames read for the named risks; then every prep tab of both games at 390x844 with touch by pointer clicks, candidate and live (FOC43-11), frames read for the Stats tabs; the same prep sweep on live at 1280x720, 1440x900 and 1600x900 as the baseline of FOC43-01 and FOC43-02 (frames read)",
+      "the strategy guide opened at 1024x768, 1280x720, 1600x900 and 2000x1012 in Chapters I, II and IV",
+      "continuity harness (real keys, GPU, 59 fps) on Chapters VIII and XVII, candidate against live a061e9dc: 3,196 s of battle, both builds won",
+      "KO-wipe observer on the stock route: Chapter I at normal and fast speed (twice at normal), Chapter III in full (seven links, the Yu Yevon link at normal speed), Chapter II 25 turns, FFX-2 Bahamut first menu; delivery A/B Chapter I live against candidate (mixer, requests, memory)",
+      "Chapter II over seeds 1 to 500 on live's source and the candidate's (wins, turns, KOs): both reproduced to the digit",
+      "full vitest (1,136 files, 17,581 tests), tsc 7.0.2 fresh (3,609 files), tools/orphans.mjs, tools/pose-scale-check.mjs, the candidate artifact manifest against live's, the _headers rule against the candidate's file list",
+      "the new critic instruments once each, live on the candidate: coldload (3 runs and a throttled one; 2 runs on live), sweep prep (candidate and live), sweep matrix; title-enter-probe.mjs on the candidate and live to read coldload's 20 s (the first-run briefing's own timeout)"
+    ],
+    "reused": [
+      {
+        "what": "the 12-seed difficulty tables of every chapter other than II and the 440-run replay behind the KO-wipe figure of 145 pairs",
+        "from": "docs/handoff/re-parity-rc5.md and the commit message of 7b2582e7",
+        "why": "a sampled focused review, not a sweep; the goldens and the presenter files pass"
+      },
+      {
+        "what": "the board-art prefetch measurements (fast and slow link)",
+        "from": "docs/handoff/r43-delivery.md section 3",
+        "why": "the mode is off by default (DEFAULT_PREFETCH_MODE now) and the unit tests hold the default; nothing a player waits on changed"
+      },
+      {
+        "what": "the decode check of the shipped art, audio and fonts",
+        "from": "live a061e9dc's stored manifest (decode-checked at its deploy)",
+        "why": "every one of those files is byte-identical to live's (manifest diff), so the decode result carries"
+      }
+    ],
+    "notTested": [
+      "the six deploy-time checks of r43-delivery.md section 5 (provable only on the deployed site) and the live artifact",
+      "a defeat and the retry in any chapter; the stock Chapter II route to a death (the Phoenix Down aim, PR-0397)",
+      "a KO-wipe pair at fast speed (none occurred while R was held); the burst of the Curse as frames (my series landed late)",
+      "the Fins' attack and Evrae's Inhale at full frame (CHK-013 stays UNVERIFIED for the look)",
+      "memory on a phone; Safari, Firefox, a real controller or a real touch device; audio by ear (CHK-001, CHK-B1); the six-window layout matrix on live (only the candidate); the Save Sphere wash (Chapter XI)",
+      "2560x1440 on the prep and results screens, 2000x1012 and 1280x720 on the pause outside the matrix, the FFX-2 chapters beyond the first menu, FFX Chapters VII, IX, X, XII, XIV and XVIII by real keys"
+    ]
+  },
+  "regressions": [
+    "FOC43-01 (polish): on first launch the prep hint strip, now 14 px, runs under the first-run guide's slab: \"SCROLL\" half hidden at 1280x720 (CHAPTER tab, both games), \"ESC BACK\" and the rest cut at 1440x900 and 1600x900 on the FFX Sphere Grid tab; whole beside the slab on live."
+  ],
+  "nextReview": "Live verification of the exact artifact after the deploy, including the six header and repeat-load checks of docs/handoff/r43-delivery.md section 5 (owed: provable only on the deployed site); then the deep review of this build, which the plan classes deep (shared combat core, presenter, audio routing, global layout: deepAfterDeploy). Bailey's yes is owed for FOC43-09 (the Right Fin's remaining plant offset).",
+  "elapsedMinutes": 250
+}

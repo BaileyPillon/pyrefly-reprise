@@ -1,0 +1,460 @@
+{
+ "review": "live-smoke",
+ "sha": "7b2582e7",
+ "base": "https://echoesofspira.com/?cb=<time>",
+ "browserMode": "gpu",
+ "viewport": "1600x900",
+ "startedAt": "2026-10-13T06:10:09.304Z",
+ "parts": {
+  "ffx-ch1": {
+   "id": "seymour-flux",
+   "expectScene": "scene-gagazet",
+   "expectBoss": "boss-seymour",
+   "steps": [],
+   "build": {
+    "sha": "7b2582e7",
+    "bundle": "index-1ntEYvFO.js"
+   },
+   "briefing": {
+    "screen": "title",
+    "probe": {
+     "viewport": "1600x900",
+     "floor": 14,
+     "nText": 11,
+     "minEff": 15,
+     "underCount": 0,
+     "under": [],
+     "overlaps": 0,
+     "cut": 0
+    },
+    "shot": {
+     "file": "ffx-ch1-briefing.jpg",
+     "meanLuminance": 32.8,
+     "screen": "title"
+    }
+   },
+   "selected": "seymour-flux",
+   "board": {
+    "file": "ffx-ch1-board.jpg",
+    "meanLuminance": 36.3,
+    "screen": "chapter-select",
+    "selected": "seymour-flux"
+   },
+   "prepProbe": {
+    "viewport": "1600x900",
+    "floor": 14,
+    "nText": 71,
+    "minEff": 14,
+    "underCount": 0,
+    "under": [],
+    "overlaps": 0,
+    "cut": 0
+   },
+   "prepShot": {
+    "file": "ffx-ch1-prep.jpg",
+    "meanLuminance": 34.7,
+    "screen": "party-prep",
+    "state": {
+     "chapter": "seymour-flux",
+     "game": "ffx",
+     "tabs": [
+      "chapter",
+      "stats",
+      "sphere-grid",
+      "equipment",
+      "items",
+      "overdrive"
+     ],
+     "tab": "chapter",
+     "member": "tidus",
+     "outcome": null,
+     "panelsRegistered": 6
+    }
+   },
+   "music": {
+    "msConfirmToFirstLine": 4072,
+    "msInPrep": 1885,
+    "firstLine": {
+     "speaker": "Kimahri",
+     "text": "Ki"
+    },
+    "atFirstLine": {
+     "playing": null,
+     "current": null,
+     "fading": [],
+     "held": [
+      "scene-gagazet",
+      "boss-seymour",
+      "victory-ffx"
+     ],
+     "muted": false,
+     "manifest": true,
+     "cues": 35,
+     "cachedTracks": []
+    },
+    "expectedScene": "scene-gagazet",
+    "scenePlayingAtFirstLine": false,
+    "sceneFromPrerendered": false,
+    "sceneRequestMsAfterConfirm": 54,
+    "sceneFinishedMsBeforeFirstLine": null,
+    "requestsBeforeFirstLine": [
+     {
+      "url": "/audio/music/title.mp3",
+      "atMs": -1152,
+      "doneMs": null
+     },
+     {
+      "url": "/audio/sfx/sprite.mp3",
+      "atMs": -1152,
+      "doneMs": null
+     },
+     {
+      "url": "/audio/sfx/sprite-v2.mp3",
+      "atMs": -1152,
+      "doneMs": null
+     },
+     {
+      "url": "/audio/music/chapter-select.mp3",
+      "atMs": -672,
+      "doneMs": null
+     },
+     {
+      "url": "/audio/music/scene-gagazet.mp3",
+      "atMs": 54,
+      "doneMs": null
+     }
+    ]
+   },
+   "cutsceneShot": {
+    "file": "ffx-ch1-first-line.jpg",
+    "meanLuminance": 105.8,
+    "screen": "cutscene"
+   },
+   "enemies": [
+    "seymour-flux",
+    "mortiorchis"
+   ],
+   "menu": {
+    "screen": "battle",
+    "enemies": [
+     "seymour-flux",
+     "mortiorchis"
+    ],
+    "audio": {
+     "playing": "boss-seymour",
+     "current": {
+      "name": "boss-seymour",
+      "gain": 1
+     },
+     "muted": false,
+     "manifest": true
+    },
+    "bossPlayingIsExpected": true,
+    "hudProbe": {
+     "viewport": "1600x900",
+     "floor": 14,
+     "nText": 71,
+     "minEff": 14,
+     "underCount": 0,
+     "under": [],
+     "overlaps": 4,
+     "cut": 0
+    }
+   },
+   "menuShot": {
+    "file": "ffx-ch1-menu.jpg",
+    "meanLuminance": 84.1,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "menuText": "Tidus Kimahri Yuna Seymour Flux Mortiorchis Tidus Physical damage Tidus 2420 /2420 115 /115 OD Yuna 673 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE Mortiorchis HP 4000 / 4000 FIRE ICE THUNDER WATER HOLY GRAV I HIDE G GUIDE NEXT BEST MOVE Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns up It puts Haste on the party. N HIDE MOVES TALK ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ▼ Q △ DEFEND E ENEMY MOVE Seymour MAESTER AUTO Tidus YOUR TURN · CTB 1 OF 3 Tidus PAUSE",
+   "mentions": {
+    "megaFlare": [],
+    "slow": []
+   },
+   "turns": [
+    {
+     "i": 1,
+     "before": {
+      "l": 11
+     },
+     "after": {
+      "l": 16
+     },
+     "logGrew": true
+    },
+    {
+     "i": 2,
+     "before": {
+      "l": 16
+     },
+     "after": {
+      "l": 20
+     },
+     "logGrew": true
+    },
+    {
+     "i": 3,
+     "before": {
+      "l": 21
+     },
+     "after": {
+      "l": 25
+     },
+     "logGrew": true
+    }
+   ],
+   "cancel": {
+    "backAtMenu": true,
+    "screen": "battle"
+   },
+   "ko": {
+    "turnsToKo": 8,
+    "koEvents": 2,
+    "victim": "yuna",
+    "menuAfterKo": "Error: ASSERT-FAIL awaitingMenu after 90261ms"
+   },
+   "koShot": {
+    "file": "ffx-ch1-ko.jpg",
+    "meanLuminance": 82,
+    "screen": "battle"
+   },
+   "status": "error",
+   "error": "page.evaluate: TypeError: Cannot read properties of null (reading 'combatants')\n    at eval (eval at evaluate (:311:30), <anonymous>:3:51)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+   "errorShot": {
+    "file": "ffx-ch1-error.jpg",
+    "meanLuminance": 22.3,
+    "screen": "results"
+   },
+   "documents": [],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "ffx2-ch4": {
+   "id": "ffx2-bahamut",
+   "expectScene": "scene-bevelle-underground",
+   "expectBoss": "boss-bahamut",
+   "steps": [],
+   "build": {
+    "sha": "7b2582e7",
+    "bundle": "index-1ntEYvFO.js"
+   },
+   "briefing": {
+    "screen": "title",
+    "probe": {
+     "viewport": "1600x900",
+     "floor": 14,
+     "nText": 11,
+     "minEff": 15,
+     "underCount": 0,
+     "under": [],
+     "overlaps": 0,
+     "cut": 0
+    },
+    "shot": {
+     "file": "ffx2-ch4-briefing.jpg",
+     "meanLuminance": 47,
+     "screen": "title"
+    }
+   },
+   "selected": "ffx2-bahamut",
+   "board": {
+    "file": "ffx2-ch4-board.jpg",
+    "meanLuminance": 21.9,
+    "screen": "chapter-select",
+    "selected": "ffx2-bahamut"
+   },
+   "prepProbe": {
+    "viewport": "1600x900",
+    "floor": 14,
+    "nText": 58,
+    "minEff": 14,
+    "underCount": 0,
+    "under": [],
+    "overlaps": 0,
+    "cut": 0
+   },
+   "prepShot": {
+    "file": "ffx2-ch4-prep.jpg",
+    "meanLuminance": 33.1,
+    "screen": "party-prep",
+    "state": {
+     "chapter": "ffx2-bahamut",
+     "game": "ffx2",
+     "tabs": [
+      "chapter",
+      "dresspheres",
+      "stats",
+      "accessories",
+      "items"
+     ],
+     "tab": "chapter",
+     "member": "yuna",
+     "outcome": null,
+     "panelsRegistered": 5
+    }
+   },
+   "music": {
+    "msConfirmToFirstLine": 6663,
+    "msInPrep": 1874,
+    "firstLine": {
+     "speaker": "Rikku",
+     "text": "C"
+    },
+    "atFirstLine": {
+     "playing": "scene-bevelle-underground",
+     "current": {
+      "name": "scene-bevelle-underground",
+      "gain": 0.0314563512802124
+     },
+     "fading": [
+      {
+       "name": "chapter-select",
+       "gain": 0.003179008373990655
+      }
+     ],
+     "held": [
+      "boss-bahamut"
+     ],
+     "muted": false,
+     "manifest": true,
+     "cues": 35,
+     "cachedTracks": [
+      "scene-bevelle-underground:prerendered"
+     ]
+    },
+    "expectedScene": "scene-bevelle-underground",
+    "scenePlayingAtFirstLine": true,
+    "sceneFromPrerendered": true,
+    "sceneRequestMsAfterConfirm": 38,
+    "sceneFinishedMsBeforeFirstLine": 1147,
+    "requestsBeforeFirstLine": [
+     {
+      "url": "/audio/music/title.mp3",
+      "atMs": -2735,
+      "doneMs": 2317
+     },
+     {
+      "url": "/audio/sfx/sprite.mp3",
+      "atMs": -2735,
+      "doneMs": 2602
+     },
+     {
+      "url": "/audio/sfx/sprite-v2.mp3",
+      "atMs": -2735,
+      "doneMs": 5089
+     },
+     {
+      "url": "/audio/music/chapter-select.mp3",
+      "atMs": -2356,
+      "doneMs": 2086
+     },
+     {
+      "url": "/audio/music/scene-bevelle-underground.mp3",
+      "atMs": 38,
+      "doneMs": 5516
+     },
+     {
+      "url": "/audio/music/boss-bahamut.mp3",
+      "atMs": 5910,
+      "doneMs": null
+     }
+    ]
+   },
+   "cutsceneShot": {
+    "file": "ffx2-ch4-first-line.jpg",
+    "meanLuminance": 49,
+    "screen": "cutscene"
+   },
+   "enemies": [
+    "bahamut"
+   ],
+   "menu": {
+    "screen": "battle",
+    "enemies": [
+     "bahamut"
+    ],
+    "audio": {
+     "playing": "boss-bahamut",
+     "current": {
+      "name": "boss-bahamut",
+      "gain": 1
+     },
+     "muted": false,
+     "manifest": true
+    },
+    "bossPlayingIsExpected": true,
+    "hudProbe": {
+     "viewport": "1600x900",
+     "floor": 14,
+     "nText": 85,
+     "minEff": 14,
+     "underCount": 0,
+     "under": [],
+     "overlaps": 11,
+     "cut": 0
+    }
+   },
+   "menuShot": {
+    "file": "ffx2-ch4-menu.jpg",
+    "meanLuminance": 67.5,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "menuText": "Bahamut SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ WHITE MAGIC Open the White Magic menu. Dark Knight is among the strongest dresspheres in the game, with a slow but heavy attack and strong defense. Put one of your girls in it now. Save, and start one girl as a Thief so she can steal from the bosses ahead. A Ribbon on one party member is also worth having, to block nasty status effects. Bahamut BOSS BATTLE Time to take on an aeon! Remember to Steal a Mute Shock off him before the battle ends. Bahamut cycles through one fixed attack pattern: “Curse” or an ordinary physical hit (Curse locks a girl into her current dressphere) Ordinary physical hit Ordinary physical hit “Impulse” (takes 37.5% of HP) “Impulse” again “Countdown” “Mega Flare” Then the cycle starts over. The first Impulse tells you Countdown is near, and Mega Flare hurts badly, so have everyone fully healed before it comes. Impulse cannot kill: it takes a percentage of HP, like Demi. With a pattern this simple there is little more to say. If you are struggling, grind some EXP by the Save Sphere to level up your Dark Knights. Bahamut HP: 8,400 STEAL: Mute Shock DROP: Gris-Gris Bag G HIDE GUIDE [ ] SCROLL NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP 100% TO HIT + SHELL It puts Shell on the party. N HIDE MOVES BAHAMUT ACTS NEXT Curse SCRIPTED Inflicts Curse on one girl. RANDOM TARGET YUNARIKKUPAINE Lands on one of these, pi",
+   "mentions": {
+    "megaFlare": [
+     " “Impulse” (takes 37.5% of HP) “Impulse” again “Countdown” “Mega Flare” Then the cycle starts over. The first Impulse tells you Countdown is near, and Mega Flare hurts badly, so ha",
+     "ts over. The first Impulse tells you Countdown is near, and Mega Flare hurts badly, so have everyone fully healed before it comes. Impulse cannot kill: it takes a percentage of HP,",
+     "of these, picked when it acts. STATUSES Curse 100% ALSO The Mega Flare countdown is a fixed wait of about 25 seconds on the game’s own clock — Slow, Haste and a fallen girl do not "
+    ],
+    "slow": [
+     " a fixed wait of about 25 seconds on the game’s own clock — Slow, Haste and a fallen girl do not change it J HOLD · +1 MORE E HIDE GAUGES RUNNING · A COMMAND HOLDS THEM RIKKU “Bar'"
+    ]
+   },
+   "pauseShot": {
+    "file": "ffx2-ch4-pause.jpg",
+    "meanLuminance": 23.8,
+    "screen": "pause"
+   },
+   "pause": {
+    "pauseEsc": "pause",
+    "hide": {
+     "len0": 1819,
+     "lenH": 1436,
+     "lenR": 1819,
+     "hidDropsText": true,
+     "restored": true,
+     "stillPause": "pause"
+    },
+    "afterEsc": "battle",
+    "pauseP": "pause",
+    "afterP": "battle"
+   },
+   "audioLater": {
+    "playing": "boss-bahamut",
+    "muted": false,
+    "manifest": true,
+    "cues": 35
+   },
+   "musicRequests": [
+    "/audio/music/title.mp3",
+    "/audio/sfx/sprite.mp3",
+    "/audio/sfx/sprite-v2.mp3",
+    "/audio/music/chapter-select.mp3",
+    "/audio/music/scene-bevelle-underground.mp3",
+    "/audio/music/boss-bahamut.mp3",
+    "/audio/music/pause.mp3",
+    "/audio/music/boss-bahamut.mp3"
+   ],
+   "status": "ran",
+   "documents": [],
+   "consoleErrors": [],
+   "notFound": []
+  }
+ },
+ "finishedAt": "2026-10-13T06:14:15.964Z",
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

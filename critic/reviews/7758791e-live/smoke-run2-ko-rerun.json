@@ -1,0 +1,189 @@
+{
+ "review": "live-smoke",
+ "sha": "7758791e",
+ "base": "https://echoesofspira.com/?cb=<time>",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-13T11:48:10.429Z",
+ "parts": {
+  "ffx2-rikku-ko": {
+   "id": "ffx2-trema",
+   "viewport": "1600x900",
+   "steps": [],
+   "note": "debug-assisted: chapter entered through the debug API; Rikku set to 1 HP; an engine Attack on her submitted with forceCommand and presented through the presenter play(); not a player-reachable route",
+   "members": [
+    {
+     "id": "yuna",
+     "hp": 5355,
+     "art": "yuna-dark-knight",
+     "dressphere": "dark-knight"
+    },
+    {
+     "id": "rikku",
+     "hp": 5106,
+     "art": "rikku-alchemist",
+     "dressphere": "alchemist"
+    },
+    {
+     "id": "paine",
+     "hp": 5355,
+     "art": "paine-dark-knight",
+     "dressphere": "dark-knight"
+    }
+   ],
+   "enemies": [
+    "paragon"
+   ],
+   "rectBefore": {
+    "x": 623.3306522966434,
+    "y": 612.0227399416341,
+    "w": 57.81845478751961,
+    "h": 147.98476675224776
+   },
+   "shotBefore": {
+    "file": "ffx2-rikku-ko-before.jpg",
+    "meanLuminance": 62.2,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "forced": {
+    "events": [
+     "turn-start",
+     "action-start",
+     "chain",
+     "damage",
+     "chain",
+     "ko",
+     "action-end",
+     "atb"
+    ],
+    "played": "played",
+    "rikkuHp": 0,
+    "rikkuAlive": false
+   },
+   "koEvents": 1,
+   "rectAfter": {
+    "x": 675.9179548045695,
+    "y": 714.7700431712709,
+    "w": 139.07297626454283,
+    "h": 77.36002095135757
+   },
+   "cropFile": "ffx2-rikku-ko-crop.jpg",
+   "fullShot": {
+    "file": "ffx2-rikku-ko-full.jpg",
+    "screen": "battle"
+   },
+   "koArtRequested": [
+    {
+     "url": "/art/characters/rikku-alchemist/ko.json",
+     "status": 200,
+     "bytes": 2714
+    },
+    {
+     "url": "/art/characters/rikku-alchemist/ko.webp",
+     "status": 200,
+     "bytes": 362850
+    },
+    {
+     "url": "/art/characters/rikku-alchemist/ko.webp",
+     "status": 200,
+     "bytes": 362850
+    }
+   ],
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  }
+ },
+ "assertions": [
+  {
+   "part": "ffx2-rikku-ko",
+   "name": "Rikku is an Alchemist in this chapter (her art is rikku-alchemist)",
+   "ok": true,
+   "detail": [
+    {
+     "id": "yuna",
+     "hp": 5355,
+     "art": "yuna-dark-knight",
+     "dressphere": "dark-knight"
+    },
+    {
+     "id": "rikku",
+     "hp": 5106,
+     "art": "rikku-alchemist",
+     "dressphere": "alchemist"
+    },
+    {
+     "id": "paine",
+     "hp": 5355,
+     "art": "paine-dark-knight",
+     "dressphere": "dark-knight"
+    }
+   ]
+  },
+  {
+   "part": "ffx2-rikku-ko",
+   "name": "the engine KO of Rikku was presented (play() returned, a ko event for rikku in the log, she is down)",
+   "ok": true,
+   "detail": {
+    "events": [
+     "turn-start",
+     "action-start",
+     "chain",
+     "damage",
+     "chain",
+     "ko",
+     "action-end",
+     "atb"
+    ],
+    "played": "played",
+    "rikkuHp": 0,
+    "rikkuAlive": false
+   }
+  },
+  {
+   "part": "ffx2-rikku-ko",
+   "name": "the Alchemist KO painting (ko.json and ko.webp) was fetched from the live site and answered 200 (no 404, no html)",
+   "ok": true,
+   "detail": {
+    "fetched": [
+     {
+      "url": "/art/characters/rikku-alchemist/ko.json",
+      "status": 200,
+      "bytes": 2714
+     },
+     {
+      "url": "/art/characters/rikku-alchemist/ko.webp",
+      "status": 200,
+      "bytes": 362850
+     },
+     {
+      "url": "/art/characters/rikku-alchemist/ko.webp",
+      "status": 200,
+      "bytes": 362850
+     }
+    ],
+    "bad": []
+   }
+  },
+  {
+   "part": "ffx2-rikku-ko",
+   "name": "she lies down: her silhouette goes from taller than wide (standing) to wider than tall (knocked down)",
+   "ok": true,
+   "detail": {
+    "before": [
+     58,
+     148
+    ],
+    "after": [
+     139,
+     77
+    ]
+   }
+  }
+ ],
+ "finishedAt": "2026-10-13T11:48:35.805Z",
+ "elapsedMinutes": 0.4,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

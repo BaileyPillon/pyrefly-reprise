@@ -1,0 +1,31 @@
+{
+ "result": "PASS",
+ "artifactHash": "6208b03963d4dfab39b5a1c6181b29c85accfc1569b2f622f4165987651098fd",
+ "liveManifest": "match",
+ "checked": 5205,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [
+  "_headers is part of this artifact and was not downloaded (no address serves a host-read file); assets/index-B-8CEurV.css was served with Cache-Control \"public, max-age=31536000, immutable\""
+ ],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/index-B-8CEurV.css",
+  "value": "public, max-age=31536000, immutable"
+ },
+ "run": {
+  "files": 5205,
+  "wrapper": "critic/reviews/7758791e-live-verify.mjs",
+  "workers": 16,
+  "window": 48,
+  "megabytesFetched": 10330,
+  "seconds": 1793,
+  "liveUrl": "https://echoesofspira.com/",
+  "bust": "1791889972458",
+  "finishedAt": "2026-10-13T11:42:45.033Z"
+ }
+}

@@ -1,0 +1,1450 @@
+{
+ "scene": "battle-ch9",
+ "w": 1600,
+ "h": 900,
+ "base": "https://echoesofspira.com/?cb=1791871915",
+ "seed": 1,
+ "floor": 14,
+ "steps": [
+  {
+   "label": "first-menu",
+   "file": "battle-ch9-1600x900-first-menu.jpg",
+   "screen": "battle",
+   "state": {
+    "chapter": "yojimbo-cavern",
+    "game": "ffx",
+    "scene": "cavern-stolen-fayth",
+    "scenePlaceholder": false,
+    "preview": false,
+    "links": 1,
+    "chainLength": 1,
+    "paused": false,
+    "canPause": true,
+    "canPauseOnCancel": true,
+    "exitIntent": null,
+    "playTimeMs": 47381.600000000006,
+    "hud": true,
+    "rig": "idle",
+    "actors": [
+     {
+      "id": "lulu",
+      "side": "party",
+      "art": "lulu",
+      "pose": "idle",
+      "placeholder": false,
+      "facing": 1,
+      "mirrored": false,
+      "life": "idle"
+     },
+     {
+      "id": "ginnem",
+      "side": "enemy",
+      "art": "ginnem",
+      "pose": "idle",
+      "placeholder": false,
+      "facing": -1,
+      "mirrored": false,
+      "life": "idle"
+     },
+     {
+      "id": "yojimbo",
+      "side": "enemy",
+      "art": "yojimbo-cavern",
+      "pose": "idle",
+      "placeholder": false,
+      "facing": -1,
+      "mirrored": false,
+      "life": "idle"
+     },
+     {
+      "id": "daigoro",
+      "side": "enemy",
+      "art": "daigoro",
+      "pose": "idle",
+      "placeholder": false,
+      "facing": -1,
+      "mirrored": false,
+      "life": "idle"
+     },
+     {
+      "id": "kimahri",
+      "side": "party",
+      "art": "kimahri",
+      "pose": "ready",
+      "placeholder": false,
+      "facing": 1,
+      "mirrored": false,
+      "life": "ready"
+     },
+     {
+      "id": "yuna",
+      "side": "party",
+      "art": "yuna",
+      "pose": "idle",
+      "placeholder": false,
+      "facing": 1,
+      "mirrored": false,
+      "life": "idle"
+     }
+    ],
+    "spellFx": {
+     "quality": "full",
+     "running": [],
+     "quads": 0,
+     "cpuMs": 0,
+     "cpuMeanMs": 0,
+     "flights": {
+      "launched": 0,
+      "landed": 0,
+      "live": 0,
+      "lastLaunchAt": 0,
+      "lastLandAt": 0
+     }
+    },
+    "playback": {
+     "speed": "normal",
+     "timeScale": 1,
+     "auto": false,
+     "aborted": false,
+     "phase": "command:kimahri",
+     "awaitingMenu": true,
+     "played": 7,
+     "lastEvents": [
+      {
+       "seq": 0,
+       "type": "sensor",
+       "ms": 0
+      },
+      {
+       "seq": 1,
+       "type": "sensor",
+       "ms": 0
+      },
+      {
+       "seq": 2,
+       "type": "sensor",
+       "ms": 0
+      },
+      {
+       "seq": 3,
+       "type": "turn-start",
+       "ms": 114
+      },
+      {
+       "seq": 4,
+       "type": "action-start",
+       "ms": 978
+      },
+      {
+       "seq": 5,
+       "type": "action-end",
+       "ms": 245
+      },
+      {
+       "seq": 6,
+       "type": "turn-start",
+       "ms": 125
+      }
+     ],
+     "lastCommand": null
+    },
+    "battle": {
+     "turn": 2,
+     "ticks": 10,
+     "events": 7,
+     "result": null,
+     "combatants": [
+      {
+       "id": "tidus",
+       "hp": 2420,
+       "maxHp": 2420,
+       "mp": 115,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "yuna",
+       "hp": 1500,
+       "maxHp": 1500,
+       "mp": 270,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "kimahri",
+       "hp": 2310,
+       "maxHp": 2310,
+       "mp": 130,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "auron",
+       "hp": 3410,
+       "maxHp": 3410,
+       "mp": 75,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "wakka",
+       "hp": 2530,
+       "maxHp": 2530,
+       "mp": 90,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "lulu",
+       "hp": 1375,
+       "maxHp": 1375,
+       "mp": 290,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "rikku",
+       "hp": 1540,
+       "maxHp": 1540,
+       "mp": 115,
+       "alive": true,
+       "side": "party",
+       "statuses": []
+      },
+      {
+       "id": "valefor",
+       "hp": 1530,
+       "maxHp": 1530,
+       "mp": 51,
+       "alive": true,
+       "side": "aeon",
+       "statuses": []
+      },
+      {
+       "id": "ifrit",
+       "hp": 2075,
+       "maxHp": 2075,
+       "mp": 49,
+       "alive": true,
+       "side": "aeon",
+       "statuses": []
+      },
+      {
+       "id": "ixion",
+       "hp": 2055,
+       "maxHp": 2055,
+       "mp": 54,
+       "alive": true,
+       "side": "aeon",
+       "statuses": []
+      },
+      {
+       "id": "shiva",
+       "hp": 1830,
+       "maxHp": 1830,
+       "mp": 59,
+       "alive": true,
+       "side": "aeon",
+       "statuses": []
+      },
+      {
+       "id": "bahamut",
+       "hp": 2935,
+       "maxHp": 2935,
+       "mp": 74,
+       "alive": true,
+       "side": "aeon",
+       "statuses": []
+      },
+      {
+       "id": "yojimbo",
+       "hp": 33000,
+       "maxHp": 33000,
+       "mp": 2000,
+       "alive": true,
+       "side": "enemy",
+       "statuses": []
+      },
+      {
+       "id": "ginnem",
+       "hp": 10,
+       "maxHp": 10,
+       "mp": 0,
+       "alive": true,
+       "side": "enemy",
+       "statuses": []
+      },
+      {
+       "id": "daigoro",
+       "hp": 1,
+       "maxHp": 1,
+       "mp": 0,
+       "alive": true,
+       "side": "enemy",
+       "statuses": []
+      }
+     ]
+    },
+    "log": [
+     {
+      "type": "sensor",
+      "targetId": "yojimbo",
+      "full": false,
+      "text": "",
+      "seq": 0
+     },
+     {
+      "type": "sensor",
+      "targetId": "ginnem",
+      "full": false,
+      "text": "",
+      "seq": 1
+     },
+     {
+      "type": "sensor",
+      "targetId": "daigoro",
+      "full": false,
+      "text": "",
+      "seq": 2
+     },
+     {
+      "type": "turn-start",
+      "actorId": "yojimbo",
+      "turn": 1,
+      "elapsedTicks": 0,
+      "seq": 3
+     },
+     {
+      "type": "action-start",
+      "actorId": "yojimbo",
+      "command": {
+       "kind": "ability",
+       "id": "yojimbo-summon",
+       "targets": [
+        "ginnem"
+       ]
+      },
+      "abilityId": "yojimbo-summon",
+      "abilityName": "Summon",
+      "targets": [
+       "ginnem"
+      ],
+      "seq": 4
+     },
+     {
+      "type": "action-end",
+      "actorId": "yojimbo",
+      "seq": 5
+     },
+     {
+      "type": "turn-start",
+      "actorId": "kimahri",
+      "turn": 2,
+      "elapsedTicks": 10,
+      "seq": 6
+     }
+    ]
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 77,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "Kimahri",
+     "at": "div.ig-ctb > div.ig-ctb__row > span.ig-ctb__name",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1395.4,
+      149.3,
+      64.1,
+      20
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.ig-ctb > div.ig-ctb__row > span.ig-ctb__name",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1430.5,
+      220.4,
+      40,
+      20
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.ig-ctb > div.ig-ctb__row > span.ig-ctb__name",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1426.2,
+      281.5,
+      35.5,
+      20
+     ]
+    },
+    {
+     "text": "Yojimbo",
+     "at": "div.ig-ctb > div.ig-ctb__row > span.ig-ctb__name",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1387.1,
+      342.6,
+      65.6,
+      20
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.ig-ctb > div.ig-ctb__row > span.ig-ctb__name",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1379.8,
+      403.7,
+      64.1,
+      20
+     ]
+    },
+    {
+     "text": "Yojimbo",
+     "at": "div.ig-ctb > div.ig-ctb__row > span.ig-ctb__name",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1369.3,
+      464.8,
+      65.6,
+      20
+     ]
+    },
+    {
+     "text": "Attack",
+     "at": "div.ig-cmd-stack > div.ig-cmd.ig-cmd--selected > span.ffx-cmd__label",
+     "fs": 9.78,
+     "scale": 2.5,
+     "eff": 24.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      127.7,
+      590.5,
+      104.9,
+      32.5
+     ]
+    },
+    {
+     "text": "Special",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ffx-cmd__label",
+     "fs": 9.78,
+     "scale": 2.5,
+     "eff": 24.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      120,
+      657.1,
+      119,
+      32.5
+     ]
+    },
+    {
+     "text": "▸",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ffx-cmd__chev",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgba(11, 10, 18, 0.65)",
+     "rect": [
+      388,
+      661.9,
+      18.4,
+      22.5
+     ]
+    },
+    {
+     "text": "×1",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ig-cmd__ready.ffx-cmd__badge",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgba(244, 241, 232, 0.85)",
+     "rect": [
+      426.6,
+      661.8,
+      14.3,
+      20
+     ]
+    },
+    {
+     "text": "Items",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ffx-cmd__label",
+     "fs": 9.78,
+     "scale": 2.5,
+     "eff": 24.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      137.7,
+      723.8,
+      85.7,
+      32.5
+     ]
+    },
+    {
+     "text": "▸",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ffx-cmd__chev",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgba(11, 10, 18, 0.65)",
+     "rect": [
+      396.1,
+      728.6,
+      18.4,
+      22.5
+     ]
+    },
+    {
+     "text": "×27",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ig-cmd__ready.ffx-cmd__badge",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgba(244, 241, 232, 0.85)",
+     "rect": [
+      434.6,
+      728.4,
+      24.1,
+      20
+     ]
+    },
+    {
+     "text": "Switch",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ffx-cmd__label",
+     "fs": 9.78,
+     "scale": 2.5,
+     "eff": 24.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      155.5,
+      790.4,
+      108.2,
+      32.5
+     ]
+    },
+    {
+     "text": "▸",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ffx-cmd__chev",
+     "fs": 7.2,
+     "scale": 2.5,
+     "eff": 18,
+     "color": "rgba(11, 10, 18, 0.65)",
+     "rect": [
+      420.3,
+      795.2,
+      18.4,
+      22.5
+     ]
+    },
+    {
+     "text": "×4",
+     "at": "div.ig-cmd-stack > div.ig-cmd > span.ig-cmd__ready.ffx-cmd__badge",
+     "fs": 6.4,
+     "scale": 2.5,
+     "eff": 16,
+     "color": "rgba(244, 241, 232, 0.85)",
+     "rect": [
+      458.8,
+      795.1,
+      17.7,
+      20
+     ]
+    },
+    {
+     "text": "Q",
+     "at": "div.ffx-cmd-area > div.ffx-cmd-defend > b.ffx-cmd-defend__key",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      95.7,
+      856.8,
+      12,
+      20
+     ]
+    },
+    {
+     "text": "△",
+     "at": "div.ffx-cmd-area > div.ffx-cmd-defend > i.ffx-cmd-defend__sym",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      122.7,
+      856.8,
+      14.2,
+      20
+     ]
+    },
+    {
+     "text": "Defend",
+     "at": "div.ffx-cmd-area > div.ffx-cmd-defend > span.ffx-cmd-defend__label",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      144.4,
+      856.8,
+      67,
+      20
+     ]
+    },
+    {
+     "text": "Physical damage",
+     "at": "div.ffxhud__stage > div.ig-cutin__info.ffx-cmd-info > div.ig-cutin__info-desc",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      94.8,
+      351.5,
+      127.2,
+      22.5
+     ]
+    },
+    {
+     "text": "Lulu",
+     "at": "div.ig-stat-list > div.ig-stat > span.ig-stat__name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1140.5,
+      663.8,
+      45.5,
+      32.5
+     ]
+    },
+    {
+     "text": "1375",
+     "at": "div.ig-stat-list > div.ig-stat > span.ig-stat__value",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1203.8,
+      660.6,
+      51.4,
+      37.5
+     ]
+    },
+    {
+     "text": "/1375",
+     "at": "div.ig-stat > span.ig-stat__value > small",
+     "fs": 6.6,
+     "scale": 2.5,
+     "eff": 16.5,
+     "color": "rgb(184, 200, 218)",
+     "rect": [
+      1258.5,
+      673.1,
+      35.4,
+      20
+     ]
+    },
+    {
+     "text": "290",
+     "at": "div.ig-stat-list > div.ig-stat > span.ig-stat__value.ig-stat__value--mp",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(127, 198, 232)",
+     "rect": [
+      1311.7,
+      660.6,
+      44.9,
+      37.5
+     ]
+    },
+    {
+     "text": "/290",
+     "at": "div.ig-stat > span.ig-stat__value.ig-stat__value--mp > small",
+     "fs": 6.6,
+     "scale": 2.5,
+     "eff": 16.5,
+     "color": "rgb(184, 200, 218)",
+     "rect": [
+      1359.9,
+      673.1,
+      31.9,
+      20
+     ]
+    },
+    {
+     "text": "OD",
+     "at": "div.ig-stat > span.ig-stat__od.ffx-stat__od > em",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.45)",
+     "rect": [
+      1516.3,
+      653.6,
+      25.8,
+      20
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.ig-stat-list > div.ig-stat.ig-stat--acting > span.ig-stat__name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      1122.7,
+      741.6,
+      81.6,
+      32.5
+     ]
+    },
+    {
+     "text": "2310",
+     "at": "div.ig-stat-list > div.ig-stat.ig-stat--acting > span.ig-stat__value",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1222.1,
+      738.4,
+      54.1,
+      37.5
+     ]
+    },
+    {
+     "text": "/2310",
+     "at": "div.ig-stat.ig-stat--acting > span.ig-stat__value > small",
+     "fs": 6.6,
+     "scale": 2.5,
+     "eff": 16.5,
+     "color": "rgb(184, 200, 218)",
+     "rect": [
+      1279.5,
+      750.9,
+      37.1,
+      20
+     ]
+    },
+    {
+     "text": "130",
+     "at": "div.ig-stat-list > div.ig-stat.ig-stat--acting > span.ig-stat__value.ig-stat__value--mp",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(127, 198, 232)",
+     "rect": [
+      1334.5,
+      738.4,
+      39.9,
+      37.5
+     ]
+    },
+    {
+     "text": "/130",
+     "at": "div.ig-stat.ig-stat--acting > span.ig-stat__value.ig-stat__value--mp > small",
+     "fs": 6.6,
+     "scale": 2.5,
+     "eff": 16.5,
+     "color": "rgb(184, 200, 218)",
+     "rect": [
+      1377.7,
+      750.9,
+      29.1,
+      20
+     ]
+    },
+    {
+     "text": "OD",
+     "at": "div.ig-stat.ig-stat--acting > span.ig-stat__od.ffx-stat__od > em",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.45)",
+     "rect": [
+      1531.2,
+      731.3,
+      25.8,
+      20
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.ig-stat-list > div.ig-stat > span.ig-stat__name",
+     "fs": 10.67,
+     "scale": 2.5,
+     "eff": 26.68,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1105,
+      819.3,
+      49.6,
+      32.5
+     ]
+    },
+    {
+     "text": "1500",
+     "at": "div.ig-stat-list > div.ig-stat > span.ig-stat__value",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      1172.4,
+      816.1,
+      55.3,
+      37.5
+     ]
+    },
+    {
+     "text": "/1500",
+     "at": "div.ig-stat > span.ig-stat__value > small",
+     "fs": 6.6,
+     "scale": 2.5,
+     "eff": 16.5,
+     "color": "rgb(184, 200, 218)",
+     "rect": [
+      1231,
+      828.6,
+      37.7,
+      20
+     ]
+    },
+    {
+     "text": "270",
+     "at": "div.ig-stat-list > div.ig-stat > span.ig-stat__value.ig-stat__value--mp",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(127, 198, 232)",
+     "rect": [
+      1286.4,
+      816.1,
+      42.2,
+      37.5
+     ]
+    },
+    {
+     "text": "/270",
+     "at": "div.ig-stat > span.ig-stat__value.ig-stat__value--mp > small",
+     "fs": 6.6,
+     "scale": 2.5,
+     "eff": 16.5,
+     "color": "rgb(184, 200, 218)",
+     "rect": [
+      1332,
+      828.6,
+      30.2,
+      20
+     ]
+    },
+    {
+     "text": "OD",
+     "at": "div.ig-stat > span.ig-stat__od.ffx-stat__od > em",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.45)",
+     "rect": [
+      1486.6,
+      809,
+      25.8,
+      20
+     ]
+    },
+    {
+     "text": "The Cavern of the Stolen Fayth can be done on yo",
+     "at": "div.sgd__body > p.sgd__u.sgd__p > span.sgd__t",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(220, 216, 204)",
+     "rect": [
+      73.3,
+      -75,
+      283.3,
+      92.7
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Kimahri's Overdrive - Ronso Rage",
+     "at": "div.sgd__body > div.sgd__u.sgd__hint > p.sgd__hint-title",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      85.8,
+      27.7,
+      223,
+      17.5
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Helpful Hint",
+     "at": "div.sgd__body > div.sgd__u.sgd__hint > p.sgd__hint-kind",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(233, 215, 166)",
+     "rect": [
+      85.8,
+      44,
+      121.1,
+      20
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Use Lancet on a Ghost in this area and Kimahri c",
+     "at": "div.sgd__body > div.sgd__u.sgd__hint > p.sgd__hint-text",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(220, 216, 204)",
+     "rect": [
+      85.8,
+      67.8,
+      260.8,
+      36.3
+     ],
+     "clipped": true
+    },
+    {
+     "text": "Yojimbo",
+     "at": "div.sgd__body > div.sgd__u.sgd__doc-head > p.sgd__title",
+     "fs": 8,
+     "scale": 2.5,
+     "eff": 20,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      73.3,
+      117.9,
+      57.6,
+      22.5
+     ]
+    },
+    {
+     "text": "In the next area an unsent summoner, Lady Ginnem",
+     "at": "div.sgd__body > p.sgd__u.sgd__p > span.sgd__t",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(220, 216, 204)",
+     "rect": [
+      73.3,
+      149.8,
+      277.3,
+      55.1
+     ]
+    },
+    {
+     "text": "Yojimbo is not too hard to beat, and Yuna's aeon",
+     "at": "div.sgd__body > p.sgd__u.sgd__p > span.sgd__t",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(220, 216, 204)",
+     "rect": [
+      73.3,
+      211.2,
+      271.3,
+      55.1
+     ]
+    },
+    {
+     "text": "G",
+     "at": "div.sgd > button.sgd__toggle > b",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      66,
+      85,
+      11.6,
+      20
+     ]
+    },
+    {
+     "text": "hide guide",
+     "at": "div.sgd > button.sgd__toggle > span",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      85.1,
+      85,
+      98.2,
+      20
+     ]
+    },
+    {
+     "text": "[ ]",
+     "at": "div.sgd > button.sgd__keys.sgd__keys--on > b",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      215.1,
+      85,
+      19.7,
+      20
+     ]
+    },
+    {
+     "text": "scroll",
+     "at": "div.sgd > button.sgd__keys.sgd__keys--on > span",
+     "fs": 5.7,
+     "scale": 2.5,
+     "eff": 14.25,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      242.3,
+      85,
+      66,
+      20
+     ]
+    },
+    {
+     "text": "Next best move",
+     "at": "div.mad__card > div.mad__head > span.mad__title",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      590.8,
+      663.3,
+      169.5,
+      20
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.mad__card > div.mad__head > span.mad__actor",
+     "fs": 7,
+     "scale": 2.5,
+     "eff": 17.5,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      910,
+      663.3,
+      53.6,
+      20
+     ]
+    },
+    {
+     "text": "Fire Gem",
+     "at": "article.mad__move > p.mad__line > span.mad__label",
+     "fs": 8.4,
+     "scale": 2.5,
+     "eff": 21,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      563.2,
+      690.6,
+      75.5,
+      27.5
+     ]
+    },
+    {
+     "text": "→",
+     "at": "article.mad__move > p.mad__line > span.mad__arrow",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(141, 153, 168)",
+     "rect": [
+      646.2,
+      698.1,
+      14.2,
+      17.5
+     ]
+    },
+    {
+     "text": "Yojimbo",
+     "at": "article.mad__move > p.mad__line > span.mad__target",
+     "fs": 8.4,
+     "scale": 2.5,
+     "eff": 21,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      667.9,
+      690.6,
+      68.9,
+      27.5
+     ]
+    },
+    {
+     "text": "in Items",
+     "at": "article.mad__move > p.mad__stats > span.mad__stat",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      570.7,
+      721.5,
+      67.3,
+      20
+     ]
+    },
+    {
+     "text": "2,810–3,175",
+     "at": "article.mad__move > p.mad__stats > span.mad__stat.mad__stat--dmg",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(242, 210, 74)",
+     "rect": [
+      659.1,
+      721.5,
+      67.2,
+      17.5
+     ]
+    },
+    {
+     "text": "5 hits",
+     "at": "article.mad__move > p.mad__stats > span.mad__stat",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      747.3,
+      721.5,
+      49.6,
+      20
+     ]
+    },
+    {
+     "text": "no MP",
+     "at": "article.mad__move > p.mad__stats > span.mad__stat",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      817.9,
+      721.5,
+      49.6,
+      20
+     ]
+    },
+    {
+     "text": "always hits",
+     "at": "article.mad__move > p.mad__stats > span.mad__stat",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      570.7,
+      751.3,
+      99.8,
+      20
+     ]
+    },
+    {
+     "text": "Deals fire damage to five random enemies.",
+     "at": "div.mad__card > article.mad__move > p.mad__effect",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(185, 198, 214)",
+     "rect": [
+      563.2,
+      777.3,
+      273.1,
+      17.5
+     ]
+    },
+    {
+     "text": "Most damage on the board — 3000 to Yojimbo.",
+     "at": "div.mad__card > article.mad__move > p.mad__why",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(220, 216, 204)",
+     "rect": [
+      563.2,
+      799.4,
+      298.4,
+      17.5
+     ]
+    },
+    {
+     "text": "N",
+     "at": "div.mad > button.mad__toggle > b",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      561.3,
+      621.3,
+      12.5,
+      20
+     ]
+    },
+    {
+     "text": "hide moves",
+     "at": "div.mad > button.mad__toggle > span",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      581.2,
+      621.3,
+      109.6,
+      20
+     ]
+    },
+    {
+     "text": "Yojimbo",
+     "at": "div.ffx-zg__panel > div.ffx-zg__top > span.ffx-zg__name",
+     "fs": 30,
+     "scale": 1.1111,
+     "eff": 33.33,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      766.6,
+      22.2,
+      95.9,
+      41.1
+     ]
+    },
+    {
+     "text": "0%",
+     "at": "div.ffx-zg__panel > div.ffx-zg__top > span.ffx-zg__pct",
+     "fs": 24,
+     "scale": 1.1111,
+     "eff": 26.67,
+     "color": "rgb(232, 160, 160)",
+     "rect": [
+      1161.5,
+      28.9,
+      34.1,
+      33.3
+     ]
+    },
+    {
+     "text": "Daigoro",
+     "at": "div.ffx-zg__bar > i.ffx-zg__seg > span",
+     "fs": 12.69,
+     "scale": 1.1111,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.62)",
+     "rect": [
+      759.1,
+      101.1,
+      77.1,
+      18.9
+     ]
+    },
+    {
+     "text": "+ Kozuka",
+     "at": "div.ffx-zg__bar > i.ffx-zg__seg > span",
+     "fs": 12.69,
+     "scale": 1.1111,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.62)",
+     "rect": [
+      866.3,
+      101.1,
+      84.5,
+      18.9
+     ]
+    },
+    {
+     "text": "+ Wakizashi",
+     "at": "div.ffx-zg__bar > i.ffx-zg__seg > span",
+     "fs": 12.69,
+     "scale": 1.1111,
+     "eff": 14.1,
+     "color": "rgba(244, 241, 232, 0.62)",
+     "rect": [
+      973.5,
+      101.1,
+      110.5,
+      18.9
+     ]
+    },
+    {
+     "text": "Next: Daigoro",
+     "at": "div.ffx-zg__frame > div.ffx-zg__panel > div.ffx-zg__now",
+     "fs": 14,
+     "scale": 1.1111,
+     "eff": 15.56,
+     "color": "rgba(244, 241, 232, 0.78)",
+     "rect": [
+      747,
+      125.6,
+      95.7,
+      18.9
+     ]
+    },
+    {
+     "text": "E",
+     "at": "div.eint.eint--off > button.eint__toggle > b",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(176, 42, 42)",
+     "rect": [
+      1395.8,
+      99.4,
+      11.2,
+      20
+     ]
+    },
+    {
+     "text": "enemy move",
+     "at": "div.eint.eint--off > button.eint__toggle > span",
+     "fs": 5.68,
+     "scale": 2.5,
+     "eff": 14.2,
+     "color": "rgb(207, 214, 222)",
+     "rect": [
+      1414.5,
+      99.4,
+      115.9,
+      20
+     ]
+    },
+    {
+     "text": "Auron",
+     "at": "div.coach-layer > div.coach-mark.coach-mark--in > div.coach-mark__who",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      235.2,
+      410,
+      70.9,
+      16
+     ]
+    },
+    {
+     "text": "“He moves after you. Not before. Use it.”",
+     "at": "div.coach-layer > div.coach-mark.coach-mark--in > div.coach-mark__body",
+     "fs": 21,
+     "scale": 1,
+     "eff": 21,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      235.2,
+      435.4,
+      346.6,
+      51.7
+     ]
+    },
+    {
+     "text": "Enter",
+     "at": "div.coach-mark__foot > span > b.coach-mark__key",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      235.2,
+      511.8,
+      57.3,
+      16
+     ]
+    },
+    {
+     "text": "continue",
+     "at": "div.coach-mark.coach-mark--in > div.coach-mark__foot > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.66)",
+     "rect": [
+      292.5,
+      511.8,
+      94.6,
+      16
+     ]
+    },
+    {
+     "text": "First time only",
+     "at": "div.coach-mark.coach-mark--in > div.coach-mark__foot > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.66)",
+     "rect": [
+      443.5,
+      511.8,
+      148.7,
+      16
+     ]
+    },
+    {
+     "text": "PAUSE",
+     "at": "div > div.screen.battle-screen > button.battle-pause-chip.ig",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      35.1,
+      21,
+      67.4,
+      18
+     ]
+    }
+   ]
+  }
+ ],
+ "error": null,
+ "consoleErrors": []
+}

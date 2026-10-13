@@ -1,0 +1,302 @@
+{
+ "review": "live-music",
+ "sha": "7b2582e7",
+ "browserMode": "gpu",
+ "viewport": "1600x900",
+ "startedAt": "2026-10-13T06:34:51.917Z",
+ "runs": [
+  {
+   "id": "seymour-flux",
+   "rep": 1,
+   "selected": "seymour-flux",
+   "status": "ran",
+   "msInPrep": 1803,
+   "msConfirmToFirstLine": 3946,
+   "speaker": "Kimahri",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-gagazet.mp3",
+   "sceneRequestMsAfterConfirm": 30,
+   "sceneFinishedMsAfterConfirm": 3260,
+   "sceneFinishedMsBeforeFirstLine": 686,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-gagazet",
+   "audioAfterConfirm": [
+    "/audio/music/scene-gagazet.mp3 req+30ms done+3260ms",
+    "/audio/music/boss-seymour.mp3 req+3682ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "seymour-flux",
+   "rep": 2,
+   "selected": "seymour-flux",
+   "status": "ran",
+   "msInPrep": 1803,
+   "msConfirmToFirstLine": 3969,
+   "speaker": "Kimahri",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-gagazet.mp3",
+   "sceneRequestMsAfterConfirm": 27,
+   "sceneFinishedMsAfterConfirm": 3609,
+   "sceneFinishedMsBeforeFirstLine": 360,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-gagazet",
+   "audioAfterConfirm": [
+    "/audio/music/scene-gagazet.mp3 req+27ms done+3609ms"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "seymour-flux",
+   "rep": 3,
+   "selected": "seymour-flux",
+   "status": "ran",
+   "msInPrep": 1802,
+   "msConfirmToFirstLine": 3929,
+   "speaker": "Kimahri",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-gagazet.mp3",
+   "sceneRequestMsAfterConfirm": 38,
+   "sceneFinishedMsAfterConfirm": null,
+   "sceneFinishedMsBeforeFirstLine": null,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-gagazet",
+   "audioAfterConfirm": [
+    "/audio/music/scene-gagazet.mp3 req+38ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "yunalesca",
+   "rep": 1,
+   "selected": "yunalesca",
+   "status": "ran",
+   "msInPrep": 1806,
+   "msConfirmToFirstLine": 6547,
+   "speaker": "Braska",
+   "playingAtFirstLine": "scene-zanarkand-dome",
+   "currentTrack": {
+    "name": "scene-zanarkand-dome",
+    "gain": 0.014750931411981583
+   },
+   "sceneCueRequested": "/audio/music/scene-zanarkand-dome.mp3",
+   "sceneRequestMsAfterConfirm": 39,
+   "sceneFinishedMsAfterConfirm": 5376,
+   "sceneFinishedMsBeforeFirstLine": 1171,
+   "prerendered": true,
+   "scenePlaying": true,
+   "expectedSceneGuess": "scene-zanarkand-dome",
+   "audioAfterConfirm": [
+    "/audio/music/scene-zanarkand-dome.mp3 req+39ms done+5376ms",
+    "/audio/music/boss-yunalesca.mp3 req+5898ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "yunalesca",
+   "rep": 2,
+   "selected": "yunalesca",
+   "status": "ran",
+   "msInPrep": 1802,
+   "msConfirmToFirstLine": 6957,
+   "speaker": "Braska",
+   "playingAtFirstLine": "scene-zanarkand-dome",
+   "currentTrack": {
+    "name": "scene-zanarkand-dome",
+    "gain": 0.00011777188774431124
+   },
+   "sceneCueRequested": "/audio/music/scene-zanarkand-dome.mp3",
+   "sceneRequestMsAfterConfirm": 35,
+   "sceneFinishedMsAfterConfirm": 6436,
+   "sceneFinishedMsBeforeFirstLine": 521,
+   "prerendered": true,
+   "scenePlaying": true,
+   "expectedSceneGuess": "scene-zanarkand-dome",
+   "audioAfterConfirm": [
+    "/audio/music/scene-zanarkand-dome.mp3 req+35ms done+6436ms",
+    "/audio/music/boss-yunalesca.mp3 req+6940ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "yunalesca",
+   "rep": 3,
+   "selected": "yunalesca",
+   "status": "ran",
+   "msInPrep": 1804,
+   "msConfirmToFirstLine": 6967,
+   "speaker": "Braska",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-zanarkand-dome.mp3",
+   "sceneRequestMsAfterConfirm": 37,
+   "sceneFinishedMsAfterConfirm": null,
+   "sceneFinishedMsBeforeFirstLine": null,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-zanarkand-dome",
+   "audioAfterConfirm": [
+    "/audio/music/scene-zanarkand-dome.mp3 req+37ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "ffx2-bahamut",
+   "rep": 1,
+   "selected": "ffx2-bahamut",
+   "status": "ran",
+   "msInPrep": 1802,
+   "msConfirmToFirstLine": 6754,
+   "speaker": "Rikku",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-bevelle-underground.mp3",
+   "sceneRequestMsAfterConfirm": 35,
+   "sceneFinishedMsAfterConfirm": null,
+   "sceneFinishedMsBeforeFirstLine": null,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-bevelle-underground",
+   "audioAfterConfirm": [
+    "/audio/music/scene-bevelle-underground.mp3 req+35ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "ffx2-bahamut",
+   "rep": 2,
+   "selected": "ffx2-bahamut",
+   "status": "ran",
+   "msInPrep": 1803,
+   "msConfirmToFirstLine": 6786,
+   "speaker": "Rikku",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-bevelle-underground.mp3",
+   "sceneRequestMsAfterConfirm": 51,
+   "sceneFinishedMsAfterConfirm": null,
+   "sceneFinishedMsBeforeFirstLine": null,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-bevelle-underground",
+   "audioAfterConfirm": [
+    "/audio/music/scene-bevelle-underground.mp3 req+51ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "ffx2-bahamut",
+   "rep": 3,
+   "selected": "ffx2-bahamut",
+   "status": "ran",
+   "msInPrep": 1815,
+   "msConfirmToFirstLine": 6795,
+   "speaker": "Rikku",
+   "playingAtFirstLine": null,
+   "currentTrack": null,
+   "sceneCueRequested": "/audio/music/scene-bevelle-underground.mp3",
+   "sceneRequestMsAfterConfirm": 47,
+   "sceneFinishedMsAfterConfirm": null,
+   "sceneFinishedMsBeforeFirstLine": null,
+   "prerendered": false,
+   "scenePlaying": false,
+   "expectedSceneGuess": "scene-bevelle-underground",
+   "audioAfterConfirm": [
+    "/audio/music/scene-bevelle-underground.mp3 req+47ms (unfinished)"
+   ],
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "cancel: seymour-flux -> prep -> Escape -> ffx2-bahamut",
+   "rep": 1,
+   "cancelPath": true,
+   "heldInPrep": [
+    "scene-gagazet",
+    "boss-seymour",
+    "victory-ffx"
+   ],
+   "escapesToBoard": 2,
+   "heldAfterCancelOnBoard": [],
+   "backOnBoard": true,
+   "heldInSecondPrep": [
+    "scene-bevelle-underground",
+    "boss-bahamut"
+   ],
+   "msConfirmToFirstLine": 6786,
+   "playingAtFirstLine": "chapter-select",
+   "heldAtFirstLine": [
+    "scene-bevelle-underground",
+    "boss-bahamut"
+   ],
+   "status": "ran",
+   "scenePlaying": false,
+   "holdEndedOnCancel": true,
+   "consoleErrors": [],
+   "notFound": []
+  }
+ ],
+ "finishedAt": "2026-10-13T06:37:38.921Z",
+ "consoleErrorsTotal": 0,
+ "notFoundTotal": 0,
+ "summary": {
+  "seymour-flux": {
+   "runs": 3,
+   "ran": 3,
+   "scenePlayingAtFirstLine": 0,
+   "msToFirstLine": [
+    3946,
+    3969,
+    3929
+   ]
+  },
+  "yunalesca": {
+   "runs": 3,
+   "ran": 3,
+   "scenePlayingAtFirstLine": 2,
+   "msToFirstLine": [
+    6547,
+    6957,
+    6967
+   ]
+  },
+  "ffx2-bahamut": {
+   "runs": 3,
+   "ran": 3,
+   "scenePlayingAtFirstLine": 0,
+   "msToFirstLine": [
+    6754,
+    6786,
+    6795
+   ]
+  },
+  "cancelPath": {
+   "status": "ran",
+   "holdEndedOnCancel": true,
+   "heldInPrep": [
+    "scene-gagazet",
+    "boss-seymour",
+    "victory-ffx"
+   ],
+   "heldAfterCancelOnBoard": [],
+   "scenePlayingAtFirstLine": false,
+   "playingAtFirstLine": "chapter-select"
+  },
+  "consoleErrors": 0,
+  "notFound": 0
+ }
+}

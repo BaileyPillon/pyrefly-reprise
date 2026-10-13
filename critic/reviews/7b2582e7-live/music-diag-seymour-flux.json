@@ -1,0 +1,176 @@
+{
+ "review": "live-music-diag",
+ "sha": "7b2582e7",
+ "browserMode": "gpu",
+ "chapter": "seymour-flux",
+ "startedAt": "2026-10-13T06:38:47.164Z",
+ "timeline": {
+  "msUnlockToConfirm": 1309,
+  "msConfirmToFirstLine": 3978,
+  "playingAtFirstLine": null
+ },
+ "byKind": {
+  "music": {
+   "requests": 3,
+   "finishedBeforeFirstLine": 2,
+   "megabytesFinished": 4.2
+  },
+  "sfx-sprite": {
+   "requests": 3,
+   "finishedBeforeFirstLine": 2,
+   "megabytesFinished": 2.6
+  },
+  "art": {
+   "requests": 14,
+   "finishedBeforeFirstLine": 13,
+   "megabytesFinished": 4.4
+  },
+  "font": {
+   "requests": 3,
+   "finishedBeforeFirstLine": 3,
+   "megabytesFinished": 0.1
+  },
+  "code": {
+   "requests": 1,
+   "finishedBeforeFirstLine": 0,
+   "megabytesFinished": 0
+  },
+  "other": {
+   "requests": 0,
+   "finishedBeforeFirstLine": 0,
+   "megabytesFinished": 0
+  }
+ },
+ "musicAndSprites": [
+  {
+   "kind": "sfx-sprite",
+   "url": "/audio/manifest.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -1143,
+   "doneMs": -964,
+   "bytes": 8137
+  },
+  {
+   "kind": "music",
+   "url": "/audio/music/title.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -963,
+   "doneMs": 3555,
+   "bytes": 2332092
+  },
+  {
+   "kind": "sfx-sprite",
+   "url": "/audio/sfx/sprite.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -962,
+   "doneMs": 3943,
+   "bytes": 2710615
+  },
+  {
+   "kind": "sfx-sprite",
+   "url": "/audio/sfx/sprite-v2.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -962,
+   "doneMs": null,
+   "bytes": null
+  },
+  {
+   "kind": "music",
+   "url": "/audio/music/chapter-select.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -613,
+   "doneMs": 3505,
+   "bytes": 2107651
+  },
+  {
+   "kind": "music",
+   "url": "/audio/music/scene-gagazet.mp3",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 33,
+   "doneMs": null,
+   "bytes": null
+  }
+ ],
+ "largestArt": [
+  {
+   "kind": "art",
+   "url": "/art/characters/seymour-flux/idle.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 33,
+   "doneMs": 2735,
+   "bytes": 1064215
+  },
+  {
+   "kind": "art",
+   "url": "/art/pause/ch1-seymour-flux.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 33,
+   "doneMs": 2589,
+   "bytes": 954156
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/wakka.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -1122,
+   "doneMs": -681,
+   "bytes": 912308
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/seymour.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -173,
+   "doneMs": 2429,
+   "bytes": 869857
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/lulu.webp",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -959,
+   "doneMs": 2290,
+   "bytes": 838316
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/kimahri.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": -607,
+   "doneMs": -350,
+   "bytes": 2317
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/auron.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 34,
+   "doneMs": 329,
+   "bytes": 2131
+  },
+  {
+   "kind": "art",
+   "url": "/art/portraits/rikku.json",
+   "status": 200,
+   "protocol": "h3",
+   "startedMs": 34,
+   "doneMs": 329,
+   "bytes": 1575
+  }
+ ],
+ "megabytesFinishedAfterUnlockBeforeFirstLine": 11.3,
+ "status": "ran"
+}

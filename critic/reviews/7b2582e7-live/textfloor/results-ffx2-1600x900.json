@@ -1,0 +1,489 @@
+{
+ "scene": "results-ffx2",
+ "w": 1600,
+ "h": 900,
+ "base": "https://echoesofspira.com/?cb=1791871915",
+ "seed": 1,
+ "floor": 14,
+ "steps": [
+  {
+   "label": "results",
+   "file": "results-ffx2-1600x900-results.jpg",
+   "screen": "results",
+   "state": {
+    "chapterId": "ffx2-bahamut",
+    "outcome": "victory",
+    "silent": true,
+    "dismissed": false,
+    "clearMs": 28123,
+    "newBest": true,
+    "choice": "continue",
+    "actionIndex": 0,
+    "members": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   },
+   "viewport": "1600x900",
+   "floor": 14,
+   "nText": 31,
+   "minEff": 14.1,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [
+    {
+     "a": "RESULTS · 0:28",
+     "b": "Results",
+     "at": "div.rres__page > div.rres__head > div.rres__chip | div.rres__page > div.rres__head > div.rres__heading",
+     "share": 0.68
+    },
+    {
+     "a": "Results",
+     "b": "NEW BEST",
+     "at": "div.rres__page > div.rres__head > div.rres__heading | div.rres__head > div.rres__rule-row > span.rres__tag",
+     "share": 0.56
+    }
+   ],
+   "cut": [],
+   "items": [
+    {
+     "text": "BEVELLE UNDERGROUND — LIMBO",
+     "at": "div.rres__stage.lb-stage > div.rres__caption > span.rres__cap-loc",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(107, 100, 120)",
+     "rect": [
+      1531.1,
+      66.6,
+      20,
+      396.8
+     ]
+    },
+    {
+     "text": "· CLEARED",
+     "at": "div.rres__stage.lb-stage > div.rres__caption > span.rres__cap-end",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(107, 100, 120)",
+     "rect": [
+      1531.1,
+      463.4,
+      20,
+      134.1
+     ]
+    },
+    {
+     "text": "RESULTS · 0:28",
+     "at": "div.rres__page > div.rres__head > div.rres__chip",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(185, 178, 198)",
+     "rect": [
+      95.5,
+      96.1,
+      172,
+      20
+     ]
+    },
+    {
+     "text": "Results",
+     "at": "div.rres__page > div.rres__head > div.rres__heading",
+     "fs": 62.22,
+     "scale": 2.5,
+     "eff": 155.55,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      80,
+      102.5,
+      376.4,
+      187.5
+     ]
+    },
+    {
+     "text": "NEW BEST",
+     "at": "div.rres__head > div.rres__rule-row > span.rres__tag",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(185, 178, 198)",
+     "rect": [
+      275.5,
+      278.9,
+      96.6,
+      20
+     ]
+    },
+    {
+     "text": "EXP",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__k",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      84.4,
+      408.9,
+      43.6,
+      20
+     ]
+    },
+    {
+     "text": "1,300",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__v",
+     "fs": 17.78,
+     "scale": 2.5,
+     "eff": 44.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      277.7,
+      381.4,
+      94.2,
+      57.5
+     ]
+    },
+    {
+     "text": "×3 PARTY",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__d",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      622.2,
+      406.4,
+      84.4,
+      22.5
+     ]
+    },
+    {
+     "text": "AP",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__k",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      84.4,
+      472.5,
+      29.5,
+      20
+     ]
+    },
+    {
+     "text": "15",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__v",
+     "fs": 17.78,
+     "scale": 2.5,
+     "eff": 44.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      277.7,
+      445,
+      37.3,
+      57.5
+     ]
+    },
+    {
+     "text": "PER DRESSPHERE",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__d",
+     "fs": 6.67,
+     "scale": 2.5,
+     "eff": 16.68,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      544.3,
+      470,
+      162.3,
+      22.5
+     ]
+    },
+    {
+     "text": "GIL",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__k",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      84.4,
+      536.1,
+      37.5,
+      20
+     ]
+    },
+    {
+     "text": "1,000",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__v",
+     "fs": 17.78,
+     "scale": 2.5,
+     "eff": 44.45,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      277.7,
+      508.6,
+      95.4,
+      57.5
+     ]
+    },
+    {
+     "text": "ITEMS",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__k",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      84.4,
+      587.1,
+      68.5,
+      20
+     ]
+    },
+    {
+     "text": "Gris Gris Bag",
+     "at": "div.rres__ledger.rres__ledger--compact > div.rres__line > div.rres__v.rres__v--items",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      277.7,
+      574.6,
+      143.5,
+      35
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.rres__member > div.rres__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      104,
+      662.9,
+      14.1,
+      30
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.rres__member-text > div.rres__member-line > span.rres__member-name",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      153.3,
+      653.6,
+      41.4,
+      27.5
+     ]
+    },
+    {
+     "text": "WHITE MAGE · CURAGA 55/80 AP",
+     "at": "div.rres__member > div.rres__member-text > div.rres__member-detail",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(123, 116, 134)",
+     "rect": [
+      153.3,
+      682.1,
+      268,
+      20
+     ]
+    },
+    {
+     "text": "+1,300",
+     "at": "div.rres__party.rres__party--normal > div.rres__member > span.rres__member-ap",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      591.3,
+      659.1,
+      77.6,
+      37.5
+     ]
+    },
+    {
+     "text": "EXP",
+     "at": "div.rres__member > span.rres__member-ap > small",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      675.5,
+      674.1,
+      31.1,
+      17.5
+     ]
+    },
+    {
+     "text": "R",
+     "at": "div.rres__member > div.rres__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      103.5,
+      729.5,
+      15,
+      30
+     ]
+    },
+    {
+     "text": "Rikku",
+     "at": "div.rres__member-text > div.rres__member-line > span.rres__member-name",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      153.3,
+      720.2,
+      48.5,
+      27.5
+     ]
+    },
+    {
+     "text": "DARK KNIGHT · CONFUSE 30/30 AP",
+     "at": "div.rres__member > div.rres__member-text > div.rres__member-detail",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(123, 116, 134)",
+     "rect": [
+      153.3,
+      748.8,
+      286.5,
+      20
+     ]
+    },
+    {
+     "text": "+1,300",
+     "at": "div.rres__party.rres__party--normal > div.rres__member > span.rres__member-ap",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      591.3,
+      725.7,
+      77.6,
+      37.5
+     ]
+    },
+    {
+     "text": "EXP",
+     "at": "div.rres__member > span.rres__member-ap > small",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      675.5,
+      740.7,
+      31.1,
+      17.5
+     ]
+    },
+    {
+     "text": "P",
+     "at": "div.rres__member > div.rres__face > span",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      103.9,
+      796.1,
+      14.4,
+      30
+     ]
+    },
+    {
+     "text": "Paine",
+     "at": "div.rres__member-text > div.rres__member-line > span.rres__member-name",
+     "fs": 8.89,
+     "scale": 2.5,
+     "eff": 22.23,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      153.3,
+      786.8,
+      44.8,
+      27.5
+     ]
+    },
+    {
+     "text": "WARRIOR · FLAMETONGUE 20/20 AP",
+     "at": "div.rres__member > div.rres__member-text > div.rres__member-detail",
+     "fs": 5.64,
+     "scale": 2.5,
+     "eff": 14.1,
+     "color": "rgb(123, 116, 134)",
+     "rect": [
+      153.3,
+      815.4,
+      293.4,
+      20
+     ]
+    },
+    {
+     "text": "+1,300",
+     "at": "div.rres__party.rres__party--normal > div.rres__member > span.rres__member-ap",
+     "fs": 11.56,
+     "scale": 2.5,
+     "eff": 28.9,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      591.3,
+      792.4,
+      77.6,
+      37.5
+     ]
+    },
+    {
+     "text": "EXP",
+     "at": "div.rres__member > span.rres__member-ap > small",
+     "fs": 5.78,
+     "scale": 2.5,
+     "eff": 14.45,
+     "color": "rgb(91, 85, 102)",
+     "rect": [
+      675.5,
+      807.4,
+      31.1,
+      17.5
+     ]
+    },
+    {
+     "text": "CONFIRM ▸",
+     "at": "div.rres__page > div.rres__confirm > span",
+     "fs": 6.22,
+     "scale": 2.5,
+     "eff": 15.55,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      1381.3,
+      808.9,
+      127.7,
+      20
+     ]
+    }
+   ]
+  }
+ ],
+ "error": null,
+ "consoleErrors": []
+}

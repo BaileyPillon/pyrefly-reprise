@@ -1,0 +1,65 @@
+{
+ "review": "live-progress",
+ "sha": "7b2582e7",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-13T06:25:34.019Z",
+ "saveBefore": null,
+ "resultsText": "MT. GAGAZET — THE PROMINENCE · CLEARED RESULTS · 1:25 Victory NEW BEST ...Okay. Next one. AP 10,000 ×4 PARTY GIL 6,000 ITEMS Lv. 4 Key Sphere T Tidus +9 S.Lv S.LV 39 · 1,231/1,386 AP +10,000AP Y Yuna +8 S.Lv S.LV 40 · 1,295/1,485 AP +10,000AP K Kimahri +12 S.L",
+ "screenAfterConfirm": "results",
+ "savedAfterWin": {
+  "bytes": 736,
+  "topKeys": [
+   "version",
+   "updatedAt",
+   "chapters",
+   "unlocked",
+   "settings",
+   "seenCoach",
+   "flags"
+  ],
+  "chapterI": {
+   "id": "seymour-flux",
+   "cleared": true,
+   "bestTimeMs": 85233,
+   "bestTurns": 78,
+   "attempts": 1,
+   "playTimeMs": 82513.09999999999
+  },
+  "unlockedCount": 0
+ },
+ "afterReload": {
+  "screen": "title",
+  "chapterIAfter": {
+   "id": "seymour-flux",
+   "cleared": true,
+   "bestTimeMs": 85233,
+   "bestTurns": 78,
+   "attempts": 1,
+   "playTimeMs": 82513.09999999999
+  },
+  "progressSurvived": true,
+  "volumeBefore": 0.8,
+  "volumeSetTo": 0.37,
+  "volumeAfter": 0.37,
+  "volumeSurvived": true,
+  "saveIdentical": true,
+  "topLevelKeysThatDiffer": []
+ },
+ "boardAfterReload": {
+  "selectedId": "seymour-flux",
+  "keys": [
+   "selectedIndex",
+   "selectedId",
+   "tiles",
+   "coming",
+   "cleared",
+   "order",
+   "beaten",
+   "total"
+  ]
+ },
+ "status": "ran",
+ "consoleErrors": [],
+ "notFound": [],
+ "finishedAt": "2026-10-13T06:27:26.735Z"
+}

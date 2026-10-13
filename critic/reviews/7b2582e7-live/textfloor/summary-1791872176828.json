@@ -1,0 +1,146 @@
+[
+ {
+  "scene": "prep-ffx",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab2-stats",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab3-sphere-grid",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 13
+   },
+   {
+    "label": "tab3-sphere-grid-card-closed",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 4
+   },
+   {
+    "label": "tab4-equipment",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab5-items",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab6-overdrive",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   }
+  ]
+ },
+ {
+  "scene": "prep-ffx2",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab2-dresspheres",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab3-stats",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab4-accessories",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   },
+   {
+    "label": "tab5-items",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   }
+  ]
+ },
+ {
+  "scene": "results-ffx",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "results",
+    "minEff": 14.1,
+    "under": 0,
+    "overlaps": 2
+   }
+  ]
+ },
+ {
+  "scene": "results-ffx2",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "results",
+    "minEff": 14.1,
+    "under": 0,
+    "overlaps": 2
+   }
+  ]
+ },
+ {
+  "scene": "battle-ch9",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "first-menu",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   }
+  ]
+ },
+ {
+  "scene": "battle-ch12",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "first-menu",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   }
+  ]
+ }
+]
