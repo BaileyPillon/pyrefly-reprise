@@ -9,6 +9,17 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
+## 2026-10-13 · Not yet released (r46-scenecue, branch `r46-scenecue`): the opening scene's music, ordering built and left off
+
+Address: none yet (nothing deployed; branch `r46-scenecue` from `d5bf2206`). Engineering detail: `docs/handoff/r46-scenecue.md`.
+
+- **Both games, loading order (nothing a player sees changes in this build):** the live check found the chapter's scene music playing at the first spoken line in 2 of 15 runs, because at the
+  card confirm the music, the sound packs and the battle's art all start at once and share one link. This work asks for the opening scene's music alone first and starts the rest when it has
+  arrived or after 4 seconds. Measured on a throttled link (18 Mbit/s) in Chapter II (FFX) and Chapter IV (FFX-2), 9 quick and 6 human-pace runs a side: it made no difference, because the
+  party screen's own paintings and the selected card's backdrops, which it does not hold, are what crowd the music out. So it ships **switched off** (add `?scenecue=on` to try it) and the first
+  battle menu and the memory in use are unchanged. Holding the party screen's paintings as well would put the music in time in Chapter II quick play and Chapter IV at human pace, at the cost
+  of those paintings arriving 1 to 3.5 seconds later on a slow link; that is Bailey's choice and is not built.
+
 ## 2026-10-12 · Release 42 (r42): the games' own battle rules on echoesofspira.com
 
 Address: https://echoesofspira.com (main a061e9dc, bundle Chs9J3OY)

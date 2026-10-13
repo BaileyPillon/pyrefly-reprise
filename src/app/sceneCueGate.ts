@@ -10,7 +10,8 @@
  * This file is the gate that holds "the rest". It plays nothing and fetches nothing itself: `AudioManager.warmMusic` settles it,
  * `sfxChapter` and `GameFlow.playChapter` run their deferred starts through {@link SceneCueGate.after}.
  *
- * A run gets no gate (so every start is immediate, exactly as before this change) when: the switch is off (`?scenecue=off`),
+ * A run gets no gate (so every start is immediate, exactly as before this change) when: the switch is not on (OFF by default, see
+ * {@link SCENE_CUE_DEFAULT_ON}; `?scenecue=on` or `?scenecue=<capMs>` turns it on),
  * cutscenes are skipped, the chapter's opening scene asks for no cue at its first line (Chapter I opens with silence), or the
  * mixer will not fetch one (audio still locked, the synth-only build, sound switched off, the cue already decoded, no rendered
  * file for it).
@@ -24,8 +25,14 @@ import { openingSceneCue } from './openingSceneCue.ts';
 /** How long the rest of the run waits for the opening cue before it starts anyway (ms). */
 export const SCENE_CUE_CAP_MS = 4000;
 
-/** Is the ordering on when the page address says nothing? Set from the measurements (docs/handoff/r46-scenecue.md). */
-export const SCENE_CUE_DEFAULT_ON = true;
+/**
+ * Is the ordering on when the page address says nothing? NO: the measurements did not earn it (docs/handoff/r46-scenecue.md). On the
+ * 18 Mbit/s link, with the gate as built, the cue arrived as late as without it (Chapter II fast 10.4 s against 10.0 to 10.7 s, Chapter IV
+ * 13.7 against 13.5), because what competes with it (the party prep's art, the card's backdrops, the unlock-time audio) is not what the
+ * gate holds, and 2 of 30 runs with it on never reached a first line (party prep 9 to 15 s late), against 0 of 60 without. Off by default,
+ * kept behind `?scenecue=on` so the next experiment starts from a tested gate.
+ */
+export const SCENE_CUE_DEFAULT_ON = false;
 
 export interface Timers {
   set(fn: () => void, ms: number): unknown;

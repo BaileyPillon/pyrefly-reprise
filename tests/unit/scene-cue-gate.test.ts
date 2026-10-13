@@ -24,7 +24,7 @@ import { audio } from '../../src/audio/index.ts';
 import { AudioManager } from '../../src/audio/AudioManager.ts';
 import { chapterWarmCues, musicChapter } from '../../src/app/chapterMusicWarm.ts';
 import { openingSceneCue, scriptOpensWithMusic } from '../../src/app/openingSceneCue.ts';
-import { SCENE_CUE_CAP_MS, SceneCueGate, sceneCueGateFor, sceneCueSwitch, type Timers } from '../../src/app/sceneCueGate.ts';
+import { SCENE_CUE_CAP_MS, SCENE_CUE_DEFAULT_ON, SceneCueGate, sceneCueGateFor, sceneCueSwitch, type Timers } from '../../src/app/sceneCueGate.ts';
 import { sfxChapter } from '../../src/app/sfxGame.ts';
 import type { App } from '../../src/app/App.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
@@ -234,7 +234,9 @@ describe('SceneCueGate', () => {
 });
 
 describe('the switch: ?scenecue=', () => {
-  it('on by default; off, on, or a cap in milliseconds from the address', () => {
+  it('off by default (the measurements did not earn it); off, on, or a cap in milliseconds from the address', () => {
+    expect(SCENE_CUE_DEFAULT_ON).toBe(false);
+    expect(sceneCueSwitch('')).toEqual({ on: false, capMs: SCENE_CUE_CAP_MS });
     expect(sceneCueSwitch('', true)).toEqual({ on: true, capMs: SCENE_CUE_CAP_MS });
     expect(sceneCueSwitch('', false)).toEqual({ on: false, capMs: SCENE_CUE_CAP_MS });
     expect(sceneCueSwitch('?scenecue=off', true).on).toBe(false);
@@ -470,7 +472,7 @@ describe('needsFirstFetch and sceneCueGateFor: no gate when nothing would be fet
     const { am } = unlocked();
     expect(am.needsFirstFetch('scene-zanarkand-dome')).toBe(true); // manifest not read yet counts as yes
     vi.spyOn(audio, 'needsFirstFetch').mockReturnValue(true);
-    const gate = sceneCueGateFor(yunalesca(), {}, '');
+    const gate = sceneCueGateFor(yunalesca(), {}, '?scenecue=on');
     expect(gate).toBeInstanceOf(SceneCueGate);
     expect(gate?.capMs).toBe(SCENE_CUE_CAP_MS);
     gate?.cancel();
@@ -478,8 +480,8 @@ describe('needsFirstFetch and sceneCueGateFor: no gate when nothing would be fet
 
   it('(1) a chapter with no opening cue: no gate, whatever the mixer says (Chapter I opens with silence)', () => {
     vi.spyOn(audio, 'needsFirstFetch').mockReturnValue(true);
-    expect(sceneCueGateFor(getChapter('seymour-flux')!, {}, '')).toBeNull();
-    expect(sceneCueGateFor(getChapter('ff7-guard-scorpion')!, {}, '')).toBeNull();
+    expect(sceneCueGateFor(getChapter('seymour-flux')!, {}, '?scenecue=on')).toBeNull();
+    expect(sceneCueGateFor(getChapter('ff7-guard-scorpion')!, {}, '?scenecue=on')).toBeNull();
   });
 
   it('(2) a cue already decoded: no gate', async () => {
@@ -515,7 +517,8 @@ describe('needsFirstFetch and sceneCueGateFor: no gate when nothing would be fet
   it('the switch off, and a run that skips its cutscenes: no gate', () => {
     vi.spyOn(audio, 'needsFirstFetch').mockReturnValue(true);
     expect(sceneCueGateFor(yunalesca(), {}, '?scenecue=off')).toBeNull();
-    expect(sceneCueGateFor(yunalesca(), { skipCutscenes: true }, '')).toBeNull();
+    expect(sceneCueGateFor(yunalesca(), { skipCutscenes: true }, '?scenecue=on')).toBeNull();
+    expect(sceneCueGateFor(yunalesca(), {}, '')).toBeNull(); // the default is OFF: the measurements did not earn it (docs/handoff/r46-scenecue.md)
     expect(sceneCueGateFor(yunalesca(), {}, '?scenecue=1500')?.capMs).toBe(1500);
   });
 
@@ -628,6 +631,7 @@ describe('GameFlow.runChapter: the packs and the battle\'s art wait for the open
     document.body.innerHTML = '';
     events = [];
     gateSeen = undefined;
+    history.replaceState(null, '', '/?scenecue=on'); // the ordering is off by default; these tests are about the ordering, so they ask for it
     resetFlowScreens();
     const prepLeaves = new Promise<boolean>((resolve) => (leavePrep = resolve));
     registerFlowScreens({ partyPrep: () => new FakePrep(prepLeaves) as never, cutscene: (o) => new FakeCutscene(o), results: () => new Quiet() as never, battle: (o) => new FakeBattle(o) });
@@ -715,6 +719,17 @@ describe('GameFlow.runChapter: the packs and the battle\'s art wait for the open
   });
 
   it('(2, 3, 4) nothing to fetch first (cue decoded, sound off, synth fallback; the real mixer here is locked): no gate, everything at once', async () => {
+    const run = app.flow.runChapter('yunalesca', { seed: 1, skipResults: true });
+    await flush();
+    expect(events).toEqual(['packs', 'warm:scene-zanarkand-dome', 'art']);
+    expect(gateSeen).toBeUndefined();
+    leavePrep(true);
+    await run;
+  });
+
+  it('the page address says nothing: the ordering is off by default, so even a first fetch coming gets no gate (everything at once, as before)', async () => {
+    history.replaceState(null, '', '/');
+    vi.spyOn(audio, 'needsFirstFetch').mockReturnValue(true);
     const run = app.flow.runChapter('yunalesca', { seed: 1, skipResults: true });
     await flush();
     expect(events).toEqual(['packs', 'warm:scene-zanarkand-dome', 'art']);

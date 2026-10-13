@@ -22,6 +22,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { chromium } from 'playwright';
 import { currentChromiumArgs, resolveBrowserMode } from './browser-mode.mjs';
+import { installHold, parseHold } from './scene-cue-hold.mjs';
 
 const arg = (name, fallback) => {
   const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
@@ -39,6 +40,8 @@ const cfg = {
   memory: arg('memory', 'on') === 'on',
   label: arg('label', ''),
   out: arg('out', ''),
+  hold: parseHold(arg('hold', '')), // the bound experiment (scene-cue-hold.mjs): --hold=art,packs,music from the confirm until the cue has arrived
+  holdcap: Number(arg('holdcap', '8000')),
 };
 // The cue each chapter's opening scene plays first (read from the story scripts: the first `music` step, else the chapter's `music.scene`).
 const CHAPTERS = {
@@ -124,9 +127,11 @@ async function oneRun(index) {
   const chunks = [];
   const heap = [];
   let heapTimer = null;
+  let holdCtl = null;
   try {
     const context = await browser.newContext({ viewport: { width: 1600, height: 900 }, deviceScaleFactor: 1, ignoreHTTPSErrors: true });
     await context.addInitScript(installProbe);
+    holdCtl = cfg.hold.any ? await installHold(context, { hold: cfg.hold, capMs: cfg.holdcap, cuePath: `/audio/music/${chapter.scene}.mp3` }) : null;
     const page = await context.newPage();
     page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
     page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e).slice(0, 200)}`));
@@ -141,8 +146,8 @@ async function oneRun(index) {
     });
     cdp.on('Network.responseReceived', (e) => { const r = requests.get(e.requestId); if (r) { r.status = e.response.status; r.first = r.start + (e.timestamp - r.ts) * 1000; r.total = Number(e.response.headers['content-length'] ?? e.response.headers['Content-Length'] ?? 0) || null; } });
     cdp.on('Network.dataReceived', (e) => { const r = requests.get(e.requestId); if (r && e.encodedDataLength > 0) chunks.push([r.start + (e.timestamp - r.ts) * 1000, e.encodedDataLength, r.cat, e.requestId]); });
-    cdp.on('Network.loadingFinished', (e) => { const r = requests.get(e.requestId); if (r) { r.end = r.start + (e.timestamp - r.ts) * 1000; r.bytes = e.encodedDataLength; } });
-    cdp.on('Network.loadingFailed', (e) => { const r = requests.get(e.requestId); if (r) { r.failed = e.errorText; r.end = r.start + (e.timestamp - r.ts) * 1000; } });
+    cdp.on('Network.loadingFinished', (e) => { const r = requests.get(e.requestId); if (r) { r.end = r.start + (e.timestamp - r.ts) * 1000; r.bytes = e.encodedDataLength; if (r.path === `/audio/music/${chapter.scene}.mp3`) holdCtl?.noteCueDone(); } });
+    cdp.on('Network.loadingFailed', (e) => { const r = requests.get(e.requestId); if (r) { r.failed = e.errorText; r.end = r.start + (e.timestamp - r.ts) * 1000; if (r.path === `/audio/music/${chapter.scene}.mp3`) holdCtl?.noteCueDone(); } });
     heapTimer = setInterval(() => { cdp.send('Performance.getMetrics').then((m) => { const g = (n) => m.metrics.find((x) => x.name === n)?.value ?? null; heap.push({ t: Date.now(), used: g('JSHeapUsedSize'), total: g('JSHeapTotalSize') }); }, () => undefined); }, 250);
 
     const scr = () => page.evaluate(() => window.__pyrefly?.screen?.() ?? null).catch(() => null);
@@ -175,6 +180,7 @@ async function oneRun(index) {
     await sleep(600);
     await selectCard(cfg.chapter);
     if (human) await sleep(3000);
+    holdCtl?.arm();
     run.tConfirm = Date.now(); // time zero: Enter on the card
     await page.keyboard.press('Enter');
     await sleep(human ? 3000 : 1800);
@@ -204,6 +210,8 @@ async function oneRun(index) {
     run.error = String(e?.message ?? e).slice(0, 300);
   } finally {
     clearInterval(heapTimer);
+    holdCtl?.stop();
+    run.holdLog = holdCtl ? { count: holdCtl.log.length, maxWaitMs: Math.max(0, ...holdCtl.log.map((x) => x.waitedMs)), paths: holdCtl.log.slice(0, 60).map((x) => `${x.path} +${x.sinceArmMs} waited ${x.waitedMs}`) } : null;
     sampler.stop();
     await browser.close().catch(() => undefined);
   }
