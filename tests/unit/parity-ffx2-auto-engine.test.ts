@@ -310,6 +310,31 @@ describe('Counterattack, Magic Counter and Evade & Counter on the engine\'s own 
     expect(events.filter((x) => x.type === 'counter')).toEqual([]);
   });
 
+  it('a girl who falls to a LATER strike of the same command does not counter either: the counter queued by the first strike is dropped when she is down', () => {
+    // a physical, single-target, status-free command with several strikes that never misses (accuracy formula 0)
+    const multi = POOL.find((a) => {
+      const r = a.ffx2Record!;
+      return (r.flagsDamage & 3) === 1 && (r.flagsTarget & 0xc) === 0 && ((r.flagsMisc >> 3) & 7) === 0 && r.hits >= 2 && (r.flagsMisc & 0x4000) === 0;
+    });
+    expect(multi, 'the pool has a several-strike command').toBeDefined();
+    const probeBoard = board({ yuna: LOADOUTS['berserkerCa'] as Loadout }, 11);
+    probeBoard.unit('yuna').stats.maxHp = BIG;
+    probeBoard.unit('yuna').hp = BIG;
+    const amounts = probeBoard
+      .act(probeBoard.unit('paragon'), { kind: 'ability', id: (multi as AbilityDef).id, targets: ['yuna'] } as Command)
+      .map(ev)
+      .filter((x) => x.type === 'damage' && x.targetId === 'yuna')
+      .map((x) => x.amount as number);
+    expect(amounts.length).toBeGreaterThanOrEqual(2);
+    const e = board({ yuna: LOADOUTS['berserkerCa'] as Loadout }, 11);
+    const yuna = e.unit('yuna');
+    yuna.stats.maxHp = BIG;
+    yuna.hp = (amounts[0] as number) + 1; // the first strike leaves her standing, the second takes her down
+    const events = e.act(e.unit('paragon'), { kind: 'ability', id: (multi as AbilityDef).id, targets: ['yuna'] } as Command).map(ev);
+    expect(yuna.alive).toBe(false);
+    expect(events.filter((x) => x.type === 'counter' || (x.type === 'action-start' && x.actorId === 'yuna'))).toEqual([]);
+  });
+
   it('a counter changes nothing of the girl\'s ATB (it is a system action, not her turn)', () => {
     const e = board({ yuna: LOADOUTS['berserkerCa'] as Loadout });
     const yuna = e.unit('yuna');

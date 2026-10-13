@@ -8,7 +8,8 @@
  * (`status-clock.ts`); whether a payout can set off a counter is not in the notes.
  *
  * The counter is the target's own Attack aimed at the source, queued as a system action: the engine plays it once the action that set
- * it off has finished (`engineHooks.ts#runPartyCounters`). Nothing here draws a random number.
+ * it off has finished (`engineHooks.ts#runPartyCounters`, which drops it if she or the attacker has fallen by then: the knock-out
+ * routine empties her queue). Nothing here draws a random number.
  */
 
 import type { AbilityDef } from '../common/types.ts';
@@ -57,7 +58,6 @@ function counterOf(ctx: ResolveContext, r: AppliedResult): void {
   const layer = r.target.autoLayer;
   if (hooks === undefined || layer === undefined) return;
   if ((layer.words[0] & (COUNTER_WORD0.COUNTERATTACK | COUNTER_WORD0.EVADE_AND_COUNTER | COUNTER_WORD0.MAGIC_COUNTER)) === 0) return;
-  if (!r.target.alive || r.target.removed) return; // the knock-out routine drops her queue
   if (r.missed && !COUNTER_AFTER_MISS) return;
   const queued = counterCheck(
     {
