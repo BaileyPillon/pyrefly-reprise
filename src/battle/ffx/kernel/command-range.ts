@@ -2,7 +2,7 @@
  * The range and dead-target filter the executor applies when a sub-action starts (re-parity RC7 lane L-CMD; **FFX only**).
  *
  * Source and spec: `research/re-ffx-command-gate.md` section 3. Function: `pp_BtlRangeCheck`, FFX.exe 0x00791fa0 (30,000 vectors against
- * the real machine code, 0 mismatches; `tests/unit/parity-ffx-command-range.test.ts`, fixture `tests/fixtures/parity/ffx/command_range.json`).
+ * the real machine code, 0 mismatches; `tests/unit/parity-ffx-command-gate.test.ts`, fixture `tests/fixtures/parity/ffx/command_range.json`).
  *
  * **There is no retarget.** The filter walks the sub-action's target mask once. A target whose distance byte is above the command's reach
  * (and that is not the user) is counted as out of reach and dropped; a target that is dead is dropped unless the command may target the

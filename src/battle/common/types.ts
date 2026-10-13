@@ -1396,8 +1396,9 @@ export interface FFXCommandRecord {
   type: number;
   /**
    * Record word 0x1c (u32), the bits the kernels read: bits 3 to 5 the accuracy formula (0 always hits), 6 Darkness
-   * applies, 8 absorb (a drain's sign), 13 and 14 Delay Attack and Delay Buster, 16 pierces Armored, 18 uses the
-   * weapon's properties, 23 no effect on the living.
+   * applies, 8 absorb (a drain's sign), 13 and 14 Delay Attack and Delay Buster, 16 pierces Armored, 17 gated by Silence
+   * (`kernel/command-gate.ts`: the command is refused while its user is Silenced), 18 uses the weapon's properties,
+   * 23 no effect on the living.
    */
   flagsMisc: number;
   /** Record word 0x20 (u16): bits 0 and 1 the damage type (1 physical, 2 magical), 2 can crit, 3 crit bonus from equipment, 4 heals, 6 cap 9999, 7 cap 99999. */
