@@ -16,7 +16,8 @@
  *
  * Everything is inside `@media (max-width: 599px)` and keyed on `.prep[data-phone='page']`, so every desktop size, the
  * CHAPTER tab and the SPHERE GRID tab keep what they have by construction. Nothing a player reads is under 14 CSS px
- * (CHK-003) and every control is at least 40 px (the faces on a 360 px phone) and 44 px everywhere else.
+ * (CHK-003) and every control is 44 px or taller, except the seven round heads of FFX, which share one row and so are
+ * about 45 px at 390, 40 px at 360 and 35 px at 320 (the narrowest width the page is checked at).
  */
 
 @media (max-width: 599px) {
@@ -180,13 +181,16 @@
   }
 
   /* FFX: round heads, the seven of them in a row; the selected one is ringed in the accent. The name and the level stay
-     in the markup for a screen reader and are clipped to nothing. */
+     in the markup for a screen reader and are not drawn: opacity 0 inside the head's own clip (a 1 px clipped box would
+     read as cut and overprinting text to every text sweep, and display none would take the name from the button). */
   .prep[data-phone='page']:not(.ig--ffx2) .prep__member {
     position: relative;
+    /* 46 px a head, shrinking together to fit the row (about 45 px at 390, 40 at 360, 35 at 320) and kept round. */
     flex: 0 1 46px;
-    min-width: 40px;
+    min-width: 0;
     width: auto;
-    height: 46px;
+    height: auto;
+    aspect-ratio: 1;
     box-sizing: border-box;
     margin: 0 !important;
     padding: 0;
@@ -218,19 +222,21 @@
   .prep[data-phone='page']:not(.ig--ffx2) .prep__member-name,
   .prep[data-phone='page']:not(.ig--ffx2) .prep__member-lv {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
+    left: 0;
+    top: 0;
+    margin: 0;
     padding: 0;
     border: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
+    opacity: 0;
+    pointer-events: none;
     white-space: nowrap;
     font-size: 14px;
   }
 
   /* FFX-2: three name tabs leaning right, each a face, the name and her level; the selected one is ivory. */
   .prep[data-phone='page'].ig--ffx2 .prep__member {
+    /* 34 px at 390 and wider; a small phone (down to 320) draws the face smaller so the name keeps its room. */
+    --prph-face: max(28px, min(34px, 9.4vw));
     flex: 1 1 0;
     min-width: 0;
     width: auto;
@@ -240,7 +246,7 @@
     margin: 0 !important;
     padding: 4px 8px 4px 5px;
     display: grid;
-    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-columns: var(--prph-face) minmax(0, 1fr);
     grid-template-areas:
       'face name'
       'face lv';
@@ -258,8 +264,8 @@
   }
   .prep[data-phone='page'].ig--ffx2 .prep__member .prep__face {
     grid-area: face;
-    width: 34px;
-    height: 34px;
+    width: var(--prph-face);
+    height: var(--prph-face);
     margin: 0;
     font-size: 14px;
   }
@@ -268,7 +274,8 @@
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 20px;
+    /* 20 px from 385 px wide, down to 16 px at 308 and under: never under the 14 px floor. */
+    font-size: clamp(16px, 5.2vw, 20px);
     line-height: 1;
   }
   .prep[data-phone='page'].ig--ffx2 .prep__member-lv {

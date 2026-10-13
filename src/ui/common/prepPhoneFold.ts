@@ -95,8 +95,10 @@ export function pagePhone(page: HTMLElement, dir: 1 | -1): boolean {
  * Does nothing (and consumes nothing) unless the page is the phone-width scroller. Never claims the frame.
  */
 export function phoneKeys(input: InputSnapshot, host: HTMLElement | null): boolean {
+  // Idle frames (almost all of them) read no style at all.
+  if (!host || !(input.justPressed('r1') || input.justPressed('l1') || input.justPressed('triangle'))) return false;
   const page = phonePage(host);
-  if (!host || !page) return false;
+  if (!page) return false;
   if (input.consume('r1')) pagePhone(page, 1);
   if (input.consume('l1')) pagePhone(page, -1);
   if (input.consume('triangle')) toggleAllSections(host);

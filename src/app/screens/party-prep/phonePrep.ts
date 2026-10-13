@@ -102,9 +102,15 @@ export function installPhonePrep(prep: HTMLElement, stage: HTMLElement, chapter:
     const edge = (on.previousElementSibling as HTMLElement | null) ?? on;
     strip.scrollLeft = Math.max(0, edge.offsetLeft - 16);
   };
+  // Crossing the 600 px line (a window dragged narrower, a tablet turned upright): the open tab goes back into view.
+  const onQuery = (): void => {
+    placeTab();
+    update();
+  };
   prep.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update, { passive: true });
   window.addEventListener('keydown', onKey);
+  mq?.addEventListener?.('change', onQuery);
   // Fonts and the panel's own content settle after mount and change the
   // stacked page's height; the stage is `height: auto` there, so watch it.
   const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(update) : null;
@@ -127,6 +133,7 @@ export function installPhonePrep(prep: HTMLElement, stage: HTMLElement, chapter:
       prep.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
       window.removeEventListener('keydown', onKey);
+      mq?.removeEventListener?.('change', onQuery);
       ro?.disconnect();
     },
   };

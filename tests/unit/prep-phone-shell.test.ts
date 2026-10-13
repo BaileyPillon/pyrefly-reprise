@@ -149,6 +149,35 @@ describe('the prep shell on the stacked page', () => {
     screen.exit();
   });
 
+  it('puts the open tab back into view when the window crosses the 600 px line, and lets go of the query with the screen', async () => {
+    let onChange: (() => void) | null = null;
+    const mql = {
+      matches: false,
+      media: PHONE_PREP_QUERY,
+      addEventListener: (_type: string, fn: () => void) => {
+        onChange = fn;
+      },
+      removeEventListener: vi.fn(),
+    };
+    Object.defineProperty(window, 'matchMedia', { configurable: true, value: () => mql });
+    Object.defineProperty(HTMLElement.prototype, 'offsetLeft', {
+      configurable: true,
+      get(this: HTMLElement) {
+        return this.classList.contains('prep__tab') ? [...(this.parentElement?.children ?? [])].indexOf(this) * 100 : 0;
+      },
+    });
+    const { screen, root } = await mountShell('seymour-flux');
+    screen.trigger('prep:tab:overdrive');
+    const strip = root.querySelector<HTMLElement>('.prep__tabs')!;
+    const at = [...strip.children].findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    expect(strip.scrollLeft).toBe(0); // a desktop width: the strip is left alone
+    mql.matches = true;
+    onChange!();
+    expect(strip.scrollLeft).toBe((at - 1) * 100 - 16);
+    screen.exit();
+    expect(mql.removeEventListener).toHaveBeenCalledWith('change', onChange);
+  });
+
   it('keeps the browser from paging the page a second time on PageDown, on the stacked tabs and CHAPTER only', async () => {
     phone(true);
     const { screen } = await mountShell('ffx2-bahamut');
@@ -213,10 +242,14 @@ describe('the stylesheets cannot reach a desktop size, and print nothing under t
   });
 
   it.each(sheets)('%s: no font-size under the 14 px floor (CHK-003)', (file) => {
-    const sizes = [...read(file).matchAll(/font-size:\s*([\d.]+)px/g)].map((m) => Number(m[1]));
-    expect(sizes.length).toBeGreaterThan(0);
-    for (const s of sizes) expect(s).toBeGreaterThanOrEqual(14);
-    expect(read(file)).not.toMatch(/font-size:\s*[\d.]+(?:em|rem|vw|%)/);
+    const declared = [...read(file).matchAll(/font-size:\s*([^;]+);/g)].map((m) => m[1]!.trim());
+    expect(declared.length).toBeGreaterThan(0);
+    // Only two forms: a plain px size, or a clamp() whose floor is a px size. Both are held to 14 px; nothing relative.
+    for (const v of declared) {
+      const px = /^([\d.]+)px$/.exec(v) ?? /^clamp\(\s*([\d.]+)px\s*,/.exec(v);
+      expect(px, `${file}: font-size: ${v}`).not.toBeNull();
+      expect(Number(px![1]), `${file}: font-size: ${v}`).toBeGreaterThanOrEqual(14);
+    }
   });
 
   it('the tab sheet keeps CHAPTER and SPHERE GRID out of it, and a finger-sized row is at least 44 px tall', () => {
