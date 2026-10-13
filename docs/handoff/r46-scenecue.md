@@ -106,6 +106,7 @@ by less than the run-to-run spread). The unit tests cover the cap boundary and a
 - LV43-2 stays open: on the quick route the scene music is not playing at the first line in Chapter II (0 of 9) and Chapter IV (0 of 9 and, at human pace, 0 of 6). The levers are named above.
 - The 2 of 30 late-prep runs with the ordering on are unexplained.
 - `src/audio/AudioManager.ts` is 809 lines (780 before; over 400 already, house rule 7); this lane added the gate plumbing (+29) rather than split a file nobody asked to split. `BattleScreenFlow.ts` shrank (541 to 527).
+- Checks at the tip: `tsc --noEmit` clean; `node tools/orphans.mjs` lists neither new module; the full suite (`node node_modules/vitest/vitest.mjs run --maxWorkers=2`, run once) **1147 files passed, 13 skipped (1160); 17957 tests passed, 69 skipped, 1 todo (18027); exit 0**; `tests/unit/scene-cue-gate.test.ts` 40 of 40.
 - Not run: a live check (no deploy is allowed from this lane), a real-network measurement, a phone.
 - Reproduce: serve a build with `node tools/dist-h2-server.mjs --dir=dist --port=5246 --key=... --cert=...`, then `PYREFLY_BROWSER=gpu node tools/scene-cue-proof.mjs --url=https://127.0.0.1:5246/ --chapter=yunalesca --route=fast --runs=9 --out=run.json`
   (`--query=scenecue=on|off`, `--hold=art,packs,music`), `node tools/scene-cue-table.mjs --dir=<folder>`. Build from PowerShell with `BASE_PATH='/'` and vite directly, never `npm run build` in a tree whose `public/art` is a junction.
