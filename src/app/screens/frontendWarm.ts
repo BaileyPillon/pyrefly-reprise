@@ -8,6 +8,7 @@
  * The title screen waits for a key, so it is where this starts: whatever the
  * next screen shows first (the briefing's two paintings on a first launch,
  * otherwise the board's opening card and every card's faces), then the rest.
+ * Since r43 (PR-0405) it starts at the player's first key or pointer input, not when the title appears: see {@link armFrontEndWarm}.
  *
  * Each screen waits for its own set before it goes up, with a ceiling so a
  * slow network delays a screen and never holds it. The screen right after the
@@ -146,6 +147,108 @@ export function warmFrontEnd(app: Pick<App, 'save'>, briefingDue: boolean): void
       /* a harness without chapters: the screens load their own art */
     }
   });
+}
+
+/**
+ * What the next screen needs for its first paint, and nothing beyond it: the briefing's two paintings when it is due, else the
+ * board's opening card with its faces. A screen waits for these (ceilinged, {@link holdForNextScreen}); the rest of the board does not.
+ */
+function warmNextScreen(app: Pick<App, 'save'>, briefingDue: boolean): void {
+  if (briefingDue) void warmImages(briefingArtUrls());
+  void loadArtManifest().then(() => {
+    try {
+      void warmImages(boardArtUrls(app.save).first);
+    } catch {
+      /* a harness without chapters: the screens load their own art */
+    }
+  });
+}
+
+/**
+ * When the title asks for the briefing's and the board's paintings (PR-0405, round 25).
+ *
+ *   `now`    as soon as the title is up: the next screen's first paint, then every other card's art (r42 and before).
+ *   `first`  the next screen's first paint as soon as the title is up; the rest of the board at the player's first input.
+ *   `defer`  nothing until the player's first input; the press that leaves the title then holds for the next screen's first paint.
+ *
+ * The address can name one (`?prefetch=now|first|defer`, for the measurements and for switching a mode on); the default is
+ * {@link DEFAULT_PREFETCH_MODE}, `now`: what the live build does. Measured on a 100 Mbit/s link against the live build, `defer` made the board arrive
+ * a second later after the press and Auron's briefing come up a second late, and `first` kept the press as fast but left the board's rail strips empty for
+ * several seconds for a player who had sat on the title (they finish about 5 s later), neither of which may happen on a fast link, and neither helped a slow
+ * one (the idle lane already keeps the rest of the board behind the opening card there). `docs/handoff/r43-delivery.md` holds the numbers; one constant here
+ * (and nothing else) turns `first` or `defer` on for everyone.
+ */
+export type PrefetchMode = 'now' | 'first' | 'defer';
+
+export const PREFETCH_MODES: readonly PrefetchMode[] = ['now', 'first', 'defer'];
+
+/** The mode in force when the address names none. */
+export const DEFAULT_PREFETCH_MODE: PrefetchMode = 'now';
+
+/** The mode a page address names (`?prefetch=`), else `fallback`. */
+export function prefetchModeFrom(search: string, fallback: PrefetchMode = DEFAULT_PREFETCH_MODE): PrefetchMode {
+  const value = new URLSearchParams(search).get('prefetch');
+  return PREFETCH_MODES.find((mode) => mode === value) ?? fallback;
+}
+
+/**
+ * What counts as the player's first input: a key, a press, a touch, a wheel, or the pointer moving.
+ * (A gamepad raises no DOM event; the title's own start press reaches {@link startFrontEndWarm} directly.)
+ */
+export const FIRST_INPUT_EVENTS = ['keydown', 'pointerdown', 'pointermove', 'touchstart', 'wheel'] as const;
+
+/** The listeners of the one pending {@link armFrontEndWarm}, so arming twice (the title entered again) never stacks them. */
+let pendingArm: (() => void) | null = null;
+
+/**
+ * The paintings wait for the player's first key or pointer input, not for the title to appear (PR-0405).
+ *
+ * Round 25 measured 29.7 MB of art arriving in the 4.5 seconds after the title was ready (121 MB in the first 24 s) before anyone had
+ * touched anything. The briefing's and the board's paintings now start at the first key, press, touch, wheel or pointer movement
+ * anywhere in the front end, or at the press that leaves the title ({@link startFrontEndWarm}), whichever comes first. A session with no
+ * input at all (a tab left open, a script that only looks) fetches none of them.
+ *
+ * Nothing waits on this that did not wait before: the title's hold for the next screen's first paint ({@link holdForNextScreen},
+ * ceilinged at {@link FRONTEND_WARM_CEILING_MS}) is what the press that leaves the title waits for. Game case: both (one shared front end).
+ *
+ * Returns the function that cancels the wait.
+ */
+export function armFrontEndWarm(
+  app: Pick<App, 'save'>,
+  briefingDue: () => boolean,
+  target: Pick<EventTarget, 'addEventListener' | 'removeEventListener'> | null = typeof window === 'undefined' ? null : window,
+): () => void {
+  pendingArm?.();
+  if (!target) return () => undefined;
+  const fire = (): void => startFrontEndWarm(app, briefingDue());
+  const disarm = (): void => {
+    for (const type of FIRST_INPUT_EVENTS) target.removeEventListener(type, fire, { capture: true });
+    if (pendingArm === disarm) pendingArm = null;
+  };
+  for (const type of FIRST_INPUT_EVENTS) target.addEventListener(type, fire, { capture: true, passive: true });
+  pendingArm = disarm;
+  return disarm;
+}
+
+/** Start the front end's paintings now, and stop waiting for an input to do it (the first input has come). */
+export function startFrontEndWarm(app: Pick<App, 'save'>, briefingDue: boolean): void {
+  pendingArm?.();
+  warmFrontEnd(app, briefingDue);
+}
+
+/** The title's side of it: what to ask for now and what to leave for the first input, by {@link PrefetchMode}. Returns the function that cancels the wait. */
+export function beginFrontEndWarm(
+  app: Pick<App, 'save'>,
+  briefingDue: () => boolean,
+  mode: PrefetchMode = DEFAULT_PREFETCH_MODE,
+  target?: Pick<EventTarget, 'addEventListener' | 'removeEventListener'> | null,
+): () => void {
+  if (mode === 'now') {
+    startFrontEndWarm(app, briefingDue());
+    return () => undefined;
+  }
+  if (mode === 'first') warmNextScreen(app, briefingDue());
+  return armFrontEndWarm(app, briefingDue, target);
 }
 
 /** How long a screen may still wait: what the title left of it, else the whole ceiling. */
