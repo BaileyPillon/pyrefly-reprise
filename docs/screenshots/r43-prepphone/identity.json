@@ -1,0 +1,1018 @@
+{
+ "1600x900": {
+  "vs": "base-a vs after-final",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "720736b416e5adef9e218078432995267b72f4198067a463c85e6869586e07ea",
+    "sha256After": "720736b416e5adef9e218078432995267b72f4198067a463c85e6869586e07ea"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "c92c0f4c3c2a4818fb4ab205bce63e1db1c9dfba70400a266df5b50ddcb5de20",
+    "sha256After": "c92c0f4c3c2a4818fb4ab205bce63e1db1c9dfba70400a266df5b50ddcb5de20"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "cd9ab6cfc835b290a436da206d412cf6c38daac3c9f8b8dea53d6d44ac078f7f",
+    "sha256After": "cd9ab6cfc835b290a436da206d412cf6c38daac3c9f8b8dea53d6d44ac078f7f"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "176eff21587579da03af0cbe3dd567bc0471499e4f9cc8ba9021b45f6fe329be",
+    "sha256After": "176eff21587579da03af0cbe3dd567bc0471499e4f9cc8ba9021b45f6fe329be"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "081a30e76f693873a6efa627c39ec94df81e5e41c36297519d1008077dacb45b",
+    "sha256After": "081a30e76f693873a6efa627c39ec94df81e5e41c36297519d1008077dacb45b"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "f7d18a5da7349528e46c834e66e49b68cecf44cfcd24c7ec16fcbb063e3fa589",
+    "sha256After": "f7d18a5da7349528e46c834e66e49b68cecf44cfcd24c7ec16fcbb063e3fa589"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "0d60ec7a3488df9e5a7407a2f4b136214212a696102618a76fb6dd1772b01a7c",
+    "sha256After": "0d60ec7a3488df9e5a7407a2f4b136214212a696102618a76fb6dd1772b01a7c"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "d161f954e785f01e88446c94c0585293ad97add8d9dfd8f6032291257c14d186",
+    "sha256After": "d161f954e785f01e88446c94c0585293ad97add8d9dfd8f6032291257c14d186"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3c363d2d6a9bcfff618f0d60f36096fa70b0710a5135a28518af285e54c7b2cd",
+    "sha256After": "3c363d2d6a9bcfff618f0d60f36096fa70b0710a5135a28518af285e54c7b2cd"
+   },
+   {
+    "file": "seymour-flux-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e5542469309a3ce211d4e3d1ae28e495a723e8519a08ad215772603794155ae6",
+    "sha256After": "e5542469309a3ce211d4e3d1ae28e495a723e8519a08ad215772603794155ae6"
+   },
+   {
+    "file": "seymour-flux-01-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "837a4e377fbae4071ff6e10522a86aff9b5f92af756f43c3371488393dad95ad",
+    "sha256After": "837a4e377fbae4071ff6e10522a86aff9b5f92af756f43c3371488393dad95ad"
+   },
+   {
+    "file": "seymour-flux-01-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "b8ddc39d7cdb217c3443f63cd1c1fe878c177608709a4d74dec7978ba3015d3e",
+    "sha256After": "b8ddc39d7cdb217c3443f63cd1c1fe878c177608709a4d74dec7978ba3015d3e"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid-m0.png",
+    "status": "differs",
+    "pixels": 3455,
+    "maxChannelDelta": 237,
+    "bbox": [
+     315,
+     502,
+     660,
+     652
+    ],
+    "sha256Before": "eba77e9b32dbb4310ca2baaed36639a3c4e24e2337a12546fef2dad2dd31b39e",
+    "sha256After": "49a5b23ffa5004e5a2ae9ff5f8052aad23be7ade3ece94df942d39d25051767f"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e6eb7ff746c432c7a30960cc97ff9dd97e68bc0a745a2be45ae08b3dddf3a51d",
+    "sha256After": "e6eb7ff746c432c7a30960cc97ff9dd97e68bc0a745a2be45ae08b3dddf3a51d"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "4f9f9f747676c8e601f675594be5d37b0361f4850f84327c60cc68e836f1106b",
+    "sha256After": "4f9f9f747676c8e601f675594be5d37b0361f4850f84327c60cc68e836f1106b"
+   },
+   {
+    "file": "seymour-flux-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "22d37cdcb5f14407e0e95b5c6371c5361e21c0c78b0b635a7464b2c4a427794d",
+    "sha256After": "22d37cdcb5f14407e0e95b5c6371c5361e21c0c78b0b635a7464b2c4a427794d"
+   },
+   {
+    "file": "seymour-flux-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "7b88dd71e9e4121b5d8f1e337c4f32038b0a7cfc05364d6dab17c2290cafd758",
+    "sha256After": "7b88dd71e9e4121b5d8f1e337c4f32038b0a7cfc05364d6dab17c2290cafd758"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3ead75cfd6081fc6208b296bc38e6dfd929382437805394a27db150aad168311",
+    "sha256After": "3ead75cfd6081fc6208b296bc38e6dfd929382437805394a27db150aad168311"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "51c179a748a9d49f01990fdf737fc6a57558e6b51b1bbc51ff4ff5774453a58f",
+    "sha256After": "51c179a748a9d49f01990fdf737fc6a57558e6b51b1bbc51ff4ff5774453a58f"
+   }
+  ]
+ },
+ "1600x900-control-base-a-vs-base-b": {
+  "vs": "the same pristine build twice",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "720736b416e5adef9e218078432995267b72f4198067a463c85e6869586e07ea",
+    "sha256After": "720736b416e5adef9e218078432995267b72f4198067a463c85e6869586e07ea"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "c92c0f4c3c2a4818fb4ab205bce63e1db1c9dfba70400a266df5b50ddcb5de20",
+    "sha256After": "c92c0f4c3c2a4818fb4ab205bce63e1db1c9dfba70400a266df5b50ddcb5de20"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "cd9ab6cfc835b290a436da206d412cf6c38daac3c9f8b8dea53d6d44ac078f7f",
+    "sha256After": "cd9ab6cfc835b290a436da206d412cf6c38daac3c9f8b8dea53d6d44ac078f7f"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "176eff21587579da03af0cbe3dd567bc0471499e4f9cc8ba9021b45f6fe329be",
+    "sha256After": "176eff21587579da03af0cbe3dd567bc0471499e4f9cc8ba9021b45f6fe329be"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "081a30e76f693873a6efa627c39ec94df81e5e41c36297519d1008077dacb45b",
+    "sha256After": "081a30e76f693873a6efa627c39ec94df81e5e41c36297519d1008077dacb45b"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "f7d18a5da7349528e46c834e66e49b68cecf44cfcd24c7ec16fcbb063e3fa589",
+    "sha256After": "f7d18a5da7349528e46c834e66e49b68cecf44cfcd24c7ec16fcbb063e3fa589"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "0d60ec7a3488df9e5a7407a2f4b136214212a696102618a76fb6dd1772b01a7c",
+    "sha256After": "0d60ec7a3488df9e5a7407a2f4b136214212a696102618a76fb6dd1772b01a7c"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "d161f954e785f01e88446c94c0585293ad97add8d9dfd8f6032291257c14d186",
+    "sha256After": "d161f954e785f01e88446c94c0585293ad97add8d9dfd8f6032291257c14d186"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3c363d2d6a9bcfff618f0d60f36096fa70b0710a5135a28518af285e54c7b2cd",
+    "sha256After": "3c363d2d6a9bcfff618f0d60f36096fa70b0710a5135a28518af285e54c7b2cd"
+   },
+   {
+    "file": "seymour-flux-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e5542469309a3ce211d4e3d1ae28e495a723e8519a08ad215772603794155ae6",
+    "sha256After": "e5542469309a3ce211d4e3d1ae28e495a723e8519a08ad215772603794155ae6"
+   },
+   {
+    "file": "seymour-flux-01-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "837a4e377fbae4071ff6e10522a86aff9b5f92af756f43c3371488393dad95ad",
+    "sha256After": "837a4e377fbae4071ff6e10522a86aff9b5f92af756f43c3371488393dad95ad"
+   },
+   {
+    "file": "seymour-flux-01-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "b8ddc39d7cdb217c3443f63cd1c1fe878c177608709a4d74dec7978ba3015d3e",
+    "sha256After": "b8ddc39d7cdb217c3443f63cd1c1fe878c177608709a4d74dec7978ba3015d3e"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid-m0.png",
+    "status": "differs",
+    "pixels": 3080,
+    "maxChannelDelta": 237,
+    "bbox": [
+     315,
+     502,
+     660,
+     652
+    ],
+    "sha256Before": "eba77e9b32dbb4310ca2baaed36639a3c4e24e2337a12546fef2dad2dd31b39e",
+    "sha256After": "3c73c1ab6c2668d80daf82016084992d64b27557cea44b3755e0d1b2ba7d6948"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e6eb7ff746c432c7a30960cc97ff9dd97e68bc0a745a2be45ae08b3dddf3a51d",
+    "sha256After": "e6eb7ff746c432c7a30960cc97ff9dd97e68bc0a745a2be45ae08b3dddf3a51d"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "4f9f9f747676c8e601f675594be5d37b0361f4850f84327c60cc68e836f1106b",
+    "sha256After": "4f9f9f747676c8e601f675594be5d37b0361f4850f84327c60cc68e836f1106b"
+   },
+   {
+    "file": "seymour-flux-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "22d37cdcb5f14407e0e95b5c6371c5361e21c0c78b0b635a7464b2c4a427794d",
+    "sha256After": "22d37cdcb5f14407e0e95b5c6371c5361e21c0c78b0b635a7464b2c4a427794d"
+   },
+   {
+    "file": "seymour-flux-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "7b88dd71e9e4121b5d8f1e337c4f32038b0a7cfc05364d6dab17c2290cafd758",
+    "sha256After": "7b88dd71e9e4121b5d8f1e337c4f32038b0a7cfc05364d6dab17c2290cafd758"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3ead75cfd6081fc6208b296bc38e6dfd929382437805394a27db150aad168311",
+    "sha256After": "3ead75cfd6081fc6208b296bc38e6dfd929382437805394a27db150aad168311"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "51c179a748a9d49f01990fdf737fc6a57558e6b51b1bbc51ff4ff5774453a58f",
+    "sha256After": "51c179a748a9d49f01990fdf737fc6a57558e6b51b1bbc51ff4ff5774453a58f"
+   }
+  ]
+ },
+ "1600x900-control-after-a-vs-after-final": {
+  "vs": "this build twice",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "720736b416e5adef9e218078432995267b72f4198067a463c85e6869586e07ea",
+    "sha256After": "720736b416e5adef9e218078432995267b72f4198067a463c85e6869586e07ea"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "c92c0f4c3c2a4818fb4ab205bce63e1db1c9dfba70400a266df5b50ddcb5de20",
+    "sha256After": "c92c0f4c3c2a4818fb4ab205bce63e1db1c9dfba70400a266df5b50ddcb5de20"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "cd9ab6cfc835b290a436da206d412cf6c38daac3c9f8b8dea53d6d44ac078f7f",
+    "sha256After": "cd9ab6cfc835b290a436da206d412cf6c38daac3c9f8b8dea53d6d44ac078f7f"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "176eff21587579da03af0cbe3dd567bc0471499e4f9cc8ba9021b45f6fe329be",
+    "sha256After": "176eff21587579da03af0cbe3dd567bc0471499e4f9cc8ba9021b45f6fe329be"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "081a30e76f693873a6efa627c39ec94df81e5e41c36297519d1008077dacb45b",
+    "sha256After": "081a30e76f693873a6efa627c39ec94df81e5e41c36297519d1008077dacb45b"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "f7d18a5da7349528e46c834e66e49b68cecf44cfcd24c7ec16fcbb063e3fa589",
+    "sha256After": "f7d18a5da7349528e46c834e66e49b68cecf44cfcd24c7ec16fcbb063e3fa589"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "0d60ec7a3488df9e5a7407a2f4b136214212a696102618a76fb6dd1772b01a7c",
+    "sha256After": "0d60ec7a3488df9e5a7407a2f4b136214212a696102618a76fb6dd1772b01a7c"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "d161f954e785f01e88446c94c0585293ad97add8d9dfd8f6032291257c14d186",
+    "sha256After": "d161f954e785f01e88446c94c0585293ad97add8d9dfd8f6032291257c14d186"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3c363d2d6a9bcfff618f0d60f36096fa70b0710a5135a28518af285e54c7b2cd",
+    "sha256After": "3c363d2d6a9bcfff618f0d60f36096fa70b0710a5135a28518af285e54c7b2cd"
+   },
+   {
+    "file": "seymour-flux-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e5542469309a3ce211d4e3d1ae28e495a723e8519a08ad215772603794155ae6",
+    "sha256After": "e5542469309a3ce211d4e3d1ae28e495a723e8519a08ad215772603794155ae6"
+   },
+   {
+    "file": "seymour-flux-01-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "837a4e377fbae4071ff6e10522a86aff9b5f92af756f43c3371488393dad95ad",
+    "sha256After": "837a4e377fbae4071ff6e10522a86aff9b5f92af756f43c3371488393dad95ad"
+   },
+   {
+    "file": "seymour-flux-01-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "b8ddc39d7cdb217c3443f63cd1c1fe878c177608709a4d74dec7978ba3015d3e",
+    "sha256After": "b8ddc39d7cdb217c3443f63cd1c1fe878c177608709a4d74dec7978ba3015d3e"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid-m0.png",
+    "status": "differs",
+    "pixels": 3059,
+    "maxChannelDelta": 236,
+    "bbox": [
+     315,
+     502,
+     660,
+     652
+    ],
+    "sha256Before": "6a4c54fec44375ff4ad042fe4ee858165ca77a209a4008fef6a8d9741f1b4cc0",
+    "sha256After": "49a5b23ffa5004e5a2ae9ff5f8052aad23be7ade3ece94df942d39d25051767f"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e6eb7ff746c432c7a30960cc97ff9dd97e68bc0a745a2be45ae08b3dddf3a51d",
+    "sha256After": "e6eb7ff746c432c7a30960cc97ff9dd97e68bc0a745a2be45ae08b3dddf3a51d"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "4f9f9f747676c8e601f675594be5d37b0361f4850f84327c60cc68e836f1106b",
+    "sha256After": "4f9f9f747676c8e601f675594be5d37b0361f4850f84327c60cc68e836f1106b"
+   },
+   {
+    "file": "seymour-flux-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "22d37cdcb5f14407e0e95b5c6371c5361e21c0c78b0b635a7464b2c4a427794d",
+    "sha256After": "22d37cdcb5f14407e0e95b5c6371c5361e21c0c78b0b635a7464b2c4a427794d"
+   },
+   {
+    "file": "seymour-flux-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "7b88dd71e9e4121b5d8f1e337c4f32038b0a7cfc05364d6dab17c2290cafd758",
+    "sha256After": "7b88dd71e9e4121b5d8f1e337c4f32038b0a7cfc05364d6dab17c2290cafd758"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3ead75cfd6081fc6208b296bc38e6dfd929382437805394a27db150aad168311",
+    "sha256After": "3ead75cfd6081fc6208b296bc38e6dfd929382437805394a27db150aad168311"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "51c179a748a9d49f01990fdf737fc6a57558e6b51b1bbc51ff4ff5774453a58f",
+    "sha256After": "51c179a748a9d49f01990fdf737fc6a57558e6b51b1bbc51ff4ff5774453a58f"
+   }
+  ]
+ },
+ "600x900": {
+  "vs": "base vs build",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "59b10e27d4c409cc270c702fcd0b833973b865192077a6aae886f0b8fa69c19a",
+    "sha256After": "59b10e27d4c409cc270c702fcd0b833973b865192077a6aae886f0b8fa69c19a"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "598e7b11f097db0f8e60ae40ddf6ea233110c31a6dc5b51c7ff7009b9b9db952",
+    "sha256After": "598e7b11f097db0f8e60ae40ddf6ea233110c31a6dc5b51c7ff7009b9b9db952"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "24756ae4a6acdfa01790f05cd9d7ee905e1f7d4c6db4a78f7fa34d05d5552b97",
+    "sha256After": "24756ae4a6acdfa01790f05cd9d7ee905e1f7d4c6db4a78f7fa34d05d5552b97"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "74553bb1deefff7a0b841115ed4cdea362b9d79968752bfae07c8acd7bb142ff",
+    "sha256After": "74553bb1deefff7a0b841115ed4cdea362b9d79968752bfae07c8acd7bb142ff"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "d43fe41f72284d515f6653702881997c81b6f679b67ecbfd4ddb92c2333f1049",
+    "sha256After": "d43fe41f72284d515f6653702881997c81b6f679b67ecbfd4ddb92c2333f1049"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "506637fc14ac0e800bac7d21772386e456e2233965091a980a8d828de44cc27c",
+    "sha256After": "506637fc14ac0e800bac7d21772386e456e2233965091a980a8d828de44cc27c"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "c5513ae0188ae6e36cd52ea3c5145d2947e015a7064a23ec741ee6f5b848e9a5",
+    "sha256After": "c5513ae0188ae6e36cd52ea3c5145d2947e015a7064a23ec741ee6f5b848e9a5"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "80996c23db600714c76ff06dab3d8d2ab7cfc02984486c6c0523488816ead916",
+    "sha256After": "80996c23db600714c76ff06dab3d8d2ab7cfc02984486c6c0523488816ead916"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "663dc154d14b6188cf87bd130ad5f61c11bf8adf79ba0c75fca8b1a442a8d2c4",
+    "sha256After": "663dc154d14b6188cf87bd130ad5f61c11bf8adf79ba0c75fca8b1a442a8d2c4"
+   },
+   {
+    "file": "seymour-flux-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "23de7a4cb3d501ee35db0f9c8280d91bafbeea04bd298a0115c0e94f7d46b56b",
+    "sha256After": "23de7a4cb3d501ee35db0f9c8280d91bafbeea04bd298a0115c0e94f7d46b56b"
+   },
+   {
+    "file": "seymour-flux-01-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "4a1853135312584eac20b0abb30bb4ccf45818ca17e53d5f67f4bd35586f9d25",
+    "sha256After": "4a1853135312584eac20b0abb30bb4ccf45818ca17e53d5f67f4bd35586f9d25"
+   },
+   {
+    "file": "seymour-flux-01-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "10db996f76de7e5c2dd6474f55b1fa9b8261e225ea337aca3ef7686c926ce52c",
+    "sha256After": "10db996f76de7e5c2dd6474f55b1fa9b8261e225ea337aca3ef7686c926ce52c"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid-m0.png",
+    "status": "differs",
+    "pixels": 334,
+    "maxChannelDelta": 29,
+    "bbox": [
+     117,
+     469,
+     247,
+     524
+    ],
+    "sha256Before": "ccb67e8e5e542c9b53f869abf22bcf98583e1a56d2f9cf27bb18d13fafb62ecb",
+    "sha256After": "c8fb2fd83c4a15ce7375c72364132416cbd332bc273f4e8bc0b921013d9dde18"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e665e3a3d3d2c34effb4026fed9a9d5f7d5300bbdd370ee135d5a946110c0566",
+    "sha256After": "e665e3a3d3d2c34effb4026fed9a9d5f7d5300bbdd370ee135d5a946110c0566"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "6b590047d890fcee92b91215bfdd669be2ecd2f7057d99e8677380208d5cb4e0",
+    "sha256After": "6b590047d890fcee92b91215bfdd669be2ecd2f7057d99e8677380208d5cb4e0"
+   },
+   {
+    "file": "seymour-flux-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "17de8dd5c6d5a5cce3a93a99874ec9b3e9e0e850d456851dc1630534a6f279c4",
+    "sha256After": "17de8dd5c6d5a5cce3a93a99874ec9b3e9e0e850d456851dc1630534a6f279c4"
+   },
+   {
+    "file": "seymour-flux-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "850a265e3a4cc2f6f75eacf38d55842d471ff813e2b8a9b77c0f4b4d6ad7c525",
+    "sha256After": "850a265e3a4cc2f6f75eacf38d55842d471ff813e2b8a9b77c0f4b4d6ad7c525"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3606e6e723cf637ca34b334ff79967ccc473170dfb652569b5189a49ccdb0444",
+    "sha256After": "3606e6e723cf637ca34b334ff79967ccc473170dfb652569b5189a49ccdb0444"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "0a0c53bd688439c7e76b07b03386cf60f9ad09b2c033cf8f2b49992de9b5cf5e",
+    "sha256After": "0a0c53bd688439c7e76b07b03386cf60f9ad09b2c033cf8f2b49992de9b5cf5e"
+   }
+  ]
+ },
+ "1280x720": {
+  "vs": "base vs build",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "ae48e7fc407e30f2639b193709ac623f8ec7cae45db1909306b76324fdbc905c",
+    "sha256After": "ae48e7fc407e30f2639b193709ac623f8ec7cae45db1909306b76324fdbc905c"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "addd03f92289ae873d964207730cf37f5d3d517787c9b71519cc2e4bd5f5f285",
+    "sha256After": "addd03f92289ae873d964207730cf37f5d3d517787c9b71519cc2e4bd5f5f285"
+   },
+   {
+    "file": "ffx2-bahamut-01-dresspheres-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "5e8d550271ea3202b367e81e36169cd2fd64f95ae399723e4a0fe35d13e2bbdf",
+    "sha256After": "5e8d550271ea3202b367e81e36169cd2fd64f95ae399723e4a0fe35d13e2bbdf"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "a5a689c780a2cffeaf290884f436c4b6787e0e0641490efae567f382215133dd",
+    "sha256After": "a5a689c780a2cffeaf290884f436c4b6787e0e0641490efae567f382215133dd"
+   },
+   {
+    "file": "ffx2-bahamut-02-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "5e7b8675b9884cf98cc311e4a43bf2e571761504bd1f19bef483e94c2a19cd90",
+    "sha256After": "5e7b8675b9884cf98cc311e4a43bf2e571761504bd1f19bef483e94c2a19cd90"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "7d3d04da20a8475c06d099932d99b5bc196874886cee2f2b39690635c622f009",
+    "sha256After": "7d3d04da20a8475c06d099932d99b5bc196874886cee2f2b39690635c622f009"
+   },
+   {
+    "file": "ffx2-bahamut-03-accessories-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "c89993e2e5806400d6092b0312ee667a0bb1d888786ab87f4ff5fac3eab51adc",
+    "sha256After": "c89993e2e5806400d6092b0312ee667a0bb1d888786ab87f4ff5fac3eab51adc"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "9bd9c2bf1933046256cb478fd30bd09efa2e3b3008c2f55604f170cce4261466",
+    "sha256After": "9bd9c2bf1933046256cb478fd30bd09efa2e3b3008c2f55604f170cce4261466"
+   },
+   {
+    "file": "ffx2-bahamut-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "b7a39f52163767bb13c30b76562b759eeb61b522926707766c29abe3b51c61d1",
+    "sha256After": "b7a39f52163767bb13c30b76562b759eeb61b522926707766c29abe3b51c61d1"
+   },
+   {
+    "file": "seymour-flux-00-chapter-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "e47eb52d7f2c0fb6c3e985c68a78ccb31cd0a0ce6d7f13610a6f4d183dafdf3a",
+    "sha256After": "e47eb52d7f2c0fb6c3e985c68a78ccb31cd0a0ce6d7f13610a6f4d183dafdf3a"
+   },
+   {
+    "file": "seymour-flux-01-stats-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "b71bb4cb822e8df042e5c63c4293215c5eed4bbc92f09fd4fb7c479f9fd76377",
+    "sha256After": "b71bb4cb822e8df042e5c63c4293215c5eed4bbc92f09fd4fb7c479f9fd76377"
+   },
+   {
+    "file": "seymour-flux-01-stats-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "4796ef24d7d4aaebc5efe0a5e88e200fc037e35a7cc1d96779fa5067cade802b",
+    "sha256After": "4796ef24d7d4aaebc5efe0a5e88e200fc037e35a7cc1d96779fa5067cade802b"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid-m0.png",
+    "status": "differs",
+    "pixels": 2443,
+    "maxChannelDelta": 236,
+    "bbox": [
+     252,
+     402,
+     527,
+     521
+    ],
+    "sha256Before": "444419b905f94af3df1bdaa67e5226b0f86a13b37460062c4ebd5cc44cf30a32",
+    "sha256After": "dbf81b60e74a138f0a03a38d35625623291c23394d8b941f37e92650faa0fb44"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "af00008197a5f215c26712b790abac2cd78f9b79ba63374f79f99e3b15a7e60f",
+    "sha256After": "af00008197a5f215c26712b790abac2cd78f9b79ba63374f79f99e3b15a7e60f"
+   },
+   {
+    "file": "seymour-flux-03-equipment-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "1fe465e9de88396c73ae0ee381499d3497b3079d3b40b57febf3ae7311dd36a7",
+    "sha256After": "1fe465e9de88396c73ae0ee381499d3497b3079d3b40b57febf3ae7311dd36a7"
+   },
+   {
+    "file": "seymour-flux-04-items-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "9e92aced726c75b45a09cc5d84988136ff8b8a6194bb4c01990b0c153b923f4c",
+    "sha256After": "9e92aced726c75b45a09cc5d84988136ff8b8a6194bb4c01990b0c153b923f4c"
+   },
+   {
+    "file": "seymour-flux-04-items-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "3ae2848bebd98bce5673cae11713937f68d825e859f0fda54b0206dd429d1ef3",
+    "sha256After": "3ae2848bebd98bce5673cae11713937f68d825e859f0fda54b0206dd429d1ef3"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m0.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "8f81a840bdf76b60bb517b321c3cda22388f3ad2f7b039c9f3a91e21ca836473",
+    "sha256After": "8f81a840bdf76b60bb517b321c3cda22388f3ad2f7b039c9f3a91e21ca836473"
+   },
+   {
+    "file": "seymour-flux-05-overdrive-m3.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "994f6ae822e734e046aac3193e2843df7c35f626cc3d1d003f809ff7e7020f21",
+    "sha256After": "994f6ae822e734e046aac3193e2843df7c35f626cc3d1d003f809ff7e7020f21"
+   }
+  ]
+ },
+ "phone-390x844-chapter-and-sphere-grid": {
+  "vs": "origin/main vs build, the two tabs that keep their own phone pages",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "71b05833d20c25fbf0e8907484f974a80848dae08b3f14ec7b76d055e913f3e3",
+    "sha256After": "71b05833d20c25fbf0e8907484f974a80848dae08b3f14ec7b76d055e913f3e3"
+   },
+   {
+    "file": "seymour-flux-00-chapter.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "6e61b06b0ac913c88fd38ead7a197b92b28fe362bbb5ef7a4054ffcdddd4d9b9",
+    "sha256After": "6e61b06b0ac913c88fd38ead7a197b92b28fe362bbb5ef7a4054ffcdddd4d9b9"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid.png",
+    "status": "differs",
+    "pixels": 1441,
+    "maxChannelDelta": 241,
+    "bbox": [
+     30,
+     333,
+     278,
+     441
+    ],
+    "sha256Before": "d17edc333d00b9116e662fccc2baaa55e3233cd00cce87e033b338a801794a5b",
+    "sha256After": "ec0c3e3f79c9a46d9a9114c8330ad8ec1023efbfd43d69208d85f1245015075e"
+   }
+  ]
+ },
+ "phone-430x932-chapter-and-sphere-grid": {
+  "vs": "origin/main vs build, the two tabs that keep their own phone pages",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "d74789cbdd174f0ec04e36683b41a80b3bcbb4fc7621250bfe249414e7e33d77",
+    "sha256After": "d74789cbdd174f0ec04e36683b41a80b3bcbb4fc7621250bfe249414e7e33d77"
+   },
+   {
+    "file": "seymour-flux-00-chapter.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "964241fa67bc06014cfa2302b1f76ae0f4c6179198f1deed9e4dd0ac3b8eb4c8",
+    "sha256After": "964241fa67bc06014cfa2302b1f76ae0f4c6179198f1deed9e4dd0ac3b8eb4c8"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid.png",
+    "status": "differs",
+    "pixels": 1364,
+    "maxChannelDelta": 241,
+    "bbox": [
+     30,
+     331,
+     278,
+     438
+    ],
+    "sha256Before": "999d5aff2eb1b2c776f1d9413487861cf80c2892a42d67c908df226f870b9a66",
+    "sha256After": "580af12061bfe5f2d7882b9b2abc1b4a0d3f1493c349d3b2f9805d398fddd3bb"
+   }
+  ]
+ },
+ "phone-390x844-control-origin-main-twice": {
+  "vs": "origin/main against itself (a second capture), the same two tabs",
+  "rows": [
+   {
+    "file": "ffx2-bahamut-00-chapter.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "71b05833d20c25fbf0e8907484f974a80848dae08b3f14ec7b76d055e913f3e3",
+    "sha256After": "71b05833d20c25fbf0e8907484f974a80848dae08b3f14ec7b76d055e913f3e3"
+   },
+   {
+    "file": "seymour-flux-00-chapter.png",
+    "status": "identical",
+    "pixels": 0,
+    "maxChannelDelta": 0,
+    "bbox": null,
+    "sha256Before": "6e61b06b0ac913c88fd38ead7a197b92b28fe362bbb5ef7a4054ffcdddd4d9b9",
+    "sha256After": "6e61b06b0ac913c88fd38ead7a197b92b28fe362bbb5ef7a4054ffcdddd4d9b9"
+   },
+   {
+    "file": "seymour-flux-02-sphere-grid.png",
+    "status": "differs",
+    "pixels": 1668,
+    "maxChannelDelta": 241,
+    "bbox": [
+     30,
+     333,
+     278,
+     441
+    ],
+    "sha256Before": "d17edc333d00b9116e662fccc2baaa55e3233cd00cce87e033b338a801794a5b",
+    "sha256After": "beb7b5213f7a81e86dc33830e96e59ba3178d7f3b6869a14e36787c0664fea09"
+   }
+  ]
+ }
+}
