@@ -61,6 +61,15 @@
      fallback, which is why the FFX-2 card's eyebrow came out gold. This value
      IS that fallback, so no FFX screen changes by a pixel. */
   --ig-accent-deep: #a67c16;
+  /* Small accent text on ivory that has to read at 4.5:1 (PREP-A's "+10% dmg" notes and bag counts; Bailey, 2026-10-13, option B
+     of the phone Party Prep shade sheet). A deeper brown-gold than --ig-accent-deep, which reads 3.4:1 on the ivory: this one
+     reads 5.41:1 on #f4f1e8. .ig--ffx2 repoints it to the raspberry (6.07:1). */
+  --ig-accent-text-on-paper: #7f5c0a;
+  /* A count that rose or fell, in type on a dark ink plate (PREP-A's dressphere up and down counts; the same two shades in both
+     games, so .ig--ffx2 leaves them alone): pale green 10.75:1 and pale red 8.21:1 on the plate. A triangle always comes first,
+     so direction never depends on the colour alone. */
+  --ig-gain-on-ink: #7fd09a;
+  --ig-loss-on-ink: #f08a8a;
 
   /* Type stacks — spec "Type" table. Cormorant Garamond's face declaration
      lives in src/ui/common/fonts.css (--font-serif there) — already loaded
@@ -105,6 +114,7 @@
      eyebrow is accent-on-paper type; inventing a darker pink would put a
      colour on an approved screen that Bailey has not seen (hard rule 9). */
   --ig-accent-deep: var(--ig-accent-on-paper);
+  --ig-accent-text-on-paper: #9c3267; /* the raspberry for small pink text on ivory, 6.07:1 */
   --ig-skew: 12deg;
   --ig-skew-inverse: -12deg;
   --ig-edge: 1;
