@@ -9,15 +9,19 @@
  * hidden. Every desktop size is untouched by construction, and so are the CHAPTER and SPHERE GRID tabs (they never get
  * `data-phone='page'`).
  *
- * Colours are the Ink & Gold tokens (`--ig-*`, so FFX is gold and FFX-2 pink with no rule of its own) wherever the page this
- * is built to uses one. It uses four shades the tokens lack, and this sheet takes them from the page rather than from the
- * nearest token (they are the page's own `--acc-text`, `--good` and `--bad`; docs/handoff/r43-prepphone.md lists them):
- *   - small accent text on ivory (the "+10% dmg" notes, the bag's counts): #7f5c0a gold and #9c3267 pink, which the page
- *     deepened to 5.4:1 on the ivory because the approved on-paper accent is 3.4:1 at this size;
- *   - the up and down counts on a dark plate: #7fd09a and #f08a8a. The deltas inside an ivory body keep the two literals
- *     the shipped FFX-2 Stats tab already uses (#2f7a46, #a5323a).
- * Two more are a step off the page, on purpose: the section plate is `--ig-ink-panel` (0.84, the page drew 0.90) and the
- * stuck bar's ground is #04060b, which the CHAPTER page already uses (the page drew #05070c).
+ * Colours are the Ink & Gold tokens (`--ig-*`, so FFX is gold and FFX-2 pink with no rule of its own): Bailey's PREP-A pick
+ * approves the layout only, so a shade the page drew that the tokens lack is mapped to the nearest token, and each of those is
+ * listed in docs/handoff/r43-prepphone.md ("Where the build differs"):
+ *   - small accent text on ivory (the "+10% dmg" notes, the bag's counts): the page drew #7f5c0a gold and #9c3267 pink, deepened
+ *     to 5.4:1 on the ivory; this is `--ig-accent-deep` (#a67c16 gold, #b8437e pink), which reads 3.4:1 (gold) on the ivory,
+ *     the same as the approved on-paper accent the rest of the app prints small labels in. The page's shades are the one-line
+ *     switch on `--prph-acc-text` below;
+ *   - the up and down counts on a dark plate: the page drew pale green and red (#7fd09a, #f08a8a); the tokens have neither,
+ *     so the counts are ivory and the arrows carry the direction (`--prph-good`, `--prph-bad`);
+ *   - the deltas inside an ivory body keep the two literals the shipped FFX-2 Stats tab already prints them in (#2f7a46,
+ *     #a5323a), which no token has either;
+ *   - the section plate is `--ig-ink-panel` (0.84, the page drew 0.90) and the stuck bar's ground is #04060b, which the CHAPTER
+ *     page already uses (the page drew #05070c).
  *
  * Nothing a player reads is under 14 CSS px (CHK-003), and every row a finger can press is at least 44 px tall.
  */
@@ -37,16 +41,13 @@
     --prph-rule: color-mix(in srgb, var(--ig-ink) 14%, transparent);
     --prph-soft: color-mix(in srgb, var(--ig-ink) 66%, transparent);
     --prph-dim: rgba(244, 241, 232, 0.66);
-    /* Small accent text on ivory, deepened for contrast (5.4:1; the on-paper accent is 3.4:1 at 14 to 20 px). */
-    --prph-acc-text: #7f5c0a;
-    /* Up and down on an ivory body, then on a dark plate. */
+    /* Small accent text on ivory: the deep accent token (gold; pink under .ig--ffx2). The page drew #7f5c0a and #9c3267 (5.4:1). */
+    --prph-acc-text: var(--ig-accent-deep);
+    /* Up and down on an ivory body (the shipped FFX-2 Stats literals), then on a dark plate (ivory: the tokens have no green or red). */
     --prph-up: #2f7a46;
     --prph-down: #a5323a;
-    --prph-good: #7fd09a;
-    --prph-bad: #f08a8a;
-  }
-  .prep[data-phone='page'].ig--ffx2 .prph {
-    --prph-acc-text: #9c3267;
+    --prph-good: var(--ig-paper);
+    --prph-bad: var(--ig-paper);
   }
 
   /* ----------------------------------------------------------- the name line */
