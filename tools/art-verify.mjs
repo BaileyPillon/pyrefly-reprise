@@ -18,6 +18,11 @@
  * load a 28-byte WebP, so two fully transparent layers left Paine's living pause portrait static there (the re-check's B3). Whether a
  * file LOADS is proved in the engines themselves by `tools/art-browser-load.mjs`.
  *
+ * **Strip thumbnails (r44-thumbs).** `verifyShippedArt` also runs `tools/art-thumb-verify.mjs`: the small copies of the paintings the chapter
+ * board's strips paint must decode to their master resized again by the rule, pixel for pixel, and the build must hold exactly the ones its
+ * record lists, for every master of `src/data/art/strip-art.json`. The audit below also reads them: every `*.thumb.webp|png` name the
+ * bundle or the record carries must be a shipped file, and the bundle and the record must name the same ones.
+ *
  * **auditArtReferences: no reference to a file that is not there.** The art is reached by name from code, styles, pages and
  * data. After the derivation the PNG names of the derived files are no longer files, so the audit reads every shipped text
  * file and sorts each `art/<...>.png` or `art/<...>.webp` it names:
@@ -41,6 +46,9 @@ import { extname, join, relative, sep } from 'node:path';
 
 import { DERIVED_REPORT, MIN_WEBP_BYTES, listMasterPngs, pixelsOf, pool, webpName } from './art-derive-lib.mjs';
 import { COLOUR_CHUNKS, decoderIndependent, pngChunkTypes } from './art-image-facts.mjs';
+import { verifyShippedThumbs } from './art-thumb-verify.mjs';
+import { STRIP_LIST } from './art-thumbs.mjs';
+import { THUMB_FILE } from './art-thumb-apply.mjs';
 
 const walk = (root) => {
   const out = [];
@@ -57,8 +65,8 @@ const walk = (root) => {
 
 const samePixels = (a, b) => a.hash === b.hash && a.width === b.width && a.height === b.height;
 
-/** The pixel-identity gate over a build output; see the file header. */
-export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = true } = {}) {
+/** The pixel-identity gate over a build output; see the file header. `listFile` is the strip list the thumbnails are checked against. */
+export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = true, listFile = join(publicDir, '..', STRIP_LIST) } = {}) {
   const t0 = Date.now();
   const problems = [];
   const masters = listMasterPngs(publicDir);
@@ -117,8 +125,10 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = t
   if (!record && n.webp > 0) problems.push(`${DERIVED_REPORT} is missing from a build that ships ${n.webp} derived WebP file(s)`);
   const names = new Set(masters.map((m) => m.rel));
   for (const f of recorded.keys()) if (!names.has(f)) problems.push(`${f}: art/derived.json lists a master that is not in public/art`);
+  const thumbs = await verifyShippedThumbs({ distDir, publicDir, listFile, jobs });
+  problems.push(...thumbs.problems);
   problems.sort();
-  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, problems, ms: Date.now() - t0 };
+  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, thumbs: { checked: thumbs.checked, webp: thumbs.webp, png: thumbs.png, none: thumbs.none, enabled: thumbs.enabled }, problems, ms: Date.now() - t0 };
 }
 
 const ART_NAME = String.raw`(?<![\w-])art\/[A-Za-z0-9_@.\-/]+?\.(?:png|webp)(?![\w])`;
@@ -146,9 +156,14 @@ function scan(distDir) {
   const have = new Set(files.map((f) => f.rel));
   const record = existsSync(join(distDir, DERIVED_REPORT)) ? JSON.parse(readFileSync(join(distDir, DERIVED_REPORT), 'utf8')) : null;
   const derived = new Set((record?.files ?? []).filter((f) => f.kind === 'webp').map((f) => f.path));
+  // The strip thumbnails the record lists (r44-thumbs): each must be a shipped file, and the bundle must name the same ones.
+  const thumbRecord = new Set((record?.thumbs?.files ?? []).filter((f) => f.thumb).map((f) => f.thumb));
+  const thumbBundle = new Set();
   const strict = [];
+  for (const name of thumbRecord) if (!have.has(name)) strict.push(`${DERIVED_REPORT}: lists the strip thumbnail ${name}, which is not in the build`);
   const dangling = new Set();
-  const stats = { files: 0, strictNames: 0, jsNames: 0, jsShipped: 0, jsDerived: 0, provenanceMentions: 0, dynamicPieces: 0 };
+  const stats = { files: 0, strictNames: 0, jsNames: 0, jsShipped: 0, jsDerived: 0, thumbRecorded: thumbRecord.size, thumbNames: 0, provenanceMentions: 0, dynamicPieces: 0 };
+  let bundles = 0;
   for (const f of files) {
     const ext = extname(f.rel).toLowerCase();
     if (!TEXT.has(ext) || f.rel === DERIVED_REPORT) continue;
@@ -173,8 +188,17 @@ function scan(distDir) {
     }
     const names = artNamesIn(text);
     if (ext === '.js' || ext === '.mjs') {
+      bundles++;
       stats.dynamicPieces += dynamicPieces(text);
       for (const name of names) {
+        // A strip thumbnail is named by the map the build inserts (`__PYREFLY_ART_THUMBS__`); it is never "dangling", it is shipped or it is wrong.
+        if (THUMB_FILE.test(name)) {
+          stats.thumbNames++;
+          thumbBundle.add(name);
+          if (!have.has(name)) strict.push(`${f.rel}: names the strip thumbnail ${name}, which is not in the build`);
+          else if (!thumbRecord.has(name)) strict.push(`${f.rel}: names the strip thumbnail ${name}, which ${DERIVED_REPORT} does not list`);
+          continue;
+        }
         stats.jsNames++;
         if (have.has(name)) stats.jsShipped++;
         else if (derived.has(name)) stats.jsDerived++;
@@ -187,6 +211,8 @@ function scan(distDir) {
       }
     }
   }
+  // The other direction: a thumbnail the record ships and no bundle names is a file nothing will ever ask for. Only judged where a bundle exists.
+  if (bundles > 0) for (const name of thumbRecord) if (!thumbBundle.has(name)) strict.push(`${DERIVED_REPORT}: lists the strip thumbnail ${name}, and no bundle names it`);
   return { strict, dangling: [...dangling].sort(), stats };
 }
 
@@ -207,6 +233,7 @@ export function formatAudit(r) {
   const lines = [
     `art-derive audit: ${r.ok ? 'PASS' : 'FAIL'}: ${s.files} text files read; ${s.strictNames} art name(s) in pages, styles and data, each a shipped file: ${r.strict.length === 0 ? 'yes' : `NO (${r.strict.length})`}`,
     `  bundle: ${s.jsNames} literal art name(s): ${s.jsShipped} a shipped file, ${s.jsDerived} a derived master (mapped at run time), ${r.dangling.length} dangling${r.baselineDangling ? ` (${r.baselineDangling.length} in the baseline build, ${r.newDangling.length} new)` : ''}; ${s.dynamicPieces} name(s) built at run time (covered by the real-play audit); ${s.provenanceMentions} provenance mention(s) in JSON, not judged`,
+    `  strip thumbnails: ${s.thumbRecorded} in the record, ${s.thumbNames} name(s) in the bundle; each a shipped file and each in both: ${r.strict.some((p) => /strip thumbnail/.test(p)) ? 'NO' : 'yes'}`,
   ];
   for (const p of r.problems) lines.push(`  PROBLEM ${p}`);
   return lines.join('\n');

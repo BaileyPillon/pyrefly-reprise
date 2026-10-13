@@ -13,6 +13,8 @@ import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts'
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
+import { platesAhead } from './frontendWarm.ts';
+import { warmImages } from '../imageWarm.ts';
 import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
 import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
 import { EXPERIMENT_DOOR_CHAPTER, EXPERIMENT_DOOR_WORD } from './frontend/experimentDoor.ts'; import { MUSHROOM_DOOR_CHAPTER, MUSHROOM_DOOR_WORD } from './frontend/mushroomDoor.ts'; // the typed-word doors of the Experiment and Sinspawn Gui
@@ -386,6 +388,9 @@ export class ChapterSelectScreen extends Screen {
     // r29 PR-0221: the plate, the faces and the wash at urgent, up decoded; the card left behind is demoted.
     const parts = [board, aside].filter((e): e is HTMLElement => e instanceof HTMLElement);
     this.showHero(parts, wash instanceof HTMLElement ? wash : null, washUrl);
+    // r44-thumbs: the strips are small copies, so the plates of the cards a press or two from the cursor are fetched ahead of it, in the
+    // idle lane (the window slides with the cursor); every other card's plate loads when it is shown.
+    void warmImages(platesAhead(this.tiles, this.selected), 'idle');
   }
 }
 

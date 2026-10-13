@@ -25,6 +25,11 @@ import { preloadAsked } from '../battlePreload.ts';
 
 /** The attribute a deferred strip image carries instead of `src`. */
 export const LAZY_SRC = 'data-lazy-src';
+/**
+ * The full picture behind a strip's small copy (r44-thumbs): carried by a rail image whose `data-lazy-src` is a thumbnail, and used only
+ * if the thumbnail cannot be loaded, so a strip is never left blank for a small copy that failed (`chapterPlates.ts`).
+ */
+export const LAZY_FULL = 'data-lazy-full';
 
 /** The card index an image belongs to (`data-action="fe-card-N"`), or -1. */
 function cardIndexOf(img: Element): number {
@@ -35,6 +40,7 @@ function cardIndexOf(img: Element): number {
 
 function put(img: HTMLImageElement, url: string): void {
   img.removeAttribute(LAZY_SRC);
+  img.removeAttribute(LAZY_FULL);
   img.setAttribute('src', url);
 }
 
@@ -107,9 +113,25 @@ export function mountLazyPlates(root: ParentNode, selected: number): string[] {
       put(img, url);
       continue;
     }
+    const full = img.getAttribute(LAZY_FULL);
     void warmImage(url, 'idle').then((ok) => {
       if (!img.hasAttribute(LAZY_SRC)) return;
-      if (ok || manifestKnowsAssetNow(url) !== false) put(img, url);
+      if (ok) {
+        put(img, url);
+        return;
+      }
+      // The small copy did not load (a 404, a file that will not decode): the strip falls back to the full picture rather than going blank.
+      if (full && full !== url) {
+        img.setAttribute(LAZY_SRC, full);
+        img.removeAttribute(LAZY_FULL);
+        void warmImage(full, 'idle').then((fine) => {
+          if (!img.hasAttribute(LAZY_SRC)) return;
+          if (fine || manifestKnowsAssetNow(full) !== false) put(img, full);
+          else img.remove();
+        });
+        return;
+      }
+      if (manifestKnowsAssetNow(url) !== false) put(img, url);
       else img.remove();
     });
   }
