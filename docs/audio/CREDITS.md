@@ -143,6 +143,120 @@ and eleven Wikimedia Commons files. Not used at all: Sonniss GDC bundles, Freeso
 need an account), BBC Sound Effects (its licence excludes this use). No retail game audio was used as
 a source or as a reference.
 
+### SFX parity originals (`public/audio/sfx/parity-*.mp3`, generated 2026-10-13, installed on branch `r45-audio`)
+
+Bailey, 2026-10-10 23:05 EDT: "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important."; 2026-10-12: "I'll go with all of your recommendations" (driver items 47k to 47n, 52d, 52i to 52n and 58c). The driver installed the loose set of the generation run (the 7 picks that passed every check and the 11 that came within 1.5 times the tolerance), 18 cues in 6 packs. Each is an original made with ElevenLabs Sound Effects (model `eleven_text_to_sound_v2`, text only: the request body is `text`, `duration_seconds`, `prompt_influence` and `model_id`), mastered by our own tools (`tools/audio/sfx-parity-sprite.py`, `sfx-parity-measure.mjs`). No retail audio was read, copied, sampled, kept or fed to the generator; each prompt passed the project lint (`tools/audio/sfx-parity-lint.mjs`: no game, place, character, composer or model named). Made on the project's ElevenLabs account (Creator tier). Prompts, raw-take hashes and mastered-file hashes are also in `docs/audio/sfx-parity-record.json`, with the 295 takes that measurement turned down.
+
+Packs: `ffx-core` (q3, 329,971 bytes, 8 cues); `ffx2-core` (q3, 184,746 bytes, 6 cues); `ffx-lady` (q5, 111,935 bytes, 1 cue); `ffx2-bahamut` (q5, 20,096 bytes, 1 cue); `ffx2-machina` (q5, 13,852 bytes, 1 cue); `ffx2-shuyin` (q5, 29,881 bytes, 1 cue).
+
+- **`ffx-core` / `cursor-move`** (row `ffx.ui.tick`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `da5ae23cd4a3194a7c9866a58d3da2e793976068e0d81721f5e1f19b67fe45bf`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx-core` / `swing-katana`** (row `ffx.weapon.katana.swing`, near, take `ffx.weapon.katana.swing.v1`): the raw take SHA-256 `503a07d7fc27fe2abe2713e908effb2f0675c0fd5dd5db188cc94cd45a5377cc`, the mastered file `1f373ab427b50aee9473676f247bec9d8bf5b4f60f10d3e698e1aded06ef7b39`. The prompt, as sent (`duration_seconds` 0.6, `prompt_influence` 0.6):
+
+```
+A fast sharp katana draw-cut, a thin high-speed whoosh with a bright blade hiss and some low body, medium attack. About half a second. Close-miked, realistic sound design, no music, no voice.
+```
+
+- **`ffx-core` / `fire-2`** (row `ffx.fire.t2`, strict, take `ffx.fire.t2.v1`): the raw take SHA-256 `ec5181410fde75585abc37fef6e4eb0098ab96fb18c26c099da1a9a3a3c2569e`, the mastered file `ab306d02816867142a263d5ed9b5ce0a3628f0bbde87e0f86b3d4877593292c1`. The prompt, as sent (`duration_seconds` 2.3, `prompt_influence` 0.5):
+
+```
+A stronger fire spell, a deep roaring blaze that swells quickly with a thick rolling rumble, crackling embers and a long fading roar. About two seconds, low-heavy. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx-core` / `water`** (row `ffx.water.t1`, strict, take `ffx.water.t1.v4`): the raw take SHA-256 `e579234f096679ec9c8f19270004b7661c0005d1047ecf749fe70ca13d4539b7`, the mastered file `40be5f47b7a2ca13c7e6d820beeaa00158a2c9683e1263437796a02932415e36`. The prompt, as sent (`duration_seconds` 2.2, `prompt_influence` 0.5):
+
+```
+A water spell, a rushing surge that swells and crashes with a bubbly splashing body and a soft spray, ending in trickling droplets. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: brighter and airier, more shimmer.
+```
+
+- **`ffx-core` / `shell`** (row `ffx.shell`, near, take `ffx.shell.v1`): the raw take SHA-256 `88680ada5a9d01eeef2f721be208c55ca6977bcb6d983f1bbd17ae8ca7772010`, the mastered file `c43b76c1c07f1a01b3d2b7d382a6804751749b90ca3452ee02f1ead26616ff8d`. The prompt, as sent (`duration_seconds` 2, `prompt_influence` 0.5):
+
+```
+A veil of light magic, a bright high icy-silver shimmer curtain with airy sparkling hiss and a glass tinkle, descending softly. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx-core` / `buff-generic`** (row `ffx.buff`, near, take `ffx.buff.v2`): the raw take SHA-256 `0cf807b45fa0faf6b274c1865714bb611d3b3de2db5999a1266b9d0a20301170`, the mastered file `1027957d17a0d0ffb4631846c34c0afea48dc2aadd94c48df98b3c2cf75a59b9`. The prompt, as sent (`duration_seconds` 2.1, `prompt_influence` 0.5):
+
+```
+A gentle blessing magic, a bright airy upward shimmer with fine glittering sparkles. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.
+```
+
+- **`ffx-core` / `darkness`** (row `ffx.darkness`, strict, take `ffx.darkness.v1`): the raw take SHA-256 `fbeae34407d604ee8e27bc4c5e9f911a1c54463b98b6a578bdd76383b6f79878`, the mastered file `f2ca63d02f24b984d8c88bf262b2c8c8bc802c1ada604e34be1a674a29e80ec5`. The prompt, as sent (`duration_seconds` 1.3, `prompt_influence` 0.5):
+
+```
+A blinding dark magic, a deep low swell like a heavy curtain falling, thick and dim, with a short sudden close. About one second. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx-lady` / `lady-metamorph`** (row `ffx.boss.lady.metamorph`, near, take `ffx.boss.lady.metamorph.v1`): the raw take SHA-256 `b71edbc7f1e663c5046d555f0645b5a15fe7588a2fe734b1fdf92c77fdb8b2ac`, the mastered file `6041afd361b1d6a7224027b2f826008898a1d0cc5e89a8e1e113e8958213746f`. The prompt, as sent (`duration_seconds` 13.7, `prompt_influence` 0.4):
+
+```
+A monstrous transformation, a very long slow rising swell of grinding, stretching and warping tones that finally erupts and settles. About twelve seconds. Cinematic sound design, no music, no voice.
+```
+
+- **`ffx-core` / `meteor`** (row `ffx.dark.meteor`, strict, take `ffx.dark.meteor.v1`): the raw take SHA-256 `7db3066a1159963bb46d1083b343830b50f80e84945e328ecbd3ab9fd5781040`, the mastered file `208839e251cdd1293ae0cc5af69f0e9cfce03dd6fe03fef45efff61234c67dc3`. The prompt, as sent (`duration_seconds` 7.2, `prompt_influence` 0.4):
+
+```
+A meteor crashing down, a long rising whistle and rumble of an incoming rock erupting into a colossal impact and rolling debris. About six seconds. Cinematic sound design, no music, no voice.
+```
+
+- **`ffx2-core` / `hit-dagger`** (row `ffx2.lb.thief.hit`, near, take `ffx2.lb.thief.hit.v2`): the raw take SHA-256 `6351bfef7463b05bc28b1c360726896cac1616c732076c91d426d00838a39527`, the mastered file `047437c60b730c44255729c51db346d6e4503409c8fef68d890f5f89d161d914`. The prompt, as sent (`duration_seconds` 2.7, `prompt_influence` 0.6):
+
+```
+A flurry of five quick bursts of fine crackling static, very high and sparkling, one after another, building slowly to the loudest at the end. Close-miked, realistic sound design, no music, no voice.
+```
+
+- **`ffx2-core` / `cursor-move-x2`** (row `ffx2.ui.tick`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `da5ae23cd4a3194a7c9866a58d3da2e793976068e0d81721f5e1f19b67fe45bf`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx2-core` / `confirm-x2`** (row `ffx2.ui.confirm`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `da5ae23cd4a3194a7c9866a58d3da2e793976068e0d81721f5e1f19b67fe45bf`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx2-core` / `menu-page-x2`** (row `ffx2.ui.page`, near, take `ffx.ui.tick.v9`): the raw take SHA-256 `382e79725421e7b2d73828c737f6d0271cd2125713affcabed81dd4a8839f7c5`, the mastered file `5f211abfd2a220dfa75d25e0909ae78c42fd94aa3af5cdebaebb0874839b908c`. The prompt, as sent (`duration_seconds` 0.5, `prompt_influence` 0.8):
+
+```
+A single gentle high-pitched chime tick, a pure glassy tone, short. Dry and clean, no reverb, no music, no voice.
+```
+
+- **`ffx2-core` / `flare-x2`** (row `ffx2.flare`, strict, take `ffx2.flare.v1`): the raw take SHA-256 `61986c3cfe52cc7b8ff7518f34b2042e50955c488e712b400b32d83cca74b648`, the mastered file `e39dc87efd1c09de5f054d42d862e5c853a919b1111f35a4bb0b1c6e42e750e6`. The prompt, as sent (`duration_seconds` 4.8, `prompt_influence` 0.5):
+
+```
+A massive energy detonation, a very deep sub-bass swell building for nearly three seconds into a thunderous boom, with pulsing low rumble. About four and a half seconds. Cinematic fantasy sound design, no music, no melody, no voice.
+```
+
+- **`ffx2-core` / `cura-x2`** (row `ffx2.cura`, near, take `ffx2.cura.v2`): the raw take SHA-256 `8222ee05608195a964d57c1ad2925196c685f48958cde7661451b94039cdae78`, the mastered file `de829f28b09f070a85235f37755f2d076833d4c9592d312c676f2a66c6571606`. The prompt, as sent (`duration_seconds` 3.3, `prompt_influence` 0.5):
+
+```
+A fuller healing spell, a warm mid glow with soft chimes blooming and gently circling. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.
+```
+
+- **`ffx2-machina` / `machina-destroy`** (row `ffx2.boss.machina.ko`, strict, take `ffx2.boss.machina.ko.v2`): the raw take SHA-256 `03291e73ed19943cb306ff6aa7380511b42f10fa386e5513db7061dba58b88db`, the mastered file `c2388b6b6240029179a47713f1f81cf45a3d10b7a6c4c5733ef37495923c75a9`. The prompt, as sent (`duration_seconds` 2.8, `prompt_influence` 0.6):
+
+```
+A giant machine dying, a deep groaning mechanical collapse with a heavy clang-rumble and fading metallic ringing. About two and a half seconds. Close-miked, realistic sound design, no music, no voice. Variation: heavier, with more low body.
+```
+
+- **`ffx2-bahamut` / `boss-bahamut`** (row `ffx2.boss.bahamut`, strict, take `ffx2.boss.bahamut.v2`): the raw take SHA-256 `e24a5fc314b2515a1ad28816584390ca463256a14e2297c302b74d19697941ef`, the mastered file `8fe51ef241649fb64e0753ccc6e7f3739b5caa31c5fb3a222d88521fea3a0665`. The prompt, as sent (`duration_seconds` 3.4, `prompt_influence` 0.5):
+
+```
+A giant dragon-like beast's solid lunging attack, a full mid whooshing roar rising for almost a second into a thudding strike. About three seconds. Light and clear, mid-pitched, with a crisp edge and no deep bass. Cinematic sound design, no music, no voice.
+```
+
+- **`ffx2-shuyin` / `boss-shuyin`** (row `ffx2.boss.shuyin`, near, take `ffx2.boss.shuyin.v1`): the raw take SHA-256 `e7d8c711848e58898d2867da16405596e69c6573631460abdfcf63a6965dbca4`, the mastered file `9b320b7fef3d3dedac56f996867a577b3ae134c0d6f608a3af19b51aae1c0add`. The prompt, as sent (`duration_seconds` 5.5, `prompt_influence` 0.4):
+
+```
+A dark swordsman's long sweeping attack, six heavy low slashes and whooshes in a flowing sequence with a deep resonant undertone. About five seconds. Cinematic sound design, no music, no voice.
+```
+
 ### Per cue: `scene-macalania-temple` (Chapter VII, FFX only, 2026-09-29)
 
 "The Frozen Temple", original (rule 8): the score is
