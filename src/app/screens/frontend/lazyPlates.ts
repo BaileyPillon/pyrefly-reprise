@@ -38,10 +38,16 @@ function cardIndexOf(img: Element): number {
   return m ? Number(m[1]) : -1;
 }
 
+/** The attribute of the small copy a plate shows under its full picture until that is up (`chapterPlates.ts`, r44-thumbs). */
+export const LAZY_PLACEHOLDER = 'data-lazy-ph';
+
 function put(img: HTMLImageElement, url: string): void {
   img.removeAttribute(LAZY_SRC);
   img.removeAttribute(LAZY_FULL);
   img.setAttribute('src', url);
+  // The full picture is up (decoded, so it paints on the next frame): the small copy under it goes, or the soft edge of a boss would show through.
+  const under = img.previousElementSibling;
+  if (under?.hasAttribute(LAZY_PLACEHOLDER)) under.remove();
 }
 
 /**

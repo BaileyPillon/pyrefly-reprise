@@ -105,16 +105,24 @@ export function currentPlateReach(): number {
 
 /** A card's plate: its scene backdrop (the wash behind the board) and every painting its hero markup shows, all at full size. */
 function plateUrls(tile: ChapterTile, index: number): string[] {
-  return [...(tile.sceneKey ? [artUrl(`art/backdrops/${tile.sceneKey}.png`)] : []), ...srcsIn(heroHtml(tile, index))];
+  // The plate's small copies (`data-lazy-ph`, shown under the full pictures) are the strips' own files, not part of what a plate waits for.
+  const plate = heroHtml(tile, index).replace(/<img\b[^>]*\bdata-lazy-ph\b[^>]*>/g, '');
+  return [...(tile.sceneKey ? [artUrl(`art/backdrops/${tile.sceneKey}.png`)] : []), ...srcsIn(plate)];
 }
 
 /**
- * The full plates of the cards nearest the cursor, nearest first (r44-thumbs): what the idle lane fetches ahead of the cursor now that
- * the rail's strips are small copies and the whole board's full pictures are no longer fetched. `reach` is how many presses away
- * a card still counts (`PLATE_AHEAD`); the selected card's own plate is not in it, because it is loaded at urgent when it is shown.
+ * The full plates of the cards nearest the cursor, one list a card, nearest first (r44-thumbs): what is fetched ahead of the cursor now that
+ * the rail's strips are small copies and the whole board's full pictures are no longer fetched. `reach` is how many presses away a card
+ * still counts (`PLATE_AHEAD`); the selected card's own plate is not in it, because it is loaded at urgent when it is shown. The first card
+ * is the one a hand reaches for next (on to the right), and the board gives its plate a lane of its own (`ChapterSelectScreen.refresh`).
  */
+export function platesAheadByCard(tiles: readonly ChapterTile[], selected: number, reach: number = currentPlateReach()): string[][] {
+  return aheadCards(tiles, selected, reach).map((i) => (tiles[i] ? plateUrls(tiles[i]!, i) : []));
+}
+
+/** The same plates as one list, nearest card first. */
 export function platesAhead(tiles: readonly ChapterTile[], selected: number, reach: number = currentPlateReach()): string[] {
-  return aheadCards(tiles, selected, reach).flatMap((i) => (tiles[i] ? plateUrls(tiles[i]!, i) : []));
+  return platesAheadByCard(tiles, selected, reach).flat();
 }
 
 /**
