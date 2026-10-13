@@ -11,7 +11,8 @@ import type { AbilityDef, CombatantId } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
 import { pickVariant, resolveCommand } from './adapt/command.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
-import { hpCostFor, resolveTargets } from './targeting.ts';
+import { effectiveMpCost, hpCostFor } from './menu.ts';
+import { resolveTargets } from './targeting.ts';
 import { NAMED_TARGETS_ONLY } from './constants.ts';
 
 import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
@@ -38,7 +39,7 @@ export function resolveAbility(
   const pool = namedOnly ? all.filter((u) => requested.includes(u.id)) : all;
   if (pool.length === 0) return 0;
 
-  const mpCost = user.statuses.spellspring ? 0 : ability.mpCost;
+  const mpCost = effectiveMpCost(user, ability); // Spellspring, Half MP Cost, One MP Cost and Magic Booster (re-parity RC7 lane X2-B)
   if (mpCost > 0) user.mp = Math.max(0, user.mp - mpCost);
 
   // The Dark Knight pays in HP. Darkness is **12.5% of the user's own max HP**

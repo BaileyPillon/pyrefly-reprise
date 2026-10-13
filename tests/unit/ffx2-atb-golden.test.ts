@@ -163,6 +163,16 @@
  * 1/10 (seed 5; it was 2/10), which is the chain getting harder, measured and disclosed in the handoff (500 seeds of the shipped line: 430 to 323), not tuned. The
  * Wait arm still equals the D = 0 arrays and the Wait engine switched to Active still equals the Active arrays (both asserted below). The old hashes are in git at 931613a8.
  * **Re-pinned an eleventh time, every array, for the game's own random streams** (re-parity RNG lane, branch re-parity-rng, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. Every hit, critical, variance, status, theft, opening-gauge and target-search draw moves to the stream the game gives it (a girl's own stream is slot + 20, a monster's slot + 13, plus 16 for the hit roll and 32 for status rolls; 5 for a random-target pick, 10 and 11 for theft, 2 and 4 for the scripts), so every one of the sixty digests moved. The outcomes did not: Chapter 4 is still 20/20 at D = 0 and Chapter 5 still 20/20 (CH5_D0_OUTCOMES is unchanged). Nothing on the bosses or the party was tuned.
+ *
+ * **Re-pinned a twelfth time, one hash (`CH5_D0` seed 4), for the command menu's data and rules** (re-parity RC7 lane X2-B, branch re-parity-rc7-x2cmd, 2026-10-13, FFX-2 only;
+ * reason "game-code parity", the checked note FFX2-G02 section 2.5 and row E2; `docs/handoff/re-parity-rc7-x2cmd.md`). Silence now stops the 88 rows that carry the silenceable bit
+ * (Arcana, every Dance and Song, the White Magic spells, the Moogle, Cait and Eraser moves ...) and not the two spell menus' labels, and spares Pray, Vigor, Focus and MP Absorb.
+ * Cause, found by ablation (the old Silence rule put back through a module mock for the run reproduces the old digest; putting back the old offered-abilities rule alone, which
+ * also moved the menus, does not): in Chapter V's link 4 Rikku is Silenced and used to cast Black Sky (an Arcana spell the old rule let through); she now uses Darkness, and
+ * Yuna, also Silenced, can use Pray and Vigor and takes a Remedy instead. Every other seed of the four arrays is unchanged (recomputed, equal): the 19 other `CH5_D0`
+ * digests, all twenty `CH4_D0`, all ten `CH4_D1500` and all ten `CH5_D1500`; D = 0 is still 20/20 in both chapters and the Wait arm still equals the D = 0 arrays. The
+ * old hash is in git at ab57f082. The menus' other changes (free pairs, passive markers no longer rows, greyed Itch rows, the Special family without Item and Escape) move no
+ * digest here: no seed of these two chapters meets them.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -180,7 +190,7 @@ const CH4_D0 = [
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  '14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '92f34919fb6d8fcc', '2b5cfff69fa679a1',
+  '14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1',
   '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588', '056a29c9f64475e6', 'ea11e6bc57472033',
   '05af170bce70e2d5', '74a919cdaf0a8ad6', 'f780f0894a0abad4', '1364bcf4301efff4', '6a307cb2f5a5ac7c',
   '8cb28183509bba6e', '462f552cd4c79127', '5f977e99eddd8cf7', 'a2cde3f49733da1a', 'acec700595ac3f00',

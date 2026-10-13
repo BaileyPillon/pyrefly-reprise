@@ -116,6 +116,11 @@ export interface Ffx2Unit extends FFX2Combatant {
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */
   bribeThreshold?: number;
+  /**
+   * The three auto-ability words (`Chr+0x650`, `+0x652`, `+0x654`) of a girl: her listed auto-abilities and the ones her garment grid's tags stand for
+   * (`adapt/menu.ts#autoWordsOf`). The MP cost reads them (Half MP Cost, One MP Cost, Magic Booster; re-parity RC7 lane X2-B). Absent: all zero.
+   */
+  autoWords?: readonly [number, number, number];
 }
 
 /** Ability lookup. Data files register the real table; `abilities.ts` is the fallback. */
@@ -154,6 +159,8 @@ export interface GateBonus {
   waitDownPercent?: number;
   /** Raises this girl's damage cap to 99 999 for the battle (The End, G+R). */
   breaksDamageLimit?: boolean;
+  /** The auto-ability tags this effect carries (`Half MP Cost`, `One MP Cost`, `Magic Booster` are the ones the menu reads: re-parity RC7 lane X2-B). */
+  autoTags?: string[];
   /** Human-readable label for the HUD. */
   label?: string;
   /**

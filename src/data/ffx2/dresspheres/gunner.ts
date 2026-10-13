@@ -51,8 +51,8 @@ export const gunner: DressphereDef = {
     52: { hp: 1877, mp: 91, str: 90, mag: 44, def: 48, mdef: 48, agi: 56, acc: 127, eva: 5, luck: 20 },
   },
   abilities: [
-    { abilityId: 'x2-gunner-attack', apCost: 0 },
-    { abilityId: 'x2-gunner-trigger-happy', apCost: 0 },
+    { abilityId: 'x2-gunner-attack', apCost: 0, free: true },
+    { abilityId: 'x2-gunner-trigger-happy', apCost: 0, free: true },
     { abilityId: 'x2-gunner-potshot', apCost: 20 },
     { abilityId: 'x2-gunner-cheap-shot', apCost: 30, prereq: 'x2-gunner-potshot' },
     { abilityId: 'x2-gunner-enchanted-ammo', apCost: 30 },

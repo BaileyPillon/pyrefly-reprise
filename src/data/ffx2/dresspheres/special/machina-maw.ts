@@ -72,8 +72,8 @@ export const machinaMaw: SpecialDressphereDef = {
   },
   abilities: {
     main: [
-      { abilityId: 'x2-machina-maw-attack', apCost: 0 },
-      { abilityId: 'x2-machina-maw-death-missile', apCost: 0 },
+      { abilityId: 'x2-machina-maw-attack', apCost: 0, free: true },
+      { abilityId: 'x2-machina-maw-death-missile', apCost: 0, free: true },
       { abilityId: 'x2-machina-maw-revival', apCost: 10 },
       { abilityId: 'x2-machina-maw-shockwave', apCost: 20 },
       { abilityId: 'x2-machina-maw-shockstorm', apCost: 20, prereq: 'x2-machina-maw-shockwave' },

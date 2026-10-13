@@ -37,7 +37,7 @@ import {
   itemRegistryFrom,
 } from '../../src/battle/ffx2/index.ts';
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
-import { buildCommands } from '../../src/battle/ffx2/targeting.ts';
+import { buildCommands } from '../../src/battle/ffx2/menu.ts';
 import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
 import { registerBattleContent, ffx2EngineOptions } from '../../src/app/screens/BattleScreenContent.ts';
 import * as ffx2data from '../../src/data/ffx2/index.ts';

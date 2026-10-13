@@ -281,6 +281,72 @@ export const samuraiAbilities: AbilityDef[] = [
     messageTemplate: '{user} learns SOS Critical',
     extra: { passive: 'sos-always-critical' },
   },
+  {
+    // §3.9 [verified: 2 sources]: 30 AP (needs Magicide), 10 MP; damage plus the hidden Action-cancel, which cancels a target's charging action and restarts
+    // its ATB from empty [ffx2-combat-core §2.8]. The game's row 0x3073 (re-parity RC7 lane X2-B): power 20, the cancel chance 100.
+    id: 'x2-samurai-dismissal',
+    name: 'Dismissal',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 10,
+    chargeTicks: CT_SHORT,
+    recoveryTicks: RT_NORMAL,
+    power: 20,
+    formula: 'strength',
+    damageType: 'physical',
+    element: ['none'],
+    targeting: 'single-any',
+    hits: 1,
+    statusEffects: [{ status: 'action-cancel', chance: 254, duration: 0 }],
+    removesStatuses: [],
+    flags: ['crit-eligible'],
+    messageTemplate: '{user} uses Dismissal',
+  },
+  {
+    // §3.9 [verified: 2 sources]: 40 AP (needs Dismissal), 10 MP; damage plus removal of every stat Up and Down level. The game's row 0x3074: power 20, the seven
+    // stat statuses at chance 254 with the removal amount 127.
+    id: 'x2-samurai-fingersnap',
+    name: 'Fingersnap',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 10,
+    chargeTicks: CT_SHORT,
+    recoveryTicks: RT_NORMAL,
+    power: 20,
+    formula: 'strength',
+    damageType: 'physical',
+    element: ['none'],
+    targeting: 'single-any',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [
+      'str-up', 'str-down', 'mag-up', 'mag-down', 'def-up', 'def-down', 'mdef-up', 'mdef-down', 'accu-up', 'accu-down', 'eva-up', 'eva-down', 'luck-up', 'luck-down',
+    ],
+    flags: ['crit-eligible', 'removes-statuses'],
+    messageTemplate: '{user} uses Fingersnap',
+  },
+  {
+    // §3.9, §2.3 step 8 [verified: 2 sources]: 60 AP (needs Sparkler), 10 MP; physical damage plus 1 per enemy this party slot has ever defeated. The game's row
+    // 0x3077: formula 22 (the flat addition), power 16. The engine keeps no lifetime kill count yet, so the addition is 0 (no chapter reaches this).
+    id: 'x2-samurai-momentum',
+    name: 'Momentum',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 10,
+    chargeTicks: CT_SHORT,
+    recoveryTicks: RT_NORMAL,
+    power: 16,
+    formula: 'strength',
+    damageType: 'physical',
+    element: ['none'],
+    targeting: 'single-any',
+    hits: 1,
+    statusEffects: [],
+    removesStatuses: [],
+    flags: ['crit-eligible'],
+    messageTemplate: '{user} uses Momentum',
+    extra: { addsDefeatedCount: true },
+  },
 ];
 
 export default samuraiAbilities;

@@ -210,6 +210,11 @@ export function waitDownPercent(bonuses: readonly GateBonus[]): number {
   return best;
 }
 
+/** The auto-ability tags of every unlocked bonus, in order (re-parity RC7 lane X2-B: the menu reads the MP-cost ones). */
+export function gateAutoTags(bonuses: readonly GateBonus[]): string[] {
+  return bonuses.flatMap((b) => b.autoTags ?? []);
+}
+
 /** True once a Break Damage Limit gate combination has been passed. §2.4 */
 export function breaksDamageLimit(bonuses: readonly GateBonus[]): boolean {
   return bonuses.some((b) => b.breaksDamageLimit === true);

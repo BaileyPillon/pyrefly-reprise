@@ -224,6 +224,30 @@ export const berserkerAbilities: AbilityDef[] = [
     messageTemplate: '{user} learns Evade & Counter',
     extra: { passive: 'evade-then-counter', triggersOn: 'single-target-physical' },
   },
+  {
+    // §3.10 [single source]: 40 AP (needs Crackdown), 8 MP; damage plus ACCU Down 5 and EVA Down 10 (Infinite) [§2.9.1]. The game's row 0x308f (re-parity RC7
+    // lane X2-B): power 16, group 2 statuses 11 and 12 at -5 and -10.
+    id: 'x2-berserker-unhinge',
+    name: 'Unhinge',
+    game: 'ffx2',
+    category: 'skill',
+    mpCost: 8,
+    chargeTicks: CT_MEDIUM,
+    recoveryTicks: RT_NORMAL,
+    power: 16,
+    formula: 'strength',
+    damageType: 'physical',
+    element: ['none'],
+    targeting: 'single-any',
+    hits: 1,
+    statusEffects: [
+      { status: 'accu-down', chance: 254, duration: 255, stacks: 5 },
+      { status: 'eva-down', chance: 254, duration: 255, stacks: 10 },
+    ],
+    removesStatuses: [],
+    flags: ['crit-eligible'],
+    messageTemplate: '{user} uses Unhinge',
+  },
 ];
 
 export default berserkerAbilities;

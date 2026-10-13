@@ -38,7 +38,7 @@ import { buildSnapshot } from './gauges.ts';
 import { bySlot, completeCommand, wakeIdle } from './atb-engine.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
-import type { MenuContext } from './targeting.ts';
+import type { MenuContext } from './menu.ts';
 import { aiContextFor, berserkTurnCommand, runAfterActionHooks } from './engineHooks.ts';
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';

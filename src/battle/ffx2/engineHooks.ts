@@ -9,7 +9,7 @@ import type { BattleState, CombatantId, Command } from '../common/types.ts';
 import type { BattleRng } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
-import { berserkCommand, type MenuContext } from './targeting.ts';
+import { berserkCommand, type MenuContext } from './menu.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { abilityPerformedBy } from './execute.ts';
 import { takeResults } from './results-tally.ts';

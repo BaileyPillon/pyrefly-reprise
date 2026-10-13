@@ -29,7 +29,8 @@ import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
 import { accessoryAutoStatuses, accessoryImmunities, withPoolStatuses } from './kit.ts';
-import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
+import { activeGateBonuses, breaksDamageLimit, gateAutoTags, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
+import { autoWordsOf } from './adapt/menu.ts';
 import { baseRequired } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
 import { applyStatus } from './statuses.ts';
@@ -92,7 +93,7 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
   const hp = clamp(member.hp ?? stats.maxHp, 0, stats.maxHp);
   const mp = clamp(member.mp ?? stats.maxMp, 0, stats.maxMp);
 
-  return {
+  const unit: Ffx2Unit = {
     id: member.id,
     name: member.name,
     side: 'party',
@@ -132,6 +133,9 @@ function buildMember(member: FFX2MemberBuild, slot: number, options: Ffx2EngineO
     // who arrives with gates passed (a full carry only; no shipped build has any).
     ...(passed.length > 0 ? { aiMemory: { waitDown: waitDownPercent(bonuses), bdl: breaksDamageLimit(bonuses) } } : {}),
   };
+  // The auto-ability words the MP cost reads (Half MP Cost, One MP Cost, Magic Booster): her listed auto-abilities and her garment grid's tags (re-parity RC7 lane X2-B).
+  unit.autoWords = autoWordsOf(unit, gateAutoTags(bonuses), options.dresspheres?.get(member.currentDressphere)?.abilityIds ?? []);
+  return unit;
 }
 
 function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
