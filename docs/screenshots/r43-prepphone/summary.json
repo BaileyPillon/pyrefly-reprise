@@ -1,6 +1,6 @@
 {
- "sha": "e0f66efa",
- "generated": "2026-10-13T01:51:37.675Z",
+ "sha": "98bcc847",
+ "generated": "2026-10-13T03:50:33.743Z",
  "runs": {
   "build-390x844": {
    "w": 390,
@@ -4833,7 +4833,7 @@
      "game": "FFX",
      "name": "START BATTLE (a touch tap on the pinned button, from the equipment page) begins the fight",
      "ok": true,
-     "detail": "screen party-prep -> cutscene in 403 ms"
+     "detail": "screen party-prep -> cutscene in 404 ms"
     },
     {
      "game": "FFX-2",
@@ -5170,7 +5170,7 @@
      "game": "FFX",
      "name": "START BATTLE (a touch tap on the pinned button, from the equipment page) begins the fight",
      "ok": true,
-     "detail": "screen party-prep -> cutscene in 415 ms"
+     "detail": "screen party-prep -> cutscene in 422 ms"
     },
     {
      "game": "FFX-2",
@@ -5350,7 +5350,7 @@
      "game": "FFX-2",
      "name": "START BATTLE (a touch tap on the pinned button, from the accessories page) begins the fight",
      "ok": true,
-     "detail": "screen party-prep -> cutscene in 402 ms"
+     "detail": "screen party-prep -> cutscene in 417 ms"
     }
    ]
   },

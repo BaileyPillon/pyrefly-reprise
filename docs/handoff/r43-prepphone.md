@@ -5,10 +5,15 @@ largely done and matched the target well; the rest was the unit tests, the brows
 code found, the breakpoint listener and the idle-frame return), the colours, the commits and these notes). Branch `r43-prepphone`
 from origin/main `2868c195` (live `a061e9dc`); worktree `D:/pyrefly-r43-prepphone` (`node_modules` and `public/art` are junctions, both untracked: `cmd /c rmdir` each before ever
 removing the tree). **Nothing is merged and nothing is deployed.** Commits: `f060d152` (the build and its unit tests), `e0f66efa` (what the browser proof showed), then the proof frames and these
-notes. Source: deep round 25's PR-0295 (major, interface); Bailey's PREP-A pick (2026-10-12, item 59a of the driver's list: "I'll go with all of your recommendations"; the pick approves the
+notes (`19d19e3a`, `5a780295`), then `98bcc847` (the colours, below) and the frames and notes that follow it. Source: deep round 25's PR-0295 (major, interface); Bailey's PREP-A pick (2026-10-12, item 59a of the driver's list: "I'll go with all of your recommendations"; the pick approves the
 LAYOUT only; D-781 is the standing decision that this layout is built only from a mockup he picks). Frames and numbers: [docs/screenshots/r43-prepphone/](../screenshots/r43-prepphone/README.md). Paper preflight:
 [docs/plans/r43-prepphone-review.md](../plans/r43-prepphone-review.md). `node tools/critic-plan.mjs` classes the change DEEP (shared layout and input), so a deploy of it owes a focused review before and the deep
 review after (`critic/RUBRIC.md` section 4).
+
+**One change after the notes above were written (2026-10-12 23:30 EDT, commit `98bcc847`).** The first sub-agent, resumed after its freeze, checked the finished branch against the lane's brief (the desktop
+frames against origin/main by its own capture: 18 of 19 identical, the 19th the Sphere Grid's animated map, which also differs between two runs of origin/main; the five PREP-A frames against the build
+by block position: every block within 1 px) and changed the one thing that did not follow it: the brief says a shade the Ink & Gold tokens lack is the nearest token, listed as a deviation (Bailey's pick
+approves the layout only), and the build had taken four shades from the page. They are the nearest tokens again (item 1 below); the page's own shades are a one-line switch each. No layout moved.
 
 ## What round 25 found, and what is true now
 
@@ -48,9 +53,9 @@ and dressphere tables, the bag), and unit tests compare them and the notes chara
 Measured on the frames (`profile` of the accent borders and ivory bodies, target against build): every block is within 1 px vertically on the four frames at rest; on the scrolled frame the touch drag rests at 227 px, the target's 230, so the blocks are 2 px
 apart. Beyond that:
 
-1. **Colours.** The page uses four shades the Ink & Gold tokens lack: small accent text on ivory (#7f5c0a gold and #9c3267 pink, "deepened to 5.4:1 because the approved on-paper accent is 3.4:1 at this size"), and the up and down counts on a dark plate
-   (#7fd09a and #f08a8a); the ivory-body deltas are the shipped FFX-2 Stats tab's own #2f7a46 and #a5323a. The build takes these four from the page (not from the nearest token). The first sub-agent had mapped them to tokens (a lighter, lower-contrast accent text and
-   ivory up and down counts); that was reversed because the target and its contrast reasoning are the approved thing. **Bailey did not name colours, only the layout: if he wants the tokens instead, it is one line each in `prep-phone-sections.css` (`--prph-acc-text`, `--prph-good`, `--prph-bad`).**
+1. **Colours: the nearest Ink & Gold token, as the brief says (commit `98bcc847`).** The page uses four shades the tokens lack: small accent text on ivory (#7f5c0a gold and #9c3267 pink, "deepened to 5.4:1 because the approved on-paper accent is 3.4:1 at this size"), and the up and down counts on a dark plate
+   (#7fd09a and #f08a8a); the ivory-body deltas are the shipped FFX-2 Stats tab's own #2f7a46 and #a5323a, which no token has either and which are kept. The build maps the first two to `--ig-accent-deep` (#a67c16 gold, #b8437e pink: 3.4:1 and 4.5:1 on the ivory, against the page's 5.4:1, so the small "+10% dmg" notes and the bag's counts read a little lighter than the target's)
+   and the counts to ivory (`--ig-paper`; the arrows carry the direction; the target's counts are green and red). The sub-agent that finished the lane had taken the four shades from the page for their contrast; Bailey named a layout, not colours. **If he wants the page's shades back it is one line each in `prep-phone-sections.css`: `--prph-acc-text: #7f5c0a` (and `#9c3267` under `.prep.ig--ffx2`), `--prph-good: #7fd09a`, `--prph-bad: #f08a8a`.**
 2. The section plate is the `--ig-ink-panel` token (0.84), the page drew 0.90; the stuck bar's ground is `#04060b` (the Chapter page's), the page drew `#05070c`. Both are invisible on the dark ground.
 3. The seven FFX heads are about 45 px and round (the page drew 46 px): seven heads share a 362 px row. At 360 they are 40 px and at 320 35 px; the page was drawn at 390 only.
 4. START BATTLE is within 1 px of the frames' (the shell's own button; the text row inside it reads 1 to 2 px lower).
@@ -76,7 +81,7 @@ apart. Beyond that:
 
 ## Verified
 
-On the code of `e0f66efa` (the later commits are docs, frames and scripts only): `node node_modules/typescript/bin/tsc --noEmit -p .` clean; the **whole unit suite** (`vitest run`, six shards at `--maxWorkers=2`, each under its own timeout, TEMP and TMP on D:) passes:
+On the code of `e0f66efa` (the later commits are docs, frames and scripts only, except `98bcc847`: the colours, one CSS file, after which `tsc --noEmit` is clean, the 56 unit test files whose names say css, floor, inkgold, phone, prep, layout or text-size (893 tests) pass, `node tools/orphans.mjs` reads the same 36 older orphans, and every browser proof was run again; the whole unit suite was not re-run for a change of three custom properties): `node node_modules/typescript/bin/tsc --noEmit -p .` clean; the **whole unit suite** (`vitest run`, six shards at `--maxWorkers=2`, each under its own timeout, TEMP and TMP on D:) passes:
 1110 test files passed (13 skipped), 17,283 tests passed (72 skipped, 1 todo), 0 failed; the lane's own files are `prep-phone-views.test.ts` (25), `prep-phone-page.test.ts` (20) and `prep-phone-shell.test.ts` (27); `node tools/orphans.mjs`: 1560 modules, 36 orphaned, none of them
 this lane's (the 36 are older, e.g. `src/ui/ffx2/PartyPrep.ts`, the unwired standalone menu); a `git merge-tree` of the branch against `origin/main`, `origin/r43-rc`, `origin/r43-textfloor`, `origin/r43-motion2`, `origin/r43-delivery` and `origin/r43-critic-tools` reports no conflict.
 

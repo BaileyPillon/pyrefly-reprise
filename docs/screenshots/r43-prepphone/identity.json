@@ -113,7 +113,7 @@
    {
     "file": "seymour-flux-02-sphere-grid-m0.png",
     "status": "differs",
-    "pixels": 3455,
+    "pixels": 3055,
     "maxChannelDelta": 237,
     "bbox": [
      315,
@@ -122,7 +122,7 @@
      652
     ],
     "sha256Before": "eba77e9b32dbb4310ca2baaed36639a3c4e24e2337a12546fef2dad2dd31b39e",
-    "sha256After": "49a5b23ffa5004e5a2ae9ff5f8052aad23be7ade3ece94df942d39d25051767f"
+    "sha256After": "34dc0ac762a0b47d010e7f9fed09a1a5a851308a628dc123aaf5f2c12fd524e7"
    },
    {
     "file": "seymour-flux-03-equipment-m0.png",
@@ -475,8 +475,8 @@
    {
     "file": "seymour-flux-02-sphere-grid-m0.png",
     "status": "differs",
-    "pixels": 3059,
-    "maxChannelDelta": 236,
+    "pixels": 3410,
+    "maxChannelDelta": 237,
     "bbox": [
      315,
      502,
@@ -484,7 +484,7 @@
      652
     ],
     "sha256Before": "6a4c54fec44375ff4ad042fe4ee858165ca77a209a4008fef6a8d9741f1b4cc0",
-    "sha256After": "49a5b23ffa5004e5a2ae9ff5f8052aad23be7ade3ece94df942d39d25051767f"
+    "sha256After": "34dc0ac762a0b47d010e7f9fed09a1a5a851308a628dc123aaf5f2c12fd524e7"
    },
    {
     "file": "seymour-flux-03-equipment-m0.png",
@@ -656,16 +656,16 @@
    {
     "file": "seymour-flux-02-sphere-grid-m0.png",
     "status": "differs",
-    "pixels": 334,
-    "maxChannelDelta": 29,
+    "pixels": 826,
+    "maxChannelDelta": 119,
     "bbox": [
      117,
      469,
      247,
-     524
+     525
     ],
     "sha256Before": "ccb67e8e5e542c9b53f869abf22bcf98583e1a56d2f9cf27bb18d13fafb62ecb",
-    "sha256After": "c8fb2fd83c4a15ce7375c72364132416cbd332bc273f4e8bc0b921013d9dde18"
+    "sha256After": "a2ca6b91ef205040f075b1709ca3b86a77251137c331d00360f31faff6354a43"
    },
    {
     "file": "seymour-flux-03-equipment-m0.png",
@@ -837,8 +837,8 @@
    {
     "file": "seymour-flux-02-sphere-grid-m0.png",
     "status": "differs",
-    "pixels": 2443,
-    "maxChannelDelta": 236,
+    "pixels": 1585,
+    "maxChannelDelta": 69,
     "bbox": [
      252,
      402,
@@ -846,7 +846,7 @@
      521
     ],
     "sha256Before": "444419b905f94af3df1bdaa67e5226b0f86a13b37460062c4ebd5cc44cf30a32",
-    "sha256After": "dbf81b60e74a138f0a03a38d35625623291c23394d8b941f37e92650faa0fb44"
+    "sha256After": "e632c2fc5988e84853a44fbfcb87a747078e0f0c2bc5460af3851e2a6b1caceb"
    },
    {
     "file": "seymour-flux-03-equipment-m0.png",
@@ -928,7 +928,7 @@
    {
     "file": "seymour-flux-02-sphere-grid.png",
     "status": "differs",
-    "pixels": 1441,
+    "pixels": 1355,
     "maxChannelDelta": 241,
     "bbox": [
      30,
@@ -937,7 +937,7 @@
      441
     ],
     "sha256Before": "d17edc333d00b9116e662fccc2baaa55e3233cd00cce87e033b338a801794a5b",
-    "sha256After": "ec0c3e3f79c9a46d9a9114c8330ad8ec1023efbfd43d69208d85f1245015075e"
+    "sha256After": "d4764f5913031cb87a1889ce6ea287f70519b6aa288a44db48bf9814ce9c65dd"
    }
   ]
  },
@@ -965,16 +965,16 @@
    {
     "file": "seymour-flux-02-sphere-grid.png",
     "status": "differs",
-    "pixels": 1364,
-    "maxChannelDelta": 241,
+    "pixels": 1060,
+    "maxChannelDelta": 235,
     "bbox": [
      30,
      331,
      278,
-     438
+     439
     ],
     "sha256Before": "999d5aff2eb1b2c776f1d9413487861cf80c2892a42d67c908df226f870b9a66",
-    "sha256After": "580af12061bfe5f2d7882b9b2abc1b4a0d3f1493c349d3b2f9805d398fddd3bb"
+    "sha256After": "03fa8a994f94e7779dd7c16ff3bd0ac77fb3a08e7d158b33623ca7d3ece8670a"
    }
   ]
  },

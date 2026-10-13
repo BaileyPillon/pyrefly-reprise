@@ -1,6 +1,6 @@
 # r43-prepphone: the eight heavy party-prep tabs on a phone, PREP-A (PR-0295): frames and numbers
 
-Written 2026-10-12 by the lane's continuing Sonnet sub-agent. Branch `r43-prepphone`; the build every frame here was taken from is the code of `e0f66efa` (its first commit is `f060d152`); this folder and the notes are the commit after it. **Nothing is merged and nothing is deployed.**
+Written 2026-10-12 by the lane's continuing Sonnet sub-agent and refreshed at 23:50 by the lane's first sub-agent, resumed after its freeze. Branch `r43-prepphone`; the build every frame here was taken from is the code of `98bcc847` (the lane's first commit is `f060d152`; `98bcc847` is the one CSS file after `e0f66efa`: the colours are the nearest Ink & Gold tokens, the brief's rule, so every frame was retaken on it; the layout did not move); this folder and the notes are the commit after it. **Nothing is merged and nothing is deployed.**
 Handoff: [docs/handoff/r43-prepphone.md](../../handoff/r43-prepphone.md). Paper preflight: [docs/plans/r43-prepphone-review.md](../../plans/r43-prepphone-review.md).
 
 Every capture is headless Chromium on the real GPU (`PYREFLY_BROWSER=gpu`), a fresh profile, seed 1, the first-run guide skipped, device scale factor 1, the screen reached by the player's keys (title, board, Enter).
@@ -8,7 +8,13 @@ On a phone each tab is opened by a **real touch tap** and every scroll is a **re
 (live `a061e9dc`) served beside the branch with the same art. The sweep is CHK-003's walk (`tools/text-floor-probe.mjs` on origin/r43-textfloor, plus off-screen text): every visible text node, its font size times every
 ancestor's scale. Every JPEG here is a re-encode of a PNG capture; the pixel comparisons were made on the PNGs.
 
-## Side by side (today | target | build)
+## Side by side (target left, build right: [pairs/390x844/](pairs/390x844/); today | target | build: [side-by-side/](side-by-side/))
+
+The five PREP-A frames as plain two-up pictures, the target on the left and the build on the right, each 390x844 (the target PNGs are 390x845):
+[A-ffx-stats.jpg](pairs/390x844/A-ffx-stats.jpg), [A-ffx-equipment.jpg](pairs/390x844/A-ffx-equipment.jpg), [A-x2-stats.jpg](pairs/390x844/A-x2-stats.jpg), [A-x2-stats-scrolled.jpg](pairs/390x844/A-x2-stats-scrolled.jpg), [A-x2-accessories.jpg](pairs/390x844/A-x2-accessories.jpg).
+The three-up frames below add origin/main as it is today on the left.
+
+### Today | target | build
 
 The target is the PREP-A frames of `critic/scratch/prep-phone-options-2026-10-12/` (Bailey picked PREP-A on 2026-10-12; the pick approves the layout). The mockup drew five frames; the other four tabs have no frame, so they are built in the same recipe
 and shown today | build. All at 390x844 in [side-by-side/390x844/](side-by-side/390x844/):
@@ -127,18 +133,22 @@ Pixel comparison of the PNG captures (every tab of both games, the first member 
 
 | Window | Result | Differs |
 |---|---|---|
-| 1600x900 (the brief) | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (3455 px, bbox [315,502,660,652]) |
-| 1280x720 | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (2443 px, bbox [252,402,527,521]) |
-| 600x900 (the first width that is not a phone) | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (334 px, bbox [117,469,247,524]) |
+| 1600x900 (the brief) | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (3055 px, bbox [315,502,660,652]) |
+| 1280x720 | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (1585 px, bbox [252,402,527,521]) |
+| 600x900 (the first width that is not a phone) | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (826 px, bbox [117,469,247,525]) |
 | 1600x900 control: origin/main against itself | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (3080 px, bbox [315,502,660,652]) |
-| 1600x900 control: this build against itself | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (3059 px, bbox [315,502,660,652]) |
-| 390x844 phone: Chapter and Sphere Grid, origin/main against this build | 2 of 3 identical | seymour-flux-02-sphere-grid.png (1441 px, bbox [30,333,278,441]) |
-| 430x932 phone: Chapter and Sphere Grid, origin/main against this build | 2 of 3 identical | seymour-flux-02-sphere-grid.png (1364 px, bbox [30,331,278,438]) |
+| 1600x900 control: this build against itself | 18 of 19 identical | seymour-flux-02-sphere-grid-m0.png (3410 px, bbox [315,502,660,652]) |
+| 390x844 phone: Chapter and Sphere Grid, origin/main against this build | 2 of 3 identical | seymour-flux-02-sphere-grid.png (1355 px, bbox [30,333,278,441]) |
+| 430x932 phone: Chapter and Sphere Grid, origin/main against this build | 2 of 3 identical | seymour-flux-02-sphere-grid.png (1060 px, bbox [30,331,278,439]) |
 | 390x844 phone control: Chapter and Sphere Grid, origin/main against itself | 2 of 3 identical | seymour-flux-02-sphere-grid.png (1668 px, bbox [30,333,278,441]) |
 
 The one capture that differs is the Sphere Grid tab, and it differs the same way between two runs of the same build, on the desktop and on the phone (a marching-ants route preview and a pulsing node: bounding box about x 315 to 660, y 502 to 652 at 1600x900,
 x 30 to 278, y 333 to 441 on the phone, the same box in the origin/main-against-itself control): it is that tab's own animation, not this change. The Chapter pages are pixel-identical at the phone. The first sub-agent's earlier pair had also shown a difference of at most 2 levels in a 1112 x 76 px band of the FFX-2 Items capture; it did not reproduce in either fresh pair against the pristine export (that tab is identical in both). [identity.json](identity.json) has every file with the SHA-256 of its pixels. The desktop pairs (before = origin/main, after = this build) are in [desktop/1600x900/](desktop/1600x900/).
 `scripts/proof-desktop-input.mjs` on the final code at 1600x900: 18 of 18 checks (a mouse click on every heavy tab and on a roster row, Up, Esc; the phone page is never shown; the hidden phone page follows the Overdrive board's `click()`). Not part of the count and unchanged from origin/main: a real mouse click on a desktop Overdrive mode row does nothing there (the rows inherit `pointer-events: none`); the log line says so.
+
+The colour commit (`98bcc847`) was desktop-checked again by an independent pair of captures taken before it, on the code of `5a780295` (origin/main against the build: 18 of 19 identical at 1600x900, only the Sphere Grid's own animation differing). Its own 1280x720 capture read 16 of 19 on a first run, a difference of at most 2 levels
+(of 255) on the FFX Stats capture, in the soft shadow under the sheet; a second run of the same code read 18 of 19 like the origin/main pair, and the table above is that run: GPU shadow noise between launches, not a layout change (the commit changes custom properties inside the phone query only). The 430x932 input proof crashed once
+at its very end (the page closed under it, after 54 passing checks) and read 55 of 55 on a second run.
 
 ## Other widths and engines
 
@@ -150,10 +160,10 @@ x 30 to 278, y 333 to 441 on the phone, the same box in the origin/main-against-
 
 ## Where the build differs from the target
 
-See the handoff's list ([docs/handoff/r43-prepphone.md](../../handoff/r43-prepphone.md), "Where the build differs from the PREP-A target"). In short: four shades the tokens lack are taken from the page; the section plate is the token (0.84, not 0.90) and the stuck bar's ground is the
+See the handoff's list ([docs/handoff/r43-prepphone.md](../../handoff/r43-prepphone.md), "Where the build differs from the PREP-A target"). In short: the four shades the tokens lack are the nearest tokens (the small accent text on ivory is `--ig-accent-deep`, 3.4:1 against the page's 5.4:1; the up and down counts on a dark plate are ivory); the section plate is the token (0.84, not 0.90) and the stuck bar's ground is the
 Chapter page's; the seven heads are about 45 px (not 46) because they share the row; START BATTLE is within 1 px of the frames'; the scrolled frame rests 3 px short of the target's offset (227, not 230); four tabs have no frame to match.
 
 ## Folders
 
-`side-by-side/` (today | target | build), `now/390x844/`, `now/430x932/` (this build: every tab, and the end of each long page; not called `build/` because .gitignore ignores that name), `today/` (origin/main), `target/` (the five PREP-A frames), `webkit/`, `small/` (320 and 360 wide), `desktop/1600x900/{before,after}/`,
+`pairs/390x844/` (the five PREP-A frames, target left and build right), `side-by-side/` (today | target | build), `now/390x844/`, `now/430x932/` (this build: every tab, and the end of each long page; not called `build/` because .gitignore ignores that name), `today/` (origin/main), `target/` (the five PREP-A frames), `webkit/`, `small/` (320 and 360 wide), `desktop/1600x900/{before,after}/`,
 `identity.json`, `summary.json` (every sweep and every check), `scripts/` (the Playwright scripts, with a README).

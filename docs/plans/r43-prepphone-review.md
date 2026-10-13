@@ -45,5 +45,5 @@ seven heads did not fit one row; fixed by letting them shrink).
 - **CHAPTER and SPHERE GRID** (PR-0127 / D-071, PR-0127 / D-295): they ship their own phone pages and keep them byte for byte; a pixel comparison against origin/main at 390x844 confirms it (the Sphere Grid's animated map excepted).
 - **The desktop Overdrive rows' mouse click** (found, not caused): the rows inherit `pointer-events: none` from `#ui`, so a real mouse click lands on the canvas on origin/main too.
   Pixel-identical desktop was the brief, so it is reported for the driver, not fixed here. The phone rows set `pointer-events: auto` and take a real tap.
-- **Colours beyond the PREP-A page's own** (the four shades it uses that the tokens lack are taken from the page, not invented; see the handoff).
+- **Colours beyond the Ink & Gold tokens** (the four shades the PREP-A page uses that the tokens lack are the nearest tokens, as the lane's brief says, commit `98bcc847`; the page's own are a one-line switch each; see the handoff).
 - **A Wait or Active choice, a keyboard way to fold one section, or any change to the shell's keymap.** Ideas need a yes (hard rule 10).

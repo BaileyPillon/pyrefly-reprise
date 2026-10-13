@@ -20,5 +20,6 @@ Stop each server by its PID when done.
 | `proof-sphere.mjs` | The Sphere Grid tab by touch (it keeps its own phone page): zoom, centre, one of its own heads, START BATTLE uncovered; run it on the branch and on origin/main (`--tag=sphere-build` / `--tag=sphere-base`). |
 | `proof-desktop-input.mjs` | The prep functions by mouse and keys at a desktop size, and that the phone page never shows there. |
 | `shots-desktop.mjs`, `compare.mjs` | Every tab at a desktop size, and the exact pixel comparison of two folders. |
+| `make-pairs.mjs` | The five PREP-A frames as plain two-up pictures (target left, build right), into `../pairs/390x844/`; run after `proof-shots.mjs` and `proof-scrolled.mjs`. |
 | `finalize.mjs` | Builds this folder: JPEGs, the side-by-side frames, `identity.json`, `summary.json`. |
 | `run-final.sh` | The sequence, each command under its own hard timeout. |
