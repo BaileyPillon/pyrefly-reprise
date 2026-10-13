@@ -1,6 +1,6 @@
 # r44-diffb: Chapter XIII's move advisor follows the chapter's own line (DIFF-B, PR-0227)
 
-Branch `r44-diffb-thumbs` (this note covers the first of its two commits), built on `origin/r43-rc` 7b2582e7.
+Branch `r44-diffb-thumbs` (this note covers its first commit, 323a861b; the chapter board's thumbnails, the other approved change on the branch, are `docs/handoff/r44-thumbs.md`), built on `origin/r43-rc` 7b2582e7.
 Approved by Bailey on 2026-10-12 at about 23:15 EDT ("I'll go with all of your recommendations", the driver's list item "DIFF-B: the Chapter XIII advisor change", decision 61c).
 **Game case: FFX-2 only, Chapter XIII (Paragon, then Trema).** Chapters V and XV and every FFX chapter keep the card they had. No rule, boss, party, kit or timer number changes; no row is added to a menu; only the order of the card's rows does. Not deployed; nothing here is live.
 

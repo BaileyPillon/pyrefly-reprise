@@ -126,6 +126,17 @@ export function platesAhead(tiles: readonly ChapterTile[], selected: number, rea
 }
 
 /**
+ * Asks for the plates of the cards a press from the cursor (r44-thumbs, {@link platesAheadByCard}); the board calls it each time it shows a
+ * card. The first card's plate, the one a hand reaches for next (on to the right), goes in `lane`: `normal` once the cursor has moved, so it
+ * is ahead of the idle queue that holds every other card's faces; `idle` when the board opens, because the first paint's own set and the
+ * first input's music have the pipe then (on a 1.6 Mbit/s link the music finished 2.5 s later when this plate was asked for at the opening).
+ * The rest of the window waits its turn in the idle lane.
+ */
+export function warmPlatesAhead(tiles: readonly ChapterTile[], selected: number, lane: 'normal' | 'idle'): void {
+  platesAheadByCard(tiles, selected).forEach((urls, k) => void warmImages(urls, k === 0 ? lane : 'idle'));
+}
+
+/**
  * The board's paintings: `first` is what its first paint shows and waits for
  * (the opening card's plate, silhouettes and faces); `rest` is everything else,
  * most urgent first: the rail's strips (r44-thumbs: small copies of each card's

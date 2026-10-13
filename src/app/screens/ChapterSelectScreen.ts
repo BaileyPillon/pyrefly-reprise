@@ -12,9 +12,7 @@ import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCard
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
-import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
-import { platesAheadByCard } from './frontendWarm.ts';
-import { warmImages } from '../imageWarm.ts';
+import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts'; import { warmPlatesAhead } from './frontendWarm.ts'; // r44-thumbs: the plates a press from the cursor
 import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
 import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
 import { EXPERIMENT_DOOR_CHAPTER, EXPERIMENT_DOOR_WORD } from './frontend/experimentDoor.ts'; import { MUSHROOM_DOOR_CHAPTER, MUSHROOM_DOOR_WORD } from './frontend/mushroomDoor.ts'; // the typed-word doors of the Experiment and Sinspawn Gui
@@ -352,14 +350,12 @@ export class ChapterSelectScreen extends Screen {
 
   // --------------------------------------------------------------- render
 
-  /** `lane` is the lane of the card a hand reaches for next: `normal` once the cursor has moved (a hand is on the keys), `idle` when the board opens. */
   private refresh(lane: 'normal' | 'idle' = 'normal'): void {
     const tile = this.tiles[this.selected];
     if (!tile) return;
     this.warmer.focus(tile.playable ? tile.chapter : null);
 
-    // FFX-2's half of the board carries the pyre-pink accent, the existing
-    // token swap — never a new colour (presentation-ink-and-gold.md).
+    // FFX-2's half of the board carries the pyre-pink accent, the existing token swap, never a new colour (presentation-ink-and-gold.md).
     this.root.classList.toggle('ig--ffx2', tile.game === 'ffx2');
 
     const wash = this.root.querySelector('.fe-cselect__wash');
@@ -389,11 +385,7 @@ export class ChapterSelectScreen extends Screen {
     // r29 PR-0221: the plate, the faces and the wash at urgent, up decoded; the card left behind is demoted.
     const parts = [board, aside].filter((e): e is HTMLElement => e instanceof HTMLElement);
     this.showHero(parts, wash instanceof HTMLElement ? wash : null, washUrl);
-    // r44-thumbs: the strips are small copies, so the plates of the cards a press away are fetched ahead of the cursor (the window slides
-    // with it); every other card's plate loads when it is shown. Once a hand is on the keys the card it reaches for next (on to the right)
-    // goes ahead of the idle queue, which holds every other card's faces; the rest of the window waits its turn in it. When the board
-    // opens the whole window waits its turn: on a slow link the first paint's own set and the music have the pipe.
-    platesAheadByCard(this.tiles, this.selected).forEach((urls, k) => void warmImages(urls, k === 0 ? lane : 'idle'));
+    warmPlatesAhead(this.tiles, this.selected, lane); // r44-thumbs: the strips are small copies; the plates a press away load ahead (`lane`: frontendWarm.ts)
   }
 }
 
