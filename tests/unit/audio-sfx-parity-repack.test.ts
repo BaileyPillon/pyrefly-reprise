@@ -6,7 +6,9 @@
  * The rule is strict on purpose: a cue retires only when EVERY way the game reaches it ends at a recorded original in the
  * game's core pack, which every chapter of the game loads. So Auron's recording of the katana swing does not retire the
  * katana swing while the foes still play it, a boss pack's recording retires nothing, and a cue nothing was seen to use stays.
- * With no pack shipped nothing retires and the list is empty, which is what the build holds today.
+ * With no pack shipped nothing retires and the list is empty. Since 2026-10-12 the two core packs ship (the loose set of the SFX run), the plan took
+ * three stand-ins out of the sprite (buff-generic, hit-dagger, water: 0.17 MB), and `retired.ts` holds them: a plan made on the repacked sprite keeps the
+ * names already out of it (`already`), so the generated list does not lose them and `--check` stays green.
  */
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -91,6 +93,21 @@ describe('which stand-ins a recorded original retires', () => {
     const plan = planRetirement(input({ sprite: new Set(['mystery']) }));
     expect(plan.kept['mystery']).toMatch(/key space/);
   });
+
+  it('carries the names a repack already took out of the sprite, sorted, apart from what it retires now (so a second run on the repacked sprite loses none)', () => {
+    const core = { ffx: { 'swing-sword': { game: 'ffx' as const } }, ffx2: undefined };
+    const now = { ffx: [use('v2:swing-sword', ['swing-sword'])], ffx2: [] };
+    const first = planRetirement(input({ core, uses: now }));
+    expect(first.retired).toEqual(['swing-sword']);
+    expect(first.already).toEqual([]);
+    // The repack took it out: the sprite no longer holds it, the plan on that sprite retires nothing new and still reports it.
+    const sprite = new Set(Object.keys(cues).filter((name) => name !== 'swing-sword'));
+    const second = planRetirement(input({ sprite, core, uses: now, already: ['swing-sword'] }));
+    expect(second.retired).toEqual([]);
+    expect(second.already).toEqual(['swing-sword']);
+    expect(planRetirement(input({ already: ['water', 'buff-generic'] })).already).toEqual(['buff-generic', 'water']);
+    expect(retiredBytes(second, {}, 1_000_000, 100)).toBe(0); // it gives back nothing now
+  });
 });
 
 describe('what the repack gives back', () => {
@@ -112,9 +129,10 @@ describe('the retired list the build keeps', () => {
     expect([...sprite, ...RETIRED_V2_CUES].sort()).toEqual(Object.keys(V2_CUES).sort());
   });
 
-  it('is empty while no core pack has shipped', () => {
+  it('is empty while no core pack has shipped, and holds the three cues the first repack took out (2026-10-12) now that both have', () => {
     const packs = (JSON.parse(readFileSync(join(ROOT, 'public', 'audio', 'manifest.json'), 'utf8')) as { sfxParity?: { packs?: Record<string, unknown> } }).sfxParity?.packs ?? {};
     if (!packs['ffx-core'] && !packs['ffx2-core']) expect(RETIRED_V2_CUES).toEqual([]);
+    else expect(RETIRED_V2_CUES).toEqual(['buff-generic', 'hit-dagger', 'water']);
   });
 
   it('is what the command writes: --check passes, and the report retires nothing today', () => {
@@ -123,7 +141,8 @@ describe('the retired list the build keeps', () => {
     expect(check.stdout).toMatch(/retired\.ts is current/);
     const report = spawnSync(process.execPath, ['tools/audio/sfx-parity-repack.mjs'], { cwd: ROOT, encoding: 'utf8' });
     expect(report.status, report.stderr).toBe(0);
-    expect(report.stdout).toMatch(/retire 0:/);
-    expect(report.stdout).toMatch(/keep \d+ \(ffx has no core pack\)/);
+    expect(report.stdout).toMatch(/retire 0:/); // nothing new: the three it took out are already out of the sprite
+    expect(report.stdout).toMatch(/already out of the sprite \(retired\.ts keeps them\): buff-generic, hit-dagger, water/);
+    expect(report.stdout).toMatch(/keep \d+ \(ffx still plays it as the stand-in\)/);
   }, 180_000);
 });

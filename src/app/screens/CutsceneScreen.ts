@@ -58,7 +58,7 @@ const HOLD_TO_SKIP_MS = 550;
  * placeholders. Not chapter content.
  */
 export const DEMO_CUTSCENE_SCRIPT: StoryScript = [
-  music('boss-dread'),
+  music('boss-gui'), // 2026-10-12: `boss-dread`'s MP3 is retired (music batch 2); `boss-gui` plays the same dread, as an original
   camera('cutscene_low', 0),
   // Leads with a `say` (portrait + name tag) rather than the `narrate`
   // variant, so a plain `goto('cutscene')`/screenshot with no advance shows

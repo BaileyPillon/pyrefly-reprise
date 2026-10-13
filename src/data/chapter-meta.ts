@@ -215,7 +215,7 @@ const YUNALESCA_META: ChapterMeta = {
     { image: 'portraits/auron.png', caption: "it isn't over" },
   ],
   focalCharacterId: 'yunalesca',
-  musicKeys: ['scene-zanarkand-dome', 'boss-yunalesca', 'victory-ffx'],
+  musicKeys: ['scene-zanarkand-dome', 'boss-challenge', 'victory-ffx'],
 };
 
 /**
@@ -319,7 +319,7 @@ const FFX2_BAHAMUT_META: ChapterMeta = {
     { image: 'characters/paine-warrior/idle.png', caption: "you don't get another option" },
   ],
   focalCharacterId: 'yuna-ffx2',
-  musicKeys: ['scene-bevelle-underground', 'boss-bahamut'],
+  musicKeys: ['scene-bevelle-underground', 'boss-bahamut', 'victory-bahamut'],
 };
 
 /**

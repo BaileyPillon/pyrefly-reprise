@@ -147,8 +147,8 @@ export const sinspawnGuiGroup1: EnemyGroupDef = {
   nextGroupId: GUI_GROUP_2_ID,
   bossId: GUI_ID,
   headline: 'Sinspawn Gui',
-  // "Peril" is the game's cue here; our nearest existing cue is the dread theme (no new audio, `docs/audio/THEMES.md`).
-  musicCues: [{ at: 'start', track: 'boss-dread', fadeMs: 1200 }],
+  // "Peril" is the game's cue here; since 2026-10-12 ours is `boss-gui`, an ElevenLabs original (music batch 2, FFX only; the dread theme stood in before).
+  musicCues: [{ at: 'start', track: 'boss-gui', fadeMs: 1200 }],
 };
 
 /** Fight 2: Yuna, Seymour and Auron, Switch off; the weaker body; the spoils of both fights are paid together. */
@@ -165,8 +165,8 @@ export const sinspawnGuiGroup2: EnemyGroupDef = {
   plate: MUSHROOM_ROCK_RUINED_PLATE, // the second fight is fought in the ruined command center (research section 7; the beam has struck)
   checkpointOnEntry: true, // a defeat retries here, with the HP and MP the party carried in
   hopelessRetry: { standing: 2, answer: 'restore' }, // two of the three on their feet, or the retry opens with everyone up and full
-  // "Challenge" is the game's cue here; our nearest existing cue is Seymour's own theme.
-  musicCues: [{ at: 'start', track: 'boss-seymour', fadeMs: 1200 }],
+  // "Challenge" is the game's cue here; since 2026-10-12 ours is `boss-challenge`, an ElevenLabs original shared with Chapter II (music batch 2, FFX only; Seymour's own theme stood in before).
+  musicCues: [{ at: 'start', track: 'boss-challenge', fadeMs: 1200 }],
 };
 
 export const SINSPAWN_GUI_GROUPS: readonly EnemyGroupDef[] = [sinspawnGuiGroup1, sinspawnGuiGroup2];

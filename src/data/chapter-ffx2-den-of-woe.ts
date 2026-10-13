@@ -38,9 +38,9 @@
  * - `sceneKey: 'bevelle-underground'` — **placeholder**: the approved FFX-2
  *   underground diorama, the nearest to a cave, until the Den scene (plan track T5,
  *   after the O-3 pick A, cold blue pyreflies) is built.
- * - `music` — **GP16 a, stand-in b**: `boss-shuyin` until `boss-den-of-woe` is
- *   auditioned (rule 13); field bed `scene-bevelle-underground` (placeholder, with the
- *   scene); the FFX-2 fanfare.
+ * - `music` — **GP16 a**: `boss-den-of-woe`, an ElevenLabs original since 2026-10-12
+ *   (music batch 2, FFX-2 only; the stand-in `boss-shuyin` before); field bed
+ *   `scene-bevelle-underground` (placeholder, with the scene); the FFX-2 fanfare.
  * - `scriptsRef` — **placeholder**: a silent pre scene that opens the battle and a
  *   silent post scene that shows results. The beats (GP13 a silent shades, GP14 a
  *   Yuna's narration, GP15's callouts) are drafted for Bailey in
@@ -96,7 +96,7 @@ export const FFX2_DEN_OF_WOE: Chapter = {
   scriptsRef: DEN_OF_WOE_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {
     scene: 'scene-bevelle-underground', // PLACEHOLDER, with the scene
-    battle: 'boss-shuyin', // GP16 stand-in b
+    battle: 'boss-den-of-woe', // GP16 a (2026-10-12; `boss-shuyin` stood in before)
     victory: 'victory-ffx2',
   },
   sensorTexts: {

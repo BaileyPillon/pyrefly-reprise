@@ -703,7 +703,8 @@ async function main() {
   // The names the bundle builds at run time are covered by `node tools/art-play-audit.mjs --dir <this build>` (the focused review).
   log('art: pixel identity of every shipped WebP against its master PNG, and every reference to the art');
   const artIdentity = await verifyShippedArt({ distDir: DIST, publicDir: join(ROOT, 'public') });
-  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel) in ${(artIdentity.ms / 1000).toFixed(0)} s`);
+  const th = artIdentity.thumbs; // r44-thumbs: the board's strip thumbnails are proved in the same pass (tools/art-thumb-verify.mjs)
+  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel); strip thumbnails: ${th.enabled ? `${th.checked} listed (${th.webp} WebP, ${th.png} PNG, ${th.none} with none), each decoded and compared with its master resized by the rule` : 'NONE in this build (PYREFLY_ART_THUMBS=off, or a tool from before r44): the strips on the board load the full paintings'} in ${(artIdentity.ms / 1000).toFixed(0)} s`);
   if (!artIdentity.ok) {
     for (const p of artIdentity.problems.slice(0, 25)) log(`  ${p}`);
     fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels, are missing, or are a WebP of art that a decoder could draw differently (node tools/art-derive.mjs verify --dir dist-release); the default PYREFLY_ART_WEBP=exact makes none of these, PYREFLY_ART_WEBP=off ships the PNGs as before`);

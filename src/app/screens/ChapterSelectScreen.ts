@@ -12,7 +12,7 @@ import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCard
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
-import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts';
+import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts'; import { warmPlatesAhead } from './frontendWarm.ts'; // r44-thumbs: the plates a press from the cursor
 import { SecretDoor, WordDoor } from './frontend/secretDoor.ts';
 import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './frontend/leblancDoor.ts';
 import { EXPERIMENT_DOOR_CHAPTER, EXPERIMENT_DOOR_WORD } from './frontend/experimentDoor.ts'; import { MUSHROOM_DOOR_CHAPTER, MUSHROOM_DOOR_WORD } from './frontend/mushroomDoor.ts'; // the typed-word doors of the Experiment and Sinspawn Gui
@@ -141,7 +141,7 @@ export class ChapterSelectScreen extends Screen {
       rail.innerHTML = railHtml(groupChapterTiles(this.tiles), this.tiles, this.selected, (id) => this.bestTime(id));
       mountLazyPlates(rail, this.selected); // r29: the strips in the idle lane, nearest first, up once decoded
     }
-    this.refresh();
+    this.refresh('idle'); // nobody has pressed anything yet: nothing is fetched ahead of the first paint's own set
     void this.app.fade('clear', 500);
   }
 
@@ -350,13 +350,12 @@ export class ChapterSelectScreen extends Screen {
 
   // --------------------------------------------------------------- render
 
-  private refresh(): void {
+  private refresh(lane: 'normal' | 'idle' = 'normal'): void {
     const tile = this.tiles[this.selected];
     if (!tile) return;
     this.warmer.focus(tile.playable ? tile.chapter : null);
 
-    // FFX-2's half of the board carries the pyre-pink accent, the existing
-    // token swap — never a new colour (presentation-ink-and-gold.md).
+    // FFX-2's half of the board carries the pyre-pink accent, the existing token swap, never a new colour (presentation-ink-and-gold.md).
     this.root.classList.toggle('ig--ffx2', tile.game === 'ffx2');
 
     const wash = this.root.querySelector('.fe-cselect__wash');
@@ -386,6 +385,7 @@ export class ChapterSelectScreen extends Screen {
     // r29 PR-0221: the plate, the faces and the wash at urgent, up decoded; the card left behind is demoted.
     const parts = [board, aside].filter((e): e is HTMLElement => e instanceof HTMLElement);
     this.showHero(parts, wash instanceof HTMLElement ? wash : null, washUrl);
+    warmPlatesAhead(this.tiles, this.selected, lane); // r44-thumbs: the strips are small copies; the plates a press away load ahead (`lane`: frontendWarm.ts)
   }
 }
 

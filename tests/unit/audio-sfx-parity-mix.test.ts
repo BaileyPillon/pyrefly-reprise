@@ -80,6 +80,8 @@ describe('the floor under the party (FFX-2 hits): today\'s level, not the D-210 
   /** What the floors were under P1 as first accepted (52i): D-210's level, today minus 6.02 dB. 52n replaced them with today's class levels. */
   const D210 = { weapon: -24, impact: -20.1 } as const;
   const HITS = ['shot-gun', 'swing-dagger', 'hit-gun', 'hit-dagger', 'hit-greatsword'] as const;
+  /** The sprite's own cues among them: `hit-dagger` left the v2 sprite on 2026-10-12 (the final repack, `retired.ts`) because the recorded original in ffx2-core answers every use of it, at the same floor. */
+  const IN_SPRITE = HITS.filter((cue) => cue in cues);
 
   it('the floors are the recorded set\'s class levels (-18 weapon, -14.1 impact), and applyLow stays off', () => {
     expect(mix.floors).toEqual({ weapon: -18, impact: -14.1 });
@@ -89,7 +91,8 @@ describe('the floor under the party (FFX-2 hits): today\'s level, not the D-210 
   it('NO CUT: the girls\' swings and blows, and their KO fall, play at today\'s level (no trim at all), where the D-210 floor cut each about 6 dB', () => {
     for (const cue of [...HITS, 'ko-fall']) expect(PARITY_TRIMS_DB.ffx2[cue], `${cue} takes no trim`).toBeUndefined();
     for (const cue of ['shot-gun', 'swing-dagger']) expect(level('ffx2', cue), cue).toBeCloseTo(-18, 0);
-    for (const cue of ['hit-gun', 'hit-dagger', 'hit-greatsword']) expect(level('ffx2', cue), cue).toBeCloseTo(-14.1, 0);
+    for (const cue of ['hit-gun', 'hit-greatsword']) expect(level('ffx2', cue), cue).toBeCloseTo(-14.1, 0);
+    expect(IN_SPRITE).toEqual(['shot-gun', 'swing-dagger', 'hit-gun', 'hit-greatsword']); // the one cue the sprite lost; the pack test holds its original to its row
     // Nothing the floor protects goes lower than the floor, and no party trim anywhere is a cut of even a decibel.
     for (const row of mix.rows.filter((r) => r.floor)) {
       const target = rowTarget(mix, row);
@@ -101,9 +104,9 @@ describe('the floor under the party (FFX-2 hits): today\'s level, not the D-210 
 
   it('moves the floor with one number: the D-210 floor in its place brings the cut back (about -6 dB), and today\'s class levels remove it', () => {
     const cut = deriveTrims({ ...mix, floors: D210 }, cues);
-    for (const cue of [...HITS, 'ko-fall']) expect(cut.ffx2[cue]!, `${cue} under the D-210 floor`).toBeLessThanOrEqual(-5.9);
+    for (const cue of [...IN_SPRITE, 'ko-fall']) expect(cut.ffx2[cue]!, `${cue} under the D-210 floor`).toBeLessThanOrEqual(-5.9);
     const kept = deriveTrims({ ...mix, floors: { weapon: -18, impact: -14.1 } }, cues);
-    for (const cue of HITS) expect(kept.ffx2[cue], cue).toBeUndefined();
+    for (const cue of IN_SPRITE) expect(kept.ffx2[cue], cue).toBeUndefined();
     expect(kept.ffx2).toEqual(PARITY_TRIMS_DB.ffx2); // the shipped table is exactly this derivation
   });
 

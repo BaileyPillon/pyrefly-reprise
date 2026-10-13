@@ -129,7 +129,7 @@ export const yunalescaScripts: ChapterScripts = {
 
     say('yunalesca', 'Then you will die out there, in despair.'),
     say('yunalesca', 'I would rather it were here. And gentle.'),
-    music('boss-yunalesca', 900),
+    music('boss-challenge', 900), // 2026-10-12: the "Challenge" original (batch 2); `boss-yunalesca`'s MP3 is retired
     camera('action', 700),
     battleStart(),
   ],

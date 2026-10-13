@@ -2,8 +2,17 @@ import type { FFXMemberBuild, FFXPartyBuild, OverdriveModeId } from '../../../ba
 import type { EffectiveStatRow } from '../../../battle/ffx/effectiveStats.ts';
 import { effectiveStats } from '../../../battle/ffx/effectiveStats.ts';
 import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrepScreen.ts';
+import { appendPhoneHost, phoneKeys, readOpen } from '../../common/prepPhoneFold.ts';
 import { itemLabel } from '../../common/resultsMath.ts';
 import { autoAbilityLabel } from './autoAbilityLabels.ts';
+import { MODE_BLURB, OVERDRIVE_NAME, modeLabel } from './overdriveText.ts';
+import {
+  ffxEquipmentPhoneHtml,
+  ffxItemsPhoneHtml,
+  ffxOverdrivePhoneHtml,
+  ffxStatsPhoneHtml,
+  statBonusText,
+} from './phoneViews.ts';
 
 /**
  * The Party / Equipment / Items / Overdrive-modes tabs: four small composing
@@ -41,12 +50,8 @@ function ffxBuild(ctx: PrepPanelContext): FFXPartyBuild | null {
  * [ffx-combat-core §9, §2.4].
  */
 function bonusChip(row: EffectiveStatRow): string {
-  if (row.bonusPercent === 0) return '';
-  const text =
-    row.kind === 'mitigation'
-      ? `&minus;${row.bonusPercent}% taken`
-      : `+${row.bonusPercent}%${row.kind === 'damage' ? ' dmg' : ''}`;
-  return `<span class="ffxprep-stat__bonus">${text}</span>`;
+  const text = statBonusText(row);
+  return text ? `<span class="ffxprep-stat__bonus">${escapeHtml(text)}</span>` : '';
 }
 
 /**
@@ -69,10 +74,12 @@ function bonusChip(row: EffectiveStatRow): string {
 export function makeStatsPanel(): PrepPanel {
   let build: FFXPartyBuild | null = null;
   let gridEl: HTMLElement | null = null;
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
 
   const render = (memberId: string): void => {
     const member = build?.members.find((m) => m.id === memberId);
     if (!gridEl || !member) return;
+    if (phoneEl) phoneEl.innerHTML = ffxStatsPhoneHtml(member, readOpen(phoneEl));
     gridEl.innerHTML = effectiveStats(member)
       .rows.map((row) => {
         const raised = row.effective !== row.base;
@@ -101,13 +108,16 @@ export function makeStatsPanel(): PrepPanel {
         '<div class="ffxprep-stats"></div>' +
         '<div class="ffxprep-stats__note">Equipment grants auto-abilities, not stat points: HP/MP&thinsp;+% raise the pool, the rest apply in the damage chain.</div>';
       gridEl = root.querySelector('.ffxprep-stats');
+      phoneEl = appendPhoneHost(root);
       render(ctx.memberId);
     },
     unmount() {
       build = null;
       gridEl = null;
+      phoneEl = null;
     },
     selectMember: render,
+    handleInput: (input) => phoneKeys(input, phoneEl),
   };
 }
 
@@ -126,10 +136,12 @@ export function makeStatsPanel(): PrepPanel {
 export function makeEquipmentPanel(): PrepPanel {
   let build: FFXPartyBuild | null = null;
   let bodyEl: HTMLElement | null = null;
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
 
   const render = (memberId: string): void => {
     const member = build?.members.find((m) => m.id === memberId);
     if (!bodyEl || !member) return;
+    if (phoneEl) phoneEl.innerHTML = ffxEquipmentPhoneHtml(member, readOpen(phoneEl));
     const gear = (label: string, def: FFXMemberBuild['equipment']['weapon']): string => `
       <div class="ffxprep-gear">
         <div class="ffxprep-gear__name"><b>${label}</b> ${escapeHtml(def.name)}</div>
@@ -152,13 +164,16 @@ export function makeEquipmentPanel(): PrepPanel {
       build = ffxBuild(ctx);
       root.innerHTML = '<div class="ffxprep-equipment"></div>';
       bodyEl = root.querySelector('.ffxprep-equipment');
+      phoneEl = appendPhoneHost(root);
       render(ctx.memberId);
     },
     unmount() {
       build = null;
       bodyEl = null;
+      phoneEl = null;
     },
     selectMember: render,
+    handleInput: (input) => phoneKeys(input, phoneEl),
   };
 }
 
@@ -180,16 +195,26 @@ export function makeEquipmentPanel(): PrepPanel {
  * straight onto a player-facing surface.
  */
 export function makeItemsPanel(): PrepPanel {
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
   return {
     id: 'items',
     label: 'Items',
     game: 'ffx',
     order: 30,
     fullScreen: false,
+    handleInput: (input) => phoneKeys(input, phoneEl),
+    unmount() {
+      phoneEl = null;
+    },
     mount(root, ctx: PrepPanelContext) {
       const build = ffxBuild(ctx);
+      const drawPhone = (): void => {
+        phoneEl = appendPhoneHost(root);
+        phoneEl.innerHTML = ffxItemsPhoneHtml(build, readOpen(phoneEl));
+      };
       if (!build || !build.inventory.length) {
         root.innerHTML = '<div class="ffxprep-empty">No items.</div>';
+        drawPhone();
         return;
       }
       const kinds = build.inventory.length;
@@ -208,65 +233,18 @@ export function makeItemsPanel(): PrepPanel {
       root.innerHTML = `
         <div class="ffxprep-items__head">${kinds} kind${kinds === 1 ? '' : 's'} <span>${total} in the bag</span></div>
         <div class="ffxprep-items ffxprep-items--two-col">${rows}</div>`;
+      drawPhone();
     },
   };
 }
 
 // --------------------------------------------------------------- Overdrive
 
-/**
- * Static per-character Overdrive move name (visual-bible §5.4's STATS tab:
- * "the character's Overdrive name ... all verified from the wiki
- * infoboxes"). A display label only — Lulu's is the `'fury'` menu marker
- * that expands into her learned `<spell>-fury` ids at battle time
- * [CONTRACT-CHANGES decision 9], never something this tab could derive from
- * `unlockedOverdriveIds` (which for her is 19 spell-tier ids, not one name).
- */
-const OVERDRIVE_NAME: Record<string, string> = {
-  tidus: 'Swordplay',
-  yuna: 'Grand Summon',
-  auron: 'Bushido',
-  wakka: 'Slots',
-  lulu: 'Fury',
-  kimahri: 'Ronso Rage',
-  rikku: 'Mix',
-};
-
-/**
- * FFX names its Overdrive modes Stoic, Warrior, Comrade, Healer… — proper
- * nouns, as the menu prints them. `OverdriveModeId` is the lower-case id, and
- * the row was printing it raw (`stoic`, `daredevil`); the `text-transform:
- * uppercase` in the CSS hid it at a glance and not in the DOM. Every id in the
- * union is a single word, so title case *is* the name.
- */
-function modeLabel(mode: OverdriveModeId): string {
-  return mode.charAt(0).toUpperCase() + mode.slice(1);
-}
-
-const MODE_BLURB: Partial<Record<OverdriveModeId, string>> = {
-  stoic: 'Charges from damage taken.',
-  warrior: 'Charges from damage dealt.',
-  comrade: "Charges when an ally takes damage.",
-  healer: 'Charges from healing allies.',
-  tactician: 'Charges from inflicting a status.',
-  victim: 'Charges from being inflicted with a status.',
-  dancer: 'Charges from evading an attack.',
-  avenger: "Charges when an ally is KO'd.",
-  slayer: 'Charges from a kill.',
-  hero: 'Charges from a big kill.',
-  rook: 'Charges from blocking damage.',
-  victor: 'Charges just from winning.',
-  coward: 'Charges from escaping.',
-  ally: "Charges at the start of the user's turn.",
-  sufferer: 'Charges each turn while afflicted.',
-  daredevil: 'Charges each turn while in Critical.',
-  loner: 'Charges each turn while fighting alone.',
-};
-
 /** The Overdrive tab: the character's Overdrive move name, plus mode selection. */
 export function makeOverdrivePanel(): PrepPanel {
   let build: FFXPartyBuild | null = null;
   let bodyEl: HTMLElement | null = null;
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
   let currentMemberId = '';
 
   const render = (memberId: string): void => {
@@ -288,13 +266,20 @@ export function makeOverdrivePanel(): PrepPanel {
       <div class="ffxprep-mode-list">${rows}</div>
       <div class="ffxprep-mode-blurb">${escapeHtml(MODE_BLURB[member.overdrive.mode] ?? '')}</div>
     `;
-    bodyEl.querySelectorAll<HTMLElement>('[data-mode]').forEach((row) => {
-      row.addEventListener('click', () => {
-        const mode = row.dataset['mode'] as OverdriveModeId;
-        if (member.overdrive.unlockedModes.includes(mode)) member.overdrive.mode = mode;
-        render(currentMemberId);
+    // The desktop rows and the phone page's rows are the same control: a click or a tap equips that mode.
+    const wire = (scope: HTMLElement): void =>
+      scope.querySelectorAll<HTMLElement>('[data-mode]').forEach((row) => {
+        row.addEventListener('click', () => {
+          const mode = row.dataset['mode'] as OverdriveModeId;
+          if (member.overdrive.unlockedModes.includes(mode)) member.overdrive.mode = mode;
+          render(currentMemberId);
+        });
       });
-    });
+    wire(bodyEl);
+    if (phoneEl) {
+      phoneEl.innerHTML = ffxOverdrivePhoneHtml(member, readOpen(phoneEl));
+      wire(phoneEl);
+    }
   };
 
   return {
@@ -307,12 +292,15 @@ export function makeOverdrivePanel(): PrepPanel {
       build = ffxBuild(ctx);
       root.innerHTML = '<div class="ffxprep-overdrive"></div>';
       bodyEl = root.querySelector('.ffxprep-overdrive');
+      phoneEl = appendPhoneHost(root);
       render(ctx.memberId);
     },
     unmount() {
       build = null;
       bodyEl = null;
+      phoneEl = null;
     },
     selectMember: render,
+    handleInput: (input) => phoneKeys(input, phoneEl),
   };
 }

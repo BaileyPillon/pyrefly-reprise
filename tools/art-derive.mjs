@@ -19,6 +19,11 @@
  *   node tools/art-derive.mjs audit  --dir <build output> [--baseline <an earlier build of the same sources>]
  *        the reference audit: nothing names an art file the build does not hold; exit 1 on any
  *
+ * The strip thumbnails (r44-thumbs, `tools/art-thumbs.mjs`): `plan` and `warm` also derive the small copies of the paintings the chapter
+ * board's strips paint (`src/data/art/strip-art.json`; `--strip-list <file>` names another list, `PYREFLY_ART_THUMBS=off` makes none), `verify` proves
+ * each one decodes to its master resized again by the rule and that the build holds exactly the recorded ones (`tools/art-thumb-verify.mjs`), and `audit`
+ * checks that the bundle and the record name the same thumbnail files and that each is shipped.
+ *
  * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` is the switch (default `exact`): `off` ships the PNGs exactly as before; `exact` ships
  * a WebP only for a master every decoder draws the same from it (opaque, or alpha only 0 and 255 with no colour under alpha 0:
  * premultiplying is then the identity) and ships every other master as a PNG recompressed at maximum effort, each proved to decode to
@@ -34,6 +39,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { planArtDerivation, resolveCache, resolveScope } from './art-derive-lib.mjs';
+import { STRIP_LIST, planThumbs, resolveThumbSwitch } from './art-thumbs.mjs';
 import { auditArtReferences, formatAudit, verifyShippedArt } from './art-verify.mjs';
 
 /** The `--name value` pairs of an argument list. */
@@ -61,12 +67,15 @@ async function main(argv) {
     const plan = await planArtDerivation({ publicDir, cacheDir: resolveCache(option(argv, '--cache')), scope: resolveScope(option(argv, '--scope') ?? undefined), jobs, log: (m) => console.log(m) });
     const mb = (n) => `${(n / 1e6).toFixed(1)} MB`;
     console.log(`art-derive ${plan.scope}: ${plan.counts.webp} webp, ${plan.counts.png} recompressed png, ${plan.counts.copy} unchanged; masters ${mb(plan.bytes.masters)} -> ${mb(plan.bytes.shipped)} (saves ${mb(plan.bytes.saved)}) in ${(plan.ms / 1000).toFixed(0)} s; cache ${plan.cacheDir}/${plan.encoder}`);
+    const thumbs = await planThumbs({ publicDir, cacheDir: plan.cacheDir, listFile: resolve(option(argv, '--strip-list', resolve(publicDir, '..', STRIP_LIST))), jobs, log: (m) => console.log(m), off: resolveThumbSwitch() === 'off' });
+    const made = thumbs.entries.filter((e) => e.kind !== 'none');
+    console.log(thumbs.off ? 'art-derive thumbnails: none (off)' : `art-derive thumbnails: ${made.length} of ${thumbs.entries.length} masters (${made.filter((e) => e.kind === 'webp').length} webp, ${made.filter((e) => e.kind === 'png').length} png), ${mb(made.reduce((n, e) => n + e.bytes, 0))} from ${mb(thumbs.entries.reduce((n, e) => n + (e.masterBytes ?? 0), 0))} in ${(thumbs.ms / 1000).toFixed(0)} s`);
   } else if (command === 'verify' || command === 'audit') {
     if (!option(argv, '--dir')) throw new Error(`${command} needs --dir <build output>`);
     const dir = resolve(option(argv, '--dir'));
     if (command === 'verify') {
-      const r = await verifyShippedArt({ distDir: dir, publicDir, jobs, exact: !argv.includes('--allow-inexact') });
-      console.log(`art-derive verify${r.exact ? ' (exact)' : ' (--allow-inexact)'}: ${r.ok ? 'PASS' : 'FAIL'}: ${r.checked} masters checked (${r.webp} WebP, ${r.png} PNG, ${r.decoded} pixel-compared), ${r.problems.length} problem(s), ${(r.ms / 1000).toFixed(0)} s`);
+      const r = await verifyShippedArt({ distDir: dir, publicDir, jobs, exact: !argv.includes('--allow-inexact'), listFile: resolve(option(argv, '--strip-list', resolve(publicDir, '..', STRIP_LIST))) });
+      console.log(`art-derive verify${r.exact ? ' (exact)' : ' (--allow-inexact)'}: ${r.ok ? 'PASS' : 'FAIL'}: ${r.checked} masters checked (${r.webp} WebP, ${r.png} PNG, ${r.decoded} pixel-compared); strip thumbnails: ${r.thumbs.enabled ? `${r.thumbs.checked} checked (${r.thumbs.webp} WebP, ${r.thumbs.png} PNG, ${r.thumbs.none} none), each decoded and compared with its master resized by the rule` : 'none in this build'}; ${r.problems.length} problem(s), ${(r.ms / 1000).toFixed(0)} s`);
       for (const p of r.problems) console.log(`  PROBLEM ${p}`);
       process.exitCode = r.ok ? 0 : 1;
     } else {

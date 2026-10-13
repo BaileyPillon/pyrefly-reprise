@@ -238,7 +238,9 @@ async function auditCue(name, entry) {
   if (entry.loopEnd > duration + 0.05) {
     failures.push(`loopEnd ${entry.loopEnd}s past the file's ${duration.toFixed(2)}s`);
   }
-  if (entry.loopEnd - entry.loopStart < 5) failures.push('loop body under 5 s');
+  // A one-shot (a defeat cue, 2026-10-12) plays once and then holds digital silence: the player always loops, so its loop region IS that silence (`loopStart` where
+  // the silence begins, `loopEnd` the file's end, about 2 s) and the entry says `oneShot: true`. A short loop body is what it is by construction; every other gate still runs.
+  if (entry.loopEnd - entry.loopStart < 5 && entry.oneShot !== true) failures.push('loop body under 5 s');
   if (edges.leadingSec > 0.5) failures.push(`${edges.leadingSec.toFixed(2)}s of leading silence`);
   if (edges.trailingSec > 3.5) failures.push(`${edges.trailingSec.toFixed(2)}s of trailing silence`);
   if (Math.abs(info.size - (entry.bytes ?? info.size)) > 4096) {

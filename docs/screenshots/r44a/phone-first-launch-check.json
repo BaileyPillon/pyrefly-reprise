@@ -1,0 +1,201 @@
+{
+ "what": "A first launch on a 390x844 touch phone, party prep, with the first-run guide step-2 slab up over the PREP-A stacked pages (the one combination no PREP-A capture showed: every one had the guide skipped). Headless Chromium (SwiftShader), fresh profile, real touch taps, the dev server of the r44a-rc tree before the PLATE_AHEAD, FOC43-01 and mode-row commits were relevant to it.",
+ "when": "2026-10-13T06:28:04.804Z",
+ "tabs": [
+  "chapter",
+  "stats",
+  "sphere-grid",
+  "equipment",
+  "items",
+  "overdrive"
+ ],
+ "consoleErrors": [],
+ "note": "slabOverlapPx is the pixel area of the slab over START BATTLE, the pinned tab strip and the pinned faces row (0 = no overlap); startHit is whether a real pointer at START BATTLE reaches it. On the Sphere Grid tab the first-time card is modal until closed (startHit false before, true after), as it was before PREP-A; the Sphere Grid and CHAPTER phone pages are not PREP-A pages (phoneAttr null). The strip of tab buttons scrolls sideways on a phone, so not every button is on screen at once.",
+ "steps": {
+  "first": {
+   "tab": "chapter",
+   "phoneAttr": null,
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 510,
+    "w": 360,
+    "h": 139,
+    "bottom": 649,
+    "right": 367
+   },
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "stats": {
+   "tab": "stats",
+   "phoneAttr": "page",
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 510,
+    "w": 360,
+    "h": 139,
+    "bottom": 649,
+    "right": 367
+   },
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "sphere-grid": {
+   "tab": "sphere-grid",
+   "phoneAttr": null,
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 508,
+    "w": 360,
+    "h": 139,
+    "bottom": 647,
+    "right": 367
+   },
+   "startHit": false,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "sphere-grid-card-closed": {
+   "tab": "sphere-grid",
+   "phoneAttr": null,
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 508,
+    "w": 360,
+    "h": 139,
+    "bottom": 647,
+    "right": 367
+   },
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "equipment": {
+   "tab": "equipment",
+   "phoneAttr": "page",
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 510,
+    "w": 360,
+    "h": 139,
+    "bottom": 649,
+    "right": 367
+   },
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "items": {
+   "tab": "items",
+   "phoneAttr": "page",
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 510,
+    "w": 360,
+    "h": 139,
+    "bottom": 649,
+    "right": 367
+   },
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "overdrive": {
+   "tab": "overdrive",
+   "phoneAttr": "page",
+   "guideStep": "2",
+   "slab": {
+    "x": 7,
+    "y": 510,
+    "w": 360,
+    "h": 139,
+    "bottom": 649,
+    "right": 367
+   },
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  },
+  "afterSkip": {
+   "tab": "overdrive",
+   "phoneAttr": "page",
+   "guideStep": null,
+   "slab": null,
+   "startHit": true,
+   "slabOverlapPx": {
+    "start": 0,
+    "tabs": 0,
+    "roster": 0
+   },
+   "hintDisplay": "none",
+   "viewport": [
+    390,
+    844
+   ]
+  }
+ }
+}

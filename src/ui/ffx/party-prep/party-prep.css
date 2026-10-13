@@ -225,6 +225,10 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
+  /* `#ui` is `pointer-events: none` and that inherits down to here; `index.html`'s `#ui [data-action]` fallback does not cover a row (it
+     carries `data-mode`), so it restates it, as `.prep__member` and the Sphere Grid's controls do. Without it a mouse click landed on
+     the canvas under the overlay and only `row.click()` equipped a mode (r43-prepphone found it; a tablet at 600 px or wider too). */
+  pointer-events: auto;
 }
 .ffxprep-mode-row--selected {
   background: var(--ig-accent);

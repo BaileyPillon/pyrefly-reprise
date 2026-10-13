@@ -30,6 +30,8 @@ import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrep
 import { accessoryEffect } from '../../../battle/ffx2/accessories.ts';
 import { GARMENT_GRIDS, STANDARD_DRESSPHERES, SPECIAL_DRESSPHERES, FFX2_ITEMS, ABILITIES } from '../../../data/ffx2/index.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from '../dressphereIcons.ts';
+import { appendPhoneHost, phoneKeys, readOpen } from '../../common/prepPhoneFold.ts';
+import { x2AccessoriesPhoneHtml, x2DresspheresPhoneHtml, x2ItemsPhoneHtml, type GridModel } from './phoneViews.ts';
 import './party-prep.css';
 
 function escapeHtml(s: string): string {
@@ -69,11 +71,30 @@ function joinOr(parts: readonly string[], empty = '—'): string {
  * a full bar that has not paid out. So the bank and the cheapest rung left are
  * two separate facts, stated as two facts.
  */
-function apText(ap: number, next: { abilityId: string; apCost: number } | undefined): string {
+function apParts(ap: number, next: { abilityId: string; apCost: number } | undefined): string[] {
   const parts: string[] = [];
   if (ap > 0) parts.push(`${ap} AP banked`);
   if (next) parts.push(`next ${abilityName(next.abilityId)} ${next.apCost} AP`);
+  return parts;
+}
+
+function apText(ap: number, next: { abilityId: string; apCost: number } | undefined): string {
+  const parts = apParts(ap, next);
   return parts.length ? ` &middot; ${parts.join(' &middot; ')}` : '';
+}
+
+/** The Garment Grid she carries, as the phone page draws it (the desktop strip is `gridHtml` below). */
+function gridModel(m: FFX2MemberBuild): GridModel {
+  const state = m.garmentGrid;
+  const def = GARMENT_GRIDS[state.id as keyof typeof GARMENT_GRIDS];
+  if (!def) return { name: state.id, equip: `Node ${state.nodePosition + 1}.`, nodes: 0, here: -1, gates: [] };
+  return {
+    name: def.name,
+    equip: def.equip?.description ?? 'no equip effect',
+    nodes: def.nodeCount,
+    here: state.nodePosition,
+    gates: def.gateColours.map((c) => ({ colour: c, passed: state.passedGates.includes(c) })),
+  };
 }
 
 /**
@@ -113,6 +134,7 @@ function learnedChipsHtml(learned: readonly string[]): string {
 export function makeDresspherePanel(): PrepPanel {
   let build: FFX2PartyBuild | null = null;
   let bodyEl: HTMLElement | null = null;
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
 
   const gridHtml = (m: FFX2MemberBuild): string => {
     const state = m.garmentGrid;
@@ -161,6 +183,19 @@ export function makeDresspherePanel(): PrepPanel {
       .filter((a) => !learned.includes(a.abilityId as never) && a.apCost > 0)
       .sort((a, b) => a.apCost - b.apCost)[0];
     const others = member.owned.filter((id) => id !== worn);
+    if (phoneEl) {
+      const ref = (id: string) => ({ abbr: dressphereAbbr(id), colour: dressphereColour(id), label: dressphereLabel(id) });
+      phoneEl.innerHTML = x2DresspheresPhoneHtml(
+        {
+          who: { name: member.name, level: member.level, dressphere: worn },
+          worn: { ...ref(worn), label: def?.name ?? dressphereLabel(worn), commands: def?.commands ?? [] },
+          learned: { names: learned.map(abilityName), total, ap: apParts(progress?.ap ?? 0, next) },
+          grid: gridModel(member),
+          owned: others.map(ref),
+        },
+        readOpen(phoneEl),
+      );
+    }
     // Two columns, because the ivory sheet is 820 units wide and ~138 tall:
     // stacked, this panel ran off the bottom of the sheet and under the START
     // BATTLE button. Worn dressphere across the top, what she knows on the
@@ -201,13 +236,16 @@ export function makeDresspherePanel(): PrepPanel {
       build = ffx2Build(ctx);
       root.innerHTML = '<div class="x2prep"></div>';
       bodyEl = root.querySelector('.x2prep');
+      phoneEl = appendPhoneHost(root);
       render(ctx.memberId);
     },
     unmount() {
       build = null;
       bodyEl = null;
+      phoneEl = null;
     },
     selectMember: render,
+    handleInput: (input) => phoneKeys(input, phoneEl),
   };
 }
 
@@ -225,16 +263,22 @@ export function makeDresspherePanel(): PrepPanel {
 export function makeAccessoryPanel(): PrepPanel {
   let build: FFX2PartyBuild | null = null;
   let bodyEl: HTMLElement | null = null;
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
 
-  const effectText = (id: string): string => {
+  /** The accessory's effect as `STAT +N` parts; none when the table has no row for it (or it changes nothing). */
+  const effectParts = (id: string): string[] => {
     const effect = accessoryEffect(id);
-    if (!effect) return 'no modelled effect';
+    if (!effect) return [];
     const parts: string[] = [];
     for (const [key, value] of Object.entries(effect.stats ?? {})) {
       if (typeof value === 'number' && value !== 0) parts.push(`${key.toUpperCase()} ${value > 0 ? '+' : ''}${value}`);
     }
     if (effect.hpPercent) parts.push(`max HP +${Math.round(effect.hpPercent * 100)}%`);
     if (effect.mpPercent) parts.push(`max MP +${Math.round(effect.mpPercent * 100)}%`);
+    return parts;
+  };
+  const effectText = (id: string): string => {
+    const parts = effectParts(id);
     return parts.length ? parts.join(', ') : 'no modelled effect';
   };
 
@@ -247,6 +291,16 @@ export function makeAccessoryPanel(): PrepPanel {
   const render = (memberId: string): void => {
     const member = build?.members.find((m) => m.id === memberId);
     if (!bodyEl || !member) return;
+    if (phoneEl) {
+      const slots = [0, 1].map((slot) => {
+        const id = member.accessories[slot];
+        return id ? { name: label(id), parts: effectParts(id) } : null;
+      });
+      phoneEl.innerHTML = x2AccessoriesPhoneHtml(
+        { who: { name: member.name, level: member.level, dressphere: member.currentDressphere }, slots },
+        readOpen(phoneEl),
+      );
+    }
     // Two slots, hard limit [types.ts `FFX2Combatant.accessories`].
     bodyEl.innerHTML = [0, 1]
       .map((slot) => {
@@ -275,13 +329,16 @@ export function makeAccessoryPanel(): PrepPanel {
       build = ffx2Build(ctx);
       root.innerHTML = '<div class="x2prep"></div>';
       bodyEl = root.querySelector('.x2prep');
+      phoneEl = appendPhoneHost(root);
       render(ctx.memberId);
     },
     unmount() {
       build = null;
       bodyEl = null;
+      phoneEl = null;
     },
     selectMember: render,
+    handleInput: (input) => phoneKeys(input, phoneEl),
   };
 }
 
@@ -289,16 +346,27 @@ export function makeAccessoryPanel(): PrepPanel {
 
 /** The Items tab: the party bag and the gil, with real item names. Party-wide, so it ignores `selectMember`. */
 export function makeItemsPanel(): PrepPanel {
+  let phoneEl: HTMLElement | null = null; // PR-0295: the phone page of this tab, hidden above 599 px
   return {
     id: 'items',
     label: 'Items',
     game: 'ffx2',
     order: 30,
     fullScreen: false,
+    handleInput: (input) => phoneKeys(input, phoneEl),
+    unmount() {
+      phoneEl = null;
+    },
     mount(root, ctx: PrepPanelContext) {
       const build = ffx2Build(ctx);
+      const drawPhone = (): void => {
+        phoneEl = appendPhoneHost(root);
+        const rows = (build?.inventory ?? []).map((e) => ({ name: FFX2_ITEMS[e.itemId]?.name ?? e.itemId, count: e.count }));
+        phoneEl.innerHTML = x2ItemsPhoneHtml(rows, build?.gil ?? 0, readOpen(phoneEl));
+      };
       if (!build) {
         root.innerHTML = '<div class="ffxprep-empty">No items.</div>';
+        drawPhone();
         return;
       }
       const rows = build.inventory
@@ -312,6 +380,7 @@ export function makeItemsPanel(): PrepPanel {
       root.innerHTML =
         (rows ? `<div class="ffxprep-items">${rows}</div>` : '<div class="ffxprep-empty">No items.</div>') +
         `<div class="x2prep-line"><b>GIL</b> ${build.gil.toLocaleString()}</div>`;
+      drawPhone();
     },
   };
 }

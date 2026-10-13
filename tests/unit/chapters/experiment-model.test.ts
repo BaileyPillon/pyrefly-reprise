@@ -158,9 +158,9 @@ describe('the two acts', () => {
     expect([EXPERIMENT_SPRITE, EXPERIMENT_PROTOTYPE_SPRITE]).toEqual(['ffx2-experiment', 'ffx2-experiment-proto']); // the art brief's subject names
   });
 
-  it('each act has its own existing music cue; no new audio', () => {
-    expect(experimentActOneGroup.musicCues).toEqual([{ at: 'start', track: 'boss-ffx2-aeon', fadeMs: 800 }]);
-    expect(experimentActTwoGroup.musicCues).toEqual([{ at: 'start', track: 'boss-vegnagun', fadeMs: 1400 }]);
+  it('both acts play one original, boss-experiment (2026-10-12, music batch 2; Act I played boss-ffx2-aeon and Act II boss-vegnagun before), and Act II asks for it again with its longer fade', () => {
+    expect(experimentActOneGroup.musicCues).toEqual([{ at: 'start', track: 'boss-experiment', fadeMs: 800 }]);
+    expect(experimentActTwoGroup.musicCues).toEqual([{ at: 'start', track: 'boss-experiment', fadeMs: 1400 }]);
   });
 });
 
@@ -173,9 +173,9 @@ describe('the chapter record', () => {
     expect(FFX2_EXPERIMENT.enemyGroupRef).toBe(experimentActOneGroup);
   });
 
-  it("plays the Chapter V preset, and the music names Act II's cue as the second phase", () => {
+  it("plays the Chapter V preset, and the music names the one cue for both acts (the second phase is the same cue)", () => {
     expect(FFX2_EXPERIMENT.buildRef.game).toBe('ffx2');
-    expect(FFX2_EXPERIMENT.music).toEqual({ scene: 'scene-bevelle-underground', battle: 'boss-ffx2-aeon', phase2: 'boss-vegnagun', victory: 'victory-ffx2' });
+    expect(FFX2_EXPERIMENT.music).toEqual({ scene: 'scene-bevelle-underground', battle: 'boss-experiment', phase2: 'boss-experiment', victory: 'victory-ffx2' });
   });
 
   it('has a Sensor line for each body, in twenty words or fewer', () => {

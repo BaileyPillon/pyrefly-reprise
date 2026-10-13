@@ -12,9 +12,8 @@
  *   plate, used as installed;
  * - `scriptsRef` — the story (`src/story/scripts/ffx2-den-of-woe.ts`, GP13 a, GP14 a, GP15, from
  *   `docs/plans/gippal-story-draft.md`);
- * - `music` — GP16 as the record already has it (the stand-in `boss-shuyin` until a
- *   `boss-den-of-woe` is picked by ear, rule 13; the field bed `scene-bevelle-underground`; the
- *   FFX-2 fanfare), unchanged.
+ * - `music` — GP16 as the record has it (`boss-den-of-woe` since 2026-10-12, an ElevenLabs original;
+ *   the stand-in `boss-shuyin` before; the field bed `scene-bevelle-underground`; the FFX-2 fanfare).
  *
  * **Listed** 2026-09-26 (Bailey, 2026-09-26: "I pick your recommendation for Den of Woe", "Den: both,
  * drop the prep"), as commit 430736bf listed Chapter XI: `./encounters.ts` puts this result in

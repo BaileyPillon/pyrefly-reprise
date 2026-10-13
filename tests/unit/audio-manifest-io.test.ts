@@ -20,10 +20,12 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { ManifestMusicEntry } from '../../tools/audio/manifest-io.mjs';
 import {
   LOOP_DECIMALS,
+  addMusicEntryText,
   externalSource,
   mergeIntoManifest,
   musicEntry,
   readManifest,
+  removeMusicEntryText,
   secondsAtSample,
   setMusicEntryText,
   updateManifest,
@@ -346,5 +348,91 @@ describe('setMusicEntryText and externalSource', () => {
     expect(externalSource({ source: 7 })).toBeNull();
     expect(externalSource(null)).toBeNull();
     expect(externalSource(undefined)).toBeNull();
+  });
+});
+
+/**
+ * Adding and removing whole entries as text (batch 2, 2026-10-12): the install writes new cues, a one-shot flag and takes a few cues out, and every
+ * other byte of the manifest has to stay as it was, for the same reason `setMusicEntryText` exists.
+ */
+describe('addMusicEntryText and removeMusicEntryText', () => {
+  const fixture = (eol: string): string =>
+    [
+      '{',
+      '  "version": 1,',
+      '  "music": {',
+      '    "alpha": {',
+      '      "file": "music/alpha.mp3",',
+      '      "loopStart": 1.5,',
+      '      "bytes": 100,',
+      '      "lufs": -16.0',
+      '    },',
+      '    "gamma": {',
+      '      "file": "music/gamma.mp3",',
+      '      "loopStart": 3.5,',
+      '      "bytes": 300,',
+      '      "lufs": -16.0',
+      '    }',
+      '  },',
+      '  "sfx": null',
+      '}',
+      '',
+    ].join(eol);
+  const entry = (name: string) => ({
+    file: `music/${name}.mp3`,
+    loopStart: 7,
+    loopEnd: 9,
+    duration: 9,
+    bytes: 127588,
+    lufs: -16,
+    truePeakDb: -2,
+    source: 'elevenlabs-music_v2_5',
+    oneShot: true,
+  });
+
+  it.each([
+    ['LF', '\n'],
+    ['CRLF', '\r\n'],
+  ])('puts a new entry in key order in the middle, at the start and at the end, with %s line endings, touching nothing else', (_name, eol) => {
+    const before = fixture(eol);
+    const middle = addMusicEntryText(before, 'beta', entry('beta'));
+    expect(Object.keys((JSON.parse(middle) as { music: object }).music)).toEqual(['alpha', 'beta', 'gamma']);
+    const start = addMusicEntryText(before, 'aardvark', entry('aardvark'));
+    expect(Object.keys((JSON.parse(start) as { music: object }).music)).toEqual(['aardvark', 'alpha', 'gamma']);
+    const end = addMusicEntryText(before, 'zeta', entry('zeta'));
+    expect(Object.keys((JSON.parse(end) as { music: object }).music)).toEqual(['alpha', 'gamma', 'zeta']);
+    expect(end.replace(/\r\n/g, '\n').includes('\r')).toBe(false);
+    // Taking the new entry out again gives back the very same text, whichever place it went to.
+    for (const [name, text] of [['beta', middle], ['aardvark', start], ['zeta', end]] as const) {
+      expect(removeMusicEntryText(text, name), name).toBe(before);
+    }
+    // The block reads as given: a boolean prints as true, the levels keep their decimal point, the flag follows the source.
+    expect(middle).toContain(`      "truePeakDb": -2.0,${eol}      "source": "elevenlabs-music_v2_5",${eol}      "oneShot": true${eol}    },${eol}    "gamma"`);
+    expect((JSON.parse(middle) as { music: { beta: unknown } }).music.beta).toEqual(entry('beta'));
+  });
+
+  it("keeps the comma rule: the entry before a new last entry gains one, the new last has none, and a removed last entry takes its predecessor's comma with it", () => {
+    const end = addMusicEntryText(fixture('\n'), 'zeta', entry('zeta')).split('\n');
+    expect(end[end.indexOf('    "zeta": {') - 1]).toBe('    },');
+    expect(end[end.indexOf('  },') - 1]).toBe('    }');
+    const removed = removeMusicEntryText(fixture('\n'), 'gamma').split('\n');
+    expect(removed[removed.indexOf('  },') - 1]).toBe('    }');
+    expect(Object.keys((JSON.parse(removeMusicEntryText(fixture('\n'), 'alpha')) as { music: object }).music)).toEqual(['gamma']);
+  });
+
+  it('refuses an entry that is already there, and the removal of one that is not', () => {
+    expect(() => addMusicEntryText(fixture('\n'), 'alpha', entry('alpha'))).toThrow(/already has a music entry "alpha"/);
+    expect(() => removeMusicEntryText(fixture('\n'), 'delta')).toThrow(/no music entry "delta"/);
+  });
+
+  it('writes a boolean through setMusicEntryText too, and the shipped manifest round-trips (one-shot flags included) and survives losing and regaining its first entry', () => {
+    const after = setMusicEntryText(fixture('\n'), 'alpha', { ...entry('alpha') });
+    expect((JSON.parse(after) as { music: { alpha: { oneShot: boolean } } }).music.alpha.oneShot).toBe(true);
+    const text = readFileSync(new URL('../../public/audio/manifest.json', import.meta.url), 'utf8');
+    const music = (JSON.parse(text) as { music: Record<string, { file: string }> }).music;
+    for (const [name, e] of Object.entries(music)) expect(setMusicEntryText(text, name, e), name).toBe(text);
+    const first = Object.keys(music)[0]!;
+    expect(removeMusicEntryText(text, first)).not.toBe(text);
+    expect(addMusicEntryText(removeMusicEntryText(text, first), first, music[first]!)).toBe(text);
   });
 });

@@ -11,8 +11,8 @@
  * - `tip` and `handwritten` are our own words over the research's sourced rules (section 4.3 the head's cancel, section 4.5 the shield, section 5.2 Seymour's spells).
  * - `heroArt` is not made yet (`pause/ch21-sinspawn-gui`, so the pause screen shows the fallback): `heroArtFallback` is Seymour's approved portrait, the chapter's hook. `snapshots` are existing
  *   assets only: the Ridge plate (a provisional one until the overnight pick is installed), the body's provisional painting, Seymour's approved cast.
- * - `musicKeys` are the cues the chapter plays, all existing: `scene-gagazet` under the narration, `boss-dread` for the Ridge, `boss-seymour` for the guest hour (stand-ins for the game's own
- *   two, named in `docs/audio/THEMES.md`), and the shared `victory-ffx`.
+ * - `musicKeys` are the cues the chapter plays: `scene-gagazet` under the narration, `boss-gui` for the Ridge, `boss-challenge` for the guest hour (ElevenLabs originals since 2026-10-12, the
+ *   game's "Peril" and "Challenge"; the dread theme and Seymour's own theme stood in before), and the shared `victory-ffx`.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';
@@ -41,7 +41,7 @@ export const SINSPAWN_GUI_META: ChapterMeta = {
     { image: 'characters/seymour-macalania/cast.png', caption: 'a guest at your side' },
   ],
   focalCharacterId: 'seymour',
-  musicKeys: ['scene-gagazet', 'boss-dread', 'boss-seymour', 'victory-ffx'],
+  musicKeys: ['scene-gagazet', 'boss-gui', 'boss-challenge', 'victory-ffx'],
 };
 
 export default SINSPAWN_GUI_META;
