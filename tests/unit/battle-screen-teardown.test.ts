@@ -73,6 +73,7 @@ vi.mock('../../src/engine/BattlePresenterStage.ts', () => ({
   PaintedStage: class {
     highlight = { apply: () => undefined, clear: () => undefined };
     stage = async () => void (await h.gates.stage);
+    setEntrances = () => undefined; // E-PYRE: the screen turns the boss entrance on for a real fight (decision 61e)
     dispose = () => undefined;
     update = () => undefined;
     snapshot = () => [];
