@@ -9,6 +9,32 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
+## 2026-10-13 · The phone Party Prep's four colour shades, option B (branch r46-prepshades; not live)
+
+Address: none yet (branch r46-prepshades on release candidate r45-rc d5bf2206; not merged, not deployed, no review run)
+
+- **Both games:** on a phone, the Party Prep page's small coloured text now uses the colours of the approved mockup
+  page, after Bailey saw them beside the first version and went with the recommendation. In FFX the small
+  gold "+10% dmg" note on the Stats tab, and the gold bag counts on the Items tab, are a deeper
+  brown-gold that reads clearly on the ivory card (5.4 to 1; it was 3.4 to 1). In FFX-2 the pink
+  bag counts on the Items tab are a deeper raspberry (6.1 to 1; it was 4.5 to 1). Nothing else moves:
+  no layout, size or other colour changes, and the same colours are in the Ink & Gold style sheet under
+  their own names, so the next screen can use them.
+- **FFX-2 only (the dressphere plates on the Stats tab):** the count after the up triangle is a pale green
+  and the count after the down triangle a pale red, where both were ivory. Both read at better than
+  8 to 1 on the dark plate, and the triangles stay in front of the numbers, so direction never depends on
+  the colour alone.
+- **How it was checked:** tsc clean; the 34 test files that read the style sheets or the phone prep passed
+  (834 tests), including a new one that pins each shade's contrast against its real background; a
+  production build in headless Chromium on a 390x844 touch phone read exactly the four colours of the
+  mockup page, at the same positions, with no pixel of the four views differing from the mockup page's
+  by more than 6 levels. Whole pages: [the FFX note](docs/screenshots/r46-prepshades/1-ffx-stats-gold-note.png),
+  [the FFX-2 bag counts](docs/screenshots/r46-prepshades/2-ffx2-items-pink-count.png),
+  [up counts](docs/screenshots/r46-prepshades/3-ffx2-stats-up-count.png) and
+  [down counts](docs/screenshots/r46-prepshades/4-ffx2-stats-down-count.png).
+
+![The four shades on the phone Party Prep: the mockup page's own on the left, this build on the right](docs/screenshots/r46-prepshades/prepshades-target-b-vs-build-390x844.jpg)
+
 ## 2026-10-12 · Release 42 (r42): the games' own battle rules on echoesofspira.com
 
 Address: https://echoesofspira.com (main a061e9dc, bundle Chs9J3OY)
