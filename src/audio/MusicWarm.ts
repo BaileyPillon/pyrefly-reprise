@@ -15,6 +15,16 @@
  * Pure bookkeeping: no audio, no DOM, no timers.
  */
 
+/**
+ * What `warmMusic` needs of the gate that holds the rest of a chapter run behind its opening cue (`app/sceneCueGate.ts`,
+ * r46-scenecue): `settle()` when the first cue's response has arrived, failed or turned out not to be needed, and `opened`,
+ * which resolves when the gate opens by any route (including its cap), so the rest of the audio warm can go on.
+ */
+export interface WarmGate {
+  settle(): void;
+  readonly opened: Promise<void>;
+}
+
 export class MusicWarmHold {
   /** Cues asked for and not yet played, in the order the run needs them. */
   private owed: string[] = [];

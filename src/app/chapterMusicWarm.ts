@@ -19,6 +19,8 @@
 
 import { audio } from '../audio/index.ts';
 import { getChapter, type Chapter, type ChapterId } from '../data/encounters.ts';
+import { openingSceneCue } from './openingSceneCue.ts';
+import type { SceneCueGate } from './sceneCueGate.ts';
 import { cueForGroup } from './screens/BattleEncounterChain.ts';
 import { resultsCueFor } from './screens/resultsMusic.ts';
 
@@ -30,19 +32,27 @@ import { resultsCueFor } from './screens/resultsMusic.ts';
  */
 export function chapterWarmCues(chapter: Chapter): string[] {
   const opening = cueForGroup(chapter, chapter.enemyGroupRef, 'first').track;
-  const wanted = [chapter.music.scene, opening, chapter.music.victory, resultsCueFor(chapter, 'defeat')?.cue];
+  // r46-scenecue: the cue the opening scene plays at its first line leads. It is `Chapter.music.scene` for every shipped chapter
+  // (pinned by tests/unit/scene-cue-gate.test.ts), so this adds nothing; a script that named another bed would still get it first.
+  const wanted = [openingSceneCue(chapter), chapter.music.scene, opening, chapter.music.victory, resultsCueFor(chapter, 'defeat')?.cue];
   return [...new Set(wanted.filter((cue): cue is string => typeof cue === 'string' && cue.length > 0))];
 }
 
 /**
  * Warm chapter `id`'s cues until the returned function runs (which also runs `release`). Mirrors `sfxChapter`
  * (`src/app/sfxGame.ts`): the run that starts the warm is the run that ends the hold.
+ *
+ * With a `gate` (r46-scenecue, `sceneCueGate.ts`) the opening cue, which leads the list, is fetched alone and the gate is
+ * settled by it; the end of the run also cancels the gate, so a deferred start that never ran never will. With no gate the
+ * mixer is called exactly as before (one argument).
  */
-export function musicChapter(id: ChapterId, release: () => void): () => void {
+export function musicChapter(id: ChapterId, release: () => void, gate?: SceneCueGate | null): () => void {
   const chapter = getChapter(id);
-  const end = chapter ? audio.warmMusic(chapterWarmCues(chapter)) : null;
+  const cues = chapter ? chapterWarmCues(chapter) : null;
+  const end = cues ? (gate ? audio.warmMusic(cues, gate) : audio.warmMusic(cues)) : null;
   return () => {
     end?.();
+    gate?.cancel();
     release();
   };
 }

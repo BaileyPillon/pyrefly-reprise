@@ -32,6 +32,8 @@ import { resultsCueFor, resultsScreenSilent, startResultsMusic, type ResultsMusi
 import { noteChapterLost } from '../../ui/common/objectiveReveal.ts';
 import { runBriefingIfDue } from './raiseBriefing.ts'; import { sfxChapter } from '../sfxGame.ts';
 import { musicChapter } from '../chapterMusicWarm.ts';
+import { scriptOpensWithMusic } from '../openingSceneCue.ts'; // moved out (r46-scenecue): the derivation of the opening cue shares it
+import { sceneCueGateFor, type SceneCueGate } from '../sceneCueGate.ts';
 import { preloadBattle } from './battlePreload.ts';
 import { holdIdleLane } from '../imageWarm.ts';
 import { entryCardWait } from './entryCard.ts';
@@ -307,13 +309,15 @@ export class GameFlow {
    * no menu to return to, so it reports the defeat and stops.
    */
   async runChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
-    const release = musicChapter(id, sfxChapter(id, holdIdleLane())); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep
+    const chapterRecord = getChapter(id);
+    const gate = chapterRecord ? sceneCueGateFor(chapterRecord, opts) : null; // r46-scenecue: the opening scene's cue goes down the pipe first; null = everything starts at once, as before
+    const release = musicChapter(id, sfxChapter(id, holdIdleLane(), gate), gate); // r29 PR-0221/PR-0240: the board's strips wait until the flow is back on the board; D-302: the chapter's SFX voice; PR-0373: its scene, boss and victory cues are fetched behind prep
     const endRun = getChapter(id)?.experimental ? beginExperimentRun() : (): void => undefined; // an experiment's run keeps the coach's memory off the save, whatever happens in it (CHK-025, F393-05)
     // PR-0283: RESTART ENCOUNTER replays inside this run, and r34fix-quit: QUIT TO TITLE exits it (`runWithRestarts`), one owner each.
-    return runWithRestarts(this, (o) => this.playChapter(id, o), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(() => { release(); endRun(); });
+    return runWithRestarts(this, (o) => this.playChapter(id, o, gate), opts, () => { [this.handedOver, this.step] = [true, 'title']; return this.app.goto('title'); }).finally(() => { release(); endRun(); });
   }
 
-  private async playChapter(id: ChapterId, opts: RunChapterOptions): Promise<BattleScreenResult | null> {
+  private async playChapter(id: ChapterId, opts: RunChapterOptions, gate: SceneCueGate | null = null): Promise<BattleScreenResult | null> {
     const chapter = getChapter(id);
     if (!chapter) return null;
     if (chapter.experimental && chapter.game === 'ff7') { // FF7's hidden experiment has its own flow; the FFX-2 Leblanc preview plays through this one, below
@@ -324,7 +328,8 @@ export class GameFlow {
     const save: FlowProgress = chapter.experimental ? experimentProgress : this.app.save; // an experiment keeps its attempts and clears in the experiments' store, never the save
     // FA3 = b (FFX-2 Ch. XI only): RETRY and RESTART ENCOUNTER past a Save Sphere re-enter that link.
     let { attempt, carry, opts: { seed } } = ({ opts } = openRun(this, id, opts)); // a fresh first seed (PR-0008)
-    void preloadBattle(chapter, seed); // the battle's art loads behind prep and the scene (PR-0061)
+    if (gate) gate.after(() => void preloadBattle(chapter, seed)); // r46-scenecue: behind the opening cue's response (or its cap); a run that ends first never asks
+    else void preloadBattle(chapter, seed); // the battle's art loads behind prep and the scene (PR-0061)
 
     // A run started from outside {@link start}'s own loop — `main.ts` when the board
     // resolves, the debug API's `gotoChapter` — **is** the new owner of the stack,
@@ -520,22 +525,3 @@ export class GameFlow {
     return choice;
   }
 }
-
-/**
- * True when a script sets its own bed before it says anything.
- *
- * "Before it says anything" is the whole test: every shipped scene opens with
- * `music(...)` in its first few steps (`music(null)` counts — a post scene
- * asking for silence is still the script deciding), so the flow's own cue only
- * applies to a script that never mentions music at all.
- */
-function scriptOpensWithMusic(script: StoryScript): boolean {
-  for (const step of script.slice(0, MUSIC_LOOKAHEAD)) {
-    if (step.type === 'music') return true;
-    if (step.type === 'say' || step.type === 'narrate' || step.type === 'choice') return false;
-  }
-  return false;
-}
-
-/** How far into a script to look for its own opening cue. */
-const MUSIC_LOOKAHEAD = 8;

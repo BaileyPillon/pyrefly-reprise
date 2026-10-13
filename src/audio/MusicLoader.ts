@@ -80,12 +80,17 @@ export class MusicLoader {
     return this.cache.get(name)?.source ?? null;
   }
 
-  load(ctx: AudioContext, name: string): Promise<LoopedBuffer> {
+  /**
+   * `onFetchEnd` (r46-scenecue, additive): called once, when the network part of a pre-rendered cue is over, before it is
+   * decoded or synthesised: its bytes have arrived, or the fetch failed, or there is no file to fetch. A load that joins a
+   * request already in flight, or finds the cue cached, never calls it (the caller's own promise tells it).
+   */
+  load(ctx: AudioContext, name: string, onFetchEnd?: () => void): Promise<LoopedBuffer> {
     const cached = this.cache.get(name);
     if (cached) return Promise.resolve(cached);
     const existing = this.inflight.get(name);
     if (existing) return existing;
-    const promise = this.render(ctx, name).then((buffer) => {
+    const promise = this.render(ctx, name, onFetchEnd).then((buffer) => {
       this.cache.set(name, buffer);
       this.inflight.delete(name);
       return buffer;
@@ -107,8 +112,8 @@ export class MusicLoader {
     return dropped;
   }
 
-  private async render(ctx: AudioContext, name: string): Promise<LoopedBuffer> {
-    const prerendered = await this.loadPrerendered(ctx, name);
+  private async render(ctx: AudioContext, name: string, onFetchEnd?: () => void): Promise<LoopedBuffer> {
+    const prerendered = await this.loadPrerendered(ctx, name, onFetchEnd);
     if (prerendered) return prerendered;
     return this.synthesise(ctx, name);
   }
@@ -121,25 +126,37 @@ export class MusicLoader {
    * offline cache miss or a codec the browser rejects should all end up
    * synthesising the cue, which always works.
    */
-  private async loadPrerendered(ctx: AudioContext, name: string): Promise<LoopedBuffer | null> {
-    if (this.prerenderFailed.has(name)) return null;
+  private async loadPrerendered(ctx: AudioContext, name: string, onFetchEnd?: () => void): Promise<LoopedBuffer | null> {
+    if (this.prerenderFailed.has(name)) return this.fetchEnded(onFetchEnd, null);
     const entry = musicEntry(this.manifest, name);
-    if (!entry) return null;
-    if (typeof fetch !== 'function') return null;
+    if (!entry) return this.fetchEnded(onFetchEnd, null);
+    if (typeof fetch !== 'function') return this.fetchEnded(onFetchEnd, null);
     try {
       const response = await fetch(resolveAudioUrl(this.baseUrl, entry.file));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const bytes = await response.arrayBuffer();
+      this.fetchEnded(onFetchEnd, null); // the bytes are in: the link is free for the next request while this one decodes
       const buffer = await ctx.decodeAudioData(bytes);
       const { loopStart, loopEnd } = clampLoopPoints(entry, buffer.duration);
       return { buffer, loopStart, loopEnd, source: 'prerendered' };
     } catch (error) {
+      this.fetchEnded(onFetchEnd, null); // a failed fetch frees the link as well (a second call is harmless)
       this.prerenderFailed.add(name);
       if (typeof console !== 'undefined') {
         console.warn(`[audio] pre-rendered "${name}" unavailable, synthesising instead`, error);
       }
       return null;
     }
+  }
+
+  /** Tell the caller the network part is over (never throws; idempotence is the caller's), and hand `value` back. */
+  private fetchEnded<T>(onFetchEnd: (() => void) | undefined, value: T): T {
+    try {
+      onFetchEnd?.();
+    } catch {
+      /* a hook is a favour, never a failure */
+    }
+    return value;
   }
 
   /** Route 2: the original synthesis path, in a Worker when there is one. */

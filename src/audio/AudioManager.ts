@@ -22,7 +22,7 @@ import { renderHallImpulse } from './dsp/hall.ts';
 import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sfxMix.ts';
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import { hasPrerenderedMusic, hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
-import { MusicWarmHold } from './MusicWarm.ts';
+import { MusicWarmHold, type WarmGate } from './MusicWarm.ts';
 import { SfxSprites, type SfxPick } from './SfxSprites.ts';
 import { startSfxSource, type ParityVoice } from './sfxSource.ts';
 import { sfxGame, voiceKey, type SfxGame } from './sfxV2/voicing.ts';
@@ -388,25 +388,54 @@ export class AudioManager {
    * is a render, not a fetch), and with the audio still locked nothing is fetched. The cues are kept decoded until they
    * are played or the returned function is called when the run ends (see `MusicWarm.ts`). Only the cues it is given.
    */
-  warmMusic(names: readonly string[]): () => void {
+  warmMusic(names: readonly string[], gate?: WarmGate): () => void {
     const token = this.warmHold.begin(names.filter((name) => hasTrack(name)));
-    void this.fetchWarm(token, names);
+    void this.fetchWarm(token, names, gate);
     return () => this.warmHold.release(token);
   }
 
-  private async fetchWarm(token: number, names: readonly string[]): Promise<void> {
+  /**
+   * r46-scenecue: will {@link warmMusic} really fetch `name` over the network? Synchronous, and a guess the warm confirms
+   * (it settles a gate itself when it finds there is nothing to fetch): the audio is unlocked and not synth-only, sound is on
+   * (not muted, master and music above zero), `name` is a track not decoded yet, and the manifest lists a rendered file for it
+   * (a manifest not read yet counts as yes).
+   */
+  needsFirstFetch(name: string): boolean {
+    if (!this.ctx || this.synthOnly || typeof fetch !== 'function') return false;
+    if (this.muted || this.masterVolume <= 0 || this.musicVolume <= 0) return false;
+    if (!hasTrack(name) || this.loader.has(name)) return false;
+    return this.manifest === null || hasPrerenderedMusic(this.manifest, name);
+  }
+
+  /**
+   * With a `gate` (r46-scenecue) the first name, the cue the opening scene needs at its first line, goes down the pipe alone:
+   * the gate settles when its bytes are in, when it fails, when there is nothing to fetch, or (`gate.opened`) at the gate's cap,
+   * and only then do the other cues follow. Without one this is the loop it always was.
+   */
+  private async fetchWarm(token: number, names: readonly string[], gate?: WarmGate): Promise<void> {
     const ctx = this.ctx;
-    if (!ctx || this.synthOnly) return;
     try {
+      if (!ctx || this.synthOnly) return;
       await this.loadManifest();
-      for (const name of names) {
+      for (const [index, name] of names.entries()) {
         // A newer run, the end of this one, or a rebuilt context stops the fetching at the next cue.
         if (!this.warmHold.isCurrent(token) || this.ctx !== ctx) return;
-        if (!hasTrack(name) || !hasPrerenderedMusic(this.manifest, name) || this.loader.has(name)) continue;
-        await this.loader.load(ctx, name).catch(() => undefined);
+        if (!hasTrack(name) || !hasPrerenderedMusic(this.manifest, name) || this.loader.has(name)) {
+          if (index === 0) gate?.settle(); // nothing to fetch for the opening cue: nothing to wait for
+          continue;
+        }
+        if (index === 0 && gate) {
+          const load = this.loader.load(ctx, name, () => gate.settle()).catch(() => undefined);
+          await Promise.race([load, gate.opened]); // the cue's arrival (or failure) opens the gate; so does its cap
+          gate.settle();
+        } else {
+          await this.loader.load(ctx, name).catch(() => undefined);
+        }
       }
     } catch {
       /* a warm is a favour to the player, never a failure */
+    } finally {
+      gate?.settle(); // every way out opens the gate: a stale run, an unlocked-too-late context, a thrown error
     }
   }
 
