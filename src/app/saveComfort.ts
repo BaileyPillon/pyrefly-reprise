@@ -22,6 +22,7 @@
 import type { Settings } from './SaveData.ts';
 import { migrateFxLooks } from './fxLooks.ts';
 import { migrateFxParts } from './fxParts.ts';
+import { migrateAccess } from './saveAccess.ts';
 
 export { defaultFxLooks, type FxLookSettings } from './fxLooks.ts';
 export { defaultFxParts, type FxPartSettings } from './fxParts.ts';
@@ -60,6 +61,7 @@ export function migrateComfort(settings: Settings, defaults: Readonly<Settings>,
   if (!isTextSize(settings.textSize)) settings.textSize = 1;
   if (typeof settings.reduceMotion !== 'boolean') settings.reduceMotion = defaults.reduceMotion;
   if (typeof settings.lowEffects !== 'boolean') settings.lowEffects = false;
+  migrateAccess(settings); // PR-0032: REDUCE FLASHES and COLOUR VISION (`saveAccess.ts`): anything but a boolean or a known mode reads OFF
   migrateFxLooks(settings); // eye-candy D's three looks: anything but a boolean reads as ON
   migrateFxParts(settings, raw); // D-317's nine parts: a part the blob lacks takes its look's value, once
 }

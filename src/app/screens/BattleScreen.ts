@@ -65,6 +65,7 @@ import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
 import { defaultSettings } from '../SaveData.ts';
 import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { battleComfort } from './battleComfort.ts';
+import { readReduceFlashes } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
@@ -262,6 +263,7 @@ export class BattleScreen extends Screen {
       sceneKey: this.scene.key,
       grade: this.app.renderer,
       comfort: battleComfort, // REDUCE MOTION and LOW EFFECTS (D-285)
+      reduceFlashes: readReduceFlashes, // PR-0032: phase lighting lands at once, every wash and flash is softened, the bloom peaks at 35 %
       cameraPreset: battleCameraPreset(chapter.game), // fb2-0929: `calm` by default (D-291), `?cam=current` for the old camera (CameraPreset.ts)
     });
 

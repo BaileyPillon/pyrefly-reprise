@@ -163,6 +163,15 @@ export class BattleMoments {
     }
   }
 
+  /** The player's REDUCE FLASHES setting, as the overlay reports it (PR-0032): only an action's first blow flashes. */
+  get reducedFlashes(): boolean {
+    try {
+      return this.deps.moments?.reduceFlashes?.() === true;
+    } catch {
+      return false;
+    }
+  }
+
   /** `base` ms at the current playback speed. */
   ms(base: number): number {
     return Math.max(0, base * this.scale);

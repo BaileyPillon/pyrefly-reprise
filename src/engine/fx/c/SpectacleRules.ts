@@ -197,6 +197,14 @@ export function planHit(game: SpectacleGame, hit: HitInfo, f: SpectacleFlags): H
   };
 }
 
+/**
+ * C6's splash mode: REDUCE MOTION, and REDUCE FLASHES (PR-0032: the slab slams in over 180 ms and a repeat is a 250 ms flash), take
+ * the 200 ms static fade, every play. Otherwise a move's first play in a battle is the full splash and a repeat is the 250 ms flash.
+ */
+export function splashMode(f: Pick<SpectacleFlags, 'reduceMotion' | 'reduceFlashes'>, seen: boolean): 'full' | 'repeat' | 'calm' {
+  return f.reduceMotion || f.reduceFlashes ? 'calm' : seen ? 'repeat' : 'full';
+}
+
 /** C1's flash budget: at most one impact frame per action and `perSecond` in any rolling second. */
 export class FlashBudget {
   private readonly times: number[] = [];

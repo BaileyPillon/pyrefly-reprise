@@ -20,6 +20,9 @@ import { figureLookOf, type FigureLook, type StatusGame } from './statusLooks.ts
 import { wearsLooks } from './statusMarks.ts';
 import { statusMotionStill } from './statusCalm.ts';
 import { paceRate } from '../../engine/pace.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
+import type { ColourVision } from '../../app/saveAccess.ts';
+import { cvdTint } from './colourVision.ts';
 
 type Cell<T> = { value: T };
 type ColourCell = Cell<{ set(c: number): unknown }>;
@@ -48,13 +51,17 @@ export interface PaintLook {
 /** Tint priority: the first status in this order with a tint wins (one multiply at a time). */
 const TINT_ORDER: readonly StatusId[] = ['zombie', 'berserk', 'curse'];
 
-export function paintLookOf(game: StatusGame, statuses: Partial<Record<string, unknown>>): PaintLook {
+/**
+ * `cvd` (COLOUR VISION on, PR-0032; FFX only): the Berserk and Curse tints take the mode's colours, because the red and the
+ * murky brown are 2.9 apart under protanopia (`colourVision.ts`). Zombie, and every FFX-2 look, never move. Off: unchanged.
+ */
+export function paintLookOf(game: StatusGame, statuses: Partial<Record<string, unknown>>, cvd: ColourVision = 'off'): PaintLook {
   const has = (s: string): boolean => statuses[s] !== undefined && statuses[s] !== null;
   let tint: number | null = null;
   for (const s of TINT_ORDER) {
     const t = has(s) ? figureLookOf(game, s)?.tint : undefined;
     if (t !== undefined) {
-      tint = t;
+      tint = game === 'ffx' && cvd !== 'off' ? (cvdTint(s, cvd) ?? t) : t;
       break;
     }
   }
@@ -118,13 +125,24 @@ export class StatusFigureTint {
   private wanted = new Map<CombatantId, PaintLook>();
   private acting = new Set<CombatantId>();
 
-  constructor(private readonly game: StatusGame, private readonly field: () => TintField | null) {}
+  /** The state last synced, and the COLOUR VISION mode it was synced under: a change of mode re-syncs it (PR-0032). */
+  private lastState: BattleState | null = null;
+  private lastCvd: ColourVision = 'off';
+
+  constructor(
+    private readonly game: StatusGame,
+    private readonly field: () => TintField | null,
+    private readonly cvd: () => ColourVision = readColourVision,
+  ) {}
 
   sync(state: BattleState): void {
     const next = new Map<CombatantId, PaintLook>();
+    const cvd = this.cvd();
+    this.lastState = state;
+    this.lastCvd = cvd;
     for (const [id, c] of Object.entries(state.combatants)) {
       if (!wearsLooks(c, state.result)) continue;
-      const look = paintLookOf(this.game, c.statuses);
+      const look = paintLookOf(this.game, c.statuses, cvd);
       if (look.tint !== null || look.glow || look.freeze || look.pulse) next.set(id, look);
     }
     this.wanted = next;
@@ -147,6 +165,7 @@ export class StatusFigureTint {
   }
 
   update(dt: number): void {
+    if (this.lastState && this.cvd() !== this.lastCvd) this.sync(this.lastState); // COLOUR VISION changed in the pause: the tint follows on resume
     this.reconcile();
     const still = statusMotionStill();
     for (const a of this.applied.values()) {

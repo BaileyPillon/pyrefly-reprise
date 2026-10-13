@@ -3,6 +3,8 @@ import './spherechange-wheel.css';
 import { installInkGoldStyles } from '../inkgold/index.ts';
 import type { GarmentGridState, GateColour, SpherechangeCommand } from '../../battle/common/types.ts';
 import { dressphereLabel } from './dressphereIcons.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
+import { cvdOr, gateLetter } from '../common/colourVision.ts';
 
 /**
  * The Garment Grid's own node/link graph. `GarmentGridState` (in
@@ -148,8 +150,13 @@ export function openSpherechangeWheel(deps: SpherechangeDeps): Promise<Spherecha
           const b = nodePos(link.to, grid.nodes.length);
           const travelled = linkTravelled(state, link);
           const cls = travelled ? 'ffx2sc__link ffx2sc__link--travelled' : 'ffx2sc__link';
+          const cvd = readColourVision();
+          const mx = (a.x + b.x) / 2;
+          const my = (a.y + b.y) / 2;
+          // COLOUR VISION (PR-0032, FFX-2 only): the orb takes the mode's colour and prints the gate's letter, the second cue beside it.
           const orb = link.gate
-            ? `<circle class="ffx2sc__gate" cx="${(a.x + b.x) / 2}" cy="${(a.y + b.y) / 2}" r="7" fill="${GATE_HEX[link.gate]}"></circle>`
+            ? `<circle class="ffx2sc__gate" cx="${mx}" cy="${my}" r="7" fill="${cvdOr('gates', link.gate, cvd, GATE_HEX[link.gate])}"></circle>` +
+              (cvd === 'off' ? '' : `<text class="ffx2sc__gate-letter" x="${mx}" y="${my}" text-anchor="middle" dominant-baseline="central">${gateLetter(link.gate)}</text>`)
             : '';
           return `<line class="${cls}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>${orb}`;
         })
@@ -183,7 +190,7 @@ export function openSpherechangeWheel(deps: SpherechangeDeps): Promise<Spherecha
       const id = grid.nodes[target.node]?.dressphereId;
       if (!id) return '<div class="ffx2sc__detail ffx2sc__detail--dim">Empty node.</div>';
       const gateLine = target.link.gate
-        ? `<div class="ffx2sc__gate-line" style="color:${GATE_HEX[target.link.gate]}">GRANTS: ${target.link.gateEffectLabel ?? dressphereLabel(target.link.gate)}</div>`
+        ? `<div class="ffx2sc__gate-line" style="color:${cvdOr('gates', target.link.gate, readColourVision(), GATE_HEX[target.link.gate])}">GRANTS: ${target.link.gateEffectLabel ?? dressphereLabel(target.link.gate)}</div>`
         : '';
       return `<div class="ffx2sc__detail">
         <div class="ffx2sc__detail-name">${dressphereLabel(id)}</div>

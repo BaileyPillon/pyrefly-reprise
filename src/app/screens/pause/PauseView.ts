@@ -37,6 +37,7 @@ import { chromeSideForCombatant, plateIdFor } from './plates.ts';
 import { buildTabs, memberIdOf, type PauseTab } from './tabs.ts';
 import { memberColumns } from './meters.ts';
 import {
+  accessColumns,
   chapterColumns,
   controlsColumns,
   guideColumns,
@@ -307,6 +308,8 @@ export class PauseView {
           extraRows: this.deps.extraRows,
           game: this.game,
         });
+      case 'accessibility':
+        return accessColumns({ settings: this.deps.save.settings, game: this.game });
       case 'controls':
         return controlsColumns();
       case 'guide':

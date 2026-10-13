@@ -20,7 +20,7 @@ import type { ChapterMeta } from '../../../data/chapter-meta.ts';
 import type { Settings } from '../../SaveData.ts';
 import type { EncounterProgress, ObjectiveStatus } from '../../../ui/common/chapterObjectives.ts';
 import { formatPlayTime } from '../../../ui/common/chapterObjectives.ts';
-import { optionRows } from '../PauseScreenPanels.ts';
+import { accessRows, optionRows } from '../PauseScreenPanels.ts';
 
 /** One row in a tab body. */
 export interface PanelRow {
@@ -143,6 +143,27 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
     { id: 'settings', heading: 'Settings', rows: settings, wide: true },
     { id: 'encounter', heading: 'This encounter', rows: encounter, wide: true },
   ];
+}
+
+// ------------------------------------------------------------ accessibility
+
+/**
+ * The ACCESSIBILITY tab (PR-0032; OPT-B of `critic/scratch/options-additions-2026-10-12/`, Bailey 2026-10-12, "OPT-B with
+ * NO-KEYS", answered with "I'll go with all of your recommendations"): one COMFORT column, `accessRows` as hairline rows
+ * exactly like the OPTIONS settings. It takes the settings column's id so the shipped stylesheet gives it the same key width,
+ * cursor-dot room and phone scroller as the mock drew. The mock's second column (KEYS: REMAP KEYS, RESET KEYS) is not built.
+ *
+ * Both games (shared plumbing); COLOUR VISION is left out of FF7 (`accessRows`).
+ */
+export function accessColumns(ctx: { settings: Readonly<Settings>; game?: GameId }): PanelColumn[] {
+  const rows: PanelRow[] = accessRows(ctx.settings, ctx.game).map((r) => ({
+    id: r.id,
+    label: r.label,
+    value: r.value,
+    ratio: r.ratio,
+    selectable: true,
+  }));
+  return [{ id: 'settings', heading: 'Comfort', rows, wide: true }];
 }
 
 // ----------------------------------------------------------------- controls

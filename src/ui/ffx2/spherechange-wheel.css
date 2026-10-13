@@ -75,6 +75,17 @@
   stroke: var(--ig-ink);
   stroke-width: 1;
 }
+/* COLOUR VISION (PR-0032, FFX-2 only): the gate's letter, printed on the orb in paper with an ink edge so it reads on all four colours. */
+.ffx2sc__gate-letter {
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: 9px;
+  fill: #fff;
+  stroke: var(--ig-ink);
+  stroke-width: 1.6px;
+  paint-order: stroke fill;
+  pointer-events: none;
+}
 
 .ffx2sc__node {
   position: absolute;

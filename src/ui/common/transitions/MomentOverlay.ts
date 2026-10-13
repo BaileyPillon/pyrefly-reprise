@@ -26,6 +26,7 @@ import { playTurnCutIn, type TurnCutInRequest } from './TurnCutInLayer.ts';
 import { confirmPress, type ConfirmPress } from './confirmPress.ts';
 import { OpeningHurry } from './openingHurry.ts';
 import { prefersReducedMotion } from './reduceMotion.ts';
+import { readReduceFlashes } from '../../../app/accessFlags.ts';
 import { phoneSliceOf, phoneTopOf } from '../phoneSlice.ts';
 
 type SlabKind = 'reveal' | 'overdrive' | 'telegraph';
@@ -168,6 +169,11 @@ export class MomentOverlay implements MomentsPort {
   /** The player's reduce-motion choice (A-13's roll skips under it). */
   reduceMotion(): boolean {
     return prefersReducedMotion(this.el.ownerDocument.defaultView as (Window & typeof globalThis) | null);
+  }
+
+  /** The player's REDUCE FLASHES choice (PR-0032): only an action's first blow flashes. */
+  reduceFlashes(): boolean {
+    return readReduceFlashes();
   }
 
   /** The approved turn cut-in (PR-0005); see `TurnCutInLayer.ts`. */

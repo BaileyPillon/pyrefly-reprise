@@ -1,5 +1,7 @@
 import './cutsceneStage.css';
 import { loadArtManifest, manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
+import { cutsceneFlash } from '../../engine/flashRules.ts';
+import { readReduceFlashes } from '../accessFlags.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import type { HideActorStep, SetPoseStep, ShowActorStep, StoryScript } from '../../story/dsl.ts';
 import {
@@ -198,9 +200,11 @@ export class CutsceneStage {
 
   flash(color: string | undefined, ms: number): Promise<void> {
     const el = this.flashEl;
-    el.style.background = color ?? '#ffffff';
+    // PR-0032: under REDUCE FLASHES the flash peaks at 35 % in ivory, and a long white one (a cover over a scene swap) stays opaque but dim.
+    const look = cutsceneFlash(color, ms, readReduceFlashes());
+    el.style.background = look.background;
     el.style.transitionDuration = '0ms';
-    el.style.opacity = '0.7';
+    el.style.opacity = String(look.peak);
     return new Promise((resolve) => {
       window.requestAnimationFrame(() => {
         el.style.transitionDuration = `${ms}ms`;

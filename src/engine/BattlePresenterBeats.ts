@@ -24,6 +24,7 @@ import { motionAllowed } from './motion/MotionGate.ts'; // r38-motion: BATTLE SP
 import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL (both games); a no-op without a shot
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
+import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import {
   banner,
@@ -164,8 +165,9 @@ export async function damage(
   const heavy = event.crit || event.overkill === true || event.capped === true;
   ctx.moments.impact(event.targetId, { hitIndex: event.hitIndex, heavy });
 
-  void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit });
-  target?.flash(event.crit ? 0xffffff : 0xffd0c0, event.crit ? 260 : 200, event.crit ? 1 : 0.8);
+  const flashes = blowFlashes(event.hitIndex, ctx.moments?.reducedFlashes === true); // PR-0032: under REDUCE FLASHES only an action's first blow flashes and blooms
+  void ctx.stage.vfx.impact(event.targetId, { element: event.element, crit: event.crit, ...(flashes ? {} : { quiet: true }) });
+  if (flashes) target?.flash(event.crit ? 0xffffff : 0xffd0c0, event.crit ? 260 : 200, event.crit ? 1 : 0.8);
   target?.shake(event.crit ? 0.16 : 0.1, 340);
   void target?.recoil(360, event.crit ? 0.34 : 0.22);
   cue(ctx, elementCue(event.element, event.crit), { volume: event.crit ? 1 : 0.8 });

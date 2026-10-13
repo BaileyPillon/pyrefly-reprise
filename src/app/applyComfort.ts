@@ -12,6 +12,11 @@
  *   now reaches the FFX-2 battle HUD and the pause in both games.
  * - `data-reduce-motion` and `data-low-effects`, present while the flag is on: the
  *   CSS mirror of every `prefers-reduced-motion` block (`ui/common/comfort.css`).
+ * - `data-reduce-flashes` (PR-0032, the ACCESSIBILITY tab), present while on:
+ *   `ui/common/comfort-flashes.css` softens every HUD pulse and flash under it.
+ *   `data-colour-vision="red-green" | "blue-yellow"` and the `--cvd-*` variables, present
+ *   while a mode is on: `ui/common/colour-vision.css` recolours the four groups that
+ *   collapse under colour blindness and prints their second cue.
  * - Not on `<html>`: eye-candy D's three looks switch its options A, B and C (`fxLooks.ts`), and the
  *   `eyeCandyFlags.ts` seam gets a fresh provider for the looks and the EYE CANDY page's nine parts
  *   (D-317, `fxParts.ts`): a look key answers the look, a part key the look AND the part.
@@ -24,14 +29,18 @@
  */
 
 import '../ui/common/comfort.css';
+import '../ui/common/comfort-flashes.css';
+import '../ui/common/colour-vision.css';
 import '../ui/common/text-size.css';
 import '../ui/common/text-size-wide.css';
 import { eyeCandy } from '../engine/fx/EyeCandy.ts';
 import { eyeCandyOn, setEyeCandyProvider } from '../engine/fx/eyeCandyFlags.ts';
 import { fxDebugHooks } from '../engine/fx/fxDebugHooks.ts';
+import { cvdVars } from '../ui/common/colourVision.ts';
 import type { Settings } from './SaveData.ts';
 import { fxLooksOf, type FxLookField } from './fxLooks.ts';
 import { EYE_CANDY_KEYS, eyeCandyProviderFor, type FxPartField } from './fxParts.ts';
+import { isColourVision, type ColourVision } from './saveAccess.ts';
 import { isTextSize } from './saveComfort.ts';
 
 /**
@@ -52,7 +61,10 @@ export function textSizeWideScope(): boolean {
   }
 }
 
-type ComfortFields = Pick<Settings, 'textSize' | 'reduceMotion' | 'lowEffects' | FxLookField | FxPartField>;
+type ComfortFields = Pick<Settings, 'textSize' | 'reduceMotion' | 'lowEffects' | 'reduceFlashes' | 'colourVision' | FxLookField | FxPartField>;
+
+/** Every `--cvd-*` variable a mode writes (the same names for both modes), so one pass can clear them. */
+const CVD_VAR_NAMES: readonly string[] = Object.keys(cvdVars('red-green'));
 
 export function applyComfort(settings: Readonly<Partial<ComfortFields>>, root: HTMLElement | null = rootEl()): void {
   // Eye-candy D's three look rows (CINEMA LIGHT, LIVING PAINTINGS, BATTLE SPECTACLE), live and with or
@@ -70,11 +82,27 @@ export function applyComfort(settings: Readonly<Partial<ComfortFields>>, root: H
   else delete root.dataset['textSizeWide'];
   flag(root, 'reduceMotion', settings.reduceMotion === true);
   flag(root, 'lowEffects', settings.lowEffects === true);
+  flag(root, 'reduceFlashes', settings.reduceFlashes === true); // PR-0032: `comfort-flashes.css` softens the HUD pulses under it
+  applyColourVision(root, isColourVision(settings.colourVision) ? settings.colourVision : 'off');
 }
 
 function flag(root: HTMLElement, key: string, on: boolean): void {
   if (on) root.dataset[key] = '';
   else delete root.dataset[key];
+}
+
+/**
+ * COLOUR VISION (PR-0032): `data-colour-vision="red-green" | "blue-yellow"` and the `--cvd-*` variables `colour-vision.css`
+ * reads, written together while a mode is on; OFF removes the attribute and every variable, so nothing matches and nothing moves.
+ */
+function applyColourVision(root: HTMLElement, mode: ColourVision): void {
+  for (const name of CVD_VAR_NAMES) root.style.removeProperty(name);
+  if (mode === 'off') {
+    delete root.dataset['colourVision'];
+    return;
+  }
+  root.dataset['colourVision'] = mode;
+  for (const [name, value] of Object.entries(cvdVars(mode))) root.style.setProperty(name, value);
 }
 
 function rootEl(): HTMLElement | null {

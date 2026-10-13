@@ -16,7 +16,7 @@ import type { PaintedActor } from '../../PaintedActor.ts';
 import { SegmentPool, SpritePool } from './FxPools.ts';
 import { hitBurst, iceGlints, poolsOf, sendOff, sparkleSweep, type Pools } from './HitDraw.ts';
 import type { FxStagePort } from './presenterHooks.ts';
-import { easeInOut, FlashBudget, planHit, planVictory, SPECTACLE_TUNING, type OrbitPlan, type SpectacleFlags, type SpectacleGame } from './SpectacleRules.ts';
+import { easeInOut, FlashBudget, planHit, planVictory, SPECTACLE_TUNING, splashMode, type OrbitPlan, type SpectacleFlags, type SpectacleGame } from './SpectacleRules.ts';
 import { FireColumns, IceBurst, ShockSpheres } from './SpellLayers.ts';
 import { bigMoment, castOnto, spellMoment, type MomentCtx } from './SpellMoments.ts';
 import { SpectaclePass } from './SpectaclePass.ts';
@@ -144,7 +144,7 @@ export class SpectacleFx implements FxStagePort {
     const f = this.d.flags();
     const art = this.d.stage.snapshot().find((s) => s.id === o.actorId)?.art ?? '';
     const key = `${o.actorId}:${o.name}`;
-    const mode = f.reduceMotion ? 'calm' : this.splashed.has(key) ? 'repeat' : 'full';
+    const mode = splashMode(f, this.splashed.has(key)); // REDUCE MOTION and REDUCE FLASHES: the 200 ms static fade (`SpectacleRules.splashMode`)
     this.splashed.add(key);
     this.stats.splashes++;
     const side = this.d.stage.sideOf(o.actorId);

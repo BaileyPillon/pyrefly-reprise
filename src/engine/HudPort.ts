@@ -24,7 +24,7 @@ export interface TargetingPort {
    * Light these ids on the field and dim everyone else; `null` restores it.
    * Called on every arrow press, and on confirm and cancel.
    */
-  select(sel: { ids: CombatantId[]; mode: 'single' | 'all'; accent: AccentKind } | null): void;
+  select(sel: { ids: CombatantId[]; mode: 'single' | 'all'; accent: AccentKind; colour?: number } | null): void;
   /**
    * Fade whatever is still covering this id, for the case the spread formation
    * genuinely cannot clear — Vegnagun's parts, which touch because they are

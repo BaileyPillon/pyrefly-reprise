@@ -30,6 +30,7 @@ import type { PrepPanel, PrepPanelContext } from '../../../app/screens/PartyPrep
 import { accessoryEffect } from '../../../battle/ffx2/accessories.ts';
 import { GARMENT_GRIDS, STANDARD_DRESSPHERES, SPECIAL_DRESSPHERES, FFX2_ITEMS, ABILITIES } from '../../../data/ffx2/index.ts';
 import { dressphereAbbr, dressphereColour, dressphereLabel } from '../dressphereIcons.ts';
+import { gateLetter } from '../../common/colourVision.ts'; // PR-0032: the letter COLOUR VISION prints on a gate pip
 import './party-prep.css';
 
 function escapeHtml(s: string): string {
@@ -127,7 +128,7 @@ export function makeDresspherePanel(): PrepPanel {
       ? def.gateColours
           .map(
             (c) =>
-              `<i class="x2prep-gate x2prep-gate--${c}${state.passedGates.includes(c) ? ' x2prep-gate--passed' : ''}" title="${c}${
+              `<i class="x2prep-gate x2prep-gate--${c}${state.passedGates.includes(c) ? ' x2prep-gate--passed' : ''}" data-gate="${gateLetter(c)}" title="${c}${
                 state.passedGates.includes(c) ? ' (passed)' : ''
               }"></i>`,
           )

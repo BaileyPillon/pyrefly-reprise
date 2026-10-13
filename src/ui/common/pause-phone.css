@@ -72,3 +72,19 @@
     top: calc(var(--pu-top-obj) - var(--pu-phone-obj-lift, 0px));
   }
 }
+
+/*
+ * PR-0032 (the ACCESSIBILITY tab, OPT-B; game case: both, shared pause plumbing). The tab's one COMFORT column takes the settings
+ * column's id, so it picked up the OPTIONS phone window (`pause-screen.css`: five rows of height, scrolling, a fade at the foot).
+ * That window counts the column's heading as a row, so a column of a heading and five rows showed three and a half of them, where
+ * the approved frame (`critic/scratch/options-additions-2026-10-12/frames/B-phone-*.jpg`) shows all five at once. Five rows never
+ * need a scroller: this tab's column grows to its content and carries no fade. OPTIONS keeps its window.
+ */
+@media (max-width: 620px) {
+  .pause__body[data-tab='accessibility'] .pause__col[data-col='settings'] {
+    max-height: none;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
