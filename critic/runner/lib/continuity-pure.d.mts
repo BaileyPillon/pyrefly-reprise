@@ -21,7 +21,7 @@ export interface ContinuityConfig {
   tracking?: { unregistered?: 'centroid' | 'feet' };
   /** r40 instrument edit (b): `twirl: false` gives the earlier reading of a twirl's cuts back; `gapFrames` is how far apart two steps of one change may be. */
   staged?: { twirl?: boolean; gapFrames?: number };
-  /** r43 (FOC40-02): `excuse: true` tags a jerk whose step happened under the Save Sphere's wash as covered and leaves it out of the numbers; `minCover` is how much of the picture the veil must hide; a null `selector` stops the probe reading the wash. */
+  /** r43 (FOC40-02): `excuse: true` tags a jerk whose step happened under the Save Sphere's wash as covered and leaves it out of the numbers (it ships false until the owner's yes: the definition of a jerk is his); `minCover` is how much of the picture the veil must hide; a null `selector` stops the probe reading the wash. */
   wash?: { excuse?: boolean; minCover?: number; selector?: string | null };
   [key: string]: unknown;
 }

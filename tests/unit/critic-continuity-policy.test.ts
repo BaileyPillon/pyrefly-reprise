@@ -70,6 +70,19 @@ describe('the continuity block of the policy', () => {
     }
   });
 
+  it('has no switch that changes what counts as a jerk or a snap ON unless its note quotes the owner by date (the definition is his, D-420 to D-426; AGENTS.md rule 10: ideas need a yes)', () => {
+    // r40 (a) and (b) quote his pick (Bailey 2026-10-10, P5 and P4/P5). r43's wash excuse had only the lane brief behind it, so it ships off until his yes is quoted in its note.
+    const quotesOwner = (on: boolean, note?: string): boolean => !on || /Bailey 20\d\d-\d\d-\d\d/.test(note ?? '');
+    expect(quotesOwner(true, 'r43 instrument edit, switched on because the lane brief asked for it')).toBe(false); // the guard itself
+    expect(quotesOwner(true, 'Bailey 2099-01-01 (a fixture for this guard, not a decision)')).toBe(true);
+    expect(quotesOwner(false, undefined)).toBe(true);
+    const blocks = policy['continuity'] as unknown as Record<string, { note?: string } | undefined>;
+    const switches: Array<[string, boolean]> = [['tracking', c.tracking?.unregistered === 'centroid'], ['staged', c.staged?.twirl === true], ['wash', c.wash?.excuse === true]];
+    for (const [name, on] of switches) {
+      expect(quotesOwner(on, blocks[name]?.note), `continuity.${name} is ON in critic/policy.json but its note does not quote the owner ("Bailey <date>"): the definition of a jerk is his (D-420 to D-426), AGENTS.md rule 10. Ship it off, or quote his words and time in the note and add the D-row`).toBe(true);
+    }
+  });
+
   it('puts both checks in the library as implemented, with a tool that exists', () => {
     for (const id of ['CHK-026', 'CHK-027']) {
       const k = policy.checks.find((x) => x.id === id) as { id: string; automation: string; tool?: string } | undefined;

@@ -3,9 +3,10 @@
 // The Save Sphere card (src/app/screens/SaveSphereCard.ts; FFX-2 Chapter XI only, between the links of the Road) washes the whole frame, HUD included, to a
 // pale lilac white and restages the next link UNDER the wash. Anima's group scale goes from 1 to 2.8235 in one frame about 0.6 s later, still under it, so her
 // head climbs about 900 px in one frame at 1600x900. The probe copies the WebGL canvas, and the wash is an HTML overlay in front of it, so the harness counted a
-// pop that the player sees only through a veil that is 74 percent opaque. That one outlier (960 px; 966 px on the live build) is why CHK-027 failed the chapter
-// on its own, and the lane that traced it (r41-aeonjump) listed this as an option: let the probe mark the frames in which the wash is up as covered and count no
-// jerk in them, as the harness already excuses camera cuts and staged costume changes.
+// pop that the player sees only through a veil that is 74 percent opaque. That one outlier (960 px; 966 px on the live build; 967.7 px in round 25) is the run's
+// headline worst jerk and the first of its strips, though not what decides the chapter (round 25's Chapter XI has 15 more jerks of 40 px or more). The lane that
+// traced it (r41-aeonjump) listed this as an option, "neither built" under AGENTS.md rule 10: let the probe mark the frames in which the wash is up as covered and
+// count no jerk in them, as the harness already excuses camera cuts and staged costume changes.
 //
 // The probe (continuity-probe.mjs) reads the wash element's computed `opacity` on every frame it samples (`w` on the frame record) and the element's background
 // alpha once (`meta.wash.alpha`). This module is the pure half: how much of the picture the wash hides, whether the step of a jerk was under it, and the tags.
@@ -14,7 +15,8 @@
 //   a step = the move from frame n-1 to frame n  both frames must be under the veil, so the step's cover is the LESS covered of the two
 //   covered when the policy's `continuity.wash.excuse` is true and the step's cover is at least `minCover`
 //
-// The definition of a jerk is the owner's (D-420 to D-426): `excuse: false` gives the earlier reading back (every jerk counted, the wash still shown on it).
+// The definition of a jerk is the owner's (D-420 to D-426) and no yes of his to this excuse is recorded, so the policy ships `excuse: false`: every jerk counted as
+// before, the wash still shown on the ones it was over. `excuse: true` is the switch for when he says yes (`CONT_CFG='{"wash":{"excuse":true}}'` runs the what-if for one run).
 // A jerk with no wash on either frame is untouched, and an alpha the probe could not read (`null`) hides nothing, so the jerk stays counted.
 //
 // Game case: FFX-2 only in effect (the only wash that exists is the Save Sphere's, and only Chapter XI plays it); the code is shared critic plumbing and idle in FFX.

@@ -1,9 +1,11 @@
 /**
  * The Save Sphere's wash in the continuity harness (r43 instrument edit; docs/handoff/r41-aeonjump.md, FOC40-02). Chapter XI's Save Sphere card washes the whole frame,
  * HUD included, to a pale lilac white and restages the next link under it; Anima's group scale lands 0.6 s later, still under the wash, and her head climbs about 900 px in
- * one frame. The probe copies the canvas and the wash is an HTML overlay, so the harness counted a pop the player sees only through a veil that is 74 percent opaque, and that
- * one outlier failed CHK-027 on its own (967.7 px in round 25). The probe now records the wash element's opacity on every frame it is up; a jerk whose step was under a wash that
- * hides at least `continuity.wash.minCover` of the picture is tagged `covered` and left out of the numbers, and the policy can switch that off.
+ * one frame. The probe copies the canvas and the wash is an HTML overlay, so the harness counted a pop the player sees only through a veil that is 74 percent opaque. That one
+ * outlier is the run's headline worst jerk and the first of its strips (967.7 px in round 25), but it does not decide Chapter XI's verdict: that chapter has 15 more jerks of 40 px
+ * or more, so CHK-027 fails with or without it. The probe now records the wash element's opacity on every frame it is up; a jerk whose step was under a wash that hides at least
+ * `continuity.wash.minCover` of the picture is tagged `covered` and left out of the numbers WHEN THE POLICY EXCUSES IT. It does not yet: the definition of a jerk is Bailey's
+ * (D-420 to D-426), no yes of his to this excuse is recorded (AGENTS.md rule 10), so `continuity.wash.excuse` ships false and the tests below turn it on to hold what it would do.
  *
  * Held to a synthetic recording and a fake page: nothing opens a browser. Game case: FFX-2 only in effect (only Chapter XI plays a Save Sphere card; `restoresPartyOnEntry`,
  * `SaveSphereCard.ts`); the harness plumbing is shared and does nothing in FFX, where no wash exists.
@@ -32,11 +34,14 @@ afterEach(() => { delete process.env['CONT_CFG']; });
 describe('the wash block of the policy', () => {
   const c = continuityConfig();
 
-  it('excuses a jerk under a wash that hides 70 percent of the picture, reads the Save Sphere\'s wash, and is on by default', () => {
-    expect(c.wash).toMatchObject({ excuse: true, minCover: 0.7, selector: WASH_SELECTOR });
+  // The definition of a jerk is Bailey's (D-420 to D-426). r41-aeonjump listed this excuse as an option "neither built (rule 10: ideas need a yes)", and no yes of his is
+  // recorded (round 25 never mentions the card; DECISIONS.md has no wash row), so the policy ships it OFF. When he says yes: set `excuse` to true in critic/policy.json, quote his
+  // words and time in that block's note (the guard in critic-continuity-policy.test.ts asks for it), add the D-row, and change this test to say so.
+  it('ships OFF until the owner says yes, and still reads the Save Sphere\'s wash: no jerk is excused, the wash is recorded on the ones it was over', () => {
+    expect(c.wash).toMatchObject({ excuse: false, minCover: 0.7, selector: WASH_SELECTOR });
     expect(WASH_SELECTOR).toBe('[data-testid="save-sphere"] .ssphere__wash');
     expect(WASH_MIN_COVER).toBe(0.7);
-    expect(washPolicy(c)).toEqual({ excuse: true, minCover: 0.7, selector: WASH_SELECTOR });
+    expect(washPolicy(c)).toEqual({ excuse: false, minCover: 0.7, selector: WASH_SELECTOR });
   });
 
   it('needs the veil essentially all the way up: its full cover is 0.74, so a minCover above that would excuse nothing and one far below it would excuse a half-hidden jump', () => {
@@ -44,13 +49,14 @@ describe('the wash block of the policy', () => {
     expect(c.wash!.minCover!).toBeGreaterThanOrEqual(0.5);
   });
 
-  it('can be switched off, or told to stop reading the page, by the environment, block by block, and a policy without the block excuses nothing', () => {
-    process.env['CONT_CFG'] = '{"wash":{"excuse":false}}';
-    const off = continuityConfig();
-    expect(off.wash).toMatchObject({ excuse: false, minCover: 0.7, selector: WASH_SELECTOR }); // merged: the rest of the block stays
-    expect(washPolicy(off).excuse).toBe(false);
+  it('can be switched ON for one run (the what-if before the owner decides), or told to stop reading the page, by the environment, block by block, and a policy without the block excuses nothing', () => {
+    process.env['CONT_CFG'] = '{"wash":{"excuse":true}}';
+    const on = continuityConfig();
+    expect(on.wash).toMatchObject({ excuse: true, minCover: 0.7, selector: WASH_SELECTOR }); // merged: the rest of the block stays
+    expect(washPolicy(on).excuse).toBe(true);
     process.env['CONT_CFG'] = '{"wash":{"selector":null}}';
     expect(washPolicy(continuityConfig()).selector).toBeNull();
+    expect(washPolicy(continuityConfig()).excuse).toBe(false); // the environment leaves the shipped switch alone
     delete process.env['CONT_CFG'];
     expect(washPolicy({})).toEqual({ excuse: false, minCover: WASH_MIN_COVER, selector: null });
     expect(washPolicy(null)).toEqual({ excuse: false, minCover: WASH_MIN_COVER, selector: null });
@@ -288,11 +294,13 @@ function recording(o: { frames?: number; at?: number; dy?: number; wash?: { from
 // minSwaps 0: this figure never changes pose, and the verdict must say FAIL or PASS about its motion, not UNVERIFIED for want of swaps.
 const CFG: ContinuityConfig = { ...continuityConfig(), minSwaps: 0 };
 const withWash = (wash: Partial<NonNullable<ContinuityConfig['wash']>>): ContinuityConfig => ({ ...CFG, wash: { ...CFG.wash, ...wash } });
+// CFG is the shipped policy, whose excuse is OFF until the owner says yes: it counts every jerk. ON turns the switch on, to hold what it does once he has.
+const ON = withWash({ excuse: true });
 
 describe('a head that jumps 900 px in one frame', () => {
-  it('without any wash is a jerk and fails CHK-027, as it always did', () => {
+  it('without any wash is a jerk and fails CHK-027, as it always did (the switch on or off)', () => {
     const { meta, records } = recording({});
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.jerks).toHaveLength(1);
     expect(r.jerks[0]).toMatchObject({ n: 150 });
     expect(r.jerks[0]!.px).toBeGreaterThan(800);
@@ -305,9 +313,9 @@ describe('a head that jumps 900 px in one frame', () => {
     expect(r.wash).toMatchObject({ framesSeen: 0, jerksUnderWash: 0, jerksCovered: 0, spans: [] });
   });
 
-  it('under the full Save Sphere wash is tagged covered, listed, and not counted: no jerk, no failure, no strip, the exception said in the verdict', () => {
+  it('with the excuse ON (the owner\'s yes) under the full Save Sphere wash is tagged covered, listed, and not counted: no jerk, no failure, no strip, the exception said in the verdict', () => {
     const { meta, records } = recording({ wash: [{ from: 100, to: 210, w: 1 }] });
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.jerks).toHaveLength(1); // still in the report
     expect(r.jerks[0]).toMatchObject({ n: 150, covered: true, wash: { opacity: 1, cover: 0.74, frames: [149, 150] } });
     expect(r.summary.motion.jerks).toBe(0);
@@ -321,15 +329,29 @@ describe('a head that jumps 900 px in one frame', () => {
     expect(r.wash).toMatchObject({ framesSeen: 111, maxOpacity: 1, jerksUnderWash: 1, jerksCovered: 1, spans: [{ from: 100, to: 210, frames: 111, ms: 1850 }], alpha: ALPHA, excuse: true });
   });
 
-  it('with `excuse: false` in the policy is counted again, and still shows the wash that was over it', () => {
+  it('under the full Save Sphere wash with the SHIPPED policy (excuse off until the owner\'s yes) is counted, fails CHK-027, gets its strip, and still shows the wash that was over it', () => {
+    expect(CFG.wash!.excuse).toBe(false); // the policy as shipped, not a test's override
+    const { meta, records } = recording({ wash: [{ from: 100, to: 210, w: 1 }] });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    expect(r.jerks[0]).toMatchObject({ n: 150, wash: { opacity: 1, cover: 0.74, frames: [149, 150] } }); // the evidence is kept
+    expect(r.jerks[0]).not.toHaveProperty('covered');
+    expect(r.summary.motion.jerks).toBe(1);
+    expect(r.summary.motion.jerksOverFail).toBe(1);
+    expect(r.summary.motion.worstJerkPx).toBeGreaterThan(800);
+    expect(r.summary.motion.jerksCovered).toBe(0);
+    expect(r.summary.checks['CHK-027'].result).toBe('FAIL');
+    expect(r.summary.checks['CHK-027']).not.toHaveProperty('note');
+    expect(r.worst.jerks).toHaveLength(1);
+    expect(r.wash).toMatchObject({ framesSeen: 111, maxOpacity: 1, jerksUnderWash: 1, jerksCovered: 0, worstCoveredPx: 0, alpha: ALPHA, excuse: false });
+  });
+
+  it('with `excuse: false` forced on top of the policy (the way back once the owner has said yes) is counted the same way', () => {
     const { meta, records } = recording({ wash: [{ from: 100, to: 210, w: 1 }] });
     const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: withWash({ excuse: false }) });
     expect(r.jerks[0]).toMatchObject({ wash: { cover: 0.74 } });
     expect(r.jerks[0]).not.toHaveProperty('covered');
     expect(r.summary.motion.jerks).toBe(1);
-    expect(r.summary.motion.jerksCovered).toBe(0);
     expect(r.summary.checks['CHK-027'].result).toBe('FAIL');
-    expect(r.worst.jerks).toHaveLength(1);
   });
 
   it('on a policy with no wash block at all is counted (the earlier harness)', () => {
@@ -341,50 +363,50 @@ describe('a head that jumps 900 px in one frame', () => {
     expect(r.summary.checks['CHK-027'].result).toBe('FAIL');
   });
 
-  it('while the wash is only fading in is NOT hidden: 37 percent of the picture shows nothing of it', () => {
+  it('while the wash is only fading in is NOT hidden (even with the excuse ON): 37 percent of the picture shows nothing of it', () => {
     const { meta, records } = recording({ wash: [{ from: 100, to: 210, w: 0.5 }] });
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.jerks[0]).toMatchObject({ wash: { opacity: 0.5, cover: 0.37 } });
     expect(r.jerks[0]).not.toHaveProperty('covered');
     expect(r.summary.motion.jerks).toBe(1);
     expect(r.summary.checks['CHK-027'].result).toBe('FAIL');
   });
 
-  it('after the wash has gone is a jerk (the veil lifted before the figure moved)', () => {
+  it('after the wash has gone is a jerk (the veil lifted before the figure moved), the excuse ON or off', () => {
     const { meta, records } = recording({ wash: [{ from: 60, to: 140, w: 1 }] });
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.jerks[0]).not.toHaveProperty('wash');
     expect(r.summary.motion.jerks).toBe(1);
   });
 
-  it('on the first frame of the wash is a jerk: the frame before it has no veil, so the step is not under it', () => {
+  it('on the first frame of the wash is a jerk (even with the excuse ON): the frame before it has no veil, so the step is not under it', () => {
     const { meta, records } = recording({ wash: [{ from: 150, to: 210, w: 1 }] });
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.jerks[0]).toMatchObject({ wash: { opacity: 0, cover: 0, frames: [149, 150] } });
     expect(r.summary.motion.jerks).toBe(1);
   });
 
-  it('is still a jerk when the veil\'s alpha was not read (cover 0), and the record says why', () => {
+  it('is still a jerk when the veil\'s alpha was not read (cover 0), even with the excuse ON, and the record says why', () => {
     const { meta, records } = recording({ wash: [{ from: 100, to: 210, w: 1 }], alpha: null });
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.jerks[0]).toMatchObject({ wash: { cover: 0 } });
     expect(r.summary.motion.jerks).toBe(1);
     expect(r.wash.alpha).toBeNull();
   });
 
-  it('a recording made before the edit (no `w`, no meta.wash) is analysed exactly as it was', () => {
+  it('a recording made before the edit (no `w`, no meta.wash) is analysed exactly as it was, even with the excuse ON', () => {
     const { meta, records } = recording({});
     delete (meta as { wash?: unknown }).wash;
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     expect(r.summary.motion.jerks).toBe(1);
     expect(r.wash).toMatchObject({ framesSeen: 0, selector: WASH_SELECTOR, alpha: null });
   });
 
-  it('keeps a visible jerk in the same chapter: only the one under the veil is excused', () => {
+  it('keeps a visible jerk in the same chapter: with the excuse ON only the one under the veil is excused', () => {
     // the figure also drops 300 px at frame 40, before the card
     const { meta, records } = recording({ wash: [{ from: 100, to: 210, w: 1 }] });
     for (const rec of records) if (rec.n >= 40 && rec.n < 150) rec.f[0]!.s = [[0, 1, 1, ...rect(300, 500, 200, 400)], 0];
-    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: CFG });
+    const r = analyzeRun({ meta, records, anchors: ANCHORS, cfg: ON });
     const early = r.jerks.find((j) => j.n === 40)!;
     expect(early).not.toHaveProperty('covered');
     expect(r.jerks.filter((j) => j.covered).map((j) => j.n)).toEqual([150]);
