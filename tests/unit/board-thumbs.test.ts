@@ -309,9 +309,11 @@ describe('the cursor, and the plates fetched ahead of it', () => {
     expect(aheadCards(all, 0, 0)).toEqual([]);
     expect(aheadCards(all, 5, 1)).toEqual([6, 11, 4]);
     expect(aheadCards(all, 5, 2)).toEqual([6, 11, 4, 7, 3]);
-    // The default reach is one press: the next card, the other game's first, the one behind.
-    expect(PLATE_AHEAD).toBe(1);
-    expect(aheadCards(all, 5)).toEqual([6, 11, 4]);
+    // The default reach is two presses (r44a-rc; it was one): the next card, the other game's first, the one behind, then the next one on
+    // and the one behind that.
+    expect(PLATE_AHEAD).toBe(2);
+    expect(aheadCards(all, 5)).toEqual([6, 11, 4, 7, 3]);
+    expect(aheadCards(all, 0)).toEqual([1, 11, 17, 2, 16]);
   });
 
   it('skips a COMING card: the cursor never lands on it, so its plate is never fetched', () => {
@@ -334,20 +336,25 @@ describe('the cursor, and the plates fetched ahead of it', () => {
     expect(plateAheadFrom('?x=1', 3)).toBe(3);
   });
 
-  it('fetches the full plates of the cards a press away, the next card first, and of no other card', () => {
+  it('fetches the full plates of the cards within two presses, the next card first, and of no other card', () => {
     setThumbArt(thumbMap());
     const all = tiles();
     const sceneOf = (i: number): string => artUrl(`art/backdrops/${all[i]!.sceneKey}.png`);
     const urls = platesAhead(all, 0);
     for (const i of aheadCards(all, 0)) expect(urls, all[i]!.id).toContain(sceneOf(i));
     expect(urls[0]).toBe(sceneOf(1)); // the next card's scene leads
-    for (const i of [0, 2, 4, 6, 8, 9, 14, 16]) expect(urls, all[i]!.id).not.toContain(sceneOf(i)); // the selected card's own plate is loaded when it is shown; the rest are not near
+    for (const i of [0, 4, 6, 8, 9, 14]) expect(urls, all[i]!.id).not.toContain(sceneOf(i)); // the selected card's own plate is loaded when it is shown; the rest are not near
     expect(urls.some((u) => SMALL.test(u))).toBe(false); // a plate is always the full picture
     expect(platesAhead(all, 0, 0)).toEqual([]);
-    expect(platesAhead(all, 0, 2)).toContain(sceneOf(2));
+    // The reach of two presses (r44a-rc) is what makes the difference: the card two on and the card two back are in it, and at the old reach of one they were not.
+    expect(urls).toContain(sceneOf(2));
+    expect(urls).toContain(sceneOf(16));
+    expect(platesAhead(all, 0, 1)).not.toContain(sceneOf(2));
+    expect(platesAhead(all, 0, 1)).not.toContain(sceneOf(16));
+    expect(platesAhead(all, 0, 3)).toContain(sceneOf(3));
     // One list a card, the next card's first: the board gives that list a lane of its own.
     const byCard = platesAheadByCard(all, 0);
-    expect(byCard).toHaveLength(3);
+    expect(byCard).toHaveLength(5);
     expect(byCard[0]).toContain(sceneOf(1));
     expect(byCard.flat()).toEqual(urls);
   });
@@ -390,7 +397,7 @@ describe('the board warms the plates ahead as the cursor moves', () => {
     screen = input = root = null;
   });
 
-  it('asks for the plates of the cards a press away when it opens (all of them in the idle lane), and again after each move, the next card ahead of the idle queue', () => {
+  it('asks for the plates of the cards within two presses when it opens (all of them in the idle lane), and again after each move, the next card ahead of the idle queue', () => {
     screen!.enter();
     const all = tiles();
     const sceneOf = (i: number): string => artUrl(`art/backdrops/${all[i]!.sceneKey}.png`);
@@ -400,18 +407,27 @@ describe('the board warms the plates ahead as the cursor moves', () => {
     // Nobody has pressed anything: the whole window waits its turn, so the first paint's own set and the music have the pipe.
     expect(opening.find((a) => a.urls.includes(sceneOf(1)))?.lane).toBe('idle');
     expect(opening.find((a) => a.urls.includes(sceneOf(11)))?.lane).toBe('idle'); // the other game's first card
+    expect(opening.find((a) => a.urls.includes(sceneOf(2)))?.lane).toBe('idle'); // two presses on, in the reach since r44a-rc
     expect(new Set(opening.flatMap((a) => a.urls)).has(sceneOf(8))).toBe(false);
     asked.length = 0;
-    for (let i = 0; i < 6; i++) key('ArrowRight'); // the cursor is on card 6 now
+    for (let i = 0; i < 5; i++) key('ArrowRight'); // the cursor is on card 5
+    expect(screen!.snapshot()['selectedIndex']).toBe(5);
+    // Card 7 is two presses on from here: with the reach of two (r44a-rc; it was one) it is asked for already, in the idle lane.
+    expect(plateCalls().find((a) => a.urls.includes(sceneOf(7)))?.lane).toBe('idle');
+    asked.length = 0; // from here on, only the last move's asks
+    key('ArrowRight'); // the cursor is on card 6 now
     expect(screen!.snapshot()['selectedIndex']).toBe(6);
     const after = new Set(plateCalls().flatMap((a) => a.urls));
     expect(after.has(sceneOf(7))).toBe(true); // the next card, one press on from where the cursor stands
     expect(after.has(sceneOf(11))).toBe(true); // and the other game's first card, one press away
-    expect(after.has(sceneOf(8))).toBe(false); // two presses on is still not asked for
+    expect(after.has(sceneOf(8))).toBe(true); // two presses on is asked for too
+    expect(after.has(sceneOf(4))).toBe(true); // and two presses back
+    expect(after.has(sceneOf(9))).toBe(false); // three presses on is not
     expect(after.has(sceneOf(14))).toBe(false); // a far card is not asked for
     // A hand is on the keys: the card it reaches for next goes ahead of the idle queue (every other card's faces), the rest waits in it.
     expect(plateCalls().find((a) => a.urls.includes(sceneOf(7)))?.lane).toBe('normal');
     expect(plateCalls().find((a) => a.urls.includes(sceneOf(11)))?.lane).toBe('idle');
+    expect(plateCalls().find((a) => a.urls.includes(sceneOf(8)))?.lane).toBe('idle');
   });
 
   it('paints the rail with the small copies and the plate with the full picture, in the mounted board', () => {

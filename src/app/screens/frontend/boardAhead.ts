@@ -11,8 +11,14 @@
 
 import { stepGroup, type ChapterTile } from './chapterGrid.ts';
 
-/** How many presses from the cursor a card still has its plate fetched ahead of it (`?ahead=N` names another, for the measurements). */
-export const PLATE_AHEAD = 1;
+/**
+ * How many presses from the cursor a card still has its plate fetched ahead of it (`?ahead=N` names another, for the measurements).
+ *
+ * 2 since r44a-rc (the driver's call on the table in `docs/handoff/r44-thumbs.md`, which measured 0, 1 and 2). At 1 a hand pressing four
+ * times a second saw the next plates soft for about 0.4 s a press, which the board before the thumbnails never shows; 2 costs 9.3 MB more
+ * over a session (93.1 MB, against 83.8 MB at 1 and the live site's 129.1 MB) and removes about one soft press.
+ */
+export const PLATE_AHEAD = 2;
 
 /** The reach a page address names (`?ahead=0..9`), else `fallback`. */
 export function plateAheadFrom(search: string, fallback: number = PLATE_AHEAD): number {
