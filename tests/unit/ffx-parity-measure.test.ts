@@ -46,6 +46,11 @@ function parseSeeds(spec: string | undefined): number[] {
   return spec.split(',').map((s) => Number(s.trim())).filter((n) => Number.isFinite(n));
 }
 const SEEDS = parseSeeds(process.env['PYREFLY_MEASURE_SEEDS']);
+/**
+ * `PYREFLY_MEASURE_FORCE_MIX=1` (RC7 lane FFX-H, a diagnostic and not the shipped line): whenever a character has an enabled Mix Overdrive row (Rikku with a full
+ * gauge), play it instead of the line's pick, so the Mix code is exercised in whole chapters. The pair is the engine's default roll among the pairs the bag holds.
+ */
+const FORCE_MIX = process.env['PYREFLY_MEASURE_FORCE_MIX'] === '1';
 const ONLY = (process.env['PYREFLY_MEASURE_CHAPTERS'] ?? '').split(',').map((s) => s.trim()).filter((s) => s !== '');
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
@@ -62,6 +67,8 @@ interface Row {
   meanPartyKos: number;
   /** Mean number of Rikku Mix actions per seed over the whole chain (an action whose ability id starts with `mix-`); RC7 lane FFX-H added it. */
   meanMixUses: number;
+  /** Which Mix results fired over all the seeds (ability id to count). */
+  mixResults: Record<string, number>;
   /** One letter per seed, in seed order: W won every link, L lost, U unresolved (for paired before and after comparisons). */
   perSeed: string;
   seedList: string;
@@ -76,6 +83,8 @@ interface One {
   engineTurns: number;
   partyKos: number;
   mixUses: number;
+  /** Which Mix results fired in this run (ability id to count). */
+  mixResults: Record<string, number>;
 }
 
 /** What the golden test plays when the strategy has no pick: the first enabled Attack, else the first enabled row. */
@@ -87,9 +96,13 @@ function fallback(d: Input): Command {
 }
 
 /** Rikku's Mix results that were used: the action-start events whose ability id is a `mix-` result (RC7 lane FFX-H). */
-function mixUsesOf(state: Readonly<BattleState>): number {
+function mixUsesOf(state: Readonly<BattleState>, into: Record<string, number>): number {
   let n = 0;
-  for (const e of state.log) if (e.type === 'action-start' && typeof e.abilityId === 'string' && e.abilityId.startsWith('mix-')) n += 1;
+  for (const e of state.log) {
+    if (e.type !== 'action-start' || typeof e.abilityId !== 'string' || !e.abilityId.startsWith('mix-')) continue;
+    n += 1;
+    into[e.abilityId] = (into[e.abilityId] ?? 0) + 1;
+  }
   return n;
 }
 
@@ -116,13 +129,14 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
   let engineTurns = 0;
   let partyKos = 0;
   let mixUses = 0;
+  const mixResults: Record<string, number> = {};
   for (let step = 0; step < MAX_STEPS; step += 1) {
     const d = engine.nextDecision();
     if (d.kind === 'resolved' || d.kind === 'waiting') continue;
     if (d.kind === 'battle-over') {
       engineTurns += d.result.turns;
       partyKos += partyKosOf(engine.state() as Readonly<BattleState>);
-      mixUses += mixUsesOf(engine.state() as Readonly<BattleState>);
+      mixUses += mixUsesOf(engine.state() as Readonly<BattleState>, mixResults);
       outcome = String(d.result.outcome);
       if (link === 1) link1Won = outcome === 'victory';
       if (outcome !== 'victory' || !group.nextGroupId || link >= MAX_LINKS) break;
@@ -136,9 +150,10 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
       continue;
     }
     partyTurns += 1;
-    engine.submit(intendedStrategy(d.actorId, d.commands, engine as never) ?? fallback(d));
+    const mixRow = FORCE_MIX ? d.commands.find((c) => c.enabled && c.command.kind === 'overdrive' && c.command.id === 'mix') : undefined;
+    engine.submit(mixRow ? ({ ...mixRow.command, targets: [] } as Command) : (intendedStrategy(d.actorId, d.commands, engine as never) ?? fallback(d)));
   }
-  return { outcome, link1Won, partyTurns, engineTurns, partyKos, mixUses };
+  return { outcome, link1Won, partyTurns, engineTurns, partyKos, mixUses, mixResults };
 }
 
 function mean(xs: readonly number[]): number {
@@ -163,6 +178,10 @@ describe.skipIf(!MEASURE)('RE parity, FFX: the intended line in every FFX chapte
         meanEngineTurns: mean(runs.map((r) => r.engineTurns)),
         meanPartyKos: mean(runs.map((r) => r.partyKos)),
         meanMixUses: mean(runs.map((r) => r.mixUses)),
+        mixResults: runs.reduce<Record<string, number>>((all, r) => {
+          for (const [id, n] of Object.entries(r.mixResults)) all[id] = (all[id] ?? 0) + n;
+          return all;
+        }, {}),
         perSeed: runs.map((r) => (r.outcome === 'victory' ? 'W' : r.outcome === 'defeat' ? 'L' : 'U')).join(''),
         seedList: SEEDS.length > 24 ? `${SEEDS[0]}-${SEEDS[SEEDS.length - 1]}` : SEEDS.join(','),
         detail: runs.map((r, i) => ({ seed: SEEDS[i] as number, ...r })),

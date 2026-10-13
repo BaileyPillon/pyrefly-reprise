@@ -101,6 +101,7 @@ describe('the bag (0x00790550)', () => {
   it('replays 300 vectors of the real function (stacks, caps, refusals, emptied slots, full bags, non-items, both bit arrays)', () => {
     const fx = loadFfxParityFixture('bag_change');
     expect(fx).not.toBeNull();
+    expect(fx!.vectors.length).toBe(300);
     for (const v of fx!.vectors) {
       const i = v.in as { bag: SparseSlots; obtained: number[]; lost: number[]; item: number; delta: number };
       const o = v.out as { ret: number; bag: SparseSlots; obtained: number[]; lost: number[] };
@@ -182,6 +183,7 @@ describe('deduct and refund (0x007b0c20)', () => {
   it('replays 300 vectors of the real function (party, aeon and monster users, deduct and refund, Mix records, short stock)', () => {
     const fx = loadFfxParityFixture('deduct_refund');
     expect(fx).not.toBeNull();
+    expect(fx!.vectors.length).toBe(300);
     for (const v of fx!.vectors) {
       const i = v.in as { user: number; delta: number; effective: number[]; bag: SparseSlots; obtained: number[]; lost: number[] };
       const o = v.out as { ret: number; bag: SparseSlots; obtained: number[]; lost: number[] };
@@ -212,6 +214,7 @@ describe('gil (0x007859a0 pay, 0x00784830 add)', () => {
   it('replays 300 vectors of the real functions', () => {
     const fx = loadFfxParityFixture('gil_pay_add');
     expect(fx).not.toBeNull();
+    expect(fx!.vectors.length).toBe(300);
     for (const v of fx!.vectors) {
       const i = v.in as { gil: number; amount: number };
       const o = v.out as { afterPay: number; payRet: number; afterAdd: number };

@@ -22,7 +22,7 @@ import type { Command, FFXCombatant, ItemDrop } from '../../src/battle/common/ty
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
 import { executeCommand } from '../../src/battle/ffx/execute.ts';
-import { mixablePairs } from '../../src/battle/ffx/overdrive.ts';
+import { mixablePairs, rollDefaultMinigame } from '../../src/battle/ffx/overdrive.ts';
 import { mixPickerParams } from '../../src/battle/ffx/pickerParams.ts';
 import { resolveSteal } from '../../src/battle/ffx/steal.ts';
 import { refundItem, spendItem } from '../../src/battle/ffx/state.ts';
@@ -279,6 +279,22 @@ describe('what the menu offers, and the starting bag', () => {
     expect(params.recipes['potion|potion']).toBe('mix-ultra-potion');
     expect(params.recipes['antidote|fire-gem']).toBe('mix-firestorm');
     expect(params.recipeNames['potion|potion']).toBe('Ultra Potion');
+  });
+
+  it('the default roll of an automated Mix (AI, auto-battle, a headless run) picks one pair of the bag, and an empty bag picks none', () => {
+    const ctx = bagCtx({ potion: 2, 'fire-gem': 1, map: 3 });
+    const mix = ALL_ABILITIES.find((a) => a.id === 'mix')!;
+    const rikku = fighter({ id: 'rikku', side: 'party', stats: stats() });
+    const pairs = mixablePairs(ctx);
+    expect(pairs.length).toBe(5); // 3 distinct pairs, and potion (x2) and map (x3) may be doubled, the one Fire Gem may not
+    for (let i = 0; i < 20; i++) {
+      const rolled = rollDefaultMinigame(ctx, 'rikku-mix', mix, rikku);
+      expect(rolled.kind).toBe('rikku-mix');
+      const picked = (rolled as { mix: { ingredients: [string, string]; resultAbilityId: string | null } }).mix;
+      expect(pairs.some(([a, b, id]) => a === picked.ingredients[0] && b === picked.ingredients[1] && id === picked.resultAbilityId)).toBe(true);
+    }
+    const none = rollDefaultMinigame(bagCtx({}), 'rikku-mix', mix, rikku) as { mix: { ingredients: [string, string]; resultAbilityId: string | null } };
+    expect(none.mix).toEqual({ ingredients: ['', ''], resultAbilityId: null });
   });
 
   it('the starting bag is the bag of the game: the same item listed twice stops at 99 and a stack never passes it', () => {

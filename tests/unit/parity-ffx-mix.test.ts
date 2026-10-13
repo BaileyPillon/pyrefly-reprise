@@ -224,6 +224,7 @@ describe('the resolver (0x007b0520)', () => {
   it('replays 300 whole-record runs of the real function (loading and resolved guards, two, one and no ingredients, no target, learn bits)', () => {
     const fx = loadFfxParityFixture('mix_resolver');
     expect(fx).not.toBeNull();
+    expect(fx!.vectors.length).toBe(300);
     for (const v of fx!.vectors) {
       const i = v.in as {
         loading: number; resolved: number; animating: number; user: number; slots: number; fields: number[]; mask: number;
