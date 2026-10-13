@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-12 — Playback rule 2 names one exception: a status the same action's KO wipe takes plays no beat (release candidate `r43-rc`; both games as plumbing, FFX's death check is the only emitter today; presentation only, no event and no contract type changed)
+
+Bailey's "I’ll go with all of your recommendations" (2026-10-12 ~17:50 EDT, item 59b) accepted RC5's rule (lane FFX-D: the death check runs after the target's last hit, as in the game). This is the fix for its side effect, no new look: a status that lands on a target who dies in the same action now arrives as a `status-add` and, a few events later, a `status-remove` with reason `ko` (145 pairs over 440 seeded FFX runs, 12 before RC5). Each pair played as a flash, a cue, a message line, a row icon and 220 ms + 88 ms; Chapter III's Curse on a dying party member played five of them, about 1.5 s. Game case: **both** (shared presenter plumbing, CHK-020); FFX-2's engine takes a KO'd unit's statuses without an event, and FF7's does not use the reason.
+
+- `docs/CONTRACTS.md`, playback rule 2: "never reorders or drops one" now carries the stated exception. No file in the list above changed in shape.
+- New `src/engine/BattlePresenterKoWipe.ts` (`koWipedStatuses(events)`, pure) and 7 lines in `BattlePresenter.playBurst`: the named add and its wipe are skipped (no flash, cue, message line, wait or HUD notification), the removal is still rolled into the shown rows, and both stay in the trace. A status that landed in an earlier action, turn or burst keeps both beats.
+- The engine's events are untouched: `ffx-engine-golden`, `ffx2-atb-golden` and `ff7-golden` do not move. Tests: `presenter-ko-wipe.test.ts` and `presenter-ko-wipe-chapter3.test.ts`.
+
 ## 2026-10-11 — Gear is read the way the game reads it: `EquipmentDef.bonusCrit` is the crit byte of EACH piece, and its default is the game's 3 (RC4 lane FFX-C, branch `re-parity-rc4-gear`; FFX only; additive, one meaning widened)
 
 Bailey, 2026-10-08: "It needs to be a 1:1 parity. this is very useful for our project."; 2026-10-10: "go full speed ahead please" and "ill go with all your recommendations". Source: `FFX-G03` (the real party stat builder, VA 0x007860f0, and gear loop, VA 0x0079c5f0, run with every one of the 134 auto-ability records alone and in pairs; 41,498 vectors, 0 mismatches). Game case: **FFX only**; `ffx2-atb-golden` and `ff7-golden` are unchanged.
