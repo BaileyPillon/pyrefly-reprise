@@ -1,0 +1,151 @@
+{
+ "what": "The FFX Overdrive mode rows take a real mouse click on a desktop, in a real browser (same run as foc43-01-browser-check.json): the same page with the rows forced back to the inherited pointer-events none (an inline inherit, what the page did before the fix) against the page as the fix leaves it",
+ "when": "2026-10-13T06:19:37.028Z",
+ "build": "r44a-rc working tree, the mode-row fix uncommitted at the time of the run",
+ "runs": [
+  {
+   "size": "1280x720",
+   "error": null,
+   "consoleErrors": [],
+   "steps": {
+    "overdriveRows": [
+     {
+      "mode": "stoic",
+      "selected": false,
+      "equippedTag": false,
+      "cx": 826.5310974121094,
+      "cy": 231.40625,
+      "pointerEvents": "auto",
+      "hit": "div.ffxprep-mode-row",
+      "hitIsRow": true
+     },
+     {
+      "mode": "warrior",
+      "selected": true,
+      "equippedTag": true,
+      "cx": 826.5310974121094,
+      "cy": 261.40625,
+      "pointerEvents": "auto",
+      "hit": "div.ffxprep-mode-row",
+      "hitIsRow": true
+     }
+    ],
+    "overdriveTarget": "stoic",
+    "beforeFixHit": {
+     "mode": "stoic",
+     "selected": false,
+     "equippedTag": false,
+     "cx": 826.5310974121094,
+     "cy": 231.40625,
+     "pointerEvents": "none",
+     "hit": "canvas",
+     "hitIsRow": false
+    },
+    "beforeFixAfterClick": [
+     {
+      "mode": "stoic",
+      "selected": false
+     },
+     {
+      "mode": "warrior",
+      "selected": true
+     }
+    ],
+    "withFixHit": {
+     "mode": "stoic",
+     "selected": false,
+     "equippedTag": false,
+     "cx": 826.5310974121094,
+     "cy": 231.40625,
+     "pointerEvents": "auto",
+     "hit": "div.ffxprep-mode-row",
+     "hitIsRow": true
+    },
+    "withFixAfterClick": [
+     {
+      "mode": "stoic",
+      "selected": true,
+      "equippedTag": true
+     },
+     {
+      "mode": "warrior",
+      "selected": false,
+      "equippedTag": false
+     }
+    ]
+   }
+  },
+  {
+   "size": "1600x900",
+   "error": null,
+   "consoleErrors": [],
+   "steps": {
+    "overdriveRows": [
+     {
+      "mode": "stoic",
+      "selected": false,
+      "equippedTag": false,
+      "cx": 1033.1638793945312,
+      "cy": 289.2578125,
+      "pointerEvents": "auto",
+      "hit": "div.ffxprep-mode-row",
+      "hitIsRow": true
+     },
+     {
+      "mode": "warrior",
+      "selected": true,
+      "equippedTag": true,
+      "cx": 1033.1638793945312,
+      "cy": 326.7578125,
+      "pointerEvents": "auto",
+      "hit": "div.ffxprep-mode-row",
+      "hitIsRow": true
+     }
+    ],
+    "overdriveTarget": "stoic",
+    "beforeFixHit": {
+     "mode": "stoic",
+     "selected": false,
+     "equippedTag": false,
+     "cx": 1033.1638793945312,
+     "cy": 289.2578125,
+     "pointerEvents": "none",
+     "hit": "canvas",
+     "hitIsRow": false
+    },
+    "beforeFixAfterClick": [
+     {
+      "mode": "stoic",
+      "selected": false
+     },
+     {
+      "mode": "warrior",
+      "selected": true
+     }
+    ],
+    "withFixHit": {
+     "mode": "stoic",
+     "selected": false,
+     "equippedTag": false,
+     "cx": 1033.1638793945312,
+     "cy": 289.2578125,
+     "pointerEvents": "auto",
+     "hit": "div.ffxprep-mode-row",
+     "hitIsRow": true
+    },
+    "withFixAfterClick": [
+     {
+      "mode": "stoic",
+      "selected": true,
+      "equippedTag": true
+     },
+     {
+      "mode": "warrior",
+      "selected": false,
+      "equippedTag": false
+     }
+    ]
+   }
+  }
+ ]
+}
