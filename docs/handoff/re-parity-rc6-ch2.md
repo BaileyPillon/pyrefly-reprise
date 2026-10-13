@@ -221,3 +221,25 @@ PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_YUNA_LINES=base,tactic,swa
 Wakka wears no Zombie Ward, so her Hellbiter always zombifies him, and his Death Ward gives him a fair chance against Mega Death even when it has not. Following the card, the fight is won about nine times in ten again (it was about eight). The guide says so and says why, and notes that a raised ally is a plain target until her
 next Hellbiter. Yunalesca's own numbers and the Zombie rule are unchanged. **Chapter III, the fayth's Auto-Life (FFX).** When a party member is knocked out in the last chain of fights and the fayth's Auto-Life stands him back up, its icon no longer disappears from his row for the length of the revive. Nothing about
 the fights themselves changed.
+
+## 14. On origin/r45-rc (2026-10-13: the whole suite and Chapter II on the merged tip `ab57f082`)
+
+Read-only check for the release driver: nothing in `src/` or `tests/` was changed, and no pin was moved by the merge. The tip is `origin/r45-rc` (`d5bf2206`) plus this branch's seven commits (merge `db3e296d`). A worktree has no `public/art`. TEMP and TMP on D:, `--maxWorkers=4 --testTimeout=120000 --exclude '**/zz-*'` (the two `zz-*.tmp` files in the tree are other lanes' scratch). It took 2,835 s, because another lane held the CPU at 100 % the whole time.
+
+**The whole suite, once:** 1,163 files: 1,126 passed, 23 failed, 14 skipped; 17,636 tests: 17,338 passed, 183 failed, 114 skipped, 1 todo. (Before the merge, section 9: 1,140 files and 17,303 tests; r45-rc brought 23 files and 333 tests, all of them passing.)
+
+| Failing file | Failed | Why |
+|---|---:|---|
+| the 22 files of section 9: `ui-portrait-face-crop` (145), `art-ref-defaults` (4), `pause-remake` (3), `chapter-meta` (file), `chapter-meta-evrae` (3), `chapter-meta-ffx2-leblanc` (2), `chapter-meta-seymour-anima-macalania` (3), `cutscene-story-poses` (1), `party-face-manifest` (file), `chapters/chapters-6-7-8-enemy-sprite-manifest` (file), `chapters/den-of-woe-ship-content` (3), `chapters/den-of-woe-ship-scene` (1), `chapters/experiment-scene` (1), `chapters/fallen-aeons-ship-content` (2), `chapters/fallen-aeons-ship-scene` (1), `chapters/isaaru-ship` (3), `chapters/leblanc-art` (2), `chapters/leblanc-party-sprites` (file), `chapters/natus-ship-content` (2), `chapters/natus-ship-scene` (2), `chapters/trema-ship-content` (4), `chapters/yojimbo-content` (file) | 182 | **art-only**, the same names and the same counts as before the merge. Each is an ENOENT on a `public/art/...` file, the missing `public/art/manifest.json` (the "file" rows fail to load at all), "Reference image not found" / "Input file is missing", or an `existsSync` of a plate or backdrop that is not on this disk (read at the failing lines of `trema-ship-content`, `den-of-woe-ship-scene`, `experiment-scene`, `natus-ship-content`, `isaaru-ship`). Not fixed, by rule. |
+| `party-prep-panels` ("a single panel: still takes the whole screen when it says nothing") | 1 | **not art, and not a pin: a load timeout.** "Hook timed out in 15000ms": the file's `beforeEach` re-imports `PartyPrepScreen` after `vi.resetModules()`, and under that load the import took longer than the config's `hookTimeout` (15 s; `--testTimeout` does not raise it). Alone, on this same tree: **8 of 8 pass** (2.1 s). The branch touches neither the screen nor the test (`git diff --stat origin/r45-rc..HEAD` has no such path), so no comparison with `origin/r45-rc` was needed. |
+
+Passing, by file: `ffx-engine-golden` (18), `ffx2-atb-golden` (6), `ff7-golden` (3), `strategy-chapter2` (13), `re-parity-rc6-ch2` (6), `re-parity-rc6-ch2-ring` (1), `re-parity-rc6-autolife` (3), `ffx-chapter2` (15), `re-parity-ai-yunalesca` (24), `presenter-ko-wipe` (33) and `presenter-ko-wipe-chapter3` (1), `advisor-v4-card` (3), the five `guide-doc*` files and `strategy-guide` (25).
+
+**Chapter II and III over 500 seeds on the merged tree**, the command of section 12 (`PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-500 PYREFLY_MEASURE_CHAPTERS=yunalesca,braskas-final-aeon`, 372 s):
+
+| Chapter | Seeds | Wins | Lost | Unresolved | Party turns | Engine turns | Party KOs |
+|---|---|---|---|---|---|---|---|
+| II Yunalesca | 1 to 500 | **453** (90.6 %) | 46 | 1 (seed 375, also unresolved before RC6) | 157.7 | 224.0 | 13.6 |
+| III Braska's Final Aeon | 1 to 500 | 479 (95.8 %) | 21 | 0 | 232.1 | 373.0 | 5.4 |
+
+Both rows, with the per-seed outcome string and the per-seed turns and KOs, equal the pre-merge measurement (`after-ch2-500.json`, `after-ch3-500.json`) **on all 500 seeds**: the merge moved nothing in either chapter. Raw files, the suite log and the failing-file summary: `D:\Tools\ffx-parity\rc6-ch2\onr45\` (`suite.json`, `suite.log`, `onr45-ch2-ch3-500.json`, `measure500.log`).
