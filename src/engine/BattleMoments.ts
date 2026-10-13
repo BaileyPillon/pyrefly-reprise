@@ -40,6 +40,7 @@ import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
 import { fittedPush } from './ShotFit.ts';
 import { ShotRules } from './ShotRules.ts';
+import type { ShotAction, ShotActionInfo, ShotAnswer, ShotCtx, ShotDirector, ShotSubject } from './ShotDirector.ts';
 
 /** Authored durations, in ms at `speed: 'normal'`. The one place to tune. */
 export const MOMENT_TIMING = {
@@ -135,6 +136,11 @@ export class BattleMoments {
   hurry = false;
   /** A-13: an attack was opened and its first hit has not landed yet. */
   private rollOwed = false;
+  /** The action opened last and not yet closed: who, and what, for the beats after its opening (`ShotDirector.ts`). */
+  private open: { actor: ShotSubject; action: ShotAction } | null = null;
+  /** The scene's director took a held shot's opening, so its release is the director's too: a telegraph's, a form change's. */
+  private telegraphDirected = false;
+  private formDirected = false;
   /** The framing rules a shot is checked against (A-11, A-1, A-12; `ShotRules.ts`). */
   readonly shots: ShotRules;
 
@@ -209,6 +215,33 @@ export class BattleMoments {
     if (rig) this.cam.snapTo(rig);
   }
 
+  // ------------------------------------------------------------- shot director
+
+  /**
+   * Ask the scene's shot director (`SceneStaging.shotDirector`, `ShotDirector.ts`) whether it takes this beat's camera. `undefined` when the scene publishes none or it has no handler for the
+   * beat: the beat plays as it always has and nothing is awaited. A handler that throws, or whose promise rejects, answers `false`: a broken director costs the shot, never the battle.
+   */
+  private ask(call: (director: ShotDirector) => ShotAnswer | undefined): ShotAnswer | undefined {
+    const director = this.deps.stage.shotDirector;
+    if (!director) return undefined;
+    try {
+      const answer = call(director);
+      return answer instanceof Promise ? answer.catch(() => false) : answer;
+    } catch {
+      return undefined;
+    }
+  }
+
+  /** What every beat's context carries. */
+  private shotCtx(): ShotCtx {
+    return { camera: this.cam, speed: this.deps.speed(), skipping: this.skipping, ms: (base) => this.ms(base) };
+  }
+
+  /** A combatant and its side, as the stage reports it. */
+  private subject(id: CombatantId): ShotSubject {
+    return { id, side: this.deps.stage.sideOf(id) };
+  }
+
   /**
    * An explicit `camera` event from a boss's data file. Bypasses the shot
    * grammar (that is what it is for) but still obeys the playback speed.
@@ -260,14 +293,19 @@ export class BattleMoments {
     bossName?: string | null;
   } = {}): Promise<void> {
     this.shots.headline = opts.bossId ?? this.shots.headline;
-    this.shots.fitPhone();
-    const intro = this.shots.opening(this.pick('intro', 'idle')); // FFX-2 giants: the master, where the scene's intro would cut one (`ShotRules.opening`)
-    this.cut(intro);
+    const asked = this.ask((d) => d.battleStart?.({ ...this.shotCtx(), partyIds: opts.partyIds ?? [], boss: opts.bossId ? this.subject(opts.bossId) : null, bossName: opts.bossName ?? null }));
+    const directed = asked instanceof Promise ? await asked : asked === true; // the scene's director has the opening's camera: the party still walks on and the plate still shows
+    if (!directed) {
+      this.shots.fitPhone();
+      const intro = this.shots.opening(this.pick('intro', 'idle')); // FFX-2 giants: the master, where the scene's intro would cut one (`ShotRules.opening`)
+      this.cut(intro);
+    }
     // E-PYRE (decision 61e): the enemy and aeon figures the stage is holding unseen come in now, beside the party's slide, and nothing waits for them:
     // a hurried or skipped opening shows them at once, and the opening's end lands any that is still on its way (`settleEntrances` below).
+    // The figures are the stage's, not the camera's: they come in whether the scene's shot director took the opening's camera or not.
     this.enterFigures();
     if (this.skipping) {
-      this.cut(this.pick('idle'));
+      if (!directed) this.cut(this.pick('idle'));
       if (opts.bossId) this.revealed.add(opts.bossId);
       return;
     }
@@ -275,10 +313,10 @@ export class BattleMoments {
     this.setHudVisible(false);
     try {
       await this.slidePartyIn(opts.partyIds ?? []);
-      await this.move(this.pick('idle'), MOMENT_TIMING.openHold);
+      if (!directed) await this.move(this.pick('idle'), MOMENT_TIMING.openHold);
       this.onActionRig = false;
 
-      if (opts.bossId) await this.revealBoss(opts.bossId, opts.bossName ?? null);
+      if (opts.bossId) await this.revealBoss(opts.bossId, opts.bossName ?? null, directed);
     } finally {
       // Whatever happened — an abort mid-reveal, a scene with no rigs, a
       // throw out of the art layer — the player gets their HUD back.
@@ -341,20 +379,19 @@ export class BattleMoments {
 
   /**
    * The boss reveal: a slow push on the enemy's own rig with the name plate
-   * up, then back out to `idle`. Plays once per enemy id.
+   * up, then back out to `idle`. Plays once per enemy id. `directed`: the scene's shot director has the opening's camera (`battleStart`), so the roar and the plate play and the camera does not move.
    */
-  async revealBoss(bossId: CombatantId, bossName: string | null): Promise<void> {
+  async revealBoss(bossId: CombatantId, bossName: string | null, directed = false): Promise<void> {
     if (this.revealed.has(bossId) || this.hurry) return;
     this.revealed.add(bossId);
     if (this.skipping) return;
 
     // FFX-2 desktop: a reveal that would pull a girl out of the frame goes less far (`ShotRules.reveal`, B5); everywhere else it is as it was.
-    const shot = this.shots.reveal(this.rigFor(bossId), MOMENT_PUSH.reveal);
-    const rig = shot.rig;
+    const shot = directed ? null : this.shots.reveal(this.rigFor(bossId), MOMENT_PUSH.reveal);
     const g = sfxGame(); // D-302: the boss's own roar in a voiced chapter (`sfxV2/weapons.ts`), else today's
     const roar = (g && roarFor(g, bossId)) || 'boss-roar';
     this.cue(roar, 0.9, g ? momentEvents(g, 'appear', bossId, this.deps.stage.sideOf(bossId) ?? null, g && roarFor(g, bossId)) : undefined); // SFX parity: the boss's own recorded reveal, when a pack has it
-    const push = this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.revealPush));
+    const push = shot ? this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.revealPush)) : undefined;
     const plate = bossName
       ? this.deps.moments?.nameSlab({
           title: bossName,
@@ -362,17 +399,29 @@ export class BattleMoments {
           holdMs: this.ms(MOMENT_TIMING.revealSlab),
         })
       : undefined;
-    await this.move(rig, MOMENT_TIMING.revealPush * 0.55);
+    if (shot) await this.move(shot.rig, MOMENT_TIMING.revealPush * 0.55);
     await Promise.all([push, plate]);
-    await this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
-    await this.move(this.pick('idle'), MOMENT_TIMING.returnOut);
+    if (shot) {
+      await this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
+      await this.move(this.pick('idle'), MOMENT_TIMING.returnOut);
+    }
     this.onActionRig = false;
   }
 
   // ---------------------------------------------------------------- per turn
 
-  /** A new turn begins: fall back to the neutral framing if a shot is still up. */
-  async turnStart(): Promise<void> {
+  /** A new turn begins (`actorId`: whose, when the presenter says): fall back to the neutral framing if a shot is still up. */
+  async turnStart(actorId?: CombatantId): Promise<void> {
+    const asked = this.ask((d) => d.turnStart?.({ ...this.shotCtx(), actor: actorId === undefined ? undefined : this.subject(actorId) }));
+    if (asked instanceof Promise ? await asked : asked === true) {
+      this.onActionRig = false; // the director brought the frame back: no shot of ours is up
+      return;
+    }
+    return this.settle();
+  }
+
+  /** Fall back to the neutral framing if a shot is still up: a turn begins, an action closes, a form settles. */
+  private async settle(): Promise<void> {
     if (!this.onActionRig) return;
     this.onActionRig = false;
     void this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
@@ -387,12 +436,16 @@ export class BattleMoments {
    * away fast, a `cast` holds on the caster long enough to see the spell wind
    * up before the impact cut takes the frame to the target.
    */
-  async actionOpen(actorId: CombatantId, pose: string, targets: readonly CombatantId[] = []): Promise<void> {
+  async actionOpen(actorId: CombatantId, pose: string, targets: readonly CombatantId[] = [], info?: ShotActionInfo): Promise<void> {
     this.actions++;
     this.onActionRig = true;
     // A-13: the roll lands on the attack's first hit (`impact`), not the swing.
     this.rollOwed = pose === 'attack';
     this.shots.focus = this.shots.enemy(actorId) ?? targets.map((t) => this.shots.enemy(t)).find((t) => t !== null) ?? null;
+    const action: ShotAction = { ...info, kind: pose };
+    this.open = { actor: this.subject(actorId), action };
+    const asked = this.ask((d) => d.actionOpen?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action }));
+    if (asked instanceof Promise ? await asked : asked === true) return; // the director has the push in on the attacker, and the cast's hold
     if (this.skipping) {
       this.cut(this.shots.fit(this.rigFor(actorId), 0).rig);
       return;
@@ -409,6 +462,11 @@ export class BattleMoments {
    * frame would strobe through a twelve-hit Attack Reels.
    */
   impact(targetId: CombatantId, opts: { hitIndex?: number; heavy?: boolean } = {}): void {
+    const taken = this.ask((d) => d.impact?.({ ...this.shotCtx(), actor: this.open?.actor, action: this.open?.action, target: this.subject(targetId), hitIndex: opts.hitIndex ?? 0, heavy: opts.heavy === true }));
+    if (taken === true) {
+      this.rollOwed = false; // the roll is the hit's camera move, and the director took it
+      return;
+    }
     if (this.skipping) {
       this.rollOwed = false;
       return;
@@ -447,9 +505,13 @@ export class BattleMoments {
    */
   async actionClose(): Promise<void> {
     this.rollOwed = false;
-    if (this.overdriveOpen) await this.overdriveEnd();
-    if (this.telegraphOpen && this.actions > this.telegraphAtAction) await this.telegraphEnd();
-    await this.turnStart();
+    const asked = this.ask((d) => d.actionClose?.({ ...this.shotCtx(), actor: this.open?.actor, action: this.open?.action }));
+    const directed = asked instanceof Promise ? await asked : asked === true; // the director brings the frame back: the letterbox and the vignette still come down, with no release of ours
+    if (this.overdriveOpen) await this.overdriveEnd(directed);
+    if (this.telegraphOpen && this.actions > this.telegraphAtAction) await this.telegraphEnd(directed);
+    this.open = null;
+    if (directed) this.onActionRig = false;
+    else await this.settle();
   }
 
   // -------------------------------------------------------------- overdrive
@@ -458,13 +520,17 @@ export class BattleMoments {
    * An Overdrive gets its own rig: a brief letterbox, the Ink & Gold name slab
    * and a held push-in, then the payoff plays under it.
    */
-  async overdriveStart(actorId: CombatantId, name: string): Promise<void> {
+  async overdriveStart(actorId: CombatantId, name: string, targets: readonly CombatantId[] = [], info?: ShotActionInfo): Promise<void> {
     this.actions++;
     this.onActionRig = true;
     this.shots.focus = this.shots.enemy(actorId);
+    const action: ShotAction = { ...info, kind: 'overdrive', name };
+    this.open = { actor: this.subject(actorId), action };
     const rig = this.rigFor(actorId);
+    const asked = this.ask((d) => d.overdriveStart?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action }));
+    const directed = asked instanceof Promise ? await asked : asked === true; // the director has the Overdrive's rig and push: the stinger, the letterbox and the slab still play
     if (this.skipping) {
-      this.cut(rig);
+      if (!directed) this.cut(rig);
       return;
     }
     this.overdriveOpen = true;
@@ -472,9 +538,11 @@ export class BattleMoments {
     const stinger = stingerFor(game);
     this.cue(stinger ?? 'overdrive-full', 1, game && stinger ? momentEvents(game, 'overdrive-start', actorId, this.deps.stage.sideOf(actorId) ?? null, stinger) : undefined); // D-302: the Overdrive / Special stinger; SFX parity: that character's own recorded opening, when a pack has it
     const bars = this.deps.moments?.letterbox(true, this.ms(MOMENT_TIMING.odLetterbox));
-    const shot = this.shots.fit(rig, MOMENT_PUSH.overdrive);
-    void this.move(shot.rig, MOMENT_TIMING.actionIn);
-    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.odPush));
+    if (!directed) {
+      const shot = this.shots.fit(rig, MOMENT_PUSH.overdrive);
+      void this.move(shot.rig, MOMENT_TIMING.actionIn);
+      void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.odPush));
+    }
     await bars;
     await this.deps.moments?.nameSlab({
       title: name,
@@ -484,12 +552,17 @@ export class BattleMoments {
     });
   }
 
-  /** Drop the letterbox and the push once the payoff has landed. */
-  async overdriveEnd(): Promise<void> {
+  /** Drop the letterbox and the push once the payoff has landed. `directed`: the scene's shot director has already taken this beat (an action close or the victory it is part of): the letterbox comes down, no release of ours. */
+  async overdriveEnd(directed = false): Promise<void> {
     if (!this.overdriveOpen) return;
     this.overdriveOpen = false;
+    let ours = !directed;
+    if (ours) {
+      const asked = this.ask((d) => d.overdriveEnd?.({ ...this.shotCtx(), actor: this.open?.actor, action: this.open?.action }));
+      ours = !(asked instanceof Promise ? await asked : asked === true);
+    }
     await this.deps.moments?.letterbox(false, this.ms(MOMENT_TIMING.odOut));
-    await this.cam.release?.(this.ms(MOMENT_TIMING.odOut));
+    if (ours) await this.cam.release?.(this.ms(MOMENT_TIMING.odOut));
   }
 
   // -------------------------------------------------------------- telegraph
@@ -504,17 +577,22 @@ export class BattleMoments {
    * Stage 2 — the attack lands next turn — pulses faster and pushes further.
    */
   async telegraph(enemyId: CombatantId, stage: 1 | 2, name?: string): Promise<void> {
+    const asked = this.ask((d) => d.telegraph?.({ ...this.shotCtx(), enemy: this.subject(enemyId), stage, name }));
+    const directed = asked instanceof Promise ? await asked : asked === true; // the director has the slow zoom: the vignette and the slab still play
     if (this.skipping) return;
     this.shots.focus = enemyId;
     this.onActionRig = true;
     this.telegraphOpen = true;
+    this.telegraphDirected = directed; // and its release, when it ends (`telegraphEnd`)
     this.telegraphAtAction = this.actions;
     const imminent = stage === 2;
-    const shot = this.shots.fit(this.rigFor(enemyId), MOMENT_PUSH.telegraph * (imminent ? 1.35 : 1));
+    const shot = directed ? null : this.shots.fit(this.rigFor(enemyId), MOMENT_PUSH.telegraph * (imminent ? 1.35 : 1));
 
     this.deps.moments?.vignette(true, { bpm: TELEGRAPH_BPM[stage] });
-    void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.telegraphZoom));
-    await this.move(shot.rig, MOMENT_TIMING.telegraphZoom * 0.4);
+    if (shot) {
+      void this.cam.push?.(shot.push, this.ms(MOMENT_TIMING.telegraphZoom));
+      await this.move(shot.rig, MOMENT_TIMING.telegraphZoom * 0.4);
+    }
     if (imminent && name) {
       await this.deps.moments?.nameSlab({
         title: name,
@@ -524,12 +602,14 @@ export class BattleMoments {
     }
   }
 
-  /** The charged attack resolved (or was interrupted): drop the zoom and throb. */
-  async telegraphEnd(): Promise<void> {
+  /** The charged attack resolved (or was interrupted): drop the zoom and throb. `directed`: the scene's shot director has the frame (an action close or the victory this is part of): the vignette goes, no release of ours. */
+  async telegraphEnd(directed = false): Promise<void> {
     if (!this.telegraphOpen) return;
     this.telegraphOpen = false;
+    const theirs = directed || this.telegraphDirected; // a director that took the zoom took its release
+    this.telegraphDirected = false;
     this.deps.moments?.vignette(false);
-    await this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
+    if (!theirs) await this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
   }
 
   // ------------------------------------------------------------ form change
@@ -538,8 +618,12 @@ export class BattleMoments {
   async formChange(enemyId: CombatantId): Promise<void> {
     // A new form is a new fight: let its reveal plate play again.
     this.revealed.delete(enemyId);
+    const asked = this.ask((d) => d.formChange?.({ ...this.shotCtx(), enemy: this.subject(enemyId) }));
+    const directed = asked instanceof Promise ? await asked : asked === true;
     if (this.skipping) return;
     this.onActionRig = true;
+    this.formDirected = directed; // the director has the hold on the boss, and its release when the form settles (`formChangeEnd`)
+    if (directed) return;
     const rig = this.rigFor(enemyId);
     void this.cam.push?.(fittedPush(this.deps.stage, this.cam, rig, MOMENT_PUSH.reveal), this.ms(MOMENT_TIMING.formHold));
     await this.move(rig, MOMENT_TIMING.formHold * 0.35);
@@ -548,8 +632,14 @@ export class BattleMoments {
   /** Let the new form settle back into the neutral framing. */
   async formChangeEnd(): Promise<void> {
     if (this.skipping) return;
+    const directed = this.formDirected;
+    this.formDirected = false;
+    if (directed) {
+      this.onActionRig = false;
+      return;
+    }
     await this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
-    await this.turnStart();
+    await this.settle();
   }
 
   // ---------------------------------------------------------------- victory
@@ -557,13 +647,16 @@ export class BattleMoments {
   /** The party pose, on its own rig, under the fanfare. */
   async victory(): Promise<void> {
     this.onActionRig = false;
-    await this.telegraphEnd();
-    await this.overdriveEnd();
+    const asked = this.ask((d) => d.victory?.(this.shotCtx()));
+    const directed = asked instanceof Promise ? await asked : asked === true; // the director has the victory rig: an open telegraph's and Overdrive's chrome still comes down
+    await this.telegraphEnd(directed);
+    await this.overdriveEnd(directed);
     const rig = this.pick('victory', 'party', 'idle');
     if (this.skipping) {
-      this.cut(rig);
+      if (!directed) this.cut(rig);
       return;
     }
+    if (directed) return;
     void this.cam.release?.(this.ms(MOMENT_TIMING.returnOut));
     await this.move(rig, MOMENT_TIMING.victoryIn);
   }
@@ -572,6 +665,9 @@ export class BattleMoments {
   clear(): void {
     this.overdriveOpen = false;
     this.telegraphOpen = false;
+    this.telegraphDirected = false;
+    this.formDirected = false;
+    this.open = null;
     this.revealed.clear();
     this.deps.moments?.clear();
     // An abort during the opening skips `battleStart`'s own restore, and a HUD

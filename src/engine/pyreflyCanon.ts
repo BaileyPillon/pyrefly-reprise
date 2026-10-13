@@ -111,6 +111,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   // Sin's chapters (XVII, XVIII; FFX only): the same deck over Sin's plates (`scenes/evrae-airship-sin.ts`), so the deck's row.
   'sin-fahrenheit-flight': { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"` },
   'sin-fahrenheit-bevelle': { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"` },
+  // The hidden Fayth chapter (FFX only; `scenes/exp-fayth-deck.ts`): Chapter VIII's deck over Chapter VIII's own plate, so the deck's row (the deck itself: research/ffx-evrae-airship.md §12.3).
+  'exp-fayth-deck': { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"; the deck is Chapter VIII's, research/ffx-evrae-airship.md §12.3` },
   'bevelle-underground': { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"` },
   'cavern-stolen-fayth': {
     game: 'ffx',

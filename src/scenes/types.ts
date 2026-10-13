@@ -6,6 +6,7 @@ import type { BattleCamera, CameraRig } from '../engine/BattleCamera.ts';
 import type { LightRig } from '../engine/Lighting.ts';
 import type { ParticleField } from '../engine/Particles.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
+import type { ShotDirector } from '../engine/ShotDirector.ts';
 
 /**
  * The contract between a **scene** and whatever is driving it.
@@ -271,6 +272,12 @@ export interface SceneStaging {
    * `EnemyIntentMountOptions.maxHeight`).
    */
   readonly intentRoof?: boolean;
+  /**
+   * This scene's own camera plan for the battle's beats (`src/engine/ShotDirector.ts`): `BattleMoments` asks it before it moves the camera for a beat, and a beat the director takes gets none of
+   * `BattleMoments`' own moves. Omitted everywhere but the hidden Fayth chapter (FFX only, `exp-fayth-deck`), whose director is a stub that declines every beat: every other scene plays exactly the
+   * shots it always did.
+   */
+  readonly shotDirector?: ShotDirector;
 }
 
 /** The staging switches a build set, and only those. */
@@ -295,6 +302,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.artNamespace) out.artNamespace = build.artNamespace;
   if (build.advisorCap !== undefined) out.advisorCap = build.advisorCap;
   if (build.intentRoof === true) out.intentRoof = true;
+  if (build.shotDirector) out.shotDirector = build.shotDirector;
   return out;
 }
 

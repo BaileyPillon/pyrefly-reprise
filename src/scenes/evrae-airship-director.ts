@@ -44,7 +44,7 @@ import {
   farActorScale,
   rangeShiftAt,
   type AirshipFlags,
-  type AirshipRange,
+  type AirshipRange, type RangeStaging,
 } from './evrae-airship-range.ts';
 import { evraeSubject, phoneRig, rangeSubjectFor, stagingOf, type PhoneRigStaging, type RangeSubject } from './evrae-airship-subjects.ts';
 import { PHONE_FIT_KEY } from '../engine/ShotRules.ts';
@@ -82,6 +82,8 @@ const RANGE_RIGS = ['idle', 'action', 'enemy'] as const;
 const FAR_POSES = ['idle', 'attack', 'cast', 'hurt'] as const;
 
 export class AirshipRangeDirector {
+  /** A scene's own Evrae spots and NEAR / FAR rigs in place of `RANGE_STAGING`'s (the hidden Fayth chapter's FFX staging, `exp-fayth-skin.ts`); null for every other deck: `RANGE_STAGING`, as ever. */
+  staging: Readonly<Record<AirshipRange, Pick<RangeStaging, 'evrae' | 'rigs'>>> | null = null;
   private range: AirshipRange = 'near';
   private from: AirshipRange = 'near';
   private shiftMs = -1;
@@ -306,17 +308,17 @@ export class AirshipRangeDirector {
 
   /** Where the bound subject stands at `range`: its staged spot, and at NEAR the window's trim off the pin (`nearAspectFor`). */
   private spotOf(range: AirshipRange): readonly [number, number, number] {
-    const { spot } = stagingOf(this.subject, range, this.phone);
-    return range === 'near' && this.nearDx !== 0 ? [spot[0] + this.nearDx, spot[1], spot[2]] : spot;
+    const spot = this.staging?.[range].evrae ?? stagingOf(this.subject, range, this.phone).spot;
+    return range === 'near' && this.nearDx !== 0 && !this.staging ? [spot[0] + this.nearDx, spot[1], spot[2]] : spot; // a scene's own staging keeps its numbers: no window trim
   }
 
   /** Register `range`'s rigs and, unless `move` is false (a window that changed shape: {@link restand}), move the camera to its current one. */
   private installRigs(range: AirshipRange, snap: boolean, move = true): void {
     const cam = this.camera;
     if (!cam) return;
-    const rigs = RANGE_STAGING[range].rigs;
+    const rigs = (this.staging ?? RANGE_STAGING)[range].rigs;
     const staging = this.phone ? (this.subject.phone?.[range] ?? this.face?.[range]) : undefined;
-    const back = range === 'near' ? this.nearDolly : 1;
+    const back = range === 'near' && !this.staging ? this.nearDolly : 1; // ...and no Hor+ stand-back: FFX's own framing holds on every window
     const stand = back > 1 ? { ...staging, dolly: (staging?.dolly ?? 1) * back } : staging;
     for (const name of RANGE_RIGS) cam.addRig(name, phoneRig(rigs[name], stand));
     if (!move) return;
