@@ -19,6 +19,8 @@ export interface Rig {
   tracked: Set<string>;
   comfort: { reduceMotion: boolean; lowEffects: boolean };
   flags: { reduceFlashes: boolean; tier: 'full' | 'phone' | 'low' };
+  /** What the host answers to `planOwed` (FOC44A-05): CHAPTER FRAMING's plan is still to land. Off by default, as for a stage with no framing. */
+  plan: { owed: boolean };
   /** One frame of the stage: the actor, then the entrances. */
   step(n?: number): void;
   figure(id: string): Actor;
@@ -30,6 +32,7 @@ export function rig(): Rig {
   const tracked = new Set<string>();
   const comfort = { reduceMotion: false, lowEffects: false };
   const flags = { reduceFlashes: false, tier: 'full' as 'full' | 'phone' | 'low' };
+  const plan = { owed: false };
   const host: EntranceHost = {
     spawn: (m) => (motes.push(m), true),
     hush: (a, on) => void (on ? hushed.add(a) : hushed.delete(a)),
@@ -38,6 +41,7 @@ export function rig(): Rig {
     reduceFlashes: () => flags.reduceFlashes,
     cameraAt: () => ({ x: 0, y: 3, z: 14 }),
     tier: () => flags.tier,
+    planOwed: () => plan.owed,
   };
   const ent = new StageEntrances(host);
   const figures: Actor[] = [];
@@ -48,6 +52,7 @@ export function rig(): Rig {
     tracked,
     comfort,
     flags,
+    plan,
     step(n = 1): void {
       for (let i = 0; i < n; i++) {
         for (const a of figures) a.update(DT, DT);

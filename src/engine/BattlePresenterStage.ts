@@ -78,6 +78,11 @@ export interface PaintedStageOptions {
   reduceFlashes?: () => boolean;
   /** REDUCE MOTION and LOW EFFECTS (D-285, `ComfortCamera.ts`), read live. Absent = both off. */
   comfort?: () => ComfortFlags;
+  /**
+   * CHAPTER FRAMING's plan is still to land (`fx/mix/MaxMix.ts` `framingPlanOwed`): it re-sizes a boss in one frame, so the boss entrance lets no figure in before it has
+   * (`entrance/StageEntrances.ts`, FOC44A-05). Read live. Absent = never owed, as for a stage with no framing.
+   */
+  planOwed?: () => boolean;
   /** Camera comfort preset (fb2-0929 options, default `current` = untouched; `CameraPreset.ts`). */
   cameraPreset?: () => CameraPresetSpec;
   /** The renderer, so a master the art governor loads is uploaded ahead of its swap (release 39.1, `TextureStager.ts`); without it the swap is release 39's. */
@@ -739,7 +744,7 @@ export class PaintedStage implements BattleStage {
    */
   setEntrances(on: boolean): void {
     if (!on) {
-      this.entrances?.settle(true);
+      this.entrances?.settle(true, true); // switched off: every figure is on the field now, plan or no plan
       this.entrances = null;
       return;
     }
@@ -752,6 +757,7 @@ export class PaintedStage implements BattleStage {
       reduceFlashes: () => this.opts.reduceFlashes?.() === true,
       cameraAt: () => this.opts.camera.position,
       tier: () => this.spellFx.quality,
+      planOwed: () => this.opts.planOwed?.() === true, // FOC44A-05: CHAPTER FRAMING's plan lands while the figure is unseen
     });
   }
 
