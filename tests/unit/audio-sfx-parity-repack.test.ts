@@ -129,10 +129,10 @@ describe('the retired list the build keeps', () => {
     expect([...sprite, ...RETIRED_V2_CUES].sort()).toEqual(Object.keys(V2_CUES).sort());
   });
 
-  it('is empty while no core pack has shipped, and holds the three cues the first repack took out (2026-10-12) now that both have', () => {
+  it('is empty while no core pack has shipped, and holds the nine cues the two repacks took out (2026-10-12: three; 2026-10-13: six more) now that both have', () => {
     const packs = (JSON.parse(readFileSync(join(ROOT, 'public', 'audio', 'manifest.json'), 'utf8')) as { sfxParity?: { packs?: Record<string, unknown> } }).sfxParity?.packs ?? {};
     if (!packs['ffx-core'] && !packs['ffx2-core']) expect(RETIRED_V2_CUES).toEqual([]);
-    else expect(RETIRED_V2_CUES).toEqual(['buff-generic', 'hit-dagger', 'water']);
+    else expect(RETIRED_V2_CUES).toEqual(['buff-generic', 'dissolve-pyreflies', 'gun-burst', 'hit-dagger', 'hit-greatsword', 'hit-gun', 'hit-katana', 'hit-spear', 'water']);
   });
 
   it('is what the command writes: --check passes, and the report retires nothing today', () => {
@@ -141,8 +141,8 @@ describe('the retired list the build keeps', () => {
     expect(check.stdout).toMatch(/retired\.ts is current/);
     const report = spawnSync(process.execPath, ['tools/audio/sfx-parity-repack.mjs'], { cwd: ROOT, encoding: 'utf8' });
     expect(report.status, report.stderr).toBe(0);
-    expect(report.stdout).toMatch(/retire 0:/); // nothing new: the three it took out are already out of the sprite
-    expect(report.stdout).toMatch(/already out of the sprite \(retired\.ts keeps them\): buff-generic, hit-dagger, water/);
+    expect(report.stdout).toMatch(/retire 0:/); // nothing new: the nine it took out are already out of the sprite
+    expect(report.stdout).toMatch(/already out of the sprite \(retired\.ts keeps them\): buff-generic, dissolve-pyreflies, gun-burst, hit-dagger, hit-greatsword, hit-gun, hit-katana, hit-spear, water/);
     expect(report.stdout).toMatch(/keep \d+ \(ffx still plays it as the stand-in\)/);
   }, 180_000);
 });

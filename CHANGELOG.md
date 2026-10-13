@@ -1,13 +1,41 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 64 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 66 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-13 · Audio lane 2: 29 more recorded sound effects, a quiet Chapter IV and results tunes that loop without a breath (not live)
+
+Address: none yet (branch r46-audio2, from r45-rc d5bf2206; not deployed, no review run; nobody has heard any of it, so every sound below is a pick by measurement that your ear can overrule)
+
+- **FFX, sound effects (every chapter):** 14 more of the game's everyday sounds are recorded originals instead of
+  the stand-ins: Slow, a fiend dissolving, Petrify, Cure and Cura (also Potion and Hi-Potion), Auron's katana
+  blow, Kimahri's spear blow, Grenade, Ether, Life and Phoenix Down, Waterga, Thundaga, the menu's cancel sound
+  and the refused-action sound.
+- **FFX, Seymour Flux and Braska's Final Aeon (Chapters I and III):** Seymour Flux's attack and his Cross Cleave
+  have their own recordings (Chapter I only), and so does the final aeon's Power Wave and Gravija (Chapter III
+  only).
+- **FFX-2, sound effects (every chapter):** the Warrior's and the Gunner's hits, the spell chant, the
+  Trigger Happy shots, Death, Cure, and the menu's cancel, refused-action, window-open and window-close sounds
+  are recorded originals. Dark Shiva's attack (Chapters XI and XVI) and Vegnagun's leg strike (Chapter V) have
+  their own recordings, and Shuyin's attack plays a newer, closer recording.
+- **Both games, what did not change:** 24 sounds keep today's recording because the new take was no better, and
+  11 wait for a second look. Two of the new takes (FFX Petrify and Kimahri's spear blow) are quieter than the
+  sound they replace: they are sharp and short, and making them louder would have squashed them.
+- **FFX-2, Chapter IV (Bahamut):** the quiet victory tune now stops when you press Continue after the tally.
+  It used to loop on under the whole scene that follows, which this chapter keeps silent. In Chapter XI (the
+  Glen) and Chapter XV (out of the Den of Woe) the scene's own music now comes back after the tally instead of
+  the victory tune looping under the last lines.
+- **Both games, the results tunes:** the victory tune of FFX, of FFX-2 and of Chapter IV no longer fades to
+  near silence at the end of every pass and re-enters at full level. The loop now closes inside the music
+  (the level across the join moves by less than 2 dB, where it moved by 13 to 24 dB). The first time through
+  sounds as it did; FFX-2's loop is 32 seconds instead of 38.
+- No picture for this build: it changes sounds and a music cue, not what is on screen.
 
 ## 2026-10-13 · The phone Party Prep's four colour shades, option B (branch r46-prepshades; not live)
 

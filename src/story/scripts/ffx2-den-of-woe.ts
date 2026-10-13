@@ -128,6 +128,10 @@ const POST: StoryScript = [
   say('paine', "Baralai's still carrying him. I'll get him back."), // 14
   say('rikku-x2', "Okay. Team hug. Paine, you're in the middle."), // 15
   results(),
+  // `showResults()` (`BattleScreenFlow.ts`) starts `victory-ffx2` on its own once the tally shows and it replaces
+  // the bed this scene opened with, which then never came back: the cue looped on under line 16 (FOC45-01's gap in
+  // another FFX-2 script). The scene has its own cue, so it is put back as the scene resumes past the tally.
+  music('scene-bevelle-underground', 900),
   say('paine', 'No.'), // 16
 ];
 

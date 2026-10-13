@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "about": "What the SFX parity packs ship, and what was tried: per shipped cue the pick, its provenance (the exact request body, the character-cost the service reported, sha256 of the raw take and of the mastered file) and its measured level against the row. 'set' says how the pick passed: 'strict' (every check the spec holds a take to) or 'near' (attack, centroid and bands each within 1.5 times the tolerance: the driver's call of 2026-10-12 installs the loose set, strict plus near, and Bailey's ear decides). 'rejected' keeps the takes measurement turned down (295 of the 2026-10-13 run, with the checks they failed, and the pilot's one), so the same prompt is not paid for twice. Agents cannot hear (rule 13): every pick is by measurement against the spec row and stays open to Bailey's ear. Numbers and our own takes only; no retail id, name or audio is recorded here.",
+  "about": "What the SFX parity packs ship, and what was tried: per shipped cue the pick, its provenance (the exact request body, the character-cost the service reported, sha256 of the raw take and of the mastered file) and its measured level against the row. 'set' says how the pick passed: 'strict' (every check the spec holds a take to), 'near' (attack, centroid and bands each within 1.5 times the tolerance: the driver's call of 2026-10-12 installs the loose set, strict plus near, and Bailey's ear decides), or 'driver' (the second batch, 2026-10-13: the best take of a row that is neither, which the driver marked 'use the new take' on the listening page after hearing its measured distance from the row beside today's cue; 'fit' and 'deviations' say how far it is, where 1.0 is the edge of the spec's tolerance, and 'levelFlags' marks a take that was mastered below its row's level because a limiter would have had to take more than 3 dB). 47 cues ship. 'rejected' keeps the takes measurement turned down (272 of the 2026-10-13 run, with the checks they failed, and the pilot's one), so the same prompt is not paid for twice; a take that now ships is not listed there. Agents cannot hear (rule 13): every pick is by measurement against the spec row and stays open to Bailey's ear. Numbers and our own takes only; no retail id, name or audio is recorded here.",
   "generator": {
     "service": "ElevenLabs Sound Effects",
     "model": "eleven_text_to_sound_v2",
@@ -546,7 +546,7 @@
       "pack": "ffx2-shuyin",
       "cue": "boss-shuyin",
       "specRow": "ffx2.boss.shuyin",
-      "take": "ffx2.boss.shuyin.v1",
+      "take": "ffx2.boss.shuyin.v3",
       "request": {
         "text": "A dark swordsman's long sweeping attack, six heavy low slashes and whooshes in a flowing sequence with a deep resonant undertone. About five seconds. Cinematic sound design, no music, no voice.",
         "duration_seconds": 5.5,
@@ -554,14 +554,14 @@
         "model_id": "eleven_text_to_sound_v2"
       },
       "characterCost": 60,
-      "sha256Raw": "e7d8c711848e58898d2867da16405596e69c6573631460abdfcf63a6965dbca4",
-      "sha256Mastered": "9b320b7fef3d3dedac56f996867a577b3ae134c0d6f608a3af19b51aae1c0add",
+      "sha256Raw": "ad4fbd8d2917b62aa74a4305b7c4a26c25c15bf217c6c651a1ec708cea4fe6ee",
+      "sha256Mastered": "58d193a6b7517921062ee3e051626235a07eed9513441e29e928e27e7e60e2ee",
       "measured": {
-        "activeMs": 2445,
-        "attackMs": 1205,
+        "activeMs": 3620,
+        "attackMs": 1450,
         "lufs": -14.1,
-        "truePeakDb": -4.17,
-        "centroidHz": 57,
+        "truePeakDb": -4.63,
+        "centroidHz": 51,
         "bandsPct": [100, 0, 0, 0, 0]
       },
       "target": {
@@ -570,6 +570,1121 @@
         "lufs": -14.1,
         "centroidHz": 100,
         "bandsPct": [93, 7, 0, 0, 0]
+      },
+      "replaces": {
+        "take": "ffx2.boss.shuyin.v1",
+        "sha256Raw": "e7d8c711848e58898d2867da16405596e69c6573631460abdfcf63a6965dbca4",
+        "why": "a newer draw of the same prompt, closer to the row: worst core deviation 1.05 against 1.44 (length 1.36 against 2.54)"
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "slow",
+      "specRow": "ffx.slow",
+      "take": "ffx.slow.v1",
+      "request": {
+        "text": "A sinking slowdown magic, a thick heavy low drone that drags downward in pitch, syrupy and dragging. Under two seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 2.2,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 24,
+      "sha256Raw": "0f7965a42b28574308f2debd74a66b2389fe4cc8907e87aab8fc6a64088130dd",
+      "sha256Mastered": "14c5adfc4894b2b6950a93a295baeb3bd80c8c1cda4e1d9d970a78088e9697df",
+      "measured": {
+        "activeMs": 1465,
+        "attackMs": 600,
+        "lufs": -14.0,
+        "truePeakDb": -5.76,
+        "centroidHz": 134,
+        "bandsPct": [97, 3, 0, 0, 0]
+      },
+      "target": {
+        "lenMs": 1785,
+        "attackMs": 350,
+        "lufs": -14,
+        "centroidHz": 100,
+        "bandsPct": [97, 0, 0, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.896,
+        "attack": 2.381,
+        "centroid": 0.0,
+        "bands": 0.2
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "dissolve-pyreflies",
+      "specRow": "ffx.ko.fiend",
+      "take": "ffx.ko.fiend.v1",
+      "request": {
+        "text": "A monster's dying moan, a deep low groan that swells slowly and fades away into silence. About two and three quarter seconds. Cinematic sound design, no music, no voice.",
+        "duration_seconds": 3.4,
+        "prompt_influence": 0.4,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 37,
+      "sha256Raw": "da1d43e9f984bd9f586eebf91a1075391664343f7cc6490cd87d4396ec491ce5",
+      "sha256Mastered": "7cf23ede2f6557ed7e11d69ae84ad017a216f47f8c3f0a777edbcbaa79d69644",
+      "measured": {
+        "activeMs": 3005,
+        "attackMs": 235,
+        "lufs": -22.0,
+        "truePeakDb": -18.33,
+        "centroidHz": 366,
+        "bandsPct": [44, 51, 4, 0, 0]
+      },
+      "target": {
+        "lenMs": 2785,
+        "attackMs": 2530,
+        "lufs": -22.0,
+        "centroidHz": 100,
+        "bandsPct": [78, 21, 0, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.395,
+        "attack": 3.024,
+        "centroid": 3.861,
+        "bands": 2.267
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "petrify-shatter",
+      "specRow": "ffx.petrify",
+      "take": "ffx.petrify.v1",
+      "request": {
+        "text": "A stone-turning curse, brittle gritty cracking and grinding as flesh calcifies, ending in a dry stony clunk. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 17,
+      "sha256Raw": "69dc6ce7ad17da45587197bc01c01d3402621e4741e1c45df4cf91f3cb84b42c",
+      "sha256Mastered": "8c0c628b06664a09c562b75f83cc79bde9b289b76485ed8cfb649f67fbada72e",
+      "measured": {
+        "activeMs": 1390,
+        "attackMs": 110,
+        "lufs": -21.49,
+        "truePeakDb": -1.6,
+        "centroidHz": 7358,
+        "bandsPct": [7, 0, 17, 48, 28]
+      },
+      "target": {
+        "lenMs": 1135,
+        "attackMs": 100,
+        "lufs": -14.1,
+        "centroidHz": 4300,
+        "bandsPct": [13, 18, 30, 25, 15]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.123,
+        "attack": 0.333,
+        "centroid": 2.275,
+        "bands": 1.533
+      },
+      "levelFlags": [
+        "capped"
+      ],
+      "levelShortfallDb": 7.39
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "cure-2",
+      "specRow": "ffx.cure.t2",
+      "take": "ffx.cure.t2.v1",
+      "request": {
+        "text": "A fuller healing sparkle, a warm shimmering wash of glittering chimes that blooms and gently circles. About one and three quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 2,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 22,
+      "sha256Raw": "5193806a4b98b3ff1964d6f8cf48193ec054ac55b844d5ac16cba3510068c488",
+      "sha256Mastered": "ac0ec6d81411ea7b6289b6d1a0e4de391ea3c84d850fb3aa18cf724f7895d7cc",
+      "measured": {
+        "activeMs": 1480,
+        "attackMs": 210,
+        "lufs": -17.0,
+        "truePeakDb": -10.66,
+        "centroidHz": 9014,
+        "bandsPct": [0, 0, 1, 58, 41]
+      },
+      "target": {
+        "lenMs": 1570,
+        "attackMs": 180,
+        "lufs": -17.0,
+        "centroidHz": 6100,
+        "bandsPct": [0, 4, 24, 58, 13]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.287,
+        "attack": 0.556,
+        "centroid": 1.655,
+        "bands": 1.867
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "hit-katana",
+      "specRow": "ffx.weapon.katana.hit",
+      "take": "ffx.weapon.katana.hit.v5",
+      "request": {
+        "text": "A heavy katana slicing through a target, a long low sweeping rush swelling into a clean cutting impact with a deep body thump. About one second. With a low rounded thump underneath, like a fist hitting a leather bag, soft and muffled, not sharp, it swells gradually for about 0.3 seconds before the peak. Close-miked, realistic sound design, no music, no voice.",
+        "duration_seconds": 1,
+        "prompt_influence": 0.7,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 11,
+      "sha256Raw": "4b11bc3451e2e63c3d456fd23bc310ef55c2be4b82a43a6a811e4ccccb827a29",
+      "sha256Mastered": "efc3667f67c76c5706ef63513a8b1d44c1f9f1032363da36e9b227e61a46da0f",
+      "measured": {
+        "activeMs": 720,
+        "attackMs": 115,
+        "lufs": -14.1,
+        "truePeakDb": -2.68,
+        "centroidHz": 1256,
+        "bandsPct": [77, 4, 7, 7, 5]
+      },
+      "target": {
+        "lenMs": 750,
+        "attackMs": 350,
+        "lufs": -14.1,
+        "centroidHz": 1000,
+        "bandsPct": [80, 5, 5, 7, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.2,
+        "attack": 2.238,
+        "centroid": 0.775,
+        "bands": 0.333
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "cure",
+      "specRow": "ffx.cure.t1",
+      "take": "ffx.cure.t1.v1",
+      "request": {
+        "text": "A gentle healing sparkle, soft airy glittering chimes in a warm shimmering wash that blooms quickly and fades. About one and a half seconds, bright and soft. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 1.7,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 19,
+      "sha256Raw": "b066f03d1af93ce6e8b7417fa1e0dd85982de29fff98a1147aaa6d872b7a0ead",
+      "sha256Mastered": "3f927c5e43d4175296fa7401d6fa42977dd8f99f161803a3870c669a4d406f02",
+      "measured": {
+        "activeMs": 1300,
+        "attackMs": 60,
+        "lufs": -19.1,
+        "truePeakDb": -10.56,
+        "centroidHz": 8656,
+        "bandsPct": [0, 0, 4, 84, 12]
+      },
+      "target": {
+        "lenMs": 1380,
+        "attackMs": 215,
+        "lufs": -19.1,
+        "centroidHz": 6100,
+        "bandsPct": [0, 0, 12, 74, 11]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.29,
+        "attack": 2.403,
+        "centroid": 1.479,
+        "bands": 0.667
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "hit-spear",
+      "specRow": "ffx.weapon.spear.hit",
+      "take": "ffx.weapon.spear.hit.v2",
+      "request": {
+        "text": "A spear piercing a target, a swelling mid rush into a full penetrating hit with a short wooden shaft quiver. About one and two tenths of a second. Close-miked, realistic sound design, no music, no voice. Variation: fuller and rounder, with a little more body.",
+        "duration_seconds": 1.2,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 13,
+      "sha256Raw": "773c0789549823233248c3126c5e2da598a4b2f1cf0241b1f5c137ea7dd22b37",
+      "sha256Mastered": "48489617933588e916f6b6d3b1cd4e4e61d82a6bcac88cefb8e9613f49f831c1",
+      "measured": {
+        "activeMs": 495,
+        "attackMs": 140,
+        "lufs": -17.48,
+        "truePeakDb": -1.6,
+        "centroidHz": 344,
+        "bandsPct": [88, 8, 1, 2, 1]
+      },
+      "target": {
+        "lenMs": 910,
+        "attackMs": 225,
+        "lufs": -14.4,
+        "centroidHz": 600,
+        "bandsPct": [79, 5, 14, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 2.28,
+        "attack": 1.259,
+        "centroid": 2.031,
+        "bands": 0.867
+      },
+      "levelFlags": [
+        "capped"
+      ],
+      "levelShortfallDb": 3.08
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-flux",
+      "cue": "swing-flux",
+      "specRow": "ffx.boss.flux.attack",
+      "take": "ffx.boss.flux.attack.v1",
+      "request": {
+        "text": "A tall armored fighter's quick sword strike, a short sharp whoosh and a solid blade impact with a mid hit. About one second. Close-miked, realistic sound design, no music, no voice.",
+        "duration_seconds": 0.7,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 8,
+      "sha256Raw": "bd4bdec618655bdce62c3525f11461a90dde1f0906536a51aa8e4341f23b89ea",
+      "sha256Mastered": "bde0567cb068bfa4241d0bd730c0ff1f23b66aa17d716d76480e1483157ba6ae",
+      "measured": {
+        "activeMs": 325,
+        "attackMs": 55,
+        "lufs": -16.1,
+        "truePeakDb": -3.32,
+        "centroidHz": 1491,
+        "bandsPct": [58, 16, 11, 13, 2]
+      },
+      "target": {
+        "lenMs": 435,
+        "attackMs": 50,
+        "lufs": -16.1,
+        "centroidHz": 1100,
+        "bandsPct": [18, 44, 37, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.264,
+        "attack": 0.2,
+        "centroid": 1.124,
+        "bands": 2.667
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "item-grenade",
+      "specRow": "ffx.item.grenade",
+      "take": "ffx.item.grenade.v1",
+      "request": {
+        "text": "A thrown grenade exploding, a sharp bang with a short fiery burst and falling debris. About one and a half seconds. Close-miked, realistic sound design, no music, no voice.",
+        "duration_seconds": 1.7,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 19,
+      "sha256Raw": "9b847a5f46c4daa731831dfdbbda6e7bdff7523eb620819b0b1605a476c2f64d",
+      "sha256Mastered": "c3c94f957bad98e093c9a1e3f0e895ecdb1da9af34b01c9763526f6b1848cccb",
+      "measured": {
+        "activeMs": 920,
+        "attackMs": 5,
+        "lufs": -14.0,
+        "truePeakDb": -5.95,
+        "centroidHz": 234,
+        "bandsPct": [86, 9, 4, 0, 0]
+      },
+      "target": {
+        "lenMs": 1375,
+        "attackMs": 80,
+        "lufs": -14,
+        "centroidHz": 300,
+        "bandsPct": [85, 7, 7, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.655,
+        "attack": 3.0,
+        "centroid": 0.286,
+        "bands": 0.2
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "item-ether",
+      "specRow": "ffx.item.ether",
+      "take": "ffx.item.ether.v2",
+      "request": {
+        "text": "A restorative potion, fine glittering chimes with a bright airy sparkle, a clean magical refill. About one and three quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.",
+        "duration_seconds": 2,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 22,
+      "sha256Raw": "6adab68cbda54587b54de4ca8e2e007cf9aba29a49830ce14e6bb0fbef30b38d",
+      "sha256Mastered": "3b634016a52158f38aa98eb94fd1b38ca2b6624c62ef240be5d5501d11d5bc04",
+      "measured": {
+        "activeMs": 1790,
+        "attackMs": 255,
+        "lufs": -18.7,
+        "truePeakDb": -13.1,
+        "centroidHz": 8942,
+        "bandsPct": [0, 0, 1, 54, 45]
+      },
+      "target": {
+        "lenMs": 1640,
+        "attackMs": 295,
+        "lufs": -18.7,
+        "centroidHz": 7100,
+        "bandsPct": [0, 0, 14, 68, 17]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.457,
+        "attack": 0.452,
+        "centroid": 0.968,
+        "bands": 1.867
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-flux",
+      "cue": "flux-cleave",
+      "specRow": "ffx.boss.flux.cleave",
+      "take": "ffx.boss.flux.cleave.v1",
+      "request": {
+        "text": "A massive two-stroke sword attack, a long rising metallic charge building for several seconds, then two crossing heavy slashes with ringing steel impacts. About seven seconds. Cinematic sound design, no music, no voice.",
+        "duration_seconds": 7.5,
+        "prompt_influence": 0.4,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 82,
+      "sha256Raw": "29da492543af3c5266c914fab8c1a9a362baf2fa3857b5deff56446b01b373bd",
+      "sha256Mastered": "7cc62bf969464366e4ebee06330a0a850a0e3c9531acdf70cdc8fbf4faf0d05e",
+      "measured": {
+        "activeMs": 5650,
+        "attackMs": 3895,
+        "lufs": -14.0,
+        "truePeakDb": -6.31,
+        "centroidHz": 640,
+        "bandsPct": [78, 2, 17, 4, 0]
+      },
+      "target": {
+        "lenMs": 6765,
+        "attackMs": 2745,
+        "lufs": -14,
+        "centroidHz": 400,
+        "bandsPct": [85, 4, 9, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.824,
+        "attack": 1.396,
+        "centroid": 1.524,
+        "bands": 0.533
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "life",
+      "specRow": "ffx.life",
+      "take": "ffx.life.v2",
+      "request": {
+        "text": "A resurrection shimmer, a glowing airy swell building for about a second into a warm bright bloom with a soft chime, then fading slowly. About two and a half seconds, gentle and uplifting. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.",
+        "duration_seconds": 3,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 33,
+      "sha256Raw": "bbaa2a50c10b5338d96868c2b7d8b6a954af79113f0856b1a6b11a9802b48b81",
+      "sha256Mastered": "73d7190b87b4da057eab9175619f5f58d70b189a485fbdf09d2a56e66a31fd73",
+      "measured": {
+        "activeMs": 2530,
+        "attackMs": 1210,
+        "lufs": -15.7,
+        "truePeakDb": -9.52,
+        "centroidHz": 6199,
+        "bandsPct": [0, 6, 44, 1, 49]
+      },
+      "target": {
+        "lenMs": 2495,
+        "attackMs": 1015,
+        "lufs": -15.7,
+        "centroidHz": 4100,
+        "bandsPct": [0, 3, 66, 25, 6]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.07,
+        "attack": 0.64,
+        "centroid": 1.737,
+        "bands": 2.867
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "water-3",
+      "specRow": "ffx.water.t3",
+      "take": "ffx.water.t3.v4",
+      "request": {
+        "text": "A massive tidal wave crashing, a huge rushing swell and solid splash with rolling surf and cascading droplets. About two and a half seconds. It swells gradually for about 1.3 seconds before the peak. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 3.2,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 35,
+      "sha256Raw": "64050ee0898ee5c366a21ab0a3094a7de2d8359ef355afc7ffd3838adbc26bcf",
+      "sha256Mastered": "6367c4ec32271e7f17148e8ad768ec6ca00513bf4121f178958972f3cf77ccc1",
+      "measured": {
+        "activeMs": 2285,
+        "attackMs": 760,
+        "lufs": -14.6,
+        "truePeakDb": -7.09,
+        "centroidHz": 990,
+        "bandsPct": [38, 39, 17, 5, 1]
+      },
+      "target": {
+        "lenMs": 2650,
+        "attackMs": 1260,
+        "lufs": -14.6,
+        "centroidHz": 1100,
+        "bandsPct": [42, 29, 24, 4, 0]
+      },
+      "fit": "near",
+      "deviations": {
+        "length": 0.689,
+        "attack": 1.323,
+        "centroid": 0.255,
+        "bands": 0.667
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-final-aeon",
+      "cue": "fa-wave",
+      "specRow": "ffx.boss.fa.wave",
+      "take": "ffx.boss.fa.wave.v1",
+      "request": {
+        "text": "A rolling shockwave, a vast low surging wave of pressure sweeping across with a deep growing drone pressing down. About eight seconds. Cinematic sound design, no music, no voice.",
+        "duration_seconds": 8.5,
+        "prompt_influence": 0.4,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 94,
+      "sha256Raw": "7371dfc18a52e955d6d921993558242076d5d5f7ca47aa194d720eab66fbc082",
+      "sha256Mastered": "4897cd548f81cb2934e3f04e969c72d6e1d95e1dd447d970da0961b3ef9b80cf",
+      "measured": {
+        "activeMs": 6245,
+        "attackMs": 3130,
+        "lufs": -14.4,
+        "truePeakDb": -4.59,
+        "centroidHz": 97,
+        "bandsPct": [96, 4, 0, 0, 0]
+      },
+      "target": {
+        "lenMs": 7570,
+        "attackMs": 6400,
+        "lufs": -14.4,
+        "centroidHz": 200,
+        "bandsPct": [89, 8, 3, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.875,
+        "attack": 1.703,
+        "centroid": 1.887,
+        "bands": 0.467
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "thunder-3",
+      "specRow": "ffx.thunder.t3",
+      "take": "ffx.thunder.t3.v1",
+      "request": {
+        "text": "A colossal lightning strike, a heavy low electric swell erupting into a deafening thunder crack and a long rolling boom, deep and powerful. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 3.4,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 37,
+      "sha256Raw": "0dd29dc13c75dd5d29fa7dd1742bb484eb95393c0856cc5cc1e603fb276175ad",
+      "sha256Mastered": "a47e7f25052107693b97d33682de710c0230d453b200557619b7fa1136f61b52",
+      "measured": {
+        "activeMs": 2880,
+        "attackMs": 500,
+        "lufs": -14.0,
+        "truePeakDb": -6.01,
+        "centroidHz": 490,
+        "bandsPct": [79, 14, 4, 2, 1]
+      },
+      "target": {
+        "lenMs": 2860,
+        "attackMs": 1340,
+        "lufs": -14,
+        "centroidHz": 600,
+        "bandsPct": [63, 25, 9, 3, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.035,
+        "attack": 2.09,
+        "centroid": 0.5,
+        "bands": 1.067
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "hit-greatsword",
+      "specRow": "ffx2.lb.warrior.hit",
+      "take": "ffx2.lb.warrior.hit.v4",
+      "request": {
+        "text": "Four gritty scrapes of a steel blade across armor, each louder than the last, ending on the loudest, crunchy and mid-pitched, not hissy. Close-miked, realistic sound design, no music, no voice.",
+        "duration_seconds": 1.9,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 21,
+      "sha256Raw": "a5e0d554858b9bdb68312ca12b3fff3bd35387cc222786042fbffc836681a961",
+      "sha256Mastered": "adca31283be4a039d75ed3c519163f7a061d574058b9f968926a66158bbd83cb",
+      "measured": {
+        "activeMs": 965,
+        "attackMs": 655,
+        "lufs": -14.1,
+        "truePeakDb": -5.76,
+        "centroidHz": 5324,
+        "bandsPct": [0, 0, 38, 54, 8]
+      },
+      "target": {
+        "lenMs": 1500,
+        "attackMs": 1080,
+        "lufs": -14.1,
+        "centroidHz": 4400,
+        "bandsPct": [4, 22, 38, 24, 12]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.783,
+        "attack": 1.312,
+        "centroid": 0.776,
+        "bands": 2.0
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-aeons",
+      "cue": "boss-shiva",
+      "specRow": "ffx2.boss.shiva",
+      "take": "ffx2.boss.shiva.v1",
+      "request": {
+        "text": "An icy graceful strike, a bright high crystalline sweep with airy frost and ringing glass. About two seconds. Cinematic sound design, no music, no voice.",
+        "duration_seconds": 2.4,
+        "prompt_influence": 0.4,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 26,
+      "sha256Raw": "638352c99237b4e44484dadd411a51ddddc22df53a8a27a2666dd66883abae82",
+      "sha256Mastered": "ccc4eb2fda9574a2e826c9dfdbf3b964c7bd779b661d1c7cd09da4ef02618513",
+      "measured": {
+        "activeMs": 1880,
+        "attackMs": 1215,
+        "lufs": -14.0,
+        "truePeakDb": -6.58,
+        "centroidHz": 7871,
+        "bandsPct": [0, 0, 0, 95, 5]
+      },
+      "target": {
+        "lenMs": 2013,
+        "attackMs": 820,
+        "lufs": -14.0,
+        "centroidHz": 7800,
+        "bandsPct": [0, 0, 16, 60, 22]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.33,
+        "attack": 1.606,
+        "centroid": 0.012,
+        "bands": 2.333
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "magic-charge-x2",
+      "specRow": "ffx2.cast.chant",
+      "take": "ffx2.cast.chant.v1",
+      "request": {
+        "text": "A brief airy rising incantation shimmer, a soft glassy rise that ends in a gentle flick. About half a second. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 0.8,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 9,
+      "sha256Raw": "8e44e1e751dbd7cb96d330228c43086071fd10dd72775c740b56223d4db810c7",
+      "sha256Mastered": "ec7f1504292c8daf04ff39597bd480005636c0491a2305af97fd38008a49fff7",
+      "measured": {
+        "activeMs": 720,
+        "attackMs": 250,
+        "lufs": -19.9,
+        "truePeakDb": -13.48,
+        "centroidHz": 3260,
+        "bandsPct": [0, 0, 84, 14, 1]
+      },
+      "target": {
+        "lenMs": 586,
+        "attackMs": 155,
+        "lufs": -19.9,
+        "centroidHz": 1000,
+        "bandsPct": [51, 18, 27, 3, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.143,
+        "attack": 2.043,
+        "centroid": 4.903,
+        "bands": 3.8
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "gun-burst",
+      "specRow": "ffx2.special.trigger",
+      "take": "ffx2.special.trigger.v2",
+      "request": {
+        "text": "A rapid burst of pistol shots, five quick snappy reports in about half a second. Close-miked, realistic sound design, no music, no voice. Variation: fuller and rounder, with a little more body.",
+        "duration_seconds": 0.7,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 8,
+      "sha256Raw": "2f678d8d8a2b2f6e4071c3653db5c0c22f1b55d56306cbb472b03e5fb9281be3",
+      "sha256Mastered": "aa18821274db63abf57c21463096e1200161e8790eea6c0674e4d892e85bfa80",
+      "measured": {
+        "activeMs": 445,
+        "attackMs": 90,
+        "lufs": -18.0,
+        "truePeakDb": -9.81,
+        "centroidHz": 1163,
+        "bandsPct": [27, 45, 22, 5, 1]
+      },
+      "target": {
+        "lenMs": 487,
+        "attackMs": 30,
+        "lufs": -18.0,
+        "centroidHz": 1800,
+        "bandsPct": [72, 3, 10, 9, 6]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.431,
+        "attack": 2.4,
+        "centroid": 1.769,
+        "bands": 3.0
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "death",
+      "specRow": "ffx2.death",
+      "take": "ffx2.death.v1",
+      "request": {
+        "text": "A death spell, a cold bright sharp hiss followed by a single mid toll. About one and a quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
+        "duration_seconds": 1.4,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 15,
+      "sha256Raw": "53721e0cc631af1709dbb7dda9c0172ed56a93dc05e9fc03e6327efc2a83fcaa",
+      "sha256Mastered": "928317c67b3e7d78ddb85dcdaa4c561d0146ef3ca41fdd1feded657c9cd38966",
+      "measured": {
+        "activeMs": 1315,
+        "attackMs": 35,
+        "lufs": -15.0,
+        "truePeakDb": -8.89,
+        "centroidHz": 5162,
+        "bandsPct": [8, 17, 15, 51, 9]
+      },
+      "target": {
+        "lenMs": 1195,
+        "attackMs": 575,
+        "lufs": -15.0,
+        "centroidHz": 5700,
+        "bandsPct": [0, 0, 50, 40, 10]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.502,
+        "attack": 3.13,
+        "centroid": 0.391,
+        "bands": 2.333
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "error-x2",
+      "specRow": "ffx2.ui.error",
+      "take": "ffx.ui.error.v2",
+      "request": {
+        "text": "Two quick low muffled wooden thumps one after the other, rounded and soft, like knocking twice on a thick padded door, pitched low. Over in about a quarter of a second. Dry and clean, no reverb, no music, no voice. Variation: slightly warmer and rounder.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.7,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 6,
+      "sha256Raw": "6bd11ad4094d132e0ce6e98cfbedf737a5b815de027fe4a8cbb831b826c7bae1",
+      "sha256Mastered": "224c98b461ac1c286a3ddbd1f8979d4d5cf1a8870a7b6d2253e6c32c0ef14999",
+      "measured": {
+        "activeMs": 385,
+        "attackMs": 10,
+        "lufs": -17.3,
+        "truePeakDb": -2.41,
+        "centroidHz": 77,
+        "bandsPct": [100, 0, 0, 0, 0]
+      },
+      "target": {
+        "lenMs": 279,
+        "attackMs": 15,
+        "lufs": -17.3,
+        "centroidHz": 200,
+        "bandsPct": [87, 12, 0, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.9,
+        "attack": 0.2,
+        "centroid": 2.886,
+        "bands": 0.867
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "hit-gun",
+      "specRow": "ffx2.lb.gunner.hit",
+      "take": "ffx2.lb.gunner.hit.v1",
+      "request": {
+        "text": "A bullet striking a target, a crisp snappy impact tick followed by a small spray of fizzy debris and a faint metallic ring-down in three tiny separate crackles. Close-miked, realistic sound design, no music, no voice.",
+        "duration_seconds": 2.4,
+        "prompt_influence": 0.6,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 26,
+      "sha256Raw": "237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2",
+      "sha256Mastered": "ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71",
+      "measured": {
+        "activeMs": 2265,
+        "attackMs": 10,
+        "lufs": -14.1,
+        "truePeakDb": -4.86,
+        "centroidHz": 3829,
+        "bandsPct": [6, 3, 40, 51, 0]
+      },
+      "target": {
+        "lenMs": 1978,
+        "attackMs": 25,
+        "lufs": -14.1,
+        "centroidHz": 4400,
+        "bandsPct": [18, 21, 24, 19, 18]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.725,
+        "attack": 0.6,
+        "centroid": 0.552,
+        "bands": 2.133
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "cancel-x2",
+      "specRow": "ffx2.ui.cancel",
+      "take": "ffx.ui.cancel.v4",
+      "request": {
+        "text": "A short airy flick that starts and stops abruptly, a quick puff of bright air with a hushed rustle, over in about a tenth of a second. Dry and clean, no reverb, no music, no voice.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.8,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 6,
+      "sha256Raw": "c99c9d9a603b0f53d1ee53dae17c8fce60e554d8b185e5d9621dbd56c0870d26",
+      "sha256Mastered": "eec2f6b72dad194cd1d857a362bf6b16577afd81fe6e268ebe9099ead10d8319",
+      "measured": {
+        "activeMs": 220,
+        "attackMs": 120,
+        "lufs": -22.8,
+        "truePeakDb": -10.93,
+        "centroidHz": 5677,
+        "bandsPct": [6, 0, 33, 49, 12]
+      },
+      "target": {
+        "lenMs": 124,
+        "attackMs": 70,
+        "lufs": -22.8,
+        "centroidHz": 6000,
+        "bandsPct": [0, 0, 28, 60, 11]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 2.4,
+        "attack": 2.0,
+        "centroid": 0.203,
+        "bands": 0.733
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "menu-close-x2",
+      "specRow": "ffx2.ui.close",
+      "take": "ffx.ui.cancel.v4",
+      "request": {
+        "text": "A short airy flick that starts and stops abruptly, a quick puff of bright air with a hushed rustle, over in about a tenth of a second. Dry and clean, no reverb, no music, no voice.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.8,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 6,
+      "sha256Raw": "c99c9d9a603b0f53d1ee53dae17c8fce60e554d8b185e5d9621dbd56c0870d26",
+      "sha256Mastered": "b617a5e325b832b38b0b5c701027eb9a1da346c71ccc294493ae42747f3b6949",
+      "measured": {
+        "activeMs": 220,
+        "attackMs": 120,
+        "lufs": -24.0,
+        "truePeakDb": -12.13,
+        "centroidHz": 5677,
+        "bandsPct": [6, 0, 33, 49, 12]
+      },
+      "target": {
+        "lenMs": 124,
+        "attackMs": 70,
+        "lufs": -24.0,
+        "centroidHz": 6000,
+        "bandsPct": [0, 0, 28, 60, 11]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 2.4,
+        "attack": 2.0,
+        "centroid": 0.203,
+        "bands": 0.733
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-machina",
+      "cue": "boss-leg",
+      "specRow": "ffx2.boss.leg",
+      "take": "ffx2.boss.leg.v1",
+      "request": {
+        "text": "A giant mechanical leg stomping, eight deep sub-bass thuds in a row with a shuddering metallic rumble. About four and a half seconds. Cinematic sound design, no music, no voice.",
+        "duration_seconds": 5,
+        "prompt_influence": 0.4,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 55,
+      "sha256Raw": "538ebbcc51e6de442728cea1d0b569e9dbaa67d4ec68edff1ac90bdecb6628c8",
+      "sha256Mastered": "965dac94a19acdebc195c4d893975118a9120728daa81b69504af8bf5fec6c65",
+      "measured": {
+        "activeMs": 2125,
+        "attackMs": 225,
+        "lufs": -14.0,
+        "truePeakDb": -4.36,
+        "centroidHz": 38,
+        "bandsPct": [100, 0, 0, 0, 0]
+      },
+      "target": {
+        "lenMs": 4438,
+        "attackMs": 1855,
+        "lufs": -14.0,
+        "centroidHz": 0,
+        "bandsPct": [100, 0, 0, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 2.606,
+        "attack": 2.929,
+        "centroid": 0.0,
+        "bands": 0.0
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "menu-open-x2",
+      "specRow": "ffx2.ui.open",
+      "take": "ffx.ui.turn.v3",
+      "request": {
+        "text": "A single clear soft bell-like ping, a pure bright tone with a gentle medium-length ring, calm and tasteful. About four tenths of a second. Dry and clean, no reverb, no music, no voice. Variation: slightly brighter and glassier.",
+        "duration_seconds": 0.6,
+        "prompt_influence": 0.7,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 7,
+      "sha256Raw": "243c8abce7dee36d1008fd252c2fadf627a061a3fd345077ed71376fb1b25d4c",
+      "sha256Mastered": "3dec867d806a2cb5198069e6871232cdc3072673b6128ad73dba140e078071cc",
+      "measured": {
+        "activeMs": 555,
+        "attackMs": 10,
+        "lufs": -24.0,
+        "truePeakDb": -14.67,
+        "centroidHz": 2169,
+        "bandsPct": [0, 0, 86, 14, 0]
+      },
+      "target": {
+        "lenMs": 432,
+        "attackMs": 15,
+        "lufs": -24.0,
+        "centroidHz": 4200,
+        "bandsPct": [0, 0, 92, 0, 5]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.424,
+        "attack": 0.2,
+        "centroid": 2.808,
+        "bands": 0.933
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx2-core",
+      "cue": "cure-x2",
+      "specRow": "ffx2.cure",
+      "take": "ffx2.cure.v3",
+      "request": {
+        "text": "A healing spell, a slowly blooming wash of glittering chimes and airy shimmer with three soft pulses, glowing. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: brighter and airier, more shimmer.",
+        "duration_seconds": 3.4,
+        "prompt_influence": 0.5,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 37,
+      "sha256Raw": "13a848448d0a18fcc530d6519468052f6fc609b016973ecfde10aa661d72158d",
+      "sha256Mastered": "1afcc152016a5c151d60aacbae1a8a04667176e26ab546e436c049ccd8eca600",
+      "measured": {
+        "activeMs": 2815,
+        "attackMs": 435,
+        "lufs": -14.0,
+        "truePeakDb": -5.63,
+        "centroidHz": 5060,
+        "bandsPct": [0, 28, 23, 26, 22]
+      },
+      "target": {
+        "lenMs": 3249,
+        "attackMs": 1885,
+        "lufs": -14,
+        "centroidHz": 3200,
+        "bandsPct": [9, 21, 44, 20, 6]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 0.668,
+        "attack": 2.564,
+        "centroid": 1.916,
+        "bands": 1.4
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "error",
+      "specRow": "ffx.ui.error",
+      "take": "ffx.ui.error.v2",
+      "request": {
+        "text": "Two quick low muffled wooden thumps one after the other, rounded and soft, like knocking twice on a thick padded door, pitched low. Over in about a quarter of a second. Dry and clean, no reverb, no music, no voice. Variation: slightly warmer and rounder.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.7,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 6,
+      "sha256Raw": "6bd11ad4094d132e0ce6e98cfbedf737a5b815de027fe4a8cbb831b826c7bae1",
+      "sha256Mastered": "224c98b461ac1c286a3ddbd1f8979d4d5cf1a8870a7b6d2253e6c32c0ef14999",
+      "measured": {
+        "activeMs": 385,
+        "attackMs": 10,
+        "lufs": -17.3,
+        "truePeakDb": -2.41,
+        "centroidHz": 77,
+        "bandsPct": [100, 0, 0, 0, 0]
+      },
+      "target": {
+        "lenMs": 275,
+        "attackMs": 15,
+        "lufs": -17.3,
+        "centroidHz": 200,
+        "bandsPct": [87, 12, 0, 0, 0]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 1.9,
+        "attack": 0.2,
+        "centroid": 2.886,
+        "bands": 0.867
+      }
+    },
+    {
+      "set": "driver",
+      "pack": "ffx-core",
+      "cue": "cancel",
+      "specRow": "ffx.ui.cancel",
+      "take": "ffx.ui.cancel.v4",
+      "request": {
+        "text": "A short airy flick that starts and stops abruptly, a quick puff of bright air with a hushed rustle, over in about a tenth of a second. Dry and clean, no reverb, no music, no voice.",
+        "duration_seconds": 0.5,
+        "prompt_influence": 0.8,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 6,
+      "sha256Raw": "c99c9d9a603b0f53d1ee53dae17c8fce60e554d8b185e5d9621dbd56c0870d26",
+      "sha256Mastered": "eec2f6b72dad194cd1d857a362bf6b16577afd81fe6e268ebe9099ead10d8319",
+      "measured": {
+        "activeMs": 220,
+        "attackMs": 120,
+        "lufs": -22.8,
+        "truePeakDb": -10.93,
+        "centroidHz": 5677,
+        "bandsPct": [6, 0, 33, 49, 12]
+      },
+      "target": {
+        "lenMs": 110,
+        "attackMs": 60,
+        "lufs": -22.8,
+        "centroidHz": 5800,
+        "bandsPct": [0, 0, 29, 61, 10]
+      },
+      "fit": "failed",
+      "deviations": {
+        "length": 2.4,
+        "attack": 2.0,
+        "centroid": 0.203,
+        "bands": 0.733
       }
     }
   ],
@@ -1072,36 +2187,6 @@
     {
       "pack": null,
       "cue": null,
-      "specRow": "ffx.boss.fa.wave",
-      "take": "ffx.boss.fa.wave.v1",
-      "request": {
-        "text": "A rolling shockwave, a vast low surging wave of pressure sweeping across with a deep growing drone pressing down. About eight seconds. Cinematic sound design, no music, no voice.",
-        "duration_seconds": 8.5,
-        "prompt_influence": 0.4,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 94,
-      "sha256Raw": "7371dfc18a52e955d6d921993558242076d5d5f7ca47aa194d720eab66fbc082",
-      "failedChecks": [
-        "attack",
-        "centroid"
-      ],
-      "deviations": {
-        "length": 0.875,
-        "attack": 1.703,
-        "centroid": 1.887,
-        "bands": 0.467
-      },
-      "measured": {
-        "active_ms": 6245,
-        "attack_ms": 3130,
-        "centroid_hz": 97,
-        "bands_pct": [96, 4, 0, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
       "specRow": "ffx.boss.flux.annihilation",
       "take": "ffx.boss.flux.annihilation.v1",
       "request": {
@@ -1127,37 +2212,6 @@
         "attack_ms": 1135,
         "centroid_hz": 259,
         "bands_pct": [80, 14, 6, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.boss.flux.attack",
-      "take": "ffx.boss.flux.attack.v1",
-      "request": {
-        "text": "A tall armored fighter's quick sword strike, a short sharp whoosh and a solid blade impact with a mid hit. About one second. Close-miked, realistic sound design, no music, no voice.",
-        "duration_seconds": 0.7,
-        "prompt_influence": 0.6,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 8,
-      "sha256Raw": "bd4bdec618655bdce62c3525f11461a90dde1f0906536a51aa8e4341f23b89ea",
-      "failedChecks": [
-        "length",
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 1.264,
-        "attack": 0.2,
-        "centroid": 1.124,
-        "bands": 2.667
-      },
-      "measured": {
-        "active_ms": 325,
-        "attack_ms": 55,
-        "centroid_hz": 1491,
-        "bands_pct": [58, 16, 11, 13, 2]
       }
     },
     {
@@ -1250,36 +2304,6 @@
         "attack_ms": 790,
         "centroid_hz": 882,
         "bands_pct": [79, 2, 15, 5, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.boss.flux.cleave",
-      "take": "ffx.boss.flux.cleave.v1",
-      "request": {
-        "text": "A massive two-stroke sword attack, a long rising metallic charge building for several seconds, then two crossing heavy slashes with ringing steel impacts. About seven seconds. Cinematic sound design, no music, no voice.",
-        "duration_seconds": 7.5,
-        "prompt_influence": 0.4,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 82,
-      "sha256Raw": "29da492543af3c5266c914fab8c1a9a362baf2fa3857b5deff56446b01b373bd",
-      "failedChecks": [
-        "attack",
-        "centroid"
-      ],
-      "deviations": {
-        "length": 0.824,
-        "attack": 1.396,
-        "centroid": 1.524,
-        "bands": 0.533
-      },
-      "measured": {
-        "active_ms": 5650,
-        "attack_ms": 3895,
-        "centroid_hz": 640,
-        "bands_pct": [78, 2, 17, 4, 0]
       }
     },
     {
@@ -1501,36 +2525,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx.cure.t1",
-      "take": "ffx.cure.t1.v1",
-      "request": {
-        "text": "A gentle healing sparkle, soft airy glittering chimes in a warm shimmering wash that blooms quickly and fades. About one and a half seconds, bright and soft. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 1.7,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 19,
-      "sha256Raw": "b066f03d1af93ce6e8b7417fa1e0dd85982de29fff98a1147aaa6d872b7a0ead",
-      "failedChecks": [
-        "attack",
-        "centroid"
-      ],
-      "deviations": {
-        "length": 0.29,
-        "attack": 2.403,
-        "centroid": 1.479,
-        "bands": 0.667
-      },
-      "measured": {
-        "active_ms": 1300,
-        "attack_ms": 60,
-        "centroid_hz": 8656,
-        "bands_pct": [0, 0, 4, 84, 12]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.cure.t1",
       "take": "ffx.cure.t1.v2",
       "request": {
         "text": "A gentle healing sparkle, soft airy glittering chimes in a warm shimmering wash that blooms quickly and fades. About one and a half seconds, bright and soft. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.",
@@ -1617,36 +2611,6 @@
         "attack_ms": 205,
         "centroid_hz": 9143,
         "bands_pct": [0, 0, 0, 47, 53]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.cure.t2",
-      "take": "ffx.cure.t2.v1",
-      "request": {
-        "text": "A fuller healing sparkle, a warm shimmering wash of glittering chimes that blooms and gently circles. About one and three quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 2,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 22,
-      "sha256Raw": "5193806a4b98b3ff1964d6f8cf48193ec054ac55b844d5ac16cba3510068c488",
-      "failedChecks": [
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.287,
-        "attack": 0.556,
-        "centroid": 1.655,
-        "bands": 1.867
-      },
-      "measured": {
-        "active_ms": 1480,
-        "attack_ms": 210,
-        "centroid_hz": 9014,
-        "bands_pct": [0, 0, 1, 58, 41]
       }
     },
     {
@@ -2851,35 +3815,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx.item.ether",
-      "take": "ffx.item.ether.v2",
-      "request": {
-        "text": "A restorative potion, fine glittering chimes with a bright airy sparkle, a clean magical refill. About one and three quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.",
-        "duration_seconds": 2,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 22,
-      "sha256Raw": "6adab68cbda54587b54de4ca8e2e007cf9aba29a49830ce14e6bb0fbef30b38d",
-      "failedChecks": [
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.457,
-        "attack": 0.452,
-        "centroid": 0.968,
-        "bands": 1.867
-      },
-      "measured": {
-        "active_ms": 1790,
-        "attack_ms": 255,
-        "centroid_hz": 8942,
-        "bands_pct": [0, 0, 1, 54, 45]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.item.ether",
       "take": "ffx.item.ether.v3",
       "request": {
         "text": "A restorative potion, fine glittering chimes with a bright airy sparkle, a clean magical refill. About one and three quarter seconds. A clear mid-high edge, crisp and present like a clap, no sparkle, soft on top, not shrill. Cinematic fantasy sound design, no music, no melody, no voice.",
@@ -2941,36 +3876,6 @@
     {
       "pack": null,
       "cue": null,
-      "specRow": "ffx.item.grenade",
-      "take": "ffx.item.grenade.v1",
-      "request": {
-        "text": "A thrown grenade exploding, a sharp bang with a short fiery burst and falling debris. About one and a half seconds. Close-miked, realistic sound design, no music, no voice.",
-        "duration_seconds": 1.7,
-        "prompt_influence": 0.6,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 19,
-      "sha256Raw": "9b847a5f46c4daa731831dfdbbda6e7bdff7523eb620819b0b1605a476c2f64d",
-      "failedChecks": [
-        "length",
-        "attack"
-      ],
-      "deviations": {
-        "length": 1.655,
-        "attack": 3,
-        "centroid": 0.286,
-        "bands": 0.2
-      },
-      "measured": {
-        "active_ms": 920,
-        "attack_ms": 5,
-        "centroid_hz": 234,
-        "bands_pct": [86, 9, 4, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
       "specRow": "ffx.item.remedy",
       "take": "ffx.item.remedy.v1",
       "request": {
@@ -2998,37 +3903,6 @@
         "attack_ms": 140,
         "centroid_hz": 1134,
         "bands_pct": [1, 88, 2, 8, 2]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.ko.fiend",
-      "take": "ffx.ko.fiend.v1",
-      "request": {
-        "text": "A monster's dying moan, a deep low groan that swells slowly and fades away into silence. About two and three quarter seconds. Cinematic sound design, no music, no voice.",
-        "duration_seconds": 3.4,
-        "prompt_influence": 0.4,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 37,
-      "sha256Raw": "da1d43e9f984bd9f586eebf91a1075391664343f7cc6490cd87d4396ec491ce5",
-      "failedChecks": [
-        "attack",
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.395,
-        "attack": 3.024,
-        "centroid": 3.861,
-        "bands": 2.267
-      },
-      "measured": {
-        "active_ms": 3005,
-        "attack_ms": 235,
-        "centroid_hz": 366,
-        "bands_pct": [44, 51, 4, 0, 0]
       }
     },
     {
@@ -3152,36 +4026,6 @@
         "attack_ms": 1230,
         "centroid_hz": 6996,
         "bands_pct": [0, 0, 29, 45, 25]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.life",
-      "take": "ffx.life.v2",
-      "request": {
-        "text": "A resurrection shimmer, a glowing airy swell building for about a second into a warm bright bloom with a soft chime, then fading slowly. About two and a half seconds, gentle and uplifting. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.",
-        "duration_seconds": 3,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 33,
-      "sha256Raw": "bbaa2a50c10b5338d96868c2b7d8b6a954af79113f0856b1a6b11a9802b48b81",
-      "failedChecks": [
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.07,
-        "attack": 0.64,
-        "centroid": 1.737,
-        "bands": 2.867
-      },
-      "measured": {
-        "active_ms": 2530,
-        "attack_ms": 1210,
-        "centroid_hz": 6199,
-        "bands_pct": [0, 6, 44, 1, 49]
       }
     },
     {
@@ -3338,37 +4182,6 @@
         "attack_ms": 5210,
         "centroid_hz": 3283,
         "bands_pct": [0, 1, 78, 15, 7]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.petrify",
-      "take": "ffx.petrify.v1",
-      "request": {
-        "text": "A stone-turning curse, brittle gritty cracking and grinding as flesh calcifies, ending in a dry stony clunk. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 1.5,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 17,
-      "sha256Raw": "69dc6ce7ad17da45587197bc01c01d3402621e4741e1c45df4cf91f3cb84b42c",
-      "failedChecks": [
-        "length",
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 1.123,
-        "attack": 0.333,
-        "centroid": 2.275,
-        "bands": 1.533
-      },
-      "measured": {
-        "active_ms": 1390,
-        "attack_ms": 110,
-        "centroid_hz": 7358,
-        "bands_pct": [7, 0, 17, 48, 28]
       }
     },
     {
@@ -3869,35 +4682,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx.slow",
-      "take": "ffx.slow.v1",
-      "request": {
-        "text": "A sinking slowdown magic, a thick heavy low drone that drags downward in pitch, syrupy and dragging. Under two seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 2.2,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 24,
-      "sha256Raw": "0f7965a42b28574308f2debd74a66b2389fe4cc8907e87aab8fc6a64088130dd",
-      "failedChecks": [
-        "attack"
-      ],
-      "deviations": {
-        "length": 0.896,
-        "attack": 2.381,
-        "centroid": 0,
-        "bands": 0.2
-      },
-      "measured": {
-        "active_ms": 1465,
-        "attack_ms": 600,
-        "centroid_hz": 134,
-        "bands_pct": [97, 3, 0, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.slow",
       "take": "ffx.slow.v2",
       "request": {
         "text": "A sinking slowdown magic, a thick heavy low drone that drags downward in pitch, syrupy and dragging. Under two seconds. The loudest moment is right at the start, a sharp instant attack. Cinematic fantasy sound design, no music, no melody, no voice.",
@@ -4195,36 +4979,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx.thunder.t3",
-      "take": "ffx.thunder.t3.v1",
-      "request": {
-        "text": "A colossal lightning strike, a heavy low electric swell erupting into a deafening thunder crack and a long rolling boom, deep and powerful. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 3.4,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 37,
-      "sha256Raw": "0dd29dc13c75dd5d29fa7dd1742bb484eb95393c0856cc5cc1e603fb276175ad",
-      "failedChecks": [
-        "attack",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.035,
-        "attack": 2.09,
-        "centroid": 0.5,
-        "bands": 1.067
-      },
-      "measured": {
-        "active_ms": 2880,
-        "attack_ms": 500,
-        "centroid_hz": 490,
-        "bands_pct": [79, 14, 4, 2, 1]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.thunder.t3",
       "take": "ffx.thunder.t3.v2",
       "request": {
         "text": "A colossal lightning strike, a solid mid electric swell erupting into a deafening thunder crack and a long rolling bang, full and powerful. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.",
@@ -4379,36 +5133,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx.ui.cancel",
-      "take": "ffx.ui.cancel.v4",
-      "request": {
-        "text": "A short airy flick that starts and stops abruptly, a quick puff of bright air with a hushed rustle, over in about a tenth of a second. Dry and clean, no reverb, no music, no voice.",
-        "duration_seconds": 0.5,
-        "prompt_influence": 0.8,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 6,
-      "sha256Raw": "c99c9d9a603b0f53d1ee53dae17c8fce60e554d8b185e5d9621dbd56c0870d26",
-      "failedChecks": [
-        "length",
-        "attack"
-      ],
-      "deviations": {
-        "length": 2.4,
-        "attack": 2,
-        "centroid": 0.203,
-        "bands": 0.733
-      },
-      "measured": {
-        "active_ms": 220,
-        "attack_ms": 120,
-        "centroid_hz": 5677,
-        "bands_pct": [6, 0, 33, 49, 12]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.ui.cancel",
       "take": "ffx.ui.cancel.v5",
       "request": {
         "text": "A very short soft quick papery swish, bright but not shrill, stopping abruptly. Dry and clean, no reverb, no music, no voice.",
@@ -4465,36 +5189,6 @@
         "attack_ms": 35,
         "centroid_hz": 71,
         "bands_pct": [99, 1, 0, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.ui.error",
-      "take": "ffx.ui.error.v2",
-      "request": {
-        "text": "Two quick low muffled wooden thumps one after the other, rounded and soft, like knocking twice on a thick padded door, pitched low. Over in about a quarter of a second. Dry and clean, no reverb, no music, no voice. Variation: slightly warmer and rounder.",
-        "duration_seconds": 0.5,
-        "prompt_influence": 0.7,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 6,
-      "sha256Raw": "6bd11ad4094d132e0ce6e98cfbedf737a5b815de027fe4a8cbb831b826c7bae1",
-      "failedChecks": [
-        "length",
-        "centroid"
-      ],
-      "deviations": {
-        "length": 1.9,
-        "attack": 0.2,
-        "centroid": 2.886,
-        "bands": 0.867
-      },
-      "measured": {
-        "active_ms": 385,
-        "attack_ms": 10,
-        "centroid_hz": 77,
-        "bands_pct": [100, 0, 0, 0, 0]
       }
     },
     {
@@ -5795,35 +6489,6 @@
     {
       "pack": null,
       "cue": null,
-      "specRow": "ffx.weapon.katana.hit",
-      "take": "ffx.weapon.katana.hit.v5",
-      "request": {
-        "text": "A heavy katana slicing through a target, a long low sweeping rush swelling into a clean cutting impact with a deep body thump. About one second. With a low rounded thump underneath, like a fist hitting a leather bag, soft and muffled, not sharp, it swells gradually for about 0.3 seconds before the peak. Close-miked, realistic sound design, no music, no voice.",
-        "duration_seconds": 1,
-        "prompt_influence": 0.7,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 11,
-      "sha256Raw": "4b11bc3451e2e63c3d456fd23bc310ef55c2be4b82a43a6a811e4ccccb827a29",
-      "failedChecks": [
-        "attack"
-      ],
-      "deviations": {
-        "length": 0.2,
-        "attack": 2.238,
-        "centroid": 0.775,
-        "bands": 0.333
-      },
-      "measured": {
-        "active_ms": 720,
-        "attack_ms": 115,
-        "centroid_hz": 1256,
-        "bands_pct": [77, 4, 7, 7, 5]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
       "specRow": "ffx.weapon.katana.swing",
       "take": "ffx.weapon.katana.swing.v2",
       "request": {
@@ -5971,37 +6636,6 @@
         "attack_ms": 120,
         "centroid_hz": 117,
         "bands_pct": [97, 1, 1, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx.weapon.spear.hit",
-      "take": "ffx.weapon.spear.hit.v2",
-      "request": {
-        "text": "A spear piercing a target, a swelling mid rush into a full penetrating hit with a short wooden shaft quiver. About one and two tenths of a second. Close-miked, realistic sound design, no music, no voice. Variation: fuller and rounder, with a little more body.",
-        "duration_seconds": 1.2,
-        "prompt_influence": 0.6,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 13,
-      "sha256Raw": "773c0789549823233248c3126c5e2da598a4b2f1cf0241b1f5c137ea7dd22b37",
-      "failedChecks": [
-        "length",
-        "attack",
-        "centroid"
-      ],
-      "deviations": {
-        "length": 2.28,
-        "attack": 1.259,
-        "centroid": 2.031,
-        "bands": 0.867
-      },
-      "measured": {
-        "active_ms": 495,
-        "attack_ms": 140,
-        "centroid_hz": 344,
-        "bands_pct": [88, 8, 1, 2, 1]
       }
     },
     {
@@ -6660,36 +7294,6 @@
     {
       "pack": null,
       "cue": null,
-      "specRow": "ffx2.boss.leg",
-      "take": "ffx2.boss.leg.v1",
-      "request": {
-        "text": "A giant mechanical leg stomping, eight deep sub-bass thuds in a row with a shuddering metallic rumble. About four and a half seconds. Cinematic sound design, no music, no voice.",
-        "duration_seconds": 5,
-        "prompt_influence": 0.4,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 55,
-      "sha256Raw": "538ebbcc51e6de442728cea1d0b569e9dbaa67d4ec68edff1ac90bdecb6628c8",
-      "failedChecks": [
-        "length",
-        "attack"
-      ],
-      "deviations": {
-        "length": 2.606,
-        "attack": 2.929,
-        "centroid": 0,
-        "bands": 0
-      },
-      "measured": {
-        "active_ms": 2125,
-        "attack_ms": 225,
-        "centroid_hz": 38,
-        "bands_pct": [100, 0, 0, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
       "specRow": "ffx2.boss.machina.ko",
       "take": "ffx2.boss.machina.ko.v1",
       "request": {
@@ -6745,36 +7349,6 @@
         "attack_ms": 45,
         "centroid_hz": 71,
         "bands_pct": [97, 2, 0, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx2.boss.shiva",
-      "take": "ffx2.boss.shiva.v1",
-      "request": {
-        "text": "An icy graceful strike, a bright high crystalline sweep with airy frost and ringing glass. About two seconds. Cinematic sound design, no music, no voice.",
-        "duration_seconds": 2.4,
-        "prompt_influence": 0.4,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 26,
-      "sha256Raw": "638352c99237b4e44484dadd411a51ddddc22df53a8a27a2666dd66883abae82",
-      "failedChecks": [
-        "attack",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.33,
-        "attack": 1.606,
-        "centroid": 0.012,
-        "bands": 2.333
-      },
-      "measured": {
-        "active_ms": 1880,
-        "attack_ms": 1215,
-        "centroid_hz": 7871,
-        "bands_pct": [0, 0, 0, 95, 5]
       }
     },
     {
@@ -6897,38 +7471,6 @@
         "attack_ms": 655,
         "centroid_hz": 62,
         "bands_pct": [99, 1, 0, 0, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx2.cast.chant",
-      "take": "ffx2.cast.chant.v1",
-      "request": {
-        "text": "A brief airy rising incantation shimmer, a soft glassy rise that ends in a gentle flick. About half a second. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 0.8,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 9,
-      "sha256Raw": "8e44e1e751dbd7cb96d330228c43086071fd10dd72775c740b56223d4db810c7",
-      "failedChecks": [
-        "length",
-        "attack",
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 1.143,
-        "attack": 2.043,
-        "centroid": 4.903,
-        "bands": 3.8
-      },
-      "measured": {
-        "active_ms": 720,
-        "attack_ms": 250,
-        "centroid_hz": 3260,
-        "bands_pct": [0, 0, 84, 14, 1]
       }
     },
     {
@@ -7217,37 +7759,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx2.cure",
-      "take": "ffx2.cure.v3",
-      "request": {
-        "text": "A healing spell, a slowly blooming wash of glittering chimes and airy shimmer with three soft pulses, glowing. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice. Variation: brighter and airier, more shimmer.",
-        "duration_seconds": 3.4,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 37,
-      "sha256Raw": "13a848448d0a18fcc530d6519468052f6fc609b016973ecfde10aa661d72158d",
-      "failedChecks": [
-        "attack",
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.668,
-        "attack": 2.564,
-        "centroid": 1.916,
-        "bands": 1.4
-      },
-      "measured": {
-        "active_ms": 2815,
-        "attack_ms": 435,
-        "centroid_hz": 5060,
-        "bands_pct": [0, 28, 23, 26, 22]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx2.cure",
       "take": "ffx2.cure.v4",
       "request": {
         "text": "A healing spell, a slowly blooming wash of warm chimes and soft glow with three soft pulses, glowing. About three seconds. Warm, soft and rounded, not shrill, no sparkle or hiss, it swells gradually for about 1.9 seconds before the peak. Cinematic fantasy sound design, no music, no melody, no voice.",
@@ -7273,36 +7784,6 @@
         "attack_ms": 55,
         "centroid_hz": 3642,
         "bands_pct": [0, 59, 7, 33, 2]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx2.death",
-      "take": "ffx2.death.v1",
-      "request": {
-        "text": "A death spell, a cold bright sharp hiss followed by a single mid toll. About one and a quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice.",
-        "duration_seconds": 1.4,
-        "prompt_influence": 0.5,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 15,
-      "sha256Raw": "53721e0cc631af1709dbb7dda9c0172ed56a93dc05e9fc03e6327efc2a83fcaa",
-      "failedChecks": [
-        "attack",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.502,
-        "attack": 3.13,
-        "centroid": 0.391,
-        "bands": 2.333
-      },
-      "measured": {
-        "active_ms": 1315,
-        "attack_ms": 35,
-        "centroid_hz": 5162,
-        "bands_pct": [8, 17, 15, 51, 9]
       }
     },
     {
@@ -7900,35 +8381,6 @@
         "attack_ms": 0,
         "centroid_hz": 596,
         "bands_pct": [67, 6, 26, 1, 0]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx2.lb.gunner.hit",
-      "take": "ffx2.lb.gunner.hit.v1",
-      "request": {
-        "text": "A bullet striking a target, a crisp snappy impact tick followed by a small spray of fizzy debris and a faint metallic ring-down in three tiny separate crackles. Close-miked, realistic sound design, no music, no voice.",
-        "duration_seconds": 2.4,
-        "prompt_influence": 0.6,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 26,
-      "sha256Raw": "237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2",
-      "failedChecks": [
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.725,
-        "attack": 0.6,
-        "centroid": 0.552,
-        "bands": 2.133
-      },
-      "measured": {
-        "active_ms": 2265,
-        "attack_ms": 10,
-        "centroid_hz": 3829,
-        "bands_pct": [6, 3, 40, 51, 0]
       }
     },
     {
@@ -8803,37 +9255,6 @@
       "pack": null,
       "cue": null,
       "specRow": "ffx2.lb.warrior.hit",
-      "take": "ffx2.lb.warrior.hit.v4",
-      "request": {
-        "text": "Four gritty scrapes of a steel blade across armor, each louder than the last, ending on the loudest, crunchy and mid-pitched, not hissy. Close-miked, realistic sound design, no music, no voice.",
-        "duration_seconds": 1.9,
-        "prompt_influence": 0.6,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 21,
-      "sha256Raw": "a5e0d554858b9bdb68312ca12b3fff3bd35387cc222786042fbffc836681a961",
-      "failedChecks": [
-        "length",
-        "attack",
-        "bands"
-      ],
-      "deviations": {
-        "length": 1.783,
-        "attack": 1.312,
-        "centroid": 0.776,
-        "bands": 2
-      },
-      "measured": {
-        "active_ms": 965,
-        "attack_ms": 655,
-        "centroid_hz": 5324,
-        "bands_pct": [0, 0, 38, 54, 8]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
-      "specRow": "ffx2.lb.warrior.hit",
       "take": "ffx2.lb.warrior.hit.v5",
       "request": {
         "text": "A heavy blade hacking into wooden armor four times in a row, each hit louder, crunchy and clattering, ending on the loudest. Close-miked, realistic sound design, no music, no voice.",
@@ -9518,37 +9939,6 @@
     {
       "pack": null,
       "cue": null,
-      "specRow": "ffx2.special.trigger",
-      "take": "ffx2.special.trigger.v2",
-      "request": {
-        "text": "A rapid burst of pistol shots, five quick snappy reports in about half a second. Close-miked, realistic sound design, no music, no voice. Variation: fuller and rounder, with a little more body.",
-        "duration_seconds": 0.7,
-        "prompt_influence": 0.6,
-        "model_id": "eleven_text_to_sound_v2"
-      },
-      "characterCost": 8,
-      "sha256Raw": "2f678d8d8a2b2f6e4071c3653db5c0c22f1b55d56306cbb472b03e5fb9281be3",
-      "failedChecks": [
-        "attack",
-        "centroid",
-        "bands"
-      ],
-      "deviations": {
-        "length": 0.431,
-        "attack": 2.4,
-        "centroid": 1.769,
-        "bands": 3
-      },
-      "measured": {
-        "active_ms": 445,
-        "attack_ms": 90,
-        "centroid_hz": 1163,
-        "bands_pct": [27, 45, 22, 5, 1]
-      }
-    },
-    {
-      "pack": null,
-      "cue": null,
       "specRow": "ffx2.thunder",
       "take": "ffx2.thunder.v1",
       "request": {
@@ -9670,6 +10060,37 @@
         "centroid_hz": 2061,
         "bands_pct": [5, 34, 47, 12, 1]
       }
+    },
+    {
+      "pack": null,
+      "cue": null,
+      "specRow": "ffx2.boss.shuyin",
+      "take": "ffx2.boss.shuyin.v1",
+      "request": {
+        "text": "A dark swordsman's long sweeping attack, six heavy low slashes and whooshes in a flowing sequence with a deep resonant undertone. About five seconds. Cinematic sound design, no music, no voice.",
+        "duration_seconds": 5.5,
+        "prompt_influence": 0.4,
+        "model_id": "eleven_text_to_sound_v2"
+      },
+      "characterCost": 60,
+      "sha256Raw": "e7d8c711848e58898d2867da16405596e69c6573631460abdfcf63a6965dbca4",
+      "failedChecks": [
+        "length",
+        "attack"
+      ],
+      "deviations": {
+        "length": 2.542,
+        "attack": 1.439,
+        "centroid": 0.0,
+        "bands": 0.467
+      },
+      "measured": {
+        "active_ms": 2445,
+        "attack_ms": 1205,
+        "centroid_hz": 57,
+        "bands_pct": [100, 0, 0, 0, 0]
+      },
+      "supersededBy": "ffx2.boss.shuyin.v3"
     }
   ]
 }
