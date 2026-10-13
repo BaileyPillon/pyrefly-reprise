@@ -318,9 +318,9 @@ describe('Death actually kills, and Zombie is what spares you (§5.3)', () => {
 });
 
 describe('revival effects and Zombie (§4.2, §7.1)', () => {
-  it('Phoenix Down revives a KO’d Zombie at 50% HP, and it stays a Zombie', () => {
-    // Zombie survives KO. Refusing to revive a KO'd Zombie made every
-    // zombified member who died permanently lost, which is how Form II bled out.
+  it('Phoenix Down revives a KO’d member at 50% HP, and the Zombie he died with is gone', () => {
+    // A KO clears Zombie (the exe's status reset, FFX-G02 section 3.2; re-parity RC5 closed D-214 / PR-0217). Until RC5 the engine kept
+    // Zombie on the dead, so the raised member came back still a Zombie; now he comes back clean and a Hellbiter has to zombify him again.
     const { ctx, at } = realCtx(7);
     const tidus = at('tidus');
     tidus.immunities['zombie'] = 0;
@@ -331,7 +331,7 @@ describe('revival effects and Zombie (§4.2, §7.1)', () => {
     resolveAbility(ctx, at('yuna'), { ...phoenix, category: 'item' }, ['tidus']);
     expect(tidus.alive).toBe(true);
     expect(tidus.hp).toBe(Math.floor(tidus.stats.maxHp / 2));
-    expect(tidus.statuses['zombie']).toBeDefined();
+    expect(tidus.statuses['zombie']).toBeUndefined();
   });
 
   it('a revival effect kills a living Zombie outright', () => {

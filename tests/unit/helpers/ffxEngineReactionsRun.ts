@@ -52,9 +52,9 @@ export function runEngine(sit: Situation, rng: SeededRng, run: EngineDrive): Out
       const c = byId.get(step.who) as FFXCombatant;
       run.koActor(ctx, c);
       if (c.alive) {
-        // revived by Auto-Life: the KO reset keeps Zombie and Eject (the engine's reading) and clears the rest
+        // revived by Auto-Life: the KO reset clears Zombie and Scan with the rest (RC5); only the Eject marker stays (the engine's stand-in for the separate ejected flag)
         const prev = words.get(step.who) as Words;
-        const reset: Words = { perm: prev.perm & 2, counters: new Array<number>(13).fill(0), extra: prev.extra };
+        const reset: Words = { perm: 0, counters: new Array<number>(13).fill(0), extra: prev.extra & 0x100 };
         words.set(step.who, reset);
         syncStatuses(c, reset, (memberOf.get(step.who) as Member).given);
       }

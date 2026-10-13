@@ -16,6 +16,8 @@ import { releaseThreatenLink } from './adapt/threaten.ts';
 import { reviveAutoStatuses } from './adapt/auto-status.ts';
 import { gaugeOnDeath } from './gauge.ts';
 import { cancelReactionsOf, reactToDeath } from './adapt/reactions.ts';
+import { holdsDeathForHook } from './ai/hooks.ts';
+import { overkillReached, overkillStart, overkillStep } from './kernel/death-check.ts';
 
 /** Metadata for a `damage` event. */
 export interface DamageEventInfo {
@@ -27,13 +29,22 @@ export interface DamageEventInfo {
   hitCount: number;
   capped?: boolean;
   /**
-   * A lethal hit leaves the KO pending (re-parity, FFX only): the game runs the target's `onHit` before
-   * its death check, so a script that puts HP back stops the death. `hit-apply.ts` sets it for a target
-   * whose script {@link ../ai/hooks.ts ScriptHooks.holdsDeath} (both AI lanes' bosses that refill or revive
-   * themselves: the Mortiorchis, Mortibody, Macalania's Seymour, Yunalesca, Braska's Final Aeon, the Yu Pagodas);
-   * `abilities.ts#finishTouched` settles it after the script's `onHit` has run.
+   * A lethal hit leaves the KO pending (re-parity, FFX only): the game's death check runs once, after the target's LAST hit of the action
+   * (and after its script's `onHit`), and a hit only clamps HP at 0 until then (RC5 lane FFX-D; FFX-G02 section 3.12). `hit-apply.ts` sets it
+   * on every hit of an action; `abilities.ts#finishTouched` settles it with {@link settleDeferredDeath}. Callers outside an action (a Poison
+   * tick, a Regen payout, a script writing HP) leave it unset and the KO happens in the call, as the game's single-hit check does.
    */
   holdKo?: boolean;
+  /**
+   * The target's script {@link ../ai/hooks.ts ScriptHooks.holdsDeath} (the bosses that refill or revive themselves: the Mortiorchis, Mortibody,
+   * Macalania's Seymour, Yunalesca, Braska's Final Aeon, the Yu Pagodas): a held KO that the script is certain to refill is not an overkill of anything.
+   */
+  scriptHeld?: boolean;
+  /**
+   * The HP damage the whole action has done to this target so far, this hit included (each hit's value after the cap and before the clamp, a heal
+   * negative): the game's overkill counter is the monster's threshold minus this (`kernel/death-check.ts#overkillStep`). Absent outside an action.
+   */
+  actionDamage?: number;
 }
 
 /**
@@ -65,14 +76,19 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
 
   const enemyDef = target.enemy;
   // A held KO that the script is certain to refill (a form change, a Yu Pagoda) is not an overkill of anything (AI lane B).
-  const survives = info.holdKo === true && (hasNextForm(target) || enemyDef?.reviveRule !== undefined);
+  const survives = info.scriptHeld === true && (hasNextForm(target) || enemyDef?.reviveRule !== undefined);
+  // **Overkill is the damage of the whole action** (RC5 lane FFX-D; FFX-G02 sections 1 and 3.1): inside an action the event names the first hit after which
+  // the target is at 0 HP with the action's running total (`actionDamage`) at the threshold, and the mark that counts (`ctx.rt.overkilled`) is made at the
+  // death check from the final total. A caller outside an action has only this hit.
+  const total = info.actionDamage;
+  const threshold = enemyDef?.rewards.overkillThreshold ?? 0;
   const overkill =
-    applied > 0 &&
     target.hp === 0 &&
     wasAlive &&
     !survives &&
     enemyDef !== undefined &&
-    applied >= enemyDef.rewards.overkillThreshold;
+    applied > 0 &&
+    (total === undefined ? applied >= threshold : total >= threshold && !(hpBefore === 0 && total - applied >= threshold));
 
   const event: Parameters<Ctx['emit']>[0] = {
     type: 'damage',
@@ -89,7 +105,7 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
   if (capped) event.capped = true;
   ctx.emit(event);
 
-  // A target whose death waits for its `onHit` is marked overkilled only if it dies (`settleDeferredDeath`).
+  // A target whose death waits for its last hit is marked overkilled only if it dies, from the action's total (`settleDeferredDeath`).
   if (overkill && info.holdKo !== true && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
   refreshCriticalStatus(ctx, target);
   if (target.hp === 0 && wasAlive) {
@@ -102,18 +118,24 @@ export function dealDamage(ctx: Ctx, target: FFXCombatant, amount: number, info:
 }
 
 /**
- * The death check a lethal hit left pending ({@link DamageEventInfo.holdKo}): after the target's
- * `onHit` ran, a target still at 0 HP and still standing dies now. A no-op for anyone else.
+ * The overkill counter of the game's death check (`kernel/death-check.ts#overkillReached`): the monster's threshold minus the HP damage of the whole action is
+ * below 1. Only a monster, and not one whose script is certain to refill it (a form change, a Yu Pagoda).
  */
-export function settleDeferredDeath(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId): void {
+export function overkillAtDeath(target: FFXCombatant, actionDamage: number): boolean {
+  const def = target.enemy;
+  if (def === undefined) return false;
+  if (holdsDeathForHook(target) && (hasNextForm(target) || def.reviveRule !== undefined)) return false;
+  return overkillReached(overkillStep(overkillStart(def.rewards.overkillThreshold), actionDamage));
+}
+
+/**
+ * The death check a lethal hit left pending ({@link DamageEventInfo.holdKo}): after the target's last hit of the action and its
+ * script's `onHit`, a target still at 0 HP and still standing dies now (the game's check, VA 0x0078c740). `actionDamage` is the action's HP
+ * damage to this target (the overkill counter's input). A no-op for anyone else.
+ */
+export function settleDeferredDeath(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId, actionDamage?: number): void {
   if (target.hp !== 0 || !target.alive || has(target, 'ko')) return;
-  // The lethal hit's overkill mark, which `dealDamage` held back: the latest damage event on this target says it.
-  for (let i = ctx.state.log.length - 1; i >= 0; i--) {
-    const e = ctx.state.log[i];
-    if (e?.type !== 'damage' || e.targetId !== target.id) continue;
-    if (e.overkill === true && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
-    break;
-  }
+  if (actionDamage !== undefined && overkillAtDeath(target, actionDamage) && !ctx.rt.overkilled.includes(target.id)) ctx.rt.overkilled.push(target.id);
   koActor(ctx, target, sourceId);
 }
 
@@ -247,16 +269,20 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
     // one KO a head. A cast Auto-Life is still consumed, as it should be.
     const everlasting = autoLife.permanent === true;
     if (!everlasting) removeStatus(ctx, target, 'auto-life', 'consumed');
+    // A revived character re-enters with a rank-3 delay, and loses its buffs
+    // (§2.3, "KO revival loses buffs") — but not the fayth's gift. The fayth's revival is the game's own command 0x311F
+    // in the possession fights, and the party's script answers it by zeroing that character's CTB, so the one who rose acts
+    // next [re-ffx-ai-yunalesca-bfa §5.2; the seven party workers of sins07_*, @0x027f to @0x0327].
+    // The KO reset comes FIRST, as in the game's check (VA 0x0078c740: the reset runs, then the Auto-Life revive is queued as an action of the
+    // dead character, a quarter of its maximum through the damage chain): a Double HP pool is undone before the quarter is taken from the
+    // maximum, and Critical is judged on the HP the revive gives (re-parity RC5, lane FFX-D; FFX-G02 sections 3.1 and 3.7). Not modelled: the
+    // revive being a queued action that other entries and later hits can see the corpse before, and Magic Booster's x3/2 on it.
+    clearStatusesOnKo(ctx, target);
     const hp = Math.max(1, idiv(target.stats.maxHp, 4));
     target.hp = hp;
     target.alive = true;
     ctx.emit({ type: 'revive', targetId: target.id, hp, cause: everlasting ? 'fayth' : 'auto-life' });
     refreshCriticalStatus(ctx, target);
-    // A revived character re-enters with a rank-3 delay, and loses its buffs
-    // (§2.3, "KO revival loses buffs") — but not the fayth's gift. The fayth's revival is the game's own command 0x311F
-    // in the possession fights, and the party's script answers it by zeroing that character's CTB, so the one who rose acts
-    // next [re-ffx-ai-yunalesca-bfa §5.2; the seven party workers of sins07_*, @0x027f to @0x0327].
-    clearStatusesOnKo(ctx, target);
     if (everlasting) {
       target.statuses['auto-life'] = { ...autoLife };
       rtOf(ctx, target.id).ctb = 0;

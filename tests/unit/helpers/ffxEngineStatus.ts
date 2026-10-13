@@ -164,9 +164,8 @@ const chance = (rng: SeededRng, p: number): boolean => rng.next() < p;
 function randomWords(rng: SeededRng, dead: boolean): Words {
   const w: Words = { perm: 0, autoPerm: 0, counters: new Array<number>(13).fill(0), extra: 0, autoExtra: 0, stacks: new Array<number>(6).fill(0), buff: 0 };
   if (dead) {
-    // The game's death resets every status; the engine keeps Zombie and Scan on a member who dies.
-    w.perm = 1 | (chance(rng, 0.3) ? 2 : 0);
-    if (chance(rng, 0.2)) w.extra = 1;
+    // The game's death resets every status but Death: Zombie and Scan go too (re-parity RC5, lane FFX-D).
+    w.perm = 1;
     return w;
   }
   if (chance(rng, 0.05)) {
@@ -445,12 +444,9 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
 
   const w = sit.words;
   const dead0 = (w.perm & 1) !== 0;
-  // The engine keeps Zombie on a member who died; the exe's death handler would have cleared it, so the infliction step is shown a
-  // dead member with Death alone, while the damage pipeline sees the engine's word.
-  const zombieKept = dead0 && (w.perm & 2) !== 0;
-  const stepPerm = (p: number): number => ((p & 1) !== 0 ? p & ~2 : p);
-  const live = { perm: stepPerm(w.perm), counters: [...w.counters], extra: w.extra };
-  let record: StatusRecord = { perm: stepPerm(w.perm), counters: [...w.counters], extra: w.extra };
+  // A member who died carries Death alone (the exe's death handler clears the rest, and so does the engine since RC5).
+  const live = { perm: w.perm, counters: [...w.counters], extra: w.extra };
+  let record: StatusRecord = { perm: w.perm, counters: [...w.counters], extra: w.extra };
   let stacks = [...w.stacks];
   let buff = w.buff;
   let hp = sit.target.hp, mp = sit.target.mp, ctb = sit.target.ctb;
@@ -485,7 +481,7 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
     const counters = record.counters;
     const inp = oracleInputs(sit, { hp, mp, ctb, sleep: (counters[0] as number) > 0 });
     // The pipeline reads the target as it stands now: the record after the earlier hits (the engine applies each hit's statuses at once).
-    const pipePerm = record.perm | (zombieKept ? 2 : 0);
+    const pipePerm = record.perm;
     const pipeExtra = record.extra & KNOWN_EXTRA;
     inp.hit.target.status = pipePerm;
     inp.hit.target.reflex = stacks[3] as number;
@@ -625,8 +621,8 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
   const finalExtra = record.extra & KNOWN_EXTRA;
   const words: Words | null = alive
     ? {
-        perm: (record.perm & ~1) | (zombieKept ? 2 : 0),
-        autoPerm: w.autoPerm & ((record.perm & ~1) | (zombieKept ? 2 : 0)),
+        perm: record.perm & ~1,
+        autoPerm: w.autoPerm & (record.perm & ~1),
         counters: [...record.counters],
         extra: finalExtra,
         autoExtra: w.autoExtra & finalExtra,

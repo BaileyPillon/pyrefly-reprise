@@ -696,6 +696,9 @@ Everything below is the engine's behaviour, proved against the kernels on genera
    (Death alone, `adapt/status.ts#recordOf`), so that Life on a KO'd member that the engine still shows as a Zombie stands it up
    instead of killing it. Recommendation: have the Yunalesca AI lane check whether the Hellbiter weighting reads the permanent
    word at all (or a copy taken before the reset), then drop Zombie and Scan from `SURVIVES_KO`.
+   **Settled 2026-10-12 (re-parity RC5, `FFX-G02`; Bailey's yes of 2026-10-11):** the weighting's getter reads the permanent word of the slot with no
+   liveness test, and the reset takes the Zombie bit away at the moment of death, so a corpse reads 0. `SURVIVES_KO` is now `ko` and `eject` only, and
+   `recordOf` no longer needs its bridge for a dead member (D-214 / PR-0217 closed).
 2. **Banish is an ordinary Eject command that lands on an aeon.** The Aeon Ribbon the engine's data gives every aeon is an
    Eject-immunity byte of 255 in the extra-immune word; the Banish command (`extra.bypassesAeonRibbon`) is handed that word
    without the Eject bit. Nothing else changed for Seymour's Banish.

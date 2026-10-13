@@ -283,26 +283,41 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  *    lane's value above).
  * The three places where a lane had to be fitted to another (the dry-run clone copying the Tidus counters, the per-action sweep after an item reaction, the target builder dealing a planned
  * Overdrive's hits before the result removes some) move none of the 18: each was switched off alone on the merged tree and all 18 digests below came out the same. Nothing on the bosses or the party was tuned.
+ * RE-BASELINED ONCE 2026-10-12 by RC5 lane FFX-D (branch re-parity-rc5, on r42-rc; FFX only; docs/handoff/re-parity-rc5.md; Bailey 2026-10-11 "Close D-214 / PR-0217: a KO clears Zombie and Scan, per the exe"):
+ * a KO clears Zombie and Scan with everything else but Death (VA 0x0079a190); the death check runs after the target's LAST hit of an action, not at the first hit that reaches 0 HP (VA 0x0078c740);
+ * Auto-Life is removed at the moment of death and its revive is a quarter of the maximum the reset gives back; overkill is the damage of the whole action. TWELVE of the 18 digests move and SIX are byte
+ * for byte what they were (seymour-flux#7, evrae-airship#1 and #7, seymour-natus#7, seymour-omnis#1 and #7). One outcome moves: yunalesca#7 victory -> defeat; the other 17 keep theirs. Who moves what,
+ * each proved by putting ONE rule back on the new tree and running all 18 (with all four put back this file is 18/18 on exactly the old values above):
+ *  - KO clears Zombie and Scan (rule 1): seymour-flux#1 alone (put it back and 33074c0e returns); braskas-final-aeon#1 and #7 link 1 (8bc2d45f and eed22595 return); and yunalesca#1 and #7 together with rule 2
+ *    (neither rule alone returns them). The seed-7 outcome flip is rule 1: with it put back the digest is a victory (828c9ccf), with only rule 2 put back it is still the defeat. In Chapter II about seven
+ *    Zombies die in a fight, half of the party's KOs, and each used to stay a Zombie on the floor and come back one when raised.
+ *  - The death check after the last hit (rule 2): seymour-anima-macalania#1 and #7, yojimbo-cavern#1 and #7, seymour-natus#1 and isaaru-via-purifico#1 and #7 move by this rule ALONE (put it back and
+ *    all seven return): their outcomes and every number are unchanged, the logs differ in where the 'ko' event of a party member falls in a multi-hit action (after the remaining hits' damage events, no
+ *    longer between them). It also moves braskas-final-aeon#1 link 7 and, with rule 1, yunalesca#1 and #7.
+ *  - Auto-Life removed at death, the revive taken from the maximum the reset gives back, Critical judged after it (rule 3): braskas-final-aeon#1 links 2 and 4 to 7 and #7 links 4 to 6 (the fayth's
+ *    permanent Auto-Life in the possession fights); no other line holds an Auto-Life. Links after a moved one inherit its end state, as ever in this chain.
+ *  - Overkill as the damage of the whole action (rule 4) moves none of the 18 (put it back and every digest is the same).
+ * Nothing on the bosses or the party was tuned. One seed is one sample: the 500-seed rates before and after, with the ablation, are in docs/handoff/re-parity-rc5.md.
  */
 const GOLDEN: Record<string, string> = {
-  'seymour-flux#1': '33074c0e:victory',
+  'seymour-flux#1': '18bfe5b2:victory',
   'seymour-flux#7': 'c3845a:victory',
-  'yunalesca#1': 'ef0b1f5a:victory',
-  'yunalesca#7': 'e75064e9:victory',
-  'braskas-final-aeon#1': '8bc2d45f:victory 37e83cbf:victory bd952081:victory c8b4d68f:victory 1106322a:victory 7f13b668:victory c0039a69:victory',
-  'braskas-final-aeon#7': 'eed22595:victory 8d75fead:victory 9482b803:victory 7e6d7449:victory 9b249f0d:victory 97592b14:victory f2f0106a:victory',
-  'seymour-anima-macalania#1': 'a6d9e71f:victory',
-  'seymour-anima-macalania#7': 'e9ae2f10:victory',
+  'yunalesca#1': '4cc7ce75:victory',
+  'yunalesca#7': '97c45011:defeat',
+  'braskas-final-aeon#1': 'd3eb1d76:victory d0d6d6ab:victory bd952081:victory 7027cb8b:victory c729b968:victory acd18b39:victory 4a53b026:victory',
+  'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 4bc11074:victory bff8a810:victory de77ee88:victory f2f0106a:victory',
+  'seymour-anima-macalania#1': '5b4108d1:victory',
+  'seymour-anima-macalania#7': '99b1fdc:victory',
   'evrae-airship#1': '4f323f6e:victory',
   'evrae-airship#7': 'b67a717e:victory',
-  'yojimbo-cavern#1': '62272b5c:victory',
-  'yojimbo-cavern#7': 'af8241eb:victory',
-  'seymour-natus#1': '40514ec8:victory',
+  'yojimbo-cavern#1': 'daacc3d9:victory',
+  'yojimbo-cavern#7': '164be66a:victory',
+  'seymour-natus#1': '8994e748:victory',
   'seymour-natus#7': '9e7c5b2:victory',
   'seymour-omnis#1': 'd2966784:victory',
   'seymour-omnis#7': '30b6f82f:victory',
-  'isaaru-via-purifico#1': '6990d85c:victory afd1cb7e:victory 13b0bd8a:victory',
-  'isaaru-via-purifico#7': 'cec669c3:victory 78386a12:victory a36d68be:victory',
+  'isaaru-via-purifico#1': '133684ff:victory 7cfaa2ad:victory 13b0bd8a:victory',
+  'isaaru-via-purifico#7': '6a55a1ad:victory cfd75f2d:victory a36d68be:victory',
 };
 
 describe('FFX engine goldens (every FFX chapter, the line, whole chain)', () => {
