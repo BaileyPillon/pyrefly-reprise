@@ -126,9 +126,9 @@ describe('the seam between the acts: restored, checkpointed, and no Save Sphere 
     expect(run.synced).toBeGreaterThanOrEqual(2);
   });
 
-  it('the music follows the formations: the boss theme, then the Vegnagun theme at Act II (the cues the data declares)', async () => {
+  it('the music follows the formations: one original for both acts (2026-10-12, music batch 2), asked for again at Act II, where the mixer carries on instead of restarting it', async () => {
     const run = await chain(FFX2_EXPERIMENT, ['victory', 'victory']);
-    expect(run.music).toEqual(['boss-ffx2-aeon', 'boss-vegnagun']);
+    expect(run.music).toEqual(['boss-experiment', 'boss-experiment']);
   });
 
   it('Act II is still the retry checkpoint: win Act I, lose Act II, and the checkpoint is Act II, link 2, entered on the carried setup', async () => {

@@ -22,24 +22,45 @@
       "truePeakDb": -2.4,
       "source": "elevenlabs-music_v2_5"
     },
-    "boss-dread": {
-      "file": "music/boss-dread.mp3",
-      "loopStart": 10.666667,
-      "loopEnd": 85.333333,
-      "duration": 88.3333,
-      "bytes": 2615074,
+    "boss-challenge": {
+      "file": "music/boss-challenge.mp3",
+      "loopStart": 18.18093,
+      "loopEnd": 91.072426,
+      "duration": 94.0724,
+      "bytes": 1559663,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -1.8,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-den-of-woe": {
+      "file": "music/boss-den-of-woe.mp3",
+      "loopStart": 11.278277,
+      "loopEnd": 85.138753,
+      "duration": 88.1388,
+      "bytes": 1475802,
+      "lufs": -16.0,
+      "truePeakDb": -2.3,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-evrae": {
       "file": "music/boss-evrae.mp3",
-      "loopStart": 6.666213,
-      "loopEnd": 79.999546,
-      "duration": 83,
-      "bytes": 2719357,
+      "loopStart": 9.161134,
+      "loopEnd": 90.8161,
+      "duration": 93.8161,
+      "bytes": 1779961,
       "lufs": -16.0,
-      "truePeakDb": -1.4,
-      "score": "a660934bb598f632"
+      "truePeakDb": -1.6,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-experiment": {
+      "file": "music/boss-experiment.mp3",
+      "loopStart": 4.767166,
+      "loopEnd": 80.525488,
+      "duration": 83.5255,
+      "bytes": 1560484,
+      "lufs": -16.0,
+      "truePeakDb": -3.7,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-ff7-guard": {
       "file": "music/boss-ff7-guard.mp3",
@@ -51,15 +72,6 @@
       "truePeakDb": -1.6,
       "source": "elevenlabs-music_v2_5"
     },
-    "boss-ffx2-aeon": {
-      "file": "music/boss-ffx2-aeon.mp3",
-      "loopStart": 12,
-      "loopEnd": 114,
-      "duration": 117,
-      "bytes": 4069829,
-      "lufs": -15.8,
-      "truePeakDb": -1.7
-    },
     "boss-ffx2-fallen-aeons": {
       "file": "music/boss-ffx2-fallen-aeons.mp3",
       "loopStart": 30.906009,
@@ -68,6 +80,16 @@
       "bytes": 1521986,
       "lufs": -16.0,
       "truePeakDb": -3.3,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "boss-gui": {
+      "file": "music/boss-gui.mp3",
+      "loopStart": 16.278617,
+      "loopEnd": 89.594331,
+      "duration": 92.5943,
+      "bytes": 1794912,
+      "lufs": -16.0,
+      "truePeakDb": -2.1,
       "source": "elevenlabs-music_v2_5"
     },
     "boss-isaaru": {
@@ -82,12 +104,13 @@
     },
     "boss-jecht": {
       "file": "music/boss-jecht.mp3",
-      "loopStart": 6.666667,
-      "loopEnd": 107.121678,
-      "duration": 110.1217,
-      "bytes": 3534672,
+      "loopStart": 6.446712,
+      "loopEnd": 81.879229,
+      "duration": 84.8792,
+      "bytes": 1638772,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -5.3,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-leblanc": {
       "file": "music/boss-leblanc.mp3",
@@ -111,13 +134,13 @@
     },
     "boss-seymour-macalania": {
       "file": "music/boss-seymour-macalania.mp3",
-      "loopStart": 7.619048,
-      "loopEnd": 121.904762,
-      "duration": 124.9048,
-      "bytes": 3774749,
+      "loopStart": 12.417143,
+      "loopEnd": 88.610884,
+      "duration": 91.6109,
+      "bytes": 1405210,
       "lufs": -16.0,
-      "truePeakDb": -1.5,
-      "score": "90c06f737af9686a"
+      "truePeakDb": -1.8,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-seymour-natus": {
       "file": "music/boss-seymour-natus.mp3",
@@ -129,14 +152,25 @@
       "truePeakDb": -4.5,
       "source": "elevenlabs-music_v2_5"
     },
+    "boss-seymour-omnis": {
+      "file": "music/boss-seymour-omnis.mp3",
+      "loopStart": 3.090408,
+      "loopEnd": 76.927506,
+      "duration": 79.9275,
+      "bytes": 1523869,
+      "lufs": -16.0,
+      "truePeakDb": -4.0,
+      "source": "elevenlabs-music_v2_5"
+    },
     "boss-shuyin": {
       "file": "music/boss-shuyin.mp3",
-      "loopStart": 12.551406,
-      "loopEnd": 102.796009,
-      "duration": 105.797,
-      "bytes": 3324154,
-      "lufs": -15.9,
-      "truePeakDb": -1.3
+      "loopStart": 13.647234,
+      "loopEnd": 84.240204,
+      "duration": 87.2402,
+      "bytes": 1511775,
+      "lufs": -16.0,
+      "truePeakDb": -1.8,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-sin-assault": {
       "file": "music/boss-sin-assault.mp3",
@@ -170,40 +204,33 @@
     },
     "boss-vegnagun": {
       "file": "music/boss-vegnagun.mp3",
-      "loopStart": 11.428571,
-      "loopEnd": 91.428571,
-      "duration": 94.4286,
-      "bytes": 3065960,
-      "lufs": -15.9,
-      "truePeakDb": -1.1
+      "loopStart": 13.098866,
+      "loopEnd": 94.104921,
+      "duration": 97.1049,
+      "bytes": 1505633,
+      "lufs": -16.0,
+      "truePeakDb": -1.5,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-yojimbo": {
       "file": "music/boss-yojimbo.mp3",
-      "loopStart": 14.545465,
-      "loopEnd": 87.272721,
-      "duration": 90.2727,
-      "bytes": 2650013,
+      "loopStart": 10.056304,
+      "loopEnd": 90.06195,
+      "duration": 93.062,
+      "bytes": 1517469,
       "lufs": -16.0,
-      "truePeakDb": -1.4,
-      "score": "76abbdea8b282bdc"
+      "truePeakDb": -1.9,
+      "source": "elevenlabs-music_v2_5"
     },
     "boss-yu-yevon": {
       "file": "music/boss-yu-yevon.mp3",
-      "loopStart": 6,
-      "loopEnd": 215.6,
-      "duration": 218.6,
-      "bytes": 6419190,
+      "loopStart": 23.791043,
+      "loopEnd": 81.320431,
+      "duration": 84.3204,
+      "bytes": 1502768,
       "lufs": -16.0,
-      "truePeakDb": -1.5
-    },
-    "boss-yunalesca": {
-      "file": "music/boss-yunalesca.mp3",
-      "loopStart": 10.909093,
-      "loopEnd": 100.909093,
-      "duration": 103.9091,
-      "bytes": 3055321,
-      "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -3.6,
+      "source": "elevenlabs-music_v2_5"
     },
     "chapter-select": {
       "file": "music/chapter-select.mp3",
@@ -215,23 +242,47 @@
       "truePeakDb": -1.7,
       "source": "elevenlabs-music_v2_5"
     },
+    "defeat-ffx": {
+      "file": "music/defeat-ffx.mp3",
+      "loopStart": 7,
+      "loopEnd": 9,
+      "duration": 9,
+      "bytes": 127588,
+      "lufs": -16.0,
+      "truePeakDb": -2.0,
+      "source": "elevenlabs-music_v2_5",
+      "oneShot": true
+    },
+    "defeat-ffx2": {
+      "file": "music/defeat-ffx2.mp3",
+      "loopStart": 6.03,
+      "loopEnd": 8.03,
+      "duration": 8.03,
+      "bytes": 114743,
+      "lufs": -16.0,
+      "truePeakDb": -2.8,
+      "source": "elevenlabs-music_v2_5",
+      "oneShot": true
+    },
     "ending-ffx": {
       "file": "music/ending-ffx.mp3",
-      "loopStart": 33.642358,
-      "loopEnd": 122.653741,
-      "duration": 125.6537,
-      "bytes": 3600003,
+      "loopStart": 8.281542,
+      "loopEnd": 91.031837,
+      "duration": 94.0318,
+      "bytes": 1488836,
       "lufs": -16.0,
-      "truePeakDb": -1.9
+      "truePeakDb": -3.1,
+      "source": "elevenlabs-music_v2_5"
     },
     "ending-ffx2": {
       "file": "music/ending-ffx2.mp3",
-      "loopStart": 12.082494,
-      "loopEnd": 116.331655,
-      "duration": 119.3317,
-      "bytes": 3583736,
-      "lufs": -15.9,
-      "truePeakDb": -1.3
+      "loopStart": 27.870567,
+      "loopEnd": 90.732925,
+      "duration": 93.7329,
+      "bytes": 1759079,
+      "lufs": -16.0,
+      "truePeakDb": -2.4,
+      "source": "elevenlabs-music_v2_5"
     },
     "pause": {
       "file": "music/pause.mp3",
@@ -244,68 +295,83 @@
     },
     "scene-bevelle-underground": {
       "file": "music/scene-bevelle-underground.mp3",
-      "loopStart": 19.2,
-      "loopEnd": 105.6,
-      "duration": 108.6,
-      "bytes": 3211958,
-      "lufs": -15.9,
-      "truePeakDb": -1.3
+      "loopStart": 15.587279,
+      "loopEnd": 86.708254,
+      "duration": 89.7083,
+      "bytes": 1486864,
+      "lufs": -16.0,
+      "truePeakDb": -2.1,
+      "source": "elevenlabs-music_v2_5"
+    },
+    "scene-chateau-leblanc": {
+      "file": "music/scene-chateau-leblanc.mp3",
+      "loopStart": 16.902608,
+      "loopEnd": 88.011406,
+      "duration": 91.0117,
+      "bytes": 1804807,
+      "lufs": -16.0,
+      "truePeakDb": -4.3,
+      "source": "elevenlabs-music_v2_5"
     },
     "scene-dreams-end": {
       "file": "music/scene-dreams-end.mp3",
-      "loopStart": 12.63161,
-      "loopEnd": 101.052653,
-      "duration": 104.0526,
-      "bytes": 3162331,
+      "loopStart": 8.752041,
+      "loopEnd": 74.791769,
+      "duration": 77.7918,
+      "bytes": 1314252,
       "lufs": -16.0,
-      "truePeakDb": -2.6
+      "truePeakDb": -2.6,
+      "source": "elevenlabs-music_v2_5"
     },
     "scene-fahrenheit": {
       "file": "music/scene-fahrenheit.mp3",
-      "loopStart": 9.230771,
-      "loopEnd": 73.846145,
-      "duration": 76.8461,
-      "bytes": 2408623,
+      "loopStart": 17.019819,
+      "loopEnd": 76.76288,
+      "duration": 79.7629,
+      "bytes": 1209039,
       "lufs": -16.0,
-      "truePeakDb": -1.4,
-      "score": "6f81c0f19ff8fa2c"
+      "truePeakDb": -2.1,
+      "source": "elevenlabs-music_v2_5"
     },
     "scene-farplane": {
       "file": "music/scene-farplane.mp3",
-      "loopStart": 20.869569,
-      "loopEnd": 104.347823,
-      "duration": 107.3478,
-      "bytes": 3491121,
-      "lufs": -15.9,
-      "truePeakDb": -1.3
+      "loopStart": 15.676485,
+      "loopEnd": 78.283696,
+      "duration": 81.2837,
+      "bytes": 1391539,
+      "lufs": -16.0,
+      "truePeakDb": -3.1,
+      "source": "elevenlabs-music_v2_5"
     },
     "scene-gagazet": {
       "file": "music/scene-gagazet.mp3",
-      "loopStart": 40,
-      "loopEnd": 103.333333,
-      "duration": 106.3333,
-      "bytes": 3009651,
+      "loopStart": 11.351882,
+      "loopEnd": 78.572063,
+      "duration": 81.5721,
+      "bytes": 1358317,
       "lufs": -16.0,
-      "truePeakDb": -1.4
+      "truePeakDb": -4.8,
+      "source": "elevenlabs-music_v2_5"
     },
     "scene-macalania-temple": {
       "file": "music/scene-macalania-temple.mp3",
-      "loopStart": 12.857143,
-      "loopEnd": 60,
-      "duration": 63,
-      "bytes": 1973838,
+      "loopStart": 10.417438,
+      "loopEnd": 70.702177,
+      "duration": 73.7022,
+      "bytes": 1204516,
       "lufs": -16.0,
-      "truePeakDb": -3.1,
-      "score": "b78867e82b34697f"
+      "truePeakDb": -3.7,
+      "source": "elevenlabs-music_v2_5"
     },
     "scene-zanarkand-dome": {
       "file": "music/scene-zanarkand-dome.mp3",
-      "loopStart": 10,
-      "loopEnd": 126.165193,
-      "duration": 129.1652,
-      "bytes": 3936592,
+      "loopStart": 8.847982,
+      "loopEnd": 77.650816,
+      "duration": 80.6508,
+      "bytes": 1059949,
       "lufs": -16.0,
-      "truePeakDb": -1.5
+      "truePeakDb": -2.0,
+      "source": "elevenlabs-music_v2_5"
     },
     "title": {
       "file": "music/title.mp3",
@@ -317,23 +383,35 @@
       "truePeakDb": -2.4,
       "source": "elevenlabs-music_v2_5"
     },
+    "victory-bahamut": {
+      "file": "music/victory-bahamut.mp3",
+      "loopStart": 6.516236,
+      "loopEnd": 31.79839,
+      "duration": 34.7984,
+      "bytes": 514225,
+      "lufs": -16.0,
+      "truePeakDb": -1.9,
+      "source": "elevenlabs-music_v2_5"
+    },
     "victory-ffx": {
       "file": "music/victory-ffx.mp3",
-      "loopStart": 8.146508,
-      "loopEnd": 72.146508,
-      "duration": 75.1465,
-      "bytes": 2324004,
-      "lufs": -15.9,
-      "truePeakDb": -2.1
+      "loopStart": 7.901587,
+      "loopEnd": 34.58737,
+      "duration": 37.5874,
+      "bytes": 634232,
+      "lufs": -16.0,
+      "truePeakDb": -4.4,
+      "source": "elevenlabs-music_v2_5"
     },
     "victory-ffx2": {
       "file": "music/victory-ffx2.mp3",
-      "loopStart": 7.5,
-      "loopEnd": 67.5,
-      "duration": 70.5,
-      "bytes": 2396379,
+      "loopStart": 7.765125,
+      "loopEnd": 45.763832,
+      "duration": 48.7638,
+      "bytes": 986317,
       "lufs": -16.0,
-      "truePeakDb": -1.1
+      "truePeakDb": -4.2,
+      "source": "elevenlabs-music_v2_5"
     }
   },
   "sfx": {

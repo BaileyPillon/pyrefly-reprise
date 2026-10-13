@@ -23,7 +23,7 @@
  *   Experiment's story this chapter is NOT in `../registry.ts` (its tests pin that the registry's keys are the listed chapters); the runner's deadline reads the script itself
  *   (`midBattleDeadlineMs`), and `tests/unit/chapters/sinspawn-gui-story.test.ts` audits the lint, the budget (`SEAM_BUDGET_MS`) and the trigger-to-script agreement.
  * - One callout (`gui-head-shakes`) answers the head's first shake in each fight: Auron's ten words (`charge-started` on the head, once a battle).
- * - Music: the chapter's scene cue plays under `pre` and `post` (the record's `music.scene`, a stand-in); the first fight's cue (`boss-dread`) starts at `battleStart()` and the formation's own
+ * - Music: the chapter's scene cue plays under `pre` and `post` (the record's `music.scene`, a stand-in); the first fight's cue (`boss-gui`, 2026-10-12; `boss-dread` before) starts at `battleStart()` and the formation's own
  *   start cue names it, so the battle does not restart it.
  */
 

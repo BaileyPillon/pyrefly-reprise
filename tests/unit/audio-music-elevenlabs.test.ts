@@ -22,6 +22,7 @@ import { describe, expect, it } from 'vitest';
 
 import { hasTrack } from '../../src/audio/tracks/index.ts';
 import { AUDIO_BUDGET_BYTES, externalSource } from '../../tools/audio/manifest-io.mjs';
+import { batch2, batch2Cues, batch2MusicMoved } from './helpers/musicBatch2.ts';
 
 const text = (p: string) => readFileSync(new URL(`../../${p}`, import.meta.url), 'utf8');
 const read = (p: string) => JSON.parse(text(p));
@@ -124,10 +125,11 @@ describe('ElevenLabs music: the record', () => {
       .filter(([, entry]) => externalSource(entry) !== null)
       .map(([name]) => name)
       .sort();
-    expect(exempt).toEqual([...record.cues.map((c) => c.cue), ...added.cues.map((c) => c.cue), ...batch1.cues.map((c) => c.cue)].sort());
+    expect(exempt).toEqual([...record.cues.map((c) => c.cue), ...added.cues.map((c) => c.cue), ...batch1.cues.map((c) => c.cue), ...batch2Cues].sort());
     for (const name of exempt) expect(manifest.music[name]!.source, name).toBe(record.source);
     expect(added.source, "the 2026-10-10 record names the same source").toBe(record.source);
     expect(batch1.source, "the batch-1 record names the same source").toBe(record.source);
+    expect(batch2.source, "the batch-2 record (2026-10-12) names the same source").toBe(record.source);
   });
 });
 
@@ -221,7 +223,7 @@ describe('ElevenLabs music: the whole', () => {
   it('moved the music total by exactly the bytes these cues changed, from the total music v2 pinned', () => {
     const total = Object.values(manifest.music).reduce((sum, e) => sum + e.bytes, 0);
     const moved = record.cues.reduce((sum, c) => sum + c.after.bytes - c.before.bytes, 0);
-    expect(total).toBe(v2.totals.musicBytesAfter + moved + addedBytes);
+    expect(total).toBe(v2.totals.musicBytesAfter + moved + addedBytes + batch2MusicMoved);
   });
 
   it('is inside the shipping budget with the sfx sprites counted, and qa.mjs found nothing', () => {

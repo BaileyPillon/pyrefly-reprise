@@ -156,7 +156,8 @@ export const yunalescaGroup: EnemyGroupDef = {
   ],
   musicCues: [
     // Final music key per docs/CONTRACT-CHANGES.md's decided vocabulary.
-    { at: 'start', track: 'boss-yunalesca', fadeMs: 800 },
+    // Since 2026-10-12 the "Challenge" original, `boss-challenge` (batch 2, FFX only): the game plays one track for Yunalesca and the hidden Sinspawn Gui chapter's second fight.
+    { at: 'start', track: 'boss-challenge', fadeMs: 800 },
   ],
 };
 

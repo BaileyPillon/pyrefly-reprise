@@ -31,9 +31,9 @@
  *   deep violet, B21 = a) is picked and not painted; Chapter 1's diorama is
  *   the one every FFX chapter falls back on (the Natus precedent). Not
  *   `dreams-end`: a different place (research §7, B21).
- * - `music.battle: 'boss-seymour'` — **placeholder**, B18's named stand-in
- *   (Chapter I's cue) until the new Noble Rot cue is sketched and picked by
- *   ear (rules 8 and 13).
+ * - `music.battle: 'boss-seymour-omnis'` — since 2026-10-12 (music batch 2, FFX only) his own
+ *   ElevenLabs original; Chapter I's `boss-seymour`, B18's named stand-in until then,
+ *   stays with Chapter I (Bailey chose it by ear).
  * - `scriptsRef` — **placeholder**: a silent pre scene that opens the battle
  *   and a silent post scene that shows results. The story beats are drafted
  *   for Bailey in `docs/plans/omnis-story-draft.md`; this track does not write
@@ -81,10 +81,10 @@ export const SEYMOUR_OMNIS: Chapter = {
   enemyGroupRef: seymourOmnisGroup,
   scriptsRef: OMNIS_PLACEHOLDER_SCRIPTS, // PLACEHOLDER — see the file header
   music: {
-    // PLACEHOLDER — B18 = a's stand-in (b) until the new cue is picked (O-6).
+    // Battle: his own original since 2026-10-12 (B18 = a's stand-in, Chapter I's cue, before). Scene: PLACEHOLDER (the ship layer sets `scene-dreams-end`).
     // FFX cues only (THEMES.md never crosses the scores).
     scene: 'scene-gagazet',
-    battle: 'boss-seymour',
+    battle: 'boss-seymour-omnis',
     victory: 'victory-ffx',
   },
   // research §1.5 and §2, in our own words (the enemy records carry the same line).

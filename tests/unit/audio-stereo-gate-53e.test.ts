@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { AUDIO_BUDGET_BYTES } from '../../tools/audio/manifest-io.mjs';
+import { batch2MusicMoved } from './helpers/musicBatch2.ts';
 import { FFMPEG, STEREO_GATE, judgeStereo, measureFile, measureStereo } from '../../tools/audio/stereo-gate.mjs';
 
 const REPO = fileURLToPath(new URL('../../', import.meta.url));
@@ -234,8 +235,9 @@ describe('the stereo gate (driver item 53e): the shipped files', () => {
     const shipped = music + (manifest.sfx?.bytes ?? 0) + (manifest.sfxV2?.bytes ?? 0);
     expect(AUDIO_BUDGET_BYTES).toBe(105e6);
     expect(record.totals.budgetBytes).toBe(AUDIO_BUDGET_BYTES);
-    expect(record.totals.musicBytesAfter).toBe(music);
-    expect(record.totals.shippedAudioBytesAfter).toBe(shipped);
+    // The record's totals are the ones of 2026-10-11; music batch 2 (2026-10-12) moved the music total by `batch2MusicMoved` since (pinned by audio-music-batch2-2026-10-12.test.ts).
+    expect(record.totals.musicBytesAfter + batch2MusicMoved).toBe(music);
+    expect(record.totals.shippedAudioBytesAfter + batch2MusicMoved).toBe(shipped);
     expect(shipped).toBeLessThan(AUDIO_BUDGET_BYTES);
     expect(record.totals.shippedAudioBytesAfter).toBeLessThan(record.totals.shippedAudioBytesBefore);
     expect(record.totals.qaFindings).toBe(0);
