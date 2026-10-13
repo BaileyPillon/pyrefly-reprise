@@ -193,10 +193,10 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
         category: 'summon',
         mpCost: 0,
         rank: 3,
-        enabled: locked === undefined && !has(user, 'silence'),
+        enabled: locked === undefined, // Summon and Grand Summon carry no Silence flag: a Silenced Yuna can summon (FFX-G07 finding 3, re-parity RC7)
         validTargets: [],
       };
-      if (!row.enabled) row.disabledReason = locked ?? 'Silenced';
+      if (!row.enabled) row.disabledReason = locked;
       rows.push(row);
     }
   }
