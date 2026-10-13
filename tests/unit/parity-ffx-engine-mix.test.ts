@@ -234,6 +234,28 @@ describe('the bag is the game\'s bag in the engine', () => {
     expect(f.ctx.rt.inventory.get('rig-item')).toBe(98);
   });
 
+  it('an offer of gil reaches the hit in full whatever the gil held: the action throws 300 for an offer of 3000 with 500 in hand and with 5000, and only the second pays', () => {
+    const spare = ALL_ABILITIES.find((a) => a.id === 'spare-change')!;
+    const run = (gil: number): { damage: number; gilAfter: number } => {
+      const thief = fighter({ id: 'rikku', side: 'party', stats: stats() });
+      const foe = fighter({ id: 'foe', side: 'enemy', stats: stats({ hp: 99999, maxHp: 99999 }) }) as FFXCombatant;
+      const { ctx, events } = contextOf(thief, foe, new ScriptedRng([0, 0, 0, 0, 0, 0]), 0);
+      ctx.content.addAbilities([{ ...spare, targeting: 'single-enemy' }]);
+      ctx.content.addItems([{ id: 'spare-item', name: 'Spare Change', game: 'ffx', effect: 'spare-change', targeting: 'single-enemy', usableInBattle: true, usableInMenu: false, price: 0 }]);
+      ctx.rt.inventory.set('spare-item', 1);
+      ctx.rt.gil = gil;
+      executeCommand(ctx, thief, { kind: 'item', id: 'spare-item', targets: [foe.id], gilSpent: 3000 } as Command, true);
+      const hit = events.find((e) => e['type'] === 'damage');
+      return { damage: Number(hit?.['amount'] ?? hit?.['damage'] ?? 0), gilAfter: ctx.rt.gil };
+    };
+    const poor = run(500);
+    const rich = run(5000);
+    expect(rich.damage).toBeGreaterThan(0);
+    expect(poor.damage).toBe(rich.damage);
+    expect(poor.gilAfter).toBe(500);
+    expect(rich.gilAfter).toBe(2000);
+  });
+
   it('the Spare Change offer is paid in full, or not at all when the gil does not cover it, and the action runs with the offer either way', () => {
     // 3 Gil-spending items are modelled by command.gilSpent on an item command; the bribe amount reaches the hit as given
     const f = stealField(0);

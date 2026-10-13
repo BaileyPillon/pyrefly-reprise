@@ -205,6 +205,13 @@ describe('the resolver (0x007b0520)', () => {
     expect(none.bag.counts[0]).toBe(2);
   });
 
+  it('a single ingredient is never learned, even one whose number looks like a Mix result and a target was found', () => {
+    // 0x3070 is no item, but as a lone "ingredient" it is the result: the learn step needs TWO ingredients
+    const r = run(record(0x311e, 0x3070), [], 1 << 4);
+    expect(r.out).toMatchObject({ ret: 0, field0: 0x3070, ingredients: 1, learned: false });
+    expect(r.shared.every((w) => w === 0)).toBe(true);
+  });
+
   it('only the first two ingredients are used; the Mix, Item and empty fields are not ingredients', () => {
     const [a, b, c] = [item('potion'), item('hi-potion'), item('x-potion')];
     const r = run(record(0x311e, 0xff, 0x3001, a, b, c), [[a, 4], [b, 4], [c, 4]]);

@@ -70,6 +70,18 @@ describe('the bag (0x00790550)', () => {
     expect(bag.obtained.every((w) => w === 0)).toBe(true);
   });
 
+  it('a slot under the id 0 is free whatever its count, a slot under 0xff with a count is not: a new stack takes the first of the free ones', () => {
+    const bag = newBag();
+    bag.ids[0] = 0xff; // a count under the "emptied" id: occupied, matches nothing
+    bag.counts[0] = 7;
+    bag.ids[1] = 0; // a count under the id 0: free to the game
+    bag.counts[1] = 7;
+    bag.ids[2] = 0x2002;
+    bag.counts[2] = 4;
+    expect(bagChange(bag, POTION, 3)).toBe(0);
+    expect(slotsOfBag(bag)).toEqual([[0, 0xff, 7], [1, POTION, 3], [2, 0x2002, 4]]);
+  });
+
   it('a full bag (112 stacks) refuses a new item, and a removal of an item it does not hold is refused', () => {
     const bag = newBag();
     for (let i = 0; i < BAG_SLOTS; i++) {
