@@ -99,7 +99,7 @@ describe('site C: what Chapter II uses', () => {
     }
     expect(use.subjects.has('valefor')).toBe(true);
     expect(use.portraits.has('tidus')).toBe(true);
-    expect(use.music.has('boss-yunalesca')).toBe(true);
+    expect(use.music.has('boss-challenge')).toBe(true); // her own cue since 2026-10-12 (music batch 2); `boss-yunalesca` is a retired composition now
   });
 
   it('claims a pause plate only when the shipped manifest really has one', () => {

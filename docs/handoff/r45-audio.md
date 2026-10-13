@@ -4,7 +4,7 @@ Written 2026-10-13 by a Sonnet sub-agent of the release driver. Branch `r45-audi
 
 Authority (Bailey): "you need to use eleven labs"; "for music create originals that closely resemble the mood and atmosphere of the songs playing at each respective encounter"; 2026-10-10 23:05 EDT: "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important."; 2026-10-12: "I'll go with all of your recommendations". The driver's decisions are items 47, 52, 53, 58 and 61 in `D:/Tools/pyrefly-scratch/2026-10-07/decisions-to-record.md`; the music is the batch-2 lane's `D:/Tools/pyrefly-scratch/2026-10-10/music-batch2` (27 picks) and the sound effects the SFX lane's `D:/Tools/pyrefly-scratch/2026-10-12/sfx-gen` (the loose set, 18 cues). Nobody has heard any of it (rule 13): the picks are the driver's, by brief and measurement, and Bailey can overrule any of them by ear.
 
-Commits, in order: `fe7fb87c` (audio tooling), `974ee7a5` (music batch 2), then the handoff note and the SFX commits listed under Part 2.
+Commits, in order: `fe7fb87c` (audio tooling: the manifest writer adds and removes entries as text, `oneShot`), `974ee7a5` (music batch 2: the 27 files, the routing, the results screen, the retirements, the records), `f6885f10` (this note, part 1), `1e6253b0` (SFX parity: the loose set, the v2 repack, the repack-tool fix) and the last commit (this note finished, and the one test the full suite found still pinning Chapter II's old cue).
 
 ## Part 1: music batch 2 (27 ElevenLabs originals), the results screen's cues, three MP3s retired
 
@@ -113,3 +113,68 @@ The defeat flow: the presenter's `defeat` beat (party KO'd, screen darkens, no m
 ### Budget
 
 `node tools/audio/qa.mjs` (no cue finding, no manifest problem): shipped audio **100,798,034 bytes (100.80 MB) before**, **67,702,100 bytes (67.70 MB) after** the music (budget 105 MB, unchanged); the music alone went from 93,196,705 to 60,100,771 bytes (the old synth-era renders were V0 files of 2 to 6 MB; the originals are 0.5 to 1.8 MB).
+## Part 2: SFX parity, the loose set (18 recorded originals in six packs)
+
+Decision: the driver's call (in this lane's brief) installs the LOOSE set of the generation run (`D:/Tools/pyrefly-scratch/2026-10-12/sfx-gen`: the 7 picks that passed every check and the 11 that came within 1.5 times the tolerance) and no other take. The run was stopped by the API key's own quota; 214 events were planned, 153 generated, 7 pass strictly, 11 are near, 135 failed, 61 were skipped (36 HOLD rows, 16 rows no battle moment answers, 9 no chapter carries), so most of the parity set is still the v2 synth sprite. Nothing here is a listening verdict (rule 13); the near picks are best efforts and Bailey's ear decides them.
+
+Game case, from the pack's own game (rule 14): FFX only for the `ffx-` packs (9 cues), FFX-2 only for the `ffx2-` packs (9 cues); the repack plan's idempotence is both.
+
+| Pack (quality, bytes) | Loaded by | Cue | Spec row | Pass | Active ms (got/row) | Centroid Hz (got/row) | LUFS (got/row) |
+|---|---|---|---|---|---|---|---|
+| `ffx-core` (q3, 329,971) | every FFX chapter | `cursor-move` | `ffx.ui.tick` | near | 280 / 150 | 1955 / 2700 | -18.8 / -18.8 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `swing-katana` | `ffx.weapon.katana.swing` | near | 305 / 365 | 1829 / 2200 | -18 / -18 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `fire-2` | `ffx.fire.t2` | strict | 1505 / 1890 | 135 / 200 | -14.3 / -14.3 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `water` | `ffx.water.t1` | strict | 1860 / 1765 | 1389 / 1800 | -16.6 / -16.6 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `shell` | `ffx.shell` | near | 1450 / 1615 | 9332 / 8700 | -16 / -16 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `buff-generic` | `ffx.buff` | near | 1515 / 1690 | 7895 / 7200 | -16.9 / -16.9 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `darkness` | `ffx.darkness` | strict | 920 / 1030 | 64 / 100 | -14.2 / -14.2 |
+| `ffx-lady` (q5, 111,935) | Chapter II (Yunalesca) | `lady-metamorph` | `ffx.boss.lady.metamorph` | near | 10825 / 11825 | 255 / 400 | -14 / -14 |
+| `ffx-core` (q3, 329,971) | every FFX chapter | `meteor` | `ffx.dark.meteor` | strict | 6225 / 6140 | 229 / 200 | -14 / -14 |
+| `ffx2-core` (q3, 184,746) | every FFX-2 chapter | `hit-dagger` | `ffx2.lb.thief.hit` | near | 1695 / 2251 | 8353 / 9200 | -14.1 / -14.1 |
+| `ffx2-core` (q3, 184,746) | every FFX-2 chapter | `cursor-move-x2` | `ffx2.ui.tick` | near | 280 / 170 | 1955 / 2700 | -18.8 / -18.8 |
+| `ffx2-core` (q3, 184,746) | every FFX-2 chapter | `confirm-x2` | `ffx2.ui.confirm` | near | 280 / 170 | 1955 / 2700 | -18.8 / -18.8 |
+| `ffx2-core` (q3, 184,746) | every FFX-2 chapter | `menu-page-x2` | `ffx2.ui.page` | near | 280 / 170 | 1955 / 2700 | -24 / -24 |
+| `ffx2-core` (q3, 184,746) | every FFX-2 chapter | `flare-x2` | `ffx2.flare` | strict | 3710 / 4695 | 46 / 100 | -15 / -15 |
+| `ffx2-core` (q3, 184,746) | every FFX-2 chapter | `cura-x2` | `ffx2.cura` | near | 2430 / 3103 | 769 / 900 | -15 / -15 |
+| `ffx2-machina` (q5, 13,852) | Chapter V (Vegnagun) | `machina-destroy` | `ffx2.boss.machina.ko` | strict | 1955 / 2356 | 122 / 100 | -14 / -14 |
+| `ffx2-bahamut` (q5, 20,096) | Chapter IV (Bahamut) | `boss-bahamut` | `ffx2.boss.bahamut` | strict | 2685 / 2942 | 215 / 300 | -14 / -14 |
+| `ffx2-shuyin` (q5, 29,881) | Chapter V (Shuyin) | `boss-shuyin` | `ffx2.boss.shuyin` | near | 2445 / 4973 | 57 / 100 | -14.1 / -14.1 |
+
+The packs hold the cue the game asks for by name (`tools/audio/sfx-parity-names.mjs` refuses a name no hook asks for), each at its row's level within the unit test's +/-0.3 LUFS and under -1.1 dBTP with no trim. The three `ffx2.ui.*` rows share one take (`ffx.ui.tick.v9`) mastered at each row's own level. The cue names are the ones the presenter's event table already asks for, so no game code changed.
+
+### What was done, with the repo's own tools
+
+1. `python -I tools/audio/sfx-parity-sprite.py --pack <pack> --picks packs/<pack>.loose.picks.json --q <3|5> --install`: the core packs (`ffx-core`, `ffx2-core`) at q3 and the four boss packs at q5 (58c), core first, boss last. Each install checks the budget and the 5 MB gate; the manifest was rewritten by the packer (it adds the six packs and nothing else; the music and first-sprite entries are identical to before, checked by parsing both).
+2. `node tools/audio/sfx-parity-layout.mjs` (the plan for the whole set): it fits and no pack is unloaded; `--coverage` finds no row heard in a chapter that does not load its pack.
+3. `node tools/audio/sfx-parity-repack.mjs`: with the two core packs shipped it retires three stand-ins, **buff-generic, water (FFX) and hit-dagger (FFX-2)**, because every way the scripted fight reaches them ends at a recorded original in the game's core pack. `--write` regenerated `src/audio/sfxV2/retired.ts`; `D:/Tools/venvs/sfx-0930/Scripts/python.exe tools/audio/sfx-v2-sprite.py --exclude --install` rebuilt `sprite-v2.mp3` (100 -> 97 cues, 4,891,552 -> 4,725,444 bytes); `node --experimental-transform-types tools/audio/sfx-parity-mix.mjs` re-derived `parityTrims.ts` (the two FFX trims of the retired cues went with them).
+4. `node tools/audio/qa.mjs --only=sfx`: 0 findings (each pack's peak is -2.85 dBTP or lower, nothing clipped).
+
+**A defect in the repack tool, fixed:** `planRetirement` planned on the sprite as it is now, so on the repacked sprite it planned nothing, `--write` would have regenerated `retired.ts` as the empty list, and `--check` (and `audio-sfx-parity-repack.test.ts`) could never pass again. The plan now takes `already` (the key space minus the sprite): those names stay in the generated list and the exclude file and are reported apart from what is retired now. A second run says `retire 0: (nothing)` and `already out of the sprite (retired.ts keeps them): buff-generic, hit-dagger, water`; `--check` says `retired.ts is current`. Tests: one new unit test on the pure plan; the shipped-list tests say what is true now.
+
+### The golden pin: not re-recorded
+
+`tests/fixtures/sfx-parity-pin.golden.json` pins what the presenter asks the mixer for (key, volume, delay, pan) over the scripted fight. A recorded original is chosen inside the mixer from the `events` option, which the pin leaves out on purpose, and the repack changes only which names the sprite holds, so no scenario moved: `audio-sfx-parity-pin.test.ts` passes on the unchanged golden (the FFX half and the FFX-2 half). The task said to re-record only the events that now play a recorded original, the way the test header says; none of them changes the trace, so nothing was re-recorded. The events that now play a recorded original are the 18 spec rows in the table above (FFX: `ffx.ui.tick`, `ffx.weapon.katana.swing`, `ffx.fire.t2`, `ffx.water.t1`, `ffx.shell`, `ffx.buff`, `ffx.darkness`, `ffx.boss.lady.metamorph`, `ffx.dark.meteor`; FFX-2: `ffx2.lb.thief.hit`, `ffx2.ui.tick`, `ffx2.ui.confirm`, `ffx2.ui.page`, `ffx2.flare`, `ffx2.cura`, `ffx2.boss.machina.ko`, `ffx2.boss.bahamut`, `ffx2.boss.shuyin`).
+
+### Budget and record
+
+Shipped audio (`qa.mjs`, all of it): **100,798,034 bytes before this branch, 68,226,473 bytes (68.23 MB of 105 MB) after both parts**: the music 60,100,771, the first sprite 2,709,777, the v2 sprite 4,725,444 and the six packs 690,481. `docs/audio/sfx-parity-record.json` holds the 18 shipped cues (the exact request, the character cost, both hashes, the measurements, strict or near) and the 295 turned-down takes; `CREDITS.md` carries every prompt as sent.
+
+## Checks run
+
+- `npx tsc --noEmit` (the repo's own: `node node_modules/typescript/bin/tsc --noEmit -p .`): clean after every step.
+- `node tools/orphans.mjs`: 1,560 modules, 36 orphaned, none of them a file of this branch (`resultsMusic.ts` is reachable from `BattleScreenFlow`).
+- The audio, music, themes, flow, presenter, results, chapter, story and chapters test files (benches left out), the pause, ui, cutscene and screen files, then **the full suite once**, last: 1,138 files (1,124 passed, 13 skipped, 1 failed) and 17,709 tests (17,635 passed, 72 skipped, 1 todo, 1 failed) in 2,083 s on two workers, with other agents' runs on the same machine. The one failure, `learn-exploded-frame.test.ts` (it pinned `boss-yunalesca` as Chapter II's cue), was fixed and re-run alone: 10 of 10 pass. Every failure along the way was a test that pinned an old cue, an old total or the empty-packs world, and was updated to the new fact, never loosened.
+- `node tools/audio/qa.mjs` (all of it): **100,798,034 bytes before the branch, 68,226,473 bytes (68.23 MB of 105 MB) after**, 41 music cues and 6 packs, 0 cue findings, 0 sfx findings, no manifest problem.
+
+## Not done, guessed, or worth knowing
+
+- **Chapter IV, "replaces the fanfare there only".** Chapter IV had no fanfare to replace: its results screen was silent and the script cuts the music before `results(true)`. I read the pick as PR-0410's question ("should the Chapter IV victory play `victory-ffx2`?") answered with VB-A instead, wired as a cue of its own under a screen that stays silent in every other way (pose, tally flourish, quips). That needed `silent` to stop following from an absent `music.victory` (`resultsScreenSilent`); two older tests that pinned "Chapter IV has no victory key" now pin the new fact. If Bailey wants the screen itself loud, `isSilentResultsChapter` is the one switch.
+- **The Experiment's Act II.** VG-A's pick lists `ffx2-masterpiece-theatre (act 2)` among its chapters (today's user), EX-A's lists `boss-vegnagun (act 2)` as the cue it replaces. I followed EX-A and decision 47f ("one cue for the Experiment"): both acts play \`boss-experiment\`, and \`boss-vegnagun\` is Chapter V's alone. Act II asks for the same cue again with its 1.4 s fade; the mixer carries on instead of restarting it (a fake mixer in the test records both asks).
+- **No defeat cue on a withdrawal** (the FFX stalemate, \`escape\`): it is not a defeat, and today's behaviour (the theme stops with the battle screen) is unchanged. One line in \`resultsCueFor\` if the driver wants it.
+- **Fallbacks of the results cues** are existing scores that loop (\`pause\` for \`victory-bahamut\` and \`defeat-ffx\`, \`scene-farplane\` for \`defeat-ffx2\`), and only play if the MP3 cannot load. A one-shot's "play once" is the file's own 2 s of silence; the synth fallback would not stop.
+- **The warm list.** \`chapterWarmCues\` now ends with the loss's cue (0.12 MB). The mixer keeps three decoded cues (\`evictionPlan\`, \`keep = 3\`), so the decoded buffer is dropped when the scene bed starts and the cue is decoded again at the defeat; what the warm buys is the fetch (the browser's cache), not the decode. Harmless, small, and easy to take out (\`chapterMusicWarm.ts\` and its test).
+- **Not re-run:** the headless-browser decode proof (\`music-v2-browser-proof.mjs\`) on the new files; the batch-2 lane ran its own and found all 47 staged files decode to the same frames as ffmpeg. \`docs/audio/audition.html\` was not regenerated (it was last built at music v2 and carries none of the 2026-10-07 or 2026-10-10 cues either); its links to \`boss-ffx2-aeon.mp3\`, \`boss-dread.mp3\` and \`boss-yunalesca.mp3\` are dead now. Bailey's listening page for the music is the lane's artifact, not that file.
+- **NOW.md, DECISIONS.md and ACTIONS.md are not touched** (the driver owns the ledgers and the other tree has uncommitted edits to them); the decisions this implements are already items 47, 52, 53, 58 and 61.
+- **The manifest** was written as text by the house writer for the music (every other byte kept, CRLF kept) and by the packers for the SFX (\`sfx-parity-sprite.py\` and \`sfx-v2-sprite.py\` rewrite it whole with LF endings; with \`core.autocrlf\` git sees only the real changes: music and first-sprite entries identical to before, checked by parsing both).
+- **An incident of mine, 01:28 EDT:** a hung \`python -\` call of mine made me run \`taskkill /F /IM python.exe\` once, which ended two python.exe processes (PIDs 54884 and 79692). One was my own call; the other was very probably the ComfyUI server of the overnight art lane: ComfyUI was not listening a minute later, and the \`PyreflyComfyUI\` task shows a restart at 01:32:41 and it is listening again. A render in flight at that moment was lost; nothing else was touched (Mirage's \`pythonw\` and the other lanes' processes were not python.exe). I did not restart anything myself and stopped using image-name kills.
+- **Servers:** none started by me (no dev or preview server); the full suite and the QA runs have exited.
