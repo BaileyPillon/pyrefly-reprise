@@ -277,14 +277,19 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
     // dead character, a quarter of its maximum through the damage chain): a Double HP pool is undone before the quarter is taken from the
     // maximum, and Critical is judged on the HP the revive gives (re-parity RC5, lane FFX-D; FFX-G02 sections 3.1 and 3.7). Not modelled: the
     // revive being a queued action that other entries and later hits can see the corpse before, and Magic Booster's x3/2 on it.
-    clearStatusesOnKo(ctx, target);
+    //
+    // The fayth's permanent Auto-Life is wiped by that reset and put back by the revive, inside the same call (the permanent flag `Chr+0x3b`,
+    // FFX-G02 sections 3.6 and 3.7): nothing sees the gap, so the engine leaves the status on the body and says nothing about it. It used
+    // to emit `status-remove` (reason ko) and then put the status back with no `status-add`, so a party row that follows the events lost the
+    // icon for the length of the revive beat and kept it off until the next resync (focused review FOC43-04, Chapter III's last link).
+    // Now a permanent holder's Auto-Life has no event at a KO at all, and a cast one is still removed with its event (above).
+    clearStatusesOnKo(ctx, target, everlasting ? ['auto-life'] : []);
     const hp = Math.max(1, idiv(target.stats.maxHp, 4));
     target.hp = hp;
     target.alive = true;
     ctx.emit({ type: 'revive', targetId: target.id, hp, cause: everlasting ? 'fayth' : 'auto-life' });
     refreshCriticalStatus(ctx, target);
     if (everlasting) {
-      target.statuses['auto-life'] = { ...autoLife };
       rtOf(ctx, target.id).ctb = 0;
       reviveAutoStatuses(ctx, target); // the equipment statuses the KO reset wiped come back with the revive, as in the branch below [re-parity RC4]
     } else {

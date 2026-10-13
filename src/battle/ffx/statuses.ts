@@ -60,9 +60,13 @@ export function removeStatus(
   return true;
 }
 
-/** Everything a KO clears [ffx-combat-core §4.2]. */
-export function clearStatusesOnKo(ctx: Ctx, target: FFXCombatant): void {
-  wipeStatuses(ctx, target, SURVIVES_KO, 'ko');
+/**
+ * Everything a KO clears [ffx-combat-core §4.2]. `alsoKeep` names statuses the engine leaves on the body through the wipe because it
+ * puts them straight back in the same call (the fayth's permanent Auto-Life, `hp.ts#koActor`): nothing observes the gap, so no
+ * `status-remove` is emitted for them and no `status-add` has to follow (re-parity RC6, FOC43-04).
+ */
+export function clearStatusesOnKo(ctx: Ctx, target: FFXCombatant, alsoKeep: readonly StatusId[] = []): void {
+  wipeStatuses(ctx, target, alsoKeep.length === 0 ? SURVIVES_KO : [...SURVIVES_KO, ...alsoKeep], 'ko');
 }
 
 // ---------------------------------------------------------------------------

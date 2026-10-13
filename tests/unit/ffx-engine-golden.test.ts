@@ -298,14 +298,29 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  *    permanent Auto-Life in the possession fights); no other line holds an Auto-Life. Links after a moved one inherit its end state, as ever in this chain.
  *  - Overkill as the damage of the whole action (rule 4) moves none of the 18 (put it back and every digest is the same).
  * Nothing on the bosses or the party was tuned. One seed is one sample: the 500-seed rates before and after, with the ablation, are in docs/handoff/re-parity-rc5.md.
+ *
+ * ONE re-baseline 2026-10-13 by RC6 (FFX only; FOC43-04, the focused review of 7b2582e7): the fayth's permanent Auto-Life no longer emits a
+ * `status-remove` (reason ko) at a KO. The engine used to emit it and put the status back with no event, so a row that follows the events lost the icon
+ * (the game wipes the status in the KO reset and the revive puts the permanent flag back in the same call, FFX-G02 3.6 and 3.7); the status now stays
+ * on the body through the wipe and has no event at all. Moves braskas-final-aeon#1 links 2 and 4 to 7 and #7 links 4 to 6 (the possession
+ * fights, the only lines with a permanent Auto-Life): in each, the new log equals the old one with exactly one `status-remove auto-life (ko)` taken out
+ * per fayth revive (16, 4, 7, 15, 1 and 7, 13, 19 events) and the `seq` of everything after it renumbered; same outcomes, same HP, same turns.
+ * The other 16 digests, and the old values of these two chapters' unmoved links, are byte for byte what they were. Proof: both logs dumped, the
+ * old engine's with the removal put back, compared event by event with `seq` left out (`docs/handoff/re-parity-rc6-ch2.md` section 6).
+ *
+ * ONE more re-baseline, the same day, by RC6 (FFX only; Chapter II's line, not the engine): the shipped line has Tidus hand his first Form III turn to Wakka
+ * (`src/engine/tactics/yunalesca-bench.ts`; Bailey 2026-10-12 "I'll go with all of your recommendations", rework of the line after the KO rule). Moves yunalesca#1
+ * (4cc7ce75 -> 73fd4f55, victory both) and yunalesca#7 (97c45011 defeat -> 8e48c312 victory). The new log is the old one to the switch event itself (the first 982
+ * events of #1 and the first 737 of #7 are identical), and they part there. The other 16 digests are untouched (no other chapter's line changed; the Chapter III
+ * digests are the ones above), ffx2-atb-golden and ff7-golden unchanged. Rates over 500 seeds: 398 -> 453 wins (docs/handoff/re-parity-rc6-ch2.md).
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '18bfe5b2:victory',
   'seymour-flux#7': 'c3845a:victory',
-  'yunalesca#1': '4cc7ce75:victory',
-  'yunalesca#7': '97c45011:defeat',
-  'braskas-final-aeon#1': 'd3eb1d76:victory d0d6d6ab:victory bd952081:victory 7027cb8b:victory c729b968:victory acd18b39:victory 4a53b026:victory',
-  'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 4bc11074:victory bff8a810:victory de77ee88:victory f2f0106a:victory',
+  'yunalesca#1': '73fd4f55:victory',
+  'yunalesca#7': '8e48c312:victory',
+  'braskas-final-aeon#1': 'd3eb1d76:victory 5e4670d:victory bd952081:victory c14f091f:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
+  'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
   'seymour-anima-macalania#1': '5b4108d1:victory',
   'seymour-anima-macalania#7': '99b1fdc:victory',
   'evrae-airship#1': '4f323f6e:victory',

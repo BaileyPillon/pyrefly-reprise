@@ -49,10 +49,17 @@
  * every party-switch row the engine offered was disabled, so four of the seven
  * members could never enter the battle — is fixed in `src/battle/ffx/commands.ts`
  * and written up in `tests/unit/ffx-engine-followups.test.ts`. This tactic
- * still does not switch; see the note on the free switch below. The remaining
+ * did not switch until RC6 (see below, and the note on the free switch). The remaining
  * losses are Confuse: it is never cleared by physical damage despite the status
  * data saying it is, so one Mind Blast that catches all three actives is
  * usually the run [`tests/unit/strategy-chapter2.test.ts`].
+ *
+ * **Re-measured 2026-10-13 (re-parity RC5 and RC6, FFX only).** The game's KO reset takes the Zombie away, so a zombified member who dies comes
+ * back plain until Hellbiter lands on him again, and the line above fell from 476 to 398 wins of 500. The loss is nearly always the same
+ * moment: a Mega Death that finds no Zombie standing (71 of the 102 losses in 500 seeds ended on one), and the Zombies die in bulk to Mind
+ * Blast, Curaga and Slaps. Tidus, Yuna and Auron wear Zombie Ward, which blocks about half of Hellbiter, so on his first
+ * turn in Form III Tidus hands the turn to Wakka (`./yunalesca-bench.ts`), who wears none: 453 wins of 500 on seeds 1 to 500 and 457 on 501
+ * to 1000, against 398 and 405. The candidates that did not pay are in `docs/handoff/re-parity-rc6-ch2.md`.
  */
 
 import type { AvailableCommand, Command, CombatantId, FFXCombatant } from '../../battle/common/types.ts';
@@ -68,6 +75,7 @@ import {
   revive,
   row,
 } from './common.ts';
+import { zombieCarrierSwap } from './yunalesca-bench.ts';
 
 /**
  * Yunalesca HP left, below which a form is "about to fall".
@@ -119,6 +127,10 @@ export const yunalesca: Tactic = (actorId, commands, engine) => {
   const actor = state.combatants[actorId];
   if (!actor) return null;
 
+  // Form III: Tidus makes way for Wakka, the one fighter who wears no Zombie Ward (`./yunalesca-bench.ts`, RC6).
+  const carrier = zombieCarrierSwap(actorId, commands, form);
+  if (carrier) return carrier;
+
   const living = party.filter((c) => c.alive);
   // The supporter is whoever carries Curaga or Reflect this turn — Yuna in the
   // shipped build. Everyone else is an attacker, and attackers never spend a
@@ -147,8 +159,9 @@ export const yunalesca: Tactic = (actorId, commands, engine) => {
     if (raised) return raised;
   }
 
-  // NOTE — the free switch **is** available now, and this tactic still does not
-  // take it. `SwitchCommand` hands the current turn to the incoming member at
+  // NOTE — the free switch **is** available now, and this tactic takes it exactly
+  // once (RC6): Tidus hands his first Form III turn to Wakka (`./yunalesca-bench.ts`),
+  // and no other switch is played. The rota below is still unmeasured. `SwitchCommand` hands the current turn to the incoming member at
   // no cost (ffx-combat-core §1.7), which would let the supporter's slot hold
   // Yuna only on the turns that need her and a striker (Wakka ~1,400 a swing
   // against Yunalesca's Defense, versus Yuna's ~170) on the rest. Until this
@@ -239,6 +252,9 @@ export const yunalesca: Tactic = (actorId, commands, engine) => {
       //    a few hundred HP that nobody can heal because she is Zombie, where
       //    dying to it and taking a Phoenix Down puts her back at half her max.
       //    In Forms II and III surviving a hit is worth less than dying to it.
+      //    (That last reason was the old KO rule's: a Phoenix Down used to return a dead Zombie still zombified. A KO takes the Zombie
+      //    now. Shell on a Zombie Mind Blast would kill, the turn before Mind Blast, was measured again on 2026-10-13: 156 wins of 200
+      //    against 157, so the line still does not cast it. `docs/handoff/re-parity-rc6-ch2.md`.)
       const guardI = row(commands, ['Defend']);
       if (guardI) return aim(guardI, actorId);
       return holdOverdrive(commands, boss.id);
@@ -417,6 +433,9 @@ export const yunalesca: Tactic = (actorId, commands, engine) => {
   //    kills — seed 20260916 went from 17,377 HP left to 46,158 with that rule
   //    in. A worn Zombie is left worn; when it falls, a Phoenix Down brings it
   //    back at half max HP and still zombified, which is the sustain here.
+  //    (Until RC5. A KO takes the Zombie away now, so the Phoenix Down returns a plain member and the sustain is Hellbiter's next
+  //    landing. Curing the worn Zombie early in the cycle, to heal it before Mind Blast, was measured on 2026-10-13 and loses:
+  //    372 wins of 500 against 398. The ladder is `tests/unit/re-parity-rc6-ch2-ladder.test.ts`.)
   //    In Form III the rhythm stays **behind** the aeons (`!hasAeonLeft`), and
   //    that ordering is measured, not assumed. Letting it run between summons
   //    was tried: with the Holy Waters already spent in Form II the only cure
