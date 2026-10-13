@@ -307,12 +307,18 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * per fayth revive (16, 4, 7, 15, 1 and 7, 13, 19 events) and the `seq` of everything after it renumbered; same outcomes, same HP, same turns.
  * The other 16 digests, and the old values of these two chapters' unmoved links, are byte for byte what they were. Proof: both logs dumped, the
  * old engine's with the removal put back, compared event by event with `seq` left out (`docs/handoff/re-parity-rc6-ch2.md` section 6).
+ *
+ * ONE more re-baseline, the same day, by RC6 (FFX only; Chapter II's line, not the engine): the shipped line has Tidus hand his first Form III turn to Wakka
+ * (`src/engine/tactics/yunalesca-bench.ts`; Bailey 2026-10-12 "I'll go with all of your recommendations", rework of the line after the KO rule). Moves yunalesca#1
+ * (4cc7ce75 -> 73fd4f55, victory both) and yunalesca#7 (97c45011 defeat -> 8e48c312 victory). The new log is the old one to the switch event itself (the first 982
+ * events of #1 and the first 737 of #7 are identical), and they part there. The other 16 digests are untouched (no other chapter's line changed; the Chapter III
+ * digests are the ones above), ffx2-atb-golden and ff7-golden unchanged. Rates over 500 seeds: 398 -> 453 wins (docs/handoff/re-parity-rc6-ch2.md).
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '18bfe5b2:victory',
   'seymour-flux#7': 'c3845a:victory',
-  'yunalesca#1': '4cc7ce75:victory',
-  'yunalesca#7': '97c45011:defeat',
+  'yunalesca#1': '73fd4f55:victory',
+  'yunalesca#7': '8e48c312:victory',
   'braskas-final-aeon#1': 'd3eb1d76:victory 5e4670d:victory bd952081:victory c14f091f:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
   'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
   'seymour-anima-macalania#1': '5b4108d1:victory',
