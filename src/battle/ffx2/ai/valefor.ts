@@ -20,11 +20,13 @@
  * **Targets, from the Besaid scene's start positions** (`./script-rolls.ts` `SCENES.besaid`, `pos_bsyt05_229.psc`; the engine tracks no later movement, as for every other boss that uses `searchr`):
  *
  * - **Normal Attack**: the near-weighted pick of a living girl (`searchNear`: weight by ground distance and angle from the boss's facing): at the start Yuna 41.9 percent, Rikku 29.1, Paine 29.0.
- * - **Sonic Wings**: the girl at the **greatest 2-D ground distance** from the boss: Yuna at the start (53.00 against 52.39 for Rikku and Paine). Body radii are not read, so exact ties (Rikku and Paine, when Yuna is
- *   down) are near-weighted, and an unambiguous extreme draws nothing. (The first build used Ormi's stand-in, the highest slot; the game's own positions replace it. `[script]`; whether m164 makes a first,
- *   discarded search before this one is in the note's search idiom: none is made here, as for Ormi's single `searchr`.)
- * - **Energy Ray and Energy Blast**: the whole party. The research says "everyone in a 160 degree arc in front of her"; the script's Ray is on all girls (the girls stand in front of the boss in every start
- *   formation on record, the largest angle from the boss's facing is about 17 degrees against an 80 degree half-arc, and the engine tracks no later movement), so **Energy Ray hits every living girl, as the Blast does**.
+ * - **Sonic Wings**: one search over the living, targetable girls, keeping those at the **greatest 2-D ground distance** (the game subtracts both body radii and cuts to a whole number; `[script]`, the review's §4.2 and §5): a single
+ *   farthest girl draws nothing, ties keep every tied girl and the pick among them is near-weighted (one draw). **The radii are not read**, so which girls are tied at the start is `[inferred]`: Yuna is 0.607 farther than Rikku and
+ *   Paine (53.00 against 52.39), the lone farthest for most radius sums and tied with them for about 39 in 100; this engine takes the positions as they are, so **Yuna while she is up**, and with Yuna down Rikku and Paine (exactly tied).
+ *   Paine is never the lone farthest. (The first build used Ormi's stand-in, the highest slot; the game's own positions replace it.)
+ * - **Energy Ray and Energy Blast**: the whole party, queued on the same group with identical target and misc flags (the review's §3 and §4.4); a charged cast skips a girl who has fallen by the time the hits land, so **every living girl is
+ *   hit**. The research's "everyone in a 160 degree arc in front of her" is **not in the script or in either move row** (if the game has it, it is in effect or animation data, which was not read); every girl stands in front of the
+ *   boss in the start formation, so nothing is lost.
  *
  * What the data layer carries beside this script (`src/data/ffx2/enemies/valefor-abilities.ts`, `monster-records/records-valefor.ts`): Energy Ray is magical (Shell halves it) and **Energy Blast is not**
  * (its row has damage flags 0: neither Shell nor Protect reduces it); Sonic Wings is physical (Protect applies), MP damage only, and never misses.

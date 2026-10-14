@@ -47,6 +47,7 @@ import {
   x2ValeforAbilities,
 } from '../../../src/data/ffx2/enemies/valefor-abilities.ts';
 import { MONSTER_RECORDS } from '../../../src/data/ffx2/monster-records/index.ts';
+import { FFX2_COMMAND_RECORDS } from '../../../src/data/ffx2/command-records/index.ts';
 import { heldItems } from '../../../src/data/ffx2/items/held.ts';
 import { FFX2_VALEFOR_BESAID, VALEFOR_BESAID_ID } from '../../../src/data/chapter-ffx2-valefor-besaid.ts';
 import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
@@ -64,6 +65,7 @@ interface Fixture {
   unmapped: { basakuWord: number; soundId: number; monsterTypeWord: number; specialBits7and8: number[]; group1ResistSlots17and18: number[]; elementBits6and7: number[] };
   research: Record<string, unknown> & { level: number; hp: number; str: number; mag: number; def: number; mdef: number; agi: number; eva: number; luck: number; exp: number; ap: number; gil: number; pilferGil: number; attackDC: number; sonicWingsDC: number; energyRayDC: number; energyBlastDC: number };
   disagreements: Array<{ field: string }>;
+  commandRows: Record<string, unknown> & { cadence: { agi: number; seconds: Record<string, { charge: number; recovery: number }> } };
   scene: { boss: { x: number; z: number }; girls: Array<{ x: number; z: number }>; groundDistance: Record<string, number>; attackPercentAtTheStart: Record<string, number> };
   script: { gauge: { perAttackClassTurn: number; perResultAppliedToHer: number; rayMarks: number[]; raysPerCycle: number; overdriveAt: number }; withNobodyHittingHer: { rayTurns: number[]; blastTurn: number }; noHpPhases: boolean; noTimer: boolean };
   notUsed: { row363: { level: number; hp: number; acc: number } };
@@ -260,8 +262,40 @@ describe('the four moves are the research\'s (damage constants, targets, the hit
     expect(byId[VALEFOR_ATTACK_ID]!.canMiss).not.toBe(false);
   });
 
-  it('none of her moves is wired to a command row yet (monmagic 0x4091 to 0x4093 are not read): no `ffx2Record` on any ability', () => {
-    for (const a of x2ValeforAbilities) expect(a.ffx2Record, a.id).toBeUndefined();
+  it('the three special moves run on the game\'s own command rows (monmagic 0x4091 to 0x4093, the RE review): every field is the fixture\'s, and the ability carries the very record the table serves', () => {
+    for (const id of [VALEFOR_ENERGY_RAY_ID, VALEFOR_SONIC_WINGS_ID, VALEFOR_ENERGY_BLAST_ID]) {
+      const want = FIXTURE.commandRows[id] as Record<string, number>;
+      const record = FFX2_COMMAND_RECORDS[id]!;
+      expect(record, id).toBeDefined();
+      expect(record, id).toMatchObject(want);
+      expect(Object.keys(record).sort(), `${id}: no field beyond the row's`).toEqual(Object.keys(want).sort());
+      expect(byId[id]!.ffx2Record, id).toBe(record);
+    }
+    expect(ROW.abilities.slice(1, 4)).toEqual([0x4091, 0x4092, 0x4093]);
+    expect([FFX2_COMMAND_RECORDS[VALEFOR_ENERGY_RAY_ID]!.id, FFX2_COMMAND_RECORDS[VALEFOR_SONIC_WINGS_ID]!.id, FFX2_COMMAND_RECORDS[VALEFOR_ENERGY_BLAST_ID]!.id]).toEqual([0x4091, 0x4092, 0x4093]);
+    expect(byId[VALEFOR_ATTACK_ID]!.ffx2Record, 'the plain Attack runs on the monster record\'s row 0x41da, not on a row of its own').toBeUndefined();
+  });
+
+  it('the rows say what the review reads from them: Ray magical and Blast neither physical nor magical (damage flags 0x2 and 0x0), Sonic Wings physical and MP-only, none rolls to hit, charge 120, 100 and 120, recovery 100, 80 and 100', () => {
+    const rec = (id: string) => FFX2_COMMAND_RECORDS[id]!;
+    expect([rec(VALEFOR_ENERGY_RAY_ID).flagsDamage & 3, rec(VALEFOR_ENERGY_BLAST_ID).flagsDamage & 3, rec(VALEFOR_SONIC_WINGS_ID).flagsDamage & 3]).toEqual([2, 0, 1]);
+    expect(rec(VALEFOR_SONIC_WINGS_ID).damageClass, 'class 2 is the MP pool').toBe(2);
+    for (const id of [VALEFOR_ENERGY_RAY_ID, VALEFOR_SONIC_WINGS_ID, VALEFOR_ENERGY_BLAST_ID]) expect((rec(id).flagsMisc >> 3) & 7, `${id}: accuracy formula 0, it never rolls`).toBe(0);
+    expect([rec(VALEFOR_ENERGY_RAY_ID).costCast, rec(VALEFOR_SONIC_WINGS_ID).costCast, rec(VALEFOR_ENERGY_BLAST_ID).costCast]).toEqual([120, 100, 120]);
+    expect([rec(VALEFOR_ENERGY_RAY_ID).costAtb, rec(VALEFOR_SONIC_WINGS_ID).costAtb, rec(VALEFOR_ENERGY_BLAST_ID).costAtb]).toEqual([100, 80, 100]);
+    expect(rec(VALEFOR_ENERGY_RAY_ID).flagsTarget, 'Ray and Blast have identical target and misc flags: the same whole-party group, no arc').toBe(rec(VALEFOR_ENERGY_BLAST_ID).flagsTarget);
+    expect(rec(VALEFOR_ENERGY_RAY_ID).flagsMisc).toBe(rec(VALEFOR_ENERGY_BLAST_ID).flagsMisc);
+    expect([VALEFOR_DC.energyRay, VALEFOR_DC.sonicWings, VALEFOR_DC.energyBlast]).toEqual([rec(VALEFOR_ENERGY_RAY_ID).power, rec(VALEFOR_SONIC_WINGS_ID).power, rec(VALEFOR_ENERGY_BLAST_ID).power]);
+  });
+
+  it('the cadence is the review\'s, from the costs and her Agility 125: charge 3.37 s and recovery 2.80 s for Ray and Blast, charge 2.80 s and recovery 2.24 s for Sonic Wings', () => {
+    const agi = FIXTURE.commandRows.cadence.agi;
+    expect(agi).toBe(ROW.agi);
+    const seconds = (cost: number): number => Math.round((Math.ceil((cost * 10000) / (agi + 1) / 95) / 29.97) * 100) / 100;
+    for (const id of [VALEFOR_ENERGY_RAY_ID, VALEFOR_SONIC_WINGS_ID, VALEFOR_ENERGY_BLAST_ID]) {
+      const rec = FFX2_COMMAND_RECORDS[id]!;
+      expect({ charge: seconds(rec.costCast ?? 0), recovery: seconds(rec.costAtb ?? 0) }, id).toEqual(FIXTURE.commandRows.cadence.seconds[id]);
+    }
   });
 });
 

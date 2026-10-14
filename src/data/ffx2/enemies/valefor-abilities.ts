@@ -6,8 +6,8 @@
  * **wins where it says more**. The FFX Valefor (Yuna's aeon, and the possessed one of the Yunalesca and Braska fights, `src/data/ffx/**`) is a different monster of a different game and **no number of its is
  * used**; every id here is `x2-valefor-`-prefixed so the two games never meet in one lookup.
  *
- * The four rows below, move by move (the engine resolves each from these fields; **the game's own command rows are laid on the three special moves by `../command-records/valefor.ts` / the monster
- * record's `commands`, so the charge, the recovery and every flag are the rows' own once that map is attached**, `../monster-records/records-valefor.ts`):
+ * The four rows below, move by move (**the game's own command rows are laid on the three special moves by `../command-records/valefor.ts`, so the charge, the recovery and every flag the engine reads are the rows'
+ * own**; the fields here are the ability's own reading, kept consistent with them and pinned against them by `tests/unit/chapters/besaid-valefor-data.test.ts`):
  *
  * - **Normal Attack**, DC 16, physical: it runs on the game's plain Attack row 0x41da (the monster record's `plainAttack`).
  * - **Sonic Wings**: MP damage only (formula 0, power 2), on the girl at the greatest ground distance (`../../../battle/ffx2/ai/valefor.ts#furthestGirl`: Yuna at the start). **Physical** (Protect applies),

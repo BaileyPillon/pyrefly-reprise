@@ -205,6 +205,81 @@
   "noHpPhases": true,
   "noTimer": true
  },
+ "commandRows": {
+  "source": "monmagic.bin rows 0x4091 to 0x4093 (offset 0x20 + 136 x (id - 0x4000)), read byte by byte by the RE session; research/re-ffx2-ai-valefor.md section 3 and the appendix. Numbers only; the shape is FFX2CommandRecord; hex ids and words written as decimal",
+  "x2-valefor-energy-ray": {
+   "id": 16529,
+   "costAtb": 100,
+   "costCast": 120,
+   "category": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 20,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "x2-valefor-sonic-wings": {
+   "id": 16530,
+   "costAtb": 80,
+   "costCast": 100,
+   "category": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 1,
+   "damageClass": 2,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 2,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "x2-valefor-energy-blast": {
+   "id": 16531,
+   "costAtb": 100,
+   "costCast": 120,
+   "category": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 0,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 25,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "cadence": {
+   "rule": "recovery = cost_atb x 10000 / (AGI + 1) units, charge = cost_cast x 10000 / (AGI + 1) units, 95 units a step at normal speed, 29.97 steps a second, rounded up to whole steps; her AGI is 125",
+   "agi": 125,
+   "seconds": {
+    "x2-valefor-energy-ray": {
+     "charge": 3.37,
+     "recovery": 2.8
+    },
+    "x2-valefor-sonic-wings": {
+     "charge": 2.8,
+     "recovery": 2.24
+    },
+    "x2-valefor-energy-blast": {
+     "charge": 3.37,
+     "recovery": 2.8
+    }
+   }
+  }
+ },
  "notUsed": {
   "row363": {
    "note": "a second Valefor record (id 0x116b), in no btl.txt formation: Lv 48, HP 38,000, ACC 108; NOT this chapter",

@@ -80,6 +80,8 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Experiment's seven rows are the new-chapters RE lane's, pinned field by field against their own numbers-only fixture (tests/fixtures/parity/ffx2/experiment_rows.json,
   // tests/unit/chapters/experiment-engine.test.ts); this fixture holds the 205 rows the seven listed chapters can reach.
   if (label.startsWith('x2-experiment-')) return;
+  // The hidden Valefor at Besaid's three rows (monmagic 0x4091 to 0x4093) are the RE review's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/besaid_valefor_rows.json, tests/unit/chapters/besaid-valefor-data.test.ts).
+  if (label.startsWith('x2-valefor-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;
