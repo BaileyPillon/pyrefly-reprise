@@ -9,10 +9,19 @@
 
 import type { Ffx2Unit } from './internal.ts';
 import { mem } from './internal.ts';
-import { AI_IDLE_STEPS, AI_IDLE_WAKE, AI_POLL_COST } from './ai/idle.ts';
+import { AI_IDLE_STEPS, AI_IDLE_WAKE, AI_NO_INTENT, AI_POLL_COST, AI_REPOLL } from './ai/idle.ts';
 import { ATB_BASE_VALUE } from './constants.ts';
 import { completeCommand } from './atb-engine.ts';
 import { Ffx2AtbState } from './kernel/atb-gauge.ts';
+
+/**
+ * Whether a poll whose `decide` returned null was **not a turn** (FFX-2 only; the Tourist Trap): the script marked it `AI_REPOLL` (Yojimbo's "dog" pick, which raises a flag and is polled again on the very next step) or
+ * `AI_NO_INTENT` (Daigoro asleep until the flag wakes him). The game polls a ready monster every step and counts none of these as a turn, so `engine-core.ts#runAiTurn` takes back the turn count and the `turn-start`
+ * it had already drafted, and plays no `action-end`: `result.turns` (the results screen's TURNS) and the presenter's per-turn beat count real turns only. Only those two scripts set the keys, so no other unit is affected.
+ */
+export function pollIsNotATurn(actor: Ffx2Unit): boolean {
+  return mem(actor, AI_REPOLL) === 1 || mem(actor, AI_NO_INTENT) === 1;
+}
 
 /**
  * Settle the ATB slot of a poll that played no command. [ffx2-vegnagun-shuyin §5] It waits the standard gauge, unless the script said

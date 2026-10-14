@@ -9,7 +9,8 @@
  * 2. **The five command rows** (0x40a1 to 0x40a5): attached to the abilities word for word, none rolls to hit (rule 5), Wakizashi B's row keeps its 0x17 target byte while the script aims it at ONE girl like A
  *    (`[strongly indicated]`, RE re-review 2026-10-14; `WAKIZASHI_B_HITS_ONE_GIRL` is the one-line switch), Zanmato charges 120 and rests 200.
  * 3. **The poll**: the counter is tested at 100 before the raise and Zanmato is the 14th poll; otherwise it is raised by 8 first and the band is read on the raised value; the roll picks the move in the
- *    review's order; a dog pick is a poll without a turn that raises a flag and wakes Daigoro; the real actions before a Zanmato number 7.25 on average and 4 to 10 in about 96 percent of cycles.
+ *    review's order; a dog pick is a poll without a turn that raises a flag and wakes Daigoro (and, since 2026-10-14, leaves no `turn-start` and no `action-end` in the log and no count in the results' TURNS:
+ *    `tourist-trap-turns.test.ts`; the polls in this file are read off the scripts with `recordPolls`, not off the log); the real actions before a Zanmato number 7.25 on average and 4 to 10 in about 96 percent of cycles.
  * 4. **The fight**: in the real engine Zanmato leaves every girl at 1 HP and 1 MP through Protect and Shell, Kozuka takes a quarter of current MP and poisons, Daigoro is an actor of his own who bites on his
  *    own turn after a call and is never a target of a menu or an area move, the intent board reports a real move and the battle ends on Yojimbo's fall with the dog still standing.
  */
@@ -45,7 +46,7 @@ import {
 } from '../../../src/data/ffx2/enemies/tourist-trap.ts';
 import { DAIGORO_ACTIONS, TOURIST_TRAP_ACTION_IDS, WAKIZASHI_B_HITS_ONE_GIRL, YOJIMBO_ACTIONS, YOJIMBO_ACTION_IDS, YOJIMBO_SCRIPTS } from '../../../src/data/ffx2/enemies/tourist-trap-abilities.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
-import { driveFight, withoutActionTime } from '../helpers/touristTrapDrive.ts';
+import { driveFight, recordPolls, withoutActionTime } from '../helpers/touristTrapDrive.ts';
 
 interface Row {
   row: number; formation: number; slot: number; level: number; hp: number; mp: number; str: number; def: number; mag: number; mdef: number; agi: number; acc: number; eva: number; luck: number;
@@ -562,43 +563,23 @@ describe('the fight in the real engine', () => {
     expect(bites.length, 'he bit').toBeGreaterThan(0);
     for (const b of bites) expect(b.abilityId).toBe(BITE);
     expect(ev.some((e) => e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID && e.abilityId === BITE), 'Yojimbo never uses the bite').toBe(false);
-    // Yojimbo's dog picks: a poll (turn-start) with no action of his before his next poll.
-    const picks: number[] = [];
-    let lastPollAt = -1;
-    let acted = true;
-    ev.forEach((e, i) => {
-      if (e.type === 'turn-start' && e.actorId === X2_YOJIMBO_ID) {
-        if (lastPollAt >= 0 && !acted) picks.push(lastPollAt);
-        lastPollAt = i;
-        acted = false;
-      }
-      if (e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID) acted = true;
-    });
-    expect(picks.length, 'there were dog picks').toBeGreaterThan(0);
-    expect(bites.length, 'a bite answers a call: never more bites than calls').toBeLessThanOrEqual(picks.length);
-    // A call that finds him asleep (his last poll was silent) wakes him: he is polled on the very next steps. One that finds him biting or recovering waits for his own next poll.
+    // Yojimbo's dog picks: a poll that queued nothing (read off the script: a poll that is not a turn leaves nothing in the log).
+    expect(run.dogPicks, 'there were dog picks').toBeGreaterThan(0);
+    expect(bites.length, 'a bite answers a call: never more bites than calls').toBeLessThanOrEqual(run.dogPicks);
+    // A call that finds him asleep (his last poll queued nothing) wakes him: he is polled on the very next steps. One that finds him biting or recovering waits for his own next poll.
     let woken = 0;
     for (const seed of [1, 2, 3, 4, 5, 6]) {
-      const log = driveFight(seed, { line: 'intended' }).log as unknown as Ev[];
-      const turnStarts = log.map((e, i) => (e.type === 'turn-start' && e.actorId === X2_YOJIMBO_ID ? i : -1)).filter((i) => i >= 0);
-      for (const [n, i] of turnStarts.entries()) {
-        const next = turnStarts[n + 1] ?? log.length;
-        const acted = log.slice(i, next).some((e) => e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID);
-        if (acted) continue; // a real action: not a call
-        const asleep = (() => {
-          for (let j = i - 1; j >= 0; j--) {
-            const e = log[j]!;
-            if (e.type === 'action-start' && e.actorId === X2_DAIGORO_ID) return false;
-            if (e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID) return true;
-          }
-          return false;
-        })();
-        if (!asleep) continue;
-        const dogTurn = log.findIndex((e, j) => j > i && e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID);
-        expect(dogTurn, `seed ${seed}: a call that finds him asleep is answered`).toBeGreaterThan(i);
-        expect((log[dogTurn]!.elapsedTicks ?? 0) - (log[i]!.elapsedTicks ?? 0), `seed ${seed}: woken, polled within two steps of the call`).toBeLessThanOrEqual(2);
+      const polls = driveFight(seed, { line: 'intended' }).pollLog;
+      polls.forEach((pick, k) => {
+        if (pick.actorId !== X2_YOJIMBO_ID || pick.abilityId !== null) return; // not a dog pick
+        const lastOfDog = polls.slice(0, k).reverse().find((p) => p.actorId === X2_DAIGORO_ID);
+        if (lastOfDog?.abilityId !== null) return; // he is biting or resting (or has not been polled yet): the call waits for his next poll
+        const next = polls.slice(k + 1).find((p) => p.actorId === X2_DAIGORO_ID);
+        expect(next, `seed ${seed}: a call that finds him asleep is answered`).toBeDefined();
+        expect(next!.abilityId, `seed ${seed}: and the answer is the bite`).toBe(BITE);
+        expect(next!.at - pick.at, `seed ${seed}: woken, polled within two steps of the call`).toBeLessThanOrEqual(2);
         woken += 1;
-      }
+      });
     }
     expect(woken, 'at least one call found him asleep').toBeGreaterThan(0);
   });
@@ -676,7 +657,8 @@ function quietYojimbo(seed: number, group = cavernYojimboGroup): FFX2Engine {
   return engine;
 }
 const dogBites = (engine: FFX2Engine): number => (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'action-start' && e.actorId === X2_DAIGORO_ID).length;
-const dogPolls = (engine: FFX2Engine): number => (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID).length;
+/** Daigoro's polls so far, the silent one included: read off the script (`recordPolls`), because a sleeping poll is not a turn and leaves nothing in the log. */
+const dogPolls = (polls: readonly { actorId: string }[]): number => polls.filter((p) => p.actorId === X2_DAIGORO_ID).length;
 /** What Yojimbo's dog pick does to the board: raise the flag and wake the dog (the same two lines as `callDaigoro`). */
 function call(engine: FFX2Engine): void {
   engine.state().flags[DAIGORO_CALL_FLAG] = true;
@@ -686,10 +668,11 @@ function call(engine: FFX2Engine): void {
 }
 
 describe("Daigoro's flag: one flag, not a count; he bites on his own gauge", () => {
-  it('a call that finds him asleep is answered in the same step; a call while he rests is seen at his next poll (so he bites again); two calls while the flag is up are one bite', () => {
+  it('a call that finds him asleep is answered in the same step; a call while he rests is seen at his next poll (so he bites again); two calls while the flag is up are one bite', () => recordPolls((polls) => {
     const engine = quietYojimbo(1, withoutActionTime());
     // He is asleep after his one silent poll.
-    playDefending(engine, () => dogPolls(engine) >= 1, 4000);
+    playDefending(engine, () => dogPolls(polls) >= 1, 4000);
+    expect(polls.map((p) => p.abilityId), 'the one poll queued nothing').toEqual([null]);
     expect(dogBites(engine)).toBe(0);
     // Call 1, asleep: bitten at once, in the very step of the call.
     const tickOfCall = engine.state().ticks;
@@ -709,19 +692,21 @@ describe("Daigoro's flag: one flag, not a count; he bites on his own gauge", () 
     const after = engine.state().ticks;
     playDefending(engine, () => engine.state().ticks >= after + 900, 4000);
     expect(dogBites(engine), 'no call, no bite: two calls were one bite, not two').toBe(2);
-  });
+  }));
 
-  it("his rest after a bite is the row's 87 steps (cost 100 over AGI 120), Yojimbo's ordinary moves rest 105 and Zanmato charges 105 and rests 174: the rows' own pace, action time off", () => {
+  it("his rest after a bite is the row's 87 steps (cost 100 over AGI 120), Yojimbo's ordinary moves rest 105 and Zanmato charges 105 and rests 174: the rows' own pace, action time off", () => recordPolls((polls) => {
     // The bite: poll to poll, with a call waiting for the next one.
     const engine = quietYojimbo(2, withoutActionTime());
-    playDefending(engine, () => dogPolls(engine) >= 1, 4000);
+    playDefending(engine, () => dogPolls(polls) >= 1, 4000);
     call(engine);
     playDefending(engine, () => dogBites(engine) >= 1, 4000);
     call(engine); // raised during the rest: seen at his next poll
     playDefending(engine, () => dogBites(engine) >= 2, 4000);
-    const polls = (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID).map((e) => e.elapsedTicks!);
-    expect(polls.at(-1)! - polls.at(-2)!, "a bite's rest: 8,264 units over 95 a step, rounded up").toBe(87);
+    const bitePolls = (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID).map((e) => e.elapsedTicks!); // his turn-starts are his bites: the silent poll is not a turn
+    expect(bitePolls, 'two bites, two turns').toHaveLength(2);
+    expect(bitePolls[1]! - bitePolls[0]!, "a bite's rest: 8,264 units over 95 a step, rounded up").toBe(87);
     // Yojimbo: poll to poll while the party only defends (nothing hits him, so no chain lock holds his ready gauge: `isActionLocked`, section 1.7), until the first girl falls (a fallen girl adds 30 steps to a monster's rest).
+    // Read off the polls of his script, not the log: a dog pick is a poll without a turn, so the gap from a real move to his next poll is its rest, whatever the next poll turns out to be.
     const rest = new Set<number>();
     const zanmato = new Set<number>();
     for (const [seed, ac] of [[1, 0], [2, 0], [3, 0], [4, 0], [5, 90], [6, 90]] as const) {
@@ -729,35 +714,30 @@ describe("Daigoro's flag: one flag, not a count; he bites on his own gauge", () 
       quiet.setSeed(seed);
       quiet.init({ game: 'ffx2', party: FFX2_TOURIST_TRAP.buildRef as FFX2PartyBuild, enemies: withoutActionTime(), triggers: [], seed, condition: 'normal', canEscape: false });
       (quiet.state().combatants[X2_YOJIMBO_ID] as unknown as Ffx2Unit).aiMemory = { [AC]: ac };
-      const log = playDefending(quiet, (l) => l.some((e) => e.type === 'ko') || l.filter((e) => e.type === 'turn-start' && (e as Ev).actorId === X2_YOJIMBO_ID).length >= 40, 8000) as unknown as Ev[];
-      const polls: Array<{ at: number; index: number }> = [];
-      log.forEach((e, index) => {
-        if (e.type === 'turn-start' && e.actorId === X2_YOJIMBO_ID) polls.push({ at: e.elapsedTicks!, index });
-      });
-      for (let i = 0; i + 1 < polls.length; i++) {
-        const span = log.slice(polls[i]!.index, polls[i + 1]!.index);
-        if (span.some((e) => e.type === 'ko' || e.type === 'revive')) continue;
-        const act = span.find((e) => e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID);
-        if (!act) continue; // a dog pick: no rest
-        const gap = polls[i + 1]!.at - polls[i]!.at;
-        if (act.abilityId === ZN) zanmato.add(gap);
+      const from = polls.length;
+      const yojimboPolls = (): typeof polls => polls.slice(from).filter((p) => p.actorId === X2_YOJIMBO_ID);
+      playDefending(quiet, (l) => l.some((e) => e.type === 'ko') || yojimboPolls().length >= 40, 8000);
+      const mine = yojimboPolls();
+      for (let i = 0; i + 1 < mine.length; i++) {
+        if (mine[i]!.abilityId === null) continue; // a dog pick: no rest (tested below)
+        if (mine[i]!.downedGirls !== mine[i + 1]!.downedGirls) continue; // a girl fell in between: +30 steps, not the row's rest
+        const gap = mine[i + 1]!.at - mine[i]!.at;
+        if (mine[i]!.abilityId === ZN) zanmato.add(gap);
         else rest.add(gap);
       }
     }
     expect([...rest], 'Kozuka, Wakizashi A and B: 120 over AGI 120 is 104.39 steps, rounded up').toEqual([105]);
     expect([...zanmato], 'Zanmato: a 105-step charge, then a 174-step rest').toEqual([279]);
-  });
+  }));
 
   it('a dog pick has no rest at all: Yojimbo is polled again on the very next step, with the counter already raised', () => {
     const run = driveFight(1, { line: 'intended', group: withoutActionTime() });
-    const log = run.log as unknown as Ev[];
-    const polls = log.map((e, index) => ({ e, index })).filter((x) => x.e.type === 'turn-start' && x.e.actorId === X2_YOJIMBO_ID);
+    const polls = run.pollLog.filter((p) => p.actorId === X2_YOJIMBO_ID);
     let picks = 0;
     for (let i = 0; i + 1 < polls.length; i++) {
-      const span = log.slice(polls[i]!.index, polls[i + 1]!.index);
-      if (span.some((e) => e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID)) continue;
+      if (polls[i]!.abilityId !== null) continue; // a real move: it rests
       picks += 1;
-      expect(polls[i + 1]!.e.elapsedTicks! - polls[i]!.e.elapsedTicks!, 'a pick with no rest: the next step').toBe(1);
+      expect(polls[i + 1]!.at - polls[i]!.at, 'a pick with no rest: the next step').toBe(1);
     }
     expect(picks, 'there were dog picks').toBeGreaterThan(0);
   });
