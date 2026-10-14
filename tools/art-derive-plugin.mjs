@@ -16,6 +16,9 @@
  *     before any script runs, and the hint has to name the file the site serves. It is done on the finished file, not in
  *     `transformIndexHtml`: Vite writes `imagesrcset` after the post hooks and a rewrite made there is lost (the reference
  *     audit, `tools/art-verify.mjs`, caught exactly that).
+ *     It also rewrites the build's art SIDECARS (r46-fix, FOC46-01; `tools/art-sidecar-redact.mjs`), whatever the art switch: each string
+ *     value that holds a path of the build PC (a drive letter, a user-profile folder) becomes that path's last name, in the OUTPUT only;
+ *     `public/art` is never written, and `tools/dist-local-paths.mjs` is the deploy's gate that no such path is left anywhere in the build.
  *
  * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` picks what is derived (default `exact`); `off` makes the plugin a no-op (the PNGs
  * ship as before): the switch for a live problem.
@@ -32,6 +35,7 @@ import { join, resolve } from 'node:path';
 import process from 'node:process';
 
 import { applyPlan, planArtDerivation, resolveCache, resolveScope, shippedList, webpName } from './art-derive-lib.mjs';
+import { redactBuildSidecars } from './art-sidecar-redact.mjs';
 import { STRIP_LIST, planThumbs, resolveThumbSwitch, thumbMap } from './art-thumbs.mjs';
 
 /** `art/<...>.png` as it sits in a page, behind any base path. */
@@ -43,6 +47,7 @@ export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCac
   let shipped = new Set();
   let outDir = 'dist';
   let applied = false;
+  let redacted = false;
   return {
     name: 'pyrefly-art-derive',
     apply: 'build',
@@ -68,7 +73,15 @@ export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCac
       outDir = resolve(config.root, config.build.outDir);
     },
     closeBundle() {
-      if (plan === null || applied || !existsSync(join(outDir, 'index.html'))) return;
+      if (!existsSync(join(outDir, 'index.html'))) return;
+      // r46-fix (FOC46-01): the painting sidecars name folders of the build PC, and the site is public. Whatever art switch is set, the
+      // BUILD OUTPUT's sidecars are written with each local path replaced by its last name (`art-sidecar-redact.mjs`); `public/art` is never touched.
+      if (!redacted) {
+        redacted = true;
+        const done = redactBuildSidecars(outDir);
+        console.log(`[pyrefly-art-derive] sidecars: ${done.changed} of ${done.files} art JSON file(s) written with ${done.paths} local path(s) in ${done.strings} string value(s) replaced by their last name; the masters are untouched${done.plain.length ? `; ${done.plain.length} file(s) are not valid JSON and were redacted as plain text` : ''}`);
+      }
+      if (plan === null || applied) return;
       applied = true;
       const done = applyPlan(outDir, plan);
       // The constant in the bundle names every derived master, so a master whose PNG the build did not copy would be a name with no file.

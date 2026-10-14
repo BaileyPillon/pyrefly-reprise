@@ -40,6 +40,13 @@ Address: none yet (branch r46-audio2, from r45-rc d5bf2206; not deployed, no rev
   girls' hits keep today's level, never a quieter one (your decision 52n: a quiet hit was heard as no attack
   sound at all), and on the loudest 400 milliseconds the new recording already matches the sound it replaces; only
   its long tail makes the overall figure 2.6 dB higher. A first pass had cut it 1.6 dB; that is undone.
+- **Both games, the small data files beside the paintings (a fix before this goes out):** about 950 of the
+  1,263 small files that sit beside the paintings (notes on how each painting was made) named folders of the
+  computer the game is built on, and went out with every release. The build now writes each such name as the
+  file's own name alone, and the deploy refuses to go out if any file of the site still names a folder of that
+  computer. Everything the game reads from these files (sizes, feet lines, scales, facings, focal points, heads) is
+  the same, checked on all 1,263 files and in the browser against the live site; no picture, sound or screen
+  differs.
 - **FFX-2, Chapter IV (Bahamut):** the quiet victory tune now stops when you press Continue after the tally.
   It used to loop on under the whole scene that follows, which this chapter keeps silent. In Chapter XI (the
   Glen) and Chapter XV (out of the Den of Woe) the scene's own music now comes back after the tally instead of

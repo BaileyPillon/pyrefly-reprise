@@ -113,6 +113,7 @@ import {
 } from './deploy-host.mjs';
 import { resolveWranglerBin } from './deploy-wrangler.mjs';
 import { SOURCEMAP_DIR_ENV, findSourceMapReferences, findUnshipped } from './dist-filter.mjs';
+import { formatLocalPathReport, scanBuildForLocalPaths } from './dist-local-paths.mjs';
 import {
   archiveMarker,
   buildPendingMarker,
@@ -704,7 +705,7 @@ async function main() {
   log('art: pixel identity of every shipped WebP against its master PNG, and every reference to the art');
   const artIdentity = await verifyShippedArt({ distDir: DIST, publicDir: join(ROOT, 'public') });
   const th = artIdentity.thumbs; // r44-thumbs: the board's strip thumbnails are proved in the same pass (tools/art-thumb-verify.mjs)
-  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel); strip thumbnails: ${th.enabled ? `${th.checked} listed (${th.webp} WebP, ${th.png} PNG, ${th.none} with none), each decoded and compared with its master resized by the rule` : 'NONE in this build (PYREFLY_ART_THUMBS=off, or a tool from before r44): the strips on the board load the full paintings'} in ${(artIdentity.ms / 1000).toFixed(0)} s`);
+  log(`art identity ${artIdentity.ok ? 'PASS' : 'FAIL'}: ${artIdentity.checked} masters (${artIdentity.webp} shipped as WebP, ${artIdentity.png} as PNG, ${artIdentity.decoded} compared pixel for pixel); sidecars: ${artIdentity.sidecars.checked} (${artIdentity.sidecars.redacted} written with the paths of this PC replaced by their last names, each the master's text and nothing else); strip thumbnails: ${th.enabled ? `${th.checked} listed (${th.webp} WebP, ${th.png} PNG, ${th.none} with none), each decoded and compared with its master resized by the rule` : 'NONE in this build (PYREFLY_ART_THUMBS=off, or a tool from before r44): the strips on the board load the full paintings'} in ${(artIdentity.ms / 1000).toFixed(0)} s`);
   if (!artIdentity.ok) {
     for (const p of artIdentity.problems.slice(0, 25)) log(`  ${p}`);
     fail(`${artIdentity.problems.length} shipped art file(s) are not their master's pixels, are missing, or are a WebP of art that a decoder could draw differently (node tools/art-derive.mjs verify --dir dist-release); the default PYREFLY_ART_WEBP=exact makes none of these, PYREFLY_ART_WEBP=off ships the PNGs as before`);
@@ -712,6 +713,13 @@ async function main() {
   const artRefs = auditArtReferences(DIST);
   for (const line of formatAudit(artRefs).split(/\r?\n/)) log(line);
   if (!artRefs.ok) fail(`${artRefs.problems.length} reference(s) to an art file the build does not hold — see above`);
+  // r46-fix (FOC46-01): the site is public and names no folder of the PC that built it. The painting sidecars began as provenance records and carried
+  // staging and backup paths of this machine to every release; the build now writes them with each path replaced by its last name (the art-derive plugin),
+  // and every shipped text file (the data, the code, the stylesheets, the pages, the licences) is searched for a drive-letter or user-profile path.
+  // The report names the file, the line and the kind and never prints the path (tools/dist-local-paths.mjs).
+  const localPaths = scanBuildForLocalPaths(DIST);
+  for (const line of formatLocalPathReport(localPaths).split(/\r?\n/)) log(line);
+  if (localPaths.hits.length) fail(`${localPaths.hits.length} path(s) of the build machine in the shipped files — see above (node tools/dist-local-paths.mjs --dir dist-release); the paths are not printed`);
   // The re-check's B3 (r38-bytes): every image the build ships loads and decodes, at its master's size, in WebKit and in Chromium, and no
   // portrait plate would stay static. A pick of 20 to 30 files cannot find two bad ones in 900, and a file the browser cannot decode still
   // answers 200 and logs nothing, so this loads the whole set (tools/art-browser-load.mjs, about 20 seconds). An engine that cannot start fails it.

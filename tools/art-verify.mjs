@@ -23,6 +23,9 @@
  * record lists, for every master of `src/data/art/strip-art.json`. The audit below also reads them: every `*.thumb.webp|png` name the
  * bundle or the record carries must be a shipped file, and the bundle and the record must name the same ones.
  *
+ * **Sidecars (r46-fix, FOC46-01).** `verifyShippedArt` also runs `verifyShippedSidecars`: every art JSON of `public/` is in the build as the master's text with the
+ * local paths of the build PC replaced by their last names (`tools/art-sidecar-redact.mjs`, the function the build itself uses), and nothing else differs.
+ *
  * **auditArtReferences: no reference to a file that is not there.** The art is reached by name from code, styles, pages and
  * data. After the derivation the PNG names of the derived files are no longer files, so the audit reads every shipped text
  * file and sorts each `art/<...>.png` or `art/<...>.webp` it names:
@@ -46,6 +49,7 @@ import { extname, join, relative, sep } from 'node:path';
 
 import { DERIVED_REPORT, MIN_WEBP_BYTES, listMasterPngs, pixelsOf, pool, webpName } from './art-derive-lib.mjs';
 import { COLOUR_CHUNKS, decoderIndependent, pngChunkTypes } from './art-image-facts.mjs';
+import { listMasterSidecars, redactJsonText } from './art-sidecar-redact.mjs';
 import { verifyShippedThumbs } from './art-thumb-verify.mjs';
 import { STRIP_LIST } from './art-thumbs.mjs';
 import { THUMB_FILE } from './art-thumb-apply.mjs';
@@ -64,6 +68,31 @@ const walk = (root) => {
 };
 
 const samePixels = (a, b) => a.hash === b.hash && a.width === b.width && a.height === b.height;
+
+/**
+ * **Sidecars (r46-fix, FOC46-01).** For every art JSON of `public/`, the build holds exactly the master's text with the local paths of the
+ * build PC replaced by their last names (`redactJsonText`, the one function the build itself uses): the same keys, order, numbers and
+ * formatting, only the string values that held a path differ. A shipped sidecar the build left unchanged where the master carries a path (the
+ * paths would go live), or one that differs from the master anywhere else, is a problem. The game's own reads are proved equal by
+ * `tests/unit/art-sidecar-redact.test.ts`; that no path is left anywhere in the build is `tools/dist-local-paths.mjs`.
+ */
+export function verifyShippedSidecars({ distDir, publicDir }) {
+  const problems = [];
+  const masters = listMasterSidecars(publicDir);
+  let redacted = 0;
+  for (const m of masters) {
+    const shipped = join(distDir, m.rel);
+    if (!existsSync(shipped)) {
+      problems.push(`${m.rel}: the build does not hold this sidecar`);
+      continue;
+    }
+    const master = readFileSync(m.full, 'utf8');
+    const want = redactJsonText(master);
+    if (want.text !== master) redacted++;
+    if (readFileSync(shipped, 'utf8') !== want.text) problems.push(`${m.rel}: the shipped sidecar is not the master with its local paths replaced by their last names`);
+  }
+  return { checked: masters.length, redacted, problems };
+}
 
 /** The pixel-identity gate over a build output; see the file header. `listFile` is the strip list the thumbnails are checked against. */
 export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = true, listFile = join(publicDir, '..', STRIP_LIST) } = {}) {
@@ -127,8 +156,10 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = t
   for (const f of recorded.keys()) if (!names.has(f)) problems.push(`${f}: art/derived.json lists a master that is not in public/art`);
   const thumbs = await verifyShippedThumbs({ distDir, publicDir, listFile, jobs });
   problems.push(...thumbs.problems);
+  const sidecars = verifyShippedSidecars({ distDir, publicDir });
+  problems.push(...sidecars.problems);
   problems.sort();
-  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, thumbs: { checked: thumbs.checked, webp: thumbs.webp, png: thumbs.png, none: thumbs.none, enabled: thumbs.enabled }, problems, ms: Date.now() - t0 };
+  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, thumbs: { checked: thumbs.checked, webp: thumbs.webp, png: thumbs.png, none: thumbs.none, enabled: thumbs.enabled }, sidecars: { checked: sidecars.checked, redacted: sidecars.redacted }, problems, ms: Date.now() - t0 };
 }
 
 const ART_NAME = String.raw`(?<![\w-])art\/[A-Za-z0-9_@.\-/]+?\.(?:png|webp)(?![\w])`;

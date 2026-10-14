@@ -10,6 +10,8 @@ export interface ArtVerifyResult {
   exact: boolean;
   /** The strip thumbnails (`tools/art-thumb-verify.mjs`): how many entries were checked, of which kinds, and whether the build made any. */
   thumbs: { checked: number; webp: number; png: number; none: number; enabled: boolean };
+  /** The art sidecars (r46-fix): how many the master folder holds and how many of them carry a local path the build replaced. */
+  sidecars: { checked: number; redacted: number };
   problems: string[];
   ms: number;
 }
@@ -20,6 +22,8 @@ export interface ArtVerifyResult {
  */
 export function verifyShippedArt(options: { distDir: string; publicDir: string; jobs?: number; exact?: boolean; listFile?: string }): Promise<ArtVerifyResult>;
 export function artNamesIn(text: string): string[];
+/** Every art JSON of `public/` is in the build as the master's text with its local paths replaced (`redactJsonText`), and nothing else differs. */
+export function verifyShippedSidecars(options: { distDir: string; publicDir: string }): { checked: number; redacted: number; problems: string[] };
 
 export interface ArtAuditResult {
   ok: boolean;

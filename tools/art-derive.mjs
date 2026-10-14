@@ -75,7 +75,7 @@ async function main(argv) {
     const dir = resolve(option(argv, '--dir'));
     if (command === 'verify') {
       const r = await verifyShippedArt({ distDir: dir, publicDir, jobs, exact: !argv.includes('--allow-inexact'), listFile: resolve(option(argv, '--strip-list', resolve(publicDir, '..', STRIP_LIST))) });
-      console.log(`art-derive verify${r.exact ? ' (exact)' : ' (--allow-inexact)'}: ${r.ok ? 'PASS' : 'FAIL'}: ${r.checked} masters checked (${r.webp} WebP, ${r.png} PNG, ${r.decoded} pixel-compared); strip thumbnails: ${r.thumbs.enabled ? `${r.thumbs.checked} checked (${r.thumbs.webp} WebP, ${r.thumbs.png} PNG, ${r.thumbs.none} none), each decoded and compared with its master resized by the rule` : 'none in this build'}; ${r.problems.length} problem(s), ${(r.ms / 1000).toFixed(0)} s`);
+      console.log(`art-derive verify${r.exact ? ' (exact)' : ' (--allow-inexact)'}: ${r.ok ? 'PASS' : 'FAIL'}: ${r.checked} masters checked (${r.webp} WebP, ${r.png} PNG, ${r.decoded} pixel-compared); strip thumbnails: ${r.thumbs.enabled ? `${r.thumbs.checked} checked (${r.thumbs.webp} WebP, ${r.thumbs.png} PNG, ${r.thumbs.none} none), each decoded and compared with its master resized by the rule` : 'none in this build'}; sidecars: ${r.sidecars.checked} checked, ${r.sidecars.redacted} with local paths replaced, each the master's text and nothing else; ${r.problems.length} problem(s), ${(r.ms / 1000).toFixed(0)} s`);
       for (const p of r.problems) console.log(`  PROBLEM ${p}`);
       process.exitCode = r.ok ? 0 : 1;
     } else {
