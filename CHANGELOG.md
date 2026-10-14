@@ -1,13 +1,52 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 67 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 68 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-14 · Rikku's Mix and the FFX-2 battle menu follow the game, and two hidden FFX-2 chapters (release candidate r48-rc; not live)
+
+Address: none yet (branch r48-rc: the live release r47 b8aa6f96 plus the rule lanes of re-parity-rc7 8eb2e8c6, and the hidden chapters of ch-tourist-trap a142ad1b and ch-besaid-valefor 865d024a, each described in its own entry below; not deployed, no review run)
+
+- **FFX only, Rikku's Mix:** works the way the game's does. Any two items make something (the game has a result for
+  every one of the 6,328 pairs), and the 21 Mixes that were missing are in (Pineapple, Blaster Mine, Hazardous Shell,
+  Calamity Bomb, Heat Blaster, Brimstone, and the ice, thunder and water families from Snow Flurry to Dark Rain; they
+  borrow the nearest family's effect, so their picture and sound are that family's). Both ingredients are used up the
+  moment the Mix goes off, a Mix with nobody to aim at costs the ingredients but not Rikku's Overdrive, and who a Mix
+  lands on is chosen as the game chooses (one random member for the single-target ones, a whole side otherwise).
+  Stacks of items stop at 99 wherever they grow, a stolen item and a refund included, and a Spare Change offer is paid
+  in full or not at all. The Mix list shows what it showed before: the recipes it has always listed, and "? ? ?" for
+  any other pair; such a pair now makes the game's real result where the last build said "Mix failed!". No chapter
+  plays a Mix, so no fight changes. No boss number and no party number changed, and every chapter wins as often as
+  before.
+- **FFX-2 only:** The girls' automatic abilities now work the way the game's do, and the battle menu follows the
+  game's own rules for what a girl can use. An accessory or dressphere ability that keeps a status on her for good
+  (the Moon, Shining, Defense, Star, Recovery and Speed Bracers, Adamantite, Ragnarok, Bloodlust, Wring, Minerva's
+  Plate, Shmooth Shailing, Lady Luck's Critical, the Mascot's Auto-Shell and Auto-Protect) puts it on and keeps it,
+  out of a Dispel's reach, and the SOS abilities (Warrior's SOS Protect, Samurai's SOS Critical, the Wall Ring, the
+  Regen and Haste Bangles, Cat Nip) switch their statuses on when her HP drops under a third and off when she is
+  healed past it. The Berserker's Counterattack, Magic Counter and Evade & Counter, which did nothing until now,
+  answer a blow with her own Attack at the attacker (Evade & Counter makes a physical swing miss her outright).
+  Nothing a shipped build wears uses these yet, so the chapters play as before until a player masters the abilities or
+  wears the accessories. The commands a dressphere gives you from the start are there before you learn anything (Pray,
+  Cure, Power Break, Fire, Blizzard, Thunder and Water), the passive abilities you learn no longer appear as commands
+  you can pick, and Yuna, Rikku and Paine each have their own Trainer moves. While a girl is Itchy every command stays
+  on the list but greyed out, with Escape and changing dressphere the ways out. Silence stops everything the game
+  stops, every Dance and Song and the Dark Knight's spells included, and leaves Pray, Vigor, Focus and MP Absorb
+  alone. Moves that cost MP follow Half MP Cost, One MP Cost and Magic Booster the way the game does, and a girl in a
+  Special dressphere has no Item or Escape command. The Samurai gains Magicide, Dismissal, Fingersnap, Momentum,
+  Shin-Zantetsu and Clean Slate, the Alchemist gains Dispel Tonic and Mega Phoenix, and the order in which commands
+  unlock now matches the game for the Samurai, Thief, Berserker, Warrior, White Mage and Alchemist.
+- **Disclosed, FFX-2:** one FFX-2 golden digest moved, Chapter V (Vegnagun and Shuyin), because of the wider Silence
+  scope above: it wins exactly as often (490 of 500 seeds before and after, every seed the same outcome) and plays
+  about 0.07 party turns longer a fight. The White Mage's Pray is a free, 0 MP heal of the whole party on her opening
+  menu, as the game lists it; no shipped chapter changes because of it, but a White Mage who only prays is now very
+  hard to wear down, which a later balance pass should expect.
 
 ## 2026-10-14 · The ACCESSIBILITY tab with REDUCE FLASHES and COLOUR VISION, and the site's small painting files cut to what the game reads (release candidate r47-rc; not live)
 
