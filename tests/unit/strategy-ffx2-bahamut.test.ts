@@ -269,8 +269,15 @@ const BREAK_LADDER: ReadonlyArray<readonly [string, string]> = [
 /** The tactic's own bar, from §2.4's 66.0%-under-Shell figure. */
 const TOP_UP_BAR = 0.7;
 
-/** Rows a counter-test line must never fall into by accident. */
-const SUSTAIN_LABELS = new Set(['Cure', 'Cura', 'Curaga', 'Vigor', 'Shell', 'Protect', 'Life']);
+/**
+ * Rows a counter-test line must never fall into by accident.
+ *
+ * **Pray joined on 2026-10-14 (re-parity RC7 X2-B, FFX-2 only; reason "game-code parity").** The game lists Pray for the White Mage from the start (a "free"
+ * pair of its command table, `docs/handoff/re-parity-rc7-x2cmd.md`), so the engine's menu now offers it. It costs nothing and heals the party, so the
+ * fall-back "first enabled row" below landed on it once her MP was spent: on seed 1 Yuna prayed 2,654 times, the party lived 156 Mega Flares and the mashing
+ * line won 21 of 30 seeds. Pray is sustain like Cure and Vigor, and the harness keeps its promise by not choosing it.
+ */
+const SUSTAIN_LABELS = new Set(['Cure', 'Cura', 'Curaga', 'Vigor', 'Pray', 'Shell', 'Protect', 'Life']);
 
 const enabledRow = (commands: AvailableCommand[], label: string): AvailableCommand | undefined =>
   commands.find((c) => c.enabled && c.label === label && c.validTargets.length > 0);

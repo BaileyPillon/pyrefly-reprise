@@ -34,8 +34,10 @@ export const songstress: DressphereDef = {
     50: { hp: 1323, mp: 176, str: 12, mag: 84, def: 12, mdef: 52, agi: 59, acc: 100, eva: 12, luck: 11 },
   },
   abilities: [
-    { abilityId: 'x2-songstress-darkness-dance', apCost: 0 },
+    { abilityId: 'x2-songstress-darkness-dance', apCost: 0, free: true },
     { abilityId: 'x2-songstress-samba-of-silence', apCost: 20 },
+    { abilityId: 'x2-songstress-mp-mambo', apCost: 20, keyItem: 0x46 },
+    { abilityId: 'x2-songstress-magical-masque', apCost: 20, keyItem: 0x47 },
     { abilityId: 'x2-songstress-sleepy-shuffle', apCost: 80 },
     { abilityId: 'x2-songstress-carnival-cancan', apCost: 80, prereq: 'x2-songstress-sleepy-shuffle' },
     { abilityId: 'x2-songstress-slow-dance', apCost: 60 },

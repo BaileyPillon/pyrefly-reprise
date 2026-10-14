@@ -77,7 +77,7 @@ describe('accessories\' status half (kit.ts)', () => {
     for (const id of ['yuna', 'rikku', 'paine']) {
       expect(unit(id).statuses.protect?.ticksRemaining).toBeNull();
       expect(unit(id).statuses.shell?.ticksRemaining).toBeNull();
-      expect(unit(id).autoStatuses).toEqual(['protect', 'shell']);
+      expect(unit(id).autoStatuses).toEqual(['shell', 'protect']); // the layer lists group 2 by the game's slot (Shell 0, Protect 1); the set is what it always was (re-parity X2-D)
     }
     const units = Object.values(start(viaInfinitoSourcedKitBuild).engine.state().combatants) as unknown as Ffx2Unit[];
     const { ctx: c, events } = ctx(units);

@@ -49,7 +49,7 @@ export function aimGate(ctx: Ctx, actor: FFXCombatant, def: AbilityDef, targets:
  */
 export function fizzle(ctx: Ctx, actor: FFXCombatant, command: Command, outOfReach: boolean): ExecutionResult {
   if (command.kind === 'item' && ctx.rt.prepaidItem === command.id) {
-    refundItem(ctx, command.id);
+    refundItem(ctx, command.id, actor);
     ctx.rt.prepaidItem = undefined;
   }
   if (outOfReach && actor.controller === 'player' && ctx.rt.currentActorId === actor.id && ctx.rt.inReaction !== true) {

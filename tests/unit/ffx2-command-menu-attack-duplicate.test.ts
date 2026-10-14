@@ -42,7 +42,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { bahamutSetup, aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import { registerBattleContent, ffx2EngineOptions } from '../../src/app/screens/BattleScreenContent.ts';
-import { buildCommands } from '../../src/battle/ffx2/targeting.ts';
+import { buildCommands } from '../../src/battle/ffx2/menu.ts';
 import { applyStatus } from '../../src/battle/ffx2/index.ts';
 import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
 import type { AvailableCommand, Decision } from '../../src/battle/common/types.ts';
@@ -137,7 +137,7 @@ describe('the fix does not touch berserk, itchy or a dressphere with no Attack a
     expect(rows[0]!.command).toMatchObject({ kind: 'attack' });
   });
 
-  it('an itchy Gunner gets no Attack at all (§2.8: Itchy leaves only spherechange/Escape)', () => {
+  it('an itchy Gunner keeps her one Attack row, greyed (§2.8: Itchy leaves only spherechange/Escape usable; FFX2-G02 E1: the game greys every row instead of hiding it)', () => {
     const opts = ffx2EngineOptions();
     const unit = gunner({ itchy: true });
     const commands = buildCommands(unit, {
@@ -146,7 +146,12 @@ describe('the fix does not touch berserk, itchy or a dressphere with no Attack a
       dresspheres: opts.dresspheres!,
       canEscape: false,
     });
-    expect(attackRows(commands)).toHaveLength(0);
+    const rows = attackRows(commands);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.enabled).toBe(false);
+    expect(rows[0]!.disabledReason).toMatch(/Itchy/);
+    // nothing but a spherechange or Escape can be answered
+    expect(commands.filter((c) => c.enabled).every((c) => c.command.kind === 'spherechange' || c.command.kind === 'escape' || c.command.kind === 'defend')).toBe(true);
   });
 
   it('Yuna in White Mage (no Attack command, §3.5) still gets none — this fix never adds one', () => {

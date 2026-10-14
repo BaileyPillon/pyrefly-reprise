@@ -72,7 +72,7 @@ export function runItemReactions(h: EndHooks, keepDeaths = false): void {
       const reactor = tryActor(ctx, r.userId);
       if (r.lost || !reactor || !isAlive(reactor)) continue;
       if (r.kind === 'auto-phoenix' && !reactionCanAct(canActFacts(reactor))) {
-        refundItem(ctx, r.itemId);
+        refundItem(ctx, r.itemId, reactor);
         continue;
       }
       ran++;

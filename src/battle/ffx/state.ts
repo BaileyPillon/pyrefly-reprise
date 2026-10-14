@@ -24,6 +24,7 @@ import type { ActorRuntime, FFXRuntime } from './runtime.ts';
 import { baseCtb } from './math.ts';
 import { chrBaseCtb } from './kernel/ctb.ts';
 import { isAlive, onField, targetable } from './predicates.ts';
+import { changeStock } from './adapt/bag.ts';
 
 // The single-combatant predicates live in `./predicates.ts` since round 04
 // (PR-0040: this file crossed the 400-line house limit, AGENTS.md hard rule 7).
@@ -75,26 +76,24 @@ export interface Ctx {
  * the count printed after each link was still the untouched 10. Chapter 5's
  * FFX-2 chain was never affected.
  *
+ * The change is the game's own bag function (`kernel/bag.ts`, via `adapt/bag.ts`; re-parity RC7): a removal larger than the stack is refused whole.
+ * **A monster never touches the bag** (`kernel/deduct.ts`: the game's deduct and refund skip chr index 0x14 to 0x1b, the game's actor number of a monster of
+ * the formation), so a `user` that is a monster pays nothing and the use goes ahead.
+ *
  * Returns false when the bag is empty, so callers keep their existing "No items
  * left" behaviour.
  */
-export function spendItem(ctx: Ctx, id: string): boolean {
-  const count = ctx.rt.inventory.get(id) ?? 0;
-  if (count <= 0) return false;
-  const left = count - 1;
-  ctx.rt.inventory.set(id, left);
-  ctx.state.flags[`inventory:${id}`] = left;
-  return true;
+export function spendItem(ctx: Ctx, id: string, user?: FFXCombatant): boolean {
+  return changeStock(ctx, id, -1, user) === 0;
 }
 
 /**
  * Give one of `id` back to the party bag (the action executor's refund, `0x007b0c20` with +1): the stack stops at 99, so a refund into
- * a full stack is lost, and the new count is mirrored into `state.flags` like {@link spendItem}'s.
+ * a full stack is lost, and the new count is mirrored into `state.flags` like {@link spendItem}'s. The refund is not matched to a deduction that
+ * really happened: with none of the item left it makes a stack of one. A monster's refund changes nothing, as its deduction did not.
  */
-export function refundItem(ctx: Ctx, id: string): void {
-  const left = Math.min(99, (ctx.rt.inventory.get(id) ?? 0) + 1);
-  ctx.rt.inventory.set(id, left);
-  ctx.state.flags[`inventory:${id}`] = left;
+export function refundItem(ctx: Ctx, id: string, user?: FFXCombatant): void {
+  changeStock(ctx, id, 1, user);
 }
 
 /** A fresh, empty {@link ActorRuntime} for a combatant. */

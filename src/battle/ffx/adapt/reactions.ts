@@ -124,7 +124,7 @@ export function reactToHit(ctx: Ctx, target: FFXCombatant, hit: HitFacts): void 
     });
     if (req) {
       const itemId = MED_LIST[req.index] as ItemId;
-      if (spendItem(ctx, itemId)) enqueue(ctx, { kind: 'auto-med', userId: target.id, targetId: target.id, itemId, priority: req.priority });
+      if (spendItem(ctx, itemId, target)) enqueue(ctx, { kind: 'auto-med', userId: target.id, targetId: target.id, itemId, priority: req.priority });
     }
   }
 
@@ -140,7 +140,7 @@ export function reactToHit(ctx: Ctx, target: FFXCombatant, hit: HitFacts): void 
     });
     if (req) {
       const itemId = POTION_LIST[req.index] as ItemId;
-      if (spendItem(ctx, itemId)) enqueue(ctx, { kind: 'auto-potion', userId: target.id, targetId: target.id, itemId, priority: req.priority });
+      if (spendItem(ctx, itemId, target)) enqueue(ctx, { kind: 'auto-potion', userId: target.id, targetId: target.id, itemId, priority: req.priority });
     }
   }
 }
@@ -162,7 +162,7 @@ export function reactToDeath(ctx: Ctx, victim: FFXCombatant): void {
   const k = autoPhoenix(false, stockOf(ctx, PHOENIX_DOWN), candidates);
   if (k === null) return;
   const rescuer = holders[k] as FFXCombatant;
-  if (spendItem(ctx, PHOENIX_DOWN)) {
+  if (spendItem(ctx, PHOENIX_DOWN, rescuer)) {
     enqueue(ctx, { kind: 'auto-phoenix', userId: rescuer.id, targetId: victim.id, itemId: PHOENIX_DOWN, priority: 0x30 });
   }
 }

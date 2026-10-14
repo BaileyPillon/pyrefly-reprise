@@ -313,6 +313,12 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * (4cc7ce75 -> 73fd4f55, victory both) and yunalesca#7 (97c45011 defeat -> 8e48c312 victory). The new log is the old one to the switch event itself (the first 982
  * events of #1 and the first 737 of #7 are identical), and they part there. The other 16 digests are untouched (no other chapter's line changed; the Chapter III
  * digests are the ones above), ffx2-atb-golden and ff7-golden unchanged. Rates over 500 seeds: 398 -> 453 wins (docs/handoff/re-parity-rc6-ch2.md).
+ *
+ * RC7 assembly, 2026-10-14 (re-parity-rc7: lane L-CMD, the command rules, and lane FFX-H, Rikku's Mix and the item bag, merged onto re-parity-rc6-ch2; FFX only;
+ * docs/handoff/re-parity-rc7.md). Each lane left all 18 digests as they were, and so does the merged tree: nothing is re-baselined. The pinned seeds (1 and 7 of the
+ * nine chapters) never reach a path either lane changed: no second Doublecast cast meets a foe the first one killed, no dropped target, no Mix, no stack past 99.
+ * The seeds that do reach one are measured, not pinned: the whole-chain event-log digests of seeds 1 to 500 of all eleven chapters differ from the base's on
+ * Braska's Final Aeon (149), Sin: the Face (124) and Yunalesca (seed 429), and on no other seed; every outcome is the base's.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '18bfe5b2:victory',

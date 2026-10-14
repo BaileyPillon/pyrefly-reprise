@@ -140,8 +140,9 @@ describe("the attached records are the game's table", () => {
     // 461 and 459 since the hidden Sinspawn Gui chapter (FFX only): Requiem (0x30e3), the Lv. 1 Key Sphere (0x2051), Gui's Special 1 (0x6001) and Venom (0x6031), each with its record (all four rows are in the game's fixtures).
     // 462 and 460 since the airship menu followed the game (re-parity row D-08, Bailey 2026-10-09 "Yes, match the game"): Cid's
     // third Trigger Command, Cancel (0x3108), with the game's own record (the same fields as Talk and Pull back).
-    expect(ALL_ABILITIES).toHaveLength(462);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(460);
+    // 483 and 481 since re-parity RC7 lane FFX-H: the 21 Mix results the data layer lacked (0x308d to 0x30a8), each with its record.
+    expect(ALL_ABILITIES).toHaveLength(483);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(481);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });
@@ -386,7 +387,7 @@ describe("the status bytes of the attached records are the game's table (re-pari
   /**
    * The shatter chance (record byte 0x2c) is read from the record for every recorded command, as the other status bytes are
    * (`adapt/status.ts#commandStatus`); `AbilityDef.shatterChance` is read only by an ability with no game record. Where the ability's own
-   * number differs from the record's: 7 abilities of ours carry a chance the game's record does not (it is 0 there), and 148 more (and the
+   * number differs from the record's: 7 abilities of ours carry a chance the game's record does not (it is 0 there), and 152 more (148, plus the four grenade-line Mix results RC7 added, whose records carry 50; and the
    * party's own Attack, 30, which lives in the registry) have a chance in the game's record that our data never authored. Only the first group can change a fight that ships: a Petrified party member
    * is hit by enemy commands, and the enemy rows of the second group are the possessed Yojimbo's Daigoro (10) and Grothia's attack (10).
    */
@@ -410,7 +411,7 @@ describe("the status bytes of the attached records are the game's table (re-pari
       'mortibody-water: 10 -> 0',
       'natus-flare: 10 -> 0',
     ]);
-    expect(added).toBe(148);
+    expect(added).toBe(152);
   });
 
   it('the stage-buff mask has no bits above the six stacks, and an amount whenever it is set', () => {

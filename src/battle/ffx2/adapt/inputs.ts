@@ -9,6 +9,8 @@
 import type { StatBlock } from '../../common/types.ts';
 import type { Ffx2Unit } from '../internal.ts';
 import { isChained } from '../chain.ts';
+import { COUNTER_WORD0 } from '../kernel/counter-check.ts';
+import { holdsWord0 } from './auto-layer.ts';
 import type { HitAttacker, HitTarget } from '../kernel/hit.ts';
 import type { PipelineAttacker, PipelineTarget } from '../kernel/pipeline-types.ts';
 import { STATUS_COUNT, initialStatusResult, type StatusAttacker, type StatusResult, type StatusTarget } from '../kernel/statusTypes.ts';
@@ -141,7 +143,7 @@ export function hitTarget(target: Ffx2Unit, id: number): HitTarget {
     asleep: has(target, 'sleep'),
     petrified: has(target, 'petrify'),
     stopped: has(target, 'stop'),
-    evadesPhysical: false, // the Evade & Counter auto-ability is not modelled
+    evadesPhysical: holdsWord0(target, COUNTER_WORD0.EVADE_AND_COUNTER), // Evade & Counter (word 0 bit 3): a physical-only command on accuracy formula 1 or 2 misses her with no roll (re-parity X2-D)
     inHitReaction: isChained(target),
     aided: false,
     maxHp: target.stats.maxHp,

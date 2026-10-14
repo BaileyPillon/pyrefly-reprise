@@ -51,8 +51,8 @@ export const darkKnight: DressphereDef = {
     52: { hp: 3035, mp: 234, str: 118, mag: 79, def: 140, mdef: 96, agi: 41, acc: 104, eva: 4, luck: 12 },
   },
   abilities: [
-    { abilityId: 'x2-dark-knight-attack', apCost: 0 },
-    { abilityId: 'x2-dark-knight-darkness', apCost: 0 },
+    { abilityId: 'x2-dark-knight-attack', apCost: 0, free: true },
+    { abilityId: 'x2-dark-knight-darkness', apCost: 0, free: true },
     { abilityId: 'x2-dark-knight-charon', apCost: 20 },
     { abilityId: 'x2-dark-knight-drain', apCost: 20 },
     { abilityId: 'x2-dark-knight-demi', apCost: 20 },
@@ -64,7 +64,9 @@ export const darkKnight: DressphereDef = {
     { abilityId: 'x2-dark-knight-black-sky', apCost: 100, prereq: 'x2-dark-knight-death' },
     { abilityId: 'x2-dark-knight-poisonproof', apCost: 30 },
     { abilityId: 'x2-dark-knight-stoneproof', apCost: 30, prereq: 'x2-dark-knight-poisonproof' },
+    { abilityId: 'x2-dark-knight-confuseproof', apCost: 30, prereq: 'x2-dark-knight-stoneproof' },
     { abilityId: 'x2-dark-knight-curseproof', apCost: 30 },
+    { abilityId: 'x2-dark-knight-deathproof', apCost: 40, prereq: 'x2-dark-knight-curseproof' },
   ],
 };
 

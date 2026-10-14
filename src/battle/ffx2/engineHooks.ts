@@ -9,7 +9,7 @@ import type { BattleState, CombatantId, Command } from '../common/types.ts';
 import type { BattleRng } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
-import { berserkCommand, type MenuContext } from './targeting.ts';
+import { berserkCommand, type MenuContext } from './menu.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { abilityPerformedBy } from './execute.ts';
 import { takeResults } from './results-tally.ts';
@@ -198,6 +198,41 @@ function resolveAsCounter(env: CounterEnv, unit: Ffx2Unit, command: Extract<Comm
   env.emit({ type: 'action-start', actorId: unit.id, command, abilityId: ability.id, abilityName: ability.name, targets: command.targets });
   resolveAbility(env.resolveCtx(), unit, ability, command.targets, { isCounter: true });
   env.emit({ type: 'action-end', actorId: unit.id });
+}
+
+/** A counter a result set off, waiting for the action that caused it to end (`applied.ts`). */
+export interface PendingCounter {
+  target: Ffx2Unit;
+  source: Ffx2Unit;
+  cause: 'counterattack' | 'evade-and-counter' | 'magic-counter';
+}
+
+/**
+ * **A girl's counters** (Berserker: Counterattack, Magic Counter, Evade & Counter; re-parity X2-D, FFX-2 only). The game queues the
+ * girl's own Attack at the attacker as a system action (note FFX2-G04 3.6); the engine plays each one once the action that set it off
+ * has ended, as a free action like an enemy's counter: `action-start`, her Attack at the source alone, the `counter` event, `action-end`,
+ * and no change to her ATB (a system action is not her turn; the notes say nothing about a cost, `[estimate]`). A counter whose girl or
+ * attacker has fallen in the meantime is dropped. Her blow reports to the enemy scripts as a party action's damage does (`onDamaged`,
+ * `onTargeted`, the results tally) but is not a turn (`onTurnResolved` is not told) and sets off no counter of its own.
+ */
+export function runPartyCounters(
+  queue: PendingCounter[],
+  env: CounterEnv & { mark(): number; since(from: number): EventDraft[] },
+): void {
+  while (queue.length > 0) {
+    const { target: girl, source, cause } = queue.shift() as PendingCounter;
+    if (!girl.alive || girl.removed || !source.alive || source.removed) continue;
+    const ability = env.abilities.get('attack');
+    if (!ability) continue;
+    const from = env.mark();
+    const command: Command = { kind: 'attack', targets: [source.id] };
+    env.emit({ type: 'action-start', actorId: girl.id, command, abilityId: ability.id, abilityName: ability.name, targets: [source.id] });
+    resolveAbility(env.resolveCtx(), girl, ability, [source.id], { isCounter: true, counterCause: cause });
+    env.emit({ type: 'action-end', actorId: girl.id });
+    notifyEnemiesDamaged(env.since(from), girl, env.units, env.aiContext);
+    notifyEnemiesTargeted(env.since(from), girl, env.units, env.aiContext);
+    notifyEnemiesResults(env.units, env.aiContext);
+  }
 }
 
 /** HP damage this action dealt, per target (an HP cost the caster paid is not a hit). */

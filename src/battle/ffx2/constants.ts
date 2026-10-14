@@ -212,6 +212,16 @@ export const NEAR_WEIGHTED_TARGET_SEARCH = true;
  */
 export const MEGA_FLARE_CONSTANT = 14;
 
+/**
+ * Whether a physical attack that MISSES a girl still reaches her counter check (re-parity X2-D). The game's result applier runs for
+ * every hit determination, a miss included (`research/re-ffx2-ai-fallen-trema.md` 1.2, [H]), and the counter check, called from it,
+ * has no hit or miss test of its own (note FFX2-G04 3.6), so Counterattack and Evade & Counter answer a miss as they answer a hit
+ * (Magic Counter needs something to have landed, so a miss never gives it). Note FFX2-G04 open question 4 says the miss path "was not
+ * traced"; this reading joins two notes' statements. Off, a miss gives no counter. One live check settles it: an Evade & Counter
+ * girl and one enemy swing at her that misses.
+ */
+export const COUNTER_AFTER_MISS = true;
+
 /** Enemy basic Attack constant; 16 makes step 6 a no-op. [ffx2-bahamut §2.3] `[estimate]` */
 export const ENEMY_ATTACK_CONSTANT = 16;
 

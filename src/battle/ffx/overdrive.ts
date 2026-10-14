@@ -16,7 +16,7 @@ import type { TimingBonus } from './formulas.ts';
 import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
 import { attackReelHits } from './reels.ts';
 import { defaultGrandSummonAeon } from './aeon-duel.ts';
-import { grandSummonEntries, mixPickerParams } from './pickerParams.ts';
+import { MIX_PREVIEW_ALL_PAIRS, grandSummonEntries, mixPickerParams } from './pickerParams.ts';
 import { gaugeAdd, gaugePay } from './gauge.ts';
 
 /** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
@@ -125,16 +125,35 @@ export function timerMsFor(def: AbilityDef): number {
 }
 
 /**
- * Every recipe the party can actually make right now [ffx-combat-core §5.9].
- *
- * A pair is mixable when both ingredients are in the bag — and when the two
- * ids are the same (Potion + Potion -> Ultra Potion) the bag must hold **two**.
+ * Every pair the party can actually mix right now [ffx-combat-core §5.9]. The game's table is complete (any two items make something, `kernel/mix.ts`;
+ * re-parity RC7), so this is every pair of items in the bag, in the bag's order, each with the result it makes. A pair is mixable when both ingredients are
+ * in the bag, and when the two ids are the same (Potion + Potion -> Ultra Potion) the bag must hold **two** (the menu's rule, FFX-G05 section 3.3).
  */
 export function mixablePairs(ctx: Ctx): Array<[ItemId, ItemId, AbilityId]> {
+  const stock = [...ctx.rt.inventory].filter(([, count]) => count > 0);
+  const out: Array<[ItemId, ItemId, AbilityId]> = [];
+  for (let i = 0; i < stock.length; i++) {
+    for (let j = i; j < stock.length; j++) {
+      const [a, held] = stock[i] as [ItemId, number];
+      const [b] = stock[j] as [ItemId, number];
+      if (i === j && held < 2) continue;
+      const result = ctx.content.mixResult(a, b);
+      if (result !== undefined && ctx.content.ability(result) !== undefined) out.push([a, b, result]);
+    }
+  }
+  return out;
+}
+
+/**
+ * The pairs the Mix picker's preview names [ffx-combat-core §5.9]. With {@link MIX_PREVIEW_ALL_PAIRS} off (the shipped state) this is the registered recipes
+ * whose two ingredients are in the bag (the same item twice needs two in stock), in the registry's order: the line every build before re-parity RC7
+ * shipped, and "? ? ?" for any other pair. With it on, it is {@link mixablePairs}: every pair of the bag with the result the game's chart gives it.
+ * **Only the preview reads this.** The engine's resolution of a fired pair, and the automatic draw of an AI or headless Mix, stay on the full chart.
+ */
+export function mixPreviewPairs(ctx: Ctx, allPairs: boolean = MIX_PREVIEW_ALL_PAIRS): Array<[ItemId, ItemId, AbilityId]> {
+  if (allPairs) return mixablePairs(ctx);
   const held = (id: ItemId): number => ctx.rt.inventory.get(id) ?? 0;
-  return ctx.content
-    .mixPairs()
-    .filter(([a, b]) => (a === b ? held(a) >= 2 : held(a) >= 1 && held(b) >= 1));
+  return ctx.content.mixPairs().filter(([a, b]) => (a === b ? held(a) >= 2 : held(a) >= 1 && held(b) >= 1));
 }
 
 /** The `<spell>-fury` rows a Fury marker expands into for this caster [§5.7]. */
@@ -187,7 +206,7 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       break;
     case 'rikku-mix':
       // Hotfix 24: the named bag and the recipes the overlay reads (`pickerParams.ts`).
-      Object.assign(base, mixPickerParams(ctx, mixablePairs(ctx)));
+      Object.assign(base, mixPickerParams(ctx, mixPreviewPairs(ctx))); // the preview's pairs, not the engine's (`MIX_PREVIEW_ALL_PAIRS`)
       break;
     case 'yuna-grand-summon':
       Object.assign(base, { aeons: grandSummonEntries(ctx) }); // the roster unless a duel narrows it, as the picker reads it (hotfix 24)
@@ -255,13 +274,8 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       return { kind, fury: { sweptDegrees, casts: furyCastsFor(def, user.stats.mag, sweptDegrees) } };
     }
     case 'rikku-mix': {
-      // Roll the *input*, as everywhere else in this switch: two ingredients
-      // out of the bag, not a chosen outcome. The shipped recipe table is
-      // explicitly partial ("only ONE confirmed recipe per result",
-      // `data/ffx/mixes/recipes.ts`), so the draw is made among the pairs the
-      // party is actually carrying that the table can resolve — a uniform draw
-      // over the whole bag would return "no recipe" almost every time and hand
-      // the player a spent gauge, which is the bug this replaces.
+      // Roll the *input*, as everywhere else in this switch: two ingredients out of the bag, not a chosen outcome. The game's table is complete
+      // (re-parity RC7, `kernel/mix.ts`), so the draw is made among every pair the party is carrying (`mixablePairs`): any two items make something.
       const pairs = mixablePairs(ctx);
       const chosen = pairs.length > 0 ? ctx.rng.aux.pick(pairs) : undefined;
       return {
