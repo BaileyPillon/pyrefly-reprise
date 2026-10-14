@@ -53,7 +53,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     name: 'Entrust',
     game: 'ffx',
     category: 'special',
-    mpCost: 0,
+    // MP 8, not 0 (re-parity RC7 L-CMD, 2026-10-14; FFX only): command.bin record 0x3027, byte +0x25 = 8 (FFX Steam
+    // build 25501027; `research/re-ffx-command-gate.md` section 2, coverage note FFX-G07 section 4.3). The "MP 0" in the
+    // GAP note above is the older research row and is superseded.
+    mpCost: 8,
     rank: 3,
     power: 0,
     formula: 'none',

@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-13 — `FFXCommandRecord.flagsMisc` documents bit 17 (the Silence gate) (RC7 lane L-CMD, branch `re-parity-rc7-cmd`; FFX only; doc comment only, no type changed)
+
+Bailey, 2026-10-08: "It needs to be a 1:1 parity."; 2026-10-11: "ok keep going ill go with all your recommendations please"; 2026-10-13: "i'll go with all of your recommendations". Source: `FFX-G07` (condensed in `research/re-ffx-command-gate.md`, section 1).
+
+- `src/battle/common/types.ts` (contract file), `FFXCommandRecord.flagsMisc`: the doc comment lists bit 17 (0x20000) as "gated by Silence". The field, its type and its values did not change; the data already carried the bit (41 player-table and 46 enemy-table rows). The engine now reads it: `abilities.ts#blockedBySilence` and `kernel/command-gate.ts#usableCost`.
+- Engine-private, no contract: `battle/ffx/kernel/command-gate.ts`, `kernel/command-range.ts`, `adapt/command-gate.ts`, `command-start.ts`, `escape.ts`. `autoWordA` (`adapt/words.ts`) now carries Half MP Cost (0x4000) and One MP Cost (0x8000).
+- `FFX_HINTS.silence` in `ui/common/statusWords.ts` still says a Silenced member has "no Summon"; that words change is the release driver's (FFX only; the FFX-2 card is untouched).
+
 ## 2026-10-12 — The results screen's music: Chapter IV gets a victory cue and a missing `music.victory` no longer means a silent screen; a loss plays one cue per game (music batch 2, branch `r45-audio`; `src/data/encounters.ts` values only, no type changed; both games as plumbing, FFX-2 only for Chapter IV)
 
 Bailey, 2026-10-10 23:05 EDT: "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please."; 2026-10-12: "I'll go with all of your recommendations" (driver items 53d, 58e, 58f; PR-0410).

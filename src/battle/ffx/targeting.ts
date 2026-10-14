@@ -19,6 +19,7 @@ import {
   tryActor,
 } from './state.ts';
 import { isReachZero } from './reach.ts';
+import { rangeFilter } from './kernel/command-range.ts';
 
 /** `flagsMisc` bit 18: the command uses the weapon's properties (Wakka's weapon commands reach at range). */
 const MISC_USES_WEAPON_BIT = 0x40000;
@@ -180,32 +181,39 @@ export function isPerHitRandom(targeting: Targeting): boolean {
 }
 
 /**
- * The combatants one hit of this action lands on.
- *
- * `chosen` is what the command carried; an empty list falls back to the
- * targeting rule so an AI script can submit `targets: []` and get sane
- * behaviour.
+ * What an action's aim comes to when it starts: who is left, whether one of them is still to be drawn, and how much of the aim fell short.
+ * `targets` are the survivors (when `pick` is set, the candidates one of which an empty aim draws on the engine-side stream); `named` is how
+ * many targets the command named; `outOfReach` counts the targets the reach rule dropped (`kernel/command-range.ts`).
  */
-export function resolveTargets(
-  ctx: Ctx,
-  user: FFXCombatant,
-  def: AbilityDef,
-  chosen: readonly CombatantId[],
-): FFXCombatant[] {
-  const pickAll = (list: FFXCombatant[]): FFXCombatant[] => list;
+export interface Aim {
+  targets: FFXCombatant[];
+  pick: boolean;
+  named: number;
+  outOfReach: number;
+}
+
+/**
+ * The aim of an action, worked out without drawing anything (re-parity RC7 lane L-CMD; FFX only).
+ *
+ * **There is no retarget** (`kernel/command-range.ts`, the game's `pp_BtlRangeCheck`): a target the command named that is gone from the field,
+ * out of reach or dead (unless the command may target the dead) is dropped, and nothing takes its place. `resolveTargets` used to draw a
+ * fresh random target when none of the named ones was left; the game starts nothing instead. An empty aim (a script's `targets: []`, a placeholder)
+ * is not a named target: it is the engine's stand-in for the game's script choosing, so it still draws one legal target.
+ */
+export function aimOf(ctx: Ctx, user: FFXCombatant, def: AbilityDef, chosen: readonly CombatantId[]): Aim {
   // Resolution honours the same gap the menu does, so an explicitly submitted
   // target cannot cross a gap the menu refused to offer — nor land on a foe the
   // menu never offers (`targetable`: untargetable or hidden, like Macalania's
   // Seymour or Yojimbo's Ginnem and Daigoro). A same-side pick is unchanged.
   const crosses = reachesFoesAtRange(ctx, user, def);
+  const opposite = user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx);
   // Per-target reach and the never-a-random-pick flag (Chapter XII's discs)
   // filter nothing for any combatant without those flags, so the arrays below
   // — and every RNG draw made from them — are unchanged elsewhere.
-  const foes = (crosses ? (user.side === 'enemy' ? livingFriendlies(ctx) : livingEnemies(ctx)) : []).filter((c) =>
-    reachesTarget(ctx, user, def, c),
-  );
+  const foes = (crosses ? opposite : []).filter((c) => reachesTarget(ctx, user, def, c));
   const randomFoes = foes.filter(randomPickable);
   const mates = alliesOf(ctx, user).filter((c) => targetable(c) && (def.flags.includes('can-target-dead') || isAlive(c)));
+  const all = (targets: FFXCombatant[], named = 0): Aim => ({ targets, pick: false, named, outOfReach: targets.length === 0 ? opposite.length - foes.length : 0 });
 
   // A scripted group (the game's `performCommand(group, command)`): exactly the combatants the script named, whatever the
   // row's own single or multi flag says [re-ffx-ai-yunalesca-bfa §1.4]. Only rows with `extra.groupTarget`: Yu Yevon's
@@ -213,44 +221,68 @@ export function resolveTargets(
   // the script aims at one actor or at the whole front line. It comes before the switch because the multi rows
   // ('all', 'all-enemies') would otherwise ignore the list.
   if (def.extra?.['groupTarget'] === true && chosen.length > 0) {
-    return chosen.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && onField(c) && isAlive(c));
+    const group = chosen.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && onField(c) && isAlive(c));
+    return { targets: group, pick: false, named: chosen.length, outOfReach: 0 };
   }
 
   switch (def.targeting) {
     case 'self':
-      return [user];
+      return all([user]);
     case 'all-enemies':
-      return pickAll(foes);
+      return all(foes);
     case 'all-allies':
-      return pickAll(mates);
+      return all(mates);
     case 'all':
-      return [...mates, ...foes];
+      return all([...mates, ...foes]);
     // A random-target row's action carries the whole set. The picks (one per hit) are made by the target builder once the action's targets
     // are built (`target-build.ts`, the game's pp_BtlBuildTargetHits), not here.
     case 'random-enemy':
-      return randomFoes;
+      return all(randomFoes);
     case 'random-ally':
-      return mates;
+      return all(mates);
     default:
       break;
   }
 
-  const explicit = chosen
-    .map((id) => tryActor(ctx, id))
-    .filter(
-      (c): c is FFXCombatant =>
-        c !== undefined &&
-        onField(c) &&
-        (c.side === user.side || (crosses && targetable(c) && reachesTarget(ctx, user, def, c))),
-    );
-  if (explicit.length > 0) return explicit.slice(0, 1);
+  if (chosen.length > 0) {
+    // What the command named, through the game's range filter: out of reach and dead targets are dropped (the dead unless the command may
+    // target them), and nobody takes their place.
+    const named = chosen
+      .map((id) => tryActor(ctx, id))
+      .filter((c): c is FFXCombatant => c !== undefined && onField(c) && (c.side === user.side || targetable(c)));
+    const seen = named.map((c) => ({
+      isUser: c === user,
+      far: c.side === user.side || (crosses && reachesTarget(ctx, user, def, c)) ? 0 : 1,
+      dead: !isAlive(c),
+    }));
+    const out = rangeFilter(0, def.flags.includes('can-target-dead'), seen);
+    return { targets: named.filter((_, i) => out.kept[i]).slice(0, 1), pick: false, named: chosen.length, outOfReach: out.outOfReach };
+  }
 
   // The empty-aim fallback skips never-random foes too (Chapter XII's discs;
   // our estimate — research §2 names random-target attacks only).
   const fallback =
     def.targeting === 'single-ally' ? mates : def.targeting === 'single-any' ? [...randomFoes, ...mates] : randomFoes;
   // No aim at all (a script's `targets: []`, a placeholder): the game has no draw for this, so it is an engine stand-in on the engine-side stream.
-  return fallback.length > 0 ? [ctx.rng.aux.pick(fallback)] : [];
+  return { targets: fallback, pick: true, named: 0, outOfReach: fallback.length === 0 ? opposite.length - foes.length : 0 };
+}
+
+/**
+ * The combatants one hit of this action lands on.
+ *
+ * `chosen` is what the command carried; an empty list falls back to the
+ * targeting rule so an AI script can submit `targets: []` and get sane
+ * behaviour. A named target that is gone, out of reach or dead is dropped and not replaced ({@link aimOf}).
+ */
+export function resolveTargets(
+  ctx: Ctx,
+  user: FFXCombatant,
+  def: AbilityDef,
+  chosen: readonly CombatantId[],
+): FFXCombatant[] {
+  const aim = aimOf(ctx, user, def, chosen);
+  if (!aim.pick) return aim.targets;
+  return aim.targets.length > 0 ? [ctx.rng.aux.pick(aim.targets)] : [];
 }
 
 /**

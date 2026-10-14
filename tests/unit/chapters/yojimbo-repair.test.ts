@@ -46,13 +46,16 @@ function firstInput(engine: BattleEngine): Input {
 
 describe('Repair 1 — an explicit target the menu never offers does not land (FFX engine)', () => {
   for (const bystander of ['ginnem', 'daigoro']) {
-    it(`Attack submitted at '${bystander}' strikes Yojimbo instead, on 20 seeds`, () => {
+    // Re-parity RC7 (FFX-G07 3.9): the game's range filter drops a named target it cannot aim at and takes NO replacement, so the Attack lands on nobody.
+    // Until then the engine drew a random legal target and it struck Yojimbo.
+    it(`Attack submitted at '${bystander}' lands on nobody (no replacement is drawn), on 20 seeds`, () => {
       for (let seed = 1; seed <= 20; seed++) {
         const engine = newEngine(seed);
         const d = firstInput(engine);
         const attack = d.commands.find((c) => c.command.kind === 'attack' && c.enabled);
         expect(attack?.validTargets).toEqual(['yojimbo']);
         const hpBefore = engine.state().combatants[bystander]!.hp;
+        const yojimboHp = engine.state().combatants['yojimbo']!.hp;
         const from = engine.state().log.length;
         engine.submit({ kind: 'attack', targets: [bystander] } as Command);
         const st = engine.state();
@@ -62,8 +65,8 @@ describe('Repair 1 — an explicit target the menu never offers does not land (F
           .slice(from)
           .filter((e) => e.type === 'damage' || e.type === 'miss')
           .map((e) => (e as { targetId?: string }).targetId);
-        expect(hit.length).toBeGreaterThan(0);
-        expect(hit.every((id) => id === 'yojimbo')).toBe(true);
+        expect(hit).toEqual([]);
+        expect(st.combatants['yojimbo']!.hp).toBe(yojimboHp);
       }
     });
   }

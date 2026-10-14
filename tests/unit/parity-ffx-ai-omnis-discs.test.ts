@@ -67,11 +67,13 @@ describe('what turns a disc (m106 onHit @0x113; the scenes @0x1842 to 0x1b28; D-
     expect(omnisDiscs(b.state)).toEqual(['fire', 'fire', 'lightning', 'fire']);
   });
 
-  it('a blow from someone who cannot reach out of melee never reaches a disc (the authored reach rule stays): it falls on Seymour instead', () => {
+  it('a blow from someone who cannot reach out of melee never reaches a disc (the authored reach rule stays): the range filter drops it and nobody takes its place', () => {
+    // Re-parity RC7 (the game's range filter, FFX-G07 3.9): a named target out of reach is dropped and NOT replaced. The engine used to draw a random legal
+    // target (Seymour himself) for it; the game starts nothing, so the disc keeps its element and Seymour is not hit either.
     const { ctx } = fresh();
     act(ctx, 'tidus', blow, [DISC(1)]);
     expect(omnisDiscs(ctx.state)).toEqual(['fire', 'fire', 'fire', 'fire']);
-    expect(ctx.state.flags[OMNIS_HITS]).toBe(1);
+    expect(ctx.state.flags[OMNIS_HITS] ?? 0).toBe(0);
   });
 
   it('only the damage type decides: any other type does nothing, and neither does a hit on Seymour himself', () => {
