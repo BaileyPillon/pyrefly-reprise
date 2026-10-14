@@ -92,6 +92,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
     for (const [key, record] of Object.entries(MONSTER_RECORDS)) {
       // The hidden Experiment's row 194 is pinned against its own numbers-only fixture (tests/fixtures/parity/ffx2/experiment_rows.json, tests/unit/chapters/experiment-engine.test.ts).
       if (key.startsWith('ffx2-djose-experiment-')) continue;
+      // The hidden Valefor at Besaid's row 164 is pinned against its own numbers-only fixture (tests/fixtures/parity/ffx2/besaid_valefor_rows.json, tests/unit/chapters/besaid-valefor-data.test.ts).
+      if (key.startsWith('ffx2-besaid-valefor/')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

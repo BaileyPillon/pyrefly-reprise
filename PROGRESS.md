@@ -22,7 +22,7 @@ Append one entry per finished step. Times are EDT.
 
 1. [x] Worktree and junctions (above)
 2. [x] critic-plan (DEEP: encounters.ts, the FFX-2 AI table, chapter registry) + paper preflight `docs/plans/ch-besaid-valefor-review.md` (PROCEED; flags the besaid/daigoro one-letter overlap against chapter-doors.test.ts)
-3. [~] Build (in progress, 2026-10-14 ~01:00): DONE and pushed: enemy data + abilities + group, the game's own monster row 164 (RE note re-ffx2-yojimbo-valefor, fetched at 91ef1fd3; re-pinned: MP 9,999, ACC 95, Gravity nulled, status list, steal byte 128, no slots 17/18, row 363 unused), the AI script (valefor.ts, tagged reading), the tactic, the party (Chapter 2 preset carried forward), the chapter record + pause meta, the story script, the door word + table row, held items (Moon Bracer, Healing Spring), registrations. TODO: scene key spot for Valefor, guide card + document, registry tests (numbers, music table, party stature, strategy guide), the unit tests, bench.
-4. [ ] Tests, tsc, orphans, audio qa, full suite once (D: >= 15 GB first)
+3. [x] Build, pushed: data, row 164 record, AI (tagged), tactic, party, chapter record + meta, story, door (word VALEFOR since the driver moved it from besaid), guide card + page, scene spot (djose-chamber.ts), held items, registry tests updated. Tests written: valefor-door (22), besaid-valefor-data (24), besaid-valefor-engine (15); fixture besaid_valefor_rows.json (row 164, 200 raw bytes). TODO: flow/scene/store/bench tests, art pilot queue, CHANGELOG, CONTRACT-CHANGES, handoff.
+4. [~] Tests, tsc, orphans, audio qa, full suite once (D: >= 15 GB first)
 5. [ ] Browser proof on a production build (outDir on M:), screenshots
 6. [ ] Handoff doc + CHANGELOG entry + push
