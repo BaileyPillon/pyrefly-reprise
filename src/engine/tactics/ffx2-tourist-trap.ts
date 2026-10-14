@@ -12,11 +12,11 @@
  *
  * **Yuna (White Mage)**, in this order:
  * 1. **Revive**: a Phoenix Down (else Life) for a girl down.
- * 2. **Esuna** (else a Remedy) for a girl who is poisoned, the Poison Kozuka leaves.
- * 3. **An Ether** for herself under 24 MP (Kozuka takes a quarter of one girl's MP, Zanmato all but one).
- * 4. **Protect** whenever anyone lacks it: Wakizashi and Daigoro are physical.
- * 5. **A Mega-Potion** when two are under 35 percent (the heal for the turn after Zanmato); **Curaga** (else Cura) for one under 45 percent.
- * 6. **Cura** for one under 75 percent; else **Pray**.
+ * 2. **A Mega-Potion** when two are under 35 percent: the heal for the turn after Zanmato, which leaves every girl at 1 HP and 1 MP, so it must come from the bag and before anything else.
+ * 3. **Esuna** (else a Remedy) for a girl who is poisoned, the Poison Kozuka leaves.
+ * 4. **An Ether** for herself under 24 MP (Kozuka takes a quarter of one girl's MP).
+ * 5. **Protect** whenever anyone lacks it: Wakizashi and Daigoro are physical.
+ * 6. **Curaga** (else Cura) for one under 45 percent; **Cura** for one under 75 percent; else **Pray**.
  *
  * **The Dark Knights**: a Hi-Potion for herself under 25 percent (after Zanmato they stand at 1 HP), else Darkness.
  *
@@ -45,20 +45,20 @@ function yunaTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCo
     if (back) return back;
   }
   const living = party.filter((u) => u.alive);
+  const below = (f: number): number => living.filter((u) => hpFraction(u) < f).length;
+  if (below(0.35) >= 2) {
+    const all = use(commands, 'item', 'x2-mega-potion', []) ?? use(commands, 'ability', 'x2-white-mage-pray', []);
+    if (all) return all;
+  }
   const poisoned = living.find((u) => has(u, 'poison'));
   if (poisoned) {
     const cure = use(commands, 'ability', 'x2-white-mage-esuna', [poisoned.id]) ?? use(commands, 'item', 'x2-remedy', [poisoned.id]);
     if (cure) return cure;
   }
   const lowest = [...living].sort((a, b) => hpFraction(a) - hpFraction(b))[0];
-  const below = (f: number): number => living.filter((u) => hpFraction(u) < f).length;
   if (self.mp < 24) {
     const ether = use(commands, 'item', 'x2-ether', [self.id]);
     if (ether) return ether;
-  }
-  if (below(0.35) >= 2) {
-    const all = use(commands, 'item', 'x2-mega-potion', []) ?? use(commands, 'ability', 'x2-white-mage-pray', []);
-    if (all) return all;
   }
   if (living.some((u) => !has(u, 'protect'))) {
     const protect = use(commands, 'ability', 'x2-white-mage-protect', []);
