@@ -9,7 +9,7 @@
  * routes each chapter to its cue and no other chapter to it (rule 14: which game), that the replaced cues stay in use (so no file is retired), that THEMES.md and
  * CREDITS.md name them, and that the Evrae re-cut moved only two manifest numbers. Nothing here is a listening verdict (AGENTS.md rule 13).
  *
- * Game case: FFX-2 only for `boss-ffx2-fallen-aeons` (Chapters XI and XVI) and `boss-trema` (Chapter XIII, phase 2); FFX only for `boss-seymour-natus` (X),
+ * Game case: FFX-2 only for `boss-ffx2-fallen-aeons` (Chapters XI and XVI, and the hidden Tourist Trap) and `boss-trema` (Chapter XIII, phase 2); FFX only for `boss-seymour-natus` (X),
  * `boss-isaaru` (XIV), `boss-sin-assault` (XVII), `boss-sin-countdown` (XVIII) and the `boss-evrae` re-cut (Chapter VIII).
  */
 
@@ -79,7 +79,7 @@ const EXPECTED: Record<string, { game: string; replaces: string | null; fallback
     game: 'FFX-2',
     replaces: 'boss-ffx2-aeon',
     fallback: 'boss-ffx2-aeon',
-    chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'] },
+    chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'], 'ffx2-tourist-trap': ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap plays the same "Aeons" cue (2026-10-14, by reference, no new audio)
   },
   'boss-trema': { game: 'FFX-2', replaces: 'boss-ffx2-aeon', fallback: 'boss-ffx2-aeon', chapters: { 'ffx2-trema': ['scene-bevelle-underground', 'boss-trema'] } },
   'boss-seymour-natus': { game: 'FFX', replaces: 'boss-seymour-macalania', fallback: 'boss-seymour-macalania', chapters: { 'seymour-natus': ['boss-seymour-natus'] } },

@@ -50,7 +50,7 @@ export const FFX2_TOURIST_TRAP_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'It comes about seven of his attacks in, as few as four or as many as ten, because the calls to Daigoro count too. He winds up for it, so the charge bar warns you; the banner names each move as it starts, and Yuna’s Protect makes the blades much easier to live with.',
+      text: 'It comes about seven of his attacks in, as few as four or as many as ten, because the calls to Daigoro count too. He winds up for it, so the charge bar warns you; the banner names each move, and Yuna’s Protect makes the blades much easier to live with.',
     },
     {
       t: 'p',
@@ -62,7 +62,7 @@ export const FFX2_TOURIST_TRAP_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Darkness ignores his Defense, so two Dark Knights on Darkness are the sources’ answer. The Breaks and every harmful status do nothing to him.',
+      text: 'Darkness ignores his Defense, so two Dark Knights on Darkness are the usual answer. The Breaks and every harmful status do nothing to him.',
     },
     {
       t: 'loot',

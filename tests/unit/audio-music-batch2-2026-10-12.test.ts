@@ -242,9 +242,10 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'ffx2-masterpiece-theatre': { scene: 'scene-bevelle-underground', links: ['boss-experiment', 'boss-experiment'] },
     'sinspawn-gui': { scene: 'scene-gagazet', links: ['boss-gui', 'boss-challenge'] },
     'exp-fayth': { scene: 'scene-fahrenheit', links: ['boss-evrae'] }, // the hidden Fayth chapter is Chapter VIII's record by reference, so it plays Chapter VIII's music (FFX only)
+    'ffx2-tourist-trap': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap (FFX-2 only, 2026-10-14): the field bed and the "Aeons" cue the Road and Ixion play, by reference
   };
 
-  it('plays each chapter\'s scene bed and each link\'s theme as the table says: the 18 listed chapters, FF7, and the four hidden experiments', async () => {
+  it('plays each chapter\'s scene bed and each link\'s theme as the table says: the 18 listed chapters, FF7, and the five hidden experiments', async () => {
     expect(Object.keys(EXPECTED).sort()).toEqual(allChapters().map((c) => c.id).sort());
     for (const chapter of allChapters()) {
       expect(chapter.music.scene, `${chapter.id} scene`).toBe(EXPECTED[chapter.id]!.scene);

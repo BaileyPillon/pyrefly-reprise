@@ -3,7 +3,8 @@
  *
  * Source: `kernel/monmagic.bin` rows 0x40a1 to 0x40a5 of the Steam HD build, read by the RE parity session's review of Yojimbo's and Daigoro's scripts (**RE review 2026-10-14, m170 / m174, rows 170 / 174**; the
  * note `research/re-ffx2-ai-tourist-trap.md` follows on `origin/re-ffx2-yojimbo-valefor`; the monster rows themselves are `research/re-ffx2-yojimbo-valefor.md`). Numbers only, no game text and no
- * game code. Merged into `FFX2_COMMAND_RECORDS` by `./index.ts`.
+ * game code. Merged into `FFX2_COMMAND_RECORDS` by `./index.ts`. They agree with the wiki constants of `research/ffx-yojimbo.md` §8.2 (damage constants 16, 13 and 16, Kozuka's quarter of current MP and its Poison,
+ * Zanmato's 1 HP and 1 MP), which they replace as the source.
  *
  * - **0x40a1, Kozuka**: one enemy (target flags 0x13), damage formula 4 (a fraction of the CURRENT value), power 4 (a quarter), damage class 2 (the MP pool), no damage-type bit (so Protect and Shell
  *   do not reduce it), Poison at status byte 100 (group 1 slot 5); rest 120, no charge.

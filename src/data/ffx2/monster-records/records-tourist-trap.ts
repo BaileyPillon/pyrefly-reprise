@@ -2,7 +2,7 @@
  * The game's own monster rows for Yojimbo and Daigoro in the Cavern of the Stolen Fayth (the optional FFX-2 mission "Tourist Trap"; the hidden chapter). Re-parity W3's shape; **FFX-2 only**.
  *
  * Source: `battle/kernel/monster.bin` of the Steam HD build, **row 170 (Yojimbo)** and **row 174 (Daigoro)**, formation 1847 slots 1 and 2, read field by field by the RE parity session
- * (`research/re-ffx2-yojimbo-valefor.md` sections 3 to 5, numbers only), pinned by `tests/unit/chapters/tourist-trap-engine.test.ts` against `tests/fixtures/parity/ffx2/tourist_trap_rows.json`.
+ * (`research/re-ffx2-yojimbo-valefor.md` §3 to §5, numbers only) `[verified: the game's own table]`, pinned by `tests/unit/chapters/tourist-trap-engine.test.ts` against `tests/fixtures/parity/ffx2/tourist_trap_rows.json`.
  * Merged into `MONSTER_RECORDS` by `./records.ts`.
  *
  * What the rows say: Yojimbo: Accuracy 95; group 1 immune (255) to Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse (slots 0 to 8), Eject (slot 10), **Itchy (17) and Auto-Life (18)**; group 2
