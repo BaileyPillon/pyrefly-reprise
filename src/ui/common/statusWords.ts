@@ -161,9 +161,12 @@ const FFX2_HINTS: Partial<Record<StatusId, HintRow>> = {
     // R3942 (FFX-2 phone, one row): what wakes her, the sentence's list ("a hit, Esuna, Remedy"); the chip says SLEEP.
     line: (n) => `${n}: a hit, <b>Esuna</b>, <b>Remedy</b>`,
   },
-  // §2.8 Silence: blocks White Magic, Black Magic and Arcana; "Cured by Echo Screen" (+ Esuna, Remedy).
+  // §2.8 Silence: "Cured by Echo Screen" (+ Esuna, Remedy). It stopped White Magic, Black Magic and Arcana; since the RC7
+  // command lane (X2-B, FFX2-G02) it stops everything the game stops, every Dance and Song and the Moogle, Cait and Eraser
+  // spells included, and leaves Pray, Vigor, Focus and MP Absorb alone, so the desktop card says "no spells, Dances or Songs"
+  // (FFX-2 only; pinned in `tests/unit/status-silence-card-words.test.ts`). The phone sentence and line never listed it.
   silence: {
-    full: (n) => `<b>${n} is silenced:</b> no White Magic, Black Magic or Arcana. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
+    full: (n) => `<b>${n} is silenced:</b> no spells, Dances or Songs. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
     // U2 (PR-0290, FFX-2 only): the phone card names the whole cure list the desktop card does, in one sentence.
     short: (n) => `${n} is silenced: <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
     line: (n) => `${n}: <b>Echo Screen</b>, <b>Esuna</b>, <b>Remedy</b>`,

@@ -6,8 +6,10 @@
  * White Magic), and the Summon list, Grand Summon, Doublecast and every Overdrive carry none. A Silenced Yuna can summon, so the FFX
  * card says "no White or Black Magic" and nothing about Summon. Until 2026-10-14 it said "and no Summon".
  *
- * **FFX-2 only.** Its own card (`research/ffx2-combat-core.md` section 2.8: White Magic, Black Magic and Arcana) did not change, word for
- * word, in the desktop sentence, the phone sentence and the phone one-row line.
+ * **FFX-2 only.** Its own card used to list what Silence stops as the research's section 2.8 did (White Magic, Black Magic and Arcana).
+ * Since the RC7 command lane (X2-B, FFX2-G02) Silence stops everything the game stops, every Dance and Song and the Moogle, Cait and
+ * Eraser spells included (and leaves Pray, Vigor, Focus and MP Absorb alone), so the desktop sentence says "no spells, Dances or Songs"
+ * (2026-10-14, release candidate r48-rc). The phone sentence and the phone one-row line never listed what is stopped and did not change.
  *
  * The Studio's FFX-only rule row (`learn/studio/rules.ts`, "Silence") says the same as the FFX card, so it is pinned here too.
  */
@@ -47,12 +49,21 @@ describe('FFX Silence card: White and Black Magic only (a Silenced Yuna can stil
   });
 });
 
-describe('FFX-2 Silence card: unchanged, word for word', () => {
-  it('the desktop sentence is FFX-2\'s table (White Magic, Black Magic or Arcana)', () => {
+describe('FFX-2 Silence card: no spells, Dances or Songs (the phone forms unchanged)', () => {
+  it('the desktop sentence says "no spells, Dances or Songs" and no longer lists the three magics', () => {
     const hint = cureHint('ffx2', 'silence', 'Rikku', 'rikku')!;
     expect(hint.html).toBe(
-      '<b>Rikku is silenced:</b> no White Magic, Black Magic or Arcana. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.',
+      '<b>Rikku is silenced:</b> no spells, Dances or Songs. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.',
     );
+    expect(hint.html).not.toMatch(/White Magic|Black Magic|Arcana/);
+  });
+
+  it('the sentence is the same for every girl (only the name changes) and the FFX card still says White or Black Magic', () => {
+    for (const [name, id] of [['Yuna', 'yuna'], ['Rikku', 'rikku'], ['Paine', 'paine']] as const) {
+      expect(cureHint('ffx2', 'silence', name, id)!.html, name).toContain(`<b>${name} is silenced:</b> no spells, Dances or Songs.`);
+    }
+    expect(cureHint('ffx', 'silence', 'Tidus', 'tidus')!.html).toContain('no White or Black Magic.');
+    expect(cureHint('ffx', 'silence', 'Tidus', 'tidus')!.html).not.toMatch(/Dance|Song|spells/);
   });
 
   it('the phone sentence names the whole cure list', () => {
