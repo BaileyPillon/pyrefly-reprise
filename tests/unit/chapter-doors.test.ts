@@ -28,8 +28,8 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the five doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
-    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth']);
+  it('holds the six doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
+    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'valefor']);
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);
     for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{4,}$/);
@@ -63,7 +63,7 @@ describe('the table', () => {
 
   it('leads the FFX words to FFX chapters and the FFX-2 words to FFX-2 chapters (the game of the row is the chapter\'s)', () => {
     const game = (word: string): string | undefined => getChapter(CHAPTER_DOORS.find((d) => d.word === word)!.chapter)?.game;
-    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx']);
+    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('valefor')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2']);
   });
 });
 

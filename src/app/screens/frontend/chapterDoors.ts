@@ -8,7 +8,7 @@
  * - **`limit`** opens FF7's Guard Scorpion experiment (`secret: true`, `./secretDoor.ts`). It is the one door with more than a word: the same chapter also opens on seven taps of the "Chapter
  *   select" label and on the pad sequence L1 R1 L1 R1 Select, so its matcher is the visit's `SecretDoor`. It opens in the key's own handler (its last letter, T, is bound to nothing, so no
  *   press is left over), its later letters are never board presses (L, I, M, I, T), and it stays shut while `ff7ExperimentReady()` says so (`gate`).
- * - **`leblanc`**, **`experiment`**, **`mushroom`**, **`fayth`** and **`besaid`** (FFX-2 Chapter 3's Valefor, `./besaidDoor.ts`: E is START, S, A and D are down, left and right) are plain `WordDoor`s. Their last letter can be a bound key (Leblanc's C is START, the Experiment's and Mushroom's M is SELECT),
+ * - **`leblanc`**, **`experiment`**, **`mushroom`**, **`fayth`** and **`valefor`** (FFX-2 Chapter 3's Valefor at Besaid, `./valeforDoor.ts`: V is SELECT, A is left, E is START, F and R are L1 and R1) are plain `WordDoor`s. Their last letter can be a bound key (Leblanc's C is START, the Experiment's and Mushroom's M is SELECT),
  *   and party prep begins the fight on the latched press, so each opens on the board's *next frame*, which takes every press first (`ChapterSelectScreen.handleInput`, the `opening` frame); and a
  *   later letter that is a board key (the A of "leblanc" and "fayth" is `left`, the S of "mushroom" is `down`, the X of "experiment" is `cancel`) is claimed by the word, so it does not move the
  *   cursor (`KeyFeed.claimed`, the screen's `wordKey`).
@@ -28,7 +28,7 @@ import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './leblancDoor.t
 import { EXPERIMENT_DOOR_CHAPTER, EXPERIMENT_DOOR_WORD } from './experimentDoor.ts';
 import { MUSHROOM_DOOR_CHAPTER, MUSHROOM_DOOR_WORD } from './mushroomDoor.ts';
 import { FAYTH_DOOR_CHAPTER, FAYTH_DOOR_WORD } from './faythDoor.ts';
-import { BESAID_DOOR_CHAPTER, BESAID_DOOR_WORD } from './besaidDoor.ts';
+import { VALEFOR_DOOR_CHAPTER, VALEFOR_DOOR_WORD } from './valeforDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -52,7 +52,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: EXPERIMENT_DOOR_WORD, chapter: EXPERIMENT_DOOR_CHAPTER },
   { word: MUSHROOM_DOOR_WORD, chapter: MUSHROOM_DOOR_CHAPTER },
   { word: FAYTH_DOOR_WORD, chapter: FAYTH_DOOR_CHAPTER },
-  { word: BESAID_DOOR_WORD, chapter: BESAID_DOOR_CHAPTER },
+  { word: VALEFOR_DOOR_WORD, chapter: VALEFOR_DOOR_CHAPTER },
 ];
 
 /** What one key did to the doors. */

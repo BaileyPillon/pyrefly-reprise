@@ -5,7 +5,7 @@ Paper preflight under `critic/RUBRIC.md` §4 (AGENTS.md rule 15). `node tools/cr
 Written 2026-10-14 ~02:00 EDT, before any code, by the sub-agent building the chapter overnight for the driver.
 
 **Authority (Bailey, 2026-10-13, verbatim, relayed by the driver):** "I'll go with your 2 recommendations there, add them in. Yojimbo and Daigoro "Tourist Trap" and
-Valefor at Besaid Temple." and "full speed ahead while I sleep". The driver's decisions: the chapter ships **hidden behind the typed word `besaid`**, hidden chapter number
+Valefor at Besaid Temple." and "full speed ahead while I sleep". The driver's decisions: the chapter ships **hidden behind the typed word `valefor`** (first `besaid`, moved by the driver: §7), hidden chapter number
 **24** (the Yojimbo lane is 23, word `daigoro`, on branch `ch-tourist-trap`); listing it on the board waits for Bailey; the art is **provisional** and reuses approved
 paintings where they fit; no approved painting is replaced; the music is one of our own original cues (the retail "Aeons" is never used).
 
@@ -18,6 +18,13 @@ registry) is "both" (CHK-020) and is written so that every other chapter behaves
 **sparse worktree** (the 2026-09-26 "lighter worktrees" recipe: no `docs/screenshots`, no `docs/concepts` beyond the folders tests read), about 540 MB. The coordinator then
 ordered the production build **off D:** (vite `--outDir M:/pyrefly-builds/ch-besaid-valefor/dist`) and no build or full suite while D: is under 15 GB free; §9 follows that.
 
+> **Update 2026-10-14 ~01:10 (two course corrections from the driver, both applied; the rest of this plan stands).**
+> **(1) The game's own monster row landed** (`research/re-ffx2-yojimbo-valefor.md`, origin/re-ffx2-yojimbo-valefor at 91ef1fd3): `monster.bin` **row 164** is the Besaid Temple Valefor (formation 0393
+> `bsyt05_229`), and it equals the research §7.1 in every shared field. §2 below is re-pinned to it: the row wins wherever it says more (MP, Accuracy, the status list, the steal byte, **Gravity nulled**),
+> row 363 (Lv 48, HP 38,000, in no formation) is not used, the columns the note marks "unmapped (raw N)" are wired to nothing, and the Bribe flag is assumed neither way. Her AI script (`m164`) is not decompiled yet,
+> so §3 stays the research's tagged reading. **(2) The door word is `valefor`, not `besaid`** (the driver's decision): `besaid` ended in `d`, the first letter of the Tourist Trap lane's `daigoro`, which the shared
+> rule in `chapter-doors.test.ts` forbids; `valefor` overlaps no other word (§7). The chapter id is `ffx2-valefor-besaid` (the boss first, as `ffx2-ixion-djose`); the formation id is `ffx2-besaid-valefor`.
+
 ## 1. What the chapter is
 
 - **One boss, one link.** Valefor, bestiary #178, possessed by Shuyin's pyreflies in the Chamber of the Fayth at Besaid Temple; compulsory mission "Protect Besaid Temple!"
@@ -29,54 +36,56 @@ ordered the production build **off D:** (vite `--outDir M:/pyrefly-builds/ch-bes
 - **No pre-set menu, no dial, no second act.** One formation, `canEscape: false`, the party restored for a retry by the engine's normal rules (a loss reopens the same fight).
   The chapter's attempts and clears go to the experiments' own store (`experimental: true`), never the save: no save change, no migration.
 
-## 2. The data: only what the research says (rule 6), each field with its source and tag
+## 2. The data: the game's own row, then the research (rule 6), each field with its source and tag
 
-Source for the block: `research/ffx2-fallen-aeons.md` §7.1 (Candidate B), which carries SinirothX's *Enemy Encyclopedia* (GameFAQs 31807) block, the FF Wiki page (revision 3979327)
-and, for HP, EXP, AP, gil and items, FFExodus, GamerGuides and Split_Infinity. The RE session's note for the game's **own** monster row (`research/re-ffx2-yojimbo-valefor.md`
-on `origin/re-ffx2-yojimbo-valefor`, read from the Steam build's `monster.bin`, promised for about 01:45 EDT) **wins for every field it proves**; when it lands the fixture is re-pinned
-and this table gets a "RE row" column and a list of every disagreement (`tests/fixtures/parity/ffx2/besaid_valefor_rows.json`, `source` field). Until then:
+Sources, in order of authority: **`research/re-ffx2-yojimbo-valefor.md`** (the RE session's read of the Steam build's `monster.bin`, **row 164**, `[RE row 164]`), then `research/ffx2-fallen-aeons.md` §7.1
+(SinirothX's *Enemy Encyclopedia*, GameFAQs 31807, and the FF Wiki page, revision 3979327; HP, EXP, AP, gil and items also FFExodus, GamerGuides and Split_Infinity). The two **agree in every field they
+share**; the row adds the rest. `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` carries the row's 200 raw bytes, and `besaid-valefor-data.test.ts` decodes them and pins the data and the record to them.
 
 | Field | Value | Source | Tag |
 |---|---|---|---|
-| Level | 22 | §7.1 | `[verified: 2 sources]` SinirothX, wiki |
-| HP | 8,430 | §7.1 | `[verified: 5 sources]` (also FFExodus, GamerGuides, Split_Infinity) |
-| STR / MAG / DEF / MDEF | 97 / 11 / 76 / 20 | §7.1 | `[verified: 2 sources]` |
-| AGI / EVA / Luck | 125 / 25 / 3 | §7.1 | `[verified: 2 sources]` |
-| EXP / AP / Gil / Pilfer Gil | 1,500 / 15 / 1,200 / 1,500 | §7.1 | `[verified: 2 sources]` + three guides |
-| Elements | all neutral | §7.1 | `[verified: 2 sources]` |
-| Breaks and Slow | land | §7.1 | `[verified: 2 sources]` |
-| Drop | Moon Bracer | §7.1 | `[verified: 2 sources]` |
-| Steal | Healing Spring x4, rare x6 | §7.1 | `[verified: 2 sources]` |
-| Normal Attack | physical, DC 16 | §7.1 | `[verified: 2 sources]` |
-| Sonic Wings | MP damage, DC 2, on the character furthest away | §7.1 | `[verified: 2 sources: SinirothX, wiki prose]` |
-| Energy Ray | magic, DC 20, everyone in a 160 degree arc in front of her | §7.1 | `[verified: 2 sources]` |
-| Energy Blast | magic, DC 25, all | §7.1 | `[verified: 2 sources]` |
-| Basic mix | 2/3 Normal Attack, 1/3 Sonic Wings | §7.1 | `[verified: 2 sources]` |
-| Counter | +5 when she acts or is attacked; Energy Ray on crossing 30 and 60; at 100 the counter is 0 and Energy Blast; the wiki's "after 6 / 12 / 20 counts" is the same at 5 per count | §7.1, §11 row 9 | `[verified: 2 sources]` |
+| Level | 22 | row 164 = §7.1 | `[RE row 164]`, `[verified: 2 sources]` |
+| HP | 8,430 | row 164 = §7.1 | `[RE row 164]`, `[verified: 5 sources]` |
+| MP | **9,999** | row 164 | `[RE row 164]`: §7.1 gives none (the first draft's placeholder 0 is replaced); no move of hers costs MP |
+| STR / MAG / DEF / MDEF | 97 / 11 / 76 / 20 | row 164 = §7.1 | `[RE row 164]` |
+| AGI / EVA / Luck | 125 / 25 / 3 | row 164 = §7.1 | `[RE row 164]` |
+| Accuracy | **95** | row 164 | `[RE row 164]`: §7.1 gives none; the monster record lays the same byte |
+| EXP / AP / Gil / Pilfer Gil | 1,500 / 15 / 1,200 / 1,500 | row 164 = §7.1 | `[RE row 164]` |
+| Elements | neutral to Fire, Ice, Lightning, Water, Holy; **Gravity nulled** | row 164 (null byte 0x10) | `[RE row 164]`: **a disagreement with §7.1** ("neutral"): set to immune |
+| Status immunities | Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, Eject (group 1, 0 to 8 and 10); Stop, Doom (group 2, 6 and 14); Slow and every Break land | row 164 | `[RE row 164]`; §7.1 says only "Breaks and Slow land" (agrees) |
+| Special word | 0x3c3: no percent-HP formulas (bit 0), hit reactions do not slow her (bit 1), no ATB damage (bit 6); bits 7 and 8 unmapped, bit 9 contested (Bribe or magic cancel) | row 164 | bits 0, 1, 6 `[RE row 164]` + the note's checked bit meanings; 7, 8, 9 not read |
+| Steal | Healing Spring x4, rare x6, chance byte **128** (50.2 %) | row 164 = §7.1 (the byte is new) | `[RE row 164]` |
+| Drop | Moon Bracer (common and rare), chance byte 255 | row 164 = §7.1 | `[RE row 164]` |
+| Zantetsu byte | 80 | row 164 | carried in the record, not modelled (no Zantetsu status) |
+| Bribe | no slot | row 164 | `[RE row 164]`; Bribe immunity unproven either way: none set, none denied |
+| Normal Attack | physical, DC 16 (the game's row 0x41da) | §7.1; row 164 lists 0x41da | `[verified: 2 sources]` + `[RE row 164]` |
+| Sonic Wings | MP damage, DC 2, on the character furthest away | §7.1; row 164 lists 0x4092 | `[verified: 2 sources]`; the command row itself is not read |
+| Energy Ray | magic, DC 20, everyone in a 160 degree arc in front of her | §7.1; row 164 lists 0x4091 | `[verified: 2 sources]`; the command row itself is not read |
+| Energy Blast | magic, DC 25, all | §7.1; row 164 lists 0x4093 | `[verified: 2 sources]`; the command row itself is not read |
+| Basic mix | 2/3 Normal Attack, 1/3 Sonic Wings | §7.1 | `[verified: 2 sources]`; the AI script is not decompiled |
+| Counter | +5 when she acts or is attacked; Energy Ray on crossing 30 and 60; at 100 the counter is 0 and Energy Blast; the wiki's "6 / 12 / 20 counts" is the same at 5 per count | §7.1, §11 row 9 | `[verified: 2 sources]`; the AI script is not decompiled |
 | Music | retail "Aeons" | §6.3 | `[single source]`; **not used** |
 
-**Unsourced, left as the nearest sibling or left out, each said in the code:**
+**Disagreements with the research** (each listed again in the handoff with its row number as the source): (1) **Gravity**: the row nulls it, §7.1 says neutral. (2) **MP** 9,999 and **Accuracy** 95: §7.1 gives
+neither (new, not a disagreement). (3) **Status list**: §7.1 gives only "Breaks and Slow land"; the row gives the full list (agrees on Breaks and Slow). (4) the steal byte 128 and the drop byte 255 are new.
+Nothing in §7.1 is contradicted by the row beyond Gravity. **Row 363** (a second Valefor: Lv 48, HP 38,000, ACC 108, Excalibur, Full Break, Crackdown) is **not** this chapter's and is not used.
 
-1. **MP.** The research gives none; no move of hers costs MP. The record says `0` (tagged), and the RE row replaces it. (Not a game fact: a placeholder.)
-2. **Accuracy.** Not in the §7.1 table. The Road's aeons and Ixion carry 0 on the record and the engine's enemy baseline applies; the W3 attach step (`monster-records`) corrects it
-   to the game's own byte (the W3 note: every FFX-2 monster row says 95) **when a row for this enemy exists**. `[model: sibling aeons]` until then.
-3. **The full status list.** §7.1 says only "Breaks and Slow land". The conservative reading is Ixion's documented list (Instant Death, Petrify, Sleep, Silence, Darkness, Poison,
-   Confuse, Berserk, Curse, Eject, Stop, Doom, Delay, Interrupt immune; Breaks and Slow land) and "fractional damage" immune, because the three temple aeons share one row in §7.1
-   and Ixion's list is the only one the research documents. `[model: sibling aeon]`; the RE row's resist bytes replace it.
-4. **Which roll value is Sonic Wings.** The research gives the weights (2/3 : 1/3) only; `random() mod 3 == 0` is Sonic Wings (the Chapter XI scripts' habit). `[model]`.
-5. **Sonic Wings' damage type** (physical or other) and whether it rolls to hit. Not sourced. Read as the Attack family (physical, rolls to hit), the reading under which Protect
-   helps; the test shows the other reading's difference. `[model]`.
-6. **What "attacked" counts.** Read as the project reads it for Shiva, Anima, the Sisters and Ixion, whose scripts were read from the game's own rows: **+5 per result applied to her**
-   (a landing strike, a miss, a no-effect result, from anyone but herself; `AiScript.onResults` / `results-tally.ts`), not +5 per party action. Valefor's own script is not read
-   yet. `[model: the sibling aeons' rule]`.
-7. **"Crossing".** At 30 and 60 she answers with one Energy Ray each, **once per threshold per cycle**: a flag per threshold, reset when the counter resets at 100. If a multi-hit
-   volley passes both thresholds in one go, the two Rays come on her next two turns, in order. `[model]`.
-8. **Party levels at Besaid.** No source gives a level. Anchors: Valefor is Lv 22 `[SinirothX]`; our Chapter 2 preset (`ffx2/builds/bevelle.ts`) is Lv 23 / 24 / 25 (research
-   `ffx2-bahamut.md` §4.1, a worked example); the Djose preset is 32 / 33 / 34 (an estimate). The first Chapter 3 mission follows Chapter 2 directly, so the **Chapter 2 preset is
-   carried forward** (same girls, same dresspheres: no Samurai, no Lady Luck, which come later in Chapter 3 `[verified]`), `[estimate]`, and **measured, not tuned** (§8).
-9. **The "Moon Bracer" and "Healing Spring" item ids** must exist in the FFX-2 item tables; if not, the reward is the research's name carried as data and the gap is disclosed.
-10. **Action time (the animation window).** Chapters XI, XIII and XVI ship it at 3 s (Bailey's D-269 pick; the rule is sourced, the length is not). Carried as one named constant,
-    ON at 3 s as the sibling aeon chapters do, and measured both ways in the bench (§8). Not a boss number.
+**Still unsourced, and said so in the code (each a `[model]`):**
+
+1. **Her AI script.** `m164` is not decompiled (the RE note's section 9), so the mix, the counter and the thresholds are §7.1's description built on the engine's action counter, in the shape of the sibling
+   aeons' scripts. The roll value that is Sonic Wings (`random() mod 3 == 0`) is ours: the research gives the weights only.
+2. **Sonic Wings' damage type** (physical or other) and whether it rolls to hit, and the three moves' command rows (monmagic 0x4091 to 0x4093): not read. Read as the Attack family (physical, rolls to hit, Protect
+   helps); the moves run on SinirothX's damage constants. The Normal Attack runs on the game's row 0x41da, which the monster record carries (so it can crit by that row's byte, 5, and shatters at 10).
+3. **What "attacked" counts.** Read as the project reads it for Shiva, Anima, the Sisters and Ixion, whose scripts were read from the game: **+5 per result applied to her** (`AiScript.onResult` through
+   `resultGauge(5)`, with the guard of Shiva's and Anima's scripts), not +5 per party action.
+4. **"Crossing".** One Energy Ray per threshold per cycle (a flag each, cleared at the Blast); a volley that passes both marks gives the two Rays on her next two turns, the lower first.
+5. **Party levels at Besaid.** No source gives a level. Anchors: Valefor is Lv 22; the Chapter 2 preset (`ffx2/builds/bevelle.ts`) is Lv 23 / 24 / 25 (research `ffx2-bahamut.md` §4.1); the Djose preset is 32 / 33 / 34
+   (an estimate). The first Chapter 3 mission follows Chapter 2 directly, so the **Chapter 2 preset is carried forward** (same girls, same dresspheres: Yuna White Mage, Rikku Dark Knight, Paine Warrior; no Samurai, no
+   Lady Luck, which come later in Chapter 3 `[verified]`), `[estimate]`, and **measured, not tuned** (§8).
+6. **Items.** Moon Bracer (no stats, Auto-Shell, `ffx2-combat-core.md` §5.4) and Healing Spring (a recovery item, §5.5) get held-only `ItemDef` rows (`items/held.ts`), as every other steal and drop of the FFX-2 bosses does;
+   Healing Spring's Regen effect is not wired (disclosed).
+7. **Action time (the animation window).** Chapters XI, XIII and XVI ship it at 3 s (Bailey's D-269 pick; the rule is sourced, the length is not). One named constant, ON at 3 s as the sibling aeon chapters do, and
+   measured both ways in the bench (§8). Not a boss number.
 
 ## 3. The AI (deterministic, `src/battle/ffx2/ai/valefor.ts`, no DOM and no `three`: rule 1)
 
@@ -117,14 +126,14 @@ Chamber's geometry. So no geometry is invented.
 
 | File | What | Source |
 |---|---|---|
-| `src/data/ffx2/enemies/valefor.ts`, `valefor-abilities.ts` | `x2-valefor` and its four moves, the group (`canEscape: false`, the aeon cue, action time), rewards | §7.1, tagged |
+| `src/data/ffx2/enemies/valefor.ts`, `valefor-abilities.ts`, `monster-records/records-valefor.ts` | `x2-valefor` and its four moves, the group (`canEscape: false`, the aeon cue, action time), rewards, and the game's own row 164 laid on her | row 164, §7.1, tagged |
 | `src/battle/ffx2/ai/valefor.ts` (+ one line in `ai/index.ts`) | the script of §3, `furthestGirl` | §7.1; Ormi's D-018/q3 |
 | `src/data/ffx2/builds/besaid.ts` | the Chapter 2 preset carried forward, `[estimate]` | §2.8 |
-| `src/data/chapter-ffx2-besaid-valefor.ts`, `chapter-meta-ffx2-besaid-valefor.ts` | the record (id `ffx2-besaid-valefor`, number 24, `experimental`), the pause meta (quote, handwritten, objectives, tip), one line in `chapters-experiments.ts` and one in `chapter-meta.ts` | the sibling chapters |
-| `src/story/scripts/ffx2-besaid-valefor.ts` | a short intro and a short close, our own words over the sourced beats (`research/writing-bible.md`; attributed speakers; `story/textLint.ts`) | §0.3, §7.1 |
-| scene | the Chamber of the Fayth on the existing provisional plate (§6): Valefor's spot and height added to the Chamber's maps, no new scene key | staging, ours |
-| `src/app/screens/frontend/besaidDoor.ts` (+ one row in `chapterDoors.ts`) | `BESAID_DOOR_WORD = 'besaid'`, `BESAID_DOOR_CHAPTER` | the other doors |
-| `src/data/guides/ffx2-besaid-valefor.ts` (+ docs entry), `src/engine/tactics/ffx2-besaid-valefor.ts` (+ index/lookup lines) | the guide card and the move advisor, in our words, citing the research's sources | the project's guide rules |
+| `src/data/chapter-ffx2-valefor-besaid.ts`, `chapter-meta-ffx2-valefor-besaid.ts` | the record (id `ffx2-valefor-besaid`, number 24, `experimental`), the pause meta (quote, handwritten, objectives, tip), one line in `chapters-experiments.ts` and one in `chapter-meta.ts` | the sibling chapters |
+| `src/story/scripts/ffx2-valefor-besaid.ts` | a short intro and a short close, our own words over the sourced beats (`research/writing-bible.md`; attributed speakers; `story/textLint.ts`) | §0.3, §7.1 |
+| `src/scenes/djose-chamber.ts` (two small additions) | the Chamber of the Fayth on the existing plate (§6): Valefor's spot added to the Chamber's maps and to the phone camera's list; no new scene key | staging, ours |
+| `src/app/screens/frontend/valeforDoor.ts` (+ one row in `chapterDoors.ts`) | `VALEFOR_DOOR_WORD = 'valefor'`, `VALEFOR_DOOR_CHAPTER` | the other doors |
+| `src/data/guides/ffx2-valefor-besaid.ts` (+ docs entry), `src/engine/tactics/ffx2-valefor-besaid.ts` (+ index/lookup lines) | the guide card and the move advisor, in our words, citing the research's sources | the project's guide rules |
 | `src/data/encounters.ts` | `ChapterId`, `ListedChapterId`, `Chapter.number` gain the id and 24 on their existing lines (the file stays at 397 of 400 lines: no new lines) | additive |
 | tests (§8), `docs/CONTRACT-CHANGES.md` entry, the handoff, CHANGELOG | | |
 
@@ -133,24 +142,25 @@ Chamber's geometry. So no geometry is invented.
 - **Valefor**: the approved painting set `characters/valefor/{idle,attack,cast,hurt}` (the FFX aeon's painting; `x2-` possessed treatments exist only for Shiva, Anima and Ixion), reused
   as provisional. No `ko` or `overdrive` painting exists for her; the presenter's fallback is checked in the browser (§9) and disclosed. Not a "possessed" look: a violet derived
   painting would be a new art step, held for Bailey (the Ixion precedent, D-268).
-- **Backdrop**: no approved Besaid chamber exists. The existing Chamber of the Fayth plate `backdrops/djose-chamber-provisional` (Chapter XVI's; hash-recorded, **provisional**, with the
-  pit in the floor that belongs to Chapter 5) is the stand-in, so the chapter's scene key is that plate's own key: the cutscene screen and the prep wash find the painting with no new art
-  file (`public/art` is a read-only junction here). **A small local render pilot for a Besaid Chamber of the Fayth backdrop is queued into art run 8** (one queue file, candidates only,
-  never installed); the handoff names the candidates folder.
+- **Backdrop**: no approved Besaid chamber exists. The stand-in is the Chamber of the Fayth plate `backdrops/djose-chamber-provisional`: **Bailey's approved pick for Chapter XVI** (D-273, hash-locked; the
+  `-provisional` suffix no longer means unapproved for it), used here as the **provisional stand-in for Besaid's own chamber** (it has the pit that belongs to Chapter 5, and Ixion's spot). The chapter's scene key is that
+  plate's own key, so the cutscene screen and the prep wash find the painting with no new art file (`public/art` is a read-only junction here), and Valefor stands on Ixion's spot. **A small local render pilot for a
+  Besaid Chamber of the Fayth backdrop is queued into art run 8** (one queue file, candidates only, never installed); the handoff names the candidates folder.
 - **Music**: field bed `scene-bevelle-underground` (the FFX-2 chapters' fallback bed), fight `boss-ffx2-fallen-aeons` (our own ElevenLabs take; the same cue Chapter XI and Ixion play, the
   sourced mood of the game's "Aeons"), fanfare `victory-ffx2`, defeat `defeat-ffx2`. Existing cues by reference only; no new audio. Bailey's call by ear (rule 13).
 
 ## 7. The door
 
-`besaid` on the chapter-select board opens the chapter's party prep, like the other doors. Letters against `app/Input.ts` `KEY_MAP`: B is bound to nothing; **E is `start`**; **S is `down`**; **A is
-`left`**; I is nothing; **D is `right`**. On the board the word claims its later letters (so S, A and the last D never move the cursor, `KeyFeed.claimed`), the last letter opens on the
-board's next frame, which takes every press (`opening`), and the first E is `start`, which the board ignores. The title screen is not where the word is typed (Enter and E start the flow). Pinned
-with the real `Input`, the real board and the real title screen in `tests/unit/besaid-door.test.ts` (a copy of the method of `mushroom-door.test.ts`).
+`valefor` on the chapter-select board opens the chapter's party prep, like the other doors. Letters against `app/Input.ts` `KEY_MAP`: **V is `select`**, **A is `left`**, L is nothing, **E is `start`**, **F is `l1`**,
+O is nothing, **R is `r1`**. On the board the word claims its later letters (so the A, the only board key in it, never moves the cursor, `KeyFeed.claimed`), `select`, `start`, `l1` and `r1` are ignored by the board, and
+the last letter opens on the board's next frame, which takes every press (`opening`). The title screen is not where the word is typed (Enter and E start the flow there, and the word has an E). The F and the R are two
+thirds of FF7's pad sequence, which the word never completes (the matcher is per visit). Pinned with the real `Input`, the real board and the real title screen in `tests/unit/valefor-door.test.ts` (a copy of the method of
+`fayth-door.test.ts`).
 
-**Prefix check against every other door, `daigoro` included.** `limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`: none of them begins with, ends with or contains `besaid`, and `besaid` does not begin with, end with or contain any of them. **One thing to flag for the merge:** `tests/unit/chapter-doors.test.ts` also forbids *any suffix of one word equalling a prefix of another*; the last letter of `besaid`
-(`d`) is the first of `daigoro`, a one-letter overlap, so that shared test will fail once the two lanes meet, on the pair (`besaid`, `daigoro`). Each branch is green alone. The harm the rule
-guards against needs `besaid` and then `aigoro` typed straight after (the board has already left), but the rule is the project's, so the decision (relax it to overlaps of two or more
-letters, or move one word) is the driver's, and my own door test states the overlap as a computed fact and pins the property the brief asks for (no word is a prefix of another).
+**The driver's decision (2026-10-14): the word is `valefor`.** The first pick, `besaid`, ended in `d`, which begins the Tourist Trap lane's `daigoro`; `chapter-doors.test.ts` forbids any suffix of one word equalling a prefix of
+another, so the two lanes would have failed it at the merge. `valefor` has no such overlap with `limit`, `leblanc`, `experiment`, `mushroom`, `fayth` or `daigoro`: it ends in `r` (none of them starts with `r`,
+`or`, `for`, `efor`, `lefor` or `alefor`) and starts with `v` (none ends in `v`, `va`, `val`, ...), and none begins with, ends with or contains the other. **Proved**: `valefor-door.test.ts` runs the shared rule over the table's words
+plus `daigoro` and types the two words back to back in both orders, and the shared `chapter-doors.test.ts` was also run on a scratch copy with `daigoro` added to its word list (green). The shared rule is unchanged.
 
 ## 8. Tests (written with the code)
 
@@ -158,16 +168,16 @@ Unit: the data against a numbers-only fixture with its sources (`tests/fixtures/
 disagreements listed); the abilities' rows (DCs, targeting, `canMiss`); the AI on seeded runs (the decision table: the counter, the two Rays once each, the Blast and the reset, the 2/3 : 1/3
 mix over many seeds, the reaction +5 per result, a multi-hit volley), `furthestGirl` (the highest living slot; none dead; no draw), Energy Ray on all living girls (a KO'd girl is not hit), Sonic Wings'
 MP loss on the furthest girl in the real engine (and her HP untouched); the build; the chapter record and its registration (not in `CHAPTERS` or `CHAPTER_IDS`, found by `getChapter`,
-number 24, the board still shows 18, the numbers test, the batch-2 music table, the party-stature list, the guide and advisor lookups); the door; the experiments' store (a clear goes to
+number 24, the board still shows 18, the numbers test, the batch-2 music table, the party-stature list, the guide and advisor lookups); the door (`valefor-door.test.ts`); the experiments' store (a clear goes to
 `pyrefly-reprise:experiments:v1`, the save is byte-identical); story lint; a bench (the advisor line and a naive line on the Wait and Active clocks, action time on and off: **measured, never
 tuned**, disclosed). Then `tsc --noEmit`, `node tools/orphans.mjs`, `node tools/audio/qa.mjs`, and **the full suite once, after D: has 15 GB or more free** (TEMP and TMP on
 `D:/Tools/pyrefly-scratch/tmp`, or on M: if the coordinator says D: cannot). Browser: a production build of this tree built **to M:** (`BASE_PATH='/'`, vite directly, never `npm run build`, never
-`tools/gen/manifest.mjs`, one dist), served on port 5531, headless Playwright from node (`PYREFLY_BROWSER=gpu`): `besaid` opens the chapter, the intro plays, the first menu, a win, a loss, Sonic Wings
+`tools/gen/manifest.mjs`, one dist), served on port 5531, headless Playwright from node (`PYREFLY_BROWSER=gpu`): `valefor` opens the chapter, the intro plays, the first menu, a win, a loss, Sonic Wings
 on the back girl, the other words still work, the board has no card; frames at 1600x900 and 390x844 under `docs/screenshots/ch-besaid-valefor/`, looked at with the Read tool.
 
 ## 9. Risks and how each is checked
 
-1. **The word's keys** (§7): E (`start`), S, A and D are bound; pinned with real input, not argued. The one-letter overlap with `daigoro` is flagged above.
+1. **The word's keys** (§7): V (`select`), A, E (`start`), F (`l1`) and R (`r1`) are bound; pinned with real input, not argued. The overlap with `daigoro` is gone with the new word.
 2. **Shared registries edited by two lanes at once** (`encounters.ts`, `chapters-experiments.ts`, `chapter-meta.ts`, `chapterDoors.ts`, the music and number tests): each edit here is one added item
    on an existing line, so the merge with `ch-tourist-trap` is a mechanical union (`Chapter.number` gains 23 there and 24 here).
 3. **`encounters.ts` at 397 of 400 lines:** no lines are added (the union lines grow), and `yojimbo-repair.test.ts` pins the count.
@@ -183,5 +193,5 @@ on the back girl, the other words still work, the board has no card; frames at 1
 ## 10. Verdict
 
 **PROCEED.** Everything above is research-sourced or a tagged model; nothing is tuned; nothing approved is replaced; the door, the registry edits and the AI are small and additive. The review class stays
-DEEP: the driver integrates, runs the focused pass, and the deep review is owed on the live build. Open for the driver: the word overlap with `daigoro` (§7), the party's levels (§2.8, measured), the provisional
+DEEP: the driver integrates, runs the focused pass, and the deep review is owed on the live build. Open for the driver: the party's levels (§2.8, measured), the provisional
 plate and the missing KO and overdrive paintings (§6).
