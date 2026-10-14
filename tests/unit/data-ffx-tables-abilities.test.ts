@@ -310,6 +310,11 @@ describe('FFX ability catalog — numeric ranges stay inside the documented boun
     }
   });
 
+  it('Entrust costs 8 MP and the aeons\' Nul-All 4 (FFX only; command.bin records 0x3027 and 0x312d, byte +0x25; RC7 L-CMD 2026-10-14)', () => {
+    expect(ABILITIES['entrust']?.mpCost).toBe(8);
+    expect(ABILITIES['nul-all-aeon']?.mpCost).toBe(4);
+  });
+
   it('every AbilityDef.rank, when present, is 1-10 (or the documented 0 = "falls back to rank 3" byte)', () => {
     // ffx-combat-core §6.1 [verified: 2 sources]: "The raw rank byte is 0 ->
     // the engine's fallback is rank 3" — Dismiss ships the raw byte (0), not
