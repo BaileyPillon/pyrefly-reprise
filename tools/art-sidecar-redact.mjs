@@ -1,22 +1,26 @@
 /**
- * The painting sidecars as a build ships them: the master's own text with the paths of the build machine replaced (r46-fix, FOC46-01).
+ * The art JSON as a build ships it: a painting sidecar cut to the fields the game reads (r47-rc, FOC46-06), every other file with the paths
+ * of the build machine replaced (r46-fix, FOC46-01).
  *
- * About 950 of the 1,263 `public/art/**\/*.json` sidecars (the provenance records of the renders that made each painting) name staging, scratch
- * and backup folders of the PC that built the game, and one a user-profile folder. The site is public (the standing rule: no personal or PC
- * details), so the BUILD OUTPUT carries those files with each local path replaced by that path's final name alone (`dist-local-paths.mjs`:
- * `X:/some/folder/tree/name.png` -> `name.png`, a folder -> its name). **The masters in `public/art` are never touched**: the Vite plugin
+ * The `public/art/**\/*.json` sidecars are the provenance records of the renders that made each painting. They named staging, scratch and backup
+ * folders of the PC that built the game (FOC46-01, answered by replacing each path with its last name), and they carry the owner's first name (969
+ * files) and links to private claude.ai pages (620) in their notes (FOC46-06). The site is public (the standing rule: no personal or PC details),
+ * and the game reads ten fields of these files (`art-sidecar-fields.mjs`), so the BUILD OUTPUT carries each sidecar as exactly those fields of its
+ * master, values untouched (`projectSidecarText`, the rule is in that file's header). **The masters in `public/art` are never touched**: the Vite plugin
  * (`art-derive-plugin.mjs`) calls `redactBuildSidecars` on the build's output folder, after Vite has copied `public/` into it, and each file is
  * written through a temporary name and a rename, so even a file that shared its data with a master could not change it.
  *
- * THE FORMATTING RULE, the same for every file: the shipped file is the master's own text, byte for byte, except that each string VALUE
- * that held a local path is rewritten in place as `JSON.stringify` of its redacted text. Keys (names of properties), their order, every number
- * as it was spelt, every other string with its escapes, the white space and the line ends are the master's. A sidecar with no local path is the
- * master's bytes exactly (a gate that compares a shipped sidecar with its master compares it with `redactJsonText(master)`: one function).
- * A text that is not valid JSON (none exists today) is redacted as plain text and listed, so a broken file cannot carry a path either.
+ * Every JSON under `art/` that is not a sidecar (`NON_SIDECAR_ART_JSON`: the two manifests the game reads whole, and the build's own record) keeps the
+ * FOC46-01 rule, `redactJsonText`: the master's own text, byte for byte, except that each string VALUE that held a local path is rewritten in place as
+ * `JSON.stringify` of its redacted text (keys and their order, numbers as spelt, other strings with their escapes, white space and line ends are the
+ * master's; a file with no path is the master's bytes exactly; a text that is not valid JSON is redacted as plain text and listed). No manifest holds a
+ * path today, so they ship as they are.
  *
- * What the game reads of these files does not change: `width`, `height`, `baselineY`, `scale`, `anchorY`, `facing`, `seed`, `prompt`, `focal`,
- * `headTop` and the fields of `art/manifest.json` and `art/portrait-parts/manifest.json` never hold a path (`tests/unit/art-sidecar-redact.test.ts`
- * reads every sidecar of the master folder and proves the redacted output equal to the master in all of them, and changed only in string values that held a path).
+ * `shippedArtJsonText(rel, masterText)` is the ONE function that says what the build writes for a file: the build step below, `art-derive verify`
+ * (`verifyShippedSidecars`) and the tests all use it.
+ *
+ * What the game reads of these files does not change (`tests/unit/art-sidecar-redact.test.ts`, table `READERS`, with a guard over `src/`; and
+ * `tests/unit/art-sidecar-fields.test.ts`, which reads every sidecar of the master folder and proves every field a reader takes equal to the master's).
  *
  * Game case: both (shared build plumbing; no game content).
  */
@@ -24,8 +28,9 @@ import { existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, renameSync
 import { dirname, join, relative, sep } from 'node:path';
 import process from 'node:process';
 
+import { isSidecarJson, projectSidecarText } from './art-sidecar-fields.mjs';
 import { isUnshippedPublicFile } from './dist-filter.mjs';
-import { findLocalPaths, redactLocalPaths } from './dist-local-paths.mjs';
+import { findLocalPaths, findPrivateLinks, redactLocalPaths } from './dist-local-paths.mjs';
 
 /** A string literal that can hold a path at all: a drive needs a colon, a profile folder the word. (A cheap test before the literal is decoded.) */
 const MAY_HOLD_PATH = /:|Users|Documents and Settings/;
@@ -85,6 +90,30 @@ export function redactJsonText(text) {
 }
 
 /**
+ * What the build writes for one art JSON file: `rel` is its site-relative path (`art/characters/yuna/idle.json`), `masterText` the master's text.
+ * A painting sidecar is cut to the fields the game reads (`projectSidecarText`: an error for a text that is not a JSON object, with the file named);
+ * any other file has the paths of the build machine replaced (`redactJsonText`).
+ * Returns `{ text, sidecar, kept, dropped, strings, paths, plain }`: the text to write, whether the file is a sidecar, for a sidecar the keys kept and
+ * the keys left out (names, in order), for any other file the string values rewritten and the paths replaced, and whether it was not JSON.
+ * @param {string} rel
+ * @param {string} masterText
+ * @returns {{ text: string; sidecar: boolean; kept: string[]; dropped: string[]; strings: number; paths: number; plain: boolean }}
+ */
+export function shippedArtJsonText(rel, masterText) {
+  if (isSidecarJson(rel)) {
+    let projected;
+    try {
+      projected = projectSidecarText(masterText);
+    } catch (err) {
+      throw new Error(`${rel}: a painting sidecar must be a JSON object (${err instanceof Error ? err.message : String(err)})`);
+    }
+    return { text: projected.text, sidecar: true, kept: projected.kept, dropped: projected.dropped, strings: 0, paths: 0, plain: false };
+  }
+  const r = redactJsonText(masterText);
+  return { text: r.text, sidecar: false, kept: [], dropped: [], strings: r.strings, paths: r.paths, plain: r.plain };
+}
+
+/**
  * Every art sidecar a build ships, from `public/`: all `public/art/**\/*.json` except what `dist-filter.mjs` never ships (the numbered takes).
  * Links ARE followed (a worktree's junctioned `public/art` is read, never written).
  */
@@ -115,13 +144,18 @@ function writeReplacing(file, data) {
 }
 
 /**
- * Rewrite the art sidecars of a build output folder (`<outDir>/art/**\/*.json`): every one with a local path in a string value.
- * Throws if a path survives the rewrite or a file is not UTF-8 text. Returns what was done; the paths themselves are never in it.
+ * Write the art JSON of a build output folder (`<outDir>/art/**\/*.json`) as the build ships it (`shippedArtJsonText`): each painting sidecar cut to
+ * the fields the game reads, every other file with its local paths replaced. Throws if a file is not UTF-8 text, a sidecar is not a JSON object, or
+ * what is written still holds a local path or a link to claude.ai (a kept field that holds one is a master to fix, never text to rewrite: the
+ * values of the kept fields are the master's own). Returns what was done; neither a path, a link nor a value is ever in it.
  * @param {string} outDir
- * @returns {{ files: number; changed: number; strings: number; paths: number; changedFiles: string[]; plain: string[] }}
+ * @returns {{ files: number; sidecars: number; keysKept: number; keysDropped: number; changed: number; strings: number; paths: number; changedFiles: string[]; plain: string[] }}
+ *   `files` art JSON files seen; `sidecars` of them painting sidecars; `keysKept` and `keysDropped` summed over the sidecars; `changed` files written
+ *   (a file already in its shipped form is not written again); `strings` and `paths` the string values rewritten and the paths replaced in the
+ *   non-sidecar files; `plain` the non-sidecar files that are not JSON.
  */
 export function redactBuildSidecars(outDir) {
-  const result = { files: 0, changed: 0, strings: 0, paths: 0, changedFiles: [], plain: [] };
+  const result = { files: 0, sidecars: 0, keysKept: 0, keysDropped: 0, changed: 0, strings: 0, paths: 0, changedFiles: [], plain: [] };
   const root = join(outDir, 'art');
   if (!existsSync(root)) return result;
   const walk = (dir) => {
@@ -138,11 +172,16 @@ export function redactBuildSidecars(outDir) {
       result.files++;
       const bytes = readFileSync(full);
       const text = bytes.toString('utf8');
-      if (!Buffer.from(text, 'utf8').equals(bytes)) throw new Error(`${rel}: is not UTF-8 text, so its paths cannot be replaced safely`);
-      const r = redactJsonText(text);
-      if (r.plain) result.plain.push(rel);
+      if (!Buffer.from(text, 'utf8').equals(bytes)) throw new Error(`${rel}: is not UTF-8 text, so it cannot be cut or its paths replaced safely`);
+      const r = shippedArtJsonText(rel, text);
+      if (r.sidecar) {
+        result.sidecars++;
+        result.keysKept += r.kept.length;
+        result.keysDropped += r.dropped.length;
+      } else if (r.plain) result.plain.push(rel);
+      if (findLocalPaths(r.text).length > 0) throw new Error(`${rel}: a local path is left in what the build would write (${r.sidecar ? 'in a field the game reads: fix the master' : 'the rule in tools/dist-local-paths.mjs does not cover its shape'})`);
+      if (findPrivateLinks(r.text).length > 0) throw new Error(`${rel}: a link to claude.ai is in what the build would write${r.sidecar ? ' (in a field the game reads: fix the master)' : ''}`);
       if (r.text === text) continue;
-      if (findLocalPaths(r.text).length > 0) throw new Error(`${rel}: a local path is left after the replacement (the rule in tools/dist-local-paths.mjs does not cover its shape)`);
       writeReplacing(full, r.text);
       result.changed++;
       result.strings += r.strings;

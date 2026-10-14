@@ -16,9 +16,11 @@
  *     before any script runs, and the hint has to name the file the site serves. It is done on the finished file, not in
  *     `transformIndexHtml`: Vite writes `imagesrcset` after the post hooks and a rewrite made there is lost (the reference
  *     audit, `tools/art-verify.mjs`, caught exactly that).
- *     It also rewrites the build's art SIDECARS (r46-fix, FOC46-01; `tools/art-sidecar-redact.mjs`), whatever the art switch: each string
- *     value that holds a path of the build PC (a drive letter, a user-profile folder) becomes that path's last name, in the OUTPUT only;
- *     `public/art` is never written, and `tools/dist-local-paths.mjs` is the deploy's gate that no such path is left anywhere in the build.
+ *     It also writes the build's art JSON (`tools/art-sidecar-redact.mjs`), whatever the art switch: each painting SIDECAR is written as exactly the
+ *     fields the game reads (r47-rc, FOC46-06; `tools/art-sidecar-fields.mjs`: the provenance notes are left out), every other art JSON with each
+ *     path of the build PC (a drive letter, a user-profile folder) replaced by its last name (r46-fix, FOC46-01), in the OUTPUT only; `public/art`
+ *     is never written, and `tools/dist-local-paths.mjs` is the deploy's gate that no path, no link to claude.ai and no sidecar key outside the list
+ *     is left anywhere in the build.
  *
  * `PYREFLY_ART_WEBP=off|partial|safe|exact|all` picks what is derived (default `exact`); `off` makes the plugin a no-op (the PNGs
  * ship as before): the switch for a live problem.
@@ -74,12 +76,13 @@ export function pyreflyArtDerive({ scope = resolveScope(), cacheDir = resolveCac
     },
     closeBundle() {
       if (!existsSync(join(outDir, 'index.html'))) return;
-      // r46-fix (FOC46-01): the painting sidecars name folders of the build PC, and the site is public. Whatever art switch is set, the
-      // BUILD OUTPUT's sidecars are written with each local path replaced by its last name (`art-sidecar-redact.mjs`); `public/art` is never touched.
+      // r46-fix (FOC46-01) and r47-rc (FOC46-06): the painting sidecars name folders of the build PC, the owner and private pages, and the site is
+      // public. Whatever art switch is set, the BUILD OUTPUT's sidecars are written as only the fields the game reads, and any other art JSON with
+      // each local path replaced by its last name (`art-sidecar-redact.mjs`); `public/art` is never touched.
       if (!redacted) {
         redacted = true;
         const done = redactBuildSidecars(outDir);
-        console.log(`[pyrefly-art-derive] sidecars: ${done.changed} of ${done.files} art JSON file(s) written with ${done.paths} local path(s) in ${done.strings} string value(s) replaced by their last name; the masters are untouched${done.plain.length ? `; ${done.plain.length} file(s) are not valid JSON and were redacted as plain text` : ''}`);
+        console.log(`[pyrefly-art-derive] sidecars: ${done.sidecars} painting sidecar(s) of ${done.files} art JSON file(s) written with only the fields the game reads (${done.keysKept} key(s) kept, ${done.keysDropped} left out); the other ${done.files - done.sidecars} had ${done.paths} local path(s) in ${done.strings} string value(s) replaced by their last name; the masters are untouched${done.plain.length ? `; ${done.plain.length} file(s) are not valid JSON and were redacted as plain text` : ''}`);
       }
       if (plan === null || applied) return;
       applied = true;

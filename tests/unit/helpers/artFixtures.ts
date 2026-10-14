@@ -8,6 +8,8 @@ import { dirname, join } from 'node:path';
 import { crc32, deflateSync } from 'node:zlib';
 import sharp from 'sharp';
 
+import { redactBuildSidecars } from '../../../tools/art-sidecar-redact.mjs';
+
 /** A temporary world: `root` holds `public/` (`pub`), a cache folder and, once made, a build output `out`. */
 export function makeWorld(): { root: string; pub: string; cache: string } {
   const root = mkdtempSync(join(tmpdir(), 'pyrefly-art-derive-'));
@@ -82,7 +84,11 @@ export function putFile(pub: string, rel: string, data: Buffer | string): void {
   writeFileSync(f, data);
 }
 
-/** What Vite leaves in the output before the plugins' closeBundle: public copied whole, the unshipped files pruned. */
+/**
+ * What a build leaves in its output: public copied whole and the unshipped files pruned (what Vite leaves before the plugins' closeBundle), then the art
+ * JSON written as the plugin's closeBundle writes it first of all (r47-rc, FOC46-06: a painting sidecar as only the fields the game reads). The WebP
+ * derivation (`applyPlan`) is the test's own step.
+ */
 export function makeBuild(pub: string, root: string, extra: Record<string, string> = {}): string {
   const out = join(root, 'out');
   cpSync(pub, out, { recursive: true });
@@ -91,6 +97,7 @@ export function makeBuild(pub: string, root: string, extra: Record<string, strin
     mkdirSync(dirname(join(out, rel)), { recursive: true });
     writeFileSync(join(out, rel), body);
   }
+  redactBuildSidecars(out);
   return out;
 }
 

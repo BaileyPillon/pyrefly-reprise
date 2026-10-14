@@ -23,8 +23,10 @@
  * record lists, for every master of `src/data/art/strip-art.json`. The audit below also reads them: every `*.thumb.webp|png` name the
  * bundle or the record carries must be a shipped file, and the bundle and the record must name the same ones.
  *
- * **Sidecars (r46-fix, FOC46-01).** `verifyShippedArt` also runs `verifyShippedSidecars`: every art JSON of `public/` is in the build as the master's text with the
- * local paths of the build PC replaced by their last names (`tools/art-sidecar-redact.mjs`, the function the build itself uses), and nothing else differs.
+ * **Sidecars (r46-fix, FOC46-01; r47-rc, FOC46-06).** `verifyShippedArt` also runs `verifyShippedSidecars`: every art JSON of `public/` is in the build as exactly
+ * what `shippedArtJsonText` (`tools/art-sidecar-redact.mjs`, the function the build itself uses) makes of its master: a painting sidecar cut to the fields the game
+ * reads (`tools/art-sidecar-fields.mjs`, the values the master's own text), any other art JSON (the two manifests) with its local paths replaced, and nothing else
+ * differs. It also proves the split between the two kinds against the master folder: a sidecar has a painting beside it and a non-sidecar has none.
  *
  * **auditArtReferences: no reference to a file that is not there.** The art is reached by name from code, styles, pages and
  * data. After the derivation the PNG names of the derived files are no longer files, so the audit reads every shipped text
@@ -49,7 +51,8 @@ import { extname, join, relative, sep } from 'node:path';
 
 import { DERIVED_REPORT, MIN_WEBP_BYTES, listMasterPngs, pixelsOf, pool, webpName } from './art-derive-lib.mjs';
 import { COLOUR_CHUNKS, decoderIndependent, pngChunkTypes } from './art-image-facts.mjs';
-import { listMasterSidecars, redactJsonText } from './art-sidecar-redact.mjs';
+import { isSidecarJson } from './art-sidecar-fields.mjs';
+import { listMasterSidecars, shippedArtJsonText } from './art-sidecar-redact.mjs';
 import { verifyShippedThumbs } from './art-thumb-verify.mjs';
 import { STRIP_LIST } from './art-thumbs.mjs';
 import { THUMB_FILE } from './art-thumb-apply.mjs';
@@ -69,29 +72,54 @@ const walk = (root) => {
 
 const samePixels = (a, b) => a.hash === b.hash && a.width === b.width && a.height === b.height;
 
+/** A painting is beside its sidecar when one of these has the sidecar's name. */
+const PAINTING_EXTENSIONS = ['.png', '.webp', '.jpg', '.jpeg'];
+
 /**
- * **Sidecars (r46-fix, FOC46-01).** For every art JSON of `public/`, the build holds exactly the master's text with the local paths of the
- * build PC replaced by their last names (`redactJsonText`, the one function the build itself uses): the same keys, order, numbers and
- * formatting, only the string values that held a path differ. A shipped sidecar the build left unchanged where the master carries a path (the
- * paths would go live), or one that differs from the master anywhere else, is a problem. The game's own reads are proved equal by
- * `tests/unit/art-sidecar-redact.test.ts`; that no path is left anywhere in the build is `tools/dist-local-paths.mjs`.
+ * **Sidecars (r46-fix, FOC46-01; r47-rc, FOC46-06).** For every art JSON of `public/`, the build holds exactly what `shippedArtJsonText` (the one function the
+ * build itself uses) makes of the master: a painting sidecar is the master cut to the fields the game reads (the same keys in the master's order, each value the
+ * master's own text, no other key), any other art JSON (the two manifests) is the master with the local paths of the build PC replaced by their last names. A
+ * shipped file that is the master as it was, or differs anywhere else, is a problem. The split is proved too: a file the build treats as a sidecar has a painting
+ * beside it in `public/`, and a file it treats as something else has none, so a new JSON file under `art/` that is not a sidecar fails here instead of silently
+ * losing its keys. The game's own reads are proved equal by `tests/unit/art-sidecar-redact.test.ts` and `art-sidecar-fields.test.ts`; that no path, no link to
+ * claude.ai and no key outside the list is anywhere in the build is `tools/dist-local-paths.mjs`.
  */
 export function verifyShippedSidecars({ distDir, publicDir }) {
   const problems = [];
   const masters = listMasterSidecars(publicDir);
+  let sidecars = 0;
+  let others = 0;
   let redacted = 0;
+  let keysDropped = 0;
   for (const m of masters) {
     const shipped = join(distDir, m.rel);
+    const painted = PAINTING_EXTENSIONS.some((e) => existsSync(join(publicDir, m.rel.replace(/\.json$/i, e))));
+    if (isSidecarJson(m.rel) && !painted) problems.push(`${m.rel}: the build treats this as a painting sidecar and keeps only the fields the game reads, but no painting stands beside it: if it is not a sidecar, add it to NON_SIDECAR_ART_JSON in tools/art-sidecar-fields.mjs`);
+    if (!isSidecarJson(m.rel) && painted) problems.push(`${m.rel}: the build treats this as no sidecar (NON_SIDECAR_ART_JSON in tools/art-sidecar-fields.mjs), but a painting stands beside it`);
     if (!existsSync(shipped)) {
       problems.push(`${m.rel}: the build does not hold this sidecar`);
       continue;
     }
     const master = readFileSync(m.full, 'utf8');
-    const want = redactJsonText(master);
-    if (want.text !== master) redacted++;
-    if (readFileSync(shipped, 'utf8') !== want.text) problems.push(`${m.rel}: the shipped sidecar is not the master with its local paths replaced by their last names`);
+    let want;
+    try {
+      want = shippedArtJsonText(m.rel, master);
+    } catch (err) {
+      problems.push(err instanceof Error ? err.message : String(err));
+      continue;
+    }
+    if (want.sidecar) {
+      sidecars++;
+      keysDropped += want.dropped.length;
+    } else {
+      others++;
+      if (want.text !== master) redacted++;
+    }
+    if (readFileSync(shipped, 'utf8') !== want.text) {
+      problems.push(`${m.rel}: the shipped file is not ${want.sidecar ? 'the master cut to the fields the game reads' : 'the master with its local paths replaced by their last names'}`);
+    }
   }
-  return { checked: masters.length, redacted, problems };
+  return { checked: masters.length, sidecars, others, redacted, keysDropped, problems };
 }
 
 /** The pixel-identity gate over a build output; see the file header. `listFile` is the strip list the thumbnails are checked against. */
@@ -159,7 +187,7 @@ export async function verifyShippedArt({ distDir, publicDir, jobs = 4, exact = t
   const sidecars = verifyShippedSidecars({ distDir, publicDir });
   problems.push(...sidecars.problems);
   problems.sort();
-  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, thumbs: { checked: thumbs.checked, webp: thumbs.webp, png: thumbs.png, none: thumbs.none, enabled: thumbs.enabled }, sidecars: { checked: sidecars.checked, redacted: sidecars.redacted }, problems, ms: Date.now() - t0 };
+  return { ok: problems.length === 0, checked: masters.length, webp: n.webp, png: n.png, decoded: n.decoded, exact, thumbs: { checked: thumbs.checked, webp: thumbs.webp, png: thumbs.png, none: thumbs.none, enabled: thumbs.enabled }, sidecars: { checked: sidecars.checked, sidecars: sidecars.sidecars, others: sidecars.others, redacted: sidecars.redacted, keysDropped: sidecars.keysDropped }, problems, ms: Date.now() - t0 };
 }
 
 const ART_NAME = String.raw`(?<![\w-])art\/[A-Za-z0-9_@.\-/]+?\.(?:png|webp)(?![\w])`;

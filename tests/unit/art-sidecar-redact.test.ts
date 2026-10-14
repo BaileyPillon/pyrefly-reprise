@@ -1,23 +1,25 @@
 /**
- * The painting sidecars as the build ships them (r46-fix, FOC46-01; both games, build plumbing): every local path of the build PC in a string
- * value is replaced by its last name, in the BUILD OUTPUT only, and the game reads exactly what it read before.
+ * The art JSON as the build ships it (r46-fix, FOC46-01; r47-rc, FOC46-06; both games, build plumbing): a painting sidecar is written as only the
+ * fields the game reads, values untouched (`art-sidecar-fields.test.ts` proves the projection itself), any other art JSON (the two manifests) has the
+ * local paths of the build PC in its string values replaced by their last names; in the BUILD OUTPUT only, and the game reads exactly what it read before.
  *
  * The proof has four parts. (1) The READERS table: every place `src/` fetches an art JSON, and the fields it takes; a guard test fails when a
- * new reader appears, so nobody can add one without listing its fields here. (2) For every sidecar of the master folder (`public/art`, the
- * approved masters; skipped when the checkout has no art, which is gitignored): the redacted text is valid JSON, deep-equal to the master in
- * every field the game reads, equal to it in everything but the string values that held a path, and no read field holds a path at all (if one
- * did, the redaction would change what the game reads: STOP). (3) The function itself: the formatting rule, keys and numbers untouched, a file
- * without a path byte-identical. (4) The build step: it writes the output's files only, through a temporary name (a master that is hard-linked
- * into the output is not changed), and the gate (`verifyShippedSidecars`) fails a build that kept a path or changed anything else.
+ * new reader appears, so nobody can add one without listing its fields here, and the list of fields a shipped sidecar may carry (`SIDECAR_FIELDS`) is
+ * proved equal to the union of what the readers take. (2) For every art JSON of the master folder (`public/art`, the approved masters; skipped when the
+ * checkout has no art, which is gitignored): what the build writes is valid JSON, deep-equal to the master in every field the game reads, and no
+ * read field holds a path at all. (3) The path replacement itself, still used for any non-sidecar art JSON: the formatting rule, keys and numbers
+ * untouched, a file without a path byte-identical. (4) The build step: it writes the output's files only, through a temporary name (a master that is
+ * hard-linked into the output is not changed), and the gate (`verifyShippedSidecars`) fails a build that kept a key, a path or changed anything else.
  */
 import { existsSync, linkSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve, sep } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { pyreflyArtDerive } from '../../tools/art-derive-plugin.mjs';
-import { listMasterSidecars, redactBuildSidecars, redactJsonText } from '../../tools/art-sidecar-redact.mjs';
+import { SIDECAR_FIELDS, isSidecarJson } from '../../tools/art-sidecar-fields.mjs';
+import { listMasterSidecars, redactBuildSidecars, redactJsonText, shippedArtJsonText } from '../../tools/art-sidecar-redact.mjs';
 import { verifyShippedSidecars } from '../../tools/art-verify.mjs';
-import { findLocalPaths, redactLocalPaths } from '../../tools/dist-local-paths.mjs';
+import { findLocalPaths, findPrivateLinks, redactLocalPaths } from '../../tools/dist-local-paths.mjs';
 
 const ROOT = resolve(import.meta.dirname, '../..');
 const PUBLIC = join(ROOT, 'public');
@@ -88,6 +90,27 @@ describe('the readers of an art JSON in src/ (the guard)', () => {
     expect(used).toEqual(['anchorY', 'baselineY', 'facing', 'height', 'prompt', 'scale', 'seed', 'width']);
     expect(READERS[0]!.fields.slice().sort()).toEqual(used);
   });
+
+  it('FOC46-06: a shipped sidecar may carry exactly the fields the readers take (SIDECAR_FIELDS), no more and no fewer', () => {
+    expect([...SIDECAR_FIELDS].sort()).toEqual(fieldsOf('painting'));
+  });
+
+  it('the files the build does not cut (NON_SIDECAR_ART_JSON, besides the build\'s own record) are the two manifests the readers take whole', () => {
+    const manifests = READERS.filter((r) => r.scope !== 'painting').map((r) => (r.scope === 'art/manifest.json' ? 'art/manifest.json' : 'art/portrait-parts/manifest.json'));
+    expect([...new Set(manifests)].sort()).toEqual(['art/manifest.json', 'art/portrait-parts/manifest.json']);
+    for (const rel of manifests) expect(isSidecarJson(rel), rel).toBe(false);
+  });
+
+  it('the loader reads its sidecar by named fields only: no computed key, no spread, no walk over the parsed object', () => {
+    // The re-check of FOC46-06 (dynamic access): `tryLoadMeta` is the one reader that takes a whole parsed sidecar (`raw`); the others take one named
+    // field (`focal`, `headTop`) or two (`width`, `height`). A computed key, a spread or an Object.keys/entries/values over `raw` would read a field the table does not list.
+    const meta = codeOf(readFileSync(join(ROOT, 'src/engine/PaintedArt.ts'), 'utf8'));
+    const body = meta.slice(meta.indexOf('export async function tryLoadMeta'), meta.indexOf('export async function loadPainted'));
+    expect(body).not.toMatch(/\braw\s*\[/);
+    expect(body).not.toMatch(/\.\.\.\s*raw\b/);
+    expect(body).not.toMatch(/Object\.(keys|entries|values|assign)\(\s*raw\b/);
+    expect(body).not.toMatch(/\bfor\s*\(\s*(const|let)\s+\w+\s+(in|of)\s+raw\b/);
+  });
 });
 
 /** Every string literal that is a value (not a key) replaced by `""`: the text of a JSON file without its string values. */
@@ -118,42 +141,47 @@ function differences(a: unknown, b: unknown, at: string, out: string[], changed:
   if (!Object.is(a, b)) out.push(`${at}: a ${typeof a} changed`);
 }
 
-describe.skipIf(!HAVE_ART)('every sidecar of the master folder, redacted', () => {
+describe.skipIf(!HAVE_ART)('every art JSON of the master folder, as the build ships it', () => {
   const masters = listMasterSidecars(PUBLIC);
 
   it('is valid JSON, equal to the master in every field the game reads, and none of those fields holds a path', () => {
     const problems: string[] = [];
-    let withPath = 0;
+    let cut = 0;
     for (const m of masters) {
       const text = readFileSync(m.full, 'utf8');
-      const r = redactJsonText(text);
+      const r = shippedArtJsonText(m.rel, text);
       const before = JSON.parse(text) as Record<string, unknown>;
       let after: Record<string, unknown>;
       try {
         after = JSON.parse(r.text) as Record<string, unknown>;
       } catch {
-        problems.push(`${m.rel}: the redacted text is not valid JSON`);
+        problems.push(`${m.rel}: what the build writes is not valid JSON`);
         continue;
       }
-      if (r.text !== text) withPath++;
+      if (r.sidecar && r.dropped.length > 0) cut++;
       if (r.plain) problems.push(`${m.rel}: not JSON`);
       if (before === null || typeof before !== 'object') continue;
       for (const f of readFieldsFor(m.rel)) {
-        if (!(f in before)) continue;
+        if (!(f in before)) {
+          if (f in after) problems.push(`${m.rel}: the read field ${f} appeared`);
+          continue;
+        }
         if (JSON.stringify(after[f]) !== JSON.stringify(before[f])) problems.push(`${m.rel}: the read field ${f} changed`);
-        if (findLocalPaths(JSON.stringify(before[f])).length > 0) problems.push(`${m.rel}: the read field ${f} HOLDS A PATH (stop: the redaction would change what the game reads)`);
+        if (findLocalPaths(JSON.stringify(before[f])).length > 0) problems.push(`${m.rel}: the read field ${f} HOLDS A PATH (stop: the build would not ship it as it is)`);
       }
     }
     expect(problems).toEqual([]);
-    expect(withPath, 'the master folder carries paths today; the test would prove nothing without them').toBeGreaterThan(0);
+    expect(cut, 'the master folder carries provenance today; the test would prove nothing without it').toBeGreaterThan(1000);
   });
 
-  it('differs from the master only inside string values that held a path: the same keys in the same order, numbers and layout as the master', () => {
+  it('a file that is no sidecar differs from the master only inside string values that held a path: the same keys in the same order, numbers and layout', () => {
     const problems: string[] = [];
-    let strings = 0;
-    for (const m of masters) {
+    let seen = 0;
+    for (const m of masters.filter((x) => !isSidecarJson(x.rel))) {
+      seen++;
       const text = readFileSync(m.full, 'utf8');
       const r = redactJsonText(text);
+      expect(shippedArtJsonText(m.rel, text).text, 'the build writes exactly redactJsonText for it').toBe(r.text);
       if (skeleton(r.text) !== skeleton(text)) problems.push(`${m.rel}: the text outside its string values changed`);
       const found: string[] = [];
       const changed = { n: 0 };
@@ -161,20 +189,19 @@ describe.skipIf(!HAVE_ART)('every sidecar of the master folder, redacted', () =>
       for (const f of found) problems.push(`${m.rel}${f}`);
       if (changed.n !== r.strings) problems.push(`${m.rel}: ${changed.n} strings differ, ${r.strings} reported`);
       if (r.text === text && changed.n !== 0) problems.push(`${m.rel}: reported unchanged`);
-      strings += changed.n;
     }
     expect(problems).toEqual([]);
-    expect(strings).toBeGreaterThan(0);
+    expect(seen, 'the two manifests').toBe(2);
   });
 
-  it('leaves nothing the gate finds, writes a file without a path as the master exactly, and is idempotent', () => {
+  it('leaves nothing the gate finds, and writing it again changes nothing', () => {
     const problems: string[] = [];
     for (const m of masters) {
       const text = readFileSync(m.full, 'utf8');
-      const r = redactJsonText(text);
+      const r = shippedArtJsonText(m.rel, text);
       if (findLocalPaths(r.text).length > 0) problems.push(`${m.rel}: a path is left`);
-      if (redactJsonText(r.text).text !== r.text) problems.push(`${m.rel}: not idempotent`);
-      if (findLocalPaths(text).length === 0 && r.text !== text) problems.push(`${m.rel}: had no path and changed`);
+      if (findPrivateLinks(r.text).length > 0) problems.push(`${m.rel}: a link to claude.ai is left`);
+      if (shippedArtJsonText(m.rel, r.text).text !== r.text) problems.push(`${m.rel}: not idempotent`);
     }
     expect(problems).toEqual([]);
   });
@@ -232,23 +259,35 @@ describe('the build step', () => {
     mkdirSync(join(file, '..'), { recursive: true });
     writeFileSync(file, text);
   };
-  const DIRTY = '{ "width": 10, "height": 20, "installedFrom": "D:/Tools/art-backup/title/echo.png", "provenance": "C:\\\\Users\\\\someone\\\\Pictures\\\\echo.png" }\n';
+  // A sidecar with provenance: two fields the game reads, a path of the build PC, a profile path, the owner's name and a private link.
+  const DIRTY =
+    '{ "width": 10, "height": 20, "installedFrom": "D:/Tools/art-backup/title/echo.png", "provenance": "C:\\\\Users\\\\someone\\\\Pictures\\\\echo.png", "status": "approved by Bailey", "source": "https://claude.ai/artifact/AbC123" }\n';
+  const DIRTY_SHIPPED = '{\n  "width": 10,\n  "height": 20\n}\n';
   const CLEAN = '{ "width": 30, "height": 40, "facing": "right" }\n';
+  const CLEAN_SHIPPED = '{\n  "width": 30,\n  "height": 40,\n  "facing": "right"\n}\n';
+  // The two manifests the game reads whole: one with a path in a value (the replacement stays for it), one without.
+  const MANIFEST_DIRTY = '{ "version": 2, "subjects": {}, "where": "D:/Tools/staging/subjects.json" }\n';
+  const MANIFEST_CLEAN = '{ "version": 1, "master": [1, 2], "plates": [] }\n';
 
-  it('writes the output only, leaves a file without a path as it was, and reports counts, never a path', () => {
+  it('writes the output only: a sidecar as only the fields the game reads, a manifest with its paths replaced, and reports counts, never a path or a name', () => {
     const root = tmp();
     put(join(root, 'public/art/title/echo.json'), DIRTY);
     put(join(root, 'public/art/characters/yuna/idle.json'), CLEAN);
     put(join(root, 'dist/art/title/echo.json'), DIRTY);
     put(join(root, 'dist/art/characters/yuna/idle.json'), CLEAN);
     put(join(root, 'dist/art/title/echo.png'), 'not json');
-    const before = statSync(join(root, 'dist/art/characters/yuna/idle.json')).mtimeMs;
+    put(join(root, 'dist/art/manifest.json'), MANIFEST_DIRTY);
+    put(join(root, 'dist/art/portrait-parts/manifest.json'), MANIFEST_CLEAN);
+    const before = statSync(join(root, 'dist/art/portrait-parts/manifest.json')).mtimeMs;
     const done = redactBuildSidecars(join(root, 'dist'));
-    expect(done).toMatchObject({ files: 2, changed: 1, strings: 2, paths: 2, changedFiles: ['art/title/echo.json'], plain: [] });
-    expect(JSON.stringify(done)).not.toMatch(/Tools|someone|Pictures/);
-    expect(JSON.parse(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8'))).toEqual({ width: 10, height: 20, installedFrom: 'echo.png', provenance: 'echo.png' });
-    expect(readFileSync(join(root, 'dist/art/characters/yuna/idle.json'), 'utf8')).toBe(CLEAN);
-    expect(statSync(join(root, 'dist/art/characters/yuna/idle.json')).mtimeMs).toBe(before);
+    expect(done).toMatchObject({ files: 4, sidecars: 2, keysKept: 5, keysDropped: 4, changed: 3, strings: 1, paths: 1, plain: [] });
+    expect([...done.changedFiles].sort()).toEqual(['art/characters/yuna/idle.json', 'art/manifest.json', 'art/title/echo.json']);
+    expect(JSON.stringify(done)).not.toMatch(/Tools|someone|Pictures|Bailey|claude/);
+    expect(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8')).toBe(DIRTY_SHIPPED);
+    expect(readFileSync(join(root, 'dist/art/characters/yuna/idle.json'), 'utf8')).toBe(CLEAN_SHIPPED);
+    expect(readFileSync(join(root, 'dist/art/manifest.json'), 'utf8'), 'a manifest keeps every key and has its path replaced').toBe(MANIFEST_DIRTY.replace('D:/Tools/staging/subjects.json', 'subjects.json'));
+    expect(readFileSync(join(root, 'dist/art/portrait-parts/manifest.json'), 'utf8'), 'a manifest without a path is not touched').toBe(MANIFEST_CLEAN);
+    expect(statSync(join(root, 'dist/art/portrait-parts/manifest.json')).mtimeMs).toBe(before);
     expect(readFileSync(join(root, 'public/art/title/echo.json'), 'utf8'), 'the master is untouched').toBe(DIRTY);
     expect(readdirSync(join(root, 'dist/art/title')).sort(), 'no temporary file is left').toEqual(['echo.json', 'echo.png']);
     expect(redactBuildSidecars(join(root, 'dist')).changed, 'a second run changes nothing').toBe(0);
@@ -261,29 +300,73 @@ describe('the build step', () => {
     linkSync(join(root, 'public/art/title/echo.json'), join(root, 'dist/art/title/echo.json'));
     redactBuildSidecars(join(root, 'dist'));
     expect(readFileSync(join(root, 'public/art/title/echo.json'), 'utf8')).toBe(DIRTY);
-    expect(JSON.parse(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8')).installedFrom).toBe('echo.png');
+    expect(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8')).toBe(DIRTY_SHIPPED);
   });
 
   it('does nothing for a build without an art folder', () => {
     const root = tmp();
     mkdirSync(join(root, 'dist'));
-    expect(redactBuildSidecars(join(root, 'dist'))).toMatchObject({ files: 0, changed: 0 });
+    expect(redactBuildSidecars(join(root, 'dist'))).toMatchObject({ files: 0, sidecars: 0, changed: 0 });
   });
 
-  it('is what the gate checks: a faithful build passes, a build that kept a path or changed anything else fails', () => {
+  it('fails the build, naming the file and never the value, when a sidecar is not a JSON object or a kept field holds a path or a private link', () => {
+    for (const [text, why] of [
+      ['[1, 2]', /a painting sidecar must be a JSON object/],
+      ['{ "width": 10, "prompt": "from D:/Tools/staging/echo.png" }', /a local path is left .*in a field the game reads: fix the master/],
+      ['{ "width": 10, "prompt": "see https://claude.ai/artifact/AbC123" }', /a link to claude\.ai is in what the build would write .*fix the master/],
+    ] as const) {
+      const root = tmp();
+      put(join(root, 'dist/art/title/echo.json'), text);
+      let message = '';
+      try {
+        redactBuildSidecars(join(root, 'dist'));
+      } catch (err) {
+        message = String((err as Error).message);
+      }
+      expect(message, text).toMatch(why);
+      expect(message, text).toMatch(/^art\/title\/echo\.json: /);
+      expect(message, text).not.toMatch(/Tools|staging|AbC123/);
+      expect(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8'), 'nothing was written').toBe(text);
+    }
+  });
+
+  it('is what the gate checks: a faithful build passes, a build that kept a key, a path or changed anything else fails', () => {
     const root = tmp();
     put(join(root, 'public/art/title/echo.json'), DIRTY);
+    put(join(root, 'public/art/title/echo.png'), 'a painting');
     put(join(root, 'public/art/characters/yuna/idle.json'), CLEAN);
+    put(join(root, 'public/art/characters/yuna/idle.webp'), 'a painting');
+    put(join(root, 'public/art/manifest.json'), MANIFEST_DIRTY);
     put(join(root, 'public/art/characters/yuna/idle.2.json'), '{"numbered":"take"}'); // a numbered take never ships
-    for (const f of ['title/echo.json', 'characters/yuna/idle.json']) put(join(root, 'dist/art', f), readFileSync(join(root, 'public/art', f), 'utf8'));
+    for (const f of ['title/echo.json', 'characters/yuna/idle.json', 'manifest.json']) put(join(root, 'dist/art', f), readFileSync(join(root, 'public/art', f), 'utf8'));
     const args = { distDir: join(root, 'dist'), publicDir: join(root, 'public') };
-    expect(verifyShippedSidecars(args).problems.join('\n'), 'the build as Vite copied it still carries the paths').toMatch(/echo\.json: the shipped sidecar is not the master with its local paths replaced/);
+    const asVite = verifyShippedSidecars(args).problems.join('\n');
+    expect(asVite, 'the build as Vite copied it still carries the provenance').toMatch(/echo\.json: the shipped file is not the master cut to the fields the game reads/);
+    expect(asVite, 'and the paths of a manifest').toMatch(/manifest\.json: the shipped file is not the master with its local paths replaced/);
     redactBuildSidecars(join(root, 'dist'));
-    expect(verifyShippedSidecars(args)).toEqual({ checked: 2, redacted: 1, problems: [] });
-    put(join(root, 'dist/art/characters/yuna/idle.json'), CLEAN.replace('30', '31'));
-    expect(verifyShippedSidecars(args).problems.join('\n')).toMatch(/idle\.json: the shipped sidecar is not the master/);
+    expect(verifyShippedSidecars(args)).toEqual({ checked: 3, sidecars: 2, others: 1, redacted: 1, keysDropped: 4, problems: [] });
+    // a key left in, a value changed, a file missing
+    put(join(root, 'dist/art/title/echo.json'), DIRTY_SHIPPED.replace('"height": 20', '"height": 20,\n  "status": "x"'));
+    expect(verifyShippedSidecars(args).problems.join('\n'), 'a key kept').toMatch(/echo\.json: the shipped file is not the master cut to the fields the game reads/);
+    put(join(root, 'dist/art/title/echo.json'), DIRTY_SHIPPED);
+    put(join(root, 'dist/art/characters/yuna/idle.json'), CLEAN_SHIPPED.replace('30', '31'));
+    expect(verifyShippedSidecars(args).problems.join('\n'), 'a value changed').toMatch(/idle\.json: the shipped file is not the master cut/);
+    put(join(root, 'dist/art/characters/yuna/idle.json'), CLEAN); // the master as it was, with nothing cut: not the shipped form even though it has no provenance
+    expect(verifyShippedSidecars(args).problems.join('\n'), 'the master\'s own text').toMatch(/idle\.json: the shipped file is not the master cut/);
     rmSync(join(root, 'dist/art/title/echo.json'));
     expect(verifyShippedSidecars(args).problems.join('\n')).toMatch(/echo\.json: the build does not hold this sidecar/);
+  });
+
+  it('proves the split against the master folder: a sidecar has a painting beside it, a non-sidecar has none', () => {
+    const root = tmp();
+    put(join(root, 'public/art/stray/odd.json'), '{"width": 1}'); // no painting: the build would cut every key of a file that is not a sidecar
+    put(join(root, 'public/art/manifest.json'), MANIFEST_CLEAN);
+    put(join(root, 'public/art/manifest.png'), 'a painting'); // a painting beside a manifest: it is not the manifest
+    for (const f of ['stray/odd.json', 'manifest.json']) put(join(root, 'dist/art', f), readFileSync(join(root, 'public/art', f), 'utf8'));
+    redactBuildSidecars(join(root, 'dist'));
+    const problems = verifyShippedSidecars({ distDir: join(root, 'dist'), publicDir: join(root, 'public') }).problems.join('\n');
+    expect(problems).toMatch(/stray\/odd\.json: the build treats this as a painting sidecar and keeps only the fields the game reads, but no painting stands beside it.*NON_SIDECAR_ART_JSON/);
+    expect(problems).toMatch(/manifest\.json: the build treats this as no sidecar .*but a painting stands beside it/);
   });
 
   it('runs in the Vite plugin at closeBundle, whatever the art switch says, and never writes public/', () => {
@@ -294,7 +377,7 @@ describe('the build step', () => {
     const plugin = pyreflyArtDerive({ scope: 'off' }) as unknown as { configResolved(c: unknown): void; closeBundle(): void };
     plugin.configResolved({ root, build: { outDir: 'dist' } });
     plugin.closeBundle();
-    expect(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8')).not.toMatch(/Tools|someone|Pictures/);
+    expect(readFileSync(join(root, 'dist/art/title/echo.json'), 'utf8')).toBe(DIRTY_SHIPPED);
     expect(readFileSync(join(root, 'public/art/title/echo.json'), 'utf8')).toBe(DIRTY);
     plugin.closeBundle(); // a second call is a no-op
   });

@@ -10,7 +10,7 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { findLocalPaths, formatLocalPathReport, leafOfPath, redactLocalPaths, scanBuildForLocalPaths } from '../../tools/dist-local-paths.mjs';
+import { findLocalPaths, findPrivateLinks, formatLocalPathReport, leafOfPath, redactLocalPaths, scanBuildForLocalPaths } from '../../tools/dist-local-paths.mjs';
 
 const kinds = (text: string): string[] => findLocalPaths(text).map((h) => h.kind);
 
@@ -130,6 +130,41 @@ describe('redactLocalPaths: each local path becomes its last name', () => {
   });
 });
 
+describe('findPrivateLinks: a link to claude.ai (FOC46-06)', () => {
+  const found = (text: string): number => findPrivateLinks(text).length;
+
+  it.each([
+    ['an https link', '"source": "https://claude.ai/artifact/FsGq1abc"', 1],
+    ['an http link', 'http://claude.ai/', 1],
+    ['a link with no scheme', 'see claude.ai/artifact/x and claude.ai/share/y', 2],
+    ['a subdomain', 'https://www.claude.ai/chat/1 and https://api.claude.ai/', 2],
+    ['capitals', 'CLAUDE.AI/chat and Claude.ai', 2],
+    ['the bare host in a sentence', 'made with claude.ai.', 1],
+    ['a link in the middle of JSON', '{"a":"x","note":"https://claude.ai/code/artifact/0b1","b":2}', 1],
+  ])('finds %s', (_name, text, n) => {
+    expect(found(text as string)).toBe(n);
+  });
+
+  it.each([
+    ['a longer host', 'https://notclaude.ai/x and https://claude.air/x and claude.ai.example.com/x and claude.aix'],
+    ['another host', 'https://anthropic.com/claude and https://example.com/claude.ai-notes-nope'],
+    ['the word Claude', 'Claude Code and Claude Sonnet, and "claude" alone'],
+    ['a file name', 'claude_ai.json and claude-ai.png and claudeai'],
+    ['an account word', 'ai.claude and claude@ai'],
+  ])('does not find %s', (_name, text) => {
+    expect(found(text)).toBe(0);
+  });
+
+  it('reports the line and column of each (one-based) and never the link', () => {
+    const hits = findPrivateLinks('first line\r\n  a https://claude.ai/x b\nthird claude.ai');
+    expect(hits).toEqual([
+      { line: 2, column: 13, kind: 'link' },
+      { line: 3, column: 7, kind: 'link' },
+    ]);
+    expect(JSON.stringify(hits)).not.toMatch(/claude/);
+  });
+});
+
 describe('the deploy runs the gate', () => {
   it('searches every shipped text file after the art audits and before the browser load, and refuses the deploy on a hit', () => {
     const deploy = readFileSync(join(import.meta.dirname, '..', '..', 'tools', 'deploy-pages.mjs'), 'utf8');
@@ -155,18 +190,60 @@ describe('scanBuildForLocalPaths: a build folder', () => {
     const root = mkdtempSync(join(tmpdir(), 'dist-paths-'));
     try {
       mkdirSync(join(root, 'art', 'characters'), { recursive: true });
+      mkdirSync(join(root, 'data'), { recursive: true });
       writeFileSync(join(root, 'index.html'), '<a href="https://example.com/x">x</a>');
       writeFileSync(join(root, 'art', 'characters', 'clean.json'), JSON.stringify({ width: 10, height: 20 }));
-      writeFileSync(join(root, 'art', 'characters', 'dirty.json'), JSON.stringify({ width: 10, installedFrom: 'D:/Tools/staging/x.png', note: 'C:\\Users\\someone\\x' }, null, 1));
+      writeFileSync(join(root, 'data', 'dirty.json'), JSON.stringify({ width: 10, installedFrom: 'D:/Tools/staging/x.png', note: 'C:\\Users\\someone\\x' }, null, 1));
       writeFileSync(join(root, 'art', 'characters', 'picture.png'), Buffer.from('D:/Tools/staging/binary-not-read'));
       const report = scanBuildForLocalPaths(root);
       expect(report.scanned).toBe(3);
-      expect([...new Set(report.hits.map((h) => h.file))]).toEqual(['art/characters/dirty.json']);
+      expect([...new Set(report.hits.map((h) => h.file))]).toEqual(['data/dirty.json']);
       expect(report.hits.map((h) => h.kind).sort()).toEqual(['drive', 'drive']);
       const text = formatLocalPathReport(report);
-      expect(text).toContain('art/characters/dirty.json');
+      expect(text).toContain('data/dirty.json');
       expect(text).not.toMatch(/Tools|staging|someone/);
-      expect(formatLocalPathReport({ scanned: 3, hits: [] })).toBe('local paths: none in 3 text file(s)');
+      expect(formatLocalPathReport({ scanned: 3, hits: [] })).toBe('build privacy gate: no local path, no link to claude.ai and no sidecar key outside the list in 3 text file(s)');
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('FOC46-06: fails on a link to claude.ai in any text file, and on a key outside the list in a painting sidecar, and prints neither a link nor a value', () => {
+    const root = mkdtempSync(join(tmpdir(), 'dist-paths-'));
+    try {
+      mkdirSync(join(root, 'art', 'characters', 'yuna'), { recursive: true });
+      mkdirSync(join(root, 'art', 'portrait-parts'), { recursive: true });
+      mkdirSync(join(root, 'assets'), { recursive: true });
+      // fine: a sidecar of listed fields only, the two manifests and the build's own record (not sidecars, so their keys are their own), an empty sidecar
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'ok.json'), '{\n  "width": 10,\n  "height": 20,\n  "prompt": "a painted room"\n}\n');
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'empty.json'), '{}\n');
+      writeFileSync(join(root, 'art', 'manifest.json'), '{"version":2,"subjects":{},"generatedAt":"x"}');
+      writeFileSync(join(root, 'art', 'portrait-parts', 'manifest.json'), '{"version":1,"master":[1,2],"plates":[]}');
+      writeFileSync(join(root, 'art', 'derived.json'), '{"files":[],"thumbs":{}}');
+      writeFileSync(join(root, 'index.html'), '<a href="https://example.com/x">x</a>');
+      expect(scanBuildForLocalPaths(root).hits).toEqual([]);
+      // not fine
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'prov.json'), '{\n  "width": 10,\n  "status": "approved by Bailey",\n  "installedFrom": "x.png",\n  "model": "m"\n}\n');
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'weird.json'), '{"width": 1, "a b/c": 2, "k\\u00e9y": 3}');
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'array.json'), '[1, 2]');
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'broken.json'), '{"width": ');
+      writeFileSync(join(root, 'assets', 'credits.html'), '<p>made at <a href="https://claude.ai/artifact/AbC123">a page</a> and claude.ai/share/Zz9, www.claude.ai, API.CLAUDE.AI</p>');
+      writeFileSync(join(root, 'art', 'characters', 'yuna', 'linked.json'), '{"width": 1, "prompt": "see https://claude.ai/artifact/AbC123"}');
+      const report = scanBuildForLocalPaths(root);
+      const by = (file: string): string[] => report.hits.filter((h) => h.file === file).map((h) => `${h.kind}${h.key ? `:${h.key}` : ''}`);
+      expect(by('art/characters/yuna/prov.json')).toEqual(['sidecar-key:status', 'sidecar-key:installedFrom', 'sidecar-key:model']);
+      expect(by('art/characters/yuna/weird.json'), 'a key that is not a plain identifier is a hit, and its name is not given').toEqual(['sidecar-key', 'sidecar-key']);
+      expect(by('art/characters/yuna/array.json')).toEqual(['sidecar-shape']);
+      expect(by('art/characters/yuna/broken.json')).toEqual(['sidecar-shape']);
+      expect(by('assets/credits.html')).toEqual(['link', 'link', 'link', 'link']);
+      expect(by('art/characters/yuna/linked.json'), 'a link in a kept field is still a link').toEqual(['link']);
+      expect(report.hits.filter((h) => ['art/manifest.json', 'art/portrait-parts/manifest.json', 'art/derived.json', 'art/characters/yuna/ok.json', 'art/characters/yuna/empty.json', 'index.html'].includes(h.file))).toEqual([]);
+      const prov = report.hits.find((h) => h.file === 'art/characters/yuna/prov.json' && h.key === 'status')!;
+      expect(prov).toMatchObject({ line: 3, column: 3 }); // the key's own place, one-based
+      const text = formatLocalPathReport(report);
+      expect(text).toMatch(/art\/characters\/yuna\/prov\.json:3:3 sidecar-key x3 \[status, installedFrom, model\]/);
+      expect(text).toContain('assets/credits.html');
+      expect(text).not.toMatch(/AbC123|Zz9|Bailey|approved|claude\.ai\/|https?:|a b\/c|k.y"/); // the header names the kind of link, never a link
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
