@@ -21,7 +21,7 @@ import { GROUP1_STATUS, GROUP2_STATUS } from '../../../src/battle/ffx2/adapt/slo
 import { affinityBytes, specialWord } from '../../../src/battle/ffx2/adapt/words.ts';
 import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
-import { VALEFOR_ABILITY, VALEFOR_SCRIPT, x2ValeforScript } from '../../../src/battle/ffx2/ai/valefor.ts';
+import { VALEFOR_ABILITY, VALEFOR_AC_PER_ACTION, VALEFOR_AC_PER_RESULT, VALEFOR_RAYS_PER_CYCLE, VALEFOR_RAY_MARKS, VALEFOR_SCENE, VALEFOR_SCRIPT, VALEFOR_SONIC_WINGS_ROLL, groundDistance, x2ValeforScript } from '../../../src/battle/ffx2/ai/valefor.ts';
 import { lintScript } from '../../../src/story/dsl.ts';
 import { ffx2ValeforBesaidScripts } from '../../../src/story/scripts/ffx2-valefor-besaid.ts';
 import * as data from '../../../src/data/ffx2/index.ts';
@@ -64,6 +64,8 @@ interface Fixture {
   unmapped: { basakuWord: number; soundId: number; monsterTypeWord: number; specialBits7and8: number[]; group1ResistSlots17and18: number[]; elementBits6and7: number[] };
   research: Record<string, unknown> & { level: number; hp: number; str: number; mag: number; def: number; mdef: number; agi: number; eva: number; luck: number; exp: number; ap: number; gil: number; pilferGil: number; attackDC: number; sonicWingsDC: number; energyRayDC: number; energyBlastDC: number };
   disagreements: Array<{ field: string }>;
+  scene: { boss: { x: number; z: number }; girls: Array<{ x: number; z: number }>; groundDistance: Record<string, number>; attackPercentAtTheStart: Record<string, number> };
+  script: { gauge: { perAttackClassTurn: number; perResultAppliedToHer: number; rayMarks: number[]; raysPerCycle: number; overdriveAt: number }; withNobodyHittingHer: { rayTurns: number[]; blastTurn: number }; noHpPhases: boolean; noTimer: boolean };
   notUsed: { row363: { level: number; hp: number; acc: number } };
 }
 interface Decoded {
@@ -260,6 +262,23 @@ describe('the four moves are the research\'s (damage constants, targets, the hit
 
   it('none of her moves is wired to a command row yet (monmagic 0x4091 to 0x4093 are not read): no `ffx2Record` on any ability', () => {
     for (const a of x2ValeforAbilities) expect(a.ffx2Record, a.id).toBeUndefined();
+  });
+});
+
+describe('the scene and the script are the RE review\'s (m164, pos_bsyt05_229; the fixture carries the numbers)', () => {
+  it('the Besaid start positions are the fixture\'s, and the ground distances are Yuna 53.00, Rikku and Paine 52.39', () => {
+    expect(VALEFOR_SCENE.boss).toEqual(FIXTURE.scene.boss);
+    expect(VALEFOR_SCENE.girls).toEqual(FIXTURE.scene.girls);
+    expect([groundDistance(0), groundDistance(1), groundDistance(2)].map((d) => Math.round(d * 100) / 100)).toEqual([FIXTURE.scene.groundDistance['yuna'], FIXTURE.scene.groundDistance['rikku'], FIXTURE.scene.groundDistance['paine']]);
+  });
+
+  it('the gauge constants are the fixture\'s: +5 an attack-class turn and per result, Rays at 30 and 60 (two a cycle), the Blast at 100, Sonic Wings on roll 0 of 3; no HP phase and no timer', () => {
+    const g = FIXTURE.script.gauge;
+    expect([VALEFOR_AC_PER_ACTION, VALEFOR_AC_PER_RESULT, [...VALEFOR_RAY_MARKS], VALEFOR_RAYS_PER_CYCLE]).toEqual([g.perAttackClassTurn, g.perResultAppliedToHer, g.rayMarks, g.raysPerCycle]);
+    expect(VALEFOR_SONIC_WINGS_ROLL).toBe(0);
+    expect(FIXTURE.script.noHpPhases && FIXTURE.script.noTimer).toBe(true);
+    expect(x2ValeforScript.onTurnResolved, 'no clock hook: nothing scripted ends the fight').toBeUndefined();
+    expect(x2ValeforScript.onDamaged, 'no HP hook').toBeUndefined();
   });
 });
 

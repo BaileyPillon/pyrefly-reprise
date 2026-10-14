@@ -1,13 +1,33 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 66 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 67 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-14 · A hidden chapter: Valefor at Besaid (branch ch-besaid-valefor; not live)
+
+Address: none yet (branch ch-besaid-valefor, from r46-rc ca9fd0b4; not deployed, no review run; nobody has played it by ear or by eye, so the art and the music are provisional picks)
+
+- **FFX-2, hidden chapter:** Valefor at Besaid Temple, the compulsory Chapter 3 mission "Protect Besaid Temple!", where
+  Shuyin's pyreflies have taken the temple's aeon. Type `valefor` on the chapter board; it is not in the board's
+  "of 18" and is not listed. One fight in the Chamber of the Fayth: her gauge fills with every move of hers and every
+  blow she takes, two Energy Rays (the whole party) on the way up, then the Energy Blast, which no Shell or Protect
+  softens; Sonic Wings drains MP from the girl farthest from her. Her numbers, her script and her targets are the game's
+  own (read from the game files: monster row 164, her AI script and the temple's start positions); the party is the
+  Chapter 2 party carried forward, which is an estimate. It is the gentlest of the aeons: the guide's line wins every
+  seed, and the chapter is not tuned.
+- **FFX-2, art and sound (provisional):** Valefor's own paintings (the FFX aeon's, approved) and the Chamber of the
+  Fayth you already know from Ixion, with its pit (which belongs to Chapter 5); there is no painting of her knocked out.
+  The fight plays the same aeon theme as Chapters XI and XVI. A backdrop for Besaid's own chamber is being drawn
+  overnight as candidates only.
+- **Both:** the hidden words `limit`, `leblanc`, `experiment`, `mushroom` and `fayth` still work, a wrong word still
+  opens nothing, and the new chapter writes only its own record (never the save).
+- TBD-PICTURE
 
 ## 2026-10-13 · Audio lane 2: 29 more recorded sound effects, a quiet Chapter IV and results tunes that loop without a breath (not live)
 

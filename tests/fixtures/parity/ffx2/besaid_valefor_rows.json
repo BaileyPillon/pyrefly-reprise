@@ -141,6 +141,70 @@
   "drop chance byte 255",
   "zantetsu byte 80"
  ],
+ "scene": {
+  "source": "pos_bsyt05_229.psc (PlayerPos and EnemyPos lines), byte for byte Ixion's, via the RE review of 2026-10-14 (research/re-ai-valefor note); numbers only: the game's ground-plane units, x across and z into the scene",
+  "boss": {
+   "x": 0,
+   "z": 26
+  },
+  "girls": [
+   {
+    "x": 0,
+    "z": -27
+   },
+   {
+    "x": -12,
+    "z": -25
+   },
+   {
+    "x": 12,
+    "z": -25
+   }
+  ],
+  "groundDistance": {
+   "yuna": 53,
+   "rikku": 52.39,
+   "paine": 52.39
+  },
+  "attackPercentAtTheStart": {
+   "yuna": 41.9,
+   "rikku": 29.1,
+   "paine": 29
+  }
+ },
+ "script": {
+  "source": "m164, the game's own AI script, read by the RE session (review of 2026-10-14); numbers only",
+  "gauge": {
+   "perAttackClassTurn": 5,
+   "perResultAppliedToHer": 5,
+   "rayMarks": [
+    30,
+    60
+   ],
+   "raysPerCycle": 2,
+   "overdriveAt": 100
+  },
+  "turn": [
+   "gauge >= 100: Energy Blast on all, gauge and Rays fired reset",
+   "else gauge >= 60 and fewer than 2 Rays fired: Energy Ray",
+   "else gauge >= 30 and 0 Rays fired: Energy Ray",
+   "else gauge + 5, then random() % 3: 0 Sonic Wings, 1 or 2 Attack"
+  ],
+  "gaugeReadBeforeTheTurnsGain": true,
+  "withNobodyHittingHer": {
+   "rayTurns": [
+    7,
+    14
+   ],
+   "blastTurn": 23
+  },
+  "rng": {
+   "random": "stream 2, one draw per attack-class turn only",
+   "targetSearches": "stream 4"
+  },
+  "noHpPhases": true,
+  "noTimer": true
+ },
  "notUsed": {
   "row363": {
    "note": "a second Valefor record (id 0x116b), in no btl.txt formation: Lv 48, HP 38,000, ACC 108; NOT this chapter",

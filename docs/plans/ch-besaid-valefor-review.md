@@ -25,6 +25,14 @@ ordered the production build **off D:** (vite `--outDir M:/pyrefly-builds/ch-bes
 > so §3 stays the research's tagged reading. **(2) The door word is `valefor`, not `besaid`** (the driver's decision): `besaid` ended in `d`, the first letter of the Tourist Trap lane's `daigoro`, which the shared
 > rule in `chapter-doors.test.ts` forbids; `valefor` overlaps no other word (§7). The chapter id is `ffx2-valefor-besaid` (the boss first, as `ffx2-ixion-djose`); the formation id is `ffx2-besaid-valefor`.
 
+> **Update 2026-10-14 ~01:25 (the RE review; applied, the rest of this plan stands where not contradicted).** The RE session reviewed the battle code against **the game's own script `m164`, the move rows, all 200
+> bytes of row 164 and the Besaid scene's start positions** ("RE review 2026-10-14, m164, row 164, pos_bsyt05_229"; `research/re-ffx2-ai-valefor.md` on origin/re-ffx2-yojimbo-valefor). **Five majors, applied:** (1) the gauge is
+> read before the turn's own gain, a Ray or Blast turn adds nothing: **Rays on her 7th and 14th turn, the Blast on her 23rd** (the first build fired them on the 6th, 12th and 21st); (2) the Besaid scene ships start
+> positions, so the old claim "no geometry exists" (§4 as first written) is **withdrawn**: Sonic Wings goes to the greatest ground distance (**Yuna** at the start, 53.00 against 52.39), the Attack is near-weighted (41.9 / 29.1 /
+> 29.0 percent), and Ormi's highest-slot stand-in is gone from this chapter; (3) **Energy Blast is not magical** (its row's damage flags are 0: neither Shell nor Protect reduces it), Energy Ray is; (4) **Sonic Wings never misses**
+> (rule 5), is physical and MP-only; (5) the charge and recovery of the three special moves come from their rows. Minors applied: slots 17 and 18 (Itchy, Auto-Life) are in the record at 255, bits 7, 8 and 9 of the special word make
+> her immune to Interrupt and Bribe, the texts say Shell halves the Rays only and Sonic Wings drains the girl farthest from her, and facts read from the script are tagged `[script]`, not `[model]`.
+
 ## 1. What the chapter is
 
 - **One boss, one link.** Valefor, bestiary #178, possessed by Shuyin's pyreflies in the Chamber of the Fayth at Besaid Temple; compulsory mission "Protect Besaid Temple!"
@@ -59,75 +67,61 @@ share**; the row adds the rest. `tests/fixtures/parity/ffx2/besaid_valefor_rows.
 | Zantetsu byte | 80 | row 164 | carried in the record, not modelled (no Zantetsu status) |
 | Bribe | no slot | row 164 | `[RE row 164]`; Bribe immunity unproven either way: none set, none denied |
 | Normal Attack | physical, DC 16 (the game's row 0x41da) | §7.1; row 164 lists 0x41da | `[verified: 2 sources]` + `[RE row 164]` |
-| Sonic Wings | MP damage, DC 2, on the character furthest away | §7.1; row 164 lists 0x4092 | `[verified: 2 sources]`; the command row itself is not read |
-| Energy Ray | magic, DC 20, everyone in a 160 degree arc in front of her | §7.1; row 164 lists 0x4091 | `[verified: 2 sources]`; the command row itself is not read |
-| Energy Blast | magic, DC 25, all | §7.1; row 164 lists 0x4093 | `[verified: 2 sources]`; the command row itself is not read |
-| Basic mix | 2/3 Normal Attack, 1/3 Sonic Wings | §7.1 | `[verified: 2 sources]`; the AI script is not decompiled |
-| Counter | +5 when she acts or is attacked; Energy Ray on crossing 30 and 60; at 100 the counter is 0 and Energy Blast; the wiki's "6 / 12 / 20 counts" is the same at 5 per count | §7.1, §11 row 9 | `[verified: 2 sources]`; the AI script is not decompiled |
+| Sonic Wings | MP damage only (formula 0, power 2), DC 2, physical (Protect applies), **never misses** (accuracy formula 0, no Darkness bit), no critical, on the girl at the greatest ground distance | §7.1; row 164 lists 0x4092; `[RE review]` the script and the row | `[verified: 2 sources]`, `[script]` |
+| Energy Ray | magical (**Shell applies**), DC 20, on every girl (the arc covers all three), never misses; charge 120 (3.37 s), recovery 100 (2.80 s) | §7.1; row 164 lists 0x4091; `[RE review]` | `[verified: 2 sources]`, `[script]` |
+| Energy Blast | **not magical: its row's damage flags are 0, so neither Shell nor Protect reduces it**, DC 25, on every girl, never misses; charge 120 (3.37 s), recovery 100 (2.80 s) | §7.1; row 164 lists 0x4093; `[RE review]` | `[verified: 2 sources]`, `[script]` |
+| Basic mix | 2/3 Normal Attack, 1/3 Sonic Wings (`random() mod 3`: 0 is Sonic Wings), one draw per attack-class turn on stream 2 | §7.1; the script (m164) | `[verified: 2 sources]`, `[script]` |
+| Counter | one gauge and a Rays-fired counter: at 100 the Blast (both reset); else at 60 with fewer than 2 Rays, a Ray; else at 30 with none, a Ray; else an attack-class turn (gauge + 5, then the roll). The gauge is read before the turn's gain; Ray and Blast turns add nothing; every result applied to her adds 5. No HP phases, no timer | §7.1 §11 row 9; the script (m164) | `[verified: 2 sources]`, `[script]` |
 | Music | retail "Aeons" | §6.3 | `[single source]`; **not used** |
 
 **Disagreements with the research** (each listed again in the handoff with its row number as the source): (1) **Gravity**: the row nulls it, §7.1 says neutral. (2) **MP** 9,999 and **Accuracy** 95: §7.1 gives
 neither (new, not a disagreement). (3) **Status list**: §7.1 gives only "Breaks and Slow land"; the row gives the full list (agrees on Breaks and Slow). (4) the steal byte 128 and the drop byte 255 are new.
 Nothing in §7.1 is contradicted by the row beyond Gravity. **Row 363** (a second Valefor: Lv 48, HP 38,000, ACC 108, Excalibur, Full Break, Crackdown) is **not** this chapter's and is not used.
 
-**Still unsourced, and said so in the code (each a `[model]`):**
+**What is still a model, and said so in the code (each a `[model]`):**
 
-1. **Her AI script.** `m164` is not decompiled (the RE note's section 9), so the mix, the counter and the thresholds are §7.1's description built on the engine's action counter, in the shape of the sibling
-   aeons' scripts. The roll value that is Sonic Wings (`random() mod 3 == 0`) is ours: the research gives the weights only.
-2. **Sonic Wings' damage type** (physical or other) and whether it rolls to hit, and the three moves' command rows (monmagic 0x4091 to 0x4093): not read. Read as the Attack family (physical, rolls to hit, Protect
-   helps); the moves run on SinirothX's damage constants. The Normal Attack runs on the game's row 0x41da, which the monster record carries (so it can crit by that row's byte, 5, and shatters at 10).
-3. **What "attacked" counts.** Read as the project reads it for Shiva, Anima, the Sisters and Ixion, whose scripts were read from the game: **+5 per result applied to her** (`AiScript.onResult` through
-   `resultGauge(5)`, with the guard of Shiva's and Anima's scripts), not +5 per party action.
-4. **"Crossing".** One Energy Ray per threshold per cycle (a flag each, cleared at the Blast); a volley that passes both marks gives the two Rays on her next two turns, the lower first.
-5. **Party levels at Besaid.** No source gives a level. Anchors: Valefor is Lv 22; the Chapter 2 preset (`ffx2/builds/bevelle.ts`) is Lv 23 / 24 / 25 (research `ffx2-bahamut.md` §4.1); the Djose preset is 32 / 33 / 34
+1. **What the script does not give.** Nothing about her AI is a model any more: the order, the marks, the roll values and the targets are the game's (`[script]`). The two things the review leaves open are named in the code: whether m164
+   makes a first, discarded target search before Sonic Wings' search (none is made here, as for Ormi's single `searchr`), and whether the reaction handler's guard (not self, not stopped, asleep...) applies to her: it can only
+   filter her own results, since she is immune to every status that would switch it off.
+2. **The Normal Attack's critical byte and shatter.** It runs on the game's plain Attack row 0x41da (crit byte 5, shatter 10), which the monster record carries.
+3. **Party levels at Besaid.** No source gives a level. Anchors: Valefor is Lv 22; the Chapter 2 preset (`ffx2/builds/bevelle.ts`) is Lv 23 / 24 / 25 (research `ffx2-bahamut.md` §4.1); the Djose preset is 32 / 33 / 34
    (an estimate). The first Chapter 3 mission follows Chapter 2 directly, so the **Chapter 2 preset is carried forward** (same girls, same dresspheres: Yuna White Mage, Rikku Dark Knight, Paine Warrior; no Samurai, no
    Lady Luck, which come later in Chapter 3 `[verified]`), `[estimate]`, and **measured, not tuned** (§8).
-6. **Items.** Moon Bracer (no stats, Auto-Shell, `ffx2-combat-core.md` §5.4) and Healing Spring (a recovery item, §5.5) get held-only `ItemDef` rows (`items/held.ts`), as every other steal and drop of the FFX-2 bosses does;
+4. **Items.** Moon Bracer (no stats, Auto-Shell, `ffx2-combat-core.md` §5.4) and Healing Spring (a recovery item, §5.5) get held-only `ItemDef` rows (`items/held.ts`), as every other steal and drop of the FFX-2 bosses does;
    Healing Spring's Regen effect is not wired (disclosed).
-7. **Action time (the animation window).** Chapters XI, XIII and XVI ship it at 3 s (Bailey's D-269 pick; the rule is sourced, the length is not). One named constant, ON at 3 s as the sibling aeon chapters do, and
+5. **Action time (the animation window).** Chapters XI, XIII and XVI ship it at 3 s (Bailey's D-269 pick; the rule is sourced, the length is not). One named constant, ON at 3 s as the sibling aeon chapters do, and
    measured both ways in the bench (§8). Not a boss number.
 
 ## 3. The AI (deterministic, `src/battle/ffx2/ai/valefor.ts`, no DOM and no `three`: rule 1)
 
-One script `x2-valefor`, in the shape of Anima's and Ixion's (`decide`, plus the reaction entry). Each poll, in this order:
+**The game's own script, `m164`** (the RE review, `[script]`). One gauge and a "Rays fired" counter, no HP phases (it reads none of her own HP, MP or statuses), no timer (nothing scripted ends the fight; the "too long" Meteor
+block never runs). Each turn, in order: (1) gauge at least 100: **Energy Blast** on all girls, gauge and Rays fired reset; (2) else gauge at least 60 and fewer than 2 Rays fired: **Energy Ray**; (3) else gauge at least 30 and none
+fired: **Energy Ray**; (4) else an attack-class turn: gauge + 5, then `random() mod 3`: 0 **Sonic Wings**, 1 or 2 **Normal Attack**. The gauge is read BEFORE the turn's gain; Ray and Blast turns add nothing; every result applied to her
+adds 5 (`resultGauge(5)`). RNG: `random()` on stream 2, one draw per attack-class turn only; target searches on stream 4 (fewer than two candidates: no draw). With nobody hitting her: Rays on her turns 7 and 14, Blast on turn 23.
+The reaction entry's memory key is `valeforRays`; the ability ids are `x2-valefor-*` (the FFX Valefor's ids are never touched); the Ray, the Blast and Sonic Wings are `canMiss: false` (rule 5), only the plain Attack rolls.
 
-1. AC at least 100: AC := 0, both thresholds re-armed, **Energy Blast** on all. (AC is read before the poll's own gain, as in Shiva's, Anima's and Ixion's rows.)
-2. Otherwise AC gains 5 (her own action). Then, if the new AC has reached 30 and the 30 flag is clear, or has reached 60 and the 60 flag is clear (the lower first): set that flag
-   and **Energy Ray**.
-3. Otherwise `random() mod 3`: 0 **Sonic Wings** on the furthest living girl; 1 or 2 **Normal Attack** on a living girl (uniform, as the other FFX-2 scripts pick; the game weights
-   by closeness and facing, which the engine does not model, `ai/script-rolls.ts`).
+## 4. The two positional moves: the game's own start positions (the first draft's "no geometry exists" is withdrawn)
 
-The reaction entry adds 5 per result applied to her (`resultGauge(5)` from `fallen-aeons.ts`). Memory keys are this script's own (`valeforRay30`, `valeforRay60`).
-The ability ids are `x2-valefor-*`: the FFX Valefor's ids (`valefor`, `possessed-valefor*`) are never touched. Every row carries its sources in its comment; every Overdrive and
-every magic row says `canMiss: false` (rule 5); only the Attack, and Sonic Wings by the reading in §2.5, roll.
+**What the engine knows.** It tracks no live positions (a girl is her party `slot`; stage positions are presentation and must not leak into the engine, rule 1), but it carries the scenes' **start positions** for every boss whose
+script uses `searchr` (`ai/script-rolls.ts#SCENES`: the game's `PlayerPos` and `EnemyPos` lines, numbers only) and the game's near-weighted search (`searchNear`, `sceneWeights`). The first draft of this plan said the research gives no
+geometry for Besaid and chose Ormi's owner-approved stand-in (the highest slot, D-018/q3). **The RE review found the Besaid scene's file** (`pos_bsyt05_229.psc`, byte for byte Ixion's): the boss at (0, 26), Yuna (0, -27), Rikku (-12, -25),
+Paine (12, -25). They are added to `SCENES` as `besaid`, and the stand-in is **not used** by this chapter.
 
-## 4. The two positional moves: what the engine knows, and the smallest faithful model
-
-**What exists today.** The FFX-2 engine has **no positions**: a girl is her party `slot` (Yuna 0, Rikku 1, Paine 2). Stage positions (`SceneSlots`, the rigs) are presentation and must not
-leak into the engine (rule 1). The one precedent for "the character furthest away" is **Ormi's Supercollider** (`ai/syndicate-ormi.ts`): the **highest `slot` among the living,
-the back of the formation**, an owner-approved stand-in (decision D-018/q3, 2026-09-21), which draws nothing. The RE lane has the game's own start positions for four scenes
-(`research/re-ffx2-ai-scene-positions.md`: Bahamut, the Tail, the Leg, Shuyin; `ai/script-rolls.ts#SCENES`); **Besaid's scene is not among them**, and no research file gives the
-Chamber's geometry. So no geometry is invented.
-
-**The model (tagged `[model]`).**
-
-- **Sonic Wings** goes to the **back of the formation: the highest slot among the living girls** (Ormi's rule, D-018/q3, reused, not re-decided). With all three standing that is
-  Paine; when Paine is down it is Rikku; with only Yuna up, Yuna. No draw. It is a fixed distance order per party slot (slot 2 is the furthest), which is what the engine can know.
-  In the game's own start formations the back girls are about equidistant (Bahamut's scene: Yuna 50, Rikku and Paine 57.6 ground units from the boss), so the order between the
-  back two is a tie there; the stand-in breaks it the one way the project already chose.
-- **Energy Ray** hits **all living girls**. The arc is 160 degrees in front of her (80 either side of her facing); the girls stand in front of her in our fixed formation (in the game's
-  scene files the boss faces the party; the largest angle from the facing to a girl in the four scenes on record is about 17 degrees for Bahamut's, nowhere near 80), and the engine
-  tracks no later movement (a girl who has run round behind her mid-fight is not modelled). So in this engine **Energy Ray hits all three, exactly as Energy Blast does**, and the
-  difference between them is the counter and the damage constant (20 against 25), not who is hit. It is stated in the guide, in the intent text and in a test, never hidden.
-- If the RE note carries this scene's `PlayerPos` and `EnemyPos` lines, the furthest girl is recomputed from the ground distance (the game's own rule: `searchr` on distance, max)
-  and the arc from the boss's facing at the start; the model then becomes "the start formation" and is re-tagged. One function (`furthestGirl`) is the whole seam.
+- **Sonic Wings** goes to the girl at the **greatest 2-D ground distance** from the boss: **Yuna at the start (53.00 against 52.39 for Rikku and Paine)**. Body radii are not read, so exact ties (Rikku and Paine, when Yuna is down)
+  are near-weighted (one draw among two), and an unambiguous extreme draws nothing. `[script]`.
+- **The Normal Attack** is the near-weighted pick of a living girl: Yuna 41.9 percent, Rikku 29.1, Paine 29.0 (the weights are the game's, `1 + floor(32768 / floor((1 + d)(1 + 2a) + 1))`, with the boss facing the middle of the girls;
+  one draw of the whole range gives 597, 415 and 414 of 1,426 values, pinned in `besaid-valefor-engine.test.ts`). `[script]`.
+- **Energy Ray and Energy Blast** reach the whole party. The research says "everyone in a 160 degree arc in front of her"; the girls stand in front of the boss in every start formation on record (the largest angle from the boss's
+  facing to a girl is about 17 degrees against an 80 degree half-arc) and the engine tracks no later movement, so **Energy Ray hits every living girl, as the Blast does**; the difference between them is the gauge mark, the damage
+  constant (20 against 25) and the class (the Ray is magical and Shell halves it, the Blast is not magical and nothing halves it). Stated in the guide and in a test.
+- The positions are the start positions, as for every other boss that uses `searchr`: a girl who has since run elsewhere is not modelled (the engine has no live positions).
 
 ## 5. What gets built, in files
 
 | File | What | Source |
 |---|---|---|
 | `src/data/ffx2/enemies/valefor.ts`, `valefor-abilities.ts`, `monster-records/records-valefor.ts` | `x2-valefor` and its four moves, the group (`canEscape: false`, the aeon cue, action time), rewards, and the game's own row 164 laid on her | row 164, §7.1, tagged |
-| `src/battle/ffx2/ai/valefor.ts` (+ one line in `ai/index.ts`) | the script of §3, `furthestGirl` | §7.1; Ormi's D-018/q3 |
+| `src/battle/ffx2/ai/valefor.ts` (+ one line in `ai/index.ts`) | the script of §3, `furthestGirl`, `attackTarget`; one row (`besaid`) in `ai/script-rolls.ts#SCENES` | the game's m164 and `pos_bsyt05_229` (the RE review) |
 | `src/data/ffx2/builds/besaid.ts` | the Chapter 2 preset carried forward, `[estimate]` | §2.8 |
 | `src/data/chapter-ffx2-valefor-besaid.ts`, `chapter-meta-ffx2-valefor-besaid.ts` | the record (id `ffx2-valefor-besaid`, number 24, `experimental`), the pause meta (quote, handwritten, objectives, tip), one line in `chapters-experiments.ts` and one in `chapter-meta.ts` | the sibling chapters |
 | `src/story/scripts/ffx2-valefor-besaid.ts` | a short intro and a short close, our own words over the sourced beats (`research/writing-bible.md`; attributed speakers; `story/textLint.ts`) | §0.3, §7.1 |
@@ -165,8 +159,8 @@ plus `daigoro` and types the two words back to back in both orders, and the shar
 ## 8. Tests (written with the code)
 
 Unit: the data against a numbers-only fixture with its sources (`tests/fixtures/parity/ffx2/besaid_valefor_rows.json`, `source` and per-field tags; re-pinned to the RE row when it lands, with the
-disagreements listed); the abilities' rows (DCs, targeting, `canMiss`); the AI on seeded runs (the decision table: the counter, the two Rays once each, the Blast and the reset, the 2/3 : 1/3
-mix over many seeds, the reaction +5 per result, a multi-hit volley), `furthestGirl` (the highest living slot; none dead; no draw), Energy Ray on all living girls (a KO'd girl is not hit), Sonic Wings'
+disagreements listed); the abilities' rows (DCs, targeting, `canMiss`); the AI on seeded runs (the decision table: the gauge read before the gain, the Rays on turns 7 and 14, the Blast on 23 and the reset, the 2/3 : 1/3
+mix over 300 rolls, the reaction +5 per result, a multi-hit volley), `furthestGirl` (the greatest ground distance: Yuna; the Rikku and Paine tie near-weighted; no draw for an unambiguous extreme), Energy Ray on all living girls (a KO'd girl is not hit), Sonic Wings'
 MP loss on the furthest girl in the real engine (and her HP untouched); the build; the chapter record and its registration (not in `CHAPTERS` or `CHAPTER_IDS`, found by `getChapter`,
 number 24, the board still shows 18, the numbers test, the batch-2 music table, the party-stature list, the guide and advisor lookups); the door (`valefor-door.test.ts`); the experiments' store (a clear goes to
 `pyrefly-reprise:experiments:v1`, the save is byte-identical); story lint; a bench (the advisor line and a naive line on the Wait and Active clocks, action time on and off: **measured, never
