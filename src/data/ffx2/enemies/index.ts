@@ -44,6 +44,9 @@ import { x2IxionAbilities } from './ixion-djose-abilities.ts';
 // The Experiment at Djose Temple (FFX-2 Chapter 5; the hidden chapter "The Experiment", FFX-2 only): `./experiment.ts`.
 import { experimentGroups } from './experiment.ts';
 import { experimentAbilities } from './experiment-abilities.ts';
+// Valefor at Besaid Temple (FFX-2 Chapter 3; the hidden chapter "Valefor at Besaid", FFX-2 only): `./valefor.ts`.
+import { valeforGroups } from './valefor.ts';
+import { x2ValeforAbilities } from './valefor-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -60,6 +63,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...denOfWoeGroups,
   ...ixionDjoseGroups,
   ...experimentGroups,
+  ...valeforGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -86,6 +90,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...denOfWoeAbilities,
   ...x2IxionAbilities,
   ...experimentAbilities,
+  ...x2ValeforAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

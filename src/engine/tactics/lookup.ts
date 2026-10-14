@@ -37,6 +37,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ffx2-den-of-woe': 'ffx2',
   'ffx2-ixion-djose': 'ffx2',
   'ffx2-masterpiece-theatre': 'ffx2', // the Experiment (hidden chapter, 2026-10-10)
+  'ffx2-valefor-besaid': 'ffx2', // Valefor at Besaid (hidden chapter, 2026-10-14)
   'ffx2-fallen-aeons': 'ffx2',
   'seymour-omnis': 'ffx',
   'isaaru-via-purifico': 'ffx',
