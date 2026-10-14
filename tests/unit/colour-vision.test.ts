@@ -38,6 +38,7 @@ import {
   type CvdMode,
 } from '../../src/ui/common/colourVision.ts';
 import { StatusFigureTint, paintLookOf, type TintField, type TintFigure } from '../../src/ui/common/statusFigureTint.ts';
+import { x2DresspheresPhoneHtml } from '../../src/ui/ffx2/party-prep/phoneViews.ts';
 import { StatusMarks, marksFor } from '../../src/ui/common/statusMarks.ts';
 import { openSpherechangeWheel, type GarmentGridDef } from '../../src/ui/ffx2/SpherechangeWheel.ts';
 import { minPair, simulate, type Kind } from './helpers/cvdSim.ts';
@@ -428,6 +429,38 @@ describe('gates: the Garment Grid\'s gates (FFX-2 only)', () => {
     expect(css).toMatch(/html\[data-colour-vision\] \.x2prep-gate--red \{ background: var\(--cvd-gate-r\); \}/);
     expect(css).toMatch(/html\[data-colour-vision\] \.x2prep-gate::after \{\s*content: attr\(data-gate\);/);
     expect(read('src/ui/ffx2/party-prep/party-prep.css'), 'today\'s pip has no letter').not.toContain('attr(data-gate)');
+  });
+
+  it('the PREP-A phone pages (a gate site added after the lane was cut) print the same letters and take the mode\'s colours through the same variables', () => {
+    const host = document.createElement('div');
+    host.innerHTML = x2DresspheresPhoneHtml(
+      {
+        who: { name: 'Yuna', level: 20, dressphere: 'white-mage' },
+        worn: { abbr: 'WM', colour: '#f2f2f2', label: 'White Mage', commands: [] },
+        learned: { names: [], total: 0, ap: [] },
+        grid: {
+          name: 'Test Grid',
+          equip: 'DEF +1',
+          nodes: 4,
+          here: 1,
+          gates: [
+            { colour: 'red', passed: true },
+            { colour: 'green', passed: false },
+            { colour: 'blue', passed: false },
+            { colour: 'yellow', passed: true },
+          ],
+        },
+        owned: [],
+      },
+      new Map(),
+    );
+    expect([...host.querySelectorAll('.prph-gate')].map((i) => i.getAttribute('data-gate'))).toEqual(['R', 'G', 'B', 'Y']);
+    const css = read('src/ui/common/colour-vision.css');
+    for (const [name, key] of [['red', 'r'], ['green', 'g'], ['blue', 'b'], ['yellow', 'y']] as const) {
+      expect(css).toContain(`html[data-colour-vision] .prep[data-phone='page'] .prph-gate.is-${name} { background: var(--cvd-gate-${key}); }`);
+    }
+    expect(css).toMatch(/\.prph-gate::after \{\s*content: attr\(data-gate\);/);
+    expect(read('src/ui/common/prep-phone-parts.css'), 'today\'s phone pip has no letter').not.toContain('attr(data-gate)');
   });
 
   it('SpherechangeFlourish takes the mode\'s gate colour through the same table', () => {

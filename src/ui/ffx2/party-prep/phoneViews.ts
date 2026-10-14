@@ -24,6 +24,7 @@ import {
   whoHtml,
 } from '../../common/prepPhoneKit.ts';
 import { isOpen } from '../../common/prepPhoneFold.ts';
+import { gateLetter } from '../../common/colourVision.ts'; // PR-0032: the letter COLOUR VISION prints on a gate pip (the desktop sheet's pips carry it too)
 
 /** What the page remembers of each section: open or folded, by key (`prepPhoneFold.readOpen`). */
 export type OpenState = ReadonlyMap<string, boolean>;
@@ -69,7 +70,7 @@ export interface DresspheresPhone {
 function gridBody(g: GridModel): string {
   const nodes = Array.from({ length: g.nodes }, (_, i) => `<i class="prph-node${i === g.here ? ' is-here' : ''}"></i>`).join('');
   const gates = g.gates.length
-    ? g.gates.map((x) => `<i class="prph-gate is-${escapeHtml(x.colour)}${x.passed ? ' is-passed' : ''}" title="${escapeHtml(x.colour)}${x.passed ? ' (passed)' : ''}"></i>`).join('')
+    ? g.gates.map((x) => `<i class="prph-gate is-${escapeHtml(x.colour)}${x.passed ? ' is-passed' : ''}" data-gate="${escapeHtml(gateLetter(x.colour))}" title="${escapeHtml(x.colour)}${x.passed ? ' (passed)' : ''}"></i>`).join('')
     : '<span class="prph-line">no gates</span>';
   return `<div class="prph-strip">${nodes}<span class="prph-gates">${gates}</span></div>${lineHtml(g.equip)}`;
 }

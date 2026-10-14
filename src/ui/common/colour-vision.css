@@ -11,8 +11,8 @@
  *   target    both games the bracket, plate and ALL label of `ffx-hud.css`: FFX-2's HUD draws the same `.ffx-target--ally|self|enemy` corners and name plate
  *                        (under `.ffx2hud`, beside its own pink flower reticle and TARGET plate, which carry no side colour)
  *   numerals  both games `damage-numbers.css`: one `DamageNumbers` serves both HUDs
- *   gates     FFX-2 only the Garment Grid pips of party prep (`x2prep-gate`); the Spherechange wheel and flourish are drawn
- *                        in TS (`SpherechangeWheel.ts`, `SpherechangeFlourish.ts`) from the same table
+ *   gates     FFX-2 only the Garment Grid pips of party prep (`x2prep-gate`, and `prph-gate` on the phone pages); the Spherechange
+ *                        wheel and flourish are drawn in TS (`SpherechangeWheel.ts`, `SpherechangeFlourish.ts`) from the same table
  *   tints     FFX only   the figure's tint is a multiply on the painting (`statusFigureTint.ts`), and the initial over the
  *                        head is a mark (`statusMarks.ts`), styled at the end of this file
  */
@@ -89,6 +89,29 @@ html[data-colour-vision] .x2prep-gate::after {
   font: 700 6px / 1 var(--ig-font-display, 'Chakra Petch', sans-serif);
   color: #fff;
   -webkit-text-stroke: 0.9px #0b0a12;
+  paint-order: stroke fill;
+}
+
+/* The same four gates on the PREP-A phone pages (`ui/ffx2/party-prep/phoneViews.ts`, class `prph-gate`, added after this lane was cut): the
+   same table, the same letter. Their pip is a 12px diamond, so under a mode it is a 16px tile with the letter on it. */
+html[data-colour-vision] .prep[data-phone='page'] .prph-gate.is-red { background: var(--cvd-gate-r); }
+html[data-colour-vision] .prep[data-phone='page'] .prph-gate.is-green { background: var(--cvd-gate-g); }
+html[data-colour-vision] .prep[data-phone='page'] .prph-gate.is-blue { background: var(--cvd-gate-b); }
+html[data-colour-vision] .prep[data-phone='page'] .prph-gate.is-yellow { background: var(--cvd-gate-y); }
+html[data-colour-vision] .prep[data-phone='page'] .prph-gate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transform: none;
+  border-radius: 2px;
+}
+html[data-colour-vision] .prep[data-phone='page'] .prph-gate::after {
+  content: attr(data-gate);
+  font: 700 10px / 1 var(--ig-font-display, 'Chakra Petch', sans-serif);
+  color: #fff;
+  -webkit-text-stroke: 1.2px #0b0a12;
   paint-order: stroke fill;
 }
 
