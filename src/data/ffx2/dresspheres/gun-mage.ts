@@ -40,8 +40,8 @@ export const gunMage: DressphereDef = {
     52: { hp: 1637, mp: 184, str: 102, mag: 105, def: 41, mdef: 84, agi: 56, acc: 123, eva: 4, luck: 12 },
   },
   abilities: [
-    { abilityId: 'x2-gun-mage-attack', apCost: 0 },
-    { abilityId: 'x2-gun-mage-scan', apCost: 0 },
+    { abilityId: 'x2-gun-mage-attack', apCost: 0, free: true },
+    { abilityId: 'x2-gun-mage-scan', apCost: 0, free: true },
     { abilityId: 'x2-gun-mage-1000-needles', apCost: 0 },
     { abilityId: 'x2-gun-mage-absorb', apCost: 0 },
     { abilityId: 'x2-gun-mage-mighty-guard', apCost: 0 },

@@ -74,8 +74,8 @@ export const fullThrottle: SpecialDressphereDef = {
   },
   abilities: {
     main: [
-      { abilityId: 'x2-full-throttle-attack', apCost: 0 },
-      { abilityId: 'x2-full-throttle-aestus', apCost: 0 },
+      { abilityId: 'x2-full-throttle-attack', apCost: 0, free: true },
+      { abilityId: 'x2-full-throttle-aestus', apCost: 0, free: true },
       { abilityId: 'x2-full-throttle-fiers', apCost: 20, prereq: 'x2-full-throttle-aestus' },
       { abilityId: 'x2-full-throttle-deeth', apCost: 20, prereq: 'x2-full-throttle-fiers' },
       { abilityId: 'x2-full-throttle-fright', apCost: 20 },

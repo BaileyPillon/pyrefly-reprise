@@ -45,7 +45,7 @@ import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
 import { stepsUntilNextEvent } from './lookahead.ts';
-import { buildCommands } from './targeting.ts';
+import { buildCommands } from './menu.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';

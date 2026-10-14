@@ -163,6 +163,7 @@ function toBonus(gates: readonly GateColour[], effect: DataGridEffect): GateBonu
     ...(Object.keys(stats).length > 0 ? { stats } : {}),
     ...(effect.grantsAbilityIds?.length ? { abilities: [...effect.grantsAbilityIds] } : {}),
     ...(waitDown ? { waitDownPercent: WAIT_DOWN_PERCENT } : {}),
+    ...(tags.length > 0 ? { autoTags: [...tags] } : {}),
     ...(bdl ? { breaksDamageLimit: true } : {}),
     ...(effect.perGatePassed ? { perGate: true } : {}),
     ...(effect.description ? { label: effect.description } : {}),

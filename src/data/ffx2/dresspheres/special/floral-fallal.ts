@@ -72,8 +72,8 @@ export const floralFallal: SpecialDressphereDef = {
   },
   abilities: {
     main: [
-      { abilityId: 'x2-floral-fallal-attack', apCost: 0 },
-      { abilityId: 'x2-floral-fallal-heat-whirl', apCost: 0 },
+      { abilityId: 'x2-floral-fallal-attack', apCost: 0, free: true },
+      { abilityId: 'x2-floral-fallal-heat-whirl', apCost: 0, free: true },
       { abilityId: 'x2-floral-fallal-barrier', apCost: 20 },
       { abilityId: 'x2-floral-fallal-flare-whirl', apCost: 24 },
       { abilityId: 'x2-floral-fallal-great-whirl', apCost: 30, prereq: 'x2-floral-fallal-flare-whirl' },

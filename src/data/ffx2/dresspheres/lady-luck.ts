@@ -38,10 +38,10 @@ export const ladyLuck: DressphereDef = {
     50: { hp: 1503, mp: 188, str: 72, mag: 65, def: 28, mdef: 51, agi: 58, acc: 125, eva: 7, luck: 32 },
   },
   abilities: [
-    { abilityId: 'x2-lady-luck-attack', apCost: 0 },
+    { abilityId: 'x2-lady-luck-attack', apCost: 0, free: true },
     { abilityId: 'x2-lady-luck-bribe', apCost: 40 },
     { abilityId: 'x2-lady-luck-two-dice', apCost: 20 },
-    { abilityId: 'x2-lady-luck-attack-reels', apCost: 20 },
+    { abilityId: 'x2-lady-luck-attack-reels', apCost: 20, free: true },
     { abilityId: 'x2-lady-luck-magic-reels', apCost: 70, prereq: 'x2-lady-luck-attack-reels' },
     { abilityId: 'x2-lady-luck-luck', apCost: 30 },
     { abilityId: 'x2-lady-luck-felicity', apCost: 40, prereq: 'x2-lady-luck-luck' },

@@ -14,6 +14,15 @@ export interface DressphereAbilityEntry {
   apCost: number;
   /** Ability id that must be learned first, if any. */
   prereq?: AbilityId;
+  /** Several abilities that must ALL be learned first (the game's composite prerequisites: Demi Sword needs the four elemental swords, Physicist the Chemist pair). */
+  prereqAll?: AbilityId[];
+  /** A key item (the game's key item number) that must be held first (the Songstress' two dances; the engine models no key items, so the entry is never offered). */
+  keyItem?: number;
+  /**
+   * The game lists this entry without it being learned (the pair's prerequisite field is 0): Power Break, Cure and Attack Reels carry an AP cost that counts toward
+   * mastery and are in the menu from the start (re-parity RC7 lane X2-B; FFX2-G02 sections 2.2 and 3.5). `apCost` is unchanged.
+   */
+  free?: boolean;
   /** Scopes this entry to one girl. Undefined = every girl (all standard dresspheres but Trainer/Mascot). */
   character?: CharacterId;
 }
