@@ -24,13 +24,13 @@ Tags: **[bytes]** read from the file by this note's scripts; **[N: file §]** a 
 
 | Item | Value |
 |---|---|
-| Archive | `FFX2_Data.vbf`, the Steam HD Remaster (FFX-2 half), `D:\Tools\ffx-hd\FINAL FANTASY FFX&FFX-2 HD Remaster\data\`, 17,867,755,272 bytes, 137,386 files |
+| Archive | `FFX2_Data.vbf`, the Steam HD Remaster (FFX-2 half), the owner's own install, 17,867,755,272 bytes, 137,386 files |
 | Files inside it | `ffx_ps2/ffx2/master/jppc/battle/kernel/monster.bin` (96,596 bytes, entry offset 17,862,709,038, SHA-256 `50964278e7b164e6c93f51b2bbacad054104e3142ef47f05f726e3377e3ec504`) and the English copy `ffx_ps2/ffx2/master/new_uspc/battle/kernel/monster.bin` (119,716 bytes, SHA-256 `1831faed8e5c6f5b47a9ab577f8e9b2f905cf31b7486e387a22fe020a343558a`). Both are the same table; the English copy also carries the name text. Also read: `monster2.bin` (jppc 87,842 B, SHA-256 `9327e6571d2f92ac86d70268d698dfe146b17976c14260b3594e8534142c23b9`; new_uspc 99,912 B, `2645ad692c415e3af5aa06b7f9932b80c9315ec88b66ff77c5be1828eecac80d`) |
 | Table shape [bytes] | 32-byte header of eight u32 words: version 1 at 0x00; minimum index 0 at 0x0c; **maximum index 369** at 0x10; record size 200 at 0x14; text offset 74,000 at 0x18; data offset 32 at 0x1c. Then rows 0 to 369 of 200 bytes (**370 rows**: "369" is the header's last index), row *i* at file offset `0x20 + 200 i`; the name text starts at file offset `0x20 + 74,000` |
 | Locale copies [bytes] | `master/jppc` and the nine `new_*pc` copies (jp, us, sp, kr, it, fr, de, cn, ch) of `monster.bin` **and** `monster2.bin`: bytes 8 to 199 of all 370 rows are identical in all ten copies, for both tables (only the name and help text references differ). So the numbers do not depend on the locale |
-| Second copy of the game [bytes] | the live Steam library copy (`E:\SteamLibrary\...\data\FFX2_Data.vbf`, 17,867,755,892 bytes) gives byte-identical files for all 20 tables above (same SHA-256) |
-| Reader | our own VBF reader (standard library only, opens the archive `rb`): `D:\Tools\pyrefly-scratch\2026-10-07\modding-research\gamefiles\vbf.py`; layout in `...\gamefiles\gamefiles.md` §1. Row parser and dumpers: `D:\Tools\ffx-parity\yv-rows\` (`extract_kernel.py`, `lib_mon.py`, `dump_rows.py`, `formations.py`), run with `python -I` |
-| Independent check | a second parser written by an earlier lane (`D:\Tools\ffx-parity\ai\ffx2-leblanc-den-ixion\tools\mon-dump.mjs`, run on its own extraction of the same archive) prints the same values for rows 164, 170, 174 and 363 |
+| Second copy of the game [bytes] | a second install of the same Steam build (`FFX2_Data.vbf`, 17,867,755,892 bytes) gives byte-identical files for all 20 tables above (same SHA-256) |
+| Reader | our own VBF reader (standard library only, opens the archive `rb`): `vbf.py`, kept outside the repo with its layout notes (`gamefiles.md` §1). Row parser and dumpers, also outside the repo (`extract_kernel.py`, `lib_mon.py`, `dump_rows.py`, `formations.py`), run with `python -I` |
+| Independent check | a second parser written by an earlier lane (`mon-dump.mjs`, kept outside the repo, run on its own extraction of the same archive) prints the same values for rows 164, 170, 174 and 363 |
 | Struct layout | the shipped `battle/kernel/monster.h` (the `btl_monster` struct) matches the 200-byte rows field for field (`gamefiles.md` §3); offsets below are from that order and from the offsets earlier notes use (record `+0xa4` Pilfer Gil, `+0xab` steal chance byte, `+0x50` automatic-status mask) |
 
 ## 2. How each row was identified
@@ -241,12 +241,12 @@ No repo or wiki value is on file for it. It is listed so a later fight that uses
 
 ## 8. Notes cited
 
-In the repo (`research/`): `re-ffx2-damage.md`, `re-ffx2-hit-status.md`, `re-ffx2-atb-status.md`, `re-ffx2-ai-leblanc-den-ixion.md`, `re-ffx2-ai-fallen-trema.md`, `re-ffx2-ai-bahamut-vegnagun.md`, `ffx2-fallen-aeons.md`, `ffx-yojimbo.md`. Local only: the coverage notes `D:\Tools\ffx-parity\coverage\ffx2\FFX2-G01.md`, `FFX2-G03.md`, `FFX2-G04.md`, and `D:\Tools\pyrefly-scratch\2026-10-07\modding-research\gamefiles\gamefiles.md`.
+In the repo (`research/`): `re-ffx2-damage.md`, `re-ffx2-hit-status.md`, `re-ffx2-atb-status.md`, `re-ffx2-ai-leblanc-den-ixion.md`, `re-ffx2-ai-fallen-trema.md`, `re-ffx2-ai-bahamut-vegnagun.md`, `ffx2-fallen-aeons.md`, `ffx-yojimbo.md`. Kept outside the repo: the coverage notes `FFX2-G01.md`, `FFX2-G03.md`, `FFX2-G04.md`, and `gamefiles.md`.
 
 ## 9. AI scripts (not decompiled here)
 
-No dump of the AI scripts of FFX-2 rows 164, 170, 174 or 363 exists in `D:\Tools\rea\analysis` or the `D:\Tools\ffx-parity\ai*` lanes. (The files `ai\ffx-yunalesca-bfa\allmon\m164.txt`, `m170.txt`, `m174.txt` and `dis\m164.txt`, `m174.txt` are FFX monsters with the same numbers, not these.) The scripts are in the archive, as plain-text sources and compiled packages:
+No dump of the AI scripts of FFX-2 rows 164, 170, 174 or 363 exists in our analysis folders (kept outside the repo). (The files `ffx-yunalesca-bfa\allmon\m164.txt`, `m170.txt`, `m174.txt` and `dis\m164.txt`, `m174.txt` are FFX monsters with the same numbers, not these.) The scripts are in the archive, as plain-text sources and compiled packages:
 
 * `ffx_ps2/ffx2/master/jppc/battle/mon/m164.src` (3,786 bytes), `m170.src` (3,566), `m174.src` (1,045), `m363.src` (2,331);
 * compiled: `.../mon/_m164/m164.bin` (94,848), `_m170/m170.bin` (105,024), `_m174/m174.bin` (41,264), `_m363/m363.bin` (94,400), with `mm###.src` and `mt###.src` beside each;
-* tools that read them: `D:\Tools\ffx-parity\ai\ffx2-leblanc-den-ixion\tools\x2dis.mjs` (disassembler), `moves.mjs` (every move a source uses with its full row), `cmp-src-bin.mjs`; the lane's notes `...\NOTES.md`.
+* tools that read them: the Leblanc-den lane's `x2dis.mjs` (disassembler, kept outside the repo), `moves.mjs` (every move a source uses with its full row), `cmp-src-bin.mjs`; the lane's notes `...\NOTES.md`.
