@@ -317,7 +317,7 @@ describe('the scene and the script are the RE review\'s (m164, pos_bsyt05_229; t
 });
 
 describe('the group, the party and the chapter', () => {
-  it('is one link that cannot be fled, on our own aeon cue (never the retail "Aeons"), action time on at 3 s like the sibling aeon chapters', () => {
+  it('is one link that cannot be fled, on our own aeon cue (never the retail "Aeons"), action time on at 3 s, kept by precedent (D-151, D-187/D-197, D-269), awaiting Bailey\'s pick', () => {
     expect(besaidValeforGroup).toMatchObject({ id: BESAID_VALEFOR, game: 'ffx2', canEscape: false });
     expect(besaidValeforGroup.enemies).toEqual([x2Valefor]);
     expect(besaidValeforGroup.musicCues).toEqual([{ at: 'start', track: 'boss-ffx2-fallen-aeons', fadeMs: 800 }]);

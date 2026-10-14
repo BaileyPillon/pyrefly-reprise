@@ -127,7 +127,7 @@ export const besaidValeforGroup: EnemyGroupDef = {
   enemies: [x2Valefor],
   canEscape: false,
   musicCues: AEON_CUE,
-  ...actionTime, // VALEFOR_ACTION_TIME_ON: on, 3 s, as the sibling aeon chapters
+  ...actionTime, // VALEFOR_ACTION_TIME_ON: on, 3 s, kept by precedent (D-151, D-187/D-197, D-269), awaiting Bailey's pick
 };
 
 export const valeforGroups: readonly EnemyGroupDef[] = [besaidValeforGroup];
