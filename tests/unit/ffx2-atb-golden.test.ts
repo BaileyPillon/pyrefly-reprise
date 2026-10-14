@@ -173,6 +173,11 @@
  * digests, all twenty `CH4_D0`, all ten `CH4_D1500` and all ten `CH5_D1500`; D = 0 is still 20/20 in both chapters and the Wait arm still equals the D = 0 arrays. The
  * old hash is in git at ab57f082. The menus' other changes (free pairs, passive markers no longer rows, greyed Itch rows, the Special family without Item and Escape) move no
  * digest here: no seed of these two chapters meets them.
+ *
+ * **RC7 assembly, 2026-10-14** (re-parity-rc7: lane X2-D, the automatic statuses and counters, and lane X2-B, the command menu, merged onto re-parity-rc6-ch2; FFX-2 only;
+ * `docs/handoff/re-parity-rc7.md`). Nothing is re-pinned by the merge: the one hash lane X2-B moved (`CH5_D0` seed 4, above) is the only difference from the base in the
+ * merged tree, and lane X2-D moves none (a girl who holds no automatic ability has no layer, so no draw, no event and no state changes). The shipped line of all eight
+ * FFX-2 chapters over seeds 1 to 500 equals the base in every sum and every seed's outcome except Chapter V's Silence-scope movement (+35 party turns, +3 KOs, wins 490).
  */
 
 import { describe, expect, it } from 'vitest';
