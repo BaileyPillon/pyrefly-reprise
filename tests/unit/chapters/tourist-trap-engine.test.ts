@@ -6,7 +6,8 @@
  *
  * 1. **The rows**: Yojimbo is `monster.bin` row 170 and Daigoro row 174, field by field, as the enemy data carries them and as the attached records lay them; where the row disagrees with the research the
  *    build started on (Reflect, Bribe, the dog) the row wins; nothing the note marks unmapped is wired.
- * 2. **The five command rows** (0x40a1 to 0x40a5): attached to the abilities word for word, none rolls to hit (rule 5), Wakizashi B hits the whole party, Zanmato charges 120 and rests 200.
+ * 2. **The five command rows** (0x40a1 to 0x40a5): attached to the abilities word for word, none rolls to hit (rule 5), Wakizashi B's row keeps its 0x17 target byte while the script aims it at ONE girl like A
+ *    (`[strongly indicated]`, RE re-review 2026-10-14; `WAKIZASHI_B_HITS_ONE_GIRL` is the one-line switch), Zanmato charges 120 and rests 200.
  * 3. **The poll**: the counter is tested at 100 before the raise and Zanmato is the 14th poll; otherwise it is raised by 8 first and the band is read on the raised value; the roll picks the move in the
  *    review's order; a dog pick is a poll without a turn that raises a flag and wakes Daigoro; the real actions before a Zanmato number 7.25 on average and 4 to 10 in about 96 percent of cycles.
  * 4. **The fight**: in the real engine Zanmato leaves every girl at 1 HP and 1 MP through Protect and Shell, Kozuka takes a quarter of current MP and poisons, Daigoro is an actor of his own who bites on his
@@ -24,6 +25,7 @@ import { Ffx2ScriptStream } from '../../../src/battle/ffx2/adapt/streams.ts';
 import { specialWord } from '../../../src/battle/ffx2/adapt/words.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { isTargetable } from '../../../src/battle/ffx2/targeting.ts';
+import { wakeIdleNow } from '../../../src/battle/ffx2/atb-engine.ts';
 import type { AiContext, Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
 import { aiScriptFor } from '../../../src/battle/ffx2/ai/index.ts';
 import { AI_IDLE_STEPS, AI_IDLE_WAKE, AI_REPOLL, IDLE_UNTIL_WOKEN, WAKE_ON_FLAG } from '../../../src/battle/ffx2/ai/idle.ts';
@@ -41,9 +43,9 @@ import {
   x2Daigoro,
   x2Yojimbo,
 } from '../../../src/data/ffx2/enemies/tourist-trap.ts';
-import { DAIGORO_ACTIONS, TOURIST_TRAP_ACTION_IDS, YOJIMBO_ACTIONS, YOJIMBO_ACTION_IDS, YOJIMBO_SCRIPTS } from '../../../src/data/ffx2/enemies/tourist-trap-abilities.ts';
+import { DAIGORO_ACTIONS, TOURIST_TRAP_ACTION_IDS, WAKIZASHI_B_HITS_ONE_GIRL, YOJIMBO_ACTIONS, YOJIMBO_ACTION_IDS, YOJIMBO_SCRIPTS } from '../../../src/data/ffx2/enemies/tourist-trap-abilities.ts';
 import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
-import { driveFight } from '../helpers/touristTrapDrive.ts';
+import { driveFight, withoutActionTime } from '../helpers/touristTrapDrive.ts';
 
 interface Row {
   row: number; formation: number; slot: number; level: number; hp: number; mp: number; str: number; def: number; mag: number; mdef: number; agi: number; acc: number; eva: number; luck: number;
@@ -99,9 +101,8 @@ describe("the game's own rows: Yojimbo is row 170 and Daigoro row 174", () => {
     // Every status slot of both groups: 255 in the row means immune on the enemy, anything else means not listed.
     GROUP1_STATUS.forEach((status, i) => {
       if (status === null) return;
-      // Indexes 17 and 18 read 255 in the row but the RE note lists them as unmapped (section 5): not wired, so not immune here (`itchy` is the engine's name for slot 17).
-      if (i === 17 || i === 18) expect(x2Yojimbo.immunities[status as StatusId], `group 1 slot ${i} ${status} is unmapped, not wired`).toBeUndefined();
-      else if (FIX.yojimbo.resistGroup1[i] === 255) expect(x2Yojimbo.immunities[status as StatusId], `group 1 slot ${i} ${status}`).toBe(255);
+      // Slots 17 (Itchy) and 18 (Auto-Life) read 255 and are wired (the RE session's answer: command.h names them, 369 of 370 rows carry 255 at both).
+      if (FIX.yojimbo.resistGroup1[i] === 255) expect(x2Yojimbo.immunities[status as StatusId], `group 1 slot ${i} ${status}`).toBe(255);
       else expect(x2Yojimbo.immunities[status as StatusId], `group 1 slot ${i} ${status}`).toBeUndefined();
     });
     GROUP2_STATUS.forEach((statuses, i) => {
@@ -128,10 +129,16 @@ describe("the game's own rows: Yojimbo is row 170 and Daigoro row 174", () => {
     expect(MONSTER_RECORDS[YOJ_KEY]!.special).toBe(0x3c3);
     expect(MONSTER_RECORDS[DOG_KEY]!.special).toBe(0);
     expect(MONSTER_RECORDS[YOJ_KEY]!.species).toBe(0); // the monster-type word is unmapped (raw 0)
-    for (const idx of [17, 18]) expect(MONSTER_RECORDS[YOJ_KEY]!.resist1[idx], `group 1 index ${idx} is unmapped`).toBeUndefined();
+    for (const idx of [17, 18]) {
+      expect(GROUP1_STATUS[idx], `group 1 slot ${idx}`).toBe(idx === 17 ? 'itchy' : 'auto-life');
+      expect(MONSTER_RECORDS[YOJ_KEY]!.resist1[idx], `Yojimbo, group 1 slot ${idx}`).toBe(255);
+      expect(MONSTER_RECORDS[DOG_KEY]!.resist1[idx], `Daigoro, group 1 slot ${idx}`).toBe(255);
+    }
+    expect(x2Yojimbo.immunities.itchy).toBe(255);
+    expect(x2Yojimbo.immunities['auto-life']).toBe(255);
   });
 
-  it('Daigoro is an actor of his own: row 174, Lv 30, HP 1, MP 1, 42 / 50 / 61 / 106 / 120 / 95 / 0 / 7, Curse only, no rewards, one command (the bite)', () => {
+  it('Daigoro is an actor of his own: row 174, Lv 30, HP 1, MP 1, 42 / 50 / 61 / 106 / 120 / 95 / 0 / 7, immune to Curse, Itchy and Auto-Life only, no rewards, one command (the bite)', () => {
     const d = FIX.daigoro;
     expect([d.row, d.formation, d.slot]).toEqual([174, 1847, 2]);
     expect([x2Daigoro.level, x2Daigoro.stats.maxHp, x2Daigoro.stats.maxMp]).toEqual([30, 1, 1]);
@@ -141,7 +148,7 @@ describe("the game's own rows: Yojimbo is row 170 and Daigoro row 174", () => {
     expect(x2Daigoro.stats.agi, 'a real gauge: he is in the ATB snapshots with his own Agility, not 0').toBe(120);
     expect(x2Daigoro.ffx2Record).toBe(MONSTER_RECORDS[DOG_KEY]);
     expect(MONSTER_RECORDS[DOG_KEY]).toMatchObject({ row: 174, acc: 95, special: 0, stealByte: 0 });
-    expect(x2Daigoro.immunities).toEqual({ curse: 255 }); // group 1 index 8; indexes 17 and 18 are unmapped and not wired
+    expect(x2Daigoro.immunities).toEqual({ curse: 255, itchy: 255, 'auto-life': 255 }); // group 1 slots 8, 17 and 18, and nothing else
     expect(d.resistGroup2.every((b) => b === 0)).toBe(true);
     expect(x2Daigoro.immunityFlags).toEqual([]);
     expect(x2Daigoro.affinities).toEqual({});
@@ -204,8 +211,11 @@ describe('the five command rows (0x40a1 to 0x40a5): attached word for word, none
     for (const id of TOURIST_TRAP_ACTION_IDS) expect(ab(id).canMiss, id).toBe(false);
   });
 
-  it('Wakizashi A is one girl and Wakizashi B the whole party (target flags 0x13 and 0x17); the bite is one girl; both Wakizashi and the bite are physical, Kozuka and Zanmato are not', () => {
-    expect([ab(WA).targeting, ab(WB).targeting, ab(BITE).targeting, ab(KZ).targeting, ab(ZN).targeting]).toEqual(['single-enemy', 'all-enemies', 'single-enemy', 'single-enemy', 'all-enemies']);
+  it("Wakizashi A and Wakizashi B are one girl each (the row's target flags are 0x13 and 0x17, but the game's script aims B at one searched girl like A: strongly indicated, RE re-review 2026-10-14); the bite is one girl; Zanmato is the whole party; both Wakizashi and the bite are physical, Kozuka and Zanmato are not", () => {
+    expect(WAKIZASHI_B_HITS_ONE_GIRL, 'the shipped reading: one girl').toBe(true);
+    expect([ab(WA).targeting, ab(WB).targeting, ab(BITE).targeting, ab(KZ).targeting, ab(ZN).targeting]).toEqual(['single-enemy', 'single-enemy', 'single-enemy', 'single-enemy', 'all-enemies']);
+    // The data stays the game's row: B's target byte is still 0x17 (the game's only widening, a rebuild after the chosen girl falls before the strike, reads it) and A's is 0x13.
+    expect([ab(WA).ffx2Record!.flagsTarget, ab(WB).ffx2Record!.flagsTarget, ab(ZN).ffx2Record!.flagsTarget]).toEqual([0x13, 0x17, 0x17]);
     expect([ab(WA).power, ab(WB).power, ab(BITE).power]).toEqual([16, 13, 16]);
     for (const id of [WA, WB, BITE]) expect(ab(id)).toMatchObject({ formula: 'strength', damageType: 'physical', element: ['none'] });
     expect(ab(BITE).name).toBe('Daigoro');
@@ -351,15 +361,23 @@ describe('the poll: the counter is tested at 100 before the raise, then raised b
     expect(s.self.aiMemory?.[AI_REPOLL]).toBe(0);
   });
 
-  it('a real action takes a target search (one living girl) except Wakizashi B and Zanmato, which take none; an empty party does nothing and costs no count', () => {
+  it('a real action takes a target search (one living girl), Wakizashi B too (it is aimed at one girl exactly as A is: strongly indicated, RE re-review 2026-10-14); Zanmato takes none; an empty party does nothing and costs no count', () => {
     const one = stub({ ac: 0, rolls: [0] });
     const r = poll(one);
     expect(r).toMatchObject({ id: KZ });
     expect((r as { targets: string[] }).targets).toHaveLength(1);
     expect(GIRLS.map((g) => g.id)).toContain((r as { targets: string[] }).targets[0]);
-    const all = stub({ ac: 64, rolls: [0] });
-    expect(poll(all)).toMatchObject({ id: WB, targets: [] });
-    expect(all.searches.count, 'no search for the whole party').toBe(0);
+    const aimed = stub({ ac: 64, rolls: [0] }); // raised 72: roll 0 of 4 is Wakizashi B
+    const b = poll(aimed) as { id: string; targets: string[] };
+    expect(b.id).toBe(WB);
+    expect(b.targets, 'B is queued on ONE searched girl').toHaveLength(1);
+    expect(GIRLS.map((g) => g.id)).toContain(b.targets[0]);
+    expect(aimed.searches.count, "the game's script runs the same one-girl search for B as for A: one draw on stream 4").toBe(1);
+    const a = poll(stub({ ac: 64, rolls: [1] })) as { id: string; targets: string[] }; // roll 1 of 4 is Wakizashi A: the same shape
+    expect([a.id, a.targets.length]).toEqual([WA, 1]);
+    const zan = stub({ ac: 104, rolls: [0] });
+    expect(poll(zan)).toMatchObject({ id: ZN, targets: [] });
+    expect(zan.searches.count, 'Zanmato takes the whole party group: no search').toBe(0);
     const empty = stub({ ac: 40, party: [] });
     expect(yojimbo.decide(empty.ctx)).toBeNull();
     expect(acOf(empty.self)).toBe(40);
@@ -505,6 +523,38 @@ describe('the fight in the real engine', () => {
     expect(seen, 'Kozuka was thrown at least once across the seeds').toBeGreaterThan(0);
   });
 
+  it('every Wakizashi B in a real fight is queued on ONE girl and lands once on that girl alone (strongly indicated, RE re-review 2026-10-14: the script aims it like A), with no miss roll', () => {
+    let seen = 0;
+    let seenA = 0;
+    for (const seed of Array.from({ length: 16 }, (_, i) => i + 1)) {
+      const engine = start(seed, 62); // the top band from the first poll (raised 70): B, A, Kozuka or the dog
+      const log = playDefending(engine, (l) => yojimboActions(l) >= 4) as unknown as Ev[];
+      let ability: string | undefined;
+      let named: string[] = [];
+      let hit: string[] = [];
+      for (const e of log) {
+        if (e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID) {
+          ability = e.abilityId;
+          named = [...(e as unknown as { targets: string[] }).targets];
+          hit = [];
+        }
+        if (ability !== undefined && e.type === 'damage' && e.targetId !== undefined) hit.push(e.targetId);
+        if (ability !== undefined && e.type === 'miss') hit.push('MISS');
+        if (e.type === 'action-end' && e.actorId === X2_YOJIMBO_ID && ability !== undefined) {
+          if (ability === WB || ability === WA) {
+            expect(named, `seed ${seed}: queued on one girl`).toHaveLength(1);
+            expect(hit, `seed ${seed}: lands once, on her alone, never a miss`).toEqual(named);
+            if (ability === WB) seen += 1;
+            else seenA += 1;
+          }
+          ability = undefined;
+        }
+      }
+    }
+    expect(seen, 'Wakizashi B was thrown at least a few times across the seeds').toBeGreaterThan(2);
+    expect(seenA, 'and so was A, whose shape it shares').toBeGreaterThan(2);
+  });
+
   it("a dog pick raises the call and wakes Daigoro: he is polled within a few steps and his bite is HIS action, never Yojimbo's", () => {
     const run = driveFight(1, { line: 'intended' });
     const ev = run.log as unknown as Ev[];
@@ -612,5 +662,103 @@ describe('the fight in the real engine', () => {
     const engine = start(1, 0);
     expect(specialWord(engine.state().combatants[X2_YOJIMBO_ID] as never)).toBe(0x3c3);
     expect(specialWord(engine.state().combatants[X2_DAIGORO_ID] as never)).toBe(0);
+  });
+});
+
+// ----------------------------------------------------------------------------------------------------------------------------------------- 5. the dog's flag, and the pace from the rows
+
+/** The engine with Yojimbo silenced (his script replaced by the idle one), so the only calls to Daigoro are the ones a test makes. */
+function quietYojimbo(seed: number, group = cavernYojimboGroup): FFX2Engine {
+  const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
+  engine.setSeed(seed);
+  engine.init({ game: 'ffx2', party: FFX2_TOURIST_TRAP.buildRef as FFX2PartyBuild, enemies: group, triggers: [], seed, condition: 'normal', canEscape: false });
+  (engine.state().combatants[X2_YOJIMBO_ID] as unknown as Ffx2Unit).enemy!.aiScriptId = 'idle';
+  return engine;
+}
+const dogBites = (engine: FFX2Engine): number => (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'action-start' && e.actorId === X2_DAIGORO_ID).length;
+const dogPolls = (engine: FFX2Engine): number => (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID).length;
+/** What Yojimbo's dog pick does to the board: raise the flag and wake the dog (the same two lines as `callDaigoro`). */
+function call(engine: FFX2Engine): void {
+  engine.state().flags[DAIGORO_CALL_FLAG] = true;
+  const units = Object.values(engine.state().combatants) as unknown as Ffx2Unit[];
+  const dogUnit = units.find((u) => u.id === X2_DAIGORO_ID)!;
+  wakeIdleNow(dogUnit, units, WAKE_ON_FLAG);
+}
+
+describe("Daigoro's flag: one flag, not a count; he bites on his own gauge", () => {
+  it('a call that finds him asleep is answered in the same step; a call while he rests is seen at his next poll (so he bites again); two calls while the flag is up are one bite', () => {
+    const engine = quietYojimbo(1, withoutActionTime());
+    // He is asleep after his one silent poll.
+    playDefending(engine, () => dogPolls(engine) >= 1, 4000);
+    expect(dogBites(engine)).toBe(0);
+    // Call 1, asleep: bitten at once, in the very step of the call.
+    const tickOfCall = engine.state().ticks;
+    call(engine);
+    playDefending(engine, () => dogBites(engine) >= 1, 4000);
+    const log = engine.state().log as unknown as Ev[];
+    const firstBitePoll = log.filter((e) => e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID).at(-1)!;
+    expect(firstBitePoll.elapsedTicks, 'the bite is polled in the step of the call').toBe(Math.round(tickOfCall));
+    expect(engine.state().flags[DAIGORO_CALL_FLAG], 'and lowers the flag').toBe(false);
+    // Two calls while he rests: one flag. He bites ONCE more, when his rest is over, and then waits.
+    call(engine);
+    call(engine);
+    expect(engine.state().flags[DAIGORO_CALL_FLAG]).toBe(true);
+    playDefending(engine, () => dogBites(engine) >= 2, 4000);
+    expect(dogBites(engine)).toBe(2);
+    expect(engine.state().flags[DAIGORO_CALL_FLAG]).toBe(false);
+    const after = engine.state().ticks;
+    playDefending(engine, () => engine.state().ticks >= after + 900, 4000);
+    expect(dogBites(engine), 'no call, no bite: two calls were one bite, not two').toBe(2);
+  });
+
+  it("his rest after a bite is the row's 87 steps (cost 100 over AGI 120), Yojimbo's ordinary moves rest 105 and Zanmato charges 105 and rests 174: the rows' own pace, action time off", () => {
+    // The bite: poll to poll, with a call waiting for the next one.
+    const engine = quietYojimbo(2, withoutActionTime());
+    playDefending(engine, () => dogPolls(engine) >= 1, 4000);
+    call(engine);
+    playDefending(engine, () => dogBites(engine) >= 1, 4000);
+    call(engine); // raised during the rest: seen at his next poll
+    playDefending(engine, () => dogBites(engine) >= 2, 4000);
+    const polls = (engine.state().log as unknown as Ev[]).filter((e) => e.type === 'turn-start' && e.actorId === X2_DAIGORO_ID).map((e) => e.elapsedTicks!);
+    expect(polls.at(-1)! - polls.at(-2)!, "a bite's rest: 8,264 units over 95 a step, rounded up").toBe(87);
+    // Yojimbo: poll to poll while the party only defends (nothing hits him, so no chain lock holds his ready gauge: `isActionLocked`, section 1.7), until the first girl falls (a fallen girl adds 30 steps to a monster's rest).
+    const rest = new Set<number>();
+    const zanmato = new Set<number>();
+    for (const [seed, ac] of [[1, 0], [2, 0], [3, 0], [4, 0], [5, 90], [6, 90]] as const) {
+      const quiet = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
+      quiet.setSeed(seed);
+      quiet.init({ game: 'ffx2', party: FFX2_TOURIST_TRAP.buildRef as FFX2PartyBuild, enemies: withoutActionTime(), triggers: [], seed, condition: 'normal', canEscape: false });
+      (quiet.state().combatants[X2_YOJIMBO_ID] as unknown as Ffx2Unit).aiMemory = { [AC]: ac };
+      const log = playDefending(quiet, (l) => l.some((e) => e.type === 'ko') || l.filter((e) => e.type === 'turn-start' && (e as Ev).actorId === X2_YOJIMBO_ID).length >= 40, 8000) as unknown as Ev[];
+      const polls: Array<{ at: number; index: number }> = [];
+      log.forEach((e, index) => {
+        if (e.type === 'turn-start' && e.actorId === X2_YOJIMBO_ID) polls.push({ at: e.elapsedTicks!, index });
+      });
+      for (let i = 0; i + 1 < polls.length; i++) {
+        const span = log.slice(polls[i]!.index, polls[i + 1]!.index);
+        if (span.some((e) => e.type === 'ko' || e.type === 'revive')) continue;
+        const act = span.find((e) => e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID);
+        if (!act) continue; // a dog pick: no rest
+        const gap = polls[i + 1]!.at - polls[i]!.at;
+        if (act.abilityId === ZN) zanmato.add(gap);
+        else rest.add(gap);
+      }
+    }
+    expect([...rest], 'Kozuka, Wakizashi A and B: 120 over AGI 120 is 104.39 steps, rounded up').toEqual([105]);
+    expect([...zanmato], 'Zanmato: a 105-step charge, then a 174-step rest').toEqual([279]);
+  });
+
+  it('a dog pick has no rest at all: Yojimbo is polled again on the very next step, with the counter already raised', () => {
+    const run = driveFight(1, { line: 'intended', group: withoutActionTime() });
+    const log = run.log as unknown as Ev[];
+    const polls = log.map((e, index) => ({ e, index })).filter((x) => x.e.type === 'turn-start' && x.e.actorId === X2_YOJIMBO_ID);
+    let picks = 0;
+    for (let i = 0; i + 1 < polls.length; i++) {
+      const span = log.slice(polls[i]!.index, polls[i + 1]!.index);
+      if (span.some((e) => e.type === 'action-start' && e.actorId === X2_YOJIMBO_ID)) continue;
+      picks += 1;
+      expect(polls[i + 1]!.e.elapsedTicks! - polls[i]!.e.elapsedTicks!, 'a pick with no rest: the next step').toBe(1);
+    }
+    expect(picks, 'there were dog picks').toBeGreaterThan(0);
   });
 });

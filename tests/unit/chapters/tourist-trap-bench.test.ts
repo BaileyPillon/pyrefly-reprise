@@ -8,7 +8,7 @@
  * on Darkness) as `intendedStrategy` plays it; `naive` is the same party attacking every turn with no answers. The party is the Chapter 3 preset (`djoseBuild`, Lv 32 / 33 / 34, the
  * research is silent on the mission's level: an `[estimate]`), with the Chapter 5 preset (Lv 46 / 48 / 50) beside it as the other end of the research's "Chapter 3 or Chapter 5". The
  * clocks: Wait (the default a player has) at bench speed, and Active at a human pace of 1.5 s and 4 s a decision. Action time (3 s per move, the flat add-on the sibling possessed-aeon chapters
- * carry on top of their rows, Bailey's pick) is ON as shipped; the OFF row is the control, and the Zanmato cycle is reported both ways. The table is printed; the assertions are the structure that
+ * carry on top of their rows; kept by precedent, awaiting Bailey's pick for this chapter: his picks were per chapter) is ON as shipped; the OFF row is the control, and the Zanmato cycle is reported both ways. The table is printed; the assertions are the structure that
  * does not move (the 14th-poll Zanmato, a party without answers loses, the cycle is longer with the add-on), never a win rate: a rate is a disclosure for Bailey, not a gate.
  */
 import { describe, expect, it } from 'vitest';
@@ -27,6 +27,8 @@ interface Cell {
   medianPolls: number;
   meanRealActions: number;
   meanBites: number;
+  /** Daigoro's bites per cycle of 14 polls (the RE step model's target is about 4.3, 3.4 to 4.5 over animation lengths). */
+  bitesPerCycle: number;
   /** Mean seconds from one Zanmato to the next in this cell's fights (null when no fight had two). */
   cycleSeconds: number | null;
   /** Mean seconds to the first Zanmato (null when none reached one). */
@@ -48,6 +50,7 @@ function cell(label: string, opts: TouristTrapDriveOptions): Cell {
     medianPolls: polls[Math.floor(polls.length / 2)]!,
     meanRealActions: runs.reduce((n, r) => n + r.sequence.length, 0) / runs.length,
     meanBites: runs.reduce((n, r) => n + r.bites, 0) / runs.length,
+    bitesPerCycle: runs.reduce((n, r) => n + r.bites, 0) / (runs.reduce((n, r) => n + r.polls, 0) / 14),
     cycleSeconds: mean(gaps),
     firstZanmatoSeconds: mean(runs.filter((r) => r.zanmatoSeconds.length > 0).map((r) => r.zanmatoSeconds[0]!)),
     runs,
@@ -72,7 +75,7 @@ describe('the fight, measured over 40 seeds a cell (printed; not a gate)', () =>
   it('prints the table', () => {
     const rows = cells.map(
       (c) =>
-        `${c.label.padEnd(76)} wins ${String(c.wins).padStart(2)}/40  Zanmato in ${String(c.withZanmato).padStart(2)}  KOs ${c.meanKos.toFixed(2)}  polls ${String(c.medianPolls).padStart(2)}  real actions ${c.meanRealActions.toFixed(1)}  bites ${c.meanBites.toFixed(1)}  first Zanmato ${fmt(c.firstZanmatoSeconds)} s  Zanmato to Zanmato ${fmt(c.cycleSeconds)} s`,
+        `${c.label.padEnd(76)} wins ${String(c.wins).padStart(2)}/40  Zanmato in ${String(c.withZanmato).padStart(2)}  KOs ${c.meanKos.toFixed(2)}  polls ${String(c.medianPolls).padStart(2)}  real actions ${c.meanRealActions.toFixed(1)}  bites ${c.meanBites.toFixed(1)} (${c.bitesPerCycle.toFixed(2)} a cycle)  first Zanmato ${fmt(c.firstZanmatoSeconds)} s  Zanmato to Zanmato ${fmt(c.cycleSeconds)} s`,
     );
     // eslint-disable-next-line no-console
     console.log(['', 'Tourist Trap bench (Yojimbo and Daigoro, the game\'s scripts and rows):', ...rows].join('\n'));
@@ -95,6 +98,14 @@ describe('the fight, measured over 40 seeds a cell (printed; not a gate)', () =>
       }
     }
     expect(by('Chapter 3 preset, intended line, Wait clock').meanBites).toBeGreaterThan(0);
+  });
+
+  it("Daigoro's bites per cycle sit in the RE step model's range (3.4 to 4.5, about 4.3), in the cells long enough to have cycles", () => {
+    for (const label of ['Chapter 3 preset, intended line, Wait clock', 'Chapter 3 preset, intended line, Wait clock, action time OFF (control)', 'Chapter 3 preset, naive']) {
+      const c = by(label);
+      expect(c.bitesPerCycle, label).toBeGreaterThan(3.2);
+      expect(c.bitesPerCycle, label).toBeLessThan(4.7);
+    }
   });
 
   it('a party with no answers loses every fight, and the shipped line can win some: the counter matters', () => {

@@ -8,8 +8,10 @@
  * says nothing there may be reused here). This file carries the fields the engine's `AbilityDef` needs around the rows: ids, names, targeting, the banner, the hit rule and the pace.
  *
  * - **Kozuka** (0x40a1): one girl, takes a quarter of her **current MP** (4/16, the MP pool only) and poisons her (status byte 100). No damage to HP.
- * - **Wakizashi A** (0x40a2): one girl, physical, damage constant 16. **Wakizashi B** (0x40a3): the **whole party** (the row's target flags are the all-enemies ones, 0x17, the same as Zanmato's),
- *   physical, damage constant 13. The wiki called both single target; the row decides.
+ * - **Wakizashi A** (0x40a2): one girl, physical, damage constant 16. **Wakizashi B** (0x40a3): physical, damage constant 13, and **one girl too** `[strongly indicated]` (RE re-review 2026-10-14 of the
+ *   game's script `m170`): the row's target flags are the all-enemies ones (0x17, the same as Zanmato's) and the first draft read them at their word (the whole party), but the script runs the same uniform
+ *   one-girl search for B as for A and queues B on her, `setdircom` does not read the row's target flags, and the target-mask dispatcher (emulated, 44,320 vectors, no mismatch) passes a "multiple" row's mask on
+ *   unchanged and never widens it. The wiki's "both single target" and the script agree. {@link WAKIZASHI_B_HITS_ONE_GIRL} is the one-line switch back.
  * - **Zanmato** (0x40a4): the whole party to 1 HP and 1 MP ("remaining HP and MP - 1"), a long charge (120) and a long rest (200). The engine's existing `setHpTo`/`setMpTo` path (formula 0x0a,
  *   `kernel/damage.ts`, the Magus Sisters' Delta Attack): no Protect, Shell or Defense reduces it, it cannot kill, a KO'd girl is untouched.
  * - **Daigoro** (0x40a5): one girl, physical, damage constant 16, rest 100. **Daigoro's own action**, not Yojimbo's: the dog bites on his own turn whenever Yojimbo has called him (`../../../battle/ffx2/ai/tourist-trap.ts`).
@@ -23,6 +25,15 @@
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
+
+/**
+ * **Wakizashi B hits ONE girl** (`[strongly indicated]`, RE re-review 2026-10-14, `research/re-ffx2-ai-tourist-trap.md` section 4.2 and FFX2-G02 section 2.8; not yet confirmed by a play): the game's script searches one girl for
+ * B exactly as for A and queues the move on her, and the dispatcher that turns a script's choice into a target mask never widens a row's mask. **The record's target byte stays 0x17** (`../command-records/tourist-trap.ts`: the
+ * data is the game's row, and the game's only widening, the rebuild when the chosen girl is KO'd before the strike, keeps all living girls for a "multiple" row; it cannot happen here, because a command with no charge
+ * strikes in the very step it is chosen). `false` is the first reading (the whole party, the row's 0x17 taken at its word): this one constant is the whole switch, for this ability's `targeting` and for the script's
+ * targets (`../../../battle/ffx2/ai/tourist-trap.ts`).
+ */
+export const WAKIZASHI_B_HITS_ONE_GIRL: boolean = true;
 
 /** Yojimbo's four actions' ids, one place (the data, the AI script, the tactic, the story and the tests read these). */
 export const YOJIMBO_ACTIONS = {
@@ -98,11 +109,11 @@ export const touristTrapAbilities: AbilityDef[] = [
     ...base,
     id: YOJIMBO_ACTIONS.wakizashiB,
     name: 'Wakizashi',
-    power: 13, // damage constant 13 (row 0x40a3); its target flags are the whole party's
+    power: 13, // damage constant 13 (row 0x40a3); its target flags (0x17) are the whole party's, but the script aims it at one girl: WAKIZASHI_B_HITS_ONE_GIRL
     formula: 'strength',
     damageType: 'physical',
     element: ['none'],
-    targeting: 'all-enemies',
+    targeting: WAKIZASHI_B_HITS_ONE_GIRL ? 'single-enemy' : 'all-enemies',
     extra: { variant: 'B' },
     chargeTicks: 0,
     recoveryTicks: 120,

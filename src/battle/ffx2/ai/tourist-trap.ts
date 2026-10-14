@@ -11,7 +11,7 @@
  * Yojimbo, each poll (the game polls a ready monster every step; a poll is NOT a turn):
  *   counter >= 100     queue Zanmato on all girls; counter = 0                                  (the 14th poll: 13 raises of 8 reach 104)
  *   else               counter += 8 FIRST, then the band is read on the RAISED value:
- *     raised >= 70     random() mod 4:  0 Wakizashi B (the whole party), 1 Wakizashi A, 2 Kozuka, 3 the dog
+ *     raised >= 70     random() mod 4:  0 Wakizashi B, 1 Wakizashi A, 2 Kozuka, 3 the dog
  *     30 to 69         random() mod 4:  0 Kozuka, 1 Wakizashi A, 2 and 3 the dog
  *     below 30         random() mod 3:  0 Kozuka, 1 and 2 the dog
  *   the dog            NOT a move of his: he raises a battle flag, queues nothing, and is polled again on the very next step with the
@@ -21,28 +21,31 @@
  *   else               nothing (he waits)
  * ```
  *
- * The roll is `random() mod N` on the scripts' stream 2 ({@link scriptModCtx}); a single-target move is aimed by a uniform pick on stream 4 ({@link pickGirl}), drawn after the roll; Zanmato and
- * Wakizashi B take no target. **The dog's bite is aimed by a uniform pick too, where the game's script uses the near-weighted search**: it needs the formation's start positions, and `SCENES`
- * (`./script-rolls.ts`) holds only the Bahamut, Leg, Tail and Shuyin scenes (formation 1847 is not there). The Meteor enrage block of `m170` never runs in play: no timer is added.
+ * The roll is `random() mod N` on the scripts' stream 2 ({@link scriptModCtx}); every real move but Zanmato is aimed at ONE girl by a uniform pick on stream 4 ({@link pickGirl}), drawn after the roll: Kozuka, Wakizashi A and
+ * **Wakizashi B** alike (B hits one girl, `[strongly indicated]`: RE re-review 2026-10-14; {@link WAKIZASHI_B_HITS_ONE_GIRL} is the one-line switch); Zanmato takes the whole party and no search. **The dog's bite is aimed by a uniform
+ * pick too, where the game's script uses the near-weighted search**: it needs the formation's start positions, and `SCENES` (`./script-rolls.ts`) holds only the Bahamut, Leg, Tail and Shuyin scenes (formation 1847 is not
+ * there, and the Cavern scene is PROVED to carry none: the compiled scene file is the generic empty one, `pos_nagi05_229.psc` is empty too, RE 2026-10-14), so the uniform stand-in is the honest choice. The Meteor
+ * enrage block of `m170` never runs in play: no timer is added.
  *
  * **What a cycle looks like.** Zanmato is the 14th poll of every cycle; how many real actions come before it varies, because every dog pick is a poll without a turn: the expected count is 3 x 1/3 +
  * 5 x 1/2 + 5 x 3/4 = 7.25, and 4 to 10 in about 96 percent of cycles (`tests/unit/chapters/tourist-trap-engine.test.ts` computes the distribution). Deterministic under the seeded RNG; the counter
  * lives in the unit's AI memory (`ai/fallen-aeons.ts`'s `AC`), so the intent board's clone-and-sample dry run sees it, and follows the chain of polls to the move that is really coming
  * (`AI_REPOLL`, `../intent.ts`). Nothing raises the counter but his own polls: no result-driven gain.
  *
- * **Daigoro** waits with `idleFor(self, IDLE_UNTIL_WOKEN, WAKE_ON_FLAG)`: one poll, then asleep until Yojimbo's dog pick wakes him (`wakeIdle`, `../atb-engine.ts`), so he is never polled every step
+ * **Daigoro** waits with `idleFor(self, IDLE_UNTIL_WOKEN, WAKE_ON_FLAG)`: one poll, then asleep until Yojimbo's dog pick wakes him (`wakeIdleNow`, `../atb-engine.ts`: ready within the same step), so he is never polled every step
  * (a decision per logic step for the whole fight would trip the presenter's livelock limit, `engine/BattlePresenterUtil.ts`). A flag raised while he is biting or recovering waits for his next poll, as the
- * game's flag does; several calls before his turn are one bite.
+ * game's flag does; several calls before his turn are one bite. **Order within a step:** the engine polls Yojimbo before the dog (the dog is made ready by Yojimbo's own poll, so he is polled after it); the game's order
+ * between two ready monsters in one step is not established.
  */
 
 import type { Command } from '../../common/types.ts';
 import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
 import { setMem } from '../internal.ts';
-import { wakeIdle } from '../atb-engine.ts';
+import { wakeIdleNow } from '../atb-engine.ts';
 import { AC, AC_OVERDRIVE, acOf, bumpAc } from './fallen-aeons.ts';
 import { AI_NO_INTENT, AI_REPOLL, IDLE_UNTIL_WOKEN, WAKE_ON_FLAG, idleFor } from './idle.ts';
 import { pickGirl, scriptModCtx } from './script-rolls.ts';
-import { DAIGORO_ACTIONS, TOURIST_TRAP_UNITS, YOJIMBO_ACTIONS, YOJIMBO_SCRIPTS } from '../../../data/ffx2/enemies/tourist-trap-abilities.ts';
+import { DAIGORO_ACTIONS, TOURIST_TRAP_UNITS, WAKIZASHI_B_HITS_ONE_GIRL, YOJIMBO_ACTIONS, YOJIMBO_SCRIPTS } from '../../../data/ffx2/enemies/tourist-trap-abilities.ts';
 
 /** The counter rises by this much on every poll (RE review, m170). */
 export const YOJIMBO_COUNTER_STEP = 8;
@@ -67,11 +70,14 @@ export function bandFor(raised: number): (typeof YOJIMBO_BANDS)[number] {
   return YOJIMBO_BANDS.find((band) => raised >= band.from) ?? YOJIMBO_BANDS[YOJIMBO_BANDS.length - 1]!;
 }
 
-/** Raise the flag and wake the dog (if he is asleep): he is polled on the next step. */
+/**
+ * Raise the flag and, if the dog is asleep, make him ready now: the game polls a ready monster on every step, so he sees the flag in this very step (after Yojimbo, who is not ready again until the next one) and bites
+ * at once; a pick made while he rests raises the flag again for his next poll, and a pick made while it is still up changes nothing (it is one flag, not a count).
+ */
 function callDaigoro(ctx: AiContext): void {
   ctx.flags[DAIGORO_CALL_FLAG] = true;
   const dog = ctx.units.find((u) => u.id === TOURIST_TRAP_UNITS.daigoro && u.alive && !u.removed);
-  if (dog) wakeIdle(dog, ctx.units, WAKE_ON_FLAG);
+  if (dog) wakeIdleNow(dog, ctx.units, WAKE_ON_FLAG);
 }
 
 /** Yojimbo: one poll. Zanmato once the counter has filled (and the counter back to 0), else raise it and pick by the band; a dog pick is a poll without a turn. */
@@ -93,9 +99,12 @@ export const x2YojimboScript: AiScript = {
       setMem(self, AI_REPOLL, 1);
       return idleFor(self, 1); // polled again on the very next step: no turn, no recovery
     }
-    if (pick === 'wakizashiB') return { kind: 'ability', id: YOJIMBO_ACTIONS.wakizashiB, targets: [] }; // the whole party: no target search
-    const id = pick === 'kozuka' ? YOJIMBO_ACTIONS.kozuka : YOJIMBO_ACTIONS.wakizashiA;
-    return { kind: 'ability', id, targets: pickGirl(ctx) } satisfies Command;
+    const id = pick === 'kozuka' ? YOJIMBO_ACTIONS.kozuka : pick === 'wakizashiB' ? YOJIMBO_ACTIONS.wakizashiB : YOJIMBO_ACTIONS.wakizashiA;
+    // The game's script searches ONE girl for every real move except Zanmato, Wakizashi B included (one draw on stream 4; RE re-review 2026-10-14, `research/re-ffx2-ai-tourist-trap.md` section 4.2), and queues
+    // the move on her: **B hits one girl, like A** `[strongly indicated]` (the dispatcher passes the row's 0x17 through unchanged and never widens it). `WAKIZASHI_B_HITS_ONE_GIRL` (`false`: the whole party, the
+    // draw still made and its answer unused) is the one-line switch.
+    const girl = pickGirl(ctx);
+    return { kind: 'ability', id, targets: pick === 'wakizashiB' && !WAKIZASHI_B_HITS_ONE_GIRL ? [] : girl } satisfies Command;
   },
 };
 

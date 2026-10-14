@@ -30,7 +30,7 @@ export const WAKE_ON_ALIVE_CHANGE = 2;
 
 /**
  * A flag a script raised: whoever waits for it is polled on the next step (additive, 2026-10-14, the Tourist Trap). The raising script wakes the waiter itself
- * (`wakeIdle(unit, units, WAKE_ON_FLAG)`, `../atb-engine.ts`) right after it sets the flag; the engine core needs no change. Daigoro waits this way for Yojimbo's call (`./tourist-trap.ts`), so he
+ * (`wakeIdleNow(unit, units, WAKE_ON_FLAG)`, `../atb-engine.ts`: the waiter is ready within the same step, as the game's every-step poll would find it) right after it sets the flag; the engine core needs no change. Daigoro waits this way for Yojimbo's call (`./tourist-trap.ts`), so he
  * is polled once, not every step, which would be a decision per logic step for the whole fight (`LIVELOCK_SPINS`, `engine/BattlePresenterUtil.ts`).
  */
 export const WAKE_ON_FLAG = 4;

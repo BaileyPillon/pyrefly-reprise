@@ -27,6 +27,15 @@ for Bailey's word, the art is provisional and reuses approved paintings where th
 > fourteenth turn". Kept on the review's own rule: the flat 3 s action-time add-on stays because the sibling aeon chapters carry it on top of their rows. Added to make the board honest: the intent dry run follows polls that
 > are not turns and skips a sleeping part (additive, two lines each). The bite is aimed by a uniform pick (no start positions for formation 1847). The Meteor block adds no timer.
 
+> **Update 2026-10-14 ~04:00 (RE re-review of 95152154; "RE re-review").** The additive engine pieces (`wakeIdleNow`, the dry run's re-polls) were found sound (determinism identical on seeds 1, 7 and 23; 7.58 real actions and
+> 3.48 bites per cycle, inside the 3.4 to 4.5 range; ours measure 7.25 real actions exactly and 4.3 to 4.5 bites). What it asked for, all applied: (1) **Wakizashi B hits ONE girl, not the whole party** (`[strongly indicated]`:
+> the script runs the same uniform one-girl search for B as for A and queues it on her; `setdircom` does not read the row's target flags; the target-mask dispatcher, emulated over 44,320 vectors with no mismatch, passes a
+> "multiple" row's mask unchanged and never widens it; the only widening is the rebuild when the chosen girl is KO'd before the strike, which cannot happen here because a command with no charge strikes in the step it is
+> chosen): B now takes `pickGirl` exactly as A does and is `single-enemy`; the record keeps its 0x17; `WAKIZASHI_B_HITS_ONE_GIRL` (`tourist-trap-abilities.ts`) is the one-line switch back; the guide line and the tests follow;
+> (2) the action-time add-on is no longer called Bailey's pick for this chapter: **kept by precedent, awaiting his pick** (his picks were per chapter: D-151, D-187 / D-197, D-269); (3) the Cavern scene is PROVED to carry no
+> positions (the compiled scene file is the generic empty one), so the uniform bite aim is final, not provisional; (4) disclosed: the engine polls Yojimbo before the dog within a step (the game's order is not established),
+> and `src/battle/ffx2/intent.ts` is over 400 lines (756 before this branch, 771 now): pre-existing; (5) the shared `encounters.ts` change has its `docs/CONTRACT-CHANGES.md` entry (rule 2).
+
 ## 1. What the chapter is, and the data (rule 6: only what the research says)
 
 Sources: `research/ffx-yojimbo.md` §8.2 (the wiki Cavern page, FFExodus Chapter 3, SinirothX's *Enemy Encyclopedia*), `research/ffx2-fallen-aeons.md` §7.2 (SinirothX confirms the counter and
@@ -57,27 +66,27 @@ five; the first draft let Wakizashi and Daigoro roll and 11 percent were evaded)
 earliest party that has reached the mission and under the boss's Lv 36; it owns Dark Knight, Samurai, Alchemist, White Mage, Remedies and Esuna); Chapter 5's preset (46/48/50) is measured beside it. The research names
 two Dark Knights or Samurai/Warrior/Gunner plus an Alchemist and Poison protection; the Star Pendant and Glass Buckle are not in our accessory table, so the answers in the data are Esuna and Remedy.
 (7) **Stage heights:** Yojimbo 27.1 and Daigoro 8.0 are the HD models of FFX (`research/ffx-yojimbo.md` §12, `[datamined]`); the X-2 possessed aeon is assumed to be the same model `[estimate]`; against the girls'
-mean 17.727 that is 1.529 and 0.450. (8) **Still an estimate:** the dog's bite is aimed by a uniform pick, where the game uses the near-weighted search (it needs the formation's start positions, which `SCENES`
-in `ai/script-rolls.ts` does not hold for formation 1847); the action-time add-on (below).
+mean 17.727 that is 1.529 and 0.450. (8) **Still an estimate:** the dog's bite is aimed by a uniform pick, where the game uses the near-weighted search (it needs the formation's start positions: `SCENES` in `ai/script-rolls.ts` does not hold formation 1847, and the Cavern scene is PROVED to carry none: the compiled scene file is the generic empty one, `pos_nagi05_229.psc` is empty too, RE 2026-10-14); the action-time add-on (below).
 
 
 ## 2. The mechanics and how our FFX-2 engine models each
 
 - **Yojimbo's poll** (`ai/tourist-trap.ts`, the RE review of `m170`): the existing AI-memory counter (`ai/fallen-aeons.ts`: `AC`, `acOf`, `bumpAc`, `AC_OVERDRIVE`). Each poll: `ac >= 100` -> Zanmato on the whole
   party and `ac = 0`; otherwise `ac += 8` **first**, then the band is read on the raised value (>= 70: roll mod 4 gives Wakizashi B, Wakizashi A, Kozuka, the dog; 30 to 69: mod 4 gives Kozuka, Wakizashi A, dog, dog; below
-  30: mod 3 gives Kozuka, dog, dog). The roll is `random() mod N` (stream 2, `scriptModCtx`); a single-target move is aimed by a uniform pick (stream 4, `pickGirl`) drawn after the roll; Wakizashi B and Zanmato take no
-  target. Deterministic under the seeded RNG. No result-driven gain, no timer (the Meteor enrage block never runs in play).
+  30: mod 3 gives Kozuka, dog, dog). The roll is `random() mod N` (stream 2, `scriptModCtx`); every real move but Zanmato, Wakizashi B included (RE re-review: one girl, `[strongly indicated]`), is aimed at one girl by a uniform pick (stream 4, `pickGirl`) drawn after the roll; Zanmato takes the whole
+  party and no search. Deterministic under the seeded RNG. No result-driven gain, no timer (the Meteor enrage block never runs in play).
 - **The dog pick is a poll without a turn**: Yojimbo raises the battle flag `daigoroCalled`, wakes Daigoro (`wakeIdle(dog, units, WAKE_ON_FLAG)`), marks `AI_REPOLL` and returns `idleFor(self, 1)` (polled again on the
   very next step, no recovery). The intent board's dry run follows such polls to the move that is really coming (`intent.ts#dryRun`, additive), so it never says "No action" for a poll that is not a turn. Zanmato is the
   14th poll of every cycle; the real actions before it number 7.25 on average and 4 to 10 in about 96 percent of cycles (the test computes it from the bands).
 - **Daigoro is an actor of his own** (row 174, AGI 120, his own gauge): a second `EnemyDef` in the group's `parts` (`isPart`: never counted for victory, `results.ts`), `untargetable` (the FFX-2 wiki; `targeting.ts#isTargetable`:
   no menu and no area move reaches him) and `hideHpBar`. His script, on his own turn: flag up -> clear it and bite one girl (row 0x40a5); else sleep until woken (`idleFor(self, IDLE_UNTIL_WOKEN, WAKE_ON_FLAG)`, and
   `AI_NO_INTENT` so the intent board looks past a sleeper). The additive pieces are two constants and a marker in `ai/idle.ts`, no change to the engine core. The bite is uniform-aimed (see above).
-- **The five command rows** (`command-records/tourist-trap.ts`, attached like every other FFX-2 boss's): Kozuka 0x40a1, Wakizashi A 0x40a2, Wakizashi B 0x40a3 (all enemies, 0x17), Zanmato 0x40a4 (charge 120, rest 200),
+- **The five command rows** (`command-records/tourist-trap.ts`, attached like every other FFX-2 boss's): Kozuka 0x40a1, Wakizashi A 0x40a2, Wakizashi B 0x40a3 (target byte 0x17, kept as the game's row; the script aims it at one girl), Zanmato 0x40a4 (all enemies 0x17, charge 120, rest 200),
   the bite 0x40a5 (rest 100). Accuracy formula 0 on all five. Zanmato is the Magus Sisters' Delta Attack shape (formula 0x0a, `target.hp - 1` and MP the same, damage type `other`): no Protect, Shell or Defense reduces it,
   it cannot kill, a KO'd girl is untouched. Kozuka: formula 4 power 4 on the MP pool (a quarter of current MP), Poison at status byte 100.
-- **Action time** (the flat 3 s add-on) stays ON: the sibling possessed-aeon chapters carry it on top of their rows too (the Road: Bailey's option A, `docs/plans/fallen-aeons-bench.md`; Ixion at Djose: D-269,
-  `docs/handoff/chapter-ixion.md`, `docs/plans/ixion-bench.md`; Cloister 100), and `docs/handoff/re-parity-rc3.md` keeps it on top of the rows. The Zanmato cycle is reported both ways in the handoff.
+- **Action time** (the flat 3 s add-on) stays ON **by precedent, awaiting Bailey's pick for this chapter** (his picks were per chapter: the Cloister D-151, the Road D-187 / D-197, `docs/plans/fallen-aeons-bench.md`;
+  Ixion at Djose D-269, `docs/handoff/chapter-ixion.md`, `docs/plans/ixion-bench.md`): the sibling possessed-aeon chapters carry it on top of their rows, and `docs/handoff/re-parity-rc3.md` keeps it on top of the rows.
+  The Zanmato cycle is reported both ways in the handoff as an open decision.
 - **Rewards, immunities, steal** laid on `EnemyDef`/`EnemyRewards` by the same shapes the Experiment uses; the game's rows (`attachMonsterRecords`, `MONSTER_RECORDS` keyed `group/enemy`) are attached (special word 0x3c3 for
   Yojimbo, 0 for Daigoro; Reflect byte 0).
 

@@ -22,10 +22,10 @@
  * `research/ffx-yojimbo.md` §8.2 and Y-10, `[single source: wiki]`; the review's init for the dog: cursor off) and is **not counted for victory**: a *part* of the group (`parts`), so the engine never counts him
  * (`results.ts`), the targeting code skips `untargetable`, and the HUD draws no bar for him (`hideHpBar`).
  *
- * **Pace** is the rows' (costs over AGI 120, `../command-records/tourist-trap.ts`), and the formation carries **action time ON at 3 s on top**, exactly as the sibling possessed-aeon chapters do
- * (the Road, Chapter XI, `./fallen-aeons-road.ts`: Bailey's option A, 2026-09-25; Ixion at Djose, Chapter XVI, `./ixion-djose.ts`: D-269, 2026-09-27, `docs/handoff/chapter-ixion.md` and `docs/plans/ixion-bench.md`;
- * Cloister 100, Chapter XIII). The rule is sourced `[verified: 2 sources]`, its length is not (`src/battle/ffx2/action-time.ts`). `TOURIST_TRAP_ACTION_TIME_ON = false` turns it off; no boss number moves either
- * way, and the handoff reports the Zanmato cycle both ways.
+ * **Pace** is the rows' (costs over AGI 120, `../command-records/tourist-trap.ts`), and the formation carries **action time ON at 3 s on top**, **kept by precedent, awaiting Bailey's pick for this chapter**:
+ * his add-on picks were per chapter (the Cloister, Chapter XIII: D-151; the Road, Chapter XI, `./fallen-aeons-road.ts`: option A, D-187 and D-197, 2026-09-25; Ixion at Djose, Chapter XVI, `./ixion-djose.ts`: D-269,
+ * 2026-09-27, `docs/handoff/chapter-ixion.md` and `docs/plans/ixion-bench.md`), and there is no row for this one. The rule is sourced `[verified: 2 sources]`, its length is not (`src/battle/ffx2/action-time.ts`).
+ * `TOURIST_TRAP_ACTION_TIME_ON = false` turns it off; no boss number moves either way, and the handoff reports the Zanmato cycle both ways as an open decision.
  *
  * The painting is PROVISIONAL and borrowed: Lady Ginnem's Yojimbo and Daigoro of the FFX Chapter IX (`characters/yojimbo-cavern`, `characters/daigoro`): same aeon, same dog. Nothing is replaced.
  */
@@ -55,14 +55,15 @@ export const YOJIMBO_MP = 9999;
 export const YOJIMBO_AGI = 120;
 
 /**
- * **Action time, ON at 3 s** (see the header): the sibling possessed-aeon chapters' flat add-on, on top of the rows. `[estimate]`: unsourced length, Bailey's pick for the other aeons. `false` turns it off.
+ * **Action time, ON at 3 s** (see the header): the sibling possessed-aeon chapters' flat add-on, on top of the rows. `[estimate]`: unsourced length; **kept by precedent, awaiting Bailey's pick for this chapter** (his picks
+ * were per chapter: D-151, D-187 / D-197, D-269). `false` turns it off.
  */
 export const TOURIST_TRAP_ACTION_TIME_ON: boolean = true;
 export const TOURIST_TRAP_ACTION_TIME_SECONDS = 3;
 const actionTime = TOURIST_TRAP_ACTION_TIME_ON ? { actionTimeSeconds: TOURIST_TRAP_ACTION_TIME_SECONDS } : {};
 
 /**
- * Row 170's resist bytes (`[game rows]`, laid on by `./records-tourist-trap.ts` as well): group 1 at 255 for Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse and Eject;
+ * Row 170's resist bytes (`[game rows]`, laid on by `./records-tourist-trap.ts` as well): group 1 at 255 for Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, Eject, Itchy and Auto-Life (slots 17 and 18);
  * group 2 at 255 for Slow, Stop, the seven stat stages and Doom (so no Break lands). Delay and Interrupt (the row's special word, bits 6 and 9) have no status slot here and stay as authored:
  * `STANDARD_AILMENT_IMMUNITY` carries them. **Reflect is NOT immune** (row 170 group 2 index 2 reads 0; the wiki's list said otherwise): not listed.
  */
@@ -72,6 +73,8 @@ const YOJIMBO_IMMUNE: StatusImmunities = {
   ...DEF_MDEF_MOD_IMMUNITY, // all seven stat stages: no Break lands
   stop: 255,
   slow: 255,
+  itchy: 255, // group 1 slot 17
+  'auto-life': 255, // group 1 slot 18
 };
 
 /** Music: "Aeons" plays in the fight `[single source: wiki Cavern page]`; our original FFX-2 aeon cue (the Road's and Ixion's: the game plays the same track at each) is that slot. */
@@ -142,7 +145,7 @@ export const x2Daigoro: EnemyDef = {
   mp: 1,
   level: 30, // row 174
   affinities: {}, // row 174: no element byte set
-  immunities: {},
+  immunities: { curse: 255, itchy: 255, 'auto-life': 255 }, // row 174: group 1 slots 8, 17 and 18, nothing else
   immunityFlags: [], // row 174: special word 0
   forms: [{ name: 'Daigoro', spriteKey: X2_DAIGORO_SPRITE, hp: 1 }],
   aiScriptId: X2_DAIGORO_SCRIPT,

@@ -5,12 +5,14 @@
  * (`research/re-ffx2-yojimbo-valefor.md` sections 3 to 5, numbers only), pinned by `tests/unit/chapters/tourist-trap-engine.test.ts` against `tests/fixtures/parity/ffx2/tourist_trap_rows.json`.
  * Merged into `MONSTER_RECORDS` by `./records.ts`.
  *
- * What the rows say: Yojimbo: Accuracy 95; group 1 immune (255) to Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse (slots 0 to 8) and Eject (slot 10); group 2
+ * What the rows say: Yojimbo: Accuracy 95; group 1 immune (255) to Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse (slots 0 to 8), Eject (slot 10), **Itchy (17) and Auto-Life (18)**; group 2
  * immune to Slow, Stop, the seven stat stages and Doom (slots 5 to 14); Shell, Protect, **Reflect**, Regen and Haste are NOT resisted (the wiki's Reflect immunity is not in the record); steal
- * byte 128 (50.2 percent), Power Wrist x1 common and x1 rare (item 0x9008); Pilfer Gil 2,000; no Bribe slot; Zantetsu 120. Daigoro: Accuracy 95; immune to Curse only; no steal, no gil.
+ * byte 128 (50.2 percent), Power Wrist x1 common and x1 rare (item 0x9008); Pilfer Gil 2,000; no Bribe slot; Zantetsu 120. Daigoro: Accuracy 95; group 1 immune to Curse (8), Itchy (17) and Auto-Life (18) and nothing else; no steal, no gil.
  *
- * **What is deliberately NOT wired** (the RE note marks it unmapped, rule 6): **group 1 slots 17 and 18** (255 on both rows: "unmapped (raw 255, 255)", section 5; they have no status slot here that the note proves, so
- *   leaving them out changes nothing in a fight) and **the monster-type word (+0x9a)**, read 0 and unmapped (`species` is 0).
+ * **Group 1 slots 17 and 18 are wired** (255 on both rows): slot 17 is Itchy and slot 18 Auto-Life, per the game's own `command.h`, so the engine's slot table (`adapt/slots.ts`) is right (RE session, answering this chapter's
+ *   question, 2026-10-14: 369 of 370 rows carry 255 at both; the rows note's sections 3 and 5 are being corrected: their "unmapped" wording predates it). An earlier draft left both out on that wording.
+ *
+ * **What is deliberately NOT wired** (the RE note marks it unmapped, rule 6): **the monster-type word (+0x9a)**, read 0 (`species` is 0).
  *
  * **The special word is the game's own, 0x3c3** (RE review 2026-10-14, m170 / m174: "special word 0x3c3 for Yojimbo", Daigoro's 0): bits 0 (no percentage-HP formulas), 1 (a hit reaction does not slow its
  *   gauge), 6 (no ATB damage), 7 and 8 (unmapped, read by nothing here) and 9 ("immune to magic cancel" by the ATB note). **This engine reads bit 9 (0x200) as Bribe immunity** (`adapt/words.ts`, the W3 lane's reading,
@@ -27,7 +29,7 @@ const YOJIMBO_ROW: FFX2MonsterRecord = {
   row: 170,
   table: 1,
   acc: 95,
-  resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255 },
+  resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255, 17: 255, 18: 255 },
   resist2: { 5: 255, 6: 255, 7: 255, 8: 255, 9: 255, 10: 255, 11: 255, 12: 255, 13: 255, 14: 255 },
   special: 0x3c3, // the row's word as it is (see the header)
   species: 0,
@@ -43,7 +45,7 @@ const DAIGORO_ROW: FFX2MonsterRecord = {
   row: 174,
   table: 1,
   acc: 95,
-  resist1: { 8: 255 },
+  resist1: { 8: 255, 17: 255, 18: 255 },
   resist2: {},
   special: 0,
   species: 0,

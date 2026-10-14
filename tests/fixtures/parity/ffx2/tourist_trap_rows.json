@@ -179,7 +179,7 @@
   "abilityList": []
  },
  "unmapped": {
-  "_note": "Raw values the RE note marks unmapped (section 5). Never read by the engine or the tests below; kept so the numbers are on record.",
+  "_note": "Raw values the RE note marks unmapped (section 5). Never read by the engine or the tests below; kept so the numbers are on record. Group 1 slots 17 and 18 (255 on both rows) are NOT here any more: they are Itchy and Auto-Life per the game's own command.h (RE session, 2026-10-14), and are wired.",
   "soundId": {
    "yojimbo": 4266,
    "daigoro": 4270
@@ -195,16 +195,6 @@
   "specialBits7and8": {
    "yojimbo": "set",
    "daigoro": "clear"
-  },
-  "group1Indexes17and18": {
-   "yojimbo": [
-    255,
-    255
-   ],
-   "daigoro": [
-    255,
-    255
-   ]
   },
   "thinkingByte": {
    "yojimbo": 0,

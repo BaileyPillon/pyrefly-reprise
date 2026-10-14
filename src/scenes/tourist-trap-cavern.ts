@@ -49,9 +49,12 @@ const heightOf = (model: number): number => Math.round(DJOSE_PARTY_HEIGHT * (mod
 export const YOJIMBO_FIGURE_HEIGHT = heightOf(YOJIMBO_MODEL_HEIGHT);
 export const DAIGORO_FIGURE_HEIGHT = heightOf(DAIGORO_MODEL_HEIGHT);
 
-/** Where the two stand (staging, ours): Yojimbo right of the party on the pad's side, the dog a step in front of him and toward the girls. */
-export const YOJIMBO_SPOT: [number, number, number] = [3.6, 0, -4.4];
-export const DAIGORO_SPOT: [number, number, number] = [1.9, 0, -3.4];
+/**
+ * Where the two stand (staging, ours): Yojimbo right of the party, the dog a step in front of him and toward the girls. Solved in the browser at 1600x900 and 390x844 (the first menu): at x 3.6 the command stack hid
+ * Yojimbo's legs and the intent slab his hat, and on the phone he stood at the right edge; at x 2.7 he clears both and the pair sits closer to the girls.
+ */
+export const YOJIMBO_SPOT: [number, number, number] = [2.7, 0, -4.4];
+export const DAIGORO_SPOT: [number, number, number] = [1.4, 0, -3.4];
 const ENEMY_SLOTS: Array<[number, number, number]> = [YOJIMBO_SPOT, DAIGORO_SPOT, [-0.5, 0, -6.6]];
 
 const STAGING = {

@@ -40,7 +40,7 @@ export const FFX2_TOURIST_TRAP_DOC: GuideDoc = {
       items: [
         'Early on he mostly calls Daigoro, with now and then a Kozuka',
         'Midway the blade comes in: Wakizashi, on one girl, joins the list',
-        'Late in the count a second, lighter Wakizashi joins it, and that one cuts the whole party',
+        'Late in the count a second, lighter Wakizashi joins it, and it too falls on one girl',
         'When the count is full he uses “Zanmato”, and the count starts over',
       ],
     },
