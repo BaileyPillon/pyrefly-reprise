@@ -52,7 +52,7 @@ import { gaugeSteps } from './lookahead.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
-import { inertLead, setToLead } from './intentLead.ts';
+import { damagesMp, emptiesMpLead, inertLead, kindWord, setToLead } from './intentLead.ts';
 import { rolledChance, rollsStatus, statusProbability, statusProbabilityBetween } from './adapt/preview.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
@@ -255,7 +255,10 @@ export function describeAbility(def: AbilityDef): string {
   const lead = inertLead(def, where, statusWord);
   const inert = lead !== null;
   if (def.formula === 'none' && def.statusEffects.length > 0) {
-    parts.push(`Inflicts ${def.statusEffects.map((s) => statusWord(s.status)).join(', ')} on ${where}`);
+    const inflicts = def.statusEffects.map((s) => statusWord(s.status)).join(', ');
+    // Looming Glacier sets one girl's MP to 0 as well as inflicting Stop (row 0x4102, class 2): say both.
+    const empties = emptiesMpLead(def, where);
+    parts.push(empties ? `${empties} and inflicts ${inflicts}` : `Inflicts ${inflicts} on ${where}`);
   } else if (setTo) {
     parts.push(setTo);
   } else if (lead) {
@@ -264,10 +267,12 @@ export function describeAbility(def: AbilityDef): string {
     parts.push(`Restores HP to ${where}`);
   } else {
     const els = def.element.filter((e) => e !== 'none');
-    const kind =
-      def.damageType === 'physical' ? 'Physical' : def.damageType === 'magical' ? 'Magical' : '';
+    // The word follows the move's own type, except an MP drain whose game row is neither physical nor magical
+    // (Leblanc's Osmose); a move that damages MP says so ("Physical non-elemental MP damage to one girl", Sonic Wings).
+    const kind = kindWord(def);
     const element = els.length > 0 ? `${els.map((e) => ELEMENT_WORD[e]).join('/')} ` : 'non-elemental ';
-    parts.push(`${kind} ${element}damage to ${where}`.replace(/\s+/g, ' ').trim());
+    const pool = damagesMp(def) ? 'MP ' : '';
+    parts.push(`${kind} ${element}${pool}damage to ${where}`.replace(/\s+/g, ' ').trim());
   }
   if (def.hits > 1) parts.push(`${def.hits} hits`);
   if (def.flags.includes('drains')) parts.push('drains the damage back as HP');

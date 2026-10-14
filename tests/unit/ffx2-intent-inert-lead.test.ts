@@ -2,8 +2,9 @@
  * iter2-b6 CHECK blockers B6CHK-01 and B6CHK-02: PR-0188's "inert" branch in the FFX-2 sentence
  * builder made two enemy intent sentences false.
  *
- * - Delta Attack (Chapter XI, Magus Sisters) sets the party to 1 HP and 0 MP through
- *   `extra.setHpTo` / `extra.setMpTo`, but read "Deals no damage.".
+ * - Delta Attack (Chapter XI, Magus Sisters) sets the party to 1 HP through `extra.setHpTo`, but read
+ *   "Deals no damage.". (Its sentence also said "and 0 MP", from the wiki's `extra.setMpTo`; the game's own row 0x40a9 is
+ *   damage class 1, HP only, and the engine keeps her MP, so since release candidate r48-rc it says "at 1 HP".)
  * - The enemy Dispels (Vegnagun's Bulwark Left, the Redoubt Left, Paragon Oversoul, Chapter V)
  *   read "Cures Auto Life, Shell, ..." where they strip the girls' buffs.
  *
@@ -24,10 +25,13 @@ const row = (id: string): AbilityDef => {
 };
 
 describe('FFX-2 intent: a formula-none row is only inert when nothing in it does harm', () => {
-  it('Delta Attack says it leaves the whole party at 1 HP and 0 MP, never "no damage"', () => {
-    const text = describeAbility(row('x2-magus-delta-attack'));
+  it('Delta Attack says it leaves the whole party at 1 HP (HP only, the game\'s row 0x40a9 is class 1), never "no damage"', () => {
+    const def = row('x2-magus-delta-attack');
+    expect(def.ffx2Record?.damageClass, 'the game\'s row: class 1, HP only').toBe(1);
+    const text = describeAbility(def);
     expect(text).not.toMatch(/no damage/i);
-    expect(text).toBe('Leaves the whole party at 1 HP and 0 MP.');
+    expect(text).not.toMatch(/MP/);
+    expect(text).toBe('Leaves the whole party at 1 HP.');
   });
 
   it('every enemy Dispel says it removes the buffs, never "Cures"', () => {
