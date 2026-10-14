@@ -1,0 +1,108 @@
+/*
+ * COLOUR VISION's CSS half (ACCESSIBILITY tab, PR-0032; Bailey, 2026-10-12, "I'll go with all of your
+ * recommendations"). The colours of the four groups that collapse under a simulation of colour blindness,
+ * and the second cue beside each (a shape or a letter), under `html[data-colour-vision]`, which
+ * `app/applyComfort.ts` sets while a mode is on together with the `--cvd-*` variables below, taken from
+ * `ui/common/colourVision.ts` (the one table; `tests/unit/colour-vision.test.ts` re-runs the simulation on it).
+ * Nothing here applies with the row OFF: no attribute, no variable, no rule matches, no pixel changes.
+ *
+ * Only the four groups move; the other seven the round measured shrink but stay readable or already carry
+ * a word, so they are not touched. Game case per group (AGENTS.md rule 14):
+ *   target    both games the bracket, plate and ALL label of `ffx-hud.css`: FFX-2's HUD draws the same `.ffx-target--ally|self|enemy` corners and name plate
+ *                        (under `.ffx2hud`, beside its own pink flower reticle and TARGET plate, which carry no side colour)
+ *   numerals  both games `damage-numbers.css`: one `DamageNumbers` serves both HUDs
+ *   gates     FFX-2 only the Garment Grid pips of party prep (`x2prep-gate`); the Spherechange wheel and flourish are drawn
+ *                        in TS (`SpherechangeWheel.ts`, `SpherechangeFlourish.ts`) from the same table
+ *   tints     FFX only   the figure's tint is a multiply on the painting (`statusFigureTint.ts`), and the initial over the
+ *                        head is a mark (`statusMarks.ts`), styled at the end of this file
+ */
+
+/* --------------------------------------------------------------- target (both games) */
+
+/* Ally and self colours move; enemy keeps its gold in both modes. */
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--ally { --ffx-mark: var(--cvd-target-ally); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--self { --ffx-mark: var(--cvd-target-self); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__plate--ally { --ffx-plate-mark: var(--cvd-target-ally); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__plate--self { --ffx-plate-mark: var(--cvd-target-self); }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__all--ally { --ffx-all-mark: var(--cvd-target-ally); }
+
+/* The second cue: a tick on each corner of the bracket that differs by side. A diamond for an enemy, a plus
+   for an ally, a ring for yourself. It sits inside the L, in the bracket's own colour, and takes the corner's
+   ink shadow and the dim of a bracket that is not the one aimed at. The name plate keeps its name and letter. */
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c::after {
+  content: '';
+  position: absolute;
+  box-sizing: border-box;
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+}
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--tl::after { left: 6px; top: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--tr::after { right: 6px; top: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--bl::after { left: 6px; bottom: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target__c--br::after { right: 6px; bottom: 6px; }
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--enemy .ffx-target__c::after {
+  background: var(--ffx-mark);
+  transform: rotate(45deg) scale(0.86);
+}
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--ally .ffx-target__c::after {
+  background:
+    linear-gradient(var(--ffx-mark), var(--ffx-mark)) center / 100% 2px no-repeat,
+    linear-gradient(var(--ffx-mark), var(--ffx-mark)) center / 2px 100% no-repeat;
+}
+html[data-colour-vision] :is(.ffxhud, .ffx2hud) .ffx-target--self .ffx-target__c::after {
+  border: 2px solid var(--ffx-mark);
+  border-radius: 50%;
+}
+
+/* ---------------------------------------------------------------- numerals (both games) */
+
+/* MP's gradient: today's sky blue, or violet under BLUE-YELLOW. RED-GREEN leaves it as it is (the variables carry today's values).
+   The second cue is text: a heal already prints "+", and an MP numeral prints "MP" (`DamageNumbers.ts`). */
+html[data-colour-vision] .dnum--mp {
+  background: linear-gradient(180deg, var(--cvd-mp-hi) 0%, var(--cvd-mp-lo) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ------------------------------------------------------------------ gates (FFX-2 only) */
+
+html[data-colour-vision] .x2prep-gate--red { background: var(--cvd-gate-r); }
+html[data-colour-vision] .x2prep-gate--green { background: var(--cvd-gate-g); }
+html[data-colour-vision] .x2prep-gate--blue { background: var(--cvd-gate-b); }
+html[data-colour-vision] .x2prep-gate--yellow { background: var(--cvd-gate-y); }
+
+/* The second cue: the gate's letter. The pip is a 6px diamond, too small to hold one, so under a mode it is
+   a 9px tile with the letter on it (R, G, B or Y; `title` and the GRANTS line already name the colour). */
+html[data-colour-vision] .x2prep-gate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 9px;
+  height: 9px;
+  transform: none;
+  border-radius: 1.5px;
+}
+html[data-colour-vision] .x2prep-gate::after {
+  content: attr(data-gate);
+  font: 700 6px / 1 var(--ig-font-display, 'Chakra Petch', sans-serif);
+  color: #fff;
+  -webkit-text-stroke: 0.9px #0b0a12;
+  paint-order: stroke fill;
+}
+
+/* ------------------------------------------------------------------ tints (FFX only) */
+
+/* The status's initial over the fighter's head, beside the tint (`statusMarks.ts`: B for Berserk, C for Curse).
+   Static: no pulse and no drift, so REDUCE MOTION and REDUCE FLASHES have nothing to change. Both letters at once sit side by side. */
+.stm--initial i {
+  left: calc(-9px * var(--k));
+  top: calc(-60px * var(--k));
+  font: 700 calc(28px * var(--k)) / 1 'Chakra Petch', sans-serif;
+  color: #f4f1e8;
+  -webkit-text-stroke: calc(3.4px * var(--k)) #0b0a12;
+  paint-order: stroke fill;
+}
+.stm--initial-b:has(~ .stm--initial-c) i { transform: translateX(calc(-15px * var(--k))); }
+.stm--initial-b ~ .stm--initial-c i { transform: translateX(calc(15px * var(--k))); }

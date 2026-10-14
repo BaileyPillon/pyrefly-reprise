@@ -15,6 +15,7 @@ import type { GameId } from '../../battle/common/types.ts';
 import type { Settings } from '../SaveData.ts';
 import { fxSummary } from '../fxParts.ts';
 import { TEXT_SIZES, textSizeLabel } from '../saveComfort.ts';
+import { colourVisionLabel } from '../saveAccess.ts';
 import { escapeHtml } from '../../ui/common/html.ts';
 
 // ------------------------------------------------------------------ options
@@ -47,15 +48,15 @@ export const TEXT_SPEED_MAX: (typeof TEXT_SPEEDS)[5] = 2;
 /**
  * The OPTIONS rows, read out of the live {@link Settings}.
  *
- * Volume, text speed, the three comfort rows of accessibility A2 (TEXT SIZE,
- * REDUCE MOTION, LOW EFFECTS; D-285, `docs/concepts/r29-options/options.html`
- * frame A2: under TEXT SPEED, TEXT SIZE nudged with Left / Right like it), the
- * FFX-2 Active/Wait toggle, and whether the strategy guide starts visible.
- * Under LOW EFFECTS, EYE CANDY (D-317, option A: Bailey, 2026-10-02, "all your recommendations,
+ * Volume, text speed, EYE CANDY (D-317, option A: Bailey, 2026-10-02, "all your recommendations,
  * godspeed"), where eye-candy D's three look rows were: one row that opens the EYE CANDY page
  * (`pause/eyeCandyPage.ts`) and reads ALL ON, ALL OFF or `n OF 11` for `game` (`fxParts.ts`); the
- * pause drops it in FF7, which draws no eye candy.
- * `skipSeenCutscenes` stays off the menu.
+ * pause drops it in FF7, which draws no eye candy. Then the FFX-2 Active/Wait toggle, and whether
+ * the strategy guide starts visible. `skipSeenCutscenes` stays off the menu.
+ *
+ * TEXT SIZE, REDUCE MOTION and LOW EFFECTS (the three comfort rows of accessibility A2, D-285) moved
+ * to the ACCESSIBILITY tab with REDUCE FLASHES and COLOUR VISION (PR-0032, OPT-B: Bailey, 2026-10-12,
+ * "I'll go with all of your recommendations"): {@link accessRows}. A setting lives in one place.
  */
 export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): OptionRow[] {
   const pct = (v: number): string => `${Math.round(v * 100)}`;
@@ -69,6 +70,24 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
       value: `${settings.textSpeed}x`,
       ratio: (settings.textSpeed - TEXT_SPEED_MIN) / (TEXT_SPEED_MAX - TEXT_SPEED_MIN),
     },
+    { id: 'eyeCandy', label: 'EYE CANDY', value: fxSummary(settings, game), ratio: null },
+    { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
+    { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
+  ];
+}
+
+/**
+ * The ACCESSIBILITY tab's COMFORT rows (PR-0032; the layout is OPT-B of `critic/scratch/options-additions-2026-10-12/`):
+ * TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS and COLOUR VISION, in that order. The first, second and fourth
+ * moved here from OPTIONS unchanged (same ids, same labels, same values, same keys: TEXT SIZE nudged with Left / Right
+ * like TEXT SPEED); REDUCE FLASHES and COLOUR VISION are new, both OFF by default. Key remapping is not built, so the
+ * mock's KEYS column is not here.
+ *
+ * COLOUR VISION is dropped in FF7 (the hidden experiment): none of its four groups is drawn there, so the row would
+ * switch nothing (the way EYE CANDY is dropped for FF7); REDUCE FLASHES works there through the shared stage and stays.
+ */
+export function accessRows(settings: Readonly<Settings>, game: GameId = 'ffx'): OptionRow[] {
+  const rows: OptionRow[] = [
     {
       id: 'textSize',
       label: 'TEXT SIZE',
@@ -76,11 +95,11 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
       ratio: Math.max(0, TEXT_SIZES.indexOf(settings.textSize)) / (TEXT_SIZES.length - 1),
     },
     { id: 'reduceMotion', label: 'REDUCE MOTION', value: settings.reduceMotion ? 'ON' : 'OFF', ratio: null },
+    { id: 'reduceFlashes', label: 'REDUCE FLASHES', value: settings.reduceFlashes ? 'ON' : 'OFF', ratio: null },
     { id: 'lowEffects', label: 'LOW EFFECTS', value: settings.lowEffects ? 'ON' : 'OFF', ratio: null },
-    { id: 'eyeCandy', label: 'EYE CANDY', value: fxSummary(settings, game), ratio: null },
-    { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
-    { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },
   ];
+  if (game !== 'ff7') rows.push({ id: 'colourVision', label: 'COLOUR VISION', value: colourVisionLabel(settings.colourVision), ratio: null });
+  return rows;
 }
 
 export function optionsTabHtml(settings: Readonly<Settings>, selected: number): string {

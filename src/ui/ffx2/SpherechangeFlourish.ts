@@ -34,6 +34,8 @@
 import './spherechange-flourish.css';
 import type { CombatantId, GateColour } from '../../battle/common/types.ts';
 import { dressphereColour, dressphereLabel } from './dressphereIcons.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
+import { cvdOr } from '../common/colourVision.ts';
 
 /** §4.5.2's four-colour gate set, verbatim — the same table `SpherechangeWheel` draws its orbs from. */
 const GATE_HEX: Record<GateColour, string> = {
@@ -120,7 +122,8 @@ export function playSpherechangeFlourish(
   const bodyH = Math.max(Math.abs(feet.y - head.y), 24 * scale);
   const colour = dressphereColour(moment.to);
   const gates = moment.gatesCrossed;
-  const gateColour = gates.length > 0 ? (GATE_HEX[gates[gates.length - 1]!] ?? colour) : colour;
+  const lastGate = gates.length > 0 ? gates[gates.length - 1]! : null;
+  const gateColour = lastGate ? cvdOr('gates', lastGate, readColourVision(), GATE_HEX[lastGate] ?? colour) : colour; // PR-0032: COLOUR VISION's gate colour (off hands GATE_HEX back untouched)
 
   const el = document.createElement('div');
   el.className = 'ffx2sf';

@@ -18,6 +18,7 @@ import type { GameId } from '../../../battle/common/types.ts';
 import type { SaveStore } from '../../SaveData.ts';
 import { isFxLookField } from '../../fxLooks.ts';
 import { fxLookOnPatch, isFxSwitchField } from '../../fxParts.ts';
+import { stepColourVision } from '../../saveAccess.ts';
 import { stepTextSize, wrapTextSize } from '../../saveComfort.ts';
 import { TEXT_SPEEDS, VOLUME_STEP } from '../PauseScreenPanels.ts';
 
@@ -76,6 +77,14 @@ export function adjustSetting(save: SaveStore, id: string, dir: 1 | -1, press = 
       return true;
     case 'lowEffects':
       save.setSettings({ lowEffects: !settings.lowEffects });
+      return true;
+    case 'reduceFlashes':
+      // PR-0032 (ACCESSIBILITY tab): flips like REDUCE MOTION. `applyComfort` puts it on <html> on the write; the stage reads it live.
+      save.setSettings({ reduceFlashes: !settings.reduceFlashes });
+      return true;
+    case 'colourVision':
+      // PR-0032: OFF, RED-GREEN, BLUE-YELLOW. Left, Right, Confirm and a tap all step and wrap, so a phone is never stuck on a mode.
+      save.setSettings({ colourVision: stepColourVision(settings.colourVision, dir) });
       return true;
     case 'ffx2Atb':
       save.setSettings({ ffx2Atb: settings.ffx2Atb === 'active' ? 'wait' : 'active' });

@@ -117,18 +117,18 @@ const FFX_PANELS = [
 const PHONE_PANELS = ['.ffxhud .ig-ctb', '.ffxhud .ig-stat', '.ffxhud .ig-cmd', '.phud-guide', '.phud-foot'].join(', ');
 
 test.describe('the three rows, by real input', () => {
-  test('keys at 1600x900: TEXT SIZE, REDUCE MOTION and LOW EFFECTS, kept across a reload', async ({ page }) => {
+  test('keys at 1600x900 on the ACCESSIBILITY tab (PR-0032, OPT-B): TEXT SIZE, REDUCE MOTION and LOW EFFECTS, kept across a reload', async ({ page }) => {
     await boot(page, { reduceMotion: false, lowEffects: false });
     await toMenu(page);
     expect(await html(page)).toEqual({ size: '100', motion: false, effects: false });
     await page.keyboard.press('Escape');
     await page.waitForTimeout(800);
     for (let i = 0; i < 12; i++) {
-      if ((await page.evaluate(() => document.querySelector<HTMLElement>('.pause__tab--on')?.dataset['tab'])) === 'options') break;
+      if ((await page.evaluate(() => document.querySelector<HTMLElement>('.pause__tab--on')?.dataset['tab'])) === 'accessibility') break;
       await page.keyboard.press('KeyE');
       await page.waitForTimeout(250);
     }
-    expect(await page.evaluate(() => document.querySelector<HTMLElement>('.pause__tab--on')?.dataset['tab'])).toBe('options');
+    expect(await page.evaluate(() => document.querySelector<HTMLElement>('.pause__tab--on')?.dataset['tab'])).toBe('accessibility');
     const go = async (id: string): Promise<void> => {
       for (let i = 0; i < 16 && (await selectedRow(page)) !== id; i++) {
         await page.keyboard.press('ArrowDown');
@@ -162,12 +162,12 @@ test.describe('the three rows, by real input', () => {
 
   test.describe('taps at 390x844', () => {
     test.use({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
-    test('the pause chip, the OPTIONS tab and the rows answer taps; TEXT SIZE wraps back to 100 %', async ({ page }) => {
+    test('the pause chip, the ACCESSIBILITY tab and the rows answer taps; TEXT SIZE wraps back to 100 %', async ({ page }) => {
       await boot(page, { reduceMotion: false, lowEffects: false });
       await toMenu(page);
       await page.locator('.battle-pause-chip').tap();
       await page.waitForTimeout(800);
-      await page.locator('.pause__tab[data-tab="options"]').tap();
+      await page.locator('.pause__tab[data-tab="accessibility"]').tap();
       await page.waitForTimeout(600);
       const row = (id: string) => page.locator(`.pause__row[data-row="${id}"]`);
       const seen: string[] = [];

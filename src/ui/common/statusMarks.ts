@@ -17,6 +17,9 @@ import './status-marks.css';
 import './status-marks-calm.css';
 import type { BattleState, CombatantId, StatusId } from '../../battle/common/types.ts';
 import { figureLookOf, type FigureMark, type StatusGame } from './statusLooks.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
+import type { ColourVision } from '../../app/saveAccess.ts';
+import { cvdInitial } from './colourVision.ts';
 
 export type Point = { x: number; y: number };
 export type Rect = { x: number; y: number; w: number; h: number };
@@ -47,12 +50,25 @@ export function markScale(h: number): number {
   return Math.max(K_MIN, Math.min(K_MAX, h / REFERENCE_HEIGHT));
 }
 
-/** Every mark a combatant wears in `game`, in draw order, deduplicated. Pure. */
-export function marksFor(game: StatusGame, statuses: Partial<Record<string, unknown>>): FigureMark[] {
+/**
+ * Every mark a combatant wears in `game`, in draw order, deduplicated. Pure.
+ *
+ * `cvd` (COLOUR VISION on, PR-0032; FFX only, where the Berserk and Curse tints collapse under protanopia): a Berserk
+ * fighter also wears a B and a Curse fighter a C over the head, the second cue beside the tint. Off: unchanged.
+ */
+export function marksFor(game: StatusGame, statuses: Partial<Record<string, unknown>>, cvd: ColourVision = 'off'): FigureMark[] {
   const out: FigureMark[] = [];
   for (const [id, inst] of Object.entries(statuses)) {
     if (inst === undefined || inst === null) continue;
     for (const m of figureLookOf(game, id as StatusId)?.marks ?? []) if (!out.includes(m)) out.push(m);
+  }
+  if (game === 'ffx' && cvd !== 'off') {
+    for (const [id, inst] of Object.entries(statuses)) {
+      if (inst === undefined || inst === null) continue;
+      const initial = cvdInitial(id);
+      const mark: FigureMark | null = initial === 'B' ? 'initial-b' : initial === 'C' ? 'initial-c' : null;
+      if (mark && !out.includes(mark)) out.push(mark);
+    }
   }
   return out;
 }
@@ -105,6 +121,10 @@ function markHtml(mark: FigureMark): string {
     case 'orb-blue':
       // NulBlaze / NulFrost / NulShock / NulTide (FFX): "a circling red / white / yellow / blue orb".
       return `<span class="stm stm--orb stm--${mark}"><i></i></span>`;
+    case 'initial-b':
+    case 'initial-c':
+      // COLOUR VISION (PR-0032, FFX only): the initial of the status whose tint it sits beside (`colour-vision.css`).
+      return `<span class="stm stm--initial stm--${mark}"><i>${mark === 'initial-b' ? 'B' : 'C'}</i></span>`;
     default:
       return '';
   }
@@ -126,7 +146,14 @@ export class StatusMarks {
   private layerAt = 0;
   private layerSize = '';
 
-  constructor(private readonly game: StatusGame) {
+  /** The state last synced, and the COLOUR VISION mode it was synced under: a change of mode re-syncs it (PR-0032). */
+  private lastState: BattleState | null = null;
+  private lastCvd: ColourVision = 'off';
+
+  constructor(
+    private readonly game: StatusGame,
+    private readonly cvd: () => ColourVision = readColourVision,
+  ) {
     this.el = document.createElement('div');
     this.el.className = `stm-layer stm-layer--${game}`;
     this.el.dataset['role'] = 'status-marks';
@@ -135,9 +162,12 @@ export class StatusMarks {
   /** Reconcile with the state: who wears which marks. Cheap when nothing changed. */
   sync(state: BattleState): void {
     const live = new Set<CombatantId>();
+    const cvd = this.cvd();
+    this.lastState = state;
+    this.lastCvd = cvd;
     for (const [id, c] of Object.entries(state.combatants)) {
       if (!wearsLooks(c, state.result)) continue;
-      const marks = marksFor(this.game, c.statuses);
+      const marks = marksFor(this.game, c.statuses, cvd);
       if (marks.length === 0) continue;
       live.add(id);
       const key = marks.join(',');
@@ -182,6 +212,7 @@ export class StatusMarks {
   /** Per frame: follow each figure. */
   update(dt: number, field: MarkField | null): void {
     this.clock += dt;
+    if (this.lastState && this.cvd() !== this.lastCvd) this.sync(this.lastState); // COLOUR VISION changed in the pause: the letters follow on resume
     for (let i = this.flashes.length - 1; i >= 0; i--) {
       const f = this.flashes[i]!;
       if (this.clock < f.until) continue;

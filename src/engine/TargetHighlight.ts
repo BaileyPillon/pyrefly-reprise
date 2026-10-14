@@ -58,6 +58,11 @@ export interface TargetSelection {
   side: Side | 'both' | null;
   /** Accent to paint the selected figures with. */
   accent: AccentKind;
+  /**
+   * COLOUR VISION (PR-0032, FFX only: the FFX HUD sets it): the colour the pool takes instead of `ACCENT[accent]`, so the pool agrees with
+   * the bracket and plate the HUD recoloured. Absent: the accent's own colour, as always.
+   */
+  colour?: number;
 }
 
 /** The field this highlighter drives. Exactly what `PaintedStage` can answer. */
@@ -107,7 +112,7 @@ export class TargetHighlight {
     }
     this.current = { ...selection, ids: [...selection.ids] };
     const chosen = new Set(selection.ids);
-    const colour = ACCENT[selection.accent];
+    const colour = selection.colour ?? ACCENT[selection.accent];
 
     for (const id of this.field.staged()) {
       const actor = this.field.actor(id);

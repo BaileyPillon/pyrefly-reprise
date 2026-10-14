@@ -67,6 +67,8 @@ import { NChipMeter } from './advisorChipSizes.ts';
 import { underTheChipRow } from './advisorFolded.ts';
 import { TIP_BADGE } from './advisorTip.ts';
 import { intentChipDockAt } from './intentChipDock.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
+import { cvdColour, hexToInt } from '../common/colourVision.ts';
 
 export { intentChipDockAt } from './intentChipDock.ts';
 
@@ -919,7 +921,9 @@ export class FFXBattleHud implements HudPort {
         this.targeting.select(null);
         this.targeting.xray(null);
       } else {
-        this.targeting.select({ ids: [...ids], mode: sel.mode, accent: kind });
+        // COLOUR VISION (PR-0032, FFX only): the accent pool takes the mode's ally and self colours, to agree with the bracket and plate.
+        const cvd = readColourVision();
+        this.targeting.select({ ids: [...ids], mode: sel.mode, accent: kind, ...(cvd === 'off' ? {} : { colour: hexToInt(cvdColour('target', kind, cvd)) }) });
         // Only when the layout genuinely left it covered. Option B answers
         // occlusion by spreading the lane; this is the fallback for parts of
         // one machine, and it stays off whenever the target is already clear.

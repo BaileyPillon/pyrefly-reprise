@@ -437,13 +437,17 @@ export class ImpactFlash extends Mesh {
    *   a Cure on a party member lit her up exactly like a physical crit --
    *   white is also the worst possible additive colour, because it is the only
    *   one that drives all three channels to clipping at once.
+   * @param cap REDUCE FLASHES (`flashRules.SOFT_BLOOM_CAP`): the most this bloom may reach, 0..1;
+   *   absent leaves the configured peak as it was.
    */
   play(
     at: Vector3 | { x: number; y: number; z: number },
     ms = 260,
     scale = 1,
     colour?: number | string,
+    cap?: number,
   ): void {
+    const peak = cap === undefined ? this.peakOpacity : Math.min(this.peakOpacity, cap);
     this.position.set(at.x, at.y, at.z);
     this.visible = true;
     const mat = this.material as MeshBasicMaterial;
@@ -457,7 +461,7 @@ export class ImpactFlash extends Mesh {
         this.scale.set(s, s, 1);
         // Falls off faster than linear: the bloom is a pop, and the long dim
         // tail is what used to sit on a figure for a quarter of a second.
-        mat.opacity = Math.pow(1 - t, 1.6) * this.peakOpacity;
+        mat.opacity = Math.pow(1 - t, 1.6) * peak;
       },
       onComplete: () => {
         this.visible = false;

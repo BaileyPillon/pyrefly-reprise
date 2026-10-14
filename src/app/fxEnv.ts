@@ -1,8 +1,9 @@
 /**
  * The comfort flags eye-candy D reads every frame (`EyeCandy.ts` `eyeCandy.env`), wired in the
  * product at boot, not only by the debug API: REDUCE MOTION (the OPTIONS row, or the OS
- * preference, as the battle camera reads it), LOW EFFECTS, REDUCE FLASHES once that row exists
- * (read defensively: the setting is not on main yet), and the viewport for the phone tier.
+ * preference, as the battle camera reads it), LOW EFFECTS, REDUCE FLASHES (the ACCESSIBILITY tab's row,
+ * PR-0032: it is what sets the five rules that were written before it existed: the impact frame, the
+ * lens flare, the spell moments, the splash and the arena lighting), and the viewport for the phone tier.
  *
  * REDUCE MOTION is cached for half a second: the flag is read by several layers every frame, and
  * `readSetting` plus `matchMedia` per read is wasted work. An OPTIONS change applies within 0.5 s.
