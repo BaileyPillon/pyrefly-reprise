@@ -5,7 +5,8 @@
  * - the experimental Leblanc chapter's room (FFX-2 only): Chapter VI's room over its own plate and art namespace (`./exp-leblanc-last-room.ts`);
  * - the Experiment's grounds (FFX-2 only): the Machine Faction's grounds at Djose Temple, on a provisional plate (`./experiment-grounds.ts`, `../data/experiment-plates.ts`);
  * - Mushroom Rock Road (FFX only): the hidden Sinspawn Gui chapter, on a provisional plate (`./mushroom-rock-road.ts`);
- * - the hidden Fayth chapter's deck (FFX only): Chapter VIII's deck with a camera director on it (`./exp-fayth-deck.ts`).
+ * - the hidden Fayth chapter's deck (FFX only): Chapter VIII's deck with a camera director on it (`./exp-fayth-deck.ts`);
+ * - the hidden Tourist Trap chapter's cavern (FFX-2 only): the Cavern of the Stolen Fayth under the FFX-2 camera, on Chapter IX's approved plate (`./tourist-trap-cavern.ts`).
  *
  * Each row is real (the factory wins); `build` is the unreachable demo diorama, as for every scene with a factory of its own. Moved here unchanged from `./index.ts`, except Fayth's, which is new.
  * Game case: each row is its own chapter's game's, as tagged; the table is shared plumbing.
@@ -22,6 +23,8 @@ import { buildMushroomRockRoadScene, MUSHROOM_SLOTS } from './mushroom-rock-road
 import { MUSHROOM_ROCK_SCENE } from '../data/ffx/sinspawn-gui-ids.ts';
 import { buildExpFaythDeckScene, EXP_FAYTH_SCENE_ENTRY } from './exp-fayth-deck.ts';
 import { EXP_FAYTH_SCENE } from '../data/ffx/exp-fayth-ids.ts';
+import { buildTouristTrapCavernScene, TOURIST_TRAP_SLOTS } from './tourist-trap-cavern.ts'; // the Tourist Trap's cavern (FFX-2 only, hidden chapter)
+import { TOURIST_TRAP_SCENE } from '../data/tourist-trap-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -33,6 +36,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: MUSHROOM_ROCK_SCENE, title: "Mushroom Rock Road — Operation Mi'ihen", build: buildDemoScene, slots: MUSHROOM_SLOTS, placeholder: false },
   // The hidden Fayth chapter's deck (FFX only): Chapter VIII's deck and plate, with a camera director.
   EXP_FAYTH_SCENE_ENTRY,
+  // The Tourist Trap's fight (FFX-2 only, hidden chapter): the Cavern of the Stolen Fayth under the FFX-2 camera, on Chapter IX's approved plate.
+  { key: TOURIST_TRAP_SCENE, title: 'Cavern of the Stolen Fayth — the Tourist Trap', build: buildDemoScene, slots: TOURIST_TRAP_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -41,4 +46,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_LEBLANC_SCENE]: buildExpLeblancLastRoomScene, // the experimental Leblanc chapter (FFX-2 only)
   [MUSHROOM_ROCK_SCENE]: buildMushroomRockRoadScene, // the hidden Sinspawn Gui chapter (FFX only)
   [EXP_FAYTH_SCENE]: buildExpFaythDeckScene, // the hidden Fayth chapter (FFX only)
+  [TOURIST_TRAP_SCENE]: buildTouristTrapCavernScene, // the hidden Tourist Trap chapter (FFX-2 only)
 };

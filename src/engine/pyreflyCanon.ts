@@ -17,6 +17,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import { departureKindOf } from './BattlePresenterDepartures.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
 import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
+import { TOURIST_TRAP_SCENE } from '../data/tourist-trap-ids.ts';
 
 /**
  * People, who die as people: the presentation plan's A-5 row ("Humans
@@ -128,6 +129,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [DJOSE_CHAMBER_PLATE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-ixion-djose.md §6.1: the arena rows name no particles' },
   // The Experiment at Djose (the hidden chapter, FFX-2 only): the Fayth Antechamber; the key is its plate's (`data/experiment-plates.ts`).
   [EXPERIMENT_GROUNDS_PLATE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-experiment.md §6.1: the arena rows name no particles' },
+  // The Tourist Trap (the hidden chapter, FFX-2 only): the Cavern of the Stolen Fayth under the FFX-2 camera.
+  [TOURIST_TRAP_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §8.2: the mission page names no particles in the chamber' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.
   'sector1-reactor': {
     game: 'ff7',

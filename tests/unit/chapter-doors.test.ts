@@ -1,7 +1,7 @@
 /**
  * **The chapter-select board's doors, as one table** (`src/app/screens/frontend/chapterDoors.ts`): the one test over every word at once.
  *
- * Each door's own suite (`ff7-secret-door`, `exp-leblanc-door`, `ffx2-experiment-door`, `mushroom-door`, `fayth-door`) drives the board with real key events and compared its word with its neighbours' by hand,
+ * Each door's own suite (`ff7-secret-door`, `exp-leblanc-door`, `ffx2-experiment-door`, `mushroom-door`, `fayth-door`, `daigoro-door`) drives the board with real key events and compared its word with its neighbours' by hand,
  * each with the neighbours it knew of. This one reads the table, so a word added tomorrow is checked against every word that is already there:
  *
  * - **no word begins with, ends with or contains another**, and **no end of one word is the beginning of another** (a run of letters that finishes one word must not also start, or finish, a second one:
@@ -28,8 +28,8 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the five doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
-    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth']);
+  it('holds the six doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
+    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro']);
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);
     for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{4,}$/);

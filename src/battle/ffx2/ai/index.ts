@@ -37,6 +37,8 @@ import { denOfWoeScripts } from './den-of-woe.ts';
 import { x2IxionScript } from './ixion.ts';
 // The Experiment at Djose Temple (FFX-2 Chapter 5; the hidden chapter "The Experiment"): one script per Special level.
 import { experimentScripts } from './experiment.ts';
+// Yojimbo (the action counter) and Daigoro (the endless wait) in the Cavern of the Stolen Fayth (the optional mission "Tourist Trap"; the hidden chapter, FFX-2 only).
+import { touristTrapScripts } from './tourist-trap.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -75,6 +77,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...denOfWoeScripts,
   x2IxionScript,
   ...experimentScripts,
+  ...touristTrapScripts,
   idleScript,
   basicAttackScript,
 ];
