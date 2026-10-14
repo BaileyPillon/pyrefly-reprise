@@ -28,7 +28,8 @@ import type { BattleRng } from '../common/streams.ts';
 import type { CarriedPartyState, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
-import { accessoryAutoStatuses, accessoryImmunities, withPoolStatuses } from './kit.ts';
+import { accessoryImmunities, withPoolStatuses } from './kit.ts';
+import { initAutoLayers } from './auto-layer.ts';
 import { activeGateBonuses, breaksDamageLimit, gateStatTotal, waitDownPercent, withStatBonus } from './garment-grids.ts';
 import { baseRequired } from './gauges.ts';
 import { defaultGarmentGrids } from './garment-grids.ts';
@@ -178,8 +179,8 @@ function buildEnemy(enemy: EnemyDef, isPart: boolean): Ffx2Unit {
 }
 
 /**
- * `EnemyDef.autoStatuses` (FFX-2, Chapter XIII's Trema: Spellspring), and a girl's Auto-Wall
- * accessories (`kit.ts`). Applied before the
+ * `EnemyDef.autoStatuses` (FFX-2, Chapter XIII's Trema: Spellspring). A girl's automatic statuses are the layer of
+ * `auto-layer.ts` (re-parity X2-D). Applied before the
  * first event, with no RNG draw, and remembered on the unit so a Dispel leaves them alone
  * (`resolve.ts`). An enemy without the field is built exactly as before.
  */
@@ -287,14 +288,16 @@ export function buildState(
     gridNodes[unit.id] = gridNodeContents(member, grid?.nodes ?? 6);
     if (options.carriedParty) applyCarriedState(unit, options.carriedParty);
     if (enemies.restoresPartyOnEntry) restoreAtSaveSphere(unit);
-    // Accessories' status half (`kit.ts`): Auto-Wall and Ribbon. No shipped build before Chapter XIII's kit option wears one.
-    applyAutoStatuses(unit, accessoryAutoStatuses(unit.accessories));
+    // Ribbon's wards (`kit.ts`). Her automatic statuses (the accessories' and the dressphere's Auto and SOS abilities) come from `initAutoLayers` below.
     Object.assign(unit.immunities, accessoryImmunities(unit.accessories));
     units.push(unit);
   });
 
   for (const enemy of enemies.enemies) units.push(buildEnemy(enemy, false));
   for (const part of enemies.parts ?? []) units.push(buildEnemy(part, true));
+
+  // Each girl's automatic-status layer (re-parity X2-D): the rows her dressphere and accessories list, the kept set at once, the SOS set while her HP is under a third.
+  initAutoLayers(units, rng);
 
   // The scripts' init entries run before the first gauge is rolled (AiScript.init, RC3): the Vegnagun Head's Agility 110 (row H3).
   for (const unit of units) {

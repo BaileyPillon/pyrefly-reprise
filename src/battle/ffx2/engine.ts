@@ -78,6 +78,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.awaitingBy = null;
     this.inputOwner = null;
     this.held = null;
+    this.counterQueue = [];
     this.carriedSteps = 0;
     this.stepCredit = 0;
     this.ordered = [];

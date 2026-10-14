@@ -12,9 +12,10 @@
  *   Auto-Shell and Shining Bracer Auto-Protect `[verified: 2 sources]` (ffx2-combat-core §5.4
  *   table: "Defense Bracer | no stats, **Auto-Wall**", "Adamantite | … Auto-Wall";
  *   ffx2-vegnagun-shuyin §6.7: "Moon Bracer / Shining Bracer / Defense Bracer | Auto-Shell /
- *   Auto-Protect / both", "Adamantite | Constant Protect + Shell"). An auto-status is applied
- *   before the first event and is kept on `Ffx2Unit.autoStatuses`, so a removal list (Dispel,
- *   Genesis) leaves it, the rule Trema's Spellspring already uses (`resolve.ts`, `[estimate]`); the
+ *   Auto-Protect / both", "Adamantite | Constant Protect + Shell"). Since re-parity X2-D these (and the other twelve
+ *   accessories that keep a status or an SOS set) are rows of the game's automatic-status layer
+ *   (`adapt/auto-rows.ts`, `auto-layer.ts`), kept on `Ffx2Unit.autoStatuses`, so a removal list (Dispel,
+ *   Genesis) leaves them, the rule Trema's Spellspring already uses (`resolve.ts`); the
  *   wiki's *Paragon* says its attacks "cannot nullify Auto-Protect or Auto-Shell".
  * - **Ribbon**: immune to Petrification, Sleep, Silence, Darkness, Poison, Confusion, Berserk,
  *   Curse, Pointless, Itchy, Slow and Stop, not KO, Doom or Eject `[verified: 2 sources]`
@@ -29,14 +30,6 @@
 
 import type { StatBlock, StatusId } from '../common/types.ts';
 
-/** Accessory id → the statuses it keeps on. */
-export const ACCESSORY_AUTO_STATUSES: Readonly<Record<string, readonly StatusId[]>> = {
-  'defense-bracer': ['protect', 'shell'],
-  adamantite: ['protect', 'shell'],
-  'moon-bracer': ['shell'],
-  'shining-bracer': ['protect'],
-};
-
 /** What a Ribbon blocks (§2.8). */
 export const RIBBON_IMMUNE: readonly StatusId[] = [
   'petrify', 'sleep', 'silence', 'darkness', 'poison', 'confuse', 'berserk', 'curse', 'pointless', 'itchy', 'slow', 'stop',
@@ -44,13 +37,6 @@ export const RIBBON_IMMUNE: readonly StatusId[] = [
 
 /** The default max HP cap without Break HP Limit (ffx2-combat-core §2.4). */
 export const MAX_HP_CAP = 9999;
-
-/** The statuses a girl's accessories keep on, in accessory order, without repeats. */
-export function accessoryAutoStatuses(accessories: readonly string[]): StatusId[] {
-  const out: StatusId[] = [];
-  for (const id of accessories) for (const s of ACCESSORY_AUTO_STATUSES[id] ?? []) if (!out.includes(s)) out.push(s);
-  return out;
-}
 
 /** Immunities (255) a girl's accessories grant: a Ribbon's list, or nothing. */
 export function accessoryImmunities(accessories: readonly string[]): Partial<Record<StatusId, number>> {
