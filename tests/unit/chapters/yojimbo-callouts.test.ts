@@ -223,6 +223,9 @@ describe('Kimahri, when Doom lands on Yojimbo (count 5, research §2.1)', () => 
   it('fires once, right after the Doom status lands, in that same action', () => {
     const engine = newEngine(24);
     makeInvincible(engine);
+    // The cost check when the command starts wants Kimahri's gauge full (re-parity RC7, FFX-G07 3.5): the menu would only offer Doom then.
+    const kimahri = engine.state().combatants['kimahri'] as FFXCombatant;
+    if (kimahri.overdrive) kimahri.overdrive.gauge = 100;
     let doomed = false;
     drive(engine, (d) => {
       if (!doomed && d.actorId === 'kimahri') {

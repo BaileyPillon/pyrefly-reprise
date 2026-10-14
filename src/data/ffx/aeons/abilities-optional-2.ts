@@ -180,7 +180,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     name: 'Nul-All',
     game: 'ffx',
     category: 'aeon',
-    mpCost: 0,
+    // MP 4, not 0 (re-parity RC7 L-CMD, 2026-10-14; FFX only): command.bin record 0x312d, byte +0x25 = 4, the only
+    // aeon-type (0) record with an MP cost (FFX Steam build 25501027; `research/re-ffx-command-gate.md` section 2,
+    // coverage note FFX-G07 section 4.3).
+    mpCost: 4,
     rank: 3,
     power: 0,
     formula: 'none',

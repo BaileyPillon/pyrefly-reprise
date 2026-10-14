@@ -21,13 +21,14 @@
  */
 
 import type { AbilityDef, AbilityId, CombatantId, ElementId, FFXCombatant, StatusId } from '../common/types.ts';
-import { idiv } from './math.ts';
 import { type Ctx, has, hasFlag, rankOf, stacks } from './state.ts';
 import type { TimingBonus } from './adapt/hit.ts';
 import { drawsOf } from './adapt/draws.ts';
 import { streamsOf } from './adapt/streams.ts';
 import { resolveElements } from './elements.ts';
-import { hasAuto, weaponElements } from './equipment.ts';
+import { weaponElements } from './equipment.ts';
+import { SILENCE_GATED, mpCost } from './kernel/command-gate.ts';
+import { gateRecordOf, mpChrOf } from './adapt/command-gate.ts';
 import { ejectActor, settleDeferredDeath } from './hp.ts';
 import { listensToHit, runOnHit, runOnTargeted } from './ai/hooks.ts';
 import { resolveCommand } from './adapt/command.ts';
@@ -83,23 +84,24 @@ export interface ResolveOptions {
   spreadHits?: number;
 }
 
-/** MP cost after Magic Booster, One MP Cost and Half MP Cost [ffx-combat-core §9]. */
+/**
+ * The MP the user pays for this ability: the game's (re-parity RC7 lane L-CMD, `kernel/command-gate.ts#mpCost`; FFX only). Half MP Cost halves it **rounding
+ * up** (Esuna 5 costs 3, Scan 1 costs 1) unless the Magic Booster doubles a Black or White Magic spell, in which case the doubling takes the round-up away;
+ * One MP Cost makes any cost above 0 equal 1, and the Booster then doubles it (2 on a spell); Spellspring makes it 0. A monster pays no MP.
+ */
 export function mpCostFor(user: FFXCombatant, def: AbilityDef): number {
-  if (has(user, 'mp-cost-zero')) return 0;
   if (user.side === 'enemy') return 0;
-  let cost = def.mpCost;
-  if (hasAuto(user, 'magic-booster') && (def.category === 'blackmagic' || def.category === 'whitemagic')) {
-    cost *= 2;
-  }
-  if (hasAuto(user, 'one-mp-cost')) return cost > 0 ? 1 : 0;
-  if (hasAuto(user, 'half-mp-cost')) cost = idiv(cost, 2);
-  return cost;
+  return mpCost(gateRecordOf(def), mpChrOf(user));
 }
 
-/** Silence blocks Wht/Blk Magic and Summon — never an Overdrive [ffx-combat-core §4.2]. */
+/**
+ * Silence blocks the commands whose record carries the Silence flag (bit 0x20000 of the record's flag word): all 22 White and 19 Black Magic
+ * records of the command table (Scan and Esuna among them) and the monster records that carry it. **Not** Summon, Grand Summon, Doublecast or an Overdrive
+ * (re-parity RC7 lane L-CMD, `kernel/command-gate.ts#usableCost`; FFX only). An ability with no game record is gated by its category, as before.
+ */
 export function blockedBySilence(user: FFXCombatant, def: AbilityDef): boolean {
   if (!has(user, 'silence')) return false;
-  return def.category === 'blackmagic' || def.category === 'whitemagic' || def.category === 'summon';
+  return (gateRecordOf(def).flagsMisc & SILENCE_GATED) !== 0;
 }
 
 function elementFor(elements: readonly ElementId[]): ElementId {

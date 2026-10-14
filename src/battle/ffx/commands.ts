@@ -177,8 +177,8 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
     }
   }
 
-  // Summon, Yuna only, rank 3. Blocked by Silence, and never while an aeon is
-  // already out.
+  // Summon, Yuna only, rank 3. **Not** blocked by Silence (its record carries no Silence flag: FFX-G07
+  // finding 3, re-parity RC7), and never while an aeon is already out.
   // An aeon duel's mirror-locked aeon stays on the list, greyed with its
   // reason (Chapter XIV, plan B6 / O-5 "Mirror of Grothia"); with no lock
   // set, the rows are exactly the available aeons in roster order, as before.
@@ -193,10 +193,10 @@ export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableComman
         category: 'summon',
         mpCost: 0,
         rank: 3,
-        enabled: locked === undefined && !has(user, 'silence'),
+        enabled: locked === undefined, // Summon and Grand Summon carry no Silence flag: a Silenced Yuna can summon (FFX-G07 finding 3, re-parity RC7)
         validTargets: [],
       };
-      if (!row.enabled) row.disabledReason = locked ?? 'Silenced';
+      if (!row.enabled) row.disabledReason = locked;
       rows.push(row);
     }
   }
