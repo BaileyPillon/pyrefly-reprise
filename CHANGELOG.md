@@ -61,6 +61,23 @@ Address: none yet (branch r48-rc: the live release r47 b8aa6f96 plus the rule la
   about 0.07 party turns longer a fight. The White Mage's Pray is a free, 0 MP heal of the whole party on her opening
   menu, as the game lists it; no shipped chapter changes because of it, but a White Mage who only prays is now very
   hard to wear down, which a later balance pass should expect.
+- **How it was checked:** tsc clean after each of the three merges and after the fixes; the files of both hidden
+  chapters, their doors, the chapter numbers, the three goldens, the random streams, every parity-ffx and parity-ffx2
+  file, the intent, status-word and menu tests (123 files, 2,333 tests, 14 skipped by their own flags); then the whole
+  suite once (1,249 files, 19,619 tests: 19,544 passed, 74 skipped, 1 todo, none failing); the orphan check (28 older
+  modules, none from the merged lanes) and the audio check (no findings, 68.87 MB of 105 MB); a production build whose
+  files name no local path and whose art matches its masters (3,778 masters checked, 3,462 compared pixel by pixel, no
+  name left dangling); and a headless walk of that build (the board still says "of 18" with no new card, the words
+  "daigoro" and "valefor" each open their chapter to its first command menu against Yojimbo and Valefor, no console
+  error or failed request), with the three Itchy frames below and a look at the first menus of both hidden chapters.
+  Nothing past those first menus was played on this build; the entries below say what each chapter's own checks
+  covered.
+
+![The desktop battle menu while Paine is Itchy, 1600x900: Attack, Skill and Item keep their names and the reason is cut short beside each](docs/screenshots/r48-rc/itchy-menu-desktop-1600x900.jpg)
+
+![The same menu at 2000x1012](docs/screenshots/r48-rc/itchy-menu-desktop-2000x1012.jpg)
+
+![The phone layout while Paine is Itchy, unchanged: each name with its reason under it (390x844)](docs/screenshots/r48-rc/itchy-menu-phone-390x844.jpg)
 
 ## 2026-10-14 · Tourist Trap: Yojimbo and Daigoro, a hidden FFX-2 chapter behind the word `daigoro` (branch ch-tourist-trap, part of release candidate r48-rc; not live)
 

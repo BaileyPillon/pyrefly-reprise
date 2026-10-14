@@ -2,12 +2,12 @@
 
 Candidate r48-rc, assembled from `origin/r47-rc` (b8aa6f96, live since 06:08 on 2026-10-14).
 Assembled by a sub-agent of the release driver on 2026-10-14. No deploy, no review from this agent.
-Worktree `D:/pyrefly-r48`, branch `r48-rc`. Progress is appended after every step.
+A sibling worktree of the main tree, branch `r48-rc`. Progress is appended after every step.
 
 ## Step 0: tips checked and worktree made
 
 - origin/r47-rc = b8aa6f96, origin/re-parity-rc7 = 8eb2e8c6, origin/ch-tourist-trap = a142ad1b, origin/ch-besaid-valefor = 865d024a. All four equal the tips the brief names, so nothing moved.
-- Worktree made from origin/r47-rc; junctions: node_modules to the main tree's node_modules, public/art to D:/pyrefly-art-r47 (read only).
+- Worktree made from origin/r47-rc; junctions: node_modules to the main tree's node_modules, public/art to the approved-art mirror made for r47 (read only).
 - `node tools/fx-assets.mjs ensure --warn`: 26 files restored from the art backup, verify PASS.
 - A PAUSE file already existed in the overnight folder (empty, created 04:28 by another session). Not mine: left alone, not created, not removed.
 
@@ -43,3 +43,22 @@ Worktree `D:/pyrefly-r48`, branch `r48-rc`. Progress is appended after every ste
   - A reason that already fits is laid out exactly as before: with "Silenced" on a greyed row, the label, reason and arrow boxes are identical to the old declarations (injected over the new rule). With "Not enough MP" (199 px) the old CSS squeezed "Skill" to 19.6 px and clipped it; the new CSS gives it 80.4 px and ellipsises the reason. So the same live defect on "Not enough MP" and "No legal target" rows is fixed too; the real reasons the FFX-2 menu produces are those two, "Silenced", "Cursed" and Itchy's.
   - Frames: `docs/screenshots/r48-rc/itchy-menu-desktop-1600x900.jpg`, `-desktop-2000x1012.jpg`, `-phone-390x844.jpg` (the pre-fix frames are in `docs/screenshots/rc7-menu/`).
   - 60 menu, HUD and text-size unit files: 59 passed, 1 skipped by its own flag (625 tests).
+- After the suite two comments that still said "and 0 MP" for Delta Attack (`intentLead.ts` header, `magus-sisters-abilities.ts`) were brought in line; comments only, tsc clean, the five related files rerun green (55 tests).
+
+## Step 5: validation (tip of this step: see `git log`; the build below was made from the tree with the CSS fix already in it, `__PYREFLY_BUILD_SHA__` 0d6416e7; the only shipped input that changed afterwards is that one CSS file, which is inside the build)
+
+- **tsc** clean after merge 1, merge 2, the squash and every fix.
+- **Targeted vitest** (both chapters' files, both doors, the chapter numbers, the doors table, the three goldens, `rng-streams`, every `parity-ffx-*` and `parity-ffx2-*`, `den-of-woe-carry`): 123 files, 2,347 tests: 2,333 passed, 14 skipped by their own flags, 0 failed. The intent, status-word, Silence-card and menu groups ran in their own batches above (16 files 224 tests; 60 files 625 tests), all green.
+- **`node tools/orphans.mjs`**: 1,689 modules, 1,661 reachable, 28 orphaned, all older (audio voice presets, a few old UI and scene files); none from RC7, Tourist Trap or Valefor. **`node tools/audio/qa.mjs`**: 0 cues with findings, 0 sfx findings, 68.87 MB of the 105 MB budget.
+- **Full suite once** (`--maxWorkers=2 --testTimeout=60000`, 07:21 to 07:52, 31 minutes): **1,249 files, all passed; 19,619 tests: 19,544 passed, 0 failed, 74 skipped, 1 todo.** (r47's own run: 1,224 files, 19,144 tests.) No failure to classify.
+- **Production build** (vite directly, `BASE_PATH=/`, M: drive, 1 min 40 s; 11 GB): `tools/dist-local-paths.mjs` PASS (no local path, no link to claude.ai, no sidecar key outside the list in 1,291 text files); `art-derive verify` PASS (3,778 masters checked, 479 WebP and 3,299 PNG, 3,462 pixel-compared, 36 strip thumbnails, 1,263 sidecars); `art-derive audit` PASS (1,283 text files, 515 literal art names, 0 dangling); `art-browser-load` PASS (3,863 of 3,863 images load and decode at the master's size in Chromium 153 and WebKit 26.6, 0 failed). The three gates and the walk ran against that one dist.
+- **Walk** (headless Chromium, GPU, real key presses, 1600x900): the board is the chapter select; the strip says "of 18"; 18 cards and none for either hidden chapter; no EXP numeral; "daigoro" leaves the board for party prep and reaches Yuna's first menu (White Magic, Change, Item) against Yojimbo and Daigoro; "valefor" reaches Paine's first menu (Attack, Skill, Change, Item) against Valefor; no console error, no HTTP error. Two clean runs; the first run, made while the art gate was reading the same disk, saw three image requests fail (a card thumbnail, a board backdrop thumbnail, an Ixion painting; the failure reason was not recorded) and the two later runs saw none (one run set aside one ERR_ABORTED backdrop request, the browser cancelling a load). I looked at both first-menu frames: Tourist Trap matches that lane's own proof; Valefor shows her on the Chamber plate with her guide and the advisor slab.
+- The Itchy frames of fix (a), at three sizes, are in step 4 above.
+
+## Open and for the driver
+
+- **Tourist Trap's tip carries machine paths** (drive letters and folder names of its worktree, build folder and scratch folder) in `PROGRESS.md` (4 lines), `docs/handoff/ch-tourist-trap.md` (3) and `docs/plans/ch-tourist-trap-review.md` (2), and its branch history carries them too. The brief asked for a `--no-ff` merge of that branch and its Valefor counterpart was squashed for exactly this reason; the tree can be redacted in one follow-up commit if wanted (history cannot without a squash). Not changed here.
+- **The party's Osmose** (`x2-shared-osmose`, also cast by the Paragon Oversoul) still reads "damage" without "MP": it carries only the `drains-mp` flag, which HP-and-MP drains share, so it is outside the brief's predicate (`mpOnly` or `damagesPool: 'mp'`).
+- **Leblanc's Osmose** is now worded as neither physical nor magical (its game row 0x406d has damage flags 0), but the ability's own `damageType` field still says `magical`. The engine builds a move's command record from the game row when the ability has one (`adapt/command.ts`, which derives a record from the ability's fields only when there is no row); the field itself is read for the Shell and Protect hit class that Vegnagun's counters use (`execute.ts`), which Leblanc's fight does not reach. I did not check anything else that might read the field for this move. Word only; the data is not changed.
+- **Unverified, from RC7** (its handoff, section 8): a miss still reaches the counter check and a queued counter costs no gauge (`COUNTER_AFTER_MISS` is true); the delay of a fizzled command and of a Mix that finds nobody are the engine's stand-ins; no girl's counter has been seen on a screen.
+- Left alone on purpose: r47's CHANGELOG entry; `NOW.md` and the ledgers (the driver's); no deploy, no review.
