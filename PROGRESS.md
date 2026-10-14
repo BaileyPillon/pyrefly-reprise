@@ -21,7 +21,7 @@ Append one entry per finished step. Times are EDT.
 ## Steps (brief)
 
 1. [x] Worktree and junctions (above)
-2. [ ] critic-plan + paper preflight `docs/plans/ch-besaid-valefor-review.md`
+2. [x] critic-plan (DEEP: encounters.ts, the FFX-2 AI table, chapter registry) + paper preflight `docs/plans/ch-besaid-valefor-review.md` (PROCEED; flags the besaid/daigoro one-letter overlap against chapter-doors.test.ts)
 3. [ ] Build: data, monster row and AI, chapter meta, intro scene, stage, music, guide card
 4. [ ] Tests, tsc, orphans, audio qa, full suite once (D: >= 15 GB first)
 5. [ ] Browser proof on a production build (outDir on M:), screenshots
