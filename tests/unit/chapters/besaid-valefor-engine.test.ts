@@ -66,7 +66,7 @@ describe('the counter and the marks (a stub context, exact draws)', () => {
       b.rng.drain(); // a Ray or a Blast draws nothing, so the values queued for a swing would be left over
       const c = b.poll(...SWING);
       order.push(b.id(c)!);
-      const specials = [RAY, BLAST].includes(b.id(c)!);
+      const specials = ([RAY, BLAST] as string[]).includes(b.id(c)!);
       expect(b.rng.calls.length - draws, `poll ${poll} draws`).toBe(specials ? 0 : 2); // a Ray or a Blast draws nothing; a swing draws the roll and the target
     }
     const specialsAt = order.flatMap((id, i) => (id === RAY || id === BLAST ? [`${i + 1}:${id.replace('x2-valefor-energy-', '')}`] : []));
