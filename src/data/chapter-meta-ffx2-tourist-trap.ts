@@ -32,7 +32,7 @@ export const TOURIST_TRAP_META: ChapterMeta = {
     { id: 'defeat-yojimbo', label: 'Defeat Yojimbo', rule: { kind: 'victory' } },
   ],
   tip:
-    'Yojimbo counts his own turns, and on the fourteenth he takes the whole party down to one HP. ' +
+    'Yojimbo keeps a count, and when it is full he takes the whole party down to one HP, about seven attacks in. ' +
     'Keep a heal ready for the turn after, and cure the Poison his Kozuka leaves.',
   snapshots: [
     { image: `backdrops/${TOURIST_TRAP_PLATE}.png`, caption: 'the old chamber' },

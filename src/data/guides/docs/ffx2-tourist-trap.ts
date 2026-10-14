@@ -33,14 +33,14 @@ export const FFX2_TOURIST_TRAP_DOC: GuideDoc = {
     { t: 'head', at: ['x2-yojimbo'], title: 'Yojimbo', tag: 'Boss Battle' },
     {
       t: 'p',
-      text: 'Yojimbo keeps a count of his own turns. It rises with every move he makes, and the moves he picks change as it climbs:',
+      text: 'Yojimbo keeps a count that rises with every move he weighs, and what he picks changes as it climbs. Calling Daigoro is one of the picks:',
     },
     {
       t: 'ul',
       items: [
-        'Early on he mostly sends Daigoro, with now and then a Kozuka',
-        'Midway the blade comes in: Wakizashi joins the list',
-        'Late in the count a second, lighter Wakizashi joins it too',
+        'Early on he mostly calls Daigoro, with now and then a Kozuka',
+        'Midway the blade comes in: Wakizashi, on one girl, joins the list',
+        'Late in the count a second, lighter Wakizashi joins it, and that one cuts the whole party',
         'When the count is full he uses “Zanmato”, and the count starts over',
       ],
     },
@@ -50,7 +50,7 @@ export const FFX2_TOURIST_TRAP_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'It comes on his fourteenth move. Count along if you like; the banner names each move as it starts, and Yuna’s Protect makes the blades much easier to live with.',
+      text: 'It comes about seven of his attacks in, as few as four or as many as ten, because the calls to Daigoro count too. He winds up for it, so the charge bar warns you; the banner names each move as it starts, and Yuna’s Protect makes the blades much easier to live with.',
     },
     {
       t: 'p',
@@ -58,7 +58,7 @@ export const FFX2_TOURIST_TRAP_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Daigoro cannot be targeted. Do not spend a turn trying: the damage is Yojimbo’s to take.',
+      text: 'Daigoro cannot be targeted. Do not spend a turn trying: the damage is Yojimbo’s to take. When Yojimbo calls him he bites one girl on his own turn, so his bites come in answer to the calls.',
     },
     {
       t: 'p',

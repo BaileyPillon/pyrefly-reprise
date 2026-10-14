@@ -20,8 +20,58 @@
   "nullMask": 16,
   "half": 0,
   "weak": 0,
-  "resistGroup1": [255,255,255,255,255,255,255,255,255,0,255,0,0,0,0,0,0,255,255,0,0,0,0,0],
-  "resistGroup2": [0,0,0,0,0,255,255,255,255,255,255,255,255,255,255,0,0,0,0,0,0,0,0,0],
+  "resistGroup1": [
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   0,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   255,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "resistGroup2": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
   "exp": 2000,
   "gil": 1500,
   "ap": 15,
@@ -29,9 +79,23 @@
   "dropChanceByte": 255,
   "stealChanceByte": 128,
   "zantetsuByte": 120,
-  "dropItem": { "id": 36960, "common": 1, "rare": 1 },
-  "stealItem": { "id": 36872, "common": 1, "rare": 1 },
-  "abilityList": [16545, 16546, 16547, 16548, 16562]
+  "dropItem": {
+   "id": 36960,
+   "common": 1,
+   "rare": 1
+  },
+  "stealItem": {
+   "id": 36872,
+   "common": 1,
+   "rare": 1
+  },
+  "abilityList": [
+   16545,
+   16546,
+   16547,
+   16548,
+   16562
+  ]
  },
  "daigoro": {
   "row": 174,
@@ -53,8 +117,58 @@
   "nullMask": 0,
   "half": 0,
   "weak": 0,
-  "resistGroup1": [0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,255,255,0,0,0,0,0],
-  "resistGroup2": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  "resistGroup1": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   255,
+   255,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "resistGroup2": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
   "exp": 0,
   "gil": 0,
   "ap": 0,
@@ -66,24 +180,171 @@
  },
  "unmapped": {
   "_note": "Raw values the RE note marks unmapped (section 5). Never read by the engine or the tests below; kept so the numbers are on record.",
-  "soundId": { "yojimbo": 4266, "daigoro": 4270 },
-  "basakuWord": { "yojimbo": 0, "daigoro": 0 },
-  "monsterTypeWord": { "yojimbo": 0, "daigoro": 0 },
-  "specialBits7and8": { "yojimbo": "set", "daigoro": "clear" },
-  "group1Indexes17and18": { "yojimbo": [255, 255], "daigoro": [255, 255] },
-  "thinkingByte": { "yojimbo": 0, "daigoro": 1 }
+  "soundId": {
+   "yojimbo": 4266,
+   "daigoro": 4270
+  },
+  "basakuWord": {
+   "yojimbo": 0,
+   "daigoro": 0
+  },
+  "monsterTypeWord": {
+   "yojimbo": 0,
+   "daigoro": 0
+  },
+  "specialBits7and8": {
+   "yojimbo": "set",
+   "daigoro": "clear"
+  },
+  "group1Indexes17and18": {
+   "yojimbo": [
+    255,
+    255
+   ],
+   "daigoro": [
+    255,
+    255
+   ]
+  },
+  "thinkingByte": {
+   "yojimbo": 0,
+   "daigoro": 1
+  }
  },
  "researchBeforeTheRows": {
   "_note": "What research/ffx-yojimbo.md section 8.2 (wiki, FFExodus, SinirothX) had, which this build started on. Every number equals the row; the differences are the three below.",
   "level": 36,
   "hp": 22000,
   "mp": 9999,
-  "stats": { "str": 44, "mag": 61, "def": 50, "mdef": 106, "agi": 120, "luck": 7 },
-  "rewards": { "exp": 2000, "ap": 15, "gil": 1500, "pilferGil": 2000 },
+  "stats": {
+   "str": 44,
+   "mag": 61,
+   "def": 50,
+   "mdef": 106,
+   "agi": 120,
+   "luck": 7
+  },
+  "rewards": {
+   "exp": 2000,
+   "ap": 15,
+   "gil": 1500,
+   "pilferGil": 2000
+  },
   "stealRate": 128,
   "zantetsu": 120,
   "wikiImmuneToReflect": true,
   "wikiImmuneToBribe": true,
-  "wikiAbilities": ["Wakizashi A", "Wakizashi B", "Daigoro", "Kozuka", "Zanmato"]
+  "wikiAbilities": [
+   "Wakizashi A",
+   "Wakizashi B",
+   "Daigoro",
+   "Kozuka",
+   "Zanmato"
+  ]
+ },
+ "commandRows": {
+  "_note": "RE review 2026-10-14 of the scripts m170 and m174 (monmagic.bin rows 0x40a1 to 0x40a5), numbers only, as the driver relayed them. All five: hits 1, accuracy byte 0, accuracy formula 0 (the misc word's bits 3 to 5), element 0, no crit. costAtb is Cmd+0x22 (the rest), costCast is Cmd+0x24 (the charge). The review did not give the shatter chance, the species-killer mask or the category: 0 here, unwired.",
+  "kozuka": {
+   "id": 16545,
+   "flagsTarget": 19,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 0,
+   "damageClass": 2,
+   "formula": 4,
+   "power": 4,
+   "costAtb": 120,
+   "costCast": 0,
+   "status1": {
+    "5": 100
+   }
+  },
+  "wakizashiA": {
+   "id": 16546,
+   "flagsTarget": 19,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 1,
+   "damageClass": 1,
+   "formula": 0,
+   "power": 16,
+   "costAtb": 120,
+   "costCast": 0
+  },
+  "wakizashiB": {
+   "id": 16547,
+   "flagsTarget": 23,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 1,
+   "damageClass": 1,
+   "formula": 0,
+   "power": 13,
+   "costAtb": 120,
+   "costCast": 0
+  },
+  "zanmato": {
+   "id": 16548,
+   "flagsTarget": 23,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 0,
+   "damageClass": 3,
+   "formula": 10,
+   "power": 1,
+   "costAtb": 200,
+   "costCast": 120
+  },
+  "daigoroBite": {
+   "id": 16549,
+   "flagsTarget": 19,
+   "flagsMisc": 1090519046,
+   "flagsDamage": 1,
+   "damageClass": 1,
+   "formula": 0,
+   "power": 16,
+   "costAtb": 100,
+   "costCast": 0
+  }
+ },
+ "poll": {
+  "_note": "RE review 2026-10-14 of m170 / m174: the poll block, as relayed. The counter is tested at 100 BEFORE the raise; otherwise it is raised by 8 FIRST and the band is read on the raised value. Rolls are random() on stream 2, targets a uniform pick on stream 4. A dog pick queues nothing and sets a battle flag; Daigoro clears it on his own turn and bites.",
+  "counterStep": 8,
+  "zanmatoAt": 100,
+  "bands": [
+   {
+    "raisedFrom": 70,
+    "rollMod": 4,
+    "picks": [
+     "wakizashiB",
+     "wakizashiA",
+     "kozuka",
+     "dog"
+    ]
+   },
+   {
+    "raisedFrom": 30,
+    "rollMod": 4,
+    "picks": [
+     "kozuka",
+     "wakizashiA",
+     "dog",
+     "dog"
+    ]
+   },
+   {
+    "raisedFrom": 0,
+    "rollMod": 3,
+    "picks": [
+     "kozuka",
+     "dog",
+     "dog"
+    ]
+   }
+  ],
+  "zanmatoPoll": 14,
+  "realActionsPerCycle": {
+   "mean": 7.25,
+   "spanOfAbout96Percent": [
+    4,
+    10
+   ]
+  }
  }
 }

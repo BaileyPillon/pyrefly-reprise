@@ -4,14 +4,16 @@
  * (`src/engine/tactics/ffx2-tourist-trap.ts`); `naive` is the same party attacking with no answers, reported and never tuned to.
  *
  * - `driveFight(seed, opts)` plays the one fight on any build, clock and action-time setting.
- * - `summarise(log)` reads Yojimbo's moves in order, the girls' knock-outs and turns off any log.
+ * - `summarise(log)` reads Yojimbo's polls and real actions in order, Daigoro's bites, the poll and the time of each Zanmato, and the girls' knock-outs and turns off any log.
  */
 
 import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import { FFX2_TOURIST_TRAP } from '../../../src/data/chapter-ffx2-tourist-trap.ts';
-import { TOURIST_TRAP_BODY_IDS, X2_YOJIMBO_ID, cavernYojimboGroup } from '../../../src/data/ffx2/enemies/tourist-trap.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
+import { YOJIMBO_ACTIONS } from '../../../src/data/ffx2/enemies/tourist-trap-abilities.ts';
+import { TOURIST_TRAP_BODY_IDS, X2_DAIGORO_ID, X2_YOJIMBO_ID, cavernYojimboGroup } from '../../../src/data/ffx2/enemies/tourist-trap.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
 
@@ -23,8 +25,16 @@ export type TouristTrapLine = 'intended' | 'naive';
 export interface TouristTrapRun {
   outcome: string | undefined;
   ticks: number;
-  /** Yojimbo's moves, by ability id, in the order he used them. */
+  /** Yojimbo's real actions (Kozuka, Wakizashi, Zanmato), by ability id, in the order he used them: a dog pick is a poll, not an action. */
   sequence: string[];
+  /** Yojimbo's polls (his `turn-start` events: every poll, a dog pick included). */
+  polls: number;
+  /** The poll each of his Zanmatos came on (1-based, counted from the start of the fight): 14, 28, 42 ... */
+  zanmatoPolls: number[];
+  /** The time of each Zanmato, in seconds of battle time (the start of the poll that queued it). */
+  zanmatoSeconds: number[];
+  /** Daigoro's bites (his own actions). */
+  bites: number;
   /** Yojimbo's moves, counted by ability id. */
   moves: Record<string, number>;
   /** The girls' actions. */
@@ -60,17 +70,31 @@ function fallback(d: Input): Command {
 }
 
 /** Yojimbo's moves and the girls' knock-outs, read off any log. */
-export function summarise(log: readonly BattleEvent[]): Pick<TouristTrapRun, 'sequence' | 'moves' | 'partyTurns' | 'kos'> {
+export function summarise(log: readonly BattleEvent[]): Pick<TouristTrapRun, 'sequence' | 'polls' | 'zanmatoPolls' | 'zanmatoSeconds' | 'bites' | 'moves' | 'partyTurns' | 'kos'> {
   const sequence: string[] = [];
   const moves: Record<string, number> = {};
+  const zanmatoPolls: number[] = [];
+  const zanmatoSeconds: number[] = [];
+  let polls = 0;
+  let bites = 0;
   let partyTurns = 0;
   let kos = 0;
-  for (const e of log as readonly (BattleEvent & { actorId?: string; abilityId?: string; targetId?: string; who?: string })[]) {
+  let lastTicks = 0;
+  for (const e of log as readonly (BattleEvent & { actorId?: string; abilityId?: string; targetId?: string; who?: string; elapsedTicks?: number })[]) {
+    if (e.type === 'turn-start' && e.actorId === X2_YOJIMBO_ID) {
+      polls += 1;
+      lastTicks = e.elapsedTicks ?? lastTicks;
+    }
     if (e.type === 'action-start') {
-      if (e.actorId !== undefined && TOURIST_TRAP_BODY_IDS.includes(e.actorId)) {
+      if (e.actorId === X2_DAIGORO_ID) bites += 1;
+      else if (e.actorId !== undefined && TOURIST_TRAP_BODY_IDS.includes(e.actorId)) {
         const id = e.abilityId ?? '?';
         sequence.push(id);
         moves[id] = (moves[id] ?? 0) + 1;
+        if (id === YOJIMBO_ACTIONS.zanmato) {
+          zanmatoPolls.push(polls);
+          zanmatoSeconds.push(lastTicks / STEPS_PER_SECOND);
+        }
       } else partyTurns += 1;
     }
     if (e.type === 'ko') {
@@ -78,7 +102,7 @@ export function summarise(log: readonly BattleEvent[]): Pick<TouristTrapRun, 'se
       if (who !== undefined && !TOURIST_TRAP_BODY_IDS.includes(who)) kos += 1;
     }
   }
-  return { sequence, moves, partyTurns, kos };
+  return { sequence, polls, zanmatoPolls, zanmatoSeconds, bites, moves, partyTurns, kos };
 }
 
 /** One fight from the chapter's party (or `opts.build`), one line, one seed. The Wait clock by default, as a player has it. */

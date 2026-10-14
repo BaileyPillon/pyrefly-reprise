@@ -7,7 +7,7 @@
  * ## The line
  *
  * The research's strategy (`research/ffx-yojimbo.md` section 8.2, `[verified: 2 sources: wiki, FFExodus]`): protect against his Poison, put two hard hitters on him, keep someone who
- * heals the whole party for the turn after Zanmato (a Mega-Potion, or a Mix), and expect Zanmato on his 14th turn. The preset's girls are Yuna the White Mage and two Dark Knights
+ * heals the whole party for the turn after Zanmato (a Mega-Potion, or a Mix), and expect Zanmato about seven attacks in (it is the 14th POLL of the game's script, and the calls to Daigoro are polls without a turn). The preset's girls are Yuna the White Mage and two Dark Knights
  * (Darkness ignores Defense; the Dark Knights' own Poisonproof is learned), so:
  *
  * **Yuna (White Mage)**, in this order:

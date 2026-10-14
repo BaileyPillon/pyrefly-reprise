@@ -205,12 +205,16 @@ describe('the guide card and document, and the line they teach', () => {
     expect(FFX2_TOURIST_TRAP_GUIDE.clockRules?.wait, 'the Wait habit line leads the rules under Wait').toBeDefined();
   });
 
-  it('says what the research says and no more: the 14th turn, a Mega-Potion first, Kozuka poisons, Daigoro cannot be targeted', () => {
+  it('says what the game does and no more: Zanmato about seven attacks in (never "the fourteenth turn"), a Mega-Potion first, Kozuka poisons, Daigoro cannot be targeted and bites on his own turn', () => {
     const text = FFX2_TOURIST_TRAP_GUIDE.rules.map((r) => r.text).join(' ');
-    expect(text).toMatch(/fourteenth/);
+    expect(text).toMatch(/about seven/);
+    expect(text).toMatch(/as few as four or as many as ten/);
+    expect(text).not.toMatch(/fourteenth|14th|same way every time/i); // Zanmato is the 14th POLL; a poll is not a turn, and the number of attacks before it varies
     expect(text).toMatch(/Mega-Potion/);
     expect(text).toMatch(/Kozuka/);
     expect(text).toMatch(/Daigoro cannot be targeted/);
+    expect(text).toMatch(/his action, not Yojimbo/);
+    expect(text).not.toMatch(/one of Yojimbo’s own moves/); // the bite is Daigoro's own action
     expect(text).not.toMatch(/Jegged says|according to Jegged/i); // his page for this mission was not read: the card says whose strategy it follows in its source note
     expect(text).not.toMatch(/reflect/i); // the wiki's Reflect immunity is not in the game's row
   });
@@ -253,6 +257,21 @@ describe("the tactic: Protect first, a heal from the bag the turn after Zanmato,
     throw new Error('no menu');
   }
 
+  /** `who`'s menu with the whole party at full HP and MP and unpoisoned (a blow that landed while the others waited must not decide a test of the opening): the menu is rebuilt after the reset. */
+  function freshMenu(engine: FFX2Engine, who: string, after?: (engine: FFX2Engine) => void) {
+    menuOf(engine, who);
+    for (const id of ['yuna', 'rikku', 'paine']) {
+      const c = engine.state().combatants[id]!;
+      c.hp = c.stats.maxHp;
+      c.mp = c.stats.maxMp;
+      delete (c.statuses as Record<string, unknown>)['poison'];
+    }
+    after?.(engine);
+    const d = engine.nextDecision();
+    if (d.kind !== 'player-input' || d.actorId !== who) throw new Error('the menu did not come back');
+    return d;
+  }
+
   it('is registered for the one boss id under the chapter id, and gives way (null) when Yojimbo is not on the field', () => {
     expect(TOURIST_TRAP_BOSS_IDS).toEqual([X2_YOJIMBO_ID]);
     const engine = engineAt(0);
@@ -265,9 +284,9 @@ describe("the tactic: Protect first, a heal from the bag the turn after Zanmato,
 
   it('opens with Protect for the party (nobody is hurt) and sends the Dark Knights to Darkness', () => {
     const engine = engineAt(0);
-    const yuna = menuOf(engine, 'yuna');
+    const yuna = freshMenu(engine, 'yuna');
     expect(ffx2TouristTrap('yuna', yuna.commands, engine)).toMatchObject({ kind: 'ability', id: 'x2-white-mage-protect' });
-    const rikku = menuOf(engine, 'rikku');
+    const rikku = freshMenu(engine, 'rikku');
     expect(ffx2TouristTrap('rikku', rikku.commands, engine)).toMatchObject({ kind: 'ability', id: 'x2-dark-knight-darkness' });
   });
 
@@ -289,9 +308,10 @@ describe("the tactic: Protect first, a heal from the bag the turn after Zanmato,
 
   it('cures a poisoned girl with Esuna (a Remedy when Esuna is out of reach), after the party heal and before anything else', () => {
     const engine = engineAt(0);
-    for (const id of ['yuna', 'rikku', 'paine']) (engine.state().combatants[id]!.statuses as Record<string, unknown>)['protect'] = PROTECT;
-    (engine.state().combatants['rikku']!.statuses as Record<string, unknown>)['poison'] = { id: 'poison', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true };
-    const yuna = menuOf(engine, 'yuna');
+    const yuna = freshMenu(engine, 'yuna', (e) => {
+      for (const id of ['yuna', 'rikku', 'paine']) (e.state().combatants[id]!.statuses as Record<string, unknown>)['protect'] = PROTECT;
+      (e.state().combatants['rikku']!.statuses as Record<string, unknown>)['poison'] = { id: 'poison', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true };
+    });
     expect(ffx2TouristTrap('yuna', yuna.commands, engine)).toMatchObject({ kind: 'ability', id: 'x2-white-mage-esuna', targets: ['rikku'] });
     const noEsuna = yuna.commands.map((c) => (c.command.kind === 'ability' && (c.command as { id: string }).id === 'x2-white-mage-esuna' ? { ...c, enabled: false } : c));
     expect(ffx2TouristTrap('yuna', noEsuna, engine)).toMatchObject({ kind: 'item', id: 'x2-remedy', targets: ['rikku'] });

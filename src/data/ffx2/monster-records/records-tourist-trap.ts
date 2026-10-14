@@ -9,12 +9,13 @@
  * immune to Slow, Stop, the seven stat stages and Doom (slots 5 to 14); Shell, Protect, **Reflect**, Regen and Haste are NOT resisted (the wiki's Reflect immunity is not in the record); steal
  * byte 128 (50.2 percent), Power Wrist x1 common and x1 rare (item 0x9008); Pilfer Gil 2,000; no Bribe slot; Zantetsu 120. Daigoro: Accuracy 95; immune to Curse only; no steal, no gil.
  *
- * **What is deliberately NOT wired** (the RE note marks it unmapped, or leaves its meaning open; rule 6):
- * - **Group 1 slots 17 and 18** (255 on both rows): "unmapped (raw 255, 255)" in the note's section 5. They have no status slot in the engine, so leaving them out changes nothing in a fight.
- * - **The special word's bits 7, 8 and 9.** The rows hold 0x3c3 (Yojimbo; 0 for Daigoro): bits 0, 1, 6, 7, 8, 9. Bits 0 (no percentage-HP formulas), 1 (a hit reaction does not slow its gauge) and 6 (no ATB
- *   damage) have meanings an earlier checked note proves, so the wired word is **0x43**. Bits 7 and 8 are unmapped. Bit 9 is "immune to magic cancel" by the ATB note and "Bribe immune" by the
- *   hit-status note, and this engine reads bit 9 (0x200) as Bribe immunity: the RE note leaves it open, so, per the driver's rule ("assume neither"), it is left out.
- * - **The monster-type word (+0x9a)**, read 0 and unmapped: `species` is 0.
+ * **What is deliberately NOT wired** (the RE note marks it unmapped, rule 6): **group 1 slots 17 and 18** (255 on both rows: "unmapped (raw 255, 255)", section 5; they have no status slot here that the note proves, so
+ *   leaving them out changes nothing in a fight) and **the monster-type word (+0x9a)**, read 0 and unmapped (`species` is 0).
+ *
+ * **The special word is the game's own, 0x3c3** (RE review 2026-10-14, m170 / m174: "special word 0x3c3 for Yojimbo", Daigoro's 0): bits 0 (no percentage-HP formulas), 1 (a hit reaction does not slow its
+ *   gauge), 6 (no ATB damage), 7 and 8 (unmapped, read by nothing here) and 9 ("immune to magic cancel" by the ATB note). **This engine reads bit 9 (0x200) as Bribe immunity** (`adapt/words.ts`, the W3 lane's reading,
+ *   which the hit-status note disputes and the RE note leaves open); the row has no Bribe slot, so there is nothing a Bribe could give either way. An earlier draft of this file wired 0x43 (bits 0, 1 and 6) to keep
+ *   Bribe unassumed; the review asked for the game's word.
  *
  * Confidence: [verified: the game's own table, pinned by `tests/unit/chapters/tourist-trap-engine.test.ts`].
  */
@@ -28,7 +29,7 @@ const YOJIMBO_ROW: FFX2MonsterRecord = {
   acc: 95,
   resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255 },
   resist2: { 5: 255, 6: 255, 7: 255, 8: 255, 9: 255, 10: 255, 11: 255, 12: 255, 13: 255, 14: 255 },
-  special: 0x43, // the row's 0x3c3 reduced to the proven bits 0, 1 and 6 (see the header)
+  special: 0x3c3, // the row's word as it is (see the header)
   species: 0,
   zantetsu: 120,
   stealByte: 128,

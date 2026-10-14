@@ -45,6 +45,7 @@ import { type BattleRng, type RngSnapshot, sampleSnapshot } from '../common/stre
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { AI_IDLE_STEPS, AI_IDLE_WAKE, AI_NO_INTENT, AI_REPOLL } from './ai/idle.ts';
 import { BAHAMUT_COUNTDOWN_START } from './constants.ts';
 import { canAct } from './statuses.ts';
 import { gaugeSteps } from './lookahead.ts';
@@ -175,14 +176,28 @@ function cloneAiContext(
 interface DryRun {
   command: Command | null;
   events: EventDraft[];
+  /** The unit is asleep until woken (`ai/idle.ts` AI_NO_INTENT): it has no intent to report, and the board looks past it. */
+  silent?: boolean;
 }
+
+/** How many polls that are not turns (`AI_REPOLL`) a dry run follows to the move that is really coming: Yojimbo's 13 raises before Zanmato are the longest chain there is. */
+const MAX_REPOLLS = 16;
 
 function dryRun(env: Ffx2IntentEnv, enemyId: CombatantId, rngState: RngSnapshot): DryRun | null {
   const built = cloneAiContext(env, enemyId, rngState);
   if (!built) return null;
   const scriptId = built.self.enemy?.aiScriptId;
   try {
-    return { command: aiScriptFor(scriptId).decide(built.ctx), events: built.events };
+    const script = aiScriptFor(scriptId);
+    let command = script.decide(built.ctx);
+    // A poll that is not a turn (Yojimbo's "dog" pick raises a flag and queues nothing: `ai/idle.ts` AI_REPOLL) is not what the board is asked about: follow the polls to the move that is really coming.
+    for (let n = 0; n < MAX_REPOLLS && command === null && built.self.aiMemory?.[AI_REPOLL] === 1; n++) {
+      delete built.self.aiMemory[AI_IDLE_STEPS];
+      delete built.self.aiMemory[AI_IDLE_WAKE];
+      command = script.decide(built.ctx);
+    }
+    const silent = command === null && built.self.aiMemory?.[AI_NO_INTENT] === 1;
+    return { command, events: built.events, ...(silent ? { silent: true } : {}) };
   } catch {
     return null;
   }
@@ -559,7 +574,7 @@ export function predictFFX2EnemyIntent(
   // correctly calling for this turn. FFX-2 only: FFX's CTB has no charge bar.
   const committed = unit.atb.charging?.commandRef ?? null;
   const first: DryRun | null = committed ? { command: committed, events: [] } : dryRun(env, enemyId, base);
-  if (!first) return null;
+  if (!first || first.silent === true) return null;
 
   const defFor = (command: Command | null): AbilityDef | undefined => {
     if (!command || command.kind !== 'ability') return undefined;

@@ -7,10 +7,12 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. Yojimbo's action counter, Zanmato (the party to 1 HP and 1 MP), Kozuka and the untargetable Daigoro are FFX-2 facts; no FFX chapter reads
  * this file, and none of FFX Chapter IX's guide (a different fight with an Overdrive gauge and a different Zanmato) is reused.
  *
- * Sourced facts only: the wiki's Cavern page, FFExodus's Chapter 3 walkthrough and SinirothX's *Enemy Encyclopedia* (the counter, +8 a turn, Zanmato at 100 or more, `[verified: 2 sources]`;
- * Kozuka's quarter of one girl's MP and its Poison; Daigoro cannot be targeted; the strategy: Poison protection, two hard hitters, a heal for the turn after Zanmato). **Jegged's page for this
+ * Sourced facts only: the wiki's Cavern page, FFExodus's Chapter 3 walkthrough and SinirothX's *Enemy Encyclopedia* (the counter, +8 a poll, Zanmato at 100 or more, `[verified: 2 sources]`;
+ * Kozuka's quarter of one girl's MP and its Poison; Daigoro cannot be targeted; the strategy: Poison protection, two hard hitters, a heal for the turn after Zanmato), and the game's own scripts as the RE review
+ * of 2026-10-14 read them (`m170`, `m174`, rows 170 and 174). **Jegged's page for this
  * mission is not in `research/jegged-encounter-guides-ffx2.md`**, so this card follows the wiki's and FFExodus's strategy in our own words, and says so; it is rewritten to Jegged's if his page is read later.
- * The fourteenth turn is the research's own derivation from the counter (`[derived]`, not a quoted sentence of any guide).
+ * Zanmato is the 14th POLL of every cycle, and a poll is not a turn: how many real attacks come before it varies (7.25 on average, 4 to 10 in about 96 percent of cycles: the RE review, and
+ * `tests/unit/chapters/tourist-trap-engine.test.ts` computes it from the bands). The card says "about seven", never "the fourteenth turn".
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`), as for every FFX-2 ship brief.
  */
@@ -23,8 +25,8 @@ export const TOURIST_TRAP_GUIDE_IDS = ['x2-yojimbo'] as const;
 
 const RULES: GuideRule[] = [
   {
-    text: 'Yojimbo counts his own turns, and his count fills on the fourteenth: Zanmato drops the whole party to 1 HP and 1 MP. The count runs the same way every time, so plan that turn instead of hoping to end the fight first.',
-    short: 'Zanmato comes on his 14th turn',
+    text: 'Yojimbo keeps a count that rises with every move he weighs, the calls to Daigoro included. When it is full he gathers himself for Zanmato, which drops the whole party to 1 HP and 1 MP. It comes about seven of his attacks in, as few as four or as many as ten, and the long wind-up shows it: plan that turn instead of hoping to end the fight first.',
+    short: 'Zanmato after about seven attacks',
     cite: 'ffx-yojimbo §8.2',
   },
   {
@@ -38,7 +40,7 @@ const RULES: GuideRule[] = [
     cite: 'ffx-yojimbo §8.2',
   },
   {
-    text: 'Daigoro cannot be targeted, so spend no turn on him. His bite arrives as one of Yojimbo’s own moves.',
+    text: 'Daigoro cannot be targeted, so spend no turn on him. When Yojimbo calls him he bites one girl on his own turn: the bite is his action, not Yojimbo’s.',
     short: 'Daigoro cannot be targeted',
     cite: 'ffx-yojimbo §8.2',
   },

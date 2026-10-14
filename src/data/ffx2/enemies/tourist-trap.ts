@@ -10,18 +10,22 @@
  * (`./records-tourist-trap.ts` lays the rows' resist bytes, accuracy, steal byte and special word; `tests/unit/chapters/tourist-trap-engine.test.ts` pins them against
  * `tests/fixtures/parity/ffx2/tourist_trap_rows.json`). Every number the wiki gave equals the row (`research/ffx-yojimbo.md` §8.2: Level 36, HP 22,000, MP 9,999, STR/MAG/DEF/MDEF/AGI/LUCK
  * 44/61/50/106/120/7, EXP 2,000, AP 15, Gil 1,500, Pilfer Gil 2,000, drop Recovery Bracer, steal Power Wrist at byte 128, Zantetsu 120); the row adds Accuracy 95 and Evasion 0 (read, no longer
- * estimated). **Where the row disagrees with the research this build started on** (listed in `docs/handoff/ch-tourist-trap.md`): (1) the wiki's Reflect immunity is NOT in row 170 (its Reflect byte is
- * 0): removed; (2) Bribe immunity is unproven either way: neither is assumed (no flag, and the special word wired without bit 9); (3) Daigoro is a record of his own (row 174), not a placeholder;
- * (4) Yojimbo's own move list (row 170: Kozuka, Wakizashi twice, Zanmato, Die) has NO Daigoro move, and the dog's list is empty, so the Daigoro strike comes from the sourced table (wiki and
- * SinirothX) and the dog's own script (row 174's AI, not decompiled yet); here it is Yojimbo's selection, the dog standing beside him; (5) "Multi-attack" has no column in the row.
+ * estimated). **Where the rows disagree with the research this build started on** (listed in `docs/handoff/ch-tourist-trap.md`): (1) the wiki's Reflect immunity is NOT in row 170 (its Reflect byte is
+ * 0): removed; (2) Bribe immunity is unproven either way: no flag; (3) Daigoro is a record of his own (row 174), not a placeholder; (4) Yojimbo's own list (row 170: Kozuka, Wakizashi twice, Zanmato, Die)
+ * has NO Daigoro move: **the bite is Daigoro's own action** (the review of the game's scripts `m170` and `m174`, below); (5) "Multi-attack" has no column in the row.
  *
- * **Daigoro** is a separate battler (his own `EnemyDef` with row 174's stats) that **cannot be targeted**: the FFX-2 wiki's Cavern page says so (`research/ffx-yojimbo.md` §8.2 and Y-10,
- * `[single source: wiki]`; the row says nothing either way). He is a *part* of the group (`parts`): the engine never counts a part toward victory, the targeting code skips `untargetable`, and his
- * script waits forever (`../../../battle/ffx2/ai/tourist-trap.ts`), so he makes one silent poll at the start, takes no action of his own and shows no bar.
+ * **The game's scripts** (RE review 2026-10-14, m170 / m174; the five command rows are `../command-records/tourist-trap.ts`): see `../../../battle/ffx2/ai/tourist-trap.ts`. In short, Yojimbo keeps a counter
+ * raised by 8 on every poll and Zanmato comes on the 14th poll; his "dog" pick is not a move of his, it raises a battle flag; **Daigoro is a separate actor** (Lv 30, own gauge, AGI 120) who bites one girl
+ * on his own turn when the flag is up.
  *
- * **Pace.** The research prints no charge or rest for any move; the engine default stands, and the formation carries **action time ON at 3 s**: the same `[estimate]` Bailey picked for the other
- * possessed-aeon fights (the Road, Chapter XI; Ixion at Djose, Chapter XVI, D-269; Cloister 100, Chapter XIII). The rule is sourced `[verified: 2 sources]`, its length is not
- * (`src/battle/ffx2/action-time.ts`). `TOURIST_TRAP_ACTION_TIME_ON = false` turns it off; no boss number moves either way.
+ * **Daigoro** therefore has his own `EnemyDef` with row 174's stats, one ability (the bite) and a script that waits for the flag. He **cannot be targeted** (the FFX-2 wiki's Cavern page,
+ * `research/ffx-yojimbo.md` §8.2 and Y-10, `[single source: wiki]`; the review's init for the dog: cursor off) and is **not counted for victory**: a *part* of the group (`parts`), so the engine never counts him
+ * (`results.ts`), the targeting code skips `untargetable`, and the HUD draws no bar for him (`hideHpBar`).
+ *
+ * **Pace** is the rows' (costs over AGI 120, `../command-records/tourist-trap.ts`), and the formation carries **action time ON at 3 s on top**, exactly as the sibling possessed-aeon chapters do
+ * (the Road, Chapter XI, `./fallen-aeons-road.ts`: Bailey's option A, 2026-09-25; Ixion at Djose, Chapter XVI, `./ixion-djose.ts`: D-269, 2026-09-27, `docs/handoff/chapter-ixion.md` and `docs/plans/ixion-bench.md`;
+ * Cloister 100, Chapter XIII). The rule is sourced `[verified: 2 sources]`, its length is not (`src/battle/ffx2/action-time.ts`). `TOURIST_TRAP_ACTION_TIME_ON = false` turns it off; no boss number moves either
+ * way, and the handoff reports the Zanmato cycle both ways.
  *
  * The painting is PROVISIONAL and borrowed: Lady Ginnem's Yojimbo and Daigoro of the FFX Chapter IX (`characters/yojimbo-cavern`, `characters/daigoro`): same aeon, same dog. Nothing is replaced.
  */
@@ -29,12 +33,12 @@
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
 import { DEF_MDEF_MOD_IMMUNITY, STANDARD_AILMENT_IMMUNITY, STAT_MOD_IMMUNITY_5 } from './vegnagun-shared.ts';
 import { attachMonsterRecords } from '../monster-records/index.ts';
-import { YOJIMBO_ACTION_IDS, YOJIMBO_SCRIPTS } from './tourist-trap-abilities.ts';
+import { DAIGORO_ACTIONS, TOURIST_TRAP_UNITS, YOJIMBO_ACTION_IDS, YOJIMBO_SCRIPTS } from './tourist-trap-abilities.ts';
 
 /** The formation and its two bodies. */
 export const CAVERN_YOJIMBO_GROUP = 'ffx2-cavern-yojimbo';
-export const X2_YOJIMBO_ID = 'x2-yojimbo';
-export const X2_DAIGORO_ID = 'x2-daigoro';
+export const X2_YOJIMBO_ID = TOURIST_TRAP_UNITS.yojimbo;
+export const X2_DAIGORO_ID = TOURIST_TRAP_UNITS.daigoro;
 /** The AI scripts (`../../../battle/ffx2/ai/tourist-trap.ts`). */
 export const X2_YOJIMBO_SCRIPT = YOJIMBO_SCRIPTS.yojimbo;
 export const X2_DAIGORO_SCRIPT = YOJIMBO_SCRIPTS.daigoro;
@@ -51,7 +55,7 @@ export const YOJIMBO_MP = 9999;
 export const YOJIMBO_AGI = 120;
 
 /**
- * **Action time, ON at 3 s** (see the header). `[estimate]`: unsourced length, Bailey's pick for the other possessed aeons. `false` turns it off.
+ * **Action time, ON at 3 s** (see the header): the sibling possessed-aeon chapters' flat add-on, on top of the rows. `[estimate]`: unsourced length, Bailey's pick for the other aeons. `false` turns it off.
  */
 export const TOURIST_TRAP_ACTION_TIME_ON: boolean = true;
 export const TOURIST_TRAP_ACTION_TIME_SECONDS = 3;
@@ -98,7 +102,7 @@ export const x2Yojimbo: EnemyDef = {
   level: YOJIMBO_LEVEL,
   affinities: { gravity: 'immune' }, // row 170 element bytes: null Gravity (bit 4), nothing else
   immunities: { ...YOJIMBO_IMMUNE },
-  // The special word 0x3c3 (row 170): bit 0 no percentage-HP formulas, bit 6 no ATB damage (Delay). Bit 9 (magic cancel, or Bribe: open in the RE note) is not read as Bribe: no 'immune-to-bribe'.
+  // The special word 0x3c3 (row 170): bit 0 no percentage-HP formulas, bit 6 no ATB damage (Delay). No 'immune-to-bribe': Bribe immunity is unproven either way (RE note, section 3).
   immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-delay'],
   forms: [{ name: 'Yojimbo', spriteKey: X2_YOJIMBO_SPRITE, hp: YOJIMBO_HP }],
   aiScriptId: X2_YOJIMBO_SCRIPT,
@@ -118,15 +122,15 @@ export const x2Yojimbo: EnemyDef = {
     },
     // Mission reward: the Tetra Master Garment Grid and the Star Bracer [single source: wiki]. Grids are not an `EnemyRewards` field; the results screen does not show it (the Ixion precedent).
   },
-  abilityIds: [...YOJIMBO_ACTION_IDS],
+  abilityIds: [...YOJIMBO_ACTION_IDS], // row 170's list without its Die row: Kozuka, Wakizashi A, Wakizashi B, Zanmato
   flags: { isBoss: true },
-  sensorText: 'He keeps a count of his own moves. When it fills, he cuts the whole party down to a breath, so heal first.',
+  sensorText: 'He keeps a count of his own moves. When it fills, he gathers himself and cuts the whole party down to a breath, so heal first.',
 };
 
 /**
- * Daigoro, the dog: a separate battler with a record of his own (`monster.bin` row 174, formation 1847 slot 2): Level 30, HP 1, MP 1, STR 42, DEF 50, MAG 61, MDEF 106, AGI 120, ACC 95,
- * EVA 0, LCK 7, special word 0, no rewards, no ability list, Curse resist 255 (`./records-tourist-trap.ts` lays the resist byte). **He cannot be targeted** (the FFX-2 wiki, `[single source]`).
- * He takes no action here (one silent poll at the start, then his script waits forever; the real one, `m174`, is not decompiled), so none of these numbers is ever read in battle beyond HP 1 keeping him alive.
+ * Daigoro, the dog: a separate actor with a record of his own (`monster.bin` row 174, formation 1847 slot 2): Level 30, HP 1, MP 1, STR 42, DEF 50, MAG 61, MDEF 106, AGI 120, ACC 95, EVA 0, LCK 7,
+ * special word 0, no rewards, Curse resist 255 (`./records-tourist-trap.ts` lays the resist byte). His one command is the bite (row 0x40a5), which he uses on his own turn when Yojimbo has called him.
+ * **He cannot be targeted** (the FFX-2 wiki, `[single source]`) and is not counted for victory.
  */
 export const x2Daigoro: EnemyDef = {
   id: X2_DAIGORO_ID,
@@ -143,7 +147,7 @@ export const x2Daigoro: EnemyDef = {
   forms: [{ name: 'Daigoro', spriteKey: X2_DAIGORO_SPRITE, hp: 1 }],
   aiScriptId: X2_DAIGORO_SCRIPT,
   rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 0, drops: [] }, // row 174: no rewards
-  abilityIds: [], // row 174: no ability list
+  abilityIds: [DAIGORO_ACTIONS.bite], // row 174's own list is empty; the bite (0x40a5) comes from his script
   flags: { untargetable: true, hideHpBar: true, partOf: X2_YOJIMBO_ID },
 };
 

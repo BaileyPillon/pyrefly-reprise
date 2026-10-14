@@ -11,6 +11,22 @@ for Bailey's word, the art is provisional and reuses approved paintings where th
 `research/ffx-yojimbo.md` §0.3). No FFX file changes behaviour; the FFX Chapter IX (`yojimbo-cavern`, Lady Ginnem's Yojimbo) is a different fight with different rows and nothing of its data is reused
 (its file headers say so). The shared plumbing (the chapter registry, one door row, one scene row) is "both" (CHK-020) and is additive: a build without the chapter behaves as before.
 
+> **Update 2026-10-14 ~01:25 (the RE rows landed).** The RE parity session pushed `research/re-ffx2-yojimbo-valefor.md` (origin/re-ffx2-yojimbo-valefor 91ef1fd3): the game's own `monster.bin` rows, **Yojimbo = row 170, Daigoro = row 174** (formation 1847, slots 1 and 2). The data below is **re-pinned to them**
+> (`src/data/ffx2/monster-records/records-tourist-trap.ts`, fixture `tests/fixtures/parity/ffx2/tourist_trap_rows.json`, `tests/unit/chapters/tourist-trap-engine.test.ts`). Every wiki number in the table equals the row. **Where the row disagrees with the research this plan was
+> written on** (each also in the handoff, with its row): (1) the wiki's **Reflect** immunity is NOT in row 170 (group-2 Reflect byte 0): removed; (2) **Bribe** immunity is unproven either way: no flag, and the special word is wired as its proven bits only (0x43 of the row's 0x3c3); (3) **Daigoro** is a
+> record of his own (Lv 30, HP 1, MP 1, 42 / 50 / 61 / 106 / 120 / 95 / 0 / 7, Curse only, no rewards, no ability list), not a placeholder; (4) **Yojimbo's own move list** (Kozuka, Wakizashi twice, Zanmato, Die) has **no Daigoro move** and the dog's list is empty: the strike stays the sourced
+> table's (wiki and SinirothX: a weighted choice of Yojimbo's counter), run as Yojimbo's selection, until the two scripts (`m170`, `m174`) are decompiled; (5) **Accuracy 95 and Evasion 0** are now read, no longer estimates; (6) Gravity null is confirmed (element byte 0x10); (7) "Multi-attack" has no column. Daigoro stays
+> untargetable on the FFX-2 wiki's word alone (`research/ffx-yojimbo.md` §8.2 and Y-10, **single source**: the row says nothing either way; my first draft wrote "verified: 2 sources" for that claim, which was wrong). Unmapped columns are not wired (the RE note's section 5).
+> The AI is still the tagged wiki and SinirothX table: the scripts are not decompiled.
+
+> **Update 2026-10-14 ~02:00 (the RE review of the game's scripts `m170` and `m174`, rows 170 / 174; "RE review 2026-10-14").** The review replaced the wiki-built AI of the first draft with the game's own poll, and this plan's
+> mechanics (§2) and the readings (§1) are rewritten to it: (1) **BLOCKER fixed:** Daigoro is not a Yojimbo turn; a "dog" pick is a poll without a turn that raises a flag, and Daigoro is a separate actor who bites on his own turn
+> when the flag is up (row 0x40a5); (2) the band is read on the **raised** counter, only the Zanmato test comes before the raise; (3) the roll-to-move order per band is the game's; (4) all five rows have accuracy formula 0:
+> `canMiss: false` on all five (rule 5); (5) the five command rows are attached (costs, targets: Wakizashi B hits the whole party; Zanmato charges 120 and rests 200); (6) the monster rows are attached with the game's special
+> word (0x3c3 for Yojimbo, 0 for Daigoro; Reflect byte 0); (7) Kozuka's Poison is status byte 100; (8) Daigoro is in the ATB snapshots with his real AGI 120; (9) the text says "the 14th poll" and "about seven attacks", never "the
+> fourteenth turn". Kept on the review's own rule: the flat 3 s action-time add-on stays because the sibling aeon chapters carry it on top of their rows. Added to make the board honest: the intent dry run follows polls that
+> are not turns and skips a sleeping part (additive, two lines each). The bite is aimed by a uniform pick (no start positions for formation 1847). The Meteor block adds no timer.
+
 ## 1. What the chapter is, and the data (rule 6: only what the research says)
 
 Sources: `research/ffx-yojimbo.md` §8.2 (the wiki Cavern page, FFExodus Chapter 3, SinirothX's *Enemy Encyclopedia*), `research/ffx2-fallen-aeons.md` §7.2 (SinirothX confirms the counter and
@@ -23,47 +39,56 @@ replace the wiki's for every field it proves**; this build starts on the wiki's 
 | Where, when | Cavern of the Stolen Fayth; optional mission, opens at the start of Chapter 3, finished in Chapter 3 or 5; tourists trapped, Yuna fights Yojimbo "possessed by Shuyin's despair" | wiki + FFExodus `[verified: 2 sources]` |
 | Level / HP / MP | 36 / 22,000 / 9,999 | level: wiki `[single source]`; HP, MP: wiki + FFExodus `[verified: 2]` |
 | STR / MAG / DEF / MDEF / AGI / LUCK | 44 / 61 / 50 / 106 / 120 / 7 | wiki `[single source]` |
-| Evasion, Accuracy | not in the research. Accuracy 95 (every monster row in the W3 lane's table reads 95, `src/data/ffx2/monster-records/index.ts`); Evasion 0 | `[estimate]` until the RE row |
+| Evasion, Accuracy | Accuracy 95, Evasion 0 | **row 170 `[game rows]`** (read; first drafted as estimates) |
 | Rewards | EXP 2,000, AP 15, Gil 1,500, Pilfer Gil 2,000; drop Recovery Bracer (common and rare); steal Power Wrist (common and rare), steal rate 128 | wiki + FFExodus `[verified: 2]`; steal rate wiki `[single source]` |
-| Immune | Gravity, Silence, Sleep, Darkness, Poison, Confuse, Berserk, Curse, Petrify, Slow, Delay, Stop, Eject, Interrupt, every stat modifier, Death, Doom, Bribe, fractional damage; Reflect | wiki `[single source]` |
+| Immune | Gravity, Silence, Sleep, Darkness, Poison, Confuse, Berserk, Curse, Petrify, Slow, Delay, Stop, Eject, Interrupt, every stat modifier, Death, Doom, fractional damage (**not** Reflect and **not assumed** Bribe: see the update) | wiki `[single source]`, confirmed by **row 170** except Reflect, Bribe and Multi-attack |
 | Wakizashi A / B | single target, non-elemental, DC 16 / DC 13 (B is "rare") | wiki + SinirothX `[verified: 2]` |
-| Daigoro | non-elemental, DC 16, the dog's follow-through "even if Yojimbo is hit"; **Daigoro cannot be targeted**; the formation has Daigoro as a separate body (`Yojimbo 1 Daigoro 1`) | wiki + SinirothX `[verified: 2]` |
+| Daigoro | non-elemental, DC 16, the dog's follow-through "even if Yojimbo is hit" (wiki + SinirothX `[verified: 2]`); the formation has Daigoro as a separate body (`Yojimbo 1 Daigoro 1`: SinirothX, and **row 174**); **Daigoro cannot be targeted** (wiki `[single source]`) | as tagged |
 | Kozuka | takes 25 percent of the target's current MP and inflicts Poison (100 percent) | wiki + FFExodus `[verified: 2]` |
 | Zanmato | the whole party to 1 HP and 1 MP ("remaining HP and MP - 1"); telegraph: raises his right hand, palm left | effect `[verified: 2]`, MP half and telegraph wiki `[single source]` |
-| AI | an **action counter, +8 on each of his turns**; at 100 or more: Zanmato, then the counter resets to 0. Bands: 0-29 Daigoro 2/3, Kozuka 1/3; 30-69 Daigoro 1/2, Kozuka 1/4, Wakizashi A 1/4; 70-99 Daigoro, Kozuka, Wakizashi A, Wakizashi B 1/4 each | wiki + SinirothX `[verified: 2]` |
+| AI | an **action counter, +8 on each of his polls** (the review: raised first, the bands read on the raised value; the dog pick is a poll without a turn); at 100 or more: Zanmato, then the counter resets to 0. Bands: 0-29 Daigoro 2/3, Kozuka 1/3; 30-69 Daigoro 1/2, Kozuka 1/4, Wakizashi A 1/4; 70-99 Daigoro, Kozuka, Wakizashi A, Wakizashi B 1/4 each | wiki + SinirothX `[verified: 2]` |
 | Music | "Aeons" (the FFX-2 aeon slot), the location theme "Labyrinth" | wiki `[single source]` |
 
-**Where the research is silent, and the reading chosen** (each tagged `[estimate]` in the code, reported in the handoff, re-pinned when the RE session lands):
-(1) **Order of increment and band test.** The research derives Zanmato on his 14th turn (ceil(100/8) = 13 turns to reach 104): the counter is tested before it is raised. So turn n reads the counter
-8(n-1): turns 1-4 band one, 5-9 band two, 10-13 band three, 14 Zanmato. (2) **Which roll value is which move** inside a band (only the fractions are sourced): roll mod 3 or mod 4, the move order as the table prints it.
-(3) **Pace** (charge and rest of each move): no source; the engine default (rest 70, no charge) at his Agility 120, the same stand the Experiment's note takes when a row is missing ("the pace is the rows' gauge costs only");
-animation lengths are not modelled. (4) **Does Wakizashi or Daigoro roll to hit?** Both are physical, so they roll (rule 5); Kozuka (MP and status) and Zanmato never roll (`canMiss: false`). (5) **Daigoro's own stats:** none
-in the research for the FFX-2 body (the FFX row `m266` is FFX's); placeholders, never read, because he is untargetable and takes no turn. (6) **Party:** the Chapter 3 preset (`djoseBuild`, Lv 32/33/34, the end of
-Chapter 3, which is the earliest party that has reached the mission and sits under the boss's Lv 36; it owns Dark Knight, Samurai, Alchemist, White Mage, Remedies and Esuna); Chapter 5's preset (46/48/50) is
-measured beside it. The research names two Dark Knights or Samurai/Warrior/Gunner plus an Alchemist and Poison protection; the Star Pendant and Glass Buckle are not in our accessory table, so the answers
-in the data are Esuna and Remedy. (7) **Stage heights:** Yojimbo 27.1 and Daigoro 8.0 are the HD models of FFX (`research/ffx-yojimbo.md` §12, `[datamined]`); the X-2 possessed aeon is assumed to be the same
-model `[estimate]`; against the girls' mean 17.727 that is 1.529 and 0.450.
+**Where the research was silent, and what settled it.** The first draft chose readings (all `[estimate]`); the RE review of the game's scripts and rows (2026-10-14, below) replaced each one:
+(1) **Order of increment and band test**: the research's "14th turn" derivation (ceil(100/8) = 13 raises to reach 104) was right about the 14th and wrong about its meaning: it is the 14th **poll**, the test at 100 is made
+before the raise, the raise comes first and the band is read on the **raised** value. (2) **Which roll is which move**: the review gives the order per band (not the table's printed one). (3) **Pace**: the five command rows
+carry the costs (rest 120, 120, 120, 200 and 100, Zanmato's charge 120), so the engine defaults are gone. (4) **Does a blow roll to hit?** No: all five rows have accuracy formula 0 (rule 5: `canMiss: false` on all
+five; the first draft let Wakizashi and Daigoro roll and 11 percent were evaded). (5) **Daigoro's stats**: row 174. (6) **Party:** unchanged, the Chapter 3 preset (`djoseBuild`, Lv 32/33/34, the end of Chapter 3, the
+earliest party that has reached the mission and under the boss's Lv 36; it owns Dark Knight, Samurai, Alchemist, White Mage, Remedies and Esuna); Chapter 5's preset (46/48/50) is measured beside it. The research names
+two Dark Knights or Samurai/Warrior/Gunner plus an Alchemist and Poison protection; the Star Pendant and Glass Buckle are not in our accessory table, so the answers in the data are Esuna and Remedy.
+(7) **Stage heights:** Yojimbo 27.1 and Daigoro 8.0 are the HD models of FFX (`research/ffx-yojimbo.md` §12, `[datamined]`); the X-2 possessed aeon is assumed to be the same model `[estimate]`; against the girls'
+mean 17.727 that is 1.529 and 0.450. (8) **Still an estimate:** the dog's bite is aimed by a uniform pick, where the game uses the near-weighted search (it needs the formation's start positions, which `SCENES`
+in `ai/script-rolls.ts` does not hold for formation 1847); the action-time add-on (below).
+
 
 ## 2. The mechanics and how our FFX-2 engine models each
 
-- **The action counter** is the existing AI-memory counter (`ai/fallen-aeons.ts`: `AC`, `acOf`, `bumpAc`, `AC_OVERDRIVE`, the helpers Ixion's script also imports). `ai/tourist-trap.ts` is one script,
-  `x2-yojimbo`: at the start of each poll, `ac >= 100` -> Zanmato on the whole party and `ac = 0`; otherwise pick by band (`scriptModCtx`: the game's `random() mod N` stream), aim at a uniform living girl
-  (`pickGirl`), then `ac += 8`. Deterministic under the seeded RNG; the memory is on the unit, so the intent board's clone-and-sample dry run sees the counter (Zanmato is a certain, visible next move at 100+).
-  No result-driven gain (that is Shiva's and Anima's rule, not his).
-- **Zanmato** is the Magus Sisters' Delta Attack shape (`extra: { setHpTo: 1, setMpTo: 1 }`, formula 0x0a in `kernel/damage.ts`, `target.hp - 1`, damage type `other`, all enemies, `canMiss: false`): no Protect, Shell or
-  Defense reduces it, it cannot kill, a KO'd girl is untouched. The effect is the sourced one; the engine path already exists, nothing new.
-- **Kozuka**: `percent-current` power 4 (4/16 = 25 percent of current), `extra.mpOnly` (the MP pool only), plus Poison at chance 254 (lands unless the girl resists); `canMiss: false`.
-- **Daigoro the body**: a second `EnemyDef` with `flags: { untargetable, isPart, hideHpBar }` (`results.ts#battleOutcome` counts only non-part enemies, so he never gates victory; `targeting.ts#isTargetable` honours `untargetable`), and an idle
-  script that waits forever (`idleFor(self, IDLE_UNTIL_WOKEN)`: one poll, no turns, no events). The **move** "Daigoro" belongs to Yojimbo's list (he commands the dog), is a physical `strength` hit, DC 16.
-  Nothing FFX's `orders.ts` does is reused.
-- **Rewards, immunities, steal** laid on `EnemyDef`/`EnemyRewards` by the same shapes the Experiment uses; the game's row (`attachMonsterRecords`, `MONSTER_RECORDS` keyed `group/enemy`) is added when the RE rows land.
+- **Yojimbo's poll** (`ai/tourist-trap.ts`, the RE review of `m170`): the existing AI-memory counter (`ai/fallen-aeons.ts`: `AC`, `acOf`, `bumpAc`, `AC_OVERDRIVE`). Each poll: `ac >= 100` -> Zanmato on the whole
+  party and `ac = 0`; otherwise `ac += 8` **first**, then the band is read on the raised value (>= 70: roll mod 4 gives Wakizashi B, Wakizashi A, Kozuka, the dog; 30 to 69: mod 4 gives Kozuka, Wakizashi A, dog, dog; below
+  30: mod 3 gives Kozuka, dog, dog). The roll is `random() mod N` (stream 2, `scriptModCtx`); a single-target move is aimed by a uniform pick (stream 4, `pickGirl`) drawn after the roll; Wakizashi B and Zanmato take no
+  target. Deterministic under the seeded RNG. No result-driven gain, no timer (the Meteor enrage block never runs in play).
+- **The dog pick is a poll without a turn**: Yojimbo raises the battle flag `daigoroCalled`, wakes Daigoro (`wakeIdle(dog, units, WAKE_ON_FLAG)`), marks `AI_REPOLL` and returns `idleFor(self, 1)` (polled again on the
+  very next step, no recovery). The intent board's dry run follows such polls to the move that is really coming (`intent.ts#dryRun`, additive), so it never says "No action" for a poll that is not a turn. Zanmato is the
+  14th poll of every cycle; the real actions before it number 7.25 on average and 4 to 10 in about 96 percent of cycles (the test computes it from the bands).
+- **Daigoro is an actor of his own** (row 174, AGI 120, his own gauge): a second `EnemyDef` in the group's `parts` (`isPart`: never counted for victory, `results.ts`), `untargetable` (the FFX-2 wiki; `targeting.ts#isTargetable`:
+  no menu and no area move reaches him) and `hideHpBar`. His script, on his own turn: flag up -> clear it and bite one girl (row 0x40a5); else sleep until woken (`idleFor(self, IDLE_UNTIL_WOKEN, WAKE_ON_FLAG)`, and
+  `AI_NO_INTENT` so the intent board looks past a sleeper). The additive pieces are two constants and a marker in `ai/idle.ts`, no change to the engine core. The bite is uniform-aimed (see above).
+- **The five command rows** (`command-records/tourist-trap.ts`, attached like every other FFX-2 boss's): Kozuka 0x40a1, Wakizashi A 0x40a2, Wakizashi B 0x40a3 (all enemies, 0x17), Zanmato 0x40a4 (charge 120, rest 200),
+  the bite 0x40a5 (rest 100). Accuracy formula 0 on all five. Zanmato is the Magus Sisters' Delta Attack shape (formula 0x0a, `target.hp - 1` and MP the same, damage type `other`): no Protect, Shell or Defense reduces it,
+  it cannot kill, a KO'd girl is untouched. Kozuka: formula 4 power 4 on the MP pool (a quarter of current MP), Poison at status byte 100.
+- **Action time** (the flat 3 s add-on) stays ON: the sibling possessed-aeon chapters carry it on top of their rows too (the Road: Bailey's option A, `docs/plans/fallen-aeons-bench.md`; Ixion at Djose: D-269,
+  `docs/handoff/chapter-ixion.md`, `docs/plans/ixion-bench.md`; Cloister 100), and `docs/handoff/re-parity-rc3.md` keeps it on top of the rows. The Zanmato cycle is reported both ways in the handoff.
+- **Rewards, immunities, steal** laid on `EnemyDef`/`EnemyRewards` by the same shapes the Experiment uses; the game's rows (`attachMonsterRecords`, `MONSTER_RECORDS` keyed `group/enemy`) are attached (special word 0x3c3 for
+  Yojimbo, 0 for Daigoro; Reflect byte 0).
+
 
 ## 3. New code (all additive; every file under 400 lines)
 
 | File | What |
 |---|---|
 | `src/data/ffx2/enemies/tourist-trap.ts`, `tourist-trap-abilities.ts` | the two bodies, the group (`ffx2-cavern-yojimbo`), the five abilities |
-| `src/battle/ffx2/ai/tourist-trap.ts` | `x2-yojimbo` (counter script), `x2-daigoro-bystander` |
+| `src/battle/ffx2/ai/tourist-trap.ts` | `x2-yojimbo` (the poll), `x2-daigoro` (the bite, or sleep) |
+| `src/data/ffx2/command-records/tourist-trap.ts`, `monster-records/records-tourist-trap.ts` | the five command rows (0x40a1 to 0x40a5) and the two monster rows (170, 174) |
 | `src/data/chapter-ffx2-tourist-trap.ts`, `chapter-meta-ffx2-tourist-trap.ts` | the record (id `ffx2-tourist-trap`, number 23, `experimental`), pause metadata |
 | `src/scenes/tourist-trap-cavern.ts` | the stage: the approved `cavern-stolen-fayth` plate under the FFX-2 camera rigs and party slots |
 | `src/story/scripts/ffx2-tourist-trap.ts` | a short opening and closing in our own words |
