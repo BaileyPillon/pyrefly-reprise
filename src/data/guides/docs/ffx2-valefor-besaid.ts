@@ -27,7 +27,11 @@ export const FFX2_VALEFOR_BESAID_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'She keeps a hidden count. Every swing she makes (the plain Attack and Sonic Wings, not the Rays or the Blast) and every blow she takes raises it, and it sets off Energy Ray, a magic blast on the whole party, twice on the way up, and Energy Blast, her strongest, at the top.',
+      text: 'She keeps a hidden count. Every swing she makes (the plain Attack and Sonic Wings, not the Rays or the Blast) and every blow she takes raises it.',
+    },
+    {
+      t: 'p',
+      text: 'It sets off Energy Ray, a magic blast on the whole party, twice on the way up, and Energy Blast, her strongest, at the top.',
     },
     {
       t: 'p',
