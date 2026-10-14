@@ -12,7 +12,7 @@ Bailey, 2026-10-08: "It needs to be a 1:1 parity."; 2026-10-11: "ok keep going i
 
 - `src/battle/common/types.ts` (contract file), `FFXCommandRecord.flagsMisc`: the doc comment lists bit 17 (0x20000) as "gated by Silence". The field, its type and its values did not change; the data already carried the bit (41 player-table and 46 enemy-table rows). The engine now reads it: `abilities.ts#blockedBySilence` and `kernel/command-gate.ts#usableCost`.
 - Engine-private, no contract: `battle/ffx/kernel/command-gate.ts`, `kernel/command-range.ts`, `adapt/command-gate.ts`, `command-start.ts`, `escape.ts`. `autoWordA` (`adapt/words.ts`) now carries Half MP Cost (0x4000) and One MP Cost (0x8000).
-- `FFX_HINTS.silence` in `ui/common/statusWords.ts` still says a Silenced member has "no Summon"; that words change is the release driver's (FFX only; the FFX-2 card is untouched).
+- `FFX_HINTS.silence` in `ui/common/statusWords.ts` still says a Silenced member has "no Summon"; that words change is the release driver's (FFX only; the FFX-2 card is untouched). Done in release candidate `r47-rc` on 2026-10-14: the FFX card now says "no White or Black Magic" (Scan counts as White Magic) and the FFX-2 card is unchanged, both pinned in `tests/unit/status-silence-card-words.test.ts`; the one other on-screen repeat, the Studio's FFX-only Silence row in `learn/studio/rules.ts`, reads "Blocks Black and White Magic, but never blocks Summon or an Overdrive."
 
 ## 2026-10-12 — The results screen's music: Chapter IV gets a victory cue and a missing `music.victory` no longer means a silent screen; a loss plays one cue per game (music batch 2, branch `r45-audio`; `src/data/encounters.ts` values only, no type changed; both games as plumbing, FFX-2 only for Chapter IV)
 

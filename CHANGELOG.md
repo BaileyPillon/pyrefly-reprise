@@ -41,6 +41,15 @@ Address: none yet (branch r47-rc: the release candidate r46-rc ca9fd0b4 plus the
   private pages no longer go out, and the deploy refuses a build in which any file of the site names a folder of the
   build computer or links to a private page, or any of these small files has anything else in it. Every value the game
   reads is the same; no picture, sound or screen differs.
+- **FFX only:** The command rules now follow the game's own checks. Silence cuts off White and Black Magic, and Scan,
+  which the game files as White Magic, is now cut off too; calling an aeon is not on the game's Silence list. Half MP
+  Cost rounds up as the game does (a 5 MP spell costs 3, not 2), and One MP Cost with the Magic Booster costs 2. An
+  action is checked again for Silence, MP and a full Overdrive gauge as it starts, and costs nothing if it cannot
+  start. A target that has died or gone by the time its attacker acts is no longer swapped for a random one. Lulu's
+  Doublecast no longer fires its second spell, or spends its MP, at a foe the first spell already killed. Flee counts
+  only party members still in the battle. Entrust now costs 8 MP and the Magus Sisters' Nul-All costs 4 MP, as in the
+  game; neither is offered in any chapter yet, so no fight changes. No boss or party number changed, and every chapter
+  wins as often as before.
 - **How it was checked:** tsc clean; every test of the accessibility lane and of the files this build touched passed
   (151 files, 2,511 tests), then the whole suite once (1,224 files, 19,144 tests, none failing); a production build,
   whose art matches its masters pixel for pixel and whose 3,863 images all load in Chromium and WebKit; and a real-key

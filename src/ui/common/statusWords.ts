@@ -137,9 +137,13 @@ const FFX_HINTS: Partial<Record<StatusId, HintRow>> = {
     full: (n, p) => `<b>${n} is asleep</b> and cannot act. A physical hit wakes ${p.them} (magic does not); <b>Esuna</b> or a <b>Remedy</b> cures it.`,
     short: (n, p) => `<b>${n} is asleep:</b> a physical hit, <b>Esuna</b> or a <b>Remedy</b> wakes ${p.them}.`,
   },
-  // §4.2 Silence: blocks Wht Magic, Blk Magic and Summon; Echo Screen, Esuna, Remedy.
+  // §4.2 Silence: blocks White and Black Magic; Echo Screen, Esuna, Remedy. FFX only (FFX-2's table is below and stays as it is).
+  // Summon is NOT blocked: Silence is a flag on the command record, every White and Black Magic record carries it (Scan counts as
+  // White Magic, so a Silenced member loses Scan too) and the Summon list, Grand Summon, Doublecast and the Overdrives carry none.
+  // The card said "and no Summon" until 2026-10-14 (§4.2 superseded 2026-10-13 by re-parity RC7 lane L-CMD, FFX-G07,
+  // `research/re-ffx-command-gate.md` section 1). Pinned in `tests/unit/status-silence-card-words.test.ts`.
   silence: {
-    full: (n) => `<b>${n} is silenced:</b> no White or Black Magic and no Summon. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
+    full: (n) => `<b>${n} is silenced:</b> no White or Black Magic. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.`,
     short: (n) => `<b>${n} is silenced:</b> <b>Echo Screen</b> cures it.`,
   },
   // §4.2 Curse: the Overdrive gauge cannot fill; Dispel, Holy Water (Remedy and Esuna do not).
