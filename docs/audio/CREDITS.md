@@ -275,25 +275,25 @@ A sinking slowdown magic, a thick heavy low drone that drags downward in pitch, 
 A monster's dying moan, a deep low groan that swells slowly and fades away into silence. About two and three quarter seconds. Cinematic sound design, no music, no voice.
 ```
 
-- **`ffx-core` / `petrify-shatter`** (row `ffx.petrify`, driver pick, failed, take `ffx.petrify.v1`): the raw take SHA-256 `69dc6ce7ad17da45587197bc01c01d3402621e4741e1c45df4cf91f3cb84b42c`, the mastered file `8c0c628b06664a09c562b75f83cc79bde9b289b76485ed8cfb649f67fbada72e`. The prompt, as sent (`duration_seconds` 1.5, `prompt_influence` 0.5):
+- **`ffx-core` / `petrify-shatter`** (row `ffx.petrify`, driver pick, failed, take `ffx.petrify.v1`): the raw take SHA-256 `69dc6ce7ad17da45587197bc01c01d3402621e4741e1c45df4cf91f3cb84b42c`, the mastered file `2d22d0ae282fcaf42dd6d49c0455633126871a8790f797396c8c50a632fb9106` (re-levelled in r46-fix, FOC46-03, by 14.17 dB under the lane's true-peak limiter from the lane's `8c0c628b06664a09c562b75f83cc79bde9b289b76485ed8cfb649f67fbada72e`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 1.5, `prompt_influence` 0.5):
 
 ```
 A stone-turning curse, brittle gritty cracking and grinding as flesh calcifies, ending in a dry stony clunk. About two seconds. Cinematic fantasy sound design, no music, no melody, no voice.
 ```
 
-- **`ffx-core` / `cure-2`** (row `ffx.cure.t2`, driver pick, failed, take `ffx.cure.t2.v1`): the raw take SHA-256 `5193806a4b98b3ff1964d6f8cf48193ec054ac55b844d5ac16cba3510068c488`, the mastered file `ac0ec6d81411ea7b6289b6d1a0e4de391ea3c84d850fb3aa18cf724f7895d7cc`. The prompt, as sent (`duration_seconds` 2, `prompt_influence` 0.5):
+- **`ffx-core` / `cure-2`** (row `ffx.cure.t2`, driver pick, failed, take `ffx.cure.t2.v1`): the raw take SHA-256 `5193806a4b98b3ff1964d6f8cf48193ec054ac55b844d5ac16cba3510068c488`, the mastered file `7388ebd45f5c269024da900cd875cddaa1c9763690e7afba0e5c9180e8f9662b` (re-levelled in r46-fix, FOC46-03, by -2 dB from the lane's `ac0ec6d81411ea7b6289b6d1a0e4de391ea3c84d850fb3aa18cf724f7895d7cc`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 2, `prompt_influence` 0.5):
 
 ```
 A fuller healing sparkle, a warm shimmering wash of glittering chimes that blooms and gently circles. About one and three quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice.
 ```
 
-- **`ffx-core` / `hit-katana`** (row `ffx.weapon.katana.hit`, driver pick, failed, take `ffx.weapon.katana.hit.v5`): the raw take SHA-256 `4b11bc3451e2e63c3d456fd23bc310ef55c2be4b82a43a6a811e4ccccb827a29`, the mastered file `efc3667f67c76c5706ef63513a8b1d44c1f9f1032363da36e9b227e61a46da0f`. The prompt, as sent (`duration_seconds` 1, `prompt_influence` 0.7):
+- **`ffx-core` / `hit-katana`** (row `ffx.weapon.katana.hit`, driver pick, failed, take `ffx.weapon.katana.hit.v5`): the raw take SHA-256 `4b11bc3451e2e63c3d456fd23bc310ef55c2be4b82a43a6a811e4ccccb827a29`, the mastered file `d93817bbdbcfb2ff40bb529033b7f12b9c9fd9515f57838bd7f6e3a5b7c4e3c3` (re-levelled in r46-fix, FOC46-03, by -2.7 dB from the lane's `efc3667f67c76c5706ef63513a8b1d44c1f9f1032363da36e9b227e61a46da0f`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 1, `prompt_influence` 0.7):
 
 ```
 A heavy katana slicing through a target, a long low sweeping rush swelling into a clean cutting impact with a deep body thump. About one second. With a low rounded thump underneath, like a fist hitting a leather bag, soft and muffled, not sharp, it swells gradually for about 0.3 seconds before the peak. Close-miked, realistic sound design, no music, no voice.
 ```
 
-- **`ffx-core` / `cure`** (row `ffx.cure.t1`, driver pick, failed, take `ffx.cure.t1.v1`): the raw take SHA-256 `b066f03d1af93ce6e8b7417fa1e0dd85982de29fff98a1147aaa6d872b7a0ead`, the mastered file `3f927c5e43d4175296fa7401d6fa42977dd8f99f161803a3870c669a4d406f02`. The prompt, as sent (`duration_seconds` 1.7, `prompt_influence` 0.5):
+- **`ffx-core` / `cure`** (row `ffx.cure.t1`, driver pick, failed, take `ffx.cure.t1.v1`): the raw take SHA-256 `b066f03d1af93ce6e8b7417fa1e0dd85982de29fff98a1147aaa6d872b7a0ead`, the mastered file `dc9d4a099a656b32a6b60141536696bb5cc3d8ef49a06a7cbb16974a70cb7a07` (re-levelled in r46-fix, FOC46-03, by 0.4 dB from the lane's `3f927c5e43d4175296fa7401d6fa42977dd8f99f161803a3870c669a4d406f02`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 1.7, `prompt_influence` 0.5):
 
 ```
 A gentle healing sparkle, soft airy glittering chimes in a warm shimmering wash that blooms quickly and fades. About one and a half seconds, bright and soft. Cinematic fantasy sound design, no music, no melody, no voice.
@@ -311,7 +311,7 @@ A spear piercing a target, a swelling mid rush into a full penetrating hit with 
 A tall armored fighter's quick sword strike, a short sharp whoosh and a solid blade impact with a mid hit. About one second. Close-miked, realistic sound design, no music, no voice.
 ```
 
-- **`ffx-core` / `item-grenade`** (row `ffx.item.grenade`, driver pick, failed, take `ffx.item.grenade.v1`): the raw take SHA-256 `9b847a5f46c4daa731831dfdbbda6e7bdff7523eb620819b0b1605a476c2f64d`, the mastered file `c3c94f957bad98e093c9a1e3f0e895ecdb1da9af34b01c9763526f6b1848cccb`. The prompt, as sent (`duration_seconds` 1.7, `prompt_influence` 0.6):
+- **`ffx-core` / `item-grenade`** (row `ffx.item.grenade`, driver pick, failed, take `ffx.item.grenade.v1`): the raw take SHA-256 `9b847a5f46c4daa731831dfdbbda6e7bdff7523eb620819b0b1605a476c2f64d`, the mastered file `b07731ade064fc78d8c60bb8d009876f8e9736381eec5bfd1e90f7025c35bc3f` (re-levelled in r46-fix, FOC46-03, by -0.5 dB from the lane's `c3c94f957bad98e093c9a1e3f0e895ecdb1da9af34b01c9763526f6b1848cccb`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 1.7, `prompt_influence` 0.6):
 
 ```
 A thrown grenade exploding, a sharp bang with a short fiery burst and falling debris. About one and a half seconds. Close-miked, realistic sound design, no music, no voice.
@@ -329,25 +329,25 @@ A restorative potion, fine glittering chimes with a bright airy sparkle, a clean
 A massive two-stroke sword attack, a long rising metallic charge building for several seconds, then two crossing heavy slashes with ringing steel impacts. About seven seconds. Cinematic sound design, no music, no voice.
 ```
 
-- **`ffx-core` / `life`** (row `ffx.life`, driver pick, failed, take `ffx.life.v2`): the raw take SHA-256 `bbaa2a50c10b5338d96868c2b7d8b6a954af79113f0856b1a6b11a9802b48b81`, the mastered file `73d7190b87b4da057eab9175619f5f58d70b189a485fbdf09d2a56e66a31fd73`. The prompt, as sent (`duration_seconds` 3, `prompt_influence` 0.5):
+- **`ffx-core` / `life`** (row `ffx.life`, driver pick, failed, take `ffx.life.v2`): the raw take SHA-256 `bbaa2a50c10b5338d96868c2b7d8b6a954af79113f0856b1a6b11a9802b48b81`, the mastered file `7cc2b4b57f1d20fcf41a9edf505010110b13e86d590469acc308f35da9a56996` (re-levelled in r46-fix, FOC46-03, by -0.7 dB from the lane's `73d7190b87b4da057eab9175619f5f58d70b189a485fbdf09d2a56e66a31fd73`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 3, `prompt_influence` 0.5):
 
 ```
 A resurrection shimmer, a glowing airy swell building for about a second into a warm bright bloom with a soft chime, then fading slowly. About two and a half seconds, gentle and uplifting. Cinematic fantasy sound design, no music, no melody, no voice. Variation: darker and heavier, more mid end.
 ```
 
-- **`ffx-core` / `water-3`** (row `ffx.water.t3`, driver pick, near, take `ffx.water.t3.v4`): the raw take SHA-256 `64050ee0898ee5c366a21ab0a3094a7de2d8359ef355afc7ffd3838adbc26bcf`, the mastered file `6367c4ec32271e7f17148e8ad768ec6ca00513bf4121f178958972f3cf77ccc1`. The prompt, as sent (`duration_seconds` 3.2, `prompt_influence` 0.6):
+- **`ffx-core` / `water-3`** (row `ffx.water.t3`, driver pick, near, take `ffx.water.t3.v4`): the raw take SHA-256 `64050ee0898ee5c366a21ab0a3094a7de2d8359ef355afc7ffd3838adbc26bcf`, the mastered file `94174075cb2c6cfa9b5f3f4163579dd4c348e65847e9b556e9687fd90f2d010d` (re-levelled in r46-fix, FOC46-03, by -1.2 dB from the lane's `6367c4ec32271e7f17148e8ad768ec6ca00513bf4121f178958972f3cf77ccc1`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 3.2, `prompt_influence` 0.6):
 
 ```
 A massive tidal wave crashing, a huge rushing swell and solid splash with rolling surf and cascading droplets. About two and a half seconds. It swells gradually for about 1.3 seconds before the peak. Cinematic fantasy sound design, no music, no melody, no voice.
 ```
 
-- **`ffx-final-aeon` / `fa-wave`** (row `ffx.boss.fa.wave`, driver pick, failed, take `ffx.boss.fa.wave.v1`): the raw take SHA-256 `7371dfc18a52e955d6d921993558242076d5d5f7ca47aa194d720eab66fbc082`, the mastered file `4897cd548f81cb2934e3f04e969c72d6e1d95e1dd447d970da0961b3ef9b80cf`. The prompt, as sent (`duration_seconds` 8.5, `prompt_influence` 0.4):
+- **`ffx-final-aeon` / `fa-wave`** (row `ffx.boss.fa.wave`, driver pick, failed, take `ffx.boss.fa.wave.v1`): the raw take SHA-256 `7371dfc18a52e955d6d921993558242076d5d5f7ca47aa194d720eab66fbc082`, the mastered file `131d6cba3614c1b895ce4fc592a2b2dd23db119e51f138dd915a7bfc35c45ed4` (re-levelled in r46-fix, FOC46-03, by -3.27 dB from the lane's `4897cd548f81cb2934e3f04e969c72d6e1d95e1dd447d970da0961b3ef9b80cf`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 8.5, `prompt_influence` 0.4):
 
 ```
 A rolling shockwave, a vast low surging wave of pressure sweeping across with a deep growing drone pressing down. About eight seconds. Cinematic sound design, no music, no voice.
 ```
 
-- **`ffx-core` / `thunder-3`** (row `ffx.thunder.t3`, driver pick, failed, take `ffx.thunder.t3.v1`): the raw take SHA-256 `0dd29dc13c75dd5d29fa7dd1742bb484eb95393c0856cc5cc1e603fb276175ad`, the mastered file `a47e7f25052107693b97d33682de710c0230d453b200557619b7fa1136f61b52`. The prompt, as sent (`duration_seconds` 3.4, `prompt_influence` 0.5):
+- **`ffx-core` / `thunder-3`** (row `ffx.thunder.t3`, driver pick, failed, take `ffx.thunder.t3.v1`): the raw take SHA-256 `0dd29dc13c75dd5d29fa7dd1742bb484eb95393c0856cc5cc1e603fb276175ad`, the mastered file `6d5af25e5b17a302c8e36ec194360822c04ad4f6a9e606eaeb1185092b804e0c` (re-levelled in r46-fix, FOC46-03, by -6.2 dB from the lane's `a47e7f25052107693b97d33682de710c0230d453b200557619b7fa1136f61b52`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 3.4, `prompt_influence` 0.5):
 
 ```
 A colossal lightning strike, a heavy low electric swell erupting into a deafening thunder crack and a long rolling boom, deep and powerful. About three seconds. Cinematic fantasy sound design, no music, no melody, no voice.
@@ -365,7 +365,7 @@ Four gritty scrapes of a steel blade across armor, each louder than the last, en
 An icy graceful strike, a bright high crystalline sweep with airy frost and ringing glass. About two seconds. Cinematic sound design, no music, no voice.
 ```
 
-- **`ffx2-core` / `magic-charge-x2`** (row `ffx2.cast.chant`, driver pick, failed, take `ffx2.cast.chant.v1`): the raw take SHA-256 `8e44e1e751dbd7cb96d330228c43086071fd10dd72775c740b56223d4db810c7`, the mastered file `ec7f1504292c8daf04ff39597bd480005636c0491a2305af97fd38008a49fff7`. The prompt, as sent (`duration_seconds` 0.8, `prompt_influence` 0.5):
+- **`ffx2-core` / `magic-charge-x2`** (row `ffx2.cast.chant`, driver pick, failed, take `ffx2.cast.chant.v1`): the raw take SHA-256 `8e44e1e751dbd7cb96d330228c43086071fd10dd72775c740b56223d4db810c7`, the mastered file `54fc5ea6fb2048409b77200528688462beeab3c9ed87b4220babafe123d7000f` (re-levelled in r46-fix, FOC46-03, by -0.9 dB from the lane's `ec7f1504292c8daf04ff39597bd480005636c0491a2305af97fd38008a49fff7`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 0.8, `prompt_influence` 0.5):
 
 ```
 A brief airy rising incantation shimmer, a soft glassy rise that ends in a gentle flick. About half a second. Cinematic fantasy sound design, no music, no melody, no voice.
@@ -377,7 +377,7 @@ A brief airy rising incantation shimmer, a soft glassy rise that ends in a gentl
 A rapid burst of pistol shots, five quick snappy reports in about half a second. Close-miked, realistic sound design, no music, no voice. Variation: fuller and rounder, with a little more body.
 ```
 
-- **`ffx2-core` / `death`** (row `ffx2.death`, driver pick, failed, take `ffx2.death.v1`): the raw take SHA-256 `53721e0cc631af1709dbb7dda9c0172ed56a93dc05e9fc03e6327efc2a83fcaa`, the mastered file `928317c67b3e7d78ddb85dcdaa4c561d0146ef3ca41fdd1feded657c9cd38966`. The prompt, as sent (`duration_seconds` 1.4, `prompt_influence` 0.5):
+- **`ffx2-core` / `death`** (row `ffx2.death`, driver pick, failed, take `ffx2.death.v1`): the raw take SHA-256 `53721e0cc631af1709dbb7dda9c0172ed56a93dc05e9fc03e6327efc2a83fcaa`, the mastered file `2a1403b45596fb2eecdc3af8c3d164082d0d6d8247d0e0c45dcbe11bf7e7cff6` (re-levelled in r46-fix, FOC46-03, by -4.7 dB from the lane's `928317c67b3e7d78ddb85dcdaa4c561d0146ef3ca41fdd1feded657c9cd38966`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 1.4, `prompt_influence` 0.5):
 
 ```
 A death spell, a cold bright sharp hiss followed by a single mid toll. About one and a quarter seconds. Cinematic fantasy sound design, no music, no melody, no voice.
@@ -389,7 +389,7 @@ A death spell, a cold bright sharp hiss followed by a single mid toll. About one
 Two quick low muffled wooden thumps one after the other, rounded and soft, like knocking twice on a thick padded door, pitched low. Over in about a quarter of a second. Dry and clean, no reverb, no music, no voice. Variation: slightly warmer and rounder.
 ```
 
-- **`ffx2-core` / `hit-gun`** (row `ffx2.lb.gunner.hit`, driver pick, failed, take `ffx2.lb.gunner.hit.v1`): the raw take SHA-256 `237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2`, the mastered file `ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71`. The prompt, as sent (`duration_seconds` 2.4, `prompt_influence` 0.6):
+- **`ffx2-core` / `hit-gun`** (row `ffx2.lb.gunner.hit`, driver pick, failed, take `ffx2.lb.gunner.hit.v1`): the raw take SHA-256 `237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2`, the mastered file `e0c79b8f78853e306658675a96cfdcd8de2e29f1af38ed604113af08ecce963a` (re-levelled in r46-fix, FOC46-03, by -1.6 dB from the lane's `ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 2.4, `prompt_influence` 0.6):
 
 ```
 A bullet striking a target, a crisp snappy impact tick followed by a small spray of fizzy debris and a faint metallic ring-down in three tiny separate crackles. Close-miked, realistic sound design, no music, no voice.

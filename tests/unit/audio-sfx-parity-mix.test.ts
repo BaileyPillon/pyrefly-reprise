@@ -92,8 +92,11 @@ describe('the floor under the party (FFX-2 hits): today\'s level, not the D-210 
   it('NO CUT: the girls\' swings and blows, and their KO fall, play at today\'s level (no trim at all), where the D-210 floor cut each about 6 dB', () => {
     for (const cue of [...HITS, 'ko-fall']) expect(PARITY_TRIMS_DB.ffx2[cue], `${cue} takes no trim`).toBeUndefined();
     for (const cue of ['shot-gun', 'swing-dagger']) expect(level('ffx2', cue), cue).toBeCloseTo(-18, 0);
-    // The three blows the sprite lost play from ffx2-core at today's impact level (the pack test holds each original to its row).
-    for (const cue of ['hit-dagger', 'hit-gun', 'hit-greatsword']) expect(shippedPack['ffx2-core']!.cues[cue]!.lufs, `${cue} in ffx2-core`).toBeCloseTo(-14.1, 0);
+    // The three blows the sprite lost play from ffx2-core at today's impact level (the pack test holds each original to its row). The Gunner's blow was
+    // brought 1.6 dB down in r46-fix (FOC46-03): the reviewer's integrated measure put the original 2.6 dB over the stand-in it replaced although the two
+    // read the same on the loudest 400 ms (its tail is 2.4 s, the stand-in's 0.6 s); `sfx-parity-levelfix.json` records it and the levels test pins it.
+    for (const cue of ['hit-dagger', 'hit-greatsword']) expect(shippedPack['ffx2-core']!.cues[cue]!.lufs, `${cue} in ffx2-core`).toBeCloseTo(-14.1, 0);
+    expect(shippedPack['ffx2-core']!.cues['hit-gun']!.lufs, 'hit-gun in ffx2-core (re-levelled)').toBeCloseTo(-15.6, 0);
     expect(IN_SPRITE).toEqual(['shot-gun', 'swing-dagger']);
     // Nothing the floor protects goes lower than the floor, and no party trim anywhere is a cut of even a decibel.
     for (const row of mix.rows.filter((r) => r.floor)) {

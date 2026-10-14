@@ -2110,7 +2110,7 @@
     "packs": {
       "ffx-core": {
         "file": "sfx/parity-ffx-core.mp3",
-        "bytes": 777011,
+        "bytes": 773826,
         "duration": 40.447007,
         "quality": "libmp3lame -q:a 3",
         "cues": {
@@ -2171,8 +2171,8 @@
             "take": "ffx.weapon.katana.hit.v5",
             "onsetMs": 0,
             "peakMs": 115,
-            "lufs": -14.06,
-            "truePeakDb": -2.64
+            "lufs": -16.83,
+            "truePeakDb": -5.25
           },
           "hit-spear": {
             "offset": 2.478617,
@@ -2195,8 +2195,8 @@
             "take": "ffx.item.grenade.v1",
             "onsetMs": 0,
             "peakMs": 5,
-            "lufs": -14.0,
-            "truePeakDb": -5.82
+            "lufs": -14.5,
+            "truePeakDb": -6.36
           },
           "buff-generic": {
             "offset": 4.373923,
@@ -2219,8 +2219,8 @@
             "take": "ffx.cure.t1.v1",
             "onsetMs": 0,
             "peakMs": 60,
-            "lufs": -19.05,
-            "truePeakDb": -10.69
+            "lufs": -18.7,
+            "truePeakDb": -9.89
           },
           "cure-2": {
             "offset": 8.233923,
@@ -2231,8 +2231,8 @@
             "take": "ffx.cure.t2.v1",
             "onsetMs": 0,
             "peakMs": 210,
-            "lufs": -16.96,
-            "truePeakDb": -10.49
+            "lufs": -18.96,
+            "truePeakDb": -12.87
           },
           "darkness": {
             "offset": 10.283923,
@@ -2279,8 +2279,8 @@
             "take": "ffx.life.v2",
             "onsetMs": 60,
             "peakMs": 1270,
-            "lufs": -15.71,
-            "truePeakDb": -9.44
+            "lufs": -16.39,
+            "truePeakDb": -10.38
           },
           "petrify-shatter": {
             "offset": 17.93932,
@@ -2291,8 +2291,8 @@
             "take": "ffx.petrify.v1",
             "onsetMs": 0,
             "peakMs": 110,
-            "lufs": -21.47,
-            "truePeakDb": -1.58
+            "lufs": -15.08,
+            "truePeakDb": -1.31
           },
           "shell": {
             "offset": 19.46932,
@@ -2327,8 +2327,8 @@
             "take": "ffx.thunder.t3.v1",
             "onsetMs": 0,
             "peakMs": 500,
-            "lufs": -13.99,
-            "truePeakDb": -5.85
+            "lufs": -20.18,
+            "truePeakDb": -12.12
           },
           "water": {
             "offset": 26.027029,
@@ -2351,8 +2351,8 @@
             "take": "ffx.water.t3.v4",
             "onsetMs": 5,
             "peakMs": 765,
-            "lufs": -14.58,
-            "truePeakDb": -6.8
+            "lufs": -15.8,
+            "truePeakDb": -7.79
           },
           "dissolve-pyreflies": {
             "offset": 30.67381,
@@ -2382,7 +2382,7 @@
       },
       "ffx2-core": {
         "file": "sfx/parity-ffx2-core.mp3",
-        "bytes": 352125,
+        "bytes": 351081,
         "duration": 21.089592,
         "quality": "libmp3lame -q:a 3",
         "cues": {
@@ -2515,8 +2515,8 @@
             "take": "ffx2.lb.gunner.hit.v1",
             "onsetMs": 0,
             "peakMs": 10,
-            "lufs": -13.97,
-            "truePeakDb": -4.74
+            "lufs": -15.57,
+            "truePeakDb": -6.37
           },
           "cura-x2": {
             "offset": 9.082857,
@@ -2551,8 +2551,8 @@
             "take": "ffx2.death.v1",
             "onsetMs": 0,
             "peakMs": 35,
-            "lufs": -15.03,
-            "truePeakDb": -8.55
+            "lufs": -19.62,
+            "truePeakDb": -13.23
           },
           "flare-x2": {
             "offset": 16.33898,
@@ -2575,8 +2575,8 @@
             "take": "ffx2.cast.chant.v1",
             "onsetMs": 0,
             "peakMs": 250,
-            "lufs": -19.87,
-            "truePeakDb": -13.25
+            "lufs": -20.79,
+            "truePeakDb": -14.04
           }
         }
       },
@@ -2706,7 +2706,7 @@
       },
       "ffx-final-aeon": {
         "file": "sfx/parity-ffx-final-aeon.mp3",
-        "bytes": 75150,
+        "bytes": 68893,
         "duration": 6.672041,
         "quality": "libmp3lame -q:a 5",
         "cues": {
@@ -2719,8 +2719,8 @@
             "take": "ffx.boss.fa.wave.v1",
             "onsetMs": 5,
             "peakMs": 3135,
-            "lufs": -14.4,
-            "truePeakDb": -4.57
+            "lufs": -17.67,
+            "truePeakDb": -7.85
           }
         }
       },

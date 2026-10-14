@@ -337,7 +337,15 @@ describe('the shipped manifest\'s packs', () => {
     expect(Object.keys(shipped.sfxParity.packs).length, 'every listed pack parses').toBe(Object.keys(shippedRaw.sfxParity!.packs!).length);
   });
 
-  it('ships every pack it lists at its byte count, under the gates, in the right game, at its row\'s level', () => {
+  // The cues re-levelled in r46-fix (FOC46-03): they ship at the level the level-fix file records, which is within the driver's 1.5 dB of the sound they
+  // replace on live rather than at the spec row's level (`docs/audio/sfx-parity-levelfix.json`, pinned by audio-sfx-levels-2026-10-13.test.ts).
+  const levelFixed = new Map(
+    (JSON.parse(readFileSync(join(ROOT, 'docs', 'audio', 'sfx-parity-levelfix.json'), 'utf8')) as { rows: { pack: string; cue: string; action: string; momentaryLufsAfter: number }[] }).rows
+      .filter((r) => r.action !== 'kept')
+      .map((r) => [`${r.pack}/${r.cue}`, r.momentaryLufsAfter] as const),
+  );
+
+  it('ships every pack it lists at its byte count, under the gates, in the right game, at its row\'s level (or at its recorded re-level)', () => {
     for (const [name, pack] of Object.entries(shipped.sfxParity.packs)) {
       expect(name, name).toMatch(PARITY_PACK_NAME);
       expect(pack.file, name).toBe(`sfx/parity-${name}.mp3`);
@@ -352,7 +360,9 @@ describe('the shipped manifest\'s packs', () => {
         expect(c.truePeakDb!, `${name}/${cueName} true peak`).toBeLessThanOrEqual(-1.1 + 0.05);
         const row = mix.rows.find((r) => r.id === c.specRow);
         const target = row ? rowTarget(mix, row) : null;
-        if (target !== null) expect(Math.abs(c.lufs! - target), `${name}/${cueName} against ${c.specRow}`).toBeLessThanOrEqual(0.3);
+        const reLevelled = levelFixed.get(`${name}/${cueName}`);
+        if (reLevelled !== undefined) expect(Math.abs(c.lufs! - reLevelled), `${name}/${cueName} against its recorded re-level`).toBeLessThanOrEqual(0.05);
+        else if (target !== null) expect(Math.abs(c.lufs! - target), `${name}/${cueName} against ${c.specRow}`).toBeLessThanOrEqual(0.3);
       }
     }
   });
