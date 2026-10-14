@@ -50,6 +50,21 @@ Address: none yet (branch r47-rc: the release candidate r46-rc ca9fd0b4 plus the
   only party members still in the battle. Entrust now costs 8 MP and the Magus Sisters' Nul-All costs 4 MP, as in the
   game; neither is offered in any chapter yet, so no fight changes. No boss or party number changed, and every chapter
   wins as often as before.
+- **FFX-2 only, Rikku's dressphere paintings:** the eight dresspheres that were louder than Yuna's (Alchemist, Berserker,
+  Black Mage, Gunner, Lady Luck, Songstress, Thief and White Mage; 443 painting files, every pose at every size it has) are
+  brought down to the colour strength of Yuna's painting of the same dressphere, as chosen (option A; the pick between
+  the sheets was left to the driver). The hot red-orange tops, boots and skirts turn coral, the orange skin a rosy tan
+  inside the skin colour of her FFX painting, and the glare of the orange fills eases. Her hair and the yellow fills
+  keep their gold (the one change the driver made to the pick: the hair stays golden, not cream; the orange strands
+  underneath go sandy), and eyes, beads, outlines, dark shading, whites and transparency are untouched, as is every
+  pixel's place, so nothing moves on screen. The Songstress goes from saturation 0.74 to 0.57 (Yuna's: 0.58) and the Alchemist from 0.75 to 0.56 (Yuna's
+  Thief: 0.54). The Dark Knight and Warrior were already quieter than Yuna and are unchanged; so are her FFX painting
+  and the hidden Leblanc chapter's own copies. The old paintings are kept (a backup, the private art repository, the
+  old art folder). Checked here with the art, pose, manifest, chapter, engine, effects and continuity tests (191
+  files, 3,194 tests passed), the approved-art check (916 ok) and the pose-scale check; the whole suite was run once
+  after the art changed (19,187 tests: 19,106 passed, 73 skipped; seven timed out on a busy machine and pass run
+  alone). Before and after: `docs/screenshots/r47-rikku-colour/rikku-final-before-after.jpg`; the
+  numbers and the way back are in `docs/handoff/r47-rikku-colour.md`.
 - **How it was checked:** tsc clean; every test of the accessibility lane and of the files this build touched passed
   (151 files, 2,511 tests), then the whole suite once (1,224 files, 19,144 tests, none failing); a production build,
   whose art matches its masters pixel for pixel and whose 3,863 images all load in Chromium and WebKit; and a real-key
