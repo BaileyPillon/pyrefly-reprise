@@ -13,3 +13,4 @@ Word `daigoro`, hidden chapter number 23 (fayth is 22). Not merged, not deployed
 ## Steps
 
 - [x] Step 1 (00:40): worktree created, junctions (node_modules, public/art -> D:/pyrefly-art-r44 read only), public/fx ensured (26 restored, verify PASS).
+- [x] Step 2 (01:10): `node tools/critic-plan.mjs` says DEEP; paper preflight `docs/plans/ch-tourist-trap-review.md` written before any code (data table with tags, the readings chosen where the research is silent, the engine model of the counter, Zanmato, Kozuka, Daigoro, the word's keys, risks, tests). RE rows (research/re-ffx2-yojimbo-valefor.md) not yet landed: re-pin when they do.
