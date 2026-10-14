@@ -1408,13 +1408,12 @@
       },
       "characterCost": 26,
       "sha256Raw": "237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2",
-      "sha256Mastered": "e0c79b8f78853e306658675a96cfdcd8de2e29f1af38ed604113af08ecce963a",
-      "levelFix": "docs/audio/sfx-parity-levelfix.json",
+      "sha256Mastered": "ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71",
       "measured": {
         "activeMs": 2265,
         "attackMs": 10,
-        "lufs": -15.57,
-        "truePeakDb": -6.37,
+        "lufs": -14.1,
+        "truePeakDb": -4.86,
         "centroidHz": 3829,
         "bandsPct": [6, 3, 40, 51, 0]
       },

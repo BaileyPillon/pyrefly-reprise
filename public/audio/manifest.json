@@ -2382,7 +2382,7 @@
       },
       "ffx2-core": {
         "file": "sfx/parity-ffx2-core.mp3",
-        "bytes": 351081,
+        "bytes": 351499,
         "duration": 21.089592,
         "quality": "libmp3lame -q:a 3",
         "cues": {
@@ -2515,8 +2515,8 @@
             "take": "ffx2.lb.gunner.hit.v1",
             "onsetMs": 0,
             "peakMs": 10,
-            "lufs": -15.57,
-            "truePeakDb": -6.37
+            "lufs": -13.97,
+            "truePeakDb": -4.74
           },
           "cura-x2": {
             "offset": 9.082857,

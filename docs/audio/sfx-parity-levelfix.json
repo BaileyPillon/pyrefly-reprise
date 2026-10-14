@@ -4,9 +4,10 @@
   "rule": {
     "withinDb": 1.5,
     "hardLimitDb": 3,
-    "metric": "EBU R128 integrated loudness of the cue cut out of the decoded file (offset, duration as the game plays it) and padded with 1 s of silence; a v2 stand-in is measured with its play-time P1 trim added (src/audio/sfxV2/parityTrims.ts). Overall RMS and the true peak are recorded too; RMS follows the length of the tail and is not the rule."
+    "metric": "EBU R128 integrated loudness of the cue cut out of the decoded file (offset, duration as the game plays it) and padded with 1 s of silence; a v2 stand-in is measured with its play-time P1 trim added (src/audio/sfxV2/parityTrims.ts). Overall RMS and the true peak are recorded too; RMS follows the length of the tail and is not the rule.",
+    "exceptions": "One, named: an FFX-2 party hit is never made quieter than today's on the loudest 400 ms (decision 52n, D-750; the friends' playtest heard quiet hits as no attack sound). It is the Gunner's hit, ffx2-core/hit-gun, which keeps the level the lane mastered it at (equal to its stand-in on the loudest 400 ms, 2.6 dB over on the integrated measure). No other FFX-2 party hit was moved: the Warrior's (ffx2-core/hit-greatsword) is inside the rule and kept, and of the three FFX-2 rows that were re-levelled the other two (Death, the chant) are not hits."
   },
-  "method": "A row inside the rule keeps its level. A row outside moves toward live's level to 1.0 dB from it (0.35 dB of margin is kept: a row within 0.15 dB of the edge is nudged in, the meter prints one decimal). A gain is applied to the lane's mastered file; when the gain would pass the mastering ceiling (-1.6 dBTP) the lane's own lookahead true-peak limiter (process.py tp_limit, 3 ms look-ahead, 80 ms release) holds it. The pack is rebuilt by tools/audio/sfx-parity-sprite.py (q3 core, q5 boss) from the lane's inputs with the re-levelled file in place of the lane's.",
+  "method": "A row inside the rule keeps its level. A row outside moves toward live's level to 1.0 dB from it (0.35 dB of margin is kept: a row within 0.15 dB of the edge is nudged in, the meter prints one decimal). A gain is applied to the lane's mastered file; when the gain would pass the mastering ceiling (-1.6 dBTP) the lane's own lookahead true-peak limiter (process.py tp_limit, 3 ms look-ahead, 80 ms release) holds it. The pack is rebuilt by tools/audio/sfx-parity-sprite.py (q3 core, q5 boss) from the lane's inputs with the re-levelled file in place of the lane's. The Gunner's hit was re-levelled in the first pass and put back on the lane's file (the exception above); the pack was rebuilt a second time without that one change.",
   "rows": [
     {
       "pack": "ffx-core",
@@ -524,20 +525,25 @@
       "standInRms": -18.12,
       "levelTarget": -18,
       "lufsBefore": -15.4,
-      "lufsAfter": -17.1,
+      "lufsAfter": -15.4,
       "rmsBefore": -22.35,
-      "rmsAfter": -23.96,
+      "rmsAfter": -22.35,
       "truePeakBefore": -4.7,
-      "truePeakAfter": -6.4,
+      "truePeakAfter": -4.7,
       "deltaLufsBefore": 2.6,
-      "deltaLufsAfter": 0.9,
-      "action": "gain",
+      "deltaLufsAfter": 2.6,
+      "action": "kept",
+      "exception": {
+        "decision": "52n (D-750)",
+        "rule": "An FFX-2 party hit is never made quieter than today's on the loudest 400 ms (the manifest's lufs). The 1.5 dB rule on the integrated loudness does not apply to it.",
+        "standInLoudest400msLufs": -14.1,
+        "loudest400msLufsBefore": -13.97,
+        "loudest400msLufsAfter": -13.97,
+        "why": "The first pass of r46-fix cut this row 1.6 dB because the integrated measure put it 2.6 dB over its stand-in. On the loudest 400 ms it is already equal to the stand-in (-13.97 against -14.1), its tail is 2.4 s against the stand-in's 0.6 s (which is what makes the integrated figure larger and the RMS and the peak lower), and the cut took it to 1.5 dB under today's level on the measure decision 52n fixes. 52n keeps the girls' hits at today's level because the friends' playtest heard quiet hits as no attack sound at all."
+      },
       "momentaryLufsBefore": -13.97,
-      "momentaryLufsAfter": -15.57,
-      "manifestTruePeakAfter": -6.37,
-      "gainDb": -1.6,
-      "sha256MasteredBefore": "ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71",
-      "sha256MasteredAfter": "e0c79b8f78853e306658675a96cfdcd8de2e29f1af38ed604113af08ecce963a"
+      "momentaryLufsAfter": -13.97,
+      "manifestTruePeakAfter": -4.74
     },
     {
       "pack": "ffx2-core",

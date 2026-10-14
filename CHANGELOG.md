@@ -31,11 +31,15 @@ Address: none yet (branch r46-audio2, from r45-rc d5bf2206; not deployed, no rev
   recording of its own, and FFX-2's defeats briefly fell back to an older, different sound. FFX keeps its new
   recording; FFX-2 is back on the old one.
 - **Both games, levels (a fix before this goes out):** each new recording now plays within 1.5 dB of the sound
-  it replaces, measured as the game plays it. Twelve of the thirty were moved to get there: eight FFX sounds
+  it replaces, measured as the game plays it. Eleven of the thirty were moved to get there: eight FFX sounds
   (Cure, Cura, Life, Waterga, Thundaga, Auron's katana blow, Grenade and Petrify), the final aeon's Power Wave,
-  and three FFX-2 sounds (Death, the Gunner's hit and the spell chant). Most were too loud, not too quiet;
+  and two FFX-2 sounds (Death and the spell chant). Most were too loud, not too quiet;
   Petrify was 8 dB too quiet and was raised under a limiter, which makes its crack less sharp than the
   recording was. The ear has not judged any of it.
+- **FFX-2 only, the Gunner's hit (a fix before this goes out):** it keeps the level it was recorded at. The
+  girls' hits keep today's level, never a quieter one (your decision 52n: a quiet hit was heard as no attack
+  sound at all), and on the loudest 400 milliseconds the new recording already matches the sound it replaces; only
+  its long tail makes the overall figure 2.6 dB higher. A first pass had cut it 1.6 dB; that is undone.
 - **FFX-2, Chapter IV (Bahamut):** the quiet victory tune now stops when you press Continue after the tally.
   It used to loop on under the whole scene that follows, which this chapter keeps silent. In Chapter XI (the
   Glen) and Chapter XV (out of the Den of Woe) the scene's own music now comes back after the tally instead of

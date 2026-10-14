@@ -389,7 +389,7 @@ A death spell, a cold bright sharp hiss followed by a single mid toll. About one
 Two quick low muffled wooden thumps one after the other, rounded and soft, like knocking twice on a thick padded door, pitched low. Over in about a quarter of a second. Dry and clean, no reverb, no music, no voice. Variation: slightly warmer and rounder.
 ```
 
-- **`ffx2-core` / `hit-gun`** (row `ffx2.lb.gunner.hit`, driver pick, failed, take `ffx2.lb.gunner.hit.v1`): the raw take SHA-256 `237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2`, the mastered file `e0c79b8f78853e306658675a96cfdcd8de2e29f1af38ed604113af08ecce963a` (re-levelled in r46-fix, FOC46-03, by -1.6 dB from the lane's `ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71`; `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 2.4, `prompt_influence` 0.6):
+- **`ffx2-core` / `hit-gun`** (row `ffx2.lb.gunner.hit`, driver pick, failed, take `ffx2.lb.gunner.hit.v1`): the raw take SHA-256 `237ba61a918b7675917f84e2e7dddf359b11ad5dbf9e08a2940ac9a84b4f48e2`, the mastered file `ca9487d8682559ebf3310fbe459ca72a0f42d0e0beba09a8c3c3d738f7ed7d71` (r46-fix, FOC46-03, tried a -1.6 dB re-level of it and put it back: decision 52n keeps the FFX-2 party's hits at today's level, and on the loudest 400 ms it matches the stand-in it replaces; the exception is recorded in `docs/audio/sfx-parity-levelfix.json`). The prompt, as sent (`duration_seconds` 2.4, `prompt_influence` 0.6):
 
 ```
 A bullet striking a target, a crisp snappy impact tick followed by a small spray of fizzy debris and a faint metallic ring-down in three tiny separate crackles. Close-miked, realistic sound design, no music, no voice.
