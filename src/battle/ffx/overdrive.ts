@@ -16,7 +16,7 @@ import type { TimingBonus } from './formulas.ts';
 import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
 import { attackReelHits } from './reels.ts';
 import { defaultGrandSummonAeon } from './aeon-duel.ts';
-import { grandSummonEntries, mixPickerParams } from './pickerParams.ts';
+import { MIX_PREVIEW_ALL_PAIRS, grandSummonEntries, mixPickerParams } from './pickerParams.ts';
 import { gaugeAdd, gaugePay } from './gauge.ts';
 
 /** The Attack Reels strip, in both spellings the tree uses [§5.6, `reels.ts`]. */
@@ -144,6 +144,18 @@ export function mixablePairs(ctx: Ctx): Array<[ItemId, ItemId, AbilityId]> {
   return out;
 }
 
+/**
+ * The pairs the Mix picker's preview names [ffx-combat-core §5.9]. With {@link MIX_PREVIEW_ALL_PAIRS} off (the shipped state) this is the registered recipes
+ * whose two ingredients are in the bag (the same item twice needs two in stock), in the registry's order: the line every build before re-parity RC7
+ * shipped, and "? ? ?" for any other pair. With it on, it is {@link mixablePairs}: every pair of the bag with the result the game's chart gives it.
+ * **Only the preview reads this.** The engine's resolution of a fired pair, and the automatic draw of an AI or headless Mix, stay on the full chart.
+ */
+export function mixPreviewPairs(ctx: Ctx, allPairs: boolean = MIX_PREVIEW_ALL_PAIRS): Array<[ItemId, ItemId, AbilityId]> {
+  if (allPairs) return mixablePairs(ctx);
+  const held = (id: ItemId): number => ctx.rt.inventory.get(id) ?? 0;
+  return ctx.content.mixPairs().filter(([a, b]) => (a === b ? held(a) >= 2 : held(a) >= 1 && held(b) >= 1));
+}
+
 /** The `<spell>-fury` rows a Fury marker expands into for this caster [§5.7]. */
 export function furySpellsFor(ctx: Ctx, user: FFXCombatant, marker: AbilityDef): AbilityDef[] {
   const out: AbilityDef[] = [];
@@ -194,7 +206,7 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       break;
     case 'rikku-mix':
       // Hotfix 24: the named bag and the recipes the overlay reads (`pickerParams.ts`).
-      Object.assign(base, mixPickerParams(ctx, mixablePairs(ctx)));
+      Object.assign(base, mixPickerParams(ctx, mixPreviewPairs(ctx))); // the preview's pairs, not the engine's (`MIX_PREVIEW_ALL_PAIRS`)
       break;
     case 'yuna-grand-summon':
       Object.assign(base, { aeons: grandSummonEntries(ctx) }); // the roster unless a duel narrows it, as the picker reads it (hotfix 24)
