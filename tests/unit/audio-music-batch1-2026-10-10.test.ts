@@ -79,7 +79,8 @@ const EXPECTED: Record<string, { game: string; replaces: string | null; fallback
     game: 'FFX-2',
     replaces: 'boss-ffx2-aeon',
     fallback: 'boss-ffx2-aeon',
-    chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'], 'ffx2-tourist-trap': ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap plays the same "Aeons" cue (2026-10-14, by reference, no new audio)
+    // The hidden Valefor at Besaid (FFX-2 only; 2026-10-14) plays the aeon cue on its one link, by reference: the same fallen-aeons battle cue as Chapter XI and Ixion, our own composition, no new file.
+    chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'], 'ffx2-tourist-trap': ['boss-ffx2-fallen-aeons'], 'ffx2-valefor-besaid': ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap plays the same "Aeons" cue (2026-10-14, by reference, no new audio)
   },
   'boss-trema': { game: 'FFX-2', replaces: 'boss-ffx2-aeon', fallback: 'boss-ffx2-aeon', chapters: { 'ffx2-trema': ['scene-bevelle-underground', 'boss-trema'] } },
   'boss-seymour-natus': { game: 'FFX', replaces: 'boss-seymour-macalania', fallback: 'boss-seymour-macalania', chapters: { 'seymour-natus': ['boss-seymour-natus'] } },

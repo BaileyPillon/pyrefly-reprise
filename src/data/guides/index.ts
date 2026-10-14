@@ -29,6 +29,7 @@ import { SIN_FINS_CORE_GUIDE } from './sin-fins-core.ts';
 import { SIN_FACE_GUIDE } from './sin-face.ts';
 import { FFX2_EXPERIMENT_GUIDE } from './ffx2-experiment.ts';
 import { FFX2_TOURIST_TRAP_GUIDE } from './ffx2-tourist-trap.ts';
+import { FFX2_VALEFOR_BESAID_GUIDE } from './ffx2-valefor-besaid.ts';
 
 export type {
   ChapterGuide,
@@ -102,6 +103,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_EXPERIMENT_GUIDE,
   // The hidden Tourist Trap (FFX-2 only, the optional mission in the Cavern of the Stolen Fayth; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here for the same reason.
   FFX2_TOURIST_TRAP_GUIDE,
+  // The hidden Valefor at Besaid (FFX-2 only, Chapter 3; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here too.
+  FFX2_VALEFOR_BESAID_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

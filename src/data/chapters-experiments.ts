@@ -8,6 +8,7 @@
  * - **The Experiment** (`'ffx2-masterpiece-theatre'`, number 20, 2026-10-10; FFX-2 only): the Machine Faction's weapon at Djose Temple, fought twice.
  * - **Sinspawn Gui** (`'sinspawn-gui'`, number 21, 2026-10-10; FFX only): the Mushroom Rock Road monster in two fights, the second with Seymour as a guest.
  * - **Fayth** (`'exp-fayth'`, number 22, 2026-10-10; FFX only): Evrae on the Fahrenheit's deck, Chapter VIII's encounter, fought with FFX's own battle camera (D-632); derived from Chapter VIII's record.
+ * - **Valefor at Besaid** (`'ffx2-valefor-besaid'`, number 24, 2026-10-14; FFX-2 only): the possessed aeon in the Chamber of the Fayth, Chapter 3's mission "Protect Besaid Temple!" (23 is the Tourist Trap lane's).
  *
  * - **Tourist Trap** (`'ffx2-tourist-trap'`, number 23, 2026-10-14; FFX-2 only): Yojimbo and Daigoro in the Cavern of the Stolen Fayth, the optional mission; word `daigoro`.
  *
@@ -24,8 +25,9 @@ import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts';
 import { SINSPAWN_GUI } from './chapter-sinspawn-gui.ts';
 import { EXP_FAYTH } from './chapter-exp-fayth.ts';
 import { FFX2_TOURIST_TRAP } from './chapter-ffx2-tourist-trap.ts';
+import { FFX2_VALEFOR_BESAID } from './chapter-ffx2-valefor-besaid.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID] as const;
 }

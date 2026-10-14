@@ -45,6 +45,7 @@ import { DEN_OF_WOE_TACTIC_IDS, ffx2DenOfWoe } from './ffx2-den-of-woe.ts';
 import { IXION_DJOSE_BOSS_IDS, ffx2IxionDjose } from './ffx2-ixion-djose.ts';
 import { EXPERIMENT_BOSS_IDS, ffx2Experiment } from './ffx2-experiment.ts';
 import { TOURIST_TRAP_BOSS_IDS, ffx2TouristTrap } from './ffx2-tourist-trap.ts';
+import { VALEFOR_BESAID_BOSS_IDS, ffx2ValeforBesaid } from './ffx2-valefor-besaid.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
@@ -84,6 +85,7 @@ export { ffx2DenOfWoe, DEN_OF_WOE_TACTIC_IDS } from './ffx2-den-of-woe.ts';
 export { ffx2IxionDjose, IXION_DJOSE_BOSS_IDS } from './ffx2-ixion-djose.ts';
 export { ffx2Experiment, EXPERIMENT_BOSS_IDS } from './ffx2-experiment.ts';
 export { ffx2TouristTrap, TOURIST_TRAP_BOSS_IDS } from './ffx2-tourist-trap.ts';
+export { ffx2ValeforBesaid, VALEFOR_BESAID_BOSS_IDS } from './ffx2-valefor-besaid.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
@@ -152,6 +154,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...EXPERIMENT_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-masterpiece-theatre', bossId, tactic: ffx2Experiment })),
   // The Tourist Trap (FFX-2 only, hidden chapter, 2026-10-14): Yojimbo and his count; Daigoro is never a target.
   ...TOURIST_TRAP_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-tourist-trap', bossId, tactic: ffx2TouristTrap })),
+  // Valefor at Besaid (FFX-2 only, hidden chapter, 2026-10-14): the possessed aeon, one fighter.
+  ...VALEFOR_BESAID_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-valefor-besaid', bossId, tactic: ffx2ValeforBesaid })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.

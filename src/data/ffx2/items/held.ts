@@ -21,6 +21,8 @@
  * | `soul-of-thamasa` | Soul of Thamasa | Ixion's drop (Djose, Chapter XVI) | `ffx2-ixion-djose.md` §3.1, verified: 6 sources; effect wiki, single source |
  * | `sprint-shoes` | Sprint Shoes | Ixion (both slots) | `ffx2-ixion-djose.md` §3.1, verified: 4 sources; effect wiki, single source |
  * | `power-wrist` | Power Wrist | Yojimbo (both slots; the hidden Tourist Trap, 2026-10-14) | `ffx2-combat-core.md` §5.4, verified: 2 sources; the steal is `monster.bin` row 170 |
+ * | `moon-bracer` | Moon Bracer | Valefor's drop (Besaid, the hidden Valefor chapter) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; effect `ffx2-combat-core.md` §5.4 (no stats, Auto-Shell) |
+ * | `x2-healing-spring` | Healing Spring | Valefor (both slots) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; a recovery item (`ffx2-combat-core.md` §5.5, Regen), held-only here: its effect is not wired |
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
@@ -65,7 +67,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -104,6 +106,10 @@ export const heldItems: ItemDef[] = [
   // Yojimbo's steal in the hidden Tourist Trap (FFX-2 only, 2026-10-14; common and rare slot, monster.bin row 170): ffx2-combat-core §5.4 "Power Wrist | STR +20 | 1500 / 6000 (sell / buy)"
   // `[verified: 2 sources]`; the price is the buy price, as in every row here, and the same Str +20 the accessory table already carries (`battle/ffx2/accessories.ts`).
   held('power-wrist', 'Power Wrist', 6000, 'Accessory. Str +20.'),
+  // Valefor at Besaid (FFX-2 only, the hidden chapter): Moon Bracer, no stats, Auto-Shell (ffx2-combat-core §5.4); no price in the research.
+  held('moon-bracer', 'Moon Bracer', 'unsourced', 'Accessory. Auto-Shell.'),
+  // Healing Spring is a recovery item (ffx2-combat-core §5.5: Regen on the target party, ~3 % max HP a tick, not sold, sells for 150); the research names no effect row of ours, so it is held-only until one is built.
+  held('x2-healing-spring', 'Healing Spring', 0, 'Recovery item (Regen); its effect is not wired yet.'),
 ];
 
 export default heldItems;

@@ -47,6 +47,9 @@ import { experimentAbilities } from './experiment-abilities.ts';
 // Yojimbo and Daigoro in the Cavern of the Stolen Fayth (the optional FFX-2 mission "Tourist Trap"; the hidden chapter, FFX-2 only): `./tourist-trap.ts`.
 import { touristTrapGroups } from './tourist-trap.ts';
 import { touristTrapAbilities } from './tourist-trap-abilities.ts';
+// Valefor at Besaid Temple (FFX-2 Chapter 3; the hidden chapter "Valefor at Besaid", FFX-2 only): `./valefor.ts`.
+import { valeforGroups } from './valefor.ts';
+import { x2ValeforAbilities } from './valefor-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -64,6 +67,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...ixionDjoseGroups,
   ...experimentGroups,
   ...touristTrapGroups,
+  ...valeforGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -91,6 +95,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2IxionAbilities,
   ...experimentAbilities,
   ...touristTrapAbilities,
+  ...x2ValeforAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

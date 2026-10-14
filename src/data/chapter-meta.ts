@@ -6,8 +6,7 @@
  * stay exactly as they are for the chapter-select card and the in-battle
  * Sensor panel. `ChapterMeta` is written for a different reader: the
  * "Until Dawn"-style pause menu's character-relationship tab and the new
- * prebattle screen tab it shares layout with (see
- * `docs/handoff/pause-screen.md`).
+ * prebattle screen tab it shares layout with (see `docs/handoff/pause-screen.md`).
  *
  * Every fact here is derived from `research/writing-bible.md` (voices,
  * §5.4 victory quips) and each chapter's own research document — the beat
@@ -25,6 +24,7 @@ import { EXPERIMENT_META } from './chapter-meta-ffx2-experiment.ts';
 import { TOURIST_TRAP_META } from './chapter-meta-ffx2-tourist-trap.ts';
 import { SINSPAWN_GUI_META } from './chapter-meta-sinspawn-gui.ts';
 import { EXP_FAYTH_META } from './chapter-meta-exp-fayth.ts';
+import { VALEFOR_BESAID_META } from './chapter-meta-ffx2-valefor-besaid.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
 import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
@@ -391,7 +391,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
 ] as const;
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

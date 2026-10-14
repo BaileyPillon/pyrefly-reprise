@@ -243,6 +243,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'sinspawn-gui': { scene: 'scene-gagazet', links: ['boss-gui', 'boss-challenge'] },
     'exp-fayth': { scene: 'scene-fahrenheit', links: ['boss-evrae'] }, // the hidden Fayth chapter is Chapter VIII's record by reference, so it plays Chapter VIII's music (FFX only)
     'ffx2-tourist-trap': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap (FFX-2 only, 2026-10-14): the field bed and the "Aeons" cue the Road and Ixion play, by reference
+    'ffx2-valefor-besaid': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Valefor at Besaid (FFX-2 only): the aeon cue Chapter XI and Ixion play, our own take
   };
 
   it('plays each chapter\'s scene bed and each link\'s theme as the table says: the 18 listed chapters, FF7, and the five hidden experiments', async () => {
