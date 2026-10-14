@@ -7,7 +7,8 @@
  * The iter2-b6 check (B6CHK-01, B6CHK-02) found two sentences made false by that branch:
  *
  * - Delta Attack (`extra.setHpTo: 1, setMpTo: 0`, `aeon-effects.ts`) read "Deals no damage." while
- *   it leaves the whole party at 1 HP and 0 MP. It now says exactly that, from the two keys.
+ *   it leaves the whole party at 1 HP. It now says exactly that, from the keys and the game's row (the wiki's
+ *   `setMpTo: 0` is not read: row 0x40a9 is damage class 1, HP only; see {@link setToLead}).
  * - A Dispel (`removesStatuses` of Auto-Life and the buffs) read "Cures ...", the opposite of losing
  *   a buff. A removal now reads "Removes ... from <target>", true of a Remedy and a Dispel alike.
  *
