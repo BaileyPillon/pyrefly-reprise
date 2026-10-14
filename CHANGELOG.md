@@ -1,13 +1,60 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 66 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 67 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-14 · The ACCESSIBILITY tab with REDUCE FLASHES and COLOUR VISION, and the site's small painting files cut to what the game reads (release candidate r47-rc; not live)
+
+Address: none yet (branch r47-rc: the release candidate r46-rc ca9fd0b4 plus the accessibility lane r44-access; not deployed; the deep review that a save-data change owes comes first)
+
+- **Both games, the pause menu:** a ninth tab, ACCESSIBILITY, sits right after OPTIONS and holds five rows: TEXT SIZE,
+  REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS and COLOUR VISION. The first, second and fourth moved there from OPTIONS
+  with the same names, values and keys, so OPTIONS is shorter. The two new rows start OFF and are kept in the save
+  (nothing that was saved before is changed, and a save from an older build loads with both off). Remapping keys is
+  not part of this build.
+- **Both games, REDUCE FLASHES:** softens 22 things that flash. Every flash peaks at about a third of its strength,
+  white turns a warm ivory, a full-screen white wash that hides a change of scene stays opaque but dim, an action's
+  first blow is the only one that flashes, and a warning that pulses becomes one soft fade or a steady glow. It covers
+  hit, heal and status flashes, elements, spell effects, big-attack warnings, impact frames, lens flares, the lighting
+  of a boss's phases, cutscene flashes and the Overdrive splash. The closing flash when a boss or an aeon finishes
+  gathering out of pyreflies is left out.
+- **FFX only, REDUCE FLASHES:** the summon's wash, a boss changing form, the target bracket that flashes on a group,
+  the party card when a member is hurt and the Overdrive timing flash.
+- **FFX-2 only, REDUCE FLASHES:** Spherechange, the girl's card when she is hit, the Save Sphere's wash in Chapter XI
+  (an opaque dim cover, so the next link still hides its swap), the ready gauge's shimmer and the chain counter's
+  veil from chain 20 up.
+- **COLOUR VISION, three values (OFF, RED-GREEN, BLUE-YELLOW):** changes only the four things that blur together
+  under colour blindness, and gives each a second cue besides its colour. **FFX only:** the Berserk and Curse tints (a B or a C
+  over the head). **Both games:** the ally and self marks on the targeting brackets (a diamond, a plus or a ring on
+  each corner) and the heal and MP numbers (an MP number says "MP"; BLUE-YELLOW makes it violet). **FFX-2 only:** the
+  four colours of the Garment Grid's gates, in the Spherechange wheel, its flourish and the Party Prep pages (each gate
+  prints R, G, B or Y), including the Party Prep pages on a phone, which this build covers as well.
+- **Both games, the small files beside the paintings:** the 1,261 small files that sit beside the paintings on the site
+  now hold only what the game reads from them (sizes, feet lines, scales, facings, focal points, heads, and the seed
+  and the prompt text the loader copies). The notes on how each painting was made, who approved it and links to
+  private pages no longer go out, and the deploy refuses a build in which any file of the site names a folder of the
+  build computer or links to a private page, or any of these small files has anything else in it. Every value the game
+  reads is the same; no picture, sound or screen differs.
+- **How it was checked:** tsc clean; every test of the accessibility lane and of the files this build touched passed
+  (151 files, 2,511 tests), then the whole suite once (1,224 files, 19,144 tests, none failing); a production build,
+  whose art matches its masters pixel for pixel and whose 3,863 images all load in Chromium and WebKit; and a real-key
+  walk of that build (title, board, Party Prep, the first command menu of FFX Chapter I and FFX-2 Chapter IV, the
+  ACCESSIBILITY tab, both rows switched on, a reload that keeps them, an old save, a phone) with 120 art data files
+  requested, every one answered, and no console error. Three layout checks at 130 % TEXT SIZE in the browser test files
+  fail on two small pieces of the FFX battle screen that this build did not touch (the command menu's "more below"
+  arrow and the sensor's element chip); they are listed for the review.
+
+![The ACCESSIBILITY tab on the production build, REDUCE FLASHES on and COLOUR VISION on RED-GREEN](docs/screenshots/r47-rc/ffx-accessibility-tab-1600x900.jpg)
+
+![FFX-2's ACCESSIBILITY tab, COLOUR VISION on BLUE-YELLOW](docs/screenshots/r47-rc/ffx2-accessibility-blue-yellow-1600x900.jpg)
+
+![The Garment Grid on FFX-2's phone Party Prep with COLOUR VISION on: each gate prints its letter](docs/screenshots/r47-rc/ffx2-phone-prep-gate-letters-390x844.jpg)
 
 ## 2026-10-13 · Audio lane 2: 29 more recorded sound effects, a quiet Chapter IV and results tunes that loop without a breath (not live)
 
