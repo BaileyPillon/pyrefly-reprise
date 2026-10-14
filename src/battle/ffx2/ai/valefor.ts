@@ -1,44 +1,40 @@
 /**
  * Valefor at Besaid Temple (FFX-2 Chapter 3, "Protect Besaid Temple!"; the hidden chapter "Valefor at Besaid"). **FFX-2 only** [AGENTS.md rule 14].
  *
- * Source: `research/ffx2-fallen-aeons.md` §7.1 (SinirothX's *Enemy Encyclopedia* + the FF Wiki prose, `[verified: 2 sources]`; the wiki's "after 6 / 12 / 20 counts" is the same
- * 30 / 60 / 100 at 5 per count, §11 row 9). **Valefor's own script has not been read from the game yet**, so this is the research's description built on the engine's
- * action counter, in the shape of the scripts of the family it belongs to (Shiva's and Anima's, `./fallen-aeons.ts`; Ixion's, `./ixion.ts`), and each reading that is ours is
- * tagged `[model]` in `docs/plans/ch-besaid-valefor-review.md` §2 and §3. The RE session's note `research/re-ffx2-yojimbo-valefor.md` (the game's own monster row) is pinned
- * in `tests/fixtures/parity/ffx2/besaid_valefor_rows.json`; when a script read lands it replaces this reading.
- *
- * Each poll, in this order:
+ * **The order below is the game's own script, `m164`** (the RE session's review of 2026-10-14: "RE review 2026-10-14, m164, row 164, pos_bsyt05_229", `research/re-ffx2-ai-valefor.md`; the first build was
+ * the research's description, `research/ffx2-fallen-aeons.md` §7.1, `[verified: 2 sources]`, which the script confirms in outline: Normal Attack 2/3 and Sonic Wings 1/3, +5 a count, Energy Ray at 30 and
+ * 60, the Energy Blast at 100). The script has one gauge and a "Rays fired" counter, **no HP phases** (it reads none of her own HP, MP or statuses) and **no timer** (nothing scripted ends the fight;
+ * the "too long" Meteor block never runs: none is added here). Each turn, in this order `[script]`:
  *
  * | # | Condition | Action |
  * |---|---|---|
- * | 1 | AC at least 100 (read before the poll's own gain) | AC := 0, both Ray flags cleared; **Energy Blast** on all the party |
- * | 2 | else AC gains 5 (her own action); the new AC has reached 30 and the 30 flag is clear, or has reached 60 and the 60 flag is clear (the lower first) | that flag is set; **Energy Ray** |
- * | 3 | else `random() mod 3` = 0 | **Sonic Wings** on the furthest living girl ({@link furthestGirl}) |
- * | 4 | else (1 or 2) | **Normal Attack** on a uniform living girl |
+ * | 1 | gauge at least 100 | gauge := 0 and Rays fired := 0; **Energy Blast** on every girl |
+ * | 2 | else gauge at least 60 and fewer than 2 Rays fired | one more Ray fired; **Energy Ray** on every girl |
+ * | 3 | else gauge at least 30 and no Ray fired | Rays fired := 1; **Energy Ray** on every girl |
+ * | 4 | else (an attack-class turn) gauge + 5, then `random() mod 3` | 0 **Sonic Wings** on the girl at the greatest ground distance; 1 or 2 **Normal Attack** on a near-weighted living girl |
  *
- * The reaction entry adds 5 to AC for every result another character applies to her (`resultGauge(5)`: a landing strike, a miss, a no-effect result; the guard holds unless she
- * is stopped, asleep, petrified, confused, berserk or ejected): `[model]`, the reading the project applies to every other fallen aeon, whose scripts were read from the game
- * (`research/re-ffx2-ai-fallen-trema.md` 1.2), where §7.1 says "+5 when she acts or is attacked".
+ * **The gauge is read BEFORE the turn's own gain**, and the Ray and Blast turns add nothing. With nobody hitting her, the Rays come on her 7th and 14th turn and the Blast on her 23rd. Every result applied to her
+ * (a landing strike, a miss or a no-effect result, never her own) adds 5 through the reaction handler (`resultGauge(5)`; Valefor is immune to every status that would switch the handler off, so its guard only
+ * filters her own results). RNG `[script]`: `random()` on stream 2, **one draw per attack-class turn only**; the target searches on stream 4 (a search over fewer than two candidates draws nothing).
  *
- * **The two positional moves** (preflight §4). The engine has no positions (a girl is her party `slot`: rule 1 keeps stage positions out of the engine):
+ * **Targets, from the Besaid scene's start positions** (`./script-rolls.ts` `SCENES.besaid`, `pos_bsyt05_229.psc`; the engine tracks no later movement, as for every other boss that uses `searchr`):
  *
- * - **Sonic Wings** "on the character furthest away" goes to the **back of the formation, the highest `slot` among the living girls**: Ormi's owner-approved stand-in
- *   (`./syndicate-ormi.ts`, decision D-018/q3, 2026-09-21), reused and not re-decided. `[model]`. It draws nothing (that stand-in's habit).
- * - **Energy Ray** hits "everyone in a 160 degree arc in front of her". In the fixed formation all three girls stand in front of her (the largest angle from the boss's facing to a
- *   girl in the four scenes on record, `research/re-ffx2-ai-scene-positions.md`, is about 17 degrees; the arc is 80 either side) and the engine tracks no later movement, so the move is
- *   `all-enemies`: **it hits every living girl, exactly as Energy Blast does**. `[model]`. The data row is `../../../data/ffx2/enemies/valefor-abilities.ts`.
+ * - **Normal Attack**: the near-weighted pick of a living girl (`searchNear`: weight by ground distance and angle from the boss's facing): at the start Yuna 41.9 percent, Rikku 29.1, Paine 29.0.
+ * - **Sonic Wings**: the girl at the **greatest 2-D ground distance** from the boss: Yuna at the start (53.00 against 52.39 for Rikku and Paine). Body radii are not read, so exact ties (Rikku and Paine, when Yuna is
+ *   down) are near-weighted, and an unambiguous extreme draws nothing. (The first build used Ormi's stand-in, the highest slot; the game's own positions replace it. `[script]`; whether m164 makes a first,
+ *   discarded search before this one is in the note's search idiom: none is made here, as for Ormi's single `searchr`.)
+ * - **Energy Ray and Energy Blast**: the whole party. The research says "everyone in a 160 degree arc in front of her"; the script's Ray is on all girls (the girls stand in front of the boss in every start
+ *   formation on record, the largest angle from the boss's facing is about 17 degrees against an 80 degree half-arc, and the engine tracks no later movement), so **Energy Ray hits every living girl, as the Blast does**.
  *
- * "Crossing 30 and 60" is one Energy Ray per threshold per cycle (a flag each, cleared at the Blast); a multi-hit volley that passes both thresholds at once gives the two Rays on
- * her next two turns, the lower first. `[model]`. Which roll value is Sonic Wings (0) is `[model]` too: the research gives only the weights, 2/3 Attack and 1/3 Sonic Wings.
- *
- * The attack target is a uniform pick among the living girls, as every other FFX-2 script here does where the game weights by closeness and facing (`./script-rolls.ts`).
+ * What the data layer carries beside this script (`src/data/ffx2/enemies/valefor-abilities.ts`, `monster-records/records-valefor.ts`): Energy Ray is magical (Shell halves it) and **Energy Blast is not**
+ * (its row has damage flags 0: neither Shell nor Protect reduces it); Sonic Wings is physical (Protect applies), MP damage only, and never misses.
  */
 
 import type { Command } from '../../common/types.ts';
-import type { AiContext, AiScript, Ffx2Unit } from '../internal.ts';
+import type { AiContext, AiScript } from '../internal.ts';
 import { mem, setMem } from '../internal.ts';
 import { AC, AC_OVERDRIVE, acOf, bumpAc, resultGauge } from './fallen-aeons.ts';
-import { girls, pickGirl, scriptModCtx } from './script-rolls.ts';
+import { SCENES, girls, scriptModCtx, searchNear } from './script-rolls.ts';
 
 /** The script id (`EnemyFields.aiScriptId`; the data file `src/data/ffx2/enemies/valefor.ts` names the same string, a test pins it). */
 export const VALEFOR_SCRIPT = 'x2-valefor';
@@ -51,30 +47,49 @@ export const VALEFOR_ABILITY = {
   energyBlast: 'x2-valefor-energy-blast',
 } as const;
 
-/** AI memory: 1 once the Energy Ray of the 30 mark (resp. the 60 mark) has been fired this cycle. */
-export const VALEFOR_RAY_30_FIRED = 'valeforRay30';
-export const VALEFOR_RAY_60_FIRED = 'valeforRay60';
+/** AI memory: how many Energy Rays have gone since the last Blast (the script's "Rays fired" counter: 0, 1 or 2). */
+export const VALEFOR_RAYS_FIRED = 'valeforRays';
 
-/** The counter marks `[verified: 2 sources]` (§7.1): an Energy Ray on crossing each; the Overdrive is {@link AC_OVERDRIVE}. */
+/** The gauge marks `[script]`: the first Ray at 30 (none fired yet), the second at 60 (fewer than two fired); the Overdrive is {@link AC_OVERDRIVE}. */
 export const VALEFOR_RAY_MARKS: readonly [number, number] = [30, 60];
-/** AC gained by her own poll, and per result applied to her `[model: the sibling aeons' rule; §7.1 "+5 when she acts or is attacked"]`. */
+/** Rays per cycle. */
+export const VALEFOR_RAYS_PER_CYCLE = 2;
+/** The gauge gained by an attack-class turn, and per result applied to her `[script]`. */
 export const VALEFOR_AC_PER_ACTION = 5;
 export const VALEFOR_AC_PER_RESULT = 5;
-/** The roll value (`random() mod 3`) that is Sonic Wings: 1 of 3, so Attack gets the other 2 of 3 `[model: the weights are sourced, which value is not]`. */
+/** The roll value (`random() mod 3`) that is Sonic Wings: 1 of 3, so Normal Attack gets the other 2 of 3 `[script]`. */
 export const VALEFOR_SONIC_WINGS_ROLL = 0;
+
+/** Valefor's room: the boss and the girls' start positions (`pos_bsyt05_229.psc`, `[script]`). */
+export const VALEFOR_SCENE = SCENES.besaid;
 
 function use(id: string, targets: string[]): Command {
   return { kind: 'ability', id, targets };
 }
 
+/** The ground distance from the boss to the girl at party slot `slot`, in the game's units, from the scene's start positions. */
+export function groundDistance(slot: number): number {
+  const girl = VALEFOR_SCENE.girls[slot] ?? VALEFOR_SCENE.girls[0];
+  return Math.hypot(girl.x - VALEFOR_SCENE.boss.x, girl.z - VALEFOR_SCENE.boss.z);
+}
+
 /**
- * "The character furthest away": the **back of the formation**, the highest `slot` among the living girls (Ormi's stand-in, D-018/q3). With Yuna, Rikku and Paine up that is Paine;
- * with Paine down, Rikku; Yuna alone, Yuna. No draw. One function is the whole seam: if the game's scene positions for this fight are ever pinned, this becomes a distance sort.
+ * "The character furthest away": the living girl(s) at the greatest ground distance (Yuna at the start); an unambiguous extreme draws nothing, exact ties are near-weighted (`searchNear`),
+ * one draw among two or more. `[script]`, from the Besaid scene's own start positions.
  */
 export function furthestGirl(ctx: AiContext): string[] {
-  let furthest: Ffx2Unit | undefined;
-  for (const unit of girls(ctx)) if (furthest === undefined || unit.slot > furthest.slot) furthest = unit;
-  return furthest === undefined ? [] : [furthest.id];
+  const alive = girls(ctx);
+  if (alive.length === 0) return [];
+  const farthest = Math.max(...alive.map((u) => groundDistance(u.slot)));
+  const tied = alive.filter((u) => Math.abs(groundDistance(u.slot) - farthest) < 1e-9);
+  const pick = searchNear(ctx.rng, tied, VALEFOR_SCENE);
+  return pick === undefined ? [] : [pick.id];
+}
+
+/** The Normal Attack's target: the near-weighted pick of a living girl (one draw with two or more). `[script]`. */
+export function attackTarget(ctx: AiContext): string[] {
+  const pick = searchNear(ctx.rng, girls(ctx), VALEFOR_SCENE);
+  return pick === undefined ? [] : [pick.id];
 }
 
 export const x2ValeforScript: AiScript = {
@@ -82,27 +97,28 @@ export const x2ValeforScript: AiScript = {
   decide(ctx) {
     const self = ctx.self;
     if (girls(ctx).length === 0) return null;
-    // Row 1: AC read before this poll's own gain. The Overdrive resets the counter and re-arms both Rays.
-    if (acOf(self) >= AC_OVERDRIVE) {
+    // The gauge as it stands: a turn's own gain comes only in the attack-class branch below.
+    const gauge = acOf(self);
+    const rays = mem(self, VALEFOR_RAYS_FIRED);
+    // 1: the Blast resets the gauge and the Ray counter.
+    if (gauge >= AC_OVERDRIVE) {
       setMem(self, AC, 0);
-      setMem(self, VALEFOR_RAY_30_FIRED, 0);
-      setMem(self, VALEFOR_RAY_60_FIRED, 0);
+      setMem(self, VALEFOR_RAYS_FIRED, 0);
       return use(VALEFOR_ABILITY.energyBlast, []);
     }
-    // Row 2: her own action adds 5; an Energy Ray for each mark the counter has reached and not yet answered, the lower first.
+    // 2 and 3: an Energy Ray at each mark the gauge has reached and the counter has not answered (a gauge that jumps past both gives two Rays on her next two turns).
+    if (gauge >= VALEFOR_RAY_MARKS[1] && rays < VALEFOR_RAYS_PER_CYCLE) {
+      setMem(self, VALEFOR_RAYS_FIRED, rays + 1);
+      return use(VALEFOR_ABILITY.energyRay, []);
+    }
+    if (gauge >= VALEFOR_RAY_MARKS[0] && rays === 0) {
+      setMem(self, VALEFOR_RAYS_FIRED, 1);
+      return use(VALEFOR_ABILITY.energyRay, []);
+    }
+    // 4: an attack-class turn: the gauge gains 5, then one in three Sonic Wings on the farthest girl, else a Normal Attack on a near-weighted girl.
     bumpAc(self, VALEFOR_AC_PER_ACTION);
-    const ac = acOf(self);
-    if (ac >= VALEFOR_RAY_MARKS[0] && mem(self, VALEFOR_RAY_30_FIRED) === 0) {
-      setMem(self, VALEFOR_RAY_30_FIRED, 1);
-      return use(VALEFOR_ABILITY.energyRay, []);
-    }
-    if (ac >= VALEFOR_RAY_MARKS[1] && mem(self, VALEFOR_RAY_60_FIRED) === 0) {
-      setMem(self, VALEFOR_RAY_60_FIRED, 1);
-      return use(VALEFOR_ABILITY.energyRay, []);
-    }
-    // Rows 3 and 4: one in three Sonic Wings on the back of the formation, else a Normal Attack on a uniform living girl.
     if (scriptModCtx(ctx, 3) === VALEFOR_SONIC_WINGS_ROLL) return use(VALEFOR_ABILITY.sonicWings, furthestGirl(ctx));
-    return use(VALEFOR_ABILITY.attack, pickGirl(ctx));
+    return use(VALEFOR_ABILITY.attack, attackTarget(ctx));
   },
   ...resultGauge(VALEFOR_AC_PER_RESULT),
 };

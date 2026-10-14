@@ -7,11 +7,11 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres, the fallen aeons' action counter; the FFX Valefor (Yuna's aeon, and the possessed one of FFX's own fights) shares a name and
  * nothing else.
  *
- * Sourced facts only: the Normal Attack, Sonic Wings (MP, on the character furthest away), Energy Ray (magic, the whole party in front of her) and Energy Blast (magic, all) (§7.1, `[verified: 2
- * sources]`); the hidden count that every move of hers and every blow she takes raises, an Energy Ray on crossing 30 and 60 and the Energy Blast at 100 (§7.1, `[verified: 2 sources]`: **the
- * game's own script is not read yet, so the mix and the marks are the research's description**); Strength 97, Defense 76, Magic 11, Magic Defense 20 (row 164 of the game's table, the same in §7.1);
- * Breaks and Slow land, Gravity does nothing (row 164). The guide says "the back of the line" for Sonic Wings (the engine's reading of "furthest away": the highest slot, preflight §4) and "the whole
- * party" for Energy Ray (the girls all stand in front of her in the fixed formation). **Not modelled, so not promised:** which side of her a girl stands on.
+ * Sourced facts only: the Normal Attack, Sonic Wings (MP, on the character furthest away), Energy Ray (magic, the whole party in front of her) and Energy Blast (all; **not magic: its row's damage flags are 0, so
+ * neither Shell nor Protect reduces it**) (§7.1, `[verified: 2 sources]`, and the RE review of 2026-10-14 of the game's own script and move rows: m164, row 164); the hidden count that every attack-class turn of hers
+ * and every blow she takes raises, an Energy Ray at 30 and at 60 and the Energy Blast at 100 (§7.1, **and the game's own script**); Strength 97, Defense 76, Magic 11, Magic Defense 20 (row 164 of the game's table, the
+ * same in §7.1); Breaks and Slow land, Gravity does nothing (row 164). The guide says "the girl who stands farthest from her, Yuna at the start" for Sonic Wings (the game's own start positions,
+ * `pos_bsyt05_229`: Yuna 53.00, Rikku and Paine 52.39) and "the whole party" for Energy Ray (the girls all stand in front of her in the fixed formation). **Not modelled, so not promised:** where a girl stands once she has moved.
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`), as for every FFX-2 guide.
  */
@@ -34,12 +34,12 @@ const RULES: GuideRule[] = [
     cite: 'ffx2-fallen-aeons §7.1',
   },
   {
-    text: 'Energy Ray and Energy Blast are magic and land on all three girls at once, so Shell halves them: put Shell up, heal after each Ray, and top everyone up before the Blast.',
-    short: 'Shell up, heal between the Rays',
+    text: 'Energy Ray is magic and lands on all three girls at once, so Shell halves it. Energy Blast is not magic: neither Shell nor Protect softens it, so only HP does. Heal after each Ray, and top everyone up before the Blast.',
+    short: 'Shell the Rays, heal before the Blast',
     cite: 'ffx2-fallen-aeons §7.1',
   },
   {
-    text: 'Sonic Wings does no damage to HP: it only chips a little MP from the girl at the back of the line. Keep an Ether for Yuna, who needs MP for Protect, Shell and Curaga.',
+    text: 'Sonic Wings does no damage to HP: it only chips a little MP from the girl who stands farthest from her, Yuna at the start. Keep an Ether for Yuna, who needs MP for Protect, Shell and Curaga.',
     short: 'Sonic Wings drains MP',
     cite: 'ffx2-fallen-aeons §7.1',
   },
@@ -53,7 +53,7 @@ const RULES: GuideRule[] = [
 const HINTS: GuideHint[] = [
   { when: { labels: ['Darkness'] }, text: 'Darkness ignores her Defense of 76, and costs HP, not MP', cite: 'ffx2-fallen-aeons §7.1' },
   { when: { labels: ['Protect'] }, text: 'Protect for the party: her plain swing is the hit that hurts', cite: 'ffx2-fallen-aeons §7.1' },
-  { when: { labels: ['Shell'] }, text: 'Shell for the party: Energy Ray and Energy Blast are magic, and both hit everyone', cite: 'ffx2-fallen-aeons §7.1' },
+  { when: { labels: ['Shell'] }, text: 'Shell for the party: Energy Ray is magic and hits everyone, and Shell halves it (not the Blast)', cite: 'ffx2-fallen-aeons §7.1' },
   { when: { labels: ['Power Break'] }, text: 'Power Break lowers her Strength: Breaks land on her', cite: 'ffx2-fallen-aeons §7.1' },
   { when: { labels: ['Armor Break'] }, text: 'Armor Break lowers her Defense of 76, so every swing goes further', cite: 'ffx2-fallen-aeons §7.1' },
   { when: { labels: ['Mega-Potion'] }, text: 'Two girls are low: a Mega-Potion tops up everyone before the next Ray', cite: 'ffx2-fallen-aeons §7.1' },

@@ -8,8 +8,8 @@
  *
  * It is the **advisor line** the chapter's bench measures (`tests/unit/chapters/besaid-valefor-bench.test.ts`): an input to a measurement, never game data, and nothing in it tunes the boss
  * (hard rule 6; `boss-side-fix-needs-measured-options`). It answers what the research says about her (`research/ffx2-fallen-aeons.md` §7.1): her Normal Attack is the physical hit (STR 97, so
- * **Protect** and a **Power Break** matter), her Energy Ray and Energy Blast are magic on all three girls (so **Shell** halves them), Sonic Wings chips a little MP from the back of the line (so an
- * Ether for the girl who casts), and Breaks and Slow land on her.
+ * **Protect** and a **Power Break** matter), her Energy Ray is magic on all three girls (so **Shell** halves it) while her **Energy Blast is not magic: neither Shell nor Protect softens it** (the RE review of 2026-10-14, m164, row 164: its damage flags are 0, so the answer to it is HP), Sonic Wings chips a little MP from the girl who stands farthest from her (Yuna at the start, who is also the one who
+ * casts: hence the Ether), and Breaks and Slow land on her.
  *
  * **Yuna (White Mage)**, in this order:
  * 1. **Revive**: a Phoenix Down (else Life) for a girl down.

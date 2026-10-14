@@ -23,7 +23,7 @@ export const FFX2_VALEFOR_BESAID_DOC: GuideDoc = {
     { t: 'p', text: 'Be sure to Steal her Healing Springs before the fight ends.' },
     {
       t: 'p',
-      text: 'Valefor mostly swings. Her swing is the hit that hurts, with a Strength of 97, and one time in three she uses Sonic Wings instead, which only chips a little MP from the girl at the back.',
+      text: 'Valefor mostly swings. Her swing is the hit that hurts, with a Strength of 97, and one time in three she uses Sonic Wings instead, which only chips a little MP from the girl who stands farthest from her.',
     },
     {
       t: 'p',
@@ -31,7 +31,7 @@ export const FFX2_VALEFOR_BESAID_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Energy Ray and Energy Blast are magic and land on all three girls at once, so Shell halves them. Energy Blast hits hardest of all: have everyone healed before it.',
+      text: 'Energy Ray is magic and lands on all three girls at once, so Shell halves it. Energy Blast hits hardest of all, and it is not magic: neither Shell nor Protect softens it, so have everyone healed before it.',
     },
     {
       t: 'p',

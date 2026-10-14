@@ -5,8 +5,9 @@
  *
  * - `title`, `subtitle`, `location` and `blurb` are the record's (one premise on the card and the prep).
  * - `numeral` is `EXP` like the other hidden chapters (the board has no card for it; the prep header and the pause screen say so).
- * - `handwritten` and `tip` are our own words over the sourced facts (`research/ffx2-fallen-aeons.md` §7.1, `[verified: 2 sources]`): a hidden count rises with every blow and every move of
- *   hers; two Energy Rays reach the whole party on the way to the Energy Blast; Sonic Wings drains MP, from the back of the formation; Shell and Protect; heal between.
+ * - `handwritten` and `tip` are our own words over the sourced facts (`research/ffx2-fallen-aeons.md` §7.1, `[verified: 2 sources]`, and the game's own script and move rows, the RE review of 2026-10-14, m164): a hidden
+ *   count rises with every blow she takes and every attack-class turn of hers; two Energy Rays reach the whole party on the way to the Energy Blast; **Shell halves the Rays only, nothing softens the Blast** (its row is
+ *   not magical), so the answer to the Blast is HP; Sonic Wings drains MP from the girl farthest from her (Yuna at the start).
  * - `quote` is Yuna's dismay at the aeon, from the chapter's pre scene (`../story/scripts/ffx2-valefor-besaid.ts`), our own line.
  * - `objectives`: survive Energy Blast (the lesson), bring her under half, the win.
  * - `heroArt` has no painting of its own yet: the card shows Valefor's idle as `heroArtFallback` (PROVISIONAL: the FFX aeon's approved painting, reused).
@@ -25,15 +26,15 @@ export const VALEFOR_BESAID_META: ChapterMeta = {
   heroArt: 'pause/ffx2-valefor-besaid', // no painting yet: the fallback below shows
   heroArtFallback: 'characters/valefor/idle.png',
   quote: { text: 'Valefor? It is me. Please, stop.', speaker: 'Yuna' },
-  handwritten: 'shell up. two rays, then the blast',
+  handwritten: 'shell the rays. heal before the blast',
   objectives: [
     { id: 'survive-energy-blast', label: 'Survive Energy Blast', rule: { kind: 'survived-ability', ability: 'energy-blast' } },
     { id: 'valefor-below-half', label: 'Bring Valefor below half', rule: { kind: 'boss-hp-below', fraction: 0.5 } },
     { id: 'defeat-valefor', label: 'Defeat Valefor', rule: { kind: 'victory' } },
   ],
   tip:
-    'Every blow, and every move of hers, stirs a hidden count. Energy Ray reaches the whole party twice, then Energy Blast follows: ' +
-    'put Shell up and heal between them. Her wings drain MP from the back of the line.',
+    'Every blow she takes, and every swing of hers, fills a hidden count. Energy Ray hits the whole party twice, then Energy Blast follows: ' +
+    'Shell halves the Rays but nothing softens the Blast, so heal before it. Her wings drain MP from whoever stands farthest from her.',
   snapshots: [
     { image: `backdrops/${VALEFOR_BESAID_SCENE_KEY}.png`, caption: 'the chamber at Besaid' },
     { image: 'characters/valefor/cast.png', caption: 'the pyreflies gather' },

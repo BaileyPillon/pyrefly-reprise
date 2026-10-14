@@ -13,7 +13,7 @@
  * quantities). **Where the row says more, the row wins**, each marked `[RE row 164]` below: **MP 9,999** (§7.1 gives none), **Accuracy 95** (§7.1 gives none), the **status list** (Death, Petrify, Sleep,
  * Silence, Darkness, Poison, Confusion, Berserk, Curse, Eject, Stop, Doom; the special word's bits 0 and 6), the **steal chance byte 128**, the Zantetsu byte 80, and **Gravity is nulled**, which §7.1's
  * "neutral" omits. The row is laid on this enemy by `../monster-records/records-valefor.ts` (`attachMonsterRecords`, called at the foot of this file). **The second Valefor, row 363 (Lv 48, HP 38,000),
- * sits in no formation and is NOT used here.** Columns the note marks "unmapped (raw N)" are wired to nothing (the Bribe flag is not assumed to be either bit: no Bribe is set and none is denied).
+ * sits in no formation and is NOT used here.** Columns the note marks "unmapped (raw N)" are wired to nothing except where the RE review of 2026-10-14 says the engine's table is right: group-1 slots 17 and 18 (Itchy and Auto-Life) are in the record, and the special word's bits 7, 8 and 9 make her immune to Interrupt and Bribe.
  * `tests/unit/chapters/besaid-valefor-data.test.ts` pins this file and the record against `tests/fixtures/parity/ffx2/besaid_valefor_rows.json` (the row's 200 raw bytes, decoded by the test).
  *
  * **Art: provisional.** `spriteKey: 'valefor'` is the FFX aeon's approved painting set (`public/art/characters/valefor/{idle,attack,cast,hurt}`), reused as is. There is no `ko`
@@ -33,11 +33,10 @@ export const VALEFOR_SPRITE = 'valefor';
 export const VALEFOR_SCRIPT_ID = 'x2-valefor';
 
 /**
- * The status list, **[RE row 164]**: group 1 Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse (slots 0 to 8) and Eject (10); group 2 Stop (6) and Doom (14); and the
- * special word's bit 6 (takes no ATB damage: Delay does nothing, `research/re-ffx2-damage.md` §2.4). **Slow and every Break land** (all seven stat-stage bytes and Slow read 0; also §7.1 "Breaks and Slow
- * land"). Not listed, on purpose: group-1 slots 17 and 18, which the note marks unmapped (the engine's slot table would read them as Itchy and Auto-Life), and Interrupt, which rides on special bit 9,
- * the contested Bribe or magic-cancel bit that the note does not assume. Zantetsu (byte 80) is not modelled (no `zantetsu` status; the Ixion precedent). The monster record replaces these bytes
- * wherever the engine has a slot for them.
+ * The status list, **[RE row 164]**: group 1 Death, Petrify, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse (slots 0 to 8), Eject (10) and slots 17 and 18 (Itchy and Auto-Life in the engine's table;
+ * the RE review of 2026-10-14 confirmed the table, 369 of the 370 monster rows carry 255 there); group 2 Stop (6) and Doom (14); and the special word's bits: **bit 6 (no ATB damage: Delay does nothing,
+ * `research/re-ffx2-damage.md` §2.4) and bits 7, 8 and 9 set, so she is immune to Interrupt and to Bribe, whichever bit is which** (the RE review). **Slow and every Break land** (all seven stat-stage bytes and Slow
+ * read 0; also §7.1 "Breaks and Slow land"). Zantetsu (byte 80) is not modelled (no `zantetsu` status; the Ixion precedent). The monster record replaces these bytes wherever the engine has a slot for them.
  */
 const VALEFOR_IMMUNE: StatusImmunities = {
   ko: 255,
@@ -52,7 +51,8 @@ const VALEFOR_IMMUNE: StatusImmunities = {
   eject: 255,
   stop: 255,
   doom: 255,
-  'delay-effect': 255,
+  'delay-effect': 255, // special bit 6
+  'action-cancel': 255, // Interrupt: special bits 7, 8 and 9 are set [RE review]
 };
 
 /**
@@ -93,8 +93,8 @@ export const x2Valefor: EnemyDef = {
   // Neutral to Fire, Ice, Lightning, Water and Holy [RE row 164: no absorb, half or weak byte] = §7.1 [verified: 2 sources]; **Gravity is nulled** [RE row 164: null byte 0x10, bit 4], which §7.1 omits.
   affinities: { gravity: 'immune' },
   immunities: VALEFOR_IMMUNE,
-  // The special word 0x3c3 [RE row 164]: bit 0 immune to the percent-HP formulas ("fractional damage"), bit 6 no ATB damage (Delay). Bits 7 and 8 are unmapped, bit 9 is contested: not read here.
-  immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-delay'],
+  // The special word 0x3c3 [RE row 164]: bit 0 immune to the percent-HP formulas ("fractional damage"), bit 6 no ATB damage (Delay), bits 7, 8 and 9 set: immune to Interrupt and to Bribe, whichever bit is which [RE review].
+  immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Valefor', spriteKey: VALEFOR_SPRITE, hp: 8430 }],
   aiScriptId: VALEFOR_SCRIPT_ID,
   rewards: {
@@ -111,7 +111,7 @@ export const x2Valefor: EnemyDef = {
       common: { itemId: 'x2-healing-spring', count: 4 }, // Healing Spring x4 [RE row 164, item 0x2034] = §7.1 [verified: 2 sources]
       rare: { itemId: 'x2-healing-spring', count: 6 }, // rare x6 [RE row 164] = §7.1 [verified: 2 sources]
     },
-    // Mission reward: none in the research. Bribe: the row has no Bribe slot, and Bribe immunity is unproven either way (the RE note, section 3): so no `bribe` and no flag.
+    // Mission reward: none in the research. Bribe: the row has no Bribe slot and bits 7, 8 and 9 of its special word are set (immune to Bribe whichever bit is which, the RE review): no `bribe`, and the flag above.
   },
   abilityIds: [VALEFOR_ATTACK_ID, VALEFOR_SONIC_WINGS_ID, VALEFOR_ENERGY_RAY_ID, VALEFOR_ENERGY_BLAST_ID],
   flags: { isBoss: true },

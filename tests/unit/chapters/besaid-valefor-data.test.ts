@@ -147,7 +147,7 @@ describe('the enemy data is the row, and the row equals the research in every sh
     expect(ROW.stealChanceByte).toBe(128);
   });
 
-  it('the drop and steal items have rows (held-only: Moon Bracer is Auto-Shell, Healing Spring a recovery item whose effect is not wired), and no Bribe is set or denied', () => {
+  it('the drop and steal items have rows (held-only: Moon Bracer is Auto-Shell, Healing Spring a recovery item whose effect is not wired), and no Bribe slot exists', () => {
     for (const id of ['moon-bracer', 'x2-healing-spring']) {
       const item = heldItems.find((i) => i.id === id)!;
       expect(item, id).toBeDefined();
@@ -156,7 +156,8 @@ describe('the enemy data is the row, and the row equals the research in every sh
     }
     expect(ROW.bribeItems).toEqual([0, 0, 0, 0]);
     expect(x2Valefor.rewards.bribe).toBeUndefined();
-    expect(x2Valefor.immunityFlags).not.toContain('immune-to-bribe');
+    expect((ROW.special >> 7) & 7, 'special bits 7, 8 and 9 are all set: immune to Interrupt and Bribe whichever is which').toBe(7);
+    expect(x2Valefor.immunityFlags).toContain('immune-to-bribe');
   });
 });
 
@@ -194,28 +195,26 @@ describe('the monster record is the row, and the engine\'s status table is built
     expect(specialWord(Object.assign(aiUnit(VALEFOR_ID, 'enemy', ROW.hp, 0), { enemy: { ...x2Valefor, aiScriptId: VALEFOR_SCRIPT_ID, formIndex: 0 } }) as never)).toBe(0x3c3);
   });
 
-  it('the resist bytes are the row\'s, slot by slot, **except slots 17 and 18, which the note marks unmapped and which are NOT wired**', () => {
-    const wired1 = Object.fromEntries(Object.entries(ROW.resist1).filter(([slot]) => slot !== '17' && slot !== '18'));
-    expect(RECORD.resist1).toEqual(Object.fromEntries(Object.entries(wired1).map(([k, v]) => [Number(k), v])));
+  it('the resist bytes are the row\'s, slot by slot, slots 17 and 18 included (the RE review of 2026-10-14: the engine\'s table is right, 17 is Itchy and 18 is Auto-Life)', () => {
+    expect(RECORD.resist1).toEqual(Object.fromEntries(Object.entries(ROW.resist1).map(([k, v]) => [Number(k), v])));
     expect(RECORD.resist2).toEqual(Object.fromEntries(Object.entries(ROW.resist2).map(([k, v]) => [Number(k), v])));
     expect(Object.keys(ROW.resist1).map(Number).sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 17, 18]);
     expect(Object.keys(ROW.resist2).map(Number)).toEqual([6, 14]); // Stop and Doom: Slow and every stat stage read 0, so Breaks and Slow land
-    expect(FIXTURE.unmapped.group1ResistSlots17and18).toEqual([255, 255]); // on file, raw, wired to nothing
+    expect(FIXTURE.unmapped.group1ResistSlots17and18).toEqual([255, 255]);
   });
 
-  it('after the attach, the enemy is immune to exactly the statuses the row nulls at the slots the engine has, plus Delay (the special word\'s bit 6): never Itchy or Auto-Life (slots 17 and 18), never Interrupt (bit 9, contested)', () => {
-    const expected = new Set<string>(['delay-effect']);
+  it('after the attach, the enemy is immune to exactly the statuses the row nulls at the slots the engine has (Itchy and Auto-Life at 17 and 18 included), plus Delay (the special word\'s bit 6) and Interrupt (bits 7, 8 and 9 are set: immune whichever bit is which, the RE review)', () => {
+    const expected = new Set<string>(['delay-effect', 'action-cancel']);
     for (const [slot, byte] of Object.entries(ROW.resist1)) {
-      if (slot === '17' || slot === '18') continue;
       const status = GROUP1_STATUS[Number(slot)];
       if (status !== null && status !== undefined && byte === 255) expected.add(status);
     }
     for (const [slot, byte] of Object.entries(ROW.resist2)) for (const status of GROUP2_STATUS[Number(slot)] ?? []) if (byte === 255) expected.add(status);
     const immune = new Set(Object.entries(x2Valefor.immunities).filter(([, v]) => v === 255).map(([k]) => k));
     expect([...immune].sort()).toEqual([...expected].sort());
-    for (const status of ['itchy', 'auto-life', 'action-cancel']) expect(immune.has(status), status).toBe(false);
+    for (const status of ['itchy', 'auto-life', 'action-cancel']) expect(immune.has(status), status).toBe(true);
     for (const lands of ['slow', 'str-down', 'def-down', 'mag-down', 'mdef-down', 'shell', 'protect', 'reflect', 'haste', 'regen']) expect(immune.has(lands), `${lands} lands`).toBe(false);
-    expect(x2Valefor.immunityFlags).toEqual(['boss', 'immune-to-percentage-damage', 'immune-to-delay']); // special bits 0 and 6
+    expect(x2Valefor.immunityFlags).toEqual(['boss', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe']); // special bits 0 and 6, and 7 to 9
   });
 });
 
@@ -240,11 +239,11 @@ describe('the four moves are the research\'s (damage constants, targets, the hit
     expect([byId[VALEFOR_ATTACK_ID]!.power, byId[VALEFOR_SONIC_WINGS_ID]!.power, byId[VALEFOR_ENERGY_RAY_ID]!.power, byId[VALEFOR_ENERGY_BLAST_ID]!.power]).toEqual([16, 2, 20, 25]);
   });
 
-  it('the Attack and Sonic Wings are single-target physical hits; Energy Ray and Energy Blast are magic on every living girl (the arc covers all three in the fixed formation)', () => {
+  it('the Attack and Sonic Wings are single-target physical hits; Energy Ray is magic on every living girl and **Energy Blast is not magic** (its row\'s damage flags are 0: neither Shell nor Protect reduces it)', () => {
     expect(byId[VALEFOR_ATTACK_ID]).toMatchObject({ formula: 'strength', damageType: 'physical', targeting: 'single-enemy', category: 'attack' });
     expect(byId[VALEFOR_SONIC_WINGS_ID]).toMatchObject({ formula: 'strength', damageType: 'physical', targeting: 'single-enemy' });
     expect(byId[VALEFOR_ENERGY_RAY_ID]).toMatchObject({ formula: 'magic', damageType: 'magical', targeting: 'all-enemies' });
-    expect(byId[VALEFOR_ENERGY_BLAST_ID]).toMatchObject({ formula: 'magic', damageType: 'magical', targeting: 'all-enemies' });
+    expect(byId[VALEFOR_ENERGY_BLAST_ID]).toMatchObject({ formula: 'magic', damageType: 'other', targeting: 'all-enemies' });
   });
 
   it('Sonic Wings takes MP, not HP (the key the command adapter reads); no move costs MP', () => {
@@ -252,11 +251,11 @@ describe('the four moves are the research\'s (damage constants, targets, the hit
     for (const a of x2ValeforAbilities) expect(a.mpCost, a.id).toBe(0);
   });
 
-  it('hard rule 5: both magic rows are `canMiss: false`, so the Overdrive always hits; the Attack and Sonic Wings never carry it (they roll)', () => {
+  it('hard rule 5: the Ray, the Blast (her Overdrive) and Sonic Wings (accuracy formula 0, no Darkness bit: the RE review) are `canMiss: false`; the plain Attack is the one move that rolls', () => {
     expect(byId[VALEFOR_ENERGY_RAY_ID]!.canMiss).toBe(false);
     expect(byId[VALEFOR_ENERGY_BLAST_ID]!.canMiss).toBe(false);
+    expect(byId[VALEFOR_SONIC_WINGS_ID]!.canMiss).toBe(false);
     expect(byId[VALEFOR_ATTACK_ID]!.canMiss).not.toBe(false);
-    expect(byId[VALEFOR_SONIC_WINGS_ID]!.canMiss).not.toBe(false);
   });
 
   it('none of her moves is wired to a command row yet (monmagic 0x4091 to 0x4093 are not read): no `ffx2Record` on any ability', () => {
