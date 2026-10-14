@@ -56,7 +56,7 @@ Offsets are from the start of the 200-byte row. "Proved" means an earlier checke
 | +0x19 | thinking byte | `re-ffx2-ai-fallen-trema.md` §1.6: a record field that the battle never reads. Value given for completeness |
 | +0x1a u16 | **special word** | bit 0: immune to percentage-HP formulas 4 and 7 (`re-ffx2-damage.md` §2.1); bit 1: a hit reaction does not slow its gauge (`re-ffx2-atb-status.md` §3.1); bit 6: takes no ATB damage (`re-ffx2-damage.md` §2.4); bit 9: immune to magic cancel (`re-ffx2-atb-status.md` §5, `FFX2-G01` §4.4). Bits 2, 7 and 8 are **unmapped** (the shipped header names bit 7 `disable_zan` and bit 8 `wairo`, effects not traced). Open: `re-ffx2-hit-status.md` §2.3 and §6 call the same bit 9 (`Chr+0x3a7` bit 1) the Bribe-immune flag, which contradicts the ATB note and `FFX2-G01`; the Bribe flag is not assumed to be either bit here |
 | +0x1c .. +0x1f | **absorb, null, half, weak** element bytes | `re-ffx2-damage.md` §3 (bit 0 fire, 1 ice, 2 thunder, 3 water, 4 gravity, 5 holy; 6 and 7 unmapped) |
-| +0x20 .. +0x37 | **group-1 resist bytes**, 24 of them (255 = immune) | `re-ffx2-hit-status.md` §4: 0 Death, 1 Petrify, 2 Sleep, 3 Silence, 4 Darkness, 5 Poison, 6 Confusion, 7 Berserk, 8 Curse, 9 Defense, 10 Eject, 15 Always Critical, 17 a status that clears Confusion, Berserk and Curse. Indexes 11 to 14, 16 and 18 to 23 are unmapped |
+| +0x20 .. +0x37 | **group-1 resist bytes**, 24 of them (255 = immune) | `re-ffx2-hit-status.md` §4: 0 Death, 1 Petrify, 2 Sleep, 3 Silence, 4 Darkness, 5 Poison, 6 Confusion, 7 Berserk, 8 Curse, 9 Defense, 10 Eject, 15 Always Critical; **17 Itchy and 18 Auto-Life** (added 2026-10-14 from the Valefor follow-up, `re-ffx2-ai-valefor.md`: the game's own shipped `command.h` names slot 17 "change clothes" and slot 18 "relife", the Auto-Life rows inflict 18 and Dispel clears it, and 369 of the 370 rows carry 255 in both; `re-ffx2-hit-status.md` §4 describes 17 by an effect, clearing Confusion, Berserk and Curse). Indexes 11 to 14, 16 and 19 to 23 are unmapped |
 | +0x38 .. +0x4f | **group-2 resist bytes**, 24 of them | same §4: 0 Shell, 1 Protect, 2 Reflect, 3 Regen, 4 Haste, 5 Slow, 6 Stop, 7 to 13 the seven stat stages, 14 Doom, 15 to 17 the immunities. Which stage is which: only 7 STR, 9 DEF, 11 ACC are named (`re-ffx2-ai-leblanc-den-ixion.md` §2). Indexes 18 to 23 unmapped |
 | +0x50 i32, +0x54 i32, +0x58 .. +0x6f | automatic-status masks (group 1, group 2) and their counts | `FFX2-G04` §3.4 (monster records: mask at `+0x50`, group-2 mask at `+0x54`, counts from `+0x58`; Spellspring = group-1 bit 13) |
 | +0x70 .. +0x8f | ability list, 16 x u16 | the ids resolve by the convention the notes use for `0x41da` Attack and `0x40e5` Supercollider (a `0x4xxx` id is a row of `monmagic.bin`, a `0x3xxx` id a row of `command.bin`, row = low 12 bits). **What the game reads the list for is not traced**; the names are given as identifiers |
@@ -146,7 +146,7 @@ Stats are the bytes. Percentages are the notes' formulas on the bytes.
 | Sound id (+0x96) | unmapped (raw value 4260) | unmapped (raw value 4266) | unmapped (raw value 4270) | unmapped (raw value 4260) |
 | Monster-type word (+0x9a) | unmapped (raw value 0) | unmapped (raw value 0) | unmapped (raw value 0) | unmapped (raw value 0) |
 | Special word bit 7 and bit 8 | unmapped (set) | unmapped (set) | unmapped (clear) | unmapped (set) |
-| Group-1 resist indexes 17 and 18 | unmapped (raw value 255, 255) | unmapped (raw value 255, 255) | unmapped (raw value 255, 255) | unmapped (raw value 255, 255) |
+| Group-1 resist 17 (Itchy) and 18 (Auto-Life) | immune (255, 255) | immune (255, 255) | immune (255, 255) | immune (255, 255) |
 | Element bits 6 and 7 | unmapped (clear) | unmapped (clear) | unmapped (clear) | unmapped (clear) |
 | Name reference (+0x00) | 0x005a5a8c | 0x00535bad | 0x00425c6f | 0x005aaff1 |
 | Help reference (+0x04) | 0x010b5a94 | 0x00df5bb5 | 0x00195c77 | 0x010baff9 |
@@ -234,7 +234,7 @@ No repo or wiki value is on file for it. It is listed so a later fight that uses
 ## 7. Open items
 
 1. Which fight uses row 363 (no `btl.txt` formation names it).
-2. What the ability list, the "basaku" word, the sound id and the type word are read for; what special bits 7 and 8 do; the Bribe flag (bit 8 or 9); the group-1 indexes 17 and 18.
+2. What the ability list, the "basaku" word, the sound id and the type word are read for; what special bits 7 and 8 do; the Bribe flag (bit 8 or 9). (The group-1 indexes 17 and 18 were open here; they are Itchy and Auto-Life, see section 3.)
 3. Whether the wiki's "Reflect" and "Multi-attack" immunities for Yojimbo live in a column outside the record or are wiki wording.
 4. Daigoro's attack: it is not in Yojimbo's list and the dog's list is empty, so the dog's move comes from its script (row 174's AI), which was not read here.
 5. Whether the game ever reads `monster2.bin` rows for these four monsters (their Oversoul type is 0).
