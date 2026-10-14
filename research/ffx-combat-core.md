@@ -1043,6 +1043,8 @@ Learned via **Lancet** on enemies that carry the skill. Learning one **instantly
 
 ### 5.9 Rikku — Mix
 
+> **Superseded in part (re-parity RC7, lane FFX-H).** The game's combination table is complete (112 x 112, 6,328 pairs, 64 results; the engine now resolves from it), not the 43 example pairs below; "one confirmed recipe per result", the skipped ice, thunder and water families and "keeps the gauge ... and still delays Rikku" (the delay's size is unestablished) are corrected in [`re-ffx-mix.md`](re-ffx-mix.md). The 43 rows below stay true as examples.
+
 Two items are consumed and a single result action fires. **Every mix is rank 6** (the CTB preview lies and shows 5). All mixes have damage type **Other** and `ignores_armored`. Recipes are an unordered pair lookup over the game's item "mix groups"; many pairs collapse to the same result. `[verified: 2 sources]`
 
 **Resolution-order warning (P0 for implementers):** the engine computes the signed HP/MP amounts from the **pre-action** target state, then removes statuses, then applies the amounts. Therefore **Super Elixir and Final Elixir remove Zombie and still kill that character** with reversed healing. Panacea (no HP component) is the only safe cleanse. `[verified: 2 sources]`

@@ -40,6 +40,7 @@ import type { AbilityDef, FFXCombatant, ItemDrop } from '../common/types.ts';
 import { type Ctx, rtOf } from './state.ts';
 import { hasAuto } from './equipment.ts';
 import { rollSteal } from './adapt/steal.ts';
+import { changeStock } from './adapt/bag.ts';
 import { FfxStream } from './adapt/streams.ts';
 
 /**
@@ -98,9 +99,8 @@ export function resolveSteal(ctx: Ctx, user: FFXCombatant, target: FFXCombatant,
 
   rt.stealCount = Math.min(255, rt.stealCount + 1);
   const count = Math.max(1, drop.count);
-  const held = (ctx.rt.inventory.get(drop.itemId) ?? 0) + count;
-  ctx.rt.inventory.set(drop.itemId, held);
-  ctx.state.flags[`inventory:${drop.itemId}`] = held;
+  // The bag is the game's: a stack stops at 99 and the excess is lost (`kernel/bag.ts`, FFX.exe 0x00790550: steals, rewards and every other gain go through it).
+  changeStock(ctx, drop.itemId, count);
   ctx.emit({
     type: 'message',
     text: count > 1 ? `Stole ${itemName(ctx, drop)} x${count}!` : `Stole ${itemName(ctx, drop)}!`,

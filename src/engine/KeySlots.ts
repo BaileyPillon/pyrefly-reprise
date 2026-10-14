@@ -41,7 +41,7 @@ export const TELEGRAPH_POSE = 'telegraph';
  * serves the whole family (`od-fury.png`, `od-mix.png`) instead of one copy per id. The engine resolves a Fury or
  * a Mix to its result id (`firaga-fury`, `mix-ultra-potion`), which is what the move's own key name would have to
  * be. Never the id itself; a move's own `od-<id>` painting is tried first (`armOdKey`). Lulu's Fury is `<spell>-fury`
- * (19 ids, `fire-fury` .. `ultima-fury`); Rikku's Mix is the 43 `mix-*` ids. Neither pattern matches an FFX-2 or FF7 id.
+ * (19 ids, `fire-fury` .. `ultima-fury`); Rikku's Mix is the 64 `mix-*` ids. Neither pattern matches an FFX-2 or FF7 id.
  */
 export function odFamilyOf(abilityId: string): string[] {
   if (/^[a-z]+-fury$/.test(abilityId)) return ['fury'];

@@ -212,4 +212,10 @@ export interface FFXRuntime {
   reactionDeaths?: Set<CombatantId>;
   /** The item an item reaction paid for when it was queued: `execute.ts` takes that one use as already spent. */
   prepaidItem?: string;
+  /**
+   * The Mix results the party has made with two ingredients and a target found: the game's party-shared 16-word array of discovered results (FFX-G05
+   * section 3.2 step 7; `kernel/mix.ts`). Written by `mix.ts`; nothing in the engine reads it back, as the game's reader of it is unread (a picker that
+   * lists known results would). Absent until the first Mix.
+   */
+  mixShared?: number[];
 }

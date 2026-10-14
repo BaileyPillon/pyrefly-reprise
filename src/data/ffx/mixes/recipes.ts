@@ -8,9 +8,13 @@
  * from `mixes/abilities.ts`.
  *
  * Only ONE confirmed recipe per result is listed, per the brief — this is
- * reference/flavour data, not an exhaustive recipe table (the real game has
- * many more valid pairs per result, generally grouped by item "family" and
- * quantity-in-inventory tiers, which are out of scope here).
+ * reference/flavour data, not an exhaustive recipe table. **Play no
+ * longer depends on it** (re-parity RC7, lane FFX-H): the game's whole
+ * combination table (6,328 pairs, 64 results) is `battle/ffx/kernel/mix-table.ts`
+ * and the resolver is `kernel/mix.ts`. This table stays as the independent
+ * list of 43 pairs that `tests/unit/parity-ffx-mix.test.ts` checks the chart
+ * against, cell by cell; the registry keeps it only as a fallback for an
+ * ingredient the chart does not know.
  *
  * Some ingredient item ids below (`hypello-potion`, `door-to-tomorrow`,
  * `designer-wallet`, `map`, `mana-spring`) may not exist in the items

@@ -238,9 +238,9 @@ describe('odFamilyOf: one key painting for a family of ability ids (FFX only)', 
     );
     expect(odFamilyOf('firaga-fury')).toEqual(['fury']);
   });
-  it('Rikku\'s Mix: all 43 `mix-*` ids resolve to `mix`', () => {
+  it('Rikku\'s Mix: all 64 `mix-*` ids (release 38\'s 43 and the 21 the game\'s chart adds) resolve to `mix`', () => {
     const fam = members(FFX_ABILITIES as Record<string, unknown>);
-    expect(fam['mix']?.length).toBe(43);
+    expect(fam['mix']?.length).toBe(64);
     expect(fam['mix']?.every((id) => id.startsWith('mix-'))).toBe(true);
   });
   it('nothing else in FFX resolves to a family, and nothing in FFX-2 or FF7 does', () => {

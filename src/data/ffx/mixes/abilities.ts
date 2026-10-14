@@ -22,7 +22,7 @@
  *     Overdrive-gain flag statuses (14).
  *   - `mixes/abilities-ordnance.ts` — the grenade and fire lines plus the
  *     two percent-current/deal-9999 nukes (12).
- * 9 + 8 + 14 + 12 = 43 result abilities (the brief's "~41" approximation).
+ * 9 + 8 + 14 + 12 = 43 result abilities (the brief's "~41" approximation); `mixes/abilities-ordnance-2.ts` adds the other 21 of the game's 64.
  *
  * ID RULE: every result ability id is prefixed `mix-` (e.g. `mix-grenade`)
  * to avoid colliding with the item catalog owned by a different parallel
@@ -33,13 +33,9 @@
  * displays rank 5 for Mix — the decompile's actual recovery cost is rank 6
  * [ffx-combat-core §5.9].
  *
- * KNOWN GAP: research also references ice/thunder/water elemental
- * counterparts to the Fire-line families (Blaster/Flurry/Bolt/Waterfall,
- * Icefall/Rolling Thunder/Flash Flood, Winter Storm/Lightning Bolt/Tidal
- * Wave, Black Ice/Electroshock/Aqua Toxin, Krysta/Thunderblast/Dark Rain),
- * but only gives their damage SHAPE, not confirmed exact names or ids in
- * order. They are deliberately SKIPPED here rather than guessed — see the
- * report for this gap.
+ * FORMER GAP, CLOSED (re-parity RC7, lane FFX-H): the game makes 64 results and this catalog carried 43; the ice, thunder and water families
+ * and six more were "deliberately SKIPPED rather than guessed". The other 21 are in `mixes/abilities-ordnance-2.ts`, every number read from the
+ * game's own command records (`tests/fixtures/parity/ffx/command_records.json`), so nothing in them is a guess. 43 + 21 = 64, the table's own.
  *
  * ACCURACY DECISION (2026-09-16, corrected in a second integration pass —
  * the first pass's `canMiss: true`, and its "known gap" on the ally-target
@@ -73,6 +69,7 @@ import { RESTORATIVE_MIX_ABILITIES } from './abilities-restoratives.ts';
 import { WARD_MIX_ABILITIES } from './abilities-wards.ts';
 import { BOOST_MIX_ABILITIES } from './abilities-boosts.ts';
 import { ORDNANCE_MIX_ABILITIES } from './abilities-ordnance.ts';
+import { ORDNANCE_MIX_ABILITIES_2 } from './abilities-ordnance-2.ts';
 
 export { MIX_CLEANSE_STATUSES } from './abilities-restoratives.ts';
 
@@ -118,4 +115,5 @@ export const ABILITIES: Record<string, AbilityDef> = {
   ...WARD_MIX_ABILITIES,
   ...BOOST_MIX_ABILITIES,
   ...ORDNANCE_MIX_ABILITIES,
+  ...ORDNANCE_MIX_ABILITIES_2,
 };
