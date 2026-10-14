@@ -748,6 +748,25 @@
 .ffx2hud .ig-cmd--disabled .ffx2cmd__reason {
   color: rgba(244, 241, 232, 0.7);
 }
+/*
+ * Desktop layout only (the phone stacks the reason under the name, `phone-hud.css`): when a greyed row's reason does not
+ * fit beside its name, the REASON gives way, not the name.
+ *
+ * Itchy's reason is 26 characters ("Itchy — spherechange first"). As a `flex: none` item it was wider than the whole row
+ * and squeezed the label (shrinkable, `min-width: 0`) to 0 px, so the three greyed rows read only "ITCHY — SPHERECHANG"
+ * and nothing said which row was Attack, Skill or Item (RC7 handoff, section 14). The reason now shrinks first, with an
+ * ellipsis ("ITCHY — SP…"), and the full text still names the highlighted row in the top bar. The shrink factor is so
+ * large against the name's that the name loses nothing (well under a thousandth of a pixel) until the reason is down to
+ * 0 px; only then does a name that alone is wider than the row end in its own ellipsis, as before. A reason that already
+ * fit (Silenced, Not enough MP) lays out exactly as it did.
+ */
+html:not([data-phone-battle]) .ffx2hud .ffx2cmd__reason {
+  flex: 0 1000000 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 /* PR-0018 (FFX-2, B6): the shared 42 % fade blended a disabled row into the dark scene (FFX
    measured 1.98 to 2.25:1 on the same rule). FFX-2 takes FFX's round-10 answer, an opaque
    inverted slab, so the row's contrast never depends on the painting behind it. */

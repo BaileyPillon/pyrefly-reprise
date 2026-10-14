@@ -42,6 +42,20 @@ Address: none yet (branch r48-rc: the live release r47 b8aa6f96 plus the rule la
   Special dressphere has no Item or Escape command. The Samurai gains Magicide, Dismissal, Fingersnap, Momentum,
   Shin-Zantetsu and Clean Slate, the Alchemist gains Dispel Tonic and Mega Phoenix, and the order in which commands
   unlock now matches the game for the Samurai, Thief, Berserker, Warrior, White Mage and Alchemist.
+- **FFX-2 only, the status guide and the move slab:** the status guide's Silence card says "no spells, Dances or
+  Songs" (it listed White Magic, Black Magic and Arcana, which is too few now that Silence stops every Dance and Song
+  and the Moogle, Cait and Eraser spells too); the FFX card still says "no White or Black Magic". The enemy-move slab
+  says "MP damage" for every move that drains MP (Valefor's Sonic Wings, Lacrimosa, Magical Attack Detected, Osmose,
+  Waning Moon, Yojimbo's Kozuka), and Leblanc's Osmose is no longer called "Magical", because the game's row for it is
+  neither physical nor magical. Delta Attack says it "leaves the whole party at 1 HP" (the old line added "and 0 MP",
+  but the game's row is HP only and the fight has always kept the girls' MP), and Looming Glacier says it "empties one
+  girl's MP and inflicts Stop". Words only: no number and no fight changed.
+- **FFX-2 only, the desktop battle menu while a girl is Itchy:** the three greyed commands (Attack, Skill and Item)
+  show their names again, with the reason cut short beside each ("ITCHY — …") instead of the 26-character reason
+  squeezing the name out of the row; the full reason still names the highlighted row in the top bar. The same squeeze
+  hit any greyed row whose reason did not fit beside its name (a 13-character "Not enough MP"), and the reason gives
+  way there too. A reason that fits ("Silenced") lays out exactly as before, and the phone layout is untouched (its
+  command area is pixel for pixel the same as in the last frame taken before the change).
 - **Disclosed, FFX-2:** one FFX-2 golden digest moved, Chapter V (Vegnagun and Shuyin), because of the wider Silence
   scope above: it wins exactly as often (490 of 500 seeds before and after, every seed the same outcome) and plays
   about 0.07 party turns longer a fight. The White Mage's Pray is a free, 0 MP heal of the whole party on her opening
