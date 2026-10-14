@@ -20,6 +20,7 @@
  * | `arcane-lore` | Arcane Lore | Shade of Nooj (Chapter XV) | `ffx2-gippal-den-of-woe.md` §3.2; effect `ffx2-combat-core.md` Arcana |
  * | `soul-of-thamasa` | Soul of Thamasa | Ixion's drop (Djose, Chapter XVI) | `ffx2-ixion-djose.md` §3.1, verified: 6 sources; effect wiki, single source |
  * | `sprint-shoes` | Sprint Shoes | Ixion (both slots) | `ffx2-ixion-djose.md` §3.1, verified: 4 sources; effect wiki, single source |
+ * | `power-wrist` | Power Wrist | Yojimbo (both slots; the hidden Tourist Trap, 2026-10-14) | `ffx2-combat-core.md` §5.4, verified: 2 sources; the steal is `monster.bin` row 170 |
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
@@ -100,6 +101,9 @@ export const heldItems: ItemDef[] = [
   // Ixion at Djose (FFX-2 only): the effects are the wiki's accessory table (ffx2-ixion-djose §3.1, single source).
   held('soul-of-thamasa', 'Soul of Thamasa', 'unsourced', 'Accessory. Spells 150 % stronger, MP cost doubled; Mag +15.'),
   held('sprint-shoes', 'Sprint Shoes', 'unsourced', 'Accessory. Act first; Haste; Agi +10.'),
+  // Yojimbo's steal in the hidden Tourist Trap (FFX-2 only, 2026-10-14; common and rare slot, monster.bin row 170): ffx2-combat-core §5.4 "Power Wrist | STR +20 | 1500 / 6000 (sell / buy)"
+  // `[verified: 2 sources]`; the price is the buy price, as in every row here, and the same Str +20 the accessory table already carries (`battle/ffx2/accessories.ts`).
+  held('power-wrist', 'Power Wrist', 6000, 'Accessory. Str +20.'),
 ];
 
 export default heldItems;

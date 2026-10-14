@@ -9,6 +9,8 @@
  * - **Sinspawn Gui** (`'sinspawn-gui'`, number 21, 2026-10-10; FFX only): the Mushroom Rock Road monster in two fights, the second with Seymour as a guest.
  * - **Fayth** (`'exp-fayth'`, number 22, 2026-10-10; FFX only): Evrae on the Fahrenheit's deck, Chapter VIII's encounter, fought with FFX's own battle camera (D-632); derived from Chapter VIII's record.
  *
+ * - **Tourist Trap** (`'ffx2-tourist-trap'`, number 23, 2026-10-14; FFX-2 only): Yojimbo and Daigoro in the Cavern of the Stolen Fayth, the optional mission; word `daigoro`.
+ *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
  * Split out of `./encounters.ts` for the house 400-line rule (AGENTS.md hard rule 7); `encounters.ts` still exports `EXPERIMENT_CHAPTERS`
@@ -21,8 +23,9 @@ import { experimentalLeblanc } from './chapter-exp-leblanc.ts';
 import { FFX2_EXPERIMENT } from './chapter-ffx2-experiment.ts';
 import { SINSPAWN_GUI } from './chapter-sinspawn-gui.ts';
 import { EXP_FAYTH } from './chapter-exp-fayth.ts';
+import { FFX2_TOURIST_TRAP } from './chapter-ffx2-tourist-trap.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP] as const;
 }

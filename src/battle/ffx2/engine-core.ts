@@ -28,7 +28,7 @@ import type {
   Ffx2Unit,
   GarmentGridRegistry,
 } from './internal.ts';
-import { settleFlavourTurn } from './flavour-turn.ts';
+import { pollIsNotATurn, settleFlavourTurn } from './flavour-turn.ts';
 import { WAKE_ON_ALIVE_CHANGE, WAKE_ON_RESULT } from './ai/idle.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { baseSpeedOf, type AtbSpeed } from './clock.ts';
@@ -324,9 +324,15 @@ export class Ffx2EngineCore {
       performCommand(this.env(), actor, command, false, before);
       return;
     }
+    // A poll that is not a turn (Tourist Trap: a dog pick, a sleeping dog; `pollIsNotATurn`) takes its count and its `turn-start` back (the draft sits at `before`; no draw was made for it) and plays no `action-end`.
+    const notATurn = pollIsNotATurn(actor);
+    if (notATurn) {
+      this.battleState.turn -= 1;
+      this.drafts.splice(before, 1);
+    }
     // A flavour turn still consumes the ATB slot (`flavour-turn.ts`: the standard gauge, a voice line's speak command, or an idle wait).
     settleFlavourTurn(actor, this.units);
-    this.emit({ type: 'action-end', actorId: actor.id });
+    if (!notATurn) this.emit({ type: 'action-end', actorId: actor.id });
     this.afterAction(actor, before);
   }
 

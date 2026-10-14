@@ -207,6 +207,18 @@ export function wakeIdle(u: Ffx2Unit, units: readonly Ffx2Unit[], mask: number):
 }
 
 /**
+ * {@link wakeIdle}, but the unit is made READY inside the step the event happened in (additive, 2026-10-14, the Tourist Trap): the next `nextDecision` polls it before any time passes. The game polls a ready monster
+ * on every logic step, so a script that raises a flag in its own poll is followed, in the same step, by the poll of the unit that waits for the flag: Daigoro bites at once when Yojimbo calls him, and Yojimbo's next
+ * poll finds him resting (RE review 2026-10-14, `research/re-ffx2-ai-tourist-trap.md` section 7). A unit that is not idle-waiting, or did not ask for this event, is left alone; returns whether it was woken.
+ */
+export function wakeIdleNow(u: Ffx2Unit, units: readonly Ffx2Unit[], mask: number): boolean {
+  if (u.gauge.idleWait !== true || ((u.gauge.idleWake ?? 0) & mask) === 0) return false;
+  completeCommand(u, 0, units, true);
+  u.gauge.state = Ffx2AtbState.ScriptRequest; // ready now: a monster whose script is asked for a command
+  return true;
+}
+
+/**
  * The cast time of a command (`atb_charge_time`, exe 0x00644520), in units: `cost_cast * 10000 / (AGI + 1)`, shortened by
  * the girl's cast-speed entries. The engine keeps one such entry per girl, the Garment Grid gate's "wait down" percent, and
  * applies it to every cast of hers (the gate names a skillset; the auto-ability tables that say which commands it covers are

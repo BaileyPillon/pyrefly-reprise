@@ -29,6 +29,7 @@ import { SINSPAWN_GUI_DOC } from './sinspawn-gui.ts';
 import { SIN_FINS_CORE_DOC } from './sin-fins-core.ts';
 import { SIN_FACE_DOC } from './sin-face.ts';
 import { FFX2_EXPERIMENT_DOC } from './ffx2-experiment.ts';
+import { FFX2_TOURIST_TRAP_DOC } from './ffx2-tourist-trap.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -51,6 +52,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SIN_FINS_CORE_DOC,
   SIN_FACE_DOC,
   FFX2_EXPERIMENT_DOC, // the hidden Experiment (FFX-2 only)
+  FFX2_TOURIST_TRAP_DOC, // the hidden Tourist Trap (FFX-2 only)
 ];
 
 /** The document for one chapter id, if it has one. */

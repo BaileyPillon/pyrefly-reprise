@@ -80,6 +80,8 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Experiment's seven rows are the new-chapters RE lane's, pinned field by field against their own numbers-only fixture (tests/fixtures/parity/ffx2/experiment_rows.json,
   // tests/unit/chapters/experiment-engine.test.ts); this fixture holds the 205 rows the seven listed chapters can reach.
   if (label.startsWith('x2-experiment-')) return;
+  // The hidden Tourist Trap's five rows (0x40a1 to 0x40a5) are the RE review's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/tourist_trap_rows.json, tests/unit/chapters/tourist-trap-engine.test.ts).
+  if (label.startsWith('x2-yojimbo-') || label.startsWith('x2-daigoro-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

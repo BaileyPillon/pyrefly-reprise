@@ -1,7 +1,7 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 68 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 69 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
@@ -47,6 +47,41 @@ Address: none yet (branch r48-rc: the live release r47 b8aa6f96 plus the rule la
   about 0.07 party turns longer a fight. The White Mage's Pray is a free, 0 MP heal of the whole party on her opening
   menu, as the game lists it; no shipped chapter changes because of it, but a White Mage who only prays is now very
   hard to wear down, which a later balance pass should expect.
+
+## 2026-10-14 · Tourist Trap: Yojimbo and Daigoro, a hidden FFX-2 chapter behind the word `daigoro` (branch ch-tourist-trap, part of release candidate r48-rc; not live)
+
+Address: none yet (branch ch-tourist-trap a142ad1b, merged into release candidate r48-rc; not deployed, no review run; nobody has heard its music or judged its look, and both are provisional)
+
+- **FFX-2, hidden chapter:** the optional mission "Tourist Trap" in the Cavern of the Stolen Fayth. Type `daigoro` on the
+  chapter board; there is no card and the board still says "of 18". One fight: Yojimbo, possessed, and his small stone dog
+  Daigoro, against Yuna (White Mage) and two Dark Knights at levels 32 to 34. The numbers are the game's own rows, read by the
+  reverse-engineering lane (Yojimbo is row 170, Daigoro row 174); the party's level is an estimate.
+- **FFX-2, how Yojimbo fights:** he keeps a count that rises by 8 every time he looks at it, and what he picks changes as it
+  climbs. Calling Daigoro is one of the picks, and it is not a move of Yojimbo's own: Daigoro is a second fighter with his
+  own gauge who bites one girl when he is called (a call is not a turn, so the Defeat screen's TURNS leaves it out). When
+  the count is full (about seven real attacks in, as few as four or as many as ten, because the calls to the dog count too)
+  he gathers himself for Zanmato, which leaves the whole party at 1 HP and 1 MP. Nothing softens it, so the answer is a heal
+  the turn after (a Mega-Potion from the bag needs no MP). Kozuka takes a quarter of one girl's MP and poisons her, and both
+  Wakizashi fall on one girl.
+- **FFX-2, open for Bailey:** the 3 seconds a move that the Road, Ixion and the Cloister carry on top of the game's own pacing
+  is kept here by precedent and waits for his pick (the first Zanmato then comes about 58 seconds in; without it, 34). The
+  second Wakizashi hitting one girl and not the whole party is strongly indicated by the game's script but not yet confirmed
+  by a play, and where Daigoro bites is a uniform pick, because the cavern carries no start positions.
+- **FFX-2, provisional:** the paintings are Chapter IX's (FFX) Yojimbo and Daigoro and its cavern plate, unchanged, and the
+  music is the "Aeons" cue the Road and Ixion play. Nothing was replaced.
+- **How it was checked:** type check clean; the full suite once (19,004 tests: 10 failed, every one a test that lists all
+  chapters, scenes or guides meeting the new one; fixed and re-run); a production build played in headless Chromium: the word
+  opens the chapter, the opening line and the first menu on a desktop and on a phone, a win (Zanmato on the 14th and 28th
+  look, every Wakizashi on one girl, the row's EXP, AP and gil), a loss with no answers, and the other hidden words still open
+  their chapters.
+- **Disclosed:** at 1600x900 the enemy-move slab can cover part of Yojimbo's hat and, while Daigoro is about to bite, part of
+  the first command row.
+
+![The first menu at 1600x900: Yuna, Rikku and Paine facing Yojimbo and Daigoro, Rikku's reaction to the first Kozuka on screen](docs/screenshots/ch-tourist-trap/1600x900-win-first-menu.jpg)
+
+![Zanmato's wind-up: the slab says it leaves the whole party at 1 HP and 1 MP](docs/screenshots/ch-tourist-trap/1600x900-zanmato-charge.jpg)
+
+![The same first menu on a 390x844 phone](docs/screenshots/ch-tourist-trap/390x844-first-menu-settled.jpg)
 
 ## 2026-10-14 · The ACCESSIBILITY tab with REDUCE FLASHES and COLOUR VISION, and the site's small painting files cut to what the game reads (release candidate r47-rc; not live)
 

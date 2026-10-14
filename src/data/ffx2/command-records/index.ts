@@ -13,6 +13,7 @@
 import type { AbilityDef, FFX2CommandRecord } from '../../../battle/common/types.ts';
 import { COMMAND_RECORDS_ENEMIES } from './enemies.ts';
 import { COMMAND_RECORDS_EXPERIMENT } from './experiment.ts';
+import { COMMAND_RECORDS_TOURIST_TRAP } from './tourist-trap.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_PARTY } from './party.ts';
 
@@ -22,6 +23,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_PARTY,
   ...COMMAND_RECORDS_ENEMIES,
   ...COMMAND_RECORDS_EXPERIMENT, // the hidden chapter's Experiment (new-chapters RE lane, 2026-10-10)
+  ...COMMAND_RECORDS_TOURIST_TRAP, // the hidden Tourist Trap chapter: Yojimbo's four rows and Daigoro's bite (RE review 2026-10-14, m170 / m174)
 };
 
 /** The reachable abilities that have no game row, and why. */

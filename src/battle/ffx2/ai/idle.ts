@@ -28,6 +28,27 @@ export const WAKE_ON_RESULT = 1;
 /** Any unit falls or is raised (a Redoubt waits for its twin to fall; the Head waits for the second Redoubt to fall or rise). */
 export const WAKE_ON_ALIVE_CHANGE = 2;
 
+/**
+ * A flag a script raised: whoever waits for it is polled on the next step (additive, 2026-10-14, the Tourist Trap). The raising script wakes the waiter itself
+ * (`wakeIdleNow(unit, units, WAKE_ON_FLAG)`, `../atb-engine.ts`: the waiter is ready within the same step, as the game's every-step poll would find it) right after it sets the flag; the engine core needs no change. Daigoro waits this way for Yojimbo's call (`./tourist-trap.ts`), so he
+ * is polled once, not every step, which would be a decision per logic step for the whole fight (`LIVELOCK_SPINS`, `engine/BattlePresenterUtil.ts`).
+ */
+export const WAKE_ON_FLAG = 4;
+
+/**
+ * A poll that is not a turn: the script returned null from an idle request of one step (`idleFor(self, 1)`) and is polled again on the very next step, with no recovery spent. The game's own
+ * scripts do this (Yojimbo's "dog" pick sets a flag and queues nothing); the intent board's dry run (`../intent.ts`) reads this key to follow the chain of polls to the move that is really coming,
+ * so it never reports "No action" for a poll that is not a turn. Set it with `setMem(self, AI_REPOLL, 1)` before returning `idleFor(self, 1)`. The engine honours it too (`../flavour-turn.ts#pollIsNotATurn`): such a poll is not counted
+ * in `result.turns` and leaves no `turn-start` and no `action-end` in the log.
+ */
+export const AI_REPOLL = 'rePoll';
+
+/**
+ * A poll that is only a wait, set by a script whose unit has nothing to do until it is woken (Daigoro, `./tourist-trap.ts`): the intent board skips such a unit (`../intent.ts`), so a sleeping part never claims the
+ * slab with "No action" while a boss is about to act. Only a script that sets it is skipped; every other unit's board is unchanged. Set it with `setMem(self, AI_NO_INTENT, 1)` and clear it when the unit acts. Like {@link AI_REPOLL}, it also makes the engine count the poll as no turn (`../flavour-turn.ts#pollIsNotATurn`).
+ */
+export const AI_NO_INTENT = 'noIntent';
+
 /** An idle wait with no end of its own: only a wake ends it (about 9 hours of battle time; a battle is over long before). */
 export const IDLE_UNTIL_WOKEN = 1_000_000;
 
