@@ -31,6 +31,8 @@ export interface RetirePlan {
   kept: Record<string, string>;
   /** The names that were already out of the sprite when the plan was made, sorted: retired too, but giving no bytes back now. */
   already?: string[];
+  /** The names in `already` that the rules no longer allow to stay out (a game that asks for the cue has no recorded original of it): they must be put back into the sprite. */
+  reinstate?: string[];
 }
 
 export function planRetirement(input: RetireInput): RetirePlan;

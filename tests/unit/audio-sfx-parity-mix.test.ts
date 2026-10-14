@@ -142,9 +142,10 @@ describe('HOLD rows keep today\'s sound (52j)', () => {
     for (const cue of ['swing-sword', 'hit-sword', 'swing-staff', 'swing-claw', 'swing-katana']) expect(PARITY_TRIMS_DB.ffx[cue], cue).toBeUndefined();
     const all = deriveTrims({ ...mix, applyLow: true }, cues);
     expect(all.ffx['magic-charge']!).toBeLessThan(-15);
-    // The dissolve left the v2 sprite on 2026-10-13 (the recorded original in ffx-core answers every use of it), so no trim is derived for it at all.
-    expect(cues['dissolve-pyreflies']).toBeUndefined();
-    expect(all.ffx['dissolve-pyreflies']).toBeUndefined();
+    // The dissolve is in the v2 sprite (it left on 2026-10-13 on FFX's original alone and came back in r46-fix, FOC46-02: FFX-2's defeat plays it):
+    // its KO row is low, so the shipped table holds it for both games.
+    expect(cues['dissolve-pyreflies']).toBeDefined();
+    expect(PARITY_TRIMS_DB.ffx2['dissolve-pyreflies']).toBeUndefined();
   });
 
   it('lets a boss\'s signature row move a shared cue only when no generic row names it', () => {

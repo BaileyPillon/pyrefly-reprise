@@ -1361,8 +1361,8 @@
   },
   "sfxV2": {
     "file": "sfx/sprite-v2.mp3",
-    "bytes": 4512497,
-    "duration": 175.271769,
+    "bytes": 4617705,
+    "duration": 179.321769,
     "quality": "libmp3lame -q:a 0",
     "cues": {
       "cancel": {
@@ -2095,6 +2095,14 @@
         "game": "ffx",
         "lufs": -14.0,
         "truePeakDb": -4.42
+      },
+      "dissolve-pyreflies": {
+        "offset": 175.271769,
+        "duration": 4.0,
+        "category": "ambience",
+        "game": "ffx",
+        "lufs": -22.0,
+        "truePeakDb": -14.26
       }
     }
   },
