@@ -15,19 +15,28 @@ Address: none yet (branch ch-besaid-valefor, from r46-rc ca9fd0b4; not deployed,
 
 - **FFX-2, hidden chapter:** Valefor at Besaid Temple, the compulsory Chapter 3 mission "Protect Besaid Temple!", where
   Shuyin's pyreflies have taken the temple's aeon. Type `valefor` on the chapter board; it is not in the board's
-  "of 18" and is not listed. One fight in the Chamber of the Fayth: her gauge fills with every move of hers and every
-  blow she takes, two Energy Rays (the whole party) on the way up, then the Energy Blast, which no Shell or Protect
-  softens; Sonic Wings drains MP from the girl farthest from her. Her numbers, her script and her targets are the game's
+  "of 18" and is not listed. One fight in the Chamber of the Fayth: her gauge fills with every swing of hers (the plain
+  Attack and Sonic Wings, not the Rays or the Blast) and every blow she takes, two Energy Rays (the whole party) on
+  the way up, then the Energy Blast, which no Shell or Protect softens; Sonic Wings drains MP from the girl farthest from her. Her numbers, her script and her targets are the game's
   own (read from the game files: monster row 164, her AI script and the temple's start positions); the party is the
   Chapter 2 party carried forward, which is an estimate. It is the gentlest of the aeons: the guide's line wins every
   seed, and the chapter is not tuned.
 - **FFX-2, art and sound (provisional):** Valefor's own paintings (the FFX aeon's, approved) and the Chamber of the
   Fayth you already know from Ixion, with its pit (which belongs to Chapter 5); there is no painting of her knocked out.
-  The fight plays the same aeon theme as Chapters XI and XVI. A backdrop for Besaid's own chamber is being drawn
-  overnight as candidates only.
+  The fight plays the same aeon theme as Chapters XI and XVI. Six candidate backdrops for Besaid's own chamber were
+  drawn locally (daylit temple interiors, wood and stone, the sea in the light); none is installed or in the build.
 - **Both:** the hidden words `limit`, `leblanc`, `experiment`, `mushroom` and `fayth` still work, a wrong word still
   opens nothing, and the new chapter writes only its own record (never the save).
-- TBD-PICTURE
+- **Proof:** played in a production build in a headless browser: the word opens the chapter, the board has no card and
+  still says "of 18", the other hidden words still work, the intro plays, a fight is won and another lost (the Retry
+  button goes back through the party prep), and Sonic Wings lands on Yuna, the girl farthest from her, every time. Also
+  on a phone-sized screen.
+
+![The first menu in the Chamber of the Fayth: Valefor, her guide card and the three girls](docs/screenshots/ch-besaid-valefor/1600x900-first-menu.jpg)
+
+![The winning blow: 437 damage, Valefor's bar empty, and no painting of her knocked out yet](docs/screenshots/ch-besaid-valefor/1600x900-valefor-down.jpg)
+
+![The results screen after the win](docs/screenshots/ch-besaid-valefor/1600x900-results.jpg)
 
 ## 2026-10-13 · Audio lane 2: 29 more recorded sound effects, a quiet Chapter IV and results tunes that loop without a breath (not live)
 

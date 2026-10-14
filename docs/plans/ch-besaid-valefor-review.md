@@ -14,9 +14,9 @@ the FFX-2 monster row #178, the fallen aeons' action counter. Nothing in it is t
 `research/re-ffx-ai-yunalesca-bfa.md`; a different monster, a different game: rule 14). The shared plumbing it needs (one row in the board's door table, the chapter
 registry) is "both" (CHK-020) and is written so that every other chapter behaves exactly as before.
 
-**Environment note (disk).** D: has 3 to 5 GB free tonight, not the briefed 25 GB. A full worktree (6.5 GB tracked) did not fit ("No space left on device"); this tree is a
+**Environment note (disk).** The project drive had 3 to 5 GB free tonight, not the briefed 25 GB. A full worktree (6.5 GB tracked) did not fit ("No space left on device"); this tree is a
 **sparse worktree** (the 2026-09-26 "lighter worktrees" recipe: no `docs/screenshots`, no `docs/concepts` beyond the folders tests read), about 540 MB. The coordinator then
-ordered the production build **off D:** (vite `--outDir M:/pyrefly-builds/ch-besaid-valefor/dist`) and no build or full suite while D: is under 15 GB free; §9 follows that.
+ordered the production build **off the project drive** (vite `--outDir` on the second drive) and no build or full suite while the project drive is under 15 GB free; §9 follows that.
 
 > **Update 2026-10-14 ~01:10 (two course corrections from the driver, both applied; the rest of this plan stands).**
 > **(1) The game's own monster row landed** (`research/re-ffx2-yojimbo-valefor.md`, origin/re-ffx2-yojimbo-valefor at 91ef1fd3): `monster.bin` **row 164** is the Besaid Temple Valefor (formation 0393
@@ -80,17 +80,18 @@ Nothing in §7.1 is contradicted by the row beyond Gravity. **Row 363** (a secon
 
 **What is still a model, and said so in the code (each a `[model]`):**
 
-1. **What the script does not give.** Nothing about her AI is a model any more: the order, the marks, the roll values and the targets are the game's (`[script]`). The two things the review leaves open are named in the code: whether m164
-   makes a first, discarded target search before Sonic Wings' search (none is made here, as for Ormi's single `searchr`), and whether the reaction handler's guard (not self, not stopped, asleep...) applies to her: it can only
-   filter her own results, since she is immune to every status that would switch it off.
+1. **What the script does not give.** Nothing about her AI is a model any more: the order, the marks, the roll values, the targets and the search idiom are the game's (`[script]`; the RE re-review closed the question of a
+   discarded first search: m164 makes none, each branch is one search call, unlike Ixion's pair form). What stays open is disclosed in the handoff: the body radii (so "Yuna is the lone farthest, about 61 in 100, or the three are tied,
+   about 39 in 100"), the extreme search over all girls (with Yuna down, if the game took the extreme over all three before filtering the living it would pick nothing and this engine substitutes the nearest living girl), the start
+   facing, and whether the girls stand at their start spots at each poll. The reaction handler's guard can only filter her own results, since she is immune to every status that would switch it off.
 2. **The Normal Attack's critical byte and shatter.** It runs on the game's plain Attack row 0x41da (crit byte 5, shatter 10), which the monster record carries.
 3. **Party levels at Besaid.** No source gives a level. Anchors: Valefor is Lv 22; the Chapter 2 preset (`ffx2/builds/bevelle.ts`) is Lv 23 / 24 / 25 (research `ffx2-bahamut.md` §4.1); the Djose preset is 32 / 33 / 34
    (an estimate). The first Chapter 3 mission follows Chapter 2 directly, so the **Chapter 2 preset is carried forward** (same girls, same dresspheres: Yuna White Mage, Rikku Dark Knight, Paine Warrior; no Samurai, no
    Lady Luck, which come later in Chapter 3 `[verified]`), `[estimate]`, and **measured, not tuned** (§8).
 4. **Items.** Moon Bracer (no stats, Auto-Shell, `ffx2-combat-core.md` §5.4) and Healing Spring (a recovery item, §5.5) get held-only `ItemDef` rows (`items/held.ts`), as every other steal and drop of the FFX-2 bosses does;
    Healing Spring's Regen effect is not wired (disclosed).
-5. **Action time (the animation window).** Chapters XI, XIII and XVI ship it at 3 s (Bailey's D-269 pick; the rule is sourced, the length is not). One named constant, ON at 3 s as the sibling aeon chapters do, and
-   measured both ways in the bench (§8). Not a boss number.
+5. **Action time (the animation window).** Chapters XI, XIII and XVI ship it at 3 s; **here it is kept by precedent (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), awaiting Bailey's pick for this chapter** (the rule is
+   sourced, the length is not). One named constant, ON at 3 s, and measured both ways in the bench (§8; the numbers with and without it are in the handoff). Not a boss number.
 
 ## 3. The AI (deterministic, `src/battle/ffx2/ai/valefor.ts`, no DOM and no `three`: rule 1)
 
@@ -164,10 +165,10 @@ mix over 300 rolls, the reaction +5 per result, a multi-hit volley), `furthestGi
 MP loss on the furthest girl in the real engine (and her HP untouched); the build; the chapter record and its registration (not in `CHAPTERS` or `CHAPTER_IDS`, found by `getChapter`,
 number 24, the board still shows 18, the numbers test, the batch-2 music table, the party-stature list, the guide and advisor lookups); the door (`valefor-door.test.ts`); the experiments' store (a clear goes to
 `pyrefly-reprise:experiments:v1`, the save is byte-identical); story lint; a bench (the advisor line and a naive line on the Wait and Active clocks, action time on and off: **measured, never
-tuned**, disclosed). Then `tsc --noEmit`, `node tools/orphans.mjs`, `node tools/audio/qa.mjs`, and **the full suite once, after D: has 15 GB or more free** (TEMP and TMP on
-`D:/Tools/pyrefly-scratch/tmp`, or on M: if the coordinator says D: cannot). Browser: a production build of this tree built **to M:** (`BASE_PATH='/'`, vite directly, never `npm run build`, never
+tuned**, disclosed). Then `tsc --noEmit`, `node tools/orphans.mjs`, `node tools/audio/qa.mjs`, and **the full suite once, after the project drive has 15 GB or more free** (TEMP and TMP on
+the scratch folder, or on the second drive if the coordinator says the project drive cannot). Browser: a production build of this tree built **to the second drive** (`BASE_PATH='/'`, vite directly, never `npm run build`, never
 `tools/gen/manifest.mjs`, one dist), served on port 5531, headless Playwright from node (`PYREFLY_BROWSER=gpu`): `valefor` opens the chapter, the intro plays, the first menu, a win, a loss, Sonic Wings
-on the back girl, the other words still work, the board has no card; frames at 1600x900 and 390x844 under `docs/screenshots/ch-besaid-valefor/`, looked at with the Read tool.
+on the farthest girl (Yuna while she is up: the game's positions replaced the first plan's "back girl"), the other words still work, the board has no card; frames at 1600x900 and 390x844 under `docs/screenshots/ch-besaid-valefor/`, looked at with the Read tool. **Done 2026-10-14, all passed** (`docs/handoff/ch-besaid-valefor.md` section 8).
 
 ## 9. Risks and how each is checked
 
