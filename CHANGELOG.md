@@ -25,8 +25,17 @@ Address: none yet (branch r46-audio2, from r45-rc d5bf2206; not deployed, no rev
   are recorded originals. Dark Shiva's attack (Chapters XI and XVI) and Vegnagun's leg strike (Chapter V) have
   their own recordings, and Shuyin's attack plays a newer, closer recording.
 - **Both games, what did not change:** 24 sounds keep today's recording because the new take was no better, and
-  11 wait for a second look. Two of the new takes (FFX Petrify and Kimahri's spear blow) are quieter than the
-  sound they replace: they are sharp and short, and making them louder would have squashed them.
+  11 wait for a second look.
+- **FFX-2, every chapter (a fix before this goes out):** an ordinary enemy defeat plays the recording it has
+  always played. The first version of this lane took that sound out of the shared set because FFX had a new
+  recording of its own, and FFX-2's defeats briefly fell back to an older, different sound. FFX keeps its new
+  recording; FFX-2 is back on the old one.
+- **Both games, levels (a fix before this goes out):** each new recording now plays within 1.5 dB of the sound
+  it replaces, measured as the game plays it. Twelve of the thirty were moved to get there: eight FFX sounds
+  (Cure, Cura, Life, Waterga, Thundaga, Auron's katana blow, Grenade and Petrify), the final aeon's Power Wave,
+  and three FFX-2 sounds (Death, the Gunner's hit and the spell chant). Most were too loud, not too quiet;
+  Petrify was 8 dB too quiet and was raised under a limiter, which makes its crack less sharp than the
+  recording was. The ear has not judged any of it.
 - **FFX-2, Chapter IV (Bahamut):** the quiet victory tune now stops when you press Continue after the tally.
   It used to loop on under the whole scene that follows, which this chapter keeps silent. In Chapter XI (the
   Glen) and Chapter XV (out of the Den of Woe) the scene's own music now comes back after the tally instead of
