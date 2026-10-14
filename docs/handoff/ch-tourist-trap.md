@@ -1,7 +1,7 @@
 # Tourist Trap: Yojimbo and Daigoro in the Cavern of the Stolen Fayth (a hidden FFX-2 chapter)
 
 **Status (2026-10-14, overnight build for Bailey, via the release driver):** built, tested and proved in a production build in a browser; **not merged and not deployed**. Branch `ch-tourist-trap`
-(from `origin/r46-rc` ca9fd0b4), worktree `D:\pyrefly-ch-tourist-trap`. Tip: see the last line of this file.
+(from `origin/r46-rc` ca9fd0b4), in a worktree of its own (a sibling folder of the main tree). Tip: see the last line of this file.
 
 **Authority (Bailey, 2026-10-13/14, verbatim, via the driver):** "I'll go with your 2 recommendations there, add them in. Yojimbo and Daigoro "Tourist Trap" and Valefor at Besaid Temple." and "full speed ahead
 while I sleep". The driver's decisions: the chapter ships **hidden behind the typed word `daigoro`**, hidden chapter **number 23** (Fayth is 22), listing it on the board waits for Bailey's word, the art is
@@ -178,7 +178,7 @@ The counter matters: a party that only attacks loses every fight to Zanmato and 
   (`tests/unit/chapters/zz-tourist-trap-probe*.tmp.test.ts`, not committed: it prints, asserts nothing).
 - The chapter's own suites: `tourist-trap-engine` 30 tests (rows pinned to the fixture, the poll, the flag, the pace pins, real-engine fights, a real-fight check that every Wakizashi B lands once on one girl), `tourist-trap-chapter` 19,
   `tourist-trap-bench` 7 (the table above), `daigoro-door` 19, `chapter-doors` 10 (six words).
-- **Browser proof on a production build** (`vite build` with `BASE_PATH=/`, output to `M:\pyrefly-builds\ch-tourist-trap\dist`, bundle `index-DNR2x4Zs.js`; `vite preview` on :5521; headless Chromium in GPU mode from node,
+- **Browser proof on a production build** (`vite build` with `BASE_PATH=/`, output to a folder named for this chapter on the second drive, bundle `index-DNR2x4Zs.js`; `vite preview` on :5521; headless Chromium in GPU mode from node,
   never the built-in pane; the overnight art runner paused for the duration and released after; both servers stopped):
   - **Board:** 18 tiles and 18 cards, "of 18 beaten", no `EXP` text, no card for the chapter: PASS.
   - **The word, real keys:** typing `daigoro` on the board opens party prep for `ffx2-tourist-trap` (header "EXP · TOURIST TRAP"); Enter, the opening line plays, then the first menu (White Mage's menu: White Magic, Change, Item) at
@@ -190,7 +190,7 @@ The counter matters: a party that only attacks loses every fight to Zanmato and 
   - **The other words:** `leblanc` opens `exp-leblanc`, `experiment` opens `ffx2-masterpiece-theatre`, `mushroom` opens `sinspawn-gui`, `fayth` opens `exp-fayth`, and `limit` still hands the board to FF7's battle screen.
   - **Zero page errors and zero console errors in every run.** Screenshots, which I looked at, under `docs/screenshots/ch-tourist-trap/`: `1600x900-win-first-menu`, `-win-party-prep`, `-win-opening-line`, `-win-zanmato`, `-win-result`,
     `-loss-first-menu`, `-loss-zanmato`, `-loss-result`, `-kozuka`, `-bite-a`, `-bite-b`, `-wakizashi-b`, `-zanmato-charge`, `-zanmato-landed`, `-board-no-card`, `-limit-door`, and on the phone `390x844-first-menu`,
-    `-first-menu-settled`, `-p-party-prep`, `-p-opening-line`. The proof script is `D:\Tools\pyrefly-scratch\2026-10-14\ch-tourist-trap\proof.mjs` (scratch, not committed).
+    `-first-menu-settled`, `-p-party-prep`, `-p-opening-line`. The proof script is `proof.mjs` in the lane's scratch folder (not committed).
 
 ### What the screenshots show that is not this chapter's to fix (HUD placement; reported, not changed)
 

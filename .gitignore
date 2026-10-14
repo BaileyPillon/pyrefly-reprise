@@ -69,3 +69,6 @@ critic/scratch/
 
 # critic round evidence (screenshots, harnesses): reports are tracked, evidence folders are not
 critic/rounds/*/
+
+# build-lane scratch progress log: the lanes write PROGRESS.md at the repository root while they work; it never belongs in a commit
+PROGRESS.md

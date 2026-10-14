@@ -132,14 +132,14 @@ end is another's beginning (`chapter-doors.test.ts`). Proven with the real `Inpu
 5. **Difficulty**: nothing in the boss is tuned (D-410). A bench (wins of 40, both presets, both clocks) is reported as measured; a chapter that is too hard or too easy is disclosed with the honest options.
 6. **Merge conflicts with the Valefor lane**: it edits the same registries (`encounters.ts`, `chapters-experiments.ts`, `chapterDoors.ts`, `experiment-scenes.ts`); every edit here is one line beside the Fayth line.
    `encounters.ts` is 397 of 400 lines: edits are made inside existing lines, none added.
-7. **Disk**: D: is nearly full; the production build goes to `M:/pyrefly-builds/ch-tourist-trap/dist` (coordinator), never started under 15 GB free on D:, and the full suite waits for the same.
+7. **Disk**: D: is nearly full; the production build goes to a folder named for this chapter on the second drive (coordinator), never started under 15 GB free on D:, and the full suite waits for the same.
 8. **RE rows arrive after the build**: the data is one module with tagged fields; re-pinning is a fixture and a few constants.
 
 ## 7. Tests (written with the code)
 
 Data pinned to a numbers-only fixture with the sources in comments; the AI and the counter (unit, seeded); abilities (hit rule `canMiss`, Zanmato 1/1, Kozuka MP and Poison); the chapter record, number 23, not in `CHAPTERS` or
 `CHAPTER_IDS`, found by `getChapter`, the board still 18; the door (real `Input`, real board and title); the experiments' store (attempts and clears never touch the save); story lint; guide and tactic; a bench. Then `tsc --noEmit`,
-`node tools/orphans.mjs`, `node tools/audio/qa.mjs`, the full suite once (`--maxWorkers=2 --testTimeout=60000`, TEMP and TMP on D:/Tools/pyrefly-scratch/tmp, after the free-space check).
+`node tools/orphans.mjs`, `node tools/audio/qa.mjs`, the full suite once (`--maxWorkers=2 --testTimeout=60000`, TEMP and TMP pointed at a tmp folder in the scratch area, after the free-space check).
 Browser: the word on the board, the chapter opens, the opening plays, the first menu at 1600x900 and 390x844, a win and a loss, the counter's Zanmato seen coming, the other doors, no card on the board.
 
 ## 8. Verdict
