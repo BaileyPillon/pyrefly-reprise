@@ -252,7 +252,9 @@ export function describeAbility(def: AbilityDef): string {
     const kind =
       def.damageType === 'physical' ? 'Physical' : def.damageType === 'magical' ? 'Magical' : '';
     const element = els.length > 0 ? `${els.map((e) => ELEMENT_WORD[e]).join('/')} ` : 'non-elemental ';
-    parts.push(`${kind} ${element}damage to ${where}`.replace(/\s+/g, ' ').trim());
+    // An MP-only move (`extra.mpOnly`, the key the command adapter reads: Valefor's Sonic Wings) says so: "MP damage", not the HP "damage" the same sentence means for every other move.
+    const mp = def.extra?.['mpOnly'] === true ? 'MP ' : '';
+    parts.push(`${kind} ${element}${mp}damage to ${where}`.replace(/\s+/g, ' ').trim());
   }
   if (def.hits > 1) parts.push(`${def.hits} hits`);
   if (def.flags.includes('drains')) parts.push('drains the damage back as HP');

@@ -383,6 +383,57 @@ describe('the real engine, a party that only defends', () => {
   });
 });
 
+describe('the cadence in the real engine: the game\'s own rows and the 3 s animation window (steps from the start of one of her actions to the start of the next)', () => {
+  /** Start-to-start steps of her actions by the move that opened the interval, against a sturdy party that only defends. */
+  function startToStart(window: boolean): Record<string, number[]> {
+    const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...(window ? {} : { actionTimeSeconds: 0 }) }));
+    const setup: BattleSetup = { game: 'ffx2', party: sturdy, enemies: besaidValeforGroup, triggers: [], seed: 5, condition: 'normal', canEscape: false };
+    engine.setSeed(5);
+    engine.init(setup);
+    const starts: Array<{ ability: string; tick: number }> = [];
+    let seen = 0;
+    const scan = (): void => {
+      const log = engine.state().log as readonly Ev[];
+      for (; seen < log.length; seen++) {
+        const e = log[seen]!;
+        if (e.type === 'action-start' && e.actorId === VALEFOR_ID) starts.push({ ability: e.abilityId!, tick: engine.state().ticks });
+      }
+    };
+    for (let i = 0; i < 40_000 && starts.length < 26; i++) {
+      const d = engine.nextDecision();
+      scan();
+      if (d.kind === 'battle-over') break;
+      if (d.kind === 'waiting') {
+        engine.tick(Math.max(1, d.nextEventMs));
+        scan();
+        continue;
+      }
+      if (d.kind !== 'player-input') continue;
+      engine.submit({ kind: 'defend', targets: [] } as Command);
+      scan();
+    }
+    const by: Record<string, number[]> = {};
+    for (let i = 0; i + 1 < starts.length; i++) (by[starts[i]!.ability] ??= []).push(starts[i + 1]!.tick - starts[i]!.tick);
+    return by;
+  }
+
+  it('without the window: Attack 84 steps (recovery 100), Sonic Wings 151 (charge 100 + recovery 80), Energy Ray and Energy Blast 185 (charge 120 + recovery 100), every time', () => {
+    const by = startToStart(false);
+    for (const [ability, steps] of [[ATTACK, 84], [WINGS, 151], [RAY, 185], [BLAST, 185]] as const) {
+      expect(by[ability]?.length ?? 0, ability).toBeGreaterThanOrEqual(1);
+      expect(new Set(by[ability]), ability).toEqual(new Set([steps]));
+    }
+  });
+
+  it('with the 3 s window (90 steps a move, kept by precedent, awaiting Bailey\'s pick): Attack 174, Sonic Wings 241, Energy Ray and Energy Blast 275', () => {
+    const by = startToStart(true);
+    for (const [ability, steps] of [[ATTACK, 174], [WINGS, 241], [RAY, 275], [BLAST, 275]] as const) {
+      expect(by[ability]?.length ?? 0, ability).toBeGreaterThanOrEqual(1);
+      expect(new Set(by[ability]), ability).toEqual(new Set([steps]));
+    }
+  });
+});
+
 describe('the pause objectives read her real moves', () => {
   it('"Survive Energy Blast" is true once her Energy Blast has resolved and the party stands, false before, false after a wipe', () => {
     const meta = getChapterMeta(VALEFOR_BESAID_ID)!;

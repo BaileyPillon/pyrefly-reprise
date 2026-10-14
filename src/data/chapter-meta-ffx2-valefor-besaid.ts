@@ -32,9 +32,10 @@ export const VALEFOR_BESAID_META: ChapterMeta = {
     { id: 'valefor-below-half', label: 'Bring Valefor below half', rule: { kind: 'boss-hp-below', fraction: 0.5 } },
     { id: 'defeat-valefor', label: 'Defeat Valefor', rule: { kind: 'victory' } },
   ],
+  // Short enough for the prep card's tip box (about five lines at 1600 x 900): the guide card in battle carries the rest (Sonic Wings and the girl farthest from her).
   tip:
-    'Every blow she takes, and every swing of hers, fills a hidden count. Energy Ray hits the whole party twice, then Energy Blast follows: ' +
-    'Shell halves the Rays but nothing softens the Blast, so heal before it. Her wings drain MP from whoever stands farthest from her.',
+    'Every blow she takes, and every swing of hers, fills a hidden count: two Energy Rays, then the Energy Blast. ' +
+    'Shell halves a Ray, not the Blast: heal before it.',
   snapshots: [
     { image: `backdrops/${VALEFOR_BESAID_SCENE_KEY}.png`, caption: 'the chamber at Besaid' },
     { image: 'characters/valefor/cast.png', caption: 'the pyreflies gather' },

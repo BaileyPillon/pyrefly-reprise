@@ -56,11 +56,12 @@ const VALEFOR_IMMUNE: StatusImmunities = {
 };
 
 /**
- * **Action time, ON at 3 s**, as the sibling fallen-aeon chapters ship it (Chapters XI, XIII, XVI: Bailey's pick D-269; the rule is sourced `[verified: 2 sources]`, its length is not,
- * `research/ffx2-trema.md` §12.4). One named constant; `false` turns it off; no boss number moves either way. `tests/unit/chapters/besaid-valefor-bench.test.ts` measures both.
+ * **Action time, ON at 3 s: kept by precedent (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), awaiting Bailey's pick for this chapter** (those picks were his for those chapters, not for this one; the rule is
+ * sourced `[verified: 2 sources]`, its length is not, `research/ffx2-trema.md` §12.4). One named constant; `false` turns it off; no boss number moves either way. `tests/unit/chapters/besaid-valefor-bench.test.ts`
+ * measures the fight with and without it (the numbers are in the handoff).
  */
 export const VALEFOR_ACTION_TIME_ON: boolean = true;
-/** **`[estimate]`**: the length the sibling chapters ship. Unsourced (research `ffx2-trema.md` §12.4). */
+/** **`[estimate]`**: the length the precedent chapters ship, awaiting Bailey's pick here. Unsourced (research `ffx2-trema.md` §12.4). */
 export const VALEFOR_ACTION_TIME_SECONDS = 3;
 const actionTime = VALEFOR_ACTION_TIME_ON ? { actionTimeSeconds: VALEFOR_ACTION_TIME_SECONDS } : {};
 

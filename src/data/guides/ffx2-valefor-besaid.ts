@@ -29,7 +29,7 @@ const RULES: GuideRule[] = [
     cite: 'ffx2-fallen-aeons §7.1',
   },
   {
-    text: 'Every move of hers and every blow she takes fills a hidden count. Energy Ray, on the whole party, comes twice on the way up, and Energy Blast, also on everyone, comes at the top, after which the count starts over.',
+    text: 'Every swing of hers (the plain Attack and Sonic Wings, not the Rays or the Blast) and every blow she takes fills a hidden count. Energy Ray, on the whole party, comes twice on the way up, and Energy Blast, also on everyone, comes at the top, after which the count starts over.',
     short: 'Two Energy Rays, then Energy Blast',
     cite: 'ffx2-fallen-aeons §7.1',
   },

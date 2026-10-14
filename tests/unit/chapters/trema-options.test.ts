@@ -41,6 +41,8 @@ const CLOISTER_GROUP_IDS = ['ffx2-cloister-paragon', 'ffx2-cloister-trema', 'ffx
 const ROAD_GROUP_IDS = ['ffx2-road-shiva', 'ffx2-road-magus-sisters', 'ffx2-road-anima'];
 /** Chapter XVI's one Djose link carries it too, at the same 3 s (Bailey's pick, 2026-09-27, D-269; `ixion-djose.ts`). */
 const DJOSE_GROUP_IDS = ['ffx2-djose-ixion'];
+/** The hidden Valefor at Besaid's one link (2026-10-14) carries it too, at the same 3 s, **by precedent** (D-151 Cloister, D-187 and D-197 Road, D-269 Ixion), awaiting Bailey's pick for that chapter (`valefor.ts`, `VALEFOR_ACTION_TIME_ON`). */
+const BESAID_GROUP_IDS = ['ffx2-besaid-valefor'];
 
 describe('the shipped pick: Oversoul Paragon with Split_Infinity\'s kit, and 3 s of action time on the Cloister links only', () => {
   it('the switches read Bailey\'s pick; the global action-time switch and estimate are untouched', () => {
@@ -74,9 +76,9 @@ describe('the shipped pick: Oversoul Paragon with Split_Infinity\'s kit, and 3 s
     expect(['victory', 'defeat']).toContain(driveParagon(LINES.intended, 1).outcome);
   });
 
-  it('only the Cloister formations, the Road links and the Djose link carry action time (3 s), and the battle flag is set on both links', () => {
+  it('only the Cloister formations, the Road links, the Djose link and the hidden Besaid link carry action time (3 s), and the battle flag is set on both links', () => {
     for (const g of data.ENEMY_GROUPS) {
-      if (CLOISTER_GROUP_IDS.includes(g.id) || ROAD_GROUP_IDS.includes(g.id) || DJOSE_GROUP_IDS.includes(g.id)) expect(g.actionTimeSeconds, g.id).toBe(3);
+      if (CLOISTER_GROUP_IDS.includes(g.id) || ROAD_GROUP_IDS.includes(g.id) || DJOSE_GROUP_IDS.includes(g.id) || BESAID_GROUP_IDS.includes(g.id)) expect(g.actionTimeSeconds, g.id).toBe(3);
       else expect('actionTimeSeconds' in g, g.id).toBe(false);
     }
     expect(board('paragon').engine.state().flags[ACTION_TIME_FLAG]).toBe(3);
