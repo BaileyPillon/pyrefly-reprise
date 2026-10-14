@@ -192,9 +192,16 @@ describe('the flag is the only way in: every other chain carries what it always 
    * `docs/handoff/re-parity-ai-ffx2-a.md`).** No Den code changed; Chapter 5's bosses (the Tail, the Leg and its Nodes, the Core, the Head, the
    * Redoubts and Shuyin) follow the game's own scripts now, so its eight equal `ffx2-atb-golden.test.ts` CH5_D0 seeds 1 to 8 again (the first
    * event that differs is inside the Tail's link). Chapters 6 and XI and the Sisters did not move. The old Chapter 5 hashes are in git at 931613a8.
+   *
+   * **Chapter 5's seed 4 re-pinned 2026-10-14 for re-parity RC7 X2-B, the FFX-2 command menu** (FFX-2 only; reason "game-code parity";
+   * `docs/handoff/re-parity-rc7-x2cmd.md` section 5). No Den code changed; the menu rules did: Silence now stops exactly the rows with the game's
+   * silenceable bit (the Arcana spells yes, Pray and Vigor no). In Chapter V's link 4, seed 4, Rikku is Silenced and used to cast Black Sky; she
+   * now uses Darkness, and Yuna, also Silenced, can use Pray and Vigor. `92f34919fb6d8fcc` became `4662e80c1515469b`, which is again the
+   * `ffx2-atb-golden.test.ts` CH5_D0 seed 4 digest. The other seven Chapter 5 logs and all thirty-two of the others (Chapter 6, Chapter XI, the
+   * Sisters) are unchanged. With the old Silence rule put back through a module mock the old digest returns.
    */
   const BASE = {
-    ch5: ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '92f34919fb6d8fcc', '2b5cfff69fa679a1', '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588'],
+    ch5: ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1', '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588'],
     ch6: ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10', 'a39696f7ae0ccaa4', '4f0e498c14ac2d5c', 'c86b36c8466a45b2', '800aecc068609cf2', '3bc2d05021df6507'],
     ch11: ['1e2967f9a6eb564d', '7c7fa3bf60a618b0', 'a930f8adbfddbc40', '9b34cf5f9dd088f9', '04d8eb23fb7525d0', '88e605a902ddb419', '5633c37e7a691312', 'b7c8bf061dca8d62'],
     sisters: ['9169f136877f9e92', '05f2b56d8cd64c18', '6d1ab630119409ae', '813bd394e5ac703d', 'f9f8a98425850b50', '26879886243ece21', '45fc4057955ccc75', 'c3dbe73d64528a38'],
