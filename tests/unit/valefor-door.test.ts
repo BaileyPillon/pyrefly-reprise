@@ -10,7 +10,7 @@
  * 2. **the chapter is hidden by default**: the assertions are on its id, its EXP numeral and the tile count, never on the word in the board's text (Chapter XVI's card says "Ixion" and the
  *    word is also the name of an FFX aeon);
  * 3. **the word opens it**, and only the word: the cursor stays, nothing is remembered or written; a wrong letter resets, and so does a pause over 2 s between letters;
- * 4. **the six doors do not interfere**, the chapter opens party prep, and **the word overlaps no other door word, `daigoro` (the Tourist Trap lane's, branch `ch-tourist-trap`) included**: the
+ * 4. **the seven doors do not interfere**, the chapter opens party prep, and **the word overlaps no other door word, `daigoro` (the Tourist Trap lane's, branch `ch-tourist-trap`) included**: the
  *    shared rule of `chapter-doors.test.ts` (no begin, end, containment or suffix-prefix overlap) is run here over the table's words plus `daigoro`, and the two words are typed back to back.
  *
  * The tests read the word from its one constant, never a literal.
@@ -35,7 +35,7 @@ import { CHAPTERS, CHAPTER_IDS, EXPERIMENT_CHAPTERS, getChapter } from '../../sr
 
 const WORD = VALEFOR_DOOR_WORD;
 const VALEFOR = VALEFOR_DOOR_CHAPTER;
-/** The sibling lane's word (branch `ch-tourist-trap`, hidden chapter 23): not in this branch's table, so it is named here and tested against. */
+/** The sibling lane's word (branch `ch-tourist-trap`, hidden chapter 23): not in the table of the branch this file was written on, so it is named here and tested against; in r48-rc it is in the table too. */
 const SIBLING_WORDS = ['daigoro'] as const;
 
 const codeOf = (key: string): string => (/^[a-z]$/i.test(key) ? `Key${key.toUpperCase()}` : key === ' ' ? 'Space' : key);
@@ -304,8 +304,8 @@ describe('the word opens it on chapter select', () => {
     expect(rig.picked).toEqual([VALEFOR]);
   });
 
-  it('a wrong letter resets: every typo, a wrong first letter, half of each other door\'s word, an unrelated word, `daigoro`', async () => {
-    const others = [...CHAPTER_DOORS.filter((d) => d.word !== WORD).map((d) => d.word.slice(0, -1)), 'daigoro'];
+  it('a wrong letter resets: every typo, a wrong first letter, half of each other door\'s word (`daigoro`\'s included: it is a door of the table in r48-rc), an unrelated word', async () => {
+    const others = CHAPTER_DOORS.filter((d) => d.word !== WORD).map((d) => d.word.slice(0, -1));
     for (const wrong of ['valifor', 'vakefor', 'valefr', 'balefor', WORD.slice(0, -1), ...others, 'valiant']) {
       const rig = mount();
       rig.typeWord(wrong);
