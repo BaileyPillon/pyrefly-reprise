@@ -20,7 +20,7 @@
  * intent board's clone-and-sample dry run sees it, and Zanmato is a certain, visible next move once the counter is full.
  *
  * **Daigoro** is a separate body that cannot be targeted. His script asks to be polled again in about nine hours of battle time (`idleFor(IDLE_UNTIL_WOKEN)`, nothing wakes it), so he takes no
- * turn, makes no event and holds no gauge; his one attack is Yojimbo's move "Daigoro".
+ * action, and holds no gauge after that first silent poll (the log shows one `turn-start` and one `action-end` for him at tick 17); his one attack is Yojimbo's move "Daigoro".
  */
 
 import type { Command } from '../../common/types.ts';
