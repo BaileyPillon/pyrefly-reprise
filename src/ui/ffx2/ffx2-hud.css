@@ -767,6 +767,31 @@ html:not([data-phone-battle]) .ffx2hud .ffx2cmd__reason {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+/*
+ * Desktop layout only, and only for a greyed row whose NAME leaves its reason no room (`CommandMenuReason.ts` decides: less than
+ * a fifth of the reason would show beside the name, which "White Magic" under Itchy did: 188 px of a 283 px line, the group arrow
+ * and the cursor after it, so the reason was 30 px, and 2 px under the cursor; live check LV48-1). The reason drops under the
+ * name, left-aligned like the phone layout's, with the whole line to itself, the same device as a Change row's `GRANTS:` line
+ * (`.ffx2cmd--gate` above): the row grows by the reason's line and the name keeps every pixel it had. `order: 1` keeps the group
+ * arrow and the cursor up on the name's line. A row whose reason shows well enough never gets the class and lays out as above.
+ */
+html:not([data-phone-battle]) .ffx2hud .ig-cmd.ffx2cmd--reason-below {
+  height: auto;
+  min-height: 23.11px;
+  flex-wrap: wrap;
+  align-content: center;
+  padding-top: 2.67px; /* 6 */
+  padding-bottom: 2.67px;
+  row-gap: 1.78px; /* 4 */
+}
+html:not([data-phone-battle]) .ffx2hud .ig-cmd.ffx2cmd--reason-below .ffx2cmd__label {
+  flex: 1 1 auto;
+}
+html:not([data-phone-battle]) .ffx2hud .ig-cmd.ffx2cmd--reason-below .ffx2cmd__reason {
+  order: 1;
+  flex: 1 0 100%;
+  text-align: left;
+}
 /* PR-0018 (FFX-2, B6): the shared 42 % fade blended a disabled row into the dark scene (FFX
    measured 1.98 to 2.25:1 on the same rule). FFX-2 takes FFX's round-10 answer, an opaque
    inverted slab, so the row's contrast never depends on the painting behind it. */
