@@ -1,0 +1,308 @@
+/* The offering screen of the hidden Last Summoning (FFX only), built to the approved frame `frame-2b-offering-menu.png` (Bailey's delegated pick):
+   Dream's End as the ground, Yu Yevon above the line "Yu Yevon reaches for one of your aeons.", the row of aeon cards (taken ones grey with a red cross), the panel of what he takes and what you lose, the keys strip.
+   Authored on a 1600 x 900 frame: `--u` is one pixel of that frame and scales with the viewport (`min(100vw / 1600, 100vh / 900)`), so the proportions hold from a desktop to a 4K screen.
+   A narrow portrait screen (the phone) re-lays it out: the eight cards in two rows of four, the panel stacked, one wide GIVE button.
+   Ink and Gold chrome: gold on ink, ivory type, Cormorant Garamond for the headline and the names, Chakra Petch for the small caps (`src/ui/inkgold/tokens.css`). */
+
+.lsoffer {
+  --u: min(calc(100vw / 1600), calc(100vh / 900));
+  --lso-blood: #d96b6b;
+  position: absolute;
+  inset: 0;
+  z-index: 70; /* over the HUD, the pause chip and the field: nothing of the fight is on screen while Yu Yevon chooses */
+  overflow: hidden;
+  color: var(--ig-paper, #f4f1e8);
+  opacity: 0;
+  transition: opacity 520ms ease-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.lsoffer--in { opacity: 1; }
+.lsoffer--out { opacity: 0; transition-duration: 460ms; }
+
+/* The ground: Dream's End's painting, darkened toward the edges and warm at the centre, as in the frame. */
+.lsoffer__ground {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 38%, rgba(255, 118, 40, 0.18) 0%, rgba(40, 0, 0, 0) 70%),
+    radial-gradient(ellipse 120% 100% at 50% 40%, rgba(20, 0, 6, 0.28) 0%, rgba(8, 0, 8, 0.74) 62%, rgba(4, 0, 6, 0.94) 100%),
+    var(--lso-ground, none) center 30% / cover no-repeat,
+    #1a0508;
+}
+.lsoffer__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: calc(48 * var(--u)) calc(60 * var(--u)) calc(34 * var(--u));
+  box-sizing: border-box;
+}
+
+/* Yu Yevon over a pale warm halo. */
+.lsoffer__yevon {
+  position: relative;
+  flex: 0 0 auto;
+  width: calc(240 * var(--u));
+  height: calc(210 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lsoffer__yevon::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 190, 90, 0.5) 0%, rgba(255, 110, 40, 0.22) 38%, rgba(255, 80, 20, 0) 70%);
+}
+.lsoffer__yevon img {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 calc(18 * var(--u)) rgba(255, 170, 80, 0.55));
+}
+
+.lsoffer__head { flex: 0 0 auto; text-align: center; margin-top: calc(12 * var(--u)); }
+.lsoffer__eyebrow {
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: calc(13 * var(--u));
+  letter-spacing: 0.26em;
+  color: var(--ig-gold, #e3b94a);
+}
+.lsoffer__title {
+  margin: calc(10 * var(--u)) 0 0;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: calc(46 * var(--u));
+  line-height: 1.1;
+  color: #fbf6ea;
+  text-shadow: 0 calc(2 * var(--u)) calc(14 * var(--u)) rgba(0, 0, 0, 0.7);
+}
+.lsoffer__sub {
+  margin: calc(6 * var(--u)) 0 0;
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: calc(17 * var(--u));
+  color: rgba(214, 200, 232, 0.92);
+}
+
+/* The row of cards. */
+.lsoffer__row {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: calc(14 * var(--u));
+  margin: calc(18 * var(--u)) 0 0;
+  padding: 0;
+  list-style: none;
+  height: calc(330 * var(--u));
+}
+.lscard {
+  position: relative;
+  flex: 0 0 auto;
+  width: calc(170 * var(--u));
+  height: calc(266 * var(--u));
+  padding: 0;
+  border: calc(2 * var(--u)) solid rgba(240, 232, 218, 0.72);
+  border-radius: calc(3 * var(--u));
+  background: #0c0810;
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  font: inherit;
+  transition: transform 220ms ease-out, border-color 220ms, box-shadow 220ms, filter 420ms;
+}
+.lscard__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 12%;
+}
+/* The Sisters' card: the three paintings side by side. */
+.lscard--sisters .lscard__trio {
+  position: absolute;
+  inset: 8% 4% 14%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.lscard--sisters .lscard__trio img { height: 100%; width: auto; min-width: 0; object-fit: contain; margin: 0 -7%; }
+.lscard__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(8, 4, 12, 0) 52%, rgba(8, 4, 12, 0.92) 100%);
+}
+.lscard__name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(24 * var(--u));
+  text-align: center;
+  font-family: var(--ig-font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: calc(27 * var(--u));
+  color: #fbf6ea;
+  text-shadow: 0 calc(1 * var(--u)) calc(8 * var(--u)) rgba(0, 0, 0, 0.9);
+}
+.lscard__tag {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(8 * var(--u));
+  text-align: center;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: calc(11 * var(--u));
+  letter-spacing: 0.22em;
+  min-height: 1em;
+}
+
+/* The focused card: raised, larger, gold. */
+.lscard--focus {
+  transform: translateY(calc(-18 * var(--u))) scale(1.1);
+  border-color: var(--ig-gold, #e3b94a);
+  box-shadow: 0 0 calc(26 * var(--u)) rgba(227, 185, 74, 0.5), 0 0 0 calc(1 * var(--u)) rgba(227, 185, 74, 0.7);
+  z-index: 2;
+}
+.lscard--focus .lscard__tag { color: var(--ig-gold, #e3b94a); }
+
+/* A card Yu Yevon already holds: grey, crossed, inert. */
+.lscard--taken { cursor: default; border-color: rgba(150, 140, 170, 0.34); }
+.lscard--taken .lscard__img, .lscard--taken .lscard__trio { filter: grayscale(1) brightness(0.52) contrast(0.92); }
+.lscard--taken .lscard__name { color: rgba(214, 206, 224, 0.62); }
+.lscard--taken .lscard__tag { color: var(--lso-blood); }
+.lscard--taken::before,
+.lscard--taken::after {
+  content: '';
+  position: absolute;
+  left: 18%;
+  top: calc(50% - 3 * var(--u));
+  width: 64%;
+  height: calc(6 * var(--u));
+  background: var(--lso-blood);
+  opacity: 0.86;
+  border-radius: calc(2 * var(--u));
+  z-index: 1;
+}
+.lscard--taken::before { transform: rotate(45deg); }
+.lscard--taken::after { transform: rotate(-45deg); }
+
+/* The beat of giving: the chosen card dims and takes its cross. */
+.lscard--giving .lscard__img, .lscard--giving .lscard__trio { filter: grayscale(1) brightness(0.52) contrast(0.92); }
+.lscard--giving { border-color: rgba(150, 140, 170, 0.4); box-shadow: none; }
+.lscard--giving .lscard__tag { color: var(--lso-blood); }
+.lscard--giving::before,
+.lscard--giving::after {
+  content: '';
+  position: absolute;
+  left: 18%;
+  top: calc(50% - 3 * var(--u));
+  width: 64%;
+  height: calc(6 * var(--u));
+  background: var(--lso-blood);
+  border-radius: calc(2 * var(--u));
+  z-index: 1;
+  animation: lscard-cross 420ms ease-out both;
+}
+.lscard--giving::before { --rot: 45deg; }
+.lscard--giving::after { --rot: -45deg; animation-delay: 120ms; }
+@keyframes lscard-cross {
+  from { opacity: 0; transform: rotate(var(--rot)) scaleX(0.1); }
+  to { opacity: 0.9; transform: rotate(var(--rot)) scaleX(1); }
+}
+
+/* The panel: what Yu Yevon's copy does, and what you lose. */
+.lsoffer__panel {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: stretch;
+  gap: calc(34 * var(--u));
+  width: calc(1020 * var(--u));
+  max-width: 100%;
+  margin-top: auto;
+  padding: calc(14 * var(--u)) calc(22 * var(--u));
+  box-sizing: border-box;
+  background: rgba(11, 10, 18, 0.88);
+  border: calc(1 * var(--u)) solid rgba(227, 185, 74, 0.35);
+}
+.lsoffer__col { flex: 1 1 0; min-width: 0; }
+.lsoffer__h {
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: calc(11.5 * var(--u));
+  letter-spacing: 0.2em;
+  color: var(--ig-gold, #e3b94a);
+}
+.lsoffer__p {
+  margin: calc(6 * var(--u)) 0 0;
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: calc(16.5 * var(--u));
+  line-height: 1.32;
+  color: #f1ecdf;
+}
+.lsoffer__keys {
+  flex: 0 0 auto;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  font-family: var(--ig-font-text, 'Exo 2', sans-serif);
+  font-size: calc(14 * var(--u));
+  color: rgba(214, 200, 232, 0.9);
+  white-space: nowrap;
+}
+.lsoffer__cap {
+  display: inline-block;
+  padding: calc(3 * var(--u)) calc(9 * var(--u));
+  border: 0;
+  border-radius: calc(2 * var(--u));
+  background: #f4f1e8;
+  color: #0b0a12;
+  font-family: var(--ig-font-display, 'Chakra Petch', sans-serif);
+  font-weight: 700;
+  font-size: calc(13 * var(--u));
+  letter-spacing: 0.04em;
+}
+button.lsoffer__cap { cursor: pointer; }
+button.lsoffer__cap:hover, button.lsoffer__cap:focus-visible { background: var(--ig-gold, #e3b94a); outline: none; }
+
+/* A narrow portrait screen (the phone): two rows of four cards, the panel stacked, one wide GIVE button. */
+@media (max-width: 760px) and (max-aspect-ratio: 1 / 1) {
+  .lsoffer { --u: calc(100vw / 480); }
+  .lsoffer__stage { padding: calc(26 * var(--u)) calc(20 * var(--u)) calc(18 * var(--u)); overflow-y: auto; }
+  .lsoffer__yevon { width: calc(150 * var(--u)); height: calc(120 * var(--u)); }
+  .lsoffer__eyebrow { font-size: calc(12 * var(--u)); letter-spacing: 0.16em; }
+  .lsoffer__title { font-size: calc(32 * var(--u)); }
+  .lsoffer__sub { font-size: calc(14.5 * var(--u)); }
+  .lsoffer__row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: calc(10 * var(--u));
+    width: 100%;
+    height: auto;
+    margin-top: calc(16 * var(--u));
+  }
+  .lscard { width: 100%; height: auto; aspect-ratio: 0.66; border-width: calc(1.6 * var(--u)); }
+  .lscard--focus { transform: scale(1.04); }
+  .lscard__name { font-size: calc(16 * var(--u)); bottom: calc(17 * var(--u)); }
+  .lscard__tag { font-size: calc(9 * var(--u)); bottom: calc(5 * var(--u)); letter-spacing: 0.12em; }
+  .lsoffer__panel { flex-direction: column; gap: calc(10 * var(--u)); width: 100%; margin-top: calc(14 * var(--u)); padding: calc(12 * var(--u)) calc(14 * var(--u)); }
+  .lsoffer__h { font-size: calc(11.5 * var(--u)); }
+  .lsoffer__p { font-size: calc(14.5 * var(--u)); }
+  .lsoffer__keys { align-self: stretch; justify-content: center; font-size: calc(13 * var(--u)); }
+  .lsoffer__keys .lsoffer__legend { display: none; }
+  button.lsoffer__cap--give { flex: 1 1 auto; padding: calc(12 * var(--u)); font-size: calc(16 * var(--u)); text-align: center; background: var(--ig-gold, #e3b94a); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lsoffer, .lsoffer--out, .lscard { transition: none; }
+  .lscard--giving::before, .lscard--giving::after { animation: none; opacity: 0.9; transform: rotate(var(--rot)); }
+}

@@ -37,9 +37,16 @@ function locksFor(taken: readonly OfferingKey[]): NonNullable<EnemyGroupDef['loc
   return taken.flatMap((key) => aeonIdsOf(key).map((aeonId) => ({ aeonId, mirrorOf: 'yu-yevon', reason: TAKEN_REASON })));
 }
 
+/** The Sensor's lines for the three Sisters (ours; each says what her script does: `research/re-ffx-last-summoning.md` section 6.2). The record's `sensorTexts` (`../../chapter-last-summoning.ts`) carries the same words. */
+export const SISTER_SENSOR_TEXT: Readonly<Record<'cindy' | 'sandy' | 'mindy', string>> = {
+  cindy: 'She mends, drains, and calls the Delta Attack when all three are ready.',
+  sandy: 'She wards Cindy with Reflect and hurries her sisters.',
+  mindy: 'Her Flare finds you through Cindy’s Reflect.',
+};
+
 /** The Sisters' three bodies in the game's slot order (Mindy, Sandy, Cindy), each on her own script, then the two Pagodas. */
 function sistersEnemies(): EnemyDef[] {
-  const body = (key: 'mindy' | 'sandy' | 'cindy', slot: number): EnemyDef => ({ ...possessedAeonEnemyDef(`possessed-${key}`, slot), aiScriptId: `possessed-${key}` });
+  const body = (key: 'mindy' | 'sandy' | 'cindy', slot: number): EnemyDef => ({ ...possessedAeonEnemyDef(`possessed-${key}`, slot), aiScriptId: `possessed-${key}`, sensorText: SISTER_SENSOR_TEXT[key] });
   return [
     body('mindy', 0),
     body('sandy', 1),

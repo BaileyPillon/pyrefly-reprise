@@ -41,6 +41,8 @@ import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
 import { resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
 import { playSaveSphereCard } from './SaveSphereCard.ts';
+import { offeringChooser } from './BattleScreenOffering.ts'; // the hidden Last Summoning's offering seam (FFX only; never asked by any other chapter)
+import type { OfferingOverlay } from '../../ui/ffx/offering/OfferingScreen.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
 import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
@@ -140,6 +142,8 @@ export class BattleScreen extends Screen {
   private momentOverlay: MomentOverlay | null = null;
   private setup: BattleSetup | null = null;
   private group: EnemyGroupDef | null = null;
+  /** The hidden Last Summoning's offering screen while it is up (FFX only); the frame's input goes to it first (`handleInput`). */
+  private offering: OfferingOverlay | null = null;
   private checkpoint: ChainCheckpoint | null = null;
 
   private startedAt = 0;
@@ -491,6 +495,17 @@ export class BattleScreen extends Screen {
       audio,
       startLink: this.opts.resumeAt?.link ?? 1,
       priorWon: this.opts.resumeAt?.won ?? [], // PR-0138: the links won before the checkpoint
+      // The hidden Last Summoning: asked before the first fight and after each possession link, only by a formation that sets `offersAeons` (`BattleScreenOffering.ts`).
+      choose: offeringChooser({
+        root: this.root,
+        aeonIds: () => (this.setup?.party.game === 'ffx' ? this.setup.party.aeons.map((a) => a.id) : []),
+        sleep: this.pauseGate,
+        instant: () => presenter.playbackSpeed === 'skip',
+        cancelled: () => presenter.isAborted === true || this.exited,
+        reduceMotion: () => this.app.save?.settings?.reduceMotion === true,
+        sfx: (name) => audio.playSfx(name),
+        attach: (overlay) => void (this.offering = overlay),
+      }),
       saveSphere: (swap) =>
         playSaveSphereCard({
           root: this.root,
@@ -820,6 +835,10 @@ export class BattleScreen extends Screen {
       return;
     }
 
+    // The offering screen (the hidden Last Summoning) takes the arrows and the confirm; the pause keys below still work, and Esc does not (a choice has no back).
+    const offering = this.offering?.visible === true;
+    if (offering) this.offering!.handleInput(input);
+
     // A mid-battle beat owns the input while it is on screen.
     this.cutscenes?.handleInput(input);
 
@@ -848,7 +867,7 @@ export class BattleScreen extends Screen {
       void this.openPause();
       return;
     }
-    if (input.justPressed('cancel') && this.canPauseOnCancel) {
+    if (input.justPressed('cancel') && this.canPauseOnCancel && !offering) {
       input.consume('cancel');
       audio.playSfx('menu-open');
       void this.openPause();
