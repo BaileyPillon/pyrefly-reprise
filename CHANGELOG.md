@@ -78,7 +78,9 @@ Address: none yet (branch ch-biran-yenke, code and tests at 5e29bb0c, merged int
   never changes side. The open question whether that swing is Bulldoze is **answered** by the reverse-engineering session: a Berserk monster's default attack is the
   forced-action word of its record, Biran's is Bulldoze (0x60A5), so Berserk's three-halves applies to it (research/re-ffx-targeting.md section 3 and FFX-G04 for the
   forced turn, FFX-H02 for the record, research/re-ffx-damage.md for the multiplier); the ordinary attack has Bulldoze's numbers (formula 1, power 16), so nothing on
-  screen changes and the engine is untouched. The gear the brothers drop and Kimahri's Steal are not modelled. At 1600x900 the Sensor tab can sit over Biran's head.
+  screen changes and the engine is untouched. The gear the brothers drop and Kimahri's Steal are not modelled. At 1600x900 the first menu's Sensor chip named Yenke over the blond brother's head
+  (the card is pinned in the lane the enemies stand in and names the brother the party's Sensor read last); the two brothers' stage spots are swapped, so it now sits over the brother it names and the target cursor opens on
+  Biran, the brother the advisor's first tip names. While you aim at the other brother the card still names him and rests over his neighbour, as it does in every fight with two enemies.
   The pause screen's hero painting is not made.
 
 ![The first menu at 1600x900: Kimahri alone against Biran and Yenke on Mt. Gagazet, the guide open and the advisor's first tip, Lancet](docs/screenshots/ch-biran-yenke/1600x900-first-menu.jpg)

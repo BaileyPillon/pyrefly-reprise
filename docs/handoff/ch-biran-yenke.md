@@ -151,9 +151,15 @@ preview server stopped by its port afterwards). The script is `proof.mjs` in the
 
 ### What the screenshots show that is not this chapter's to fix (HUD placement; reported, not changed)
 
-- At 1600x900 the **Sensor tab** (right of the focused brother's head) lands over Biran's head: the cursor starts on Yenke, who stands left of Biran, so his tab sits on the nearer figure (`I` hides it). The same family as the
-  disclosed HUD placements of other chapters.
-- The advisor's first tip is "Lancet -> Biran Ronso" while the target cursor starts on Yenke: a player who presses Enter three times learns Yenke's Fire Breath first, which is as good a first lesson.
+- **Found by the driver and fixed in release candidate r49-rc (FFX only; the stage's two spots swapped, no painting touched):** the first-menu frame above showed the Sensor chip "YENKE RONSO" over the blond brother's head while the
+  turn list showed Biran blond and Yenke brown. **What was wrong was neither the paintings nor the ids** (each brother draws his own `characters/<id>` subject, the actor's art id equals his id, the portraits come from the same
+  paintings) **nor an anchor on a figure: the chip is the one shared FFX Sensor card, pinned at grid (436, 166), which at 1600x900 lies over the right-hand front figure, and at the first menu it names the enemy the party's Sensor read LAST**
+  (the formation's order, Biran then Yenke). Biran stood at the front right, so the card named Yenke over Biran. The stage now puts **Yenke at the front right and Biran behind him on the left** (`scenes/gagazet-ronso.ts`, `ENEMY_SPOTS`,
+  with the reasoning in its header; pinned by `tests/unit/chapters/biran-yenke-stage.test.ts`): the first menu's chip sits over the brother it names. The frames are in `docs/screenshots/r49-rc/` (the first menu at 1600x900 and 390x844, and
+  each brother aimed). **What it does not change:** the card is not anchored to a figure, so while the player aims at the OTHER brother it names him and rests over his neighbour, as in every multi-enemy FFX fight (the aimed figure's
+  bracket, its name plate and the TARGET strip are drawn by id and right for both); and the open card still covers a figure while it is open (the card's own steer is defeated near the turn rail), a shared-HUD matter reported, not changed.
+- The advisor's first tip is "Lancet -> Biran Ronso" and **the target cursor now starts on Biran as well** (it opens on the leftmost figure on screen, and Biran is the one at the back left): the old mismatch, a cursor on Yenke
+  against a tip naming Biran, is gone with the swap.
 - Kimahri's HP reads 1,974 of 2,310 at the first menu in the browser: Biran, the faster brother, opened with Thunder before Kimahri's first turn on that seed (his queue entry reads "Bulldoze, 2nd"); party prep and the engine's start say 2,310.
 
 ## Open items

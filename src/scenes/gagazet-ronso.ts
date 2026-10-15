@@ -14,9 +14,17 @@ import { BIRAN_ID, YENKE_ID } from '../data/ffx/biran-yenke-ids.ts';
 // same lights, snow, mist, rocks and camera rigs, said so in the handoff. It is the provisional stand-in; the gate itself is Bailey's to commission. Chapter I's scene file is not touched: this is a thin
 // derivation of what `buildGagazetScene` builds, with this fight's staging in place of Seymour Flux's (his and Mortiorchis's pins and giant heights belong to Chapter I's fight, not to two Ronso).
 //
-// STAGING. Kimahri stands on Chapter I's first party slot (the party is held on its slots: `holdParty`). The brothers stand right of centre, Biran in front, Yenke behind and to the left of him, both inside the
-// FFX HUD's safe area (its rail ends at 0.79 of the canvas width; `docs/ENGINE-API.md#hud-safe-area`). Both brothers start on the same side of the arena in the game (Area 0, `research/re-ffx-biran-yenke.md`
+// STAGING. Kimahri stands on Chapter I's first party slot (the party is held on its slots: `holdParty`). The brothers stand right of centre, **Yenke in front and to the right, Biran behind and to the left of him**, both inside
+// the FFX HUD's safe area (its rail ends at 0.79 of the canvas width; `docs/ENGINE-API.md#hud-safe-area`). Both brothers start on the same side of the arena in the game (Area 0, `research/re-ffx-biran-yenke.md`
 // section 4); a Bulldoze moves the user to the other area, which the engine tracks (`battle/ffx/ai/biran-yenke-rules.ts`) and the stage does not draw: the other area is behind the camera.
+//
+// WHO STANDS WHERE IS NOT FREE (the driver's find on the first build's first-menu frame, r49-rc). The Sensor card (`ui/ffx/SensorPanel.ts`) is pinned at grid (436, 166), which at 1600x900 lies over the right-hand front
+// figure, and it names the enemy the party's Sensor read LAST when the battle opens (`battle/ffx/sensor.ts#revealForSensorAuto`, the formation's own order: Biran, then Yenke). In the first build Biran stood there, so the
+// chip read "YENKE RONSO" over the blond brother's head while the turn list showed Biran blond and Yenke brown. The ids and the paintings were right all along (each brother draws his own subject, `characters/<id>`); only the
+// place under the card was wrong, so **the front-right figure is the last brother in the formation's order, Yenke**, and the first menu's chip sits over the brother it names. The target cursor opens on the LEFTMOST figure
+// on screen (`ui/ffx/TargetCursor.ts#showSingle`), which is now Biran, the brother the advisor's first tip names (Lancet -> Biran Ronso): the cursor and the tip agree. `tests/unit/chapters/biran-yenke-stage.test.ts` pins both.
+// What this does not change: the card is one shared FFX read-out, not anchored to a figure, so while the player aims at the OTHER brother it names him and rests over his neighbour (the aimed figure's bracket, its name
+// plate and the TARGET strip, all drawn by id, are right for both).
 //
 // HEIGHTS. A Ronso stands at Kimahri's size (`research/visual-bible.md` section 1.22.4, `[single source]`: the base sheet is Kimahri's; `[estimate]`). His datamined height is 1.211 of Tidus's with the horn
 // included (`data/ffx/party-stature.ts`); the brothers' paintings run horn tip to foot, so 1.211 of the party's shared height is the whole figure: 2.204 units against the party's 1.82.
@@ -33,10 +41,10 @@ const PARTY_SLOTS: Spot[] = [
   [-0.61, 0, -1.05],
 ];
 
-/** Where the brothers stand (`ENEMY_SPOTS` is the one place to move a body). */
+/** Where the brothers stand (`ENEMY_SPOTS` is the one place to move a body; read the note above before swapping them: Yenke in front on the right, under the Sensor card's resting place). */
 const ENEMY_SPOTS: Record<string, Spot> = {
-  [BIRAN_ID]: [1.85, 0, -2.0], // 2.15 in the first build: the phone rig (390 wide) cropped his mane at the right edge in the browser proof, so he stands 0.3 nearer the middle
-  [YENKE_ID]: [0.55, 0, -3.9],
+  [BIRAN_ID]: [0.55, 0, -3.9],
+  [YENKE_ID]: [1.85, 0, -2.0], // 2.15 in the first build, where Biran stood: the phone rig (390 wide) cropped his mane at the right edge in the browser proof, so that spot was moved 0.3 nearer the middle; the r49-rc phone frame shows Yenke whole here
 };
 
 /** This fight's staging: the party held on its slots, each brother pinned to his spot at the Ronso height. */
