@@ -322,3 +322,79 @@ describe('XK2: the commit window', () => {
     expect(Array.from(streams)).toEqual(before);
   });
 });
+
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// The case the lane was asked to name: the last girl falls while a revive is queued by another girl (FFX2-G10 10.1 and 10.2, FFX2-G06 3.5 and 3.7)
+
+describe('XK2 with XF1: the last girl falls with a revive queued', () => {
+  it('a girl who is standing and casting is not a lost party: the Phoenix Down she queued lands, and the fight goes on', () => {
+    const b = battle();
+    kill(b, 'paine');
+    kill(b, 'yuna');
+    const d = nextMenu(b.engine); // Rikku is the only one left to ask
+    expect(d.actorId).toBe('rikku');
+    b.engine.submit({ kind: 'item', id: PD, targets: ['yuna'] });
+    expect((b.units['rikku'] as Ffx2Unit).atb.charging).not.toBeNull();
+    expect(b.flags[KEY]).toBe(0); // reserved at the pick
+    for (let i = 0; i < 400 && !(b.units['yuna'] as Ffx2Unit).alive; i++) {
+      const dec = b.engine.nextDecision();
+      if (dec.kind === 'waiting') b.engine.tick(Math.max(1, dec.nextEventMs));
+      expect(dec.kind).not.toBe('battle-over'); // a casting girl is alive: the evaluation never says defeat
+    }
+    expect((b.units['yuna'] as Ffx2Unit).alive).toBe(true);
+    expect(b.state.result).toBeNull();
+    expect(stats(b).opened).toBe(0);
+  });
+
+  it('the last standing girl falls with her own revive on the purple bar: the cast is dropped and refunded at the knock-out, the defeat commits at once', () => {
+    const b = battle();
+    kill(b, 'paine');
+    kill(b, 'rikku');
+    const d = nextMenu(b.engine);
+    expect(d.actorId).toBe('yuna');
+    b.engine.submit({ kind: 'item', id: PD, targets: ['rikku'] });
+    expect(b.flags[KEY]).toBe(0);
+    kill(b, 'yuna', 'm0');
+    expect(b.engine.nextDecision().kind).toBe('battle-over');
+    expect(b.flags[KEY]).toBe(1); // the knock-out cancelled her queue and gave the item back
+    expect(b.state.result?.outcome).toBe('defeat');
+    expect(stats(b)).toMatchObject({ opened: 1, lapsed: 0, committed: 1, waitedSteps: 0, inFlight: { party: 0, enemy: 0 }, lastCode: 1 });
+  });
+
+  it('a girl who was knocked out with a revive queued does not hold the end when the last girl falls after her', () => {
+    const b = battle();
+    kill(b, 'paine');
+    const d = nextMenu(b.engine);
+    const caster = d.actorId;
+    const other = caster === 'yuna' ? 'rikku' : 'yuna';
+    b.engine.submit({ kind: 'item', id: PD, targets: ['paine'] });
+    expect(b.flags[KEY]).toBe(0);
+    kill(b, caster, 'm0'); // she falls first
+    expect(b.engine.nextDecision().kind).not.toBe('battle-over'); // the other girl still stands
+    b.engine.tick(STEP_MS); // one logic step: the sweep takes the fallen girl's cast off the bar and gives the item back
+    expect((b.units[caster] as Ffx2Unit).atb.charging).toBeNull();
+    expect(b.flags[KEY]).toBe(1);
+    kill(b, other, 'm0'); // and now the last one falls
+    expect(b.engine.nextDecision().kind).toBe('battle-over');
+    expect(b.state.result?.outcome).toBe('defeat');
+    expect(stats(b)).toMatchObject({ opened: 1, committed: 1, waitedSteps: 0, inFlight: { party: 0 } });
+    expect(b.flags[KEY]).toBe(1);
+  });
+
+  it('a petrified girl\'s queued revive does not hold a lost party either: it is dropped at the commit and the item comes back', () => {
+    const b = battle();
+    kill(b, 'paine');
+    const d = nextMenu(b.engine);
+    const caster = b.units[d.actorId] as Ffx2Unit;
+    const other = d.actorId === 'yuna' ? 'rikku' : 'yuna';
+    b.engine.submit({ kind: 'item', id: PD, targets: ['paine'] });
+    expect(b.flags[KEY]).toBe(0);
+    applyStatus(caster, { status: 'petrify', chance: 255, duration: 0 }); // she no longer counts as standing, and neither does her cast
+    kill(b, other, 'm0'); // the last girl who still counts falls
+    expect(b.engine.nextDecision().kind).toBe('battle-over');
+    expect(b.state.result?.outcome).toBe('defeat');
+    expect(stats(b)).toMatchObject({ opened: 1, committed: 1, waitedSteps: 0 });
+    expect(caster.atb.charging).toBeNull();
+    expect(b.flags[KEY]).toBe(1);
+  });
+});

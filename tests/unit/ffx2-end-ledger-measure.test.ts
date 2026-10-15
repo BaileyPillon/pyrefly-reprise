@@ -64,6 +64,8 @@ interface Seed {
   itemUses: Record<string, number>;
   stockEnd: Record<string, number>;
   window: WindowStats;
+  /** The end window of the link that was lost (a defeat is always the last link of a chain); null on a seed that was won. */
+  defeatWindow: WindowStats | null;
 }
 
 function fallback(d: Input): Command {
@@ -107,7 +109,7 @@ async function playChain(chapter: Chapter, seed: number): Promise<Seed> {
   engine.init(setup);
   const hash = createHash('sha1');
   const out: Seed = {
-    outcome: 'unresolved', links: 1, digest: '', partyTurns: 0, engineTurns: 0, ticks: 0, partyKos: 0, itemUses: {}, stockEnd: {}, window: emptyWindow(),
+    outcome: 'unresolved', links: 1, digest: '', partyTurns: 0, engineTurns: 0, ticks: 0, partyKos: 0, itemUses: {}, stockEnd: {}, window: emptyWindow(), defeatWindow: null,
   };
   const stats = (): WindowStats => {
     const f = (engine as unknown as { endWindowStats?: () => WindowStats }).endWindowStats;
@@ -132,7 +134,9 @@ async function playChain(chapter: Chapter, seed: number): Promise<Seed> {
         }
       }
       hash.update(JSON.stringify(state.log));
-      addWindow(out.window, stats());
+      const linkWindow = stats();
+      addWindow(out.window, linkWindow);
+      if (String(d.result.outcome) === 'defeat') out.defeatWindow = linkWindow;
       for (const [key, value] of Object.entries(state.flags)) {
         if (key.startsWith('inventory:') && typeof value === 'number') out.stockEnd[key.slice('inventory:'.length)] = value;
       }
@@ -174,6 +178,19 @@ describe.skipIf(!MEASURE)('RE parity RC8, FFX-2: wins, item use and the end wind
       const items: Record<string, number> = {};
       for (const r of runs) for (const [k, v] of Object.entries(r.itemUses)) items[k] = (items[k] ?? 0) + v;
       const sum = (f: (r: Seed) => number): number => runs.reduce((a, r) => a + f(r), 0);
+      // The case "the last girl falls with a revive queued by another girl": the defeats' own windows, link by link (the aggregate above mixes in the won links).
+      const lost = runs.map((r) => r.defeatWindow).filter((w): w is WindowStats => w !== null);
+      const defeatWindows = {
+        defeats: lost.length,
+        opened: lost.reduce((a, w) => a + w.opened, 0),
+        lapsed: lost.reduce((a, w) => a + w.lapsed, 0),
+        withPartyCastInFlight: lost.filter((w) => w.inFlight.party > 0).length,
+        withEnemyCastInFlight: lost.filter((w) => w.inFlight.enemy > 0).length,
+        partyCastsInFlight: lost.reduce((a, w) => a + w.inFlight.party, 0),
+        enemyCastsInFlight: lost.reduce((a, w) => a + w.inFlight.enemy, 0),
+        waitedSteps: lost.reduce((a, w) => a + w.waitedSteps, 0),
+        longestWait: lost.reduce((a, w) => Math.max(a, w.maxWaited ?? 0), 0),
+      };
       rows.push({
         chapter: id,
         seeds: runs.length,
@@ -187,6 +204,7 @@ describe.skipIf(!MEASURE)('RE parity RC8, FFX-2: wins, item use and the end wind
         itemUses: items,
         itemUsesPerFight: Math.round((Object.values(items).reduce((a, b) => a + b, 0) / Math.max(1, runs.length)) * 100) / 100,
         window: win,
+        defeatWindows,
       });
     }
     for (const row of rows) console.log(JSON.stringify(row));
