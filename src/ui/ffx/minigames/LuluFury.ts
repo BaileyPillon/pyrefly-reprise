@@ -30,12 +30,14 @@ function thresholdsFor(params: Record<string, unknown>, magic: number): number[]
  *
  * The keyboard and the d-pad are the game's own fallback when no analog stick is present (`battle/ffx/kernel/minigame-fury.ts`, VA 0x00891B80,
  * run against the game's machine code, `FFX-G01` section 6.4): a **left press and a right press make one step**, and **two steps are worth
- * one rotation** (a cast is gained when the step counter plus one, halved, reaches the spell's next threshold). How many rotations each cast
- * costs is the game's table, by spell and by Lulu's Magic. It used to count every alternate press as half a rotation (a step was one press, a
- * rotation two) with an invented rotation cost. Two presses that arrive within one 1/30 s frame are read as both held together, which the game
- * ignores; a step is dropped when the 0.5 s stall clock clears a left press whose right press has not come. An analog stick would turn the
- * dial by quadrants (the controller handles it, tested) but this overlay has no stick input: that would be a new input, left to the driver.
- * The result reports `sweptDegrees = rotations x 360` (a digital pair of steps is one rotation) and the casts the controller reached.
+ * one rotation** (a cast is gained when the step counter plus one, halved, reaches the spell's next threshold). The game reads a button as NEWLY
+ * pressed (VA 0x00630CF0 is true when the bit is set now and was not at the last poll: read from the code, VA 0x00631360), so a held key counts once and a
+ * step needs a press on each side, in either order. How many rotations each cast costs is the game's table, by spell and by Lulu's Magic. It used to
+ * count every alternate press as half a rotation (a step was one press, a rotation two) with an invented rotation cost. Two presses that arrive within
+ * one 1/30 s frame are read as both newly pressed in the same poll, which sets neither flag; a step is also dropped when the 0.5 s stall clock clears a
+ * left press whose right press has not come. An analog stick would turn the dial by quadrants (the controller handles it, tested) but this overlay has
+ * no stick input: that would be a new input, left to the driver. The result reports `sweptDegrees = rotations x 360` (a digital pair of steps is one
+ * rotation) and the casts the controller reached.
  */
 export function openLuluFury(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
   const timerMs = num(params['timerMs'], FURY_LIMIT_SECONDS * 1000);
@@ -83,14 +85,15 @@ export function openLuluFury(root: HTMLElement, params: Record<string, unknown>)
       resolve({ kind: 'lulu-fury', fury });
     };
 
-    /** One battle frame: the controller reads the left and right readings seen since the last one. */
+    /** One battle frame: the controller's first call reads the presses seen since the last frame, the second call (after the extra pad poll) finds none new. */
     const driver = new FrameDriver(
       () => overlay.elapsedMs(),
       (frame) => {
         const sample: readonly [boolean, boolean] = [left, right];
         left = false;
         right = false;
-        const pad: FuryPad = { stick: () => [0x80, 0x80], buttons: () => sample };
+        const first = controller.calls; // the call about to be made is the frame's first while the count still stands here
+        const pad: FuryPad = { stick: () => [0x80, 0x80], buttons: () => (controller.calls === first ? sample : [false, false]) };
         controller.frame(frame / 30, pad);
         render();
         if (controller.done || controller.level >= FURY_MAX_CASTS) void finish();

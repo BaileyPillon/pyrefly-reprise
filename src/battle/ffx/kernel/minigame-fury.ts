@@ -22,7 +22,8 @@
  * Casts stop at 16.
  *
  * **Digital pad** (no analog pad). A "step" is a left-only reading and a right-only reading both seen before the stall clock clears them
- * (both held together sets neither). The clock: when a call finds no quadrant and more than 0.5001 s have passed since the last clear,
+ * (both in the same reading sets neither). A reading is a button NEWLY pressed: the reader 0x00630CF0 is true when the bit is set in the pad's current word
+ * and was not in the previous one (the code at 0x00631360, read from the disassembly), so a held key counts once. The clock: when a call finds no quadrant and more than 0.5001 s have passed since the last clear,
  * both flags are cleared and the clock restarts. One step adds 1 to the counter, and the casts go up by one when `(counter + 1) / 2`
  * (integer division) reaches the next threshold, so two steps are worth one rotation.
  *
@@ -36,7 +37,7 @@ import { FURY_MAX_CASTS } from './minigame-fury-tables.ts';
 export interface FuryPad {
   /** The stick sample at `index` (axes 0 to 255, centre 128). */
   stick(index: number): readonly [x: number, y: number];
-  /** The digital left and right readings at `index`. */
+  /** The digital left and right readings at `index`: whether each button was newly pressed at that poll. */
   buttons(index: number): readonly [left: boolean, right: boolean];
 }
 

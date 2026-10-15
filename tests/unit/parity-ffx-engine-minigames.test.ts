@@ -352,7 +352,7 @@ describe('the three overlays run the game\'s controllers on the engine\'s params
     expect(r.sequence.timeRemainingMs).toBeCloseTo(Math.fround(4 - (r.sequence.frame as number) / 30) * 1000, 6);
   });
 
-  it('Fury: a step is a left and a right press and two steps are a rotation; eight presses at Magic 20 make seven steps, three rotations and three casts', async () => {
+  it('Fury: a step is a left and a right press and two steps are a rotation; four pairs at Magic 20 make four steps, two rotations and two casts', async () => {
     const p = minigameParams(
       { rt: { inventory: new Map() }, content: furyContent() } as never,
       LULU_1['fire-fury'] as AbilityDef,
@@ -365,12 +365,31 @@ describe('the three overlays run the game\'s controllers on the engine\'s params
       key('ArrowRight');
       await vi.advanceTimersByTimeAsync(100);
     }
-    // Fire Fury at Magic 20 takes row 0 (T 1 2 4 6 9 ...). The first press only sets the left flag; every later press, held for the frame it was seen in, meets the
-    // flag of the other side that the last step left set, so it completes a step: 8 presses = 7 steps (the game's flags are sticky: FFX-G01 section 6.4).
-    // counter = 1 + 7 = 8, (8 + 1) / 2 = 4 reaches T[2] = 4 -> 3 casts; rotations = floor(7 / 2) = 3.
-    expect(o.root.querySelector('[data-role="counter"]')?.textContent).toBe('3');
+    // Fire Fury at Magic 20 takes row 0 (T 1 2 4 6 9 ...). The game reads a button as newly pressed, so Left then Right is one step and 4 pairs are 4 steps
+    // (the flags are cleared by a step, and a press is an edge, not a hold: 0x00630CF0). counter = 1 + 4 = 5, (5 + 1) / 2 = 3 reaches T[1] = 2 but not T[2] = 4 -> 2 casts;
+    // rotations = 4 / 2 = 2.
+    expect(o.root.querySelector('[data-role="counter"]')?.textContent).toBe('2');
     await vi.advanceTimersByTimeAsync(4500);
     const r = o.result();
-    expect(r).toEqual({ kind: 'lulu-fury', fury: { sweptDegrees: 3 * 360, casts: 3 } });
+    expect(r).toEqual({ kind: 'lulu-fury', fury: { sweptDegrees: 2 * 360, casts: 2 } });
+  });
+
+  it('Fury: a key held down counts once, and two presses on the same side never make a step', async () => {
+    const p = minigameParams(
+      { rt: { inventory: new Map() }, content: furyContent() } as never,
+      LULU_1['fire-fury'] as AbilityDef,
+      member({ id: 'lulu', stats: { ...member({ id: 'x' }).stats, mag: 20 } }) as unknown as FFXCombatant,
+    );
+    const o = open('lulu-fury', p);
+    for (let i = 0; i < 6; i++) {
+      key('ArrowLeft'); // Left, Left, Left ...: one flag, no step
+      await vi.advanceTimersByTimeAsync(100);
+    }
+    expect(o.root.querySelector('[data-role="counter"]')?.textContent).toBe('1');
+    key('ArrowRight'); // the 0.5 s stall clock has cleared the Lefts by now, so at most one step is made: counter 2, (2 + 1) / 2 = 1 is below T[1] = 2
+    await vi.advanceTimersByTimeAsync(100);
+    expect(o.root.querySelector('[data-role="counter"]')?.textContent).toBe('1');
+    await vi.advanceTimersByTimeAsync(4500);
+    expect(o.result()).toEqual({ kind: 'lulu-fury', fury: { sweptDegrees: 0, casts: 1 } });
   });
 });
