@@ -917,6 +917,13 @@ export interface ItemDrop {
   count: number;
   /** Drop chance as a percentage, 0–100. Omit for a guaranteed entry. */
   chance?: number;
+  /**
+   * **FFX enemy drops only: the rare item of the same drop slot** (additive; the hidden Biran and Yenke chapter, 2026-10-14). The game's loot record names a common and a rare item per slot and gives exactly
+   * ONE of them when the slot drops (`research/re-ffx-biran-yenke.md` section 2: a Return Sphere, or, one time in eight, a Friend Sphere in its place). When the slot drops (`chance`), one more
+   * byte roll (0 to 255) on the engine-side stream picks the rare item when `byte * 100 < rare.chance * 256`, so a `chance` of 12.5 is exactly the game's "below 0x20". An Overkill doubles whichever was given.
+   * Absent everywhere else, and then the drop is exactly as it was (no extra draw).
+   */
+  rare?: { itemId: ItemId; count: number; chance: number };
 }
 
 /** What an enemy yields when it dies [ffx-combat-core §12.2]. */

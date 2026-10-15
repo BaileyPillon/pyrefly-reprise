@@ -95,6 +95,8 @@ export const ITEMS: Record<string, ItemDef> = {
   // research/ffx-sin.md §2.4 [decompiled]: the Left Fin, Genais and the Core drop these (Chapter XVII).
   'hp-sphere': gridItem('hp-sphere', 'HP Sphere'),
   'return-sphere': gridItem('return-sphere', 'Return Sphere'),
+  // The hidden Biran and Yenke chapter's rare drop (one time in eight instead of the Return Sphere; research/re-ffx-biran-yenke.md section 2): the name and the class only, like every Sphere Grid item here.
+  'friend-sphere': gridItem('friend-sphere', 'Friend Sphere'),
   'mp-sphere': gridItem('mp-sphere', 'MP Sphere'),
   'ability-sphere': {
     id: 'ability-sphere',

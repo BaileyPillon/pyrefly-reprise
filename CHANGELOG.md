@@ -1,13 +1,50 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 70 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 71 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-14 · Biran and Yenke: Kimahri alone against the two Ronso, a hidden FFX chapter behind the word `gagazet` (branch ch-biran-yenke, not yet in a release candidate; not live)
+
+Address: none yet (branch ch-biran-yenke, code and tests at e5a72d74; not merged into a release candidate, not deployed, no review run; nobody has heard its music or judged its look, and both are provisional)
+
+- **FFX, hidden chapter:** Biran and Yenke Ronso at the Mountain Gate of Mt. Gagazet, the fight where Kimahri goes in alone. Type `gagazet` on the chapter
+  board; there is no card and the board still says "of 18". One fight, Kimahri against both brothers. The numbers, the moves and the rules of both are
+  the game's own, read from its files by the reverse-engineering lane. Their HP is not a fixed number: it is set from Kimahri's own strength and magic when
+  the battle begins (3,208 for Biran and 2,406 for Yenke for the Kimahri this chapter fields).
+- **FFX, what the fight teaches:** Lancet learns a Ronso Rage from each brother, one a cast, and a new Rage fills Kimahri's Overdrive gauge. Biran gives Thrust Kick,
+  Self-Destruct and Doom, and Mighty Guard once he has cast it himself (at half strength); Yenke gives Fire Breath, Aqua Breath and Stone Breath, and White Wind
+  once he has cast it. Kimahri starts without the Rages the fight teaches. Self-Destruct ejects Kimahri, who is alone, and the fight ends as a withdrawal.
+- **FFX, how the brothers fight:** Biran Thunder, Bulldoze, Blizzard, Bulldoze; Yenke Fire Breath, Aqua Breath, Bulldoze; every Bulldoze carries its user to the
+  other side of the arena. While the two stand on the same side a plain Attack on one makes the other stand guard and does 8 damage (against about 450 when they
+  are apart); Jump, the Rages and Lancet are not turned aside. When one falls the other grows stronger: Yenke Hasted, Biran Berserk. A Berserk Biran never offers
+  Mighty Guard, so learn what Biran carries before Yenke falls.
+- **FFX, rewards:** each brother pays 1,500 gil and 4,500 AP (6,750 on an Overkill) and one item from one slot: a Return Sphere, or one time in eight a Friend
+  Sphere in its place (twice as many on an Overkill). Never none, never both; before this build the engine rolled the two as separate drops.
+- **FFX, provisional:** the stage is Chapter I's Mt. Gagazet (no painting of the gate exists); the two brothers' paintings are new candidates made locally, nothing
+  approved was replaced; the music is the generic boss cue. The guide card follows the walkthrough in our own words and the game's files where they differ.
+- **Both:** the hidden words `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro` and `valefor` still work, `limit` still opens FF7's battle as before, a wrong
+  word opens nothing, and the chapter writes only its own record, never the save. No other chapter changes: the 18 FFX engine goldens do not move, and one new
+  optional field (`ItemDrop.rare`, the rare item of a drop slot) is read by the FFX results only where a drop names one.
+- **How it was checked:** type check clean; the full suite once (19,740 tests: 3 failed, each a test that lists every departure kind, command record or scene
+  file meeting the new chapter; fixed and re-run green); a production build played in headless Chromium: the word opens the chapter and no other, the opening
+  and the first menu with Kimahri alone, Lancet through the real menu teaching Fire Breath, a win in 0:56 (both brothers' own Rages cast, six Rages learned, the
+  closing scene and the results), a loss with Retry, the whole thing again on a 390x844 phone, and the other hidden words still opening their chapters. The
+  advisor's line wins 100 of 100 seeds on the engine (in 16 decisions); the plain Attack with a Potion also wins 100 of 100 (in 25); the plain Attack alone wins none.
+- **Disclosed:** Self-Destruct (a Rage Kimahri can learn here) was proved in the engine, not in a browser run. A Berserk Biran swings an ordinary attack, not Bulldoze,
+  and never changes side; whether the game's default monster attack is Bulldoze is an open question for the reverse-engineering lane. The gear the brothers
+  drop and Kimahri's Steal are not modelled. At 1600x900 the Sensor tab can sit over Biran's head. The pause screen's hero painting is not made.
+
+![The first menu at 1600x900: Kimahri alone against Biran and Yenke on Mt. Gagazet, the guide open and the advisor's first tip, Lancet](docs/screenshots/ch-biran-yenke/1600x900-first-menu.jpg)
+
+![Lancet learned through the real menu: Kimahri healed, his gauge ready, and the advisor naming Fire Breath, which hits both brothers](docs/screenshots/ch-biran-yenke/1600x900-lancet-learned.jpg)
+
+![The results after the win: AP 9,000, gil 3,000 and one Return Sphere from each brother](docs/screenshots/ch-biran-yenke/1600x900-results.jpg)
 
 ## 2026-10-14 · Rikku's Mix and the FFX-2 battle menu follow the game, and two hidden FFX-2 chapters (release candidate r48-rc; not live)
 

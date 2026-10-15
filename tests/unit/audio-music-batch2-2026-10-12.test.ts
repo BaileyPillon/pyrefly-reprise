@@ -242,6 +242,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'ffx2-masterpiece-theatre': { scene: 'scene-bevelle-underground', links: ['boss-experiment', 'boss-experiment'] },
     'sinspawn-gui': { scene: 'scene-gagazet', links: ['boss-gui', 'boss-challenge'] },
     'exp-fayth': { scene: 'scene-fahrenheit', links: ['boss-evrae'] }, // the hidden Fayth chapter is Chapter VIII's record by reference, so it plays Chapter VIII's music (FFX only)
+    'biran-yenke': { scene: 'scene-gagazet', links: ['boss-challenge'] }, // the hidden Biran and Yenke chapter (FFX only, 2026-10-14): the mountain's own bed and the generic "Challenge" boss cue Chapter II and the Gui guest hour play, by reference (no source names this fight's cue)
     'ffx2-tourist-trap': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap (FFX-2 only, 2026-10-14): the field bed and the "Aeons" cue the Road and Ixion play, by reference
     'ffx2-valefor-besaid': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Valefor at Besaid (FFX-2 only): the aeon cue Chapter XI and Ixion play, our own take
   };
@@ -264,7 +265,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
 
   it('plays each new cue in its own chapters only, and only in its own game (an FFX cue in FFX chapters, an FFX-2 cue in FFX-2 chapters)', async () => {
     const owners: Record<string, string[]> = {
-      'boss-challenge': ['yunalesca', 'sinspawn-gui'],
+      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke'],
       'boss-gui': ['sinspawn-gui'],
       'boss-seymour-omnis': ['seymour-omnis'],
       'boss-den-of-woe': ['ffx2-den-of-woe'],

@@ -9,6 +9,7 @@
  */
 
 import type { BattleResult, CombatantId, ItemDrop } from '../common/types.ts';
+import { byteRoll } from '../common/rng.ts';
 import { type Ctx, has, isAlive, tryActor } from './state.ts';
 import { gaugeOnVictory } from './gauge.ts';
 import { idiv } from './math.ts';
@@ -47,7 +48,11 @@ function collectRewards(ctx: Ctx): { ap: number; gil: number; drops: ItemDrop[] 
       // The engine's own drop model (a percent chance per drop), not the game's (stream 10 against a chance byte, `kernel/drops.ts`, not wired):
       // it draws from the engine-side stream so the battle's game streams end where the fight ended.
       if (drop.chance === undefined || ctx.rng.aux.int(1, 100) <= drop.chance) {
-        drops.push({ ...drop, count: overkilled ? Math.min(99, drop.count * OVERKILL_DROP_MULTIPLIER) : drop.count });
+        // One drop slot gives ONE item: a slot that names a rare alternative (`ItemDrop.rare`, the game's loot record: a common and a rare item per slot) draws one more byte and gives the rare item
+        // when it falls under the rare chance, the common one otherwise, never both. A drop with no `rare` draws nothing more, so every other chapter's drops are exactly as they were.
+        const { rare, ...common } = drop;
+        const given = rare !== undefined && byteRoll(ctx.rng.aux) * 100 < rare.chance * 256 ? { itemId: rare.itemId, count: rare.count } : common;
+        drops.push({ ...given, count: overkilled ? Math.min(99, given.count * OVERKILL_DROP_MULTIPLIER) : given.count });
       }
     }
   }

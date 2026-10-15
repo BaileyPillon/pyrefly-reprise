@@ -52,6 +52,7 @@ import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
 import { ISAARU_CHAPTER_BOSS_IDS, isaaruViaPurifico } from './ffx-isaaru.ts';
 import { SIN_TACTIC_ENTRIES } from './sin-tactics.ts';
 import { SINSPAWN_GUI_BOSS_IDS, sinspawnGui } from './sinspawn-gui.ts';
+import { BIRAN_YENKE_BOSS_IDS, biranYenke } from './biran-yenke.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -92,6 +93,7 @@ export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymou
 export { isaaruViaPurifico, ISAARU_CHAPTER_BOSS_IDS } from './ffx-isaaru.ts';
 export { sinFinsCore, sinFace, SIN_FINS_CORE_BOSS_IDS, SIN_FACE_BOSS_IDS } from './sin-tactics.ts'; // XVII and XVIII (FFX), unlisted
 export { sinspawnGui, SINSPAWN_GUI_BOSS_IDS } from './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only)
+export { biranYenke, BIRAN_YENKE_BOSS_IDS } from './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -163,6 +165,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...SIN_TACTIC_ENTRIES, // Chapters XVII and XVIII (FFX only, unlisted): the Fins and the Core under four ids, the Face under one
   // The hidden Sinspawn Gui chapter (FFX only): the body of each of its two fights; the head and arms are parts of whichever body is on the field.
   ...SINSPAWN_GUI_BOSS_IDS.map((bossId) => ({ chapterId: 'sinspawn-gui', bossId, tactic: sinspawnGui })),
+  // The hidden Biran and Yenke chapter (FFX only): the two brothers; Kimahri's line is Lancet, then the Rages.
+  ...BIRAN_YENKE_BOSS_IDS.map((bossId) => ({ chapterId: 'biran-yenke', bossId, tactic: biranYenke })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

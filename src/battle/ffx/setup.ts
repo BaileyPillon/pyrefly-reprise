@@ -34,6 +34,7 @@ import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
 import { applySinSetups } from './ai/sin-setup.ts';
 import { applyGuiSetup } from './ai/sinspawn-gui-rules.ts';
+import { applyBiranYenkeSetup } from './ai/biran-yenke-setup.ts';
 import { applyLinkLineUp, restorePartyOnEntry } from './line-up.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
@@ -377,5 +378,6 @@ export function buildBattle(
   applyIsaaruSetup(ctx); // Grothia's and Pterya's gauges, Spathi's count, Isaaru's no-turn [ffx-isaaru-bevelle §4]
   applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   applyGuiSetup(ctx); // Sinspawn Gui: the fight number, the body's acceleration line, the arms without turns, Wakka's reach [re-ffx-ai-gui §3, §5]
+  applyBiranYenkeSetup(ctx); // Biran and Yenke: both brothers' HP, STR, MAG, AGI and MDF from Kimahri's, at the battle's start [re-ffx-biran-yenke §3]
   return ctx;
 }
