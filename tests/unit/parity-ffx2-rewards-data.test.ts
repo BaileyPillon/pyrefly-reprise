@@ -10,7 +10,9 @@
  *    and of the Trema options has its row laid on it, and no enemy of any other group does;
  *  - the authored EXP, AP and gil agree with the row (the three Syndicate records that did not are fixed: Ormi in Act I, Ormi and Logos
  *    in Act II), and the authored common drop is the row's common slot;
- *  - every item id a row can drop has a game number in our table and a name that reads as the game's.
+ *  - every item id a row can drop has a game number in our table and a name that reads as the game's;
+ *  - every shipped monster's reward numbers carry their row citation: the table and row of `monster.bin` / `monster2.bin`, the same row its
+ *    record cites for the rest of it, naming the same monster, and the data file says where the rows come from.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -41,6 +43,10 @@ const ROWS = JSON.parse(readFileSync(here('kill_reward_rows.json'), 'utf8')) as 
 
 /** Every group of the FFX-2 data, with its enemies and parts. */
 const GROUPS = Object.values(data.ENEMY_GROUPS_BY_ID);
+
+/** Every monster this project can put on an FFX-2 field: each enemy and part of each formation it ships. */
+const ENEMIES: Array<{ key: string; enemy: EnemyDef }> = [];
+for (const group of GROUPS) for (const enemy of [...group.enemies, ...(group.parts ?? [])]) ENEMIES.push({ key: `${group.id}/${enemy.id}`, enemy });
 
 /** The game's item names as the engine's labels read them: the English copies of `item.bin`, `accessory.bin` and `important.bin` spell them, but the engine's ids have no hyphen in Gris Gris Bag and Magical Dances Vol 1 (earlier builds'), so those two labels read without one. */
 const NAMES: Readonly<Record<number, string>> = {
@@ -76,8 +82,7 @@ describe('the kill-reward rows are the game\'s', () => {
 });
 
 describe('the rows are laid on the enemy data', () => {
-  const enemies: Array<{ key: string; enemy: EnemyDef }> = [];
-  for (const group of GROUPS) for (const enemy of [...group.enemies, ...(group.parts ?? [])]) enemies.push({ key: `${group.id}/${enemy.id}`, enemy });
+  const enemies = ENEMIES;
 
   it('every enemy that has a row wears it, and the rows are all worn by someone', () => {
     const worn = new Set<string>();
@@ -103,6 +108,45 @@ describe('the rows are laid on the enemy data', () => {
       const common = row.drop[0] === 0 ? [] : [{ itemId: KILL_ITEM_ID[row.drop[0]]!, count: row.drop[1] }];
       expect(enemy.rewards.drops.map((d) => ({ itemId: d.itemId, count: d.count })), key).toEqual(common);
     }
+  });
+});
+
+describe('every shipped monster\'s reward numbers carry their row citation', () => {
+  /**
+   * The row a monster's record (W3) cites for the rest of it is the row its rewards are read from: one row of `monster.bin` a monster. The one exception is the
+   * Fiend Arena's Trema, built from the story Trema's record (row 295) and paid by its own row of the game (328, note FFX2-G03 table 5.1).
+   */
+  const OWN_ROW: Readonly<Record<string, number>> = { 'ffx2-cloister-trema-arena/trema': 328 };
+  /** The reader spells a name as the game's file does ("Fem,Goon"); ours has a hyphen. */
+  const plain = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  it('each monster wears a reward row that names its table and row, as the reader read them, and the row is that monster\'s', () => {
+    expect(ENEMIES.length).toBe(Object.keys(ROWS).length);
+    for (const { key, enemy } of ENEMIES) {
+      const kill = enemy.ffx2Record?.kill;
+      expect(kill, `${key}: no reward row`).toBeDefined();
+      if (kill === undefined) continue;
+      expect([1, 2], `${key}: table`).toContain(kill.table);
+      expect(Number.isInteger(kill.row) && kill.row >= 1, `${key}: row ${kill.row}`).toBe(true);
+      const fixture = ROWS[key];
+      expect(fixture, `${key}: the reader's fixture has no row`).toBeDefined();
+      expect([kill.table, kill.row], `${key}: the row the data cites is the row the reader read`).toEqual([fixture?.table, fixture?.row]);
+      expect(plain(fixture?.name ?? ''), `${key}: the cited row is another monster's (${fixture?.name})`).toBe(plain(enemy.name));
+      const own = OWN_ROW[key];
+      expect([kill.table, kill.row], `${key}: the reward row and the record's row`).toEqual(own !== undefined ? [1, own] : [enemy.ffx2Record?.table, enemy.ffx2Record?.row]);
+    }
+  });
+
+  it('no formation cites one row for two of its monsters', () => {
+    for (const group of GROUPS) {
+      const cited = [...group.enemies, ...(group.parts ?? [])].map((e) => `${e.ffx2Record?.kill?.table}/${e.ffx2Record?.kill?.row}`);
+      expect(new Set(cited).size, `${group.id}: ${cited.join(', ')}`).toBe(cited.length);
+    }
+  });
+
+  it('the data file says where its rows come from: the game file, the reader, the note and a confidence tag', () => {
+    const text = readFileSync(fileURLToPath(new URL('../../src/data/ffx2/monster-records/kill-rewards.ts', import.meta.url)), 'utf8');
+    for (const needle of ['monster.bin', 'monster2.bin', 'Steam', 'FFX2-G03', '[verified']) expect(text, needle).toContain(needle);
   });
 });
 
