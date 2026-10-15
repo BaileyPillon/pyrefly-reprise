@@ -410,8 +410,12 @@ describe('the Magus Sisters: three aeons at once', () => {
     rig.fighter('mindy').hp = 0;
     rig.fighter('mindy').alive = false;
     rig.fighter('mindy').statuses['ko'] = { id: 'ko', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
-    rig.until('cindy');
+    // A sister acts after Mindy fell: the end-of-action check must keep the summon (two are still standing).
+    expect(rig.nextInput().actorId).not.toBe('mindy');
+    rig.submit({ kind: 'defend', targets: [] });
     expect(rig.state.aeonId).toBe('cindy');
+    expect(rig.state.aeonIds).toEqual(['cindy', 'sandy', 'mindy']);
+    rig.until('cindy');
     for (const id of ['cindy', 'sandy']) {
       rig.fighter(id).hp = 0;
       rig.fighter(id).alive = false;
