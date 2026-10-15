@@ -2486,7 +2486,7 @@ export interface BattleResult {
   /**
    * FFX-2 only (re-parity RC9, lane X2-C): what each girl earned by the game's kill-reward routine, keyed by member id: her EXP (after the end-of-battle
    * rollback: a girl who is dead or Petrified loses what she gained) and the AP credited to her (capped at 99 a battle). {@link BattleResult.exp} stays the
-   * results total; **{@link BattleResult.ap} is the AP of the best-credited girl**. Absent for FFX and FF7 and on a battle that paid nothing.
+   * results total; **{@link BattleResult.ap} is the AP of the best-credited girl**. Absent outside FFX-2 and on a battle that paid nothing.
    */
   rewardsByMember?: Record<CombatantId, { exp: number; ap: number }>;
   /**
