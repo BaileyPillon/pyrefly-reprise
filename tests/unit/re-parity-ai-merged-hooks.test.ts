@@ -114,6 +114,11 @@ describe('the one runner calls the hook of every hooked enemy of the shipped dat
       // The probe is about the runner, not about whether the fight lets a party member reach this body now.
       delete target.flags.untargetable;
       delete target.flags.hidden;
+      // Re-parity RC9 lane FFX-G slice G-c (FFX only): the Mortiphasm discs (BattleDistance 2) and Sin's Genais Core (3, while Genais stands) are out of reach of this
+      // probe, a command with no record of its own that stands for the plain Attack (reach 0), as the game's reach rule has it (`reach.ts#reachOf`,
+      // `targeting.ts#reachesTarget`, proven in `parity-ffx-reach.test.ts`). Before this release the Chapter XII flag let every non-physical probe through. The
+      // hook count is what this file proves, so the probe removes the distance the way it removes the two flags above.
+      delete target.flags.battleDistance;
       expect(listensToHit(target), 'the script listens to onHit').toBe(true);
       const hooks = hooksOf(target)!;
       const original = hooks.onHit!;
