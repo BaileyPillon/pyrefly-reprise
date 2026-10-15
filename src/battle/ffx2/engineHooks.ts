@@ -10,6 +10,9 @@ import type { BattleRng } from '../common/streams.ts';
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { berserkCommand, type MenuContext } from './menu.ts';
+import { confusedTurn, type ConfusionEnv } from './adapt/confusion.ts';
+import { Ffx2AtbState } from './kernel/atb-gauge.ts';
+import { isConfusedGirl } from './statuses.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { abilityPerformedBy } from './execute.ts';
 import { takeResults } from './results-tally.ts';
@@ -302,4 +305,37 @@ export function runCounters(produced: EventDraft[], actor: Ffx2Unit, env: Counte
     const command = script.counter(env.aiContext(unit), actor, { amount, attackClass: env.attackClass });
     if (command && command.kind === 'ability') resolveAsCounter(env, unit, command);
   }
+}
+
+/** What an autopilot turn needs from the engine (re-parity RC9 lane X2-H). */
+export interface AutopilotHost {
+  readonly menu: MenuContext;
+  readonly confusion: ConfusionEnv;
+  readonly rng: BattleRng;
+  readonly emit: Emit;
+  /** The turn begins (`turn-start`). */
+  begin(): void;
+  /** Resolve the command as the actor. */
+  perform(command: Command): void;
+}
+
+/**
+ * One turn of a girl the player does not control. **FFX-2 only.** Berserk (the game's state 8) swings her Attack ({@link berserkTurnCommand});
+ * Confusion (state 7) is her own pick of a command and a target by the game's rule (`adapt/confusion.ts`, `kernel/confusion-pick.ts`). Berserk wins
+ * when both are on, as in the game (it removes Confusion when it lands). A Confusion pick that queues nothing (no candidate, or nobody to aim at) is not a
+ * turn: the game's pick returns 0, her state goes back to IDLE and the next logic step asks again, so she stays idle here with the recovery she has.
+ */
+export function runAutopilot(actor: Ffx2Unit, host: AutopilotHost): void {
+  if (!actor.statuses.berserk && isConfusedGirl(actor)) {
+    const turn = confusedTurn(actor, host.confusion);
+    if (turn === null) {
+      actor.gauge.state = Ffx2AtbState.Idle;
+      return;
+    }
+    host.begin();
+    host.perform(turn.command);
+    return;
+  }
+  host.begin();
+  host.perform(berserkTurnCommand(actor, host.menu, host.rng, host.emit));
 }

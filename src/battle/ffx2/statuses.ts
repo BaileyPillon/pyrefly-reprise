@@ -21,7 +21,7 @@ import type {
   StatusInstance,
 } from '../common/types.ts';
 import { withPoolStatuses } from './kit.ts';
-import { STAT_STACK_MAX } from './constants.ts';
+import { CONFUSION_PICK, STAT_STACK_MAX } from './constants.ts';
 import { isStageSlot, slotOf } from './adapt/slots.ts';
 import { FFX2_STATUS_ROM } from './kernel/status-timers-set.ts';
 import { STATUS2_INFO } from './kernel/statusTypes.ts';
@@ -214,4 +214,12 @@ export function clearAfterBattle(c: FFX2Combatant): void {
 export function canAct(c: FFX2Combatant): boolean {
   if (!c.alive || c.removed) return false;
   return !(c.statuses.sleep || c.statuses.stop || c.statuses.petrify);
+}
+
+/**
+ * A Confused girl: the player does not control her, the game's Confusion pick does (RC9 X2-H, `CONFUSION_PICK`). A Confused monster is not one (its lists are unread: it keeps running
+ * its script).
+ */
+export function isConfusedGirl(c: FFX2Combatant): boolean {
+  return CONFUSION_PICK && c.side === 'party' && c.statuses.confuse !== undefined;
 }

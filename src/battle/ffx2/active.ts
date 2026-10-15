@@ -32,7 +32,7 @@ import type { Ffx2Unit } from './internal.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
 import { rollDefault } from './minigames.ts';
-import { canAct } from './statuses.ts';
+import { canAct, isConfusedGirl } from './statuses.ts';
 
 /**
  * FFX-2's Config "ATB Mode" (§1.5). `'wait'` is the default (D-029): the clock
@@ -110,12 +110,12 @@ export interface TickOptions {
  *
  * A Berserked girl is *not* awaiting input: §2.8 says she "can only use the
  * basic Attack command; **player loses control**", so the engine takes her turn
- * (`runBerserkTurn`). A girl suspended on a timed-Overdrive overlay still
+ * (`runAutopilotTurn`). A Confused girl is not either: she picks her own command (RC9 X2-H). A girl suspended on a timed-Overdrive overlay still
  * belongs to the player and keeps her own path.
  */
 export function awaitsPlayerInput(unit: Ffx2Unit, minigamePending: boolean): boolean {
   if (unit.controller !== 'player') return false;
-  return !(unit.statuses.berserk && !minigamePending);
+  return !((unit.statuses.berserk || isConfusedGirl(unit)) && !minigamePending);
 }
 
 /**
@@ -164,7 +164,7 @@ export interface HeldCommand {
  */
 export function heldStillPending(unit: Ffx2Unit | undefined): boolean {
   if (!unit || unit.removed || !unit.alive) return false;
-  if (unit.statuses.berserk) return false;
+  if (unit.statuses.berserk || isConfusedGirl(unit)) return false;
   return canAct(unit);
 }
 
