@@ -55,13 +55,11 @@ describe('the two monster records (RE section 2)', () => {
   it('pay each on his own death 1,500 gil, 4,500 AP (6,750 on an Overkill), a Return Sphere x1 or one time in eight a Friend Sphere x1, a Lv. 3 Key Sphere to steal (rare x2) and block Bribe', () => {
     for (const b of [biran, yenke]) {
       expect(b.rewards).toMatchObject({ ap: 4_500, apOverkill: 6_750, gil: 1_500, overkillThreshold: 2_500 });
-      expect(b.rewards.drops).toEqual([
-        { itemId: 'return-sphere', count: 1, chance: 87.5 },
-        { itemId: 'friend-sphere', count: 1, chance: 12.5 },
-      ]);
+      // ONE drop slot, one item: the Return Sphere, or in its place one time in eight the Friend Sphere (the loot record's common and rare item; `tests/unit/chapters/biran-yenke-rewards.test.ts` plays it out).
+      expect(b.rewards.drops).toEqual([{ itemId: 'return-sphere', count: 1, rare: { itemId: 'friend-sphere', count: 1, chance: 12.5 } }]);
       expect(b.rewards.steal).toEqual({ baseChance: 100, common: { itemId: 'lv-3-key-sphere', count: 1 }, rare: { itemId: 'lv-3-key-sphere', count: 2 } });
       expect(b.rewards.bribe).toEqual({ item: { itemId: 'potion', count: 1 }, immune: true });
-      for (const id of [...b.rewards.drops.map((d) => d.itemId), b.rewards.steal!.common.itemId, b.rewards.bribe!.item.itemId]) expect(ITEMS[id], `${id} is an item`).toBeDefined();
+      for (const id of [...b.rewards.drops.flatMap((d) => [d.itemId, ...(d.rare ? [d.rare.itemId] : [])]), b.rewards.steal!.common.itemId, b.rewards.bribe!.item.itemId]) expect(ITEMS[id], `${id} is an item`).toBeDefined();
     }
   });
 

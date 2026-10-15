@@ -178,13 +178,22 @@ function chapterHps(chapterId: string): Set<number> {
 
 const num = (s: string): number => Number(s.replace(/,/g, ''));
 
+/**
+ * Pages whose HP line prints **no number, on purpose**: the game does not hold a fixed HP row for the fight, it sets both enemies' HP at the battle's start from the party (the hidden Biran and Yenke chapter:
+ * from Kimahri's own strength and magic, `research/re-ffx-biran-yenke.md` section 3), so no printed number would be true of every party. The line must then carry no digit at all, so the exemption cannot hide a wrong number.
+ */
+const HP_SET_BY_THE_PARTY = new Set(['biran-yenke']);
+
 describe('every HP a document prints is one the game uses (AGENTS.md rule 6)', () => {
   for (const d of GUIDE_DOCS) {
     it(`${d.id}`, () => {
       const hps = chapterHps(d.id);
       const printed: number[] = [];
       for (const b of d.blocks) {
-        if (b.t === 'field' && /HP$/.test(b.label)) printed.push(num(b.value));
+        if (b.t === 'field' && /HP$/.test(b.label)) {
+          if (HP_SET_BY_THE_PARTY.has(d.id)) expect(b.value, `${d.id} HP line prints a number`).not.toMatch(/\d/);
+          else printed.push(num(b.value));
+        }
         if (b.t === 'loot') for (const r of b.rows) printed.push(num(r.hp));
       }
       for (const p of printed) expect(hps.has(p), `${d.id} prints HP ${p}; the game holds ${[...hps].join(', ')}`).toBe(true);

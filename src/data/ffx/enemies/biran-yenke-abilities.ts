@@ -22,8 +22,9 @@
  * rows' animations and sounds, whether Thunder and Blizzard's "reflectable, pierces Armored" matters to a Kimahri who has neither.
  */
 
-import type { AbilityDef } from '../../../battle/common/types.ts';
+import type { AbilityDef, FFXCommandRecord } from '../../../battle/common/types.ts';
 import { ABILITIES as KIMAHRI_RAGES_2 } from '../abilities/overdrive-kimahri-2.ts';
+import { COMMAND_RECORDS_PLAYER } from '../command-records/player.ts';
 
 export const BULLDOZE_ID = 'ronso-bulldoze' as const;
 export const FIRE_BREATH_ID = 'ronso-fire-breath' as const;
@@ -76,6 +77,27 @@ function asBrotherRage(rageId: 'mighty-guard' | 'white-wind', id: string): Abili
 
 export const biranMightyGuard: AbilityDef = asBrotherRage('mighty-guard', BIRAN_MIGHTY_GUARD_ID);
 export const yenkeWhiteWind: AbilityDef = asBrotherRage('white-wind', YENKE_WHITE_WIND_ID);
+
+/** Kimahri's own record of a Rage the brothers perform (the same command id, 0x3072 or 0x3070: the note's "Kimahri's Rage rows"), by Kimahri's ability id. */
+function rageRecord(rageId: 'mighty-guard' | 'white-wind'): FFXCommandRecord {
+  const record = COMMAND_RECORDS_PLAYER[rageId];
+  if (record === undefined) throw new Error(`biran-yenke-abilities: Kimahri's Rage '${rageId}' has no command record`);
+  return record;
+}
+
+/**
+ * The game's own command record of each row (`attachCommandRecords`, `../command-records/index.ts`; the words equal `tests/fixtures/parity/ffx/command_records.json`, which `tests/unit/data-ffx-command-records.test.ts`
+ * checks, and the rank and chance bytes were read from the kernel tables with the reverse-engineering session's command reader on 2026-10-14, read-only). `type 0` is a monster-side or item row; the two Rages are
+ * Kimahri's own (`type 4`, the Overdrive family), so they are the very record objects of `mighty-guard` and `white-wind`. Berserk: the chance byte 120 for status 9, and no duration byte (RE section 6).
+ */
+export const COMMAND_RECORDS_BIRAN_YENKE: Readonly<Record<string, FFXCommandRecord>> = {
+  [BULLDOZE_ID]: { id: 0x60a5, type: 0, flagsMisc: 0x6, flagsDamage: 0x5, damageClass: 1, rank: 3 }, // Bulldoze: physical, can crit, accuracy formula 0
+  [FIRE_BREATH_ID]: { id: 0x60a2, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Fire Breath (the monster-side row, not Kimahri's 0x3069)
+  [AQUA_BREATH_ID]: { id: 0x60a3, type: 0, flagsMisc: 0x6, flagsDamage: 0x0, damageClass: 1, rank: 3 }, // Aqua Breath (the monster-side row, not Kimahri's 0x306e)
+  [BERSERK_SELF_ID]: { id: 0x400f, type: 0, flagsMisc: 0x20006, flagsDamage: 0x2, damageClass: 0, rank: 3, chances: [[9, 120]] }, // Berserk: Berserk chance 120, no duration byte
+  [BIRAN_MIGHTY_GUARD_ID]: rageRecord('mighty-guard'), // Kimahri's Mighty Guard row 0x3072
+  [YENKE_WHITE_WIND_ID]: rageRecord('white-wind'), // Kimahri's White Wind row 0x3070
+};
 
 export const BIRAN_YENKE_ABILITIES: Readonly<Record<string, AbilityDef>> = {
   [BULLDOZE_ID]: bulldoze,

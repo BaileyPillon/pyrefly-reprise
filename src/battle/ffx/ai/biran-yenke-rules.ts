@@ -13,8 +13,12 @@
  *   plain Attack**: the partner's **DEF becomes 254 and Sentinel goes on until that partner is next hit**; his `onHit` releases it (DEF back to 30, Sentinel off). Jump, Thrust Kick and the Rages never trigger it, and
  *   Lancet, items and spells are not physical. The quirk rests on the executable's resolver bytes, not on a run (RE 5.6, section 9 item 2); built as the note reads.
  *
- * **Not modelled, and why** (listed in the handoff): the brothers' dialogue and its one random draw (no script text, no new content: the driver's decision, so this script draws no random number); event 7's extra
- * side flip for a Berserk Biran (nothing reads his side once Yenke has fallen: the half-HP action is cancelled and the defence swap needs a living partner); the camera's side words.
+ * **The one random draw** (RE 5.7): every non-lethal hit event on a brother takes one draw of the script stream (stream 2), `v12 := GetRandomValue() mod 100`, which in the game only picks a line of dialogue
+ * (`onBrotherHit`). The dialogue is not shown (no script text, no new content: the driver's decision) but the draw is kept, so the stream stands where the game's does. The turn scripts draw nothing.
+ *
+ * **Not modelled, and why** (listed in the handoff): the brothers' dialogue (the draw above is kept); event 7's extra side flip for a Berserk Biran (nothing reads his side once Yenke has fallen: the
+ * half-HP action is cancelled and the defence swap needs a living partner), and with it the open question whether the game's default monster Attack is Bulldoze (a Berserk Biran swings the engine's generic
+ * Attack here, whose numbers equal Bulldoze's); the camera's side words.
  *
  * The battle layer does not import `src/data`, so the ids are copied here and `tests/unit/chapters/biran-yenke-data.test.ts` pins that the copies agree with the data.
  */
@@ -26,6 +30,7 @@ import { ATTACK_ABILITY_ID } from '../registry.ts';
 import { queuedKey } from '../ronso-rage.ts';
 import { fiveQuarters } from './biran-yenke-stats.ts';
 import type { UsedCommand } from './hooks.ts';
+import { scriptMod } from './script-random.ts';
 import type { AiContext } from './types.ts';
 import { num } from './types.ts';
 
@@ -183,7 +188,29 @@ export function onBrotherTargeted(ctx: Ctx, self: FFXCombatant, used: UsedComman
   raiseGuard(ctx, partner); // the hit brother is not changed
 }
 
-/** The brother was hit (once per action, after the hit): a guard he stood is released (RE 5.7). */
+/** `v12`, the roll of the last non-lethal hit (RE 5.7). It starts at 200 and only the game's dialogue reads it (`v12 > 50` plays the line on a release), which this chapter does not show. */
+export const V12_LAST_ROLL = 'lastRoll';
+export const V12_START = 200;
+
+/** The roll stored by the last non-lethal hit on `c`, or the script's starting 200 before any. */
+export function lastRoll(ctx: Ctx, c: FFXCombatant): number {
+  return num(rtOf(ctx, c.id).ai, V12_LAST_ROLL, V12_START);
+}
+
+/**
+ * The brother was hit (once per action per target, after the hit and before the death check; RE 5.7).
+ *
+ * - **HP 0 (this action killed him):** Sentinel off, nothing more (the final lines are dialogue only). No draw.
+ * - **HP above 0:** if his Sentinel is on, the release (DEF back to 30, Sentinel off) -- **only then**: the script writes DEF only on that branch (the RE review, 2026-10-14). Then, always on this branch,
+ *   `v12 := GetRandomValue() mod 100`: **one draw of the shared script stream (stream 2) per non-lethal hit event**. The stored value only ever chose a line of dialogue, which is not shown (the driver's
+ *   decision: no dialogue), but the draw is kept so the stream stands where the game's does.
+ */
 export function onBrotherHit(ctx: Ctx, self: FFXCombatant): void {
-  if (self.statuses['sentinel'] !== undefined || self.stats.def !== BASE_DEF) releaseGuard(ctx, self);
+  const sentinel = self.statuses['sentinel'] !== undefined;
+  if (!isAlive(self)) {
+    if (sentinel) removeStatus(ctx, self, 'sentinel', 'expired');
+    return;
+  }
+  if (sentinel) releaseGuard(ctx, self);
+  rtOf(ctx, self.id).ai[V12_LAST_ROLL] = scriptMod(ctx, 100);
 }

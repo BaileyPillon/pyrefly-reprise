@@ -29,6 +29,7 @@ import { BIRAN_ID, BIRAN_SCRIPT, BIRAN_YENKE_GROUP_ID, YENKE_ID, YENKE_SCRIPT } 
 import { AQUA_BREATH_ID, BERSERK_SELF_ID, BIRAN_MIGHTY_GUARD_ID, BULLDOZE_ID, FIRE_BREATH_ID, YENKE_WHITE_WIND_ID } from './biran-yenke-abilities.ts';
 
 export { BIRAN_ID, BIRAN_YENKE_GROUP_ID, YENKE_ID };
+export { BIRAN_YENKE_ABILITIES } from './biran-yenke-abilities.ts'; // the chapter's data barrel: the data index registers the rows and the formation from this one module
 
 /** The records' own numbers (RE section 2). HP, STR, MAG, MDF and AGI are overwritten at the battle's start (RE section 3); the rest stay. */
 export const RECORD = { hp: 9_999, mp: 200, str: 25, def: 30, mag: 30, mdef: 10, agi: 32, luck: 15, eva: 0, acc: 100 } as const;
@@ -47,10 +48,9 @@ const REWARDS: EnemyDef['rewards'] = {
   apOverkill: 6_750,
   gil: 1_500,
   overkillThreshold: OVERKILL_THRESHOLD,
-  drops: [
-    { itemId: 'return-sphere', count: 1, chance: 87.5 }, // the common drop; a Friend Sphere comes in its place one time in eight (RE section 2)
-    { itemId: 'friend-sphere', count: 1, chance: 12.5 },
-  ],
+  // ONE drop slot, one item (RE section 2): the slot's chance byte is 255 (always drops), the common item a Return Sphere x1 and the rare one a Friend Sphere x1 in its place when the second draw's low byte is
+  // below 0x20, one time in eight (`ItemDrop.rare`: the engine rolls the slot once and gives one of the two, never both and never neither). An Overkill doubles whichever is given (the note: x2 of either).
+  drops: [{ itemId: 'return-sphere', count: 1, rare: { itemId: 'friend-sphere', count: 1, chance: 12.5 } }],
   steal: { baseChance: 100, common: { itemId: 'lv-3-key-sphere', count: 1 }, rare: { itemId: 'lv-3-key-sphere', count: 2 } }, // the record's chance byte 255, clamped to the contract's 0-100
   bribe: { item: { itemId: 'potion', count: 1 }, immune: true },
 };

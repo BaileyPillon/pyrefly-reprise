@@ -81,6 +81,7 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'dark-matter': { id: 0x2035, type: 0, flagsMisc: 0x10406, flagsDamage: 0x80, damageClass: 1, shatter: 10, rank: 2 }, // Dark Matter
   'hp-sphere': { id: 0x2055, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // HP Sphere
   'return-sphere': { id: 0x2060, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Return Sphere
+  'friend-sphere': { id: 0x2061, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Friend Sphere (the hidden Biran and Yenke chapter's rare drop; item 97, the entry after the Return Sphere in the game's own order, rank byte 2 read from the table)
   'mp-sphere': { id: 0x2056, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // MP Sphere
   'ability-sphere': { id: 0x2049, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Ability Sphere
   'blk-magic-sphere': { id: 0x204f, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Blk Magic Sphere

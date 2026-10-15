@@ -48,7 +48,7 @@ const belowHalf = (c: FFXCombatant): void => void (c.hp = Math.trunc(c.stats.max
 // ------------------------------------------------------------------------------------------------------------------------ the cycles
 
 describe("the cycles (RE section 5.3): Biran Thunder, Bulldoze, Blizzard, Bulldoze; Yenke Fire Breath, Aqua Breath, Bulldoze", () => {
-  it('repeat in order, always at Kimahri, and the whole fight draws no random number from either script', () => {
+  it('repeat in order, always at Kimahri (every target is fixed: no picker draw)', () => {
     const e = H.newEngine(1);
     H.runDefending(e, (en) => H.actions(H.log(en), BIRAN).length >= 8 && H.actions(H.log(en), YENKE).length >= 6);
     expect(H.actions(H.log(e), BIRAN).slice(0, 8)).toEqual(['thunder', 'ronso-bulldoze', 'blizzard', 'ronso-bulldoze', 'thunder', 'ronso-bulldoze', 'blizzard', 'ronso-bulldoze']);
@@ -56,7 +56,7 @@ describe("the cycles (RE section 5.3): Biran Thunder, Bulldoze, Blizzard, Bulldo
     for (const ev of H.log(e)) if (ev.type === 'action-start' && (ev.actorId === BIRAN || ev.actorId === YENKE)) expect(ev.targets, `${ev.actorId} ${ev.abilityId}`).toEqual([KIM]);
   });
 
-  it('never use the random stream: the script is run with every stream made to throw', () => {
+  it('the turn script never uses the random stream: it is run with every stream made to throw (the game\'s one draw is in the hit hook, `biran-yenke-hit.test.ts`)', () => {
     const { ctx } = ctxOn(1);
     const throwing = new Proxy({}, { get: () => () => { throw new Error('the Ronso script drew a random number'); } });
     const real = ctx.rng;

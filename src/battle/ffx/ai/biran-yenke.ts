@@ -1,7 +1,7 @@
 /**
  * **Biran Ronso and Yenke Ronso**, Kimahri's solo trial, as the game's own scripts run them (FFX only; the hidden Biran and Yenke chapter; `research/re-ffx-biran-yenke.md` section 5, "RE section n"; the rules are
- * `./biran-yenke-rules.ts`). **Nothing here is random: the game's only draw in these scripts picks a dialogue line, and this chapter has none** (no dialogue, no new content: the driver's decision), so no
- * script draw is made.
+ * `./biran-yenke-rules.ts`). **The turn script draws nothing** (every target is fixed). The game's one draw in these scripts picks a dialogue line on each non-lethal hit; this chapter shows no dialogue
+ * (the driver's decision), but `onBrotherHit` keeps the draw so the script stream stands where the game's does.
  *
  * ## The turn (`onTurn`, RE 5.3), in this order
  *

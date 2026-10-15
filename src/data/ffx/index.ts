@@ -145,8 +145,7 @@ import { evraeGroup } from './enemies/evrae.ts';
 import { yojimboGroup } from './enemies/yojimbo.ts';
 import { SINSPAWN_GUI_ABILITIES } from './enemies/sinspawn-gui-abilities.ts'; // the hidden Sinspawn Gui chapter (FFX only, 2026-10-10): Special 1 and Venom
 import { SINSPAWN_GUI_GROUPS } from './enemies/sinspawn-gui.ts';
-import { BIRAN_YENKE_ABILITIES } from './enemies/biran-yenke-abilities.ts'; // the hidden Biran and Yenke chapter (FFX only, 2026-10-14): Bulldoze, the brothers' Breaths, Berserk, their half-HP Rages
-import { BIRAN_YENKE_GROUPS } from './enemies/biran-yenke.ts';
+import { BIRAN_YENKE_ABILITIES, BIRAN_YENKE_GROUPS } from './enemies/biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only, 2026-10-14): Bulldoze, the Breaths, Berserk, the half-HP Rages, and the formation
 import {
   braskasFinalAeonGroup,
   possessedAeonGroups,
@@ -350,8 +349,7 @@ export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = {
   ...Object.fromEntries([sinLeftFinGroup, sinRightFinGroup, sinGenaisCoreGroup].map((g) => [g.id, g])),
   // The hidden Sinspawn Gui chapter (`src/data/chapter-sinspawn-gui.ts`): fight 1, then fight 2 with Seymour (`nextGroupId`).
   ...Object.fromEntries(SINSPAWN_GUI_GROUPS.map((g) => [g.id, g])),
-  // The hidden Biran and Yenke chapter (`src/data/chapter-biran-yenke.ts`): Kimahri alone against both brothers.
-  ...Object.fromEntries(BIRAN_YENKE_GROUPS.map((g) => [g.id, g])),
+  ...Object.fromEntries(BIRAN_YENKE_GROUPS.map((g) => [g.id, g])), // the hidden Biran and Yenke chapter (`src/data/chapter-biran-yenke.ts`): Kimahri alone against both brothers
 };
 
 /** Convenience alias for the first group of the possessed-aeon gauntlet. */
