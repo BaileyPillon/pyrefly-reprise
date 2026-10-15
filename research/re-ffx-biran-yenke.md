@@ -121,7 +121,97 @@ Note on party Chr records: the battle set-up initialises every party and aeon sl
 
 ## 5. The AI scripts (d)
 
-*The decoded AI follows in the next commit of this branch (record, formation, party and move rows above are final).*
+Each brother has one AI worker. Names of the engine events follow [note: re-ffx-ai-seymour.md 1.1] (tag index: 0 onTurn, 1 preTurn, 2 onTargeted, 3 onHit, 4 onDeath, 6 postTurn, 7 the "post-move" event). Offsets are code offsets inside the monster file's program. Everything in this section is [bytes] (disassembled, then the branch-critical stretches re-read against a raw opcode dump of the same bytes) unless a tag says otherwise. The hooks were **not** run in an interpreter for this note (section 9).
+
+### 5.1 Which function answers which event
+
+| Event | Biran (m134) | Yenke (m135) | What it does |
+|---|---|---|---|
+| init | f0 | f0 | Dull hit reactions off, no birth animation, enemy group 0, motion constants; death animation 0 (body stays, targetable) for Biran and 1 (body stays, untargetable) for Yenke; private `v12 := 200`; **partner actor `v14 := 21` (Biran) / `20` (Yenke)** |
+| preTurn (1) | f3 @0x0181 | f2 @0x010a | half-HP and partner-dead flags (5.2) |
+| onTurn (0) | f4 @0x0214 | f3 @0x019d | the cycle and the reactions (5.3) |
+| onTargeted (2) | f6 @0x0361 | f5 @0x02f2 | Lancet learning (section 7) and the defence swap counter (5.6) |
+| onHit (3) | f7 @0x04ae | f6 @0x043f | death scenes, release of the defence swap, one random draw (5.7) |
+| onDeath (4) | f8 @0x0543 | f7 @0x04d4 | Targetable := 0 (the body stays but cannot be chosen) |
+| postTurn (6) | f5 @0x0354 | f4 @0x02e5 | stores the brother's current side (Area) in a shared variable the scene camera reads; cosmetic |
+| event 7 | f2 @0x010a, **Biran only** | none | clears the learnable-Rage word; if Berserk, swaps sides (5.5); then runs straight into the preTurn code |
+
+Event 7 is raised from the actor state machine in the executable (two call sites, in the per-actor update at 0x788480 and a helper at 0x787D70) [bytes: exe]; the earlier lanes call it "postMove". Its exact timing relative to an action was not traced; the use here is consistent with "once the actor has finished its action" [inferred]. [unproved]
+
+### 5.2 State and the half-HP / partner-dead flags (preTurn)
+
+Private state: `v8` cycle step; `v9` partner-dead flag (128 when set); `v10` half-HP state (0 idle, 128 pending, 255 spent or cancelled); `v15` Rage gate (255 once the half-HP Rage is queued); `v12` the previous onHit roll (starts at 200); `v3` target spec; `v13` chosen command. Shared battle variables: the "which brother speaks" word (Biran writes 128, Yenke 255), a "partner-died scene played" word, and the two brothers' sides for the camera.
+
+On every turn start (and again at event 7 for Biran):
+
+1. **Half-HP trigger.** If the partner is alive and `v10 = 0` and the brother's HP is below **max HP / 2** (integer division, strict "below"), then `v10 := 128`, the "who speaks" word is set, and dialogue scene 0 runs. So the half-HP action is armed once, only while the brother lives. [bytes]
+2. **Partner-dead trigger.** If the partner is not alive and `v9 = 0`: `v9 := 128`, `v10 := 255` (this cancels a pending half-HP action and forbids a future one), the "who speaks" word is set, **Biran STR := floor(STR / 4) x 5** or **Yenke MAG := floor(MAG / 4) x 5**, and dialogue scene 2 runs. [bytes]
+
+### 5.3 The turn (onTurn)
+
+In this order [bytes]:
+
+1. **Half-HP action pending (`v10 = 128`):** `v10 := 255`; target spec = all monsters (spec -15) when the two brothers' Area values are equal, else the brother himself (spec -13); `v15 := 255`; the Overdrive gauge := 100 (to pay the 100 cost of the Rage row); queue **Mighty Guard 0x3072 (Biran)** / **White Wind 0x3070 (Yenke)** on that spec; the turn ends. Same side: both brothers are affected; different sides: only the caster.
+2. **Partner dead and not yet reacted:**
+   - Biran: if `v9 = 128` and he is not Berserk: `v10 := 255`, queue **Berserk 0x400F on himself**; turn ends. (Berserk lands: chance 120 against byte 0.)
+   - Yenke: if `v9 = 128` and he is not Hasted: queue **Haste 0x3036 on himself** and write his AGI := Kimahri's AGI - 4 (property read of actor 3); turn ends. This repeats each turn until Haste is on.
+3. **Otherwise the cycle**, target always actor 3 (Kimahri):
+
+| Step `v8` | Biran | Yenke |
+|---|---|---|
+| 0 | Thunder 0x3043 | Fire Breath 0x60A2 |
+| 1 | Bulldoze 0x60A5 and swap sides | Aqua Breath 0x60A3 |
+| 2 | Blizzard 0x3041 | Bulldoze 0x60A5 and swap sides |
+| 3 | Bulldoze 0x60A5 and swap sides | (wraps) |
+| Then | `v8 += 1`; wraps to 0 after 3 | `v8 += 1`; wraps to 0 after 2 |
+
+"Swap sides" before queueing Bulldoze: if the brother's Area is 0, `AreaToMoveTo := 1`, facing 90 degrees, enemy group := 1; otherwise `AreaToMoveTo := 0`, facing -90, enemy group := 0. The command is queued **after** the Area write. The half-HP and partner-dead branches do not advance `v8`. The cycle has no random element and no HP threshold. [bytes]
+
+A queued command only exists if the owner can act (not Petrified, Confused, asleep, ejected, Provoked unless it keeps control, Threatened) [note: re-ffx-ai-seymour.md 1.2]; both brothers are immune to Confuse, Sleep, Petrify and Provoke, and Threaten cannot land (byte 0). A Berserk Biran takes the engine's Berserk turn instead of the script's: the forced-action word (Bulldoze) on an automatically picked target (Kimahri) [bytes: exe, the Berserk/Confuse turn function]. The script's cycle does not run for him, which is why event 7 carries the side swap (5.5).
+
+### 5.4 After a brother dies
+
+- Biran dead: Yenke gets MAG x5/4 (floor(MAG / 4) x 5), his half-HP action cancelled, his Haste turn (5.3 step 2), and his cycle continues (Fire Breath, Aqua Breath, Bulldoze). Yenke AGI becomes Kimahri's AGI - 4 (was -8).
+- Yenke dead: Biran gets STR x5/4, his half-HP action cancelled, Berserk (so Bulldoze every turn, side swapping each time) and no more Thunder or Blizzard.
+- If one dies while the other is below half HP with the half-HP action already pending (`v10 = 128`), the pending action is cancelled (`v10 := 255`), so the Rage is not used and (section 7) is never offered. [bytes]
+
+### 5.5 Berserk Biran (event 7)
+
+Event 7 on Biran: set the learnable-Rage word to 0; if he is Berserk, flip his side exactly as the cycle does (Area 0 to 1 and back, facing and enemy group included); then fall into the preTurn code (5.2). So a Berserk Biran, whose own onTurn is bypassed, still alternates sides after each Bulldoze. [bytes]
+
+### 5.6 The defence swap counter (onTargeted, both brothers)
+
+When Kimahri's command targets one brother, the script (after the Lancet part) runs these gates in order and returns at the first failure [bytes]:
+
+1. the partner is alive;
+2. the used command's damage type is **physical** (damage-flag value 1);
+3. a property read keyed by the used command id gives a non-zero result (see the quirk below);
+4. the last attacker is not Self (-13; an attacker id is 0 to 30 or 255 so this never fires [inferred]);
+5. the used command is not 0x3120 (the Death spell);
+6. **the two brothers are on the same side** (equal Area).
+
+When all pass, **the partner's DEF is set to 254 and its Sentinel status is turned on**. The hit brother is not changed.
+
+The release is in the partner's own onHit (5.7): the next time **that** brother is hit (the action, not each hit), if Sentinel is on, its DEF is set back to 30, Sentinel is cleared, and with the previous roll above 50 a dialogue scene plays. Damage to the guarded brother from that first hit is already computed with DEF 254 and Sentinel (Sentinel halves physical damage, [note: re-ffx-damage.md]); the release comes after the hit.
+
+**The quirk (gate 3).** In other monster scripts the same position reads a property of the *command* itself ("does it affect HP"). In both brothers' scripts it is a *character* property read (max HP) whose subject is the command id itself. [bytes] The engine's actor-spec resolver treats a number outside its special ranges as an actor id taken from the **low byte** of the number, valid only up to 30, and then reads that actor's max HP with no alive or in-battle test [bytes: exe, 0x794330 and the id check at 0x793650]. So the gate passes only for commands whose id has a low byte of 0 to 30 naming a slot whose Chr record has a non-zero max HP. The battle set-up initialises every party and aeon slot from the save data (section 4), so Kimahri's plain **Attack (0x3000, low byte 0 = Tidus's slot) passes**; every Ronso Rage (0x3068 to 0x3073, low byte 0x68 and up) **fails**, as does anything with a low byte above 30 [inferred from those bytes; whether other low bytes name a populated slot depends on the save]. In plain terms: **hitting a brother with Kimahri's plain Attack guards the other brother; Jump, Thrust Kick and the other Rages do not.** Lancet, items and spells are not physical and never trigger it. This was found by reading, not by running the engine. [unproved]
+
+### 5.7 Hits, death and the one random draw (onHit and onDeath)
+
+onHit runs once per action per target after the hit is applied and before the death check [note: re-ffx-ai-seymour.md 1.1]. For a brother:
+
+- **HP is 0 (this action killed him):** Sentinel off. If the partner is **not** alive either: if the "partner-died scene played" word is 0, dialogue scene 4 (both brothers' last lines); otherwise set the "who speaks" word and play scene 3. If the partner is alive, nothing more.
+- **HP above 0:** if his Sentinel is on: DEF := 30, Sentinel := 0, and if `v12 > 50` set the "who speaks" word and play scene 1. Then (always, on this branch) `v12 := GetRandomValue() mod 100`.
+
+So each non-lethal hit event on a brother costs **one draw from the shared script stream (stream 2)** [note: re-ffx-ai-yunalesca-bfa.md 1.2]; `v12 > 50` is true for residues 51 to 99, 48.97 percent of draws [note: re-ffx-ai-seymour.md 1.3]; the first release before any draw sees `v12 = 200` and always plays the scene. The scene is a line of dialogue only (no stat effect). [bytes]
+
+Neither script uses `findMatchingChr` with more than one candidate (the Lancet part reads the last attacker, one candidate), so **no stream-4 target draw happens**; every action target is fixed (actor 3 or Self or the monster group). The only RNG in the whole AI is the stream-2 draw above, and it changes nothing but a dialogue scene. [bytes] / [inferred for the stream numbering of the candidate rule]
+
+onDeath: Targetable := 0 for the dying brother. Rewards are paid by the engine's death routine per dead monster (section 2).
+
+### 5.8 Dialogue scenes (what they do to the battle)
+
+The formation script holds scenes 0 to 4 for the brothers as functions 2 to 6 of its scene worker (called by `runBtlSceneB`): 0 half-HP line, 1 release of the defence swap, 2 partner-died line (sets the "partner-died scene played" word), 3 and 4 the final lines. Each scene pauses the battle clock (`btlWait`), hides the battle status, plays voice and optional subtitles, and restarts the clock (`btlOn`). A scene call is ignored while another scene runs [note: re-ffx-ai-seymour.md 1.4]. None changes a stat, a status or a turn. The opening scene (battle-start hook) is the stat setup of section 3 behind the brothers' two opening lines. [bytes]
 
 ## 6. The move rows the two scripts use (d)
 
@@ -163,3 +253,32 @@ Consequences, all from the scripts' own gates [bytes]:
 - The half-HP action only happens if the **brother is still alive** when the Ronso first drops below half (section 5.2). If the brother dies first, the pending half-HP flag is overwritten and the Rage is **never offered**. To learn Mighty Guard the player must get Biran below half max HP while Yenke lives, wait for Biran's next turn, and Lancet him afterwards; White Wind mirrors this for Yenke.
 - Biran's script also writes 0 to the learned-move word at the start of its event-7 function (section 5.1); Yenke's does not. Either way the value is rewritten on every Lancet. [bytes]
 - Each Rage a brother can offer is also on other fiends' lists [note: FFX-G09 4.1] (for example Dark Flan and Spirit teach White Wind through their own files).
+
+## 8. Comparison with what the repo already says
+
+The repo holds **no HP, stat, loot or AI numbers for Biran or Yenke** (no `src/data` row; the research notes mention them only as Ronso Rage teachers and as the lead-in to the Flux fight), so there is nothing to compare for sections 2 to 5; a wiki-based set of rows built elsewhere should be re-pinned to sections 2 to 5 of this note. The Rage rows and teacher lists the repo does state:
+
+| Claim in the repo | Game files (this note) | Verdict |
+|---|---|---|
+| Fire Breath: row 105, rank 3, all enemies, Special Magic (MAG cube, ignores MDef), power 24, Fire; teachers incl. Yenke (`ffx-combat-core.md` 5.8) | command row 0x3069: rank 3, single + enemy-side + multi, formula 15, power 24, Fire; Yenke offers it 2nd | agree |
+| Self-Destruct: row 107, HP formula, 30, rank 3; Biran teaches it | formula 16 (user max HP), power 30, rank 3; Biran offers it 3rd | agree (the "Kimahri is Ejected" part not re-checked here) |
+| Thrust Kick: row 108, Strength, 33, plain damage; Biran | formula 1, power 33, rank 3; Biran 2nd | agree |
+| Stone Breath: row 109, all enemies, Petrify at 254; Yenke | Petrify chance 254, formula 1, power 0, multi; Yenke 4th | agree |
+| Aqua Breath: row 110, Special Magic 26, Water; Yenke | formula 15, power 26, Water; Yenke 3rd | agree |
+| Doom: row 111, applies the Doom flag; Biran | extra-status word 0x4000 (Doom); Biran 4th | agree |
+| Mighty Guard: row 114, rank 4, Protect + Shell 254 + one charge of each Nul; Biran, and only after Biran has used it (`ffx-seymour-flux.md` 6.1) | Shell and Protect 254 / 254, four Nuls 254 chance with duration 1; Biran offers it first, gated on his own half-HP Mighty Guard | agree |
+| White Wind: row 112, Healing 40, rank 3, "learn from Dark Flan, Spirit" (`ffx-combat-core.md` 5.8) | formula 7, power 40, rank 3; **Yenke also teaches it**, first, gated on his own half-HP White Wind | row agrees; **the combat-core teacher list differs** (it omits Yenke; `ffx-seymour-flux.md` 6.1 already has him) |
+| Learning a Rage fills Kimahri's gauge (`ffx-combat-core.md` 5.8, `ffx-seymour-flux.md` 7.9) | same [note: FFX-G09 3.3] | agree |
+| Engine rule 5 of AGENTS.md: "only physical attacks roll"; monsters' physical moves roll | Bulldoze (physical) carries accuracy formula 0, which always hits [note: re-ffx-commands.md] | **differs** if the battle engine rolls a monster's physical move by default: Bulldoze must be read as "cannot miss" |
+| Ronso Rage rows cost "a full gauge" | all eight Rages are Overdrive-class with a cost of 100; the brothers pay it by writing their gauge to 100 first | agree (mechanism is new) |
+
+## 9. What is not proved, and what would prove it
+
+1. **No hook was run.** The two AI programs were read and the decisive stretches re-read against raw opcodes, not executed. A run in the earlier lanes' small Atel interpreter (mock Kimahri, 4-step and 3-step cycles, the half-HP and partner-dead arming, the learn priority, the defence swap with and without the property-gate quirk) would turn every [bytes] AI line into a run result.
+2. **The property-gate quirk (5.6)** rests on the executable's resolver bytes and on the claim that Tidus's Chr record has a non-zero max HP in this fight (the set-up loop initialises every party slot from the save). A run of the real property getter on a Chr array built by that set-up, or a recorded fight, would prove it. If Tidus's slot read zero, the counter would be dead for Kimahri's Attack too.
+3. **Event 7** (Biran only): what raises it and when, relative to the action. It matters only for the Berserk side swap and for clearing the learnable word.
+4. **Start side.** That both brothers start on Area 0 (the positions in section 4) is inferred from the scripts; the Area property's initial value was not read.
+5. **Clamps** on the property writes of section 3 (max HP caps, stat byte range), and the exact stats the script reads from Kimahri (his current battle STR, MAG, AGI including gear and boosts, and his current HP at that moment).
+6. **Flag word bits** 0x400 and 0x20000 of 0x20401, the battle-end result that produces end type 3, the stage used by a scripted launch of formation 10, and the dialogue-scene wait lengths: not decoded.
+7. **Turn order and first actor**: not traced (CTB initial values, the Slow/Haste effect on the cycle, and which brother acts first). Biran is faster than Yenke by 4 AGI points at the start by the formation's writes.
+8. The unmapped record fields are listed raw in section 2 (+0x00 to +0x13, +0x78 to +0x7F, loot +0x110 and +0x111).
