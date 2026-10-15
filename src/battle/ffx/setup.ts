@@ -30,6 +30,7 @@ import { startAutoStatuses } from './adapt/auto-status.ts';
 import { stockAfter } from './adapt/bag.ts';
 import { rebuildCarriedPools, refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
+import { spendEntryDraws } from './adapt/entry.ts';
 import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
 import { applySinSetups } from './ai/sin-setup.ts';
@@ -366,6 +367,7 @@ export function buildBattle(
     if (c) startAutoStatuses(ctx, c);
   }
 
+  spendEntryDraws(ctx, group.id); // the game's two draws before the opening counters: the start-type roll (stream 1, discarded) and the placement shuffle of linked monsters [adapt/entry.ts; RC8, FFX only]
   seedInitialCtb(ctx, setup.condition ?? 'normal');
   applyPossessionOpening(ctx); // the possession fights' and Yu Yevon's opening counters [ai/possession-setup.ts]
   // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.

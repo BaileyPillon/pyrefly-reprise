@@ -8,6 +8,8 @@
  * | Roll | Stream | Source |
  * |---|---|---|
  * | damage variance, critical roll, Escape, the opening CTB | the roller's own, mode 0: party slot + 20, every aeon and party slot 7: 27, a monster slot + 8 (28 to 35) | `re-ffx-rng-hit.md` 2 |
+ * | the battle's start-type roll: one draw in every battle, spent and discarded (re-parity RC8, FFX only) | 1, `& 0xFF` | `re-ffx-battle-entry.md` 1; `adapt/entry.ts` |
+ * | the placement shuffle of linked monsters: 2n draws for each group of n, before the opening counters (RC8, FFX only) | each member's own mode 0 stream, the monster slot + 8 (28 to 35) | `re-ffx-battle-entry.md` 2; `adapt/entry.ts` |
  * | the hit-or-evade roll | the user's mode 1 (+ 16) | same |
  * | status infliction, extra statuses, shatter, Threaten | the user's mode 2 (+ 32) | same |
  * | steal success and amount | 10; the rare slot 11 (loot and drops are the engine's own model, on `BattleRng.aux`) | `re-ffx-rng-hit.md` 2 |
@@ -32,6 +34,8 @@ import { slotOf } from './slots.ts';
 
 /** The streams that do not depend on a character (`research/re-ffx-rng-hit.md` section 2, and the lane notes named there). */
 export const FfxStream = {
+  /** The battle's start-type roll (VA 0x0078d090): one draw, `value & 0xFF`, in every battle; the engine spends it and discards the answer (RC8 lane FFX-L). */
+  StartType: 1,
   /** A script's `GetRandomValue()`: `value & 0xFFFF`. */
   Script: 2,
   /** A script's `findMatchingChr` pick, and the target of a forced (Berserk, Confuse) single-target action: `value % count`. */

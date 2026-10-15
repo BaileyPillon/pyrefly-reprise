@@ -75,7 +75,10 @@ export function gaugeOnTurn(ctx: Ctx, actor: FFXCombatant): void {
   commitOd(ctx, f, (c) => modeCause(c, 'aeon-turn'));
 }
 
-/** The battle was won: every party member in the battle, dead or not, runs the Victor counter. */
+/**
+ * The battle ended, **whatever the result** (the game calls the hook for every result 1 to 5, `research/re-ffx-battle-entry.md` section 3; re-parity RC8, FFX only):
+ * every party member in the battle, dead or not, runs the Victor counter, and a Victor who is alive, free of Curse and not Petrified gains 20.
+ */
 export function gaugeOnVictory(ctx: Ctx): void {
   const f = odFieldOf(ctx);
   odOnVictory(f.w);
