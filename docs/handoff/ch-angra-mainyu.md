@@ -14,7 +14,7 @@ Bailey adopted the chapter on 2026-10-07 (D-536, "Angra Mainyu (FFX-2, the Bikan
 
 ## 2. What it is
 
-One formation, one link, no chain: **Angra Mainyu** (the body, bestiary #175, Lv 47, 333,444 HP) and its two arms as **parts**, **Zarich** (the left arm, #177, Lv 36, 5,440 HP) and **Tawrich** (the right arm, #176, Lv 38, 5,440 HP). The party is the Chapter V preset carried over (Yuna White Mage 46, Rikku and Paine Dark Knight 48 and 50: `[estimate]`, see section 6). The fight cannot be fled.
+One formation, one link, no chain: **Angra Mainyu** (the body, bestiary #175, Lv 47, 333,444 HP) and its two arms as **parts**, **Zarich** (the left arm, #177, Lv 36, 5,440 HP) and **Tawrich** (the right arm, #176, Lv 38, 5,440 HP). The party is the Chapter V preset carried over (Yuna White Mage 46, Rikku and Paine Dark Knight 48 and 50: `[estimate]`), **raised by 20 levels in release candidate r49-rc (66 / 68 / 70; section 6)**. The fight cannot be fled.
 
 | | |
 |---|---|
@@ -103,7 +103,7 @@ Also open, and ours rather than the note's: the Reflect line (the wiki says the 
 
 **At the sourced Chapter V preset the guide's line wins none of 240 fights, at any pace, with or without action time**, and the naive line is dead inside a minute (the first Flame took two girls on the seeds I read). This is the plain result and it is **not tuned**: no boss number moved. Why it loses, from the runs: the body has 333,444 HP and a Darkness does about 1,800 to 2,200 to each body, so the body falls to roughly 150 to 190 casts; each cast costs the caster a quarter of her maximum HP; the arms (5,440 HP) die to a few Darknesses and the body raises each with Full-Life (24 times in a mean seven-minute loss), so most of the body's turns go on that and the damage on the arms never counts; and the Flame, ten strikes at 3/16 of maximum HP with the chain, is a level-independent percentage that kills any girl who takes four of them.
 
-**The one option the measurements hand to Bailey:** a raise of the preset's three levels, **OFF (0)**: `ANGRA_MAINYU_LEVEL_BONUS` in `data/ffx2/builds/angra-mainyu.ts` (the advisor line, bench speed, action time on):
+**The one option the measurements handed to Bailey, now ON at +20 in release candidate r49-rc:** a raise of the preset's three levels, `ANGRA_MAINYU_LEVEL_BONUS` in `data/ffx2/builds/angra-mainyu.ts` (the table measures each raise from the sourced preset itself, `farplaneBuild`; the advisor line, bench speed, action time on):
 
 | raise | levels | wins | minutes (all fights) | girl KOs |
 |---|---|---|---|---|
@@ -112,7 +112,28 @@ Also open, and ours rather than the note's: the Reflect line (the wiki says the 
 | +20 | 66 / 68 / 70 | 18/20 | 7.09 | 2.50 |
 | +30 | 76 / 78 / 80 | 20/20 | 4.66 | 0.95 |
 
-**Nothing is raised.** No source gives a level for the mission (the research and the RE note hold no party number), so **the sourced preset stays the default and the raise is an `[estimate]` for Bailey to set** (never from a guess of ours). The girls' stats are a function of dressphere and level alone, so a raise changes nothing else.
+**The raise is ON: +20, Lv 66 / 68 / 70, the driver's delegated pick** under Bailey's standing word to take all the recommendations (recorded as Bailey's item 78a; the lane measured 18 of 20 wins with the advisor's line at +20 and none of 240 at the Chapter V preset). **Party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away** (`ANGRA_MAINYU_LEVEL_BONUS = 0`). No source gives a level for the mission (the research and the RE note hold no party number), so the raise is an `[estimate]` and Bailey's to keep or to take back. The girls' stats are a function of dressphere and level alone, so a raise changes nothing else.
+
+**Why the sourced preset loses, and what the raise buys (the RE session's explanation, from the game's own rows at the estimated Lv 46 / 48 / 50):** survival is the whole problem. Perdition's Flame does about 6,657 per cast against about 14,000 total party HP, Flare one-shots an unshelled Yuna or Rikku, and Full-Life revives the arms 14 to 28 times. The +20 option won in 387 s and 427 s.
+
+**The shipped party measured again** (the same bench, 20 seeds a cell, on the r49-rc tree, the party at +20 as it ships; the +20 row above and this table agree where they overlap, and every row of the sourced-preset table above came out the same on this tree, so the merge with Biran and Yenke moved no FFX-2 number):
+
+| line | mode | wins | minutes | body actions | Flames | Osmoses | Full-Lifes | arm KOs | girl KOs | losses |
+|---|---|---|---|---|---|---|---|---|---|---|
+| advisor | bench (0 ms), action time on | 18/20 | 7.09 | 48.75 | 3.50 | 0.00 | 40.25 | 41.30 | 2.50 | 2 |
+| advisor | bench (0 ms), action time OFF | 20/20 | 3.81 | 37.65 | 3.05 | 0.00 | 29.65 | 30.50 | 0.90 | 0 |
+| advisor | Wait split 1.5 s, action time on | 16/20 | 8.47 | 58.75 | 3.95 | 0.00 | 45.90 | 46.95 | 4.10 | 4 |
+| advisor | Wait split 1.5 s, action time OFF | 17/20 | 4.57 | 47.40 | 3.75 | 0.00 | 33.80 | 34.80 | 3.15 | 3 |
+| advisor | Active 1.5 s, action time on | 1/20 | 9.18 | 63.20 | 5.00 | 0.00 | 36.60 | 36.85 | 12.25 | 19 |
+| advisor | Active 1.5 s, action time OFF | 2/20 | 4.41 | 44.95 | 4.05 | 0.00 | 22.40 | 22.70 | 8.65 | 18 |
+| naive | bench (0 ms), action time on | 0/20 | 1.02 | 6.25 | 1.35 | 0.00 | 2.35 | 2.50 | 3.75 | 20 |
+| naive | bench (0 ms), action time OFF | 0/20 | 0.76 | 6.55 | 1.30 | 0.00 | 2.50 | 2.65 | 3.75 | 20 |
+| naive | Wait split 1.5 s, action time on | 0/20 | 1.02 | 6.30 | 1.35 | 0.00 | 2.70 | 2.90 | 3.60 | 20 |
+| naive | Wait split 1.5 s, action time OFF | 0/20 | 0.68 | 5.75 | 1.20 | 0.00 | 1.70 | 1.75 | 3.65 | 20 |
+| naive | Active 1.5 s, action time on | 0/20 | 0.93 | 5.75 | 1.30 | 0.00 | 1.55 | 1.80 | 3.95 | 20 |
+| naive | Active 1.5 s, action time OFF | 0/20 | 0.60 | 5.05 | 1.20 | 0.00 | 1.05 | 1.10 | 3.55 | 20 |
+
+**What that says about the shipped raise, plainly:** at bench speed the guide's line wins 18 of 20 (20 of 20 without the 3 s window) and on the Wait-split clock at 1.5 s a menu 16 of 20, **but on the Active clock at 1.5 s a decision it wins 1 of 20** (2 of 20 without the window; 12.25 girl KOs a fight against 2.50 at bench speed); the naive line still wins none anywhere. So +20 makes the fight winnable by the advisor's line at a patient pace, not at a quick one; a further raise (+30 wins 20 of 20 at bench speed) is the other measured option, and the sourced preset the other end.
 
 **The party preset is the nearest existing FFX-2 chapter's, in story order:** Jegged's Chapter 5 walkthrough runs Djose Temple, then the Bikanel Desert, then Bevelle, and the hidden Experiment (the Chapter 5 mission at Djose Temple) uses **the Chapter V preset** (`builds/farplane.ts`, Yuna White Mage 46, Rikku and Paine Dark Knight 48 and 50, the Experiment's `buildRef`). It sits inside the Chapter 5 level band (43 to 52) against the body's Lv 47. A deep copy, so no chapter's preset can mutate another's.
 
@@ -143,7 +164,7 @@ Shared files touched (all additive; `docs/CONTRACT-CHANGES.md`, newest entry on 
 ## 9. Open points for Bailey and the driver
 
 1. **Listing**: the chapter stays hidden until Bailey says. Listing is a record move (into `CHAPTERS` and `CHAPTER_IDS`, removing `experimental`), a number and a numeral, plus the board's card art.
-2. **The difficulty and the level option** (section 6): the guide's line wins none at the sourced preset. Bailey's call: leave the fight as the game's rows make it, or set `ANGRA_MAINYU_LEVEL_BONUS` (+20 wins 18 of 20 in about 7 minutes).
+2. **The difficulty and the level option** (section 6): the guide's line wins none at the sourced preset. **The raise ships ON at +20 in release candidate r49-rc** (the driver's delegated pick, item 78a; the guide's line wins 18 of 20 at bench speed in about 7 minutes, 16 of 20 on the Wait-split clock, and **1 of 20 on the Active clock at 1.5 s a decision**). Bailey's call: keep it, or set `ANGRA_MAINYU_LEVEL_BONUS` back to 0 for the sourced preset.
 3. **Action time** (3 s) kept by precedent, awaiting his pick.
 4. **The three paintings and the plate are provisional picks of ours**, not Bailey's; the arms have an idle painting only; music by ear, existing cues only.
 5. **The unproved points** in section 5, above all the ending (the arms standing when the body falls) and the arms' immunities.
@@ -175,6 +196,6 @@ After the fixes the 30 guide and stream files (390 tests), the 19 scene, chapter
 
 ## 11. For the driver: NOW.md line and release notes
 
-NOW.md (suggested): "Angra Mainyu (hidden FFX-2 chapter, typed word `angra` on the board, number 26 `EXP`): built on branch `ch-angra-mainyu`, pushed; the game's own rows 268 to 270 and scripts m268 to m270 (RE note 2026-10-14), one fight, the Chapter V party carried over; **the guide's line wins 0 of 240 fights at the sourced preset** (a measured option raises the levels, off); art provisional (new local paintings, nothing replaced); not merged, not deployed; the unproved points and the inferred constants are in `docs/handoff/ch-angra-mainyu.md`."
+NOW.md (suggested): "Angra Mainyu (hidden FFX-2 chapter, typed word `angra` on the board, number 26 `EXP`): built on branch `ch-angra-mainyu`, pushed; the game's own rows 268 to 270 and scripts m268 to m270 (RE note 2026-10-14), one fight, the Chapter V party carried over; **the guide's line wins 0 of 240 fights at the sourced preset** (the measured option that raises the levels by 20 is ON in release candidate r49-rc: 18 of 20 at bench speed, a party-side estimate, the boss rows untouched, the preset one constant away); art provisional (new local paintings, nothing replaced); merged into r49-rc, not deployed; the unproved points and the inferred constants are in `docs/handoff/ch-angra-mainyu.md`."
 
 CHANGELOG (FFX-2 only): in the file (an entry at the top, "not live"). Ledger rows are the driver's: the word (`angra`), the party-level estimate, the level option, the art picks (provisional), the action-time carry.

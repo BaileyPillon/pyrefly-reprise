@@ -42,7 +42,7 @@ Nothing was downloaded and no image was saved.
 | Which arm is which | Zarich is the left arm and Tawrich the right (Jegged; the Zarich page; the Angra page's order of "Tawrich ... and Zarich" names no side). The Tawrich page calls Zarich "the right arm" once. | `[conflict]` §7, resolved: Zarich left |
 | Before Chapter 5 | The same fiend roams the dig areas, invisible but for the minimap, where it does not attack and its arms cannot be targeted; it ejects the party with Unnatural Selection after 53 seconds or at a set HP. **Not this chapter.** | `[single source]` (wiki) |
 | Music | The battle theme "Aeons" plays in the fight (also the Anything Eater and Humbaba bosses). | `[single source]` (wiki, OST page) |
-| The party's level | **No source gives one.** The mission is mid-Chapter 5; the Chapter 5 party band is 43 to 52, and the project's Chapter V preset is Lv 46 / 48 / 50 (`src/data/ffx2/builds/farplane.ts`, used for the Experiment, which is also a Chapter 5 mission). | `[estimate]` |
+| The party's level | **No source gives one.** The mission is mid-Chapter 5; the Chapter 5 party band is 43 to 52, and the project's Chapter V preset is Lv 46 / 48 / 50 (`src/data/ffx2/builds/farplane.ts`, used for the Experiment, which is also a Chapter 5 mission). **Release candidate r49-rc ships the party raised by 20 levels (66 / 68 / 70)**, the driver's delegated pick: a party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away (`ANGRA_MAINYU_LEVEL_BONUS` in `src/data/ffx2/builds/angra-mainyu.ts`). | `[estimate]` |
 
 ---
 
@@ -113,7 +113,7 @@ Zarich: Glimmer of Despair, and elemental magic now and then. Tawrich: Punch and
 
 ## 5. The party and what the guides say
 
-- **Party:** Yuna, Rikku and Paine. No level, dresspheres or bag is sourced; Chapter 5 band 43 to 52 (`research/ffx2-vegnagun-shuyin.md` §6), preset Lv 46 / 48 / 50. `[estimate]`
+- **Party:** Yuna, Rikku and Paine. No level, dresspheres or bag is sourced; Chapter 5 band 43 to 52 (`research/ffx2-vegnagun-shuyin.md` §6), preset Lv 46 / 48 / 50, shipped in release candidate r49-rc raised by 20 levels (66 / 68 / 70: a party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away). `[estimate]`
 - **Jegged's first answer:** one girl heals (an Alchemist with Mega-Potions, or a White Mage with Curaga), the other two are Dark Knights. Their Darkness is neither physical nor magical ("special damage"), so it reaches **all three bodies**, ignoring the arms' immunities; they take less damage because of their Defense. Use it again and again on the arms and let the body spend its turns reviving and healing them. `[single source]`
 - **Jegged's second answer:** drain the body's MP (a Gunner's Target MP, a Samurai's Magicide, a Thief's Pilfer MP, a Gun Mage's Absorb) and keep the party's MP low too, so the body falls into Osmose. `[single source]`; the wiki adds Soul Springs and Mana Springs, a Lady Luck's Item Reels, a Songstress's Sing against stat loss and the Warrior's Magic Break, and strategies built on two Berserkers and a Gun Mage, `[single source]`.
 - **Gear:** protect against Poison, Silence and Darkness; the Ribbon helps (Jegged). `[single source]`
@@ -134,7 +134,7 @@ No source in this note describes the body in words beyond "a unique design" and 
 4. **Bio:** on the wiki's list for the body, not on Jegged's order of moves. **Left out** of the first build.
 5. **The 15-turn clock and the 7-turn repeat** are one source; the game's script settles them.
 6. **Accuracy, Evasion, the arms' missing defence, the hit rule of each move, the arms' odds** are in no source read.
-7. **The level** the party fights it at is an `[estimate]`.
+7. **The level** the party fights it at is an `[estimate]`: the Chapter V preset's 46 / 48 / 50, raised by 20 in release candidate r49-rc (a party-side estimate; the boss rows are untouched; the preset is one constant away).
 
 ---
 

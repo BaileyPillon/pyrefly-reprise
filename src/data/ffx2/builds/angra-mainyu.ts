@@ -12,21 +12,25 @@
  *
  * It is a deep copy, so no chapter's preset can ever mutate another's. **Measured, not tuned** (`tests/unit/chapters/angra-mainyu-bench.test.ts`): if Bailey wants the fight easier or harder the honest options are a
  * measured round with different levels, never boss numbers (`boss-side-fix-needs-measured-options`).
+ *
+ * **Release candidate r49-rc ships the raise ON (+20: Lv 66 / 68 / 70), the driver's delegated pick** under Bailey's standing word to take all the recommendations (recorded as Bailey's item 78a, 2026-10-15). It is a
+ * **party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away** (`ANGRA_MAINYU_LEVEL_BONUS = 0`).
  */
 
 import type { FFX2PartyBuild } from '../../../battle/common/types.ts';
 import { farplaneBuild } from './farplane.ts';
 
 /**
- * **The one option the measurements hand to Bailey: a raise of the preset's three levels, OFF (0).** At the preset as it stands (Lv 46 / 48 / 50) the shipped advisor line (`../../../engine/tactics/ffx2-angra-mainyu.ts`) wins
- * **0 of 20 seeds**; the numbers by raise, with the action time on, 20 seeds each (`tests/unit/chapters/angra-mainyu-bench.test.ts`, `docs/handoff/ch-angra-mainyu.md` §4): +10 wins 7 of 20, +20 wins 18 of 20
- * (about 7 minutes), +30 wins 20 of 20 (about 5). **Nothing is raised**: no source gives a level for the mission (the driver's rule, 2026-10-14: never invent levels), so the sourced preset stays the default and
- * this constant is an `[estimate]` for Bailey to set if he wants the fight winnable by the advisor's line. The girls' stats are a function of dressphere and level only (`research/ffx2-combat-core.md` §5.1), so the
- * raise changes nothing else; a level never goes above 99.
+ * **The one option the measurements handed to Bailey: a raise of the preset's three levels, now ON at +20 (Lv 46 / 48 / 50 become 66 / 68 / 70).** At the sourced Chapter V preset as it stands the shipped advisor line
+ * (`../../../engine/tactics/ffx2-angra-mainyu.ts`) wins **0 of 20 seeds** (0 of 240 fights over every pace and line the lane measured); the numbers by raise, with the action time on, 20 seeds each
+ * (`tests/unit/chapters/angra-mainyu-bench.test.ts`, `docs/handoff/ch-angra-mainyu.md` §6): +10 wins 7 of 20, **+20 wins 18 of 20** (about 7 minutes), +30 wins 20 of 20 (about 5). No source gives a level for the mission (the
+ * driver's rule, 2026-10-14: never invent levels), so this is an `[estimate]` and it is **party-side only: the boss rows are untouched**; it makes the fight winnable by the advisor's line. The girls' stats are a function
+ * of dressphere and level only (`research/ffx2-combat-core.md` §5.1), so the raise changes nothing else; a level never goes above 99. **The Chapter V preset is one constant away**: set this to 0 and the party is the
+ * sourced preset again (the bench measures its raises from `farplaneBuild`, so its table does not move).
  */
-export const ANGRA_MAINYU_LEVEL_BONUS: number = 0;
+export const ANGRA_MAINYU_LEVEL_BONUS: number = 20;
 
-/** The Chapter V preset (the Experiment's), carried into the Bikanel Desert mission (a deep copy). */
+/** The Chapter V preset (the Experiment's), carried into the Bikanel Desert mission (a deep copy), its three levels raised by {@link ANGRA_MAINYU_LEVEL_BONUS}. */
 export const angraMainyuBuild: FFX2PartyBuild = structuredClone(farplaneBuild);
 if (ANGRA_MAINYU_LEVEL_BONUS !== 0) for (const member of angraMainyuBuild.members) member.level = Math.min(99, member.level + ANGRA_MAINYU_LEVEL_BONUS);
 

@@ -22,8 +22,13 @@ Address: none yet (branch ch-angra-mainyu 566003a1, from release candidate r48-r
   Flare, Curaga, Bio or Demi in between; Zarich saps MP and strength, Tawrich punches and breathes. Its numbers, its
   moves and its three scripts are the game's own (read from the game files: monster rows 268 to 270, the move rows,
   the start positions and the three AI scripts); the party is the Chapter V party carried over, which is an
-  estimate. **At that level the guide's line wins none of 240 measured fights, and the chapter is not tuned**: a
-  measured option that raises the girls' levels is there and is off (+20 levels wins 18 of 20).
+  estimate. **At that level (46 / 48 / 50) the guide's line wins none of 240 measured fights, and the boss is not
+  tuned**: the girls' three levels are raised by 20 (66 / 68 / 70), the one measured option, now on. It is a
+  party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away. With it the guide's line
+  wins 18 of 20 measured fights at bench speed and 16 of 20 at a patient menu pace, but 1 of 20 on the Active clock at
+  1.5 seconds a decision, so the fight stays hard for a quick player. Why it loses without the raise: survival is the
+  whole problem (Perdition's Flame does about 6,657 a cast against about 14,000 total party HP, Flare one-shots an
+  unshelled Yuna or Rikku, and Full-Life revives the arms 14 to 28 times).
 - **FFX-2, art and sound (provisional):** the fiend and its two arms are new paintings drawn locally for this
   chapter, on a new desert backdrop: dunes, a buried arch, a dug-in camp and a mesa under a bright sky. None of it is
   Bailey's pick and no approved painting was replaced; none of the three has a hurt or knocked-out painting. The

@@ -15,7 +15,8 @@
  * when its own runs low; Zarich casts and saps, Tawrich punches and breathes. **The fight ends when the body falls**, the arms standing or not. No second act, no prep tab, no dial. The chapter's attempts, clears and time
  * go to the experiments' own store (`experimental: true`), never `pyrefly-reprise:save:v1`.
  *
- * - `buildRef` — the Chapter V preset carried over (`./ffx2/builds/angra-mainyu.ts`): the Experiment's, the nearest chapter in story order (`[estimate]`: no source gives a level for the mission).
+ * - `buildRef` — the Chapter V preset carried over (`./ffx2/builds/angra-mainyu.ts`): the Experiment's, the nearest chapter in story order (`[estimate]`: no source gives a level for the mission), **with its three levels raised
+ *   by 20 in release candidate r49-rc** (a party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away: `ANGRA_MAINYU_LEVEL_BONUS`).
  * - `enemyGroupRef` — the three bodies, the game's rows (every field tagged in `./ffx2/enemies/angra-mainyu*.ts`).
  * - `sceneKey` — the Bikanel Desert on a provisional plate (`../scenes/angra-mainyu-desert.ts`); the painting is a new file in the art mirror.
  * - `scriptsRef` — the story (`../story/scripts/ffx2-angra-mainyu.ts`): our own words over the sourced beats.

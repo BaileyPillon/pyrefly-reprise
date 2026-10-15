@@ -1,6 +1,8 @@
 /**
  * Angra Mainyu (FFX-2 Chapter 5, the hidden chapter): the bench. **FFX-2 only** [AGENTS.md rule 14]. **Measure, never tune**: no boss number moves here (rule 6; `boss-side-fix-needs-measured-options`); a result
- * goes to Bailey. The party is the Chapter V preset (Yuna 46, Rikku 48, Paine 50: `[estimate]`, the Experiment's, `src/data/ffx2/builds/angra-mainyu.ts`: no source gives the mission's levels). The three bodies run on
+ * goes to Bailey. The party is the Chapter V preset (Yuna 46, Rikku 48, Paine 50: `[estimate]`, the Experiment's, `src/data/ffx2/builds/angra-mainyu.ts`: no source gives the mission's levels), **which ships raised by 20 levels
+ * since release candidate r49-rc** (66 / 68 / 70: a party-side estimate, the boss rows untouched, the Chapter V preset one constant away). The first two tables below are the shipped party; the raise table measures from `farplaneBuild`, the
+ * sourced preset itself. The three bodies run on
  * the game's own rows and scripts (`research/re-ffx2-angra-mainyu.md`).
  *
  * The model is the one the other benches use: bench speed is zero decision time; human speed is the live default, **Wait split**, 1.5 s a menu (0.5 s on the top-level list with the clock running, 1.0 s inside a
@@ -18,6 +20,7 @@ import { describe, expect, it } from 'vitest';
 import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 import { ANGRA_MAINYU_ACTION_TIME_ON, ANGRA_MAINYU_ACTION_TIME_SECONDS } from '../../../src/data/ffx2/enemies/angra-mainyu.ts';
 import { ANGRA_MAINYU_LEVEL_BONUS, angraMainyuBuild } from '../../../src/data/ffx2/builds/angra-mainyu.ts';
+import { farplaneBuild } from '../../../src/data/ffx2/builds/farplane.ts';
 import { ANGRA_ABILITY as A } from '../../../src/battle/ffx2/ai/angra-mainyu.ts';
 import { driveAngra, type AngraDriveOptions, type AngraLine, type AngraRun } from '../helpers/angraMainyuDrive.ts';
 
@@ -55,9 +58,10 @@ const row = (label: string, mode: string, t: Tally): string =>
 const HEAD = '| line | mode | wins | minutes | body actions | Flames | Osmoses | Full-Lifes | arm KOs | girl KOs | losses |\n|---|---|---|---|---|---|---|---|---|---|---|';
 
 describe('the shipped defaults', () => {
-  it('the sourced preset ships: no level is raised, and the 3 s window is on by precedent (awaiting Bailey\'s pick)', () => {
-    expect(ANGRA_MAINYU_LEVEL_BONUS).toBe(0);
-    expect(angraMainyuBuild.members.map((m) => [m.id, m.level])).toEqual([['yuna', 46], ['rikku', 48], ['paine', 50]]);
+  it('the Chapter V preset ships raised by 20 levels (r49-rc: the driver\'s delegated pick, a party-side estimate), and the 3 s window is on by precedent (awaiting Bailey\'s pick)', () => {
+    expect(ANGRA_MAINYU_LEVEL_BONUS).toBe(20);
+    expect(angraMainyuBuild.members.map((m) => [m.id, m.level])).toEqual([['yuna', 66], ['rikku', 68], ['paine', 70]]);
+    expect(farplaneBuild.members.map((m) => [m.id, m.level]), 'the preset itself is the sourced 46 / 48 / 50').toEqual([['yuna', 46], ['rikku', 48], ['paine', 50]]);
     expect(ANGRA_MAINYU_ACTION_TIME_ON).toBe(true);
     expect(ANGRA_MAINYU_ACTION_TIME_SECONDS).toBe(3);
   });
@@ -98,11 +102,11 @@ describe(`Angra Mainyu: ${SEEDS} seeds, advisor and naive, three paces, action t
 });
 
 describe('the one option: a raise of the preset\'s three levels (advisor line, bench speed, action time on)', () => {
-  it('measures +0, +10, +20 and +30 levels, and more levels never win less often', () => {
+  it('measures +0, +10, +20 and +30 levels from the sourced Chapter V preset (46 / 48 / 50, not the shipped +20), and more levels never win less often', () => {
     const wins: number[] = [];
     const rows: string[] = [];
     for (const raise of [0, 10, 20, 30]) {
-      const build = structuredClone(angraMainyuBuild);
+      const build = structuredClone(farplaneBuild);
       for (const m of build.members) m.level = Math.min(99, m.level + raise);
       const t = measure('advisor', { build });
       wins.push(t.wins);

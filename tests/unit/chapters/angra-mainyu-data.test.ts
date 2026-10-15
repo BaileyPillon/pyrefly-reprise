@@ -495,10 +495,15 @@ describe('the group, the party and the chapter', () => {
     expect([...ANGRA_MAINYU_BODY_IDS]).toEqual([X2_ANGRA_MAINYU_ID, X2_ZARICH_ID, X2_TAWRICH_ID]);
   });
 
-  it('the party is the Chapter V preset (the Experiment\'s, the nearest chapter in story order): Yuna 46 White Mage, Rikku 48 and Paine 50 Dark Knights, a deep copy; no level is raised (the option is OFF)', () => {
-    expect(ANGRA_MAINYU_LEVEL_BONUS).toBe(0);
-    expect(angraMainyuBuild.members.map((m) => [m.id, m.level, m.currentDressphere])).toEqual([['yuna', 46, 'white-mage'], ['rikku', 48, 'dark-knight'], ['paine', 50, 'dark-knight']]);
-    expect(angraMainyuBuild).toEqual(farplaneBuild);
+  it('the party is the Chapter V preset (the Experiment\'s, the nearest chapter in story order) with its three levels raised by 20 (the option is ON, r49-rc): Yuna 66 White Mage, Rikku 68 and Paine 70 Dark Knights, a deep copy; the preset itself is untouched', () => {
+    expect(ANGRA_MAINYU_LEVEL_BONUS).toBe(20);
+    expect(angraMainyuBuild.members.map((m) => [m.id, m.level, m.currentDressphere])).toEqual([['yuna', 66, 'white-mage'], ['rikku', 68, 'dark-knight'], ['paine', 70, 'dark-knight']]);
+    // Nothing but the three levels differs from the Chapter V preset: the party-side estimate moves no other field, and no boss row is touched (the boss tests above read the rows themselves).
+    const raised = structuredClone(farplaneBuild);
+    for (const m of raised.members) m.level += ANGRA_MAINYU_LEVEL_BONUS;
+    expect(angraMainyuBuild).toEqual(raised);
+    // The shared preset (the Experiment's, the Fallen Aeons', Trema's, the Den of Woe's) keeps its own levels: the raise is made on the copy.
+    expect(farplaneBuild.members.map((m) => [m.id, m.level])).toEqual([['yuna', 46], ['rikku', 48], ['paine', 50]]);
     expect(angraMainyuBuild).not.toBe(farplaneBuild);
     expect(angraMainyuBuild.members[0]).not.toBe(farplaneBuild.members[0]);
     expect(FFX2_ANGRA_MAINYU.buildRef).toBe(angraMainyuBuild);
