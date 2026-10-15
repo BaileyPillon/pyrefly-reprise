@@ -72,6 +72,23 @@ export function playOne(seed: number, groupId: string, choose: (input: Input, en
   return { outcome: 'unfinished', inputs, turns: engine.state().turn, events: log(engine) };
 }
 
+/** An engine on `groupId` with the chapter's mid-battle triggers armed (the seam on `all-ko`, the Yojimbo callout). */
+export function createEngineWithTriggers(seed: number, groupId: string, triggers: BattleSetup['triggers']): ReturnType<typeof createFFXEngine> {
+  const engine = createFFXEngine({ content, autoResolveMinigames: true });
+  engine.init({ ...setup(seed, groupId), triggers });
+  return engine;
+}
+
+/** Advance to the next player input (the Dark Aeons' turns resolve on the way). */
+export function nextInput(engine: BattleEngine): Input {
+  for (let i = 0; i < 400; i++) {
+    const d = engine.nextDecision();
+    if (d.kind === 'player-input') return d;
+    if (d.kind === 'battle-over') throw new Error('the battle ended');
+  }
+  throw new Error('no player input');
+}
+
 /** The plain Attack on the first living Dark Aeon, no aeon, no potion: the careless line. */
 export function careless(d: Input, engine: BattleEngine): Command | null {
   const foes = engine.state().enemyIds.filter((id) => (engine.state().combatants[id] as FFXCombatant).alive);

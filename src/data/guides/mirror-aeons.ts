@@ -37,9 +37,9 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §4.1, §4.2; jegged-encounter-guides-ffx-b',
     },
     {
-      text: 'Mindy first, then Sandy, then Cindy. Mindy is the smallest of the three and the fastest to fall, and each sister down is one fewer to fill the joint attack.',
-      short: 'Mindy first',
-      cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2, §4.2',
+      text: 'Blades for Cindy and Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Each sister down is one fewer to fill the joint attack.',
+      short: 'Blades for Cindy, spells for Mindy',
+      cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2, §4.2',
     },
     {
       text: 'Ribbon, Auto-Haste, Auto-Phoenix and Auto-Protect do the long work: the sisters and Yojimbo land Petrify, Poison, the Breaks, Slow and Sleep. Quick Hit gets the most blows in.',
@@ -60,9 +60,10 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
 
   hints: [
     { when: { kinds: ['summon'] }, text: 'Send {target} in: the next big move lands on it, not on the party, and it keeps the party off the floor', cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §5.1' },
-    { when: { kinds: ['attack'], targetId: MINDY }, text: 'Mindy first: the smallest pool of the three. Her Passado hits many times and kills, so her turns are worth cutting short', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
+    { when: { kinds: ['attack'], targetId: MINDY }, text: 'A blade almost never finds Mindy (her Evasion is the highest of the three): use a spell, an Overdrive or an aeon on her, and keep the blades for Cindy and Sandy', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
+    { when: { labels: ['Ultima', 'Flare', 'Thundaga', 'Firaga', 'Blizzaga', 'Waterga'] }, text: 'A spell never misses: {actor} aims it at Mindy first, the sister a blade cannot touch, and her Magic Defense is lower than her Defense', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { kinds: ['attack'], targetId: SANDY }, text: 'Sandy hits hard, and her plain blow can Petrify: keep Ribbon or Stoneproof on someone', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
-    { when: { kinds: ['attack'], targetId: CINDY }, text: 'Cindy is the biggest pool: leave her for last, and keep the potions ready for her Camisade', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
+    { when: { kinds: ['attack'], targetId: CINDY }, text: 'Cindy never dodges, so a blade always lands on her: the surest target, and the biggest pool. Keep the potions ready for her Camisade', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Quick Hit'] }, text: 'Quick Hit: the fastest blow {actor} has, so the most turns before the next big move', cite: 'ffx-mirror-aeons §2, §3; jegged-encounter-guides-ffx-b' },
     { when: { kinds: ['attack'], targetId: YOJIMBO }, text: 'Dark Yojimbo dodges many physical blows (his Luck is high): keep swinging, and do not mistake a miss for a mistake', cite: 'ffx-mirror-aeons §3; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Potion', 'Hi-Potion', 'X-Potion'] }, text: 'Top {target} up: the multi-hit moves leave a member low, and a second blow would finish them', cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2' },

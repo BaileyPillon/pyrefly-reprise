@@ -43,7 +43,7 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
     { t: 'field', label: 'HP', value: '2,000,000' },
     {
       t: 'p',
-      text: 'Mindy is fast and hard to hit. Passado is a flurry that kills; Calamity inflicts Poison, Silence, Darkness, Curse and all four Breaks. Take her first.',
+      text: 'Mindy is fast, and almost impossible to hit with a blade: her Evasion is the highest of the three. Spells, Overdrives and aeons find her. Passado is a flurry that kills; Calamity inflicts Poison, Silence, Darkness, Curse and all four Breaks.',
     },
     { t: 'h3', text: 'Together and alone' },
     {
@@ -56,7 +56,7 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
       items: [
         'Wear Ribbon, Auto-Haste, Auto-Phoenix and Auto-Protect; keep Stoneproof or Ribbon on someone for Sandy.',
         "On the first turn, send an aeon in. It takes the joint attack, and your party's gauges stay where they were.",
-        'Take Mindy first, then Sandy, then Cindy. Quick Hit gets the most blows in.',
+        'Blades for Cindy (she never dodges) and Sandy; Ultima or Flare from the mage for Mindy. Quick Hit gets the most blows in.',
         'Keep an aeon in reserve for the next time all three are full, or for a lone sister\'s Mega Graviton.',
         'Heal under half strength, and revive the fallen at once.',
       ],

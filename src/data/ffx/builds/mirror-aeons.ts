@@ -8,7 +8,7 @@
  *
  * | Choice | Value | Source |
  * |---|---|---|
- * | Line-up | Tidus, Yuna, Auron on the field; Wakka, Lulu, Kimahri, Rikku on the bench | `./dreams-end.ts`'s trio, the repository's endgame party (the guides name Quick Hit (Tidus) and Auto-Life (Yuna) among the skills they ask for) |
+ * | Line-up | **Tidus, Yuna, Lulu** on the field; Auron, Wakka, Kimahri, Rikku on the bench | `./dreams-end.ts`'s seven, the repository's endgame party. **Lulu takes Auron's place because of Dark Mindy:** her Evasion is 240 (RE section 2), and the engine lands 0 of 55 physical blows of this party on her (measured, `docs/handoff/ch-mirror-aeons.md`); a spell never misses (GamerGuides and StrategyWiki both send a mage: Doublecast Flare or Ultima). The guides also name Quick Hit (Tidus) and Auto-Life (Yuna) among the skills they ask for |
  * | Stats | every member at the caps: HP 9,999, MP 999, the seven other stats 255 | Jegged Stat Maxing (the caps), GamerGuides ("250 to 255 by now"), StrategyWiki ("maxed out stats") `[estimate]` |
  * | Luck | `ENDGAME_LUCK` = 60 | Jegged: raise it as far as is reasonable, it is "not required"; no source gives a number `[estimate]` |
  * | Armour | Auto-Haste, Auto-Phoenix, Auto-Protect, Ribbon on all seven | Jegged Best Armor: Auto-Haste and Auto-Phoenix "must have", Auto-Protect and Ribbon "strong" `[estimate]` |
@@ -60,8 +60,8 @@ export const ENDGAME_WEAPONS: Readonly<Record<string, readonly AutoAbilityId[]>>
   rikku: ['break-damage-limit', 'strength-20', 'strength-10', 'strength-5'],
 };
 
-/** The skills the guides ask for that Dream's End withholds: Quick Hit (Tidus), Auto-Life (Yuna) (StrategyWiki's preparation lists). */
-const EXTRA_SKILLS: Readonly<Record<string, readonly string[]>> = { tidus: ['quick-hit'], yuna: ['auto-life'] };
+/** The skills the guides ask for that Dream's End withholds: Quick Hit (Tidus), Auto-Life (Yuna) (StrategyWiki's preparation lists), and Lulu's Flare and Ultima (the guides' answer to a high-Evasion Dark Mindy; Dream's End withholds both). */
+const EXTRA_SKILLS: Readonly<Record<string, readonly string[]>> = { tidus: ['quick-hit'], yuna: ['auto-life'], lulu: ['flare', 'ultima'] };
 
 function endgameMember(m: FFXMemberBuild): FFXMemberBuild {
   const out = structuredClone(m);
@@ -110,8 +110,8 @@ function endgameAeons(): AeonBuild[] {
 export const mirrorAeonsBuild: FFXPartyBuild = {
   game: 'ffx',
   members: dreamsEndBuild.members.map(endgameMember),
-  activeSlots: ['tidus', 'yuna', 'auron'],
-  reserve: ['wakka', 'lulu', 'kimahri', 'rikku'],
+  activeSlots: ['tidus', 'yuna', 'lulu'],
+  reserve: ['auron', 'wakka', 'kimahri', 'rikku'],
   aeons: endgameAeons(),
   inventory: dreamsEndBuild.inventory.filter((e) => e.itemId !== 'candle-of-life').map((e) => ({ ...e })),
   gil: ENDGAME_GIL,
