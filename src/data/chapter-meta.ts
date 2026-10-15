@@ -40,21 +40,13 @@ import { ISAARU_META } from './chapter-meta-isaaru.ts';
 import { SIN_CHAPTER_META } from './chapter-meta-sin.ts';
 
 /**
- * The pause screen's objective rule vocabulary. Each rule is a pure
- * descriptor — small, serialisable, and meant to be evaluated by the pause
- * screen against a live `BattleState` (see `docs/handoff/pause-screen.md`
- * for the evaluator contract). This module only *describes* objectives; it
- * does not evaluate them, so it has no dependency on `BattleState` itself.
+ * The pause screen's objective rule vocabulary. Each rule is a pure descriptor — small, serialisable, and meant to be evaluated by the pause screen against a live `BattleState`
+ * (see `docs/handoff/pause-screen.md` for the evaluator contract). This module only *describes* objectives; it does not evaluate them, so it has no dependency on `BattleState` itself.
  *
- * `link-reached` refers to the chapter's own battle-chain position
- * (`EnemyGroupDef.nextGroupId`/`BattleSetup.chained`, i.e. which link of a
- * multi-battle chapter is live — Yunalesca's forms are `form-reached`
- * instead, since hers is one battle with in-place transformations, not a
- * chain of separate `EnemyGroupDef`s). `parts-downed` and `chain-landed`
- * extend the six example shapes in the brief for the two objectives that
- * don't fit them: Braska's Final Aeon's Yu Pagoda pair, and FFX-2 Bahamut's
- * Chain Attack counter (`FFXCombatant.chainCount`, distinct from a chapter
- * "link").
+ * `link-reached` refers to the chapter's own battle-chain position (`EnemyGroupDef.nextGroupId`/`BattleSetup.chained`, i.e. which link of a multi-battle chapter is live — Yunalesca's
+ * forms are `form-reached` instead, since hers is one battle with in-place transformations, not a chain of separate `EnemyGroupDef`s). `parts-downed` and `chain-landed` extend the
+ * six example shapes in the brief for the two objectives that don't fit them: Braska's Final Aeon's Yu Pagoda pair, and FFX-2 Bahamut's Chain Attack counter (`FFXCombatant.chainCount`,
+ * distinct from a chapter "link").
  */
 export type ObjectiveRule =
   | { kind: 'status-cured'; status: string }
