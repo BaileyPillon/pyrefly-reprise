@@ -379,6 +379,41 @@ describe('a Confused girl on the engine\'s own path', () => {
     }
   });
 
+  it('end to end, the one way a shipped line puts Confusion on a girl: a Dark Knight Confuse from Yuna lands on Rikku, who then takes her turns herself (no menu) until it wears off', () => {
+    const darkKnight = { ...(LOADOUTS['plain'] as never as Record<string, unknown>), dressphere: 'dark-knight', learned: { 'dark-knight': ['x2-dark-knight-confuse'] } };
+    let own = 0;
+    for (let seed = 1; seed <= 8; seed++) {
+      const e = tough(board({ yuna: darkKnight as never }, seed));
+      e.unit('paragon').flags['untargetable'] = true; // out of her reach: a swing at it would be answered with Big Bang and end the battle
+      const rikku = e.unit('rikku');
+      const landed = e.act(e.unit('yuna'), { kind: 'ability', id: 'x2-dark-knight-confuse', targets: ['rikku'] });
+      expect(landed.some((x) => x.type === 'status-add' && (x as { status?: string }).status === 'confuse' && (x as { targetId?: string }).targetId === 'rikku'), `seed ${seed}: it lands`).toBe(true);
+      expect(rikku.statuses['confuse'], `seed ${seed}`).toBeDefined();
+      // a short clock so that it wears off inside the run (the shipped one is 200,000 units, about 70 seconds)
+      rikku.statuses['confuse']!.ticksRemaining = 40_000;
+      let expired = false;
+      let asked = false;
+      for (let i = 0; i < 8000 && !asked; i++) {
+        const d = e.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (rikku.statuses['confuse'] === undefined) expired = true;
+        if (d.kind === 'player-input') {
+          if (d.actorId === 'rikku') {
+            expect(expired, `seed ${seed}: a menu while Confused`).toBe(true);
+            asked = true;
+          } else {
+            e.submit({ kind: 'defend', targets: [] });
+          }
+          continue;
+        }
+        const events = d.kind === 'waiting' ? e.tick(Math.max(1, d.nextEventMs)) : d.kind === 'resolved' ? d.events : [];
+        if (!expired) own += events.filter((x) => x.type === 'action-start' && (x as { actorId?: string }).actorId === 'rikku').length;
+      }
+      expect(asked, `seed ${seed}: asked again`).toBe(true);
+    }
+    expect(own).toBeGreaterThan(0);
+  });
+
   it('a preview of an item command that names its targets exactly (simulateFFX2Command) aims where the engine does: the Megalixir on the enemy heals the enemy', () => {
     const options = ffx2Options();
     const e = tough(board({ yuna: LOADOUTS['plain'] as never }, 2));
