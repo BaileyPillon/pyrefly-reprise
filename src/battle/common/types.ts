@@ -2399,7 +2399,12 @@ export type TriggerCondition =
    */
   | { type: 'overdrive'; who: CombatantId; at?: number }
   /** Any enemy began a telegraphed charge; `who` narrows it to one enemy. */
-  | { type: 'charge-started'; who?: CombatantId };
+  | { type: 'charge-started'; who?: CombatantId }
+  /**
+   * **FFX only** (additive; the hidden Mirror Aeons chapter, 2026-10-15): every combatant in `ids` that is **in this battle** is down (HP 0 or ejected), and at least one is. Evaluated from the state after each
+   * resolved action, like `hp-below`. A trio has no single "last" member for a `ko` to name, and a list that names members a formation lacks (a lone sister) still works; X-2 never fires it.
+   */
+  | { type: 'all-ko'; ids: CombatantId[] };
 
 /**
  * A story beat wired to a battle state change.

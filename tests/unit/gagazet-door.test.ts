@@ -73,7 +73,7 @@ describe('the word against every other door word', () => {
   const others = CHAPTER_DOORS.map((d) => d.word).filter((w) => w !== WORD);
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order', () => {
-    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'angra']); // `angra` is the Angra Mainyu lane's (FFX-2, hidden chapter 26), merged in release candidate r49-rc
+    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'angra', 'yojimbo']); // `angra` is the Angra Mainyu lane's (FFX-2, hidden chapter 26), merged in release candidate r49-rc; `yojimbo` is the Mirror Aeons chapter's (FFX, 27)
     for (const other of others) {
       for (const [a, b] of [[WORD, other], [other, WORD]] as const) {
         expect(a.startsWith(b), `${a} begins ${b}`).toBe(false);

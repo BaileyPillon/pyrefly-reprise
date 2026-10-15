@@ -37,8 +37,8 @@ const FFX_CHAPTERS = [
   'sin-face', // XVIII
 ] as const;
 
-/** The hidden FFX experiments: FFX chapters by their own `game`, so the rule reaches them, but not on the board (the first test counts the listed eleven). Sinspawn Gui and Fayth (Evrae with FFX's camera; 2026-10-10; `mushroom-door.test.ts`, `fayth-door.test.ts`), and Biran and Yenke (Kimahri alone at the Mountain Gate; 2026-10-14; `gagazet-door.test.ts`). */
-const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui', 'exp-fayth', 'biran-yenke'] as const;
+/** The hidden FFX experiments: FFX chapters by their own `game`, so the rule reaches them, but not on the board (the first test counts the listed eleven). Sinspawn Gui and Fayth (Evrae with FFX's camera; 2026-10-10; `mushroom-door.test.ts`, `fayth-door.test.ts`), Biran and Yenke (Kimahri alone at the Mountain Gate; 2026-10-14; `gagazet-door.test.ts`) and Mirror Aeons (Yuna's party against the Dark Aeons; 2026-10-15; `yojimbo-door.test.ts`). */
+const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui', 'exp-fayth', 'biran-yenke', 'mirror-aeons'] as const;
 const FFX_REACHED = [...FFX_CHAPTERS, ...HIDDEN_FFX_CHAPTERS];
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS];

@@ -12,6 +12,7 @@
 import type { FFXCommandRecord, FFXPlainAttack } from '../../../battle/common/types.ts';
 import { COMMAND_RECORDS_GUI } from '../enemies/sinspawn-gui-abilities.ts'; // Sinspawn Gui's Special 1 and Venom (hidden chapter, 2026-10-10)
 import { COMMAND_RECORDS_BIRAN_YENKE } from '../enemies/biran-yenke-abilities.ts'; // Bulldoze, the brothers' Breaths, Berserk and their half-HP Rages (hidden chapter, 2026-10-14)
+import { COMMAND_RECORDS_DARK_AEONS } from '../enemies/dark-aeons-abilities.ts'; // the Dark Aeons' fourteen rows (hidden Mirror Aeons chapter, 2026-10-15)
 
 /**
  * The possessed aeons' plain Attack: monster-magic-2 record 0x6000 "Attack" (accuracy formula 2 on a byte of 90, formula 1,
@@ -28,6 +29,7 @@ export const POSSESSED_PLAIN_ATTACK: FFXPlainAttack = {
 export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>> = {
   ...COMMAND_RECORDS_GUI,
   ...COMMAND_RECORDS_BIRAN_YENKE,
+  ...COMMAND_RECORDS_DARK_AEONS,
   'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, shatter: 30, rank: 3, chances: [[1, 100]] }, // Lance of Atrophy (our numbers differ: section 4)
   'full-life': { id: 0x60f5, type: 0, flagsMisc: 0x4800086, flagsDamage: 0x32, damageClass: 1, rank: 3, chances: [[0, 254]] }, // Full Life
   'cross-cleave': { id: 0x6074, type: 0, flagsMisc: 0x4006, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Cross Cleave (our numbers differ: section 4)

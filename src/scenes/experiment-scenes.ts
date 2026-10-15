@@ -31,6 +31,8 @@ import { buildGagazetRonsoScene, GAGAZET_RONSO_SLOTS } from './gagazet-ronso.ts'
 import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
 import { buildAngraMainyuDesertScene, ANGRA_MAINYU_SLOTS } from './angra-mainyu-desert.ts'; // Angra Mainyu's desert (FFX-2 only, hidden chapter)
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
+import { buildMirrorAeonsScene, MIRROR_SLOTS } from './mirror-aeons.ts'; // Mirror Aeons (FFX only, hidden chapter): Mushroom Rock Road, then the Cavern's plate
+import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -48,6 +50,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: GAGAZET_RONSO_SCENE, title: 'Mt. Gagazet — the Mountain Gate (Biran and Yenke)', build: buildDemoScene, slots: GAGAZET_RONSO_SLOTS, placeholder: false },
   // Angra Mainyu's fight (FFX-2 only, hidden chapter): the Bikanel Desert under the FFX-2 camera, on a provisional painted plate.
   { key: ANGRA_MAINYU_SCENE, title: 'Bikanel Desert — Angra Mainyu', build: buildDemoScene, slots: ANGRA_MAINYU_SLOTS, placeholder: false },
+  // Mirror Aeons (FFX only, hidden chapter): Mushroom Rock Road for the Dark Magus Sisters, the Cavern of the Stolen Fayth's plate for Dark Yojimbo (one stage, two plates).
+  { key: MIRROR_AEONS_SCENE, title: 'Mushroom Rock Road and the Cavern of the Stolen Fayth — Mirror Aeons', build: buildDemoScene, slots: MIRROR_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -59,4 +63,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [TOURIST_TRAP_SCENE]: buildTouristTrapCavernScene, // the hidden Tourist Trap chapter (FFX-2 only)
   [GAGAZET_RONSO_SCENE]: buildGagazetRonsoScene, // the hidden Biran and Yenke chapter (FFX only)
   [ANGRA_MAINYU_SCENE]: buildAngraMainyuDesertScene, // the hidden Angra Mainyu chapter (FFX-2 only)
+  [MIRROR_AEONS_SCENE]: buildMirrorAeonsScene, // the hidden Mirror Aeons chapter (FFX only)
 };

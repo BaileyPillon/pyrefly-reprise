@@ -30,8 +30,9 @@ import { FFX2_TOURIST_TRAP } from './chapter-ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID } from './chapter-ffx2-valefor-besaid.ts';
 import { BIRAN_YENKE } from './chapter-biran-yenke.ts';
 import { FFX2_ANGRA_MAINYU } from './chapter-ffx2-angra-mainyu.ts';
+import { MIRROR_AEONS } from './chapter-mirror-aeons.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, MIRROR_AEONS] as const;
 }

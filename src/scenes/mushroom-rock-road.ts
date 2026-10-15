@@ -32,9 +32,11 @@ export const MUSHROOM_PLATE = { w: 2688, h: 1536 } as const;
  * Each plate's own look: **the row set on the floor** (y 0: the plate above it shows, the plate below it is under the 3D floor) and the rows sampled for the sky, the horizon, the ground and the
  * fog. The camp's crane, cage and horizon sit high in the picture, so its floor row is the middle of the plate; the ruined camp's glassy fan and leaning posts sit lower, so its floor row is lower.
  */
-export const MUSHROOM_PLATE_LOOK: Readonly<Record<string, { floorRow: number; bands: NonNullable<BackdropOptions['sampleBands']>; layer: { from: number; to: number } }>> = {
+export const MUSHROOM_PLATE_LOOK: Readonly<Record<string, { floorRow: number; bands: NonNullable<BackdropOptions['sampleBands']>; layer?: { from: number; to: number } }>> = {
   [MUSHROOM_ROCK_SCENE]: { floorRow: 0.5, bands: { sky: [0.0, 0.14], horizon: [0.3, 0.4], ground: [0.56, 0.9], key: [0.38, 0.5] }, layer: { from: 0.3, to: 0.5 } },
   [MUSHROOM_ROCK_RUINED_PLATE]: { floorRow: 0.72, bands: { sky: [0.0, 0.14], horizon: [0.3, 0.4], ground: [0.74, 0.95], key: [0.42, 0.58] }, layer: { from: 0.42, to: 0.7 } },
+  // The hidden Mirror Aeons chapter's second act (`./mirror-aeons.ts`) swaps in the Cavern of the Stolen Fayth's plate (same 2688 x 1536 size): the Cavern scene's own floor row and sampled bands (`CAVERN_PLATE`, `./cavern-stolen-fayth.ts`).
+  'cavern-stolen-fayth': { floorRow: 0.95, bands: { sky: [0.02, 0.2], horizon: [0.62, 0.78], ground: [0.84, 0.97], key: [0.3, 0.55] } }, // no masked band: the floor band carries the pad (the Cavern scene's own choice)
 };
 
 /** Painting plane of one plate: 34 wide at z -12, its floor row on the floor (y 0). */
@@ -153,7 +155,7 @@ export const buildMushroomRockRoadScene: SceneFactory = async (opts: SceneBuildO
       centreY: plane.centreY,
       cameraRef,
       /** One masked band nearest the fighters. */
-      layers: low ? [] : [{ from: look.layer.from, to: look.layer.to, feather: 0.1, featherBottom: 0.05, z: -14, opacity: 0.5 }],
+      layers: low || look.layer === undefined ? [] : [{ from: look.layer.from, to: look.layer.to, feather: 0.1, featherBottom: 0.05, z: -14, opacity: 0.5 }],
       sampleBands: look.bands,
       ground: { size: 40, repeat: 5, tintMix: 0.36, luma: 0.42, fade: true, fadeCore: 0.3, center: [0.5, -3.5] },
       fog: { near: 16, far: 44, colorMix: 0.16 },

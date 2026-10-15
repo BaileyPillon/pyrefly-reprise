@@ -143,8 +143,9 @@ describe("the attached records are the game's table", () => {
     // 483 and 481 since re-parity RC7 lane FFX-H: the 21 Mix results the data layer lacked (0x308d to 0x30a8), each with its record.
     // 490 and 488 since the hidden Biran and Yenke chapter (FFX only, 2026-10-14): the Friend Sphere (0x2061), Bulldoze (0x60a5), the brothers' Fire Breath and Aqua Breath (0x60a2, 0x60a3), Berserk (0x400f), and
     // the brothers' own copies of Kimahri's Mighty Guard and White Wind (0x3072, 0x3070), each with its record (all seven rows are in the game's fixture; the RE review of 2026-10-14 asked for them).
-    expect(ALL_ABILITIES).toHaveLength(490);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(488);
+    // 506 and 504 since the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the Dark Aeons' fourteen move rows (0x4086, 0x4100 to 0x4102, 0x4104 to 0x410b, 0x4127, 0x412b) and the Master and Teleport Spheres (0x2050, 0x2062), each with its record (all sixteen rows are in the game's fixtures).
+    expect(ALL_ABILITIES).toHaveLength(506);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(504);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });
@@ -337,6 +338,18 @@ const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
   'possessed-yojimbo-zanmato: ko chance 255, the record has no byte',
   // Evrae's Stone Gaze: the Slow it inflicts lasts 100 in the record, 254 ("until removed") in ours.
   'evrae-stone-gaze: slow duration 254, record 100',
+  // The Dark Aeons (the hidden Mirror Aeons chapter): the extra-status word (Auto-Life, Curse, Doom) and the cleanse bits live in the record, which is the one the kernel reads; the ability carries only the regular statuses.
+  'dark-calamity: extra bits 0x0, record 0x400',
+  'dark-mega-graviton: extra bits 0x0, record 0x4000',
+  'dark-razzia: cleanse in the record, ours none',
+  'dark-razzia: extra bits 0x0, record 0x200',
+  'dark-zanmato: cleanse in the record, ours none',
+  'dark-zanmato: extra bits 0x0, record 0x200',
+  'dark-delta-attack: cleanse in the record, ours none',
+  'dark-delta-attack: extra bits 0x0, record 0x200',
+  'dark-cindy-attack: cleanse in the record, ours none',
+  'dark-cindy-attack: extra bits 0x0, record 0x200',
+  ...['haste', 'nulblaze', 'nulfrost', 'nulshock', 'nultide', 'protect', 'reflect', 'regen', 'shell'].map((s) => `dark-cindy-attack: the record has a byte 254 for ${s} (a cleanse), ours none`),
 ];
 
 describe("the status bytes of the attached records are the game's table (re-parity W2)", () => {
