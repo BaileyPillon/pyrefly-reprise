@@ -71,16 +71,17 @@ describe('the engine plays the game\'s rule: any hit of the ATB class closes a m
   // logic step and a command leaves the game's recovery and cast, so every log moved. The 18 before it were pinned 2026-10-09 for W3
   // (old hashes in git at 931613a8; the release-17 replay rows that stood beside them are gone with the option).
   // **Re-pinned for the game's own random streams** (re-parity RNG lane, 2026-10-11, FFX-2 only; reason "game RNG streams (Bailey 2026-10-09)": FFX-2 draws from its own 68 streams, every seed is another deal of the same odds, and nothing else moved (docs/handoff/re-parity-rng.md). The old hashes are in git at 0c729fa5. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
+  // **Re-pinned for the game's kill rewards** (re-parity RC9 lane X2-C, 2026-10-15, FFX-2 only; reason "game-code parity", note FFX2-G03; docs/handoff/re-parity-rc9-x2-rewards.md): the `victory` result is what the reward routine paid at each knock-out, so that one event's payload differs in every log. Cause, by ablation: with each victory result put back to what the old `buildResult` made from the same board, all eighteen logs give their old digest again, so no battle changed. The old hashes are in git at f939b87f. The active rows equal the atb golden's CH4_D1500 / CH5_D1500 seeds 1 to 3 again.
   const ON: Record<string, string> = {
-    'IV|active|1': '9318b354f5ca9274', 'IV|split|1': '5a130a8b9471b3b4',
-    'IV|active|2': 'c325078b03484e03', 'IV|split|2': '6cd47cce9ff0c566',
-    'IV|active|3': '05f9575c5edc6a2d', 'IV|split|3': 'eacb29d3dc8dc52b',
-    'V|active|1': 'db1e80d7abded255', 'V|split|1': '7ba16a311c0ad6f7',
-    'V|active|2': '128eb3693b451727', 'V|split|2': '7655eae520d2cc4e',
-    'V|active|3': 'b75aa5e2ee54da92', 'V|split|3': '2855c3a5d5b95acf',
-    'VI|active|1': '7e74f53c3427ff72', 'VI|split|1': '8e3e646ff69c5295',
-    'VI|active|2': '9c161637372c7670', 'VI|split|2': '90ba2a636459997b',
-    'VI|active|3': '62eff16f98b3bf29', 'VI|split|3': '8cc46b1f690367b2',
+    'IV|active|1': '8824d296168910b4', 'IV|split|1': '8be1e2fce2b20d78',
+    'IV|active|2': 'bb33546f8c0f1c3a', 'IV|split|2': '1d2fdad6c7315d9d',
+    'IV|active|3': '80587b969aed200a', 'IV|split|3': 'b1ab459c88b89b83',
+    'V|active|1': 'd2dcc53c5fe4cec9', 'V|split|1': 'a7b7ec50fb1da0cd',
+    'V|active|2': '386ff8bc59793801', 'V|split|2': '8cd139a1b2156bf7',
+    'V|active|3': 'e985d3567532176f', 'V|split|3': '435684a794b673ba',
+    'VI|active|1': 'a28aa8a95ecc5a68', 'VI|split|1': '227c2ea677e4f49d',
+    'VI|active|2': 'ac7ea66c6340cd6d', 'VI|split|2': '5c0fb09eb5ff2381',
+    'VI|active|3': '46883c1193920b34', 'VI|split|3': '528ca964faa2ca45',
   };
   const DRIVES = { IV: driveChapter4, V: driveChapter5, VI: driveChapter6 } as const;
 

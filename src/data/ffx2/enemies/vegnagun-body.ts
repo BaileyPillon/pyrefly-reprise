@@ -63,7 +63,9 @@ function bulwark(id: string, name: string, slot: number): EnemyDef {
       stolenGil: 300, // §3.3 line 338 "(Pilfer 300)"; §13.2 S2 [verified: 2 sources]
       overkillThreshold: 0,
       exp: 200,
-      drops: [{ itemId: 'x2-mega-potion', count: 1, chance: 50 }, { itemId: 'x2-x-potion', count: 1, chance: 50 }],
+      // The common slot. The game's row (monster.bin 288 and 289): drop byte 128 (50.2 percent), Mega-Potion common and X-Potion rare; the roll is the row's
+      // (`../monster-records/kill-rewards.ts`, re-parity RC9 lane X2-C). The two entries at chance 50 this used to carry were never read, and the build paid both.
+      drops: [{ itemId: 'x2-mega-potion', count: 1 }],
       steal: {
         baseChance: 50,
         common: { itemId: 'x2-phoenix-down', count: 1 },

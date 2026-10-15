@@ -115,6 +115,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   autoStatuses?: StatusId[];
   /** A girl's automatic-status layer: the auto-ability rows she holds, the kept and SOS sets and the effective layer (`adapt/auto-layer.ts`, `auto-layer.ts`; re-parity X2-D). Absent when she holds no row. */
   autoLayer?: Ffx2AutoLayer;
+  /** The most hits one chain on this unit ever reached this battle (`Chr+0x5ae`): it never resets, and the drop roll adds it to the current chain (`chain.ts#bumpChain`; re-parity RC9, lane X2-C). */
+  bestChain?: number;
   /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */

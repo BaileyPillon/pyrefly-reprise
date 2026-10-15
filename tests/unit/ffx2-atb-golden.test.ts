@@ -178,6 +178,16 @@
  * `docs/handoff/re-parity-rc7.md`). Nothing is re-pinned by the merge: the one hash lane X2-B moved (`CH5_D0` seed 4, above) is the only difference from the base in the
  * merged tree, and lane X2-D moves none (a girl who holds no automatic ability has no layer, so no draw, no event and no state changes). The shipped line of all eight
  * FFX-2 chapters over seeds 1 to 500 equals the base in every sum and every seed's outcome except Chapter V's Silence-scope movement (+35 party turns, +3 KOs, wins 490).
+ *
+ * **Re-pinned a thirteenth time, every array, for the game's kill rewards** (re-parity RC9 lane X2-C, branch re-parity-rc9-x2-rewards, 2026-10-15, FFX-2 only; reason "game-code parity",
+ * the checked note FFX2-G03; `docs/handoff/re-parity-rc9-x2-rewards.md`). The `victory` event carries the result record, and the result is now what the game's reward routine paid
+ * at each knock-out (EXP, AP, gil and the item roll; each girl's share in the new `rewardsByMember`), not the sum of every monster's authored rewards, so the payload of that one
+ * event differs in every log: Chapter 4's Bahamut pays the same numbers with the new field (and its Gris-Gris Bag from a roll), Chapter 5's Leg link no longer pays the three Nodes it
+ * never kills, the Bulwarks stop paying both items and the Head's Redoubts pay only when they fall. Cause, found by ablation: replaying all sixty logs and putting each `victory`
+ * result back to what the old `buildResult` made from the same board (the sum of the authored rewards, the Bulwarks' old two entries, no `rewardsByMember`) gives the old digest again for
+ * 60 of 60 (CH4_D0 20/20, CH5_D0 20/20, CH4_D1500 10/10, CH5_D1500 10/10): no battle changed, not one event before the victory moved. A knock-out now takes one draw on stream 10
+ * (a girl's too) and a drop a draw on stream 11; neither moves any roll in these two chapters, whose intended line steals nothing. Outcomes are unchanged (CH5_D0_OUTCOMES stays).
+ * The old hashes are in git at f939b87f.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -187,29 +197,29 @@ const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
 /** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D0 = [
-  '08332b98dd23c13e', 'b320e520bf125d9c', '3b1bae27af9363c1', '4f8c87800a532af0', 'fcbc982c603fae64',
-  '300c16a2498a6a36', '8c994ac8e401a081', '487ad2569fc675f6', 'a183074c99b62dbc', '97e281a62a4e83d2',
-  '9a76d41f653670d3', '3a77e68afe04fe8f', '9fa897d1235af985', 'cc0fbb7c4962d455', '267f7d8428d4de22',
-  '47851e5ebdac808e', '58daa1fb3c29507c', '953ebac39bcdf582', 'f30620e6ee91ce1a', '01470faf3fb827ec',
+  '2283fa8d277a5a09', '10d4aaac01fce3a3', '0f60637d8e8f2eac', 'd4fecb545452aa23', '1a1fb0ba2bb34f1e',
+  'dd6e72945bd21755', 'd8b1487ee433d707', 'f61d03cb4e6480dc', '7a63e3005bc321d8', '9204e3ef9f84b1d3',
+  'd0a433bec6e80f6c', '72ca8221b01bc398', '32b9cb66de26683d', '0288afc034454712', '2420e5f935589076',
+  'd8c7e98a5d2c6343', 'd33185fc18586a9a', '809f6fdff6cfa377', 'f12f324dd2664699', 'fbb766148ae1e58d',
 ];
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  '14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1',
-  '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588', '056a29c9f64475e6', 'ea11e6bc57472033',
-  '05af170bce70e2d5', '74a919cdaf0a8ad6', 'f780f0894a0abad4', '1364bcf4301efff4', '6a307cb2f5a5ac7c',
-  '8cb28183509bba6e', '462f552cd4c79127', '5f977e99eddd8cf7', 'a2cde3f49733da1a', 'acec700595ac3f00',
+  '8e9429959caa77dc', 'be258eaee12d9c42', '9d1d23fa8dbeed4a', 'cf47f923046e917c', '18f8310a102d96a7',
+  'c60fbf1a48373774', '84dce885117708f1', '00a0897a737acb54', '0d170d843b040d6f', '6fe63b609d0ea929',
+  '48a4acfc581297ef', 'fd69069f83bfa1d1', 'd9f3cac0b5dc8f52', 'da6017f24b06326d', '7805e99e54d892bc',
+  '0e29b8d7d7e14a93', '14d5aef2f3551d6f', 'ac2ac940a3d65566', 'b3b858ac6d9c554a', '86f944382d2152ba',
 ];
 
 /** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D1500 = [
-  '9318b354f5ca9274', 'c325078b03484e03', '05f9575c5edc6a2d', '5ca4f2ee4ae9edfd', '0af57a98ab480cbe',
-  'b75b69c690bc619e', 'e098f02143c771f7', 'e30ae9d24e21bed9', 'd72bd8136f4aecf1', 'dcb5dfd472e93c13',
+  '8824d296168910b4', 'bb33546f8c0f1c3a', '80587b969aed200a', '7c7f4d908d420ba0', '21f09c05ac8723cf',
+  '8f46770658697734', '5135a2da9a031244', 'e5222c309208d5be', '87b24e7f043a329d', 'a67eef20310c65ee',
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D1500 = [
-  'db1e80d7abded255', '128eb3693b451727', 'b75aa5e2ee54da92', 'ad3bd0a96b7a2b1a', '6fa8a633acc41166',
-  '8e0c8849569198c2', '1ca8f3c131542b5d', 'd3f5e401c53a86e5', '966da767eeda3cec', '64742449853c3c75',
+  'd2dcc53c5fe4cec9', '386ff8bc59793801', 'e985d3567532176f', '35782213d0ae447a', '1f50ed179d5bfcd0',
+  'bfb5c0b9458c6282', 'ae2184e2ffb3e8d3', '9288f689d9ebec1e', '74edfb5a34ff6a59', 'dd6148f8b204937f',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */

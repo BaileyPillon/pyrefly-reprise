@@ -13,6 +13,8 @@
  *   Action-cancel) keep what was authored.
  * - **Steal.** The item-steal chance byte, and the figure Pilfer Gil takes (the gil chance byte is 255 for every
  *   monster, `research/re-ffx2-ai-leblanc-den-ixion.md` section 1.9).
+ * - **Kill rewards.** The row's EXP, AP, gil, drop chance byte and two item slots (`./kill-rewards.ts`, re-parity RC9, lane X2-C) go on the record as `kill`,
+ *   which the engine's reward roll reads (`battle/ffx2/kill-rewards.ts`). The authored `rewards` stay as the common-slot summary the guides and tests read.
  *
  * Nothing else is touched: levels, HP and the stat bytes stay as authored, and `research/re-ffx2-commands.md` section 7
  * lists where they differ from the rows. Idempotent: calling it again changes nothing.
@@ -20,9 +22,11 @@
 
 import type { EnemyDef, EnemyGroupDef, FFX2MonsterRecord, StatusId } from '../../../battle/common/types.ts';
 import { GROUP1_STATUS, GROUP2_STATUS } from '../../../battle/ffx2/adapt/slots.ts';
+import { KILL_REWARD_ROWS } from './kill-rewards.ts';
 import { MONSTER_RECORDS } from './records.ts';
 
 export { MONSTER_RECORDS } from './records.ts';
+export { KILL_REWARD_ROWS } from './kill-rewards.ts';
 
 /** Lay one monster row on one enemy and correct the fields it supersedes. */
 export function applyMonsterRecord(enemy: EnemyDef, record: FFX2MonsterRecord): void {
@@ -49,8 +53,14 @@ export function applyMonsterRecord(enemy: EnemyDef, record: FFX2MonsterRecord): 
 /** Lay the rows on every enemy and part of a group (the same group is returned). */
 export function attachMonsterRecords<G extends EnemyGroupDef>(group: G): G {
   for (const enemy of [...group.enemies, ...(group.parts ?? [])]) {
-    const record = MONSTER_RECORDS[`${group.id}/${enemy.id}`];
+    const key = `${group.id}/${enemy.id}`;
+    const record = MONSTER_RECORDS[key];
     if (record !== undefined) applyMonsterRecord(enemy, record);
+    const kill = KILL_REWARD_ROWS[key];
+    if (kill === undefined) continue;
+    // The record is shared by everyone who wears the same row; an enemy built from another's (the Fiend Arena's Trema from the story's) wears its own copy.
+    if (record !== undefined) record.kill = kill;
+    else if (enemy.ffx2Record !== undefined) enemy.ffx2Record = { ...enemy.ffx2Record, kill };
   }
   return group;
 }

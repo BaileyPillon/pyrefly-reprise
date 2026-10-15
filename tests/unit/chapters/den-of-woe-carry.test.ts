@@ -199,12 +199,17 @@ describe('the flag is the only way in: every other chain carries what it always 
    * now uses Darkness, and Yuna, also Silenced, can use Pray and Vigor. `92f34919fb6d8fcc` became `4662e80c1515469b`, which is again the
    * `ffx2-atb-golden.test.ts` CH5_D0 seed 4 digest. The other seven Chapter 5 logs and all thirty-two of the others (Chapter 6, Chapter XI, the
    * Sisters) are unchanged. With the old Silence rule put back through a module mock the old digest returns.
+   *
+   * **Re-pinned, all thirty-two, for the game's kill rewards** (re-parity RC9 lane X2-C, 2026-10-15, FFX-2 only; reason "game-code parity", note FFX2-G03; `docs/handoff/re-parity-rc9-x2-rewards.md`).
+   * The `victory` result is what the reward routine paid at each knock-out, so that one event's payload differs in every log (the Leg link no longer pays the Nodes it never kills; the Bulwarks
+   * pay one roll, not two items; Ormi in Act I, and Ormi and Logos in Act II, carry the game's rows). Cause, by ablation: with each victory result put back to what the old `buildResult`
+   * made from the same board, all thirty-two logs give their old digest again, so no battle changed. The old hashes are in git at f939b87f.
    */
   const BASE = {
-    ch5: ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1', '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588'],
-    ch6: ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10', 'a39696f7ae0ccaa4', '4f0e498c14ac2d5c', 'c86b36c8466a45b2', '800aecc068609cf2', '3bc2d05021df6507'],
-    ch11: ['1e2967f9a6eb564d', '7c7fa3bf60a618b0', 'a930f8adbfddbc40', '9b34cf5f9dd088f9', '04d8eb23fb7525d0', '88e605a902ddb419', '5633c37e7a691312', 'b7c8bf061dca8d62'],
-    sisters: ['9169f136877f9e92', '05f2b56d8cd64c18', '6d1ab630119409ae', '813bd394e5ac703d', 'f9f8a98425850b50', '26879886243ece21', '45fc4057955ccc75', 'c3dbe73d64528a38'],
+    ch5: ['8e9429959caa77dc', 'be258eaee12d9c42', '9d1d23fa8dbeed4a', 'cf47f923046e917c', '18f8310a102d96a7', 'c60fbf1a48373774', '84dce885117708f1', '00a0897a737acb54'],
+    ch6: ['e333756b294b5fb2', '89f1d99f2748a632', '859c892b47692430', '365c1eba055fd59c', '5aaf4da483968db6', 'c3c73361903c4cb6', '14bfc0550ec67f9e', '4db71beb353ee98d'],
+    ch11: ['78f8237fe8f8c6ee', '321267019c85cbf8', 'd81564b3f332b9fe', 'fd20a529c747086e', 'ae81affb1dd81145', '3022ad6f7be5ee1c', '78c116485bdd67d2', 'cb3171194bb2ccf5'],
+    sisters: ['191ce94d037c44ca', '4edaaa343eafcdf8', '850847c86aa8626b', '8ad4f0e72c41739b', '4f4155412c4d1f52', '3ea61c2fb8da9cfc', 'b02b7aeac2c6044e', 'c4a0168aebfa86d6'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {
