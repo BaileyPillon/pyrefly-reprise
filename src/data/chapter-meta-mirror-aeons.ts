@@ -32,7 +32,7 @@ export const MIRROR_AEONS_META: ChapterMeta = {
     { id: 'the-cavern', label: 'Reach the cavern', rule: { kind: 'link-reached', link: 2 } },
     { id: 'send-the-blade', label: 'Send the dark blade home', rule: { kind: 'victory' } },
   ],
-  tip: "The sisters open with the joint attack, and Auto-Life does not turn it: call one of Yuna's aeons in first. A blade cannot find Mindy, so spells are for her. Dark Yojimbo's Overdrive is the same as the sisters', so keep an aeon ready when his blade is ready.",
+  tip: "The sisters open with the joint attack, which Auto-Life does not turn: call one of Yuna's aeons in first. A blade cannot find Mindy, so use spells on her.",
   snapshots: [
     { image: `backdrops/${MIRROR_ACT_I_PLATE}.png`, caption: 'the road' },
     { image: 'characters/cindy/idle.png', caption: 'three in the wrong colours' },

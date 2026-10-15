@@ -105,5 +105,5 @@ export const MIRROR_ACT_II_GROUP = yojimboGroupId(MIRROR_ACT_II);
 /** The seam between the acts: a mid-battle script on the `all-ko` of Act I's sisters (`../../story/scripts/mirror-aeons.ts` mirrors the id). */
 export const MIRROR_SEAM = 'sisters-fall' as const;
 
-/** The player's side: Yuna's aeons the preset owns, and the two named estimates the files do not hold (RE section 5.5; `../builds/mirror-aeons.ts`). */
+/** The player's side: the four optional aeons Yuna owns in the preset (Yojimbo and the three Magus Sisters); the two named estimates the files do not hold are in `./builds/mirror-aeons.ts` (RE section 5.5). */
 export const PLAYER_MIRROR_AEONS = ['yojimbo', 'cindy', 'sandy', 'mindy'] as const;

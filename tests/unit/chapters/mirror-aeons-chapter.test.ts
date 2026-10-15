@@ -30,6 +30,7 @@ import { getScene, getSceneFactory, sceneKeys } from '../../../src/scenes/index.
 import { MIRROR_ENEMY_SPOTS, MIRROR_FIGURE_HEIGHTS, MIRROR_SLOTS } from '../../../src/scenes/mirror-aeons.ts';
 import { MUSHROOM_PLATE_LOOK, MUSHROOM_SLOTS } from '../../../src/scenes/mushroom-rock-road.ts';
 import { lintScript } from '../../../src/story/dsl.ts';
+import { MID_SCRIPT_BUDGET_MS, PRESENTER_BUDGET_MS, SEAM_BUDGET_MS, midBattleDeadlineMs, scriptDurationMs } from '../../../src/story/registry.ts';
 import type { Step, StoryScript } from '../../../src/story/dsl.ts';
 import { mirrorAeonsScripts } from '../../../src/story/scripts/mirror-aeons.ts';
 import * as H from '../helpers/mirrorAeonsDrive.ts';
@@ -164,6 +165,15 @@ describe('the story: our own words, attributed, linted, short; the seam is wired
     const steps = S.midScripts[MIRROR_SEAM]!;
     expect(steps.some((s) => s.type === 'flash' || s.type === 'fade')).toBe(true);
     expect(steps.filter((s) => s.type === 'flash').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("the seam fits the seam budget and the callout the interrupt budget, and the runner's deadline stays under the presenter's abandon time", () => {
+    const seam = S.midScripts[MIRROR_SEAM]!;
+    const callout = S.midScripts['dark-yojimbo-ready']!;
+    expect(scriptDurationMs(seam)).toBeLessThanOrEqual(SEAM_BUDGET_MS);
+    expect(scriptDurationMs(callout)).toBeLessThanOrEqual(MID_SCRIPT_BUDGET_MS);
+    expect(midBattleDeadlineMs(seam)).toBeLessThan(PRESENTER_BUDGET_MS);
+    expect(midBattleDeadlineMs(callout)).toBe(MID_SCRIPT_BUDGET_MS);
   });
 
   it('is short and spoken only by the party; the post scene is the cavern', () => {

@@ -33,6 +33,20 @@ describe('the formula against the three canonical blocks', () => {
     expect(aeonStatsFromYuna('bahamut', weak, 300, { capped: false }).hp).toBe(2_840);
   });
 
+  it("the last tier's floor is the RE note's quoted minima for the four optional aeons (600 battles and over, RE section 5.5; the note's column order is HP MP STR DEF MAG MDEF ACC EVA AGI)", () => {
+    const weak: YunaStats = { hp: 100, mp: 10, str: 1, def: 1, mag: 1, mdef: 1, agi: 1, eva: 1, acc: 1, luck: 17 };
+    const quoted: Record<string, number[]> = {
+      yojimbo: [3_064, 0, 61, 73, 48, 69, 38, 122, 30],
+      cindy: [8_410, 142, 60, 94, 64, 84, 20, 44, 34],
+      sandy: [6_910, 103, 69, 76, 73, 84, 22, 38, 34],
+      mindy: [4_887, 178, 50, 70, 85, 84, 21, 50, 42],
+    };
+    for (const [id, [hp, mp, str, def, mag, mdef, acc, eva, agi]] of Object.entries(quoted)) {
+      const got = aeonStatsFromYuna(id, weak, 600, { capped: false });
+      expect([got.hp, got.mp, got.str, got.def, got.mag, got.mdef, got.acc, got.eva, got.agi], id).toEqual([hp, mp, str, def, mag, mdef, acc, eva, agi]);
+    }
+  });
+
   it('the power base and the tier follow the formula', () => {
     expect(powerBase({ hp: 9_999, mp: 999, str: 255, def: 255, mag: 255, mdef: 255, agi: 255, eva: 255, acc: 255 })).toBe(99 + 99 + 255 * 7);
     expect(powerBase({ hp: 20_000, mp: 5_000, str: 0, def: 0, mag: 0, mdef: 0, agi: 0, eva: 0, acc: 0 })).toBe(99 + 99); // HP and MP are read through their caps

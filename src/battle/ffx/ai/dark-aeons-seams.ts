@@ -19,6 +19,12 @@
 
 import { getAiScript } from './types.ts';
 
+// TODO(RE) 1: register the four Dark scripts and the dog's (`registerAiScript(DARK_SCRIPTS.<name>, ...)`), branching on the flag `DARK_BATTLE_ID_FLAG`; `tests/unit/chapters/mirror-aeons-seams.test.ts` then runs its sister and Yojimbo blocks by itself.
+// TODO(RE) 2: Dark Yojimbo's tier fill is published as `DARK_GAUGE_PER_TURN_FLAG` (+6, +10, +16, +20, +26 a turn, +2 per hit taken: RE section 4.1); the script reads it, the engine reads nothing.
+// TODO(RE) 3: Yuna's Yojimbo (hire answer, compatibility, Pay, the free attack, the command roll, the penalties): `YOJIMBO_HIRE_ANSWER` and `YOJIMBO_START_COMPATIBILITY` in `data/ffx/builds/mirror-aeons.ts` are the two named estimates to read.
+// TODO(RE) 4: Yuna's Magus Sisters as ONE summon of three actors (orders, motivation, Combine powers, the wipe for three): today `state.aeonId` holds one aeon and the three arrive one at a time through the ordinary summon.
+// TODO(RE) 5: the ambushed start of the first Yojimbo tier (`DARK_FORMATIONS['mirror-yojimbo-nagi05_70']`, RE section 4.1), which changes the intro only.
+
 /** The AI script ids the four Dark enemies and the dog carry (`data/ffx/mirror-aeons-ids.ts`). */
 export const DARK_SCRIPTS = {
   cindy: 'dark-sister-cindy',

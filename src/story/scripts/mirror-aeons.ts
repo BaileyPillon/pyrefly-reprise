@@ -31,11 +31,13 @@ export const SISTERS_FALL = 'sisters-fall';
 export const DARK_YOJIMBO_READY = 'dark-yojimbo-ready';
 const SISTERS = ['dark-cindy', 'dark-sandy', 'dark-mindy'] as const;
 const DARK_YOJIMBO = 'dark-yojimbo';
-/** The second act's plate, mirrored from `src/data/ffx/mirror-aeons-ids.ts` (`MIRROR_ACT_II_PLATE`). */
+/** The two plates, mirrored from `src/data/ffx/mirror-aeons-ids.ts` (`MIRROR_ACT_I_PLATE`, `MIRROR_ACT_II_PLATE`). The scene's own key is not a plate (this chapter's stage is one scene with two plates), so the opening names the road's plate itself. */
+const ROAD_PLATE = 'mushroom-rock-road';
 const CAVERN_PLATE = 'cavern-stolen-fayth';
 
 export const mirrorAeonsScripts: ChapterScripts = {
   pre: [
+    backdrop(ROAD_PLATE, 0), // the scene's key is not a plate, so the opening draws the road's explicitly (a black screen otherwise)
     camera('idle', 0),
     fade('clear', 1200),
     wait(600),
