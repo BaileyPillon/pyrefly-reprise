@@ -9,6 +9,10 @@
  * `tests/unit/parity-ffx2-rewards-data.test.ts` against `tests/fixtures/parity/ffx2/kill_reward_rows.json`, which the reader wrote.
  * Keyed `group id / enemy id`, as `./records.ts`; `attachMonsterRecords` lays each one on its `EnemyDef` as `ffx2Record.kill`.
  *
+ * Confidence: [verified: the game's own table, read field by field by our own reader and pinned row for row by `tests/unit/parity-ffx2-rewards-data.test.ts` against `tests/fixtures/parity/ffx2/kill_reward_rows.json`;
+ * the rule the routine applies to them is note FFX2-G03 §4 and §5.1, proved on 213,000 emulator vectors]. The EXP, AP and gil agree with the enemy data's guide-sourced numbers except for Ormi in Act I and Ormi and Logos in Act II
+ * (FFX2-G03 §8, rows E8 and E9); the drop byte and the two item slots are the game's alone (the guides print one drop).
+ *
  * What the numbers say that the authored enemy data did not (FFX2-G03 section 8): Dr. Goon and Fem-Goon drop on a byte of 128 (50.2
  * percent), the Bulwarks on 128 with Mega-Potion common and X-Potion rare, Logos in Act III on 192 (75.3 percent); the rare slot is its own
  * item for Shiva, Sandy, Cindy, Paragon, Trema, the Oversoul, the Nodes and the Bulwarks; Ormi in Act I pays 220 EXP, 1 AP, 220 gil and a

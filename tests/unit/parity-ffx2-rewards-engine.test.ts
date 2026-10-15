@@ -6,10 +6,10 @@
  * read off the generator's tap: they import nothing of `kernel/kill-rewards.ts`, the ledger or the adapter, so a wrong wiring shows as a
  * difference. The rig knocks a unit out through the engine's own HP path (`applyHpDelta`), where the KO resolution and so the roll run.
  *
- * Mutation-checked by hand (scratch, one change at a time, each caught here): the roll not called; called after the chain breaks; a girl's
- * knock-out skipped; the victory paying every standing monster; the best chain not tracked; the draw order swapped; an owner counted twice;
- * the Pointless, ejected and fallen-girl rules dropped; the rollback sparing a Petrified girl; Steal Will and Bribe paying; a plain Eject
- * not paying; the ledger lost by the advisor's fork; the fallback for a monster with no row.
+ * Mutation-checked by hand (scratch, one change at a time, 37 changes over the kernel and the engine, `docs/handoff/re-parity-rc9-x2-rewards.md` section 5; every one caught here or in the kernel test but one that is equivalent):
+ * the roll not called; called after the chain breaks; a girl's knock-out skipped; the victory paying every standing monster; the best chain not recorded; the chain read as 0; the Pointless, ejected and fallen-girl
+ * rules dropped; the rollback sparing a Petrified or a dead girl; Steal Will paying; a plain Eject never paying, or always paying; the AP summed over the girls instead of the best; a monster with no row losing its drops;
+ * the ability words taken from the wrong word; one shared save index.
  */
 
 import { describe, expect, it } from 'vitest';
