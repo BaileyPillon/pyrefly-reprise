@@ -125,11 +125,14 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
       driver.catchUp();
       if (!settled) pressQueued = true;
     };
-    const watcher = new RawInputWatcher((b, source) => {
-      if (b !== 'confirm' || settled) return;
-      device.note(source);
-      confirm();
-    });
+    const watcher = new RawInputWatcher(
+      (b, source) => {
+        if (b !== 'confirm' || settled) return;
+        device.note(source);
+        confirm();
+      },
+      { edgeOnly: true }, // the game reads a press as newly pressed: a held key is one press
+    );
     // A finger or a click anywhere on the slab is the confirm press (PR-0360). `pointerdown`, like a key's `keydown`: no lift to wait for.
     const onPointer = (e: PointerEvent): void => {
       if (settled || e.button > 0) return;

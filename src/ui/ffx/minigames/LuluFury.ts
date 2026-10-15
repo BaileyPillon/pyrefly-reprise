@@ -100,14 +100,17 @@ export function openLuluFury(root: HTMLElement, params: Record<string, unknown>)
       },
     );
 
-    const watcher = new RawInputWatcher((b) => {
-      if (settled) return;
-      if (b !== 'left' && b !== 'right') return;
-      driver.catchUp();
-      if (settled) return;
-      if (b === 'left') left = true;
-      else right = true;
-    });
+    const watcher = new RawInputWatcher(
+      (b) => {
+        if (settled) return;
+        if (b !== 'left' && b !== 'right') return;
+        driver.catchUp();
+        if (settled) return;
+        if (b === 'left') left = true;
+        else right = true;
+      },
+      { edgeOnly: true }, // the game reads Left and Right as newly pressed: a held direction does not repeat
+    );
 
     // The ring runs out at the limit: the frames still due go by, then the frame that finds the limit gone ends it.
     overlay.startTimer(timerMs, () => {

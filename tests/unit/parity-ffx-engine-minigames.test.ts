@@ -352,6 +352,21 @@ describe('the three overlays run the game\'s controllers on the engine\'s params
     expect(r.sequence.timeRemainingMs).toBeCloseTo(Math.fround(4 - (r.sequence.frame as number) / 30) * 1000, 6);
   });
 
+  it('Bushido: a held key is one press (the game reads the pad\'s pressed edge), so the auto-repeat of a held arrow does not reset a run', async () => {
+    const o = open('auron-sequence', { sequence: ['up', 'down'], timerMs: 4000, name: 'Test' });
+    key('ArrowUp');
+    for (let i = 0; i < 5; i++) {
+      await vi.advanceTimersByTimeAsync(40);
+      window.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp', key: 'ArrowUp', repeat: true })); // the operating system's repeat of a held key
+    }
+    await vi.advanceTimersByTimeAsync(100);
+    expect(o.root.querySelectorAll('.ig-minigame__key--done').length).toBe(1); // Up counted once; the repeats did not count as a wrong Up
+    expect(o.root.querySelectorAll('.ffx-mg-key--wrong').length).toBe(0);
+    key('ArrowDown');
+    await vi.advanceTimersByTimeAsync(600);
+    expect(o.result()).toMatchObject({ kind: 'auron-sequence', sequence: { success: true, correctInputs: 2 } });
+  });
+
   it('Fury: a step is a left and a right press and two steps are a rotation; four pairs at Magic 20 make four steps, two rotations and two casts', async () => {
     const p = minigameParams(
       { rt: { inventory: new Map() }, content: furyContent() } as never,

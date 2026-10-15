@@ -153,11 +153,14 @@ export function openAuronSequence(root: HTMLElement, params: Record<string, unkn
       if (!settled) pending |= WORD_OF_BUTTON[b] ?? NEVER;
     };
 
-    const watcher = new RawInputWatcher((b, source) => {
-      if (settled) return;
-      device.note(source);
-      press(b);
-    });
+    const watcher = new RawInputWatcher(
+      (b, source) => {
+        if (settled) return;
+        device.note(source);
+        press(b);
+      },
+      { edgeOnly: true }, // the game compares the pad's pressed-edge word: a held key is one press, not a run of them
+    );
 
     // Mouse and touch: a press on chip i is the press of sequence[i] (PR-0360). `pointerdown`, not `click`: the
     // chips are rebuilt on every press, and a finger that lifts over a rebuilt chip would never click anything.
