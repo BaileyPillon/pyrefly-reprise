@@ -48,6 +48,10 @@ export const FfxStream = {
   StealSlot: 11,
   /** Wakka's Attack Reels result. Named for the stream map; nothing draws it yet (the player's reel input is a stand-in on `BattleRng.aux`). */
   Reels: 19,
+  /** The player's Yojimbo: the turn-start free-attack roll and the script's raw draw (re-parity lane FFX-K, `FFX-G08` 3.1; the draw is the 31-bit value, the script masks it). */
+  Yojimbo: 17,
+  /** The Magus Sisters: `RollMagusRandom` and their menu builders (re-parity lane FFX-K, `FFX-G08` 6.2; `(value & 0xFF) < threshold`). */
+  Magus: 18,
 } as const;
 
 /** The FFX generator and seeding, in the shape {@link GameStreams} wants. */
