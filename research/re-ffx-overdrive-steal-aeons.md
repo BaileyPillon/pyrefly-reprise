@@ -139,7 +139,7 @@ The gain always goes through the add of §1.2.
 | 8 | Slayer | 0x7b0f80 | a party member or aeon kills a monster | +20 |
 | 9 | Hero | 0x7b0f80 | the same, when the monster's max HP is above 3 times the killer's reference damage (unsigned) | +20 |
 | 10 | Rook | 0x7b12c0 | Shell or Protect reduced a monster's hit on a party member or aeon (record bit 1) | +10 |
-| 11 | Victor | 0x7b1540 (the battle-end state) | the battle is won; every party member in the battle, **dead or not** | +20 |
+| 11 | Victor | 0x7b1540 (the battle-end state) | the battle is won; every party member in the battle, **dead or not** **[Superseded 2026-10-15 by re-parity RC8 lane FFX-L, from FFX.exe: the hook is called for every result 1 to 5, not only a victory (`research/re-ffx-battle-entry.md` section 3); the engine runs it at every ending.]** | +20 |
 | 12 | Coward | 0x7b1090 (a successful flee) | the character fled | +10 |
 | 13 | Ally | 0x7b13c0 (the scheduler, for each queued turn) | the start of its own turn | +3 |
 | 14 | Sufferer | 0x7b13c0 | its turn starts with Zombie, Poison, Confuse, Sleep, Silence, Darkness, Slow or Doom | +16 |

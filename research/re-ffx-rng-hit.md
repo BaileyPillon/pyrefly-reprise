@@ -268,7 +268,7 @@ These are the changes the wiring batch has to make; none has been made.
 | 9 | Loop nesting: hits outside, targets inside; the game goes target slot by target slot, hits inside | `abilities.ts` 143 to 145 | only multi-hit, multi-target actions |
 | 10 | Generator: one shared mulberry32 float stream and `rng.int(0, 100)`; the game uses 68 streams and `31-bit mod 101` (rolls 0 to 33 are likelier by one part in 21 million). A decision for Bailey (P3) | `common/rng.ts` | whole replays move |
 | 11 | Escape: no draw when the battle cannot be escaped, no "always escape" state; party Flee always succeeds (the game's group flee, VA 0x007ada60, was not read) | `execute.ts` 49 to 60 | draws 0 / 1 |
-| 12 | Battle start type is taken from the setup data and never rolled (right for bosses; the game rolls 32/33 in 256 for random encounters) | `turnQueue.ts` 182 | out of scope for the five bosses |
+| 12 | Battle start type is taken from the setup data and never rolled (right for bosses; the game rolls 32/33 in 256 for random encounters). **[Superseded 2026-10-15 by re-parity RC8 lane FFX-L, from FFX.exe: the roll's ONE draw of stream 1 is spent in every battle and every chapter formation overwrites its answer with a normal start, so the setup's start type stays; `research/re-ffx-battle-entry.md` section 1, `adapt/entry.ts`.]** | `turnQueue.ts` 182 | out of scope for the five bosses |
 
 Not a difference: the engine's `canMiss: false` and "enemy action with no accuracy byte" shortcuts, the sleeping
 and petrified auto-hit, the 40 percent of ACC (`floor(0.4 acc)` and `floor(2 acc / 5)` agree for every ACC from 0 to
