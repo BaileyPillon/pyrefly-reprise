@@ -4,7 +4,7 @@ import type { BattleCamera } from '../engine/BattleCamera.ts';
 import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import type { ScenePalette } from '../engine/Renderer.ts';
-import { ANGRA_MAINYU_BODY_IDS, ANGRA_MAINYU_PLATE, X2_ANGRA_MAINYU_ID, X2_TAWRICH_ID, X2_ZARICH_ID } from '../data/angra-mainyu-ids.ts';
+import { ANGRA_MAINYU_BODY_IDS, ANGRA_MAINYU_PLATE, ANGRA_MAINYU_SCENE, X2_ANGRA_MAINYU_ID, X2_TAWRICH_ID, X2_ZARICH_ID } from '../data/angra-mainyu-ids.ts';
 import { DJOSE_CAMERA_REF, DJOSE_CHAMBER_SLOTS, DJOSE_PARTY_HEIGHT, DJOSE_RIGS, type DjosePlateFrame, djoseCentreY } from './djose-chamber.ts';
 import { RoadPhoneCamera, roadOnPhone } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
@@ -73,7 +73,7 @@ export const ANGRA_MAINYU_SLOTS: SceneSlots = {
 
 /** A hot, bright desert grade: the painting's own warm light kept, the shadows a cool sand-blue, a little more bloom than the caves. */
 export const ANGRA_MAINYU_PALETTE: ScenePalette = {
-  name: 'ffx2-angra-mainyu-desert',
+  name: ANGRA_MAINYU_SCENE,
   lift: [0.012, 0.01, 0.01],
   gamma: [1.0, 1.0, 1.0],
   gain: [0.84, 0.82, 0.78],
@@ -113,7 +113,7 @@ function plateOptions(url: string, low: boolean, cameraRef: [number, number, num
 /** **The Bikanel Desert, for Angra Mainyu**, as a {@link SceneFactory}. Owns no combatants. */
 export const buildAngraMainyuDesertScene: SceneFactory = async (opts: SceneBuildOptions = {}): Promise<SceneBuild> => {
   const group = new Group();
-  group.name = 'scene:ffx2-angra-mainyu-desert';
+  group.name = `scene:${ANGRA_MAINYU_SCENE}`;
   const low = opts.quality === 'low';
   const cameraRef = opts.cameraRef ?? DJOSE_CAMERA_REF;
   const url = artUrl(`art/backdrops/${ANGRA_MAINYU_PLATE}.png`);

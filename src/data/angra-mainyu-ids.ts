@@ -17,8 +17,11 @@ export const X2_TAWRICH_ID = 'x2-tawrich';
 /** Every body of the fight, the body first (`bossIds` of the guide, the advisor and the tests). */
 export const ANGRA_MAINYU_BODY_IDS = [X2_ANGRA_MAINYU_ID, X2_ZARICH_ID, X2_TAWRICH_ID] as const;
 
-/** The scene key: the FFX-2 stage for the desert (`src/scenes/angra-mainyu-desert.ts`). */
-export const ANGRA_MAINYU_SCENE = 'ffx2-angra-mainyu-desert';
-
 /** The painting: a provisional Bikanel Desert plate (`public/art/backdrops/bikanel-desert-provisional.png`, a new file in the art mirror; until it is installed the engine shows its placeholder plate). */
 export const ANGRA_MAINYU_PLATE = 'bikanel-desert-provisional';
+
+/**
+ * The scene key: the FFX-2 stage for the desert (`src/scenes/angra-mainyu-desert.ts`). It is the plate's own key, as every other chapter's scene is (`djose-chamber-provisional`, `mushroom-rock-road`), because the cutscene
+ * screen and the party prep's wash draw `backdrops/<sceneKey>.png`: a scene key of its own had left the intro on a black screen.
+ */
+export const ANGRA_MAINYU_SCENE = ANGRA_MAINYU_PLATE;
