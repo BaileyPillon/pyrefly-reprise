@@ -47,6 +47,8 @@ interface WindowStats {
   lapsed: number;
   committed: number;
   waitedSteps: number;
+  maxWaited?: number;
+  capped?: number;
   inFlight: { party: number; enemy: number };
   lastCode: number;
 }
@@ -82,7 +84,7 @@ function partyKosOf(log: readonly BattleEvent[], state: Readonly<BattleState>): 
 }
 
 function emptyWindow(): WindowStats {
-  return { opened: 0, lapsed: 0, committed: 0, waitedSteps: 0, inFlight: { party: 0, enemy: 0 }, lastCode: 0 };
+  return { opened: 0, lapsed: 0, committed: 0, waitedSteps: 0, maxWaited: 0, capped: 0, inFlight: { party: 0, enemy: 0 }, lastCode: 0 };
 }
 
 function addWindow(into: WindowStats, from: WindowStats): void {
@@ -90,6 +92,8 @@ function addWindow(into: WindowStats, from: WindowStats): void {
   into.lapsed += from.lapsed;
   into.committed += from.committed;
   into.waitedSteps += from.waitedSteps;
+  into.maxWaited = Math.max(into.maxWaited ?? 0, from.maxWaited ?? 0);
+  into.capped = (into.capped ?? 0) + (from.capped ?? 0);
   into.inFlight.party += from.inFlight.party;
   into.inFlight.enemy += from.inFlight.enemy;
   into.lastCode = from.lastCode;

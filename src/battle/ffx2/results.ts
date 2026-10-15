@@ -17,6 +17,7 @@
 
 import type { BattleResult, BattleState } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
+import { evaluateEnd, outcomeOfEnd } from './adapt/battle-end.ts';
 
 /** Deterministic actor order: party by slot, then enemies by slot. */
 export function actorOrder(units: readonly Ffx2Unit[]): Ffx2Unit[] {
@@ -48,7 +49,8 @@ export function emptyState(): BattleState {
 }
 
 /**
- * Has the battle ended? Returns the outcome, or `null` to keep playing.
+ * Has the battle ended? Returns the outcome, or `null` to keep playing. **The game's evaluation** (exe 0x0061ef70, `kernel/battle-end.ts`, through `adapt/battle-end.ts`);
+ * the engine COMMITS the end only after the commit window (`end-window.ts`, re-parity RC8 XK2), so this says what the evaluation answers now, not when the fight ends.
  *
  * `flags.badEnding` is the Vegnagun head's cannon fail clock: when Shuyin's
  * seventh line fires, Spira is destroyed and the run ends in the bad ending —
@@ -58,14 +60,9 @@ export function battleOutcome(
   units: readonly Ffx2Unit[],
   state: BattleState,
 ): BattleResult['outcome'] | null {
-  // PR-0145: a petrified girl is not standing. 'All three girls petrified = Game Over'
-  // [ffx2-combat-core §2.8, `[verified: 2 sources]`], so the helpless party is not beaten down first.
-  const partyAlive = units.some((u) => u.side === 'party' && u.alive && !u.removed && !u.statuses.petrify);
-  const bossesAlive = units.some((u) => u.side === 'enemy' && !u.flags.isPart && u.alive && !u.removed && !u.statuses.petrify);
-
-  if (state.flags['badEnding'] === true || !partyAlive) return 'defeat';
-  if (!bossesAlive) return 'victory';
-  return null;
+  // PR-0145: a petrified girl is not standing ('All three girls petrified = Game Over' [ffx2-combat-core §2.8, `[verified: 2 sources]`]); the enemies that are all stone are
+  // defeated (XK-petrify); a girl who is ejected is alive but out of the battle, which ends the fight as a defeat as it always has (result 3, not turned into an escape).
+  return outcomeOfEnd(evaluateEnd(units, state));
 }
 
 /** Gil Pilfer Gil took this battle; kept on a win or an escape, lost with the party. */

@@ -178,6 +178,20 @@
  * `docs/handoff/re-parity-rc7.md`). Nothing is re-pinned by the merge: the one hash lane X2-B moved (`CH5_D0` seed 4, above) is the only difference from the base in the
  * merged tree, and lane X2-D moves none (a girl who holds no automatic ability has no layer, so no draw, no event and no state changes). The shipped line of all eight
  * FFX-2 chapters over seeds 1 to 500 equals the base in every sum and every seed's outcome except Chapter V's Silence-scope movement (+35 party turns, +3 KOs, wins 490).
+ *
+ * **Re-pinned a thirteenth time, every array, for the item ledger and the battle-end commit window** (re-parity RC8, lane X2-F row XF1 and lane X2-K row XK2, branch `re-parity-rc8-x2-end-ledger`,
+ * 2026-10-15, FFX-2 only; reason "game-code parity", the checked notes FFX2-G06 and FFX2-G10; `docs/handoff/re-parity-rc8-x2-end-ledger.md`). All sixty digests moved. Cause, found by
+ * fingerprinting the full event log of every seed before (the base commit's sources) and after and comparing them event by event: **in all sixty the logs are identical up to the base's
+ * own last events** (the live status payloads of earlier `status-add` events aside, which keep counting down after the event and so differ at the end of the run) **and differ at the
+ * end of the first link**: the end of a fight is now committed only after the casts already on the purple bar have fired (the game's phase-2 drain, exe 0x0061e7a0), so a Cure, a
+ * Protect or a Phoenix Down in flight when the last blow lands resolves before the victory (extra `atb`, `status-add`, `action-end`, `damage` and `status-tick` events between the
+ * last blow and the `victory`: 1 to 51 events on a Chapter IV D = 0 seed, 3 to 10 on a Chapter V one; the one seed with none, `CH4_D1500` seed 6, differs only in its last `atb` snapshot, where the window had closed a girl's open menu). On the chain arms the later links then start from the state the window left, so
+ * they differ from there on. The item ledger alone (the item leaves the stock at the pick) moves exactly one of the sixty, `CH5_D1500` seed 3, whose link 4 differs because
+ * Paine can no longer pick the Mega Phoenix another girl's cast has reserved (she picks a Phoenix Down); the other fifty-nine are byte-identical with the ledger alone (measured by
+ * dumping the arms with the ledger wired and the window not). Outcomes: Chapter IV is still 20/20 at D = 0 and 10/10 on the Active arm; Chapter V is still 20/20 at D = 0; **the
+ * Chapter V Active D = 1500 arm goes from 4/10 to 9/10** (seeds 1, 5, 6 and 7 lose no more; seed 10 is still lost): the heals in flight when a link ends now land before the next link
+ * starts. An ablation that stops the window from waiting for a command held back for a chain lock gives the same 9/10, so the cause is the casts in flight, not that rule. The
+ * Wait arm still equals the D = 0 arrays and a Wait engine switched to Active still equals the Active arrays (both asserted below). The old hashes are in git at ea431aa0.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -187,29 +201,29 @@ const SEEDS = Array.from({ length: 20 }, (_, i) => i + 1);
 
 /** Re-pinned for PR-0075; the pre-change hashes are in git at 1b33971..17b9af2. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D0 = [
-  '08332b98dd23c13e', 'b320e520bf125d9c', '3b1bae27af9363c1', '4f8c87800a532af0', 'fcbc982c603fae64',
-  '300c16a2498a6a36', '8c994ac8e401a081', '487ad2569fc675f6', 'a183074c99b62dbc', '97e281a62a4e83d2',
-  '9a76d41f653670d3', '3a77e68afe04fe8f', '9fa897d1235af985', 'cc0fbb7c4962d455', '267f7d8428d4de22',
-  '47851e5ebdac808e', '58daa1fb3c29507c', '953ebac39bcdf582', 'f30620e6ee91ce1a', '01470faf3fb827ec',
+  '6baeab06549072aa', 'dabe314b3bcfb98c', '1aca076e62b746d6', 'a2e75bae8a1d3805', '7110a473d05c6008',
+  '807a01d058664c8f', 'fb9ebca381fc5407', 'ed3c9b184b3a7643', 'afe23378dd3fa59e', 'c24f5570c48e99a1',
+  '88425f0d8d271fb3', 'e91056a94ce7e28a', 'b97fda435d979369', '8b787c3a3f58028a', 'f8610576af141ff3',
+  '687196de7521bed0', '098a870b4c4ee266', '77e2a9cfa28591b7', '6fd10928b8cfba66', '9cbb7004aab30dc7',
 ];
 
 /** Re-pinned for IC-2 + Acta Est Fabula's target (2026-09-26); the old hashes are in git at ea05f877. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D0 = [
-  '14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1',
-  '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588', '056a29c9f64475e6', 'ea11e6bc57472033',
-  '05af170bce70e2d5', '74a919cdaf0a8ad6', 'f780f0894a0abad4', '1364bcf4301efff4', '6a307cb2f5a5ac7c',
-  '8cb28183509bba6e', '462f552cd4c79127', '5f977e99eddd8cf7', 'a2cde3f49733da1a', 'acec700595ac3f00',
+  'bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772', '19e4019ffcf7880c', '48022cc460c8aae2',
+  '71a0d0a7a92737fa', '276aa8ad4aa650ab', '7a1ae4b195157295', 'ef2f7e32e91d11d7', 'f7bcf23cab5b7506',
+  '6dc9e5f77beda50f', 'f580c3578f32e89e', 'dbca9b3cb4361250', '8a7a854690883e7c', '17ec8ba0f1432659',
+  '0ed2b7ed444575ec', 'd53423843c0e7639', '5803427cca2ef08b', 'dfffc40350dac830', 'ce771f6138874510',
 ];
 
 /** Re-pinned for the menu-cancel correction (only a Delay / Action-cancel hit closes a menu, 2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for Mega Flare at the game's power 14 (2026-10-09, see the ninth re-pin above); the old hashes are in git at 3663cd3a. Re-pinned a fourth time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH4_D1500 = [
-  '9318b354f5ca9274', 'c325078b03484e03', '05f9575c5edc6a2d', '5ca4f2ee4ae9edfd', '0af57a98ab480cbe',
-  'b75b69c690bc619e', 'e098f02143c771f7', 'e30ae9d24e21bed9', 'd72bd8136f4aecf1', 'dcb5dfd472e93c13',
+  '541a5b56a437d847', 'de4b9b9272b4f31c', 'efad46ae79750115', '5ce88d3db42b4f5c', 'bf3bc4c9c96b45cf',
+  '78923b216f0cfa8a', 'be348b7486ab49d2', '4c461d984729b666', '16db2f8f02e22800', '6d253ccae574681b',
 ];
 /** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
 const CH5_D1500 = [
-  'db1e80d7abded255', '128eb3693b451727', 'b75aa5e2ee54da92', 'ad3bd0a96b7a2b1a', '6fa8a633acc41166',
-  '8e0c8849569198c2', '1ca8f3c131542b5d', 'd3f5e401c53a86e5', '966da767eeda3cec', '64742449853c3c75',
+  '92819ec58ac5dabc', '4ca43d65de715648', 'fc8876ca27be75d6', '9569c0c08bb461f2', 'af03edc3758d8923',
+  'dc2a5848a5794ec5', 'fcc3c245eca146bd', '8fc4b62f1e0c4fa4', '1ce0a6f4e1bcf31c', '71141886d58a95c9',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */

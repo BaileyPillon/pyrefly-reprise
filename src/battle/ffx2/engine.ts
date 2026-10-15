@@ -60,6 +60,7 @@ import {
   type TickOptions,
 } from './active.ts';
 import { Ffx2EngineCore } from './engine-core.ts';
+import { EndWindow, type EndWindowStats } from './end-window.ts';
 
 /** Rounding slack when milliseconds become whole logic steps (a call handed exactly the time to an event must reach it). */
 const STEP_EPSILON = 1e-6;
@@ -80,6 +81,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.inputOwner = null;
     this.held = null;
     this.counterQueue = [];
+    this.endWindow = new EndWindow();
     this.carriedSteps = 0;
     this.stepCredit = 0;
     this.ordered = [];
@@ -273,9 +275,15 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     f.dresspheres = this.dresspheres;
     f.grids = this.grids;
     f.rng = this.rng.fork(seed, rngState);
+    f.endWindow = this.endWindow.clone();
     [f.elapsedMs, f.inputOwner, f.hitClosed, f.carriedSteps, f.stepCredit] = [this.elapsedMs, this.inputOwner, this.hitClosed, this.carriedSteps, this.stepCredit];
     [f.speed, f.mode, f.split, f.level] = [this.speed, this.mode, this.split, this.level];
     return f;
+  }
+
+  /** The commit window's counters (tests and the measurement; deliberately not on the interface): ends opened, lapsed and committed, the steps they waited, what was in flight. */
+  endWindowStats(): EndWindowStats {
+    return { ...this.endWindow.stats, inFlight: { ...this.endWindow.stats.inFlight } };
   }
 
   /** The command a chain-locked girl confirmed and is waiting to fire, if any. */
@@ -288,7 +296,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
    * polls this once per pump step while a menu is up; see `active.ts` {@link inputStillValid}.
    */
   inputValid(actorId: CombatantId): boolean {
-    return inputStillValid(this.units, actorId, !!this.battleState.result, this.awaitingMinigame !== null, this.hitClosed === actorId);
+    return inputStillValid(this.units, actorId, !!this.battleState.result || this.endWindow.open, this.awaitingMinigame !== null, this.hitClosed === actorId); // the end window closes every menu
   }
 
   /**
