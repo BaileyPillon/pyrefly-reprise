@@ -22,7 +22,7 @@ releases); FFX-2's Yojimbo ("Tourist Trap") is a different record and shares not
     opening move is the joint Delta Attack (RE section 4.2; Jegged Sisters / StrategyWiki in `research/ffx-mirror-aeons.md`). Backdrop: the Mushroom Rock Road plate that Sinspawn Gui already uses.
   - **Act II, Dark Yojimbo, in the Cavern of the Stolen Fayth.** Dark Yojimbo (m340) and the dog stand-in. The game fights him five times (tiers `nagi05_70` to `_74`); the chapter fights **one tier** (section 3).
     Backdrop: the Cavern plate that Chapter IX (Yojimbo) already uses.
-- **The player: Yuna with Yojimbo AND the Magus Sisters in her summon list**, plus Tidus and Auron on the field and Wakka, Lulu, Kimahri and Rikku on the bench. The mirror is the point: the Dark Sisters meet Yuna's
+- **The player: Yuna with Yojimbo AND the Magus Sisters in her summon list**, plus Tidus and Lulu on the field and Auron, Wakka, Kimahri and Rikku on the bench (**Lulu takes the third seat because of Dark Mindy:** her Evasion is 240, and the engine, run on the preset in this lane, lands 0 of 55 blades on her; a spell never misses; see the update at the end). The mirror is the point: the Dark Sisters meet Yuna's
   Sisters, Dark Yojimbo meets Yuna's Yojimbo (Pay him, and hope for Zanmato against a resistance byte of 4).
 - **Hidden, an experiment.** `experimental: true`: attempts, clears and time go to the experiments' own store, never the save (no schema change; not the save-data deep class); no part of "N of 18"; the board has
   no card. Number **27** (26 is Angra Mainyu; `tests/unit/chapter-numbers.test.ts`).
@@ -43,7 +43,7 @@ mostly **loses** (under 20 percent). Measured by a bench on the real engine over
 **The two levers, and only these:**
 
 1. **The party preset** (`data/ffx/builds/mirror-aeons.ts`, all `[estimate]`): stats, gear, the aeons' stats derived from Yuna's by the §6.4 formula, gauges and the bag. One constants block; the source of each
-   number (Jegged Stat Maxing for the caps, Best Armor for the auto-abilities, GamerGuides' 250 to 255) is in `research/ffx-mirror-aeons.md` section 4.
+   number (Jegged Stat Maxing for the caps, Best Armor for the auto-abilities, GamerGuides' 250 to 255) is in `research/ffx-mirror-aeons.md` section 4. **Its levers, in the order the bench turns them, each a named constant:** the party's **Luck** (`ENDGAME_LUCK`, 60: Dark Yojimbo's Luck 114 and Dark Mindy's Evasion 240 are what the party's hit chance fights, Jegged: "high Luck will make the battle much easier"), the **stats fraction** of the caps, **Anima** in or out of the aeons, the **First Strike** seats, the **gil** Pay draws on, and the aeons' starting **gauges**.
 2. **Which of the game's own formations and tiers each act uses.** The files give a ladder in each act, so the choice is a **pick among real fights, not a number of ours**:
    - Act I, easiest to hardest: Mindy alone `kino05_71` (2.0M HP), Sandy alone `kino05_70` (2.5M), Cindy alone `kino01_71` (3.0M), Sandy and Mindy `kino01_72` (4.5M, pair), the trio `kino01_70` / `kino00_70` (7.5M,
      all gauges at 100). A lone sister has no Delta Attack (guides; RE section 4.2: the joint attack needs all three).
@@ -117,3 +117,16 @@ work. Frames under `docs/screenshots/ch-mirror-aeons/`, each looked at.
 2. Dark paintings (red and black) of the four aeons, the Mushroom Rock Road and Cavern plates (both are provisional stand-ins already), and the music (no source names these fights' cues) are Bailey's picks.
 3. The player's Yojimbo's starting compatibility (named estimate) and the hire answer 2 (the third reply, which Jegged and the files agree is the cheaper path).
 4. Whether the five tiers should become five links (the game's own structure) instead of one tier; it multiplies Act II by five.
+
+## 10. Update, 2026-10-15 (after the build): what the plan said and what was built
+
+| Plan | Built | Why |
+|---|---|---|
+| Tidus, Yuna and Auron on the field | **Tidus, Yuna and Lulu**; Auron on the bench | Dark Mindy's Evasion is 240 (RE section 2): on the engine a Luck-60 party's blades land 0 of 55 on her, 80 percent on Sandy, all on Cindy, two in five on Dark Yojimbo; a spell never misses. GamerGuides and StrategyWiki both send a mage (Doublecast Flare or Ultima). The advisor's target rule follows: blades to Cindy and Sandy, spells to Mindy (digest C9) |
+| `enemies/dark-aeons.ts`, `dark-aeons-abilities.ts`, `dark-aeons-groups.ts` | the same, plus `enemies/hidden-ffx.ts` | one barrel keeps `data/ffx/index.ts` at 399 lines |
+| "the dog as a bystander" | the dog stand-in is **untargetable, takes no turns, is no part of the victory and bites on Yojimbo's order with Strength 244** | the RE session's reading of the dog's own script (the file m116) closed the note's open question about the order row 0x4086; recorded in the handoff |
+| the seam on `all-ko` | built, and played on the real engine in every fall order, for the trio, a lone sister and never in Act II | |
+| Act II a retry checkpoint, one results screen for both acts | `checkpointOnEntry` and `poolsChainSpoils` on the Yojimbo groups (existing flags) | the game lets the player heal at the Save Sphere between its five tiers (Jegged Yojimbo) |
+| the word `yojimbo` | built; `zanmato` is the rejected word, with its control in `tests/unit/yojimbo-door.test.ts` | section 6 |
+| the bench | the harness and its fallback smoke run, the reach measurement (always on), the real ladder `skipIf` the AI and the summon rules are absent | section 3 |
+| the Master and Teleport Spheres | added to the item data with records at `[inferred]` table indices 0x2050 and 0x2062 | the note names the items and not their indices; every Sphere Grid item's row is the same blank row |
