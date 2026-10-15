@@ -325,6 +325,53 @@
   cursor: default;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  user-select: none; /* a long press on it (the phone's door field, `frontend/doorField.ts`) must not select it or open the system's callout */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/*
+ * The phone's door field: one small text field, put up by a long press on the label above and nowhere else (nothing is drawn before that; `frontend/doorField.ts`). Ink & Gold: the ink
+ * slab with the gold bar of the label and the display face. The type is 18px at least on any window: a phone zooms the page into a field set smaller than 16px.
+ */
+.fe-doorfield {
+  position: absolute;
+  z-index: 100; /* above the first-run guide's overlay (60 to 90): the player asked for it */
+  left: calc(12 * var(--fe-k));
+  right: calc(12 * var(--fe-k));
+  top: calc(4 * var(--fe-k));
+  display: flex;
+  align-items: center;
+  background: var(--ig-ink); /* opaque: the label under it must not show through the typed letters */
+  border-left: calc(4 * var(--fe-k)) solid var(--ig-gold);
+  box-shadow: 0 calc(6 * var(--fe-k)) calc(18 * var(--fe-k)) rgba(0, 0, 0, 0.55);
+}
+.fe-doorfield__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: calc(9 * var(--fe-k)) calc(14 * var(--fe-k));
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ig-paper);
+  caret-color: var(--ig-gold);
+  font-family: var(--ig-font-display);
+  font-weight: 700;
+  font-size: max(18px, calc(20 * var(--fe-k)));
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  -webkit-appearance: none;
+  appearance: none;
+}
+@media (min-width: 761px) and (min-aspect-ratio: 3 / 4) {
+  .fe-doorfield {
+    right: auto;
+    left: calc(52 * var(--fe-k));
+    top: calc(30 * var(--fe-k));
+    width: calc(420 * var(--fe-k));
+  }
 }
 
 /* ------------------------------------------------------------- the phone */

@@ -14,6 +14,7 @@ import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.t
 import { BoardWarmer } from './frontend/boardWarm.ts';
 import { deferSrcs, heroPlates, mountLazyPlates } from './frontend/lazyPlates.ts'; import { warmPlatesAhead } from './frontendWarm.ts'; // r44-thumbs: the plates a press from the cursor
 import { BoardDoors } from './frontend/chapterDoors.ts'; // every door of the board in one table: FF7's secret door and the typed words of the hidden chapters
+import { DoorField, type DoorKeyboard } from './frontend/doorField.ts'; // the phone's way to type a word: a long press on the label puts up a field that feeds the same table
 import { experimentRecord } from '../experiments/experimentRecords.ts';
 
 export interface ChapterSelectScreenOptions {
@@ -92,6 +93,7 @@ export class ChapterSelectScreen extends Screen {
   private wordKey = false; // a later letter of a word was just typed: the board leaves this frame's presses alone (the A of "leblanc" and "fayth" is `left`, the S of "mushroom" is `down`)
   private opening: ChapterId | null = null; // its last letter was just typed: the door opens on the next frame, which can take that press (C is START; see `handleInput`)
   private eyebrow: HTMLElement | null = null;
+  private field: DoorField | null = null;
   /** A-3: the focused chapter's battle starts loading while its card is read. */
   private readonly warmer = new BoardWarmer();
   /** r29: the selected card's plate and wash, put up decoded (`lazyPlates.ts`). */
@@ -289,12 +291,15 @@ export class ChapterSelectScreen extends Screen {
     this.doors = new BoardDoors();
     window.addEventListener('keydown', this.onDoorKey);
     this.eyebrow = this.root.querySelector<HTMLElement>('.fe-cselect__eyebrow');
+    if (this.eyebrow) this.field = new DoorField({ host: this.root, label: this.eyebrow, keyboard: (this.app as { input?: DoorKeyboard }).input, onDoor: (id) => this.openDoor(id) }); // first: it takes the click a long press leaves, ahead of the tap listener
     this.eyebrow?.addEventListener('click', this.onDoorTap);
   }
 
   private disarmDoor(): void {
     window.removeEventListener('keydown', this.onDoorKey);
     this.eyebrow?.removeEventListener('click', this.onDoorTap);
+    this.field?.dispose();
+    this.field = null;
     this.eyebrow = null;
   }
 
