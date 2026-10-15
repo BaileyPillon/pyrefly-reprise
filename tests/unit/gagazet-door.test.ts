@@ -10,7 +10,7 @@
  *    control that a plain Z does open the selected card (so the check can fail). The title answers `confirm` and `start`, so the word is typed on the board, never on the title;
  * 2. **the chapter is hidden by default** (asserted on its id, its EXP numeral and the tile count, never on the word);
  * 3. **the word opens it**, and only the word: the cursor stays, nothing is remembered or written; a wrong letter resets, and so does a pause over 2 s between letters;
- * 4. **the eight doors do not interfere**, the chapter opens party prep, and the word overlaps no other door word in any position (the shared rule of `chapter-doors.test.ts`, run here too).
+ * 4. **the nine doors do not interfere** (eight on this branch alone; `angra`, the Angra Mainyu lane's, joins them in release candidate r49-rc), the chapter opens party prep, and the word overlaps no other door word in any position (the shared rule of `chapter-doors.test.ts`, run here too).
  *
  * The tests read the word from its one constant, never a literal.
  */
@@ -73,7 +73,7 @@ describe('the word against every other door word', () => {
   const others = CHAPTER_DOORS.map((d) => d.word).filter((w) => w !== WORD);
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order', () => {
-    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor']);
+    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'angra']); // `angra` is the Angra Mainyu lane's (FFX-2, hidden chapter 26), merged in release candidate r49-rc
     for (const other of others) {
       for (const [a, b] of [[WORD, other], [other, WORD]] as const) {
         expect(a.startsWith(b), `${a} begins ${b}`).toBe(false);
@@ -354,7 +354,7 @@ describe('the word opens it on chapter select, and its Z never opens the card un
   });
 });
 
-describe('the eight doors do not interfere', () => {
+describe('the nine doors do not interfere', () => {
   it('each word opens its own chapter and nothing else', async () => {
     for (const row of CHAPTER_DOORS) {
       const rig = mount();
