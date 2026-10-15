@@ -25,11 +25,13 @@ import { SEYMOUR_OMNIS_GUIDE } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_GUIDE } from './seymour-natus.ts';
 import { ISAARU_GUIDE } from './ffx-isaaru.ts';
 import { SINSPAWN_GUI_GUIDE } from './sinspawn-gui.ts';
+import { BIRAN_YENKE_GUIDE } from './biran-yenke.ts';
 import { SIN_FINS_CORE_GUIDE } from './sin-fins-core.ts';
 import { SIN_FACE_GUIDE } from './sin-face.ts';
 import { FFX2_EXPERIMENT_GUIDE } from './ffx2-experiment.ts';
 import { FFX2_TOURIST_TRAP_GUIDE } from './ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID_GUIDE } from './ffx2-valefor-besaid.ts';
+import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 
 export type {
   ChapterGuide,
@@ -60,6 +62,7 @@ export {
   SEYMOUR_NATUS_GUIDE,
   ISAARU_GUIDE,
   SINSPAWN_GUI_GUIDE,
+  BIRAN_YENKE_GUIDE,
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
   FFX2_EXPERIMENT_GUIDE,
@@ -105,6 +108,10 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_TOURIST_TRAP_GUIDE,
   // The hidden Valefor at Besaid (FFX-2 only, Chapter 3; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here too.
   FFX2_VALEFOR_BESAID_GUIDE,
+  // The hidden Biran and Yenke chapter (FFX only, Kimahri's solo trial; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  BIRAN_YENKE_GUIDE,
+  // The hidden Angra Mainyu (FFX-2 only, Chapter 5; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here too.
+  FFX2_ANGRA_MAINYU_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

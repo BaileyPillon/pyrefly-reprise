@@ -47,7 +47,7 @@ function rewardItemIds(enemy: EnemyDef): string[] {
   const ids: string[] = [];
   const rewards = enemy.rewards;
   if (!rewards) return ids;
-  for (const drop of rewards.drops) ids.push(drop.itemId);
+  for (const drop of rewards.drops) ids.push(drop.itemId, ...(drop.rare ? [drop.rare.itemId] : [])); // a slot's rare item (`ItemDrop.rare`) is as much a drop as the common one
   if (rewards.steal) {
     ids.push(rewards.steal.common.itemId, rewards.steal.rare.itemId);
   }

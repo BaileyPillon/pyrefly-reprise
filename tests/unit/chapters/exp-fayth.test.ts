@@ -29,7 +29,9 @@ import { EXPERIMENT_GROUNDS_PLATE } from '../../../src/data/experiment-plates.ts
 import { ALL_ABILITIES, ITEMS } from '../../../src/data/ffx/index.ts';
 import { EXP_FAYTH_ID, EXP_FAYTH_SCENE } from '../../../src/data/ffx/exp-fayth-ids.ts';
 import { MUSHROOM_ROCK_SCENE } from '../../../src/data/ffx/sinspawn-gui-ids.ts';
+import { GAGAZET_RONSO_SCENE } from '../../../src/data/ffx/biran-yenke-ids.ts';
 import { TOURIST_TRAP_SCENE } from '../../../src/data/tourist-trap-ids.ts';
+import { ANGRA_MAINYU_SCENE } from '../../../src/data/angra-mainyu-ids.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { PYREFLY_CANON, pyreflyCanonFor } from '../../../src/engine/pyreflyCanon.ts';
 import { EVRAE_AIRSHIP_DECK_SLOTS } from '../../../src/scenes/evrae-airship-deck.ts';
@@ -149,7 +151,7 @@ describe('its scene', () => {
   });
 
   it('the hidden chapters\' scenes moved to the side table are all still registered, row for row, with the factories they had', () => {
-    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE]; // the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row
+    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE]; // the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toEqual(keys);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES).sort()).toEqual([...keys].sort());
     for (const key of keys) {

@@ -107,7 +107,7 @@ describe('the near-weighted search (searchr)', () => {
   });
 
   it('uses the scene start positions of each scene whose boss searches (numbers only)', () => {
-    expect(Object.keys(SCENES)).toEqual(['bahamut', 'tail', 'leg', 'shuyin', 'besaid']); // besaid: Valefor's room, the hidden chapter (`pos_bsyt05_229`, the RE review of 2026-10-14)
+    expect(Object.keys(SCENES)).toEqual(['bahamut', 'tail', 'leg', 'shuyin', 'besaid', 'angra']); // besaid: Valefor's room, the hidden chapter (`pos_bsyt05_229`, the RE review of 2026-10-14); angra: Angra Mainyu's desert (`pos_bika*_229`, the RE note of 2026-10-14)
     for (const scene of Object.values(SCENES)) {
       const weights = sceneWeights(scene, [0, 1, 2]);
       expect(weights.every((w) => w > 1)).toBe(true);

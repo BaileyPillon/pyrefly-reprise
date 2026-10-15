@@ -18,6 +18,8 @@ import { departureKindOf } from './BattlePresenterDepartures.ts';
 import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
 import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
 import { TOURIST_TRAP_SCENE } from '../data/tourist-trap-ids.ts';
+import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
+import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 
 /**
  * People, who die as people: the presentation plan's A-5 row ("Humans
@@ -131,6 +133,15 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [EXPERIMENT_GROUNDS_PLATE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-experiment.md §6.1: the arena rows name no particles' },
   // The Tourist Trap (the hidden chapter, FFX-2 only): the Cavern of the Stolen Fayth under the FFX-2 camera.
   [TOURIST_TRAP_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §8.2: the mission page names no particles in the chamber' },
+  // Biran and Yenke (the hidden chapter, FFX only): Chapter I's mountain plate for the Mountain Gate, so the mountain's row: no source puts pyreflies in the air on the trail (the brothers are beaten and lie down, they are not sent).
+  [GAGAZET_RONSO_SCENE]: {
+    game: 'ffx',
+    verdict: 'unattested',
+    cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the brothers' bodies stay (research/re-ffx-biran-yenke.md section 5.1)`,
+    treatment: "As Gagazet: snow and glitter, nothing added; the brothers lie down and stay (`BattlePresenterDepartures.ts`), they do not dissolve",
+  },
+  // Angra Mainyu (the hidden chapter, FFX-2 only): the Bikanel Desert.
+  [ANGRA_MAINYU_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-angra-mainyu.md §1: no source names particles in the desert fight' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.
   'sector1-reactor': {
     game: 'ff7',

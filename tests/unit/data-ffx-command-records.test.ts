@@ -141,8 +141,10 @@ describe("the attached records are the game's table", () => {
     // 462 and 460 since the airship menu followed the game (re-parity row D-08, Bailey 2026-10-09 "Yes, match the game"): Cid's
     // third Trigger Command, Cancel (0x3108), with the game's own record (the same fields as Talk and Pull back).
     // 483 and 481 since re-parity RC7 lane FFX-H: the 21 Mix results the data layer lacked (0x308d to 0x30a8), each with its record.
-    expect(ALL_ABILITIES).toHaveLength(483);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(481);
+    // 490 and 488 since the hidden Biran and Yenke chapter (FFX only, 2026-10-14): the Friend Sphere (0x2061), Bulldoze (0x60a5), the brothers' Fire Breath and Aqua Breath (0x60a2, 0x60a3), Berserk (0x400f), and
+    // the brothers' own copies of Kimahri's Mighty Guard and White Wind (0x3072, 0x3070), each with its record (all seven rows are in the game's fixture; the RE review of 2026-10-14 asked for them).
+    expect(ALL_ABILITIES).toHaveLength(490);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(488);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });

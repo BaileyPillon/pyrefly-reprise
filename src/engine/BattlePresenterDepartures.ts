@@ -91,6 +91,10 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   mortibody: 'returns',
   // FFX, Chapter I: research/ffx-seymour-flux.md §2.2 ("no death state") and §4.4 ("never absent").
   mortiorchis: 'returns',
+  // FFX, the hidden Biran and Yenke chapter: research/re-ffx-biran-yenke.md section 5.1: both brothers' init sets a death animation after which the body STAYS (0 for Biran, 1 for Yenke), and onDeath
+  // makes it untargetable; they are living Ronso beaten in a trial, not fiends sent. The body lies down where it fell (`'body'`) and nothing dissolves into pyreflies.
+  'biran-ronso': 'body',
+  'yenke-ronso': 'body',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {

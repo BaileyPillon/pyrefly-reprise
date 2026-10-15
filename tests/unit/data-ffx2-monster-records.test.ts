@@ -96,6 +96,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-cavern-yojimbo/')) continue;
       // The hidden Valefor at Besaid's row 164 is pinned against its own numbers-only fixture (tests/fixtures/parity/ffx2/besaid_valefor_rows.json, tests/unit/chapters/besaid-valefor-data.test.ts).
       if (key.startsWith('ffx2-besaid-valefor/')) continue;
+      // The hidden Angra Mainyu's rows 268 to 270 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/angra_mainyu_rows.json, tests/unit/chapters/angra-mainyu-data.test.ts).
+      if (key.startsWith('ffx2-bikanel-angra-mainyu/')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

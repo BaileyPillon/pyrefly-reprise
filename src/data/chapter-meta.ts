@@ -25,6 +25,8 @@ import { TOURIST_TRAP_META } from './chapter-meta-ffx2-tourist-trap.ts';
 import { SINSPAWN_GUI_META } from './chapter-meta-sinspawn-gui.ts';
 import { EXP_FAYTH_META } from './chapter-meta-exp-fayth.ts';
 import { VALEFOR_BESAID_META } from './chapter-meta-ffx2-valefor-besaid.ts';
+import { BIRAN_YENKE_META } from './chapter-meta-biran-yenke.ts';
+import { ANGRA_MAINYU_META } from './chapter-meta-ffx2-angra-mainyu.ts';
 import { SEYMOUR_ANIMA_MACALANIA_META } from './chapter-meta-seymour-anima-macalania.ts';
 import { EVRAE_META } from './chapter-meta-evrae.ts';
 import { YOJIMBO_META } from './chapter-meta-yojimbo.ts';
@@ -38,21 +40,13 @@ import { ISAARU_META } from './chapter-meta-isaaru.ts';
 import { SIN_CHAPTER_META } from './chapter-meta-sin.ts';
 
 /**
- * The pause screen's objective rule vocabulary. Each rule is a pure
- * descriptor — small, serialisable, and meant to be evaluated by the pause
- * screen against a live `BattleState` (see `docs/handoff/pause-screen.md`
- * for the evaluator contract). This module only *describes* objectives; it
- * does not evaluate them, so it has no dependency on `BattleState` itself.
+ * The pause screen's objective rule vocabulary. Each rule is a pure descriptor — small, serialisable, and meant to be evaluated by the pause screen against a live `BattleState`
+ * (see `docs/handoff/pause-screen.md` for the evaluator contract). This module only *describes* objectives; it does not evaluate them, so it has no dependency on `BattleState` itself.
  *
- * `link-reached` refers to the chapter's own battle-chain position
- * (`EnemyGroupDef.nextGroupId`/`BattleSetup.chained`, i.e. which link of a
- * multi-battle chapter is live — Yunalesca's forms are `form-reached`
- * instead, since hers is one battle with in-place transformations, not a
- * chain of separate `EnemyGroupDef`s). `parts-downed` and `chain-landed`
- * extend the six example shapes in the brief for the two objectives that
- * don't fit them: Braska's Final Aeon's Yu Pagoda pair, and FFX-2 Bahamut's
- * Chain Attack counter (`FFXCombatant.chainCount`, distinct from a chapter
- * "link").
+ * `link-reached` refers to the chapter's own battle-chain position (`EnemyGroupDef.nextGroupId`/`BattleSetup.chained`, i.e. which link of a multi-battle chapter is live — Yunalesca's
+ * forms are `form-reached` instead, since hers is one battle with in-place transformations, not a chain of separate `EnemyGroupDef`s). `parts-downed` and `chain-landed` extend the
+ * six example shapes in the brief for the two objectives that don't fit them: Braska's Final Aeon's Yu Pagoda pair, and FFX-2 Bahamut's Chain Attack counter (`FFXCombatant.chainCount`,
+ * distinct from a chapter "link").
  */
 export type ObjectiveRule =
   | { kind: 'status-cured'; status: string }
@@ -391,7 +385,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
 ] as const;
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

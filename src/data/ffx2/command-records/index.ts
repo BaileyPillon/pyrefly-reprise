@@ -15,6 +15,7 @@ import { COMMAND_RECORDS_ENEMIES } from './enemies.ts';
 import { COMMAND_RECORDS_EXPERIMENT } from './experiment.ts';
 import { COMMAND_RECORDS_TOURIST_TRAP } from './tourist-trap.ts';
 import { COMMAND_RECORDS_VALEFOR } from './valefor.ts';
+import { COMMAND_RECORDS_ANGRA_MAINYU } from './angra-mainyu.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_PARTY } from './party.ts';
 
@@ -26,6 +27,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_EXPERIMENT, // the hidden chapter's Experiment (new-chapters RE lane, 2026-10-10)
   ...COMMAND_RECORDS_TOURIST_TRAP, // the hidden Tourist Trap chapter: Yojimbo's four rows and Daigoro's bite (RE review 2026-10-14, m170 / m174)
   ...COMMAND_RECORDS_VALEFOR, // the hidden chapter's Valefor at Besaid: monmagic 0x4091 to 0x4093 (RE review 2026-10-14)
+  ...COMMAND_RECORDS_ANGRA_MAINYU, // the hidden Angra Mainyu chapter: the three bodies' moves (RE note re-ffx2-angra-mainyu, 2026-10-14)
 };
 
 /** The reachable abilities that have no game row, and why. */

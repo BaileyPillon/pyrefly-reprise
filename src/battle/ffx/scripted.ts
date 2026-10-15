@@ -15,6 +15,7 @@
  * | `reelStrip` | string[] | symbol strip for a Slots default roll |
  * | `stealRoll` | string | the ability makes §7.8.1's item-steal roll (`steal.ts`) |
  * | `scriptAims` | boolean | a `random-enemy` row whose script names who each hit lands on (`targeting.ts#aimedTargetForHit`; the Seymour fights' spells) |
+ * | `learnsRonsoRage` | boolean | Lancet: after the hit lands, the target may teach the user a Ronso Rage (`ronso-rage.ts`; only the lesson rows of the hidden Biran and Yenke chapter teach anything) |
  *
  * Deliberately **not** here: instant death. Death, Death Fury, Pain, Zanmato and the two Wisps are not a script any more: each
  * one's game record carries a Death chance byte, and the status step (`adapt/status.ts`, the game's `pp_BtlInflictStatus`)
@@ -28,6 +29,7 @@ import { dealDamage, ejectActor } from './hp.ts';
 import { addGauge } from './overdrive.ts';
 import { banishAeon } from './aeons.ts';
 import { resolveSteal, stealsItem } from './steal.ts';
+import { learnRonsoRage } from './ronso-rage.ts';
 
 /** Minimum max HP the Mortiorchis floors at [ffx-seymour-flux §2.2]. */
 export const MORTIORCHIS_MIN_MAX_HP = 1000;
@@ -58,6 +60,9 @@ export function runScriptedExtra(
   // **Steal.** §7.8.1's roll, its per-monster counter and its message; see
   // `steal.ts` for why it is keyed off the data's own `extra`.
   if (stealsItem(def)) resolveSteal(ctx, user, target);
+
+  // **Lancet teaches a Ronso Rage** (FFX only; the hidden Biran and Yenke chapter). Inert unless the target has a lesson row (`ronso-rage.ts`): every other enemy returns before anything is written.
+  if (extra['learnsRonsoRage'] === true) learnRonsoRage(ctx, user, target);
 
   const shatterOnKill = extra['shatterOnKill'] === true;
   const script = typeof extra['script'] === 'string' ? (extra['script'] as string) : undefined;

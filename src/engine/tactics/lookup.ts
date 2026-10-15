@@ -39,11 +39,13 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ffx2-masterpiece-theatre': 'ffx2', // the Experiment (hidden chapter, 2026-10-10)
   'ffx2-tourist-trap': 'ffx2', // the Tourist Trap (hidden chapter, 2026-10-14)
   'ffx2-valefor-besaid': 'ffx2', // Valefor at Besaid (hidden chapter, 2026-10-14)
+  'ffx2-angra-mainyu': 'ffx2', // Angra Mainyu (hidden chapter, 2026-10-14)
   'ffx2-fallen-aeons': 'ffx2',
   'seymour-omnis': 'ffx',
   'isaaru-via-purifico': 'ffx',
   'sin-fins-core': 'ffx', 'sin-face': 'ffx', // Chapters XVII and XVIII (FFX only), listed 2026-09-29
   'sinspawn-gui': 'ffx', // the hidden Sinspawn Gui chapter (FFX only)
+  'biran-yenke': 'ffx', // the hidden Biran and Yenke chapter (FFX only)
 };
 
 /**
