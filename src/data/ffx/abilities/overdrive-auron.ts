@@ -152,9 +152,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
 
   /**
-   * §5.5 row 4 [verified: 2 sources]. Rank 7 on a successful chain (fail
-   * rank 6), all enemies. Success (documented correction) is 20 DmgCon x2
-   * hits; fail is 15 DmgCon x1. No rider status at all, so no immune row.
+   * §5.5 row 4 [verified: 2 sources]. Rank 7 whatever the grade (the user's recovery is the menu row's rank; the "(fail 6)" of the research table is the
+   * rank of the game's replacement row, which never reaches the user: `FFX-H01` section 3.5, re-parity RC9 lane FFX-B2; no `failRank`), all enemies.
+   * Success (documented correction) is 20 DmgCon x2 hits; fail is 15 DmgCon x1. No rider status at all, so no immune row.
    */
   tornado: {
     id: 'tornado',
@@ -183,7 +183,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
       minigameParams: { sequence: [...BUSHIDO_SEQUENCES['tornado']!] }, // length and order are the game's: overdrives/inputs.ts
       failPower: 15,
       failHits: 1,
-      failRank: 6, // rank on the fail branch; preserves the research's "(fail 6)" note
       vfxKey: 'vfx-tornado',
       // No immunePower/immuneHits: Tornado has no rider status, so the
       // immune-row branch does not apply per the coordinating agent's note.

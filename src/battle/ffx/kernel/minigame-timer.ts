@@ -17,6 +17,8 @@
  * Pure, DOM-free, deterministic.
  */
 
+import type { ScaleOverride } from './modifiers.ts';
+
 /** Ticks per second on a non-PAL build (the English Steam build). */
 export const TICKS_PER_SECOND = 30;
 /** Ticks per second when the PAL flag is set (proof only; no shipped build sets it). */
@@ -34,6 +36,23 @@ export function timerA(limitSeconds: number, ticks: number, pal = false): number
   if (ticks <= 0) return limit;
   const a = Math.fround(limit - ticks / (pal ? TICKS_PER_SECOND_PAL : TICKS_PER_SECOND));
   return a > 0 ? a : 0;
+}
+
+/**
+ * The two floats the damage scale override (VA 0x0078bd90) reads from the user's struct, `A` at `Chr+0xd2c` and `B` at `Chr+0xd30`, for a Swordplay or
+ * Bushido result (re-parity RC9, lane FFX-B3; `FFX-G01` section 5 and row 22 of section 10). Both are float32 **seconds**: `B` is the move's limit
+ * and `A` the timer's value when the input was accepted, `float32(B - frame / 30)`, 0 once it is not above 0. The game only ever produces whole
+ * frames, so for an instant it can produce the figures are exactly its own; the float32 of the same instant in milliseconds, which the engine fed the
+ * override before, differs by one point in about 1 percent of (instant, damage) pairs.
+ *
+ * `frame` is the controller frame the move ended in (the result's `frame`, counted from 1) and is what the game's `A` is built from. A result that
+ * carries none (the headless stand-in's whole milliseconds, a test rig's hand-built result) is read as the float32 of its time left in seconds,
+ * clamped to 0 to `limitMs`.
+ */
+export function timingScale(limitMs: number, timeRemainingMs: number, frame?: number): ScaleOverride {
+  const b = Math.fround(limitMs / 1000);
+  if (frame !== undefined) return { a: timerA(b, frame), b };
+  return { a: Math.fround(Math.min(Math.max(timeRemainingMs, 0), limitMs) / 1000), b };
 }
 
 /**

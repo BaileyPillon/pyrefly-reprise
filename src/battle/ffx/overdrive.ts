@@ -15,6 +15,7 @@ import { type Ctx, has } from './state.ts';
 import type { TimingBonus } from './formulas.ts';
 import { DEGREES_PER_ROTATION, FURY_MAX_CASTS, furyCastsFor, furySpellIdsFor } from './fury.ts';
 import { furyParams, minigameLimitMs, swordplayParams } from './adapt/minigame.ts';
+import { timingScale } from './kernel/minigame-timer.ts';
 import { attackReelHits } from './reels.ts';
 import { defaultGrandSummonAeon } from './aeon-duel.ts';
 import { MIX_PREVIEW_ALL_PAIRS, grandSummonEntries, mixPickerParams } from './pickerParams.ts';
@@ -289,16 +290,25 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
   }
 }
 
+/**
+ * A Swordplay or Bushido result as the damage code reads it: the time left in milliseconds (0 for a failure, which earns no bonus) and **the game's own
+ * `A` and `B`** (`scale`, float32 seconds, built from the controller's frame; re-parity RC9, lane FFX-B3, `FFX-G01` section 5 and row 22).
+ */
+function controllerBonus(success: boolean, timeRemainingMs: number, frame: number | undefined, limitMs: number): TimingBonus {
+  const left = success ? timeRemainingMs : 0;
+  return { timeRemainingMs: left, timerMs: limitMs, scale: timingScale(limitMs, left, success ? frame : undefined) };
+}
+
 /** The §5.2 timing bonus carried by a minigame outcome, or `null`. A failed Swordplay or Bushido earns none (§5.3 rule 1, §5.5; PR-0267, od2). */
 export function timingBonusFrom(result: MinigameResult | undefined, def: AbilityDef): TimingBonus | null {
   if (!result) return null;
   const timerMs = timerMsFor(def);
   if (timerMs <= 0) return null;
   if (result.kind === 'tidus-timing') {
-    return { timeRemainingMs: result.timing.success ? result.timing.timeRemainingMs : 0, timerMs: result.timing.timerMs || timerMs };
+    return controllerBonus(result.timing.success, result.timing.timeRemainingMs, result.timing.frame, result.timing.timerMs || timerMs);
   }
   if (result.kind === 'auron-sequence') {
-    return { timeRemainingMs: result.sequence.success ? result.sequence.timeRemainingMs : 0, timerMs };
+    return controllerBonus(result.sequence.success, result.sequence.timeRemainingMs, result.sequence.frame, timerMs);
   }
   if (result.kind === 'wakka-reels' || result.kind === 'ladyluck-reels') {
     return { timeRemainingMs: result.reels.timeRemainingMs, timerMs };

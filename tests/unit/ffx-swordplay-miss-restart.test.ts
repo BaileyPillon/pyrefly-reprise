@@ -155,8 +155,10 @@ const total = (xs: number[]): number => xs.reduce((a, b) => a + b, 0);
 describe('a failed Swordplay earns no timing bonus [§5.2, §5.3; as PR-0267 for Bushido]', () => {
   it('timingBonusFrom pays 0 ms on any failed timing input, and the remaining time on a success', () => {
     const sc = TIDUS['spiral-cut']!;
-    expect(timingBonusFrom(timing(false, 2994), sc)).toEqual({ timeRemainingMs: 0, timerMs: 3000 });
-    expect(timingBonusFrom(timing(true, 2994), sc)).toEqual({ timeRemainingMs: 2994, timerMs: 3000 });
+    // RC9 lane FFX-B3 (FFX only): the payload also carries `scale`, the game's own A and B as float32 SECONDS (a failure: A = 0; a result with no frame: the float32
+    // of its time left; FFX-G01 section 5). Before, it was these two milliseconds only. The proof is `parity-ffx-engine-od-results.test.ts`.
+    expect(timingBonusFrom(timing(false, 2994), sc)).toEqual({ timeRemainingMs: 0, timerMs: 3000, scale: { a: 0, b: 3 } });
+    expect(timingBonusFrom(timing(true, 2994), sc)).toEqual({ timeRemainingMs: 2994, timerMs: 3000, scale: { a: Math.fround(2.994), b: 3 } });
   });
 
   for (const def of Object.values(TIDUS)) {

@@ -148,8 +148,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
 
   /**
-   * §5.3 row 4 [verified: 2 sources]. Rank 7 on a successful timing chain
-   * (fail rank 6). Two-part hit: 8 hits at 4 DmgCon each, then a finishing
+   * §5.3 row 4 [verified: 2 sources]. Rank 7 whatever the grade: the user's recovery is the menu row's rank, and the "(fail rank 6)" the research table
+   * carries is the rank of the game's replacement row, which never reaches the user (`FFX-H01` section 3.5, re-parity RC9 lane FFX-B2; no `failRank`).
+   * Two-part hit: 8 hits at 4 DmgCon each, then a finishing
    * "Last Hit" at 24 DmgCon x1 — `power`/`hits` carry the 8x4 main volley,
    * `extra.finisherPower`/`extra.finisherHits` carry the finisher. The
    * finisher only fires on a successful chain; on fail the whole Overdrive
@@ -181,7 +182,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
       timedInputBonus: true,
       failPower: 4,
       failHits: 8,
-      failRank: 6, // rank on the fail branch; not asked for explicitly but preserves the research's "(fail rank 6)" note
       finisherPower: 24,
       finisherHits: 1,
       finisherAppliesOnSuccessOnly: true,

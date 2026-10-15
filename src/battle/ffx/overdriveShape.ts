@@ -22,16 +22,21 @@ const SUCCESS_ONLY_KEYS = ['finisherPower', 'finisherHits', 'finisherAppliesOnSu
 
 /**
  * The sourced **(Fail)** or **(Immune)** row a Swordplay / Bushido record
- * carries inline as `extra.failPower`/`failHits`(/`failRank`) or
+ * carries inline as `extra.failPower`/`failHits` or
  * `extra.immunePower`/`immuneHits` [ffx-combat-core §5.3, §5.5, both tables
- * `[verified: 2 sources]`]. Only DmgCon, hit count and (where the table gives
- * one) rank change; everything else, `canMiss: false` (hard rule 5) and the
+ * `[verified: 2 sources]`]. Only DmgCon and hit count change; everything else, `canMiss: false` (hard rule 5) and the
  * `crit-eligible` flag included, stays the success record's. A fail row drops the
  * success-only finisher keys. **Both rows drop the rider** (no status, no Delay):
  * the Immune rows 270 to 273 (od5, research note Q2) and the Fail rows 266 to 269
  * and 235 to 238 (od6, research note Q3a `[verified: 5 sources]`: "Effects only are
  * applied when sequence is entered correctly"). The can-crit bit stays on both
  * (Q3b). `undefined` when the record carries no such row, so the caller keeps `def`.
+ *
+ * **The rank is the menu row's, whatever the grade** (re-parity RC9, lane FFX-B2; `FFX-G01` row 17, closed by `FFX-H01` section 3.5): the game stores the
+ * rank of the command the player chose when it first calculates the action (`0x007892E0`, byte `Chr+0xDE8`), the result handler never writes it and
+ * the action-done call pays it, so a failed Tornado or Blitz Ace costs 7 like a clean one. The replacement rows have ranks of their own in the
+ * command table (the Fail rows 3, 4, 5, 6, the (Immune) rows 5, 5, 6, 6) and none of them ever reaches the user. A record's old `failRank: 6` was the
+ * research note's "(fail 6)", which is the replacement row's rank, not the user's (`tests/unit/parity-ffx-engine-od-results.test.ts`).
  * **FFX only**: FFX-2 has no Swordplay/Bushido.
  */
 export function rowFromExtra(def: AbilityDef, row: 'fail' | 'immune'): AbilityDef | undefined {
@@ -39,13 +44,12 @@ export function rowFromExtra(def: AbilityDef, row: 'fail' | 'immune'): AbilityDe
   const power = extra[`${row}Power`];
   const hits = extra[`${row}Hits`];
   if (typeof power !== 'number' || typeof hits !== 'number') return undefined;
-  const rank = extra[`${row}Rank`];
   const rest: Record<string, unknown> = { ...extra };
   if (row === 'fail') for (const k of SUCCESS_ONLY_KEYS) delete rest[k];
   // Neither the Fail rows (TRK 266 to 269, 235 to 238; Q3a) nor the Immune rows (270 to 273; Q2)
   // carry a status or a Delay; a chance-254 rider never drew, so dropping it adds and removes no draw.
   const flags = def.flags.filter((f) => !DELAY_FLAGS.includes(f));
-  return { ...def, power, hits, rank: typeof rank === 'number' ? rank : def.rank, extra: rest, statusEffects: [], flags };
+  return { ...def, power, hits, extra: rest, statusEffects: [], flags };
 }
 
 const DELAY_FLAGS: readonly string[] = ['weak-delay', 'strong-delay'];
