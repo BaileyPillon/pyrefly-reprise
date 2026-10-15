@@ -200,14 +200,15 @@ export function lastRoll(ctx: Ctx, c: FFXCombatant): number {
 /**
  * The brother was hit (once per action per target, after the hit and before the death check; RE 5.7).
  *
- * - **HP 0 (this action killed him):** Sentinel off, nothing more (the final lines are dialogue only). No draw.
+ * - **HP 0 (this action killed him):** Sentinel off, nothing more (the final lines are dialogue only). No draw. **The test is his HP, not `isAlive`**: a lethal hit holds the KO (`DamageEventInfo.holdKo`, `hit-apply.ts`) until
+ *   after this hook, so a brother killed by the blow reaches it at HP 0 and still `alive` with no `ko` status, and `isAlive` would send every lethal blow down the living branch below (found by the RE session's last pass).
  * - **HP above 0:** if his Sentinel is on, the release (DEF back to 30, Sentinel off) -- **only then**: the script writes DEF only on that branch (the RE review, 2026-10-14). Then, always on this branch,
  *   `v12 := GetRandomValue() mod 100`: **one draw of the shared script stream (stream 2) per non-lethal hit event**. The stored value only ever chose a line of dialogue, which is not shown (the driver's
  *   decision: no dialogue), but the draw is kept so the stream stands where the game's does.
  */
 export function onBrotherHit(ctx: Ctx, self: FFXCombatant): void {
   const sentinel = self.statuses['sentinel'] !== undefined;
-  if (!isAlive(self)) {
+  if (self.hp <= 0) {
     if (sentinel) removeStatus(ctx, self, 'sentinel', 'expired');
     return;
   }

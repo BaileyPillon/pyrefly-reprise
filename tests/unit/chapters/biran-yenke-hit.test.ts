@@ -6,6 +6,10 @@
  * 2. **The release is the script's own.** The guard is released only when Sentinel is on (DEF back to 30, Sentinel off); the hook never writes DEF otherwise. A lethal hit turns Sentinel off and nothing more.
  *
  * The cases call the hook on a real battle built by `buildBattle` (exact counts, no turn order in the way), then play one real exchange through the engine.
+ *
+ * **A real lethal blow is its own case** (the last describe; the RE session's last pass, 2026-10-15). The hand-set case above sets HP 0 and the `ko` status by hand, which is the state the hook never sees in the
+ * game: `hit-apply.ts` holds the KO (`holdKo`) until after `onHit`, so a brother killed by the blow reaches the hook at HP 0 and still alive, and a test of `isAlive` let every lethal blow take the living branch.
+ * That case drives Kimahri's Attack through the engine on a brother with 1 HP and reads stream 2 on the game's real 68-stream generator.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -17,7 +21,9 @@ import { runPreTurn } from '../../../src/battle/ffx/ai/hooks.ts';
 import { aiContextFor } from '../../../src/battle/ffx/ai/types.ts';
 import { ronsoAi } from '../../../src/battle/ffx/ai/biran-yenke.ts';
 import { V12_LAST_ROLL, V12_START, lastRoll, onBrotherHit, raiseGuard } from '../../../src/battle/ffx/ai/biran-yenke-rules.ts';
-import { rtOf } from '../../../src/battle/ffx/state.ts';
+import { FfxStream, makeFfxRng } from '../../../src/battle/ffx/adapt/streams.ts';
+import { rngNextState } from '../../../src/battle/ffx/kernel/rng.ts';
+import { has, isAlive, rtOf } from '../../../src/battle/ffx/state.ts';
 import * as H from '../helpers/ronsoDrive.ts';
 
 const { BIRAN, YENKE, KIM } = H;
@@ -150,6 +156,52 @@ describe('in a real exchange', () => {
       expect(open.amount, `seed ${seed}`).toBeGreaterThan(400);
       expect(open.amount, `seed ${seed}`).toBeLessThan(520);
       expect(guardedHit.amount / open.amount, `seed ${seed}`).toBeLessThan(0.03);
+    }
+  });
+});
+
+describe('a REAL lethal blow, driven through the engine, takes no draw of the script stream (RE 5.7)', () => {
+  /** A battle on the game's own 68 streams, so stream 2 (the script stream) can be read by itself; the raw `GameStreams` is returned for its `states`. */
+  function realStreams(seed: number): { ctx: Ctx; log: BattleEvent[]; script: () => number } {
+    const log: BattleEvent[] = [];
+    const rng = makeFfxRng(seed);
+    const ctx = buildBattle(H.setup(seed), rng, H.content, (e) => void log.push(e as BattleEvent));
+    return { ctx, log, script: () => rng.states[FfxStream.Script] ?? -1 };
+  }
+  /** Kimahri's plain Attack at Biran while the brothers stand together: Yenke stands guard and takes the blow, for 8 (the case above), with Sentinel on and DEF at 254. */
+  const blow = (ctx: Ctx): void => void executeCommand(ctx, who(ctx, KIM), { kind: 'attack', targets: [BIRAN] }, true);
+
+  it('a blow that leaves him standing moves stream 2 by exactly one draw; the blow that kills him moves it by none, releases nothing, and the death check then kills him', () => {
+    // The control: the same blow on a brother with plenty of HP is a non-lethal hit event, the one draw of the game (and the guard is released by his own hit).
+    for (const seed of [1, 2, 3]) {
+      const c = realStreams(seed);
+      const before = c.script();
+      blow(c.ctx);
+      const yenke = who(c.ctx, YENKE);
+      const hits = c.log.filter((e) => e.type === 'damage');
+      expect(hits, `seed ${seed}: one hit, on the guard`).toMatchObject([{ targetId: YENKE, amount: 8 }]);
+      expect(yenke.hp, `seed ${seed}: he is still standing`).toBeGreaterThan(0);
+      expect(c.script(), `seed ${seed}: one draw of stream 2`).toBe(rngNextState(FfxStream.Script, before));
+      expect(lastRoll(c.ctx, yenke), `seed ${seed}: the roll is stored`).toBeLessThan(100);
+      expect(yenke.stats.def, `seed ${seed}: released`).toBe(30);
+    }
+
+    // The case: Yenke has 1 HP, so the same 8-point blow is a real lethal one. Nothing is set by hand but his HP: the KO, if it comes, comes from the engine's own death check, after the hook.
+    for (const seed of [1, 2, 3]) {
+      const c = realStreams(seed);
+      const yenke = who(c.ctx, YENKE);
+      yenke.hp = 1;
+      const before = c.script();
+      blow(c.ctx);
+      expect(c.log.filter((e) => e.type === 'damage'), `seed ${seed}: one hit, on the guard`).toMatchObject([{ targetId: YENKE, amount: 8 }]);
+      expect(yenke.hp, `seed ${seed}`).toBe(0);
+      expect(has(yenke, 'ko'), `seed ${seed}: the death check ran after the hook and he is down`).toBe(true);
+      expect(isAlive(yenke), `seed ${seed}`).toBe(false);
+      expect(c.script(), `seed ${seed}: stream 2 did not move`).toBe(before);
+      expect(lastRoll(c.ctx, yenke), `seed ${seed}: nothing stored`).toBe(V12_START);
+      expect(yenke.stats.def, `seed ${seed}: the script writes DEF only on the living branch, so the guard's 254 stays`).toBe(254);
+      expect(yenke.statuses['sentinel'], `seed ${seed}: Sentinel is off`).toBeUndefined();
+      expect(who(c.ctx, BIRAN).hp, `seed ${seed}: the other brother was not touched`).toBe(who(c.ctx, BIRAN).stats.maxHp);
     }
   });
 });
