@@ -49,6 +49,7 @@ import { buildCommands } from './menu.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';
+import { itemAvailable } from './adapt/item-ledger.ts';
 import {
   allTargetsGone,
   clockHeldByMenu,
@@ -226,7 +227,8 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     // Active ATB, `active.ts`: everything this command aimed at died while the
     // menu was open. Refuse and reopen — the turn is not spent (preflight
     // §4.4 (a)). Under Wait this branch was unreachable.
-    if (actor.controller === 'player' && allTargetsGone(this.units, command, abilityFor(this.env(), command))) {
+    // Likewise an item the reserved stock no longer has (the HUD greys it out first; a menu built before another girl's pick can still send it): refused, the turn not spent.
+    if (actor.controller === 'player' && (allTargetsGone(this.units, command, abilityFor(this.env(), command)) || (command.kind === 'item' && !itemAvailable(this.battleState.flags, command.id)))) {
       return this.flush();
     }
     if (!suspended) this.inputOwner = null;

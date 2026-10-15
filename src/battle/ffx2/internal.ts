@@ -31,6 +31,7 @@ import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
 import type { Ffx2AutoLayer } from './adapt/auto-layer.ts';
+import type { ItemHold } from './adapt/item-ledger.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -107,6 +108,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   sdspPartIds?: CombatantId[];
   /** Grid node count she transformed from, 2–6. Drives main-part stat scaling. */
   sdspGridNodeCount?: number;
+  /** The item her cast in flight has reserved (the item ledger, `adapt/item-ledger.ts`; re-parity RC8, lane X2-F): kept spent when the cast fires, given back when it leaves the queue. */
+  itemHold?: ItemHold;
   /** Set on an enemy once an item has been stolen from it: one per battle (`steal.ts`). */
   stolenFrom?: boolean;
   /** Set on an enemy once Pilfer Gil has taken its gil: once per battle (`steal.ts`). */

@@ -8,26 +8,11 @@
  * Pure TypeScript: no DOM, no Three.js, no `Math.random()`. FFX-2 only.
  */
 
-import type {
-  AtbSnapshot,
-  BattleEvent,
-  BattleResult,
-  BattleState,
-  CombatantId,
-  Command,
-} from '../common/types.ts';
+import type { AtbSnapshot, BattleEvent, BattleResult, BattleState, CombatantId, Command } from '../common/types.ts';
 import type { BattleRng } from '../common/streams.ts';
 import { makeFfx2Rng } from './adapt/streams.ts';
 import { stepsToMs } from './clock.ts';
-import type {
-  AbilityRegistry,
-  AiContext,
-  DressphereRegistry,
-  EventDraft,
-  Ffx2EngineOptions,
-  Ffx2Unit,
-  GarmentGridRegistry,
-} from './internal.ts';
+import type { AbilityRegistry, AiContext, DressphereRegistry, EventDraft, Ffx2EngineOptions, Ffx2Unit, GarmentGridRegistry } from './internal.ts';
 import { pollIsNotATurn, settleFlavourTurn } from './flavour-turn.ts';
 import { WAKE_ON_ALIVE_CHANGE, WAKE_ON_RESULT } from './ai/idle.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
@@ -46,19 +31,10 @@ import { evaluateTriggers, signalFromEvents } from './triggers.ts';
 import { abilityFor, performCommand, type ExecEnv, type Suspension } from './execute.ts';
 import { actorOrder, battleOutcome, buildResult, emptyState } from './results.ts';
 import {
-  allTargetsGone,
-  awaitsPlayerInput,
-  canTakeTurn,
-  clockHeldByMenu,
-  DEFAULT_ATB_MODE,
-  DEFAULT_WAIT_SPLIT,
-  heldStillPending,
-  ownsInput,
-  withDefaultTimedInput,
-  type AtbMode,
-  type HeldCommand,
-  type MenuLevel,
+  allTargetsGone, awaitsPlayerInput, canTakeTurn, clockHeldByMenu, DEFAULT_ATB_MODE, DEFAULT_WAIT_SPLIT, heldStillPending, ownsInput, withDefaultTimedInput,
+  type AtbMode, type HeldCommand, type MenuLevel,
 } from './active.ts';
+import { itemAvailable, releaseItemHolds } from './adapt/item-ledger.ts';
 
 export class Ffx2EngineCore {
   protected rng: BattleRng = makeFfx2Rng(0);
@@ -160,6 +136,7 @@ export class Ffx2EngineCore {
       fire: (u) => this.fireChargedCommand(u),
       complete: (u) => completeCommand(u, u.gauge.costAtb, this.units, u.gauge.idleWait === true),
     });
+    releaseItemHolds(this.units, this.battleState.flags); // a cast the step dropped (Stop, Petrify, a KO, ejection) gives its item back
   }
 
   /**
@@ -220,7 +197,7 @@ export class Ffx2EngineCore {
     this.held = null;
     if (!held) return;
     const ability = abilityFor(this.env(), held.command);
-    if (allTargetsGone(this.units, held.command, ability)) return;
+    if (allTargetsGone(this.units, held.command, ability) || (held.command.kind === 'item' && !itemAvailable(this.battleState.flags, held.command.id))) return;
     const command = withDefaultTimedInput(held.command, ability, this.rng, this.options.minigames !== false);
     const before = this.drafts.length;
     this.beginTurn(actor);
@@ -348,6 +325,7 @@ export class Ffx2EngineCore {
 
   /** Post-action bookkeeping: AI hooks (`runAfterActionHooks`), then story triggers and battle end. */
   protected afterAction(actor: Ffx2Unit, startedAt: number): void {
+    releaseItemHolds(this.units, this.battleState.flags); // a cast the action dropped (a KO, a dress change, a magic cancel) gives its item back
     const cls = this.battleState.flags['lastAttackClass'];
     const env = {
       units: this.units, abilities: this.abilities, attackClass: typeof cls === 'string' ? cls : 'none',
