@@ -108,7 +108,9 @@ export const ANGRA_SCENE: Scene = SCENES.angra;
 
 /**
  * **`[inferred]` Where Tawrich's near-weighted Punch search is made from.** The rows give both arms the spot (0, 0) and the body's script links them to its model (the note's §8.2, §12 item 5), so neither
- * arm's own position is known; the **body's spot** stands in for both, as the driver ruled (2026-10-14). One constant: change it after the RE review.
+ * arm's own position is known; the **body's spot** stands in for both, as the driver ruled (2026-10-14). One constant. **The RE session's review left it `[inferred]` and measured how much it matters** (the shares of the three girls
+ * as the near-weighted pick gives them): the body's spot gives 28.7 / 41.7 / 29.6 percent; a shift of 10 units either way moves each share by under 1 point; the origin (0, 0) gives 23.6 / 51.6 / 24.8; the facing assumption matters most
+ * (the body facing +x gives 23.5 / 30.4 / 46.1). The handoff (`docs/handoff/ch-angra-mainyu.md` section 4) carries the same note.
  */
 export const COMPANION_SEARCH_ORIGIN: Placement = SCENES.angra.boss;
 

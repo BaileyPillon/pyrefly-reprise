@@ -79,12 +79,13 @@ const SHARED_IMMUNE: StatusImmunities = {
 };
 
 /**
- * **THE ARMS' IMMUNITIES: ONE CONSTANT, `[inferred]`, for the RE session to confirm or flip.** The two arms carry a permanent automatic status each, group-2 slot 15 (Zarich) and slot 16 (Tawrich), amount 127
- * (`research/re-ffx2-angra-mainyu.md` §4.1 and §4.2). By the damage note's address arithmetic slot 15 is the physical-immunity counter and slot 16 the magical-immunity counter, so **Zarich is immune to physical
- * damage and Tawrich to magical damage**, which also matches the rows' defences (Zarich DEF 0 / MDEF 99, Tawrich DEF 99 / MDEF 0), the two scripts' styles (a caster, a puncher), Jegged and the FF Wiki
- * (`research/ffx2-angra-mainyu.md` §1 and §7). **The slot meanings are not read from a status table** and what the game does with the amount 127 is not traced (the note's §4.2 and §12 item 4): "permanent" is an assumption. Here the
- * two slots are the engine's own `null-physical` and `null-magic` (`../../../battle/ffx2/adapt/slots.ts`: slot 15 and 16), laid as `autoStatuses` for good, so a Dark Knight's Darkness, which is neither, reaches both
- * (Jegged). To flip them, swap the two values below; `tests/unit/chapters/angra-mainyu-engine.test.ts` pins the reading.
+ * **THE ARMS' IMMUNITIES: ONE CONSTANT, PROVED** by the RE session's review of this chapter (the first build had it as an inference). The two arms carry a permanent automatic status each, group-2 slot 15 (Zarich) and slot 16
+ * (Tawrich), amount 127 (`research/re-ffx2-angra-mainyu.md` §4.1 and §4.2). The game's stat ids 88 to 90 (`stat_invincible_physic`, `stat_invincible_magic`, `stat_invincible`; FFX2-G05 section 3.5) write the counter bytes
+ * 0x4B4 + 15, + 16 and + 17, so **slot 15 is physical immunity (Zarich), slot 16 magical immunity (Tawrich) and slot 17 full invincibility**, and damage step 12 (`research/re-ffx2-damage.md` §2.1) zeroes the damage of a hit
+ * that meets the matching byte, which is what `battle/ffx2/kernel/pipeline.ts` does (`isImmune`, line 173). So **Zarich is immune to physical damage and Tawrich to magical damage**, which also matches the rows' defences
+ * (Zarich DEF 0 / MDEF 99, Tawrich DEF 99 / MDEF 0), the two scripts' styles (a caster, a puncher), Jegged and the FF Wiki (`research/ffx2-angra-mainyu.md` §1 and §7). **One link stays unproved: the monster set-up's copy
+ * of the row into the effective byte was read, not run.** Here the two slots are the engine's own `null-physical` and `null-magic` (`../../../battle/ffx2/adapt/slots.ts`: slot 15 and 16), laid as `autoStatuses` for good, so a
+ * Dark Knight's Darkness, which is neither, reaches both (Jegged). `tests/unit/chapters/angra-mainyu-engine.test.ts` pins the reading.
  */
 export const COMPANION_IMMUNITY: { readonly zarich: StatusId; readonly tawrich: StatusId } = { zarich: 'null-physical', tawrich: 'null-magic' };
 
@@ -181,7 +182,7 @@ export const x2Tawrich: EnemyDef = {
   affinities: { gravity: 'immune' }, // null byte 0x10 [RE row 270]: the wiki says "halves"
   immunities: { ...SHARED_IMMUNE, reflect: 255 }, // Reflect 255 on both arms [RE rows 269, 270]
   immunityFlags: ['immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
-  // Group-2 slot 16, amount 127 [RE row 270]: the magical-immunity counter (Null Magic). Spells pass through it; Darkness, which is neither physical nor magical, does not [Jegged, wiki]. `[inferred]`: see {@link COMPANION_IMMUNITY}.
+  // Group-2 slot 16, amount 127 [RE row 270]: the magical-immunity counter (Null Magic). Spells pass through it; Darkness, which is neither physical nor magical, does not [Jegged, wiki]. Proved: see {@link COMPANION_IMMUNITY}.
   autoStatuses: [COMPANION_IMMUNITY.tawrich],
   forms: [{ name: 'Tawrich', spriteKey: TAWRICH_SPRITE, hp: 5440 }],
   aiScriptId: TAWRICH_SCRIPT_ID,
@@ -219,7 +220,7 @@ export const x2Zarich: EnemyDef = {
   affinities: { gravity: 'immune', fire: 'resist', ice: 'resist', lightning: 'resist', water: 'resist', holy: 'resist' },
   immunities: { ...SHARED_IMMUNE, reflect: 255 },
   immunityFlags: ['immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
-  // Group-2 slot 15, amount 127 [RE row 269]: the physical-immunity counter (Null Physical). Blows pass through it; Darkness does not [Jegged, wiki]. `[inferred]`: see {@link COMPANION_IMMUNITY}.
+  // Group-2 slot 15, amount 127 [RE row 269]: the physical-immunity counter (Null Physical). Blows pass through it; Darkness does not [Jegged, wiki]. Proved: see {@link COMPANION_IMMUNITY}.
   autoStatuses: [COMPANION_IMMUNITY.zarich],
   forms: [{ name: 'Zarich', spriteKey: ZARICH_SPRITE, hp: 5440 }],
   aiScriptId: ZARICH_SCRIPT_ID,

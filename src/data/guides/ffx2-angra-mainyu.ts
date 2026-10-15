@@ -9,7 +9,7 @@
  * Sourced facts only: Perdition's Flame (ten hits on random girls, each 3/16 of her maximum HP; physical, so Protect halves it, Shell does not), Demi (a quarter of current HP), Flare, Bio (Poison), Osmose (only when the body's
  * MP is under 200), Curaga and Full-Life on the arms, Dispel only when every girl has Reflect (the game's rows and scripts, the RE note §9 and §10, and Jegged); Zarich's Glimmer of Despair (MP and four stats down) and
  * Ga spells, Tawrich's Punch and Bloody Breath (Silence, Darkness, Poison, Confusion) (the rows and the FF Wiki); Zarich immune to physical damage and Tawrich to magical damage (Jegged and the FF Wiki; the game's own
- * automatic statuses, `[inferred]` by the RE note), so Darkness, which is neither, reaches all three. **Not promised:** that the fight ends when the body falls whatever the arms do (the RE note's §12 item 3), the odds the
+ * automatic statuses, proved by the RE session's review), so Darkness, which is neither, reaches all three. **Not promised:** that the fight ends when the body falls whatever the arms do (the RE note's §12 item 3), the odds the
  * arms' scripts give beyond "a cycle", and where the arms stand.
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`), as for every FFX-2 guide.

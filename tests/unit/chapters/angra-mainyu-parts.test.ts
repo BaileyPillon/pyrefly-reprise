@@ -3,7 +3,7 @@
  *
  * Every test here uses the *immortal* measurement rig (the girls carry Invincible and are topped up at every decision; a rig, not a chapter) so a controlled volley can land while the three scripts run.
  *
- * 1. **The arms' immunities** [`COMPANION_IMMUNITY`, `[inferred]` from group-2 slots 15 and 16 of rows 269 and 270 and from Jegged and the wiki: "Zarich ignores physical, Tawrich ignores magic, Darkness is neither"]:
+ * 1. **The arms' immunities** [`COMPANION_IMMUNITY`, proved by the RE session's review (group-2 slots 15 and 16 of rows 269 and 270 are the physical and magical immunity counters, FFX2-G05 section 3.5 and `research/re-ffx2-damage.md` §2.1; Jegged and the wiki agree): "Zarich ignores physical, Tawrich ignores magic, Darkness is neither"]:
  *    a blow on Zarich is a miss ("immune"), a spell on Tawrich is a miss, the reverse lands, and Darkness (neither class) reaches the body and both arms. The immunities are laid at the start, one each, and stay through a death.
  * 2. **A fallen arm** [RE §9.5 branches 3 and 4]: the body raises it with Full-Life at full HP, Tawrich before Zarich, and the arm acts again; the fight does not stall on the loop.
  * 3. **The ending** [`[inferred]`, the driver's ruling: when the body falls the fight is over, the arms leave with it]: the body's death is a victory with both arms still standing, and pays what row 268 pays.

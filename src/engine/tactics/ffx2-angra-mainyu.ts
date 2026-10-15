@@ -8,7 +8,7 @@
  *
  * It is the **advisor line** the chapter's bench measures (`tests/unit/chapters/angra-mainyu-bench.test.ts`): an input to a measurement, never game data, and nothing in it tunes the boss (hard rule 6;
  * `boss-side-fix-needs-measured-options`). It is Jegged's first answer to the fight (`research/ffx2-angra-mainyu.md` §5): **one girl heals and two Dark Knights use Darkness**, which is neither physical nor
- * magical, so it reaches the body and both arms (Zarich is immune to physical damage and Tawrich to magical damage, `[inferred]`). It answers what the rows say: Perdition's Flame is physical (so **Protect** halves
+ * magical, so it reaches the body and both arms (Zarich is immune to physical damage and Tawrich to magical damage: proved by the RE session's review, see `COMPANION_IMMUNITY`). It answers what the rows say: Perdition's Flame is physical (so **Protect** halves
  * it, Shell does not), Flare, Demi and Zarich's spells are magical (so **Shell** halves them), Bio and Bloody Breath poison and silence, Zarich's Glimmer of Despair drains MP and lowers stats.
  *
  * **Yuna (White Mage)**, in this order:
@@ -91,7 +91,7 @@ function darkKnightTurn(commands: AvailableCommand[], self: AnyCombatant, party:
     const back = use(commands, 'item', 'x2-phoenix-down', [yuna.id]);
     if (back) return back;
   }
-  // Darkness costs the user a quarter of her maximum HP: an X-Potion (a full heal) before she is low, else a Hi-Potion.
+  // Darkness costs the user 12.5 percent of her maximum HP (the data's figure, `hpCostPercent` on `x2-dark-knight-darkness`): an X-Potion (a full heal) before she is low, else a Hi-Potion.
   if (hpFraction(self) < 0.45) {
     const potion = use(commands, 'item', 'x2-x-potion', [self.id]) ?? use(commands, 'item', 'x2-hi-potion', [self.id]);
     if (potion) return potion;

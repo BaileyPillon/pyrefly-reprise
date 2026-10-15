@@ -9,7 +9,7 @@
  *    the steal byte and gil) and the status table the engine builds from them, row by row.
  * 2. **The research**: every number the wiki shares with the rows equals it; the disagreements (Gravity nulled, Reflect landing on the body, Accuracy and Evasion, the arms' missing defences) are the rows'.
  * 3. **The fifteen move rows**: every field of every record is the appendix's, every ability carries its record, the hit rule of hard rule 5 (Punch alone rolls), the costs, the cadence in seconds.
- * 4. **What is `[inferred]`, in ONE constant**: the arms' permanent immunities (`COMPANION_IMMUNITY`); and the companions' search origin (`COMPANION_SEARCH_ORIGIN`).
+ * 4. **Two named constants**: the arms' permanent immunities (`COMPANION_IMMUNITY`, proved by the RE session's review) and the companions' search origin (`COMPANION_SEARCH_ORIGIN`, still `[inferred]`).
  * 5. The group (three bodies, the arms as parts, the formation's slot order), the party (the Chapter V preset, the Experiment's, deep copy), the items, the chapter record and its registration (hidden), the
  *    pause metadata, the story's lint and the guide.
  */
@@ -290,7 +290,7 @@ describe('the monster records are the rows, and the engine\'s status table is bu
   });
 });
 
-describe('the arms\' permanent immunities: ONE inferred constant, from the rows\' automatic statuses (group 2, slots 15 and 16, amount 127)', () => {
+describe('the arms\' permanent immunities: ONE constant, proved, from the rows\' automatic statuses (group 2, slots 15 and 16, amount 127)', () => {
   it('the rows give Zarich slot 15 and Tawrich slot 16 with the amount 127, and the body none', () => {
     expect([ROWS.angra.decoded.group2AutoMask, ROWS.zarich.decoded.group2AutoMask, ROWS.tawrich.decoded.group2AutoMask]).toEqual([0, 0x8000, 0x10000]);
     expect(ROWS.zarich.decoded.group2AutoAmounts).toEqual({ '15': 127 });
