@@ -31,7 +31,7 @@ export const LAST_SUMMONING_META: ChapterMeta = {
     { id: 'nothing-left', label: 'Meet Yu Yevon with nothing left to call', rule: { kind: 'link-reached', link: 9 } },
     { id: 'end-chant', label: 'End the chanting', rule: { kind: 'victory' } },
   ],
-  tip: 'Every aeon you still hold can be summoned: the one in front of you is already gone. Yojimbo is paid, not ordered, and the Sisters fire the Delta Attack when all three gauges are full.',
+  tip: 'Every aeon you still hold can be summoned. Pay Yojimbo; the Sisters need all three gauges full.',
   snapshots: [
     { image: 'backdrops/dreams-end.png', caption: "dream's end" },
     { image: 'characters/yu-yevon/idle.png', caption: 'what takes them' },

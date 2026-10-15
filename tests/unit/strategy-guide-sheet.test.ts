@@ -21,7 +21,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GUIDE_DOCS, docForChapter } from '../../src/data/guides/docs/index.ts';
 import { StrategyGuide } from '../../src/ui/common/StrategyGuide.ts';
 import { SCROLL_KEYS, gapAbove, padScrollStep, padScrollTravel, scrollSheetByKey, wheelStep } from '../../src/ui/common/guideScroll.ts';
-import { fakeBoard } from './helpers/guideDocStrings.ts';
+import { boardForDoc, fakeBoard } from './helpers/guideDocStrings.ts';
 import { stubSheetLayout } from './helpers/guideSheetStub.ts';
 
 const CSS = readFileSync(resolve(process.cwd(), 'src/ui/common/strategy-guide.css'), 'utf8');
@@ -169,7 +169,7 @@ describe('where the sheet opens', () => {
 
   it('measures a list item from its list: the gap above the first item is the gap above the list', () => {
     const doc = GUIDE_DOCS.find((d) => d.blocks.some((b) => b.t === 'ul'))!;
-    const { stage } = mount(fakeBoard(doc.game, [{ id: doc.bossIds[0]! }]));
+    const { stage } = mount(boardForDoc(doc));
     stubSheetLayout(stage, { unitHeight: 20, gap: 4, padTop: 5, clientHeight: 100 });
     const body = stage.querySelector<HTMLElement>('.sgd__body')!;
     const li = body.querySelector<HTMLElement>('ul > li[data-block]')!;

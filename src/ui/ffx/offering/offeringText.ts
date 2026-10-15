@@ -90,7 +90,9 @@ export function panelFor(focus: OfferingKey, held: readonly OfferingKey[]): Offe
 
 /** The headings above the two columns of the panel. */
 export function panelHeadings(focus: OfferingKey): { fought: string; lose: string } {
-  return { fought: `IF YU YEVON TAKES ${OFFERING_NAMES[focus].toUpperCase()}`, lose: 'WHAT YOU LOSE' };
+  // The approved frame heads the Sisters' panel "IF YU YEVON TAKES THE MAGUS SISTERS".
+  const name = focus === 'sisters' ? `THE ${OFFERING_NAMES[focus].toUpperCase()}` : OFFERING_NAMES[focus].toUpperCase();
+  return { fought: `IF YU YEVON TAKES ${name}`, lose: 'WHAT YOU LOSE' };
 }
 
 /** The legend of the keys strip. */

@@ -92,5 +92,11 @@ export interface GuideDoc {
    * chained chapter lists **all** of its links, exactly as `ChapterGuide.bossIds` does.
    */
   readonly bossIds: readonly string[];
+  /**
+   * Only when the board's `flags` hold a key beginning with `prefix` whose value is `value`: a document whose enemy ids another chapter's document shares is told apart by what the chapter sets on the
+   * board (the hidden Last Summoning fields Chapter III's possessed aeons and Yu Yevon, and its links lock the aeons Yu Yevon has taken with the reason "Taken by Yu Yevon"). Absent for every other document,
+   * which is found by its enemies alone. A document that sets it is listed ahead of the one it shares ids with (`./docs/index.ts`).
+   */
+  readonly onlyWhenFlag?: { readonly prefix: string; readonly value: string };
   readonly blocks: readonly DocBlock[];
 }

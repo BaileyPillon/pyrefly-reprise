@@ -20,6 +20,7 @@
  */
 
 import type { BattleState, CombatantId, GameId } from '../../battle/common/types.ts';
+import { LAST_SUMMONING_ID, TAKEN_REASON } from '../../data/ffx/last-summoning-ids.ts'; // a module with no imports of its own
 
 /** The game each chapter with a guide or a tactic belongs to. */
 export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
@@ -46,7 +47,23 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'sin-fins-core': 'ffx', 'sin-face': 'ffx', // Chapters XVII and XVIII (FFX only), listed 2026-09-29
   'sinspawn-gui': 'ffx', // the hidden Sinspawn Gui chapter (FFX only)
   'biran-yenke': 'ffx', // the hidden Biran and Yenke chapter (FFX only)
+  'last-summoning': 'ffx', // the hidden Last Summoning chapter (FFX only, 2026-10-15)
 };
+
+/** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */
+export const LOCK_REASON_PREFIX = 'aeonDuel.reason:';
+
+/**
+ * Is this the hidden Last Summoning's board? Its possessed aeons and Yu Yevon carry the very ids Chapter III's do, so the ids cannot tell the two chains apart; **the locks can**: every formation of the Last Summoning
+ * that is fought locks the aeons Yu Yevon has taken with the reason "Taken by Yu Yevon" (`data/ffx/enemies/last-summoning-chain.ts`), and no other formation of either game says those words.
+ * Reads `flags` when the board has them; a board without (a test's, the guide's synthetic ones) is not this chapter's.
+ */
+export function onLastSummoningBoard(state: Readonly<{ flags?: Readonly<Record<string, unknown>> }>): boolean {
+  const flags = state.flags;
+  if (flags === undefined) return false;
+  for (const key of Object.keys(flags)) if (key.startsWith(LOCK_REASON_PREFIX) && flags[key] === TAKEN_REASON) return true;
+  return false;
+}
 
 /**
  * Is this chapter the one on the board? Its game must be the battle's game
@@ -54,11 +71,13 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
  * record on the enemy side, never a party member or a summoned aeon.
  */
 export function chapterOnBoard(
-  state: Readonly<Pick<BattleState, 'game' | 'combatants'>>,
+  state: Readonly<Pick<BattleState, 'game' | 'combatants'>> & Readonly<{ flags?: Readonly<Record<string, unknown>> }>,
   chapterId: string,
   bossIds: readonly CombatantId[],
 ): boolean {
   if (CHAPTER_GAME[chapterId] !== state.game) return false;
+  // The hidden Last Summoning shares Chapter III's enemy ids; it is on the board only when its own locks are (see `onLastSummoningBoard`), and its entries are listed ahead of Chapter III's.
+  if (chapterId === LAST_SUMMONING_ID && !onLastSummoningBoard(state)) return false;
   return bossIds.some((id) => state.combatants[id]?.side === 'enemy');
 }
 
