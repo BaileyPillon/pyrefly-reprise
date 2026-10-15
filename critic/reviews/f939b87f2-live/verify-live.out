@@ -1,0 +1,20 @@
+{
+ "result": "PASS",
+ "artifactHash": "a63f8a4a4dab4106d81c1b4c80b04f76c08379af7daeeea226f028ed3a599ed2",
+ "liveManifest": "match",
+ "checked": 5251,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [
+  "_headers is part of this artifact and was not downloaded (no address serves a host-read file); assets/exp-fayth-table-sH0UsuWp.js was served with Cache-Control \"public, max-age=31536000, immutable\""
+ ],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/exp-fayth-table-sH0UsuWp.js",
+  "value": "public, max-age=31536000, immutable"
+ }
+}

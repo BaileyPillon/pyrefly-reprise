@@ -1,0 +1,1535 @@
+{
+ "tag": "s3-fayth",
+ "width": 1600,
+ "height": 900,
+ "base": "https://echoesofspira.com/?cb=17921011360479134",
+ "t0": 1792101136199,
+ "stage": "done",
+ "startedAt": "2026-10-15T21:52:16.199Z",
+ "consoleErrors": [],
+ "pageErrors": [],
+ "notFound": [],
+ "htmlMedia": [],
+ "failed": [
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 6098
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 6098
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8117
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8117
+  }
+ ],
+ "audio": [
+  {
+   "url": "audio/sfx/sprite.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2709777",
+   "range": null
+  },
+  {
+   "url": "audio/music/title.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2331315",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite-v2.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "4617705",
+   "range": null
+  },
+  {
+   "url": "audio/music/chapter-select.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2106911",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/parity-ffx-core.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "773826",
+   "range": null
+  },
+  {
+   "url": "audio/music/scene-fahrenheit.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1209039",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-evrae.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1779961",
+   "range": null
+  },
+  {
+   "url": "audio/music/victory-ffx.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "643980",
+   "range": null
+  },
+  {
+   "url": "audio/music/defeat-ffx.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "127588",
+   "range": null
+  }
+ ],
+ "art": [
+  {
+   "url": "art/title/keyart.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "750528"
+  },
+  {
+   "url": "art/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/auron/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718378"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/backdrops/dreams-end.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3239954"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/tidus.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "898210"
+  },
+  {
+   "url": "art/portraits/yuna.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "797104"
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1213589"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "238873"
+  },
+  {
+   "url": "art/backdrops/gagazet.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "375064"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "371392"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "275648"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "407272"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "407325"
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "262252"
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "428808"
+  },
+  {
+   "url": "art/backdrops/dreams-end.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "305228"
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "455201"
+  },
+  {
+   "url": "art/backdrops/den-of-woe.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "210422"
+  },
+  {
+   "url": "art/characters/baralai-shade/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "175790"
+  },
+  {
+   "url": "art/backdrops/macalania-temple.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "421110"
+  },
+  {
+   "url": "art/characters/anima/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "229511"
+  },
+  {
+   "url": "art/backdrops/via-infinito.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "372750"
+  },
+  {
+   "url": "art/characters/trema/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "150908"
+  },
+  {
+   "url": "art/characters/evrae/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "403308"
+  },
+  {
+   "url": "art/backdrops/evrae-airship-deck.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "338780"
+  },
+  {
+   "url": "art/backdrops/road-to-the-farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "286596"
+  },
+  {
+   "url": "art/characters/x2-shiva/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "248629"
+  },
+  {
+   "url": "art/backdrops/cavern-stolen-fayth.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "220450"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "169316"
+  },
+  {
+   "url": "art/backdrops/leblanc-last-room.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "359684"
+  },
+  {
+   "url": "art/characters/leblanc/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "207318"
+  },
+  {
+   "url": "art/backdrops/bevelle-highbridge.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "381744"
+  },
+  {
+   "url": "art/characters/seymour-natus/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "224116"
+  },
+  {
+   "url": "art/backdrops/farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "321672"
+  },
+  {
+   "url": "art/characters/vegnagun-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "822104"
+  },
+  {
+   "url": "art/backdrops/garden-of-pain.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "273406"
+  },
+  {
+   "url": "art/characters/seymour-omnis/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "328753"
+  },
+  {
+   "url": "art/backdrops/via-purifico.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "291342"
+  },
+  {
+   "url": "art/characters/isaaru/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "162036"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "328206"
+  },
+  {
+   "url": "art/characters/overdrive-sin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "657558"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "283182"
+  },
+  {
+   "url": "art/portraits/auron.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "798376"
+  },
+  {
+   "url": "art/characters/sin-left-fin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "309529"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1019085"
+  },
+  {
+   "url": "art/portraits/tidus.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yuna.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/kimahri.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "968150"
+  },
+  {
+   "url": "art/portraits/lulu.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "837746"
+  },
+  {
+   "url": "art/portraits/wakka.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "911762"
+  },
+  {
+   "url": "art/portraits/seymour.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "869268"
+  },
+  {
+   "url": "art/backdrops/gagazet.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "968150"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/rikku-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "1048996"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661196"
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4359436"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1246213"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "724684"
+  },
+  {
+   "url": "art/characters/kimahri/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "775805"
+  },
+  {
+   "url": "art/portraits/auron.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/exp-fayth-deck.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3424618"
+  },
+  {
+   "url": "art/pause/evrae-chapter-card.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "636826"
+  },
+  {
+   "url": "art/characters/evrae/idle-far.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "192392"
+  },
+  {
+   "url": "art/characters/evrae/breath-charge.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "891704"
+  },
+  {
+   "url": "art/backdrops/evrae-airship-deck.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3424618"
+  },
+  {
+   "url": "art/portraits/rikku.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "897134"
+  },
+  {
+   "url": "art/portraits/wakka.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/lulu.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/rikku.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/cid.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "720220"
+  },
+  {
+   "url": "art/backdrops/exp-fayth-deck.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/exp-fayth-deck.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3424618"
+  },
+  {
+   "url": "art/characters/evrae/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/evrae/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "876825"
+  },
+  {
+   "url": "art/characters/wakka/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "793742"
+  },
+  {
+   "url": "art/characters/wakka/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "635401"
+  },
+  {
+   "url": "art/characters/evrae/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/evrae/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "458399"
+  },
+  {
+   "url": "art/characters/evrae/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "798525"
+  },
+  {
+   "url": "art/characters/evrae/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "867579"
+  },
+  {
+   "url": "art/characters/evrae/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "798525"
+  },
+  {
+   "url": "art/characters/evrae/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "391682"
+  },
+  {
+   "url": "art/characters/evrae/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "867579"
+  },
+  {
+   "url": "art/characters/evrae/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "458399"
+  },
+  {
+   "url": "art/characters/evrae/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "681552"
+  },
+  {
+   "url": "art/characters/tidus/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "391682"
+  },
+  {
+   "url": "art/characters/tidus/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "795714"
+  },
+  {
+   "url": "art/characters/tidus/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "681552"
+  },
+  {
+   "url": "art/characters/tidus/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718671"
+  },
+  {
+   "url": "art/characters/tidus/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "795714"
+  },
+  {
+   "url": "art/characters/tidus/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "756250"
+  },
+  {
+   "url": "art/characters/tidus/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "571744"
+  },
+  {
+   "url": "art/characters/tidus/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718671"
+  },
+  {
+   "url": "art/characters/tidus/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "756250"
+  },
+  {
+   "url": "art/characters/tidus/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "444628"
+  },
+  {
+   "url": "art/characters/tidus/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "571744"
+  },
+  {
+   "url": "art/characters/tidus/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "363726"
+  },
+  {
+   "url": "art/characters/tidus/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "411286"
+  },
+  {
+   "url": "art/characters/tidus/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "444628"
+  },
+  {
+   "url": "art/characters/tidus/defend.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "363726"
+  },
+  {
+   "url": "art/characters/tidus/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "712323"
+  },
+  {
+   "url": "art/characters/tidus/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "411286"
+  },
+  {
+   "url": "art/characters/tidus/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "401839"
+  },
+  {
+   "url": "art/characters/tidus/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/od-energy-rain.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "649818"
+  },
+  {
+   "url": "art/characters/tidus/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "712323"
+  },
+  {
+   "url": "art/characters/tidus/od-slice-and-dice.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "453011"
+  },
+  {
+   "url": "art/characters/tidus/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "401839"
+  },
+  {
+   "url": "art/characters/tidus/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "436081"
+  },
+  {
+   "url": "art/characters/tidus/od-energy-rain.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "649818"
+  },
+  {
+   "url": "art/characters/tidus/od-energy-rain.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/od-slice-and-dice.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/od-slice-and-dice.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "453011"
+  },
+  {
+   "url": "art/characters/wakka/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1071002"
+  },
+  {
+   "url": "art/characters/wakka/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "436081"
+  },
+  {
+   "url": "art/characters/wakka/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "912220"
+  },
+  {
+   "url": "art/characters/wakka/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "775135"
+  },
+  {
+   "url": "art/characters/wakka/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1071002"
+  },
+  {
+   "url": "art/characters/wakka/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "912220"
+  },
+  {
+   "url": "art/characters/wakka/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/hurt.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "442132"
+  },
+  {
+   "url": "art/characters/wakka/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1155189"
+  },
+  {
+   "url": "art/characters/wakka/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "775135"
+  },
+  {
+   "url": "art/characters/wakka/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "717564"
+  },
+  {
+   "url": "art/characters/wakka/hurt.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "442132"
+  },
+  {
+   "url": "art/characters/wakka/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "301954"
+  },
+  {
+   "url": "art/characters/wakka/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1155189"
+  },
+  {
+   "url": "art/characters/wakka/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "717564"
+  },
+  {
+   "url": "art/characters/wakka/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "532994"
+  },
+  {
+   "url": "art/characters/wakka/defend.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "301954"
+  },
+  {
+   "url": "art/characters/wakka/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "878773"
+  },
+  {
+   "url": "art/characters/wakka/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/wakka/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "532994"
+  },
+  {
+   "url": "art/characters/wakka/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "500070"
+  },
+  {
+   "url": "art/characters/wakka/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "590030"
+  },
+  {
+   "url": "art/characters/wakka/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "878773"
+  },
+  {
+   "url": "art/characters/wakka/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "500070"
+  },
+  {
+   "url": "art/characters/wakka/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "960495"
+  },
+  {
+   "url": "art/characters/rikku/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "546767"
+  },
+  {
+   "url": "art/characters/rikku/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "590030"
+  },
+  {
+   "url": "art/characters/rikku/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "393200"
+  },
+  {
+   "url": "art/characters/rikku/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "960495"
+  },
+  {
+   "url": "art/characters/rikku/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "546767"
+  },
+  {
+   "url": "art/characters/rikku/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "485865"
+  },
+  {
+   "url": "art/characters/rikku/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "393200"
+  },
+  {
+   "url": "art/characters/rikku/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "616922"
+  },
+  {
+   "url": "art/characters/rikku/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "485865"
+  },
+  {
+   "url": "art/characters/rikku/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "676203"
+  },
+  {
+   "url": "art/characters/rikku/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "520055"
+  },
+  {
+   "url": "art/characters/rikku/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "616922"
+  },
+  {
+   "url": "art/characters/rikku/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "676203"
+  },
+  {
+   "url": "art/characters/rikku/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "637519"
+  },
+  {
+   "url": "art/characters/rikku/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "520055"
+  },
+  {
+   "url": "art/characters/rikku/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "489290"
+  },
+  {
+   "url": "art/characters/rikku/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "637519"
+  },
+  {
+   "url": "art/characters/rikku/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "489290"
+  },
+  {
+   "url": "art/pause/tidus.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "348778"
+  },
+  {
+   "url": "art/pause/wakka.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "257340"
+  },
+  {
+   "url": "art/pause/rikku.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "364306"
+  }
+ ],
+ "requests": 231,
+ "shots": [
+  {
+   "file": "shots/s3-fayth-01-prep.png",
+   "name": "01-prep",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "party-prep",
+    "chapter": "exp-fayth"
+   },
+   "screen": "party-prep",
+   "chapter": "exp-fayth",
+   "game": "ffx",
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "party-prep"
+   ],
+   "stack": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s3-fayth-02-opening-1.png",
+   "name": "02-opening-1",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "cutscene"
+   },
+   "screen": "cutscene",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "cutscene"
+   ],
+   "stack": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s3-fayth-03-opening-2.png",
+   "name": "03-opening-2",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "cutscene"
+   },
+   "screen": "cutscene",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "cutscene"
+   ],
+   "stack": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  }
+ ],
+ "fails": [],
+ "log": [
+  "door attempt 1 party-prep exp-fayth",
+  "CHECK-OK   typing 'fayth' opens party prep for exp-fayth (first attempt) {\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"exp-fayth\",\"waitedMs\":3}",
+  "CHECK-OK   'fayth' opened at all within 3 attempts [{\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"exp-fayth\",\"waitedMs\":3}]",
+  "CHECK-OK   the exp-fayth-deck plate was requested and answered 200 as an image [{\"url\":\"art/backdrops/exp-fayth-deck.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"3424618\"},{\"url\":\"art/backdrops/exp-fayth-deck.json\",\"status\":200,\"ct\":\"application/json\",\"len\":null},{\"url\":\"art/backdrops/exp-fayth-deck.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"3424618\"}]",
+  "CHECK-OK   the opening is not black: mean luminance well above black and most pixels are not near-black {\"intro1\":{\"lum\":109.2,\"darkShare\":0.3},\"focusedBuild\":111.1}",
+  "CHECK-OK   the next line of the opening also shows the painting (not black) {\"lum\":109,\"darkShare\":0.3}"
+ ],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "build": {
+  "sha": "f939b87f",
+  "bundle": "index-4LVgaz0l.js"
+ },
+ "checks": {
+  "typing 'fayth' opens party prep for exp-fayth (first attempt)": {
+   "ok": true,
+   "detail": "{\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"exp-fayth\",\"waitedMs\":3}"
+  },
+  "'fayth' opened at all within 3 attempts": {
+   "ok": true,
+   "detail": "[{\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"exp-fayth\",\"waitedMs\":3}]"
+  },
+  "the exp-fayth-deck plate was requested and answered 200 as an image": {
+   "ok": true,
+   "detail": "[{\"url\":\"art/backdrops/exp-fayth-deck.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"3424618\"},{\"url\":\"art/backdrops/exp-fayth-deck.json\",\"status\":200,\"ct\":\"application/json\",\"len\":null},{\"url\":\"art/backdrops/exp-fayth-deck.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"3424618\"}]"
+  },
+  "the opening is not black: mean luminance well above black and most pixels are not near-black": {
+   "ok": true,
+   "detail": "{\"intro1\":{\"lum\":109.2,\"darkShare\":0.3},\"focusedBuild\":111.1}"
+  },
+  "the next line of the opening also shows the painting (not black)": {
+   "ok": true,
+   "detail": "{\"lum\":109,\"darkShare\":0.3}"
+  }
+ },
+ "titlePresses": 2,
+ "doorAttempts": [
+  {
+   "attempt": 1,
+   "screen": "party-prep",
+   "chapter": "exp-fayth",
+   "waitedMs": 3
+  }
+ ],
+ "prep": {
+  "lum": 32.2,
+  "darkShare": 0.1
+ },
+ "intro1": {
+  "lum": 109.2,
+  "darkShare": 0.3
+ },
+ "plateInfo": {
+  "resources": [
+   {
+    "n": "backdrops/exp-fayth-deck.webp",
+    "status": 200,
+    "bytes": 3424618,
+    "transfer": 3424918
+   },
+   {
+    "n": "backdrops/exp-fayth-deck.json",
+    "status": 200,
+    "bytes": 239,
+    "transfer": 539
+   },
+   {
+    "n": "backdrops/exp-fayth-deck.webp",
+    "status": 200,
+    "bytes": 3424618,
+    "transfer": 300
+   }
+  ],
+  "bigImgs": [
+   {
+    "tag": "CANVAS",
+    "src": "",
+    "w": 1600,
+    "h": 900
+   },
+   {
+    "tag": "IMG",
+    "src": "wakka.webp",
+    "w": 832,
+    "h": 1216
+   }
+  ],
+  "bgs": [
+   "exp-fayth-deck.webp\""
+  ]
+ },
+ "plateReq": [
+  {
+   "url": "art/backdrops/exp-fayth-deck.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3424618"
+  },
+  {
+   "url": "art/backdrops/exp-fayth-deck.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/exp-fayth-deck.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3424618"
+  }
+ ],
+ "intro2": {
+  "lum": 109,
+  "darkShare": 0.3
+ },
+ "finishedAt": "2026-10-15T21:52:31.496Z"
+}

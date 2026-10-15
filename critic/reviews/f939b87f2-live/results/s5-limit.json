@@ -1,0 +1,848 @@
+{
+ "tag": "s5-limit",
+ "width": 1600,
+ "height": 900,
+ "base": "https://echoesofspira.com/?cb=179210176718491920",
+ "t0": 1792101767494,
+ "stage": "door",
+ "startedAt": "2026-10-15T22:02:47.494Z",
+ "consoleErrors": [],
+ "pageErrors": [],
+ "notFound": [],
+ "htmlMedia": [],
+ "failed": [
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 6589
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 6589
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8718
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8718
+  }
+ ],
+ "audio": [
+  {
+   "url": "audio/music/title.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2331315",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite-v2.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "4617705",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2709777",
+   "range": null
+  },
+  {
+   "url": "audio/music/chapter-select.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2106911",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-ff7-guard.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1741096",
+   "range": null
+  }
+ ],
+ "art": [
+  {
+   "url": "art/title/keyart.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "750528"
+  },
+  {
+   "url": "art/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/auron/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718378"
+  },
+  {
+   "url": "art/backdrops/dreams-end.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3239954"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/tidus.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "898210"
+  },
+  {
+   "url": "art/portraits/yuna.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "797104"
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1213589"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "238873"
+  },
+  {
+   "url": "art/backdrops/gagazet.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "375064"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "371392"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "275648"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "407272"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "407325"
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "262252"
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "428808"
+  },
+  {
+   "url": "art/backdrops/dreams-end.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "305228"
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "455201"
+  },
+  {
+   "url": "art/backdrops/den-of-woe.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "210422"
+  },
+  {
+   "url": "art/characters/baralai-shade/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "175790"
+  },
+  {
+   "url": "art/backdrops/macalania-temple.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "421110"
+  },
+  {
+   "url": "art/characters/anima/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "229511"
+  },
+  {
+   "url": "art/backdrops/via-infinito.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "372750"
+  },
+  {
+   "url": "art/characters/trema/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "150908"
+  },
+  {
+   "url": "art/backdrops/evrae-airship-deck.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "338780"
+  },
+  {
+   "url": "art/characters/evrae/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "403308"
+  },
+  {
+   "url": "art/backdrops/road-to-the-farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "286596"
+  },
+  {
+   "url": "art/characters/x2-shiva/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "248629"
+  },
+  {
+   "url": "art/backdrops/cavern-stolen-fayth.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "220450"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "169316"
+  },
+  {
+   "url": "art/backdrops/leblanc-last-room.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "359684"
+  },
+  {
+   "url": "art/characters/leblanc/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "207318"
+  },
+  {
+   "url": "art/backdrops/bevelle-highbridge.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "381744"
+  },
+  {
+   "url": "art/characters/seymour-natus/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "224116"
+  },
+  {
+   "url": "art/backdrops/farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "321672"
+  },
+  {
+   "url": "art/characters/vegnagun-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "822104"
+  },
+  {
+   "url": "art/backdrops/garden-of-pain.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "273406"
+  },
+  {
+   "url": "art/characters/seymour-omnis/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "328753"
+  },
+  {
+   "url": "art/backdrops/via-purifico.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "291342"
+  },
+  {
+   "url": "art/characters/isaaru/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "162036"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "328206"
+  },
+  {
+   "url": "art/characters/overdrive-sin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "657558"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "283182"
+  },
+  {
+   "url": "art/characters/sin-left-fin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "309529"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/portraits/auron.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "798376"
+  },
+  {
+   "url": "art/portraits/tidus.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/kimahri.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yuna.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1019085"
+  },
+  {
+   "url": "art/portraits/lulu.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "837746"
+  },
+  {
+   "url": "art/portraits/wakka.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "911762"
+  },
+  {
+   "url": "art/portraits/seymour.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "869268"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1019085"
+  },
+  {
+   "url": "art/backdrops/gagazet.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "968150"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/rikku-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "1048996"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4359436"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661196"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1246213"
+  },
+  {
+   "url": "art/characters/yuna/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "724684"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/ff7-film-reactor.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": "38"
+  },
+  {
+   "url": "art/backdrops/ff7-film-reactor.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3144206"
+  },
+  {
+   "url": "art/characters/ff7-film-guard-scorpion/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "556191"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "512888"
+  },
+  {
+   "url": "art/characters/ff7-film-guard-scorpion/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1246855"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "512888"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "556191"
+  },
+  {
+   "url": "art/characters/ff7-film-guard-scorpion/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-guard-scorpion/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1341857"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/back.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "586308"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "535389"
+  },
+  {
+   "url": "art/characters/ff7-film-guard-scorpion/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1341857"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "535389"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "524563"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/back.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "586308"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "565335"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/back.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "524563"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/spin.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "563006"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "565335"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "541425"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/spin.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/spin.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "563006"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/aim.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661676"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "541425"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/windup.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "621458"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/windup.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661674"
+  },
+  {
+   "url": "art/characters/ff7-film-cloud/windup.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "621458"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/aim.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/aim.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661676"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "614933"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661674"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/punch.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "669196"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "539743"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "614933"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/punch.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/punch.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "669196"
+  },
+  {
+   "url": "art/characters/ff7-film-barret/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/ff7-film-barret/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "539743"
+  }
+ ],
+ "requests": 142,
+ "shots": [
+  {
+   "file": "shots/s5-limit-01-battle.png",
+   "name": "01-battle",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle"
+   },
+   "screen": "battle",
+   "chapter": "ff7-guard-scorpion",
+   "game": "ff7",
+   "phase": "idle",
+   "awaitingMenu": false,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  }
+ ],
+ "fails": [],
+ "log": [
+  "CHECK-OK   'limit' opens the hidden FF7 experiment straight into its battle screen {\"screen\":\"battle\",\"scene\":\"sector1-reactor\",\"game\":\"ff7\"}"
+ ],
+ "bootMs": 2803,
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "build": {
+  "sha": "f939b87f",
+  "bundle": "index-4LVgaz0l.js"
+ },
+ "checks": {
+  "'limit' opens the hidden FF7 experiment straight into its battle screen": {
+   "ok": true,
+   "detail": "{\"screen\":\"battle\",\"scene\":\"sector1-reactor\",\"game\":\"ff7\"}"
+  }
+ },
+ "titlePresses": 2,
+ "saveChapterKeysAfter": [],
+ "finishedAt": "2026-10-15T22:03:01.501Z"
+}

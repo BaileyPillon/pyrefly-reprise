@@ -1,0 +1,74 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-15T22:07:41Z",
+  "build": {
+    "mainSha": "f939b87f2",
+    "bundle": "4LVgaz0l",
+    "artifactHash": "a63f8a4a4dab4106d81c1b4c80b04f76c08379af7daeeea226f028ed3a599ed2"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/f939b87f2.json --url https://echoesofspira.com/ --changed-from critic/artifacts/ea431aa0.json --full (33 min 50 s) -> {result: PASS, artifactHash: a63f8a4a4dab4106d81c1b4c80b04f76c08379af7daeeea226f028ed3a599ed2, liveManifest: match, checked: 5251, mismatched: [], missing: [], wrongType: [], errors: []}. The manifest lists 5252 files (10.8 GB); _headers is host-read, never served, so not downloaded; index.html as a browser asks for it is identical to the artifact once Cloudflare's Web Analytics beacon (366 bytes and the line feed) is cut out. In the page, __pyrefly.build() read {sha: f939b87f, bundle: index-4LVgaz0l.js} in all 26 contexts and the served page's script tag is assets/index-4LVgaz0l.js (read in both gagazet runs). dist-gate, the production candidate the focused review used, is byte-identical to the live manifest for index.html, the five files under assets/, art/manifest.json and art/derived.json. Across 26 browser contexts and 4,484 requests (27 contexts counting the first exploration): 0 responses with status >= 400, 0 image or audio responses served as text/html; 227 audio responses over 20 files, all 200 audio/mpeg.",
+      "reason": "Every compared file is byte-identical to the stored manifest with the right content type, and the live manifest names this artifact."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright launched from node scripts with PYREFLY_BROWSER=gpu (renderer ANGLE NVIDIA GeForce RTX 5070 Ti Direct3D11, never SwiftShader; no black canvas, so no fallback was needed), a fresh browser context per run, a ?cb= cache-busting URL, 1600x900 and 390x844, real key presses and real mouse clicks (page.mouse.move then click on START BATTLE, the Special row, the PAUSE chip, the Options tab). Every capture was asserted before it was shot, with the state read before and after the shot: screen name, chapter id, game, awaitingMenu === true for every battle-menu capture (phase command:kimahri for Kimahri), #ui > [data-screen] roots equal to the screen stack, no title root once past the title. Final evidence set (12 contexts): 60 captures, 0 unverified (gagazet by keys 17, gagazet by keys and clicks 18, angra 7, daigoro 3, fayth 3, gagazet at 390x844 6, older door words 6). Every wait matched or threw (assertScreen, waitBattleMenu); the one run that could not start threw and shot nothing. Evidence: D:/pyrefly-r49/.live-f939-tmp/results/*.json and shots/*.png.",
+      "reason": "Every capture of the intended states carries its asserted screen, chapter and menu condition; the harness's own wrong assumptions are listed in the notes and were corrected by new runs, none is hidden."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Light reload smoke on the live URL, twice (runs s1 and s1b). In the pause OPTIONS tab (reached with Tab in s1, with a real click on the tab in s1b) ArrowLeft on MASTER VOLUME lowered it 0.8 -> 0.7 and pyrefly-reprise:save:v1 held 0.7 at once; page.reload(); localStorage read 0.7, audioDebug().volumes.master read 0.7 at boot before any key press (applied, not only stored), every other setting unchanged (diff of the settings object = [masterVolume]), the two storage keys unchanged (pyrefly-reprise:experiments:v1, pyrefly-reprise:save:v1). H in the pause also wrote pausePanelsHidden true and, pressed again, false.",
+      "reason": "Light pass only: the full upgrade matrix (fresh player, returning player, a save from the previous live build, invalid or truncated storage, the reset flow) was not run. This build does not touch save data and CHK-024 is not in the marker's check list."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "exact artifact: all 5251 downloadable files of the 5252-file manifest byte-compared with the live site (--full), content types, live manifest match, index.html as a browser receives it",
+      "title -> chapter select at 1600x900: 0 OF 18 BEATEN, 18 tiles, no hidden card; the compact 0/18 form at 390x844",
+      "'gagazet' (Biran and Yenke, FFX): door -> party prep biran-yenke -> opening on the painted Gagazet plate -> Kimahri's first player turn (Attack / Special / Items, Kimahri alone against Biran 3208 and Yenke 2406 HP) -> cancel path (Special -> target selection -> Escape back to the top menu, not the pause) -> Lancet on Biran through the real menu (Enter in one run, a real click on Special in the other) -> 'Kimahri learns Thrust Kick' (banner on screen and in the battle log), Overdrive gauge 100, Thrust Kick on his list, an Overdrive row at the next menu",
+      "'angra' (Angra Mainyu, FFX-2) in three runs: door -> party prep ffx2-angra-mainyu -> opening -> first menu (Rikku's Attack / Skill / Change / Item; Yuna, Rikku, Paine against Angra Mainyu 333,444 HP, Tawrich and Zarich 5,440 HP) in about 27 s -> cancel path (Attack -> target step with 'WAIT - ATB HELD' -> Escape back to the same menu) -> Escape opens the pause, P resumes to the same menu; not fought, by the brief",
+      "'daigoro' and 'fayth' openings draw their paintings: mean luminance 76.3 and 109.2 (the focused review's candidate read 76.7 and 111.1), 1.5 % and 0.3 % near-black pixels, plates ffx2-tourist-trap-cavern.webp and exp-fayth-deck.webp answered 200 image/webp; both doors opened on the first attempt",
+      "pause on the gagazet battle: Escape and P open and close it, H hides and restores the panels (pause--bare, panelsHidden true then false, persisted), a real click on the PAUSE chip opens it, the battle clock runs after resume (frames advance), the same menu and phase come back",
+      "music (network and state only, nothing was listened to): 20 audio files fetched, all 200 audio/mpeg; audioDebug().playing followed title, chapter-select, scene-gagazet, boss-challenge, pause, boss-challenge (FFX-2: scene-bevelle-underground, boss-ffx2-fallen-aeons, pause); the loader reported source 'prerendered' for title, chapter-select, scene-gagazet and pause, and prerendered.manifest true throughout",
+      "'gagazet' first menu at 390x844: a real click on START BATTLE started the chapter, the three command rows sit inside the viewport, no horizontal page scroll, target selection shows SPECIAL -> BIRAN RONSO and BACK inside the viewport, Escape cancels",
+      "older door words on the live artifact: leblanc, experiment, mushroom and valefor open their party prep, limit opens the FF7 battle, a wrong word opens nothing",
+      "one setting changed through the real UI, reload, kept and applied (CHK-024 light)",
+      "console errors, page errors, responses >= 400 and wrong-type media over 26 contexts and 4,484 requests: 0"
+    ],
+    "reused": [
+      {
+        "what": "the focused review's code-level findings for this candidate",
+        "from": "critic/reviews/f939b87f-focused.json",
+        "why": "dist-gate, the candidate that review used, is byte-identical to the live artifact for index.html, every file under assets/ (the bundle index-4LVgaz0l.js, the CSS, the workers, exp-fayth-table), art/manifest.json and art/derived.json, so the code those findings describe is the code that is live. None of its captures is reused as a pass here."
+      }
+    ],
+    "notTested": [
+      "the full CHK-024 upgrade matrix (fresh / returning / previous-build save fixture / invalid or truncated storage / reset flow)",
+      "a complete Biran and Yenke fight to results, and any Angra Mainyu win or loss to results (the focused review's evidence; Angra was not attempted, by the brief)",
+      "Lancet on Yenke (Fire Breath), a learned Ronso Rage in the Overdrive picker, Jump, the brothers' guard behaviour",
+      "continuity (CHK-026, CHK-027), the data audit (CHK-008, CHK-011), same-seed pairs, first-time-fan lens: the deep review's obligation, still pending on this build",
+      "the formal cold-load timing (critic/runner/lib/coldload.mjs, throttled run); the informal boot to ready was 2.5 s unthrottled in run s1b",
+      "audio by ear: no agent listened; routing, fetches and state only",
+      "other viewport shapes (2000x1012, 4:3, 1440p, 4K), a real phone, Safari or WebKit, a gamepad",
+      "the other chapters of this release through a real flow"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 63,
+  "notes": "Mode: headless Chromium by Playwright from node, PYREFLY_BROWSER=gpu (ANGLE, NVIDIA GeForce RTX 5070 Ti, Direct3D11); no black canvas, no fallback. Counts: 0 console errors, 0 page errors, 0 responses >= 400, 0 wrong-type media over 26 harness contexts and 4,484 requests (the first exploration, run with its own logger, also read 0 and 0). LV-1 (informational): 121 requests ended net::ERR_ABORTED over the 26 contexts (63 in the 12-context final set); none has a status, none logged a console error, every painting shown loaded. They are cancelled prefetches: other chapters' art dropped when the player leaves the board, and the 1x art/pause/<member>.webp request cancelled on each pause open while art/pause/<member>.2x.webp answers 200. LV-2 (harness, not the product): my first runs asserted things the game does not do: an Enter pressed in the first second after the title appears is ignored (a second press took in every run), FFX-2's command menu can be waiting while the engine phase reads play:* or script:* (I had asserted command:*) and its HUD actor is the advisor's .mad__actor, the 390x844 layout draws its own target panel (SPECIAL -> BIRAN RONSO and BACK) and the board count as 0/18, and the pause root has no pause--bare class on the .pause element. Each assertion was corrected and the scenario re-run; the first runs (s1: 1 of 29 checks, the pause--bare one; s2 and s2b: harness identity checks; s4 to s4c) are kept in .live-f939-tmp/results. LV-3: one fresh context timed out in page.goto at 30 s with no response while other agents' headless browsers were running on this GPU; curl read the page in 0.26 s a minute later; the run was repeated with a 90 s limit and the site booted in 2.5 s. Nothing points at the product. F939-01 (the open Sensor card sits over Yenke at Kimahri's first menu; I hides it) was seen again on live exactly as the focused report disclosed; it is not a new finding. No product code was touched, nothing was committed, pushed or deployed. Elapsed: about 63 active minutes (the 33 min 50 s --full download ran in the background while the smoke was built, so it added no time); the wall clock is about 3 h 10 min because the session waited about 2 h 10 min for a usage-limit reset between the first Angra run and its re-run."
+}

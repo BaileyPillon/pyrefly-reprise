@@ -1,0 +1,2335 @@
+{
+ "tag": "s1b-gagazet",
+ "width": 1600,
+ "height": 900,
+ "base": "https://echoesofspira.com/?cb=179210145564975274",
+ "t0": 1792101455855,
+ "stage": "done",
+ "startedAt": "2026-10-15T21:57:35.855Z",
+ "consoleErrors": [],
+ "pageErrors": [],
+ "notFound": [],
+ "htmlMedia": [],
+ "failed": [
+  {
+   "url": "art/characters/x2-ixion/idle.png",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 8114
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.png",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 8114
+  },
+  {
+   "url": "art/characters/rikku-thief/idle.png",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 10858
+  },
+  {
+   "url": "art/pause/kimahri.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "pause-esc",
+   "atMs": 49414
+  },
+  {
+   "url": "art/pause/kimahri.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "pause-p",
+   "atMs": 57081
+  },
+  {
+   "url": "art/pause/kimahri.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "pause-chip",
+   "atMs": 61733
+  },
+  {
+   "url": "art/pause/kimahri.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "settings",
+   "atMs": 65165
+  }
+ ],
+ "audio": [
+  {
+   "url": "audio/music/title.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2331315",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2709777",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite-v2.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "4617705",
+   "range": null
+  },
+  {
+   "url": "audio/music/chapter-select.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2106911",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/parity-ffx-core.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "773826",
+   "range": null
+  },
+  {
+   "url": "audio/music/scene-gagazet.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1358317",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-challenge.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1559663",
+   "range": null
+  },
+  {
+   "url": "audio/music/victory-ffx.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "643980",
+   "range": null
+  },
+  {
+   "url": "audio/music/defeat-ffx.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "127588",
+   "range": null
+  },
+  {
+   "url": "audio/music/pause.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1478084",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-challenge.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1559663",
+   "range": null
+  },
+  {
+   "url": "audio/music/pause.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1478084",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-challenge.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1559663",
+   "range": null
+  },
+  {
+   "url": "audio/music/pause.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1478084",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-challenge.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1559663",
+   "range": null
+  },
+  {
+   "url": "audio/music/pause.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1478084",
+   "range": null
+  }
+ ],
+ "art": [
+  {
+   "url": "art/title/keyart.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "750528"
+  },
+  {
+   "url": "art/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/auron/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718378"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/backdrops/dreams-end.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3239954"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/tidus.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "898210"
+  },
+  {
+   "url": "art/portraits/yuna.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "797104"
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1213589"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "238873"
+  },
+  {
+   "url": "art/backdrops/gagazet.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "375064"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "371392"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "275648"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "407272"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "407325"
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "262252"
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "428808"
+  },
+  {
+   "url": "art/backdrops/dreams-end.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "305228"
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "455201"
+  },
+  {
+   "url": "art/backdrops/den-of-woe.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "210422"
+  },
+  {
+   "url": "art/characters/baralai-shade/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "175790"
+  },
+  {
+   "url": "art/backdrops/macalania-temple.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "421110"
+  },
+  {
+   "url": "art/characters/anima/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "229511"
+  },
+  {
+   "url": "art/backdrops/via-infinito.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "372750"
+  },
+  {
+   "url": "art/characters/trema/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "150908"
+  },
+  {
+   "url": "art/characters/evrae/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "403308"
+  },
+  {
+   "url": "art/backdrops/evrae-airship-deck.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "338780"
+  },
+  {
+   "url": "art/backdrops/road-to-the-farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "286596"
+  },
+  {
+   "url": "art/characters/x2-shiva/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "248629"
+  },
+  {
+   "url": "art/backdrops/cavern-stolen-fayth.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "220450"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "169316"
+  },
+  {
+   "url": "art/backdrops/leblanc-last-room.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "359684"
+  },
+  {
+   "url": "art/characters/leblanc/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "207318"
+  },
+  {
+   "url": "art/characters/seymour-natus/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "224116"
+  },
+  {
+   "url": "art/backdrops/bevelle-highbridge.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "381744"
+  },
+  {
+   "url": "art/backdrops/farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "321672"
+  },
+  {
+   "url": "art/characters/vegnagun-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "822104"
+  },
+  {
+   "url": "art/backdrops/garden-of-pain.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "273406"
+  },
+  {
+   "url": "art/characters/seymour-omnis/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "328753"
+  },
+  {
+   "url": "art/backdrops/via-purifico.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "291342"
+  },
+  {
+   "url": "art/characters/isaaru/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "162036"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "328206"
+  },
+  {
+   "url": "art/characters/overdrive-sin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "657558"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "283182"
+  },
+  {
+   "url": "art/characters/sin-left-fin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "309529"
+  },
+  {
+   "url": "art/portraits/auron.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "798376"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1019085"
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "968150"
+  },
+  {
+   "url": "art/portraits/rikku-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "1048996"
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4359436"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1246213"
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2957714"
+  },
+  {
+   "url": "art/portraits/yuna.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/kimahri.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/tidus.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "689734"
+  },
+  {
+   "url": "art/portraits/lulu.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "837746"
+  },
+  {
+   "url": "art/portraits/seymour.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "869268"
+  },
+  {
+   "url": "art/portraits/wakka.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "911762"
+  },
+  {
+   "url": "art/backdrops/gagazet.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "689734"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1229350"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/den-of-woe.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2635906"
+  },
+  {
+   "url": "art/characters/nooj-shade/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "328804"
+  },
+  {
+   "url": "art/characters/gippal-shade/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "613949"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/characters/baralai-shade/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "477826"
+  },
+  {
+   "url": "art/characters/tidus/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661196"
+  },
+  {
+   "url": "art/portraits/rikku.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "897134"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "477818"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "724684"
+  },
+  {
+   "url": "art/characters/paine-warrior/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "461929"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1081427"
+  },
+  {
+   "url": "art/characters/kimahri/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "812284"
+  },
+  {
+   "url": "art/characters/kimahri/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "775805"
+  },
+  {
+   "url": "art/characters/rikku-alchemist/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "617771"
+  },
+  {
+   "url": "art/characters/yuna-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718749"
+  },
+  {
+   "url": "art/characters/yuna-gunner/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "557639"
+  },
+  {
+   "url": "art/characters/rikku-thief/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "686135"
+  },
+  {
+   "url": "art/backdrops/gagazet-ronso.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/pause/ch25-biran-yenke.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "984958"
+  },
+  {
+   "url": "art/characters/biran-ronso/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "830540"
+  },
+  {
+   "url": "art/characters/yenke-ronso/idle.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "473550"
+  },
+  {
+   "url": "art/portraits/yenke.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "235224"
+  },
+  {
+   "url": "art/portraits/biran.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "482772"
+  },
+  {
+   "url": "art/backdrops/gagazet-ronso.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/gagazet-ronso.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/biran-ronso/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/biran-ronso/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "830540"
+  },
+  {
+   "url": "art/characters/yenke-ronso/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yenke-ronso/idle.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "473550"
+  },
+  {
+   "url": "art/characters/kimahri/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "594570"
+  },
+  {
+   "url": "art/characters/kimahri/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "962344"
+  },
+  {
+   "url": "art/characters/kimahri/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "791171"
+  },
+  {
+   "url": "art/characters/kimahri/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "594570"
+  },
+  {
+   "url": "art/characters/kimahri/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "784637"
+  },
+  {
+   "url": "art/characters/kimahri/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "962344"
+  },
+  {
+   "url": "art/characters/kimahri/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "721241"
+  },
+  {
+   "url": "art/characters/kimahri/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "791171"
+  },
+  {
+   "url": "art/characters/kimahri/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "784637"
+  },
+  {
+   "url": "art/characters/kimahri/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "848338"
+  },
+  {
+   "url": "art/characters/kimahri/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "721241"
+  },
+  {
+   "url": "art/characters/kimahri/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "609383"
+  },
+  {
+   "url": "art/characters/kimahri/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "378936"
+  },
+  {
+   "url": "art/characters/kimahri/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "848338"
+  },
+  {
+   "url": "art/characters/kimahri/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "762441"
+  },
+  {
+   "url": "art/characters/kimahri/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "609383"
+  },
+  {
+   "url": "art/characters/kimahri/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "378936"
+  },
+  {
+   "url": "art/characters/kimahri/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "745809"
+  },
+  {
+   "url": "art/characters/kimahri/defend.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "562718"
+  },
+  {
+   "url": "art/characters/kimahri/sleep.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "762441"
+  },
+  {
+   "url": "art/characters/kimahri/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/kimahri/critical.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "745809"
+  },
+  {
+   "url": "art/characters/kimahri/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "562718"
+  },
+  {
+   "url": "art/characters/kimahri/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/pause/kimahri.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "302728"
+  },
+  {
+   "url": "art/backdrops/gagazet-ronso.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/kimahri/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "962344"
+  },
+  {
+   "url": "art/characters/biran-ronso/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yenke-ronso/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yenke-ronso.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "235224"
+  },
+  {
+   "url": "art/portraits/biran-ronso.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "482772"
+  },
+  {
+   "url": "art/characters/yenke-ronso/idle.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "473550"
+  },
+  {
+   "url": "art/characters/biran-ronso/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "830540"
+  },
+  {
+   "url": "art/characters/biran-ronso/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yenke-ronso/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yenke-ronso.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/biran-ronso.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/pause/kimahri.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portrait-parts/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/eyeL-window.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "641"
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/mouth-concerned-press.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "52858"
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/eyeL-iris.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "11916"
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/eyeL-socket.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2756"
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/eyeL-catch.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1238"
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/lidL-closed.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "40431"
+  },
+  {
+   "url": "art/portrait-parts/kimahri/2x/mouth-open-smile.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "57126"
+  },
+  {
+   "url": "art/title/keyart.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "750528"
+  },
+  {
+   "url": "art/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/portraits/tidus.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/portraits/yuna.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/gagazet.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/dreams-end.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/den-of-woe.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/baralai-shade/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/macalania-temple.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/anima/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/via-infinito.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/trema/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/evrae-airship-deck.thumb.webp",
+   "status": 304,
+   "ct": "image/webp",
+   "len": null
+  },
+  {
+   "url": "art/characters/evrae/idle.thumb.png",
+   "status": 304,
+   "ct": "image/png",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/road-to-the-farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "286596"
+  },
+  {
+   "url": "art/characters/x2-shiva/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "248629"
+  },
+  {
+   "url": "art/backdrops/cavern-stolen-fayth.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "220450"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "169316"
+  },
+  {
+   "url": "art/backdrops/leblanc-last-room.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "359684"
+  },
+  {
+   "url": "art/characters/leblanc/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "207318"
+  },
+  {
+   "url": "art/backdrops/bevelle-highbridge.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "381744"
+  },
+  {
+   "url": "art/characters/seymour-natus/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "224116"
+  },
+  {
+   "url": "art/backdrops/farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "321672"
+  },
+  {
+   "url": "art/characters/vegnagun-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "822104"
+  },
+  {
+   "url": "art/backdrops/garden-of-pain.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "273406"
+  },
+  {
+   "url": "art/characters/seymour-omnis/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "328753"
+  },
+  {
+   "url": "art/backdrops/via-purifico.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "291342"
+  },
+  {
+   "url": "art/characters/isaaru/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "162036"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "328206"
+  },
+  {
+   "url": "art/characters/overdrive-sin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "657558"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "283182"
+  },
+  {
+   "url": "art/characters/sin-left-fin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "309529"
+  },
+  {
+   "url": "art/portraits/auron.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "798376"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1019085"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "968150"
+  },
+  {
+   "url": "art/portraits/rikku-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "1048996"
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4359436"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1246213"
+  }
+ ],
+ "requests": 263,
+ "shots": [
+  {
+   "file": "shots/s1b-gagazet-01-title.png",
+   "name": "01-title",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "title"
+   },
+   "screen": "title",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "title"
+   ],
+   "stack": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-02-board.png",
+   "name": "02-board",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "chapter-select"
+   },
+   "screen": "chapter-select",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "chapter-select"
+   ],
+   "stack": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "order": 18
+  },
+  {
+   "file": "shots/s1b-gagazet-03-prep.png",
+   "name": "03-prep",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "party-prep",
+    "chapter": "biran-yenke",
+    "game": "ffx"
+   },
+   "screen": "party-prep",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "party-prep"
+   ],
+   "stack": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-04-cutscene.png",
+   "name": "04-cutscene",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "cutscene"
+   },
+   "screen": "cutscene",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "cutscene"
+   ],
+   "stack": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-05-first-menu.png",
+   "name": "05-first-menu",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "awaitingMenu": true,
+    "phase": "command:kimahri"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "rows": [
+    "Attack*",
+    "Special",
+    "Items"
+   ]
+  },
+  {
+   "file": "shots/s1b-gagazet-06-target.png",
+   "name": "06-target",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "awaitingMenu": true,
+    "phase": "command:kimahri"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "target": {
+    "name": "Biran Ronso",
+    "visible": true
+   }
+  },
+  {
+   "file": "shots/s1b-gagazet-07-after-cancel.png",
+   "name": "07-after-cancel",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "awaitingMenu": true,
+    "phase": "command:kimahri"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "rows": [
+    "Attack",
+    "Special*",
+    "Items"
+   ]
+  },
+  {
+   "file": "shots/s1b-gagazet-08-learns-banner.png",
+   "name": "08-learns-banner",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "play:message",
+   "awaitingMenu": false,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "banner": {
+    "text": "learns Thrust Kick",
+    "cls": "ig-banner__chip",
+    "parentCls": "ig-banner",
+    "w": 262,
+    "h": 36,
+    "x": 261,
+    "y": 63,
+    "opacity": "1"
+   }
+  },
+  {
+   "file": "shots/s1b-gagazet-09-second-menu.png",
+   "name": "09-second-menu",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "awaitingMenu": true,
+    "phase": "command:kimahri"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "rows": [
+    "Attack*",
+    "Special",
+    "Items",
+    "Overdrive"
+   ],
+   "kimahri": {
+    "hp": 2085,
+    "mp": 130,
+    "gauge": 100,
+    "rages": [
+     "jump",
+     "thrust-kick"
+    ]
+   }
+  },
+  {
+   "file": "shots/s1b-gagazet-10-pause-esc.png",
+   "name": "10-pause-esc",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "pause",
+    "chapter": "biran-yenke"
+   },
+   "screen": "pause",
+   "chapter": "biran-yenke",
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "stack": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "pv": {
+    "rootClass": "pause ig",
+    "bare": false,
+    "bareEl": null,
+    "tabs": {
+     "w": 1472,
+     "h": 43,
+     "opacity": "1",
+     "visibility": "visible",
+     "display": "flex"
+    },
+    "body": {
+     "w": 735,
+     "h": 222,
+     "opacity": "1",
+     "visibility": "visible",
+     "display": "flex"
+    },
+    "tabsShown": true,
+    "bodyShown": true,
+    "tab": "member:kimahri"
+   }
+  },
+  {
+   "file": "shots/s1b-gagazet-11-pause-hidden.png",
+   "name": "11-pause-hidden",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "pause",
+    "chapter": "biran-yenke"
+   },
+   "screen": "pause",
+   "chapter": "biran-yenke",
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "stack": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "pv": {
+    "rootClass": "pause ig",
+    "bare": true,
+    "bareEl": "pause__stage lb-stage pause--mirror pause--bare",
+    "tabs": {
+     "w": 0,
+     "h": 0,
+     "opacity": "1",
+     "visibility": "visible",
+     "display": "flex"
+    },
+    "body": {
+     "w": 0,
+     "h": 0,
+     "opacity": "1",
+     "visibility": "visible",
+     "display": "flex"
+    },
+    "tabsShown": false,
+    "bodyShown": false,
+    "tab": "member:kimahri"
+   }
+  },
+  {
+   "file": "shots/s1b-gagazet-12-pause-restored.png",
+   "name": "12-pause-restored",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "pause",
+    "chapter": "biran-yenke"
+   },
+   "screen": "pause",
+   "chapter": "biran-yenke",
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "stack": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": [],
+   "pv": {
+    "rootClass": "pause ig",
+    "bare": false,
+    "bareEl": null,
+    "tabs": {
+     "w": 1472,
+     "h": 43,
+     "opacity": "1",
+     "visibility": "visible",
+     "display": "flex"
+    },
+    "body": {
+     "w": 735,
+     "h": 222,
+     "opacity": "1",
+     "visibility": "visible",
+     "display": "flex"
+    },
+    "tabsShown": true,
+    "bodyShown": true,
+    "tab": "member:kimahri"
+   }
+  },
+  {
+   "file": "shots/s1b-gagazet-13-resumed-esc.png",
+   "name": "13-resumed-esc",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "awaitingMenu": true,
+    "phase": "command:kimahri"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-14-pause-p.png",
+   "name": "14-pause-p",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "pause",
+    "chapter": "biran-yenke"
+   },
+   "screen": "pause",
+   "chapter": "biran-yenke",
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "stack": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-15-resumed-p.png",
+   "name": "15-resumed-p",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "battle",
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "awaitingMenu": true,
+    "phase": "command:kimahri"
+   },
+   "screen": "battle",
+   "chapter": "biran-yenke",
+   "game": "ffx",
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "roots": [
+    "battle"
+   ],
+   "stack": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-15b-pause-chip.png",
+   "name": "15b-pause-chip",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "pause",
+    "chapter": "biran-yenke"
+   },
+   "screen": "pause",
+   "chapter": "biran-yenke",
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "stack": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-16-options-changed.png",
+   "name": "16-options-changed",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "pause",
+    "chapter": "biran-yenke"
+   },
+   "screen": "pause",
+   "chapter": "biran-yenke",
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "stack": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s1b-gagazet-17-reload-title.png",
+   "name": "17-reload-title",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "title"
+   },
+   "screen": "title",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "title"
+   ],
+   "stack": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  }
+ ],
+ "fails": [],
+ "log": [
+  "CHECK-OK   build is f939b87f / index-4LVgaz0l.js {\"sha\":\"f939b87f\",\"bundle\":\"index-4LVgaz0l.js\"}",
+  "CHECK-OK   GPU renderer (not SwiftShader) ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "CHECK-OK   served page loads assets/index-4LVgaz0l.js assets/index-4LVgaz0l.js,beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+  "title presses 2",
+  "CHECK-OK   board says \"0 OF 18 BEATEN\" 0 OF 18 BEATEN",
+  "CHECK-OK   board has 18 tiles and total 18 tiles=18 total=18",
+  "CHECK-OK   hidden chapters are not on the board order has 18",
+  "CHECK-OK   typing 'gagazet' opens party prep for biran-yenke (FFX) {\"chapter\":\"biran-yenke\",\"game\":\"ffx\"}",
+  "prep Enters 1 cutscene taps 10",
+  "CHECK-OK   Kimahri's first player turn: menu waiting, phase command:kimahri {\"phase\":\"command:kimahri\",\"scene\":\"gagazet-ronso\"}",
+  "CHECK-OK   first menu rows are Attack / Special / Items Attack*,Special,Items",
+  "combatants at first menu [{\"id\":\"kimahri\",\"side\":\"party\",\"hp\":1962,\"mp\":130},{\"id\":\"biran-ronso\",\"side\":\"enemy\",\"hp\":3208,\"mp\":200},{\"id\":\"yenke-ronso\",\"side\":\"enemy\",\"hp\":2406,\"mp\":200}]",
+  "CHECK-OK   Kimahri alone vs Biran 3208 and Yenke 2406 HP [{\"id\":\"kimahri\",\"side\":\"party\",\"hp\":1962,\"mp\":130},{\"id\":\"biran-ronso\",\"side\":\"enemy\",\"hp\":3208,\"mp\":200},{\"id\":\"yenke-ronso\",\"side\":\"enemy\",\"hp\":2406,\"mp\":200}]",
+  "CHECK-OK   ArrowDown moves the cursor to Special Attack,Special*,Items",
+  "CHECK-OK   Enter on Special (one special, Lancet) opens target selection on Biran {\"name\":\"Biran Ronso\",\"visible\":true}",
+  "target switch {\"key\":\"ArrowRight\",\"from\":\"Biran Ronso\",\"to\":\"Yenke Ronso\"}",
+  "CHECK-OK   Escape cancels target selection: back to the top menu, still the battle (not the pause) {\"screen\":\"battle\",\"awaiting\":true,\"target\":{\"name\":\"Yenke Ronso\",\"visible\":false},\"rows\":[\"Attack\",\"Special*\",\"Items\"]}",
+  "REAL CLICK the Special row {\"x\":283,\"y\":740}",
+  "CHECK-OK   A real mouse click on the Special row opens target selection {\"name\":\"Biran Ronso\",\"visible\":true}",
+  "confirming Lancet on Biran Ronso expecting Thrust Kick",
+  "CHECK-OK   the \"learns\" banner draws on screen {\"text\":\"learns Thrust Kick\",\"cls\":\"ig-banner__chip\",\"parentCls\":\"ig-banner\",\"w\":262,\"h\":36,\"x\":261,\"y\":63,\"opacity\":\"1\"}",
+  "CHECK-OK   battle log carries the message \"Kimahri learns Thrust Kick\" [\"Kimahri learns Thrust Kick\"]",
+  "events since Lancet action-start,mp-damage,damage,heal,message,overdrive-gauge,action-end",
+  "CHECK-OK   learning the Rage filled the Overdrive gauge (100) and put it on his list {\"hp\":2085,\"mp\":130,\"gauge\":100,\"rages\":[\"jump\",\"thrust-kick\"]}",
+  "rows at second menu [\"Attack*\",\"Special\",\"Items\",\"Overdrive\"]",
+  "CHECK-OK   Escape at the menu opens the pause (stack battle,pause) {\"screen\":\"pause\",\"stack\":[\"battle\",\"pause\"],\"chapter\":\"biran-yenke\"}",
+  "CHECK-OK   pause panels are up (tabs and body shown) {\"rootClass\":\"pause ig\",\"bare\":false,\"bareEl\":null,\"tabs\":{\"w\":1472,\"h\":43,\"opacity\":\"1\",\"visibility\":\"visible\",\"display\":\"flex\"},\"body\":{\"w\":735,\"h\":222,\"opacity\":\"1\",\"visibility\":\"visible\",\"display\":\"flex\"},\"tabsShown\":true,\"bodyShown\":true,\"tab\":\"member:kimahri\"}",
+  "audio in pause {\"playing\":\"pause\",\"gain\":1,\"muted\":false}",
+  "CHECK-OK   H hides the pause panels (pause--bare, panelsHidden, tabs/body not shown) {\"bare\":true,\"panelsHidden\":true,\"tabsShown\":false,\"bodyShown\":false,\"stored\":true}",
+  "CHECK-OK   H again restores the pause panels {\"bare\":false,\"panelsHidden\":false,\"tabsShown\":true,\"bodyShown\":true,\"stored\":false}",
+  "CHECK-OK   Escape resumes: back on the battle menu, same actor, clock running {\"screen\":\"battle\",\"awaiting\":true,\"phase\":\"command:kimahri\",\"roots\":[\"battle\"],\"frames\":[2638,3030,3067]}",
+  "CHECK-OK   P opens the pause {\"screen\":\"pause\",\"stack\":[\"battle\",\"pause\"]}",
+  "CHECK-OK   P resumes {\"screen\":\"battle\",\"awaiting\":true,\"phase\":\"command:kimahri\"}",
+  "REAL CLICK the PAUSE chip {\"x\":67,\"y\":30}",
+  "CHECK-OK   A real click on the PAUSE chip opens the pause {\"screen\":\"pause\",\"stack\":[\"battle\",\"pause\"]}",
+  "CHECK-OK   Escape resumes after the chip-opened pause {\"screen\":\"battle\",\"awaiting\":true,\"phase\":\"command:kimahri\"}",
+  "audio after resume {\"playing\":\"boss-challenge\",\"gain\":1,\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7}}",
+  "REAL CLICK the Options tab {\"x\":538,\"y\":79}",
+  "CHECK-OK   A real click on the Options tab reaches OPTIONS options",
+  "selected options row [\"MASTER VOLUME80\"]",
+  "CHECK-OK   ArrowLeft on MASTER VOLUME lowers it 0.8 -> 0.7 and stores it {\"sel\":[\"MASTER VOLUME80\"],\"before\":0.8,\"after\":0.7}",
+  "CHECK-OK   after reload the changed setting survived in storage (masterVolume 0.7) {\"stored\":0.7}",
+  "CHECK-OK   after reload the game applied it (audio master volume 0.7 at boot) {\"master\":0.7,\"music\":0.7,\"sfx\":0.7}",
+  "CHECK-OK   after reload every other setting is unchanged {\"diff\":[\"masterVolume\"],\"keysBefore\":[\"pyrefly-reprise:experiments:v1\",\"pyrefly-reprise:save:v1\"],\"keysAfter\":[\"pyrefly-reprise:experiments:v1\",\"pyrefly-reprise:save:v1\"]}"
+ ],
+ "bootMs": 2526,
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "build": {
+  "sha": "f939b87f",
+  "bundle": "index-4LVgaz0l.js"
+ },
+ "checks": {
+  "build is f939b87f / index-4LVgaz0l.js": {
+   "ok": true,
+   "detail": "{\"sha\":\"f939b87f\",\"bundle\":\"index-4LVgaz0l.js\"}"
+  },
+  "GPU renderer (not SwiftShader)": {
+   "ok": true,
+   "detail": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "served page loads assets/index-4LVgaz0l.js": {
+   "ok": true,
+   "detail": "assets/index-4LVgaz0l.js,beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+  },
+  "board says \"0 OF 18 BEATEN\"": {
+   "ok": true,
+   "detail": "0 OF 18 BEATEN"
+  },
+  "board has 18 tiles and total 18": {
+   "ok": true,
+   "detail": "tiles=18 total=18"
+  },
+  "hidden chapters are not on the board": {
+   "ok": true,
+   "detail": "order has 18"
+  },
+  "typing 'gagazet' opens party prep for biran-yenke (FFX)": {
+   "ok": true,
+   "detail": "{\"chapter\":\"biran-yenke\",\"game\":\"ffx\"}"
+  },
+  "Kimahri's first player turn: menu waiting, phase command:kimahri": {
+   "ok": true,
+   "detail": "{\"phase\":\"command:kimahri\",\"scene\":\"gagazet-ronso\"}"
+  },
+  "first menu rows are Attack / Special / Items": {
+   "ok": true,
+   "detail": "Attack*,Special,Items"
+  },
+  "Kimahri alone vs Biran 3208 and Yenke 2406 HP": {
+   "ok": true,
+   "detail": "[{\"id\":\"kimahri\",\"side\":\"party\",\"hp\":1962,\"mp\":130},{\"id\":\"biran-ronso\",\"side\":\"enemy\",\"hp\":3208,\"mp\":200},{\"id\":\"yenke-ronso\",\"side\":\"enemy\",\"hp\":2406,\"mp\":200}]"
+  },
+  "ArrowDown moves the cursor to Special": {
+   "ok": true,
+   "detail": "Attack,Special*,Items"
+  },
+  "Enter on Special (one special, Lancet) opens target selection on Biran": {
+   "ok": true,
+   "detail": "{\"name\":\"Biran Ronso\",\"visible\":true}"
+  },
+  "Escape cancels target selection: back to the top menu, still the battle (not the pause)": {
+   "ok": true,
+   "detail": "{\"screen\":\"battle\",\"awaiting\":true,\"target\":{\"name\":\"Yenke Ronso\",\"visible\":false},\"rows\":[\"Attack\",\"Special*\",\"Items\"]}"
+  },
+  "A real mouse click on the Special row opens target selection": {
+   "ok": true,
+   "detail": "{\"name\":\"Biran Ronso\",\"visible\":true}"
+  },
+  "the \"learns\" banner draws on screen": {
+   "ok": true,
+   "detail": "{\"text\":\"learns Thrust Kick\",\"cls\":\"ig-banner__chip\",\"parentCls\":\"ig-banner\",\"w\":262,\"h\":36,\"x\":261,\"y\":63,\"opacity\":\"1\"}"
+  },
+  "battle log carries the message \"Kimahri learns Thrust Kick\"": {
+   "ok": true,
+   "detail": "[\"Kimahri learns Thrust Kick\"]"
+  },
+  "learning the Rage filled the Overdrive gauge (100) and put it on his list": {
+   "ok": true,
+   "detail": "{\"hp\":2085,\"mp\":130,\"gauge\":100,\"rages\":[\"jump\",\"thrust-kick\"]}"
+  },
+  "Escape at the menu opens the pause (stack battle,pause)": {
+   "ok": true,
+   "detail": "{\"screen\":\"pause\",\"stack\":[\"battle\",\"pause\"],\"chapter\":\"biran-yenke\"}"
+  },
+  "pause panels are up (tabs and body shown)": {
+   "ok": true,
+   "detail": "{\"rootClass\":\"pause ig\",\"bare\":false,\"bareEl\":null,\"tabs\":{\"w\":1472,\"h\":43,\"opacity\":\"1\",\"visibility\":\"visible\",\"display\":\"flex\"},\"body\":{\"w\":735,\"h\":222,\"opacity\":\"1\",\"visibility\":\"visible\",\"display\":\"flex\"},\"tabsShown\":true,\"bodyShown\":true,\"tab\":\"member:kimahri\"}"
+  },
+  "H hides the pause panels (pause--bare, panelsHidden, tabs/body not shown)": {
+   "ok": true,
+   "detail": "{\"bare\":true,\"panelsHidden\":true,\"tabsShown\":false,\"bodyShown\":false,\"stored\":true}"
+  },
+  "H again restores the pause panels": {
+   "ok": true,
+   "detail": "{\"bare\":false,\"panelsHidden\":false,\"tabsShown\":true,\"bodyShown\":true,\"stored\":false}"
+  },
+  "Escape resumes: back on the battle menu, same actor, clock running": {
+   "ok": true,
+   "detail": "{\"screen\":\"battle\",\"awaiting\":true,\"phase\":\"command:kimahri\",\"roots\":[\"battle\"],\"frames\":[2638,3030,3067]}"
+  },
+  "P opens the pause": {
+   "ok": true,
+   "detail": "{\"screen\":\"pause\",\"stack\":[\"battle\",\"pause\"]}"
+  },
+  "P resumes": {
+   "ok": true,
+   "detail": "{\"screen\":\"battle\",\"awaiting\":true,\"phase\":\"command:kimahri\"}"
+  },
+  "A real click on the PAUSE chip opens the pause": {
+   "ok": true,
+   "detail": "{\"screen\":\"pause\",\"stack\":[\"battle\",\"pause\"]}"
+  },
+  "Escape resumes after the chip-opened pause": {
+   "ok": true,
+   "detail": "{\"screen\":\"battle\",\"awaiting\":true,\"phase\":\"command:kimahri\"}"
+  },
+  "A real click on the Options tab reaches OPTIONS": {
+   "ok": true,
+   "detail": "options"
+  },
+  "ArrowLeft on MASTER VOLUME lowers it 0.8 -> 0.7 and stores it": {
+   "ok": true,
+   "detail": "{\"sel\":[\"MASTER VOLUME80\"],\"before\":0.8,\"after\":0.7}"
+  },
+  "after reload the changed setting survived in storage (masterVolume 0.7)": {
+   "ok": true,
+   "detail": "{\"stored\":0.7}"
+  },
+  "after reload the game applied it (audio master volume 0.7 at boot)": {
+   "ok": true,
+   "detail": "{\"master\":0.7,\"music\":0.7,\"sfx\":0.7}"
+  },
+  "after reload every other setting is unchanged": {
+   "ok": true,
+   "detail": "{\"diff\":[\"masterVolume\"],\"keysBefore\":[\"pyrefly-reprise:experiments:v1\",\"pyrefly-reprise:save:v1\"],\"keysAfter\":[\"pyrefly-reprise:experiments:v1\",\"pyrefly-reprise:save:v1\"]}"
+  }
+ },
+ "clicks": true,
+ "titlePresses": 2,
+ "targetSwitch": {
+  "key": "ArrowRight",
+  "from": "Biran Ronso",
+  "to": "Yenke Ronso"
+ },
+ "audioSamples": [
+  {
+   "atMs": 2,
+   "playing": null,
+   "source": null,
+   "cached": null,
+   "gain": null,
+   "held": []
+  },
+  {
+   "atMs": 5271,
+   "playing": "title",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.000501127156894654,
+   "held": []
+  },
+  {
+   "atMs": 6190,
+   "playing": "chapter-select",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.00012781952682416886,
+   "held": []
+  },
+  {
+   "atMs": 8384,
+   "playing": "chapter-select",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 1,
+   "held": [
+    "scene-gagazet",
+    "boss-challenge",
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  {
+   "atMs": 11479,
+   "playing": "scene-gagazet",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.0004520417714957148,
+   "held": [
+    "boss-challenge",
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  {
+   "atMs": 23587,
+   "playing": "boss-challenge",
+   "source": null,
+   "cached": null,
+   "gain": 0.00011777188774431124,
+   "held": [
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  {
+   "atMs": 47466,
+   "playing": "pause",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.0021243311930447817,
+   "held": [
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  }
+ ],
+ "audioSampled": [
+  {
+   "atMs": 2,
+   "playing": null,
+   "source": null,
+   "cached": null,
+   "gain": null,
+   "held": []
+  },
+  {
+   "atMs": 5271,
+   "playing": "title",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.000501127156894654,
+   "held": []
+  },
+  {
+   "atMs": 6190,
+   "playing": "chapter-select",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.00012781952682416886,
+   "held": []
+  },
+  {
+   "atMs": 8384,
+   "playing": "chapter-select",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 1,
+   "held": [
+    "scene-gagazet",
+    "boss-challenge",
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  {
+   "atMs": 11479,
+   "playing": "scene-gagazet",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.0004520417714957148,
+   "held": [
+    "boss-challenge",
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  {
+   "atMs": 23587,
+   "playing": "boss-challenge",
+   "source": null,
+   "cached": null,
+   "gain": 0.00011777188774431124,
+   "held": [
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  {
+   "atMs": 47466,
+   "playing": "pause",
+   "source": "prerendered",
+   "cached": true,
+   "gain": 0.0021243311930447817,
+   "held": [
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  }
+ ],
+ "audioFinal": {
+  "playing": null,
+  "currentGain": null,
+  "muted": false,
+  "volumes": {
+   "master": 0.7,
+   "music": 0.7,
+   "sfx": 0.7
+  },
+  "held": [],
+  "prerendered": {
+   "manifest": false,
+   "cues": 0,
+   "sprite": false,
+   "spriteDecoded": false,
+   "v2": {
+    "cues": 0,
+    "decoded": false,
+    "game": null,
+    "retired": 8
+   },
+   "parity": {
+    "packs": [],
+    "active": [],
+    "decoded": []
+   }
+  },
+  "currentTrack": null,
+  "cached": []
+ },
+ "finishedAt": "2026-10-15T21:58:49.727Z"
+}

@@ -1,0 +1,1625 @@
+{
+ "tag": "s3-daigoro",
+ "width": 1600,
+ "height": 900,
+ "base": "https://echoesofspira.com/?cb=179210111992615016",
+ "t0": 1792101120131,
+ "stage": "done",
+ "startedAt": "2026-10-15T21:52:00.131Z",
+ "consoleErrors": [],
+ "pageErrors": [],
+ "notFound": [],
+ "htmlMedia": [],
+ "failed": [
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 6349
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "why": "net::ERR_ABORTED",
+   "stage": "board",
+   "atMs": 6349
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 7802
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 7802
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8244
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8244
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8448
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8448
+  },
+  {
+   "url": "art/portraits/rikku.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8621
+  },
+  {
+   "url": "art/portraits/jecht.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8621
+  },
+  {
+   "url": "art/portraits/young-auron.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8621
+  },
+  {
+   "url": "art/portraits/yunalesca.webp",
+   "why": "net::ERR_ABORTED",
+   "stage": "door",
+   "atMs": 8622
+  }
+ ],
+ "audio": [
+  {
+   "url": "audio/music/title.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2331315",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2709777",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/sprite-v2.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "4617705",
+   "range": null
+  },
+  {
+   "url": "audio/music/chapter-select.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "2106911",
+   "range": null
+  },
+  {
+   "url": "audio/sfx/parity-ffx2-core.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "351499",
+   "range": null
+  },
+  {
+   "url": "audio/music/scene-bevelle-underground.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1486864",
+   "range": null
+  },
+  {
+   "url": "audio/music/boss-ffx2-fallen-aeons.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "1521986",
+   "range": null
+  },
+  {
+   "url": "audio/music/victory-ffx2.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "875248",
+   "range": null
+  },
+  {
+   "url": "audio/music/defeat-ffx2.mp3",
+   "status": 200,
+   "ct": "audio/mpeg",
+   "len": "114743",
+   "range": null
+  }
+ ],
+ "art": [
+  {
+   "url": "art/title/keyart.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "750528"
+  },
+  {
+   "url": "art/manifest.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/auron/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "718378"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/backdrops/dreams-end.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3239954"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/tidus.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "898210"
+  },
+  {
+   "url": "art/portraits/yuna.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "797104"
+  },
+  {
+   "url": "art/portraits/kimahri.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1213589"
+  },
+  {
+   "url": "art/backdrops/gagazet.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "375064"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "238873"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "371392"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "275648"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "407272"
+  },
+  {
+   "url": "art/characters/ffx2-bahamut/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "407325"
+  },
+  {
+   "url": "art/backdrops/djose-chamber-provisional.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "262252"
+  },
+  {
+   "url": "art/characters/x2-ixion/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "428808"
+  },
+  {
+   "url": "art/backdrops/dreams-end.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "305228"
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "455201"
+  },
+  {
+   "url": "art/backdrops/den-of-woe.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "210422"
+  },
+  {
+   "url": "art/characters/baralai-shade/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "175790"
+  },
+  {
+   "url": "art/backdrops/macalania-temple.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "421110"
+  },
+  {
+   "url": "art/characters/anima/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "229511"
+  },
+  {
+   "url": "art/backdrops/via-infinito.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "372750"
+  },
+  {
+   "url": "art/characters/trema/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "150908"
+  },
+  {
+   "url": "art/backdrops/evrae-airship-deck.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "338780"
+  },
+  {
+   "url": "art/characters/evrae/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "403308"
+  },
+  {
+   "url": "art/backdrops/road-to-the-farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "286596"
+  },
+  {
+   "url": "art/characters/x2-shiva/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "248629"
+  },
+  {
+   "url": "art/backdrops/cavern-stolen-fayth.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "220450"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "169316"
+  },
+  {
+   "url": "art/backdrops/leblanc-last-room.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "359684"
+  },
+  {
+   "url": "art/characters/leblanc/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "207318"
+  },
+  {
+   "url": "art/backdrops/bevelle-highbridge.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "381744"
+  },
+  {
+   "url": "art/characters/seymour-natus/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "224116"
+  },
+  {
+   "url": "art/backdrops/farplane.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "321672"
+  },
+  {
+   "url": "art/characters/vegnagun-body/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "822104"
+  },
+  {
+   "url": "art/backdrops/garden-of-pain.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "273406"
+  },
+  {
+   "url": "art/characters/seymour-omnis/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "328753"
+  },
+  {
+   "url": "art/backdrops/via-purifico.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "291342"
+  },
+  {
+   "url": "art/characters/isaaru/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "162036"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "328206"
+  },
+  {
+   "url": "art/characters/overdrive-sin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "657558"
+  },
+  {
+   "url": "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "283182"
+  },
+  {
+   "url": "art/characters/sin-left-fin/idle.thumb.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "309529"
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/portraits/tidus.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/kimahri.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/yuna.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/auron.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "798376"
+  },
+  {
+   "url": "art/portraits/lulu.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "837746"
+  },
+  {
+   "url": "art/portraits/wakka.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "911762"
+  },
+  {
+   "url": "art/portraits/seymour.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "869268"
+  },
+  {
+   "url": "art/characters/yunalesca-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1019085"
+  },
+  {
+   "url": "art/backdrops/gagazet.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/zanarkand-dome.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "3968218"
+  },
+  {
+   "url": "art/backdrops/gagazet.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4067864"
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/seymour-flux-body/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "975196"
+  },
+  {
+   "url": "art/portraits/yuna-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "968150"
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/mortiorchis/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "969982"
+  },
+  {
+   "url": "art/characters/tidus/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/tidus/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "661196"
+  },
+  {
+   "url": "art/portraits/rikku-x2.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "1048996"
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/characters/yuna/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "724684"
+  },
+  {
+   "url": "art/characters/yuna/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/auron.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/braskas-final-aeon-1/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1229350"
+  },
+  {
+   "url": "art/characters/kimahri/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "775805"
+  },
+  {
+   "url": "art/characters/kimahri/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/backdrops/bevelle-underground.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "4359436"
+  },
+  {
+   "url": "art/portraits/braska.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "949180"
+  },
+  {
+   "url": "art/portraits/rikku.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "897134"
+  },
+  {
+   "url": "art/portraits/yunalesca.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "870484"
+  },
+  {
+   "url": "art/portraits/jecht.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "919896"
+  },
+  {
+   "url": "art/portraits/young-auron.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "844066"
+  },
+  {
+   "url": "art/backdrops/ffx2-tourist-trap-cavern.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2700818"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "597215"
+  },
+  {
+   "url": "art/backdrops/cavern-stolen-fayth.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2700818"
+  },
+  {
+   "url": "art/characters/daigoro/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "759063"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "477818"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1081427"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "812284"
+  },
+  {
+   "url": "art/portraits/paine.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "889880"
+  },
+  {
+   "url": "art/portraits/yuna-x2.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/rikku-x2.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/paine.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/ffx2-tourist-trap-cavern.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/ffx2-tourist-trap-cavern.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2700818"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/portraits/rikku.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "897134"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "597215"
+  },
+  {
+   "url": "art/characters/daigoro/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "759063"
+  },
+  {
+   "url": "art/characters/daigoro/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "477818"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "1081427"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/idle.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/idle.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "812284"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "449156"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "474837"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "610734"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "449156"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "610734"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/daigoro/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "761786"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/ready.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "425468"
+  },
+  {
+   "url": "art/characters/yojimbo-cavern/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "474837"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/attack.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "257592"
+  },
+  {
+   "url": "art/characters/daigoro/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/daigoro/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "761786"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/cast.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "224742"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/ready.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "425468"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/item.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "261976"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/attack.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "257592"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "378997"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/cast.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "224742"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/item.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "261976"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "452386"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "497270"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "378997"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "336758"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "452386"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/sleep.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "227344"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "497270"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/critical.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "353540"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "336758"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/defend.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/follow.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "295150"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/sleep.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "227344"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/critical.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "353540"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "526346"
+  },
+  {
+   "url": "art/characters/yuna-white-mage/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/yuna-white-mage/follow.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "295150"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "949130"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "436981"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "526346"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "396518"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "949130"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "436981"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/hurt.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "421724"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "396518"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "795529"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "406814"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/hurt.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "421724"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/sleep.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "355624"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "795529"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "406814"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/critical.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "397190"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "777472"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/sleep.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "355624"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/critical.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "397190"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "671270"
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/rikku-dark-knight/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "777472"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "791708"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/ready.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/ready.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "671270"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "465147"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "561233"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/attack.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/attack.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "791708"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/cast.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/cast.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "465147"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "577070"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "534862"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/item.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "561233"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/item.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/hurt.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "758832"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/hurt.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "577070"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/ko.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "390242"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/ko.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "534862"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/victory.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/victory.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "758832"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/sleep.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "376238"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/defend.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/defend.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "390242"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/critical.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "426944"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/sleep.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "467534"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/sleep.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "376238"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/critical.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/critical.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "426944"
+  },
+  {
+   "url": "art/characters/paine-dark-knight/follow.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/characters/paine-dark-knight/follow.png",
+   "status": 200,
+   "ct": "image/png",
+   "len": "467534"
+  },
+  {
+   "url": "art/pause/rikku-ffx2.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "478468"
+  },
+  {
+   "url": "art/pause/paine.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "336044"
+  },
+  {
+   "url": "art/pause/yuna-ffx2.2x.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "328288"
+  }
+ ],
+ "requests": 242,
+ "shots": [
+  {
+   "file": "shots/s3-daigoro-01-prep.png",
+   "name": "01-prep",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "party-prep",
+    "chapter": "ffx2-tourist-trap"
+   },
+   "screen": "party-prep",
+   "chapter": "ffx2-tourist-trap",
+   "game": "ffx2",
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "party-prep"
+   ],
+   "stack": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s3-daigoro-02-opening-1.png",
+   "name": "02-opening-1",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "cutscene"
+   },
+   "screen": "cutscene",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "cutscene"
+   ],
+   "stack": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  },
+  {
+   "file": "shots/s3-daigoro-03-opening-2.png",
+   "name": "03-opening-2",
+   "viewport": "1600x900",
+   "want": {
+    "screen": "cutscene"
+   },
+   "screen": "cutscene",
+   "chapter": null,
+   "game": null,
+   "phase": null,
+   "awaitingMenu": false,
+   "roots": [
+    "cutscene"
+   ],
+   "stack": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "verified": true,
+   "misses": []
+  }
+ ],
+ "fails": [],
+ "log": [
+  "door attempt 1 party-prep ffx2-tourist-trap",
+  "CHECK-OK   typing 'daigoro' opens party prep for ffx2-tourist-trap (first attempt) {\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"ffx2-tourist-trap\",\"waitedMs\":6}",
+  "CHECK-OK   'daigoro' opened at all within 3 attempts [{\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"ffx2-tourist-trap\",\"waitedMs\":6}]",
+  "CHECK-OK   the ffx2-tourist-trap-cavern plate was requested and answered 200 as an image [{\"url\":\"art/backdrops/ffx2-tourist-trap-cavern.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"2700818\"},{\"url\":\"art/backdrops/ffx2-tourist-trap-cavern.json\",\"status\":200,\"ct\":\"application/json\",\"len\":null},{\"url\":\"art/backdrops/ffx2-tourist-trap-cavern.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"2700818\"}]",
+  "CHECK-OK   the opening is not black: mean luminance well above black and most pixels are not near-black {\"intro1\":{\"lum\":76.3,\"darkShare\":1.5},\"focusedBuild\":76.7}",
+  "CHECK-OK   the next line of the opening also shows the painting (not black) {\"lum\":75.3,\"darkShare\":1.5}"
+ ],
+ "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5070 Ti (0x00002C05) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "build": {
+  "sha": "f939b87f",
+  "bundle": "index-4LVgaz0l.js"
+ },
+ "checks": {
+  "typing 'daigoro' opens party prep for ffx2-tourist-trap (first attempt)": {
+   "ok": true,
+   "detail": "{\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"ffx2-tourist-trap\",\"waitedMs\":6}"
+  },
+  "'daigoro' opened at all within 3 attempts": {
+   "ok": true,
+   "detail": "[{\"attempt\":1,\"screen\":\"party-prep\",\"chapter\":\"ffx2-tourist-trap\",\"waitedMs\":6}]"
+  },
+  "the ffx2-tourist-trap-cavern plate was requested and answered 200 as an image": {
+   "ok": true,
+   "detail": "[{\"url\":\"art/backdrops/ffx2-tourist-trap-cavern.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"2700818\"},{\"url\":\"art/backdrops/ffx2-tourist-trap-cavern.json\",\"status\":200,\"ct\":\"application/json\",\"len\":null},{\"url\":\"art/backdrops/ffx2-tourist-trap-cavern.webp\",\"status\":200,\"ct\":\"image/webp\",\"len\":\"2700818\"}]"
+  },
+  "the opening is not black: mean luminance well above black and most pixels are not near-black": {
+   "ok": true,
+   "detail": "{\"intro1\":{\"lum\":76.3,\"darkShare\":1.5},\"focusedBuild\":76.7}"
+  },
+  "the next line of the opening also shows the painting (not black)": {
+   "ok": true,
+   "detail": "{\"lum\":75.3,\"darkShare\":1.5}"
+  }
+ },
+ "titlePresses": 2,
+ "doorAttempts": [
+  {
+   "attempt": 1,
+   "screen": "party-prep",
+   "chapter": "ffx2-tourist-trap",
+   "waitedMs": 6
+  }
+ ],
+ "prep": {
+  "lum": 31.6,
+  "darkShare": 0.1
+ },
+ "intro1": {
+  "lum": 76.3,
+  "darkShare": 1.5
+ },
+ "plateInfo": {
+  "resources": [
+   {
+    "n": "backdrops/ffx2-tourist-trap-cavern.webp",
+    "status": 200,
+    "bytes": 2700818,
+    "transfer": 2701118
+   },
+   {
+    "n": "backdrops/ffx2-tourist-trap-cavern.json",
+    "status": 200,
+    "bytes": 358,
+    "transfer": 658
+   },
+   {
+    "n": "backdrops/ffx2-tourist-trap-cavern.webp",
+    "status": 200,
+    "bytes": 2700818,
+    "transfer": 300
+   }
+  ],
+  "bigImgs": [
+   {
+    "tag": "CANVAS",
+    "src": "",
+    "w": 1600,
+    "h": 900
+   }
+  ],
+  "bgs": [
+   "ffx2-tourist-trap-cavern.webp\""
+  ]
+ },
+ "plateReq": [
+  {
+   "url": "art/backdrops/ffx2-tourist-trap-cavern.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2700818"
+  },
+  {
+   "url": "art/backdrops/ffx2-tourist-trap-cavern.json",
+   "status": 200,
+   "ct": "application/json",
+   "len": null
+  },
+  {
+   "url": "art/backdrops/ffx2-tourist-trap-cavern.webp",
+   "status": 200,
+   "ct": "image/webp",
+   "len": "2700818"
+  }
+ ],
+ "intro2": {
+  "lum": 75.3,
+  "darkShare": 1.5
+ },
+ "finishedAt": "2026-10-15T21:52:15.899Z"
+}

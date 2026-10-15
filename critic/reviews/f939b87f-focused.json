@@ -1,0 +1,569 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-15T18:17:38.635Z",
+ "build": {
+  "mainSha": "f939b87f"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect (crash, lock, lost progress, an encounter that cannot finish) is introduced or left reachable: Biran and Yenke was won, lost and retried by real keys at three sizes; Angra Mainyu was lost and retried by real keys at three sizes and won through the results (with the boss HP device, disclosed).",
+  "No regression against live r48: 23 of 23 same-seed pairs are identical to the live site, the shipped art differs only by additions (30 new files, 3 renamed bundles, 2 index files grown), 0 approved or judge-locked hashes mismatch, and the 267 targeted tests pass.",
+  "Both known art defects are fixed: the Tourist Trap prep and opening and the fayth deck draw their plates (200 responses, mean luminance 76 and 111, no 404s).",
+  "The majors are inside the two brand-new hidden chapters (F939-01, F939-03) or carried (PR-0380); they are disclosed and do not hold the build."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke (gagazet), ffx2-angra-mainyu (angra)",
+   "state": "pause (Escape) over each new first menu, results screens, 1600x900",
+   "reason": "Escape from the first menu opened the pause screen over both new chapters and Escape resumed (rec.pause resumedByEsc, pOpens, pCloses in each run.json); the results screens own the window. Every other chapter rests on the unchanged layout code (no screen, HUD or CSS file is in the diff; the art diff is additions only).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/14-pause-Esc.png",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-lose/14-pause-Esc.png",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-lose/31-results.png"
+   ]
+  },
+  {
+   "id": "CHK-003",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "both new chapters",
+   "state": "first menus at 1600x900, 2000x1012, 390x844",
+   "reason": "Looked at, not measured: no computed font size was read. Everything a player must read was legible in the frames, and the first-menu tip and command buttons at 390x844 read clearly; the only collision is F939-02 (polish).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win-390-touch/11-advisor.png",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-lose-390-touch/10-first-menu-coach.png"
+   ]
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke, ffx2-angra-mainyu",
+   "state": "advisor on every turn of the won Biran run and the Angra runs",
+   "reason": "Every move the advisor named was in the open actor's own list: Kimahri's Lancet (Special), Thrust Kick, Fire Breath; Rikku's Darkness, Yuna's Pray and Curaga, Paine's Phoenix Down; the route took each by its menu (run.json picks).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/run.json",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win/run.json"
+   ]
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "FFX-2",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "ffx2-angra-mainyu",
+   "state": "a broken board: Yuna and Rikku down, Tawrich and Zarich revived",
+   "reason": "In the 15-minute Angra run the advisor opened with Phoenix Down on Yuna and Rikku, then healing and Darkness (picks list); it did not keep recommending offence at a downed party.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win/run.json"
+   ]
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke",
+   "state": "the Ronso Rage picker and cancel paths",
+   "reason": "Only target-cancel (16b-after-cancel) and Escape from pause were walked by this review; the Kimahri-rage chooser after Lancet was confirmed by the route but its tear-down on cancel, KO mid-decision and battle end were not individually captured.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/16b-after-cancel.png"
+   ]
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "both new chapters",
+   "state": "guide card, advisor card, intent card, results, prep",
+   "reason": "No developer vocabulary in any frame read (the SCRIPTED chip is the shared intent card's existing word).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/11-advisor.png",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-lose/10-first-menu-coach.png"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "FAIL",
+   "mandatory": false,
+   "game": "FFX",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke",
+   "state": "first command menu at 1600x900 and 2000x1012",
+   "reason": "The shared Sensor card (\"Yenke Ronso HP 2406 / 2406\") sits over the whole body of the front-right brother, Yenke: only a silhouette shows behind it. See F939-01.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/11-advisor.png",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win-2000/11-advisor.png"
+   ]
+  },
+  {
+   "id": "CHK-009",
+   "result": "FAIL",
+   "mandatory": false,
+   "game": "FFX-2",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "ffx2-angra-mainyu",
+   "state": "first menu at 390x844",
+   "reason": "The enemy header row prints \"TAWRICH\" and \"SCAN\" on top of each other. See F939-02 (polish). Every name is otherwise shown in full (the turn rail wraps \"Yenke Ronso\" to two lines, in full).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/angra-390-top-zoom.png"
+   ]
+  },
+  {
+   "id": "CHK-011",
+   "result": "FAIL",
+   "mandatory": false,
+   "game": "FFX",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke",
+   "state": "first command menu",
+   "reason": "Same cause as CHK-008: one of the two targetable enemies is hidden behind the open Sensor card at the first menu (I hides the card). Both brothers are visible with the card closed and at 390x844; all three Angra bodies are visible at all three sizes.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/11-advisor.png",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win-390-touch/11-advisor.png",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-lose/10-first-menu-coach.png"
+   ]
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "both new chapters",
+   "state": "new paintings",
+   "reason": "Every new painting is provisional by the driver's decision; Bailey alone approves art, and no approved painting changed (verify-approved: 0 mismatched, 0 missing, approved and judge-locked). The frames were looked at in the game; nothing was judged against the rubric."
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke, ffx2-angra-mainyu, nine door words",
+   "state": "title to board to word to prep to scene to fight to results to retry or board",
+   "reason": "Played with real Playwright keys (and touch taps at 390x844). Labelled hooks used and disclosed: setSeed(1) before the first key (all runs), and, in ONE Angra run only (tag bodyhp), battleState().combatants[boss].hp = 9000 at the first menu.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/run.json",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-lose/run.json",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win-bodyhp/run.json",
+    "critic/reviews/f939b87f-focused/doors/doors.json"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "all",
+   "state": "every capture",
+   "reason": "Every capture went through the harness's asserted screen (route.mjs snap roots, assertScreen). One wait failed and was recorded, not shot: a first run of the word \"fayth\" after \"daigoro\" in one process never reached party-prep (F939-05); its re-run passed. In the Angra bodyhp run the post-battle-scene shot was refused because the screen was already results (recorded in fails).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/plates/plates.json",
+    "critic/reviews/f939b87f-focused/plates/plates-fayth.json"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "reason": "Owed after the deploy, on the live exact artifact."
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "shared plumbing",
+   "state": "ItemDrop.rare, doors, registry, scenes",
+   "reason": "Shared plumbing is additive and inert elsewhere: 23 of 23 same-seed pairs (seed 1 on 16 listed chapters, seed 2 on the 7 FFX-2 ones; debug API, skip speed, intended tactic) are identical to LIVE r48 in outcome, turns, ticks, exp, ap, gil and links, and the 267 targeted tests pass.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/same-seed-pairs.json"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "FFX only (Biran and Yenke), FFX-2 only (Angra Mainyu)",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke, ffx2-angra-mainyu",
+   "state": "presence and absence",
+   "reason": "Biran and Yenke: kimahri party, CTB, Lancet and Ronso Rages are FFX (research/ffx-biran-yenke.md, re-ffx-biran-yenke.md); the prep reads game ffx. Angra: FFX-2 rows 268-270, ATB, dresspheres, Ribbon (re-ffx2-angra-mainyu.md); prep game ffx2. Absence: no src/battle/ffx or src/data/ffx file mentions Angra, and no ffx2 file mentions Biran or ronso-rage (grep); the git diff adds no import from one engine into the other; the Ribbon is added only to the FFX-2 held-item table and the Friend Sphere only to the FFX table; ItemDrop.rare is read only by ffx/results.ts. Each word opens only its own chapter (doors.json).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/doors/doors.json",
+    "critic/reviews/f939b87f-focused/same-seed-pairs.json"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke (done), ffx2-angra-mainyu (win not reached)",
+   "state": "win, loss and retry to their real destinations",
+   "reason": "Biran and Yenke: a WIN (3:36, results AP 9,000, Gil 3,000, Return Sphere x2, the closing scene, back to the board, reload) at 1600x900, 2000x1012 and 390x844 touch, and a LOSS with RETRY into party prep and a fresh fight, by real keys. Angra Mainyu: a LOSS with RETRY at three sizes by real keys, but a WIN only with the boss HP set to 9,000 by the debug hook (results: EXP 5,000 x3, AP 30, Gil 5,000, Ribbon; the board after); the unhooked 15-minute run ended unfinished (F939-03), so a win by real keys is not shown.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/run.json",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-lose/run.json",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-lose/run.json",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win-bodyhp/31-results.png",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win/run.json"
+   ]
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "FFX; FFX-2",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke, ffx2-angra-mainyu",
+   "state": "subsystems through the real menus",
+   "reason": "Lancet through Special: \"Kimahri learns ...\" eight times (Thrust Kick, Self-Destruct, Doom, Mighty Guard, Fire Breath, White Wind, Aqua Breath, Stone Breath), each filling the gauge to 100 (battle log cause lancet-learn); Return Sphere x2 paid one per brother. Angra: Darkness reached all three bodies and the arms fell and were revived by Full-Life ten times in the long run; the girls' revives and heals came from the real menus.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/battle-log.json",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win/battle-log.json"
+   ]
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke, ffx2-angra-mainyu",
+   "state": "continuity harness, GPU, 1600x900, dedicated",
+   "reason": "Biran and Yenke: 88 of 88 measured swaps registered, max head jump 0.4 %, feet shift 1.6 px. Angra: 339 of 339 registered, max head jump 0.2 %, feet 0.6 px. Frame rate 35.6 and 32.8 (not the 60 of earlier reviews).",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/continuity/continuity-summary.json"
+   ]
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "mandatory": false,
+   "game": "both",
+   "mode": "automated + frames looked at",
+   "minutes": 3,
+   "chapter": "biran-yenke, ffx2-angra-mainyu",
+   "state": "continuity harness",
+   "reason": "118 jerks of 40 px or more, worst 198.5 px: 52 are Kimahri (Biran run) and 66 are Yuna, Rikku and Paine (Angra run), all existing figures with unchanged paintings and no pose code in the diff; every new figure is under 40 px (Biran 37.1, Yenke 37.1, Zarich 26.7, Tawrich 31.2, Angra Mainyu 28.7). The carried PR-0380. The runs were at 33 to 36 fps against 60, which enlarges per-frame steps, so the counts are not comparable with earlier reviews.",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/continuity/continuity-summary.json",
+    "critic/reviews/f939b87f-focused/continuity/biran-yenke-win-f939b87f/continuity/strips/jerk-000-kimahri.jpg"
+   ]
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "biran-yenke",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 408.8,
+    "swaps": 165,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.4,
+    "maxFeetShiftPx": 1.6,
+    "worstJerkPx": 198.5,
+    "jerksCovered": 0,
+    "fps": 35.6,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "biran-yenke-win-f939b87f/continuity/strips/swap-022-kimahri-hurt-idle.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-053-kimahri-idle-hurt.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-169-kimahri-idle-victory.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-008-kimahri-idle-ready.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-070-kimahri-ready-item.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-067-kimahri-critical-hurt.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-064-kimahri-hurt-critical.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-086-kimahri-ready-attack.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-096-kimahri-ready-cast.jpg",
+     "biran-yenke-win-f939b87f/continuity/strips/swap-105-kimahri-follow-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-angra-mainyu",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 463.4,
+    "swaps": 360,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 0.2,
+    "maxFeetShiftPx": 0.6,
+    "worstJerkPx": 147.9,
+    "jerksCovered": 0,
+    "fps": 32.8,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-025-yuna-hurt-ko.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-027-rikku-hurt-ko.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-112-paine-ready-idle.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-135-paine-idle-ready.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-351-paine-hurt-ready.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-215-paine-ready-hurt.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-090-paine-ready-item.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-108-paine-item-ready.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-087-paine-critical-ready.jpg",
+     "ffx2-angra-mainyu-win-f939b87f/continuity/strips/swap-070-rikku-hurt-critical.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 872.2,
+  "counted": 525,
+  "swaps": 541,
+  "size": {
+   "judged": 339,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 186,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 0.4,
+   "maxHeadJumpPctRegistration": 0.4,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.6,
+   "feetOverTolerance": 0,
+   "headMeasured": 339,
+   "headRegistration": 339,
+   "headSilhouette": 0,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 339,
+   "ghostFrames": 879,
+   "worstGhostSeverity": 0.364,
+   "ghostOverFail": 0,
+   "jerks": 227,
+   "worstJerkPx": 198.5,
+   "jerksOverFail": 118,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.019,
+   "maxCentroidShiftPx": 121.3,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 3
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "339 of 339 measured swaps had a registered head (tolerance 3 percent); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "118 jerk(s) of 40 px or more in one frame (worst 198.5 px)"
+    ]
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 872.2 s of battle, 32.8 to 35.6 fps, 2 of 2 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (118 jerk(s) of 40 px or more in one frame (worst 198.5 px))",
+  "base": "http://127.0.0.1:5455/",
+  "date": "2026-10-15T17:50:53.760Z"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "F939-01",
+   "severity": "major",
+   "title": "The shared Sensor card covers Yenke Ronso completely at the first menu of Biran and Yenke",
+   "game": "FFX",
+   "chapter": "biran-yenke (word gagazet)",
+   "expected": "both enemies visible at the first command menu (CHK-011, CHK-008)",
+   "observed": "At 1600x900 and 2000x1012 the first menu shows Kimahri and Biran; Yenke stands behind the open Sensor card and only his silhouette shows. The card names the enemy last scanned and rests over the front-right figure, so while the player aims at Biran it still sits over Yenke. Dismissible with I; at 390x844 both brothers show.",
+   "repro": "type gagazet on the board, Enter through the scene, look at the first menu",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/11-advisor.png",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win/16-target-single.png",
+    "critic/reviews/f939b87f-focused/routes/biran-yenke-win-2000/11-advisor.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-011, CHK-008",
+   "where": "shared FFX Sensor card (anchor fixed at grid 436,166) against scenes/gagazet-ronso.ts ENEMY_SPOTS; the builder's handoff lists it as a shared-HUD matter",
+   "fix": "open the first menu with the card closed for this chapter, or stage the front-right spot clear of the card",
+   "acceptanceCheck": "CHK-011 PASS at 1600x900 and 2000x1012",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "F939-03",
+   "severity": "major",
+   "title": "Angra Mainyu was not finished by real keys in 15 minutes (the known Active-clock difficulty)",
+   "game": "FFX-2",
+   "chapter": "ffx2-angra-mainyu (word angra)",
+   "expected": "a real-key route reaches the outcome",
+   "observed": "The unhooked route played 67 turns in 900 s, 206 s of battle time; the body had taken 55,988 of 333,444 HP, the arms fell and were revived 10 times, the route ended \"stalled\" with the party alive. The advisor bench line wins 1 of 20 at Active 1.5 s (vitest bench, this review: 1/20 and 2/20 with action time off; 16/20 on Wait split, 18/20 at bench speed). Disclosed as known; not a lock.",
+   "repro": "route-door.mjs ffx2-angra-mainyu win with DOOR=angra, budget 900000",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win/run.json",
+    "critic/reviews/f939b87f-focused/routes/ffx2-angra-mainyu-win/battle-log.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-022",
+   "where": "ANGRA_MAINYU_LEVEL_BONUS 20 (a party-side estimate) and the fight's length",
+   "fix": "Bailey's pick on difficulty; nothing built without a yes",
+   "acceptanceCheck": "a real-key win on Wait and on Active",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "PR-0380",
+   "severity": "major",
+   "title": "Figures still jump 40 px or more in one frame (CHK-027), carried; seen again on Kimahri, Yuna, Rikku and Paine in the new chapters",
+   "game": "both",
+   "chapter": "biran-yenke, ffx2-angra-mainyu",
+   "expected": "no jerk of 40 px or more",
+   "observed": "118 such jerks, all on existing figures; no new figure reaches 40 px (worst 37.1). Frame rate in this run 33 to 36 fps.",
+   "repro": "continuity-door.mjs on the two chapters",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/continuity/continuity-summary.json",
+    "critic/reviews/f939b87f-focused/continuity/biran-yenke-win-f939b87f/continuity/strips/jerk-000-kimahri.jpg"
+   ],
+   "confidence": "high that they exist; medium on the count (low fps)",
+   "requirement": "CHK-027, RUBRIC 6a",
+   "where": "figure motion; no pose, stage or painting code of existing figures is in this diff and their paintings are unchanged",
+   "fix": "unchanged from round 26",
+   "acceptanceCheck": "CHK-027 PASS",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "F939-02",
+   "severity": "polish",
+   "title": "At 390x844 the Angra enemy header prints TAWRICH over its SCAN label",
+   "game": "FFX-2",
+   "chapter": "ffx2-angra-mainyu",
+   "expected": "name and label do not overlap",
+   "observed": "The S of SCAN lies under the H of TAWRICH",
+   "repro": "angra, first menu at 390x844 touch",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/routes/angra-390-top-zoom.png"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-009",
+   "where": "shared FFX-2 phone enemy header, a seven-letter name in a half-width cell",
+   "fix": "let the label drop or shrink at phone width",
+   "acceptanceCheck": "no overlap at 390x844",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "F939-05",
+   "severity": "polish",
+   "title": "One of three runs of the word \"fayth\" did not reach party prep (cause unknown)",
+   "game": "FFX",
+   "chapter": "exp-fayth",
+   "expected": "the word opens prep every time",
+   "observed": "In a process that had just run \"daigoro\", the board stayed or left the board within 30 s; the same word opened prep in the nine-word door run and in a re-run. Not reproduced; harness timing is the likelier cause.",
+   "repro": "plates.mjs without ONLYWORD",
+   "evidence": [
+    "critic/reviews/f939b87f-focused/plates/plates.json",
+    "critic/reviews/f939b87f-focused/plates/plates-fayth.json"
+   ],
+   "confidence": "low",
+   "requirement": "CHK-016",
+   "where": "unknown",
+   "fix": "none until reproduced",
+   "acceptanceCheck": "10 consecutive opens",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "production build of f939b87f (BASE_PATH=/ , vite preview 5455, headless Chromium GPU): the board (\"0 OF 18 BEATEN\", 18 tiles) and all nine door words plus one wrong word (each opens its own prep, limit opens FF7's battle, a wrong word opens nothing)",
+   "Biran and Yenke: win 1600x900, 2000x1012, 390x844 touch; loss with retry at 1600x900; Lancet teaching eight Rages; pause, advisor, intent, guide, target cancel",
+   "Angra Mainyu: loss with retry at three sizes; a 15-minute unhooked win attempt; a hooked win to results and board",
+   "plates: Tourist Trap and fayth openings; same-seed pairs against live (23); data audit of both chapters against research/re-ffx-biran-yenke.md and re-ffx2-angra-mainyu.md (HP 8U and 6U with the note's worked example 7,896 / 5,922 recomputed, 3,208 / 2,406 for the shipped Kimahri; Angra rows 268-270: level, HP, stats, rewards, drops, steal, elements; all equal); verify-approved; manifest size diff against live; tsc clean; orphans: none of the new modules listed; 20 test files, 267 tests"
+  ],
+  "reused": [
+   {
+    "what": "the continuity of every other chapter, and CHK-002/003 layout of unchanged screens",
+    "from": "critic/reviews/ea431aa0-focused.json and critic/reviews/continuity-baseline-r38/",
+    "why": "no presenter, stage, figure or painting file of an existing chapter is in the diff (only two departure rows for the new bodies and additive registry rows) and every existing art file is the same size and approved hashes match"
+   }
+  ],
+  "notTested": [
+   "a win of Angra Mainyu by real keys",
+   "Self-Destruct withdrawal panel (engine test only)",
+   "audio, by ear (rule 13)",
+   "the continuity of the 18 listed chapters on this candidate, and a live comparison of the new chapters (none exists)",
+   "CHK-003 numeric font sizes, CHK-006 cancel and KO paths of the Rage picker"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy (CHK-017), then the deep review on the live build (deepAfterDeploy); Bailey's picks on Angra's difficulty and on the Sensor card over Yenke.",
+ "elapsedMinutes": 140
+}
