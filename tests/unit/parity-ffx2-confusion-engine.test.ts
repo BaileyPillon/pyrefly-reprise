@@ -8,8 +8,10 @@
  * Item command when the party holds something usable), one draw of HER stream (slot + 20) picks one, a second picks the item, and the target is one draw of stream 4 among
  * everyone in the battle (a row with the team-split bit takes both sides, herself included) or, for a multiple-target row, one draw of stream 5 picks a side.
  *
- * Mutation-checked by hand (scratch, one line at a time, each caught here): the pick not wired (`confused: false`); `awaitsPlayerInput` ignoring Confusion; the menu not closed
- * when Confusion lands; the first draw on the wrong stream; the item index off by one; the single-target draw on stream 5; the team split dropped (allies and herself left out).
+ * Mutation-checked (a scratch pass of 34 one-line faults in the kernels, the adapter and the engine wiring, run against this file, the kernel replay and the dress pins, each restored
+ * byte for byte; `docs/handoff/re-parity-rc9-x2-confusion.md` section 4 lists them): 33 are caught, 1 is an equivalent mutant (the party-side test in `isConfusedGirl`, which no engine
+ * path reads for a monster). Five survived the first pass; four got the test that kills them (a unit that cannot be targeted, the Active tick path on its own, a pick that
+ * queues nothing going back to idle at once, a command held for a chain lock dropped when Confusion lands) and the fifth is the equivalent mutant.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -224,6 +226,11 @@ describe('a Confused girl on the engine\'s own path', () => {
     expect(yuna.gauge.state).toBe(Ffx2AtbState.Confused);
     const before = draws.filter((s) => s === 20).length;
     let turns = 0;
+    // the very first ask: nothing is queued, so she goes back to idle at once (the game's pick returns 0 and her state returns to IDLE)
+    const first = e.nextDecision();
+    expect(first.kind).toBe('resolved');
+    expect(yuna.gauge.state).toBe(Ffx2AtbState.Idle);
+    if (first.kind === 'resolved') turns += first.events.filter((x) => x.type === 'turn-start' && (x as { actorId?: string }).actorId === 'yuna').length;
     for (let i = 0; i < 12; i++) {
       const d = e.nextDecision();
       if (d.kind === 'resolved') turns += d.events.filter((x) => x.type === 'turn-start' && (x as { actorId?: string }).actorId === 'yuna').length;
@@ -304,6 +311,72 @@ describe('a Confused girl on the engine\'s own path', () => {
     }
     expect(own).toBeGreaterThan(0);
     expect(asked).toBeGreaterThan(5);
+  });
+
+  it('a unit the engine cannot target (flags.untargetable) is outside the pick\'s world: the oracle with that unit left out agrees on the item, the targets and the draws, and nothing is aimed at it', () => {
+    let aimed = 0;
+    for (let seed = 1; seed <= 60; seed++) {
+      const e = tough(board({ yuna: LOADOUTS['plain'] as never }, seed));
+      e.unit('paragon').flags['untargetable'] = true;
+      e.unit('yuna').statuses['confuse'] = confusion();
+      const draws: number[] = [];
+      (e.streams as unknown as { tap: (s: number, v: number) => void }).tap = (s) => draws.push(s);
+      const got = toAction(e, 'yuna', draws);
+      if (got === null) continue;
+      aimed++;
+      const want = oracle(seed, { ...got, alive: new Map(got.alive).set('paragon', false) });
+      const c = got.start.command;
+      expect(c.kind === 'item' ? c.id : null, `seed ${seed} item`).toBe(want.item);
+      expect([...c.targets].sort(), `seed ${seed} targets`).toEqual([...want.targets].sort());
+      expect(c.targets, `seed ${seed}`).not.toContain('paragon');
+      expect(draws.slice(got.at, got.at + want.draws.length), `seed ${seed} draws`).toEqual(want.draws);
+    }
+    expect(aimed).toBeGreaterThan(50);
+  });
+
+  it('the Active clock path alone (tick with throughInput, no nextDecision in between) runs her turn inside the tick', () => {
+    let acted = 0;
+    for (let seed = 1; seed <= 20; seed++) {
+      const e = tough(board({ yuna: LOADOUTS['plain'] as never }, seed));
+      e.unit('yuna').statuses['confuse'] = confusion();
+      for (let i = 0; i < 400; i++) {
+        const events = e.tick(500, { throughInput: true });
+        if (events.some((x) => x.type === 'action-start' && (x as { actorId?: string }).actorId === 'yuna')) {
+          acted++;
+          break;
+        }
+      }
+    }
+    expect(acted).toBeGreaterThan(15);
+  });
+
+  it('a command held for a chain lock does not outlive her turning Confused (as for Berserk): she acts by herself, and when it runs out she is asked for a command instead of the old one firing', () => {
+    for (const seed of [2, 5, 8, 11, 14]) {
+      const e = tough(board({ yuna: LOADOUTS['plain'] as never }, seed));
+      e.unit('paragon').flags['untargetable'] = true; // out of her reach: a swing at it would be answered with Big Bang and end the battle
+      const yuna = e.unit('yuna');
+      const slot = e as unknown as { held: { actorId: string; command: { kind: 'item'; id: string; targets: string[] } } | null };
+      slot.held = { actorId: 'yuna', command: { kind: 'item', id: 'x2-remedy', targets: ['rikku'] } };
+      yuna.statuses['confuse'] = { ...confusion(), ticksRemaining: 40_000 };
+      e.nextDecision();
+      expect(slot.held, `seed ${seed}: dropped at once`).toBeNull();
+      let verdict = 'nothing happened';
+      let expired = false;
+      for (let i = 0; i < 8000 && verdict === 'nothing happened'; i++) {
+        const d = e.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (yuna.statuses['confuse'] === undefined) expired = true;
+        if (d.kind === 'player-input') {
+          if (d.actorId === 'yuna') verdict = expired ? 'a menu' : 'a menu while Confused';
+          else e.submit({ kind: 'defend', targets: [] });
+          continue;
+        }
+        const events = d.kind === 'waiting' ? e.tick(Math.max(1, d.nextEventMs)) : d.kind === 'resolved' ? d.events : [];
+        if (expired && events.some((x) => x.type === 'action-start' && (x as { actorId?: string }).actorId === 'yuna')) verdict = 'the old command fired';
+      }
+      expect(verdict, `seed ${seed}`).toBe('a menu');
+      expect(slot.held, `seed ${seed}`).toBeNull();
+    }
   });
 
   it('a preview of an item command that names its targets exactly (simulateFFX2Command) aims where the engine does: the Megalixir on the enemy heals the enemy', () => {
