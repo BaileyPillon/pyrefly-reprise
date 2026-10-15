@@ -1,0 +1,67 @@
+{
+ "removed": [
+  "assets/index-92HbUNj_.css",
+  "assets/index-Cnc9DuSS.js",
+  "assets/worker-Mv1HVYXb.js"
+ ],
+ "addedCount": 7,
+ "added": [
+  "assets/exp-fayth-table-DKYNX064.js",
+  "assets/index-Cg05Z3H_.js",
+  "assets/index-D109LGpF.css",
+  "assets/worker-BxdiLfJT.js",
+  "audio/sfx/parity-ffx-final-aeon.mp3",
+  "audio/sfx/parity-ffx-flux.mp3",
+  "audio/sfx/parity-ffx2-aeons.mp3"
+ ],
+ "changedCount": 962,
+ "changedByKind": {
+  "art json": 952,
+  "audio": 9,
+  "index.html": 1
+ },
+ "answers": [
+  {
+   "address": "echoesofspira.com",
+   "file": "assets/index-92HbUNj_.css",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoesofspira.com",
+   "file": "assets/index-Cnc9DuSS.js",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoesofspira.com",
+   "file": "assets/worker-Mv1HVYXb.js",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "file": "assets/index-92HbUNj_.css",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "file": "assets/index-Cnc9DuSS.js",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "file": "assets/worker-Mv1HVYXb.js",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  }
+ ]
+}

@@ -1,0 +1,6742 @@
+{
+ "review": "live-smoke",
+ "sha": "b8aa6f96",
+ "bundle": "DA6NOD0r",
+ "base": "https://echoesofspira.com/?cb=<time>",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-14T11:17:49.357Z",
+ "parts": {
+  "access-ffx": {
+   "id": "seymour-flux",
+   "game": "ffx",
+   "chapterNumber": 1,
+   "pace": "fast",
+   "word": null,
+   "expected": {
+    "scene": "scene-gagazet",
+    "battle": "boss-seymour",
+    "victory": "victory-ffx",
+    "firstFormationCue": "boss-seymour"
+   },
+   "viewport": "1600x900",
+   "build": {
+    "build": {
+     "sha": "b8aa6f96",
+     "bundle": "index-DA6NOD0r.js"
+    },
+    "version": "0.1.0"
+   },
+   "storageAtStart": 0,
+   "guideSkipped": true,
+   "selected": "seymour-flux",
+   "prepState": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "chapter",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "heldInPrep": [
+    "scene-gagazet",
+    "boss-seymour",
+    "victory-ffx",
+    "defeat-ffx"
+   ],
+   "sceneTaps": 49,
+   "firstLine": {
+    "msAfterConfirm": 3972,
+    "speaker": "Kimahri",
+    "text": "Ki",
+    "playing": null,
+    "gain": null,
+    "held": [
+     "scene-gagazet",
+     "boss-seymour",
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "sceneCuePlaying": false,
+    "anyScenePlaying": false
+   },
+   "entrance": {
+    "msToFirstMenu": 12280
+   },
+   "enemies": [
+    "seymour-flux",
+    "mortiorchis"
+   ],
+   "menuShot": {
+    "file": "access-ffx-first-menu.jpg",
+    "meanLuminance": 86.4,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "audioAtMenu": {
+    "playing": "boss-seymour",
+    "gain": 1,
+    "muted": false,
+    "manifest": true,
+    "cues": 41,
+    "sprite": true,
+    "v2": {
+     "cues": 92,
+     "decoded": true,
+     "game": "ffx",
+     "retired": 8
+    },
+    "parity": {
+     "packs": [
+      "ffx-core",
+      "ffx2-core",
+      "ffx-lady",
+      "ffx2-bahamut",
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx-flux",
+      "ffx-final-aeon",
+      "ffx2-aeons"
+     ],
+     "active": [
+      "ffx-flux",
+      "ffx-core"
+     ],
+     "decoded": [
+      "ffx-flux",
+      "ffx-core"
+     ]
+    },
+    "sfxLog": [
+     {
+      "t": 41.050666666666665,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 48.76,
+      "asked": "v2:boss-roar",
+      "played": "v2:boss-roar",
+      "via": "v2",
+      "volume": 0.9
+     },
+     {
+      "t": 56.181333333333335,
+      "asked": "v2:swing-katana",
+      "played": "v2:swing-katana",
+      "via": "v2",
+      "volume": 0.8
+     },
+     {
+      "t": 56.58133333333333,
+      "asked": "v2:hit-heavy-enemy",
+      "played": "v2:hit-heavy-enemy",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": 0.1
+     },
+     {
+      "t": 56.88,
+      "asked": "v2:status-applied",
+      "played": "v2:status-applied",
+      "via": "v2",
+      "volume": 0.5
+     },
+     {
+      "t": 57.152,
+      "asked": "v2:status-applied",
+      "played": "v2:status-applied",
+      "via": "v2",
+      "volume": 0.5
+     }
+    ],
+    "held": [
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "playedFileRequest": "music/boss-seymour.mp3 200 audio/mpeg 2679632B req+9454ms done+10384ms",
+    "matchesFirstFormationCue": true
+   },
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-gagazet",
+     "boss-seymour",
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx-flux",
+     "parity-ffx-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10730B req+4460ms done+4522ms",
+     "music/title.mp3 200 audio/mpeg 2332081B req+4524ms done+6150ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710547B req+4524ms done+6519ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618696B req+4524ms done+7447ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107667B req+5586ms done+7267ms",
+     "sfx/parity-ffx-flux.mp3 200 audio/mpeg 95441B req+8082ms done+8298ms",
+     "sfx/parity-ffx-core.mp3 200 audio/mpeg 774418B req+8083ms done+8880ms",
+     "music/scene-gagazet.mp3 200 audio/mpeg 1358978B req+8083ms done+9148ms",
+     "music/boss-seymour.mp3 200 audio/mpeg 2679632B req+9454ms done+10384ms",
+     "music/victory-ffx.mp3 200 audio/mpeg 644528B req+10737ms done+11003ms",
+     "music/defeat-ffx.mp3 200 audio/mpeg 128080B req+11151ms done+11206ms"
+    ]
+   },
+   "packsFetched": [
+    "parity-ffx-flux",
+    "parity-ffx-core"
+   ],
+   "pauseShot": {
+    "file": "access-ffx-pause.jpg",
+    "meanLuminance": 28.5,
+    "screen": "pause"
+   },
+   "pause": {
+    "pauseEsc": "pause",
+    "hide": {
+     "len0": 938,
+     "lenH": 583,
+     "lenR": 938,
+     "hidDropsText": true,
+     "restored": true,
+     "stillPause": "pause"
+    },
+    "afterEsc": "battle",
+    "pauseP": "pause",
+    "afterP": "battle"
+   },
+   "audioAfterPause": {
+    "playing": "boss-seymour"
+   },
+   "access": {
+    "how": "keys",
+    "game": "ffx",
+    "flashSelector": ".ffx-stat--hurt",
+    "start": {
+     "html": {
+      "reduceFlashes": false,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "present": true,
+      "version": 1,
+      "topKeys": [
+       "version",
+       "updatedAt",
+       "chapters",
+       "unlocked",
+       "settings",
+       "seenCoach",
+       "flags"
+      ],
+      "progress": {
+       "seenCoach": [
+        "briefing",
+        "firstrun-board",
+        "firstrun-prep",
+        "firstrun-battle",
+        "ffx-turn-order"
+       ],
+       "chapters": [
+        "seymour-flux"
+       ],
+       "flags": 0
+      },
+      "settings": {
+       "reduceFlashes": false,
+       "colourVision": "off",
+       "reduceMotion": false,
+       "lowEffects": false,
+       "textSize": 1
+      }
+     }
+    },
+    "flashOff": {
+     "ms": 12496,
+     "presses": 8,
+     "entries": [
+      {
+       "t": 80230,
+       "cls": "ffx-stat--hurt",
+       "animationName": "ffx-hurt-flash",
+       "animationDuration": "0.3s",
+       "animationTimingFunction": "ease",
+       "filter": "brightness(1)",
+       "reduceFlashes": false,
+       "colourVision": "off"
+      }
+     ]
+    },
+    "pauseOpened": {
+     "screen": "pause",
+     "tab": "member:tidus",
+     "row": null
+    },
+    "tabWalk": {
+     "ok": true,
+     "presses": 6,
+     "seen": [
+      "member:tidus",
+      "member:yuna",
+      "member:kimahri",
+      "chapter",
+      "guide",
+      "options",
+      "accessibility"
+     ]
+    },
+    "tabState": {
+     "screen": "pause",
+     "tab": "accessibility",
+     "row": null
+    },
+    "rowsBefore": [
+     {
+      "id": "textSize",
+      "label": "TEXT SIZE",
+      "value": "100%",
+      "selected": false
+     },
+     {
+      "id": "reduceMotion",
+      "label": "REDUCE MOTION",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "reduceFlashes",
+      "label": "REDUCE FLASHES",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "lowEffects",
+      "label": "LOW EFFECTS",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "colourVision",
+      "label": "COLOUR VISION",
+      "value": "OFF",
+      "selected": false
+     }
+    ],
+    "tabLabels": [
+     "Tidus",
+     "Yuna",
+     "Kimahri",
+     "Chapter",
+     "Guide",
+     "Options",
+     "Accessibility",
+     "Controls",
+     "Music"
+    ],
+    "tabShot": {
+     "file": "access-ffx-access-tab.jpg",
+     "meanLuminance": 28,
+     "screen": "pause",
+     "tab": "accessibility"
+    },
+    "flashesOn": {
+     "label": "on",
+     "value": "ON",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "off",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "flashesUndo": {
+     "label": "off (undo)",
+     "value": "OFF",
+     "html": {
+      "reduceFlashes": false,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "reduceFlashes": false,
+      "colourVision": "off",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "flashesAgain": {
+     "label": "on",
+     "value": "ON",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "off",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "cvRedGreen": {
+     "label": "red-green",
+     "value": "RED-GREEN",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "cvBlueYellow": {
+     "label": "blue-yellow",
+     "value": "BLUE-YELLOW",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "blue-yellow",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#7ee8b0",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d0343c",
+       "--cvd-gate-g": "#00a6a6",
+       "--cvd-gate-b": "#7a4fd0",
+       "--cvd-gate-y": "#e3b94a",
+       "--cvd-mp-lo": "#b48cf0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "blue-yellow",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "cvBack": {
+     "label": "back to red-green (Left)",
+     "value": "RED-GREEN",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "textUp": {
+     "label": "up",
+     "value": "115%",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "115",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1.15
+     }
+    },
+    "textBack": {
+     "label": "back to 100% (Left)",
+     "value": "100%",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "rowsAfter": [
+     {
+      "id": "textSize",
+      "label": "TEXT SIZE",
+      "value": "100%",
+      "selected": true
+     },
+     {
+      "id": "reduceMotion",
+      "label": "REDUCE MOTION",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "reduceFlashes",
+      "label": "REDUCE FLASHES",
+      "value": "ON",
+      "selected": false
+     },
+     {
+      "id": "lowEffects",
+      "label": "LOW EFFECTS",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "colourVision",
+      "label": "COLOUR VISION",
+      "value": "RED-GREEN",
+      "selected": false
+     }
+    ],
+    "tabShotOn": {
+     "file": "access-ffx-access-tab-on.jpg",
+     "meanLuminance": 28.2,
+     "screen": "pause",
+     "tab": "accessibility"
+    },
+    "afterClose": {
+     "screen": "battle",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     }
+    },
+    "flashOn": {
+     "ms": 3364,
+     "presses": 2,
+     "entries": [
+      {
+       "t": 94986,
+       "cls": "ffx-stat--hurt",
+       "animationName": "ffx-hurt-soft",
+       "animationDuration": "0.6s",
+       "animationTimingFunction": "ease-out",
+       "filter": "brightness(1)",
+       "reduceFlashes": true,
+       "colourVision": "red-green"
+      }
+     ]
+    },
+    "flashShot": {
+     "file": "access-ffx-after-hit.jpg",
+     "meanLuminance": 100.4,
+     "screen": "battle"
+    },
+    "storageSaved": true,
+    "beforeReload": {
+     "saved": {
+      "present": true,
+      "version": 1,
+      "topKeys": [
+       "version",
+       "updatedAt",
+       "chapters",
+       "unlocked",
+       "settings",
+       "seenCoach",
+       "flags"
+      ],
+      "progress": {
+       "seenCoach": [
+        "briefing",
+        "firstrun-board",
+        "firstrun-prep",
+        "firstrun-battle",
+        "ffx-turn-order",
+        "ffx-overdrive",
+        "ffx-aeon"
+       ],
+       "chapters": [
+        "seymour-flux"
+       ],
+       "flags": 0
+      },
+      "settings": {
+       "reduceFlashes": true,
+       "colourVision": "red-green",
+       "reduceMotion": false,
+       "lowEffects": false,
+       "textSize": 1
+      }
+     },
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     }
+    },
+    "afterReload": {
+     "screen": "title",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "present": true,
+      "version": 1,
+      "topKeys": [
+       "version",
+       "updatedAt",
+       "chapters",
+       "unlocked",
+       "settings",
+       "seenCoach",
+       "flags"
+      ],
+      "progress": {
+       "seenCoach": [
+        "briefing",
+        "firstrun-board",
+        "firstrun-prep",
+        "firstrun-battle",
+        "ffx-turn-order",
+        "ffx-overdrive",
+        "ffx-aeon"
+       ],
+       "chapters": [
+        "seymour-flux"
+       ],
+       "flags": 0
+      },
+      "settings": {
+       "reduceFlashes": true,
+       "colourVision": "red-green",
+       "reduceMotion": false,
+       "lowEffects": false,
+       "textSize": 1
+      }
+     }
+    },
+    "reloadPause": {
+     "screen": "pause",
+     "tab": "member:tidus",
+     "row": null
+    },
+    "reloadTab": {
+     "ok": true,
+     "presses": 6,
+     "seen": [
+      "member:tidus",
+      "member:yuna",
+      "member:kimahri",
+      "chapter",
+      "guide",
+      "options",
+      "accessibility"
+     ]
+    },
+    "reloadRows": [
+     {
+      "id": "textSize",
+      "label": "TEXT SIZE",
+      "value": "100%",
+      "selected": false
+     },
+     {
+      "id": "reduceMotion",
+      "label": "REDUCE MOTION",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "reduceFlashes",
+      "label": "REDUCE FLASHES",
+      "value": "ON",
+      "selected": false
+     },
+     {
+      "id": "lowEffects",
+      "label": "LOW EFFECTS",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "colourVision",
+      "label": "COLOUR VISION",
+      "value": "RED-GREEN",
+      "selected": false
+     }
+    ],
+    "reloadShot": {
+     "file": "access-ffx-access-tab-after-reload.jpg",
+     "meanLuminance": 27.6,
+     "screen": "pause",
+     "tab": "accessibility"
+    }
+   },
+   "silence": {
+    "debugAssisted": true,
+    "coaching": {
+     "allowed": true,
+     "battleHelp": true,
+     "seen": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx-turn-order"
+     ]
+    },
+    "before": {
+     "shown": true,
+     "text": "GUIDE ZOMBIE Healing turns into damage on a Zombie, and a Phoenix Down would KO her outright. Holy Water or a Remedy cures it; Esuna does not.",
+     "html": "<div class=\"sthint__head\">GUIDE <i>ZOMBIE</i></div><div class=\"sthint__body\">Healing turns into damage on a Zombie, and a <b>Phoenix Down</b> would KO her outright. <b>Holy Water</b> or a <b>Remedy</b> cures it; Esuna does not.</div>",
+     "rect": [
+      53,
+      78,
+      340,
+      106
+     ]
+    },
+    "injected": {
+     "id": "tidus",
+     "name": "Tidus",
+     "alive": true
+    },
+    "firstRead": {
+     "shown": true,
+     "text": "GUIDE ZOMBIE Healing turns into damage on a Zombie, and a Phoenix Down would KO her outright. Holy Water or a Remedy cures it; Esuna does not. Tidus is silenced: Echo Screen cures it.",
+     "html": "<div class=\"sthint__head\">GUIDE <i>ZOMBIE</i></div><div class=\"sthint__body\">Healing turns into damage on a Zombie, and a <b>Phoenix Down</b> would KO her outright. <b>Holy Water</b> or a <b>Remedy</b> cures it; Esuna does not. <b>Tidus is silenced:</b> <b>Echo Screen</b> cures it.</div>",
+     "rect": [
+      53,
+      78,
+      340,
+      126
+     ]
+    },
+    "setAside": [
+     "yuna:zombie"
+    ],
+    "card": {
+     "shown": true,
+     "text": "GUIDE SILENCE Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.",
+     "html": "<div class=\"sthint__head\">GUIDE <i>SILENCE</i></div><div class=\"sthint__body\"><b>Tidus is silenced:</b> no White or Black Magic. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.</div>",
+     "rect": [
+      53,
+      78,
+      340,
+      85
+     ]
+    },
+    "shot": {
+     "file": "access-ffx-silence-card.jpg",
+     "meanLuminance": 95.2,
+     "screen": "battle"
+    },
+    "afterRemoval": {
+     "shown": true,
+     "text": "GUIDE ZOMBIE Healing turns into damage on a Zombie, and a Phoenix Down would KO her outright. Holy Water or a Remedy cures it; Esuna does not.",
+     "html": "<div class=\"sthint__head\">GUIDE <i>ZOMBIE</i></div><div class=\"sthint__body\">Healing turns into damage on a Zombie, and a <b>Phoenix Down</b> would KO her outright. <b>Holy Water</b> or a <b>Remedy</b> cures it; Esuna does not.</div>",
+     "rect": [
+      53,
+      78,
+      340,
+      106
+     ]
+    }
+   },
+   "allyBracket": {
+    "rows": [
+     "Attack",
+     "Special▸×1",
+     "Items▸×27"
+    ],
+    "items": [
+     "Potion",
+     "Hi-Potion",
+     "X-Potion",
+     "Mega-Potion",
+     "Phoenix Down"
+    ],
+    "targeting": {
+     "side": null,
+     "ids": [
+      "yuna"
+     ]
+    },
+    "brackets": [
+     {
+      "kind": "enemy",
+      "mark": "#f2c21e",
+      "cornerAfterContent": "\"\"",
+      "cornerAfterWidth": "7px"
+     },
+     {
+      "kind": "enemy",
+      "mark": "#f2c21e",
+      "cornerAfterContent": "\"\"",
+      "cornerAfterWidth": "7px"
+     },
+     {
+      "kind": "ally",
+      "mark": "#56b4e9",
+      "cornerAfterContent": "\"\"",
+      "cornerAfterWidth": "7px"
+     },
+     {
+      "kind": "self",
+      "mark": "#f4f1e8",
+      "cornerAfterContent": "\"\"",
+      "cornerAfterWidth": "7px"
+     },
+     {
+      "kind": "ally",
+      "mark": "#56b4e9",
+      "cornerAfterContent": "\"\"",
+      "cornerAfterWidth": "7px"
+     }
+    ],
+    "ally": {
+     "kind": "ally",
+     "mark": "#56b4e9",
+     "cornerAfterContent": "\"\"",
+     "cornerAfterWidth": "7px"
+    },
+    "shot": {
+     "file": "access-ffx-ally-bracket.jpg",
+     "meanLuminance": 81.4,
+     "screen": "battle"
+    },
+    "afterCancel": {
+     "screen": "battle",
+     "awaitingMenu": true
+    }
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "phone-gates-off": {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "state": "off",
+   "viewport": "390x844 touch dpr2 (Android phone user agent)",
+   "settingsFrom": "a fresh profile (defaults)",
+   "members": [
+    {
+     "who": "Yuna",
+     "gates": [
+      {
+       "colour": "red",
+       "letter": "R",
+       "bg": "rgb(201, 58, 66)",
+       "w": 12,
+       "h": 12,
+       "boxW": 17,
+       "visible": true,
+       "afterContent": "none",
+       "passed": false
+      },
+      {
+       "colour": "green",
+       "letter": "G",
+       "bg": "rgb(117, 145, 58)",
+       "w": 12,
+       "h": 12,
+       "boxW": 17,
+       "visible": true,
+       "afterContent": "none",
+       "passed": false
+      },
+      {
+       "colour": "blue",
+       "letter": "B",
+       "bg": "rgb(58, 120, 190)",
+       "w": 12,
+       "h": 12,
+       "boxW": 17,
+       "visible": true,
+       "afterContent": "none",
+       "passed": false
+      },
+      {
+       "colour": "yellow",
+       "letter": "Y",
+       "bg": "rgb(227, 185, 74)",
+       "w": 12,
+       "h": 12,
+       "boxW": 17,
+       "visible": true,
+       "afterContent": "none",
+       "passed": false
+      }
+     ]
+    }
+   ],
+   "guideOnBoard": {
+    "step": "1",
+    "text": "AURON · 1 OF 3 “Start with the first one.” Tap its picture to begin. The other fights wait on the board. TAP HERE SKIP THE GUIDE"
+   },
+   "env": {
+    "w": 390,
+    "h": 844,
+    "dpr": 2,
+    "touch": 1,
+    "coarse": true
+   },
+   "guideSkipped": true,
+   "prepState": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "chapter",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": null,
+    "reduceMotion": false,
+    "lowEffects": false,
+    "textSize": "100",
+    "cvd": {
+     "--cvd-target-ally": null,
+     "--cvd-target-self": null,
+     "--cvd-gate-r": null,
+     "--cvd-gate-g": null,
+     "--cvd-gate-b": null,
+     "--cvd-gate-y": null,
+     "--cvd-mp-lo": null
+    }
+   },
+   "saved": {
+    "present": true,
+    "version": 1,
+    "topKeys": [
+     "version",
+     "updatedAt",
+     "chapters",
+     "unlocked",
+     "settings",
+     "seenCoach",
+     "flags"
+    ],
+    "progress": {
+     "seenCoach": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle"
+     ],
+     "chapters": [
+      "seymour-flux",
+      "yunalesca",
+      "braskas-final-aeon",
+      "seymour-anima-macalania",
+      "evrae-airship",
+      "yojimbo-cavern",
+      "seymour-natus",
+      "seymour-omnis",
+      "isaaru-via-purifico",
+      "sin-fins-core",
+      "sin-face",
+      "ffx2-bahamut"
+     ],
+     "flags": 0
+    },
+    "settings": {
+     "reduceFlashes": false,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   },
+   "tabState": {
+    "screen": "party-prep",
+    "tab": "prep:tab:dresspheres",
+    "phone": "page",
+    "sideScroll": false
+   },
+   "read": {
+    "who": "Yuna",
+    "gates": [
+     {
+      "colour": "red",
+      "letter": "R",
+      "bg": "rgb(201, 58, 66)",
+      "w": 12,
+      "h": 12,
+      "boxW": 17,
+      "visible": true,
+      "afterContent": "none",
+      "passed": false
+     },
+     {
+      "colour": "green",
+      "letter": "G",
+      "bg": "rgb(117, 145, 58)",
+      "w": 12,
+      "h": 12,
+      "boxW": 17,
+      "visible": true,
+      "afterContent": "none",
+      "passed": false
+     },
+     {
+      "colour": "blue",
+      "letter": "B",
+      "bg": "rgb(58, 120, 190)",
+      "w": 12,
+      "h": 12,
+      "boxW": 17,
+      "visible": true,
+      "afterContent": "none",
+      "passed": false
+     },
+     {
+      "colour": "yellow",
+      "letter": "Y",
+      "bg": "rgb(227, 185, 74)",
+      "w": 12,
+      "h": 12,
+      "boxW": 17,
+      "visible": true,
+      "afterContent": "none",
+      "passed": false
+     }
+    ]
+   },
+   "shot": {
+    "file": "phone-gates-off-dresspheres.jpg",
+    "meanLuminance": 94,
+    "screen": "party-prep",
+    "tab": "dresspheres"
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": [],
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10733B req+4351ms done+4402ms",
+     "music/title.mp3 200 audio/mpeg 2332097B req+4404ms done+5396ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710540B req+4404ms done+6419ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618652B req+4404ms done+7420ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107621B req+5524ms done+6973ms",
+     "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20569B req+8515ms done+8617ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352030B req+8515ms done+9338ms",
+     "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487534B req+8515ms done+10403ms",
+     "music/boss-bahamut.mp3 200 audio/mpeg 1342222B req+10692ms done+11238ms",
+     "music/victory-bahamut.mp3 200 audio/mpeg 551697B req+11512ms done+11632ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115241B req+11768ms done+11882ms"
+    ]
+   }
+  },
+  "phone-gates-on": {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "state": "on",
+   "viewport": "390x844 touch dpr2 (Android phone user agent)",
+   "settingsFrom": "the profile saved by the access-ffx run (REDUCE FLASHES on, COLOUR VISION red-green)",
+   "members": [
+    {
+     "who": "Yuna",
+     "gates": [
+      {
+       "colour": "red",
+       "letter": "R",
+       "bg": "rgb(213, 94, 0)",
+       "w": 16,
+       "h": 16,
+       "boxW": 16,
+       "visible": true,
+       "afterContent": "\"R\"",
+       "passed": false
+      },
+      {
+       "colour": "green",
+       "letter": "G",
+       "bg": "rgb(0, 158, 115)",
+       "w": 16,
+       "h": 16,
+       "boxW": 16,
+       "visible": true,
+       "afterContent": "\"G\"",
+       "passed": false
+      },
+      {
+       "colour": "blue",
+       "letter": "B",
+       "bg": "rgb(0, 114, 178)",
+       "w": 16,
+       "h": 16,
+       "boxW": 16,
+       "visible": true,
+       "afterContent": "\"B\"",
+       "passed": false
+      },
+      {
+       "colour": "yellow",
+       "letter": "Y",
+       "bg": "rgb(240, 228, 66)",
+       "w": 16,
+       "h": 16,
+       "boxW": 16,
+       "visible": true,
+       "afterContent": "\"Y\"",
+       "passed": false
+      }
+     ]
+    }
+   ],
+   "guideOnBoard": null,
+   "env": {
+    "w": 390,
+    "h": 844,
+    "dpr": 2,
+    "touch": 1,
+    "coarse": true
+   },
+   "guideSkipped": true,
+   "prepState": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "chapter",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "html": {
+    "reduceFlashes": true,
+    "colourVision": "red-green",
+    "reduceMotion": false,
+    "lowEffects": false,
+    "textSize": "100",
+    "cvd": {
+     "--cvd-target-ally": "#56b4e9",
+     "--cvd-target-self": "#f4f1e8",
+     "--cvd-gate-r": "#d55e00",
+     "--cvd-gate-g": "#009e73",
+     "--cvd-gate-b": "#0072b2",
+     "--cvd-gate-y": "#f0e442",
+     "--cvd-mp-lo": "#3a8fd0"
+    }
+   },
+   "saved": {
+    "present": true,
+    "version": 1,
+    "topKeys": [
+     "version",
+     "updatedAt",
+     "chapters",
+     "unlocked",
+     "settings",
+     "seenCoach",
+     "flags"
+    ],
+    "progress": {
+     "seenCoach": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx-turn-order",
+      "ffx-overdrive",
+      "ffx-aeon"
+     ],
+     "chapters": [
+      "seymour-flux"
+     ],
+     "flags": 0
+    },
+    "settings": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   },
+   "tabState": {
+    "screen": "party-prep",
+    "tab": "prep:tab:dresspheres",
+    "phone": "page",
+    "sideScroll": false
+   },
+   "read": {
+    "who": "Yuna",
+    "gates": [
+     {
+      "colour": "red",
+      "letter": "R",
+      "bg": "rgb(213, 94, 0)",
+      "w": 16,
+      "h": 16,
+      "boxW": 16,
+      "visible": true,
+      "afterContent": "\"R\"",
+      "passed": false
+     },
+     {
+      "colour": "green",
+      "letter": "G",
+      "bg": "rgb(0, 158, 115)",
+      "w": 16,
+      "h": 16,
+      "boxW": 16,
+      "visible": true,
+      "afterContent": "\"G\"",
+      "passed": false
+     },
+     {
+      "colour": "blue",
+      "letter": "B",
+      "bg": "rgb(0, 114, 178)",
+      "w": 16,
+      "h": 16,
+      "boxW": 16,
+      "visible": true,
+      "afterContent": "\"B\"",
+      "passed": false
+     },
+     {
+      "colour": "yellow",
+      "letter": "Y",
+      "bg": "rgb(240, 228, 66)",
+      "w": 16,
+      "h": 16,
+      "boxW": 16,
+      "visible": true,
+      "afterContent": "\"Y\"",
+      "passed": false
+     }
+    ]
+   },
+   "shot": {
+    "file": "phone-gates-on-dresspheres.jpg",
+    "meanLuminance": 94.4,
+    "screen": "party-prep",
+    "tab": "dresspheres"
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": [],
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10730B req+3708ms done+3745ms",
+     "music/title.mp3 200 audio/mpeg 2332089B req+3746ms done+5508ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710572B req+3746ms done+5860ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618629B req+3746ms done+8630ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107606B req+3957ms done+5906ms",
+     "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20573B req+6632ms done+6882ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352013B req+6633ms done+7529ms",
+     "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487512B req+6633ms done+8798ms",
+     "music/boss-bahamut.mp3 200 audio/mpeg 1342176B req+9131ms done+9673ms",
+     "music/victory-bahamut.mp3 200 audio/mpeg 551693B req+9960ms done+10101ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115238B req+10234ms done+10290ms"
+    ]
+   }
+  },
+  "access-ffx2": {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "chapterNumber": 4,
+   "pace": "fast",
+   "word": null,
+   "expected": {
+    "scene": "scene-bevelle-underground",
+    "battle": "boss-bahamut",
+    "victory": "victory-bahamut",
+    "firstFormationCue": "boss-bahamut"
+   },
+   "viewport": "1600x900",
+   "build": {
+    "build": {
+     "sha": "b8aa6f96",
+     "bundle": "index-DA6NOD0r.js"
+    },
+    "version": "0.1.0"
+   },
+   "storageAtStart": 0,
+   "guideSkipped": true,
+   "selected": "ffx2-bahamut",
+   "prepState": {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "chapter",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "heldInPrep": [
+    "scene-bevelle-underground",
+    "boss-bahamut",
+    "victory-bahamut",
+    "defeat-ffx2"
+   ],
+   "sceneTaps": 21,
+   "firstLine": {
+    "msAfterConfirm": 3941,
+    "speaker": "Rikku",
+    "text": "C",
+    "playing": "scene-bevelle-underground",
+    "gain": 0.13453009724617004,
+    "held": [
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true
+   },
+   "entrance": {
+    "msToFirstMenu": 11326
+   },
+   "enemies": [
+    "bahamut"
+   ],
+   "menuShot": {
+    "file": "access-ffx2-first-menu.jpg",
+    "meanLuminance": 77.4,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "audioAtMenu": {
+    "playing": "boss-bahamut",
+    "gain": 1,
+    "muted": false,
+    "manifest": true,
+    "cues": 41,
+    "sprite": true,
+    "v2": {
+     "cues": 92,
+     "decoded": true,
+     "game": "ffx2",
+     "retired": 8
+    },
+    "parity": {
+     "packs": [
+      "ffx-core",
+      "ffx2-core",
+      "ffx-lady",
+      "ffx2-bahamut",
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx-flux",
+      "ffx-final-aeon",
+      "ffx2-aeons"
+     ],
+     "active": [
+      "ffx2-bahamut",
+      "ffx2-core"
+     ],
+     "decoded": [
+      "ffx2-bahamut",
+      "ffx2-core"
+     ]
+    },
+    "sfxLog": [
+     {
+      "t": 16.592,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move-x2",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 19.490666666666666,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move-x2",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 20.96,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move-x2",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 23.861333333333334,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move-x2",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 29.650666666666666,
+      "asked": "v2:boss-roar-aeon",
+      "played": "boss-bahamut",
+      "via": "parity",
+      "volume": 0.9
+     },
+     {
+      "t": 34.781333333333336,
+      "asked": "v2:magic-charge-x2",
+      "played": "v2:magic-charge-x2",
+      "via": "v2",
+      "volume": 0.7,
+      "trimDb": -4.9
+     }
+    ],
+    "held": [
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "playedFileRequest": "music/boss-bahamut.mp3 200 audio/mpeg 1342170B req+11744ms done+12482ms",
+    "matchesFirstFormationCue": true
+   },
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10736B req+4278ms done+4387ms",
+     "music/title.mp3 200 audio/mpeg 2332058B req+4389ms done+5947ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710555B req+4389ms done+6344ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618647B req+4389ms done+7511ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107664B req+5400ms done+7017ms",
+     "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20573B req+9642ms done+9762ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352021B req+9643ms done+10291ms",
+     "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487485B req+9643ms done+11411ms",
+     "music/boss-bahamut.mp3 200 audio/mpeg 1342170B req+11744ms done+12482ms",
+     "music/victory-bahamut.mp3 200 audio/mpeg 551702B req+12845ms done+13031ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115229B req+13171ms done+13219ms"
+    ]
+   },
+   "packsFetched": [
+    "parity-ffx2-bahamut",
+    "parity-ffx2-core"
+   ],
+   "pauseShot": {
+    "file": "access-ffx2-pause.jpg",
+    "meanLuminance": 23.8,
+    "screen": "pause"
+   },
+   "pause": {
+    "pauseEsc": "pause",
+    "hide": {
+     "len0": 1841,
+     "lenH": 1444,
+     "lenR": 1841,
+     "hidDropsText": true,
+     "restored": true,
+     "stillPause": "pause"
+    },
+    "afterEsc": "battle",
+    "pauseP": "pause",
+    "afterP": "battle"
+   },
+   "audioAfterPause": {
+    "playing": "boss-bahamut"
+   },
+   "access": {
+    "how": "mouse",
+    "game": "ffx2",
+    "flashSelector": ".ffx2-hit-flash",
+    "start": {
+     "html": {
+      "reduceFlashes": false,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "present": true,
+      "version": 1,
+      "topKeys": [
+       "version",
+       "updatedAt",
+       "chapters",
+       "unlocked",
+       "settings",
+       "seenCoach",
+       "flags"
+      ],
+      "progress": {
+       "seenCoach": [
+        "briefing",
+        "firstrun-board",
+        "firstrun-prep",
+        "firstrun-battle",
+        "ffx2-gauge"
+       ],
+       "chapters": [
+        "seymour-flux",
+        "yunalesca",
+        "braskas-final-aeon",
+        "seymour-anima-macalania",
+        "evrae-airship",
+        "yojimbo-cavern",
+        "seymour-natus",
+        "seymour-omnis",
+        "isaaru-via-purifico",
+        "sin-fins-core",
+        "sin-face",
+        "ffx2-bahamut"
+       ],
+       "flags": 0
+      },
+      "settings": {
+       "reduceFlashes": false,
+       "colourVision": "off",
+       "reduceMotion": false,
+       "lowEffects": false,
+       "textSize": 1
+      }
+     }
+    },
+    "flashOff": {
+     "ms": 4865,
+     "presses": 6,
+     "entries": [
+      {
+       "t": 48621,
+       "cls": "ffx2-hit-flash",
+       "animationName": "ffx2-hit-flash",
+       "animationDuration": "0.2s",
+       "animationTimingFunction": "ease-out",
+       "filter": "brightness(1)",
+       "reduceFlashes": false,
+       "colourVision": "off"
+      },
+      {
+       "t": 48621,
+       "cls": "ffx2-hit-flash",
+       "animationName": "ffx2-hit-flash",
+       "animationDuration": "0.2s",
+       "animationTimingFunction": "ease-out",
+       "filter": "brightness(1)",
+       "reduceFlashes": false,
+       "colourVision": "off"
+      }
+     ]
+    },
+    "pauseOpened": {
+     "screen": "pause",
+     "tab": "member:yuna",
+     "row": null
+    },
+    "tabWalk": {
+     "ok": true,
+     "presses": 1,
+     "seen": [
+      "member:yuna",
+      "accessibility"
+     ]
+    },
+    "tabState": {
+     "screen": "pause",
+     "tab": "accessibility",
+     "row": null
+    },
+    "rowsBefore": [
+     {
+      "id": "textSize",
+      "label": "TEXT SIZE",
+      "value": "100%",
+      "selected": false
+     },
+     {
+      "id": "reduceMotion",
+      "label": "REDUCE MOTION",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "reduceFlashes",
+      "label": "REDUCE FLASHES",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "lowEffects",
+      "label": "LOW EFFECTS",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "colourVision",
+      "label": "COLOUR VISION",
+      "value": "OFF",
+      "selected": false
+     }
+    ],
+    "tabLabels": [
+     "Yuna",
+     "Rikku",
+     "Paine",
+     "Chapter",
+     "Guide",
+     "Options",
+     "Accessibility",
+     "Controls",
+     "Music"
+    ],
+    "tabShot": {
+     "file": "access-ffx2-access-tab.jpg",
+     "meanLuminance": 23.3,
+     "screen": "pause",
+     "tab": "accessibility"
+    },
+    "flashesOn": {
+     "label": "on",
+     "value": "ON",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "off",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "flashesUndo": {
+     "label": "off (undo)",
+     "value": "OFF",
+     "html": {
+      "reduceFlashes": false,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "reduceFlashes": false,
+      "colourVision": "off",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "flashesAgain": {
+     "label": "on",
+     "value": "ON",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": null,
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": null,
+       "--cvd-target-self": null,
+       "--cvd-gate-r": null,
+       "--cvd-gate-g": null,
+       "--cvd-gate-b": null,
+       "--cvd-gate-y": null,
+       "--cvd-mp-lo": null
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "off",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "cvRedGreen": {
+     "label": "red-green",
+     "value": "RED-GREEN",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "cvBlueYellow": {
+     "label": "blue-yellow",
+     "value": "BLUE-YELLOW",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "blue-yellow",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#7ee8b0",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d0343c",
+       "--cvd-gate-g": "#00a6a6",
+       "--cvd-gate-b": "#7a4fd0",
+       "--cvd-gate-y": "#e3b94a",
+       "--cvd-mp-lo": "#b48cf0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "blue-yellow",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "cvBack": {
+     "label": "wrap round to red-green (two clicks)",
+     "value": "RED-GREEN",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "textUp": {
+     "label": "up",
+     "value": "115%",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "115",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1.15
+     }
+    },
+    "textBack": {
+     "label": "two more clicks wrap round to 100%",
+     "value": "100%",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     },
+     "saved": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    },
+    "rowsAfter": [
+     {
+      "id": "textSize",
+      "label": "TEXT SIZE",
+      "value": "100%",
+      "selected": true
+     },
+     {
+      "id": "reduceMotion",
+      "label": "REDUCE MOTION",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "reduceFlashes",
+      "label": "REDUCE FLASHES",
+      "value": "ON",
+      "selected": false
+     },
+     {
+      "id": "lowEffects",
+      "label": "LOW EFFECTS",
+      "value": "OFF",
+      "selected": false
+     },
+     {
+      "id": "colourVision",
+      "label": "COLOUR VISION",
+      "value": "RED-GREEN",
+      "selected": false
+     }
+    ],
+    "tabShotOn": {
+     "file": "access-ffx2-access-tab-on.jpg",
+     "meanLuminance": 23.5,
+     "screen": "pause",
+     "tab": "accessibility"
+    },
+    "afterClose": {
+     "screen": "battle",
+     "html": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": "100",
+      "cvd": {
+       "--cvd-target-ally": "#56b4e9",
+       "--cvd-target-self": "#f4f1e8",
+       "--cvd-gate-r": "#d55e00",
+       "--cvd-gate-g": "#009e73",
+       "--cvd-gate-b": "#0072b2",
+       "--cvd-gate-y": "#f0e442",
+       "--cvd-mp-lo": "#3a8fd0"
+      }
+     }
+    },
+    "flashOn": {
+     "ms": 1791,
+     "presses": 2,
+     "entries": [
+      {
+       "t": 59322,
+       "cls": "ffx2-hit-flash",
+       "animationName": "ffx2-hit-soft",
+       "animationDuration": "0.5s",
+       "animationTimingFunction": "ease-out",
+       "filter": "brightness(1)",
+       "reduceFlashes": true,
+       "colourVision": "red-green"
+      },
+      {
+       "t": 59322,
+       "cls": "ffx2-hit-flash",
+       "animationName": "ffx2-hit-soft",
+       "animationDuration": "0.5s",
+       "animationTimingFunction": "ease-out",
+       "filter": "brightness(1)",
+       "reduceFlashes": true,
+       "colourVision": "red-green"
+      }
+     ]
+    },
+    "flashShot": {
+     "file": "access-ffx2-after-hit.jpg",
+     "meanLuminance": 53.4,
+     "screen": "battle"
+    }
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "rikku-ch06": {
+   "id": "ffx2-leblanc",
+   "game": "ffx2",
+   "chapterNumber": 6,
+   "pace": "fast",
+   "word": null,
+   "expected": {
+    "scene": "scene-chateau-leblanc",
+    "battle": "boss-leblanc",
+    "victory": "victory-ffx2",
+    "firstFormationCue": "boss-leblanc"
+   },
+   "viewport": "1600x900",
+   "build": {
+    "build": {
+     "sha": "b8aa6f96",
+     "bundle": "index-DA6NOD0r.js"
+    },
+    "version": "0.1.0"
+   },
+   "storageAtStart": 0,
+   "guideSkipped": true,
+   "selected": "ffx2-leblanc",
+   "prepState": {
+    "chapter": "ffx2-leblanc",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "chapter",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "heldInPrep": [
+    "scene-chateau-leblanc",
+    "boss-leblanc",
+    "victory-ffx2",
+    "defeat-ffx2"
+   ],
+   "sceneTaps": 49,
+   "firstLine": {
+    "msAfterConfirm": 3936,
+    "speaker": "Rikku",
+    "text": "Pi",
+    "playing": "scene-chateau-leblanc",
+    "gain": 0.14600743353366852,
+    "held": [
+     "boss-leblanc",
+     "victory-ffx2",
+     "defeat-ffx2"
+    ],
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true
+   },
+   "entrance": {
+    "msToFirstMenu": 9787
+   },
+   "enemies": [
+    "ormi-entrance",
+    "dr-goon",
+    "fem-goon"
+   ],
+   "menuShot": {
+    "file": "rikku-ch06-first-menu.jpg",
+    "meanLuminance": 76.7,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "audioAtMenu": {
+    "playing": "boss-leblanc",
+    "gain": 1,
+    "muted": false,
+    "manifest": true,
+    "cues": 41,
+    "sprite": true,
+    "v2": {
+     "cues": 92,
+     "decoded": true,
+     "game": "ffx2",
+     "retired": 8
+    },
+    "parity": {
+     "packs": [
+      "ffx-core",
+      "ffx2-core",
+      "ffx-lady",
+      "ffx2-bahamut",
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx-flux",
+      "ffx-final-aeon",
+      "ffx2-aeons"
+     ],
+     "active": [
+      "ffx2-leblanc",
+      "ffx2-core"
+     ],
+     "decoded": [
+      "ffx2-core"
+     ]
+    },
+    "sfxLog": [
+     {
+      "t": 40,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move-x2",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 50.28,
+      "asked": "boss-roar",
+      "played": "boss-roar",
+      "via": "sprite",
+      "volume": 0.9
+     },
+     {
+      "t": 54.96,
+      "asked": "v2:swing-greatsword",
+      "played": "v2:swing-greatsword",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": 0.1
+     },
+     {
+      "t": 55.34133333333333,
+      "asked": "v2:hit-heavy-enemy",
+      "played": "v2:hit-heavy-enemy",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": -3.8
+     },
+     {
+      "t": 55.952,
+      "asked": "v2:swing-greatsword",
+      "played": "v2:swing-greatsword",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": 0.1
+     },
+     {
+      "t": 56.232,
+      "asked": "v2:whiff",
+      "played": "v2:whiff",
+      "via": "v2",
+      "volume": 0.5
+     }
+    ],
+    "held": [
+     "victory-ffx2",
+     "defeat-ffx2"
+    ],
+    "playedFileRequest": "music/boss-leblanc.mp3 200 audio/mpeg 1471951B req+12529ms done+13163ms",
+    "matchesFirstFormationCue": true
+   },
+   "audio": {
+    "n": 10,
+    "byStatus": {
+     "200": 10
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 9
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-chateau-leblanc",
+     "boss-leblanc",
+     "victory-ffx2",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10769B req+4519ms done+4558ms",
+     "music/title.mp3 200 audio/mpeg 2332091B req+4560ms done+6498ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710620B req+4560ms done+6221ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618735B req+4560ms done+7380ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107606B req+5644ms done+7122ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352032B req+10215ms done+11015ms",
+     "music/scene-chateau-leblanc.mp3 200 audio/mpeg 1805508B req+10215ms done+12198ms",
+     "music/boss-leblanc.mp3 200 audio/mpeg 1471951B req+12529ms done+13163ms",
+     "music/victory-ffx2.mp3 200 audio/mpeg 875822B req+13440ms done+13680ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115239B req+13845ms done+13909ms"
+    ]
+   },
+   "packsFetched": [
+    "parity-ffx2-core"
+   ],
+   "rikku": {
+    "requests": [
+     {
+      "rel": "art/characters/rikku-thief/idle.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 686135,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/idle.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/ready.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/attack.webp",
+      "status": 200,
+      "ct": "image/webp",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/ready.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/cast.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/item.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/attack.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/cast.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/hurt.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/item.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/ko.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/victory.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/hurt.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/ko.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/defend.webp",
+      "status": 200,
+      "ct": "image/webp",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/victory.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/sleep.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/defend.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/critical.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/sleep.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/follow.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/critical.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/follow.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-gunner/idle.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/twirl-start.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/twirl-start.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 398420,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-thief/twirl-going.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-thief/twirl-going.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 430091,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-gunner/twirl-mid.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-gunner/twirl-mid.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 1197131,
+      "saved": true
+     }
+    ],
+    "changedRequested": [
+     "art/characters/rikku-thief/idle.png",
+     "art/characters/rikku-thief/ready.png",
+     "art/characters/rikku-thief/attack.webp",
+     "art/characters/rikku-thief/cast.png",
+     "art/characters/rikku-thief/item.png",
+     "art/characters/rikku-thief/hurt.png",
+     "art/characters/rikku-thief/ko.png",
+     "art/characters/rikku-thief/victory.png",
+     "art/characters/rikku-thief/defend.webp",
+     "art/characters/rikku-thief/sleep.png",
+     "art/characters/rikku-thief/critical.png",
+     "art/characters/rikku-thief/follow.png",
+     "art/characters/rikku-thief/twirl-start.png",
+     "art/characters/rikku-thief/twirl-going.png",
+     "art/characters/rikku-gunner/twirl-mid.png"
+    ],
+    "controlsRequested": [],
+    "python": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "measure": [
+     {
+      "id": "rikku-thief/idle.png",
+      "rel": "art/characters/rikku-thief/idle.png",
+      "servedBytes": 686135,
+      "servedSha256": "cc786005c55c289748df2b49e231bf2d6dc8e38c81f5ce5ae91ab5445abab808",
+      "size": [
+       558,
+       1212
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "dfc175bed545b3588071a4558fb5540c2dcf117374e6220a25135d385e7e3929"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "861535fc71ce5fe8e8a34599112e34fa88844866b2409b6ba1594148aae7d3ae"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5843795293869966,
+       "master47": 0.5843795293869966,
+       "master44": 0.6567814950842878
+      },
+      "meanSaturationFull": {
+       "served": 0.6001145529809391,
+       "master47": 0.6001145529809391,
+       "master44": 0.6671226322347957
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 295943
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 227885,
+       "visiblePixels": 295943
+      }
+     },
+     {
+      "id": "rikku-thief/ready.png",
+      "rel": "art/characters/rikku-thief/ready.png",
+      "servedBytes": 381598,
+      "servedSha256": "ef378dec7e218554acd85cef78f1b7802fd6af693ba2cb7408ebe09ba25a02e4",
+      "size": [
+       548,
+       801
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "219fe7e1b171276d0815ce8d4f8fe24bfc74a93643ab808732ce04cd5ff6697d"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "b06b0e6f165156a0166fefce1be19afb6d3f01ddd09b0ccd7ab63d5c09417867"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5592545904591593,
+       "master47": 0.5592545904591593,
+       "master44": 0.6512736778039216
+      },
+      "meanSaturationFull": {
+       "served": 0.579964065515877,
+       "master47": 0.579964065515877,
+       "master44": 0.6672899140288061
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 146241
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 100472,
+       "visiblePixels": 146241
+      }
+     },
+     {
+      "id": "rikku-thief/attack.webp",
+      "rel": "art/characters/rikku-thief/attack.webp",
+      "servedBytes": 356398,
+      "servedSha256": "1d464c81cd268a85034ffcb03481abb893159ff37a6cc459c5e68d34c1b19a27",
+      "size": [
+       788,
+       1083
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "4a69514f9ec06ccacf696fe4325526e31d85f0e73927ba56214507692f37207d"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "743bba8feb5cc6cf08bcc3dd590e3cdd87a557421e927dfb5790551b3dd8707a"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5894452386165498,
+       "master47": 0.5894452386165498,
+       "master44": 0.6817410074146725
+      },
+      "meanSaturationFull": {
+       "served": 0.6056702781907799,
+       "master47": 0.6056702781907799,
+       "master44": 0.6927931004199184
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 251332
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 199287,
+       "visiblePixels": 251332
+      }
+     },
+     {
+      "id": "rikku-thief/cast.png",
+      "rel": "art/characters/rikku-thief/cast.png",
+      "servedBytes": 377880,
+      "servedSha256": "ea5ddef3a0974a3606298e2f4fcd3367de2ed41441acaafd32467584066efdbf",
+      "size": [
+       596,
+       912
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "473f6edaa45e8a04f4b69b3efc43f23291815d06c280747ed1292d2acd990636"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "720409176e0ee584c250e7bbe90dd6154cd2100e11a4a0da796c24ee6c2a172c"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5462435835743913,
+       "master47": 0.5462435835743913,
+       "master44": 0.6190632702607989
+      },
+      "meanSaturationFull": {
+       "served": 0.5678037850789324,
+       "master47": 0.5678037850789324,
+       "master44": 0.6358082600233613
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 139022
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 93015,
+       "visiblePixels": 139022
+      }
+     },
+     {
+      "id": "rikku-thief/item.png",
+      "rel": "art/characters/rikku-thief/item.png",
+      "servedBytes": 379222,
+      "servedSha256": "80b88b2aca9ee7b026316a46260bcea0525fe0f0c1c6d15321cd771270633a6d",
+      "size": [
+       461,
+       896
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "b06f2dfcc50d260c33927f04e8f983daea894a054a0b35afd3ecfe69820cdc72"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "32736415afc521ba6e9c7901cbe640cfb978d78fd89bc9fdb908a682600f74fb"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5190718439461358,
+       "master47": 0.5190718439461358,
+       "master44": 0.5815097548638963
+      },
+      "meanSaturationFull": {
+       "served": 0.5426934162485553,
+       "master47": 0.5426934162485553,
+       "master44": 0.599375231554424
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 140597
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 82514,
+       "visiblePixels": 140597
+      }
+     },
+     {
+      "id": "rikku-thief/hurt.png",
+      "rel": "art/characters/rikku-thief/hurt.png",
+      "servedBytes": 394790,
+      "servedSha256": "558d2182c85c5a04a34ac51afdc4b32617bef3f60bc6b8c408b333a17dc70194",
+      "size": [
+       569,
+       836
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "b0f97721cc051ede61460727f5a4480ea1189745fb15f10a3bc29047a64992b5"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "5e2fc453e070990a30ee1b648ccef25dc6038436935641ec1d756a90c23d44d9"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5526461606003154,
+       "master47": 0.5526461606003154,
+       "master44": 0.6248334383068141
+      },
+      "meanSaturationFull": {
+       "served": 0.5730346316771111,
+       "master47": 0.5730346316771111,
+       "master44": 0.6406621298559725
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 142005
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 101914,
+       "visiblePixels": 142005
+      }
+     },
+     {
+      "id": "rikku-thief/ko.png",
+      "rel": "art/characters/rikku-thief/ko.png",
+      "servedBytes": 446857,
+      "servedSha256": "4480ff3698a26f62101484b9d95ee4fca8ba93ff42655bb8830da281a11aa0e8",
+      "size": [
+       1113,
+       525
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "f6a72a18923101edb8719e70058ef10f3dc1e6a15dab4390f986e2d3f01bea66"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "cad3cd1289cbf5f499041ef787c4a8563549ac3f494f8b69d3c011e377f64a9e"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5632874764298187,
+       "master47": 0.5632874764298187,
+       "master44": 0.6591338773425088
+      },
+      "meanSaturationFull": {
+       "served": 0.5915010242474649,
+       "master47": 0.5915010242474649,
+       "master44": 0.676798196581457
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 205424
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 166974,
+       "visiblePixels": 205424
+      }
+     },
+     {
+      "id": "rikku-thief/victory.png",
+      "rel": "art/characters/rikku-thief/victory.png",
+      "servedBytes": 329436,
+      "servedSha256": "55f2875e629c89dfb4b9183093074100daa71ca875a7e2ea3727def806bb881a",
+      "size": [
+       399,
+       959
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "b43cfada84d814b17d3207603a645711e7d874ca761470d85c6b1279282b48b5"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "f74c8a97039ef9dfb6681d30c85bff133c9c0fbfea2281ceabc682f981780677"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.4618726369722517,
+       "master47": 0.4618726369722517,
+       "master44": 0.4975405201914226
+      },
+      "meanSaturationFull": {
+       "served": 0.48570645295910325,
+       "master47": 0.48570645295910325,
+       "master44": 0.5191452605578131
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 127066
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 73357,
+       "visiblePixels": 127066
+      }
+     },
+     {
+      "id": "rikku-thief/defend.webp",
+      "rel": "art/characters/rikku-thief/defend.webp",
+      "servedBytes": 322878,
+      "servedSha256": "15300145747e193e800d98213e7e50c81983b0b89b31f674b47c57081b315cab",
+      "size": [
+       642,
+       1130
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "9640836a90fe89c36f4eea5e52e69d09820fe539d0284d22437aff630da507f6"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "9af816fda5e6be0268d83f10a1681cae9e646d7aa434e40b3dda5d8818171d5c"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.618580086158655,
+       "master47": 0.618580086158655,
+       "master44": 0.7382527804465939
+      },
+      "meanSaturationFull": {
+       "served": 0.641852671601621,
+       "master47": 0.641852671601621,
+       "master44": 0.7534156140888771
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 226823
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 169229,
+       "visiblePixels": 226823
+      }
+     },
+     {
+      "id": "rikku-thief/sleep.png",
+      "rel": "art/characters/rikku-thief/sleep.png",
+      "servedBytes": 449095,
+      "servedSha256": "b4ea8c2ddbac5292aa8e1a3881b6b43da02d8f587f9ece396fbea6bb984a4b26",
+      "size": [
+       435,
+       1134
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "e6120d5c54281acc473084f3acd34dff834424de36d3dfc7ffa491655cc84485"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "ff087a43ae1d28c9604be7060da30074b3fd7a4bbf405195b2c518f9ca883370"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5438686039448264,
+       "master47": 0.5438686039448264,
+       "master44": 0.6280380951559633
+      },
+      "meanSaturationFull": {
+       "served": 0.5721653782305602,
+       "master47": 0.5721653782305602,
+       "master44": 0.6506404774183137
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 196818
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 136387,
+       "visiblePixels": 196818
+      }
+     },
+     {
+      "id": "rikku-thief/critical.png",
+      "rel": "art/characters/rikku-thief/critical.png",
+      "servedBytes": 576461,
+      "servedSha256": "491a2fb9ef4e14500bd0838c29d4da71767c8c71f90381925593e0dabb7ec315",
+      "size": [
+       807,
+       786
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "a9c420d96b0a56340c61d4aff02ecfc2a85c452741dd3e5a68996964e128a84d"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "66fe7b56f05366330c63d3f049bab3d1f481a0b3ba3b9f13f74308c0013955e1"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.6509582725426752,
+       "master47": 0.6509582725426752,
+       "master44": 0.7709365222253146
+      },
+      "meanSaturationFull": {
+       "served": 0.6627664439005848,
+       "master47": 0.6627664439005848,
+       "master44": 0.7772646197244482
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 284570
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 213211,
+       "visiblePixels": 284570
+      }
+     },
+     {
+      "id": "rikku-thief/follow.png",
+      "rel": "art/characters/rikku-thief/follow.png",
+      "servedBytes": 401442,
+      "servedSha256": "ce832098d74a7225f58ea53f437e35d14a03f3d544acc634989722d05816c16d",
+      "size": [
+       799,
+       781
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "770c670463d09f79b709e5692675b81da3506796140c652f294c2e1a3976fad2"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "8e9ed6cb4e22eb3ba59b840d1f42e07f88ce01c7d01c339a34ddf71c9184706b"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.514266458222908,
+       "master47": 0.514266458222908,
+       "master44": 0.5953500123319004
+      },
+      "meanSaturationFull": {
+       "served": 0.5384668243378997,
+       "master47": 0.5384668243378997,
+       "master44": 0.6115420814183569
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 143021
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 84865,
+       "visiblePixels": 143021
+      }
+     },
+     {
+      "id": "rikku-thief/twirl-start.png",
+      "rel": "art/characters/rikku-thief/twirl-start.png",
+      "servedBytes": 398420,
+      "servedSha256": "a47437a71154f68e27d5e080fce12b6fa10a33a9b2088e94c557bc5a1bceca1c",
+      "size": [
+       486,
+       977
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "7568f0091cf32b2a72d24a01451eadfbed6bc68f6125e607a2dcc12e047f326a"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "5f43626a5bea7ebf8d713b9e1b9ff0009d2157cb6ccde976db66dda6887a12d3"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5165181806716757,
+       "master47": 0.5165181806716757,
+       "master44": 0.6104017874681346
+      },
+      "meanSaturationFull": {
+       "served": 0.546046855152443,
+       "master47": 0.546046855152443,
+       "master44": 0.630837464310616
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 153275
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 108731,
+       "visiblePixels": 153275
+      }
+     },
+     {
+      "id": "rikku-thief/twirl-going.png",
+      "rel": "art/characters/rikku-thief/twirl-going.png",
+      "servedBytes": 430091,
+      "servedSha256": "6acc0dc4aee2600de66cb49ec41c3cc2dd97b2f875e810509e235d6aede6ed60",
+      "size": [
+       465,
+       985
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "4c403df6131ae4145abafcf9a938753b50cc57d4496ed42dd5afef3d31fc009c"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "f9113fcab0d1f97ff49f318cc09d19abddebff371f24b0a600cb9593243061bf"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.55875421660826,
+       "master47": 0.55875421660826,
+       "master44": 0.6524920799919496
+      },
+      "meanSaturationFull": {
+       "served": 0.5770070710445825,
+       "master47": 0.5770070710445825,
+       "master44": 0.662935909900547
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 143997
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 110837,
+       "visiblePixels": 143997
+      }
+     },
+     {
+      "id": "rikku-gunner/twirl-mid.png",
+      "rel": "art/characters/rikku-gunner/twirl-mid.png",
+      "servedBytes": 1197131,
+      "servedSha256": "9454f7b5ced13c555b56ff823415be9e569746ede1cba15c8cc6179b859dac07",
+      "size": [
+       784,
+       1212
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "cfbffd5028d71ee2c920751f5c6db57f87f76187df8ff124c000613d987ebeb4"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.49397769222969984,
+       "master47": 0.49397769222969984,
+       "master44": 0.6577273107258146
+      },
+      "meanSaturationFull": {
+       "served": 0.5054033281787553,
+       "master47": 0.5054033281787553,
+       "master44": 0.6677176916685793
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 386551
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 359694,
+       "visiblePixels": 386551
+      }
+     }
+    ],
+    "canvas": {
+     "w": 558,
+     "h": 1212,
+     "opaque": 276435,
+     "meanSaturation": 0.600109322878434,
+     "probe": "art/characters/rikku-thief/idle.png",
+     "pythonFullRes": 0.6001145529809391
+    }
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "rikku-ch05": {
+   "id": "ffx2-vegnagun-shuyin",
+   "game": "ffx2",
+   "chapterNumber": 5,
+   "pace": "fast",
+   "word": null,
+   "expected": {
+    "scene": "scene-farplane",
+    "battle": "boss-vegnagun",
+    "phase2": "boss-shuyin",
+    "victory": "victory-ffx2",
+    "firstFormationCue": "boss-vegnagun"
+   },
+   "viewport": "1600x900",
+   "build": {
+    "build": {
+     "sha": "b8aa6f96",
+     "bundle": "index-DA6NOD0r.js"
+    },
+    "version": "0.1.0"
+   },
+   "storageAtStart": 0,
+   "guideSkipped": true,
+   "selected": "ffx2-vegnagun-shuyin",
+   "prepState": {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "game": "ffx2",
+    "tabs": [
+     "chapter",
+     "dresspheres",
+     "stats",
+     "accessories",
+     "items"
+    ],
+    "tab": "chapter",
+    "member": "yuna",
+    "outcome": null,
+    "panelsRegistered": 5
+   },
+   "heldInPrep": [
+    "scene-farplane",
+    "boss-vegnagun",
+    "victory-ffx2",
+    "defeat-ffx2"
+   ],
+   "sceneTaps": 34,
+   "firstLine": {
+    "msAfterConfirm": 5958,
+    "speaker": "Nooj",
+    "text": "B",
+    "playing": "scene-farplane",
+    "gain": 1,
+    "held": [
+     "boss-vegnagun",
+     "victory-ffx2",
+     "defeat-ffx2"
+    ],
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true
+   },
+   "entrance": {
+    "msToFirstMenu": 10689
+   },
+   "enemies": [
+    "vegnagun-tail"
+   ],
+   "menuShot": {
+    "file": "rikku-ch05-first-menu.jpg",
+    "meanLuminance": 115.9,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "audioAtMenu": {
+    "playing": "boss-vegnagun",
+    "gain": 1,
+    "muted": false,
+    "manifest": true,
+    "cues": 41,
+    "sprite": true,
+    "v2": {
+     "cues": 92,
+     "decoded": true,
+     "game": "ffx2",
+     "retired": 8
+    },
+    "parity": {
+     "packs": [
+      "ffx-core",
+      "ffx2-core",
+      "ffx-lady",
+      "ffx2-bahamut",
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx-flux",
+      "ffx-final-aeon",
+      "ffx2-aeons"
+     ],
+     "active": [
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx2-core"
+     ],
+     "decoded": [
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx2-core"
+     ]
+    },
+    "sfxLog": [
+     {
+      "t": 32.392,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move-x2",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 41.02133333333333,
+      "asked": "v2:machina-roar",
+      "played": "v2:machina-roar",
+      "via": "v2",
+      "volume": 0.9
+     },
+     {
+      "t": 46.512,
+      "asked": "v2:magic-charge-x2",
+      "played": "v2:magic-charge-x2",
+      "via": "v2",
+      "volume": 0.7,
+      "trimDb": -4.9
+     },
+     {
+      "t": 47.050666666666665,
+      "asked": "v2:hit-heavy-enemy",
+      "played": "v2:hit-heavy-enemy",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": -3.8
+     },
+     {
+      "t": 47.272,
+      "asked": "v2:hit-heavy-enemy",
+      "played": "v2:hit-heavy-enemy",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": -3.8
+     },
+     {
+      "t": 47.49066666666667,
+      "asked": "v2:hit-heavy-enemy",
+      "played": "v2:hit-heavy-enemy",
+      "via": "v2",
+      "volume": 0.8,
+      "trimDb": -3.8
+     }
+    ],
+    "held": [
+     "victory-ffx2",
+     "defeat-ffx2"
+    ],
+    "playedFileRequest": "music/boss-vegnagun.mp3 200 audio/mpeg 1506318B req+11998ms done+12806ms",
+    "matchesFirstFormationCue": true
+   },
+   "audio": {
+    "n": 12,
+    "byStatus": {
+     "200": 12
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 11
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-farplane",
+     "boss-vegnagun",
+     "victory-ffx2",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-machina",
+     "parity-ffx2-shuyin",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10728B req+4169ms done+4201ms",
+     "music/title.mp3 200 audio/mpeg 2332096B req+4202ms done+5774ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710615B req+4202ms done+6130ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618727B req+4202ms done+7042ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107597B req+5294ms done+6865ms",
+     "sfx/parity-ffx2-machina.mp3 200 audio/mpeg 28693B req+9692ms done+9805ms",
+     "sfx/parity-ffx2-shuyin.mp3 200 audio/mpeg 33535B req+9692ms done+9811ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352021B req+9692ms done+10392ms",
+     "music/scene-farplane.mp3 200 audio/mpeg 1392161B req+9692ms done+11684ms",
+     "music/boss-vegnagun.mp3 200 audio/mpeg 1506318B req+11998ms done+12806ms",
+     "music/victory-ffx2.mp3 200 audio/mpeg 875820B req+13122ms done+13451ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115232B req+13618ms done+13668ms"
+    ]
+   },
+   "packsFetched": [
+    "parity-ffx2-machina",
+    "parity-ffx2-shuyin",
+    "parity-ffx2-core"
+   ],
+   "rikku": {
+    "requests": [
+     {
+      "rel": "art/characters/rikku-dark-knight/idle.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 1081427,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/idle.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/ready.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/attack.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/cast.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/ready.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/attack.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/item.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/cast.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/hurt.webp",
+      "status": 200,
+      "ct": "image/webp",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/item.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/ko.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/hurt.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/victory.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/sleep.webp",
+      "status": 200,
+      "ct": "image/webp",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/ko.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/victory.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/critical.webp",
+      "status": 200,
+      "ct": "image/webp",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/sleep.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/follow.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 0,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/critical.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/follow.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-gunner/idle.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/twirl-start.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/twirl-start.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 423142,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/twirl-going.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-dark-knight/twirl-going.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 430075,
+      "saved": true
+     },
+     {
+      "rel": "art/characters/rikku-gunner/twirl-mid.json",
+      "status": 200,
+      "ct": "application/json",
+      "bytes": null,
+      "saved": false
+     },
+     {
+      "rel": "art/characters/rikku-gunner/twirl-mid.png",
+      "status": 200,
+      "ct": "image/png",
+      "bytes": 1197131,
+      "saved": true
+     }
+    ],
+    "changedRequested": [
+     "art/characters/rikku-gunner/twirl-mid.png"
+    ],
+    "controlsRequested": [
+     "art/characters/rikku-dark-knight/idle.png",
+     "art/characters/rikku-dark-knight/ready.png",
+     "art/characters/rikku-dark-knight/attack.png",
+     "art/characters/rikku-dark-knight/cast.png",
+     "art/characters/rikku-dark-knight/item.png",
+     "art/characters/rikku-dark-knight/hurt.webp",
+     "art/characters/rikku-dark-knight/ko.png",
+     "art/characters/rikku-dark-knight/victory.png",
+     "art/characters/rikku-dark-knight/sleep.webp",
+     "art/characters/rikku-dark-knight/critical.webp",
+     "art/characters/rikku-dark-knight/follow.png",
+     "art/characters/rikku-dark-knight/twirl-start.png",
+     "art/characters/rikku-dark-knight/twirl-going.png"
+    ],
+    "python": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "measure": [
+     {
+      "id": "rikku-gunner/twirl-mid.png",
+      "rel": "art/characters/rikku-gunner/twirl-mid.png",
+      "servedBytes": 1197131,
+      "servedSha256": "9454f7b5ced13c555b56ff823415be9e569746ede1cba15c8cc6179b859dac07",
+      "size": [
+       784,
+       1212
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "cfbffd5028d71ee2c920751f5c6db57f87f76187df8ff124c000613d987ebeb4"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.49397769222969984,
+       "master47": 0.49397769222969984,
+       "master44": 0.6577273107258146
+      },
+      "meanSaturationFull": {
+       "served": 0.5054033281787553,
+       "master47": 0.5054033281787553,
+       "master44": 0.6677176916685793
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 386551
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": false,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 359694,
+       "visiblePixels": 386551
+      }
+     },
+     {
+      "id": "rikku-dark-knight/idle.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/idle.png",
+      "servedBytes": 1081427,
+      "servedSha256": "8b3176e24d54e24a563f35129f1afb6acf08f3aa1feb70cbf4f08746c83bfb51",
+      "size": [
+       787,
+       1205
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5497464850861571,
+       "master47": 0.5497464850861571,
+       "master44": 0.5497464850861571
+      },
+      "meanSaturationFull": {
+       "served": 0.5904707466497261,
+       "master47": 0.5904707466497261,
+       "master44": 0.5904707466497261
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 443536
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 443536
+      }
+     },
+     {
+      "id": "rikku-dark-knight/ready.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/ready.png",
+      "servedBytes": 526346,
+      "servedSha256": "f2b011e2c76e575b346aec03f9664bab45ee2f6464d72ca212afd8cef7590084",
+      "size": [
+       652,
+       940
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "cb246aa5fa2e3728d089e3c2e5fb286ded6886846f87b82a07d82b6e8be886d8"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "cb246aa5fa2e3728d089e3c2e5fb286ded6886846f87b82a07d82b6e8be886d8"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.6039656174792398,
+       "master47": 0.6039656174792398,
+       "master44": 0.6039656174792398
+      },
+      "meanSaturationFull": {
+       "served": 0.6245997333576148,
+       "master47": 0.6245997333576148,
+       "master44": 0.6245997333576148
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 205518
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 205518
+      }
+     },
+     {
+      "id": "rikku-dark-knight/attack.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/attack.png",
+      "servedBytes": 949130,
+      "servedSha256": "a64dc857b444ae2714a67af3eab3661b7bbaad980986fe9d165bd887bfc7018c",
+      "size": [
+       980,
+       1170
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "a8d9cee74a8a8fd57cbbf031c347630f1061fd60b0db15fffa76f3d6a9c9a137"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "a8d9cee74a8a8fd57cbbf031c347630f1061fd60b0db15fffa76f3d6a9c9a137"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.6104430555832024,
+       "master47": 0.6104430555832024,
+       "master44": 0.6104430555832024
+      },
+      "meanSaturationFull": {
+       "served": 0.6453736623538163,
+       "master47": 0.6453736623538163,
+       "master44": 0.6453736623538163
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 365109
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 365109
+      }
+     },
+     {
+      "id": "rikku-dark-knight/cast.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/cast.png",
+      "servedBytes": 436981,
+      "servedSha256": "bba130f10320ade68b20fd1c49bea3ac3f3d7598a026ce75bad687d950fdd1bf",
+      "size": [
+       386,
+       1163
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "ce9ecdef063c56e9aa8905e0d86fe2ab4a7ea0fdf0ce8484b48f824f13c77219"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "ce9ecdef063c56e9aa8905e0d86fe2ab4a7ea0fdf0ce8484b48f824f13c77219"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.6044559499042572,
+       "master47": 0.6044559499042572,
+       "master44": 0.6044559499042572
+      },
+      "meanSaturationFull": {
+       "served": 0.6564745189906224,
+       "master47": 0.6564745189906224,
+       "master44": 0.6564745189906224
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 164105
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 164105
+      }
+     },
+     {
+      "id": "rikku-dark-knight/item.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/item.png",
+      "servedBytes": 396518,
+      "servedSha256": "6da5d52cd9c7973bdb7c41fafe434d607937ea9b19a36ac64c1e7f96e522e9ff",
+      "size": [
+       429,
+       866
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "94def74a2fbe487925a84c040ca5cbdb61e25bc88e944d93ecd89f6b382a2d2c"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "94def74a2fbe487925a84c040ca5cbdb61e25bc88e944d93ecd89f6b382a2d2c"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5065732447192283,
+       "master47": 0.5065732447192283,
+       "master44": 0.5065732447192283
+      },
+      "meanSaturationFull": {
+       "served": 0.5289020044816043,
+       "master47": 0.5289020044816043,
+       "master44": 0.5289020044816043
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 136309
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 136309
+      }
+     },
+     {
+      "id": "rikku-dark-knight/hurt.webp (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/hurt.webp",
+      "servedBytes": 421724,
+      "servedSha256": "2c4874d1609ac49096e5e8176b3e3d871fa9212a3f3732137d16dea570bf0a2a",
+      "size": [
+       765,
+       1062
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "3dc49367216777e06011066cea659e6f9343342a6f67f5e131be66c2c4279b0f"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "3dc49367216777e06011066cea659e6f9343342a6f67f5e131be66c2c4279b0f"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5479093708488079,
+       "master47": 0.5479093708488079,
+       "master44": 0.5479093708488079
+      },
+      "meanSaturationFull": {
+       "served": 0.5887740084529992,
+       "master47": 0.5887740084529992,
+       "master44": 0.5887740084529992
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 286331
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 286331
+      }
+     },
+     {
+      "id": "rikku-dark-knight/ko.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/ko.png",
+      "servedBytes": 795529,
+      "servedSha256": "976c5d4e2f34a1958fd55d1f16c37c5167da8c11e3ead190ec89f68e07492063",
+      "size": [
+       1204,
+       580
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "26d12305db94687c879912e1e41566c3a4342c0015a0d6fbd093073b1ae27c10"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "26d12305db94687c879912e1e41566c3a4342c0015a0d6fbd093073b1ae27c10"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5137231556042077,
+       "master47": 0.5137231556042077,
+       "master44": 0.5137231556042077
+      },
+      "meanSaturationFull": {
+       "served": 0.5429271222466888,
+       "master47": 0.5429271222466888,
+       "master44": 0.5429271222466888
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 322860
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 322860
+      }
+     },
+     {
+      "id": "rikku-dark-knight/victory.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/victory.png",
+      "servedBytes": 406814,
+      "servedSha256": "264023aa06048d5f21b0f4a1bc9488ed0d5fbaa63137b555ded54e037ce60a6b",
+      "size": [
+       428,
+       1119
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "d4e61c69483aa47b1cc43128051c4d0516bb51c1fcbb0b3dad9d4a8aad404620"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "d4e61c69483aa47b1cc43128051c4d0516bb51c1fcbb0b3dad9d4a8aad404620"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.7087078083456112,
+       "master47": 0.7087078083456112,
+       "master44": 0.7087078083456112
+      },
+      "meanSaturationFull": {
+       "served": 0.7239363749273121,
+       "master47": 0.7239363749273121,
+       "master44": 0.7239363749273121
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 180041
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 180041
+      }
+     },
+     {
+      "id": "rikku-dark-knight/sleep.webp (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/sleep.webp",
+      "servedBytes": 355624,
+      "servedSha256": "e9815edfb81d980900680c761f1fde02da6b6fc16cc85126256ad6cae0835a2d",
+      "size": [
+       575,
+       1197
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "10d136ed84bf637c1902764a9365a0c03b2886bb35ac410019715e7ed7eb505b"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "10d136ed84bf637c1902764a9365a0c03b2886bb35ac410019715e7ed7eb505b"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.6883094961414407,
+       "master47": 0.6883094961414407,
+       "master44": 0.6883094961414407
+      },
+      "meanSaturationFull": {
+       "served": 0.7291536964696785,
+       "master47": 0.7291536964696785,
+       "master44": 0.7291536964696785
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 239157
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 239157
+      }
+     },
+     {
+      "id": "rikku-dark-knight/critical.webp (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/critical.webp",
+      "servedBytes": 397190,
+      "servedSha256": "fe2c48f05d28cfa0bfe53f022e13857cd3a7386adc2db22625cab21144e56db3",
+      "size": [
+       712,
+       983
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "ac8658584649386ab89e6500497336d163e31e51560d67c51bc8e5c5b2751b12"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "ac8658584649386ab89e6500497336d163e31e51560d67c51bc8e5c5b2751b12"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5350999235866813,
+       "master47": 0.5350999235866813,
+       "master44": 0.5350999235866813
+      },
+      "meanSaturationFull": {
+       "served": 0.579638883704303,
+       "master47": 0.579638883704303,
+       "master44": 0.579638883704303
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 269841
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 269841
+      }
+     },
+     {
+      "id": "rikku-dark-knight/follow.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/follow.png",
+      "servedBytes": 777472,
+      "servedSha256": "88056d58064dfa80ec4bfa662c6e97ecdf809f32f150a7cb07232020adc78310",
+      "size": [
+       695,
+       1216
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "97899f5b1d2686111ef84ddbc7fb472e3a0928c3dee309ecc087ea344581b2e2"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "97899f5b1d2686111ef84ddbc7fb472e3a0928c3dee309ecc087ea344581b2e2"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.47880407270560993,
+       "master47": 0.47880407270560993,
+       "master44": 0.47880407270560993
+      },
+      "meanSaturationFull": {
+       "served": 0.536930152164509,
+       "master47": 0.536930152164509,
+       "master44": 0.536930152164509
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 312284
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 312284
+      }
+     },
+     {
+      "id": "rikku-dark-knight/twirl-start.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/twirl-start.png",
+      "servedBytes": 423142,
+      "servedSha256": "0d1203f90f3d34acaa6199ea227b101f6f617d4a50aaab141dfefdab512380a3",
+      "size": [
+       568,
+       905
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "15976b8bb0a1a3aeaffddfbf339b8f6e8b002a7b72804ba50afe7c612bded14e"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "15976b8bb0a1a3aeaffddfbf339b8f6e8b002a7b72804ba50afe7c612bded14e"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.5529071657659801,
+       "master47": 0.5529071657659801,
+       "master44": 0.5529071657659801
+      },
+      "meanSaturationFull": {
+       "served": 0.598464020447853,
+       "master47": 0.598464020447853,
+       "master44": 0.598464020447853
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 138939
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 138939
+      }
+     },
+     {
+      "id": "rikku-dark-knight/twirl-going.png (unchanged control)",
+      "rel": "art/characters/rikku-dark-knight/twirl-going.png",
+      "servedBytes": 430075,
+      "servedSha256": "8117c689de82e468e3db2bb69b89517fee87e286daf65284ac084fab922bf677",
+      "size": [
+       562,
+       917
+      ],
+      "master47": {
+       "exists": true,
+       "sha256": "08275eb109419a53422fef45195e2271c3bb1ddb638f12df0f071921b240982c"
+      },
+      "master44": {
+       "exists": true,
+       "sha256": "08275eb109419a53422fef45195e2271c3bb1ddb638f12df0f071921b240982c"
+      },
+      "meanSaturationThumb256": {
+       "served": 0.4832269988433479,
+       "master47": 0.4832269988433479,
+       "master44": 0.4832269988433479
+      },
+      "meanSaturationFull": {
+       "served": 0.5101830333376328,
+       "master47": 0.5101830333376328,
+       "master44": 0.5101830333376328
+      },
+      "vsMaster47": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 139482
+      },
+      "vsMaster44": {
+       "sameShape": true,
+       "identicalRGBA": true,
+       "identicalAlpha": true,
+       "rgbPixelsDifferingWhereVisible": 0,
+       "visiblePixels": 139482
+      }
+     }
+    ],
+    "canvas": {
+     "w": 784,
+     "h": 1212,
+     "opaque": 368179,
+     "meanSaturation": 0.5054043684642238,
+     "probe": "art/characters/rikku-gunner/twirl-mid.png",
+     "pythonFullRes": 0.5054033281787553
+    }
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "ffx-ch02-fast": {
+   "id": "yunalesca",
+   "game": "ffx",
+   "chapterNumber": 2,
+   "pace": "fast",
+   "word": null,
+   "expected": {
+    "scene": "scene-zanarkand-dome",
+    "battle": "boss-challenge",
+    "victory": "victory-ffx",
+    "firstFormationCue": "boss-challenge"
+   },
+   "viewport": "1600x900",
+   "build": {
+    "build": {
+     "sha": "b8aa6f96",
+     "bundle": "index-DA6NOD0r.js"
+    },
+    "version": "0.1.0"
+   },
+   "storageAtStart": 0,
+   "guideSkipped": true,
+   "selected": "yunalesca",
+   "prepState": {
+    "chapter": "yunalesca",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "chapter",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "heldInPrep": [
+    "scene-zanarkand-dome",
+    "boss-challenge",
+    "victory-ffx",
+    "defeat-ffx"
+   ],
+   "sceneTaps": 62,
+   "firstLine": {
+    "msAfterConfirm": 3066,
+    "speaker": "Braska",
+    "text": "Tha",
+    "playing": "scene-zanarkand-dome",
+    "gain": 1,
+    "held": [
+     "boss-challenge",
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true
+   },
+   "entrance": {
+    "msToFirstMenu": 8432
+   },
+   "enemies": [
+    "yunalesca"
+   ],
+   "menuShot": {
+    "file": "ffx-ch02-fast-first-menu.jpg",
+    "meanLuminance": 82.7,
+    "screen": "battle",
+    "awaitingMenu": true
+   },
+   "audioAtMenu": {
+    "playing": "boss-challenge",
+    "gain": 1,
+    "muted": false,
+    "manifest": true,
+    "cues": 41,
+    "sprite": true,
+    "v2": {
+     "cues": 92,
+     "decoded": true,
+     "game": "ffx",
+     "retired": 8
+    },
+    "parity": {
+     "packs": [
+      "ffx-core",
+      "ffx2-core",
+      "ffx-lady",
+      "ffx2-bahamut",
+      "ffx2-machina",
+      "ffx2-shuyin",
+      "ffx-flux",
+      "ffx-final-aeon",
+      "ffx2-aeons"
+     ],
+     "active": [
+      "ffx-lady",
+      "ffx-core"
+     ],
+     "decoded": [
+      "ffx-lady",
+      "ffx-core"
+     ]
+    },
+    "sfxLog": [
+     {
+      "t": 16.901333333333334,
+      "asked": "dome-echo",
+      "played": "dome-echo",
+      "via": "sprite",
+      "volume": 1
+     },
+     {
+      "t": 29.21066666666667,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 35.730666666666664,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 43.690666666666665,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 47.38133333333333,
+      "asked": "cursor-move",
+      "played": "v2:cursor-move",
+      "via": "parity",
+      "volume": 1
+     },
+     {
+      "t": 56.010666666666665,
+      "asked": "v2:boss-roar",
+      "played": "v2:boss-roar",
+      "via": "v2",
+      "volume": 0.9
+     }
+    ],
+    "held": [
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "playedFileRequest": "music/boss-challenge.mp3 200 audio/mpeg 1560286B req+9672ms done+9994ms",
+    "matchesFirstFormationCue": true
+   },
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-zanarkand-dome",
+     "boss-challenge",
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx-lady",
+     "parity-ffx-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 10731B req+4446ms done+4503ms",
+     "music/title.mp3 200 audio/mpeg 2332025B req+4505ms done+6135ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710533B req+4505ms done+6438ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4618739B req+4505ms done+7373ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107660B req+5570ms done+7066ms",
+     "sfx/parity-ffx-lady.mp3 200 audio/mpeg 112430B req+8189ms done+8414ms",
+     "sfx/parity-ffx-core.mp3 200 audio/mpeg 774426B req+8189ms done+9238ms",
+     "music/scene-zanarkand-dome.mp3 200 audio/mpeg 1060578B req+8189ms done+9428ms",
+     "music/boss-challenge.mp3 200 audio/mpeg 1560286B req+9672ms done+9994ms",
+     "music/victory-ffx.mp3 200 audio/mpeg 644543B req+10321ms done+10784ms",
+     "music/defeat-ffx.mp3 200 audio/mpeg 128077B req+10915ms done+11029ms"
+    ]
+   },
+   "packsFetched": [
+    "parity-ffx-lady",
+    "parity-ffx-core"
+   ],
+   "silence": {
+    "debugAssisted": true,
+    "coaching": {
+     "allowed": true,
+     "battleHelp": true,
+     "seen": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx-turn-order"
+     ]
+    },
+    "before": {
+     "shown": false,
+     "text": "",
+     "html": "",
+     "rect": [
+      0,
+      0,
+      0,
+      0
+     ]
+    },
+    "injected": {
+     "id": "tidus",
+     "name": "Tidus",
+     "alive": true
+    },
+    "firstRead": {
+     "shown": true,
+     "text": "GUIDE SILENCE Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.",
+     "html": "<div class=\"sthint__head\">GUIDE <i>SILENCE</i></div><div class=\"sthint__body\"><b>Tidus is silenced:</b> no White or Black Magic. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.</div>",
+     "rect": [
+      53,
+      110,
+      330,
+      85
+     ]
+    },
+    "card": {
+     "shown": true,
+     "text": "GUIDE SILENCE Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.",
+     "html": "<div class=\"sthint__head\">GUIDE <i>SILENCE</i></div><div class=\"sthint__body\"><b>Tidus is silenced:</b> no White or Black Magic. <b>Echo Screen</b>, <b>Esuna</b> or a <b>Remedy</b> cures it.</div>",
+     "rect": [
+      53,
+      110,
+      330,
+      85
+     ]
+    },
+    "shot": {
+     "file": "ffx-ch02-fast-silence-card.jpg",
+     "meanLuminance": 73.4,
+     "screen": "battle"
+    },
+    "afterRemoval": {
+     "shown": false,
+     "text": "",
+     "html": "",
+     "rect": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  }
+ },
+ "assertions": [
+  {
+   "part": "access-ffx",
+   "name": "party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "seymour-flux"
+  },
+  {
+   "part": "access-ffx",
+   "name": "the first menu is reached (awaitingMenu) after the entrance",
+   "ok": true,
+   "detail": {
+    "msToFirstMenu": 12280
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "the first-menu capture is not a black canvas (mean luminance above 5)",
+   "ok": true,
+   "detail": 86.4
+  },
+  {
+   "part": "access-ffx",
+   "name": "prerendered music, not the procedural fallback: the manifest is loaded, the playing cue's mp3 was requested and answered 200 audio/mpeg",
+   "ok": true,
+   "detail": {
+    "playing": "boss-seymour",
+    "expected": "boss-seymour",
+    "file": "music/boss-seymour.mp3 200 audio/mpeg 2679632B req+9454ms done+10384ms"
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "the cue playing at the first menu is the first formation's start cue from the chapter data",
+   "ok": true,
+   "detail": {
+    "playing": "boss-seymour",
+    "expected": "boss-seymour"
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "no retired file (boss-ffx2-aeon, boss-dread, boss-yunalesca) was requested",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "access-ffx",
+   "name": "every audio request answered 2xx with the right content type; none failed",
+   "ok": true,
+   "detail": {
+    "notOk": [],
+    "failed": [],
+    "wrongType": []
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "the per-game sound packs fetched are this game's own (parity-ffx-flux, parity-ffx-core) and none of the other game's",
+   "ok": true,
+   "detail": {
+    "packsFetched": [
+     "parity-ffx-flux",
+     "parity-ffx-core"
+    ],
+    "otherPacks": [],
+    "active": [
+     "ffx-flux",
+     "ffx-core"
+    ]
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "Escape pauses, H hides then restores the panels, Escape resumes, P pauses, P resumes",
+   "ok": true,
+   "detail": {
+    "pauseEsc": "pause",
+    "hide": {
+     "len0": 938,
+     "lenH": 583,
+     "lenR": 938,
+     "hidDropsText": true,
+     "restored": true,
+     "stillPause": "pause"
+    },
+    "afterEsc": "battle",
+    "pauseP": "pause",
+    "afterP": "battle"
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "access: the fresh profile starts with REDUCE FLASHES and COLOUR VISION off (no attribute on html, no --cvd variable, saved values off or absent)",
+   "ok": true,
+   "detail": {
+    "html": {
+     "reduceFlashes": false,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": false,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "FFX Silence card (debug-assisted status): the HUD card reads \"<name> is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.\" and does not mention Summon",
+   "ok": true,
+   "detail": {
+    "text": "GUIDE SILENCE Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.",
+    "setAside": [
+     "yuna:zombie"
+    ]
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "a hit flash read with REDUCE FLASHES off: the game's own animation ffx-hurt-flash (0.3s)",
+   "ok": true,
+   "detail": {
+    "t": 80230,
+    "cls": "ffx-stat--hurt",
+    "animationName": "ffx-hurt-flash",
+    "animationDuration": "0.3s",
+    "animationTimingFunction": "ease",
+    "filter": "brightness(1)",
+    "reduceFlashes": false,
+    "colourVision": "off"
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "Escape opens the pause screen",
+   "ok": true,
+   "detail": {
+    "screen": "pause",
+    "tab": "member:tidus",
+    "row": null
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "the ACCESSIBILITY tab is reached by the real key E and is the selected tab",
+   "ok": true,
+   "detail": {
+    "walk": [
+     "member:tidus",
+     "member:yuna",
+     "member:kimahri",
+     "chapter",
+     "guide",
+     "options",
+     "accessibility"
+    ],
+    "state": {
+     "screen": "pause",
+     "tab": "accessibility",
+     "row": null
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "the tab holds the five rows TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS, COLOUR VISION in that order, REDUCE FLASHES OFF and COLOUR VISION OFF",
+   "ok": true,
+   "detail": [
+    "TEXT SIZE=100%",
+    "REDUCE MOTION=OFF",
+    "REDUCE FLASHES=OFF",
+    "LOW EFFECTS=OFF",
+    "COLOUR VISION=OFF"
+   ]
+  },
+  {
+   "part": "access-ffx",
+   "name": "REDUCE FLASHES: one activation turns the row ON, puts data-reduce-flashes on <html> and saves reduceFlashes true",
+   "ok": true,
+   "detail": {
+    "label": "on",
+    "value": "ON",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "REDUCE FLASHES, the undo path: a second activation turns it OFF again, the attribute is gone and the save reads false",
+   "ok": true,
+   "detail": {
+    "label": "off (undo)",
+    "value": "OFF",
+    "html": {
+     "reduceFlashes": false,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": false,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "REDUCE FLASHES back ON for the rest of the run",
+   "ok": true,
+   "detail": {
+    "label": "on",
+    "value": "ON",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "COLOUR VISION: one step turns the row to RED-GREEN, data-colour-vision=\"red-green\" is on <html> with the --cvd variables (ally #56b4e9, gates #d55e00 #009e73 #0072b2 #f0e442) and the save reads red-green",
+   "ok": true,
+   "detail": {
+    "label": "red-green",
+    "value": "RED-GREEN",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "COLOUR VISION: the next step reads BLUE-YELLOW (--cvd-gate-g #00a6a6, gate blue #7a4fd0, MP #b48cf0)",
+   "ok": true,
+   "detail": {
+    "label": "blue-yellow",
+    "value": "BLUE-YELLOW",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "blue-yellow",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#7ee8b0",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d0343c",
+      "--cvd-gate-g": "#00a6a6",
+      "--cvd-gate-b": "#7a4fd0",
+      "--cvd-gate-y": "#e3b94a",
+      "--cvd-mp-lo": "#b48cf0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "blue-yellow",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "COLOUR VISION settles on RED-GREEN for the rest of the run",
+   "ok": true,
+   "detail": {
+    "label": "back to red-green (Left)",
+    "value": "RED-GREEN",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "TEXT SIZE (the row moved into this tab): one step reads 115%, data-text-size=\"115\" is on <html> and the save reads 1.15",
+   "ok": true,
+   "detail": {
+    "label": "up",
+    "value": "115%",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "115",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1.15
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "TEXT SIZE is back at 100% for the rest of the run",
+   "ok": true,
+   "detail": {
+    "label": "back to 100% (Left)",
+    "value": "100%",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "Escape (twice) closes the pause and returns to the battle, with both settings still on",
+   "ok": true,
+   "detail": {
+    "screen": "battle",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "a hit flash read with REDUCE FLASHES on: the softened animation ffx-hurt-soft (0.6s), not ffx-hurt-flash",
+   "ok": true,
+   "detail": {
+    "t": 94986,
+    "cls": "ffx-stat--hurt",
+    "animationName": "ffx-hurt-soft",
+    "animationDuration": "0.6s",
+    "animationTimingFunction": "ease-out",
+    "filter": "brightness(1)",
+    "reduceFlashes": true,
+    "colourVision": "red-green"
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "COLOUR VISION red-green: the ALLY target bracket (Phoenix Down aimed at a fallen member) reads the sky-blue ally colour #56b4e9 and carries the plus mark (a corner ::after of 7px); the cancel path returns to the menu",
+   "ok": true,
+   "detail": {
+    "kind": "ally",
+    "mark": "#56b4e9",
+    "cornerAfterContent": "\"\"",
+    "cornerAfterWidth": "7px"
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "reload (CHK-024 light): before any input the page reads both settings back from the save: data-reduce-flashes and data-colour-vision=\"red-green\" are on <html>",
+   "ok": true,
+   "detail": {
+    "screen": "title",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "present": true,
+     "version": 1,
+     "topKeys": [
+      "version",
+      "updatedAt",
+      "chapters",
+      "unlocked",
+      "settings",
+      "seenCoach",
+      "flags"
+     ],
+     "progress": {
+      "seenCoach": [
+       "briefing",
+       "firstrun-board",
+       "firstrun-prep",
+       "firstrun-battle",
+       "ffx-turn-order",
+       "ffx-overdrive",
+       "ffx-aeon"
+      ],
+      "chapters": [
+       "seymour-flux"
+      ],
+      "flags": 0
+     },
+     "settings": {
+      "reduceFlashes": true,
+      "colourVision": "red-green",
+      "reduceMotion": false,
+      "lowEffects": false,
+      "textSize": 1
+     }
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "reload: every saved setting is exactly what it was before the reload",
+   "ok": true,
+   "detail": {
+    "before": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    },
+    "after": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "reload: the progress is kept too (every coach tip seen before the reload is still seen, the chapter records and the flags are the same)",
+   "ok": true,
+   "detail": {
+    "before": {
+     "seenCoach": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx-turn-order",
+      "ffx-overdrive",
+      "ffx-aeon"
+     ],
+     "chapters": [
+      "seymour-flux"
+     ],
+     "flags": 0
+    },
+    "after": {
+     "seenCoach": [
+      "briefing",
+      "firstrun-board",
+      "firstrun-prep",
+      "firstrun-battle",
+      "ffx-turn-order",
+      "ffx-overdrive",
+      "ffx-aeon"
+     ],
+     "chapters": [
+      "seymour-flux"
+     ],
+     "flags": 0
+    }
+   }
+  },
+  {
+   "part": "access-ffx",
+   "name": "reload: the pause screen opened in the new session shows REDUCE FLASHES ON and COLOUR VISION RED-GREEN on the ACCESSIBILITY tab",
+   "ok": true,
+   "detail": {
+    "pause": "pause",
+    "rows": [
+     "TEXT SIZE=100%",
+     "REDUCE MOTION=OFF",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=OFF",
+     "COLOUR VISION=RED-GREEN"
+    ]
+   }
+  },
+  {
+   "part": "phone-gates-off",
+   "name": "phone party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "ffx2-bahamut"
+  },
+  {
+   "part": "phone-gates-off",
+   "name": "the fresh profile has COLOUR VISION off: no data-colour-vision, no --cvd variable",
+   "ok": true,
+   "detail": {
+    "html": {
+     "reduceFlashes": false,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": false,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "phone-gates-off",
+   "name": "the Dresspheres tab is opened by a real tap on the phone page (screen, tab and the stacked page asserted)",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "tab": "prep:tab:dresspheres",
+    "phone": "page",
+    "sideScroll": false
+   }
+  },
+  {
+   "part": "phone-gates-off",
+   "name": "COLOUR VISION off on the phone page (the control): the gate pips are today's 12px diamonds with no letter and none of the red-green colours",
+   "ok": true,
+   "detail": [
+    {
+     "colour": "red",
+     "letter": "R",
+     "bg": "rgb(201, 58, 66)",
+     "w": 12,
+     "h": 12,
+     "boxW": 17,
+     "visible": true,
+     "afterContent": "none",
+     "passed": false
+    },
+    {
+     "colour": "green",
+     "letter": "G",
+     "bg": "rgb(117, 145, 58)",
+     "w": 12,
+     "h": 12,
+     "boxW": 17,
+     "visible": true,
+     "afterContent": "none",
+     "passed": false
+    },
+    {
+     "colour": "blue",
+     "letter": "B",
+     "bg": "rgb(58, 120, 190)",
+     "w": 12,
+     "h": 12,
+     "boxW": 17,
+     "visible": true,
+     "afterContent": "none",
+     "passed": false
+    },
+    {
+     "colour": "yellow",
+     "letter": "Y",
+     "bg": "rgb(227, 185, 74)",
+     "w": 12,
+     "h": 12,
+     "boxW": 17,
+     "visible": true,
+     "afterContent": "none",
+     "passed": false
+    }
+   ]
+  },
+  {
+   "part": "phone-gates-on",
+   "name": "phone party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "ffx2-bahamut"
+  },
+  {
+   "part": "phone-gates-on",
+   "name": "the saved profile is read back on this new context: data-colour-vision=\"red-green\" on <html> and the --cvd variables set",
+   "ok": true,
+   "detail": {
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "phone-gates-on",
+   "name": "the Dresspheres tab is opened by a real tap on the phone page (screen, tab and the stacked page asserted)",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "tab": "prep:tab:dresspheres",
+    "phone": "page",
+    "sideScroll": false
+   }
+  },
+  {
+   "part": "phone-gates-on",
+   "name": "COLOUR VISION red-green on the phone page: every Garment Grid gate pip is an Okabe-Ito tile (red #d55e00, green #009e73, blue #0072b2, yellow #f0e442), 16px, with its letter as the second cue",
+   "ok": true,
+   "detail": [
+    {
+     "colour": "red",
+     "letter": "R",
+     "bg": "rgb(213, 94, 0)",
+     "w": 16,
+     "h": 16,
+     "boxW": 16,
+     "visible": true,
+     "afterContent": "\"R\"",
+     "passed": false
+    },
+    {
+     "colour": "green",
+     "letter": "G",
+     "bg": "rgb(0, 158, 115)",
+     "w": 16,
+     "h": 16,
+     "boxW": 16,
+     "visible": true,
+     "afterContent": "\"G\"",
+     "passed": false
+    },
+    {
+     "colour": "blue",
+     "letter": "B",
+     "bg": "rgb(0, 114, 178)",
+     "w": 16,
+     "h": 16,
+     "boxW": 16,
+     "visible": true,
+     "afterContent": "\"B\"",
+     "passed": false
+    },
+    {
+     "colour": "yellow",
+     "letter": "Y",
+     "bg": "rgb(240, 228, 66)",
+     "w": 16,
+     "h": 16,
+     "boxW": 16,
+     "visible": true,
+     "afterContent": "\"Y\"",
+     "passed": false
+    }
+   ]
+  },
+  {
+   "part": "access-ffx2",
+   "name": "party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "ffx2-bahamut"
+  },
+  {
+   "part": "access-ffx2",
+   "name": "the first menu is reached (awaitingMenu) after the entrance",
+   "ok": true,
+   "detail": {
+    "msToFirstMenu": 11326
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "the first-menu capture is not a black canvas (mean luminance above 5)",
+   "ok": true,
+   "detail": 77.4
+  },
+  {
+   "part": "access-ffx2",
+   "name": "prerendered music, not the procedural fallback: the manifest is loaded, the playing cue's mp3 was requested and answered 200 audio/mpeg",
+   "ok": true,
+   "detail": {
+    "playing": "boss-bahamut",
+    "expected": "boss-bahamut",
+    "file": "music/boss-bahamut.mp3 200 audio/mpeg 1342170B req+11744ms done+12482ms"
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "the cue playing at the first menu is the first formation's start cue from the chapter data",
+   "ok": true,
+   "detail": {
+    "playing": "boss-bahamut",
+    "expected": "boss-bahamut"
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "no retired file (boss-ffx2-aeon, boss-dread, boss-yunalesca) was requested",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "access-ffx2",
+   "name": "every audio request answered 2xx with the right content type; none failed",
+   "ok": true,
+   "detail": {
+    "notOk": [],
+    "failed": [],
+    "wrongType": []
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "the per-game sound packs fetched are this game's own (parity-ffx2-bahamut, parity-ffx2-core) and none of the other game's",
+   "ok": true,
+   "detail": {
+    "packsFetched": [
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "otherPacks": [],
+    "active": [
+     "ffx2-bahamut",
+     "ffx2-core"
+    ]
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "Escape pauses, H hides then restores the panels, Escape resumes, P pauses, P resumes",
+   "ok": true,
+   "detail": {
+    "pauseEsc": "pause",
+    "hide": {
+     "len0": 1841,
+     "lenH": 1444,
+     "lenR": 1841,
+     "hidDropsText": true,
+     "restored": true,
+     "stillPause": "pause"
+    },
+    "afterEsc": "battle",
+    "pauseP": "pause",
+    "afterP": "battle"
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "access: the fresh profile starts with REDUCE FLASHES and COLOUR VISION off (no attribute on html, no --cvd variable, saved values off or absent)",
+   "ok": true,
+   "detail": {
+    "html": {
+     "reduceFlashes": false,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": false,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "a hit flash read with REDUCE FLASHES off: the game's own animation ffx2-hit-flash (0.2s)",
+   "ok": true,
+   "detail": {
+    "t": 48621,
+    "cls": "ffx2-hit-flash",
+    "animationName": "ffx2-hit-flash",
+    "animationDuration": "0.2s",
+    "animationTimingFunction": "ease-out",
+    "filter": "brightness(1)",
+    "reduceFlashes": false,
+    "colourVision": "off"
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "Escape opens the pause screen",
+   "ok": true,
+   "detail": {
+    "screen": "pause",
+    "tab": "member:yuna",
+    "row": null
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "the ACCESSIBILITY tab is reached by a real mouse click and is the selected tab",
+   "ok": true,
+   "detail": {
+    "walk": [
+     "member:yuna",
+     "accessibility"
+    ],
+    "state": {
+     "screen": "pause",
+     "tab": "accessibility",
+     "row": null
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "the tab holds the five rows TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS, COLOUR VISION in that order, REDUCE FLASHES OFF and COLOUR VISION OFF",
+   "ok": true,
+   "detail": [
+    "TEXT SIZE=100%",
+    "REDUCE MOTION=OFF",
+    "REDUCE FLASHES=OFF",
+    "LOW EFFECTS=OFF",
+    "COLOUR VISION=OFF"
+   ]
+  },
+  {
+   "part": "access-ffx2",
+   "name": "REDUCE FLASHES: one activation turns the row ON, puts data-reduce-flashes on <html> and saves reduceFlashes true",
+   "ok": true,
+   "detail": {
+    "label": "on",
+    "value": "ON",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "REDUCE FLASHES, the undo path: a second activation turns it OFF again, the attribute is gone and the save reads false",
+   "ok": true,
+   "detail": {
+    "label": "off (undo)",
+    "value": "OFF",
+    "html": {
+     "reduceFlashes": false,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": false,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "REDUCE FLASHES back ON for the rest of the run",
+   "ok": true,
+   "detail": {
+    "label": "on",
+    "value": "ON",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": null,
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": null,
+      "--cvd-target-self": null,
+      "--cvd-gate-r": null,
+      "--cvd-gate-g": null,
+      "--cvd-gate-b": null,
+      "--cvd-gate-y": null,
+      "--cvd-mp-lo": null
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "off",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "COLOUR VISION: one step turns the row to RED-GREEN, data-colour-vision=\"red-green\" is on <html> with the --cvd variables (ally #56b4e9, gates #d55e00 #009e73 #0072b2 #f0e442) and the save reads red-green",
+   "ok": true,
+   "detail": {
+    "label": "red-green",
+    "value": "RED-GREEN",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "COLOUR VISION: the next step reads BLUE-YELLOW (--cvd-gate-g #00a6a6, gate blue #7a4fd0, MP #b48cf0)",
+   "ok": true,
+   "detail": {
+    "label": "blue-yellow",
+    "value": "BLUE-YELLOW",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "blue-yellow",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#7ee8b0",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d0343c",
+      "--cvd-gate-g": "#00a6a6",
+      "--cvd-gate-b": "#7a4fd0",
+      "--cvd-gate-y": "#e3b94a",
+      "--cvd-mp-lo": "#b48cf0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "blue-yellow",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "COLOUR VISION settles on RED-GREEN for the rest of the run",
+   "ok": true,
+   "detail": {
+    "label": "wrap round to red-green (two clicks)",
+    "value": "RED-GREEN",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "TEXT SIZE (the row moved into this tab): one step reads 115%, data-text-size=\"115\" is on <html> and the save reads 1.15",
+   "ok": true,
+   "detail": {
+    "label": "up",
+    "value": "115%",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "115",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1.15
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "TEXT SIZE is back at 100% for the rest of the run",
+   "ok": true,
+   "detail": {
+    "label": "two more clicks wrap round to 100%",
+    "value": "100%",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    },
+    "saved": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": 1
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "Escape (twice) closes the pause and returns to the battle, with both settings still on",
+   "ok": true,
+   "detail": {
+    "screen": "battle",
+    "html": {
+     "reduceFlashes": true,
+     "colourVision": "red-green",
+     "reduceMotion": false,
+     "lowEffects": false,
+     "textSize": "100",
+     "cvd": {
+      "--cvd-target-ally": "#56b4e9",
+      "--cvd-target-self": "#f4f1e8",
+      "--cvd-gate-r": "#d55e00",
+      "--cvd-gate-g": "#009e73",
+      "--cvd-gate-b": "#0072b2",
+      "--cvd-gate-y": "#f0e442",
+      "--cvd-mp-lo": "#3a8fd0"
+     }
+    }
+   }
+  },
+  {
+   "part": "access-ffx2",
+   "name": "a hit flash read with REDUCE FLASHES on: the softened animation ffx2-hit-soft (0.5s), not ffx2-hit-flash",
+   "ok": true,
+   "detail": {
+    "t": 59322,
+    "cls": "ffx2-hit-flash",
+    "animationName": "ffx2-hit-soft",
+    "animationDuration": "0.5s",
+    "animationTimingFunction": "ease-out",
+    "filter": "brightness(1)",
+    "reduceFlashes": true,
+    "colourVision": "red-green"
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "ffx2-leblanc"
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the first menu is reached (awaitingMenu) after the entrance",
+   "ok": true,
+   "detail": {
+    "msToFirstMenu": 9787
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the first-menu capture is not a black canvas (mean luminance above 5)",
+   "ok": true,
+   "detail": 76.7
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "prerendered music, not the procedural fallback: the manifest is loaded, the playing cue's mp3 was requested and answered 200 audio/mpeg",
+   "ok": true,
+   "detail": {
+    "playing": "boss-leblanc",
+    "expected": "boss-leblanc",
+    "file": "music/boss-leblanc.mp3 200 audio/mpeg 1471951B req+12529ms done+13163ms"
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the cue playing at the first menu is the first formation's start cue from the chapter data",
+   "ok": true,
+   "detail": {
+    "playing": "boss-leblanc",
+    "expected": "boss-leblanc"
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "no retired file (boss-ffx2-aeon, boss-dread, boss-yunalesca) was requested",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "every audio request answered 2xx with the right content type; none failed",
+   "ok": true,
+   "detail": {
+    "notOk": [],
+    "failed": [],
+    "wrongType": []
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the per-game sound packs fetched are this game's own (parity-ffx2-core) and none of the other game's",
+   "ok": true,
+   "detail": {
+    "packsFetched": [
+     "parity-ffx2-core"
+    ],
+    "otherPacks": [],
+    "active": [
+     "ffx2-leblanc",
+     "ffx2-core"
+    ]
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the page requested at least one of Rikku's changed dressphere paintings (art/characters/rikku-<dressphere>/...) and every Rikku request answered 200",
+   "ok": true,
+   "detail": {
+    "changed": [
+     "art/characters/rikku-thief/idle.png",
+     "art/characters/rikku-thief/ready.png",
+     "art/characters/rikku-thief/attack.webp",
+     "art/characters/rikku-thief/cast.png",
+     "art/characters/rikku-thief/item.png",
+     "art/characters/rikku-thief/hurt.png",
+     "art/characters/rikku-thief/ko.png",
+     "art/characters/rikku-thief/victory.png"
+    ],
+    "n": 31
+   }
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "every changed Rikku painting this page loaded is pixel-identical to the corrected master in D:/pyrefly-art-r47 and DIFFERS from the old one in D:/pyrefly-art-r44",
+   "ok": true,
+   "detail": [
+    "rikku-thief/idle.png: r47 true, r44 false, saturation 0.657 -> 0.584",
+    "rikku-thief/ready.png: r47 true, r44 false, saturation 0.651 -> 0.559",
+    "rikku-thief/attack.webp: r47 true, r44 false, saturation 0.682 -> 0.589",
+    "rikku-thief/cast.png: r47 true, r44 false, saturation 0.619 -> 0.546",
+    "rikku-thief/item.png: r47 true, r44 false, saturation 0.582 -> 0.519",
+    "rikku-thief/hurt.png: r47 true, r44 false, saturation 0.625 -> 0.553",
+    "rikku-thief/ko.png: r47 true, r44 false, saturation 0.659 -> 0.563",
+    "rikku-thief/victory.png: r47 true, r44 false, saturation 0.498 -> 0.462",
+    "rikku-thief/defend.webp: r47 true, r44 false, saturation 0.738 -> 0.619",
+    "rikku-thief/sleep.png: r47 true, r44 false, saturation 0.628 -> 0.544",
+    "rikku-thief/critical.png: r47 true, r44 false, saturation 0.771 -> 0.651",
+    "rikku-thief/follow.png: r47 true, r44 false, saturation 0.595 -> 0.514",
+    "rikku-thief/twirl-start.png: r47 true, r44 false, saturation 0.610 -> 0.517",
+    "rikku-thief/twirl-going.png: r47 true, r44 false, saturation 0.652 -> 0.559",
+    "rikku-gunner/twirl-mid.png: r47 true, r44 false, saturation 0.658 -> 0.494"
+   ]
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the mean saturation of each changed painting the page loaded equals the corrected master's and is below the old master's",
+   "ok": true,
+   "detail": [
+    "rikku-thief/idle.png: 0.6568 -> 0.5844 (master r47 0.5844)",
+    "rikku-thief/ready.png: 0.6513 -> 0.5593 (master r47 0.5593)",
+    "rikku-thief/attack.webp: 0.6817 -> 0.5894 (master r47 0.5894)",
+    "rikku-thief/cast.png: 0.6191 -> 0.5462 (master r47 0.5462)",
+    "rikku-thief/item.png: 0.5815 -> 0.5191 (master r47 0.5191)",
+    "rikku-thief/hurt.png: 0.6248 -> 0.5526 (master r47 0.5526)",
+    "rikku-thief/ko.png: 0.6591 -> 0.5633 (master r47 0.5633)",
+    "rikku-thief/victory.png: 0.4975 -> 0.4619 (master r47 0.4619)",
+    "rikku-thief/defend.webp: 0.7383 -> 0.6186 (master r47 0.6186)",
+    "rikku-thief/sleep.png: 0.6280 -> 0.5439 (master r47 0.5439)",
+    "rikku-thief/critical.png: 0.7709 -> 0.6510 (master r47 0.6510)",
+    "rikku-thief/follow.png: 0.5954 -> 0.5143 (master r47 0.5143)",
+    "rikku-thief/twirl-start.png: 0.6104 -> 0.5165 (master r47 0.5165)",
+    "rikku-thief/twirl-going.png: 0.6525 -> 0.5588 (master r47 0.5588)",
+    "rikku-gunner/twirl-mid.png: 0.6577 -> 0.4940 (master r47 0.4940)"
+   ]
+  },
+  {
+   "part": "rikku-ch06",
+   "name": "the page's own decode (canvas getImageData) of the Rikku painting it loaded has the same mean saturation as the saved served file decoded by PIL (full size, within 0.003)",
+   "ok": true,
+   "detail": {
+    "w": 558,
+    "h": 1212,
+    "opaque": 276435,
+    "meanSaturation": 0.600109322878434,
+    "probe": "art/characters/rikku-thief/idle.png",
+    "pythonFullRes": 0.6001145529809391
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "ffx2-vegnagun-shuyin"
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the first menu is reached (awaitingMenu) after the entrance",
+   "ok": true,
+   "detail": {
+    "msToFirstMenu": 10689
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the first-menu capture is not a black canvas (mean luminance above 5)",
+   "ok": true,
+   "detail": 115.9
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "prerendered music, not the procedural fallback: the manifest is loaded, the playing cue's mp3 was requested and answered 200 audio/mpeg",
+   "ok": true,
+   "detail": {
+    "playing": "boss-vegnagun",
+    "expected": "boss-vegnagun",
+    "file": "music/boss-vegnagun.mp3 200 audio/mpeg 1506318B req+11998ms done+12806ms"
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the cue playing at the first menu is the first formation's start cue from the chapter data",
+   "ok": true,
+   "detail": {
+    "playing": "boss-vegnagun",
+    "expected": "boss-vegnagun"
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "no retired file (boss-ffx2-aeon, boss-dread, boss-yunalesca) was requested",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "every audio request answered 2xx with the right content type; none failed",
+   "ok": true,
+   "detail": {
+    "notOk": [],
+    "failed": [],
+    "wrongType": []
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the per-game sound packs fetched are this game's own (parity-ffx2-machina, parity-ffx2-shuyin, parity-ffx2-core) and none of the other game's",
+   "ok": true,
+   "detail": {
+    "packsFetched": [
+     "parity-ffx2-machina",
+     "parity-ffx2-shuyin",
+     "parity-ffx2-core"
+    ],
+    "otherPacks": [],
+    "active": [
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx2-core"
+    ]
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the page requested at least one of Rikku's changed dressphere paintings (art/characters/rikku-<dressphere>/...) and every Rikku request answered 200",
+   "ok": true,
+   "detail": {
+    "changed": [
+     "art/characters/rikku-gunner/twirl-mid.png"
+    ],
+    "n": 29
+   }
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "every changed Rikku painting this page loaded is pixel-identical to the corrected master in D:/pyrefly-art-r47 and DIFFERS from the old one in D:/pyrefly-art-r44",
+   "ok": true,
+   "detail": [
+    "rikku-gunner/twirl-mid.png: r47 true, r44 false, saturation 0.658 -> 0.494"
+   ]
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the mean saturation of each changed painting the page loaded equals the corrected master's and is below the old master's",
+   "ok": true,
+   "detail": [
+    "rikku-gunner/twirl-mid.png: 0.6577 -> 0.4940 (master r47 0.4940)"
+   ]
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the Rikku paintings this page loaded that were NOT rewritten (Dark Knight, Warrior, her FFX painting) equal BOTH masters, the old and the new",
+   "ok": true,
+   "detail": [
+    "rikku-dark-knight/idle.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/ready.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/attack.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/cast.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/item.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/hurt.webp (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/ko.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/victory.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/sleep.webp (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/critical.webp (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/follow.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/twirl-start.png (unchanged control): r47 true, r44 true",
+    "rikku-dark-knight/twirl-going.png (unchanged control): r47 true, r44 true"
+   ]
+  },
+  {
+   "part": "rikku-ch05",
+   "name": "the page's own decode (canvas getImageData) of the Rikku painting it loaded has the same mean saturation as the saved served file decoded by PIL (full size, within 0.003)",
+   "ok": true,
+   "detail": {
+    "w": 784,
+    "h": 1212,
+    "opaque": 368179,
+    "meanSaturation": 0.5054043684642238,
+    "probe": "art/characters/rikku-gunner/twirl-mid.png",
+    "pythonFullRes": 0.5054033281787553
+   }
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "party-prep shows the intended chapter",
+   "ok": true,
+   "detail": "yunalesca"
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "the first menu is reached (awaitingMenu) after the entrance",
+   "ok": true,
+   "detail": {
+    "msToFirstMenu": 8432
+   }
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "the first-menu capture is not a black canvas (mean luminance above 5)",
+   "ok": true,
+   "detail": 82.7
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "prerendered music, not the procedural fallback: the manifest is loaded, the playing cue's mp3 was requested and answered 200 audio/mpeg",
+   "ok": true,
+   "detail": {
+    "playing": "boss-challenge",
+    "expected": "boss-challenge",
+    "file": "music/boss-challenge.mp3 200 audio/mpeg 1560286B req+9672ms done+9994ms"
+   }
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "the cue playing at the first menu is the first formation's start cue from the chapter data",
+   "ok": true,
+   "detail": {
+    "playing": "boss-challenge",
+    "expected": "boss-challenge"
+   }
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "no retired file (boss-ffx2-aeon, boss-dread, boss-yunalesca) was requested",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "every audio request answered 2xx with the right content type; none failed",
+   "ok": true,
+   "detail": {
+    "notOk": [],
+    "failed": [],
+    "wrongType": []
+   }
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "the per-game sound packs fetched are this game's own (parity-ffx-lady, parity-ffx-core) and none of the other game's",
+   "ok": true,
+   "detail": {
+    "packsFetched": [
+     "parity-ffx-lady",
+     "parity-ffx-core"
+    ],
+    "otherPacks": [],
+    "active": [
+     "ffx-lady",
+     "ffx-core"
+    ]
+   }
+  },
+  {
+   "part": "ffx-ch02-fast",
+   "name": "FFX Silence card (debug-assisted status): the HUD card reads \"<name> is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.\" and does not mention Summon",
+   "ok": true,
+   "detail": {
+    "text": "GUIDE SILENCE Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.",
+    "setAside": []
+   }
+  }
+ ],
+ "loadRetries": [],
+ "finishedAt": "2026-10-14T11:25:15.948Z",
+ "elapsedMinutes": 7.4,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "audioRequestsAll": [
+  {
+   "run": "access-ffx",
+   "request": "manifest.json 200 application/json 10730B req+4460ms done+4522ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/title.mp3 200 audio/mpeg 2332081B req+4524ms done+6150ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710547B req+4524ms done+6519ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618696B req+4524ms done+7447ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107667B req+5586ms done+7267ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/parity-ffx-flux.mp3 200 audio/mpeg 95441B req+8082ms done+8298ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/parity-ffx-core.mp3 200 audio/mpeg 774418B req+8083ms done+8880ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/scene-gagazet.mp3 200 audio/mpeg 1358978B req+8083ms done+9148ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 2679632B req+9454ms done+10384ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/victory-ffx.mp3 200 audio/mpeg 644528B req+10737ms done+11003ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/defeat-ffx.mp3 200 audio/mpeg 128080B req+11151ms done+11206ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/pause.mp3 200 audio/mpeg 1478792B req+62416ms done+63487ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 470B req+64424ms done+64562ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/pause.mp3 200 audio/mpeg 464B req+65351ms done+65449ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 470B req+66216ms done+66279ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/pause.mp3 200 audio/mpeg 469B req+80587ms done+80640ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 467B req+90821ms done+90883ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "manifest.json 200 application/json 10729B req+108359ms done+108439ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/title.mp3 200 audio/mpeg 2332108B req+108440ms done+110636ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710576B req+108440ms done+111223ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618759B req+108440ms done+111895ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107634B req+108606ms done+111049ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/parity-ffx-flux.mp3 200 audio/mpeg 95442B req+110093ms done+110336ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "sfx/parity-ffx-core.mp3 200 audio/mpeg 774399B req+110093ms done+111211ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/scene-gagazet.mp3 200 audio/mpeg 1358953B req+110093ms done+111591ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 474B req+111862ms done+112123ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/victory-ffx.mp3 200 audio/mpeg 644531B req+112444ms done+112820ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/defeat-ffx.mp3 200 audio/mpeg 128082B req+112943ms done+113038ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/pause.mp3 200 audio/mpeg 1478711B req+163265ms done+163583ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 465B req+166685ms done+166734ms"
+  },
+  {
+   "run": "access-ffx",
+   "request": "music/pause.mp3 200 audio/mpeg 470B req+167222ms done+167255ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "manifest.json 200 application/json 10733B req+4351ms done+4402ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "music/title.mp3 200 audio/mpeg 2332097B req+4404ms done+5396ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710540B req+4404ms done+6419ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618652B req+4404ms done+7420ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107621B req+5524ms done+6973ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20569B req+8515ms done+8617ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352030B req+8515ms done+9338ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487534B req+8515ms done+10403ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342222B req+10692ms done+11238ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "music/victory-bahamut.mp3 200 audio/mpeg 551697B req+11512ms done+11632ms"
+  },
+  {
+   "run": "phone-gates-off",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115241B req+11768ms done+11882ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "manifest.json 200 application/json 10730B req+3708ms done+3745ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "music/title.mp3 200 audio/mpeg 2332089B req+3746ms done+5508ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710572B req+3746ms done+5860ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618629B req+3746ms done+8630ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107606B req+3957ms done+5906ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20573B req+6632ms done+6882ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352013B req+6633ms done+7529ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487512B req+6633ms done+8798ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342176B req+9131ms done+9673ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "music/victory-bahamut.mp3 200 audio/mpeg 551693B req+9960ms done+10101ms"
+  },
+  {
+   "run": "phone-gates-on",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115238B req+10234ms done+10290ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "manifest.json 200 application/json 10736B req+4278ms done+4387ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/title.mp3 200 audio/mpeg 2332058B req+4389ms done+5947ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710555B req+4389ms done+6344ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618647B req+4389ms done+7511ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107664B req+5400ms done+7017ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20573B req+9642ms done+9762ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352021B req+9643ms done+10291ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487485B req+9643ms done+11411ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342170B req+11744ms done+12482ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/victory-bahamut.mp3 200 audio/mpeg 551702B req+12845ms done+13031ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115229B req+13171ms done+13219ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/pause.mp3 200 audio/mpeg 1478715B req+39638ms done+39910ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342167B req+41638ms done+41874ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/pause.mp3 200 audio/mpeg 464B req+42543ms done+42583ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 470B req+43446ms done+43491ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/pause.mp3 200 audio/mpeg 466B req+49261ms done+49298ms"
+  },
+  {
+   "run": "access-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 464B req+56921ms done+56985ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "manifest.json 200 application/json 10769B req+4519ms done+4558ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "music/title.mp3 200 audio/mpeg 2332091B req+4560ms done+6498ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710620B req+4560ms done+6221ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618735B req+4560ms done+7380ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107606B req+5644ms done+7122ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352032B req+10215ms done+11015ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "music/scene-chateau-leblanc.mp3 200 audio/mpeg 1805508B req+10215ms done+12198ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "music/boss-leblanc.mp3 200 audio/mpeg 1471951B req+12529ms done+13163ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "music/victory-ffx2.mp3 200 audio/mpeg 875822B req+13440ms done+13680ms"
+  },
+  {
+   "run": "rikku-ch06",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115239B req+13845ms done+13909ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "manifest.json 200 application/json 10728B req+4169ms done+4201ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "music/title.mp3 200 audio/mpeg 2332096B req+4202ms done+5774ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710615B req+4202ms done+6130ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618727B req+4202ms done+7042ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107597B req+5294ms done+6865ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "sfx/parity-ffx2-machina.mp3 200 audio/mpeg 28693B req+9692ms done+9805ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "sfx/parity-ffx2-shuyin.mp3 200 audio/mpeg 33535B req+9692ms done+9811ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 352021B req+9692ms done+10392ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "music/scene-farplane.mp3 200 audio/mpeg 1392161B req+9692ms done+11684ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "music/boss-vegnagun.mp3 200 audio/mpeg 1506318B req+11998ms done+12806ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "music/victory-ffx2.mp3 200 audio/mpeg 875820B req+13122ms done+13451ms"
+  },
+  {
+   "run": "rikku-ch05",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115232B req+13618ms done+13668ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "manifest.json 200 application/json 10731B req+4446ms done+4503ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "music/title.mp3 200 audio/mpeg 2332025B req+4505ms done+6135ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710533B req+4505ms done+6438ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4618739B req+4505ms done+7373ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107660B req+5570ms done+7066ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "sfx/parity-ffx-lady.mp3 200 audio/mpeg 112430B req+8189ms done+8414ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "sfx/parity-ffx-core.mp3 200 audio/mpeg 774426B req+8189ms done+9238ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "music/scene-zanarkand-dome.mp3 200 audio/mpeg 1060578B req+8189ms done+9428ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "music/boss-challenge.mp3 200 audio/mpeg 1560286B req+9672ms done+9994ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "music/victory-ffx.mp3 200 audio/mpeg 644543B req+10321ms done+10784ms"
+  },
+  {
+   "run": "ffx-ch02-fast",
+   "request": "music/defeat-ffx.mp3 200 audio/mpeg 128077B req+10915ms done+11029ms"
+  }
+ ],
+ "audioTotals": {
+  "requests": 103,
+  "byStatus": {
+   "200": 103
+  },
+  "retiredRequested": 0,
+  "distinctFiles": [
+   "/audio/manifest.json",
+   "/audio/music/boss-bahamut.mp3",
+   "/audio/music/boss-challenge.mp3",
+   "/audio/music/boss-leblanc.mp3",
+   "/audio/music/boss-seymour.mp3",
+   "/audio/music/boss-vegnagun.mp3",
+   "/audio/music/chapter-select.mp3",
+   "/audio/music/defeat-ffx.mp3",
+   "/audio/music/defeat-ffx2.mp3",
+   "/audio/music/pause.mp3",
+   "/audio/music/scene-bevelle-underground.mp3",
+   "/audio/music/scene-chateau-leblanc.mp3",
+   "/audio/music/scene-farplane.mp3",
+   "/audio/music/scene-gagazet.mp3",
+   "/audio/music/scene-zanarkand-dome.mp3",
+   "/audio/music/title.mp3",
+   "/audio/music/victory-bahamut.mp3",
+   "/audio/music/victory-ffx.mp3",
+   "/audio/music/victory-ffx2.mp3",
+   "/audio/sfx/parity-ffx-core.mp3",
+   "/audio/sfx/parity-ffx-flux.mp3",
+   "/audio/sfx/parity-ffx-lady.mp3",
+   "/audio/sfx/parity-ffx2-bahamut.mp3",
+   "/audio/sfx/parity-ffx2-core.mp3",
+   "/audio/sfx/parity-ffx2-machina.mp3",
+   "/audio/sfx/parity-ffx2-shuyin.mp3",
+   "/audio/sfx/sprite-v2.mp3",
+   "/audio/sfx/sprite.mp3"
+  ]
+ },
+ "audioFilesInArtifact": {
+  "distinctFetched": 28,
+  "notInArtifact": []
+ },
+ "lv43": {
+  "runs": [
+   {
+    "run": "access-ffx",
+    "id": "seymour-flux",
+    "pace": "fast",
+    "firstLineCue": null,
+    "expectedScene": "scene-gagazet",
+    "sceneCuePlaying": false,
+    "anyScenePlaying": false,
+    "firstLineMs": 3972
+   },
+   {
+    "run": "access-ffx2",
+    "id": "ffx2-bahamut",
+    "pace": "fast",
+    "firstLineCue": "scene-bevelle-underground",
+    "expectedScene": "scene-bevelle-underground",
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true,
+    "firstLineMs": 3941
+   },
+   {
+    "run": "rikku-ch06",
+    "id": "ffx2-leblanc",
+    "pace": "fast",
+    "firstLineCue": "scene-chateau-leblanc",
+    "expectedScene": "scene-chateau-leblanc",
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true,
+    "firstLineMs": 3936
+   },
+   {
+    "run": "rikku-ch05",
+    "id": "ffx2-vegnagun-shuyin",
+    "pace": "fast",
+    "firstLineCue": "scene-farplane",
+    "expectedScene": "scene-farplane",
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true,
+    "firstLineMs": 5958
+   },
+   {
+    "run": "ffx-ch02-fast",
+    "id": "yunalesca",
+    "pace": "fast",
+    "firstLineCue": "scene-zanarkand-dome",
+    "expectedScene": "scene-zanarkand-dome",
+    "sceneCuePlaying": true,
+    "anyScenePlaying": true,
+    "firstLineMs": 3066
+   }
+  ],
+  "playing": 4,
+  "total": 5,
+  "byChapter": {
+   "seymour-flux": "0/1",
+   "ffx2-bahamut": "1/1",
+   "ffx2-leblanc": "1/1",
+   "ffx2-vegnagun-shuyin": "1/1",
+   "yunalesca": "1/1"
+  }
+ },
+ "partial": true,
+ "savedAt": "2026-10-14T11:25:15.956Z"
+}

@@ -1,0 +1,909 @@
+{
+  "startedAt": "2026-10-14T10:42:52.732Z",
+  "url": "https://echoesofspira.com/",
+  "attempts": [
+    {
+      "seed": 1,
+      "verdict": "error: Error: page.evaluate: TypeError: Cannot read properties of null (reading 'combatants')\n    at eval (eval at evaluate (:311:30), <anonymous>:11:20)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "silenceTries": [
+        {
+          "try": 1,
+          "ability": "Silence Buster",
+          "landed": true
+        }
+      ],
+      "seymourTurns": [
+        {
+          "turnSeq": 59,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 60,
+              "type": "status-tick",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 61,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": "expired",
+              "amount": null
+            },
+            {
+              "seq": 62,
+              "type": "turn-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 63,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 62,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 63,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 69,
+          "acted": "Lance of Atrophy",
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 2,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 70,
+              "type": "action-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": "Lance of Atrophy",
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 71,
+              "type": "damage",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": 775
+            },
+            {
+              "seq": 72,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": "critical",
+              "abilityName": null,
+              "text": null,
+              "reason": "expired",
+              "amount": null
+            },
+            {
+              "seq": 73,
+              "type": "status-add",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": "zombie",
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 74,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": "zombie",
+              "abilityName": null,
+              "text": null,
+              "reason": "ko",
+              "amount": null
+            },
+            {
+              "seq": 75,
+              "type": "ko",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 76,
+              "type": "action-end",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 77,
+              "type": "defeat",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "verdict": "error: Error: page.evaluate: TypeError: Cannot read properties of null (reading 'combatants')\n    at eval (eval at evaluate (:311:30), <anonymous>:11:20)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "silenceTries": [
+        {
+          "try": 1,
+          "ability": "Silence Buster",
+          "landed": true
+        }
+      ],
+      "seymourTurns": [
+        {
+          "turnSeq": 78,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 79,
+              "type": "status-tick",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 80,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": "expired",
+              "amount": null
+            },
+            {
+              "seq": 81,
+              "type": "turn-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 82,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 81,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 82,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "verdict": "error: Error: page.evaluate: TypeError: Cannot read properties of null (reading 'combatants')\n    at eval (eval at evaluate (:311:30), <anonymous>:11:20)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "silenceTries": [
+        {
+          "try": 1,
+          "ability": "Silence Buster",
+          "landed": true
+        }
+      ],
+      "seymourTurns": [
+        {
+          "turnSeq": 54,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 55,
+              "type": "status-tick",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 56,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": "expired",
+              "amount": null
+            },
+            {
+              "seq": 57,
+              "type": "turn-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 58,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 57,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 58,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 64,
+          "acted": "Lance of Atrophy",
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 2,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 65,
+              "type": "action-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": "Lance of Atrophy",
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 66,
+              "type": "damage",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": 725
+            },
+            {
+              "seq": 67,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": "critical",
+              "abilityName": null,
+              "text": null,
+              "reason": "expired",
+              "amount": null
+            },
+            {
+              "seq": 68,
+              "type": "status-add",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": "zombie",
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 69,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": "zombie",
+              "abilityName": null,
+              "text": null,
+              "reason": "ko",
+              "amount": null
+            },
+            {
+              "seq": 70,
+              "type": "ko",
+              "actorId": null,
+              "targetId": "wakka",
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 71,
+              "type": "action-end",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 72,
+              "type": "defeat",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "verdict": "complete",
+      "silenceTries": [
+        {
+          "try": 1,
+          "ability": "Silence Buster",
+          "landed": true
+        }
+      ],
+      "seymourTurns": [
+        {
+          "turnSeq": 60,
+          "acted": null,
+          "mpBeforeSilence": 512,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": 5,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 61,
+              "type": "status-tick",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 62,
+              "type": "status-remove",
+              "actorId": null,
+              "targetId": "seymour-flux",
+              "status": "silence",
+              "abilityName": null,
+              "text": null,
+              "reason": "expired",
+              "amount": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "chosenSeed": 4,
+  "build": {
+    "sha": "b8aa6f96",
+    "bundle": "index-DA6NOD0r.js",
+    "version": "0.1.0",
+    "scripts": [
+      "/assets/index-DA6NOD0r.js",
+      "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+    ],
+    "href": "https://echoesofspira.com/?coach=off"
+  },
+  "keys": [
+    "q",
+    "q",
+    "q",
+    "q",
+    "q",
+    "f",
+    "ArrowDown",
+    "Enter",
+    "ArrowDown",
+    "Enter",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowDown",
+    "Enter",
+    "ArrowRight",
+    "Enter",
+    "q"
+  ],
+  "frames": [
+    {
+      "file": "1-silence-command-chosen.png",
+      "note": "Wakka's Skill list with Silence Buster highlighted (the Silence command being chosen); Seymour's cycle 5, MP 512",
+      "atMs": 317868
+    },
+    {
+      "file": "2-silence-target-seymour.png",
+      "note": "target step: Silence Buster aimed at Seymour Flux",
+      "atMs": 319302
+    },
+    {
+      "file": "3-silence-landed-on-seymour.png",
+      "note": "Silence landed on Seymour Flux (status-add seq 53) from Silence Buster",
+      "atMs": 322000
+    },
+    {
+      "file": "4a-seymour-turn-refused.png",
+      "note": "Seymour's turn (seq 60) while Silenced: NO action-start follows (MP 512, cycle 6)",
+      "atMs": 364687
+    },
+    {
+      "file": "5-after.png",
+      "note": "after: the next command menu (wakka), Seymour MP 512, cycle 6",
+      "atMs": 366833
+    }
+  ],
+  "steps": [
+    {
+      "step": 0,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 3,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 14
+    },
+    {
+      "step": 1,
+      "actor": "yuna",
+      "rows": "Talk|Attack|Special|White Magic|Items|Summon",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 3,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 18
+    },
+    {
+      "step": 2,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 3,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 23
+    },
+    {
+      "step": 3,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 4,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 32
+    },
+    {
+      "step": 4,
+      "actor": "yuna",
+      "rows": "Talk|Attack|Special|White Magic|Items|Summon",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 4,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 37
+    },
+    {
+      "step": 5,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 5,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 48
+    },
+    {
+      "step": 6,
+      "actor": "wakka",
+      "rows": "Attack|Special|Items|Switch",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 5,
+      "active": [
+        "wakka",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 49
+    },
+    {
+      "step": 7,
+      "actor": "yuna",
+      "rows": "Talk|Attack|Special|White Magic|Items|Summon",
+      "seymourMp": 512,
+      "seymourStatuses": [
+        "silence"
+      ],
+      "cycle": 5,
+      "active": [
+        "wakka",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 57
+    },
+    {
+      "step": 8,
+      "actor": "wakka",
+      "rows": "Attack|Special|Items|Switch",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 6,
+      "active": [
+        "wakka",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 64
+    }
+  ],
+  "silenceTries": [
+    {
+      "try": 1,
+      "ability": "Silence Buster",
+      "landed": true,
+      "events": [
+        {
+          "seq": 49,
+          "type": "mp-damage",
+          "actorId": null,
+          "targetId": "wakka",
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": 10
+        },
+        {
+          "seq": 50,
+          "type": "action-start",
+          "actorId": "wakka",
+          "targetId": null,
+          "status": null,
+          "abilityName": "Silence Buster",
+          "text": null,
+          "reason": null,
+          "amount": null
+        },
+        {
+          "seq": 51,
+          "type": "overdrive-gauge",
+          "actorId": null,
+          "targetId": null,
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": null
+        },
+        {
+          "seq": 52,
+          "type": "damage",
+          "actorId": null,
+          "targetId": "seymour-flux",
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": 588
+        },
+        {
+          "seq": 53,
+          "type": "status-add",
+          "actorId": null,
+          "targetId": "seymour-flux",
+          "status": "silence",
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": null
+        },
+        {
+          "seq": 54,
+          "type": "action-end",
+          "actorId": "wakka",
+          "targetId": null,
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": null
+        }
+      ]
+    }
+  ],
+  "seymourTurns": [
+    {
+      "turnSeq": 60,
+      "acted": null,
+      "mpBeforeSilence": 512,
+      "mpAtTurn": 512,
+      "cycleBeforeSilence": 5,
+      "cycleAtTurn": 6,
+      "silenceOnSeymourAtTurn": false,
+      "eventsAfter": [
+        {
+          "seq": 61,
+          "type": "status-tick",
+          "actorId": null,
+          "targetId": "seymour-flux",
+          "status": "silence",
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": null
+        },
+        {
+          "seq": 62,
+          "type": "status-remove",
+          "actorId": null,
+          "targetId": "seymour-flux",
+          "status": "silence",
+          "abilityName": null,
+          "text": null,
+          "reason": "expired",
+          "amount": null
+        }
+      ]
+    }
+  ],
+  "mpBefore": 512,
+  "silencedAt": 53,
+  "final": {
+    "actor": "wakka",
+    "awaitingMenu": true,
+    "played": 64,
+    "rows": [
+      {
+        "label": "Attack",
+        "disabled": false,
+        "selected": true
+      },
+      {
+        "label": "Special",
+        "disabled": false,
+        "selected": false
+      },
+      {
+        "label": "Items",
+        "disabled": false,
+        "selected": false
+      },
+      {
+        "label": "Switch",
+        "disabled": false,
+        "selected": false
+      }
+    ],
+    "seymour": {
+      "hp": 69412,
+      "mp": 512,
+      "statuses": {}
+    },
+    "cycle": 6,
+    "activeIds": [
+      "wakka",
+      "yuna",
+      "kimahri"
+    ],
+    "reserveIds": [
+      "auron",
+      "lulu",
+      "rikku",
+      "tidus"
+    ],
+    "party": {
+      "wakka": {
+        "hp": 2530,
+        "mp": 80,
+        "statuses": []
+      },
+      "yuna": {
+        "hp": 1101,
+        "mp": 270,
+        "statuses": [
+          "defend"
+        ]
+      },
+      "kimahri": {
+        "hp": 0,
+        "mp": 130,
+        "statuses": [
+          "ko"
+        ]
+      },
+      "auron": {
+        "hp": 3410,
+        "mp": 75,
+        "statuses": []
+      },
+      "lulu": {
+        "hp": 1375,
+        "mp": 290,
+        "statuses": []
+      },
+      "rikku": {
+        "hp": 1540,
+        "mp": 115,
+        "statuses": []
+      },
+      "tidus": {
+        "hp": 2420,
+        "mp": 115,
+        "statuses": []
+      }
+    },
+    "logLen": 64,
+    "turn": 14,
+    "result": null
+  },
+  "pageErrors": []
+}

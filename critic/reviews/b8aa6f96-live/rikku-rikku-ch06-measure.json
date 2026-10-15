@@ -1,0 +1,632 @@
+[
+ {
+  "id": "rikku-thief/idle.png",
+  "rel": "art/characters/rikku-thief/idle.png",
+  "servedBytes": 686135,
+  "servedSha256": "cc786005c55c289748df2b49e231bf2d6dc8e38c81f5ce5ae91ab5445abab808",
+  "size": [
+   558,
+   1212
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "dfc175bed545b3588071a4558fb5540c2dcf117374e6220a25135d385e7e3929"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "861535fc71ce5fe8e8a34599112e34fa88844866b2409b6ba1594148aae7d3ae"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5843795293869966,
+   "master47": 0.5843795293869966,
+   "master44": 0.6567814950842878
+  },
+  "meanSaturationFull": {
+   "served": 0.6001145529809391,
+   "master47": 0.6001145529809391,
+   "master44": 0.6671226322347957
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 295943
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 227885,
+   "visiblePixels": 295943
+  }
+ },
+ {
+  "id": "rikku-thief/ready.png",
+  "rel": "art/characters/rikku-thief/ready.png",
+  "servedBytes": 381598,
+  "servedSha256": "ef378dec7e218554acd85cef78f1b7802fd6af693ba2cb7408ebe09ba25a02e4",
+  "size": [
+   548,
+   801
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "219fe7e1b171276d0815ce8d4f8fe24bfc74a93643ab808732ce04cd5ff6697d"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "b06b0e6f165156a0166fefce1be19afb6d3f01ddd09b0ccd7ab63d5c09417867"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5592545904591593,
+   "master47": 0.5592545904591593,
+   "master44": 0.6512736778039216
+  },
+  "meanSaturationFull": {
+   "served": 0.579964065515877,
+   "master47": 0.579964065515877,
+   "master44": 0.6672899140288061
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 146241
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 100472,
+   "visiblePixels": 146241
+  }
+ },
+ {
+  "id": "rikku-thief/attack.webp",
+  "rel": "art/characters/rikku-thief/attack.webp",
+  "servedBytes": 356398,
+  "servedSha256": "1d464c81cd268a85034ffcb03481abb893159ff37a6cc459c5e68d34c1b19a27",
+  "size": [
+   788,
+   1083
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "4a69514f9ec06ccacf696fe4325526e31d85f0e73927ba56214507692f37207d"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "743bba8feb5cc6cf08bcc3dd590e3cdd87a557421e927dfb5790551b3dd8707a"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5894452386165498,
+   "master47": 0.5894452386165498,
+   "master44": 0.6817410074146725
+  },
+  "meanSaturationFull": {
+   "served": 0.6056702781907799,
+   "master47": 0.6056702781907799,
+   "master44": 0.6927931004199184
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 251332
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 199287,
+   "visiblePixels": 251332
+  }
+ },
+ {
+  "id": "rikku-thief/cast.png",
+  "rel": "art/characters/rikku-thief/cast.png",
+  "servedBytes": 377880,
+  "servedSha256": "ea5ddef3a0974a3606298e2f4fcd3367de2ed41441acaafd32467584066efdbf",
+  "size": [
+   596,
+   912
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "473f6edaa45e8a04f4b69b3efc43f23291815d06c280747ed1292d2acd990636"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "720409176e0ee584c250e7bbe90dd6154cd2100e11a4a0da796c24ee6c2a172c"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5462435835743913,
+   "master47": 0.5462435835743913,
+   "master44": 0.6190632702607989
+  },
+  "meanSaturationFull": {
+   "served": 0.5678037850789324,
+   "master47": 0.5678037850789324,
+   "master44": 0.6358082600233613
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 139022
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 93015,
+   "visiblePixels": 139022
+  }
+ },
+ {
+  "id": "rikku-thief/item.png",
+  "rel": "art/characters/rikku-thief/item.png",
+  "servedBytes": 379222,
+  "servedSha256": "80b88b2aca9ee7b026316a46260bcea0525fe0f0c1c6d15321cd771270633a6d",
+  "size": [
+   461,
+   896
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "b06f2dfcc50d260c33927f04e8f983daea894a054a0b35afd3ecfe69820cdc72"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "32736415afc521ba6e9c7901cbe640cfb978d78fd89bc9fdb908a682600f74fb"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5190718439461358,
+   "master47": 0.5190718439461358,
+   "master44": 0.5815097548638963
+  },
+  "meanSaturationFull": {
+   "served": 0.5426934162485553,
+   "master47": 0.5426934162485553,
+   "master44": 0.599375231554424
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 140597
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 82514,
+   "visiblePixels": 140597
+  }
+ },
+ {
+  "id": "rikku-thief/hurt.png",
+  "rel": "art/characters/rikku-thief/hurt.png",
+  "servedBytes": 394790,
+  "servedSha256": "558d2182c85c5a04a34ac51afdc4b32617bef3f60bc6b8c408b333a17dc70194",
+  "size": [
+   569,
+   836
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "b0f97721cc051ede61460727f5a4480ea1189745fb15f10a3bc29047a64992b5"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "5e2fc453e070990a30ee1b648ccef25dc6038436935641ec1d756a90c23d44d9"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5526461606003154,
+   "master47": 0.5526461606003154,
+   "master44": 0.6248334383068141
+  },
+  "meanSaturationFull": {
+   "served": 0.5730346316771111,
+   "master47": 0.5730346316771111,
+   "master44": 0.6406621298559725
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 142005
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 101914,
+   "visiblePixels": 142005
+  }
+ },
+ {
+  "id": "rikku-thief/ko.png",
+  "rel": "art/characters/rikku-thief/ko.png",
+  "servedBytes": 446857,
+  "servedSha256": "4480ff3698a26f62101484b9d95ee4fca8ba93ff42655bb8830da281a11aa0e8",
+  "size": [
+   1113,
+   525
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "f6a72a18923101edb8719e70058ef10f3dc1e6a15dab4390f986e2d3f01bea66"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "cad3cd1289cbf5f499041ef787c4a8563549ac3f494f8b69d3c011e377f64a9e"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5632874764298187,
+   "master47": 0.5632874764298187,
+   "master44": 0.6591338773425088
+  },
+  "meanSaturationFull": {
+   "served": 0.5915010242474649,
+   "master47": 0.5915010242474649,
+   "master44": 0.676798196581457
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 205424
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 166974,
+   "visiblePixels": 205424
+  }
+ },
+ {
+  "id": "rikku-thief/victory.png",
+  "rel": "art/characters/rikku-thief/victory.png",
+  "servedBytes": 329436,
+  "servedSha256": "55f2875e629c89dfb4b9183093074100daa71ca875a7e2ea3727def806bb881a",
+  "size": [
+   399,
+   959
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "b43cfada84d814b17d3207603a645711e7d874ca761470d85c6b1279282b48b5"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "f74c8a97039ef9dfb6681d30c85bff133c9c0fbfea2281ceabc682f981780677"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.4618726369722517,
+   "master47": 0.4618726369722517,
+   "master44": 0.4975405201914226
+  },
+  "meanSaturationFull": {
+   "served": 0.48570645295910325,
+   "master47": 0.48570645295910325,
+   "master44": 0.5191452605578131
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 127066
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 73357,
+   "visiblePixels": 127066
+  }
+ },
+ {
+  "id": "rikku-thief/defend.webp",
+  "rel": "art/characters/rikku-thief/defend.webp",
+  "servedBytes": 322878,
+  "servedSha256": "15300145747e193e800d98213e7e50c81983b0b89b31f674b47c57081b315cab",
+  "size": [
+   642,
+   1130
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "9640836a90fe89c36f4eea5e52e69d09820fe539d0284d22437aff630da507f6"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "9af816fda5e6be0268d83f10a1681cae9e646d7aa434e40b3dda5d8818171d5c"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.618580086158655,
+   "master47": 0.618580086158655,
+   "master44": 0.7382527804465939
+  },
+  "meanSaturationFull": {
+   "served": 0.641852671601621,
+   "master47": 0.641852671601621,
+   "master44": 0.7534156140888771
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 226823
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 169229,
+   "visiblePixels": 226823
+  }
+ },
+ {
+  "id": "rikku-thief/sleep.png",
+  "rel": "art/characters/rikku-thief/sleep.png",
+  "servedBytes": 449095,
+  "servedSha256": "b4ea8c2ddbac5292aa8e1a3881b6b43da02d8f587f9ece396fbea6bb984a4b26",
+  "size": [
+   435,
+   1134
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "e6120d5c54281acc473084f3acd34dff834424de36d3dfc7ffa491655cc84485"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "ff087a43ae1d28c9604be7060da30074b3fd7a4bbf405195b2c518f9ca883370"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5438686039448264,
+   "master47": 0.5438686039448264,
+   "master44": 0.6280380951559633
+  },
+  "meanSaturationFull": {
+   "served": 0.5721653782305602,
+   "master47": 0.5721653782305602,
+   "master44": 0.6506404774183137
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 196818
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 136387,
+   "visiblePixels": 196818
+  }
+ },
+ {
+  "id": "rikku-thief/critical.png",
+  "rel": "art/characters/rikku-thief/critical.png",
+  "servedBytes": 576461,
+  "servedSha256": "491a2fb9ef4e14500bd0838c29d4da71767c8c71f90381925593e0dabb7ec315",
+  "size": [
+   807,
+   786
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "a9c420d96b0a56340c61d4aff02ecfc2a85c452741dd3e5a68996964e128a84d"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "66fe7b56f05366330c63d3f049bab3d1f481a0b3ba3b9f13f74308c0013955e1"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6509582725426752,
+   "master47": 0.6509582725426752,
+   "master44": 0.7709365222253146
+  },
+  "meanSaturationFull": {
+   "served": 0.6627664439005848,
+   "master47": 0.6627664439005848,
+   "master44": 0.7772646197244482
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 284570
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 213211,
+   "visiblePixels": 284570
+  }
+ },
+ {
+  "id": "rikku-thief/follow.png",
+  "rel": "art/characters/rikku-thief/follow.png",
+  "servedBytes": 401442,
+  "servedSha256": "ce832098d74a7225f58ea53f437e35d14a03f3d544acc634989722d05816c16d",
+  "size": [
+   799,
+   781
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "770c670463d09f79b709e5692675b81da3506796140c652f294c2e1a3976fad2"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "8e9ed6cb4e22eb3ba59b840d1f42e07f88ce01c7d01c339a34ddf71c9184706b"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.514266458222908,
+   "master47": 0.514266458222908,
+   "master44": 0.5953500123319004
+  },
+  "meanSaturationFull": {
+   "served": 0.5384668243378997,
+   "master47": 0.5384668243378997,
+   "master44": 0.6115420814183569
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 143021
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 84865,
+   "visiblePixels": 143021
+  }
+ },
+ {
+  "id": "rikku-thief/twirl-start.png",
+  "rel": "art/characters/rikku-thief/twirl-start.png",
+  "servedBytes": 398420,
+  "servedSha256": "a47437a71154f68e27d5e080fce12b6fa10a33a9b2088e94c557bc5a1bceca1c",
+  "size": [
+   486,
+   977
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "7568f0091cf32b2a72d24a01451eadfbed6bc68f6125e607a2dcc12e047f326a"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "5f43626a5bea7ebf8d713b9e1b9ff0009d2157cb6ccde976db66dda6887a12d3"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5165181806716757,
+   "master47": 0.5165181806716757,
+   "master44": 0.6104017874681346
+  },
+  "meanSaturationFull": {
+   "served": 0.546046855152443,
+   "master47": 0.546046855152443,
+   "master44": 0.630837464310616
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 153275
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 108731,
+   "visiblePixels": 153275
+  }
+ },
+ {
+  "id": "rikku-thief/twirl-going.png",
+  "rel": "art/characters/rikku-thief/twirl-going.png",
+  "servedBytes": 430091,
+  "servedSha256": "6acc0dc4aee2600de66cb49ec41c3cc2dd97b2f875e810509e235d6aede6ed60",
+  "size": [
+   465,
+   985
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "4c403df6131ae4145abafcf9a938753b50cc57d4496ed42dd5afef3d31fc009c"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "f9113fcab0d1f97ff49f318cc09d19abddebff371f24b0a600cb9593243061bf"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.55875421660826,
+   "master47": 0.55875421660826,
+   "master44": 0.6524920799919496
+  },
+  "meanSaturationFull": {
+   "served": 0.5770070710445825,
+   "master47": 0.5770070710445825,
+   "master44": 0.662935909900547
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 143997
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 110837,
+   "visiblePixels": 143997
+  }
+ },
+ {
+  "id": "rikku-gunner/twirl-mid.png",
+  "rel": "art/characters/rikku-gunner/twirl-mid.png",
+  "servedBytes": 1197131,
+  "servedSha256": "9454f7b5ced13c555b56ff823415be9e569746ede1cba15c8cc6179b859dac07",
+  "size": [
+   784,
+   1212
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "cfbffd5028d71ee2c920751f5c6db57f87f76187df8ff124c000613d987ebeb4"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.49397769222969984,
+   "master47": 0.49397769222969984,
+   "master44": 0.6577273107258146
+  },
+  "meanSaturationFull": {
+   "served": 0.5054033281787553,
+   "master47": 0.5054033281787553,
+   "master44": 0.6677176916685793
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 386551
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 359694,
+   "visiblePixels": 386551
+  }
+ }
+]

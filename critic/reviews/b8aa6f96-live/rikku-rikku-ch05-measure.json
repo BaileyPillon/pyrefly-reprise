@@ -1,0 +1,590 @@
+[
+ {
+  "id": "rikku-gunner/twirl-mid.png",
+  "rel": "art/characters/rikku-gunner/twirl-mid.png",
+  "servedBytes": 1197131,
+  "servedSha256": "9454f7b5ced13c555b56ff823415be9e569746ede1cba15c8cc6179b859dac07",
+  "size": [
+   784,
+   1212
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "cfbffd5028d71ee2c920751f5c6db57f87f76187df8ff124c000613d987ebeb4"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.49397769222969984,
+   "master47": 0.49397769222969984,
+   "master44": 0.6577273107258146
+  },
+  "meanSaturationFull": {
+   "served": 0.5054033281787553,
+   "master47": 0.5054033281787553,
+   "master44": 0.6677176916685793
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 386551
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 359694,
+   "visiblePixels": 386551
+  }
+ },
+ {
+  "id": "rikku-dark-knight/idle.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/idle.png",
+  "servedBytes": 1081427,
+  "servedSha256": "8b3176e24d54e24a563f35129f1afb6acf08f3aa1feb70cbf4f08746c83bfb51",
+  "size": [
+   787,
+   1205
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5497464850861571,
+   "master47": 0.5497464850861571,
+   "master44": 0.5497464850861571
+  },
+  "meanSaturationFull": {
+   "served": 0.5904707466497261,
+   "master47": 0.5904707466497261,
+   "master44": 0.5904707466497261
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 443536
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 443536
+  }
+ },
+ {
+  "id": "rikku-dark-knight/ready.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/ready.png",
+  "servedBytes": 526346,
+  "servedSha256": "f2b011e2c76e575b346aec03f9664bab45ee2f6464d72ca212afd8cef7590084",
+  "size": [
+   652,
+   940
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "cb246aa5fa2e3728d089e3c2e5fb286ded6886846f87b82a07d82b6e8be886d8"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "cb246aa5fa2e3728d089e3c2e5fb286ded6886846f87b82a07d82b6e8be886d8"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6039656174792398,
+   "master47": 0.6039656174792398,
+   "master44": 0.6039656174792398
+  },
+  "meanSaturationFull": {
+   "served": 0.6245997333576148,
+   "master47": 0.6245997333576148,
+   "master44": 0.6245997333576148
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 205518
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 205518
+  }
+ },
+ {
+  "id": "rikku-dark-knight/attack.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/attack.png",
+  "servedBytes": 949130,
+  "servedSha256": "a64dc857b444ae2714a67af3eab3661b7bbaad980986fe9d165bd887bfc7018c",
+  "size": [
+   980,
+   1170
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "a8d9cee74a8a8fd57cbbf031c347630f1061fd60b0db15fffa76f3d6a9c9a137"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "a8d9cee74a8a8fd57cbbf031c347630f1061fd60b0db15fffa76f3d6a9c9a137"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6104430555832024,
+   "master47": 0.6104430555832024,
+   "master44": 0.6104430555832024
+  },
+  "meanSaturationFull": {
+   "served": 0.6453736623538163,
+   "master47": 0.6453736623538163,
+   "master44": 0.6453736623538163
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 365109
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 365109
+  }
+ },
+ {
+  "id": "rikku-dark-knight/cast.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/cast.png",
+  "servedBytes": 436981,
+  "servedSha256": "bba130f10320ade68b20fd1c49bea3ac3f3d7598a026ce75bad687d950fdd1bf",
+  "size": [
+   386,
+   1163
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "ce9ecdef063c56e9aa8905e0d86fe2ab4a7ea0fdf0ce8484b48f824f13c77219"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "ce9ecdef063c56e9aa8905e0d86fe2ab4a7ea0fdf0ce8484b48f824f13c77219"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6044559499042572,
+   "master47": 0.6044559499042572,
+   "master44": 0.6044559499042572
+  },
+  "meanSaturationFull": {
+   "served": 0.6564745189906224,
+   "master47": 0.6564745189906224,
+   "master44": 0.6564745189906224
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 164105
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 164105
+  }
+ },
+ {
+  "id": "rikku-dark-knight/item.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/item.png",
+  "servedBytes": 396518,
+  "servedSha256": "6da5d52cd9c7973bdb7c41fafe434d607937ea9b19a36ac64c1e7f96e522e9ff",
+  "size": [
+   429,
+   866
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "94def74a2fbe487925a84c040ca5cbdb61e25bc88e944d93ecd89f6b382a2d2c"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "94def74a2fbe487925a84c040ca5cbdb61e25bc88e944d93ecd89f6b382a2d2c"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5065732447192283,
+   "master47": 0.5065732447192283,
+   "master44": 0.5065732447192283
+  },
+  "meanSaturationFull": {
+   "served": 0.5289020044816043,
+   "master47": 0.5289020044816043,
+   "master44": 0.5289020044816043
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 136309
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 136309
+  }
+ },
+ {
+  "id": "rikku-dark-knight/hurt.webp (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/hurt.webp",
+  "servedBytes": 421724,
+  "servedSha256": "2c4874d1609ac49096e5e8176b3e3d871fa9212a3f3732137d16dea570bf0a2a",
+  "size": [
+   765,
+   1062
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "3dc49367216777e06011066cea659e6f9343342a6f67f5e131be66c2c4279b0f"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "3dc49367216777e06011066cea659e6f9343342a6f67f5e131be66c2c4279b0f"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5479093708488079,
+   "master47": 0.5479093708488079,
+   "master44": 0.5479093708488079
+  },
+  "meanSaturationFull": {
+   "served": 0.5887740084529992,
+   "master47": 0.5887740084529992,
+   "master44": 0.5887740084529992
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 286331
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 286331
+  }
+ },
+ {
+  "id": "rikku-dark-knight/ko.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/ko.png",
+  "servedBytes": 795529,
+  "servedSha256": "976c5d4e2f34a1958fd55d1f16c37c5167da8c11e3ead190ec89f68e07492063",
+  "size": [
+   1204,
+   580
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "26d12305db94687c879912e1e41566c3a4342c0015a0d6fbd093073b1ae27c10"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "26d12305db94687c879912e1e41566c3a4342c0015a0d6fbd093073b1ae27c10"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5137231556042077,
+   "master47": 0.5137231556042077,
+   "master44": 0.5137231556042077
+  },
+  "meanSaturationFull": {
+   "served": 0.5429271222466888,
+   "master47": 0.5429271222466888,
+   "master44": 0.5429271222466888
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 322860
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 322860
+  }
+ },
+ {
+  "id": "rikku-dark-knight/victory.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/victory.png",
+  "servedBytes": 406814,
+  "servedSha256": "264023aa06048d5f21b0f4a1bc9488ed0d5fbaa63137b555ded54e037ce60a6b",
+  "size": [
+   428,
+   1119
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "d4e61c69483aa47b1cc43128051c4d0516bb51c1fcbb0b3dad9d4a8aad404620"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "d4e61c69483aa47b1cc43128051c4d0516bb51c1fcbb0b3dad9d4a8aad404620"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.7087078083456112,
+   "master47": 0.7087078083456112,
+   "master44": 0.7087078083456112
+  },
+  "meanSaturationFull": {
+   "served": 0.7239363749273121,
+   "master47": 0.7239363749273121,
+   "master44": 0.7239363749273121
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 180041
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 180041
+  }
+ },
+ {
+  "id": "rikku-dark-knight/sleep.webp (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/sleep.webp",
+  "servedBytes": 355624,
+  "servedSha256": "e9815edfb81d980900680c761f1fde02da6b6fc16cc85126256ad6cae0835a2d",
+  "size": [
+   575,
+   1197
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "10d136ed84bf637c1902764a9365a0c03b2886bb35ac410019715e7ed7eb505b"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "10d136ed84bf637c1902764a9365a0c03b2886bb35ac410019715e7ed7eb505b"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6883094961414407,
+   "master47": 0.6883094961414407,
+   "master44": 0.6883094961414407
+  },
+  "meanSaturationFull": {
+   "served": 0.7291536964696785,
+   "master47": 0.7291536964696785,
+   "master44": 0.7291536964696785
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 239157
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 239157
+  }
+ },
+ {
+  "id": "rikku-dark-knight/critical.webp (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/critical.webp",
+  "servedBytes": 397190,
+  "servedSha256": "fe2c48f05d28cfa0bfe53f022e13857cd3a7386adc2db22625cab21144e56db3",
+  "size": [
+   712,
+   983
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "ac8658584649386ab89e6500497336d163e31e51560d67c51bc8e5c5b2751b12"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "ac8658584649386ab89e6500497336d163e31e51560d67c51bc8e5c5b2751b12"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5350999235866813,
+   "master47": 0.5350999235866813,
+   "master44": 0.5350999235866813
+  },
+  "meanSaturationFull": {
+   "served": 0.579638883704303,
+   "master47": 0.579638883704303,
+   "master44": 0.579638883704303
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 269841
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 269841
+  }
+ },
+ {
+  "id": "rikku-dark-knight/follow.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/follow.png",
+  "servedBytes": 777472,
+  "servedSha256": "88056d58064dfa80ec4bfa662c6e97ecdf809f32f150a7cb07232020adc78310",
+  "size": [
+   695,
+   1216
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "97899f5b1d2686111ef84ddbc7fb472e3a0928c3dee309ecc087ea344581b2e2"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "97899f5b1d2686111ef84ddbc7fb472e3a0928c3dee309ecc087ea344581b2e2"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.47880407270560993,
+   "master47": 0.47880407270560993,
+   "master44": 0.47880407270560993
+  },
+  "meanSaturationFull": {
+   "served": 0.536930152164509,
+   "master47": 0.536930152164509,
+   "master44": 0.536930152164509
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 312284
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 312284
+  }
+ },
+ {
+  "id": "rikku-dark-knight/twirl-start.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/twirl-start.png",
+  "servedBytes": 423142,
+  "servedSha256": "0d1203f90f3d34acaa6199ea227b101f6f617d4a50aaab141dfefdab512380a3",
+  "size": [
+   568,
+   905
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "15976b8bb0a1a3aeaffddfbf339b8f6e8b002a7b72804ba50afe7c612bded14e"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "15976b8bb0a1a3aeaffddfbf339b8f6e8b002a7b72804ba50afe7c612bded14e"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5529071657659801,
+   "master47": 0.5529071657659801,
+   "master44": 0.5529071657659801
+  },
+  "meanSaturationFull": {
+   "served": 0.598464020447853,
+   "master47": 0.598464020447853,
+   "master44": 0.598464020447853
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 138939
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 138939
+  }
+ },
+ {
+  "id": "rikku-dark-knight/twirl-going.png (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/twirl-going.png",
+  "servedBytes": 430075,
+  "servedSha256": "8117c689de82e468e3db2bb69b89517fee87e286daf65284ac084fab922bf677",
+  "size": [
+   562,
+   917
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "08275eb109419a53422fef45195e2271c3bb1ddb638f12df0f071921b240982c"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "08275eb109419a53422fef45195e2271c3bb1ddb638f12df0f071921b240982c"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.4832269988433479,
+   "master47": 0.4832269988433479,
+   "master44": 0.4832269988433479
+  },
+  "meanSaturationFull": {
+   "served": 0.5101830333376328,
+   "master47": 0.5101830333376328,
+   "master44": 0.5101830333376328
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 139482
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 139482
+  }
+ }
+]

@@ -1,0 +1,380 @@
+{
+ "assertions": {
+  "runA": 68,
+  "runB": 10,
+  "total": 78,
+  "failed": []
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "loadRetries": [],
+ "audio": {
+  "requests": 318,
+  "byStatus": {
+   "200": 318
+  },
+  "byContentType": {
+   "application/json": 30,
+   "audio/mpeg": 288
+  },
+  "retiredRequested": 0,
+  "distinctFiles": 23,
+  "files": {
+   "manifest.json": 30,
+   "music/title.mp3": 30,
+   "sfx/sprite.mp3": 30,
+   "sfx/sprite-v2.mp3": 30,
+   "music/chapter-select.mp3": 30,
+   "sfx/parity-ffx-core.mp3": 17,
+   "music/scene-gagazet.mp3": 11,
+   "music/boss-seymour.mp3": 12,
+   "music/victory-ffx.mp3": 16,
+   "music/defeat-ffx.mp3": 15,
+   "sfx/parity-ffx-lady.mp3": 6,
+   "music/scene-zanarkand-dome.mp3": 6,
+   "music/boss-challenge.mp3": 6,
+   "sfx/parity-ffx2-bahamut.mp3": 10,
+   "sfx/parity-ffx2-core.mp3": 13,
+   "music/scene-bevelle-underground.mp3": 12,
+   "music/boss-bahamut.mp3": 12,
+   "music/victory-bahamut.mp3": 10,
+   "music/defeat-ffx2.mp3": 13,
+   "music/pause.mp3": 4,
+   "music/scene-farplane.mp3": 1,
+   "music/boss-ffx2-fallen-aeons.mp3": 1,
+   "music/victory-ffx2.mp3": 3
+  }
+ },
+ "parts": {
+  "static": "ran",
+  "music-timing-fast": "summary",
+  "music-timing-human": "summary",
+  "ffx-ch01-fast": "ran",
+  "ffx-ch02-fast": "ran",
+  "ffx2-ch04-fast": "ran",
+  "ffx2-ch11-fast": "ran",
+  "ffx2-ch13-fast": "ran",
+  "ffx2-ch13-hurried": "ran",
+  "ffx-ch01-human": "ran",
+  "ffx2-ch04-human": "ran",
+  "cancel": "ran",
+  "results-ffx": "ran",
+  "results-ffx2": "ran",
+  "defeat-ffx": "ran",
+  "defeat-ffx2": "error",
+  "phone": "ran"
+ },
+ "partsWithError": [
+  "defeat-ffx2: ASSERT-FAIL screen expected=results after 240249ms"
+ ],
+ "lv43_2": {
+  "music-timing-fast": {
+   "all": "6/9",
+   "byChapter": {
+    "seymour-flux": "0/3",
+    "yunalesca": "3/3",
+    "ffx2-bahamut": "3/3"
+   },
+   "withoutChapterI": "6/6",
+   "msToFirstLine": [
+    3967,
+    3965,
+    3943,
+    4148,
+    4166,
+    4181,
+    4902,
+    5049,
+    4079
+   ],
+   "gains": [
+    null,
+    null,
+    null,
+    0.575,
+    0.782,
+    0.624,
+    0.172,
+    0.146,
+    0.158
+   ],
+   "sceneDoneMsAfterConfirm": [
+    1282,
+    1199,
+    921,
+    1766,
+    1822,
+    1797,
+    2503,
+    2487,
+    1907
+   ]
+  },
+  "music-timing-human": {
+   "all": "4/6",
+   "byChapter": {
+    "seymour-flux": "0/2",
+    "yunalesca": "2/2",
+    "ffx2-bahamut": "2/2"
+   },
+   "withoutChapterI": "4/4",
+   "msToFirstLine": [
+    5169,
+    5164,
+    4148,
+    4205,
+    3981,
+    3995
+   ],
+   "gains": [
+    null,
+    null,
+    0.587,
+    0.849,
+    0.172,
+    0.158
+   ],
+   "sceneDoneMsAfterConfirm": [
+    1655,
+    1103,
+    1188,
+    876,
+    1564,
+    680
+   ]
+  },
+  "chapterRuns": [
+   {
+    "tag": "ffx-ch01-fast",
+    "id": "seymour-flux",
+    "pace": "fast",
+    "hurry": false,
+    "firstLinePlaying": null,
+    "sceneCuePlaying": false,
+    "gain": null,
+    "msAfterConfirm": 3991,
+    "firstMenuPlaying": "boss-seymour"
+   },
+   {
+    "tag": "ffx-ch02-fast",
+    "id": "yunalesca",
+    "pace": "fast",
+    "hurry": false,
+    "firstLinePlaying": "scene-zanarkand-dome",
+    "sceneCuePlaying": true,
+    "gain": 0.6373456120491028,
+    "msAfterConfirm": 4147,
+    "firstMenuPlaying": "boss-challenge"
+   },
+   {
+    "tag": "ffx2-ch04-fast",
+    "id": "ffx2-bahamut",
+    "pace": "fast",
+    "hurry": false,
+    "firstLinePlaying": "scene-bevelle-underground",
+    "sceneCuePlaying": true,
+    "gain": 0.14600743353366852,
+    "msAfterConfirm": 5445,
+    "firstMenuPlaying": "boss-bahamut"
+   },
+   {
+    "tag": "ffx2-ch11-fast",
+    "id": "ffx2-fallen-aeons",
+    "pace": "fast",
+    "hurry": false,
+    "firstLinePlaying": "scene-farplane",
+    "sceneCuePlaying": true,
+    "gain": 0.20617033541202545,
+    "msAfterConfirm": 3213,
+    "firstMenuPlaying": "boss-ffx2-fallen-aeons"
+   },
+   {
+    "tag": "ffx2-ch13-fast",
+    "id": "ffx2-trema",
+    "pace": "fast",
+    "hurry": false,
+    "firstLinePlaying": "scene-bevelle-underground",
+    "sceneCuePlaying": true,
+    "gain": 0.1921985149383545,
+    "msAfterConfirm": 5632,
+    "firstMenuPlaying": "scene-bevelle-underground"
+   },
+   {
+    "tag": "ffx2-ch13-hurried",
+    "id": "ffx2-trema",
+    "pace": "fast",
+    "hurry": true,
+    "firstLinePlaying": "scene-bevelle-underground",
+    "sceneCuePlaying": true,
+    "gain": 0.18234458565711975,
+    "msAfterConfirm": 4052,
+    "firstMenuPlaying": "scene-bevelle-underground"
+   },
+   {
+    "tag": "ffx-ch01-human",
+    "id": "seymour-flux",
+    "pace": "human",
+    "hurry": false,
+    "firstLinePlaying": null,
+    "sceneCuePlaying": false,
+    "gain": null,
+    "msAfterConfirm": 5154,
+    "firstMenuPlaying": "boss-seymour"
+   },
+   {
+    "tag": "ffx2-ch04-human",
+    "id": "ffx2-bahamut",
+    "pace": "human",
+    "hurry": false,
+    "firstLinePlaying": "scene-bevelle-underground",
+    "sceneCuePlaying": true,
+    "gain": 0.1265181303024292,
+    "msAfterConfirm": 3963,
+    "firstMenuPlaying": "boss-bahamut"
+   }
+  ],
+  "cancel": {
+   "playingAtFirstLine": "scene-bevelle-underground",
+   "scenePlaying": true,
+   "ms": 4583
+  },
+  "allRuns": {
+   "total": 24,
+   "scenePlaying": 17,
+   "chapterIRuns": 7,
+   "chapterIPlaying": 0,
+   "otherRuns": 17,
+   "otherPlaying": 17
+  }
+ },
+ "results": {
+  "results-ffx": {
+   "status": "ran",
+   "trail": [
+    "cutscene",
+    "battle",
+    "cutscene",
+    "results"
+   ],
+   "at4s": {
+    "playing": "victory-ffx",
+    "gain": 1,
+    "fading": 0,
+    "muted": false
+   },
+   "pastCue": {
+    "afterResultsMs": 42600,
+    "playing": "victory-ffx",
+    "gain": 1,
+    "screen": "results"
+   },
+   "expected": "victory-ffx",
+   "manifest": {
+    "duration": 37.5874,
+    "loopStart": 7.901587,
+    "loopEnd": 34.58737
+   },
+   "text": "L B BRIEFING MT. GAGAZET — THE PROMINENCE · CLEARED RESULTS · 0:23 Victory NEW B"
+  },
+  "results-ffx2": {
+   "status": "ran",
+   "trail": [
+    "cutscene",
+    "battle",
+    "cutscene",
+    "results"
+   ],
+   "at4s": {
+    "playing": "victory-bahamut",
+    "gain": 1,
+    "fading": 0,
+    "muted": false
+   },
+   "pastCue": {
+    "afterResultsMs": 39806,
+    "playing": "victory-bahamut",
+    "gain": 1,
+    "screen": "results"
+   },
+   "expected": "victory-bahamut",
+   "manifest": {
+    "duration": 34.7984,
+    "loopStart": 6.516236,
+    "loopEnd": 31.79839
+   },
+   "text": "L B BRIEFING BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 0:09 Results NEW BE"
+  },
+  "defeat-ffx": {
+   "status": "ran",
+   "at4s": {
+    "playing": "defeat-ffx",
+    "gain": 1,
+    "muted": false,
+    "cachedDefeat": []
+   },
+   "pastCue": {
+    "afterResultsMs": 13017,
+    "playing": "defeat-ffx",
+    "screen": "results"
+   },
+   "manifest": {
+    "duration": 9,
+    "oneShot": true
+   },
+   "text": "AZET — THE PROMINENCE · FELL RESULTS · 0:21 Defeat TURNS 18 ATTEMPTS 1 BEST — NE"
+  },
+  "defeat-ffx2": {
+   "status": "error",
+   "error": "ASSERT-FAIL screen expected=results after 240249ms",
+   "text": ""
+  }
+ },
+ "phone": {
+  "status": "ran",
+  "step2Cue": {
+   "text": "▼ MORE BELOW",
+   "visibility": "hidden",
+   "display": "block",
+   "opacity": "1",
+   "isVisibleClass": true,
+   "rect": [
+    0,
+    727,
+    390,
+    33
+   ]
+  },
+  "step2Chevron": {
+   "dir": "down",
+   "display": "block",
+   "rect": [
+    177,
+    742,
+    36,
+    22
+   ]
+  },
+  "afterSkipCue": {
+   "text": "▼ MORE BELOW",
+   "visibility": "visible",
+   "display": "block",
+   "opacity": "1",
+   "isVisibleClass": true,
+   "rect": [
+    0,
+    727,
+    390,
+    33
+   ]
+  },
+  "floor": {
+   "under": 0,
+   "min": 14
+  },
+  "floorAfter": {
+   "under": 0,
+   "min": 14
+  }
+ }
+}

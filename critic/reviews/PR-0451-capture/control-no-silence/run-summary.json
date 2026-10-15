@@ -1,0 +1,471 @@
+{
+  "startedAt": "2026-10-14T10:49:50.696Z",
+  "url": "https://echoesofspira.com/",
+  "attempts": [
+    {
+      "seed": 4,
+      "verdict": "complete",
+      "silenceTries": [],
+      "seymourTurns": [
+        {
+          "turnSeq": 26,
+          "acted": "Lance of Atrophy",
+          "mpBeforeSilence": null,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": null,
+          "cycleAtTurn": 4,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 27,
+              "type": "action-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": "Lance of Atrophy",
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 28,
+              "type": "damage",
+              "actorId": null,
+              "targetId": "yuna",
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": 399
+            },
+            {
+              "seq": 29,
+              "type": "action-end",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 40,
+          "acted": null,
+          "mpBeforeSilence": null,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": null,
+          "cycleAtTurn": 4,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 41,
+              "type": "message",
+              "actorId": null,
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": "Seymour waits",
+              "reason": null,
+              "amount": null
+            }
+          ]
+        },
+        {
+          "turnSeq": 56,
+          "acted": "Dispel",
+          "mpBeforeSilence": null,
+          "mpAtTurn": 512,
+          "cycleBeforeSilence": null,
+          "cycleAtTurn": 6,
+          "silenceOnSeymourAtTurn": false,
+          "eventsAfter": [
+            {
+              "seq": 57,
+              "type": "action-start",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": "Dispel",
+              "text": null,
+              "reason": null,
+              "amount": null
+            },
+            {
+              "seq": 58,
+              "type": "action-end",
+              "actorId": "seymour-flux",
+              "targetId": null,
+              "status": null,
+              "abilityName": null,
+              "text": null,
+              "reason": null,
+              "amount": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "chosenSeed": 4,
+  "build": {
+    "sha": "b8aa6f96",
+    "bundle": "index-DA6NOD0r.js",
+    "version": "0.1.0",
+    "scripts": [
+      "/assets/index-DA6NOD0r.js",
+      "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920"
+    ],
+    "href": "https://echoesofspira.com/?coach=off"
+  },
+  "keys": [
+    "q",
+    "q",
+    "q",
+    "q",
+    "q",
+    "q",
+    "q"
+  ],
+  "frames": [
+    {
+      "file": "4a-seymour-turn-lance-of-atrophy.png",
+      "note": "Seymour's turn (seq 26) while Silenced: action-start Lance of Atrophy (MP 512, cycle 4)",
+      "atMs": 37407
+    },
+    {
+      "file": "4b-seymour-turn-refused.png",
+      "note": "Seymour's turn (seq 40) while Silenced: NO action-start follows (MP 512, cycle 4)",
+      "atMs": 44511
+    },
+    {
+      "file": "4c-seymour-turn-dispel.png",
+      "note": "Seymour's turn (seq 56) while Silenced: action-start Dispel (MP 512, cycle 6)",
+      "atMs": 52818
+    },
+    {
+      "file": "5-after.png",
+      "note": "after: the next command menu (tidus), Seymour MP 512, cycle 6",
+      "atMs": 55728
+    }
+  ],
+  "steps": [
+    {
+      "step": 0,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 3,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 14
+    },
+    {
+      "step": 1,
+      "actor": "yuna",
+      "rows": "Talk|Attack|Special|White Magic|Items|Summon",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 3,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 18
+    },
+    {
+      "step": 2,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 3,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 23
+    },
+    {
+      "step": 3,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 4,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 32
+    },
+    {
+      "step": 4,
+      "actor": "yuna",
+      "rows": "Talk|Attack|Special|White Magic|Items|Summon",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 4,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 37
+    },
+    {
+      "step": 5,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 5,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 48
+    },
+    {
+      "step": 6,
+      "actor": "yuna",
+      "rows": "Talk|Attack|Special|White Magic|Items|Summon",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 5,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 53
+    },
+    {
+      "step": 7,
+      "actor": "tidus",
+      "rows": "(Talk)|Attack|Special|White Magic|Items|(Flee)",
+      "seymourMp": 512,
+      "seymourStatuses": [],
+      "cycle": 6,
+      "active": [
+        "tidus",
+        "yuna",
+        "kimahri"
+      ],
+      "logLen": 61
+    }
+  ],
+  "silenceTries": [],
+  "seymourTurns": [
+    {
+      "turnSeq": 26,
+      "acted": "Lance of Atrophy",
+      "mpBeforeSilence": null,
+      "mpAtTurn": 512,
+      "cycleBeforeSilence": null,
+      "cycleAtTurn": 4,
+      "silenceOnSeymourAtTurn": false,
+      "eventsAfter": [
+        {
+          "seq": 27,
+          "type": "action-start",
+          "actorId": "seymour-flux",
+          "targetId": null,
+          "status": null,
+          "abilityName": "Lance of Atrophy",
+          "text": null,
+          "reason": null,
+          "amount": null
+        },
+        {
+          "seq": 28,
+          "type": "damage",
+          "actorId": null,
+          "targetId": "yuna",
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": 399
+        },
+        {
+          "seq": 29,
+          "type": "action-end",
+          "actorId": "seymour-flux",
+          "targetId": null,
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": null
+        }
+      ]
+    },
+    {
+      "turnSeq": 40,
+      "acted": null,
+      "mpBeforeSilence": null,
+      "mpAtTurn": 512,
+      "cycleBeforeSilence": null,
+      "cycleAtTurn": 4,
+      "silenceOnSeymourAtTurn": false,
+      "eventsAfter": [
+        {
+          "seq": 41,
+          "type": "message",
+          "actorId": null,
+          "targetId": null,
+          "status": null,
+          "abilityName": null,
+          "text": "Seymour waits",
+          "reason": null,
+          "amount": null
+        }
+      ]
+    },
+    {
+      "turnSeq": 56,
+      "acted": "Dispel",
+      "mpBeforeSilence": null,
+      "mpAtTurn": 512,
+      "cycleBeforeSilence": null,
+      "cycleAtTurn": 6,
+      "silenceOnSeymourAtTurn": false,
+      "eventsAfter": [
+        {
+          "seq": 57,
+          "type": "action-start",
+          "actorId": "seymour-flux",
+          "targetId": null,
+          "status": null,
+          "abilityName": "Dispel",
+          "text": null,
+          "reason": null,
+          "amount": null
+        },
+        {
+          "seq": 58,
+          "type": "action-end",
+          "actorId": "seymour-flux",
+          "targetId": null,
+          "status": null,
+          "abilityName": null,
+          "text": null,
+          "reason": null,
+          "amount": null
+        }
+      ]
+    }
+  ],
+  "mpBefore": null,
+  "silencedAt": null,
+  "final": {
+    "actor": "tidus",
+    "awaitingMenu": true,
+    "played": 61,
+    "rows": [
+      {
+        "label": "Talk",
+        "disabled": true,
+        "selected": false
+      },
+      {
+        "label": "Attack",
+        "disabled": false,
+        "selected": true
+      },
+      {
+        "label": "Special",
+        "disabled": false,
+        "selected": false
+      },
+      {
+        "label": "White Magic",
+        "disabled": false,
+        "selected": false
+      },
+      {
+        "label": "Items",
+        "disabled": false,
+        "selected": false
+      },
+      {
+        "label": "Flee",
+        "disabled": true,
+        "selected": false
+      }
+    ],
+    "seymour": {
+      "hp": 70000,
+      "mp": 512,
+      "statuses": {}
+    },
+    "cycle": 6,
+    "activeIds": [
+      "tidus",
+      "yuna",
+      "kimahri"
+    ],
+    "reserveIds": [
+      "auron",
+      "wakka",
+      "lulu",
+      "rikku"
+    ],
+    "party": {
+      "tidus": {
+        "hp": 2420,
+        "mp": 115,
+        "statuses": []
+      },
+      "yuna": {
+        "hp": 1101,
+        "mp": 270,
+        "statuses": [
+          "defend"
+        ]
+      },
+      "kimahri": {
+        "hp": 0,
+        "mp": 130,
+        "statuses": [
+          "ko"
+        ]
+      },
+      "auron": {
+        "hp": 3410,
+        "mp": 75,
+        "statuses": []
+      },
+      "wakka": {
+        "hp": 2530,
+        "mp": 90,
+        "statuses": []
+      },
+      "lulu": {
+        "hp": 1375,
+        "mp": 290,
+        "statuses": []
+      },
+      "rikku": {
+        "hp": 1540,
+        "mp": 115,
+        "statuses": []
+      }
+    },
+    "logLen": 61,
+    "turn": 14,
+    "result": null
+  },
+  "pageErrors": []
+}

@@ -1,0 +1,77 @@
+[
+ {
+  "id": "rikku-thief/idle.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/idle.png",
+  "rel": "art/characters/rikku-thief/idle.png"
+ },
+ {
+  "id": "rikku-thief/ready.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/ready.png",
+  "rel": "art/characters/rikku-thief/ready.png"
+ },
+ {
+  "id": "rikku-thief/attack.webp",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/attack.webp",
+  "rel": "art/characters/rikku-thief/attack.webp"
+ },
+ {
+  "id": "rikku-thief/cast.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/cast.png",
+  "rel": "art/characters/rikku-thief/cast.png"
+ },
+ {
+  "id": "rikku-thief/item.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/item.png",
+  "rel": "art/characters/rikku-thief/item.png"
+ },
+ {
+  "id": "rikku-thief/hurt.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/hurt.png",
+  "rel": "art/characters/rikku-thief/hurt.png"
+ },
+ {
+  "id": "rikku-thief/ko.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/ko.png",
+  "rel": "art/characters/rikku-thief/ko.png"
+ },
+ {
+  "id": "rikku-thief/victory.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/victory.png",
+  "rel": "art/characters/rikku-thief/victory.png"
+ },
+ {
+  "id": "rikku-thief/defend.webp",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/defend.webp",
+  "rel": "art/characters/rikku-thief/defend.webp"
+ },
+ {
+  "id": "rikku-thief/sleep.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/sleep.png",
+  "rel": "art/characters/rikku-thief/sleep.png"
+ },
+ {
+  "id": "rikku-thief/critical.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/critical.png",
+  "rel": "art/characters/rikku-thief/critical.png"
+ },
+ {
+  "id": "rikku-thief/follow.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/follow.png",
+  "rel": "art/characters/rikku-thief/follow.png"
+ },
+ {
+  "id": "rikku-thief/twirl-start.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/twirl-start.png",
+  "rel": "art/characters/rikku-thief/twirl-start.png"
+ },
+ {
+  "id": "rikku-thief/twirl-going.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-thief/twirl-going.png",
+  "rel": "art/characters/rikku-thief/twirl-going.png"
+ },
+ {
+  "id": "rikku-gunner/twirl-mid.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch06/art/characters/rikku-gunner/twirl-mid.png",
+  "rel": "art/characters/rikku-gunner/twirl-mid.png"
+ }
+]

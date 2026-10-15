@@ -1,0 +1,889 @@
+{
+ "review": "live-smoke",
+ "sha": "d5bf2206",
+ "base": "https://echoesofspira.com/?cb=<time>",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-13T23:05:41.979Z",
+ "parts": {
+  "static": {
+   "pages": [
+    {
+     "address": "echoesofspira.com",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cnc9DuSS.js",
+     "css": "assets/index-92HbUNj_.css"
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cnc9DuSS.js",
+     "css": "assets/index-92HbUNj_.css"
+    }
+   ],
+   "retiredDirect": [
+    {
+     "address": "echoesofspira.com",
+     "file": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 404,
+     "ct": null,
+     "bytes": 0,
+     "startsLikeHtml": false
+    },
+    {
+     "address": "echoesofspira.com",
+     "file": "audio/music/boss-dread.mp3",
+     "status": 404,
+     "ct": null,
+     "bytes": 0,
+     "startsLikeHtml": false
+    },
+    {
+     "address": "echoesofspira.com",
+     "file": "audio/music/boss-yunalesca.mp3",
+     "status": 404,
+     "ct": null,
+     "bytes": 0,
+     "startsLikeHtml": false
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "file": "audio/music/boss-ffx2-aeon.mp3",
+     "status": 404,
+     "ct": null,
+     "bytes": 0,
+     "startsLikeHtml": false
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "file": "audio/music/boss-dread.mp3",
+     "status": 404,
+     "ct": null,
+     "bytes": 0,
+     "startsLikeHtml": false
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "file": "audio/music/boss-yunalesca.mp3",
+     "status": 404,
+     "ct": null,
+     "bytes": 0,
+     "startsLikeHtml": false
+    }
+   ],
+   "manifest": {
+    "status": 200,
+    "ct": "application/json",
+    "bytes": 62130,
+    "music": 41,
+    "sfxPacks": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin"
+    ],
+    "retiredListed": [],
+    "victory": {
+     "victory-ffx": {
+      "duration": 37.5874,
+      "loopStart": 7.901587,
+      "loopEnd": 34.58737,
+      "oneShot": false
+     },
+     "victory-ffx2": {
+      "duration": 48.7638,
+      "loopStart": 7.765125,
+      "loopEnd": 45.763832,
+      "oneShot": false
+     },
+     "victory-bahamut": {
+      "duration": 34.7984,
+      "loopStart": 6.516236,
+      "loopEnd": 31.79839,
+      "oneShot": false
+     },
+     "defeat-ffx": {
+      "duration": 9,
+      "loopStart": 7,
+      "loopEnd": 9,
+      "oneShot": true
+     },
+     "defeat-ffx2": {
+      "duration": 8.03,
+      "loopStart": 6.03,
+      "loopEnd": 8.03,
+      "oneShot": true
+     }
+    }
+   },
+   "sfxParityCueCount": 18,
+   "bundleMentions": {
+    "assets/index-Cnc9DuSS.js": {
+     "boss-ffx2-aeon": 9,
+     "boss-dread": 5,
+     "boss-yunalesca": 5
+    }
+   },
+   "status": "ran"
+  },
+  "results-ffx2": {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "expectedVictory": "victory-bahamut",
+   "viewport": "1600x900",
+   "note": "debug-assisted: the chapter is played by the debug API (gotoChapter, auto intended, skip speed, prep skipped) but its opening and closing scenes are PLAYED, advanced with real Enter presses (the win's cue starts after the closing scene replaces the battle screen, so a run with the scenes skipped does not show it: see the screen trail); the results screen is the game's own",
+   "guideSkipped": true,
+   "screenTrail": [
+    "cutscene",
+    "battle",
+    "cutscene",
+    "results"
+   ],
+   "sceneTaps": 28,
+   "resultsText": "AN UNOFFICIAL FAN TRIBUTE Echoes of Spira PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCEL B BRIEFING BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 0:09 Results NEW BE",
+   "resultsShot": {
+    "file": "results-ffx2-results.jpg",
+    "meanLuminance": 153.2,
+    "screen": "results"
+   },
+   "audioAt4s": {
+    "playing": "victory-bahamut",
+    "gain": 1,
+    "fading": 0,
+    "muted": false
+   },
+   "victoryCueManifest": {
+    "duration": 34.7984,
+    "loopStart": 6.516236,
+    "loopEnd": 31.79839
+   },
+   "audioPastCueLength": {
+    "afterResultsMs": 39806,
+    "playing": "victory-bahamut",
+    "gain": 1,
+    "screen": "results"
+   },
+   "enterPressesOnResults": 1,
+   "screenAfterResults": "cutscene",
+   "audioAfterContinue": {
+    "playing": "victory-bahamut"
+   },
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 9514B req+4246ms done+4387ms",
+     "music/title.mp3 200 audio/mpeg 2332064B req+4388ms done+6079ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710583B req+4388ms done+6403ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4726474B req+4388ms done+7378ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107627B req+5369ms done+7022ms",
+     "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20576B req+7228ms done+7380ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 185253B req+7229ms done+7417ms",
+     "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487530B req+7229ms done+8399ms",
+     "music/boss-bahamut.mp3 200 audio/mpeg 1342228B req+8720ms done+9376ms",
+     "music/victory-bahamut.mp3 200 audio/mpeg 514755B req+9649ms done+9881ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115259B req+9998ms done+10346ms"
+    ]
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "defeat-ffx": {
+   "id": "seymour-flux",
+   "game": "ffx",
+   "viewport": "1600x900",
+   "note": "debug-assisted: the chapter is entered through the debug API (cutscenes and prep skipped), every party member is set to 1 HP, the fight is handed to the defend strategy at skip speed; the results screen is the game's own",
+   "guideSkipped": true,
+   "members": [
+    {
+     "id": "tidus",
+     "hp": 1
+    },
+    {
+     "id": "yuna",
+     "hp": 1
+    },
+    {
+     "id": "kimahri",
+     "hp": 1
+    },
+    {
+     "id": "auron",
+     "hp": 1
+    },
+    {
+     "id": "wakka",
+     "hp": 1
+    },
+    {
+     "id": "lulu",
+     "hp": 1
+    },
+    {
+     "id": "rikku",
+     "hp": 1
+    },
+    {
+     "id": "valefor",
+     "hp": 1
+    },
+    {
+     "id": "ifrit",
+     "hp": 1
+    },
+    {
+     "id": "ixion",
+     "hp": 1
+    },
+    {
+     "id": "shiva",
+     "hp": 1
+    },
+    {
+     "id": "bahamut",
+     "hp": 1
+    }
+   ],
+   "resultsText": "AN UNOFFICIAL FAN TRIBUTE Echoes of Spira PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCEL B BRIEFING MT. GAGAZET — THE PROMINENCE · FELL RESULTS · 0:21 Defeat TURNS 18 ATTEMPTS 1 BEST — NE",
+   "resultsShot": {
+    "file": "defeat-ffx-results.jpg",
+    "meanLuminance": 22.3,
+    "screen": "results"
+   },
+   "audioAt3s": {
+    "playing": "defeat-ffx",
+    "gain": 1,
+    "muted": false,
+    "cachedDefeat": []
+   },
+   "defeatCueManifest": {
+    "duration": 9,
+    "oneShot": true
+   },
+   "audioPastCueLength": {
+    "afterResultsMs": 13017,
+    "playing": "defeat-ffx",
+    "screen": "results"
+   },
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-gagazet",
+     "boss-seymour",
+     "victory-ffx",
+     "defeat-ffx"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 9481B req+4501ms done+4539ms",
+     "music/title.mp3 200 audio/mpeg 2332064B req+4540ms done+6520ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710555B req+4540ms done+6362ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4726452B req+4540ms done+7436ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107724B req+5622ms done+7244ms",
+     "sfx/parity-ffx-core.mp3 200 audio/mpeg 330491B req+8515ms done+8663ms",
+     "music/scene-gagazet.mp3 200 audio/mpeg 1358977B req+8515ms done+8662ms",
+     "music/boss-seymour.mp3 200 audio/mpeg 2679713B req+9665ms done+14044ms",
+     "music/victory-ffx.mp3 200 audio/mpeg 634777B req+14622ms done+14757ms",
+     "music/defeat-ffx.mp3 200 audio/mpeg 128083B req+14892ms done+14943ms",
+     "music/defeat-ffx.mp3 200 audio/mpeg 465B req+29553ms done+29607ms"
+    ]
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "defeat-ffx2": {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "viewport": "1600x900",
+   "note": "debug-assisted: the chapter is entered through the debug API (cutscenes and prep skipped), every party member is set to 1 HP, the fight is handed to the defend strategy at skip speed; the results screen is the game's own",
+   "guideSkipped": true,
+   "members": [
+    {
+     "id": "yuna",
+     "hp": 1
+    },
+    {
+     "id": "rikku",
+     "hp": 1
+    },
+    {
+     "id": "paine",
+     "hp": 1
+    }
+   ],
+   "status": "error",
+   "error": "ASSERT-FAIL screen expected=results after 240249ms",
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 9480B req+5123ms done+5175ms",
+     "music/title.mp3 200 audio/mpeg 2332064B req+5177ms done+8243ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710578B req+5177ms done+8482ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4726527B req+5177ms done+11314ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107602B req+6250ms done+9365ms",
+     "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20571B req+8237ms done+8389ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 185255B req+8237ms done+8553ms",
+     "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487500B req+8237ms done+11116ms",
+     "music/boss-bahamut.mp3 200 audio/mpeg 1342160B req+11424ms done+12239ms",
+     "music/victory-bahamut.mp3 200 audio/mpeg 514759B req+12519ms done+13198ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115236B req+13322ms done+13603ms"
+    ]
+   },
+   "errorShot": {
+    "file": "defeat-ffx2-error.jpg",
+    "meanLuminance": 111.8,
+    "screen": "battle"
+   },
+   "consoleErrors": [],
+   "notFound": []
+  },
+  "phone": {
+   "viewport": "390x844 touch dpr2",
+   "guideOnBoard": {
+    "step": "1",
+    "text": "AURON · 1 OF 3 “Start with the first one.” Tap its picture to begin. The other fights wait on the board. TAP HERE SKIP THE GUIDE"
+   },
+   "prepState": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "chapter",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "step2": {
+    "guideStep": "2",
+    "tab": "chapter",
+    "phoneAttr": null,
+    "cue": {
+     "text": "▼ MORE BELOW",
+     "visibility": "hidden",
+     "display": "block",
+     "opacity": "1",
+     "isVisibleClass": true,
+     "rect": [
+      0,
+      727,
+      390,
+      33
+     ]
+    },
+    "chevron": {
+     "dir": "down",
+     "display": "block",
+     "rect": [
+      177,
+      742,
+      36,
+      22
+     ]
+    },
+    "sideScroll": false
+   },
+   "step2Shot": {
+    "file": "phone-prep-guide-step2.jpg",
+    "meanLuminance": 55.3,
+    "screen": "party-prep",
+    "chapter": "seymour-flux",
+    "guideStep": "2"
+   },
+   "step2Probe": {
+    "viewport": "390x844",
+    "floor": 14,
+    "nText": 41,
+    "minEff": 14,
+    "underCount": 0,
+    "under": [],
+    "overlaps": 6,
+    "cut": 0
+   },
+   "guideSkipped": true,
+   "afterSkip": {
+    "guideStep": null,
+    "tab": "chapter",
+    "phoneAttr": null,
+    "cue": {
+     "text": "▼ MORE BELOW",
+     "visibility": "visible",
+     "display": "block",
+     "opacity": "1",
+     "isVisibleClass": true,
+     "rect": [
+      0,
+      727,
+      390,
+      33
+     ]
+    },
+    "chevron": null,
+    "sideScroll": false
+   },
+   "afterSkipShot": {
+    "file": "phone-prep-guide-skipped.jpg",
+    "meanLuminance": 161.6,
+    "screen": "party-prep",
+    "guideStep": null
+   },
+   "textFloorAfterSkip": {
+    "viewport": "390x844",
+    "floor": 14,
+    "nText": 37,
+    "minEff": 14,
+    "underCount": 0,
+    "under": [],
+    "overlaps": 0,
+    "cut": 0
+   },
+   "status": "ran",
+   "consoleErrors": [],
+   "notFound": [],
+   "audio": {
+    "n": 7,
+    "byStatus": {
+     "200": 7
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 6
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-gagazet"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 9482B req+4596ms done+4700ms",
+     "music/title.mp3 200 audio/mpeg 2331315B req+4701ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2709777B req+4701ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4725444B req+4702ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2106911B req+5756ms",
+     "sfx/parity-ffx-core.mp3 200 audio/mpeg 330512B req+6962ms done+8706ms",
+     "music/scene-gagazet.mp3 200 audio/mpeg 1358317B req+6962ms"
+    ]
+   }
+  }
+ },
+ "assertions": [
+  {
+   "part": "static",
+   "name": "both addresses serve bundle Cnc9DuSS",
+   "ok": true,
+   "detail": [
+    {
+     "address": "echoesofspira.com",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cnc9DuSS.js",
+     "css": "assets/index-92HbUNj_.css"
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cnc9DuSS.js",
+     "css": "assets/index-92HbUNj_.css"
+    }
+   ]
+  },
+  {
+   "part": "static",
+   "name": "the live audio manifest lists none of the three retired files",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "results-ffx2",
+   "name": "the results screen is up and the chapter's victory cue is the one playing",
+   "ok": true,
+   "detail": {
+    "playing": "victory-bahamut",
+    "expected": "victory-bahamut"
+   }
+  },
+  {
+   "part": "results-ffx2",
+   "name": "the victory cue is still the current cue after its whole length (a loop), at a non-zero gain (a name is not sound: nobody here can hear)",
+   "ok": true,
+   "detail": {
+    "afterResultsMs": 39806,
+    "playing": "victory-bahamut",
+    "gain": 1,
+    "screen": "results"
+   }
+  },
+  {
+   "part": "results-ffx2",
+   "name": "no retired file requested; every audio request 2xx",
+   "ok": true,
+   "detail": {
+    "retired": [],
+    "notOk": [],
+    "failed": []
+   }
+  },
+  {
+   "part": "defeat-ffx",
+   "name": "the defeat results screen is up (screen, chapter and outcome text read) and defeat-ffx is the cue playing",
+   "ok": true,
+   "detail": {
+    "playing": "defeat-ffx",
+    "text": "AN UNOFFICIAL FAN TRIBUTE Echoes of Spira PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCE"
+   }
+  },
+  {
+   "part": "defeat-ffx",
+   "name": "no retired file requested; every audio request 2xx",
+   "ok": true,
+   "detail": {
+    "retired": [],
+    "notOk": [],
+    "failed": []
+   }
+  },
+  {
+   "part": "phone",
+   "name": "FFX Chapter I prep, guide step 2 up on a first launch (screen, chapter and step asserted)",
+   "ok": true,
+   "detail": {
+    "chapter": "seymour-flux",
+    "step": "2",
+    "tab": "chapter",
+    "phoneAttr": null
+   }
+  },
+  {
+   "part": "phone",
+   "name": "the MORE BELOW cue exists and is hidden (computed visibility) while step 2's slab is up; its box and the chevron's are named",
+   "ok": true,
+   "detail": {
+    "cue": {
+     "text": "▼ MORE BELOW",
+     "visibility": "hidden",
+     "display": "block",
+     "opacity": "1",
+     "isVisibleClass": true,
+     "rect": [
+      0,
+      727,
+      390,
+      33
+     ]
+    },
+    "chevron": {
+     "dir": "down",
+     "display": "block",
+     "rect": [
+      177,
+      742,
+      36,
+      22
+     ]
+    },
+    "boxesOverlap": true
+   }
+  },
+  {
+   "part": "phone",
+   "name": "the guide is skipped by a tap, the screen stays party-prep, and the cue is back to the page's own state (visible when the page scrolls)",
+   "ok": true,
+   "detail": {
+    "cue": {
+     "text": "▼ MORE BELOW",
+     "visibility": "visible",
+     "display": "block",
+     "opacity": "1",
+     "isVisibleClass": true,
+     "rect": [
+      0,
+      727,
+      390,
+      33
+     ]
+    }
+   }
+  }
+ ],
+ "loadRetries": [],
+ "finishedAt": "2026-10-13T23:12:24.074Z",
+ "elapsedMinutes": 6.7,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "audioRequestsAll": [
+  {
+   "run": "results-ffx2",
+   "request": "manifest.json 200 application/json 9514B req+4246ms done+4387ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "music/title.mp3 200 audio/mpeg 2332064B req+4388ms done+6079ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710583B req+4388ms done+6403ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4726474B req+4388ms done+7378ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107627B req+5369ms done+7022ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20576B req+7228ms done+7380ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 185253B req+7229ms done+7417ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487530B req+7229ms done+8399ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342228B req+8720ms done+9376ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "music/victory-bahamut.mp3 200 audio/mpeg 514755B req+9649ms done+9881ms"
+  },
+  {
+   "run": "results-ffx2",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115259B req+9998ms done+10346ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "manifest.json 200 application/json 9481B req+4501ms done+4539ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/title.mp3 200 audio/mpeg 2332064B req+4540ms done+6520ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710555B req+4540ms done+6362ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4726452B req+4540ms done+7436ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107724B req+5622ms done+7244ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "sfx/parity-ffx-core.mp3 200 audio/mpeg 330491B req+8515ms done+8663ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/scene-gagazet.mp3 200 audio/mpeg 1358977B req+8515ms done+8662ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/boss-seymour.mp3 200 audio/mpeg 2679713B req+9665ms done+14044ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/victory-ffx.mp3 200 audio/mpeg 634777B req+14622ms done+14757ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/defeat-ffx.mp3 200 audio/mpeg 128083B req+14892ms done+14943ms"
+  },
+  {
+   "run": "defeat-ffx",
+   "request": "music/defeat-ffx.mp3 200 audio/mpeg 465B req+29553ms done+29607ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "manifest.json 200 application/json 9480B req+5123ms done+5175ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/title.mp3 200 audio/mpeg 2332064B req+5177ms done+8243ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710578B req+5177ms done+8482ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4726527B req+5177ms done+11314ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107602B req+6250ms done+9365ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20571B req+8237ms done+8389ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 185255B req+8237ms done+8553ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487500B req+8237ms done+11116ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342160B req+11424ms done+12239ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/victory-bahamut.mp3 200 audio/mpeg 514759B req+12519ms done+13198ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115236B req+13322ms done+13603ms"
+  },
+  {
+   "run": "phone",
+   "request": "manifest.json 200 application/json 9482B req+4596ms done+4700ms"
+  },
+  {
+   "run": "phone",
+   "request": "music/title.mp3 200 audio/mpeg 2331315B req+4701ms"
+  },
+  {
+   "run": "phone",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2709777B req+4701ms"
+  },
+  {
+   "run": "phone",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4725444B req+4702ms"
+  },
+  {
+   "run": "phone",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2106911B req+5756ms"
+  },
+  {
+   "run": "phone",
+   "request": "sfx/parity-ffx-core.mp3 200 audio/mpeg 330512B req+6962ms done+8706ms"
+  },
+  {
+   "run": "phone",
+   "request": "music/scene-gagazet.mp3 200 audio/mpeg 1358317B req+6962ms"
+  }
+ ],
+ "audioTotals": {
+  "requests": 40,
+  "byStatus": {
+   "200": 40
+  },
+  "retiredRequested": 0,
+  "distinctFiles": [
+   "/audio/manifest.json",
+   "/audio/music/boss-bahamut.mp3",
+   "/audio/music/boss-seymour.mp3",
+   "/audio/music/chapter-select.mp3",
+   "/audio/music/defeat-ffx.mp3",
+   "/audio/music/defeat-ffx2.mp3",
+   "/audio/music/scene-bevelle-underground.mp3",
+   "/audio/music/scene-gagazet.mp3",
+   "/audio/music/title.mp3",
+   "/audio/music/victory-bahamut.mp3",
+   "/audio/music/victory-ffx.mp3",
+   "/audio/sfx/parity-ffx-core.mp3",
+   "/audio/sfx/parity-ffx2-bahamut.mp3",
+   "/audio/sfx/parity-ffx2-core.mp3",
+   "/audio/sfx/sprite-v2.mp3",
+   "/audio/sfx/sprite.mp3"
+  ]
+ },
+ "partial": true,
+ "savedAt": "2026-10-13T23:12:24.076Z"
+}

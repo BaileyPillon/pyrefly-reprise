@@ -1,0 +1,991 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-14T00:32:49.596Z",
+  "build": {
+    "mainSha": "0b0571d1"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect (crash, lock, lost progress, an encounter that cannot finish) is introduced or left reachable by the change: the four change sets were played by real keys on the production candidate (FFX Chapters I, II, III, VIII and the hidden Fayth chapter; FFX-2 Chapters IV, XI and XV; the hidden Leblanc, Experiment and Mushroom chapters to their first menu) and every run reached its menu or its results with 0 console errors; the Fayth chapter wins to its results and leaves the save alone (the main save key is byte-identical after a full win and only the hidden experiments key is written).",
+    "No regression against live d5bf2206 at critical or major severity: three existing chapters (FFX I and VIII, FFX-2 IV), two repetitions each, live and candidate alternating: the engine's first events (up to 12) are identical in every run, the first menu comes within the spread of one build (the candidate -217 to +83 ms against live), and the stage camera in the opening and the first action differs from live by no more than two runs of the same build differ from each other; the shares of the change that touch the shared presenter (`BattleMoments`, `BattlePresenter*`, `ShotDirector`) are inert for every scene that does not publish a director.",
+    "The shades are exactly the note's four colours on the right pages of the right game; the engine's permanent-Auto-Life event is gone (the whole Chapter III chain shows 0 removal events against live's 43 and the icon present in 250 of 250 samples where live loses it 33 times); Chapter II's first Form III turn reads and plays as the note says; FOC45-01 and FOC45-02 are fixed on the measures they named (Chapter IV's cue 0.3 s after Continue; the three wraps +0.3, -1.8, +0.5 dB from +24.2, +12.8, +23.1).",
+    "Nothing of the local-files route reaches the build (apply 'serve' plugin, `import.meta.env.DEV` guard; no `ffx-local`, `__ffx`, `GLTFLoader`, `.glb` or PC path in the JavaScript; `GET /__ffx-local/...` on the served build answers the page), no retail asset type ships, every art file is byte-identical to live; the chapter does not exist on the board (18 chapters) and typing fayth opens it only on the candidate (on live the same letters only move the cursor).",
+    "The majors that are not regressions are disclosed and carried: FOC43-06 (carried, the same count on both builds in the same session: 19 and 25 on the candidate against 19 and 26 on live in Chapters VIII and XVIII, at 59.7 to 59.8 fps) and, inside the brand-new chapter, FOC46-05; the chapter may ship switched off. Polish findings (FOC46-01 to FOC46-04) are listed and do not hold the build."
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "minutes": 60,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe, exp-fayth (to the results); the three results loops and 44 changed pack cues measured offline",
+      "state": "title to results by real keys; offline decode and measurement",
+      "mode": "automated",
+      "reason": "The technical half is done and clean: tools/audio/qa.mjs 0 cue findings and 0 sfx findings (68.77 MB of 105; the budget gate PASS); my own ffmpeg re-measure of all 41 music cues (-16 LUFS each, loop points on sample boundaries); the page's own decoder 52 of 52 shipped MP3s (41 music cues, the 2 sprites, the 9 packs) decode in Chromium 153 with Web Audio's decodeAudioData, 0 failed, none silent, the largest length difference from the manifest 1 ms (WebKit 26.6 has no Web Audio and refuses every MP3, the files byte-identical to live included: UNVERIFIED, an engine-build limit); the 44 changed or new pack cues measured against the sounds they replace; the three results loops' wraps measured by me (+24.2/+12.8/+23.1 dB on live to +0.3/-1.8/+0.5 dB); routing proved in real fights of both games (packs game-aware, 0 cross-game cues, 0 synth); Chapter IV's cue silent after the tally and Chapters XI and XV re-cued. NOBODY HAS HEARD ANY OF IT (rule 13): UNVERIFIED stays until Bailey auditions; what the ear owes is in the last section (the spell chant, Petrify, the three wraps, the post-tally silence).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/qa-audio.log",
+        "critic/reviews/0b0571d1-focused/gates/audio-offline.json",
+        "critic/reviews/0b0571d1-focused/gates/audio-decode-engines.json",
+        "critic/reviews/0b0571d1-focused/sfx/measure.md",
+        "critic/reviews/0b0571d1-focused/sfx/pairs.md",
+        "critic/reviews/0b0571d1-focused/sfx/fights.md",
+        "critic/reviews/0b0571d1-focused/music/wrap-measure.md",
+        "critic/reviews/0b0571d1-focused/music/post-tally.md"
+      ]
+    },
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 20,
+      "game": "both",
+      "chapter": "seymour-flux, exp-fayth, ffx2-bahamut",
+      "state": "board, prep, first menu, pause at 1600x900, 2000x1012 and 390x844 touch",
+      "mode": "automated",
+      "reason": "The screens the changes touch fill the window with no sideways scroll: the board at 1600x900 (scroll width = client width, 18 cards, the board's own text unchanged), FFX Chapter I at 2000x1012 (board, prep with the first-run guide up and after, first menu, the pause and its SOUND TEST tab: identical numbers to the previous review's run of the same screens: 114 text nodes, floor 14 px, 0 under, 0 cut, 23 rows), the hidden Fayth chapter at 2000x1012 and at 390x844 by touch (its prep, first menu and pause), and FFX-2 Chapter IV at 390x844 (67 text nodes, floor 14 px, 0 under, 1 cut and 6 sideways: the pause tab strip's own swipe overflow, as before; 25 rows). The phone prep pages with the first-run guide up still hide the MORE BELOW cue (FOC44A-01's fix holds: cue visibility hidden in all four prep runs). The 'Party prep' tile reads the same screen as before; the phone shades are covered in section 1.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/board/cand-1600x900/board.jpg",
+        "critic/reviews/0b0571d1-focused/layout/cand-seymour-flux-menu-2000/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-phone/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-ffx2-bahamut-menu-phone/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/03-prep.jpg"
+      ]
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 8,
+      "game": "both",
+      "chapter": "seymour-flux, exp-fayth, ffx2-bahamut",
+      "state": "every text node of the pause SOUND TEST tab and the prep pages",
+      "mode": "automated",
+      "reason": "Every text node of the pause's SOUND TEST tab (the one surface with a long text list) reads 14 px or more at 2000x1012 (FFX I 114 nodes, Fayth 125) and 390x844 (Fayth 67, FFX-2 IV 67): 0 under the floor in all four, 0 cut on desktop and the one cut at 390x844 that the previous review recorded; the phone prep shades are all at the same text sizes as before (a colour change only).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/layout/cand-seymour-flux-menu-2000/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-phone/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-ffx2-bahamut-menu-phone/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/03-prep.jpg"
+      ]
+    },
+    {
+      "id": "CHK-004",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 12,
+      "game": "ffx",
+      "chapter": "yunalesca",
+      "state": "Tidus's first command menu in Form III, real HUD",
+      "mode": "automated",
+      "reason": "At Tidus's first command menu in Form III of Chapter II, with real keys to the menu and the real HUD up, the advisor card names the move 'Wakka, IN SWITCH, NO MP, Swaps a bench member into the slot; they take this turn' (move 1) and 'Remedy, Tidus, IN ITEMS' (move 2); the borrowed 'intended' strategy, built from the same tactic, picked the offered enabled switch row (tidus to wakka), the engine logged exactly that switch event, and the HUD that followed shows Wakka's row and a card for Wakka's own turn. The chip names the submenu the row lives in; the SWITCH row on Tidus's menu sits below the six visible rows (a down arrow shows more) and was not scrolled to in the picture. The model-level ownership tests (advisor-ownership, re-parity-rc6-ch2) pass.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/rc6/cand-ch2/result.json",
+        "critic/reviews/0b0571d1-focused/rc6/cand-ch2/form3-tidus-menu.jpg"
+      ]
+    },
+    {
+      "id": "CHK-005",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 3,
+      "game": "ffx",
+      "chapter": "yunalesca",
+      "state": "model level: the switch row off, before Form III, another actor",
+      "mode": "automated",
+      "reason": "The recommendation is tested at its edges at model level by the candidate's own tests, which I ran: tests/unit/re-parity-rc6-ch2.test.ts ('is Tidus's switch to Wakka in Form III, and nothing before it, for anyone else, or when the row is off': the card falls back to the rest of the tactic when Wakka is not on the bench or not able) and strategy-chapter2.test.ts (13) pass. The on-screen broken board (Wakka down on the bench at Form III) was not played in the browser; the rule fires only on an ENABLED switch row the engine offers, so a board with Wakka out can only fall back.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/vitest-key.json"
+      ]
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 10,
+      "game": "both",
+      "chapter": "ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe",
+      "state": "the results cue and the scenes after the tally",
+      "mode": "automated",
+      "reason": "The transient the changed flow adds, the results cue, dies with its screen: in FFX-2 Chapter IV the cue fades out 0.3 s after the real Continue and nothing plays through the post scene, in XI and XV it is replaced by the chapter's own bed within 0.35 s (each fading in over about a second), and the board's loop starts where the scene ends; live keeps the victory loop under the scene (music/post-tally.md). No letterbox, vignette or slab was found left up in the opening, first-action and win runs of Chapters I, IV, VIII, XI, XV and the Fayth chapter (the screenshots at the first menu and the results).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/music/post-tally.md"
+      ]
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 6,
+      "game": "both",
+      "chapter": "all chapters played, exp-fayth",
+      "state": "the prep, the first menu, the results text read in the runs",
+      "mode": "automated",
+      "reason": "No developer vocabulary (undefined, NaN, raw keys, placeholders) in the text read from the board, the prep, the first menus and the results screens of the candidate's runs. The hidden Fayth chapter's header reads 'EXP · EVRAE, FFX CAMERA (EXPERIMENTAL)', in the same style as the other hidden chapters' ('EXP · EXPERIMENTAL: LEBLANC (NEW ART)', 'EXP · THE EXPERIMENT'); the SOUND TEST's id-derived titles are FOC45-03 (carried polish).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/board/cand-1600x900/result.json",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-win/result.json"
+      ]
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 8,
+      "game": "both",
+      "chapter": "seymour-flux, evrae-airship, ffx2-bahamut, exp-fayth",
+      "state": "first command menu of four chapters",
+      "mode": "automated",
+      "reason": "At the first command menu of Chapters I, VIII and IV (live and candidate alike, the same frames) and of the hidden Fayth chapter the panels sit beside the painted actors, not over them (the fayth menu: the command list on the left, the three on the deck between it and the advisor card, Evrae at the right; its HUD is laid out for the old rest camera, disclosed). The opening comparison shows the candidate's first-menu frames equal to live's within the noise.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/open/summary.md",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-menu/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/open/cand-evrae-airship-r1/first-menu.jpg"
+      ]
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 5,
+      "game": "both",
+      "chapter": "seymour-flux, exp-fayth, ffx2-bahamut",
+      "state": "every text node at three sizes",
+      "mode": "automated",
+      "reason": "No title or name is cut in the layout runs (0 cut at 2000x1012; at 390x844 the single cut node is the pause tab strip's own swipe overflow, the same as the previous review's runs); the Fayth chapter's prep header reads in full ('EXP · Evrae, FFX Camera (Experimental) — Deck of the Fahrenheit — The Approach to Bevelle').",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/layout/cand-seymour-flux-menu-2000/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-phone/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-ffx2-bahamut-menu-phone/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/03-prep.jpg"
+      ]
+    },
+    {
+      "id": "CHK-011",
+      "result": "FAIL",
+      "mandatory": false,
+      "minutes": 6,
+      "game": "both",
+      "chapter": "seymour-flux, evrae-airship, ffx2-bahamut, exp-fayth, yunalesca",
+      "state": "first command menu (and Form III of Chapter II)",
+      "mode": "automated",
+      "reason": "PASS in every existing chapter and on desktop: at the first command menu the targetable enemies are in frame in FFX Chapter I (Seymour Flux seated at the right and Mortiorchis), Chapter VIII (Evrae's coil beside the party), FFX-2 Chapter IV (Bahamut) and, on desktop, the hidden Fayth chapter (the painted Evrae enters from the right edge and is cut by the frame as the game's is); Yunalesca fills the frame at Form III of Chapter II (the picture of the Form III menu). FAIL only inside the new Fayth chapter at 390x844: the boss is out of frame at the first menu (FOC46-05; Chapter VIII on the same phone shows his coil).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/open/cand-seymour-flux-r1/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/open/cand-evrae-airship-r1/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/open/cand-ffx2-bahamut-r1/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-menu/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-phone/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/layout/cand-evrae-airship-menu-phone/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/rc6/cand-ch2/form3-tidus-menu.jpg"
+      ]
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 15,
+      "game": "both",
+      "chapter": "all",
+      "state": "the production build and its art",
+      "mode": "automated",
+      "reason": "No painting changed: every one of the 5,114 art files (and the 1,264 JSON sidecars among them) is byte-identical to live. art-derive verify PASS (3,778 masters, 3,397 pixel-compared, 0 problems) and audit PASS (515 literal art names, 0 dangling) on this build; art-browser-load and art-play-audit: art-play-audit on this build, limited to the frontend, the openings of FFX Chapters I and VIII and FFX-2 Chapter IV and the results of Chapters I and IV: 6 of 6 scenarios passed, 999 image requests (325 WebP, 674 PNG, all 200 with an image type), 0 HTTP errors, 0 console errors (the full 20-scenario run was stopped after 6.8 min at its tenth chapter to keep the review inside its time). art-browser-load was not re-run: every image file of this build (5,114 of 5,114 art files, the depth maps and the fonts) is byte-identical to live's, which the previous review loaded 3,863 of 3,863 in Chromium 153 and WebKit 26.6 (`d5bf2206-focused/gates/art-browser-load.json`). The hidden Fayth chapter's painted face is Chapter VIII's own plate (no fallback art ships as its final face); it does ask for one plate file it does not have (FOC46-04, in the new feature).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/art-verify.log",
+        "critic/reviews/0b0571d1-focused/gates/art-audit.log",
+        "critic/reviews/0b0571d1-focused/gates/manifest-diff.log",
+        "critic/reviews/0b0571d1-focused/gates/manifest-cand.json"
+      ]
+    },
+    {
+      "id": "CHK-013",
+      "result": "NOT APPLICABLE",
+      "mandatory": false,
+      "minutes": 0,
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "automated",
+      "reason": "No art changed in this candidate: the manifest diff against live lists no painting among its 7 added, 3 removed and 10 changed files (every one of the 5,114 art files is byte-identical), and approvedArtCheck is false.",
+      "evidence": []
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 120,
+      "game": "both",
+      "chapter": "seymour-flux, evrae-airship, yunalesca, braskas-final-aeon, ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe, exp-fayth and the four other door words",
+      "state": "title to the first menu or the results by real keys, taps and clicks",
+      "mode": "automated",
+      "reason": "Every behaviour claimed was reached with the player's own input: the title entered by Enter, the board walked by arrow keys, the door words typed letter by letter (fayth, limit, leblanc, experiment, mushroom), Esc to skip the first-run guide, Enter through the prep and the scenes, the results left by a real Enter or a click on the control, the phone prep by touch taps (tabs, the guide's skip words). The fights themselves are handed to the debug API's autoBattle (a labelled setup hook) after the real-key walk to the first menu; Chapter II's Form III turn is read at the real HUD menu and its decision submitted through the presenter's pending-menu path (a labelled hook).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/board/cand-1600x900/result.json",
+        "critic/reviews/0b0571d1-focused/music/cand-seymour-flux-win/result.json",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-win/result.json",
+        "critic/reviews/0b0571d1-focused/phone/shades-cand-ffx2-bahamut-390x844/result.json"
+      ]
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 0,
+      "game": "both",
+      "chapter": "all",
+      "state": "every capture",
+      "mode": "automated",
+      "reason": "Every script asserts the screen (and, on the phone, the selected tab) before it reads or captures, and records the screen with its samples; a failed wait throws (ASSERT-FAIL) and is never a capture of the wrong screen. No capture in this report is of an unasserted screen.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/walk2.mjs",
+        "critic/reviews/0b0571d1-focused/open-compare.mjs",
+        "critic/reviews/0b0571d1-focused/shades-look.mjs",
+        "critic/reviews/0b0571d1-focused/board-check.mjs"
+      ]
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "mandatory": false,
+      "minutes": 0,
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "automated",
+      "reason": "Pre-deploy focused review of the production candidate; the live check of the exact artifact is the obligation after the deploy. The identity recorded here: dist-gate artifact hash 3c911310c70ad257 (5,222 files, 10,299.8 MB) against live's published manifest (hash f4686f3feaef4797, 5,218 files); 7 added, 10 changed, 3 removed, 5,205 byte-identical.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/manifest-cand.json",
+        "critic/reviews/0b0571d1-focused/gates/manifest-live.json",
+        "critic/reviews/0b0571d1-focused/gates/manifest-diff.log"
+      ]
+    },
+    {
+      "id": "CHK-018",
+      "result": "FAIL",
+      "mandatory": false,
+      "minutes": 10,
+      "game": "both",
+      "chapter": "all",
+      "state": "the production build and the network of the runs",
+      "mode": "automated",
+      "reason": "Everything the candidate adds is referenced correctly except one chapter-specific plate: art-derive audit reads 515 literal art names in the bundle, 0 dangling (36 a shipped file, 479 a derived master mapped at run time); every audio file the walker's 10 runs asked for answered 200 audio/mpeg (112 MP3 responses, 24 distinct files, 0 console errors, 0 404s, none of the three retired v2 files and no file of the other game's packs requested); the manifest decodes with the decode check on (the same two flat-colour Paine layers as before). FAIL is inside the new feature only: the hidden Fayth chapter's scene key `exp-fayth-deck` is read as a painting name by the prep wash and the cutscene plate, and `art/backdrops/exp-fayth-deck.png` is not in the build (FOC46-04; 2 to 3 requests a run answered with the page itself on the preview and a 404 on the live host; the prep is a flat navy page).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/art-audit.log",
+        "critic/reviews/0b0571d1-focused/sfx/fights.md",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-win/result.json"
+      ]
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 15,
+      "game": "both",
+      "chapter": "all",
+      "state": "every changed audio file and the art set",
+      "mode": "automated",
+      "reason": "52 of 52 shipped MP3s decode in Chromium 153 with lengths within 1 ms of the manifest and none silent (the page's own Web Audio); `tools/audio/qa.mjs` and my ffmpeg re-measure agree (41 of 41 music cues clean, 9 packs and the sprites decode, 68.77 MB of the 105 MB budget). WebKit 26.6 cannot decode audio at all here (no Web Audio, media error 4 on every MP3, byte-identical files included): audio decode in WebKit is UNVERIFIED, an engine-build limit as in the previous review. Images: every art file is byte-identical to live and live's art-browser-load result (3,863 of 3,863 in both engines) applies; art-derive verify (3,778 masters, 3,397 pixel-compared) passes on this build.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/audio-decode-engines.json",
+        "critic/reviews/0b0571d1-focused/gates/audio-offline.json",
+        "critic/reviews/0b0571d1-focused/gates/art-verify.log"
+      ]
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 20,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe, yunalesca, braskas-final-aeon",
+      "state": "each shared change in both games",
+      "mode": "automated",
+      "reason": "Each shared change was run in both games: the phone prep shades (FFX Chapter I and FFX-2 Chapter IV, with the control on live), the recorded sound effects (FFX Chapter I and the hidden Fayth chapter, FFX-2 IV, XI, XV), the results music and the post-tally cues (FFX-2 IV, XI, XV; the FFX posts are unchanged), the shared presenter's openings and first actions (FFX I, VIII; FFX-2 IV), the continuity harness (FFX VIII and XVIII; the FFX-2 side is covered by the first-action camera comparison only, see CHK-027).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/phone/shades-cand-seymour-flux-390x844/result.json",
+        "critic/reviews/0b0571d1-focused/sfx/fights.md",
+        "critic/reviews/0b0571d1-focused/music/post-tally.md",
+        "critic/reviews/0b0571d1-focused/open/summary.md"
+      ]
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 15,
+      "game": "both",
+      "chapter": "all",
+      "state": "presence in the intended game, absence in the other",
+      "mode": "automated",
+      "reason": "Each part checked for its own game and for absence in the other: shades (the gold notes on FFX pages only, the pink counts and the up and down counts on FFX-2 pages only); recorded effects (9 single-game packs, every pack requested in the four fights its own game's, 0 cues of the other game; the by-name probes: FFX Chapter I answers 16 of 16 new FFX names from its packs and no FFX-2 name from a pack; FFX-2 Chapters XI and V answer all 12 new FFX-2 names from their packs (the leg only in V, where the machina pack is loaded) and no FFX name from a pack; FF7 answers every name from the shared banks); RC6 (the FFX-2 ATB and FF7 goldens unchanged and green; the Wakka switch exists in no other chapter); the Fayth chapter (registry game ffx, 18 chapters listed, the door word opens it only in the FFX board flow). One game-aware leak found and listed: FOC46-02 (an FFX row's retirement changed FFX-2's enemy-defeat sound).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/sfx/fights.md",
+        "critic/reviews/0b0571d1-focused/sfx/measure.md",
+        "critic/reviews/0b0571d1-focused/gates/vitest-key.json",
+        "critic/reviews/0b0571d1-focused/board/cand-1600x900/result.json"
+      ]
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 25,
+      "game": "both",
+      "chapter": "seymour-flux, yunalesca, braskas-final-aeon, ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe, exp-fayth",
+      "state": "win to the results screen, Continue, the board",
+      "mode": "automated",
+      "reason": "Wins reach their real destination: FFX Chapter I, FFX-2 Chapters IV, XI and XV and the hidden Fayth chapter were won by the strategy after the real-key walk, and in each the results screen, the real Continue (or the control's click), the post scene where there is one, and the chapter-select board followed; Chapter II ran to the end of its fight in the same way and went to the post-fight scene; Chapter III ran its whole seven-link chain to the results screen on both builds; The Fayth chapter's results read 'CLEARED' and its board is unchanged afterwards (the main save key byte-identical (617 bytes before and after a full win) and the only key written `pyrefly-reprise:experiments:v1` (119 bytes, the hidden chapters' own record), the board still reading 0 OF 18 BEATEN with 18 chapters). Losses and withdrawals were not re-run: the defeat, retry and withdrawal code is not touched by r46 (the previous review's runs of the same artifact stand).",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/music/cand-seymour-flux-win/result.json",
+        "critic/reviews/0b0571d1-focused/music/cand-ffx2-bahamut-win/result.json",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-win/result.json",
+        "critic/reviews/0b0571d1-focused/rc6/cand-ch2/result.json"
+      ]
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 25,
+      "game": "both",
+      "chapter": "seymour-flux, yunalesca, braskas-final-aeon, ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe, exp-fayth",
+      "state": "real presentation path",
+      "mode": "automated",
+      "reason": "Invoked through the real presentation path and surviving the next frames: the recorded effects asked by name by the game's own events in real fights (FFX Chapter I and the Fayth chapter: 11 and 9 recorded originals via their packs; FFX-2 IV, XI, XV: 9, 9 and 8), the results music from showResults and its stop or re-cue after the tally (IV, XI, XV), the shot director's beats (`BattleMoments` asks the scene's director for the opening, the action open and close, the impact; none is installed for any scene but the Fayth chapter's, and the three existing chapters' first actions equal live's), and the engine's Auto-Life event and the HUD in Chapter III.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/sfx/fights.md",
+        "critic/reviews/0b0571d1-focused/music/post-tally.md",
+        "critic/reviews/0b0571d1-focused/rc6/cand-ch3/result.json",
+        "critic/reviews/0b0571d1-focused/rc6/live-ch3/result.json"
+      ]
+    },
+    {
+      "id": "CHK-026",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 40,
+      "game": "ffx",
+      "chapter": "evrae-airship, sin-face",
+      "state": "the continuity harness, real keys, seed 1, 1600x900",
+      "mode": "automated",
+      "reason": "The harness on the candidate's production bundle (real keys, seed 1, 1600x900, one browser, 59.7 to 59.8 fps) in FFX Chapter VIII (362.6 s of battle, 476 swaps) and Chapter XVIII (159.2 s, 297 swaps), and on live in the same session (365.2 s and 476 swaps, 162.6 s and 299 swaps): CHK-026 PASS on all four (head size jump at most 0.1 percent in VIII and 0.2 percent registered in XVIII, 3.6 by the silhouette measure, the same on live and in the previous review, 0 heads over the tolerance, feet shift at most 1.1 px, 0 snaps, no double image over the fail line: worst 0.34 to 0.38). The hidden Fayth chapter and the FFX-2 chapters were not run by the harness on this candidate (it opens a chapter by its card): UNVERIFIED there, not counted here.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/cont-chain.log",
+        "critic/reviews/0b0571d1-focused/continuity/continuity-summary.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/0b0571d1-focused/cont-table.md",
+        "critic/reviews/0b0571d1-focused/cont-rows.json",
+        "critic/reviews/0b0571d1-focused/continuity/evrae-airship-win-0b0571d1/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/evrae-airship-win-live/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity/sin-face-win-0b0571d1/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/sin-face-win-live/continuity/continuity.json"
+      ]
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "mandatory": false,
+      "minutes": 0,
+      "game": "ffx",
+      "chapter": "evrae-airship, sin-face",
+      "state": "the continuity harness, real keys, seed 1, 1600x900",
+      "mode": "automated",
+      "reason": "The same runs: CHK-027 FAIL on all four, the carried failure FOC43-06: 19 and 25 jerks of 40 px or more on the candidate (44 in all, worst 109.5 px) against 19 and 26 on live (45 in all, worst 109.9 px) in the same session; the same figures and the same worst moves on both; snaps 0 per minute. Not introduced by the candidate and not a regression: the candidate's count is not above live's in either chapter.",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/cont-chain.log",
+        "critic/reviews/0b0571d1-focused/continuity/continuity-summary.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/0b0571d1-focused/cont-table.md",
+        "critic/reviews/0b0571d1-focused/cont-rows.json",
+        "critic/reviews/0b0571d1-focused/continuity/evrae-airship-win-0b0571d1/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/evrae-airship-win-live/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity/sin-face-win-0b0571d1/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/sin-face-win-live/continuity/continuity.json"
+      ]
+    },
+    {
+      "id": "CHK-B1",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "minutes": 0,
+      "game": "both",
+      "chapter": "-",
+      "state": "-",
+      "mode": "manual",
+      "reason": "No sound or music was judged: agents cannot hear (rule 13). The 29 recorded sound effects and Shuyin's newer take, the three re-cut results loops and the post-tally silences are measured, routed and decoded, and the owner delegated every choice to the driver, so nobody has heard them; what the ear owes is the last section.",
+      "evidence": []
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "evrae-airship",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 362.6,
+        "swaps": 468,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 0.1,
+        "maxFeetShiftPx": 1.1,
+        "worstJerkPx": 107.8,
+        "jerksCovered": 0,
+        "fps": 59.7,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-014-rikku-ko-idle.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-006-rikku-follow-idle.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-237-kimahri-hurt-idle.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-234-kimahri-idle-hurt.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-004-rikku-attack-follow.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-475-kimahri-idle-victory.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-345-tidus-attack-follow.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-328-tidus-ready-attack.jpg",
+          "evrae-airship-win-0b0571d1/continuity/strips/swap-022-wakka-idle-hurt.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "sin-face",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 159.2,
+        "swaps": 292,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 3.6,
+        "maxFeetShiftPx": 1.1,
+        "worstJerkPx": 109.5,
+        "jerksCovered": 0,
+        "fps": 59.8,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "sin-face-win-0b0571d1/continuity/strips/swap-145-wakka-hurt-idle.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-066-wakka-idle-hurt.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-275-wakka-critical-hurt.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-279-wakka-hurt-critical.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-245-wakka-hurt-ready.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-155-auron-attack-follow.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-108-lulu-hurt-idle.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-140-lulu-idle-hurt.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-295-lulu-critical-victory.jpg",
+          "sin-face-win-0b0571d1/continuity/strips/swap-183-auron-follow-idle.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 521.8,
+    "counted": 760,
+    "swaps": 773,
+    "size": {
+      "judged": 562,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 198,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 3.6,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1.1,
+      "feetOverTolerance": 0,
+      "headMeasured": 562,
+      "headRegistration": 561,
+      "headSilhouette": 1,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 561,
+      "ghostFrames": 2224,
+      "worstGhostSeverity": 0.372,
+      "ghostOverFail": 0,
+      "jerks": 141,
+      "worstJerkPx": 109.5,
+      "jerksOverFail": 44,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.014,
+      "maxCentroidShiftPx": 100.1,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "561 of 562 measured swaps had a registered head (tolerance 3 percent); 1 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "44 jerk(s) of 40 px or more in one frame (worst 109.5 px)"
+        ]
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 2 chapter(s), 521.8 s of battle, 59.7 to 59.8 fps, 2 of 2 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (44 jerk(s) of 40 px or more in one frame (worst 109.5 px))",
+    "base": "http://127.0.0.1:5481/",
+    "date": "2026-10-14T00:17:21.640Z"
+  },
+  "targets": {
+    "required": 1,
+    "matched": 1,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0
+  },
+  "issues": [
+    {
+      "id": "FOC43-06",
+      "status": "open, carried (restated by 0b0571d1-focused)",
+      "severity": "major",
+      "title": "Jerks of 40 px or more remain (CHK-027 FAIL) on the candidate and on live alike: 86 against 86 in FFX-2 XIII in the same hour at 53 fps (24 on the earlier idle-machine run); carried",
+      "game": "both",
+      "chapter": "sin-face, ffx2-trema, ffx2-fallen-aeons",
+      "expected": "no jerk of 40 px or more in one frame (RUBRIC 6a, D-421)",
+      "observed": "The harness on FFX Chapter VIII (Evrae) and Chapter XVIII (Sin: the Face), candidate 0b0571d1 and live d5bf2206 back to back in the same session at 59.7 to 59.8 fps (a quiet machine), seed 1, real keys: 19 and 25 jerks of 40 px or more on the candidate against 19 and 26 on live (44 and 45 in all, worst 109.5 and 109.9 px), the same figures leading on both (Chapter VIII: Evrae 13, Tidus 3, Rikku 2, Kimahri 1 on both; Sin: the Face: Overdrive Sin 21 and 23, Wakka 2 and 2, Auron 2 and 1), snaps 0 per minute on all four, CHK-026 PASS and CHK-027 FAIL on all four. The previous review read 86 against 86 in FFX-2 XIII in the same hour on a loaded machine and 50 in Chapter XVIII at 56 fps on the same artifact, so the count follows the frame pacing; the same-session pair is the comparison, and it shows no difference. The jerks are the big moves of the figures themselves, the kinds the earlier reviews list; none is new on the candidate (the same figures lead on live) and the shared presenter edits did not change any figure motion. The FFX-2 chapters were not re-run by the harness on this candidate.",
+      "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=<id> --tag=<x> --budget=1200000 --summary=continuity-summary-<id>.json, seed 1, 1600x900, candidate and live back to back (critic/reviews/0b0571d1-focused/cont-chain.mjs)",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/cont-table.md",
+        "critic/reviews/0b0571d1-focused/continuity/continuity-summary.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/continuity-summary.json",
+        "critic/reviews/0b0571d1-focused/continuity/evrae-airship-win-0b0571d1/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/evrae-airship-win-live/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity/sin-face-win-0b0571d1/continuity/continuity.json",
+        "critic/reviews/0b0571d1-focused/continuity-live/sin-face-win-live/continuity/continuity.json"
+      ],
+      "confidence": "high that they exist on both builds and that the candidate is not worse in the paired chapters; medium on the load's share of the count (the fight differs by a few turns)",
+      "requirement": "RUBRIC 6a, CHK-027",
+      "where": "presenter pose swaps at KO, revive and ATB cuts, damage recoils, the Save Sphere wash (none touched by this candidate)",
+      "fix": "carried from FOC41-01, FOC42-01, FOC43-06: blend or stage the KO and revive cuts",
+      "acceptanceCheck": "the continuity harness shows no jerk of 40 px or more on the three chapters",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC45-03",
+      "severity": "polish",
+      "title": "The SOUND TEST titles of the new stand-in cue ids are id-derived (\"Victory Bahamut\" here, \"Boss Bahamut\" since batch 1) where composed tracks have titles (\"Iron Undertow\", \"Noble Rot\")",
+      "game": "ffx2",
+      "chapter": "the pause screen, MUSIC tab (FFX-2 Chapter IV)",
+      "expected": "a player-facing title for every row of the SOUND TEST list (CHK-007)",
+      "observed": "FFX-2 Chapter IV at 1600x900, 2000x1012 and 390x844: the rows are Boss Bahamut, Iron Undertow, Victory Bahamut, then the composed titles; none of the nine new cue ids has a composed title in src/audio/tracks/index.ts (26 tracks are named). Where the list shows them, they read as ids with spaces. || Carried, unchanged: the three results loops this candidate re-cuts keep their id-derived titles; the proposals for titles are in docs/handoff/r46-audio2.md part 4 and wait on the owner.",
+      "repro": "walk2.mjs --goal=menu --layout=1 --chapter=ffx2-bahamut (layout/cand-ffx2-bahamut-menu-1600/result.json jukebox.titles)",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/layout/cand-ffx2-bahamut-menu-1600/result.json",
+        "critic/reviews/d5bf2206-focused/layout/cand-ffx2-bahamut-menu-1600/05-pause-music.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-007 (no developer vocabulary in player-facing copy)",
+      "where": "src/audio/tracks/index.ts TRACK_NOTES / the jukebox title derivation",
+      "fix": "name the new cues (the owner chooses the names)",
+      "acceptanceCheck": "no SOUND TEST row reads as a cue id",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open, carried (restated by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC45-04",
+      "severity": "polish",
+      "title": "In one of five opening conditions (Enter pressed 600 ms after the battle screen) the first command menu comes a median 192 ms (2 percent) later than on live; low confidence",
+      "game": "ffx2",
+      "chapter": "ffx2-trema (Chapter XIII, link 1)",
+      "expected": "the first menu at the same time as live (the entrance gate must not delay the opening: decision 61e, E-PYRE: 0 ms added before the first menu)",
+      "observed": "Paragon, live and candidate alternating, seed 1, real keys, headless Chromium on the GPU, part of the series with other sessions loading the machine: field to first menu (medians, ms) nothing pressed 10,033 against 10,042 (2 and 2); Enter at 0 8,116 against 8,116 (7 and 7); Enter at 600 8,650 against 8,842 (9 and 10; rank test z 1.9, p about 0.06; live's own runs span 5,566 to 10,450); CPU x3 12,433 against 12,725 (4 and 4, the same two modes on both builds, partners within 0.1 to 0.4 s); CPU x6 13,325 against 13,566 (2 and 2). In an earlier half of the review (n=2 a side) the same measure read +167, +234, +100 and +241 ms; at n=7 to 10 only the Enter-600 difference remains. The cost the gate was built to pay is the figure's later arrival when hurried or slowed (0.7 to 1.3 s), which the menu's timing mostly absorbs. || Carried, unchanged and still unconfirmed: nothing in this candidate touches the entrance code (src/engine/entrance); the three unhurried openings of this review (see the opening comparison) read the first menu within the spread of one build.",
+      "repro": "cd critic/reviews/d5bf2206-focused; HURRY_MS=600 SUFFIX=h600-rN node obs-entrance.mjs <url> <tag> ffx2-trema 0 1 0 (live and candidate alternating); node sum-ent.mjs, table B",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md",
+        "critic/reviews/d5bf2206-focused/entrance/",
+        "critic/reviews/d5bf2206-focused/drive-ent3.log",
+        "critic/reviews/d5bf2206-focused/drive-ent8.log"
+      ],
+      "confidence": "low: borderline against the spread of one build, measured partly under load from other sessions",
+      "requirement": "decision 61e / E-PYRE: no delay before the first menu",
+      "where": "src/engine/entrance/StageEntrances.ts and EntranceHost.planOwed (the gate waits for the plan, up to PLAN_MAX_MS); suspected, not traced",
+      "fix": "none proposed until it reproduces; if it does, let the gate release at the menu's own deadline",
+      "acceptanceCheck": "Enter 600 ms, 12 runs a side on an idle machine: the medians within 100 ms",
+      "introducedByCandidate": true,
+      "regressionVsLive": "unknown",
+      "inNewFeature": false,
+      "status": "open, carried (restated by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC45-05",
+      "severity": "polish",
+      "title": "After leaving a fight by the pause (OPTIONS, Chapter select) the board plays no music for at least the 2.7 s watched, in both games; live does the same",
+      "game": "both",
+      "chapter": "seymour-flux (FFX), ffx2-bahamut (FFX-2)",
+      "expected": "the board's own loop (chapter-select) when the board is shown, as after a defeat's CHAPTER SELECT (it starts 0.3 s after the screen)",
+      "observed": "Withdrawal by real clicks (Esc, OPTIONS tab, \"Chapter select\"): the board is shown, the pause cue fades out in 0.07 s and no music source starts for the 2.7 s the walker watched (FFX I and FFX-2 IV on the candidate) and for 2.7 and 4.3 s on live (the same withdrawal on live in both chapters): `playing` is null throughout. After a defeat panel's CHAPTER SELECT the board loop starts at once on the candidate. || Carried, unchanged: the code that returns to the board after an aborted fight is not touched by this candidate; not re-measured.",
+      "repro": "cd critic/reviews/d5bf2206-focused; node walk.mjs --base=<url> --tag=<cand|live> --chapter=seymour-flux --goal=withdraw --kind=music (and ffx2-bahamut)",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/cand-seymour-flux-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/music/cand-ffx2-bahamut-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/music/live-seymour-flux-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/music/live-ffx2-bahamut-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/drive-misc-withdraw.log",
+        "critic/reviews/d5bf2206-focused/drive-misc-withdrawlive.log"
+      ],
+      "confidence": "high that it happens on both builds; medium on how long it lasts (the walker watched 2.7 to 4.3 s)",
+      "requirement": "CHK-023 (the audible feedback of a state change)",
+      "where": "BattleScreen.requestExit('chapter-select') -> finish({kind:'aborted'}) -> the caller's return to the board: no playMusic('chapter-select') on that path (BattleScreenFlow.chapterSelect() is the path that calls it); suspected, not traced",
+      "fix": "start the board's loop where the board is shown after an aborted fight",
+      "acceptanceCheck": "walk.mjs --goal=withdraw shows chapter-select playing within 1 s of the board",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open, carried (restated by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC44A-03",
+      "severity": "polish",
+      "title": "A hand scanning the chapter board at four presses a second sees one of a plate's two pictures soft for up to about 0.4 s a press from the fourth press on (the live build before 7758791e showed none) (carried: 7758791e, the live build now, has it too)",
+      "game": "both",
+      "chapter": "the chapter board",
+      "expected": "a plate full when the cursor lands, or at worst the picture it had (live: 0 soft plates in eight presses 250 ms apart)",
+      "observed": "tools/delivery-proof.mjs on both builds, 100 Mbit/s, 20 ms, HTTP cache off, six seconds on the title then eight presses 250 ms apart: live 0 blank and 0 soft on all eight; candidate 0/0 0/0 0/0 0/1 0/1 0/1 0/1 0/1 (blank/soft at +60 ms), every press settled by +2 s; never blank. At a normal pace (six presses 2.5 s apart) 0/0 on every press on both builds. The strips themselves are painted when the board appears (36 of 36 against live's 13 of 36). || Carried, unchanged: boardAhead.ts is not touched by this candidate; not re-measured.",
+      "repro": "node tools/delivery-proof.mjs (the builder's harness) with link fast and mash, on the candidate and on live; evidence delivery/ and sum-board.mjs",
+      "evidence": [
+        "critic/reviews/7758791e-focused/delivery/",
+        "critic/reviews/7758791e-focused/sheets/board-cand-vs-live-1600x900.jpg",
+        "critic/reviews/7758791e-focused/soft-cand/"
+      ],
+      "confidence": "high that it exists; medium on how a human thumb reads it (the soft picture is the strip's own small copy under the full one, for under half a second)",
+      "requirement": "CHK-012, CHK-019 (a plate never ships empty or soft as its final face)",
+      "where": "src/ui/common/boardAhead.ts PLATE_AHEAD = 2 (the builder's disclosed trade, docs/handoff/r44-thumbs.md)",
+      "fix": "raise PLATE_AHEAD to 3 for the idle lane on a fast link, or fetch the neighbour plates of the cursor first in a scan; the builder's call",
+      "acceptanceCheck": "the same eight-press scan shows 0 soft plates on the candidate",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open, carried (restated by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC44A-02",
+      "severity": "polish",
+      "title": "Two sub-visual resampling differences from live on the desktop prep: the Bahamut photograph on FFX-2 Chapter IV's CHAPTER tab and the FFX Sphere Grid roster face edges",
+      "game": "both",
+      "chapter": "ffx2-bahamut, seymour-flux",
+      "expected": "desktop prep pixel-identical to live apart from FIX A (the brief)",
+      "observed": "every tab of both games at 1600x900, guide skipped: 9 of 11 tabs bit-identical to live; FFX-2 Chapter IV's CHAPTER tab differs by 1,770 px in one 97x25 px region (the Bahamut photograph, max channel difference 161) in both pairs of boots; the Sphere Grid roster face edges differ slightly. URL, file bytes (sha256 equal) and computed style are the same on both builds and each build is deterministic across boots; suspected cause: the browser's decode and downscale of the same file after a different history of loads (the board no longer decodes the full paintings first). Nothing is visible at 1x. || Carried, unchanged: not re-measured; the candidate changes no painting and no desktop prep layout.",
+      "repro": "node critic/reviews/7758791e-focused/cmp-prep-desktop.mjs (obs-prep-desktop.mjs on both builds, twice)",
+      "evidence": [
+        "critic/reviews/7758791e-focused/prep-desktop-compare-skip.txt",
+        "critic/reviews/7758791e-focused/prep-desktop-compare-skip-boot2.txt",
+        "critic/reviews/7758791e-focused/sheets/zoom-ffx2-chapter-photo2-cand-over-live.png",
+        "critic/reviews/7758791e-focused/sheets/diff-ffx2-chapter-skip.png"
+      ],
+      "confidence": "high that they differ, medium on the cause",
+      "requirement": "the brief's \"pixel-identical to live\", CHK-013",
+      "where": "image decode order after the board change (suspected)",
+      "fix": "none needed unless Bailey sees it; if so, decode the photograph at its drawn size",
+      "acceptanceCheck": "the same comparison shows 0 differing pixels",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open, carried (restated by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC43-02",
+      "status": "open, carried (restated by 0b0571d1-focused)",
+      "severity": "polish",
+      "title": "The FFX Sphere Grid tab is under the 14 px floor from 1280x720 to 1599x899 (carried from 7b2582e7)",
+      "game": "ffx",
+      "chapter": "seymour-flux",
+      "expected": "no text under 14 px",
+      "observed": "not re-measured here; FIX A's runs show the hint strip keeps its 14 px floor on that tab at 1280x720, 1440x900 and 1600x900. || Carried, unchanged: not re-measured; the candidate changes no desktop layout.",
+      "repro": "tools/text-floor-sweep.mjs on the prep screen at 1280x720",
+      "evidence": [
+        "critic/reviews/7758791e-focused/foc43-cand/"
+      ],
+      "confidence": "medium (carried)",
+      "requirement": "CHK-003",
+      "where": "src/ui/ffx/ Sphere Grid tab",
+      "fix": "carried",
+      "acceptanceCheck": "the sweep at 1280x720 and 1440x900",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC44A-04",
+      "severity": "suggestion",
+      "title": "Waiting on the title now costs about 12 MB more before any input (57.4 against 45.3 MB at six seconds): the idle lane fetches the 36 thumbnails and the plates two presses ahead",
+      "game": "both",
+      "chapter": "the title and the chapter board",
+      "expected": "no more bytes than live before a player acts, or a metered-network exemption",
+      "observed": "delivery-proof, same link and cache setting on both builds: bytes before the first input 57.4 MB against 45.3 MB; the whole session is lighter (142.9 against 158.2 MB over six presses, 123.6 against 146.9 MB on a phone, 112.7 against 141.1 MB when Enter is pressed at 0.5 s). || Carried, unchanged: the idle lane (boardAhead.ts) is not touched; not re-measured.",
+      "repro": "node tools/delivery-proof.mjs link fast, candidate and live",
+      "evidence": [
+        "critic/reviews/7758791e-focused/delivery/",
+        "critic/reviews/7758791e-focused/sum-board.mjs"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-019 (assets), the brief's \"36 small derived files\"",
+      "where": "the board's idle prefetch lane (src/ui/common/boardAhead.ts)",
+      "fix": "hold the thumbnails until the first input on a metered or save-data connection (navigator.connection.saveData)",
+      "acceptanceCheck": "a metered phone that only opens the title pays no more than live",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open, carried (restated by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC45-01",
+      "severity": "polish",
+      "title": "FFX-2 Chapter IV: victory-bahamut keeps looping under the whole scene that follows the results screen, because the script writes no music(null) after results(true); the cue the doc calls a quiet resolve under a silent results screen ends only when the board's loop replaces it",
+      "game": "ffx2",
+      "chapter": "ffx2-bahamut (Chapter IV)",
+      "expected": "docs/handoff/r45-audio.md and src/data/encounters.ts: victory-bahamut is 'the quiet resolve under its silent results screen'; the FFX scripts stop their victory cue 0.36 s after Continue; the script's own note says the tally and the scene after sit in silence (writing-bible 5.4)",
+      "observed": "Chapter IV won by real keys from the title: victory-bahamut starts on the results screen as one source (6.5 s intro into a 25.3 s loop, loop end 31.8 s), the results screen is held 37 s and the cue loops past its loop end without a stop; after Continue the post-results scene plays with the cue still sounding and it ends only 24.0 s after Continue, when the board's loop replaces it (the walker taps at about 1 s a line: longer at reading pace). The other victory cues stop with the script or are replaced by the next bed in the chapters whose scripts the audio batch did not touch; Chapter IV is the only chapter where the lingering is new, because it had no victory cue before. || r46-audio2 added music(null, 300) after results(true) in ffx2-bahamut.ts. VERIFIED on the candidate: in FFX-2 Chapter IV won by real keys from the title, victory-bahamut starts on the results screen, and after the real Continue it fades out in about 0.3 s (the mixer shows it fading at +0.1 s and nothing current at +0.4 s) and the post-results scene is silent for the 23 s until the board loop starts; on live the same cue sounds until 22.5 to 26 s after Continue (music/post-tally.md).",
+      "repro": "cd critic/reviews/d5bf2206-focused; node walk.mjs --base=http://127.0.0.1:5481/ --tag=cand --chapter=ffx2-bahamut --goal=win --speed=fast --hold=37 --kind=music; node analyse-audio.mjs (run cand-ffx2-bahamut-win: results afterContinue)",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/music/post-tally.md",
+        "critic/reviews/0b0571d1-focused/music/cand-ffx2-bahamut-win/result.json",
+        "critic/reviews/d5bf2206-focused/music/cand-ffx2-bahamut-win/result.json"
+      ],
+      "confidence": "high that it happens (one run, the cue and the scene are deterministic); the ear decides whether it is wanted",
+      "requirement": "docs/handoff/r45-audio.md \"Victory\" (a quiet resolve under the results screen); CHK-023 (the cue is stopped where the design stops it)",
+      "where": "src/story/scripts/ffx2-bahamut.ts (no music(null, ...) after results(true)); suspected, not traced beyond reading the script",
+      "fix": "add a music(null, ...) after the tally, as the FFX scripts do, or let the cue carry on by decision (the owner's yes first, AGENTS.md rule 10)",
+      "acceptanceCheck": "the win run of Chapter IV shows the victory cue gone within 1 s of Continue, or the owner has heard it under the scene and wants it",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "status": "fixed (verified by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC45-02",
+      "severity": "suggestion",
+      "title": "The three results loops decay to -54, -40 and -36 dBFS in the last 50 ms before the wrap and re-enter 24, 13 and 23 dB louder, as the files themselves do: a breath at every pass that no click detector flags (the ear decides)",
+      "game": "both",
+      "chapter": "victory-ffx, victory-ffx2, victory-bahamut",
+      "expected": "a results loop that wraps without an audible breath (RUBRIC audio; CHK-001 loop-seam discontinuity)",
+      "observed": "tools/audio/music-v2-browser-proof.mjs (the page's own decoder, Chromium): no click above 1.22 times the music's own local step and at most 0.12 dB of level jump at the wrap on every cue, but the three results loops end each pass in a decay and re-enter at full level: victory-ffx -53.6 dBFS in the last 50 ms and 24.2 dB across the wrap, victory-ffx2 -40.3 and 12.8 dB, victory-bahamut -36.2 and 23.1 dB. The file's own continuation makes the same jump (within 0.02 to 0.05 dB of the wrap's), so the wrap is as seamless as the file itself; what a listener may hear is a near-silent moment at every pass. A loop held under a results screen wraps at 34.6 s (FFX), 45.8 s (FFX-2) and 31.8 s (Chapter IV). || r46-audio2 moved the loop points of victory-ffx, victory-ffx2 and victory-bahamut. Measured by me on the shipped files, live against the candidate (decoded with ffmpeg, 50 ms windows either side of the wrap): victory-ffx +24.2 dB (live) to +0.3 dB on the 50 ms level step, victory-ffx2 +12.8 to -1.8, victory-bahamut +23.1 to +0.5 (200 ms: +18.7 to -0.8, -1.0 to -1.2, +24.4 to +1.1); sample-step ratio at the wrap 0.20, 0.36, 0.66",
+      "repro": "node tools/audio/music-v2-browser-proof.mjs (gates/music-v2-browser-proof.json)",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/music/wrap-measure.md",
+        "critic/reviews/0b0571d1-focused/music/wrap-measure.json",
+        "critic/reviews/0b0571d1-focused/gates/audio-offline.json"
+      ],
+      "confidence": "medium (a measurement; whether it is heard as a breath or as phrasing is the ear's, rule 13)",
+      "requirement": "CHK-001, CHK-B1",
+      "where": "the three victory MP3s (public/audio/music/victory-*.mp3): loop point placement",
+      "fix": "if the owner hears it: re-cut the loop end before the fade, or end the body on the downbeat",
+      "acceptanceCheck": "the wrap's pre and post level within 6 dB",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true,
+      "status": "fixed on the measure the issue named (verified by 0b0571d1-focused); the ear still owes the seams"
+    },
+    {
+      "id": "FOC43-04",
+      "severity": "polish",
+      "title": "After the Curse sequence the permanent Auto-Life icon is missing from the row until the burst ends (the observation the brief named)",
+      "game": "ffx",
+      "chapter": "braskas-final-aeon (the Yu Yevon link)",
+      "expected": "the row keeps the permanent Auto-Life icon, or loses it when the Auto-Life is consumed and gets it back when it is granted",
+      "observed": "Yu Pagoda's Curse kills Tidus; the Auto-Life revive plays (consumption 115 ms, revive 625 ms). Tidus's row loses the Auto-Life icon at the burst's first status event, 125 ms before the consumption plays, and shows it again at the action's end: 1.28 s without the icon while the figure's halo is drawn. Every link boundary also blinks the three rows' icons off and on for 75 to 110 ms. Cause not traced (suspected: the shown row takes the engine's live statuses at the first status event of the action, and the engine had already consumed the Auto-Life); I cannot say whether the old presenter did the same, because live's engine does not emit this sequence. || VERIFIED FIXED on the candidate: Chapter III's whole seven-link chain from the title by real keys, the fight handed to the 'intended' strategy at skip speed, the same fight on live (the old engine) and on the candidate (43 fayth revives: 16 in link 2, 4 in link 4, 7 in link 5, 15 in link 6, 1 in link 7). A 50 ms sampler compared the engine's Auto-Life with the party window's medallion for every member. Live: 43 status-remove events of Auto-Life with reason ko (one per revive), 0 status-add, and the three active rows' icon vanished 33 times (links 2, 4, 5 and 6, 50 to 116 ms each at skip speed): Tidus missing in 24 of 257 samples, Yuna 15, Auron 6. Candidate: 0 such events, the icon present in 250 of 250 samples on each active row through all 43 revives, 0 vanishes, the link boundaries included.",
+      "repro": "ko-route.mjs braskas-final-aeon win (the stock route, normal speed in the last link), then ko-analyze.mjs: autoLifeIconTransitions",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/rc6/live-skip-ch3/result.json",
+        "critic/reviews/0b0571d1-focused/rc6/cand-skip-ch3/result.json",
+        "critic/reviews/0b0571d1-focused/rc6/cand-skip-ch3/end.jpg"
+      ],
+      "confidence": "high that it happens, low on the cause",
+      "requirement": "CHK-006 (overlay lifetime)",
+      "where": "src/engine/BattlePresenterVitals.ts projectState and the HUD row sync, suspected",
+      "fix": "trace the early loss; keep the icon until its own removal event plays",
+      "acceptanceCheck": "Tidus's row shows the Auto-Life icon until the status-remove plays and again from the revive",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "fixed (verified by 0b0571d1-focused)"
+    },
+    {
+      "id": "FOC46-01",
+      "severity": "polish",
+      "title": "About 950 of the 1,264 painting JSON sidecars served under art/ name local working folders of the build PC (staging, scratch and backup folders on the D: drive), and one of them a user-profile folder path; identical on the live site today",
+      "game": "both",
+      "chapter": "the site (every build since the sidecars were first shipped)",
+      "expected": "A public site serves no path of the build machine (the repo rule \"public repo: no PII, no PC or personal-project details\"; the sidecars are provenance records for the owner, not game data)",
+      "observed": "Searching the production build for any path of this PC found none in the JavaScript, the stylesheet or the page, but about 950 of the 1,264 `art/**/*.json` sidecars (provenance written when each painting was made) carry `D:/Tools/...` staging, scratch and backup paths, and `art/title/echo.json` a path under a user profile folder. All 1,264 are byte-identical to the live site's (manifest diff), the live host serves them (`GET /art/title/echo.json` answers 200 application/json), and no key, token, e-mail address or credential is in the build (searched). The candidate neither adds nor widens it.",
+      "repro": "Search dist-gate/art for the pattern drive-letter-colon-slash followed by Tools, Users or pyrefly; or GET https://echoesofspira.com/art/title/echo.json",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/gates/manifest-diff.log",
+        "critic/reviews/0b0571d1-focused/gates/manifest-cand.json"
+      ],
+      "confidence": "high",
+      "requirement": "public-repo no-PII rule (memory: nothing personal or about the PC on public surfaces); AGENTS.md hard rule 8 (original assets only) is not involved",
+      "where": "public/art/**/*.json shipped by the production build (`tools/dist-filter.mjs` leaves out 322 unshipped files, not these)",
+      "fix": "leave the provenance sidecars out of the production build, or scrub their path fields at build time, after checking which of the 1,278 JSON files the game itself fetches at run time (the rest are records)",
+      "acceptanceCheck": "a search of the production build for drive-letter paths and profile folders returns nothing, and the game still loads every JSON it fetches",
+      "introducedByCandidate": false,
+      "regressionVsLive": false
+    },
+    {
+      "id": "FOC46-02",
+      "severity": "polish",
+      "title": "FFX-2 lost its enemy-defeat sound: `dissolve-pyreflies` is the defeat sound of both games, but the lane replaced it in the FFX pack only and retired it from the shared bank, so every ordinary enemy defeat in FFX-2 now plays the older first-bank cue instead of the v2 recording live plays",
+      "game": "ffx2",
+      "chapter": "ffx2-bahamut, ffx2-fallen-aeons, ffx2-den-of-woe (and every FFX-2 chapter with an ordinary enemy defeat)",
+      "expected": "A change true to FFX but not FFX-2 does not apply to FFX-2 (AGENTS.md rule 14); the code itself says \"Fiends disperse their pyreflies in both games (research/ffx-vs-ffx2-presentation.md line 132, [verified: 2 sources]); the set tags the cue FFX, the source makes it both\" (`src/audio/sfxV2/battleVoice.ts`, `ko()`)",
+      "observed": "In the same deterministic fights, live answers the defeat ask `v2:dissolve-pyreflies` with the v2 cue (via v2); the candidate answers it with `dissolve-pyreflies` from the first bank (via sprite) in FFX-2 Chapters IV, XI and XV, while FFX Chapter I plays the new recorded original from `ffx-core` (7 plays). `RETIRED_V2_CUES` grew from 3 to 9 names (`src/audio/sfxV2/retired.ts`); a retired name is answered by its recorded original where its pack is loaded and by the first-bank cue elsewhere, and the FFX-2 packs have no `dissolve-pyreflies`. A different timbre at a defeat, not a silence; nobody chose it, and nobody has heard it.",
+      "repro": "node critic/reviews/0b0571d1-focused/walk2.mjs --base=<url> --tag=cand --chapter=ffx2-bahamut --goal=win --speed=fast, then read sfxLog for asked v2:dissolve-pyreflies; node analyse-sfx-r46.mjs",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/sfx/fights.md",
+        "critic/reviews/0b0571d1-focused/sfx/fights.json",
+        "critic/reviews/0b0571d1-focused/music/cand-ffx2-bahamut-win/result.json"
+      ],
+      "confidence": "high that it happens; the ear owns whether it matters",
+      "requirement": "AGENTS.md rule 14, CHK-021",
+      "where": "src/audio/sfxV2/retired.ts (the retired list), the FFX-2 packs (no dissolve cue)",
+      "fix": "keep `dissolve-pyreflies` in the shared v2 bank (take it off the retired list; the FFX pack still answers it in FFX chapters), or give the FFX-2 core pack its own take; the owner picks",
+      "acceptanceCheck": "in an FFX-2 fight the defeat ask answers `v2:dissolve-pyreflies` as live does, and in an FFX fight it still answers the ffx-core original",
+      "introducedByCandidate": true,
+      "regressionVsLive": "unknown"
+    },
+    {
+      "id": "FOC46-03",
+      "severity": "polish",
+      "title": "Two of the new recorded takes (Petrify, and the FFX-2 spell chant, the most played new cue) are much quieter than the sounds they replace; the lane flags Petrify and Kimahri's spear as quieter, but its own table also puts the chant 4.9 dB under and does not flag it, and my measure does not reproduce the spear's shortfall",
+      "game": "both",
+      "chapter": "FFX: every chapter with Petrify; FFX-2: every chapter (the chant plays on every cast: 46 times in Chapter IV, 43 in XI, 27 in XV)",
+      "expected": "a recorded take at about the level of the cue it replaces, or its shortfall named (docs/handoff/r46-audio2.md names Petrify at 7.4 dB and the spear at 3.1 dB)",
+      "observed": "Measured by me against the sound each replaces on live (slices decoded from both builds' files; EBU R128 integrated loudness with the slice padded to a 400 ms block, and overall RMS): Petrify -8.4 LUFS and -11.1 dB RMS below its stand-in (confirmed, more than the note says); the spell chant -3.0 LUFS and -3.9 dB RMS (the lane's table: -19.87 against -15.0 LUFS, -4.9 dB; peak 7.7 dB lower) and its weakest fit by the lane's own measure (deviation 4.9), not flagged; Kimahri's spear -0.8 LUFS and +1.0 dB RMS (the note says -3.1: not reproduced). The other rows read between 1.2 dB under and 3.7 dB over.",
+      "repro": "node critic/reviews/0b0571d1-focused/sfx-pair.mjs (needs ffmpeg and the two builds' audio files)",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/sfx/pairs.md",
+        "critic/reviews/0b0571d1-focused/sfx/pairs.json",
+        "critic/reviews/0b0571d1-focused/sfx/measure.md"
+      ],
+      "confidence": "high on the numbers; the ear owns whether it is a problem (rule 13)",
+      "requirement": "CHK-001 / CHK-B1 (audio is judged by ear)",
+      "where": "public/audio/sfx/parity-ffx-core.mp3 (`petrify-shatter`), parity-ffx2-core.mp3 (`magic-charge-x2`)",
+      "fix": "Bailey listens to the chant in a fight; if it is too quiet, raise its gain in the pack or keep the old take for that row (the quickest reversal is the note's: take the cue out of the pack and rerun the packer)",
+      "acceptanceCheck": "the owner has heard Petrify and the chant in play and kept or changed them",
+      "introducedByCandidate": true,
+      "regressionVsLive": "unknown"
+    },
+    {
+      "id": "FOC46-04",
+      "severity": "polish",
+      "inNewFeature": true,
+      "title": "The hidden Fayth chapter's scene key `exp-fayth-deck` names a painting that does not exist: the party prep and the pre-battle scene ask for `art/backdrops/exp-fayth-deck.png`, which is not in the build (the host answers the page itself on the preview, 404 on the live host), so the prep and the scene before the fight show no painting behind them (the prep is a flat navy page where Chapter I's has the blurred painted wash)",
+      "game": "ffx",
+      "chapter": "exp-fayth (typed word \"fayth\")",
+      "expected": "every chapter's prep wash and scene plate resolve to a shipped painting (the battle itself draws Chapter VIII's own plate by design and does)",
+      "observed": "In each of the Fayth chapter's runs (the walk to the first menu: 2 requests; the full win: 3) the page asked for `art/backdrops/exp-fayth-deck.png` and was answered by `index.html` (200 text/html) on the preview; the live host answers a missing path with a plain 404, so a visitor who types the word gets a failed request in the console. No other chapter does this (35 earlier runs: 0). The scene factory uses `EVRAE_DECK_PLATE` for the battle, but `PartyPrepScreen` (`art/backdrops/${sceneKey}.png`) and `cutscenePlate.ts` read the scene key as a file name.",
+      "repro": "type fayth on the board; watch the network for art/backdrops/exp-fayth-deck.png (critic/runner/lib/route-evidence.mjs lists it under htmlImages)",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-win/result.json",
+        "critic/reviews/0b0571d1-focused/fayth/cand-exp-fayth-menu/result.json",
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-2000/03-prep.jpg",
+        "critic/reviews/0b0571d1-focused/layout/cand-seymour-flux-menu-2000/03-prep.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-012 (no fallback ships as the final face), CHK-018",
+      "where": "src/data/chapter-exp-fayth.ts (`sceneKey`), src/app/screens/PartyPrepScreen.ts line 162, src/app/screens/cutscenePlate.ts line 25",
+      "fix": "point the chapter's prep wash and scene plate at Chapter VIII's `evrae-airship-deck` painting (a plate name for the lookups, as the other chapters that share a plate do) or ship a copy under the new name",
+      "acceptanceCheck": "no request for `art/backdrops/exp-fayth-deck.png` in a Fayth run, and the prep and the scene before the fight draw the deck painting",
+      "introducedByCandidate": true,
+      "regressionVsLive": false
+    },
+    {
+      "id": "FOC46-05",
+      "severity": "major",
+      "inNewFeature": true,
+      "title": "The hidden Fayth chapter on a phone (390x844): at the first command menu the boss is out of frame (a sliver of him at the right edge) and the party is small at the left, where Chapter VIII, the same fight, shows his coil beside the party",
+      "game": "ffx",
+      "chapter": "exp-fayth (typed word \"fayth\"), 390x844 touch",
+      "expected": "every targetable enemy is visible at the first command menu (CHK-011), as it is in Chapter VIII on the same phone",
+      "observed": "At 390x844 by touch, first command menu, seed 1: Chapter VIII (the existing chapter, same encounter) frames the three on the deck with Evrae's scaled coil filling the right third; the Fayth chapter (the table camera, FFX's framing for a 16:9 frame) frames the deck as a slab with the party at the left and nothing of Evrae but a thin shape at the right edge. On desktop (1600x900, 2000x1012) he is in frame, cut by the right edge as the game's is. Not a regression: the chapter does not exist on live, and it is behind a typed word.",
+      "repro": "type fayth on the board at 390x844 with touch, walk to the first menu: critic/reviews/0b0571d1-focused/walk2.mjs --chapter=exp-fayth --word=fayth --goal=menu --layout=1 --size=390x844 --touch=1",
+      "evidence": [
+        "critic/reviews/0b0571d1-focused/layout/cand-exp-fayth-menu-phone/first-menu.jpg",
+        "critic/reviews/0b0571d1-focused/layout/cand-evrae-airship-menu-phone/first-menu.jpg"
+      ],
+      "confidence": "high that the boss is out of frame; medium on how much of the fight on a phone looks like this (only the first menu was captured)",
+      "requirement": "CHK-011 (every targetable enemy is visible); the owner's \"painted B: FFX's camera timing and framing\" was approved for the website, not measured on a phone",
+      "where": "the table camera (src/engine/ffxcam/tableCamera.ts, variant.ts) keeps the 16:9 vertical field on a portrait frame; the phone framing is not part of the recorded shot table",
+      "fix": "fit the table camera's horizontal field on a portrait viewport (pull back or aim at the party and the boss together), or keep the chapter off phones until that is done; the owner picks (end state first)",
+      "acceptanceCheck": "at 390x844 the boss is wholly or mostly in frame at the first menu and in the default views, as in Chapter VIII",
+      "introducedByCandidate": true,
+      "regressionVsLive": false
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "the production candidate built and gated: manifest with the decode check and its diff against live, art-derive verify and audit, art-play-audit (the frontend, the openings of FFX Chapters I and VIII and FFX-2 Chapter IV, and the results of Chapters I and IV), audio qa and my own ffmpeg re-measure of 41 cues, the layering diff, the search of the build for the local-files route and PC paths, 16 targeted test files (188 tests)",
+      "the four phone Party Prep shades at 390x844 by touch (FFX Chapter I, FFX-2 Chapter IV, control on live)",
+      "the second audio lane: 44 pack cues measured against their stand-ins, the three results loops measured on live and the candidate, 52 MP3s decoded in Chromium, real fights of FFX Chapter I and the hidden Fayth chapter and FFX-2 Chapters IV, XI, XV against live's same fights, every new cue asked by name in FFX I, FFX-2 XI and V and FF7, the post-tally music of IV, XI, XV",
+      "RC6: the goldens, the layering rule, the data audit, Chapter II's first Form III turn at the real HUD, Chapter III's whole chain on live and the candidate (the Auto-Life events against the HUD)",
+      "the hidden Fayth chapter: the board with 18 chapters, five door words on the candidate and four on live, by real keys to its first menu, its win, its results and its save; the three other hidden chapters to their first menu; the phone and 2000x1012 layouts",
+      "the three existing chapters' openings and first actions against live (FFX I, VIII; FFX-2 IV; 12 paired runs)",
+      "the continuity harness on FFX Chapters VIII and XVIII, candidate and live back to back in the same session (1,049.6 s of battle)"
+    ],
+    "reused": [
+      {
+        "what": "live's music and sound logs for FFX Chapter I and FFX-2 Chapters IV, XI, XV (post-tally music, sound asks)",
+        "from": "critic/reviews/d5bf2206-focused/music/cand-*-win",
+        "why": "the previous review's candidate is the artifact live serves now (published manifest hash f4686f3feaef4797); nothing in this candidate changes the walker or the host"
+      },
+      {
+        "what": "art-browser-load (3,863 of 3,863 images load in Chromium 153 and WebKit 26.6)",
+        "from": "critic/reviews/d5bf2206-focused/gates/art-browser-load.json",
+        "why": "every art file of this build (5,114 of 5,114), the depth maps and the fonts are byte-identical to live's, so the same files load in the same engines"
+      },
+      {
+        "what": "the music routing of 21 chapters, the defeats, the withdrawals and the pause jukebox",
+        "from": "critic/reviews/d5bf2206-focused/music, layout",
+        "why": "the routing, defeat and results code and the pause are not touched by r46; what r46 does touch (the three loops and the three scripts) was re-run here"
+      },
+      {
+        "what": "the driver's full suite (18,796 tests, 0 failed), the targeted run (246 files, 4,415 passed), orphans, tsc, audio qa",
+        "from": "D:/Tools/pyrefly-scratch/2026-10-13/r46-suite.json, r46-targeted.json",
+        "why": "recorded evidence on the same commit 0b0571d1; I re-ran the golden, RC6, door, guard, audio and shades files myself"
+      }
+    ],
+    "notTested": [
+      "the ear (rule 13): CHK-001 and CHK-B1 stay UNVERIFIED",
+      "audio decode in WebKit (Playwright's WebKit 26.6 has no Web Audio and refuses every MP3, byte-identical files included)",
+      "the continuity harness on FFX-2 chapters and on the hidden Fayth chapter (the harness walks a chapter by its board card)",
+      "the carried polish FOC45-03, FOC45-04, FOC45-05, FOC44A-02, FOC44A-03, FOC43-02, FOC44A-04: restated, not re-measured (their code is not touched by r46)",
+      "the broken board (Wakka down) at Form III in the browser (model level only); the Chapter II defeat paths; the line's win rate (the lane's number)",
+      "reduce-motion and low-effects openings of the Fayth chapter; the Fayth chapter on a real device; real Safari and iOS",
+      "art-play-audit on all 20 scenarios (stopped at the tenth after 6.8 min; 6 scenarios ran to completion)",
+      "live verification of the exact artifact (CHK-017): after the deploy"
+    ]
+  },
+  "regressions": [
+    "None at major or critical severity, and none confirmed at any severity: the paired series (three existing chapters' openings, first menus and first actions; the continuity pairs in the same session; the same fights' sound logs; the phone shades control) show the candidate equal to live except where the change meant it to differ (the recorded effects, the post-tally cues, the loop wraps, the four phone colours, the engine's Auto-Life event). Two differences from live are not regressions in the strict sense but are listed: FOC46-02 (FFX-2's enemy-defeat sound is the older bank's cue) and FOC46-03 (the new takes' loudness), both ear-owed, tagged regressionVsLive unknown."
+  ],
+  "nextReview": "Live verification of the exact artifact after the deploy (CHK-017: the candidate's artifact hash 3c911310c70ad257 against what the site serves, every audio file answering 200 audio/mpeg from the live host, the three new packs and the new bundle present, `GET /__ffx-local/manifest.json` a 404); then the deep review of this build, which the plan classes deep (deepAfterDeploy: the FFX engine, the presenter and stage, the asset loader and manifests, a new chapter and the audio routing are shared systems; the deep review of a061e9dc is carried): every affected chapter through its real flow, the continuity harness on every listed chapter, and the first-time-fan lens.",
+  "elapsedMinutes": 135
+}

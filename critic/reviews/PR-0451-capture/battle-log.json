@@ -1,0 +1,628 @@
+[
+  {
+    "type": "sensor",
+    "targetId": "seymour-flux",
+    "full": false,
+    "text": "Turns healing into a weapon. Kill the floating thing before it finishes counting.",
+    "hp": 70000,
+    "maxHp": 70000,
+    "mp": 512,
+    "maxMp": 512,
+    "weaknesses": [],
+    "seq": 0
+  },
+  {
+    "type": "sensor",
+    "targetId": "mortiorchis",
+    "full": false,
+    "text": "It is not attacking you. It is waiting for a number to fill.",
+    "hp": 4000,
+    "maxHp": 4000,
+    "mp": 512,
+    "maxMp": 512,
+    "weaknesses": [],
+    "seq": 1
+  },
+  {
+    "type": "turn-start",
+    "actorId": "seymour-flux",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 2
+  },
+  {
+    "type": "action-start",
+    "actorId": "seymour-flux",
+    "command": {
+      "kind": "ability",
+      "id": "lance-of-atrophy",
+      "targets": [
+        "kimahri"
+      ]
+    },
+    "abilityId": "lance-of-atrophy",
+    "abilityName": "Lance of Atrophy",
+    "targets": [
+      "kimahri"
+    ],
+    "seq": 3
+  },
+  {
+    "type": "damage",
+    "targetId": "kimahri",
+    "amount": 724,
+    "element": "none",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "sourceId": "seymour-flux",
+    "affinity": "normal",
+    "seq": 4
+  },
+  {
+    "type": "status-add",
+    "targetId": "kimahri",
+    "status": "zombie",
+    "instance": {
+      "id": "zombie",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "seymour-flux",
+      "sourceAbilityId": "lance-of-atrophy"
+    },
+    "seq": 5
+  },
+  {
+    "type": "action-end",
+    "actorId": "seymour-flux",
+    "seq": 6
+  },
+  {
+    "type": "script-trigger",
+    "name": "seymour-lance",
+    "payload": {
+      "script": "seymour-lance"
+    },
+    "seq": 7
+  },
+  {
+    "type": "turn-start",
+    "actorId": "mortiorchis",
+    "turn": 2,
+    "elapsedTicks": 1,
+    "seq": 8
+  },
+  {
+    "type": "action-start",
+    "actorId": "mortiorchis",
+    "command": {
+      "kind": "ability",
+      "id": "full-life",
+      "targets": [
+        "kimahri"
+      ]
+    },
+    "abilityId": "full-life",
+    "abilityName": "Full-Life",
+    "targets": [
+      "kimahri"
+    ],
+    "seq": 9
+  },
+  {
+    "type": "status-remove",
+    "targetId": "kimahri",
+    "status": "zombie",
+    "reason": "ko",
+    "seq": 10
+  },
+  {
+    "type": "ko",
+    "targetId": "kimahri",
+    "sourceId": "mortiorchis",
+    "seq": 11
+  },
+  {
+    "type": "action-end",
+    "actorId": "mortiorchis",
+    "seq": 12
+  },
+  {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 3,
+    "elapsedTicks": 1,
+    "seq": 13
+  },
+  {
+    "type": "action-start",
+    "actorId": "tidus",
+    "command": {
+      "kind": "defend",
+      "targets": [
+        "tidus"
+      ]
+    },
+    "abilityId": "defend",
+    "abilityName": "Defend",
+    "targets": [
+      "tidus"
+    ],
+    "seq": 14
+  },
+  {
+    "type": "status-add",
+    "targetId": "tidus",
+    "status": "defend",
+    "instance": {
+      "id": "defend",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "tidus",
+      "sourceAbilityId": "defend"
+    },
+    "seq": 15
+  },
+  {
+    "type": "action-end",
+    "actorId": "tidus",
+    "seq": 16
+  },
+  {
+    "type": "turn-start",
+    "actorId": "yuna",
+    "turn": 4,
+    "elapsedTicks": 13,
+    "seq": 17
+  },
+  {
+    "type": "action-start",
+    "actorId": "yuna",
+    "command": {
+      "kind": "defend",
+      "targets": [
+        "yuna"
+      ]
+    },
+    "abilityId": "defend",
+    "abilityName": "Defend",
+    "targets": [
+      "yuna"
+    ],
+    "seq": 18
+  },
+  {
+    "type": "status-add",
+    "targetId": "yuna",
+    "status": "defend",
+    "instance": {
+      "id": "defend",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "yuna",
+      "sourceAbilityId": "defend"
+    },
+    "seq": 19
+  },
+  {
+    "type": "action-end",
+    "actorId": "yuna",
+    "seq": 20
+  },
+  {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 5,
+    "elapsedTicks": 3,
+    "seq": 21
+  },
+  {
+    "type": "status-remove",
+    "targetId": "tidus",
+    "status": "defend",
+    "reason": "expired",
+    "seq": 22
+  },
+  {
+    "type": "action-start",
+    "actorId": "tidus",
+    "command": {
+      "kind": "defend",
+      "targets": [
+        "tidus"
+      ]
+    },
+    "abilityId": "defend",
+    "abilityName": "Defend",
+    "targets": [
+      "tidus"
+    ],
+    "seq": 23
+  },
+  {
+    "type": "status-add",
+    "targetId": "tidus",
+    "status": "defend",
+    "instance": {
+      "id": "defend",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "tidus",
+      "sourceAbilityId": "defend"
+    },
+    "seq": 24
+  },
+  {
+    "type": "action-end",
+    "actorId": "tidus",
+    "seq": 25
+  },
+  {
+    "type": "turn-start",
+    "actorId": "seymour-flux",
+    "turn": 6,
+    "elapsedTicks": 3,
+    "seq": 26
+  },
+  {
+    "type": "action-start",
+    "actorId": "seymour-flux",
+    "command": {
+      "kind": "ability",
+      "id": "lance-of-atrophy",
+      "targets": [
+        "yuna"
+      ]
+    },
+    "abilityId": "lance-of-atrophy",
+    "abilityName": "Lance of Atrophy",
+    "targets": [
+      "yuna"
+    ],
+    "seq": 27
+  },
+  {
+    "type": "damage",
+    "targetId": "yuna",
+    "amount": 399,
+    "element": "none",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "sourceId": "seymour-flux",
+    "affinity": "normal",
+    "seq": 28
+  },
+  {
+    "type": "action-end",
+    "actorId": "seymour-flux",
+    "seq": 29
+  },
+  {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 7,
+    "elapsedTicks": 13,
+    "seq": 30
+  },
+  {
+    "type": "status-remove",
+    "targetId": "tidus",
+    "status": "defend",
+    "reason": "expired",
+    "seq": 31
+  },
+  {
+    "type": "action-start",
+    "actorId": "tidus",
+    "command": {
+      "kind": "defend",
+      "targets": [
+        "tidus"
+      ]
+    },
+    "abilityId": "defend",
+    "abilityName": "Defend",
+    "targets": [
+      "tidus"
+    ],
+    "seq": 32
+  },
+  {
+    "type": "status-add",
+    "targetId": "tidus",
+    "status": "defend",
+    "instance": {
+      "id": "defend",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "tidus",
+      "sourceAbilityId": "defend"
+    },
+    "seq": 33
+  },
+  {
+    "type": "action-end",
+    "actorId": "tidus",
+    "seq": 34
+  },
+  {
+    "type": "turn-start",
+    "actorId": "yuna",
+    "turn": 8,
+    "elapsedTicks": 5,
+    "seq": 35
+  },
+  {
+    "type": "status-remove",
+    "targetId": "yuna",
+    "status": "defend",
+    "reason": "expired",
+    "seq": 36
+  },
+  {
+    "type": "action-start",
+    "actorId": "yuna",
+    "command": {
+      "kind": "defend",
+      "targets": [
+        "yuna"
+      ]
+    },
+    "abilityId": "defend",
+    "abilityName": "Defend",
+    "targets": [
+      "yuna"
+    ],
+    "seq": 37
+  },
+  {
+    "type": "status-add",
+    "targetId": "yuna",
+    "status": "defend",
+    "instance": {
+      "id": "defend",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "yuna",
+      "sourceAbilityId": "defend"
+    },
+    "seq": 38
+  },
+  {
+    "type": "action-end",
+    "actorId": "yuna",
+    "seq": 39
+  },
+  {
+    "type": "turn-start",
+    "actorId": "seymour-flux",
+    "turn": 9,
+    "elapsedTicks": 3,
+    "seq": 40
+  },
+  {
+    "type": "message",
+    "text": "Seymour waits",
+    "kind": "telegraph",
+    "seq": 41
+  },
+  {
+    "type": "turn-start",
+    "actorId": "mortiorchis",
+    "turn": 10,
+    "elapsedTicks": 0,
+    "seq": 42
+  },
+  {
+    "type": "action-start",
+    "actorId": "mortiorchis",
+    "command": {
+      "kind": "ability",
+      "id": "full-life",
+      "targets": [
+        "yuna"
+      ]
+    },
+    "abilityId": "full-life",
+    "abilityName": "Full-Life",
+    "targets": [
+      "yuna"
+    ],
+    "seq": 43
+  },
+  {
+    "type": "miss",
+    "targetId": "yuna",
+    "sourceId": "mortiorchis",
+    "reason": "wrong-state",
+    "seq": 44
+  },
+  {
+    "type": "action-end",
+    "actorId": "mortiorchis",
+    "seq": 45
+  },
+  {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 11,
+    "elapsedTicks": 8,
+    "seq": 46
+  },
+  {
+    "type": "status-remove",
+    "targetId": "tidus",
+    "status": "defend",
+    "reason": "expired",
+    "seq": 47
+  },
+  {
+    "type": "switch",
+    "outId": "tidus",
+    "inId": "wakka",
+    "seq": 48
+  },
+  {
+    "type": "mp-damage",
+    "targetId": "wakka",
+    "amount": 10,
+    "sourceId": "wakka",
+    "seq": 49
+  },
+  {
+    "type": "action-start",
+    "actorId": "wakka",
+    "command": {
+      "kind": "ability",
+      "id": "silence-buster",
+      "targets": [
+        "seymour-flux"
+      ]
+    },
+    "abilityId": "silence-buster",
+    "abilityName": "Silence Buster",
+    "targets": [
+      "seymour-flux"
+    ],
+    "seq": 50
+  },
+  {
+    "type": "overdrive-gauge",
+    "who": "wakka",
+    "from": 30,
+    "to": 38,
+    "cause": "warrior",
+    "seq": 51
+  },
+  {
+    "type": "damage",
+    "targetId": "seymour-flux",
+    "amount": 588,
+    "element": "none",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "sourceId": "wakka",
+    "affinity": "normal",
+    "seq": 52
+  },
+  {
+    "type": "status-add",
+    "targetId": "seymour-flux",
+    "status": "silence",
+    "instance": {
+      "id": "silence",
+      "turnsRemaining": 1,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "wakka",
+      "sourceAbilityId": "silence-buster"
+    },
+    "seq": 53
+  },
+  {
+    "type": "action-end",
+    "actorId": "wakka",
+    "seq": 54
+  },
+  {
+    "type": "turn-start",
+    "actorId": "yuna",
+    "turn": 12,
+    "elapsedTicks": 13,
+    "seq": 55
+  },
+  {
+    "type": "status-remove",
+    "targetId": "yuna",
+    "status": "defend",
+    "reason": "expired",
+    "seq": 56
+  },
+  {
+    "type": "action-start",
+    "actorId": "yuna",
+    "command": {
+      "kind": "defend",
+      "targets": [
+        "yuna"
+      ]
+    },
+    "abilityId": "defend",
+    "abilityName": "Defend",
+    "targets": [
+      "yuna"
+    ],
+    "seq": 57
+  },
+  {
+    "type": "status-add",
+    "targetId": "yuna",
+    "status": "defend",
+    "instance": {
+      "id": "defend",
+      "turnsRemaining": 254,
+      "ticksRemaining": null,
+      "charges": null,
+      "stacks": 0,
+      "permanent": false,
+      "sourceId": "yuna",
+      "sourceAbilityId": "defend"
+    },
+    "seq": 58
+  },
+  {
+    "type": "action-end",
+    "actorId": "yuna",
+    "seq": 59
+  },
+  {
+    "type": "turn-start",
+    "actorId": "seymour-flux",
+    "turn": 13,
+    "elapsedTicks": 0,
+    "seq": 60
+  },
+  {
+    "type": "status-tick",
+    "targetId": "seymour-flux",
+    "status": "silence",
+    "remaining": 0,
+    "seq": 61
+  },
+  {
+    "type": "status-remove",
+    "targetId": "seymour-flux",
+    "status": "silence",
+    "reason": "expired",
+    "seq": 62
+  },
+  {
+    "type": "turn-start",
+    "actorId": "wakka",
+    "turn": 14,
+    "elapsedTicks": 20,
+    "seq": 63
+  }
+]

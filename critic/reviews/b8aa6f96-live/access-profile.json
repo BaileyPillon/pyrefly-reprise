@@ -1,0 +1,14 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://echoesofspira.com",
+      "localStorage": [
+        {
+          "name": "pyrefly-reprise:save:v1",
+          "value": "{\"version\":1,\"updatedAt\":1791976770357,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":37815.000000000015}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.8,\"musicVolume\":0.7,\"sfxVolume\":0.7,\"sfxBalanceMigrated\":true,\"textSpeed\":1,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"fxLight\":true,\"fxLiving\":true,\"fxSpectacle\":true,\"fxDof\":true,\"fxFog\":true,\"fxEdges\":true,\"fxBreath\":true,\"fxKo\":true,\"fxFraming\":true,\"fxHero\":true,\"fxSphere\":true,\"fxSplash\":true,\"textSize\":1,\"reduceFlashes\":true,\"colourVision\":\"red-green\",\"guideVisible\":true,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"wait\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"reduceMotion\":false},\"seenCoach\":[\"briefing\",\"firstrun-board\",\"firstrun-prep\",\"firstrun-battle\",\"ffx-turn-order\",\"ffx-overdrive\",\"ffx-aeon\"],\"flags\":{}}"
+        }
+      ]
+    }
+  ]
+}

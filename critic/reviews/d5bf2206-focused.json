@@ -1,0 +1,962 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-13T19:04:14.788Z",
+  "build": {
+    "mainSha": "d5bf2206"
+  },
+  "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "FAIL",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect and no regression at major or critical severity against live 7758791e: the candidate's production build (artifact hash f4686f3feaef4797) was played from the title by real keys through 21 chapters (14 to their results screen and back to the board, 7 to their first menu), through 6 defeats with real RETRY and CHAPTER SELECT clicks and 2 withdrawals; tsc is clean (0 errors), the 35 test files of the change sets pass (708 tests) beside the driver's full suite (1,146 files, 17,914 tests), the art gates pass (3,863 of 3,863 images decode in Chromium and WebKit), the approved art is intact (916 ok, 0 mismatched, 0 missing) and the audio gates are clean (qa.mjs 0 findings, 41 of 41 cues re-measured at -16 LUFS, 41 of 41 decoded by the page).",
+    "The five change sets do what they claim in the production bundle: every changed chapter plays the routing table (scene bed, boss cue per link, results cue; 166 of 166 cue starts carry the manifest's loop points, 0 requests for the three retired MP3s, 0 other-game cue files); the victory cue starts once on the results screen and loops past its loop end, the defeat cue starts 0.23 to 0.32 s after the defeat panel shows and is gone within 0.5 s of a RETRY or CHAPTER SELECT click, a withdrawal plays neither; 16 of the 18 recorded effects played in real fights for their own events and every other ask plays today's sound; FOC44A-05 is fixed (Paragon's size step landed on a visible figure in 20 of 22 hurried or slowed live runs and in 0 of 23 candidate runs; first menu within the spread of live's); FOC44A-01 is fixed (the MORE BELOW cue is hidden under the guide's step 2 on 10 of 10 phone pages at 390x844 and at 360x740).",
+    "What does not hold is disclosed or carried: CHK-027 stays FAIL on both builds (FOC43-06, major, 86 jerks of 40 px or more on the candidate and 86 on live in the same hour in FFX-2 XIII; not introduced, not a regression); Chapter IV's victory cue keeps looping under the scene after its results screen (FOC45-01, polish, inside the new cue); the board is silent after a withdrawal through the pause on live and candidate alike (FOC45-05, polish); nobody has heard any of the 27 originals or the 18 recorded effects (CHK-B1, the owner's ear)."
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "minutes": 70,
+      "game": "both",
+      "chapter": "seymour-flux, yunalesca, braskas-final-aeon, ffx2-bahamut, ffx2-vegnagun-shuyin, ffx2-leblanc, evrae-airship, ffx2-fallen-aeons, seymour-omnis, ffx2-trema, ffx2-den-of-woe, sinspawn-gui, ffx2-masterpiece-theatre, exp-leblanc (to the results); seymour-anima-macalania, yojimbo-cavern, seymour-natus, isaaru-via-purifico, ffx2-ixion-djose, sin-fins-core, sin-face (to the first menu)",
+      "state": "title to results screen by real keys; first menu for the rest group",
+      "reason": "The technical half is done and clean: tools/audio/qa.mjs 0 cue findings and 0 sfx findings (68.23 MB of 105); my own ffmpeg re-measure of all 41 cues (-16 LUFS integrated each, loop points on sample boundaries, the two defeat cues end in digital silence); the page's own decoder 41 of 41 music cues and 49 of 49 shipped files in Chromium (WebKit audio decode UNVERIFIED: the Playwright Windows build has no Web Audio and refuses every MP3, the unchanged ones too); 29 candidate runs from the title play every changed chapter's scene bed, per-link boss cue and results cue in the order of docs/handoff/r45-audio.md, 166 of 166 cue starts carry the manifest's loop points, 0 requests for the three retired MP3s, 0 non-200 and 0 non-audio/mpeg responses, 0 synth plays. What cannot be established by an agent (rule 13): that anyone has heard the 27 originals or the 18 recorded effects and signed off (CHK-001 item 4, CHK-B1); the owner delegated the choices to the driver and the ear's verdict is owed (section 12).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/gates/qa-audio.log",
+        "critic/reviews/d5bf2206-focused/gates/audio-offline.json",
+        "critic/reviews/d5bf2206-focused/gates/music-v2-browser-proof.json",
+        "critic/reviews/d5bf2206-focused/gates/audio-decode-engines.json",
+        "critic/reviews/d5bf2206-focused/music-routing-table.md",
+        "critic/reviews/d5bf2206-focused/music-analysis.txt",
+        "critic/reviews/d5bf2206-focused/music-summary.json",
+        "critic/reviews/d5bf2206-focused/totals.json"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 15,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "board, prep with the guide up, first menu, pause and its MUSIC tab, defeat and results panels",
+      "reason": "The screens the audio change touches fill the window at 1600x900, 2000x1012 and 390x844 touch in both games, with no sideways scroll (the only off-screen text at 390x844 is the pause tab strip's own swipe overflow and the battle's PAUSE chip under the pause layer); the approved \"Pause screen\" and \"Party prep\" tiles read the same screens as the build (targets/ composites). The change adds no screen; the pause layer, the board and the prep were not restyled.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/layout/",
+        "critic/reviews/d5bf2206-focused/targets/pause-tile-vs-ffx1-1600.jpg",
+        "critic/reviews/d5bf2206-focused/targets/pause-tile-vs-ffx2-4-1600.jpg",
+        "critic/reviews/d5bf2206-focused/targets/party-prep-tile-vs-ffx1-1600.jpg"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 20,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "the pause MUSIC tab at three sizes; the phone prep pages with the guide up",
+      "reason": "Every text node of the pause's MUSIC tab reads 14 px or more at 1600x900, 2000x1012 and 390x844 in both games (0 under the floor, 0 cut, the list's rows are not clipped); the phone prep pages with the first-run guide up (FOC44A-01) at 390x844 and 360x740 change no text size or place (a `visibility` rule only).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/layout/",
+        "critic/reviews/d5bf2206-focused/phone/",
+        "critic/reviews/d5bf2206-focused/sheets/foc44a01-crops.jpg"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-006",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 15,
+      "game": "both",
+      "chapter": "seymour-flux, yunalesca, ffx2-leblanc, ffx2-bahamut, the fourteen win chapters",
+      "state": "results and defeat panels, RETRY, CHAPTER SELECT, withdrawal, pause and the phone guide",
+      "reason": "The overlays of the changed flow die with their decision: after a real click on RETRY or CHAPTER SELECT in the six loss runs (FFX I, II; FFX-2 VI; late and early choices) the defeat panel is replaced by the prep, the fight or the board the choice names, the defeat cue is gone within 78 to 368 ms and nothing of it sounds over the next screen (0 samples); in the 14 win runs the results screen is left by a real Enter to the post scene and the board; a withdrawal through the pause's OPTIONS tab reaches the board with no defeat or victory cue and no pause audio left running; on the phone the first-run guide's layer is gone after a real tap on its skip words (FOC44A-01). Not walked: a withdrawal from a mid-chain link and Chapter IV's own defeat panel (section 5).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/",
+        "critic/reviews/d5bf2206-focused/vd-table.md",
+        "critic/reviews/d5bf2206-focused/phone/"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-007",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 8,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "the pause MUSIC tab, the results and defeat panels",
+      "reason": "No developer vocabulary (undefined, NaN, raw keys, placeholders) in the SOUND TEST list, the defeat panel or the results text read in the runs; the list's rows are titles. The one wording issue is FOC45-03 (new cue ids shown as id-derived titles such as \"Victory Bahamut\"), polish.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/layout/cand-ffx2-bahamut-menu-1600/result.json",
+        "critic/reviews/d5bf2206-focused/layout/cand-seymour-flux-menu-1600/05-pause-music.jpg"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 12,
+      "game": "both",
+      "chapter": "ffx2-trema, ffx2-bahamut, seymour-flux, sin-face, the 21 first menus",
+      "state": "the opening, entrances playing, the first menu",
+      "reason": "The entrance gate holds a boss figure back until CHAPTER FRAMING's plan has landed, so no figure is drawn at the wrong size; in every observed run the figure is whole before the first command menu (Paragon 4.4 to 5.0 s before it when hurried or slowed, 6.45 s unhurried; Bahamut, the Left Fin, Shiva, Evrae, Overdrive Sin, Seymour Flux and Mortiorchis, Ginnem, Yunalesca and Baralai's shade 5.8 to 9.8 s), and in the 21 first-menu frames of the review (`sheets/first-menus-all.jpg`) the HUD panels do not cover a boss. The only figure that is in the first menu pale and translucent is Chapter XV's shade (a design of the figure).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/entrance/",
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md",
+        "critic/reviews/d5bf2206-focused/sheets/pop-paragon-h0.jpg",
+        "critic/reviews/d5bf2206-focused/music/"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 6,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "state": "the pause MUSIC tab",
+      "reason": "Every title in the SOUND TEST list is shown in full at 1600x900, 2000x1012 and 390x844 (0 cut names; the list scrolls, it does not clip a row). The board and prep names are not touched.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/layout/"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-011",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 10,
+      "game": "both",
+      "chapter": "the 21 chapters of section 4",
+      "state": "the first command menu",
+      "reason": "Every one of the 21 chapters played reached its first command menu with its boss figure or figures wholly in the picture (`sheets/first-menus-all.jpg`, and the entrance logs: every figure whole 4.4 to 9.8 s before the menu, none held back by the gate beyond it). Chapter XV's Baralai is a shade by design; Chapter IX's Yojimbo and Daigoro are in the picture before the field is shown, as on the previous build.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/",
+        "critic/reviews/d5bf2206-focused/entrance/",
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-012",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 8,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "the build and the first menus",
+      "reason": "No painting changed: every painting, font and depth map is byte-identical to live (5,178 of 5,178 shared files); art-derive verify and audit PASS, art-browser-load 3,863 of 3,863 in Chromium 153 and WebKit 26.6, art-play-audit 3 of 3 scenarios (523 image requests, 0 HTTP errors, 0 console errors), verify-approved 916 ok / 0 mismatched / 0 missing. No placeholder face was drawn in the first menus played (every run: 0 HTML-as-image responses, 0 404s).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/gates/art-verify.log",
+        "critic/reviews/d5bf2206-focused/gates/art-audit.log",
+        "critic/reviews/d5bf2206-focused/gates/art-browser-load.json",
+        "critic/reviews/d5bf2206-focused/gates/art-play-audit.json",
+        "critic/reviews/d5bf2206-focused/gates/verify-approved.json",
+        "critic/reviews/d5bf2206-focused/gates/manifest-diff-summary.json"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-013",
+      "result": "NOT APPLICABLE",
+      "mandatory": false,
+      "minutes": 1,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "n/a",
+      "reason": "No art changed in this candidate: the manifest diff against live lists no painting among its 19 added, 7 removed and 21 changed files (all other 5,178 are byte-identical), and approvedArtCheck is false; the first-menu and pause captures show the same paintings as live.",
+      "evidence": [],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 120,
+      "game": "both",
+      "chapter": "seymour-flux, yunalesca, braskas-final-aeon, ffx2-bahamut, ffx2-vegnagun-shuyin, ffx2-leblanc, evrae-airship, ffx2-fallen-aeons, seymour-omnis, ffx2-trema, ffx2-den-of-woe, sinspawn-gui, ffx2-masterpiece-theatre, exp-leblanc (to the results); seymour-anima-macalania, yojimbo-cavern, seymour-natus, isaaru-via-purifico, ffx2-ixion-djose, sin-fins-core, sin-face (to the first menu)",
+      "state": "from the title to the results screen, the retry, the pause and the phone guide",
+      "reason": "Every behaviour claimed was reached with the player's own input: 29 candidate runs enter the title by real keys (Enter, arrows, a typed word for a hidden chapter, Esc, Enter through the pre-battle scene), the results are left by a real Enter, RETRY and CHAPTER SELECT by real mouse clicks (late and early), the withdrawal by Esc and the OPTIONS tab's \"Chapter select\", the SOUND TEST rows by real clicks, the phone guide by real touch taps. The debug API's autoBattle moved the fights on from the first menu (a labelled setup hook; it proves nothing about a player's reach and is not used as proof of one).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/",
+        "critic/reviews/d5bf2206-focused/layout/",
+        "critic/reviews/d5bf2206-focused/phone/",
+        "critic/reviews/d5bf2206-focused/entrance/"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "minutes": 5,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "every capture and every measurement",
+      "reason": "The walker asserts the screen before each step and records it with every audio sample; a wait that failed was recorded as such and never as a screenshot of the wrong screen (Chapter IV's loss was waited out twice and is recorded UNVERIFIED in section 5; the first withdrawal attempt could not find its way out (the walker was looking in the wrong tab) and was re-run, not counted). The entrance observers read the page's own clock and the figure's own state each frame.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/walk.mjs",
+        "critic/reviews/d5bf2206-focused/walk2.mjs",
+        "critic/reviews/d5bf2206-focused/obs-entrance.mjs",
+        "critic/reviews/d5bf2206-focused/drive-misc-withdraw.log",
+        "critic/reviews/d5bf2206-focused/drive-misc-lose.log"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-017",
+      "result": "NOT APPLICABLE",
+      "mandatory": false,
+      "minutes": 5,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "n/a",
+      "reason": "Pre-deploy focused review of the production candidate; the live check of the exact artifact is the obligation after the deploy. The identity recorded here: dist-gate artifact hash f4686f3feaef4797 (5,218 files, 10,299.2 MB) built from origin/r45-rc d5bf2206 against live's published manifest (hash 6208b03963d4dfab, 5,206 files): 19 added, 7 removed, 21 changed, 5,178 byte-identical.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/gates/manifest-cand.json",
+        "critic/reviews/d5bf2206-focused/gates/manifest-live.json",
+        "critic/reviews/d5bf2206-focused/gates/manifest-diff-summary.json"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-018",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 4,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "the build and every audio request",
+      "reason": "art-derive audit: 515 literal art names, 0 dangling, 54 built at run time and covered by the real-play audit; every audio file the page asked for in 29 candidate runs (337 requests, 47 distinct MP3s) answered 200 audio/mpeg, none of the three retired files was requested, no 404 and no HTML served for a media request; no other game's cue file or sfx pack was fetched in any run.",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/gates/art-audit.log",
+        "critic/reviews/d5bf2206-focused/totals.json",
+        "critic/reviews/d5bf2206-focused/music-analysis.txt"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-019",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 12,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "the build",
+      "reason": "41 of 41 music cues decode in the page's own decoder in Chromium with lengths within 2 frames of the manifest's and no click above 1.22 times the local step; all 49 of 49 shipped MP3s (41 music cues, the 2 sprites, the 6 packs) decode in Chromium 153.0.8010.12 with lengths within 1 ms of the manifest and none silent; WebKit 26.6 (Playwright, Windows) has no Web Audio and its media element refuses every MP3, including the three files that are byte-identical to live, so WebKit AUDIO decode is UNVERIFIED (an engine-build limit, not a finding about the files; WebKit does decode every image: 3,863 of 3,863); the 8 sfx files (sprite, v2 sprite, six parity packs) decode with sound in the page; art-browser-load 3,863 of 3,863 in Chromium and WebKit; art-derive verify PASS (3,397 pixel-compared, 36 thumbnails).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/gates/music-v2-browser-proof.json",
+        "critic/reviews/d5bf2206-focused/gates/audio-decode-engines.json",
+        "critic/reviews/d5bf2206-focused/gates/art-browser-load.json",
+        "critic/reviews/d5bf2206-focused/gates/art-verify.log"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 25,
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut, and the chapters of section 4",
+      "state": "results, defeat, pause jukebox, entrance, phone guide",
+      "reason": "Each shared change was run in both games: results music and the defeat cue (FFX I, II, III and the hidden Gui; FFX-2 IV, V, VI, XI, XIII, XV and the hidden Experiment and Leblanc), the pause's SOUND TEST (Chapter I and IV), the sound-effect packs (FFX and FFX-2 each with their own six), the phone first-run guide (FFX I and FFX-2 IV, five tabs each) and the entrance gate (Paragon FFX-2; Seymour Flux and Overdrive Sin FFX; Bahamut FFX-2). Differences between the games are the ones the research gives (the cue names and the packs).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music-routing-table.md",
+        "critic/reviews/d5bf2206-focused/layout/",
+        "critic/reviews/d5bf2206-focused/phone/",
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md",
+        "critic/reviews/d5bf2206-focused/sfx-tables.md"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 15,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "presence and absence per change",
+      "reason": "Each change set was checked for its own game and for absence in the other, from the network and the sfx log: no FFX chapter requested an FFX-2 cue file or an FFX-2 pack and no FFX-2 chapter an FFX one (the analyzer tests both directions in every run); ffx-lady only in Chapter II, ffx2-machina and ffx2-shuyin only in Chapter V, ffx2-bahamut only in Chapter IV; an FFX-2 pack name asked in an FFX chapter never resolves to a recorded original (sfx probe); the defeat cue is each game's own. The case per change (both / FFX only / FFX-2 only) is stated in sections 4 to 8 with its research source (docs/audio/music-batch2-2026-10-12.json, research/ffx-yunalesca.md l.56, research/ffx-sinspawn-gui.md l.61, 440-441, research/ffx-seymour-flux.md l.1336).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music-routing-table.md",
+        "critic/reviews/d5bf2206-focused/sfx-tables.md",
+        "critic/reviews/d5bf2206-focused/music-analysis.txt",
+        "critic/reviews/d5bf2206-focused/sfx/"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-022",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 120,
+      "game": "both",
+      "chapter": "seymour-flux, yunalesca, braskas-final-aeon, ffx2-bahamut, ffx2-vegnagun-shuyin, ffx2-leblanc, evrae-airship, ffx2-fallen-aeons, seymour-omnis, ffx2-trema, ffx2-den-of-woe, sinspawn-gui, ffx2-masterpiece-theatre, exp-leblanc (to the results); seymour-anima-macalania, yojimbo-cavern, seymour-natus, isaaru-via-purifico, ffx2-ixion-djose, sin-fins-core, sin-face (to the first menu)",
+      "state": "title to board to prep to battle to results; defeat with retry and chapter select; withdrawal",
+      "reason": "Wins reach the results screen and the board in all 14 chapters played to an outcome (the post scene, the tally, Continue, the chapter-select board; once a chain's last link only), 6 losses in FFX I, FFX II and FFX-2 VI reach the defeat panel and leave by RETRY (FFX I, FFX-2 VI: the next fight's own theme) or CHAPTER SELECT (FFX II, FFX-2 VI: the board), early and late, and 2 withdrawals (FFX I, FFX-2 IV) reach the board. Not exercised, and recorded as such: Chapter IV's own loss (two timeouts, section 5), a withdrawal from a mid-chain link, a loss in the chapters not played (the plumbing is the shared BattleScreenFlow.showResults).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/",
+        "critic/reviews/d5bf2206-focused/vd-table.md",
+        "critic/reviews/d5bf2206-focused/drive-misc-lose.log",
+        "critic/reviews/d5bf2206-focused/drive-misc-loseiv.log",
+        "critic/reviews/d5bf2206-focused/drive-misc-loseearly.log",
+        "critic/reviews/d5bf2206-focused/drive-misc-withdraw.log"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 60,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "real fights: results music, sound-effect hooks, the entrance gate",
+      "reason": "Invoked through the real presentation path and surviving the next frames: the results music from BattleScreenFlow.showResults (victory once after the last link, defeat once after the results screen replaces the battle, none on a withdrawal), the music player's scene-to-boss-to-results order across chained links, 16 of the 18 recorded effects played \"via parity\" in real fights for their own events (the other two: flare-x2 not cast by the line played, pinned by audio-sfx-parity-events.test.ts; confirm-x2 is not asked for by name, decision 52k), and the entrance gate holding Paragon until CHAPTER FRAMING's plan has landed (0 of 23 hurried or slowed Paragon runs resized a visible figure, 20 of 22 on live).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/sfx-tables.md",
+        "critic/reviews/d5bf2206-focused/music-analysis.txt",
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-026",
+      "result": "PASS",
+      "mandatory": false,
+      "minutes": 70,
+      "game": "both",
+      "chapter": "ffx2-trema, sin-face, ffx2-fallen-aeons",
+      "state": "real fights, every pose swap counted",
+      "reason": "The harness on the candidate's production bundle (real keys, seed 1, 1600x900, one browser, 53.6 to 56.0 fps because other sessions were loading the machine): FFX-2 Chapter XIII 517 s of battle and 837 swaps, FFX Chapter XVIII 171 s and 301 swaps, FFX-2 Chapter XI 479 s and 490 swaps: CHK-026 PASS on every run (head size jump at most 3.6 percent on the same-art swaps of XIII and XVIII and 15.6 percent in XI on its one costume change, 0 head or feet over tolerance, feet at most 1.2 px; the XI figures equal the earlier idle-machine run's); on live in the same hour the same measures in FFX-2 XIII (head at most 2.2 percent, feet 1 px).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/continuity/continuity-summary.json",
+        "critic/reviews/d5bf2206-focused/continuity-live/index.json",
+        "critic/reviews/d5bf2206-focused/cont-table.md",
+        "critic/reviews/d5bf2206-focused/continuity/ffx2-trema-win-d5bf2206/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity-live/ffx2-trema-win-live7758791e/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity/sin-face-win-d5bf2206/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity/ffx2-fallen-aeons-win-d5bf2206/continuity/continuity.json"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "mandatory": false,
+      "minutes": 70,
+      "game": "both",
+      "chapter": "ffx2-trema, sin-face, ffx2-fallen-aeons",
+      "state": "real fights, every frame probed",
+      "reason": "The harness on the candidate's production bundle (real keys, seed 1, 1600x900, one browser, 53.6 to 56.0 fps because other sessions were loading the machine): FFX-2 Chapter XIII 517 s of battle and 837 swaps, FFX Chapter XVIII 171 s and 301 swaps, FFX-2 Chapter XI 479 s and 490 swaps: CHK-027 FAIL on every run (jerks of 40 px or more: XIII 86, XVIII 50, XI 32; snaps 0 per minute; no double image at or over 0.40). The same hour on live: XIII 86 against 86 (worst 201.6 against 185.8 px), Chapter XVIII 50 jerks (not paired: live's twin was not run); the earlier idle-machine counts (24, 25 and 18) are not comparable (59.6 fps, not 53 to 56). FAIL on both builds: carried FOC43-06; the entrance jerk this change targets (Paragon's 354.7 px) is not in the candidate's run, and not in live's same-hour run either (section 10).",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/continuity/continuity-summary.json",
+        "critic/reviews/d5bf2206-focused/continuity-live/index.json",
+        "critic/reviews/d5bf2206-focused/cont-table.md",
+        "critic/reviews/d5bf2206-focused/continuity/ffx2-trema-win-d5bf2206/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity-live/ffx2-trema-win-live7758791e/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity/sin-face-win-d5bf2206/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity/ffx2-fallen-aeons-win-d5bf2206/continuity/continuity.json"
+      ],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    },
+    {
+      "id": "CHK-B1",
+      "result": "UNVERIFIED",
+      "mandatory": false,
+      "minutes": 1,
+      "game": "both",
+      "chapter": "see reason",
+      "state": "n/a",
+      "reason": "No sound or music was judged: agents cannot hear (rule 13). 27 music originals, 18 recorded effects, the three victory loops and the two defeat cues are routed, measured and decoded, and the owner delegated every choice to the driver, so nobody has heard them; the list of what the ear owes is section 12.",
+      "evidence": [],
+      "artifactVersion": "d5bf2206",
+      "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+      "environment": "headless Chromium (and Playwright WebKit for the decode and image-load checks) from node, PYREFLY_BROWSER=gpu (59 to 60 fps in the harness runs, no black canvas), the candidate dist-gate built from PowerShell with BASE_PATH=/ (TEMP and TMP on D:) and served by vite preview on 127.0.0.1:5481 (stopped by PID at the end), a fresh profile per run, seed 1; live = https://echoesofspira.com/ (bundle CKOVah7-, 7758791e); 1600x900 unless a size is named",
+      "mode": "automated"
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "chapters": [
+      {
+        "chapter": "ffx2-trema",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 516.6,
+        "swaps": 834,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 2.2,
+        "maxFeetShiftPx": 0.4,
+        "worstJerkPx": 185.8,
+        "jerksCovered": 0,
+        "fps": 53.6,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-187-rikku-follow-idle.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-014-yuna-follow-idle.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-184-rikku-ready-follow.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-012-yuna-attack-follow.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-311-paine-ready-hurt.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-454-rikku-attack-follow.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-332-yuna-cast-ready.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-821-rikku-cast-hurt.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-616-rikku-hurt-cast.jpg",
+          "ffx2-trema-win-d5bf2206/continuity/strips/swap-675-yuna-ready-hurt.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "sin-face",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 170.8,
+        "swaps": 296,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 3.6,
+        "maxFeetShiftPx": 1.1,
+        "worstJerkPx": 145.7,
+        "jerksCovered": 0,
+        "fps": 56,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "sin-face-win-d5bf2206/continuity/strips/swap-107-wakka-idle-hurt.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-070-wakka-hurt-idle.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-245-wakka-critical-hurt.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-213-wakka-hurt-critical.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-127-auron-attack-follow.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-140-lulu-idle-hurt.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-177-lulu-hurt-idle.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-299-lulu-critical-victory.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-157-auron-follow-idle.jpg",
+          "sin-face-win-d5bf2206/continuity/strips/swap-181-auron-ready-follow.jpg"
+        ],
+        "unverified": null
+      },
+      {
+        "chapter": "ffx2-fallen-aeons",
+        "game": "ffx2",
+        "checks": {
+          "CHK-026": "PASS",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 478.9,
+        "swaps": 465,
+        "snapsPerMinute": 0,
+        "maxHeadJumpPct": 15.6,
+        "maxFeetShiftPx": 1.2,
+        "worstJerkPx": 192.4,
+        "jerksCovered": 0,
+        "fps": 55.9,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-221-sandy-hurt-ko.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-233-cindy-hurt-ko.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-102-x2-shiva-hurt-ko.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-289-rikku-ready-attack.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-225-mindy-hurt-ko.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-004-paine-ready-hurt.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-006-paine-hurt-ready.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-299-rikku-idle-hurt.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-301-rikku-hurt-idle.jpg",
+          "ffx2-fallen-aeons-win-d5bf2206/continuity/strips/swap-310-rikku-ready-idle.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "battleSeconds": 1166.3,
+    "counted": 1595,
+    "swaps": 1628,
+    "size": {
+      "judged": 1481,
+      "costumeSwaps": 1,
+      "sameArtSwaps": 113,
+      "costumeWorstHeadPct": 28.7,
+      "costumeWorstFeetPx": 23.1,
+      "maxHeadJumpPct": 15.6,
+      "maxHeadJumpPctRegistration": 0.3,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1.2,
+      "feetOverTolerance": 0,
+      "headMeasured": 1481,
+      "headRegistration": 1071,
+      "headSilhouette": 410,
+      "headUnmeasured": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 1,
+      "hardCutsPerMinute": 0.05,
+      "ghostSwaps": 1440,
+      "ghostFrames": 5196,
+      "worstGhostSeverity": 0.375,
+      "ghostOverFail": 0,
+      "jerks": 437,
+      "worstJerkPx": 192.4,
+      "jerksOverFail": 168,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.052,
+      "maxCentroidShiftPx": 116.9,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 1,
+      "stagedSteps": 1,
+      "stagedSnapsExcused": 1,
+      "jerksAtStaged": 7
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "PASS",
+        "reasons": [],
+        "note": "1071 of 1481 measured swaps had a registered head (tolerance 3 percent); 410 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "168 jerk(s) of 40 px or more in one frame (worst 192.4 px)"
+        ]
+      }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 3 chapter(s), 1166.3 s of battle, 53.6 to 56 fps, 3 of 3 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (168 jerk(s) of 40 px or more in one frame (worst 192.4 px))",
+    "base": "http://127.0.0.1:5481/",
+    "date": "2026-10-13T17:46:47.675Z"
+  },
+  "targets": {
+    "required": 3,
+    "matched": 2,
+    "failing": 0,
+    "unverified": 1,
+    "waiting": 1
+  },
+  "issues": [
+    {
+      "id": "FOC45-01",
+      "severity": "polish",
+      "title": "FFX-2 Chapter IV: victory-bahamut keeps looping under the whole scene that follows the results screen, because the script writes no music(null) after results(true); the cue the doc calls a quiet resolve under a silent results screen ends only when the board's loop replaces it",
+      "game": "ffx2",
+      "chapter": "ffx2-bahamut (Chapter IV)",
+      "expected": "docs/handoff/r45-audio.md and src/data/encounters.ts: victory-bahamut is 'the quiet resolve under its silent results screen'; the FFX scripts stop their victory cue 0.36 s after Continue; the script's own note says the tally and the scene after sit in silence (writing-bible 5.4)",
+      "observed": "Chapter IV won by real keys from the title: victory-bahamut starts on the results screen as one source (6.5 s intro into a 25.3 s loop, loop end 31.8 s), the results screen is held 37 s and the cue loops past its loop end without a stop; after Continue the post-results scene plays with the cue still sounding and it ends only 24.0 s after Continue, when the board's loop replaces it (the walker taps at about 1 s a line: longer at reading pace). The other victory cues stop with the script or are replaced by the next bed in the chapters whose scripts the audio batch did not touch; Chapter IV is the only chapter where the lingering is new, because it had no victory cue before.",
+      "repro": "cd critic/reviews/d5bf2206-focused; node walk.mjs --base=http://127.0.0.1:5481/ --tag=cand --chapter=ffx2-bahamut --goal=win --speed=fast --hold=37 --kind=music; node analyse-audio.mjs (run cand-ffx2-bahamut-win: results afterContinue)",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/cand-ffx2-bahamut-win/result.json",
+        "critic/reviews/d5bf2206-focused/music-analysis.txt",
+        "critic/reviews/d5bf2206-focused/vd-table.md"
+      ],
+      "confidence": "high that it happens (one run, the cue and the scene are deterministic); the ear decides whether it is wanted",
+      "requirement": "docs/handoff/r45-audio.md \"Victory\" (a quiet resolve under the results screen); CHK-023 (the cue is stopped where the design stops it)",
+      "where": "src/story/scripts/ffx2-bahamut.ts (no music(null, ...) after results(true)); suspected, not traced beyond reading the script",
+      "fix": "add a music(null, ...) after the tally, as the FFX scripts do, or let the cue carry on by decision (the owner's yes first, AGENTS.md rule 10)",
+      "acceptanceCheck": "the win run of Chapter IV shows the victory cue gone within 1 s of Continue, or the owner has heard it under the scene and wants it",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "FOC45-02",
+      "severity": "suggestion",
+      "title": "The three results loops decay to -54, -40 and -36 dBFS in the last 50 ms before the wrap and re-enter 24, 13 and 23 dB louder, as the files themselves do: a breath at every pass that no click detector flags (the ear decides)",
+      "game": "both",
+      "chapter": "victory-ffx, victory-ffx2, victory-bahamut",
+      "expected": "a results loop that wraps without an audible breath (RUBRIC audio; CHK-001 loop-seam discontinuity)",
+      "observed": "tools/audio/music-v2-browser-proof.mjs (the page's own decoder, Chromium): no click above 1.22 times the music's own local step and at most 0.12 dB of level jump at the wrap on every cue, but the three results loops end each pass in a decay and re-enter at full level: victory-ffx -53.6 dBFS in the last 50 ms and 24.2 dB across the wrap, victory-ffx2 -40.3 and 12.8 dB, victory-bahamut -36.2 and 23.1 dB. The file's own continuation makes the same jump (within 0.02 to 0.05 dB of the wrap's), so the wrap is as seamless as the file itself; what a listener may hear is a near-silent moment at every pass. A loop held under a results screen wraps at 34.6 s (FFX), 45.8 s (FFX-2) and 31.8 s (Chapter IV).",
+      "repro": "node tools/audio/music-v2-browser-proof.mjs (gates/music-v2-browser-proof.json)",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/gates/music-v2-browser-proof.json",
+        "critic/reviews/d5bf2206-focused/gates/audio-offline.json"
+      ],
+      "confidence": "medium (a measurement; whether it is heard as a breath or as phrasing is the ear's, rule 13)",
+      "requirement": "CHK-001, CHK-B1",
+      "where": "the three victory MP3s (public/audio/music/victory-*.mp3): loop point placement",
+      "fix": "if the owner hears it: re-cut the loop end before the fade, or end the body on the downbeat",
+      "acceptanceCheck": "the wrap's pre and post level within 6 dB",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "FOC45-03",
+      "severity": "polish",
+      "title": "The SOUND TEST titles of the new stand-in cue ids are id-derived (\"Victory Bahamut\" here, \"Boss Bahamut\" since batch 1) where composed tracks have titles (\"Iron Undertow\", \"Noble Rot\")",
+      "game": "ffx2",
+      "chapter": "the pause screen, MUSIC tab (FFX-2 Chapter IV)",
+      "expected": "a player-facing title for every row of the SOUND TEST list (CHK-007)",
+      "observed": "FFX-2 Chapter IV at 1600x900, 2000x1012 and 390x844: the rows are Boss Bahamut, Iron Undertow, Victory Bahamut, then the composed titles; none of the nine new cue ids has a composed title in src/audio/tracks/index.ts (26 tracks are named). Where the list shows them, they read as ids with spaces.",
+      "repro": "walk2.mjs --goal=menu --layout=1 --chapter=ffx2-bahamut (layout/cand-ffx2-bahamut-menu-1600/result.json jukebox.titles)",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/layout/cand-ffx2-bahamut-menu-1600/result.json",
+        "critic/reviews/d5bf2206-focused/layout/cand-ffx2-bahamut-menu-1600/05-pause-music.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-007 (no developer vocabulary in player-facing copy)",
+      "where": "src/audio/tracks/index.ts TRACK_NOTES / the jukebox title derivation",
+      "fix": "name the new cues (the owner chooses the names)",
+      "acceptanceCheck": "no SOUND TEST row reads as a cue id",
+      "introducedByCandidate": true,
+      "regressionVsLive": false,
+      "inNewFeature": true
+    },
+    {
+      "id": "FOC45-04",
+      "severity": "polish",
+      "title": "In one of five opening conditions (Enter pressed 600 ms after the battle screen) the first command menu comes a median 192 ms (2 percent) later than on live; low confidence",
+      "game": "ffx2",
+      "chapter": "ffx2-trema (Chapter XIII, link 1)",
+      "expected": "the first menu at the same time as live (the entrance gate must not delay the opening: decision 61e, E-PYRE: 0 ms added before the first menu)",
+      "observed": "Paragon, live and candidate alternating, seed 1, real keys, headless Chromium on the GPU, part of the series with other sessions loading the machine: field to first menu (medians, ms) nothing pressed 10,033 against 10,042 (2 and 2); Enter at 0 8,116 against 8,116 (7 and 7); Enter at 600 8,650 against 8,842 (9 and 10; rank test z 1.9, p about 0.06; live's own runs span 5,566 to 10,450); CPU x3 12,433 against 12,725 (4 and 4, the same two modes on both builds, partners within 0.1 to 0.4 s); CPU x6 13,325 against 13,566 (2 and 2). In an earlier half of the review (n=2 a side) the same measure read +167, +234, +100 and +241 ms; at n=7 to 10 only the Enter-600 difference remains. The cost the gate was built to pay is the figure's later arrival when hurried or slowed (0.7 to 1.3 s), which the menu's timing mostly absorbs.",
+      "repro": "cd critic/reviews/d5bf2206-focused; HURRY_MS=600 SUFFIX=h600-rN node obs-entrance.mjs <url> <tag> ffx2-trema 0 1 0 (live and candidate alternating); node sum-ent.mjs, table B",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md",
+        "critic/reviews/d5bf2206-focused/entrance/",
+        "critic/reviews/d5bf2206-focused/drive-ent3.log",
+        "critic/reviews/d5bf2206-focused/drive-ent8.log"
+      ],
+      "confidence": "low: borderline against the spread of one build, measured partly under load from other sessions",
+      "requirement": "decision 61e / E-PYRE: no delay before the first menu",
+      "where": "src/engine/entrance/StageEntrances.ts and EntranceHost.planOwed (the gate waits for the plan, up to PLAN_MAX_MS); suspected, not traced",
+      "fix": "none proposed until it reproduces; if it does, let the gate release at the menu's own deadline",
+      "acceptanceCheck": "Enter 600 ms, 12 runs a side on an idle machine: the medians within 100 ms",
+      "introducedByCandidate": true,
+      "regressionVsLive": "unknown",
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC45-05",
+      "severity": "polish",
+      "title": "After leaving a fight by the pause (OPTIONS, Chapter select) the board plays no music for at least the 2.7 s watched, in both games; live does the same",
+      "game": "both",
+      "chapter": "seymour-flux (FFX), ffx2-bahamut (FFX-2)",
+      "expected": "the board's own loop (chapter-select) when the board is shown, as after a defeat's CHAPTER SELECT (it starts 0.3 s after the screen)",
+      "observed": "Withdrawal by real clicks (Esc, OPTIONS tab, \"Chapter select\"): the board is shown, the pause cue fades out in 0.07 s and no music source starts for the 2.7 s the walker watched (FFX I and FFX-2 IV on the candidate) and for 2.7 and 4.3 s on live (the same withdrawal on live in both chapters): `playing` is null throughout. After a defeat panel's CHAPTER SELECT the board loop starts at once on the candidate.",
+      "repro": "cd critic/reviews/d5bf2206-focused; node walk.mjs --base=<url> --tag=<cand|live> --chapter=seymour-flux --goal=withdraw --kind=music (and ffx2-bahamut)",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/music/cand-seymour-flux-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/music/cand-ffx2-bahamut-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/music/live-seymour-flux-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/music/live-ffx2-bahamut-withdraw/result.json",
+        "critic/reviews/d5bf2206-focused/drive-misc-withdraw.log",
+        "critic/reviews/d5bf2206-focused/drive-misc-withdrawlive.log"
+      ],
+      "confidence": "high that it happens on both builds; medium on how long it lasts (the walker watched 2.7 to 4.3 s)",
+      "requirement": "CHK-023 (the audible feedback of a state change)",
+      "where": "BattleScreen.requestExit('chapter-select') -> finish({kind:'aborted'}) -> the caller's return to the board: no playMusic('chapter-select') on that path (BattleScreenFlow.chapterSelect() is the path that calls it); suspected, not traced",
+      "fix": "start the board's loop where the board is shown after an aborted fight",
+      "acceptanceCheck": "walk.mjs --goal=withdraw shows chapter-select playing within 1 s of the board",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC44A-05",
+      "severity": "major",
+      "title": "Closed by this candidate (found on live 7758791e): Paragon's size step still lands on a visible figure when the opening is hurried or the machine is slow: the entrance jerk of Chapter XIII is not gone for those players, nor in the harness run (355 px on both builds)",
+      "game": "ffx2",
+      "chapter": "ffx2-trema (Chapter XIII, link 1)",
+      "expected": "E-PYRE (decision 61e, the brief): \"entrance jerk should be gone\"; no one-frame step of scale or place on a visible figure (round 25's PR-0380: Paragon 355 px)",
+      "observed": "Fixed. Paragon (FFX-2 XIII, link 1), live 7758791e against d5bf2206, alternating, seed 1, real keys: Enter at 0 ms, Enter at 600 ms, the CPU slowed 3 and 6 times and nothing pressed. Live resizes the figure (scale 1 to 3.047, a step of 2.047) while it is on screen and partly gathered in 20 of 22 hurried or slowed runs (Enter 0: 7 of 7; Enter 600: 7 of 9; CPU x3: 4 of 4; CPU x6: 2 of 2); the candidate in 0 of 23 (0 of 7, 0 of 10, 0 of 4, 0 of 2; nothing pressed: 0 of 2 on each): the figure first shows at its final scale 3.047 in every candidate run and gathers once, 900 ms, whole 4.7 to 5.2 s before the first menu when hurried or slowed and 6.45 s unhurried. The first menu is not moved in four of five conditions (medians, field to first menu, live against candidate: nothing pressed 10,033 against 10,042 ms; Enter 0 8,116 against 8,116; CPU x3 12,433 against 12,725; CPU x6 13,325 against 13,566); at Enter 600 the candidate reads a median 192 ms later (8,650 against 8,842; rank test p about 0.06; FOC45-04, polish, low confidence). The cost, as designed, is that the figure starts gathering a median 0.7 to 1.3 s later than on live when the opening is hurried or slowed. The harness probe under Enter at 0: worst jerk 0 px on the candidate, 253.9 px on live; under CPU x3 the candidate reads 89.6 px (Rikku and Paine, the same step of the same two party figures that live shows: 89.6 and 65.6 px) against live's 266.3 and 266.5 px (Paragon). Bahamut (FFX-2 IV), Seymour Flux and Mortiorchis (FFX I), Overdrive Sin (FFX XVIII), Evrae, the Left Fin, Shiva, Ginnem, Yunalesca and Baralai's shade: no step on a visible figure. The phone layout (390x844 touch): Paragon and Overdrive Sin, no step on either build, first menu within 33 ms.",
+      "repro": "cd critic/reviews/7758791e-focused; HURRY_MS=0 node obs-pop.mjs http://127.0.0.1:5477/ cand ffx2-trema paragon 16 (also HURRY_MS=600, THROTTLE=3, THROTTLE=6; the same with https://echoesofspira.com/ live); node sum-conditions.mjs; the harness: PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=ffx2-trema --budget=480000",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/entrance/",
+        "critic/reviews/d5bf2206-focused/foc44a05-tables.md",
+        "critic/reviews/d5bf2206-focused/sheets/pop-paragon-h0.jpg",
+        "critic/reviews/d5bf2206-focused/sheets/pop-paragon-h600.jpg",
+        "critic/reviews/d5bf2206-focused/sheets/pop-paragon-t3.jpg",
+        "critic/reviews/d5bf2206-focused/sheets/pop-paragon-t6.jpg",
+        "critic/reviews/d5bf2206-focused/sheets/pop-paragon-plain.jpg",
+        "critic/reviews/d5bf2206-focused/pop/"
+      ],
+      "confidence": "high that it happens in these conditions (every run of Paragon under them stepped, none without them, 9 quiet runs); medium on how many players meet it (an Enter within the first second is common, a CPU three times slower than this one is an older phone); the cause is suspected, not traced",
+      "requirement": "E-PYRE as the brief states it; CHK-027 (motion is continuous)",
+      "where": "src/engine/entrance/StageEntrances.ts: the gate (QUIET_MS 300, MIN_AGE_MS 900, PATIENCE_MS 1600) opens before CHAPTER FRAMING's plan lands when the opening begins early against the figure's age (Enter skips the slate) or the stage clock runs slow; suspected, not traced",
+      "fix": "hold a figure whose scene still has a size plan pending until the plan has landed (with a ceiling), or apply the planned size at hold time so the gather plays at the final size; the builder's call",
+      "acceptanceCheck": "obs-pop.mjs on Chapter XIII with HURRY_MS=0, HURRY_MS=600, THROTTLE=3 and THROTTLE=6 shows no change of scale over 0.05 between two frames while the figure's alpha is above 0.02; the continuity harness on Chapter XIII shows no jerk of 40 px or more in its first 10 s of battle",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "fixed - verified on d5bf2206: 0 of 23 hurried or slowed runs of Paragon resized a visible figure on the candidate against 20 of 22 on live (Enter at 0 ms, Enter at 600 ms, CPU x3, CPU x6; nothing pressed: 0 of 2 on both); phone 390x844: no step on either build"
+    },
+    {
+      "id": "FOC44A-01",
+      "severity": "polish",
+      "title": "Closed by this candidate (found on live 7758791e): On every phone prep page that scrolls, the first-run guide's down chevron is drawn over the page's MORE BELOW cue and hides its middle letters",
+      "game": "both",
+      "chapter": "seymour-flux, ffx2-bahamut",
+      "expected": "the guide and the cue do not collide",
+      "observed": "Guide at step 2 on a fresh profile: the MORE BELOW cue is visibility:hidden on 10 of 10 pages at 390x844 (FFX Chapter I: Chapter, Stats, Equipment, Items, Overdrive; FFX-2 Chapter IV: Chapter, Dresspheres, Stats, Accessories, Items) and 10 of 10 at 360x740; live: visible on all 10, the chevron overlapping the cue by 648 px squared. After a real tap on the skip words the layer is gone and the cue computes visible again. No text made smaller or moved.",
+      "repro": "node critic/reviews/7758791e-focused/obs-prep-phone.mjs (guide-up-<tab>.jpg), crops in sheets/crop-guide-chevron-*.png",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/phone/",
+        "critic/reviews/d5bf2206-focused/sheets/foc44a01-crops.jpg"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-008 (panels against each other)",
+      "where": "the guide's chevron (src/ui/coach/first-run.css) against .prep__phone-cue",
+      "fix": "hide the cue while the guide is up (the same selector pattern as FIX A), or move the chevron",
+      "acceptanceCheck": "guide-up captures show the cue whole or absent, never overprinted",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "fixed - verified on d5bf2206 (390x844 and 360x740 touch emulation, Chromium; not Safari or a real phone)"
+    },
+    {
+      "id": "FOC43-06",
+      "status": "open - carried",
+      "severity": "major",
+      "title": "Jerks of 40 px or more remain (CHK-027 FAIL) on the candidate and on live alike: 86 against 86 in FFX-2 XIII in the same hour at 53 fps (24 on the earlier idle-machine run); carried",
+      "game": "both",
+      "chapter": "sin-face, ffx2-trema, ffx2-fallen-aeons",
+      "expected": "no jerk of 40 px or more in one frame (RUBRIC 6a, D-421)",
+      "observed": "The harness on FFX-2 XIII, candidate d5bf2206 and live 7758791e in the same hour on a loaded machine (53.6 and 53.3 fps), seed 1, real keys: 86 jerks of 40 px or more in 516.6 s of battle against 86 in 516.3 s (59 and 62 of them damage recoils), worst 185.8 px (Paragon's first attack) against 201.6 px (Trema); snaps 0 per minute on both, no double image at or over 0.40 (worst 0.375 and 0.377); CHK-026 PASS on both. Chapter XVIII 50 jerks (not paired: live's twin was not run) and FFX-2 XI 32 (unpaired); the earlier idle-machine runs of 7758791e read 24, 25 and 18 at 59.6 to 59.8 fps, so the count follows the frame pacing and the same-hour pair is the comparison. Paragon's entrance jerk (354.7 px in the earlier run) did not recur on either build in this run. The jerks are the kinds the earlier reviews list (damage recoils, ATB cuts, swaps at a KO); none is new.",
+      "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<url> --evidence=<dir> --chapters=sin-face,ffx2-trema,ffx2-fallen-aeons --tag=<x> (Chapter XIII with --budget=480000), seed 1, 1600x900; node critic/reviews/7758791e-focused/sum-continuity.mjs",
+      "evidence": [
+        "critic/reviews/d5bf2206-focused/continuity/continuity-summary.json",
+        "critic/reviews/d5bf2206-focused/cont-table.md",
+        "critic/reviews/d5bf2206-focused/continuity/ffx2-trema-win-d5bf2206/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity-live/ffx2-trema-win-live7758791e/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity/sin-face-win-d5bf2206/continuity/continuity.json",
+        "critic/reviews/d5bf2206-focused/continuity/ffx2-fallen-aeons-win-d5bf2206/continuity/continuity.json"
+      ],
+      "confidence": "high that they exist on both builds and that the candidate is not worse in the paired chapters; medium on the load's share of the count (the fight differs by a few turns)",
+      "requirement": "RUBRIC 6a, CHK-027",
+      "where": "presenter pose swaps at KO, revive and ATB cuts, damage recoils, the Save Sphere wash (none touched by this candidate)",
+      "fix": "carried from FOC41-01, FOC42-01, FOC43-06: blend or stage the KO and revive cuts",
+      "acceptanceCheck": "the continuity harness shows no jerk of 40 px or more on the three chapters",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC44A-03",
+      "severity": "polish",
+      "title": "A hand scanning the chapter board at four presses a second sees one of a plate's two pictures soft for up to about 0.4 s a press from the fourth press on (the live build before 7758791e showed none) (carried: 7758791e, the live build now, has it too)",
+      "game": "both",
+      "chapter": "the chapter board",
+      "expected": "a plate full when the cursor lands, or at worst the picture it had (live: 0 soft plates in eight presses 250 ms apart)",
+      "observed": "tools/delivery-proof.mjs on both builds, 100 Mbit/s, 20 ms, HTTP cache off, six seconds on the title then eight presses 250 ms apart: live 0 blank and 0 soft on all eight; candidate 0/0 0/0 0/0 0/1 0/1 0/1 0/1 0/1 (blank/soft at +60 ms), every press settled by +2 s; never blank. At a normal pace (six presses 2.5 s apart) 0/0 on every press on both builds. The strips themselves are painted when the board appears (36 of 36 against live's 13 of 36).",
+      "repro": "node tools/delivery-proof.mjs (the builder's harness) with link fast and mash, on the candidate and on live; evidence delivery/ and sum-board.mjs",
+      "evidence": [
+        "critic/reviews/7758791e-focused/delivery/",
+        "critic/reviews/7758791e-focused/sheets/board-cand-vs-live-1600x900.jpg",
+        "critic/reviews/7758791e-focused/soft-cand/"
+      ],
+      "confidence": "high that it exists; medium on how a human thumb reads it (the soft picture is the strip's own small copy under the full one, for under half a second)",
+      "requirement": "CHK-012, CHK-019 (a plate never ships empty or soft as its final face)",
+      "where": "src/ui/common/boardAhead.ts PLATE_AHEAD = 2 (the builder's disclosed trade, docs/handoff/r44-thumbs.md)",
+      "fix": "raise PLATE_AHEAD to 3 for the idle lane on a fast link, or fetch the neighbour plates of the cursor first in a scan; the builder's call",
+      "acceptanceCheck": "the same eight-press scan shows 0 soft plates on the candidate",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open - carried, not re-measured (live 7758791e has it; this candidate does not touch the code or the files)"
+    },
+    {
+      "id": "FOC44A-02",
+      "severity": "polish",
+      "title": "Two sub-visual resampling differences from live on the desktop prep: the Bahamut photograph on FFX-2 Chapter IV's CHAPTER tab and the FFX Sphere Grid roster face edges",
+      "game": "both",
+      "chapter": "ffx2-bahamut, seymour-flux",
+      "expected": "desktop prep pixel-identical to live apart from FIX A (the brief)",
+      "observed": "every tab of both games at 1600x900, guide skipped: 9 of 11 tabs bit-identical to live; FFX-2 Chapter IV's CHAPTER tab differs by 1,770 px in one 97x25 px region (the Bahamut photograph, max channel difference 161) in both pairs of boots; the Sphere Grid roster face edges differ slightly. URL, file bytes (sha256 equal) and computed style are the same on both builds and each build is deterministic across boots; suspected cause: the browser's decode and downscale of the same file after a different history of loads (the board no longer decodes the full paintings first). Nothing is visible at 1x.",
+      "repro": "node critic/reviews/7758791e-focused/cmp-prep-desktop.mjs (obs-prep-desktop.mjs on both builds, twice)",
+      "evidence": [
+        "critic/reviews/7758791e-focused/prep-desktop-compare-skip.txt",
+        "critic/reviews/7758791e-focused/prep-desktop-compare-skip-boot2.txt",
+        "critic/reviews/7758791e-focused/sheets/zoom-ffx2-chapter-photo2-cand-over-live.png",
+        "critic/reviews/7758791e-focused/sheets/diff-ffx2-chapter-skip.png"
+      ],
+      "confidence": "high that they differ, medium on the cause",
+      "requirement": "the brief's \"pixel-identical to live\", CHK-013",
+      "where": "image decode order after the board change (suspected)",
+      "fix": "none needed unless Bailey sees it; if so, decode the photograph at its drawn size",
+      "acceptanceCheck": "the same comparison shows 0 differing pixels",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open - carried, not re-measured (live 7758791e has it; this candidate does not touch the code or the files)"
+    },
+    {
+      "id": "FOC43-02",
+      "status": "open - carried, not re-measured (live 7758791e has it; this candidate does not touch the code or the files)",
+      "severity": "polish",
+      "title": "The FFX Sphere Grid tab is under the 14 px floor from 1280x720 to 1599x899 (carried from 7b2582e7)",
+      "game": "ffx",
+      "chapter": "seymour-flux",
+      "expected": "no text under 14 px",
+      "observed": "not re-measured here; FIX A's runs show the hint strip keeps its 14 px floor on that tab at 1280x720, 1440x900 and 1600x900.",
+      "repro": "tools/text-floor-sweep.mjs on the prep screen at 1280x720",
+      "evidence": [
+        "critic/reviews/7758791e-focused/foc43-cand/"
+      ],
+      "confidence": "medium (carried)",
+      "requirement": "CHK-003",
+      "where": "src/ui/ffx/ Sphere Grid tab",
+      "fix": "carried",
+      "acceptanceCheck": "the sweep at 1280x720 and 1440x900",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "id": "FOC44A-04",
+      "severity": "suggestion",
+      "title": "Waiting on the title now costs about 12 MB more before any input (57.4 against 45.3 MB at six seconds): the idle lane fetches the 36 thumbnails and the plates two presses ahead",
+      "game": "both",
+      "chapter": "the title and the chapter board",
+      "expected": "no more bytes than live before a player acts, or a metered-network exemption",
+      "observed": "delivery-proof, same link and cache setting on both builds: bytes before the first input 57.4 MB against 45.3 MB; the whole session is lighter (142.9 against 158.2 MB over six presses, 123.6 against 146.9 MB on a phone, 112.7 against 141.1 MB when Enter is pressed at 0.5 s).",
+      "repro": "node tools/delivery-proof.mjs link fast, candidate and live",
+      "evidence": [
+        "critic/reviews/7758791e-focused/delivery/",
+        "critic/reviews/7758791e-focused/sum-board.mjs"
+      ],
+      "confidence": "high",
+      "requirement": "CHK-019 (assets), the brief's \"36 small derived files\"",
+      "where": "the board's idle prefetch lane (src/ui/common/boardAhead.ts)",
+      "fix": "hold the thumbnails until the first input on a metered or save-data connection (navigator.connection.saveData)",
+      "acceptanceCheck": "a metered phone that only opens the title pays no more than live",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false,
+      "status": "open - carried, not re-measured (live 7758791e has it; this candidate does not touch the code or the files)"
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "the audio routing of 21 chapters from the title by real keys on the production bundle: 14 to their results screen and back to the board (FFX I, II, III, VIII, XII and the hidden Gui; FFX-2 IV, V, VI, XI, XIII, XV and the hidden Experiment and Leblanc) and 7 to their first command menu (FFX VII, IX, X, XIV, XVII, XVIII; FFX-2 XVI): 29 candidate runs, 337 audio requests, 166 of 166 cue starts with the manifest's loop points, 0 retired files, 0 other-game cues",
+      "victory and defeat: 14 wins (one source of the chapter's own victory cue, once after the last link of a chain, looping past its loop end), 6 losses in FFX I, II and FFX-2 VI with real RETRY and CHAPTER SELECT clicks late and early, 2 withdrawals on candidate and live",
+      "sound effects: 16 of the 18 recorded originals in real fights for their own events; the same deterministic fight on live and candidate in FFX I and FFX-2 IV (32 of 40 and 17 of 23 asks identical, the rest the recorded originals' events); a probe matrix in FFX II, FFX-2 IV and V and live's II",
+      "FOC44A-05: Paragon (FFX-2 XIII) by condition (nothing pressed, Enter at 0 and 600 ms, CPU x3 and x6), live and candidate alternating, 25 candidate and 24 live runs; the harness's own probe at Enter 0 and CPU x3 (live twice); the phone layout (Paragon, Overdrive Sin); the entrances of Bahamut, Seymour Flux, Overdrive Sin, Evrae, the Left Fin, Shiva, Ginnem, Yojimbo, Yunalesca and Baralai's shade",
+      "FOC44A-01: the first-run guide at step 2 on the ten phone prep pages (FFX I, FFX-2 IV) at 390x844 and 360x740, live and candidate, and after a real tap on the skip words",
+      "layout and the pause jukebox: FFX I and FFX-2 IV at 1600x900, 2000x1012 and 390x844 touch (board, prep with guide, first menu, pause, MUSIC tab, real clicks on rows); the 21 first-menu frames",
+      "the build gates: dist-gate built here, tsc (0 errors), the 35 changed test files (708 tests), tools/audio/qa.mjs, my own ffmpeg re-measure of all 41 cues, the page's own decoder and the engine decode of the shipped audio (Chromium (49 of 49 shipped MP3s; WebKit audio decode UNVERIFIED: Playwright's Windows WebKit has no Web Audio and refuses every MP3, the unchanged ones too)), art-derive verify and audit, art-browser-load (3,863 of 3,863 in Chromium and WebKit), art-play-audit (3 of 3), verify-approved (916 ok), the manifest against live's",
+      "The harness on the candidate's production bundle (real keys, seed 1, 1600x900, one browser, 53.6 to 56.0 fps because other sessions were loading the machine): FFX-2 Chapter XIII 517 s of battle and 837 swaps, FFX Chapter XVIII 171 s and 301 swaps, FFX-2 Chapter XI 479 s and 490 swaps; Chapter XVIII 50 jerks (not paired: live's twin was not run); FFX-2 XIII paired with live in the same hour (86 jerks against 86)"
+    ],
+    "reused": [
+      {
+        "what": "the driver's full suite (1,146 files, 17,914 tests, 0 failed) and critic-plan DEEP with deepBeforeDeploy false",
+        "from": "the release driver of r45-rc",
+        "why": "tsc, the 35 test files of the change sets and the plan were re-run here; the full suite was not (a focused review does not repeat it)"
+      },
+      {
+        "what": "the builder's loop-point and loudness record of the 27 originals and the sfx parity record (seven strict, eleven near)",
+        "from": "docs/audio/music-batch2-2026-10-12.json, docs/audio/sfx-parity-record.json",
+        "why": "my own ffmpeg re-measure and the page decoder were run on the shipped files; the builder's generator specs are the record of what was asked for"
+      },
+      {
+        "what": "the previous review's entrance runs of 7758791e (Chapters VIII, IX, XI, XVII unhurried)",
+        "from": "critic/reviews/7758791e-focused/entrance/",
+        "why": "that build is the live build now; where the same chapter was also run on live in this review the pair is used instead"
+      },
+      {
+        "what": "FOC44A-02, FOC44A-03, FOC44A-04 and FOC43-02 (carried)",
+        "from": "critic/reviews/7758791e-focused.json",
+        "why": "this candidate touches neither their code nor their files (the manifest diff has no painting, thumbnail or board change)"
+      }
+    ],
+    "notTested": [
+      "sound and music by ear (rule 13; CHK-B1): the 27 originals, the 18 recorded effects, the three results loops' wrap, the defeat cues, Chapter IV's victory cue under its post-results scene (section 12)",
+      "FFX-2 Chapter IV's own defeat (two timeouts: the 1-HP party was not defeated in 8 minutes under the defend and the attack strategies; method check in section 5), a withdrawal from a mid-chain link, a loss in FFX III, VII to XII and XIV to XVIII and FFX-2 V, XI, XIII, XV, XVI and the hidden chapters (shared plumbing, one defeat cue per game)",
+      "the victory and defeat cues in the seven chapters played only to their first menu (VII, IX, X, XIV, XVI, XVII, XVIII): routed by the shared plumbing and the unit tests, played in the other chapters",
+      "WebKit's audio decode: Playwright's Windows WebKit 26.6 has no Web Audio and its media element refuses every MP3 (the three byte-identical-to-live files too), so the 49 shipped audio files are proved in Chromium only (49 of 49); WebKit's images are proved (3,863 of 3,863)",
+      "the hidden FF7 chapter (ff7-guard-scorpion): its cue file is byte-identical to live and its row of the routing table is unchanged (boss-ff7-guard, no victory or defeat cue); it was not played",
+      "the live artifact and the post-deploy checks (CHK-017: the exact-artifact comparison against artifact hash f4686f3feaef4797 belongs to the live review)",
+      "a real phone or Safari itself (Chromium touch emulation and Playwright WebKit): the `:has()` rule behind FOC44A-01 on Safari 15.4 and newer, touch drags, the address bar, memory and the real frame rate on a phone",
+      "the entrance on LOW EFFECTS and REDUCE MOTION, on Trema's own link (link 2), on a device slower than six times this CPU, and the continuity harness on the 18 other chapters of the plan (Chapters XIII, XVIII and XI only)",
+      "the soft-plate scan (FOC44A-03), the title's 12 MB (FOC44A-04), the FFX Sphere Grid text floor (FOC43-02) and the other open items of the earlier reviews were outside this change"
+    ]
+  },
+  "regressions": [
+    "None at major or critical severity, and none confirmed at any severity: the paired series (Paragon by condition, FFX-2 XIII continuity in the same hour, the withdrawal and the first menus) show the candidate equal to or better than live; FOC45-04 (Enter 600, a median 192 ms later first menu, low confidence, regressionVsLive unknown) is the only measure on which the candidate reads worse, within the spread. FFX XVIII and FFX-2 XI continuity have no same-hour live twin (the earlier idle-machine runs are not comparable at 56 against 59.7 fps), so for those two chapters \"no regression\" rests on the Chapter XIII pair and on the change sets not touching pose swaps, damage recoils or ATB cuts, not on a pair of their own."
+  ],
+  "nextReview": "Live verification of the exact artifact after the deploy (CHK-017: the candidate's artifact hash f4686f3feaef4797 against what the site serves, every audio file answering 200 audio/mpeg from the live host); then the deep review of this build, which the plan classes deep (deepAfterDeploy: audio routing, the asset loader, the presenter's stage, global layout), on the live build, with the carried deep review of a061e9dc. Bailey's ear is owed for the list of section 12 (CHK-B1), and a debug-API knock-out run of Chapter IV's defeat is the one outcome this review could not reach.",
+  "elapsedMinutes": 345
+}

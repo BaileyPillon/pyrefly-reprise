@@ -1,0 +1,92 @@
+[
+ {
+  "id": "alchemist/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/alchemist_idle.png",
+  "rel": "art/characters/rikku-alchemist/idle.png"
+ },
+ {
+  "id": "alchemist/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/alchemist_idle@2x.png",
+  "rel": "art/characters/rikku-alchemist/idle@2x.png"
+ },
+ {
+  "id": "berserker/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/berserker_idle.png",
+  "rel": "art/characters/rikku-berserker/idle.png"
+ },
+ {
+  "id": "berserker/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/berserker_idle@2x.png",
+  "rel": "art/characters/rikku-berserker/idle@2x.png"
+ },
+ {
+  "id": "black-mage/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/black-mage_idle.png",
+  "rel": "art/characters/rikku-black-mage/idle.png"
+ },
+ {
+  "id": "black-mage/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/black-mage_idle@2x.png",
+  "rel": "art/characters/rikku-black-mage/idle@2x.png"
+ },
+ {
+  "id": "gunner/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/gunner_idle.png",
+  "rel": "art/characters/rikku-gunner/idle.png"
+ },
+ {
+  "id": "gunner/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/gunner_idle@2x.png",
+  "rel": "art/characters/rikku-gunner/idle@2x.png"
+ },
+ {
+  "id": "lady-luck/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/lady-luck_idle.png",
+  "rel": "art/characters/rikku-lady-luck/idle.png"
+ },
+ {
+  "id": "songstress/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/songstress_idle.png",
+  "rel": "art/characters/rikku-songstress/idle.png"
+ },
+ {
+  "id": "songstress/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/songstress_idle@2x.png",
+  "rel": "art/characters/rikku-songstress/idle@2x.png"
+ },
+ {
+  "id": "thief/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/thief_idle.png",
+  "rel": "art/characters/rikku-thief/idle.png"
+ },
+ {
+  "id": "thief/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/thief_idle@2x.png",
+  "rel": "art/characters/rikku-thief/idle@2x.png"
+ },
+ {
+  "id": "white-mage/idle",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/white-mage_idle.png",
+  "rel": "art/characters/rikku-white-mage/idle.png"
+ },
+ {
+  "id": "white-mage/idle@2x",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/white-mage_idle@2x.png",
+  "rel": "art/characters/rikku-white-mage/idle@2x.png"
+ },
+ {
+  "id": "dark-knight/idle (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/dark-knight_idle_unchanged_control_.png",
+  "rel": "art/characters/rikku-dark-knight/idle.png"
+ },
+ {
+  "id": "warrior/idle (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/warrior_idle_unchanged_control_.png",
+  "rel": "art/characters/rikku-warrior/idle.png"
+ },
+ {
+  "id": "rikku (FFX painting, unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-live/rikku_FFX_painting_unchanged_control_.png",
+  "rel": "art/characters/rikku/idle.png"
+ }
+]

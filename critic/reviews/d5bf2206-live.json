@@ -1,0 +1,65 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-10-13T23:27:00.000Z",
+ "build": {
+  "mainSha": "d5bf2206",
+  "bundle": "Cnc9DuSS",
+  "artifactHash": "f4686f3feaef4797195ceca35ff0cb161d75eb66989626a1c4bbde80c629c4fe"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "verifyLive() from tools/artifact-manifest.mjs run with --full semantics against critic/artifacts/d5bf2206.json (wrapper critic/reviews/d5bf2206-live-verify.mjs, 16-way prefetch, 48-file window): 5217 of the 5218 files compared byte for byte with a cache-busting query (every file except the host-read _headers), 0 mismatched, 0 missing, 0 wrong content type, 0 errors; the live artifact-manifest.json matches (artifact hash f4686f3feaef4797); index.html is identical to the artifact once Cloudflare's Web Analytics beacon is removed; assets/index-92HbUNj_.css was served Cache-Control public, max-age=31536000, immutable; 10299 MB fetched in 2158 s. Both addresses (echoesofspira.com and the workers.dev backup) serve bundle Cnc9DuSS. Against 7758791e the artifact added 19 files, changed 21 and removed 7: the 7 removed (the old bundle and workers, boss-dread.mp3, boss-ffx2-aeon.mp3, boss-yunalesca.mp3) answer 404 at both addresses. Artifact: critic/artifacts/d5bf2206-verify-live.json."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Chromium driven by Playwright from node, PYREFLY_BROWSER=gpu (first-menu mean luminance 62.6 to 89.3 on eight captures: no black canvas, no fallback needed), a fresh browser and context per part (storage empty), a cache-busting query, 1600x900 with real key presses (390x844 touch with real taps for the phone part), every capture preceded by an asserted screen, chapter and state. 78 assertions, 0 failed; console errors 0; 404s 0; HTML served for an image or sound 0. Chapters from the title to the first battle menu by real keys: FFX Chapter I (fast and human pace), FFX Chapter II, FFX-2 Chapter IV (fast and human pace), XI, XIII (unhurried, and hurried by holding Enter on the opening scene); cue at the first menu = the chapter data's first-formation cue in all 8 (boss-seymour, boss-challenge, boss-bahamut, boss-ffx2-fallen-aeons, scene-bevelle-underground); every audio request recorded (318 in runs A and B, 11 more in the retried defeat part: all 200, 30 application/json and 288 audio/mpeg in A and B, 0 for boss-ffx2-aeon, boss-dread or boss-yunalesca; the three answer 404 when asked for directly). Per-game packs: FFX runs fetched only parity-ffx-core (and parity-ffx-lady in Chapter II), FFX-2 runs only parity-ffx2-core (and parity-ffx2-bahamut in Chapter IV); each run held only its own game's cues. Escape pause, H hide and restore, Escape resume, P pause, P resume: PASS in FFX Chapter I and FFX-2 Chapter IV. Results screens reached through the debug API's auto battle with the opening and closing scenes played by real Enter presses: FFX Chapter I plays victory-ffx (at 4.5 s and at 42.6 s, past its 37.6 s length), FFX-2 Chapter IV plays victory-bahamut (at 4.5 s and at 39.8 s, past its 34.8 s length); the FFX defeat screen (every non-enemy combatant set to 1 HP, defend strategy at skip speed) plays defeat-ffx at 3 s and at 13 s. Cancel path of the music warm: the FFX hold ended on the board, the FFX-2 chapter then held only its own cues. Chapter XIII's Paragon opening (both runs): the BATTLE START card covered the stage, the framing plan landed under it, and the box moved at most 0.5 percent a frame after the card left. Phone, first launch, FFX Chapter I prep at 390x844: the MORE BELOW cue is visibility hidden while the guide's step 2 is up and visible after the guide is skipped by a tap; 0 text under 14 px in both states. Pause jukebox: 23 rows, none of the three retired titles. Not reached: the FFX-2 defeat results screen (two attempts, see reason).",
+   "reason": "One part is UNVERIFIED and is named, not hidden: the FFX-2 defeat results screen (defeat-ffx2) was not reached by the debug route in two attempts (the auto battle at skip speed with every party member at 1 HP, strategy defend then attack): both times Rikku and Paine fell and the battle stayed on Yuna's command menu at full HP for 240 s, so the screen never became results. The defeat-ffx2 file itself is fetched in every FFX-2 run (13 requests in runs A and B and 1 more in run C, all 200 audio/mpeg). The focused review of this build could not reach that outcome either. Method check written, no third attempt. One harness lesson: with skipCutscenes true the debug route reaches the results screen with no closing scene and the victory cue is not playing (playing null); with the scenes played by real Enter presses it plays. All 18 chapters have a closing scene, so this is the debug route, not a player route."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Lightweight reload smoke on the live build (fresh profile, 1600x900): the first-run guide skipped by a real Esc; FFX Chapter I played through the debug API with its opening and closing scenes advanced by real Enter presses (clear recorded: attempts 1, best time 23284 ms, best turns 78); the save's master volume edited to 0.42 (the way earlier live checks did); the page reloaded: the game returned to the title, the Chapter I clear survived unchanged, the volume read 0.42, and the save string was byte-identical to what was written; the board after the reload showed Chapter I cleared.",
+   "reason": "The full upgrade matrix (a save from the previous build migrating forward, truncated storage, the reset flow) is not part of this pass; the Chapter I clear came from the debug API's auto battle, not from a player's hands."
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "artifact identity: 5217 of 5218 files byte-identical with live (all but the host-read _headers), content types, the live artifact-manifest.json match, the page as a browser receives it, the 7 removed files answering 404 at both addresses, the bundle Cnc9DuSS at echoesofspira.com and the workers.dev backup",
+   "the three retired MP3s: asked for directly (404 at both addresses), absent from the live audio manifest, requested 0 times in the 329 audio requests of runs A, B and C and 0 times in the pause jukebox walk; the live bundle still names them 9, 5 and 5 times as the synth fallback scores that stand in for the cues (src/audio/tracks/index.ts RETIRED_MUSIC_CUES), which is how the code is meant to be",
+   "FFX Chapters I and II and FFX-2 Chapters IV, XI and XIII from the title by real keys to the first battle menu: every audio request (status, content type, bytes, timing), the cue at the first spoken line and at the first menu, the per-game SFX packs and their plays through the parity pack, the held cues in prep",
+   "LV43-2 re-measured with the same method as 7b2582e7 (9 fast-route and 6 human-pace runs of Chapters I, II and IV with none of my own traffic running, two loads as before) plus the 8 chapter runs and the cancel path (24 measured runs in all): the scene cue was playing at the first spoken line in 17 of 17 runs of the chapters whose opening script starts a cue (II, IV, XI, XIII) and in 0 of 7 runs of Chapter I, whose opening script begins with music(null)",
+   "Escape pause, H hide and restore, resume, P pause and resume in FFX Chapter I and FFX-2 Chapter IV; the pause jukebox panel (music tab) at 1600x900: 23 rows, none of the three retired titles",
+   "results: FFX Chapter I and FFX-2 Chapter IV victory cues playing at the results screen and still current past their length; the FFX defeat results screen plays defeat-ffx; FOC45-01 re-observed (victory-bahamut still playing 1.5 s after Enter, under the scene that follows)",
+   "Chapter XIII's Paragon opening, unhurried and hurried (Enter held on the opening scene): the BATTLE START card clock, the framing plan's landing and the box's steps after the card left, first menu at 9139 and 4156 ms",
+   "the cancel path of the music warm (Escape out of prep: the hold ends; the next chapter holds only its own game's cues)",
+   "phone, first launch: FFX Chapter I prep at 390x844 touch, the MORE BELOW cue hidden under the guide's step 2 and back after the skip; text floor 0 under 14 px",
+   "settings and progress reload; console and 404 sweep of every part: 0 and 0"
+  ],
+  "reused": [],
+  "notTested": [
+   "the FFX-2 defeat results screen (defeat-ffx2 playing at it): two attempts through the debug route stalled at Yuna's command menu; UNVERIFIED",
+   "the full upgrade matrix (CHK-024 full)",
+   "audio by ear: nobody here can hear (a cue name and a non-zero gain are not sound); loop seams, loudness, the 18 recorded effects as heard (CHK-B1 stays owed to Bailey)",
+   "a chapter win by real input: the wins reached the results screens through the debug API's auto battle (the scenes were played with real Enter presses)",
+   "parity-ffx2-machina and parity-ffx2-shuyin and the chapters that load them (V and others), the hidden chapters, FFX Chapters III and VII to XVIII and FFX-2 VI, XV and XVI entrances",
+   "WebKit or Safari audio decode, a real phone, a real controller, other sizes, LOW EFFECTS or REDUCE MOTION on the entrance",
+   "the figure's gather in Chapter XIII's entrance beyond the clock above: the two runs did not meet the condition FOC44A-05 guards (the plan landing after the card has gone), so they show no step after the card left, not the fix working; the contact sheets are in the scratch folder for the deep review"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 85,
+ "notes": "Deploy 2026-10-13T22:02:42Z (docs/deploys.log, owner override) from D:/pyrefly-r45, replacing 7758791e. Everything above ran on the live URL https://echoesofspira.com/ (and the exact-artifact check also on the workers.dev backup address for the page, the removed files and the bundle name) between 22:07Z and 23:27Z on 2026-10-13. The byte comparison (36 minutes) ran while I built the smoke; the reported smoke ran after it finished, with none of my own traffic running. Shakedown runs made while the comparison shared the link are not counted anywhere. The first reported process died at the start of results-ffx2 on a 30 s page.goto timeout (one live page load; the site answered in 0.1 s a minute later and no load failed in the other runs); the parts that had finished were saved, the remaining parts were run again as run B, and the one retry of the FFX-2 defeat part was run C. Scripts: critic/reviews/d5bf2206-live-verify.mjs, d5bf2206-live-smoke.mjs, d5bf2206-live-jukebox.mjs; raw results and captures: D:/Tools/pyrefly-scratch/2026-10-13/live-d5bf2206/. The pending marker's live obligation is settled by tools/critic-clear.mjs; the deep obligation stays pending."
+}

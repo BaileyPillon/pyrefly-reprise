@@ -1,0 +1,43 @@
+{
+ "files": 1291,
+ "fetched": 1291,
+ "sameSha": 1291,
+ "differentSha": [],
+ "failed": [],
+ "bytes": 11543492,
+ "bytesMB": 11,
+ "gate": {
+  "exit": 0,
+  "output": "{\n \"scanned\": 1291,\n \"hits\": []\n}\n"
+ },
+ "devRoute": [
+  {
+   "address": "echoesofspira.com",
+   "path": "__ffx-local/manifest.json",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "__ffx-local/",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "__ffx-local/manifest.json",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "__ffx-local/",
+   "status": 404,
+   "ct": "",
+   "bytes": 0
+  }
+ ]
+}

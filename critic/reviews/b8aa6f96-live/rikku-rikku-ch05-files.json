@@ -1,0 +1,72 @@
+[
+ {
+  "id": "rikku-gunner/twirl-mid.png",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-gunner/twirl-mid.png",
+  "rel": "art/characters/rikku-gunner/twirl-mid.png"
+ },
+ {
+  "id": "rikku-dark-knight/idle.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/idle.png",
+  "rel": "art/characters/rikku-dark-knight/idle.png"
+ },
+ {
+  "id": "rikku-dark-knight/ready.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/ready.png",
+  "rel": "art/characters/rikku-dark-knight/ready.png"
+ },
+ {
+  "id": "rikku-dark-knight/attack.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/attack.png",
+  "rel": "art/characters/rikku-dark-knight/attack.png"
+ },
+ {
+  "id": "rikku-dark-knight/cast.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/cast.png",
+  "rel": "art/characters/rikku-dark-knight/cast.png"
+ },
+ {
+  "id": "rikku-dark-knight/item.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/item.png",
+  "rel": "art/characters/rikku-dark-knight/item.png"
+ },
+ {
+  "id": "rikku-dark-knight/hurt.webp (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/hurt.webp",
+  "rel": "art/characters/rikku-dark-knight/hurt.webp"
+ },
+ {
+  "id": "rikku-dark-knight/ko.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/ko.png",
+  "rel": "art/characters/rikku-dark-knight/ko.png"
+ },
+ {
+  "id": "rikku-dark-knight/victory.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/victory.png",
+  "rel": "art/characters/rikku-dark-knight/victory.png"
+ },
+ {
+  "id": "rikku-dark-knight/sleep.webp (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/sleep.webp",
+  "rel": "art/characters/rikku-dark-knight/sleep.webp"
+ },
+ {
+  "id": "rikku-dark-knight/critical.webp (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/critical.webp",
+  "rel": "art/characters/rikku-dark-knight/critical.webp"
+ },
+ {
+  "id": "rikku-dark-knight/follow.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/follow.png",
+  "rel": "art/characters/rikku-dark-knight/follow.png"
+ },
+ {
+  "id": "rikku-dark-knight/twirl-start.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/twirl-start.png",
+  "rel": "art/characters/rikku-dark-knight/twirl-start.png"
+ },
+ {
+  "id": "rikku-dark-knight/twirl-going.png (unchanged control)",
+  "served": "D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/rikku-served/rikku-ch05/art/characters/rikku-dark-knight/twirl-going.png",
+  "rel": "art/characters/rikku-dark-knight/twirl-going.png"
+ }
+]

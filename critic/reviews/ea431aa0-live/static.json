@@ -1,0 +1,396 @@
+{
+ "review": "live-static",
+ "sha": "ea431aa0",
+ "bundle": "DzeCyPSw",
+ "startedAt": "2026-10-15T00:51:57.767Z",
+ "assertions": [
+  {
+   "part": "pages",
+   "name": "both addresses serve bundle DzeCyPSw and stylesheet Bu4qsaVc",
+   "ok": true,
+   "detail": [
+    {
+     "address": "echoesofspira.com",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-DzeCyPSw.js",
+     "css": "assets/index-Bu4qsaVc.css"
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-DzeCyPSw.js",
+     "css": "assets/index-Bu4qsaVc.css"
+    }
+   ]
+  },
+  {
+   "part": "pages",
+   "name": "the live audio manifest is the shipped dist-release one",
+   "ok": true,
+   "detail": true
+  },
+  {
+   "part": "removed",
+   "name": "the 4 files of b8aa6f96 this build replaced answer 404 at both addresses",
+   "ok": true,
+   "detail": [
+    "echoesofspira.com assets/exp-fayth-table-CUPJDSuj.js 404",
+    "echoesofspira.com assets/index-D6xsaimI.css 404",
+    "echoesofspira.com assets/index-DA6NOD0r.js 404",
+    "echoesofspira.com assets/worker-CCGsjJeK.js 404",
+    "echoes-of-spira.baileypillon.workers.dev assets/exp-fayth-table-CUPJDSuj.js 404",
+    "echoes-of-spira.baileypillon.workers.dev assets/index-D6xsaimI.css 404",
+    "echoes-of-spira.baileypillon.workers.dev assets/index-DA6NOD0r.js 404",
+    "echoes-of-spira.baileypillon.workers.dev assets/worker-CCGsjJeK.js 404"
+   ]
+  },
+  {
+   "part": "removed",
+   "name": "the 4 new files are served at both addresses with the manifest's sha256",
+   "ok": true,
+   "detail": [
+    "echoesofspira.com assets/exp-fayth-table-qvhITO2F.js 200 text/javascript eq true",
+    "echoesofspira.com assets/index-Bu4qsaVc.css 200 text/css eq true",
+    "echoesofspira.com assets/index-DzeCyPSw.js 200 text/javascript eq true",
+    "echoesofspira.com assets/worker-D9zpfPtz.js 200 text/javascript eq true",
+    "echoes-of-spira.baileypillon.workers.dev assets/exp-fayth-table-qvhITO2F.js 200 text/javascript eq true",
+    "echoes-of-spira.baileypillon.workers.dev assets/index-Bu4qsaVc.css 200 text/css eq true",
+    "echoes-of-spira.baileypillon.workers.dev assets/index-DzeCyPSw.js 200 text/javascript eq true",
+    "echoes-of-spira.baileypillon.workers.dev assets/worker-D9zpfPtz.js 200 text/javascript eq true"
+   ]
+  },
+  {
+   "part": "text",
+   "name": "all 1291 text files of the artifact downloaded from live, each sha256 equal to the manifest",
+   "ok": true,
+   "detail": {
+    "files": 1291,
+    "fetched": 1291,
+    "sameSha": 1291,
+    "different": 0,
+    "failed": 0
+   }
+  },
+  {
+   "part": "text",
+   "name": "the project's own gate (tools/dist-local-paths.mjs: local paths, claude.ai links, sidecar keys outside the list) over the live text download: exit 0, no hit",
+   "ok": true,
+   "detail": {
+    "exit": 0,
+    "scanned": 1291,
+    "hits": 0
+   }
+  },
+  {
+   "part": "text",
+   "name": "positive control: the gate refuses a made-up folder that carries a drive path, a sidecar key outside the list and a claude.ai link",
+   "ok": true,
+   "detail": {
+    "exit": 1,
+    "hits": 4,
+    "kinds": [
+     "sidecar-key",
+     "drive",
+     "link"
+    ]
+   }
+  },
+  {
+   "part": "text",
+   "name": "/__ffx-local/ (the converter's dev-only route) answers 404 at both addresses",
+   "ok": true,
+   "detail": [
+    "echoesofspira.com __ffx-local/manifest.json 404",
+    "echoesofspira.com __ffx-local/ 404",
+    "echoes-of-spira.baileypillon.workers.dev __ffx-local/manifest.json 404",
+    "echoes-of-spira.baileypillon.workers.dev __ffx-local/ 404"
+   ]
+  },
+  {
+   "part": "words",
+   "name": "the live bundle carries the FFX-2 Silence card words (\"no spells, Dances or Songs\") and not the old \"no White Magic, Black Magic or Arcana\"",
+   "ok": true,
+   "detail": {
+    "ffx2NewSilence": [
+     "assets/index-DzeCyPSw.js"
+    ],
+    "ffx2OldSilence": [],
+    "ffxSilence": [
+     "assets/index-DzeCyPSw.js"
+    ],
+    "ffxOldSilence": [],
+    "touristTrap": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ],
+    "valeforBesaid": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ],
+    "daigoroWord": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ],
+    "valeforWord": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ]
+   }
+  },
+  {
+   "part": "words",
+   "name": "the live bundle still carries the FFX Silence card words (\"no White or Black Magic.\") and not the older \"and no Summon\"",
+   "ok": true,
+   "detail": {
+    "ffxSilence": [
+     "assets/index-DzeCyPSw.js"
+    ],
+    "ffxOldSilence": []
+   }
+  },
+  {
+   "part": "words",
+   "name": "the live bundle carries both hidden chapters (ffx2-tourist-trap, ffx2-valefor-besaid) and their two door words",
+   "ok": true,
+   "detail": {
+    "touristTrap": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ],
+    "valeforBesaid": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ],
+    "daigoroWord": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ],
+    "valeforWord": [
+     "assets/index-DzeCyPSw.js",
+     "assets/worker-D9zpfPtz.js"
+    ]
+   }
+  }
+ ],
+ "pages": [
+  {
+   "address": "echoesofspira.com",
+   "status": 200,
+   "ct": "text/html",
+   "bundle": "assets/index-DzeCyPSw.js",
+   "css": "assets/index-Bu4qsaVc.css"
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "status": 200,
+   "ct": "text/html",
+   "bundle": "assets/index-DzeCyPSw.js",
+   "css": "assets/index-Bu4qsaVc.css"
+  }
+ ],
+ "audioManifestEqualsShipped": true,
+ "removed": [
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/exp-fayth-table-CUPJDSuj.js",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/index-D6xsaimI.css",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/index-DA6NOD0r.js",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/worker-CCGsjJeK.js",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/exp-fayth-table-CUPJDSuj.js",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/index-D6xsaimI.css",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/index-DA6NOD0r.js",
+   "status": 404,
+   "ct": ""
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/worker-CCGsjJeK.js",
+   "status": 404,
+   "ct": ""
+  }
+ ],
+ "added": [
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/exp-fayth-table-qvhITO2F.js",
+   "status": 200,
+   "ct": "text/javascript",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/index-Bu4qsaVc.css",
+   "status": 200,
+   "ct": "text/css",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/index-DzeCyPSw.js",
+   "status": 200,
+   "ct": "text/javascript",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoesofspira.com",
+   "path": "assets/worker-D9zpfPtz.js",
+   "status": 200,
+   "ct": "text/javascript",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/exp-fayth-table-qvhITO2F.js",
+   "status": 200,
+   "ct": "text/javascript",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/index-Bu4qsaVc.css",
+   "status": 200,
+   "ct": "text/css",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/index-DzeCyPSw.js",
+   "status": 200,
+   "ct": "text/javascript",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  },
+  {
+   "address": "echoes-of-spira.baileypillon.workers.dev",
+   "path": "assets/worker-D9zpfPtz.js",
+   "status": 200,
+   "ct": "text/javascript",
+   "cache": "public, max-age=31536000, immutable",
+   "sha256Equal": true
+  }
+ ],
+ "text": {
+  "files": 1291,
+  "fetched": 1291,
+  "sameSha": 1291,
+  "differentSha": [],
+  "failed": [],
+  "bytes": 8799970,
+  "bytesMB": 8.4,
+  "gate": {
+   "exit": 0,
+   "scanned": 1291,
+   "hitCount": 0,
+   "kinds": [],
+   "head": "{\n \"scanned\": 1291,\n \"hits\": []\n}\n",
+   "stderr": ""
+  },
+  "control": {
+   "exit": 1,
+   "scanned": 2,
+   "hitCount": 4,
+   "kinds": [
+    "sidecar-key",
+    "drive",
+    "link"
+   ],
+   "head": "{\n \"scanned\": 2,\n \"hits\": [\n  {\n   \"file\": \"art/characters/x/idle.json\",\n   \"line\": 3,\n   \"column\": 1,\n   \"kind\": \"sidecar-key\",\n   \"key\": \"candidateSource\"\n  },\n  {\n   \"file\": \"art/characters/x/idle.json\",\n   \"line\": 3,\n   \"column\": 21,\n   \"kind\": \"drive\"\n  },\n  {\n   \"file\": \"art/characters/x/idle.json\",\n   \"line\": 4,\n   \"column\": 1,\n   \"kind\": \"sidecar-key\",\n   \"key\": \"status\"\n  },\n  {\n   \"file\": \"notes.txt\",\n   \"line\": 1,\n   \"column\": 13,\n   \"kind\": \"link\"\n  }\n ]\n}\n",
+   "stderr": ""
+  },
+  "devRoute": [
+   {
+    "address": "echoesofspira.com",
+    "path": "__ffx-local/manifest.json",
+    "status": 404,
+    "ct": "",
+    "bytes": 0
+   },
+   {
+    "address": "echoesofspira.com",
+    "path": "__ffx-local/",
+    "status": 404,
+    "ct": "",
+    "bytes": 0
+   },
+   {
+    "address": "echoes-of-spira.baileypillon.workers.dev",
+    "path": "__ffx-local/manifest.json",
+    "status": 404,
+    "ct": "",
+    "bytes": 0
+   },
+   {
+    "address": "echoes-of-spira.baileypillon.workers.dev",
+    "path": "__ffx-local/",
+    "status": 404,
+    "ct": "",
+    "bytes": 0
+   }
+  ]
+ },
+ "words": {
+  "ffx2NewSilence": [
+   "assets/index-DzeCyPSw.js"
+  ],
+  "ffx2OldSilence": [],
+  "ffxSilence": [
+   "assets/index-DzeCyPSw.js"
+  ],
+  "ffxOldSilence": [],
+  "touristTrap": [
+   "assets/index-DzeCyPSw.js",
+   "assets/worker-D9zpfPtz.js"
+  ],
+  "valeforBesaid": [
+   "assets/index-DzeCyPSw.js",
+   "assets/worker-D9zpfPtz.js"
+  ],
+  "daigoroWord": [
+   "assets/index-DzeCyPSw.js",
+   "assets/worker-D9zpfPtz.js"
+  ],
+  "valeforWord": [
+   "assets/index-DzeCyPSw.js",
+   "assets/worker-D9zpfPtz.js"
+  ]
+ },
+ "finishedAt": "2026-10-15T00:52:55.952Z"
+}

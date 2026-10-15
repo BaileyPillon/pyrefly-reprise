@@ -1,0 +1,139 @@
+{
+ "review": "live-jukebox",
+ "sha": "d5bf2206",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-13T23:20:06.739Z",
+ "debugAssisted": "the battle is entered through gotoChapter (skipCutscenes, skipPrep); the pause and the tab walk are real key presses",
+ "screenAfterEscape": "pause",
+ "pauseState": {
+  "chapter": "seymour-flux",
+  "member": "tidus",
+  "rows": [],
+  "panelsHidden": false,
+  "photo": null,
+  "credits": null,
+  "eyeCandy": null,
+  "playTimeMs": 18499.300000000003,
+  "tabs": [
+   "member:tidus",
+   "member:yuna",
+   "member:kimahri",
+   "chapter",
+   "guide",
+   "options",
+   "controls",
+   "music"
+  ],
+  "tab": "member:tidus",
+  "focus": "tabs",
+  "row": null,
+  "mirrored": false,
+  "portrait": {
+   "plate": "tidus",
+   "gaze": {
+    "x": -0.773583984375,
+    "y": -0.8321180555555556
+   },
+   "expression": "neutral",
+   "driver": true,
+   "reduceMotion": false
+  },
+  "music": null,
+  "objectives": [
+   {
+    "id": "cure-zombie-before-full-life",
+    "label": "Holy Water a Zombie before Full-Life lands",
+    "done": false
+   },
+   {
+    "id": "survive-total-annihilation",
+    "label": "Survive Total Annihilation",
+    "done": false
+   },
+   {
+    "id": "defeat-seymour-flux",
+    "label": "Defeat Seymour Flux",
+    "done": false
+   }
+  ],
+  "progress": {
+   "label": "BOSS HP 100%",
+   "ratio": 1,
+   "value": 70000,
+   "total": 70000
+  }
+ },
+ "walk": [
+  {
+   "i": 0,
+   "present": false,
+   "tab": "member:tidus"
+  },
+  {
+   "i": 1,
+   "present": false,
+   "tab": "member:yuna"
+  },
+  {
+   "i": 2,
+   "present": false,
+   "tab": "member:kimahri"
+  },
+  {
+   "i": 3,
+   "present": false,
+   "tab": "chapter"
+  },
+  {
+   "i": 4,
+   "present": false,
+   "tab": "guide"
+  },
+  {
+   "i": 5,
+   "present": false,
+   "tab": "options"
+  },
+  {
+   "i": 6,
+   "present": false,
+   "tab": "controls"
+  },
+  {
+   "i": 7,
+   "present": true,
+   "tab": "music"
+  }
+ ],
+ "panel": {
+  "present": true,
+  "chars": 449,
+  "rowCount": 23,
+  "retiredTitlesListed": [],
+  "first6": [
+   "Bright After the Storm",
+   "Noble Rot",
+   "Where the Horns Fell Silent",
+   "A City That Never Was",
+   "Blitz for Two",
+   "Hold the Trail"
+  ]
+ },
+ "shot": "jukebox.jpg",
+ "played": {
+  "playing": "pause",
+  "gain": 1
+ },
+ "requestedByThePress": [],
+ "status": "ran",
+ "audioRequests": [
+  "/audio/sfx/sprite.mp3",
+  "/audio/sfx/sprite-v2.mp3",
+  "/audio/music/pause.mp3",
+  "/audio/sfx/parity-ffx-core.mp3"
+ ],
+ "retiredRequested": [],
+ "consoleErrors": 0,
+ "notFound": 0,
+ "finishedAt": "2026-10-13T23:20:36.761Z"
+}

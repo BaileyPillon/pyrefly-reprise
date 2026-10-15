@@ -1,0 +1,696 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-15T00:15:42.290Z",
+ "build": {
+  "mainSha": "ea431aa0"
+ },
+ "targetVersion": "ba8a7e74a9d66640aff8515eba95a38d056b65fd90b8c4347b20f53f0f1c0b98",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect (crash, lock, lost progress, an encounter that cannot finish) is introduced or left reachable by the change: both new chapters were played by real keys from the title to a WIN and to a LOSS (Tourist Trap win 5:21, loss 1:41; Valefor win 7:56, loss 3:55), each through the results screen and CONFIRM or RETRY, 0 console errors in all four; a hidden clear writes only the experiments store (main save key byte-identical); no save, schema or progress code is in the diff. Through the page the same seeds end the same way on candidate and live: 25 of 25 pairs identical, 0 with a different outcome.",
+  "No regression against live b8aa6f96: the candidate adds 4 files, removes 4 and changes index.html, and every image, audio file and art JSON is byte-identical to live; the stylesheet differs by one rule; the board is unchanged (18 tiles, \"of 18\", no id of either hidden chapter; the words open only their own chapters: checked by real keys: each of the six door words opens its own chapter, four near-misses open nothing); the first menus of FFX-2 Chapters IV and V list what live lists except what the RC7 menu rules change on purpose (passives gone from the Skill and White Magic lists, Pray added to Yuna's list in Chapter IV); Itchy, which on live hides Attack, Skill and Item altogether, now lists them greyed with their names intact at 1600x900, 2000x1012 and 390x844 (the lane's numbers reproduced to the decimal).",
+  "The changed-area spot checks pass on the served candidate: the Itchy rows (3 sizes), the Silence card (FFX-2 only), the advisor text (10 changed sentences, each intended, 490 unchanged), the data of both new chapters (52 of 52 values equal to their sources). Two new polish findings are inside the new Tourist Trap chapter (FOC48-01: its prep and opening scene have no painting behind them, a missing plate; FOC48-02: a cited research note is not in the tree) and neither blocks.",
+  "The majors that are not regressions are disclosed and carried unchanged: PR-0380 (jerks, CHK-027), PR-0295, PR-0148, PR-0099 (now also the two hidden chapters' borrowed cues) and PR-0421. Re-measured in the same hour for this review: FFX-2 IV candidate: 269.3 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 43.6 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL; FFX-2 IV live: 267 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 42 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 6,
+   "game": "both",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor); reused: every listed chapter",
+   "state": "pause (Escape) and results over the two new chapters at 1600x900",
+   "mode": "automated + frames looked at",
+   "reason": "Re-run on the changed area: the pause opened by Escape over each new chapter's first menu and the results screen of each (hidden/*/14-pause-Esc.jpg, 31-results.jpg) own the whole window; the other chapters rest on the carried PASS because the layout code and every shipped byte but one CSS rule are unchanged (dependencyArgument).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/14-pause-Esc.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/14-pause-Esc.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/31-results.jpg",
+    "critic/reviews/ea431aa0-focused/gates/css-diff.json"
+   ],
+   "reusedFrom": "critic/reviews/ca9fd0b4-focused.json",
+   "dependencyArgument": "CARRIED from the focused review of ca9fd0b4 and the deep review round 26 of b8aa6f96 (PASS), re-argued for this candidate: against live the shipped files are identical except 4 renamed bundle files and index.html (gates/manifest-diff.log), every image and audio file and every art JSON byte for byte; the stylesheet differs by exactly ONE rule, `html:not([data-phone-battle]) .ffx2hud .ffx2cmd__reason` (gates/css-diff.json: 3,438 to 3,439 rules, 0 removed), which only touches the reason text of a greyed FFX-2 desktop command row; and the source diff against live touches no presenter, stage, HUD layout or screen code besides the status-guide words, the door registrations and the new chapters' own scene, tactic, story and data files (git diff b8aa6f96 ea431aa0)."
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 8,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap first menu; ffx2-bahamut Itchy menu at three sizes",
+   "state": "first command menu with the advisor card; Paine under Itchy",
+   "mode": "automated (measured in the page)",
+   "reason": "Measured in the page on the served candidate: the Tourist Trap's advisor card reads at a minimum effective size of 14.2 px (floor 14) and its card and the four command rows overlap by 0 px; under Itchy the greyed rows' reason text is 20 px effective at 1600x900, 22.5 px at 2000x1012 and 14 px on the phone layout, the names 24.5 / 27.5 / 16 px. Everything else rests on identical CSS (dependencyArgument).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/itchy/cand-itchy.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/run.json"
+   ],
+   "reusedFrom": "critic/reviews/ca9fd0b4-focused.json",
+   "dependencyArgument": "CARRIED from the focused review of ca9fd0b4 and the deep review round 26 of b8aa6f96 (PASS), re-argued for this candidate: against live the shipped files are identical except 4 renamed bundle files and index.html (gates/manifest-diff.log), every image and audio file and every art JSON byte for byte; the stylesheet differs by exactly ONE rule, `html:not([data-phone-battle]) .ffx2hud .ffx2cmd__reason` (gates/css-diff.json: 3,438 to 3,439 rules, 0 removed), which only touches the reason text of a greyed FFX-2 desktop command row; and the source diff against live touches no presenter, stage, HUD layout or screen code besides the status-guide words, the door registrations and the new chapters' own scene, tactic, story and data files (git diff b8aa6f96 ea431aa0)."
+  },
+  {
+   "id": "CHK-004",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 14,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "both fights won by following the advisor card with real keys",
+   "mode": "automated",
+   "reason": "Every move the advisor card named was pressed by real keys and landed: Tourist Trap 55 picks, Valefor 72 picks, 0 wrong-target confirms and 0 open overlays with nothing choosable; both ended in a win by that line alone.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/run.json"
+   ]
+  },
+  {
+   "id": "CHK-005",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 6,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap",
+   "state": "the broken board after Zanmato (all three girls at 1 HP and 1 MP)",
+   "mode": "automated",
+   "reason": "Zanmato landed in the won Tourist Trap fight (every girl at 1 HP at turn 22, the event log of the loss run shows the set-to on all three) and the advisor card answered the broken board with items that need no MP (Hi-Potion on the acting girl, then a party Mega-Potion at turn 24, then Remedy, Ether, Esuna) and the party was back near full by turn 25 (Yuna 911 of 911, Paine 2,241 of 2,241, Rikku 2,123 of 2,426). One observation, not a defect: the first answer was a single Hi-Potion on the girl whose menu was open, the party-wide Mega-Potion came a turn later (the handoff names the Mega-Potion first).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-lose-r48/battle-log.json"
+   ]
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 10,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "banners, charge bar, guide and pause overlays through four full runs",
+   "mode": "automated",
+   "reason": "Four real-key runs (two wins, two losses) opened and closed the pause, the guide (G), the enemy move slab (E) and the advisor (N) and left the fights through the results screen with no stale root at any asserted capture (the route driver reads the screen roots with every capture and lists a failed assertion: Tourist Trap win 0, Valefor win 1, the two losses 0 and 0; the one entry is the refused Valefor post-battle shot, taken after the screen had already moved to the results).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-lose-r48/run.json"
+   ]
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 6,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "prep, opening lines, advisor, enemy move slab, pause, results, status card",
+   "mode": "automated + frames looked at",
+   "reason": "The text captured from every player-facing surface of the two new chapters (board, prep, opening lines, advisor card, enemy move slab, pause, options, results: every surface the route driver reads, in both winning runs) holds none of the banned vocabulary (section sign, file stems, row or step numbers, debug, TODO, placeholder, hyphenated ids, hex row ids); the only hit of the pattern list is the real label \"FFX-2 · EXP\" on the prep screen. The new sentences of the advisor text pass were also diffed over all 523 FFX-2 rows (data/intent-diff.json): 10 changed, each reads as plain play.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/data/intent-diff.json"
+   ]
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 4,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "first menu with the advisor card and the guide at 1600x900",
+   "mode": "automated",
+   "reason": "The route driver's overlap measure at the first menu finds 0 overlapping panels in the Tourist Trap and 0 in Valefor; the frames show the party and the boss clear of the panels (hidden/*/10-first-menu-coach.jpg, 23-midfight.jpg). The stage framing code is unchanged against live apart from one inert id in the Djose chamber's phone camera list.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/10-first-menu-coach.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/23-midfight.jpg"
+   ]
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 4,
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut under Itchy (desktop and phone); new chapters",
+   "state": "greyed command rows",
+   "mode": "automated (measured in the page)",
+   "reason": "The fix's own claim, measured: under Itchy the names Attack, Skill and Item are drawn in full and none is clipped at 1600x900 (Attack 104.9, Skill 80.4, Item 67.2 px), 2000x1012 (Attack 118, Skill 90.4, Item 75.5 px) and on the phone layout (Attack 66.8, Skill 51, Item 42.7 px), the numbers the lane reported to the decimal; on live the same state lists only Change and Escape (so the names were absent, not clipped). What is cut is the REASON (\"ITCHY — …\" on desktop; the full text names the highlighted row in the top bar): a reason is not a name, noted not counted. The two new chapters show every name they use in full (Yojimbo, Daigoro, the five moves, Valefor and her four moves).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/itchy/cand-itchy.json",
+    "critic/reviews/ea431aa0-focused/itchy/live-itchy.json",
+    "critic/reviews/ea431aa0-focused/itchy/cand-desktop-1600x900-stack.png",
+    "critic/reviews/ea431aa0-focused/itchy/cand-phone-390x844-stack.png"
+   ]
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 2,
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut under Itchy",
+   "state": "the selected row among greyed rows",
+   "mode": "automated + frames looked at",
+   "reason": "With three greyed rows the selected row (Change, a usable one) is the only lit row in all three frames and the top bar names the highlighted row; the selection styles are unchanged CSS (one rule differs). Carried for the rest.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/itchy/cand-desktop-1600x900-stack.png",
+    "critic/reviews/ea431aa0-focused/itchy/cand-desktop-2000x1012-stack.png"
+   ],
+   "reusedFrom": "critic/reviews/ca9fd0b4-focused.json",
+   "dependencyArgument": "CARRIED from the focused review of ca9fd0b4 and the deep review round 26 of b8aa6f96 (PASS), re-argued for this candidate: against live the shipped files are identical except 4 renamed bundle files and index.html (gates/manifest-diff.log), every image and audio file and every art JSON byte for byte; the stylesheet differs by exactly ONE rule, `html:not([data-phone-battle]) .ffx2hud .ffx2cmd__reason` (gates/css-diff.json: 3,438 to 3,439 rules, 0 removed), which only touches the reason text of a greyed FFX-2 desktop command row; and the source diff against live touches no presenter, stage, HUD layout or screen code besides the status-guide words, the door registrations and the new chapters' own scene, tactic, story and data files (git diff b8aa6f96 ea431aa0)."
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 4,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "targeting at the first menu of each new chapter at 1600x900",
+   "mode": "automated + frames looked at",
+   "reason": "Yojimbo is drawn with his bar and is the one targetable enemy (the target cursor opened on him in the real-key run: 16-target-single.jpg); Daigoro is visible beside him and is deliberately not targetable and has no bar (data comment, Y-10); Valefor is the one target. The 390x844 first menus of both chapters (submenus/cand-*-phone-*-top.jpg, looked at) show the whole party, the boss (and Daigoro) inside the frame, the advisor tip and the four command rows: nothing like the hidden Fayth chapter's cropped boss (FOC46-05). The carried FAIL of the hidden Fayth chapter (FOC46-05) is a different chapter and is not re-measured.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/16-target-single.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/16-target-single.jpg",
+    "critic/reviews/ea431aa0-focused/submenus/cand-ffx2-tourist-trap-phone-rikku-top.jpg",
+    "critic/reviews/ea431aa0-focused/submenus/cand-ffx2-valefor-besaid-phone-paine-top.jpg"
+   ]
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "mandatory": false,
+   "minutes": 0,
+   "game": "both",
+   "chapter": "all",
+   "state": "art",
+   "mode": "automated",
+   "reason": "NOT APPLICABLE: no painting changed (all 3,863 images are byte-identical to live, gates/manifest-diff.log lists no image among its added, changed or removed files). The two hidden chapters reuse approved paintings unchanged (Valefor on the Djose Chamber plate, Yojimbo and Daigoro from Chapter IX); their missing prep and scene plate is FOC48-01."
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 40,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor); ffx2-bahamut, ffx2-vegnagun-shuyin",
+   "state": "title to results by the keyboard, typed words, Itchy and Silence by labelled setup hooks",
+   "mode": "automated (real keys)",
+   "reason": "By the player's own input (Playwright keyboard from the title, GPU mode): the typed words daigoro and valefor on the board (the first D of daigoro moves the cursor one step and the board then leaves for the chapter, as designed), prep, the opening scene, the first menu, E, G, N, the pause with its tabs, the fight by the advisor card's moves, the results screen and CONFIRM or RETRY, four runs. Labelled setup hooks only where no shipped state reaches the thing checked: setSeed(1) (every run), Itchy and the Escape flag by hand on Paine (no shipped fight applies Itch at a reproducible moment and none allows Escape; the lane's own recipe), Silence put on a girl through the engine state, and autoBattle for the storage check; none proves a player can do those things, and the report says so where it matters.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/chain.log",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-lose-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-lose-r48/run.json"
+   ]
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 3,
+   "game": "both",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "asserted captures",
+   "mode": "automated",
+   "reason": "Every capture of the routes carries its asserted screen and state (the route driver refuses a wrong-screen capture and lists it under fails); the one refusal, Valefor's post-battle scene shot (the screen had moved to the results), is recorded UNVERIFIED by the harness and is not quoted. Every frame this report cites was looked at.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/run.json",
+    "critic/reviews/ea431aa0-focused/hidden/index.json"
+   ]
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "mandatory": false,
+   "minutes": 0,
+   "game": "both",
+   "chapter": "all",
+   "state": "before the deploy",
+   "mode": "automated",
+   "reason": "NOT APPLICABLE before the deploy; owed after it. Recorded for that check: this candidate's artifact hash is ed2bfe16f8f9fde9 ( MB); against live it adds 4 files, removes 4 and changes index.html (gates/manifest-diff.log). The served build's own commit stamp reads 0d6416e7 (the build was made before two comment-only commits; the Itchy rule is in it): the deploy builds the tree afresh, so its stamp and bundle name will differ from what was reviewed by those two comment edits only.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/gates/manifest-diff.log",
+    "critic/reviews/ea431aa0-focused/gates/manifest-cand.json"
+   ]
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 5,
+   "game": "both",
+   "chapter": "board, prep, pause, results for both games",
+   "state": "shared screens",
+   "mode": "automated + frames looked at",
+   "reason": "No shared screen changed. The new chapters take the same board entry (a typed word), prep, opening, HUD, pause and results as the existing hidden chapters, and the one shared-stylesheet rule is FFX-2 desktop only because the FFX command stack has no greyed-reason row (FFX has no Itchy menu); the FFX Silence card still reads \"no White or Black Magic\" on both builds (silence/first-pass).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/silence/first-pass/cand-silence.json",
+    "critic/reviews/ea431aa0-focused/silence/first-pass/live-silence.json"
+   ]
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 12,
+   "game": "both",
+   "chapter": "every change of the candidate, in both games",
+   "state": "presence in the intended game and absence in the other",
+   "mode": "automated",
+   "reason": "Cases, each with its written source (the lane handoffs, RC7 section 1, the CHANGELOG entry): (1) the two hidden chapters are FFX-2 only: absent from the board of both games (18 tiles, no id of either, \"0 of 18\", also after a win and a reload); (2) Rikku's Mix chart is FFX only: 25 changed source files sit in the FFX-only directories, 75 in the FFX-2-only directories, and the diff adds no import from one engine into the other; the shared combat core (src/battle/common) and FF7 are untouched; (3) the Silence card is FFX-2 only: the FFX-2 card reads \"no spells, Dances or Songs\" on the candidate and the FFX card reads \"no White or Black Magic\" on both builds; (4) the Itchy rows rule is FFX-2 desktop only; (5) the advisor text pass touches only the FFX-2 builder (describeAbility over 523 FFX-2 rows). Sources are the lane handoffs and research/ffx2-combat-core.md, research/re-ffx-mix.md, not memory. Data audit (the plan's dataAudit): the new chapters' 52 headline values were compared with the RE fixtures and the in-tree research tables, 52 of 52 equal (data/data-audit.json); the RC7 data tables were not re-compared by me (coverage.notTested), so this check's data half is the new chapters only.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/data/intent-diff.json",
+    "critic/reviews/ea431aa0-focused/silence/first-pass/cand-silence.json",
+    "critic/reviews/ea431aa0-focused/itchy/cand-itchy.json",
+    "critic/reviews/ea431aa0-focused/gates/css-diff.json"
+   ]
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 30,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor); ffx2-bahamut, ffx2-vegnagun-shuyin",
+   "state": "win, loss, retry and the way back to the board, by real keys",
+   "mode": "automated (real keys)",
+   "reason": "Tourist Trap: WIN in 5:21 (56 turns, seed 1), results \"CAVERN OF THE STOLEN FAYTH ... CLEARED\", EXP 2,000, Gil 1,500, Recovery Bracer, CONFIRM back to the board; LOSS in 1:41 (TURNS 12, ATTEMPTS 1, BEST never cleared), RETRY reached the battle again. Valefor: WIN in 7:56 (73 turns), \"BESAID TEMPLE ... CLEARED\", EXP 1,500, Gil 1,200, Moon Bracer, CONFIRM back to the board; LOSS in 3:55 (TURNS 25), RETRY reached the battle again. 0 console errors in all four. The harness's real-key route also played FFX-2 Chapter IV (candidate: victory in 4:37, 45 turns, 1 link(s), results screen then CONFIRM to the board (chapter-select), 0 console errors) and Chapter V (candidate: victory in 11:42, 89 turns, 5 link(s), results screen then CONFIRM to the board (chapter-select), 0 console errors; EXP 42,400, AP 120, Gil 18,300, the numbers of the skip-speed run on both builds).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/31-results.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-lose-r48/31-results.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/31-results.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-lose-r48/31-results.jpg"
+   ]
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "minutes": 10,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor); the RC7 rule lanes",
+   "state": "moves through the presenter; counters, SOS and Evade & Counter",
+   "mode": "automated + by-hand setup",
+   "reason": "The new chapters' moves ran through the real presentation path: Zanmato (charge, then every girl at 1 HP and 1 MP: the event log of the loss run shows the damage and mp-damage on all three), Kozuka (poison and MP), both Wakizashi, Daigoro acting as an actor of his own (his bite 3 times in the loss run), Valefor's Attack, Sonic Wings, Energy Ray and Energy Blast (13, 6, 6 and 2 uses in the won fight). NOT seen on a screen, so UNVERIFIED and not PASS: the RC7 Berserker counters, Evade & Counter and the SOS layer (the lane itself says no girl's counter has been seen on a screen, and no shipped loadout wears or learns them).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-lose-r48/battle-log.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/battle-log.json"
+   ]
+  },
+  {
+   "id": "CHK-026",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 0,
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut, ffx2-vegnagun-shuyin (candidate and live, same hour)",
+   "state": "continuity harness, real keys, 1600x900, GPU",
+   "mode": "automated (the harness)",
+   "reason": "Re-measured with the harness (real keys, 1600x900, GPU, seed 1): ffx2-bahamut: candidate: 269.3 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 43.6 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL; live, same hour: 267 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 42 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL || ffx2-vegnagun-shuyin: candidate: 694.4 s of battle, 628 swaps, snaps 0/min, head jump max 9%, feet shift max 0.7 px, worst jerk 75.4 px, jerks of 40 px or more 13, 59.8 fps, CHK-026 PASS, CHK-027 FAIL; live not run for this chapter. Round 26 (b8aa6f96, earlier hours) for Chapter IV: 313 swaps, head jump max 9.5%, feet shift max 0.4 px, CHK-026 PASS. No pose, stage, figure or painting file is different against live, so a PASS here rests on identical code and files as well.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/continuity/",
+    "critic/reviews/ea431aa0-focused/continuity-live/"
+   ]
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "mandatory": false,
+   "minutes": 0,
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut, ffx2-vegnagun-shuyin (candidate and live, same hour)",
+   "state": "continuity harness, real keys, 1600x900, GPU",
+   "mode": "automated (the harness)",
+   "reason": "Re-measured (jerks of 40 px or more are the FAIL line) with the harness (real keys, 1600x900, GPU, seed 1): ffx2-bahamut: candidate: 269.3 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 43.6 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL; live, same hour: 267 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 42 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL || ffx2-vegnagun-shuyin: candidate: 694.4 s of battle, 628 swaps, snaps 0/min, head jump max 9%, feet shift max 0.7 px, worst jerk 75.4 px, jerks of 40 px or more 13, 59.8 fps, CHK-026 PASS, CHK-027 FAIL; live not run for this chapter. Round 26 (b8aa6f96, earlier hours) for Chapter IV: 313 swaps, head jump max 9.5%, feet shift max 0.4 px, CHK-026 PASS. No pose, stage, figure or painting file is different against live, so a PASS here rests on identical code and files as well.",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/continuity/",
+    "critic/reviews/ea431aa0-focused/continuity-live/"
+   ]
+  },
+  {
+   "id": "CHK-025",
+   "result": "PASS",
+   "mandatory": false,
+   "minutes": 8,
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (word daigoro), ffx2-valefor-besaid (word valefor)",
+   "state": "a hidden chapter stays hidden and writes nothing to the save",
+   "mode": "automated (real keys before the fight, autoBattle hook for the storage win)",
+   "reason": "The two hidden chapters stay hidden and write nothing to the save. Board: before the word, after a win and after a reload it shows 18 tiles, \"0 of 18\", an order list with no id of either chapter, beaten 0 / 0 (Tourist Trap run) and 0 / 0 (Valefor run); the debug API lists 18 chapters. Doors by real keys (doors/doors.json): daigoro -> party-prep ffx2-tourist-trap; valefor -> party-prep ffx2-valefor-besaid; fayth -> party-prep exp-fayth; leblanc -> party-prep exp-leblanc; experiment -> party-prep ffx2-masterpiece-theatre; mushroom -> party-prep sinspawn-gui; daigor -> chapter-select; valefo -> chapter-select; valefordaigoro -> party-prep ffx2-valefor-besaid; daigorovalefor -> cutscene; besaid -> chapter-select; yojimbo -> chapter-select. Storage: Tourist Trap win: main save key byte-identical before and after (sha256 8c8d524708110165, 660 chars), keys added [\"pyrefly-reprise:experiments:v1\"], keys changed []; the experiments store then holds the chapter's record (attempts 1, clears 1, bestTimeMs 65341); board 18 tiles, 0 of 18 beaten || Valefor win: main save key byte-identical before and after (sha256 c05c728225801b2b, 660 chars), keys added [\"pyrefly-reprise:experiments:v1\"], keys changed []; the experiments store then holds the chapter's record (attempts 1, clears 1, bestTimeMs 66874); board 18 tiles, 0 of 18 beaten || Tourist Trap loss: keys pyrefly-reprise:experiments:v1, pyrefly-reprise:save:v1; experiments store {\"ffx2-tourist-trap\":{\"attempts\":2,\"clears\":0,\"bestTimeMs\":null,\"playTimeMs\":103345.79999999997,\"lastPlayedAt\" || Valefor loss: keys pyrefly-reprise:experiments:v1, pyrefly-reprise:save:v1; experiments store {\"ffx2-valefor-besaid\":{\"attempts\":2,\"clears\":0,\"bestTimeMs\":null,\"playTimeMs\":235440.5,\"lastPlayedAt\":1792019 (the two real-key losses also hold the main save key because the route itself flipped X-2 BATTLE to ACTIVE in the options, a setting the player changes; the byte comparison is the win runs', which touch no setting).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/storage/ffx2-tourist-trap-win.json",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-lose-r48/run.json"
+   ]
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "mandatory": false,
+   "minutes": 0,
+   "game": "both",
+   "chapter": "the two new chapters",
+   "state": "music",
+   "mode": "automated",
+   "reason": "UNVERIFIED, never PASS: no audio file changed against live (gates/manifest-diff.log); the two new chapters play existing cues by reference (scene-bevelle-underground, boss-ffx2-fallen-aeons, victory-ffx2, defeat-ffx2: the page's audio log shows them in the four runs) and the pack of the other game never loads. Whether those stand-in cues suit a Yojimbo and a Valefor fight is the owner's ear (rule 13; carried PR-0099).",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/audio-debug.jsonl"
+   ]
+  }
+ ],
+ "continuity": {
+  "source": "critic/reviews/ea431aa0-focused/continuity/continuity-summary-*.json (dedicated harness, base http://127.0.0.1:5481/, GPU, FFX-2 Chapter IV and V on the candidate; the same chapter(s) on live in continuity-live/, back to back in the same hour)",
+  "summaryPaths": [
+   "critic/reviews/ea431aa0-focused/continuity/continuity-summary-ffx2-bahamut.json",
+   "critic/reviews/ea431aa0-focused/continuity/continuity-summary-ffx2-vegnagun-shuyin.json"
+  ],
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": []
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "2 jerk(s) of 40 px or more in one frame (worst 43.6 px)",
+     "13 jerk(s) of 40 px or more in one frame (worst 75.4 px)"
+    ]
+   }
+  },
+  "size": {
+   "judged": 301,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 9.6,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 0.4,
+   "feetOverTolerance": 0,
+   "headMeasured": 301,
+   "headRegistration": 217,
+   "headSilhouette": 84,
+   "headUnmeasured": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 0,
+   "hardCutsPerMinute": 0,
+   "ghostSwaps": 301,
+   "ghostFrames": 1194,
+   "worstGhostSeverity": 0.327,
+   "ghostOverFail": 0,
+   "jerks": 30,
+   "worstJerkPx": 43.6,
+   "jerksOverFail": 2,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.173,
+   "maxCentroidShiftPx": 106.1,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0
+  },
+  "chapters": [
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 269.3,
+    "swaps": 301,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 9.6,
+    "maxFeetShiftPx": 0.4,
+    "worstJerkPx": 43.6,
+    "jerksCovered": 0,
+    "fps": 59.9,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-287-paine-od-x2-warrior-armor-break-ready.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-086-rikku-hurt-critical.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-283-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-018-paine-hurt-cast.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-060-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-230-paine-hurt-idle.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-088-rikku-critical-idle.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-109-rikku-idle-hurt.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-061-rikku-hurt-idle.jpg",
+     "ffx2-bahamut-win-ea431aa0/continuity/strips/swap-027-rikku-hurt-cast.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ffx2-vegnagun-shuyin",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 694.4,
+    "swaps": 628,
+    "snapsPerMinute": 0,
+    "maxHeadJumpPct": 9,
+    "maxFeetShiftPx": 0.7,
+    "worstJerkPx": 75.4,
+    "jerksCovered": 0,
+    "fps": 59.8,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-191-rikku-ready-attack.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-056-yuna-hurt-item.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-055-yuna-item-hurt.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-095-rikku-attack-follow.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-278-paine-critical-ready.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-443-paine-ready-critical.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-047-yuna-idle-hurt.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-049-yuna-hurt-idle.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-304-paine-item-ready.jpg",
+     "ffx2-vegnagun-shuyin-win-ea431aa0/continuity/strips/swap-068-yuna-ready-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ]
+ },
+ "targets": {
+  "required": 1,
+  "matched": 1,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "FOC48-01",
+   "severity": "polish",
+   "inNewFeature": true,
+   "title": "The Tourist Trap's scene key `ffx2-tourist-trap-cavern` names a painting that does not exist: the party prep has no painted wash and the pre-battle scene plays on black (the fight itself draws the approved cavern plate), and the page asks three times for `art/backdrops/ffx2-tourist-trap-cavern.png`, which is not in the build (a plain 404 on the live host)",
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap (typed word \"daigoro\")",
+   "expected": "the prep wash and the scene plate of every chapter resolve to a shipped painting (Valefor's prep and scene, on the Djose plate, do)",
+   "observed": "In the won Tourist Trap run the page asked for `art/backdrops/ffx2-tourist-trap-cavern.png` 3 times and was answered by its own page on the preview (the route driver lists them under htmlImages); live answers a missing path with a 404 (curl: 404 for that name). The prep (04-prep.jpg) is a flat navy page where other chapters' preps have the blurred painted wash, and the opening scene (05-pre-scene.jpg) is a black screen behind the dialogue box; Valefor's opening shows its plate (05-pre-scene.jpg). Same root and same fix as FOC46-04 (the hidden Fayth chapter's missing plate).",
+   "repro": "type daigoro on the board; look at the party prep and the first line of the opening scene; watch the network for art/backdrops/ffx2-tourist-trap-cavern.png (critic/runner/lib/route-evidence.mjs lists it under htmlImages)",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/04-prep.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/05-pre-scene.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-valefor-besaid-win-r48/05-pre-scene.jpg",
+    "critic/reviews/ea431aa0-focused/hidden/ffx2-tourist-trap-win-r48/network-media.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-012 (no fallback ships as the final face), CHK-018",
+   "where": "src/data/chapter-ffx2-tourist-trap.ts (`sceneKey: TOURIST_TRAP_SCENE`), src/app/screens/PartyPrepScreen.ts line 162, src/app/screens/cutscenePlate.ts line 25",
+   "fix": "give the prep wash and the scene plate a plate name that exists (`cavern-stolen-fayth`, the approved Chapter IX plate the fight already draws) or ship a copy under the new name; do not invent art",
+   "acceptanceCheck": "no request for art/backdrops/ffx2-tourist-trap-cavern.png in a Tourist Trap run, and the prep and the opening scene draw the cavern painting",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "status": "open (new in ea431aa0-focused)"
+  },
+  {
+   "id": "FOC48-02",
+   "severity": "polish",
+   "inNewFeature": true,
+   "title": "The two new chapters' data files cite `research/re-ffx2-yojimbo-valefor.md` as their source, and that note is not in the repository (it lives on the RE branch `origin/re-ffx2-yojimbo-valefor`); the numbers are in the numbers-only fixtures, which agree",
+   "game": "FFX-2",
+   "chapter": "ffx2-tourist-trap, ffx2-valefor-besaid",
+   "expected": "AGENTS rule 6: every number traces to a research/*.md note that is in the tree",
+   "observed": "git ls-files research holds neither file nor a note by that name; the citation is in src/data/ffx2/enemies/tourist-trap.ts, valefor.ts, command-records/tourist-trap.ts and monster-records/records-*.ts and in both handoffs. What IS in the tree: tests/fixtures/parity/ffx2/tourist_trap_rows.json and besaid_valefor_rows.json (the game's own rows, numbers only) and the wiki tables (research/ffx-yojimbo.md 8.2, research/ffx2-fallen-aeons.md 7.1). The data audit compared 52 values of Yojimbo, Daigoro, the five command rows and Valefor with those sources: 52 match, 0 differ (data/data-audit.json).",
+   "repro": "git ls-files research | grep -i yojimbo; grep -rn re-ffx2-yojimbo-valefor src",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/data/data-audit.json"
+   ],
+   "confidence": "high",
+   "requirement": "AGENTS rule 6, CHK-021 source rule",
+   "where": "the files named in \"observed\"",
+   "fix": "land the RE note (numbers only) in research/, or point the citations at the fixtures and the wiki tables",
+   "acceptanceCheck": "every citation resolves to a file in the tree",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "status": "open (new in ea431aa0-focused)"
+  },
+  {
+   "id": "PR-0380",
+   "severity": "major",
+   "title": "Figures and some bosses still jump, pop or teleport 40 px or more in one frame (CHK-027 FAIL on live and on every candidate measured since the check began); carried from round 26 (the deep review of b8aa6f96, critic/rounds/round-26.json), not re-observed unless stated",
+   "game": "both",
+   "chapter": "FFX I, II, VIII; FFX-2 IV, XI (round 26 harness); this review re-measured FFX-2 IV and V",
+   "expected": "no jerk of 40 px or more in one frame (RUBRIC 6a, D-421)",
+   "observed": "Re-measured for this review on FFX-2 Chapter IV (candidate then live, the same hour, 59.9 fps): candidate 2 jerk(s) of 40 px or more (worst 43.6 px), live 2 (worst 42 px); round 26 on the same chapter: worst 42.1 px. Chapter V candidate: 13 (worst 75.4 px) (no same-hour live run for V; round 26 did not run V; the regression tag rests on the IV pair and on the code: no presenter, stage, figure, scene or painting file differs from live).",
+   "repro": "critic/runner/lib/continuity.mjs on the chapter, candidate and live back to back",
+   "evidence": [
+    "critic/reviews/ea431aa0-focused/continuity/",
+    "critic/reviews/ea431aa0-focused/continuity-live/",
+    "critic/reviews/../rounds/round-26.json"
+   ],
+   "confidence": "high that they exist",
+   "requirement": "CHK-027, RUBRIC 6a",
+   "where": "figure motion (hit recoil, entrances), not this delta's files",
+   "fix": "unchanged from round 26",
+   "acceptanceCheck": "CHK-027 PASS on the chapter",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "status": "open, carried"
+  },
+  {
+   "id": "PR-0295",
+   "severity": "major",
+   "title": "The heavy party-prep tabs are a desktop frame shrunk to a phone; carried from round 26 (the deep review of b8aa6f96, critic/rounds/round-26.json), not re-observed unless stated",
+   "game": "both",
+   "chapter": "FFX and FFX-2 prep tabs at 390x844",
+   "expected": "see round 26",
+   "observed": "not re-observed here (the code and every shipped file these depend on are unchanged against live: gates/manifest-diff.log, gates/css-diff.json)",
+   "repro": "see round 26",
+   "evidence": [
+    "critic/reviews/../rounds/round-26.json"
+   ],
+   "confidence": "carried",
+   "requirement": "see round 26",
+   "where": "see round 26",
+   "fix": "unchanged from round 26",
+   "acceptanceCheck": "see round 26",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "status": "open, carried"
+  },
+  {
+   "id": "PR-0148",
+   "severity": "major",
+   "title": "No numeric owner listening score for the shipped mix; carried from round 26 (the deep review of b8aa6f96, critic/rounds/round-26.json), not re-observed unless stated",
+   "game": "both",
+   "chapter": "all",
+   "expected": "see round 26",
+   "observed": "not re-observed here (the code and every shipped file these depend on are unchanged against live: gates/manifest-diff.log, gates/css-diff.json)",
+   "repro": "see round 26",
+   "evidence": [
+    "critic/reviews/../rounds/round-26.json"
+   ],
+   "confidence": "carried",
+   "requirement": "see round 26",
+   "where": "see round 26",
+   "fix": "unchanged from round 26",
+   "acceptanceCheck": "see round 26",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "status": "open, carried"
+  },
+  {
+   "id": "PR-0099",
+   "severity": "major",
+   "title": "Nine chapters still play borrowed or stand-in scene beds or battle cues (the two new hidden chapters add two more: they play existing cues by reference); carried from round 26 (the deep review of b8aa6f96, critic/rounds/round-26.json), not re-observed unless stated",
+   "game": "both",
+   "chapter": "FFX IX, X, XII, XIV, XVII, XVIII; FFX-2 XIII, XV, XVI; and the two hidden chapters",
+   "expected": "see round 26",
+   "observed": "not re-observed here (the code and every shipped file these depend on are unchanged against live: gates/manifest-diff.log, gates/css-diff.json)",
+   "repro": "see round 26",
+   "evidence": [
+    "critic/reviews/../rounds/round-26.json"
+   ],
+   "confidence": "carried",
+   "requirement": "see round 26",
+   "where": "see round 26",
+   "fix": "unchanged from round 26",
+   "acceptanceCheck": "see round 26",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "status": "open, carried"
+  },
+  {
+   "id": "PR-0421",
+   "severity": "major",
+   "title": "The Chapter IV wide camera pull may show the backdrop plate edge (unverified); carried from round 26 (the deep review of b8aa6f96, critic/rounds/round-26.json), not re-observed unless stated",
+   "game": "FFX-2",
+   "chapter": "Ch IV Bahamut",
+   "expected": "see round 26",
+   "observed": "not re-observed here (the code and every shipped file these depend on are unchanged against live: gates/manifest-diff.log, gates/css-diff.json)",
+   "repro": "see round 26",
+   "evidence": [
+    "critic/reviews/../rounds/round-26.json"
+   ],
+   "confidence": "carried",
+   "requirement": "see round 26",
+   "where": "see round 26",
+   "fix": "unchanged from round 26",
+   "acceptanceCheck": "see round 26",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "status": "open, carried"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "the production candidate served from M:/pyrefly-builds/r48/dist (vite preview, port 5481, headless Chromium GPU): the board before and after, the two typed words and 12 door words in all (daigoro -> party-prep ffx2-tourist-trap; valefor -> party-prep ffx2-valefor-besaid; fayth -> party-prep exp-fayth; leblanc -> party-prep exp-leblanc; experiment -> party-prep ffx2-masterpiece-theatre; mushroom -> party-prep sinspawn-gui; daigor -> chapter-select; valefo -> chapter-select; valefordaigoro -> party-prep ffx2-valefor-besaid; daigorovalefor -> cutscene; besaid -> chapter-select; yojimbo -> chapter-select), prep, opening scene, first menu, E, G, N, the pause with its tabs, the fight by the advisor card, results, CONFIRM or RETRY and the board again, for Tourist Trap and Valefor: a win and a loss each, by real keys",
+   "the Itchy menu at 1600x900, 2000x1012 and 390x844 on the candidate and 1600x900 on live (itchy/); the FFX-2 menus by real arrow keys on Chapters IV and V on both builds and on the two new chapters, the phone first menus of the new chapters (submenus/)",
+   "25 same-seed pairs (seed 1 on all 18 listed chapters, seed 2 on the 7 FFX-2 ones; the page's debug API at skip speed, the 'intended' tactic): 25 identical (outcome, party turns, engine ticks elapsed, exp, ap, gil, links), 0 same outcome with different turns, 0 different outcome, 0 errored",
+   "the Silence card in the real HUD at 1600x900 and 390x844 on both builds: FFX Chapter I (unchanged: \"Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.\") and FFX-2 Chapter V (candidate \"Yuna is silenced: no spells, Dances or Songs. Echo Screen, Esuna or a Remedy cures it.\", live \"Yuna is silenced: no White Magic, Black Magic or Arcana. Echo Screen, Esuna or a Remedy cures it.\")",
+   "CHK-025: Tourist Trap win: main save key byte-identical before and after (sha256 8c8d524708110165, 660 chars), keys added [\"pyrefly-reprise:experiments:v1\"], keys changed []; the experiments store then holds the chapter's record (attempts 1, clears 1, bestTimeMs 65341); board 18 tiles, 0 of 18 beaten; Valefor win: main save key byte-identical before and after (sha256 c05c728225801b2b, 660 chars), keys added [\"pyrefly-reprise:experiments:v1\"], keys changed []; the experiments store then holds the chapter's record (attempts 1, clears 1, bestTimeMs 66874); board 18 tiles, 0 of 18 beaten; the two losses' stores (hidden/*-lose-r48/run.json storage)",
+   "the data audit (52 comparisons) and the advisor text diff over every FFX-2 row (data/), the manifest diff against live, the stylesheet rule diff, the static source diff by game",
+   "the continuity harness (CHK-026, CHK-027) on FFX-2 Chapters IV and V, candidate then live in the same hour (continuity/, continuity-live/): IV candidate: 269.3 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 43.6 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL | IV live: 267 s of battle, 301 swaps, snaps 0/min, head jump max 9.6%, feet shift max 0.4 px, worst jerk 42 px, jerks of 40 px or more 2, 59.9 fps, CHK-026 PASS, CHK-027 FAIL | V candidate: 694.4 s of battle, 628 swaps, snaps 0/min, head jump max 9%, feet shift max 0.7 px, worst jerk 75.4 px, jerks of 40 px or more 13, 59.8 fps, CHK-026 PASS, CHK-027 FAIL | V live: not run"
+  ],
+  "reused": [
+   {
+    "what": "tsc clean, the full suite (1,249 files, 19,619 tests: 19,544 passed, 74 skipped, 1 todo, 0 failed) and the production build gates (dist-local-paths, art-derive verify and audit, art-browser-load 3,863 of 3,863 in Chromium and WebKit)",
+    "from": "the release driver's runs (D:/Tools/pyrefly-scratch/2026-10-14/r48-suite.json, r48/full-suite.log, ASSEMBLY-r48.md)",
+    "why": "recorded evidence on the same tree: ea431aa0 differs from the built 2f2b07c4 by docs and .gitignore only, and from the stamp 0d6416e7 by two comment-only source edits and the Itchy rule already inside the build (git diff --stat; the built stylesheet holds the rule)"
+   },
+   {
+    "what": "the layout, legibility and scene checks (CHK-002 to CHK-011 for every chapter the delta does not touch) and the sound review",
+    "from": "critic/reviews/ca9fd0b4-focused.json and critic/rounds/round-26.json",
+    "why": "every shipped image, audio file and art JSON is byte-identical to live and the stylesheet differs by one rule (dependencyArgument on each check)"
+   },
+   {
+    "what": "the 5 carried majors (PR-0380, PR-0295, PR-0148, PR-0099, PR-0421) and the 8 polish and 2 suggestions of round 26",
+    "from": "critic/rounds/round-26.json",
+    "why": "their code and files are unchanged against live; only PR-0380 was re-measured (the continuity block)"
+   }
+  ],
+  "notTested": [
+   "the ear (rule 13): CHK-B1 stays UNVERIFIED; nobody has heard the stand-in cues of the two new chapters in their fights",
+   "the plan's data audit beyond the two new chapters: the RC7 data tables (the FFX Mix chart and its 21 new results, the FFX-2 command rows, dressphere ability lists, Trainer moves, automatic-ability tables) were NOT compared value by value with research/ by me; their sources are the RE session's decompiled rows held as numbers-only fixtures under tests/fixtures/parity and pinned by the parity tests inside the driver's 19,619-test run",
+   "the RC7 counters, Evade & Counter and the SOS layer on a screen (no shipped loadout reaches them); the FFX Mix picker and a fired unregistered pair in a browser (no chapter plays a Mix; the suite covers the rule)",
+   "Special dresspheres in a battle (a player cannot reach one in any shipped chapter); the Itchy and Special states were set by hand by design",
+   "the 2000x1012 layout of the two new chapters and their phone prep, pause and results (the 390x844 first menus were captured and looked at)",
+   "continuity of the two new chapters (the route driver the harness uses has no typed-word entry; CHK-026 and CHK-027 are recorded for the listed FFX-2 chapters only) and of FFX Chapter I, II and VIII (carried from round 26)",
+   "the odds line of Valefor's first move (the slab read Attack 50% / Sonic Wings 50% while her script and the won fight give about 2:1; an observation, not traced)",
+   "the same-hour LIVE run of FFX-2 Chapter V (started after the candidate's run and stopped to keep to the time: no live baseline for V exists in round 26 either; the V jerk count below has no pair); FFX-2 Chapter IV has its pair",
+   "live verification of the exact artifact (CHK-017) and the deep review: after the deploy"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Live verification of the exact artifact after the deploy (CHK-017: this candidate's artifact hash ed2bfe16f8f9fde9 against what the site serves; the 4 renamed bundle files and index.html are the only files that differ from b8aa6f96; the deploy builds afresh, so its commit stamp will read ea431aa0 where the reviewed build reads 0d6416e7); then the deep review of this build, which the plan classes deep (deepAfterDeploy: the FFX and FFX-2 engines, the registry, a new chapter, the global layout and the guides are shared systems; the deploy gate's count of reviews owed is the driver's check, npm run critic:status): every affected chapter through its real flow, the continuity harness on every listed chapter, and the owner's ear on the stand-in cues.",
+ "elapsedMinutes": 93
+}

@@ -1,0 +1,156 @@
+{
+ "review": "live-smoke",
+ "sha": "d5bf2206",
+ "base": "https://echoesofspira.com/?cb=<time>",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-13T23:13:25.433Z",
+ "parts": {
+  "defeat-ffx2": {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "viewport": "1600x900",
+   "note": "debug-assisted: the chapter is entered through the debug API (cutscenes and prep skipped), every party member is set to 1 HP, the fight is handed to the defend strategy at skip speed; the results screen is the game's own",
+   "guideSkipped": true,
+   "members": [
+    {
+     "id": "yuna",
+     "hp": 1
+    },
+    {
+     "id": "rikku",
+     "hp": 1
+    },
+    {
+     "id": "paine",
+     "hp": 1
+    }
+   ],
+   "strategy": "attack",
+   "status": "error",
+   "error": "ASSERT-FAIL screen expected=results after 240108ms",
+   "audio": {
+    "n": 11,
+    "byStatus": {
+     "200": 11
+    },
+    "byContentType": {
+     "application/json": 1,
+     "audio/mpeg": 10
+    },
+    "music": [
+     "title",
+     "chapter-select",
+     "scene-bevelle-underground",
+     "boss-bahamut",
+     "victory-bahamut",
+     "defeat-ffx2"
+    ],
+    "sfx": [
+     "sprite",
+     "sprite-v2",
+     "parity-ffx2-bahamut",
+     "parity-ffx2-core"
+    ],
+    "notOk": [],
+    "failed": [],
+    "retiredRequested": [],
+    "wrongType": [],
+    "files": [
+     "manifest.json 200 application/json 9517B req+77990ms done+78037ms",
+     "music/title.mp3 200 audio/mpeg 2332323B req+78039ms done+80404ms",
+     "sfx/sprite.mp3 200 audio/mpeg 2710854B req+78039ms done+80651ms",
+     "sfx/sprite-v2.mp3 200 audio/mpeg 4726817B req+78039ms done+82806ms",
+     "music/chapter-select.mp3 200 audio/mpeg 2107815B req+79114ms done+81100ms",
+     "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20567B req+81093ms done+81165ms",
+     "sfx/parity-ffx2-core.mp3 200 audio/mpeg 185253B req+81094ms done+81273ms",
+     "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487532B req+81094ms done+83023ms",
+     "music/boss-bahamut.mp3 200 audio/mpeg 1342181B req+83345ms done+84286ms",
+     "music/victory-bahamut.mp3 200 audio/mpeg 514766B req+84677ms done+85446ms",
+     "music/defeat-ffx2.mp3 200 audio/mpeg 115246B req+85567ms done+85757ms"
+    ]
+   },
+   "errorShot": {
+    "file": "defeat-ffx2-error.jpg",
+    "meanLuminance": 116.6,
+    "screen": "battle"
+   },
+   "consoleErrors": [],
+   "notFound": []
+  }
+ },
+ "assertions": [],
+ "loadRetries": [],
+ "finishedAt": "2026-10-13T23:19:07.435Z",
+ "elapsedMinutes": 5.7,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "audioRequestsAll": [
+  {
+   "run": "defeat-ffx2",
+   "request": "manifest.json 200 application/json 9517B req+77990ms done+78037ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/title.mp3 200 audio/mpeg 2332323B req+78039ms done+80404ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/sprite.mp3 200 audio/mpeg 2710854B req+78039ms done+80651ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/sprite-v2.mp3 200 audio/mpeg 4726817B req+78039ms done+82806ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/chapter-select.mp3 200 audio/mpeg 2107815B req+79114ms done+81100ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/parity-ffx2-bahamut.mp3 200 audio/mpeg 20567B req+81093ms done+81165ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "sfx/parity-ffx2-core.mp3 200 audio/mpeg 185253B req+81094ms done+81273ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/scene-bevelle-underground.mp3 200 audio/mpeg 1487532B req+81094ms done+83023ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/boss-bahamut.mp3 200 audio/mpeg 1342181B req+83345ms done+84286ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/victory-bahamut.mp3 200 audio/mpeg 514766B req+84677ms done+85446ms"
+  },
+  {
+   "run": "defeat-ffx2",
+   "request": "music/defeat-ffx2.mp3 200 audio/mpeg 115246B req+85567ms done+85757ms"
+  }
+ ],
+ "audioTotals": {
+  "requests": 11,
+  "byStatus": {
+   "200": 11
+  },
+  "retiredRequested": 0,
+  "distinctFiles": [
+   "/audio/manifest.json",
+   "/audio/music/boss-bahamut.mp3",
+   "/audio/music/chapter-select.mp3",
+   "/audio/music/defeat-ffx2.mp3",
+   "/audio/music/scene-bevelle-underground.mp3",
+   "/audio/music/title.mp3",
+   "/audio/music/victory-bahamut.mp3",
+   "/audio/sfx/parity-ffx2-bahamut.mp3",
+   "/audio/sfx/parity-ffx2-core.mp3",
+   "/audio/sfx/sprite-v2.mp3",
+   "/audio/sfx/sprite.mp3"
+  ]
+ },
+ "partial": true,
+ "savedAt": "2026-10-13T23:19:07.436Z"
+}

@@ -1,0 +1,31 @@
+{
+ "result": "PASS",
+ "artifactHash": "19d1b6207f3fb2450b3d3276461ccd9df0c5cef83075f3c85b478bc6a215050a",
+ "liveManifest": "match",
+ "checked": 5221,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [
+  "_headers is part of this artifact and was not downloaded (no address serves a host-read file); assets/exp-fayth-table-DKYNX064.js was served with Cache-Control \"public, max-age=31536000, immutable\""
+ ],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/exp-fayth-table-DKYNX064.js",
+  "value": "public, max-age=31536000, immutable"
+ },
+ "run": {
+  "files": 5221,
+  "wrapper": "critic/reviews/ca9fd0b4-live-verify.mjs",
+  "workers": 16,
+  "window": 48,
+  "megabytesFetched": 10300,
+  "seconds": 2924,
+  "liveUrl": "https://echoesofspira.com/",
+  "bust": "1791953025204",
+  "finishedAt": "2026-10-14T05:32:28.947Z"
+ }
+}

@@ -1,0 +1,239 @@
+{
+ "review": "live-smoke",
+ "sha": "ca9fd0b4",
+ "bundle": "Cg05Z3H_",
+ "base": "https://echoesofspira.com/?cb=<time>",
+ "browserMode": "gpu",
+ "startedAt": "2026-10-14T04:51:49.620Z",
+ "parts": {
+  "static": {
+   "pages": [
+    {
+     "address": "echoesofspira.com",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cg05Z3H_.js",
+     "css": "assets/index-D109LGpF.css"
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cg05Z3H_.js",
+     "css": "assets/index-D109LGpF.css"
+    }
+   ],
+   "manifest": {
+    "status": 200,
+    "ct": "application/json",
+    "bytes": 72457,
+    "music": 41,
+    "sfxPacks": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx-flux",
+     "ffx-final-aeon",
+     "ffx2-aeons"
+    ],
+    "v2Cues": 92,
+    "retiredListed": [],
+    "victory": {
+     "victory-ffx": {
+      "duration": 38.1434,
+      "loopStart": 8.457596,
+      "loopEnd": 35.143379,
+      "oneShot": false
+     },
+     "victory-ffx2": {
+      "duration": 43.2632,
+      "loopStart": 8.264218,
+      "loopEnd": 40.263152,
+      "oneShot": false
+     },
+     "victory-bahamut": {
+      "duration": 37.1568,
+      "loopStart": 8.884535,
+      "loopEnd": 34.156848,
+      "oneShot": false
+     },
+     "defeat-ffx": {
+      "duration": 9,
+      "loopStart": 7,
+      "loopEnd": 9,
+      "oneShot": true
+     },
+     "defeat-ffx2": {
+      "duration": 8.03,
+      "loopStart": 6.03,
+      "loopEnd": 8.03,
+      "oneShot": true
+     }
+    }
+   },
+   "sfxParityCueCount": 47,
+   "manifestEqualsShipped": true,
+   "status": "ran"
+  },
+  "artjson": {
+   "artJsonInManifest": 1264,
+   "sample": {
+    "n": 30,
+    "paths": [
+     "art/backdrops/macalania-temple.json",
+     "art/characters/baralai-shade/idle.json",
+     "art/characters/exp-leblanc-leblanc/idle.json",
+     "art/characters/exp-leblanc-paine-songstress/victory.json",
+     "art/characters/exp-leblanc-rikku-alchemist/idle.json",
+     "art/characters/exp-leblanc-rikku-songstress/victory.json",
+     "art/characters/exp-leblanc-yuna-black-mage/ko.json",
+     "art/characters/exp-leblanc-yuna-thief/twirl-forming.json",
+     "art/characters/ff7-film-cloud/windup.json",
+     "art/characters/ifrit/attack.json",
+     "art/characters/logos/idle.json",
+     "art/characters/overdrive-sin/stage-0@2x.json",
+     "art/characters/paine-gunner/attack.json",
+     "art/characters/paine-samurai/sleep.json",
+     "art/characters/paine-warrior/idle@2x.json",
+     "art/characters/rikku-alchemist/critical.json",
+     "art/characters/rikku-black-mage/victory.json",
+     "art/characters/rikku-lady-luck/od-x2-lady-luck-magic-reels.json",
+     "art/characters/rikku-warrior/defend.json",
+     "art/characters/sandy/idle.json",
+     "art/characters/shuyin/hurt.json",
+     "art/characters/sinspawn-gui/hurt.json",
+     "art/characters/vegnagun-head/ko.json",
+     "art/characters/x2-shiva/ko.json",
+     "art/characters/yuna-dark-knight/hurt.json",
+     "art/characters/yuna-lady-luck/twirl-going.json",
+     "art/characters/yuna-warrior/idle.json",
+     "art/characters/yunalesca-1/hurt.json",
+     "art/pause/kimahri.json",
+     "art/portraits/overdrive-sin.json"
+    ],
+    "hits": [],
+    "bareNameExamples": [
+     {
+      "path": "art/backdrops/macalania-temple.json",
+      "strings": [
+       "docs/concepts/chapters/macalania/renders/backdrop-a.png",
+       "backdrop A (warm brazier gold), docs/target/targets.json",
+       "public/art/backdrops/macalania-temple.png"
+      ]
+     },
+     {
+      "path": "art/characters/baralai-shade/idle.json",
+      "strings": [
+       "O-1 B translucent and lit from within, the same treatment for all three shades; picked by Bailey 2026-09-25 (\"I'll go with all your recommendations\"); docs/concepts/chapters/gippal/o1-shade/b-translucent-frame.jpg"
+      ]
+     },
+     {
+      "path": "art/characters/exp-leblanc-leblanc/idle.json",
+      "strings": [
+       "p_64941a30-experimental-chapter-leblanc-idle-v6.png"
+      ]
+     },
+     {
+      "path": "art/characters/exp-leblanc-paine-songstress/victory.json",
+      "strings": [
+       "paine-songstress-idle-square.png",
+       "paine-songstress-head.png",
+       "cand-14.png"
+      ]
+     }
+    ]
+   },
+   "all": {
+    "n": 1278,
+    "art": 1264,
+    "other": 14,
+    "hits": [],
+    "totalChars": 5162186
+   },
+   "status": "ran"
+  }
+ },
+ "assertions": [
+  {
+   "part": "static",
+   "name": "both addresses serve bundle Cg05Z3H_",
+   "ok": true,
+   "detail": [
+    {
+     "address": "echoesofspira.com",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cg05Z3H_.js",
+     "css": "assets/index-D109LGpF.css"
+    },
+    {
+     "address": "echoes-of-spira.baileypillon.workers.dev",
+     "status": 200,
+     "ct": "text/html",
+     "bundle": "assets/index-Cg05Z3H_.js",
+     "css": "assets/index-D109LGpF.css"
+    }
+   ]
+  },
+  {
+   "part": "static",
+   "name": "the live audio manifest lists none of the three retired files",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "part": "static",
+   "name": "the live audio manifest is the shipped dist-release one",
+   "ok": true,
+   "detail": true
+  },
+  {
+   "part": "artjson",
+   "name": "a sample of 30 art JSON files fetched from the live site: all 200 JSON, none contains a drive-letter path or a user-profile path",
+   "ok": true,
+   "detail": {
+    "n": 30,
+    "hits": 0
+   }
+  },
+  {
+   "part": "artjson",
+   "name": "every JSON file of the site (1278, the art sidecars and the depth maps) fetched from live: none names a drive or a user profile",
+   "ok": true,
+   "detail": {
+    "n": 1278,
+    "hits": 0
+   }
+  }
+ ],
+ "loadRetries": [],
+ "finishedAt": "2026-10-14T04:52:19.971Z",
+ "elapsedMinutes": 0.5,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "audioRequestsAll": [],
+ "audioTotals": {
+  "requests": 0,
+  "byStatus": {},
+  "retiredRequested": 0,
+  "distinctFiles": []
+ },
+ "audioBytesVsManifest": {
+  "files": 0,
+  "compared": 0,
+  "mismatched": [],
+  "notInManifest": []
+ },
+ "lv43": {
+  "runs": [],
+  "playing": 0,
+  "total": 0,
+  "byChapter": {}
+ },
+ "partial": true,
+ "savedAt": "2026-10-14T04:52:19.989Z"
+}

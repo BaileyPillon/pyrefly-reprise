@@ -1,0 +1,65 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-14T11:30:15.438Z",
+  "build": {
+    "mainSha": "b8aa6f96",
+    "bundle": "DA6NOD0r",
+    "artifactHash": "916e84ca631eab30430f94b6d5424b2f03756a5402f978a282ff2f31d3320d8a"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "verifyLive() from tools/artifact-manifest.mjs run with --full semantics against critic/artifacts/b8aa6f96.json (wrapper critic/reviews/b8aa6f96-live-verify.mjs, 16-way prefetch, bodies dropped once hashed): 5221 of 5222 files compared (all but the host-read _headers), 0 mismatched, 0 missing, 0 wrong content type, 0 errors, the live artifact-manifest.json matches (hash 916e84ca631eab30...), 10279 MB in 1864 s, finished 2026-10-14T11:05:20.486Z; index.html as a browser receives it is identical once Cloudflare's Web Analytics beacon is removed; assets/exp-fayth-table-CUPJDSuj.js is public, max-age=31536000, immutable. Against ca9fd0b4: 4 files added (index-DA6NOD0r.js, index-D6xsaimI.css, worker-CCGsjJeK.js, exp-fayth-table-CUPJDSuj.js), 1706 changed (1262 art JSON sidecars, 443 art images = Rikku's eight dresspheres, index.html), 4 removed (the old bundle, stylesheet, worker, fayth table): the 4 removed files answer 404 at both echoesofspira.com and echoes-of-spira.baileypillon.workers.dev, and both addresses serve index-DA6NOD0r.js and index-D6xsaimI.css. All 1291 text files of the artifact downloaded from live: 1291 of 1291 sha256 equal the manifest; the project's gate (tools/dist-local-paths.mjs: local paths, claude.ai links, sidecar keys outside the list) over that download exits 0 with 0 hits on 1291 files and refuses a made-up control (exit 1, 4 hits: sidecar-key, drive, link); /__ffx-local/ answers 404 at both addresses. The manifest's two decode notes (paine eyeR-catch.png 1x and 2x flat colour) are the same two the previous build's manifest carries."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Chromium driven by Playwright from node, PYREFLY_BROWSER=gpu (first-menu mean luminance 76.7 to 115.9 on the five reported chapter captures: no black canvas, no fallback), a fresh browser and context per part (storage empty, HTTP cache empty), real key presses and mouse clicks at 1600x900, real touch taps at 390x844 (hasTouch, isMobile, device scale 2, Android user agent); the screen (and awaitingMenu) asserted before every capture. 96 assertions in 7 browser parts, 0 failed, plus 17 in the no-browser static part, 0 failed; console errors 0, HTTP 404s 0, audio requests 103 (all 200, 28 distinct files, all files of the artifact, 0 retired). The change's flows on the live URL: (1) ACCESSIBILITY tab in FFX Chapter I (key E from the first member's tab, 6 presses) and FFX-2 Chapter IV (a real click): five rows TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS, COLOUR VISION in order on a fresh profile (all off); REDUCE FLASHES on, undo (off), on (data-reduce-flashes on <html>, save true/false/true); COLOUR VISION red-green (ally #56b4e9, self #f4f1e8, gates #d55e00 #009e73 #0072b2 #f0e442), blue-yellow (gate green #00a6a6, blue #7a4fd0, MP #b48cf0), back to red-green; TEXT SIZE 115% (data-text-size 115, save 1.15) and back; Escape twice resumes the battle. (2) A real hit flash read on each game with the setting off then on: FFX .ffx-stat--hurt ffx-hurt-flash 0.3s -> ffx-hurt-soft 0.6s; FFX-2 .ffx2-hit-flash ffx2-hit-flash 0.2s -> ffx2-hit-soft 0.5s. (3) A colour group as pixels: the FFX-2 phone Party Prep (390x844 touch) Garment Grid gate pips, off rgb(201,58,66) rgb(117,145,58) rgb(58,120,190) rgb(227,185,74) 12px no letter, on (red-green, the saved profile read back on a new context) rgb(213,94,0) rgb(0,158,115) rgb(0,114,178) rgb(240,228,66) 16px with letters R G B Y; and the FFX ally target bracket (Phoenix Down at a fallen member) --ffx-mark #56b4e9 with the 7px plus mark, cancel path back to the menu. (4) Rikku (FFX-2 Chapter VI, Thief): 14 changed Thief files plus the Gunner twirl-mid, as the page received them, pixel-identical to the corrected master in D:/pyrefly-art-r47, different from the old one in D:/pyrefly-art-r44, mean saturation 0.657 -> 0.584 (idle) and lower in every file; the page's own canvas decode of thief/idle.png reads 0.600109 against PIL's 0.600115; Chapter V (Dark Knight, not rewritten) 13 control files equal both masters; the eight dresspheres' idle files (1x and 2x) served equal r47 and differ from r44 (Songstress 0.743 -> 0.574, Alchemist 0.746 -> 0.563). (5) Sidecars: all 1261 carry only keys among the ten; 30 at random fetched fresh equal the master's ten fields. (6) The FFX Silence card (debug-assisted status) reads \"Tidus is silenced: no White or Black Magic. Echo Screen, Esuna or a Remedy cures it.\" in Chapters I and II; the live bundle holds the new words and not the old \"and no Summon\". (7) Escape, H, P pause tests in FFX Chapter I and FFX-2 Chapter IV passed.",
+      "reason": "No finding. Two behaviours a reader could take for defects are by design and explained in the report: the FFX card prints its second hint in the short form (the new words show when Silence is the first hint), and FFX Chapter I plays no scene cue at its first spoken line (its script opens with music(null)). The Silence status and a Zombie set-aside in Chapter I were put on the party through the debug API (debug-assisted, named in the report)."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight reload smoke on the live build (fresh profile, 1600x900): REDUCE FLASHES on and COLOUR VISION red-green set through the pause screen with real keys, 7 coach tips seen and the chapter record made in the session, the page reloaded: before any input data-reduce-flashes and data-colour-vision=\"red-green\" and the --cvd variables are on <html>, the saved settings object equals the one before key for key, the coach tips and chapter records are the same; from the title to the first menu again, the pause screen ACCESSIBILITY tab reads REDUCE FLASHES ON and COLOUR VISION RED-GREEN. The saved profile was also read back on a separate context (the phone run).",
+      "reason": "The full upgrade matrix (a save from the previous build migrating forward, truncated storage, the reset flow) is not part of this pass; the deep review proved the save-data side before the deploy (critic/rounds/round-26.json)."
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "artifact identity: 5221 of 5222 files byte-identical with live (all but the host-read _headers), content types, the live artifact-manifest.json match, the page as a browser receives it, the 4 removed files 404 at both addresses, both addresses on bundle DA6NOD0r; all 1291 text files downloaded from live (sha256 == manifest) and run through the project gate for local paths, claude.ai links and sidecar keys: 0 hits, with a made-up control the gate refuses; /__ffx-local/ 404",
+      "the art JSON sidecars (both): all 1261 carry only keys among the ten game fields; 30 picked at random and fetched fresh equal the master's ten fields (values, key order) and the masters of all 30 hold keys the live files lack",
+      "the ACCESSIBILITY tab, FFX Chapter I by keys and FFX-2 Chapter IV by mouse: the five rows, REDUCE FLASHES on / undo / on, COLOUR VISION red-green / blue-yellow / back (as the --cvd variables), TEXT SIZE 115 and back, Escape to resume, the saved values; REDUCE FLASHES: a real hit flash read off and on in both games (ffx-hurt-flash 0.3s -> ffx-hurt-soft 0.6s; ffx2-hit-flash 0.2s -> ffx2-hit-soft 0.5s)",
+      "COLOUR VISION as pixels: the phone Party Prep gate pips at 390x844 touch, off and on (Okabe-Ito tiles with letters), and the FFX ally target bracket (#56b4e9, the plus mark)",
+      "reload (CHK-024 light): both settings, the coach tips and the chapter record survive; the pause of the new session shows them",
+      "Rikku (FFX-2 only): the Chapter VI page's 14 Thief files and the Gunner twirl-mid as received, against the corrected master (equal) and the old one (different), mean saturation per file, one decoded by the page's own canvas; Chapter V's Dark Knight files equal both masters; the eight dresspheres' idle files, 1x and 2x, served == r47 and != r44",
+      "the FFX Silence card in Chapters I and II (debug-assisted status; a Zombie set aside in Chapter I): \"no White or Black Magic.\"; the new words are in the live bundle and the old are not",
+      "LV43-2 counted on 5 runs: the scene cue was playing at the first spoken line in 4 of 5 (FFX II, FFX-2 IV, V, VI); 0 of 1 in FFX Chapter I, whose opening script begins with music(null) (no scene cue is meant to play)",
+      "first battle menus of FFX I and II and FFX-2 IV, V and VI from the title by real keys with every audio request recorded (prerendered mp3 playing, the first formation's start cue, own game's sound packs only, no retired file); Escape pause, H hide and restore, resume, P pause and resume in FFX I and FFX-2 IV; console and 404 sweep: 0 and 0"
+    ],
+    "reused": [],
+    "notTested": [
+      "the stage's canvas flashes under REDUCE FLASHES (screen wash, flash on a fighter, bloom, cutscene cover) and the other HUD flash sources (group bracket pulse, big-attack warning plate, Overdrive timing flash, FFX-2 ready shimmer, chain-20 veil): only the party card's and the girl's card's hit flash were read",
+      "the other COLOUR VISION groups (the Berserk and Curse figure tint with its initial, the MP numeral, the Spherechange wheel gates) and BLUE-YELLOW as pixels (it was read as the --cvd variables)",
+      "TEXT SIZE at 130% and the 115% pause as a picture; REDUCE MOTION and LOW EFFECTS toggled; the ACCESSIBILITY tab by touch on a phone pause screen",
+      "the FFX command rules as played (a Silenced Yuna's Summon row, a Silenced member's Scan greyed, Out of reach, Doublecast per-cast checks, the cost gate): only the card's words were read; the deep review's per-seed comparison with live is the evidence for the rest",
+      "Rikku on the stage in Alchemist, Berserker, Black Mage, Gunner, Lady Luck, Songstress and White Mage (served files read, not stage paintings), and the 3x and 4x tiers (byte-compared by the exact-artifact part, not measured)",
+      "the hidden Fayth chapter (FOC46-04 not re-observed), a chapter win by real input, the results screens",
+      "the full upgrade matrix (CHK-024 full)",
+      "audio by ear (nobody here can hear: a cue name and a non-zero gain are not sound), WebKit or Safari, a real phone, a real controller, other sizes"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 60,
+  "notes": "Deploy 2026-10-14T10:08:44Z (docs/deploys.log, owner override) from D:/pyrefly-r47, replacing ca9fd0b4. Everything above ran on the live URL https://echoesofspira.com/ (and both addresses for the pages and the removed files). The byte comparison (31 minutes, 10.3 GB) ran while I wrote and shook down the smoke; the reported browser smoke ran after it finished on an idle link (7.4 minutes, 2026-10-14T11:17Z to 11:25Z, one process, all 7 parts); five shakedown runs and three probes that shared the link are counted nowhere. Debug-assisted: the FFX Silence status and Chapter I's Zombie set-aside; the page-side hit-flash logger records computed styles, it presses nothing. The phone run with COLOUR VISION on took the profile the FFX run saved. A PAUSE file of the overnight art runner that I did not make was in place all the time and was left untouched. Scripts: critic/reviews/b8aa6f96-live-verify.mjs, b8aa6f96-live-static.mjs, b8aa6f96-live-smoke.mjs, b8aa6f96-rikku-measure.py; progress file critic/reviews/PROGRESS-live-b8aa6f96.md; screenshots and json in D:/Tools/pyrefly-scratch/2026-10-14/live-b8aa6f96/."
+}

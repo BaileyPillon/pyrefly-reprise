@@ -1,0 +1,758 @@
+[
+ {
+  "id": "alchemist/idle",
+  "rel": "art/characters/rikku-alchemist/idle.png",
+  "servedBytes": 617771,
+  "servedSha256": "28ae5f2985a7fbb15510b57338ab7a60fb763630d6e73c63c78ceb69a9e82b46",
+  "size": [
+   541,
+   1194
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "86d6ef169cc435dadd2f964bbc0929a905ebaea8249970642ace26dc0158b531"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "c0b29b8bb773d8c6459badfb8e85d47ca8ebbdbc62a5e10bb35d8959f4cda202"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5631876544308319,
+   "master47": 0.5631876544308319,
+   "master44": 0.7462351778109789
+  },
+  "meanSaturationFull": {
+   "served": 0.5882174530790583,
+   "master47": 0.5882174530790583,
+   "master44": 0.7580534239178891
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 277540
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 233669,
+   "visiblePixels": 277540
+  }
+ },
+ {
+  "id": "alchemist/idle@2x",
+  "rel": "art/characters/rikku-alchemist/idle@2x.png",
+  "servedBytes": 3275961,
+  "servedSha256": "2ba797883ad6df360f4e2e362d083cee70fd9e507582a75212775044b2231781",
+  "size": [
+   1082,
+   2388
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "e61c6a28257abe0349f422fefccc535f11a2dbe0401195dcd7b24bb8a37340ed"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "98fcdf7f8ef82d08fa72d698e2c5dce3ded2238ef31519b61ec5a8195907a40e"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5646919418152662,
+   "master47": 0.5646919418152662,
+   "master44": 0.7524231386192892
+  },
+  "meanSaturationFull": {
+   "served": 0.5773826357784341,
+   "master47": 0.5773826357784341,
+   "master44": 0.7530878459193572
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 1082809
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 910282,
+   "visiblePixels": 1082809
+  }
+ },
+ {
+  "id": "berserker/idle",
+  "rel": "art/characters/rikku-berserker/idle.png",
+  "servedBytes": 603308,
+  "servedSha256": "f2bceb6c068e69e117c894d98992961951301081c86fe41f4ded9879009e8f9a",
+  "size": [
+   555,
+   1215
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "a44eaa1f0e1e4597ee03fd47d1f29337dd74698f17d80bb8916777168afc6b93"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "1652fe2a56b28fbe75804f6b2745dc9813d78056084d26cae2958ea6ae0f78ad"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.666512656864699,
+   "master47": 0.666512656864699,
+   "master44": 0.7959537613529737
+  },
+  "meanSaturationFull": {
+   "served": 0.6967852237192271,
+   "master47": 0.6967852237192271,
+   "master44": 0.8107815199045063
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 249035
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 171325,
+   "visiblePixels": 249035
+  }
+ },
+ {
+  "id": "berserker/idle@2x",
+  "rel": "art/characters/rikku-berserker/idle@2x.png",
+  "servedBytes": 1700046,
+  "servedSha256": "f566e49e15bd7a1461b403c0760f54960978679fbeb080ccffe7a6b0a3552fac",
+  "size": [
+   1110,
+   2430
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "9731085070fb2b7dd2c90b5bba7d69eafe293d64dff301520e07e445f8404a66"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "77369eb5e2434c5540c12c0b65d1033c8ec791c116ac845a5587454cc4ce747c"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6376375265542245,
+   "master47": 0.6376375265542245,
+   "master44": 0.7722682263590464
+  },
+  "meanSaturationFull": {
+   "served": 0.6415041873038918,
+   "master47": 0.6415041873038918,
+   "master44": 0.7578731795305333
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 982582
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 680117,
+   "visiblePixels": 982582
+  }
+ },
+ {
+  "id": "black-mage/idle",
+  "rel": "art/characters/rikku-black-mage/idle.png",
+  "servedBytes": 819011,
+  "servedSha256": "a51df3e7cbfd401bc749558c0756229dd26be59f2945bd99b02c34ea8fba48cb",
+  "size": [
+   683,
+   1190
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "919ffba8b49af40d3276c0884f1b2e178eb6f3be9b12dfda26f5a307f7179130"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "fbe93a4f88ecf63585aa6c4a20edb33eb1ba0c8f453a41af720eb240f44072d0"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6155962183966743,
+   "master47": 0.6155962183966743,
+   "master44": 0.6777572946081954
+  },
+  "meanSaturationFull": {
+   "served": 0.6422157972178703,
+   "master47": 0.6422157972178703,
+   "master44": 0.6950728949224595
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 329059
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 177133,
+   "visiblePixels": 329059
+  }
+ },
+ {
+  "id": "black-mage/idle@2x",
+  "rel": "art/characters/rikku-black-mage/idle@2x.png",
+  "servedBytes": 2372190,
+  "servedSha256": "ef466ac248debb214e3a7205dd258b1cd65aa3b693ff4ac48b99a753fc4df0c0",
+  "size": [
+   1366,
+   2380
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "c95483b737bdad45fc5b844e8682145f8ba097a8291bff4738f92e8be916446b"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "f2b2b6548167d21df9be21f20aff1c551182e259b1ef525602b8e92e1211a227"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6126167252143779,
+   "master47": 0.6126167252143779,
+   "master44": 0.6791415549088101
+  },
+  "meanSaturationFull": {
+   "served": 0.6238706080588161,
+   "master47": 0.6238706080588161,
+   "master44": 0.679941825069766
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 1299949
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 701143,
+   "visiblePixels": 1299949
+  }
+ },
+ {
+  "id": "gunner/idle",
+  "rel": "art/characters/rikku-gunner/idle.png",
+  "servedBytes": 441872,
+  "servedSha256": "493b0a1573b4871b717547a4f018c3a0f065a38a17b688feaa476e8946e05c05",
+  "size": [
+   364,
+   1062
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "c6d86ed0cd8037bbd28e0001177eb6ee304d6193c5076d7c98b8ace569cc8ce9"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "cd03d69b5e692f89d8c1c27fa0e1e81438d45ca7a6d5afa084efc6029decd7b5"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.49386949942792424,
+   "master47": 0.49386949942792424,
+   "master44": 0.6812130114492233
+  },
+  "meanSaturationFull": {
+   "served": 0.5338867969466771,
+   "master47": 0.5338867969466771,
+   "master44": 0.7052122816695598
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 167377
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 124512,
+   "visiblePixels": 167377
+  }
+ },
+ {
+  "id": "gunner/idle@2x",
+  "rel": "art/characters/rikku-gunner/idle@2x.png",
+  "servedBytes": 1258223,
+  "servedSha256": "0d0732fa36f6859fa056c010a0a42ecb31a8d47dd728496f0457a1b707a646a3",
+  "size": [
+   728,
+   2124
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "c233c064bcaab60ee7cbb63f25b7839af04149c709455abef1b455da69b4fba9"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "30fa4cf968871dab3396b4b8daeff8d5ea5a52c62224a98c14e82504043054ae"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.49904798821887525,
+   "master47": 0.49904798821887525,
+   "master44": 0.6898578480177475
+  },
+  "meanSaturationFull": {
+   "served": 0.5236414182061624,
+   "master47": 0.5236414182061624,
+   "master44": 0.6971503726920569
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 661288
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 488256,
+   "visiblePixels": 661288
+  }
+ },
+ {
+  "id": "lady-luck/idle",
+  "rel": "art/characters/rikku-lady-luck/idle.png",
+  "servedBytes": 472466,
+  "servedSha256": "28526e350272876d15372f6d31ad38db8f932db8e3c5a4c1a2721ef1230a43b7",
+  "size": [
+   337,
+   1174
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "7346eee6193010874aba02023075c9fa6dc5fca00a5e14315dea8936520d7b62"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "5876011b0357876069718f5227e51264191c7d9e05b44c4fc4b084941edc01ae"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5585531613507356,
+   "master47": 0.5585531613507356,
+   "master44": 0.7080935087916628
+  },
+  "meanSaturationFull": {
+   "served": 0.5883900930515394,
+   "master47": 0.5883900930515394,
+   "master44": 0.721187094156838
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 188310
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 141921,
+   "visiblePixels": 188310
+  }
+ },
+ {
+  "id": "songstress/idle",
+  "rel": "art/characters/rikku-songstress/idle.png",
+  "servedBytes": 607465,
+  "servedSha256": "b95d1e9415907629e522411e96b87b5e3e19bf2400cfbc306a4548ce0101f9f4",
+  "size": [
+   574,
+   1179
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "662dd1c126147380ee46f783804b0bf268f08eb161fc59dd1944f06fd63b6d46"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "f16fb4f4b55c826926819b111741a845602bdb1b70af2de94a6c187c5089b5d4"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.574480535146134,
+   "master47": 0.574480535146134,
+   "master44": 0.7427618119996244
+  },
+  "meanSaturationFull": {
+   "served": 0.5968014102592722,
+   "master47": 0.5968014102592722,
+   "master44": 0.7555458417901768
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 256388
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 210691,
+   "visiblePixels": 256388
+  }
+ },
+ {
+  "id": "songstress/idle@2x",
+  "rel": "art/characters/rikku-songstress/idle@2x.png",
+  "servedBytes": 1761210,
+  "servedSha256": "a46b7a0c0c13005879ecd6103d88dd45d1b60fa80ae1de2de9c8efc8128e05f4",
+  "size": [
+   1148,
+   2358
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "fc226a89b2b034d3bad59b259d3f7aa5b6b724451acea7a0780c8a87e1206164"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "f2f05350251094be90a009e18d74b5bfc15c58cca105e0391f40001774a7b91a"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5763465914350014,
+   "master47": 0.5763465914350014,
+   "master44": 0.7541595169790986
+  },
+  "meanSaturationFull": {
+   "served": 0.5931132529834756,
+   "master47": 0.5931132529834756,
+   "master44": 0.7595711939789594
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 1012422
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 841244,
+   "visiblePixels": 1012422
+  }
+ },
+ {
+  "id": "thief/idle",
+  "rel": "art/characters/rikku-thief/idle.png",
+  "servedBytes": 686135,
+  "servedSha256": "cc786005c55c289748df2b49e231bf2d6dc8e38c81f5ce5ae91ab5445abab808",
+  "size": [
+   558,
+   1212
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "dfc175bed545b3588071a4558fb5540c2dcf117374e6220a25135d385e7e3929"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "861535fc71ce5fe8e8a34599112e34fa88844866b2409b6ba1594148aae7d3ae"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5843795293869966,
+   "master47": 0.5843795293869966,
+   "master44": 0.6567814950842878
+  },
+  "meanSaturationFull": {
+   "served": 0.6001145529809391,
+   "master47": 0.6001145529809391,
+   "master44": 0.6671226322347957
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 295943
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 227885,
+   "visiblePixels": 295943
+  }
+ },
+ {
+  "id": "thief/idle@2x",
+  "rel": "art/characters/rikku-thief/idle@2x.png",
+  "servedBytes": 3656454,
+  "servedSha256": "04bf7fd04bdc0cf1953521c6e0f08d0fcf0806ada00cf96b97defec2a4cb8b84",
+  "size": [
+   1116,
+   2424
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "609ab1dddddf366b199dcf2acd995eb3cadb7a43f3e64564d9456eff6c9c5a2a"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "b3e799f8b9c217f19fb6ff119c11e64a53de8695f68fbc70154e317f87edb2bb"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5894328926878634,
+   "master47": 0.5894328926878634,
+   "master44": 0.6684778480638217
+  },
+  "meanSaturationFull": {
+   "served": 0.6052471690291263,
+   "master47": 0.6052471690291263,
+   "master44": 0.6770242925426384
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 1154839
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 889958,
+   "visiblePixels": 1154839
+  }
+ },
+ {
+  "id": "white-mage/idle",
+  "rel": "art/characters/rikku-white-mage/idle.png",
+  "servedBytes": 767110,
+  "servedSha256": "686a33c0d57a13ec7429ccd3b70b0b11ff1e658fb0c954b5b617e53c3f1860d3",
+  "size": [
+   626,
+   1213
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "052e19ad11061a9c7323bb4436004e23c96a2239bfc1a68bce3ce6a3491bae0c"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "c021d5ef0971d97b0a235bae8c86f02968465ab81f1197d43b4f955b97e7b32f"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.45206326480618253,
+   "master47": 0.45206326480618253,
+   "master44": 0.6143607206021109
+  },
+  "meanSaturationFull": {
+   "served": 0.48519095820558616,
+   "master47": 0.48519095820558616,
+   "master44": 0.6361175090707669
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 342201
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 247854,
+   "visiblePixels": 342201
+  }
+ },
+ {
+  "id": "white-mage/idle@2x",
+  "rel": "art/characters/rikku-white-mage/idle@2x.png",
+  "servedBytes": 2238861,
+  "servedSha256": "fd39e717414098cca47c6f848b44e806d52e6b23b8a553c878daf55af294ba9d",
+  "size": [
+   1252,
+   2426
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "2c2a68c3c5a2fee2ec69d465eee339789e91246dd05851bc04e7415d15445959"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "aa25988a02ff5dee24ebb4004ee4016a8bba853ecdecfe6cbc43690e95187d60"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.4504943754285717,
+   "master47": 0.4504943754285717,
+   "master44": 0.6185715745102947
+  },
+  "meanSaturationFull": {
+   "served": 0.4787164208477277,
+   "master47": 0.4787164208477277,
+   "master44": 0.6333610723057633
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 1354752
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": false,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 994145,
+   "visiblePixels": 1354752
+  }
+ },
+ {
+  "id": "dark-knight/idle (unchanged control)",
+  "rel": "art/characters/rikku-dark-knight/idle.png",
+  "servedBytes": 1081427,
+  "servedSha256": "8b3176e24d54e24a563f35129f1afb6acf08f3aa1feb70cbf4f08746c83bfb51",
+  "size": [
+   787,
+   1205
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "3c40c2d7cb45f8409b1f3dd883eb49deff5c1df11e6c9890b7dc8279ef3ccf59"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5497464850861571,
+   "master47": 0.5497464850861571,
+   "master44": 0.5497464850861571
+  },
+  "meanSaturationFull": {
+   "served": 0.5904707466497261,
+   "master47": 0.5904707466497261,
+   "master44": 0.5904707466497261
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 443536
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 443536
+  }
+ },
+ {
+  "id": "warrior/idle (unchanged control)",
+  "rel": "art/characters/rikku-warrior/idle.png",
+  "servedBytes": 589831,
+  "servedSha256": "bc6eb104c41218649ef4d1b754f11194ef36c70d29dd7d0001e40b988cd26b25",
+  "size": [
+   648,
+   1214
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "25f02e43a4212763fc4c9e1c5e641d90975cf1cfe20580bd4ddb921c6eff45d9"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "25f02e43a4212763fc4c9e1c5e641d90975cf1cfe20580bd4ddb921c6eff45d9"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.5572638699142451,
+   "master47": 0.5572638699142451,
+   "master44": 0.5572638699142451
+  },
+  "meanSaturationFull": {
+   "served": 0.5937624904741221,
+   "master47": 0.5937624904741221,
+   "master44": 0.5937624904741221
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 261390
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 261390
+  }
+ },
+ {
+  "id": "rikku (FFX painting, unchanged control)",
+  "rel": "art/characters/rikku/idle.png",
+  "servedBytes": 635401,
+  "servedSha256": "ae6c2f789cc8e26fa938e33bba4770a4a8b0308ce384f16a5b50d61ff3739629",
+  "size": [
+   648,
+   1120
+  ],
+  "master47": {
+   "exists": true,
+   "sha256": "05160289d4124f02ee7a58fd3b796a499797fa7bb90a16bd636bf8de8043fc43"
+  },
+  "master44": {
+   "exists": true,
+   "sha256": "05160289d4124f02ee7a58fd3b796a499797fa7bb90a16bd636bf8de8043fc43"
+  },
+  "meanSaturationThumb256": {
+   "served": 0.6427727526113723,
+   "master47": 0.6427727526113723,
+   "master44": 0.6427727526113723
+  },
+  "meanSaturationFull": {
+   "served": 0.6483523581708519,
+   "master47": 0.6483523581708519,
+   "master44": 0.6483523581708519
+  },
+  "vsMaster47": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 231414
+  },
+  "vsMaster44": {
+   "sameShape": true,
+   "identicalRGBA": true,
+   "identicalAlpha": true,
+   "rgbPixelsDifferingWhereVisible": 0,
+   "visiblePixels": 231414
+  }
+ }
+]
