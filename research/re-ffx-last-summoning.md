@@ -18,7 +18,7 @@ No script text, decompiled code or game dialogue is reproduced. Scripted lines a
 3. **The two battles** (sections 1.3, 1.4, 6): Yojimbo's `sins07_06` (battle 0x024B0006) holds the possessed Yojimbo, both Yu Pagodas, a Sinscale model that stands in for Daigoro (hidden after his first turn, its branch unreachable) and a dummy helper; he opens with a no-damage staging turn, then every turn Kozuka or Wakizashi 50/50 on a random living front-line actor (power 14 each) and Zanmato (fixed 9,999 on the whole front line, not a kill) at a full gauge. The Sisters' `sins07_07` (0x024B0007) holds all three possessed Sisters, both Pagodas and the helper in one battle: Delta Attack when all three gauges are full, otherwise Cindy heals or drains, Sandy buffs, Mindy casts or flurries; the Pagodas' Power Wave feeds the Sister with the lowest gauge.
 4. **Stat copy**: at battle start each possessed copy takes STR, DEF, MAG, MDF, AGI, EVA, ACC and maximum HP from the player's own aeon in that battle (actor 8 to 14; the Sisters from 15, 16, 17) and starts at full HP. Luck stays 0 and MP stays 1. There is no scaling and no carry-over of the player aeon's current HP or gauge; the copy's Overdrive gauge starts at 0 on a 100-point scale of its own. (section 7)
 5. **Ids**: Valefor 8, Ifrit 9, Ixion 10, Shiva 11, Bahamut 12, **Anima 13**, Yojimbo 14, Sisters 15 (with 16 and 17); battles 0x024B0000 to 0x024B0007 in that order; Yu Yevon 0x024B000A. Anima has no fixed place: it sits between Bahamut and Yojimbo in the list and the player picks when. (section 3)
-6. **Zanmato**: the second pass can never produce a Zanmato (a Zanmato on the second roll becomes Wakizashi on all), so the chance is the first pass only, with the motivation divided by (byte + 1) for hire answers 0 and 1. Bytes: possessed Valefor to Yojimbo 2, possessed Sisters 3, **Yu Pagodas 4**, Yu Yevon 4, Braska's Final Aeon 5, Dark Aeons 4, Penance 5. Because the penalty uses the highest byte of **all** monsters on the field and both Pagodas are on the field in every link, the chain's effective byte is 4 in every possession link and 5 in the Braska fight. Exact tables in section 8.
+6. **Zanmato**: the second pass can never produce a Zanmato (a Zanmato on the second roll becomes Wakizashi on all), so the chance is the first pass only, with the motivation divided by (byte + 1) for hire answers 0 and 1. Bytes: possessed Valefor to Yojimbo 2, possessed Sisters 3, **Yu Pagodas 4**, Yu Yevon 4, Braska's Final Aeon 5, Dark Aeons 4, Penance 5. Because the penalty uses the highest byte of **all** monsters on the field and both Pagodas are on the field in every link, the chain's effective byte is 4 in every possession link and 5 in the Braska fight (read from the selector's code, not run). Exact tables in section 8.
 7. **Repo mismatch**: confirmed and wider than the brief. The game's possessed Yojimbo never uses Daigoro; his two moves are Kozuka and Wakizashi, both power 14. Chapter III's shipped line cannot reach the possessed Yojimbo or Sisters records (section 4 has the grep and the 12-seed check).
 
 ## 1. Rows
@@ -77,7 +77,7 @@ Stage (battlefield) id from the area table: `sins06` stage 586, `sins07` stage *
 | `sins07_00` to `_05` | 20, 21, 22, 23 | possessed aeon, Pagoda m174, Pagoda m173, helper m274 | (0, -10.1, 0), the Pagodas as above, (0, -10.1, 0) |
 | `sins07_10` (Yu Yevon) | 20, 21, 22 | m176, Pagodas | (0, 0, 0), the Pagodas as above; aeon positions (50, 0, 0) |
 
-Aeon start positions in the `sins07` battles (index = aeon id minus 8): Valefor, Ifrit, Ixion, Shiva, Bahamut, Yojimbo and Sandy (70, -10.1, 0); Anima (80, -10.1, 0); Cindy (75, -10.1, 20); Mindy (75, -10.1, -21). In `sins06_00` all aeons are at (0, 0, -86) except Cindy (20, 0, -94.8) and Mindy (-21, 0, -90). The Pagodas' CTB is 24 at the start of every link; the possessed actor has First Strike and CTB 0 (in the Sisters' battle only Cindy); party and reserves get CTB + 1 [note: re-ffx-ai-yunalesca-bfa.md 5.3]. Escape and Flee are disabled for everyone in every battle of the chain; every party member without an aeon slot gets permanent Auto-Life at the start of each link [note: 5.2].
+Aeon start positions in the `sins07` battles (index = aeon id minus 8): Valefor, Ifrit, Ixion, Shiva, Bahamut, Yojimbo and Sandy (70, -10.1, 0); Anima (80, -10.1, 0); Cindy (75, -10.1, 20); Mindy (75, -10.1, -21). In `sins06_00` all aeons are at (0, 0, -86) except Cindy (20, 0, -94.8) and Mindy (-21, 0, -90). The Pagodas' CTB is 24 at the start of every link; the possessed actor has First Strike and CTB 0 (in the Sisters' battle only Cindy); party and reserves get CTB + 1 [note: re-ffx-ai-yunalesca-bfa.md 5.3]. Escape and Flee are disabled for everyone in every battle of the chain; every non-aeon party member gets permanent Auto-Life at the start of each link [note: 5.2].
 
 ### 1.4 The move rows of the two possession battles [bytes]
 
@@ -176,7 +176,9 @@ So the repo's number is **10 where the files say 14**, the name and the id are w
 | Sandy's list | Razzia, Haste, Reflect | matches |
 | `command-records/enemies.ts` ids | Camisade 0x60E3, Razzia 0x60E4 | the scripts call 0x30E5 and 0x30E7 (the 0x60E3 and 0x60E4 rows have the same power but rank 3 and no shatter) |
 
-**Does Chapter III's shipped line ever reach these records?** The data layer builds the possessed chain from the player's owned aeons (`buildPossessedAeonChain`); the shipped chain `possessedAeonGroups` is built once from the five mandatory aeons, and `dreams-end.ts` lists only those five (Anima, Yojimbo and the Magus Sisters are left out on purpose). Grep on `origin/r49-rc`: outside the data file and tests, nothing calls `buildPossessedAeonChain`; `src/data/ffx/index.ts` registers the prebuilt `possessedAeonGroups` only. The tests that build the full chain (`audio-chain-entrance-owner`, `possessed-aeons`, `data-ffx-enemies`) pass the full list by hand. So the possessed Yojimbo and Sisters records are unreachable from Chapter III as shipped. A run of 12 seeds of the shipped chain confirming that no such ability fires follows in section 9.
+**Does Chapter III's shipped line ever reach these records?** The data layer builds the possessed chain from the player's owned aeons (`buildPossessedAeonChain`); the shipped chain `possessedAeonGroups` is built once from the five mandatory aeons, and `dreams-end.ts` lists only those five (Anima, Yojimbo and the Magus Sisters are left out on purpose). Grep on `origin/r49-rc`: outside the data file and tests, nothing calls `buildPossessedAeonChain`; `src/data/ffx/index.ts` registers the prebuilt `possessedAeonGroups` only. The tests that build the full chain (`audio-chain-entrance-owner`, `possessed-aeons`, `data-ffx-enemies`) pass the full list by hand. So the possessed Yojimbo and Sisters records are unreachable from Chapter III as shipped.
+
+**The 12-seed check** (a throw-away test, deleted after the run, on the exact source of `origin/r49-rc` extracted into a scratch folder, so not on the other lane's worktree, which sits on a different branch): for seeds 1 to 12 it played every link of the shipped chain (`possessed-valefor`, `-ifrit`, `-ixion`, `-shiva`, `-bahamut`, then `yu-yevon`, followed through `nextGroupId`) on the real engine with the Dream's End party and a naive line (the first Attack on the first target, else Defend), and logged every enemy action. Result: the chain holds **six formations and no Anima, Yojimbo or Sister**; 72 battles, all victories; the possessed aeons used only Sonic Wings and Energy Ray (Valefor), Meteor Strike and Hellfire (Ifrit), Aerospark and Thor's Hammer (Ixion), Heavenly Strike and Diamond Dust (Shiva), Impulse and Mega Flare (Bahamut); **0 possessed-Yojimbo or possessed-Sisters actions**. The line is not a balance measurement, only a reachability check.
 
 ## 5. Answer 2: can Yuna summon an aeon that is not yet possessed while the chain runs?
 
@@ -252,6 +254,76 @@ All eight lines below are in the setup of each possessed monster script, run at 
 - **HP carry-over**: none in either direction. The copy ignores the player aeon's current HP and the fight does not touch the player aeon. What does carry across links is the **party's** HP, MP and statuses, and the recovery counters of aeons that were wiped (section 2).
 - **Raw property writes with no mapped meaning**: property 296 is set at the start to 6000 (Valefor), 3000 (Ifrit), 4000 (Ixion), 3500 (Shiva), 1500 (Bahamut), 5000 (Anima), 3500 (Yojimbo), 5000 (Cindy), 3000 (Sandy), 4000 (Mindy); property 295 is set to 1 for the Sisters; properties 217 and 238 are set to 1 and 0 for all. They are listed raw and not interpreted.
 
-## 8 and 9. To follow
+## 8. Answer 6: the player's Yojimbo's Zanmato against a target's Zanmato byte
 
-Answer 6 (the Zanmato tables), the 12-seed check of Chapter III and the list of what is not proved follow in the next commit of this branch.
+Everything in 8.1 and 8.2 is the "Pay" path of the player's Yojimbo, as read and run by the aeon-side lane (FFX-G08 3.2 and 4.4: the script on the game's own script machine, 0 mismatches against an independent model) [note: FFX-G08]. The probabilities below are this lane's exact arithmetic on those rules (every count is out of the 64 equally likely values of the draw's low six bits).
+
+### 8.1 The rule
+
+1. **Motivation `V0`** (a number, before any monster penalty): `V0 = 4 x n + (compatibility div 10)`, where `n = floor(log2 of the gil paid) - 2` for a payment of 8 gil or more and 0 below. Compatibility runs 0 to 255 and the payment up to 99,999,999, so `V0` runs from 0 to **121**. (Examples: compatibility 128 and 100,000 gil give 68; compatibility 128 and 1,000,000 gil give 80; compatibility 255 and 1,000,000 gil give 93.)
+2. **The monster penalty** uses `L`, the **highest Zanmato byte over every monster on the field** (the game's property getter takes the maximum over the group "all monsters"). Hire answer 0: `V = V0 x (75 + 50 x paid / total gil) / 100`, then `V / (L + 1)`. Hire answer 1: `V = V0 / (L + 1)`. Hire answer 2: `V = V0 x 0.8 / ((L + 3) div 3)`, which is a divisor of 1 for `L` 0 to 2, 2 for 3 to 5 and 3 for 6 and 7. A full Overdrive gauge (and no Curse) then adds **20** to `V`.
+3. **The first roll** is `trunc(V) + b` with `b` the low six bits of one draw: below 32 Daigoro, 32 to 47 Kozuka, 48 to 62 Wakizashi on one, 63 to 79 Wakizashi on all, **80 and over Zanmato**. So the number of Zanmato draws out of 64 is `clamp(trunc(V) - 16, 0, 64)`.
+4. **The second pass.** If `L` is above 0 and the first roll is **not** Zanmato, the script rolls **again with `L` taken as 0** (`V` recomputed from the same payment, the same full-gauge bonus), with a fresh draw. That second roll is final, and **a Zanmato on it becomes Wakizashi on all**. So the second pass can **never** produce a Zanmato: the whole chance of Zanmato is the first roll's, and the monster penalty only gates Zanmato. A failed first roll does not drag the result down to Kozuka or Daigoro: once `V0` is 63 or more (and 43 or more with a full gauge) the second roll is Wakizashi on all with certainty (hire answer 1; the other answers scale `V0` first). (Compatibility change follows the final command: Wakizashi on all +3, Zanmato +4.)
+5. **A free attack** (the turn-start roll, no payment, no hire answer, no gauge bonus) is a separate path: its Zanmato result is replaced by Wakizashi on all when the pick finds no target **or the highest Zanmato byte of the "matching group" is above 0** (what that group resolves to for the check is an open question in the aeon-side note), so against any monster with a byte above 0 a free attack is never Zanmato [note: FFX-G08 3.3, 11.2; inferred for the group].
+
+### 8.2 The exact chances
+
+Zanmato draws out of 64, first roll = the whole chance, hire answer 1 (the divisor is `L + 1`); each cell is "no bonus | full gauge" (`+20`). `L` 0 is the reference for an ordinary monster.
+
+| `L` (byte) | `V0` 40 | 60 | 68 | 80 | 93 | 100 | 121 | Zanmato possible without the bonus from `V0` |
+|---:|---|---|---|---|---|---|---|---:|
+| 0 | 24 \| 44 | 44 \| 64 | 52 \| 64 | 64 \| 64 | 64 \| 64 | 64 \| 64 | 64 \| 64 |17 |
+| **2** | 0 \| 17 | 4 \| 24 | 6 \| 26 | 10 \| 30 | 15 \| 35 | 17 \| 37 | 24 \| 44 | 51 |
+| **3** | 0 \| 14 | 0 \| 19 | 1 \| 21 | 4 \| 24 | 7 \| 27 | 9 \| 29 | 14 \| 34 | 68 |
+| **4** | 0 \| 12 | 0 \| 16 | 0 \| 17 | 0 \| 20 | 2 \| 22 | 4 \| 24 | 8 \| 28 | 85 |
+| **5** | 0 \| 10 | 0 \| 14 | 0 \| 15 | 0 \| 17 | 0 \| 19 | 0 \| 20 | 4 \| 24 | 102 |
+
+As percentages: 1 of 64 is 1.56, 2 is 3.13, 4 is 6.25, 8 is 12.5, 14 is 21.9, 20 is 31.3, 24 is 37.5, 28 is 43.75, 34 is 53.1, 44 is 68.75. With a full gauge a Zanmato is possible at any `V0` (at `V0` 0 and `L` 4 it is 4 of 64); without it, only from `V0 = 17 x (L + 1)`, and a Zanmato can never be certain for `L` above 0 (it would need `V0` of 80 x (L + 1), far above 121).
+
+**The best case a player can reach** (`V0` = 121: the whole 99,999,999 gil at compatibility 255; for answer 0 the whole gil paid, factor 1.25), Zanmato chance in percent, no bonus | full gauge:
+
+| `L` | hire answer 0 | hire answer 1 | hire answer 2 |
+|---:|---|---|---|
+| 2 | 53.1 \| 84.4 | 37.5 \| 68.8 | 100 \| 100 |
+| 3 | 32.8 \| 64.1 | 21.9 \| 53.1 | 50.0 \| 81.3 |
+| 4 | 21.9 \| 53.1 | 12.5 \| 43.8 | 50.0 \| 81.3 |
+| 5 | 14.1 \| 45.3 | 6.25 \| 37.5 | 50.0 \| 81.3 |
+
+**Final result, not only the Zanmato chance** (answer 1, `L` 4): at `V0` 80 the command is Wakizashi on all 100 percent of the time without the bonus, and Zanmato 31.25 percent / Wakizashi on all 68.75 percent with a full gauge; at `V0` 93, 3.13 / 96.88 percent without and 34.4 / 65.6 with; at `V0` 121, 12.5 / 87.5 without and 43.75 / 56.25 with. No Daigoro and no Kozuka appears in any of these, because the second roll has the full `V0`.
+
+### 8.3 The Zanmato byte of every relevant target (section 1.5 has the full list)
+
+| Target | Byte | Notes |
+|---|---:|---|
+| possessed Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima, Yojimbo | 2 | on its own they would give a divisor of 3 (or 1 for answer 2) |
+| possessed Cindy, Sandy, Mindy | 3 | divisor 4 (2 for answer 2) |
+| **Yu Pagodas (present in every link and in the Yu Yevon fight)** | **4** | decides `L` in every link |
+| Yu Yevon | 4 | |
+| **Braska's Final Aeon** | **5** | the file holds 5, not the wiki's 6; both forms are one record |
+| Dark Aeons (all of them, Dark Yojimbo and the Dark Sisters included) | 4 | `research/re-ffx-dark-aeons.md` |
+| helper actor, Sinscale stand-in (the dog) | 0 | never lower `L` |
+
+`L` is a maximum over everything on the field, so a stand-in or helper of byte 0 changes nothing and **a battle's `L` is its highest actor**: Braska's Final Aeon fight 5 (the boss) with the Pagodas at 4 behind it; **every possession link 4, because the two Pagodas (4) stand in the battle beside a possessed aeon of 2 or 3**; Yu Yevon 4. The selector's code counts every monster slot that is in the battle and has not left it [static]; the Pagodas are hidden or "destroyed" but never leave (their scripts keep taking turns), so I read them as counted [inferred: the spawn code that sets the in-battle byte of a hidden monster was not traced]. If they were not counted, the links would read 2 (Valefor to Yojimbo) and 3 (the Sisters), which is the first row and the second row of the table.
+
+**The Braska "current form only" quirk** (the wiki's words): in the file it follows from the script, not from the byte: when his first form's HP reaches 0 the script resets him to the second form's pool (120,000 HP, Strength + 5), so whatever kills the first form, a landed Zanmato included, leaves the second form to fight [bytes, note: re-ffx-ai-yunalesca-bfa.md 3.7]. Whether a Zanmato can land on him at all is not shown here (section 9).
+
+### 8.4 What this means for the two chapters, in words
+
+- **Chapter 27, Dark Mirror** (the player's aeon against its Dark twin): every Dark Aeon has byte 4, and the Dark Yojimbo's dog, the only other thing on the field, has 0, so `L` is 4 throughout. The player's Yojimbo cannot make a Zanmato below `V0` = 85 without a full gauge; at the extreme (the whole gil, compatibility 255) it is 12.5 percent for answer 1, 21.9 for answer 0 and 50 for answer 2; typical payments give Wakizashi on all, and a full gauge lifts Zanmato to roughly 31 to 44 percent at the higher payments (`V0` 80 to 121). A free attack is never Zanmato there.
+- **Chapter 28, The Last Summoning**: against Braska's Final Aeon (`L` 5) the best case is 6.25 percent (answer 1) with no bonus and 37.5 with a full gauge; in every possession link `L` is 4, so the same figures as Chapter 27 apply whichever aeon is possessed, **the possessed aeon's own byte of 2 or 3 never lowers the penalty**; against Yu Yevon also 4. The Sisters' battle is no different: the Pagodas still stand in it.
+- **What a landed Zanmato does to these targets is not shown by this lane.** Every target above has Death resistance 255 and the Slice flag, yet the player's Zanmato inflicts Death at chance 255, which the status code lands whatever the resistance byte [note: re-ffx-ctb-status.md], and the Pagoda scripts expect a Zanmato to reach them. What the Slice flag (record flag byte +0x29, bit 1) does to a landed Zanmato was not traced: the engine reads it through a getter table, and Yunalesca, Evrae and Omega Weapon carry it as well. So the numbers above are the chance that Yojimbo **chooses** Zanmato; whether it then kills a possessed aeon, a Dark Aeon or a Pagoda needs its own trace before a chapter relies on it.
+- **The possessed Yojimbo's own Zanmato is not that move**: it is a fixed 9,999 on every front-line actor (section 1.4), not a death.
+
+## 9. What is not proved
+
+1. **No game code and no script was run in this lane.** The chain's AI is the earlier lane's interpreter run [note: re-ffx-ai-yunalesca-bfa.md]; the menu, the summon list, the lock and the selector were read from the executable's disassembly. The Zanmato arithmetic is exact on the aeon-side lane's proven rules.
+2. **The menu's look and cursor.** That the list shows already-possessed aeons in a second style, and where the cursor starts, are read from the list builder's two states and not run; the dialogue code was not read.
+3. **Where the copy's numbers come from.** The scripts read the player's aeon's battle record by actor number after the aeon was removed from the party. That the record then holds the aeon's stats was not traced (the game does it; how its battle setup fills a removed aeon's record is not shown).
+4. **Whether the Pagodas count for the Zanmato penalty** (8.3): read from the selector, not run.
+5. **What a landed Zanmato does** to each target; **the matching-group selector** of the free attack.
+6. **How the second and third Sister enter play** in the Sisters' battle (what un-hides Sandy and Mindy).
+7. **The single aeons' gauge maximum.** Only the Sisters write it (100); the other seven rely on the monster default of 100 (the mode byte and the maximum byte are separate fields of the character record [note: re-ffx-overdrive-steal-aeons.md 1.1]).
+8. **Unmapped values**, kept raw: properties 295, 296, 217 and 238; the row flag bit 0x40000000 on Zanmato and Delta Attack; the two natives that wrap each launch in the event (one sets a worker flag, one a global byte).
+9. **The starting compatibility and the hire answer** of a given save (aeon-side note, open question 1); every table above takes them as inputs.
+10. **The 12-seed check is a reachability check**, with a naive line and the shipped five-aeon chain. It does not measure balance, and it did not play any chain that holds Anima, Yojimbo or the Sisters (none is built in the shipped game).
+11. **The wiki's "level 6" for Braska's Final Aeon** against the file's 5 is a source conflict; the file wins by the house rule (hard rule 6 and the decompile-over-wiki rule of the earlier notes).
