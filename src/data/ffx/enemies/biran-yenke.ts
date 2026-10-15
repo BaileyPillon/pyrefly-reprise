@@ -19,9 +19,10 @@
  * ## Rewards (RE section 2, `[bytes]`, each brother on his own death)
  *
  * **1,500 gil, 4,500 AP (6,750 on an Overkill, threshold 2,500)**; slot 1 drops a **Return Sphere x1 (a Friend Sphere x1 one time in eight; x2 of either on an Overkill, which the engine's rule doubles)**; steal: **Lv. 3
- * Key Sphere x1 (rare x2)**, Bribe blocked (the record's Bribe item is a Potion). **The engine's drop model rolls each listed drop on its own chance** (`battle/ffx/results.ts`, "not the game's"), so "a Friend Sphere
- * instead of the Return Sphere" is two independent chances here (87.5 and 12.5 percent: both, or neither, can come up; the game's single slot cannot). **Not modelled:** the gear drop (chance byte 255, a weapon
- * or armour piece; the results screen has no row for equipment), the Pilfer / Nab Gil factor, the Monster Arena price.
+ * Key Sphere x1 (rare x2)**, Bribe blocked (the record's Bribe item is a Potion). **One slot pays one item** (`ItemDrop.rare`, `battle/ffx/results.ts#collectRewards`): the slot always drops (no chance is listed) and the
+ * engine draws one more byte of its own side stream to choose between the two, so a Friend Sphere comes in the Return Sphere's place one time in eight and the Return Sphere otherwise (87.5 and 12.5 percent), never both
+ * and never neither, as the game's single slot does; an Overkill doubles whichever was given. **Not modelled:** the gear drop (chance byte 255, a weapon or armour piece; the results screen has no row for equipment),
+ * the Pilfer / Nab Gil factor, the Monster Arena price.
  */
 
 import type { EnemyDef, EnemyGroupDef, StatBlock, StatusId, StatusImmunities } from '../../../battle/common/types.ts';
