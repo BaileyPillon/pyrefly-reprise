@@ -178,6 +178,80 @@ So the repo's number is **10 where the files say 14**, the name and the id are w
 
 **Does Chapter III's shipped line ever reach these records?** The data layer builds the possessed chain from the player's owned aeons (`buildPossessedAeonChain`); the shipped chain `possessedAeonGroups` is built once from the five mandatory aeons, and `dreams-end.ts` lists only those five (Anima, Yojimbo and the Magus Sisters are left out on purpose). Grep on `origin/r49-rc`: outside the data file and tests, nothing calls `buildPossessedAeonChain`; `src/data/ffx/index.ts` registers the prebuilt `possessedAeonGroups` only. The tests that build the full chain (`audio-chain-entrance-owner`, `possessed-aeons`, `data-ffx-enemies`) pass the full list by hand. So the possessed Yojimbo and Sisters records are unreachable from Chapter III as shipped. A run of 12 seeds of the shipped chain confirming that no such ability fires follows in section 9.
 
-## 5 to 9. To follow
+## 5. Answer 2: can Yuna summon an aeon that is not yet possessed while the chain runs?
 
-Answers 2, 3, 4 and 6 in full (the summon gate during the chain, the two possession battles, the stat copy, the Zanmato tables), the 12-seed check of Chapter III and the list of what is not proved follow in the next commits of this branch.
+**Yes, in both forms of Braska's Final Aeon and in every possession link.** The pieces:
+
+1. **Nothing disables the Summon command.** The formation scripts of `sins06_00` and of every `sins07_*` battle write the command-disable call only for Escape and Flee (everyone) and, in the Braska fight, for Talk. Summon (0x3117), Grand Summon (0x3118) and the Sisters' own command (0x30FF) are left alone. [bytes]
+2. **The summon list.** The battle menu builds the Summon list from the battle's character records for ids 0 to 17: an aeon is listed when its record exists in this battle and it is an aeon; the three Sisters are folded into one entry (the 0x30FF command). A record exists in a battle when the aeon's party flag is on at the start (or it already existed) [static]. Because the event switched the party flag off with the party-removal native **before** launching a link (section 2), an aeon that was chosen earlier or is being possessed now has no record in that battle and is not in the list; every other held aeon (Anima, Yojimbo and the Sisters included) is. [static]
+3. **The usability gate** for a listed aeon (the menu-side gate and the disabled test, FFX-G07 3.6) refuses it only when its HP is not above 0, its availability flag is clear, it was removed for good, or its recovery counter is set. The availability flag is set to 1 for every character record at battle start [static: the battle-start routine writes 1 for all 31 records], so the only thing that clears it during the chain is the lock call below. A listed Sisters entry is also refused when any one of the three Sisters is unavailable. [static, note: FFX-G07 3.6]
+
+**The lock (script call 0x703B, "set command disabled", handler 0x7A6EF0) and the chain.** Its handler takes (owner, id, value). For an id below 0x1000 (an aeon) it writes the value into that aeon's availability byte (the owner is ignored); for a command id of 0x3000 or more it sets or clears a bit in the owner's disabled-command mask (value 1 disables; Escape and Flee in the chain are of this second kind). [static] A value of 0 on an aeon id is therefore the game's real "no such aeon" lock; the harness run of `research/re-ffx-dark-aeons.md` section 9 showed that a locked aeon is refused at the usability gate with the disabled code. The earlier scan (16 sites in 14 formations) covered **formation scripts only**. This lane also swept the **monster scripts** (all 361 files) and found the lock used with an aeon id in exactly **ten** of them, which are the chain's:
+
+| Monster script | Locks | Value |
+|---|---|---:|
+| m163 possessed Valefor | aeon 8 | 0 |
+| m164 possessed Ifrit | aeon 9 | 0 |
+| m165 possessed Ixion | aeon 10 | 0 |
+| m166 possessed Shiva | aeon 11 | 0 |
+| m167 possessed Bahamut | aeon 12 | 0 |
+| m168 possessed Anima | aeon 13 | 0 |
+| m169 possessed Yojimbo | aeon 14 | 0 |
+| m178 possessed Cindy | aeon 15 | 0 |
+| m179 possessed Sandy | aeon 16 | 0 |
+| m180 possessed Mindy | aeon 17 | 0 |
+
+Each runs once, in the monster's own setup at battle start, and locks **only its own aeon**. Answer to "does any chain formation use that lock, and on which aeons": **no formation script of the chain does** (`sins06_00`, `sins07_00` to `sins07_07`, `sins07_10` call only Escape, Flee and Talk); **the monster scripts of the possessed aeons do**, one aeon each. In the normal flow the lock is redundant with the party removal (the aeon is already out of the list); it is the second layer. In the Sisters' battle the three locks together also refuse the Sisters' entry. Other monster scripts that call the same native use command ids, not aeon ids. [bytes, static]
+
+**Which aeons the gate offers, link by link** (A = the aeons Yuna holds, as entries; the Sisters are one entry):
+
+| Point | Offered by the summon gate |
+|---|---|
+| Braska's Final Aeon, form I and form II (one battle, one party) | every entry of A that is not knocked out or on a recovery counter; nothing is removed or locked |
+| Link 1 (the aeon the player chose first, call it X1) | A without X1 (X1 is out of the party and locked) |
+| Link k (the k-th chosen, Xk) | A without X1 to Xk |
+| Yu Yevon | none: every entry has been removed |
+
+So the player's summon pool **shrinks by one entry per link**, and the aeon fought in a link is never the aeon the player can bring in. In the Sisters' link all three are removed together. [bytes, static]
+
+**What a summon does in a link** [note: FFX-G08 5; re-ffx-ai-evrae-yojimbo-isaaru-sin.md 1.2]: the whole party is parked, frozen exactly as it is (HP, MP, statuses, counters); the aeon arrives with its own 20-point gauge. The monsters' "front line" is then the summoned aeon alone (the group is every non-monster actor in the battle), so the possessed aeon's single-target moves, its group moves and the Overdrive all land on it; the Pagodas' Power Wave still goes only to the possessed actor (or, in the Sisters' battle, to the Sister with the lowest gauge). When every aeon-side member is down the battle does not end: the aeon is dismissed without revive, the party returns, the aeon takes a recovery counter (Valefor 9, Ifrit 13, Ixion 21, Shiva 21, Bahamut 25, Anima 25, Yojimbo 25 and each Sister 31 are the counters after a wipe; one is dropped per finished battle) [note: re-ffx-overdrive-steal-aeons.md 4.8], and at most nine battles follow Braska's Final Aeon (eight links and Yu Yevon), so an aeon wiped in a link, or in the Braska fight, is not available again before the chain ends [inferred arithmetic]. A wipe is not a Game Over. The party's permanent Auto-Life does not cover an aeon. [note]
+
+## 6. Answer 3: the two possession battles
+
+Rows, slots, stage and positions are in sections 1.1 to 1.4; this section is the behaviour. All of it is the compiled AI of the monster files m169 and m178 to m180 and of the two Pagodas, read from the disassembly and run by the earlier lane's interpreter against the real rows; only the sentences marked otherwise are new.
+
+### 6.1 Yojimbo's battle (`sins07_06`, battle 0x024B0006)
+
+- **Cast on the field**: slot 20 the possessed Yojimbo; slots 21 and 22 the two Yu Pagodas (hidden at the start, shown by his first turn); slot 23 a **Sinscale model standing in for Daigoro** (the third branch of his AI aims the Daigoro staging row at it; the branch is unreachable, and the script hides the stand-in after his first turn); slot 24 the helper actor (the "summoner" of the staging turn; never acts, not targetable, not needed for the battle end). Stage 587; positions in 1.3. [bytes]
+- **Opening** (his first turn, which comes first: First Strike and CTB 0, both Pagodas at CTB 24, the party and reserves at CTB + 1 and one more from the aeon's own setup): **no attack**. The helper performs a no-damage staging action in the manner of a summon, then he performs the no-damage possession caption action, and both Pagodas are shown. [bytes, note: 5.3, 5.5]
+- **Every later turn**, in this order: (1) if his Overdrive gauge is 100 or more, **Zanmato** on the whole front line, gauge back to 0; (2) otherwise pick a random living front-line actor (a stream-4 draw only when two or more can be chosen) and flip a coin (stream 2, modulo 2): **Kozuka** or **Wakizashi** on that actor, power 14 either way; there is no Attack and no reachable Daigoro. The gauge then rises by 0 to 9 on a turn that was not the Overdrive and clamps at 100. [bytes]
+- **When he is hit**: ignored when his HP is 0, his gauge is full or the move does not touch HP; otherwise the gauge rises by 0 to 9 per action (a miss counts, a heal does not); a Pagoda's Power Wave on him adds 5 more (5 to 14 in all, where the other six aeons get 15 to 33). [bytes, note: 5.5]
+- **The Pagodas** here: Power Wave 0x60D2 (a fixed 1,500 heal that removes Zombie, Poison and Reflect) on the possessed Yojimbo **only while his gauge is below 100**; otherwise they repeat their last command. When one is "destroyed" it is made invisible and untargetable for 1 (Slowed), 2 or 3 of its own turns and returns with all the damage it absorbed; the Pagoda scripts treat the player's Zanmato (0x30E2) as hitting for its whole current pool. [bytes, note: 4]
+- **Death**: the body stays (boss death), the battle ends when the possessed actor is dead and the Pagodas, which never count, are ignored. The battle's AI never ends it early. [bytes]
+- **Damage he does** (before Shell/Protect/Defend, variance and criticals): Kozuka and Wakizashi are Strength-against-DEF rows of power 14, capped at 9,999; Zanmato is a flat 9,999 on each front-line actor. His Strength is the player's Yojimbo's Strength (section 7), so how hard he hits is what the player built. [bytes, inferred for the sentence on strength]
+
+### 6.2 The Magus Sisters' battle (`sins07_07`, battle 0x024B0007)
+
+- **Cast on the field**: slot 20 Mindy, slot 21 Sandy, slot 22 Cindy (note the order: Mindy is the first slot), slots 23 and 24 the Yu Pagodas, slot 25 the helper actor. Stage 587; positions in 1.3. Sandy and Mindy start hidden (their AI skips a turn while hidden); what un-hides them is a battle scene that no AI function queues, so how the second and third Sister enter play was not traced. [bytes, note: 5.6]
+- **Opening**: only Cindy has First Strike and CTB 0; the other two Sisters and both Pagodas start at CTB 24. Cindy's first turn is the staging turn (a no-damage summon-style action by the helper and the possession caption), and shows the Pagodas. [bytes]
+- **Cindy's turn**, in order: (1) if **all three Sisters are alive and each has a gauge of 100 or more**: **Delta Attack** on the whole front line (her post-turn step then zeroes all three gauges); (2) else if her HP is under two thirds of her maximum (`(max / 3) x 2`, integer): **Drain** on the front-line actor with the highest HP; (3) else, with Sandy's and Mindy's HP percent (255 for a dead one): if either is at 50 or less, **Curaga** on the one with the lower percent (a tie goes to Mindy); (4) else **Camisade** (command 0x30E5) on a random living front-line actor. If she is targeted by the one-off "special" token that Sandy or Mindy send when the three gauges are full, she throws the Delta Attack at once and zeroes her own gauge. She also remembers her Reflect so that a Pagoda's Power Wave stripping it is undone on the hit. [bytes]
+- **Sandy's turn**: (1) all three gauges full: send the token to Cindy; (2) else if Cindy is alive without Reflect: **Reflect on Cindy**; (3) else **Haste** on a random Sister without Haste; (4) else **Razzia** (command 0x30E7) on a random living front-line actor. [bytes]
+- **Mindy's turn**: (1) all three gauges full: send the token to Cindy; (2) else if Cindy is alive and has Reflect: **Flare on Cindy** (it bounces onto the front line through her Reflect); (3) else a coin that is Passado with probability 48.97 percent (a modulo-100 draw above 50) and Flare otherwise, on a random living front-line actor. [bytes, note: 5.6]
+- **Gauges**: each Sister's gauge is on a 100-point scale of her own (the Sister writes the maximum explicitly), starts at 0, and rises by 0 to 9 on each of her own turns, by **10 to 19 per hit event** against her and by a further 30 to 39 when the hit is a Pagoda's Power Wave (about 40 to 58 in all); it clamps at 100. [bytes]
+- **The Pagodas' preference**: in this battle a Pagoda's Power Wave goes to the **living Sister with the lowest gauge** (ties random) and the Pagoda takes no action at all when that lowest gauge is already 100. The group it picks from is every monster except actors 23, 24 and 25 (the Pagodas and the helper). So the Pagodas feed the Sister who is furthest from Delta Attack, and Delta Attack is on the table once all three are full and alive. [bytes, note: 4.2]
+- **Death**: a dead Sister leaves a body, her bar is hidden and she is untargetable; one dead Sister makes Delta Attack impossible for the rest of the fight (the test needs all three alive). The battle ends when all three are dead. [bytes]
+
+## 7. Answer 4: how a possessed copy takes the player's stats
+
+All eight lines below are in the setup of each possessed monster script, run at battle start, and are the same for every aeon of the chain [bytes]:
+
+- **Copied from the player's own aeon in this battle** (the aeon's battle character record: actor 8 for Valefor through 14 for Yojimbo; actors 15, 16, 17 for Cindy, Sandy and Mindy): **STR, DEF, MAG, MDF, AGI, EVA, ACC and maximum HP**. The copy's HP is then set to that maximum, so it **starts at full HP**.
+- **Not copied**: Luck (stays the record's 0), MP (the record's 1), the aeon's current HP, statuses, gear, the aeon's Overdrive gauge or learned abilities (the one exception is a check on Valefor: whether the player's Valefor knows Energy Blast decides which Overdrive the copy uses). The possessed copy gets the aeon's name and, for Ifrit, Ixion and Shiva, the record's Fire, Thunder or Ice absorb.
+- **Scaling**: none. The numbers are straight copies, with no multiplier, floor or level step; the record placeholders of section 1.2 are overwritten. How strong the copy is depends only on what the player's aeon was built to. The aeon's stats themselves are rebuilt from Yuna's at every battle's end with a floor that depends on the number of battles fought [note: re-ffx-overdrive-steal-aeons.md 4.3 to 4.6].
+- **Overdrive**: the copy runs the "aeons only" Overdrive mode with the bar shown and a gauge that starts at **0**; the Sisters set the maximum to 100 explicitly and the other seven keep the monster default of 100. All the scripts' arithmetic is on that 100-point scale (the player's own aeon gauge is 20 points wide, which is not copied). The engine's own aeon gain rules (a monster hitting the aeon, the aeon hitting a monster) do not apply to a possessed copy because the hits on it come from the player's side and the hits it deals land on the party [inferred: the engine's attacker-side test was not run]; the gain comes from the scripts alone (turn: 0 to 9; hit: 0 to 9, Sisters 10 to 19; Power Wave extras as in section 6).
+- **HP carry-over**: none in either direction. The copy ignores the player aeon's current HP and the fight does not touch the player aeon. What does carry across links is the **party's** HP, MP and statuses, and the recovery counters of aeons that were wiped (section 2).
+- **Raw property writes with no mapped meaning**: property 296 is set at the start to 6000 (Valefor), 3000 (Ifrit), 4000 (Ixion), 3500 (Shiva), 1500 (Bahamut), 5000 (Anima), 3500 (Yojimbo), 5000 (Cindy), 3000 (Sandy), 4000 (Mindy); property 295 is set to 1 for the Sisters; properties 217 and 238 are set to 1 and 0 for all. They are listed raw and not interpreted.
+
+## 8 and 9. To follow
+
+Answer 6 (the Zanmato tables), the 12-seed check of Chapter III and the list of what is not proved follow in the next commit of this branch.
