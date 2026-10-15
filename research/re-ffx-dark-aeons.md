@@ -16,6 +16,8 @@ Files used (size in bytes, SHA-256 prefix): monster files `m340` Dark Yojimbo (5
 - **Dark Yojimbo (m340) is five fights, `nagi05_70` to `_74`**, each a fresh 1,600,000-HP Dark Yojimbo with the same record and the same script; the only difference is one constant: how much his Overdrive gauge gains after each of his own turns (+6 / +10 / +16 / +20 / +26, battle ids 0x01AE0046 to 0x01AE004A). He is fast (AGI 243, one action every 9 ticks). Each turn: if the gauge is 100 or more, **Zanmato** on the whole front line; otherwise one stream-2 draw modulo 3 chooses **Wakizashi on the whole front line**, **Kozuka on one random living front-line character**, or the **dog order**, which makes the dog (m116) bite a random living front-line character. The gain is added **after every turn including the Zanmato turn**, so the gauge restarts at the tier's step, not at 0. Each hit event on him adds +2. Nothing else: no HP threshold, no phases, no reaction beyond the +2. [bytes] [disasm: m340 @0x0132, @0x02f0] [run]
 - **The Dark Sisters (m341 Cindy, m342 Sandy, m343 Mindy) are six formations** (`kino00_70` and `kino01_70` the trio, `kino01_71` Cindy alone, `kino01_72` Mindy and Sandy, `kino05_70` Sandy alone, `kino05_71` Mindy alone). Each Sister's turn: (1) trio formations only, while all three live and all three gauges are 100 or more, **Cindy uses Delta Attack** on the whole front line and zeroes the three gauges, while Sandy and Mindy attack and keep their gauge at 100; (2) otherwise, with her own gauge at 100 or more, **Mega Graviton** on the whole front line and her gauge to 0; (3) otherwise a fair coin (stream 2, modulo 2) between her two basic moves (Cindy: Camisade or the dispelling attack 0x412B; Sandy: Razzia or Attack with Petrify; Mindy: Passado or Calamity), each adding 20 to her gauge. Each hit event on a Sister adds +5. The trio starts with all three gauges at 100, so in a normal start Delta Attack is the third enemy action of the battle; every other formation starts the gauge at 0 and the cycle is five basic turns then Mega Graviton. Killing one Sister ends Delta Attack for good. [bytes] [disasm: m341 @0x01d8, m342 @0x01b4, m343 @0x01d8] [run]
 - **At the game's own numbers every damaging move is an instant KO on an aeon.** Against the minimum player-side aeon stats (section 6.3) Kozuka, Wakizashi, Zanmato and the dog's bite all exceed the 99,999 cap before any defence; Delta Attack deals 781,430 per hit (six hits); Razzia, Camisade and the Attack with Petrify exceed the cap; only Passado per hit (about 11,500 to 14,500) and Mega Graviton (7/16 of the target's maximum HP) do not. Zanmato, Delta Attack, Razzia and the dispelling attack 0x412B also carry the cleanse flag with an extra-status word, which by the record rules removes those statuses (Auto-Life, for the first three) from the target instead of inflicting them. The difficulty of a mirror chapter is therefore set by whatever the chapter scales, not by the tier or the formation alone. [inferred arithmetic on [bytes] rows] (section 6.3)
+- **Recommendation (section 2.6; the driver decides).** Act 1: `nagi05_71` (tier 2, +10 per turn, Zanmato on his 11th turn then every 10, about four player-aeon actions apart); tier 1 if the chapter scales enemy damage up, tiers 3 to 5 leave two actions or fewer. Act 2: `kino01_72` (Mindy and Sandy, 4,500,000 HP together, gauges start at 0, Mega Graviton on each one's 6th turn); the faithful three-against-three trio opens with Delta Attack as the third enemy action in 87.5 percent of normal starts, so it needs the gauges started at 0 (Delta Attack then arrives at tick 45) or a damage scale-down.
+- **Two rules a mirror chapter departs from or must decide.** Every Dark Aeon formation calls one unmapped call with the matching aeon's own id (14 for Dark Yojimbo; 15, 16, 17 for the Sisters): most probably the game forbids summoning the matching aeon against its dark twin (unproved, section 2.2). Escape and Flee are disabled in all eleven formations, and their flag words make a defeat a game over.
 - **Rows are in section 1, formations in section 2 (with the recommendation and the numbers per option), the engine facts the scripts lean on in section 3, Dark Yojimbo's AI in section 4, the Sisters' AI in section 5, every move row in section 6, what is not proved in section 8.**
 
 ## 1. The monster records (a)
@@ -221,7 +223,48 @@ Each of the four Dark files has a second worker (type 1, slot 4) that only sets 
 
 ## 4. Dark Yojimbo's AI (m340) and the dog (m116)
 
-*Follows in the next commit of this branch.*
+### 4.1 Setup (init, f0 @0x0000 to 0x012d) [bytes] [disasm: m340 @0x0006 to 0x012d] [run]
+
+Presentation values; death animation "boss" (the body stays and cannot be targeted); Overdrive bar shown, **maximum 100**; unmapped property 296 := 300; "Tough" (no delay recoil) on; "returns before the death animation" on; hit reactions not dulled. **No write to HP, MP, STR or any other stat**, so every tier starts at the record's 1,600,000 HP, STR 244, AGI 243. No write to the gauge, which starts at 0 (the monster setup writes 0 [note: re-ffx-ai-evrae-yojimbo-isaaru-sin.md 3.1]). In the battle id 28,180,550 (tier 1) only, it also writes `SetAmbushState(Ambushed)`, which lands after the opening counters and changes the intro only [note: FFX-G10 3.2, open question 3 there]. The dog's setup is in section 1.4.
+
+### 4.2 The turn (onTurn, f2) [bytes] [disasm: m340 @0x013f to 0x02ef] [run, exact tallies over all 65,536 stream-2 results]
+
+1. **Gauge 100 or more:** **Zanmato** on the whole front line (no draw), then the gauge is written 0.
+2. **Otherwise** one stream-2 draw, modulo 3:
+   - residue 0 (21,846 of 65,536, 33.334 percent): **Wakizashi (the group row 0x4109)** on the whole front line;
+   - residue 1 (21,845, 33.333 percent): **Kozuka (0x4107)** on one random living front-line character (stream 4 when two or more live; no draw for one);
+   - residue 2 (21,845, 33.333 percent): the **dog order, Daigoro (0x4086)**, aimed at actor 21, the dog.
+3. **After either branch (Zanmato included)** the gauge gains the tier's step, capped at 100: battle id 28,180,550 +6; 28,180,551 +10; 28,180,552 +16; 28,180,553 +20; 28,180,554 +26. A battle id outside these five adds nothing (not reachable in the game). **The Zanmato turn therefore ends with the gauge at the step, not at 0**: [run] gauge 100 becomes 6, 10, 16, 20, 26 after Zanmato in the five tiers.
+
+Draws: one stream-2 draw on every ordinary turn, none on a Zanmato turn; one stream-4 draw on a Kozuka turn when two or more characters are alive; none for Zanmato, the group Wakizashi or the order. The row 0x4108 (single Wakizashi) is in his list but no branch queues it. [run]
+
+### 4.3 What a hit does (onHit, f3 @0x02f0) [bytes] [run]
+
+If `isCounterattackAllowed()` the gauge gains **2**, capped at 100 [run: 0 to 2, 99 to 100, no gain when the gate is false]. Once per player action that reaches him, a miss included, a party counter-attack not (section 3). There is no HP-based phase, no half-HP action and no counter command. Dark Yojimbo has no onTargeted, preTurn or other reaction code; his onDeath only substitutes his Die command for the death animation (f6 @0x032b). [bytes]
+
+### 4.4 The dog and its bite [bytes] [disasm: m116 @0x0192 to 0x028c] [run]
+
+The dog order (0x4086) is a row with one hit and no damage class, no status and formula 0, aimed at the dog; by the onHit rule (section 3) that raises the dog's onHit. In each of the five Dark Yojimbo battle ids the dog's onHit does one thing: **if its own `isCounterattackAllowed()` holds, it picks a random living front-line character (stream 4, a draw only when two or more live) and queues the bite (Daigoro 0x410B) as a reaction against that character** [run: the queue holds the bite aimed at the character; no queue when the gate is false]. A reaction pays no CTB and uses the dog's own STR, which the dog's setup wrote as 244. The bite: formula 1 power 8, "neither" type, always hits, cap 99,999, Petrify 254 and Poison 254 (section 6). In any other battle id the same file queues a plain Attack (0x6000) instead and the order is not part of the story. [bytes]
+
+The chain (order, then dog hit event, then reaction) is the same one the Cavern trial Yojimbo uses with its dog [note: re-ffx-ai-evrae-yojimbo-isaaru-sin.md 3.4, confidence B there]. That the hit event is raised although the dog cannot be targeted is therefore proved only by that fight's reading, not run here. [inferred]
+
+### 4.5 What each tier changes
+
+Only the step of 4.2 rule 3 (and, for tier 1, the intro-only Ambushed write). Everything else is identical byte for byte in the five fights: HP, stats, the roll, the moves, the dog. [bytes] [run]
+
+| Tier / battle id | Step | Gauge after his turns 1 to 6, no hits | First Zanmato (his turn) | Zanmato gap (turns) |
+|---|---:|---|---|---:|
+| 1 / 28,180,550 | +6 | 6, 12, 18, 24, 30, 36 | 18th | 17 |
+| 2 / 28,180,551 | +10 | 10, 20, 30, 40, 50, 60 | 11th | 10 |
+| 3 / 28,180,552 | +16 | 16, 32, 48, 64, 80, 96 | 8th | 7 |
+| 4 / 28,180,553 | +20 | 20, 40, 60, 80, 100, then 20 | 6th | 5 |
+| 5 / 28,180,554 | +26 | 26, 52, 78, 100, then 26, 52 | 5th | 4 |
+
+[run] Each player action that reaches him adds 2 on top, so the real gap is shorter by 1 to 2 turns when the player acts every 24 ticks (section 2.6). A turn is 9 ticks.
+
+### 4.6 What triggers each tier
+
+The field event, not the monster: five route zones launch the tiers in order, with a "next tier not yet done" fallback in the fourth and fifth zones (section 2.4). The monster script has no memory of earlier tiers; each fight is self-contained. [bytes]
 
 ## 5. The Dark Magus Sisters' AI (m341, m342, m343)
 
@@ -342,6 +385,28 @@ Reading: **every damaging move except Passado per hit and Mega Graviton exceeds 
 0x4104 Calamity: 52 01 6d 01 00 03 00 00 00 00 33 45 06 00 00 00 80 00 00 00 03 00 00 00 03 00 00 01 00 00 00 00 00 fe fe fe fe fe 00 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00
 ```
 
+## 7. Randomness at a glance (for an exact replay) [run]
+
+| Script | Stream 2 (`GetRandomValue`) | Stream 4 (`findMatchingChr`, only with two or more living candidates) |
+|---|---|---|
+| Dark Yojimbo ordinary turn | 1 draw, modulo 3 | 1 draw on a Kozuka turn |
+| Dark Yojimbo Zanmato turn | none | none |
+| The dog's bite (reaction) | none | 1 draw |
+| Sister, rule 1 (Cindy) / rule 2 | none | none |
+| Sister, rule 1 (Sandy, Mindy) / rule 3 | 1 draw, modulo 2 | 1 draw for the single-target move |
+| onHit of all five scripts | none | none (the dog: see above) |
+
+The formation scripts' camera functions draw stream 2 too (modulo 3, to pick an angle, in functions bound to engine events that depend on which aeon is on the field; the event numbers and the draw counts per scene were not decoded); those draws shift the stream and are not part of the AI. [bytes] Variance, critical and status draws belong to the damage pipeline [note: re-ffx-damage.md 3; re-ffx-rng-hit.md].
+
 ## 8. What is not proved
 
-*Follows in the next commit of this branch.*
+1. **No script ran in the real engine.** The bytecode ran in the earlier lanes' small interpreter with the real command rows; every behavioural line marked [run] is the script's own. The engine facts around it (the counter gate, the reaction filter, group and target resolution, the opening counters, the tie order) are the earlier lanes' (confidence B in their notes) and were not re-proved here.
+2. **`ct_7126`** (section 2.2): the call every Dark Aeon formation makes with the matching aeon id. The handler chain was found (VA 0x7A5260, 0x7969B0, 0x796670, 0x797090) but its argument layout and what the byte gates were not decoded; "the game forbids the matching aeon" is the most probable reading, not a result. A mirror chapter should treat the rule as unknown until a hook run or a play check settles it.
+3. **Whether Auto-Life survives Zanmato, Delta Attack, Razzia and 0x412B**: the rows carry the cleanse flag with the Auto-Life bit; the order of the cleanse against the death check inside a hit was not traced (section 6.2).
+4. **The dog's hit event** while the dog is untargetable (section 4.4): from the Cavern trial's identical chain, not run.
+5. **The start of a battle for a player who summons**: how the front line, the opening counters and the start type behave when the player's aeons take the field mid-battle (the chapter's own hand-off) is not covered; section 2.2 gives the figures for a battle whose party starts on the field.
+6. **Event conditions**: what sets the quest bit that allows the Dark Yojimbo ladder, why the stage ids alternate, what area (0 or 1) a battle starts in, what room 223 holds after the eight Dark Aeons, and the tail of the `nagi0500` launch function (bits 128 of the progress and quest words) were not traced.
+7. **Unmapped fields**, listed raw: monster record +0x00 to +0x13 and +0x79 to +0x7F; loot +0x110 and +0x111; the unmapped property 296 (written 300 / 100 / 200 / none); the +0x1c flag bit 0x40000000 on Zanmato and Delta Attack; the +0x1b usage byte (0x45 / 0x47 / 0x06) and the first sixteen bytes of each move row; flag-word bits 0x400, 0x800 and 0x1000 of the battle flag words.
+8. **Arithmetic marked [inferred]**: the CTB figures (9 ticks per enemy turn, the player aeon's 24), the timelines of section 2.6, the damage table of section 6.3 (formulas applied by hand to the minimum aeon stats; no criticals, no Protect, Shell, Defend or Shield, variance taken as 1) and the gauge-sync reading in 5.3.
+9. **Corrections to the feasibility note, each from bytes or a run, none against its bytes:** the Zanmato turn restarts the gauge at the tier's step, not at 0 (4.2); Kozuka picks a random living front-line character, not the first (section 3); 0x412B dispels (cleanse flag) rather than buffs (6.2); the "further branch" of Cindy's script is a coin between Camisade and 0x412B (5.2); Sandy's and Mindy's later branches are Mega Graviton at 100 and the same coin (5.2); the "counter allowed" test it left open is `isCounterattackAllowed` (section 3); the dog's file is authored for the five Dark Yojimbo battle ids (1.4).
+10. Everything tagged [note] is as proved in its own note; none was re-run here.
