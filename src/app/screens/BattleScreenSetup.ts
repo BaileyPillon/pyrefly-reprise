@@ -170,11 +170,20 @@ function carryFfx(build: FFXPartyBuild, state: BattleState, withStatuses = false
     };
   });
 
+  // A build that owns the player's Yojimbo (re-parity lane FFX-K) carries his compatibility and the gil Pay has spent to the next link; no other build has `yojimbo`.
+  const flagged = (key: string, fallback: number): number => {
+    const v = state.flags[key];
+    return typeof v === 'number' ? v : fallback;
+  };
+  const yojimbo = build.yojimbo;
   return {
     ...build,
     members,
     aeons,
     inventory: carryInventory(build.inventory, state),
+    ...(yojimbo === undefined
+      ? {}
+      : { yojimbo: { ...yojimbo, compatibility: flagged('yojimbo:compatibility', yojimbo.compatibility) }, gil: flagged('yojimbo:gil', build.gil) }),
   };
 }
 

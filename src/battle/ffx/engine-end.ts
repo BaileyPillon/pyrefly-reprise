@@ -19,7 +19,7 @@ import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts'
 import { drainScriptReactions } from './ai/reaction-drain.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { counterInputs } from './counter-inputs.ts';
-import { aeonDuelLost, dismissAeon } from './aeons.ts';
+import { aeonDuelLost, aeonsDown, dismissAeon } from './aeons.ts';
 import { settleAeonRecovery } from './adapt/aeon-party.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
 
@@ -180,12 +180,8 @@ export function afterAction(
   if (actor.side === 'enemy') ctx.rt.lastEnemyActorId = actor.id;
   ctx.rt.currentActorId = null;
 
-  // An aeon that ran out of HP hands the field back; it is not a wipe.
-  const aeonId = ctx.state.aeonId;
-  if (aeonId) {
-    const aeon = tryActor(ctx, aeonId);
-    if (aeon && !isAlive(aeon)) dismissAeon(ctx, 'ko');
-  }
+  // An aeon that ran out of HP hands the field back; it is not a wipe. (The three Magus Sisters stay until all three are down.)
+  if (aeonsDown(ctx)) dismissAeon(ctx, 'ko');
 
   evaluateTriggers(ctx, collectSignals(h.buffer));
   checkEnd(h);

@@ -53,10 +53,12 @@ const GEAR: Readonly<Record<string, { pierce: boolean; breakDamage: boolean; rec
   mindy: { pierce: true, breakDamage: true, recovery: 30 },
 };
 const AEONS = ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut', 'anima', 'yojimbo'] as const;
+/** A build that owns Yojimbo must say how he starts (lane FFX-K, no default in src/battle): these are test values, this file is about gear and recovery counts. */
+const YOJIMBO = { yojimbo: { compatibility: 128, hireAnswer: 1 as const } };
 
 function makeCtx(over: Partial<BattleSetup> = {}): Ctx {
   const s = setup({
-    party: party({ aeons: AEONS.map((id) => aeon({ id })) }),
+    party: party({ aeons: AEONS.map((id) => aeon({ id })), ...YOJIMBO }),
     enemies: { id: 'g', game: 'ffx', enemies: [enemy({ id: 'foe-a' }), enemy({ id: 'foe-b' })] },
     ...over,
   });
@@ -134,7 +136,7 @@ describe('the recovery count of a wiped aeon', () => {
 
   it('the count travels with the aeon to the next link of a chain, as the screen carries it', () => {
     const ctx = makeCtx();
-    const s = setup({ party: party({ aeons: AEONS.map((id) => aeon({ id })) }) });
+    const s = setup({ party: party({ aeons: AEONS.map((id) => aeon({ id })), ...YOJIMBO }) });
     summonAeon(ctx, 'yuna', 'shiva');
     at(ctx, 'shiva').hp = 0;
     dismissAeon(ctx, 'ko');

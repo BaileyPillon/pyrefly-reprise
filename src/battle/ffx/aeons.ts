@@ -15,7 +15,7 @@
  */
 
 import type { CombatantId, FFXCombatant } from '../common/types.ts';
-import { type Ctx, rtOf, statusOf, tryActor } from './state.ts';
+import { type Ctx, aeonsOut, isAlive, rtOf, statusOf, tryActor } from './state.ts';
 import { ejectActor } from './hp.ts';
 import { releaseThreatenLink } from './adapt/threaten.ts';
 import { aeonSummonable, dismissOutcome, summonOutcome } from './adapt/aeon-party.ts';
@@ -24,6 +24,8 @@ import { aeonGearOf } from './aeon-gear.ts';
 import { removeStatus } from './statuses.ts';
 import { setGauge } from './overdrive.ts';
 import { duelLost, lockedMirrorOf } from './aeon-duel.ts';
+import { SISTER_IDS, asOneSummon, dismissSisters, summonSisters } from './adapt/sisters.ts';
+import { yojimboWiped } from './adapt/yojimbo.ts';
 
 /**
  * Aeons Yuna may summon right now: HP above 0 and no recovery count left (`FUN_0079a080`). An aeon under an aeon duel's **mirror
@@ -36,7 +38,17 @@ export function availableAeons(ctx: Ctx): FFXCombatant[] {
     if (lockedMirrorOf(ctx, key) !== undefined) continue;
     out.push(aeon);
   }
-  return out;
+  // The Magus Sisters come as one (re-parity lane FFX-K, only for a build that owns them): the list holds Cindy, and only when all three can come.
+  return ctx.rt.sisters ? asOneSummon(out) : out;
+}
+
+/** Is every aeon that is out down (the aeon wipe)? One aeon: it is. The three Magus Sisters: all three are. False when none is out. */
+export function aeonsDown(ctx: Ctx): boolean {
+  const ids = aeonsOut(ctx);
+  return ids.length > 0 && ids.every((id) => {
+    const a = tryActor(ctx, id);
+    return a !== undefined && !isAlive(a);
+  });
 }
 
 /** An aeon duel's sourced loss (`./aeon-duel.ts#duelLost`, B11 = a): no aeon out, none left to summon. */
@@ -54,6 +66,7 @@ export function aeonDuelLost(ctx: Ctx): boolean {
 export function summonAeon(ctx: Ctx, ownerId: CombatantId, aeonKey: string, grand = false): FFXCombatant | undefined {
   const aeon = ctx.rt.aeonRoster.get(aeonKey);
   if (!aeon) return undefined;
+  if (ctx.rt.sisters && SISTER_IDS.includes(aeonKey)) return summonSisters(ctx, ownerId, grand);
   if ((aeon.aeon?.reviveCountdown ?? 0) > 0) return undefined;
 
   // The kernel decides on the field as it stands, the party still in it.
@@ -93,8 +106,10 @@ export function summonAeon(ctx: Ctx, ownerId: CombatantId, aeonKey: string, gran
 export function dismissAeon(ctx: Ctx, reason: 'command' | 'ko' | 'banished'): void {
   const id = ctx.state.aeonId;
   if (!id) return;
+  if (ctx.state.aeonIds) return dismissSisters(ctx, reason);
   const aeon = tryActor(ctx, id);
   const wiped = reason !== 'command';
+  if (reason === 'ko' && id === 'yojimbo') yojimboWiped(ctx); // the player's Yojimbo knocked out while he is out: compatibility -10 (a no-op for any other build)
   const outcome = aeon && slotIfAny(ctx, aeon) !== undefined ? dismissOutcome(ctx, aeon, wiped) : undefined;
   ctx.state.aeonId = null;
   if (aeon) {

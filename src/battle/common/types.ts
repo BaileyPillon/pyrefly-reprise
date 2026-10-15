@@ -1000,7 +1000,11 @@ export interface EnemyFields {
    * [ffx-bfa-yu-yevon §3.1, verified: 2 sources].
    */
   doomTurns?: number;
-  /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
+  /**
+   * The game's Zanmato byte plus 1 (the data files write "byte 3 -> level 4"); unset reads as byte 0. Only the player's Yojimbo reads it (re-parity lane
+   * FFX-K, `battle/ffx/adapt/yojimbo.ts`): his Pay divides its motivation by the highest byte over the monsters on the field plus 1, and a free attack is never
+   * Zanmato against a group with a byte above 0 (`docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 2.4).
+   */
   zanmatoLevel?: number;
   /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
   plainAttack?: FFXPlainAttack;
@@ -1833,8 +1837,9 @@ export interface AbilityCommand {
    */
   extra?: MinigameResult;
   /**
-   * FFX-2 only (re-parity W3): the gil offered, for Lady Luck's Bribe (the accuracy formula and the reward read it;
+   * FFX-2 (re-parity W3): the gil offered, for Lady Luck's Bribe (the accuracy formula and the reward read it;
    * `ActionRec+0xb0`). Omitted, a Bribe offers nothing and the game's rule makes it miss.
+   * FFX (re-parity lane FFX-K): the payment of the player's Yojimbo's Pay (`PAY_ABILITY_ID` in `battle/ffx/aeon-commands.ts`), 0 to the party's gil.
    */
   gilSpent?: number;
   /**
@@ -2536,6 +2541,11 @@ export interface BattleState {
   enemyIds: CombatantId[];
   /** Summoned aeon, or `null`. While non-null, party CTB counters and status durations are frozen. */
   aeonId: CombatantId | null;
+  /**
+   * FFX only (re-parity lane FFX-K): every aeon that is out when more than one is, the three Magus Sisters in list order
+   * (`['cindy', 'sandy', 'mindy']`; `aeonId` is then the first). Absent whenever one aeon, or none, is out, so every other battle's state is unchanged.
+   */
+  aeonIds?: CombatantId[];
   /** Battle turn counter, 1-based; increments on each `turn-start`. */
   turn: number;
   /**
@@ -2717,6 +2727,37 @@ export interface AeonBuild {
   statuses?: Partial<Record<StatusId, StatusInstance>>;
 }
 
+/**
+ * What a build that owns the player's Yojimbo must say (re-parity lane FFX-K, FFX only; the build lists `yojimbo` in `aeons` and gives this, or
+ * `buildBattle` throws). Neither number has a default anywhere in `src/battle`.
+ */
+export interface YojimboBuild {
+  /**
+   * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`**: the game's image holds 0 and no initialiser
+   * was found. 128 is strongly indicated by the owner's own save files (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
+   * confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
+   * A chain carries the changed value to the next link (`state.flags['yojimbo:compatibility']`).
+   */
+  compatibility: number;
+  /**
+   * The hire answer, 0, 1 or 2: the reply the player gave in the recruitment haggle (0 the dearest start price, 2 the cheapest). It scales the
+   * motivation Pay makes (`kernel/yojimbo.ts`). The game's default, when he was never hired through that scene, is 0.
+   */
+  hireAnswer: 0 | 1 | 2;
+}
+
+/**
+ * What a build that owns the Magus Sisters must say (re-parity lane FFX-K, FFX only; the build lists all three of `cindy`, `sandy` and `mindy` in
+ * `aeons` and gives this, or `buildBattle` throws).
+ */
+export interface SistersBuild {
+  /**
+   * Each Sister's motivation at the start of the battle, 0 to 100 (`Chr+0x6e1`). **UNSOURCED**: the note does not say where it starts; the
+   * chapter must label its value an estimate until it is read.
+   */
+  motivation: { cindy: number; sandy: number; mindy: number };
+}
+
 /** The FFX party at a chapter's build point. */
 export interface FFXPartyBuild {
   game: 'ffx';
@@ -2734,6 +2775,10 @@ export interface FFXPartyBuild {
   /** Bench member ids, switchable in. */
   reserve: string[];
   aeons: AeonBuild[];
+  /** Present exactly when `aeons` lists `yojimbo`: the player's Yojimbo's own rules (re-parity lane FFX-K). Absent, no Yojimbo rule runs. */
+  yojimbo?: YojimboBuild;
+  /** Present exactly when `aeons` lists `cindy`, `sandy` and `mindy`: the Magus Sisters' own rules (re-parity lane FFX-K). */
+  sisters?: SistersBuild;
   inventory: InventoryEntry[];
   /** Party gil. Range 0–9 999 999. */
   gil: number;
@@ -2818,7 +2863,11 @@ export interface EnemyDef {
    * Also the countdown Doom runs on when it is inflicted **on** this enemy.
    */
   doomTurns?: number;
-  /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
+  /**
+   * The game's Zanmato byte plus 1 (the data files write "byte 3 -> level 4"); unset reads as byte 0. Only the player's Yojimbo reads it (re-parity lane
+   * FFX-K, `battle/ffx/adapt/yojimbo.ts`): his Pay divides its motivation by the highest byte over the monsters on the field plus 1, and a free attack is never
+   * Zanmato against a group with a byte above 0 (`docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 2.4).
+   */
   zanmatoLevel?: number;
   /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
   plainAttack?: FFXPlainAttack;

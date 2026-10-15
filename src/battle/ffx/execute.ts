@@ -27,6 +27,7 @@ import { resolveDoublecast } from './doublecast.ts';
 import { carryOutOrder } from './orders.ts';
 import { isVolley, resolveVolley } from './volley.ts';
 import { duelRefusalFor } from './aeon-duel.ts';
+import { executeAeonCommand } from './aeon-commands.ts';
 
 /** What executing a command did, so the engine loop knows how to proceed. */
 export interface ExecutionResult {
@@ -71,6 +72,10 @@ export function executeCommand(
     ctx.emit({ type: 'message', text: refusal, kind: 'system' });
     return { rank: 0, rejected: true, damageDealt: 0 };
   }
+
+  // The player's Yojimbo's and the Magus Sisters' own commands (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else, whose command goes on.
+  const aeonResult = executeAeonCommand(ctx, actor, command, (who, cmd) => executeCommand(ctx, who, cmd, true));
+  if (aeonResult !== null) return aeonResult;
 
   switch (command.kind) {
     case 'attack':
