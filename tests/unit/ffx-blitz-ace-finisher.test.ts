@@ -29,7 +29,7 @@ const board = (def: AbilityDef) =>
     party: party({ members: [member({ id: 'tidus', overdrive: od(def.id) }), member({ id: 'auron' }), member({ id: 'yuna' })], activeSlots: ['tidus', 'auron', 'yuna'] }),
     enemies: { id: 'g', game: 'ffx', enemies: [enemy({ id: 'dummy', hp: 99_999 })] },
   });
-const timing = (success: boolean, timeRemainingMs = 0): MinigameResult => ({ kind: 'tidus-timing', timing: { success, timeRemainingMs, timerMs: 2200 } });
+const timing = (success: boolean, timeRemainingMs = 0): MinigameResult => ({ kind: 'tidus-timing', timing: { success, timeRemainingMs, timerMs: 2000 } }); // Blitz Ace's limit is 2 s (RC9 lane FFX-A; it was 2.2 s)
 
 function fire(def: AbilityDef, result: MinigameResult): { amounts: number[]; misses: number; tick: number } {
   const reg = new FFXContentRegistry();

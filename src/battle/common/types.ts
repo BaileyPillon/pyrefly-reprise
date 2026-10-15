@@ -1724,8 +1724,14 @@ export interface TimingResult {
    * Range 0–`timerMs`.
    */
   timeRemainingMs: number;
-  /** The timer length this Overdrive used, 2 200–3 000 ms. */
+  /** The timer length this Overdrive used: 3 000 ms, or 2 000 ms for Blitz Ace (the game's limits, FFX-G01 section 6.2). */
   timerMs: number;
+  /**
+   * **Additive (re-parity RC9, FFX only).** The controller frame (1/30 s, counted from 1) the move ended in: the frame a hit press was seen in, or the
+   * frame that found the limit gone (91 for a 3 s limit). `timeRemainingMs` is then `(limit - frame / 30) * 1000`, the game's `A`. Absent from a result a
+   * test rig builds by hand.
+   */
+  frame?: number;
 }
 
 /** Result payload for `auron-sequence`. */
@@ -1736,6 +1742,8 @@ export interface SequenceResult {
   correctInputs: number;
   /** `timerMs - msElapsedWhenLastInputLanded` (4 000 ms; Tornado 3 000 ms since od5). Range 0 to the timer. */
   timeRemainingMs: number;
+  /** **Additive (re-parity RC9, FFX only).** The controller frame (1/30 s, from 1) the move ended in; `timeRemainingMs` is then `(limit - frame / 30) * 1000`. */
+  frame?: number;
   /**
    * **Not read since od5 (2026-10-01); kept so the contract stays additive.** The FFX engine
    * decides the higher-DmgCon "immune" row itself, per target, from each target's own
@@ -1768,9 +1776,12 @@ export interface ReelResult {
 
 /** Result payload for `lulu-fury`. */
 export interface FuryResult {
-  /** Total angle swept by the stick, in degrees. Range 0–20 000. */
+  /** Whole rotations of the stick times 360 (a digital pad's two left/right steps are one rotation). Range 0–20 000. */
   sweptDegrees: number;
-  /** `min(16, floor(sweptDegrees / degreesPerCast(spell, lulu.magic)))`. Range 0–16. */
+  /**
+   * The casts the game's table gives those rotations for the spell at Lulu's Magic, at least 1 and at most 16 (re-parity RC9: `kernel/minigame-fury-tables.ts`,
+   * FFX-G01 section 6.4; the engine recomputes it from `sweptDegrees` whenever that is above 0). Range 1–16.
+   */
   casts: number;
 }
 

@@ -319,13 +319,22 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * nine chapters) never reach a path either lane changed: no second Doublecast cast meets a foe the first one killed, no dropped target, no Mix, no stack past 99.
  * The seeds that do reach one are measured, not pinned: the whole-chain event-log digests of seeds 1 to 500 of all eleven chapters differ from the base's on
  * Braska's Final Aeon (149), Sin: the Face (124) and Yunalesca (seed 429), and on no other seed; every outcome is the base's.
+ *
+ * ONE digest re-baselined 2026-10-15 by RC9 lane FFX-A (branch re-parity-rc9-ffx-overdrives; FFX only; the Overdrive minigames, docs/handoff/re-parity-rc9-ffx-overdrives.md):
+ * braskas-final-aeon#1 link 4 (c14f091f -> 9c42c87a, victory both; links 1 to 3 and 5 to 7 of #1 and all of #7 are byte for byte what they were). Cause: Energy Rain's
+ * limit is the game's 3.0 s (FFX-G01 section 6.2), where the engine had 2.6 s. The headless line rolls Tidus's Swordplay from a stand-in (`rollDefaultMinigame`): one
+ * draw for the 75 percent test and, on a success, one `aux.int(0, limit)` for the time left. The draws are the same and in the same order; the second is read against
+ * 3000 instead of 2600, so that Energy Rain's timing bonus differs by a point or two and the log parts there. Proved by ablation: with Energy Rain's limit set back
+ * to 2.6 s in `kernel/minigame-swordplay.ts` this file is 18/18 on the old values. The other 17 digests never moved. ffx-engine-golden is the only golden that moves
+ * (ffx2-atb-golden and ff7-golden are unchanged). The seeds that do reach a changed number are measured, not pinned: the handoff compares the whole-chain event-log
+ * digests of seeds 1 to 500 of the seven chapters whose line fires these Overdrives with the base's.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '18bfe5b2:victory',
   'seymour-flux#7': 'c3845a:victory',
   'yunalesca#1': '73fd4f55:victory',
   'yunalesca#7': '8e48c312:victory',
-  'braskas-final-aeon#1': 'd3eb1d76:victory 5e4670d:victory bd952081:victory c14f091f:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
+  'braskas-final-aeon#1': 'd3eb1d76:victory 5e4670d:victory bd952081:victory 9c42c87a:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
   'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
   'seymour-anima-macalania#1': '5b4108d1:victory',
   'seymour-anima-macalania#7': '99b1fdc:victory',

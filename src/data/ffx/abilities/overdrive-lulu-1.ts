@@ -14,7 +14,7 @@
  * - `minigame: 'lulu-fury'`, `hits: 16` — this is the cast-count CAP, not a
  *   fixed hit count. The actual number of casts per use of the Overdrive
  *   comes from the `lulu-fury` minigame's `FuryResult` at runtime
- *   (`min(16, sweptDegrees / degreesPerCast)`), not from this static field.
+ *   (the game's table of casts by rotations, `battle/ffx/fury.ts#furyCastsFor`, at least 1 and at most 16), not from this static field.
  * - No `crit-eligible` flag: nothing in the research states Fury can crit.
  * - No `timedInputBonus`: "Lulu's timer always reaches 0, so Fury gets no
  *   [§5.2] bonus" — Fury is excluded from the Tidus/Auron/Wakka timed-input

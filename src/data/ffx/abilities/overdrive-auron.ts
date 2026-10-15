@@ -4,8 +4,8 @@
  * Source: `research/ffx-combat-core.md` §5.5 (rank/DmgCon/hits) and §5.2
  * (timed-input bonus). All rows `[verified: 2 sources]`.
  *
- * Timed-input bonus (§5.2): `timerMs = 4000` for Auron (Tornado 3000 since od5:
- * [estimate, Bailey D-312], `timerMsFor` in `battle/ffx/overdrive.ts`); same runtime formula
+ * Timed-input bonus (§5.2): `timerMs = 4000` for Auron (Tornado 3000: the game's limits,
+ * `FFX-G01` section 6.3; it was an estimate, Bailey D-312; `timerMsFor` in `battle/ffx/overdrive.ts`); same runtime formula
  * as Tidus/Wakka, applied by the engine from the `auron-sequence` minigame
  * result. Marked here via `extra.timedInputBonus: true`.
  *
@@ -61,7 +61,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
-      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['dragon-fang']!] }, // length verified, order our estimate: overdrives/inputs.ts
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['dragon-fang']!] }, // length and order are the game's: overdrives/inputs.ts
       failPower: 16,
       failHits: 1,
       immunePower: 19,
@@ -99,7 +99,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
-      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['shooting-star']!] }, // length verified, order our estimate: overdrives/inputs.ts
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['shooting-star']!] }, // length and order are the game's: overdrives/inputs.ts
       failPower: 24,
       failHits: 1,
       immunePower: 27,
@@ -142,7 +142,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
-      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['banishing-blade']!] }, // length verified, order our estimate: overdrives/inputs.ts
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['banishing-blade']!] }, // length and order are the game's: overdrives/inputs.ts
       failPower: 28,
       failHits: 1,
       immunePower: 30,
@@ -180,7 +180,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'auron-sequence',
     extra: {
       timedInputBonus: true,
-      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['tornado']!] }, // length verified, order our estimate: overdrives/inputs.ts
+      minigameParams: { sequence: [...BUSHIDO_SEQUENCES['tornado']!] }, // length and order are the game's: overdrives/inputs.ts
       failPower: 15,
       failHits: 1,
       failRank: 6, // rank on the fail branch; preserves the research's "(fail 6)" note

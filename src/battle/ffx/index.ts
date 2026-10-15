@@ -38,7 +38,6 @@ export {
 export { idiv, baseCtb, icvVariance, ICV_BASE, ICV_VARIANCE } from './math.ts';
 export { computeDamage, estimatedDamage, hitChance, critChance, resolveAffinity } from './formulas.ts';
 export type { DamageInput, DamageResult, TimingBonus } from './formulas.ts';
-export type { FuryTier } from './fury.ts';
 export { effectiveStats, effectivePool } from './effectiveStats.ts';
 export type { EffectiveStats, EffectiveStatRow, EffectiveStatKey, StatBonusKind, StatsBearer } from './effectiveStats.ts';
 export { bearerHasAuto, bonusPercentFor } from './equipment.ts';
@@ -73,12 +72,9 @@ export {
   minigameParams,
   timerMsFor,
   timingBonusFrom,
-  degreesPerCast,
   furyCastsFor,
-  furyTierOf,
   isMenuMarker,
   DEGREES_PER_ROTATION,
-  FURY_ANCHOR_BUDGET,
   FURY_MAX_CASTS,
 } from './overdrive.ts';
 export { mortibsorption, MORTIORCHIS_MIN_MAX_HP, MORTIORCHIS_DECAY } from './scripted.ts';

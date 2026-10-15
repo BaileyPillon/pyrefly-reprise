@@ -140,7 +140,8 @@ export function shapeOverdrive(
     // so the rotation cost is the engine's call and not the overlay's
     // [CONTRACT-CHANGES decision 9, ffx-combat-core §5.7].
     const swept = result.fury.sweptDegrees;
-    const casts = swept > 0 ? furyCastsFor(def, user.stats.mag, swept) : Math.max(0, result.fury.casts);
+    // A Fury casts at least once: the game's casts start at 1 (`kernel/minigame-fury-tables.ts`), so no rotation at all still hits once.
+    const casts = swept > 0 ? furyCastsFor(def, user.stats.mag, swept) : Math.max(1, result.fury.casts);
     // The game plans all sixteen hits over the targets and takes away the casts it was not given (`ResolveOptions.spreadHits`).
     return { def, options: { ...options, hits: Math.min(FURY_MAX_CASTS, casts), ...(isPerHitRandom(def.targeting) ? { spreadHits: def.hits } : {}) } };
   }

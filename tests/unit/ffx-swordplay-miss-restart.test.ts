@@ -14,6 +14,10 @@
  * and `timingBonusFrom` still paid the remaining time: on the fixture board a
  * failed Spiral Cut dealt 529 against 485 for a correct press with 200 ms left.
  *
+ * Since re-parity RC9 (lane FFX-A, FFX only) the marker is the game's own controller, a frame at a time (`kernel/minigame-swordplay.ts`, proven against
+ * the machine code in `parity-ffx-minigames.test.ts`): a press is seen by the NEXT 1/30 s frame, a miss sends the marker back to the left end and the
+ * move goes on, only the limit running out fails, and the result carries the frame.
+ *
  * The overlay runs for real here (jsdom, fake clock, real `keydown` events on
  * the window, the same `RawInputWatcher` the game uses); the damage runs the
  * real engine.
@@ -23,32 +27,39 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AbilityDef, BattleEvent, Command, Decision, MinigameResult } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine, timingBonusFrom } from '../../src/battle/ffx/index.ts';
 import { ABILITIES as TIDUS } from '../../src/data/ffx/abilities/overdrive-tidus.ts';
-import { expireTidusTiming, pressTidusTiming } from '../../src/ui/ffx/minigames/logic.ts';
+import { swordplayFrame, swordplayGeometry, swordplayStart } from '../../src/battle/ffx/kernel/minigame-swordplay.ts';
 import { openTidusTiming } from '../../src/ui/ffx/minigames/TidusTiming.ts';
 import { attackAbility, enemy, member, party, setup } from './ffx-fixtures.test.ts';
 
-// The overlay's defaults: a 360 px bar, gold zone 180 +/- 22 px, 340 px/s.
-const BAR = { barWidth: 360, zoneHalfWidth: 22, speedPxPerSec: 340, timerMs: 3000 };
-/** 180 px from the far left at 340 px/s: the cursor is dead centre this long into a sweep. */
-const CENTRE_MS = Math.round((180 / 340) * 1000); // 529
+describe('the Swordplay controller: a miss restarts the sweep, only the limit fails [§5.3 rule 1]', () => {
+  const g = swordplayGeometry(0x20); // Spiral Cut: window [243, 267], 11 units a frame from 118
 
-describe('pressTidusTiming: a miss restarts the sweep, only expiry fails [§5.3 rule 1]', () => {
-  it('a press outside the zone is a miss that restarts the sweep at the press time', () => {
-    const p = pressTidusTiming({ ...BAR, elapsedMs: 6, sweepStartMs: 0 });
-    expect(p).toMatchObject({ kind: 'miss', sweepStartMs: 6 });
+  it('a press outside the window is a miss: the marker goes back to the left end and the move goes on', () => {
+    const s = swordplayStart(g);
+    expect(swordplayFrame(s, g, true)).toEqual({ done: false }); // frame 1: the marker stands at 118, outside the window
+    expect(s.misses).toBe(1);
+    expect(s.pos).toBe(118 + 11); // restarted at 118 and moved one step
   });
 
-  it('after a miss the zone is timed from the restart, not from the opening', () => {
-    // 1006 ms after opening the original sweep would be at 342 px (a miss); the restarted one is centred.
-    expect(pressTidusTiming({ ...BAR, elapsedMs: 1006, sweepStartMs: 0 }).kind).toBe('miss');
-    const hit = pressTidusTiming({ ...BAR, elapsedMs: 477 + CENTRE_MS, sweepStartMs: 477 });
-    expect(hit.kind).toBe('hit');
-    if (hit.kind === 'hit') expect(hit.timing).toEqual({ success: true, timeRemainingMs: 3000 - 477 - CENTRE_MS, timerMs: 3000 });
+  it('after a miss the window is timed from the restart, not from the opening', () => {
+    // a miss in frame 6 restarts the marker: it is judged at 118 + 11 j in frame 6 + j, so the window [243, 267] is reached in frames 18 and 19
+    const s = swordplayStart(g);
+    for (let f = 1; f <= 5; f++) swordplayFrame(s, g, false);
+    swordplayFrame(s, g, true); // frame 6: a miss
+    for (let f = 7; f <= 17; f++) expect(swordplayFrame(s, g, false)).toEqual({ done: false });
+    expect(swordplayFrame(s, g, true)).toEqual({ done: true, grade: 1, a: Math.fround(3 - 18 / 30), frame: 18 }); // 118 + 11 x 12 = 250
+    // the same press 12 frames after the opening would have hit anyway; one timed off the OLD sweep (frame 38) misses on the restarted one
+    const t = swordplayStart(g);
+    for (let f = 1; f <= 5; f++) swordplayFrame(t, g, false);
+    swordplayFrame(t, g, true);
+    for (let f = 7; f <= 37; f++) swordplayFrame(t, g, false);
+    expect(swordplayFrame(t, g, true)).toEqual({ done: false }); // frame 38: the old sweep's window, the restarted marker is at 118 + 11 x 32 reflected
   });
 
-  it('a press at or past the timer is the expiry fail, with no time left', () => {
-    expect(pressTidusTiming({ ...BAR, elapsedMs: 3000, sweepStartMs: 2471 })).toEqual({ kind: 'expired', timing: expireTidusTiming(3000) });
-    expect(expireTidusTiming(2200)).toEqual({ success: false, timeRemainingMs: 0, timerMs: 2200 });
+  it('a press past the limit is the expiry fail, with no time left', () => {
+    const s = swordplayStart(g);
+    for (let f = 1; f <= 90; f++) swordplayFrame(s, g, false);
+    expect(swordplayFrame(s, g, true)).toEqual({ done: true, grade: 0, a: 0, frame: 91 }); // frame 91 finds A = 0 before it looks at the press
   });
 });
 
@@ -73,40 +84,41 @@ describe('the real overlay with real keys: miss -> restart -> hit or expiry', ()
     return { root, cursor, result: () => result };
   };
 
-  it('a mis-press at ~6 ms does not resolve; the cursor goes back to the far left; the timer then expires as a fail', async () => {
+  it('a mis-press at ~6 ms does not resolve; the cursor goes back to the far left; the limit then ends it as a fail', async () => {
     const o = open();
     await vi.advanceTimersByTimeAsync(6);
     press();
-    expect(o.cursor()).toBe(0); // back at the far left
+    await vi.advanceTimersByTimeAsync(60); // frame 1 (due at 33 ms, run on the next animation frame) sees the press: a miss, the marker restarts at 118 and steps to 129
+    expect(o.cursor()).toBeCloseTo(((129 - 118) / 275) * 100, 1); // 4 percent
     await vi.advanceTimersByTimeAsync(100);
     expect(o.result()).toBeUndefined(); // still playing
     expect(o.root.querySelector('.ffx-mg--fail')).toBeNull();
-    await vi.advanceTimersByTimeAsync(3500); // past the 3 000 ms timer and the 400 ms of flash + close
-    expect(o.result()).toEqual({ kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 0, timerMs: 3000 } });
+    await vi.advanceTimersByTimeAsync(3500); // past the 3 000 ms limit and the 400 ms of flash + close
+    expect(o.result()).toEqual({ kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 0, timerMs: 3000, frame: 91 } });
   });
 
-  it('a mis-press then a correct press resolves the success, with the time left at the correct press', async () => {
+  it('a mis-press then a correct press resolves the success, with the time left at the frame the correct press was seen in', async () => {
     const o = open();
     await vi.advanceTimersByTimeAsync(6);
-    press(); // miss: the sweep restarts at ~6 ms
-    await vi.advanceTimersByTimeAsync(CENTRE_MS);
-    press(); // the restarted cursor is at the centre now; the next test separates the two sweeps
+    press(); // miss in frame 1: the marker restarts, and is judged at 118 + 11 j in frame 1 + j
+    await vi.advanceTimersByTimeAsync(414); // t = 420 ms: frame 13 (due at 433 ms) will judge 118 + 11 x 12 = 250, inside [243, 267]
+    press();
     await vi.advanceTimersByTimeAsync(1000);
     const r = o.result();
     expect(r?.kind).toBe('tidus-timing');
     if (r?.kind !== 'tidus-timing') return;
     expect(r.timing.success).toBe(true);
-    expect(r.timing.timeRemainingMs).toBeGreaterThan(3000 - 6 - CENTRE_MS - 40);
-    expect(r.timing.timeRemainingMs).toBeLessThanOrEqual(3000 - 6 - CENTRE_MS + 40);
+    expect(r.timing.frame).toBe(13);
+    expect(r.timing.timeRemainingMs).toBeCloseTo(Math.fround(3 - 13 / 30) * 1000, 6); // 2566.67 ms
   });
 
   it('a mis-press late in the sweep restarts it from the left, so a press timed off the old sweep misses', async () => {
     const o = open();
-    await vi.advanceTimersByTimeAsync(700); // past the zone (238 px)
-    press(); // miss, restart at 700
-    await vi.advanceTimersByTimeAsync(1006 - 700 - 6); // 1000 ms in: the old sweep would be at 340 px, the new at ~102 px
-    expect(o.cursor()).toBeLessThan(40); // 102/360 = 28 %
-    press(); // a miss on the restarted sweep, still no resolution
+    await vi.advanceTimersByTimeAsync(700); // past the window on the way out
+    press(); // seen by frame 22 (733 ms): a miss, restart
+    await vi.advanceTimersByTimeAsync(1000 - 700); // t = 1000 ms, frame 30: the restarted marker is at 129 + 8 x 11 = 217, the old sweep's would be elsewhere
+    expect(o.cursor()).toBeLessThan(40); // (217 - 118) / 275 = 36 percent
+    press(); // frame 31 judges 217: a miss on the restarted sweep, still no resolution
     await vi.advanceTimersByTimeAsync(50);
     expect(o.result()).toBeUndefined();
   });
@@ -149,7 +161,7 @@ describe('a failed Swordplay earns no timing bonus [§5.2, §5.3; as PR-0267 for
 
   for (const def of Object.values(TIDUS)) {
     it(`${def.name}: a fail deals the same whatever the clock showed, and never out-damages a success`, () => {
-      const timerMs = { 'energy-rain': 2600, 'blitz-ace': 2200 }[def.id] ?? 3000;
+      const timerMs = { 'blitz-ace': 2000 }[def.id] ?? 3000; // the game's limits: 3 s, Blitz Ace 2 s (it was 2.6 s for Energy Rain and 2.2 s for Blitz Ace)
       const expired = total(fire(def, timing(false, 0, timerMs)).amounts);
       expect(total(fire(def, timing(false, timerMs - 6, timerMs)).amounts)).toBe(expired);
       expect(total(fire(def, timing(true, 0, timerMs)).amounts)).toBeGreaterThanOrEqual(expired);

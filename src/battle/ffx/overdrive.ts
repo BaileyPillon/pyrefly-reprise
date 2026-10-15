@@ -13,7 +13,8 @@ import type {
 } from '../common/types.ts';
 import { type Ctx, has } from './state.ts';
 import type { TimingBonus } from './formulas.ts';
-import { FURY_ANCHOR_BUDGET, FURY_MAX_CASTS, degreesPerCast, furyCastsFor, furySpellIdsFor, furyTierOf } from './fury.ts';
+import { DEGREES_PER_ROTATION, FURY_MAX_CASTS, furyCastsFor, furySpellIdsFor } from './fury.ts';
+import { furyParams, minigameLimitMs, swordplayParams } from './adapt/minigame.ts';
 import { attackReelHits } from './reels.ts';
 import { defaultGrandSummonAeon } from './aeon-duel.ts';
 import { MIX_PREVIEW_ALL_PAIRS, grandSummonEntries, mixPickerParams } from './pickerParams.ts';
@@ -23,17 +24,7 @@ import { gaugeAdd, gaugePay } from './gauge.ts';
 const ATTACK_REEL_SYMBOLS = new Set(['1-hit', '2-hit', 'miss', '1hit', '2hit']);
 
 // Re-exported so callers have one import site for Overdrive behaviour.
-export {
-  DEGREES_PER_ROTATION,
-  FURY_ANCHOR_BUDGET,
-  FURY_MAX_CASTS,
-  degreesPerCast,
-  furyCastsFor,
-  furySpellIdsFor,
-  furyTierOf,
-  isMenuMarker,
-} from './fury.ts';
-export type { FuryTier } from './fury.ts';
+export { DEGREES_PER_ROTATION, FURY_MAX_CASTS, furyCastsFor, furySpellIdsFor, isMenuMarker } from './fury.ts';
 
 /** Add to a combatant's gauge and emit the HUD event: the game's gauge add for a party member or an aeon (`./gauge.ts#gaugeAdd`). */
 export function addGauge(ctx: Ctx, c: FFXCombatant, raw: number, cause: string): void {
@@ -87,21 +78,12 @@ export function overdriveReady(c: FFXCombatant): boolean {
 // Minigame protocol [docs/CONTRACTS.md]
 // ---------------------------------------------------------------------------
 
-/** Published timer lengths [ffx-combat-core §5.2, §5.3]. */
-const TIMER_MS: Readonly<Record<string, number>> = {
-  'spiral-cut': 3000,
-  'slice-and-dice': 3000,
-  'energy-rain': 2600,
-  'blitz-ace': 2200,
-};
-
 /**
  * Default timer for a minigame kind, in ms. **`0` means "not a timed input"**,
  * not "no time" — see {@link minigameParams}, which omits the field entirely in
  * that case so an overlay cannot start a zero-length countdown.
  *
- * Lulu's Fury **is** timed: §5.7 gives it an input window of "~4 s, consistent
- * with the other timed Overdrives" `[estimate]`. It returning 0 is why Fury
+ * Lulu's Fury **is** timed: 4 s for all 19 spells (the game's, `FFX-G01` section 6.4; §5.7 had it as "~4 s" `[estimate]`). It returning 0 is why Fury
  * settled in 431 ms with `{ sweptDegrees: 0, casts: 0 }` and spent the gauge
  * for nothing. Ronso Rage and Mix are **pickers** — `types.ts` says so of Rage
  * in as many words — and stay untimed. §5.2 excludes Fury from the *damage*
@@ -110,12 +92,15 @@ const TIMER_MS: Readonly<Record<string, number>> = {
  */
 export function timerMsFor(def: AbilityDef): number {
   switch (def.minigame) {
+    // The game's limits (re-parity RC9, FFX only; `FFX-G01` sections 6.2 to 6.4, `adapt/minigame.ts#minigameLimitMs`): Spiral Cut, Slice and Dice and
+    // Energy Rain 3 s, Blitz Ace 2 s; Shooting Star, Dragon Fang and Banishing Blade 4 s, Tornado 3 s; every Fury 4 s. An ability that is none of them
+    // (a test's) keeps the old defaults.
     case 'tidus-timing':
-      return TIMER_MS[def.id] ?? 3000;
-    case 'auron-sequence': // Tornado 3 s [estimate, Bailey D-312: GF-KB, XU, AGS; input-rules note D1], the rest 4 s
-      return def.id === 'tornado' ? 3000 : 4000;
+      return minigameLimitMs(def) ?? 3000;
+    case 'auron-sequence':
+      return minigameLimitMs(def) ?? (def.id === 'tornado' ? 3000 : 4000);
     case 'lulu-fury':
-      return 4000;
+      return minigameLimitMs(def) ?? 4000;
     case 'wakka-reels':
     case 'ladyluck-reels':
       return 20000;
@@ -176,10 +161,10 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
   const base: Record<string, unknown> = { abilityId: def.id, ...(timerMs > 0 ? { timerMs } : {}) };
   switch (def.minigame) {
     case 'tidus-timing':
-      Object.assign(base, { travelMs: 1059, zonePercent: 12.22, name: def.name }); // title (od4); each tier's own pair is in extra.minigameParams (PR-0308)
+      Object.assign(base, { name: def.name, ...swordplayParams(def) }); // the title is the Overdrive chosen (od4); the bar, window and marker speed are the game's for this move (RC9)
       break;
     case 'auron-sequence':
-      Object.assign(base, { name: def.name }); // the title is the Overdrive chosen (od4); its `sequence` comes from extra.minigameParams below (PR-0308)
+      Object.assign(base, { name: def.name }); // the title is the Overdrive chosen (od4); its `sequence` (the game's order) comes from extra.minigameParams below (PR-0308, RC9)
       break;
     case 'wakka-reels':
       // The strip comes off the reel set the player picked — it was hard-coded
@@ -192,14 +177,8 @@ export function minigameParams(ctx: Ctx, def: AbilityDef, user: FFXCombatant): R
       });
       break;
     case 'lulu-fury':
-      Object.assign(base, {
-        maxCasts: FURY_MAX_CASTS,
-        magic: user.stats.mag,
-        spellAbilityId: def.id,
-        furyTier: furyTierOf(def),
-        degreesPerCast: degreesPerCast(def, user.stats.mag),
-        anchorBudgetDegrees: FURY_ANCHOR_BUDGET,
-      });
+      // The spell's variant and the 16 thresholds the game builds from it and Lulu's Magic (`adapt/minigame.ts`); the overlay turns them into casts.
+      Object.assign(base, { maxCasts: FURY_MAX_CASTS, magic: user.stats.mag, spellAbilityId: def.id, ...furyParams(def, user.stats.mag) });
       break;
     case 'kimahri-rage':
       Object.assign(base, { rages: user.overdrive?.unlockedOverdriveIds ?? [] });
@@ -267,10 +246,11 @@ export function rollDefaultMinigame(ctx: Ctx, kind: MinigameKind, def: AbilityDe
       };
     }
     case 'lulu-fury': {
-      // Roll the *input*, not the outcome: a swept angle inside the published
-      // 15-rotation budget, then let `degreesPerCast` decide how many casts
-      // that buys at this Magic and tier.
-      const sweptDegrees = ctx.rng.aux.int(Math.floor(FURY_ANCHOR_BUDGET / 3), FURY_ANCHOR_BUDGET);
+      // Roll the *input*, not the outcome: a swept angle of 5 to 15 rotations
+      // (one draw, as ever), then let the game's table decide how many casts
+      // that buys at this Magic and spell (`furyCastsFor`, RC9).
+      const budget = 15 * DEGREES_PER_ROTATION;
+      const sweptDegrees = ctx.rng.aux.int(Math.floor(budget / 3), budget);
       return { kind, fury: { sweptDegrees, casts: furyCastsFor(def, user.stats.mag, sweptDegrees) } };
     }
     case 'rikku-mix': {

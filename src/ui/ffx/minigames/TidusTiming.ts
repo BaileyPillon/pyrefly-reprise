@@ -1,24 +1,55 @@
 import type { MinigameResult, TimingResult } from '../../../battle/common/types.ts';
+import {
+  SWORDPLAY_CATEGORIES,
+  type SwordplayFrame,
+  type SwordplayGeometry,
+  swordplayFraction,
+  swordplayFrame,
+  swordplayGeometry,
+  swordplayStart,
+  swordplayWindowFractions,
+} from '../../../battle/ffx/kernel/minigame-swordplay.ts';
 import { RawInputWatcher } from '../rawInput.ts';
-import { expireTidusTiming, pressTidusTiming, swordplayGeometry, tidusCursorPosition } from './logic.ts';
+import { FrameDriver } from './frameDriver.ts';
 import { OverdriveOverlay } from './OverdriveOverlay.ts';
 import { DeviceTracker, markTappable, zoneInstruction } from './overlayInput.ts';
 import { num, str } from './params.ts';
 
 /**
+ * The bar the overlay plays: the engine's published numbers (`battle/ffx/adapt/minigame.ts#swordplayParams`), else the move's own from the
+ * game's table. A bare call (a demo, a test: `{ name, timerMs }`) plays Spiral Cut. `timerMs` is the limit when it is given.
+ */
+export function swordplayGeometryFor(params: Record<string, unknown>): SwordplayGeometry {
+  const category = num(params['category'], 0x20);
+  const base = swordplayGeometry(SWORDPLAY_CATEGORIES.includes(category) ? category : 0x20);
+  return {
+    limit: num(params['timerMs'], base.limit * 1000) / 1000,
+    speed: num(params['speed'], base.speed),
+    width: base.width,
+    x0: num(params['x0'], base.x0),
+    bar: num(params['bar'], base.bar),
+    lo: num(params['windowLo'], base.lo),
+    hi: num(params['windowHi'], base.hi),
+  };
+}
+
+/**
  * Tidus — Swordplay [visual-bible §3.11.1], restyled onto Ink & Gold's
  * `.ig-minigame__bar`/`__zone`/`__cursor` (`docs/handoff/ink-and-gold/
- * Swordplay.dc.html` is this overlay's own approved mock): a ping-pong
- * cursor over a bar with a highlighted gold zone; the zone narrows and the
- * cursor speeds up for stronger Overdrives, tuned per-Overdrive by the
- * caller's `params` (`zoneHalfWidth`, `speedPxPerSec`) rather than
- * hard-coded here. Pixel math stays internal (it feeds the pure resolver in
- * `logic.ts`); only the CSS custom properties driving `.ig-minigame__bar`
- * are percentages.
+ * Swordplay.dc.html` is this overlay's own approved mock): a cursor bouncing
+ * over a bar with a highlighted gold zone; the zone narrows and the cursor
+ * speeds up for stronger Overdrives. **FFX only.**
  *
- * A press outside the zone is not a failure: the cursor goes back to the far
- * left and sweeps again, and only timer expiry fails [ffx-combat-core §5.3
- * rule 1, `[verified: 2 sources]`; `pressTidusTiming`]. FFX only.
+ * ## The game's controller, a frame at a time (re-parity RC9, lane FFX-A; Bailey 2026-10-11, plan question Q3, D-765)
+ *
+ * The marker is no longer a smooth real-time slide: it moves a whole step every 1/30 s frame (11, 12, 13 and 14 units on a 275-unit bar for
+ * the four moves) and the gold zone is the game's narrower, centred window (8.7, 7.3, 7.3 and 6.5 percent of the bar), both from
+ * `battle/ffx/kernel/minigame-swordplay.ts`, which the game's own machine code was run against (`FFX-G01` section 6.2). What is drawn is what
+ * is judged: a press is seen by the next frame, which tests the marker as it stands on screen. The look (slab, bar, ring, words) is unchanged.
+ *
+ * A press outside the zone is not a failure: the cursor goes back to the far left and sweeps again, and only the limit running out fails
+ * [ffx-combat-core §5.3 rule 1, `[verified: 2 sources]`, and the kernel]. The result carries the controller frame the press was seen in
+ * (`TimingResult.frame`) and the time left as the game computes it, `limit - frame / 30` seconds.
  *
  * ## Every input can press (PR-0360, FFX only)
  *
@@ -29,10 +60,8 @@ import { num, str } from './params.ts';
  * The subtitle names the control in use (`PRESS ENTER` / `PRESS CROSS` / `TAP` / `CLICK` in the gold zone).
  */
 export function openTidusTiming(root: HTMLElement, params: Record<string, unknown>): Promise<MinigameResult> {
-  const timerMs = num(params['timerMs'], 3000);
-  const barWidth = num(params['barWidth'], 360);
-  // The Overdrive's own zone and marker speed (`zonePercent`, `travelMs`: PR-0308); the pixel params are the demo's.
-  const { zoneHalfWidth, speedPxPerSec: speed } = swordplayGeometry(params, barWidth);
+  const geom = swordplayGeometryFor(params);
+  const timerMs = geom.limit * 1000;
   const name = str(params['name'], 'Slice & Dice');
 
   const overlay = new OverdriveOverlay();
@@ -52,24 +81,49 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
     </div>`;
   const barEl = overlay.bodyEl.querySelector<HTMLElement>('[data-role="bar"]')!;
   const cursorEl = overlay.bodyEl.querySelector<HTMLElement>('[data-role="cursor"]')!;
-  barEl.style.setProperty('--ig-zone-start', `${(((barWidth / 2 - zoneHalfWidth) / barWidth) * 100).toFixed(2)}%`);
-  barEl.style.setProperty('--ig-zone-width', `${((zoneHalfWidth * 2) / barWidth) * 100}%`);
+  // The window is centred on the bar and the bar's CSS is in percent: start and width as shares of the 275-unit bar.
+  const zone = swordplayWindowFractions(geom);
+  barEl.style.setProperty('--ig-zone-start', `${(zone.start * 100).toFixed(2)}%`);
+  barEl.style.setProperty('--ig-zone-width', `${(zone.width * 100).toFixed(2)}%`);
 
   return new Promise<MinigameResult>((resolve) => {
-    let rafId = 0;
+    const state = swordplayStart(geom);
     let settled = false;
-    let sweepStartMs = 0;
-    /** The one press, from a key, the pad or a tap on the slab. */
+    let pressQueued = false;
+    const setCursor = (): void => {
+      cursorEl.style.left = `${(swordplayFraction(state, geom) * 100).toFixed(2)}%`;
+    };
+
+    const finish = async (end: Extract<SwordplayFrame, { done: true }>): Promise<void> => {
+      if (settled) return;
+      settled = true;
+      driver.stop();
+      watcher.detach();
+      overlay.el.removeEventListener('pointerdown', onPointer);
+      setCursor();
+      const timing: TimingResult = { success: end.grade === 1, timeRemainingMs: end.grade === 1 ? end.a * 1000 : 0, timerMs, frame: end.frame };
+      await (timing.success ? overlay.flashSuccess() : overlay.flashFail());
+      await overlay.close();
+      resolve({ kind: 'tidus-timing', timing });
+    };
+
+    /** One controller frame: the press queued since the last one is seen now. */
+    const driver = new FrameDriver(
+      () => overlay.elapsedMs(),
+      () => {
+        const pressed = pressQueued;
+        pressQueued = false;
+        const end = swordplayFrame(state, geom, pressed);
+        if (end.done) void finish(end);
+        else setCursor();
+      },
+    );
+
+    /** The one press, from a key, the pad or a tap on the slab: seen by the next frame, after the frames already due have gone by. */
     const confirm = (): void => {
       if (settled) return;
-      const press = pressTidusTiming({ elapsedMs: overlay.elapsedMs(), sweepStartMs, barWidth, zoneHalfWidth, speedPxPerSec: speed, timerMs });
-      if (press.kind === 'miss') {
-        sweepStartMs = press.sweepStartMs; // the marker returns to the far left; the timer keeps running
-        setCursor(0);
-        return;
-      }
-      if (press.kind === 'hit') setCursor(press.cursorPos);
-      void finish(press.timing);
+      driver.catchUp();
+      if (!settled) pressQueued = true;
     };
     const watcher = new RawInputWatcher((b, source) => {
       if (b !== 'confirm' || settled) return;
@@ -85,28 +139,13 @@ export function openTidusTiming(root: HTMLElement, params: Record<string, unknow
     };
     overlay.el.addEventListener('pointerdown', onPointer);
 
-    const setCursor = (pos: number): void => {
-      cursorEl.style.left = `${((pos / barWidth) * 100).toFixed(2)}%`;
-    };
-
-    const animate = (): void => {
-      setCursor(tidusCursorPosition(overlay.elapsedMs() - sweepStartMs, barWidth, speed));
-      rafId = requestAnimationFrame(animate);
-    };
-
-    const finish = async (timing: TimingResult): Promise<void> => {
-      if (settled) return;
-      settled = true;
-      cancelAnimationFrame(rafId);
-      watcher.detach();
-      overlay.el.removeEventListener('pointerdown', onPointer);
-      await (timing.success ? overlay.flashSuccess() : overlay.flashFail());
-      await overlay.close();
-      resolve({ kind: 'tidus-timing', timing });
-    };
-
-    overlay.startTimer(timerMs, () => void finish(expireTidusTiming(timerMs)));
+    // The ring runs out at the limit: the frames still due go by, then the frame that finds the limit gone ends it.
+    overlay.startTimer(timerMs, () => {
+      driver.pump();
+      if (!settled) driver.forceFrame();
+    });
     watcher.attach();
-    animate();
+    driver.start();
+    setCursor();
   });
 }
