@@ -145,7 +145,7 @@ export function buildBattleResult(
   const { gil, drops } = earned;
   // A formation-level reward no enemy carries (Chapter XIV's 5,000 AP, B13 = a); 0 elsewhere.
   const ap = earned.ap + (outcome === 'victory' ? victoryBonusAp(ctx) : 0);
-  if (outcome === 'victory') gaugeOnVictory(ctx); // `pp_BtlOdOnVictory`: every party member in the battle, dead or not, runs the Victor counter
+  gaugeOnVictory(ctx); // `pp_BtlOdOnVictory` (0x007b1540) runs for EVERY result, not only a victory [FFX-G10 3.5; RC8, FFX only]: every party member in the battle, dead or not, runs the Victor counter, and a living Victor free of Curse and Petrify gains 20
 
   const result: BattleResult = {
     outcome,
