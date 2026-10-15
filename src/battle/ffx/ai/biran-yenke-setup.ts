@@ -10,7 +10,7 @@
 import type { FFXCombatant } from '../../common/types.ts';
 import { type Ctx, tryActor } from '../state.ts';
 import { type BrotherNumbers, ronsoStatsFromKimahri } from './biran-yenke-stats.ts';
-import { BIRAN_ID, KIMAHRI_ID, YENKE_ID } from './biran-yenke-rules.ts';
+import { BIRAN_ID, KIMAHRI_ID, YENKE_ID, publishSides } from './biran-yenke-rules.ts';
 
 /** Write one brother's derived numbers onto his combatant (and his form's HP, as the possessed aeons' mirror does). */
 function write(c: FFXCombatant, n: BrotherNumbers): void {
@@ -29,4 +29,5 @@ export function applyBiranYenkeSetup(ctx: Ctx): void {
   const derived = ronsoStatsFromKimahri({ str: kimahri.stats.str, mag: kimahri.stats.mag, agi: kimahri.stats.agi, hp: kimahri.hp });
   write(biran, derived.biran);
   write(yenke, derived.yenke);
+  publishSides(ctx); // both start in Area 0: together (RE section 4, `[inferred]`)
 }

@@ -8,7 +8,7 @@
  * - **`limit`** opens FF7's Guard Scorpion experiment (`secret: true`, `./secretDoor.ts`). It is the one door with more than a word: the same chapter also opens on seven taps of the "Chapter
  *   select" label and on the pad sequence L1 R1 L1 R1 Select, so its matcher is the visit's `SecretDoor`. It opens in the key's own handler (its last letter, T, is bound to nothing, so no
  *   press is left over), its later letters are never board presses (L, I, M, I, T), and it stays shut while `ff7ExperimentReady()` says so (`gate`).
- * - **`leblanc`**, **`experiment`**, **`mushroom`**, **`fayth`**, **`daigoro`** (the Tourist Trap, FFX-2, `./daigoroDoor.ts`; D is `right`, A is `left`, R is `r1`, its last letter O is unbound) and **`valefor`** (FFX-2 Chapter 3's Valefor at Besaid, `./valeforDoor.ts`: V is SELECT, A is left, E is START, F and R are L1 and R1) are plain `WordDoor`s. Their last letter can be a bound key (Leblanc's C is START, the Experiment's and Mushroom's M is SELECT),
+ * - **`leblanc`**, **`experiment`**, **`mushroom`**, **`fayth`**, **`daigoro`** (the Tourist Trap, FFX-2, `./daigoroDoor.ts`; D is `right`, A is `left`, R is `r1`, its last letter O is unbound) **`valefor`** (FFX-2 Chapter 3's Valefor at Besaid, `./valeforDoor.ts`: V is SELECT, A is left, E is START, F and R are L1 and R1) and **`gagazet`** (FFX, Kimahri's solo trial against Biran and Yenke, `./gagazetDoor.ts`: A is left, **Z is confirm**, E is START; G and T are unbound) are plain `WordDoor`s. Their last letter can be a bound key (Leblanc's C is START, the Experiment's and Mushroom's M is SELECT),
  *   and party prep begins the fight on the latched press, so each opens on the board's *next frame*, which takes every press first (`ChapterSelectScreen.handleInput`, the `opening` frame); and a
  *   later letter that is a board key (the A of "leblanc" and "fayth" is `left`, the S of "mushroom" is `down`, the X of "experiment" is `cancel`) is claimed by the word, so it does not move the
  *   cursor (`KeyFeed.claimed`, the screen's `wordKey`).
@@ -18,7 +18,7 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc` and `experiment`, FFX for `mushroom` and `fayth`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro` and `valefor`, FFX for `mushroom`, `fayth` and `gagazet`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -30,6 +30,7 @@ import { MUSHROOM_DOOR_CHAPTER, MUSHROOM_DOOR_WORD } from './mushroomDoor.ts';
 import { FAYTH_DOOR_CHAPTER, FAYTH_DOOR_WORD } from './faythDoor.ts';
 import { DAIGORO_DOOR_CHAPTER, DAIGORO_DOOR_WORD } from './daigoroDoor.ts';
 import { VALEFOR_DOOR_CHAPTER, VALEFOR_DOOR_WORD } from './valeforDoor.ts';
+import { GAGAZET_DOOR_CHAPTER, GAGAZET_DOOR_WORD } from './gagazetDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -55,6 +56,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: FAYTH_DOOR_WORD, chapter: FAYTH_DOOR_CHAPTER },
   { word: DAIGORO_DOOR_WORD, chapter: DAIGORO_DOOR_CHAPTER },
   { word: VALEFOR_DOOR_WORD, chapter: VALEFOR_DOOR_CHAPTER },
+  { word: GAGAZET_DOOR_WORD, chapter: GAGAZET_DOOR_CHAPTER },
 ];
 
 /** What one key did to the doors. */

@@ -1036,7 +1036,7 @@ Learned via **Lancet** on enemies that carry the skill. Learning one **instantly
 | Stone Breath | 109 | 3 | all enemies | Strength | 0 | **Petrify at chance 254** | Anacondaur, Basilisk, Yenke Ronso |
 | Aqua Breath | 110 | 3 | all enemies | **Special Magic**, crit | **26** | Water | Chimera(-Brain/-geist), Yenke Ronso |
 | Doom | 111 | 3 | 1 enemy | Magic | 0 | applies **Doom** flag | Biran Ronso, Ghost, Wraith |
-| White Wind | 112 | 3 | whole party | **Healing** | **40** | MAG-scaled Cura-strength party heal | Dark Flan, Spirit |
+| White Wind | 112 | 3 | whole party | **Healing** | **40** | MAG-scaled Cura-strength party heal | Dark Flan, Spirit, **Yenke Ronso** (only after his own half-HP White Wind; `re-ffx-biran-yenke.md` §7, §8) |
 | Bad Breath | 113 | 4 | all enemies | Magic | 0 | Poison 100/254, Sleep 100/**10**, Silence 100/**10**, Darkness 100/**10** — *Kimahri's version cannot Confuse* | Malboro, Great Malboro |
 | Mighty Guard | 114 | 4 | whole party | Magic | 0 | **Protect + Shell (254) + one charge of each of the four Nuls** | Behemoth, Behemoth King, Biran Ronso |
 | Nova | 115 | **7** | all enemies | **Special Magic**, crit | **70** | massive non-elemental | Omega Weapon, Nemesis |

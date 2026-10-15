@@ -81,9 +81,23 @@ export function sameSide(ctx: Ctx, a: FFXCombatant, b: FFXCombatant): boolean {
   return areaOf(ctx, a) === areaOf(ctx, b);
 }
 
+/** The battle flag `ronso.gate.<brother>`: 1 once that brother has queued his half-HP Rage, so Lancet may now offer his Mighty Guard or White Wind. For the guide and the advisor. */
+export const GATE_FLAG_PREFIX = 'ronso.gate.';
+
+/** The battle flag the guide's hints and the advisor read (`BattleState.flags`): 1 while both brothers stand on the same side, 0 while they are apart. */
+export const SAME_SIDE_FLAG = 'ronso.sameSide';
+
+/** Publish whether the brothers stand together (the opening, and after every Bulldoze). Nothing in the engine reads it back: it is for the guide and the advisor. */
+export function publishSides(ctx: Ctx): void {
+  const biran = tryActor(ctx, BIRAN_ID);
+  const yenke = tryActor(ctx, YENKE_ID);
+  if (biran !== undefined && yenke !== undefined) ctx.state.flags[SAME_SIDE_FLAG] = sameSide(ctx, biran, yenke) ? 1 : 0;
+}
+
 /** Bulldoze: the user's side flips (RE 5.3: Area 0 to 1 and back; the action is queued after the write). */
 export function swapSide(ctx: Ctx, self: FFXCombatant): void {
   rtOf(ctx, self.id).ai[AREA] = areaOf(ctx, self) === 0 ? 1 : 0;
+  publishSides(ctx);
 }
 
 /** Kimahri, the one living party member (no draw: one candidate). */
@@ -118,6 +132,7 @@ export function takeHalfHpAction(ctx: Ctx, self: FFXCombatant, memory: Memory): 
   if (own === undefined || partner === undefined || num(memory, V10_HALF_HP) !== PENDING) return undefined;
   memory[V10_HALF_HP] = SPENT;
   memory[queuedKey(own.rage)] = true; // the Lancet gate opens when he QUEUES it, not when it resolves (RE section 7)
+  ctx.state.flags[`${GATE_FLAG_PREFIX}${self.id}`] = 1; // for the guide and the advisor (the engine reads the memory above, not this flag)
   const together = isAlive(partner) && sameSide(ctx, self, partner);
   return { move: own.move, targets: together ? [self.id, partner.id] : [self.id] };
 }

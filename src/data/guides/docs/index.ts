@@ -26,6 +26,7 @@ import { SEYMOUR_OMNIS_DOC } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_DOC } from './seymour-natus.ts';
 import { ISAARU_DOC } from './ffx-isaaru.ts';
 import { SINSPAWN_GUI_DOC } from './sinspawn-gui.ts';
+import { BIRAN_YENKE_DOC } from './biran-yenke.ts';
 import { SIN_FINS_CORE_DOC } from './sin-fins-core.ts';
 import { SIN_FACE_DOC } from './sin-face.ts';
 import { FFX2_EXPERIMENT_DOC } from './ffx2-experiment.ts';
@@ -50,6 +51,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_NATUS_DOC,
   ISAARU_DOC,
   SINSPAWN_GUI_DOC, // the hidden Sinspawn Gui chapter (FFX only)
+  BIRAN_YENKE_DOC, // the hidden Biran and Yenke chapter (FFX only)
   SIN_FINS_CORE_DOC,
   SIN_FACE_DOC,
   FFX2_EXPERIMENT_DOC, // the hidden Experiment (FFX-2 only)
