@@ -17,8 +17,9 @@
  * (`onBrotherHit`). The dialogue is not shown (no script text, no new content: the driver's decision) but the draw is kept, so the stream stands where the game's does. The turn scripts draw nothing.
  *
  * **Not modelled, and why** (listed in the handoff): the brothers' dialogue (the draw above is kept); event 7's extra side flip for a Berserk Biran (nothing reads his side once Yenke has fallen: the
- * half-HP action is cancelled and the defence swap needs a living partner), and with it the open question whether the game's default monster Attack is Bulldoze (a Berserk Biran swings the engine's generic
- * Attack here, whose numbers equal Bulldoze's); the camera's side words.
+ * half-HP action is cancelled and the defence swap needs a living partner); the camera's side words. (The question whether the game's default monster Attack is Bulldoze is answered, by the RE session's last pass:
+ * a Berserk monster's default attack is its record's forced-action word, Biran's is Bulldoze, so Berserk's x3/2 applies; a Berserk Biran swings the engine's generic Attack here, whose numbers equal Bulldoze's and
+ * which already takes the x3/2 as the default attack, so nothing changes: `research/re-ffx-targeting.md` section 3, FFX-G04, FFX-H02, `research/re-ffx-damage.md`.)
  *
  * The battle layer does not import `src/data`, so the ids are copied here and `tests/unit/chapters/biran-yenke-data.test.ts` pins that the copies agree with the data.
  */

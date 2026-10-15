@@ -69,9 +69,12 @@ Address: none yet (branch ch-biran-yenke, code and tests at 5e29bb0c, merged int
   and the first menu with Kimahri alone, Lancet through the real menu teaching Fire Breath, a win in 0:56 (both brothers' own Rages cast, six Rages learned, the
   closing scene and the results), a loss with Retry, the whole thing again on a 390x844 phone, and the other hidden words still opening their chapters. The
   advisor's line wins 100 of 100 seeds on the engine (in 16 decisions); the plain Attack with a Potion also wins 100 of 100 (in 25); the plain Attack alone wins none.
-- **Disclosed:** Self-Destruct (a Rage Kimahri can learn here) was proved in the engine, not in a browser run. A Berserk Biran swings an ordinary attack, not Bulldoze,
-  and never changes side; whether the game's default monster attack is Bulldoze is an open question for the reverse-engineering lane. The gear the brothers
-  drop and Kimahri's Steal are not modelled. At 1600x900 the Sensor tab can sit over Biran's head. The pause screen's hero painting is not made.
+- **Disclosed:** Self-Destruct (a Rage Kimahri can learn here) was proved in the engine, not in a browser run. A Berserk Biran swings the engine's ordinary attack and
+  never changes side. The open question whether that swing is Bulldoze is **answered** by the reverse-engineering session: a Berserk monster's default attack is the
+  forced-action word of its record, Biran's is Bulldoze (0x60A5), so Berserk's three-halves applies to it (research/re-ffx-targeting.md section 3 and FFX-G04 for the
+  forced turn, FFX-H02 for the record, research/re-ffx-damage.md for the multiplier); the ordinary attack has Bulldoze's numbers (formula 1, power 16), so nothing on
+  screen changes and the engine is untouched. The gear the brothers drop and Kimahri's Steal are not modelled. At 1600x900 the Sensor tab can sit over Biran's head.
+  The pause screen's hero painting is not made.
 
 ![The first menu at 1600x900: Kimahri alone against Biran and Yenke on Mt. Gagazet, the guide open and the advisor's first tip, Lancet](docs/screenshots/ch-biran-yenke/1600x900-first-menu.jpg)
 

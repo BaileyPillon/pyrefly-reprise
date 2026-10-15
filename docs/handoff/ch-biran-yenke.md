@@ -159,7 +159,10 @@ preview server stopped by its port afterwards). The script is `proof.mjs` in the
 ## Open items
 
 1. **Berserk Biran swings the engine's generic Attack** (the numbers equal Bulldoze's) **and never flips side** (the event-7 flip is not modelled). Nothing reads his side after Yenke dies (the half-HP action is
-   cancelled and the defence swap needs a living partner). **Open question for RE:** is the game's default monster attack Bulldoze? That decides whether Berserk's x3/2 applies to his swing.
+   cancelled and the defence swap needs a living partner). **The question this item used to carry, whether the game's default monster attack is Bulldoze, is answered** (the RE session's last pass): a Berserk monster's
+   default attack is the forced-action word of its record, and Biran's is Bulldoze (0x60A5), so Berserk's x3/2 applies to his swing (`research/re-ffx-targeting.md` section 3 and FFX-G04 for the forced turn, FFX-H02 for the
+   record's forced-action word, `research/re-ffx-damage.md` for the x3/2: it applies when the executing command is the user's default attack). The engine's generic Attack has the same numbers (formula 1, power 16) and
+   already takes the x3/2 as the default attack, so nothing visible changes and there is no engine change.
 2. The **Mountain Gate painting**, the **two brothers' paintings** (provisional), a yield pose for them, and the **music** are Bailey's picks. Listing the chapter on the board waits for his word.
 3. **Not modelled:** the gear drop (the game gives each brother one; the engine has no gear record for it), the Steal in this build (Kimahri's preset has no Steal), the brothers' dialogue (no barks), the camera's side words.
 4. **Self-Destruct** ends the fight as a withdrawal (see above), not in a browser run; a defeat is the game's "game over" in the field event's flag word. The difference is in the existing all-ejected rule, not in this chapter.
