@@ -36,6 +36,8 @@ import { type Ctx, tryActor } from './state.ts';
 export const AEONS_ONLY_FLAG = 'aeonDuel.only';
 /** `state.flags` key prefix: `aeonDuel.lock:<aeonId>` holds the id of the enemy it mirrors. */
 export const AEON_LOCK_PREFIX = 'aeonDuel.lock:';
+/** `state.flags` key prefix: `aeonDuel.reason:<aeonId>` holds the words a lock gives instead of "Mirror of ..." (the hidden Last Summoning's "Taken by Yu Yevon"; absent for Chapter XIV's). */
+export const AEON_LOCK_REASON_PREFIX = 'aeonDuel.reason:';
 /** `state.flags` key: AP paid on victory on top of the enemies' own. */
 export const VICTORY_BONUS_AP_FLAG = 'victory.bonusAp';
 
@@ -45,7 +47,10 @@ export const ONLY_AN_AEON = 'Only an aeon can fight an aeon';
 /** Copy the formation's duel rules into the battle. A no-op for every other formation. */
 export function applyAeonDuelSetup(ctx: Ctx, group: EnemyGroupDef): void {
   if (group.aeonsOnly === true) ctx.state.flags[AEONS_ONLY_FLAG] = true;
-  for (const lock of group.lockedAeons ?? []) ctx.state.flags[AEON_LOCK_PREFIX + lock.aeonId] = lock.mirrorOf;
+  for (const lock of group.lockedAeons ?? []) {
+    ctx.state.flags[AEON_LOCK_PREFIX + lock.aeonId] = lock.mirrorOf;
+    if (lock.reason !== undefined) ctx.state.flags[AEON_LOCK_REASON_PREFIX + lock.aeonId] = lock.reason;
+  }
   if (typeof group.victoryBonusAp === 'number' && group.victoryBonusAp > 0) {
     ctx.state.flags[VICTORY_BONUS_AP_FLAG] = group.victoryBonusAp;
   }
@@ -66,6 +71,8 @@ export function lockedMirrorOf(ctx: Ctx, aeonId: string): CombatantId | undefine
 export function lockReason(ctx: Ctx, aeonId: string): string | undefined {
   const mirror = lockedMirrorOf(ctx, aeonId);
   if (mirror === undefined) return undefined;
+  const said = ctx.state.flags[AEON_LOCK_REASON_PREFIX + aeonId];
+  if (typeof said === 'string') return said;
   return `Mirror of ${tryActor(ctx, mirror)?.name ?? mirror}`;
 }
 
@@ -172,7 +179,8 @@ export function duelRefusalFor(ctx: Ctx, user: FFXCombatant, command: Command): 
  * `[derived]`) are left out, exactly as the Summon list leaves them out.
  */
 export function grandSummonChoices(ctx: Ctx): string[] {
-  const keys = [...ctx.rt.aeonRoster.keys()];
+  // The Magus Sisters are one choice (a build that owns them, re-parity lane FFX-K): Cindy stands for the three. No other build has `ctx.rt.sisters`.
+  const keys = [...ctx.rt.aeonRoster.keys()].filter((k) => !(ctx.rt.sisters !== undefined && (k === 'sandy' || k === 'mindy')));
   if (!aeonsOnly(ctx)) return keys.filter((k) => lockedMirrorOf(ctx, k) === undefined);
   return keys.filter((k) => {
     const aeon = ctx.rt.aeonRoster.get(k);

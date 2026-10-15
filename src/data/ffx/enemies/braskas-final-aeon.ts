@@ -49,7 +49,7 @@ import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
  * gauge. `aeon`/`yu-yevon` context: Agility 30, Power Wave strips only
  * Poison/Zombie/Reflect and carries no gauge bonus.
  */
-function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, context: 'bfa' | 'aeon-or-yu-yevon'): EnemyDef {
+export function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, context: 'bfa' | 'aeon-or-yu-yevon'): EnemyDef {
   return {
     id,
     name: 'Yu Pagoda',
@@ -267,10 +267,12 @@ const POSSESSED_AEON_ABILITY_IDS: Record<BraskasFinalAeonEnemyId, string[]> = {
   'possessed-shiva': ['possessed-shiva-heavenly-strike', 'possessed-shiva-diamond-dust'],
   'possessed-bahamut': ['possessed-bahamut-impulse', 'possessed-bahamut-mega-flare'],
   'possessed-anima': ['possessed-anima-pain', 'possessed-anima-oblivion'],
-  'possessed-yojimbo': ['possessed-yojimbo-daigoro', 'possessed-yojimbo-zanmato'],
-  'possessed-cindy': ['possessed-cindy-camisade', 'possessed-cindy-delta-attack', 'curaga'],
-  'possessed-sandy': ['possessed-sandy-razzia', 'haste', 'reflect'],
-  'possessed-mindy': ['possessed-mindy-passado'],
+  // The hidden Last Summoning chapter's record fixes (2026-10-15; research/re-ffx-last-summoning.md section 1.4 and 4): Yojimbo has Kozuka and Wakizashi and no Daigoro; Cindy adds Drain, Mindy adds Flare; the Sisters'
+  // token is the row Sandy and Mindy send Cindy when all three gauges are full. Chapter III never builds these four.
+  'possessed-yojimbo': ['possessed-yojimbo-kozuka', 'possessed-yojimbo-wakizashi', 'possessed-yojimbo-zanmato'],
+  'possessed-cindy': ['possessed-cindy-camisade', 'possessed-cindy-delta-attack', 'curaga', 'drain'],
+  'possessed-sandy': ['possessed-sandy-razzia', 'haste', 'reflect', 'possessed-sisters-token'],
+  'possessed-mindy': ['possessed-mindy-passado', 'flare', 'possessed-sisters-token'],
   // Unused keys required by the BraskasFinalAeonEnemyId union — never built by buildPossessedAeonChain.
   'braskas-final-aeon': [],
   'yu-pagoda-left': [],
@@ -316,7 +318,7 @@ const POSSESSED_AEON_SENSOR_TEXT: Partial<Record<BraskasFinalAeonEnemyId, string
  * [verified: 2 sources] and is overruled by the game's own script). Everything
  * else (affinities, immunities, ability ids, flags) is real data and ships as-is.
  */
-function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
+export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): EnemyDef {
   return {
     id: aeonId,
     name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`,
@@ -360,6 +362,9 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
     ...(POSSESSED_PLAIN_ATTACKERS.includes(aeonId) ? { plainAttack: POSSESSED_PLAIN_ATTACK } : {}),
     flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
     threatenChance: 0,
+    // The game's Zanmato byte plus one (`adapt/yojimbo.ts#zanmatoByte`): the possessed Valefor to Yojimbo hold byte 2, the possessed Sisters byte 3 (research/re-ffx-last-summoning.md section 1.5, [bytes]). Read only by the player's
+    // Yojimbo, who no chain of Chapter III ever holds; the Pagodas' byte 4 is what sets the penalty in every link (RE 8.3).
+    zanmatoLevel: aeonId === 'possessed-cindy' || aeonId === 'possessed-sandy' || aeonId === 'possessed-mindy' ? 4 : 3,
     sensorText: POSSESSED_AEON_SENSOR_TEXT[aeonId] ?? 'Possessed. It used to be an ally.',
     scanText: 'Yu Yevon wears it now. Destroying it is the only mercy left.',
   };

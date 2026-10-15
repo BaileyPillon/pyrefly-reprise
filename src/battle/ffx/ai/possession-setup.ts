@@ -37,10 +37,13 @@ export function mirrorPossessedAeon(c: FFXCombatant, party: FFXPartyBuild): void
  */
 export function applyPossessionOpening(ctx: Ctx): void {
   const enemies = ctx.state.enemyIds.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined);
-  const aeon = enemies.find((c) => c.flags.isPart !== true && c.id.startsWith('possessed-'));
+  const possessed = enemies.filter((c) => c.flags.isPart !== true && c.id.startsWith('possessed-'));
+  // Chapter III has one possessed body a battle. The Magus Sisters' battle (the hidden Last Summoning, FFX only) has three: only Cindy has First Strike and CTB 0, the other two start at 24 with the Pagodas (RE section 1.3, 6.2).
+  const aeon = possessed.find((c) => c.id === 'possessed-cindy') ?? possessed[0];
   const yuYevon = enemies.find((c) => c.id === 'yu-yevon');
   if (aeon === undefined && yuYevon === undefined) return;
   if (aeon !== undefined) rtOf(ctx, aeon.id).ctb = 0;
+  for (const other of possessed.filter((c) => c !== aeon)) rtOf(ctx, other.id).ctb = 24;
   for (const part of enemies.filter((c) => c.flags.isPart === true)) rtOf(ctx, part.id).ctb = 24;
   for (const id of ctx.state.activeIds) rtOf(ctx, id).ctb = Math.min(255, rtOf(ctx, id).ctb + (aeon !== undefined ? 2 : 1));
 }

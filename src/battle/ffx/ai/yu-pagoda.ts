@@ -27,6 +27,7 @@ import { type Ctx, has, isAlive, rtOf, tryActor } from '../state.ts';
 import { recoveryTicks } from '../turnQueue.ts';
 import { gameMod, randomLiving } from './game-rolls.ts';
 import { type HitEvent, registerHitScript } from './hit-script.ts';
+import { isSisterBody, sistersPowerWave } from './possessed-sisters.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 
 /** The pool absorbed in the current life (v7). The maximum HP is the pool of the life in hand (v8). */
@@ -63,6 +64,8 @@ export const yuPagodaAi = (ai: AiContext): Command | null => {
   const main = mainEnemy(ctx);
 
   if (partner !== undefined && isAlive(partner) && main !== undefined) {
+    // The hidden Last Summoning's Sisters' battle (FFX only; inert everywhere else): the wave goes to the living Sister with the lowest gauge, and the Pagoda does nothing when that gauge is full (`./possessed-sisters.ts`).
+    if (isSisterBody(main)) return sistersPowerWave(ai);
     if (main.id === 'braskas-final-aeon') {
       memory[LAST_TARGET] = main.id;
       memory[LAST_COMMAND] = 'power-wave-bfa';

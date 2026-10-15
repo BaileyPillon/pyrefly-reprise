@@ -19,8 +19,9 @@
  * and a Yu Pagoda's Power Wave adds 15 and a second `mod 10` on top: 15 to 33 in all, mean 24; Yojimbo's is 5 instead of
  * 15 (row A6, P5). Valefor's Overdrive is Energy Blast when the party's Valefor knows it, else Energy Ray.
  *
- * Ours has one data gap: the possessed Yojimbo's Kozuka and Wakizashi are not in the data, so both sides of his coin use
- * the Daigoro row he has. He, Anima and the Magus Sisters are outside the default chain (the five story aeons are in it).
+ * The possessed Yojimbo's coin is Kozuka or Wakizashi (rows 0x60E0 and 0x60E1, power 14 each, identical in every field; the draw's 0 is Kozuka here), never Daigoro and never Attack (the Last Summoning record fix, 2026-10-15;
+ * `research/re-ffx-last-summoning.md` section 6.1). He, Anima and the Magus Sisters are outside Chapter III's chain (the five story aeons are in it); the hidden chapter 28 fights all of them. **The Sisters are one battle
+ * with a script each in `./possessed-sisters.ts`; `sisterTurn` below is the old separate-battle reading, kept only for `buildPossessedAeonChain`'s three-battle expansion, which no shipped chain builds.**
  */
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
@@ -37,6 +38,8 @@ type Pattern = 'split' | 'split-front' | 'always' | 'coin';
 
 interface AeonScript {
   special: string;
+  /** The coin's other face (the possessed Yojimbo: Kozuka is `special`, Wakizashi is this). */
+  other?: string;
   pattern: Pattern;
   overdrive: (ctx: Ctx) => string;
 }
@@ -54,7 +57,7 @@ const SCRIPTS: Readonly<Record<string, AeonScript>> = {
   'possessed-shiva': { special: 'possessed-shiva-heavenly-strike', pattern: 'split', overdrive: () => 'possessed-shiva-diamond-dust' },
   'possessed-bahamut': { special: 'possessed-bahamut-impulse', pattern: 'split-front', overdrive: () => 'possessed-bahamut-mega-flare' },
   'possessed-anima': { special: 'possessed-anima-pain', pattern: 'always', overdrive: () => 'possessed-anima-oblivion' },
-  'possessed-yojimbo': { special: 'possessed-yojimbo-daigoro', pattern: 'coin', overdrive: () => 'possessed-yojimbo-zanmato' },
+  'possessed-yojimbo': { special: 'possessed-yojimbo-kozuka', other: 'possessed-yojimbo-wakizashi', pattern: 'coin', overdrive: () => 'possessed-yojimbo-zanmato' },
 };
 
 /** The target has Counterattack or Evade and Counter (`readBtlChrProperty(v2, 61)` or `(v2, 62)`). */
@@ -70,8 +73,8 @@ function ordinaryMove(ai: AiContext, script: AeonScript): Command | null {
   const front = frontLine(ctx).map((c) => c.id);
   if (script.pattern === 'always') return use(ai, script.special, aim);
   if (script.pattern === 'coin') {
-    gameMod(ctx, 2); // Kozuka or Wakizashi: one row stands for both (see the header)
-    return use(ai, script.special, aim);
+    const coin = gameMod(ctx, 2); // Kozuka or Wakizashi (see the header): after the pick, one draw of stream 2 modulo 2
+    return use(ai, coin === 0 || script.other === undefined ? script.special : script.other, aim);
   }
   const special = script.pattern === 'split-front' ? front : aim;
   if (gameMod(ctx, 100) < 50) return use(ai, script.special, special);

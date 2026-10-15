@@ -72,12 +72,7 @@ const KNOWN_DIFFERENCES: ReadonlyArray<readonly [string, string, number, number]
   ['possessed-bahamut-mega-flare', 'power', 72, 65],
   ['possessed-anima-pain', 'power', 20, 28],
   ['possessed-anima-oblivion', 'formula', 15, 1],
-  ['possessed-yojimbo-daigoro', 'power', 10, 20],
-  ['possessed-yojimbo-daigoro', 'critBonus', 0, 20],
-  ['possessed-cindy-camisade', 'power', 30, 21],
-  ['possessed-cindy-delta-attack', 'power', 65, 10],
-  ['possessed-cindy-delta-attack', 'hits', 1, 6],
-  ['possessed-sandy-razzia', 'power', 28, 21],
+  // The possessed Yojimbo's and Sisters' rows no longer differ (the Last Summoning record fix, 2026-10-15; research/re-ffx-last-summoning.md section 4): Kozuka and Wakizashi 14, Camisade and Razzia 21, the Delta Attack 10 x 6.
   ['mac-multi-blizzara', 'hits', 2, 1],
   ['mac-multi-thundara', 'hits', 2, 1],
   ['mac-multi-watera', 'hits', 2, 1],
@@ -143,9 +138,11 @@ describe("the attached records are the game's table", () => {
     // 483 and 481 since re-parity RC7 lane FFX-H: the 21 Mix results the data layer lacked (0x308d to 0x30a8), each with its record.
     // 490 and 488 since the hidden Biran and Yenke chapter (FFX only, 2026-10-14): the Friend Sphere (0x2061), Bulldoze (0x60a5), the brothers' Fire Breath and Aqua Breath (0x60a2, 0x60a3), Berserk (0x400f), and
     // the brothers' own copies of Kimahri's Mighty Guard and White Wind (0x3072, 0x3070), each with its record (all seven rows are in the game's fixture; the RE review of 2026-10-14 asked for them).
-    expect(ALL_ABILITIES).toHaveLength(490);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(488);
-    expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
+    // 492, 489 and 3 since the hidden Last Summoning chapter's record fixes (FFX only, 2026-10-15): the possessed Yojimbo's Daigoro record is gone and his Kozuka (0x60e0) and Wakizashi (0x60e1) each have their record
+    // (both in the game's fixture), and the possessed Sisters' joint-action token is one of ours with no record.
+    expect(ALL_ABILITIES).toHaveLength(492);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(489);
+    expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });
 
@@ -333,8 +330,6 @@ const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
   'full-life: removes berserk, the record has no byte',
   'full-life: removes slow, the record has no byte',
   'full-life: extra bits 0x4000, record 0x0',
-  // The possessed Yojimbo's Zanmato is a damage command in the game (fixed power 200); it has no Death byte.
-  'possessed-yojimbo-zanmato: ko chance 255, the record has no byte',
   // Evrae's Stone Gaze: the Slow it inflicts lasts 100 in the record, 254 ("until removed") in ours.
   'evrae-stone-gaze: slow duration 254, record 100',
 ];
@@ -389,9 +384,10 @@ describe("the status bytes of the attached records are the game's table (re-pari
   /**
    * The shatter chance (record byte 0x2c) is read from the record for every recorded command, as the other status bytes are
    * (`adapt/status.ts#commandStatus`); `AbilityDef.shatterChance` is read only by an ability with no game record. Where the ability's own
-   * number differs from the record's: 7 abilities of ours carry a chance the game's record does not (it is 0 there), and 152 more (148, plus the four grenade-line Mix results RC7 added, whose records carry 50; and the
+   * number differs from the record's: 7 abilities of ours carry a chance the game's record does not (it is 0 there), and 151 more (147, plus the four grenade-line Mix results RC7 added, whose records carry 50; and the
    * party's own Attack, 30, which lives in the registry) have a chance in the game's record that our data never authored. Only the first group can change a fight that ships: a Petrified party member
-   * is hit by enemy commands, and the enemy rows of the second group are the possessed Yojimbo's Daigoro (10) and Grothia's attack (10).
+   * is hit by enemy commands, and the enemy row of the second group is Grothia's attack (10). (152 and 148 until the hidden Last Summoning's record fixes: the possessed Yojimbo's Daigoro row, a shatter of 10 our data never
+   * authored, is gone, and the possessed Camisade and Razzia now carry the 30 their rows have.)
    */
   it("the shatter chance an ability's own data carries differs from its record's on these rows, and the record's is the one the engine reads", () => {
     const overridden: string[] = [];
@@ -413,7 +409,7 @@ describe("the status bytes of the attached records are the game's table (re-pari
       'mortibody-water: 10 -> 0',
       'natus-flare: 10 -> 0',
     ]);
-    expect(added).toBe(152);
+    expect(added).toBe(151);
   });
 
   it('the stage-buff mask has no bits above the six stacks, and an amount whenever it is set', () => {

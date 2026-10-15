@@ -35,6 +35,7 @@ import './yunalesca.ts';
 import './braskas-final-aeon.ts';
 import './yu-pagoda.ts';
 import './possessed-aeons.ts';
+import './possessed-sisters.ts'; // the hidden Last Summoning chapter (FFX only): the three possessed Magus Sisters in one battle
 import './yu-yevon.ts';
 import './seymour-anima-macalania.ts';
 import './evrae.ts';

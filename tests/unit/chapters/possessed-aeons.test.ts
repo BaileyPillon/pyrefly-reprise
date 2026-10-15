@@ -93,47 +93,38 @@ describe("possessed Mindy — Passado is 2 DmgCon x 15 hits, not 26 x 2", () => 
   });
 });
 
-describe('possessed Yojimbo — Daigoro is Strength + piercing flag, DmgCon 10', () => {
-  // `research/ffx-combat-core.md` §6.3, Yojimbo row: "Daigoro (222) DmgCon 10",
-  // formula column "Strength, Physical" [verified: 2 sources].
-  it('uses the plain Strength formula at DmgCon 10', () => {
-    const daigoro = possessed('possessed-yojimbo-daigoro');
-    expect(daigoro.power).toBe(10);
-    expect(daigoro.formula).toBe('strength');
-    expect(daigoro.damageType).toBe('physical');
+describe('possessed Yojimbo — Kozuka and Wakizashi at DmgCon 14, no Daigoro (the Last Summoning record fix)', () => {
+  // research/re-ffx-last-summoning.md section 1.4 and 4 (the game's rows 0x60E0 and 0x60E1, [bytes]): physical, formula 1, power 14, one hit, one
+  // target, pierces Armored, always hits. The first build's `possessed-yojimbo-daigoro` (power 10) was the PLAYER-side Daigoro, a row he never uses.
+  it.each(['possessed-yojimbo-kozuka', 'possessed-yojimbo-wakizashi'])('%s is Strength, physical, power 14, one hit on one target, rank 3', (id) => {
+    const move = possessed(id);
+    expect(move.power).toBe(14);
+    expect(move.formula).toBe('strength');
+    expect(move.damageType).toBe('physical');
+    expect([move.hits, move.targeting, move.rank]).toEqual([1, 'single-enemy', 3]);
+    expect(move.flags).toContain('piercing');
+    expect(move.flags).not.toContain('piercing-strength');
   });
 
-  it('keeps piercing as a FLAG, never as the piercing-strength formula', () => {
-    // These are two different rules in the research and must not be conflated:
-    // §14's flag table (line 2055) — `piercing` = "Uses Defense 0 against
-    // **Armored** targets", aeon weapons except Valefor; §2.5's formula table
-    // (line 270) — `Piercing Strength` (formula 2) = "ignores Defense (treats
-    // DEF as 0)" unconditionally. §6.3 puts Daigoro on plain Strength, so the
-    // formula variant would zero Defense against every target, not just
-    // Armored ones.
-    const daigoro = possessed('possessed-yojimbo-daigoro');
-    expect(daigoro.flags).toContain('piercing');
-    expect(daigoro.formula).not.toBe('piercing-strength');
+  it('the two strikes are identical in every field but the name', () => {
+    const { id: _a, name: _b, messageTemplate: _c, ...kozuka } = possessed('possessed-yojimbo-kozuka');
+    const { id: _d, name: _e, messageTemplate: _f, ...wakizashi } = possessed('possessed-yojimbo-wakizashi');
+    expect(kozuka).toEqual(wakizashi);
   });
 
-  it('agrees with the player-aeon Daigoro record on every field §6.3 publishes', () => {
-    const mine = possessed('possessed-yojimbo-daigoro');
-    const theirs = playerAeon('daigoro');
-    expect({
-      power: mine.power,
-      hits: mine.hits,
-      formula: mine.formula,
-      damageType: mine.damageType,
-      targeting: mine.targeting,
-      piercing: mine.flags.includes('piercing'),
-    }).toEqual({
-      power: theirs.power,
-      hits: theirs.hits,
-      formula: theirs.formula,
-      damageType: theirs.damageType,
-      targeting: theirs.targeting,
-      piercing: theirs.flags.includes('piercing'),
-    });
+  it('has no Daigoro record at all, and his ability list is the two strikes and Zanmato', async () => {
+    expect(BRASKAS_FINAL_AEON_ABILITIES['possessed-yojimbo-daigoro']).toBeUndefined();
+    const { buildPossessedAeonChain } = await import('../../../src/data/ffx/enemies/braskas-final-aeon.ts');
+    const yojimbo = buildPossessedAeonChain(['yojimbo']).flatMap((g) => g.enemies).find((e) => e.id === 'possessed-yojimbo')!;
+    expect(yojimbo.abilityIds).toEqual(['possessed-yojimbo-kozuka', 'possessed-yojimbo-wakizashi', 'possessed-yojimbo-zanmato']);
+    expect(yojimbo.plainAttack, 'he never uses the plain Attack').toBeUndefined();
+  });
+
+  it('Zanmato is a fixed 9,999 on each front-line actor (formula 6, power 200), not Death', () => {
+    const zanmato = possessed('possessed-yojimbo-zanmato');
+    expect([zanmato.formula, zanmato.power, zanmato.targeting, zanmato.hits]).toEqual(['fixed-no-variance', 200, 'all-enemies', 1]);
+    expect(zanmato.statusEffects, 'no status: not a kill').toEqual([]);
+    expect(zanmato.canMiss).toBe(false);
   });
 });
 
@@ -150,7 +141,8 @@ const POSSESSED_ATTACK_SPECIAL_IDS = [
   'possessed-shiva-heavenly-strike',
   'possessed-bahamut-impulse',
   'possessed-anima-pain',
-  'possessed-yojimbo-daigoro',
+  'possessed-yojimbo-kozuka',
+  'possessed-yojimbo-wakizashi',
   'possessed-cindy-camisade',
   'possessed-sandy-razzia',
   'possessed-mindy-passado',
@@ -168,13 +160,14 @@ describe('possessed-aeon Attack/Special records match §6.3 formula and damage t
     'possessed-shiva-heavenly-strike': { formula: 'strength', damageType: 'physical' },
     'possessed-bahamut-impulse': { formula: 'strength', damageType: 'physical' },
     'possessed-anima-pain': { formula: 'special-magic', damageType: 'magical' },
-    'possessed-yojimbo-daigoro': { formula: 'strength', damageType: 'physical' },
+    'possessed-yojimbo-kozuka': { formula: 'strength', damageType: 'physical' },
+    'possessed-yojimbo-wakizashi': { formula: 'strength', damageType: 'physical' },
     'possessed-cindy-camisade': { formula: 'strength', damageType: 'physical' },
     'possessed-sandy-razzia': { formula: 'strength', damageType: 'physical' },
     'possessed-mindy-passado': { formula: 'strength', damageType: 'physical' },
   };
 
-  it('every one of the ten matches its §6.3 row', () => {
+  it('every one of the eleven matches its row', () => {
     const offenders: string[] = [];
     for (const id of POSSESSED_ATTACK_SPECIAL_IDS) {
       const def = possessed(id);
@@ -243,12 +236,12 @@ describe('OPEN ITEM — possessed-aeon Attack/Specials currently always hit', ()
     stats: { ...enemyUser.stats, eva: 30, luck: 18 },
   };
 
-  it('none of the ten carries an accuracy byte (no byte was invented)', () => {
+  it('none of them carries an accuracy byte (no byte was invented)', () => {
     const withByte = POSSESSED_ATTACK_SPECIAL_IDS.filter((id) => possessed(id).accuracy !== undefined);
     expect(withByte, `now sourced? update docs/CONTRACT-CHANGES.md: ${withByte.join(', ')}`).toEqual([]);
   });
 
-  it('and so all ten always hit today — the documented gap, behaviour not just fields', () => {
+  it('and so all of them always hit today — the documented gap, behaviour not just fields', () => {
     const rolling: string[] = [];
     for (const id of POSSESSED_ATTACK_SPECIAL_IDS) {
       if (hitChance(enemyUser, partyTarget, possessed(id)) !== null) rolling.push(id);

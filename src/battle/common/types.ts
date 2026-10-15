@@ -2985,8 +2985,22 @@ export interface EnemyGroupDef {
    * whose name the greyed Summon row gives as its reason ("Mirror of
    * Grothia", Bailey's O-5 pick). Read by `battle/ffx/aeon-duel.ts`; absent
    * everywhere else, so no other chapter's Summon list changes.
+   *
+   * `reason` (the hidden Last Summoning chapter, FFX only; optional, absent for Chapter XIV's): the words the greyed row gives instead of "Mirror of ...", for an aeon Yu Yevon
+   * has taken ("Taken by Yu Yevon"). The lock itself is the same: the aeon is off the Summon list and out of Grand Summon's choices.
    */
-  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId }>;
+  lockedAeons?: ReadonlyArray<{ aeonId: string; mirrorOf: CombatantId; reason?: string }>;
+  /**
+   * **FFX only (the hidden Last Summoning chapter)**: the number of formations the whole chain has when that number follows from the player's choices, not from walking `nextGroupId` (the
+   * pause screen's "BATTLE n OF m", `BattleScreen`'s `chainLengthOf`). Absent for every other chapter, whose chains are counted by walking.
+   */
+  chainLength?: number;
+  /**
+   * **FFX only (the hidden Last Summoning chapter)**: this formation is a seam where the player is asked which formation comes next (the offering screen). `'open'`: the formation is a placeholder that
+   * is never fought, and the chain loop asks before the first fight; `'next'`: the chain asks after this formation's victory, and `nextGroupId` is a marker the screen's chooser replaces. The loop
+   * (`app/screens/BattleEncounterChain.ts`) knows only that a chooser may answer with another formation id; with no chooser a `'next'` seam follows `nextGroupId` as every chain does. Absent everywhere else.
+   */
+  offersAeons?: 'open' | 'next';
   /**
    * **FFX, "can only be fought by aeons"** (Chapter XIV; research §1.2
    * [verified: 2 sources] for the rule, plan B6 / B11 for how it is
