@@ -16,7 +16,7 @@
  * | Yuna's aeons | `aeonStatsFromYuna` (`./endgame-aeons.ts`) on this Yuna at 600 battles (tier 19, the last) | `research/ffx-combat-core.md` section 6.4 `[verified: 3 sources]`; RE section 5.5 (G08): "the last tier (600 battles and over)" |
  * | The aeons | Valefor, Ifrit, Ixion, Shiva, Bahamut, **Yojimbo, Cindy, Sandy, Mindy**; **Anima is left out**, as `./dreams-end.ts` leaves it | the brief; Anima's Oblivion is the guides' favourite answer and would swamp the mirror, so adding it is a lever for the bench `[estimate]` |
  * | Yojimbo's hire answer | `YOJIMBO_HIRE_ANSWER` = 2 (the third option, "to defeat the most powerful of enemies") | Jegged Cavern; G08 section 3.5 |
- * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **the files hold no start value** (RE section 5.5, G08 section 3); "the community says 128" `[estimate]` |
+ * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **strongly indicated by the owner's saves, live confirmation pending** (the game's files hold no start value: RE section 5.5, G08 section 3; the community also says 128) `[estimate]` until it is confirmed live |
  * | Gil | `ENDGAME_GIL` = 1,500,000 (Yojimbo is paid from it each time he acts) | StrategyWiki speaks of paying "upwards of 2 million" `[estimate]` |
  * | Bag | `./dreams-end.ts`'s bag (Phoenix Downs, X-Potions, Remedies, Holy Water, Elixir ...) less the Candle of Life, a Doom-kill route that belongs to Yu Yevon alone | the repository's endgame bag `[estimate]` |
  * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **the four new aeons start at 0** | `./late-aeon-rows.ts`; the Dark Sisters start full in the trio (RE section 4.2), Yuna's do not `[estimate]` |
@@ -40,7 +40,7 @@ export const ENDGAME_BATTLES = 600;
 export const ENDGAME_GIL = 1_500_000;
 /** The hire answer 0 to 2 the player gave at the Fayth: 2, the third option (Jegged Cavern; G08 section 3.5). */
 export const YOJIMBO_HIRE_ANSWER = 2;
-/** Yojimbo's starting compatibility: the files do not hold it; the community says 128 (RE section 5.5). `[estimate]` */
+/** Yojimbo's starting compatibility, 0 to 255: the game's files hold no start value (RE section 5.5); 128 is **strongly indicated by the owner's saves, live confirmation pending** (the community also says 128). `[estimate]` until it is confirmed live. */
 export const YOJIMBO_START_COMPATIBILITY = 128;
 
 /** Yuna's ten stats as the aeon formula reads them. */

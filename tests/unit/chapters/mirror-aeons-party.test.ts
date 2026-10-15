@@ -102,7 +102,7 @@ describe('the nine aeons (the section 6.4 formula on this Yuna at 600 battles)',
 });
 
 describe('the named estimates the engine will read', () => {
-  it('Yojimbo\'s hire answer is the third option\'s (2, Jegged and the files agree), his starting compatibility 128 (the files hold none; the community says 128), the gil what Pay is drawn from', () => {
+  it('Yojimbo\'s hire answer is the third option\'s (2, Jegged and the files agree), his starting compatibility 128 (the files hold none; strongly indicated by the owner\'s saves, live confirmation pending), the gil what Pay is drawn from', () => {
     expect([YOJIMBO_HIRE_ANSWER, YOJIMBO_START_COMPATIBILITY, ENDGAME_GIL]).toEqual([2, 128, 1_500_000]);
     expect(mirrorAeonsBuild.gil).toBe(ENDGAME_GIL);
   });
