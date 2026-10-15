@@ -20,9 +20,9 @@
  * | {@link wipeEvent} | worker 59, function 5 (event 11) | Yojimbo knocked out or Petrified while he is out |
  *
  * **The two numbers the game's image does not hold.** The compatibility global is 0 in the image and no initialiser was found (note,
- * open question 1: the community says 128); nothing in this file holds a starting value, so a caller must give one (UNSOURCED, an
- * estimate until the game's own value is read). The hire answer (0, 1 or 2) is written only by the recruitment event; the game's default
- * is 0.
+ * open question 1). The community says 128, and the owner's own save files read 128 in every slot from 1 to 84 (RE main session; the save
+ * offset is inferred and live confirmation is pending), so 128 is strongly indicated; nothing in this file holds a starting value, so a
+ * caller must give one. The hire answer (0, 1 or 2) is written only by the recruitment event; the game's default is 0.
  *
  * Pure and deterministic (AGENTS.md rule 1): the draws and the target picks are callbacks of a {@link YojimboHost}; nothing here holds a
  * generator, imports the DOM, `three` or the engine.
@@ -104,8 +104,11 @@ export interface YojimboInputs {
   hire: number;
   /** The highest Zanmato byte among all monsters (selector "all monsters"). */
   zanAll: number;
-  /** The highest Zanmato byte of the "matching group" (the free attack's check). */
-  zanGroup: number;
+  /**
+   * The highest Zanmato byte of the "matching group" (the free attack's check). A function is read when the check is made, after the target
+   * pick (the script reads it there; the group depends on what the pick stored).
+   */
+  zanGroup: number | (() => number);
   /** Properties 19 and 20: his gauge and its maximum, in the game's units. */
   odCur: number;
   odMax: number;
@@ -250,7 +253,7 @@ function perform(inputs: YojimboInputs, state: { compat: number; reaction: numbe
     case YojimboCommand.Zanmato:
       found = pick(cmd);
       delta = 4;
-      if (!found || (inputs.zanGroup > 0 && free)) {
+      if (!found || (free && (typeof inputs.zanGroup === 'function' ? inputs.zanGroup() : inputs.zanGroup) > 0)) {
         // No group to hit, or (a free attack) a Zanmato byte above 0 in the group: Wakizashi on all instead.
         cmd = YojimboCommand.WakizashiAll;
         pick(cmd);

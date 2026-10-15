@@ -15,6 +15,7 @@ import { furySpellsFor, isMenuMarker, overdriveReady } from './overdrive.ts';
 import { availableAeons } from './aeons.ts';
 import { applyDuelRows, lockReason } from './aeon-duel.ts';
 import { triggerHandler } from './ai/index.ts';
+import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 
 /**
@@ -113,6 +114,9 @@ function rowFor(ctx: Ctx, user: FFXCombatant, def: AbilityDef, command: Availabl
  * [ffx-combat-core §4.2].
  */
 export function availableCommands(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
+  // The player's Yojimbo and the Magus Sisters have menus of their own (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else.
+  const own = aeonMenuRows(ctx, user);
+  if (own !== null) return own;
   const rows: AvailableCommand[] = [];
   const attackDef = abilityOf(ctx, ATTACK_ABILITY_ID);
   if (attackDef) rows.push(rowFor(ctx, user, attackDef, { kind: 'attack', targets: [] }));

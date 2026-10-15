@@ -23,6 +23,8 @@ import { chargeForAction, executeCommand } from './execute.ts';
 import { forcedTurn } from './forced-turn.ts';
 import { advance, nextActor, predictTurnOrder as predictOrder } from './turnQueue.ts';
 import { onTurnStart } from './ticks.ts';
+import { yojimboTurnStart } from './adapt/yojimbo.ts';
+import { sistersTurnStart } from './adapt/sisters.ts';
 import { resolveDuePartRevivals } from './hp.ts';
 import { chooseAiCommand } from './ai/index.ts';
 import { type EnemyIntent, predictNextEnemyIntent } from './intent.ts';
@@ -283,6 +285,15 @@ export class FFXEngine implements FFXBattleEngine {
       this.runTurn(actor, { kind: 'attack', targets: forced.targets });
       return;
     }
+
+    // The player's Yojimbo and the Magus Sisters have turn-start rules of their own (re-parity lane FFX-K; inert unless a build owns them): his roll can make
+    // the turn his own (a free attack), and a sister's menu builder draws before her menu opens.
+    const own = yojimboTurnStart(ctx, actor);
+    if (own !== null) {
+      this.runTurn(actor, own.command);
+      return;
+    }
+    sistersTurnStart(ctx, actor);
 
     if (actor.controller === 'ai') {
       this.runTurn(actor, chooseAiCommand(ctx, actor));

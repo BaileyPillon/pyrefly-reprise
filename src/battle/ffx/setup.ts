@@ -41,6 +41,8 @@ import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
 import { applyAeonDuelSetup } from './aeon-duel.ts';
 import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
+import { initYojimbo } from './adapt/yojimbo.ts';
+import { initSisters } from './adapt/sisters.ts';
 
 /** A permanent, undispellable instance of `status`. */
 function permanentStatus(status: StatusId): StatusInstance {
@@ -315,6 +317,8 @@ export function buildBattle(
     rt.actors.set(aeon.id, makeActorRuntime(aeon));
     rt.aeonRoster.set(build.id, aeon);
   }
+  initYojimbo(ctx, party); // the player's Yojimbo and the Magus Sisters (re-parity lane FFX-K): throws when a build owns them and does not say how they start
+  initSisters(ctx, party);
 
   // The fayth's permanent Auto-Life [ffx-bfa-yu-yevon §2.3]. It goes on every
   // member, active and benched, because a switch mid-chain must not lose it.

@@ -10,6 +10,8 @@
 import type { AbilityId, CombatantId, FFXCombatant, MinigameKind } from '../common/types.ts';
 import type { AutoState } from './kernel/auto-status.ts';
 import type { PendingItemReaction } from './adapt/reactions.ts';
+import type { YojimboRuntime } from './adapt/yojimbo.ts';
+import type { SistersRuntime } from './adapt/sisters.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -218,4 +220,8 @@ export interface FFXRuntime {
    * lists known results would). Absent until the first Mix.
    */
   mixShared?: number[];
+  /** The player's Yojimbo's own state (compatibility, hire answer, parsed actions); present only when the build owns him (re-parity lane FFX-K, `adapt/yojimbo.ts`). */
+  yojimbo?: YojimboRuntime;
+  /** The Magus Sisters' own state (standing order, motivation, the menu of the open turn); present only when the build owns them (`adapt/sisters.ts`). */
+  sisters?: SistersRuntime;
 }

@@ -120,7 +120,7 @@ describe('the free attack (event 0): the command by compatibility (table 4.1)', 
     const out = [0, 0, 0, 0, 0];
     for (let b = 0; b < 64; b++) {
       const run = freeAttackEvent(input({ compat, zanGroup: 0 }), host([b]));
-      out[[C.Daigoro, C.Kozuka, C.WakizashiOne, C.WakizashiAll, C.Zanmato].indexOf(run.command)]!++;
+      out[([C.Daigoro, C.Kozuka, C.WakizashiOne, C.WakizashiAll, C.Zanmato] as number[]).indexOf(run.command)]!++;
     }
     return out;
   }
