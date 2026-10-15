@@ -199,12 +199,20 @@ describe('the flag is the only way in: every other chain carries what it always 
    * now uses Darkness, and Yuna, also Silenced, can use Pray and Vigor. `92f34919fb6d8fcc` became `4662e80c1515469b`, which is again the
    * `ffx2-atb-golden.test.ts` CH5_D0 seed 4 digest. The other seven Chapter 5 logs and all thirty-two of the others (Chapter 6, Chapter XI, the
    * Sisters) are unchanged. With the old Silence rule put back through a module mock the old digest returns.
+   *
+   * **Re-pinned 2026-10-15 for the item ledger and the battle-end commit window** (re-parity RC8, lane X2-F row XF1 and lane X2-K row XK2, FFX-2 only; reason "game-code parity",
+   * the checked notes FFX2-G06 and FFX2-G10; `docs/handoff/re-parity-rc8-x2-end-ledger.md`). No Den code changed; the engine did: the end of a fight is committed only after the casts
+   * already on the purple bar have fired, and an item leaves the stock at the pick. 31 of the 32 logs moved (Chapter 6 seed 4 did not); Chapter 5's eight equal `ffx2-atb-golden.test.ts`
+   * CH5_D0 seeds 1 to 8 again and Chapter 6's first three equal `ffx2-hit-closes-menu.test.ts`'s. Cause, by comparing full event logs before and after: the first differing event is the end
+   * of a link in 30 of the 31 (a cast in flight resolves before the victory); in the other one, Chapter 6 seed 5, the second link opens with an Attack where the base threw a Grenade,
+   * because the four Grenades the party carries are no longer the ones a cast in flight at the end of the first link had not yet spent. All thirty-two still win. The old hashes are in
+   * git at ea431aa0.
    */
   const BASE = {
-    ch5: ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1', '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588'],
-    ch6: ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10', 'a39696f7ae0ccaa4', '4f0e498c14ac2d5c', 'c86b36c8466a45b2', '800aecc068609cf2', '3bc2d05021df6507'],
-    ch11: ['1e2967f9a6eb564d', '7c7fa3bf60a618b0', 'a930f8adbfddbc40', '9b34cf5f9dd088f9', '04d8eb23fb7525d0', '88e605a902ddb419', '5633c37e7a691312', 'b7c8bf061dca8d62'],
-    sisters: ['9169f136877f9e92', '05f2b56d8cd64c18', '6d1ab630119409ae', '813bd394e5ac703d', 'f9f8a98425850b50', '26879886243ece21', '45fc4057955ccc75', 'c3dbe73d64528a38'],
+    ch5: ['bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772', '19e4019ffcf7880c', '48022cc460c8aae2', '71a0d0a7a92737fa', '276aa8ad4aa650ab', '7a1ae4b195157295'],
+    ch6: ['aa6b56cbfa16061b', '2217fd51aa006da2', '78d4ed544301b45b', 'a39696f7ae0ccaa4', 'db1b541da1a3238e', '6b4f4ad70e4a2da1', '6ac5ea70c9ca5a53', 'e476922839d3ad3e'],
+    ch11: ['604514318823d2e0', '19c99ef6850db941', 'b11fcb2af7df9162', '748c9f80531df8af', '4f8dd5667cf843f8', '2201781c02da2e62', '387873d77b23913f', '9f660b4d1647783d'],
+    sisters: ['c7145c067ca3cb54', 'ce7ed8347fb795be', '1c46c157eb6a5aba', 'ec8e64761ac7c459', '3394a5010e63304e', '59aee9966c69a02f', 'e0fe326b14ac1a8c', '9fc81a1fb15172ec'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {
