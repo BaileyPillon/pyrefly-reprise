@@ -1,0 +1,966 @@
+{
+ "source": "FFX-2 Steam build 25501027; kernel/monster.bin rows 268 (Angra Mainyu, id 0x110c), 269 (Zarich, id 0x110d) and 270 (Tawrich, id 0x110e), the formations bika07_229, bika08_229, bika09_229, bika13_229 and bika14_229 and their start positions, read by the RE parity session (research/re-ffx2-angra-mainyu.md, origin/re-ffx2-angra-mainyu, sections 3 to 8). Numbers only. 'raw' is each row's 200 bytes as the note prints them (the English copy; bytes 8 to 199 are equal in all ten locale copies); 'decoded' is the proved columns by the note's column map (section 3), which tests/unit/chapters/angra-mainyu-data.test.ts re-derives from 'raw'. 'research' is research/ffx2-angra-mainyu.md (FF Wiki revisions 4041096, 3573851 and 3573852, and Jegged's Chapter 5 page) for the same monsters.",
+ "rows": {
+  "268": {
+   "name": "angra-mainyu",
+   "raw": "8f8556009c85f901841605000f2700002f497c6172445f000200c30700100000ffffffffffffffffff00ff000000000000ffff00000000000000000000ffff0000ffff000000ff00000000000000000000000000000000000000000000000000000000000000000000000000000000002c412d412e416d40ba3082308530b530b830703100000000000000000000000000000c110c110c11000000008813000088130000d00700001e00ffff569001005690010009200100092001000000000000000000ff000000",
+   "decoded": {
+    "hp": 333444,
+    "mp": 9999,
+    "level": 47,
+    "str": 73,
+    "def": 124,
+    "mag": 97,
+    "mdef": 114,
+    "agi": 68,
+    "acc": 95,
+    "eva": 0,
+    "luck": 2,
+    "special": 1987,
+    "absorb": 0,
+    "nullElements": 16,
+    "half": 0,
+    "weak": 0,
+    "resist1": {
+     "0": 255,
+     "1": 255,
+     "2": 255,
+     "3": 255,
+     "4": 255,
+     "5": 255,
+     "6": 255,
+     "7": 255,
+     "8": 255,
+     "10": 255,
+     "17": 255,
+     "18": 255
+    },
+    "resist2": {
+     "5": 255,
+     "6": 255,
+     "9": 255,
+     "10": 255,
+     "14": 255
+    },
+    "abilities": [
+     16684,
+     16685,
+     16686,
+     16493,
+     12474,
+     12418,
+     12421,
+     12469,
+     12472,
+     12656
+    ],
+    "exp": 5000,
+    "gil": 5000,
+    "pilferGil": 2000,
+    "ap": 30,
+    "dropChanceByte": 255,
+    "stealChanceByte": 255,
+    "dropItems": [
+     36950,
+     1,
+     36950,
+     1
+    ],
+    "stealItems": [
+     8201,
+     1,
+     8201,
+     1
+    ],
+    "bribeItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "zantetsuByte": 255,
+    "group2AutoMask": 0,
+    "group2AutoAmounts": {}
+   },
+   "unmapped": {
+    "basakuWord": 0,
+    "soundId": 4364,
+    "monsterTypeWord": 0,
+    "specialBits7to10": [
+     1,
+     1,
+     1,
+     1
+    ],
+    "elementBits6and7": [
+     0,
+     0
+    ]
+   }
+  },
+  "269": {
+   "name": "zarich",
+   "raw": "2b8634003286e502401500000f2700002446001963525f000100c30700102f00ffffffffffffffffff00ff000000000000ffff00000000000000ff0000ffff0000ffff000000ff00000000000000000000000000008000000000000000000000000000000000007f00000000000000002a41ed41f041ef41ee41f141f441f341f241000000000000000000000000000000000d110d110d110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff000000",
+   "decoded": {
+    "hp": 5440,
+    "mp": 9999,
+    "level": 36,
+    "str": 70,
+    "def": 0,
+    "mag": 25,
+    "mdef": 99,
+    "agi": 82,
+    "acc": 95,
+    "eva": 0,
+    "luck": 1,
+    "special": 1987,
+    "absorb": 0,
+    "nullElements": 16,
+    "half": 47,
+    "weak": 0,
+    "resist1": {
+     "0": 255,
+     "1": 255,
+     "2": 255,
+     "3": 255,
+     "4": 255,
+     "5": 255,
+     "6": 255,
+     "7": 255,
+     "8": 255,
+     "10": 255,
+     "17": 255,
+     "18": 255
+    },
+    "resist2": {
+     "2": 255,
+     "5": 255,
+     "6": 255,
+     "9": 255,
+     "10": 255,
+     "14": 255
+    },
+    "abilities": [
+     16682,
+     16877,
+     16880,
+     16879,
+     16878,
+     16881,
+     16884,
+     16883,
+     16882
+    ],
+    "exp": 0,
+    "gil": 0,
+    "pilferGil": 0,
+    "ap": 0,
+    "dropChanceByte": 0,
+    "stealChanceByte": 0,
+    "dropItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "stealItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "bribeItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "zantetsuByte": 255,
+    "group2AutoMask": 32768,
+    "group2AutoAmounts": {
+     "15": 127
+    }
+   },
+   "unmapped": {
+    "basakuWord": 0,
+    "soundId": 4365,
+    "monsterTypeWord": 0,
+    "specialBits7to10": [
+     1,
+     1,
+     1,
+     1
+    ],
+    "elementBits6and7": [
+     0,
+     0
+    ]
+   }
+  },
+  "270": {
+   "name": "tawrich",
+   "raw": "e8863300f0860303401500000f2700002655632a00715f000100c30700100000ffffffffffffffffff00ff000000000000ffff00000000000000ff0000ffff0000ffff000000ff0000000000000000000000000000000100000000000000000000000000000000007f0000000000000029412b410000000000000000000000000000000000000000000000000000000000000e110e110e110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff000000",
+   "decoded": {
+    "hp": 5440,
+    "mp": 9999,
+    "level": 38,
+    "str": 85,
+    "def": 99,
+    "mag": 42,
+    "mdef": 0,
+    "agi": 113,
+    "acc": 95,
+    "eva": 0,
+    "luck": 1,
+    "special": 1987,
+    "absorb": 0,
+    "nullElements": 16,
+    "half": 0,
+    "weak": 0,
+    "resist1": {
+     "0": 255,
+     "1": 255,
+     "2": 255,
+     "3": 255,
+     "4": 255,
+     "5": 255,
+     "6": 255,
+     "7": 255,
+     "8": 255,
+     "10": 255,
+     "17": 255,
+     "18": 255
+    },
+    "resist2": {
+     "2": 255,
+     "5": 255,
+     "6": 255,
+     "9": 255,
+     "10": 255,
+     "14": 255
+    },
+    "abilities": [
+     16681,
+     16683
+    ],
+    "exp": 0,
+    "gil": 0,
+    "pilferGil": 0,
+    "ap": 0,
+    "dropChanceByte": 0,
+    "stealChanceByte": 0,
+    "dropItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "stealItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "bribeItems": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "zantetsuByte": 255,
+    "group2AutoMask": 65536,
+    "group2AutoAmounts": {
+     "16": 127
+    }
+   },
+   "unmapped": {
+    "basakuWord": 0,
+    "soundId": 4366,
+    "monsterTypeWord": 0,
+    "specialBits7to10": [
+     1,
+     1,
+     1,
+     1
+    ],
+    "elementBits6and7": [
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "notUsed": {
+  "note": "monster2.bin carries a second stat block for each (boss Lv 56, HP 350,116); all three rows have Oversoul type 0, so nothing in our notes says the game reads it for these monsters. Not used.",
+  "monster2": {
+   "268": {
+    "level": 56,
+    "hp": 350116,
+    "agi": 88,
+    "oversoulType": 0
+   },
+   "269": {
+    "level": 43,
+    "hp": 5712,
+    "agi": 107,
+    "oversoulType": 0
+   },
+   "270": {
+    "level": 46,
+    "hp": 5712,
+    "agi": 147,
+    "oversoulType": 0
+   }
+  }
+ },
+ "research": {
+  "section": "research/ffx2-angra-mainyu.md section 2 (FF Wiki infoboxes; HP, steal and drop also Jegged)",
+  "angraMainyu": {
+   "level": 47,
+   "hp": 333444,
+   "mp": 9999,
+   "str": 73,
+   "mag": 97,
+   "def": 124,
+   "mdef": 114,
+   "agi": 68,
+   "luck": 2,
+   "exp": 5000,
+   "ap": 30,
+   "gil": 5000,
+   "pilferGil": 2000,
+   "gravity": "halves",
+   "zantetsu": 255
+  },
+  "tawrich": {
+   "level": 38,
+   "hp": 5440,
+   "mp": 9999,
+   "str": 85,
+   "mag": 42,
+   "def": 99,
+   "agi": 113,
+   "luck": 1,
+   "gravity": "halves",
+   "zantetsu": 255
+  },
+  "zarich": {
+   "level": 36,
+   "hp": 5440,
+   "mp": 9999,
+   "str": 70,
+   "mag": 25,
+   "mdef": 99,
+   "agi": 82,
+   "luck": 1,
+   "gravity": "immune",
+   "halves": [
+    "fire",
+    "ice",
+    "lightning",
+    "water",
+    "holy"
+   ],
+   "zantetsu": 255
+  }
+ },
+ "disagreements": [
+  {
+   "field": "gravity (Angra Mainyu)",
+   "wiki": "halves",
+   "row": "nulled (null byte 0x10)",
+   "winner": "row"
+  },
+  {
+   "field": "gravity (Tawrich)",
+   "wiki": "halves",
+   "row": "nulled (null byte 0x10)",
+   "winner": "row"
+  },
+  {
+   "field": "reflect (Angra Mainyu)",
+   "wiki": "immune",
+   "row": "lands (group-2 index 2 reads 0; the arms read 255)",
+   "winner": "row"
+  },
+  {
+   "field": "accuracy and evasion (all three)",
+   "wiki": "not listed",
+   "row": "ACC 95, EVA 0",
+   "winner": "row"
+  },
+  {
+   "field": "Zarich's defense",
+   "wiki": "not listed",
+   "row": "0",
+   "winner": "row"
+  },
+  {
+   "field": "Tawrich's magic defense",
+   "wiki": "not listed",
+   "row": "0",
+   "winner": "row"
+  },
+  {
+   "field": "the arms' rewards",
+   "wiki": "none listed",
+   "row": "EXP, AP, Gil, drop and steal all 0",
+   "winner": "agree"
+  }
+ ],
+ "commandRows": {
+  "0x412c": {
+   "owner": "Angra Mainyu",
+   "move": "Unnatural Selection",
+   "table": "monmagic",
+   "fileOffset": "0x9f80",
+   "costAtb": 0,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 5,
+   "flagsMisc": 1090519046,
+   "flagsDamage": 0,
+   "damageClass": 0,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x412d": {
+   "owner": "Angra Mainyu",
+   "move": "Perdition's Flame",
+   "table": "monmagic",
+   "fileOffset": "0xa008",
+   "costAtb": 100,
+   "costCast": 120,
+   "costMp": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1090535430,
+   "flagsDamage": 1,
+   "damageClass": 1,
+   "formula": 7,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 3,
+   "hits": 10,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x412e": {
+   "owner": "Angra Mainyu",
+   "move": "Die",
+   "table": "monmagic",
+   "fileOffset": "0xa090",
+   "costAtb": 0,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 65,
+   "flagsMisc": 2,
+   "flagsDamage": 0,
+   "damageClass": 0,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 0,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x406d": {
+   "owner": "Angra Mainyu",
+   "move": "Osmose",
+   "table": "monmagic",
+   "fileOffset": "0x3a08",
+   "costAtb": 0,
+   "costCast": 90,
+   "costMp": 0,
+   "flagsTarget": 51,
+   "flagsMisc": 539001094,
+   "flagsDamage": 0,
+   "damageClass": 2,
+   "formula": 4,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 3,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x30ba": {
+   "owner": "Angra Mainyu",
+   "move": "Full-Life",
+   "table": "command",
+   "fileOffset": "0x65d8",
+   "costAtb": 0,
+   "costCast": 100,
+   "costMp": 60,
+   "flagsTarget": 113,
+   "flagsMisc": 539263111,
+   "flagsDamage": 50,
+   "damageClass": 1,
+   "formula": 7,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 16,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x3082": {
+   "owner": "Angra Mainyu",
+   "move": "Demi",
+   "table": "command",
+   "fileOffset": "0x4738",
+   "costAtb": 0,
+   "costCast": 80,
+   "costMp": 10,
+   "flagsTarget": 1079,
+   "flagsMisc": 539000838,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 4,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 4,
+   "hits": 1,
+   "shatter": 0,
+   "element": 16,
+   "killer": 0
+  },
+  "0x3085": {
+   "owner": "Angra Mainyu",
+   "move": "Bio",
+   "table": "command",
+   "fileOffset": "0x48dc",
+   "costAtb": 0,
+   "costCast": 80,
+   "costMp": 16,
+   "flagsTarget": 1079,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 0,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x30b5": {
+   "owner": "Angra Mainyu",
+   "move": "Curaga",
+   "table": "command",
+   "fileOffset": "0x631c",
+   "costAtb": 0,
+   "costCast": 60,
+   "costMp": 20,
+   "flagsTarget": 1201,
+   "flagsMisc": 539000967,
+   "flagsDamage": 18,
+   "damageClass": 1,
+   "formula": 6,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 38,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x30b8": {
+   "owner": "Angra Mainyu",
+   "move": "Dispel",
+   "table": "command",
+   "fileOffset": "0x64c0",
+   "costAtb": 0,
+   "costCast": 60,
+   "costMp": 12,
+   "flagsTarget": 1075,
+   "flagsMisc": 539000838,
+   "flagsDamage": 34,
+   "damageClass": 0,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x3170": {
+   "owner": "Angra Mainyu",
+   "move": "Flare",
+   "table": "command",
+   "fileOffset": "0xc960",
+   "costAtb": 0,
+   "costCast": 100,
+   "costMp": 54,
+   "flagsTarget": 1075,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 55,
+   "hits": 1,
+   "shatter": 100,
+   "element": 0,
+   "killer": 0
+  },
+  "0x412a": {
+   "owner": "Zarich",
+   "move": "Glimmer of Despair",
+   "table": "monmagic",
+   "fileOffset": "0x9e70",
+   "costAtb": 80,
+   "costCast": 120,
+   "costMp": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1090519046,
+   "flagsDamage": 0,
+   "damageClass": 2,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 8,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x41ed": {
+   "owner": "Zarich",
+   "move": "Fira",
+   "table": "monmagic",
+   "fileOffset": "0x10608",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 12,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 12,
+   "hits": 1,
+   "shatter": 20,
+   "element": 1,
+   "killer": 0
+  },
+  "0x41ee": {
+   "owner": "Zarich",
+   "move": "Blizzara",
+   "table": "monmagic",
+   "fileOffset": "0x10690",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 12,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 12,
+   "hits": 1,
+   "shatter": 20,
+   "element": 2,
+   "killer": 0
+  },
+  "0x41ef": {
+   "owner": "Zarich",
+   "move": "Thundara",
+   "table": "monmagic",
+   "fileOffset": "0x10718",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 12,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 12,
+   "hits": 1,
+   "shatter": 20,
+   "element": 4,
+   "killer": 0
+  },
+  "0x41f0": {
+   "owner": "Zarich",
+   "move": "Watera",
+   "table": "monmagic",
+   "fileOffset": "0x107a0",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 12,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 12,
+   "hits": 1,
+   "shatter": 20,
+   "element": 8,
+   "killer": 0
+  },
+  "0x41f1": {
+   "owner": "Zarich",
+   "move": "Firaga",
+   "table": "monmagic",
+   "fileOffset": "0x10828",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 24,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 19,
+   "hits": 1,
+   "shatter": 20,
+   "element": 1,
+   "killer": 0
+  },
+  "0x41f2": {
+   "owner": "Zarich",
+   "move": "Blizzaga",
+   "table": "monmagic",
+   "fileOffset": "0x108b0",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 24,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 19,
+   "hits": 1,
+   "shatter": 20,
+   "element": 2,
+   "killer": 0
+  },
+  "0x41f3": {
+   "owner": "Zarich",
+   "move": "Thundaga",
+   "table": "monmagic",
+   "fileOffset": "0x10938",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 24,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 19,
+   "hits": 1,
+   "shatter": 20,
+   "element": 4,
+   "killer": 0
+  },
+  "0x41f4": {
+   "owner": "Zarich",
+   "move": "Waterga",
+   "table": "monmagic",
+   "fileOffset": "0x109c0",
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 24,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 19,
+   "hits": 1,
+   "shatter": 20,
+   "element": 8,
+   "killer": 0
+  },
+  "0x4129": {
+   "owner": "Tawrich",
+   "move": "Punch",
+   "table": "monmagic",
+   "fileOffset": "0x9de8",
+   "costAtb": 80,
+   "costCast": 20,
+   "costMp": 0,
+   "flagsTarget": 51,
+   "flagsMisc": 1090519050,
+   "flagsDamage": 1,
+   "damageClass": 1,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 125,
+   "power": 12,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "0x412b": {
+   "owner": "Tawrich",
+   "move": "Bloody Breath",
+   "table": "monmagic",
+   "fileOffset": "0x9ef8",
+   "costAtb": 80,
+   "costCast": 120,
+   "costMp": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1090519046,
+   "flagsDamage": 0,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 12,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  }
+ },
+ "commandStatuses": {
+  "note": "RE section 10: the statuses and amounts each move row carries (group-1 slot or group-2 slot: chance; steps for the stat stages)",
+  "0x3082 Demi": {
+   "gravityElement": 16
+  },
+  "0x3085 Bio": {
+   "status1": {
+    "5": 100
+   }
+  },
+  "0x30ba Full-Life": {
+   "status1": {
+    "0": 254
+   }
+  },
+  "0x412a Glimmer of Despair": {
+   "status2": {
+    "7": 255,
+    "8": 255,
+    "9": 255,
+    "10": 255
+   },
+   "steps": {
+    "7": -1,
+    "8": -1,
+    "9": -2,
+    "10": -2
+   }
+  },
+  "0x412b Bloody Breath": {
+   "status1": {
+    "3": 254,
+    "4": 254,
+    "5": 254,
+    "6": 128
+   }
+  }
+ },
+ "script": {
+  "note": "RE section 9.5, 9.7 and 9.8: the full fight (scenario level 5, or any level but 1, 2 and 3)",
+  "boss": {
+   "flameCounterGainsOnEveryPoll": 1,
+   "firstPollFlameIfHpAtLeastPercent": 80,
+   "firstPollFlameSetsCounterTo": 8,
+   "osmoseBelowMp": 200,
+   "flameAtCounter": 15,
+   "flameResetsCounterTo": 0,
+   "rollModulus": 5,
+   "rolls": [
+    "flare-or-dispel",
+    "curaga",
+    "bio",
+    "demi",
+    "demi"
+   ],
+   "curagaTargetModulus": 2,
+   "curagaTargets": [
+    "zarich",
+    "tawrich"
+   ],
+   "untouchedFlamePolls": [
+    1,
+    8,
+    23,
+    38,
+    53
+   ]
+  },
+  "zarich": {
+   "startSpellModulus": 4,
+   "startCycleCounter": 10,
+   "glimmerAtCycle": 7,
+   "glimmerBelowMp": 100,
+   "spellOrder": [
+    "firaga",
+    "waterga",
+    "thundaga",
+    "blizzaga"
+   ]
+  },
+  "tawrich": {
+   "bloodyBreathAtCycle": 8,
+   "punchesPerCycle": 7
+  }
+ },
+ "scene": {
+  "note": "pos_<scene>.psc, byte-identical in all five scenes (RE section 8.2): ground plane x and z",
+  "boss": {
+   "x": -45,
+   "z": -13
+  },
+  "girls": [
+   {
+    "x": 23,
+    "z": 29
+   },
+   {
+    "x": 33,
+    "z": 11
+   },
+   {
+    "x": 32,
+    "z": -9
+   }
+  ],
+  "groundDistance": {
+   "yuna": 79.93,
+   "rikku": 81.61,
+   "paine": 77.1
+  },
+  "companions": "Tawrich and Zarich are linked to the boss model by the boss script; their own start spots (0, 0) do not say where they stand"
+ }
+}

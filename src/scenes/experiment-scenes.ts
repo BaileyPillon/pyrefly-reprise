@@ -6,7 +6,8 @@
  * - the Experiment's grounds (FFX-2 only): the Machine Faction's grounds at Djose Temple, on a provisional plate (`./experiment-grounds.ts`, `../data/experiment-plates.ts`);
  * - Mushroom Rock Road (FFX only): the hidden Sinspawn Gui chapter, on a provisional plate (`./mushroom-rock-road.ts`);
  * - the hidden Fayth chapter's deck (FFX only): Chapter VIII's deck with a camera director on it (`./exp-fayth-deck.ts`);
- * - the hidden Tourist Trap chapter's cavern (FFX-2 only): the Cavern of the Stolen Fayth under the FFX-2 camera, on Chapter IX's approved plate (`./tourist-trap-cavern.ts`).
+ * - the hidden Tourist Trap chapter's cavern (FFX-2 only): the Cavern of the Stolen Fayth under the FFX-2 camera, on Chapter IX's approved plate (`./tourist-trap-cavern.ts`);
+ * - the hidden Angra Mainyu chapter's desert (FFX-2 only): the Bikanel Desert under the FFX-2 camera, on a provisional new plate (`./angra-mainyu-desert.ts`).
  *
  * Each row is real (the factory wins); `build` is the unreachable demo diorama, as for every scene with a factory of its own. Moved here unchanged from `./index.ts`, except Fayth's, which is new.
  * Game case: each row is its own chapter's game's, as tagged; the table is shared plumbing.
@@ -25,6 +26,8 @@ import { buildExpFaythDeckScene, EXP_FAYTH_SCENE_ENTRY } from './exp-fayth-deck.
 import { EXP_FAYTH_SCENE } from '../data/ffx/exp-fayth-ids.ts';
 import { buildTouristTrapCavernScene, TOURIST_TRAP_SLOTS } from './tourist-trap-cavern.ts'; // the Tourist Trap's cavern (FFX-2 only, hidden chapter)
 import { TOURIST_TRAP_SCENE } from '../data/tourist-trap-ids.ts';
+import { buildAngraMainyuDesertScene, ANGRA_MAINYU_SLOTS } from './angra-mainyu-desert.ts'; // Angra Mainyu's desert (FFX-2 only, hidden chapter)
+import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -38,6 +41,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   EXP_FAYTH_SCENE_ENTRY,
   // The Tourist Trap's fight (FFX-2 only, hidden chapter): the Cavern of the Stolen Fayth under the FFX-2 camera, on Chapter IX's approved plate.
   { key: TOURIST_TRAP_SCENE, title: 'Cavern of the Stolen Fayth — the Tourist Trap', build: buildDemoScene, slots: TOURIST_TRAP_SLOTS, placeholder: false },
+  // Angra Mainyu's fight (FFX-2 only, hidden chapter): the Bikanel Desert under the FFX-2 camera, on a provisional painted plate.
+  { key: ANGRA_MAINYU_SCENE, title: 'Bikanel Desert — Angra Mainyu', build: buildDemoScene, slots: ANGRA_MAINYU_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -47,4 +52,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [MUSHROOM_ROCK_SCENE]: buildMushroomRockRoadScene, // the hidden Sinspawn Gui chapter (FFX only)
   [EXP_FAYTH_SCENE]: buildExpFaythDeckScene, // the hidden Fayth chapter (FFX only)
   [TOURIST_TRAP_SCENE]: buildTouristTrapCavernScene, // the hidden Tourist Trap chapter (FFX-2 only)
+  [ANGRA_MAINYU_SCENE]: buildAngraMainyuDesertScene, // the hidden Angra Mainyu chapter (FFX-2 only)
 };

@@ -22,6 +22,7 @@
  * | `sprint-shoes` | Sprint Shoes | Ixion (both slots) | `ffx2-ixion-djose.md` §3.1, verified: 4 sources; effect wiki, single source |
  * | `power-wrist` | Power Wrist | Yojimbo (both slots; the hidden Tourist Trap, 2026-10-14) | `ffx2-combat-core.md` §5.4, verified: 2 sources; the steal is `monster.bin` row 170 |
  * | `moon-bracer` | Moon Bracer | Valefor's drop (Besaid, the hidden Valefor chapter) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; effect `ffx2-combat-core.md` §5.4 (no stats, Auto-Shell) |
+ * | `ribbon` | Ribbon | Angra Mainyu's drop (both slots; the hidden Angra Mainyu chapter, 2026-10-14) | `monster.bin` row 268 + wiki + Jegged, verified: 3 sources; effect `ffx2-combat-core.md` §3, verified: 2 sources; no price |
  * | `x2-healing-spring` | Healing Spring | Valefor (both slots) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; a recovery item (`ffx2-combat-core.md` §5.5, Regen), held-only here: its effect is not wired |
  *
  * What is **not** sourced, and so not written: an effect or description for
@@ -67,7 +68,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -108,6 +109,9 @@ export const heldItems: ItemDef[] = [
   held('power-wrist', 'Power Wrist', 6000, 'Accessory. Str +20.'),
   // Valefor at Besaid (FFX-2 only, the hidden chapter): Moon Bracer, no stats, Auto-Shell (ffx2-combat-core §5.4); no price in the research.
   held('moon-bracer', 'Moon Bracer', 'unsourced', 'Accessory. Auto-Shell.'),
+  // Angra Mainyu's drop in the hidden chapter (FFX-2 only; monster.bin row 268, common and rare slot, chance byte 255; `research/re-ffx2-angra-mainyu.md` §4.1, wiki, Jegged `[verified: 3 sources]`): the Ribbon. The effect is
+  // `research/ffx2-combat-core.md` §3 (immune to Petrification, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, Pointless, Itchy, Slow and Stop; `[verified: 2 sources]`), which the engine already wears (`battle/ffx2/kit.ts`); no shop price.
+  held('ribbon', 'Ribbon', 'unsourced', 'Accessory. Guards against Petrification, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, Pointless, Itchy, Slow and Stop.'),
   // Healing Spring is a recovery item (ffx2-combat-core §5.5: Regen on the target party, ~3 % max HP a tick, not sold, sells for 150); the research names no effect row of ours, so it is held-only until one is built.
   held('x2-healing-spring', 'Healing Spring', 0, 'Recovery item (Regen); its effect is not wired yet.'),
 ];

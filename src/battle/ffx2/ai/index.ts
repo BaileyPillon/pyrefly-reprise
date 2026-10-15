@@ -41,6 +41,8 @@ import { experimentScripts } from './experiment.ts';
 import { touristTrapScripts } from './tourist-trap.ts';
 // Valefor at Besaid Temple (FFX-2 Chapter 3; the hidden chapter "Valefor at Besaid"): the fallen aeons' action counter at its gentlest.
 import { x2ValeforScript } from './valefor.ts';
+// Angra Mainyu, Zarich and Tawrich in the Bikanel Desert (FFX-2 Chapter 5, the mission "Showdown in the Sands"; the hidden chapter "Angra Mainyu", FFX-2 only): the game's own three scripts, poll by poll.
+import { angraMainyuScripts } from './angra-mainyu.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -81,6 +83,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...experimentScripts,
   ...touristTrapScripts,
   x2ValeforScript,
+  ...angraMainyuScripts,
   idleScript,
   basicAttackScript,
 ];
