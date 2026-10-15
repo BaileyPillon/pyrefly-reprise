@@ -29,7 +29,8 @@ Files used (size in bytes, SHA-256 prefix): monster files `m340` Dark Yojimbo (5
 - **Dark Yojimbo is five fights, not one.** The event launches `nagi05_70`, `_71`, `_72`, `_73`, `_74` in turn, each a fresh 1,600,000-HP Dark Yojimbo; what changes is how fast his Overdrive gauge fills: +6, +10, +16, +20, +26 per own turn (Zanmato on the whole front line at 100), plus +2 per hit he takes. His whole turn is a three-way roll (Wakizashi on all, Kozuka on one, or his dog) unless the gauge is full. Escape and Flee are disabled for all characters and aeons. [bytes] (section 4.1.)
 - **The Dark Sisters are six formations.** Three together (`kino00_70`, `kino01_70`, all three gauges start at 100, so the opening move is the joint Delta Attack), Cindy alone (`kino01_71`), Sandy and Mindy (`kino01_72`), Sandy alone (`kino05_70`), Mindy alone (`kino05_71`). Their AI branches on the battle id. Escape and Flee are disabled in all six. [bytes] (sections 3 and 4.2.)
 - **Aeon rules, in player terms** (section 5): a summon parks the whole party and puts the aeon in with its own 20-point Overdrive gauge; the three Sisters arrive together as a party of three with three gauges; Combine powers needs all three full and able to act; a dismissal brings the party back and revives a fallen Sister to 1 HP; a wipe (everyone on the aeon side down) does not end the battle, leaves the aeons out for 9 to 31 battles and is not a Game Over. Our engine has the summon and dismiss kernel, but **not** the Sisters wired, nor Yojimbo's hire answer, compatibility, Pay or free attack (section 5.6).
-- **Not in this commit:** the final battle's possession chain (b) and Penance (c) follow in the next commit of this branch.
+- **(b) The final battle does include Yuna's own Yojimbo and Magus Sisters when she has them.** After Braska's Final Aeon, one field event loops over the aeons in the party, shows the player a menu, removes the chosen aeon from the party and launches that aeon's possession battle (`sins07_00` to `_06` for the aeons 8 to 14, Yojimbo being 14; `sins07_07` for the three Sisters together); the **player picks the order**, not the game. Each possessed aeon copies the stats of the player's own aeon. The possessed rows (`m169` Yojimbo, `m178` to `m180` the Sisters) are placeholders. The repo's Chapter III build leaves Yojimbo and the Sisters out on purpose. [bytes], [note: re-ffx-ai-yunalesca-bfa.md 5] (section 6.)
+- **(c) Penance exists:** Penance (m344, 12,000,000 HP, absorbs all five elements, Protect on from the start, which its script turns off when its HP falls below three quarters) with a Right Arm and a Left Arm (m345, m346; 500,000 HP each, also absorb all five elements), formation `hiku15_70` (area key 395, stage 395). Its battle is not launched by a literal id in any of the 377 field events read. (section 7.)
 
 ## 1. Where the pieces are
 
@@ -246,17 +247,82 @@ Sources: [note: FFX-G08 3 and 5 and 6] (the aeon-side logic, run on the game's o
 
 ## 6. The final battle against Yu Yevon's possessed aeons (b)
 
-Not in this commit; it follows in the next commit of this branch.
+### 6.1 How the chain picks and orders the aeons [bytes]
+
+The field event `sins0700` (worker 26) runs after Braska's Final Aeon (`sins06_00`):
+
+1. It reads the set of aeons in the party (`getActiveAeonsBitfield`; actor ids 8 to 15, that is Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima, **Yojimbo (14)** and **the Magus Sisters (15, as one entry)** [note: re-ffx-ai-yunalesca-bfa.md 5.1]).
+2. While the set is not empty it shows a message with a choice built from the set; **the player chooses**; the chosen aeon is removed from the party (`removePartyMember`) and a switch on the aeon id (8 to 15) launches that aeon's battle; the set is then read again.
+3. For the Sisters (id 15) the event also removes Sandy (16) and Mindy (17), so all three leave together and one battle holds the three.
+4. When the set is empty it launches Yu Yevon (`sins07_10`, 0x024B000A) with the flag word 0x10D01.
+
+| Aeon (id) | Battle id | Formation | Flag word 0x10504 destination (room, 21) |
+|---|---|---|---|
+| Valefor (8) | 0x024B0000 | `sins07_00` | 622 |
+| Ifrit (9) | 0x024B0001 | `sins07_01` | 623 |
+| Ixion (10) | 0x024B0002 | `sins07_02` | 625 |
+| Shiva (11) | 0x024B0003 | `sins07_03` | 624 |
+| Bahamut (12) | 0x024B0004 | `sins07_04` | 626 |
+| Anima (13) | 0x024B0005 | `sins07_05` | 628 |
+| **Yojimbo (14)** | 0x024B0006 | `sins07_06` | 627 |
+| **Magus Sisters (15, with 16 and 17)** | 0x024B0007 | `sins07_07` | 629 |
+| Yu Yevon | 0x024B000A | `sins07_10` | (flag word 0x10D01) |
+
+Flag word 0x10504: low byte 4 is the "move task" with the two extra arguments as the destination; bit 9 (0x200) clear, so a defeat is a game over [note: FFX-G10 3.6]. No restore call for HP, MP or statuses was found in the three events, so the party's HP, MP and statuses **carry across every link** [note: re-ffx-ai-yunalesca-bfa.md 5.1]. The chain does not require the player to own Yojimbo or the Sisters; **they appear only if Yuna has them in the party**. [note: 5.1]
+
+### 6.2 The possessed rows [bytes], behaviour [note: re-ffx-ai-yunalesca-bfa.md 5.4 to 5.6]
+
+| Row | HP / MP / overkill | STR DEF MAG MDEF AGI LCK EVA ACC | Command list | Notes |
+|---|---|---|---|---|
+| m169 possessed Yojimbo | 169 / 1 / 169 | 7 0 0 0 0 0 2 10 | 0x60CF Death, 0x60EC "Possessed by Yu Yevon" | Doom counter 10, CTB icon 14, Zanmato byte 2 |
+| m178 possessed Cindy | 2,000 / 1 / 2,000 | 1 1 1 0 1 0 1 0 | 0x60EF Death, 0x60EE "Possessed by Yu Yevon" | Doom counter 3, CTB icon 21, Zanmato byte 3 |
+| m179 possessed Sandy | 2,000 / 1 / 2,000 | 1 0 0 0 0 0 0 0 | same | the same |
+| m180 possessed Mindy | 2,000 / 1 / 2,000 | 1 0 0 0 0 0 0 0 | same | the same |
+
+All four: no loot (gil, AP, items, steal and gear chances 0); immune to Death, Zombie, Petrify, Poison, the four Breaks, Confuse, Berserk, Provoke, Sleep, Silence, Darkness and Slow; Shell, Protect, Reflect, the Nuls, Regen, Haste land; extra immunity word 0x4301 for Yojimbo and the Sisters (Scan, Eject, Auto-Life, Doom); no element affinity. [bytes] These rows are **placeholders**: at the start of each battle the script copies the **player's own aeon's** STR, DEF, MAG, MDEF, AGI, EVA, ACC and max HP into the possessed actor (Yojimbo from actor 14; the Sisters from actors 15, 16, 17), sets HP to that maximum, and uses the aeon's name. [note: re-ffx-ai-yunalesca-bfa.md 5.4, 5.6] So the strength of the possessed Yojimbo and Sisters follows how the player built them.
+
+The moves they use, from the move rows [bytes] and the script reading [note: 5.5, 5.6]:
+
+- **Possessed Yojimbo.** Each turn Kozuka (0x60E0) or Wakizashi (0x60E1) at 50/50, never Attack; both formula 1, power 14, can crit, pierce Armored. His Overdrive at 100 is Zanmato (0x60E2: formula 6, power 200, whole front line), added to his list at battle start. His dog stand-in is a Sinscale model in actor 23 that the script hides after his first turn; its Daigoro branch cannot be reached. Gauge on his own turn +0 to 9; on a hit +0 to 9, with Power Wave +5 to +14 instead of +15 to +33.
+- **Possessed Sisters** (one battle with the two Yu Pagodas and the dummy Nishida actor): Cindy Delta Attack (0x60E6: formula 15, power 10, 6 hits, front line) when all three gauges are 100 or more, else Drain on the highest-HP front-line actor if her HP is below two thirds, else Curaga on a Sister at or below 50 percent, else Camisade (0x60E3, formula 1, power 21); Sandy Reflect on Cindy, Haste on a Sister without it, or Razzia (0x60E4, power 21); Mindy Flare or Passado (0x60E5, formula 1, power 2, 15 hits). Each Sister's gauge gains 10 to 19 per hit and about 40 to 58 from a Power Wave. [note]
+- **Opening order.** The possessed actor gets First Strike and CTB 0, both Pagodas CTB 24; in the Sisters' battle only Cindy gets First Strike and CTB 0. Party and reserves CTB +1. [note: 5.3]
+
+### 6.3 What the repo ships for this
+
+- `src/data/ffx/builds/dreams-end.ts` on `origin/r49-rc`: the build is the Chapter III Dream's End party (Tidus, Yuna, Auron); its aeons array is the five mandatory aeons only, and its header states that **Anima, Yojimbo and the Magus Sisters are intentionally absent** ("assume absent for the default preset") although their possessed-aeon data ships for a player who owns them. [bytes of the repo file]
+- `src/data/ffx/enemies/braskas-final-aeon-abilities.ts` on `origin/r49-rc`: possessed ability records exist for Yojimbo (`possessed-yojimbo-daigoro`, `possessed-yojimbo-zanmato`) and Cindy, Sandy, Mindy (Camisade, Delta Attack, Razzia, Passado). Two of them **differ from the game's rows**: the Yojimbo record is named for Daigoro with power 10 (taken, per its own comment, from `research/ffx-combat-core.md` section 6.3), whereas the files give the possessed Yojimbo Kozuka and Wakizashi (power 14, never the dog) with Zanmato as his Overdrive; and Passado is described there as a 15-hit flurry, which agrees with the rows (power 2, 15 hits). No data was changed here. [bytes] vs [bytes of the repo file]
+- The order of the aeon battles in the repo is a fixed acquisition order and the Sisters are three separate battles, against the game's player-chosen order and one three-Sister battle [note: re-ffx-ai-yunalesca-bfa.md 9, rows A1 and A2].
 
 ## 7. Penance (c), for size only
 
-Not in this commit; it follows in the next commit of this branch.
+**Existence and place.** Penance is m344 with a Right Arm (m345) and a Left Arm (m346) in formation `hiku15_70` (area key 395, map `hiku15`, stage id 395, block bytes voice 0, byte 1 = 0, foot-sound id 8, in-water 0, words 0x1158 0x1159 0x115A). The area lists it as a zone with weight 0 (never rolled). The same map holds the Evrae fight (`hiku15_00`), launched by `hiku1500`. No literal launch of battle id 25,886,790 (0x018B0046) exists in the 377 field events read (20 variant event files of the game's 397 were not read); a raw byte scan finds that constant only in the event file `matu0000`, which the disassembler could not parse, so whether it is a launch there is unknown. How the game starts the Penance battle was not found. [bytes] / [unproved]
+
+| Field | Penance m344 | Arm m345 / m346 (identical rows) | Tag |
+|---|---|---|---|
+| HP / MP / overkill | 12,000,000 / 999 / 99,999 | 500,000 / 999 / 99,999 | [bytes] |
+| STR DEF MAG MDEF AGI LCK EVA ACC | 255 240 255 200 255 10 0 255 | 200 200 150 200 150 10 120 255 | [bytes] |
+| Elements absorb / immune / resist / weak | absorb all five (raw 31), others 0 | absorb all five (raw 31) | [bytes] |
+| Automatic statuses | counter word 0x10: **Protect on from the start** | none | [bytes] |
+| Status bytes | same pattern as the Dark Aeons (immune to the same 15, Threaten 0, the buffs land) | same | [bytes] |
+| Flags +0x28 / +0x29 / extra-immunity | 0x1E / 0x07 / 0x432F | 0x1E / 0x07 / 0x032F (no Doom immunity) | [bytes] |
+| Doom counter | 255 | 200 | [bytes] |
+| Commands | Attack 0x4000, Immolation 0x411F, Obliteration 0x4120, Judgment Day 0x4121, Separation 0x4122, Appearance 0x4123, Death 0x4124 | m345: Attack, Regeneration 0x4125, Atrophy 0x4126, Attack 0x4127, Calamity 0x4104, Mighty Guard 0x412A; m346: Attack, Regeneration, Atrophy, 0x412B, Tera Graviton 0x4129, Slowga 0x3039 | [bytes] |
+| AP (overkill AP) | 60,000 (65,000) | 10,000 (12,000) | [bytes] |
+| Drop | Master Sphere x3 (x6 on an overkill) in both slots of slot 1 | Dark Matter x1 / Master Sphere x1 | [bytes] |
+| Steal | Elixir x1 / Megalixir x2 | Elixir x1 / Elixir x1 | [bytes] |
+| Gear drop | chance 255, base slots 24, formula 1, crit 10, power 16, tries 20; weapons draw Break Damage Limit, armour Ribbon | chance 0 (not rolled), rows empty | [bytes] |
+| Zanmato byte | 5 | 5 | [bytes] |
+
+**Moves** (rows; formula numbers as in section 2) [bytes]: Immolation formula 1 power 32 with Armor Break and Mental Break at 254; Obliteration formula 1 power 24 with Slow at 254; Judgment Day formula 15 (MAG cube) power 240 at a group; Attack formula 1 power 16 with accuracy formula 2 and byte 90; Separation, Appearance and Death are scene rows with no effect (dead targets allowed).
+
+**What its script does, in one paragraph** (rows only; not a full decode) [bytes]: while its HP is at three quarters of its maximum or more, every turn is Obliteration on the whole front line; the first damaging hit that leaves it below three quarters makes it use Separation on itself, turns its Protect off and its Haste on and sets two shared battle variables the arms can read. After that every turn is Immolation on a random living front-line character, except that Judgment Day goes at the front line once a counter of its turns and the hits it takes reaches 20 and two other shared battle variables both read 0 (what sets them was not traced). At its death it forces its own Death and sets both arms to 0 HP. Escape is **not** disabled by the formation script or by m344 (only `SetAmbushState(Normal)` is written). The formation has no early-end call. In the formation block, byte 1 is 0. Size: three actors (12,000,000 + 2 x 500,000 HP = 13,000,000 HP of targets, the body and arms all absorbing every element), start positions in the table of section 3 style: party (-24.830, -35, 105.859), (-25.616, -35, 82.909), (-28.236, -35, 60.572); Penance (-150.801, 63, 90.078), Right Arm (-145.990, -8, 40.089), Left Arm (-150.678, -8, 138.949); area 1 (raw) party (-35, -35, 40), (-40, -35, 80), (-45, -35, 120), monsters (-370, -35, 80), (-170, -35, 80), (0, 0, 0).
 
 ## 8. What this means for choosing the encounter ([inferred]; no build is proposed here)
 
 - **As enemies, the data is complete for Dark Yojimbo and the Dark Sisters.** Rows, loot, formations, start positions, the battle flags and the AI of Dark Yojimbo are small and now readable (three moves, a gauge, five tiers). The Sisters need the rest of three scripts read before they can be reproduced (their gauge arithmetic and per-formation branches).
 - **As the player's own aeons, Yojimbo and the Sisters are not in the engine.** A chapter that puts a player Yojimbo and Sisters against a Dark or possessed enemy needs the compatibility / Pay / free-attack rules, the Sisters' three-aeon wiring, orders, motivation and Combine powers built first; the checked note supplies every rule and number for that.
 - **Scale.** The Dark rows have 1.6 to 3 million HP; the player-side aeons are capped at 9,999 per hit unless they carry Break Damage Limit (the Sisters do, Yojimbo does not [note: re-ffx-overdrive-steal-aeons.md 4.5]), so Yojimbo needs on the order of 160 capped hits against Dark Yojimbo: [inferred arithmetic].
+- **Tie to the chapter order.** The three kinds of encounter have different launch rules: Dark Yojimbo is a five-fight chain with a fixed flag word 0x1500 (no victory pose), the Sisters are single fights with a flag word of 0x1000 or 0x1800 (victory pose), the final battle is a player-ordered chain with a fixed game-over rule.
 
 ## 9. What is not proved, and what would prove it
 
