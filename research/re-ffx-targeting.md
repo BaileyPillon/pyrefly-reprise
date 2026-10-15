@@ -1,8 +1,8 @@
 # FFX battle targeting chain: Reflect, Cover, the random spread, Berserk, Confuse and Provoke (what the game code does)
 
 **Game case: FFX only.** FFX-2 has its own spread routine (0x634E40) and its own counters in its own exe; none of these addresses exist there.
-Part of the `re-parity` track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)), release candidate 4, lane FFX-G (slices G-a and G-b).
-Condensed 2026-10-11 from the private working note FFX-G04 (written 2026-10-10 by the decompilation lane, revised after two independent checks).
+Part of the `re-parity` track ([docs/plans/re-parity.md](../docs/plans/re-parity.md)), release candidate 4, lane FFX-G (slices G-a and G-b); slice G-c (§7 and §8, counters and reach) in release candidate 9.
+Condensed 2026-10-11 from the private working note FFX-G04 (written 2026-10-10 by the decompilation lane, revised after two independent checks); §7 and §8 added 2026-10-15 with five read-only checks of the exe made for slice G-c.
 
 **Source note (applies to every statement below unless a line says otherwise):** FFX.exe, Steam build 25501027, SHA-256 0537B2A1...686D (the HD
 Remaster's 32-bit executable, image base 0x00400000; every "VA" below is a virtual address in that image). Read in Ghidra, decompiler and
@@ -19,6 +19,8 @@ data, not run; **inferred** = follows from read facts but nothing ran it. A stat
 | §2 legal set, auto-target, group pick, picker | `kernel/legal-set.ts`, `kernel/target-world.ts` | `parity-ffx-target-sets.test.ts` |
 | §3 forced turns | `kernel/forced-turn.ts` | `parity-ffx-target-forced.test.ts` |
 | §5 engine wiring | `src/battle/ffx/target-build.ts`, `forced-turn.ts`, `adapt/target-world.ts` | `parity-ffx-engine-targets.test.ts` |
+| §7 counters | `kernel/counter.ts` | `parity-ffx-counter-kernel.test.ts` |
+| §8 counter wiring and reach | `src/battle/ffx/counter-chain.ts`, `adapt/counter.ts`, `reach.ts`, `kernel/command-reach-table.ts` | `parity-ffx-engine-counters.test.ts`, `parity-ffx-reach.test.ts` |
 
 ## 0. Functions
 
@@ -154,4 +156,53 @@ bounce. They are constants in each call, not per actor. (`anchors.md` of the ear
 4. Whether the counters (the global array) carry across battles: the engine starts them at 0 in every battle (the game's array is global, reset point not read).
 5. Which monsters set "keeps control when Provoked": the engine reads it from the boss scripts' notes (`research/re-ffx-ai-seymour.md` m126 init, `re-ffx-ai-yunalesca-bfa.md`
    section 1.7, `re-ffx-ai-gui.md` section 5); for every other monster in the project it is taken as 0.
-6. Counters (G10, G11), the chain flag, reach beyond the Chapter XII path (G12) and the multi-hit counter queue (open question 10 of the source note) are slice G-c and wait.
+6. Counters (G10, G11), the chain flag, reach beyond the Chapter XII path (G12) and the multi-hit counter queue: answered and built in slice G-c, §7 and §8 (2026-10-15).
+
+## 7. Counters (0x0078c1d0, 0x0079e340, 0x0078d8d0; emulated, 28,000 + 20,000 + 14,000 vectors)
+
+**The order of the game.** A command is worked out **before it is applied**: the command orchestrator (0x007892e0) builds the targets (§1), then for each target the per-target
+step (0x00789740) loops **all** of the target's hits through the per-hit pipeline (0x0078e630), which writes one hit record per hit. Only afterwards are the records applied,
+**one hit per call** (0x0078f060, read). Two calls of the counter-kind function sit in the per-hit pipeline: one at the start (it never arms; its answer feeds the hit check) and one
+at the end.
+
+- **Kind** (0x0078c1d0). 0 when the command is not single-target (target-type bits 0), when the attacker's `Chr+0xdf1` is non-zero (the attacker is itself running a reaction: 1 for every
+  queued reaction, 0 for a turn), when attacker and target are the same id, or when the byte at VA 0x0112ca12 is 0 (1 at every battle start; only eleven Belgemine duel scenes write 0,
+  none a chapter of the project). Otherwise by damage kind: physical, Evade and Counter (bit 0x10 of `Chr+0x6bc`) gives **2** and wins over Counterattack (0x08, kind **1**); magical,
+  Magic Counter (0x20) gives 1; any other kind gives 0. Kind 2 is the forced miss of the hit check, in a check that rolls only (§1 of the source note, unchanged).
+- **Arming.** The end-of-hit call arms the target's one "counter armed" byte (`Chr+0x6dc`) when the kind is not 0 and the command is harmful. The call is made for a hit, a miss, a
+  forced miss and a Nul-nullified hit; **not** for the "no effect" outcome (the hit check's first answer, a Phoenix Down on a living target). The byte is one byte: a second hit of the
+  same command arms it again, which counts for nothing once it has been cleared.
+- **Harmful** (0x0079e340): never with the restorative flag (`Cmd+0x20` bit 4); otherwise any damage class (`Cmd+0x23` and 7: HP, MP, CTB); or a non-zero chance of any of the twelve
+  permanent statuses (all flagged); or a non-zero chance **and** a non-zero duration for Sleep, Silence, Darkness or Slow (the four temporal statuses flagged); or an Eject, Curse or Doom
+  bit of the extra-status word (`Cmd+0x54`). Haste, Shell, Protect, Reflect, Regen and the Nul spells do not count. The flags are bit 7 of byte 3 of each status's behaviour entry, read from the game's own tables.
+- **Queue** (0x0078d8d0), called by every apply call whose target is armed: when the holder **can act** (the can-act of §1.1 with in-battle, not-Provoked and not-Threatened required) it
+  queues an action record: actor the holder, command the holder's `Chr+0x6c6`, target mask the attacker alone (bit `id & 31`), priority 0, kind 1 (a reaction); **the armed byte is cleared
+  whether or not it queued**. There is no chance roll and no draw anywhere in the chain. The death check at the end of the apply call removes a dying holder's queued actions.
+
+**Open question 10 of the source note, answered by reading (2026-10-15).** The per-target step computes every hit of a target before any is applied, so the armed byte is set once, by
+the hits together; the first apply call queues the counter and clears the byte; the later apply calls of the same command find it clear. **A target answers once per command, whatever
+its hit count.** (Each sub-command of an action, e.g. each spell of a Doublecast, is its own calculation and its own answer.) A row whose script names one target per hit is one command per hit.
+
+**Open question 4 of the source note, answered by reading (2026-10-15).** A scan of every memory operand with the displacement 0x6dd and 0x446 in the whole executable finds one reader of
+`Chr+0x6dd`: the character's position getter (0x007948e0), which adds an offset to the world position when the byte is set; its writers are the target builder, the death check, this queue
+and the end of the apply call. `Chr+0x446` is the script property `stat_command_type` (id 0xe0), read by the animation and camera helpers (0x007b75c0 to 0x007b77c0, 0x007dbee0) and the
+script getter. **Neither changes a rule: they are presentation.**
+
+**Row 17 (the holder's own default attack), answered by reading.** The character initialiser (0x0079b4f0) writes the **constant 0x3000** into `Chr+0x6c6` in its non-monster branch (VA
+0x0079b68d: every party member and every aeon) and the monster's record word `R+0x70` in its monster branch (VA 0x0079ba19); a scan of the whole executable for stores through the field's offset finds no other writer, and four readers (the Berserk damage step, this queue, the Berserk and Confuse turn, the Provoke turn). So the note's "aeons differ" is wrong: an aeon's counter is
+also the 0x3000 Attack. Only a monster has an own default attack, and no monster holds a counter: the monster branch zero-fills `Chr+0x6bc` (the zero-fill covers 0x540 to 0x72b), so a
+monster could hold one only if its script wrote the auto-ability property; no script of the project's formations is known to.
+
+## 8. Reach as a 4-level rule, and what the engine does now (RC9 lane FFX-G slice G-c)
+
+**Reach** (0x00799690, §2) is read from the record's target word (`Cmd+0x1a` and `Cmd+0x1b`). `kernel/command-reach-table.ts` carries the word of all 979 records of the game's command
+table (counts by reach 204 / 8 / 638 / 129, as the source note gives; a test pins them), and `reach.ts#reachOf` reads it. A command can pick a target when its reach is at least the target's
+BattleDistance, or when the target is the user. The distances the project knows: Sinspawn Gui's head **1**; the four Mortiphasm discs **2** (the formation script's init worker writes
+BattleDistance 2 on each disc: `research/re-ffx-ai-seymour.md` section 5.1, sins03_00 offsets 0xc23e, 0xc26e, 0xc29e, 0xc2ce, read); Sin's Genais Core **3** until Genais falls, then 0
+(`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md`, Genais and the Core).
+
+| # | Rule | Engine before | Wired in |
+|---|---|---|---|
+| G10 | When a counter fires | counters only for targets that took HP damage above 0 or MP damage; no single-target, harmful or can-act test; answered while asleep, Threatened, Petrified ...; a multi-target command's damaging hits counted | the chain above: armed by every outcome but "no effect", single-target and harmful commands only, can-act at the first hit, once per command, never against a reaction (`counter-chain.ts`) |
+| G11 | The counter command | the generic Attack | unchanged in effect: the holder's own default attack is 0x3000 for every party member and aeon (§7), which is the engine's generic Attack; a monster holds no counter |
+| G12 | Reach | Gui head: "reach 0 falls short"; Chapter XII discs and the Genais Core: `outOfMeleeReach` ("physical only from Wakka, Valefor, Anima, Mindy; every non-physical command reaches") | the 4-level rule with the distances above. Visible: Steal and the reach-1 commands no longer reach a disc; items and Valefor's Energy Ray (reach 2) no longer reach the Core while Genais stands |
