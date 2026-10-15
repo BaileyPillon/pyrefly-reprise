@@ -37,6 +37,10 @@ export const BIRAN_YENKE_DOC: GuideDoc = {
       t: 'p',
       text: 'He teaches Thrust Kick, Self-Destruct and Doom, and Mighty Guard only after he has cast it himself.',
     },
+    {
+      t: 'p',
+      text: "Take care with Self-Destruct: it hits for three times Kimahri's own HP and ejects him, and he is the only one fighting. Keep it for the blow that ends the fight, if you use it at all.",
+    },
     { t: 'h3', text: 'Yenke' },
     {
       t: 'p',

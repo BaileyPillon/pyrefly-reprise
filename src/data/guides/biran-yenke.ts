@@ -64,12 +64,11 @@ export const BIRAN_YENKE_GUIDE: ChapterGuide = {
     { when: { labels: ['Lancet'], targetId: YENKE }, text: 'Lancet {target}: he may teach Fire Breath, Aqua Breath or Stone Breath, and White Wind once he has called it', cite: 're-ffx-biran-yenke §7; ffx-seymour-flux §6.1' },
     { when: { labels: ['Fire Breath', 'Aqua Breath'] }, text: '{actor} breathes on both brothers: it ignores Magic Defense, and nobody stands guard against a Rage', cite: 're-ffx-biran-yenke §5.6, §7; ffx-combat-core §5.8' },
     { when: { labels: ['Thrust Kick', 'Jump'] }, text: 'A Rage is not a plain Attack: the other brother does not stand guard against it', cite: 're-ffx-biran-yenke §5.6, §7' },
-    { when: { labels: ['Self-Destruct'] }, text: 'Self-Destruct ejects {actor}, and he is fighting alone', cite: 'ffx-combat-core §5.8; re-ffx-biran-yenke §4' },
     { when: { kinds: ['attack'], targetId: BIRAN, flags: { [SAME_SIDE]: 1 } }, text: 'The brothers stand together: the other one guards, and this lands for next to nothing', cite: 're-ffx-biran-yenke §5.6' },
     { when: { kinds: ['attack'], targetId: YENKE, flags: { [SAME_SIDE]: 1 } }, text: 'The brothers stand together: the other one guards, and this lands for next to nothing', cite: 're-ffx-biran-yenke §5.6' },
     { when: { kinds: ['attack'], targetId: BIRAN, flags: { [SAME_SIDE]: 0 } }, text: 'The brothers are apart: nobody guards, so the blow lands in full', cite: 're-ffx-biran-yenke §5.3, §5.6' },
     { when: { kinds: ['attack'], targetId: YENKE, flags: { [SAME_SIDE]: 0 } }, text: 'The brothers are apart: nobody guards, so the blow lands in full', cite: 're-ffx-biran-yenke §5.3, §5.6' },
-    { when: { labels: ['Potion', 'Hi-Potion', 'X-Potion', 'Mega-Potion'] }, text: 'Top {target} up: he is the only one standing, and a Bulldoze or a breath takes a large share of him', cite: 're-ffx-biran-yenke §4, §6' },
+    { when: { labels: ['Potion', 'Hi-Potion', 'X-Potion'] }, text: 'Top {target} up: he is the only one standing, and a Bulldoze or a breath takes a large share of him', cite: 're-ffx-biran-yenke §4, §6' },
   ],
 
   watch: [],
