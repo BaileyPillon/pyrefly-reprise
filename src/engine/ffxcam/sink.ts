@@ -6,15 +6,18 @@
  *   and FFX's up vector `(0, -1, 0)` as a direction, so a scene that mirrors an axis gets its up vector for free. The scene can swap the matrix later (`setTransform`).
  * - **Roll** turns the up vector about the view axis before the camera is aimed. Its sign is FFX's, **Open** (SPEC.md 12: `camSetRoll`'s sign convention was not checked against a run), so
  *   `rollSign` is an option, to be set once a recording settles it; the sense is also flipped for a matrix that mirrors (negative determinant), so the same sign means the same on screen.
- * - **Field of view** is the pose's vertical field (`2 * atan(240 / scrDpt)`, 26.38 degrees at the default lens), set on the camera. The sink **does not touch the aspect**: the renderer owns it, so on a
- *   wider window the picture widens horizontally (Hor+) and the vertical framing FFX authored holds. That is an assumption, not a fact: how the Steam build widens FFX's 4:3 to 16:9 is Open
- *   (CAMERA.md 1.2 lists it), and a sampled frame would settle it.
+ * - **Field of view** is the pose's vertical field (`2 * atan(240 / scrDpt)`, 26.38 degrees at the default lens) **as the window is drawn with it** (`./geometry.ts`, `screenFovDeg`, FOC46-05), set on the camera. The sink
+ *   **does not touch the aspect**: the renderer owns it. In a window as wide as FFX's 4:3 or wider the picture widens horizontally (Hor+) and the vertical framing FFX authored holds. That is an assumption, not a
+ *   fact: how the Steam build widens FFX's 4:3 to 16:9 is Open (CAMERA.md 1.2 lists it), and a sampled frame would settle it. In a **narrower** window the field is FFX's 4:3 **horizontal** one and the vertical
+ *   field is taller (ours: Hor+ left an upright tablet and a phone's slice a horizontal field of about 20 degrees where FFX's frame has 34.7, and the boss stood outside it). "The window" is
+ *   {@link ThreeCameraSinkOptions.windowAspect}: what the player sees of the render, which is the camera's own aspect unless the scene says otherwise (an upright phone shows a 3:4 slice of a 16:9 canvas).
  *
  * Nothing here ticks anything: the caller applies a pose when it has one, and must apply it AFTER whatever else aims the camera that frame (`BattleCamera.update` sets the position and aim
  * every frame, so an FFX shot is applied after it). Game case: FFX only.
  */
 
 import { Matrix4, Vector3, type PerspectiveCamera } from 'three';
+import { screenFovDeg } from './geometry.ts';
 import type { CameraPose } from './solver.ts';
 
 /** Something that takes the camera's pose. */
@@ -30,6 +33,12 @@ export interface ThreeCameraSinkOptions {
    * picture clear of its HUD panels; FFX's own shot fills the frame, so the hidden Fayth chapter clears it. The mix sets it again on the next frame, before the render, and the sink clears it again.
    */
   readonly clearViewOffset?: boolean;
+  /**
+   * The shape of what the player sees of the render, width over height, read at every apply (default: the camera's own aspect). The lens is drawn for it (`screenFovDeg`): FFX's 4:3 horizontal field in a window
+   * narrower than 4:3, FFX's vertical field otherwise. The scene gives it where the window is not the canvas: an upright phone's canvas is the 16:9 render at the field's height and the window shows a 3:4 slice of it
+   * (`../../scenes/exp-fayth-world.ts`, `windowAspectOf`). The tracking net, the plate fit and the audit are told the same number, so they judge the camera this draws.
+   */
+  readonly windowAspect?: () => number;
 }
 
 /** FFX's up vector: Y points down, so up is negative y (screen block `S[0]` = (0, -1, 0)). */
@@ -43,6 +52,7 @@ export class ThreeCameraSink implements CameraSink {
   private readonly up = new Vector3();
   private readonly rollSign: 1 | -1;
   private readonly clearView: boolean;
+  private readonly windowAspect: (() => number) | null;
   private hand = 1;
 
   constructor(
@@ -52,6 +62,7 @@ export class ThreeCameraSink implements CameraSink {
   ) {
     this.rollSign = options.rollSign ?? 1;
     this.clearView = options.clearViewOffset === true;
+    this.windowAspect = options.windowAspect ?? null;
     this.setTransform(ffxToWorld);
   }
 
@@ -75,8 +86,9 @@ export class ThreeCameraSink implements CameraSink {
     }
     cam.position.copy(this.eye);
     if (length > 1e-9) cam.lookAt(this.look);
-    if (cam.fov !== pose.fovDeg) {
-      cam.fov = pose.fovDeg;
+    const fov = screenFovDeg(pose.fovDeg, this.windowAspect ? this.windowAspect() : cam.aspect); // the lens as this window is drawn with it
+    if (cam.fov !== fov) {
+      cam.fov = fov;
       cam.updateProjectionMatrix();
     }
     cam.updateMatrixWorld();

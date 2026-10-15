@@ -48,7 +48,10 @@ export interface FaythCameraWorld {
   range(): { readonly current: 'near' | 'far'; readonly shifting: boolean } | null;
   /** Every active party member on the field is down (the party has fallen); false with none on the field. */
   partyFallen(): boolean;
-  /** The window's width over height (the live camera's aspect); absent means 16:9. */
+  /**
+   * The shape of what the player sees of the render, width over height (`../../scenes/exp-fayth-world.ts`, `windowAspect`: the live camera's own aspect, or an upright phone's 3:4 slice of its 16:9 render); absent means
+   * 16:9. The tracking net judges "in frame" for this window and the camera sink draws the lens for it (`./geometry.ts`, `screenFovDeg`), so the net sees the camera the player does.
+   */
   aspect?(): number;
 }
 

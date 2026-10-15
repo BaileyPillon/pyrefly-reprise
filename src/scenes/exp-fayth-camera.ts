@@ -13,7 +13,8 @@
  *   `Scene.onBeforeRender` (`hookBeforeRender`), which `WebGLRenderer.render` calls after the matrices are updated and before it reads them. The sink also **clears the view offset**: CHAPTER FRAMING's lens
  *   shift is for the painted game's HUD, FFX's shot fills the frame, and the chapter has no switch to opt out of the mix (`fx/mix/*` is shared, so nothing there is touched).
  * - **The world it frames** is read live: the actors by name among the scene's children (as the skin finds them), their positions mapped back to FFX's frame, the models' extents and live bodies
- *   (`../engine/ffx3d/modelBox.ts`), the range director's current range (`airshipRangeDirectorOf`), the party's fall, the camera's aspect. `../engine/ffxcam/faythCamera.ts` has the rest.
+ *   (`../engine/ffx3d/modelBox.ts`), the range director's current range (`airshipRangeDirectorOf`), the party's fall, the shape of the window (`./exp-fayth-world.ts`, `windowAspectOf`: the camera's own aspect, or an upright
+ *   phone's 3:4 slice of its 16:9 render, which the lens is drawn for, FOC46-05). `../engine/ffxcam/faythCamera.ts` has the rest.
  * - **Tracking** (the camera lost its subjects, `docs/handoff/fayth-3d.md` "Camera tracking"): the characters' camHeight and camWidth are the game's own (`../engine/ffxcam/extents.ts`), the script's FAR look-at is moved to
  *   the party's column (`../engine/ffxcam/farFit.ts`), and the director's pose goes through a safety net (`../engine/ffxcam/safetyNet.ts`) given FFX's two default views. `?ffxnet=off`, `?ffxfar=script` and
  *   `?ffxext=models` turn them off one by one, for comparing with the bare replay.
@@ -33,7 +34,7 @@ import { tapShotDirector } from '../engine/ffx3d/beatTap.ts';
 import { FFX_FAR_VIEW, FFX_NEAR_VIEW, FFX_PARTY_SLOTS } from '../engine/ffx3d/ffxStaging.ts';
 import { ffxWorldMatrix } from '../engine/ffx3d/ffxWorld.ts';
 import { derive, skinOf, tapOf } from './exp-fayth-skin.ts';
-import { viewOf, worldOf } from './exp-fayth-world.ts';
+import { viewOf, windowAspectOf, worldOf } from './exp-fayth-world.ts';
 import type { SceneBuild } from './types.ts';
 
 export { viewOf }; // the camera's read of a battle actor (its tests import it from here)
@@ -77,10 +78,11 @@ export async function stageFaythCamera(base: SceneBuild, skinned: SceneBuild): P
   const seed = Number.parseInt(new URLSearchParams(search).get('ffxseed') ?? '', 10);
   const aids = trackingSwitches(search);
   let target: PerspectiveCamera | null = null;
+  const aspect = windowAspectOf(() => target); // the shape of what the player sees (an upright phone's 3:4 slice of its 16:9 render, FOC46-05): the lens and the net are told it
   const camera = new FaythCamera({
     programs: aids.extents ? programs : { ...programs, extents: {} },
     sink: latch,
-    world: worldOf(skinned, (id) => skinOf(skinned)?.modelOf(id) ?? null, () => target?.aspect ?? 16 / 9),
+    world: worldOf(skinned, (id) => skinOf(skinned)?.modelOf(id) ?? null, aspect),
     seed: Number.isFinite(seed) ? seed : 1,
     homes: { near: FFX_NEAR_VIEW, far: FFX_FAR_VIEW },
     net: aids.net,
@@ -105,7 +107,7 @@ export async function stageFaythCamera(base: SceneBuild, skinned: SceneBuild): P
       const scene = skinned.group.parent;
       if (!c || !(scene instanceof Scene)) return;
       target = c.camera;
-      latch.bind(new ThreeCameraSink(c.camera, ffxWorldMatrix(), { clearViewOffset: true }));
+      latch.bind(new ThreeCameraSink(c.camera, ffxWorldMatrix(), { clearViewOffset: true, windowAspect: aspect }));
       unhook = hookBeforeRender(scene, c.camera, () => latch.present());
     },
     update(dt: number): void {

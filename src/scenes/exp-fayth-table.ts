@@ -7,7 +7,8 @@
  * - **The camera** is the table camera (`../engine/ffxcam/tableCamera.ts`): the table director plays a shot on each of the presenter's beats, the launch fallback, the airship's range scenes, the defeat and the
  *   tracking net are the same code as the dev server's FFX camera (`../engine/ffxcam/cameraCore.ts`). The pose goes through the painted B's filter (the eye's azimuth within 35 degrees of the near default view's,
  *   the look direction's pitch inside the plate's height, and the frame on the painting: `../engine/ffxcam/plateFit.ts`) and is written at the head of the render (`../engine/ffxcam/latch.ts`), after the
- *   battle camera and the MAX mix have had their say; the sink clears the mix's view offset, as the dev server's does.
+ *   battle camera and the MAX mix have had their say; the sink clears the mix's view offset, as the dev server's does. The lens is drawn for **the window's shape** (`./exp-fayth-world.ts`, `windowAspectOf`): FFX's 4:3
+ *   horizontal field in a window narrower than 4:3, which on an upright phone is the 3:4 slice it shows of its 16:9 render (FOC46-05); the net and the plate fit are told the same shape.
  * - **A dev server** can force it with `?ffxcam=table` (even with Bailey's folder there), to compare it with FFX's own programs shot for shot; the handle `__ffxtable` is left on `globalThis` for captures and
  *   checks. `?ffxseed=n` seeds the camera's own dice (default 1). None of this is in a production build.
  *
@@ -24,7 +25,7 @@ import { FFX_FAR_VIEW, FFX_NEAR_VIEW, ffxFaythStaging } from '../engine/ffx3d/ff
 import { ffxWorldMatrix } from '../engine/ffx3d/ffxWorld.ts';
 import { airshipRangeDirectorOf } from './evrae-airship-director.ts';
 import { derive, faythRigs, flatBillboards, layPainted, paintedParts, sizeEvrae } from './exp-fayth-stage.ts';
-import { worldOf } from './exp-fayth-world.ts';
+import { windowAspectOf, worldOf } from './exp-fayth-world.ts';
 import type { SceneBuild } from './types.ts';
 
 /** What the debug handle `globalThis.__ffxtable` holds (dev server only). */
@@ -69,7 +70,7 @@ export async function stageFaythTable(base: SceneBuild): Promise<SceneBuild> {
   const evrae = sizeEvrae();
 
   let target: PerspectiveCamera | null = null;
-  const aspect = (): number => target?.aspect ?? 16 / 9;
+  const aspect = windowAspectOf(() => target); // the shape of what the player sees, which on an upright phone is a 3:4 slice of the 16:9 render (FOC46-05): the lens, the net and the plate fit are all told it
   const latch = new PoseLatch(paintedBFilter(FFX_NEAR_VIEW.thetaDeg, aspect));
   const starts: Array<readonly [string, number, string]> = [];
   const camera = new TableCamera({
@@ -104,7 +105,7 @@ export async function stageFaythTable(base: SceneBuild): Promise<SceneBuild> {
       const scene = base.group.parent;
       if (!c || !(scene instanceof Scene)) return;
       target = c.camera;
-      latch.bind(new ThreeCameraSink(c.camera, ffxWorldMatrix(), { clearViewOffset: true }));
+      latch.bind(new ThreeCameraSink(c.camera, ffxWorldMatrix(), { clearViewOffset: true, windowAspect: aspect }));
       unhook = hookBeforeRender(scene, c.camera, () => latch.present());
     },
     update(dt: number): void {

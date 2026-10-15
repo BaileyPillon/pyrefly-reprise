@@ -46,6 +46,7 @@ The live chapter's own director (`FfxCameraDirector`), headless, with the live c
 | The azimuth limit (35 degrees), the near default view as its centre | Bailey's pick (D-632) |
 | The elevation limit (-2.5, -24.5) | **measured** from the plate, `[ours]` as a rule |
 | The plate fit, the 99.5 percent line, 16:9 | `[ours]` |
+| The lens in a window narrower than 4:3 (FFX's 4:3 **horizontal** field kept, the vertical one taller, capped at the plate's own height, 60 degrees; `screenFovDeg`, FOC46-05), and "the window" as the part of the render the player sees (an upright phone shows a 3:4 slice of its 16:9 render) | `[ours]`; how the Steam build widens 4:3 to 16:9 stays **Open**, and wider windows keep FFX's vertical field as before |
 | The unbaked shots (a tenth of the frame for half a second): Slow and the black magic at FAR, Cid's missiles, the Move in | `[ours]` |
 | Branch weights | 96 draws of the programs' moduli |
 | Which member fell last for the defeat | **not known** at run time: the director picks one of the three by the dice |

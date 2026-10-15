@@ -17,6 +17,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { STUB_SHOT_DIRECTOR } from '../../../src/engine/ffxcam/stubDirector.ts';
+import { screenFovDeg, vfovDeg } from '../../../src/engine/ffxcam/geometry.ts';
 import { PLATE } from '../../../src/engine/ffxcam/plate.ts';
 import { FFX_EVRAE_SPOTS, FFX_NEAR_VIEW, FFX_PARTY_SLOTS } from '../../../src/engine/ffx3d/ffxStaging.ts';
 import { FFX_UNIT, ffxEye, ffxPointTuple } from '../../../src/engine/ffx3d/ffxWorld.ts';
@@ -198,6 +199,35 @@ describe('the camera is written last', () => {
     expect(scene.onBeforeRender).not.toBe(hook);
     b.bindCamera!(null as never);
     expect(scene.onBeforeRender).toBe(hook);
+  }, 60_000);
+
+  it('draws the lens for the window that shows (FOC46-05): an upright phone shows 390 px of a 924 by 520 render, 3:4, so FFX\'s 4:3 horizontal field is kept; a window the render fills keeps FFX\'s lens', async () => {
+    const b = await build();
+    const scene = new Scene();
+    scene.add(b.group);
+    const camera = new PerspectiveCamera(60, 924 / 520, 0.1, 400); // the canvas: 16:9 at the field's height
+    b.bindCamera!({ camera } as never);
+    b.shotDirector!.battleStart!({ ...shotCtx(), partyIds: [], boss: null, bossName: null }); // Enter: the near default view, the 1024 lens
+    b.update(1 / 60);
+    const render = new HeadOfRender();
+    render.render(scene, camera); // no #game in the page: the render fills the window
+    expect(render.last.fov).toBeCloseTo(26.38, 1);
+    const game = document.createElement('div');
+    game.id = 'game';
+    game.getBoundingClientRect = () => ({ left: -267, top: 0, right: 657, bottom: 520, width: 924, height: 520, x: -267, y: 0, toJSON: () => ({}) }) as DOMRect;
+    document.body.appendChild(game);
+    const size = { width: window.innerWidth, height: window.innerHeight };
+    Object.defineProperty(window, 'innerWidth', { value: 390, configurable: true });
+    Object.defineProperty(window, 'innerHeight', { value: 844, configurable: true });
+    try {
+      render.render(scene, camera); // the phone: the window is the 390 by 520 slice of the canvas
+      expect(render.last.fov).toBeCloseTo(screenFovDeg(vfovDeg(1024), 390 / 520), 6); // 45.24 degrees, not 26.38
+      expect(render.last.fov).toBeGreaterThan(45);
+    } finally {
+      game.remove();
+      Object.defineProperty(window, 'innerWidth', { value: size.width, configurable: true });
+      Object.defineProperty(window, 'innerHeight', { value: size.height, configurable: true });
+    }
   }, 60_000);
 });
 

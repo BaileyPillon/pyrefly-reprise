@@ -4,7 +4,7 @@
  * The painted skin has one sky plate (`./plate.ts`: 162 by 92.6 world units, 80 down the near default camera's view line) and a deck, and nothing beyond them. B's clamp (`./variant.ts`) keeps the eye's azimuth
  * about its look-at within 35 degrees of the near default's, and its elevation limit keeps the look direction's pitch inside the plate's height, but a frame at the arc's edge can still reach past the plate's
  * **side**: the view turns with the eye, and the plate is only so wide. So after both clamps {@link fitToPlate} checks the frame: a grid of its rays (the camera sink's own basis: FFX's up vector turned by the
- * roll, the vertical field of view from the lens, the horizontal one from the window's aspect) against the plate and the deck. A frame wholly on them is returned as it is. Otherwise the eye is turned about the
+ * roll, the vertical field of view the window is drawn with, the horizontal one from the window's aspect) against the plate and the deck. A frame wholly on them is returned as it is. Otherwise the eye is turned about the
  * look-at, **inside the arc**, to the nearest azimuth at which the frame is on the painting (its height, its distance and everything else kept); if there is none, the azimuth with the most of it.
  *
  * It is the same arithmetic the table was baked with (`tools/ffxcam-table-build.mjs`), so a baked pose is a fixed point of it at the aspect it was baked for (16:9) and the filter only moves a pose for a
@@ -13,7 +13,7 @@
 
 import { FFX_NEAR_VIEW, FFX_PARTY_SLOTS } from '../ffx3d/ffxStaging.ts';
 import { ffxEye, ffxPointTuple } from '../ffx3d/ffxWorld.ts';
-import { D2R } from './geometry.ts';
+import { D2R, screenFovDeg } from './geometry.ts';
 import { deckRect, plateRect, type WorldRect } from './plate.ts';
 import type { CameraPose } from './solver.ts';
 import { FFXCAM_B_AZIMUTH_LIMIT_DEG, FFXCAM_B_PITCH_MAX_DEG, FFXCAM_B_PITCH_MIN_DEG, azimuthDeg, clampAzimuth, clampElevation, type PoseFilter } from './variant.ts';
@@ -58,7 +58,8 @@ export interface Coverage {
 
 /**
  * Cast an `nx` by `ny` grid of the frame's rays (edges included) through the pose and say how many land on the plate or the deck. The camera is the sink's (`./sink.ts`): the eye and the look-at through FFX's one
- * transform, up (0, -1, 0) turned about the view axis by the roll, the vertical field of view of the lens, `aspect` the window's width over height.
+ * transform, up (0, -1, 0) turned about the view axis by the roll, the vertical field of view **the window is drawn with** (`./geometry.ts`, `screenFovDeg`: the lens's own in a window as wide as 4:3, a taller one in a
+ * narrower window), `aspect` the width over height of what the player sees.
  */
 export function coverageOf(world: PaintedWorld, pose: Pick<CameraPose, 'eye' | 'ref' | 'roll' | 'fovDeg'>, aspect: number, nx = 17, ny = 9): Coverage {
   const eye = ffxPointTuple(pose.eye);
@@ -95,7 +96,7 @@ export function coverageOf(world: PaintedWorld, pose: Pick<CameraPose, 'eye' | '
   const upx = ry * fz - rz * fy;
   const upy = rz * fx - rx * fz;
   const upz = rx * fy - ry * fx;
-  const tanY = Math.tan((pose.fovDeg * D2R) / 2);
+  const tanY = Math.tan((screenFovDeg(pose.fovDeg, aspect) * D2R) / 2);
   const tanX = tanY * aspect;
   let plate = 0;
   let deck = 0;

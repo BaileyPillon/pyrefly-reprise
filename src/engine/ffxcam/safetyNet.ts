@@ -66,7 +66,7 @@ export interface NetFrame {
   readonly steps: number;
   /** The pose the programs say. */
   readonly raw: CameraPose;
-  /** Width over height of the window. */
+  /** Width over height of the window: what the player sees of the render (`./framing.ts` judges "in frame" for the lens the camera sink draws for that shape, `./geometry.ts`, `screenFovDeg`). */
   readonly aspect: number;
   /** The subjects whose loss triggers the net: the shot has lost track when none of these boxes is in frame. Empty: nothing to watch, the net stands down. */
   readonly watch: readonly Box[];

@@ -8,13 +8,15 @@
  *
  * - **The view.** The eye looks at the reference point; the picture's up is FFX's `(0, -1, 0)` turned about the view axis by the roll (radians, the same sense the camera sink uses, so the audit and the
  *   screen agree: `./sink.ts` turns the up vector about the forward axis by `rollSign * hand * roll` and `hand` is +1 for the one FFX-to-world matrix); right is `forward x up`.
- * - **The window.** The lens is the *vertical* field of view; the horizontal one follows the aspect ratio of the window (the picture widens, the vertical framing holds: how the Steam build widens
- *   4:3 is Open, `../ffx3d/ffxWorld.ts`). Pass the live camera's aspect.
+ * - **The window.** The lens is FFX's *vertical* field of view at 4:3, and `aspect` is the shape of **what the player sees** (width over height; `../../scenes/exp-fayth-world.ts` `windowAspectOf`: the camera's own
+ *   aspect, or an upright phone's 3:4 slice of its 16:9 render). The field is the one the camera sink draws for that window (`./geometry.ts`, `screenFovDeg`): a window as wide as 4:3 or wider keeps the vertical
+ *   field and the picture widens (how the Steam build widens 4:3 is Open, `../ffx3d/ffxWorld.ts`); a narrower one keeps FFX's 4:3 horizontal field and the vertical one grows. So what this says is in frame is
+ *   what the screen shows (`tests/unit/ffxcam-aspect.test.ts` checks it against the three.js projection).
  *
  * Pure numbers: no `three`, no DOM. Game case: FFX only (the units and the up vector are FFX's).
  */
 
-import { D2R } from './geometry.ts';
+import { D2R, screenFovDeg } from './geometry.ts';
 import type { Vec3 } from './ir.ts';
 
 /** A box counts as in frame when at least this fraction of its volume is on screen (the brief's 30 percent). One number, here. */
@@ -37,13 +39,13 @@ export interface ViewPose {
   readonly fovDeg: number;
 }
 
-/** A pose as a view: the eye, the three unit axes and the half-extents of the window at distance 1. */
+/** A pose as a view in a window: the eye, the three unit axes and the half-extents of the window at distance 1. */
 export interface View {
   readonly eye: Vec3;
   readonly forward: Vec3;
   readonly up: Vec3;
   readonly right: Vec3;
-  /** tan(half the vertical field of view). */
+  /** tan(half the vertical field of view the window is drawn with: `screenFovDeg` of the pose's lens). */
   readonly tanY: number;
   /** tan(half the horizontal field of view): `tanY * aspect`. */
   readonly tanX: number;
@@ -79,7 +81,7 @@ export function viewOf(pose: ViewPose, aspect: number): View | null {
   let up = scale(flat, 1 / norm(flat));
   if (pose.roll !== 0) up = rotateAbout(up, forward, pose.roll);
   const right = cross(forward, up);
-  const tanY = Math.tan((pose.fovDeg * D2R) / 2);
+  const tanY = Math.tan((screenFovDeg(pose.fovDeg, aspect) * D2R) / 2); // the lens as the sink draws it for this window
   return { eye: pose.eye, forward, up, right, tanY, tanX: tanY * aspect };
 }
 
