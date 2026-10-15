@@ -1,7 +1,7 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 72 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 71 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
@@ -9,85 +9,79 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
-## 2026-10-14 · A hidden chapter: Angra Mainyu in the Bikanel Desert (branch ch-angra-mainyu, part of release candidate r49-rc; not live)
+## 2026-10-15 · Release 49 (r49): two more hidden chapters, Biran and Yenke (FFX) and Angra Mainyu (FFX-2), and no more black openings for Tourist Trap and the fayth chapter
 
-Address: none yet (branch ch-angra-mainyu 566003a1, from release candidate r48-rc ea431aa0, merged into release candidate r49-rc; not deployed, no review run; nobody has played it by ear or by eye, so the art and the music are provisional picks)
+Address: https://echoesofspira.com (main f939b87f2, bundle 4LVgaz0l)
 
-- **FFX-2, hidden chapter:** Angra Mainyu, the Chapter 5 mission "Showdown in the Sands" at the Al Bhed dig in the
-  Bikanel Desert. Type `angra` on the chapter board; it is not in the board's "of 18" and is not listed. Three bodies
-  on the sand: the fiend and its two arms. Zarich, the left arm, takes no physical damage and Tawrich, the right
-  arm, takes no magic; Darkness is neither, so it reaches all three. The fiend opens with Perdition's Flame (ten hits
-  on random girls, each taking three sixteenths of that girl's full HP, so keep everyone high; Protect halves it),
-  raises a fallen arm with Full-Life, drinks the party's MP with Osmose once its own runs low, and rolls
-  Flare, Curaga, Bio or Demi in between; Zarich saps MP and strength, Tawrich punches and breathes. Its numbers, its
-  moves and its three scripts are the game's own (read from the game files: monster rows 268 to 270, the move rows,
-  the start positions and the three AI scripts); the party is the Chapter V party carried over, which is an
-  estimate. **At that level (46 / 48 / 50) the guide's line wins none of 240 measured fights, and the boss is not
-  tuned**: the girls' three levels are raised by 20 (66 / 68 / 70), the one measured option, now on. It is a
-  party-side estimate; the boss rows are untouched; the Chapter V preset is one constant away. With it the guide's line
-  wins 18 of 20 measured fights at bench speed and 16 of 20 at a patient menu pace, but 1 of 20 on the Active clock at
-  1.5 seconds a decision, so the fight stays hard for a quick player. Why it loses without the raise: survival is the
-  whole problem (Perdition's Flame does about 6,657 a cast against about 14,000 total party HP, Flare one-shots an
-  unshelled Yuna or Rikku, and Full-Life revives the arms 14 to 28 times).
-- **FFX-2, art and sound (provisional):** the fiend and its two arms are new paintings drawn locally for this
-  chapter, on a new desert backdrop: dunes, a buried arch, a dug-in camp and a mesa under a bright sky. None of it is
-  Bailey's pick and no approved painting was replaced; none of the three has a hurt or knocked-out painting. The
-  fight plays the aeon theme the other FFX-2 hidden chapters play. A first pick of Tawrich drew as a square halo in
-  the game and was replaced.
-- **Both:** the hidden words `limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor` and
-  `gagazet` still work, a wrong word still opens nothing, and the new chapter writes only its own record (never the save).
-- **Proof:** played in a production build in a headless browser: the word opens the chapter, the board has no card
-  and still says "of 18", the other hidden words still work, the intro plays, a fight is lost and its Retry goes back
-  through the party prep, and a win is played through to the results (the fiend's HP set low through the debug
-  state, since the guide's line cannot win it). Also on a phone-sized screen.
-
-![The first menu on the Bikanel plate: the fiend, Zarich on the left and Tawrich on the right, the guide card and the three girls](docs/screenshots/ch-angra-mainyu/1600x900-first-menu.jpg)
-
-![The fiend's bar is empty after a Darkness that also took both arms down](docs/screenshots/ch-angra-mainyu/1600x900-body-down.jpg)
-
-![The results screen after the win](docs/screenshots/ch-angra-mainyu/1600x900-results.jpg)
-
-## 2026-10-14 · Biran and Yenke: Kimahri alone against the two Ronso, a hidden FFX chapter behind the word `gagazet` (branch ch-biran-yenke, part of release candidate r49-rc; not live)
-
-Address: none yet (branch ch-biran-yenke, code and tests at 5e29bb0c, merged into release candidate r49-rc; not deployed, no review run; nobody has heard its music or judged its look, and both are provisional)
-
-- **FFX, hidden chapter:** Biran and Yenke Ronso at the Mountain Gate of Mt. Gagazet, the fight where Kimahri goes in alone. Type `gagazet` on the chapter
-  board; there is no card and the board still says "of 18". One fight, Kimahri against both brothers. The numbers, the moves and the rules of both are
-  the game's own, read from its files by the reverse-engineering lane. Their HP is not a fixed number: it is set from Kimahri's own strength and magic when
-  the battle begins (3,208 for Biran and 2,406 for Yenke for the Kimahri this chapter fields).
-- **FFX, what the fight teaches:** Lancet learns a Ronso Rage from each brother, one a cast, and a new Rage fills Kimahri's Overdrive gauge. Biran gives Thrust Kick,
-  Self-Destruct and Doom, and Mighty Guard once he has cast it himself (at half strength); Yenke gives Fire Breath, Aqua Breath and Stone Breath, and White Wind
-  once he has cast it. Kimahri starts without the Rages the fight teaches. Self-Destruct ejects Kimahri, who is alone, and the fight ends as a withdrawal.
-- **FFX, how the brothers fight:** Biran Thunder, Bulldoze, Blizzard, Bulldoze; Yenke Fire Breath, Aqua Breath, Bulldoze; every Bulldoze carries its user to the
-  other side of the arena. While the two stand on the same side a plain Attack on one makes the other stand guard and does 8 damage (against about 450 when they
-  are apart); Jump, the Rages and Lancet are not turned aside. When one falls the other grows stronger: Yenke Hasted, Biran Berserk. A Berserk Biran never offers
-  Mighty Guard, so learn what Biran carries before Yenke falls.
-- **FFX, rewards:** each brother pays 1,500 gil and 4,500 AP (6,750 on an Overkill) and one item from one slot: a Return Sphere, or one time in eight a Friend
+- **FFX only, a hidden chapter, Biran and Yenke:** Kimahri goes in alone against the two Ronso brothers at the Mountain Gate of Mt. Gagazet. Type `gagazet`
+  on the chapter board; there is no card and the board still says "of 18". One fight, Kimahri against both brothers. The numbers, the moves and the rules of
+  both are the game's own, read from its files by the reverse-engineering lane. Their HP is not a fixed number: it is set from Kimahri's own strength and
+  magic when the battle begins (3,208 for Biran and 2,406 for Yenke for the Kimahri this chapter fields). Kimahri starts without the three Rages the fight
+  teaches (Mighty Guard, White Wind and Self-Destruct).
+- **FFX only, what the fight teaches:** Lancet learns a Ronso Rage from each brother, one a cast, and a new Rage fills Kimahri's Overdrive gauge. Biran gives
+  Thrust Kick, Self-Destruct and Doom, and Mighty Guard once he has cast it himself (at half strength); Yenke gives Fire Breath, Aqua Breath and Stone Breath, and
+  White Wind once he has cast it. Self-Destruct ejects Kimahri, who is alone, and the fight ends as a withdrawal.
+- **FFX only, how the brothers fight:** Biran Thunder, Bulldoze, Blizzard, Bulldoze; Yenke Fire Breath, Aqua Breath, Bulldoze; every Bulldoze carries its user to
+  the other side of the arena. While the two stand on the same side a plain Attack on one makes the other stand guard and does 8 damage (against about 450 when
+  they are apart); Jump, the Rages and Lancet are not turned aside. When one falls the other grows stronger: Yenke Hasted, Biran Berserk. A Berserk Biran never
+  offers Mighty Guard, so learn what Biran carries before Yenke falls (the game's file says he still teaches Thrust Kick, Self-Destruct and Doom; a written
+  guide says he cannot teach at all, so the guide card says only what is true under both).
+- **FFX only, rewards:** each brother pays 1,500 gil and 4,500 AP (6,750 on an Overkill) and one item from one slot: a Return Sphere, or one time in eight a Friend
   Sphere in its place (twice as many on an Overkill). Never none, never both; before this build the engine rolled the two as separate drops.
-- **FFX, provisional:** the stage is Chapter I's Mt. Gagazet (no painting of the gate exists); the two brothers' paintings are new candidates made locally, nothing
-  approved was replaced; the music is the generic boss cue. The guide card follows the walkthrough in our own words and the game's files where they differ.
-- **Both:** the hidden words `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor` and `angra` still work, `limit` still opens FF7's battle as before, a wrong
-  word opens nothing, and the chapter writes only its own record, never the save. No other chapter changes: the 18 FFX engine goldens do not move, and one new
-  optional field (`ItemDrop.rare`, the rare item of a drop slot) is read by the FFX results only where a drop names one.
-- **How it was checked:** type check clean; the full suite once (19,740 tests: 3 failed, each a test that lists every departure kind, command record or scene
-  file meeting the new chapter; fixed and re-run green); a production build played in headless Chromium: the word opens the chapter and no other, the opening
-  and the first menu with Kimahri alone, Lancet through the real menu teaching Fire Breath, a win in 0:56 (both brothers' own Rages cast, six Rages learned, the
-  closing scene and the results), a loss with Retry, the whole thing again on a 390x844 phone, and the other hidden words still opening their chapters. The
-  advisor's line wins 100 of 100 seeds on the engine (in 16 decisions); the plain Attack with a Potion also wins 100 of 100 (in 25); the plain Attack alone wins none.
-- **Disclosed:** Self-Destruct (a Rage Kimahri can learn here) was proved in the engine, not in a browser run. A Berserk Biran swings the engine's ordinary attack and
-  never changes side. The open question whether that swing is Bulldoze is **answered** by the reverse-engineering session: a Berserk monster's default attack is the
-  forced-action word of its record, Biran's is Bulldoze (0x60A5), so Berserk's three-halves applies to it (research/re-ffx-targeting.md section 3 and FFX-G04 for the
-  forced turn, FFX-H02 for the record, research/re-ffx-damage.md for the multiplier); the ordinary attack has Bulldoze's numbers (formula 1, power 16), so nothing on
-  screen changes and the engine is untouched. The gear the brothers drop and Kimahri's Steal are not modelled. At 1600x900 the first menu's Sensor chip named Yenke over the blond brother's head
-  (the card is pinned in the lane the enemies stand in and names the brother the party's Sensor read last); the two brothers' stage spots are swapped, so it now sits over the brother it names and the target cursor opens on
-  Biran, the brother the advisor's first tip names. While you aim at the other brother the card still names him and rests over his neighbour, as it does in every fight with two enemies.
-  The pause screen's hero painting is not made.
+- **FFX only, art and sound (provisional):** the two brothers are new paintings drawn locally, blue-furred like Kimahri (Biran heavy with a blond mane, Yenke lean
+  with an auburn mane), with faces in the turn order and a pause painting of Biran; their stage spots are swapped, Yenke at the front right and Biran behind him on
+  the left, so the first menu's Sensor chip sits over the brother it names. The opening scene and the party prep draw Chapter I's Mt. Gagazet (a copy of the approved
+  painting: no painting of the gate exists) and the music is the generic boss cue. None of it is Bailey's pick and no approved painting was replaced.
+- **FFX-2 only, a hidden chapter, Angra Mainyu:** the Chapter 5 mission "Showdown in the Sands" at the Al Bhed dig in the Bikanel Desert. Type `angra` on the chapter
+  board; it is not in the board's "of 18" and is not listed. Three bodies on the sand: the fiend and its two arms. Zarich, the left arm, takes no physical damage and
+  Tawrich, the right arm, takes no magic; Darkness is neither, so it reaches all three. The fiend opens with Perdition's Flame (ten hits on random girls, each taking
+  three sixteenths of that girl's full HP, so keep everyone high; Protect halves it), raises a fallen arm with Full-Life, drinks the party's MP with Osmose once its
+  own runs low, and rolls Flare, Curaga, Bio or Demi in between; Zarich saps MP and strength, Tawrich punches and breathes. Its numbers, its moves and its three
+  scripts are the game's own (read from the game files: monster rows 268 to 270, the move rows, the start positions and the three AI scripts); the party is the
+  Chapter V party carried over, which is an estimate. **At that level (46 / 48 / 50) the guide's line wins none of 240 measured fights, and the boss is not tuned**:
+  the girls' three levels are raised by 20 (66 / 68 / 70), the one measured option, on in this build. It is a party-side estimate; the boss rows are untouched; the
+  Chapter V preset is one constant away. With it the guide's line wins 18 of 20 measured fights at bench speed and 16 of 20 at a patient menu pace, but 1 of 20 on the
+  Active clock at 1.5 seconds a decision, so the fight stays very hard for a quick player. By Bailey's pick the 3 seconds a move that the Road, Ixion, the Cloister,
+  Tourist Trap and Valefor carry on top of the game's own pacing are kept here too.
+- **FFX-2 only, art and sound (provisional):** the fiend and its two arms are new paintings drawn locally for this chapter, on a new desert backdrop (dunes, a buried
+  arch, a dug-in camp and a mesa under a bright sky), with a pause painting. None of it is Bailey's pick and no approved painting was replaced; none of the three
+  has a hurt or knocked-out painting. The fight plays the aeon theme the other FFX-2 hidden chapters play.
+- **Both, the black openings are gone:** the hidden Tourist Trap (`daigoro`, FFX-2) used to open on a black screen and had no painted wash in its party prep, and the
+  hidden fayth chapter (`fayth`, FFX) had no deck plate; both now draw their painting (copies of approved paintings under the names their scenes ask for: the Cavern
+  of the Stolen Fayth for Tourist Trap and the Evrae airship deck for the fayth chapter). This closes FOC48-01 and FOC46-04.
+- **Both, the hidden words:** `limit` (the FF7 experiment), `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor`, `gagazet` and `angra` each open their
+  chapter, a wrong word still opens nothing, nothing is remembered, and the two new chapters write only their own record, never the save. Both stay hidden until
+  Bailey has played them and says to list them.
+- **Disclosed by the focused review and the live check:** F939-01 (major, new): the open Sensor card still covers Yenke completely at the first menu of Biran and Yenke
+  at 1600 by 900 and 2000 by 1012 (the I key closes it; a phone is fine); the next release moves the brothers so the card covers neither. F939-03 (major, new): Angra
+  Mainyu is very hard on the Active clock and the review could not finish it by real keys in 15 minutes; it reached the results only with the boss's HP set low through
+  the debug state. CHK-027 / PR-0380 (major, carried): figures and some bosses still jump 40 pixels or more in one frame (118 jumps on existing figures; no new
+  figure reaches 40 px). F939-02 (polish): at 390 by 844 Angra's enemy header prints TAWRICH over its SCAN label. F939-05 (polish): one of three runs of the word
+  `fayth` did not reach party prep (not reproduced; the live check opened it first time). Self-Destruct, a Rage Kimahri can learn here, was proved in the engine but not
+  in a browser run; a Berserk Biran swings the engine's ordinary attack (Bulldoze's numbers) and never changes side; the gear the brothers drop and Kimahri's Steal are
+  not modelled. The majors carried from earlier deep reviews (PR-0295, PR-0148, PR-0099, PR-0421) were not re-examined by these reviews.
+- **Not in this release:** listing the hidden chapters on the board (he plays them first); the reverse-engineering lane's accuracy fixes and two small FFX-2 text fixes
+  (the next release, r50, is code only); the Sinspawn Gui and Dark Aeon paintings (installed in a newer art mirror for a later release); a theme of their own for either
+  new chapter.
+- **Deploy notes:** shipped at 14:49 EDT on 2026-10-15 (docs/deploys.log: 2026-10-15T18:49:25Z) under Bailey's owner override (his words "ok keep going we have full usage!
+  republish all artifacts here. I'll go with all of your recommendations") because deep reviews are owed on earlier builds; the focused review's SHIP came first (140
+  minutes; changed area FAIL on the disclosed majors; 23 of 23 same-seed pairs identical with the last build). The deploy compared the live files with the build, and a
+  live check then found all 5,251 downloadable files identical, the board still saying "of 18", `gagazet` and `angra` opening their chapters to the first command menu by
+  real keys (Lancet on Biran taught Thrust Kick) and no console error. The deep review is owed (58 builds carried).
+- **How it was checked:** tsc clean; the whole suite once on the assembled candidate (19,844 passed, none failing in the end: 16 files had failed first under
+  full CPU load, 19 timeouts and one real failure, and all re-ran green); the orphan check (the same 28 older modules, none from the lanes) and the build gates (the art matches its masters, no file names a local path); a
+  headless walk of the production build (the board of 18, nine door words, both chapters at 1600 by 900 and at 390 by 844, no console error or missing file). Both
+  chapters were also reviewed by the reverse-engineering session against the game's files (Biran and Yenke: 132 of 132 same-seed runs of the other FFX chapters
+  identical; Angra Mainyu: 264 of 264 FFX-2 rows identical) and played on their own branches before they joined: Biran and Yenke in a production build in headless
+  Chromium (the word by real keys, Lancet through the real menu, a win in 0:56, a loss with Retry, a phone), Angra Mainyu the same (its win only with the boss's HP set low).
 
-![The first menu at 1600x900: Kimahri alone against Biran and Yenke on Mt. Gagazet, the guide open and the advisor's first tip, Lancet](docs/screenshots/ch-biran-yenke/1600x900-first-menu.jpg)
+![The first menu of Biran and Yenke at 1600x900: Kimahri alone, the brothers repainted as blue-furred Ronso, and the advisor's first tip, Lancet](docs/screenshots/r49-rc/1600x900-gagazet-first-menu.jpg)
 
-![Lancet learned through the real menu: Kimahri healed, his gauge ready, and the advisor naming Fire Breath, which hits both brothers](docs/screenshots/ch-biran-yenke/1600x900-lancet-learned.jpg)
+![Angra Mainyu's first menu at 1600x900: the three girls against the fiend, Zarich's claw and Tawrich's fist, on the provisional desert plate](docs/screenshots/r49-rc/1600x900-angra-first-menu.jpg)
 
-![The results after the win: AP 9,000, gil 3,000 and one Return Sphere from each brother](docs/screenshots/ch-biran-yenke/1600x900-results.jpg)
+![Tourist Trap's opening scene, which used to be a black screen, now drawn on the Cavern of the Stolen Fayth](docs/screenshots/r49-rc/1600x900-daigoro-intro-line-1.jpg)
+
+*Top: the first menu of Biran and Yenke. Middle: the first menu of Angra Mainyu. Bottom: Tourist Trap's opening, no longer black.*
 
 ## 2026-10-14 · Release 48 (r48): Rikku's Mix and the FFX-2 battle menu follow the game, and two hidden FFX-2 chapters
 
