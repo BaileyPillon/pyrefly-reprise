@@ -19,6 +19,7 @@ import { DJOSE_CHAMBER_PLATE } from '../data/ixion-plates.ts';
 import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
 import { TOURIST_TRAP_SCENE } from '../data/tourist-trap-ids.ts';
 import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
+import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 
 /**
@@ -140,6 +141,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
     cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the brothers' bodies stay (research/re-ffx-biran-yenke.md section 5.1)`,
     treatment: "As Gagazet: snow and glitter, nothing added; the brothers lie down and stay (`BattlePresenterDepartures.ts`), they do not dissolve",
   },
+  // The Last Summoning (the hidden chapter, FFX only): Dream's End as Chapter III builds it, so Dream's End's row.
+  [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
   // Angra Mainyu (the hidden chapter, FFX-2 only): the Bikanel Desert.
   [ANGRA_MAINYU_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-angra-mainyu.md §1: no source names particles in the desert fight' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.
