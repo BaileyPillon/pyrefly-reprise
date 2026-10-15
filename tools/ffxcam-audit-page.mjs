@@ -7,6 +7,10 @@
  * under `inner`) and the lens. It imports the one in-frame definition from the game's own source (`src/engine/ffxcam/framing.ts`, served by the dev server) so the audit and the safety net can never
  * disagree about what "in frame" means. No retail data is here: the harness runs against Bailey's local models and camera folder and writes its records to `D:\Tools\ffx-parity\shots\tracking\`.
  *
+ * **Two readings per figure.** The canvas reading (`framing.ts`, at the camera's own aspect) is what the safety net judges by. The **window reading** is what the player sees: the same lattice through the
+ * three.js camera's own matrices, kept to the part of the canvas that lies inside the viewport (an upright phone shows a slice of a 16:9 canvas and slides it, `src/ui/common/phoneFraming.ts`), written as
+ * extra columns at the end of every row (`tools/ffxcam-audit-lib.mjs`, `layout`). They are the same on any window the render fills.
+ *
  * Game case: FFX only.
  */
 
@@ -204,6 +208,43 @@ export async function installAudit(cfg) {
     return inside / (n * n * n);
   };
 
+  // ---- the WINDOW reading: what the player sees of the render, through the three.js camera's own matrices. On a desktop or tablet window the render fills the window and this equals the reading above; on an upright
+  // phone the canvas is the 16:9 render at the field's height and the window shows a slice of it (`phone-battle.css`, `phoneFraming.ts`, which slides it at each command menu), so only this reading says whether
+  // a figure is on the phone's screen. The window is read off the page each frame: the part of `#game`'s box that lies inside the viewport, as normalised device coordinates of the canvas.
+  const gameEl = document.getElementById('game');
+  const windowNdc = () => {
+    const r = gameEl?.getBoundingClientRect();
+    if (!r || !(r.width > 0) || !(r.height > 0)) return { x0: -1, x1: 1, y0: -1, y1: 1 };
+    const fx0 = Math.max(0, -r.left) / r.width;
+    const fx1 = Math.min(r.width, window.innerWidth - r.left) / r.width;
+    const fy0 = Math.max(0, -r.top) / r.height;
+    const fy1 = Math.min(r.height, window.innerHeight - r.top) / r.height;
+    return { x0: 2 * fx0 - 1, x1: 2 * fx1 - 1, y0: 1 - 2 * fy1, y1: 1 - 2 * fy0 };
+  };
+  const fractionThroughWindow = (cam, b, n, win) => {
+    const e = cam.matrixWorldInverse.elements;
+    const p = cam.projectionMatrix.elements;
+    let inside = 0;
+    for (let i = 0; i < n; i++)
+      for (let j = 0; j < n; j++)
+        for (let k = 0; k < n; k++) {
+          const x = b.min[0] + ((b.max[0] - b.min[0]) * (i + 0.5)) / n;
+          const y = b.min[1] + ((b.max[1] - b.min[1]) * (j + 0.5)) / n;
+          const z = b.min[2] + ((b.max[2] - b.min[2]) * (k + 0.5)) / n;
+          const vx = e[0] * x + e[4] * y + e[8] * z + e[12];
+          const vy = e[1] * x + e[5] * y + e[9] * z + e[13];
+          const vz = e[2] * x + e[6] * y + e[10] * z + e[14];
+          const cx = p[0] * vx + p[4] * vy + p[8] * vz + p[12];
+          const cy = p[1] * vx + p[5] * vy + p[9] * vz + p[13];
+          const cw = p[3] * vx + p[7] * vy + p[11] * vz + p[15];
+          if (!(cw > 1e-6)) continue;
+          const nx = cx / cw;
+          const ny = cy / cw;
+          if (nx >= win.x0 && nx <= win.x1 && ny >= win.y0 && ny <= win.y1) inside++;
+        }
+    return inside / (n * n * n);
+  };
+
   // ---- the per-frame sampler (after the game's own frame callback, so the camera is as the frame drew it)
   const ids = cfg.ids;
   const sample = () => {
@@ -211,34 +252,44 @@ export async function installAudit(cfg) {
     const cam = h.target();
     if (!shown || !cam) return;
     A.aspect = cam.aspect;
+    cam.updateMatrixWorld();
+    const win = windowNdc();
+    // The shape of what the window shows: the camera's own aspect on a window the render fills, a phone's slice of it otherwise. The in-frame definition (framing.ts) is asked for the window's shape, as the game asks it.
+    const winAspect = cam.aspect * ((win.x1 - win.x0) / (win.y1 - win.y0));
+    A.windowAspect = winAspect;
+    const half = { x0: -(win.x1 - win.x0) / 2, x1: (win.x1 - win.x0) / 2, y0: -(win.y1 - win.y0) / 2, y1: (win.y1 - win.y0) / 2 }; // the window centred on the camera's axis: where the net's definition says the picture is
     const force = A.frameNo % cfg.boxEvery === 0;
     const fr = [];
+    const winFr = [];
     const boxes = [];
     for (const id of ids) {
       const b = boxOf(id, force);
       if (!b) {
         fr.push(-1, -1);
+        winFr.push(-1);
         boxes.push(0, 0, 0, 0, 0, 0);
         continue;
       }
-      fr.push(+framing.visibleFraction(shown, b.ffx, cam.aspect).toFixed(3), +framing.apparentHeight(shown, b.ffx, cam.aspect).toFixed(3));
+      fr.push(+framing.visibleFraction(shown, b.ffx, winAspect).toFixed(3), +framing.apparentHeight(shown, b.ffx, winAspect).toFixed(3));
+      winFr.push(+fractionThroughWindow(cam, b.world, framing.LATTICE, win).toFixed(3));
       boxes.push(...b.ffx.min.map((n) => +n.toFixed(2)), ...b.ffx.max.map((n) => +n.toFixed(2)));
     }
     if (A.frameNo % 25 === 0) {
-      cam.updateMatrixWorld();
       for (let q = 0; q < ids.length; q++) {
         const b = cache.get(ids[q]);
         if (!b) continue;
-        const d = Math.abs(framing.visibleFraction(shown, b.ffx, cam.aspect) - fractionThroughCamera(cam, b.world, framing.LATTICE));
+        const ours = framing.visibleFraction(shown, b.ffx, winAspect);
+        const theirs = fractionThroughWindow(cam, b.world, framing.LATTICE, half);
+        const d = Math.abs(ours - theirs);
         A.xcheck.samples++;
         A.xcheck.sum += d;
         if (d > A.xcheck.maxDiff) A.xcheck.maxDiff = d;
-        if (d > 0.05 && A.xcheck.bad.length < 40) A.xcheck.bad.push({ frame: A.frameNo, id: ids[q], ours: +framing.visibleFraction(shown, b.ffx, cam.aspect).toFixed(3), camera: +fractionThroughCamera(cam, b.world, framing.LATTICE).toFixed(3), steps: dir.steps, eye: shown.eye.map((n) => +n.toFixed(2)), camPos: cam.position.toArray().map((n) => +n.toFixed(3)), view: !!cam.view?.enabled, boxAge: A.frameNo % cfg.boxEvery });
+        if (d > 0.05 && A.xcheck.bad.length < 40) A.xcheck.bad.push({ frame: A.frameNo, id: ids[q], ours: +ours.toFixed(3), camera: +theirs.toFixed(3), steps: dir.steps, eye: shown.eye.map((n) => +n.toFixed(2)), camPos: cam.position.toArray().map((n) => +n.toFixed(3)), view: !!cam.view?.enabled, boxAge: A.frameNo % cfg.boxEvery });
       }
     }
     const netState = { idle: 0, in: 1, hold: 2, out: 3 }[A.net?.state ?? 'idle'] ?? 0;
     const range = window.__pyrefly.battleState()?.flags?.['airship.range'] === 'far' ? 1 : 0;
-    const row = [A.frameNo, Math.round(performance.now()), dir.steps, intern(dir.programId ?? '-'), A.beats.length - 1, ...fr, ...shown.eye.map((n) => +n.toFixed(2)), ...shown.ref.map((n) => +n.toFixed(2)), +shown.roll.toFixed(4), +shown.fovDeg.toFixed(3), ...boxes, netState, range];
+    const row = [A.frameNo, Math.round(performance.now()), dir.steps, intern(dir.programId ?? '-'), A.beats.length - 1, ...fr, ...shown.eye.map((n) => +n.toFixed(2)), ...shown.ref.map((n) => +n.toFixed(2)), +shown.roll.toFixed(4), +shown.fovDeg.toFixed(3), ...boxes, netState, range, ...winFr, +win.x0.toFixed(4), +win.x1.toFixed(4), +win.y0.toFixed(4), +win.y1.toFixed(4)];
     if (cfg.keepFrames) A.frames.push(row);
   };
 

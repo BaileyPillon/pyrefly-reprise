@@ -5,13 +5,14 @@
  * Pins: a frame is lost when no subject of its beat has 30 percent of its box on screen (29 is lost, 30 is not); while an action is open and its own shot runs the subjects are the actor and its
  * targets (an impact adds its target; the close, a turn start and the battle's start end the action); for the default views, the scenes, the victory and the defeat, and with nothing open, they are the party
  * and Evrae; a hidden figure (-1) is nobody; an action by a figure the record does not track (Cid) is judged by its targets, and with none left it gets no verdict; a frame lasts to the next frame (capped, so a pause is not time); lost stretches are runs of
- * consecutive lost frames and a gap in the record ends one; the net column is read when the row has it.
+ * consecutive lost frames and a gap in the record ends one; the net column is read when the row has it; **the window reading** (what the player sees, kept to the viewport: an upright phone shows a slice of a
+ * 16:9 render) is read through the columns after the range when the record has them, the net's reading when asked or for an older record, and each row says which it used and carries Evrae's fraction.
  *
  * Game case: FFX only.
  */
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_VIEW_PROGRAMS, SEEN_MIN, analyse, group, layout, openActions, programOfKey, stretches, type AuditBeat, type AuditRecord } from '../../tools/ffxcam-audit-lib.mjs';
+import { DEFAULT_VIEW_PROGRAMS, READINGS, SEEN_MIN, analyse, group, layout, openActions, programOfKey, stretches, type AuditBeat, type AuditRecord } from '../../tools/ffxcam-audit-lib.mjs';
 
 const IDS = ['tidus', 'wakka', 'rikku', 'evrae'];
 const DEFAULT = 'hiku15_00.w3.f3';
@@ -144,6 +145,48 @@ describe('time and stretches', () => {
     const byProgram = group(rows, (r) => r.program);
     expect(byProgram.get(SHOT)).toEqual({ total: 32, lost: 16, frames: 2 });
     expect(byProgram.get(DEFAULT)).toEqual({ total: 32, lost: 16, frames: 2 });
+  });
+});
+
+describe('the window reading (what the player sees: an upright phone shows a slice of a 16:9 render)', () => {
+  /** A row that carries the window columns: the net's fractions as in `row`, then the window's (a fraction per figure) and its four edges. */
+  function windowRow(t: number, program: number, beatIndex: number, net: number[], window: number[]): number[] {
+    const L = layout(IDS.length);
+    const out = row(t, program, beatIndex, net);
+    out.length = L.rect + 4;
+    out.fill(0, L.boxes + 6 * IDS.length, out.length);
+    window.forEach((f, k) => (out[L.win + k] = f));
+    out.splice(L.rect, 4, -0.42, 0.42, -1, 1);
+    return out;
+  }
+  const beats = [beat('actionOpen', 'tidus', ['evrae'])];
+
+  it('the layout puts the window\'s fractions after the airship\'s range and its four edges after them', () => {
+    const L = layout(IDS.length);
+    expect(L.win).toBe(L.range + 1);
+    expect(L.rect).toBe(L.win + IDS.length);
+    expect(READINGS).toEqual(['auto', 'net', 'window']);
+  });
+
+  it('a verdict reads the window when the record has it (auto), the net\'s reading when asked, and the net\'s only for a record made before the window columns', () => {
+    // the net's reading says everyone is in frame; the window (a phone's 390 px slice) shows nobody
+    const rec = record(beats, [windowRow(0, 0, 0, [1, 1, 1, 1], [0, 0, 0, 0]), windowRow(16, 0, 0, [1, 1, 1, 1], [0, 0, 0.4, 0])]);
+    expect(analyse(rec).map((r) => r.lost)).toEqual([true, false]); // auto: the window's
+    expect(analyse(rec, '', SEEN_MIN, 'window').map((r) => r.lost)).toEqual([true, false]);
+    expect(analyse(rec, '', SEEN_MIN, 'net').map((r) => r.lost)).toEqual([false, false]);
+    expect(analyse(rec).map((r) => r.reading)).toEqual(['window', 'window']);
+    expect(analyse(rec, '', SEEN_MIN, 'net').map((r) => r.reading)).toEqual(['net', 'net']);
+    const old = record(beats, [row(0, 0, 0, [0, 0, 0, 0]), row(16, 0, 0, [1, 0, 0, 0])]); // no window columns
+    expect(analyse(old).map((r) => r.reading)).toEqual(['net', 'net']);
+    expect(analyse(old, '', SEEN_MIN, 'window').map((r) => r.lost)).toEqual([true, false]);
+  });
+
+  it('every row carries Evrae\'s fraction under the reading it used, null when he is hidden or untracked', () => {
+    const rec = record(beats, [windowRow(0, 0, 0, [1, 1, 1, 0.9], [0, 0, 0, 0.2]), windowRow(16, 0, 0, [1, 1, 1, 0.9], [1, 1, 1, -1])]);
+    expect(analyse(rec).map((r) => r.evrae)).toEqual([0.2, null]);
+    expect(analyse(rec, '', SEEN_MIN, 'net').map((r) => r.evrae)).toEqual([0.9, 0.9]);
+    const noBoss: AuditRecord = { seed: 1, cfg: { ids: ['tidus', 'wakka', 'rikku'] }, programs: [DEFAULT], beats, frames: [row(0, 0, 0, [1, 1, 1])] };
+    expect(analyse(noBoss)[0]?.evrae).toBeNull();
   });
 });
 

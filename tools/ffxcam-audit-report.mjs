@@ -3,14 +3,18 @@
  * the ten worst programs by lost seconds, the longest stretches of lost frames, and, for a run with the safety net on, where the net fired and how long it held the picture. The arithmetic is
  * `tools/ffxcam-audit-lib.mjs` (what "loses track" means is written there).
  *
- *   node tools/ffxcam-audit-report.mjs D:/Tools/ffx-parity/shots/tracking/before/seed*.json [--json=out.json] [--seen=0.3]
+ *   node tools/ffxcam-audit-report.mjs D:/Tools/ffx-parity/shots/tracking/before/seed*.json [--json=out.json] [--seen=0.3] [--reading=auto|net|window] [--opening=3000]
+ *
+ * `--reading` says which fraction a verdict uses (`ffxcam-audit-lib.mjs`, READINGS): the net's (`framing.ts`, the window's shape, the picture centred on the camera's axis) or the window's (what the player sees through
+ * the camera and the viewport, an upright phone's slide included; the default `auto` is that when the record has it). They are the same on any window the render fills. The "Evrae in frame" lines say how long the boss
+ * is on screen (overall, by range, and in the first `--opening` ms of each fight), which "lost track" cannot: the party in frame is enough for a default view.
  *
  * Retail data is nowhere in the records (numbers only); the program names are ids of Bailey's local transcription.
  *
  * Game case: FFX only.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
-import { SEEN_MIN, SPECK_HEIGHT, analyse, group, programOfKey, stretches } from './ffxcam-audit-lib.mjs';
+import { READINGS, SEEN_MIN, SPECK_HEIGHT, analyse, group, programOfKey, stretches } from './ffxcam-audit-lib.mjs';
 
 const argv = process.argv.slice(2);
 const files = argv.filter((a) => !a.startsWith('--'));
@@ -20,6 +24,9 @@ const opt = (name, fallback) => {
 };
 const SEEN = Number(opt('seen', String(SEEN_MIN)));
 const OUT = opt('json', null);
+const READING = opt('reading', 'auto');
+if (!READINGS.includes(READING)) throw new Error(`--reading must be one of ${READINGS.join(', ')}`);
+const OPENING_MS = Number(opt('opening', '3000'));
 
 const pct = (a, b) => (b > 0 ? ((100 * a) / b).toFixed(2) : '0.00');
 const sec = (ms) => (ms / 1000).toFixed(2);
@@ -29,7 +36,7 @@ const perFile = [];
 const netEvents = [];
 for (const file of files) {
   const rec = JSON.parse(readFileSync(file, 'utf8'));
-  const rows = analyse(rec, file, SEEN);
+  const rows = analyse(rec, file, SEEN, READING);
   all.push(...rows);
   const total = rows.reduce((s, r) => s + r.dt, 0);
   const lostMs = rows.filter((r) => r.lost).reduce((s, r) => s + r.dt, 0);
@@ -50,6 +57,23 @@ console.log('seed   battle s   lost s   lost %  longest lost s  stretches  net e
 for (const p of perFile) console.log(`${String(p.seed).padStart(4)} ${sec(p.totalMs).padStart(9)} ${sec(p.lostMs).padStart(8)} ${pct(p.lostMs, p.totalMs).padStart(8)} ${sec(p.longestMs).padStart(15)} ${String(p.stretches).padStart(10)} ${String(p.netEngagements).padStart(16)} ${sec(p.netHeldMs).padStart(11)}`);
 const speckAll = all.filter((r) => r.speck).reduce((s, r) => s + r.dt, 0);
 console.log(`\nALL: lost ${sec(lostAll)} s of ${sec(total)} s = ${pct(lostAll, total)} %   (a second reading: in frame but a speck, under ${SPECK_HEIGHT * 100} % of the picture's height: ${sec(speckAll)} s = ${pct(speckAll, total)} %)`);
+
+/** How long Evrae is on screen: of the rows that know him, overall, by the airship's range, and in the first `OPENING_MS` of each record (a record starts at the battle's first beat). */
+function bossStats() {
+  const sum = (rs) => rs.reduce((n, r) => n + r.dt, 0);
+  const known = all.filter((r) => r.evrae !== null);
+  const pick = (rs) => ({ ms: sum(rs), seenMs: sum(rs.filter((r) => r.evrae >= SEEN)) });
+  const opening = files.flatMap((file) => {
+    const mine = known.filter((r) => r.file === file);
+    const t0 = mine[0]?.t ?? 0;
+    return mine.filter((r) => r.t - t0 < OPENING_MS);
+  });
+  return { overall: pick(known), near: pick(known.filter((r) => r.far === false)), far: pick(known.filter((r) => r.far === true)), opening: pick(opening) };
+}
+const boss = bossStats();
+const share = (x) => `${pct(x.seenMs, x.ms)} % of ${sec(x.ms)} s`;
+console.log(`reading: ${all[0]?.reading ?? '-'} (${READING})`);
+console.log(`Evrae in frame (at least ${SEEN * 100} % of him on screen): ${share(boss.overall)} overall; NEAR ${share(boss.near)}; FAR ${share(boss.far)}; the opening (the first ${OPENING_MS / 1000} s of each fight) ${share(boss.opening)}`);
 
 const byBeat = group(all, (r) => r.beat);
 console.log('\nper beat (the last beat the presenter raised)');
@@ -87,6 +111,8 @@ const summary = {
   battleMs: total,
   lostMs: lostAll,
   lostPercent: total > 0 ? (100 * lostAll) / total : 0,
+  reading: all[0]?.reading ?? null,
+  evrae: boss,
   speckMs: all.filter((r) => r.speck).reduce((s, r) => s + r.dt, 0),
   longestLostMs: longest[0]?.ms ?? 0,
   stretchesOver500ms: over,

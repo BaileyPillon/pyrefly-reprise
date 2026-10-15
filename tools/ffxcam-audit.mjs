@@ -100,7 +100,7 @@ for (; frames * 16 < maxMinutes * 60 * 1000; ) {
 const data = await page.evaluate(() => {
   const a = window.__audit;
   const net = a.net;
-  return { cfg: a.cfg, aspect: a.aspect, programs: a.programs, beats: a.beats, starts: a.starts, frames: a.frames, interventions: net ? net.events : a.interventions, xcheck: a.xcheck, outcome: a.outcome, boxMs: a.boxMs, boxCount: a.boxCount, error: a.error ?? null };
+  return { cfg: a.cfg, aspect: a.aspect, windowAspect: a.windowAspect, programs: a.programs, beats: a.beats, starts: a.starts, frames: a.frames, interventions: net ? net.events : a.interventions, xcheck: a.xcheck, outcome: a.outcome, boxMs: a.boxMs, boxCount: a.boxCount, error: a.error ?? null };
 });
 writeFileSync(out, JSON.stringify({ label: arg('label', `seed${seed}`), seed, query, far, strategy, width, height, virtualMs: frames * 16, ...data }));
 console.log(`seed ${seed}: ${data.frames.length} frames, ${data.beats.length} beats, ${data.starts.length} program starts, outcome ${data.outcome}; boxes ${data.boxCount} in ${data.boxMs.toFixed(0)} ms; framing vs camera cross-check: ${data.xcheck.samples} samples, max difference ${data.xcheck.maxDiff.toFixed(3)}; wall ${((Date.now() - t0) / 1000).toFixed(0)} s -> ${out}`);
