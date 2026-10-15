@@ -3,8 +3,8 @@
  *
  * Source: FFX-2.exe, Steam build 25501027, the reward roll (0x006246d0) and the AP gain (0x00635590); note FFX2-G03 sections 4.1 to 4.9 and
  * 5.1. The expectations below are written from the note's rules and the monster rows' numbers (table 5.1), by hand, with the raw draws
- * read off the generator's tap: they import nothing of `kernel/kill-rewards.ts`, the ledger or the adapter, so a wrong wiring shows as a
- * difference. The rig knocks a unit out through the engine's own HP path (`applyHpDelta`), where the KO resolution and so the roll run.
+ * read off the generator's tap: they import nothing of `kernel/kill-rewards.ts`, the ledger or the adapter (but `ejectPays`, the one-line rule of the two commands that
+ * clear the pay flag, read by its two ids in the last Eject case), so a wrong wiring shows as a difference. The rig knocks a unit out through the engine's own HP path (`applyHpDelta`), where the KO resolution and so the roll run.
  *
  * Mutation-checked by hand (scratch, one change at a time, 37 changes over the kernel and the engine, `docs/handoff/re-parity-rc9-x2-rewards.md` section 5; every one caught here or in the kernel test but one that is equivalent):
  * the roll not called; called after the chain breaks; a girl's knock-out skipped; the victory paying every standing monster; the best chain not recorded; the chain read as 0; the Pointless, ejected and fallen-girl
@@ -18,6 +18,8 @@ import { fileURLToPath } from 'node:url';
 import type { GameStreams } from '../../src/battle/common/streams.ts';
 import type { BattleEvent, Command, EnemyFields } from '../../src/battle/common/types.ts';
 import type { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { ejectPays } from '../../src/battle/ffx2/kill-rewards.ts';
+import * as data from '../../src/data/ffx2/index.ts';
 import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
 import { driveChapter5 } from './helpers/ffx2ChapterDrive.ts';
 import { board, type RewardsProbe, type Tapped } from './helpers/ffx2RewardsRig.ts';
@@ -294,6 +296,18 @@ describe('the results line and the other seams', () => {
     const steal = ejected('x2-thief-steal-will');
     expect(steal.landed).toBe(true);
     expect(steal.paid).toBe(0); // the pay flag is cleared: no roll, no draw
+  });
+
+  it('only Steal Will and Bribe clear the pay flag: every other ability that ejects pays like a knock-out, whatever it is called (4.1)', () => {
+    // The one pure function of this file's subject that is read directly: the two game ids (0x30c7 Steal Will, 0x30f0 Bribe) are the note's, the engine's ability ids are
+    // its own (the Bribe never ejects in the engine yet; the day it does, it pays nothing, and this is where that is pinned).
+    const ejectors = Object.values(data.ABILITIES).filter((a) => a.statusEffects.some((s) => s.status === 'eject'));
+    expect(ejectors.length).toBeGreaterThan(5);
+    for (const a of ejectors) expect(ejectPays(a.id), a.id).toBe(a.id !== 'x2-thief-steal-will');
+    expect(ejectPays('x2-thief-steal-will')).toBe(false);
+    expect(ejectPays('x2-lady-luck-bribe')).toBe(false);
+    expect(ejectPays('x2-berserker-eject')).toBe(true);
+    expect(ejectPays('an-ability-the-game-has-no-number-for')).toBe(true);
   });
 });
 
