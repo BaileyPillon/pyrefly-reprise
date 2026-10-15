@@ -562,10 +562,9 @@ export interface CombatantFlags {
   /** Cannot be revived by anything (possessed aeons, Yu Yevon's shell). */
   noRevive?: boolean;
   /**
-   * **Out of melee reach** (FFX): a *physical* party action reaches this
-   * combatant only from a user who can reach it (`targeting.ts`,
-   * `REACHES_OUT_OF_MELEE`: Wakka, Valefor, Anima, Mindy). Seymour Omnis's
-   * Mortiphasm discs [ffx-seymour-omnis §2, verified: 4 sources]. Magic reaches.
+   * **Out of melee reach** (FFX). *No longer read by any engine since re-parity RC9 (lane FFX-G slice G-c):* the per-target rule it stood for ("a physical action
+   * reaches only from Wakka, Valefor, Anima, Mindy; magic always reaches") is now the game's own 4-level rule, carried by {@link battleDistance} (the Mortiphasm
+   * discs 2, Sin's Genais Core 3). The field stays in the type so that no importer breaks (shared contracts are additive).
    */
   outOfMeleeReach?: boolean;
   /**
@@ -575,10 +574,12 @@ export interface CombatantFlags {
    */
   neverRandomTarget?: boolean;
   /**
-   * **The game's `BattleDistance`** (FFX; Sinspawn Gui's head, 1, `research/re-ffx-ai-gui.md` section 4): a command reaches this combatant only when its
-   * own reach (0 to 3, from its record: `battle/ffx/reach.ts`) is at least this number. 1 puts it out of reach of every reach-0 command (Attack and the melee
-   * skills, Tidus's and Auron's physical Overdrives, Steal, the Breaks) while every spell, Lancet, Scan, item and Requiem lands; a user whose weapon reaches
-   * (Wakka) lands his weapon commands too. Absent (0) for everyone else, so no other battle changes. Read by `targeting.ts#reachesTarget`.
+   * **The game's `BattleDistance`** (FFX; `Chr+0x4ff`): a command reaches this combatant only when its own reach (0 to 3, from its record:
+   * `battle/ffx/reach.ts#reachOf`) is at least this number, or when the combatant is the user. 1 (Sinspawn Gui's head, `research/re-ffx-ai-gui.md` section 4)
+   * puts it out of reach of every reach-0 command (Attack and the melee skills, Steal, the Breaks, the physical Overdrives); 2 (the Mortiphasm discs,
+   * `research/re-ffx-ai-seymour.md` section 5) also stops the reach-1 commands (Spare Change, the aeon Overdrives); 3 (Sin's Genais Core until Genais falls)
+   * leaves only the reach-3 commands: the spells, Lancet, Scan and the Attack of Wakka, Valefor, Anima and Mindy. Absent (0) for everyone else, so no
+   * other battle changes. Read by `targeting.ts#reachesTarget`.
    */
   battleDistance?: number;
 }

@@ -12,13 +12,15 @@ import { type Ctx, type EventInput, commandAbility, has, isAlive, refundItem, rt
 import { canActFacts } from './adapt/reactions.ts';
 import { reactionCanAct } from './kernel/reaction-items.ts';
 import { executeCommand } from './execute.ts';
-import { collectReactions, onTurnEnd } from './ticks.ts';
+import { onTurnEnd } from './ticks.ts';
+import { takeCounters } from './counter-chain.ts';
 import { sweepAutoStatuses } from './adapt/auto-status.ts';
 import { collectSignals, evaluateTriggers } from './triggers.ts';
 import { collectBossCounters, runMortibsorptionIfDown } from './ai/reactions.ts';
 import { drainScriptReactions } from './ai/reaction-drain.ts';
 import { runMacalaniaPhaseHooks } from './ai/seymour-anima-macalania.ts';
 import { counterInputs } from './counter-inputs.ts';
+import { ATTACK_ABILITY_ID } from './registry.ts';
 import { aeonDuelLost, dismissAeon } from './aeons.ts';
 import { settleAeonRecovery } from './adapt/aeon-party.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
@@ -99,8 +101,8 @@ export function afterAction(
   const ctx = h.ctx;
   void damageDealt;
 
-  // Who this action damaged, landed a status on, or pushed into a new form.
-  const { damaged, counterable } = counterInputs(actor.id, actionEvents);
+  // Who this action pushed into a new form (its killing blow is never countered by the boss scripts' counters).
+  const { counterable } = counterInputs(actor.id, actionEvents);
 
   // The Mortiorchis never dies; it drains Seymour and comes back smaller.
   runMortibsorptionIfDown(ctx);
@@ -147,23 +149,18 @@ export function afterAction(
     // The reactions the boss scripts' hooks queued while the action resolved (re-parity, `ai/hooks.ts`), oldest first.
     drainScriptReactions(h);
     sweepAutoStatuses(ctx);
+  }
 
-    // Equipment reactions: Counterattack and Magic Counter (the item reactions follow below).
-    if (def) {
-      for (const reaction of collectReactions(ctx, actor, def, damaged)) {
-        const reactor = tryActor(ctx, reaction.actorId);
-        if (!reactor) continue;
-        h.push({
-          type: 'counter',
-          actorId: reaction.actorId,
-          targetId: reaction.targetId,
-          abilityId: reaction.abilityId,
-          cause: reaction.cause,
-        });
-        executeCommand(ctx, reactor, { kind: 'attack', targets: [reaction.targetId] }, true);
-        sweepAutoStatuses(ctx);
-      }
-    }
+  // Equipment reactions: Counterattack, Evade and Counter and Magic Counter (the item reactions follow below). The hits of the action decided them, each at its
+  // target's first hit of a command (`counter-chain.ts`); each answers with the holder's own default attack at the attacker, a reaction that costs no turn. A holder or
+  // an attacker that is no longer standing answers nothing.
+  for (const reaction of takeCounters(ctx)) {
+    const reactor = tryActor(ctx, reaction.holderId);
+    const aggressor = tryActor(ctx, reaction.attackerId);
+    if (!reactor || !aggressor || !isAlive(reactor) || !isAlive(aggressor) || reactor.id === aggressor.id) continue;
+    h.push({ type: 'counter', actorId: reaction.holderId, targetId: reaction.attackerId, abilityId: ATTACK_ABILITY_ID, cause: reaction.cause });
+    executeCommand(ctx, reactor, { kind: 'attack', targets: [reaction.attackerId] }, true);
+    sweepAutoStatuses(ctx);
   }
 
   // The item reactions the action's hits and deaths queued: Auto-Med, Auto-Potion, Auto-Phoenix (`adapt/reactions.ts`).

@@ -18,6 +18,7 @@
 
 import type { AbilityDef, CombatantId, FFXCombatant, Targeting } from '../../common/types.ts';
 import { type BondArray, newBond } from '../kernel/cover.ts';
+import { FORCED_ACTION_WORD } from '../kernel/forced-action-table.ts';
 import { ExtraBit, PermBit } from '../kernel/status-types.ts';
 import {
   CMD_RANDOM_SPREAD,
@@ -33,8 +34,19 @@ import { actorNumber } from '../ai/script-random.ts';
 import { randomPickable, reachesTarget } from '../targeting.ts';
 import { resolveCommand } from './command.ts';
 
-/** The default attack's command id, which every slot record carries (a non-zero default attack: the engine has one generic Attack). */
+/** The default attack of every party member and aeon: the constant the character initialiser writes into `Chr+0x6c6` (VA 0x0079b68d), the Attack command. */
 const DEFAULT_ATTACK = 0x3000;
+
+/**
+ * A combatant's default attack (`Chr+0x6c6`): 0x3000 for the party and the aeons, and for a monster the forced-action word of its record (`kernel/forced-action-table.ts`;
+ * RC9 lane FFX-G slice G-c). A word of 0 means the monster has no default attack, so its Berserk, Confuse and Provoke turns are dropped and it can never answer with a
+ * counter. A monster whose record is not matched yet (a few possessed aeons, Pterya) keeps the engine's generic Attack, 0x3000. The engine still resolves every default attack as
+ * its one generic `attack` ability (an enemy's own plain-Attack record where the data carries it): the word decides only whether there is one.
+ */
+export function defaultAttackOf(c: FFXCombatant): number {
+  if (c.side !== 'enemy') return DEFAULT_ATTACK;
+  return FORCED_ACTION_WORD.get(c.id) ?? DEFAULT_ATTACK;
+}
 
 /** The game slot of a combatant for the targeting chain, or `undefined` when the game has none for it. */
 export function chainSlotOf(ctx: Pick<Ctx, 'state'>, c: FFXCombatant): number | undefined {
@@ -111,7 +123,7 @@ export function chainWorld(ctx: Ctx, user: FFXCombatant, def: AbilityDef, neverR
       reflect: has(c, 'reflect') ? 1 : 0,
       targetable: targetable(c) && reachesTarget(ctx, user, def, c) && (!neverRandom || randomPickable(c)) ? 1 : 0,
       only: 0xff,
-      defAtk: DEFAULT_ATTACK,
+      defAtk: defaultAttackOf(c),
       keeps: keepsControlWhenProvoked(c) ? 1 : 0,
       ...(provokerSlot !== undefined ? { provokedBy: provokerSlot } : {}),
     };
