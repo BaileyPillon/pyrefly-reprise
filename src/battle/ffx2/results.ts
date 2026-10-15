@@ -8,6 +8,8 @@
  *   [ffx2-vegnagun-shuyin §3.2]. Same for the Bulwarks and the Redoubts, which
  *   are levers rather than targets. So only enemies without `flags.isPart`
  *   count.
+ * - **A Petrified enemy is defeated** (re-parity RC8, XK-petrify). The game's evaluation (exe 0x0061ef70) counts a monster that is in the battle, present and not dead only
+ *   if it is not Petrified, so enemies that are all stone end the fight [FFX2-G10 10.1, E 20,000]; a Petrified girl already stopped counting as standing (PR-0145).
  * - **The engine never advances a chained encounter.** On a victory it copies
  *   `EnemyGroupDef.nextGroupId` onto the result and stops; the BattleScreen
  *   re-inits for the next link (CONTRACT-CHANGES, orchestrator decision 6).
@@ -59,7 +61,7 @@ export function battleOutcome(
   // PR-0145: a petrified girl is not standing. 'All three girls petrified = Game Over'
   // [ffx2-combat-core §2.8, `[verified: 2 sources]`], so the helpless party is not beaten down first.
   const partyAlive = units.some((u) => u.side === 'party' && u.alive && !u.removed && !u.statuses.petrify);
-  const bossesAlive = units.some((u) => u.side === 'enemy' && !u.flags.isPart && u.alive && !u.removed);
+  const bossesAlive = units.some((u) => u.side === 'enemy' && !u.flags.isPart && u.alive && !u.removed && !u.statuses.petrify);
 
   if (state.flags['badEnding'] === true || !partyAlive) return 'defeat';
   if (!bossesAlive) return 'victory';
