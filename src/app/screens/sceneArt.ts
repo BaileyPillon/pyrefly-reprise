@@ -14,7 +14,7 @@
 
 import type { StoryScript } from '../../story/dsl.ts';
 import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
-import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, plateKeyOfScene } from '../../data/art/artNamespace.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { portraitIdIn } from '../../ui/common/portraitNamespace.ts';
 import { untilWarm, warmImage, warmImages, type WarmLane } from '../imageWarm.ts';
@@ -57,7 +57,7 @@ export function stageScene(
   gone: () => boolean,
 ): Promise<boolean> | null {
   const art = sceneArtUrls(script, sceneKey);
-  const bg = sceneKey ? artUrl(`art/backdrops/${sceneKey}.png`) : null;
+  const bg = sceneKey ? artUrl(`art/backdrops/${plateKeyOfScene(sceneKey)}.png`) : null; // a scene that stands on another scene's painting asks for that one (`scenePlate.ts`)
   // A `backdrop()` step that already swapped the plate wins over a late decode.
   if (bg) whenDecoded(bg, 'urgent', () => void (gone() || root.style.backgroundImage || (root.style.backgroundImage = `url(${bg})`)));
   if (hasPipeline()) void warmImages(art.rest, 'urgent');
@@ -84,7 +84,7 @@ export function whenDecoded(url: string, lane: WarmLane, apply: () => void): voi
 export function sceneArtUrls(script: StoryScript | undefined, sceneKey: string | undefined): { first: string[]; rest: string[] } {
   const first: string[] = [];
   const rest: string[] = [];
-  if (sceneKey) first.push(artUrl(`art/backdrops/${sceneKey}.png`));
+  if (sceneKey) first.push(artUrl(`art/backdrops/${plateKeyOfScene(sceneKey)}.png`));
   const namespace = artNamespaceOfScene(sceneKey); // the experimental Leblanc chapter's speakers show its own portraits (`DialogueBox`)
   let speaker = false;
   for (const step of script ?? []) {

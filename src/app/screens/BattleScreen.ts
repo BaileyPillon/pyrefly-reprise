@@ -28,7 +28,7 @@ import {
   uiPortsRegistered,
 } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
-import { inArtNamespace } from '../../data/art/artNamespace.ts';
+import { inArtNamespace, plateKeyOfScene } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -450,7 +450,7 @@ export class BattleScreen extends Screen {
       bossName: boss.name,
       subline: chapter.subtitle,
       artKey: inArtNamespace(ns, boss.spriteKey || boss.id),
-      backdropKey: chapter.sceneKey,
+      backdropKey: plateKeyOfScene(chapter.sceneKey),
       party,
       game: chapter.game,
       ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),

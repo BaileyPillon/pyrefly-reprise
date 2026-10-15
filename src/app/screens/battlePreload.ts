@@ -44,7 +44,7 @@ import { artCandidatesFor, backdropUrl, portraitUrl, resolveArt } from '../../en
 import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
 import { pixelUrlFor } from '../../engine/ArtTier.ts';
-import { artNamespaceOfScene, inArtNamespace } from '../../data/art/artNamespace.ts';
+import { artNamespaceOfScene, inArtNamespace, plateKeyOfScene } from '../../data/art/artNamespace.ts';
 import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
 import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
 import { plateIdFor } from './pause/plates.ts';
@@ -149,7 +149,7 @@ const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECT
 /** The battle backdrop's URL as the scene loads it. */
 export function plateUrlFor(sceneKey: string): string {
   const own = SCENE_PLATES[sceneKey];
-  return own ? artUrl(own) : backdropUrl(sceneKey);
+  return own ? artUrl(own) : backdropUrl(plateKeyOfScene(sceneKey)); // a scene that stands on another scene's painting (`scenePlate.ts`) warms that file
 }
 
 /** The pause close-up the pause's `srcset` will pick for this window (`PortraitStage.mountPlate`). */

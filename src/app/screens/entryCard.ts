@@ -7,6 +7,7 @@
  * fight): no card, the ink as before.
  */
 
+import { plateKeyOfScene } from '../../data/art/artNamespace.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { loadingCardWait, type CoverWait } from '../../ui/common/transitions/loadingCard.ts';
 import { battleCardInfo } from './battlePreload.ts';
@@ -22,7 +23,7 @@ export function entryCardWait(root: HTMLElement, chapter: Chapter): CoverWait {
       bossName: info.bossName,
       subline: chapter.subtitle,
       artKey: info.artKey,
-      backdropKey: chapter.sceneKey,
+      backdropKey: plateKeyOfScene(chapter.sceneKey),
       party: info.party,
       game: chapter.game,
     };

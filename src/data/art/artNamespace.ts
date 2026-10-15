@@ -55,3 +55,9 @@ export function baseArtId(artId: string): string {
   const ns = artNamespaceOf(artId);
   return ns ? artId.slice(ns.length + 1) : artId;
 }
+
+/**
+ * Beside the namespace lookup, because the same screens ask both of a scene key: which painting a scene's chapter stands in front of when it is another scene's, by reference (FOC46-04; `./scenePlate.ts`:
+ * the hidden Fayth chapter stands on Chapter VIII's deck). The party prep, the pre-battle scene, the battle preload and the battle-start card build `art/backdrops/<key>.png` from `plateKeyOfScene(sceneKey)`.
+ */
+export { plateKeyOfScene } from './scenePlate.ts';

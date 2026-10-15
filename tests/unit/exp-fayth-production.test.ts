@@ -46,8 +46,9 @@ describe('a production build of the deck scene', () => {
     const text = await productionBundle();
     expect(text.length).toBeGreaterThan(100_000); // it built the scene, not an empty shell
 
-    // what the website's scene is made of
-    for (const needle of ['TableDirector', 'TableCamera', 'echoes-evrae-shots/1', 'paintedBFilter', 'PoseLatch', 'ThreeCameraSink', 'sky-roll', 'STUB_SHOT_DIRECTOR']) {
+    // what the website's scene is made of. The stub director (phase 1's scene, the factory's own) is named by its body, `battleStart: () => false`: the bundler inlines a constant used once, so whether the identifier
+    // `STUB_SHOT_DIRECTOR` survives depends on the order the modules come in (a new import edge in the shared data layer flipped it, FOC46-04), and the proof is that the stub is in, not what it is called.
+    for (const needle of ['TableDirector', 'TableCamera', 'echoes-evrae-shots/1', 'paintedBFilter', 'PoseLatch', 'ThreeCameraSink', 'sky-roll', 'battleStart: () => false']) {
       expect(text.includes(needle), `${needle} should be in the bundle`).toBe(true);
     }
 
