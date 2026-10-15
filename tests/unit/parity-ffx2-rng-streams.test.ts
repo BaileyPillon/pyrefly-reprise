@@ -3,7 +3,7 @@
  *
  * What is proved here, and against what:
  *
- * 1. **Which stream each draw of an action comes from.** For 2,000 generated actions, by user (a girl in each party slot, a monster
+ * 1. **Which stream each draw of an action comes from.** For one action of every ability in the pool (the sweep, so no kind of draw depends on a random sample) and then 2,000 generated actions, by user (a girl in each party slot, a monster
  *    in each of the first eight monster slots), the real `resolveAbility` runs on FFX-2's own 68 streams with every draw
  *    recorded; the kernels then run on the SAME recorded values, in the game's order (`helpers/ffx2WiringOracle.ts`, which
  *    imports nothing from the engine's adapters), each draw labelled by its role (hit roll, random-target pick, variance, critical
@@ -55,9 +55,10 @@ const ALL: AbilityDef[] = [
 const POOL = wiringPool(ALL);
 
 /**
- * How many actions each comparison generates. The sample is drawn from the pool of every registered ability, so adding abilities (a new hidden chapter adds a dozen) moves the whole sample, and the checks that it
- * "reaches every kind of draw" and that the Steal mutant is caught depend on it holding a Steal: the pool has one (`x2-thief-steal`) among about 280, so 400 draws miss it about one time in four, and did on the sample
- * the Angra Mainyu chapter's rows produced; 2,000 make that less than one in a thousand and cost half a second.
+ * How many RANDOM actions each comparison generates, after the sweep. The random sample is drawn from the pool of every registered ability, so adding abilities (a new hidden chapter adds a dozen) moves the whole sample, and
+ * the checks that it "reaches every kind of draw" and that the Steal mutant is caught used to depend on it holding a Steal: the pool has one (`x2-thief-steal`) among about 280, so 400 draws missed it about one time in four, and
+ * did on the sample the Angra Mainyu chapter's rows produced; 2,000 made that less than one in a thousand, which every pool change would still have risked. **The guarantee is now the sweep**: every comparison first runs ONE
+ * action for EVERY ability in the pool (`compare`), so each kind of draw, the single Steal included, is exercised whatever the random sample holds; the 2,000 random actions keep the mutants' counts and the user coverage.
  */
 const SAMPLE = 2000;
 
@@ -114,13 +115,16 @@ function expectedStream(role: string, userSlot: number, targetSlots: readonly nu
   }
 }
 
-function compare(n: number, make: (seed: number) => GameStreams): { bad: string[]; compared: number; users: Set<string>; roles: Set<string> } {
+function compare(n: number, make: (seed: number) => GameStreams): { bad: string[]; compared: number; users: Set<string>; roles: Set<string>; abilities: Set<string> } {
   const rng = makeRng(20261011);
   const bad: string[] = [];
   const users = new Set<string>();
   const roles = new Set<string>();
-  for (let i = 0; i < n; i++) {
-    const sit = randomSituation(rng, POOL);
+  const abilities = new Set<string>();
+  // The sweep first: one action for every ability in the pool (so no kind of draw depends on the random sample holding it), then `n` random ones.
+  for (let i = 0; i < POOL.length + n; i++) {
+    const sit = randomSituation(rng, i < POOL.length ? [POOL[i]!] : POOL);
+    abilities.add(sit.def.id);
     const k = sit.userSide === 'party' ? rng.int(0, 2) : rng.int(0, 7);
     const run = viaEngine(sit, k, make(500 + i));
     // The kernel slots, from the note (the party 0 to 14, the monsters 15 to 30, each side by rank): the user stands behind k dummies of its side.
@@ -135,7 +139,7 @@ function compare(n: number, make: (seed: number) => GameStreams): { bad: string[
     for (const r of seen) roles.add(r.split(':')[0]!);
     if (used !== run.taps.length || expected.join() !== got.join()) bad.push(`#${i} ${sit.def.id} by slot ${userSlot}: wanted ${expected.join()} (${seen.join(' ')}), saw ${got.join()}`);
   }
-  return { bad, compared: n, users, roles };
+  return { bad, compared: POOL.length + n, users, roles, abilities };
 }
 
 /** An engine whose generator moves one purpose onto another stream. */
@@ -154,13 +158,22 @@ describe('the draws of an action come from the stream the table names (written o
     expect(POOL.length).toBeGreaterThan(120);
   });
 
-  it('2,000 generated actions: every draw is on the stream its role names, for each girl slot and monster slot', () => {
+  it('the sweep and 2,000 generated actions: every draw is on the stream its role names, for each girl slot and monster slot', () => {
     const r = compare(SAMPLE, (seed) => makeFfx2Rng(seed));
     expect(r.bad.slice(0, 5)).toEqual([]);
     expect([...r.users].filter((u) => u.startsWith('enemy')).length).toBeGreaterThanOrEqual(8);
     expect([...r.users].filter((u) => u.startsWith('party')).length).toBe(3);
     // the sample reaches every kind of draw
     for (const role of ['hit', 'variance', 'crit', 'status', 'shatter', 'pick', 'steal', 'ko']) expect([...r.roles], role).toContain(role);
+  });
+
+  it('the sweep runs one action for EVERY ability in the pool, the Steal included, whatever the random sample holds', () => {
+    const r = compare(0, (seed) => makeFfx2Rng(seed)); // no random actions at all: the sweep alone
+    expect(r.compared).toBe(POOL.length);
+    expect(r.bad.slice(0, 5)).toEqual([]);
+    expect([...r.abilities].sort()).toEqual([...new Set(POOL.map((a) => a.id))].sort());
+    expect(POOL.map((a) => a.id)).toContain('x2-thief-steal');
+    for (const role of ['hit', 'variance', 'crit', 'status', 'shatter', 'pick', 'steal', 'ko']) expect([...r.roles], `${role}, from the sweep alone`).toContain(role);
   });
 
   it('MUTANT: the hit roll on the variance stream is caught', () => {
