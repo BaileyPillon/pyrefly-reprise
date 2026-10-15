@@ -193,4 +193,155 @@ Why tier 2: it leaves about four player actions between Zanmatos, which is the f
 
 Advice: the pair `kino01_72` is the best fit for "not too easy, not too hard" as a game-sourced formation: two enemies, no Delta Attack, and a Mega Graviton on turn 6 that the player can see coming on the visible gauge. If the chapter must show three Sisters against three, the faithful trio is a wipe at its opening in 87.5 percent of normal starts at the game's own numbers (Delta Attack is the third enemy action), so it needs either the gauges started at 0 (above) or the Sisters' damage scaled; the first is the smaller departure from the game's data and keeps the signature move (Delta Attack at tick 45, after five rounds in which the player acts about twice per aeon). Killing one Sister disables Delta Attack for the rest of the trio fight, which is the player's counterplay and is worth keeping. Which Sister to kill first: Cindy (3,000,000 HP) is the only one who can throw Delta Attack, but the trio test also fails if Sandy or Mindy is dead, so the smallest HP (Mindy, 2,000,000) is the cheapest way to switch it off; Cindy dead also switches it off. [inferred from the scripts [run]; arithmetic [inferred]]
 
-*Sections 3 to 8 (the engine facts, Dark Yojimbo's AI, the Sisters' AI, every move row, what is not proved) follow in the next commits of this branch.*
+## 3. The engine facts the scripts lean on
+
+The scripts are the game's own bytecode; what they do depends on a few engine rules that earlier lanes proved. Only those used here are repeated (VA = address in FFX.exe).
+
+**Hooks.** Each monster file has one AI worker (slot 61) whose function table binds the engine events by tag: 0 onTurn, 1 preTurn, 2 onTargeted, 3 onHit, 4 onDeath [note: re-ffx-ai-seymour.md 1.1; re-ffx-biran-yenke.md 5.1]. The five files here bind:
+
+| File | init | onTurn | preTurn | onTargeted | onHit | onDeath |
+|---|---|---|---|---|---|---|
+| m340 Dark Yojimbo | f0 @0x0000 | f2 @0x0132 | f4 @0x0329 (empty) | f5 @0x032a (empty) | f3 @0x02f0 | f6 @0x032b (swaps in his Die command as the death animation) |
+| m341 Dark Cindy | f0 @0x0000 | f2 @0x01d8 | f4 @0x0415 (empty) | f5 @0x0416 (empty) | f3 @0x03dc | f6 @0x0417 (empty) |
+| m342 Dark Sandy | f0 @0x0000 | f2 @0x01b4 | f4 @0x04ed (empty) | f5 @0x04ee (empty) | f3 @0x04b4 | f6 @0x04ef (empty) |
+| m343 Dark Mindy | f0 @0x0000 | f2 @0x01d8 | f4 @0x0511 (empty) | f5 @0x0512 (empty) | f3 @0x04d8 | f6 @0x0513 (empty) |
+| m116 the dog | f0 @0x0000 | f2 @0x018a (empty) | none | none | f3 @0x018b | none |
+
+Each of the four Dark files has a second worker (type 1, slot 4) that only sets presentation (low-health slump off; Cindy and Sandy also scale the model). There is no preTurn, onTargeted or onDeath logic anywhere in these five files. [bytes] [disasm: the five files]
+
+**onHit and the +2 / +5 gain.** onHit is raised once per sub-action per target, after the last hit of that target's block; a miss, a status-only move and a move with a hit record but no damage each raise one; a command with zero hit records raises none. It runs before the death check. `isCounterattackAllowed()` is true when the owner is not Petrified, Confused, Berserk, asleep, Ejected or Threatened (Provoked and not-in-battle are allowed), the owner's last attacker exists, and that attacker is not itself running a reaction record, so a party counter-attack does not pay the gain [note: re-ffx-ai-evrae-yojimbo-isaaru-sin.md 1.1; engine VA 0x7A8450]. The Dark rows are immune to every disabling status except Threaten, which cannot land (byte 0), so in practice **every player action that reaches the monster pays the gain once**, however many hits or targets it has. A script gain happens on top of any engine rule; no engine rule fills a monster's script Overdrive gauge (property 19) in these battles, so the gauge changes only where the scripts write it [inferred: no other writer was looked for; the run results are the scripts'].
+
+**Random draws.** `GetRandomValue()` is stream 2 masked to 16 bits: modulo 2 is exact (32,768 each), modulo 3 gives residue 0 on 21,846 of the 65,536 values and residues 1 and 2 on 21,845 each [note: re-ffx-ai-evrae-yojimbo-isaaru-sin.md 1.5]. `findMatchingChr(front line, alive, 0, any)` is a uniform pick among the living, targetable members of the group in ascending actor number, drawing one stream-4 value when there are two or more candidates and none for zero or one [note: re-ffx-ai-seymour.md 1.3; re-ffx-ai-yunalesca-bfa.md 1.3]. The earlier feasibility note read the Kozuka target as "the first living front-line character"; the engine rule makes it a random living one.
+
+**Groups and commands.** `FrontlineChars` is every non-monster actor in the battle, a KO'd one included; when an aeon is summoned the parked party leaves the battle, so the front line is the summoned aeon or aeons [note: re-ffx-ai-evrae-yojimbo-isaaru-sin.md 1.2; FFX-G08 5]. `performCommand(group, id)` queues one action against the whole group; with an actor id it targets that actor; it queues only if the owner can act [note: re-ffx-ai-seymour.md 1.2]. The dog's reaction is kept only if the dog can act and the order's attacker is on a normal turn [note: re-ffx-ai-evrae-yojimbo-isaaru-sin.md 1.1].
+
+**Speed.** Recovery after an action is `tick speed (AGI) x rank`, halved by Haste and doubled by Slow; every move below has rank 3 and every Dark Aeon is in the 170 to 255 plateau (tick speed 3), so **each of them acts every 9 ticks** (4 hasted: all four accept Haste; Slow is immune) [note: re-ffx-ctb-status.md 1, 2]. The dog gets no turns.
+
+**The scripts' tests, once, in plain words** (used in sections 4 and 5): "gauge" is the Overdrive current value (script property 19), "max" its maximum (property 20, written 100); every addition is capped at max; the Sisters' trio test reads the actors 20, 21 and 22 by number.
+
+## 4. Dark Yojimbo's AI (m340) and the dog (m116)
+
+*Follows in the next commit of this branch.*
+
+## 5. The Dark Magus Sisters' AI (m341, m342, m343)
+
+### 5.1 Setup (init, f0)
+
+All three: Overdrive bar shown, maximum 100, hit reactions not dulled, "returns before the death animation" on, death animation "fiend" (dissipation); the battle-id branches decide only the gauge write [bytes] [disasm: m341 @0x00c6 to 0x01d3, m342 @0x00c6 to 0x01af, m343 @0x00c6 to 0x01d3] [run]:
+
+| Battle id | Gauge written | Property 296 |
+|---|---|---|
+| `kino00_70` (14,417,990) | current := 100 | Cindy 100, Mindy 200, Sandy none |
+| `kino01_70` (14,483,526) | current := 100 | the same |
+| any other id (`kino01_71`, `kino01_72`, `kino05_70`, `kino05_71`) | none, so it starts at 0 | the same |
+
+### 5.2 The turn (onTurn, f2): one rule list for all three
+
+Evaluated in this order; the first rule that fires ends the turn. "The trio test" exists only when the battle id is `kino00_70` or `kino01_70` (the two branches are identical). "Front line" is the group of the player's side; "a random target" is the stream-4 pick of section 3. [bytes] [disasm: m341 @0x01df to 0x03db, m342 @0x01bb to 0x04b3, m343 @0x01df to 0x04d7] [run]
+
+| # | Condition | Cindy | Sandy | Mindy | Gauge afterwards |
+|---|---|---|---|---|---|
+| 1 | trio battle id, and actors 20, 21 and 22 are all alive, and the three gauges are each 100 or more | **Delta Attack on the whole front line**; she first writes 0 to all three gauges | stream-2 coin (draw modulo 2): 0 Razzia, 1 Attack (0x4127), each on a random target | coin: 0 Passado, 1 Calamity, each on a random target | Cindy: all three become 0; Sandy and Mindy: own gauge + 20, capped at 100, so it stays 100 |
+| 2 | own gauge 100 or more | **Mega Graviton on the whole front line** | the same | the same | own gauge := 0 (no addition afterwards) |
+| 3 | otherwise | coin: 0 Camisade, 1 the dispelling attack 0x412B, each on a random target | coin: 0 Razzia, 1 Attack (0x4127) | coin: 0 Passado, 1 Calamity | own gauge + 20, capped at 100 |
+
+Exact odds: the coin is 50.000 / 50.000 (modulo 2 is exact); rule 1 for Cindy and rule 2 draw nothing from stream 2; rule 1 for Sandy and Mindy draws one, as does rule 3. Each single-target move draws one stream-4 value when two or more front-line characters are alive. The trio test reads actors 20, 21 and 22, which are Mindy, Sandy and Cindy in the trio formations: the numbers are right only there, and that is the only place the test runs. [run: every branch above, exact tallies]
+
+**Important order effect.** The trio test is checked on **each** Sister's own turn against the gauges at that moment. Mindy (actor 20) and Sandy (21) act before Cindy (22) in a round (equal counters resolve to the lower actor), so Delta Attack happens on **Cindy's** turn, after Mindy and Sandy have already spent theirs as plain attacks that leave their gauge at 100. [inferred from the CTB tie rule and the run]
+
+### 5.3 What a Sister does when hit, targeted or killed
+
+- **onHit (f3):** if `isCounterattackAllowed()`, own gauge + 5, capped at 100; nothing else. One gain per player action that reaches her (section 3). [bytes] [run: gauge 0 to 5, 98 to 100, no gain when the gate is false]
+- **onTargeted, preTurn:** empty. **onDeath:** empty in all three. There is no counter-attack, no reaction command, no phase change and no HP threshold in any of the three scripts. [bytes] [disasm]
+- **A Sister's death changes the others only through the trio test.** The test needs all three alive, so the first death turns it off for the rest of the fight: Cindy then goes to rules 2 and 3 (Mega Graviton at 100, otherwise Camisade or 0x412B), Sandy and Mindy likewise, and nothing ever uses Delta Attack again. A dead Sister's gauge is never read (the alive test comes first). No other script reads another Sister's HP or gauge; nothing is copied to the survivors. [run: trio, Sandy dead, all gauges 100: Cindy and Mindy each take rule 2]
+- **Gauge sync in the trio.** With the three gauges moving together (+20 per own turn) the trio test passes at the start of the round after all three reach 100, so Mindy and Sandy hold at 100 and Cindy throws Delta Attack. Hits add +5 to the Sister hit, so a Sister hit more often than the others can reach 100 while another is still below it; on her turn she then takes rule 2 (Mega Graviton, gauge to 0), and the trio test fails until all three are back at 100. In the faithful trio (all start at 100, Delta Attack on Cindy's first turn) the three gauges are zeroed together and refill together at +20 per turn, so the next Delta Attack is Cindy's 7th turn (54 ticks later) unless hits have broken the step. [run, inferred for the sync arithmetic]
+
+### 5.4 How the script branches by battle id (the per-formation reading)
+
+| Formation | Rules live | Start gauges | Cycle of each Sister |
+|---|---|---|---|
+| `kino00_70`, `kino01_70` (trio) | 1, 2, 3 | 100, 100, 100 | opening: Mindy (basic move), Sandy (basic move), Cindy **Delta Attack**; afterwards five basic turns then Delta Attack (period 6 turns / 54 ticks) while the three stay in step and alive |
+| `kino01_71` (Cindy alone) | 2, 3 | 0 | five basic turns (Camisade or 0x412B), Mega Graviton on the 6th, repeat (period 6 / 54 ticks) |
+| `kino01_72` (Mindy, Sandy) | 2, 3 | 0, 0 | each Sister alone as above; no interaction |
+| `kino05_70` (Sandy alone) | 2, 3 | 0 | five basic turns (Razzia or Attack), Mega Graviton on the 6th |
+| `kino05_71` (Mindy alone) | 2, 3 | 0 | five basic turns (Passado or Calamity), Mega Graviton on the 6th |
+
+[run] Hits shorten the first Mega Graviton only when a Sister is hit enough to carry 100 into her fifth turn (five +20 turns already give 100 at the start of the sixth); with +5 per hit, four hits before her fifth turn bring it forward by one turn. [inferred arithmetic]
+
+### 5.5 Targeting, summed up
+
+Single-target moves go to a random living front-line character (uniform, stream 4, one draw only if two or more are alive); Mega Graviton and Delta Attack go to the whole front line. There is no Provoke, Threaten or target memory: all four are immune to Provoke, and no script reads the last attacker. With the player's single aeon out the pick has no draw; with the player's three Sisters out it is a one-in-three pick each time. [bytes] [run]
+
+## 6. The move rows (c)
+
+All fourteen rows are in `monmagic1` (monster magic table 1, 92-byte records; layout [note: re-ffx-commands.md 1, 7]). Formula numbers are those of [note: re-ffx-damage.md 2]: 1 Strength against DEF, 3 Magic against MDF, 4 Magic with MDF ignored, 8 fraction of the target's maximum (`max x power / 16`), 15 MAG cube with no defence. Damage type from the flags (+0x20 bits 0 and 1): physical halves under Protect, magical under Shell, "neither" under neither. **Every row carries accuracy formula 0 (always hits), so any later data row must set `canMiss: false`** (AGENTS.md hard rule 5). Rank 3 everywhere (the record's 0 would also mean 3). Monsters pay no MP. [bytes]
+
+### 6.1 The rows
+
+| Move (id, table row) | Used by | Target / usage bytes (+0x1a, +0x1b) | Type / formula / power / hits | Classes (+0x23) | Crit bonus (+0x27) / shatter (+0x2c) | Statuses (chance), durations | Extra word (+0x54) | Flags | Rank |
+|---|---|---|---|---|---|---|---|---|---:|
+| Zanmato 0x410A, monmagic1 row 266 | Dark Yojimbo, gauge 100: whole front line | 0x3b, 0x47 | neither / 1 / 250 / 1 | HP | 0 / 100 | none | 0x200 (Auto-Life) | **cleanse**, cap 99,999, always hits, bit 0x40000000 set (unmapped) | 3 |
+| Wakizashi (group) 0x4109, monmagic1 row 265 | Dark Yojimbo, 1/3 of ordinary turns: whole front line | 0x3b, 0x47 | physical / 1 / 28 / 1 | HP | 0 / 100 | none | 0 | cap 99,999, always hits | 3 |
+| Kozuka 0x4107, monmagic1 row 263 | Dark Yojimbo, 1/3: one random living front-line character | 0x33, 0x47 | physical / 1 / 16 / 1 | HP | 0 / 0 | Power Break 254, Magic Break 254, Armor Break 254, Mental Break 254, Slow 254; durations Slow 254 | 0 | cap 99,999, always hits | 3 |
+| Daigoro (order) 0x4086, monmagic1 row 134 | Dark Yojimbo, 1/3: aimed at the dog (actor 21) | 0x33, 0x45 | neither / 0 / 0 / 1 | none | 0 / 0 | none | 0 | always hits | 3 |
+| Daigoro (bite) 0x410B, monmagic1 row 267 | the dog, as a reaction to the order: one random living front-line character | 0x33, 0x45 | neither / 1 / 8 / 1 | HP | 0 / 0 | Petrify 254, Poison 254 | 0 | cap 99,999, always hits | 3 |
+| Wakizashi (single) 0x4108, monmagic1 row 264 | in Dark Yojimbo's list; no script queues it | 0x33, 0x47 | physical / 1 / 32 / 1 | HP | 0 / 100 | none | 0 | cap 99,999, always hits | 3 |
+| Delta Attack 0x4106, monmagic1 row 262 | Cindy, trio rule: whole front line | 0x3b, 0x45 | neither / 15 / 80 / 6 | HP | 0 / 0 | none | 0x200 (Auto-Life) | can crit, crit bonus from gear, **cleanse**, cap 99,999, always hits, bit 0x40000000 set (unmapped) | 3 |
+| Mega Graviton 0x4105, monmagic1 row 261 | each Sister, own gauge 100: whole front line | 0x3b, 0x06 | magical / 8 / 7 / 1 | HP | 0 / 0 | Sleep 254, Silence 254, Darkness 254, Slow 254; durations Sleep 99, Silence 99, Darkness 99, Slow 254 | 0x4000 (Doom) | cap 99,999, always hits | 3 |
+| Camisade 0x4101, monmagic1 row 257 | Cindy, coin 0: one random living front-line character | 0x33, 0x45 | physical / 4 / 100 / 1 | HP+MP | 0 / 100 | none | 0 | cap 99,999, always hits | 3 |
+| "Extra 44" 0x412B, monmagic1 row 299 | Cindy, coin 1: one random living front-line character | 0x33, 0x06 | physical / 1 / 36 / 1 | HP | 0 / 100 | Shell 254, Protect 254, Reflect 254, Nul-Tide 254, Nul-Blaze 254, Nul-Shock 254, Nul-Frost 254, Regen 254, Haste 254; durations Shell 254, Protect 254, Reflect 254, Nul-Tide 254, Nul-Blaze 254, Nul-Shock 254, Nul-Frost 254, Regen 254, Haste 254 | 0x200 (Auto-Life) | can crit, crit bonus from gear, **cleanse**, cap 99,999, always hits | 3 |
+| Razzia 0x4100, monmagic1 row 256 | Sandy, coin 0: one | 0x33, 0x45 | physical / 4 / 100 / 1 | HP | 0 / 100 | none | 0x200 (Auto-Life) | **cleanse**, cap 99,999, always hits | 3 |
+| Attack 0x4127, monmagic1 row 295 | Sandy, coin 1: one | 0x33, 0x06 | physical / 1 / 36 / 1 | HP | 0 / 100 | Petrify 254 | 0 | can crit, crit bonus from gear, cap 99,999, always hits | 3 |
+| Passado 0x4102, monmagic1 row 258 | Mindy, coin 0: one | 0x33, 0x45 | neither / 1 / 4 / 15 | HP | 15 / 100 | Death 254 | 0 | can crit, cap 99,999, always hits | 3 |
+| Calamity 0x4104, monmagic1 row 260 | Mindy, coin 1: one | 0x33, 0x45 | neither / 3 / 0 / 1 | none | 0 / 0 | Poison 254, Power Break 254, Magic Break 254, Armor Break 254, Mental Break 254, Silence 254, Darkness 254; durations Silence 254, Darkness 254 | 0x400 (Curse) | cap 99,999, always hits | 3 |
+
+### 6.2 Reading the rows
+
+- **The cleanse flag (`**cleanse**`, +0x20 bit 5).** A record with this bit removes instead of inflicting; its status bytes and extra word then mean "remove this" [note: re-ffx-commands.md 7, "Cleansing"]. So **0x412B ("Extra 44") is a physical attack of power 36 that dispels the target's Shell, Protect, Reflect, the four Nuls, Regen and Haste** (the buff-looking bytes are the list to remove; the feasibility note listed them as inflicted, which the flag reverses) and Auto-Life; **Zanmato, Delta Attack and Razzia remove Auto-Life** from their targets. Whether the removal precedes the death check inside the same hit (so that Auto-Life cannot save the target) was not traced; the ordering in [note: re-ffx-damage.md 3] puts status steps after the damage, which would let Auto-Life trigger on the KO. [bytes] / [unproved]
+- **Mega Graviton** has no cleanse flag, so its extra word **inflicts Doom**; it deals `7/16 x the target's maximum HP` (Shell halves it), and inflicts Sleep, Silence and Darkness (duration 99) and Slow (254) at chance 254 against the target's byte. **Calamity** does no damage (power 0) and inflicts Poison, the four Breaks, Silence and Darkness at 254 plus the Curse bit. **Passado** is 15 hits of power 4 with Death at 254 on each hit (the status step sits inside the per-hit pipeline [note: re-ffx-damage.md 3], so it rolls per hit [inferred]), crit bonus 15. **Attack (0x4127)** inflicts Petrify at 254. **Kozuka** inflicts the four Breaks and Slow at 254 (Slow duration 254). **The dog's bite** inflicts Petrify and Poison at 254. Statuses land when the chance 254 exceeds the target's resist byte (a byte of 255 blocks all of them), so a character with the matching proof gear or an aeon with 255 in that slot is immune. [bytes] [note: re-ffx-biran-yenke.md 2 for the byte rule]
+- **Camisade is the only row with the MP class**: it deals its (capped) damage to HP and also to MP. [bytes]
+- **Shatter byte 100** on Zanmato, both Wakizashi, Camisade, Razzia, Attack, 0x412B and Passado means a hit on an already Petrified target shatters it with certainty [note: re-ffx-commands.md 7.4]; Sandy's Attack petrifies, so a following hit from any of these ends that character. [bytes] [inferred for the chain]
+- **Unmapped bits.** Zanmato and Delta Attack set bit 0x40000000 of the +0x1c flag word, which no checked note maps; byte +0x1b (usage) is 0x45 / 0x47 / 0x06 as listed; bytes +0x00 to +0x0f are text offsets. The rest of each row is in the raw listing. [bytes]
+
+### 6.3 What the numbers mean against a player-side aeon (arithmetic on the formulas; no engine was run)
+
+Reference defenders are the minimum aeon stats of the last tier in the feasibility note (5.5): Yojimbo HP 3,064, DEF 73; Cindy HP 8,410, DEF 94; Sandy HP 6,910, DEF 76; Mindy HP 4,887, DEF 70 (the minima, not what a given save has). Base values before Protect, Shell, Defend, Shield, variance (240 to 271 over 256) and criticals; "cap" is the 99,999 per-hit cap of the row. [inferred arithmetic on [bytes]]
+
+| Move (user stats) | Yojimbo | Cindy | Sandy | Mindy |
+|---|---:|---:|---:|---:|
+| Zanmato (STR 244, formula 1, power 250) | 3,954,937 (cap) | 3,216,421 (cap) | 3,838,328 (cap) | 4,061,828 (cap) |
+| Wakizashi, group (power 28) | 442,953 (cap) | 360,239 (cap) | 429,892 (cap) | 454,924 (cap) |
+| Kozuka (power 16) | 253,116 (cap) | 205,851 (cap) | 245,653 (cap) | 259,957 (cap) |
+| Daigoro bite (dog STR 244, power 8) | 126,558 (cap) | 102,925 (cap) | 122,826 (cap) | 129,978 (cap) |
+| Delta Attack per hit (Cindy MAG 171, formula 15, power 80, six hits) | 781,430 (cap) | same | same | same |
+| Camisade (Cindy MAG 171, formula 4, power 100) | 124,325 (cap) | same | same | same |
+| Razzia (Sandy MAG 207, formula 4, power 100) | 181,025 (cap) | same | same | same |
+| Attack 0x4127 (Sandy STR 186, power 36) | 252,292 (cap) | 205,182 (cap) | 244,854 (cap) | 259,112 (cap) |
+| Dispelling attack 0x412B (Cindy STR 175, power 36) | 210,132 (cap) | 170,894 (cap) | 203,935 (cap) | 215,811 (cap) |
+| Passado per hit (Mindy STR 148, power 4, 15 hits) | 14,124 | 11,487 | 13,708 | 14,506 |
+| Mega Graviton (7/16 of maximum HP) | 1,340 | 3,679 | 3,023 | 2,138 |
+
+Reading: **every damaging move except Passado per hit and Mega Graviton exceeds an aeon's whole HP several times over, before Protect or Shell halves it once**; Passado's first hit already exceeds every one of the four minimum HP figures (Death at 254 on every hit besides). The cap (99,999) is far above any aeon HP the feasibility note lists, and Zanmato, Delta Attack and Razzia also strip Auto-Life. Therefore a mirror chapter that keeps these rows unchanged is decided by who acts first and by whether the player's side ever gets a move; the scaling knobs that exist in the data are the enemy's STR and MAG (the cube makes damage grow with the cube of the stat), HP, the gauge steps, and which formation or tier is used. Nothing here proposes a number.
+
+### 6.4 The raw rows (bytes +0x10 to +0x5b of each record; the first sixteen bytes are text offsets)
+
+```
+0x410A Zanmato: b2 01 b2 01 00 03 00 00 00 00 3b 47 06 00 00 40 a0 00 00 01 03 00 00 00 01 00 fa 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00
+0x4109 Wakizashi (group): b0 01 b0 01 00 03 00 00 00 00 3b 47 06 00 00 00 81 00 00 01 03 00 00 00 01 00 1c 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x4107 Kozuka: af 01 af 01 00 03 00 00 00 00 33 47 06 00 00 00 81 00 00 01 03 00 00 00 01 00 10 01 00 00 00 00 00 00 fe fe fe fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 fe 00 00 00 00 00 00 00 00
+0x4086 Daigoro (order): 00 00 00 00 00 12 00 00 00 00 33 45 06 00 00 00 00 00 00 00 03 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x410B Daigoro (bite): 00 00 00 00 00 01 00 00 00 00 33 45 06 00 00 00 80 00 00 01 03 00 00 00 01 00 08 01 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x4108 Wakizashi (single): b0 01 b0 01 00 03 00 00 00 00 33 47 06 00 00 00 81 00 00 01 03 00 00 00 01 00 20 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x4106 Delta Attack: 03 02 03 02 00 03 00 00 00 00 3b 45 06 00 00 40 ac 00 00 01 03 00 00 00 0f 00 50 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00
+0x4105 Mega Graviton: 66 00 67 00 00 03 00 00 00 00 3b 06 06 00 00 00 82 00 00 01 03 00 00 00 08 00 07 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fe fe fe 00 00 00 00 00 00 00 00 00 fe 63 63 63 00 00 00 00 00 00 00 00 00 fe 00 40 00 00 00 00 00 00
+0x4101 Camisade: 01 02 01 02 00 03 00 00 00 00 33 45 06 00 00 00 81 00 00 03 03 00 00 00 04 00 64 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x412B "Extra 44": 00 00 00 00 00 01 00 00 00 00 33 06 02 00 00 00 ad 00 00 01 03 00 00 00 01 00 24 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fe fe fe fe fe fe fe fe fe 00 00 00 00 fe fe fe fe fe fe fe fe fe 00 00 02 00 00 00 00 00 00
+0x4100 Razzia: 00 02 00 02 00 03 00 00 00 00 33 45 06 00 00 00 a1 00 00 01 03 00 00 00 04 00 64 01 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00
+0x4127 Attack: 00 00 00 00 00 01 00 00 00 00 33 06 02 00 00 00 8d 00 00 01 03 00 00 00 01 00 24 01 64 00 00 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x4102 Passado: 02 02 02 02 00 03 00 00 00 00 33 45 06 00 00 00 84 00 00 01 03 00 00 0f 01 00 04 0f 64 00 fe 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x4104 Calamity: 52 01 6d 01 00 03 00 00 00 00 33 45 06 00 00 00 80 00 00 00 03 00 00 00 03 00 00 01 00 00 00 00 00 fe fe fe fe fe 00 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 fe fe 00 00 00 00 00 00 00 00 00 00 00 04 00 00 00 00 00 00
+```
+
+## 8. What is not proved
+
+*Follows in the next commit of this branch.*
