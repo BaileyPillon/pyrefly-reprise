@@ -11,6 +11,9 @@
  * Gillionaire, Double AP + Double Items + Double EXP, Double and Triple AP) after each link's `init`, so the reward abilities can be measured with the combat itself
  * untouched (the words are read by the kill roll only). The base commit ignores them: its columns are the shipped line's.
  *
+ * Each seed also gets a **log digest**: a hash of every link's whole event log with the payload of the `victory` and `defeat` results set aside (all but the outcome, the turns and the time),
+ * so a before and an after run can say whether any battle changed besides what it paid. The base commit's run and the branch's run print the same digest for a battle that did not move.
+ *
  * Runs only with `PYREFLY_MEASURE=1`. `PYREFLY_MEASURE_SEEDS=<n>` plays seeds 1 to n (default 12) and `<a>-<b>` plays seeds a to b,
  * `PYREFLY_MEASURE_CHAPTERS=<id,id>` narrows the run, `PYREFLY_MEASURE_OUT=<file>` writes the rows as JSON. The same file runs on
  * the base commit (before) and on the branch (after): it reads only `BattleResult` fields that both have.
@@ -18,9 +21,10 @@
  * Game case: **FFX-2 only**.
  */
 
+import { createHash } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 import { describe, it } from 'vitest';
-import type { BattleResult, BattleSetup, BattleState, Command, Decision, EnemyGroupDef } from '../../src/battle/common/types.ts';
+import type { BattleEvent, BattleResult, BattleSetup, BattleState, Command, Decision, EnemyGroupDef } from '../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { findEnemyGroup, setupForChapter, setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
@@ -60,8 +64,19 @@ function withVariant(engine: FFX2Engine): void {
 
 interface One {
   outcome: string;
+  /** Hash of every link's event log without the results' payloads (see the header). */
+  digest: string;
   /** The links won, with what each paid. */
   links: Array<Pick<BattleResult, 'exp' | 'ap' | 'gil'> & { drops: Array<{ itemId: string; count: number }> }>;
+}
+
+/** One link's event log with each result's payload set aside: what this lane changes is what the victory pays, so the rest of the log is what must not move. */
+function logInput(log: readonly BattleEvent[]): string {
+  const apart = (e: BattleEvent): unknown =>
+    e.type === 'victory' || e.type === 'defeat'
+      ? { ...e, result: { outcome: e.result.outcome, turns: e.result.turns, elapsedTicks: e.result.elapsedTicks, elapsedMs: e.result.elapsedMs } }
+      : e;
+  return JSON.stringify(log.map(apart));
 }
 
 function fallback(d: Input): Command {
@@ -78,7 +93,8 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
   engine.setSeed(setup.seed);
   engine.init(setup);
   withVariant(engine);
-  const one: One = { outcome: 'unresolved', links: [] };
+  const one: One = { outcome: 'unresolved', digest: '', links: [] };
+  const hash = createHash('sha256');
   let link = 1;
   for (let step = 0; step < MAX_STEPS; step += 1) {
     const d = engine.nextDecision();
@@ -89,6 +105,7 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
     }
     if (d.kind === 'battle-over') {
       one.outcome = String(d.result.outcome);
+      hash.update(logInput(engine.state().log));
       if (d.result.outcome === 'victory') one.links.push({ exp: d.result.exp, ap: d.result.ap, gil: d.result.gil, drops: d.result.drops.map((x) => ({ itemId: x.itemId, count: x.count })) });
       if (one.outcome !== 'victory' || !group.nextGroupId || link >= MAX_LINKS) break;
       const next = await findEnemyGroup(group.nextGroupId);
@@ -103,6 +120,7 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
     }
     engine.submit(intendedStrategy(d.actorId, d.commands, engine as never) ?? fallback(d));
   }
+  one.digest = hash.digest('hex').slice(0, 16);
   return one;
 }
 
@@ -111,6 +129,8 @@ interface Row {
   seeds: number;
   firstSeed: number;
   perSeed: string;
+  /** One digest a seed (the whole chain's event logs without the results' payloads): equal before and after for a chain whose battles did not move. */
+  digests: string[];
   wins: number;
   /** Summed over the WON chains (every link of a won chain), the way the results screen sums a chain. Sums, so split runs merge exactly. */
   total: { exp: number; ap: number; gil: number; items: number };
@@ -166,6 +186,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX-2 kill rewards: what each won chain pa
         seeds: runs.length,
         firstSeed: FIRST_SEED,
         perSeed: runs.map((r) => (r.outcome === 'victory' ? 'W' : r.outcome === 'defeat' ? 'L' : 'U')).join(''),
+        digests: runs.map((r) => r.digest),
         wins: won.length,
         total,
         items: Object.fromEntries(Object.entries(items).sort(([a], [b]) => a.localeCompare(b))),
