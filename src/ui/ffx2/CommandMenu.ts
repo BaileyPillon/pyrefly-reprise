@@ -43,6 +43,7 @@ import { commandHelpText, groupHelpText } from './commandHelp.ts';
 import { withTargets } from './withTargets.ts';
 import { keepPlateDocked } from './plateRedock.ts';
 import { followedIndex, pageFold, scrollAffordance, syncFolds } from './CommandMenuScroll.ts';
+import { syncReasons } from './CommandMenuReason.ts';
 
 /** Kept here so importers of the menu still find it; the scroll rules live in `CommandMenuScroll.ts`. */
 export { scrollAffordance };
@@ -409,6 +410,7 @@ export function openCommandMenu(deps: CommandMenuDeps): Promise<Command> {
     let keepTop: number | null = null;
     function markFold(): void {
       const box = deps.container;
+      syncReasons(box); // a greyed row whose reason has no room beside its name puts it under the name (changes the row's height, so first)
       if (keepTop !== null) box.scrollTop = keepTop;
       const cursor = box.querySelector<HTMLElement>('.ig-cmd--selected');
       if (cursor && typeof cursor.scrollIntoView === 'function') cursor.scrollIntoView({ block: 'nearest' });
