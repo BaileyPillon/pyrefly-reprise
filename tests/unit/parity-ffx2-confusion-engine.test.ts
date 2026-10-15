@@ -17,11 +17,15 @@ import { makeFfx2Rng } from '../../src/battle/ffx2/adapt/streams.ts';
 import type { BattleEvent, StatusId, StatusInstance } from '../../src/battle/common/types.ts';
 import { Ffx2AtbState } from '../../src/battle/ffx2/kernel/atb-gauge.ts';
 import { runAutopilot } from '../../src/battle/ffx2/engineHooks.ts';
+import { simulateFFX2Command } from '../../src/battle/ffx2/simulate.ts';
+import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
 import { LOADOUTS, board, type Probe } from './helpers/ffx2AutoRig.ts';
 
 const confusion = (): StatusInstance => ({ id: 'confuse' as StatusId, turnsRemaining: null, ticksRemaining: 100_000_000, charges: null, stacks: 1, permanent: false });
 
 interface Start {
+  /** How many draws the tap had logged when the call that began her action started. */
+  at: number;
   state: ReturnType<Probe['streams']['saveState']>;
   alive: Map<string, boolean>;
   events: BattleEvent[];
@@ -33,16 +37,18 @@ function tough(e: Probe, freezeEnemy = true): Probe {
   for (const id of ['yuna', 'rikku', 'paine']) {
     const u = e.unit(id);
     u.stats.maxHp = 99999;
-    u.hp = 99999;
+    u.hp = 50000;
   }
+  if (freezeEnemy) e.unit('paragon').hp = Math.floor(e.unit('paragon').stats.maxHp / 2);
   if (freezeEnemy) e.unit('paragon').statuses['stop'] = { id: 'stop' as StatusId, turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true };
   return e;
 }
 
 /** Play until `who` begins an action, answering every other girl's menu with a pass; null when the battle ends first. */
-function toAction(e: Probe, who: string, maxCalls = 4000): Start | null {
+function toAction(e: Probe, who: string, tapped: number[] = [], maxCalls = 4000): Start | null {
   for (let i = 0; i < maxCalls; i++) {
     const state = e.streams.saveState();
+    const at = tapped.length;
     const alive = new Map(e.all.map((u) => [u.id, u.alive && !u.removed]));
     const d = e.nextDecision();
     if (d.kind === 'battle-over') return null;
@@ -56,9 +62,26 @@ function toAction(e: Probe, who: string, maxCalls = 4000): Start | null {
       continue;
     }
     const start = d.events.find((x) => x.type === 'action-start' && (x as { actorId?: string }).actorId === who);
-    if (start !== undefined) return { state, alive, events: d.events, start: start as never };
+    if (start !== undefined) return { at, state, alive, events: d.events, start: start as never };
   }
   return null;
+}
+
+/** Keep playing until `who's` action has resolved (an item is charged on the purple bar first) and return every event from then on. */
+function drain(e: Probe, who: string, maxCalls = 600): BattleEvent[] {
+  const out: BattleEvent[] = [];
+  for (let i = 0; i < maxCalls; i++) {
+    const d = e.nextDecision();
+    if (d.kind === 'battle-over') break;
+    if (d.kind === 'player-input') {
+      e.submit({ kind: 'defend', targets: [] });
+      continue;
+    }
+    const events = d.kind === 'waiting' ? e.tick(Math.max(1, d.nextEventMs)) : d.kind === 'resolved' ? d.events : [];
+    out.push(...events);
+    if (events.some((x) => x.type === 'action-end' && (x as { actorId?: string }).actorId === who)) break;
+  }
+  return out;
 }
 
 /** The party stock in the order the build lists it, with the game's id and target flags of each (the data's rows). */
@@ -108,7 +131,7 @@ function oracle(seed: number, s: Start): { item: string | null; targets: string[
 
 describe('a Confused girl on the engine\'s own path', () => {
   it('is never offered a menu, and acts by herself with the command and the target the game\'s rule picks (150 seeds, the oracle replays her stream)', () => {
-    const seen = { attack: 0, item: 0, multi: 0, self: 0, enemy: 0, ally: 0, games: 0 };
+    const seen = { attack: 0, item: 0, multi: 0, self: 0, enemy: 0, ally: 0, games: 0, halves: 0 };
     for (let seed = 1; seed <= 150; seed++) {
       const e = tough(board({ yuna: LOADOUTS['plain'] as never }, seed));
       e.unit('yuna').statuses['confuse'] = confusion();
@@ -120,6 +143,14 @@ describe('a Confused girl on the engine\'s own path', () => {
       expect(c.kind === 'item' ? c.id : null, `seed ${seed} item`).toBe(want.item);
       expect(c.kind, `seed ${seed} kind`).toBe(want.item === null ? 'attack' : 'item');
       expect([...c.targets].sort(), `seed ${seed} targets`).toEqual([...want.targets].sort());
+      // the effect follows the pick: a multiple-target item lands on exactly the half the game chose (the other team's Paragon included), nobody else
+      if (want.item !== null && want.targets.length > 0 && STOCK.find((x) => x.item === want.item)?.cursor === 0x35) {
+        // the engine reports a heal as a damage event with a negative amount
+        const lands = (x: BattleEvent, item: string): boolean => (item === 'x2-megalixir' ? x.type === 'damage' && x.amount < 0 : x.type === 'status-add');
+        const landed = [...got.events, ...drain(e, 'yuna')].filter((x) => lands(x, want.item as string)).map((x) => (x as { targetId?: string }).targetId as string);
+        expect([...new Set(landed)].sort(), `seed ${seed} landed`).toEqual([...want.targets].sort());
+        seen.halves++;
+      }
       if (want.item === null) seen.attack++;
       else seen.item++;
       if (want.targets.length > 1) seen.multi++;
@@ -138,14 +169,11 @@ describe('a Confused girl on the engine\'s own path', () => {
       e.unit('yuna').statuses['confuse'] = confusion();
       const draws: number[] = [];
       (e.streams as unknown as { tap: (s: number, v: number) => void }).tap = (s) => draws.push(s);
-      const got = toAction(e, 'yuna');
+      const got = toAction(e, 'yuna', draws);
       if (got === null) continue;
       const want = oracle(seed, got);
-      // the draws of the call that began her action come first in that call; find them as the last run of the oracle's length ending at the pick
-      const at = draws.length;
-      expect(at).toBeGreaterThanOrEqual(want.draws.length);
-      const head = draws.join(',');
-      expect(head.includes(want.draws.join(',')), `seed ${seed}`).toBe(true);
+      // the call that began her action drew, first and in this order, exactly the streams the rule names (her own, then 4 or 5), and nothing else before them
+      expect(draws.slice(got.at, got.at + want.draws.length), `seed ${seed}`).toEqual(want.draws);
     }
   });
 
@@ -234,5 +262,56 @@ describe('a Confused girl on the engine\'s own path', () => {
     e.unit('yuna').statuses['berserk'] = { ...confusion(), id: 'berserk' as StatusId };
     const got = toAction(e, 'yuna');
     expect(got?.start.command.kind).toBe('attack');
+  });
+
+  it('Berserk wins when both stand (the game removes Confusion when Berserk lands; if both ever stand the order is Berserk\'s): her Attack, at the enemy, every seed', () => {
+    for (let seed = 1; seed <= 40; seed++) {
+      const e = tough(board({ yuna: LOADOUTS['plain'] as never }, seed));
+      e.unit('yuna').statuses['berserk'] = { ...confusion(), id: 'berserk' as StatusId };
+      e.unit('yuna').statuses['confuse'] = confusion();
+      const got = toAction(e, 'yuna');
+      if (got === null) continue;
+      expect(got.start.command.kind, `seed ${seed}`).toBe('attack');
+      expect([...got.start.command.targets], `seed ${seed}`).toEqual(['paragon']);
+    }
+  });
+
+  it('Confusion that runs out gives the menu back: she acts by herself while it lasts, then she is asked for a command again', () => {
+    let own = 0;
+    let asked = 0;
+    for (let seed = 1; seed <= 12; seed++) {
+      const e = tough(board({ yuna: LOADOUTS['plain'] as never }, seed));
+      const yuna = e.unit('yuna');
+      // the status's own clock falls by her raw speed each step: this one lasts a few seconds
+      yuna.statuses['confuse'] = { ...confusion(), ticksRemaining: 40_000 };
+      let expired = false;
+      for (let i = 0; i < 8000 && asked <= own; i++) {
+        const d = e.nextDecision();
+        if (d.kind === 'battle-over') break;
+        if (yuna.statuses['confuse'] === undefined) expired = true;
+        if (d.kind === 'player-input') {
+          if (d.actorId === 'yuna') {
+            expect(expired, `seed ${seed}: a menu while Confused`).toBe(true);
+            asked++;
+            break;
+          }
+          e.submit({ kind: 'defend', targets: [] });
+          continue;
+        }
+        const events = d.kind === 'waiting' ? e.tick(Math.max(1, d.nextEventMs)) : d.kind === 'resolved' ? d.events : [];
+        if (!expired) own += events.filter((x) => x.type === 'action-start' && (x as { actorId?: string }).actorId === 'yuna').length;
+      }
+    }
+    expect(own).toBeGreaterThan(0);
+    expect(asked).toBeGreaterThan(5);
+  });
+
+  it('a preview of an item command that names its targets exactly (simulateFFX2Command) aims where the engine does: the Megalixir on the enemy heals the enemy', () => {
+    const options = ffx2Options();
+    const e = tough(board({ yuna: LOADOUTS['plain'] as never }, 2));
+    const preview = (exact: boolean) =>
+      simulateFFX2Command(e.state(), 'yuna', { kind: 'item', id: 'x2-megalixir', targets: ['paragon'], ...(exact ? { exactTargets: true } : {}) }, { roll: 'mid', abilities: options.abilities, items: options.items });
+    expect(preview(true)?.hpDelta['paragon'] ?? 0).toBeLessThan(0); // hp rises: delta = before - after
+    expect(preview(false)?.hpDelta['paragon'] ?? 0).toBe(0); // the item's own targeting takes the girls' side only
   });
 });

@@ -58,6 +58,8 @@ const SEED_RANGE = /^(\d+)-(\d+)$/.exec(SEED_SPEC);
 const FIRST_SEED = SEED_RANGE ? Number(SEED_RANGE[1]) : 1;
 const LAST_SEED = SEED_RANGE ? Number(SEED_RANGE[2]) : Number(SEED_SPEC);
 const ONLY = process.env['PYREFLY_MEASURE_CHAPTERS']?.split(',');
+/** What-if (not the shipped line): the named girls start every link Confused for the game's own timer, 200,000 units (about 70 seconds at the Normal speed). */
+const INJECT = process.env['PYREFLY_CONFUSE']?.split(',').filter((x) => x.length > 0) ?? [];
 const MAX_STEPS = 60_000;
 const MAX_LINKS = 12;
 
@@ -98,12 +100,24 @@ function confusedGirlsOf(state: Readonly<BattleState>): number {
   return n;
 }
 
+/** Put Confusion on the named girls (the engine's combatants are its units). */
+function injectConfusion(engine: FFX2Engine): void {
+  const combatants = (engine.state() as BattleState).combatants;
+  for (const id of INJECT) {
+    const girl = combatants[id];
+    if (girl !== undefined && girl.alive && girl.statuses['confuse'] === undefined) {
+      girl.statuses['confuse'] = { id: 'confuse', turnsRemaining: null, ticksRemaining: 200_000, charges: null, stacks: 1, permanent: false };
+    }
+  }
+}
+
 async function playChain(chapter: Chapter, seed: number): Promise<One> {
   let setup: BattleSetup = setupForChapter(chapter, seed);
   let group: EnemyGroupDef = chapter.enemyGroupRef;
   const engine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
   engine.setSeed(setup.seed);
   engine.init(setup);
+  injectConfusion(engine);
   let outcome = 'unresolved';
   let link = 1;
   let link1Won = false;
@@ -135,6 +149,7 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
       link += 1;
       engine.setSeed(setup.seed);
       engine.init(setup);
+      injectConfusion(engine);
       continue;
     }
     partyTurns += 1;
@@ -160,6 +175,7 @@ describe.skipIf(!MEASURE)('RE parity, FFX-2 Confusion: the intended line in ever
       rows.push({
         chapter: chapter.id,
         confusion: process.env['PYREFLY_CONFUSION'] === 'off' ? 'old rule (menu kept)' : 'the game\'s pick',
+        injected: INJECT,
         seeds: runs.length,
         firstSeed: FIRST_SEED,
         perSeed: runs.map((r) => (r.outcome === 'victory' ? 'W' : r.outcome === 'defeat' ? 'L' : 'U')).join(''),

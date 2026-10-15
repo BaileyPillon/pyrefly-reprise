@@ -24,6 +24,19 @@ import { statusWord1 } from './words.ts';
 /** The command rows that are a dressphere's plain Attack (one per dressphere family: the engine resolves them all as `attack`). */
 const ATTACK_ROWS: ReadonlySet<number> = new Set([0x302c, 0x302d, 0x302e, 0x302f, 0x3030, 0x3031, 0x312f]);
 
+/** The lists the menu kernel made for a girl, kept while her dressphere and what she has learned stay as they were (building them walks all 554 rows twice, and a Confused girl who finds nothing to pick asks every step). */
+const listCache = new WeakMap<Ffx2Unit, { key: string; lists: { main: number[]; shortcut: number[] } | null }>();
+
+function listsOf(actor: Ffx2Unit, ladder: readonly string[]): { main: number[]; shortcut: number[] } | null {
+  const learned = Object.entries(actor.dresspheres?.abilitiesLearned ?? {}).map(([k, v]) => `${k}:${v.learned.length}`).join(',');
+  const key = `${actor.dresspheres?.current ?? ''}|${learned}|${actor.level}|${ladder.length}`;
+  const hit = listCache.get(actor);
+  if (hit !== undefined && hit.key === key) return hit.lists;
+  const lists = confusionLists(actor, ladder);
+  listCache.set(actor, { key, lists });
+  return lists;
+}
+
 /** What the pick needs of the engine. */
 export interface ConfusionEnv {
   readonly units: readonly Ffx2Unit[];
@@ -101,7 +114,7 @@ export interface ConfusedTurn {
  */
 export function confusedTurn(actor: Ffx2Unit, env: ConfusionEnv): ConfusedTurn | null {
   const sphere = env.dresspheres.get(actor.dresspheres?.current ?? '');
-  const lists = confusionLists(actor, sphere?.abilityIds ?? []);
+  const lists = listsOf(actor, sphere?.abilityIds ?? []);
   if (lists === null) return null;
   const stock = stockOf(env);
   const world: Ffx2PickWorld = {
@@ -119,7 +132,7 @@ export function confusedTurn(actor: Ffx2Unit, env: ConfusionEnv): ConfusedTurn |
     const at = stock.ids.indexOf(r.command);
     const item = stock.items[at];
     if (item === undefined) return null;
-    return { command: { kind: 'item', id: item, targets }, candidates: r.candidates.length, gameCommand: r.command };
+    return { command: { kind: 'item', id: item, targets, exactTargets: true }, candidates: r.candidates.length, gameCommand: r.command };
   }
   const ability = abilityOfGameId(r.command);
   if (ATTACK_ROWS.has(r.command)) return { command: { kind: 'attack', targets }, candidates: r.candidates.length, gameCommand: r.command };
