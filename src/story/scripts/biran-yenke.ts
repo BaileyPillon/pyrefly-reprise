@@ -6,7 +6,7 @@
  * ours** and quotes nothing of the game's script [AGENTS.md rule 8]; the brothers' own lines inside the battle (the game's dialogue scenes, RE section 5.8) are **not** reproduced and have no stand-in: no barks
  * (the driver's decision: new lines would be new content). Voices from `research/writing-bible.md`: Kimahri (section 1.7) speaks in the third person, three to eight words, **once, after a silence**, and never into one.
  *
- * `pre` is five lines and a silence, `post` four lines and a silence; no mid-battle scripts and no victory quips (the fight is a trial between kin).
+ * `pre` is five lines and a silence, `post` three lines and a silence; no mid-battle scripts and no victory quips (the fight is a trial between kin).
  *
  * Like the Experiment's and Sinspawn Gui's, this chapter is NOT in `../registry.ts` (its tests pin that the registry's keys are the listed chapters); `tests/unit/chapters/biran-yenke-story.test.ts`
  * audits the lint and the line count.
