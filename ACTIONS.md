@@ -18,36 +18,63 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 759, from 2026-09-15 to 2026-10-14 (ids A-0001 to A-0759), 525 of them linked to at least one decision (701 distinct decision ids).
+- **Rows:** 763, from 2026-09-15 to 2026-10-15 (ids A-0001 to A-0763), 529 of them linked to at least one decision (703 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
-| implementation | 248 |
+| implementation | 250 |
 | art | 79 |
 | deploy | 74 |
 | review | 154 |
-| records | 45 |
+| records | 46 |
 | infrastructure | 28 |
 | account | 18 |
-| download | 13 |
+| download | 14 |
 | maintenance | 27 |
 | process | 73 |
 
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 462 |
+| October 2026 | 466 |
 
-- **By game:** 553 both, 80 n/a, 67 FFX-2, 59 FFX (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 554 both, 80 n/a, 68 FFX-2, 61 FFX (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 74 deploy rows: 63 lines of docs/deploys.log (53 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to "I'll go with all of your recommendations keep going !" (2026-10-14).
 - **Reviews:** 154 rows: 48 focused reviews (46 SHIP, 1 HOLD, 1 no verdict), 53 live checks (51 PASS, 1 FAIL, 1 UNVERIFIED), 22 deep rounds with a report (12 SHIP, 6 HOLD, 4 no verdict) and 31 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 51 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-14](#2026-10-14) (23) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-15](#2026-10-15) (4) · [10-14](#2026-10-14) (23) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
+
+### 2026-10-15
+
+- **A-0763** · `records` · both · **Recorded the two D-536 chapters: D-850 and D-851, A-0760 to A-0763, both handoffs and preflights, the contract-changes entry, a CHANGELOG lane entry (not live), the NOW.md banner and log (records only)**
+  - What: The preflights were written after the build, which is the wrong order under rule 15; each says so. The CHANGELOG entry is a lane entry marked not live, to be folded into the release entry of the build that ships the chapters. DECISIONS.md and ACTIONS.md regenerated. Game case: both (one chapter for each game). The browser runs, the full suite and the shared FFX-2 preview fix are in A-0760 and A-0761 and the handoffs.
+  - Who: Claude Code cloud session · Decisions: D-850, D-851
+  - Result: done; on branch claude/vigilant-galileo-h6yf7j
+  - Evidence: `docs/target/decisions.json and actions.json` · `DECISIONS.md, ACTIONS.md and CHANGELOG.md` · `docs/CONTRACT-CHANGES.md` · `docs/handoff/NOW.md`
+  - Reversible: yes, documentation only; revert the records commit
+- **A-0762** · `download` · FFX · **The FFX-RNG-tracker's data tables (commit 0acf1ac3) fetched into the session's scratch space to decode Biran's and Yenke's rows; not committed; rule 11's ask was not made first (FFX only)**
+  - What: 17 files, 1.7 MB, from Grayfox96/FFX-RNG-tracker at commit 0acf1ac3 (the commit the Natus, Omnis, Yojimbo, Gui, Sin and Isaaru research notes already cite): the monster, command and monster-magic CSV tables (PS2 and HD), monster\_actions.json, formations.json, the item tables, and the reader's own Python modules, read as text for the byte layout. Read as data with a decoder written in the session and run with Python's isolated mode; the tracker's code was never run. Nothing of it is in the repository: the research note cites the commit and the rows. AGENTS.md rule 11 says to ask before downloading anything, and this was not asked first: it is disclosed here, in the handoff and in the summary to him. Game case: FFX only.
+  - Who: Claude Code cloud session · Decisions: D-850
+  - Result: done; the files stay in the session's scratch space and go with the container
+  - Evidence: `research/ffx-biran-yenke.md (section 0.2 and Sources)` · `docs/handoff/ch-biran-yenke.md (section 3)`
+  - Reversible: yes, nothing was installed or committed; the container's scratch space is discarded with it
+- **A-0761** · `implementation` · FFX-2 · **Angra Mainyu built end to end: the hidden FFX-2 chapter 26 behind the word angra, the fiend and his two arms at the Bikanel excavation camp (FFX-2 only)**
+  - What: Under his words of 2026-10-15 (D-851). The research note research/ffx2-angra-mainyu.md (no row of the three monsters was read; every number a written source's through search summaries, tagged with its count, a stand-in row of the game's own table, or a stated estimate; six conflicts resolved; the verify list and the RE questions). The chapter: the body with Tawrich and Zarich as parts; their guards as permanent Null Magic and Null Physical, which Darkness passes and which survive an arm's fall and Full-Life; 17 abilities, Perdition's Flame derived (ten random hits of 3/16 of maximum HP, physical) and 13 stand-in rows copied from the monsters that carry them; the three scripts (the Flame on his first turn and every seventh while both arms stand, Full-Life on a fallen arm while he has 60 MP, Osmose when he lacks it, Demi, Flare or Curaga otherwise; the arms' estimated odds); the Ribbon as a held item; the Chapter 5 party; his figure on the Experiment's grounds plate with the arms as figure-less anchored parts; 3 s of action time under D-846; the story (an opening, the first Flame's and first revive's beats, the close); the guide card and page; the advisor's tactic (Shell and an early Protect measured and left out); the door word angra; the record, metadata and registrations. Tests: data, engine, story, a 40-seed bench both ways for action time, the door; shared tests gained his rows; the FFX-2 parity sample draws its old pool as before and his rows on their own. A shared FFX-2 readout fixed (found by the browser run): the move preview printed Perdition's Flame at about half its hit (the per-hit row divided an aimed volley back, which stops at her HP); it now estimates one hit per girl (battle/ffx2/intent.ts, intentRandom.ts, simulate.ts), pinned by an engine test that fails on the old code. It reaches every FFX-2 enemy volley of random hits (Trema's Meteor, the Paragon's Final Impact, Vegnagun's Odi Et Amo and Dies Irae, Shuyin's Run & Slash, Anima's Oblivion, Leblanc's No Love Lost, the Experiment's Rocket Launchers): their slabs read one hit per girl, no battle changes. The FFX twin keeps the old reading and is a follow-up. Game case: FFX-2 only.
+  - Who: Claude Code cloud session (one session, both chapters) · Decisions: D-851, D-536, D-846
+  - Result: built on branch claude/vigilant-galileo-h6yf7j and pushed; not merged or deployed; focused and deep reviews owed; list only after the RE session reads his rows. Bench (40 seeds): advisor 24 of 40 with action time on, 36 off; naive 0. Full suite: the same 23 environment-only failures as clean HEAD. Browser: won at a retry taken by keys (19.5 min, seven frames).
+  - Evidence: `docs/handoff/ch-angra-mainyu.md` · `docs/plans/ch-angra-mainyu-review.md` · `research/ffx2-angra-mainyu.md` · `tests/unit/chapters/angra-mainyu-*.test.ts and tests/unit/angra-door.test.ts` · `docs/screenshots/ch-angra-mainyu/`
+  - Reversible: yes, a hidden chapter on a branch: do not merge it, or revert its commit; nothing in the save changes
+- **A-0760** · `implementation` · FFX · **Biran and Yenke built end to end: the hidden FFX chapter 25 behind the word kimahri, Kimahri alone at the gate of Mt. Gagazet (FFX only)**
+  - What: Under his words of 2026-10-15 (D-850). The research note research/ffx-biran-yenke.md (the game's records m134 and m135 and every command row decoded from the tracker tables at the pinned commit 0acf1ac3, each row equal to the Steam build's table in the repo; the stat formulas and the fight's rules from the written sources through search summaries, tagged, seven conflicts resolved). The chapter: the two records and eight ability rows with their records; the battle writing the Ronso's HP, Strength, Magic and Agility from Kimahri's at setup (battle/ffx/ai/biran-yenke-rules.ts, -stats.ts, applyRonsoSetup in setup.ts); the two scripts (Biran's four-step loop, Mighty Guard and White Wind once below a quarter, Berserk and Haste when the other falls) with the guarding as the engine's Cover with Sentinel and Bulldoze moving the user's row; Lancet teaching the eight Ronso Rages through a teacher registry (battle/ffx/ronso-rage.ts, the learnsRonsoRage extra in scripted.ts, inert for every other enemy); Kimahri's gate preset (Chapter I's less what the duel teaches); the Gagazet plate staging at Kimahri's stature; the departures table (they yield); the story (an opening, seven mid-battle beats on the Ronso's own moves, the close); the guide card and page; the advisor's tactic; the door word kimahri; the hidden chapter's record, metadata (with the hidden chapters' metadata list split into chapter-meta-unlisted.ts for the 400-line rule) and registrations. Shared tests that count every chapter gained its rows, and the two FFX parity suites now draw their old pool exactly as before and sample the new rows separately (the reshuffled sample had exposed a pre-existing Chaos Grenade Provoke and Threaten write-back gap, situation 4174, recorded as a follow-up). Game case: FFX only.
+  - Who: Claude Code cloud session (one session, both chapters) · Decisions: D-850, D-536
+  - Result: built on branch claude/vigilant-galileo-h6yf7j and pushed; not merged or deployed; focused and deep reviews owed. Bench: the advisor's line wins 200 of 200 seeds, attack-only none. Full suite: the same 23 environment-only failures as clean HEAD. Browser: won by real keys then the advisor (2.4 min, six frames).
+  - Evidence: `docs/handoff/ch-biran-yenke.md` · `docs/plans/ch-biran-yenke-review.md` · `research/ffx-biran-yenke.md` · `tests/unit/chapters/biran-yenke-*.test.ts and tests/unit/kimahri-door.test.ts` · `docs/screenshots/ch-biran-yenke/`
+  - Reversible: yes, a hidden chapter on a branch: do not merge it, or revert its commit; nothing in the save changes
 
 ### 2026-10-14
 

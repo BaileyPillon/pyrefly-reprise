@@ -21,6 +21,8 @@ import { ANGRA_ABILITY, ANGRA_ID, ANGRA_SCRIPT, TAWRICH_ABILITY, TAWRICH_ID, TAW
 import { ANGRA_HP, ARM_HP } from '../../../src/data/ffx2/enemies/angra-mainyu.ts';
 import { bench, enemy, type Bench } from '../helpers/ffx2ScriptRig.ts';
 import { driveAngra, type Input } from '../helpers/angraDrive.ts';
+import { chainBefore } from '../../../src/battle/ffx2/chain.ts';
+import type { FFX2Combatant } from '../../../src/battle/common/types.ts';
 
 type Ev = BattleEvent & { targetId?: string; sourceId?: string; amount?: number; hitIndex?: number; hitCount?: number; multiplier?: number; status?: string; partId?: string; name?: string; reason?: string; actorId?: string; abilityId?: string; cause?: string };
 const GIRLS = ['yuna', 'rikku', 'paine'];
@@ -290,6 +292,27 @@ describe('the fight in the real engine', () => {
     }
     expect(charges).toBeGreaterThan(8);
     expect(fellDuringCharge).toBeGreaterThan(0);
+  });
+
+  it('the move preview shows each girl what ONE hit of Perdition\'s Flame does to her (3/16 of her maximum HP, halved by Protect), not the volley divided back, which stopped at her HP', () => {
+    type Row = { targetId: string; amount: number };
+    type Probe = { moveName: string; randomTarget?: { rows: Row[]; perHit: boolean; hits: number } | null };
+    const probe = (e: { intent(): unknown }): Probe | null => e.intent() as Probe | null;
+    const r = driveAngra('swing', 1, { until: (e) => probe(e)?.moveName === "Perdition's Flame" });
+    const intent = probe(r.engine)!;
+    expect(intent.moveName).toBe("Perdition's Flame");
+    expect([intent.randomTarget?.perHit, intent.randomTarget?.hits]).toEqual([true, 10]);
+    const rows = intent.randomTarget!.rows;
+    expect(rows.map((x) => x.targetId).sort()).toEqual([...GIRLS].sort());
+    let exact = 0;
+    for (const row of rows) {
+      const girl = r.engine.state().combatants[row.targetId] as FFX2Combatant;
+      if (chainBefore(girl) !== 0) continue; // a girl still in a chain takes more: pinned below for the rest
+      const base = Math.floor((girl.stats.maxHp * 3) / 16);
+      expect(row.amount, row.targetId).toBe(girl.statuses['protect'] !== undefined ? Math.floor(base / 2) : base);
+      exact += 1;
+    }
+    expect(exact).toBeGreaterThan(0);
   });
 
   it('the battle ends when the body falls, whoever stands: victory with both arms up, and his rewards paid (5,000 EXP, 30 AP, 5,000 gil, the Ribbon)', () => {

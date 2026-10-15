@@ -2,11 +2,15 @@
  * One hidden chapter, from the title to the board again, by real input: the steps the D-536 chapters' specs share (`../biran-yenke.spec.ts`, FFX; `../ffx2-angra-mainyu.spec.ts`, FFX-2).
  *
  * Real keys carry the player from the title to the chapter-select board, type the chapter's word (the board has no card for it), begin party prep, read the opening scene by Enter presses, and take
- * the first decisions of the fight from the command menu (Enter on the lit row, Enter on the target, as a player who only presses Confirm does). The fight is then **handed to the shipped move advisor
- * at skip speed** (`autoBattle('intended')`, `setBattleSpeed('skip')`): software GL renders about one frame a second at 1600x900 here (`ffx2-experiment.spec.ts` measured it), and both fights run
- * minutes of game time, so the advisor finishing the fight is said in the handoff, never passed off as play. Results and the post scene are read by Enter presses, and the board comes back.
+ * the first decisions of the fight from the command menu (Enter on the lit row, Enter on the target, as a player who only presses Confirm does). The fight is then **handed to the shipped move advisor**
+ * (`autoBattle('intended')`). **Playback runs at skip speed from the first frame of the battle** (`setBattleSpeed('skip')`, presentation only: the engine, its seed and every number are untouched):
+ * software GL renders one frame in four to five seconds at 1600x900 in a cloud container (about one a second on the owner's machine, `ffx2-experiment.spec.ts`), so at normal speed the battle's
+ * opening alone takes minutes. The advisor finishing the fight is said in the handoff, never passed off as play. Enter is pressed only on the battle's own command menu (a defeat panel's lit row
+ * is RETRY). After a win the results and the post scene are read by Enter presses; after a loss the defeat panel's RETRY is taken by Enter while the spec allows a retry (party prep, START BATTLE,
+ * and the advisor plays the retried fight from its first turn), else its CHAPTER SELECT with Escape. Either way the board comes back. Frames are numbered in the order they are taken.
+ * Every wait is by the clock, not a count of polls, for the same reason.
  *
- * The debug API pins the seed, reads the state and the log, marks the coach cards seen, and hands the fight over; it never skips a scene or sets a number.
+ * The debug API pins the seed, reads the state and the log, marks the coach cards seen, sets the playback speed, and hands the fight over; it never skips a scene or sets a number.
  */
 import { expect, type Page } from '@playwright/test';
 
@@ -14,10 +18,15 @@ import './pyrefly-window.ts';
 
 export interface HiddenChapterRun {
   outcome: string | null;
+  /** Fights played: the first, plus one for each retry. */
+  attempts: number;
   realActions: string[];
   sawOpening: boolean;
   sawResults: boolean;
   sawClosing: boolean;
+  /** A defeat panel came up (then RETRY by Enter, or CHAPTER SELECT by Escape). */
+  sawDefeatPanel: boolean;
+  backOnBoard: boolean;
   thrown: string[];
 }
 
@@ -33,6 +42,8 @@ export interface HiddenChapterOptions {
   foes: string[];
   /** Decisions taken by real keys before the advisor takes over. */
   realDecisions: number;
+  /** Lost fights retried from the defeat panel's RETRY, as a player trying again does (default 0: CHAPTER SELECT at the first loss). */
+  retries?: number;
 }
 
 const screen = (page: Page): Promise<string | undefined> => page.evaluate(() => window.__pyrefly!.app.current?.name);
@@ -47,7 +58,11 @@ const partyActions = (page: Page): Promise<string[]> =>
 
 export async function playHiddenChapter(page: Page, o: HiddenChapterOptions): Promise<HiddenChapterRun> {
   const tag = `${page.viewportSize()!.width}x${page.viewportSize()!.height}`;
-  const shoot = (moment: string): Promise<Buffer> => page.screenshot({ path: `${o.shots}/${tag}-${moment}.jpg`, type: 'jpeg', quality: 80 });
+  let shots = 0;
+  const shoot = (moment: string): Promise<Buffer> => {
+    shots += 1;
+    return page.screenshot({ path: `${o.shots}/${tag}-${String(shots).padStart(2, '0')}-${moment}.jpg`, type: 'jpeg', quality: 80 });
+  };
   const thrown: string[] = [];
   page.on('pageerror', (e) => thrown.push(String(e)));
   await page.goto('./');
@@ -56,9 +71,10 @@ export async function playHiddenChapter(page: Page, o: HiddenChapterOptions): Pr
 
   // The title to the board, by Enter.
   expect(await screen(page)).toBe('title');
-  for (let i = 0; i < 8 && (await screen(page)) !== 'chapter-select'; i++) {
+  const toBoard = Date.now() + 300_000;
+  while (Date.now() < toBoard && (await screen(page)) !== 'chapter-select') {
     await page.keyboard.press('Enter');
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(3_000);
   }
   expect(await screen(page)).toBe('chapter-select');
   await page.waitForTimeout(1500);
@@ -71,71 +87,129 @@ export async function playHiddenChapter(page: Page, o: HiddenChapterOptions): Pr
     await page.keyboard.press(ch);
     await page.waitForTimeout(90);
   }
-  await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'party-prep', null, { timeout: 30_000 });
+  await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'party-prep', null, { timeout: 120_000 });
   await page.waitForTimeout(1500);
   expect(await page.evaluate(() => window.__pyrefly!.app.current!.snapshot()['chapter']), 'party prep is the hidden chapter\'s').toBe(o.id);
-  await shoot('01-prep-after-the-word');
+  await shoot('prep-after-the-word');
   await page.evaluate(() => window.__pyrefly!.markCoachSeen());
   await page.keyboard.press('Enter');
 
   // The opening scene, by Enter, until the fight.
   let sawOpening = false;
-  for (let i = 0; i < 80 && (await screen(page)) !== 'battle'; i++) {
+  const toBattle = Date.now() + 900_000;
+  while (Date.now() < toBattle && (await screen(page)) !== 'battle') {
     if (!sawOpening && (await text(page)).includes(o.openingText)) {
       sawOpening = true;
-      await shoot('02-opening-line');
+      await shoot('opening-line');
     }
     if ((await screen(page)) === 'cutscene') await page.keyboard.press('Enter');
-    await page.waitForTimeout(700);
+    await page.waitForTimeout(2_500);
   }
   expect(await screen(page)).toBe('battle');
-  await page.waitForTimeout(2500);
+  // Playback at skip speed from the battle's first frame (presentation only; the header says why).
+  const skip = (): Promise<void> => expect.poll(() => page.evaluate(() => window.__pyrefly!.setBattleSpeed('skip')), { timeout: 300_000, intervals: [1_000] }).toBe(true);
+  await skip();
   const field = await page.evaluate(() => Object.keys(window.__pyrefly!.battleState()!.combatants));
   expect(field, 'the chapter\'s foes stand').toEqual(expect.arrayContaining(o.foes));
-  await shoot('03-field');
+  // The battle's own command menu, never another screen's buttons: Enter on a defeat panel is its RETRY.
+  const menuUp = (): Promise<boolean> =>
+    page.evaluate(
+      () =>
+        window.__pyrefly!.app.current?.name === 'battle' &&
+        (window.__pyrefly!.battleState()?.result ?? null) === null && // `null` while the fight runs
+        [...document.querySelectorAll<HTMLElement>('.ig-cmd')].some((r) => r.getBoundingClientRect().width > 0),
+    );
+  const over = (): Promise<boolean> => page.evaluate(() => window.__pyrefly!.app.current?.name !== 'battle' || (window.__pyrefly!.battleState()?.result ?? null) !== null);
+  await expect.poll(menuUp, { timeout: 900_000, intervals: [2_000] }).toBe(true);
+  await shoot('first-menu');
 
-  // The first decisions by real keys: Enter on the lit row, Enter on the target.
+  // The first decisions by real keys: Enter on the lit row, Enter on the target. The fight can end under them (a party wiped before the advisor's turn): then the decisions it allowed count.
   let shotFirst = false;
-  for (let i = 0; i < 400 && (await partyActions(page)).length < o.realDecisions; i++) {
-    const menu = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('.ig-cmd')].some((r) => r.getBoundingClientRect().width > 0));
-    if (menu) await page.keyboard.press('Enter');
-    await page.waitForTimeout(350);
-    if (!shotFirst && (await partyActions(page)).length >= 1) {
+  let realActions = await partyActions(page);
+  const until = Date.now() + 900_000;
+  while (Date.now() < until && realActions.length < o.realDecisions && !(await over())) {
+    if (await menuUp()) await page.keyboard.press('Enter');
+    await page.waitForTimeout(1_500);
+    const now = await partyActions(page);
+    if (now.length > realActions.length) realActions = now; // a screen that has left the battle reads an empty log
+    if (!shotFirst && realActions.length >= 1) {
       shotFirst = true;
-      await shoot('04-first-real-action');
+      await shoot('first-real-action');
     }
   }
-  const realActions = await partyActions(page);
-  expect(realActions.length, 'decisions taken by real keys').toBeGreaterThanOrEqual(o.realDecisions);
+  const endedUnderKeys = await over();
+  expect(realActions.length, 'decisions taken by real keys').toBeGreaterThanOrEqual(endedUnderKeys ? 1 : o.realDecisions);
 
   // The advisor finishes the fight at skip speed.
-  await page.evaluate(() => {
-    window.__pyrefly!.autoBattle('intended');
-    window.__pyrefly!.setBattleSpeed('skip');
-  });
-  const outcome = await page.evaluate(async () => (await window.__pyrefly!.waitBattleEnd())?.outcome ?? null);
+  if (!endedUnderKeys) await page.evaluate(() => window.__pyrefly!.autoBattle('intended'));
+  let outcome = await outcomeOf(page);
+
+  // A defeat: the panel offers RETRY (lit) and CHAPTER SELECT. With a retry left, Enter takes RETRY, as a player trying again does: party prep, START BATTLE by Enter, and the advisor plays
+  // the new fight from its first turn (`BattleScreenFlow.runChapter`: a retry reseeds, the seed plus 1000 an attempt, and skips the opening scene). Without one, Escape takes CHAPTER SELECT.
+  let attempts = 1;
+  let sawDefeatPanel = false;
+  while (outcome === 'defeat') {
+    await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'results', null, { timeout: 300_000 });
+    await page.waitForFunction(() => (document.querySelector('.rres__page')?.textContent ?? '').trim().length > 0, null, { timeout: 300_000 }).catch(() => null);
+    await page.waitForTimeout(5_000);
+    if (!sawDefeatPanel) await shoot('defeat');
+    sawDefeatPanel = true;
+    if (attempts > (o.retries ?? 0)) {
+      await page.keyboard.press('Escape');
+      const backOnBoard = await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'chapter-select', null, { timeout: 300_000 }).then(() => true, () => false);
+      if (backOnBoard) {
+        await page.waitForTimeout(5_000);
+        await shoot('board-after');
+      }
+      return { outcome, attempts, realActions, sawOpening, sawResults: true, sawClosing: false, sawDefeatPanel, backOnBoard, thrown };
+    }
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'party-prep', null, { timeout: 300_000 });
+    await page.waitForTimeout(1_500);
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'battle', null, { timeout: 300_000 });
+    await skip();
+    await expect.poll(() => page.evaluate(() => window.__pyrefly!.autoBattle('intended')), { timeout: 300_000, intervals: [1_000] }).toBe(true);
+    attempts += 1;
+    outcome = await outcomeOf(page);
+  }
 
   // Results, then the closing scene, then the board.
   let sawResults = false;
   let sawClosing = false;
-  for (let i = 0; i < 260 && (await screen(page)) !== 'chapter-select'; i++) {
+  // The text is read every half second and Enter pressed every 2.5 s: a line types itself out, so a short-lived one is caught between presses.
+  const back = Date.now() + 1_200_000;
+  let lastPress = 0;
+  while (Date.now() < back && (await screen(page)) !== 'chapter-select') {
     const now = await screen(page);
-    if (now === 'results' && !sawResults) {
-      sawResults = true;
-      await page.waitForTimeout(2500);
-      await shoot('05-results');
-    }
+    // The results screen comes up, but no frame of it is taken: a fight the advisor finished counts as an automated run, whose results screen is silent and moves on by itself
+    // (`ResultsScreen`, `silent`); the rewards it would show are pinned by the chapters' engine tests.
+    if (now === 'results') sawResults = true;
     if (!sawClosing && (await text(page)).includes(o.closingText)) {
       sawClosing = true;
-      await shoot('06-closing-line');
+      // The closing lines advance by themselves in one to two seconds, less than a software-GL frame: a frame taken at once caught a speaker and no words; a few seconds on, the box
+      // holds a line of the scene being typed (often a later one). The check above is what proves the scene played; the frame only shows it.
+      await page.waitForTimeout(6_000);
+      await shoot('closing-line');
     }
-    if (now === 'cutscene' || now === 'results') await page.keyboard.press('Enter');
-    await page.waitForTimeout(now === 'battle' ? 400 : 650);
+    if ((now === 'cutscene' || now === 'results') && Date.now() - lastPress >= 2_500) {
+      await page.keyboard.press('Enter');
+      lastPress = Date.now();
+    }
+    await page.waitForTimeout(500);
   }
-  if (outcome === 'victory') {
-    await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'chapter-select', null, { timeout: 60_000 });
-    await page.waitForTimeout(1500);
-    await shoot('07-board-after');
+  const backOnBoard = await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'chapter-select', null, { timeout: 300_000 }).then(() => true, () => false);
+  if (backOnBoard) {
+    await page.waitForTimeout(5_000);
+    await shoot('board-after');
   }
-  return { outcome, realActions, sawOpening, sawResults, sawClosing, thrown };
+  return { outcome, attempts, realActions, sawOpening, sawResults, sawClosing, sawDefeatPanel, backOnBoard, thrown };
+}
+
+/** How the fight ended: the battle screen's own answer while it stands, else the results screen's record (a victory's post scene comes first). */
+async function outcomeOf(page: Page): Promise<string | null> {
+  const fought = await page.evaluate(async () => (window.__pyrefly!.battle() ? ((await window.__pyrefly!.waitBattleEnd())?.outcome ?? null) : null));
+  if (fought) return fought;
+  await page.waitForFunction(() => window.__pyrefly!.app.current?.name === 'results', null, { timeout: 300_000 });
+  return page.evaluate(() => String((window.__pyrefly!.app.current!.snapshot() as { outcome?: string }).outcome ?? '') || null);
 }

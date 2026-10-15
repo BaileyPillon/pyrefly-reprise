@@ -1,13 +1,64 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 70 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 71 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-15 · Two hidden chapters: Biran and Yenke (FFX, the word `kimahri`) and Angra Mainyu (FFX-2, the word `angra`) (branch claude/vigilant-galileo-h6yf7j; not live)
+
+Address: none yet (branch claude/vigilant-galileo-h6yf7j from main 8934a41b; not merged, not deployed, no review run; nobody has heard their music or judged their look, and both are provisional)
+
+- **FFX, hidden chapter 25, Biran and Yenke:** Kimahri alone at the gate of Mt. Gagazet, against the two Ronso who broke
+  his horn. Type `kimahri` on the chapter board; there is no card and the board still says "of 18". Their records and moves
+  are the game's own, and their HP, Strength, Magic and Agility are written from Kimahri's when the fight starts, so a
+  stronger Kimahri meets stronger Ronso. Side by side they guard each other (a blow aimed at one lands on the other, at
+  half); Bulldoze sends its user to the other row and the guarding stops. Lancet teaches Ronso Rages: Self-Destruct, Thrust
+  Kick, Doom and Mighty Guard from Biran, Fire Breath, Stone Breath, Aqua Breath and White Wind from Yenke (Mighty Guard
+  and White Wind only once the Ronso has used it). When one falls, Biran goes Berserk or Yenke Hastes himself. Kimahri is
+  Chapter I's Kimahri before he has learned anything here.
+- **FFX-2, hidden chapter 26, Angra Mainyu:** the fiend the Bikanel dig woke turns on the Al Bhed excavation camp once the
+  Cactuar Gatekeepers have calmed the sandstorm. Type `angra` on the board. He fights with two arms: Tawrich cannot be
+  hurt by magic and Zarich not by physical blows, and the Dark Knight's Darkness hits all three and passes both.
+  Perdition's Flame (ten hits on random girls, each 3/16 of her maximum HP and harder the more often one girl is hit;
+  Protect halves each) comes on his first turn and every seventh after, but only while both arms stand, and a fallen arm
+  comes back with Full-Life while he has the MP. Only the body has to fall. The party is Chapter 5's Yuna, Rikku and Paine.
+- **Difficulty, measured and not tuned:** the guide's line wins Biran and Yenke on every one of 200 seeds. Against Angra
+  Mainyu it wins about three fights in five with the 3 seconds of action time the new chapters keep (D-846) and nine in
+  ten without, in about eleven minutes or six; with no Darkness or Protect nothing wins.
+- **Sourcing:** Biran's and Yenke's records and moves are the game's rows; the stat formulas and the fight's rules come
+  from written guides. **Angra Mainyu is the weakest-sourced chapter so far:** none of his rows was read, so his numbers
+  are written guides', other monsters' rows of the game's own table, or estimates, each tagged; the research advises
+  reading his rows before he is listed.
+- **Provisional:** both Ronso wear Kimahri's own paintings on Chapter I's Gagazet plate; Angra Mainyu wears Chapter XI's
+  possessed Anima, his arms have no painting, and his camp is the Experiment's grounds plate. The music is the Gagazet bed
+  and our aeon cue. Nothing approved was replaced.
+- **Also, FFX-2 only:** the enemy-move preview prints one hit of a random volley on each girl, as it says it does. It read
+  Perdition's Flame at about half (a volley that would kill its aim stopped at her HP). The same row changes for every FFX-2
+  volley of random hits: Trema's Meteor, the Paragon's Final Impact, Vegnagun's Odi Et Amo and Dies Irae, Shuyin's Run & Slash,
+  Anima's Oblivion, Leblanc's No Love Lost and the Experiment's Rocket Launchers. Those that kill read higher, and those that
+  do not now read one hit rather than the average of a chain of hits on one girl. No battle changes; only the preview's number.
+- **How it was checked:** `npx tsc --noEmit` and the e2e typecheck clean; each chapter's own suites pass (Biran and
+  Yenke: data, rules, story, a 200-seed bench, the door; Angra Mainyu: data, engine, story, a 40-seed bench, the door)
+  with every shared suite that counts the chapters; the full `npm test` in this container (1,259 files, 19,491 tests)
+  fails the same 23 files and the same tests as clean HEAD does here, all for the environment (22 for the paintings
+  absent here; `advisor-floor`'s tests time out at their 15-second limit under load and pass alone); `node
+  tools/orphans.mjs` lists none of the new modules (its 28 are older); a real-input run of each in headless Chromium
+  against the dev server, from the title by keys, the word typed, prep, the opening scene, the first turns by keys, then
+  the move advisor to the end: Biran and Yenke won (2.4 minutes); Angra Mainyu lost its first fight and won the retry
+  taken by keys from the defeat panel, as a player trying again would (19.5 minutes). This container has none of the
+  paintings (`public/art` stays on Bailey's disk), so no frame shows the art; DECISIONS.md and ACTIONS.md regenerate
+  clean (`--check`).
+
+![Party prep opened by typing kimahri on the chapter board: Biran and Yenke's card, its three objectives and its tip (this container has no paintings, so every panel and figure is a stand-in)](docs/screenshots/ch-biran-yenke/1600x900-01-prep-after-the-word.jpg)
+
+![Kimahri's first menu at the gate: the move advisor's Lancet on Yenke Ronso, the turn order down the right, Yenke's card](docs/screenshots/ch-biran-yenke/1600x900-03-first-menu.jpg)
+
+![Angra Mainyu about to loose Perdition's Flame: his two arms' bars under his, and the forecast of one hit on each girl, ten hits in all (no paintings in this container, so the figures are stand-ins)](docs/screenshots/ch-angra-mainyu/1600x900-04-first-real-action.jpg)
 
 ## 2026-10-14 · Release 48 (r48): Rikku's Mix and the FFX-2 battle menu follow the game, and two hidden FFX-2 chapters
 

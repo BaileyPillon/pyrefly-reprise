@@ -33,10 +33,8 @@ export const BIRAN_YENKE_META: ChapterMeta = {
     { id: 'biran-below-a-quarter', label: 'Bring Biran below a quarter', rule: { kind: 'boss-hp-below', fraction: 0.25 } },
     { id: 'defeat-the-ronso', label: 'Defeat Biran and Yenke', rule: { kind: 'victory' } },
   ],
-  // Short enough for the prep card's tip box; the guide card in battle carries the rest.
-  tip:
-    'Side by side they guard each other: your Attack lands on the wrong Ronso, at half. Lancet and Rages get through. ' +
-    'Bring each below a quarter, and Lancet him after his Mighty Guard or White Wind.',
+  // Short enough for the prep card's tip box (it fades what overflows); the guide card in battle carries the rest.
+  tip: 'Side by side they guard each other: an Attack hits the wrong Ronso at half. Lancet gets through. Lancet each again after his Mighty Guard or White Wind.',
   snapshots: [
     { image: `backdrops/${BIRAN_YENKE_SCENE}.png`, caption: 'the mountain gate' },
     { image: 'characters/kimahri/jump.png', caption: 'Kimahri answers alone' },

@@ -446,7 +446,7 @@ export function estimateFFX2Command(
   actorId: CombatantId,
   command: Command,
   def: AbilityDef,
-  options: { abilities?: AbilityRegistry; items?: ItemRegistry; aim?: CombatantId } = {},
+  options: { abilities?: AbilityRegistry; items?: ItemRegistry; aim?: CombatantId; hits?: number } = {},
 ): ActionEstimate | null {
   const at = (roll: RollPolicy): SimOutcome | null =>
     simulateFFX2Command(state, actorId, command, { roll, ...options });
@@ -680,8 +680,8 @@ export function predictFFX2EnemyIntent(
         : null;
 
   const randomTarget = def && first.command
-    ? ffx2RandomTarget(Object.values(env.state.combatants) as Ffx2Unit[], unit, first.command, def, sampledTargets, (aimed, aim) =>
-        estimateFFX2Command(env.state, enemyId, aimed, def, { ...simOptions, aim })?.perTarget ?? null)
+    ? ffx2RandomTarget(Object.values(env.state.combatants) as Ffx2Unit[], unit, first.command, def, sampledTargets, (aimed, aim, hits) =>
+        estimateFFX2Command(env.state, enemyId, aimed, def, { ...simOptions, aim, ...(hits !== undefined ? { hits } : {}) })?.perTarget ?? null)
     : null;
   const statusText: string[] = [];
   const statusSource = def ?? payloadDef;

@@ -27,13 +27,12 @@ export function ffx2RandomTarget<R extends RandomTargetRow>(
   command: Command,
   def: AbilityDef,
   sampled: readonly (readonly CombatantId[])[],
-  estimate: (aimed: Command, aim: CombatantId) => readonly R[] | null,
+  estimate: (aimed: Command, aim: CombatantId, hits?: number) => readonly R[] | null,
 ): RandomTarget<R> | null {
   const ids = randomTargetCandidates(def.targeting, sampled, () => validTargetIds(units, self, def));
   if (!ids) return null;
   const perHit = isRandomTargeting(def.targeting) && def.hits > 1;
-  // Aimed, every hit of a per-hit volley lands on the aim: divide back to one.
-  return randomTargetRows(ids, def.hits, perHit, perHit ? def.hits : 1, (id) =>
-    estimate({ ...command, targets: [id] } as Command, id),
-  );
+  // A per-hit volley is estimated as ONE hit on each candidate, so the row is what a hit does to her now (her chain included). The whole volley aimed at her and divided back
+  // undercounted any volley that would kill her partway: its total stops at the HP she has (Angra Mainyu's Perdition's Flame read about half). FFX-2 only: the FFX twin is unchanged.
+  return randomTargetRows(ids, def.hits, perHit, 1, (id) => estimate({ ...command, targets: [id] } as Command, id, perHit ? 1 : undefined));
 }

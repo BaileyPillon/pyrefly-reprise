@@ -151,6 +151,7 @@ export interface Ffx2SimOptions {
   abilities?: AbilityRegistry;
   items?: ItemRegistry;
   aim?: CombatantId; // a random pick lands here when it can (PR-0153)
+  hits?: number; // a hit count in place of the ability's: one, for the per-hit row of a random volley (`intentRandom.ts`)
 }
 
 // ----------------------------------------------------------------- the clone
@@ -269,7 +270,7 @@ export function simulateFFX2Command(
     ...(options.items ? { items: options.items } : {}),
   };
 
-  const hitsOverride = expectedMinigameHits(ability, options.roll ?? 'mid');
+  const hitsOverride = options.hits ?? expectedMinigameHits(ability, options.roll ?? 'mid');
   try {
     resolveAbility(ctx, user, ability, command.targets, {
       ...(hitsOverride !== null ? { hitsOverride } : {}), ...(command.kind === 'ability' && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
@@ -279,10 +280,7 @@ export function simulateFFX2Command(
     return null;
   }
 
-  return summarise(clone, before, events, {
-    mpSpent: Math.max(0, mpBefore - (clone.combatants[actorId]?.mp ?? mpBefore)),
-    ability,
-  });
+  return summarise(clone, before, events, { mpSpent: Math.max(0, mpBefore - (clone.combatants[actorId]?.mp ?? mpBefore)), ability });
 }
 
 function hpSnapshot(state: BattleState): Record<CombatantId, number> {

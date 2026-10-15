@@ -17,16 +17,19 @@ test('Biran and Yenke (hidden, FFX only): the word `kimahri` opens it; prep, the
     seed: 3,
     shots: 'docs/screenshots/ch-biran-yenke',
     openingText: 'The gate of Mt. Gagazet',
-    closingText: 'The two Ronso lower their hands',
+    closingText: 'The two Ronso', // the first words of the closing line: the box types a line out, and at a few seconds a frame the rest may not show before the next Enter
     foes: ['biran-ronso', 'yenke-ronso'],
     realDecisions: 2,
   });
-  console.log(`[biran-yenke] ${run.outcome}; by keys: ${run.realActions.slice(0, 2).join(', ')}`);
+  console.log(`[biran-yenke] ${run.outcome} in ${run.attempts} fight(s); by keys: ${run.realActions.slice(0, 2).join(', ')}`);
   expect(run.sawOpening, 'the opening scene played').toBe(true);
   expect(run.outcome, 'the duel is won').toBe('victory');
   expect(run.sawResults, 'the results screen showed').toBe(true);
   expect(run.sawClosing, 'the closing scene played').toBe(true);
+  expect(run.backOnBoard, 'the board came back').toBe(true);
   const stored = await page.evaluate(() => window.localStorage.getItem('pyrefly-reprise:experiments:v1'));
-  expect(stored ?? '', 'the clear went to the experiments store, never the save').toContain('biran-yenke');
+  expect(stored ?? '', 'the clear went to the experiments store').toContain('biran-yenke');
+  const save = await page.evaluate(() => window.localStorage.getItem('pyrefly-reprise:save:v1') ?? '');
+  expect(save, 'nothing of the hidden chapter in the save').not.toContain('biran-yenke');
   expect(run.thrown, 'no uncaught page error').toEqual([]);
 });

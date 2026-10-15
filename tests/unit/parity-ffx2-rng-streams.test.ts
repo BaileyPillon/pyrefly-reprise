@@ -31,6 +31,7 @@ import { assignSlots } from '../../src/battle/ffx2/atb-engine.ts';
 import { FFX2_STREAM_GAME, makeFfx2Rng } from '../../src/battle/ffx2/adapt/streams.ts';
 import { oracleRoles } from './helpers/ffx2WiringOracle.ts';
 import { engineUnit, makeRng, randomSituation, wiringPool, type Situation } from './helpers/ffx2WiringRig.ts';
+import { angraMainyuAbilities } from '../../src/data/ffx2/enemies/angra-mainyu-abilities.ts';
 
 // ------------------------------------------------------------------------------------------ the independent stream table
 
@@ -52,7 +53,13 @@ const ALL: AbilityDef[] = [
   ...Object.values(data.ABILITIES),
   ...FALLBACK_ABILITY_IDS.map((id) => defaultAbilities.get(id) as AbilityDef),
 ];
-const POOL = wiringPool(ALL);
+/**
+ * Rows added after this suite's sample was drawn: the hidden Angra Mainyu chapter's (FFX-2 only, 2026-10-15; other monsters' rows standing in). Adding them to the pool reshuffled the
+ * seeded sample until it drew no Steal at all, so the steal role and its mutant went unchecked: the pool below draws exactly as it did before them, and they are sampled on their own.
+ */
+const LATER_ROWS = new Set(angraMainyuAbilities.map((a) => a.id));
+const POOL = wiringPool(ALL.filter((a) => !LATER_ROWS.has(a.id)));
+const LATER_POOL = wiringPool(ALL.filter((a) => LATER_ROWS.has(a.id)));
 
 // ----------------------------------------------------------------------------------------------------- the engine, tapped
 
@@ -107,13 +114,13 @@ function expectedStream(role: string, userSlot: number, targetSlots: readonly nu
   }
 }
 
-function compare(n: number, make: (seed: number) => GameStreams): { bad: string[]; compared: number; users: Set<string>; roles: Set<string> } {
-  const rng = makeRng(20261011);
+function compare(n: number, make: (seed: number) => GameStreams, pool: readonly AbilityDef[] = POOL, seed = 20261011): { bad: string[]; compared: number; users: Set<string>; roles: Set<string> } {
+  const rng = makeRng(seed);
   const bad: string[] = [];
   const users = new Set<string>();
   const roles = new Set<string>();
   for (let i = 0; i < n; i++) {
-    const sit = randomSituation(rng, POOL);
+    const sit = randomSituation(rng, pool);
     const k = sit.userSide === 'party' ? rng.int(0, 2) : rng.int(0, 7);
     const run = viaEngine(sit, k, make(500 + i));
     // The kernel slots, from the note (the party 0 to 14, the monsters 15 to 30, each side by rank): the user stands behind k dummies of its side.
@@ -179,6 +186,14 @@ describe('the draws of an action come from the stream the table names (written o
   it('MUTANT: Steal on the slot stream is caught', () => {
     const r = compare(400, (seed) => new Mutant((s) => (s === 10 ? 11 : s), seed));
     expect(r.bad.length).toBeGreaterThan(0);
+  });
+
+  it('the hidden Angra Mainyu chapter\'s rows, sampled on their own (200 actions, their own seed): every draw is on the stream its role names', () => {
+    expect(LATER_POOL.length).toBeGreaterThan(8);
+    const r = compare(200, (seed) => makeFfx2Rng(seed), LATER_POOL, 20261015);
+    expect(r.bad.slice(0, 5)).toEqual([]);
+    // They are spells and drains that never miss (no hit roll, no critical) and none spreads random hits (Perdition's Flame has no row, so it is not in a pool of rowed commands): they draw variance, and the knock-out and shatter rolls of a fall.
+    expect([...r.roles].sort()).toEqual(['ko', 'shatter', 'variance']);
   });
 
   it('the same run seed gives the same draws, action after action', () => {
