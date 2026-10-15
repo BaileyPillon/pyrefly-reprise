@@ -107,8 +107,8 @@ Pinned by `tests/unit/chapter-doors.test.ts` (the table gains the row) and the n
 Unit: the records and the loot against the note, field by field; the 11 formations (monster slots, battle ids, stage ids, start gauges, escape off); the command records equal the kernel fixture word for word;
 the aeon formula reproduces `AEON_CANONICAL_STATS` for the three declared Yuna profiles; the preset; the chapter record (not in `CHAPTERS`, found by `getChapter`, number 27, board still 18, the store takes the
 attempt and the clear, the save byte-identical); the chain (Act I to Act II, the plate, the seam on `all-ko`); the door (real `Input`, real board, real title screen, every sibling word); the pause metadata; the
-story lint; the guide and advisor registrations; the scene and canon rows; the seams. Then `tsc --noEmit`, `node tools/orphans.mjs`, `node tools/audio/qa.mjs`. Browser: a production build of this tree on the
-second drive (`vite build` with `BASE_PATH=/` from PowerShell, one dist), headless Playwright from node: the word opens party prep, a frame of party prep, the opening on each act's backdrop; the other words still
+story lint; the guide and advisor registrations; the scene and canon rows; the seams. Then `tsc --noEmit`, `node tools/orphans.mjs`, `node tools/audio/qa.mjs`. Browser: a production build of this tree in a
+separate folder (`vite build` with `BASE_PATH=/` from PowerShell, one dist), headless Playwright from node: the word opens party prep, a frame of party prep, the opening on each act's backdrop; the other words still
 work. Frames under `docs/screenshots/ch-mirror-aeons/`, each looked at.
 
 ## 9. Open questions (for the driver, Bailey or RE)
@@ -130,3 +130,15 @@ work. Frames under `docs/screenshots/ch-mirror-aeons/`, each looked at.
 | the word `yojimbo` | built; `zanmato` is the rejected word, with its control in `tests/unit/yojimbo-door.test.ts` | section 6 |
 | the bench | the harness and its fallback smoke run, the reach measurement (always on), the real ladder `skipIf` the AI and the summon rules are absent | section 3 |
 | the Master and Teleport Spheres | added to the item data with records at `[inferred]` table indices 0x2050 and 0x2062 | the note names the items and not their indices; every Sphere Grid item's row is the same blank row |
+
+## 11. Update, 2026-10-15 (after the reverse-engineering session's second note, `research/re-ffx-dark-aeons.md` at 36c3cdb8, merged)
+
+| Plan or first build | Now | Why |
+|---|---|---|
+| The first note's section 2.2 read the formations' call `ct_7126` as a lock on the matching aeon | **Nothing is barred:** Yuna's own Yojimbo and Magus Sisters are summonable in both acts, against their dark twins | RE note section 9: `ct_7126` is a memory pin on the aeon's loaded data; the game's real lock (script call 0x703B) is used by none of the eleven formations. Proved at the usability gate and in the summon kernel, not yet seen on screen |
+| Yojimbo's starting compatibility 128, "the community says" | 128, **strongly indicated by the owner's saves, live confirmation pending** | RE's lane FFX-K asks the chapter to say so where it gives the value (`data/ffx/builds/mirror-aeons.ts`) |
+| The Master and Teleport Sphere ids `[inferred]` | `[bytes]`: 0x2050 and 0x2062 | RE note 1.3 (the loot rows) |
+| The start gauge 0 outside the trio formations `[inferred]` | `[bytes]` `[run]` | RE note 2.5 and 5.1 |
+| Act II's default: tier 3 `nagi05_72`, the middle of the five | unchanged; **RE recommends tier 2 `nagi05_71`**, and tiers 1 to 3 are the candidates (tiers 4 and 5 leave one to two player actions between Zanmatos) | RE note 2.6; the pick stays the bench's and the driver's |
+| Act I's fallbacks if the trio is out of the band: a pair, then Cindy alone | the pair `kino01_72`; or **the trio at gauge 0, which is OUR adjustment and not a game formation and must be disclosed if it is used** | RE note 2.6: the faithful trio opens with Delta Attack as the third enemy action in 87.5 percent of normal starts |
+| Seams: "the engine's Yojimbo rules read the two constants" | RE's summon engine (`origin/re-parity-ffx-yojimbo-sisters`, lane FFX-K, not final) asks a build for `yojimbo` and `sisters` fields and **throws without them** | the handoff, section 5, says what the merge needs |
