@@ -7,8 +7,9 @@
  * seeds dropped each item at least once, and the draws taken on the two shared streams (10 and 11) when the build has a tap.
  * **Measure, never tune**: nothing here changes a boss or a party number.
  *
- * `PYREFLY_X2C_VARIANT=hunter` plays the same chapters with all three girls in the Thief dressphere with Item Hunter learned (the one
- * reward ability a shipped dressphere teaches), so the drop threshold's `+64` per owner can be measured.
+ * `PYREFLY_X2C_VARIANT=hunter|butterfingers|gillionaire|doubles|triple` plays the same chapters with the three girls' ability words set (Item Hunter, Butterfingers,
+ * Gillionaire, Double AP + Double Items + Double EXP, Double and Triple AP) after each link's `init`, so the reward abilities can be measured with the combat itself
+ * untouched (the words are read by the kill roll only). The base commit ignores them: its columns are the shipped line's.
  *
  * Runs only with `PYREFLY_MEASURE=1`. `PYREFLY_MEASURE_SEEDS=<n>` plays seeds 1 to n (default 12) and `<a>-<b>` plays seeds a to b,
  * `PYREFLY_MEASURE_CHAPTERS=<id,id>` narrows the run, `PYREFLY_MEASURE_OUT=<file>` writes the rows as JSON. The same file runs on
@@ -19,7 +20,7 @@
 
 import { writeFileSync } from 'node:fs';
 import { describe, it } from 'vitest';
-import type { BattleResult, BattleSetup, BattleState, Command, Decision, EnemyGroupDef, FFX2MemberBuild } from '../../src/battle/common/types.ts';
+import type { BattleResult, BattleSetup, BattleState, Command, Decision, EnemyGroupDef } from '../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { findEnemyGroup, setupForChapter, setupForNextLink } from '../../src/app/screens/BattleScreenSetup.ts';
@@ -39,25 +40,22 @@ const MAX_LINKS = 12;
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
-/** The Thief's ladder up to Item Hunter (a shipped dressphere's one reward ability). */
-const HUNTER = ['x2-thief-item-hunter'];
+/**
+ * The ability words a variant lays on the three girls after each `init` (`Ffx2Unit.autoWords`: word 0 `Chr+0x650`, word 1 `Chr+0x652`), so the reward abilities can be
+ * measured with the combat itself untouched (the words are read by the kill roll and, for word 0 and 2, the MP cost; none of these sets an MP bit).
+ */
+const VARIANT_WORDS: Readonly<Record<string, readonly [number, number, number]>> = {
+  hunter: [0, 0x0200, 0], // Item Hunter on all three girls: +64 each on the drop byte
+  butterfingers: [0, 0x0002, 0], // the rare slot is certain when an item drops
+  gillionaire: [0, 0x0010, 0], // gil x2 per owner: x8
+  doubles: [0x1000, 0x0020 | 0x0040, 0], // Double AP, Double Items, Double EXP on all three
+  triple: [0x3000, 0, 0], // Double AP and Triple AP: x6
+};
 
-function dressed(m: FFX2MemberBuild, sphere: string, learned: string[]): FFX2MemberBuild {
-  return {
-    ...m,
-    currentDressphere: sphere,
-    owned: [...new Set([sphere, ...m.owned])],
-    abilitiesLearned: { ...m.abilitiesLearned, [sphere]: { learned: [...learned], ap: 0 } },
-  };
-}
-
-/** The variant's loadout laid on a chapter's opening party. */
-function withVariant(setup: BattleSetup): BattleSetup {
-  if (VARIANT === 'none' || setup.party.game !== 'ffx2') return setup;
-  const [a, b, c] = setup.party.members;
-  if (a === undefined || b === undefined || c === undefined) return setup;
-  const members: [FFX2MemberBuild, FFX2MemberBuild, FFX2MemberBuild] = [dressed(a, 'thief', HUNTER), dressed(b, 'thief', HUNTER), dressed(c, 'thief', HUNTER)];
-  return { ...setup, party: { ...setup.party, members } };
+function withVariant(engine: FFX2Engine): void {
+  const words = VARIANT_WORDS[VARIANT];
+  if (words === undefined) return;
+  for (const unit of (engine as unknown as { units: Array<{ side: string; autoWords?: readonly [number, number, number] }> }).units) if (unit.side === 'party') unit.autoWords = words;
 }
 
 interface One {
@@ -74,11 +72,12 @@ function fallback(d: Input): Command {
 }
 
 async function playChain(chapter: Chapter, seed: number): Promise<One> {
-  let setup: BattleSetup = withVariant(setupForChapter(chapter, seed));
+  let setup: BattleSetup = setupForChapter(chapter, seed);
   let group: EnemyGroupDef = chapter.enemyGroupRef;
   const engine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
   engine.setSeed(setup.seed);
   engine.init(setup);
+  withVariant(engine);
   const one: One = { outcome: 'unresolved', links: [] };
   let link = 1;
   for (let step = 0; step < MAX_STEPS; step += 1) {
@@ -99,6 +98,7 @@ async function playChain(chapter: Chapter, seed: number): Promise<One> {
       link += 1;
       engine.setSeed(setup.seed);
       engine.init(setup);
+      withVariant(engine);
       continue;
     }
     engine.submit(intendedStrategy(d.actorId, d.commands, engine as never) ?? fallback(d));

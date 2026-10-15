@@ -81,7 +81,7 @@ function stateOf(spec: SideSpec): OState {
  * The roles of the draws a situation takes, in order, with the kernels run on `raws` (the values a real generator gave the engine) instead of
  * the situation's scripted ones; `used` is how many of them the kernels consumed. A role is one of: row (a Roulette pick), hit, pick (a
  * random-target pick), variance, crit, status, shatter, steal, stealSlot, pilfer, bribe, bribeSlot, rider (an engine status with no slot in the
- * game's tables), and `ko:i` / `phase:i` for target `i` (its gauge reset after a knock-out, its Poison or Regen phase).
+ * game's tables), and `ko:i` / `phase:i` / `reward:i` for target `i` (its gauge reset after a knock-out, its Poison or Regen phase, the reward roll's draw on stream 10).
  */
 export function oracleRoles(sit: Situation, raws: readonly number[]): { roles: string[]; used: number } {
   const roles: string[] = [];
@@ -316,6 +316,8 @@ export function oracleRun(sit: Situation, opts: { raws?: readonly number[]; role
     const st = states[i] as OState;
     // Re-parity W4: the knock-out routine (`pp_ko_resolve`) re-initialises the gauge first, and `MsChrAtbInit` draws once (% 64).
     raw(63, `ko:${i}`);
+    // Re-parity RC9 (lane X2-C): then the knock-out resolution's reward roll, one draw on stream 10 whoever fell and whatever it carries (note FFX2-G03 4.2); a drop's second draw cannot happen here (these units carry no row).
+    raw(254, `reward:${i}`);
     st.dead = true;
     st.hp = 0;
     st.g1 |= 1; // the KO status
@@ -339,7 +341,11 @@ export function oracleRun(sit: Situation, opts: { raws?: readonly number[]; role
     // accumulator at a random phase, one draw % (16000 / 4 + 1), group 1 before group 2.
     if ((next & 0x20) !== 0 && (prevG1 & 0x20) === 0) raw(4000, `phase:${i}`);
     if (((st.g2[3] as number) << 24 >> 24) > 0 && prevRegen === 0) raw(4000, `phase:${i}`);
-    if ((next & 0x400) !== 0 && (prevG1 & 0x400) === 0) st.removed = true;
+    if ((next & 0x400) !== 0 && (prevG1 & 0x400) === 0) {
+      st.removed = true;
+      // An Eject runs the knock-out resolution too, and its reward roll, unless the command is Steal Will or a Bribe (note FFX2-G03 4.1; re-parity RC9, lane X2-C).
+      if (sit.def.id !== 'x2-thief-steal-will' && sit.def.id !== 'x2-lady-luck-bribe') raw(254, `reward:${i}`);
+    }
     // the engine's own rule, which the game's code does not have (`statuses.ts applyStatus`, left for W4): Stop wipes Sleep, Confusion and Berserk
     if (prevStop === 0 && (st.g2[6] as number) !== 0) st.g1 &= ~(0x4 | 0x40 | 0x80);
   }

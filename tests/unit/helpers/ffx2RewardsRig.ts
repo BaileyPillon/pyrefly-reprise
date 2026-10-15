@@ -71,6 +71,12 @@ export class RewardsProbe extends FFX2Engine {
     for (let i = 0; i < hits; i++) bumpChain(target, i, false);
   }
 
+  /** The chain window ran out (`advanceChainWindows`): the counter is 0 and the window is closed; the best the target ever reached stays. */
+  expireChain(target: Ffx2Unit): void {
+    target.chainCount = 0;
+    target.chainWindowTicks = 0;
+  }
+
   /** The result record the battle-end check would build for `outcome` now. */
   result(outcome: BattleResult['outcome'] = 'victory'): BattleResult {
     return buildResult(this.units, this.battleState, outcome, 0);

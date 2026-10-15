@@ -13,8 +13,14 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { Command, EnemyFields } from '../../src/battle/common/types.ts';
-import { board, type RewardsProbe } from './helpers/ffx2RewardsRig.ts';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import type { GameStreams } from '../../src/battle/common/streams.ts';
+import type { BattleEvent, Command, EnemyFields } from '../../src/battle/common/types.ts';
+import type { FFX2Engine } from '../../src/battle/ffx2/index.ts';
+import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
+import { driveChapter5 } from './helpers/ffx2ChapterDrive.ts';
+import { board, type RewardsProbe, type Tapped } from './helpers/ffx2RewardsRig.ts';
 
 const ACT_I = 'ffx2-leblanc-entrance';
 
@@ -84,12 +90,19 @@ describe('a knock-out pays at once (the KO resolution), not the victory', () => 
 });
 
 describe('the drop roll (4.7): the byte, the chains, Item Hunter, the rare slot', () => {
-  /** Kill Dr. Goon on `seed` after `hits` hits in a chain, with the owners' words, and return what the engine dropped and the streams it drew. */
-  function goon(seed: number, hits = 0, w1 = 0): { items: string[]; counts: number[]; streams: number[] } {
+  /**
+   * Kill Dr. Goon on `seed` after `hits` hits in a chain (and, when `then` is above 0, after the window ran out and `then` more hits made a new chain),
+   * with the owners' words, and return what the engine dropped and the streams it drew.
+   */
+  function goon(seed: number, hits = 0, w1 = 0, then = 0): { items: string[]; counts: number[]; streams: number[] } {
     const p = board(ACT_I, seed);
     word(p, 0, w1);
     const drGoon = p.enemy('dr-goon');
     p.chained(drGoon, hits);
+    if (then > 0) {
+      p.expireChain(drGoon);
+      p.chained(drGoon, then);
+    }
     p.kill(drGoon);
     return { items: dropIds(p), counts: p.result().drops.map((d) => d.count), streams: p.rewardDraws.map((d) => d.stream) };
   }
@@ -98,9 +111,8 @@ describe('the drop roll (4.7): the byte, the chains, Item Hunter, the rare slot'
    * The note's rule, written from the raw values the generator will hand out: the byte is 128; q = the stream-10 draw mod 255 must be below 128 + best + current
    * chain + 64 per Item Hunter owner; the stream-11 draw and 255 below 32 m + best + current chain picks the rare Grenade over the common Potion.
    */
-  function oracle(seed: number, hits: number, hunters: number, m: number): { items: string[]; streams: number[] } {
+  function oracle(seed: number, chains: number, hunters: number, m: number): { items: string[]; streams: number[] } {
     const p = board(ACT_I, seed);
-    const chains = 2 * hits; // best and current are both `hits`
     if (p.peek(10) % 255 >= 128 + chains + 64 * hunters) return { items: [], streams: [10] };
     return { items: [(p.peek(11) & 255) < 32 * m + chains ? 'x2-grenade' : 'x2-potion'], streams: [10, 11] };
   }
@@ -126,12 +138,22 @@ describe('the drop roll (4.7): the byte, the chains, Item Hunter, the rare slot'
     let rareMore = 0;
     for (let seed = 1; seed <= 120; seed++) {
       const got = goon(seed, 20);
-      expect({ items: got.items, streams: got.streams }, `seed ${seed}`).toEqual(oracle(seed, 20, 0, 1));
+      expect({ items: got.items, streams: got.streams }, `seed ${seed}`).toEqual(oracle(seed, 40, 0, 1)); // best 20 + current 20
       if (got.items.length > 0 && oracle(seed, 0, 0, 1).items.length === 0) drewMore += 1; // a seed that drops only because of the chain
       if (got.items[0] === 'x2-grenade' && oracle(seed, 0, 0, 1).items[0] === 'x2-potion') rareMore += 1; // a seed that is rare only because of the chain
     }
     expect(drewMore).toBeGreaterThan(0);
     expect(rareMore).toBeGreaterThan(0);
+  });
+
+  it('the best chain stays when the window runs out: 40 hits, the chain breaks, 2 more hits make best 40 + current 2', () => {
+    let dearer = 0;
+    for (let seed = 1; seed <= 120; seed++) {
+      const got = goon(seed, 40, 0, 2);
+      expect({ items: got.items, streams: got.streams }, `seed ${seed}`).toEqual(oracle(seed, 42, 0, 1));
+      if (got.items.length > 0 && oracle(seed, 4, 0, 1).items.length === 0) dearer += 1; // a seed that drops only because the best chain was remembered
+    }
+    expect(dearer).toBeGreaterThan(0);
   });
 
   it('Item Hunter adds 64 per owner to the byte, and never to the rare share; Butterfingers makes the rare slot certain and does not compound', () => {
@@ -273,4 +295,69 @@ describe('the results line and the other seams', () => {
     expect(steal.landed).toBe(true);
     expect(steal.paid).toBe(0); // the pay flag is cleared: no roll, no draw
   });
+});
+
+describe('Chapter V\'s whole chain on the shipped line: the accounting oracle (the event log, the tapped draws and the reader\'s fixture)', () => {
+  interface Row {
+    exp: number;
+    ap: number;
+    gil: number;
+    dropByte: number;
+    drop: number[];
+  }
+  const ROWS = JSON.parse(readFileSync(fileURLToPath(new URL('../fixtures/parity/ffx2/kill_reward_rows.json', import.meta.url)), 'utf8')) as Record<string, Row>;
+
+  /** Every link's tapped draws: the engine's generator is replaced at each `init`, so the tap goes on right after it. */
+  function chain(seed: number): { logs: BattleEvent[][]; taps: Tapped[][] } {
+    const taps: Tapped[][] = [];
+    const prepare = (e: FFX2Engine): void => {
+      const init = e.init.bind(e);
+      e.init = (setup): void => {
+        init(setup);
+        const t: Tapped[] = [];
+        taps.push(t);
+        (e as unknown as { rng: GameStreams }).rng.tap = (stream, value) => t.push({ stream, value });
+      };
+    };
+    return { logs: driveChapter5(seed, 0, {}, prepare).logs, taps };
+  }
+
+  it('each link pays exactly the rows of the monsters that fell in it, the draws are one on stream 10 per knock-out and one on stream 11 per item, and the Nodes pay nothing', () => {
+    let kos = 0;
+    let bulwarkKos = 0;
+    let nodeKos = 0;
+    for (let seed = 1; seed <= 4; seed++) {
+      const { logs, taps } = chain(seed);
+      expect(logs.length, `seed ${seed}`).toBe(VEGNAGUN_CHAIN_ORDER.length);
+      logs.forEach((log, i) => {
+        const group = VEGNAGUN_CHAIN_ORDER[i]!;
+        const label = `seed ${seed} link ${i + 1} (${group})`;
+        const fell = log.filter((e): e is Extract<BattleEvent, { type: 'ko' }> => e.type === 'ko').map((e) => e.targetId);
+        const paying = fell.filter((id) => ROWS[`${group}/${id}`] !== undefined).map((id) => ROWS[`${group}/${id}`]!);
+        const victory = log.find((e): e is Extract<BattleEvent, { type: 'victory' }> => e.type === 'victory');
+        expect(victory, label).toBeDefined();
+        const r = victory!.result;
+        // the totals: the rows of the fallen, nothing else (no ability on the shipped line, so no multiplier), and a girl is credited at most 99 AP in a battle
+        // (the Head's two Redoubts fall again and again, ten AP each time)
+        expect([r.exp, r.ap, r.gil], label).toEqual([paying.reduce((s, x) => s + x.exp, 0), Math.min(99, paying.reduce((s, x) => s + x.ap, 0)), paying.reduce((s, x) => s + x.gil, 0)]);
+        // the draws: one on stream 10 for every knock-out (a girl's too) and one on stream 11 for every item that dropped; no theft in this line
+        expect(log.some((e) => e.type === 'message' && /stole|pilfer|bribe/i.test(e.text)), label).toBe(false);
+        const t = taps[i]!;
+        expect(t.filter((d) => d.stream === 10).length, label).toBe(fell.length);
+        const items = r.drops.reduce((s, d) => s + d.count, 0);
+        expect(t.filter((d) => d.stream === 11).length, label).toBe(items);
+        // the items: a 255 byte drops once, a 0 byte never, 128 at most once, each from the row's two slots
+        const sure = paying.filter((x) => x.dropByte === 255).length;
+        const maybe = paying.filter((x) => x.dropByte === 128).length;
+        expect(items, label).toBeGreaterThanOrEqual(sure);
+        expect(items, label).toBeLessThanOrEqual(sure + maybe);
+        kos += fell.length;
+        bulwarkKos += fell.filter((id) => id.startsWith('bulwark')).length;
+        nodeKos += fell.filter((id) => id.startsWith('node-')).length;
+      });
+    }
+    expect(kos).toBeGreaterThan(20);
+    expect(nodeKos).toBe(0); // the three Nodes carry 300,000 HP and the fight never asks the party to kill them: they pay nothing now
+    expect(bulwarkKos).toBeGreaterThanOrEqual(0);
+  }, 300_000);
 });

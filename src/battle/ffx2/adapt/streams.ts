@@ -14,6 +14,7 @@
  * | the first-strike roll, the reset it triggers | 1 (the roll), the unit's own (the reset) | `re-ffx2-atb-status.md` section 4 |
  * | the target of each hit of a random-target row | 5 (`value % candidates`, ascending slot order, no draw under two) | `re-ffx2-hit-status.md` 2.6 |
  * | Steal, Pilfer Gil, Bribe | 10 and 11 | `re-ffx2-hit-status.md` 5; the kernels pass them |
+ * | the kill-reward roll: one draw on 10 at EVERY knock-out (a girl's too), a draw on 11 when an item drops | 10 and 11 | FFX2-G03 4.2 and 6; `kill-rewards.ts` (re-parity RC9, lane X2-C) |
  * | a script's `random()` | 2, the low 16 bits | `re-ffx2-ai-*.md` |
  * | a script's target search (`searchr`, `searchr_nop`) | 4 | `re-ffx2-ai-*.md` |
  *
