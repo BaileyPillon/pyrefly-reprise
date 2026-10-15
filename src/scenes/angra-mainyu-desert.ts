@@ -17,8 +17,10 @@ import type { SceneSlots } from './index.ts';
 // Game case: FFX-2 only [AGENTS.md rule 14]. The hidden chapter "Angra Mainyu" (the Chapter 5 mission "Showdown in the Sands": the body and its two arms at the Al Bhed excavation camp). No FFX chapter stands here.
 //
 // THE PAINTING IS NEW AND PROVISIONAL (rule 9). None of the approved plates is a desert, so the stage is a local render, `backdrops/bikanel-desert-provisional` (2688 x 1536: dunes, a buried arch, a dug-in camp, a half-buried
-// machina wreck, mesas under a cloudy sky), installed as a NEW file in the art mirror; nothing approved is replaced. It is framed here the way the Djose plates are: a wide plane far behind the stage, cropped by
-// the FFX-2 camera so the dunes sit under the fighters.
+// machina wreck, mesas under a cloudy sky), installed as a NEW file in the art mirror; nothing approved is replaced. It is framed here the way the Djose plates are, a wide plane far behind the stage cropped by the FFX-2 camera, but solved in the browser
+// at 1600x900 and 390x844 for THIS plate: the idle camera sees about 40 percent of it, and the window that reads as a desert is the upper right (the mesa, the bright sky, the sunlit dunes), so the plane is slid 27 left
+// and lowered 23; the plate's lower left (the camp and the dark flank of the buried arch) is a window of near-black shadow and blown sunlit sand in this pipeline, which was made for dark plates. A 3D floor tinted to the
+// sand grounds the fighters; the grade takes the highlights down and keeps the painted figures out of the plate's bloom.
 //
 // The camera rigs, the party slots, the girls' world height and the phone dolly are Chapter V's and Chapter XVI's (`./djose-chamber.ts`): the FFX-2 HUD is solved against them. **Where the three bodies stand and
 // how tall they are is staging, ours, not game data**: the game's own start positions are the boss at (-45, -13) and the girls at (23, 29), (33, 11) and (32, -9) (the RE note, numbers for the AI's searches only,
@@ -28,12 +30,12 @@ import type { SceneSlots } from './index.ts';
 export const ANGRA_MAINYU_FRAME: DjosePlateFrame = {
   width: 150,
   distance: -48,
-  centreY: 3.0,
-  shiftX: 0,
-  horizon: [0.3, 0.36],
-  groundBand: [0.82, 0.97],
+  centreY: -23,
+  shiftX: -27,
+  horizon: [0.2, 0.3],
+  groundBand: [0.25, 0.45],
   floor: true,
-  phoneCentreY: 3.0,
+  phoneCentreY: -23,
 };
 
 /**
@@ -46,11 +48,11 @@ export const TAWRICH_FIGURE_HEIGHT = 2.7;
 
 /**
  * Where the three stand (staging, ours): the body back and right of the middle, Zarich (the left arm) and Tawrich (the right arm) either side of it and a little nearer the girls, beside the boss as the driver ruled.
- * Solved in the browser at 1600x900 and 390x844 (the first menu).
+ * Solved in the browser at 1600x900 and 390x844 (the first menu): the body at the back, the arms in front of it, and none of the three under the right-hand command menu or the enemy card.
  */
-export const ANGRA_MAINYU_SPOT: [number, number, number] = [3.4, 0, -8.6];
-export const ZARICH_SPOT: [number, number, number] = [0.4, 0, -6.0];
-export const TAWRICH_SPOT: [number, number, number] = [6.8, 0, -6.2];
+export const ANGRA_MAINYU_SPOT: [number, number, number] = [3.0, 0, -9.0];
+export const ZARICH_SPOT: [number, number, number] = [0.9, 0, -5.2];
+export const TAWRICH_SPOT: [number, number, number] = [3.2, 0, -3.7];
 /** The enemy slots by the game's slot order: the body, Tawrich, Zarich. */
 const ENEMY_SLOTS: Array<[number, number, number]> = [ANGRA_MAINYU_SPOT, TAWRICH_SPOT, ZARICH_SPOT];
 
@@ -72,19 +74,20 @@ export const ANGRA_MAINYU_SLOTS: SceneSlots = {
 /** A hot, bright desert grade: the painting's own warm light kept, the shadows a cool sand-blue, a little more bloom than the caves. */
 export const ANGRA_MAINYU_PALETTE: ScenePalette = {
   name: 'ffx2-angra-mainyu-desert',
-  lift: [0.01, 0.008, 0.006],
-  gamma: [1.0, 0.99, 0.97],
-  gain: [1.03, 1.0, 0.95],
-  saturation: 1.0,
-  vignette: 0.34,
+  lift: [0.012, 0.01, 0.01],
+  gamma: [1.0, 1.0, 1.0],
+  gain: [0.84, 0.82, 0.78],
+  saturation: 0.95,
+  vignette: 0.3,
   vignetteRadius: 0.7,
   shadowTint: [0.5, 0.46, 0.5],
   shadowTintAmount: 0.12,
   grain: 0.02,
   exposure: 1.0,
-  bloomThreshold: 0.88,
-  bloomStrength: 0.34,
+  bloomThreshold: 0.94,
+  bloomStrength: 0.12,
   bloomRadius: 0.55,
+  figureBloomMask: 0.85,
   tiltFocus: 0.55,
   tiltBandWidth: 0.2,
   tiltMaxBlur: 2.6,
@@ -100,9 +103,9 @@ function plateOptions(url: string, low: boolean, cameraRef: [number, number, num
     cameraRef,
     layers: [],
     sampleBands: { sky: [0.02, 0.14], horizon: frame.horizon, ground: frame.groundBand, key: [0.3, 0.55] },
-    ground: frame.floor ? { size: 44, repeat: 5, tintMix: 0.55, luma: 0.62, fade: true, fadeCore: 0.45, center: [3.0, 0.5] as [number, number] } : false,
+    ground: frame.floor ? { size: 44, repeat: 5, tintMix: 0.6, luma: 0.74, fade: true, fadeCore: 0.45, center: [3.0, 0.5] as [number, number] } : false,
     fog: { near: 20, far: 52, colorMix: 0.2 },
-    fogPlanes: low ? [] : [{ z: -9, y: 0.5, width: 34, height: 3.0, opacity: 0.07, speed: 0.012, additive: true }],
+    fogPlanes: low ? [] : [{ z: -9, y: 0.5, width: 34, height: 3.0, opacity: 0.04, speed: 0.012, additive: true }],
     background: 0x9a8f86,
   };
 }
@@ -129,9 +132,9 @@ export const buildAngraMainyuDesertScene: SceneFactory = async (opts: SceneBuild
     keyIntensity: 1.35,
     rimFrom: [-5.2, 3.2, -4.6],
     rimColor: 0xffe2b8,
-    rimIntensity: 0.8,
+    rimIntensity: 0.55,
     fillIntensity: 0.9,
-    ambientIntensity: 0.66,
+    ambientIntensity: 0.72,
     luma: { key: 0.88, fill: 0.7, rim: 0.82, ambient: 0.56 },
     shadows: false,
   });

@@ -3,7 +3,7 @@
  *
  * What is proved here, and against what:
  *
- * 1. **Which stream each draw of an action comes from.** For 400 generated actions, by user (a girl in each party slot, a monster
+ * 1. **Which stream each draw of an action comes from.** For 2,000 generated actions, by user (a girl in each party slot, a monster
  *    in each of the first eight monster slots), the real `resolveAbility` runs on FFX-2's own 68 streams with every draw
  *    recorded; the kernels then run on the SAME recorded values, in the game's order (`helpers/ffx2WiringOracle.ts`, which
  *    imports nothing from the engine's adapters), each draw labelled by its role (hit roll, random-target pick, variance, critical
@@ -53,6 +53,13 @@ const ALL: AbilityDef[] = [
   ...FALLBACK_ABILITY_IDS.map((id) => defaultAbilities.get(id) as AbilityDef),
 ];
 const POOL = wiringPool(ALL);
+
+/**
+ * How many actions each comparison generates. The sample is drawn from the pool of every registered ability, so adding abilities (a new hidden chapter adds a dozen) moves the whole sample, and the checks that it
+ * "reaches every kind of draw" and that the Steal mutant is caught depend on it holding a Steal: the pool has one (`x2-thief-steal`) among about 280, so 400 draws miss it about one time in four, and did on the sample
+ * the Angra Mainyu chapter's rows produced; 2,000 make that less than one in a thousand and cost half a second.
+ */
+const SAMPLE = 2000;
 
 // ----------------------------------------------------------------------------------------------------- the engine, tapped
 
@@ -147,8 +154,8 @@ describe('the draws of an action come from the stream the table names (written o
     expect(POOL.length).toBeGreaterThan(120);
   });
 
-  it('400 generated actions: every draw is on the stream its role names, for each girl slot and monster slot', () => {
-    const r = compare(400, (seed) => makeFfx2Rng(seed));
+  it('2,000 generated actions: every draw is on the stream its role names, for each girl slot and monster slot', () => {
+    const r = compare(SAMPLE, (seed) => makeFfx2Rng(seed));
     expect(r.bad.slice(0, 5)).toEqual([]);
     expect([...r.users].filter((u) => u.startsWith('enemy')).length).toBeGreaterThanOrEqual(8);
     expect([...r.users].filter((u) => u.startsWith('party')).length).toBe(3);
@@ -157,27 +164,27 @@ describe('the draws of an action come from the stream the table names (written o
   });
 
   it('MUTANT: the hit roll on the variance stream is caught', () => {
-    const r = compare(400, (seed) => new Mutant((s) => (s >= 36 && s <= 51 ? s - 16 : s), seed));
+    const r = compare(SAMPLE, (seed) => new Mutant((s) => (s >= 36 && s <= 51 ? s - 16 : s), seed));
     expect(r.bad.length).toBeGreaterThan(20);
   });
 
   it('MUTANT: the status roll on the hit stream is caught', () => {
-    const r = compare(400, (seed) => new Mutant((s) => (s >= 52 && s <= 67 ? s - 16 : s), seed));
+    const r = compare(SAMPLE, (seed) => new Mutant((s) => (s >= 52 && s <= 67 ? s - 16 : s), seed));
     expect(r.bad.length).toBeGreaterThan(5);
   });
 
   it('MUTANT: the monsters at FFX\'s offset (slot + 8) are caught', () => {
-    const r = compare(400, (seed) => new Mutant((s) => (s >= 28 && s <= 43 ? s + 1 : s), seed));
+    const r = compare(SAMPLE, (seed) => new Mutant((s) => (s >= 28 && s <= 43 ? s + 1 : s), seed));
     expect(r.bad.length).toBeGreaterThan(50);
   });
 
   it('MUTANT: the random-target pick on the search stream is caught', () => {
-    const r = compare(400, (seed) => new Mutant((s) => (s === 5 ? 4 : s), seed));
+    const r = compare(SAMPLE, (seed) => new Mutant((s) => (s === 5 ? 4 : s), seed));
     expect(r.bad.length).toBeGreaterThan(0);
   });
 
   it('MUTANT: Steal on the slot stream is caught', () => {
-    const r = compare(400, (seed) => new Mutant((s) => (s === 10 ? 11 : s), seed));
+    const r = compare(SAMPLE, (seed) => new Mutant((s) => (s === 10 ? 11 : s), seed));
     expect(r.bad.length).toBeGreaterThan(0);
   });
 

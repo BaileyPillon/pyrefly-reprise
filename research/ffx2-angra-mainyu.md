@@ -138,6 +138,17 @@ No source in this note describes the body in words beyond "a unique design" and 
 
 ---
 
+## 8. What the game's own files settle (from `research/re-ffx2-angra-mainyu.md`, 2026-10-14; the guide card cites this section)
+
+The RE session read the game's rows, its three AI scripts and the scene's start positions after the first build above was written. Where it speaks it wins; this section keeps the facts the guide and the first build lean on in one place, in the corpus's own form.
+
+1. **The types of the moves** (the RE note's section 10, the move rows). Perdition's Flame is **physical** and never misses: Protect halves it and Shell does not. Flare, Demi and Zarich's four Ga spells are **magical**: Shell halves them. Punch is physical and is the only move that rolls to hit. Bio and Bloody Breath leave a status (Poison; Silence, Darkness, Poison, Confusion) and Glimmer of Despair takes MP and lowers four stats; none of those three is a blow. `[RE rows, verified]`
+2. **The body's order** (the RE note's section 9.5, the script `m268`): the first poll is the opening Flame (HP at least 80 percent); Osmose below 200 MP; Full-Life on a fallen arm, Tawrich before Zarich; the Flame again when the poll counter reaches 15, so on polls 1, 8, 23, 38 and 53; otherwise one roll of five: Flare, Curaga on an arm, Bio, Demi, Demi. This settles items 4 and 5 of section 7: **Bio is in the roll** and the 15-poll clock is the script's own. `[RE script, verified]`
+3. **Zarich and Tawrich** (the RE note's sections 9.7 and 9.8): Zarich opens with Glimmer of Despair and then goes round Firaga, Waterga, Thundaga and Blizzaga, with a Glimmer on every seventh poll; Tawrich throws seven Punches and then a Bloody Breath. `[RE script, verified]`
+4. **Where the rows beat the wiki:** Gravity is nulled on all three (not halved), Reflect lands on the body (not immune), Accuracy is 95 and Evasion 0, and Zarich's Defense and Tawrich's Magic Defense are 0. Items 2 and 6 of section 7 stay as written: the arms' immunities are the one point the rows only hint at (`[inferred]`, group-2 slots 15 and 16). `[RE rows, verified]`
+
+---
+
 ## Sources
 
 - Final Fantasy Wiki (Fandom), through the MediaWiki API: *Angra Mainyu (Final Fantasy X-2)* rev 4041096; *Tawrich* rev 3573851; *Zarich* rev 3573852; *Final Fantasy X-2 enemy abilities* rev 3998493; *Excavation minigame*; *Episode Complete*; *Final Fantasy X-2 OST*.

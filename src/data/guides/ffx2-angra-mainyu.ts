@@ -25,7 +25,7 @@ const RULES: GuideRule[] = [
   {
     text: 'Perdition’s Flame is the move to fear: ten hits, each on a girl it picks at random, each for nearly a fifth of her full health. It is a blow, so Protect halves it. Heal the moment it lands.',
     short: 'Protect, and heal after the Flame',
-    cite: 're-ffx2-angra-mainyu §10',
+    cite: 'ffx2-angra-mainyu §8',
   },
   {
     text: 'Zarich, the left arm, shrugs off blows, and Tawrich, the right, shrugs off spells. Darkness is neither, so a Dark Knight’s Darkness reaches all three. Two Dark Knights and one healer is the line.',
@@ -51,8 +51,8 @@ const RULES: GuideRule[] = [
 
 const HINTS: GuideHint[] = [
   { when: { labels: ['Darkness'] }, text: 'Darkness is neither a blow nor a spell, so it reaches Angra Mainyu and both arms, and it costs HP, not MP', cite: 'ffx2-angra-mainyu §5' },
-  { when: { labels: ['Protect'] }, text: 'Protect for the party: it halves Perdition’s Flame and Tawrich’s Punch', cite: 're-ffx2-angra-mainyu §10' },
-  { when: { labels: ['Shell'] }, text: 'Shell for the party: it halves Flare, Demi and Zarich’s spells (not the Flame)', cite: 're-ffx2-angra-mainyu §10' },
+  { when: { labels: ['Protect'] }, text: 'Protect for the party: it halves Perdition’s Flame and Tawrich’s Punch', cite: 'ffx2-angra-mainyu §8' },
+  { when: { labels: ['Shell'] }, text: 'Shell for the party: it halves Flare, Demi and Zarich’s spells (not the Flame)', cite: 'ffx2-angra-mainyu §8' },
   { when: { labels: ['Mega-Potion'] }, text: 'Two girls are low: a Mega-Potion tops up everyone before the next Flame', cite: 'ffx2-angra-mainyu §5' },
   { when: { labels: ['Curaga', 'Cura', 'Hi-Potion'] }, text: 'Top {target} up before the next Flame', cite: 'ffx2-angra-mainyu §5' },
   { when: { labels: ['Phoenix Down', 'Life'] }, text: 'Stand {target} back up: the Flame can drop a girl', cite: 'ffx2-angra-mainyu §3' },
@@ -65,7 +65,7 @@ const PHASES: GuidePhase[] = [
   {
     label: 'ANGRA MAINYU',
     note: 'The banner names each move as it starts. The Flame opens the fight and comes again a few turns later, then every fifteenth turn of the body’s.',
-    cite: 're-ffx2-angra-mainyu §9.5',
+    cite: 'ffx2-angra-mainyu §8',
   },
 ];
 

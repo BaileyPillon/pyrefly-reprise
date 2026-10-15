@@ -39,8 +39,7 @@ export const ANGRA_MAINYU_TEXT = {
   subtitle: 'A fiend the Cactuars buried, and the two arms it fights with',
   location: 'Bikanel Desert — the Al Bhed excavation camp',
   blurb:
-    'The Al Bhed dug deep, and what the Cactuars sealed under the sand has woken. The gatekeepers have turned it from their home, so it comes for the dig camp instead, with a second pair of hands. ' +
-    'The Gullwings have a camp to save and three bodies to get through.',
+    'The Al Bhed dug deep, and what the Cactuars sealed under the sand has woken. It comes for the dig camp with a second pair of hands, and the Gullwings have three bodies to get through.',
 } as const;
 
 /** Angra Mainyu's chapter record. */
