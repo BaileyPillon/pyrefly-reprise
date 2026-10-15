@@ -233,6 +233,13 @@ describe('A6 and A7: Fury\'s casts come from the game\'s table', () => {
     const events = engine.submit({ kind: 'overdrive', id: 'fire-fury', targets: ['dummy'], extra: { kind: 'lulu-fury', fury: { sweptDegrees: 0, casts: 0 } } });
     expect(events.filter((e) => e.type === 'damage' || e.type === 'miss')).toHaveLength(1);
   });
+  it('a part of a rotation buys nothing: the angle counts whole rotations only (359 degrees is none, 540 is one, 719 is one)', () => {
+    // Fire Fury at Magic 128 takes row 3: T 1 2 3 4 5 6 7 8 10 ...; the counter starts at 1 and each whole rotation adds 1, so 0 rotations buy 1 cast, 1 buys 2, 2 buy 3, 3 buy 4.
+    // The headless roll hands the engine any whole number of degrees from 1,800 to 5,400, so the floor to whole rotations is what scores it (a rounded angle would give one more).
+    const fire = LULU_1['fire-fury'] as AbilityDef;
+    const at = (degrees: number): number => furyCastsFor(fire, 128, degrees);
+    expect([0, 359, 360, 540, 719, 720, 1079, 1080].map(at)).toEqual([1, 1, 2, 2, 2, 3, 3, 4]);
+  });
   it('a result that reports casts and no angle is taken as it is (a test rig\'s), 1 to 16', () => {
     const engine = furyEngine(40);
     const events = engine.submit({ kind: 'overdrive', id: 'fire-fury', targets: ['dummy'], extra: { kind: 'lulu-fury', fury: { sweptDegrees: 0, casts: 9 } } });
@@ -367,6 +374,21 @@ describe('the three overlays run the game\'s controllers on the engine\'s params
     expect(o.result()).toMatchObject({ kind: 'auron-sequence', sequence: { success: true, correctInputs: 2 } });
   });
 
+  it('Bushido: two keys inside one frame are one word that matches nothing, even when the second of them is the right one', async () => {
+    const o = open('auron-sequence', { sequence: ['up', 'down'], timerMs: 4000, name: 'Test' });
+    key('KeyF'); // L1: a wrong key ...
+    key('ArrowUp'); // ... and the right input, in the same 1/30 s frame: the pad's pressed word holds both bits, which is no word of the sequence
+    await vi.advanceTimersByTimeAsync(100);
+    expect(o.root.querySelectorAll('.ig-minigame__key--done').length).toBe(0); // nothing counted: the second key did not rescue the first
+    expect(o.root.querySelectorAll('.ffx-mg-key--wrong').length).toBe(1); // the missed chip is marked
+    await vi.advanceTimersByTimeAsync(300); // the wrong mark clears; the run goes on from input 1
+    key('ArrowUp');
+    await vi.advanceTimersByTimeAsync(100);
+    key('ArrowDown');
+    await vi.advanceTimersByTimeAsync(600);
+    expect(o.result()).toMatchObject({ kind: 'auron-sequence', sequence: { success: true, correctInputs: 2 } });
+  });
+
   it('Fury: a step is a left and a right press and two steps are a rotation; four pairs at Magic 20 make four steps, two rotations and two casts', async () => {
     const p = minigameParams(
       { rt: { inventory: new Map() }, content: furyContent() } as never,
@@ -406,5 +428,46 @@ describe('the three overlays run the game\'s controllers on the engine\'s params
     expect(o.root.querySelector('[data-role="counter"]')?.textContent).toBe('1');
     await vi.advanceTimersByTimeAsync(4500);
     expect(o.result()).toEqual({ kind: 'lulu-fury', fury: { sweptDegrees: 0, casts: 1 } });
+  });
+
+  it('Fury: Left and Right both held down (the keyboard\'s auto-repeat on each side) make one step, not a stream of them', async () => {
+    const p = minigameParams(
+      { rt: { inventory: new Map() }, content: furyContent() } as never,
+      LULU_1['fire-fury'] as AbilityDef,
+      member({ id: 'lulu', stats: { ...member({ id: 'x' }).stats, mag: 20 } }) as unknown as FFXCombatant,
+    );
+    const o = open('lulu-fury', p);
+    const repeat = (code: string): void => {
+      window.dispatchEvent(new KeyboardEvent('keydown', { code, key: code, repeat: true })); // the operating system's repeat of a held key
+    };
+    key('ArrowLeft');
+    await vi.advanceTimersByTimeAsync(40);
+    key('ArrowRight'); // a frame later than Left: one step, counter 2, (2 + 1) / 2 = 1 is below T[1] = 2 at Magic 20: still 1 cast
+    for (let i = 0; i < 6; i++) {
+      await vi.advanceTimersByTimeAsync(40);
+      repeat('ArrowLeft'); // the repeats of the two held keys, each in a frame of its own: every pair of them would be one more step if a repeat counted
+      await vi.advanceTimersByTimeAsync(40);
+      repeat('ArrowRight');
+    }
+    await vi.advanceTimersByTimeAsync(100);
+    expect(o.root.querySelector('[data-role="counter"]')?.textContent).toBe('1');
+    await vi.advanceTimersByTimeAsync(4500);
+    expect(o.result()).toEqual({ kind: 'lulu-fury', fury: { sweptDegrees: 0, casts: 1 } });
+  });
+
+  it.each([
+    ['Swordplay (Spiral Cut, 3 s)', 'tidus' as const, TIDUS['spiral-cut'] as AbilityDef, 3010],
+    ['Bushido (Dragon Fang, 4 s)', 'auron' as const, AURON['dragon-fang'] as AbilityDef, 4010],
+  ])('%s: the move ends the moment the ring reads 0, not a frame later (the fail shows at once)', async (_name, who, def, ms) => {
+    const req = requestFor(who, def);
+    const o = open(req.kind, req.params);
+    await vi.advanceTimersByTimeAsync(ms - 100);
+    expect(o.root.querySelector('.ffx-mg--fail'), 'still going before the ring runs out').toBeNull();
+    // the ring reads 0 on the animation frame at or after the limit; that frame runs the frames still due and then the frame that finds the limit gone (91 for 3 s, 121 for 4 s)
+    await vi.advanceTimersByTimeAsync(100);
+    expect(o.root.querySelector('.ffx-mg--fail'), 'ended in the ring\'s own frame').not.toBeNull();
+    await vi.advanceTimersByTimeAsync(2000);
+    const r = o.result();
+    expect(r?.kind === 'tidus-timing' ? r.timing : r?.kind === 'auron-sequence' ? r.sequence : undefined).toMatchObject({ success: false, timeRemainingMs: 0, frame: who === 'tidus' ? 91 : 121 });
   });
 });
