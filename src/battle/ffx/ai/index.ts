@@ -44,6 +44,7 @@ import './seymour-omnis.ts';
 import './isaaru.ts';
 import './sin-scripts.ts';
 import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the body, the head and the arms
+import './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only): Kimahri's duel with the two Ronso, and what Lancet teaches
 
 export * from './types.ts';
 export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';

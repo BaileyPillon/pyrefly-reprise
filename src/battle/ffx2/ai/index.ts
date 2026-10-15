@@ -41,6 +41,7 @@ import { experimentScripts } from './experiment.ts';
 import { touristTrapScripts } from './tourist-trap.ts';
 // Valefor at Besaid Temple (FFX-2 Chapter 3; the hidden chapter "Valefor at Besaid"): the fallen aeons' action counter at its gentlest.
 import { x2ValeforScript } from './valefor.ts';
+import { angraMainyuScripts } from './angra-mainyu.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -81,6 +82,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...experimentScripts,
   ...touristTrapScripts,
   x2ValeforScript,
+  ...angraMainyuScripts, // the hidden Angra Mainyu chapter: the body and its two arms (research/ffx2-angra-mainyu.md §4)
   idleScript,
   basicAttackScript,
 ];

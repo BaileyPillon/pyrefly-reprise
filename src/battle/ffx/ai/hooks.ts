@@ -103,6 +103,11 @@ export function listensToHit(c: FFXCombatant): boolean {
   return hooksOf(c)?.onHit !== undefined;
 }
 
+/** True when the script registered under `scriptId` listens to `onHit` (a script may register only other hooks: the Ronso's `onTargeted`). */
+export function scriptListensToHit(scriptId: string): boolean {
+  return SCRIPT_HOOKS.get(scriptId)?.onHit !== undefined;
+}
+
 /** True when a lethal hit on `c` must wait for its `onHit` before the KO is decided. */
 export function holdsDeathForHook(c: FFXCombatant): boolean {
   return hooksOf(c)?.holdsDeath === true;

@@ -27,7 +27,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, BattleEvent, BattleState, FFXCombatant } from '../../src/battle/common/types.ts';
 import { FFXEngine, registerHitScript, registerScriptHooks, resolveAbility } from '../../src/battle/ffx/index.ts';
-import { hooksOf, listensToHit, registeredHookScriptIds, scriptIdOf } from '../../src/battle/ffx/ai/hooks.ts';
+import { hooksOf, listensToHit, registeredHookScriptIds, scriptIdOf, scriptListensToHit } from '../../src/battle/ffx/ai/hooks.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS } from '../../src/data/encounters.ts';
@@ -67,13 +67,16 @@ const LANE_C = [
 const poke = (id: string, targeting: AbilityDef['targeting'] = 'single-enemy'): AbilityDef =>
   exactHit(id, 100, { targeting, flags: ['always-break-damage-limit', 'ignores-armored', 'long-range'] });
 
-/** The shipped enemies whose script listens to `onHit`: [group id, enemy id, script id]. */
+/**
+ * The shipped enemies whose script listens to `onHit`: [group id, enemy id, script id]. A script that registered other hooks only (the hidden Biran and Yenke chapter's Ronso register `onTargeted`
+ * alone, 2026-10-15) is not one of them.
+ */
 function hookedEnemies(): Array<[string, string, string]> {
   const out: Array<[string, string, string]> = [];
   for (const [groupId, group] of Object.entries(ENEMY_GROUPS_BY_ID)) {
     for (const enemy of group.enemies) {
       const script = enemy.forms[0]?.aiScriptId ?? enemy.aiScriptId;
-      if (script !== undefined && registeredHookScriptIds().includes(script)) out.push([groupId, enemy.id, script]);
+      if (script !== undefined && registeredHookScriptIds().includes(script) && scriptListensToHit(script)) out.push([groupId, enemy.id, script]);
     }
   }
   return out;

@@ -20,6 +20,10 @@ import { TIDUS_TOP } from '../../src/data/ffx/party-stature.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 import { loadScene, resolveSceneHeights, type LoadedScene } from '../../src/scenes/index.ts';
 import { GAGAZET_PARTY_HEIGHT, GAGAZET_STAGING } from '../../src/scenes/gagazet.ts';
+import { RONSO_FIGURE_HEIGHT } from '../../src/scenes/gagazet-giants.ts';
+
+/** The hidden Biran and Yenke chapter's two Ronso stand on this plate too (FFX only, 2026-10-15), at Kimahri's applied stature; Chapter I fields neither, so they change nothing there. */
+const GAGAZET_HEIGHTS = { 'seymour-flux': 6.017, mortiorchis: 3.309, 'biran-ronso': RONSO_FIGURE_HEIGHT, 'yenke-ronso': RONSO_FIGURE_HEIGHT };
 import { SIN_BEVELLE_PLATE, SIN_FLIGHT_PLATE, SIN_GENAIS_CORE_STAGING, SIN_PARTY_HEIGHT } from '../../src/scenes/evrae-airship-sin.ts';
 import { HIGHBRIDGE_ACTOR_HEIGHTS, HIGHBRIDGE_REAL_SIZE, HIGHBRIDGE_SLOTS, highbridgeHeights } from '../../src/scenes/highbridge.ts';
 import { DREAMS_END_BFA_PIN, DREAMS_END_PARTY_HEIGHT, DREAMS_END_RIGS, DREAMS_END_ROW_SHIFT, DREAMS_END_STAGING } from '../../src/scenes/dreams-end.ts';
@@ -86,7 +90,7 @@ describe('the heights: party height x height x share over Tidus (18.15), to the 
 describe("Chapter I stands Flux and Mortiorchis from the table, and the camera backs off for him", () => {
   it('the scene names both heights from the table over the stage default party height, and pins Mortiorchis against him', () => {
     expect(GAGAZET_PARTY_HEIGHT).toBe(resolveSceneHeights({}).partyHeight);
-    expect(GAGAZET_STAGING.figureHeights).toEqual({ 'seymour-flux': 6.017, mortiorchis: 3.309 });
+    expect(GAGAZET_STAGING.figureHeights).toEqual(GAGAZET_HEIGHTS);
     // Flux stays where live pinned him; Mortiorchis's offset from him (2.51 left, 1.01 up) grew by the same factor as he did (6.017 / 4.1), and it stands 0.22 further back than live so that
     // it is no nearer the party than live (Bailey, 2026-10-08, "original spacing, real sizes"): the nearest member, Kimahri (-0.61, -1.05), is 6.79 away against live's 6.75
     const grow = 6.017 / 4.1;
@@ -266,7 +270,7 @@ describe('the real factory publishes the heights (jsdom, a no-op 2D context, an 
     const scene = await loadScene('gagazet', new PerspectiveCamera());
     loaded.push(scene);
     expect(scene.slots.partyHeight).toBe(GAGAZET_PARTY_HEIGHT);
-    expect(scene.slots.figureHeights).toEqual({ 'seymour-flux': 6.017, mortiorchis: 3.309 });
+    expect(scene.slots.figureHeights).toEqual(GAGAZET_HEIGHTS);
     expect(scene.slots.enemySpots?.mortiorchis).toEqual(GAGAZET_STAGING.enemySpots.mortiorchis);
   });
 

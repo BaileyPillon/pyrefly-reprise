@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1311 decisions in all: 849 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 857 of the written decisions record a blanket yes.
+1313 decisions in all: 851 registry rows, 255 items split out of bundled acceptances, 81 early or backfilled rows, 126 picture decisions. 857 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1224 |
+| adopted | 1226 |
 | proposed | 14 |
 | deferred | 5 |
 | rejected | 12 |
 | superseded | 56 |
-| **All** | **1311** |
+| **All** | **1313** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -36,7 +36,7 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | audio | 126 |
 | ui | 139 |
 | story | 16 |
-| chapters | 201 |
+| chapters | 203 |
 | guide | 31 |
 | release | 59 |
 | hosting | 18 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 11 |
 | tech | 14 |
 | site | 18 |
-| **All** | **1311** |
+| **All** | **1313** |
 
 | Game case | Decisions |
 | --- | ---: |
 | both games | 630 |
-| FFX only | 373 |
-| FFX-2 only | 290 |
+| FFX only | 374 |
+| FFX-2 only | 291 |
 | FF7 hidden experiment | 18 |
-| **All** | **1311** |
+| **All** | **1313** |
 
 ## Standing rules in force
 
@@ -132,7 +132,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15)
 
 ## Ledger
 
@@ -4484,7 +4484,7 @@ Wednesday · 69 decisions
 - <a id="d-536"></a>**D-536** — The two new chapters are Biran and Yenke Ronso (FFX, Kimahri's solo trial) and Angra Mainyu (FFX-2, the Bikanel Desert superboss), with the Spectral Keeper as the alternate; concept frames come first, nothing is built yet (one chapter for each game)
   - Bailey: “yes install the 555 repairs, go with your recommendations” (blanket yes)
   - What changed: Accepted recommendation 7 of 10: he took the driver's proposal of D-520. Biran and Yenke Ronso for FFX (Kimahri alone against the two Ronso who mock him; a one-member battle unlike anything among the 18, where he can learn Ronso Rages) and Angra Mainyu for FFX-2 (a real challenge fight at the end of the Bikanel Desert); the Spectral Keeper at the Zanarkand Dome (a positional fight around glyph mines) is the alternate. The board would go from 11 FFX and 7 FFX-2 chapters to 12 and 8. What it does NOT do yet: nothing is built, sourced or scheduled. The driver's summary said "Concept pictures come first for your look; nothing is built until you pick", which is AGENTS.md rule 9 (end state first), and rule 6 (never invent game data) still applies: research/ holds the Biran and Yenke duel only as a lead-in note and Angra Mainyu only as a drop source, so its 333,444 HP (read on a web page in the chat) and its moves are unsourced. D-520 moved from proposed to adopted with this row.
-  - area chapters · both games · adopted · delivery not scheduled · see [D-520](#d-520) · refines [D-520](#d-520)
+  - area chapters · both games · adopted · delivery implemented · see [D-520](#d-520), [D-850](#d-850), [D-851](#d-851) · refines [D-520](#d-520)
   - Source: Bailey, 2026-10-07 08:24:49 EDT, in the Claude Code chat (the times are the session transcript's), verbatim: "yes install the 555 repairs, go with …
 - <a id="d-537"></a>**D-537** — The overnight local art is emailed to him as one email per character, with the best candidates, instead of one email per batch (both games)
   - Bailey: “yes install the 555 repairs, go with your recommendations” (blanket yes)
@@ -6106,3 +6106,18 @@ Wednesday · 19 decisions
   - What changed: Item 75d. The “Scene Music Options” page recommended Option 0: the live audio build (d5bf2206) had the scene cue playing at the first spoken line in 17 of 17 runs of the chapters that start a cue on a normal connection, and later live checks read 7 of 9 (r46) and 4 of 5 (r47, the miss being Chapter I, which opens in silence by design). The branch r46-scenecue (0a852c14) did not help in measurement (the cue is crowded out by the prep's paintings, the card's backdrops and 8.6 MB of audio), ships off by default and was left out of r46, r47 and r48. This sets D-807 aside. NOT covered (asked, no recommendation given): the Mix preview display, which stays as today in r48 (the list shows the recipes it has always listed and “? ? ?” for any other pair, and such a pair now makes the game's real result); the concept frames for Biran and Yenke Ronso and Angra Mainyu were a question, but D-536 (2026-10-07) already says concept frames come first, so the driver makes them under D-536 once the week resets. Still his to do: run the auto-update setting file, then one restart of all four apps.
   - area audio · both games · adopted · nothing to build · see [D-807](#d-807), [D-536](#d-536) · replaces [D-807](#d-807)
   - Source: Bailey, 2026-10-14 about 08:40 EDT, in the Claude Code chat, after the morning summary, verbatim: “I’ll go with all of your recommendations keep …
+
+### 2026-10-15
+
+Thursday · 2 decisions
+
+- <a id="d-850"></a>**D-850** — NEW hidden chapter 25: Biran and Yenke Ronso, Kimahri alone at the gate of Mt. Gagazet, behind the typed word “kimahri”, built end to end (FFX only)
+  - Bailey: “Implement the unimplemented chapters please. ... Implement the unimplemented chapters end-to-end please. It needs to be a finished product.”
+  - What changed: His explicit yes to building the first of D-536's two chapters (rule 10). D-536 had held them at concept frames first; his words ask for the chapter built end to end, so it is built, and what stays for his pick is the art: no painting of Biran or Yenke exists, so both wear Kimahri's own approved paintings on Chapter I's Gagazet plate (provisional, rule 9), and the briefs are in the handoff. Built in one cloud session on branch claude/vigilant-galileo-h6yf7j: the game's own records m134 and m135 and every command row (decoded from the tracker tables at the pinned commit the earlier research notes use; every row equal to the Steam build's table in the repo), the Ronso's HP, Strength, Magic and Agility written from Kimahri's when the battle starts (the written sources' formulas, read through search summaries and tagged), the guarding as the engine's Cover with Sentinel, Bulldoze moving the user to the other row, Lancet teaching the eight Ronso Rages (Mighty Guard and White Wind only after the Ronso has cast it), Biran's Berserk and Yenke's Haste when the other falls, and Kimahri as Chapter I's preset less what the duel teaches (no Mighty Guard, White Wind or Talk, Jump only, the gauge at 45 percent). Hidden behind the word “kimahri”, number 25, no card, the board still says “of 18”; the music is the Gagazet bed by reference; a story in our own words (seven mid-battle beats, none on a fall). Measured, not tuned: the advisor's line wins 200 of 200 seeds and learns White Wind on every one; attack-only wins none. Not merged, not deployed; the focused review and the deep review are owed (the critic plan reads DEEP). Listing waits for his word after he plays it (D-848). Research: research/ffx-biran-yenke.md; handoff: docs/handoff/ch-biran-yenke.md.
+  - area chapters · FFX · adopted · delivery implemented · see [D-536](#d-536), [D-520](#d-520), [D-842](#d-842), [D-843](#d-843), [D-848](#d-848), [D-851](#d-851) · refines [D-536](#d-536)
+  - Source: Bailey, 2026-10-15, in a cloud Claude Code session (branch claude/vigilant-galileo-h6yf7j), two messages, verbatim: “Implement the unimplemented …
+- <a id="d-851"></a>**D-851** — NEW hidden chapter 26: Angra Mainyu and his two arms at the Bikanel excavation camp, behind the typed word “angra”, built end to end (FFX-2 only)
+  - Bailey: “Implement the unimplemented chapters please. ... Implement the unimplemented chapters end-to-end please. It needs to be a finished product.”
+  - What changed: His explicit yes to building the second of D-536's two chapters (rule 10), as D-850 for the first. The weakest-sourced chapter of the project: no row of Angra Mainyu, Tawrich or Zarich was read (none is in the repository and no game files exist in the cloud session), so every number is a written source's read through search summaries and tagged with how many pages named it (HP 333,444 from five), a stand-in row of the game's own table that another monster carries (Demi, Flare, Curaga, Full-Life, Osmose and the eight elemental spells), or a stated estimate (the arms' unread stats, the move odds). Built on branch claude/vigilant-galileo-h6yf7j: the body and two arms as parts that never decide the battle; Tawrich immune to magic and Zarich to physical blows as permanent statuses that Darkness passes and that survive an arm's fall and revive; Perdition's Flame (ten hits on random girls of 3/16 of their maximum HP, physical so Protect halves each, every seventh of his turns and only while both arms stand); Full-Life on a fallen arm while he has the MP, Osmose when he lacks it; the Chapter 5 party (Yuna White Mage, Rikku and Paine Dark Knights); the Ribbon as his drop. Hidden behind the word “angra”, number 26; the art is provisional (the body drawn from Chapter XI's approved x2-anima paintings, the arms figure-less, the camp the Experiment's grounds plate); the fight plays our aeon cue in the role the game gives “Aeons”. Action time stays on at 3 s under D-846. Measured, not tuned (40 seeds a cell): the guide's line wins 24 of 40 at bench speed with action time on and 36 of 40 with it off (23 and 31 at human speed); with no Darkness or Protect nothing wins. Not merged, not deployed; the focused and deep reviews are owed. Listing waits for his word after he plays it (D-848) and, on the research's advice, for the reverse-engineering session to read his rows. Research: research/ffx2-angra-mainyu.md; handoff: docs/handoff/ch-angra-mainyu.md.
+  - area chapters · FFX-2 · adopted · delivery implemented · see [D-536](#d-536), [D-520](#d-520), [D-842](#d-842), [D-843](#d-843), [D-846](#d-846), [D-848](#d-848), [D-850](#d-850) · refines [D-536](#d-536)
+  - Source: Bailey, 2026-10-15, in a cloud Claude Code session (branch claude/vigilant-galileo-h6yf7j), two messages, verbatim: “Implement the unimplemented …

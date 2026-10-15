@@ -50,6 +50,9 @@ import { touristTrapAbilities } from './tourist-trap-abilities.ts';
 // Valefor at Besaid Temple (FFX-2 Chapter 3; the hidden chapter "Valefor at Besaid", FFX-2 only): `./valefor.ts`.
 import { valeforGroups } from './valefor.ts';
 import { x2ValeforAbilities } from './valefor-abilities.ts';
+// Angra Mainyu at the Bikanel excavation camp (FFX-2 Chapter 5; the hidden chapter "Angra Mainyu", FFX-2 only): `./angra-mainyu.ts`.
+import { angraMainyuGroups } from './angra-mainyu.ts';
+import { angraMainyuAbilities } from './angra-mainyu-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -68,6 +71,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...experimentGroups,
   ...touristTrapGroups,
   ...valeforGroups,
+  ...angraMainyuGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -96,6 +100,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...experimentAbilities,
   ...touristTrapAbilities,
   ...x2ValeforAbilities,
+  ...angraMainyuAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

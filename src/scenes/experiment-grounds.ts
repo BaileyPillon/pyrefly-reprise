@@ -5,6 +5,8 @@ import { LightRig, makeLightPool } from '../engine/Lighting.ts';
 import { artUrl, watchAssets, type AssetWatcher } from '../engine/PaintedArt.ts';
 import { EXPERIMENT_GROUNDS_PLATE } from '../data/experiment-plates.ts';
 import { EXPERIMENT_BODY_IDS } from '../data/ffx2/enemies/experiment.ts';
+import { ANGRA_ID, TAWRICH_ID, ZARICH_ID } from '../data/angra-mainyu-ids.ts';
+import type { PartAnchors } from '../engine/PartAnchors.ts';
 import { DJOSE_CAMERA_REF, DJOSE_CHAMBER_PALETTE, DJOSE_CHAMBER_SLOTS, DJOSE_PARTY_HEIGHT, DJOSE_RIGS, type DjosePlateFrame, djoseCentreY } from './djose-chamber.ts';
 import { RoadPhoneCamera, roadOnPhone } from './road-to-the-farplane-phone.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
@@ -60,10 +62,27 @@ export const EXPERIMENT_PHONE_FIGURE_HEIGHT = Math.round(EXPERIMENT_FIGURE_HEIGH
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [EXPERIMENT_SPOT, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 
+/**
+ * **The hidden Angra Mainyu chapter (FFX-2 only, 2026-10-15)** fights here too: this plate is the provisional stand-in for the Bikanel excavation camp (`research/ffx2-angra-mainyu.md` §6, a dig site of
+ * the same kind). The body stands on the Experiment's spot at the Experiment's height (a giant; no source gives his size, `[estimate]`), drawn from Chapter XI's approved `x2-anima` painting. **His arms
+ * have no painting**: they are figure-less parts on his, as Vegnagun's Redoubts and Bulwarks are (D-044, `../engine/PartAnchors.ts`), hung either side of his chest. He faces the girls, so his right arm,
+ * Tawrich, is on the viewer's left. Staging, not game data. Inert for the Experiment, which fields none of these ids.
+ */
+export const ANGRA_FIGURE_HEIGHT = EXPERIMENT_FIGURE_HEIGHT;
+/** The arms' anchors: a share of his height out from his centre and up from his feet (the anchored actor is 1.8 tall and stands on its point, so 0.9 below the ring's centre). */
+const ARM_OUT = 0.3;
+const ARM_UP = 0.5;
+const ANCHOR_HALF = 0.9;
+export const ANGRA_PART_ANCHORS: PartAnchors = {
+  [TAWRICH_ID]: { mode: 'overhead', offset: [-ARM_OUT * ANGRA_FIGURE_HEIGHT, ARM_UP * ANGRA_FIGURE_HEIGHT - ANCHOR_HALF, 0.4] },
+  [ZARICH_ID]: { mode: 'overhead', offset: [ARM_OUT * ANGRA_FIGURE_HEIGHT, ARM_UP * ANGRA_FIGURE_HEIGHT - ANCHOR_HALF, 0.4] },
+};
+
 const STAGING = {
   holdParty: true,
-  enemySpots: Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_SPOT])), // both acts' bodies stand on the one spot
-  figureHeights: Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_FIGURE_HEIGHT])),
+  enemySpots: { ...Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_SPOT])), [ANGRA_ID]: EXPERIMENT_SPOT }, // both acts' bodies stand on the one spot, and Angra Mainyu on it too
+  figureHeights: { ...Object.fromEntries(EXPERIMENT_BODY_IDS.map((id) => [id, EXPERIMENT_FIGURE_HEIGHT])), [ANGRA_ID]: ANGRA_FIGURE_HEIGHT },
+  partAnchors: ANGRA_PART_ANCHORS,
 } as const;
 
 /** The published slots, the same shape every other scene exports. */
@@ -128,7 +147,7 @@ export const buildExperimentGroundsScene: SceneFactory = async (opts: SceneBuild
     return pool;
   });
 
-  const phoneCamera = onPhone ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [...EXPERIMENT_BODY_IDS], sisters: [], anima: [] }) : null;
+  const phoneCamera = onPhone ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [...EXPERIMENT_BODY_IDS, ANGRA_ID], sisters: [], anima: [] }) : null;
 
   const watchEnabled = opts.watchAssets ?? Boolean(import.meta.env.DEV);
   let watcher: AssetWatcher | null = null;

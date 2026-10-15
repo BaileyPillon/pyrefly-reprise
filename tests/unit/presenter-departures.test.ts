@@ -33,8 +33,10 @@ describe('departure kinds', () => {
     }
     // + Chapter XIII's paragon and trema, held (FFX-2); + Chapter XII's seymour-omnis, held (FFX);
     // + Chapter X's mortibody and Chapter I's mortiorchis, returns (FFX; research/ffx-seymour-flux.md
-    // §2.2 and §4.4)
-    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(16);
+    // §2.2 and §4.4); + the hidden Biran and Yenke chapter's two Ronso, yields (FFX; research/ffx-biran-yenke.md §1 beat 4)
+    expect(Object.keys(DEPARTURE_KINDS)).toHaveLength(18);
+    expect(departureKindOf('biran-ronso')).toBe('yields');
+    expect(departureKindOf('yenke-ronso')).toBe('yields');
     expect(departureKindOf('mortibody')).toBe('returns');
     expect(departureKindOf('mortiorchis')).toBe('returns');
   });

@@ -34,6 +34,7 @@ import { applyMacalaniaSetup } from './ai/seymour-anima-macalania.ts';
 import { applyEvraeSetup } from './ai/evrae-rules.ts';
 import { applySinSetups } from './ai/sin-setup.ts';
 import { applyGuiSetup } from './ai/sinspawn-gui-rules.ts';
+import { applyRonsoSetup } from './ai/biran-yenke-rules.ts';
 import { applyLinkLineUp, restorePartyOnEntry } from './line-up.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
@@ -366,6 +367,8 @@ export function buildBattle(
     if (c) startAutoStatuses(ctx, c);
   }
 
+  // The Ronso duel writes Biran's and Yenke's numbers from Kimahri's before the opening order is drawn: their Agility is his less 4 and 8 [ffx-biran-yenke §2.2]. A no-op elsewhere.
+  applyRonsoSetup(ctx);
   seedInitialCtb(ctx, setup.condition ?? 'normal');
   applyPossessionOpening(ctx); // the possession fights' and Yu Yevon's opening counters [ai/possession-setup.ts]
   // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.

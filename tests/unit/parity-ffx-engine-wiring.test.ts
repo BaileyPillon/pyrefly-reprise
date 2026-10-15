@@ -21,6 +21,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, ElementId, FFXCombatant, FFXPlainAttack } from '../../src/battle/common/types.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
+import { BIRAN_YENKE_ABILITIES } from '../../src/data/ffx/enemies/biran-yenke-abilities.ts';
 import { CORE_ABILITIES, computeDamage, critChance, hitChance, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { critCheck, critChanceOf } from '../../src/battle/ffx/kernel/crit.ts';
 import { hitCheck, hitPlan } from '../../src/battle/ffx/kernel/hit.ts';
@@ -39,7 +40,13 @@ import {
   type Situation,
 } from './helpers/ffxEngineWiring.ts';
 
-const POOL: AbilityDef[] = [...wiringPool(ALL_ABILITIES), ...wiringPool(CORE_ABILITIES.map((a) => ({ ...a })))];
+/**
+ * Rows added after the 400-situation sample was pinned are drawn in a sample of their own (below), so a new chapter's rows do not reshuffle the validated one (the hidden Biran and Yenke chapter's rows,
+ * 2026-10-15, moved its bounds: a sampled branch count fell to the bound). The same rule as `parity-ffx-engine-status.test.ts`.
+ */
+const LATER_ROWS: ReadonlySet<string> = new Set(Object.keys(BIRAN_YENKE_ABILITIES));
+const POOL: AbilityDef[] = [...wiringPool(ALL_ABILITIES.filter((a) => !LATER_ROWS.has(a.id))), ...wiringPool(CORE_ABILITIES.map((a) => ({ ...a })))];
+const LATER_POOL: AbilityDef[] = wiringPool(ALL_ABILITIES.filter((a) => LATER_ROWS.has(a.id)));
 const ELEMENT_BITS: ReadonlyArray<readonly [ElementId, number]> = [['fire', 1], ['ice', 2], ['lightning', 4], ['water', 8], ['holy', 0x10]];
 
 /** The same ladder the exe's element function walks, written out again as a label. */
@@ -187,6 +194,23 @@ describe('the engine draws and decides what the kernels do, on generated situati
     expect(seen.mp).toBeGreaterThan(10);
     expect(seen.ctb).toBeGreaterThan(5);
     expect(seen.kinds.size).toBeGreaterThan(6);
+  });
+
+  it('the rows added since: 200 situations drawn from them alone, the same draws, outcomes, amounts, flags and totals', () => {
+    expect(LATER_POOL.length).toBeGreaterThan(0);
+    const rng = makeRng(20261015);
+    let compared = 0;
+    for (let i = 0; i < 200; i++) {
+      const sit = randomSituation(rng, LATER_POOL);
+      const hits = sit.def.hits;
+      const engine = viaEngine(sit, hits);
+      const kernels = viaKernels(sit, hits);
+      if (engine.died) continue;
+      const { died: _died, ...plain } = engine;
+      expect(plain, `later ${i}: ${sit.def.id}`).toEqual(kernels);
+      compared++;
+    }
+    expect(compared).toBeGreaterThan(150);
   });
 
   it('the draws of the common commands, in the game\'s order', () => {

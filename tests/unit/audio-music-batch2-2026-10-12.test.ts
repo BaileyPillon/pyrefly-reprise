@@ -244,9 +244,11 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'exp-fayth': { scene: 'scene-fahrenheit', links: ['boss-evrae'] }, // the hidden Fayth chapter is Chapter VIII's record by reference, so it plays Chapter VIII's music (FFX only)
     'ffx2-tourist-trap': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap (FFX-2 only, 2026-10-14): the field bed and the "Aeons" cue the Road and Ixion play, by reference
     'ffx2-valefor-besaid': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Valefor at Besaid (FFX-2 only): the aeon cue Chapter XI and Ixion play, our own take
+    'biran-yenke': { scene: 'scene-gagazet', links: ['scene-gagazet'] }, // the hidden Biran and Yenke (FFX only, 2026-10-15): the game plays the mountain's own theme through the duel, so the bed carries the fight (research/ffx-biran-yenke.md §8)
+    'ffx2-angra-mainyu': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Angra Mainyu (FFX-2 only, 2026-10-15): the field bed and the aeon cue, by reference (research/ffx2-angra-mainyu.md §8)
   };
 
-  it('plays each chapter\'s scene bed and each link\'s theme as the table says: the 18 listed chapters, FF7, and the five hidden experiments', async () => {
+  it('plays each chapter\'s scene bed and each link\'s theme as the table says: the 18 listed chapters, FF7, and the hidden experiments', async () => {
     expect(Object.keys(EXPECTED).sort()).toEqual(allChapters().map((c) => c.id).sort());
     for (const chapter of allChapters()) {
       expect(chapter.music.scene, `${chapter.id} scene`).toBe(EXPECTED[chapter.id]!.scene);

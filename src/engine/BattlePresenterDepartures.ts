@@ -91,6 +91,10 @@ export const DEPARTURE_KINDS: Readonly<Partial<Record<CombatantId, DepartureKind
   mortibody: 'returns',
   // FFX, Chapter I: research/ffx-seymour-flux.md §2.2 ("no death state") and §4.4 ("never absent").
   mortiorchis: 'returns',
+  // FFX, the hidden Biran and Yenke chapter: research/ffx-biran-yenke.md §1 beat 4 (they accept the defeat and hold the gate; Chapter I finds them dead later, on the Prominence).
+  // Living Ronso who stand down, not fiends who are sent: the Guado Guardians' kind.
+  'biran-ronso': 'yields',
+  'yenke-ronso': 'yields',
 };
 
 export function departureKindOf(id: CombatantId): DepartureKind {

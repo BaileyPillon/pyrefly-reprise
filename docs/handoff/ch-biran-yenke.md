@@ -1,0 +1,79 @@
+# Biran and Yenke: a hidden FFX chapter (Kimahri alone at the gate of Mt. Gagazet)
+
+**Branch `claude/vigilant-galileo-h6yf7j`** (from main 8934a41b), pushed; **not merged, not deployed, no review run.** **Game case: FFX only** (AGENTS.md rule 14): Kimahri, Lancet, Ronso Rage, the CTB and the FFX status set are FFX's; the FFX-2 Ronso of Mt. Gagazet are a different fight in a different game. The shared plumbing (one door row, the registries) is "both" as plumbing (CHK-020) and inert for every other chapter.
+**Status: built end to end, hidden, provisional art.** It is not on the board, not in "of 18", not listed anywhere; it opens only by a typed word. Listing it waits for Bailey's word after he has played it (D-848). Built in the same session as the FFX-2 chapter Angra Mainyu ([ch-angra-mainyu](ch-angra-mainyu.md)).
+
+Bailey, 2026-10-15, in a cloud Claude Code session, verbatim: "Implement the unimplemented chapters please." and, minutes later, "I would like to add, don't just implement the unimplemented chapters. Implement the unimplemented chapters end-to-end please. It needs to be a finished product. Thank you ❤️ . it is lovely working ont his project with you!" The unimplemented chapters are D-536's (2026-10-07, on D-520): this one and Angra Mainyu. The reading, following his last two "add them in" (D-842, D-843) and D-848: **hidden behind a typed word**, hidden chapter number **25**, the art **provisional** (approved paintings reused, nothing replaced), the music an existing cue by reference. Recorded as D-850.
+
+## 1. Play it
+
+1. From the title, reach the chapter-select board (the title begins on Enter, Space, Z, E or C; the word is typed on the board).
+2. Type `kimahri` (any case, letters at most 2 s apart; the board never hints). **It opens party prep itself**: no card, no sound, and the cursor does not move (K, I and H are bound to nothing, M is SELECT, A is `left` but a later letter of a live match is the word's, R is R1, which the board does not answer). Enter starts it: the opening scene (Enter steps it), then the duel.
+3. Pinned with the real `Input`, the real board and the real title screen in `tests/unit/kimahri-door.test.ts` (22 tests), and against every other door word (and `angra`) there and in `tests/unit/chapter-doors.test.ts`.
+4. A clear goes to the experiments' own store (`pyrefly-reprise:experiments:v1`), never the save: no save change, no migration.
+
+## 2. What it is
+
+One battle, one link: **Kimahri alone** (the formation's forced party `k`) against **Biran Ronso and Yenke Ronso**, both of whom must fall.
+
+| | |
+|---|---|
+| The records | the game's own m134 and m135 (decoded, below): MP 200, Def 30, MDef 10, Luck 15, Acc 100, immune to Death, Zombie, Petrify, Poison, Confuse, Provoke, Sleep, Silence, Darkness, Reflect, Slow, Eject and Auto-Life (Yenke to Berserk too); 4,500 AP (6,750 on an Overkill at 2,500), 1,500 gil, a Return Sphere always, steal a Lv. 3 Key Sphere (two on the rare roll) |
+| Their stats | **written from Kimahri's when the battle starts** (research §2.2, `battle/ffx/ai/biran-yenke-rules.ts#applyRonsoSetup`, before the opening order is drawn). With the shipped preset: Biran 3,208 HP, Str 23, Mag 9, Agi 14; Yenke 2,406 HP, Str 11, Mag 18, Agi 10. A stronger Kimahri meets stronger Ronso, as in the game |
+| Their turns | Biran: Thunder, Bulldoze, Blizzard, Bulldoze (a loop); Mighty Guard once below a quarter of his HP; **Berserk on himself when Yenke falls**. Yenke: Fire Breath, Aqua Breath, Bulldoze; White Wind once below a quarter; **Haste on himself when Biran falls** |
+| Guarding | while the two stand side by side each covers the other (the engine's Cover with Sentinel: a blow aimed at one lands on the other at half); **Bulldoze sends its user to the other row** and the guarding stops until they stand together again |
+| The lessons | **Lancet teaches Ronso Rages**: Biran Self-Destruct, Thrust Kick, Doom, Mighty Guard; Yenke Fire Breath, Stone Breath, Aqua Breath, White Wind. Mighty Guard and White Wind only **after the Ronso has cast it**. Each Rage learned fills Kimahri's gauge (the teacher registry, `battle/ffx/ronso-rage.ts`, inert for every other enemy) |
+| Kimahri | **Chapter I's Kimahri** (`data/ffx/builds/gagazet-gate.ts`), cloned, less what this duel teaches: no Mighty Guard, no White Wind, no Talk, Jump his only Rage, the gauge at 45 %, the mountain's two Mega-Potions and 20,000 gil not yet found. Every stat keeps Chapter I's `[estimate]` label |
+| Stage | the Gagazet plate (Chapter I's), the provisional stand-in for the mountain gate; both Ronso stand at Kimahri's applied stature (1.304 of the party height), Biran on the boss's spot, Yenke a step left and back |
+| Art | both Ronso are painted from **Kimahri's own approved paintings** (`RONSO_STAND_IN_ART`): no painting of Biran or Yenke exists |
+| Music | `scene-gagazet` carries the scenes and the fight (the game plays the mountain's own theme through the duel, research §8), `victory-ffx` after. **Bailey's call by ear (rule 13)** |
+| Departure | they **yield** when they fall (the Guado Guardians' kind: living Ronso who stand down, `engine/BattlePresenterDepartures.ts`), not "sent" |
+| Story | an opening scene (the gate, Kelk's leave, the two Ronso, "hornless", Kimahri's go-line), seven mid-battle beats keyed on the Ronso's own moves (the first Bulldoze, Mighty Guard raised, White Wind called, Biran's Berserk, Yenke's Haste; never on a fall, so a fallen Ronso never speaks), the close (they accept him, "A whole one.", the Ronso hold the gate). Every line is ours (`research/writing-bible.md` §1.7 Kimahri: third person, three to eight words) |
+| Guide | a card (5 rules, 7 hints, 3 phase notes) and a page; the move advisor's tactic (`engine/tactics/biran-yenke.ts`) is the line the bench measures: keep Kimahri up, spend a full gauge on a breath or a single blow, Lancet whoever can still teach, keep the lessons alive (a Ronso who has not cast his Rage is only Lanceted under half; Yenke is kept up until Biran has cast Mighty Guard, because his fall sends Biran berserk), physical blows only while they stand apart |
+
+## 3. The data, source by source
+
+`research/ffx-biran-yenke.md` (the tags are its own):
+
+- **The two records and every command row are the game's** (`[decompiled]`): monster rows 134 and 135 and the command tables, decoded **as data with a reader of my own** (the tracker's code was not run) from the Grayfox96/FFX-RNG-tracker tables at the **pinned commit 0acf1ac3**, the commit the Natus, Omnis, Yojimbo and Gui research notes already use; PS2 and HD rows are byte-identical. **Disclosed (rule 11):** those CSV and JSON files were fetched into this session's own scratch space for the decoding; nothing of them is in the repository. Every command row equals the Steam build's own table in the repo (`tests/fixtures/parity/ffx/command_records.json`) in every column it holds (`tests/unit/chapters/biran-yenke-data.test.ts`; `data-ffx-command-records.test.ts` now counts 491 abilities and 489 command records, eight more of each: Bulldoze 0x60a5, Fire Breath 0x60a2, Aqua Breath 0x60a3, Berserk 0x400f, and Kimahri's own Mighty Guard 0x3072 and White Wind 0x3070 twice each, for the game's two target entries).
+- **The stat formulas and the fight's rules are the written sources' description**, read through the web search tool's summaries (`[search: N sources]`; this session's network policy refused the wiki and guide hosts themselves). They are the weakest link and the first items of the verify list below. Seven conflicts (B-1 to B-7) are resolved in research §11.1 (16/15 HP factor, Yenke's HP x6 and Agility -8, the 25 % threshold, Biran's four-step loop, Biran berserks and Yenke hastes, the guarding as Cover with Sentinel).
+- **Not modelled, said plainly:** the equipment piece each Ronso always drops and the rare Friend Sphere (the engine has no gear-drop roller or rare-drop roll, as for Sin and Gui); the Ronso walking to their new row on screen (the row shows in the guard's status).
+
+## 4. Difficulty: measured, not tuned
+
+`tests/unit/chapters/biran-yenke-bench.test.ts`, 200 seeds (FFX is CTB, so human pace equals bench speed): **the advisor line wins all 200**, learns White Wind on every seed and Mighty Guard on 195 (all eight Rages on the same 195), in a mean of about 44 engine turns, and Kimahri ends no lower than half his HP; **attack-only loses every seed** it was tried on. The tactic's two reach constants are the bench's own maxima rounded up (the largest breath 1,148 against 1,300, the largest Lancet 136 against 150). If Bailey finds the duel too hard or too easy, Kimahri's preset is what may move (inside its stated range, and recorded), never the Ronso's rows.
+
+## 5. Art (provisional)
+
+Both Ronso wear Kimahri's approved paintings; the stage is Chapter I's Gagazet plate; the pause card falls back to Kimahri's idle painting. **Briefs for Bailey's pick (rule 9; art generation is OFF):** Biran, the larger and older Ronso, a full horn, heavier build, a darker mane; Yenke, leaner, a lighter mane, the breath-caster; the mountain gate itself (stone steps, the Ronso banners, snow). A painting of either needs his pick first; none is made.
+
+## 6. Files and merge hot spots
+
+New: `research/ffx-biran-yenke.md`; `src/data/ffx/biran-yenke-ids.ts`, `data/ffx/enemies/biran-yenke.ts`, `biran-yenke-abilities.ts`, `data/ffx/builds/gagazet-gate.ts`, `data/chapter-biran-yenke.ts`, `chapter-meta-biran-yenke.ts`, `chapter-meta-unlisted.ts` (the hidden chapters' metadata list, split out of `chapter-meta.ts` for the 400-line rule); `src/battle/ffx/ai/biran-yenke.ts`, `biran-yenke-rules.ts`, `biran-yenke-stats.ts`, `battle/ffx/ronso-rage.ts`; `src/story/scripts/biran-yenke.ts`; `src/app/screens/frontend/kimahriDoor.ts`; `src/engine/tactics/biran-yenke.ts`; `src/data/guides/biran-yenke.ts`, `guides/docs/biran-yenke.ts`; the tests listed in section 8.
+
+Shared files, one line or one block each (**merge hot spots** with any branch that adds a chapter): `data/encounters.ts` (contract: `ChapterId` and `ListedChapterId` gain the id, `Chapter.number` gains 25; `docs/CONTRACT-CHANGES.md`), `data/chapters-experiments.ts`, `data/chapter-meta.ts`, `data/ffx/index.ts`, `data/ffx/command-records/enemies.ts`, `battle/ffx/ai/index.ts` (the script import), `battle/ffx/ai/hooks.ts` (`scriptListensToHit`, for the merged-hooks parity suite), `battle/ffx/scripted.ts` (the `learnsRonsoRage` extra on Lancet), `battle/ffx/setup.ts` (`applyRonsoSetup`, a no-op elsewhere), `engine/BattlePresenterDepartures.ts`, `scenes/gagazet-giants.ts`, `app/screens/frontend/chapterDoors.ts`, the guide and tactic registries (`data/guides/index.ts`, `guides/docs/index.ts`, `engine/tactics/index.ts`, `lookup.ts`).
+
+Shared tests that count every chapter gained its row: `chapter-doors`, `chapter-numbers`, `audio-music-batch2-2026-10-12`, `engine/party-stature-chapters`, `ffx-giant-stature`, `presenter-departures`, `data-ffx-command-records`, `re-parity-ai-merged-hooks` (a script is hooked only when it listens to hits), and the fixture `tests/fixtures/parity/ffx/evrae-gaze-classes.json` (the four new rows' damage classes, from the formula column of the command fixture).
+
+**The two FFX parity suites** (`parity-ffx-engine-status`, `parity-ffx-engine-wiring`) draw seeded random situations from the whole ability pool, so the new rows reshuffled their samples and the new sample hit **a pre-existing engine and oracle mismatch that has nothing to do with this chapter**: Chaos Grenade's multi-hit write-back of Provoke against Threaten (situation 4174: the oracle keeps permission 1026, the engine 2050). The suites now draw the old pool exactly as before and sample the chapter's rows separately (seed 20261015; status 300 situations, wiring 200), and a comment names the gap. **Follow-up for the RE lane**: settle Chaos Grenade's Provoke and Threaten across hits (FFX only); suggesting it as a separate task timed out in this session, so it is recorded here and in NOW.md.
+
+## 7. Open points for Bailey and the driver
+
+1. **Play it, then say whether to list it** (D-848). The word is `kimahri`.
+2. **Art**: the briefs in section 5 (rule 9).
+3. **Music by ear** (rule 13): the Gagazet bed through the fight.
+4. **Verify before listing** (research §11.2, through the RE session): the stat formulas' constants (16/15, 586/730, /32, +30) and Yenke's Magic table (only its ends, 8 and 22, were legible); Yenke's Strength (inferred as half of Biran's); whether "Kimahri's HP" in the formulas is current or maximum HP; Biran's order and the 25 % threshold.
+5. **RE questions** (research §12): the stance the script gives the two (Guard, Sentinel or Defend) and when; what the script writes to the Ronso Rage byte and when; the exact formulas; the HP threshold and each script's order; the result when Kimahri Self-Destructs with a Ronso standing; whether a berserk Biran's Bulldoze carries Berserk's damage bonus.
+6. **Disclosed behaviour**: (a) **Self-Destruct**, learned from Biran, ejects Kimahri: with a Ronso still standing the battle ends as an **escape**, not a defeat (the game's result is RE question 5; the advisor never casts it); (b) a **berserk Biran's swing is his record's Bulldoze row**, but the battle log and text call it "Attack" (the engine's forced-attack path names every forced swing that way; checked on the real engine); (c) the drops in section 3.
+7. **Deploy + review owed**: the critic plan classes the change DEEP (the FFX CTB engine and the chapter registry are shared systems): a focused review of the production candidate before any deploy, the deep review on the live build after. This cloud session has neither the art nor the deploy tooling, so nothing was deployed.
+
+## 8. Tests and verification
+
+- `tests/unit/chapters/biran-yenke-data.test.ts` (25), `biran-yenke-rules.test.ts` (16), `biran-yenke-story.test.ts` (11), `biran-yenke-bench.test.ts` (7), `tests/unit/kimahri-door.test.ts` (22): all pass, with every shared suite listed in section 6.
+- `npx tsc --noEmit` clean; `node tools/orphans.mjs`: every new module reachable from `src/main.ts`, the orphan list unchanged at 28.
+- The full suite: running when this file was first committed; the result follows in the records commit after it.
+- The browser: a real-input run against the dev server (`tests/e2e/biran-yenke.spec.ts`) follows the first commit; its result and frames follow in the records commit after it.
+
+## 9. For the driver: NOW.md line and release notes
+
+NOW.md: "Biran and Yenke (FFX, hidden chapter 25, word `kimahri`; D-850) is built on branch claude/vigilant-galileo-h6yf7j with Angra Mainyu (FFX-2, 26, `angra`; D-851): not merged, not deployed, focused and deep reviews owed; listing waits for Bailey (D-848)." CHANGELOG: the lane entry "2026-10-15 · Two hidden chapters" (not live) is to be folded into the release entry of the build that ships it.

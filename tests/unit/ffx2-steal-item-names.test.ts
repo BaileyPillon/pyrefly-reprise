@@ -104,7 +104,8 @@ describe('FFX-2 steal rewards resolve to named items (FFX-2 only)', () => {
   });
 
   it('a held price of 0 is flagged unsourced, never read as "never sold"; White Cape keeps its sourced 3,000', () => {
-    expect([...UNSOURCED_PRICE_IDS].sort()).toEqual(['moon-bracer', 'potpourri', 'snow-ring', 'soul-of-thamasa', 'sprint-shoes', 'x2-chaos-shock', 'x2-fury-shock', 'x2-mute-shock']);
+    // + the Ribbon Angra Mainyu drops (the hidden Angra Mainyu chapter, FFX-2 only, 2026-10-15): no price in the research.
+    expect([...UNSOURCED_PRICE_IDS].sort()).toEqual(['moon-bracer', 'potpourri', 'ribbon', 'snow-ring', 'soul-of-thamasa', 'sprint-shoes', 'x2-chaos-shock', 'x2-fury-shock', 'x2-mute-shock']);
     for (const id of UNSOURCED_PRICE_IDS) expect(data.ITEMS[id]!.price, id).toBe(0);
     expect(UNSOURCED_PRICE_IDS.has('white-cape')).toBe(false);
     expect(data.ITEMS['white-cape']!.price).toBe(3000);

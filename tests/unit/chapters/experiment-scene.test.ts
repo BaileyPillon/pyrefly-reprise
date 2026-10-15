@@ -26,6 +26,7 @@ import { DJOSE_PARTY_HEIGHT, DJOSE_RIGS } from '../../../src/scenes/djose-chambe
 import { EXPERIMENT_GROUNDS_PLATE } from '../../../src/data/experiment-plates.ts';
 import { FFX2_EXPERIMENT } from '../../../src/data/chapter-ffx2-experiment.ts';
 import { EXPERIMENT_BODY_IDS } from '../../../src/data/ffx2/enemies/experiment.ts';
+import { ANGRA_ID } from '../../../src/data/angra-mainyu-ids.ts';
 import { FFX2_GIRLS_MEAN } from '../../../src/data/ffx2/fiend-stature.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../../src/engine/ArtManifest.ts';
 
@@ -43,12 +44,13 @@ describe('the Experiment grounds: registration and staging', () => {
     expect(existsSync(resolve('public/art/backdrops', `${EXPERIMENT_GROUNDS_PLATE}.json`))).toBe(true);
   });
 
-  it('seats the three girls where Chapter XVI seats them (the FFX-2 HUD is solved against those slots) and both bodies on one spot', () => {
+  it('seats the three girls where Chapter XVI seats them (the FFX-2 HUD is solved against those slots) and both bodies on one spot (with the hidden Angra Mainyu, who fights on this plate too)', () => {
     expect(EXPERIMENT_GROUNDS_SLOTS.party).toHaveLength(3);
     expect(EXPERIMENT_GROUNDS_SLOTS.partyHeight).toBe(DJOSE_PARTY_HEIGHT);
     const slots = EXPERIMENT_GROUNDS_SLOTS;
-    expect(Object.keys(slots.enemySpots ?? {}).sort()).toEqual([...EXPERIMENT_BODY_IDS].sort());
-    for (const id of EXPERIMENT_BODY_IDS) expect(slots.enemySpots?.[id], id).toEqual(EXPERIMENT_SPOT);
+    // The hidden Angra Mainyu (FFX-2 only, 2026-10-15) stands on the same spot: this plate is the provisional stand-in for his excavation camp (`tests/unit/chapters/angra-mainyu-data.test.ts`).
+    expect(Object.keys(slots.enemySpots ?? {}).sort()).toEqual([...EXPERIMENT_BODY_IDS, ANGRA_ID].sort());
+    for (const id of [...EXPERIMENT_BODY_IDS, ANGRA_ID]) expect(slots.enemySpots?.[id], id).toEqual(EXPERIMENT_SPOT);
     expect(slots.holdParty).toBe(true);
   });
 
