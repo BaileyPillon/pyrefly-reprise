@@ -5,7 +5,7 @@
 >
 > **Owner's words.** 2026-10-08 "It needs to be a 1:1 parity."; 2026-10-11 "ok keep going ill go with all your recommendations please"; 2026-10-13 "so it can go in live builds asap";
 > 2026-10-15 "keep going please, please incorporate all of your findings into our game". The wiring plan addendum marks all four rows **Bailey first: no**
-> (`D:\Tools\ffx-parity\coverage\wiring-plan-addendum-2026-10-13.md`, lane FFX-L; lane FFX-K, row K3 only: K1, K2, K4 and K5 are new content and stay unbuilt).
+> (the wiring plan addendum of 2026-10-13, a private working note outside the repository, lane FFX-L; lane FFX-K, row K3 only: K1, K2, K4 and K5 are new content and stay unbuilt).
 >
 > **Verdict: PROCEED** on branch `re-parity-rc8-ffx-entry`, cut from `origin/r48-rc` (`ea431aa0`). Nothing deploys without Bailey's word.
 
