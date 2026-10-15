@@ -84,9 +84,16 @@ function yunaTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCo
   return use(commands, 'ability', 'x2-white-mage-pray', []);
 }
 
-function darkKnightTurn(commands: AvailableCommand[], self: AnyCombatant): Command | null {
-  if (hpFraction(self) < 0.3) {
-    const potion = use(commands, 'item', 'x2-hi-potion', [self.id]);
+function darkKnightTurn(commands: AvailableCommand[], self: AnyCombatant, party: AnyCombatant[]): Command | null {
+  // Yuna is the healer: if she is down, a Dark Knight stands her up before anything else (the healer's death is what ends this fight).
+  const yuna = party.find((u) => u.id === 'yuna');
+  if (yuna && !yuna.alive && hpFraction(self) >= 0.25) {
+    const back = use(commands, 'item', 'x2-phoenix-down', [yuna.id]);
+    if (back) return back;
+  }
+  // Darkness costs the user a quarter of her maximum HP: an X-Potion (a full heal) before she is low, else a Hi-Potion.
+  if (hpFraction(self) < 0.45) {
+    const potion = use(commands, 'item', 'x2-x-potion', [self.id]) ?? use(commands, 'item', 'x2-hi-potion', [self.id]);
     if (potion) return potion;
   }
   return use(commands, 'ability', 'x2-dark-knight-darkness', []);
@@ -100,7 +107,7 @@ export const ffx2AngraMainyu: Tactic = (actorId, commands, engine: BattleEngine)
   const self = party.find((c) => c.id === actorId);
   if (!self) return null;
   if (actorId === 'yuna') return yunaTurn(commands, self, party);
-  return darkKnightTurn(commands, self);
+  return darkKnightTurn(commands, self, party);
 };
 
 export default ffx2AngraMainyu;
