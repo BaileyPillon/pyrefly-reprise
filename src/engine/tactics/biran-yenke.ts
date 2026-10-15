@@ -16,7 +16,7 @@
  * 3. **Lancet whoever still has something to teach**, Biran first: one Rage a cast, the first he does not know (RE section 7); Mighty Guard and White Wind only once that brother has called his own at half
  *    HP (the `ronso.gate.<brother>` flag). **Learn Biran's Rages before Yenke falls**: a Berserk Biran never offers Mighty Guard (the note), or anything (Jegged), so Yenke is the second to go.
  * 4. **The plain Attack only when the brothers are apart** (the `ronso.sameSide` flag is 0): together, a plain Attack on one makes the other stand guard and lands for next to nothing (RE section 5.6, the
- *    probe on the engine: 8 against 435); Lancet, which is not physical, is the filler while the gauge fills. Damage goes to **Biran until he has called his Rage** (so his Mighty Guard can be learned while Yenke
+ *    engine: 8 against 440 to 480 on five seeds, `tests/unit/chapters/biran-yenke-hit.test.ts`); Lancet, which is not physical, is the filler while the gauge fills. Damage goes to **Biran until he has called his Rage** (so his Mighty Guard can be learned while Yenke
  *    still stands), then to **Yenke**.
  *
  * The tactic only picks among the rows the engine offers.

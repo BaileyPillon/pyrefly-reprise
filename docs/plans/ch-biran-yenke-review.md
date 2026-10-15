@@ -152,3 +152,23 @@ frames under `docs/screenshots/ch-biran-yenke/`, each looked at.
 3. Replace the stand-in script with the game's own (the move order, the Guard, the Bulldoze, the partner-down rules, the HP-loss trigger); keep the learning rule's table to what the rows say (`afterUse`,
    which Rages, whether Berserk blocks, how many per cast).
 4. Re-measure the bench (never tune), update the guide, the advisor line and the Sensor lines to the rows, re-run the suites and the browser proof.
+
+## 11. Update, 2026-10-14 (after the build): what the plan said and what was built
+
+The plan above was written before any code and before the reverse-engineering note landed; the note (`research/re-ffx-biran-yenke.md`, merged as 0d62b069) made section 10 the plan, and the stand-in layer of section 3 was never built.
+Where the text above and the build differ, **the build wins**; the differences, each with its reason:
+
+| Plan (sections 3, 4, 5, 7) | Built | Why |
+|---|---|---|
+| Layer B: a labelled stand-in block (`ROWS`), one fixture marked `standIn: true`, no Guard or Bulldoze | **No stand-in anywhere.** Both records, the loot, the move rows, the formation, the two scripts, the sides, the defence swap and the stats derived from Kimahri's are the note's, and `biran-yenke-data.test.ts`, `biran-yenke-stats.test.ts` and `biran-yenke-engine.test.ts` pin them to it | The note landed before the build started |
+| The lessons table in data (`data/ffx/ronso-rages.ts`) | `battle/ffx/ronso-rage.ts` | `src/battle/**` imports no `src/data` (hard rule 1); the ids are copied there and pinned by the data test |
+| "A Berserk Biran cannot teach" (Jegged), built as a block on every Berserk target | A Berserk Biran **still teaches** Thrust Kick, Self-Destruct and Doom; only his Mighty Guard is lost, because his half-HP action is cancelled when Yenke falls first (RE sections 5.4, 5.5, 7) | The note is the game's own file and wins over the walkthrough (rule 6); the guide's advice is true under both, and the disagreement is in the handoff |
+| The gate on "after use" Rages opens when the monster has used the Rage | It opens when he **queues** it at half strength (not when it resolves), and only if his brother still lives (RE section 7) | The note's decoded gate |
+| "The fixture `tests/fixtures/parity/ffx/biran_yenke_rows.json`" | None; the values are asserted directly against the note in `biran-yenke-data.test.ts` | There was nothing to re-pin |
+| Music "picked from the existing FFX boss cues" (open item 1) | `boss-challenge` (the generic boss cue Chapter II and the Gui guest hour play), the mountain's own bed `scene-gagazet` for the scene | No source names this fight's cue; Bailey's ear decides |
+| Kimahri: "the Gagazet preset with what the duel teaches taken off, his Rages `['jump']`, gauge 45" | As planned (`data/ffx/builds/kimahri-trial.ts`, one constant `KIMAHRI_KEEPS_THE_PRESETS_RAGES`), also lacking Talk; the driver accepted the call | The preset already holds Mighty Guard and White Wind, which this fight teaches |
+| Open item: "a stand-in drop table" | One drop slot that pays **one** item (`ItemDrop.rare`, a contract field added at the RE review) | The game gives exactly one item from one slot |
+
+Added after the RE review of 09b3f268 and 4281febc (all pinned by tests): the seven command records the data-layer test asked for, the contract note for `encounters.ts` and `types.ts`, the data index folded back under 400 lines, the
+script stream's one draw per non-lethal hit on a brother (no dialogue), the guard released only while Sentinel is on. New research file: `research/ffx-biran-yenke.md` (what the written sources say, and where the game's file overrules them).
+Not changed from the plan: the word `gagazet` and its Z (section 6), the hidden number 25, the registry shape, the provisional art (two new subjects in a new art mirror, nothing approved replaced).

@@ -1,6 +1,7 @@
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots, Spot } from './index.ts';
 import { buildGagazetScene } from './gagazet.ts';
+import { GAGAZET_STAGING } from './gagazet-giants.ts';
 import { BIRAN_ID, YENKE_ID } from '../data/ffx/biran-yenke-ids.ts';
 
 // ---------------------------------------------------------------------------
@@ -34,7 +35,7 @@ const PARTY_SLOTS: Spot[] = [
 
 /** Where the brothers stand (`ENEMY_SPOTS` is the one place to move a body). */
 const ENEMY_SPOTS: Record<string, Spot> = {
-  [BIRAN_ID]: [2.15, 0, -2.0],
+  [BIRAN_ID]: [1.85, 0, -2.0], // 2.15 in the first build: the phone rig (390 wide) cropped his mane at the right edge in the browser proof, so he stands 0.3 nearer the middle
   [YENKE_ID]: [0.55, 0, -3.9],
 };
 
@@ -69,12 +70,13 @@ function derive(build: SceneBuild, over: Partial<Mutable<SceneBuild>>): SceneBui
  */
 export const buildGagazetRonsoScene: SceneFactory = async (opts: SceneBuildOptions = {}) => {
   const base = await buildGagazetScene(opts);
-  return derive(base, {
+  const out = derive(base, {
     partySlots: base.partySlots.map((s, i) => (i < PARTY_SLOTS.length ? s.clone().set(...PARTY_SLOTS[i]!) : s)),
     enemySlots: base.enemySlots.map((s, i) => (i === 0 ? s.clone().set(...ENEMY_SPOTS[BIRAN_ID]!) : i === 1 ? s.clone().set(...ENEMY_SPOTS[YENKE_ID]!) : s)),
-    holdParty: GAGAZET_RONSO_STAGING.holdParty,
-    enemySpots: GAGAZET_RONSO_STAGING.enemySpots,
-    figureHeights: GAGAZET_RONSO_STAGING.figureHeights,
-    guideFolded: false, // Chapter I opens its fight with the guide folded (Bailey's pick for Chapters I and III); this chapter's fights start as every other fight does
   });
+  // Chapter I's staging is REPLACED, not added to: every key its staging names is dropped (the giants' pins and heights, and the folded guide that is Bailey's pick for Chapters I and III only), then this
+  // fight's own are set, so the guide opens as in every other fight. Dropping by Chapter I's own key list, not by name, keeps a key it adds later out of this scene too (and keeps this file from
+  // naming the fold, which `tests/unit/ui-ffx-guide-folded-scenes.test.ts` allows only the type, its copier and the two giants' staging files to do).
+  for (const key of Object.keys(GAGAZET_STAGING)) delete (out as unknown as Record<string, unknown>)[key];
+  return Object.assign(out, { holdParty: GAGAZET_RONSO_STAGING.holdParty, enemySpots: GAGAZET_RONSO_STAGING.enemySpots, figureHeights: GAGAZET_RONSO_STAGING.figureHeights });
 };
