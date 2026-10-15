@@ -1,7 +1,7 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 71 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 72 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
@@ -9,9 +9,42 @@ picture, before and after where both exist. Engineering detail lives in `docs/ha
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
 
-## 2026-10-14 · Biran and Yenke: Kimahri alone against the two Ronso, a hidden FFX chapter behind the word `gagazet` (branch ch-biran-yenke, not yet in a release candidate; not live)
+## 2026-10-14 · A hidden chapter: Angra Mainyu in the Bikanel Desert (branch ch-angra-mainyu, part of release candidate r49-rc; not live)
 
-Address: none yet (branch ch-biran-yenke, code and tests at e5a72d74; not merged into a release candidate, not deployed, no review run; nobody has heard its music or judged its look, and both are provisional)
+Address: none yet (branch ch-angra-mainyu 566003a1, from release candidate r48-rc ea431aa0, merged into release candidate r49-rc; not deployed, no review run; nobody has played it by ear or by eye, so the art and the music are provisional picks)
+
+- **FFX-2, hidden chapter:** Angra Mainyu, the Chapter 5 mission "Showdown in the Sands" at the Al Bhed dig in the
+  Bikanel Desert. Type `angra` on the chapter board; it is not in the board's "of 18" and is not listed. Three bodies
+  on the sand: the fiend and its two arms. Zarich, the left arm, takes no physical damage and Tawrich, the right
+  arm, takes no magic; Darkness is neither, so it reaches all three. The fiend opens with Perdition's Flame (ten hits
+  on random girls, each taking three sixteenths of that girl's full HP, so keep everyone high; Protect halves it),
+  raises a fallen arm with Full-Life, drinks the party's MP with Osmose once its own runs low, and rolls
+  Flare, Curaga, Bio or Demi in between; Zarich saps MP and strength, Tawrich punches and breathes. Its numbers, its
+  moves and its three scripts are the game's own (read from the game files: monster rows 268 to 270, the move rows,
+  the start positions and the three AI scripts); the party is the Chapter V party carried over, which is an
+  estimate. **At that level the guide's line wins none of 240 measured fights, and the chapter is not tuned**: a
+  measured option that raises the girls' levels is there and is off (+20 levels wins 18 of 20).
+- **FFX-2, art and sound (provisional):** the fiend and its two arms are new paintings drawn locally for this
+  chapter, on a new desert backdrop: dunes, a buried arch, a dug-in camp and a mesa under a bright sky. None of it is
+  Bailey's pick and no approved painting was replaced; none of the three has a hurt or knocked-out painting. The
+  fight plays the aeon theme the other FFX-2 hidden chapters play. A first pick of Tawrich drew as a square halo in
+  the game and was replaced.
+- **Both:** the hidden words `limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor` and
+  `gagazet` still work, a wrong word still opens nothing, and the new chapter writes only its own record (never the save).
+- **Proof:** played in a production build in a headless browser: the word opens the chapter, the board has no card
+  and still says "of 18", the other hidden words still work, the intro plays, a fight is lost and its Retry goes back
+  through the party prep, and a win is played through to the results (the fiend's HP set low through the debug
+  state, since the guide's line cannot win it). Also on a phone-sized screen.
+
+![The first menu on the Bikanel plate: the fiend, Zarich on the left and Tawrich on the right, the guide card and the three girls](docs/screenshots/ch-angra-mainyu/1600x900-first-menu.jpg)
+
+![The fiend's bar is empty after a Darkness that also took both arms down](docs/screenshots/ch-angra-mainyu/1600x900-body-down.jpg)
+
+![The results screen after the win](docs/screenshots/ch-angra-mainyu/1600x900-results.jpg)
+
+## 2026-10-14 · Biran and Yenke: Kimahri alone against the two Ronso, a hidden FFX chapter behind the word `gagazet` (branch ch-biran-yenke, part of release candidate r49-rc; not live)
+
+Address: none yet (branch ch-biran-yenke, code and tests at 5e29bb0c, merged into release candidate r49-rc; not deployed, no review run; nobody has heard its music or judged its look, and both are provisional)
 
 - **FFX, hidden chapter:** Biran and Yenke Ronso at the Mountain Gate of Mt. Gagazet, the fight where Kimahri goes in alone. Type `gagazet` on the chapter
   board; there is no card and the board still says "of 18". One fight, Kimahri against both brothers. The numbers, the moves and the rules of both are
@@ -28,7 +61,7 @@ Address: none yet (branch ch-biran-yenke, code and tests at e5a72d74; not merged
   Sphere in its place (twice as many on an Overkill). Never none, never both; before this build the engine rolled the two as separate drops.
 - **FFX, provisional:** the stage is Chapter I's Mt. Gagazet (no painting of the gate exists); the two brothers' paintings are new candidates made locally, nothing
   approved was replaced; the music is the generic boss cue. The guide card follows the walkthrough in our own words and the game's files where they differ.
-- **Both:** the hidden words `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro` and `valefor` still work, `limit` still opens FF7's battle as before, a wrong
+- **Both:** the hidden words `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor` and `angra` still work, `limit` still opens FF7's battle as before, a wrong
   word opens nothing, and the chapter writes only its own record, never the save. No other chapter changes: the 18 FFX engine goldens do not move, and one new
   optional field (`ItemDrop.rare`, the rare item of a drop slot) is read by the FFX results only where a drop names one.
 - **How it was checked:** type check clean; the full suite once (19,740 tests: 3 failed, each a test that lists every departure kind, command record or scene
