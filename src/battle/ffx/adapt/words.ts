@@ -129,7 +129,8 @@ export function specialWord(c: FFXCombatant): number {
 }
 
 /**
- * `Chr+0x6bc`, the bits the damage kernels read: 0x40 Magic Booster, 0x200 Alchemy, 0x2000 Pierce. An aeon's word is its fixed
+ * `Chr+0x6bc`, the bits the kernels read: 0x40 Magic Booster, 0x200 Alchemy, 0x2000 Pierce (the damage kernels), 0x4000 Half MP Cost and
+ * 0x8000 One MP Cost (the command gate's MP cost, `kernel/command-gate.ts`, re-parity RC7). An aeon's word is its fixed
  * gear's (re-parity W5, `aeon-gear.ts`: 0x2001 for nine of the ten, Valefor 0x0001).
  */
 export function autoWordA(c: FFXCombatant): number {
@@ -137,6 +138,8 @@ export function autoWordA(c: FFXCombatant): number {
   if (hasAuto(c, 'magic-booster')) word |= 0x40;
   if (hasAuto(c, 'alchemy')) word |= 0x200;
   if (hasAuto(c, 'piercing')) word |= 0x2000;
+  if (hasAuto(c, 'half-mp-cost')) word |= 0x4000;
+  if (hasAuto(c, 'one-mp-cost')) word |= 0x8000;
   if (c.side === 'aeon') word |= aeonGearOf(c).autoA;
   return word;
 }

@@ -35,6 +35,8 @@ import { DEFAULT_ATB_MODE, type AtbMode } from '../../battle/ffx2/active.ts';
 import { MenuLevelRelay, paintAtbChip, type MenuLevel } from './atbClockChip.ts';
 import type { CursorSelection } from '../ffx/TargetCursor.ts';
 import { accentFor } from '../../engine/TargetHighlight.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
+import { cvdColour, hexToInt } from '../common/colourVision.ts';
 import { mountTriggerHappy } from './TriggerHappy.ts';
 import { mountLadyLuckReels } from './LadyLuckReels.ts';
 import { partyRowHtml } from './PartyRows.ts';
@@ -1121,7 +1123,9 @@ export class FFX2BattleHud implements HudPort {
         // takes a halo behind it rather than a pool on a floor it never
         // touches — `accentFor` decides, from the game flag, never memory.
         const accent = accentFor(kind, 'ffx2', true);
-        this.targeting.select({ ids: [...ids], mode: sel.mode, accent });
+        // COLOUR VISION (PR-0032, both games: the same ally and self marks): the pool takes the mode's colour, to agree with the bracket and plate.
+        const cvd = readColourVision();
+        this.targeting.select({ ids: [...ids], mode: sel.mode, accent, ...(cvd === 'off' || accent === 'ffx2' ? {} : { colour: hexToInt(cvdColour('target', accent, cvd)) }) });
         const active = sel.activeId;
         const covered = active !== null && this.targeting.visibility(active) < 0.75;
         this.targeting.xray(covered ? active : null);

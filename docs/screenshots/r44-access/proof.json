@@ -1,0 +1,653 @@
+{
+ "mode": "gpu",
+ "base": "http://127.0.0.1:5191/",
+ "startedAt": "2026-10-13T04:32:26.878Z",
+ "tabs": {
+  "ffx-1600x900": {
+   "game": "ffx",
+   "viewport": "1600x900",
+   "phone": false,
+   "tabs": [
+    "member:tidus",
+    "member:yuna",
+    "member:kimahri",
+    "chapter",
+    "guide",
+    "options",
+    "accessibility",
+    "controls",
+    "music"
+   ],
+   "rows": [
+    "textSize=100%",
+    "reduceMotion=OFF",
+    "reduceFlashes=OFF",
+    "lowEffects=OFF",
+    "colourVision=OFF"
+   ],
+   "cursor": "reduceFlashes",
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": null,
+    "cvdAlly": null,
+    "textSize": "100"
+   },
+   "optionsRows": [
+    "masterVolume",
+    "musicVolume",
+    "sfxVolume",
+    "textSpeed",
+    "eyeCandy",
+    "guideVisible",
+    "battleHelp"
+   ],
+   "consoleErrors": []
+  },
+  "ffx-390x844": {
+   "game": "ffx",
+   "viewport": "390x844",
+   "phone": true,
+   "rows": [
+    "textSize=100%",
+    "reduceMotion=OFF",
+    "reduceFlashes=OFF",
+    "lowEffects=OFF",
+    "colourVision=OFF"
+   ],
+   "rowBoxes": [
+    {
+     "row": "textSize",
+     "top": 471,
+     "bottom": 491,
+     "inView": true
+    },
+    {
+     "row": "reduceMotion",
+     "top": 491,
+     "bottom": 511,
+     "inView": true
+    },
+    {
+     "row": "reduceFlashes",
+     "top": 511,
+     "bottom": 531,
+     "inView": true
+    },
+    {
+     "row": "lowEffects",
+     "top": 531,
+     "bottom": 551,
+     "inView": true
+    },
+    {
+     "row": "colourVision",
+     "top": 551,
+     "bottom": 571,
+     "inView": true
+    }
+   ],
+   "scrollsSideways": false,
+   "consoleErrors": []
+  },
+  "ffx2-1600x900": {
+   "game": "ffx2",
+   "viewport": "1600x900",
+   "phone": false,
+   "tabs": [
+    "member:yuna",
+    "member:rikku",
+    "member:paine",
+    "chapter",
+    "guide",
+    "options",
+    "accessibility",
+    "controls",
+    "music"
+   ],
+   "rows": [
+    "textSize=100%",
+    "reduceMotion=OFF",
+    "reduceFlashes=OFF",
+    "lowEffects=OFF",
+    "colourVision=OFF"
+   ],
+   "cursor": "reduceFlashes",
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": null,
+    "cvdAlly": null,
+    "textSize": "100"
+   },
+   "optionsRows": [
+    "masterVolume",
+    "musicVolume",
+    "sfxVolume",
+    "textSpeed",
+    "eyeCandy",
+    "ffx2Atb",
+    "ffx2AtbSpeed",
+    "guideVisible",
+    "battleHelp"
+   ],
+   "consoleErrors": []
+  },
+  "ffx2-390x844": {
+   "game": "ffx2",
+   "viewport": "390x844",
+   "phone": true,
+   "rows": [
+    "textSize=100%",
+    "reduceMotion=OFF",
+    "reduceFlashes=OFF",
+    "lowEffects=OFF",
+    "colourVision=OFF"
+   ],
+   "rowBoxes": [
+    {
+     "row": "textSize",
+     "top": 471,
+     "bottom": 491,
+     "inView": true
+    },
+    {
+     "row": "reduceMotion",
+     "top": 491,
+     "bottom": 511,
+     "inView": true
+    },
+    {
+     "row": "reduceFlashes",
+     "top": 511,
+     "bottom": 531,
+     "inView": true
+    },
+    {
+     "row": "lowEffects",
+     "top": 531,
+     "bottom": 551,
+     "inView": true
+    },
+    {
+     "row": "colourVision",
+     "top": 551,
+     "bottom": 571,
+     "inView": true
+    }
+   ],
+   "scrollsSideways": false,
+   "consoleErrors": []
+  }
+ },
+ "flash": {
+  "beforeHtml": {
+   "reduceFlashes": false,
+   "colourVision": null,
+   "cvdAlly": null,
+   "textSize": "100"
+  },
+  "beforeRules": {
+   "eyeCandyReduceFlashes": false,
+   "spellWashCap": 1,
+   "spellWhiteWashTo": null,
+   "spellOneWashPerAction": false,
+   "spellActorCap": 1,
+   "spellSingleBolt": false
+  },
+  "beforeWash": {
+   "opacity": 1,
+   "background": "rgb(255, 255, 255)",
+   "transition": "opacity 220ms ease-out"
+  },
+  "beforeHeal": {
+   "asked": {
+    "colour": 10354628,
+    "ms": 320,
+    "peak": 0.6
+   },
+   "amount": 0.6,
+   "colour": "#9dffc4"
+  },
+  "beforeHurt": {
+   "animation": "ffx-hurt-flash",
+   "durationMs": 300,
+   "filterAtPeak": "brightness(1.6)"
+  },
+  "row": {
+   "value": "ON",
+   "html": {
+    "reduceFlashes": true,
+    "colourVision": null,
+    "cvdAlly": null,
+    "textSize": "100"
+   },
+   "saved": {
+    "reduceFlashes": true,
+    "colourVision": "off"
+   }
+  },
+  "afterHtml": {
+   "reduceFlashes": true,
+   "colourVision": null,
+   "cvdAlly": null,
+   "textSize": "100"
+  },
+  "afterRules": {
+   "eyeCandyReduceFlashes": true,
+   "spellWashCap": 0.35,
+   "spellWhiteWashTo": "#FFF1D6",
+   "spellOneWashPerAction": true,
+   "spellActorCap": 0.35,
+   "spellSingleBolt": true
+  },
+  "afterWash": {
+   "opacity": 0.35,
+   "background": "rgb(255, 241, 214)",
+   "transition": "opacity 220ms ease-out"
+  },
+  "afterHeal": {
+   "asked": {
+    "colour": 10354628,
+    "ms": 320,
+    "peak": 0.6
+   },
+   "amount": 0.35,
+   "colour": "#9dffc4"
+  },
+  "afterHurt": {
+   "animation": "ffx-hurt-soft",
+   "durationMs": 600,
+   "filterAtPeak": "brightness(1.21)"
+  },
+  "consoleErrors": []
+ },
+ "colour": {
+  "beforeHtml": {
+   "reduceFlashes": false,
+   "colourVision": null,
+   "cvdAlly": null,
+   "textSize": "100"
+  },
+  "offSelf": {
+   "ids": [
+    "tidus"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "self"
+  },
+  "offAlly": {
+   "ids": [
+    "yuna"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "ally"
+  },
+  "offMarks": {
+   "ally": {
+    "cls": "ffx-target ffx-target--ally ffx-target--clickable",
+    "mark": "#7ee8b0",
+    "tickDrawn": false,
+    "tickContent": "none"
+   },
+   "self": {
+    "cls": "ffx-target ffx-target--self ffx-target--dim ffx-target--clickable",
+    "mark": "#8fd0f0",
+    "tickDrawn": false,
+    "tickContent": "none"
+   },
+   "plateMark": "#7ee8b0",
+   "plateClass": "ffx-target__plate ffx-target__plate--ally ffx-target__plate--below"
+  },
+  "offMenu": [
+   " Attack",
+   " Special▸×4",
+   " White Magic▸×3",
+   ">Item ▸×27",
+   " Flee",
+   " Switch▸×4"
+  ],
+  "offNumeral": {
+   "text": "40",
+   "gradient": "linear-gradient(rgb(143, 208, 240) 0%, rgb(58, 143, 208) 100%)"
+  },
+  "row": {
+   "value": "RED-GREEN",
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": "red-green",
+    "cvdAlly": "#56b4e9",
+    "textSize": "100"
+   },
+   "saved": {
+    "reduceFlashes": false,
+    "colourVision": "red-green"
+   }
+  },
+  "afterHtml": {
+   "reduceFlashes": false,
+   "colourVision": "red-green",
+   "cvdAlly": "#56b4e9",
+   "textSize": "100"
+  },
+  "onSelf": {
+   "ids": [
+    "tidus"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "self"
+  },
+  "onAlly": {
+   "ids": [
+    "yuna"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "ally"
+  },
+  "onMarks": {
+   "ally": {
+    "cls": "ffx-target ffx-target--ally ffx-target--clickable",
+    "mark": "#56b4e9",
+    "tickDrawn": true,
+    "tickContent": "\"\""
+   },
+   "self": {
+    "cls": "ffx-target ffx-target--self ffx-target--dim ffx-target--clickable",
+    "mark": "#f4f1e8",
+    "tickDrawn": true,
+    "tickContent": "\"\""
+   },
+   "plateMark": "#56b4e9",
+   "plateClass": "ffx-target__plate ffx-target__plate--ally ffx-target__plate--below"
+  },
+  "onMenu": [
+   " Attack",
+   " Special▸×4",
+   " White Magic▸×3",
+   ">Item ▸×27",
+   " Flee",
+   " Switch▸×4"
+  ],
+  "red-greenNumeral": {
+   "text": "40 MP",
+   "gradient": "linear-gradient(rgb(143, 208, 240) 0%, rgb(58, 143, 208) 100%)"
+  },
+  "row2": {
+   "value": "BLUE-YELLOW",
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": "blue-yellow",
+    "cvdAlly": "#7ee8b0",
+    "textSize": "100"
+   },
+   "saved": {
+    "reduceFlashes": false,
+    "colourVision": "blue-yellow"
+   }
+  },
+  "blue-yellowNumeral": {
+   "text": "40 MP",
+   "gradient": "linear-gradient(rgb(217, 198, 248) 0%, rgb(180, 140, 240) 100%)"
+  },
+  "consoleErrors": []
+ },
+ "gates": {
+  "off": [
+   {
+    "gate": "R",
+    "bg": "rgb(201, 58, 66)",
+    "w": 21.2,
+    "letter": "none",
+    "rotate": "matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)"
+   },
+   {
+    "gate": "G",
+    "bg": "rgb(117, 145, 58)",
+    "w": 21.2,
+    "letter": "none",
+    "rotate": "matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)"
+   },
+   {
+    "gate": "B",
+    "bg": "rgb(58, 120, 190)",
+    "w": 21.2,
+    "letter": "none",
+    "rotate": "matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)"
+   },
+   {
+    "gate": "Y",
+    "bg": "rgb(227, 185, 74)",
+    "w": 21.2,
+    "letter": "none",
+    "rotate": "matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)"
+   }
+  ],
+  "redGreen": [
+   {
+    "gate": "R",
+    "bg": "rgb(213, 94, 0)",
+    "w": 22.5,
+    "letter": "\"R\"",
+    "rotate": "none"
+   },
+   {
+    "gate": "G",
+    "bg": "rgb(0, 158, 115)",
+    "w": 22.5,
+    "letter": "\"G\"",
+    "rotate": "none"
+   },
+   {
+    "gate": "B",
+    "bg": "rgb(0, 114, 178)",
+    "w": 22.5,
+    "letter": "\"B\"",
+    "rotate": "none"
+   },
+   {
+    "gate": "Y",
+    "bg": "rgb(240, 228, 66)",
+    "w": 22.5,
+    "letter": "\"Y\"",
+    "rotate": "none"
+   }
+  ],
+  "blueYellow": [
+   {
+    "gate": "R",
+    "bg": "rgb(208, 52, 60)",
+    "w": 22.5,
+    "letter": "\"R\"",
+    "rotate": "none"
+   },
+   {
+    "gate": "G",
+    "bg": "rgb(0, 166, 166)",
+    "w": 22.5,
+    "letter": "\"G\"",
+    "rotate": "none"
+   },
+   {
+    "gate": "B",
+    "bg": "rgb(122, 79, 208)",
+    "w": 22.5,
+    "letter": "\"B\"",
+    "rotate": "none"
+   },
+   {
+    "gate": "Y",
+    "bg": "rgb(227, 185, 74)",
+    "w": 22.5,
+    "letter": "\"Y\"",
+    "rotate": "none"
+   }
+  ],
+  "consoleErrors": []
+ },
+ "touch": {
+  "flashesTap1": {
+   "value": "ON",
+   "html": {
+    "reduceFlashes": true,
+    "colourVision": null,
+    "cvdAlly": null,
+    "textSize": "100"
+   },
+   "saved": {
+    "reduceFlashes": true,
+    "colourVision": "off"
+   }
+  },
+  "cvdTaps": [
+   {
+    "value": "RED-GREEN",
+    "attr": "red-green"
+   },
+   {
+    "value": "BLUE-YELLOW",
+    "attr": "blue-yellow"
+   },
+   {
+    "value": "OFF",
+    "attr": null
+   }
+  ],
+  "flashesTap2": {
+   "value": "OFF",
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": null,
+    "cvdAlly": null,
+    "textSize": "100"
+   },
+   "saved": {
+    "reduceFlashes": false,
+    "colourVision": "off"
+   }
+  },
+  "optionsRows": [
+   "masterVolume",
+   "musicVolume",
+   "sfxVolume",
+   "textSpeed",
+   "eyeCandy",
+   "ffx2Atb",
+   "ffx2AtbSpeed",
+   "guideVisible",
+   "battleHelp"
+  ],
+  "consoleErrors": []
+ },
+ "errors": [],
+ "finishedAt": "2026-10-13T04:34:23.639Z",
+ "colourFfx2": {
+  "beforeHtml": {
+   "reduceFlashes": false,
+   "colourVision": null,
+   "cvdAlly": null,
+   "textSize": "100"
+  },
+  "offFirst": {
+   "ids": [
+    "yuna"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "ally"
+  },
+  "offMarks": {
+   "ally": {
+    "cls": "ffx-target ffx-target--ally ffx-target--clickable",
+    "mark": "#7ee8b0",
+    "tickDrawn": false,
+    "inHud": "ffx2hud"
+   },
+   "self": {
+    "cls": "ffx-target ffx-target--self ffx-target--dim ffx-target--clickable",
+    "mark": "#8fd0f0",
+    "tickDrawn": false,
+    "inHud": "ffx2hud"
+   },
+   "plateMark": "#7ee8b0"
+  },
+  "offNext": {
+   "ids": [
+    "rikku"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "ally"
+  },
+  "row": {
+   "value": "RED-GREEN",
+   "html": {
+    "reduceFlashes": false,
+    "colourVision": "red-green",
+    "cvdAlly": "#56b4e9",
+    "textSize": "100"
+   },
+   "saved": {
+    "reduceFlashes": false,
+    "colourVision": "red-green"
+   }
+  },
+  "onFirst": {
+   "ids": [
+    "yuna"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "ally"
+  },
+  "onMarks": {
+   "ally": {
+    "cls": "ffx-target ffx-target--ally ffx-target--clickable",
+    "mark": "#56b4e9",
+    "tickDrawn": true,
+    "inHud": "ffx2hud"
+   },
+   "self": {
+    "cls": "ffx-target ffx-target--self ffx-target--dim ffx-target--clickable",
+    "mark": "#f4f1e8",
+    "tickDrawn": true,
+    "inHud": "ffx2hud"
+   },
+   "plateMark": "#56b4e9"
+  },
+  "onNext": {
+   "ids": [
+    "rikku"
+   ],
+   "mode": "single",
+   "side": null,
+   "accent": "ally"
+  },
+  "consoleErrors": []
+ },
+ "covers": {
+  "off": {
+   "classes": [
+    "ssphere",
+    "ssphere--in",
+    "ssphere--card"
+   ],
+   "washBackground": "rgba(246, 240, 250, 0.74)",
+   "washOpacity": 1,
+   "orbAnimation": "ssphere-pulse"
+  },
+  "on": {
+   "classes": [
+    "ssphere",
+    "ssphere--soft",
+    "ssphere--in",
+    "ssphere--card"
+   ],
+   "washBackground": "rgb(89, 84, 75)",
+   "washOpacity": 1,
+   "orbAnimation": "none"
+  },
+  "consoleErrors": []
+ }
+}

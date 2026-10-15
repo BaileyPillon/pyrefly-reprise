@@ -1,0 +1,291 @@
+{
+ "source": "FFX-2 Steam build 25501027; kernel/monster.bin row 164 (id 0x10a4, formation 0393 bsyt05_229, the Besaid Temple Valefor), read by the RE parity session (research/re-ffx2-yojimbo-valefor.md, origin/re-ffx2-yojimbo-valefor at 91ef1fd3, sections 3 to 5). Numbers only. 'raw' is the row's 200 bytes as the note prints them (the English copy; bytes 8 to 199 are equal in all ten locale copies); 'decoded' is the proved columns by the note's column map (section 3), which tests/unit/chapters/besaid-valefor-data.test.ts re-derives from 'raw'. 'research' is research/ffx2-fallen-aeons.md section 7.1 (SinirothX + FF Wiki, [verified: 2 sources]) for the same monster.",
+ "row": 164,
+ "raw": "8c5a5a00945a0b01ee2000000f27000016614c0b147d5f190300c30300100000ffffffffffffffffff00ff000000000000ffff0000000000000000000000ff00000000000000ff0000000000000000000000000000000000000000000000000000000000000000000000000000000000da41914092409340ad40000000000000000000000000000000000000000000000000a410a410a41000000000dc050000b0040000dc0500000f00ff805c9001005c9001003420040034200600000000000000000050000000",
+ "decoded": {
+  "hp": 8430,
+  "mp": 9999,
+  "level": 22,
+  "str": 97,
+  "def": 76,
+  "mag": 11,
+  "mdef": 20,
+  "agi": 125,
+  "acc": 95,
+  "eva": 25,
+  "luck": 3,
+  "special": 963,
+  "absorb": 0,
+  "nullElements": 16,
+  "half": 0,
+  "weak": 0,
+  "resist1": {
+   "0": 255,
+   "1": 255,
+   "2": 255,
+   "3": 255,
+   "4": 255,
+   "5": 255,
+   "6": 255,
+   "7": 255,
+   "8": 255,
+   "10": 255,
+   "17": 255,
+   "18": 255
+  },
+  "resist2": {
+   "6": 255,
+   "14": 255
+  },
+  "abilities": [
+   16858,
+   16529,
+   16530,
+   16531,
+   16557
+  ],
+  "exp": 1500,
+  "gil": 1200,
+  "pilferGil": 1500,
+  "ap": 15,
+  "dropChanceByte": 255,
+  "stealChanceByte": 128,
+  "dropItems": [
+   36956,
+   1,
+   36956,
+   1
+  ],
+  "stealItems": [
+   8244,
+   4,
+   8244,
+   6
+  ],
+  "bribeItems": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "zantetsuByte": 80
+ },
+ "unmapped": {
+  "note": "Columns the RE note marks unmapped (raw N): carried here as raw numbers, wired to nothing (AGENTS.md hard rule 6).",
+  "basakuWord": 0,
+  "soundId": 4260,
+  "monsterTypeWord": 0,
+  "specialBits7and8": [
+   1,
+   1
+  ],
+  "group1ResistSlots17and18": [
+   255,
+   255
+  ],
+  "elementBits6and7": [
+   0,
+   0
+  ]
+ },
+ "research": {
+  "section": "research/ffx2-fallen-aeons.md 7.1 (Candidate B, Valefor #178)",
+  "level": 22,
+  "hp": 8430,
+  "str": 97,
+  "mag": 11,
+  "def": 76,
+  "mdef": 20,
+  "agi": 125,
+  "eva": 25,
+  "luck": 3,
+  "exp": 1500,
+  "ap": 15,
+  "gil": 1200,
+  "pilferGil": 1500,
+  "elements": "neutral",
+  "breaksAndSlow": "land",
+  "drop": "Moon Bracer",
+  "steal": "Healing Spring x4 (rare x6)",
+  "attackDC": 16,
+  "sonicWingsDC": 2,
+  "energyRayDC": 20,
+  "energyBlastDC": 25,
+  "counter": {
+   "perAction": 5,
+   "rayMarks": [
+    30,
+    60
+   ],
+   "overdriveAt": 100
+  },
+  "mix": {
+   "attack": "2/3",
+   "sonicWings": "1/3"
+  }
+ },
+ "disagreements": [
+  {
+   "field": "elements",
+   "row164": "Gravity nulled (null byte 0x10)",
+   "research": "neutral",
+   "used": "the row: affinities { gravity: immune }"
+  }
+ ],
+ "newInRow": [
+  "mp 9999",
+  "acc 95",
+  "status immunities (group 1 slots 0 to 8 and 10; group 2 slots 6 and 14)",
+  "special word 0x3c3",
+  "steal chance byte 128",
+  "drop chance byte 255",
+  "zantetsu byte 80"
+ ],
+ "scene": {
+  "source": "pos_bsyt05_229.psc (PlayerPos and EnemyPos lines), byte for byte Ixion's, via the RE review of 2026-10-14 (research/re-ai-valefor note); numbers only: the game's ground-plane units, x across and z into the scene",
+  "boss": {
+   "x": 0,
+   "z": 26
+  },
+  "girls": [
+   {
+    "x": 0,
+    "z": -27
+   },
+   {
+    "x": -12,
+    "z": -25
+   },
+   {
+    "x": 12,
+    "z": -25
+   }
+  ],
+  "groundDistance": {
+   "yuna": 53,
+   "rikku": 52.39,
+   "paine": 52.39
+  },
+  "attackPercentAtTheStart": {
+   "yuna": 41.9,
+   "rikku": 29.1,
+   "paine": 29
+  }
+ },
+ "script": {
+  "source": "m164, the game's own AI script, read by the RE session (review of 2026-10-14); numbers only",
+  "gauge": {
+   "perAttackClassTurn": 5,
+   "perResultAppliedToHer": 5,
+   "rayMarks": [
+    30,
+    60
+   ],
+   "raysPerCycle": 2,
+   "overdriveAt": 100
+  },
+  "turn": [
+   "gauge >= 100: Energy Blast on all, gauge and Rays fired reset",
+   "else gauge >= 60 and fewer than 2 Rays fired: Energy Ray",
+   "else gauge >= 30 and 0 Rays fired: Energy Ray",
+   "else gauge + 5, then random() % 3: 0 Sonic Wings, 1 or 2 Attack"
+  ],
+  "gaugeReadBeforeTheTurnsGain": true,
+  "withNobodyHittingHer": {
+   "rayTurns": [
+    7,
+    14
+   ],
+   "blastTurn": 23
+  },
+  "rng": {
+   "random": "stream 2, one draw per attack-class turn only",
+   "targetSearches": "stream 4"
+  },
+  "noHpPhases": true,
+  "noTimer": true
+ },
+ "commandRows": {
+  "source": "monmagic.bin rows 0x4091 to 0x4093 (offset 0x20 + 136 x (id - 0x4000)), read byte by byte by the RE session; research/re-ffx2-ai-valefor.md section 3 and the appendix. Numbers only; the shape is FFX2CommandRecord; hex ids and words written as decimal",
+  "x2-valefor-energy-ray": {
+   "id": 16529,
+   "costAtb": 100,
+   "costCast": 120,
+   "category": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 20,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "x2-valefor-sonic-wings": {
+   "id": 16530,
+   "costAtb": 80,
+   "costCast": 100,
+   "category": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 1,
+   "damageClass": 2,
+   "formula": 0,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 2,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "x2-valefor-energy-blast": {
+   "id": 16531,
+   "costAtb": 100,
+   "costCast": 120,
+   "category": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1092616198,
+   "flagsDamage": 0,
+   "damageClass": 1,
+   "formula": 2,
+   "critByte": 0,
+   "accuracy": 0,
+   "power": 25,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "killer": 0
+  },
+  "cadence": {
+   "rule": "recovery = cost_atb x 10000 / (AGI + 1) units, charge = cost_cast x 10000 / (AGI + 1) units, 95 units a step at normal speed, 29.97 steps a second, rounded up to whole steps; her AGI is 125",
+   "agi": 125,
+   "seconds": {
+    "x2-valefor-energy-ray": {
+     "charge": 3.37,
+     "recovery": 2.8
+    },
+    "x2-valefor-sonic-wings": {
+     "charge": 2.8,
+     "recovery": 2.24
+    },
+    "x2-valefor-energy-blast": {
+     "charge": 3.37,
+     "recovery": 2.8
+    }
+   }
+  }
+ },
+ "notUsed": {
+  "row363": {
+   "note": "a second Valefor record (id 0x116b), in no btl.txt formation: Lv 48, HP 38,000, ACC 108; NOT this chapter",
+   "level": 48,
+   "hp": 38000,
+   "acc": 108
+  }
+ }
+}

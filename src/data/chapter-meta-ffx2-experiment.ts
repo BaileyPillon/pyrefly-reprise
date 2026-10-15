@@ -41,7 +41,7 @@ export const EXPERIMENT_META: ChapterMeta = {
     { image: 'portraits/rikku-x2.png', caption: 'is it a statue?' },
   ],
   focalCharacterId: 'yuna',
-  musicKeys: ['scene-bevelle-underground', 'boss-ffx2-aeon', 'boss-vegnagun', 'victory-ffx2'],
+  musicKeys: ['scene-bevelle-underground', 'boss-experiment', 'victory-ffx2'],
 };
 
 export default EXPERIMENT_META;

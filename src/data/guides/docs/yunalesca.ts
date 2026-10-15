@@ -4,7 +4,9 @@
  * **Game case: FFX only** (AGENTS.md rule 14). Follows the FFX encounter guide for this boss in
  * our own words and in its order (layout: `../doc-types.ts`); `research/jegged-encounter-guides-ffx-a.md`
  * Chapter 2 holds the page and every difference. HP, Steal and Drops are the numbers this game uses;
- * her buff-stripping counter is printed under the name the game gives it.
+ * her buff-stripping counter is printed under the name the game gives it. The paragraph after the armour advice (Wakka in for Tidus,
+ * and what a knock-out does to Zombie) is ours, not the guide's, added by re-parity RC6 with the line it describes
+ * (`src/engine/tactics/yunalesca-bench.ts`; the dated update in the Jegged note names the difference).
  *
  * The panel opens at the phase on the field: the header for Form I, then each phase's own stat
  * line (`formIndex` 1 and 2).
@@ -84,6 +86,14 @@ export const YUNALESCA_DOC: GuideDoc = {
     {
       t: 'p',
       text: 'Armour that blocks Silence, Darkness and Confuse is good, but think twice about blocking Zombie: you want at least one character to keep it.',
+    },
+    {
+      t: 'p',
+      text: 'Tidus, Yuna and Auron already wear Zombie Ward, which turns away about half of every Hellbiter. Before the last phase, swap Wakka in for Tidus: he wears no Zombie Ward, so Hellbiter always zombifies him.',
+    },
+    {
+      t: 'p',
+      text: "Wakka's Death Ward also gives him an even chance against Mega Death. A knock-out takes a character's Zombie away, so someone you raise is a plain target for Mega Death until the next Hellbiter.",
     },
     { t: 'list', label: 'Steal', items: ['Stamina Tablet (common)', 'Farplane Wind (rare)'] },
     { t: 'list', label: 'Drops', items: ['Lv. 3 Key Sphere'] },

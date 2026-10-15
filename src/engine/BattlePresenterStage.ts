@@ -52,6 +52,7 @@ import { KEY_FEATURES, featureRect } from './keyFeatures.ts';
 import { attachFootOcclusion, contactShadowStyle, disposeFootOcclusion, groundLumaOf } from './ContactShadow.ts';
 import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
+import { SOFT_BLOOM_CAP, softWash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { StageArt } from './StageArt.ts';
 import type { StageHost } from './TextureStager.ts';
 
@@ -74,10 +75,19 @@ export interface PaintedStageOptions {
   sceneKey?: string;
   /** The renderer's grade, which D-224's phase lighting turns (`PhaseLighting.ts`). */
   grade?: GradeTarget | null;
-  /** REDUCE FLASHES: phase lighting lands without its tween. The accessibility batch wires it; default off. */
+  /**
+   * REDUCE FLASHES (PR-0032), read live: phase lighting lands without its tween, every screen wash and flash on a fighter runs
+   * through `flashRules.ts` (35 % peak, white turns ivory, covers stay opaque but dim) and the bloom at a blow peaks at 35 %.
+   * `BattleScreen` wires it to the setting; absent reads as off.
+   */
   reduceFlashes?: () => boolean;
   /** REDUCE MOTION and LOW EFFECTS (D-285, `ComfortCamera.ts`), read live. Absent = both off. */
   comfort?: () => ComfortFlags;
+  /**
+   * CHAPTER FRAMING's plan is still to land (`fx/mix/MaxMix.ts` `framingPlanOwed`): it re-sizes a boss in one frame, so the boss entrance lets no figure in before it has
+   * (`entrance/StageEntrances.ts`, FOC44A-05). Read live. Absent = never owed, as for a stage with no framing.
+   */
+  planOwed?: () => boolean;
   /** Camera comfort preset (fb2-0929 options, default `current` = untouched; `CameraPreset.ts`). */
   cameraPreset?: () => CameraPresetSpec;
   /** The renderer, so a master the art governor loads is uploaded ahead of its swap (release 39.1, `TextureStager.ts`); without it the swap is release 39's. */
@@ -170,6 +180,11 @@ export class PaintedStage implements BattleStage {
   private readonly groundLuma: number | null;
   /** Release 39: which master of each painting the figures draw from, measured against the camera that is looking at them (`StageArt.ts`). */
   readonly art: StageArt;
+
+  /** The scene's shot director (`SceneStaging.shotDirector`), which `BattleMoments` asks before it moves the camera for a beat; absent for every scene but the hidden Fayth chapter's. */
+  get shotDirector(): SceneSlots['shotDirector'] {
+    return this.opts.slots.shotDirector;
+  }
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
@@ -388,6 +403,7 @@ export class PaintedStage implements BattleStage {
 
     this.opts.scene.add(actor);
     actor.still = () => this.opts.comfort?.().reduceMotion === true;
+    actor.softFlash = () => this.opts.reduceFlashes?.() === true; // PR-0032: REDUCE FLASHES softens every flash on this figure
     if (!anchor) this.pyreflies.stage(c.id, c.side, actor);
     if (this.staging && !anchor && c.side !== 'party') this.entrances?.hold(actor, c.id); // before it can be drawn: no frame shows it whole
     // A-8: a tight dark ellipse under the feet; a hovering figure keeps none.
@@ -739,7 +755,7 @@ export class PaintedStage implements BattleStage {
    */
   setEntrances(on: boolean): void {
     if (!on) {
-      this.entrances?.settle(true);
+      this.entrances?.settle(true, true); // switched off: every figure is on the field now, plan or no plan
       this.entrances = null;
       return;
     }
@@ -752,6 +768,7 @@ export class PaintedStage implements BattleStage {
       reduceFlashes: () => this.opts.reduceFlashes?.() === true,
       cameraAt: () => this.opts.camera.position,
       tier: () => this.spellFx.quality,
+      planOwed: () => this.opts.planOwed?.() === true, // FOC44A-05: CHAPTER FRAMING's plan lands while the figure is unseen
     });
   }
 
@@ -791,6 +808,7 @@ export class PaintedStage implements BattleStage {
       at: CombatantId | 'screen',
       key: string,
       crit: boolean,
+      quiet = false, // REDUCE FLASHES: a later blow of an action draws its sparks and slash but no bloom
     ): Promise<void> => {
       const colour = VFX_COLOURS[key] ?? VFX_COLOURS['impact']!;
       if (at === 'screen') {
@@ -807,7 +825,8 @@ export class PaintedStage implements BattleStage {
       // (docs/screenshots/70/52-ffx2-bahamut.png). `colour` is the element's,
       // so a heal reads as a green glow rather than a white hole in the figure.
       const bloom = bloomScale(staged.actor.height) * (crit ? 1.3 : 1);
-      this.hits.flash.play(point, crit ? 320 : 260, bloom, colour);
+      const soft = this.opts.reduceFlashes?.() === true;
+      if (!(soft && quiet)) this.hits.flash.play(point, crit ? 320 : 260, bloom, colour, soft ? SOFT_BLOOM_CAP : undefined);
       this.hits.sparks.emit(point, crit ? 1.35 : 1, this.opts.comfort?.().lowEffects ? LOW_EFFECTS_SPARK_SHARE : 1);
       if (key === 'slash' || key === 'impact') {
         await this.hits.slash.play(point, 300, -0.62);
@@ -817,7 +836,7 @@ export class PaintedStage implements BattleStage {
     return {
       play: (key, at) => impactAt(at, key, false),
       impact: async (at, o) =>
-        this.spellFx.covers(at) ? undefined : impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true),
+        this.spellFx.covers(at) ? undefined : impactAt(at, o?.element && o.element !== 'none' ? o.element : 'slash', o?.crit === true, o?.quiet === true),
       screenFlash: (colour, ms) => this.screenFlash(colour, ms),
       land: (at, o) => this.spellFx.land(at, o),
       pendingLand: (at, action) => this.spellFx.pendingLand(at, action), // FF7: the numeral on the drawn strike
@@ -891,9 +910,11 @@ export class PaintedStage implements BattleStage {
       this.flashEl = el;
     }
     const el = this.flashEl;
-    el.style.background = colour;
+    // PR-0032: REDUCE FLASHES. Off paints what it always painted (the colour as given, opacity 1).
+    const soft = this.opts.reduceFlashes?.() === true ? softWash(colour, ms) : null;
+    el.style.background = soft ? soft.colour : colour;
     el.style.transition = 'none';
-    el.style.opacity = '1';
+    el.style.opacity = soft ? String(soft.opacity) : '1';
     // Next frame, so the browser sees the 1 -> 0 transition.
     requestAnimationFrame(() => {
       el.style.transition = `opacity ${ms}ms ease-out`;

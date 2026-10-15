@@ -15,6 +15,7 @@
  * | a script's actor picker (`findMatchingChr`), and a Berserk or Confuse target | 4, `% candidates`, ascending actor order, no draw under two | `re-ffx-ai-*.md`; Berserk and Confuse: `pp_BtlPickAutoTarget` (0x007996d0) |
  * | the targets of a random-target command, one draw per hit | 5, the same picker | `pp_BtlBuildTargetHits` (0x0078ba70) |
  * | a Reflect bounce | 6, the same picker | same |
+ * | a Mix result's auto-target: one ally by the single picker, or one group by the group pick | 4 for the single pick (a draw only with two or more candidates); 5 for the group pick (one draw for any non-empty side), then 5 per hit of a multi-hit result | `FFX-G05` section 5, `pp_BtlAutoTarget` (0x007996d0); `mix.ts` |
  * | an Overdrive result's hit removal (Slice and Dice's Fail, Lulu's Fury with fewer casts), one draw per hit taken away | 16, `value % (targets holding the most hits)` | `FFX-G01` section 8 (0x007afe00) |
  * | Chapter VIII's scene and camera draws, the Fins' caption | 2, counted (`ai/airship-scenes.ts`) | the formation scripts |
  * | Wakka's Attack Reels result | 19, **named but not drawn yet**: the engine takes the player's reel input from `BattleRng.aux` | `re-ffx-rng-hit.md` 2 (the anchor map), `re-ffx-ai-evrae-yojimbo-isaaru-sin.md` (0x007b1b50 is the reel builder) |

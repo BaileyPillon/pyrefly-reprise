@@ -86,7 +86,7 @@ describe('music-model-test: N1 newer model', () => {
     const live = JSON.parse(readFileSync(join(REPO, 'public/audio/manifest.json'), 'utf8')) as {
       music: Record<string, { file: string }>;
     };
-    for (const cue of ['boss-seymour', 'boss-ffx2-aeon']) {
+    for (const cue of ['boss-seymour', 'boss-vegnagun']) { // an FFX cue and an FFX-2 cue that ship (boss-ffx2-aeon's MP3 was retired in batch 2, 2026-10-12)
       expect(live.music[cue]?.file).toBe(`music/${cue}.mp3`);
     }
   });

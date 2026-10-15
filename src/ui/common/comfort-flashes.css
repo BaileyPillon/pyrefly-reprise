@@ -1,0 +1,69 @@
+/*
+ * REDUCE FLASHES' CSS half (ACCESSIBILITY tab, PR-0032; Bailey, 2026-10-12, "I'll go with all of your
+ * recommendations"). Every HUD pulse and flash the battle draws in a stylesheet, softened under
+ * `html[data-reduce-flashes]`, which `app/applyComfort.ts` sets while the row is on. The rule is the
+ * round's: a lower peak (35 % of the excursion, `engine/flashRules.ts` FLASH_PEAK_CAP), a longer ramp,
+ * never a white frame; a repeating pulse becomes a steady highlight in the same colour. Nothing here
+ * applies with the row off, and no owning stylesheet is edited for it (the file layout of `comfort.css`,
+ * which does the same for REDUCE MOTION).
+ *
+ * Sources, and which game each is (AGENTS.md rule 14; the numbers are the round's list,
+ * `docs/handoff/r44-access.md`):
+ *   9  target bracket while aiming at a group     FFX     ffx-hud.css          steady highlight
+ *   10 party card when a member is hurt           FFX     ffx-hud.css          one soft fade
+ *   11 girl's card when she is hit                FFX-2   ffx2-hud.css         one soft fade
+ *   12 big-attack warning plate and slab          both    ffx-hud.css, ffx2-hud.css, enemy-intent.css  steady highlight
+ *   13 Overdrive timing flash                     FFX     overdrive-minigames.css  one soft fade, peak 35 %
+ *   21 FFX-2 ready gauge's four-step shimmer      FFX-2   ffx2-hud.css          held steady (REDUCE MOTION never stopped it)
+ *   22 the chain counter's pink veil and white numeral at chain 20 and up   FFX-2   ffx2-hud.css   dropped
+ * Washes, flashes on a fighter and the cutscene flash are not stylesheets: `engine/flashRules.ts`.
+ */
+
+/* 9: the multi-target bracket pulsed every 0.9 s until the player chose. The rule's own resting value (0.86) is the steady one. */
+html[data-reduce-flashes] .ffx-target--group .ffx-target__c { animation: none; }
+
+/* 10: one 0.3 s flash of +60 % brightness per hit becomes one 0.6 s fade of +21 % (35 % of the excursion). */
+html[data-reduce-flashes] .ffx-stat--hurt { animation: ffx-hurt-soft 0.6s ease-out; }
+@keyframes ffx-hurt-soft {
+  0%, 100% { filter: brightness(1); }
+  35% { filter: brightness(1.21); }
+}
+
+/* 11: one 0.2 s flash of +80 % brightness per hit becomes one 0.5 s fade of +28 %. */
+html[data-reduce-flashes] .ffx2-hit-flash { animation: ffx2-hit-soft 0.5s ease-out; }
+@keyframes ffx2-hit-soft {
+  0%, 100% { filter: brightness(1); }
+  35% { filter: brightness(1.28); }
+}
+
+/* 12: the warning plate pulsed brighter and dimmer about twice a second; it holds a steady lift, same colour. */
+html[data-reduce-flashes] .ffx-telegraph--stage-2,
+html[data-reduce-flashes] .ffx2hud__telegraph--s2,
+html[data-reduce-flashes] .ffx2enemy__pip--s2,
+html[data-reduce-flashes] .eint__charge--s2 {
+  animation: none;
+  filter: brightness(1.1);
+}
+
+/* 13: the minigame's mint (hit) and red (miss) fill, up to 50 % of the panel for 240 ms, peaks at 35 % and fades over 0.4 s. The miss's shake is REDUCE MOTION's and stays. */
+html[data-reduce-flashes] .ffx-mg--success { animation: ffx-mg-soft-success 0.4s ease; }
+html[data-reduce-flashes] .ffx-mg--fail { animation: ffx-mg-soft-fail 0.4s ease, ffx-mg-shake 0.2s linear; }
+@keyframes ffx-mg-soft-success {
+  0% { box-shadow: inset 0 0 0 999px rgba(126, 232, 176, 0); }
+  40% { box-shadow: inset 0 0 0 999px rgba(126, 232, 176, 0.35); }
+  100% { box-shadow: inset 0 0 0 999px rgba(126, 232, 176, 0); }
+}
+@keyframes ffx-mg-soft-fail {
+  0% { box-shadow: inset 0 0 0 999px rgba(176, 42, 42, 0); }
+  40% { box-shadow: inset 0 0 0 999px rgba(176, 42, 42, 0.35); }
+  100% { box-shadow: inset 0 0 0 999px rgba(176, 42, 42, 0); }
+}
+
+/* 21: FFX-2's ready gauge is written as a four-step shimmer about four times a second. REDUCE MOTION never stopped it
+   (the round's finding), so both settings hold it steady now, at the first step, which is what the player sees today. */
+html[data-reduce-flashes] .ffx2atb--ready,
+html[data-reduce-motion] .ffx2atb--ready { animation: none; }
+
+/* 22: from chain 20 each increment drew a two-frame pink veil over the whole screen and a two-frame white numeral. */
+html[data-reduce-flashes] .ffx2-chain-chip.ffx2chain--flash::after { display: none; }
+html[data-reduce-flashes] .ffx2-chain-chip.ffx2chain--pop .ffx2chain__n { animation: none; }

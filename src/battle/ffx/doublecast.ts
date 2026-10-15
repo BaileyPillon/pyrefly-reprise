@@ -30,6 +30,7 @@ import { type Ctx, abilityOf, rankOf } from './state.ts';
 import { mpCostFor, resolveAbility } from './abilities.ts';
 import { applyMpDelta } from './hp.ts';
 import { validTargets } from './targeting.ts';
+import { aimGate, costGate } from './command-start.ts';
 import type { ExecutionResult } from './execute.ts';
 
 /** Targeting values that point at the caster's opponents. */
@@ -77,10 +78,10 @@ export function resolveDoublecast(
   const aims: CombatantId[][] = targets.length >= 2 ? [[targets[0]!], [targets[1]!]] : [targets.slice(), targets.slice()];
   let dealt = 0;
   for (const at of aims) {
-    if (cost > 0) {
-      if (actor.mp < cost) break;
-      applyMpDelta(ctx, actor, cost, actor.id);
-    }
+    // Each cast is a sub-action of its own and starts with its own checks (re-parity RC7 lane L-CMD, `command-start.ts`): Silence and the MP again, and the range filter
+    // (a target the first cast killed is dropped, and nobody takes its place). A cast that does not start pays nothing; the next one is checked on its own.
+    if (!costGate(actor, spell, false) || !aimGate(ctx, actor, spell, at, spell.hits).ok) continue;
+    if (cost > 0) applyMpDelta(ctx, actor, cost, actor.id);
     const seqBefore = ctx.state.nextSeq;
     dealt += resolveAbility(ctx, actor, spell, at);
     // Yunalesca (FFX only): a form dying in the first cast cancels the second, which would otherwise hit the next form

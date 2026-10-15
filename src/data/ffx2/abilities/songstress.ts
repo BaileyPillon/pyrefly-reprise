@@ -167,6 +167,17 @@ export const songstressAbilities: AbilityDef[] = [
     flags: [],
     messageTemplate: "{user} sings Matador's Song",
   },
+  {
+    // §3.4 [verified: 2 sources]: 20 AP, needs the key item Magical Dances Vol. I; all MP costs become 0 for the party. The game's row 0x3095 (re-parity RC7 lane X2-B):
+    // group 1 status 13 (Spellspring). The engine models no key items, so the dance is never offered.
+    ...dance('x2-songstress-mp-mambo', 'MP Mambo', [{ status: 'spellspring', chance: 254, duration: 0 }]),
+    targeting: 'all-allies',
+  },
+  {
+    // §3.4 [verified: 2 sources]: 20 AP, needs the key item Magical Dances Vol. II; the party gains Null Magic. The game's row 0x3096: group 2 status 16.
+    ...dance('x2-songstress-magical-masque', 'Magical Masque', [{ status: 'null-magic', chance: 254, duration: 0 }]),
+    targeting: 'all-allies',
+  },
 ];
 
 export default songstressAbilities;

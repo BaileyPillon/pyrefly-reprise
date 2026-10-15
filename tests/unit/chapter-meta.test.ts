@@ -184,9 +184,9 @@ describe('CHAPTER_META', () => {
     }
   });
 
-  it('Chapter 4 (FFX-2 Bahamut) has no `victory` music key, matching the suppressed victory pose', () => {
+  it('Chapter 4 (FFX-2 Bahamut) has no fanfare, matching the suppressed victory pose: its `victory` key is the quiet resolve `victory-bahamut` (2026-10-12), never `victory-ffx2`', () => {
     const chapter = CHAPTERS.find((c) => c.id === 'ffx2-bahamut');
-    expect(chapter?.music.victory).toBeUndefined();
+    expect(chapter?.music.victory).toBe('victory-bahamut');
     // The pause-screen metadata still tracks the fight's objectives even
     // though the battle-end flourish is silent [writing-bible §5.4].
     const meta = getChapterMeta('ffx2-bahamut') as ChapterMeta;

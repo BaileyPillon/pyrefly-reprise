@@ -127,6 +127,11 @@ class Mix {
     });
   }
 
+  /** CHAPTER FRAMING's plan is still to land on the figures (`Framing.planOwed`). */
+  get planOwed(): boolean {
+    return this.framing.planOwed;
+  }
+
   /** @param realDt the same frame's unscaled seconds (default `dt`): the KO's cross runs on it, so a hit-stop never freezes it (`KoFall.ts`). */
   update(dt: number, realDt: number = dt): void {
     const t0 = performance.now();
@@ -322,6 +327,14 @@ export function bindMaxMix(b: MixBind): void {
 /** Every frame, after the rig has placed the camera and before the render. */
 export function updateMaxMix(dt: number, realDt: number = dt): void {
   current?.update(dt, realDt);
+}
+
+/**
+ * CHAPTER FRAMING's plan is still to land on the figures: the boss entrance lets none in while it is (`entrance/StageEntrances.ts`, FOC44A-05), so a size the plan gives a boss lands
+ * while the boss is unseen. False with no mix bound (a preview, FF7, a stage with no scene graph).
+ */
+export function framingPlanOwed(): boolean {
+  return current?.planOwed ?? false;
 }
 
 export function releaseMaxMix(): void {

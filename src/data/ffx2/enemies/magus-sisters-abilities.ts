@@ -198,7 +198,9 @@ export const magusSistersAbilities: AbilityDef[] = [
     // "whole party to 1 HP and 0 MP": HP [verified: 4 sources]; SinirothX prints
     // "remaining HP - 1" and mentions only HP, so the MP half is the wiki's alone
     // (F-9, `[single source]`, plan FA9). A constant, not a percentage
-    // (`aeon-effects.ts`), so it cannot kill.
+    // (`aeon-effects.ts`), so it cannot kill. The game's own row 0x40a9 settles the MP half: damage class 1,
+    // HP only. The engine follows the row, so her MP is kept (`fallen-aeons-engine.test.ts`), the engine does not
+    // read `setMpTo: 0`, and the advisor sentence says "at 1 HP" (r48-rc; `intentLead.ts`).
     power: 0,
     formula: 'none',
     damageType: 'other',

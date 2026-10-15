@@ -83,6 +83,14 @@ export class Framing {
     return this.installed;
   }
 
+  /**
+   * The plan for the figures on the field is still to come: not decided yet, or decided and waiting for a menu to close. What it writes (a giant's size, a boss's, the party's place)
+   * lands on the figures in one frame when it does, so the boss entrance (`entrance/StageEntrances.ts`, FOC44A-05) lets no figure in before. False with the part off, and with no rig to plan against.
+   */
+  get planOwed(): boolean {
+    return this.rigs !== null && this.wantOn && (this.planWanted || this.pending !== null);
+  }
+
   private layoutKey(canvas: HTMLElement): string {
     const r = canvas.getBoundingClientRect();
     return `${this.game}|${phoneBattle()}|${Math.round(r.width)}x${Math.round(r.height)}`;

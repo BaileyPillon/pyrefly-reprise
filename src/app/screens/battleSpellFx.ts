@@ -4,20 +4,26 @@
  * the settings each frame (low effects or reduced motion keep today's bloom; a
  * phone-sized viewport gets the lighter tier).
  *
- * The flash rules stay at their defaults until the REDUCE FLASHES setting
- * exists (accessibility batch); that batch passes `flash` here.
+ * The flash rules follow REDUCE FLASHES (PR-0032): off is {@link DEFAULT_FLASH_PARAMS}, today's flashes; on is
+ * {@link REDUCED_FLASH_PARAMS} (washes and glows capped at 35 %, white turns ivory, one wash per action, Thunder once).
  */
 
 import type { Renderer } from '../../engine/Renderer.ts';
 import type { StageSpellFxOptions } from '../../engine/spellfx/stageSpellFx.ts';
-import { DEFAULT_FLASH_PARAMS, REDUCED_FLASH_PARAMS, resolveFxQuality, type FxQuality } from '../../engine/spellfx/SpellFxParams.ts';
+import { DEFAULT_FLASH_PARAMS, REDUCED_FLASH_PARAMS, resolveFxQuality, type FlashParams, type FxQuality } from '../../engine/spellfx/SpellFxParams.ts';
 import type { SpellFxLayer } from '../../engine/spellfx/SpellFxLayer.ts';
 import { SPEED_RATE } from '../../engine/spellfx/SpellFxSpecials.ts';
 import type { BattleStage, PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import { ff7SpellFxOptions } from './battleFf7Fx.ts';
 import { readSetting } from '../SaveData.ts';
+import { readReduceFlashes } from '../accessFlags.ts';
 import type { GameId } from '../../battle/common/types.ts';
 import { ffxFamily } from '../../battle/common/game.ts';
+
+/** The spell effects' flash rules for the setting as it is now (the layer asks every frame, so a change in the pause applies on resume). */
+export function battleFlashParams(): Readonly<FlashParams> {
+  return readReduceFlashes() ? REDUCED_FLASH_PARAMS : DEFAULT_FLASH_PARAMS;
+}
 
 export function battleSpellFx(
   game: GameId,
@@ -34,6 +40,7 @@ export function battleSpellFx(
     game: ffxFamily(game, 'battleSpellFx'),
     // The effect clock follows the presenter's playback speed (held fast-forward).
     rate: () => SPEED_RATE(speed?.() ?? 'normal'),
+    flash: battleFlashParams, // PR-0032: REDUCE FLASHES, read every frame
     overlay: (draw) => renderer.addOverlay(draw),
     quality: () =>
       resolveFxQuality({

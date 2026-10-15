@@ -10,6 +10,7 @@ import { audio } from '../audio/index.ts';
 import { ALL_COACH_IDS } from '../ui/coach/coachCopy.ts';
 import { migrateFfx2Atb } from './saveFfx2Atb.ts';
 import { defaultFxLooks, defaultFxParts, migrateComfort, type FxLookSettings, type FxPartSettings, type TextSize } from './saveComfort.ts';
+import { ACCESS_DEFAULTS, type ColourVision } from './saveAccess.ts';
 import { applyComfort } from './applyComfort.ts';
 import { writeMerged } from './saveMerge.ts';
 import { migrateSfxBalance, SFX_DEFAULT_VOLUME } from './saveSfxBalance.ts';
@@ -70,6 +71,10 @@ export interface Settings extends FxLookSettings, FxPartSettings {
   reduceMotion: boolean;
   /** TEXT SIZE 100 / 115 / 130 % (D-285, A2). Absent before release 31: reads 100 % (`saveComfort.ts`). */
   textSize: TextSize;
+  /** REDUCE FLASHES (ACCESSIBILITY tab, PR-0032): softens every bright, quick change. Absent before release 44: reads OFF (`saveAccess.ts`). */
+  reduceFlashes: boolean;
+  /** COLOUR VISION (ACCESSIBILITY tab, PR-0032): OFF, RED-GREEN or BLUE-YELLOW. Absent before release 44: reads OFF (`saveAccess.ts`). */
+  colourVision: ColourVision;
   /**
    * Show the in-battle strategy guide (`src/ui/common/StrategyGuide.ts`).
    *
@@ -193,6 +198,7 @@ export function defaultSettings(): Settings {
     skipSeenCutscenes: false,
     lowEffects: false, ...defaultFxLooks(), ...defaultFxParts(), // eye-candy D's looks and D-317's parts, all ON
     textSize: 1,
+    ...ACCESS_DEFAULTS, // REDUCE FLASHES and COLOUR VISION, both off: today's look
     guideVisible: true,
     advisorVisible: true,
     intentVisible: true,

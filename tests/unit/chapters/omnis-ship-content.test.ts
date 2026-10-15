@@ -29,7 +29,7 @@ describe('the registered record: LISTED (2026-09-25, D-162), with the ship layer
     expect(ch?.sceneKey).toBe(OMNIS_SCENE_KEY);
     expect(ch?.scriptsRef).toBe(seymourOmnisScripts);
     expect(ch?.music).toEqual({ ...SEYMOUR_OMNIS.music, ...OMNIS_STAND_IN_CUES });
-    expect(ch?.music.battle).toBe('boss-seymour'); // B18's named stand-in until the new cue is picked by ear
+    expect(ch?.music.battle).toBe('boss-seymour-omnis'); // his own original since 2026-10-12 (music batch 2); B18's named stand-in, Chapter I's boss-seymour, played before
     expect(ch?.game).toBe('ffx');
     expect(ch?.number).toBe(12);
     expect(UNLISTED_CHAPTERS).not.toContain(SEYMOUR_OMNIS_SHIPPED);

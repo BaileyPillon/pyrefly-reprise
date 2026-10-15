@@ -3,7 +3,7 @@
  *
  * One thin full-width strip across the top: the party members on the field
  * first — the active one leading, as the reference does — then CHAPTER, GUIDE,
- * OPTIONS, CONTROLS, MUSIC. `Q` / `E` or `L1` / `R1` cycle; a 2px HP hairline
+ * OPTIONS, ACCESSIBILITY, CONTROLS, MUSIC. `Q` / `E` or `L1` / `R1` cycle; a 2px HP hairline
  * runs under each member's name; a tiny accent dot marks a tab with something
  * on it.
  *
@@ -21,8 +21,11 @@
 
 import type { AnyCombatant, BattleState } from '../../../battle/common/types.ts';
 
-/** The five tabs that are not a party member, in strip order. */
-export const FIXED_TAB_IDS = ['chapter', 'guide', 'options', 'controls', 'music'] as const;
+/**
+ * The six tabs that are not a party member, in strip order. ACCESSIBILITY (PR-0032, OPT-B) sits right after OPTIONS: the
+ * comfort rows moved there, with REDUCE FLASHES and COLOUR VISION.
+ */
+export const FIXED_TAB_IDS = ['chapter', 'guide', 'options', 'accessibility', 'controls', 'music'] as const;
 
 export type FixedTabId = (typeof FIXED_TAB_IDS)[number];
 
@@ -44,6 +47,7 @@ const LABELS: Readonly<Record<FixedTabId, string>> = {
   chapter: 'Chapter',
   guide: 'Guide',
   options: 'Options',
+  accessibility: 'Accessibility',
   controls: 'Controls',
   music: 'Music',
 };
@@ -79,7 +83,7 @@ export function memberTabDot(c: AnyCombatant): boolean {
  * `activeIds` is the field order, left to right, and the first of them is the
  * tab the screen opens on — "the active party member first". With no battle
  * under the pause (a cutscene) there are no member tabs at all and the strip
- * is the five fixed ones, which is also what makes the screen safe to open
+ * is the six fixed ones, which is also what makes the screen safe to open
  * over a scene.
  */
 export function buildTabs(state: Readonly<BattleState> | null): PauseTab[] {

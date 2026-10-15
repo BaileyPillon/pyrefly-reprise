@@ -254,7 +254,7 @@ test('Esc opens the pause at the first command menu, freezes the battle dead, an
   expect(moved, 'the fight never continued after resume').toBe(true);
 });
 
-test('the tab strip is field members first then the five fixed tabs, and Q/E cycle it', async ({ page }) => {
+test('the tab strip is field members first then the six fixed tabs, and Q/E cycle it', async ({ page }) => {
   await intoChapterOne(page);
   await waitForCommandMenu(page);
 
@@ -263,9 +263,9 @@ test('the tab strip is field members first then the five fixed tabs, and Q/E cyc
   expect((await look(page)).stack).toContain('pause');
 
   const tabIds = await page.locator('.pause__tab').evaluateAll((els) => els.map((e) => e.getAttribute('data-tab')));
-  expect(tabIds.length, 'three party members plus five fixed tabs').toBeGreaterThanOrEqual(6);
-  expect(tabIds.slice(-5)).toEqual(['chapter', 'guide', 'options', 'controls', 'music']);
-  for (const id of tabIds.slice(0, tabIds.length - 5)) expect(id).toMatch(/^member:/);
+  expect(tabIds.length, 'three party members plus six fixed tabs').toBeGreaterThanOrEqual(7);
+  expect(tabIds.slice(-6)).toEqual(['chapter', 'guide', 'options', 'accessibility', 'controls', 'music']); // PR-0032: ACCESSIBILITY right after OPTIONS
+  for (const id of tabIds.slice(0, tabIds.length - 6)) expect(id).toMatch(/^member:/);
 
   const activeTab = (): Promise<string | null> => page.locator('.pause__tab--on').getAttribute('data-tab');
   const first = await activeTab();

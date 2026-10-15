@@ -1,13 +1,292 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 66 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 72 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-14 · Rikku's Mix and the FFX-2 battle menu follow the game, and two hidden FFX-2 chapters (release candidate r48-rc; not live)
+
+Address: none yet (branch r48-rc: the live release r47 b8aa6f96 plus the rule lanes of re-parity-rc7 8eb2e8c6, and the hidden chapters of ch-tourist-trap a142ad1b and ch-besaid-valefor 865d024a, each described in its own entry below; not deployed, no review run)
+
+- **FFX only, Rikku's Mix:** works the way the game's does. Any two items make something (the game has a result for
+  every one of the 6,328 pairs), and the 21 Mixes that were missing are in (Pineapple, Blaster Mine, Hazardous Shell,
+  Calamity Bomb, Heat Blaster, Brimstone, and the ice, thunder and water families from Snow Flurry to Dark Rain; they
+  borrow the nearest family's effect, so their picture and sound are that family's). Both ingredients are used up the
+  moment the Mix goes off, a Mix with nobody to aim at costs the ingredients but not Rikku's Overdrive, and who a Mix
+  lands on is chosen as the game chooses (one random member for the single-target ones, a whole side otherwise).
+  Stacks of items stop at 99 wherever they grow, a stolen item and a refund included, and a Spare Change offer is paid
+  in full or not at all. The Mix list shows what it showed before: the recipes it has always listed, and "? ? ?" for
+  any other pair; such a pair now makes the game's real result where the last build said "Mix failed!". No chapter
+  plays a Mix, so no fight changes. No boss number and no party number changed, and every chapter wins as often as
+  before.
+- **FFX-2 only:** The girls' automatic abilities now work the way the game's do, and the battle menu follows the
+  game's own rules for what a girl can use. An accessory or dressphere ability that keeps a status on her for good
+  (the Moon, Shining, Defense, Star, Recovery and Speed Bracers, Adamantite, Ragnarok, Bloodlust, Wring, Minerva's
+  Plate, Shmooth Shailing, Lady Luck's Critical, the Mascot's Auto-Shell and Auto-Protect) puts it on and keeps it,
+  out of a Dispel's reach, and the SOS abilities (Warrior's SOS Protect, Samurai's SOS Critical, the Wall Ring, the
+  Regen and Haste Bangles, Cat Nip) switch their statuses on when her HP drops under a third and off when she is
+  healed past it. The Berserker's Counterattack, Magic Counter and Evade & Counter, which did nothing until now,
+  answer a blow with her own Attack at the attacker (Evade & Counter makes a physical swing miss her outright).
+  Nothing a shipped build wears uses these yet, so the chapters play as before until a player masters the abilities or
+  wears the accessories. The commands a dressphere gives you from the start are there before you learn anything (Pray,
+  Cure, Power Break, Fire, Blizzard, Thunder and Water), the passive abilities you learn no longer appear as commands
+  you can pick, and Yuna, Rikku and Paine each have their own Trainer moves. While a girl is Itchy every command stays
+  on the list but greyed out, with Escape and changing dressphere the ways out. Silence stops everything the game
+  stops, every Dance and Song and the Dark Knight's spells included, and leaves Pray, Vigor, Focus and MP Absorb
+  alone. Moves that cost MP follow Half MP Cost, One MP Cost and Magic Booster the way the game does, and a girl in a
+  Special dressphere has no Item or Escape command. The Samurai gains Magicide, Dismissal, Fingersnap, Momentum,
+  Shin-Zantetsu and Clean Slate, the Alchemist gains Dispel Tonic and Mega Phoenix, and the order in which commands
+  unlock now matches the game for the Samurai, Thief, Berserker, Warrior, White Mage and Alchemist.
+- **FFX-2 only, the status guide and the move slab:** the status guide's Silence card says "no spells, Dances or
+  Songs" (it listed White Magic, Black Magic and Arcana, which is too few now that Silence stops every Dance and Song
+  and the Moogle, Cait and Eraser spells too); the FFX card still says "no White or Black Magic". The enemy-move slab
+  says "MP damage" for every move that drains MP (Valefor's Sonic Wings, Lacrimosa, Magical Attack Detected, Osmose,
+  Waning Moon, Yojimbo's Kozuka), and Leblanc's Osmose is no longer called "Magical", because the game's row for it is
+  neither physical nor magical. Delta Attack says it "leaves the whole party at 1 HP" (the old line added "and 0 MP",
+  but the game's row is HP only and the fight has always kept the girls' MP), and Looming Glacier says it "empties one
+  girl's MP and inflicts Stop". Words only: no number and no fight changed.
+- **FFX-2 only, the desktop battle menu while a girl is Itchy:** the three greyed commands (Attack, Skill and Item)
+  show their names again, with the reason cut short beside each ("ITCHY — …") instead of the 26-character reason
+  squeezing the name out of the row; the full reason still names the highlighted row in the top bar. The same squeeze
+  hit any greyed row whose reason did not fit beside its name (a 13-character "Not enough MP"), and the reason gives
+  way there too. A reason that fits ("Silenced") lays out exactly as before, and the phone layout is untouched (its
+  command area is pixel for pixel the same as in the last frame taken before the change).
+- **Disclosed, FFX-2:** one FFX-2 golden digest moved, Chapter V (Vegnagun and Shuyin), because of the wider Silence
+  scope above: it wins exactly as often (490 of 500 seeds before and after, every seed the same outcome) and plays
+  about 0.07 party turns longer a fight. The White Mage's Pray is a free, 0 MP heal of the whole party on her opening
+  menu, as the game lists it; no shipped chapter changes because of it, but a White Mage who only prays is now very
+  hard to wear down, which a later balance pass should expect.
+- **How it was checked:** tsc clean after each of the three merges and after the fixes; the files of both hidden
+  chapters, their doors, the chapter numbers, the three goldens, the random streams, every parity-ffx and parity-ffx2
+  file, the intent, status-word and menu tests (123 files, 2,333 tests, 14 skipped by their own flags); then the whole
+  suite once (1,249 files, 19,619 tests: 19,544 passed, 74 skipped, 1 todo, none failing); the orphan check (28 older
+  modules, none from the merged lanes) and the audio check (no findings, 68.87 MB of 105 MB); a production build whose
+  files name no local path and whose art matches its masters (3,778 masters checked, 3,462 compared pixel by pixel, no
+  name left dangling); and a headless walk of that build (the board still says "of 18" with no new card, the words
+  "daigoro" and "valefor" each open their chapter to its first command menu against Yojimbo and Valefor, no console
+  error or failed request), with the three Itchy frames below and a look at the first menus of both hidden chapters.
+  Nothing past those first menus was played on this build; the entries below say what each chapter's own checks
+  covered.
+
+![The desktop battle menu while Paine is Itchy, 1600x900: Attack, Skill and Item keep their names and the reason is cut short beside each](docs/screenshots/r48-rc/itchy-menu-desktop-1600x900.jpg)
+
+![The same menu at 2000x1012](docs/screenshots/r48-rc/itchy-menu-desktop-2000x1012.jpg)
+
+![The phone layout while Paine is Itchy, unchanged: each name with its reason under it (390x844)](docs/screenshots/r48-rc/itchy-menu-phone-390x844.jpg)
+
+## 2026-10-14 · Tourist Trap: Yojimbo and Daigoro, a hidden FFX-2 chapter behind the word `daigoro` (branch ch-tourist-trap, part of release candidate r48-rc; not live)
+
+Address: none yet (branch ch-tourist-trap a142ad1b, merged into release candidate r48-rc; not deployed, no review run; nobody has heard its music or judged its look, and both are provisional)
+
+- **FFX-2, hidden chapter:** the optional mission "Tourist Trap" in the Cavern of the Stolen Fayth. Type `daigoro` on the
+  chapter board; there is no card and the board still says "of 18". One fight: Yojimbo, possessed, and his small stone dog
+  Daigoro, against Yuna (White Mage) and two Dark Knights at levels 32 to 34. The numbers are the game's own rows, read by the
+  reverse-engineering lane (Yojimbo is row 170, Daigoro row 174); the party's level is an estimate.
+- **FFX-2, how Yojimbo fights:** he keeps a count that rises by 8 every time he looks at it, and what he picks changes as it
+  climbs. Calling Daigoro is one of the picks, and it is not a move of Yojimbo's own: Daigoro is a second fighter with his
+  own gauge who bites one girl when he is called (a call is not a turn, so the Defeat screen's TURNS leaves it out). When
+  the count is full (about seven real attacks in, as few as four or as many as ten, because the calls to the dog count too)
+  he gathers himself for Zanmato, which leaves the whole party at 1 HP and 1 MP. Nothing softens it, so the answer is a heal
+  the turn after (a Mega-Potion from the bag needs no MP). Kozuka takes a quarter of one girl's MP and poisons her, and both
+  Wakizashi fall on one girl.
+- **FFX-2, open for Bailey:** the 3 seconds a move that the Road, Ixion and the Cloister carry on top of the game's own pacing
+  is kept here by precedent and waits for his pick (the first Zanmato then comes about 58 seconds in; without it, 34). The
+  second Wakizashi hitting one girl and not the whole party is strongly indicated by the game's script but not yet confirmed
+  by a play, and where Daigoro bites is a uniform pick, because the cavern carries no start positions.
+- **FFX-2, provisional:** the paintings are Chapter IX's (FFX) Yojimbo and Daigoro and its cavern plate, unchanged, and the
+  music is the "Aeons" cue the Road and Ixion play. Nothing was replaced.
+- **How it was checked:** type check clean; the full suite once (19,004 tests: 10 failed, every one a test that lists all
+  chapters, scenes or guides meeting the new one; fixed and re-run); a production build played in headless Chromium: the word
+  opens the chapter, the opening line and the first menu on a desktop and on a phone, a win (Zanmato on the 14th and 28th
+  look, every Wakizashi on one girl, the row's EXP, AP and gil), a loss with no answers, and the other hidden words still open
+  their chapters.
+- **Disclosed:** at 1600x900 the enemy-move slab can cover part of Yojimbo's hat and, while Daigoro is about to bite, part of
+  the first command row.
+
+![The first menu at 1600x900: Yuna, Rikku and Paine facing Yojimbo and Daigoro, Rikku's reaction to the first Kozuka on screen](docs/screenshots/ch-tourist-trap/1600x900-win-first-menu.jpg)
+
+![Zanmato's wind-up: the slab says it leaves the whole party at 1 HP and 1 MP](docs/screenshots/ch-tourist-trap/1600x900-zanmato-charge.jpg)
+
+![The same first menu on a 390x844 phone](docs/screenshots/ch-tourist-trap/390x844-first-menu-settled.jpg)
+
+## 2026-10-14 · A hidden chapter: Valefor at Besaid (branch ch-besaid-valefor, part of release candidate r48-rc; not live)
+
+Address: none yet (branch ch-besaid-valefor 865d024a, merged into release candidate r48-rc; not deployed, no review run; nobody has played it by ear or by eye, so the art and the music are provisional picks)
+
+- **FFX-2, hidden chapter:** Valefor at Besaid Temple, the compulsory Chapter 3 mission "Protect Besaid Temple!", where
+  Shuyin's pyreflies have taken the temple's aeon. Type `valefor` on the chapter board; it is not in the board's
+  "of 18" and is not listed. One fight in the Chamber of the Fayth: her gauge fills with every swing of hers (the plain
+  Attack and Sonic Wings, not the Rays or the Blast) and every blow she takes, two Energy Rays (the whole party) on
+  the way up, then the Energy Blast, which no Shell or Protect softens; Sonic Wings drains MP from the girl farthest from her. Her numbers, her script and her targets are the game's
+  own (read from the game files: monster row 164, her AI script and the temple's start positions); the party is the
+  Chapter 2 party carried forward, which is an estimate. It is the gentlest of the aeons: the guide's line wins every
+  seed, and the chapter is not tuned.
+- **FFX-2, art and sound (provisional):** Valefor's own paintings (the FFX aeon's, approved) and the Chamber of the
+  Fayth you already know from Ixion, with its pit (which belongs to Chapter 5); there is no painting of her knocked out.
+  The fight plays the same aeon theme as Chapters XI and XVI. Six candidate backdrops for Besaid's own chamber were
+  drawn locally (daylit temple interiors, wood and stone, the sea in the light); none is installed or in the build.
+- **Both:** the hidden words `limit`, `leblanc`, `experiment`, `mushroom` and `fayth` still work, a wrong word still
+  opens nothing, and the new chapter writes only its own record (never the save).
+- **Proof:** played in a production build in a headless browser: the word opens the chapter, the board has no card and
+  still says "of 18", the other hidden words still work, the intro plays, a fight is won and another lost (the Retry
+  button goes back through the party prep), and Sonic Wings lands on Yuna, the girl farthest from her, every time. Also
+  on a phone-sized screen.
+
+![The first menu in the Chamber of the Fayth: Valefor, her guide card and the three girls](docs/screenshots/ch-besaid-valefor/1600x900-first-menu.jpg)
+
+![The winning blow: 437 damage, Valefor's bar empty, and no painting of her knocked out yet](docs/screenshots/ch-besaid-valefor/1600x900-valefor-down.jpg)
+
+![The results screen after the win](docs/screenshots/ch-besaid-valefor/1600x900-results.jpg)
+
+## 2026-10-14 · The ACCESSIBILITY tab with REDUCE FLASHES and COLOUR VISION, and the site's small painting files cut to what the game reads (release candidate r47-rc; not live)
+
+Address: none yet (branch r47-rc: the release candidate r46-rc ca9fd0b4 plus the accessibility lane r44-access; not deployed; the deep review that a save-data change owes comes first)
+
+- **Both games, the pause menu:** a ninth tab, ACCESSIBILITY, sits right after OPTIONS and holds five rows: TEXT SIZE,
+  REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS and COLOUR VISION. The first, second and fourth moved there from OPTIONS
+  with the same names, values and keys, so OPTIONS is shorter. The two new rows start OFF and are kept in the save
+  (nothing that was saved before is changed, and a save from an older build loads with both off). Remapping keys is
+  not part of this build.
+- **Both games, REDUCE FLASHES:** softens 22 things that flash. Every flash peaks at about a third of its strength,
+  white turns a warm ivory, a full-screen white wash that hides a change of scene stays opaque but dim, an action's
+  first blow is the only one that flashes, and a warning that pulses becomes one soft fade or a steady glow. It covers
+  hit, heal and status flashes, elements, spell effects, big-attack warnings, impact frames, lens flares, the lighting
+  of a boss's phases, cutscene flashes and the Overdrive splash. The closing flash when a boss or an aeon finishes
+  gathering out of pyreflies is left out.
+- **FFX only, REDUCE FLASHES:** the summon's wash, a boss changing form, the target bracket that flashes on a group,
+  the party card when a member is hurt and the Overdrive timing flash.
+- **FFX-2 only, REDUCE FLASHES:** Spherechange, the girl's card when she is hit, the Save Sphere's wash in Chapter XI
+  (an opaque dim cover, so the next link still hides its swap), the ready gauge's shimmer and the chain counter's
+  veil from chain 20 up.
+- **COLOUR VISION, three values (OFF, RED-GREEN, BLUE-YELLOW):** changes only the four things that blur together
+  under colour blindness, and gives each a second cue besides its colour. **FFX only:** the Berserk and Curse tints (a B or a C
+  over the head). **Both games:** the ally and self marks on the targeting brackets (a diamond, a plus or a ring on
+  each corner) and the heal and MP numbers (an MP number says "MP"; BLUE-YELLOW makes it violet). **FFX-2 only:** the
+  four colours of the Garment Grid's gates, in the Spherechange wheel, its flourish and the Party Prep pages (each gate
+  prints R, G, B or Y), including the Party Prep pages on a phone, which this build covers as well.
+- **Both games, the small files beside the paintings:** the 1,261 small files that sit beside the paintings on the site
+  now hold only what the game reads from them (sizes, feet lines, scales, facings, focal points, heads, and the seed
+  and the prompt text the loader copies). The notes on how each painting was made, who approved it and links to
+  private pages no longer go out, and the deploy refuses a build in which any file of the site names a folder of the
+  build computer or links to a private page, or any of these small files has anything else in it. Every value the game
+  reads is the same; no picture, sound or screen differs.
+- **FFX only:** The command rules now follow the game's own checks. Silence cuts off White and Black Magic, and Scan,
+  which the game files as White Magic, is now cut off too; calling an aeon is not on the game's Silence list. Half MP
+  Cost rounds up as the game does (a 5 MP spell costs 3, not 2), and One MP Cost with the Magic Booster costs 2. An
+  action is checked again for Silence, MP and a full Overdrive gauge as it starts, and costs nothing if it cannot
+  start. A target that has died or gone by the time its attacker acts is no longer swapped for a random one. Lulu's
+  Doublecast no longer fires its second spell, or spends its MP, at a foe the first spell already killed. Flee counts
+  only party members still in the battle. Entrust now costs 8 MP and the Magus Sisters' Nul-All costs 4 MP, as in the
+  game; neither is offered in any chapter yet, so no fight changes. No boss or party number changed, and every chapter
+  wins as often as before.
+- **FFX-2 only, Rikku's dressphere paintings:** the eight dresspheres that were louder than Yuna's (Alchemist, Berserker,
+  Black Mage, Gunner, Lady Luck, Songstress, Thief and White Mage; 443 painting files, every pose at every size it has) are
+  brought down to the colour strength of Yuna's painting of the same dressphere, as chosen (option A; the pick between
+  the sheets was left to the driver). The hot red-orange tops, boots and skirts turn coral, the orange skin a rosy tan
+  inside the skin colour of her FFX painting, and the glare of the orange fills eases. Her hair and the yellow fills
+  keep their gold (the one change the driver made to the pick: the hair stays golden, not cream; the orange strands
+  underneath go sandy), and eyes, beads, outlines, dark shading, whites and transparency are untouched, as is every
+  pixel's place, so nothing moves on screen. The Songstress goes from saturation 0.74 to 0.57 (Yuna's: 0.58) and the Alchemist from 0.75 to 0.56 (Yuna's
+  Thief: 0.54). The Dark Knight and Warrior were already quieter than Yuna and are unchanged; so are her FFX painting
+  and the hidden Leblanc chapter's own copies. The old paintings are kept (a backup, the private art repository, the
+  old art folder). Checked here with the art, pose, manifest, chapter, engine, effects and continuity tests (191
+  files, 3,194 tests passed), the approved-art check (916 ok) and the pose-scale check; the whole suite was run once
+  after the art changed (19,187 tests: 19,106 passed, 73 skipped; seven timed out on a busy machine and pass run
+  alone). Before and after: `docs/screenshots/r47-rikku-colour/rikku-final-before-after.jpg`; the
+  numbers and the way back are in `docs/handoff/r47-rikku-colour.md`.
+- **How it was checked:** tsc clean; every test of the accessibility lane and of the files this build touched passed
+  (151 files, 2,511 tests), then the whole suite once (1,224 files, 19,144 tests, none failing); a production build,
+  whose art matches its masters pixel for pixel and whose 3,863 images all load in Chromium and WebKit; and a real-key
+  walk of that build (title, board, Party Prep, the first command menu of FFX Chapter I and FFX-2 Chapter IV, the
+  ACCESSIBILITY tab, both rows switched on, a reload that keeps them, an old save, a phone) with 120 art data files
+  requested, every one answered, and no console error. Three layout checks at 130 % TEXT SIZE in the browser test files
+  fail on two small pieces of the FFX battle screen that this build did not touch (the command menu's "more below"
+  arrow and the sensor's element chip); they are listed for the review.
+
+![The ACCESSIBILITY tab on the production build, REDUCE FLASHES on and COLOUR VISION on RED-GREEN](docs/screenshots/r47-rc/ffx-accessibility-tab-1600x900.jpg)
+
+![FFX-2's ACCESSIBILITY tab, COLOUR VISION on BLUE-YELLOW](docs/screenshots/r47-rc/ffx2-accessibility-blue-yellow-1600x900.jpg)
+
+![The Garment Grid on FFX-2's phone Party Prep with COLOUR VISION on: each gate prints its letter](docs/screenshots/r47-rc/ffx2-phone-prep-gate-letters-390x844.jpg)
+
+## 2026-10-13 · Audio lane 2: 29 more recorded sound effects, a quiet Chapter IV and results tunes that loop without a breath (not live)
+
+Address: none yet (branch r46-audio2, from r45-rc d5bf2206; not deployed, no review run; nobody has heard any of it, so every sound below is a pick by measurement that your ear can overrule)
+
+- **FFX, sound effects (every chapter):** 14 more of the game's everyday sounds are recorded originals instead of
+  the stand-ins: Slow, a fiend dissolving, Petrify, Cure and Cura (also Potion and Hi-Potion), Auron's katana
+  blow, Kimahri's spear blow, Grenade, Ether, Life and Phoenix Down, Waterga, Thundaga, the menu's cancel sound
+  and the refused-action sound.
+- **FFX, Seymour Flux and Braska's Final Aeon (Chapters I and III):** Seymour Flux's attack and his Cross Cleave
+  have their own recordings (Chapter I only), and so does the final aeon's Power Wave and Gravija (Chapter III
+  only).
+- **FFX-2, sound effects (every chapter):** the Warrior's and the Gunner's hits, the spell chant, the
+  Trigger Happy shots, Death, Cure, and the menu's cancel, refused-action, window-open and window-close sounds
+  are recorded originals. Dark Shiva's attack (Chapters XI and XVI) and Vegnagun's leg strike (Chapter V) have
+  their own recordings, and Shuyin's attack plays a newer, closer recording.
+- **Both games, what did not change:** 24 sounds keep today's recording because the new take was no better, and
+  11 wait for a second look.
+- **FFX-2, every chapter (a fix before this goes out):** an ordinary enemy defeat plays the recording it has
+  always played. The first version of this lane took that sound out of the shared set because FFX had a new
+  recording of its own, and FFX-2's defeats briefly fell back to an older, different sound. FFX keeps its new
+  recording; FFX-2 is back on the old one.
+- **Both games, levels (a fix before this goes out):** each new recording now plays within 1.5 dB of the sound
+  it replaces, measured as the game plays it. Eleven of the thirty were moved to get there: eight FFX sounds
+  (Cure, Cura, Life, Waterga, Thundaga, Auron's katana blow, Grenade and Petrify), the final aeon's Power Wave,
+  and two FFX-2 sounds (Death and the spell chant). Most were too loud, not too quiet;
+  Petrify was 8 dB too quiet and was raised under a limiter, which makes its crack less sharp than the
+  recording was. The ear has not judged any of it.
+- **FFX-2 only, the Gunner's hit (a fix before this goes out):** it keeps the level it was recorded at. The
+  girls' hits keep today's level, never a quieter one (your decision 52n: a quiet hit was heard as no attack
+  sound at all), and on the loudest 400 milliseconds the new recording already matches the sound it replaces; only
+  its long tail makes the overall figure 2.6 dB higher. A first pass had cut it 1.6 dB; that is undone.
+- **Both games, the small data files beside the paintings (a fix before this goes out):** about 950 of the
+  1,263 small files that sit beside the paintings (notes on how each painting was made) named folders of the
+  computer the game is built on, and went out with every release. The build now writes each such name as the
+  file's own name alone, and the deploy refuses to go out if any file of the site still names a folder of that
+  computer. Everything the game reads from these files (sizes, feet lines, scales, facings, focal points, heads) is
+  the same, checked on all 1,263 files and in the browser against the live site; no picture, sound or screen
+  differs.
+- **FFX-2, Chapter IV (Bahamut):** the quiet victory tune now stops when you press Continue after the tally.
+  It used to loop on under the whole scene that follows, which this chapter keeps silent. In Chapter XI (the
+  Glen) and Chapter XV (out of the Den of Woe) the scene's own music now comes back after the tally instead of
+  the victory tune looping under the last lines.
+- **Both games, the results tunes:** the victory tune of FFX, of FFX-2 and of Chapter IV no longer fades to
+  near silence at the end of every pass and re-enters at full level. The loop now closes inside the music
+  (the level across the join moves by less than 2 dB, where it moved by 13 to 24 dB). The first time through
+  sounds as it did; FFX-2's loop is 32 seconds instead of 38.
+- No picture for this build: it changes sounds and a music cue, not what is on screen.
+
+## 2026-10-13 · The phone Party Prep's four colour shades, option B (branch r46-prepshades; not live)
+
+Address: none yet (branch r46-prepshades on release candidate r45-rc d5bf2206; not merged, not deployed, no review run)
+
+- **Both games:** on a phone, the Party Prep page's small coloured text now uses the colours of the approved mockup
+  page, after Bailey saw them beside the first version and went with the recommendation. In FFX the small
+  gold "+10% dmg" note on the Stats tab, and the gold bag counts on the Items tab, are a deeper
+  brown-gold that reads clearly on the ivory card (5.4 to 1; it was 3.4 to 1). In FFX-2 the pink
+  bag counts on the Items tab are a deeper raspberry (6.1 to 1; it was 4.5 to 1). Nothing else moves:
+  no layout, size or other colour changes, and the same colours are in the Ink & Gold style sheet under
+  their own names, so the next screen can use them.
+- **FFX-2 only (the dressphere plates on the Stats tab):** the count after the up triangle is a pale green
+  and the count after the down triangle a pale red, where both were ivory. Both read at better than
+  8 to 1 on the dark plate, and the triangles stay in front of the numbers, so direction never depends on
+  the colour alone.
+- **How it was checked:** tsc clean; the 34 test files that read the style sheets or the phone prep passed
+  (834 tests), including a new one that pins each shade's contrast against its real background; a
+  production build in headless Chromium on a 390x844 touch phone read exactly the four colours of the
+  mockup page, at the same positions, with no pixel of the four views differing from the mockup page's
+  by more than 6 levels. Whole pages: [the FFX note](docs/screenshots/r46-prepshades/1-ffx-stats-gold-note.png),
+  [the FFX-2 bag counts](docs/screenshots/r46-prepshades/2-ffx2-items-pink-count.png),
+  [up counts](docs/screenshots/r46-prepshades/3-ffx2-stats-up-count.png) and
+  [down counts](docs/screenshots/r46-prepshades/4-ffx2-stats-down-count.png).
+
+![The four shades on the phone Party Prep: the mockup page's own on the left, this build on the right](docs/screenshots/r46-prepshades/prepshades-target-b-vs-build-390x844.jpg)
 
 ## 2026-10-13 · Release 44a (r44a): party prep on a phone, bosses that gather from pyreflies, and a lighter chapter board
 
@@ -122,6 +401,7 @@ Address: https://echoesofspira.com (main 7b2582e7, bundle 1ntEYvFO)
 ![Chapter XII first menu at 1280 by 720 in this build: text of 14 pixels or more](docs/screenshots/r43-textfloor/after/battle-ch12-1280x720-first-menu.jpg)
 
 *FFX, Chapter XII (Seymour Omnis), the first menu at 1280 by 720: the last build (top) and this build (bottom).*
+
 
 ## 2026-10-12 · Release 42 (r42): the games' own battle rules on echoesofspira.com
 

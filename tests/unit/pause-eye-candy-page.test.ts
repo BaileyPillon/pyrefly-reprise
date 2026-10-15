@@ -294,7 +294,7 @@ describe.each([
     h.screen.handleInput(pad(['confirm']));
     h.screen.handleInput(pad(['r1']));
     expect(page(h)).toBeNull();
-    expect(s(h)['tab']).toBe('controls');
+    expect(s(h)['tab']).toBe('accessibility'); // the tab after OPTIONS since PR-0032 (OPT-B)
     h.screen.trigger('pause:tab:options');
     h.screen.handleInput(pad([], ['pause:row:eyeCandy']));
     h.screen.handleInput(pad(['l1']));
@@ -307,7 +307,7 @@ describe.each([
     openByKeys(h);
     key(h, 'KeyE');
     expect(page(h)).toBeNull();
-    expect(s(h)['tab']).toBe('controls');
+    expect(s(h)['tab']).toBe('accessibility'); // the tab after OPTIONS since PR-0032 (OPT-B)
     openByKeys(h);
     key(h, 'KeyQ');
     expect(page(h)).toBeNull();

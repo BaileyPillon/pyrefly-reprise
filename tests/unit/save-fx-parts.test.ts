@@ -100,7 +100,8 @@ describe.each([
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     const added = Object.keys(after.settings).filter((k) => !(k in before.settings)).sort();
-    expect(added).toEqual([...PART_FIELDS].sort());
+    // The nine parts, and the ACCESSIBILITY tab's two settings (PR-0032, `saveAccess.ts`; both OFF).
+    expect(added).toEqual([...PART_FIELDS, 'reduceFlashes', 'colourVision'].sort());
   });
 
   it('the parts of a look it had OFF come up OFF, every other part ON', () => {

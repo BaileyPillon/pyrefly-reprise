@@ -87,8 +87,9 @@ describe.each(FIXTURES)('a %s save upgrades with every look ON', (file, release)
     for (const [k, v] of Object.entries(before.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     for (const [k, v] of Object.entries(fixture.expect.settings)) expect(after.settings[k as keyof typeof after.settings], k).toEqual(v);
     const added = Object.keys(after.settings).filter((k) => !(k in before.settings)).sort();
-    // D-317's nine parts arrive too (`fxParts.ts`): no look of these saves is OFF, so every part comes in ON.
-    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize'].sort());
+    // D-317's nine parts arrive too (`fxParts.ts`): no look of these saves is OFF, so every part comes in ON. So do the ACCESSIBILITY tab's
+    // two settings (PR-0032, `saveAccess.ts`), both OFF.
+    expect(added).toEqual([...FX_PARTS.map((p) => p.field), 'fxLight', 'fxLiving', 'fxSpectacle', 'sfxBalanceMigrated', 'textSize', 'reduceFlashes', 'colourVision'].sort());
     for (const f of LOOKS) expect(after.settings[f], f).toBe(true);
     for (const p of FX_PARTS) expect(after.settings[p.field], p.field).toBe(true);
   });

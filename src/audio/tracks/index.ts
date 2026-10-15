@@ -109,6 +109,16 @@ const COMPOSED: Record<string, Track> = {
  *
  * FF7 only, the same day: `boss-ff7-guard` (the hidden 'limit' chapter's Guard Scorpion, silent before). No FF7 score exists and `playMusic` refuses a key with
  * no track, so its synth fallback (only if the MP3 cannot load) is the generic FFX battle bed `battle-ffx`: a cross-game fallback, named here on purpose.
+ *
+ * Batch 2, 2026-10-12 (Bailey, 2026-10-10 23:05 EDT: "i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please."; 2026-10-12:
+ * "I'll go with all of your recommendations"): an ElevenLabs original for every remaining synth cue. Where one replaces a cue for every chapter that played it, it keeps the
+ * cue's key (the MP3 and manifest entry change, this score stays as the fallback). Where it serves only some of a cue's chapters, it is a key of its own over the old score:
+ * FFX only: `boss-challenge` (Chapter II, Yunalesca, and the hidden Sinspawn Gui chapter's second fight: the game plays one "Challenge" track at both, so one cue; Chapter I keeps
+ * `boss-seymour`, which Bailey chose by ear) over `boss-yunalesca`; `boss-gui` (that chapter's first fight) over `boss-dread`; `boss-seymour-omnis` (Chapter XII) over `boss-seymour`.
+ * FFX-2 only: `boss-den-of-woe` (Chapter XV) over `boss-shuyin`; `boss-experiment` (the hidden Experiment, both acts) over `boss-ffx2-aeon`; `scene-chateau-leblanc` (Chapter VI and
+ * the hidden Leblanc chapter only) over `scene-bevelle-underground`. The results screen's cues have no score of their own either: `victory-bahamut` (Chapter IV, FFX-2) and
+ * `defeat-ffx` (FFX) fall back to the hymn-bed `pause`, which is sparse and calm and shared by both games; `defeat-ffx2` (FFX-2) to `scene-farplane`. (A fallback loops: a defeat
+ * cue made to play once only plays once when its MP3 loads.)
  */
 const STAND_INS: Record<string, string> = {
   'boss-leblanc': 'boss-ffx2-aeon',
@@ -120,7 +130,29 @@ const STAND_INS: Record<string, string> = {
   'boss-sin-assault': 'boss-evrae',
   'boss-sin-countdown': 'boss-evrae',
   'boss-ff7-guard': 'battle-ffx',
+  'boss-challenge': 'boss-yunalesca',
+  'boss-gui': 'boss-dread',
+  'boss-seymour-omnis': 'boss-seymour',
+  'boss-den-of-woe': 'boss-shuyin',
+  'boss-experiment': 'boss-ffx2-aeon',
+  'scene-chateau-leblanc': 'scene-bevelle-underground',
+  'victory-bahamut': 'pause',
+  'defeat-ffx': 'pause',
+  'defeat-ffx2': 'scene-farplane',
 };
+
+/**
+ * Compositions whose pre-render is retired (batch 2, 2026-10-12): no chapter, script or screen plays the cue any more, so no MP3 ships for it and the manifest has no
+ * entry. The score stays in the repo as the synth fallback of the cues that stand in for it (`boss-yunalesca` under `boss-challenge`, `boss-dread` under `boss-gui`,
+ * `boss-ffx2-aeon` under the six cues over it), which is the only way it can be heard now; the pause jukebox leaves it out of its list, because it would play the synth.
+ * `tests/unit/audio-music-batch2-2026-10-12.test.ts` holds the list to that: each is unreferenced, unshipped and a stand-in's fallback.
+ */
+export const RETIRED_MUSIC_CUES: readonly string[] = ['boss-ffx2-aeon', 'boss-dread', 'boss-yunalesca'];
+
+/** True for a composition whose MP3 is retired (see {@link RETIRED_MUSIC_CUES}). */
+export function isRetiredMusic(name: string): boolean {
+  return RETIRED_MUSIC_CUES.includes(name);
+}
 
 export const TRACKS: Record<string, Track> = { ...COMPOSED };
 for (const [key, target] of Object.entries(STAND_INS)) {

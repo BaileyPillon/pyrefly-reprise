@@ -194,7 +194,7 @@ const STATUS_NAMES: readonly [string, string][] = [
   ['Zombie', 'All HP restoration damages instead; revival effects instantly kill a living Zombie.'],
   ['Petrify', 'Cannot act; wipes other statuses on application; a physical hit can shatter it into Eject.'],
   ['Poison', "Loses 25% of max HP at the end of the victim's own turn (enemies use their own percentage)."],
-  ['Silence', 'Blocks Black and White Magic and Summon, but never blocks an Overdrive.'],
+  ['Silence', 'Blocks Black and White Magic, but never blocks Summon or an Overdrive.'],
   ['Sleep', 'Cannot act; attacks against a sleeper always hit; physical damage wakes them, magic does not.'],
   ['Darkness', 'Physical hit chance drops to about a tenth, before Luck.'],
   ['Slow', "Recovery doubles; applying it also adds 100% to the target's current CTB counter."],

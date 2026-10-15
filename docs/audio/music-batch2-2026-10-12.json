@@ -1,0 +1,2500 @@
+{
+  "what": "Music batch 2 of the ElevenLabs originals (2026-10-12): 27 picks. 18 replace a cue in place (the cue keeps its key, its MP3 and manifest entry change), 9 are cues of their own over the composition they replace; 3 compositions lose their MP3 because no chapter plays them any more",
+  "source": "elevenlabs-music_v2_5",
+  "words": "Bailey, 2026-10-10 23:05 EDT: \"i'll go with all your recommendations even as to music and sound effects. you recommend an dchoose it please. this is extremely important.\"; 2026-10-12: \"I'll go with all of your recommendations\" (driver items 47, 52, 53, 58 and 61 in D:/Tools/pyrefly-scratch/2026-10-07/decisions-to-record.md). \"For music create originals that closely resemble the mood and atmosphere of the songs playing at each respective encounter\" and \"you need to use eleven labs\"",
+  "gameCase": "Per cue, from the chapters' own records (rule 14). FFX only: victory-ffx, defeat-ffx, boss-challenge (Chapter II and the hidden Sinspawn Gui fight 2), boss-jecht, boss-yu-yevon, boss-seymour-macalania, boss-evrae, boss-yojimbo, boss-seymour-omnis (XII), boss-gui (hidden Sinspawn Gui fight 1), scene-gagazet, scene-zanarkand-dome, scene-dreams-end, scene-macalania-temple, scene-fahrenheit, ending-ffx. FFX-2 only: victory-ffx2, victory-bahamut (Chapter IV), defeat-ffx2, boss-vegnagun, boss-shuyin, boss-den-of-woe (XV), boss-experiment (hidden), scene-chateau-leblanc (Chapter VI and the hidden Leblanc preview), scene-bevelle-underground (which also carries the Paragon fight), scene-farplane, ending-ffx2. Not touched, by Bailey's ear (58d): boss-seymour (Chapter I) and chapter-select.",
+  "master": "The files are the batch-2 lane's staged masters (D:/Tools/pyrefly-scratch/2026-10-10/music-batch2/stage/music): cut on whole bars at real attacks with an equal-power crossfade, a 3 s run-on past the loop end, one gain to -16 LUFS, the side channel narrowed in mid/side just enough to pass the stereo gate of THEMES.md (loop points unchanged), LAME V4. Installed byte for byte (sha256 checked against the lane's work/master-<brief>.json), with the lane's own manifest entries and the file renamed to the cue. A victory cue is an intro plus a loop in one file (the fanfare or resolve of 6.5 to 8 s, then the body that loops): the manifest's loopStart is where the body begins and loopEnd where it ends (except the three results loops, below). Three results loops were re-cut on 2026-10-13 (FOC45-02, branch r46-audio2): see each cue's `recut` (both loop points moved together by whole beats into the body so the loop closes on body music, not on a fade into the gap after the fanfare); the other 24 files are untouched.",
+  "oneShots": "defeat-ffx and defeat-ffx2 play once: the file holds the cue, a raised-cosine fade to digital silence and 2 s of silence, and its manifest loop is that silence (loopStart where the silence begins, loopEnd the file's end) because the music player always loops; the entry carries `oneShot: true` (the game ignores the field; qa.mjs does not flag the short loop body of an entry that has it).",
+  "synthFallback": "Each new cue is a stand-in in src/audio/tracks/index.ts for the composition it replaces (the MP3 is what plays; the synth plays only if the MP3 cannot load). victory-bahamut and defeat-ffx fall back to `pause` and defeat-ffx2 to `scene-farplane`, because the results cues replace nothing. An in-place cue keeps its own composition as its fallback. The three retired compositions (boss-ffx2-aeon, boss-dread, boss-yunalesca) stay in the repo as the fallback of the cues over them.",
+  "retired": [
+    {
+      "cue": "boss-ffx2-aeon",
+      "bytes": 4069829,
+      "sha256": "cd9385ea2f4a9fd046a149525f994339fb0b1d51dae6709ed890db7fb403b89b",
+      "manifestEntry": {
+        "file": "music/boss-ffx2-aeon.mp3",
+        "loopStart": 12,
+        "loopEnd": 114,
+        "duration": 117,
+        "bytes": 4069829,
+        "lufs": -15.8,
+        "truePeakDb": -1.7
+      },
+      "why": "its last chapter, the hidden Experiment, has boss-experiment (batch 1 had moved Chapters IV, VI, XI, XIII, XVI off it)"
+    },
+    {
+      "cue": "boss-dread",
+      "bytes": 2615074,
+      "sha256": "121e17e949dd0de62fe26f8e36d86bd8d591255746ee736fc5670c47aadfc6ab",
+      "manifestEntry": {
+        "file": "music/boss-dread.mp3",
+        "loopStart": 10.666667,
+        "loopEnd": 85.333333,
+        "duration": 88.3333,
+        "bytes": 2615074,
+        "lufs": -16,
+        "truePeakDb": -1.5
+      },
+      "why": "its only chapter, the hidden Sinspawn Gui, fight 1, has boss-gui"
+    },
+    {
+      "cue": "boss-yunalesca",
+      "bytes": 3055321,
+      "sha256": "6e046e5b0bd217528ec88c2c10740a0a22d9e4efdf54fc60fbdd4d5b9cd5a2c7",
+      "manifestEntry": {
+        "file": "music/boss-yunalesca.mp3",
+        "loopStart": 10.909093,
+        "loopEnd": 100.909093,
+        "duration": 103.9091,
+        "bytes": 3055321,
+        "lufs": -16,
+        "truePeakDb": -1.5
+      },
+      "why": "its only chapter, Chapter II, has boss-challenge"
+    }
+  ],
+  "totals": {
+    "musicBytesBefore": 93196705,
+    "musicBytesAfter": 60036383,
+    "replacedInPlace": 18,
+    "newCues": 9,
+    "retiredFiles": 3
+  },
+  "notMeasured": "Nothing here is a listening verdict (AGENTS.md rule 13): the picks are the driver's, from the briefs and the measurements, under Bailey's delegation; his ear can overrule any of them. The stereo gate was measured by the lane on these exact files (every one passes); the headless browser proof was not run on them in this lane.",
+  "cues": [
+    {
+      "cue": "victory-ffx",
+      "pick": "VF-L2",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "victoryloop",
+      "mode": "replace",
+      "brief": "vf-l2",
+      "replaces": [
+        "victory-ffx"
+      ],
+      "plays": "The results screen of every FFX chapter (1 to 3, 7 to 14, 17, 18) and the hidden Sinspawn Gui chapter, on a win: a fanfare opening of 8.5 s into a 26.7 s results body that loops (the loop closes one beat into the body since 2026-10-13, see `recut`). Only the last link of an encounter reaches the results screen, so only the last link stings.",
+      "fallback": "victory-ffx",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A warm, sincere orchestral victory fanfare that settles into a gentle, loopable processional, at 108 BPM in 4/4 in a bright major key, relief more than triumph. For the first seven seconds: a short snare roll lifts into a section of French horns and trumpets playing a noble, open fanfare figure over timpani and a sweeping harp, and the orchestra lands on one clear, held major chord that rings out. Then, without a pause and without changing key or tempo, the music settles into a calm, steady, walking processional that lasts for the rest of the piece: pizzicato basses and soft snare brushes keep an easy stride, a solo trumpet and a solo horn trade a simple, dignified, hopeful tune, warm strings and a harp answer, and a soft timpani marks the downbeats. It never builds to a climax and never ends: it keeps the same easy stride so that it can repeat. Sincere and grateful, a little weary, never boastful. Real acoustic orchestra and real percussion recorded in a warm hall. No vocals. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 48000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "544b14e3d74e4e3460d670abc27d9fe563e740773526dedc9afb82063960af86",
+        "bytes": 1921004,
+        "format": "mp3_48000_320",
+        "seconds": 48.03,
+        "songId": "LbeYPjBTpFiJprkUisYu",
+        "generatedUtc": "2026-10-13T04:11:05.041Z",
+        "creditsEstimated": 660
+      },
+      "file": {
+        "bytes": 643980,
+        "sha256": "26ef5683b88aed4693d0d0dd2543dc556ee84395cbe12a1773172cd0c005aec5"
+      },
+      "manifestEntry": {
+        "file": "music/victory-ffx.mp3",
+        "loopStart": 8.457596,
+        "loopEnd": 35.143379,
+        "duration": 38.1434,
+        "bytes": 643980,
+        "lufs": -16.0,
+        "truePeakDb": -4.4,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 2324004,
+        "sha256": "02c9f9024bbd692a10c350c5eea36ad6976857aff687f1f2fc0593955a981ff1",
+        "manifestEntry": {
+          "file": "music/victory-ffx.mp3",
+          "loopStart": 8.146508,
+          "loopEnd": 72.146508,
+          "duration": 75.1465,
+          "bytes": 2324004,
+          "lufs": -15.9,
+          "truePeakDb": -2.1
+        }
+      },
+      "master": {
+        "bpm": 107.92,
+        "bars": 12,
+        "introSec": 8.458,
+        "loopSec": 26.686,
+        "clickRatio": 0.259,
+        "fluxRatio": 0.261,
+        "stepOk": true,
+        "xfadeSec": 0.556,
+        "xfadeLaw": "equal-power",
+        "gainDb": -3.4
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.39,
+          "sideMid": -3.53,
+          "monoLoss": -1.59
+        },
+        "after": {
+          "corr": 0.703,
+          "sideMid": -7.49,
+          "monoLoss": -0.71
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -3.97
+      },
+      "why": "Heard at every FFX win (chapters 1 to 3 and 7 to 14, 17, 18 and the FFX hidden chapters). Remade as a fanfare opening of 6 to 9 s into a loopable results-screen body (decisions 53d, 58f); VF-A2 stays as the one-shot fallback.",
+      "reason": "(a) Fit: Warm brass, timpani and harp fanfare into an easy walking processional: the brass register the shipped cue is described in (relief more than triumph), in a form that loops. Measured 107.9 BPM against 108 asked. VF-L1: Hymn-like fanfare (horns, strings, bells, harp) into a calm choir-and-strings rest: sincere and grateful, further from brass. (measured 100.3 BPM) VF-A2: One-shot fallback from run 1 (warm horns, timpani and harp, one held chord, then silence); never recommended while a loop exists. (b) Seam: Click ratio 0.03, under 1.0. VF-L1 click 0.74. (c) Length: Loop 26.7 s (12 bars), intro 7.9 s. Spec: intro 7.9 s (want 6 to 9), loop 26.7 s (want 20 to 40). VF-L1 loop 28.7 s, intro 8.8 s. VF-A2 8.8 s, plays once. (d) Loudness: -16.0 LUFS. VF-L1: -16.0. VF-A2: -16.0. Project stereo gate: correlation 0.39 to 0.70, side/mid -3.5 to -7.5 dB, mono loss -1.59 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code.",
+      "recut": {
+        "date": "2026-10-13",
+        "branch": "r46-audio2",
+        "finding": "FOC45-02 of the focused review of d5bf2206",
+        "why": "The finished loop ended every pass in a fade to near silence and re-entered at full level: the chain fades the last beat before the loop end into the audio just before the loop start, and for a results loop that audio is the near-silent gap after the fanfare. Measured on the decoded file, 50 ms before the wrap against 50 ms after: +24.2 dB (200 ms against 200 ms: +18.7 dB).",
+        "what": "Same take, same bar grid, same mastering (one gain to -16 LUFS, the stereo gate, LAME V4, the 3 s run-on), same equal-power crossfade; both loop points moved together by whole beats into the body (+0.556 s) so the audio before the loop start is body music, not the gap. The first pass is the same sound; only where the loop closes and re-enters moved. Searched over every beat offset and bar count with the lane's own seam gates (click ratio, spectral flux, wrap step) and the level step; the chosen pair is a whole number of bars, phrase-aligned where the take allows.",
+        "before": {
+          "file": {
+            "bytes": 634232,
+            "sha256": "43613591a157329af26b4b0e94a46dca4b8a33e4b87a107c4d903516e104dcbd"
+          },
+          "manifestEntry": {
+            "file": "music/victory-ffx.mp3",
+            "loopStart": 7.901587,
+            "loopEnd": 34.58737,
+            "duration": 37.5874,
+            "bytes": 634232,
+            "lufs": -16,
+            "truePeakDb": -4.4,
+            "source": "elevenlabs-music_v2_5"
+          },
+          "master": {
+            "bpm": 107.92,
+            "bars": 12,
+            "introSec": 7.902,
+            "loopSec": 26.686,
+            "clickRatio": 0.033,
+            "fluxRatio": 0.417,
+            "stepOk": true,
+            "xfadeSec": 0.556,
+            "xfadeLaw": "equal-power",
+            "gainDb": -3.4
+          },
+          "stereo": {
+            "before": {
+              "corr": 0.392,
+              "sideMid": -3.55,
+              "monoLoss": -1.59
+            },
+            "after": {
+              "corr": 0.702,
+              "sideMid": -7.5,
+              "monoLoss": -0.7
+            },
+            "pass": true,
+            "passedAsRendered": false,
+            "action": "narrowed",
+            "sideGainDb": -3.95
+          }
+        },
+        "wrapBefore": {
+          "pre50": -53.6,
+          "post50": -29.4,
+          "step50": 24.2,
+          "pre200": -40.2,
+          "post200": -21.5,
+          "step200": 18.7,
+          "clickRatio": 0.078
+        },
+        "wrapAfter": {
+          "pre50": -20.2,
+          "post50": -19.9,
+          "step50": 0.3,
+          "pre200": -19.5,
+          "post200": -20.3,
+          "step200": -0.8,
+          "clickRatio": 0.196
+        },
+        "earOwed": "Measured only (rule 13): nobody has heard the new wrap. If the owner prefers the earlier loop, the previous files are in git history (r45-rc d5bf2206)."
+      }
+    },
+    {
+      "cue": "victory-ffx2",
+      "pick": "VX-L1",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "victoryloop",
+      "mode": "replace",
+      "brief": "vx-l1",
+      "replaces": [
+        "victory-ffx2"
+      ],
+      "plays": "The results screen of every FFX-2 chapter except IV (5, 6, 11, 13, 15, 16) and the hidden Leblanc preview and Experiment, on a win: a fanfare opening of 8.3 s into a 32.0 s results body that loops.",
+      "fallback": "victory-ffx2",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A short, bright, cheeky victory fanfare that settles into a light, bouncy, loopable groove, at 120 BPM in 4/4 in a bright major key. For the first seven seconds: a snare roll builds, live trumpets and trombones play a swaggering fanfare figure, a piano flourish runs up, a glockenspiel sparkles, and the band lands on one clean, happy major chord. Then, without a pause and without changing key or tempo, it settles straight into a light, bouncing, medium-swing groove that lasts for the rest of the piece: an upright bass walks, a drummer plays brushes and a light ride cymbal, a piano comps bright chords, a muted trumpet and a flute trade a catchy, playful, singing figure, and pizzicato strings and a vibraphone add sparkle. It never builds to a climax and never ends: it keeps the same groove so that it can repeat. Breezy, optimistic and a little cheeky, the feeling of counting the loot after a successful caper. Real recorded instruments in a room full of players. No vocals. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 48000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "9a6082b2230010879e648d4ab78528ea4abbf729bc32aaa99a35d094357369df",
+        "bytes": 1921004,
+        "format": "mp3_48000_320",
+        "seconds": 48.03,
+        "songId": "ISOzLP82twVeve5De3y2",
+        "generatedUtc": "2026-10-13T04:15:05.562Z",
+        "creditsEstimated": 660
+      },
+      "file": {
+        "bytes": 875248,
+        "sha256": "6c1a03595dd9c6432e4d6bd51657249009974e31349eb60898e1139c97d69240"
+      },
+      "manifestEntry": {
+        "file": "music/victory-ffx2.mp3",
+        "loopStart": 8.264218,
+        "loopEnd": 40.263152,
+        "duration": 43.2632,
+        "bytes": 875248,
+        "lufs": -16.0,
+        "truePeakDb": -4.3,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 2396379,
+        "sha256": "199f3ac9b60022e1105b064b09d959ebb006e5b49caf4627d7a0f47363062637",
+        "manifestEntry": {
+          "file": "music/victory-ffx2.mp3",
+          "loopStart": 7.5,
+          "loopEnd": 67.5,
+          "duration": 70.5,
+          "bytes": 2396379,
+          "lufs": -16,
+          "truePeakDb": -1.1
+        }
+      },
+      "master": {
+        "bpm": 120.0,
+        "bars": 16,
+        "introSec": 8.264,
+        "loopSec": 31.999,
+        "clickRatio": 0.163,
+        "fluxRatio": 0.225,
+        "stepOk": true,
+        "xfadeSec": 0.5,
+        "xfadeLaw": "equal-power",
+        "gainDb": -4.1
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.81,
+          "sideMid": -9.8,
+          "monoLoss": -0.43
+        },
+        "after": {
+          "corr": 0.776,
+          "sideMid": -8.99,
+          "monoLoss": -0.52
+        },
+        "pass": true,
+        "passedAsRendered": true,
+        "action": "left alone",
+        "sideGainDb": 0.81
+      },
+      "why": "Heard at every FFX-2 win (chapters 5, 6, 11, 13, 15, 16 and the FFX-2 hidden chapters; Chapter IV has its own, below). Remade as a fanfare opening of 6 to 9 s into a loopable results-screen body (decisions 53d, 58f); VX-A1 stays as the one-shot fallback.",
+      "reason": "(a) Fit: Cheeky live brass, snare roll, piano flourish and glockenspiel into a light medium-swing groove: the \"that was fun\" brass fanfare the shipped cue is described as, in a form that loops. Measured 120.0 BPM against 120 asked. VX-L2: Light, sparkling pizzicato, flutes, harp and celesta fanfare into a breezy pizzicato bounce: lighter and less brassy. (measured 126.0 BPM) VX-A1: One-shot fallback from run 1 (bright live brass, snare-roll build, piano flourish, then silence); never recommended while a loop exists. (b) Seam: Click ratio 0.04, under 1.0. VX-L2 click 0.25. (c) Length: Loop 38.0 s (19 bars), intro 7.8 s. Spec: intro 7.8 s (want 6 to 9), loop 38.0 s (want 20 to 40). VX-L2 loop 38.1 s, intro 7.2 s. VX-A1 6.6 s, plays once. (d) Loudness: -16.0 LUFS. VX-L2: -16.0. VX-A1: -16.0. Project stereo gate: correlation 0.81 to 0.78, side/mid -9.8 to -9.0 dB, mono loss -0.43 to -0.52 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code.",
+      "recut": {
+        "date": "2026-10-13",
+        "branch": "r46-audio2",
+        "finding": "FOC45-02 of the focused review of d5bf2206",
+        "why": "The finished loop ended every pass in a fade to near silence and re-entered at full level: the chain fades the last beat before the loop end into the audio just before the loop start, and for a results loop that audio is the near-silent gap after the fanfare. Measured on the decoded file, 50 ms before the wrap against 50 ms after: +12.8 dB (200 ms against 200 ms: -1.0 dB).",
+        "what": "Same take, same bar grid, same mastering (one gain to -16 LUFS, the stereo gate, LAME V4, the 3 s run-on), same equal-power crossfade; both loop points moved together by whole beats into the body (+0.499 s) so the audio before the loop start is body music, not the gap. The first pass is the same sound; only where the loop closes and re-enters moved. Searched over every beat offset and bar count with the lane's own seam gates (click ratio, spectral flux, wrap step) and the level step; the chosen pair is a whole number of bars, phrase-aligned where the take allows.",
+        "before": {
+          "file": {
+            "bytes": 986317,
+            "sha256": "8e1d4ace3c6905631795d87b20f73aa01a97cb609cd424df9b17a8dd7e1a0f75"
+          },
+          "manifestEntry": {
+            "file": "music/victory-ffx2.mp3",
+            "loopStart": 7.765125,
+            "loopEnd": 45.763832,
+            "duration": 48.7638,
+            "bytes": 986317,
+            "lufs": -16,
+            "truePeakDb": -4.2,
+            "source": "elevenlabs-music_v2_5"
+          },
+          "master": {
+            "bpm": 120,
+            "bars": 19,
+            "introSec": 7.765,
+            "loopSec": 37.999,
+            "clickRatio": 0.04,
+            "fluxRatio": 0.247,
+            "stepOk": true,
+            "xfadeSec": 0.5,
+            "xfadeLaw": "equal-power",
+            "gainDb": -4.2
+          },
+          "stereo": {
+            "before": {
+              "corr": 0.811,
+              "sideMid": -9.82,
+              "monoLoss": -0.43
+            },
+            "after": {
+              "corr": 0.776,
+              "sideMid": -9,
+              "monoLoss": -0.5
+            },
+            "pass": true,
+            "passedAsRendered": true,
+            "action": "left alone",
+            "sideGainDb": 0.83
+          }
+        },
+        "wrapBefore": {
+          "pre50": -40.3,
+          "post50": -27.5,
+          "step50": 12.8,
+          "pre200": -25.6,
+          "post200": -26.7,
+          "step200": -1.0,
+          "clickRatio": 0.034
+        },
+        "wrapAfter": {
+          "pre50": -14.0,
+          "post50": -15.8,
+          "step50": -1.8,
+          "pre200": -15.4,
+          "post200": -16.6,
+          "step200": -1.2,
+          "clickRatio": 0.348
+        },
+        "earOwed": "Measured only (rule 13): nobody has heard the new wrap. If the owner prefers the earlier loop, the previous files are in git history (r45-rc d5bf2206)."
+      }
+    },
+    {
+      "cue": "defeat-ffx",
+      "pick": "DF-A",
+      "game": "FFX",
+      "gameCase": "FFX only (FFX's register: a grave fall, the dread of a pilgrimage that can fail)",
+      "kind": "oneshot",
+      "mode": "new",
+      "brief": "df-a",
+      "replaces": "none (new cue)",
+      "plays": "The defeat panel of every FFX chapter and the hidden Sinspawn Gui chapter, once: 7.0 s of cue, then 2 s of held silence (oneShot). Not on a withdrawal.",
+      "fallback": "pause",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A short, sombre, slow orchestral cue of defeat lasting about eight seconds, at about 52 BPM in a minor key. Hushed low strings sink slowly, a solitary French horn plays one falling line, a deep bell tolls once, and a small wordless choir (open vowels only, no words, no lyrics) breathes a single dark chord that fades away into a long, natural silence. Grave, resigned, quiet sorrow: the stillness after a fall. Never loud, no drums, no climax, no resolution. Real acoustic instruments in a large stone hall with a long natural reverb tail. It does not loop and does not repeat: it simply decays to silence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop. Let the cue last a full nine seconds, with a slow, long, natural decay, so that the last notes are still faintly audible near the end.",
+        "music_length_ms": 10000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 2,
+        "sha256": "0879a0bd507ae177d2155bb66919f7b5755751e782e511212bd1e37894482ba6",
+        "bytes": 401324,
+        "format": "mp3_48000_320",
+        "seconds": 10.03,
+        "songId": "dmGfJT44VuyEvOInb8dG",
+        "generatedUtc": "2026-10-13T04:23:07.072Z",
+        "creditsEstimated": 138
+      },
+      "file": {
+        "bytes": 127588,
+        "sha256": "1af88d9958248029b17e4a71fe47c0d89f512240cb3b669ab333321274810591"
+      },
+      "manifestEntry": {
+        "file": "music/defeat-ffx.mp3",
+        "loopStart": 7,
+        "loopEnd": 9,
+        "duration": 9,
+        "bytes": 127588,
+        "lufs": -16,
+        "truePeakDb": -2,
+        "source": "elevenlabs-music_v2_5",
+        "oneShot": true
+      },
+      "before": null,
+      "master": {
+        "oneShot": true,
+        "fanfareSec": 7,
+        "silenceSec": 2,
+        "fadeOutSec": 0.4,
+        "clickRatio": 0,
+        "gainDb": 6.4,
+        "limiter": "look-ahead limiter at -2 dBFS (max reduction 2.58 dB)"
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.288,
+          "sideMid": -2.57,
+          "monoLoss": -1.91
+        },
+        "after": {
+          "corr": 0.697,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -5.15
+      },
+      "why": "Decision 58e: a short defeat cue per game. The results screen plays music only on a win (BattleScreenFlow.showResults), so the defeat panel has no cue of its own today.",
+      "reason": "(a) Fit: Orchestral and choral: hushed low strings, one falling horn line, a single bell, a small wordless choir, 52 BPM; grave and resigned, the more FFX of the two. DF-B: Intimate: a solo piano's three falling notes under sinking strings, one harp note, a distant bell, 56 BPM; dignified and still. (b) Seam: Plays once: a raised-cosine fade to digital silence (tail -69 dB at the last sound), then 2 s of silence that carries the manifest loop region, so the wrap is silence to silence (click ratio 0). (c) Length: 7.0 s of sound (want 6 to 10 s). DF-B 6.8 s of sound (want 6 to 10 s). (d) Loudness: -16.0 LUFS. DF-B: -16.0. Project stereo gate: correlation 0.29 to 0.70, side/mid -2.6 to -7.5 dB, mono loss -1.91 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "defeat-ffx2",
+      "pick": "DX-A",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only (FFX-2's register: rueful and gentle, a caper gone wrong rather than a doom)",
+      "kind": "oneshot",
+      "mode": "new",
+      "brief": "dx-a",
+      "replaces": "none (new cue)",
+      "plays": "The defeat panel of every FFX-2 chapter and the hidden Leblanc preview and Experiment, once: 6.0 s of cue, then 2 s of held silence (oneShot). Not on a withdrawal.",
+      "fallback": "scene-farplane",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A short, soft, wistful cue of defeat lasting about eight seconds, at about 60 BPM in a minor key: a solo piano plays a slow, sighing, falling phrase, a solo cello and a warm string section sink gently beneath it, a flute breathes one drooping note, and a harp glissando slides down and fades into silence. Sad but gentle and a little rueful, like a sigh after a plan has gone wrong, not tragic. Never loud, no drums, no climax. Real acoustic instruments in a warm hall with a natural reverb tail. It does not loop: it decays to silence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 8000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "ad7cace524f9b16d38e9a8029709f4f9bfbe21bad80eef09844d13560b585722",
+        "bytes": 321644,
+        "format": "mp3_48000_320",
+        "seconds": 8.04,
+        "songId": "xL7QQUbamBzR4MlQIXwk",
+        "generatedUtc": "2026-10-13T04:11:29.815Z",
+        "creditsEstimated": 110
+      },
+      "file": {
+        "bytes": 114743,
+        "sha256": "dd72714cc60c75bb1519cac152f4277b866376fbade74078d6575775da2df0af"
+      },
+      "manifestEntry": {
+        "file": "music/defeat-ffx2.mp3",
+        "loopStart": 6.03,
+        "loopEnd": 8.03,
+        "duration": 8.03,
+        "bytes": 114743,
+        "lufs": -16,
+        "truePeakDb": -2.8,
+        "source": "elevenlabs-music_v2_5",
+        "oneShot": true
+      },
+      "before": null,
+      "master": {
+        "oneShot": true,
+        "fanfareSec": 6.03,
+        "silenceSec": 2,
+        "fadeOutSec": 0.4,
+        "clickRatio": 0,
+        "gainDb": 8.7,
+        "limiter": null
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.556,
+          "sideMid": -5.44,
+          "monoLoss": -1.09
+        },
+        "after": {
+          "corr": 0.699,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -2.06
+      },
+      "why": "Decision 58e: a short defeat cue per game. The defeat panel has no music of its own today.",
+      "reason": "(a) Fit: Soft and wistful: a solo piano's sighing falling phrase, cello and strings sinking, one drooping flute note, a harp slide, 60 BPM; sad but gentle. DX-B: Wry: a muted trumpet's drooping phrase over pizzicato and vibraphone, a sighing bassoon, 66 BPM; disappointed and rueful. (b) Seam: Plays once: a raised-cosine fade to digital silence (tail -68 dB at the last sound), then 2 s of silence that carries the manifest loop region, so the wrap is silence to silence (click ratio 0). (c) Length: 6.0 s of sound (want 6 to 10 s). DX-B 8.2 s of sound (want 6 to 10 s). (d) Loudness: -16.0 LUFS. DX-B: -16.0. Project stereo gate: correlation 0.56 to 0.70, side/mid -5.4 to -7.5 dB, mono loss -1.09 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "victory-bahamut",
+      "pick": "VB-A",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only (Chapter IV)",
+      "kind": "victoryloop",
+      "mode": "new",
+      "brief": "vb-a",
+      "replaces": "none (the Chapter IV results screen is silent today)",
+      "plays": "Chapter IV's results screen (FFX-2, Bahamut), on a win: a quiet, bittersweet resolve of 8.9 s into a 25.3 s body that loops, under a results screen that stays silent in every other way (no pose, no tally flourish, no quips).",
+      "fallback": "pause",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A quiet, bittersweet cue of resolve after a sorrowful victory, at 76 BPM in 4/4 in a minor key that opens toward the major. For the first eight seconds: a solo grand piano plays a slow, aching, rising phrase that opens out into a warm chord, a warm string section swells softly under it, and a solo cello answers; there is no brass fanfare, no timpani roll and no triumph, only acceptance and tenderness, as if someone has set down a heavy burden. Then, without a pause and without changing key or tempo, the music settles into a quiet, steady, loopable passage that lasts for the rest of the piece: the piano plays soft, broken chords, strings hold long, warm chords, a solo cello sings a simple, consoling line, and a muted timpani marks a very quiet heartbeat every other bar. It never builds to a climax and never ends: it stays in the same hushed texture so that it can repeat. Bittersweet, tender and dignified, never loud, never triumphant. Real acoustic instruments recorded in a warm hall. No vocals. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 40000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "ae685dd5f8c9242b58ec3d59d3c70889c712761141681b7c20ced62afc3b9a7b",
+        "bytes": 1601324,
+        "format": "mp3_48000_320",
+        "seconds": 40.03,
+        "songId": "vcGX9HwIeDow6W9s01tN",
+        "generatedUtc": "2026-10-13T04:15:29.927Z",
+        "creditsEstimated": 550
+      },
+      "file": {
+        "bytes": 551158,
+        "sha256": "91c7ca402218bb6962c9ea2ccb4485ac0b6f5fdf3de954d8b23cb8050d437900"
+      },
+      "manifestEntry": {
+        "file": "music/victory-bahamut.mp3",
+        "loopStart": 8.884535,
+        "loopEnd": 34.156848,
+        "duration": 37.1568,
+        "bytes": 551158,
+        "lufs": -16.0,
+        "truePeakDb": -2.7,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 75.97,
+        "bars": 8,
+        "introSec": 8.885,
+        "loopSec": 25.272,
+        "clickRatio": 0.583,
+        "fluxRatio": 0.413,
+        "stepOk": true,
+        "xfadeSec": 0.79,
+        "xfadeLaw": "equal-power",
+        "gainDb": 4.7
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.361,
+          "sideMid": -3.27,
+          "monoLoss": -1.68
+        },
+        "after": {
+          "corr": 0.696,
+          "sideMid": -7.43,
+          "monoLoss": -0.72
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -4.2
+      },
+      "why": "Decision 58e. Chapter IV's results screen comes up silent today (no pose, no fanfare: BattleScreenFlow.showResults); the Bahamut brief calls the fight a loss Yuna inflicts on herself, so the cue is a quiet, bittersweet resolve, not a fanfare. Same 6 to 9 s opening into a loopable body.",
+      "reason": "(a) Fit: Piano-led (76 BPM, the same family as the Bahamut battle ballad): a solo piano's aching phrase opens into a warm chord, then soft broken chords and a consoling cello line. Measured 76.0 BPM against 76 asked. VB-B: Strings, solo oboe and a lone wordless voice (72 BPM): hushed and hymn-like, then harp and piano ripples under a simple oboe-and-violin phrase. (measured 72.6 BPM) (b) Seam: Click ratio 0.02, under 1.0. VB-B click 0.56. (c) Length: Loop 25.3 s (8 bars), intro 6.5 s. Spec: intro 6.5 s (want 6 to 9), loop 25.3 s (want 20 to 40). VB-B loop 26.5 s, intro 7.6 s. (d) Loudness: -16.0 LUFS. VB-B: -16.0. Project stereo gate: correlation 0.33 to 0.70, side/mid -3.0 to -7.5 dB, mono loss -1.76 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code.",
+      "recut": {
+        "date": "2026-10-13",
+        "branch": "r46-audio2",
+        "finding": "FOC45-02 of the focused review of d5bf2206",
+        "why": "The finished loop ended every pass in a fade to near silence and re-entered at full level: the chain fades the last beat before the loop end into the audio just before the loop start, and for a results loop that audio is the near-silent gap after the fanfare. Measured on the decoded file, 50 ms before the wrap against 50 ms after: +23.1 dB (200 ms against 200 ms: +24.4 dB).",
+        "what": "Same take, same bar grid, same mastering (one gain to -16 LUFS, the stereo gate, LAME V4, the 3 s run-on), same equal-power crossfade; both loop points moved together by whole beats into the body (+2.368 s) so the audio before the loop start is body music, not the gap. The first pass is the same sound; only where the loop closes and re-enters moved. Searched over every beat offset and bar count with the lane's own seam gates (click ratio, spectral flux, wrap step) and the level step; the chosen pair is a whole number of bars, phrase-aligned where the take allows.",
+        "before": {
+          "file": {
+            "bytes": 514225,
+            "sha256": "710b76e2428f4630a5b5c7fb953f5aa2b515d7ca9eb64f1b17050aa28b8976dd"
+          },
+          "manifestEntry": {
+            "file": "music/victory-bahamut.mp3",
+            "loopStart": 6.516236,
+            "loopEnd": 31.79839,
+            "duration": 34.7984,
+            "bytes": 514225,
+            "lufs": -16,
+            "truePeakDb": -1.9,
+            "source": "elevenlabs-music_v2_5"
+          },
+          "master": {
+            "bpm": 75.97,
+            "bars": 8,
+            "introSec": 6.516,
+            "loopSec": 25.282,
+            "clickRatio": 0.022,
+            "fluxRatio": 1,
+            "stepOk": true,
+            "xfadeSec": 0.79,
+            "xfadeLaw": "equal-power",
+            "gainDb": 4.7
+          },
+          "stereo": {
+            "before": {
+              "corr": 0.334,
+              "sideMid": -3,
+              "monoLoss": -1.76
+            },
+            "after": {
+              "corr": 0.699,
+              "sideMid": -7.5,
+              "monoLoss": -0.7
+            },
+            "pass": true,
+            "passedAsRendered": false,
+            "action": "narrowed",
+            "sideGainDb": -4.5
+          }
+        },
+        "wrapBefore": {
+          "pre50": -36.2,
+          "post50": -13.1,
+          "step50": 23.1,
+          "pre200": -35.3,
+          "post200": -10.9,
+          "step200": 24.4,
+          "clickRatio": 0.005
+        },
+        "wrapAfter": {
+          "pre50": -29.8,
+          "post50": -29.2,
+          "step50": 0.5,
+          "pre200": -29.9,
+          "post200": -28.9,
+          "step200": 1.1,
+          "clickRatio": 0.665
+        },
+        "earOwed": "Measured only (rule 13): nobody has heard the new wrap. If the owner prefers the earlier loop, the previous files are in git history (r45-rc d5bf2206)."
+      }
+    },
+    {
+      "cue": "boss-challenge",
+      "pick": "CH-A",
+      "game": "FFX",
+      "gameCase": "FFX only (the track is the FFX OST's; one original for three fights, per rule 47f)",
+      "kind": "loop",
+      "mode": "new",
+      "brief": "ch-a",
+      "replaces": "boss-seymour (Flux, Gui 2) and boss-yunalesca (Ch II)",
+      "plays": "Chapter II's Yunalesca (all three forms) and the hidden Sinspawn Gui chapter's second fight: the game plays one 'Challenge' track at both, so one cue. Chapter I keeps boss-seymour (Bailey chose it by ear); chapter-select keeps its loop.",
+      "fallback": "boss-yunalesca",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Cold, relentless, oppressive cinematic battle music at 158 BPM in 4/4 in a minor key over a single low pedal, written for an enemy that is not trying to be understood. A hard, clipped, repeating low-string and bassoon ostinato with syncopated off-beat accents that keep the pulse from settling, dry hammered anvils and struck metal plates, a taiko-like low drum, and short angular stabs on low brass; cold, sustained choir-like voices (open vowels only, no words, no lyrics) float high above and never form a chord. No tune, only a short mechanical figure that repeats and grows. It starts at full pressure at once after a short four-bar intro, holds one high level, adds a new layer every half minute without changing key, and never resolves or builds to a triumphant release; it falls back to the bare ostinato at the end so it can repeat. Inhuman, unsympathetic, tense. Real acoustic orchestra and real percussion. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "c722b7b34c3c8249f405293cb379b0be18415eedfcfd8c78305d188507fe4d61",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "W3efyTg5lali8hS0uoPh",
+        "generatedUtc": "2026-10-13T04:23:35.505Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1559663,
+        "sha256": "d241f94d9b21d57f2e74d1f52ff62b96a8e155ef13001e32b7a8a385d6c3c261"
+      },
+      "manifestEntry": {
+        "file": "music/boss-challenge.mp3",
+        "loopStart": 18.18093,
+        "loopEnd": 91.072426,
+        "duration": 94.0724,
+        "bytes": 1559663,
+        "lufs": -16,
+        "truePeakDb": -1.8,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 158.04,
+        "bars": 48,
+        "introSec": 18.181,
+        "loopSec": 72.891,
+        "clickRatio": 0.218,
+        "fluxRatio": 0.019,
+        "stepOk": true,
+        "xfadeSec": 0.38,
+        "xfadeLaw": "equal-power",
+        "gainDb": 0.2
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.08,
+          "sideMid": -0.7,
+          "monoLoss": -2.68
+        },
+        "after": {
+          "corr": 0.7,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -6.8
+      },
+      "why": "The game plays one track for Seymour Flux (Ch I), Yunalesca (Ch II) and the second Gui fight (hidden mushroom).",
+      "reason": "(a) Fit: Orchestral: written straight from the brief (158 BPM, clipped ostinato, no tune, no release). Measured 158.0 BPM against 158 asked. CH-B: The same pressure from a live band, since the real track is synth-forward; slightly further from the sourced \"orchestral\" reading but closer to its industrial feel. (measured 152.0 BPM) (b) Seam: Click ratio 0.22, under 1.0. CH-B click 0.17. (c) Length: Loop 72.9 s (48 bars), intro 18.2 s. CH-B loop 50.5 s, intro 13.1 s. (d) Loudness: -16.0 LUFS. CH-B: -16.0. Project stereo gate: correlation 0.08 to 0.70, side/mid -0.7 to -7.5 dB, mono loss -2.68 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-jecht",
+      "pick": "JE-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "je-a",
+      "replaces": [
+        "boss-jecht"
+      ],
+      "plays": "Chapter III, Braska's Final Aeon, battle 1 (Jecht).",
+      "fallback": "boss-jecht",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Heavy, raw, defiant instrumental rock-metal battle music at 140 BPM in 4/4 in a minor key. Thick downtuned distorted electric guitars play a blunt, repeating low riff, a live drummer plays double-kick bursts and a hard snare, a growling bass guitar doubles the riff, and a short, aching string line sits underneath and surfaces in the quieter bars. Loud and personal rather than epic, angry and grieving at once, with a half-time breakdown in the middle before the riff returns. It opens with a four-bar riff intro and falls back to the main riff at the end so it can repeat. No vocals. Real recorded instruments in a live room. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "478808de2767ef27340cb91381f8996f4ac30ee1bcce75b8023be2558fae09e3",
+        "bytes": 3842924,
+        "format": "mp3_48000_320",
+        "seconds": 96.07,
+        "songId": "93rQ1Wy7APFfofPf11s5",
+        "generatedUtc": "2026-10-13T04:24:10.332Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1638772,
+        "sha256": "111652a4668680f4efde28ca03435133cddd0866bdc37870d7fafbbcf2c0b733"
+      },
+      "manifestEntry": {
+        "file": "music/boss-jecht.mp3",
+        "loopStart": 6.446712,
+        "loopEnd": 81.879229,
+        "duration": 84.8792,
+        "bytes": 1638772,
+        "lufs": -16,
+        "truePeakDb": -5.3,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3534672,
+        "sha256": "f54493a12001620c365edb3e954a5542cd29c4a9902ab37d147d922233dd0451",
+        "manifestEntry": {
+          "file": "music/boss-jecht.mp3",
+          "loopStart": 6.666667,
+          "loopEnd": 107.121678,
+          "duration": 110.1217,
+          "bytes": 3534672,
+          "lufs": -16,
+          "truePeakDb": -1.5
+        }
+      },
+      "master": {
+        "bpm": 140,
+        "bars": 44,
+        "introSec": 6.447,
+        "loopSec": 75.433,
+        "clickRatio": 0.335,
+        "fluxRatio": 1.002,
+        "stepOk": true,
+        "xfadeSec": 0.429,
+        "xfadeLaw": "equal-power",
+        "gainDb": -4.8
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.468,
+          "sideMid": -4.4,
+          "monoLoss": -1.35
+        },
+        "after": {
+          "corr": 0.697,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -3.1
+      },
+      "why": "The only vocal-metal track in the score; the shipped riff comes from a GM SoundFont.",
+      "reason": "(a) Fit: Instrumental rock-metal at 140 BPM, exactly the brief. Measured 140.0 BPM against 140 asked. JE-B: Orchestral-metal blend with a choir over the riff (the brief's second direction). (measured 135.3 BPM) (b) Seam: Click ratio 0.34, under 1.0. JE-B click 0.04. (c) Length: Loop 75.4 s (44 bars), intro 6.5 s. JE-B loop 71.0 s, intro 15.8 s. (d) Loudness: -16.0 LUFS. JE-B: -16.0. Project stereo gate: correlation 0.47 to 0.70, side/mid -4.4 to -7.5 dB, mono loss -1.35 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-yu-yevon",
+      "pick": "YY-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "yy-a",
+      "replaces": [
+        "boss-yu-yevon"
+      ],
+      "plays": "Chapter III, Braska's Final Aeon, battle 2 (Yu Yevon and the possessed aeons).",
+      "fallback": "boss-yu-yevon",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Vast, solemn, inevitable cinematic orchestral music at 96 BPM in 4/4 in a minor key, processional rather than frantic, the music of a final confrontation that cannot be won by force. A large mixed choir sings open vowels (no words, no lyrics) over deep sustained strings and low brass chorales, slow timpani sound on every other beat, and bells toll. It rises in long slow waves to one huge choral climax and recedes without resolving, so that it can repeat. Majestic, sorrowful, final. Real orchestra, real bells and a real choir recorded in a vast stone hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "0f24584279cf2b835337e4a005dec02c0cee91f1c178a6ca588e9f54910f7f51",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "XEgmmk6x0oLxqm2eQNqo",
+        "generatedUtc": "2026-10-13T04:26:24.009Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1502768,
+        "sha256": "5a97b4da5428d9b9c94a61b55f605104fa1137aa75304aef9a62dd4dde08e545"
+      },
+      "manifestEntry": {
+        "file": "music/boss-yu-yevon.mp3",
+        "loopStart": 23.791043,
+        "loopEnd": 81.320431,
+        "duration": 84.3204,
+        "bytes": 1502768,
+        "lufs": -16,
+        "truePeakDb": -3.6,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 6419190,
+        "sha256": "2f0fdc9fe13f1fc48ffbb139907a33a5d275f42b81bd1fb964cb640457aa1c05",
+        "manifestEntry": {
+          "file": "music/boss-yu-yevon.mp3",
+          "loopStart": 6,
+          "loopEnd": 215.6,
+          "duration": 218.6,
+          "bytes": 6419190,
+          "lufs": -16,
+          "truePeakDb": -1.5
+        }
+      },
+      "master": {
+        "bpm": 95.95,
+        "bars": 23,
+        "introSec": 23.791,
+        "loopSec": 57.529,
+        "clickRatio": 0.401,
+        "fluxRatio": 0.359,
+        "stepOk": true,
+        "xfadeSec": 0.625,
+        "xfadeLaw": "equal-power",
+        "gainDb": -2.5
+      },
+      "stereo": {
+        "before": {
+          "corr": -0.006,
+          "sideMid": 0.05,
+          "monoLoss": -3.03
+        },
+        "after": {
+          "corr": 0.698,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -7.55
+      },
+      "why": "The shipped hymn runs at 40 BPM, one static three-minute statement.",
+      "reason": "(a) Fit: Processional choir, strings and brass at 96 BPM in long waves, exactly the brief. Measured 96.0 BPM against 96 asked. YY-B: Sparser choir-and-drone reading (the brief's second direction). (measured 84.1 BPM) (b) Seam: Click ratio 0.40, under 1.0. YY-B click 0.47. (c) Length: Loop 57.5 s (23 bars), intro 23.8 s. YY-B loop 57.1 s, intro 12.4 s. (d) Loudness: -16.0 LUFS. YY-B: -16.0. Project stereo gate: correlation -0.01 to 0.70, side/mid 0.0 to -7.5 dB, mono loss -3.03 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-vegnagun",
+      "pick": "VG-A",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "vg-a",
+      "replaces": [
+        "boss-vegnagun"
+      ],
+      "plays": "Chapter V, Vegnagun, links 1 to 4 (tail, leg, body, head). The hidden Experiment no longer plays it (it has boss-experiment).",
+      "fallback": "boss-vegnagun",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Urgent, colossal, relentless cinematic battle music at 164 BPM in 4/4 in a minor key, the sound of a machine the size of a building waking up. A pounding low-string and bassoon ostinato in constant note lengths, thunderous taiko and timpani on every beat, snarling low brass, heavy hammered anvils and steel, and a large choir shouting short open vowels in unison like a siren (no words, no lyrics). Energy climbs in three escalating waves with no relief, the last with a rapid tightening pulse like a countdown. It opens with the ostinato alone for about 4 seconds and falls back to it so it can repeat. Menacing and awe-struck, heavy rather than heroic. Real acoustic orchestra and real percussion. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "44cc7c7e68d4d3556018fcabd6ac0848235ac9b92704253dcb8d74737c6229c3",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "ygCoya4WwN4KG9zsp6TL",
+        "generatedUtc": "2026-10-13T04:26:59.454Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1505633,
+        "sha256": "7d40f38d42cab252ec26aaef31439cbb0931ed15a925269cd9187c7780f3fd20"
+      },
+      "manifestEntry": {
+        "file": "music/boss-vegnagun.mp3",
+        "loopStart": 13.098866,
+        "loopEnd": 94.104921,
+        "duration": 97.1049,
+        "bytes": 1505633,
+        "lufs": -16,
+        "truePeakDb": -1.5,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3065960,
+        "sha256": "ebab191afb47184e28e10ef7e6baf01c8307af64ddff62570df89257e47b7e78",
+        "manifestEntry": {
+          "file": "music/boss-vegnagun.mp3",
+          "loopStart": 11.428571,
+          "loopEnd": 91.428571,
+          "duration": 94.4286,
+          "bytes": 3065960,
+          "lufs": -15.9,
+          "truePeakDb": -1.1
+        }
+      },
+      "master": {
+        "bpm": 162.95,
+        "bars": 55,
+        "introSec": 13.099,
+        "loopSec": 81.006,
+        "clickRatio": 0.73,
+        "fluxRatio": 0.019,
+        "stepOk": true,
+        "xfadeSec": 0.368,
+        "xfadeLaw": "equal-power",
+        "gainDb": -0.5
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.219,
+          "sideMid": -1.93,
+          "monoLoss": -2.15
+        },
+        "after": {
+          "corr": 0.698,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -5.57
+      },
+      "why": "The shipped cue is a band render (synth and guitar voices).",
+      "reason": "(a) Fit: Urgent and colossal at 164 BPM in three waves, exactly the brief. Measured 162.9 BPM against 164 asked. VG-B: Slow ceremonial awe at 84 BPM (the brief's second direction). (measured 84.0 BPM) (b) Seam: Click ratio 0.73, under 1.0. VG-B click 0.20. (c) Length: Loop 81.0 s (55 bars), intro 13.1 s. VG-B loop 34.3 s, intro 28.6 s. (d) Loudness: -16.0 LUFS. VG-B: -16.0. Project stereo gate: correlation 0.22 to 0.70, side/mid -1.9 to -7.5 dB, mono loss -2.15 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-shuyin",
+      "pick": "SH-A",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "sh-a",
+      "replaces": [
+        "boss-shuyin"
+      ],
+      "plays": "Chapter V, Shuyin (link 5). The Den of Woe no longer plays it as a stand-in (it has boss-den-of-woe).",
+      "fallback": "boss-shuyin",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Slow, grieving, dirge-like cinematic orchestral music at 68 BPM in a minor key, with a steady low pulse underneath, for a last duel against a man who only wants to disappear. A solo piano and a string orchestra carry a long, aching, bittersweet line that is quietly distorted in places, as if a love song were being played at a funeral; a muted timpani heartbeat, low harp notes, and a distant solo female voice singing open vowels with no words. It rises slowly, never loud for long, and returns to near-silence so it can repeat. Tragic, tender, resigned, not heroic. Real acoustic instruments and a real voice. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "b3bf22c1a3b918a57e5f17b34e7978a170b16a04a5f351f5daa3a92bc4161efe",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "BNzfnpep8rGjP9fmDUmE",
+        "generatedUtc": "2026-10-13T04:27:31.605Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1511775,
+        "sha256": "b20698356fa3ee1ccc0d8d258e8bcdcb54f68df8ce0eb2744e5d4195e6bd889f"
+      },
+      "manifestEntry": {
+        "file": "music/boss-shuyin.mp3",
+        "loopStart": 13.647234,
+        "loopEnd": 84.240204,
+        "duration": 87.2402,
+        "bytes": 1511775,
+        "lufs": -16,
+        "truePeakDb": -1.8,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3324154,
+        "sha256": "d9f3f35144d8219231bdaabd0175b676a0a2e293b9c717e79e7b3406b95264c8",
+        "manifestEntry": {
+          "file": "music/boss-shuyin.mp3",
+          "loopStart": 12.551406,
+          "loopEnd": 102.796009,
+          "duration": 105.797,
+          "bytes": 3324154,
+          "lufs": -15.9,
+          "truePeakDb": -1.3
+        }
+      },
+      "master": {
+        "bpm": 68,
+        "bars": 20,
+        "introSec": 13.647,
+        "loopSec": 70.593,
+        "clickRatio": 0.32,
+        "fluxRatio": 0.052,
+        "stepOk": true,
+        "xfadeSec": 0.882,
+        "xfadeLaw": "equal-power",
+        "gainDb": 0.6
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.208,
+          "sideMid": -1.8,
+          "monoLoss": -2.2
+        },
+        "after": {
+          "corr": 0.706,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -5.7
+      },
+      "why": "The shipped cue is a 154 BPM re-render; the sourced reading is a slow dirge.",
+      "reason": "(a) Fit: Slow grieving dirge at 68 BPM, exactly the brief. Measured 68.0 BPM against 68 asked. SH-B: Fuller version at 72 BPM that swells to a broken climax (the brief's second direction). (measured 72.0 BPM) (b) Seam: Click ratio 0.32, under 1.0. SH-B click 0.04. (c) Length: Loop 70.6 s (20 bars), intro 13.7 s. SH-B loop 70.1 s, intro 20.0 s. (d) Loudness: -16.0 LUFS. SH-B: -16.0. Project stereo gate: correlation 0.21 to 0.71, side/mid -1.8 to -7.5 dB, mono loss -2.20 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-seymour-macalania",
+      "pick": "SA-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "sa-a",
+      "replaces": [
+        "boss-seymour-macalania"
+      ],
+      "plays": "Chapter VII, Seymour and Anima. Chapter X has its own (boss-seymour-natus) since batch 1.",
+      "fallback": "boss-seymour-macalania",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Courteous, ceremonial, quietly menacing cinematic orchestral music at 126 BPM in 4/4 in a minor key, polite and slightly wrong. A string orchestra and a solo oboe state a graceful, formal theme over a harpsichord and pizzicato basses, low brass chorales, and a struck bell that rings like a temple; the cadences sound religious but resolve somewhere slightly off. It enters composed and confident, rises once to a full orchestra swell with a tolling bell, and returns to composure so it can repeat. No triumphant release. Real acoustic instruments, real harpsichord and bell, no choir. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "12b12df5907628e535e7ca9217c672c9ec74bb9392e063240bbdd5e0595201be",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "z4VcuPe0H8Np5LKQCFjw",
+        "generatedUtc": "2026-10-13T04:28:07.724Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1405210,
+        "sha256": "fc959360cf94ba1279b39369738028d3dbc6c6543158589ba9113f54e591cad9"
+      },
+      "manifestEntry": {
+        "file": "music/boss-seymour-macalania.mp3",
+        "loopStart": 12.417143,
+        "loopEnd": 88.610884,
+        "duration": 91.6109,
+        "bytes": 1405210,
+        "lufs": -16,
+        "truePeakDb": -1.8,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3774749,
+        "sha256": "7b48e0b040c9dea82578001d31ee9a102f0d82195e848bc19e89eec5c9bbe447",
+        "manifestEntry": {
+          "file": "music/boss-seymour-macalania.mp3",
+          "loopStart": 7.619048,
+          "loopEnd": 121.904762,
+          "duration": 124.9048,
+          "bytes": 3774749,
+          "lufs": -16,
+          "truePeakDb": -1.5,
+          "score": "90c06f737af9686a"
+        }
+      },
+      "master": {
+        "bpm": 125.99,
+        "bars": 40,
+        "introSec": 12.417,
+        "loopSec": 76.194,
+        "clickRatio": 0.141,
+        "fluxRatio": 0.508,
+        "stepOk": true,
+        "xfadeSec": 0.476,
+        "xfadeLaw": "linear",
+        "gainDb": 1.5
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.319,
+          "sideMid": -2.87,
+          "monoLoss": -1.81
+        },
+        "after": {
+          "corr": 0.698,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -4.63
+      },
+      "why": "Aligned by design but SoundFont-rendered; rule 52b replaces every remaining synth or SoundFont cue.",
+      "reason": "(a) Fit: Courteous orchestral menace at 126 BPM, exactly the brief. Measured 126.0 BPM against 126 asked. SA-B: Hushed organ and chamber choir at 112 BPM (the brief's second direction). (measured 115.4 BPM) (b) Seam: Click ratio 0.14, under 1.0. SA-B click 0.59. (c) Length: Loop 76.2 s (40 bars), intro 12.4 s. SA-B loop 74.9 s, intro 8.5 s. (d) Loudness: -16.0 LUFS. SA-B: -16.0. Project stereo gate: correlation 0.32 to 0.70, side/mid -2.9 to -7.5 dB, mono loss -1.81 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-evrae",
+      "pick": "EV-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "ev-a",
+      "replaces": [
+        "boss-evrae"
+      ],
+      "plays": "Chapter VIII, Evrae. Chapters XVII and XVIII have their own since batch 1. This file replaces the one whose loop points batch 1 re-cut.",
+      "fallback": "boss-evrae",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Propulsive, airborne, mechanical cinematic battle music at 144 BPM in 4/4 in a minor key, forward motion rather than aggression, the feeling of a great ship under attack. Driving eighth notes in the low strings and bass, engine-room percussion (taiko, snare and struck metal pipes), metallic pulses, a low sustained drone that reads as altitude, open fourths and fifths with air in the middle of the mix, and a short, two-bar horn-and-string figure that repeats. It opens with the engine pulse alone for about 4 seconds and falls back to it so it can repeat. No choir, no organ. Steady, urgent and wide, never sacred. Real acoustic orchestra and percussion. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "0ef0a9e907a6e7861ffb9125ab4cf7b90e7478ec29b5169adfd3568b8df6dff3",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "7ixNE0K8sTgSI34PyBRT",
+        "generatedUtc": "2026-10-13T04:29:40.941Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1779961,
+        "sha256": "df0bcd9233a6c8bed3bf4567ea5225a91a852c9bfe7fb6a00596564b72ecb8d7"
+      },
+      "manifestEntry": {
+        "file": "music/boss-evrae.mp3",
+        "loopStart": 9.161134,
+        "loopEnd": 90.8161,
+        "duration": 93.8161,
+        "bytes": 1779961,
+        "lufs": -16,
+        "truePeakDb": -1.6,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 2719357,
+        "sha256": "b2d490ff07e830eaae0b2a732d105c512ca27f368642fc81f4d9940a3648a7b1",
+        "manifestEntry": {
+          "file": "music/boss-evrae.mp3",
+          "loopStart": 6.666213,
+          "loopEnd": 79.999546,
+          "duration": 83,
+          "bytes": 2719357,
+          "lufs": -16,
+          "truePeakDb": -1.4,
+          "score": "a660934bb598f632"
+        }
+      },
+      "master": {
+        "bpm": 144,
+        "bars": 49,
+        "introSec": 9.161,
+        "loopSec": 81.655,
+        "clickRatio": 0.729,
+        "fluxRatio": 0.142,
+        "stepOk": true,
+        "xfadeSec": 0.417,
+        "xfadeLaw": "equal-power",
+        "gainDb": -1.3
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.312,
+          "sideMid": -2.81,
+          "monoLoss": -1.83
+        },
+        "after": {
+          "corr": 0.697,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -4.69
+      },
+      "why": "Aligned by design but SoundFont-rendered; its shipped loop also measured a click ratio of 4.60.",
+      "reason": "(a) Fit: Propulsive airborne drive at 144 BPM, exactly the brief. Measured 144.0 BPM against 144 asked. EV-B: The same drive as a groove at 148 BPM (the brief says this is the one battle that can carry a groove). (measured 148.0 BPM) (b) Seam: Click ratio 0.73, under 1.0. EV-B click 0.65. (c) Length: Loop 81.7 s (49 bars), intro 9.2 s. EV-B loop 40.5 s, intro 24.4 s. (d) Loudness: -16.0 LUFS. EV-B: -16.0. Project stereo gate: correlation 0.31 to 0.70, side/mid -2.8 to -7.5 dB, mono loss -1.83 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-yojimbo",
+      "pick": "YO-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "yo-a",
+      "replaces": [
+        "boss-yojimbo"
+      ],
+      "plays": "Chapter IX, Yojimbo. Chapter XIV has its own (boss-isaaru) since batch 1.",
+      "fallback": "boss-yojimbo",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Wistful, dignified, melancholy cinematic music at 72 BPM in 4/4 in a minor key, restrained and lyrical, a character theme played during a duel rather than a boss theme. A solo cello and a solo violin carry a long, singing, aching line over felt piano and a soft string bed; a quiet pulse of pizzicato basses, no drums for the first half, then a muted frame drum and low strings join without ever becoming loud. Grief held under tight control, with one brief crack of feeling in the middle before composure returns, and it settles back to the felt piano so it can repeat. Real acoustic instruments in a warm hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "5f6791db44a0116bc060f8f47f26a64288445e4708e49dbc8918eaa14ee3af71",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "p1DLTBefudomxkxohc9h",
+        "generatedUtc": "2026-10-13T04:30:15.906Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1517469,
+        "sha256": "03d536bfa736c5e980e10a59703285b849a198abd19f28db11c23d99ebfef9be"
+      },
+      "manifestEntry": {
+        "file": "music/boss-yojimbo.mp3",
+        "loopStart": 10.056304,
+        "loopEnd": 90.06195,
+        "duration": 93.062,
+        "bytes": 1517469,
+        "lufs": -16,
+        "truePeakDb": -1.9,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 2650013,
+        "sha256": "e8ee4c4f2bc114add533d08df90c537e6df365b2728475ca5d0642064cf541ce",
+        "manifestEntry": {
+          "file": "music/boss-yojimbo.mp3",
+          "loopStart": 14.545465,
+          "loopEnd": 87.272721,
+          "duration": 90.2727,
+          "bytes": 2650013,
+          "lufs": -16,
+          "truePeakDb": -1.4,
+          "score": "76abbdea8b282bdc"
+        }
+      },
+      "master": {
+        "bpm": 71.99,
+        "bars": 24,
+        "introSec": 10.056,
+        "loopSec": 80.006,
+        "clickRatio": 0.325,
+        "fluxRatio": 1.016,
+        "stepOk": true,
+        "xfadeSec": 0.833,
+        "xfadeLaw": "equal-power",
+        "gainDb": 0.3
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.536,
+          "sideMid": -5.19,
+          "monoLoss": -1.15
+        },
+        "after": {
+          "corr": 0.699,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -2.31
+      },
+      "why": "Aligned in mood but SoundFont-rendered and faster than the sourced track is thought to be.",
+      "reason": "(a) Fit: Solo cello and violin over felt piano at 72 BPM, exactly the brief. Measured 72.0 BPM against 72 asked. YO-B: The same lament carried by a solo flute (the brief's second direction). (measured 72.0 BPM) (b) Seam: Click ratio 0.33, under 1.0. YO-B click 0.78. (c) Length: Loop 80.0 s (24 bars), intro 10.1 s. YO-B loop 76.7 s, intro 6.6 s. (d) Loudness: -16.0 LUFS. YO-B: -16.0. Project stereo gate: correlation 0.54 to 0.70, side/mid -5.2 to -7.5 dB, mono loss -1.15 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-seymour-omnis",
+      "pick": "OM-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "new",
+      "brief": "om-a",
+      "replaces": "boss-seymour",
+      "plays": "Chapter XII, Seymour Omnis (it played Chapter I's boss-seymour as a stand-in). Chapter I keeps boss-seymour.",
+      "fallback": "boss-seymour",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Climactic, grandiose, relentless cinematic orchestral battle music at 156 BPM in 4/4 in a minor key, a long final reckoning with a villain who is past all courtesy. A pipe organ and a full string orchestra play a driving, rhythmic theme with heavy low brass, pounding timpani, and a hard live drum kit under the orchestra; the theme returns in bigger and bigger forms through four distinct sections, and a large wordless choir (open vowels only, no words, no lyrics) enters in the final third. Dark, menacing, magnificent, with a short held pause before the last section. It falls back to the organ-and-strings figure at the end so it can repeat. Real organ, orchestra, drums and choir. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "ee103bff7704a93b311d44218a287428d00f85df9cfad313ae5bdd3b6978eca7",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "iqDmMM2qRc6VZTWaOwLB",
+        "generatedUtc": "2026-10-13T04:30:47.866Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1523869,
+        "sha256": "7928f9b845dff1760c1186839bb3386f1758a40e5e3e8918b51064828e87046e"
+      },
+      "manifestEntry": {
+        "file": "music/boss-seymour-omnis.mp3",
+        "loopStart": 3.090408,
+        "loopEnd": 76.927506,
+        "duration": 79.9275,
+        "bytes": 1523869,
+        "lufs": -16,
+        "truePeakDb": -4,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 156,
+        "bars": 48,
+        "introSec": 3.09,
+        "loopSec": 73.837,
+        "clickRatio": 0.042,
+        "fluxRatio": 0.212,
+        "stepOk": true,
+        "xfadeSec": 0.385,
+        "xfadeLaw": "equal-power",
+        "gainDb": -3
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.263,
+          "sideMid": -2.34,
+          "monoLoss": -2
+        },
+        "after": {
+          "corr": 0.697,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -5.16
+      },
+      "why": "The shipped stand-in is the gothic organ take made for another fight.",
+      "reason": "(a) Fit: Organ and orchestra with a hard live kit at 156 BPM in four growing sections, exactly the brief. Measured 156.0 BPM against 156 asked. OM-B: Rock rhythm section and organ carrying it with the orchestra in support (the brief's second direction). (measured 160.0 BPM) (b) Seam: Click ratio 0.04, under 1.0. OM-B click 0.26. (c) Length: Loop 73.8 s (48 bars), intro 3.1 s. OM-B loop 84.0 s, intro 3.4 s. (d) Loudness: -16.0 LUFS. OM-B: -16.0. Project stereo gate: correlation 0.26 to 0.70, side/mid -2.3 to -7.5 dB, mono loss -2.00 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-den-of-woe",
+      "pick": "DW-A",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "new",
+      "brief": "dw-a",
+      "replaces": "boss-shuyin (stand-in)",
+      "plays": "Chapter XV, the Den of Woe, all three links (it played Chapter V's boss-shuyin as a stand-in).",
+      "fallback": "boss-shuyin",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Haunted, despairing, bitter cinematic orchestral music at 104 BPM in 4/4 in a minor key, a battle in a dark hall against old comrades turned enemies. A solo piano and a string orchestra play a tense, restless pattern over a slow low pulse of cellos and basses, with dissonant held chords in the violas and muted brass, a distant tolling bell, and a thin wordless voice (open vowels only, no words, no lyrics) that appears briefly. It builds to a bitter, aching climax and falls back to the piano so it can repeat. Grief with an edge. Real acoustic instruments and a real voice. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "4db9136257ab09f4b9fc84de560342f778a5e14c3dbe365e2b84b009f1596f48",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "CuymlLiY6NyDM9P5JnQ8",
+        "generatedUtc": "2026-10-13T04:31:25.322Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1475802,
+        "sha256": "7a6344aa26786bf2b9c404c334d7ce63b8f2266973051c07869e191b51abc7e9"
+      },
+      "manifestEntry": {
+        "file": "music/boss-den-of-woe.mp3",
+        "loopStart": 11.278277,
+        "loopEnd": 85.138753,
+        "duration": 88.1388,
+        "bytes": 1475802,
+        "lufs": -16,
+        "truePeakDb": -2.3,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 103.98,
+        "bars": 32,
+        "introSec": 11.278,
+        "loopSec": 73.86,
+        "clickRatio": 0.52,
+        "fluxRatio": 0.492,
+        "stepOk": true,
+        "xfadeSec": 0.577,
+        "xfadeLaw": "equal-power",
+        "gainDb": -1.1
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.397,
+          "sideMid": -3.62,
+          "monoLoss": -1.57
+        },
+        "after": {
+          "corr": 0.699,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -3.88
+      },
+      "why": "No sourced track for the duels; the shipped cue is the Shuyin stand-in.",
+      "reason": "(a) Fit: Haunted, despairing piano and strings at 104 BPM, exactly the (inferred) brief. Measured 104.0 BPM against 104 asked. DW-B: Faster, harder, furious reading at 126 BPM (the brief's second direction). (measured 126.0 BPM) (b) Seam: Click ratio 0.52, under 1.0. DW-B click 0.76. (c) Length: Loop 73.9 s (32 bars), intro 11.3 s. DW-B loop 83.8 s, intro 5.5 s. (d) Loudness: -16.0 LUFS. DW-B: -16.0. Project stereo gate: correlation 0.40 to 0.70, side/mid -3.6 to -7.5 dB, mono loss -1.57 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-gui",
+      "pick": "G1-A",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "new",
+      "brief": "g1-a",
+      "replaces": "boss-dread (stand-in)",
+      "plays": "The hidden Sinspawn Gui chapter, fight 1 (it played boss-dread).",
+      "fallback": "boss-dread",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Tense, driving, urgent cinematic orchestral battle music at 144 BPM in 4/4 in a minor key, a camp under threat from something huge. Pulsing low strings and timpani, tremolo strings in the middle register, sharp brass stabs, a restless snare pattern, and a short repeating rising figure in the violins; the tension never releases and the music rises in two big waves. It opens with the pulsing low strings alone for about 4 seconds and falls back to them so it can repeat. Dread and urgency, not triumph. Real acoustic orchestra. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "71a2049126fbc882309e2fe4ff378c74eba68338dbe5d688f5f7e3dc658bc9c9",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "2KM5CbKvbcLu3jKoIKfj",
+        "generatedUtc": "2026-10-13T04:35:02.700Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1794912,
+        "sha256": "1dfa43718f85a123d8f131bed6970424baf425184b28cc35c7b2ee78440dbea3"
+      },
+      "manifestEntry": {
+        "file": "music/boss-gui.mp3",
+        "loopStart": 16.278617,
+        "loopEnd": 89.594331,
+        "duration": 92.5943,
+        "bytes": 1794912,
+        "lufs": -16,
+        "truePeakDb": -2.1,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 144.02,
+        "bars": 44,
+        "introSec": 16.279,
+        "loopSec": 73.316,
+        "clickRatio": 0.603,
+        "fluxRatio": 0.836,
+        "stepOk": true,
+        "xfadeSec": 0.417,
+        "xfadeLaw": "equal-power",
+        "gainDb": -0.2
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.251,
+          "sideMid": -2.23,
+          "monoLoss": -2.04
+        },
+        "after": {
+          "corr": 0.697,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -5.27
+      },
+      "why": "Fight 1 plays its own track in the game; the shipped stand-in is a patient choir canon.",
+      "reason": "(a) Fit: Tense driving camp-under-threat at 144 BPM, exactly the brief. Measured 144.0 BPM against 144 asked. G1-B: A stalking hunt at 126 BPM with a low-brass ostinato. (measured 126.0 BPM) (b) Seam: Click ratio 0.60, under 1.0. G1-B click 0.10. (c) Length: Loop 73.3 s (44 bars), intro 16.3 s. G1-B loop 34.3 s, intro 24.8 s. (d) Loudness: -16.0 LUFS. G1-B: -16.0. Project stereo gate: correlation 0.25 to 0.70, side/mid -2.2 to -7.5 dB, mono loss -2.04 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "boss-experiment",
+      "pick": "EX-A",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "new",
+      "brief": "ex-a",
+      "replaces": "boss-ffx2-aeon (act 1) and boss-vegnagun (act 2)",
+      "plays": "The hidden Experiment (FFX-2), both acts: one cue, which carries on across the act change (Act I played boss-ffx2-aeon and Act II boss-vegnagun).",
+      "fallback": "boss-ffx2-aeon",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Energetic, tense, slightly mechanical cinematic battle music at 152 BPM in 4/4 in a minor key, a fight against a strange experimental machine. Driving low strings and a live drum kit, punchy brass stabs, a bright, fast piano figure, metallic percussion, and a bridge that thins to bass and pulse before the full band crashes back. Playful menace in the first half; in the second half the rhythm stutters and slips as the machine goes out of control, and it settles back to the driving strings and kit so it can repeat. Real recorded instruments. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "c29a37f3732da8cf15aa56f7f75a4279258fde93ef14f65d5f9569a6455a0915",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "5OFrF2RSbM5Nb5CeVRio",
+        "generatedUtc": "2026-10-13T04:35:34.432Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1560484,
+        "sha256": "939fe97cc054ed112cb533a96b4bbaaaece88879b63476d05dfb220963e1172f"
+      },
+      "manifestEntry": {
+        "file": "music/boss-experiment.mp3",
+        "loopStart": 4.767166,
+        "loopEnd": 80.525488,
+        "duration": 83.5255,
+        "bytes": 1560484,
+        "lufs": -16,
+        "truePeakDb": -3.7,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 152.04,
+        "bars": 48,
+        "introSec": 4.767,
+        "loopSec": 75.758,
+        "clickRatio": 0.127,
+        "fluxRatio": 0.103,
+        "stepOk": true,
+        "xfadeSec": 0.395,
+        "xfadeLaw": "equal-power",
+        "gainDb": -3.1
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.349,
+          "sideMid": -3.16,
+          "monoLoss": -1.71
+        },
+        "after": {
+          "corr": 0.697,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -4.33
+      },
+      "why": "Two acts share one cue; the shipped stand-ins are the aeon pop cue and the Vegnagun band render.",
+      "reason": "(a) Fit: Energetic, slightly mechanical live-band reading at 152 BPM, exactly the (inferred) brief, rhythm stutters in the second half. Measured 152.0 BPM against 152 asked. EX-B: Heavier, wilder second-act reading at 160 BPM (the brief's second direction). (measured 160.0 BPM) (b) Seam: Click ratio 0.13, under 1.0. EX-B click 0.03. (c) Length: Loop 75.8 s (48 bars), intro 4.8 s. EX-B loop 48.0 s, intro 25.1 s. (d) Loudness: -16.0 LUFS. EX-B: -16.0. Project stereo gate: correlation 0.35 to 0.70, side/mid -3.2 to -7.5 dB, mono loss -1.71 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-chateau-leblanc",
+      "pick": "CB-1",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "new",
+      "brief": "cb-1",
+      "replaces": "scene-bevelle-underground (at the chateau)",
+      "plays": "Chapter VI (FFX-2) and the hidden Leblanc preview: the chateau's pre scene (it played Chapter IV's cathedral-basement bed). No other chapter.",
+      "fallback": "scene-bevelle-underground",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Swaggering, cheeky, comic big-band music at 108 BPM in a major key with a medium swing feel, the theme of a pompous villainess strutting through her own mansion. A live big band: trumpets and trombones play punchy, syncopated horn stabs and a strutting unison line, saxophones answer in smooth thirds, a clarinet adds a comic squeal, a walking upright bass, a piano comping, and a drummer playing brushes that turn to sticks on the stabs. The horn section keeps playing one extra bar before the band catches up, and there are two or three cheeky stop-time breaks where everyone halts for a beat and starts again. Playful, self-important and a little ridiculous, never sinister. It opens with a four-bar drum-and-bass strut and falls back to it so it can repeat. Real recorded instruments, a room full of players. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "30d6114e91e81e8f8c9b10f6946bc2f71bdb404d74c8b153cfcca47690ea35b3",
+        "bytes": 3600044,
+        "format": "mp3_48000_320",
+        "seconds": 90,
+        "songId": "ifzh6XeyIlsjHy7Sg7HR",
+        "generatedUtc": "2026-10-13T04:36:13.341Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1804807,
+        "sha256": "615347d406ebe9150d51373f87d4b3a517e0d646204b0df1f2097622d6f372ef"
+      },
+      "manifestEntry": {
+        "file": "music/scene-chateau-leblanc.mp3",
+        "loopStart": 16.902608,
+        "loopEnd": 88.011406,
+        "duration": 91.0117,
+        "bytes": 1804807,
+        "lufs": -16,
+        "truePeakDb": -4.3,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": null,
+      "master": {
+        "bpm": 108,
+        "bars": 32,
+        "introSec": 16.903,
+        "loopSec": 71.109,
+        "clickRatio": 0.177,
+        "fluxRatio": 0.089,
+        "stepOk": true,
+        "xfadeSec": 0.556,
+        "xfadeLaw": "equal-power",
+        "gainDb": -4.3
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.796,
+          "sideMid": -9.45,
+          "monoLoss": -0.47
+        },
+        "after": {
+          "corr": 0.795,
+          "sideMid": -9.4,
+          "monoLoss": -0.5
+        },
+        "pass": true,
+        "passedAsRendered": true,
+        "action": "left alone",
+        "sideGainDb": 0.02
+      },
+      "why": "Owed since D-209: the chateau plays a cathedral-basement bed under a mansion and a comic rival.",
+      "reason": "(a) Fit: Big-band swagger with a comic wink at scene tempo (108 BPM), exactly the brief. Measured 108.0 BPM against 108 asked. (b) Seam: Click ratio 0.18, under 1.0. (c) Length: Loop 71.1 s (32 bars), intro 16.9 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.80 to 0.80, side/mid -9.4 to -9.4 dB, mono loss -0.47 to -0.47 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-bevelle-underground",
+      "pick": "BU-2",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "bu-2",
+      "replaces": [
+        "scene-bevelle-underground"
+      ],
+      "plays": "The Bevelle Underground bed AND the Paragon fight (decision 52g): Chapter IV's scene, Chapter XIII's walk down and Paragon (phase 1), Chapter XV's and Chapter XVI's field bed, the hidden Experiment's scene. Not Chapter VI or the hidden Leblanc preview (they have scene-chateau-leblanc).",
+      "fallback": "scene-bevelle-underground",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Tense, mechanical, ritual music at 108 BPM in 4/4 in a minor key, a machine room hidden under a cathedral that wakes when it is disturbed, so that it can sit under a quiet scene and also carry a fight. A steady ticking pulse of woodblock, muted pizzicato basses and a low piano note keeps time like a mechanism; a pipe organ plays a heavy, repeating ostinato; low brass sound sacred but cold; in the middle of the piece snare and timpani hit squarely on the beat like gears meshing, low strings drive in tight eighth notes, and bowed metal plates and struck anvils ring out; thin high voices (open vowels only, no words, no lyrics) appear briefly at the peak. It tightens in two waves to a restrained but massive climax and settles back to the organ and the ticking pulse so that it can repeat. Controlled, cold and relentless, never heroic. Real organ, orchestra, percussion and voices recorded in a large stone space. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 96000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "f161a2f676169f56825ec415a0746b77170b4f38c5ba6888e0b826687f8e855e",
+        "bytes": 3841004,
+        "format": "mp3_48000_320",
+        "seconds": 96.03,
+        "songId": "xzwXNXmHcFa2J0a08T6i",
+        "generatedUtc": "2026-10-13T04:36:31.868Z",
+        "creditsEstimated": 1320
+      },
+      "file": {
+        "bytes": 1486864,
+        "sha256": "822a76a734e3e4f3ff25231bb72df74e428d27d20335e2ceadcf124669910c9b"
+      },
+      "manifestEntry": {
+        "file": "music/scene-bevelle-underground.mp3",
+        "loopStart": 15.587279,
+        "loopEnd": 86.708254,
+        "duration": 89.7083,
+        "bytes": 1486864,
+        "lufs": -16,
+        "truePeakDb": -2.1,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3211958,
+        "sha256": "b690f11c593630f73c38505c3cfeead44770eb17267f03835e69a1b70e893311",
+        "manifestEntry": {
+          "file": "music/scene-bevelle-underground.mp3",
+          "loopStart": 19.2,
+          "loopEnd": 105.6,
+          "duration": 108.6,
+          "bytes": 3211958,
+          "lufs": -15.9,
+          "truePeakDb": -1.3
+        }
+      },
+      "master": {
+        "bpm": 107.99,
+        "bars": 32,
+        "introSec": 15.587,
+        "loopSec": 71.121,
+        "clickRatio": 0.047,
+        "fluxRatio": 0.191,
+        "stepOk": true,
+        "xfadeSec": 0.556,
+        "xfadeLaw": "equal-power",
+        "gainDb": -1.5
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.471,
+          "sideMid": -4.44,
+          "monoLoss": -1.33
+        },
+        "after": {
+          "corr": 0.698,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -3.05
+      },
+      "why": "Scene bed of seven chapters; a synth-and-clarinet re-render. Since decision 52g it also carries the Paragon fight (FFX-2 Ch XIII phase 1, formerly cue 12), because the real game plays one track at both (rule 47f): one original with two readings, a sparse bed and a bed with a fighting pulse.",
+      "reason": "(a) Fit: Built to serve both uses: the ticking mechanism and organ of the bed, quiet at the loop edges, with snare, timpani and bowed metal in the middle so it can carry the Paragon fight (108 BPM). Measured 108.0 BPM against 108 asked. BU-1: The pure bed: ticking mechanism, a low bass clarinet like a poisoned prayer and a dark organ at 100 BPM, sparse and unsettling; lighter than a fight wants. (measured 100.0 BPM) (b) Seam: Click ratio 0.05, under 1.0. BU-1 click 0.21. (c) Length: Loop 71.1 s (32 bars), intro 15.6 s. BU-1 loop 76.8 s, intro 7.2 s. (d) Loudness: -16.0 LUFS. BU-1: -16.0. Project stereo gate: correlation 0.47 to 0.70, side/mid -4.4 to -7.5 dB, mono loss -1.33 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-gagazet",
+      "pick": "GA-1",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "ga-1",
+      "replaces": [
+        "scene-gagazet"
+      ],
+      "plays": "The Gagazet bed: Chapters I, IX, X, XIV and the hidden Sinspawn Gui chapter.",
+      "fallback": "scene-gagazet",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Cold, vast, indifferent music at 72 BPM in a minor key, a high mountain trail in wind and snow. A solo French horn plays slow, sparse, open phrases over a deep sustained cello drone and bowed low strings, a distant alto flute answers, a few bell-like chimes and a triangle ring in the thin air, and the pulse is only a barely audible low drum every other bar. Nothing rushes and nothing consoles; the mountain does not care. It opens with the drone alone for about 8 seconds and returns to it so it can repeat. Real acoustic horn, cello, flute and percussion recorded in a very large, cold hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "317843268ba549cec218dfc8ca186e86bcd679fccbe2a615071b282c8ec40c1e",
+        "bytes": 3601005,
+        "format": "mp3_48000_320",
+        "seconds": 90.03,
+        "songId": "4xi5j0Myx7FzFZXw63Ey",
+        "generatedUtc": "2026-10-13T04:41:22.726Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1358317,
+        "sha256": "8b26b180923bd0c548dadfd4de8eccf9c5a47ae84a680958250c110d9af9220f"
+      },
+      "manifestEntry": {
+        "file": "music/scene-gagazet.mp3",
+        "loopStart": 11.351882,
+        "loopEnd": 78.572063,
+        "duration": 81.5721,
+        "bytes": 1358317,
+        "lufs": -16,
+        "truePeakDb": -4.8,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3009651,
+        "sha256": "f643e6789b6d5cbbd399828f2e5f56993c8883b7b2b59fe2d3ea11071dccd7c5",
+        "manifestEntry": {
+          "file": "music/scene-gagazet.mp3",
+          "loopStart": 40,
+          "loopEnd": 103.333333,
+          "duration": 106.3333,
+          "bytes": 3009651,
+          "lufs": -16,
+          "truePeakDb": -1.4
+        }
+      },
+      "master": {
+        "bpm": 71.41,
+        "bars": 20,
+        "introSec": 11.352,
+        "loopSec": 67.22,
+        "clickRatio": 0.21,
+        "fluxRatio": 1.001,
+        "stepOk": true,
+        "xfadeSec": 0.84,
+        "xfadeLaw": "equal-power",
+        "gainDb": -3.2
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.595,
+          "sideMid": -5.3,
+          "monoLoss": -1.12
+        },
+        "after": {
+          "corr": 0.743,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -2.2
+      },
+      "why": "SoundFont-rendered; borrowed by chapters IX, X, XIV and the Gui chapter.",
+      "reason": "(a) Fit: Solo horn, cello drone and distant alto flute at 72 BPM: the shipped bed's own description, played by real instruments. Measured 71.4 BPM against 72 asked. (b) Seam: Click ratio 0.21, under 1.0. (c) Length: Loop 67.2 s (20 bars), intro 11.3 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.59 to 0.74, side/mid -5.3 to -7.5 dB, mono loss -1.12 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-zanarkand-dome",
+      "pick": "ZD-1",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "zd-1",
+      "replaces": [
+        "scene-zanarkand-dome"
+      ],
+      "plays": "Chapter II's scene.",
+      "fallback": "scene-zanarkand-dome",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Warm, remembered, bittersweet nocturne at 48 BPM in a minor key, slow and spacious. A solo piano plays gentle, singing phrases with a great deal of silence between them, a warm string orchestra holds long soft chords underneath, a solo cello answers the piano in the gaps, and single harp notes fall like drops. No percussion at all. It feels like a warm room that someone has just left: gentle, kind and very sad, the warmth of a memory, which is worse than cold. It opens with the solo piano alone for about 8 seconds and returns to it so it can repeat. Real acoustic piano, strings, cello and harp recorded in a warm hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "291e9784e7a9d9ba1e99329d9ad5fdd0464e78355376eaf6e11b4cb40994302d",
+        "bytes": 3601005,
+        "format": "mp3_48000_320",
+        "seconds": 90.03,
+        "songId": "JoyoL3J4IBmGLEnwcZ6L",
+        "generatedUtc": "2026-10-13T04:41:36.840Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1059949,
+        "sha256": "eeb4084fcd90c4989b844b5696203a83adea3eb61cf322d04e8072e6c2cb6be9"
+      },
+      "manifestEntry": {
+        "file": "music/scene-zanarkand-dome.mp3",
+        "loopStart": 8.847982,
+        "loopEnd": 77.650816,
+        "duration": 80.6508,
+        "bytes": 1059949,
+        "lufs": -16,
+        "truePeakDb": -2,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3936592,
+        "sha256": "5bba9a27ceadfba7d97d54d9bb2d7081ab444cc5a39ed4b9fafd53f594ce859c",
+        "manifestEntry": {
+          "file": "music/scene-zanarkand-dome.mp3",
+          "loopStart": 10,
+          "loopEnd": 126.165193,
+          "duration": 129.1652,
+          "bytes": 3936592,
+          "lufs": -16,
+          "truePeakDb": -1.5
+        }
+      },
+      "master": {
+        "bpm": 48.84,
+        "bars": 14,
+        "introSec": 8.848,
+        "loopSec": 68.803,
+        "clickRatio": 0.182,
+        "fluxRatio": 0.034,
+        "stepOk": true,
+        "xfadeSec": 1,
+        "xfadeLaw": "equal-power",
+        "gainDb": 4.2
+      },
+      "stereo": {
+        "before": {
+          "corr": -0.051,
+          "sideMid": 0.43,
+          "monoLoss": -3.23
+        },
+        "after": {
+          "corr": 0.711,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -7.91
+      },
+      "why": "SoundFont-rendered.",
+      "reason": "(a) Fit: Slow piano nocturne at 48 BPM, the shipped bed's own description (\"warmth remembered\"). Measured 48.8 BPM against 48 asked. (b) Seam: Click ratio 0.18, under 1.0. (c) Length: Loop 68.8 s (14 bars), intro 8.8 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation -0.05 to 0.71, side/mid 0.4 to -7.5 dB, mono loss -3.23 to -0.72 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-dreams-end",
+      "pick": "DE-1",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "de-1",
+      "replaces": [
+        "scene-dreams-end"
+      ],
+      "plays": "Chapter III's scene and Chapter XII's.",
+      "fallback": "scene-dreams-end",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Unmoored, dreamlike, weightless music at 76 BPM with no clear home key, a place made of memory. A celesta and a vibraphone play bent, wandering figures, soft strings move in parallel chords that slide without ever settling, bowed glasses hum, a harp plays harmonics, and a distant wordless female voice (open vowels only, no words, no lyrics) floats in and out. The pulse is only suggested by a very soft, slow, muted low drum. Gently wrong and slightly sad, with nothing to hold on to. It opens with the bowed glasses alone for about 8 seconds and returns to them so it can repeat. Real acoustic instruments and a real voice recorded in a very large, resonant hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "26d2c3bbb868c917151f53d8a6933a7caf5c2d537c37d70dc75c588e1b995cb0",
+        "bytes": 3601005,
+        "format": "mp3_48000_320",
+        "seconds": 90.03,
+        "songId": "pyIveTiazfafwsbaIoWx",
+        "generatedUtc": "2026-10-13T04:41:59.425Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1314252,
+        "sha256": "9dd897bbcafa7886cc1bff0ab1a97c611e09e68cfe908189ae0769edcdd98f91"
+      },
+      "manifestEntry": {
+        "file": "music/scene-dreams-end.mp3",
+        "loopStart": 8.752041,
+        "loopEnd": 74.791769,
+        "duration": 77.7918,
+        "bytes": 1314252,
+        "lufs": -16,
+        "truePeakDb": -2.6,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3162331,
+        "sha256": "0a3f7068117b529f813e5bb7412aab05562eae7e4913a2298fb03e0d1a2bace7",
+        "manifestEntry": {
+          "file": "music/scene-dreams-end.mp3",
+          "loopStart": 12.63161,
+          "loopEnd": 101.052653,
+          "duration": 104.0526,
+          "bytes": 3162331,
+          "lufs": -16,
+          "truePeakDb": -2.6
+        }
+      },
+      "master": {
+        "bpm": 76.32,
+        "bars": 21,
+        "introSec": 8.752,
+        "loopSec": 66.04,
+        "clickRatio": 0.387,
+        "fluxRatio": 0.161,
+        "stepOk": true,
+        "xfadeSec": 0.786,
+        "xfadeLaw": "equal-power",
+        "gainDb": 3.1
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.52,
+          "sideMid": -4.85,
+          "monoLoss": -1.23
+        },
+        "after": {
+          "corr": 0.711,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -2.65
+      },
+      "why": "SoundFont-rendered; also stands in at Chapter XII.",
+      "reason": "(a) Fit: Weightless, bent celesta and sliding chords at 76 BPM with no home key. Measured 76.3 BPM against 76 asked. (b) Seam: Click ratio 0.39, under 1.0. (c) Length: Loop 66.0 s (21 bars), intro 8.8 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.52 to 0.71, side/mid -4.8 to -7.5 dB, mono loss -1.23 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-macalania-temple",
+      "pick": "MT-1",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "mt-1",
+      "replaces": [
+        "scene-macalania-temple"
+      ],
+      "plays": "Chapter VII's scene.",
+      "fallback": "scene-macalania-temple",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Cold, still, glittering music at 56 BPM in a minor key, a temple of ice. Glockenspiel and crotales drip single notes like water falling from icicles, an alto flute plays slow, sparse phrases, strings hold very soft stacked open fourths and fifths, a harp plays harmonics, and a bowed vibraphone shimmers under a low sustained drone. Beautiful, silent and uneasy, ice pretending to be masonry. No percussion beat at all, only the slow drip. It opens with the drips and the drone alone for about 8 seconds and returns to them so it can repeat. Real acoustic instruments recorded in a large, cold stone hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "6862aeebf335d6add26f10976a0a2be905e8a9035b6379f50fff0e32fbe813f8",
+        "bytes": 3601005,
+        "format": "mp3_48000_320",
+        "seconds": 90.03,
+        "songId": "LLkmiupSUDtLDCgqpwWd",
+        "generatedUtc": "2026-10-13T04:42:14.270Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1204516,
+        "sha256": "5f958254a929704955d4ffd35811b04aaafa0d4abf4552093f60618b4088ae02"
+      },
+      "manifestEntry": {
+        "file": "music/scene-macalania-temple.mp3",
+        "loopStart": 10.417438,
+        "loopEnd": 70.702177,
+        "duration": 73.7022,
+        "bytes": 1204516,
+        "lufs": -16,
+        "truePeakDb": -3.7,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 1973838,
+        "sha256": "fae686829025b1d1197c8436079cc14ac99c66b0fbe1312ade6195354884c905",
+        "manifestEntry": {
+          "file": "music/scene-macalania-temple.mp3",
+          "loopStart": 12.857143,
+          "loopEnd": 60,
+          "duration": 63,
+          "bytes": 1973838,
+          "lufs": -16,
+          "truePeakDb": -3.1,
+          "score": "b78867e82b34697f"
+        }
+      },
+      "master": {
+        "bpm": 51.76,
+        "bars": 13,
+        "introSec": 10.417,
+        "loopSec": 60.285,
+        "clickRatio": 0.647,
+        "fluxRatio": 0.731,
+        "stepOk": true,
+        "xfadeSec": 1,
+        "xfadeLaw": "equal-power",
+        "gainDb": 0.7
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.729,
+          "sideMid": -8.05,
+          "monoLoss": -0.63
+        },
+        "after": {
+          "corr": 0.729,
+          "sideMid": -8,
+          "monoLoss": -0.6
+        },
+        "pass": true,
+        "passedAsRendered": true,
+        "action": "left alone",
+        "sideGainDb": 0
+      },
+      "why": "SoundFont-rendered.",
+      "reason": "(a) Fit: Glockenspiel drips, alto flute and stacked fourths at 56 BPM (\"ice pretending to be masonry\"). Measured 51.8 BPM against 56 asked. (b) Seam: Click ratio 0.65, under 1.0. (c) Length: Loop 60.3 s (13 bars), intro 10.4 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.73 to 0.73, side/mid -8.0 to -8.0 dB, mono loss -0.63 to -0.63 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-fahrenheit",
+      "pick": "FH-1",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "fh-1",
+      "replaces": [
+        "scene-fahrenheit"
+      ],
+      "plays": "Chapter VIII's scene and Chapters XVII's and XVIII's.",
+      "fallback": "scene-fahrenheit",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Urgent, contained, restless music at 104 BPM in 4/4 in a minor key, a ship in flight with no way back. Tremolo violins hold a nervous shimmer, a piano plays steady open fifths, a deep taiko plays a slow heartbeat, a low sustained drone like distant engines, and a solo horn calls once in a while across the open air. Wide and spare, anxious but controlled, with no time to stop and nowhere to go. It opens with the drone and the heartbeat for about 6 seconds and returns to them so it can repeat. Real acoustic orchestra, piano and taiko. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "ef1bd54e853e28a1e177f93c137fefcb5ec0e3cea35af773113e691f5d9d0889",
+        "bytes": 3601005,
+        "format": "mp3_48000_320",
+        "seconds": 90.03,
+        "songId": "uilZTwqmZYVkDj1YsCYj",
+        "generatedUtc": "2026-10-13T04:42:45.820Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1209039,
+        "sha256": "177970812e177d6de7441fc88911f9f0ff756599ad0aff0a6be9d9256ab45cfb"
+      },
+      "manifestEntry": {
+        "file": "music/scene-fahrenheit.mp3",
+        "loopStart": 17.019819,
+        "loopEnd": 76.76288,
+        "duration": 79.7629,
+        "bytes": 1209039,
+        "lufs": -16,
+        "truePeakDb": -2.1,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 2408623,
+        "sha256": "6de1361f59cd4017fd8b0e5eb1ff43a38cd3a603094bd4c5afbcfa6555566697",
+        "manifestEntry": {
+          "file": "music/scene-fahrenheit.mp3",
+          "loopStart": 9.230771,
+          "loopEnd": 73.846145,
+          "duration": 76.8461,
+          "bytes": 2408623,
+          "lufs": -16,
+          "truePeakDb": -1.4,
+          "score": "6f81c0f19ff8fa2c"
+        }
+      },
+      "master": {
+        "bpm": 96.41,
+        "bars": 24,
+        "introSec": 17.02,
+        "loopSec": 59.743,
+        "clickRatio": 0.759,
+        "fluxRatio": 0.45,
+        "stepOk": true,
+        "xfadeSec": 0.622,
+        "xfadeLaw": "linear",
+        "gainDb": -0.6
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.697,
+          "sideMid": -7.48,
+          "monoLoss": -0.71
+        },
+        "after": {
+          "corr": 0.698,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": true,
+        "action": "left alone",
+        "sideGainDb": -0.02
+      },
+      "why": "SoundFont-rendered; also stands in at XVII and XVIII.",
+      "reason": "(a) Fit: Tremolo violins, piano in fifths and a taiko heartbeat at 104 BPM (\"no time and no way back\"). Measured 96.4 BPM against 104 asked. (b) Seam: Click ratio 0.76, under 1.0. (c) Length: Loop 59.7 s (24 bars), intro 17.0 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.70 to 0.70, side/mid -7.5 to -7.5 dB, mono loss -0.71 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "scene-farplane",
+      "pick": "FP-1",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only (the shipped cue is the FFX-2 band render)",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "fp-1",
+      "replaces": [
+        "scene-farplane"
+      ],
+      "plays": "The Farplane bed: Chapters V, XI, XVI's Abyss and Chapter VI's after-scene.",
+      "fallback": "scene-farplane",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "Peaceful, distant, wistful music at 92 BPM in a major key built on open stacked fourths and fifths, a place where the departed rest in warm light. A soft piano plays slow, gentle arpeggios, a string orchestra holds long, warm, quiet chords, a harp adds slow ripples, and a far-off wordless soprano (open vowels only, no words, no lyrics) sings long phrases from a great distance. Restful but not forgetful: a faint ache under the calm. No percussion. It opens with the piano alone for about 6 seconds and returns to it so it can repeat. Real acoustic instruments and a real voice recorded in a large, soft hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 90000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "8491594d9b0bcfb139d301a4a8e5d66b7aa4c5f1cc7e5e719d43bc9073c18d50",
+        "bytes": 3601005,
+        "format": "mp3_48000_320",
+        "seconds": 90.03,
+        "songId": "aem8xKzj0e3wI9837D5O",
+        "generatedUtc": "2026-10-13T04:43:03.395Z",
+        "creditsEstimated": 1238
+      },
+      "file": {
+        "bytes": 1391539,
+        "sha256": "8130426438fb6f5273da05acb149a426ab36033137d17c44abd641a80e24de3c"
+      },
+      "manifestEntry": {
+        "file": "music/scene-farplane.mp3",
+        "loopStart": 15.676485,
+        "loopEnd": 78.283696,
+        "duration": 81.2837,
+        "bytes": 1391539,
+        "lufs": -16,
+        "truePeakDb": -3.1,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3491121,
+        "sha256": "898c4d0297db8d383ad21f50f97516dc1ab531f5d79fe79cf83e9f4c0a215b50",
+        "manifestEntry": {
+          "file": "music/scene-farplane.mp3",
+          "loopStart": 20.869569,
+          "loopEnd": 104.347823,
+          "duration": 107.3478,
+          "bytes": 3491121,
+          "lufs": -15.9,
+          "truePeakDb": -1.3
+        }
+      },
+      "master": {
+        "bpm": 92,
+        "bars": 24,
+        "introSec": 15.676,
+        "loopSec": 62.607,
+        "clickRatio": 0.336,
+        "fluxRatio": 0.976,
+        "stepOk": true,
+        "xfadeSec": 0.652,
+        "xfadeLaw": "equal-power",
+        "gainDb": -1.9
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.548,
+          "sideMid": -5.31,
+          "monoLoss": -1.12
+        },
+        "after": {
+          "corr": 0.7,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -2.19
+      },
+      "why": "Synth/band-class; scene bed of four FFX-2 chapters.",
+      "reason": "(a) Fit: Soft piano and strings in open stacks with a far-off soprano at 92 BPM (\"rest without forgetting\"). Measured 92.0 BPM against 92 asked. (b) Seam: Click ratio 0.34, under 1.0. (c) Length: Loop 62.6 s (24 bars), intro 15.7 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.55 to 0.70, side/mid -5.3 to -7.5 dB, mono loss -1.12 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "ending-ffx",
+      "pick": "EN-FFX",
+      "game": "FFX",
+      "gameCase": "FFX only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "en-ffx",
+      "replaces": [
+        "ending-ffx"
+      ],
+      "plays": "Chapter III's coda (the FFX ending).",
+      "fallback": "ending-ffx",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A slow, hopeful farewell at 58 BPM. It begins in a minor key with a solo piano playing a simple, patient, singing line; warm strings, a solo cello, a French horn and a flute join one by one, and the orchestra rises slowly around the piano until at the end the harmony turns to the major key like a door opening. No drums until a soft timpani roll under the climax. Hopeful grief, tender and grateful, the feeling of being allowed to stop at last. It falls back to the opening solo piano so it can repeat. Real acoustic piano and orchestra recorded in a warm hall. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no electric guitar, no pop.",
+        "music_length_ms": 100000,
+        "force_instrumental": true
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "7fa352b24ef9618e32ba6af77be1c8f91edb0deedea059f232a54d22d942ba16",
+        "bytes": 4001325,
+        "format": "mp3_48000_320",
+        "seconds": 100.03,
+        "songId": "99nP01G2KmNOyzzAiQHc",
+        "generatedUtc": "2026-10-13T04:43:17.677Z",
+        "creditsEstimated": 1375
+      },
+      "file": {
+        "bytes": 1488836,
+        "sha256": "d27706e481c009528199676051c851f6e2c4eb3986b127f7abba7737a3b9a400"
+      },
+      "manifestEntry": {
+        "file": "music/ending-ffx.mp3",
+        "loopStart": 8.281542,
+        "loopEnd": 91.031837,
+        "duration": 94.0318,
+        "bytes": 1488836,
+        "lufs": -16,
+        "truePeakDb": -3.1,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3600003,
+        "sha256": "d84d0ef15c4e8af121a25ce3006a5443fe51ab52079c3bdfa7d7b1c99ddee413",
+        "manifestEntry": {
+          "file": "music/ending-ffx.mp3",
+          "loopStart": 33.642358,
+          "loopEnd": 122.653741,
+          "duration": 125.6537,
+          "bytes": 3600003,
+          "lufs": -16,
+          "truePeakDb": -1.9
+        }
+      },
+      "master": {
+        "bpm": 58,
+        "bars": 20,
+        "introSec": 8.282,
+        "loopSec": 82.75,
+        "clickRatio": 0.155,
+        "fluxRatio": 0.138,
+        "stepOk": true,
+        "xfadeSec": 1,
+        "xfadeLaw": "linear",
+        "gainDb": -1.3
+      },
+      "stereo": {
+        "before": {
+          "corr": -0.053,
+          "sideMid": 0.45,
+          "monoLoss": -3.24
+        },
+        "after": {
+          "corr": 0.71,
+          "sideMid": -7.5,
+          "monoLoss": -0.7
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "narrowed",
+        "sideGainDb": -7.95
+      },
+      "why": "SoundFont-rendered.",
+      "reason": "(a) Fit: Solo piano farewell that rises to the major at 58 BPM (\"permission to stop\"). Measured 58.0 BPM against 58 asked. (b) Seam: Click ratio 0.15, under 1.0. (c) Length: Loop 82.8 s (20 bars), intro 8.3 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation -0.05 to 0.71, side/mid 0.4 to -7.5 dB, mono loss -3.24 to -0.71 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    },
+    {
+      "cue": "ending-ffx2",
+      "pick": "EN-FFX2",
+      "game": "FFX-2",
+      "gameCase": "FFX-2 only",
+      "kind": "loop",
+      "mode": "replace",
+      "brief": "en-ffx2",
+      "replaces": [
+        "ending-ffx2"
+      ],
+      "plays": "Chapter V's coda (the FFX-2 ending).",
+      "fallback": "ending-ffx2",
+      "request": {
+        "model_id": "music_v2_5",
+        "prompt": "A warm, gentle, bittersweet goodbye at 84 BPM in 4/4 in a major key. A piano and a fingerpicked acoustic guitar carry a flowing, singing accompaniment, a string section swells softly, a drummer plays brushes, an upright bass walks underneath, a flute plays a tender countermelody, and a lone wordless female voice hums (no words, no lyrics). It begins quietly, grows to a full band, and in the last section the whole harmony lifts up a whole step for a bright, hopeful finish before it settles back to the piano and guitar so it can repeat. Kind, wistful and unhurried. Real recorded instruments in a warm room. Steady tempo, no tempo changes, no fade-out, no final cadence. Not chiptune, not SNES, not arcade, no synthesizers, no electronic drums, no pop.",
+        "music_length_ms": 100000,
+        "force_instrumental": false
+      },
+      "raw": {
+        "take": 1,
+        "sha256": "114376b2ae12e8d9883ad7dca335a2fa26af7aa2007c3c884f89338592627a07",
+        "bytes": 4001325,
+        "format": "mp3_48000_320",
+        "seconds": 100.03,
+        "songId": "uyzpBnOTEubCqwaK04WY",
+        "generatedUtc": "2026-10-13T04:43:36.155Z",
+        "creditsEstimated": 1375
+      },
+      "file": {
+        "bytes": 1759079,
+        "sha256": "0b350305c19d5bd3011c666f094d5f6bbcc8db736a285915c08e0018933f746a"
+      },
+      "manifestEntry": {
+        "file": "music/ending-ffx2.mp3",
+        "loopStart": 27.870567,
+        "loopEnd": 90.732925,
+        "duration": 93.7329,
+        "bytes": 1759079,
+        "lufs": -16,
+        "truePeakDb": -2.4,
+        "source": "elevenlabs-music_v2_5"
+      },
+      "before": {
+        "bytes": 3583736,
+        "sha256": "c8f6e1b7294495ac591b8bf8009e7477da066858037f25a7d10f7fac25076b37",
+        "manifestEntry": {
+          "file": "music/ending-ffx2.mp3",
+          "loopStart": 12.082494,
+          "loopEnd": 116.331655,
+          "duration": 119.3317,
+          "bytes": 3583736,
+          "lufs": -15.9,
+          "truePeakDb": -1.3
+        }
+      },
+      "master": {
+        "bpm": 83.99,
+        "bars": 22,
+        "introSec": 27.871,
+        "loopSec": 62.862,
+        "clickRatio": 0.104,
+        "fluxRatio": 0.438,
+        "stepOk": true,
+        "xfadeSec": 0.714,
+        "xfadeLaw": "equal-power",
+        "gainDb": -0.1
+      },
+      "stereo": {
+        "before": {
+          "corr": 0.897,
+          "sideMid": -12.66,
+          "monoLoss": -0.23
+        },
+        "after": {
+          "corr": 0.774,
+          "sideMid": -9,
+          "monoLoss": -0.5
+        },
+        "pass": true,
+        "passedAsRendered": false,
+        "action": "widened",
+        "sideGainDb": 3.71
+      },
+      "why": "Synth/band-class pop re-render.",
+      "reason": "(a) Fit: Warm acoustic band goodbye at 84 BPM that lifts a step (\"goodbye, more gently\"). Measured 84.0 BPM against 84 asked. (b) Seam: Click ratio 0.10, under 1.0. (c) Length: Loop 62.9 s (22 bars), intro 27.9 s. (d) Loudness: -16.0 LUFS. Project stereo gate: correlation 0.90 to 0.77, side/mid -12.7 to -9.0 dB, mono loss -0.23 to -0.52 dB (before to after; window 0.60 to 0.85, -10 to -6, -1 or better). Judged from the brief's words and the measurements; nobody has heard it (rule 13), so Bailey's ear can overrule it by code."
+    }
+  ]
+}

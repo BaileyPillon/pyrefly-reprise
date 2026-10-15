@@ -26,11 +26,13 @@ import { withPoolStatuses } from './kit.ts';
 import {
   activeGateBonuses,
   breaksDamageLimit,
+  gateAutoTags,
   gateStatTotal,
   gatesBetween,
   waitDownPercent,
   withStatBonus,
 } from './garment-grids.ts';
+import { autoWordsOf } from './adapt/menu.ts';
 import { baseRequired, refreshGauge } from './gauges.ts';
 import { removeStatus } from './statuses.ts';
 
@@ -68,6 +70,8 @@ export function refreshDerivedStats(unit: Ffx2Unit, deps: SpherechangeDeps): Sta
   if (!unit.aiMemory) unit.aiMemory = {};
   unit.aiMemory['waitDown'] = waitDownPercent(bonuses);
   unit.aiMemory['bdl'] = breaksDamageLimit(bonuses);
+  // The auto-ability words follow the dressphere she wears and the gates she has passed (re-parity RC7 lane X2-B).
+  unit.autoWords = autoWordsOf(unit, gateAutoTags(bonuses), deps.dresspheres.get(sphere.current)?.abilityIds ?? []);
   return stats;
 }
 

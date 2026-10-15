@@ -106,13 +106,14 @@ const settingsRows = (h: Harness): string[] =>
   [...h.root.querySelectorAll<HTMLElement>('.pause__col[data-col="settings"] .pause__row')].map((r) => r.dataset['row'] ?? '');
 
 describe('one EYE CANDY row where the three were', () => {
-  it('sits under LOW EFFECTS, reads ALL ON by default, in both games; the three look rows are gone', () => {
+  it('sits under TEXT SPEED (LOW EFFECTS moved to the ACCESSIBILITY tab, PR-0032), reads ALL ON by default, in both games; the three look rows are gone', () => {
     for (const id of ['seymour-flux', 'ffx2-bahamut']) {
       const h = mount(id);
       h.screen.trigger('pause:tab:options');
       const rows = settingsRows(h);
-      const at = rows.indexOf('lowEffects');
-      expect(rows.slice(at, at + 2), id).toEqual(['lowEffects', 'eyeCandy']);
+      const at = rows.indexOf('textSpeed');
+      expect(rows.slice(at, at + 2), id).toEqual(['textSpeed', 'eyeCandy']);
+      expect(rows, 'LOW EFFECTS lives on the ACCESSIBILITY tab now, not here too').not.toContain('lowEffects');
       for (const r of LOOK_IDS) expect(rows, r).not.toContain(r);
       expect(valueOf(h, 'eyeCandy')).toBe('ALL ON');
       h.dispose();
@@ -136,9 +137,10 @@ describe('one EYE CANDY row where the three were', () => {
     const h = mount('ff7-guard-scorpion');
     h.screen.trigger('pause:tab:options');
     const rows = settingsRows(h);
-    expect(rows).toContain('lowEffects');
     expect(rows).not.toContain('eyeCandy');
     for (const r of LOOK_IDS) expect(rows).not.toContain(r);
+    h.screen.trigger('pause:tab:accessibility');
+    expect(settingsRows(h), 'LOW EFFECTS is on the ACCESSIBILITY tab').toContain('lowEffects');
   });
 });
 

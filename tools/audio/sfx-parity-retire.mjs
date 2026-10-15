@@ -17,11 +17,18 @@
  * retired name stays addressable (`src/audio/sfxV2/retired.ts`, `V2_CUES`): the voice still asks for it, the mixer finds the
  * original, and in the moment before the pack has decoded the first-bank stand-in plays instead, so nothing is ever silent.
  *
+ * The games that count are the cue's own tag AND every game whose scripted fight was seen to ask for it. The tag is the set's
+ * (`V2_CUES`), the asks are the game's: the fiend's dissolve is tagged FFX but both games play it at every defeat
+ * (`battleVoice.ts`, `ko()`), and a plan that read only the tag took it out of the sprite on the strength of FFX's recorded
+ * original, which left FFX-2's defeat on the first-bank cue (r46-fix, FOC46-02). A name an earlier repack took out (`already`) is judged
+ * again by the same rules: one that no longer qualifies is returned in `reinstate`, and the command refuses a retired list that holds it.
+ *
  * Pure: no files. Game case: both; every decision is per game (a cue both games play retires only when each game's core pack
  * holds an original for it).
  */
 
-const gamesOf = (cue) => (cue.game === 'both' ? ['ffx', 'ffx2'] : [cue.game]);
+const GAMES = ['ffx', 'ffx2'];
+const gamesOf = (cue) => (cue.game === 'both' ? GAMES : [cue.game]);
 const nameOf = (key) => (key.startsWith('v2:') ? key.slice(3) : key);
 
 /** Is an original of `name` in the game's core pack, for this game? */
@@ -37,34 +44,42 @@ function recorded(core, name, game) {
 export function planRetirement(input) {
   const retired = [];
   const kept = {};
-  for (const name of [...input.sprite].sort()) {
+  // The names already out of the sprite (an earlier repack took them): they stay retired. Without them a second run, on the repacked sprite, would plan
+  // nothing and the generated list would lose them (found 2026-10-12, the first repack).
+  const already = [...(input.already ?? [])].sort();
+  const reinstate = [];
+
+  /** Why `name` must stay in the sprite, or `null` when every game that asks for it ends at a recorded original in its core pack. */
+  const whyKept = (name) => {
     const cue = input.cues[name];
-    if (!cue) {
-      kept[name] = 'not in the key space (V2_CUES)';
-      continue;
-    }
-    let why = null;
-    for (const game of gamesOf(cue)) {
+    if (!cue) return 'not in the key space (V2_CUES)';
+    // The cue's own tag, plus every game whose fight asked for it (FOC46-02): the tag alone let FFX's original retire a cue FFX-2 still plays.
+    const asked = GAMES.filter((game) => (input.uses[game] ?? []).some((u) => nameOf(u.key) === name));
+    for (const game of GAMES.filter((g) => gamesOf(cue).includes(g) || asked.includes(g))) {
       const core = input.core[game];
-      if (!core) {
-        why = `${game} has no core pack`;
-        break;
-      }
+      if (!core) return `${game} has no core pack`;
       const uses = input.uses[game].filter((u) => nameOf(u.key) === name);
-      if (uses.length === 0) {
-        why = `no observed use in ${game} (nothing proves what depends on it)`;
-        break;
-      }
+      if (uses.length === 0) return `no observed use in ${game} (nothing proves what depends on it)`;
       const open = uses.find((u) => !(u.events ?? [name]).some((n) => recorded(core, n, game)));
-      if (open) {
-        why = `${game} still plays it as the stand-in${open.events && open.events.length > 0 ? ` (originals ${open.events.join(', ')} not in ${game}-core)` : open.events ? ' (an event with no original)' : ` (${name} is not in ${game}-core)`}`;
-        break;
-      }
+      if (open) return `${game} still plays it as the stand-in${open.events && open.events.length > 0 ? ` (originals ${open.events.join(', ')} not in ${game}-core)` : open.events ? ' (an event with no original)' : ` (${name} is not in ${game}-core)`}`;
     }
+    return null;
+  };
+
+  for (const name of [...input.sprite].sort()) {
+    const why = whyKept(name);
     if (why === null) retired.push(name);
     else kept[name] = why;
   }
-  return { retired, kept };
+  // A name an earlier repack took out is judged by the same rules: one that no longer qualifies has to come back into the sprite.
+  for (const name of already) {
+    const why = whyKept(name);
+    if (why !== null) {
+      reinstate.push(name);
+      kept[name] = why;
+    }
+  }
+  return { retired, kept, already, reinstate };
 }
 
 /** Bytes the repack gives back: the retired cues' share of the sprite, by their length (the sprite is one VBR stream). */

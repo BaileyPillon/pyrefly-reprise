@@ -31,7 +31,11 @@ export type FigureMark =
   | 'orb-red'
   | 'orb-white'
   | 'orb-yellow'
-  | 'orb-blue';
+  | 'orb-blue'
+  // COLOUR VISION (PR-0032, FFX only): the status's initial over the head, beside its tint. Never in a status's own table:
+  // `statusMarks.marksFor` adds them while a mode is on (`colourVision.ts`).
+  | 'initial-b'
+  | 'initial-c';
 
 export interface FigureLook {
   /** Marks on or over the figure, drawn while the status is on. */

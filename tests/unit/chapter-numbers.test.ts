@@ -7,7 +7,7 @@
  *
  * - the listed chapters are 1 to 18, in `CHAPTERS` order, one each;
  * - 0 means "no place on the board" and only the unlisted FF7 experiment wears it;
- * - the hidden experiments are above the eighteen and each has its own: 19 the Leblanc preview, 21 Sinspawn Gui (20 is the FFX-2 experiment lane's, which lands from its own branch);
+ * - the hidden experiments are above the eighteen and each has its own: 19 the Leblanc preview, 20 the FFX-2 Experiment, 21 Sinspawn Gui, 22 Fayth (Evrae with FFX's camera), 24 Valefor at Besaid (23 is the Tourist Trap lane's);
  * - every number is within the type's union (`Chapter.number`), so a typo fails `tsc` before it fails here.
  *
  * **Game case: both** (shared registry plumbing).
@@ -38,10 +38,13 @@ describe('chapter numbers', () => {
     }
   });
 
-  it('the known experiments keep their numbers: Leblanc 19, Sinspawn Gui 21 (20 is reserved to the FFX-2 experiment lane)', () => {
+  it('the known experiments keep their numbers: Leblanc 19, the FFX-2 Experiment 20, Sinspawn Gui 21, Fayth 22, Valefor at Besaid 24', () => {
     const number = (id: string): number | undefined => EXPERIMENT_CHAPTERS.find((c) => c.id === id)?.number;
     expect(number('exp-leblanc')).toBe(19);
+    expect(number('ffx2-masterpiece-theatre')).toBe(20);
     expect(number('sinspawn-gui')).toBe(21);
+    expect(number('exp-fayth')).toBe(22);
+    expect(number('ffx2-valefor-besaid')).toBe(24);
     expect(EXPERIMENT_CHAPTERS.map((c) => c.number)).not.toContain(0);
   });
 });

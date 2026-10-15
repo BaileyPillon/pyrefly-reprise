@@ -9,7 +9,7 @@
  * routes each chapter to its cue and no other chapter to it (rule 14: which game), that the replaced cues stay in use (so no file is retired), that THEMES.md and
  * CREDITS.md name them, and that the Evrae re-cut moved only two manifest numbers. Nothing here is a listening verdict (AGENTS.md rule 13).
  *
- * Game case: FFX-2 only for `boss-ffx2-fallen-aeons` (Chapters XI and XVI) and `boss-trema` (Chapter XIII, phase 2); FFX only for `boss-seymour-natus` (X),
+ * Game case: FFX-2 only for `boss-ffx2-fallen-aeons` (Chapters XI and XVI, and the hidden Tourist Trap) and `boss-trema` (Chapter XIII, phase 2); FFX only for `boss-seymour-natus` (X),
  * `boss-isaaru` (XIV), `boss-sin-assault` (XVII), `boss-sin-countdown` (XVIII) and the `boss-evrae` re-cut (Chapter VIII).
  */
 
@@ -24,6 +24,7 @@ import { getTrack, hasTrack, isStandIn, trackNames } from '../../src/audio/track
 import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS, type Chapter } from '../../src/data/encounters.ts';
 import { getChapterMeta } from '../../src/data/chapter-meta.ts';
 import { AUDIO_BUDGET_BYTES, externalSource } from '../../tools/audio/manifest-io.mjs';
+import { batch2 } from './helpers/musicBatch2.ts';
 
 const REPO = join(__dirname, '..', '..'); // jsdom: import.meta.url is not a file URL here
 const text = (p: string) => readFileSync(join(REPO, p), 'utf8');
@@ -78,7 +79,8 @@ const EXPECTED: Record<string, { game: string; replaces: string | null; fallback
     game: 'FFX-2',
     replaces: 'boss-ffx2-aeon',
     fallback: 'boss-ffx2-aeon',
-    chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'] },
+    // The hidden Valefor at Besaid (FFX-2 only; 2026-10-14) plays the aeon cue on its one link, by reference: the same fallen-aeons battle cue as Chapter XI and Ixion, our own composition, no new file.
+    chapters: { 'ffx2-fallen-aeons': ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'], 'ffx2-ixion-djose': ['boss-ffx2-fallen-aeons'], 'ffx2-tourist-trap': ['boss-ffx2-fallen-aeons'], 'ffx2-valefor-besaid': ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap plays the same "Aeons" cue (2026-10-14, by reference, no new audio)
   },
   'boss-trema': { game: 'FFX-2', replaces: 'boss-ffx2-aeon', fallback: 'boss-ffx2-aeon', chapters: { 'ffx2-trema': ['scene-bevelle-underground', 'boss-trema'] } },
   'boss-seymour-natus': { game: 'FFX', replaces: 'boss-seymour-macalania', fallback: 'boss-seymour-macalania', chapters: { 'seymour-natus': ['boss-seymour-natus'] } },
@@ -219,9 +221,8 @@ describe('batch 1 (2026-10-10): the engine routes each chapter to its cue and no
     }
   });
 
-  it('retires no file: the four cues the chapters left are still the cue of another chapter', async () => {
+  it('retires no file: the cues the chapters left are still the cue of another chapter (boss-ffx2-aeon, whose last chapter was the hidden Experiment, retired in batch 2 of 2026-10-12)', async () => {
     const stillUsedBy: Record<string, string> = {
-      'boss-ffx2-aeon': 'ffx2-masterpiece-theatre', // the Experiment's Act I (hidden)
       'boss-seymour-macalania': 'seymour-anima-macalania', // Chapter VII
       'boss-yojimbo': 'yojimbo-cavern', // Chapter IX
       'boss-evrae': 'evrae-airship', // Chapter VIII
@@ -235,11 +236,13 @@ describe('batch 1 (2026-10-10): the engine routes each chapter to its cue and no
 
 describe("batch 1 (2026-10-10): boss-evrae's loop points re-cut (FFX, Chapter VIII keeps the cue)", () => {
   const e = record.evraeRecut;
-  const m = manifest.music['boss-evrae']!;
+  // Batch 2 (2026-10-12) replaced boss-evrae's file with an original; the re-cut file and entry are what its record says it replaced.
+  const replaced = batch2.cues.find((c) => c.cue === 'boss-evrae')?.before ?? null;
+  const m = replaced?.manifestEntry ?? manifest.music['boss-evrae']!;
 
   it('moved only the manifest\'s two loop points: the MP3 is the one music v2 shipped, and the loop period is unchanged', () => {
     const shipped = v2.cues.find((c) => c.cue === 'boss-evrae')!;
-    expect(sha256('public/audio/music/boss-evrae.mp3')).toBe(shipped.after.sha256);
+    expect(replaced?.sha256 ?? sha256('public/audio/music/boss-evrae.mp3')).toBe(shipped.after.sha256);
     expect([shipped.loop.loopStart, shipped.loop.loopEnd, shipped.loop.duration]).toEqual([e.manifestBefore.loopStart, e.manifestBefore.loopEnd, m.duration]);
     expect([m.loopStart, m.loopEnd]).toEqual([e.manifestAfter.loopStart, e.manifestAfter.loopEnd]);
     expect([m.loopStart, m.loopEnd]).toEqual([e.after.loopStart, e.after.loopEnd]);

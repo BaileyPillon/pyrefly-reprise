@@ -91,7 +91,7 @@ export function parseFxQuery(search: string): FxQuery {
 export interface FxEnv {
   lowEffects: boolean;
   reduceMotion: boolean;
-  /** REDUCE FLASHES; the setting may not exist yet (r31-access), so callers read it defensively. */
+  /** REDUCE FLASHES, the ACCESSIBILITY tab's row (PR-0032); `fxEnv.ts` reads it from the save, and a test env may set it directly. */
   reduceFlashes: boolean;
   width: number;
   height: number;

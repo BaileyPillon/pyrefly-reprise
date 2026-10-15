@@ -94,12 +94,16 @@ export interface Scene {
 /**
  * The start positions of the scenes whose bosses use `searchr` (the scene's `PlayerPos` and `EnemyPos` lines, FFX2_Data.vbf
  * build 25501027). The Leg is the first enemy of its scene and Shuyin the fourth (the other three are the cannon's inert parts).
+ * **`besaid`** is Valefor's room, Besaid Temple's trial room (formation 0393 `bsyt05_229`; the RE review of 2026-10-14, `pos_bsyt05_229.psc`, which is byte for byte Ixion's `pos` file): the boss
+ * at (0, 26), Yuna (0, -27), Rikku (-12, -25), Paine (12, -25). Her Sonic Wings takes the greatest ground distance (Yuna at the start, 53.00 against 52.39 for Rikku and Paine) and her Attack
+ * the near-weighted pick (Yuna 41.9 percent, Rikku 29.1, Paine 29.0), `./valefor.ts`.
  */
 export const SCENES = {
   bahamut: { boss: { x: 0, z: 30 }, girls: [{ x: 0, z: -20 }, { x: -17, z: -25 }, { x: 17, z: -25 }] },
   tail: { boss: { x: -33, z: 73 }, girls: [{ x: 1, z: -43 }, { x: 29, z: -48 }, { x: 38, z: -16 }] },
   leg: { boss: { x: -70.83, z: 50.85 }, girls: [{ x: -7, z: -34 }, { x: 13, z: -29 }, { x: 28, z: -14 }] },
   shuyin: { boss: { x: 0, z: 0 }, girls: [{ x: -30, z: 27.6 }, { x: -11, z: 35 }, { x: -40, z: 10.6 }] },
+  besaid: { boss: { x: 0, z: 26 }, girls: [{ x: 0, z: -27 }, { x: -12, z: -25 }, { x: 12, z: -25 }] },
 } as const satisfies Record<string, Scene>;
 
 /** The weight of one candidate: `1 + floor(32768 / floor((1 + d)(1 + 2a) + 1))`. */

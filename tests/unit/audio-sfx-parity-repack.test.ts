@@ -6,7 +6,9 @@
  * The rule is strict on purpose: a cue retires only when EVERY way the game reaches it ends at a recorded original in the
  * game's core pack, which every chapter of the game loads. So Auron's recording of the katana swing does not retire the
  * katana swing while the foes still play it, a boss pack's recording retires nothing, and a cue nothing was seen to use stays.
- * With no pack shipped nothing retires and the list is empty, which is what the build holds today.
+ * With no pack shipped nothing retires and the list is empty. Since 2026-10-12 the two core packs ship (the loose set of the SFX run), the plan took
+ * three stand-ins out of the sprite (buff-generic, hit-dagger, water: 0.17 MB), and `retired.ts` holds them: a plan made on the repacked sprite keeps the
+ * names already out of it (`already`), so the generated list does not lose them and `--check` stays green.
  */
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -91,6 +93,48 @@ describe('which stand-ins a recorded original retires', () => {
     const plan = planRetirement(input({ sprite: new Set(['mystery']) }));
     expect(plan.kept['mystery']).toMatch(/key space/);
   });
+
+  it('counts a game that asks for a cue the set tags to the OTHER game (r46-fix, FOC46-02: the fiend\'s dissolve is tagged FFX, both games play it)', () => {
+    // `cure` is tagged FFX here; FFX-2 is seen to ask for it with no event name (nothing in the FFX-2 core answers it).
+    const core = { ffx: { cure: { game: 'ffx' as const } }, ffx2: { other: { game: 'ffx2' as const } } };
+    const uses = { ffx: [use('v2:cure', ['cure'])], ffx2: [use('v2:cure', [])] };
+    const plan = planRetirement(input({ core, uses }));
+    expect(plan.retired).toEqual([]);
+    expect(plan.kept['cure']).toMatch(/^ffx2 still plays it as the stand-in \(an event with no original\)/);
+    // Without FFX-2's ask the tag alone would have retired it, which is the bug.
+    expect(planRetirement(input({ core, uses: { ffx: uses.ffx, ffx2: [] } })).retired).toEqual(['cure']);
+    // A cue the other game asks for retires once that game's core holds an original of it too (one of its own, never the other game's).
+    expect(planRetirement(input({ core: { ffx: core.ffx, ffx2: { cure: { game: 'ffx2' as const } } }, uses: { ffx: uses.ffx, ffx2: [use('v2:cure', ['cure'])] } })).retired).toEqual(['cure']);
+    expect(planRetirement(input({ core: { ffx: core.ffx, ffx2: { cure: { game: 'ffx' as const } } }, uses: { ffx: uses.ffx, ffx2: [use('v2:cure', ['cure'])] } })).retired).toEqual([]);
+    // A game with no core pack that asks for the cue keeps it as well.
+    expect(planRetirement(input({ core: { ffx: core.ffx, ffx2: undefined }, uses })).kept['cure']).toMatch(/ffx2 has no core pack/);
+  });
+
+  it('judges a name an earlier repack took out by the same rules, and sends one that no longer qualifies back into the sprite', () => {
+    const core = { ffx: { cure: { game: 'ffx' as const } }, ffx2: { other: { game: 'ffx2' as const } } };
+    const sprite = new Set(Object.keys(cues).filter((name) => name !== 'cure'));
+    const wrong = planRetirement(input({ sprite, core, uses: { ffx: [use('v2:cure', ['cure'])], ffx2: [use('v2:cure', [])] }, already: ['cure'] }));
+    expect(wrong.reinstate).toEqual(['cure']);
+    expect(wrong.kept['cure']).toMatch(/ffx2 still plays it/);
+    const right = planRetirement(input({ sprite, core, uses: { ffx: [use('v2:cure', ['cure'])], ffx2: [] }, already: ['cure'] }));
+    expect(right.reinstate).toEqual([]);
+    expect(right.already).toEqual(['cure']);
+  });
+
+  it('carries the names a repack already took out of the sprite, sorted, apart from what it retires now (so a second run on the repacked sprite loses none)', () => {
+    const core = { ffx: { 'swing-sword': { game: 'ffx' as const } }, ffx2: undefined };
+    const now = { ffx: [use('v2:swing-sword', ['swing-sword'])], ffx2: [] };
+    const first = planRetirement(input({ core, uses: now }));
+    expect(first.retired).toEqual(['swing-sword']);
+    expect(first.already).toEqual([]);
+    // The repack took it out: the sprite no longer holds it, the plan on that sprite retires nothing new and still reports it.
+    const sprite = new Set(Object.keys(cues).filter((name) => name !== 'swing-sword'));
+    const second = planRetirement(input({ sprite, core, uses: now, already: ['swing-sword'] }));
+    expect(second.retired).toEqual([]);
+    expect(second.already).toEqual(['swing-sword']);
+    expect(planRetirement(input({ already: ['water', 'buff-generic'] })).already).toEqual(['buff-generic', 'water']);
+    expect(retiredBytes(second, {}, 1_000_000, 100)).toBe(0); // it gives back nothing now
+  });
 });
 
 describe('what the repack gives back', () => {
@@ -112,9 +156,11 @@ describe('the retired list the build keeps', () => {
     expect([...sprite, ...RETIRED_V2_CUES].sort()).toEqual(Object.keys(V2_CUES).sort());
   });
 
-  it('is empty while no core pack has shipped', () => {
+  it('is empty while no core pack has shipped, and holds the eight cues the two repacks took out (2026-10-12: three; 2026-10-13: five more) now that both have', () => {
     const packs = (JSON.parse(readFileSync(join(ROOT, 'public', 'audio', 'manifest.json'), 'utf8')) as { sfxParity?: { packs?: Record<string, unknown> } }).sfxParity?.packs ?? {};
     if (!packs['ffx-core'] && !packs['ffx2-core']) expect(RETIRED_V2_CUES).toEqual([]);
+    // `dissolve-pyreflies` is NOT here: the second repack took it out on FFX's original alone, and FFX-2's defeat fell to the first bank (r46-fix, FOC46-02).
+    else expect(RETIRED_V2_CUES).toEqual(['buff-generic', 'gun-burst', 'hit-dagger', 'hit-greatsword', 'hit-gun', 'hit-katana', 'hit-spear', 'water']);
   });
 
   it('is what the command writes: --check passes, and the report retires nothing today', () => {
@@ -123,7 +169,9 @@ describe('the retired list the build keeps', () => {
     expect(check.stdout).toMatch(/retired\.ts is current/);
     const report = spawnSync(process.execPath, ['tools/audio/sfx-parity-repack.mjs'], { cwd: ROOT, encoding: 'utf8' });
     expect(report.status, report.stderr).toBe(0);
-    expect(report.stdout).toMatch(/retire 0:/);
-    expect(report.stdout).toMatch(/keep \d+ \(ffx has no core pack\)/);
+    expect(report.stdout).toMatch(/retire 0:/); // nothing new: the eight it took out are already out of the sprite
+    expect(report.stdout).toMatch(/already out of the sprite \(retired\.ts keeps them\): buff-generic, gun-burst, hit-dagger, hit-greatsword, hit-gun, hit-katana, hit-spear, water/);
+    expect(report.stdout).not.toMatch(/REINSTATE/); // no name is out of the sprite that a game still plays as the stand-in
+    expect(report.stdout).toMatch(/keep \d+ \(ffx still plays it as the stand-in\)/);
   }, 180_000);
 });

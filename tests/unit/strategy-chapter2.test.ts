@@ -41,7 +41,9 @@ const SEEDS = [3, 7, 42, 20260916];
  * line wins 398 of 500 seeds (79.6 percent, was 476, 95.2 percent; nothing on the boss or the party was tuned, docs/handoff/re-parity-rc5.md). Seeds 3, 7 and 20260916 now lose. The other two blocks
  * (the wrong tactics stay punished) keep `SEEDS`: they assert defeats and every one of those four still loses.
  */
-const WIN_SEEDS = [1, 2, 4, 42];
+// Re-pinned 2026-10-13 (re-parity RC6, FFX only): Tidus hands his first Form III turn to Wakka, who wears no Zombie Ward (`src/engine/tactics/yunalesca-bench.ts`);
+// the line wins 453 and 457 of 500 on seeds 1 to 500 and 501 to 1000 (was 398 and 405) and 38 of these forty. Seed 42 now loses; seeds 3 and 7 win.
+const WIN_SEEDS = [1, 2, 3, 4];
 
 function newEngine(seed: number, party: FFXPartyBuild = zanarkandBuild) {
   const content = new FFXContentRegistry();
@@ -196,7 +198,8 @@ describe('the shipped intended strategy beats Chapter 2', () => {
    *
    * Re-pinned 2026-10-12 (re-parity RC5, FFX only): a KO clears Zombie (the game's
    * status reset), the line wins 398 of 500 seeds (79.6 percent) and 30 of these forty.
-   * The bar is now 27: two standard errors under the 500-seed rate for forty seeds
+   * Re-pinned again 2026-10-13 (re-parity RC6, FFX only): Wakka replaces Tidus in Form III; the line wins 453 and 457 of 500 and 38 of these forty (seeds 17 and 37 lose).
+   * The bar is now 33: two standard errors under the 500-seed rate for forty seeds (36.4 - 3.6). It was 27 for the 79.6 percent line: two standard errors under the 500-seed rate for forty seeds
    * (31.8 - 5.1), still far from the coin flip (20) and from the 13/40 of the old
    * broken engine, so a real regression still goes red.
    */
@@ -209,7 +212,7 @@ describe('the shipped intended strategy beats Chapter 2', () => {
       .map((x) => `${x.seed}: ${x.r.outcome} with ${x.r.bossHp} left`);
     console.log(`seeds 1-40: ${wins} wins; losses: ${lost.join(', ') || 'none'}`);
 
-    expect(wins, 'Chapter 2 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(27);
+    expect(wins, 'Chapter 2 must be reliably winnable, not a coin flip').toBeGreaterThanOrEqual(33);
     expect(
       results.every((r) => r.formsReached === 3),
       'every run must walk all three forms',

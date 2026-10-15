@@ -121,6 +121,16 @@
   }
 }
 
+/* REDUCE FLASHES (PR-0032): the wash is a cover that hides the swap to the next link, so it stays opaque
+   but is ivory at 35 % brightness (`flashRules.DIM_IVORY`, set as --ssphere-cover) instead of pale
+   lilac-white; the sphere stops pulsing. The 520 ms in, 1.7 s hold and 620 ms out are the same. */
+.ssphere--soft .ssphere__wash {
+  background: var(--ssphere-cover, #59544b);
+}
+.ssphere--soft.ssphere--in .ssphere__orb {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ssphere__orb,
   .ssphere__card {

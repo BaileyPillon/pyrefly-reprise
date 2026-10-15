@@ -57,6 +57,7 @@ import { paintedFragmentShader, paintedVertexShader } from './shaders/PaintedSha
 import { hitRecoilOffset, recoilLegacy } from './HitRecoil.ts'; // r40-recoil (FC-1): the knock-back's curve
 import { TweenGroup, type EasingFn, type EasingName, type Tween } from './Tween.ts';
 import { paceRate } from './pace.ts';
+import { softActorFlash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
 import { PoseBlend, poseBlendShape } from './PoseBlend.ts';
 import { placeTipped, type SlotTip } from './KoTip.ts'; // FA-2: the KO fall tips the standing plane about its feet (KoFall.ts)
 import { cutoutShadow } from './ShadowCutout.ts';
@@ -1288,6 +1289,7 @@ export class PaintedActor extends Group {
    * never cuts a strong one short.
    */
   flash(colour: number | string = 0xffffff, ms = 180, peak = 1, floorCut = 0): void { // floorCut 0..1: less dark-texel lift (FF7)
+    if (this.softFlash?.()) ({ colour, ms, peak } = softActorFlash(colour, ms, peak)); // REDUCE FLASHES: peak 0.35, white turns ivory, ms unchanged
     this.flashTween?.kill();
     this.u.flashColor.value.set(colour as never); this.u.flashFloorCut.value = clamp01(floorCut);
     const from = Math.max(clamp01(peak), this.u.flashAmount.value);
@@ -1785,6 +1787,8 @@ export class PaintedActor extends Group {
 
   /** REDUCE MOTION (D-285): no hit jitter while this answers true; set by `PaintedStage`. */
   still?: () => boolean;
+  /** REDUCE FLASHES (PR-0032): {@link flash} runs through `flashRules.softActorFlash` while this answers true; set by `PaintedStage`. */
+  softFlash?: () => boolean;
   /** Damped jitter, in world units. */
   shake(amount = 0.08, ms = 300): void {
     if (this.still?.()) return;

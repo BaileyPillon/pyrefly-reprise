@@ -19,8 +19,8 @@
  * - **GP9:** the dump's values: Baralai HP 12,220 (G-1), Drill Shot at 8 (G-5),
  *   Nooj gil 30,000 (G-3), Gippal's drop Kaiser Knuckles (G-4).
  * - **GP12:** the formations' `Weapon[..]` entries (G-10) are props, not targets.
- * - **GP16 a, stand-in b:** the new cue `boss-den-of-woe` is not composed yet, so
- *   every link plays `boss-shuyin` (the plan's named stand-in) until it is.
+ * - **GP16 a:** every link plays `boss-den-of-woe`, an ElevenLabs original since
+ *   2026-10-12 (music batch 2, FFX-2 only); `boss-shuyin`, the plan's named stand-in, played before.
  *
  * Every stat is §3 with its tag, carried verbatim (rule 6). Common to all three
  * (§3.2 row "Extra immunities"): Gravity, Death, Petrify, Sleep, Silence,
@@ -42,8 +42,8 @@ export const DEN_OF_WOE_CHAIN_ORDER = [DEN_BARALAI, DEN_GIPPAL, DEN_NOOJ] as con
 /** The §3 list for every shade: the standard block plus Slow and Stop. */
 export const SHADE_IMMUNITIES: StatusImmunities = { ...STANDARD_AILMENT_IMMUNITY, slow: 255, stop: 255 };
 
-/** GP16's stand-in, on every link, until `boss-den-of-woe` is auditioned. */
-const DEN_CUE = [{ at: 'start' as const, track: 'boss-shuyin' as const, fadeMs: 800 }];
+/** GP16's cue, on every link: `boss-den-of-woe` since 2026-10-12 (`boss-shuyin` stood in before). */
+const DEN_CUE = [{ at: 'start' as const, track: 'boss-den-of-woe' as const, fadeMs: 800 }];
 
 /** Gippal (shade), bestiary #241 (§3.1). */
 export const shadeGippal: EnemyDef = {

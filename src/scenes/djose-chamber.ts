@@ -123,9 +123,17 @@ const PARTY_SLOTS: Array<[number, number, number]> = [
 /** Ixion's combatant id (`src/data/ffx2/enemies/ixion-djose.ts`). */
 export const DJOSE_IXION_ID = 'x2-ixion';
 
-/** Ixion's spot on the plate shown: the plate's own row, else the default (staging, ours). */
+/**
+ * Valefor's combatant id (`src/data/ffx2/enemies/valefor.ts`): the hidden Valefor at Besaid chapter (FFX-2 only, 2026-10-14) stages in this Chamber too, on the same plate, as the
+ * **provisional stand-in for Besaid's own chamber** (no approved Besaid backdrop exists; the plate is Bailey's approved Djose pick, D-273). She stands on Ixion's spot, and at the scene's boss
+ * height (no HD-model stature is measured for her: staging, ours).
+ */
+export const DJOSE_VALEFOR_ID = 'x2-valefor';
+
+/** Ixion's spot on the plate shown: the plate's own row, else the default (staging, ours); Valefor's is the same spot. */
 export const DJOSE_SPOTS: Readonly<Record<string, [number, number, number]>> = {
   [DJOSE_IXION_ID]: DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT,
+  [DJOSE_VALEFOR_ID]: DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT,
 };
 
 /** The girls' world height (the FFX-2 chapters' 1.78). */
@@ -231,7 +239,7 @@ export const buildDjoseChamberScene: SceneFactory = async (opts: SceneBuildOptio
   // No live motes: the research names no particles here (§6.1; `engine/pyreflyCanon.ts` row 'unattested').
 
   const phoneCamera = onPhone
-    ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [DJOSE_IXION_ID], sisters: [], anima: [] })
+    ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [DJOSE_IXION_ID, DJOSE_VALEFOR_ID], sisters: [], anima: [] })
     : null;
 
   const watchEnabled = opts.watchAssets ?? Boolean(import.meta.env.DEV);

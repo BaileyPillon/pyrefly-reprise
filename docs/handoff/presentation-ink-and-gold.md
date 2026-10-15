@@ -32,6 +32,8 @@ turn-start cut-in. The blue FFX glass window (`hud-mock.css`) is retired.
 | `--blood` | `#B02A2A` | enemies only (existing) |
 | `--spira-sky` | `#7FC6E8` | MP (existing) |
 | `--pyre-pink` | `#F7B6D9` | replaces gold for the whole accent role in FFX-2 chapters |
+| small accent text on ivory | `#7F5C0A` (`#9C3267` in FFX-2) | added 2026-10-13 (Bailey, PREP-A shade sheet, option B): `--ig-accent-text-on-paper`, small type that must read at 4.5:1 on ivory (5.41:1 and 6.07:1); the phone Party Prep's "+10% dmg" notes and bag counts |
+| gain / loss on an ink plate | `#7FD09A` / `#F08A8A` | added 2026-10-13 (same decision): `--ig-gain-on-ink`, `--ig-loss-on-ink`, a count that rose or fell in type on a dark plate (10.75:1 and 8.21:1); the same in both games, always after a triangle |
 
 One accent per context, never two. Ink alpha for over-art panels: `rgba(11,10,18,.84)`
 (`.94` for the acting row, `.62` for name chips).

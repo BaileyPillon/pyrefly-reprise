@@ -30,6 +30,7 @@ import type { BattleRng } from '../common/streams.ts';
 import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
+import type { Ffx2AutoLayer } from './adapt/auto-layer.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
@@ -112,10 +113,17 @@ export interface Ffx2Unit extends FFX2Combatant {
   gilPilfered?: boolean;
   /** `EnemyDef.autoStatuses`, kept so a Dispel can leave them alone (`resolve.ts`). */
   autoStatuses?: StatusId[];
+  /** A girl's automatic-status layer: the auto-ability rows she holds, the kept and SOS sets and the effective layer (`adapt/auto-layer.ts`, `auto-layer.ts`; re-parity X2-D). Absent when she holds no row. */
+  autoLayer?: Ffx2AutoLayer;
   /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */
   bribeThreshold?: number;
+  /**
+   * The three auto-ability words (`Chr+0x650`, `+0x652`, `+0x654`) of a girl: her listed auto-abilities and the ones her garment grid's tags stand for
+   * (`adapt/menu.ts#autoWordsOf`). The MP cost reads them (Half MP Cost, One MP Cost, Magic Booster; re-parity RC7 lane X2-B). Absent: all zero.
+   */
+  autoWords?: readonly [number, number, number];
 }
 
 /** Ability lookup. Data files register the real table; `abilities.ts` is the fallback. */
@@ -154,6 +162,8 @@ export interface GateBonus {
   waitDownPercent?: number;
   /** Raises this girl's damage cap to 99 999 for the battle (The End, G+R). */
   breaksDamageLimit?: boolean;
+  /** The auto-ability tags this effect carries (`Half MP Cost`, `One MP Cost`, `Magic Booster` are the ones the menu reads: re-parity RC7 lane X2-B). */
+  autoTags?: string[];
   /** Human-readable label for the HUD. */
   label?: string;
   /**

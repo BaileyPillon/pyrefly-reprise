@@ -368,18 +368,30 @@ describe('the range director, driven by the real engine', () => {
 
 describe('FFX only [AGENTS.md rule 14]', () => {
   const dir = fileURLToPath(new URL('../../../src/scenes/', import.meta.url));
-  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship'));
+  /** The hidden Fayth chapter's scene (2026-10-10, FFX only) builds this same deck over Chapter VIII's plate with a camera director on it, so it is the second consumer of the deck factory besides Sin's `evrae-airship-sin.ts`. */
+  const FAYTH_DECK = 'exp-fayth-deck.ts';
+  /** Its dev-server skins (phase 3: FFX's staging and Bailey's own models) take the deck's range director and stage it with FFX's numbers, so they read the director too; FFX only, reached only from the deck above. */
+  const FAYTH_SKIN = 'exp-fayth-skin.ts';
+  /** Its camera (phase 4b: FFX's own battle camera on a dev server) reads the same director's current range and shift to play Pull back and Move in; FFX only, reached only from the deck above. */
+  const FAYTH_CAMERA = 'exp-fayth-camera.ts';
+  /** The website's version (phase 6: the painted skin with the table camera) and the world both cameras read use the same director's range, shift and actors; FFX only, reached only from the deck above. */
+  const FAYTH_TABLE = 'exp-fayth-table.ts';
+  const FAYTH_WORLD = 'exp-fayth-world.ts';
+  const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK || f === FAYTH_SKIN || f === FAYTH_CAMERA || f === FAYTH_TABLE || f === FAYTH_WORLD);
 
   it('the scene files import nothing from FFX-2', () => {
     expect(mine.length).toBeGreaterThanOrEqual(7);
+    expect(mine).toContain(FAYTH_DECK);
+    expect(mine).toContain(FAYTH_SKIN);
+    expect(mine).toContain(FAYTH_CAMERA);
     for (const f of mine) {
       const src = readFileSync(`${dir}${f}`, 'utf8');
       expect(src, f).not.toMatch(/battle\/ffx2|data\/ffx2|ui\/ffx2/);
     }
   });
 
-  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception)', () => {
-    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts')) {
+  it('no other scene imports them (the registry, index.ts, is the integrator’s one exception, and the Fayth chapter’s deck, its skins, its cameras and the world they read the others)', () => {
+    for (const f of readdirSync(dir).filter((x) => x.endsWith('.ts') && !x.startsWith('evrae-airship') && x !== 'index.ts' && x !== FAYTH_DECK && x !== FAYTH_SKIN && x !== FAYTH_CAMERA && x !== FAYTH_TABLE && x !== FAYTH_WORLD)) {
       expect(readFileSync(`${dir}${f}`, 'utf8'), f).not.toMatch(/evrae-airship/);
     }
   });

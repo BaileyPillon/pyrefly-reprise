@@ -231,7 +231,7 @@ afterEach(() => {
 // ===================================================================== tabs
 
 describe('the tab strip', () => {
-  it('puts the three on the field first, then the five fixed tabs', () => {
+  it('puts the three on the field first, then the six fixed tabs (ACCESSIBILITY right after OPTIONS, PR-0032)', () => {
     const h = mount('seymour-flux');
     const state = h.engine.state();
     expect(tabIds(h)).toEqual([
@@ -239,6 +239,7 @@ describe('the tab strip', () => {
       'chapter',
       'guide',
       'options',
+      'accessibility',
       'controls',
       'music',
     ]);
@@ -565,16 +566,13 @@ describe('every function of the old pause screen is still reachable', () => {
     try {
       const h = mount('ffx2-bahamut');
       h.screen.trigger('pause:tab:options');
-      // D-285 (A2): TEXT SIZE, REDUCE MOTION and LOW EFFECTS sit under TEXT SPEED; since D-317 one EYE CANDY row
-      // follows them where eye-candy D's three look rows were (pause-fx-looks-rows.test.ts).
-      expect(rowIds(h).slice(0, 11)).toEqual([
+      // D-285 (A2) put TEXT SIZE, REDUCE MOTION and LOW EFFECTS under TEXT SPEED; the ACCESSIBILITY tab took them (PR-0032, OPT-B).
+      // Since D-317 one EYE CANDY row follows TEXT SPEED where eye-candy D's three look rows were (pause-fx-looks-rows.test.ts).
+      expect(rowIds(h).slice(0, 8)).toEqual([
         'masterVolume',
         'musicVolume',
         'sfxVolume',
         'textSpeed',
-        'textSize',
-        'reduceMotion',
-        'lowEffects',
         'eyeCandy',
         'ffx2Atb',
         'ffx2AtbSpeed',
@@ -582,11 +580,11 @@ describe('every function of the old pause screen is still reachable', () => {
       ]);
       calls.length = 0;
       h.screen.handleInput(snapshot(['down'])); // tabs -> body, row 1
-      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: reduceMotion
-      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('reduceMotion');
+      for (let i = 0; i < 5; i++) h.screen.handleInput(snapshot(['down'])); // rows 2..6: ffx2Atb
+      expect(calls.at(-1)?.row, 'the 6th row, clipped by the five-row rule').toBe('ffx2Atb');
       expect(calls.at(-1)?.opts).toMatchObject({ block: 'nearest', behavior: 'smooth' });
-      h.screen.handleInput(snapshot(['down'])); // row 7: lowEffects
-      expect(calls.at(-1)?.row).toBe('lowEffects');
+      h.screen.handleInput(snapshot(['down'])); // row 7: ffx2AtbSpeed
+      expect(calls.at(-1)?.row).toBe('ffx2AtbSpeed');
     } finally {
       Element.prototype.scrollIntoView = original;
     }

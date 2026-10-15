@@ -1,0 +1,1022 @@
+{
+ "what": "Rikku's FFX-2 dressphere paintings brought down to Yuna's colour level, installed in the hard-link art mirror D:/pyrefly-art-r47 (worktree D:/pyrefly-r47, branch r47-rc): every pose PNG at 1x, @2x, @3x and @4x of the eight dresspheres the dial changes. Hue, alpha, outlines, dark shading, whites and every pixel's place are untouched; the sidecars did not change.",
+ "words": "Bailey, 2026-10-14, verbatim: \"go with A, show me the before and after\" (option A for Rikku's oversaturated dressphere paintings), and then, delegating the pick between the colour-corrected sheets: \"i will go with your recommendations as it comes out please.\"",
+ "pick": "the driver's pick: AT TARGET per dressphere (table.md of the colour round, section 2), with one change: the yellow hue band, her hair and the yellow fills, is held at the limiter alone so the hair stays golden",
+ "gameCase": "FFX-2 only (Rikku's dressphere paintings). Not touched: characters/rikku (FFX), characters/exp-leblanc-rikku-* (the experimental chapter's own copies), rikku-dark-knight and rikku-warrior (already below Yuna's colour level).",
+ "method": {
+  "mirror": "D:/pyrefly-art-r47 is a hard-link mirror of D:/pyrefly-art-r44 (5,316 files, 12,435,796,080 bytes, built with tools of the r44-art lane: mirror-links.mjs). Each corrected file was written beside the link (<name>.png.r47-tmp) and renamed over it (a new inode in the new mirror only); the 4,873 other files are the same inode as r44's (which is the release tree's, except the 20 files the r44-art lane replaced).",
+  "function": "docs/handoff/r47-rikku-colour/rikku_final.py (+ rikku_colour.py, rikku_colour2.py); the 75 files of Lady Luck and the Songstress it writes are byte-identical to the installed ones",
+  "png": "PIL, RGBA 8 bit, compress_level 6, the pHYs chunk of the 34 @3x files kept; each written file re-read and compared with the result before the rename",
+  "installer": "D:/Tools/pyrefly-scratch/2026-10-14/rikku-install/apply_batch.py (3 workers, 483 s); verified by verify_mirrors.py and verify_pixels.py",
+  "backup": "D:/Tools/pyrefly-art-backup/replaced/2026-10-14-rikku-colour (443 old PNGs, MANIFEST.json, README.md; every copy re-hashed)",
+  "privateRepo": "D:/Tools/pyrefly-art-repo: archive 74c3b2f (122 old 1x masters), current 37a598c (122 new 1x masters), README 6e00776; pushed (PRIVATE)"
+ },
+ "dial": {
+  "alchemist": {
+   "atTarget": 0.74,
+   "less": 0.848,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "berserker": {
+   "atTarget": 0.895,
+   "less": 1.0,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "black-mage": {
+   "atTarget": 1.0,
+   "less": 1.0,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "dark-knight": "unchanged: already below Yuna on both means",
+  "gunner": {
+   "atTarget": 0.6,
+   "less": 0.719,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "lady-luck": {
+   "atTarget": 0.6,
+   "less": 0.751,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "songstress": {
+   "atTarget": 0.745,
+   "less": 0.857,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "thief": {
+   "atTarget": 0.897,
+   "less": 1.0,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  },
+  "warrior": "unchanged: already below Yuna on both means",
+  "white-mage": {
+   "atTarget": 0.6,
+   "less": 0.722,
+   "capOnYellowBand": "the limiter alone (s 1.0, no glare pull)"
+  }
+ },
+ "band": {
+  "ye_h0": 68.0,
+  "ye_h1": 80.0,
+  "ye_h2": 120.0,
+  "ye_h3": 130.0,
+  "note": "OKLCH hue in degrees: the cap weight rises 68 to 80, is full to 120, falls 120 to 130"
+ },
+ "files_changed": {
+  "png": 443,
+  "perDressphere": {
+   "alchemist": 64,
+   "berserker": 48,
+   "black-mage": 64,
+   "gunner": 68,
+   "lady-luck": 15,
+   "songstress": 60,
+   "thief": 64,
+   "white-mage": 60
+  },
+  "notRewritten": [
+   "dark-knight",
+   "warrior"
+  ]
+ },
+ "numbers_idle_1x": {
+  "alchemist": {
+   "before": {
+    "meanC": 0.14284008130634476,
+    "meanS": 0.7462351778109789,
+    "p90C": 0.21423945059305272,
+    "meanL": 0.6598106945413261
+   },
+   "after": {
+    "meanC": 0.10668531857523288,
+    "meanS": 0.5631876544308319,
+    "p90C": 0.16149376848024508,
+    "meanL": 0.649560282778952
+   },
+   "yuna": {
+    "meanC": 0.09657841493866443,
+    "meanS": 0.5443730815936264,
+    "p90C": 0.21765650686502486,
+    "meanL": 0.6056594907349555
+   },
+   "yunaPainting": "thief",
+   "eyeChromaKept": 0.823,
+   "yellowChromaKept": 0.953,
+   "whites": {
+    "white_px": 3425,
+    "white_mean_before": 252.12,
+    "white_mean_after": 252.14,
+    "near_grey_max_dL": 0.0016
+   }
+  },
+  "berserker": {
+   "before": {
+    "meanC": 0.12881150658428772,
+    "meanS": 0.7959537613529737,
+    "p90C": 0.20613025356033843,
+    "meanL": 0.566063563920119
+   },
+   "after": {
+    "meanC": 0.10822161528708603,
+    "meanS": 0.666512656864699,
+    "p90C": 0.17253249728264033,
+    "meanL": 0.5607995081914526
+   },
+   "yuna": {
+    "meanC": 0.11015062291204884,
+    "meanS": 0.638912147128146,
+    "p90C": 0.19410432895540902,
+    "meanL": 0.5873165386386126
+   },
+   "yunaPainting": "warrior",
+   "eyeChromaKept": 0.822,
+   "yellowChromaKept": 0.945,
+   "whites": {
+    "white_px": 4823,
+    "white_mean_before": 252.09,
+    "white_mean_after": 252.09,
+    "near_grey_max_dL": 0.0016
+   }
+  },
+  "black-mage": {
+   "before": {
+    "meanC": 0.11573403450926983,
+    "meanS": 0.6777572946081954,
+    "p90C": 0.2020735678193247,
+    "meanL": 0.5636205035225743
+   },
+   "after": {
+    "meanC": 0.10707288276439363,
+    "meanS": 0.6155962183966743,
+    "p90C": 0.18205944485616835,
+    "meanL": 0.5650332434810003
+   },
+   "yuna": {
+    "meanC": 0.10912689434816097,
+    "meanS": 0.6061334279304069,
+    "p90C": 0.18443602107339505,
+    "meanL": 0.6057155753783264
+   },
+   "yunaPainting": "black-mage",
+   "eyeChromaKept": 0.951,
+   "yellowChromaKept": 0.945,
+   "whites": {
+    "white_px": 5572,
+    "white_mean_before": 251.54,
+    "white_mean_after": 251.54,
+    "near_grey_max_dL": 0.0
+   }
+  },
+  "gunner": {
+   "before": {
+    "meanC": 0.12307394473633611,
+    "meanS": 0.6812130114492233,
+    "p90C": 0.229979109430124,
+    "meanL": 0.651587931881025
+   },
+   "after": {
+    "meanC": 0.08532296037626415,
+    "meanS": 0.49386949942792424,
+    "p90C": 0.13470630282800586,
+    "meanL": 0.6420759949143073
+   },
+   "yuna": {
+    "meanC": 0.06796489697795374,
+    "meanS": 0.437618338307618,
+    "p90C": 0.12319884951337647,
+    "meanL": 0.6144477206521481
+   },
+   "yunaPainting": "gunner",
+   "eyeChromaKept": 0.713,
+   "yellowChromaKept": 0.951,
+   "whites": {
+    "white_px": 10489,
+    "white_mean_before": 252.52,
+    "white_mean_after": 252.55,
+    "near_grey_max_dL": 0.0018
+   }
+  },
+  "lady-luck": {
+   "before": {
+    "meanC": 0.12362829239212432,
+    "meanS": 0.7080935087916628,
+    "p90C": 0.20249943388981664,
+    "meanL": 0.6501694525545638
+   },
+   "after": {
+    "meanC": 0.09934480217095738,
+    "meanS": 0.5585531613507356,
+    "p90C": 0.18187305422968408,
+    "meanL": 0.6391444398220069
+   },
+   "yuna": {
+    "meanC": 0.08594960207134672,
+    "meanS": 0.43901231873858104,
+    "p90C": 0.16523482927541883,
+    "meanL": 0.6314886215794155
+   },
+   "yunaPainting": "lady-luck",
+   "eyeChromaKept": 0.784,
+   "yellowChromaKept": 0.949,
+   "whites": {
+    "white_px": 5569,
+    "white_mean_before": 253.2,
+    "white_mean_after": 253.21,
+    "near_grey_max_dL": 0.0015
+   }
+  },
+  "songstress": {
+   "before": {
+    "meanC": 0.15037871153739155,
+    "meanS": 0.7427618119996244,
+    "p90C": 0.2310262241503212,
+    "meanL": 0.6273195901686073
+   },
+   "after": {
+    "meanC": 0.11204073341511105,
+    "meanS": 0.574480535146134,
+    "p90C": 0.15524937134928316,
+    "meanL": 0.6171737311983354
+   },
+   "yuna": {
+    "meanC": 0.10730288923621921,
+    "meanS": 0.579027997550261,
+    "p90C": 0.1838601290826889,
+    "meanL": 0.6297533529796517
+   },
+   "yunaPainting": "songstress",
+   "eyeChromaKept": 0.859,
+   "yellowChromaKept": 0.962,
+   "whites": {
+    "white_px": 5881,
+    "white_mean_before": 252.38,
+    "white_mean_after": 252.38,
+    "near_grey_max_dL": 0.0016
+   }
+  },
+  "thief": {
+   "before": {
+    "meanC": 0.11718762066239306,
+    "meanS": 0.6567814950842878,
+    "p90C": 0.18172489416521304,
+    "meanL": 0.6408180420038503
+   },
+   "after": {
+    "meanC": 0.10368296629018757,
+    "meanS": 0.5843795293869966,
+    "p90C": 0.15216756236817947,
+    "meanL": 0.6323997231007489
+   },
+   "yuna": {
+    "meanC": 0.09657841493866443,
+    "meanS": 0.5443730815936264,
+    "p90C": 0.21765650686502486,
+    "meanL": 0.6056594907349555
+   },
+   "yunaPainting": "thief",
+   "eyeChromaKept": null,
+   "yellowChromaKept": 0.966,
+   "whites": {
+    "white_px": 7755,
+    "white_mean_before": 251.06,
+    "white_mean_after": 251.06,
+    "near_grey_max_dL": 0.0015
+   }
+  },
+  "white-mage": {
+   "before": {
+    "meanC": 0.1142240630526034,
+    "meanS": 0.6143607206021109,
+    "p90C": 0.2128263895803324,
+    "meanL": 0.6863951914317947
+   },
+   "after": {
+    "meanC": 0.079358307378697,
+    "meanS": 0.45206326480618253,
+    "p90C": 0.12302369668497788,
+    "meanL": 0.6748931840786743
+   },
+   "yuna": {
+    "meanC": 0.06130426314836191,
+    "meanS": 0.28602569288949903,
+    "p90C": 0.17422777595534578,
+    "meanL": 0.7374176774641383
+   },
+   "yunaPainting": "white-mage",
+   "eyeChromaKept": 0.81,
+   "yellowChromaKept": 0.964,
+   "whites": {
+    "white_px": 30084,
+    "white_mean_before": 252.44,
+    "white_mean_after": 252.44,
+    "near_grey_max_dL": 0.0016
+   }
+  }
+ },
+ "songstress_skin_vs_ffx": {
+  "ffx_chroma_p5_p25_p50_p75_p95": [
+   0.09973867986507115,
+   0.10857924774333022,
+   0.11406148846999115,
+   0.12000418500041345,
+   0.12876451183706605
+  ],
+  "before_body": {
+   "px": 29544,
+   "p5": 0.0789,
+   "p50": 0.1746,
+   "p95": 0.1908,
+   "inside_ffx_pct": 1.2,
+   "median_hue": 37.2
+  },
+  "before_face": {
+   "px": 6415,
+   "p5": 0.0705,
+   "p50": 0.0826,
+   "p95": 0.1776,
+   "inside_ffx_pct": 10.2,
+   "median_hue": 62.7
+  },
+  "after_body": {
+   "px": 29544,
+   "p5": 0.0791,
+   "p50": 0.1166,
+   "p95": 0.1262,
+   "inside_ffx_pct": 83.2,
+   "median_hue": 37.2
+  },
+  "after_face": {
+   "px": 6415,
+   "p5": 0.0709,
+   "p50": 0.0828,
+   "p95": 0.1336,
+   "inside_ffx_pct": 14.6,
+   "median_hue": 62.6
+  }
+ },
+ "integrity": {
+  "files": 443,
+  "ok": 443,
+  "alpha_identical": 443,
+  "rgb_under_alpha0_identical": 443,
+  "dark_px_untouched": 443,
+  "roundtrip_exact": 443,
+  "phys_kept": 443,
+  "new_inode": 443,
+  "oog_px_before_clip": 0,
+  "changed_px": 530785446,
+  "opaque_px": 736147396,
+  "px": 2098691792,
+  "bytes_old": 1212527689,
+  "bytes_new": 1138743715,
+  "min_L_of_changed": 0.3,
+  "hue_shift_deg_mean_of_1x_files": 0.197,
+  "hue_shift_deg_p99_max_of_1x_files": 1.037,
+  "verifiedBy": "verify_pixels.py (decoded old and new): 443 of 443 same size and mode, alpha identical, colour under alpha 0 identical, nothing changed under OKLab L 0.30, sidecars still the shared inode"
+ },
+ "mirrors": {
+  "r44_files": 5316,
+  "r47_files": 5316,
+  "r47_differing": 443,
+  "r47_differing_equals_targets": true,
+  "nontarget_files": 4873,
+  "nontarget_same_sha": 4873,
+  "nontarget_same_inode_as_r44": 4873,
+  "targets_new_inode": 443,
+  "targets_nlink_1": 443,
+  "bytes_old_targets": 1212527689,
+  "bytes_new_targets": 1138743715,
+  "release_tree_files": 5316,
+  "release_tree_vs_inventory_changed_count": 0
+ },
+ "exp_leblanc_rikku_not_changed": {
+  "alchemist": {
+   "experimentalChapter": {
+    "meanC": 0.14243163502242054,
+    "meanS": 0.7429084328639608,
+    "p90C": 0.2133293518422271,
+    "meanL": 0.6600146387671645
+   },
+   "ffx2Before": {
+    "meanC": 0.14284008130634476,
+    "meanS": 0.7462351778109789,
+    "p90C": 0.21423945059305272,
+    "meanL": 0.6598106945413261
+   },
+   "ffx2After": {
+    "meanC": 0.10668531857523288,
+    "meanS": 0.5631876544308319,
+    "p90C": 0.16149376848024508,
+    "meanL": 0.649560282778952
+   },
+   "yuna": {
+    "meanC": 0.09657841493866443,
+    "meanS": 0.5443730815936264,
+    "p90C": 0.21765650686502486,
+    "meanL": 0.6056594907349555
+   }
+  },
+  "black-mage": {
+   "experimentalChapter": {
+    "meanC": 0.11511324850521751,
+    "meanS": 0.6688363037217109,
+    "p90C": 0.20184745135153398,
+    "meanL": 0.5655007993862017
+   },
+   "ffx2Before": {
+    "meanC": 0.11573403450926983,
+    "meanS": 0.6777572946081954,
+    "p90C": 0.2020735678193247,
+    "meanL": 0.5636205035225743
+   },
+   "ffx2After": {
+    "meanC": 0.10707288276439363,
+    "meanS": 0.6155962183966743,
+    "p90C": 0.18205944485616835,
+    "meanL": 0.5650332434810003
+   },
+   "yuna": {
+    "meanC": 0.10912689434816097,
+    "meanS": 0.6061334279304069,
+    "p90C": 0.18443602107339505,
+    "meanL": 0.6057155753783264
+   }
+  },
+  "gunner": {
+   "experimentalChapter": {
+    "meanC": 0.12260418892532522,
+    "meanS": 0.6755553154414528,
+    "p90C": 0.2295914563513647,
+    "meanL": 0.6527231371034586
+   },
+   "ffx2Before": {
+    "meanC": 0.12307394473633611,
+    "meanS": 0.6812130114492233,
+    "p90C": 0.229979109430124,
+    "meanL": 0.651587931881025
+   },
+   "ffx2After": {
+    "meanC": 0.08532296037626415,
+    "meanS": 0.49386949942792424,
+    "p90C": 0.13470630282800586,
+    "meanL": 0.6420759949143073
+   },
+   "yuna": {
+    "meanC": 0.06796489697795374,
+    "meanS": 0.437618338307618,
+    "p90C": 0.12319884951337647,
+    "meanL": 0.6144477206521481
+   }
+  },
+  "songstress": {
+   "experimentalChapter": {
+    "meanC": 0.15005243324587003,
+    "meanS": 0.739412712845173,
+    "p90C": 0.23075798829022584,
+    "meanL": 0.6284535640366337
+   },
+   "ffx2Before": {
+    "meanC": 0.15037871153739155,
+    "meanS": 0.7427618119996244,
+    "p90C": 0.2310262241503212,
+    "meanL": 0.6273195901686073
+   },
+   "ffx2After": {
+    "meanC": 0.11204073341511105,
+    "meanS": 0.574480535146134,
+    "p90C": 0.15524937134928316,
+    "meanL": 0.6171737311983354
+   },
+   "yuna": {
+    "meanC": 0.10730288923621921,
+    "meanS": 0.579027997550261,
+    "p90C": 0.1838601290826889,
+    "meanL": 0.6297533529796517
+   }
+  },
+  "thief": {
+   "experimentalChapter": {
+    "meanC": 0.11444150675714382,
+    "meanS": 0.5766547018414776,
+    "p90C": 0.1843246325098414,
+    "meanL": 0.6927243310446751
+   },
+   "ffx2Before": {
+    "meanC": 0.11718762066239306,
+    "meanS": 0.6567814950842878,
+    "p90C": 0.18172489416521304,
+    "meanL": 0.6408180420038503
+   },
+   "ffx2After": {
+    "meanC": 0.10368296629018757,
+    "meanS": 0.5843795293869966,
+    "p90C": 0.15216756236817947,
+    "meanL": 0.6323997231007489
+   },
+   "yuna": {
+    "meanC": 0.09657841493866443,
+    "meanS": 0.5443730815936264,
+    "p90C": 0.21765650686502486,
+    "meanL": 0.6056594907349555
+   }
+  },
+  "warrior": {
+   "experimentalChapter": {
+    "meanC": 0.07873948272822714,
+    "meanS": 0.556755016946082,
+    "p90C": 0.20959689115613067,
+    "meanL": 0.5080958150999165
+   },
+   "ffx2Before": {
+    "meanC": 0.07883319100920264,
+    "meanS": 0.5572638699142451,
+    "p90C": 0.21009126624864277,
+    "meanL": 0.5069873012687784
+   },
+   "ffx2After": {
+    "meanC": 0.07883319100920264,
+    "meanS": 0.5572638699142451,
+    "p90C": 0.21009126624864277,
+    "meanL": 0.5069873012687784
+   },
+   "yuna": {
+    "meanC": 0.11015062291204884,
+    "meanS": 0.638912147128146,
+    "p90C": 0.19410432895540902,
+    "meanL": 0.5873165386386126
+   }
+  },
+  "white-mage": {
+   "experimentalChapter": {
+    "meanC": 0.11387655926227488,
+    "meanS": 0.6090782757362555,
+    "p90C": 0.2120259652904761,
+    "meanL": 0.6876641386964917
+   },
+   "ffx2Before": {
+    "meanC": 0.1142240630526034,
+    "meanS": 0.6143607206021109,
+    "p90C": 0.2128263895803324,
+    "meanL": 0.6863951914317947
+   },
+   "ffx2After": {
+    "meanC": 0.079358307378697,
+    "meanS": 0.45206326480618253,
+    "p90C": 0.12302369668497788,
+    "meanL": 0.6748931840786743
+   },
+   "yuna": {
+    "meanC": 0.06130426314836191,
+    "meanS": 0.28602569288949903,
+    "p90C": 0.17422777595534578,
+    "meanL": 0.7374176774641383
+   }
+  }
+ },
+ "filesNote": "path: [old sha256, new sha256, old bytes, new bytes, pixels changed]",
+ "files": {
+  "characters/rikku-alchemist/attack.png": ["c1b00b676cdbaa0a2da54e4c9c55b455d596ed6fe17b6f8589621d857b8d0f65", "e0493ebc62eaf25d383a962588f2c9e5719db5470a6d39996d07237a155d909e", 556469, 544159, 160262],
+  "characters/rikku-alchemist/attack@2x.png": ["1c6678c5cfc9b3856e0301909757945370cd9dae01f7825f364f9fc345d25d77", "46fa8332dd2cd4a28a8c4d694d32dc4230dc8c14dfa5b6d99ae8369dfd3ae5d9", 1645359, 1605502, 637544],
+  "characters/rikku-alchemist/attack@3x.png": ["cddfc3b0d3937a806882131f9758b9e654fce3256885c341d816cee7c9ecd693", "239e239ff353df162722e911cbf049f42b94a671bd9a209e9006c03fd9d1fa6d", 3569186, 3281422, 1421178],
+  "characters/rikku-alchemist/attack@4x.png": ["d9a5bf50d8543934763e5b5b202b4641cde9dddb0699daa32143fce27ec89956", "e2bda9de3580240e457f48c4a56cc91588674d0eedbe097af148dce7577c3d2d", 5078155, 4576432, 2518267],
+  "characters/rikku-alchemist/cast.png": ["64e6c3fd607a7aeedc4358253c899c402d885df9fdebd5452645e7dafd1d5456", "0cfa09239c82cc4c6009de16667849ebc16eb97eebf331d706a07a924360eda9", 573080, 561962, 167871],
+  "characters/rikku-alchemist/cast@2x.png": ["842f228304e1a08ff62652303b5c1720f8c2e8f28fafa76e3af7b31c55948905", "5ba7fd5993dbc7147118eb519638e561c54b87839fbdd9f7779543bc6de2ba00", 1727104, 1670840, 662434],
+  "characters/rikku-alchemist/cast@3x.png": ["a0253bfe739037ffc351ea1cd4150d9858817120c082d7038d829afb00c7a494", "84bd84da148ac5c76b7dcb887ae20760fcc87ad5552227122732b16cb88bc59e", 3742518, 3406948, 1479637],
+  "characters/rikku-alchemist/cast@4x.png": ["4a4e0a6b02b2d68da8ef06d828e6678d8a6cc8b49431ceb872a9ef7cd8039bf3", "ab7388ab9d0c346a6219537d5f81721e89533f701e4b9dd55e5acfe327f87941", 5456133, 4896724, 2626430],
+  "characters/rikku-alchemist/critical.png": ["1edba481b52e1bb3a786de9ecedd016d3f12ff4c1b327179d9367c7d306d4b3e", "94077dca80cba00a803cae2d382311cab1f42bcbbde0ca07d930829e18d757dc", 684485, 702871, 312290],
+  "characters/rikku-alchemist/critical@2x.png": ["4aa7a743f738ad4088fbf0c01d912a8d82bebe271bf929a086fe2e1d4d1b1db6", "c2f812d9f27583c6d8859dc981749f3fafc20c90360f78d572ba79e44db433a6", 2194442, 2330842, 1265160],
+  "characters/rikku-alchemist/critical@3x.png": ["37cdbc0dd4257d1432befbfb602cb7b94f57195bb4a7586253715aa255f6973b", "42b7f39d4dd4f44af94ebc51ccd354d55ffc21ceefa72c53ac8a44c5e82f435b", 6203969, 4565000, 2829446],
+  "characters/rikku-alchemist/critical@4x.png": ["2d764522df2bf8ef56cfc88a3aa445478f940cf247a1255e8e6fcf57e80e34c0", "3f226f179c0d0712e9828c0f2065d445f327152e9e6e1a6b3ffa270951daad1f", 6477841, 6898286, 5004585],
+  "characters/rikku-alchemist/defend.png": ["366cec955e65f1bbd6093723d97622a6c15373264eac5ea43104cdc223439a63", "36a8d2069d69040c1acdf3ec5767bc62dc7b6adf3e33d5c4d44fda0934a7414b", 389992, 407736, 156578],
+  "characters/rikku-alchemist/defend@2x.png": ["204fdec51d1faf623b718da118f3275ce450127574c39582164ea7ed55f2f62e", "9a21853a43b0c5c08d5466e3a08ee6aff229f62d212616ca8912e8f48f341af7", 1259191, 1352783, 623895],
+  "characters/rikku-alchemist/defend@3x.png": ["a0e20707dd48fcfb23763fbb729ca157f9b1a9152ce1cd85ee04e28de85b659c", "18986cbb6566a31e0089c6d6b8b61fbb0da4ebdc06b22cdc71b92f4265af427b", 3363340, 2638551, 1393052],
+  "characters/rikku-alchemist/defend@4x.png": ["1773a73135d90d8e402a3ac72a1f6bece6e122a3b5cb09fa0ab38f9caa5b933d", "e9077618b2eedeae418958bc5db9776a5a09f2bdbf4d9afe7cda34b00d14e631", 3669609, 3948940, 2460626],
+  "characters/rikku-alchemist/follow.png": ["d4174727fdffad8206069c0f3e56dcabaeddb2aec92715e9b87f9406f5518a34", "9947ca622cb7c66558060d8bcb5f3e160bcc791f3b7922f2128e7f178b62573d", 664624, 691406, 268771],
+  "characters/rikku-alchemist/follow@2x.png": ["11af4bfc24e2a8d87b7b7be1ed06aaff98735d9957f51effe602407bdba800a4", "5732a15b0d806c7c098753e525cf4531e3c9f37a38630a535af42da58a65f659", 2224110, 2383658, 1097325],
+  "characters/rikku-alchemist/follow@3x.png": ["3879e9c1364ee8dfb827f5854b79ca419f2fa88ed90b85392d0449469c955228", "d38a47a48e4044b6948648fb5ae8f3d46377bdf2fc9fdbcc7c8fbe160dccf2cc", 6373582, 4677787, 2441915],
+  "characters/rikku-alchemist/follow@4x.png": ["2644a3edde9c6bd40b99a1cc5a5edb39f48aff9577a0d9dd333c60467663e086", "d656813a84706c2c6d6305d4b5748db3880e6f544eeecf355b7b2cac431b8471", 6518694, 7004971, 4295189],
+  "characters/rikku-alchemist/hurt.png": ["7cce23a451cddf6bbb67b56afba0081f7bc27b6b6f0ec4787ed64b4c7eb6944e", "dd870a518d58c993019ef39fc8ff78059479bb35bc19698b2b110b09c012c414", 434944, 420282, 133517],
+  "characters/rikku-alchemist/hurt@2x.png": ["0fd0c710fefd1f1f00b95499b5abb25825a091d37aef7da17ca68e8df731176b", "083ce8e2b2ef2cc69d1d1e7d38e5c75e897aa5815851a8170f53b9cf07423a32", 1307514, 1261233, 527774],
+  "characters/rikku-alchemist/hurt@3x.png": ["3aa0cf17decfd643c577a322adea063f729a5a3b45f0699d09a1bb0a400e6b46", "d4085303a8f1a1b479ba93b4397816ba8a7aa721edbc141048f8452284f98bc6", 2824384, 2568124, 1177365],
+  "characters/rikku-alchemist/hurt@4x.png": ["fb7060b2872b3cc00e9c1881861a42c1e08e1ce2650f4c3ef09b244589faba5a", "64c8d84bc1b3fb3bb6713f83591c8e1f4d51cdf1694a73673faf78c361b0a909", 4035022, 3615913, 2088345],
+  "characters/rikku-alchemist/idle.png": ["c0b29b8bb773d8c6459badfb8e85d47ca8ebbdbc62a5e10bb35d8959f4cda202", "86d6ef169cc435dadd2f964bbc0929a905ebaea8249970642ace26dc0158b531", 678110, 649291, 233669],
+  "characters/rikku-alchemist/idle@2x.png": ["98fcdf7f8ef82d08fa72d698e2c5dce3ded2238ef31519b61ec5a8195907a40e", "e61c6a28257abe0349f422fefccc535f11a2dbe0401195dcd7b24bb8a37340ed", 3587503, 3516934, 910282],
+  "characters/rikku-alchemist/idle@3x.png": ["0f60985d60cc1b3b95a7041ee7481a324c58d5ca3643f2d03286cdb338196c0b", "6529814461192e5281af62a86c5084b802c6055e692ff51992a2107ccf9766d8", 4284014, 3849246, 2001032],
+  "characters/rikku-alchemist/idle@4x.png": ["1af6b1c7c3a611f8ad14f7c151c1af9f12e0ecff42f08bc4f7d2a6a8d70ef0d4", "930d7780438583b7c1698405ecbde0fe931889630bbb30856f60f9278cd4557b", 6243604, 5522502, 3551440],
+  "characters/rikku-alchemist/item.png": ["2b64256ad7b6e233aa0a65614be4657869b8242037eacafc32a747b5d48970ad", "bb109942baad7f4fc1d5d225f3ebcc04a662d73a273a1d818c3b678a72c2ce07", 439474, 430565, 128635],
+  "characters/rikku-alchemist/item@2x.png": ["2836145e9c108364671a7a68a677e62d5e5d739e58ea047a451a7cd9bd3adbbd", "76d0a403e852a96d12141e1c228da630a39bf8e53b499d4ff6cf60873e068f29", 1329121, 1290541, 509362],
+  "characters/rikku-alchemist/item@3x.png": ["1f98d5169b25f2c0e1ade1276652f74b2a50c4066b1586e44614a0f99f308a8a", "34b4e98aab22eb44f32ccac67b1e89e2a85648ed99384ae7651f349b2fd47e78", 2864026, 2612845, 1136150],
+  "characters/rikku-alchemist/item@4x.png": ["dd2cbb258ef7f89c8a0ca5f49e008d90129a961c55fecb3bd0a4c0f41bd46b4c", "f14ec12786d71ffa635a223180ae74032a45e8635406a3e159bc7b036e921469", 4071879, 3668188, 2015998],
+  "characters/rikku-alchemist/ko.png": ["26bfd58eb642ef636aea57d67f39f67d43ba80d2fa88280aa0288458c8e52787", "a6ab31bfdd4100b8199473cd6bf1efe7dbee97fd26d421ce706f86afde49f4fd", 481558, 484483, 189663],
+  "characters/rikku-alchemist/ko@2x.png": ["93c94205f72a38e228d1f4b1ecde3859f4a33c8dcc8d48394ca17e182949cd25", "0afd8e09087e2bd92df4fdab450539a7c1ea3c64ff25f9d352305cf7cd827b92", 1548206, 1628104, 762138],
+  "characters/rikku-alchemist/ko@3x.png": ["5decca8427d388a9b7e3a27ef5e55409610da9309b245c36cdfe0bac745f52cb", "9631512c88b3f60c9f3477b362c385884d4de5606cbdf637a8b6b46393a2dd6c", 4247513, 3164945, 1696212],
+  "characters/rikku-alchemist/ko@4x.png": ["a4b57463b356f6448dcf59c995fd8737a105b932896c3c60295a7ff3945bf3bc", "ba5390ce9cade305e7bb69eb72dc737393c1157e16b3e788869836900b5087b2", 4461827, 4697549, 2981967],
+  "characters/rikku-alchemist/ready.png": ["a800fb1dbca2481b1f19bfb016676102f8a2cb6422212d15a86147e7fa5c0c1b", "20c7b17e2d0af0f51c8f68cd2264cb3290db2de671f94c07c28e57dc2ce0d6fc", 452714, 447106, 116410],
+  "characters/rikku-alchemist/ready@2x.png": ["30a09229e67ba3c7ccf14e81aef99641b9f0049a30f14b98fe764e1937b17257", "f8e8055a377e407bc564f7a74a852d212e2cd1b5359300ec95718f5065fed487", 1334390, 1310577, 461201],
+  "characters/rikku-alchemist/ready@3x.png": ["0de83cd9ef60d04b423ab28bba648277863e2ab233acbbc855600db6988d7004", "b43e4f9dfccd0364295f62f3bac48c2075c4d11d687900e78046fe5de33a91cf", 2867092, 2667947, 1030373],
+  "characters/rikku-alchemist/ready@4x.png": ["ace67595cb0207f53eb4e8178042437de66bbffd8864cbaefed3027f1a27bb58", "032ecd090216086963eaafc2ee0c88f8b41be08d311f0d709d94d0e9c54a8297", 4166642, 3825582, 1829078],
+  "characters/rikku-alchemist/sleep.png": ["a0c1cf0d325aa657d84d304cdfede18136ef48f1fbd40245a4e14ac0cfc38ca6", "1142d772b520ff1b41d7d6bb62e4bd61b097c6cfc41c0b6b09119f8669318ada", 522345, 538106, 259083],
+  "characters/rikku-alchemist/sleep@2x.png": ["0d98d226bfc0508114d4bb2d807de5f5b6ed59d9f2563bd4ab642e4da9a0a2ef", "3317c66cb268260552e89c47f598c0c3b1fa4a3843633018b21c28b6e2891f0d", 1768452, 1882542, 1051550],
+  "characters/rikku-alchemist/sleep@3x.png": ["b99dff369aa31648aa1e6742f67718ced655df197470a1fb895b0459f7b7cb03", "03e2cbd0a1b2528610a335bbb2f50286e9989880f672b86c28326bb4e61f5179", 5045025, 3634887, 2346337],
+  "characters/rikku-alchemist/sleep@4x.png": ["e068b25bd49815ab1b02dacde222d89768ad05ed70badf8d0e96e903a7bb2ff8", "f60e9cc110dd4252ca6241f74bca38210916dca25164d553dc704d13e6f701ac", 5064216, 5391746, 4138787],
+  "characters/rikku-alchemist/twirl-end.png": ["4b85d74f26da1c76ceb1012d79c8275d356c3c2af90a5acce0487ed16153ed90", "efd20da656f89bcf4ed3907cfa8af3b54f3eb99c496f342f74019ddcc1572f82", 520152, 511941, 121788],
+  "characters/rikku-alchemist/twirl-end@2x.png": ["1af790d151cbad48966d03db15338cf6ea7ddea3a5faf1208a240ae3fd5e975c", "2c30f295e793b05d0655cecd3f83c4cc547d9ef13289c7c6ffe0ef98547ab9ba", 1532509, 1513105, 471380],
+  "characters/rikku-alchemist/twirl-end@3x.png": ["36ed8f2ea2f0ca57671e1184904b4a8322dbb19d3e44dded6de9255798a5914b", "170b3056a9c2db5b6508d7cecbfb6af83f4ab0a9bd552e7a6e81bd219d29d3b9", 3281598, 3069512, 1049932],
+  "characters/rikku-alchemist/twirl-end@4x.png": ["2724eae68793964cc49896795ba304d8e5133784f84b1806d010c9d4e75edb59", "f13392d183599652904966b03d8157426f123bdd22a70a665b27a67518d7676b", 4764058, 4425093, 1864507],
+  "characters/rikku-alchemist/twirl-forming.png": ["08a1c8dc7fc3e4afce532217f002e57a9c81f72ed31c79ba5e9dbea4f2bca569", "c302cb4bc8b9d052953e0ff6ac4a79a168bd43f282a133cbc9702c2a908e80a3", 562222, 558056, 132233],
+  "characters/rikku-alchemist/twirl-forming@2x.png": ["a02d0038da735b04994c5a0a70d104a7945bf35c8b2be455ba622ec424aeef0d", "0e5f004fc756f0f986c9ec475b6bb0a1080d406e38b32f834f8a97666d343121", 1628951, 1626106, 520365],
+  "characters/rikku-alchemist/twirl-forming@3x.png": ["1c912593f0f4148abe82e10f8447127576e10a99f9af1fac8c5e38ac65d75ec3", "114c900cd4a5c98d4adf9237028b6dfff6c98d2e4ffd7a27dec3003d9399cc47", 3439185, 3266293, 1158885],
+  "characters/rikku-alchemist/twirl-forming@4x.png": ["dc0f7f5b58092f22adbeb27f53e51988a371136b5c8675cb741c43423d96aa5a", "855db3cd786b4cee1c165ab368a2378f8f5f0f8f1d867b9d1abbaf22d085ae1f", 5017324, 4733615, 2060952],
+  "characters/rikku-alchemist/twirl-going.png": ["4036c84b4cb38900b21934a167bbfd5c6dadcb380ade11c9b21cc2e0ffad4e44", "25acfc3e52ca487684518b8ab187a2100af3e66399d10219af55ee831107d20d", 407321, 397475, 88933],
+  "characters/rikku-alchemist/twirl-going@2x.png": ["a09761702e2e21ebf1737ca4c6fdd9d67fbd2d38e6880254d43b9b1c9cc149bc", "b88a51d018b4be910ecb4ab2f649d0095b3d59b576d5dfe6f74258584c4dfa60", 1175613, 1152100, 348675],
+  "characters/rikku-alchemist/twirl-going@3x.png": ["737b602f9341eceeb7e149523cce1ba7e9d47beeff5f1c5de6064c00ea0faa43", "6ed5941984b2224990a5147021c3d4530f8e68c1d081513d162aeaa0142b10b4", 2475331, 2317308, 775475],
+  "characters/rikku-alchemist/twirl-going@4x.png": ["e6bc783b1dfd03edf6080f9060ada09c1d02f1ca7524c0ed758d473c682f2450", "b002a4836a5eb0389d821203a44b75c0f0923c0a5250c19a3e91b9a215bc675d", 3535808, 3262857, 1376399],
+  "characters/rikku-alchemist/twirl-start.png": ["289b499d74c7204a2e631785b87b37b44093013d375d16f2aae4063e3cc815fc", "a5bcd0c477c788bd04311572539a8852587a306385b7b1734503b99dd0ca3219", 416507, 406004, 104649],
+  "characters/rikku-alchemist/twirl-start@2x.png": ["879d5dc6f991d2545c7078316b12973d50a0520fdce5983cb89bcf2c3a29f19a", "0d8a91ebc7faac13717b09996f8a92c3f630ae47cc713614d7fe3343b21c1500", 1231515, 1204835, 411064],
+  "characters/rikku-alchemist/twirl-start@3x.png": ["4ecfd6adb2867d5ffe0139723e99b5438ba84c1b1b5a8f4fc80c7d237f300d05", "2d6efe4852a955d96dc238891476de1980a9f59f1bf8f8be6c7e4e13e5838689", 2622364, 2443257, 914167],
+  "characters/rikku-alchemist/twirl-start@4x.png": ["1bab63e7cc6cf1bc39b55edb8f886b734d35e4b70ace5ea15c19738bd2a9f8f5", "6e9081999343803d495864c90392f95f4fa7718b67db3cffaf3ebeaa654b45c7", 3731698, 3428108, 1620622],
+  "characters/rikku-alchemist/victory.png": ["cd0ba18d6ff8493dfba4f1e2267cfd6d0b38a6314a1fb844d4e481bcf5ebc039", "910b1be12fef22ce6b1c0a1e77f3f1aad37b43428a8f826696fc13b5999c6165", 352141, 342924, 94103],
+  "characters/rikku-alchemist/victory@2x.png": ["168e41c16f75a9b8da731f7fea147202019e1036ac8ff847af1e4a83fb643026", "2eebea179e49ee704b5ea99796c55f255b3aafcf90438c90aae8f6f12aa0e6d1", 1044877, 1014746, 369532],
+  "characters/rikku-alchemist/victory@3x.png": ["e25ee8352adfcea16544e26aade6b875a42baaa5f3c33b4096ecfb8e0f079687", "0ec7cbb6b4bb7cd8cc486b6e79985f507c1e80592ca69ad9c5a5e18cfe67f6f4", 2235453, 2059931, 826412],
+  "characters/rikku-alchemist/victory@4x.png": ["34b5b598f63dd84a2eb9afb6b1d5dfa76ce2e73da83ac9a1649f1be17424d8d7", "a27d3514d152da53d75e8d681cf72c495e9f044b41d025354916efa4a134e09c", 3255030, 2964356, 1467959],
+  "characters/rikku-berserker/attack.png": ["1b1e431c6161f84c8e2ffc250843cf2a26f4d42c4bba718271489ed66b8ca68e", "f9bf1bffb2a5fff53473c8b9c97ceb7a1dd05c49d54a71f1f4ced05539b0ea06", 580080, 604904, 252220],
+  "characters/rikku-berserker/attack@2x.png": ["5a24b7db37578ff1e2a7eb5d45125123ba92672d8a98ad7736805dc72bafbccf", "a166c8cdb50e10b0d35bdb9010ee3ffe1b1f6ca7678bb70692948b5befc681f5", 1929323, 2080773, 1034112],
+  "characters/rikku-berserker/attack@3x.png": ["ed65f66618a5411ba9a1a745997a4fd3e2b949200ffc8d078cd468f15a20ac97", "17c1d427fa42b21e62a53156fba2794ffd001ced2daa14a51b67f6932ba9f621", 5109216, 4045586, 2307051],
+  "characters/rikku-berserker/attack@4x.png": ["b45009348bd3c28174452a0810a76e0d1742ef124d20bb01664445b71ada6422", "f112ec9d6cb48c1a633cdf26123c40aa58c7dd92fc9a54e51d255ffb353a0254", 5527356, 6018983, 4068553],
+  "characters/rikku-berserker/cast.png": ["b9daa0eeea462b3b28d97ba7dfb09bd8cfb7b1a1e0732dc1b0cc0a24a3dd149f", "71350d52b5557baa5b49163dad04822f8391ddcc0ba001459c7dcddae19cc80f", 548541, 532174, 176343],
+  "characters/rikku-berserker/cast@2x.png": ["159d38a77df284cfca02f002e0f13f2eb277c068fbdc041afce70f8571ae5b57", "104d99518207b837eb1c312663d68c81892e50a30ab2238dbfc675463af4afc8", 1649279, 1587960, 698245],
+  "characters/rikku-berserker/cast@3x.png": ["83df888b3f49336de8a1e7c8a49850b45eaa89d68333a4c6d4fab28a4ab1fc65", "38d9f8e3572596d469b77c35e805458f2da1e89bf4462afef1eb1cd1f3097246", 3632201, 3292010, 1560978],
+  "characters/rikku-berserker/cast@4x.png": ["7546f654b896ab53a60955805444c731474a31a2f0ebd771871233e5785f352e", "0f542a2b5dd609aa5b4e7ec97abd74e7d3568c6eddb5c114cbceff9e1b6ab5b7", 5207459, 4636408, 2769028],
+  "characters/rikku-berserker/critical.png": ["772dfeab59517c6d0aaa6cc733b0588b6018fe3994ec86a3d45877c3313d5660", "2753e4627d5e669cdf7a6869f715a556638c7696f064d2f783ec808dc97aa04d", 699854, 734442, 298091],
+  "characters/rikku-berserker/critical@2x.png": ["7f0c16b63338470cc5a76cb15237d0148dcdeb0fa118e04f1e268ff65de139b1", "ceccfeef807f05652fe1ecfaa61bdcd8e02200965862f809e1a51279e555c86e", 2148459, 2295976, 1209361],
+  "characters/rikku-berserker/critical@3x.png": ["0f77c3f9a51530d6f5ca63bc8f3606590388eb45ca679260837308538ad53067", "017f2a928b766d936bdc5b27221d5fe04f0cd17bcd3fa8d758c9ce20c6ccdff4", 5881045, 4490354, 2701659],
+  "characters/rikku-berserker/critical@4x.png": ["39fbc6984271a8f02239ce0e0ae63dcc452b1b716dfd015c456148c34df11f59", "6e9086d3799a51a5b819f1951115886071a7b2cb001cd087c5bc341696b6ff51", 6196969, 6684622, 4771997],
+  "characters/rikku-berserker/defend.png": ["8aa6c56b99b728ec12f71e9b6ecd0aee20959ddc9f43c3ab17a2484ab10fb035", "1897da2fda01eff35a31e3cb631c40b8dcb9492a29b0de7ff7dad3555434137e", 494814, 505133, 204930],
+  "characters/rikku-berserker/defend@2x.png": ["8b8e8d8010c078b12ba6eee2c3cfb07a9a85086758353875da5e133c1e0425e7", "912d9702d50f47255099a5cccc67d17ae9e8f22d590e69cc7e431e0bedb8ae5b", 1641653, 1735929, 839580],
+  "characters/rikku-berserker/defend@3x.png": ["2740f54a137b42b8dac438d2912a2f0ed4a19e034d90270e397e8bc6609b567e", "bbf1baf7975a89b2955568d8b5223087f5edb23051e3b9de287059d2053daa7f", 4366772, 3361603, 1867582],
+  "characters/rikku-berserker/defend@4x.png": ["9ec584e85805a2220b1d47d552deb175fc27675b118b6de7a8b2e91d72e7c3a8", "f539c799a62038172a3910a04022d94ea9c0f5ed547687e260140f88aa32c7dc", 4638033, 4925941, 3283090],
+  "characters/rikku-berserker/follow.png": ["860376979ce8b05023422de284a598fb379c316345269e15c982d24262239aa8", "a8264240e4cc5d8fa29b1ea5066f0ee2e016d10a0f68ee643940f056ffb41a26", 735098, 722018, 203731],
+  "characters/rikku-berserker/follow@2x.png": ["63f7607ea544d57d5de39fdc75e503a6f54ccb406d229b25e9c68092127dc88d", "5edcdf21db3a1dfcf9564d2d2863440d4ba3d18dec0e7b0e5c8fb8f57cd3d663", 2188767, 2133832, 804163],
+  "characters/rikku-berserker/follow@3x.png": ["9f605636a3a13d06dee3a558011571da0b96fc555a96d79f26f7e115240a9dd2", "df75aad84035963dcdc9dda88f86e153f8d73c09ba82e950eec275194b8d47a8", 4754532, 4376767, 1792273],
+  "characters/rikku-berserker/follow@4x.png": ["aa1e9418f2bc828e469bc92e1bf648ee0addaf9f5855a9e01881af608717ed33", "095e9a42dee963b62cf5b6a5e211bcf87e23b9f40b811ca02d978b77fdcc1ae8", 7011410, 6354428, 3176552],
+  "characters/rikku-berserker/hurt.png": ["7eddcf5b955f317e34a619bd978909ed5e7de52cf2c828b9d54b30a2de53543d", "0400f62f6a8e997160144b536adce4a857300afbdb371bc1c7c43457edbc5ca1", 459776, 473234, 162908],
+  "characters/rikku-berserker/hurt@2x.png": ["946f0f4fe18f9cb2b32443b67728b5c70f160e0da18f4b051a9d16815aa84d2f", "0e4c2733316e28df813c84ede89b878c779ed29b1b941958c23bc7948030f03c", 1643034, 1743476, 668702],
+  "characters/rikku-berserker/hurt@3x.png": ["c9238d3b8e63b79a7ebab7a4da88cc3a5563cbc248e782d9f600a2abb2b75829", "98c3c77bf0e1c53515f0cb0bf6b47b9d94130781bae66a5633f9f0b36d5b3527", 4554486, 3411968, 1484478],
+  "characters/rikku-berserker/hurt@4x.png": ["7a7a4b9cd22d25724e94c025f514318ab8998c65a95f6679e96bcd58a3e75249", "9769a326aa8f386162e4a816eb0a108f135b1617db82bc3c1a0d9499ef6a1b78", 4741953, 5062090, 2606318],
+  "characters/rikku-berserker/idle.png": ["1652fe2a56b28fbe75804f6b2745dc9813d78056084d26cae2958ea6ae0f78ad", "a44eaa1f0e1e4597ee03fd47d1f29337dd74698f17d80bb8916777168afc6b93", 646535, 633296, 171325],
+  "characters/rikku-berserker/idle@2x.png": ["77369eb5e2434c5540c12c0b65d1033c8ec791c116ac845a5587454cc4ce747c", "9731085070fb2b7dd2c90b5bba7d69eafe293d64dff301520e07e445f8404a66", 1855545, 1814876, 680117],
+  "characters/rikku-berserker/idle@3x.png": ["465c8c83da88b8e77be2302a72dc56eb0fcca2af4337b0cb709caf48733a1ff9", "3a4bc1a1c055e614a3745b71ceadd862e3007fb5a0b01f4f07b26a915bc331c5", 4016499, 3695578, 1512941],
+  "characters/rikku-berserker/idle@4x.png": ["7f826cf28b67e7ccedc5fc74d9773cbe2d11d39e6deaa2d54322d2b34c17e0d9", "4d5f6e6dba9243874631877045943415a0fbab87e977b9abce8db967fee46da6", 5821124, 5275595, 2682493],
+  "characters/rikku-berserker/item.png": ["7b106f4c8b1f1ea4cd9d0f246f21895503be052b268863019833b06195045462", "85f95adfdc4590a781105348cdee85539724f3d7c39f1b9bdb54f0b4740a2ca2", 439246, 430662, 106677],
+  "characters/rikku-berserker/item@2x.png": ["23c26bf3b4856d882ac596e3af4fb9c41dc9212eabf97085d0d7c7b0530538f8", "096af0a905aaf20b4333ee50ab2884a4e6e87cbe24d96059356884073ff575e7", 1293332, 1273153, 421875],
+  "characters/rikku-berserker/item@3x.png": ["9c742091de49bf51500f5adfd328762bd9f5b629a134258c3d42acc1b28d63bc", "b815b8b8d3173a41febde103eb7c23ed4df33515e603b5e5d8a62ec47643b2f3", 2754381, 2579179, 942400],
+  "characters/rikku-berserker/item@4x.png": ["4b329d452111e69df222b0da0bee1a6a74e9c09eb24671a11e3e07a938efb0a6", "06d57cff8c9c661b3223daae800a92943e9268d4c14f51891f4e806b85078317", 4018249, 3717866, 1672290],
+  "characters/rikku-berserker/ko.png": ["78c649322e825ba040a366d478ecdfd4125f76c193a9588313a84e0d551ab65f", "44df8c9f06f497aabc8c0fe348cbc7a4553e4299b795b0fa11d526bf4f424df8", 475265, 484822, 164103],
+  "characters/rikku-berserker/ko@2x.png": ["a8f7ca2f22f9313f6083cde5bd102d45a8746fb5e3d19553fc4df36b0920ea4c", "8411050faa2c4f853c5bdceb02d173c4f69f4e2a66639e31feff10016d7b79e4", 1570600, 1648127, 666498],
+  "characters/rikku-berserker/ko@3x.png": ["324ff9c0ef5b658ab51063ef2df0d13daacd01522fef8f08b91d0cc6c4110c34", "a7003a736a024553266cd70137f499ad0a199591469b4d032c4d376bd341fded", 4318085, 3216948, 1479877],
+  "characters/rikku-berserker/ko@4x.png": ["cbf045ee12f6a771cbeadd1d1ed60108a345be4878533d16e6640bbfbb4ecc2b", "d6ab8b0714b1e8fdd3d2f65f2e5833480784201c0f7e9fb4c1ace8419e043508", 4554398, 4809577, 2596059],
+  "characters/rikku-berserker/ready.png": ["f63f31abd14072d812131d7b68c67a3a98ef0cdee1b1706f9751552c418785df", "d98c658d405e7daf3e2839cde255449967050d0a8870e4aff1cb5d08e423f591", 863170, 833879, 341643],
+  "characters/rikku-berserker/ready@2x.png": ["bd93c227432e6f82eafe410643d7ee4626e5350d929476249ff0469cee7f8718", "cd5077e0a5ad0e83eaef135046a281cced2b7560977c53e790fec8cc0ec89f59", 2806082, 2672822, 1362174],
+  "characters/rikku-berserker/ready@3x.png": ["5c22c9f95e7c3d9c10db1cdf84a90b3a57a94cd20000db177debf79fa4dc5b26", "080aa0da9b9367a37b860698a973a53de2ff263435c18393246d8282c14e3020", 6445227, 5732551, 3052308],
+  "characters/rikku-berserker/ready@4x.png": ["10b6b63a5d6c2974e416a39e72fb5979705479f485fb7562d2c98ab3f11cc020", "b3c295f66699f7d07b07efe297ba749bc62b3fabf44346ff23646bccefd3e43c", 9791440, 8605964, 5419449],
+  "characters/rikku-berserker/sleep.png": ["c05e84cf3053d2741f78198efbb595662c49a4507220631d85f0125c1ec82149", "0d896f64b359f30a42151d9a8e1e341db4407d6cc1aa62abe2e5cc06311ccecf", 497871, 527773, 201747],
+  "characters/rikku-berserker/sleep@2x.png": ["ae7391dfed3c52b3d136d32491882bb5dd5eb7b0349a583f0fa5651f8127f5e2", "448774ba4743f0cc242e8337a88dcb354b1e6cb2543e8927fbe213c70585717b", 1698233, 1833851, 839929],
+  "characters/rikku-berserker/sleep@3x.png": ["9c997d1453e479e9a669ece6cfd61fa025e9c458a694e82bb8b9ddf25425d0ee", "4f37ff4cae53765e6d9eefd01ea945a42b982ba617f7f5e70f0710e4472e9bc0", 4605837, 3546492, 1867111],
+  "characters/rikku-berserker/sleep@4x.png": ["7abb5fb45dc1ef3f0148deb9f8c1493c111528d3a3597ec90741ea6b5311bc28", "4130734df2e121a5659671576fbd52e001220de7a4eb62f1d33f51db17ff8ce2", 4784926, 5209471, 3278785],
+  "characters/rikku-berserker/victory.png": ["d72477d5512f7f752c380b2a372266bb933a71509d87efe4b3f2f572a8ea86c1", "3e27c287747c61bc8f586b035cca8beebc19571b004ee6ef6ee2e4ec183fd196", 342433, 359289, 121833],
+  "characters/rikku-berserker/victory@2x.png": ["9603cb92aba8c32e809d151cb2e03e73e8faafc22b4abd288fc2f93ee9f6da11", "4df39b8f8aff90b36899d3ae353470238045cdbb45ef781e5ed09259ce386a6a", 1183888, 1270232, 500424],
+  "characters/rikku-berserker/victory@3x.png": ["9bcc8a7d18ab22bf8be03358bb898f03740f29b40fbfb692704b00c9a960a22c", "c05bd49d74750c837f3f3eec0bb6e7c4e2bf6ec919b701102dae91e8c4f10c7e", 3132805, 2477648, 1113180],
+  "characters/rikku-berserker/victory@4x.png": ["9ed8c0d15ffbabc88d33c87d571a275b0102341a6b420573aed8a7aa59305a2f", "3b5d7301ceb10790351e0fc10fb6ecd72a5165be0d45551f94802371390eb479", 3382379, 3664027, 1958139],
+  "characters/rikku-black-mage/attack.png": ["25445b09aa73ab8dce7ab2fb5c27a8ddadbafb6d4ae77e0e96664ec73a90f4e1", "8ef4550d2559853456c2d4faa3cb5b2245ced5df747b34b91f84bed5f746ceaf", 753924, 742054, 179668],
+  "characters/rikku-black-mage/attack@2x.png": ["d2ea8be555c42b0d547b1b810bc94e11b7125e97327d8f7558296985583d4412", "ee89896580ad40102d08fae149555de6e6d55c106e0ee2d8f4e59f5599ccb291", 2292794, 2253977, 707644],
+  "characters/rikku-black-mage/attack@3x.png": ["6af900208322d108a9e68624da90a1d4a60c3d6f2ec576720e226b5d7f6d022e", "0eb2da3b6fcb0f6a82cfbac414423f554274c376f83c8a7aa5bc93195f76407e", 4979610, 4667066, 1575243],
+  "characters/rikku-black-mage/attack@4x.png": ["193f67391e24e0636654f97a68b5b1b0a55ce2baf631f69bfee081cabc5082d0", "f5056e02f3f6145b993f12a4f6bd4af45b0fd59e629911a8c82073b60fd96c85", 7077302, 6539348, 2791829],
+  "characters/rikku-black-mage/cast.png": ["5090d504649ec001f59a450bc10f6973384559c2453afd3f7a7b963f2b8a734e", "2b979f02d50dee836ba26a22622ff4168f08d8ea6d8fd1021b3cf948653a30a7", 627780, 623848, 111989],
+  "characters/rikku-black-mage/cast@2x.png": ["edf7df39f5a15f964473d0e5d200172d5a1cd55f2fa11ae049c6d63e84fabf19", "f6d23ea583f7eb26c2c8e011ff12012cc1f1bbebac2babc6c51abdbf8afd7e6f", 1842937, 1832211, 445421],
+  "characters/rikku-black-mage/cast@3x.png": ["d0d4b6ed850f536d3be8ed440a1024195375ef46606743b397e370593d143053", "84e4ea4c18ffc4300dc293c9f6da156ce36e2e7d3d18b2d077e1c927ce7fc051", 3930691, 3725110, 987005],
+  "characters/rikku-black-mage/cast@4x.png": ["2568b4857747d849ac75bd95548d0b0be6b4dc02238a02e5dc97055720d8b794", "e6d1548b8ff7d3a4ec9eba9bb20dc3810e4b05622ec8d25bc9fbb257470a83e4", 5614993, 5267580, 1748588],
+  "characters/rikku-black-mage/critical.png": ["4516f29037ec4f5beaff879ca1fa8b5d5e0066d72c69aaa9f0d09145ca1429ad", "24730b34c403550087c11e9208e0ac79b35fd9fef77a12a3af76858102144370", 488745, 520850, 154483],
+  "characters/rikku-black-mage/critical@2x.png": ["a30c79bedc4f31d4e83b98a4f6d385923278672690480d7d0ad1a69e43d24d35", "a0193fd5a249fca8a5c1eccdfb7cea154e5c1159718084a9dfbe16c51cb7040f", 1585669, 1697476, 639605],
+  "characters/rikku-black-mage/critical@3x.png": ["c630da6f8d09ac5cf203ff481b50861cab8503861ecbbfeecca9c8d8e9e42b98", "346e0754c94134a7e7515d4b2299d1cc04ad1583a2d47c0a80d58acc95fe38fb", 4089519, 3293652, 1426237],
+  "characters/rikku-black-mage/critical@4x.png": ["06a10f0f491dcdd322ec47156e6dbb3cde39eeb0de8d6ae9cfa24f2dae0bf4ca", "90dbd3545200dfcf436c7dccb729639c1d5a8624cd974d3c8ef2de20da84bd60", 4461511, 4849527, 2514753],
+  "characters/rikku-black-mage/defend.png": ["ce8c50033c5c7166cab44345d1df854868ea5e1e37de74559997baa926f6e5d4", "9ab0bd65ab208477360da6664edbddc8e64948f428df1d1d104d82d82c5a445b", 461663, 486458, 114621],
+  "characters/rikku-black-mage/defend@2x.png": ["6aa4667177bae498e20df096b590e7c2bb1a5da04311e617f6790ab55390e556", "7dcc12a84aacc549a2031a15aa3cbef7ca210e12ed5183482ef66d97733d71a7", 1575051, 1670845, 477244],
+  "characters/rikku-black-mage/defend@3x.png": ["cfcfbf46de5f68d887017f21c54c90e4f077ff869d0d5afd057360007a0e471c", "1ac59943eeeebae2e4de0d904669458789d3d1926dbd91418cce17ee187f9adb", 4409757, 3315847, 1063472],
+  "characters/rikku-black-mage/defend@4x.png": ["5eebb9d8db1616046fc4a316df3f3c3b6e7dbfab77433ec33aca827ff2e3ac96", "156e01ab150b6aa3ebfeda033b428c5a526f9a5bb1d6d50e0a99fd27eb0b9093", 4683244, 5007785, 1875763],
+  "characters/rikku-black-mage/follow.png": ["d6684b0d79413ab25e9f0e8d8ada08afdb52a62b8a7a4c7d37ad6f641116d373", "ef36cd3ef3f5963835922e2b5e3041725a424dc9d7715e5bf49572af63628295", 651227, 647872, 161686],
+  "characters/rikku-black-mage/follow@2x.png": ["ced8804c4d0226f2e7f870e7ea87efa7453464ee0833db27e251a8c7cb3cff18", "13da441c69eae1986b492dba7aa68e4d032bc37a924a4b114efbaf16d5143b93", 1940232, 1921329, 640091],
+  "characters/rikku-black-mage/follow@3x.png": ["f8e737c51c2f2594194bf9bbb2cd553ae680083d9c06c78149a325317f1d0dc7", "cfba69f1d40616a476be2568ac0b761f7b6b3d95376c15d60ff15351590fd378", 4229548, 3951486, 1427412],
+  "characters/rikku-black-mage/follow@4x.png": ["2770eb0e4f90983982f29d3a0cdb42c7f955de610b48287b19a4cc1ff480a4c4", "1c711232a7dae274623899dc5f4039bf5fb98f36e69cded51e32aa9d71f48a5f", 6103082, 5636450, 2533500],
+  "characters/rikku-black-mage/hurt.png": ["ef87fcb64ac63564d77e5813820a356d2cabdf3721aaa866298182426929ae41", "85df271b555c8b3b4a24e0adaca2b5864b637d0dda108946a849023b1e90833f", 491680, 525491, 168838],
+  "characters/rikku-black-mage/hurt@2x.png": ["cb8cf8f57cf7a3263528df6efa0e57ce8c94abef60939f39293a458d4f224459", "1b8e75791149ff4f77a711c8e9f8b8af92cdc9a8966b8795eaede727c432bf78", 1688884, 1829900, 693908],
+  "characters/rikku-black-mage/hurt@3x.png": ["27d69cfd5e888d04f3ea27f09bd2e0493ff5339bba1323f57d1c94dbcb6b2c2f", "96f5b70702519d372412228409aaa3e624a1c8d0244ec65664b427f54a28ec41", 4627968, 3591975, 1545149],
+  "characters/rikku-black-mage/hurt@4x.png": ["0538527f6eface006c1b4a3c7a7cac51e17a77a3b2443dcd85c2c7b86cc9cf9c", "0ff3b26fc0196d42d131a31089c537f75a912269f3fa09160fcfd21dec766b65", 4849565, 5305567, 2719975],
+  "characters/rikku-black-mage/idle.png": ["fbe93a4f88ecf63585aa6c4a20edb33eb1ba0c8f453a41af720eb240f44072d0", "919ffba8b49af40d3276c0884f1b2e178eb6f3be9b12dfda26f5a307f7179130", 862718, 857410, 177133],
+  "characters/rikku-black-mage/idle@2x.png": ["f2b2b6548167d21df9be21f20aff1c551182e259b1ef525602b8e92e1211a227", "c95483b737bdad45fc5b844e8682145f8ba097a8291bff4738f92e8be916446b", 2534170, 2529653, 701143],
+  "characters/rikku-black-mage/idle@3x.png": ["aa67745b87d508899a55823de4a32846608bd8bee8187501be9185975495b019", "7ef59614d6aa9430779b793b2fd5abaf2cf3054e2141c7bd77431ff4db4ec07c", 5526545, 5227737, 1561727],
+  "characters/rikku-black-mage/idle@4x.png": ["c968dd33abab11e8ebe8b10fe50a73691b35dc4fe3764b2cbce9adbf36cab98d", "e09be4dde8051aec2af273128a77ec9f0eef99dac922ecbfef3285ad2c301a33", 8102112, 7572912, 2769220],
+  "characters/rikku-black-mage/item.png": ["dc7b5271343c79331cbcff220ac8f22f28502f2921d3e0d43d43d203f17bf5d1", "6387a28b5ad0d0bdf9e1baaae2ea04b035d6b149d51b12151be8b0da98246fd4", 515216, 513705, 99416],
+  "characters/rikku-black-mage/item@2x.png": ["e02af9cafbc16a914b82b2fd17e1fbce1837aacb21b44ab04f2dd827ed0ff87d", "df6c1e68ac0cecb179256b9ad19293faaa03cc3a481e830147da30d77220687e", 1605739, 1608870, 391917],
+  "characters/rikku-black-mage/item@3x.png": ["aadc7eb141e9bfaf82e6465aa61d2e7f0920f7439af3221ab65599dbebba1c6c", "1c3ace6a2aded2764f9b0f878f029d60d9bd83a72d769b93bb720410d374a2f3", 3469287, 3320170, 873885],
+  "characters/rikku-black-mage/item@4x.png": ["e59c368baf9c4badd856322d62bef9384fae8fbbcc32026004e69eb6e43ab7bf", "ac1725b21c1f3ee9128e7d9b45e3506639a9f78488357d20ecabdbcedabcf4d7", 5080701, 4834206, 1552321],
+  "characters/rikku-black-mage/ko.png": ["1cc4bd5ebb3154dabdf3f3bbc4b8139abbf0a3835a9270b3dc91bdce9f53ea8d", "320ac8221fd479ce0286f2ac84e33c99f5df87d7bcf5831a51d14ed01bc6ce0e", 292243, 290175, 46388],
+  "characters/rikku-black-mage/ko@2x.png": ["970176134f295d2015fabde0efc0741b9b58a95ed43a7b5cd783b3f503311872", "0e3f4c0918566e26b347d5d81855284790320cdab6a47dd7c04566bc467fce63", 892915, 887560, 188382],
+  "characters/rikku-black-mage/ko@3x.png": ["b291e8f3308c93fdbe2e4d1f5760eab407bf4b0b67711bcf35e65efa86014a88", "d12bda27695a0dbca81785a0322d1a395b3fe3b369ed17d1772bd9cfc9001e19", 1943402, 1838336, 421268],
+  "characters/rikku-black-mage/ko@4x.png": ["baa11323ce1c39477abd089ebe0d5c72d98ee2af17636685ab7dca936930039a", "bf38130b687ce554292fa6b02e54530d91cc5ca2908161fbb0e9ef17cc3c7608", 2844331, 2673410, 748218],
+  "characters/rikku-black-mage/ready.png": ["86584c3369a1d1a798cf4dfffe3c5fe6020a6c2291c39a084f80a0a9484c5e4f", "119a86c6429e96dff013c11fd29ce024af6e8a609d76affa9562659dfa1e9172", 625699, 620759, 136504],
+  "characters/rikku-black-mage/ready@2x.png": ["bc1983b03325075c1f4fa8352307bf28e76e53e2ff0ab747e2711b9f3713e16e", "2597e549eaef6e39179b37845bef5cb33e52f816e292fdf0124f0035006d2e90", 1892494, 1865090, 563504],
+  "characters/rikku-black-mage/ready@3x.png": ["be24f2b7d90ec0bb111e145441250caa88613b5bb1341274b277d6defa1fa482", "956759788dadca0c2ef57acd0c659d5f7979b596656734f3b653fb9b903a0538", 4103566, 3851344, 1260380],
+  "characters/rikku-black-mage/ready@4x.png": ["01257d32a05ca9d553151050edaf379476f9b700ba0678e947550a8123c953a9", "1c589fbb0d075a7a4f589011966320276db702d366b834d40f2a82fd2675f54b", 6047616, 5622853, 2237259],
+  "characters/rikku-black-mage/sleep.png": ["c47cde3fa724e8594680d81b525af078282f652e6333794f2efad6fae0aa370b", "c2afad9a62183a558ce742384ffad0aae74f8935122d214dec90d0884b34e104", 468943, 500221, 164131],
+  "characters/rikku-black-mage/sleep@2x.png": ["f9d9eec75edc1f5a30b23e6dd51815fafdb7b944d2754302db7ed650fb5b64ad", "ef02eb7c771b73adf0aac6a6ce9f220715e0df1e5a20cb3bb894cb59e7cb22b6", 1578240, 1697940, 661531],
+  "characters/rikku-black-mage/sleep@3x.png": ["e8c87386390a860d60f20b4fdcc7f41bb0c3ebd090d34d263301d5e890b3937e", "e8b433e37ae4ce8b9f7098d5a203f584a58a2ea851a40dd4d55f302d10e5fc3b", 4282959, 3322467, 1476733],
+  "characters/rikku-black-mage/sleep@4x.png": ["532e695748cb6f36d184575393d7e7dde991c43398f33db1a6858b6e504087c0", "2c49ae0090e90301aa7d49faa03d42193e634630604c8f46d0470f0b903f7521", 4563932, 4945862, 2607437],
+  "characters/rikku-black-mage/twirl-end.png": ["8ec59c077524d7e5137355f9833f5cfcdeec286306d9516db015ae2a19d8c6e7", "14cf94cdbb28c47229884492c90ba419e86abe9394faf1643157966b4757190c", 912194, 909525, 296619],
+  "characters/rikku-black-mage/twirl-end@2x.png": ["a433f4ef0fa9f9160e60cb8847181e675f756dfe8367bb60ef67abc27f293c3c", "3ebafa8b8d49177e39da5b0cec9edef03f7fe53bb158482edde644227afc2e1f", 2925811, 2911886, 1177790],
+  "characters/rikku-black-mage/twirl-end@3x.png": ["1612a56979b9c57f73adca59699d117c4202268bc37764c72d6a29b6f1d25dc8", "ac19b97aa52d956b4e6d6c08db00a46b7be74d6282db67f8a52c2e90a9a88fc1", 6502089, 6102745, 2636734],
+  "characters/rikku-black-mage/twirl-end@4x.png": ["a42f2a4e480fea1446bf3ced33d278c0e37514e6176c70d89f9dee7fb4fedf51", "c849011f722de3564df3ed3ec6b349504565af2d402411276a21bc7880d4db99", 9638333, 8986322, 4681742],
+  "characters/rikku-black-mage/twirl-forming.png": ["d0bfc090687ccec173c7de8aaa05aac33f4feef390607c0d9d35bed087f49a7c", "aa38fdda16020cf8e5723222c57770c3731396ab6c09c40af6475b4434867a16", 905078, 902591, 187850],
+  "characters/rikku-black-mage/twirl-forming@2x.png": ["7ecd0539c6f94c6ffeeb93f11f976c68f404c4cbd46e2f17e6d59fd73b3fd6ec", "0e774b1f65e5d113fb2da010347ba2b912497dc74b1bc5967590229683677b82", 2696793, 2692071, 759995],
+  "characters/rikku-black-mage/twirl-forming@3x.png": ["812e4a7438e2e9528644f52dd1e176ab60e45f52f1b1ad39000799e84cd93d90", "b371b52d6844d7aa0ed030d0d80f93f929b79b154bc0736b516b529bd3574eb0", 5851884, 5550138, 1694349],
+  "characters/rikku-black-mage/twirl-forming@4x.png": ["52896542971cf1c288270f9fb3dc3e0f683b15008569f10ad57e44cb302e0bff", "433c7bcf64dcb301e54b9805bdc2bd5b72c9a6fb21434a4dd821df2baaee75f4", 8465842, 7966047, 3009639],
+  "characters/rikku-black-mage/twirl-going.png": ["f2426809856be532d3d07e3c767b28b2ba221c064ba9fbd122ca122d0f8645df", "afd897694345c7e0b81546cb5df446e083a1a4eb32619dc9c1252cac232209d6", 870708, 868611, 181986],
+  "characters/rikku-black-mage/twirl-going@2x.png": ["7dec636bfd72ba1f9a8b93aeabedcf7b53aef8e9ce6d2989492ad969118ebaa5", "aa62ed8c312de451c2c2660fdbcd8e3f3ee70a237e60dc448f0522f6a4f0e7b2", 2534041, 2528027, 728125],
+  "characters/rikku-black-mage/twirl-going@3x.png": ["5d39bcf56b1cdef02c92511ecb2eefc6f8d5b87c24ca793c2deafc50c424ff47", "047747049325eec9c00484d9554a58d623404b4591fb59feee45168b9a95e6d1", 5464001, 5207299, 1630200],
+  "characters/rikku-black-mage/twirl-going@4x.png": ["8962a4b55f6835899765f1723ada9b4b5e4aac96333d6fd9642687c5785a728b", "4c2ef137b9335adc721d8ac1d3a182bdcf0d36aec57fed9b9d0c71faf7513a8e", 8037591, 7613369, 2897893],
+  "characters/rikku-black-mage/twirl-start.png": ["7d3926cb9eaf30ee860de48a7db85eafbf0aea9df7eaa0d87a8074517ed6e737", "36371d6b15ea075767a8fd8deb243dae6a3a01116cc6a35671c74818cb202d0f", 780163, 778703, 253505],
+  "characters/rikku-black-mage/twirl-start@2x.png": ["8d280e3abc06bbe10f4d13559fb1b43b4a12c5872930c1f0dd229f8c960122ef", "85565fec9eb341a8df88e8ce9c6d714fd397edcd33e4512fe0485c8662c70ab0", 2606590, 2599256, 1025986],
+  "characters/rikku-black-mage/twirl-start@3x.png": ["4b02abc697d648de58640d7c738d1cbb412621a581669df211ade7c8f7a51884", "68a0b7a0f79cc2a29bb6167d05ad3bbacb84a589c4af561ee4349d5d6c8ae32e", 5834610, 5497109, 2298620],
+  "characters/rikku-black-mage/twirl-start@4x.png": ["88d54be29e32deb11459785a092a697075a04a53c29e264cb9b6d8d6dfc7cb10", "c147370eaa05bfac5bb5300ef19adb49d6045c03c98a5caa398d9d2df8d6e366", 8778285, 8225598, 4084066],
+  "characters/rikku-black-mage/victory.png": ["0153f31d65e3b05b8b0c755b4d04560e288f78c069405e431db4d0ff6dd3d117", "c5e7dc2fb69d577f0349ececcd137507cd532ed2a318680f703ac962b5498aca", 494430, 533365, 163796],
+  "characters/rikku-black-mage/victory@2x.png": ["39bf9aed6fb2ce26183ae527f20a9280fce46cb5a8357d28a8b13de8510f7e74", "fff6ce700bcf0edb315a89e6f8d59b0b39a4c5c065d36356c0d6595e0fbe55b1", 1572186, 1719057, 672300],
+  "characters/rikku-black-mage/victory@3x.png": ["1c7d6c43347b14369122529af9ee7b253bb3664fdb0d6d3e00b52eeefc64f5cc", "9b0a8570263e856ad9162ba5ab476b998b27e6a327a5d1d3ba57ce426da3dec0", 4349621, 3389102, 1506308],
+  "characters/rikku-black-mage/victory@4x.png": ["21e15168f2a7f90e471474864025950c61d28b3c8ea4db1158ede8a2c24f2866", "62806f2f8814cd9eedb739a5408a7ef20a35484cf8b7908a7fa6dc41c9d134cd", 4652715, 5116823, 2665775],
+  "characters/rikku-gunner/attack.png": ["8273894ce5c3c0708c0a6fb06d078a3492a4b1185542799ee4ceb5d41ec20ab5", "e98c4f60554e47764882d19146fb39b2214274621b8bfe401da7d0d07d5cd14e", 503109, 496342, 140620],
+  "characters/rikku-gunner/attack@2x.png": ["d4052a24e2a8553f6061306e26d23916637e9d65c4a8da045c9e1cff17030b95", "6773e274517d1bd49f215faf32e6442a5061f85beb67f444933cc78b65e24ad4", 1501518, 1487157, 551322],
+  "characters/rikku-gunner/attack@3x.png": ["4c50030a494d2fe37e8d1fb0da55e38199dcb76ed71e5f1872c0e61521345890", "96ed760c51e8cd97883321aaeeb18cace71d38ff8068d3912a2aa61620fef56f", 3243462, 3046036, 1227711],
+  "characters/rikku-gunner/attack@4x.png": ["a50af96581b948006ba84b403b9084df1b281a1ac9fc06bb71095bb97b254379", "54f9c4df58b2502d51c406b09c2871b311f84db610159a53cce080d28ceb83cf", 4616866, 4273007, 2176344],
+  "characters/rikku-gunner/cast.png": ["1d48868f96a8f14a2c00a7e1c76af3455168948ea4d8aaeecd84a786c01114f6", "43ca5ded356a5a195800d3d34ffd3764f181f919aa7b6cc22cc0057ad92320b6", 422159, 412318, 112189],
+  "characters/rikku-gunner/cast@2x.png": ["b079d70233b5f60e1ce5e7fd93f5cd963e19418c8e3d87db33c42d23ea44189c", "0f267f45169a615dd1a8ebbc7f92b5aacc83f0a62971ac1507883686005a8ba3", 1244818, 1216329, 441193],
+  "characters/rikku-gunner/cast@3x.png": ["7ed3ba517f28b0e2dca8b2aa204cc1e4136db01b6778ec21b339ec663d10ffb5", "8cfc27b6905804478af036d35c83b7a77eccd4da6dc17bee537315c821339488", 2653912, 2463595, 981172],
+  "characters/rikku-gunner/cast@4x.png": ["4c86c2f537f73e0d723246f004c991407e12200f5e3315fbb572967d0aac9057", "14d3ae605d07a56a75e3d982608ba5f23d1496b3edca12daf32337eb69808c9f", 3809688, 3482929, 1739332],
+  "characters/rikku-gunner/critical.png": ["c0792fa439d5858d41e9a904866bd4de0abe07c8ea045d5ca6c35df59861b10d", "65640f430b8d9b77cded82b85cc121fc7a27dd72404f6af682ebe4936fc57fa4", 531466, 543924, 190447],
+  "characters/rikku-gunner/critical@2x.png": ["4df5d4c8e10f4c63b411678e1714e9e10b15e269d16e9a1a29bf2b195e291234", "6798dc528c8d4cdeb82ef385dcb096c0c7cf6b66899ca5bb331ab5e51cf92452", 1777273, 1872857, 763949],
+  "characters/rikku-gunner/critical@3x.png": ["616c2edc5f8bdbb756bf247f64b0fa9c1fdace210c9f8ef5f48558cecfb6279d", "3c267f0d79ae33dce51ce0fdbab4b1766654ab704a1ce233d770899673cd6620", 5079080, 3688638, 1700399],
+  "characters/rikku-gunner/critical@4x.png": ["86006d29483ea48c6d5fbbbf947c0eb8aa308e810be4caa1b3fd7468ff82ff5e", "8109c7b7c80eb296c0270696c2b21913d73ec349c96f3c68eb97fe34efd3a5a0", 5227360, 5509004, 2991629],
+  "characters/rikku-gunner/defend.png": ["a86d7070b106504db1280135baea916d802d1db058b83ac2f655cfbafb20d2d3", "fcd668e44b0f727f0b5f5ae7058162b30ec2d3ba40338d8eebaa4583226a81ea", 342058, 354603, 116931],
+  "characters/rikku-gunner/defend@2x.png": ["28486f52d83b120f6a8f7565c2953080c8879445952f4aba817d32842a9b2b62", "8351b53973f8fe963e649a89da90848db9c7ba1dc397de94e5cab10ecbef79fe", 1224574, 1308123, 500896],
+  "characters/rikku-gunner/defend@3x.png": ["237287d2787a2e7a3e18e7c12cbc81ad2828307c9a2e0a5c4f1fd3366552d4ca", "c371ad9cc2240ffaae5f4853218dd51e52d9d7efde5611b2b144665f8b8fd9a2", 3300685, 2562204, 1110278],
+  "characters/rikku-gunner/defend@4x.png": ["48d4ecf18de1e409a777d86615509a80283046229751bc35eff9286f88438660", "359e4a0bc88fa4ba3dc62dd8bda5df097b322fd56708bca467e99ab8f014e4d3", 3554580, 3822553, 1949700],
+  "characters/rikku-gunner/follow.png": ["5d1871893aa376e25341ef1793d2f5e127567e67dba38361433081da3419e90c", "76dfd24f53addaf44df442bc7b7af17cbc0543bea6ee8d53ac648b6022733308", 501497, 522698, 181918],
+  "characters/rikku-gunner/follow@2x.png": ["fb1947940036e1639e57e867fd5ac5c8cb77d2e340d34b00d284970e024f5dc0", "a56df05e3f26da999293adf6bdf6c8b5744d9f010e652fbb08da3eb0ee8131ab", 1747339, 1868797, 745084],
+  "characters/rikku-gunner/follow@3x.png": ["0e5016e45bfaf1e697dfe7979c74a75892cac276eacd3a314e2281e6f9a8c7f5", "f786dadb4ad167042a4363c378c25e5757d8abc8eb81748d92bcaa997d0e4697", 4749768, 3672237, 1660598],
+  "characters/rikku-gunner/follow@4x.png": ["9f390fcb3add24f0f4bacc4a9704e1cd7c300a77032b85792940b2b42a99cfe1", "22caddafecbfd2792a72060baaf0430860cb9b4fb7e33b076477d06587e9d6f0", 5145938, 5546416, 2926691],
+  "characters/rikku-gunner/hurt.png": ["63cbd684da9a727036bc4ac0f90a8fcd3e83ca10e70a71ed898e896a25c8e9a6", "b70e0dc8a1595ec2a998458df176b48bf4a58935d25836989d57c2f9e3bb7665", 372288, 386010, 134924],
+  "characters/rikku-gunner/hurt@2x.png": ["217279ed39f61b072c9f8e4256c745e84e527178083069b80117ae9d1e06efb2", "11462027900706f77ede914b627103f577e7ff0848b54bbe28f6ee732c26635a", 1385488, 1467757, 549177],
+  "characters/rikku-gunner/hurt@3x.png": ["b188fba0ccd3998781d0346844f3c985b09ed3fc2aa982f1ea78be0b4c7469ce", "c09a1b33d09fde355520e16e9732fd4b550072b240a14ab1f0e409e4e768a995", 3791352, 2874720, 1217921],
+  "characters/rikku-gunner/hurt@4x.png": ["18bfd47d5aca3ef15ce9a46918ab78ac90a4d2f74c655d93bd65cbe4d940313c", "9b6adee12de38d5591e5ff77e7c372bd5b2fa64a11939dc0dce5edff68016a26", 4003520, 4271510, 2135190],
+  "characters/rikku-gunner/idle.png": ["cd03d69b5e692f89d8c1c27fa0e1e81438d45ca7a6d5afa084efc6029decd7b5", "c6d86ed0cd8037bbd28e0001177eb6ee304d6193c5076d7c98b8ace569cc8ce9", 469261, 462308, 124512],
+  "characters/rikku-gunner/idle@2x.png": ["30fa4cf968871dab3396b4b8daeff8d5ea5a52c62224a98c14e82504043054ae", "c233c064bcaab60ee7cbb63f25b7839af04149c709455abef1b455da69b4fba9", 1360242, 1335875, 488256],
+  "characters/rikku-gunner/idle@3x.png": ["68df012a26d472bea42448910a35b164bde0ed9134cbb7238bd95b17613ee405", "fcd094a614324685d5482cbf3d37f3ee9a4b4b62f062723d2bd2b477e29ef100", 3765502, 2685778, 1085668],
+  "characters/rikku-gunner/idle@4x.png": ["8d4205aaa1717cc31371b438c08a52e00aa0c2e6b51d10f0e881ddabd33dfb71", "c4ab38698ca3b9991a1deafb3b6d90e8010ed77da3d27d1f56334b57861030e9", 3956736, 3789713, 1926294],
+  "characters/rikku-gunner/item.png": ["8acb9721ba15c38bb2f922f66fdf1e95c693d99fd2f4ae8ae5c7563d1069d55a", "3616ee1fd7fd26a8cc8995635d4800de2e17eb5d788583ad45ee4e9619de8f86", 512126, 500988, 138112],
+  "characters/rikku-gunner/item@2x.png": ["3788a1cff90c05889fbfc54748c5dc852a2b71b2420518d10a89feba53fa9a36", "2495f7a0f785fe65a7ef79ab274c9724c96cb824fa178764dcca5d1824c85f69", 1538189, 1514416, 532605],
+  "characters/rikku-gunner/item@3x.png": ["1110d4bc727cb0a34673cbd97251fce69cec441965ffafad8f46c91c9349e7fc", "4eb64fbf9c1a595560a866451f64626036df86846f3b5d2a6087d79baa1258f7", 3266855, 3071739, 1187714],
+  "characters/rikku-gunner/item@4x.png": ["5a2494d48fbc8148b4ccd5c0f9ffbb3be0f8dd8ac013151a540a96ccd83d6451", "3dd7e92b35dfb045fc191ae595ec205ba7e671e2358dbfaef83d8fa1bb7aa342", 4789446, 4458619, 2108146],
+  "characters/rikku-gunner/ko.png": ["ea2a11599e7653b4c49515cd777becc0c6a48f5970ea71cc9b352cf6782c4dba", "00c5f1e8fab34f33b5bed3bb250da16dbca4e57096ce5cf3e54d0d608c8d6353", 314526, 306713, 82951],
+  "characters/rikku-gunner/ko@2x.png": ["b645a072c939eebdbf27f5eadca724eff4f555c19b601136db23b26941fac389", "80ec56933037a469b97bf3b7643939cf07ae9147bb6ecb0131ac19b1c82859cf", 941603, 921474, 328463],
+  "characters/rikku-gunner/ko@3x.png": ["6683ca41fe0e810e82cd793e832bf258335054627fefa111453e98a165430cfa", "98dae858d5513a076491e13fd52aef72e3c02722087bbc0d28971a9f5ddbce24", 2071896, 1916405, 734657],
+  "characters/rikku-gunner/ko@4x.png": ["86c9c6c862e6239abeb24477cc113ef5535625463d217305838a0d4a4c2c4831", "8c5ada7a79080dbba1c2c1fb6232171ff44d83e4e84cefc871db9709d0b5cf01", 3136115, 2875320, 1303544],
+  "characters/rikku-gunner/ready.png": ["6422fb6ce162671bbbdf69710c081b95ac8f86643cee2c8456354c0c652b849a", "ecf9629240cb1b62ff23360fc1e358f707bd032909370b498605e9e9ccd8f3b4", 469178, 457728, 122045],
+  "characters/rikku-gunner/ready@2x.png": ["75563f174ac65a7be0ba62d71a464448efc1d88d556f097b5e119bab193ed830", "86d3d7e72503e4ca28a945062f6d4c3ff69af4fcbcdb02c7783f6594e44cf6e7", 1369533, 1321730, 482755],
+  "characters/rikku-gunner/ready@3x.png": ["770dfe8a78b14bc42e7440f5afadf95bbd09726a398b31c01976efaf117b8a48", "37451319836b62107e8b76e910c49e473b0682b5123429aab04ca464c795a8f3", 2954993, 2689281, 1078302],
+  "characters/rikku-gunner/ready@4x.png": ["c7680af25e80dd8ec9b1e2b4b94056ea3b1212762c48022a70c7757d5719d46c", "a3a196a17745f84e23bfaae4cb2536613423f42b6647f3ce2076b6301c4e4a9b", 4270783, 3825501, 1913266],
+  "characters/rikku-gunner/sleep.png": ["fcfd5e7e5a2e736aeeaff446fc892295b078ee18ff4f1bdb4f4c942118b90156", "04fd3343efdc0993cf26e6416a1241567e6c369d432cdd5aef906a577aa1ec8f", 467184, 484512, 160257],
+  "characters/rikku-gunner/sleep@2x.png": ["e2d27749c031205770e0381fd965b9bc332f699438c9d2c49e78eb9436214579", "0a34b80ab4b22183c3f1b9b24af0c1357ad52778670b818cbce28c51559a5cfe", 1516030, 1622393, 648954],
+  "characters/rikku-gunner/sleep@3x.png": ["ad3499f1ee56db2a4c6ef53c6523583e738a8355e0b7530f19ac5c6e56b18692", "1e7e15fc7db984dc4870a8c8d7ff236ac32c6ff54a86c855208a3c208db0a886", 4235466, 3170173, 1446123],
+  "characters/rikku-gunner/sleep@4x.png": ["3ef0e9d32b637353f98e17a925ca897a927ec03328d1a035a23135a4b85e697f", "075b730c1c4d44198b8908215eb0bec05cf60e5ed9a10621dfb1bed6d5e78c9d", 4452602, 4765330, 2546750],
+  "characters/rikku-gunner/twirl-end.png": ["f34ceae8792cd2813f32c76078cf6e407eb68143a4d3016b6f7f9f1a02010142", "b16597e53d1c4106cdc444cb5c51a4a553f5153204008f9150eaf7e7ac380e47", 412547, 403450, 87735],
+  "characters/rikku-gunner/twirl-end@2x.png": ["8f36411122f25f8fd5aacd2b5710108d2ca6445348d1a060fca9920d2bfb973d", "3270290428453d219165784d0d1aca94eb37ced2f82e419159600d9892c81f30", 1229593, 1204222, 342614],
+  "characters/rikku-gunner/twirl-end@3x.png": ["a04de60bd8c682ac0cb229c7fb9403e18f32857c766c9f86f6c768bfd196d8ff", "9f8f72c834652af2bc013e0955e2ce5c98d0a8cda6ae93a18068ded5b5cc5e28", 2610518, 2435742, 761720],
+  "characters/rikku-gunner/twirl-end@4x.png": ["b092c29dbef0c73e632508b2afa3c08f75493db089fb094e87eb5817d5d7dd26", "347d73ee8c9e234816a537218d1d0fe45614dc7d87f9c346d49e384845d620f7", 3785221, 3483974, 1350312],
+  "characters/rikku-gunner/twirl-forming.png": ["17ea4f1fc3db913bb20ec1d056126d463f47911d2e2405136387fbe53b69410b", "39ff3516ee1928a361d9d342d48064fd0365fbb6829045fae5af5c1d59b96361", 443846, 437530, 98596],
+  "characters/rikku-gunner/twirl-forming@2x.png": ["9777b5b8353b3b5d5e7f1a1ec5ded63086e4dc72d2f9c8ac83d169b57123984c", "03c614a29b617cbaa30bc20f99a412caaa0e6c4cdc0a1149816d09a53d463a38", 1306181, 1295664, 392422],
+  "characters/rikku-gunner/twirl-forming@3x.png": ["7eabde51963b81ee6652087a55cf22e542397bfd598db8ea536df1ecf2bf4a87", "9f7867b6390167bea7dcdf790296fe66f3dbe0ec9c95d29f2ddab2ff02b57ddf", 2755004, 2616046, 873964],
+  "characters/rikku-gunner/twirl-forming@4x.png": ["324ed12389a1c576c2213d916cfe4e5e4382150b9029f3f260051be7e3f6dd67", "563284bfd41638edb6e0d670bb881f9bf3035c7f4cf7b2d3925bd1bb6a713717", 3977396, 3737040, 1551931],
+  "characters/rikku-gunner/twirl-going.png": ["e56e0a5b4a22e85e82c6508aacb5d583bc35058f3dfca5b0ab9ff2b16b855011", "32dc71055a510df331b6f42a158803e6ce52d0dadde93065aa84143adcdca040", 412123, 404414, 97421],
+  "characters/rikku-gunner/twirl-going@2x.png": ["d01c453b6908846667f5b1d5c3db586203bae14c75efffd717850d3b14ba0dc2", "5f5c6eb410a0f208bedb72bd827a03f56e942d3af3cd17b648aa6bfd9e1f79a4", 1146217, 1127000, 374955],
+  "characters/rikku-gunner/twirl-going@3x.png": ["40dde94757184357259c9c579e7ba44b725c1ca8b0e67ac4c6aecbdf4c7af536", "4a114f8b9b3dc9799b48e79f4307006901c45eb7c627c5ea8010de8fc455dfd2", 2410478, 2258793, 834223],
+  "characters/rikku-gunner/twirl-going@4x.png": ["1008b666f3547ecd554f6ba40a4e24ff44bf1b2e8191e2d793c5cccc5d90db3c", "d73fe695900d9afbc8077586336d1f0c468a42ee9eeb5e9d8026fc2d0461de88", 3415023, 3161444, 1481542],
+  "characters/rikku-gunner/twirl-mid.png": ["189a7b033157f4e105ac479ad58e9dbff6f2cd8db2ec088a2f77bbb6f6956efc", "cfbffd5028d71ee2c920751f5c6db57f87f76187df8ff124c000613d987ebeb4", 1322428, 1274780, 359694],
+  "characters/rikku-gunner/twirl-mid@2x.png": ["365a05b2862d33ecf0cbb085cb6927f6ca3269fc40b4f91bc166e16be6850458", "915642c90a01273f902248d76c7bbc39e48be61ca160a668b5ded4c87244d8a8", 3373627, 3260141, 1437908],
+  "characters/rikku-gunner/twirl-mid@3x.png": ["78e04ba3ad373183e8a36e83221548465217c2cac683fccf94810d1599087a0d", "681b603bd7aa0dfbb3e65415dffdd6217e38b08e576ef07dfbf3091e5fca23b0", 7251819, 6676278, 3217252],
+  "characters/rikku-gunner/twirl-mid@4x.png": ["bc038e2feb854acaf7ef094ec785bbc26a692cfbb7c0bc956c8a4bc475392df8", "b355a54a0194c9e7d047a655982fe42a8040e9bf6fa4b7085e440bab9b6d8833", 10431259, 9496804, 5726732],
+  "characters/rikku-gunner/twirl-start.png": ["71ecd2334949e578b08a021355bc44c117121e3b6d9155d7a90d5073d796a356", "4ab42eb8090a2438a095eac6f435271c78246f9d4afe97cf2be91dbb25c37d3b", 395988, 386801, 94165],
+  "characters/rikku-gunner/twirl-start@2x.png": ["653fe55e0023996bbaae5579c9b3270a2b718f91279e947e0b9e5aaaab30be4e", "d53e1d4cc95f80dc4beb0125046ca4f3d5dea17bbc56b3baccf1f8aa9e23f3dd", 1174349, 1147363, 367009],
+  "characters/rikku-gunner/twirl-start@3x.png": ["594166b1400e1c934375179433c589be2efa6370b3245231681f91ea4d286505", "19f71406ce57af1947f25e5f7b825ef5b0c6b0ab0e0208994412057f92d5835e", 2518205, 2340281, 817764],
+  "characters/rikku-gunner/twirl-start@4x.png": ["d0330456a7a75ba2384cbed9eb3502532716218769a6bbb544b598d6a077f0cd", "65825d99e00e6d72d4e775cafa7b46d1319daf060915a9c374303db5a242665d", 3610454, 3317302, 1450803],
+  "characters/rikku-gunner/victory.png": ["dccc92628a59988a8dd83ec60d0c5384e9ab90a36e92888bb3c96153f1f88c87", "9a33f3af5982337494ae0ba8dfcbb1d189860b6f3357bdf868e3bc0476d0725b", 389644, 380844, 111000],
+  "characters/rikku-gunner/victory@2x.png": ["4576ef60a4344d360464080a3c04df9459396629c2dbdc7d2ab56e0480cf903d", "baccffc35b2cc7bb037efa94423e7ad9092e2bd0ab800bcb26b0cce89b6e304e", 1160224, 1140855, 438554],
+  "characters/rikku-gunner/victory@3x.png": ["0b86643f52bc4583703a91a3c13e33e62a5d4081a156a5834ca86a361f3e1e58", "a8b1a8bfa08a3efec3fdd3eb2148b44107cb88687656d0806970a2d3dcb8457a", 2484298, 2320488, 980218],
+  "characters/rikku-gunner/victory@4x.png": ["9812a519e51ede9d5e068206e243bcd0c3b0d1b39fe67dcb26dcadc9efd4265e", "f6e2ffef6cfc1f15523440fcee162656fdaef58bc3ce64a76a74ea267e39d59c", 3649567, 3374995, 1741203],
+  "characters/rikku-lady-luck/attack.png": ["d5597754986d92ab78c5216ac673640d804cf013b2dc87c0ee91ecbcbd4d1226", "965c0e6b01b1a12a4937eae3660cdef241f7562ecf52d6a3fd115a8b4396645b", 603862, 592200, 159562],
+  "characters/rikku-lady-luck/cast.png": ["725dbfd2cb39e763cc7d1a5eebc7be01ce922088cf3e820b495a8a57f9ec48d0", "7bb5b34edf77db39724a317f98b1a76f6cf8ed22e2bebb89c0fd1dfc007c6a00", 392632, 385864, 98527],
+  "characters/rikku-lady-luck/follow.png": ["0e5d5f8f4349de2b96ad75bc74ffcdb61368fc021ccc9545c82c87cdfe68bba3", "ad945bff1a2fbb69b9b3d3bf37365b1edf5593bbe34fbcbc1e2cc707d7f33fdf", 347929, 341418, 84172],
+  "characters/rikku-lady-luck/hurt.png": ["924e8c1a9d48ebe461b5d8d11f8eb45cd975781a0dabcf6b13e3c23c825242ab", "40598fd92cf2bd33795d7a69cfaaea9eca608b3a30bf098a28c14c959e06bb17", 412079, 399714, 112828],
+  "characters/rikku-lady-luck/idle.png": ["5876011b0357876069718f5227e51264191c7d9e05b44c4fc4b084941edc01ae", "7346eee6193010874aba02023075c9fa6dc5fca00a5e14315dea8936520d7b62", 505592, 491123, 141921],
+  "characters/rikku-lady-luck/item.png": ["6dc59c578f2cc1652e45a3f3bf76acae27b1ae1388195ce14a5c0e25d33036c1", "ac41cb9eb68a3d5f759463e0c5c23483410dcf850d9cd2ced7ca8e79b831a047", 442879, 435375, 122823],
+  "characters/rikku-lady-luck/ko.png": ["241a60a5005903166211fb967b9a26cff0c2e2070c5495724c8c733936c451b9", "cae6f03f1ef4177fc5e1000deeedcc96a014926d5b7d9b2affb6c61012d750ca", 482281, 470362, 157373],
+  "characters/rikku-lady-luck/od-x2-lady-luck-attack-reels.png": ["a7c972aeda8274bb637be4c8f941ab20b1c18cc3ad7fd876bd2f98d53aac1e58", "084b23cec141ec36123e36bf83f41ad26aaeca8c638ec9d52925ccc217e0134c", 533410, 525365, 115348],
+  "characters/rikku-lady-luck/od-x2-lady-luck-magic-reels.png": ["a7c972aeda8274bb637be4c8f941ab20b1c18cc3ad7fd876bd2f98d53aac1e58", "084b23cec141ec36123e36bf83f41ad26aaeca8c638ec9d52925ccc217e0134c", 533410, 525365, 115348],
+  "characters/rikku-lady-luck/ready.png": ["d42b0b040f6d4c315fc6bace920a5097326eaf61e70767dfb1937b8ca8da4010", "eb6ea5ec1487d573a9eb05699d7d8f8e3a5c6006d4f9a62c0b74015681ae9848", 516778, 508160, 137221],
+  "characters/rikku-lady-luck/twirl-end.png": ["fd33451365fdfa7b529d7874faee6ea99b2cf2fb7f2efddf2f11d2ae485e48e3", "8fd0e570556801e2ee843f2f497c4461684b85ac91ff69490ca8db5e303a23ca", 484204, 484516, 110166],
+  "characters/rikku-lady-luck/twirl-forming.png": ["c47c8e4919164bf6d1f8aedc083651571a4b85c0c928afe245abc1c9d131b643", "ff22ef5d801150d73531c9b57ddf6cffa660867bb7203a7c0d4cad26772b3463", 478335, 474267, 112787],
+  "characters/rikku-lady-luck/twirl-going.png": ["87d81f887d04c96c3421d4f5648b676a0a3dc5b7819c140743e7093508b38d74", "3cec1a5bcdefdb8b2eb701be1acef6cb5d64be1fae852f34fdb1bb0fd43ed1f8", 580964, 561545, 196379],
+  "characters/rikku-lady-luck/twirl-start.png": ["9644d4d8b40d0717c9cdd920ee740bd77821c980636424005d18222d78f61480", "b1561e947a7eacc94ec7aa3349ed547100507d25e8b80bc250ad16806f56e835", 545802, 526875, 186085],
+  "characters/rikku-lady-luck/victory.png": ["fc745f44e0a52da229eeb9a26bcdd2a8c0b7b6171d129c053ee9b04080dbe371", "187950a25f54b3672b26e50d2753176b7abe9304552233ca4b98b414dc900ebc", 503113, 495355, 132895],
+  "characters/rikku-songstress/attack.png": ["67ac3a26e6111c4bb9cf306c0b126b6c4b2e34cd3ecc76d102759e3ca4b39c03", "bb22b7a38c184fbf421ef298b227831d37c4dd3b8e95690f1252debb507cab60", 584594, 563243, 167981],
+  "characters/rikku-songstress/attack@2x.png": ["ea4e4d7a31666e79c60ce19ac7b1ad17c471f341918ec94f0483555bfa56b76a", "6971723babda5e7fc32b5b47cc14d00ba818814b3e7ec5993eeff1dc27786a99", 1680252, 1636853, 661795],
+  "characters/rikku-songstress/attack@3x.png": ["75ee523ec58c329a98a76696c2d577586787a406a898495ea5614555bafaa150", "3bfc5f585059bc6535066e33672274b982e6e900b2c3f7174ecedf20ba157db7", 3606115, 3311048, 1475894],
+  "characters/rikku-songstress/attack@4x.png": ["f548d17dae993a3c843ab745fa07b14fcfc54c1d0a2f9f041c2abfd6d415b761", "91e5549bf74a19b0777ecd270c5dbf5deba35e8992d20a36da93da349cb5f7f0", 5069523, 4566796, 2617308],
+  "characters/rikku-songstress/cast.png": ["cffa22fcfa27f19da5285cd94b5bbf47afebd8d350878334483136de3570a562", "897dea378d24f22b5d91ff603f842ddfc27e3d31a51a0a7e4291dd31710de5a6", 485722, 465189, 127657],
+  "characters/rikku-songstress/cast@2x.png": ["cf243c26fb6dbccabf91f537c07f5a275b03a86310582c12a50cb57ab2313374", "b94efe78fd2b9b03d69d2f881a7660ec28239f9fdba281236246b4b907808a11", 1407190, 1350432, 502851],
+  "characters/rikku-songstress/cast@3x.png": ["b1b336caa9775fbfe6e8d2c7bd9662f3b219fbd9932989dfd95b8959ce308c9c", "1199a446540943bd9adb0095d0ab036aca6f42ee76792501eeb22a8c15c0e87f", 3014493, 2719147, 1118389],
+  "characters/rikku-songstress/cast@4x.png": ["298d5d449cd52e51e9bf241cfe6fc04d21377fd86edf758c9e7c7b3fc8dba580", "4b9e35443f304e27aec07723eb657034f439518bbebe7203f24beedd48118f9c", 4227718, 3740213, 1982917],
+  "characters/rikku-songstress/critical.png": ["97aaf03958e91d1486d1189ab657128ef3492aff94fdf55819fc615834f0e697", "386915201d864bb88c3b3d323d36300fd296956cde21ca76dd71f1ca423720a1", 571167, 593380, 270270],
+  "characters/rikku-songstress/critical@2x.png": ["8adae0214381c3d6388164f4dc850d758ce13efc1fd2539e5ac057024f11d85c", "0a9b4fed4ed039e7f452c14d9144b8a09e0771db7b1f369a179ce0ee76d76769", 1920495, 2035858, 1108193],
+  "characters/rikku-songstress/critical@3x.png": ["6b4e9424754f76b07b5ec70f73099089a7c3b2730f4954f4b7ff253607158f74", "fe028f563955e87e48beffa91bdf05a092b8fc0ac8bce256a14535a964dae7a9", 5312030, 3977885, 2469914],
+  "characters/rikku-songstress/critical@4x.png": ["fcacaedc8dbd75d2af262ffeaa09a63f9061362d8de1065613a4d62b0f2ef09c", "efb2b13be5daf8d08c2c09dcd21a674093c97124cd61c1db8acb7150fdf0256b", 5538075, 5911992, 4352623],
+  "characters/rikku-songstress/dance.png": ["4b3a1d9df1579f2c61b034cdd299e79c7dd49146e0ddaf4bafb0a48a99ead145", "a9d38a472cdda447f92da48aa2bdb84daa121954ac8161fa016b34e812c953b2", 672099, 647881, 184306],
+  "characters/rikku-songstress/dance@2x.png": ["2952a9890a938ad87aa05bcf2e63c0d2d90a587652533e137227a53164cf92b0", "f701e4237a4e42226c8138cd9df99036b43f67d6b88a05a551a4a69ed422df12", 1962458, 1921899, 731531],
+  "characters/rikku-songstress/dance@3x.png": ["8d3b421aec734948b8485ba78c5f518fb1fd008e3b8482b777c882b6dd3bb3f7", "89d8d9d1825a9dc10eb7074e5871b337719b47aca2a932f5d6524d219aee6e50", 4217307, 3928828, 1631381],
+  "characters/rikku-songstress/dance@4x.png": ["fa4d3d5d25e40a51e114f3c5752de47cafdf54963b76ca9d67d18081d344d2a4", "c81811db45d5f4ac09cf82299b7288f3188ee40a691a235446969e32d5414b9e", 5953662, 5455230, 2891526],
+  "characters/rikku-songstress/hurt.png": ["fec78e2124c5e0b7f6874dcefc3123aec52b3740c6c2b4a485dcb05e61feba90", "6c096cc3ba8a9146229698fcdcdaed33036f3a0bcdfc3d20b68d14588920c5fa", 509763, 498898, 139139],
+  "characters/rikku-songstress/hurt@2x.png": ["8f6717945b02610b2b4abcd89ee7d158f1d269d9a137422d5ae341fb75bc0c9c", "2a86ab10fe0df6d50e22dab874fad49d16496013907fb3724a05653ff0c17d7c", 1521509, 1502019, 548040],
+  "characters/rikku-songstress/hurt@3x.png": ["32971d57e5278ac7147001f24a49da04a44e4aaf0f07f71f067a9211767e56e5", "395329b1017dd580ccb7998484fe7e15d3f077b879e390c79b52b3457da94619", 3194841, 3010111, 1216466],
+  "characters/rikku-songstress/hurt@4x.png": ["34085b45006b878dfd333f4806d74fecd024776f6fe180457e28f08d4e332bc8", "60da2c099cca9762295ab595a6711cd815fdd81d79278cc4dc2d54aee959bb88", 4581910, 4260967, 2155111],
+  "characters/rikku-songstress/idle.png": ["f16fb4f4b55c826926819b111741a845602bdb1b70af2de94a6c187c5089b5d4", "662dd1c126147380ee46f783804b0bf268f08eb161fc59dd1944f06fd63b6d46", 668238, 636306, 210691],
+  "characters/rikku-songstress/idle@2x.png": ["f2f05350251094be90a009e18d74b5bfc15c58cca105e0391f40001774a7b91a", "fc226a89b2b034d3bad59b259d3f7aa5b6b724451acea7a0780c8a87e1206164", 1963747, 1868805, 841244],
+  "characters/rikku-songstress/idle@3x.png": ["62773423ec592ab81037c5c108b4124873b32ca5d737861557ce73e9f5d311f1", "210fedba0628c1d65b8ad73b61c7b6847b1cb384674ee3f691a9801b9760866a", 4258868, 3812928, 1876567],
+  "characters/rikku-songstress/idle@4x.png": ["3faee488d67585a98f5cc2cb65c49eb08b8e91e485fe77266b93282fc9e7ead2", "71c36d2314fbe7e9c297c45b83264971d84e1001168edb322e3e569ce3b9675f", 6118301, 5392444, 3330049],
+  "characters/rikku-songstress/item.png": ["0a1fefcc01927cf69bd847524221a29debabefb2d942d32305f6aa9005290b2d", "781a8f9870044b7e40f733c2c4de3a31fdcd07eb49358519f371b836068f8f29", 520485, 505678, 160708],
+  "characters/rikku-songstress/item@2x.png": ["efed0b0f5abf700679453b614d05cce38c4f7caf87a6e7a19f676039e5b5d03d", "a80de94213a8bd72d8f3c5f88f6e40d352793b02e6585e4b88c5ed6c257f4bec", 1529518, 1495792, 633335],
+  "characters/rikku-songstress/item@3x.png": ["ebcd523f357c6f7027079d114320b254c17c35bf47e1a6be4e7cf664ed02a542", "19a24ccb6159305c727478c8a87c0d4211a2fa228b47e192a8178b63f843dbc5", 3295010, 3046454, 1411887],
+  "characters/rikku-songstress/item@4x.png": ["197018013d4ebf0c1025a1a36d07b62caf41f77f70d53af3d69834a9eda12472", "770e5bc46033cca2eb389f03063fd36b3fb09e7b35185a5d50963a07e2b0ad22", 4799363, 4371158, 2504799],
+  "characters/rikku-songstress/ko.png": ["17f4f7ede4856a4e393a54075bd73231f4af7f9f4052f500c171810f1318ba5f", "3448eae7167e8ece44f71ab0a44ddb224f7aba5735aa662e191c514a6da47f35", 592055, 581202, 218258],
+  "characters/rikku-songstress/ko@2x.png": ["7b525c7aafecfc17b3c8ecc4b6de484ae0e35d09c2257a1736b142e9f116ba0f", "2de61ce4449564b9b95614b7c39f5b194fbf6a43776ea10f0282221166c6fb02", 1857752, 1816692, 869793],
+  "characters/rikku-songstress/ko@3x.png": ["24d1a855bfca95eb2a148881eb37c9eb95086879ac21e23139386cc3e0779697", "9fa97f63660ed6ce4540160aa466591e2eecf1dcbfeba67e6b0bc257f08a3c31", 4126324, 3796925, 1945439],
+  "characters/rikku-songstress/ko@4x.png": ["6794d2f8112929e1d4913be21bc78dd92e150e14d135f17f8743895d62ce9ffe", "23e137768caaac6755d2e3ead7728141677010b059323e0d85158238db2caba6", 6174721, 5616230, 3451627],
+  "characters/rikku-songstress/ready.png": ["4cd23d12d94261ed5fbf87dcc46bb61e646a9df2f5f940dca505918a357f1533", "ac3c0e775497c6e19764dde22781bdb1937dc673677cdb00c4813fd2b3222f54", 482437, 488168, 188607],
+  "characters/rikku-songstress/ready@2x.png": ["e2a825598eb55cdf990ec5deefd31f83d61bb2abad9b23c1da1a717ea542eb81", "073ee4dedc4d27e2da5e0f2f64c6dffc4c6e1aefd39c647c3d30efe1582bc13f", 1645418, 1736704, 768909],
+  "characters/rikku-songstress/ready@3x.png": ["cb94e6881ad4411d5e3dca3ceca15b7cb358d47e59a7e30a9d167ecde60cae75", "acd450eb08c46eb07d92a382072dec3e6b6520a9882df9123243aaeefda1046a", 4408423, 3382097, 1715253],
+  "characters/rikku-songstress/ready@4x.png": ["a2a0b83bec71980a645af300c6b9f735d4f1ff7ba895038eff6486bf5ff3d551", "4fdc1a0126378f55efadbd00073aa1aabd6d6ad9d8ef20af88a2698650484792", 4752537, 5033016, 3025878],
+  "characters/rikku-songstress/sleep.png": ["8d3b6f7ed50bc45f2e5b67ace7b5c4a51ee2018fc866ec5d83ad53bb65c3ff0f", "e98586df7615df7c10e419d9cb07fab683f1213a92221ac83ad38c022d8da74d", 405684, 427741, 201969],
+  "characters/rikku-songstress/sleep@2x.png": ["958715620fdfefdd1749e3034894f42c5a08012adff62100918eb2284ac40912", "0bd5a9056fcaf20765f8d1182ea780953bf3af12dbb5b503f085427be6ee014f", 1296993, 1393926, 848474],
+  "characters/rikku-songstress/sleep@3x.png": ["f9a12b5b3757bc7e0df0bed509e40a56aa57b87f7471264e773be5e4641299cc", "e01b5fab4af432b8bd469933a3ad1b6b851adf97618141dc9012de6c0579c330", 3489840, 2682926, 1897228],
+  "characters/rikku-songstress/sleep@4x.png": ["bedaa757eeaaf5cde7167e5e6e8ede016e0737919285ea81aea5d5e17fee4a50", "843fd8daaf277af648a85c6468026cf2343a5a494f6d2229748a98d3b277e385", 3621449, 3960791, 3351905],
+  "characters/rikku-songstress/twirl-end.png": ["77226d09cedc6e4c3bfd9db45deda7ab3bc87445cccd49998a6728cd571b383d", "43c71b80a42c35a0d21e207c59cf50f58ff0afe667202ff88f55bf228e767e04", 516908, 510367, 146420],
+  "characters/rikku-songstress/twirl-end@2x.png": ["6ae39c5760f8116dc3e3570736958431198286bcc5bedd5fb604f695a203cc3c", "076bd34958a2f453e25ff63be335943958b062d3c228b0b68c1fb8f07941ed52", 1568630, 1529582, 578981],
+  "characters/rikku-songstress/twirl-end@3x.png": ["9fbf1a6a18453beeceb016100e92f243d51a483e023844330697ea548b744b81", "70bf2e667f271895658cdc7b8a2992b88506571b6a4d85f7520ab7a59a8cf850", 3376668, 3130657, 1289820],
+  "characters/rikku-songstress/twirl-end@4x.png": ["bd07acf75a4e62a4eddb44dc24f90843ded3503aeb99e39a2519392635a4c4ab", "611db4b8843244f0b326615b7f7d481bbaf89504f1ddfae52e2e636b4b124452", 4890152, 4474457, 2287990],
+  "characters/rikku-songstress/twirl-forming.png": ["453eac1e63ba162793850d041f30f3d8e13e229f346ea6b842109111d84e3f72", "09c1d5b8c9c27fba7424c6c3a97588f5f410e82b2b9dd8e82ecaffc09efeaeb9", 526769, 520215, 152238],
+  "characters/rikku-songstress/twirl-forming@2x.png": ["4873e8d2240f8894d355145ff4cdfc3e6e2599a426df4de5531ee780a7d9fe9a", "af6b99b8249ebac7dc230227424de397f3e4d3fd898152d93112c6d1a2c1ee88", 1592107, 1567381, 613001],
+  "characters/rikku-songstress/twirl-forming@3x.png": ["bf60adf44d94687506bed2845addb7a7ffd7e43a959507bb95fd8e48135a03b6", "990b1fbf922453e27113272b90a97d690e3f628a5dca977d85258456907b8cfb", 3426544, 3217314, 1365665],
+  "characters/rikku-songstress/twirl-forming@4x.png": ["75f5b5be30a00e661c4118441b63cf5b2d14b71305085955a9233bde37169869", "d15ff7a14630c675861180b5a8a3274422cf73c4eb36e706284d6afbf2c8b9dc", 4943677, 4586541, 2424306],
+  "characters/rikku-songstress/twirl-going.png": ["51c81f0e753a3a75d6c8585119f89773801844a722337a612c9b696266caa9fe", "c8e1bacbfb128325322c4e9268e38ee28a79bd9ae951ec7a95c21dba814760e2", 540719, 537511, 144169],
+  "characters/rikku-songstress/twirl-going@2x.png": ["39bf6a2fe0ed09e3bbe3ac50e6e2b7333293e68226b37433fb65c9c7a0de5a93", "1bb016e6080e64c69084a473097275dcac70d9073d7845a76d0a2bc6fc94055f", 1610858, 1600468, 570694],
+  "characters/rikku-songstress/twirl-going@3x.png": ["2823fe627653256028e14a96ce3a983dbbf184ad7f95f5ae17c515e92e11f09f", "2fd28630d73a886748bca10c074143f1912616ade3e9e50de6d89a73ae1197f4", 3402037, 3229104, 1273916],
+  "characters/rikku-songstress/twirl-going@4x.png": ["62f5d72135b16e1ad31b43398cc2ef36d593159e1cf5cf6915cc235d2c2bb34e", "420cdb5088b7257c1fe03fc188ee26ae52f62ee278b8274a700f4de7699474c0", 4901830, 4622940, 2262798],
+  "characters/rikku-songstress/twirl-start.png": ["c438ce86bb6f68c3d3019fdccda3ad8c3ed3bad2acd0fb11dc7a10a112ce6af2", "df603d914c8d9547968a629ee0b090e940ba6400b3b5bc798f1706fa35f31e01", 466017, 471865, 128078],
+  "characters/rikku-songstress/twirl-start@2x.png": ["4852b532e58b3aab63a73a79064842a930655f2892fa7fba8c5511d71b7a0076", "debe898bd91535fa40a782362933e1c1587169f5772ed2d6f8b93b8567eb7417", 1433297, 1431216, 505159],
+  "characters/rikku-songstress/twirl-start@3x.png": ["746f31f206e1b77b96fe3989782ced606ddcf0813e3b219dd172b85091fcc77c", "69c8eac4e8e71d828088b7cc69a5ec9d74a7287ded912fae732ad5e97e0e51e5", 3067173, 2920024, 1127550],
+  "characters/rikku-songstress/twirl-start@4x.png": ["3eacf5fb40aef7dba0bf570a58b9a7f13f367caf61604917cccf253c6f17678b", "fdbfe725eed0a640ce583b9429a950327861affb645267ef4c4019337ccbaaa1", 4402451, 4177038, 2001687],
+  "characters/rikku-songstress/victory.png": ["1cdad88c5857ee0f93aa3957e0defe27a103e5795e08d6e36a34b32f720bf926", "339a608edda3126b2bcf869a69fa6c78c3d2a4615b02b8ffe9a1ce8280bbe97f", 809158, 778611, 259013],
+  "characters/rikku-songstress/victory@2x.png": ["23409cd1d504d97d68830e7faee6025429406542c66c1a2a573a6f4692d4d979", "a709284683c0b2621a0f9137adfd1ab9341d19c9c24d78dc948893634176d4c0", 2433749, 2360903, 1021582],
+  "characters/rikku-songstress/victory@3x.png": ["e753310d21bb985e258abd15af2099fb36df95b4d61cad0279d7da96f59467a7", "0e657dd5611ebacbbb165872c01a54748b3213ec45091b3287f8dc5848d84366", 5230156, 4834981, 2276841],
+  "characters/rikku-songstress/victory@4x.png": ["de4de70f172a7e59617f91a42469e7dbd4dda5bcfdfa929759ac641355cdab27", "7436321814ff0c9b13dfc8a0597f79ed0039c0168e6cbc24ded74941e19c04a1", 7502564, 6834377, 4038060],
+  "characters/rikku-thief/attack.png": ["743bba8feb5cc6cf08bcc3dd590e3cdd87a557421e927dfb5790551b3dd8707a", "4a69514f9ec06ccacf696fe4325526e31d85f0e73927ba56214507692f37207d", 508385, 525131, 199287],
+  "characters/rikku-thief/attack@2x.png": ["d2ccc9031da96ddcc724a81538d00f8723e50575f077b94e1d8e9bb15499073a", "5bc6e7bd114136ac4ab1d086872f8db50bc57cff3523d269b4cbb6f48b5ceb7e", 1779849, 1889095, 818299],
+  "characters/rikku-thief/attack@3x.png": ["1d5ba3c2183d9e7c4a220c7c3b794c270309eeca43434473fd440fcf428cae80", "f3e4153d19c6750dc1fd29ddc5684e5493ffc80ba7c4ab838a1843510efd40ec", 4949824, 3714230, 1822348],
+  "characters/rikku-thief/attack@4x.png": ["2582ef8a6db02fd0f4caa6aad8425585d681658854658e3ce72926ed96b98509", "c26c35482c0e9b29cd556cc0be773a32804a0623ebb1feed3a4a496b630ed44c", 5220596, 5564687, 3205133],
+  "characters/rikku-thief/cast.png": ["720409176e0ee584c250e7bbe90dd6154cd2100e11a4a0da796c24ee6c2a172c", "473f6edaa45e8a04f4b69b3efc43f23291815d06c280747ed1292d2acd990636", 399189, 393998, 93015],
+  "characters/rikku-thief/cast@2x.png": ["a29a9eb156c8804fda30178e51c0b16a35580603cf54179d02e9324d7d596988", "b2a5eac502ca3bfdd7f84cf8533e024f4e38a4c8ed99cc87c32a41366352c51a", 1174879, 1158340, 367483],
+  "characters/rikku-thief/cast@3x.png": ["da41f6c5169e49974b885abd59731e173728b8d3022a12750203cf0af1f76bf2", "93cde513da2ca3f61257a0de66d58d0c2a3baba1391991c709002f7fb44d674c", 2516788, 2367512, 817337],
+  "characters/rikku-thief/cast@4x.png": ["05dbb7e46a1542319f0360d95101beb76d640355103e0a0ac66b72b47910297f", "8d619c7dd1eb8d42f9a28839478bd442f5025ea0b5f5818d7076dd371d9ddf05", 3565013, 3312242, 1448189],
+  "characters/rikku-thief/critical.png": ["66fe7b56f05366330c63d3f049bab3d1f481a0b3ba3b9f13f74308c0013955e1", "a9c420d96b0a56340c61d4aff02ecfc2a85c452741dd3e5a68996964e128a84d", 616887, 604643, 213211],
+  "characters/rikku-thief/critical@2x.png": ["b9df7007475638d19ce20cf2f90548e5caae9a1c85a459623dba86df0ff3af00", "a2654c3a183b15b2b0ca5f07abbc893b510d768117e963b70369c009ae48093a", 1948862, 1906763, 844776],
+  "characters/rikku-thief/critical@3x.png": ["ce0ec5a7976e3e2cf80d361842c15b805d3440e2e7c66a2c0600eced8e79d146", "8c7a9f205caee3980b7f8c2f79acab8df526ca1b47a26100a7181ab5fddc49dc", 4323430, 3975095, 1890101],
+  "characters/rikku-thief/critical@4x.png": ["280e5cf1bc53b1cc40dc55d9d982e81e503d387b0c6c9e6f2536a116f0241a19", "bce29ea80ea8ac560a06ab52ee906135112683c9274cde5fb9a3821983833297", 6369846, 5799737, 3355195],
+  "characters/rikku-thief/defend.png": ["9af816fda5e6be0268d83f10a1681cae9e646d7aa434e40b3dda5d8818171d5c", "9640836a90fe89c36f4eea5e52e69d09820fe539d0284d22437aff630da507f6", 447002, 471147, 169229],
+  "characters/rikku-thief/defend@2x.png": ["5a3a46cdd077c2b9a9a83d3f88c4ca557b1825332b6e595285b5aa6509d9a8c5", "56beb155542c4c623f67f98d179c3ba2547915e67949da2d806321cd42f124f9", 1539495, 1657720, 702824],
+  "characters/rikku-thief/defend@3x.png": ["f7a9e1bd83ce8a4e853c51abc581f6f8488136dcb87348f7b5bf10dde89f5bbd", "466b799176546c24ef8fc07857e052591d5ccc0f035145e0d07b8f6bdbb5de85", 4271892, 3252906, 1564986],
+  "characters/rikku-thief/defend@4x.png": ["3152ed61f22055b24b3a2f368bbc4b3ee03ffa77385c81d3592fa737379bef53", "5a99f59955b24a1ad65b87e51e86118bafcbd587adbe5fabbb07930eacc30710", 4488369, 4854542, 2754387],
+  "characters/rikku-thief/follow.png": ["8e9ed6cb4e22eb3ba59b840d1f42e07f88ce01c7d01c339a34ddf71c9184706b", "770c670463d09f79b709e5692675b81da3506796140c652f294c2e1a3976fad2", 422770, 415190, 84865],
+  "characters/rikku-thief/follow@2x.png": ["6966c10ac06b0917e69ad7ac6415617aca018864b8ec63e77bd41acdda2cdcb6", "8e99b405f1fd43ec05986b4315e644961ac20f93fb13701094aa9ddb519e07c3", 1252139, 1225116, 355625],
+  "characters/rikku-thief/follow@3x.png": ["678436aba67cfbb5654b5fc5cbab37479d4437a69e03103f010897b283ca7acb", "21b70033eb3fad65378b052fbe1e5848a0d44f762293c51d3a5830c95c1decc5", 2666691, 2500418, 792868],
+  "characters/rikku-thief/follow@4x.png": ["49b8803b7bbac6722b132531583df944622d4df75268b4a1c9b64bf96cdd48c9", "64657efc8b9f449ca13744fd786933b8408b86caa04402466d4094259e3e39a5", 3807167, 3529012, 1406142],
+  "characters/rikku-thief/hurt.png": ["5e2fc453e070990a30ee1b648ccef25dc6038436935641ec1d756a90c23d44d9", "b0f97721cc051ede61460727f5a4480ea1189745fb15f10a3bc29047a64992b5", 415243, 410817, 101914],
+  "characters/rikku-thief/hurt@2x.png": ["720cf10992e26611e24e17e3fde864426dad0bceda86f4e3175e68a5bf688eea", "72d1cef55d2a3e3543384045b8dae865e308fe91b14e699d82922bc25483afc1", 1214070, 1201434, 390608],
+  "characters/rikku-thief/hurt@3x.png": ["8a606835b288636aa3a9f4eb0a585d06c9795dd0dc9e857f0ae76a8a868fa45b", "89be4a7130a7680b0dfb2fc7937aea76d9adc496841f713de679cf0ac8e478ae", 2598829, 2455771, 873226],
+  "characters/rikku-thief/hurt@4x.png": ["a55f4b9005b8a765305eb399add74a62a9af50de7cdd6268dfb3ce0dc36024e6", "a30cc3e9641d33c4d095c1bd072036e4da11162452df1172245f7c62e39ceaae", 3671040, 3431963, 1549247],
+  "characters/rikku-thief/idle.png": ["861535fc71ce5fe8e8a34599112e34fa88844866b2409b6ba1594148aae7d3ae", "dfc175bed545b3588071a4558fb5540c2dcf117374e6220a25135d385e7e3929", 726850, 715528, 227885],
+  "characters/rikku-thief/idle@2x.png": ["b3e799f8b9c217f19fb6ff119c11e64a53de8695f68fbc70154e317f87edb2bb", "609ab1dddddf366b199dcf2acd995eb3cadb7a43f3e64564d9456eff6c9c5a2a", 3924074, 3895672, 889958],
+  "characters/rikku-thief/idle@3x.png": ["e514747a7d7bc2df42330d1453f54025e274bf51123f91af1f07e1cf0bc89e1f", "a5b9ed31b05ea7291ee38591b93852a63f1926c27bbf40c986820cf4cf7dcf2c", 4728660, 4406998, 1967031],
+  "characters/rikku-thief/idle@4x.png": ["adc55d10cf9315384af65a4205d697458c13ad8639054b4ce4934daa0927530d", "640a374a4e545eccb4a627be4809b28abf1376754a38d4e97da2afc33d3ef615", 6990960, 6451838, 3490406],
+  "characters/rikku-thief/item.png": ["32736415afc521ba6e9c7901cbe640cfb978d78fd89bc9fdb908a682600f74fb", "b06f2dfcc50d260c33927f04e8f983daea894a054a0b35afd3ecfe69820cdc72", 397023, 393411, 82514],
+  "characters/rikku-thief/item@2x.png": ["1835745f7a3616ad7de4c8e038e7a282354f911cf4e90b81a4b1900684f06ad1", "27837c5b0b550744f37ccccb684c9fbba205d18562f89e0c9f23dd77eb1afd2b", 1175516, 1167326, 333227],
+  "characters/rikku-thief/item@3x.png": ["bb26923a5ebb6412d14b0f250aa215868eafee9b124ad8f6108a6d5d2c67c608", "935de9bf2f7d83b1c1d8015178211c53aafe6093095dacd9d778e5b1a845a071", 2509522, 2386657, 745103],
+  "characters/rikku-thief/item@4x.png": ["52d153d266bff40d838a756be2af763be4056f77fdfd26bebbbbb6b0f2c591d0", "99263d7fca66d66ac89df8cef64ad66e735475004da7769c548916552e2dff46", 3653235, 3442738, 1322323],
+  "characters/rikku-thief/ko.png": ["cad3cd1289cbf5f499041ef787c4a8563549ac3f494f8b69d3c011e377f64a9e", "f6a72a18923101edb8719e70058ef10f3dc1e6a15dab4390f986e2d3f01bea66", 472576, 468469, 166974],
+  "characters/rikku-thief/ko@2x.png": ["1edaa5d479fcb9099311df868d4bb806a582e4e0623e8735bb681114328e6a91", "b672710988e998d5756d4e00924432f0bed054f7b15e6269bb2a946bb35c9c82", 1461317, 1450476, 663631],
+  "characters/rikku-thief/ko@3x.png": ["cc06a7e93c90c0f75e3ffd37da86280df270f1704b99be18e8624041b6e4b277", "fad2b8c5ba0cc20d7244dabbe0ab2946ceac340b9555157a16b0bf65a0e2780e", 3221391, 3027497, 1485151],
+  "characters/rikku-thief/ko@4x.png": ["213cca5ed632b88ae8111835fdbb429d2bcb578a9f52776bf291a28aa0683829", "2d49e6fb9feae883d9f71d63b4301c117f10aa5dd96588fc193db1ac33faf48b", 4744224, 4424353, 2636601],
+  "characters/rikku-thief/ready.png": ["b06b0e6f165156a0166fefce1be19afb6d3f01ddd09b0ccd7ab63d5c09417867", "219fe7e1b171276d0815ce8d4f8fe24bfc74a93643ab808732ce04cd5ff6697d", 409437, 397909, 100472],
+  "characters/rikku-thief/ready@2x.png": ["615a06c641a624539e8735c2d040f69e61884fe6e5050183740badd119d04ae0", "5f29b480b837e0f141da65b45d91a4412f4d7ae68b463907405bb058d4c2e992", 1179265, 1147571, 396841],
+  "characters/rikku-thief/ready@3x.png": ["bd75c60bad0ddfb3754d6095970ae4fb19337e0199e86f5821276f3745c9d2a0", "9285c8ac3f0bad514d4ce6b3ed51fab7374b4dd62459a51387af907116433db2", 2519916, 2334067, 885060],
+  "characters/rikku-thief/ready@4x.png": ["2e352f2fe7ad3a792a187caff5c2c8f6099679a67e320bfbf8cec057cbd00722", "23fc88dafafaada3df4304b99de077a6f856792f2e5ba024c28cbd723cf025e3", 3647211, 3334919, 1568295],
+  "characters/rikku-thief/sleep.png": ["ff087a43ae1d28c9604be7060da30074b3fd7a4bbf405195b2c518f9ca883370", "e6120d5c54281acc473084f3acd34dff834424de36d3dfc7ffa491655cc84485", 484824, 475825, 136387],
+  "characters/rikku-thief/sleep@2x.png": ["e24d69c43a1d98829bf01dcd0e90e295ce5f5292e998740483f0632d3db28866", "d5664fa18da352cd6ee2f8798f390172f49063a5e1bdeb2785d7b9c64b454fce", 1464256, 1437080, 531664],
+  "characters/rikku-thief/sleep@3x.png": ["d1d26b1dfc64ff234f0da49ff1f2042323bfadd707540208f609d7bfc0f82676", "45641149e70113386d2141638bf0e12f35c4c6411f9b1384f266771610fbddc9", 3179404, 2942654, 1190161],
+  "characters/rikku-thief/sleep@4x.png": ["ce8cda770c1cbba3d81192540fe6a9c94c1970fe3be3d5714813252eed8080dd", "2b64f158ea05999b5cbb9c4894af5981d62c2435cadb28184cb451e44943e4cf", 4706417, 4321979, 2114923],
+  "characters/rikku-thief/twirl-end.png": ["99dc2b4598da754dbf8c67ecbfc7b4ff6f713f7bfe0b01caf30675019c809b9f", "f52179b6f3327d3a760c976b2ebd00c710a171e4184a5abe36f9ac80e17f1bcf", 544115, 534686, 145657],
+  "characters/rikku-thief/twirl-end@2x.png": ["734b6312d03b27a4f7b4b1b6798151e26d6169da7cfe10751c1e7678184d1eb7", "79a745a6f4293e6eb9655a3abcf88733db7063b9971876e849020d06063ace02", 1671960, 1637932, 574387],
+  "characters/rikku-thief/twirl-end@3x.png": ["0a1efd6bedda8be06f8a2df153c12eea99f2c28fb41cc2cb7e386522a0c94a8e", "ae42d306be229757719df61aeda1e170d7ba62039a97aa139ba4e3a0cebd8346", 3566357, 3338020, 1279999],
+  "characters/rikku-thief/twirl-end@4x.png": ["43f3159e1b731425c971b2e79196e54fda84836023abc3bef1158e5dddaa1559", "9ae6d037c8b5f95af19b488c7cccd0d166c6377d361df8dd40907256af43c657", 5148774, 4779702, 2271145],
+  "characters/rikku-thief/twirl-forming.png": ["61bc3a9b9d3826701c05141bef1941b0610bbb7498f960f1fb00f4775ae79b15", "c610cac41e8017bf2f22556c845da24a660e186dd7baa0cd71535ab28bc7a7fa", 545526, 541411, 126171],
+  "characters/rikku-thief/twirl-forming@2x.png": ["433e4dc51e7ed2d54430c7a98bb0648a1cd57239044039c6cd82d9d64a40843b", "96f5ae386a993810ef37eef587f410d4cfbf06b58b67ba2d644c2db38362b07b", 1664034, 1655938, 512341],
+  "characters/rikku-thief/twirl-forming@3x.png": ["711da8efd2cf89fdc485e121efb810b7784b8aa4000d8cc3a1db42bde3e53601", "9494b5d091a5e8fd6e5e1d14642a7b84d17b6c9e95f537dfbddf606242c344d0", 3503462, 3354727, 1143702],
+  "characters/rikku-thief/twirl-forming@4x.png": ["493e0f4c86283c987871c90ef89767245764e02226fca8c6bca7bf4f0c92f3a3", "4b7bc36ff568fada3f1cb4e38ec77a50bec66bd63dcd4cffe731b6754f9501aa", 5059842, 4810825, 2030851],
+  "characters/rikku-thief/twirl-going.png": ["f9113fcab0d1f97ff49f318cc09d19abddebff371f24b0a600cb9593243061bf", "4c403df6131ae4145abafcf9a938753b50cc57d4496ed42dd5afef3d31fc009c", 453610, 447210, 110837],
+  "characters/rikku-thief/twirl-going@2x.png": ["11c5bc8dd94dc094d83867d47bc4190a695f8c9e39dde8bc070c8dc7c9dedd76", "924658092d635ab5a8f210bc9fa31c2acab40ca87d2cfcc4734dfc6e80f7a159", 1362814, 1347970, 439098],
+  "characters/rikku-thief/twirl-going@3x.png": ["60f492d265d31b5cb9b2dc189f91187e7e39baaa4627085f545bea35aa6c2400", "8f52fe01539357be55fcb3adcb211ab112ec1e2b23bc0319f9ca6984afbf252e", 2869625, 2724667, 976418],
+  "characters/rikku-thief/twirl-going@4x.png": ["918e15a3f61f67f906476b37bf3161d6f10ca5fa3c6d5cedb9fe7ea56b5dfc24", "f4b887270c530639955c54f8f68f09c13d18f3cf048b2cb93f08ca7340c1a24f", 4187035, 3921028, 1733364],
+  "characters/rikku-thief/twirl-start.png": ["5f43626a5bea7ebf8d713b9e1b9ff0009d2157cb6ccde976db66dda6887a12d3", "7568f0091cf32b2a72d24a01451eadfbed6bc68f6125e607a2dcc12e047f326a", 423063, 416124, 108731],
+  "characters/rikku-thief/twirl-start@2x.png": ["377e7dc9d16f039ce977daa3a735e8435694c59212d7c263270c1d5293528e02", "dae391a8433777e02563a62e7b0e99feff94bc4207ab8974f5d25e48a5291b11", 1279878, 1261723, 430482],
+  "characters/rikku-thief/twirl-start@3x.png": ["ee7945f393cee584ad3b9e91ec813d3543050e69753a01613d9645976a648d9d", "72365675df46b32d2532e5ccef38b689141bb4b0232c934b0980205523e3fdf8", 2759460, 2589876, 956779],
+  "characters/rikku-thief/twirl-start@4x.png": ["372e08b94cd768d2c4686e05e60fe0650f708904d5873f801c3ebbab6a99783a", "aff4f3ca4fd59483be0aa26525ef4f092b3c718b0357e950cdc31fdcbec64a12", 4013462, 3713148, 1697190],
+  "characters/rikku-thief/victory.png": ["f74c8a97039ef9dfb6681d30c85bff133c9c0fbfea2281ceabc682f981780677", "b43cfada84d814b17d3207603a645711e7d874ca761470d85c6b1279282b48b5", 346682, 343000, 73357],
+  "characters/rikku-thief/victory@2x.png": ["876316a524a07b7ee369e3b3995e2ae11ec17f649618d4c096c539aff55e9eeb", "16e3135da25eaa1278496311242ec90237070a28da15b9392aed5b1438622e60", 1077693, 1067862, 299680],
+  "characters/rikku-thief/victory@3x.png": ["4733ff3ecdd073b5928d6dd70ede517b66c650eaeae8cc47dcbffd61cf4eeb1a", "6ab3596fa3060fd604e4cf1ebd04318dcd62d2bd7841891d4819cfd8c6498129", 2297349, 2179146, 669755],
+  "characters/rikku-thief/victory@4x.png": ["ee439aaa326b3ca9dd2309df779e39b7f5d399e1102931c10a3fc3ff32c9d95a", "0cc97ed6dc3fecd38cdcf96bae36d40c78aded553fa9c3943978000fe29fb800", 3300724, 3106793, 1187293],
+  "characters/rikku-white-mage/attack.png": ["d89831aecff1544c1a5a17eb20b609d482a4e2ca8964f3e575f42e4a0094727c", "f8ba3b9cffcf7373876a4500befbaff9a309aa86180986aa1f5360c9a2687c4d", 961132, 929014, 294235],
+  "characters/rikku-white-mage/attack@2x.png": ["534babaa9a48724fcd5ea15643622702d24fe9164c7e314737ff61acbe85569d", "9a1096f3ef1da434c4423b074dc8fe43990243763bb0612ecf1ecc4b78abb175", 2870621, 2772320, 1165654],
+  "characters/rikku-white-mage/attack@3x.png": ["807508ae12add99c885e21da5a20953b3593a0a43d4faf77d31ef5bc9f3c2504", "c22d71f8ddb20570511a270f16acf7a5a2cbc524d7d429e66f8fff663e0eb489", 6273425, 5737573, 2607834],
+  "characters/rikku-white-mage/attack@4x.png": ["6030c54855da35c37baaea7887e27cab38b8f9641422c11b6b8a146f24dfc7fa", "72ebd209e77d93616a790315c98d1415e449a9759acc77d71d6b1c7d715d9e5f", 9105573, 8187803, 4625612],
+  "characters/rikku-white-mage/cast.png": ["0de1fd4e004088906f121607b57f4e4b81ef613e9277ca021e90d29d0adb7b7f", "1410f0997f0ec7606d8d691d55f39e184e4e9bc6ab6cad0b11e676225aa6fb91", 659633, 630650, 222185],
+  "characters/rikku-white-mage/cast@2x.png": ["ddbd98e156ea301454c5e1226b968a73e87bb55d8d5b0c652f42d2862fde7eab", "2bbbdc00862cabb67777cc45dfcb84e2dbb2a37b8850656d35e7581abafb4cb0", 1988600, 1874490, 877808],
+  "characters/rikku-white-mage/cast@3x.png": ["58fa486eececbb60fdaaa8a2780a60e275b160ec202a12a138287fd78b0111bb", "73edee9e4d812cd16e27bef414c2ca669976ea204458057b267d9430934c5edf", 4371178, 3875106, 1963958],
+  "characters/rikku-white-mage/cast@4x.png": ["6343776e7b9c1a92aef2a0b4bd1a1cb85fa495a11939253b148ff413a1fdffd9", "e0f004fb5141082acb8ed33abe5586f97ba8beda8d73a5deacf31709e0c9267a", 6209874, 5386564, 3487717],
+  "characters/rikku-white-mage/critical.png": ["9ed675d02e986e2a0ba17023c134bbc46d586b3b87b88ebc112d3a24fd54c9c4", "c27f23685563d5f9a9eae36ac45fb2c56a3d9101e8b143b47898f6f246b459fa", 491053, 525381, 178811],
+  "characters/rikku-white-mage/critical@2x.png": ["8704c800a1763feb120c738a0595caffcfe298551cdd7473c9faf95c5b1b225f", "621c77711fd15aa2e987b558e4688a37127ecc52012c5cc1e35418a71644bf31", 1647649, 1797530, 721896],
+  "characters/rikku-white-mage/critical@3x.png": ["ca7b25d39fea035c92be987b6c65044932b4d348a594eac9721f78fde91744fd", "cdf1820428cc56e23cf3c269990426970e939f72d199116553d3be039fd0f6a6", 4476044, 3503981, 1605904],
+  "characters/rikku-white-mage/critical@4x.png": ["b9d51cbd221e241d3f8405e9e68df7990869ad1a081325e03342a57a0f959780", "4c654762b8221c6c932800020412452e60ebec4ccafb33f56a095d1714c7cbe9", 4787421, 5251139, 2825651],
+  "characters/rikku-white-mage/defend.png": ["d6d4403b72ab97d7257ce328adfcee6271d04a10bdda23485a3bc9e6fd0a2396", "3e89cb2ce037983a4a98b0e144303903db8b5227bbe6810d207eddd3b90a5591", 592910, 613648, 265565],
+  "characters/rikku-white-mage/defend@2x.png": ["f51b28971a4bee504420d08fa0fb4b417af2901bfe0fce8769da73762a0a968f", "0dc1a73d10ce7f61d0965ce870fba86e38350e5f66b79b05a6edfea78fa137a7", 1947540, 2111547, 1077056],
+  "characters/rikku-white-mage/defend@3x.png": ["6de1fbb050351cc20f0657bcfb5809151f1e78a6f882f7fe59c20b1a87080d50", "5a98ae4006a78905cbb1c9a36a502b16055fffc066a54697c48e06ff25d4f005", 5570394, 4144852, 2403161],
+  "characters/rikku-white-mage/defend@4x.png": ["27a185ce4bf727026377561c1b936e260fd1897a15917c49a0f1dbc8617f1383", "bef1eed84eea3fe9260307d04187d69dd96cacfb3fa90c43f49303980784c7f9", 5683355, 6171725, 4241926],
+  "characters/rikku-white-mage/follow.png": ["3d2ac6f1f7e08c78ea2eb732693ebf7bc797e0d1831376920942263a46564fa0", "4b24c6662420c7fb199b8a86d45920ac21161460fee6e70a92c3d3bedac7ecbd", 565065, 553975, 163681],
+  "characters/rikku-white-mage/follow@2x.png": ["c8f14dafc77bf0ba0f67c94e4416ed3ff3ca6791509f93814d3b9400b823f8e7", "ca3484e255be06f3cc9296f6564ed37481f3870789fbd6437da77d94c66dcee1", 1669590, 1630680, 643031],
+  "characters/rikku-white-mage/follow@3x.png": ["2603428cc69039ceb0348f1ef298d99ae21b379731d8e467c04400602ee84c30", "be0e46c3b5f65b2c1e038809e0c0a78c34f51a7e07e9632077323e10dcdfe404", 3564595, 3286621, 1431629],
+  "characters/rikku-white-mage/follow@4x.png": ["1a94b3ac82f10bc647ba2a75d04ab786825fe14386c003adf00f29b1d65eab23", "67a6d03f68789abb3dc94bcf0b7c8961f4fa071ddbbbf34aa2c118054efda2dd", 5037177, 4559733, 2538635],
+  "characters/rikku-white-mage/hurt.png": ["f6b0fef0152979a3fa92f6253c90fbe8ce9a4517523f38f4ba227a62d15e084c", "29f9529671775e790d2e38dc331b436aab876f0cd62d431255a8af51792fb9c6", 437652, 458175, 147809],
+  "characters/rikku-white-mage/hurt@2x.png": ["4fd94c3cd500b9e30cabe16c8a550ba00907e950174d86eae63e302d5763f80e", "4f5d44cd026ec8ae4f3483931c2abc9ec8e8cdeb54a46ff68c51e3e220bdeec3", 1519583, 1629860, 600227],
+  "characters/rikku-white-mage/hurt@3x.png": ["d0e11b73f2712b7bbaf497e7b9d8ab299020297b19cf85fb2c459a067a7bb452", "78f6a6061062a397010d10f0946b44c914ffdb35130e4daa1c3f76e2e5a2c886", 4227055, 3184146, 1332682],
+  "characters/rikku-white-mage/hurt@4x.png": ["d389b69b1fe2534a8b04089985e73d666b3e78be47e97f5b4e3b0900e9c330b5", "a560d72f4a98fdd05107fae24d7492c03ca897364cceb79a17b339468e8c4fc1", 4403791, 4738613, 2343807],
+  "characters/rikku-white-mage/idle.png": ["c021d5ef0971d97b0a235bae8c86f02968465ab81f1197d43b4f955b97e7b32f", "052e19ad11061a9c7323bb4436004e23c96a2239bfc1a68bce3ce6a3491bae0c", 826649, 804302, 247854],
+  "characters/rikku-white-mage/idle@2x.png": ["aa25988a02ff5dee24ebb4004ee4016a8bba853ecdecfe6cbc43690e95187d60", "2c2a68c3c5a2fee2ec69d465eee339789e91246dd05851bc04e7415d15445959", 2430673, 2381293, 994145],
+  "characters/rikku-white-mage/idle@3x.png": ["24e47d499ded47107fb2d1a566676f518e758b3db9525d1569f6a82b7cc94e66", "007ec3a579276c00437f37a8c71c0e85af316cdfe6084fb0e2912cd0c6c438a8", 5352443, 4930121, 2214689],
+  "characters/rikku-white-mage/idle@4x.png": ["460009173f2086b4d4015b33d1a64ef8199f60d7e4761b76807670a17f375ca3", "e269294f67b41f8afc6e6e24ddca0b47d17a3b3376eda6196c2d84ab9923f6eb", 7908960, 7190967, 3931211],
+  "characters/rikku-white-mage/item.png": ["83a413618d5655c63b9d0ea00d3b495e95b9646e809c16b8854907c25ba5e338", "6938801584adf38c2c111c3d6517e481540d02688f5f473e490a30c7219d9079", 456375, 448806, 121635],
+  "characters/rikku-white-mage/item@2x.png": ["db10bd7247ed04f73e80dda496a4501481f1340420e019de6a05f46e5b88402b", "235d98ac816e553547ddb3f1640f4240b240d8fcb32b1b29af9cbc80f78dc04b", 1344352, 1327907, 480501],
+  "characters/rikku-white-mage/item@3x.png": ["f894316aa31b7529f6a653e6b9f46d20be6a6a0980d82f1b13b26b507381cd65", "3eb015808a292830fffe4d464735902491a8a36b86c80ab25aeed531f93a8b03", 2888306, 2703686, 1072139],
+  "characters/rikku-white-mage/item@4x.png": ["eb8a4b89819cc410adc8548d8a2fb87f5a485545dc51e00d323e1393bc5a32e0", "e1f0d0415500acbf36cf0a199433d0663cde12d84fa6248a31953593a4f0e847", 4088360, 3787320, 1904045],
+  "characters/rikku-white-mage/ko.png": ["54126079f78e5dc19dbc0405ed46da80fe1787a853186ebbb6b1cb8cf4c58e96", "d50cd52cfcf4a2027b99101c308f761595adbcb7707c45c160793c63eb995fe4", 608784, 626322, 233064],
+  "characters/rikku-white-mage/ko@2x.png": ["14e418f9066cf42a539c54597b4492ed11d19728a4e67d91169bd654b35db46a", "91c098db8c0e5e1ba1c0231027c723ac0fb9f4036aaf2e933631f3fa9d22c7cd", 1869584, 1984469, 959079],
+  "characters/rikku-white-mage/ko@3x.png": ["863a64c3203049b7bedca5dfabbfd023ff7a5896b568ebbb975618dd22d51e63", "ed4df841d315af17f3fa65c7d5de1b237798a3e01030757c755807866f3590f7", 5257952, 3895408, 2137244],
+  "characters/rikku-white-mage/ko@4x.png": ["3486f57caf81c6cf8a89e145363287e34c1be4f72afca02b359b62eff9c53172", "d39ee2d43f2ec054be56b71b4d561bc946a3a45b630ee01addb9b5849824257b", 5468017, 5829344, 3766290],
+  "characters/rikku-white-mage/ready.png": ["ed74be5605fb59e3963f50fa532f4589ca90f84b2ab07d16a7a2493d40600eae", "dfba01d84da0f56261c430428926ededcfb385ea7099ca50d0e17c1eb3dfee48", 505631, 548521, 227963],
+  "characters/rikku-white-mage/ready@2x.png": ["a6670dafd90e0d0a8f2f2735667cc955c4f20862c6ee89f897b18cf28c2c2295", "b55777207e43aa1bc9feb47c2d42b12bbbbfd59c99f8aac0e98ebb8f87832e5e", 1692780, 1889429, 923901],
+  "characters/rikku-white-mage/ready@3x.png": ["06dce1bc60ae77a93021cbf3f0141f193fd435ca265fe5460f52f1ff79be5615", "4d7be0db226b082f582ed6eca335e230f6fbf742f2d97d15760c4fb8bd3ccf85", 4594704, 3694630, 2059937],
+  "characters/rikku-white-mage/ready@4x.png": ["b74527f4a695a9b680c7bcfefbc6e82dceace6f80446bb07e8bdf0190cc50c13", "83b8fa5ea5f41af18b14b07a94cdb015776978d5c83a3020400eeb8491d73092", 4884771, 5484368, 3635653],
+  "characters/rikku-white-mage/sleep.png": ["6193cd49e515744592be95e0d2830a06c3bd5a368c570701eb71c94447a24237", "2c214fde6191b0b4b2b08c2c1ef5d01aa1f920e7e4b54aaa204b3ce430485049", 608233, 652842, 310981],
+  "characters/rikku-white-mage/sleep@2x.png": ["7a2d77ddc8de4ac191aadd9821294df976d089cc3c10ec326e173600229f52f4", "d65b420359df4979cdd14d983e2d1d9340eaf84686a2bd6cab44245e7caa54af", 1908506, 2107628, 1264090],
+  "characters/rikku-white-mage/sleep@3x.png": ["f337ceaf48ed5cd01f357e8eb698f5c6def2ff68d03b00d65855504e9c80a6da", "2a41ac507fa5beaba1c78e1a2ab52c4f3c56c6aa3aa9a1479f149c1936548be3", 5703204, 4120225, 2826905],
+  "characters/rikku-white-mage/sleep@4x.png": ["26790dc3b21e41548e2c11a5c4a1e638f542f93f5885bf78cf6202c9506923db", "13388ba973f1e838bda0d63b19e1371ac0d9e8f1b4e1e9726766835349bf10ce", 5550126, 6176997, 4997149],
+  "characters/rikku-white-mage/twirl-end.png": ["67e759168743955dff492eddd6f5ba971b9cf42fa5ecdface6c0dff5f1947c7f", "cec575fd2f2daff3d4fbf28d298138f74d50d4440f4c32dc6925a38923f34bd4", 415566, 408854, 101766],
+  "characters/rikku-white-mage/twirl-end@2x.png": ["3e4f1510d55c34b95c0c9162263a70ce946bb59b61b708ef78e8f549f396ecc2", "eaab7fe5a09b18452c22c77bf2eb4dd975c27e8ba623ebeeef01031fee990394", 1242790, 1232836, 398533],
+  "characters/rikku-white-mage/twirl-end@3x.png": ["74d6b4ffe74765a53b0253caad9c454b07931337b5aea79dde32804bb95fe611", "5d305d34f56218d9e89b7162c91cf16f4a6b4d75f7ff3fb5d92c1c6187175ad5", 2635309, 2502623, 888526],
+  "characters/rikku-white-mage/twirl-end@4x.png": ["ece80351cfc893419475509484fde49581ba6d8b064d39c1ffa5f71230cf4e1d", "be2a042a4b86c63f8b05e724966f1b9cba79426f9dd7e7373444918d9b84e686", 3815118, 3580950, 1576512],
+  "characters/rikku-white-mage/twirl-forming.png": ["c53a43eccbee1841466e381c5fc9b16b17601f425b11216dcc517beb4e0cc343", "dd9d8cb9e1c7a6b1c3260f504aa12c430ccc12a3de1cac5c7fc3a46995571477", 365896, 359499, 92266],
+  "characters/rikku-white-mage/twirl-forming@2x.png": ["71879306255ae038fc7443b4f9243ff33c3ef11c007aaf84cd962177f4771091", "911f1f1bf8ab6d84ba688025f4114503fb5b8381fea9ebcbff7e991ac619d2e3", 1085191, 1075932, 357305],
+  "characters/rikku-white-mage/twirl-forming@3x.png": ["a27e9cdcce54c926a0e5f3a8ff72c2dc5b7dc245381545858f0d15f2cb37ec6d", "138048f605a56104504c70497fc7f417901cde2ca3e72416290c7222eeff0d19", 2302622, 2183188, 797175],
+  "characters/rikku-white-mage/twirl-forming@4x.png": ["bb53ac549e53d3d79cb59072d6795b3009e90dc9724f78da35cf3cdadd3563ec", "8f05c37efcf7525c3f672abb97ee4e838714d55b57893736fb46ce3b80efdf1a", 3339841, 3130956, 1414636],
+  "characters/rikku-white-mage/twirl-start.png": ["0876ec6ad4222388e31b456231bd23c8552e0dc691d3fa89c051a7c76328b4c1", "1237b65720530f9250b64f75286719027a018c2d9c7cc763e1024dcbb98d9596", 571934, 554683, 156804],
+  "characters/rikku-white-mage/twirl-start@2x.png": ["2e4d1e8890fb4128fc7ef99d8e59d7c2b1f40c0e55d68bf4521ef00cbffa8b85", "fda5afa3cb29004e6eb64235c428fab0e7fd127004523389ed010c0136fda58c", 1690791, 1646887, 623515],
+  "characters/rikku-white-mage/twirl-start@3x.png": ["c01c421db7414b3c99dedfcb99878b1933ef2d2d73da49eaad2dc4485ac90078", "f27f2d107ed96ec2be7086735d75cab9a573737f66a4103d06f7b4bea5485eed", 3642165, 3350617, 1391353],
+  "characters/rikku-white-mage/twirl-start@4x.png": ["f4f97d5e0d0e9f737cc47b1db7253a43aca10d09b4037d4e6929ca6400b7260c", "9c217eb52f27fa78425378636c91227a680ac9828115a052ebc898e3941bb03c", 5294274, 4798976, 2466114],
+  "characters/rikku-white-mage/victory.png": ["2c513010289c03c5242f24047082da17775649bf9051a3025b9a8b68e75972e9", "6de2c4719c3c3327e8c9c531eab874e57b48b11a3c12497396785c6304213f16", 454930, 442760, 142884],
+  "characters/rikku-white-mage/victory@2x.png": ["a372f0d5b97ad74e98e3f38335577b60c9ff943480c6c9d6c4b256ac8a4c88e2", "074c7570cb9e394a2079b7da373e2884fd377e0e70c526ef850ddec801fe2453", 1360522, 1327675, 553141],
+  "characters/rikku-white-mage/victory@3x.png": ["33826ca4368ac72ef11e0c6c478a23c3612e1eb1a251f1cb5c8b51e6ee256255", "b65ff366797f8a0e9954f9cd4b44fc77dc7917ef1f3643e594f077f568e3c02c", 2964454, 2716624, 1234509],
+  "characters/rikku-white-mage/victory@4x.png": ["7be73e3fc211c8f8019cb9afeacf3aecd2cf3a50cf0a506b4b2979943fdc35f7", "3861696aad0c46e4f26cc0d104ada27a87c8b639878f2fb8efd48aba23c67162", 4338331, 3943764, 2193202]
+ }
+}

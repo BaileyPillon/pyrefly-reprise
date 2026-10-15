@@ -166,6 +166,18 @@
   visibility: hidden;
 }
 
+/*
+ * What step 2's chevron covers on a phone prep page (FOC44A-01, the focused review of 7758791e). On a phone (900 px and under) the slab stands above START BATTLE and its down chevron is
+ * drawn 40 px above the button (`firstRunView.ts` `place`): exactly where the page's MORE BELOW cue stands (`.prep__phone-cue`, fixed 84 px up from the bottom of the screen). The chevron was printed
+ * over the cue's middle letters on every page that scrolls, the CHAPTER page (the older layout, `party-prep-phone.css`) and the stacked pages (`party-prep-phone-tabs.css`) alike. The cue says
+ * there is more page below and the spot has already dimmed everything but START BATTLE, so while the slab is up the cue is hidden whole, as the hint strip above is. `visibility`, so nothing
+ * moves; the cue takes no press either way. `data-step` is on the layer only while a step is on screen (`FirstRunLayer.draw` and `hide`) and the layer is removed when the guide ends or is
+ * skipped, so the cue is back by itself, with `is-visible` as the page's scroll left it. No text is made smaller or moved. Game case: both (the phone prep pages are shared by FFX and FFX-2).
+ */
+#ui:has(> .frg[data-step='2']) .prep__phone-cue {
+  visibility: hidden;
+}
+
 /* Pointer or touch wording, the swap the coach line's foot uses (coach-taps.css). */
 .frg__touch {
   display: none;

@@ -8,4 +8,4 @@
  * pack ships.
  */
 
-export const RETIRED_V2_CUES: readonly string[] = [];
+export const RETIRED_V2_CUES: readonly string[] = ['buff-generic', 'gun-burst', 'hit-dagger', 'hit-greatsword', 'hit-gun', 'hit-katana', 'hit-spear', 'water'];

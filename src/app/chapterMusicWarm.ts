@@ -20,15 +20,17 @@
 import { audio } from '../audio/index.ts';
 import { getChapter, type Chapter, type ChapterId } from '../data/encounters.ts';
 import { cueForGroup } from './screens/BattleEncounterChain.ts';
+import { resultsCueFor } from './screens/resultsMusic.ts';
 
 /**
  * The cues a run of `chapter` needs, in the order it needs them: the scene's bed, the first formation's theme, the victory
- * sting. No duplicates (Trema's opening fight is scored with the scene's own bed), nothing silent (a chapter with no
- * victory cue, Chapter IV, has none to warm).
+ * sting, and last the defeat cue of the chapter's game (music batch 2, 2026-10-12; about 0.12 MB, and it must start when the
+ * party falls rather than a fetch later). No duplicates (Trema's opening fight is scored with the scene's own bed), nothing
+ * silent (a chapter with no cue for an outcome has none to warm).
  */
 export function chapterWarmCues(chapter: Chapter): string[] {
   const opening = cueForGroup(chapter, chapter.enemyGroupRef, 'first').track;
-  const wanted = [chapter.music.scene, opening, chapter.music.victory];
+  const wanted = [chapter.music.scene, opening, chapter.music.victory, resultsCueFor(chapter, 'defeat')?.cue];
   return [...new Set(wanted.filter((cue): cue is string => typeof cue === 'string' && cue.length > 0))];
 }
 

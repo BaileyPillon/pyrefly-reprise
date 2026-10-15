@@ -191,6 +191,12 @@ export interface MomentsPort {
    */
   reduceMotion?(): boolean;
   /**
+   * The player's REDUCE FLASHES setting (PR-0032), read by the DOM side so the presenter stays DOM-free: with it on, only an
+   * action's first blow flashes the fighter and opens a bloom (`BattlePresenterBeats.damage`). Optional and additive: absent
+   * reads as off.
+   */
+  reduceFlashes?(): boolean;
+  /**
    * On an upright phone (the phone battle HUD), how much of the 16:9 render's
    * width the window shows, 0..1; `null` anywhere else. Optional and additive
    * (A-12): absent reads as "not a phone".
@@ -206,8 +212,11 @@ export interface MomentsPort {
 export interface VfxPort {
   /** Play `key` on a combatant, or `'screen'` for a full-screen effect. */
   play(key: VfxKey, at: CombatantId | 'screen'): Promise<void>;
-  /** The generic impact used when an event carries no `vfxKey`. */
-  impact(at: CombatantId, opts?: { element?: string; crit?: boolean }): Promise<void>;
+  /**
+   * The generic impact used when an event carries no `vfxKey`. `quiet` (REDUCE FLASHES, PR-0032): a later blow of an action,
+   * so the bloom at the point of impact is skipped (the sparks and the slash still draw). Optional and additive.
+   */
+  impact(at: CombatantId, opts?: { element?: string; crit?: boolean; quiet?: boolean }): Promise<void>;
   /** Full-screen colour wash — battle start, form change, defeat. */
   screenFlash(colour?: string, ms?: number): void;
   /**
@@ -402,6 +411,8 @@ export interface BattleStage {
   paints?(id: CombatantId, pose: string): boolean;
   /** RUN-IN's field: painted shapes, camera truck, smear (r38-motion, FFX-2 only; `motion/StageMotionPort.ts`). Optional and additive. */
   readonly motion?: import('./motion/StageMotionPort.ts').StageMotionPort;
+  /** The scene's shot director, which `BattleMoments` asks before it moves the camera for a beat (`ShotDirector.ts`). Optional and additive: a stage without one plays every beat's own shot. */
+  readonly shotDirector?: import('./ShotDirector.ts').ShotDirector;
 }
 
 /** The presenter's clock, handed to a staged arrival so it obeys speed and pause. */

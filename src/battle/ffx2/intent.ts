@@ -45,13 +45,14 @@ import { type BattleRng, type RngSnapshot, sampleSnapshot } from '../common/stre
 import type { AbilityRegistry, AiContext, EventDraft, Ffx2Unit, ItemRegistry } from './internal.ts';
 import { chainRegistries, defaultAbilities } from './abilities.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { AI_IDLE_STEPS, AI_IDLE_WAKE, AI_NO_INTENT, AI_REPOLL } from './ai/idle.ts';
 import { BAHAMUT_COUNTDOWN_START } from './constants.ts';
 import { canAct } from './statuses.ts';
 import { gaugeSteps } from './lookahead.ts';
 import { previewHitChance, simulateFFX2Command, type RollPolicy, type SimOutcome } from './simulate.ts';
 import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
-import { inertLead, setToLead } from './intentLead.ts';
+import { damagesMp, emptiesMpLead, inertLead, kindWord, setToLead } from './intentLead.ts';
 import { rolledChance, rollsStatus, statusProbability, statusProbabilityBetween } from './adapt/preview.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
@@ -175,14 +176,28 @@ function cloneAiContext(
 interface DryRun {
   command: Command | null;
   events: EventDraft[];
+  /** The unit is asleep until woken (`ai/idle.ts` AI_NO_INTENT): it has no intent to report, and the board looks past it. */
+  silent?: boolean;
 }
+
+/** How many polls that are not turns (`AI_REPOLL`) a dry run follows to the move that is really coming: Yojimbo's 13 raises before Zanmato are the longest chain there is. */
+const MAX_REPOLLS = 16;
 
 function dryRun(env: Ffx2IntentEnv, enemyId: CombatantId, rngState: RngSnapshot): DryRun | null {
   const built = cloneAiContext(env, enemyId, rngState);
   if (!built) return null;
   const scriptId = built.self.enemy?.aiScriptId;
   try {
-    return { command: aiScriptFor(scriptId).decide(built.ctx), events: built.events };
+    const script = aiScriptFor(scriptId);
+    let command = script.decide(built.ctx);
+    // A poll that is not a turn (Yojimbo's "dog" pick raises a flag and queues nothing: `ai/idle.ts` AI_REPOLL) is not what the board is asked about: follow the polls to the move that is really coming.
+    for (let n = 0; n < MAX_REPOLLS && command === null && built.self.aiMemory?.[AI_REPOLL] === 1; n++) {
+      delete built.self.aiMemory[AI_IDLE_STEPS];
+      delete built.self.aiMemory[AI_IDLE_WAKE];
+      command = script.decide(built.ctx);
+    }
+    const silent = command === null && built.self.aiMemory?.[AI_NO_INTENT] === 1;
+    return { command, events: built.events, ...(silent ? { silent: true } : {}) };
   } catch {
     return null;
   }
@@ -240,7 +255,10 @@ export function describeAbility(def: AbilityDef): string {
   const lead = inertLead(def, where, statusWord);
   const inert = lead !== null;
   if (def.formula === 'none' && def.statusEffects.length > 0) {
-    parts.push(`Inflicts ${def.statusEffects.map((s) => statusWord(s.status)).join(', ')} on ${where}`);
+    const inflicts = def.statusEffects.map((s) => statusWord(s.status)).join(', ');
+    // Looming Glacier sets one girl's MP to 0 as well as inflicting Stop (row 0x4102, class 2): say both.
+    const empties = emptiesMpLead(def, where);
+    parts.push(empties ? `${empties} and inflicts ${inflicts}` : `Inflicts ${inflicts} on ${where}`);
   } else if (setTo) {
     parts.push(setTo);
   } else if (lead) {
@@ -249,10 +267,12 @@ export function describeAbility(def: AbilityDef): string {
     parts.push(`Restores HP to ${where}`);
   } else {
     const els = def.element.filter((e) => e !== 'none');
-    const kind =
-      def.damageType === 'physical' ? 'Physical' : def.damageType === 'magical' ? 'Magical' : '';
+    // The word follows the move's own type, except an MP drain whose game row is neither physical nor magical
+    // (Leblanc's Osmose); a move that damages MP says so ("Physical non-elemental MP damage to one girl", Sonic Wings).
+    const kind = kindWord(def);
     const element = els.length > 0 ? `${els.map((e) => ELEMENT_WORD[e]).join('/')} ` : 'non-elemental ';
-    parts.push(`${kind} ${element}damage to ${where}`.replace(/\s+/g, ' ').trim());
+    const pool = damagesMp(def) ? 'MP ' : '';
+    parts.push(`${kind} ${element}${pool}damage to ${where}`.replace(/\s+/g, ' ').trim());
   }
   if (def.hits > 1) parts.push(`${def.hits} hits`);
   if (def.flags.includes('drains')) parts.push('drains the damage back as HP');
@@ -559,7 +579,7 @@ export function predictFFX2EnemyIntent(
   // correctly calling for this turn. FFX-2 only: FFX's CTB has no charge bar.
   const committed = unit.atb.charging?.commandRef ?? null;
   const first: DryRun | null = committed ? { command: committed, events: [] } : dryRun(env, enemyId, base);
-  if (!first) return null;
+  if (!first || first.silent === true) return null;
 
   const defFor = (command: Command | null): AbilityDef | undefined => {
     if (!command || command.kind !== 'ability') return undefined;

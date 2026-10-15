@@ -19,6 +19,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { AUDIO_BUDGET_BYTES } from '../../tools/audio/manifest-io.mjs';
+import { batch2Added, batch2Cues, batch2MusicMoved, batch2Replaced, batch2Retired } from './helpers/musicBatch2.ts';
 
 const read = (p: string) => JSON.parse(readFileSync(new URL(`../../${p}`, import.meta.url), 'utf8'));
 const manifest = read('public/audio/manifest.json') as {
@@ -69,8 +70,9 @@ const themesGame = new Map(
 
 describe('music v2: route S for FFX, N2 for FFX-2', () => {
   it('replaces every FFX and FFX-2 cue and leaves the shared cues alone', () => {
+    // Batch 2 (2026-10-12) added nine cues and retired three of these (their MP3s are gone; `audio-music-batch2-2026-10-12.test.ts` pins both).
     expect(record.cues.map((c) => c.cue).sort()).toEqual(
-      Object.keys(manifest.music).filter((k) => !record.unchanged.includes(k) && !addedCues.has(k)).sort(),
+      [...Object.keys(manifest.music).filter((k) => !record.unchanged.includes(k) && !addedCues.has(k) && !batch2Added.has(k)), ...batch2Retired].sort(),
     );
     expect(record.unchanged.sort()).toEqual(['chapter-select', 'pause', 'title']);
     for (const k of record.unchanged) expect(themesGame.get(k), k).toBe('both');
@@ -87,7 +89,7 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
 
   it('ships the files the record measured, byte for byte (except the cues a later record replaced)', () => {
     for (const c of record.cues) {
-      if (replacedLater.has(c.cue)) continue;
+      if (replacedLater.has(c.cue) || batch2Replaced.has(c.cue) || batch2Retired.has(c.cue)) continue; // batch 2 replaced or retired it
       const m = manifest.music[c.cue]!;
       const bytes = readFileSync(new URL(`../../public/audio/${m.file}`, import.meta.url));
       expect(bytes.length, `${c.cue} bytes`).toBe(c.after.bytes);
@@ -95,12 +97,12 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
       expect(createHash('sha256').update(bytes).digest('hex'), `${c.cue} sha256`).toBe(c.after.sha256);
     }
     const total = Object.values(manifest.music).reduce((a, m) => a + m.bytes, 0);
-    expect(total).toBe(record.totals.musicBytesAfter + movedLater + addedBytes);
+    expect(total).toBe(record.totals.musicBytesAfter + movedLater + addedBytes + batch2MusicMoved);
   });
 
   it('kept every loop point and duration (except the cues a later record replaced, and boss-evrae, whose loop points batch 1 re-cut on 2026-10-10 and pins itself)', () => {
     for (const c of record.cues) {
-      if (replacedLater.has(c.cue) || c.cue === 'boss-evrae') continue;
+      if (replacedLater.has(c.cue) || c.cue === 'boss-evrae' || batch2Replaced.has(c.cue) || batch2Retired.has(c.cue)) continue;
       const m = manifest.music[c.cue]!;
       expect([m.loopStart, m.loopEnd, m.duration], c.cue).toEqual([c.loop.loopStart, c.loop.loopEnd, c.loop.duration]);
     }
@@ -120,7 +122,7 @@ describe('music v2: route S for FFX, N2 for FFX-2', () => {
 
   it('passed the headless proof on a production build (for the files it played: not the cues a later record replaced)', () => {
     for (const k of Object.keys(manifest.music)) {
-      if (replacedLater.has(k) || addedCues.has(k)) continue; // the proof played the file this record measured; the release proves the new one
+      if (replacedLater.has(k) || addedCues.has(k) || batch2Cues.has(k)) continue; // the proof played the file this record measured; the release proves the new one
       const c = proof.cues[k]!;
       expect(c.status, k).toBe(200);
       expect(Math.abs(c.frameDiff), `${k} decoded length`).toBeLessThanOrEqual(2); // the manifest's 4 decimals

@@ -29,6 +29,11 @@
  */
 
 import './save-sphere-card.css';
+import { DIM_IVORY } from '../../engine/flashRules.ts';
+import { readReduceFlashes } from '../accessFlags.ts';
+
+/** The class the card wears under REDUCE FLASHES (`save-sphere-card.css`). */
+export const SAVE_SPHERE_SOFT_CLASS = 'ssphere--soft';
 
 export interface SaveSphereCardOptions {
   /** The battle screen's root; the card covers it and everything in it. */
@@ -88,6 +93,12 @@ export async function playSaveSphereCard(opts: SaveSphereCardOptions): Promise<v
   }
   const sleep = opts.sleep ?? defaultSleep;
   const el = buildSaveSphereCard(opts.root.ownerDocument);
+  // PR-0032: REDUCE FLASHES. The wash is a cover (the swap happens under it), so it stays opaque, but in ivory at 35 % brightness instead of
+  // pale lilac-white, and the sphere's pulse stops (`save-sphere-card.css`, `.ssphere--soft`). The beat lengths are the same.
+  if (readReduceFlashes()) {
+    el.classList.add(SAVE_SPHERE_SOFT_CLASS);
+    el.style.setProperty('--ssphere-cover', DIM_IVORY);
+  }
   opts.root.appendChild(el);
   try {
     // One frame at opacity 0 first, so the transition has a start to run from.

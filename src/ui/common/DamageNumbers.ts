@@ -1,5 +1,6 @@
 import './damage-numbers.css';
 import { paceRate } from '../../engine/pace.ts';
+import { readColourVision } from '../../app/accessFlags.ts';
 import {
   bouncePosition,
   BURST_GAP_MS,
@@ -327,7 +328,7 @@ export class DamageNumbers {
     el.dataset['slot'] = String(slot.index);
     el.style.fontSize = `${(fontSizeFor(kind) * scale).toFixed(1)}px`;
     el.style.opacity = '0';
-    el.textContent = textFor(kind, input.amount);
+    el.textContent = textFor(kind, input.amount, readColourVision() !== 'off'); // PR-0032: COLOUR VISION adds "MP" to an MP numeral
     this.el.appendChild(el);
 
     const max = this.opts.max ?? 48;

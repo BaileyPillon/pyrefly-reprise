@@ -18,6 +18,18 @@ import type { AbilityId, ItemId } from '../common/types.ts';
 import type { Ctx } from './state.ts';
 import { grandSummonChoices } from './aeon-duel.ts';
 
+/**
+ * Whether the Mix picker's preview names the result of **every** pair in the bag (the game's chart, `mixablePairs`), or only the registered recipes
+ * (`src/data/ffx/mixes/recipes.ts`, `FFXContentRegistry.mixPairs`) and shows "? ? ?" for any other pair, as every build before re-parity RC7 did.
+ *
+ * **Off, because it is a screen choice that is Bailey's, not an engine one** (RC7 handoff, section 11 decision 4: "whether the picker shows every pair's
+ * result or only discovered ones (a screen: a mockup first)", AGENTS.md rule 9). It only gates what the *preview* says. What a pair makes never depends on
+ * it: the engine resolves a fired pair through the game's complete chart (`overdriveShape.ts` -> `mix.ts#resolveMixAction`), and the automatic draw of a
+ * headless or AI Mix (`rollDefaultMinigame`) is still made among every pair in the bag. The player-visible difference is the preview line and, for a pair
+ * the preview did not name, that the Mix now fires its real result where an earlier build said "Mix failed!". **FFX only.**
+ */
+export const MIX_PREVIEW_ALL_PAIRS = false;
+
 /** One row of the Grand Summon list. `storedGauge` is the aeon's own gauge, not the temporary 100. */
 export interface GrandSummonEntry {
   id: string;
@@ -51,10 +63,12 @@ export function grandSummonEntries(ctx: Ctx): GrandSummonEntry[] {
 }
 
 /**
- * Mix's picker params: the bag as named ingredients, and the pairs the recipe
- * table can resolve right now (`mixablePairs`), keyed the way the overlay looks
- * them up. The engine still resolves the pair itself (`overdriveShape.ts`), so
- * a pair missing here is "Mix failed!", never a guess.
+ * Mix's picker params: the bag as named ingredients, and the pairs the preview
+ * is to name (`mixPreviewPairs`: the registered recipes, or every pair of the
+ * bag when {@link MIX_PREVIEW_ALL_PAIRS} is on), keyed the way the overlay looks
+ * them up. The engine still resolves the pair itself, through the game's whole
+ * chart (`overdriveShape.ts`), so a pair missing here is shown as "? ? ?" and
+ * still makes the game's result, never a guess.
  */
 export function mixPickerParams(ctx: Ctx, pairs: ReadonlyArray<readonly [ItemId, ItemId, AbilityId]>): MixPickerParams {
   const recipes: Record<string, AbilityId> = {};

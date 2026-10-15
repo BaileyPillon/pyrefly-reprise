@@ -110,8 +110,11 @@ export function fontSizeFor(kind: DamageKind): number {
   }
 }
 
-/** The literal text drawn for a numeral, given the classified kind and amount. */
-export function textFor(kind: DamageKind, amount?: number): string {
+/**
+ * The literal text drawn for a numeral, given the classified kind and amount. `cvd` (COLOUR VISION on, PR-0032):
+ * an MP numeral also prints "MP", the second cue beside its colour (a heal always prints its "+"). Off: unchanged.
+ */
+export function textFor(kind: DamageKind, amount?: number, cvd = false): string {
   switch (kind) {
     case 'miss':
       return 'MISS';
@@ -122,7 +125,7 @@ export function textFor(kind: DamageKind, amount?: number): string {
     default: {
       const n = Math.abs(Math.round(amount ?? 0));
       const sign = kind === 'heal' ? '+' : '';
-      return `${sign}${n}`;
+      return `${sign}${n}${cvd && kind === 'mp' ? ' MP' : ''}`;
     }
   }
 }

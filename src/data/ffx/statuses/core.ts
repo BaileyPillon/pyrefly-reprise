@@ -127,7 +127,7 @@ export const STATUSES_CORE: Record<string, FFXStatusDef> = {
     name: 'Silence',
     durationModel: 'turns',
     tickEffect:
-      'Blocks White Magic, Black Magic and Summon. Does NOT block Overdrives (Fury, Grand Summon, or any other character Overdrive) or Doublecast\'s wrapper. Ticks down by 1 at the end of the victim\'s own action.',
+      'Blocks the commands whose record carries the Silence flag: every White and Black Magic spell (Scan and Esuna among them) and some monster spells. Does NOT block Summon (re-parity RC7 lane L-CMD, research/re-ffx-command-gate.md section 1), Overdrives (Fury, Grand Summon, or any other character Overdrive) or Doublecast\'s wrapper. Ticks down by 1 at the end of the victim\'s own action.',
     curedBy: ['Echo Screen', 'Esuna', 'Remedy'],
     clearedByKo: true,
     clearedByPetrify: true,

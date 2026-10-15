@@ -56,14 +56,14 @@ import { experimentChapters } from './chapters-experiments.ts'; // the hidden ex
 
 /** Every registered chapter id (eighteen listed since 2026-09-29, plus the hidden experiments, which never write `SaveData.chapters`: `app/experiments/`). Also the keys used in `SaveData.chapters`. */
 export type ChapterId =
-  | 'ff7-guard-scorpion' | 'ffx2-masterpiece-theatre' // the Experiment (mission Masterpiece Theatre) (2026-10-10), hidden like the others (FFX-2; no card, its word on chapter select, `app/screens/frontend/experimentDoor.ts`), never in `SaveData.chapters`
+  | 'ff7-guard-scorpion' | 'ffx2-masterpiece-theatre' | 'ffx2-tourist-trap' // the Experiment (mission Masterpiece Theatre) (2026-10-10) and the Tourist Trap (Yojimbo and Daigoro, 2026-10-14; its word is 'daigoro', `app/screens/frontend/daigoroDoor.ts`), hidden like the others (FFX-2; no card, its word on chapter select, `app/screens/frontend/experimentDoor.ts`), never in `SaveData.chapters`
   | 'seymour-flux' | 'yunalesca' | 'braskas-final-aeon'
   | 'ffx2-bahamut' | 'ffx2-vegnagun-shuyin' | 'ffx2-leblanc'
   | 'seymour-anima-macalania' | 'evrae-airship' | 'yojimbo-cavern' | 'seymour-natus'
-  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc' | 'sinspawn-gui'; // the last two: hidden, no card, each opened by its word on chapter select (`app/screens/frontend/leblancDoor.ts`, `mushroomDoor.ts`): the Leblanc preview (2026-10-06) and Sinspawn Gui (FFX, 2026-10-10)
+  | 'ffx2-fallen-aeons' | 'seymour-omnis' | 'ffx2-trema' | 'isaaru-via-purifico' | 'ffx2-den-of-woe' | 'ffx2-ixion-djose' | 'sin-fins-core' | 'sin-face' | 'exp-leblanc' | 'sinspawn-gui' | 'exp-fayth' | 'ffx2-valefor-besaid'; // the last four: hidden, no card, each opened by its word on chapter select (`app/screens/frontend/leblancDoor.ts`, `mushroomDoor.ts`, `faythDoor.ts`, `besaidDoor.ts`): the Leblanc preview (2026-10-06), Sinspawn Gui (FFX, 2026-10-10), Evrae with FFX's camera (FFX, 2026-10-10) and Valefor at Besaid (FFX-2, 2026-10-14)
 
 /** Every id that can hold a place on the board: all but the hidden experiments. */
-export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-masterpiece-theatre' | 'sinspawn-gui'>;
+export type ListedChapterId = Exclude<ChapterId, 'ff7-guard-scorpion' | 'exp-leblanc' | 'ffx2-masterpiece-theatre' | 'sinspawn-gui' | 'exp-fayth' | 'ffx2-tourist-trap' | 'ffx2-valefor-besaid'>;
 
 /** Per-chapter music cues. Every value is a key into `src/audio/tracks`. */
 export interface ChapterMusic {
@@ -93,7 +93,7 @@ export interface ChapterMusic {
    * Victory fanfare, played by `BattleScreenFlow.showResults`. FFX chapters use
    * `victory-ffx` ("Relief, not triumph"), FFX-2 chapters `victory-ffx2`
    * ("That was fun") — the cue map in `docs/audio/THEMES.md` §"The cue map"
-   * rows 15 and 20. Chapter 4 is deliberately silent — see its record.
+   * rows 15 and 20. Chapter 4's screen is deliberately silent, its cue a quiet one — see its record.
    */
   victory?: MusicKey;
   /** The post-scene cue when the script sets none. Every script does (each opens with `music(null)`), so this is absent everywhere. */
@@ -104,8 +104,8 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on chapter select, 1–18 (XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment); the hidden experiments take 19 (Leblanc preview), 20 (the FFX-2 experiment lane's) and 21 (Sinspawn Gui). Unique except 0 (`tests/unit/chapter-numbers.test.ts`). */
-  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
+  /** Display order on chapter select, 1–18 (XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment); the hidden experiments take 19 (Leblanc preview), 20 (the FFX-2 experiment lane's), 21 (Sinspawn Gui) 22 (Fayth: Evrae with FFX's camera), 23 (Tourist Trap) and 24 (Valefor at Besaid). Unique except 0 (`tests/unit/chapter-numbers.test.ts`). */
+  number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24;
   /** An experiment: its attempts, clears and time go to the experiments' store, never the save, and it is no part of any count. FF7's Guard Scorpion is hidden (no card; `BattleScreenExperiment`); the FFX-2 Leblanc preview is hidden too (no card; its word on chapter select, `./chapter-exp-leblanc.ts`) and plays through the chapters' own flow. */
   experimental?: true;
   /** Card title. The encounter's name. */
@@ -184,8 +184,8 @@ export const YUNALESCA: Chapter = {
     // One cue through all three forms: the rite does not change its mind
     // [docs/audio/THEMES.md cue map row 7, "a rite that will finish with or
     // without you"]. Her forms are form-changes inside one formation, not a
-    // chain, so there is no second cue to switch to.
-    battle: 'boss-yunalesca',
+    // chain, so there is no second cue to switch to. Since 2026-10-12: `boss-challenge`, the game's one "Challenge" track, shared with Gui fight 2 (batch 2, FFX only).
+    battle: 'boss-challenge',
     victory: 'victory-ffx',
   },
   sensorTexts: {
@@ -230,8 +230,9 @@ export const BRASKAS_FINAL_AEON: Chapter = {
  * Chapter 4.
  *
  * Uniquely, this fight has **no victory pose and no fanfare** — the Results
- * screen comes up silent [writing-bible §5.4], which is why `music.victory` is
- * absent rather than set to a track.
+ * screen comes up silent [writing-bible §5.4]: no pose, no tally flourish, no quips.
+ * Since 2026-10-12 it has a victory *cue*, `victory-bahamut` (batch 2, PR-0410): a quiet resolve, not a
+ * fanfare; `silent` follows `isSilentResultsChapter` now, not an absent `music.victory`.
  */
 export const FFX2_BAHAMUT: Chapter = {
   id: 'ffx2-bahamut',
@@ -253,7 +254,7 @@ export const FFX2_BAHAMUT: Chapter = {
     // "Yuna's Ballad" — the one aeon fight with its own leitmotif rather than a
     // boss theme [bahamut.ts:114; THEMES.md cue map row 17].
     battle: 'boss-bahamut',
-    // No `victory`: the flourish is suppressed for this chapter.
+    victory: 'victory-bahamut', // the quiet resolve under its silent results screen: no fanfare (2026-10-12)
   },
   sensorTexts: {
     bahamut: 'An aeon that once fought alongside Yuna.',
@@ -313,14 +314,14 @@ export const FFX2_VEGNAGUN_SHUYIN: Chapter = {
  * the whole mission rather than nothing at all. Recorded as a gap, not a
  * silent guess.
  *
- * `music`: no dedicated cues exist for this chapter yet
- * (`docs/plans/music-modern-sound.md` and `docs/audio/THEMES.md` name none).
- * Per the integrator's brief, this falls back to the cues Chapter 4 uses —
- * `scene-bevelle-underground` and `boss-ffx2-aeon` — rather than inventing a
- * new `MusicKey`/track pair, which would need real composition and a
- * `docs/audio/THEMES.md` cue-map row this track cannot author. `victory-ffx2`
- * is the real, already-shipped FFX-2 victory fanfare (D-018: this chapter
- * ships its flourish, unlike Chapter 4's suppressed one).
+ * `music`: this chapter began on the cues Chapter 4 uses, `scene-bevelle-underground`
+ * and `boss-ffx2-aeon`, rather than a new `MusicKey`/track pair that would have needed
+ * real composition (the integrator's brief; `docs/audio/THEMES.md` named none). Since
+ * 2026-10-10 the battle is Leblanc's own cue (`boss-leblanc`), and since 2026-10-12 the
+ * scene is the chateau's own bed (`scene-chateau-leblanc`, batch 2): both ElevenLabs
+ * originals, FFX-2 only, shared with the hidden Leblanc chapter. `victory-ffx2` is the
+ * FFX-2 victory fanfare (D-018: this chapter ships its flourish, unlike Chapter 4's
+ * suppressed one).
  */
 export const FFX2_LEBLANC: Chapter = {
   id: 'ffx2-leblanc',
@@ -339,8 +340,8 @@ export const FFX2_LEBLANC: Chapter = {
   enemyGroupRef: leblancEntranceGroup,
   scriptsRef: ffx2LeblancScripts,
   music: {
-    // Fallback to Chapter 4's cues — see the class doc above.
-    scene: 'scene-bevelle-underground',
+    // The chateau's own bed since 2026-10-12 (batch 2, FFX-2 only, shared with the hidden Leblanc chapter); Chapter 4's cathedral basement played here before.
+    scene: 'scene-chateau-leblanc',
     battle: 'boss-leblanc',
     victory: 'victory-ffx2',
   },

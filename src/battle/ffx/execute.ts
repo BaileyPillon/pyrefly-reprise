@@ -8,16 +8,17 @@
  */
 
 import type { AbilityDef, Command, CombatantId, FFXCombatant } from '../common/types.ts';
-import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isSubmenuMarker, rankOf, rtOf, spendItem, tryActor } from './state.ts';
+import { type Ctx, abilityOf, canSwitchIn, commandAbility, has, isSubmenuMarker, rankOf, rtOf, tryActor } from './state.ts';
 import { mpCostFor, resolveAbility, type ResolveOptions } from './abilities.ts';
-import { applyMpDelta, ejectActor } from './hp.ts';
+import { applyMpDelta } from './hp.ts';
 import { chargeTurn } from './turnQueue.ts';
 import { isMenuMarker, minigameParams, rollDefaultMinigame, spendOverdrive } from './overdrive.ts';
-import { gaugeOnEscape } from './gauge.ts';
-import { escapeRoll } from './kernel/rolls.ts';
-import { streamsOf } from './adapt/streams.ts';
+import { tryEscape } from './escape.ts';
+import { aimGate, costGate, fizzle } from './command-start.ts';
 import { forcedAttack } from './forced-turn.ts';
 import { shapeOverdrive } from './overdriveShape.ts';
+import { itemAbility, payForItem } from './item-use.ts';
+import { type MixOutcome, mixFailed } from './mix.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
@@ -47,28 +48,6 @@ export interface ExecutionResult {
 }
 
 const NOTHING: ExecutionResult = { rank: 3, damageDealt: 0 };
-
-/**
- * Escape: `draw & 255 < 191`, i.e. 74.6% [ffx-combat-core §1.8]. The roll is spent first, from the escaper's own mode 0 stream, even in a battle
- * that cannot be escaped (`research/re-ffx-rng-hit.md` section 6; `kernel/rolls.ts#escapeRoll`). Flee (the whole party) draws nothing here.
- */
-function tryEscape(ctx: Ctx, actor: FFXCombatant, party: boolean): ExecutionResult {
-  const rolled = party ? true : escapeRoll(ctx.rt.canEscape ? 0 : 1, () => ctx.rng.on(streamsOf(ctx, actor).damage).int(0, 255));
-  if (!ctx.rt.canEscape) {
-    ctx.emit({ type: 'message', text: "Can't escape!", kind: 'system' });
-    return { rank: 1, damageDealt: 0 };
-  }
-  // Flee always succeeds and ends the battle; Escape is per-character.
-  const success = rolled;
-  ctx.emit({ type: 'escape-attempt', actorId: actor.id, success, party });
-  if (success && !party) ejectActor(ctx, actor, 'eject');
-  // A successful flee runs the gauge's escape hook for each character that fled (Coward; `pp_BtlOdOnEscape`, VA 0x007b1090).
-  if (success) {
-    const fled = party ? ctx.state.activeIds.map((id) => tryActor(ctx, id)) : [actor];
-    for (const c of fled) if (c && c.side !== 'enemy') gaugeOnEscape(ctx, c);
-  }
-  return { rank: party ? 2 : 1, damageDealt: 0 };
-}
 
 /** Resolve one command for `actor`. */
 export function executeCommand(
@@ -220,6 +199,9 @@ export function executeCommand(
     });
     return { rank: 0, rejected: true, damageDealt: 0 };
   }
+  // The cost check the game runs as a sub-action starts (re-parity RC7 lane L-CMD, `command-start.ts`): Silence, the MP and the Overdrive gauge are
+  // read again, and a refusal pays nothing.
+  if (!costGate(actor, def, command.kind === 'overdrive')) return fizzle(ctx, actor, command, false);
   // **Doublecast** [ffx-combat-core §7.4 row 41; ffx-bfa-yu-yevon §4.2
   // "grant ... Doublecast + Firaga/Thundaga", verified: 2 sources]. Only an
   // ability whose own record sets the flag takes this path; the wrapped spell
@@ -234,6 +216,7 @@ export function executeCommand(
 
   let options: ResolveOptions = {};
   let finisher: AbilityDef | undefined;
+  let mix: MixOutcome | undefined;
 
   if (command.kind === 'overdrive') {
     const kind = def.minigame;
@@ -280,7 +263,10 @@ export function executeCommand(
     def = shaped.def;
     options = shaped.options;
     finisher = shaped.finisher;
+    mix = shaped.mix;
     ctx.rt.pendingMinigame = null;
+    // A Mix that found nobody to aim at has already cost both ingredients; it spends no gauge and no hit (`mix.ts`).
+    if (mix?.failed) return mixFailed(ctx);
     // The Mix selector survived the shaping, so no pair in the bag has a
     // recipe. `types.ts` names this case ("`null` when the pair has no recipe
     // — *Mix failed!*"), and the alternative is what shipped: a `formula:
@@ -293,25 +279,10 @@ export function executeCommand(
   }
 
   if (command.kind === 'item') {
-    // An aeon has no Item command [ffx-combat-core §6.2]; `commands.ts` offers
-    // none, and one that arrives anyway is refused with the turn kept (PR-0155).
-    if (actor.side === 'aeon') {
-      ctx.emit({ type: 'message', text: `${actor.name} cannot use items`, kind: 'system' });
-      return { rank: 0, rejected: true, damageDealt: 0 };
-    }
-    // An item reaction (Auto-Med, Auto-Potion, Auto-Phoenix) was paid for when its record was queued (`adapt/reactions.ts`): that one use is not spent again.
-    if (ctx.rt.prepaidItem === command.id) {
-      ctx.rt.prepaidItem = undefined;
-    } else if (!spendItem(ctx, command.id)) {
-      ctx.emit({ type: 'message', text: 'No items left', kind: 'system' });
-      return NOTHING;
-    }
-    const item = ctx.content.item(command.id);
-    if (item) def = { ...def, targeting: item.targeting, name: item.name, category: 'item' };
-    if (command.gilSpent !== undefined) {
-      options = { ...options, gilSpent: Math.min(command.gilSpent, ctx.rt.gil) };
-      ctx.rt.gil = Math.max(0, ctx.rt.gil - (command.gilSpent ?? 0));
-    }
+    // The item's own targeting and name; an aeon has no Item command. Nothing is paid yet: the range filter below needs the item's targeting.
+    const set = itemAbility(ctx, actor, command, def);
+    if (!set.ok) return set.result;
+    def = set.def;
   }
 
   // A two-actor rig where the stat block and the turn slot belong to different
@@ -326,6 +297,20 @@ export function executeCommand(
     if (owner) options = { ...options, statsUser: owner };
   }
 
+  // The range filter the game runs as the sub-action starts: a named target that is gone, out of reach or dead is dropped and nobody takes its place; with no
+  // one left the command does not start, and nothing below (the item, the MP, the gauge) is paid.
+  // A Mix's targets are the game's auto-target's, not the command's (the player does not aim a Mix): the executor's filter sees the ones it picked. The Mix's ingredients
+  // are already gone and stay gone when the filter refuses (FFX-G05 3.1: the resolver spends them; the executor's refund of the result record finds nothing to return).
+  const aim = mix !== undefined && mix.targets.length > 0 ? mix.targets : command.targets;
+  const gate = aimGate(ctx, actor, def, aim, options.hits ?? def.hits);
+  if (!gate.ok) return fizzle(ctx, actor, command, gate.outOfReach);
+
+  if (command.kind === 'item') {
+    const paid = payForItem(ctx, actor, command, options);
+    if (!paid.ok) return paid.result;
+    options = paid.options;
+  }
+
   const cost = mpCostFor(actor, def);
   if (cost > 0) applyMpDelta(ctx, actor, cost, actor.id);
 
@@ -335,12 +320,12 @@ export function executeCommand(
     command,
     abilityId: def.id,
     abilityName: def.name,
-    targets: command.targets.slice(),
+    targets: aim.slice(),
   });
 
   if (command.kind === 'overdrive') spendOverdrive(ctx, actor);
 
-  let damageDealt = resolveAbility(ctx, actor, def, command.targets, options);
+  let damageDealt = resolveAbility(ctx, actor, def, aim, options);
   // Blitz Ace's success-only "Last Hit" (row 274, 24 x 1) lands after the volley, in the same action [§5.3].
   if (finisher) damageDealt += resolveAbility(ctx, actor, finisher, command.targets, { ...options, followUp: true });
   ctx.emit({ type: 'action-end', actorId: actor.id });

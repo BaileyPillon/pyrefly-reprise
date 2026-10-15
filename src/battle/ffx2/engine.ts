@@ -45,7 +45,7 @@ import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
 import { stepsUntilNextEvent } from './lookahead.ts';
-import { buildCommands } from './targeting.ts';
+import { buildCommands } from './menu.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';
@@ -78,6 +78,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.awaitingBy = null;
     this.inputOwner = null;
     this.held = null;
+    this.counterQueue = [];
     this.carriedSteps = 0;
     this.stepCredit = 0;
     this.ordered = [];

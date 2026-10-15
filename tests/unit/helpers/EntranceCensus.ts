@@ -242,7 +242,8 @@ export function advance(stage: CensusPaintedStage, ms: number): void {
   }
 }
 
-export function makeStage(entrances: boolean, comfort = { reduceMotion: false, lowEffects: false }): CensusPaintedStage {
+/** `extra`: more of the stage's options (FOC44A-05's `planOwed`); the census passes none. */
+export function makeStage(entrances: boolean, comfort = { reduceMotion: false, lowEffects: false }, extra: Record<string, unknown> = {}): CensusPaintedStage {
   const cam = new PerspectiveCamera();
   const stage = new CensusPaintedStage({
     scene: new Scene(),
@@ -251,6 +252,7 @@ export function makeStage(entrances: boolean, comfort = { reduceMotion: false, l
     slots: SLOTS,
     canvas: { getBoundingClientRect: () => ({ left: 0, top: 0, width: 1600, height: 900 }) } as unknown as HTMLCanvasElement,
     comfort: () => comfort,
+    ...extra,
   });
   if (entrances) stage.setEntrances(true);
   return stage;

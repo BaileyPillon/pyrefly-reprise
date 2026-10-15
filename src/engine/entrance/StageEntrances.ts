@@ -15,7 +15,16 @@
  * (`enter(true)`, `settle(true)`), and an ordinary opening's end lets an entrance still on its way finish beside the first menu (`settle(false)`: it cuts
  * nothing short and begins a figure the gate was still holding), so no entrance adds a moment before the first menu.
  *
- * A figure is never left held: `settle(true)` lets in everything, the screen turns the whole thing off for a preview and for FF7, a figure whose scene stages its
+ * **CHAPTER FRAMING's plan is waited for, not guessed at** (FOC44A-05 of the focused review of 7758791e). Those times are a guess at when the plan lands, and they were
+ * a bad one: the plan decides only once every figure stands at its place (the party's slide-in is done) and 0.6 s after the figures last changed, so it landed 1.0 to
+ * 1.7 s after the screen came up, after the 900 ms gate had opened whenever the opening came early (Enter on the card) or the machine was slow, and Paragon's size
+ * step (1 to 3.047) then fell on a figure 19 to 95 percent gathered. The stage now tells the entrance when the plan is still to land (`EntranceHost.planOwed`,
+ * `Framing.planOwed`), and **no figure is shown while it is, in either way of showing it**: the gate stays shut (`ready`, ahead of {@link PATIENCE_MS} and of the
+ * opening's end), and a hurried opening's `enter(true)` / `settle(true)` leaves such a figure held and lets it in whole the frame the plan has landed (`late`), so the
+ * size lands on a figure nobody can see. {@link PLAN_MAX_MS} is the ceiling, so a plan that never comes cannot keep a boss off the field. The first menu is not
+ * delayed (nothing awaits an entrance, and the plan lands in the opening's first seconds); in a hurried opening a figure may come in a moment after the menu opens.
+ *
+ * A figure is never left held: `settle(true, true)` lets in everything, the screen turns the whole thing off for a preview and for FF7, a figure whose scene stages its
  * own entrance is never held (`entranceCanon.ts`, Chapter IX's night-sakura arrival), and a watchdog on the stage's own clock ({@link HOLD_MAX_MS}) lets in a
  * figure whose opening never came.
  *
@@ -44,10 +53,16 @@ import {
 
 /** A figure that has stood this still (ms, unchanged scale and place) is where it will be played. CHAPTER FRAMING decides 0.6 s after a figure changes, and puts it on at once. */
 export const QUIET_MS = 300;
-/** A figure is at least this old (ms) before it is played: the plan's 0.6 s gate, and the frames its painting and a scene's follower take, with a margin. */
+/** A figure is at least this old (ms) before it is played: the plan's 0.6 s gate, and the frames its painting and a scene's follower take, with a margin. It is NOT when the plan lands (`planOwed` is). */
 export const MIN_AGE_MS = 900;
-/** The most the opening waits for a figure to be still (ms): after it, it is played where it stands. */
+/** The most the opening waits for a figure to be still (ms): after it, it is played where it stands. It does not outrank a plan that is still owed ({@link PLAN_MAX_MS}). */
 export const PATIENCE_MS = 1600;
+/**
+ * The most a figure waits for CHAPTER FRAMING's plan (ms of the stage's clock since it was built): the plan lands 1.0 to 1.7 s after the screen comes up on the machines measured
+ * (a CPU six times slower included), so this is a ceiling for a plan that never comes (no canvas, no idle rig), not a time anything is expected to reach. After it the gate and the
+ * hurried opening act as they did before the plan was waited for.
+ */
+export const PLAN_MAX_MS = 3000;
 /** A figure held this long (ms of the stage's clock) with no opening is let in: nothing may be left invisible. */
 export const HOLD_MAX_MS = 30_000;
 /** A frame longer than this (ms) counts as this long, so a hitch does not swallow the entrance. */
@@ -83,6 +98,11 @@ export interface EntranceHost {
   cameraAt(): { x: number; y: number; z: number };
   /** The effects tier (`PyreflyStage`): `'phone'` releases 0.6 of the motes. */
   tier(): 'full' | 'phone' | 'low';
+  /**
+   * CHAPTER FRAMING's plan is still to land (`Framing.planOwed`): it re-sizes a boss in one frame (Paragon's step, 1 to 3.047), so no figure is let in while it is, or the step falls
+   * on a figure on screen (FOC44A-05). Absent (a test's host, a stage with no framing) reads as never.
+   */
+  planOwed?(): boolean;
 }
 
 interface Entry {
@@ -94,6 +114,8 @@ interface Entry {
   movedAt: number;
   sig: [number, number, number, number, number];
   playing: EntranceChoice | null;
+  /** A hurried opening has let it in, but CHAPTER FRAMING's plan was still owed: it comes in whole the frame the plan has landed (or at {@link PLAN_MAX_MS}). */
+  late: boolean;
   /** ms into the entrance. */
   elapsed: number;
   /** The share of a mote not yet released (as `PyreflyStage.release`'s carry). */
@@ -153,7 +175,7 @@ export class StageEntrances {
     if (prior) this.land(prior);
     this.open = false; // a new field: whatever opening was on is over
     this.finishing = false;
-    const e: Entry = { id, actor, seed: seedOf(id), since: this.clock, movedAt: this.clock, sig: sigOf(actor), playing: null, elapsed: 0, carry: 0, rng: entranceRng(seedOf(id)) };
+    const e: Entry = { id, actor, seed: seedOf(id), since: this.clock, movedAt: this.clock, sig: sigOf(actor), playing: null, late: false, elapsed: 0, carry: 0, rng: entranceRng(seedOf(id)) };
     this.entries.set(id, e);
     this.host.hush(actor, true);
     this.rest(e);
@@ -175,15 +197,20 @@ export class StageEntrances {
   }
 
   /**
-   * The opening is over. `now` (hurried, skipped, or the stage is being switched off): every figure still held or playing is whole at once. Otherwise nothing is cut short and
-   * nothing waits: a figure that is playing carries on to its end, and one that has not begun begins (the opening's end waives the gate). The next link's figures wait for their own opening.
+   * The opening is over. `now` (hurried, skipped, or the stage is being switched off): every figure still held or playing is whole at once, except a held figure CHAPTER FRAMING's
+   * plan is still to re-size, which stays held and is whole the frame the plan lands (`late`; at {@link PLAN_MAX_MS} at the latest). `force`: no figure waits for the plan, for the
+   * stage being switched off. Otherwise nothing is cut short and nothing waits: a figure that is playing carries on to its end, and one that has not begun begins (the opening's end
+   * waives the gate, not the plan). The next link's figures wait for their own opening.
    */
-  settle(now: boolean): void {
+  settle(now: boolean, force = false): void {
     if (!now) {
       this.finishing = true;
       return;
     }
-    for (const e of [...this.entries.values()]) this.land(e);
+    for (const e of [...this.entries.values()]) {
+      if (!force && !e.playing && this.owed(e)) e.late = true;
+      else this.land(e);
+    }
     this.open = false;
     this.finishing = false;
     this.wake();
@@ -214,6 +241,12 @@ export class StageEntrances {
           this.land(e);
           continue;
         }
+        if (e.late) {
+          // a hurried opening let it in; it is whole the frame CHAPTER FRAMING's plan has landed (this frame's framing ran before this update, so its size is already on the figure)
+          if (this.owed(e)) this.rest(e);
+          else this.land(e);
+          continue;
+        }
         if (!this.open || !this.ready(e)) {
           this.rest(e); // a scene that set the figure's alpha since (a director's bind) does not bring it in
           continue;
@@ -239,7 +272,13 @@ export class StageEntrances {
 
   // ------------------------------------------------------------------ steps
 
+  /** CHAPTER FRAMING's plan is still to land and this figure has not waited {@link PLAN_MAX_MS} for it: whatever size it gives the figure must land while the figure is unseen. */
+  private owed(e: Entry): boolean {
+    return this.clock - e.since < PLAN_MAX_MS && this.host.planOwed?.() === true;
+  }
+
   private ready(e: Entry): boolean {
+    if (this.owed(e)) return false; // before the opening's end and the patience: they wait for a figure to be still, not for a plan that has not come
     if (this.finishing || this.clock - this.openedAt >= PATIENCE_MS) return true;
     return this.clock - e.since >= MIN_AGE_MS && this.clock - e.movedAt >= QUIET_MS;
   }

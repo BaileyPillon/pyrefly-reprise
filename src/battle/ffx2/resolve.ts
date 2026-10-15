@@ -11,7 +11,8 @@ import type { AbilityDef, CombatantId } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
 import { pickVariant, resolveCommand } from './adapt/command.ts';
 import { resolveSensor, sensorKind } from './sensor.ts';
-import { hpCostFor, resolveTargets } from './targeting.ts';
+import { effectiveMpCost, hpCostFor } from './menu.ts';
+import { resolveTargets } from './targeting.ts';
 import { NAMED_TARGETS_ONLY } from './constants.ts';
 
 import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
@@ -28,7 +29,7 @@ export function resolveAbility(
   user: Ffx2Unit,
   ability: AbilityDef,
   requested: readonly CombatantId[],
-  options: { isCounter?: boolean; hitsOverride?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
+  options: { isCounter?: boolean; counterCause?: string; hitsOverride?: number; gilSpent?: number; inSequence?: boolean; exactTargets?: boolean } = {},
 ): number {
   const all = resolveTargets(ctx.units, user, ability, requested, ctx.rng);
   // `extra.namedTargetsOnly` (`abilities-shuyin.ts`, Acta Est Fabula): an all-target row whose
@@ -38,7 +39,7 @@ export function resolveAbility(
   const pool = namedOnly ? all.filter((u) => requested.includes(u.id)) : all;
   if (pool.length === 0) return 0;
 
-  const mpCost = user.statuses.spellspring ? 0 : ability.mpCost;
+  const mpCost = effectiveMpCost(user, ability); // Spellspring, Half MP Cost, One MP Cost and Magic Booster (re-parity RC7 lane X2-B)
   if (mpCost > 0) user.mp = Math.max(0, user.mp - mpCost);
 
   // The Dark Knight pays in HP. Darkness is **12.5% of the user's own max HP**
@@ -66,7 +67,7 @@ export function resolveAbility(
   const reveals = sensorKind(ability);
   if (reveals) {
     resolveSensor(ctx.emit, user, pool, reveals);
-    for (const t of pool) ctx.onResult?.(t, user, ability); // a Scan or Libra is a result on each target (AI-FFX2-b)
+    for (const t of pool) ctx.onResult?.(t, user, ability); // a Scan or Libra is a result on each target (AI-FFX2-b); it changes no HP, so no SOS check or counter
     return 0;
   }
 
@@ -78,6 +79,7 @@ export function resolveAbility(
   let total = runStrikes(ctx, user, ability, command, pool, {
     ...(hitsOverride > 0 ? { hitsOverride } : {}),
     ...(options.gilSpent !== undefined ? { gilSpent: options.gilSpent } : {}),
+    ...(options.isCounter ? { system: true } : {}),
   });
 
   // **`destroys-user`** [ffx2-combat-core §2.3, §3.12 row "Charon"].
@@ -156,7 +158,7 @@ export function resolveAbility(
         actorId: user.id,
         targetId: first.id,
         abilityId: ability.id,
-        cause: 'script',
+        cause: options.counterCause ?? 'script',
       });
     }
   }

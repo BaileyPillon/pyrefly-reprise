@@ -10,6 +10,7 @@
 
 import type { AbilityDef, FFXCombatant, MinigameResult } from '../common/types.ts';
 import { type Ctx, abilityOf, spendItem } from './state.ts';
+import { type MixOutcome, resolveMixAction } from './mix.ts';
 import type { ResolveOptions } from './abilities.ts';
 import { FURY_MAX_CASTS, furyCastsFor, timingBonusFrom } from './overdrive.ts';
 import { resolveReelSpin } from './reels.ts';
@@ -87,7 +88,7 @@ export function shapeOverdrive(
   user: FFXCombatant,
   def: AbilityDef,
   result: MinigameResult | undefined,
-): { def: AbilityDef; options: ResolveOptions; finisher?: AbilityDef } {
+): { def: AbilityDef; options: ResolveOptions; finisher?: AbilityDef; mix?: MixOutcome } {
   const options: ResolveOptions = { timing: timingBonusFrom(result, def) };
   if (!result) return { def, options };
 
@@ -150,18 +151,21 @@ export function shapeOverdrive(
   }
 
   if (result.kind === 'rikku-mix') {
-    // The overlay reports the two **ingredients**; the recipe table is the
-    // engine's to read [§5.9, `registry.ts addMixRecipes`]. An overlay that
-    // already resolved the pair is honoured, and one that did not — every
-    // caller until now, which is why Mix spent a full gauge for no event —
-    // is resolved here.
+    // The overlay reports the two **ingredients**; the game's resolver and its complete chart are the engine's to run (`./mix.ts`, `kernel/mix.ts`, re-parity RC7):
+    // any two items make a result, both are consumed here, the result's targets are the game's auto-target's, and the result is learned only when it found one.
     const [a, b] = result.mix.ingredients;
+    if (a && b) {
+      const mix = resolveMixAction(ctx, user, a, b);
+      if (mix) return { def: mix.def, options, mix };
+    }
+    // An overlay that already named the result (and an ingredient the chart does not know, a test rig's) is honoured as before: the registry's own table,
+    // the ingredients that came spent one each.
     const id = result.mix.resultAbilityId ?? (a && b ? ctx.content.mixResult(a, b) : undefined);
     const mix = id ? abilityOf(ctx, id) : undefined;
     if (mix) {
       // Mix consumes both ingredients; the record says so (`extra.consumesTwoItems`).
-      if (a) spendItem(ctx, a);
-      if (b) spendItem(ctx, b);
+      if (a) spendItem(ctx, a, user);
+      if (b) spendItem(ctx, b, user);
       return { def: mix, options };
     }
   }
