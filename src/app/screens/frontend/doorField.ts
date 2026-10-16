@@ -44,8 +44,8 @@ export interface DoorFieldOptions {
   label: HTMLElement;
   /** The game's input (`App.input`), when there is one. */
   keyboard?: Partial<DoorKeyboard> | null;
-  /** A door opened: the chapter it leads to. The field is already gone. */
-  onDoor: (id: ChapterId) => void;
+  /** A door's word was typed: the chapter it leads to. Answers whether it opened; a door behind a shut switch does not, and the field then stays as it was, so that word looks like any other. */
+  onDoor: (id: ChapterId) => boolean;
   /** Long-press length, ms. Defaults to {@link HOLD_MS}. */
   holdMs?: number;
 }
@@ -220,8 +220,7 @@ export class DoorField {
       const fed = this.doors.feedKey(ch, this.tick++);
       const id = fed.now ?? fed.next;
       if (id) {
-        this.close();
-        this.opts.onDoor(id);
+        if (this.opts.onDoor(id)) this.close(); // opened: the field goes with the board's turn; shut: nothing changed, as for a wrong word
         return;
       }
     }

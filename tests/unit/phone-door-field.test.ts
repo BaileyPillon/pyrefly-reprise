@@ -314,7 +314,7 @@ describe('every door word opens its chapter when typed in the field', () => {
     expect(rig.picked).toEqual(['ffx2-valefor-besaid']);
   });
 
-  it('FF7\'s word stays behind its switch: with the switch off, the field types it and nothing opens', async () => {
+  it("FF7's word stays behind its switch: with the switch off, the field types it, nothing opens, and the field stays as it was (the word looks like any other)", async () => {
     setFf7ExperimentReadyForTests(false);
     const rig = mount();
     rig.longPress();
@@ -322,6 +322,17 @@ describe('every door word opens its chapter when typed in the field', () => {
     await flush();
     expect(rig.picked).toEqual([]);
     expect(rig.settled).toEqual([]);
+    expect(rig.field(), 'a shut door does not close the field by itself: that would tell it was a door word').not.toBeNull();
+    expect(rig.field()!.value).toBe('limit');
+    rig.key('Enter');
+    expect(rig.field()).toBeNull();
+    setFf7ExperimentReadyForTests(true);
+    const open = mount();
+    open.longPress();
+    open.typeIn('limit');
+    await flush();
+    expect(open.picked, 'the same word with the switch on opens').toEqual(['ff7-guard-scorpion']);
+    expect(open.field()).toBeNull();
   });
 });
 

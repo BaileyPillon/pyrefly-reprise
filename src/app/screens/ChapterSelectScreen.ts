@@ -323,13 +323,14 @@ export class ChapterSelectScreen extends Screen {
    * reopens on an id it has no card for, and with no sound or sign (the success
    * flash is Bailey's pick, plan §2.2).
    */
-  private openDoor(id: ChapterId): void {
-    if (this.confirming || !this.doors.isOpen(id)) return;
+  private openDoor(id: ChapterId): boolean {
+    if (this.confirming || !this.doors.isOpen(id)) return false; // the phone's field is told, so a word behind a shut switch looks like any other word
     this.confirming = true;
     (this.opts.onSelect ?? defaultOnSelect)(id);
     // No reset: the FF7 swirl now holds this frozen board while the fight loads (r29 PR-0222), and a key
     // pressed then must not move the cursor or start a card's preload under it. The flow replaces the board.
     this.settle(id);
+    return true;
   }
 
   private settle(id: ChapterId | null): void {
