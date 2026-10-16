@@ -1,13 +1,44 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 72 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 73 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-15 · A hidden chapter: The Last Summoning, where Yu Yevon takes your aeons in the order you choose, behind the word `summon` (branch ch-last-summoning, on release candidate r49-rc; not live)
+
+Address: none yet (branch ch-last-summoning, code up to 5142de0a4, from release candidate r49-rc; not deployed, no review run; nobody has heard its music or judged its look: the offering screen follows the approved frame, but the amount panel for Yojimbo's payment is a first sketch and the paintings are the ones the game already has)
+
+- **FFX, hidden chapter:** The Last Summoning, a variant of Dream's End in which the thing in the light reaches for your aeons one at a time and **you choose the order**. Type `summon` on the chapter board; there is no
+  card and the board still says "of 18". You hold all eight aeons (Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima, Yojimbo and the Magus Sisters) with Tidus, Yuna and Auron. Chapter III is unchanged: its twelve measured fights are
+  byte for byte what they were.
+- **FFX, the offering:** a new screen before the first fight and after every win: Yu Yevon above "reaches for one of your aeons", a row of eight cards, what each copy will do and what you lose. Left and Right choose, Enter
+  gives (a tap focuses, a second tap gives); what is taken is crossed out. Whichever you give up **is fought next, as a copy of your own** (your aeon's Strength, Magic, Defense and HP, at full HP), and it is gone from Yuna's Summon
+  list for the rest of the chain, marked TAKEN. Nothing heals between battles. Nine battles in all: eight possessions, then Yu Yevon with nothing left to call.
+- **FFX, the two aeons the game's chain has and ours did not:** the possessed **Yojimbo** (Kozuka or Wakizashi each turn, never Daigoro, and when his gauge is full Zanmato: a flat 9,999 on everyone at the front, not an instant
+  kill) and the possessed **Magus Sisters**, who are one battle with three bodies: Cindy mends and drains and calls the Delta Attack (six hits on everyone) once all three are alive with full gauges, Sandy hastens and shields her,
+  Mindy flares; the Yu Pagodas feed the Sister whose gauge is lowest. All of it is the game's own, read from its files.
+- **FFX, your own Yojimbo and Sisters:** you can summon them. Yojimbo's menu is Pay: a new panel asks how much (a digit at a time, opening on what the guide's line pays, Escape goes back); the Sisters, called in with a Grand
+  Summon, offer Combine for the Delta Attack. The three Sisters stand on the party's three places, each with her own status row.
+- **FFX, guide and advisor:** the guide card and page for this chain, and the move advisor: Chapter III's line for the ordinary turns, **Cindy first** in the Sisters' fight (aimed at the weakest first, the party left her alone
+  to drain as fast as it hurt her and the fight stalled in one chain of eight; aimed at her first it was won every time), Pay for Yojimbo, Combine for the Sisters, and an aeon called when Yuna has a Grand Summon and nothing urgent.
+- **FFX, provisional:** no painting is new (the twins are your own aeons' paintings, as Chapter III shows them; a copy of Dream's End's plate is the one new file, in the next art folder); the stage places of the new bodies are
+  estimates; the music is Dream's End's and Yu Yevon's own cues; Yojimbo's starting compatibility 128 and the Sisters' motivation 50 are estimates, named in one place. The Sisters' other orders are not built yet.
+- **Both:** the ten hidden words (`limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor`, `gagazet`, `angra` and the new one) all work and none begins, ends or hides inside another, a wrong word opens nothing, and the chapter writes only its own
+  record, never the save. No other chapter changes: the 18 FFX goldens and Chapter III's twelve seeds do not move.
+- **Proof:** the whole chain played on the real engine, 120 chains over five orders: the guide's line wins all 120 (a link takes a few turns to about a hundred; the Sisters fight is the longest), a plain swing wins 90 and loses the other 30, every time at the Sisters;
+  played in a production build in a headless browser with real key presses (the word, party prep, the opening, the offering at desktop and phone size, a link, Pay, the Sisters called in with Combine lit and the Delta Attack
+  playing, Dismiss), and the whole chain to Yu Yevon's fall and the results screen at skip speed.
+
+![The offering screen: Yu Yevon above the row of eight aeons, what each copy does and what you lose](docs/screenshots/ch-last-summoning/1600x900-offering.jpg)
+
+![The Magus Sisters called in, their menu with Combine lit](docs/screenshots/ch-last-summoning/1600x900-sisters-combine-lit.jpg)
+
+![The possessed Yojimbo with the guide card open](docs/screenshots/ch-last-summoning/1600x900-possessed-yojimbo-guide.jpg)
 
 ## 2026-10-14 · A hidden chapter: Angra Mainyu in the Bikanel Desert (branch ch-angra-mainyu, part of release candidate r49-rc; not live)
 
