@@ -27,7 +27,7 @@ import { chargeForAction, executeCommand } from '../../src/battle/ffx/execute.ts
 import { damageScaleOverride } from '../../src/battle/ffx/kernel/modifiers.ts';
 import { timingScale } from '../../src/battle/ffx/kernel/minigame-timer.ts';
 import { rollDefaultMinigame, timingBonusFrom } from '../../src/battle/ffx/overdrive.ts';
-import { shapeOverdrive } from '../../src/battle/ffx/overdriveShape.ts';
+import { rowFromExtra, shapeOverdrive } from '../../src/battle/ffx/overdriveShape.ts';
 import { type Ctx, type EventInput, rtOf } from '../../src/battle/ffx/state.ts';
 import { recoveryTicks } from '../../src/battle/ffx/turnQueue.ts';
 import { ABILITIES as AURON } from '../../src/data/ffx/abilities/overdrive-auron.ts';
@@ -177,6 +177,19 @@ describe('B2: the user is charged the menu command\'s rank, whatever the grade (
     expect(immuneRows, 'the engine took the (Immune) row on every vector where the game did').toBe(72);
   });
 
+  it('every Fail and (Immune) row the engine builds carries its move\'s MENU rank: the replacement rows\' own ranks (3 to 6) never reach the engine\'s charge either', () => {
+    for (const [, id, , rank] of OVERDRIVES) {
+      const def = DEF_OF[id] as AbilityDef;
+      for (const row of ['fail', 'immune'] as const) {
+        const built = rowFromExtra(def, row);
+        if (built !== undefined) expect(built.rank, `${id} ${row} row`).toBe(rank); // Tornado and Blitz Ace have no (Immune) row, the Swordplay moves none either
+      }
+    }
+    expect(rowFromExtra(DEF_OF['tornado'] as AbilityDef, 'fail')?.rank).toBe(7);
+    expect(rowFromExtra(DEF_OF['blitz-ace'] as AbilityDef, 'fail')?.rank).toBe(7);
+    expect(rowFromExtra(DEF_OF['banishing-blade'] as AbilityDef, 'immune')?.rank).toBe(6);
+  });
+
   it('a Fail costs the menu rank, a success costs the menu rank: Tornado and Blitz Ace pay 7 either way (13 ticks a point at agility 14)', () => {
     for (const [cmd, id, , rank] of OVERDRIVES) {
       expect(fire(cmd, 0, 14, 0, 0).rank, `${id} fails`).toBe(rank);
@@ -258,10 +271,22 @@ describe('B3: A and B reach the scale override as float32 seconds, A = float32(B
     expect(timingScale(3000, -5).a).toBe(0);
   });
 
+  it('the frame, not the milliseconds, makes A when a result carries both (the game\'s A is the timer\'s value at that frame)', () => {
+    const at = (limit: number, frame: number): number => (frames.find((f) => f.limit === limit && f.frame === frame) as (typeof frames)[number]).aBits;
+    const swordplay: MinigameResult = { kind: 'tidus-timing', timing: { success: true, timeRemainingMs: 1234, timerMs: 3000, frame: 20 } };
+    const bushido: MinigameResult = { kind: 'auron-sequence', sequence: { success: true, correctInputs: 8, timeRemainingMs: 1234, frame: 20 } };
+    expect(bits(timingBonusFrom(swordplay, TIDUS['spiral-cut'] as AbilityDef)!.scale!.a)).toBe(at(3, 20));
+    expect(bits(timingBonusFrom(bushido, AURON['dragon-fang'] as AbilityDef)!.scale!.a)).toBe(at(4, 20));
+  });
+
   it('a failure earns A = 0 (a factor of exactly 1) however much time the clock showed and whichever frame it carries', () => {
     const def = TIDUS['spiral-cut'] as AbilityDef;
-    const late: MinigameResult = { kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 2900, timerMs: 3000, frame: 91 } };
-    expect(timingBonusFrom(late, def)?.scale).toEqual({ a: 0, b: 3 });
+    for (const frame of [91, 10]) {
+      const failed: MinigameResult = { kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 2900, timerMs: 3000, frame } };
+      expect(timingBonusFrom(failed, def)?.scale, `frame ${frame}`).toEqual({ a: 0, b: 3 });
+    }
+    const bushido: MinigameResult = { kind: 'auron-sequence', sequence: { success: false, correctInputs: 2, timeRemainingMs: 3900, frame: 10 } };
+    expect(timingBonusFrom(bushido, AURON['dragon-fang'] as AbilityDef)?.scale).toEqual({ a: 0, b: 4 });
     expect(damageScaleOverride({ a: 0, b: 3 }, 1234)).toBe(1234);
   });
 
