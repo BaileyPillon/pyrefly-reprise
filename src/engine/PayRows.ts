@@ -1,5 +1,5 @@
 /**
- * The Pay rows of the player's Yojimbo (**FFX only**; Mirror Aeons, Chapter XXVII, is the one chapter that fields him).
+ * The Pay rows of the player's Yojimbo and the short words of the Sisters' order rows (**FFX only**; Mirror Aeons, Chapter XXVII, is the one chapter that fields them).
  *
  * The engine offers ONE Pay row, a template whose `gilSpent` is 0 ("the screen fills the payment": `battle/ffx/aeon-commands.ts`), and a payment of nothing is
  * the game's "he leaves, compatibility -20" branch. The HUD has no amount screen, so a human who chose that row paid nothing and lost him. This is the cheapest
@@ -12,6 +12,9 @@
  *
  * The amounts are our choice, set by the roll (`battle/ffx/kernel/yojimbo.ts`): the gil adds four points of the command roll for each doubling from 8 gil, so
  * each tenfold step here is worth about thirteen points.
+ *
+ * **The Sisters' orders** keep the engine's rows and ids; only their labels are shortened, because the command column cuts a label at about sixteen letters and the engine's own words ("Combine for the Delta Attack",
+ * "Revive and support (Cindy)") read "COMBINE FOR THE ..." and "REVIVE AND SUPPOR..." on the one order that matters. The game's own name for it is Combine powers.
  *
  * Imports no DOM and no `three` (layering, AGENTS.md rule 1): a pure function of the rows and the gil.
  */
@@ -43,9 +46,36 @@ export function payRows(commands: AvailableCommand[], gil: number | undefined): 
     command: { ...(template.command as AbilityCommand), gilSpent: amount },
     label,
     enabled: true,
-    help: `Pay Yojimbo ${gilText(amount)} gil. The more he is paid, the better the stroke he draws; the gil is the party's and what is left is carried on.`,
+    help: `Pay him ${gilText(amount)} gil. A bigger payment buys a better stroke.`,
   });
   const rows: AvailableCommand[] = PAY_AMOUNTS.filter((a) => a < gil).map((a) => row(a, `Pay ${gilText(a)}`));
   rows.push(row(Math.trunc(gil), rows.length === 0 ? `Pay ${gilText(Math.trunc(gil))}` : `Pay all (${gilText(Math.trunc(gil))})`));
   return [...commands.slice(0, at), ...rows, ...commands.slice(at + 1)];
+}
+
+/** The Sisters' orders, by ability id (`battle/ffx/aeon-commands.ts` ORDERS), in words that fit the command column. */
+const ORDER_LABELS: Readonly<Record<string, string>> = {
+  'sister-order-free': 'Free choice',
+  'sister-order-repeat': 'Repeat last',
+  'sister-order-attack': 'Attack order',
+  'sister-order-cindy-spells': 'Cindy: spells',
+  'sister-order-cindy-support': 'Cindy: support',
+  'sister-order-combine': 'Combine powers',
+  'sister-order-sandy-support': 'Sandy: support',
+  'sister-order-mindy-drain': 'Mindy: drain',
+};
+
+/** The commands with every order row of a Sister relabelled in short words (nothing else about a row changes); any other menu comes back as the same array. */
+export function shortOrderLabels(commands: AvailableCommand[]): AvailableCommand[] {
+  const named = (c: AvailableCommand): string | undefined => (c.command.kind === 'ability' ? ORDER_LABELS[c.command.id] : undefined);
+  if (!commands.some((c) => named(c) !== undefined)) return commands;
+  return commands.map((c) => {
+    const label = named(c);
+    return label === undefined ? c : { ...c, label };
+  });
+}
+
+/** What a person's menu is handed in place of the engine's rows: the Pay ladder and the Sisters' short order words. */
+export function aeonMenuRows(commands: AvailableCommand[], gil: number | undefined): AvailableCommand[] {
+  return shortOrderLabels(payRows(commands, gil));
 }

@@ -37,7 +37,7 @@ import { clockEngine, followMenuLevel, MenuWaker, runMenuClock } from './BattleP
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
 import { settleForMenu } from './BattlePresenterBeats.ts';
-import { payRows } from './PayRows.ts';
+import { aeonMenuRows } from './PayRows.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';
 import { ActingState } from './ActingState.ts';
@@ -597,9 +597,9 @@ export class BattlePresenter {
     const clock = clockEngine(engine);
     const unfollow = followMenuLevel(hud, clock, this.menuWake); // Wait's split: before the menu opens
     let settled = false;
-    // Yojimbo's one Pay row becomes a ladder of amounts for a person's menu (`PayRows.ts`; any other menu comes back as it was). The auto strategy took its own branch above and
+    // Yojimbo's one Pay row becomes a ladder of amounts, and a Sister's order rows get short words, for a person's menu (`PayRows.ts`; any other menu comes back as it was). The auto strategy took its own branch above and
     // the interrupt below hands it the engine's own rows, so only the keys see the ladder.
-    const shown = payRows(commands, gilLeft(engine));
+    const shown = aeonMenuRows(commands, gilLeft(engine));
     const decided = Promise.race([hud.chooseCommand(actorId, shown, previewRank), interrupt]).then(
       (command) => {
         settled = true;

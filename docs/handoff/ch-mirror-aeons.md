@@ -55,8 +55,9 @@ balance or fiction (RE 9.5) and needs Bailey's yes (rule 10).
    Win, and the post scene (eight lines) plays in the cavern.
 5. Look at: the two **provisional** backdrops (existing plates), the Dark aeons drawn with the aeons' own paintings (the possessed aeons' convention; red-and-black Dark paintings are Bailey's pick), the music (existing cues by
    reference), the guide card and page.
-6. **Do not judge yet:** (a) **Pay**: the HUD has no payment picker, so its Pay row pays nothing and Yojimbo leaves (the advisor's line pays 100,000 gil directly: section 9, item 1); (b) the Dark aeons' Overdrive gauges
-   are not drawn (the HUD's gauge widget exists only for Chapter IX's Yojimbo); (c) every Act II number that leans on a Pay (RE's Zanmato caveat above).
+6. **Yojimbo's Pay is a ladder of amounts** in his Aeon group beside Dismiss (Pay 1,000, 10,000, 100,000, 1,000,000 and Pay all, capped by the gil left; `engine/PayRows.ts`, built from the engine's one Pay row, which pays nothing). A Sister's order
+   rows carry short words (Combine powers, not "Combine for the Delta Attack", which the command column cut). **The ladder is a stop-gap for a screen Bailey has not seen** (section 9, item 1). **Do not judge yet:** (a) the Pay ladder itself; (b) the Dark aeons' Overdrive gauges
+   are not drawn (the HUD's gauge widget exists only for Chapter IX's Yojimbo); (c) every Act II number that leans on a Pay (RE's Zanmato caveat above); (d) the pause screen's hero art and the card's painting (Mindy over the road: provisional).
 
 ## 2. What was built
 
@@ -67,12 +68,13 @@ balance or fiction (RE 9.5) and needs Bailey's yes (rule 10).
 | **the Dark AI** | `battle/ffx/ai/dark-aeons.ts` (the five scripts and the two hit hooks), `dark-aeons-rules.ts` (every constant with its source), `dark-aeons-seams.ts` (ids, the formation table, the registry status), registered in `ai/index.ts`; `battle/ffx/orders.ts` (the dog's order: the victim is the game's stream-4 pick, `extra.orderedAim`) |
 | the party | `data/ffx/builds/mirror-aeons.ts` (preset: Yojimbo and the Sisters in, `yojimbo` and `sisters` fields, the gauges, 17 Phoenix Downs), `builds/endgame-aeons.ts` (the section 6.4 aeon-stat formula as a pure function) |
 | **the heal** | `EnemyGroupDef.restoresAeonsOnEntry` (`battle/common/types.ts`), `restoreAeonsOnEntry` in `battle/ffx/line-up.ts`, one call in `battle/ffx/setup.ts`; set on the Act II groups with `restoresPartyOnEntry` |
-| chapter | `data/chapter-mirror-aeons.ts`, `chapter-meta-mirror-aeons.ts`; one line each in `chapters-experiments.ts`, `chapter-meta.ts`, `encounters.ts` |
+| chapter and **the listing** | `data/chapter-mirror-aeons.ts` (no `experimental` flag), `chapter-meta-mirror-aeons.ts` (numeral XXVII); in `CHAPTERS` and `CHAPTER_IDS` (`encounters.ts`, `ListedChapterId`) and `CHAPTER_META` (`chapter-meta.ts`), out of `chapters-experiments.ts`; the card's plate alias (`app/screens/frontend/chapterGrid.ts` `BOARD_BACKDROP`: the scene key `mirror-aeons` is a code key, so the card and the plate paint Mushroom Rock Road's backdrop file); `data/art/strip-art.json` (two board masters); `story/registry.ts`; `learn/atlas/cites.ts`; `docs/audio/THEMES.md` (the XXVII row); `critic/runner/lib/sweep.mjs` (the sweep's chapter list: nineteen); `docs/CONTRACT-CHANGES.md` (the listing entry) |
 | scene | `scenes/mirror-aeons.ts` (the Mushroom Rock Road stage with this chapter's enemy staging), the Cavern plate's look in `scenes/mushroom-rock-road.ts`; rows in `scenes/experiment-scenes.ts` and `engine/pyreflyCanon.ts`; one departure row (`dark-yojimbo`: the body stays) |
 | story, guide | `story/scripts/mirror-aeons.ts`, `data/guides/mirror-aeons.ts` + `docs/mirror-aeons.ts` |
 | **the advisor's line and its card** | `engine/tactics/mirror-aeons.ts` (the line: seven rules, each a named constant or switch, `LineOptions`), `engine/tactics/advisor-aeons.ts` + one early return in `advisor.ts` (no card on Yojimbo's or a Sister's menu), index and lookup lines |
 | **the seam's HUD** | `app/screens/BattleScreenCutscenes.ts` (the beat's name on the battle root), `ui/common/cutscene.css` (one rule), `app/screens/BattleScreen.ts` (the HUD hidden across a plate link that restores the aeons) |
-| the word | `app/screens/frontend/yojimboDoor.ts` and one row in `chapterDoors.ts` |
+| the word | `app/screens/frontend/yojimboDoor.ts` and one row in `chapterDoors.ts` (still works: the word opens a listed chapter exactly as it opened the hidden one) |
+| **the Pay ladder** | `engine/PayRows.ts` (pure: the engine's one Pay row becomes rows of round amounts and a Pay all row, and a Sister's order rows get short words) and one call in `engine/BattlePresenter.ts` `chooseCommand`, for a person's menu only: the auto strategy, the advisor's line and the bench keep the engine's rows and build their own Pay; tests `pay-rows.test.ts`, `pay-rows-presenter.test.ts` |
 | contract | the `all-ko` trigger condition and `EnemyGroupDef.restoresAeonsOnEntry` in `battle/common/types.ts` (`docs/CONTRACT-CHANGES.md`, the chapter's entry) |
 | research, plans, tools, tests | `research/ffx-mirror-aeons.md`, `docs/plans/ch-mirror-aeons-review.md`, **`docs/plans/ch-mirror-aeons-bench.md`**; `tools/mirror-aeons-bench.mjs`, `tools/mirror-aeons-proof.mjs`, `tools/mirror-aeons-smoke.mjs`; `tests/unit/chapters/mirror-aeons-{aeon-stats,ai,data,party,engine,dog,flow,chapter,seams,bench}.test.ts`, `tests/unit/yojimbo-door.test.ts`, `tests/unit/helpers/mirrorAeonsDrive.ts`, `mirrorAeonsBench.ts`; edited: the shared tests that enumerate chapters and the Evrae counter's class fixture (section 7) |
 
@@ -110,7 +112,7 @@ ran the script's bytecode in its interpreter. `tests/unit/chapters/mirror-aeons-
 | The aeons | nine: the five story aeons, Yojimbo and the three Sisters (Anima left out); rows derived from Yuna's stats at 600 battles by the section 6.4 formula (Cindy 43,827 HP, Sandy 35,862, Mindy 24,913, Yojimbo 19,646 on this Yuna) | `builds/endgame-aeons.ts` | `research/ffx-combat-core.md` section 6.4 `[verified: 3 sources]`; the function reproduces all 270 numbers of the three canonical blocks (a test) |
 | **Yojimbo's starting compatibility** | **128: strongly indicated by the owner's saves, live confirmation pending** (the game's files hold no start value; the community also says 128). A fixed per-chapter value: a chain carries it (`yojimbo:compatibility`), nothing persists it across sessions (that would be save data) | `YOJIMBO_START_COMPATIBILITY` | RE lane FFX-K asks the chapter to say so where it gives the value; `[estimate]` until it is confirmed live |
 | Yojimbo's hire answer | 2 (the third option, "to defeat the most powerful of enemies") | `YOJIMBO_HIRE_ANSWER` | Jegged Cavern; G08 section 3.5 |
-| Gil | 1,500,000 (Pay draws on it; the advisor's line pays 100,000 a turn, `PAY_GIL`) | `ENDGAME_GIL` | StrategyWiki speaks of paying "upwards of 2 million" |
+| Gil | 1,500,000 (Pay draws on it; a person pays from the ladder, the advisor's line pays 100,000 a turn, `PAY_GIL`) | `ENDGAME_GIL` | StrategyWiki speaks of paying "upwards of 2 million" |
 | **The Sisters' start motivation** | **50 each** (an estimate; RE marks it unsourced). It sets Combine powers' chance (200 plus motivation in RE's kernel: always from 56 up) and the order menu's rolls; a chain does not carry it | `SISTERS_START_MOTIVATION` | named estimate, not measured as a lever |
 | **The aeons' start gauges** | the three Sisters **100** (their menu offers Combine powers only while all three bars are full, and the other seven orders that could fill a bar are not built); Yojimbo 0; the five story aeons keep Dream's End's | `SISTERS_START_GAUGE`, `YOJIMBO_START_GAUGE` | estimate; pinned in `mirror-aeons-party.test.ts` |
 | **Phoenix Downs in the bag** | **17** (the main difficulty lever, set by the bench) | `ENDGAME_PHOENIX_DOWNS` | the bench (`docs/plans/ch-mirror-aeons-bench.md`); no source gives the endgame stock |
@@ -159,7 +161,7 @@ carries Pay's id or an order's (`engine/tactics/advisor-aeons.ts`, the one early
 
 **Still owed by RE or the driver:** (a) the two Zanmato fixes above (then re-run the Pay-on rows); (b) the seven orders; (c) Combine powers is `[R]` (read from the code, not run; RE's open item 2); (d) the order of Zanmato and
 Auto-Life inside a hit (RE note 8.3) and the dog's hit event while it is untargetable (8.4), both inherited from the first note; (e) Yojimbo's compatibility live reading (128 stays labelled until then); (f) **the Pay amount screen**
-(a new screen: mockup first, rule 9; section 9, item 1).
+(the ladder of rows is built as a stop-gap; the screen Bailey wants is his pick, rule 9; section 9, item 1).
 
 ## 6. Disagreements between the guides and the files (the files win; the full table is `research/ffx-mirror-aeons.md` section 6)
 
@@ -180,14 +182,16 @@ survives a cleanse row's KO (the order of the cleanse and the death check inside
 
 ## 9. Open items and questions
 
-1. **The Pay amount screen (the first thing a player will meet).** Yojimbo's menu is Pay and Dismiss, and the engine's Pay row is a template whose `gilSpent` is 0 ("the screen fills the payment", RE section 2.3). The HUD has no
-   payment screen, so **choosing Pay with the keys pays nothing: Yojimbo leaves and his compatibility drops by 20**; only the advisor's line (the Auto strategy and the bench) pays, 100,000 a turn. A payment screen is a new screen:
-   **a mockup and Bailey's yes come first (AGENTS.md rule 9)**. Options to show him: one row per round amount ("Pay 10,000", "Pay 100,000", "Pay all"), a stepper like the Overdrive picker, or a fixed payment per chapter.
+1. **The Pay amount screen (the first thing a player will meet).** The engine's Pay row is a template whose `gilSpent` is 0 ("the screen fills the payment", RE section 2.3), and a payment of nothing is the game's "he leaves, compatibility
+   -20" branch; the HUD has no amount screen, and a one-row Aeon group runs straight through to that row, so before the ladder **choosing Pay with the keys paid nothing and Yojimbo left** (seen in the browser). **What is built, to make the chapter
+   playable end to end overnight:** the presenter turns that one row into a ladder in the same Aeon group, one row per round amount (1,000, 10,000, 100,000, 1,000,000) the party can pay and a last row, Pay all (the gil left): `engine/PayRows.ts`, no new
+   screen and no engine change. **It is provisional.** A new screen is a thing Bailey will feel, so the options he has not seen are still his to pick (AGENTS.md rule 9): this ladder, **a stepper like the Overdrive picker**, or a **fixed payment per chapter**.
+   Each is one small change in that file or one screen. The amounts are ours (the roll adds four points for each doubling of the gil from 8 gil: `kernel/yojimbo.ts`); nothing in the engine, the advisor's line or the bench reads them.
 2. **RE's two fixes** (section 5): re-run the Pay-on rows when they land and re-pick the Phoenix Down stock if the numbers move.
 3. **Dark gauges are not drawn.** Dark Yojimbo's blade and the sisters' bars only exist in the engine and the callout; the HUD's gauge widget is Chapter IX's. Drawing them is a perceivable change (mockup first).
 4. **Yojimbo's compatibility and the Sisters' motivation** (section 3): 128 is strongly indicated by the owner's saves, live confirmation pending; 50 is an estimate.
 5. **Dark paintings** of the four aeons (red and black), the two backdrops (both existing plates; the Mushroom Rock Road plate is a provisional stand-in), a **cavern grade** (the palette is applied once at the scene's entry, so the
-   cavern is lit with the road's daylight), a Dark Yojimbo departure picture, and the **music** (no source names these fights' cues) are Bailey's picks. Listing the chapter on the board waits for his word.
+   cavern is lit with the road's daylight), a Dark Yojimbo departure picture, and the **music** (no source names these fights' cues) are Bailey's picks. The chapter is **listed** on the board (his word, relayed 2026-10-15).
 6. **The word.** `yojimbo` is built; the brief's `zanmato` cannot be typed on the board (its Z is confirm and a first letter is never claimed). Making a first-letter confirm safe is a change to the board's shared input; say so if
    Bailey wants `zanmato`.
 7. **The pause screen's hero art** `pause/ch27-mirror-aeons` is not made (the fallback is Yuna's portrait, `portraits/yuna.png`).
@@ -200,6 +204,11 @@ survives a cleanse row's KO (the order of the cleanse and the death check inside
 11. **Disk:** the production build of the proof is the lane tree's one `dist` (10 GB, regenerable); it is left in place for the driver to look at or delete.
 
 ## 10. Merge hot spots (the driver)
+
+**The listing's footprint.** Besides the files below, listing a chapter moves every test that counts the board: about forty files changed their eighteen to nineteen (the door suites, `frontend-chapter-*`, `board-thumbs` (twelve FFX cards now), `chapter-select-c`,
+`chapter-numbers`, `chapter-meta`, the save fixtures, `strategy-guide`, `critic-instruments-legibility`, `exp-leblanc`, the experiment-card tests that hand a card in (now twenty) and the per-chapter order tests that read the last positions of `CHAPTERS`). **A
+lane that lists another chapter will touch the same lines.** The card is Chapter XXVII and sorts last in the FFX group; the hidden chapters numbered 19 to 26 (Leblanc's preview, the FFX-2 experiment, Sinspawn Gui, Fayth, the Tourist Trap, Besaid, Biran and Yenke, Angra Mainyu) would sort BEFORE it
+if listed, and take their own numerals. `story/registry.ts` is 399 lines (the next chapter's rows need a fold). **The save schema is untouched** (`SAVE_VERSION` 1; `tests/unit/save-mirror-aeons-listed.test.ts` loads a real save written before the listing, and the record lands in `SaveData.chapters['mirror-aeons']`).
 
 `encounters.ts`, `chapters-experiments.ts`, `chapter-meta.ts`, `chapterDoors.ts`, `scenes/experiment-scenes.ts`, `scenes/mushroom-rock-road.ts` (the plate table), `engine/pyreflyCanon.ts`, `engine/BattlePresenterDepartures.ts` (399 lines),
 `engine/tactics/{index,lookup,advisor}.ts`, `data/guides/{index,docs/index}.ts`, `data/ffx/index.ts` (399 lines), `data/ffx/command-records/{enemies,items}.ts`, `data/ffx/items/spheres.ts`, `battle/ffx/setup.ts`, `battle/ffx/orders.ts`,

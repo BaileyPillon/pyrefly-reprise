@@ -6,7 +6,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import type { AbilityCommand, AvailableCommand } from '../../src/battle/common/types.ts';
-import { PAY_AMOUNTS, payRows } from '../../src/engine/PayRows.ts';
+import { PAY_AMOUNTS, aeonMenuRows, payRows, shortOrderLabels } from '../../src/engine/PayRows.ts';
+import { ORDERS } from '../../src/battle/ffx/aeon-commands.ts';
 import { PAY, Rig, SUMMON, build, yojimbo } from './helpers/ffxKRig.ts';
 import { enemy, stats } from './ffx-fixtures.test.ts';
 
@@ -64,6 +65,27 @@ describe('payRows (pure)', () => {
     expect(m).toEqual([payTemplate, dismiss]);
     expect((payTemplate.command as AbilityCommand).gilSpent).toBe(0);
     expect(PAY_AMOUNTS).toEqual([1_000, 10_000, 100_000, 1_000_000]);
+  });
+});
+
+describe('the Sisters\' order rows in short words', () => {
+  const order = (id: string, label: string): AvailableCommand => ({ command: { kind: 'ability', id, targets: [] }, label, category: 'aeon', mpCost: 0, rank: 3, enabled: id === 'sister-order-combine', validTargets: [] });
+
+  it('names every one of the engine\'s eight orders, and no label is longer than the column shows (fifteen letters)', () => {
+    const rows = shortOrderLabels(ORDERS.map((o) => order(o.id, o.label)));
+    expect(rows.map((r) => r.label)).toEqual(['Free choice', 'Repeat last', 'Attack order', 'Cindy: spells', 'Cindy: support', 'Combine powers', 'Sandy: support', 'Mindy: drain']);
+    for (const r of rows) expect(r.label.length, r.label).toBeLessThanOrEqual(15);
+  });
+
+  it('changes nothing but the label of an order row (id, enabled, reason) and hands any other menu back as it was', () => {
+    const combine = order('sister-order-combine', 'Combine for the Delta Attack');
+    const [row] = shortOrderLabels([combine]);
+    expect(row).toMatchObject({ label: 'Combine powers', enabled: true, command: { id: 'sister-order-combine' } });
+    expect(combine.label).toBe('Combine for the Delta Attack');
+    const plain = [dismiss];
+    expect(shortOrderLabels(plain)).toBe(plain);
+    expect(aeonMenuRows(plain, 1_500_000)).toBe(plain);
+    expect(aeonMenuRows([payTemplate, dismiss], 1_500_000).map((r) => r.label)).toContain('Pay 100,000');
   });
 });
 

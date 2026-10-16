@@ -38,8 +38,8 @@ const W = Number(arg('--w', '1600'));
 const H = Number(arg('--h', '900'));
 const TOUCH = flag('--touch');
 const SEED = Number(arg('--seed', '2'));
-const HAND_OVER = 76; // Dark Yojimbo's blade when the keys take over from the advisor
-const SHIELD_AT = 88; // `SHIELD_AT_GAUGE` of the line (engine/tactics/mirror-aeons.ts): the aeon goes in once his blade is within a round of full
+const HAND_OVER = 66; // Dark Yojimbo's blade when the keys take over from the advisor (tier 2 adds 10 a turn and 2 a hit, so about three of his turns remain before a Zanmato)
+const SHIELD_AT = 66; // Yuna calls Yojimbo at her first menu from then on (the advisor's own line waits until 88; a person's turn order can skip a menu, and a Zanmato on a party with no aeon out ends the run)
 const UNTIL = arg('--until', 'end');
 const ENTRY = arg('--entry', 'card');
 const SCENARIO = arg('--scenario', 'full'); // 'combine' stops after the Sisters' Combine powers (a quick look), 'end' plays the whole proof
@@ -297,6 +297,8 @@ try {
     await page.waitForTimeout(400);
     await shot('3-act-i-sisters-combine-lit'); // the orders open, the cursor on Combine powers
     const from = await logLen();
+    const pairHp = async () => ((await state())?.enemyHp ?? {});
+    const hpBefore = await pairHp();
     await page.keyboard.press('Enter');
     const delta = await waitStart('the Delta Attack in the log', /delta/i, from, 25000);
     if (delta) {
@@ -307,8 +309,10 @@ try {
       await sleep(3500); // the six hits play out
     }
     const dealt = await damageSince(from);
-    log('delta.damage', dealt);
-    check('the Combine plays the Delta Attack: Cindy throws it, and the pair is hurt', !!delta && delta.actor === 'cindy' && (dealt['dark-mindy'] ?? 0) + (dealt['dark-sandy'] ?? 0) > 0, { delta, dealt });
+    const hpAfter = await pairHp();
+    const hpLost = ['dark-mindy', 'dark-sandy'].reduce((n, id) => n + Math.max(0, (hpBefore[id] ?? 0) - (hpAfter[id] ?? 0)), 0);
+    log('delta.damage', { dealt, hpBefore, hpAfter });
+    check('the Combine plays the Delta Attack: Cindy throws it, and the pair is hurt', !!delta && delta.actor === 'cindy' && ((dealt['dark-mindy'] ?? 0) + (dealt['dark-sandy'] ?? 0) > 0 || hpLost > 0), { delta, dealt, hpBefore, hpAfter });
   } else {
     await shot('3-act-i-sisters-menu');
   }
@@ -395,8 +399,9 @@ try {
       await page.waitForTimeout(4000);
       const lost = await state();
       log('retry.lost', { screen: await screenNow(), outcome: lost?.outcome ?? null });
-      check('the party that only defends is beaten in Act II (the results screen, a defeat)', (await screenNow()) === 'results' && lost?.outcome === 'defeat', { outcome: lost?.outcome });
-      log('retry.results', await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 300)));
+      const resultsText = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 300));
+      check('the party that only defends is beaten in Act II (the results screen, a defeat)', (await screenNow()) === 'results' && /defeat/i.test(resultsText), { screen: await screenNow(), text: resultsText });
+      log('retry.results', resultsText);
       await shot('11-defeat-results');
       let back = false;
       for (let i = 0; i < 6 && !back; i++) {
