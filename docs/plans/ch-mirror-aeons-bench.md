@@ -12,6 +12,20 @@ own estimates and WHICH of the game's own fights each act uses (the plan: `docs/
 > is left for the re-run the driver triggers when RE's follow-up has landed (the recipe below). Everything under "PRELIMINARY" was measured before the hold: it is kept only as the reason for the placeholder constants
 > (`MIRROR_ACT_I`, `MIRROR_ACT_II`, `ENDGAME_PHOENIX_DOWNS`) and as the shape to expect. **It is not the table of record and no decision should rest on it.**
 
+> **ACT II RELEASED (the driver, 2026-10-16, after RE's follow-up: `afda2d451`, the player's Zanmato kills every legal foe of the picked group; `4256d209a`, the Sisters' seven orders).** Merged into this branch (`b29b3557a`). **Act I and the whole chapter wait for the
+> last fix** (the player's Delta Attack becomes group-type: it must hit all three Dark Sisters). Act II alone, on the merged engine, 200 seeds a line, 17 Phoenix Downs, the shipped preset (`node --experimental-transform-types tools/mirror-aeons-bench.mjs --act2 --seeds 200 --lines advisor,nopay,noyojimbo,careless`):
+>
+> | Act II tier | advisor (Pay ON) | Pay OFF: Yojimbo sent in, never paid (his free attacks only) | Pay OFF: no Yojimbo | careless |
+> |---|---|---|---|---|
+> | tier 1 `nagi05_70` | 97 percent (193 of 200) | 28 percent (57) | 96 percent (192) | 0 of 200 |
+> | **tier 2 `nagi05_71` (the pick)** | **97 percent (194)** | 28 percent (56) | 97 percent (193) | 0 of 200 |
+> | tier 3 `nagi05_72` | 100 percent (200) | 23 percent (46) | 100 percent (199) | 0 of 200 |
+>
+> **These equal the preliminary rows below to the seed**, so the fix did not move Act II: a Pay at compatibility 128 against a Zanmato byte of 4 buys no Zanmato without a full Overdrive gauge (0 in 64 up to 1,000,000 gil; 17 in 64 at 100,000 with a full gauge: RE's lane handoff
+> section 10.4), and Yojimbo's gauge never reaches full before a Pay (a probe over the same 200 fights a tier: 266, 234 and 249 Pays, none with a full gauge, the highest gauge at a Pay 90, 60 and 60); Act II's first-target kill already ended the fight when Dark Yojimbo was the only legal foe (his dog is untargetable). **Pay is therefore final for Act II: it
+> barely decides it (the Pay-on and no-Yojimbo lines are within three seeds in a hundred), and the worst thing a player can do is call Yojimbo and not pay him (23 to 28 percent).** What would change it is Yojimbo's starting gauge (a lever the preset names: full
+> raises the Zanmato chance to 17 in 64 at 100,000 gil and the Zanmato ends the fight), which this pass does not move.
+
 Bailey, 2026-10-15: "i like the mirror match but make the difficulty appropriate not too easy not too hard". The target the plan turned that into: **a full run (Act I, the heal, Act II) with the advisor's line is won about
 70 percent of the time (60 to 80 accepted), and a careless line (the plain Attack on the first living enemy, no aeon, no item) mostly loses (under 20 percent).** Prefer the game's own formations; the trio with its gauges
 at 0 (OUR adjustment) only if no faithful cell lands in the band.

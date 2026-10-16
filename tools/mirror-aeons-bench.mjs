@@ -14,6 +14,7 @@
  *   --stat     Strength, Defense, Magic and Magic Defense at this fraction of the caps (the chapter ships 1)
  *   --cells    `actI:actII` chains to play (default: the three Act I cells against the three Act II tiers)
  *   --acts     also play each act alone (Act I from the fresh preset; Act II from the fresh preset, no carry)
+ *   --act2     play ONLY Act II alone, the three tiers (nagi05_70 to _72), one row a tier, for the lines asked (the driver's first order after RE's follow-up: Act II does not need the Act I answer)
  *   --ablate   the advisor's line with one rule taken away at a time, on the first of --cells (`all` or a comma list of: shield-on-full, heal-45, no-auto-life, no-cheer, story-aeons-first, items-only, no-pay, no-yojimbo)
  *   --lines    any of `advisor` (the shipped line: Yojimbo paid), `careless`, `nopay` (Yojimbo sent in first but never paid: **Pay off**, his own free attacks only) and `noyojimbo` (he is never sent in), comma-separated;
  *              default `advisor,careless`. **Pay on is provisional until RE's Zanmato fix lands** (a Pay can roll a Zanmato that today kills a Dark Aeon the game's rules would not), so Act II is read with `nopay` beside `advisor`.
@@ -72,6 +73,17 @@ const chains = args.has('--cells')
   : ACT_I_CELLS.flatMap((a) => ACT_II_CELLS.map((b) => [a, b]));
 
 const pct = (r) => `${(100 * share(r)).toFixed(0)}%`;
+if (args.has('--act2')) {
+  console.log(`# Act II alone (the three Dark Yojimbo tiers), Phoenix Downs ${phoenix}${luck !== undefined ? `, Luck ${luck}` : ''}${stat !== undefined ? `, stats x${stat}` : ''}, ${seeds} seeds a line`);
+  console.log(`| Act II tier | ${lines.join(' | ')} |\n|---|${lines.map(() => '---').join('|')}|`);
+  for (const tier of ACT_II_CELLS) {
+    const row = {};
+    for (const line of lines) row[line] = rateOf(seeds, tier, null, LINES[line], party);
+    console.log(`| ${tier} | ${lines.map((l) => `${pct(row[l])} (${row[l].wins}/${row[l].seeds}${row[l].unfinished > 0 ? `, UNFINISHED ${row[l].unfinished}` : ''})`).join(' | ')} |`);
+    console.log(JSON.stringify({ phoenix, luck: luck ?? null, stat: stat ?? null, seeds, act: tier, ...row }));
+  }
+  process.exit(0);
+}
 const detail = (r) => `${r.wins}/${r.seeds}${r.lostFirst + r.lostSecond > 0 ? ` (lost in I ${r.lostFirst}, in II ${r.lostSecond})` : ''}${r.unfinished > 0 ? ` UNFINISHED ${r.unfinished}` : ''}`;
 const cell = (r) => (r ? `${pct(r)} ${detail(r)}` : '-');
 const head = (what) => `| ${what} | ${lines.join(' | ')} |\n|---|${lines.map(() => '---').join('|')}|`;
