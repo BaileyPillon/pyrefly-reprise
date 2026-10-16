@@ -115,7 +115,10 @@ describe('the player\'s Yojimbo: his menu and his turn start', () => {
 });
 
 describe('Pay', () => {
-  /** A monster Zanmato cannot kill (Death resist 255), so a free attack that comes before the Pay cannot end the battle. */
+  /**
+   * A monster with a great deal of HP and Death resistance 255. A landed Zanmato ignores every resistance and kills it all the same, so a FREE Zanmato before the Pay
+   * would end the battle; the seeds below do not draw one (a monster with a Zanmato byte, or compatibility 0, rules it out).
+   */
   const SOLID = { id: 'dummy', stats: stats({ hp: 99999, maxHp: 99999, str: 1, agi: 1 }), immunities: { ko: 255 } } as const;
 
   /**
