@@ -234,7 +234,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     // places that read it and `extra.groupTarget` (below) makes the executor keep the whole list the order names (`targeting.ts#aimOf`; the flag the Zanmato, NulAll and Mix use).
     targeting: 'single-enemy',
     hits: 6,
-    canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
+    // Always hits: the record's accuracy formula is 0 (bits 3 to 5 of its flag word 0x44011006 are clear, so the game rolls no hit check;
+    // `research/re-ffx-commands.md` section 4.2), as ffx-bfa-yu-yevon.md §1.3 said [verified: 2 sources]; see also the file header.
+    canMiss: false,
     statusEffects: [],
     removesStatuses: [],
     flags: ['crit-eligible'],
