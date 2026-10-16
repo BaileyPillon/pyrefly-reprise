@@ -40,7 +40,8 @@ import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { beginCharge, castTime, completeCommand } from './atb-engine.ts';
 import { commandCosts } from './adapt/command.ts';
 import { rebuildAutoLayer } from './auto-layer.ts';
-import { commitItem, reserveItem } from './adapt/item-ledger.ts';
+import { commitItem, itemAvailable, reserveIngredients, reserveItem } from './adapt/item-ledger.ts';
+import { mixPlanOf } from './adapt/mix.ts';
 
 /** Everything `performCommand` needs from the engine. */
 export interface ExecEnv {
@@ -113,8 +114,13 @@ export function attackClass(ability: AbilityDef): string {
   return 'none';
 }
 
-/** Which `AbilityDef` a command resolves to, if any. */
+/**
+ * Which `AbilityDef` a command resolves to, if any. A Mix that carries its two items resolves to its RESULT, the way the game's HUD queues the result row and never the
+ * Mix stub (`adapt/mix.ts`); a bare Mix, or one whose items the engine cannot name, stays the Mix ability and does nothing, as before.
+ */
 export function abilityFor(env: ExecEnv, command: Command): AbilityDef | undefined {
+  const mixed = mixPlanOf(env.abilities, command);
+  if (mixed !== undefined) return mixed.ability;
   if (command.kind === 'attack') return env.abilities.get('attack');
   if (command.kind === 'ability' || command.kind === 'overdrive') return env.abilities.get(command.id);
   if (command.kind === 'item') {
@@ -177,18 +183,26 @@ function finishAction(env: ExecEnv, actor: Ffx2Unit, startedAt: number, costAtb:
 
 /**
  * Reserve the item of a picked item command (the game's queue add, `adapt/item-ledger.ts`): the stock gives one up now, so the menus show the lower count at once and a
- * second girl cannot take the last one. False when the stock had none. Every other command reserves nothing.
+ * second girl cannot take the last one. A Mix reserves both of its ingredients the same way. False when the stock had none. Every other command reserves nothing.
  */
 function pickItem(env: ExecEnv, actor: Ffx2Unit, command: Command): boolean {
+  const mix = mixPlanOf(env.abilities, command);
+  if (mix !== undefined) return reserveIngredients(env.state.flags, actor, mix.ingredients);
   return command.kind !== 'item' || reserveItem(env.state.flags, actor, command.id);
 }
+
+/** Does this command spend stock: an item, or a Mix that carries its two items. */
+const spendsStock = (env: ExecEnv, command: Command): boolean => command.kind === 'item' || mixPlanOf(env.abilities, command) !== undefined;
 
 /**
  * The start gate failed (the reservation is short): the record is removed with nothing to refund and the action does not happen. The HUD never offers such a pick
  * (the menus read the reserved stock) and `submit` refuses one, so this is the net for a script, a held command or a test: say so and spend the turn.
  */
 function abortItem(env: ExecEnv, actor: Ffx2Unit, command: Command, before: number, costAtb: number): void {
-  const name = command.kind === 'item' ? (env.items?.get(command.id)?.name ?? command.id) : '';
+  const plan = mixPlanOf(env.abilities, command);
+  // a Mix names the first ingredient the stock is short of (the first one, when each alone is there but the same item is asked for twice)
+  const short = command.kind === 'item' ? command.id : plan === undefined ? '' : (plan.ingredients.find((id) => !itemAvailable(env.state.flags, id)) ?? plan.ingredients[0]);
+  const name = short === '' ? '' : (env.items?.get(short)?.name ?? short);
   env.emit({ type: 'message', text: `No ${name} left`, kind: 'system' });
   finishAction(env, actor, before, costAtb);
 }
@@ -242,6 +256,10 @@ export function performCommand(
   if (chargeTicks > 0) {
     // An item is taken at the pick, before its charge begins; a cast that never fires gives it back (the sweep, `adapt/item-ledger.ts#releaseItemHolds`).
     if (!pickItem(env, actor, command)) return abortItem(env, actor, command, before, costs.costAtb);
+    // A Mix that comes back from its picker is the re-submit of the bare Mix the overlay was raised for: the suspension is over, the result charges now (a Mix always asks BEFORE it
+    // charges, as the game's HUD resolves the result before anything is queued).
+    const awaiting = env.getAwaiting();
+    if (awaiting !== null && mixPlanOf(env.abilities, command) !== undefined && sameAction(awaiting, command)) env.setAwaiting(null);
     env.emit({
       type: 'action-start',
       actorId: actor.id,
@@ -276,7 +294,7 @@ export function performCommand(
 
   // The item: reserved at the pick (a charged cast did it before it began), kept spent when the start gate passes. A command with no charge is picked and started in one
   // call, so it reserves and commits here. One party inventory (`inventory:<id>`); a monster never touches it, and an item the battle does not track is free.
-  if (command.kind === 'item' && !(pickItem(env, actor, command) && commitItem(env.state.flags, actor))) {
+  if (spendsStock(env, command) && !(pickItem(env, actor, command) && commitItem(env.state.flags, actor))) {
     return abortItem(env, actor, command, before, costs.costAtb);
   }
 

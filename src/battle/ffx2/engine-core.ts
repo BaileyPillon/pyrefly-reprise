@@ -37,7 +37,8 @@ import {
   allTargetsGone, awaitsPlayerInput, canTakeTurn, clockHeldByMenu, DEFAULT_ATB_MODE, DEFAULT_WAIT_SPLIT, heldStillPending, ownsInput, withDefaultTimedInput,
   type AtbMode, type HeldCommand, type MenuLevel,
 } from './active.ts';
-import { itemAvailable, releaseItemHolds } from './adapt/item-ledger.ts';
+import { releaseItemHolds } from './adapt/item-ledger.ts';
+import { stockShort } from './adapt/mix.ts';
 
 export class Ffx2EngineCore {
   protected rng: BattleRng = makeFfx2Rng(0);
@@ -204,7 +205,7 @@ export class Ffx2EngineCore {
     this.held = null;
     if (!held) return;
     const ability = abilityFor(this.env(), held.command);
-    if (allTargetsGone(this.units, held.command, ability) || (held.command.kind === 'item' && !itemAvailable(this.battleState.flags, held.command.id))) return;
+    if (allTargetsGone(this.units, held.command, ability) || stockShort(this.battleState.flags, this.abilities, held.command)) return;
     const command = withDefaultTimedInput(held.command, ability, this.rng, this.options.minigames !== false);
     const before = this.drafts.length;
     this.beginTurn(actor);
