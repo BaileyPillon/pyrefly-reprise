@@ -199,12 +199,21 @@ describe('the flag is the only way in: every other chain carries what it always 
    * now uses Darkness, and Yuna, also Silenced, can use Pray and Vigor. `92f34919fb6d8fcc` became `4662e80c1515469b`, which is again the
    * `ffx2-atb-golden.test.ts` CH5_D0 seed 4 digest. The other seven Chapter 5 logs and all thirty-two of the others (Chapter 6, Chapter XI, the
    * Sisters) are unchanged. With the old Silence rule put back through a module mock the old digest returns.
+   *
+   * **Chapter XI's seeds 1, 3 and 4 and the Sisters' seeds 2, 4 and 5 re-pinned 2026-10-15 for RE parity RC9 lane X2-I, the Garment Grid
+   * layouts** (FFX-2 only; reason "game-data parity"; `docs/handoff/re-parity-rc9-x2-grids.md`). No Den code changed; the grids did: Flash of Steel and
+   * Pride of the Sword are the game's real grids now, not rings. In every one of those six logs the first event that differs is the girl's own Change
+   * out of Itchy (the autopilot takes the first row of her Change menu, the dress it always took): Rikku's Dark Knight to Gunner now crosses the gate
+   * numbered 1, which pays Magic +20 (it wears blue in the data), where the ring's first link was red and paid Strength +20; Paine's Dark Knight to
+   * Gunner is a direct join on the real Pride of the Sword, no gate, where the ring's first link was red. Same girl, same dresses, other gate, so other
+   * stats and other draws from there. The other ten logs of the two chains, and Chapters 5 and 6, are byte-identical (Yuna's Tempered Will
+   * first row crosses the same red gate as before). With `GRID_LAYOUTS = false` the old digests return. The old hashes are in git at f939b87f.
    */
   const BASE = {
     ch5: ['14c489f0278792bb', '24d443bbb861aaa6', '833dda720297db2e', '4662e80c1515469b', '2b5cfff69fa679a1', '7a2a583e90ef2080', '15f003b141b6a6f3', 'f73910bcb4c31588'],
     ch6: ['2fe934963fc56c3a', 'cb4cab09fb7729df', '8034846edf7dfd10', 'a39696f7ae0ccaa4', '4f0e498c14ac2d5c', 'c86b36c8466a45b2', '800aecc068609cf2', '3bc2d05021df6507'],
-    ch11: ['1e2967f9a6eb564d', '7c7fa3bf60a618b0', 'a930f8adbfddbc40', '9b34cf5f9dd088f9', '04d8eb23fb7525d0', '88e605a902ddb419', '5633c37e7a691312', 'b7c8bf061dca8d62'],
-    sisters: ['9169f136877f9e92', '05f2b56d8cd64c18', '6d1ab630119409ae', '813bd394e5ac703d', 'f9f8a98425850b50', '26879886243ece21', '45fc4057955ccc75', 'c3dbe73d64528a38'],
+    ch11: ['eff33e3018bcd94a', '7c7fa3bf60a618b0', 'bf0a60bb28f11bbf', 'c5da9b1629e0011a', '04d8eb23fb7525d0', '88e605a902ddb419', '5633c37e7a691312', 'b7c8bf061dca8d62'],
+    sisters: ['9169f136877f9e92', '5e9e73f9e3ac2279', '6d1ab630119409ae', '67184ba4c69c22cf', 'bb9ec18ebf03b77d', '26879886243ece21', '45fc4057955ccc75', 'c3dbe73d64528a38'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

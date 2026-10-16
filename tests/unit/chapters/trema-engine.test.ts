@@ -248,9 +248,11 @@ describe('the link: carried state and the TR5 checkpoint', () => {
         (c.command as { extra: { toDressphere: string } }).extra.toDressphere === 'warrior');
       engine.submit(d.actorId === 'paine' && change ? change.command : { kind: 'defend', targets: [] });
     }
-    // A real spherechange through the menu, across The End's red gate (Dark Knight to Warrior).
+    // A real spherechange through the menu, across The End's gate (Dark Knight to Warrior). Re-baselined 2026-10-15 for RE parity RC9 lane X2-I (FFX-2 only; reason
+    // "game-data parity"): The End is the game's real grid now, and the join between its engine nodes 0 and 1 runs through the gate numbered 4, which wears blue in the
+    // data; the ring's first link, which this used to cross, was red. The change itself, the dressphere she ends in and every number after it are as they were.
     expect(paine().dresspheres.current).toBe('warrior');
-    expect(paine().dresspheres.garmentGrid.passedGates).toContain('red');
+    expect(paine().dresspheres.garmentGrid.passedGates).toContain('blue');
     // Mid-battle her maximum keeps the Crystal Bangle (E2: `spherechange.ts#refreshDerivedStats`
     // layers her accessories again), Warrior Lv 99 4,122 x2; she ends the link on it.
     expect(paine().stats.maxHp).toBe(4122 * 2);

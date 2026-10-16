@@ -15,8 +15,9 @@
  *
  * - 0x005f4800  opening the grid menu: decides whether the Special form is offered (`specialDressUpAvailable`)
  *
- * What the exe does NOT contain: the length of the dress-up animation (a motion script), and the grid's layout (nodes, links, gate
- * colours; those are in a compressed entry of the menu file `menu_plate.bin`, not decoded here).
+ * What the exe does NOT contain: the length of the dress-up animation (a motion script), and the grid's gate colours (artwork; the gates carry only numbers 1 to 4).
+ * The grid's layout (nodes, links, gate numbers) is in the 64 plain cards `menu/resdat00..63.bin`, not in a compressed entry of `menu_plate.bin` as this comment said
+ * until 2026-10-15 (`FFX2-G09` section 3.1); `kernel/grid-path.ts` reads it (the path finder 0x005eb080, the commit 0x005f51a0 mark the route; this file keeps the gate abilities).
  */
 
 import { clampInt } from './intops.ts';

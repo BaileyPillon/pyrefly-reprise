@@ -329,6 +329,8 @@ the slots, so the grid's progress starts over; mode 2 does nothing. The node mar
 The grid's nodes, links and gate positions are in the menu file `menu_plate.bin` as compressed entries ("plate decode buff"); they were not decoded. The kernel therefore takes the gates already crossed as an
 input (`Ffx2GateState`), not a route.
 
+**Corrected 2026-10-15 (RE parity RC9 lane X2-I; `FFX2-G09` section 3.1, 8):** that was a wrong guess. The layout is in 64 plain, uncompressed cards, `menu/resdat00..63.bin` (card n = plate `0x6000 + n`), not in `menu_plate.bin`, and it is decoded: 2 to 6 dressphere nodes, 0 to 4 gate nodes, 1 to 13 links per grid. A move goes to a dressphere node joined directly or through exactly one gate node, and crossing a gate marks it; the layouts are numbers in `src/data/ffx2/garment-grids/layouts.ts`, the rules `kernel/grid-path.ts`.
+
 ## 4. Auto-abilities and accessories
 
 ### 4.1 The three words (`Chr+0x650`, `+0x652`, `+0x654`)
@@ -423,6 +425,7 @@ engine's table.
 | D9 | Gates are colours (red, green, blue, yellow); a bonus needs a set of colours; `perGate` repeats a bonus once per distinct gate passed | Gate numbers 1 to 4 with conditions 1 to 7 and 100 to 102; the abilities are looked up per pair in plate order | The stat totals with every gate passed match the game for 18 of the 19 modelled grids (and the equip-only totals for all 19) | `src/battle/ffx2/garment-grids.ts:24`, `:166-181` |
 | D10 | White Signet pays MAG +10 per gate; The End, Highroad Winds and Heart of Flame have no always-on ability | White Signet (0x602c) gives Magic +15 at each of the four gates (60, not 40, in total), plus Turbo White Magic when every gate is crossed. The End (0x603b) always carries Break HP Limit, Highroad Winds (0x6009) First Strike, Heart of Flame (0x600b) Fire Eater | White Signet, 4 gates: engine MAG +40, game +60; Highroad Winds at battle start: engine no First Strike, game First Strike (ready at once) | `garment-grids.ts:111-120` |
 | D11 | Every grid is a ring of its node count with the gates on successive links | The real layout (which node touches which, where each gate sits) is in the undecoded menu file | cannot be compared; the engine's adjacency and routes are an estimate | `garment-grids.ts:26-36` |
+| D11 (corrected 2026-10-15) | as D11 | the layout is in the 64 plain cards `menu/resdat00..63.bin` and is decoded (`FFX2-G09`): 14 of the 19 modelled grids are not rings | **fixed for the 39 grids whose data agree with their cards** (RC9 lane X2-I: `kernel/grid-path.ts`, `data/ffx2/garment-grids/layouts.ts`); the other 5 data grids and the fallback table keep the ring estimate | `adapters.ts#garmentGridRegistryFrom` |
 | D12 | A change empties the gauge: `ticks = 0`, `required = baseRequired(agi)`, `charging = null` | The row's ATB cost is 0: recovery is the carry only (2.3) | Gunner (AGI 41) after a change: engine refills an Attack-sized gauge (16,666 ticks, 5.56 s, `research/re-ffx2-atb-status.md` divergence rows 1 and 4); game recovery = the carry (0 for a fresh action), thinking 0 | `src/battle/ffx2/spherechange.ts:121-124` |
 | D13 | The pools keep their ratio: `max(alive ? 1 : 0, round(newMax * hp / oldMax))` | `(oldMax/2 + hp * newMax) / oldMax`, and a result under 1 gives back the OLD value | 5 of 5,000 HP with a new maximum of 100: engine **1**, game **5**; the two agree on 398,852 of 398,864 sampled inputs | `spherechange.ts:62-66` |
 | D14 | Trigger Happy is a press count (0 to 16) from the presentation; the window is not modelled | A 1.80 / 2.20 / 2.60 s window (4.4), level from Trigger Happy 1 and 2 | -- | `src/battle/ffx2/minigames.ts:27` |
@@ -445,7 +448,7 @@ counter" 0x0061c270. Those belong to the **Oversoul** mechanism, not to a dress 
 
 ## 7. Open questions
 
-1. **The grid layout** (nodes, links, gate colours and positions) is in compressed entries of `menu_plate.bin` and was not decoded; the engine's rings stay an estimate.
+1. **The grid layout** (nodes, links, gate colours and positions) is in compressed entries of `menu_plate.bin` and was not decoded; the engine's rings stay an estimate. *(Answered 2026-10-15: the layout is in the plain cards `menu/resdat00..63.bin`, decoded in `FFX2-G09`; only the gate colours are still open, they are artwork.)*
 2. **The Special's scale in play:** the community "worked blocks" for Floral Fallal on a 6-node grid (HP 1,931 at Lv 25, 3,587 at Lv 50) equal the unscaled rows (1,932 and 3,588), not the x1.24 the recompute gives (2,395 and 4,449). The exe path is proven by
    emulation; whether the pods' and the main unit's records hold the plate that the scale reads when the form is active was not traced (the initial pod rows hold grid 0, 6 nodes). Needs a live look.
 3. **Where the walk resets between battles** for a girl not wearing a Special: only the Special case (2.5) was found.

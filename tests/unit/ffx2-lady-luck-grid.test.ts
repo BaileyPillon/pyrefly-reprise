@@ -13,11 +13,22 @@
  * Mage in before Memento Mori) and gives up Black Mage instead, and at Chapter XVI Yuna and Rikku keep their Black Mage
  * (the XVI page says Water hurts Ixion) and give up Gunner instead, so Lady Luck is the first Change row there.
  *
+ * **Re-baselined 2026-10-15 for RE parity RC9 lane X2-I (FFX-2 only; reason "game-data parity").** The Garment Grids are the game's real
+ * grids now (`kernel/grid-path.ts`, `data/ffx2/garment-grids/layouts.ts`), no longer rings. The engine numbers a grid's dressphere nodes
+ * along a ring through the real grid (`ringOrder`), so the two neighbours the builds were written for, node 1 and the last node, are
+ * still node 0's neighbours and still first and last on her first Change menu, and the real grid adds the joins it has beyond the ring:
+ * a hub grid (Protection Halo, Hour of Need, Flash of Steel, Valiant Lustre) joins node 0 to its third neighbour as well, Tempered Will
+ * and Pride of the Sword to one more, Stonehewn (a true ring) to none. So `ring` below is the old menu (unchanged: it is where the
+ * build puts the dresspheres) and `menu` is the whole first menu on the real grid, pinned from the card
+ * (`ffx2-grid-layout-engine.test.ts` proves every menu against an independent oracle). One consequence: Paine's Lady Luck on the Pride
+ * of the Sword is joined to her Dark Knight directly, so she is one Change from it, not two.
+ *
  * What this pins, and why each line matters:
  *  - every girl of the five chapters owns her, on the node the table below says, and her first Change menu is exactly the
- *    table's (the ring's two neighbours of node 0, in the engine's order: node 1, then the last node);
- *  - Lady Luck is one Change away for every girl but Paine in V, XI and XV, where she is two (Dark Knight, White Mage,
- *    Lady Luck) because the White Mage on her last node stays;
+ *    table's (the ring's two neighbours of node 0, in the engine's order: node 1, then the last node, with the real grid's
+ *    other joins between them);
+ *  - Lady Luck is one Change away for every girl in V, XI and XV (before the real grids Paine needed two: Dark Knight, White
+ *    Mage, Lady Luck), and the White Mage the V page asks for is on Paine's first menu;
  *  - **node 1, the first Change row, is the dressphere it always was** (Chapter XVI excepted, where it is Lady Luck by
  *    design: Chapter XVI has no Itchy, so no autopilot Change reads it). The autopilot's Itchy answer takes the first row,
  *    so this is what keeps Chapters XI and XIII playing exactly as before (digests identical,
@@ -36,14 +47,17 @@ import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
 
 type Input = Extract<Decision, { kind: 'player-input' }>;
 
-/** Where Lady Luck sits (`at`), and what the girl's first Change menu reads: node 1, then the ring's last node. */
-interface Place { at: number; menu: readonly string[] }
+/**
+ * Where Lady Luck sits (`at`), what the build's ring gives the girl's first Change menu (`ring`: node 1, then the ring's last node), and the whole first menu on the
+ * real grid (`menu`: those two with the joins the real grid adds between them, ascending by node).
+ */
+interface Place { at: number; ring: readonly string[]; menu: readonly string[] }
 
 /** The Chapter 5 Farplane preset (V, XI, XV share it): Black Mage's node 4 on all three rings; Paine's White Mage stays on node 5. */
 const FARPLANE: Record<string, Place> = {
-  yuna: { at: 4, menu: ['gunner', 'lady-luck'] }, // Tempered Will, 5 nodes: White Mage, Gunner, Thief, Warrior, Lady Luck
-  rikku: { at: 4, menu: ['gunner', 'lady-luck'] }, // Flash of Steel, 5 nodes: Dark Knight, Gunner, Thief, Warrior, Lady Luck
-  paine: { at: 4, menu: ['gunner', 'white-mage'] }, // Pride of the Sword, 6: Dark Knight, Gunner, Thief, Warrior, Lady Luck, White Mage
+  yuna: { at: 4, ring: ['gunner', 'lady-luck'], menu: ['gunner', 'warrior', 'lady-luck'] }, // Tempered Will, 5 nodes: White Mage, Gunner, Thief, Warrior, Lady Luck
+  rikku: { at: 4, ring: ['gunner', 'lady-luck'], menu: ['gunner', 'warrior', 'lady-luck'] }, // Flash of Steel, 5 nodes: Dark Knight, Gunner, Thief, Warrior, Lady Luck
+  paine: { at: 4, ring: ['gunner', 'white-mage'], menu: ['gunner', 'lady-luck', 'white-mage'] }, // Pride of the Sword, 6: Dark Knight, Gunner, Thief, Warrior, Lady Luck, White Mage
 };
 
 /** Chapters whose story point the sources put at or after Lady Luck's pickup. */
@@ -53,15 +67,15 @@ const WITH: Record<string, Record<string, Place>> = {
   'ffx2-den-of-woe': FARPLANE, // Chapter 5, optional
   'ffx2-trema': {
     // Chapter 5, the Via Infinito (shipped kit): Lady Luck on node 4 of Valiant Lustre's five nodes, node 1 as it was
-    yuna: { at: 4, menu: ['white-mage', 'lady-luck'] },
-    rikku: { at: 4, menu: ['gunner', 'lady-luck'] },
-    paine: { at: 4, menu: ['warrior', 'lady-luck'] },
+    yuna: { at: 4, ring: ['white-mage', 'lady-luck'], menu: ['white-mage', 'thief', 'lady-luck'] },
+    rikku: { at: 4, ring: ['gunner', 'lady-luck'], menu: ['gunner', 'warrior', 'lady-luck'] },
+    paine: { at: 4, ring: ['warrior', 'lady-luck'], menu: ['warrior', 'thief', 'lady-luck'] },
   },
   'ffx2-ixion-djose': {
     // the end of Chapter 3: node 1 of every ring, Gunner off; Black Mage (Water) and the Warrior stay on the last node
-    yuna: { at: 1, menu: ['lady-luck', 'black-mage'] }, // Protection Halo, 5 nodes: White Mage, Lady Luck, Thief, Warrior, Black Mage
-    rikku: { at: 1, menu: ['lady-luck', 'black-mage'] }, // Hour of Need, 5 nodes: Dark Knight, Lady Luck, Thief, Warrior, Black Mage
-    paine: { at: 1, menu: ['lady-luck', 'warrior'] }, // Stonehewn, 4 nodes: Dark Knight, Lady Luck, Thief, Warrior
+    yuna: { at: 1, ring: ['lady-luck', 'black-mage'], menu: ['lady-luck', 'warrior', 'black-mage'] }, // Protection Halo, 5 nodes: White Mage, Lady Luck, Thief, Warrior, Black Mage
+    rikku: { at: 1, ring: ['lady-luck', 'black-mage'], menu: ['lady-luck', 'warrior', 'black-mage'] }, // Hour of Need, 5 nodes: Dark Knight, Lady Luck, Thief, Warrior, Black Mage
+    paine: { at: 1, ring: ['lady-luck', 'warrior'], menu: ['lady-luck', 'warrior'] }, // Stonehewn, 4 nodes: Dark Knight, Lady Luck, Thief, Warrior (a true ring: no join beyond it)
   },
 };
 /** Chapter 2 story points: earlier than Lady Luck's earliest pickup (Chapter 3). */
@@ -109,10 +123,13 @@ describe("Lady Luck is on every girl's grid where the guides say she can be owne
         const grid = data.GARMENT_GRIDS[m.garmentGrid.id as keyof typeof data.GARMENT_GRIDS];
         const nodes = gridNodeContents(m, grid.nodeCount);
         expect(nodes.indexOf('lady-luck'), `${id} ${m.id}: Lady Luck's node of ${grid.nodeCount}`).toBe(want.at);
-        // A ring: node 0's two neighbours are node 1 and the last node, in that order.
-        expect([nodes[1], nodes[grid.nodeCount - 1]], `${id} ${m.id}: the ring's neighbours of node 0`).toEqual([...want.menu]);
+        // The build's ring: node 0's two neighbours there are node 1 and the last node, in that order.
+        expect([nodes[1], nodes[grid.nodeCount - 1]], `${id} ${m.id}: the ring's neighbours of node 0`).toEqual([...want.ring]);
         const rows = changes(menus.get(m.id)!);
         expect(rows, `${id} ${m.id}: Change menu`).toEqual([...want.menu]);
+        // The real grid keeps both joins of the ring (node 1 still first, the last node still last) and adds the others between them.
+        expect(rows[0], `${id} ${m.id}: node 1 is still the first row`).toBe(want.ring[0]);
+        expect(rows[rows.length - 1], `${id} ${m.id}: the last node is still the last row`).toBe(want.ring[1]);
       }
     });
   }
@@ -147,9 +164,9 @@ describe("Lady Luck is on every girl's grid where the guides say she can be owne
   }
 });
 
-describe('Paine reaches Lady Luck through her White Mage in Chapters V, XI and XV (two Changes)', () => {
+describe("Paine's White Mage (the V page's swap) is one Change away in Chapters V, XI and XV, and Lady Luck is on the menu of both dresses", () => {
   for (const id of FARPLANE_CHAPTERS) {
-    it(`${id}: Dark Knight to White Mage, then Lady Luck is on her Change menu beside Dark Knight`, () => {
+    it(`${id}: Dark Knight to White Mage, then her Change menu lists Dark Knight, Thief and Lady Luck`, () => {
       const ch = getChapter(id)!;
       const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
       engine.setSeed(1);
@@ -176,7 +193,8 @@ describe('Paine reaches Lady Luck through her White Mage in Chapters V, XI and X
         engine.submit({ ...row!.command, targets: target ? [target] : [] } as Command);
       }
       expect(seen, 'she acts again after the Change').not.toBeNull();
-      expect(changes(seen!)).toEqual(['lady-luck', 'dark-knight']); // from node 5 the ring's neighbours are node 4 and node 0
+      // From node 5 of Pride of the Sword the real grid joins node 4 and node 0 (the ring's two neighbours) and node 2, through a gate: ascending by node.
+      expect(changes(seen!)).toEqual(['dark-knight', 'thief', 'lady-luck']);
     });
   }
 });
@@ -198,7 +216,7 @@ describe('after the Change, both reels are on the menu and open the minigame', (
         if (d.kind === 'waiting') { engine.tick(Math.max(1, d.nextEventMs)); continue; }
         if (d.kind !== 'player-input') break;
         if (actor === null) {
-          // Whoever acts first with a Lady Luck row on her menu: in V, XI and XV that is never Paine (two Changes away).
+          // Whoever acts first with a Lady Luck row on her menu (since the real grids, Paine's too in V, XI and XV).
           const change = d.commands.find((c) => c.command.kind === 'spherechange' && (c.command as { extra: { toDressphere: string } }).extra.toDressphere === 'lady-luck');
           if (change) {
             actor = d.actorId;

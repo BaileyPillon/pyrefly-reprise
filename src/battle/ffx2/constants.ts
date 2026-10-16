@@ -250,3 +250,10 @@ export const HEAD_HALFWAY_LINE_AT = 51;
 
 /** The Core charges three times, then fires Memento Mori. §4.1 */
 export const CORE_CHARGES_BEFORE_MEMENTO = 3;
+
+/**
+ * Whether the Garment Grids the data has a layout for (`data/ffx2/garment-grids/layouts.ts`) are the game's real grids (re-parity RC9 lane X2-I; `FFX2-G09`; FFX-2 only): a girl moves to a
+ * dressphere node joined to hers directly or through exactly one gate node, and the move crosses that gate (`kernel/grid-path.ts`, `adapt/grid-layout.ts`). Off, every grid is the old ring of its
+ * node count with the gates spread over successive links (an `[estimate]`), which is also what a grid with no layout keeps. A measurement and rollback switch; no random draw either way.
+ */
+export const GRID_LAYOUTS = true;
