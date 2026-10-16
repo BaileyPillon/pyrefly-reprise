@@ -938,4 +938,4 @@ The deep obligation stays PENDING on 6ea8528f (critic-clear refuses it: required
 
 ## Note for the driver
 
-The only chat message relayed into this run was a question to the orchestrator (the session's name, the account, the weekly usage left). The gap-capture agent answered it from the session tools (title "FFX/FFX-2 2.5D game recreation", account bpillon3@gmail.com on Max, about 51% of the weekly all-models allowance left at its reading, resetting 2026-10-03 11:00Z) and skipped the gap captures because of it. The driver should confirm those answers to Bailey from its own session; nothing in this report depends on them.
+The only chat message relayed into this run was a question to the orchestrator (the session's name, the account, the weekly usage left). The gap-capture agent answered it from the session tools (title "FFX/FFX-2 2.5D game recreation", account #2 on Max, about 51% of the weekly all-models allowance left at its reading, resetting 2026-10-03 11:00Z) and skipped the gap captures because of it. The driver should confirm those answers to Bailey from its own session; nothing in this report depends on them.
