@@ -45,8 +45,8 @@ export const mirrorAeonsScripts: ChapterScripts = {
     say('yuna', 'Someone is calling an aeon. Here, now.'), // 2
     say('auron', 'Not calling. Forcing.'), // 3
     shake(6, 700),
-    say('lulu', 'Three of them. I know those shapes.'), // 4
-    say('yuna', 'Cindy. Sandy. Mindy. Wearing the wrong colours.'), // 5
+    say('lulu', 'Two of them. I know those shapes.'), // 4
+    say('yuna', 'Sandy and Mindy. Wearing the wrong colours.'), // 5
     say('wakka', "Yevon's doing, ya? Even our friends, now."), // 6
     say('auron', 'Then we send them properly.'), // 7
     say('tidus', "Together. Like always."), // 8

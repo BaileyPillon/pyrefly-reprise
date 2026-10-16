@@ -87,7 +87,7 @@ const SCAN = {
   sandy: 'The tallest of the Magus Sisters, turned dark. Her blows petrify, and her Razzia takes away a party\'s second chance.',
   mindy: 'The youngest of the Magus Sisters, turned dark. She is fast and hard to hit; her Passado kills, and her Calamity curses.',
 } as const;
-const SENSOR = 'Three at once is a storm. Take them one at a time.';
+const SENSOR = 'Together they are a storm. Take them one at a time.';
 
 function sister(name: SisterName, opts: { id: string; display: string; script: string; slot: number; abilityIds: string[] }): EnemyDef {
   const record = RECORDS[name];

@@ -10,7 +10,7 @@
  *
  * ## Two acts, one chain
  *
- * **Act I, the Dark Magus Sisters, on Mushroom Rock Road** (the trio `kino00_70`: every gauge starts at 100); then, with no menu between, **Act II, Dark Yojimbo, in the Cavern of the Stolen Fayth** (tier `nagi05_72`),
+ * **Act I, the Dark Magus Sisters, on Mushroom Rock Road** (the pair `kino01_72`: Dark Mindy and Dark Sandy, both gauges starting at 0); then, with no menu between, **Act II, Dark Yojimbo, in the Cavern of the Stolen Fayth** (tier `nagi05_71`),
  * on the second plate (`EnemyGroupDef.plate`). The seam between them is a mid-battle script on the sisters' fall (`all-ko`). The two picks are the chapter's choice among the game's own formations, `[estimate]` until the
  * bench has measured the ladders (`../data/ffx/mirror-aeons-ids.ts`: `MIRROR_ACT_I`, `MIRROR_ACT_II`).
  *
@@ -35,7 +35,7 @@ export const MIRROR_AEONS_TEXT = {
   title: 'Mirror Aeons',
   subtitle: "Yevon turns Yuna's own aeons against her",
   blurb:
-    'Yevon has put Yuna\'s friends in the wrong colours. Three sisters bar Mushroom Rock Road, and a swordsman waits below in the cavern where she found him. ' +
+    'Yevon has put Yuna\'s friends in the wrong colours. Two sisters bar Mushroom Rock Road, and a swordsman waits below in the cavern where she found him. ' +
     'Call your own sisters and your own blade, and send the shadows home.',
 } as const;
 
@@ -65,9 +65,9 @@ export const MIRROR_AEONS: Chapter = {
   },
   // Duplicated from the enemy records' own `sensorText` (`./ffx/enemies/dark-aeons.ts`), as the `Chapter` contract asks.
   sensorTexts: {
-    [DARK_CINDY_ID]: 'Three at once is a storm. Take them one at a time.',
-    [DARK_SANDY_ID]: 'Three at once is a storm. Take them one at a time.',
-    [DARK_MINDY_ID]: 'Three at once is a storm. Take them one at a time.',
+    [DARK_CINDY_ID]: 'Together they are a storm. Take them one at a time.',
+    [DARK_SANDY_ID]: 'Together they are a storm. Take them one at a time.',
+    [DARK_MINDY_ID]: 'Together they are a storm. Take them one at a time.',
     [DARK_YOJIMBO_ID]: 'He is paid in steel. Strike before his blade is ready.',
   },
 };

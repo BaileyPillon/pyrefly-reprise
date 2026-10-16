@@ -32,7 +32,7 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: 'Send an aeon in before the big move. The sisters open with their joint attack, Dark Yojimbo ends his build-up with Zanmato, and Auto-Life does not turn either: an aeon takes the blow, so the party stands.',
+      text: "Send an aeon in before the big move. The three sisters open with their joint attack, Dark Yojimbo ends his build-up with Zanmato, and Auto-Life does not turn either: an aeon takes the blow, so the party stands. Against the three, send Yuna's own Sisters (three bodies in one summon: the first two blows kill a lone aeon); against Dark Yojimbo, send her Yojimbo, the mirror.",
       short: 'An aeon takes the big move',
       cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §4.1, §4.2; jegged-encounter-guides-ffx-b',
     },
@@ -47,12 +47,17 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       cite: 'ffx-mirror-aeons §2, §3, §4; re-ffx-yojimbo-sisters-feasibility §2',
     },
     {
-      text: "Dark Yojimbo's blade fills each turn and a little more whenever he is struck. When it is full he uses Zanmato: keep an aeon ready, or end him first.",
+      text: "Dark Yojimbo's blade fills each turn and a little more whenever he is struck. When it is nearly full he uses Zanmato: send the aeon in a round early, not on the full gauge, or end him first. Before that, Cheer on Tidus: a third off every physical blow is what lets a full-health member live through his Wakizashi.",
       short: 'His blade fills, then Zanmato',
-      cite: 'ffx-mirror-aeons §3; re-ffx-yojimbo-sisters-feasibility §4.1',
+      cite: 'ffx-mirror-aeons §3; re-ffx-dark-aeons §4.2',
     },
     {
-      text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke; the Dark ones resist Zanmato, so do not count on it. Your Sisters choose for themselves.',
+      text: "Every fallen member costs a Phoenix Down and the bag holds only so many: heal early with Yuna's Curaga instead of waiting for the next blow, and keep Auto-Life on everyone. The bag is the clock of the road.",
+      short: 'Heal early: the bag is the clock',
+      cite: 'ffx-mirror-aeons §2; re-ffx-dark-aeons §6.3',
+    },
+    {
+      text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke; the Dark ones resist Zanmato, so do not count on it. Your Sisters have one order that works, Combine powers, and it needs all three of their gauges full.',
       short: 'Zanmato is a long shot',
       cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §2, §5.5',
     },
@@ -67,6 +72,11 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
     { when: { labels: ['Quick Hit'] }, text: 'Quick Hit: the fastest blow {actor} has, so the most turns before the next big move', cite: 'ffx-mirror-aeons §2, §3; jegged-encounter-guides-ffx-b' },
     { when: { kinds: ['attack'], targetId: YOJIMBO }, text: 'Dark Yojimbo dodges many physical blows (his Luck is high): keep swinging, and do not mistake a miss for a mistake', cite: 'ffx-mirror-aeons §3; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Potion', 'Hi-Potion', 'X-Potion'] }, text: 'Top {target} up: the multi-hit moves leave a member low, and a second blow would finish them', cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2' },
+    { when: { labels: ['Curaga', 'Cura', 'Cure'] }, text: 'Heal {target} early: a member who is already hurt is the one the next blow finishes, and every fall costs a Phoenix Down', cite: 'ffx-mirror-aeons §2, §3; re-ffx-dark-aeons §6.3' },
+    { when: { labels: ['Auto-Life'] }, text: 'Auto-Life on {target}: a second life against every blow but Zanmato, the joint attack and Razzia, which take it away', cite: 'ffx-mirror-aeons §2, §3; re-ffx-dark-aeons §6.2' },
+    { when: { labels: ['Cheer'] }, text: 'Cheer: at five stacks a third off every physical blow, which a full-health member needs to live through Dark Yojimbo\'s Wakizashi', cite: 'ffx-mirror-aeons §3; re-ffx-dark-aeons §6.3' },
+    { when: { labels: ['Pay'] }, text: 'Pay Yojimbo: the payment buys the stroke, a bigger one a better one; the Dark ones resist Zanmato', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5' },
+    { when: { labels: ['Combine for the Delta Attack'] }, text: 'Combine: all three of Yuna\'s Sisters are full, so their Delta Attack is on offer; their menu has nothing else that works', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5' },
     { when: { labels: ['Dismiss'] }, text: 'The blow has passed and the aeon is low: bring the party back, and call it again for the next one', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §5.4' },
   ],
 
@@ -78,6 +88,12 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       label: 'THE SISTERS',
       note: 'Cindy, Sandy and Mindy start with every Overdrive full, so the joint attack comes first. Alone, a sister uses Mega Graviton when her own gauge is full.',
       cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §4.2',
+    },
+    {
+      bossId: SANDY,
+      label: 'THE PAIR',
+      note: 'Sandy and Mindy start empty and have no joint attack: five plain turns, then Mega Graviton on the sixth, each for herself. A blow that reaches one adds a little to her gauge.',
+      cite: 'ffx-mirror-aeons §2; re-ffx-dark-aeons §5.4',
     },
     {
       bossId: YOJIMBO,

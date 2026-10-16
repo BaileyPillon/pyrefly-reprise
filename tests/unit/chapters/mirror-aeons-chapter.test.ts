@@ -7,7 +7,7 @@
  */
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
-import type { FFXCombatant } from '../../../src/battle/common/types.ts';
+import type { Command, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { SaveStore } from '../../../src/app/SaveData.ts';
 import { buildChapterTiles } from '../../../src/app/screens/frontend/chapterGrid.ts';
 import { boardProgress } from '../../../src/app/screens/frontend/chapterProgress.ts';
@@ -18,11 +18,11 @@ import { MIRROR_AEONS, MIRROR_AEONS_ID, MIRROR_AEONS_TEXT } from '../../../src/d
 import { getChapterMeta } from '../../../src/data/chapter-meta.ts';
 import { mirrorAeonsBuild } from '../../../src/data/ffx/builds/mirror-aeons.ts';
 import { darkAeonsGroupOf } from '../../../src/data/ffx/enemies/dark-aeons-groups.ts';
-import { DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJIMBO_ID, MIRROR_ACT_I, MIRROR_ACT_I_PLATE, MIRROR_ACT_II_PLATE, MIRROR_AEONS_SCENE, MIRROR_SEAM } from '../../../src/data/ffx/mirror-aeons-ids.ts';
+import { DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJIMBO_ID, MIRROR_ACT_I, MIRROR_ACT_I_PLATE, MIRROR_ACT_II_PLATE, MIRROR_AEONS_SCENE, MIRROR_SEAM, sistersGroupId } from '../../../src/data/ffx/mirror-aeons-ids.ts';
 import { GUIDES } from '../../../src/data/guides/index.ts';
 import { docForChapter } from '../../../src/data/guides/docs/index.ts';
 import { MIRROR_AEONS_GUIDE } from '../../../src/data/guides/mirror-aeons.ts';
-import { MIRROR_AEONS_BOSS_IDS, mirrorAeons } from '../../../src/engine/tactics/mirror-aeons.ts';
+import { MIRROR_AEONS_BOSS_IDS, PAY_GIL, SHIELD_AT_GAUGE, deltaThisRound, mirrorAeons } from '../../../src/engine/tactics/mirror-aeons.ts';
 import { tacticFor } from '../../../src/engine/tactics/index.ts';
 import { departureKindOf } from '../../../src/engine/BattlePresenterDepartures.ts';
 import { pyreflyCanonFor } from '../../../src/engine/pyreflyCanon.ts';
@@ -50,7 +50,7 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
     expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length);
   });
 
-  it("is Act I's formation (the trio) chained to Act II's, our scripts and the generic boss cue then Yojimbo's own; the card's words carry no number", () => {
+  it("is Act I's formation (the pair) chained to Act II's, our scripts and the generic boss cue then Yojimbo's own; the card's words carry no number", () => {
     expect(MIRROR_AEONS.enemyGroupRef).toBe(darkAeonsGroupOf(MIRROR_ACT_I));
     expect(MIRROR_AEONS.scriptsRef).toBe(mirrorAeonsScripts);
     expect(MIRROR_AEONS.buildRef).toBe(mirrorAeonsBuild);
@@ -64,7 +64,7 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
     const meta = getChapterMeta(MIRROR_AEONS_ID)!;
     expect(meta).toMatchObject({ id: MIRROR_AEONS_ID, gameLabel: 'FFX', numeral: 'EXP', title: MIRROR_AEONS_TEXT.title, focalCharacterId: 'yuna' });
     expect(meta.objectives.map((o) => o.rule.kind)).toEqual(['parts-downed', 'link-reached', 'victory']);
-    expect((meta.objectives[0]!.rule as unknown as { targetIds: string[] }).targetIds).toEqual(SISTER_IDS);
+    expect((meta.objectives[0]!.rule as unknown as { targetIds: string[] }).targetIds).toEqual([DARK_SANDY_ID, DARK_MINDY_ID]); // the pair
     expect(meta.objectives[1]!.rule).toEqual({ kind: 'link-reached', link: 2 });
     for (const k of meta.musicKeys) expect(hasTrack(k), k).toBe(true);
     for (const s of meta.snapshots) expect(s.image).toMatch(/^(backdrops|characters)\/[a-z0-9-]+(\/idle)?\.png$/);
@@ -223,12 +223,12 @@ describe('the guide card and document, and the line they teach', () => {
   });
 
   it('every label a hint speaks to is a row the tactic asks for', () => {
-    const asked = ['Quick Hit', 'Potion', 'Hi-Potion', 'X-Potion', 'Dismiss', 'Ultima', 'Flare', 'Thundaga', 'Firaga', 'Blizzaga', 'Waterga'];
+    const asked = ['Quick Hit', 'Potion', 'Hi-Potion', 'X-Potion', 'Dismiss', 'Ultima', 'Flare', 'Thundaga', 'Firaga', 'Blizzaga', 'Waterga', 'Curaga', 'Cura', 'Cure', 'Auto-Life', 'Cheer', 'Pay', 'Combine for the Delta Attack'];
     for (const h of MIRROR_AEONS_GUIDE.hints) for (const label of h.when.labels ?? []) expect(asked, label).toContain(label);
   });
 });
 
-describe('the tactic: an aeon for the big move, blades for Cindy and Sandy, a spell for Mindy, potions under 45 percent', () => {
+describe('the tactic: the shield for the big move, the heal, Auto-Life and Cheer, blades for Cindy and Sandy, a spell for Mindy', () => {
   /** Advance, defending, to `who`'s input. */
   function inputOf(engine: ReturnType<typeof H.newEngine>, who: string): H.Input {
     for (let i = 0; i < 12; i++) {
@@ -240,6 +240,8 @@ describe('the tactic: an aeon for the big move, blades for Cindy and Sandy, a sp
     }
     throw new Error(`no input for ${who}`);
   }
+  const TRIO = sistersGroupId('kino00_70');
+  const fighter = (e: ReturnType<typeof H.newEngine>, id: string): FFXCombatant => e.state().combatants[id] as FFXCombatant;
 
   it('is registered for all four Dark Aeons under the chapter id and reaches the engine through the lookup', () => {
     expect(MIRROR_AEONS_BOSS_IDS).toEqual([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID]);
@@ -247,56 +249,101 @@ describe('the tactic: an aeon for the big move, blades for Cindy and Sandy, a sp
     expect(tacticFor(H.newEngine(1, H.ACT_II_GROUP))).toBe(mirrorAeons);
   });
 
-  it('Tidus (First Strike, so first) swings Quick Hit at Cindy: the sister every blade finds', () => {
-    const e = H.newEngine(1);
-    const d = H.nextInput(e);
+  it("Tidus swings Quick Hit at Cindy when she is there (a blade always finds her) and at Sandy in the pair; Mindy is the spells' sister", () => {
+    const trio = H.newEngine(1, TRIO);
+    expect(mirrorAeons('tidus', H.nextInput(trio).commands, trio)).toMatchObject({ kind: 'ability', id: 'quick-hit', targets: [DARK_CINDY_ID] });
+    const pair = H.newEngine(1);
+    const d = H.nextInput(pair);
     expect(d.actorId).toBe('tidus');
-    expect(mirrorAeons('tidus', d.commands, e)).toMatchObject({ kind: 'ability', targets: [DARK_CINDY_ID] });
-  });
-
-  it('Yuna sends the sturdiest aeon in on the first turn of the trio (every gauge is full), Cindy', () => {
-    const e = H.newEngine(1);
-    const d = inputOf(e, 'yuna');
-    const pick = mirrorAeons('yuna', d.commands, e);
-    expect(pick).toMatchObject({ kind: 'summon', id: 'cindy' });
+    expect(mirrorAeons('tidus', d.commands, pair)).toMatchObject({ kind: 'ability', id: 'quick-hit', targets: [DARK_SANDY_ID] });
   });
 
   it('Lulu casts her strongest spell at Mindy, the sister a blade cannot touch', () => {
     const e = H.newEngine(1);
-    const d = inputOf(e, 'lulu');
-    const pick = mirrorAeons('lulu', d.commands, e);
+    const pick = mirrorAeons('lulu', inputOf(e, 'lulu').commands, e);
     expect(pick).toMatchObject({ kind: 'ability', targets: [DARK_MINDY_ID] });
     expect(['ultima', 'flare']).toContain((pick as { id: string }).id);
   });
 
-  it('heals a member under 45 percent before anything else, and revives the fallen first of all', () => {
+  it('against the faithful trio Yuna sends in her own Sisters on her first turn (the Delta Attack is forecast from the full gauges); in the pair she does not summon at all', () => {
+    const trio = H.newEngine(1, TRIO);
+    expect(mirrorAeons('yuna', inputOf(trio, 'yuna').commands, trio)).toMatchObject({ kind: 'summon', id: 'cindy' });
+    const pair = H.newEngine(1);
+    const pick = mirrorAeons('yuna', inputOf(pair, 'yuna').commands, pair)!;
+    expect(pick.kind).not.toBe('summon');
+  });
+
+  it('the Delta Attack forecast runs the round on the gauges: Mindy and Sandy gain 20 before Cindy, so 80, 80 and 100 is a Delta Attack this round, 60 is not, a dead Sister never', () => {
+    const sisters = (m: number, s: number, c: number): FFXCombatant[] =>
+      ([['dark-mindy', m], ['dark-sandy', s], ['dark-cindy', c]] as const).map(([id, g]) => ({ id, overdrive: { gauge: g } }) as unknown as FFXCombatant);
+    expect(deltaThisRound(sisters(100, 100, 100))).toBe(true);
+    expect(deltaThisRound(sisters(80, 80, 100))).toBe(true);
+    expect(deltaThisRound(sisters(60, 80, 100))).toBe(false);
+    expect(deltaThisRound(sisters(80, 80, 80))).toBe(false);
+    expect(deltaThisRound(sisters(100, 40, 100)), 'Mindy at 100 with the trio not ready throws Mega Graviton and drops out of step').toBe(false);
+    expect(deltaThisRound(sisters(100, 100, 100).slice(1))).toBe(false);
+  });
+
+  it("heals a member under 60 percent with Yuna's spell, lets the others keep swinging unless they are under a quarter (or Yuna is down), and revives the fallen first of all", () => {
     const e = H.newEngine(1);
-    const d = H.nextInput(e);
-    const tidus = e.state().combatants['tidus'] as FFXCombatant;
+    const d = inputOf(e, 'yuna');
+    const tidus = fighter(e, 'tidus');
     tidus.hp = Math.floor(tidus.stats.maxHp * 0.3);
+    expect(mirrorAeons('yuna', d.commands, e)).toMatchObject({ kind: 'ability', id: 'curaga', targets: ['tidus'] });
+    expect(mirrorAeons('tidus', d.commands, e)).not.toMatchObject({ kind: 'item' });
+    tidus.hp = Math.floor(tidus.stats.maxHp * 0.2);
     expect(mirrorAeons('tidus', d.commands, e)).toMatchObject({ kind: 'item', targets: ['tidus'] });
     tidus.hp = 0;
     tidus.alive = false;
-    const again = mirrorAeons('yuna', d.commands, e);
-    expect(again).not.toBeNull();
+    expect(mirrorAeons('yuna', d.commands, e)).toMatchObject({ kind: 'item', id: 'phoenix-down', targets: ['tidus'] });
+  });
+
+  it('Yuna puts Auto-Life on whoever lacks it before she attacks; against Dark Yojimbo Tidus builds five stacks of Cheer first, and against the Sisters he does not', () => {
+    const e = H.newEngine(1, H.ACT_II_GROUP);
+    expect(mirrorAeons('yuna', inputOf(e, 'yuna').commands, e)).toMatchObject({ kind: 'ability', id: 'auto-life' });
+    const f = H.newEngine(1, H.ACT_II_GROUP);
+    const tidus = H.nextInput(f);
+    expect(mirrorAeons('tidus', tidus.commands, f)).toMatchObject({ kind: 'ability', id: 'cheer', targets: ['tidus'] });
+    const pair = H.newEngine(1);
+    expect(mirrorAeons('tidus', H.nextInput(pair).commands, pair)).not.toMatchObject({ id: 'cheer' });
   });
 
   it('in Act II every blow is aimed at Dark Yojimbo, never the dog', () => {
     const e = H.newEngine(1, H.ACT_II_GROUP);
-    const d = H.nextInput(e);
-    const pick = mirrorAeons(d.actorId, d.commands, e)!;
+    const pick = mirrorAeons('lulu', inputOf(e, 'lulu').commands, e)!;
     expect((pick as { targets: string[] }).targets).toEqual([DARK_YOJIMBO_ID]);
   });
 
-  it('an aeon on the field attacks a Dark Aeon (or goes home when the danger has passed and it is low)', () => {
+  it("Dark Yojimbo's gauge within a round of full sends the mirror in, Yuna's own Yojimbo, who is paid while the blow is next and goes home once it has passed", () => {
+    // Dark Yojimbo may act before the summoned aeon's first turn: take the first seed on which Yojimbo's own menu opens.
+    let e = H.newEngine(1, H.ACT_II_GROUP);
+    let out: H.Input | undefined;
+    for (let seed = 1; seed <= 20 && out?.actorId !== 'yojimbo'; seed++) {
+      e = H.newEngine(seed, H.ACT_II_GROUP);
+      const d = inputOf(e, 'yuna');
+      expect(mirrorAeons('yuna', d.commands, e)).not.toMatchObject({ kind: 'summon' });
+      fighter(e, DARK_YOJIMBO_ID).overdrive!.gauge = SHIELD_AT_GAUGE;
+      const summon = mirrorAeons('yuna', d.commands, e);
+      expect(summon).toMatchObject({ kind: 'summon', id: 'yojimbo' });
+      e.submit({ ...summon!, targets: [] } as Command);
+      out = H.nextInput(e);
+    }
+    if (out === undefined) throw new Error('no menu');
+    expect(out.actorId).toBe('yojimbo');
+    expect(mirrorAeons('yojimbo', out.commands, e)).toMatchObject({ kind: 'ability', id: 'yojimbo-pay', gilSpent: PAY_GIL });
+    fighter(e, DARK_YOJIMBO_ID).overdrive!.gauge = 0;
+    expect(mirrorAeons('yojimbo', out.commands, e)).toMatchObject({ kind: 'dismiss' });
+  });
+
+  it("Yuna's Sisters Combine when the menu offers it (their gauges start full) and leave when it does not", () => {
     const e = H.newEngine(2);
     const d = inputOf(e, 'yuna');
     const summon = d.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Cindy')!;
     e.submit({ ...summon.command, targets: [] });
     const next = H.nextInput(e);
-    expect(next.actorId).toBe('cindy');
-    const pick = mirrorAeons('cindy', next.commands, e);
-    expect(pick).not.toBeNull();
-    expect((pick as { targets: string[] }).targets.every((t) => MIRROR_AEONS_BOSS_IDS.includes(t))).toBe(true);
+    expect(['cindy', 'sandy', 'mindy']).toContain(next.actorId);
+    expect(mirrorAeons(next.actorId, next.commands, e)).toMatchObject({ kind: 'ability', id: 'sister-order-combine' });
+    const without = next.commands.filter((c) => !(c.command.kind === 'ability' && c.command.id === 'sister-order-combine'));
+    expect(mirrorAeons(next.actorId, without, e)).toMatchObject({ kind: 'dismiss' });
   });
 });
