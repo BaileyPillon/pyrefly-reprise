@@ -2,7 +2,7 @@
 
 **Game case: FFX only.** The player's Yojimbo, his Zanmato, the possessed Yojimbo and the Magus Sisters' order commands exist only in FFX; FFX-2 has none of these rows and nothing here applies to it. Part of the `re-parity` track, written 2026-10-15 for the release driver who builds the hidden chapters "Dark Mirror" (27: the player's Yojimbo and Magus Sisters against their Dark twins) and "The Last Summoning" (28: the last two aeons against Yu Yevon's chain, then possessed). Research only: no engine, data, AI or test file was changed.
 
-**Part 1 (Zanmato) is complete. Part 2 (the Sisters' orders) follows in the next commit of this branch.**
+**Part 1 (Zanmato, sections 0 to 7) and Part 2 (the Magus Sisters' orders, sections 8 to 16) are both in this note.**
 
 **Source and tags.** Every statement carries one:
 
@@ -121,4 +121,120 @@ The engine on the branch already has, per `adapt/yojimbo.ts`, the pick (the game
 
 ## Part 2: the Magus Sisters' orders
 
-*To follow in the next commit of this branch.*
+Game case: **FFX only** (FFX-2 has no Magus Sisters). Read from the battle-system script's three sister workers (worker 60 Cindy, 61 Sandy, 62 Mindy of the system script, whose eight to nine functions are the menu builder and the order handlers), from the natives they call, and from the executable's code behind those natives. Gains, the standing order's roll and the menu are the earlier lane's proven rules [note: FFX-G08 6.2 to 6.4, emulated and run on the game's script VM]; this part adds what that note left as "read only": the **target search** (the usable test, the filters, the pick), every **order handler** and **Mindy's Reflect combo**.
+
+## 8. The answers in one screen (Part 2)
+
+1. **The eight orders** (the game's own names, command ids `0x3124` to `0x312B`): `0x3124` **Do as you will.** (free choice), `0x3125` **One more time.** (repeat), `0x3126` **Fight!**, `0x3127` **Go, go!** (Cindy only), `0x3128` **Help each other!** (Cindy only), `0x3129` **Combine powers!** (all three; built), `0x312A` **Defense!** (Sandy only), `0x312B` **Are you all right?** (Mindy only); Dismiss is `0x3056`. There is no order called Reflect: casting Reflect is the first step of Sandy's free choice. The seven orders still to build are all but Combine powers. Each command is mapped by the requester to a script event of the choosing sister's own worker (events 13 to 20) [disasm; note: FFX-G08 6.1].
+2. **What an order is.** One handler function of that sister. It clears the **standing order** (every handler but "One more time"), stores a **class** number, and walks a **fixed list of candidate commands**. A candidate is one *search*: (a) she can use the command (a target set exists and she can pay the MP; Delta Attack also needs a full gauge), (b) the **chance roll** against a threshold that is an expression of her **motivation M** (one stream-18 draw, `(draw & 0xFF) < threshold`; a negative threshold is "always" with no draw), (c) a target passes the **property filter** (one stream-4 draw only when more than one passes). The **first** candidate that passes is queued and its gain pair (gauge, motivation) is written; when none passes she loses motivation (5; Combine powers 10; Mindy's "Are you all right?" 1) and performs the rest command `0x312C` on herself. [disasm]
+3. **The target filters are tiny**: "all monsters" or "my side" or "my side except me" or "Cindy alone" as the candidate set, and one of nine tests (always, dead, has Auto-Life, has Reflect, HP full, has all four Nuls, has Shell or Reflect, has Protect or Reflect, has Haste or Reflect), each optionally negated (section 10). The group-type spells (Pray, Ultima, NulAll) are aimed at the whole stored group, the rest at the picked slot.
+4. **The standing order is one global shared by the three sisters.** "One more time" (after a successful roll of `(M + 150)/256` for Cindy, `(M + 120)/256` for Sandy and Mindy) sets it to the sister's **last performed command** and re-enters the chain of her **last class**; from then on every roll of that chain passes **only for that command** (no draw), except a threshold below 0, which still passes. A failed repeat roll clears it and runs the class-1 chain (her special, then Attack). Every other handler clears it first, so it stands from the repeat handler to the next handler of any sister. (sections 6 and 12)
+5. **Mindy's free choice has a second mode**: when **Cindy is alive and has Reflect and no order stands**, she casts **one or two spells at Cindy** (so they bounce onto the enemies), stores them, and "One more time" replays the stored list. (section 14)
+6. **What the engine needs:** a search function with the three tests and the two draws in this order, the nine filter tests, the candidate chains of sections 11 and 14, the per-sister private state (last command, class, Mindy's stored list), and the 4-argument gain pair of the repeat. The earlier lane's menu, requester, standing-order roll and gain kernels are the right base. (section 15)
+
+## 9. The search, step by step (native `btlGetCommandTargetSearch`, 0x7A37E0, with 0x7A8B40, 0x7A8AD0, 0x7A8F60, 0x7ACD40) [disasm]
+
+Inputs: the acting sister, a command, a **targeting code T**, a property P, a flag F (0 or 128 in every call the Sisters make), a chance C. It returns the picked slot, or 255 for "none".
+
+1. **Candidate set and "can she use it".** The set for T: **0** = the monster side (selector "all monsters"), **1** = her own side (the party-side slots that are in the battle and not removed: while the Sisters are out, the three sisters, a fallen one included), **0x101** = her own side without herself, **0x200 + k** = slot k alone (527 = 0x20F = Cindy). The legal-set rules then cut it as for any command: Targetable, target class, **reach** (a target whose battle distance exceeds the command's reach is cut: Attack, Camisade, Razzia and Passado have reach 0, spells and Pray reach 3, Delta Attack reach 1), and the **dead** flag (cut unless the command has the dead-target bit: Life and Full-Life have it) [note: FFX-G04 4.4]. The set is stored as her saved target mask. Then "can she use it": an Overdrive-cost command (Delta Attack, 20) needs her gauge at its maximum and no Curse; a silenceable command fails while she is Silenced; and her **MP** must cover the command's MP cost (aeons pay MP; the specials cost 0). If the set is empty or she cannot use it, the search ends with 255 and **no draw**.
+2. **The chance roll.** C below 0: passes, no draw. Otherwise, if the command is not 0 and a standing order stands: passes exactly when the command is the standing one, **no draw**. Otherwise **one draw on stream 18**: passes when `(draw & 0xFF)` is below C (a C of 256 or more always passes, but the draw is still spent). A failed roll ends the search with 255.
+3. **The pick.** For each slot of the saved mask in ascending order the property P is read on that slot alone; with F = 128 the test is negated. If no slot passes: 255. If one passes: that one, **no draw**. If several pass: **one draw on stream 4**, the pick is the one of rank (value mod n) in ascending slot order. (F values 1 and 2, "highest" and "lowest" of the property, are in the code and unused by the Sisters.)
+4. **The stored target mask** follows the command's own type: single = the mask of all candidates that passed the filter; group = those plus every member of the candidate set in the group of the lowest passing slot (monsters and sisters are all group 0 here, so in practice the whole set); all = the whole set; self = her. It is stored as her saved target mask. The handler then queues a single-target command against the **picked slot** the search returned, and the group-type spells (Pray, Ultima, NulAll) against the **stored mask** (it passes "the matching group"); the rest command goes to "self".
+
+Draw order in one search: roll (stream 18), then pick (stream 4). A search that fails in step 1 or 2 draws nothing further. Searches are tried in the order of the tables below, so the number of draws of an order depends on which candidates were usable.
+
+## 10. The nine property tests [disasm of the property getter]
+
+| P | Test (true when) | Used for |
+|---|---|---|
+| 92 | always (it counts the slot) | every attack and offensive spell on monsters |
+| 242 | the slot's dead flag is set | Life and Full-Life on a fallen sister |
+| 152 | extra-status bit 9 (Auto-Life) is set; negated: "has none" | Auto-Life |
+| 50 | the Reflect counter is non-zero; negated: "has none" | Sandy's Reflect on Cindy |
+| 283 | HP is at or above maximum HP; negated: "hurt" | the Cure family (own side except herself) |
+| 285 | the four Nul counters (Tide, Blaze, Shock, Frost) are all non-zero; negated: "lacks at least one" | NulAll |
+| 286 | the Shell counter or the Reflect counter is non-zero; negated | Shell |
+| 287 | the Protect counter or the Reflect counter is non-zero; negated | Protect |
+| 288 | the Haste counter or the Reflect counter is non-zero; negated | Haste |
+
+(The menu builders also read 281, "near death": HP below half of maximum HP, summed over the front line, and 282, the count of sisters ready for Combine powers.) A sister with Reflect is never given Shell, Protect or Haste; a sister without Reflect keeps being offered them until she has the status.
+
+## 11. The seven orders, sister by sister [disasm]
+
+Notation: **M** = the sister's motivation (0 to 100); `x div y` is integer division; "monsters" = T 0, "side" = T 1, "others" = T 0x101; **(g, m)** = the gain pair the candidate writes (gauge, motivation); "rest" = the rest command `0x312C` on herself after a loss of 5 (or as stated). Command ids and MP costs are the game's: Attack 0x3000 (reach 0), Camisade 0x30E5, Razzia 0x30E7, Passado 0x30E9 (reach 0, 0 MP), Pray 0x3019, Lancet 0x3020, Cure 0x302B (4 MP), Cura 0x302C (10), Curaga 0x302D (20), Life 0x3034 (18), Full-Life 0x3035 (60), Haste 0x3036 (8), Shell 0x303A (10), Protect 0x303B (12), Reflect 0x303C (14), Auto-Life 0x3040 (97), Fira/Blizzara/Thundara/Watera 0x3045 to 0x3048 (8), Firaga/Blizzaga/Thundaga/Waterga 0x3049 to 0x304C (16), Bio 0x304D (10), Death 0x304F (20), Drain 0x3050 (12), Osmose 0x3051 (0), Flare 0x3052 (54), Ultima 0x3053 (90), NulAll 0x312D (4), Delta Attack 0x30EA (needs a full gauge).
+
+### 11.1 Cindy (worker 60)
+
+| Order (event) | Class | Candidates in order: command / targets / filter / chance, then (g, m) | Fallback |
+|---|---:|---|---|
+| **Do as you will** 0x3124 (13) | 0 | 1. Auto-Life / side / not 152 / M + 50 (3, 10). 2. Full-Life / side / 242 / (50 + M) div 2 (2, 6). 3. Life / side / 242 / (200 + M) div 2 (1, 5). 4. Attack / monsters / 92 / M (1, 2). 5. Flare / monsters / 92 / M div 8 (2, 6). 6. **Only if** a plain roll `(draw & 0xFF) < 128` (stream 18, drawn always) passes **or an order stands**: the spells Firaga, Thundaga, Blizzaga, Waterga in that order, each as a search on monsters / 92 / M div 2 (1, 2). | (0, -5) and rest |
+| **One more time** 0x3125 (14) | last class | roll `(M + 150)/256` plain: pass = write the pair (2, 4 / 0, -6), standing := her last command, re-enter her last class below (class 0 or none = the free choice above); fail = standing := 0, class := 1. | class 1 chain on failure |
+| (class 1, the failed repeat) | 1 | Camisade / monsters / 92 / M (1, 2); Attack / monsters / 92 / -1 (1, 2). | (0, -5) and rest |
+| **Fight!** 0x3126 (15) | 2 | Camisade / monsters / 92 / 20 + M (2, 4); Attack / monsters / 92 / 150 + M (1, 3). | (0, -5) and rest |
+| **Go, go!** 0x3127 (16) | 3 | 1. **If HP is below max HP, or an order stands**: Pray / side / 92 / `(maxHP - HP) * 256 div maxHP`, aimed at the stored group (1, 1). 2. **If MP is below max MP, or an order stands**: Osmose / monsters / 92 / `(maxMP - MP) * 256 div maxMP` (1, 1). 3. Attack / monsters / 92 / 2M (1, 2). 4. **Only if** a plain roll `(draw & 0xFF) < M div 2` passes **or an order stands**: Ultima / monsters / 92 / M - 80, aimed at the stored group (5, 10); Flare / monsters / 92 / M div 8 (2, 6); Drain / monsters / 92 / M div 2 (2, 6); the spells Blizzaga, Waterga, Thundaga, Firaga in that order, each / monsters / 92 / M (1, 2); Attack / monsters / 92 / -1 (1, 2). 5. Camisade / monsters / 92 / M (3, 5). | (0, -5) and rest |
+| **Help each other!** 0x3128 (17) | 4 | Full-Life / side / 242 / M (1, 2); Life / side / 242 / 150 + M (1, 1); Auto-Life / side / not 152 / 50 + M (3, 10); then Cure, Cura, Curaga in that order, each / **others** / not 283 (hurt) / M div 2 (1, 2); then Camisade / monsters / 92 / M (3, 5). | (0, -5) and rest |
+| **Combine powers** 0x3129 (18) | none | standing := 0; Delta Attack / monsters / 92 / 200 + M: pass = remember the target mask for the joint action, (0, +10); fail = (0, -10) and rest. | (0, -10) and rest |
+
+### 11.2 Sandy (worker 61)
+
+| Order (event) | Class | Candidates | Fallback |
+|---|---:|---|---|
+| **Do as you will** 0x3124 (13) | 0 | 1. **Reflect on Cindy**: Reflect / Cindy alone (527) / not 50 / M + 200 (2, 2). 2. Razzia / monsters / 92 / 128 (1, 2). 3. Attack / monsters / 92 / -1 (1, 2). | (0, -5) and rest |
+| **One more time** 0x3125 (14) | last class | roll `(M + 120)/256`: pass = pair (2, 4 / 0, -6), standing := her last command, re-enter her last class (class 0 = the free choice); fail = standing := 0, class := 1, steps 2 and 3 of the free choice. | steps 2, 3 |
+| **Fight!** 0x3126 (15) | 2 | Razzia / monsters / 92 / M + 50 (2, 4); Attack / monsters / 92 / M + 180 (1, 3). | (0, -5) and rest |
+| **Defense!** 0x312A (19) | 5 | 1. Shell / side / not 286 / M + 50 (1, 2). 2. Protect / side / not 287 / M + 50 (1, 2). 3. Haste / side / not 288 / M (1, 2). 4. NulAll / side / not 285 / M + 50, aimed at the stored group (1, 2). 5. Cure / others / not 283 / M div 4 (1, 2). 6. Cura / others / not 283 / M div 6 (1, 2). 7. Curaga / others / not 283 / M div 8 (1, 2). 8. Razzia / monsters / 92 / M (2, 2). 9. Attack / monsters / 92 / M (1, 2). | (0, -5) and rest |
+| **Combine powers** 0x3129 (18) | none | as Cindy's. | (0, -10) and rest |
+
+### 11.3 Mindy (worker 62)
+
+| Order (event) | Class | Candidates | Fallback |
+|---|---:|---|---|
+| **Do as you will** 0x3124 (13) | 0 | The two modes of section 14: **the Reflect combo** (Cindy alive and with Reflect, no order standing, or a replay of the stored list), else Passado / monsters / 92 / M + 100 (1, 3); Attack / monsters / 92 / M + 100 (1, 3). | (0, -5) and rest |
+| **One more time** 0x3125 (14) | last class | roll `(M + 120)/256`: pass = pair (2, 4 / 0, **-15**), standing := her last command, re-enter her last class (class 0 = the free choice, which **replays the stored list** if one is stored); fail = standing := 0, **stored list cleared**, class := 1 (Passado / monsters / 92 / 128 (1, 2); Attack / monsters / 92 / M + 100 (1, 3)). | class 1 on failure |
+| **Fight!** 0x3126 (15) | 2 | Passado / monsters / 92 / M + 30 (2, 4); Attack / monsters / 92 / M + 180 (1, 3). | (0, -5) and rest |
+| **Are you all right?** 0x312B (20) | 6 | 1. Lancet / monsters / 92 / M div 2 (2, 3). 2. Drain / monsters / 92 / `(maxHP - HP) * 256 div (2 * maxHP)` (2, 3). 3. Osmose / monsters / 92 / `(maxMP - MP) * 256 div (2 * maxMP)` (2, 3). | **(0, -1)** and rest |
+| **Combine powers** 0x3129 (18) | none | as Cindy's. | (0, -10) and rest |
+
+### 11.4 Which orders each sister is offered [note: FFX-G08 6.4, run on the game VM, 9,000 runs]
+
+Cindy: Do as you will; One more time (from her second action); Fight! when a plain roll `< M + 50` passes; Go, go! when a roll `< 128` passes; Help each other! when a roll `< 200` passes; Combine powers while all three sisters are ready; Dismiss. Sandy: Do as you will; One more time; Fight! when `< M + 150`; Defense! when anyone on the front line is below half HP, **or** a roll `< 128` passes (both are evaluated, so the draw is always taken); Combine; Dismiss. Mindy: Do as you will; One more time; Fight! when `< M + 150`; Are you all right? when HP or MP is below a quarter and a roll `< 200` passes, else below half and a roll `< 128` passes; Combine; Dismiss. The menu's rolls are plain (they ignore the standing order).
+
+## 12. The standing order and how it persists [disasm; note: FFX-G08 6.2]
+
+- **One 16-bit global (the command id) for all three sisters.** Written only by the handlers: "One more time" stores the sister's **last performed command**; every other handler (and the Combine handlers) stores 0 first; a failed repeat roll stores 0. The sister's "last command" is a private variable set whenever the handler performs a command, **the rest command included**; it is not set by the Combine handlers, and it starts at 0.
+- **Effect.** The roll of every search whose threshold is 0 or above passes only for the standing command, with no draw; a threshold below 0 passes anyway; the handler's own plain `roll(0, ...)` gates (Cindy's 128 and M div 2) are *plain* rolls, but are followed by "or an order stands", so under a standing order those gates are open. The menu's rolls ignore it.
+- **Persistence.** It stands from the repeat handler's start until the next handler of *any* sister begins (which clears it). The 2-argument gain calls are suppressed while it stands, so the pair the repeat handler wrote (section 13) is the one the finished action applies. Whether the global is cleared between battles is unchecked [note: FFX-G08 open question 6].
+- **Class.** Each handler stores its class (Cindy 0 free, 1 fallback, 2 Fight, 3 Go go, 4 Help; Sandy 0, 1, 2, 5 Defense; Mindy 0, 1, 2, 6 Are you all right) *before* searching; the repeat re-enters the chain of the stored class, and any class without a case (0, and the Combine handlers, which store none) re-enters the free choice.
+
+## 13. Motivation and gauge [note: FFX-G08 6.3, emulated 20,000 vectors]
+
+Each candidate that passes writes a pair with the 2-argument call (gauge change, motivation change) into both the positive and the negative column, **only while no order stands**; the repeat handler writes its own 4-argument pair, always: (gauge +2, motivation +4) when the repeated action had a real effect, (0, -6) when it had none (**Mindy: -15**). The finished action applies the column chosen by whether it had a real effect, clamping the gauge to 0..max and the motivation to 0..100. Gauge gains are small (1 to 5 per action; Delta Attack costs 20), so Combine powers needs each sister at her full gauge after many actions; motivation moves by 1 to 10 per action and falls by 5 on a rest. The start value of the motivation is not in the code [unproved].
+
+## 14. Mindy's free choice and the Reflect combo [disasm]
+
+"Do as you will" for Mindy starts by clearing the order, the stored list and the class. Then, **if Cindy (slot 15) is alive**:
+
+1. **A stored list exists** (only possible when the chain was entered through "One more time", which does not clear it): for each stored command in the order stored, search it on **Cindy alone** with threshold -1 (always usable if she can pay the MP; no roll) and queue it at once; then the order is done. No gain call is made and her "last command" is unchanged.
+2. **No stored list, Cindy has Reflect, and no order stands**: first one plain roll `(draw & 0xFF) < M` decides the number of spells, **2 if it passes, else 1**. For each spell, one search at a time, all **on Cindy alone**, the first that passes is queued immediately: Flare / threshold M div 2 (2, 3); else Bio then Death / each M div 2 (2, 2); else the eight spells Firaga, Thundaga, Waterga, Blizzaga, Fira, Thundara, Watera, Blizzara in that order / each M (1, 2); else Drain / M (0, 1). A spell that was found is added to the stored list (up to two) and queued; a round that finds nothing adds nothing. When at least one spell was found, the order ends here and the list stays stored.
+3. Otherwise (Cindy dead or without Reflect, an order standing, or nothing found): Passado / monsters / 92 / M + 100 (1, 3); Attack / monsters / 92 / M + 100 (1, 3); else (0, -5) and rest.
+
+Because the spells are aimed at Cindy and Cindy has Reflect, the target builder bounces each reflectable spell onto a random monster (stream 6, one draw when there are two or more legal candidates) [note: FFX-G04 4.1]: Mindy's spells hit the enemy at no cost to Cindy. The two queued spells each finish as their own action, so the one gain pair the last successful search left is applied after each of them [inferred from the after-action rule in section 13]. Sandy's free choice is what puts Reflect on Cindy (step 1, threshold M + 200).
+
+## 15. What the engine needs for the orders [words]
+
+The branch's lane FFX-K already has the menu builder, the requester's mapping of the eight commands, the standing-order roll, the gain kernels and the Combine handler (`kernel/sisters.ts`, `adapt/sisters.ts`, `aeon-commands.ts`). The seven orders add:
+
+1. **A search function** with the order of section 9: candidate set by the targeting code (0, 1, 0x101, 0x200 + slot) through the engine's legal-target rules (Targetable, reach by command, the dead-target bit), the usable test (MP for aeons, silence for silenceable rows, full gauge and no Curse for Delta Attack), the roll (stream 18, the three cases), the filtered pick (stream 4 only when more than one passes), the final mask by command type (single, group, all, self), and the saved target mask.
+2. **The nine filter tests** of section 10, each with its negation. Counters are the engine's Shell, Protect, Reflect, Haste and Nul statuses; "dead" is the KO flag; "Auto-Life" the extra status.
+3. **The candidate chains** of sections 11 and 14 as data (about sixteen chains in all): per sister and order, an ordered list of (command, targeting, filter, threshold expression, gain pair), the gated blocks ("only if a plain roll passes or an order stands") and the fallback (the loss and the rest command `0x312C`, a no-effect action on herself).
+4. **Per-sister private state across turns**: last performed command (the rest command included), the stored class, and for Mindy the stored spell list (cleared at the start of her free choice and by a failed repeat). The standing order stays the single global of the existing kernel.
+5. **The repeat's 4-argument gain pair** (+2 / +4 positive, 0 / -6 negative, Mindy -15) and the suppression of the 2-argument pairs while an order stands (already in the kernel).
+6. **Reflect-bounce of Mindy's spells off Cindy** needs the engine's existing Reflect rule for a reflectable spell aimed at an ally who has Reflect (random opposing target, stream 6).
+7. **The spells and specials the lists use must be castable by the sisters**: Camisade, Razzia, Passado (reach 0), Attack, the Cure family, Life, Full-Life, Auto-Life, Haste, Shell, Protect, Reflect, NulAll, Pray, Lancet, Drain, Osmose, Bio, Death, Flare, Ultima, the eight elemental spells and the rest command.
+
+## 16. What stays unproved (Part 2)
+
+1. The **starting motivation** and gauge of a freshly summoned sister (the only writers are the after-action step and the script property setter; no initialiser was found) and whether the standing order is cleared between battles.
+2. The behaviour of the **queue and the executor** for the commands the handlers queue (priorities, the order of the two spells of Mindy's combo, what the executor does with a command whose target vanished before it runs) was not run.
+3. The **Dark Magus Sisters'** own AI is a different set of scripts (the dark-aeons note); nothing here applies to them.
+4. The cure/support searches were read for a **sister who has just died**: the dead sisters leave the candidate set except for Life and Full-Life, which is how the code reads; the engine's KO rules for aeons decide the rest.
