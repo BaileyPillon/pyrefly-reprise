@@ -33,6 +33,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 
 export const OVERDRIVE_SIN_ID = 'overdrive-sin';
 export const OVERDRIVE_SIN_GROUP_ID = 'overdrive-sin';
@@ -96,12 +97,10 @@ const overdriveSin: EnemyDef = {
   immunityFlags: ['boss', 'armored', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Sin', spriteKey: 'overdrive-sin', hp: 140_000 }],
   aiScriptId: OVERDRIVE_SIN_SCRIPT,
-  rewards: {
-    ap: 20_000, // §2.4 [verified: 3 sources]
-    apOverkill: 30_000, // §2.4
-    gil: 12_000, // §2.4
+  // The loot record m140 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 12,000 gil, 20,000 AP (30,000 on an overkill), the first slot always
+  // drops (chance byte 255) a Lv. 3 Key Sphere, two on an overkill (§2.4 [decompiled]).
+  rewards: lootRewards(140, {
     overkillThreshold: 16_000, // §2.1 [decompiled] + wiki + bover_87 + SinirothX
-    drops: [{ itemId: 'lv-3-key-sphere', count: 1 }], // §2.4 [decompiled] drop chance 255; x2 on Overkill not modelled here
     steal: {
       baseChance: 100, // §2.4 [decompiled byte 255 = guaranteed, clamped to the contract's 0-100]
       common: { itemId: 'ether', count: 1 }, // §2.4 [verified: 3 sources]
@@ -110,7 +109,7 @@ const overdriveSin: EnemyDef = {
     // §2.4: "Bribe: immune on all five" [decompiled] + wiki. The record's item is
     // not in the research, so the steal's common item stands in; it can never be bribed.
     bribe: { item: { itemId: 'ether', count: 1 }, immune: true },
-  },
+  }),
   abilityIds: [
     'overdrive-sin-drawn',
     'overdrive-sin-gaze-petrify',

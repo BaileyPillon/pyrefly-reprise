@@ -44,6 +44,7 @@
  */
 
 import type { EnemyGroupDef } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 
 export const seymourFluxGroup: EnemyGroupDef = {
   id: 'seymour-flux',
@@ -108,16 +109,10 @@ export const seymourFluxGroup: EnemyGroupDef = {
         },
       ],
       aiScriptId: 'seymour-flux', // engine-owned; see §4 for the full phase/counter script this must implement
-      rewards: {
-        ap: 10000, // §1.1 [verified: 2 sources]
-        apOverkill: 15000, // §1.1 [decompiled + wiki]
-        gil: 6000, // §1.1 [decompiled + wiki]
+      // The loot record m142 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 6,000 gil, 10,000 AP (15,000 on an overkill), and the first item
+      // slot always drops (chance byte 255): a Lv. 4 Key Sphere, two on an overkill. The numbers are the record's; the engine pays them with the game's roll (`battle/ffx/adapt/loot.ts`).
+      rewards: lootRewards(142, {
         overkillThreshold: 3500, // §1.1 [verified: 2 sources]
-        // §1.4 [verified: 2 sources]. Decompiled drop chance is byte 255
-        // (guaranteed); the "x2 on overkill" nuance has no field on
-        // `ItemDrop` in the current contract — see the final report's
-        // contract question.
-        drops: [{ itemId: 'lv-4-key-sphere', count: 1 }],
         steal: {
           baseChance: 100, // §1.4 [decompiled byte 255 = guaranteed, clamped to the 0-100 contract range]
           common: { itemId: 'elixir', count: 1 },
@@ -125,7 +120,7 @@ export const seymourFluxGroup: EnemyGroupDef = {
         },
         // §1.4 [decompiled] `immune_to_bribe` is set — bribe always fails regardless of gil.
         bribe: { item: { itemId: 'elixir', count: 1 }, immune: true },
-      },
+      }),
       abilityIds: [
         'lance-of-atrophy', // §3.1
         'full-life', // §3.1, §3.3 — animated on Mortiorchis, computed with Seymour's stats
@@ -203,7 +198,7 @@ export const seymourFluxGroup: EnemyGroupDef = {
       immunityFlags: ['armored', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
       forms: [{ name: 'Mortiorchis', spriteKey: 'mortiorchis', hp: 4000 }],
       aiScriptId: 'mortiorchis', // engine-owned; see §4.4.2 for the charge ladder + §2.2 for the death-trigger reaction
-      rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 36000, drops: [] }, // §2 [decompiled + wiki] no drops/steal/bribe — effectively unreachable overkill
+      rewards: lootRewards(143, { overkillThreshold: 36000 }), // §2 [decompiled + wiki] no drops/steal/bribe — effectively unreachable overkill; the record m143 is all zeros, and its death still rolls the game's three stream-10 draws
       abilityIds: ['mortibsorption'], // §2.2, §3.2 — its only scheduled action besides the no-damage charge telegraph
       flags: { isPart: true, partOf: 'seymour-flux' },
       sensorText: 'It is not attacking you. It is waiting for a number to fill.',

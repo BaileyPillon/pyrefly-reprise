@@ -26,9 +26,12 @@
  * - **O-2 / B13 Threaten** — the byte reads 0 (landable), the wiki says
  *   Immune. `threatenChance: 0` means **immune** in this contract (Bailey,
  *   B13 = immune, the Natus N-3 precedent).
- * - **Rewards** — the drop's rare quantity (×2) and the Overkill quantities
- *   (×2 / ×4, `[single source: decompile]`) have no field in `EnemyRewards`,
- *   which carries one guaranteed list: the common Lv. 3 Key Sphere ×1 ships.
+ * - **Rewards** — the first slot always drops a Lv. 3 Key Sphere ×1, or, one time in
+ *   eight, the record's rare entry, a Lv. 3 Key Sphere ×2 in its place; the Overkill
+ *   quantities are ×2 / ×4 (`[single source: decompile]`). Until the loot-record lane
+ *   (re-parity RC9) `EnemyRewards` had no field for the rare quantity or the Overkill
+ *   list and only the common ×1 shipped; the game's own record m131 (`../loot/records.ts`)
+ *   now carries both and the engine rolls them (`battle/ffx/adapt/loot.ts`).
  *   The steal counts are not printed by any source; ×1 is the singular reading.
  *   The sourced **equipment drop** (§1.4: always, 3-4 slots, Magic +20% /
  *   Piercing weapon or SOS armour) is not modelled either: no field (as Natus).
@@ -39,6 +42,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 import {
   OMNIS_BLIZZAGA,
   OMNIS_BLIZZARA,
@@ -119,12 +123,11 @@ const omnis: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-life', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Seymour Omnis', spriteKey: 'seymour-omnis', hp: 80_000 }],
   aiScriptId: OMNIS_SCRIPT,
-  rewards: {
-    ap: 24_000, // §1.1 [verified: 3 sources]
-    apOverkill: 36_000, // §1.1 [verified: 3 sources]
-    gil: 12_000, // §1.1 [decompiled] + wiki + GameFAQs
+  // The loot record m131 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 12,000 gil, 24,000 AP (36,000 on an overkill), the first slot always
+  // drops (chance byte 255): a Lv. 3 Key Sphere x1, or, one time in eight, the record's rare entry, Lv. 3 Key Sphere x2 in its place; x2 and x4 on an overkill (§1.4 [verified: 3
+  // sources]; the older table listed the common x1 only).
+  rewards: lootRewards(131, {
     overkillThreshold: 15_000, // §1.1 [verified: 3 sources]
-    drops: [{ itemId: 'lv-3-key-sphere', count: 1 }], // §1.4 [verified: 3 sources] — the common ×1; see the header
     steal: {
       baseChance: 100, // §1.4 [decompiled byte 255, clamped to the contract's 0-100]
       common: { itemId: 'shining-gem', count: 1 }, // §1.4 [verified: 4 sources]; count: the singular reading
@@ -132,7 +135,7 @@ const omnis: EnemyDef = {
     },
     // §1.4 [decompiled] — the record holds a Potion ×1 that can never be bribed.
     bribe: { item: { itemId: 'potion', count: 1 }, immune: true },
-  },
+  }),
   abilityIds: [
     OMNIS_VOLLEY, // the four disc spells as one turn (the engine's seam, not a game row)
     OMNIS_FIRA, // §3.1 3:69
@@ -212,7 +215,7 @@ function mortiphasm(id: string, slot: number): EnemyDef {
     immunityFlags: ['immune-to-damage', 'immune-to-scan', 'immune-to-sensor', 'immune-to-life'],
     forms: [{ name: 'Mortiphasm', spriteKey: 'mortiphasm', hp: 1 }],
     aiScriptId: MORTIPHASM_SCRIPT,
-    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 1, drops: [] }, // §2 [decompiled] + wiki: none
+    rewards: lootRewards(106, { overkillThreshold: 1 }), // §2 [decompiled] + wiki: none; the loot record m106 is all zeros
     abilityIds: [], // Turns Left / Turns Right are reactions, not rows (B22 = a)
     flags: {
       isPart: true,

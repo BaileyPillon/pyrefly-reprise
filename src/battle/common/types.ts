@@ -926,6 +926,40 @@ export interface ItemDrop {
   rare?: { itemId: ItemId; count: number; chance: number };
 }
 
+/**
+ * **FFX only: a monster's loot record in the game's own numbers** (additive; re-parity RC9, lane FFX-M). It is chunk 4 (0x118 bytes) of the monster's file `battle/mon/_mNNN/mNNN.bin` in
+ * `FFX_Data.vbf`, read as numbers (layout: the private note FFX-H02 section 3.1); the kill-rewards roll (`battle/ffx/kernel/drops.ts`, FFX.exe 0x007990d0) reads exactly these fields at
+ * each of the monster's deaths. The item numbers are the game's (`0x2000 + n`, `battle/ffx/kernel/mix-table.ts#MIX_ITEM_IDS` names them); a quantity or number of 0 means "nothing".
+ * The gear fields of the record (the owner rows, the slot and ability bytes) are NOT carried: the gear drop is proven (`kernel/gear-drop.ts`) but not wired (M2), so only the gear
+ * roll's chance byte is kept, for the roll's one draw and for the measurement.
+ */
+export interface FfxLootRecord {
+  /** The monster file number `NNN` of `mNNN.bin`. */
+  file: number;
+  /** +0x00 (u16): gil. */
+  gil: number;
+  /** +0x02 (u16): AP for a normal kill; +0x04 (u16): AP for an overkill. */
+  ap: number;
+  apOverkill: number;
+  /** +0x08, +0x09: the chance bytes of the two item slots (a slot drops when a stream-10 draw `% 255` is below its byte; 255 always drops, 0 never). */
+  chance: readonly [number, number];
+  /** +0x0b: the gear roll's chance byte (the roll's draw is made; the gear piece itself is not wired). */
+  gearChance: number;
+  /** +0x0c (u16 x4): slot 1 common, slot 1 rare, slot 2 common, slot 2 rare. The rare entry is taken when a stream-11 draw's low byte is below 0x20. +0x14 (u8 x4): their quantities. */
+  items: readonly [number, number, number, number];
+  qty: readonly [number, number, number, number];
+  /** +0x18 (u16 x4) and +0x20 (u8 x4): the same lists, read instead of the above when the monster dies to an overkill. */
+  overkillItems: readonly [number, number, number, number];
+  overkillQty: readonly [number, number, number, number];
+  /** +0x2a (u16) and +0x2c (u8): the item a bribed monster leaves and the factor of its quantity. */
+  bribeItem: number;
+  bribeFactor: number;
+  /** Where the numbers were read: the file, the chunk and a digest of its 0x118 bytes. */
+  source: string;
+  /** What a script of the monster writes over the record at run time (Sinspawn Gui's parts), when the numbers above are the values in play rather than the file's. */
+  note?: string;
+}
+
 /** What an enemy yields when it dies [ffx-combat-core §12.2]. */
 export interface EnemyRewards {
   /** AP on a normal kill. Range 0–15 000. */
@@ -950,6 +984,12 @@ export interface EnemyRewards {
   bribe?: { item: ItemDrop; immune: boolean };
   /** EXP (FFX-2 only; FFX has no EXP). Range 0–99 999. */
   exp?: number;
+  /**
+   * **FFX only: the monster's loot record** (additive; re-parity RC9). When present the FFX engine pays this monster's death with the game's own roll (`battle/ffx/adapt/loot.ts`):
+   * `ap`, `apOverkill`, `gil` and `drops` above are then the same numbers read from it, kept for display and for the data tests, and nothing rolls from `drops`. Absent (a hand-built rig),
+   * the engine turns `ap`, `gil` and `drops` into a record of the same shape and pays that.
+   */
+  loot?: FfxLootRecord;
 }
 
 /** One boss form. `formIndex` 0 is the starting form. */

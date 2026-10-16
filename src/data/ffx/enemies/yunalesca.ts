@@ -22,6 +22,7 @@
  */
 
 import type { EnemyGroupDef } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 
 export const yunalescaGroup: EnemyGroupDef = {
   id: 'yunalesca',
@@ -103,27 +104,18 @@ export const yunalescaGroup: EnemyGroupDef = {
         },
       ],
       aiScriptId: 'yunalesca-form-1',
-      rewards: {
-        // §2.2 [verified: 4 sources] — attached only to form III, granted once at the end.
-        ap: 14000,
-        apOverkill: 21000,
-        gil: 9000,
+      // The loot record m130 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 9,000 gil, 14,000 AP (21,000 on an overkill), the first item slot
+      // always drops (chance byte 255, so Game8's "7/8" of §14.5 is not the record's) a Lv. 3 Key Sphere, two on an overkill. §2.2 [verified: 4 sources]: attached only to form III,
+      // granted once at the end. The separate equipment drop (2-4 slots, Piercing + Zombiestrike/Zombieproof, §2.6) is the record's gear roll: one stream-10 draw, no gear piece (M2).
+      rewards: lootRewards(130, {
         overkillThreshold: 10000,
-        // §2.6 [verified: 3 sources]. Decompiled drop chance is byte 255
-        // (effectively guaranteed; Game8's "7/8" is an unresolved minor
-        // conflict, §14.5 — decompile preferred). "x2 on overkill" and the
-        // separate guaranteed equipment drop (2-4 slots, Piercing +
-        // Zombiestrike/Zombieproof, §2.6) have no field on the current
-        // `EnemyRewards`/`ItemDrop` shape — see the final report's contract
-        // question.
-        drops: [{ itemId: 'lv-3-key-sphere', count: 1 }],
         steal: {
           baseChance: 100, // §2.6 [verified: 4 sources] decompiled byte 255, clamped to the 0-100 contract range
           common: { itemId: 'stamina-tablet', count: 1 },
           rare: { itemId: 'farplane-wind', count: 1 },
         },
         bribe: { item: { itemId: 'farplane-wind', count: 1 }, immune: true }, // §2.6 [decompiled] immune_to_bribe
-      },
+      }),
       abilityIds: [
         'dispelling-slap', // §3, §5.1
         'absorb', // §3, §5.1
