@@ -6,9 +6,8 @@ own estimates and WHICH of the game's own fights each act uses (the plan: `docs/
 
 > **THE TABLE OF RECORD (the release driver's order, 2026-10-16), measured on the final engine.** Lane FFX-K at `494b2f2fb` / `53ce98a05` is merged: `afda2d451` (a landed player Zanmato kills every legal foe of the group it picked), `4256d209a` (the Sisters'
 > seven orders) and `494b2f2fb` (the player's Delta Attack hits every foe in reach, six hits on each; Combine powers searches before it rolls). RE's final gate passed on `53ce98a05`. **Every number below was re-run on that engine, 200 seeds a line (400 around the pick), and
-> equals the first run of 2026-10-15 (the engine as merged at `d8fa5b69`) to the seed.** The reasons, each measured: (1) **Act II alone is unchanged**: a Pay at compatibility 128 against a Zanmato byte of 4 buys no Zanmato without a full Overdrive gauge (0 in 64 up to 1,000,000 gil;
-> 17 in 64 at 100,000 with a full gauge: RE's lane handoff section 10.4), and the advisor's line never paid with a full gauge (a probe over the same fights: 266, 234 and 249 Pays in 200 fights a tier, the highest gauge at a Pay 90, 60 and 60); the Act II first-target kill already
-> ended a fight when Dark Yojimbo was the only legal foe. (2) **Act I is unchanged**: the advisor's line never calls the Sisters in Act I (a tally of its commands over 30 fights: no summon, no Combine), so a Delta Attack that now hits both Dark Sisters never enters its number (the
+> equals the first run of 2026-10-15 (the engine as merged at `d8fa5b69`) to the seed.** The reasons, each measured: (1) **Act II alone is unchanged**, because Dark Yojimbo is the only legal foe there: the Act II first-target kill already ended a fight when a Zanmato landed, so the group effect adds nothing. A Pay does buy a Zanmato against a Dark Aeon (Zanmato byte 4), at compatibility 128 and hire answer 2 (an ESTIMATE: the guides' recommended reply, not read from Bailey's save); out of 64 per Pay, a full gauge in brackets:
+> 1,000 gil 0 (20); 10,000 gil 6 (26); 100,000 gil 11 (31); 1,000,000 gil 16 (36); Pay all, 1,500,000 gil, 17 (37). Measured on the advisor's line, which pays 100,000: 42 of its 234 Pays at tier 2 bought a Zanmato and 42 of 200 Act II fights ended that way. The line never paid with a full gauge (a probe over the same fights: 266, 234 and 249 Pays in 200 fights a tier, the highest gauge at a Pay 90, 60 and 60). (This note first quoted RE's table for hire answer 1, lane handoff section 10.4, which is not this chapter's reply; corrected 2026-10-16.) (2) **Act I is unchanged**: the advisor's line never calls the Sisters in Act I (a tally of its commands over 30 fights: no summon, no Combine), so a Delta Attack that now hits both Dark Sisters never enters its number (the
 > probe: 60 Act I fights played with the group flag on and taken off at run time are identical, outcome and ticks). (3) The seven orders are not used by the line either. **The picks stand: Act I the faithful pair `kino01_72`, Act II tier 2 `nagi05_71`, 17 Phoenix Downs: 74 percent
 > with Pay on (294 of 400), 70 with Yojimbo never sent in, a careless line 0 of 200, and every Act I and tier cell is below.** The Dark Aeons stand at BattleDistance 0 (nothing in the game's formation data gives one: `research/re-ffx-dark-aeons.md` section 2.2 and 2.3), so the
 > Sisters' reach-0 moves reach them; no cell was ever benched at distance 1.
@@ -22,7 +21,7 @@ own estimates and WHICH of the game's own fights each act uses (the plan: `docs/
 > | tier 3 `nagi05_72` | 100 percent (200) | 23 percent (46) | 100 percent (199) | 0 of 200 |
 >
 > **Pay is final for Act II**: it barely decides it (Pay on and no Yojimbo are within three seeds in a hundred), and the worst thing a player can do is call Yojimbo and not pay him (23 to 28 percent). What would change it is Yojimbo's starting gauge (a lever the preset names: full raises the
-> Zanmato chance to 17 in 64 at 100,000 gil, and a Zanmato ends the fight), which this pass does not move.
+> Zanmato chance from 11 to 31 in 64 per Pay at 100,000 gil (hire answer 2, an ESTIMATE), and a Zanmato ends the fight), which this pass does not move.
 
 Bailey, 2026-10-15: "i like the mirror match but make the difficulty appropriate not too easy not too hard". The target the plan turned that into: **a full run (Act I, the heal, Act II) with the advisor's line is won about
 70 percent of the time (60 to 80 accepted), and a careless line (the plain Attack on the first living enemy, no aeon, no item) mostly loses (under 20 percent).** Prefer the game's own formations; the trio with its gauges
@@ -117,7 +116,7 @@ What the tables say together:
 - **Act II is easy alone (97 percent, Pay on or off) and hard in the chain (about 84 percent of the survivors of Act I win it) because the chain arrives with the Phoenix Downs Act I spent**; the heal gives back HP, MP and the
   aeons, not the bag. The bag is the chapter's budget, which is why it is the lever.
 - **Pay barely decides Act II**: alone, Pay ON and the line that never sends Yojimbo in are within one seed in a hundred; in the chain Pay ON is 3 to 5 points ahead in every tier (66 to 69, 69 to 74, 74 to 77), which is
-  the most the instant wins of a landed Zanmato can be worth in the number (the game's own rule, kept; rare per Pay).
+  the most the instant wins of a landed Zanmato can be worth in the number (the game's own rule, kept; about one Pay in six at the line's 100,000 gil).
 - **Calling Yojimbo and not paying him is the worst thing a player can do** (20 percent): the shield is gone at his first menu. Today the HUD's Pay row does exactly that (it sends a payment of nothing: the handoff's open item 1).
 
 ### Why the others are not the pick
@@ -200,7 +199,7 @@ by the owner's saves, live confirmation pending**; a fixed per-chapter value, ne
 
 **What waited for RE, and what is open.** Closed on 2026-10-16 (the engine merged at `53ce98a05`): the group Zanmato, the seven orders, the group Delta Attack; the bench was re-run and the picks stand. **Open, none of it moves a number today:** the order of Zanmato and Auto-Life inside a hit
 (RE note 8.3) and the dog's hit event while it is untargetable (8.4), both inherited from the first note; **the advisor's line does not use the seven orders** (it may do so only with a measured gain: a design change of the line, the driver's call, and `--ablate all` above prices each rule);
-**the Sisters' start gauge** (100, chosen when only Combine powers worked; a start at 0 is playable now and is a lever to measure, not made here); **Yojimbo's start gauge** (0; full makes a Zanmato of the player's likely and ends the fight); the Pay amount screen (the presenter's ladder of
+**the Sisters' start gauge** (100, chosen when only Combine powers worked; a start at 0 is playable now and is a lever to measure, not made here); **Yojimbo's start gauge** (0; full makes a Zanmato of the player's more likely, 31 in 64 per Pay at 100,000 gil against 11 without it, hire answer 2 being an ESTIMATE, and a Zanmato ends the fight); the Pay amount screen (the presenter's ladder of
 amounts is a stop-gap, `engine/PayRows.ts`; the line pays 100,000); and any change to what a Sister's summon costs or does. The bench's cells and constants are pinned in `tests/unit/chapters/mirror-aeons-bench.test.ts` (the picks, the 17, the Pay-off lines; the rate pins run with
 `MIRROR_AEONS_BENCH=1`, 13 tests green), so the day one moves a test says so.
 

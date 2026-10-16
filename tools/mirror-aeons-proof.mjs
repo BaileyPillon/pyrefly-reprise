@@ -14,7 +14,7 @@
  *
  * The chapter is LISTED (Bailey, 2026-10-15): the default entry is its CARD on the board, walked to with the arrow keys and begun with Enter (`--entry word` types `yojimbo` instead, which still works). `--scenario full` plays
  * both acts to the post scene, the results and back to the board (the card's ribbon and "1 of 19" prove the clear was recorded); `--scenario retry` loses Act II on purpose (the party only defends), takes RETRY on the
- * results screen and shows Act II re-opened on a whole party and whole aeons. `--scenario zanmato` makes the rare event CERTAIN by a nudge from the page (the foes' Zanmato byte cleared, the purse and Yojimbo's compatibility set) and plays
+ * results screen and shows Act II re-opened on a whole party and whole aeons. `--scenario zanmato` makes the Zanmato roll CERTAIN by a nudge from the page (the foes' Zanmato byte cleared, the purse and Yojimbo's compatibility set) and plays
  * a landed Zanmato of Yuna's Yojimbo ending Act I (both sisters fall in one action, the seam plays, Act II opens) and then Act II (Dark Yojimbo falls, the post scene, the results, the board), all with real keys after the nudge.
  *
  * Every check is printed as `check.<name>`; the exit code is 1 on a failed one. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. The word that opens the chapter is
@@ -255,7 +255,7 @@ try {
 
   if (SCENARIO === 'zanmato') {
     // --- A landed Zanmato of Yuna's Yojimbo ends each act (RE's afda2d451), in the order the engine logs it (the release driver, 2026-10-16: ko, ko, action-end, [the seam,] victory) --------------------
-    // A Pay buys a Zanmato only 3 times in 64 against the game's byte 4, so the rare event is made CERTAIN by a nudge from the page: the foes' Zanmato byte is cleared on the combatants and the purse and Yojimbo's compatibility
+    // A Pay buys a Zanmato about one time in four against the game's byte 4 at the chapter's settings (hire answer 2, compatibility 128: 16 in 64 at 1,000,000 gil), so the proof makes the roll CERTAIN by a nudge from the page rather than wait for it: the foes' Zanmato byte is cleared on the combatants and the purse and Yojimbo's compatibility
     // are set so that a Pay of all the gil rolls one (2^22 gil, compatibility 0, hire answer 1: a motivation of exactly 80). Everything after the nudge is real keys and the engine's own rules.
     const force = () =>
       page.evaluate(() => {

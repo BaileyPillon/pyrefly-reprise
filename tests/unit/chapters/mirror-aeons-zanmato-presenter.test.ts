@@ -3,7 +3,7 @@
  * ko, ko, ko, action-end, victory: `victory` comes AFTER the Zanmato's `action-end`, and in Act I the seam's `script-trigger` comes between them).
  *
  * The real presenter over the real chapter engine (the chapter's own triggers and mid-battle scripts), with the party's gil and Yojimbo's compatibility set so a Pay of ALL the gil buys a certain Zanmato (2^22 gil, compatibility 0,
- * hire answer 1, and the Dark Aeons' Zanmato byte cleared on the combatants: against the game's own byte 4 a Pay rolls one only 3 times in 64, RE's lane handoff section 10.4). A HUD calls Yojimbo, pays from the ladder it is handed ("Pay all"),
+ * hire answer 1, and the Dark Aeons' Zanmato byte cleared on the combatants: against the game's own byte 4 the chapter's hire answer 2 (an ESTIMATE) rolls one 11 times in 64 for a Pay of 100,000 and 16 for 1,000,000, RE's review of 2026-10-16; the 3 in 64 of RE's lane handoff section 10.4 is the table for hire answer 1). A HUD calls Yojimbo, pays from the ladder it is handed ("Pay all"),
  * and Defends everyone else. What is asserted is what the player sees: every foe of the group falls (one `ko` each, no `damage`), the action ends, THEN (Act I) the seam's beat plays, THEN the victory; the presenter returns a victory.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
