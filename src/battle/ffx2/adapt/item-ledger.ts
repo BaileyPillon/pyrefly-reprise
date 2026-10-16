@@ -11,6 +11,9 @@
  * - **Refund** when a cast leaves the queue without firing (a KO, Stop, Petrify, ejection or dress change drops it, a magic cancel aborts it, the battle ends): the item
  *   goes back, capped at 99. {@link releaseItemHolds} does it for every hold whose cast is gone, so no cancel path has to know about the stock.
  *
+ * - **A Mix reserves two** (re-parity RC9, lane X2-G): the game's HUD packet reserves each of the two ingredients into the record's two id slots, so the hold carries a second id
+ *   ({@link ItemHold.itemId2}) and every way out of the queue gives both back. The same item twice needs two in stock; one short, the gate would fail and the removal would refund the other.
+ *
  * **Monsters never reserve** (the kernel: a character slot of 0x0f to 0x1e), so a monster's item command touches nothing. **An item the battle does not track**
  * (no `inventory:` flag: a test rig, a script) is used freely, as before the ledger. The table the kernel sees holds the one stack being changed: the kernel's
  * functions never look at another slot but to find a free one, and the stack's own emptied slot is always free, so a one-stack table answers as the whole table would.
@@ -25,7 +28,12 @@ export interface ItemHold {
   /** The record's items reserved (+0x8e) and needed (+0x8f). */
   got: number;
   needed: number;
+  /** A Mix's second ingredient (the record's second id slot, +0x92); absent for every command that holds one item. */
+  itemId2?: string;
 }
+
+/** The item ids a hold gives back, in slot order. */
+const heldIds = (hold: ItemHold): string[] => (hold.itemId2 === undefined ? [hold.itemId] : [hold.itemId, hold.itemId2]);
 
 /** The item number the one-stack table gives the item (an item id: nibble 2). */
 const NUMBER = 0x2000;
@@ -40,10 +48,16 @@ export function trackedStock(flags: Readonly<Flags>, itemId: string): number | u
   return typeof v === 'number' ? v : undefined;
 }
 
-/** Can this item be picked now? True for an item the battle does not track; else the kernel's count must be above 0. */
-export function itemAvailable(flags: Readonly<Flags>, itemId: string): boolean {
+/** Can this item be picked now? True for an item the battle does not track; else the kernel's count must reach `need` (1 for one pick; 2 for a Mix of the same item twice). */
+export function itemAvailable(flags: Readonly<Flags>, itemId: string, need = 1): boolean {
   const have = trackedStock(flags, itemId);
-  return have === undefined || stockOf(have, (w) => stockCount(w, NUMBER)) > 0;
+  return have === undefined || stockOf(have, (w) => stockCount(w, NUMBER)) >= need;
+}
+
+/** Can the party's stock make a Mix of these two ingredients? Each tracked one must be there; the same item twice needs two. */
+export function ingredientsAvailable(flags: Readonly<Flags>, ingredients: readonly [string, string]): boolean {
+  const [a, b] = ingredients;
+  return itemAvailable(flags, a, a === b ? 2 : 1) && itemAvailable(flags, b, a === b ? 2 : 1);
 }
 
 /** Run `fn` on a one-stack table holding `count` of the item and return its answer. */
@@ -90,6 +104,33 @@ export function reserveItem(flags: Flags, unit: Ffx2Unit, itemId: string): boole
 }
 
 /**
+ * Reserve a Mix's two ingredients for `unit`'s command (the HUD packet reserves each into the record's two id slots, FFX2-G06 3.8). Returns `true` when the command may go on: both
+ * tracked ingredients are reserved and the unit holds them, or nothing is tracked, or the unit is a monster, or the pick is already reserved (a re-submitted command). Returns `false`
+ * when the stock was short for either: what the first reserve took is given back at once (the gate would fail and the removal would refund it) and nothing is held.
+ */
+export function reserveIngredients(flags: Flags, unit: Ffx2Unit, ingredients: readonly [string, string]): boolean {
+  if (unit.itemHold !== undefined) return true;
+  const rec = newRecord(NUMBER);
+  const taken: string[] = [];
+  for (const itemId of ingredients) {
+    if (trackedStock(flags, itemId) === undefined) continue; // the battle does not track it: free, as before the ledger
+    change(flags, itemId, (w) => {
+      const before = rec.got;
+      reserve(w, rec, unit.gauge.slot, NUMBER);
+      if (rec.got > before) taken.push(itemId);
+    });
+  }
+  if (rec.needed === 0) return true; // a monster, or nothing tracked: nothing is taken, nothing is held
+  if (rec.got < rec.needed) {
+    for (const itemId of taken) change(flags, itemId, (w) => refund(w, newRecord(NUMBER, { got: 1, needed: 1, ids: [NUMBER, 0] }), 1));
+    return false;
+  }
+  const [first, second] = taken as [string, string | undefined];
+  unit.itemHold = { itemId: first, got: rec.got, needed: rec.needed, ...(second !== undefined ? { itemId2: second } : {}) };
+  return true;
+}
+
+/**
  * The start gate for a cast that has fired (the commit): passes when the reservation is whole, keeps the item spent and drops the hold. Returns `false` when the
  * hold is short or its owner is dead (the gate fails and the removal refunds what the hold has). A unit with no hold passes: an untracked item, or a monster.
  */
@@ -97,10 +138,10 @@ export function commitItem(flags: Flags, unit: Ffx2Unit): boolean {
   const hold = unit.itemHold;
   if (hold === undefined) return true;
   const w = emptyWorld();
-  const rec = newRecord(NUMBER, { got: hold.got, needed: hold.needed, ids: [NUMBER, 0] });
+  const rec = newRecord(NUMBER, { got: hold.got, needed: hold.needed, ids: [NUMBER, hold.itemId2 === undefined ? 0 : NUMBER] });
   const passed = startGate(w, rec, { dead: !unit.alive, targetsOk: true, cost: 0 });
   delete unit.itemHold;
-  if (!passed) change(flags, hold.itemId, (stack) => refund(stack, rec, 1));
+  if (!passed) for (const itemId of heldIds(hold)) change(flags, itemId, (stack) => refund(stack, newRecord(NUMBER, { got: 1, needed: 1, ids: [NUMBER, 0] }), 1));
   return passed;
 }
 
@@ -109,10 +150,12 @@ export function refundItem(flags: Flags, unit: Ffx2Unit): void {
   const hold = unit.itemHold;
   if (hold === undefined) return;
   delete unit.itemHold;
-  change(flags, hold.itemId, (w) => {
-    const rec = newRecord(NUMBER, { got: hold.got, needed: hold.needed, ids: [hold.got > 0 ? NUMBER : 0, 0] });
-    refund(w, rec, 1);
-  });
+  for (const itemId of heldIds(hold)) {
+    change(flags, itemId, (w) => {
+      const rec = newRecord(NUMBER, { got: hold.got, needed: hold.needed, ids: [hold.got > 0 ? NUMBER : 0, 0] });
+      refund(w, rec, 1);
+    });
+  }
 }
 
 /**

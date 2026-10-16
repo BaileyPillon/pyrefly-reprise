@@ -17,6 +17,7 @@ import { COMMAND_RECORDS_TOURIST_TRAP } from './tourist-trap.ts';
 import { COMMAND_RECORDS_VALEFOR } from './valefor.ts';
 import { COMMAND_RECORDS_ANGRA_MAINYU } from './angra-mainyu.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
+import { COMMAND_RECORDS_MIX } from './mix.ts';
 import { COMMAND_RECORDS_PARTY } from './party.ts';
 
 /** Every ability id with a game row, mapped to that row. */
@@ -28,6 +29,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_TOURIST_TRAP, // the hidden Tourist Trap chapter: Yojimbo's four rows and Daigoro's bite (RE review 2026-10-14, m170 / m174)
   ...COMMAND_RECORDS_VALEFOR, // the hidden chapter's Valefor at Besaid: monmagic 0x4091 to 0x4093 (RE review 2026-10-14)
   ...COMMAND_RECORDS_ANGRA_MAINYU, // the hidden Angra Mainyu chapter: the three bodies' moves (RE note re-ffx2-angra-mainyu, 2026-10-14)
+  ...COMMAND_RECORDS_MIX, // the Alchemist's Mix: the 53 result rows (re-parity RC9, lane X2-G; FFX2-G06 section 4.4)
 };
 
 /** The reachable abilities that have no game row, and why. */
