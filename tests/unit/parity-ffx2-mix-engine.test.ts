@@ -439,6 +439,9 @@ describe('a Mix held for a chain lock is picked when it fires, like an item', ()
   it('if the stock was used up while it waited, it is dropped when the lock lifts: nothing taken, the turn not spent', () => {
     const { b, girl, held } = hold({ [POTION]: 0 });
     expect(held.some((e) => e.type === 'action-start' && e.actorId === girl.id)).toBe(false);
+    // dropped, not aborted: no "No Potion left" message, no turn begun for her (the abort path of `performCommand` would have spent it), and she keeps her menu
+    expect(held.some((e) => e.type === 'message' && e.kind === 'system')).toBe(false);
+    expect(held.some((e) => e.type === 'turn-start' && e.actorId === girl.id)).toBe(false);
     expect(b.flags[keyOf(POTION)]).toBe(0);
     expect(b.flags[keyOf(HI_POTION)]).toBe(2);
     expect(girl.itemHold).toBeUndefined();

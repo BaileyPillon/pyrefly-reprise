@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-16 — `MixResult` (FFX-2): the doc comment now says order matters and a null result is no failure; no field changes shape (re-parity RC9, lane X2-G, branch `re-parity-rc9-x2-mix`; FFX-2 only; documentation only)
+
+The comment on `MixResult` (`src/battle/common/types.ts`, the payload of the `rikku-mix` minigame) said "Order never matters" and "`null` when the pair has no recipe". Both are FFX-only truths (Rikku's chart is symmetric and a pair outside it made "Mix failed!"). FFX-2's Alchemist resolves a Mix by the game's recipe function (`FFX-2.exe` 0x0075A470, checked note FFX2-G06 section 3.8): **the order of the two picks changes the result in 496 of the 2,278 unordered pairs, and every pair makes one of 53 result rows**, so the comment now says so for each game.
+
+- No field is added, renamed or removed. For FFX-2 `ingredients` is the picks in the order made and `resultAbilityId` is ignored on the way in (the engine resolves the result from the ingredients, as the game's HUD does before it queues anything); it may be `null`.
+- The Alchemist's Mix takes the two items the way every minigame outcome travels (`docs/CONTRACTS.md`, "Minigame protocol"): `AbilityCommand.extra = { kind: 'rikku-mix', mix }` on the command `x2-alchemist-mix`; a bare Mix (no `extra`) is what it always was. Nothing in the protocol changed.
+- FFX is untouched: `src/battle/ffx`, `src/data/ffx` and `src/audio` have no line in this lane.
+
 ## 2026-10-15 — Mirror Aeons (Chapter XXVII, FFX) is LISTED on the chapter board: `ListedChapterId` gains `'mirror-aeons'`, the record joins `CHAPTERS` and `CHAPTER_IDS`, and "N of 18" becomes "N of 19" (branch `ch-mirror-aeons`; FFX only; the save is untouched)
 
 Bailey, 2026-10-15, relayed by the release driver, verbatim: "We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end." The chapter was built hidden behind the typed word `yojimbo` (the entry below); it is now a listed chapter.

@@ -49,7 +49,7 @@ function mix(id: string, name: string, spec: MixSpec): AbilityDef {
     flags: spec.flags,
     ...(spec.shatterChance !== undefined ? { shatterChance: spec.shatterChance } : {}),
     messageTemplate: '{user} mixes {ability}',
-    extra: { mixResult: true, fxFamily: spec.fx },
+    extra: { fxFamily: spec.fx },
   };
 }
 

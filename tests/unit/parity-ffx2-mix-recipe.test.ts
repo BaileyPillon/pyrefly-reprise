@@ -148,6 +148,21 @@ describe('what the note states about the table', () => {
     expect(FIXTURE.facts.asymmetricUnorderedPairs).toBe(496);
   });
 
+  it('the blend matrix is symmetric, so the order matters only through the no-blend tie: equal levels, different classes (which is why a transposed lookup is no fault the table could show)', () => {
+    for (let r = 0; r < 18; r++) for (let c = 0; c < 18; c++) expect((MIX_BLEND[r] as readonly number[])[c], `[${r}][${c}]`).toBe((MIX_BLEND[c] as readonly number[])[r]);
+    let ties = 0;
+    for (let i = 0; i < 68; i++) {
+      for (let j = i + 1; j < 68; j++) {
+        if (mixRecipe(ITEM(i), ITEM(j)) === mixRecipe(ITEM(j), ITEM(i))) continue;
+        const [ca, la] = MIX_ITEM_ROWS[i] as readonly [number, number];
+        const [cb, lb] = MIX_ITEM_ROWS[j] as readonly [number, number];
+        expect({ blend: (MIX_BLEND[ca] as readonly number[])[cb], sameLevel: la === lb, differentClass: ca !== cb }, `${i} and ${j}`).toEqual({ blend: MIX_NO_BLEND, sameLevel: true, differentClass: true });
+        ties += 1;
+      }
+    }
+    expect(ties).toBe(496);
+  });
+
   it('there is no failure outcome: every ordered pair makes one of the 53 rows, and all 53 are made', () => {
     const made = new Set<number>();
     for (let i = 0; i < 68; i++) for (let j = 0; j < 68; j++) made.add(mixRecipe(ITEM(i), ITEM(j)));
