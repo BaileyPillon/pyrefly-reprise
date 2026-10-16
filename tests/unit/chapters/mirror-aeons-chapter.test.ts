@@ -68,7 +68,7 @@ describe('the chapter is registered and LISTED: the last of the nineteen', () =>
     expect(meta.objectives[1]!.rule).toEqual({ kind: 'link-reached', link: 2 });
     for (const k of meta.musicKeys) expect(hasTrack(k), k).toBe(true);
     for (const s of meta.snapshots) expect(s.image).toMatch(/^(backdrops|characters)\/[a-z0-9-]+(\/idle)?\.png$/);
-    expect(meta.snapshots.map((s) => s.image)).toEqual(['backdrops/mushroom-rock-road.png', 'characters/cindy/idle.png', 'characters/yojimbo/idle.png']);
+    expect(meta.snapshots.map((s) => s.image)).toEqual(['backdrops/mushroom-rock-road.png', 'characters/dark-sandy/idle.png', 'characters/dark-yojimbo/idle.png']);
   });
 
   it('has a scene: the Mushroom Rock Road stage with this chapter\'s staging, whose swap knows the Cavern\'s plate; a canon row; Dark Yojimbo\'s body stays and the sisters dissolve', () => {

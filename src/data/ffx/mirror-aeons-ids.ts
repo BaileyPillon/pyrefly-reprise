@@ -20,7 +20,7 @@ export const MIRROR_AEONS_SCENE = 'mirror-aeons' as const;
 export const MIRROR_ACT_I_PLATE = 'mushroom-rock-road' as const;
 export const MIRROR_ACT_II_PLATE = 'cavern-stolen-fayth' as const;
 
-/** Combatant ids, which are also the art subjects' names for the sprite lookup (`characters/<spriteKey>`; the Dark aeons draw their aeon's own painting, as the possessed aeons do). */
+/** Combatant ids, which are also the art subjects' names for the sprite lookup (`characters/<spriteKey>/` and `portraits/<id>.png`: each Dark aeon draws its own Dark painting, `characters/dark-sandy/` and so on; `tests/unit/chapters/mirror-aeons-art.test.ts` pins it). */
 export const DARK_CINDY_ID = 'dark-cindy' as const;
 export const DARK_SANDY_ID = 'dark-sandy' as const;
 export const DARK_MINDY_ID = 'dark-mindy' as const;

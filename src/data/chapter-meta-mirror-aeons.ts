@@ -8,8 +8,8 @@
  * - `quote` is Yuna's one line in the pre scene (`src/story/scripts/mirror-aeons.ts`), our own words.
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers, and none a number of the fight's: send both sisters home (Act I), reach the cavern (Act II opens), win.
  * - `tip` and `handwritten` are our own words over the guides' common ground (`research/ffx-mirror-aeons.md`): the pair has no joint attack, so heal early (every fallen member costs a Phoenix Down) and spell Mindy; Dark Yojimbo's Overdrive cannot be turned by Auto-Life, so Yuna's Yojimbo goes in before his blade is full.
- * - `heroArt` is not made yet (`pause/ch27-mirror-aeons`, so the pause screen shows the fallback): `heroArtFallback` is Yuna's approved portrait. `snapshots` are existing assets only: Mushroom Rock Road's plate, Cindy's
- *   painting and Yojimbo's (the Dark ones draw the aeons' own, the possessed aeons' precedent).
+ * - `heroArt` is not made yet (`pause/ch27-mirror-aeons`, so the pause screen shows the fallback): `heroArtFallback` is Yuna's approved portrait. `snapshots` are existing assets only: Mushroom Rock Road's plate, Dark Sandy's
+ *   painting and Yojimbo's: the Dark paintings (`characters/dark-sandy/`, `characters/dark-yojimbo/`; r50.1, the first build drew the aeons' own).
  * - `musicKeys` are the cues the chapter plays: the mountain's bed under the scenes, `boss-challenge` for Act I, `boss-yojimbo` for Act II and the shared `victory-ffx`.
  */
 
@@ -38,8 +38,8 @@ export const MIRROR_AEONS_META: ChapterMeta = {
   tip: "Two sisters, no joint attack, and every fallen member costs a Phoenix Down: heal early, and use spells on Mindy, whom no blade can find. In the cavern, Cheer first and call Yuna's Yojimbo in before his blade is full.",
   snapshots: [
     { image: `backdrops/${MIRROR_ACT_I_PLATE}.png`, caption: 'the road' },
-    { image: 'characters/cindy/idle.png', caption: 'two in the wrong colours' },
-    { image: 'characters/yojimbo/idle.png', caption: 'the blade below' },
+    { image: 'characters/dark-sandy/idle.png', caption: 'two in the wrong colours' },
+    { image: 'characters/dark-yojimbo/idle.png', caption: 'the blade below' },
   ],
   focalCharacterId: 'yuna',
   musicKeys: ['scene-gagazet', 'boss-challenge', 'boss-yojimbo', 'victory-ffx'],

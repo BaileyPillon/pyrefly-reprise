@@ -17,7 +17,7 @@ import { DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJI
 // What this does NOT do: change the grade when the plate changes. The palette is applied once, at the scene's entry (`BattleScreen`), so the cavern is lit with the road's daylight grade. A cavern grade is a
 // presentation pick for Bailey's eye (`docs/handoff/ch-mirror-aeons.md`), not a number to guess here.
 //
-// THE STAGING IS AN ESTIMATE for the framing: the party stands on the Mushroom slots; the Dark aeons draw their aeons' own paintings (the possessed aeons' precedent), so the heights are the paintings' proportions
+// THE STAGING IS AN ESTIMATE for the framing: the party stands on the Mushroom slots; the Dark aeons draw their own Dark paintings (`characters/dark-<name>/`, from r50.1), so the heights are the paintings' proportions
 // against the party's 1.75, not measures. The trio stands Cindy front left, Sandy in the middle and behind, Mindy front right (the game's start positions, RE section 3, are in another coordinate system and are not
 // transcribed); Dark Yojimbo stands where Gui's body does, with the dog beside him, as far from the party as the arena allows.
 

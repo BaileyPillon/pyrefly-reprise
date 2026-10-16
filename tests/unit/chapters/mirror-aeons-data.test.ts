@@ -48,7 +48,7 @@ describe('the four records (RE section 2)', () => {
     it(`${body.name}: the record's ten numbers, no affinity, HP bar and form, Threaten 0, Zanmato byte 4`, () => {
       expect(statsOf(body)).toEqual(NOTE[name]);
       expect([body.stats.maxHp, body.stats.maxMp, body.hp, body.mp]).toEqual([NOTE[name]![0], 999, NOTE[name]![0], 999]);
-      expect(body.forms).toEqual([{ name: body.name, spriteKey: name, hp: NOTE[name]![0] }]);
+      expect(body.forms).toEqual([{ name: body.name, spriteKey: `dark-${name}`, hp: NOTE[name]![0] }]);
       expect(body.affinities).toEqual({});
       expect(body.threatenChance).toBe(0);
       expect(body.zanmatoLevel).toBe(5); // the byte 4, printed "Zanmato Lv. 5" by the guides
@@ -64,9 +64,9 @@ describe('the four records (RE section 2)', () => {
     });
   }
 
-  it('Dark Yojimbo paints Yojimbo; each sister her own aeon (the possessed aeons\' convention)', () => {
-    expect(darkYojimbo().spriteKey).toBe('yojimbo');
-    expect(['cindy', 'sandy', 'mindy'].map((n) => darkSister(n as 'cindy', 0).spriteKey)).toEqual(['cindy', 'sandy', 'mindy']);
+  it('Dark Yojimbo paints his Dark painting and each sister hers, never the player\'s aeon (r50.1; the art itself is pinned in mirror-aeons-art.test.ts)', () => {
+    expect(darkYojimbo().spriteKey).toBe('dark-yojimbo');
+    expect(['cindy', 'sandy', 'mindy'].map((n) => darkSister(n as 'cindy', 0).spriteKey)).toEqual(['dark-cindy', 'dark-sandy', 'dark-mindy']);
   });
 });
 

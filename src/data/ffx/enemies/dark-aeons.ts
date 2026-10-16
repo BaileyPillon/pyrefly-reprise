@@ -95,7 +95,7 @@ function sister(name: SisterName, opts: { id: string; display: string; script: s
   return {
     id: opts.id,
     name: opts.display,
-    spriteKey: name, // the aeon's own painting, as the possessed aeons do (the Dark paintings are Bailey's pick)
+    spriteKey: opts.id, // the Dark painting `characters/dark-<name>/` (red and black), never the aeon's own: r50.1 (the live r50 drew the player's red Sandy under the name "Dark Sandy")
     slot: opts.slot,
     stats,
     hp: stats.hp,
@@ -103,7 +103,7 @@ function sister(name: SisterName, opts: { id: string; display: string; script: s
     affinities: {},
     immunities: immunities(),
     immunityFlags: [...FLAGS],
-    forms: [{ name: opts.display, spriteKey: name, hp: stats.hp }],
+    forms: [{ name: opts.display, spriteKey: opts.id, hp: stats.hp }],
     aiScriptId: opts.script,
     rewards: rewards(name),
     abilityIds: opts.abilityIds,
@@ -134,7 +134,7 @@ export const darkYojimbo = (): EnemyDef => {
   return {
     id: DARK_YOJIMBO_ID,
     name: 'Dark Yojimbo',
-    spriteKey: 'yojimbo',
+    spriteKey: DARK_YOJIMBO_ID, // `characters/dark-yojimbo/`: not `yojimbo`, which is Yuna's own aeon (r50.1)
     slot: 0,
     stats,
     hp: stats.hp,
@@ -142,7 +142,7 @@ export const darkYojimbo = (): EnemyDef => {
     affinities: {},
     immunities: immunities(),
     immunityFlags: [...FLAGS],
-    forms: [{ name: 'Dark Yojimbo', spriteKey: 'yojimbo', hp: stats.hp }],
+    forms: [{ name: 'Dark Yojimbo', spriteKey: DARK_YOJIMBO_ID, hp: stats.hp }],
     aiScriptId: DARK_YOJIMBO_SCRIPT,
     rewards: rewards('yojimbo'),
     abilityIds: [DARK_ZANMATO_ID, DARK_KOZUKA_ID, DARK_WAKIZASHI_ID, DARK_WAKIZASHI_ALL_ID, DARK_DAIGORO_ORDER_ID],

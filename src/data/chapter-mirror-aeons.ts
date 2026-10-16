@@ -4,7 +4,7 @@
  * Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters that would be so awesome. the most epic encounter ever!!!!!!!!!" and then "keep going full speed ahead, i'll go
  * with all of your recommendations i like the mirror match but make the difficulty appropriate not too easy not too hard". The driver's decisions: the chapter is FFX only, was built **hidden behind the typed word `yojimbo`**
  * (`../app/screens/frontend/yojimboDoor.ts`, which still opens it), and Bailey then ordered it live: "We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be
- * hidden. It needs to be done and complete end-to-end." (relayed by the driver, 2026-10-15). The art is **provisional** (the aeons' own paintings stand in for the Dark ones; two existing backdrops), the music existing cues
+ * hidden. It needs to be done and complete end-to-end." (relayed by the driver, 2026-10-15). The art is **provisional** (the Dark aeons draw their own Dark paintings since r50.1, `characters/dark-<name>/`; two existing backdrops), the music existing cues
  * by reference. The paper preflight is `docs/plans/ch-mirror-aeons-review.md`; the written sources `research/ffx-mirror-aeons.md`; the handoff `docs/handoff/ch-mirror-aeons.md`.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: the Dark Aeons (International and HD releases), the player's Yojimbo and Magus Sisters and CTB are FFX's. FFX-2's Yojimbo ("Tourist Trap") is another record.
