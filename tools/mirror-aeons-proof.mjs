@@ -329,7 +329,7 @@ try {
     const pairHp = async () => ((await state())?.enemyHp ?? {});
     const hpBefore = await pairHp();
     await page.keyboard.press('Enter');
-    const delta = await waitStart('the Delta Attack in the log', /delta/i, from, 25000);
+    const delta = await waitStart('the Delta Attack in the log', /^delta attack/i, from, 25000);
     if (delta) {
       await sleep(900);
       await shot('4-act-i-delta-attack-1');
