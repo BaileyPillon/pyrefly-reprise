@@ -65,7 +65,7 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
         'Keep an aeon in reserve for the next Mega Graviton, from either sister.',
       ],
     },
-    { t: 'list', label: 'Steal', items: ['Return Sphere (Cindy), Friend Sphere (Sandy), Teleport Sphere (Mindy)', 'Elixir (rare)'] },
+    { t: 'list', label: 'Steal', items: ['Friend Sphere (Sandy), Teleport Sphere (Mindy)', 'Elixir (rare)'] },
     { t: 'list', label: 'Drops', items: ['Dark Matter (common)', 'Master Sphere (rare)'] },
 
     { t: 'head', at: ['dark-yojimbo'], title: 'Dark Yojimbo', tag: 'Boss Battle' },

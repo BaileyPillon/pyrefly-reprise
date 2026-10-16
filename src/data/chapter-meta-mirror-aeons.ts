@@ -38,7 +38,7 @@ export const MIRROR_AEONS_META: ChapterMeta = {
   tip: "Two sisters, no joint attack, and every fallen member costs a Phoenix Down: heal early, and use spells on Mindy, whom no blade can find. In the cavern, Cheer first and call Yuna's Yojimbo in before his blade is full.",
   snapshots: [
     { image: `backdrops/${MIRROR_ACT_I_PLATE}.png`, caption: 'the road' },
-    { image: 'characters/cindy/idle.png', caption: 'three in the wrong colours' },
+    { image: 'characters/cindy/idle.png', caption: 'two in the wrong colours' },
     { image: 'characters/yojimbo/idle.png', caption: 'the blade below' },
   ],
   focalCharacterId: 'yuna',

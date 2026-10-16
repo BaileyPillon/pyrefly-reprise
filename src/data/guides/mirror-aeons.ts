@@ -37,8 +37,8 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §4.1, §4.2; jegged-encounter-guides-ffx-b',
     },
     {
-      text: 'Blades for Cindy and Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Quick Hit gets the most blows in.',
-      short: 'Blades for Cindy, spells for Mindy',
+      text: 'Blades for Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Quick Hit gets the most blows in.',
+      short: 'Blades for Sandy, spells for Mindy',
       cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2, §4.2',
     },
     {
@@ -60,7 +60,7 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
 
   hints: [
     { when: { kinds: ['summon'] }, text: 'Send {target} in: the next big move lands on it, not on the party, and it keeps the party off the floor', cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §5.1' },
-    { when: { kinds: ['attack'], targetId: MINDY }, text: 'A blade almost never finds Mindy (her Evasion is the highest of the three): use a spell, an Overdrive or an aeon on her, and keep the blades for Cindy and Sandy', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
+    { when: { kinds: ['attack'], targetId: MINDY }, text: 'A blade almost never finds Mindy (her Evasion is the highest of the three): use a spell, an Overdrive or an aeon on her, and keep the blades for Sandy', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Ultima', 'Flare', 'Thundaga', 'Firaga', 'Blizzaga', 'Waterga'] }, text: 'A spell never misses: {actor} aims it at Mindy first, the sister a blade cannot touch, and her Magic Defense is lower than her Defense', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { kinds: ['attack'], targetId: SANDY }, text: 'Sandy hits hard, and her plain blow can Petrify: keep Ribbon or Stoneproof on someone', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { kinds: ['attack'], targetId: CINDY }, text: 'Cindy never dodges, so a blade always lands on her: the surest target, and the biggest pool. Keep the potions ready for her Camisade', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
