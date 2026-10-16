@@ -5,7 +5,7 @@ combat-core types, the presenter's summon beat, a scene row and the board's door
 chapter's code, by the sub-agent building it for the release driver. One piece of code predates it: the Chapter III pin (`tests/unit/chapters/last-summoning-iii-pin.test.ts`), recorded first on purpose.
 
 **Authority.** Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters ... the most epic encounter ever!!!!!!!!!" and "I'll go with all your
-recommendations I like the last summoning". The approved design is concept 2 of `D:/Tools/pyrefly-scratch/2026-10-15/aeons-chapter/concepts.md` (§3); the approved target for the new screen is its
+recommendations I like the last summoning". The approved design is concept 2 of `aeons-chapter/concepts.md` (the concepts note of 2026-10-15, kept outside the repository) (§3); the approved target for the new screen is its
 `frame-2b-offering-menu.png` (a new screen whose target was approved through Bailey's delegated pick). Chapter III itself stays **unchanged** (D-651). The driver's later decisions: `public/art` stays on
 r49 in this tree (so new paintings, if any, go into the r50 mirror as new files and this tree shows their fallback), and the final art frames are taken later in a tree that points at r50.
 

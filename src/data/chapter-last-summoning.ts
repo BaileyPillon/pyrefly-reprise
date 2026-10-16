@@ -2,7 +2,7 @@
  * **The Last Summoning**: a NEW, HIDDEN FFX chapter (branch `ch-last-summoning`, built 2026-10-15; hidden chapter number 28): Dream's End as a gauntlet whose order the player picks, with the full roster of aeons.
  *
  * Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters ... the most epic encounter ever!!!!!!!!!" and "I'll go with all your recommendations I like the last
- * summoning". The design is concept 2 of `D:/Tools/pyrefly-scratch/2026-10-15/aeons-chapter/concepts.md` (section 3) and its offering screen the approved target `frame-2b-offering-menu.png`. The driver's decisions: the
+ * summoning". The design is concept 2 of `aeons-chapter/concepts.md` (the concepts note of 2026-10-15, kept outside the repository) (section 3) and its offering screen the approved target `frame-2b-offering-menu.png`. The driver's decisions: the
  * chapter ships **hidden behind the typed word `summon`**, hidden chapter **number 28** (27 is the Dark Mirror lane's, word `yojimbo`), Chapter III itself stays **unchanged** (D-651), listing it on the board
  * waits for Bailey's word, no painting is new (the possessed aeons are the player's own paintings, as Dream's End presents them), the music is existing cues by reference. The paper preflight is
  * `docs/plans/ch-last-summoning-review.md`; the handoff `docs/handoff/ch-last-summoning.md`.
