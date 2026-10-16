@@ -30,7 +30,8 @@ import { isTargetable, validTargetIds } from '../../src/battle/ffx2/targeting.ts
 import { runDeathEntries } from '../../src/battle/ffx2/engineHooks.ts';
 import { applyStat } from '../../src/battle/ffx2/adapt/stat-setter.ts';
 import { DEATH_PATTERN_OF_ROW, deathPatternOf, leavesOnDeath } from '../../src/battle/ffx2/adapt/death-patterns.ts';
-import { GROUP_OWN, StatId, chrMonster } from '../../src/battle/ffx2/kernel/stat-setter.ts';
+import { GROUP_OWN, StatId, chrMonster, storedValue } from '../../src/battle/ffx2/kernel/stat-setter.ts';
+import { ATTACK_TRACK, DEFENSE_TRACK, UPGRADE_LEVELS } from '../../src/data/ffx2/enemies/experiment-levels.ts';
 import { ACTION_TIME_ALL_FFX2 } from '../../src/battle/ffx2/action-time.ts';
 import { ENEMY_GROUPS, ENEMY_GROUPS_BY_ID } from '../../src/data/ffx2/enemies/index.ts';
 import { farplaneBuild } from '../../src/data/ffx2/builds/farplane.ts';
@@ -425,6 +426,19 @@ describe('the existence flag (stat 224): which monsters leave the battle-end eva
     // the two packages with no engine unit: the inert second Shuyin (out of the battle, existence and cursor off) and the Experiment's parts
     expect(clears('m293') && clears('m195')).toBe(true);
     expect((usage.packages['m293'] ?? []).some(([, , , id, v]) => id === StatId.inBattle && v === 0)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------------------
+describe('ids 11 to 14: the stat tracks of the Experiment body are what its init writes, through the clamp of the setter (a 0 is stored as 1)', () => {
+  it('the five Attack levels write Strength 112, 130, 155, 180, 215 and Magic 0, 20, 45, 72, 100; the five Defense levels write Vitality and Spirit 0, 50, 100, 150, 205', () => {
+    const writes = (id: number): number[] => (usage.packages['m194'] ?? []).filter(([w, fn, , i]) => w === 0 && fn === 0 && i === id).map(([, , , , v]) => v as number);
+    const stored = (id: number): number[] => writes(id).map((v) => storedValue('clamp1', v));
+    expect(stored(StatId.str)).toEqual(UPGRADE_LEVELS.map((level) => ATTACK_TRACK[level].str));
+    expect(stored(StatId.mag)).toEqual(UPGRADE_LEVELS.map((level) => ATTACK_TRACK[level].mag));
+    expect(stored(StatId.vit)).toEqual(UPGRADE_LEVELS.map((level) => DEFENSE_TRACK[level].def));
+    expect(stored(StatId.spirit)).toEqual(UPGRADE_LEVELS.map((level) => DEFENSE_TRACK[level].mdef));
+    expect(writes(StatId.mag)[0]).toBe(0); // the script writes 0, the setter stores 1: the data already says 1
   });
 });
 
