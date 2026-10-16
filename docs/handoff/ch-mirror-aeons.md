@@ -178,7 +178,26 @@ survives a cleanse row's KO (the order of the cleanse and the death check inside
 
 ## 8. Browser proof
 
-(Filled in at the end of the pass: the real-key proof on a production build, desktop and phone.)
+**The proof tool** is `tools/mirror-aeons-proof.mjs` (headless Playwright, real keys at every menu, the advisor's line between them; never the Chrome extension or the built-in pane), run against one production build of the final source
+(`BASE_PATH=/`, `vite preview`). `--scenario full` plays the whole chapter and `--scenario retry` loses Act II on purpose. Every check is printed as `check.<name>`; the exit code is 1 on a failed one. **Three runs on the final build, all exit 0:**
+
+| Run | Viewport | Result |
+|---|---|---|
+| `--scenario full`, seed 2 | desktop 1600 x 900 | **29 of 29 checks**; best time 2:46, one attempt, the clear recorded |
+| `--scenario full`, seed 2 | phone 390 x 844, touch | **29 of 29 checks**; the same run on the phone's layout |
+| `--scenario retry`, seed 5 | desktop | **22 of 22 checks**: Act II lost on purpose, the results screen reads Defeat, RETRY re-opens Act II on Dark Yojimbo and his dog with a whole party and whole aeons |
+
+**What the full run proves** (each is a check): the board has nineteen cards and reads "of 19"; the cursor reaches the chapter's card with the arrow keys; party prep opens from Enter; the intro plays first (the pre scene, eight lines on the road);
+Act I is the pair with both gauges at 0 and the party whole; Yuna's Summon list holds Yojimbo and Cindy beside the five aeons; **Yuna calls the Sisters with the keys** and all three stand on the field; a Sister's menu has **Combine lit** beside
+Dismiss; **the Combine plays the Delta Attack** (Cindy throws it, the pair is hurt); Act I is won and **the seam plays** with the road's HUD fully off the screen behind the white-out and back whole after the cut; **Act II opens on a whole party and
+whole aeons** (the heal; the gil and the compatibility carried); Dark Yojimbo and his dog are the enemies; the keys take over when his blade is filled; **Yuna calls Yojimbo with the keys, sees the Pay ladder (Pay 1,000, 10,000, 100,000, 1,000,000,
+Pay all) and pays 100,000 from it: the party's gil goes down by exactly 100,000**; a Dark Zanmato lands on the aeon (named on the top bar while it plays); Act II is won and the post scene plays in the cavern; the results read CLEARED / Victory /
+NEW BEST and lead back to the board; the board then shows the card's ribbon, the best time and "1 of 19", and the save holds the record under the chapter's id; no console errors and no 4xx or 5xx responses.
+
+**Notes.** (1) A run can lose, because the chapter is a fight (the bench puts the advisor's line at about three runs in four): two earlier runs lost Act I or Act II and the tool was run again on another seed; the runs above are the ones on the final build.
+(2) The tool takes the keys at a blade of 76 and calls Yojimbo at Yuna's first menu from there; waiting for 88 (the advisor's own line) lost a party on a phone run, and 66 sent the aeon in so early it was struck down before the blow. (3) **Frames** (desktop,
+phone and the retry) are in `docs/screenshots/ch-mirror-aeons/`: the card, party prep, the intro, Act I's first menu, the summon list, the Sisters' Combine, the Delta Attack, the seam (four of its twelve), Act II's first menu, the Pay ladder, the Dark
+Zanmato, the post scene, the results, the board with the ribbon, and the retry's defeat and re-opened Act II. (4) The phone shows the Pay ladder as a two-column grid, with the amount of the highlighted row in the help line under it.
 
 ## 9. Open items and questions
 
