@@ -267,57 +267,101 @@ export const lateGarmentGrids: GarmentGridDef[] = [
     citation: 'ffx2-combat-core.md §2.4, §4.3 [verified: 2 sources]',
   },
   {
+    // Gate effects added from the game's plate row 44 (re-parity RC9 follow-up D1; FFX2-G09 §4.2 conditions, §4.3 plates 34 to 45 "one ability at every gate"; research/re-ffx2-dressphere.md D10; row 0x602c):
+    // Magic +15 on each of the conditions 1 to 4 (ability 0x808b, so it pays per gate crossed) and the White Magic wait-down on condition 100 (every gate crossed, ability 0x8081): the pairs Black Tabard's row
+    // pays for Black Magic. The wait-down is its own entry on all four colours, tagged with the existing 'wait-down' auto-ability tag, which the adapter reads as the engine's -40% CT (on every cast of the girl:
+    // `atb-engine.ts#castTime`, the engine's documented approximation, the same one Tricks of the Trade's tags get); it is not folded into the per-gate entry as the +15 grids above do in their description,
+    // because that entry would switch it on after the first gate. Not added (Rule 6): the row's always-on pair, the White Magic command (0x3024): no ability id of ours is provable from the row.
     id: 'white-signet',
     name: 'White Signet',
     nodeCount: 6,
     gateColours: ['red', 'green', 'blue', 'yellow'],
-    gateEffects: [],
+    gateEffects: [
+      {
+        gates: ['red', 'green', 'blue', 'yellow'],
+        effect: { description: 'MAG +15 per gate passed', statBonus: { mag: 15 }, perGatePassed: true },
+      },
+      {
+        gates: ['red', 'green', 'blue', 'yellow'],
+        effect: { description: 'White Magic wait down', autoAbilityTags: ['white-magic-wait-down'] },
+      },
+    ],
     obtained: 'A 6-node SDSP host, included for completeness [ids.ts note].',
-    citation: 'ffx2-combat-core.md §3.15 (SIX_NODE_GRID_IDS) [single source] — full gate table not published',
+    citation:
+      'ffx2-combat-core.md §3.15 (SIX_NODE_GRID_IDS) [single source]; gate effects from the game\'s plate row 44, FFX2-G09 §4.2, §4.3 and re-ffx2-dressphere.md D10 [verified: the game\'s own files]',
   },
   {
+    // Corrected from the game's plate row 39 and card 39 (follow-up D1; FFX2-G09 §4.1 shape 6 dressphere nodes + 4 gate nodes, §4.3 plates 34 to 45; row 0x6027): 6 nodes (the data said 4); Luck +30 always on
+    // (the row's Luck byte) and Luck +30 on each of the conditions 1 to 4 (ability 0x8094, one ability at every gate, so it pays per gate crossed). The four effects the data listed (Luck +30 on red, Dismissal,
+    // Butterfingers, Evasion +50; research/ffx2-vegnagun-shuyin.md §6.6) are not in the row and are removed [data fact: the row's eight pairs]. All four gates pay the same, so their colours are labels no number depends on.
     id: 'ray-of-hope',
     name: 'Ray of Hope',
-    nodeCount: 4,
+    nodeCount: 6,
     gateColours: ['red', 'green', 'blue', 'yellow'],
+    equip: { description: 'LUCK +30', statBonus: { luck: 30 } },
     gateEffects: [
-      { gates: ['red'], effect: { description: 'LUCK +30', statBonus: {} } },
-      { gates: ['green'], effect: { description: 'Dismissal', autoAbilityTags: ['dismissal'] } },
-      { gates: ['blue'], effect: { description: 'Butterfingers', autoAbilityTags: ['butterfingers'] } },
-      { gates: ['yellow'], effect: { description: 'Evasion +50', autoAbilityTags: ['evasion-up'] } },
+      {
+        gates: ['red', 'green', 'blue', 'yellow'],
+        effect: { description: 'LUCK +30 per gate passed', statBonus: { luck: 30 }, perGatePassed: true },
+      },
     ],
-    obtained: 'Per-gate stat/status bonus grid; used in the Hero Drink farm [ffx2-vegnagun-shuyin §6.6].',
-    citation: 'ffx2-vegnagun-shuyin.md §6.6 [single source]',
+    obtained: 'Per-gate stat bonus grid; used in the Hero Drink farm [ffx2-vegnagun-shuyin §6.6].',
+    citation:
+      'ffx2-vegnagun-shuyin.md §6.6 [single source]; nodes, equip and gate effects from the game\'s plate row 39, FFX2-G09 §4.1, §4.3 [verified: the game\'s own files]',
   },
   {
+    // Corrected from the game's plate row 35 and card 35 (follow-up D1; FFX2-G09 §4.1 shape 4 + 4, §4.3 plates 34 to 45; row 0x6023): 4 nodes (the data said 5); Magic +10 always on (kept) and Magic +15 on each of
+    // the conditions 1 to 4 (ability 0x808b: pays per gate crossed, as Stonehewn's Defense does). The data listed no gate effect. The four colours are labels (all four gates pay the same).
     id: 'seething-cauldron',
     name: 'Seething Cauldron',
-    nodeCount: 5,
+    nodeCount: 4,
     gateColours: ['red', 'green', 'blue', 'yellow'],
-    equip: { description: 'Raises Magic', statBonus: { mag: 10 } },
-    gateEffects: [],
+    equip: { description: 'MAG +10', statBonus: { mag: 10 } },
+    gateEffects: [
+      {
+        gates: ['red', 'green', 'blue', 'yellow'],
+        effect: { description: 'MAG +15 per gate passed', statBonus: { mag: 15 }, perGatePassed: true },
+      },
+    ],
     obtained: 'Ch.2, Moonflow, "YRP, the Scalpers Three".',
-    citation: 'ffx2-bahamut.md §4.5 [single source] — full gate table not published',
+    citation:
+      'ffx2-bahamut.md §4.5 [single source]; nodes and gate effects from the game\'s plate row 35, FFX2-G09 §4.1, §4.3 [verified: the game\'s own files]',
   },
   {
+    // Corrected from the game's plate row 34 and card 34 (follow-up D1; FFX2-G09 §4.1 shape 4 + 4, §4.3 plates 34 to 45; row 0x6022): 4 nodes (the data said 5); Strength +10 always on (kept) and Strength +15 on each of
+    // the conditions 1 to 4 (ability 0x808a: pays per gate crossed). The data listed no gate effect. The four colours are labels (all four gates pay the same).
     id: 'strength-of-one',
     name: 'Strength of One',
-    nodeCount: 5,
+    nodeCount: 4,
     gateColours: ['red', 'green', 'blue', 'yellow'],
-    equip: { description: 'Per-gate stat bonus allocated to every gate [ids.ts note].', statBonus: { str: 10 } },
-    gateEffects: [],
+    equip: { description: 'STR +10', statBonus: { str: 10 } },
+    gateEffects: [
+      {
+        gates: ['red', 'green', 'blue', 'yellow'],
+        effect: { description: 'STR +15 per gate passed', statBonus: { str: 15 }, perGatePassed: true },
+      },
+    ],
     obtained: 'Calm Lands Ruins chocobo dispatch (random), alongside Mounted Assault.',
-    citation: 'ffx2-bahamut.md §4.5 [single source] — full gate table not published',
+    citation:
+      'ffx2-bahamut.md §4.5 [single source]; nodes and gate effects from the game\'s plate row 34, FFX2-G09 §4.1, §4.3 [verified: the game\'s own files]',
   },
   {
+    // Corrected from the game's plate row 38 and card 38 (follow-up D1; FFX2-G09 §4.1 shape 4 + 4, §4.3 plates 34 to 45; row 0x6026): the always-on effect is Agility +5 (the row's Agility byte; the data said Magic +10)
+    // and Agility +5 on each of the conditions 1 to 4 (ability 0x8093: pays per gate crossed). The data listed no gate effect. Nodes (4) were right. The four colours are labels (all four gates pay the same).
     id: 'howling-wind',
     name: 'Howling Wind',
     nodeCount: 4,
     gateColours: ['red', 'green', 'blue', 'yellow'],
-    equip: { description: 'Per-gate stat bonus allocated to every gate [ids.ts note].', statBonus: { mag: 10 } },
-    gateEffects: [],
+    equip: { description: 'AGI +5', statBonus: { agi: 5 } },
+    gateEffects: [
+      {
+        gates: ['red', 'green', 'blue', 'yellow'],
+        effect: { description: 'AGI +5 per gate passed', statBonus: { agi: 5 }, perGatePassed: true },
+      },
+    ],
     obtained: 'Ch.3, uncommon field find.',
-    citation: 'ids.ts [single source] — full gate table not published',
+    citation:
+      'ids.ts [single source]; equip and gate effects from the game\'s plate row 38, FFX2-G09 §4.1, §4.3 [verified: the game\'s own files]',
   },
   {
     // Chapter XIII's sourced kit option only (docs/plans/trema-winnability-method-check.md S2); no

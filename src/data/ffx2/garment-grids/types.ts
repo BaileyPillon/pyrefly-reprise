@@ -13,12 +13,17 @@
 import type { AbilityId, ElementId, GateColour } from '../../../battle/common/types.ts';
 import type { GarmentGridId } from '../ids.ts';
 
-/** A stat bonus a Grid's equip or gate effect grants. */
+/**
+ * A stat bonus a Grid's equip or gate effect grants. `agi` and `luck` are the plate rows' Agility and Luck bytes (Howling Wind pays Agility +5, Ray of Hope Luck +30:
+ * `FFX2-G09` §4.3 and the game's plate rows 38 and 39, `docs/handoff/re-parity-rc9-x2-grids.md` follow-up D1); the engine's adapter copies every numeric key into the girl's stat block.
+ */
 export interface GarmentGridStatBonus {
   str?: number;
   mag?: number;
   def?: number;
   mdef?: number;
+  agi?: number;
+  luck?: number;
 }
 
 /** One effect (equip-level or gate-level) a Grid can grant. */

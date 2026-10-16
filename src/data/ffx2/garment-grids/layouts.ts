@@ -1,5 +1,5 @@
 /**
- * FFX-2 Garment Grid layouts: the nodes, the links and the gate numbers of the grids our data covers (re-parity RC9, lane X2-I).
+ * FFX-2 Garment Grid layouts: the nodes, the links and the gate numbers of all 44 grids our data holds (re-parity RC9, lane X2-I, and its follow-up D1).
  * **Game case: FFX-2 only** (FFX has no garment grids). Numbers only, in our grid ids: no game text, no copied file.
  *
  * Source: the game's own plain grid cards (`menu/resdat00..63.bin` of Steam build 25501027, SHA-256 6EA7F142...CD69), one card per grid, read in
@@ -15,15 +15,18 @@
  * - `colourOfGate`: which of the grid's colours the gate with number 1, 2, 3, 4 wears in our data (null: the grid has no such gate). **This is not one mapping
  *   for all grids and it is not the inferred 1 = red, 2 = green, 3 = yellow, 4 = blue** (the artwork look that would confirm that has not been done). Each table
  *   is the one under which that grid's own existing colour-keyed data pays what the game's plate row pays at the same gate number
- *   (`tests/unit/ffx2-grid-layout-data.test.ts` proves it, grid by grid and for every set of gates crossed). On 17 grids (two of them have no gate) that leaves one
+ *   (`tests/unit/ffx2-grid-layout-data.test.ts` proves it, grid by grid and for every set of gates crossed). Of the first lane's 39 grids, on 17 (two of them have no gate) that leaves one
  *   table; on the other 22 the data cannot tell (every gate pays the same, two colours only ever come together, or a stat is paid by a pair), several tables pay the
  *   same, and the one closest to the common colours was taken: a label, no number depends on which. The five older stat grids (`vanguard`, `bum-rush`,
  *   `flash-of-steel`, `protection-halo`, `hour-of-need`) have red and yellow on the physical stat and blue and green on the magical one in today's data, and the
  *   game pays the physical stat at the numbers 3 and 4, so their tables read blue, green, yellow, red. The colour flip (it waits for the artwork look) replaces
  *   those five tables with the common colours and swaps red and blue in those five grids' `gateEffects`; nothing else changes.
  *
- * Left out, listed in `docs/handoff/re-parity-rc9-x2-grids.md`: five grids whose data disagree with the cards (`healing-wind`, `ray-of-hope`,
- * `seething-cauldron`, `strength-of-one`, `howling-wind`: node count, gate set or effects). They keep the ring estimate; no data was corrected.
+ * All 44 of the data's grids are here. The first lane laid out 39 of them and left five out, because their data disagreed with the cards (`healing-wind`, `ray-of-hope`,
+ * `seething-cauldron`, `strength-of-one`, `howling-wind`: node count, gate set or effects). Follow-up D1 (2026-10-16) corrected those five grids' data and `white-signet`'s gate effects
+ * from the game's plate rows (the comments in `early.ts` and `late.ts`; "Follow-up D1" in `docs/handoff/re-parity-rc9-x2-grids.md`) and added their layouts. The tables of these five are
+ * labels, like the 22 above (the colour a gate wears was never in the data they were corrected to): the four whose four gates pay the same read red, green, yellow, blue; Healing Wind,
+ * whose card has the gates 1 and 4 only, keeps the data's red and blue, as Heart Reborn and Covetous (also the gates 1 and 4) read.
  */
 
 import type { GarmentGridLayout } from './types.ts';
@@ -143,6 +146,12 @@ export const GARMENT_GRID_LAYOUTS: Readonly<Record<string, GarmentGridLayout>> =
     nodes: [[4, 184, 224], [3, 56, 224], [0, 88, 160], [0, 120, 128], [0, 120, 192], [0, 152, 160], [1, 184, 96], [2, 56, 96], [0, 120, 160]],
     links: [[1, 2], [0, 4], [1, 4], [0, 5], [5, 6], [3, 6], [3, 7], [2, 7], [5, 8], [2, 8], [3, 8], [4, 8]],
   },
+  'healing-wind': {
+    plate: 29,
+    colourOfGate: ['red', null, null, 'blue'],
+    nodes: [[0, 167, 96], [1, 196, 184], [0, 120, 240], [4, 44, 184], [0, 73, 96]],
+    links: [[0, 1], [1, 2], [2, 3], [3, 4], [0, 4]],
+  },
   'heart-reborn': {
     plate: 30,
     colourOfGate: ['red', null, null, 'blue'],
@@ -161,6 +170,18 @@ export const GARMENT_GRID_LAYOUTS: Readonly<Record<string, GarmentGridLayout>> =
     nodes: [[0, 120, 160], [3, 160, 160], [2, 80, 160], [0, 200, 160], [1, 120, 240], [0, 40, 160], [0, 120, 80]],
     links: [[0, 1], [0, 2], [3, 4], [4, 5], [5, 6], [3, 6], [1, 3], [2, 5], [0, 6]],
   },
+  'strength-of-one': {
+    plate: 34,
+    colourOfGate: ['red', 'green', 'yellow', 'blue'],
+    nodes: [[4, 144, 160], [0, 176, 216], [3, 120, 184], [0, 64, 216], [2, 96, 160], [0, 64, 104], [1, 120, 136], [0, 176, 104]],
+    links: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [0, 7]],
+  },
+  'seething-cauldron': {
+    plate: 35,
+    colourOfGate: ['red', 'green', 'yellow', 'blue'],
+    nodes: [[4, 144, 160], [0, 176, 216], [3, 120, 184], [0, 64, 216], [2, 96, 160], [0, 64, 104], [1, 120, 136], [0, 176, 104]],
+    links: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [0, 7]],
+  },
   stonehewn: {
     plate: 36,
     colourOfGate: ['red', 'green', 'yellow', 'blue'],
@@ -172,6 +193,18 @@ export const GARMENT_GRID_LAYOUTS: Readonly<Record<string, GarmentGridLayout>> =
     colourOfGate: ['red', 'green', 'yellow', 'blue'],
     nodes: [[4, 144, 160], [0, 176, 216], [3, 120, 184], [0, 64, 216], [2, 96, 160], [0, 64, 104], [1, 120, 136], [0, 176, 104]],
     links: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [0, 7]],
+  },
+  'howling-wind': {
+    plate: 38,
+    colourOfGate: ['red', 'green', 'yellow', 'blue'],
+    nodes: [[4, 144, 160], [0, 176, 216], [3, 120, 184], [0, 64, 216], [2, 96, 160], [0, 64, 104], [1, 120, 136], [0, 176, 104]],
+    links: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [0, 7]],
+  },
+  'ray-of-hope': {
+    plate: 39,
+    colourOfGate: ['red', 'green', 'yellow', 'blue'],
+    nodes: [[1, 200, 128], [0, 120, 80], [2, 40, 128], [0, 136, 128], [4, 184, 224], [3, 56, 224], [0, 152, 160], [0, 120, 184], [0, 88, 160], [0, 104, 128]],
+    links: [[1, 3], [0, 6], [4, 7], [5, 7], [2, 8], [1, 9], [4, 6], [5, 8], [2, 9], [0, 3]],
   },
   'pride-of-the-sword': {
     plate: 40,

@@ -9,10 +9,13 @@ import { plateRow } from '../../../src/battle/ffx2/kernel/dressphere-grids.ts';
 import { abilityRow } from '../../../src/battle/ffx2/kernel/dressphere-rows.ts';
 import { kernelCheck } from './ffx2AtbAdapters.ts';
 
-export type Stats = { str: number; def: number; mag: number; mdef: number };
+export type Stats = { str: number; def: number; mag: number; mdef: number; agi: number; luck: number };
+/** The four stats most grids pay (the lane's first version proved only these). */
 export const KEYS = ['str', 'def', 'mag', 'mdef'] as const;
-/** Where the four stats the engine models sit in an `up_status` array: HP %, MP %, then STR, DEF, MAG, MDEF, AGI, ACC, EVA, LUCK. */
-export const UP_AT: Record<(typeof KEYS)[number], number> = { str: 2, def: 3, mag: 4, mdef: 5 };
+/** The six stats the data can carry for a grid: the four above and Agility (Howling Wind) and Luck (Ray of Hope); follow-up D1. The plate rows' other bytes (HP %, MP %, Accuracy, Evasion) are zero on all 64 rows. */
+export const ALL_KEYS = ['str', 'def', 'mag', 'mdef', 'agi', 'luck'] as const;
+/** Where those stats sit in an `up_status` array: HP %, MP %, then STR, DEF, MAG, MDEF, AGI, ACC, EVA, LUCK. */
+export const UP_AT: Record<(typeof ALL_KEYS)[number], number> = { str: 2, def: 3, mag: 4, mdef: 5, agi: 6, luck: 9 };
 
 /** One card as the fixture holds it: `nodes[i] = [gate, x, y]`, `links[k] = [a, b]`. */
 export interface Card {
@@ -33,7 +36,7 @@ export function cardOf(plate: number): Card {
 /** What the game's plate row pays when the gates in `crossed` have been crossed: the always-on bytes, plus every gate pair whose condition holds. */
 export function plateTotal(plate: number, crossed: ReadonlySet<number>, all: boolean): Stats {
   const row = plateRow(0x6000 + plate);
-  const total: Stats = { str: row.up[2], def: row.up[3], mag: row.up[4], mdef: row.up[5] };
+  const total: Stats = { str: row.up[2], def: row.up[3], mag: row.up[4], mdef: row.up[5], agi: row.up[6], luck: row.up[9] };
   const has = (k: number): boolean => crossed.has(k);
   for (const [cond, ability] of row.abilities) {
     let ok = cond === 0; // always on: the equip effect
@@ -44,7 +47,7 @@ export function plateTotal(plate: number, crossed: ReadonlySet<number>, all: boo
     else if (cond === 100) ok = all;
     if (!ok || ability >> 12 !== 8) continue; // only an auto-ability row carries stat bytes (the others are commands)
     const up = abilityRow(ability).up;
-    for (const k of KEYS) total[k] += up[UP_AT[k]] ?? 0;
+    for (const k of ALL_KEYS) total[k] += up[UP_AT[k]] ?? 0;
   }
   return total;
 }

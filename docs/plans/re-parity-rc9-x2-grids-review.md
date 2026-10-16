@@ -52,3 +52,5 @@ The flip (waits for the artwork look) is then exactly: replace those five tables
 1. A real girl on a hub grid (Vanguard, Protection Halo, Hour of Need): the menu offers the hub and the through-a-gate dresses, never a dress the game does not join to her node.
 2. The party-prep strip and the pause screen are unchanged (they read the data's node count and colours, not the layout).
 3. Whether the colour a gate is shown with on the five stat grids is the one the artwork shows (the open question the flip waits for).
+
+**Follow-up D1 (2026-10-16):** the five grids of the risk table above and White Signet's missing gate effects were corrected from the game's plate rows (decision D1, answered yes by the release driver under Bailey's standing "all your recommendations"), so all 44 data grids have a layout and none keeps the ring estimate; the table row above is the state of the first commit. See `docs/handoff/re-parity-rc9-x2-grids.md` section 10.

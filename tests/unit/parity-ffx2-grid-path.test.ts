@@ -276,8 +276,8 @@ describe('the commit of a move (exe 0x005f51a0) and the gate abilities it re-eva
 describe('the shipped layouts (src/data/ffx2/garment-grids/layouts.ts) are the cards', () => {
   const entries = Object.entries(GARMENT_GRID_LAYOUTS);
 
-  it('covers 39 grids, one plate each, and every one equals the card of its plate: the same nodes, positions and links', () => {
-    expect(entries).toHaveLength(39);
+  it('covers 44 grids (all the data holds), one plate each, and every one equals the card of its plate: the same nodes, positions and links', () => {
+    expect(entries).toHaveLength(44);
     const plates = new Set<number>();
     for (const [id, layout] of entries) {
       expect(plates.has(layout.plate), `${id}: plate ${layout.plate} used twice`).toBe(false);
