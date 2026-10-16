@@ -95,7 +95,7 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
       text: 'The Sisters have nothing built to do until all three gauges are full: send them away and call them again with a Grand Summon, which arrives full',
       cite: 'ffx-combat-core §6.2; re-ffx-last-summoning §5; re-ffx-yojimbo-sisters-feasibility §6',
     },
-    // ---- the Sisters' fight (the tactic's focus: the Sister with the least HP)
+    // ---- the Sisters' fight (the tactic's focus: Cindy while she stands, then the Sister with the least HP)
     sisterHint('possessed-cindy'),
     sisterHint('possessed-sandy'),
     sisterHint('possessed-mindy'),

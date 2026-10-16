@@ -82,7 +82,7 @@ const flagNumber = (engine: BattleEngine, key: string): number => {
   return typeof v === 'number' ? v : 0;
 };
 
-/** The foe an aeon should hit: the Sister with the least HP in the Sisters' fight, else the first enemy standing that is not a Pagoda. */
+/** The foe an aeon should hit: in the Sisters' fight Cindy while she stands, then the Sister with the least HP ({@link sisterToFell}), else the first enemy standing that is not a Pagoda. */
 function foeFor(engine: BattleEngine): FFXCombatant | undefined {
   const sisters = standingSisters(engine);
   if (sisters.length > 0) return sisterToFell(sisters);

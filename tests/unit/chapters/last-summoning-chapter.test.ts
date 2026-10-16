@@ -367,7 +367,7 @@ describe('the card and the document: cited, in the corpus form, and tied to the 
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- the advisor
 
-describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Sisters’ Combine, the weakest Sister, and an aeon when Yuna is free', () => {
+describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Sisters’ Combine, Cindy first in the Sisters’ fight, and an aeon when Yuna is free', () => {
   it('pays Yojimbo the smallest power of two that reaches a motivation of 63, or the largest the purse allows', () => {
     expect(SURE_WAKIZASHI).toBe(63);
     // compatibility 128: 12 from the compatibility, so 51 must come from 4n: n = 13, paid = 2^15
