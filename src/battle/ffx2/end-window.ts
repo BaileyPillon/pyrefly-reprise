@@ -16,6 +16,7 @@
 
 import type { BattleState } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
+import { END_WINDOW_FLAG } from './end-flag.ts';
 import { EndCallee, EndPhase, commitStep, newEndMachine, type EndMachine } from './kernel/battle-end-commit.ts';
 import { evaluateEnd, inFlightSides, newEndBuffers, queuedWork, runningWork } from './adapt/battle-end.ts';
 
@@ -112,8 +113,12 @@ export class EndWindow {
       const sides = inFlightSides(env.units);
       this.stats.inFlight.party += sides.party;
       this.stats.inFlight.enemy += sides.enemy;
+      env.state.flags[END_WINDOW_FLAG] = true; // the HUD reads it (`end-flag.ts`): the end is decided though the result is not built yet
     }
-    if (before === EndPhase.Draining && m.phase === EndPhase.Running) this.stats.lapsed += 1;
+    if (before === EndPhase.Draining && m.phase === EndPhase.Running) {
+      this.stats.lapsed += 1;
+      delete env.state.flags[END_WINDOW_FLAG]; // a revive landed inside the window: the fight goes on
+    }
     if (m.phase >= EndPhase.Commit && m.phase < 0x80) {
       this.stats.committed += 1;
       const waited = Math.max(0, env.ticks - this.openedAt);
