@@ -283,13 +283,42 @@ try {
   log('state.sisters-out', { aeonId: sisters.aeonId, aeonIds: sisters.aeonIds, gauges: Object.fromEntries(['cindy', 'sandy', 'mindy'].map((id) => [id, sisters.aeons[id]?.[3] ?? null])) });
   check('all three Sisters stand on the field as one summon', JSON.stringify(sisters.aeonIds) === JSON.stringify(['cindy', 'sandy', 'mindy']), sisters.aeonIds);
   // The HUD folds a Sister's orders into one Aeon group beside Dismiss: open it, read every order, put the cursor on Combine powers.
-  const menu = await rowsText();
+  let menu = await rowsText();
   log('menu.sister', menu);
   let orders = menu;
   if (menu.some((t) => /^aeon/i.test(t)) && (await pickRow(/^aeon/i))) {
     await page.waitForTimeout(500);
     orders = await collectRows();
     log('menu.sister.orders', orders);
+  }
+  // RE's follow-up (4256d209a) carries out all eight orders: take an ordinary one with the keys first, watch the turn play out and the next menu open, then come back to Combine powers.
+  const sampleLabel = orders.find((t) => !/combine|greyed|^dismiss/i.test(t));
+  if (sampleLabel) {
+    const fromO = await logLen();
+    const esc = sampleLabel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pickedO = await pickRow(new RegExp(`^${esc}$`, 'i'));
+    const orderStart = await waitFor('a Sister order in the log', async () => (await startsSince(fromO)).find((x) => ['cindy', 'sandy', 'mindy'].includes(x.actor)) ?? false, { ms: 25000, pollMs: 60 }).catch(() => null);
+    await sleep(3500);
+    const orderStarts = await startsSince(fromO);
+    log('order.sample', { label: sampleLabel, starts: orderStarts });
+    check(`a Sister's ordinary order ("${sampleLabel}") is taken with the keys and plays out`, pickedO && !!orderStart, { label: sampleLabel, starts: orderStarts });
+    await shot('3a-act-i-sisters-order-played');
+    // the next Sister's turn: pass the party's turns with Defend until a menu with the Aeon group is up, open it again
+    for (let guard = 0; guard < 8; guard++) {
+      await waitBattleMenu(page, 60000).catch(() => null);
+      menu = await rowsText();
+      if (menu.some((t) => /^aeon/i.test(t))) break;
+      await passTurn();
+      await page.waitForTimeout(1800);
+    }
+    log('menu.sister.again', menu);
+    orders = menu;
+    if (menu.some((t) => /^aeon/i.test(t)) && (await pickRow(/^aeon/i))) {
+      await page.waitForTimeout(500);
+      orders = await collectRows();
+      log('menu.sister.orders.again', orders);
+    }
+    check('the next Sister\'s menu opened after the order (the turn passed on)', menu.some((t) => /^aeon/i.test(t)), menu);
   }
   const combineLit = orders.some((t) => /combine/i.test(t) && !/greyed/.test(t));
   check("a Sister's menu has Combine powers lit, and Dismiss beside the Aeon group", combineLit && menu.some((t) => /^dismiss/i.test(t)), { menu, orders });
