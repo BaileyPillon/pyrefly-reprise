@@ -5,7 +5,11 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { Command, FFXCombatant } from '../../../src/battle/common/types.ts';
+import type { BattleSetup, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
+import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
+import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
+import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
+import { SISTERS_START_GAUGE, mirrorAeonsBuild } from '../../../src/data/ffx/builds/mirror-aeons.ts';
 import { DARK_BATTLE_ID_FLAG, DARK_GAUGE_PER_TURN_FLAG } from '../../../src/battle/ffx/ai/dark-aeons-seams.ts';
 import { mirrorAeonsScripts } from '../../../src/story/scripts/mirror-aeons.ts';
 import { MIRROR_ACT_II_GROUP, MIRROR_SEAM, YOJIMBO_TIERS, sistersGroupId, yojimboGroupId } from '../../../src/data/ffx/mirror-aeons-ids.ts';
@@ -89,25 +93,122 @@ describe('Act II opens as the files say (the five tiers of Dark Yojimbo)', () =>
   });
 });
 
-describe("Yuna's optional aeons through the real summon command", () => {
-  for (const aeon of ['yojimbo', 'cindy', 'sandy', 'mindy']) {
-    it(`${aeon} is on the roster, offered by name, and arrives on the field`, () => {
-      const e = H.newEngine(2);
-      const input = yunaInput(e);
-      expect(input.actorId).toBe('yuna');
-      const row = input.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label.toLowerCase() === aeon);
-      expect(row, `${aeon} summon row`).toBeDefined();
-      e.submit({ ...row!.command, targets: [] } as Command);
-      expect(e.state().aeonId).toBe(aeon);
-      const a = H.actor(e, aeon);
-      expect(a.side).toBe('aeon');
-      expect(a.hp).toBeGreaterThan(0);
-    });
-  }
+describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the reverse-engineering session's lane FFX-K engine)", () => {
+  const summon = (e: ReturnType<typeof H.newEngine>, label: string): void => {
+    const row = yunaInput(e).commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === label);
+    expect(row, `${label} summon row`).toBeDefined();
+    e.submit({ ...row!.command, targets: [] } as Command);
+  };
 
-  it('the roster holds nine aeons: the five story aeons, Yojimbo and the three Sisters (Anima is left out)', () => {
+  it('the roster holds seven summons: the five story aeons, Yojimbo and the Sisters (one summon, offered as Cindy; Anima is left out)', () => {
     const names = yunaInput(H.newEngine(1)).commands.filter((c) => c.command.kind === 'summon').map((c) => c.label).sort();
-    expect(names).toEqual(['Bahamut', 'Cindy', 'Ifrit', 'Ixion', 'Mindy', 'Sandy', 'Shiva', 'Valefor', 'Yojimbo']);
+    expect(names).toEqual(['Bahamut', 'Cindy', 'Ifrit', 'Ixion', 'Shiva', 'Valefor', 'Yojimbo']);
+    expect(mirrorAeonsBuild.aeons.map((a) => a.id)).toHaveLength(9); // nine aeons in the build: the three Sisters are three rows of the one summon
+    expect(mirrorAeonsBuild.yojimbo).toEqual({ compatibility: 128, hireAnswer: 2 });
+    expect(Object.keys(mirrorAeonsBuild.sisters!.motivation).sort()).toEqual(['cindy', 'mindy', 'sandy']);
+  });
+
+  it('both are summonable in BOTH acts: the game bars nothing against the dark twins (RE note 9)', () => {
+    for (const group of [H.ACT_I_GROUP, H.ACT_II_GROUP]) {
+      const labels = yunaInput(H.newEngine(2, group)).commands.filter((c) => c.enabled && c.command.kind === 'summon').map((c) => c.label);
+      expect(labels, group).toEqual(expect.arrayContaining(['Yojimbo', 'Cindy']));
+    }
+  });
+
+  it('Yojimbo arrives with his own menu, Pay and Dismiss; a payment buys one of the roll\'s commands, is taken from the gil, and moves his compatibility', () => {
+    // Dark Yojimbo may act before the summoned aeon's first turn (and kill him): take the first seed on which Yojimbo's menu opens.
+    let e = H.newEngine(1, H.ACT_II_GROUP);
+    let d: H.Input | undefined;
+    for (let seed = 1; seed <= 20 && d?.actorId !== 'yojimbo'; seed++) {
+      e = H.newEngine(seed, H.ACT_II_GROUP);
+      summon(e, 'Yojimbo');
+      expect(e.state().aeonId).toBe('yojimbo');
+      d = nextInput(e);
+    }
+    if (d === undefined) throw new Error('no menu');
+    expect(d.actorId).toBe('yojimbo');
+    expect(d.commands.filter((c) => c.enabled).map((c) => c.label)).toEqual(['Pay', 'Dismiss']);
+    expect(H.flags(e)['yojimbo:gil']).toBe(1_500_000);
+    expect(H.flags(e)['yojimbo:compatibility']).toBe(128);
+    const pay = d.commands.find((c) => c.label === 'Pay')!;
+    const events = e.submit({ ...pay.command, targets: [], gilSpent: 100_000 } as Command);
+    const acted = events.filter((ev) => ev.type === 'action-start').map((ev) => (ev.type === 'action-start' ? ev.abilityId : ''));
+    expect(acted.some((id) => ['daigoro', 'kozuka', 'wakizashi-single', 'wakizashi-multi', 'zanmato'].includes(id ?? ''))).toBe(true);
+    expect(H.flags(e)['yojimbo:gil']).toBe(1_400_000);
+    expect(H.flags(e)['yojimbo:compatibility']).not.toBe(128);
+  });
+
+  it('the Sisters arrive as ONE summon of three: Cindy asks, all three take the field, and the first one\'s menu lights Combine powers because their gauges start full', () => {
+    const e = H.newEngine(2);
+    summon(e, 'Cindy');
+    expect(e.state().aeonId).toBe('cindy');
+    expect(e.state().aeonIds).toEqual(['cindy', 'sandy', 'mindy']);
+    for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, id).toBe(SISTERS_START_GAUGE);
+    const d = nextInput(e);
+    expect(['cindy', 'sandy', 'mindy']).toContain(d.actorId);
+    const combine = d.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'sister-order-combine');
+    expect(combine?.enabled).toBe(true);
+    expect(d.commands.some((c) => c.command.kind === 'dismiss' && c.enabled)).toBe(true);
+    const events = e.submit({ ...combine!.command, targets: [] } as Command);
+    expect(events.filter((ev) => ev.type === 'action-start').map((ev) => (ev.type === 'action-start' ? ev.abilityId : ''))).toContain('delta-attack');
+    for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, `${id} paid the bar`).toBe(0);
+  });
+
+  it('with the gauges empty their menu offers Dismiss and nothing else that works (the other seven orders are not built): the reason the preset starts them full', () => {
+    const party = structuredClone(mirrorAeonsBuild);
+    for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 0;
+    const e = H.newEngine(2, H.ACT_I_GROUP, party);
+    summon(e, 'Cindy');
+    const d = nextInput(e);
+    expect(d.commands.filter((c) => c.enabled).map((c) => c.command.kind)).toEqual(['dismiss']);
+  });
+});
+
+describe('the heal between the acts (the release driver\'s delegated pick: two separate fights in the game)', () => {
+  it('Act II opens on a whole party and whole aeons, a fallen aeon standing again; the gauges, the bag, the gil and Yojimbo\'s compatibility carry as Act I left them', () => {
+    const setup1 = H.setup(3, H.groupIdOf('kino01_72'));
+    const e1 = createFFXEngine({ content: H.content, autoResolveMinigames: true });
+    e1.init(setup1);
+    const s1 = e1.state();
+    const tidus = s1.combatants['tidus'] as FFXCombatant;
+    tidus.hp = 123;
+    const lulu = s1.combatants['lulu'] as FFXCombatant;
+    lulu.hp = 0;
+    lulu.alive = false;
+    lulu.statuses['ko'] = { id: 'ko', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    const bahamut = s1.combatants['bahamut'] as FFXCombatant;
+    bahamut.hp = 0;
+    bahamut.alive = false;
+    bahamut.aeon!.reviveCountdown = 3;
+    (s1.combatants['ifrit'] as FFXCombatant).hp = 77;
+    (s1.combatants['shiva'] as FFXCombatant).overdrive!.gauge = 33;
+    s1.flags['inventory:phoenix-down'] = 5;
+    s1.flags['yojimbo:gil'] = 1_100_000;
+    s1.flags['yojimbo:compatibility'] = 150;
+
+    const group2 = ENEMY_GROUPS_BY_ID[MIRROR_ACT_II_GROUP]!;
+    const setup2 = setupForNextLink(setup1, group2, s1, 9) as BattleSetup;
+    const e2 = createFFXEngine({ content: H.content, autoResolveMinigames: true });
+    e2.init(setup2);
+    const s2 = e2.state();
+    for (const id of ['tidus', 'yuna', 'lulu']) {
+      const m = s2.combatants[id] as FFXCombatant;
+      expect([m.hp, m.stats.maxHp, m.alive, m.statuses['ko']], id).toEqual([9_999, 9_999, true, undefined]);
+    }
+    const aeon = (id: string): FFXCombatant => s2.combatants[id] as FFXCombatant;
+    for (const a of mirrorAeonsBuild.aeons) expect(aeon(a.id).hp, a.id).toBe(a.stats.maxHp);
+    expect(aeon('bahamut').alive && (aeon('bahamut').aeon!.reviveCountdown ?? 0) === 0, 'the fallen aeon stands again with no recovery count').toBe(true);
+    expect(aeon('shiva').overdrive!.gauge, 'a Save Sphere does not touch a gauge').toBe(33);
+    expect(s2.flags['yojimbo:gil']).toBe(1_100_000);
+    expect(s2.flags['yojimbo:compatibility']).toBe(150);
+    expect(setup2.party.inventory.find((i) => i.itemId === 'phoenix-down')?.count, 'the bag carries what is left').toBe(5);
+  });
+
+  it('the Act I groups and the pair carry no heal of their own: only the Yojimbo groups do, and a battle that is not a link restores nothing', () => {
+    const e = H.newEngine(1);
+    (e.state().combatants['tidus'] as FFXCombatant).hp = 1;
+    expect(ENEMY_GROUPS_BY_ID[H.ACT_I_GROUP]?.restoresAeonsOnEntry).toBeUndefined();
+    expect(ENEMY_GROUPS_BY_ID[MIRROR_ACT_II_GROUP]?.restoresAeonsOnEntry).toBe(true);
   });
 });
 

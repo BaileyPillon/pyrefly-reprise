@@ -2981,6 +2981,12 @@ export interface EnemyGroupDef {
    */
   noSaveSphereCard?: boolean;
   /**
+   * **FFX, with `restoresPartyOnEntry`: the aeons are restored too** (the hidden Mirror Aeons chapter's Act II; the release driver's delegated pick, 2026-10-15: in the game its two quests are two separate fights, so
+   * between them everyone is whole). Every aeon the party owns enters the link at full HP and MP with no status and no recovery count (a fallen aeon stands again); the Overdrive gauges are left as they are (a Save
+   * Sphere does not touch a gauge). Read by `battle/ffx/line-up.ts#restoreAeonsOnEntry` and nothing else; absent everywhere else, so every other chain, and a hopeless retry's `restoresPartyOnEntry`, keep the
+   * aeons as the previous link left them.
+   */
+  restoresAeonsOnEntry?: boolean;  /**
    * **FFX-2, a chained link the party enters carrying everything** (Chapter XV,
    * the Den of Woe; `docs/plans/chapter-gippal-review.md` GP3 = a, `[derived]`:
    * the sources carry HP, the rest is our reading of "no break"). On top of the

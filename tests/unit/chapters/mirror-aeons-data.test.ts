@@ -88,10 +88,11 @@ describe('the loot (RE section 2)', () => {
   });
 });
 
-describe('the eleven formations (RE section 3)', () => {
-  it('six Sisters formations and five Yojimbo tiers, in the game\'s file order, each registered in the data layer under its group id', () => {
+describe('the eleven formations (RE section 3) and the one adjusted trio (OUR adjustment)', () => {
+  it('six Sisters formations and five Yojimbo tiers, in the game\'s file order, then the one adjusted trio, each registered in the data layer under its group id', () => {
     expect(DARK_AEONS_GROUPS.map((g) => g.id)).toEqual([
       ...['kino00_70', 'kino01_70', 'kino01_71', 'kino01_72', 'kino05_70', 'kino05_71'].map((f) => `mirror-sisters-${f}`),
+      'mirror-sisters-kino00_70-g0', // OUR adjustment: the faithful trio's battle id with the gauges started at 0
       ...['nagi05_70', 'nagi05_71', 'nagi05_72', 'nagi05_73', 'nagi05_74'].map((f) => `mirror-yojimbo-${f}`),
     ]);
     for (const g of DARK_AEONS_GROUPS) expect(ENEMY_GROUPS_BY_ID[g.id], g.id).toBe(g);
@@ -105,6 +106,7 @@ describe('the eleven formations (RE section 3)', () => {
     expect(who('kino01_72')).toEqual(['0:dark-mindy', '1:dark-sandy']);
     expect(who('kino05_70')).toEqual(['0:dark-sandy']);
     expect(who('kino05_71')).toEqual(['0:dark-mindy']);
+    expect(who('kino00_70-g0')).toEqual(who('kino00_70'));
     for (const t of ['nagi05_70', 'nagi05_71', 'nagi05_72', 'nagi05_73', 'nagi05_74']) expect(who(t), t).toEqual(['0:dark-yojimbo', '1:dark-daigoro']);
   });
 
@@ -118,6 +120,8 @@ describe('the eleven formations (RE section 3)', () => {
       ['kino05_70', 14_745_670, 1036, 0x1000, 0],
       ['kino05_71', 14_745_671, 1036, 0x1000, 0],
     ]);
+    // OUR adjustment, not a game formation: the trio's battle id (so the scripts' trio test still runs) with the gauges started at 0.
+    expect(ids.SISTER_ADJUSTED_FORMATIONS.map((f) => [f.file, f.battleId, f.stage, f.flagWord, f.startGauge])).toEqual([['kino00_70-g0', 14_417_990, 1035, 0x1800, 0]]);
     const tiers = ids.YOJIMBO_TIERS.map((t) => [t.file, t.battleId, t.stage, t.gaugePerTurn, t.ambushed]);
     expect(tiers).toEqual([
       ['nagi05_70', 28_180_550, 1080, 6, true],
@@ -128,19 +132,20 @@ describe('the eleven formations (RE section 3)', () => {
     ]);
   });
 
-  it('Escape and Flee are off in all eleven; every Sisters group chains to Act II; only the Yojimbo groups name the cavern plate, are a retry checkpoint and pool the spoils', () => {
+  it('Escape and Flee are off in all twelve; every Sisters group chains to Act II; only the Yojimbo groups name the cavern plate, are a retry checkpoint, pool the spoils and heal the party AND the aeons on entry, with no Save Sphere card', () => {
     for (const g of DARK_AEONS_GROUPS) expect(g.canEscape, g.id).toBe(false);
     for (const g of DARK_AEONS_GROUPS.filter((x) => x.id.startsWith('mirror-sisters-'))) {
       expect(g.nextGroupId, g.id).toBe(ids.MIRROR_ACT_II_GROUP);
-      expect([g.plate, g.checkpointOnEntry, g.poolsChainSpoils], g.id).toEqual([undefined, undefined, undefined]);
+      expect([g.plate, g.checkpointOnEntry, g.poolsChainSpoils, g.restoresPartyOnEntry, g.restoresAeonsOnEntry, g.noSaveSphereCard], g.id).toEqual([undefined, undefined, undefined, undefined, undefined, undefined]);
     }
     for (const g of DARK_AEONS_GROUPS.filter((x) => x.id.startsWith('mirror-yojimbo-'))) {
       expect([g.nextGroupId, g.plate, g.checkpointOnEntry, g.poolsChainSpoils], g.id).toEqual([undefined, ids.MIRROR_ACT_II_PLATE, true, true]);
+      expect([g.restoresPartyOnEntry, g.restoresAeonsOnEntry, g.noSaveSphereCard], g.id).toEqual([true, true, true]); // the heal between the acts (the release driver's delegated pick)
     }
   });
 
-  it('the chapter\'s two picks name real groups: Act I the trio, Act II the middle tier (an estimate until the bench)', () => {
-    expect([ids.MIRROR_ACT_I, ids.MIRROR_ACT_II]).toEqual(['kino00_70', 'nagi05_72']);
+  it("the chapter's two picks name real groups: Act I the faithful pair, Act II tier 2 (the bench's picks, RE's own recommendations)", () => {
+    expect([ids.MIRROR_ACT_I, ids.MIRROR_ACT_II]).toEqual(['kino01_72', 'nagi05_71']);
     expect(ENEMY_GROUPS_BY_ID[ids.MIRROR_ACT_I_GROUP]).toBeDefined();
     expect(ENEMY_GROUPS_BY_ID[ids.MIRROR_ACT_II_GROUP]).toBeDefined();
     expect(ids.SISTER_LADDER.every((f) => darkAeonsGroupOf(f) !== undefined)).toBe(true);
@@ -207,7 +212,8 @@ describe('the fourteen move rows against the kernel fixtures (RE section 2)', ()
 
   it('the dog\'s order (0x4086) deals nothing and orders the bite (0x410B)', () => {
     const order = DARK_AEONS_ABILITIES['dark-daigoro-order']!;
-    expect([order.formula, order.power, order.extra]).toEqual(['none', 0, { ordersActor: 'dark-daigoro', orderedAbility: 'dark-daigoro-bite' }]);
+    // `orderedAim` makes the bite's victim the game's own stream-4 pick over the living front line (RE note 4.4; `battle/ffx/orders.ts`).
+    expect([order.formula, order.power, order.extra]).toEqual(['none', 0, { ordersActor: 'dark-daigoro', orderedAbility: 'dark-daigoro-bite', orderedAim: 'game-picker' }]);
     expect(order.record!.id).toBe(0x4086);
     expect(DARK_AEONS_ABILITIES['dark-daigoro-bite']!.record!.id).toBe(0x410b);
   });
@@ -226,7 +232,7 @@ describe('the battle layer\'s copies agree with the data layer', () => {
     expect(DARK_SCRIPTS).toEqual({ cindy: ids.DARK_CINDY_SCRIPT, sandy: ids.DARK_SANDY_SCRIPT, mindy: ids.DARK_MINDY_SCRIPT, yojimbo: ids.DARK_YOJIMBO_SCRIPT, daigoro: ids.DARK_DAIGORO_SCRIPT });
     expect(DARK_IDS).toEqual({ cindy: ids.DARK_CINDY_ID, sandy: ids.DARK_SANDY_ID, mindy: ids.DARK_MINDY_ID, yojimbo: ids.DARK_YOJIMBO_ID, daigoro: ids.DARK_DAIGORO_ID });
     const expected = Object.fromEntries([
-      ...ids.SISTER_FORMATIONS.map((f) => [ids.sistersGroupId(f.file), { battleId: f.battleId, startGauge: f.startGauge }]),
+      ...[...ids.SISTER_FORMATIONS, ...ids.SISTER_ADJUSTED_FORMATIONS].map((f) => [ids.sistersGroupId(f.file), { battleId: f.battleId, startGauge: f.startGauge }]),
       ...ids.YOJIMBO_TIERS.map((t) => [ids.yojimboGroupId(t.file), { battleId: t.battleId, startGauge: 0, gaugePerTurn: t.gaugePerTurn }]),
     ]);
     expect(DARK_FORMATIONS).toEqual(expected);

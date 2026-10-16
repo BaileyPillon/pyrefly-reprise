@@ -18,7 +18,7 @@
 
 import type { EnemyGroupDef } from '../../../battle/common/types.ts';
 import {
-  DARK_CINDY_ID, DARK_YOJIMBO_ID, MIRROR_ACT_II_GROUP, MIRROR_ACT_II_PLATE, SISTER_FORMATIONS, YOJIMBO_TIERS, sistersGroupId, yojimboGroupId, type SisterFormation, type YojimboTier,
+  DARK_CINDY_ID, DARK_YOJIMBO_ID, MIRROR_ACT_II_GROUP, MIRROR_ACT_II_PLATE, SISTER_ADJUSTED_FORMATIONS, SISTER_FORMATIONS, YOJIMBO_TIERS, sistersGroupId, yojimboGroupId, type SisterFormation, type YojimboTier,
 } from '../mirror-aeons-ids.ts';
 import { DARK_AEONS_ABILITIES } from './dark-aeons-abilities.ts';
 import { darkDaigoro, darkSister, darkYojimbo } from './dark-aeons.ts';
@@ -56,12 +56,18 @@ export function darkYojimboGroup(tier: YojimboTier): EnemyGroupDef {
     // the last link, so it pays both acts' spoils in one results screen (the Gui and Sin chains' flags; CONTRACT-CHANGES).
     checkpointOnEntry: true,
     poolsChainSpoils: true,
+    // **The heal between the acts** (the release driver's delegated pick, 2026-10-15: in the game the road and the cavern are two separate fights, so the party enters the cavern whole): the party AND the aeons
+    // are restored on entry (HP, MP, statuses, a fallen member or aeon up with no recovery count), with no Save Sphere card (the cavern has none). Gauges, items and Yojimbo's compatibility and gil carry as they were.
+    // It also makes a retry of Act II open on a whole party, which is what the checkpoint means.
+    restoresPartyOnEntry: true,
+    noSaveSphereCard: true,
+    restoresAeonsOnEntry: true,
     musicCues: [{ at: 'start', track: 'boss-yojimbo', fadeMs: 1200 }],
   };
 }
 
-/** Every formation of both ladders, six Sisters groups and five Yojimbo tiers, for the data index (the groups are looked up by id: `nextGroupId`, the bench). */
-export const DARK_AEONS_GROUPS: readonly EnemyGroupDef[] = [...SISTER_FORMATIONS.map(darkSistersGroup), ...YOJIMBO_TIERS.map(darkYojimboGroup)];
+/** Every formation of both ladders, six Sisters groups and five Yojimbo tiers (the game's eleven) and the one adjusted trio (OUR adjustment: `SISTER_ADJUSTED_FORMATIONS`), for the data index (the groups are looked up by id: `nextGroupId`, the bench). */
+export const DARK_AEONS_GROUPS: readonly EnemyGroupDef[] = [...SISTER_FORMATIONS.map(darkSistersGroup), ...SISTER_ADJUSTED_FORMATIONS.map(darkSistersGroup), ...YOJIMBO_TIERS.map(darkYojimboGroup)];
 
 /** The group of one formation file (`'kino00_70'`, `'nagi05_72'`). Throws on an unknown file name so a typo cannot pass silently. */
 export function darkAeonsGroupOf(file: string): EnemyGroupDef {

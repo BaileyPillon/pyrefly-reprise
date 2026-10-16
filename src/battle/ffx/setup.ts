@@ -36,7 +36,7 @@ import { applySinSetups } from './ai/sin-setup.ts';
 import { applyGuiSetup } from './ai/sinspawn-gui-rules.ts';
 import { applyBiranYenkeSetup } from './ai/biran-yenke-setup.ts';
 import { applyDarkAeonsSetup } from './ai/dark-aeons-setup.ts';
-import { applyLinkLineUp, restorePartyOnEntry } from './line-up.ts';
+import { applyLinkLineUp, restoreAeonsOnEntry, restorePartyOnEntry } from './line-up.ts';
 import { applyYojimboSetup } from './ai/yojimbo-rules.ts';
 import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
@@ -254,6 +254,7 @@ export function buildBattle(
   const group = cloneData(setup.enemies);
   applyLinkLineUp(party, group); // a link that changes the line-up (FFX only; `EnemyGroupDef.lineUp`): the guest joins, the forced trio opens, Switch may close
   if (group.restoresPartyOnEntry === true) restorePartyOnEntry(party); // a hopeless retry (Sinspawn Gui's second fight): everyone up and full
+  if (group.restoresPartyOnEntry === true && group.restoresAeonsOnEntry === true) restoreAeonsOnEntry(party); // the aeons too (the hidden Mirror Aeons chapter's Act II): whole, with no recovery count
 
   const state: BattleState = {
     game: 'ffx',

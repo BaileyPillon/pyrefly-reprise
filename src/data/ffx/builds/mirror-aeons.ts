@@ -36,12 +36,33 @@ export const ENDGAME_CAPS = { hp: 9_999, mp: 999, str: 255, def: 255, mag: 255, 
 export const ENDGAME_LUCK = 60;
 /** The battle count the aeons' stats are derived at: tier 19, the last (G08 / RE section 5.5). */
 export const ENDGAME_BATTLES = 600;
+/**
+ * **The Phoenix Downs in the bag, the bench's main lever** (`docs/plans/ch-mirror-aeons-bench.md`; `[estimate]`: no source gives a stock). Every KO of a member costs one (the armour's Auto-Phoenix uses one on the fallen, and
+ * the line's revives use the rest), so this number is the clock of Act I: with the repository's endgame bag's 10 the pair is lost four times in five, from 20 up it is won nineteen times in twenty, and **17 is the value at
+ * which the whole chapter (both acts, the advisor's line) is won about seven times in ten**, the plan's target. The other items keep the repository's endgame bag's counts (`./dreams-end.ts`): none of them limits a fight
+ * (Yuna heals with her spells), which the bench also measured.
+ */
+export const ENDGAME_PHOENIX_DOWNS = 17;
 /** Party gil: Yojimbo is paid from it (`[estimate]`; StrategyWiki speaks of paying "upwards of 2 million"). */
 export const ENDGAME_GIL = 1_500_000;
 /** The hire answer 0 to 2 the player gave at the Fayth: 2, the third option (Jegged Cavern; G08 section 3.5). */
 export const YOJIMBO_HIRE_ANSWER = 2;
 /** Yojimbo's starting compatibility, 0 to 255: the game's files hold no start value (RE section 5.5); 128 is **strongly indicated by the owner's saves, live confirmation pending** (the community also says 128). `[estimate]` until it is confirmed live. */
 export const YOJIMBO_START_COMPATIBILITY = 128;
+/**
+ * Each Magus Sister's motivation at the start of the battle, 0 to 100 (`Chr+0x6e1`): **UNSOURCED**. The reverse-engineering session's engine asks a build for it and has no default (`FFXPartyBuild.sisters`; its note says the
+ * start value is "not in the note at all"), so this is **our estimate, labelled so**: the middle of the range. It matters little: the Combine powers order succeeds with the chance `200 + motivation` out of 256 (every
+ * value from 56 up always succeeds; 50 succeeds 250 times in 256), and a success adds 10, a failure takes 10. `[estimate]` until the value is read from the game; the bench measures it as one more party lever.
+ */
+export const SISTERS_START_MOTIVATION = 50;
+/**
+ * The Overdrive gauge Yuna's Magus Sisters start the chapter at, 0 to 100 (a lever of the difficulty bench). **Full, `[estimate]`**: the engine's Sisters have no command of their own but the Combine powers order (the other seven orders
+ * are not built: `battle/ffx/aeon-commands.ts`) and Dismiss, and Combine powers is only offered when all three gauges are full, so a Sister who comes onto the field with an empty gauge can do nothing but leave. Full gauges also
+ * make the mirror: the Dark Sisters start the trio at 100 (RE note 2.5). The five story aeons keep their Dream's End gauges.
+ */
+export const SISTERS_START_GAUGE = 100;
+/** Yojimbo's gauge at the start: 0 (his menu is Pay and Dismiss, and a full gauge only raises the chance that a Pay buys Zanmato, which does nothing to a Dark Aeon: Death 255 against their immunity). `[estimate]` */
+export const YOJIMBO_START_GAUGE = 0;
 
 /** Yuna's ten stats as the aeon formula reads them. */
 export const ENDGAME_YUNA: YunaStats = { ...ENDGAME_CAPS, luck: ENDGAME_LUCK };
@@ -99,11 +120,11 @@ function derivedAeon(id: string, gauge: number): AeonBuild {
   };
 }
 
-/** The five story aeons keep Dream's End's gauges; Yojimbo and the Sisters start at 0. */
+/** The five story aeons keep Dream's End's gauges; Yojimbo starts at `YOJIMBO_START_GAUGE` and the Sisters at `SISTERS_START_GAUGE`. */
 function endgameAeons(): AeonBuild[] {
   const gauges = new Map(dreamsEndBuild.aeons.map((a) => [a.id, a.overdriveGauge]));
   const story = ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut'].map((id) => derivedAeon(id, gauges.get(id) ?? 0));
-  const optional = PLAYER_MIRROR_AEONS.map((id) => derivedAeon(id, 0));
+  const optional = PLAYER_MIRROR_AEONS.map((id) => derivedAeon(id, id === 'yojimbo' ? YOJIMBO_START_GAUGE : SISTERS_START_GAUGE));
   return [...story, ...optional];
 }
 
@@ -113,7 +134,10 @@ export const mirrorAeonsBuild: FFXPartyBuild = {
   activeSlots: ['tidus', 'yuna', 'lulu'],
   reserve: ['auron', 'wakka', 'kimahri', 'rikku'],
   aeons: endgameAeons(),
-  inventory: dreamsEndBuild.inventory.filter((e) => e.itemId !== 'candle-of-life').map((e) => ({ ...e })),
+  // The player's Yojimbo and Magus Sisters own rules in the engine (re-parity lane FFX-K: a build that lists them MUST say how they start, or `buildBattle` throws).
+  yojimbo: { compatibility: YOJIMBO_START_COMPATIBILITY, hireAnswer: YOJIMBO_HIRE_ANSWER },
+  sisters: { motivation: { cindy: SISTERS_START_MOTIVATION, sandy: SISTERS_START_MOTIVATION, mindy: SISTERS_START_MOTIVATION } },
+  inventory: dreamsEndBuild.inventory.filter((e) => e.itemId !== 'candle-of-life').map((e) => ({ ...e, ...(e.itemId === 'phoenix-down' ? { count: ENDGAME_PHOENIX_DOWNS } : {}) })),
   gil: ENDGAME_GIL,
   sphereInventory: {},
 };

@@ -9,7 +9,8 @@ import { ALL_ABILITIES } from '../../../src/data/ffx/index.ts';
 import { dreamsEndBuild } from '../../../src/data/ffx/builds/dreams-end.ts';
 import { AEON_CAPS, aeonStatsFromYuna } from '../../../src/data/ffx/builds/endgame-aeons.ts';
 import {
-  ENDGAME_ARMOR, ENDGAME_BATTLES, ENDGAME_CAPS, ENDGAME_GIL, ENDGAME_LUCK, ENDGAME_WEAPONS, ENDGAME_YUNA, YOJIMBO_HIRE_ANSWER, YOJIMBO_START_COMPATIBILITY, mirrorAeonsBuild,
+  ENDGAME_ARMOR, ENDGAME_BATTLES, ENDGAME_CAPS, ENDGAME_GIL, ENDGAME_LUCK, ENDGAME_PHOENIX_DOWNS, ENDGAME_WEAPONS, ENDGAME_YUNA, SISTERS_START_GAUGE, SISTERS_START_MOTIVATION, YOJIMBO_HIRE_ANSWER, YOJIMBO_START_COMPATIBILITY,
+  YOJIMBO_START_GAUGE, mirrorAeonsBuild,
 } from '../../../src/data/ffx/builds/mirror-aeons.ts';
 
 const ids = new Set(ALL_ABILITIES.map((a) => a.id));
@@ -95,15 +96,40 @@ describe('the nine aeons (the section 6.4 formula on this Yuna at 600 battles)',
     }
   });
 
-  it('the five story aeons keep Dream\'s End\'s gauges; the four new ones start empty', () => {
+  it('the five story aeons keep Dream\'s End\'s gauges; Yojimbo starts empty and the three Sisters FULL (their menu has nothing to do but Combine powers and leave, and Combine needs all three full)', () => {
     for (const id of ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut']) expect(aeon(id).overdriveGauge, id).toBe(dreamsEndBuild.aeons.find((a) => a.id === id)!.overdriveGauge);
-    for (const id of ['yojimbo', 'cindy', 'sandy', 'mindy']) expect(aeon(id).overdriveGauge, id).toBe(0);
+    expect([YOJIMBO_START_GAUGE, SISTERS_START_GAUGE]).toEqual([0, 100]);
+    expect(aeon('yojimbo').overdriveGauge).toBe(YOJIMBO_START_GAUGE);
+    for (const id of ['cindy', 'sandy', 'mindy']) expect(aeon(id).overdriveGauge, id).toBe(SISTERS_START_GAUGE);
   });
 });
 
-describe('the named estimates the engine will read', () => {
+describe('the named estimates the engine reads (lane FFX-K: a build that lists them must say how they start)', () => {
   it('Yojimbo\'s hire answer is the third option\'s (2, Jegged and the files agree), his starting compatibility 128 (the files hold none; strongly indicated by the owner\'s saves, live confirmation pending), the gil what Pay is drawn from', () => {
     expect([YOJIMBO_HIRE_ANSWER, YOJIMBO_START_COMPATIBILITY, ENDGAME_GIL]).toEqual([2, 128, 1_500_000]);
     expect(mirrorAeonsBuild.gil).toBe(ENDGAME_GIL);
+    expect(mirrorAeonsBuild.yojimbo).toEqual({ compatibility: 128, hireAnswer: 2 });
+  });
+
+  it('each Sister\'s start motivation is OUR estimate (the note marks it unsourced): the middle of 0 to 100, the same for all three', () => {
+    expect(SISTERS_START_MOTIVATION).toBe(50);
+    expect(mirrorAeonsBuild.sisters).toEqual({ motivation: { cindy: 50, sandy: 50, mindy: 50 } });
+  });
+});
+
+describe('the levers the bench turns (docs/plans/ch-mirror-aeons-bench.md): the bag\'s Phoenix Downs, and the values left where the first build had them', () => {
+  const count = (id: string): number | undefined => mirrorAeonsBuild.inventory.find((e) => e.itemId === id)?.count;
+
+  it('the bag holds ENDGAME_PHOENIX_DOWNS Phoenix Downs (the clock of Act I: 17 is the value at which the chapter is won about seven times in ten); every other item keeps the endgame bag\'s count', () => {
+    expect(ENDGAME_PHOENIX_DOWNS).toBe(17);
+    expect(count('phoenix-down')).toBe(ENDGAME_PHOENIX_DOWNS);
+    const old = new Map(dreamsEndBuild.inventory.map((e) => [e.itemId, e.count]));
+    for (const e of mirrorAeonsBuild.inventory) if (e.itemId !== 'phoenix-down') expect(e.count, e.itemId).toBe(old.get(e.itemId));
+    expect(count('candle-of-life')).toBeUndefined();
+  });
+
+  it('Luck stays at 60 for the whole party: the bench measured it (60, 40, 20, 0) and the pair is nearly blind to it, so it is no lever', () => {
+    expect(ENDGAME_LUCK).toBe(60);
+    for (const m of mirrorAeonsBuild.members) expect(m.stats.luck, m.id).toBe(60);
   });
 });

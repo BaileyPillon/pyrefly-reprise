@@ -28,7 +28,7 @@ export const DARK_YOJIMBO_ID = 'dark-yojimbo' as const;
 /** The dog stand-in of Dark Yojimbo's formations (the file m116, the Sinscale used as a stand-in: RE section 3): untargetable, no turns, bites when ordered. */
 export const DARK_DAIGORO_ID = 'dark-daigoro' as const;
 
-/** AI script ids. **Nothing registers them yet:** the AI is the reverse-engineering session's (`battle/ffx/ai/dark-aeons-seams.ts`). */
+/** AI script ids (registered by `battle/ffx/ai/dark-aeons.ts`, from the reverse-engineering session's note `research/re-ffx-dark-aeons.md`). */
 export const DARK_CINDY_SCRIPT = 'dark-sister-cindy' as const;
 export const DARK_SANDY_SCRIPT = 'dark-sister-sandy' as const;
 export const DARK_MINDY_SCRIPT = 'dark-sister-mindy' as const;
@@ -63,6 +63,16 @@ export const SISTER_FORMATIONS: readonly SisterFormation[] = [
   { file: 'kino05_71', battleId: 0x00e10047, sisters: ['mindy'], stage: 1036, flagWord: 0x1000, startGauge: 0 },
 ] as const;
 
+/**
+ * **OUR ADJUSTMENT, not a game formation** (RE note 2.6; disclosed wherever it is used, in the guide, the handoff and the changelog; the bench measures it only as an alternative to the faithful trio, and the
+ * chapter does NOT ship it): the faithful trio's battle id (`kino00_70`, so the scripts' trio test still runs) with the three gauges written 0 after the setup instead of 100. Delta Attack then arrives on Cindy's turn
+ * at tick 45 (five rounds of basic turns first) instead of as the third enemy action of the battle. It is the smaller departure from the game's data than scaling the Sisters' damage (RE note 2.6), and the only one the
+ * plan allowed (`docs/plans/ch-mirror-aeons-review.md`); a boss row is never touched.
+ */
+export const SISTER_ADJUSTED_FORMATIONS: readonly SisterFormation[] = [
+  { file: 'kino00_70-g0', battleId: 0x00dc0046, sisters: ['mindy', 'sandy', 'cindy'], stage: 1035, flagWord: 0x1800, startGauge: 0 },
+] as const;
+
 /** One tier of Dark Yojimbo (RE sections 3 and 4.1): five fresh 1,600,000-HP fights; what changes is how fast his gauge fills. */
 export interface YojimboTier {
   readonly file: string;
@@ -88,12 +98,14 @@ export const sistersGroupId = (file: string): string => `mirror-sisters-${file}`
 export const yojimboGroupId = (file: string): string => `mirror-yojimbo-${file}`;
 
 /**
- * **THE TWO PICKS `[estimate]`, pending the bench.** Act I fights the trio `kino00_70` (three against three, the mirror Bailey asked for; the sisters start every gauge full, so the opener is the joint attack) and
- * Act II tier 3 `nagi05_72` (the middle rung). If the bench puts a full run outside the 60 to 80 percent band for the advisor's line, the pick moves one rung of the ladder (`SISTER_LADDER`,
- * `YOJIMBO_TIERS`), a choice among the game's own fights, before any party number moves (`docs/plans/ch-mirror-aeons-review.md` section 3).
+ * **THE TWO PICKS, set by the bench** (`docs/plans/ch-mirror-aeons-bench.md`; the chapter's own choice among the game's fights, never a number of the game's). Act I fights **the faithful pair `kino01_72`** (Dark Mindy and
+ * Dark Sandy, 4.5M HP together, both gauges starting at 0: no Delta Attack, a Mega Graviton on each one's sixth turn): RE's note recommends it as the game-sourced formation that is "not too easy, not too hard" (RE note 2.6),
+ * and the bench agrees, because the faithful trio (`kino00_70`) is out of reach for the advisor's line, 1 win in 100, and so is the trio with its gauges started at 0, our adjustment (`SISTER_ADJUSTED_FORMATIONS`). Act II
+ * fights **tier 2 `nagi05_71`** (+10 a turn: Zanmato on his eleventh turn, about four actions of the party's between Zanmatos), RE's recommendation too; the bench found the tiers 1 to 5 within a few points of each other
+ * for a line that sends an aeon in on time (84 to 99 percent), so the tier is RE's reading and not a lever.
  */
-export const MIRROR_ACT_I = 'kino00_70' as const;
-export const MIRROR_ACT_II = 'nagi05_72' as const;
+export const MIRROR_ACT_I = 'kino01_72' as const;
+export const MIRROR_ACT_II = 'nagi05_71' as const;
 
 /** Act I's rungs from the easiest to the hardest, by the files' own HP totals (RE section 2): Mindy alone 2.0M, Sandy alone 2.5M, Cindy alone 3.0M, Sandy with Mindy 4.5M, the trio 7.5M. */
 export const SISTER_LADDER: readonly string[] = ['kino05_71', 'kino05_70', 'kino01_71', 'kino01_72', 'kino01_70', 'kino00_70'] as const;
