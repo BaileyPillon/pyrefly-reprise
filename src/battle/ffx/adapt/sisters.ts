@@ -7,10 +7,11 @@
  *   aeon only); the Dismiss command stands a fallen sister up at 1 HP.
  * - **The menu** ({@link sistersTurnStart}): at each sister's turn the game's menu builder runs once (its draws are on stream 18); the orders it offers wait
  *   in {@link SistersRuntime.menu} for `availableCommands`.
- * - **Combine powers** ({@link combineOrder}): the one order whose handler is built (note 6.6, read from the disassembly, not run): the chance `200 + motivation`,
- *   the target search, the Delta Attack performed by Cindy, the other sisters' counters from `summonCtb`, all three paying the bar, motivation +10 or -10.
- * - **The other seven orders** have their event numbers mapped (`kernel/aeon-request.ts`, proven) and are NOT carried out: their handlers search targets with
- *   filters nobody has decoded (note FFX-G08, open question 5), so the engine refuses them with a message rather than invent a rule.
+ * - **Combine powers** ({@link combineOrder}): the chance `200 + motivation`, the target search, the Delta Attack performed by Cindy, the other sisters' counters
+ *   from `summonCtb`, all three paying the bar, motivation +10 or -10.
+ * - **The other seven orders** are carried out by `./sister-orders.ts` (the target search and the sixteen handlers, proved on the game's own code and script VM:
+ *   `research/re-ffx-zanmato-and-orders.md` Part 2); this module keeps what they share: the state ({@link SistersRuntime}, with each sister's private memory), the
+ *   motivation and gauge bytes ({@link magusChrOf}).
  *
  * Not sourced, and so a build must say (`FFXPartyBuild.sisters`): each sister's motivation at the start of the battle. The standing order starts at 0 in every
  * battle (whether the game's survives into the next battle is the note's open question 6).
@@ -24,6 +25,7 @@ import {
   type CombineFacts,
   type MagusChr,
   DELTA_ATTACK,
+  SISTER_REST,
   SisterOrder,
   afterAction,
   combineCount,
@@ -60,6 +62,18 @@ export interface SisterPair {
   b729: number;
 }
 
+/**
+ * One sister's private variables (the handlers' own, section 12 of the note): the last command she performed (0 at the start; the rest command counts), the repeat
+ * flag, the class of the order she last took, and Mindy's stored spell list (two entries) with its count. Unproved: whether they survive into the next battle.
+ */
+export interface SisterMemory {
+  last: number;
+  flag: number;
+  cls: number;
+  list: [number, number];
+  count: number;
+}
+
 /** The Magus Sisters' state for one battle. */
 export interface SistersRuntime {
   /** The standing order, a command id (0 when none stands). */
@@ -72,6 +86,8 @@ export interface SistersRuntime {
   parsed: Record<CombatantId, number>;
   /** The orders the menu builder offered at the open turn, in the order it adds them (Dismiss last); `null` before the first sister's turn. */
   menu: { actorId: CombatantId; orders: number[] } | null;
+  /** Each sister's private variables. */
+  memory: Record<CombatantId, SisterMemory>;
 }
 
 /** The ability record of the Delta Attack. */
@@ -98,14 +114,16 @@ export function initSisters(ctx: Ctx, party: FFXPartyBuild): void {
   const motivation: Record<CombatantId, number> = {};
   const pair: Record<CombatantId, SisterPair> = {};
   const parsed: Record<CombatantId, number> = {};
+  const memory: Record<CombatantId, SisterMemory> = {};
   for (const id of SISTER_IDS) {
     const m = party.sisters.motivation[id as 'cindy' | 'sandy' | 'mindy'];
     if (!Number.isInteger(m) || m < 0 || m > 100) throw new RangeError(`FFX engine: ${id}'s motivation must be a whole number from 0 to 100, not ${String(m)}`);
     motivation[id] = m;
     pair[id] = { f714: 0, f715: 0, b726: 0, b727: 0, b728: 0, b729: 0 };
     parsed[id] = 0;
+    memory[id] = { last: 0, flag: 0, cls: 0, list: [0, 0], count: 0 };
   }
-  ctx.rt.sisters = { order: 0, motivation, pair, parsed, menu: null };
+  ctx.rt.sisters = { order: 0, motivation, pair, parsed, menu: null, memory };
 }
 
 /** Is this combatant one of the Sisters under the game's rules? */
@@ -119,7 +137,7 @@ export function sistersOf(ctx: Ctx): FFXCombatant[] {
 }
 
 /** A sister's gauge in the aeon bar's points (a point is five percent). */
-const points = (c: FFXCombatant): number => Math.floor((c.overdrive?.gauge ?? 0) / unitOf(c));
+export const points = (c: FFXCombatant): number => Math.floor((c.overdrive?.gauge ?? 0) / unitOf(c));
 
 // ---------------------------------------------------------------------------
 // Summon and Dismiss (three aeons)
@@ -263,16 +281,18 @@ export interface OrderRun {
   damageDealt: number;
 }
 
-/** The orders whose handlers are built. */
-export const BUILT_ORDERS: ReadonlySet<number> = new Set([SisterOrder.Combine]);
+/** The orders whose handlers are built: all eight (Combine powers here, the other seven in `./sister-orders.ts`). */
+export const BUILT_ORDERS: ReadonlySet<number> = new Set(Object.values(SisterOrder));
 
-function magusChrOf(ctx: Ctx, c: FFXCombatant): MagusChr {
+/** The motivation and gauge bytes of a sister as the kernels read them. */
+export function magusChrOf(ctx: Ctx, c: FFXCombatant): MagusChr {
   const s = ctx.rt.sisters!;
   const p = s.pair[c.id]!;
   return { motivation: s.motivation[c.id] ?? 0, gauge: points(c), gaugeMax: 100 / unitOf(c), ...p };
 }
 
-function storeMagusChr(ctx: Ctx, c: FFXCombatant, m: MagusChr): void {
+/** Carry the kernels' changes back onto the sister: her motivation, her pending pair and her gauge. */
+export function storeMagusChr(ctx: Ctx, c: FFXCombatant, m: MagusChr): void {
   const s = ctx.rt.sisters!;
   s.motivation[c.id] = m.motivation;
   s.pair[c.id] = { f714: m.f714, f715: m.f715, b726: m.b726, b727: m.b727, b728: m.b728, b729: m.b729 };
@@ -310,6 +330,8 @@ export function combineOrder(ctx: Ctx, actor: FFXCombatant, run: (who: FFXCombat
     },
   });
 
+  // Nothing queued: she performs the rest command on herself, which is her last command (a pass sets none; `kernel/sister-orders.ts`, the proven handler).
+  if (!outcome.queued) s.memory[actor.id]!.last = SISTER_REST;
   const mine = magusChrOf(ctx, actor);
   increaseMotivation(mine, s.order, 0, outcome.motivationChange);
   storeMagusChr(ctx, actor, mine); // the pair waits for the end of the action

@@ -386,21 +386,24 @@ describe('the Magus Sisters: the menu and Combine powers', () => {
       expect(offered.at(-1)).toBe(0x3056);
       const orderIds = rows.flatMap((r) => (r.command.kind === 'ability' ? [r.command.id] : []));
       expect(orderIds.length, `seed ${seed} ${who}: orders offered`).toBe(want.offered.length - 1);
-      // Only Combine powers has a handler; every other row is listed disabled.
-      for (const r of rows) if (r.command.kind === 'ability') expect(r.enabled, `${r.label}`).toBe(r.command.id === 'sister-order-combine');
+      // Every order has a handler (the seven others since 2026-10-15, `adapt/sister-orders.ts`; until then only Combine powers did and every other row was listed
+      // disabled): every offered row is enabled.
+      for (const r of rows) if (r.command.kind === 'ability') expect(r.enabled, `${r.label}`).toBe(true);
     }
   });
 
-  it('Combine powers is offered when all three are ready, and an order that was not offered, or has no handler, is refused with the turn kept', () => {
+  it('Combine powers is offered when all three are ready, and an order that was not offered is refused with the turn kept (every offered order has a handler since 2026-10-15)', () => {
     const rig = new Rig(build({ aeons: sisters(100), ...own }));
     rig.until('yuna');
     rig.submit(SUMMON('cindy'));
     const d = rig.nextInput();
     const combine = d.commands.find((r) => r.command.kind === 'ability' && r.command.id === 'sister-order-combine');
     expect(combine?.enabled).toBe(true);
+    // The free choice used to be refused here as "not built" and the turn kept; its handler is built now (`parity-ffx-engine-k-orders.test.ts` has the rules): it runs,
+    // and the turn passes.
     const free = rig.submit({ kind: 'ability', id: 'sister-order-free', targets: [] });
-    expect(free.some((e) => e.type === 'message' && /not built/.test(e.text))).toBe(true);
-    expect(rig.nextInput().actorId).toBe(d.actorId);
+    expect(free.some((e) => e.type === 'message' && /not built/.test(e.text))).toBe(false);
+    expect(free.some((e) => e.type === 'action-start' && e.abilityName === 'Free choice')).toBe(true);
     const low = new Rig(build({ aeons: sisters(60), ...own }));
     low.until('yuna');
     low.submit(SUMMON('cindy'));

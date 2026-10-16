@@ -207,7 +207,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     sfxKey: 'sfx-nul-all',
     messageTemplate: '{user} uses Nul-All on {target}',
     minigame: null,
-    extra: { vfxKey: 'vfx-nul-all' },
+    // The game's record 0x312D is a GROUP-type command (type 1, reach 3, the caster's own side; `kernel/sister-search.ts#COMMAND_ROWS`): Sandy's "Defense!" order aims it
+    // at the whole stored group, the three sisters (`research/re-ffx-zanmato-and-orders.md` Part 2 section 11.2). `groupTarget` keeps the list the order names whole
+    // (`targeting.ts#aimOf`); a single named target (the old menu) still gets it alone.
+    extra: { vfxKey: 'vfx-nul-all', groupTarget: true },
   },
 
   'delta-attack': {
