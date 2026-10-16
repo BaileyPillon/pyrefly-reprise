@@ -507,7 +507,11 @@ export class BattleScreen extends Screen {
         // A link fought on another plate of the scene (the hidden Sinspawn Gui chapter's ruined camp): a white pulse covers the cut and the plate swaps under it (`EnemyGroupDef.plate`).
         if (group.plate && this.scene?.swapBackdrop) {
           this.stage?.screenFlash('#ffffff', 900);
-          void this.scene.swapBackdrop(group.plate);
+          // A link that is a fresh fight (the Mirror Aeons chapter's cavern: the party and the aeons are restored on entry) does not show the road's HUD under the cut: it is taken off the screen now and put
+          // back, rebuilt for the new fight, once the plate has swapped under the white pulse. No other chapter sets `restoresAeonsOnEntry`.
+          const hud = group.restoresAeonsOnEntry === true ? this.hud : null;
+          hud?.setVisible(false);
+          void this.scene.swapBackdrop(group.plate).finally(() => hud?.setVisible(true));
         }
         // A new formation has been staged — Yunalesca's second form, the next
         // Vegnagun part — so its lane owes its own settling window.

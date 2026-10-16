@@ -408,6 +408,8 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
       box.el.hidden = mode === 'instant';
       // The HUD stays where it is; the scene behind the line just dims.
       if (playOpts?.midBattle !== false) opts.root.classList.add(MIDBEAT_CLASS);
+      // The beat's name on the root, for a stylesheet that dresses one beat in particular (`ui/common/cutscene.css`: the Mirror Aeons seam takes the HUD off the screen behind its white-out). Nothing else reads it.
+      if (playOpts?.name !== undefined) opts.root.dataset['midbeat'] = playOpts.name;
       const deadline = midBattleDeadlineMs(script);
       // The budget outlives a beat that finishes early — its stall-guard timer
       // has no cancel — so it is fenced by the beat it was started for. Without
@@ -470,6 +472,7 @@ export function createMidBattleCutscenes(opts: MidBattleCutsceneOptions): MidBat
           else console.info(line);
         }
         opts.root.classList.remove(MIDBEAT_CLASS);
+        delete opts.root.dataset['midbeat'];
         box.hide();
         box.el.hidden = true;
         card.endBeat();
