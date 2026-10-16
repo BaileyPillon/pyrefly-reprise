@@ -52,7 +52,7 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       cite: 'ffx-mirror-aeons §2, §3, §4; re-ffx-dark-aeons §6.3',
     },
     {
-      text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke. Zanmato is a long shot, and nothing a Dark one carries turns it away: a lucky Zanmato can end it. Your Sisters have one order that works, Combine powers, and it needs all three of their gauges full.',
+      text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke. Zanmato is a long shot, and nothing a Dark one carries turns it away: a lucky Zanmato can end it. Your Sisters take orders (Cindy casts and heals, Sandy shields, Mindy drains), and Combine powers, their Delta Attack, needs all three of their bars full.',
       short: 'Zanmato is a long shot',
       cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §2, §5.5; re-ffx-zanmato-and-orders §0',
     },
@@ -71,7 +71,7 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
     { when: { labels: ['Auto-Life'] }, text: 'Auto-Life on {target}: a second life against every blow but Zanmato, the joint attack and Razzia, which take it away', cite: 'ffx-mirror-aeons §2, §3; re-ffx-dark-aeons §6.2' },
     { when: { labels: ['Cheer'] }, text: 'Cheer: at five stacks a third off every physical blow, which a full-health member needs to live through Dark Yojimbo\'s Wakizashi', cite: 'ffx-mirror-aeons §3; re-ffx-dark-aeons §6.3' },
     { when: { labels: ['Pay'] }, text: 'Pay Yojimbo: the payment buys the stroke, a bigger one a better one; a lucky Zanmato can end it', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5; re-ffx-zanmato-and-orders §0' },
-    { when: { labels: ['Combine for the Delta Attack'] }, text: 'Combine: all three of Yuna\'s Sisters are full, so their Delta Attack is on offer; their menu has nothing else that works', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5' },
+    { when: { labels: ['Combine for the Delta Attack'] }, text: 'Combine: all three of Yuna\'s Sisters are full, so their Delta Attack is on offer', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5; re-ffx-zanmato-and-orders §0' },
     { when: { labels: ['Dismiss'] }, text: 'The blow has passed and the aeon is low: bring the party back, and call it again for the next one', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §5.4' },
   ],
 

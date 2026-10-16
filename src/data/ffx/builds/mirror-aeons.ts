@@ -19,7 +19,7 @@
  * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **strongly indicated by the owner's saves, live confirmation pending** (the game's files hold no start value: RE section 5.5, G08 section 3; the community also says 128) `[estimate]` until it is confirmed live |
  * | Gil | `ENDGAME_GIL` = 1,500,000 (Yojimbo is paid from it each time he acts) | StrategyWiki speaks of paying "upwards of 2 million" `[estimate]` |
  * | Bag | `./dreams-end.ts`'s bag (Phoenix Downs, X-Potions, Remedies, Holy Water, Elixir ...) less the Candle of Life, a Doom-kill route that belongs to Yu Yevon alone | the repository's endgame bag `[estimate]` |
- * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **Yojimbo starts at 0 and Yuna's three Magus Sisters at 100** | `./late-aeon-rows.ts`; the Sisters' menu offers Combine powers only while all three bars are full, and the seven other orders (the only way to fill one) are not carried out by the engine yet, so the preset starts them full `[estimate]` |
+ * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **Yojimbo starts at 0 and Yuna's three Magus Sisters at 100** | `./late-aeon-rows.ts`; the Sisters' menu offers Combine powers only while all three bars are full; **RE's follow-up (4256d209a) carries out all seven other orders now**, so a bar can be filled in the fight, and the full start is the bench's lever to re-read (0 is the other end) `[estimate]` |
  * | The Sisters' start motivation | `SISTERS_START_MOTIVATION` = 50 each | **an estimate: RE marks it unsourced** (`FFXPartyBuild.sisters`); it sets Combine powers' chance (200 plus motivation, always from 56 up) and the order menu's rolls |
  * | Phoenix Downs | `ENDGAME_PHOENIX_DOWNS` = 17 | the bench's lever (`docs/plans/ch-mirror-aeons-bench.md`); **a PRELIMINARY value** from the run on the engine as merged at d8fa5b69, to be re-set by the re-run the release driver triggers once RE's follow-up has landed `[estimate]` |
  *
@@ -62,12 +62,13 @@ export const YOJIMBO_START_COMPATIBILITY = 128;
  */
 export const SISTERS_START_MOTIVATION = 50;
 /**
- * The Overdrive gauge Yuna's Magus Sisters start the chapter at, 0 to 100 (a lever of the difficulty bench). **Full, `[estimate]`**: the engine's Sisters have no command of their own but the Combine powers order (the other seven orders
- * are not built: `battle/ffx/aeon-commands.ts`) and Dismiss, and Combine powers is only offered when all three gauges are full, so a Sister who comes onto the field with an empty gauge can do nothing but leave. Full gauges also
- * make the mirror: the Dark Sisters start the trio at 100 (RE note 2.5). The five story aeons keep their Dream's End gauges.
+ * The Overdrive gauge Yuna's Magus Sisters start the chapter at, 0 to 100 (a lever of the difficulty bench). **Full, `[estimate]`**. It was chosen when only the Combine powers order worked (the seven others were not carried out), and
+ * Combine powers is only offered when all three gauges are full, so a Sister who came onto the field with an empty gauge could do nothing but leave. **RE's follow-up (4256d209a) carries out all eight orders**, so a bar can now be
+ * filled in the fight (each order's action applies its own gain pair) and a start at 0 is playable: whether to keep the full start is the bench's call, not made here. Full gauges also make the mirror: the Dark Sisters start the trio at 100 (RE note 2.5).
+ * The five story aeons keep their Dream's End gauges.
  */
 export const SISTERS_START_GAUGE = 100;
-/** Yojimbo's gauge at the start: 0 (his menu is Pay and Dismiss, and a full gauge only raises the chance that a Pay buys Zanmato, which does nothing to a Dark Aeon: Death 255 against their immunity). `[estimate]` */
+/** Yojimbo's gauge at the start: 0 (his menu is Pay and Dismiss). **A full gauge raises the chance that a Pay buys Zanmato** (+20 to the roll's motivation: RE's lane handoff section 10.4, 17 in 64 for a 100,000 Pay at compatibility 128 against 0 in 64 without it), and **a landed Zanmato now ends a Dark Aeon fight** (every legal foe of the group dies whatever its Death resistance, afda2d451), so the start is a lever of the bench, not a detail. `[estimate]` */
 export const YOJIMBO_START_GAUGE = 0;
 
 /** Yuna's ten stats as the aeon formula reads them. */

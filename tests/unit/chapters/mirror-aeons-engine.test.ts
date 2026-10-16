@@ -185,13 +185,16 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
     expect(buildAdvisorView(e.state(), { actorId: d.actorId, commands: d.commands }), "Yojimbo's turn").toBeNull();
   });
 
-  it('with the gauges empty their menu offers Dismiss and nothing else that works (the other seven orders are not built): the reason the preset starts them full', () => {
+  it('with the gauges empty their menu offers orders that work and Dismiss, but not Combine powers (it needs all three bars full); RE\'s follow-up (4256d209a) carries the seven others out, so an empty start is playable', () => {
     const party = structuredClone(mirrorAeonsBuild);
     for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 0;
     const e = H.newEngine(2, H.ACT_I_GROUP, party);
     summon(e, 'Cindy');
     const d = nextInput(e);
-    expect(d.commands.filter((c) => c.enabled).map((c) => c.command.kind)).toEqual(['dismiss']);
+    const enabled = d.commands.filter((c) => c.enabled);
+    expect(enabled.some((c) => c.command.kind === 'dismiss')).toBe(true);
+    expect(enabled.filter((c) => c.command.kind === 'ability').length, 'at least one order the engine carries out').toBeGreaterThanOrEqual(1);
+    expect(d.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'sister-order-combine')?.enabled ?? false, 'Combine powers needs every bar full').toBe(false);
   });
 });
 

@@ -413,7 +413,11 @@ describe("Dark Yojimbo's Zanmato is the Strength row 0x410A, not a Death row (RE
     expect([row.formula, row.power, row.targeting, row.hits]).toEqual(['strength', 250, 'all-enemies', 1]);
     expect(row.flags).toContain('always-break-damage-limit'); // the cap bit: 99,999
     expect(row.statusEffects, 'no Death on the Dark Yojimbo\'s row').toEqual([]);
-    expect(COMMAND_RECORDS_DARK_AEONS[DARK_ZANMATO_ID]).toMatchObject({ id: 0x410a, damageClass: 1, extra: 0x200 });
+    // The row exactly as RE gave it (re-ffx-zanmato-and-orders, section 10.5 item 2 of the lane's handoff): Strength, power 250, one hit, the whole front line (target type all), damage kind neither, the cap-99,999 flag,
+    // the cleansing flag with the extra-status mask Auto-Life (0x200), shatter 100, no status chance, accuracy formula 0 (it never rolls).
+    expect([row.damageType, row.canMiss, row.shatterChance, row.element]).toEqual(['other', false, 100, ['none']]);
+    expect(row.removesStatuses).toEqual([]);
+    expect(COMMAND_RECORDS_DARK_AEONS[DARK_ZANMATO_ID]).toEqual({ id: 0x410a, type: 0, flagsMisc: 0x40000006, flagsDamage: 0xa0, damageClass: 1, rank: 3, shatter: 100, extra: 0x200 });
     expect(DARK_ROWS.zanmato).toBe(DARK_ZANMATO_ID);
   });
 
