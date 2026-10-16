@@ -32,11 +32,14 @@ export const LAST_SUMMONING_GUIDE_IDS = [
   'yu-yevon',
 ] as const;
 
-/** The one line every swing at a Sister gets: the tactic aims at whichever has the least HP left, and the reason is the same for all three. */
+/** The line every swing at a Sister gets: the tactic aims at Cindy while she stands and then at the Sister with the least HP left, so the reason is Cindy's, and then the other two's. */
 function sisterHint(targetId: string): GuideHint {
+  const cindy = targetId === 'possessed-cindy';
   return {
     when: { kinds: ['attack', 'overdrive'], targetId },
-    text: '{target} has the least HP left: fell any one Sister and the Delta Attack can never come, whereas a blow spread over all three would charge all three gauges',
+    text: cindy
+      ? '{target} first: she mends and drains the others and throws the Delta Attack, so with her down only the Pagodas heal a Sister, and the Delta Attack can never come'
+      : '{target} next: with Cindy down nothing but the Pagodas heals her, and with one Sister gone the Delta Attack can never come',
     cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §6.2',
   };
 }
@@ -63,8 +66,8 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
       cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §1.4, §6.1',
     },
     {
-      text: 'The three Sisters are one battle. When all three are alive with full gauges Cindy calls the Delta Attack, six hits on everyone; one Sister down and it can never come. Every blow charges the Sister it lands on, and the Pagodas feed whoever is lowest.',
-      short: 'Fell one Sister and no Delta Attack comes',
+      text: 'The three Sisters are one battle, and Cindy keeps it going: she mends and drains, and when all three are alive with full gauges she calls the Delta Attack, six hits on everyone. Fell her first; every blow also charges the gauge of the Sister it lands on.',
+      short: 'Fell Cindy first: she mends and calls the Delta',
       cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §6.2',
     },
     {
@@ -192,19 +195,19 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
     {
       bossId: 'possessed-cindy',
       label: 'The Magus Sisters',
-      note: 'Cindy mends, drains and calls the Delta Attack when all three gauges are full; Sandy wards Cindy with Reflect and hurries her sisters, then Razzia; Mindy flares through Cindy’s Reflect or flurries. A Pagoda’s Power Wave goes to the lowest gauge.',
+      note: 'Cindy mends, drains and calls the Delta Attack when all three gauges are full; Sandy wards Cindy with Reflect and hurries her sisters, then Razzia; Mindy flares through Cindy’s Reflect or flurries. A Pagoda’s Power Wave goes to the lowest gauge. Fell Cindy first.',
       cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §6.2',
     },
     {
       bossId: 'possessed-sandy',
       label: 'The Magus Sisters',
-      note: 'Cindy mends, drains and calls the Delta Attack when all three gauges are full; Sandy wards Cindy with Reflect and hurries her sisters, then Razzia; Mindy flares through Cindy’s Reflect or flurries. A Pagoda’s Power Wave goes to the lowest gauge.',
+      note: 'Cindy mends, drains and calls the Delta Attack when all three gauges are full; Sandy wards Cindy with Reflect and hurries her sisters, then Razzia; Mindy flares through Cindy’s Reflect or flurries. A Pagoda’s Power Wave goes to the lowest gauge. Fell Cindy first.',
       cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §6.2',
     },
     {
       bossId: 'possessed-mindy',
       label: 'The Magus Sisters',
-      note: 'Cindy mends, drains and calls the Delta Attack when all three gauges are full; Sandy wards Cindy with Reflect and hurries her sisters, then Razzia; Mindy flares through Cindy’s Reflect or flurries. A Pagoda’s Power Wave goes to the lowest gauge.',
+      note: 'Cindy mends, drains and calls the Delta Attack when all three gauges are full; Sandy wards Cindy with Reflect and hurries her sisters, then Razzia; Mindy flares through Cindy’s Reflect or flurries. A Pagoda’s Power Wave goes to the lowest gauge. Fell Cindy first.',
       cite: 'ffx-bfa-yu-yevon §2.2; re-ffx-last-summoning §6.2',
     },
     {

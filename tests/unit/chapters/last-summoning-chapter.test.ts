@@ -343,7 +343,8 @@ describe('the card and the document: cited, in the corpus form, and tied to the 
     expect(text).toMatch(/copy of your own/);
     expect(text).toMatch(/greyed out/);
     expect(text).toMatch(/flat 9,999 on everyone at the front/);
-    expect(text).toMatch(/one Sister down and it can never come/);
+    expect(text).toMatch(/Fell her first/);
+    expect(text).toMatch(/Cindy keeps it going/);
     expect(text).toMatch(/Doom from a Candle of Life/);
     expect(text).not.toMatch(/Daigoro is|plain Attack of Yojimbo|Death at/);
   });
@@ -426,7 +427,7 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(lastSummoning(turn.actorId, turn.commands, e)).toMatchObject({ kind: 'dismiss' });
   });
 
-  it('aims a swing in the Sisters’ fight at the Sister with the least HP, Cindy first on a tie, and leaves a single Sister alone', async () => {
+  it('aims a swing in the Sisters’ fight at Cindy while she stands, then at the Sister with the least HP, and leaves a single Sister alone', async () => {
     const e = await lastSummoningEngine(['sisters'], 6);
     const hp = (id: string, v: number): void => void ((e.state().combatants[id] as FFXCombatant).hp = v);
     const swingOf = (): Command | null => {
@@ -436,11 +437,15 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     hp('possessed-mindy', 3000);
     hp('possessed-sandy', 900);
     hp('possessed-cindy', 5000);
+    expect(swingOf()?.targets).toEqual(['possessed-cindy']); // Cindy first (she mends, drains and calls the Delta Attack), whoever has less HP
+    hp('possessed-cindy', 100);
+    expect(swingOf()?.targets).toEqual(['possessed-cindy']);
+    const cindy = e.state().combatants['possessed-cindy'] as FFXCombatant;
+    cindy.hp = 0;
+    cindy.alive = false; // Cindy has fallen: now the Sister with the least HP left
+    hp('possessed-sandy', 900);
+    hp('possessed-mindy', 3000);
     expect(swingOf()?.targets).toEqual(['possessed-sandy']);
-    hp('possessed-sandy', 4000);
-    hp('possessed-mindy', 4000);
-    hp('possessed-cindy', 4000);
-    expect(swingOf()?.targets).toEqual(['possessed-cindy']); // a tie goes to Cindy
     hp('possessed-mindy', 100);
     expect(swingOf()?.targets).toEqual(['possessed-mindy']);
   });

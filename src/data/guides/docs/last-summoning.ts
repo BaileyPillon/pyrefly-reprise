@@ -117,7 +117,7 @@ export const LAST_SUMMONING_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Fell any one Sister and the Delta Attack can never be called. Reflect on Cindy bounces your spells away from her; physical blows are not turned back, so strike whichever Sister has the least HP left.',
+      text: 'Fell Cindy first: she is the one who mends and drains, and with her gone only the Pagodas heal a Sister. Fell any Sister and the Delta Attack can never be called. Reflect on Cindy bounces your spells; physical blows are not turned back.',
     },
     {
       t: 'p',
@@ -130,7 +130,7 @@ export const LAST_SUMMONING_DOC: GuideDoc = {
       items: [
         'Keep the party healed in every battle. Potions and Ethers are all you have until the end.',
         'Beat each twin quickly: the Pagodas heal it and fill its gauge, and its Overdrive reaches everyone at the front.',
-        'Against Yojimbo, finish him before his gauge fills. Against the Sisters, fell one of them first.',
+        'Against Yojimbo, finish him before his gauge fills. Against the Sisters, fell Cindy first.',
         'Call your own aeons when the party is in trouble: while one stands, nobody in the party can be hit.',
         'Against Yu Yevon, use a Candle of Life and keep the Pagodas down.',
       ],

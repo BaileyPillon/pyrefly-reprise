@@ -8,8 +8,11 @@
  * the copy of the player's own stats, the two Yu Pagodas, nothing restored between links), so every ordinary party turn is **Chapter III's line, unchanged** (`./braskas-final-aeon.ts`: revive, repair, Protect, swing
  * at the twin; the Yu Yevon line: Candle of Life, the Pagodas down, then idle). What it adds, each from the RE session's note on the game's own files (`research/re-ffx-last-summoning.md`, "RE section n"):
  *
- * 1. **The Magus Sisters are one battle with three bodies**, and the Delta Attack needs all three alive with their gauges full (RE section 6.2). So every swing goes at **the Sister with the least HP left** (Cindy on
- *    a tie): one Sister down and the Delta Attack can never come, and a blow spread over the three charges all three gauges (10 to 19 a hit, RE section 6.2) instead of one.
+ * 1. **The Magus Sisters are one battle with three bodies**, and Cindy is the one that keeps it going: she mends (Curaga on a Sister at half HP or less) and drains (Drain whenever she is under two thirds of her own HP),
+ *    and she throws the Delta Attack, which needs all three alive with their gauges full (RE section 6.2). So every swing goes at **Cindy while she stands, then at the Sister with the least HP left**: with Cindy down
+ *    nothing but the Pagodas heals a Sister and the Delta Attack can never come, and a blow spread over the three charges all three gauges (10 to 19 a hit, RE section 6.2) instead of one. **Measured, not argued**: aimed
+ *    at the weakest first (Mindy, then Sandy), the party left Cindy alone, draining as fast as it hurt her, and the fight stalled (`The battle cannot be won from here`) in 5 of 24 seeds with the Sisters last, 3 of 24 with
+ *    them second; aimed at Cindy first it won 24 of 24 and 23 of 24, in a third to two thirds of the turns (`tests/unit/chapters/last-summoning-bench.test.ts` has the whole table).
  * 2. **The player's Yojimbo pays to be good**: Pay is his whole menu (RE section 8, the aeon-side note). The motivation is `4n + compatibility div 10` with `n = floor(log2 gil) - 2`, and once it is 63 the roll can no
  *    longer fall below Wakizashi on all, whatever the monsters' Zanmato byte (RE section 8.1 point 4), so the line pays **the smallest power of two that reaches 63**, or the largest the purse allows. Every doubling of
  *    the payment adds 4, which is why a payment is always a power of two. [The hire answer is the build's, 1; the line is written for it.]
@@ -37,7 +40,7 @@ import { type Tactic, aim, row } from './common.ts';
 /** Every enemy id the chain fields: the same eleven Chapter III's chain does (the twins carry the ids of the aeons they copy). Registered ahead of Chapter III's, behind `onLastSummoningBoard`. */
 export const LAST_SUMMONING_BOSS_IDS: readonly CombatantId[] = BRASKAS_FINAL_AEON_CHAIN_IDS;
 
-/** The three Sisters' possessed bodies, in the order a tie is broken (Cindy first). */
+/** The three Sisters' possessed bodies: Cindy, who is felled first, and then the order a tie is broken in. */
 export const SISTER_BODY_IDS: readonly CombatantId[] = ['possessed-cindy', 'possessed-sandy', 'possessed-mindy'];
 
 /** The motivation at which Yojimbo's second roll can no longer fall below Wakizashi on all (RE section 8.1, point 4). */
@@ -82,12 +85,17 @@ const flagNumber = (engine: BattleEngine, key: string): number => {
 /** The foe an aeon should hit: the Sister with the least HP in the Sisters' fight, else the first enemy standing that is not a Pagoda. */
 function foeFor(engine: BattleEngine): FFXCombatant | undefined {
   const sisters = standingSisters(engine);
-  if (sisters.length > 0) return lowestHp(sisters);
+  if (sisters.length > 0) return sisterToFell(sisters);
   return Object.values(engine.state().combatants).find((c): c is FFXCombatant => c.side === 'enemy' && !c.flags.isPart && c.alive && c.hp > 0 && !c.removed) as FFXCombatant | undefined;
 }
 
 function lowestHp(bodies: readonly FFXCombatant[]): FFXCombatant {
   return bodies.reduce((best, c) => (c.hp < best.hp ? c : best));
+}
+
+/** The Sister to hit: Cindy while she stands (she mends, drains and calls the Delta Attack), then the one with the least HP left. */
+export function sisterToFell(bodies: readonly FFXCombatant[]): FFXCombatant {
+  return bodies.find((c) => c.id === 'possessed-cindy') ?? lowestHp(bodies);
 }
 
 /** An aeon of the player's on the field, on its own turn. */
@@ -119,7 +127,7 @@ function sameCommand(a: Command, b: Command): boolean {
 }
 
 /**
- * In the Sisters' fight, aim a swing Chapter III's line made at one Sister at **the one with the least HP** instead (Cindy first on a tie). Anything else, and any fight with fewer than two Sisters
+ * In the Sisters' fight, aim a swing Chapter III's line made at one Sister at **Cindy while she stands, then the one with the least HP** instead ({@link sisterToFell}). Anything else, and any fight with fewer than two Sisters
  * standing (where there is nothing to choose), is left as it is.
  */
 function refocus(chosen: Command, commands: AvailableCommand[], engine: BattleEngine): Command {
@@ -129,7 +137,7 @@ function refocus(chosen: Command, commands: AvailableCommand[], engine: BattleEn
   if (chosen.targets.length !== 1 || !ids.has(chosen.targets[0]!)) return chosen;
   const offered = commands.find((c) => c.enabled && sameCommand(c.command, chosen));
   if (offered === undefined) return chosen;
-  const focus = lowestHp(sisters);
+  const focus = sisterToFell(sisters);
   return offered.validTargets.includes(focus.id) ? aim(offered, focus.id) : chosen;
 }
 
