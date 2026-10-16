@@ -101,6 +101,7 @@ import {
   previewCritChance as previewCritChanceFfx2,
   previewHitChance as previewHitChanceFfx2,
 } from '../../battle/ffx2/simulate.ts';
+import { damagesMp as ffx2DamagesMp } from '../../battle/ffx2/intentLead.ts';
 import { buildGuideView, recommendedCommand, type GuideDecision } from './guide.ts';
 import {
   type AdvisorIntent,
@@ -658,7 +659,9 @@ export function describeAbility(
   else if (def.formula === 'fixed') parts.push(`Fixed damage${scope}`);
   else if (def.formula !== 'none' && def.power > 0) {
     const kind = def.damageType === 'magical' ? 'magic' : def.damageType === 'physical' ? 'physical' : '';
-    parts.push(`${el.length > 0 ? `${statusLabel(el[0]!)} ` : ''}${kind} damage${scope}`.replace(/\s+/g, ' ').trim());
+    // FFX-2 only: a move whose game row damages MP says so (the party's Osmose, Target MP, Magicide); an FFX ability never has `game: 'ffx2'`.
+    const pool = def.game === 'ffx2' && ffx2DamagesMp(def) ? 'MP ' : '';
+    parts.push(`${el.length > 0 ? `${statusLabel(el[0]!)} ` : ''}${kind} ${pool}damage${scope}`.replace(/\s+/g, ' ').trim());
   }
   if (def.hits > 1) parts.push(`${def.hits} hits`);
   // PR-0324: Ronso Rage is "no timed input; a picker only" (`types.ts#MinigameKind`), so it never claims one.

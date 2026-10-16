@@ -15,6 +15,9 @@
  *
  * Nothing is remembered: a fresh `BoardDoors` is made on every visit to the board, so no letter, tap or progress survives leaving it. Nothing is shown: no card, no sound, no sign.
  *
+ * **A phone has no keyboard to type a word on**, so the same table is also fed by `./doorField.ts` (r50-rc): a long press on the "Chapter select" label puts up one text field, and every letter typed in it goes
+ * through a fresh `BoardDoors` exactly as a key press does (so a word added to `CHAPTER_DOORS` works on a phone with no other change). It is shown only while it is asked for and leaves nothing behind.
+ *
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *

@@ -175,9 +175,12 @@ describe('the data behind it', () => {
     expect(experimentActTwoGroup.noSaveSphereCard).toBe(true);
   });
 
-  it('the flag is the Experiment\'s alone: no other registered formation, in either game, sets it', () => {
+  it('the flag is the Experiment\'s and Mirror Aeons\' Act II groups\' alone (FFX-2 and FFX, each restoring the party with no card): no other registered formation, in either game, sets it', () => {
     const flagged = [...Object.values(FFX_GROUPS_BY_ID), ...Object.values(FFX2_GROUPS_BY_ID)].filter((g) => g.noSaveSphereCard === true).map((g) => g.id);
-    expect(flagged).toEqual([DJOSE_EXPERIMENT_2]);
+    // Mirror Aeons (FFX, listed 2026-10-16) sets it on the five Dark Yojimbo tiers, which are the cavern's Act II and heal the party and the aeons on entry with no Save Sphere card (`dark-aeons-groups.ts`).
+    const mirrorTiers = ['70', '71', '72', '73', '74'].map((n) => `mirror-yojimbo-nagi05_${n}`);
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);
   });
 
   it('and it only ever rides with the restore: a formation that skips the card is a formation that restores', () => {

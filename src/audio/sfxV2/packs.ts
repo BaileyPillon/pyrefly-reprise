@@ -35,6 +35,7 @@ export const BOSS_PACKS: Readonly<Record<string, readonly string[]>> = {
   'seymour-flux': ['ffx-flux'],
   yunalesca: ['ffx-lady'],
   'braskas-final-aeon': ['ffx-final-aeon'],
+  'mirror-aeons': ['ffx-final-aeon'], // Chapter XXVII (listed 2026-10-16): Lulu casts Ultima (the guides' answer to Dark Mindy's Evasion), whose recorded row lives in the Final Aeon's pack
   // FFX-2 chapters.
   'ffx2-leblanc': ['ffx2-leblanc'],
   'exp-leblanc': ['ffx2-leblanc'], // the hidden Leblanc chapter plays the same fight

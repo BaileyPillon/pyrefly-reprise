@@ -15,6 +15,7 @@ import { GUIDES } from '../../src/data/guides/index.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../src/data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../src/data/ffx2/index.ts';
+import { darkSister } from '../../src/data/ffx/enemies/dark-aeons.ts';
 import { CHAPTER_GAME } from '../../src/engine/tactics/lookup.ts';
 import { anchorBoss, docStrings, docUnits } from './helpers/guideDocStrings.ts';
 
@@ -184,10 +185,18 @@ const num = (s: string): number => Number(s.replace(/,/g, ''));
  */
 const HP_SET_BY_THE_PARTY = new Set(['biran-yenke']);
 
+/**
+ * Numbers a page may print although no fight of its chapter's chain holds them, each read from the data and never typed here, so the exemption cannot hide a wrong number. Mirror Aeons (FFX, listed
+ * 2026-10-16): the page is the Dark Magus Sisters' whole guide page (the boss header names all three), so it prints Dark Cindy's HP, which the game's record holds, though the chapter's Act I fights the
+ * faithful pair, Sandy and Mindy (`MIRROR_ACT_I`); Cindy appears on the player's side, in the Summon list.
+ */
+const HP_ALSO_PRINTED: Record<string, readonly number[]> = { 'mirror-aeons': [darkSister('cindy', 0).stats.maxHp] };
+
 describe('every HP a document prints is one the game uses (AGENTS.md rule 6)', () => {
   for (const d of GUIDE_DOCS) {
     it(`${d.id}`, () => {
       const hps = chapterHps(d.id);
+      for (const extra of HP_ALSO_PRINTED[d.id] ?? []) hps.add(extra);
       const printed: number[] = [];
       for (const b of d.blocks) {
         if (b.t === 'field' && /HP$/.test(b.label)) {

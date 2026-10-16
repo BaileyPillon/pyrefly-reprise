@@ -70,9 +70,24 @@ export function emptiesMpLead(def: AbilityDef, where: string): string | null {
   return `Empties ${where}'s MP`;
 }
 
-/** True when the row's damage lands on MP: `extra.mpOnly`, or the pool the row names (`extra.damagesPool: 'mp'`). */
+/**
+ * True when the game's own row for this ability damages MP and nothing else: damage class 2 (class 1 is HP, 3 both pools), on a
+ * row that does damage (a `formula: 'none'` row is an Ether or a Looming Glacier, worded elsewhere) and does not heal.
+ *
+ * This is the party's Osmose (row 0x317b, "MP, formula 9, power 6", `research/re-ffx2-ai-fallen-trema.md`): it carries neither
+ * `extra` key, only the `drains-mp` flag, which the HP-and-MP drains (Absorb, the Core's Leg Absorb) share, so the flag cannot
+ * say which pools it takes and the row's class can.
+ */
+export function isMpClassRow(def: AbilityDef): boolean {
+  return def.game === 'ffx2' && def.ffx2Record?.damageClass === 2 && def.formula !== 'none' && !def.flags.includes('heals');
+}
+
+/**
+ * True when the row's damage lands on MP: `extra.mpOnly`, or the pool the row names (`extra.damagesPool: 'mp'`), or the game's
+ * own row being the MP class alone ({@link isMpClassRow}). FFX-2 only: an FFX ability never reaches it (`game` is `'ffx'`).
+ */
 export function damagesMp(def: AbilityDef): boolean {
-  return def.extra?.['mpOnly'] === true || def.extra?.['damagesPool'] === 'mp';
+  return def.extra?.['mpOnly'] === true || def.extra?.['damagesPool'] === 'mp' || isMpClassRow(def);
 }
 
 /**

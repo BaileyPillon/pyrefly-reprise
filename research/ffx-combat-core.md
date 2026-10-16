@@ -739,7 +739,7 @@ Column order below is the in-game party order: **Tidus / Yuna / Auron / Kimahri 
 | **Slayer** | user kills an enemy | **20 %** (**40 %** for Warrior Monk / Fallen Monk, whose weapons also count) | 100 / 110 / 80 / 120 / 90 / 130 / 100 |
 | **Hero** | user kills an enemy with **≥ 10 000 HP, or ≥ 20× the estimated damage** | **20 %** | 50 / 50 / 40 / 45 / 50 / 70 / 50 |
 | **Rook** | user reduces or nullifies enemy damage via NulBlaze / NulFrost / NulShock / NulTide / **Protect** / **Shell** / Reflect | **10 %** | 120 / 110 / 120 / 120 / 120 / 120 / 120 |
-| **Victor** | user is in the **active** party when the battle is won | **20 %** | 120 / 150 / 200 / 120 / 160 / 200 / 140 |
+| **Victor** | user is in the **active** party when the battle is won. **[Superseded 2026-10-15 by re-parity RC8 lane FFX-L, from FFX.exe: see `research/re-ffx-battle-entry.md` section 3: the hook runs for every result, not only a victory; a living Victor free of Curse and Petrify gains it at an escape or a defeat too.]** | **20 %** | 120 / 150 / 200 / 120 / 160 / 200 / 140 |
 | **Coward** | user Escapes (a **Flee** by anyone also counts) | **10 %** | 600 / 900 / 1000 / 700 / 400 / 980 / 450 |
 | **Ally** | start of the user's turn | **3 %** *(4 % in the original JP PS2 — see §0 V6)* | 600 / 500 / 450 / 300 / 350 / 480 / 320 |
 | **Sufferer** | start of the user's turn while afflicted | **16 %** | 100 / 80 / 120 / 130 / 100 / 110 / 90 |

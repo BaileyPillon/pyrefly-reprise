@@ -48,7 +48,11 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
     { t: 'h3', text: 'Together, in a pair and alone' },
     {
       t: 'p',
-      text: 'With all three standing and full, the joint attack is their Overdrive. A sister left with only one other, or alone, and full uses Mega Graviton instead, which harms the whole party and puts Sleep, Silence, Darkness and Slow on it. Sandy and Mindy together start empty: five plain turns each, then Mega Graviton on the sixth.',
+      text: 'With all three standing and full, the joint attack is their Overdrive. A sister left with only one other, or alone, and full uses Mega Graviton instead, which harms the whole party and puts Sleep, Silence, Darkness and Slow on it.',
+    },
+    {
+      t: 'p',
+      text: 'Sandy and Mindy together start empty: five plain turns each, then Mega Graviton on the sixth.',
     },
     { t: 'lead', text: 'The strategy:' },
     {

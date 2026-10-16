@@ -109,8 +109,17 @@ export function commandHelpText(cmd: AvailableCommand): string {
   return effect ? `${cmd.disabledReason} — ${effect}` : cmd.disabledReason;
 }
 
-/** A group row (a category collapsed to one submenu-opening row): the one item's own text, or a generic opener. */
+/**
+ * A group row (a category collapsed to one submenu-opening row): the one item's own text, or a generic opener.
+ *
+ * A group with nothing enabled in it is greyed with its first item's reason (`CommandMenu.ts#groupRowHtml`), so the sentence
+ * leads with that reason the way a greyed leaf row's does: under Itchy, Attack reads "Itchy — spherechange first — Physical
+ * damage" and White Magic, Skill and Item now read "Itchy — spherechange first — Open the White Magic menu." (they read the bare
+ * opener, so the one row whose name left no room for the reason on screen, live check LV48-1, had no reason anywhere).
+ */
 export function groupHelpText(label: string, items: readonly AvailableCommand[]): string {
   const only = items.length === 1 ? items[0] : undefined;
-  return (only ? commandHelpText(only) : '') || `Open the ${label} menu.`;
+  const opener = (only ? commandHelpText(only) : '') || `Open the ${label} menu.`;
+  const reason = items.some((c) => c.enabled) ? undefined : items[0]?.disabledReason;
+  return only || !reason ? opener : `${reason} — ${opener}`;
 }

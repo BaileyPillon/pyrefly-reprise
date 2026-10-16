@@ -191,12 +191,12 @@ describe('the coverage: no row\'s sound can be heard where its pack is not loade
   });
 
   it('knows which party abilities the chapters carry (a Lore breath in the chapters whose Kimahri learned it)', () => {
-    expect([...cov.rowChapters('ffx.breath.stone')].sort()).toEqual(['braskas-final-aeon', 'seymour-omnis', 'sin-face', 'sin-fins-core']);
+    expect([...cov.rowChapters('ffx.breath.stone')].sort()).toEqual(['braskas-final-aeon', 'mirror-aeons', 'seymour-omnis', 'sin-face', 'sin-fins-core']); // Mirror Aeons (2026-10-16): Kimahri is on its bench with the breath learned
     expect(cov.rowChapters('ffx.breath.aqua').size).toBe(0); // no chapter's build or foes carry it
   });
 
   it('loads a pack where a chapter lists it, and a game\'s core pack in every chapter of the game', () => {
-    expect(cov.packChapters('ffx-final-aeon')).toEqual(new Set(['braskas-final-aeon']));
+    expect(cov.packChapters('ffx-final-aeon')).toEqual(new Set(['braskas-final-aeon', 'mirror-aeons'])); // Mirror Aeons: Lulu casts Ultima there
     expect(cov.packChapters('ffx2-aeons')).toEqual(new Set(['ffx2-fallen-aeons', 'ffx2-ixion-djose']));
     expect(cov.packChapters('ffx2-core').size).toBe(cov.facts.filter((c) => c.game === 'ffx2').length);
   });
