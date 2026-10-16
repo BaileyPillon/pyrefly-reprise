@@ -1,9 +1,10 @@
 /**
- * **Mirror Aeons**, the Dark Magus Sisters and Dark Yojimbo against Yuna's own Magus Sisters and Yojimbo: a NEW, HIDDEN FFX chapter in two acts (branch `ch-mirror-aeons`, scaffolded 2026-10-15; hidden chapter number 27).
+ * **Mirror Aeons**, the Dark Magus Sisters and Dark Yojimbo against Yuna's own Magus Sisters and Yojimbo: a NEW FFX chapter in two acts (branch `ch-mirror-aeons`, 2026-10-15; chapter number 27), **LISTED on the board on Bailey's word of 2026-10-15** (it was built hidden).
  *
  * Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters that would be so awesome. the most epic encounter ever!!!!!!!!!" and then "keep going full speed ahead, i'll go
- * with all of your recommendations i like the mirror match but make the difficulty appropriate not too easy not too hard". The driver's decisions: the chapter is FFX only, ships **hidden behind the typed word `yojimbo`**
- * (`../app/screens/frontend/yojimboDoor.ts`), listing it on the board waits for Bailey's word, the art is **provisional** (the aeons' own paintings stand in for the Dark ones; two existing backdrops), the music existing cues
+ * with all of your recommendations i like the mirror match but make the difficulty appropriate not too easy not too hard". The driver's decisions: the chapter is FFX only, was built **hidden behind the typed word `yojimbo`**
+ * (`../app/screens/frontend/yojimboDoor.ts`, which still opens it), and Bailey then ordered it live: "We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be
+ * hidden. It needs to be done and complete end-to-end." (relayed by the driver, 2026-10-15). The art is **provisional** (the aeons' own paintings stand in for the Dark ones; two existing backdrops), the music existing cues
  * by reference. The paper preflight is `docs/plans/ch-mirror-aeons-review.md`; the written sources `research/ffx-mirror-aeons.md`; the handoff `docs/handoff/ch-mirror-aeons.md`.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: the Dark Aeons (International and HD releases), the player's Yojimbo and Magus Sisters and CTB are FFX's. FFX-2's Yojimbo ("Tourist Trap") is another record.
@@ -17,9 +18,9 @@
  * **Every enemy number is the game's own** (`research/re-ffx-yojimbo-sisters-feasibility.md`); the party is an `[estimate]` preset (`./ffx/builds/mirror-aeons.ts`); **the Dark aeons' AI and Yuna's Yojimbo and Sisters in
  * the engine are the reverse-engineering session's work in progress** and plug in at the seams in `../battle/ffx/ai/dark-aeons-seams.ts`.
  *
- * **It is an experiment, not a listed chapter**, exactly as the other hidden chapters are: `experimental: true` sends its attempts, clears and play time to the experiments' own store
- * (`../app/experiments/experimentRecords.ts`), never to the save, so there is no save change and it is out of the board's "N of 18", the veteran check and total play time. It is not in `CHAPTERS` or `CHAPTER_IDS`;
- * `EXPERIMENT_CHAPTERS` lists it (`./chapters-experiments.ts`) and `getChapter` finds it. The board has no card for it.
+ * **It is a listed chapter**: it is in `CHAPTERS` and `CHAPTER_IDS` (`./encounters.ts`, after Sin's two), so the board has a card for it, "of 18" is "of 19", and its attempts, clears, best time and play time are recorded in the save
+ * exactly as every listed chapter's are (`SaveData.chapters[id]`: a free-form record keyed by the id, created at the first attempt; **no field, version or migration of the save changes**, `tests/unit/save-mirror-aeons-listed.test.ts`).
+ * It has no `experimental` flag, so its card says XXVII (the registry's number; 19 to 26 belong to the hidden chapters) and its eyebrow CHAPTER XXVII. The typed word `yojimbo` still opens it from the board.
  */
 
 import type { Chapter } from './encounters.ts';
@@ -40,14 +41,13 @@ export const MIRROR_AEONS_TEXT = {
 } as const;
 
 /**
- * Number 27: past Angra Mainyu's 26 (and Biran and Yenke's 25, Valefor at Besaid's 24, the Tourist Trap's 23), so no two chapters share a number (`tests/unit/chapter-numbers.test.ts`). It is no board
- * number: the card says EXP, the eyebrow EXPERIMENTAL (`ui/common/roman.ts`).
+ * Number 27: past Angra Mainyu's 26 (and Biran and Yenke's 25, Valefor at Besaid's 24, the Tourist Trap's 23), so no two chapters share a number (`tests/unit/chapter-numbers.test.ts`). Listed, it sorts after
+ * Sin's Chapter XVIII in the FFX group and its card reads XXVII.
  */
 export const MIRROR_AEONS: Chapter = {
   id: MIRROR_AEONS_ID,
   game: 'ffx',
   number: 27,
-  experimental: true,
   ...MIRROR_AEONS_TEXT,
   location: 'Mushroom Rock Road, and the Cavern of the Stolen Fayth',
   sceneKey: MIRROR_AEONS_SCENE,

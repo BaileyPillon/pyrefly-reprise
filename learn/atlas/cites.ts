@@ -49,6 +49,7 @@ import { SEYMOUR_NATUS_ABILITIES } from '../../src/data/ffx/enemies/seymour-natu
 import { SEYMOUR_OMNIS_ABILITIES } from '../../src/data/ffx/enemies/seymour-omnis-abilities.ts';
 import { ISAARU_ABILITIES } from '../../src/data/ffx/enemies/isaaru-abilities.ts';
 import { OVERDRIVE_SIN_ABILITIES } from '../../src/data/ffx/enemies/overdrive-sin-abilities.ts';
+import { DARK_AEONS_ABILITIES } from '../../src/data/ffx/enemies/dark-aeons-abilities.ts';
 import { SIN_FINS_ABILITIES } from '../../src/data/ffx/enemies/sin-fins-abilities.ts';
 import { SIN_GENAIS_CORE_ABILITIES } from '../../src/data/ffx/enemies/sin-genais-core-abilities.ts';
 import { x2ShivaAbilities, x2AnimaAbilities } from '../../src/data/ffx2/enemies/fallen-aeons-abilities.ts';
@@ -186,6 +187,14 @@ const COMBATANT_CITES: Record<ListedChapterId, Record<string, string>> = {
   'sin-face': {
     'overdrive-sin': 'research/ffx-sin.md §2 (src/data/ffx/enemies/overdrive-sin.ts)',
   },
+  // Chapter XXVII (FFX), listed 2026-10-15: the Dark Magus Sisters, then Dark Yojimbo and his dog.
+  'mirror-aeons': {
+    'dark-cindy': 'research/re-ffx-yojimbo-sisters-feasibility.md §2 (src/data/ffx/enemies/dark-aeons.ts)',
+    'dark-sandy': 'research/re-ffx-yojimbo-sisters-feasibility.md §2 (src/data/ffx/enemies/dark-aeons.ts)',
+    'dark-mindy': 'research/re-ffx-yojimbo-sisters-feasibility.md §2 (src/data/ffx/enemies/dark-aeons.ts)',
+    'dark-yojimbo': 'research/re-ffx-yojimbo-sisters-feasibility.md §2 (src/data/ffx/enemies/dark-aeons.ts)',
+    'dark-daigoro': 'research/re-ffx-dark-aeons.md §1.4 (src/data/ffx/enemies/dark-aeons.ts)',
+  },
 };
 
 /** The combatant `cite`, or a loud failure — every combatant this data layer ever builds a piece for must have one entered above. */
@@ -282,6 +291,9 @@ const ABILITY_FILE_CITES: Record<ListedChapterId, readonly AbilityFileCite[]> = 
   'sin-face': [
     fileCite(OVERDRIVE_SIN_ABILITIES, 'research/ffx-sin.md §3.4 (src/data/ffx/enemies/overdrive-sin-abilities.ts)'),
   ],
+  'mirror-aeons': [
+    fileCite(DARK_AEONS_ABILITIES, 'research/re-ffx-yojimbo-sisters-feasibility.md §2; research/re-ffx-dark-aeons.md §6.1 (src/data/ffx/enemies/dark-aeons-abilities.ts)'),
+  ],
 };
 
 /**
@@ -347,6 +359,8 @@ const ABILITY_OVERRIDE_CITES: Record<ListedChapterId, Record<string, string>> = 
   'sin-fins-core': {},
   // Every Chapter XVIII (Sin: the Face) ability id is `overdrive-sin-`-prefixed and defined in the chapter's own ability file.
   'sin-face': {},
+  // Every Chapter XXVII (Mirror Aeons) ability id is `dark-`-prefixed and defined in the chapter's own ability file.
+  'mirror-aeons': {},
 };
 
 /** The ability's `cite`, or a loud failure — see the module doc comment for how this is resolved. */

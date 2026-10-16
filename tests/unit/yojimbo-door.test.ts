@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 /**
- * The hidden door to the Mirror Aeons chapter (FFX only; branch `ch-mirror-aeons`, 2026-10-15): the word `yojimbo`, typed on chapter select, opens the Dark Magus Sisters and Dark Yojimbo against Yuna's own
- * Sisters and Yojimbo (hidden chapter 27, `mirror-aeons`).
+ * The door to the Mirror Aeons chapter (FFX only; branch `ch-mirror-aeons`, 2026-10-15): the word `yojimbo`, typed on chapter select, opens the Dark Magus Sisters and Dark Yojimbo against Yuna's own
+ * Sisters and Yojimbo (chapter 27, `mirror-aeons`). **The chapter was built hidden and is now LISTED (Bailey, 2026-10-15: "It needs to go live over night and not be hidden"): it has a card, and the word still opens it.**
  *
  * Written against the Gagazet, Angra, Valefor and Mushroom door suites: the real `Input`, real key events, the real board and title screen. It pins that
  *
  * 1. **the word is safe to type**: Y, O, J, I and B are bound to nothing and M is `select`, which the board ignores and a live match claims. There is **no `confirm` letter**, and that is the point of the word: the brief's
  *    `zanmato` starts with Z, a first letter is never claimed from the board, and a first-letter confirm would open the card under the cursor. The test has that control (a plain Z does open the selected card, and a
  *    first Z is not claimed), so the rejection is a fact and not a taste. The title answers `confirm` and `start` only;
- * 2. **the chapter is hidden by default** (asserted on its id, its EXP numeral and the tile count, never on the word);
+ * 2. **the chapter is listed** (a card, the numeral XXVII, last of the FFX group, "of 19"; asserted on its id, its numeral and the tile count, never on the word);
  * 3. **the word opens it**, and only the word: the cursor stays, nothing is remembered or written; a wrong letter resets, and so does a pause over 2 s between letters;
  * 4. **the ten doors do not interfere**, the chapter opens party prep, and the word overlaps no other door word in any position (the shared rule of `chapter-doors.test.ts`, run here too).
  *
@@ -42,10 +42,11 @@ function typeWord(door: WordDoor, word: string, start = 0, step = 100): Array<'o
 }
 
 describe('the word (pure)', () => {
-  it('is one constant: lower-case letters, long enough to be typed by hand, leading to a hidden FFX experiment numbered 27', () => {
+  it('is one constant: lower-case letters, long enough to be typed by hand, leading to the listed FFX chapter numbered 27', () => {
     expect(WORD).toMatch(/^[a-z]{4,}$/);
     expect(CHAPTER).toBe('mirror-aeons');
-    expect(getChapter(CHAPTER)).toMatchObject({ id: CHAPTER, game: 'ffx', experimental: true, number: 27 });
+    expect(getChapter(CHAPTER)).toMatchObject({ id: CHAPTER, game: 'ffx', number: 27 });
+    expect(getChapter(CHAPTER)?.experimental, 'a listed chapter is no experiment').toBeUndefined();
     expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain(CHAPTER);
     expect(CHAPTER_DOORS.find((d) => d.word === WORD)?.chapter).toBe(CHAPTER);
   });
@@ -239,26 +240,30 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('hidden by default', () => {
-  it('the board holds the eighteen: no tile for the chapter, no EXP numeral, "of 18" unchanged', () => {
+describe('listed on the board', () => {
+  it('the board holds the nineteen: a card for the chapter, numbered XXVII, last of the FFX group, "of 19"', () => {
     const tiles = buildChapterTiles(new SaveStore());
-    expect(tiles).toHaveLength(18);
+    expect(tiles).toHaveLength(19);
     expect(new Set(tiles.map((t) => t.id))).toEqual(new Set(CHAPTERS.map((c) => c.id as string)));
-    expect(tiles.some((t) => t.id === CHAPTER || t.chapter?.experimental || t.numeral === 'EXP')).toBe(false);
-    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([11, 7]);
-    expect((CHAPTER_IDS as readonly string[]).includes(CHAPTER)).toBe(false);
-    expect(CHAPTERS.map((c) => c.id as string)).not.toContain(CHAPTER);
+    const tile = tiles.find((t) => t.id === CHAPTER)!;
+    expect([tile.numeral, tile.game, tile.playable, tile.cleared]).toEqual(['XXVII', 'ffx', true, false]);
+    expect(tiles.some((t) => t.chapter?.experimental || t.numeral === 'EXP')).toBe(false);
+    const groups = groupChapterTiles(tiles);
+    expect(groups.map((g) => g.tiles.length)).toEqual([12, 7]);
+    expect(groups[0]!.tiles[groups[0]!.tiles.length - 1]!.id, 'the FFX group ends with the chapter').toBe(CHAPTER);
+    expect((CHAPTER_IDS as readonly string[]).includes(CHAPTER)).toBe(true);
+    expect(CHAPTERS.map((c) => c.id as string)).toContain(CHAPTER);
     const progress = boardProgress(tiles, 0);
-    expect([progress.total, progress.pips.length]).toEqual([18, 18]);
+    expect([progress.total, progress.pips.length]).toEqual([19, 19]);
   });
 
-  it('the mounted board draws eighteen cards, none for the chapter, and counts "of 18 beaten"', () => {
+  it('the mounted board draws nineteen cards, one for the chapter, with no EXP mark, and counts "of 19 beaten"', () => {
     const rig = mount();
-    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(18);
-    expect(rig.root.querySelector(`[data-card="${CHAPTER}"]`)).toBeNull();
+    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(19);
+    expect(rig.root.querySelector(`[data-card="${CHAPTER}"]`)).not.toBeNull();
     expect(rig.root.textContent).not.toMatch(/\bEXP\b/);
-    expect(rig.root.textContent).toMatch(/of 18 beaten/);
-    expect(rig.screen.snapshot()['order'] as string[]).not.toContain(CHAPTER);
+    expect(rig.root.textContent).toMatch(/of 19 beaten/);
+    expect(rig.screen.snapshot()['order'] as string[]).toContain(CHAPTER);
   });
 });
 

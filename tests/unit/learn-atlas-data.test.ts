@@ -52,6 +52,7 @@ describe('buildChapterSpecimen', () => {
       'ffx2-ixion-djose': 'pink', // Chapter XVI, FFX-2, listed 2026-09-27
       'sin-fins-core': 'gold', // Chapter XVII, FFX, unlisted
       'sin-face': 'gold', // Chapter XVIII, FFX, unlisted
+      'mirror-aeons': 'gold', // Chapter XXVII, FFX, listed 2026-10-15
     };
     for (const id of CHAPTER_IDS) {
       const specimen = buildChapterSpecimen(id);
