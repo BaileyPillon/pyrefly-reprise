@@ -12,7 +12,7 @@
  *    and she throws the Delta Attack, which needs all three alive with their gauges full (RE section 6.2). So every swing goes at **Cindy while she stands, then at the Sister with the least HP left**: with Cindy down
  *    nothing but the Pagodas heals a Sister and the Delta Attack can never come, and a blow spread over the three charges all three gauges (10 to 19 a hit, RE section 6.2) instead of one. **Measured, not argued**: aimed
  *    at the weakest first (Mindy, then Sandy), the party left Cindy alone, draining as fast as it hurt her, and the fight stalled (`The battle cannot be won from here`) in 5 of 24 seeds with the Sisters last, 3 of 24 with
- *    them second; aimed at Cindy first it won 24 of 24 and 23 of 24, in a third to two thirds of the turns (`tests/unit/chapters/last-summoning-bench.test.ts` has the whole table).
+ *    them second; aimed at Cindy first it won 24 of 24 in both orders, in about a third of the turns (`tests/unit/chapters/last-summoning-bench.test.ts` has the whole table).
  * 2. **The player's Yojimbo pays to be good**: Pay is his whole menu (RE section 8, the aeon-side note). The motivation is `4n + compatibility div 10` with `n = floor(log2 gil) - 2`, and once it is 63 the roll can no
  *    longer fall below Wakizashi on all, whatever the monsters' Zanmato byte (RE section 8.1 point 4), so the line pays **the smallest power of two that reaches 63**, or the largest the purse allows. Every doubling of
  *    the payment adds 4, which is why a payment is always a power of two. [The hire answer is the build's, 1; the line is written for it.]
@@ -21,10 +21,10 @@
  *
  * 4. **Yuna calls an aeon when she has nothing urgent to do and the Grand Summon is ready** (not against Yu Yevon, whom no aeon hurts). A Grand Summon arrives with a full gauge, so the aeon opens with its Overdrive; then
  *    it hands the field back (Dismiss), because the party is parked while an aeon stands and three swords out-swing one aeon (Chapter III's note, `./braskas-final-aeon.ts#aeonTurn`, gives the same reason to keep an aeon's
- *    stay short). **Why this rule exists:** the party alone does not out-damage Cindy's Drain and Curaga and the Pagodas' 1,500 a Power Wave once its MP and items are spent, which is what the Magus Sisters' fight
- *    becomes when it comes late in the chain (the engine then calls `The battle cannot be won from here`: about one chain in twelve on the bench, `tests/unit/chapters/last-summoning-bench.test.ts`); the roster is the
- *    chapter's whole point and its answer (Bahamut or Anima arriving on a full gauge open with a 9,999). The order the aeons are called in is ours (the biggest Overdrive first, the ones that need a payment or
- *    all three gauges last), an `[estimate]`; the rule is a convenience of the line, not a promise of a win.
+ *    stay short). **Why this rule exists:** the roster is the chapter's whole point (Bahamut or Anima arriving on a full gauge open with a 9,999), and a line that never called one would leave the chapter's own aeons to
+ *    the player alone. The order the aeons are called in is ours (the biggest Overdrive first, the ones that need a payment or all three gauges last), an `[estimate]`; it is a convenience of the line, not a promise of a win,
+ *    and the bench (`tests/unit/chapters/last-summoning-bench.test.ts`) prints how often an aeon is standing when a link ends. Without rule 1's choice of Cindy, the Magus Sisters' fight stalled in about one chain in
+ *    eight (the engine then calls `The battle cannot be won from here`) whatever was called; with it the line wins every chain the bench plays.
  *
  * Any other aeon of the player's plays itself as it does in Chapter III: its Overdrive, else it leaves.
  *
