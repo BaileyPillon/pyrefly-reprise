@@ -6,10 +6,11 @@
  * read off the generator's tap: they import nothing of `kernel/kill-rewards.ts`, the ledger or the adapter (but `ejectPays`, the one-line rule of the two commands that
  * clear the pay flag, read by its two ids in the last Eject case), so a wrong wiring shows as a difference. The rig knocks a unit out through the engine's own HP path (`applyHpDelta`), where the KO resolution and so the roll run.
  *
- * Mutation-checked by hand (scratch, one change at a time, 37 changes over the kernel and the engine, `docs/handoff/re-parity-rc9-x2-rewards.md` section 5; every one caught here or in the kernel test but one that is equivalent):
- * the roll not called; called after the chain breaks; a girl's knock-out skipped; the victory paying every standing monster; the best chain not recorded; the chain read as 0; the Pointless, ejected and fallen-girl
- * rules dropped; the rollback sparing a Petrified or a dead girl; Steal Will paying; a plain Eject never paying, or always paying; the AP summed over the girls instead of the best; a monster with no row losing its drops;
- * the ability words taken from the wrong word; one shared save index.
+ * Mutation-checked by hand (scratch, one change at a time on a snapshot, 64 changes over the kernel, the engine, the adapter, the grid tags, the rows and the advisor's preview, `docs/handoff/re-parity-rc9-x2-rewards.md`
+ * section 5; every one caught by this file, the kernel test or the data test but one that is equivalent): the roll not called; called after the chain breaks; a girl's knock-out skipped; the victory paying every standing monster,
+ * or a defeat paying; the best chain not recorded, or overwritten instead of kept; the chain read as 0; the Pointless, ejected and fallen-girl rules dropped; the rollback sparing a Petrified or a dead girl; Steal Will or a Bribe
+ * paying; a plain Eject never paying, or always paying; the AP summed over the girls instead of the best; a monster with no row losing its drops; the ability words taken from the wrong word; one shared save index;
+ * the preview sharing the live ledger.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -19,6 +20,7 @@ import type { GameStreams } from '../../src/battle/common/streams.ts';
 import type { BattleEvent, Command, EnemyFields } from '../../src/battle/common/types.ts';
 import type { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { ejectPays } from '../../src/battle/ffx2/kill-rewards.ts';
+import { simulateFFX2Command } from '../../src/battle/ffx2/simulate.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { VEGNAGUN_CHAIN_ORDER } from '../../src/data/ffx2/ids.ts';
 import { driveChapter5 } from './helpers/ffx2ChapterDrive.ts';
@@ -276,6 +278,19 @@ describe('the results line and the other seams', () => {
     expect(f.state().ffx2Rewards).toEqual(p.state().ffx2Rewards);
     f.state().ffx2Rewards!.buffer.exp = 1; // the copy's ledger is its own
     expect(p.state().ffx2Rewards!.buffer.exp).toBe(ORMI.exp);
+  });
+
+  it('a preview of a killing blow, as the advisor takes it, pays into its own copy: it sees the kill, and the live ledger and the live draws are left alone', () => {
+    const p = board(ACT_I, 3);
+    p.kill(p.enemy('dr-goon')); // the live battle has paid one kill already
+    p.enemy('ormi-entrance').hp = 1;
+    const ledger = JSON.stringify(p.state().ffx2Rewards);
+    p.untap();
+    const out = simulateFFX2Command(p.state(), 'yuna', { kind: 'attack', targets: ['ormi-entrance'] } as Command);
+    expect(out?.kills).toEqual(['ormi-entrance']);
+    expect(JSON.stringify(p.state().ffx2Rewards)).toBe(ledger);
+    expect(p.taps).toEqual([]);
+    expect(p.enemy('ormi-entrance').alive).toBe(true);
   });
 
   it('an Eject by a command other than Steal Will or a Bribe pays like a kill; by Steal Will it pays nothing (4.1)', () => {

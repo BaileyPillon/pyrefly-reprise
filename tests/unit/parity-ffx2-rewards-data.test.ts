@@ -12,7 +12,8 @@
  *    in Act II), and the authored common drop is the row's common slot;
  *  - every item id a row can drop has a game number in our table and a name that reads as the game's;
  *  - every shipped monster's reward numbers carry their row citation: the table and row of `monster.bin` / `monster2.bin`, the same row its
- *    record cites for the rest of it, naming the same monster, and the data file says where the rows come from.
+ *    record cites for the rest of it, naming the same monster, and the data file says where the rows come from; the rows of the hidden chapters
+ *    (Tourist Trap, Valefor at Besaid, Angra Mainyu, the Experiment) equal what those chapters' own fixtures decode, a second witness.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -147,6 +148,32 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
   it('the data file says where its rows come from: the game file, the reader, the note and a confidence tag', () => {
     const text = readFileSync(fileURLToPath(new URL('../../src/data/ffx2/monster-records/kill-rewards.ts', import.meta.url)), 'utf8');
     for (const needle of ['monster.bin', 'monster2.bin', 'Steam', 'FFX2-G03', '[verified']) expect(text, needle).toContain(needle);
+  });
+
+  it('the rows of the hidden chapters equal what those chapters\' own fixtures decode (a second witness: the note\'s table 5.1 does not list Tourist Trap, Valefor or Angra Mainyu)', () => {
+    interface Decoded {
+      exp: number;
+      gil: number;
+      ap: number;
+      dropChanceByte: number;
+    }
+    const read = <T>(name: string): T => JSON.parse(readFileSync(here(name), 'utf8')) as T;
+    const same = (key: string, row: number, d: Decoded, drop: readonly number[]): void => {
+      const got = KILL_REWARD_ROWS[key]!;
+      expect({ row: got.row, exp: got.exp, gil: got.gil, ap: got.ap, dropByte: got.dropByte, drop: [...got.drop] }, key).toEqual({ row, exp: d.exp, gil: d.gil, ap: d.ap, dropByte: d.dropChanceByte, drop: [...drop] });
+    };
+    const trap = read<Record<'yojimbo' | 'daigoro', Decoded & { row: number; dropItem?: { id: number; common: number; rare: number } }>>('tourist_trap_rows.json');
+    same('ffx2-cavern-yojimbo/x2-yojimbo', trap.yojimbo.row, trap.yojimbo, [trap.yojimbo.dropItem!.id, trap.yojimbo.dropItem!.common, trap.yojimbo.dropItem!.id, trap.yojimbo.dropItem!.rare]);
+    same('ffx2-cavern-yojimbo/x2-daigoro', trap.daigoro.row, trap.daigoro, [0, 0, 0, 0]);
+    const valefor = read<{ row: number; decoded: Decoded & { dropItems: number[] } }>('besaid_valefor_rows.json');
+    same('ffx2-besaid-valefor/x2-valefor', valefor.row, valefor.decoded, valefor.decoded.dropItems);
+    const angra = read<{ rows: Record<string, { name: string; decoded: Decoded & { dropItems: number[] } }> }>('angra_mainyu_rows.json').rows;
+    same('ffx2-bikanel-angra-mainyu/x2-angra-mainyu', 268, angra['268']!.decoded, angra['268']!.decoded.dropItems);
+    same('ffx2-bikanel-angra-mainyu/x2-zarich', 269, angra['269']!.decoded, angra['269']!.decoded.dropItems);
+    same('ffx2-bikanel-angra-mainyu/x2-tawrich', 270, angra['270']!.decoded, angra['270']!.decoded.dropItems);
+    const experiment = read<{ record: Decoded & { row: number; dropItem: { name: string; count: number } } }>('experiment_rows.json').record;
+    expect(experiment.dropItem.name).toBe('Elixir'); // 0x2008 in the game's numbers
+    for (const key of ['ffx2-djose-experiment-1/x2-experiment-prototype', 'ffx2-djose-experiment-2/x2-experiment']) same(key, experiment.row, experiment, [0x2008, experiment.dropItem.count, 0x2008, experiment.dropItem.count]);
   });
 });
 
