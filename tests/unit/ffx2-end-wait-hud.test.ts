@@ -30,6 +30,7 @@ import type { AiScript, Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import { registerAiScript } from '../../src/battle/ffx2/ai/index.ts';
 import { applyHpDelta } from '../../src/battle/ffx2/resolve-hp.ts';
 import { END_WINDOW_FLAG, fightEnding } from '../../src/battle/ffx2/end-flag.ts';
+import { Ffx2AtbState } from '../../src/battle/ffx2/kernel/atb-gauge.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { makeFakeBattleState } from '../../src/ui/ffx/testFixtures.ts';
 import { EndHold } from '../../src/ui/ffx2/endHold.ts';
@@ -123,6 +124,23 @@ describe('1. the engine marks the state while the fight is ending', () => {
     kill(b, 'm0', 'yuna');
     expect(b.engine.nextDecision().kind).toBe('battle-over');
     expect(b.state.result?.outcome).toBe('victory');
+    expect(fightEnding(b.state)).toBe(true);
+  });
+
+  it("a defeat carries the mark too: the last girl falls while an enemy's cast is in flight, and her KO is the last blow (the Chapter XIII loss's three seconds)", () => {
+    const b = battle();
+    const foe = b.units['m0'] as Ffx2Unit;
+    const total = 40 * 95;
+    foe.atb.charging = { commandRef: { kind: 'attack', targets: ['yuna'] } as Command, remainingTicks: total, totalTicks: total };
+    foe.pendingCommand = foe.atb.charging.commandRef;
+    foe.gauge.state = Ffx2AtbState.Executing;
+    for (const id of ['yuna', 'rikku', 'paine']) kill(b, id, 'm0');
+    expect(b.engine.nextDecision().kind).toBe('waiting');
+    expect(b.state.result, "the result is built after the enemy's cast").toBeNull();
+    expect(fightEnding(b.state)).toBe(true);
+    expect(fightDecidedBy({ seq: 1, type: 'ko', targetId: 'paine' }, b.state), "the last girl's KO is the last blow").toBe(true);
+    playOut(b);
+    expect(b.state.result?.outcome).toBe('defeat');
     expect(fightEnding(b.state)).toBe(true);
   });
 
