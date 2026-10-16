@@ -159,8 +159,10 @@ export interface HeldCommand {
 
 /**
  * Whether a held command can still fire for `unit` one day: she is alive, can
- * act and is not Berserked (§2.8 takes control away). A KO, Stop, Sleep or
- * Petrify drops it — nothing is spent, and she chooses again when she is back.
+ * act and is neither Berserked (§2.8 takes control away) nor Confused (re-parity
+ * RC9 X2-H: her own pick does). A KO, Stop, Sleep, Petrify, Berserk or Confusion
+ * drops it — nothing is spent, and she chooses again when she is back (a Confused
+ * girl does not choose: `docs/handoff/re-parity-rc9-x2-confusion.md` section 6 item 8).
  */
 export function heldStillPending(unit: Ffx2Unit | undefined): boolean {
   if (!unit || unit.removed || !unit.alive) return false;
