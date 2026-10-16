@@ -2,8 +2,9 @@
  * Biran and Yenke (the hidden FFX chapter): **what the two brothers pay**, played out on the real engine (`research/re-ffx-biran-yenke.md` section 2; FFX only).
  *
  * The game's loot record gives each brother ONE drop slot: the slot's chance byte is 255 (it always drops), the common item is a Return Sphere x1, and the rare item, a Friend Sphere x1, comes in its place when
- * the second draw's low byte is below 0x20 (one time in eight); an Overkill doubles whichever is given. The engine's drop model rolled the two items as two independent drops, so a brother could pay nothing or both
- * (the RE review, 2026-10-14); `ItemDrop.rare` (`src/battle/common/types.ts`) is the slot's rare item, and `ffx/results.ts` draws one byte more for a slot that names one.
+ * the second draw's low byte is below 0x20 (one time in eight); an Overkill doubles whichever is given. Until re-parity RC9 the engine rolled this on its own side stream (`ItemDrop.rare`), and before that as two
+ * independent drops; now it is the game's roll on the loot records m134 and m135 (`adapt/loot.ts`: stream 10 against the chance byte, stream 11 for the rare entry), and the result carries the game's reward list,
+ * in which equal items STACK (two Return Spheres are one entry of 2).
  *
  * What is pinned: a brother pays exactly one item, never none and never both; the rare one comes about one time in eight (measured over 300 fights, printed); an Overkill doubles whichever was given; the gil
  * and the AP are the record's; the same seed pays the same.
@@ -39,19 +40,21 @@ describe('each brother pays one item from one slot', () => {
   const SEEDS = 300;
   const results = Array.from({ length: SEEDS }, (_, i) => win(i + 1));
 
-  it('pays exactly one Return Sphere or Friend Sphere each: never none, never both, plain entries', () => {
+  it('pays exactly one Return Sphere or Friend Sphere each: never none, never both, stacked entries', () => {
     for (const [i, r] of results.entries()) {
-      expect(r.drops.length, `seed ${i + 1}: one item a brother`).toBe(2);
+      expect(r.drops.reduce((n, d) => n + d.count, 0), `seed ${i + 1}: one item a brother`).toBe(2);
+      expect(r.drops.length, `seed ${i + 1}: equal items stack, so one entry or two`).toBeLessThanOrEqual(2);
       for (const drop of r.drops) {
         expect(['return-sphere', 'friend-sphere'], `seed ${i + 1}`).toContain(drop.itemId);
-        expect(drop, `seed ${i + 1}`).toEqual({ itemId: drop.itemId, count: 1 }); // the result carries the item given, not the slot's table
+        expect(drop, `seed ${i + 1}`).toEqual({ itemId: drop.itemId, count: drop.count }); // the result carries the item given, not the slot's table
       }
+      expect(new Set(r.drops.map((d) => d.itemId)).size, `seed ${i + 1}: one stack per item`).toBe(r.drops.length);
       expect(r.overkilled, `seed ${i + 1}: no overkill at 1 HP and a plain blow`).toEqual([]);
     }
   });
 
   it('gives the rare Friend Sphere about one time in eight (measured), the Return Sphere otherwise', () => {
-    const friends = results.reduce((n, r) => n + r.drops.filter((d) => d.itemId === 'friend-sphere').length, 0);
+    const friends = results.reduce((n, r) => n + r.drops.filter((d) => d.itemId === 'friend-sphere').reduce((m, d) => m + d.count, 0), 0);
     const slots = SEEDS * 2;
     console.log(`[biran-yenke rewards] Friend Sphere in ${friends} of ${slots} slots (the record: 1 in 8 = ${slots / 8})`);
     expect(friends).toBeGreaterThan(slots / 8 - 35);
@@ -72,11 +75,11 @@ describe('each brother pays one item from one slot', () => {
     let sawOverkill = false;
     for (let seed = 1; seed <= 30; seed++) {
       const r = win(seed, true);
-      expect(r.drops.length, `seed ${seed}: still one item a brother`).toBe(2);
+      expect(r.drops.length, `seed ${seed}: one stack per item`).toBeLessThanOrEqual(2);
       const total = r.drops.reduce((n, d) => n + d.count, 0);
       expect(total, `seed ${seed}: 1 an item, 2 for each brother overkilled`).toBe(2 + r.overkilled.length);
       if (r.overkilled.length > 0) sawOverkill = true;
-      for (const d of r.drops) expect([1, 2], `seed ${seed}`).toContain(d.count);
+      for (const d of r.drops) expect([1, 2, 3, 4], `seed ${seed}: two brothers, each one item or two`).toContain(d.count);
     }
     expect(sawOverkill, 'a blow of 255 Strength is an overkill on a brother at 1 HP').toBe(true);
   });

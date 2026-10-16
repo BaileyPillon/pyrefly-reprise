@@ -14,9 +14,10 @@
  *    one stream along), fails for each.
  * 3. **The rolls that are not a hit's**: the opening counters' 26 draws, the scripts' `GetRandomValue` (stream 2, 16 bits) and
  *    picker (stream 4), a forced action's target (4), a random-target command's hits (5), a Reflect bounce (6), Steal (10 and 11),
- *    Escape (the escaper's own mode 0 stream), and the Evrae fight's scene and camera draws on stream 2. The stand-ins for a
- *    player (minigame defaults, an aim placeholder) and the engine's own drop model draw from the engine-side stream and never
- *    move a game stream.
+ *    Escape (the escaper's own mode 0 stream), a monster's death (its kill rewards: the two item slots and the gear roll on 10, the
+ *    rare entry on 11, a bribed monster's two draws on its killer's mode 0 stream; re-parity RC9), and the Evrae fight's scene and
+ *    camera draws on stream 2. The stand-ins for a player (minigame defaults, an aim placeholder) draw from the engine-side stream
+ *    and never move a game stream.
  * 4. **Determinism**: the same run seed gives the same draws; a fork at a position replays them.
  *
  * Game case: **FFX only**. FFX-2 has its own streams and its own test (`parity-ffx2-rng-streams.test.ts`).
@@ -385,6 +386,24 @@ describe('the other rolls: the table above, role by role', () => {
     expect(successes).toBeGreaterThan(0);
   });
 
+  it('a monster\'s death rolls its kill rewards on streams 10 and 11 (the Steal streams) and never on the engine-side stream: 10, 11, 10, 10 for a record with one live slot', async () => {
+    const { payKill } = await import('../../src/battle/ffx/adapt/loot.ts');
+    const { FFX_LOOT_RECORDS } = await import('../../src/data/ffx/loot/index.ts');
+    const sit = randomSituation(makeRng(5), POOL);
+    for (let seed = 1; seed <= 20; seed++) {
+      const rng = makeFfxRng(seed);
+      const taps: Array<{ stream: number; value: number }> = [];
+      const user = combatantOf(sit.user, 'tidus', 'party');
+      const foe = combatantOf(sit.target, 'boss', 'enemy');
+      foe.enemy = { rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 1, drops: [], loot: FFX_LOOT_RECORDS[142] } } as never;
+      const { ctx } = contextOf(user, foe, rng, 0);
+      rng.tap = (stream, value) => taps.push({ stream, value });
+      payKill(ctx, foe, user);
+      expect(taps.map((t) => t.stream), `seed ${seed}`).toEqual([STEAL, STEAL_SLOT, STEAL, STEAL]);
+      expect(taps.map((t) => t.stream)).not.toContain(AUX_STREAM);
+    }
+  });
+
   it('Escape is rolled first on the escaper\'s own mode 0 stream, even in a battle that cannot be escaped', async () => {
     const { executeCommand } = await import('../../src/battle/ffx/execute.ts');
     const sit = randomSituation(makeRng(6), POOL);
@@ -401,7 +420,7 @@ describe('the other rolls: the table above, role by role', () => {
     }
   });
 
-  it('the engine\'s stand-ins for a player and its drop model draw from the engine-side stream and move no game stream', async () => {
+  it('the engine\'s stand-ins for a player draw from the engine-side stream and move no game stream', async () => {
     const { rollDefaultMinigame } = await import('../../src/battle/ffx/overdrive.ts');
     const rng = makeFfxRng(14);
     const before = Array.from(rng.states);

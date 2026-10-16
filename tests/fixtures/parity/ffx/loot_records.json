@@ -1,0 +1,1598 @@
+{
+ "note": "The loot record of each monster file the FFX chapters ship, as numbers, from the private note FFX-H02 (D:/Tools/ffx-parity/coverage/ffx/FFX-H02/monsters_loot.tsv): its own parse of chunk 4 (0x118 bytes) of battle/mon/_mNNN/mNNN.bin in FFX_Data.vbf (Steam build 25501027). tests/unit/parity-ffx-loot-data.test.ts compares src/data/ffx/loot/records.ts with it field by field (the lane read the files again with its own script: 361 records x 31 fields, 0 differences).",
+ "files": [
+  106,
+  117,
+  119,
+  124,
+  125,
+  126,
+  127,
+  130,
+  131,
+  132,
+  134,
+  135,
+  136,
+  137,
+  138,
+  139,
+  140,
+  141,
+  142,
+  143,
+  149,
+  160,
+  161,
+  163,
+  164,
+  165,
+  166,
+  167,
+  168,
+  169,
+  173,
+  174,
+  176,
+  178,
+  179,
+  180,
+  248,
+  249,
+  254,
+  266,
+  284,
+  287,
+  288
+ ],
+ "rows": {
+  "106": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "117": {
+   "gil": 1000,
+   "ap": 400,
+   "apOverkill": 600,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8273,
+    8273,
+    0,
+    0
+   ],
+   "qty": [
+    3,
+    3,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8273,
+    8273,
+    0,
+    0
+   ],
+   "overkillQty": [
+    6,
+    6,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "119": {
+   "gil": 2600,
+   "ap": 5400,
+   "apOverkill": 8100,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8271,
+    8271,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8271,
+    8271,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "124": {
+   "gil": 5000,
+   "ap": 2000,
+   "apOverkill": 3000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8271,
+    8268,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8271,
+    8268,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "125": {
+   "gil": 3000,
+   "ap": 2500,
+   "apOverkill": 3750,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8265,
+    8265,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8265,
+    8265,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "126": {
+   "gil": 3500,
+   "ap": 6300,
+   "apOverkill": 9450,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8274,
+    8274,
+    0,
+    0
+   ],
+   "qty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8274,
+    8274,
+    0,
+    0
+   ],
+   "overkillQty": [
+    4,
+    4,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "127": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "130": {
+   "gil": 9000,
+   "ap": 14000,
+   "apOverkill": 21000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "131": {
+   "gil": 12000,
+   "ap": 24000,
+   "apOverkill": 36000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    2,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    4,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "132": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "134": {
+   "gil": 1500,
+   "ap": 4500,
+   "apOverkill": 6750,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8288,
+    8289,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8288,
+    8289,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "135": {
+   "gil": 1500,
+   "ap": 4500,
+   "apOverkill": 6750,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8288,
+    8289,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8288,
+    8289,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "136": {
+   "gil": 10000,
+   "ap": 16000,
+   "apOverkill": 24000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8277,
+    8277,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8277,
+    8277,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "137": {
+   "gil": 10000,
+   "ap": 17000,
+   "apOverkill": 25500,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "138": {
+   "gil": 10000,
+   "ap": 18000,
+   "apOverkill": 27000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8278,
+    8278,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8278,
+    8278,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "139": {
+   "gil": 10000,
+   "ap": 1800,
+   "apOverkill": 2700,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8288,
+    8288,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8288,
+    8288,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "140": {
+   "gil": 12000,
+   "ap": 20000,
+   "apOverkill": 30000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8275,
+    8275,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "141": {
+   "gil": 300,
+   "ap": 290,
+   "apOverkill": 435,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8265,
+    8265,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8265,
+    8265,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8196,
+   "bribeFactor": 10
+  },
+  "142": {
+   "gil": 6000,
+   "ap": 10000,
+   "apOverkill": 15000,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 255,
+   "items": [
+    8276,
+    8276,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8276,
+    8276,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "143": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "149": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "160": {
+   "gil": 200,
+   "ap": 48,
+   "apOverkill": 72,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 30,
+   "items": [
+    8263,
+    8263,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8263,
+    8263,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "161": {
+   "gil": 300,
+   "ap": 37,
+   "apOverkill": 55,
+   "chance": [
+    255,
+    0
+   ],
+   "gearChance": 30,
+   "items": [
+    8264,
+    8264,
+    0,
+    0
+   ],
+   "qty": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "overkillItems": [
+    8264,
+    8264,
+    0,
+    0
+   ],
+   "overkillQty": [
+    2,
+    2,
+    0,
+    0
+   ],
+   "bribeItem": 8192,
+   "bribeFactor": 1
+  },
+  "163": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "164": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "165": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "166": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "167": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "168": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "169": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "173": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "174": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "176": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "178": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "179": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "180": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "248": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "249": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "254": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "266": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "284": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "287": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  },
+  "288": {
+   "gil": 0,
+   "ap": 0,
+   "apOverkill": 0,
+   "chance": [
+    0,
+    0
+   ],
+   "gearChance": 0,
+   "items": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "qty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "overkillQty": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "bribeItem": 0,
+   "bribeFactor": 0
+  }
+ }
+}
