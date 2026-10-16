@@ -57,10 +57,14 @@ export function payDecision(c: PayCase, drawA: number, drawB: number): { command
   return { command: first, secondPass: false, draws: 1 };
 }
 
-/** The free attack's turn-start test and its command (note 3.1 step 1, 3.3). */
-export function freeAttack(compat: number, drawTurnStart: number, drawScript: number): { wins: boolean; command: string } {
+/**
+ * The free attack's turn-start test and its command (note 3.1 step 1, 3.3). `raw` is what the roll chose; `command` is what he does: a Zanmato over a group whose
+ * highest Zanmato byte (`zanGroup`) is above 0 is Wakizashi on all instead (note 3.3; `research/re-ffx-last-summoning.md` 8.1 item 5).
+ */
+export function freeAttack(compat: number, drawTurnStart: number, drawScript: number, zanGroup = 0): { wins: boolean; command: string; raw: string } {
   const a = Math.floor(compat / 4);
-  return { wins: (drawTurnStart & 0xff) < a, command: commandBySum(a + (drawScript & 63)) };
+  const raw = commandBySum(a + (drawScript & 63));
+  return { wins: (drawTurnStart & 0xff) < a, command: raw === 'zanmato' && zanGroup > 0 ? 'wakizashi-multi' : raw, raw };
 }
 
 /** The Sisters' menu from the draws it takes in order (note 6.4), as the list of order commands offered, Dismiss last. */

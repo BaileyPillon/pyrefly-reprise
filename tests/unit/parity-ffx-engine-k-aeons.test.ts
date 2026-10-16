@@ -10,107 +10,12 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import type { AvailableCommand, BattleEvent, Command, Decision, FFXCombatant, FFXPartyBuild } from '../../src/battle/common/types.ts';
-import type { GameStreams } from '../../src/battle/common/streams.ts';
-import { FFXContentRegistry, createFFXEngine, type FFXEngine } from '../../src/battle/ffx/index.ts';
-import { ALL_ABILITIES, ITEMS } from '../../src/data/ffx/index.ts';
+import type { FFXPartyBuild } from '../../src/battle/common/types.ts';
 import { carryPartyForward } from '../../src/app/screens/BattleScreenSetup.ts';
 import { PAY_ABILITY_ID } from '../../src/battle/ffx/aeon-commands.ts';
-import { aeon, enemy, member, party, setup, stats } from './ffx-fixtures.test.ts';
+import { aeon, enemy, stats } from './ffx-fixtures.test.ts';
+import { DISMISS, PAY, Rig, SUMMON, build, ids, sisters, starts, yojimbo } from './helpers/ffxKRig.ts';
 import { commandBySum, DELTA, freeAttack, payDecision, sisterMenu } from './helpers/ffxKOracle.ts';
-
-const content = new FFXContentRegistry();
-content.addAbilities([...ALL_ABILITIES]);
-content.addItems(Object.values(ITEMS));
-
-interface Tap {
-  stream: number;
-  value: number;
-}
-
-/** One engine on a test build, with every draw of the game's generator recorded. */
-class Rig {
-  readonly engine: FFXEngine;
-  readonly taps: Tap[] = [];
-  readonly events: BattleEvent[] = [];
-  readonly party: FFXPartyBuild;
-
-  constructor(party_: FFXPartyBuild, enemies = [enemy({ id: 'dummy', stats: stats({ hp: 99999, maxHp: 99999, str: 1, agi: 1 }) })], seed = 7) {
-    this.party = party_;
-    this.engine = createFFXEngine({ content, autoResolveMinigames: true });
-    this.engine.init(setup({ party: party_, enemies: { id: 'k-test', game: 'ffx', enemies, canEscape: false }, seed, condition: 'scripted' }));
-    (this.engine as unknown as { rng: GameStreams }).rng.tap = (stream, value) => void this.taps.push({ stream, value });
-  }
-
-  get state() {
-    return this.engine.state();
-  }
-
-  fighter(id: string): FFXCombatant {
-    return this.state.combatants[id] as FFXCombatant;
-  }
-
-  /** The next player turn (resolving every other turn on the way), or the decision that ended the battle. */
-  nextInput(max = 200): Extract<Decision, { kind: 'player-input' }> {
-    for (let i = 0; i < max; i++) {
-      const d = this.engine.nextDecision();
-      if (d.kind === 'player-input') return d;
-      if (d.kind === 'battle-over') throw new Error(`the battle ended: ${d.result.outcome}`);
-      if (d.kind === 'resolved') this.events.push(...d.events);
-    }
-    throw new Error('no player turn');
-  }
-
-  /** Advance to `who`'s turn; every other player turn is answered with Defend. */
-  until(who: string): Extract<Decision, { kind: 'player-input' }> {
-    for (let i = 0; i < 60; i++) {
-      const d = this.nextInput();
-      if (d.actorId === who) return d;
-      this.events.push(...this.engine.submit({ kind: 'defend', targets: [] }));
-    }
-    throw new Error(`${who} never got a turn`);
-  }
-
-  submit(command: Command): BattleEvent[] {
-    const out = this.engine.submit(command);
-    this.events.push(...out);
-    return out;
-  }
-
-  /** The draws of the given streams since `from`, in order. */
-  draws(from: number, ...streams: number[]): Tap[] {
-    return this.taps.slice(from).filter((t) => streams.includes(t.stream));
-  }
-}
-
-/** The party of the tests: Yuna acts first, then Tidus and Auron; the aeons are the caller's. */
-function build(over: Partial<FFXPartyBuild> & { aeons: FFXPartyBuild['aeons'] }): FFXPartyBuild {
-  const members = [
-    member({ id: 'tidus', stats: stats({ agi: 30, hp: 5000, maxHp: 5000 }) }),
-    member({ id: 'yuna', stats: stats({ agi: 60, hp: 5000, maxHp: 5000 }) }),
-    member({ id: 'auron', stats: stats({ agi: 20, hp: 5000, maxHp: 5000 }) }),
-  ];
-  return party({ members, gil: 100_000, ...over });
-}
-
-const yojimbo = (gauge = 0, agi = 40): FFXPartyBuild['aeons'][number] =>
-  aeon({ id: 'yojimbo', stats: stats({ hp: 4000, maxHp: 4000, mp: 0, maxMp: 0, agi, str: 60 }), overdriveGauge: gauge });
-
-/** The Sisters, at the Agility the note works its example with (Cindy 40, Sandy 40, Mindy 100). */
-const sisters = (gauge = 0): FFXPartyBuild['aeons'] => [
-  aeon({ id: 'cindy', stats: stats({ hp: 6000, maxHp: 6000, mp: 200, maxMp: 200, agi: 40, str: 60 }), overdriveGauge: gauge }),
-  aeon({ id: 'sandy', stats: stats({ hp: 5000, maxHp: 5000, mp: 100, maxMp: 100, agi: 40, str: 60 }), overdriveGauge: gauge }),
-  aeon({ id: 'mindy', stats: stats({ hp: 3000, maxHp: 3000, mp: 300, maxMp: 300, agi: 100, str: 60 }), overdriveGauge: gauge }),
-];
-
-const SUMMON = (id: string): Command => ({ kind: 'summon', id, targets: [] });
-const PAY = (gilSpent: number): Command => ({ kind: 'ability', id: PAY_ABILITY_ID, targets: [], gilSpent });
-const DISMISS: Command = { kind: 'dismiss', targets: [] };
-const ids = (rows: readonly AvailableCommand[]): string[] => rows.map((r) => (r.command.kind === 'ability' ? r.command.id : r.command.kind));
-
-/** The action-start events of a stretch of the log, as `[actor, ability id or name]`. */
-const starts = (events: readonly BattleEvent[]): Array<[string, string]> =>
-  events.flatMap((e) => (e.type === 'action-start' ? [[e.actorId, e.abilityId ?? e.abilityName ?? '?'] as [string, string]] : []));
 
 describe('a build that owns them must say how they start', () => {
   const run = (p: FFXPartyBuild): void => void new Rig(p);
@@ -210,7 +115,10 @@ describe('the player\'s Yojimbo: his menu and his turn start', () => {
 });
 
 describe('Pay', () => {
-  /** A monster Zanmato cannot kill (Death resist 255), so a free attack that comes before the Pay cannot end the battle. */
+  /**
+   * A monster with a great deal of HP and Death resistance 255. A landed Zanmato ignores every resistance and kills it all the same, so a FREE Zanmato before the Pay
+   * would end the battle; the seeds below do not draw one (a monster with a Zanmato byte, or compatibility 0, rules it out).
+   */
   const SOLID = { id: 'dummy', stats: stats({ hp: 99999, maxHp: 99999, str: 1, agi: 1 }), immunities: { ko: 255 } } as const;
 
   /**

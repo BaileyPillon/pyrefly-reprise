@@ -4,7 +4,7 @@
  *
  * **Game case: FFX only** (FFX-2 has no aeons in this sense; its Yojimbo is a mission boss with its own rules). Source: FFX.exe, Steam
  * build 25501027, SHA-256 0537B2A1...686D; note `FFX-G08` section 2, 3.1 step 3 and 6.1 (our words here). Proven against the game's own
- * machine code: 60,000 vectors, 0 mismatches (`tests/unit/parity-ffx-aeon-request.test.ts` replays a stratified subset of them from
+ * machine code: 60,000 vectors, 0 mismatches (`tests/unit/parity-ffx-yojimbo.test.ts` replays a stratified subset of them from
  * `tests/fixtures/parity/ffx/aeon_requests.json`).
  *
  * The rule, for an action whose source type is 0 (a command picked from a menu; every other source type is passed over) and the two command

@@ -1000,7 +1000,11 @@ export interface EnemyFields {
    * [ffx-bfa-yu-yevon §3.1, verified: 2 sources].
    */
   doomTurns?: number;
-  /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
+  /**
+   * The game's Zanmato byte plus 1 (the data files write "byte 3 -> level 4"); unset reads as byte 0. Only the player's Yojimbo reads it (re-parity lane
+   * FFX-K, `battle/ffx/adapt/yojimbo.ts`): his Pay divides its motivation by the highest byte over the monsters on the field plus 1, and a free attack is never
+   * Zanmato against a group with a byte above 0 (`docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 2.4).
+   */
   zanmatoLevel?: number;
   /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
   plainAttack?: FFXPlainAttack;
@@ -2725,8 +2729,8 @@ export interface AeonBuild {
 export interface YojimboBuild {
   /**
    * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`**: the game's image holds 0 and no initialiser
-   * was found. 128 is strongly indicated (the owner's own save files read 128 in every slot from 1 to 84, before recruitment, and the community
-   * says 128), live confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
+   * was found. 128 is strongly indicated by the owner's own save files (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
+   * confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
    * A chain carries the changed value to the next link (`state.flags['yojimbo:compatibility']`).
    */
   compatibility: number;
@@ -2854,7 +2858,11 @@ export interface EnemyDef {
    * Also the countdown Doom runs on when it is inflicted **on** this enemy.
    */
   doomTurns?: number;
-  /** Zanmato level 1–7; Yojimbo's Zanmato succeeds at or below the party's compatibility tier. */
+  /**
+   * The game's Zanmato byte plus 1 (the data files write "byte 3 -> level 4"); unset reads as byte 0. Only the player's Yojimbo reads it (re-parity lane
+   * FFX-K, `battle/ffx/adapt/yojimbo.ts`): his Pay divides its motivation by the highest byte over the monsters on the field plus 1, and a free attack is never
+   * Zanmato against a group with a byte above 0 (`docs/handoff/re-parity-ffx-yojimbo-sisters.md` section 2.4).
+   */
   zanmatoLevel?: number;
   /** FFX: the game's record for this enemy's plain Attack (see {@link FFXPlainAttack}); absent = the engine's own reading. */
   plainAttack?: FFXPlainAttack;

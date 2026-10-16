@@ -20,7 +20,7 @@
  * | {@link wipeEvent} | worker 59, function 5 (event 11) | Yojimbo knocked out or Petrified while he is out |
  *
  * **The two numbers the game's image does not hold.** The compatibility global is 0 in the image and no initialiser was found (note,
- * open question 1). The community says 128, and the owner's own save files read 128 in every slot from 1 to 84 (RE main session; the save
+ * open question 1). The community says 128, and the owner's own save files agree (slots 1-84 all read 128; 164 by slot 106; RE main session; the save
  * offset is inferred and live confirmation is pending), so 128 is strongly indicated; nothing in this file holds a starting value, so a
  * caller must give one. The hire answer (0, 1 or 2) is written only by the recruitment event; the game's default is 0.
  *
