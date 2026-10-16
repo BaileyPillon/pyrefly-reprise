@@ -8,7 +8,7 @@
  *     [--seed 7] [--stop link2|win] [--seam]
  *
  * It does, in order: title, chapter select (the board has the eighteen cards and no card for the chapter), the typed word (read from `src/app/screens/frontend/yojimboDoor.ts`, never retyped), party prep (and
- * that it HOLDS after the word's last letter), the pre scene, the first command menu (the three sisters on the field, the party, no placeholder figure), the advisor's line at skip speed with a screenshot at the
+ * that it HOLDS after the word's last letter), the pre scene, the first command menu (the pair on the field, the party, no placeholder figure), the advisor's line at skip speed with a screenshot at the
  * seam (the sisters' fall, the white-out) and at Act II's first menu (Dark Yojimbo and the cavern's plate), and, with `--stop win`, the post scene and the results. Exit code 1 on a failed check.
  * `--seam` leaves each sister at 1 HP before the advisor starts and plays Act I at normal speed, so the seam (the sisters' fall, the white-out, the plate swap) is on screen and is photographed.
  * Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. NOTE: until the reverse-engineering session's Dark AI lands, the enemies play the engine's fallback
@@ -41,7 +41,7 @@ const { open, assertScreen, waitBattleMenu, waitFor } = await import(pathToFileU
 const door = await import(pathToFileURL(join(REPO, 'src', 'app', 'screens', 'frontend', 'yojimboDoor.ts')).href);
 const WORD = door.YOJIMBO_DOOR_WORD;
 const CHAPTER = door.YOJIMBO_DOOR_CHAPTER;
-const SISTERS = ['dark-mindy', 'dark-sandy', 'dark-cindy'];
+const SISTERS = ['dark-mindy', 'dark-sandy']; // Act I is the faithful pair `kino01_72` (MIRROR_ACT_I): Cindy is not in it
 
 const failures = [];
 const log = (k, v) => console.log(k, typeof v === 'string' ? v : JSON.stringify(v));
@@ -147,7 +147,7 @@ try {
   await page.waitForTimeout(1500);
   const f1 = await field();
   log('field.1', f1);
-  check('the three sisters stand on the field, every gauge at 100', SISTERS.every((id) => f1?.enemies.some((e) => e.id === id && e.gauge === 100)), f1?.enemies);
+  check('the two sisters stand on the field, every gauge at 0', f1?.enemies.length === SISTERS.length && SISTERS.every((id) => f1?.enemies.some((e) => e.id === id && e.gauge === 0)), f1?.enemies);
   check('Tidus, Yuna and Lulu open; Auron, Wakka, Kimahri and Rikku wait on the bench', JSON.stringify([...f1.active]) === JSON.stringify(['tidus', 'yuna', 'lulu']) && f1.reserve.length === 4, f1);
   await shot('3-act-i-first-menu');
   await dismissCoach();
@@ -163,7 +163,7 @@ try {
 
   // --- the advisor's line, at skip speed: the seam, then Act II's first menu ------------------------------------------------------------------
   await page.evaluate((seam) => {
-    if (seam) for (const id of ['dark-mindy', 'dark-sandy', 'dark-cindy']) { const c = window.__pyrefly.battleState().combatants[id]; c.hp = 1; } // a short Act I, to watch the seam
+    if (seam) for (const id of ['dark-mindy', 'dark-sandy']) { const c = window.__pyrefly.battleState().combatants[id]; c.hp = 1; } // a short Act I, to watch the seam
     window.__pyrefly.setBattleSpeed(seam ? 'normal' : 'skip');
     window.__pyrefly.autoBattle('intended');
   }, SEAM);
@@ -176,7 +176,7 @@ try {
     const probe = await page.evaluate(() => {
       const st = window.__pyrefly.battleState?.();
       if (!st) return { none: true };
-      return { enemies: st.enemyIds, sistersDown: ['dark-mindy', 'dark-sandy', 'dark-cindy'].every((id) => st.combatants[id] && !st.combatants[id].alive) };
+      return { enemies: st.enemyIds, sistersDown: ['dark-mindy', 'dark-sandy'].every((id) => st.combatants[id] && !st.combatants[id].alive) };
     });
     if (!probe.none) {
       if (SEAM && seamShots < 5 && probe.sistersDown) {

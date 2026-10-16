@@ -1,95 +1,61 @@
 /**
- * **The bench for the hidden Mirror Aeons chapter: the difficulty measured, never tuned** (D-410; Bailey 2026-10-15: "make the difficulty appropriate not too easy not too hard"; the plan is
- * `docs/plans/ch-mirror-aeons-review.md` section 3). The target: **with the advisor's line a full run (both acts) is won about 70 percent of the time, 60 to 80 accepted**, and a careless line mostly loses. The two
- * levers are the party preset (`data/ffx/builds/mirror-aeons.ts`) and WHICH of the game's own formations each act uses (`SISTER_LADDER`, `YOJIMBO_TIERS`); **no boss row is ever edited to fit a result**.
+ * **The bench for the hidden Mirror Aeons chapter: the difficulty measured, never tuned** (D-410; Bailey 2026-10-15: "i like the mirror match but make the difficulty appropriate not too easy not too hard"; the plan
+ * is `docs/plans/ch-mirror-aeons-review.md` section 3, the table and the recommended cell `docs/plans/ch-mirror-aeons-bench.md`, printed by `tools/mirror-aeons-bench.mjs`). The target: **with the advisor's line a full
+ * run (both acts, the heal between them) is won about 70 percent of the time, 60 to 80 accepted**, and a careless line (the plain Attack on the first living enemy, no aeon, no potion) **mostly loses**. The levers are the
+ * party preset (`data/ffx/builds/mirror-aeons.ts`: its Phoenix Downs, Luck, stat fraction) and WHICH of the game's own formations each act uses; **no boss row is ever edited to fit a result**.
  *
- * ## A skeleton until the reverse-engineering session's work lands
- *
- * The ladder can only be measured with the Dark aeons' real scripts (without them the enemies play the engine's fallback, a plain Attack, and every rung is the same easy or hard fight for the wrong reason) and with
- * Yuna's Yojimbo and Magus Sisters wired (the advisor's line leans on an aeon taking the big move). So:
- *
- *  - the **harness** (`rungFigures`, the band, `pickRung`) is tested always;
- *  - a **smoke run** plays every rung of both ladders a few seeds under the fallback AI and prints the figures **labelled FALLBACK** (asserting only that every fight reaches an outcome);
- *  - **the measurement itself** (100 seeds a line per rung) is `describe.skipIf` the scripts or the summon rules are absent, and prints the ladder with the pick the plan's rule gives (`pickRung`: the rung whose advisor win rate
- *    is nearest 70 percent and inside the band; if none is, the party preset moves one lever at a time, in the order the plan lists them).
- *
- * ## What is measured today, and is not about difficulty: how far a blade and a spell reach
- *
- * The engine's hit rule is faithful to the files' rows (Dark Mindy: Evasion 240, Luck 130; Dark Sandy: Evasion 100; Dark Cindy: Evasion 0; Dark Yojimbo: Luck 114): the preset's Tidus lands **no blow on Dark Mindy, most
- * on Sandy, every one on Cindy and about two in five on Dark Yojimbo**, and a spell never misses. That is why the advisor's line sends Lulu's spells at Mindy and the blades at Cindy and Sandy.
+ * What this file pins, in three parts: the harness (always on), what a blade and a spell can reach (the engine's hit rule is the game's, and it is why the line sends blades to Cindy and Sandy and spells to Mindy),
+ * and **the shipped cell measured on the first seeds** (the full 200-seed table is the document's; here a band over fewer seeds keeps the suite quick). The chapter's picks and the preset's lever are pinned beside the
+ * numbers that set them, so the day one moves the test says so.
  */
 import { describe, expect, it } from 'vitest';
 
-import type { BattleEngine, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
-import { darkAeonsSeamStatus } from '../../../src/battle/ffx/ai/dark-aeons-seams.ts';
-import { mirrorAeons } from '../../../src/engine/tactics/mirror-aeons.ts';
-import { SISTER_LADDER, YOJIMBO_TIERS, sistersGroupId, yojimboGroupId } from '../../../src/data/ffx/mirror-aeons-ids.ts';
+import type { Command, FFXCombatant } from '../../../src/battle/common/types.ts';
+import { ENDGAME_PHOENIX_DOWNS, mirrorAeonsBuild } from '../../../src/data/ffx/builds/mirror-aeons.ts';
+import { MIRROR_ACT_I, MIRROR_ACT_II, SISTER_ADJUSTED_FORMATIONS, SISTER_LADDER, YOJIMBO_TIERS, sistersGroupId } from '../../../src/data/ffx/mirror-aeons-ids.ts';
+import {
+  ACT_I_CELLS, ACT_II_CELLS, BAND, CARELESS_AT_MOST, TARGET, advisorLine, carelessLine, inBand, pickCell, playAct, playChain, rateOf, share, withLuck, withPhoenixDowns, withStatFraction, type Rate,
+} from '../helpers/mirrorAeonsBench.ts';
 import * as H from '../helpers/mirrorAeonsDrive.ts';
 
-/** The plan's target and band (section 3): 70 percent, 60 to 80 accepted. */
-export const TARGET = 0.7;
-export const BAND: readonly [number, number] = [0.6, 0.8];
-/** A careless line should lose; under this share of wins counts as "mostly loses". */
-export const CARELESS_AT_MOST = 0.2;
-
-export interface RungFigures {
-  rung: string;
-  seeds: number;
-  wins: number;
-  losses: number;
-  other: number;
-  /** Mean player inputs of the won fights (the length of a win). */
-  meanInputsWon: number;
-}
-
-const rate = (f: RungFigures): number => f.wins / Math.max(1, f.seeds);
-export const inBand = (x: number): boolean => x >= BAND[0] && x <= BAND[1];
-
-/** The rung whose advisor win rate is nearest the target and inside the band; null when none is (the party preset then moves, one lever at a time). */
-export function pickRung(figures: readonly RungFigures[]): string | null {
-  const inside = figures.filter((f) => inBand(rate(f))).sort((a, b) => Math.abs(rate(a) - TARGET) - Math.abs(rate(b) - TARGET));
-  return inside[0]?.rung ?? null;
-}
-
-const advisor = (d: H.Input, e: BattleEngine): Command | null => mirrorAeons(d.actorId, d.commands, e);
-
-/** Play `seeds` fights of one formation with one line; the figures. */
-export function rungFigures(rung: string, groupId: string, choose: (d: H.Input, e: BattleEngine) => Command | null, seeds: number): RungFigures {
-  const runs = Array.from({ length: seeds }, (_, i) => H.playOne(i + 1, groupId, choose));
-  const won = runs.filter((r) => r.outcome === 'victory');
-  return {
-    rung,
-    seeds,
-    wins: won.length,
-    losses: runs.filter((r) => r.outcome === 'defeat').length,
-    other: runs.filter((r) => r.outcome !== 'victory' && r.outcome !== 'defeat').length,
-    meanInputsWon: won.length === 0 ? 0 : Math.round((won.reduce((a, r) => a + r.inputs, 0) / won.length) * 10) / 10,
-  };
-}
-
-const RUNGS: ReadonlyArray<readonly [string, string]> = [
-  ...SISTER_LADDER.map((f) => [f, sistersGroupId(f)] as const),
-  ...YOJIMBO_TIERS.map((t) => [t.file, yojimboGroupId(t.file)] as const),
-];
+const rate = (wins: number, seeds = 100): Rate => ({ seeds, wins, lostFirst: seeds - wins, lostSecond: 0, unfinished: 0 });
 
 describe('the harness (always on)', () => {
-  const fig = (rung: string, wins: number, seeds = 100): RungFigures => ({ rung, seeds, wins, losses: seeds - wins, other: 0, meanInputsWon: 0 });
-
   it('the band is 60 to 80 percent around a target of 70; careless is "mostly loses" under 20', () => {
     expect([TARGET, BAND, CARELESS_AT_MOST]).toEqual([0.7, [0.6, 0.8], 0.2]);
     expect([0.59, 0.6, 0.7, 0.8, 0.81].map(inBand)).toEqual([false, true, true, true, false]);
   });
 
-  it('picks the rung nearest 70 percent inside the band, and none when no rung is inside it', () => {
-    expect(pickRung([fig('a', 95), fig('b', 78), fig('c', 66), fig('d', 20)])).toBe('c'); // 66 is 4 from the target, 78 is 8
-    expect(pickRung([fig('a', 95), fig('b', 40)])).toBeNull();
-    expect(pickRung([])).toBeNull();
+  it('picks the cell nearest 70 percent inside the band, and none when no cell is inside it', () => {
+    expect(pickCell([{ advisor: rate(95) }, { advisor: rate(78) }, { advisor: rate(66) }, { advisor: rate(20) }])).toEqual({ advisor: rate(66) }); // 66 is 4 from the target, 78 is 8
+    expect(pickCell([{ advisor: rate(95) }, { advisor: rate(40) }])).toBeNull();
+    expect(pickCell([])).toBeNull();
   });
 
-  it('the ladder holds the six sister rungs and the five tiers, each a registered group', () => {
-    expect(RUNGS.map(([name]) => name)).toEqual([...SISTER_LADDER, ...YOJIMBO_TIERS.map((t) => t.file)]);
-    expect(RUNGS).toHaveLength(11);
-    for (const [name, group] of RUNGS) expect(() => H.setup(1, group), name).not.toThrow();
+  it('the cells are the game\'s own formations plus the one adjusted trio (OUR adjustment); each is registered, and the shipped picks are among them', () => {
+    expect(ACT_I_CELLS).toEqual(['kino00_70', 'kino01_72', 'kino00_70-g0']);
+    expect(ACT_II_CELLS).toEqual(['nagi05_70', 'nagi05_71', 'nagi05_72']);
+    for (const file of [...ACT_I_CELLS, ...ACT_II_CELLS]) expect(() => H.setup(1, H.groupIdOf(file)), file).not.toThrow();
+    expect(SISTER_ADJUSTED_FORMATIONS.map((f) => f.file)).toEqual(['kino00_70-g0']);
+    expect(ACT_I_CELLS).toContain(MIRROR_ACT_I);
+    expect(ACT_II_CELLS).toContain(MIRROR_ACT_II);
+    expect(SISTER_LADDER).toContain(MIRROR_ACT_I);
+    expect(YOJIMBO_TIERS.map((t) => t.file)).toContain(MIRROR_ACT_II);
+  });
+
+  it('the levers change only what they name: Phoenix Downs the one item, Luck every member\'s, the stat fraction four stats and not Agility, HP or the hit stats', () => {
+    const base = mirrorAeonsBuild;
+    const pd = withPhoenixDowns(base, 3);
+    expect(pd.inventory.find((e) => e.itemId === 'phoenix-down')?.count).toBe(3);
+    expect(pd.inventory.filter((e) => e.itemId !== 'phoenix-down')).toEqual(base.inventory.filter((e) => e.itemId !== 'phoenix-down'));
+    expect(base.inventory.find((e) => e.itemId === 'phoenix-down')?.count, 'the shared build is never mutated').toBe(ENDGAME_PHOENIX_DOWNS);
+    expect(withLuck(base, 7).members.every((m) => m.stats.luck === 7)).toBe(true);
+    const weaker = withStatFraction(base, 0.5);
+    for (const [i, m] of weaker.members.entries()) {
+      const was = base.members[i]!.stats;
+      expect([m.stats.str, m.stats.def, m.stats.mag, m.stats.mdef]).toEqual([Math.round(was.str / 2), Math.round(was.def / 2), Math.round(was.mag / 2), Math.round(was.mdef / 2)]);
+      expect([m.stats.agi, m.stats.maxHp, m.stats.eva, m.stats.acc]).toEqual([was.agi, was.maxHp, was.eva, was.acc]);
+    }
   });
 });
 
@@ -110,7 +76,7 @@ describe('what a blade and a spell can reach (measured on the real engine, the p
         if (d.kind !== 'player-input') continue;
         for (const id of e.state().activeIds) {
           const m = e.state().combatants[id] as FFXCombatant;
-          m.stats.maxHp = m.hp = 99_999;
+          m.stats.maxHp = m.hp = 9_999_999; // the Dark Aeons' blows are capped at 99,999: nobody falls while the swings are counted
         }
         const row = d.commands.find((c) => c.enabled && c.validTargets.includes(target) && (how === 'blade' ? c.command.kind === 'attack' : c.command.kind === 'ability' && c.label === 'Fire'));
         if (d.actorId !== who || !row) { e.submit(H.defend()); continue; }
@@ -123,9 +89,10 @@ describe('what a blade and a spell can reach (measured on the real engine, the p
   }
 
   it('a blade of Tidus lands none on Dark Mindy (Evasion 240), most on Sandy (100), all on Cindy (0), about two in five on Dark Yojimbo (Luck 114)', () => {
-    const mindy = reach(H.ACT_I_GROUP, 'dark-mindy', 'tidus', 'blade');
-    const sandy = reach(H.ACT_I_GROUP, 'dark-sandy', 'tidus', 'blade');
-    const cindy = reach(H.ACT_I_GROUP, 'dark-cindy', 'tidus', 'blade');
+    const pair = H.ACT_I_GROUP; // Mindy and Sandy
+    const mindy = reach(pair, 'dark-mindy', 'tidus', 'blade');
+    const sandy = reach(pair, 'dark-sandy', 'tidus', 'blade');
+    const cindy = reach(sistersGroupId('kino01_71'), 'dark-cindy', 'tidus', 'blade'); // Cindy alone
     const yojimbo = reach(H.ACT_II_GROUP, 'dark-yojimbo', 'tidus', 'blade');
     for (const r of [mindy, sandy, cindy, yojimbo]) expect(r.swings).toBeGreaterThanOrEqual(20);
     expect(mindy.hits / mindy.swings).toBeLessThan(0.05);
@@ -143,34 +110,39 @@ describe('what a blade and a spell can reach (measured on the real engine, the p
   });
 });
 
-describe('the smoke run under the fallback AI (labelled FALLBACK: it says nothing about difficulty)', () => {
-  const landed = darkAeonsSeamStatus();
-  it.skipIf(landed.sisters && landed.yojimbo)('every rung of both ladders plays to an outcome in three seeds, and the table is printed', () => {
-    const lines: string[] = [];
-    for (const [rung, group] of RUNGS) {
-      const f = rungFigures(rung, group, advisor, 3);
-      expect(f.other, `${rung} reaches an outcome`).toBe(0);
-      lines.push(`${rung.padEnd(10)} FALLBACK advisor ${f.wins}/${f.seeds} won, ${f.losses} lost, ${f.meanInputsWon} inputs a win`);
+describe('the shipped cell, measured (the document\'s table has 200 seeds a line; here the first seeds, a band, and the reasons the others are not shipped)', () => {
+  it('the chapter ships the faithful pair and tier 2, with 17 Phoenix Downs in the bag, each set by the bench', () => {
+    expect([MIRROR_ACT_I, MIRROR_ACT_II, ENDGAME_PHOENIX_DOWNS]).toEqual(['kino01_72', 'nagi05_71', 17]);
+  });
+
+  it('the advisor\'s line wins the whole chapter about seven times in ten (60 seeds, band 55 to 85 percent), and a careless line loses it', () => {
+    const advisor = rateOf(60, MIRROR_ACT_I, MIRROR_ACT_II, advisorLine);
+    expect(advisor.unfinished).toBe(0);
+    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeGreaterThanOrEqual(0.55);
+    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeLessThanOrEqual(0.85);
+    const careless = rateOf(20, MIRROR_ACT_I, MIRROR_ACT_II, carelessLine);
+    expect(share(careless), `${careless.wins} of ${careless.seeds}`).toBeLessThanOrEqual(CARELESS_AT_MOST);
+    // eslint-disable-next-line no-console
+    console.info(`[mirror-aeons bench] ${MIRROR_ACT_I} -> ${MIRROR_ACT_II}: advisor ${advisor.wins}/${advisor.seeds} (lost in I ${advisor.lostFirst}, in II ${advisor.lostSecond}), careless ${careless.wins}/${careless.seeds}`);
+  }, 180_000);
+
+  it('the faithful trio is out of the advisor\'s reach (the second Delta Attack has no shield: Mindy and Sandy kill a lone aeon first), and so is the trio with its gauges started at 0', () => {
+    for (const cell of ['kino00_70', 'kino00_70-g0']) {
+      const r = rateOf(25, cell, null, advisorLine);
+      expect(r.unfinished, cell).toBe(0);
+      expect(share(r), `${cell}: ${r.wins} of ${r.seeds}`).toBeLessThanOrEqual(0.2);
     }
-    // eslint-disable-next-line no-console
-    console.info(`[mirror-aeons bench, no Dark AI yet]\n${lines.join('\n')}`);
-  });
-});
+  }, 120_000);
 
-describe.skipIf(!(darkAeonsSeamStatus().sisters && darkAeonsSeamStatus().yojimbo))('the ladder with the real Dark AI (100 seeds a line a rung)', () => {
-  const seeds = 100;
-  const advisorFigures = RUNGS.map(([rung, group]) => rungFigures(rung, group, advisor, seeds));
-  const carelessFigures = RUNGS.map(([rung, group]) => rungFigures(rung, group, H.careless, seeds));
+  it('the single sisters are too easy to be a chapter (a careless line wins Sandy alone and Cindy alone), which is why the pair is the formation', () => {
+    for (const file of ['kino05_70', 'kino01_71']) expect(share(rateOf(10, file, null, carelessLine)), file).toBeGreaterThanOrEqual(0.9);
+  }, 60_000);
 
-  it('prints the ladder and the pick the plan\'s rule gives (the figures are the deliverable; the band is reported, not asserted)', () => {
-    const pick = pickRung(advisorFigures);
-    const rows = advisorFigures.map((f, i) => `${f.rung.padEnd(10)} advisor ${(rate(f) * 100).toFixed(0).padStart(3)}% (${f.meanInputsWon} inputs a win)   careless ${(rate(carelessFigures[i]!) * 100).toFixed(0).padStart(3)}%`);
-    // eslint-disable-next-line no-console
-    console.info(`[mirror-aeons bench]\n${rows.join('\n')}\npick: ${pick ?? 'none inside 60-80: move the party preset, one lever at a time'}`);
-    for (const f of [...advisorFigures, ...carelessFigures]) expect(f.other, `${f.rung} reaches an outcome`).toBe(0);
-  });
-
-  it('the advisor\'s line beats the careless one on every rung, and the careless line mostly loses on the rung the chapter ships', () => {
-    advisorFigures.forEach((f, i) => expect(rate(f), f.rung).toBeGreaterThanOrEqual(rate(carelessFigures[i]!)));
-  });
+  it('the heal between the acts does what the bench measured: Act II alone and as the second link are both fought from a whole party and whole aeons (one winnable seed, both ways)', () => {
+    const alone = playAct(2, MIRROR_ACT_II, advisorLine);
+    const chained = playChain(2, MIRROR_ACT_I, MIRROR_ACT_II, advisorLine);
+    expect(alone.outcome).toBe('victory');
+    expect(chained.outcome).toBe('victory');
+    expect(chained.second?.outcome).toBe('victory');
+  }, 60_000);
 });
