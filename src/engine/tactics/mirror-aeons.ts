@@ -27,7 +27,7 @@
  *    Jegged Yojimbo and GamerGuides), and **Lulu's Ultima or Flare takes Mindy first** (GamerGuides and StrategyWiki both send a mage; about 40 percent stronger than a blade because the sisters' Magic Defense is lower
  *    than their Defense). In Act II the target is Dark Yojimbo (the dog cannot be targeted).
  * 6. **An aeon on the field is a shield, not an attacker.** While the big move is still next the aeon stays and answers its own turn (an Overdrive or a special when it has one; Yojimbo is paid, `PAY_GIL`, which keeps
- *    him on the field: **the numbers that lean on his Pay are provisional until the engine's landed Zanmato is fixed**, and the bench carries lines that never pay him: {@link LineOptions.payYojimbo}; the Sisters
+ *    him on the field: **the engine's landed Zanmato is fixed (RE's `afda2d451`, merged), so the numbers that lean on his Pay are final**, and the bench still carries lines that never pay him: {@link LineOptions.payYojimbo}; the Sisters
  *    Combine when the menu offers it, the one thing it can do besides leave); once the danger has passed it goes home **at once**, because the party is parked behind an aeon and a Break Damage Limit blow of the party's
  *    is worth many of an aeon's plain attack (capped at 9,999).
  *
@@ -89,8 +89,8 @@ export interface LineOptions {
   readonly yojimboFirst: boolean;
   /**
    * Yojimbo is paid when his menu opens while the shield must stand (rule 6). Off, he is never paid: his turn is the free attack the game gives him at his own start (a Pay-less Yojimbo), and on a menu turn he
-   * is sent away. **The bench's Pay-off rows**: the engine's landed Zanmato (a Pay can roll one) still ignores a Dark Aeon's Death immunity and kills the first target (RE's open item 7, being fixed), so every
-   * number that depends on a Pay in Act II is provisional until it lands and the Pay-off rows are the ones that do not depend on it.
+   * is sent away. **The bench's Pay-off rows**: the engine's landed Zanmato (a Pay can roll one) now kills every legal foe of the group it picked, whatever its Death immunity (RE's `afda2d451`, merged; it was RE's open item 7), so
+   * the Pay-on rows are final, and the Pay-off rows show what the line is worth when it never pays.
    */
   readonly payYojimbo: boolean;
   /** Yojimbo is on the list of aeons sent in at all (rule 1). Off with {@link payYojimbo}, the bench's competent no-Pay line: the story aeons and the Sisters are the shield. */

@@ -9,7 +9,7 @@
  * **Game case: FFX only** [AGENTS.md rule 14]. The Dark Aeons exist only in FFX's International and HD releases; no FFX-2 file reads this one.
  *
  * It follows Jegged's Dark Aeons pages ("Dark Magus Sisters" and "Dark Yojimbo": fight them one by one when you can, prepare for status ailments, answer the Overdrive with an aeon, Quick Hit for offence) in our own
- * words, and **where the game's own file says more or says otherwise, the file wins** (rule 6): the sisters open the trio with the joint attack because every gauge starts full (RE section 4.2), Zanmato strips
+ * words, and **where the game's own file says more or says otherwise, the file wins** (rule 6): the full trio would open with the joint attack because every gauge starts full (RE section 4.2; this chapter's first fight is the pair, Sandy and Mindy, which has none), Zanmato strips
  * Auto-Life and is a damage hit, not an instant death (RE section 2), and Dark Yojimbo's blade fills faster the later the tier (RE section 4.1). **No number of the enemies' is on the player's page** that the
  * files do not give; the pool sizes are the files' own (RE section 2) and so are printed in the guide's doc.
  *
@@ -32,13 +32,13 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: "Send an aeon in before the big move. Dark Yojimbo ends his build-up with Zanmato, and Auto-Life does not turn it: an aeon takes the blow, so the party stands. Send Yuna's own Yojimbo, the mirror, or a story aeon, a round early. (The trio's joint attack is the same lesson: three bodies in one summon, Yuna's Sisters, are the only shield that is still standing when it lands.)",
+      text: "Send an aeon in before the big move. Dark Yojimbo ends his build-up with Zanmato, and Auto-Life does not turn it: an aeon takes the blow, so the party stands. Send Yuna's own Yojimbo, the mirror, or a story aeon, a round early. (In the first fight the same lesson answers Mega Graviton, which each sister of the pair uses once her own gauge is full: an aeon on the field takes it in the party's place.)",
       short: 'An aeon takes the big move',
       cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §4.1, §4.2; jegged-encounter-guides-ffx-b',
     },
     {
-      text: 'Blades for Cindy and Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Quick Hit gets the most blows in.',
-      short: 'Blades for Cindy, spells for Mindy',
+      text: 'Blades for Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Quick Hit gets the most blows in.',
+      short: 'Blades for Sandy, spells for Mindy',
       cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2, §4.2',
     },
     {
@@ -47,20 +47,20 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       cite: 'ffx-mirror-aeons §3; re-ffx-dark-aeons §4.2',
     },
     {
-      text: "Every fallen member costs a Phoenix Down and the bag holds only so many: heal early with Yuna's Curaga instead of waiting for the next blow, and keep Auto-Life on everyone. Ribbon, Auto-Haste, Auto-Phoenix and Auto-Protect do the long work against the Petrify, Poison, Breaks and Slow the Dark ones land. The bag is the clock of the road.",
+      text: "Every fallen member costs a Phoenix Down and the bag holds only so many: heal early with Yuna's Curaga instead of waiting for the next blow, and keep Auto-Life on everyone. Auto-Haste, Auto-Phoenix and Auto-Protect do the long work. Ribbon turns away the Petrify, Poison, Sleep, Silence, Darkness and Slow the Dark ones land, but not the four Breaks or Curse: Calamity and Kozuka land all four Breaks, and Calamity lands Curse even on a Ribbon party. The bag is the clock of the road. At the second act everyone, bench and aeons included, comes back at full HP and MP with statuses and KO cleared and fallen aeons standing; the bag, the gil, Yojimbo's compatibility and the Overdrive gauges carry over, and the Sisters' motivation and any standing order start again. (The game has two separate fights here; the full heal is our own choice.)",
       short: 'Heal early: the bag is the clock',
       cite: 'ffx-mirror-aeons §2, §3, §4; re-ffx-dark-aeons §6.3',
     },
     {
-      text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke. Zanmato is a long shot, and nothing a Dark one carries turns it away: a lucky Zanmato can end it. Your Sisters take orders (Cindy casts and heals, Sandy shields, Mindy drains), and Combine powers, their Delta Attack, needs all three of their bars full.',
-      short: 'Zanmato is a long shot',
+      text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke. A Zanmato is a real chance, not a sure thing: about one Pay in four buys one at a million gil (Pay all is about the same), and a full Overdrive gauge makes it better than one in two. Nothing a Dark one carries turns it away, so a lucky Zanmato can end it. Your Sisters take orders (Cindy casts and heals, Sandy shields, Mindy drains), and Combine powers, their Delta Attack, needs all three of their bars full.',
+      short: 'A Zanmato is a real chance',
       cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §2, §5.5; re-ffx-zanmato-and-orders §0',
     },
   ],
 
   hints: [
     { when: { kinds: ['summon'] }, text: 'Send {target} in: the next big move lands on it, not on the party, and it keeps the party off the floor', cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §5.1' },
-    { when: { kinds: ['attack'], targetId: MINDY }, text: 'A blade almost never finds Mindy (her Evasion is the highest of the three): use a spell, an Overdrive or an aeon on her, and keep the blades for Cindy and Sandy', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
+    { when: { kinds: ['attack'], targetId: MINDY }, text: 'A blade almost never finds Mindy (her Evasion is the highest of the three): use a spell, an Overdrive or an aeon on her, and keep the blades for Sandy', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Ultima', 'Flare', 'Thundaga', 'Firaga', 'Blizzaga', 'Waterga'] }, text: 'A spell never misses: {actor} aims it at Mindy first, the sister a blade cannot touch, and her Magic Defense is lower than her Defense', cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { kinds: ['attack'], targetId: SANDY }, text: 'Sandy hits hard, and her plain blow can Petrify: keep Ribbon or Stoneproof on someone', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { kinds: ['attack'], targetId: CINDY }, text: 'Cindy never dodges, so a blade always lands on her: the surest target, and the biggest pool. Keep the potions ready for her Camisade', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §2' },
@@ -68,9 +68,9 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
     { when: { kinds: ['attack'], targetId: YOJIMBO }, text: 'Dark Yojimbo dodges many physical blows (his Luck is high): keep swinging, and do not mistake a miss for a mistake', cite: 'ffx-mirror-aeons §3; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Potion', 'Hi-Potion', 'X-Potion'] }, text: 'Top {target} up: the multi-hit moves leave a member low, and a second blow would finish them', cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2' },
     { when: { labels: ['Curaga', 'Cura', 'Cure'] }, text: 'Heal {target} early: a member who is already hurt is the one the next blow finishes, and every fall costs a Phoenix Down', cite: 'ffx-mirror-aeons §2, §3; re-ffx-dark-aeons §6.3' },
-    { when: { labels: ['Auto-Life'] }, text: 'Auto-Life on {target}: a second life against every blow but Zanmato, the joint attack and Razzia, which take it away', cite: 'ffx-mirror-aeons §2, §3; re-ffx-dark-aeons §6.2' },
+    { when: { labels: ['Auto-Life'] }, text: 'Auto-Life on {target}: a second life against every blow but Zanmato and Razzia, which take it away', cite: 'ffx-mirror-aeons §2, §3; re-ffx-dark-aeons §6.2' },
     { when: { labels: ['Cheer'] }, text: 'Cheer: at five stacks a third off every physical blow, which a full-health member needs to live through Dark Yojimbo\'s Wakizashi', cite: 'ffx-mirror-aeons §3; re-ffx-dark-aeons §6.3' },
-    { when: { labels: ['Pay'] }, text: 'Pay Yojimbo: the payment buys the stroke, a bigger one a better one; a lucky Zanmato can end it', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5; re-ffx-zanmato-and-orders §0' },
+    { when: { labels: ['Pay'] }, text: 'Pay Yojimbo: a bigger payment is a better stroke, and it can buy a Zanmato, which can end the fight (about one Pay in six at a hundred thousand gil, one in four at a million)', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5; re-ffx-zanmato-and-orders §0' },
     { when: { labels: ['Combine for the Delta Attack'] }, text: 'Combine: all three of Yuna\'s Sisters are full, so their Delta Attack is on offer', cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §5.5; re-ffx-zanmato-and-orders §0' },
     { when: { labels: ['Dismiss'] }, text: 'The blow has passed and the aeon is low: bring the party back, and call it again for the next one', cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §5.4' },
   ],
@@ -81,7 +81,7 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
     {
       bossId: CINDY,
       label: 'THE SISTERS',
-      note: 'Cindy, Sandy and Mindy start with every Overdrive full, so the joint attack comes first. Alone, a sister uses Mega Graviton when her own gauge is full.',
+      note: 'Cindy does not take the field in this chapter: the first fight is the pair, Sandy and Mindy, and it has no joint attack. Each sister uses Mega Graviton once her own gauge is full.',
       cite: 'ffx-mirror-aeons §2; re-ffx-yojimbo-sisters-feasibility §4.2',
     },
     {

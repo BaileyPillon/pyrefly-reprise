@@ -15,7 +15,7 @@
  * | Weapons | Break Damage Limit and the strength or magic tiers; First Strike on Tidus and on Yuna | the guides assume Break Damage Limit (the Dark Aeons' own loot lists it; 1.6 to 3 million HP is out of reach at 9,999 a hit: RE section 8); StrategyWiki lists First Strike for Dark Yojimbo `[estimate]` |
  * | Yuna's aeons | `aeonStatsFromYuna` (`./endgame-aeons.ts`) on this Yuna at 600 battles (tier 19, the last) | `research/ffx-combat-core.md` section 6.4 `[verified: 3 sources]`; RE section 5.5 (G08): "the last tier (600 battles and over)" |
  * | The aeons | Valefor, Ifrit, Ixion, Shiva, Bahamut, **Yojimbo, Cindy, Sandy, Mindy**; **Anima is left out**, as `./dreams-end.ts` leaves it | the brief; Anima's Oblivion is the guides' favourite answer and would swamp the mirror, so adding it is a lever for the bench `[estimate]` |
- * | Yojimbo's hire answer | `YOJIMBO_HIRE_ANSWER` = 2 (the third option, "to defeat the most powerful of enemies") | Jegged Cavern; G08 section 3.5 |
+ * | Yojimbo's hire answer | `YOJIMBO_HIRE_ANSWER` = 2 (the third option, "to defeat the most powerful of enemies") | Jegged Cavern; G08 section 3.5. **An ESTIMATE: the guides' recommended reply, not read from the owner's save.** It sets what a Pay buys (the table at `YOJIMBO_START_GAUGE`) |
  * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **strongly indicated by the owner's saves, live confirmation pending** (the game's files hold no start value: RE section 5.5, G08 section 3; the community also says 128) `[estimate]` until it is confirmed live |
  * | Gil | `ENDGAME_GIL` = 1,500,000 (Yojimbo is paid from it each time he acts) | StrategyWiki speaks of paying "upwards of 2 million" `[estimate]` |
  * | Bag | `./dreams-end.ts`'s bag (Phoenix Downs, X-Potions, Remedies, Holy Water, Elixir ...) less the Candle of Life, a Doom-kill route that belongs to Yu Yevon alone | the repository's endgame bag `[estimate]` |
@@ -52,7 +52,7 @@ export const ENDGAME_BATTLES = 600;
 export const ENDGAME_PHOENIX_DOWNS = 17;
 /** Party gil: Yojimbo is paid from it (`[estimate]`; StrategyWiki speaks of paying "upwards of 2 million"). */
 export const ENDGAME_GIL = 1_500_000;
-/** The hire answer 0 to 2 the player gave at the Fayth: 2, the third option (Jegged Cavern; G08 section 3.5). */
+/** The hire answer 0 to 2 the player gave at the Fayth: 2, the third option (Jegged Cavern; G08 section 3.5). **An ESTIMATE: the guides' recommended reply, not read from the owner's save.** */
 export const YOJIMBO_HIRE_ANSWER = 2;
 /** Yojimbo's starting compatibility, 0 to 255: the game's files hold no start value (RE section 5.5); 128 is **strongly indicated by the owner's saves, live confirmation pending** (the community also says 128). `[estimate]` until it is confirmed live. */
 export const YOJIMBO_START_COMPATIBILITY = 128;
@@ -69,7 +69,7 @@ export const SISTERS_START_MOTIVATION = 50;
  * The five story aeons keep their Dream's End gauges.
  */
 export const SISTERS_START_GAUGE = 100;
-/** Yojimbo's gauge at the start: 0 (his menu is Pay and Dismiss). **A full gauge raises the chance that a Pay buys Zanmato** (+20 to the roll's motivation: RE's lane handoff section 10.4, 17 in 64 for a 100,000 Pay at compatibility 128 against 0 in 64 without it), and **a landed Zanmato now ends a Dark Aeon fight** (every legal foe of the group dies whatever its Death resistance, afda2d451), so the start is a lever of the bench, not a detail. `[estimate]` */
+/** Yojimbo's gauge at the start: 0 (his menu is Pay and Dismiss). **A full gauge raises the chance that a Pay buys Zanmato** (+20 to the roll's motivation). **What a Pay buys against the Dark Aeons (Zanmato byte 4), with this build's hire answer 2 (an ESTIMATE) and compatibility 128, out of 64 per Pay, a full gauge in brackets: 1,000 gil 0 (20); 10,000 gil 6 (26); 100,000 gil 11 (31); 1,000,000 gil 16 (36); Pay all, 1,500,000 gil, 17 (37)** (RE's review of 2026-10-16; the earlier lines of these notes quoted RE's table for hire answer 1, which is not this build's reply). Measured on the advisor's line, which pays 100,000: 42 of its 234 Pays bought a Zanmato, and 42 of 200 Act II fights ended that way. **A landed Zanmato ends a Dark Aeon fight** (every legal foe of the group dies whatever its Death resistance, afda2d451), so the start is a lever of the bench, not a detail. `[estimate]` */
 export const YOJIMBO_START_GAUGE = 0;
 
 /** Yuna's ten stats as the aeon formula reads them. */

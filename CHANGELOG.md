@@ -1,13 +1,24 @@
 # Echoes of Spira — changelog
 
 Every build that has gone live or to a preview, newest first, from the first alpha to today, and the day the
-project began: 73 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
+project began: 74 entries. Dates are US Eastern. FFX, FFX-2 or both tells you which game a change touches.
 Each entry lists its changes as text and shows a picture from that build (from release 39.2 on, up to three,
 kept under `docs/screenshots/`); where there is an "All pictures for this build" link it opens a page with every
 picture, before and after where both exist. Engineering detail lives in `docs/handoff/release-NN.md`.
 
 Echoes of Spira was called Pyrefly Reprise until 2026-10-04, so older pictures show the old name and the site
 address still carries it.
+
+## 2026-10-16 · Release 50.1 (r50.1): the Dark Mirror's words corrected after the reverse-engineering review (release 50.1; not live yet)
+
+Address: none yet (branch r50-release: the live release r50 8a3e8eff7 plus the text branch r50-text e5c63934e, which is words and comments only; not deployed, no review run)
+
+- **FFX only, Chapter XXVII, Mirror Aeons, the first fight is the pair:** the guide and the chapter card's second picture caption now say what the fight is. Act I is Dark Sandy and Dark Mindy; Cindy does not take the field there, so there is no joint attack, and each sister uses Mega Graviton once her own gauge is full (the guide used to describe the full trio opening with the joint attack). The guide's advice follows: blades for Sandy and spells for Mindy, an aeon sent in as a Mega Graviton nears, the Steal list without Cindy's Return Sphere, Auto-Life's line without the joint attack, and the card caption "two in the wrong colours" (it said three). No fight changed.
+- **FFX only, Chapter XXVII, the heal between the acts (moved here from the Release 50 entry, which stays as it shipped):** at Act II everyone, the bench and the aeons included, returns at full HP and MP with statuses and KO cleared and fallen aeons standing; the bag, the gil, Yojimbo's compatibility and the Overdrive gauges carry over, and the Sisters' motivation resets and any standing order clears. The game has two separate fights here; the full heal is our own design choice. The guide says it now, in its Strategy card and its document.
+- **FFX only, Chapter XXVII, Zanmato from Yuna's own Yojimbo is a real chance, not a long shot:** the guide now gives the odds the reverse-engineering review worked out: about one Pay in six at 100,000 gil and one in four at 1,000,000 (Pay all is about the same), and a full Overdrive gauge makes it better than one in two. The odds assume Yojimbo's hire answer 2 and compatibility 128, and both are estimates (the guide's recommended reply, not read from a save). The Release 50 entry's "it is rare" is superseded by this line; the engine's numbers did not change.
+- **FFX only, Chapter XXVII, Ribbon:** the guide no longer says Ribbon stops everything the Dark ones land. Ribbon turns away Petrify, Poison, Sleep, Silence, Darkness and Slow, but not the four Breaks or Curse: Calamity and Kozuka land all four Breaks, and Calamity lands Curse even on a Ribbon party.
+- **FFX only, under the hood:** stale comments and notes corrected (the engine's hire-answer and Zanmato comments, the proof tool's and bench's notes, a mis-joined line in `battle/common/types.ts`, the research note, the handoff, the plan and the contract-change entry that still said no Dark script was registered); the tests that pinned the old words follow. No behaviour changed, so nothing in the save, the other chapters or FFX-2 is touched.
+- **How it was checked:** type check clean on the merged tree; the 12 Mirror Aeons test files, the guide, strategy and chapter-meta suites (50 files, 824 tests passed, 6 skipped, none failed) and 16 more files that read Mirror Aeons words or the story registry (333 tests passed). Words and comments only, so no new pictures for this release.
 
 ## 2026-10-16 · Release 50 (r50): Chapter XXVII, Mirror Aeons, on the board; battles start and end the way the game's do; a phone way into the hidden chapters; five repairs (release 50; not live yet)
 

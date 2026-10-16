@@ -15,7 +15,7 @@
  *
  * ## Wiring
  *
- * - `pre` is eight lines, the **seam** (`SISTERS_FALL`) three plain lines and a white-out, `post` eight, one callout. Like the other hidden chapters' stories this one is NOT in `../registry.ts`; `tests/unit/chapters/
+ * - `pre` is eight lines, the **seam** (`SISTERS_FALL`) three plain lines and a white-out, `post` eight, one callout. This story is registered in `../registry.ts` (under `mirror-aeons`; the chapter is listed); `tests/unit/chapters/
  *   mirror-aeons-chapter.test.ts` audits the lint and the trigger-to-script agreement.
  * - The seam fires on **`all-ko` of the three sisters** (`MIRROR_SEAM`): the trio has no single last sister, so the condition names all three and is true when every sister present is down (a formation with one or two
  *   sisters works the same; in Act II there are none, so it never fires). The battle screen then puts the Cavern's plate on the stage under a white pulse (`EnemyGroupDef.plate`), so the seam ends on a white flash.

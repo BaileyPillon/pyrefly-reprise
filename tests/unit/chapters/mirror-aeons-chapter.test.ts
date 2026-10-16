@@ -199,12 +199,12 @@ describe('the guide card and document, and the line they teach', () => {
     for (const p of MIRROR_AEONS_GUIDE.phases) expect(p.cite, p.label).toMatch(cite);
   });
 
-  it('says what the files and the engine say: an aeon takes the big move, a blade cannot find Mindy, blades for Cindy and Sandy, Zanmato a long shot; and no number', () => {
+  it('says what the files and the engine say: an aeon takes the big move, a blade cannot find Mindy, blades for Sandy, Zanmato a real chance; and no number', () => {
     const text = MIRROR_AEONS_GUIDE.rules.map((r) => r.text).join(' ');
     expect(text).toMatch(/Send an aeon in before the big move/);
     expect(text).toMatch(/Auto-Life does not turn it/);
-    expect(text).toMatch(/Blades for Cindy and Sandy, spells for Mindy/);
-    expect(text).toMatch(/Zanmato|long shot/);
+    expect(text).toMatch(/Blades for Sandy, spells for Mindy/);
+    expect(text).toMatch(/Zanmato is a real chance/);
     expect(text).not.toMatch(/\d/);
   });
 
@@ -225,7 +225,7 @@ describe('the guide card and document, and the line they teach', () => {
   });
 });
 
-describe('the tactic: the shield for the big move, the heal, Auto-Life and Cheer, blades for Cindy and Sandy, a spell for Mindy', () => {
+describe('the tactic: the shield for the big move, the heal, Auto-Life and Cheer, blades for Sandy, a spell for Mindy', () => {
   /** Advance, defending, to `who`'s input. */
   function inputOf(engine: ReturnType<typeof H.newEngine>, who: string): H.Input {
     for (let i = 0; i < 12; i++) {
