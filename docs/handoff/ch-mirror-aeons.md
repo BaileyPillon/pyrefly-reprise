@@ -1,13 +1,14 @@
 # Mirror Aeons: the Dark Magus Sisters and Dark Yojimbo against Yuna's own Magus Sisters and Yojimbo (Chapter XXVII, FFX; listed on the board; "Dark Mirror")
 
-**Status (2026-10-15, phase 2 and the listing, built for Bailey, via the release driver): a finished, LISTED chapter, complete end to end; not merged to main and not deployed; RE's follow-up (the group Zanmato and the seven orders) is merged in; Act II is benched on it, and Act I and the whole chapter wait for RE's last fix (the player's Delta Attack becoming group-type).**
+**Status (2026-10-16, phase 2 and the listing, built for Bailey, via the release driver): a finished, LISTED chapter, complete end to end, on RE's FINAL engine (`53ce98a05`: the group Zanmato, the seven orders, the group Delta Attack); the difficulty table of record is run and pinned; not merged to main and not deployed.**
 Bailey, relayed by the driver, verbatim: "We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end."
 The chapter has a **card on the chapter board** (Chapter XXVII, the last of the FFX group; the board reads "of 19"), its clear, best time and attempts are recorded in the save like every listed chapter's, the typed word
 `yojimbo` still opens it, and the whole run was played in a production build with real keys: the card, party prep, the intro, Act I, the seam, the heal, Act II, the post scene, the results, the board with the ribbon, a
 retry, on a desktop and on a phone (section 8). **Listing does not touch the save schema** (section 2, `tests/unit/save-mirror-aeons-listed.test.ts`). Built, tested and proved in a production build in a browser. Branch `ch-mirror-aeons` (from
 `origin/r49-rc` f939b87f), in a worktree of its own (a sibling folder of the main tree), with the reverse-engineering session's (RE's) work merged: its two notes (`origin/re-ffx-yojimbo-sisters-feasibility` 8892f8f6, the rows,
 the formations and the aeon summon rules; `origin/re-ffx-dark-aeons` 36c3cdb8, the five scripts, the tier ladder and the mirror rule) and **lane FFX-K's engine at its FINAL tip, `origin/re-parity-ffx-yojimbo-sisters`
-d8fa5b69** (Yuna's Yojimbo and Magus Sisters in the engine; merged in two steps, 42dc0f547 and then d8fa5b69, which added only its handoff note and corrected test comments). Tip: see the last line of this file.
+53ce98a05** (Yuna's Yojimbo and Magus Sisters in the engine, merged in four steps: 42dc0f547 and d8fa5b69 (the engine and its note), `afda2d451` (a landed player Zanmato kills every legal foe of the group it picked), `4256d209a` (the Sisters' seven orders), `494b2f2fb` (the player's Delta
+Attack hits every foe in reach; Combine powers searches before it rolls) and `53ce98a05` (a comment); RE's final gate passed on it). Tip: see the last line of this file.
 
 **What phase 2 and the listing added, in one list** (details below): **the listing** (the card, "of 19", the clear recorded in the save, the typed word kept, the Atlas cites, the pause numeral, the plate over the road, the e2e counts);
 **Yuna's three Magus Sisters staged on the party's three spots** (they used to pile on one); the Dark Aeons' AI as code (RE's note, every number from it); Yuna's Yojimbo and Sisters in the party build, both summonable in both acts; **the heal between the acts**
@@ -132,18 +133,17 @@ Luck, the stat caps) and WHICH of the game's own formations each act uses.
 
 | Line (whole chapter, 200 seeds, 17 Phoenix Downs) | Won |
 |---|---|
-| the advisor's line, **Pay ON (provisional until RE's Zanmato fix)** | **74 percent** (147 of 200; 294 of 400 on the sweep's seeds) |
-| the competent line that **never pays Yojimbo and never sends him in (Pay OFF, final)** | **69 percent** (138 of 200) |
+| the advisor's line, **Pay ON** | **74 percent** (147 of 200; 294 of 400) |
+| the competent line that **never pays Yojimbo and never sends him in (Pay OFF)** | **69 percent** (138 of 200; 70 percent, 278 of 400) |
 | Yojimbo sent in first and never paid (Pay OFF: his own free attacks only; he is dismissed at his first menu and the shield goes) | 20 percent (39 of 200) |
 | a careless line | **0 of 200** |
 
-Both honest lines are inside the band, and the Pay-on line is the one RE's fix can move. Act II alone is easy (97 percent) and the chain is hard (about 84 percent of the runs that survive Act I) because the chain arrives with the
+Both honest lines are inside the band (the table of record is the final engine's; the fixes moved neither: see below). Act II alone is easy (97 percent) and the chain is hard (about 84 percent of the runs that survive Act I) because the chain arrives with the
 Phoenix Downs Act I spent: the heal gives back HP, MP and the aeons, **not the bag**.
 
-**Act II re-benched on RE's follow-up (2026-10-16; the rows above were measured at `d8fa5b69`):** Act II alone, the three tiers, 200 seeds, 17 Phoenix Downs: the advisor's line (Pay on) **97, 97, 100 percent**; Yojimbo sent in and never paid (his free attacks
+**The table of record (2026-10-16): the whole matrix, the levers and the ablations were re-run on the final engine and equal the first run (`d8fa5b69`) to the seed.** Act II alone, the three tiers, 200 seeds, 17 Phoenix Downs: the advisor's line (Pay on) **97, 97, 100 percent**; Yojimbo sent in and never paid (his free attacks
 only) 28, 28, 23; never sent in 96, 97, 100; careless 0. **Identical to the rows above to the seed**: the group Zanmato does not move Act II, because a Pay at compatibility 128 against a Zanmato byte of 4 buys no Zanmato without a full Overdrive gauge (the line paid
-749 times over the 600 fights and never with a full gauge; the highest gauge at a Pay was 90) and the first-target kill already ended an Act II fight when Dark Yojimbo was the only legal foe. **Pay is final for Act II. Act I and the whole chapter are NOT re-run:** they wait for RE's Delta Attack
-fix (the player's Delta becomes group-type and hits every Dark Sister, which makes Act I easier), and the Phoenix Down stock (17) and the two picks stay PRELIMINARY until then. `node --experimental-transform-types tools/mirror-aeons-bench.mjs --act2 --seeds 200 --lines advisor,nopay,noyojimbo,careless`.
+749 times over the 600 fights and never with a full gauge; the highest gauge at a Pay was 90) and the first-target kill already ended an Act II fight when Dark Yojimbo was the only legal foe. **Pay is final for Act II. Act I is unchanged too:** the advisor's line never calls the Sisters in Act I (a tally over 30 fights: no summon, no Combine), so the group Delta Attack never enters its number (60 Act I fights with the group flag on and off at run time: identical). The Phoenix Down lever on the pick, 400 seeds: 14 to 20 Phoenix Downs win 44, 55, 66, **74**, 79, 83 and 85 percent (Pay OFF 41, 52, 63, **70**, 77, 80, 83); Luck 80 89 percent, 40 32, 20 4; stats at 0.95 5 percent. **The picks stand and are pinned: the pair, tier 2, 17 Phoenix Downs** (`MIRROR_ACT_I`, `MIRROR_ACT_II`, `ENDGAME_PHOENIX_DOWNS`; `docs/plans/ch-mirror-aeons-bench.md` is the table of record). **The Dark Aeons stand at BattleDistance 0** (the formation data gives start positions only; pinned in `mirror-aeons-data.test.ts`), so the Sisters' reach-0 moves reach them. `node --experimental-transform-types tools/mirror-aeons-bench.mjs --act2 --seeds 200 --lines advisor,nopay,noyojimbo,careless`.
 
 **What was set aside and why** (all measured, 200 seeds): the **faithful trio** `kino00_70` wins **0 of 200** (the Delta Attack is the third enemy action of the battle, its second has no shield because Mindy and Sandy kill a
 lone aeon first, and every special move is a one-shot on a 9,999-HP member); the **trio with its gauges at 0** (OUR adjustment, registered as `kino00_70-g0`, **not shipped and named nowhere the player reads**) also **0 of 200**;
@@ -160,13 +160,22 @@ word is "appropriate"):** is 74 (Pay on) or 69 (Pay off) about right, or does he
 (one row for three). **The foes' Zanmato byte:** `zanmatoLevel` = the byte plus 1, which for the Dark Aeons is 5 (set and pinned). The gil and the compatibility ride in `state.flags` and are carried through the chain by
 `carryPartyForward`.
 
-**What the chapter does NOT depend on:** RE's two caveats of 2026-10-15 are both closed (the seven orders and the group Zanmato landed: `4256d209a`, `afda2d451`). The advisor's line still uses only Combine powers, Dismiss, Pay and the ordinary rows. **One caveat is open:** the player's Delta Attack row is
-single-enemy (6 hits, `[estimate]`) while the game's record is group-type; RE's last fix makes it hit every Dark Sister, and Act I's numbers wait for it.
+**What the chapter does NOT depend on:** RE's two caveats of 2026-10-15 are both closed (the seven orders and the group Zanmato landed: `4256d209a`, `afda2d451`). The advisor's line still uses only Combine powers, Dismiss, Pay and the ordinary rows. **The third caveat is closed too:** the player's Delta Attack is the game's group-type record now (`494b2f2fb`): it hits both Dark Sisters in Act I, six hits on each (checked in the browser run and in the engine).
+
+**A landed Zanmato of the player's, in the order the engine logs it** (the release driver's correction of RE's lane handoff section 10.6, 2026-10-16): Pay's `action-start` and `action-end`, the Zanmato's `action-start` (its `targets` the whole group), a `ko` for each foe and no `damage`, the
+Zanmato's `action-end`, then, in Act I only, the seam's `script-trigger`, then `victory`: **`victory` comes AFTER the action's `action-end`** (Act I: ko, ko, action-end, script-trigger, victory; Act II: ko, action-end, victory; the dog is untargetable and no part of it). The presenter plays an ordered burst
+event by event, so each foe falls, the action ends, the seam's beat plays (the road's HUD faded off and back, the plate swap), then the victory moment: nothing in the chapter's presentation needed a change. Pinned by `tests/unit/chapters/mirror-aeons-zanmato-presenter.test.ts` (the real presenter over the
+real chapter engine and its mid-battle scripts, both acts) and shown in the browser by **`tools/mirror-aeons-proof.mjs --scenario zanmato`** (the rare event made certain by a page-side nudge: the foes' Zanmato byte cleared, the purse and the compatibility set; every key after it is real: Yuna calls Yojimbo, pays
+everything from the ladder, the Zanmato ends Act I with the seam, Act II opens whole, a second Zanmato ends it, the post scene, the results and the board; 17 of 17 checks, frames `docs/screenshots/ch-mirror-aeons/zanmato-*`).
+
+**Distance (BattleDistance).** A foe at BattleDistance 1 is out of reach of every reach-0 command, and the Sisters' Attack, Camisade, Razzia and Passado have reach 0 (the Delta Attack reaches 1, spells 3): in RE's check Fight! rested in 40 of 40 seeds against a foe at distance 1. **No Dark Aeon here carries a
+distance**: the game's formation data gives start positions only (`research/re-ffx-dark-aeons.md` sections 2.2 and 2.3: the formation scripts write the start type, random positions off and camera work), so all of them stand at 0, nothing in the chapter sets one, it is pinned
+(`mirror-aeons-data.test.ts`), and **no bench cell was ever run at distance 1**. A probe on the chapter's engine: Attack order taken 19 times by the three Sisters over 30 Act I seeds acted 16 times and rested 3 (the order's own roll against the Sister's motivation, not reach).
 
 **The card.** RE's open item 12: the generic advisor knows no Pay or order rows and printed Dismiss as the best move on these aeons' turns (seen in the browser on the Sisters' first menu). The card is now kept off any menu that
 carries Pay's id or an order's (`engine/tactics/advisor-aeons.ts`, the one early return in `buildAdvisorView`, a test). The chapter's own line still plays those turns for the Auto strategy and the bench.
 
-**Still owed by RE or the driver:** (a) **the Delta Attack fix** (then the Act I and whole-chapter bench, and the Phoenix Down stock and the picks re-set); (b) whether the advisor's line should use another order, and whether the Sisters should start at 0 (the bench's levers now that the orders work: the driver's calls); (c) Combine powers is `[R]` (read from the code, not run; RE's open item 2); (d) the order of Zanmato and
+**Still owed by RE or the driver:** (a) nothing for the table (closed: the bench is run and pinned); (b) whether the advisor's line should use another order, and whether the Sisters should start at 0 (the bench's levers now that the orders work: the driver's calls); (c) Combine powers is `[R]` (read from the code, not run; RE's open item 2); (d) the order of Zanmato and
 Auto-Life inside a hit (RE note 8.3) and the dog's hit event while it is untargetable (8.4), both inherited from the first note; (e) Yojimbo's compatibility live reading (128 stays labelled until then); (f) **the Pay amount screen**
 (the ladder of rows is built as a stop-gap; the screen Bailey wants is his pick, rule 9; section 9, item 1).
 

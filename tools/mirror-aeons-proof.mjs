@@ -432,7 +432,7 @@ try {
     const pairHp = async () => ((await state())?.enemyHp ?? {});
     const hpBefore = await pairHp();
     await page.keyboard.press('Enter');
-    const delta = await waitStart('the Delta Attack in the log', /^delta attack/i, from, 25000);
+    const delta = await waitFor('the Delta Attack in the log', async () => (await startsSince(from)).find((x) => x.id === 'delta-attack' || x.name === 'Delta Attack') ?? false, { ms: 25000, pollMs: 60 }).catch(() => null); // the inner action: the order that starts it has its own name and no id
     if (delta) {
       await sleep(900);
       await shot('4-act-i-delta-attack-1');
