@@ -220,12 +220,19 @@ export const ABILITIES: Record<string, AbilityDef> = {
     category: 'overdrive',
     mpCost: 0,
     rank: 5,
-    power: 10, // DmgCon 10 per hit (Int/HD 6-hit version)
+    // Formula (Strength), power 10 and 6 hits are the game's own record 0x30EA, unchanged since this row was written: `tests/fixtures/parity/ffx/command_records.json`
+    // (formula 1, power 10, hits 6, element none) and `research/re-ffx-commands.md` section 3 ("exact"; the row is not in the section 4.1 list of numbers that differ, which
+    // `tests/unit/data-ffx-command-records.test.ts` pins). The old "DmgCon 10 per hit (Int/HD 6-hit version)" note of `research/ffx-combat-core.md` 6.3 says the same.
+    power: 10,
     // Exception: shared with Oblivion — Strength, not Special Magic.
     formula: 'strength',
     damageType: 'other',
     element: ['none'],
-    targeting: 'single-enemy', // [estimate] — not restated beyond DmgCon in §6.3.
+    // The game's command row is GROUP-type (type 1, reach 1, the opposite side, Overdrive cost 20: `src/battle/ffx/kernel/sister-search.ts#COMMAND_ROWS`, read from the
+    // install's own command table; `research/re-ffx-zanmato-and-orders.md` Part 2). A Combine powers that passes aims the joint action at the group its search stored, which
+    // is every foe the Delta Attack can reach, and each of them takes all 6 hits. The engine has no group-type targeting value, so the row keeps `single-enemy` for the
+    // places that read it and `extra.groupTarget` (below) makes the executor keep the whole list the order names (`targeting.ts#aimOf`; the flag the Zanmato, NulAll and Mix use).
+    targeting: 'single-enemy',
     hits: 6,
     canMiss: false, // ffx-bfa-yu-yevon.md §1.3 [verified: 2 sources]/[estimate] — always hits; see file header.
     statusEffects: [],
@@ -235,7 +242,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
     sfxKey: 'sfx-delta-attack',
     messageTemplate: '{user} uses Delta Attack on {target}',
     minigame: null,
-    extra: { vfxKey: 'vfx-delta-attack' },
+    extra: { vfxKey: 'vfx-delta-attack', groupTarget: true },
   },
 
   // ---------------------------------------------------------------------

@@ -16,6 +16,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
 import { abilityOfCommand, SISTER_ABILITY } from '../../src/battle/ffx/adapt/sister-orders.ts';
 import { C } from '../../src/battle/ffx/kernel/sister-chains.ts';
@@ -283,5 +285,19 @@ describe('the engine\'s abilities for the commands the orders perform', () => {
       const row = COMMAND_ROWS[Number(cmd)]!;
       expect(byId.get(id)!.mpCost, `${id}`).toBe(row.mp);
     }
+  });
+
+  it('the player\'s Delta Attack row follows the game\'s record 0x30EA: Strength (formula 1), power 10, 6 hits and no element as recorded, and a GROUP-type command (the whole stored group is its target)', () => {
+    const records = JSON.parse(readFileSync(fileURLToPath(new URL('../fixtures/parity/ffx/command_records.json', import.meta.url)), 'utf8')) as { columns: string[]; rows: number[][] };
+    const record = records.rows.find((r) => r[0] === C.delta)!;
+    const col = (name: string): number => record[records.columns.indexOf(name)]!;
+    const def = byId.get('delta-attack')!;
+    expect(def.record?.id, 'the row carries the record 0x30EA').toBe(C.delta);
+    expect([col('formula'), col('power'), col('hits'), col('element')], 'the game\'s record').toEqual([1, 10, 6, 0]);
+    expect([def.formula, def.power, def.hits, def.element], 'our row, the same numbers').toEqual(['strength', 10, 6, ['none']]);
+    // The command row (read from the install's command table): type bits of `Cmd+0x1a` 1 = group, reach 1, the opposite side; and the engine row keeps the named group whole.
+    const u1a = COMMAND_ROWS[C.delta]!.u1a;
+    expect([(u1a >> 2) & 3, (u1a >> 7) & 3, (u1a >> 1) & 1], 'group type, reach 1, opposite side').toEqual([1, 1, 1]);
+    expect(def.extra?.['groupTarget'], 'the executor keeps the whole list the order names').toBe(true);
   });
 });

@@ -7,35 +7,20 @@
  *   aeon only); the Dismiss command stands a fallen sister up at 1 HP.
  * - **The menu** ({@link sistersTurnStart}): at each sister's turn the game's menu builder runs once (its draws are on stream 18); the orders it offers wait
  *   in {@link SistersRuntime.menu} for `availableCommands`.
- * - **Combine powers** ({@link combineOrder}): the chance `200 + motivation`, the target search, the Delta Attack performed by Cindy, the other sisters' counters
- *   from `summonCtb`, all three paying the bar, motivation +10 or -10.
- * - **The other seven orders** are carried out by `./sister-orders.ts` (the target search and the sixteen handlers, proved on the game's own code and script VM:
+ * - **All eight orders** are carried out by `./sister-orders.ts` (the target search and the sixteen handlers, proved on the game's own code and script VM:
  *   `research/re-ffx-zanmato-and-orders.md` Part 2); this module keeps what they share: the state ({@link SistersRuntime}, with each sister's private memory), the
  *   motivation and gauge bytes ({@link magusChrOf}).
+ * - **Combine powers** is one of those eight (event 18: the search of the Delta Attack comes first, the roll `200 + motivation` second, motivation +10 or -10); what it
+ *   alone adds is the joint action it queues when the search passes ({@link jointAction}): the Delta Attack performed by Cindy at the whole group the search stored,
+ *   the other sisters' counters from `summonCtb`, all three paying the bar.
  *
  * Not sourced, and so a build must say (`FFXPartyBuild.sisters`): each sister's motivation at the start of the battle. The standing order starts at 0 in every
  * battle (whether the game's survives into the next battle is the note's open question 6).
  */
 
 import type { CombatantId, Command, FFXCombatant, FFXPartyBuild } from '../../common/types.ts';
-import { aeonSpecialRequest, EventKind } from '../kernel/aeon-request.ts';
-import { autoTargetMask } from '../kernel/legal-set.ts';
 import { type SummonSlot, summonCtb } from '../kernel/aeon-stats.ts';
-import {
-  type CombineFacts,
-  type MagusChr,
-  DELTA_ATTACK,
-  SISTER_REST,
-  SisterOrder,
-  afterAction,
-  combineCount,
-  combineEvent,
-  increaseMotivation,
-  magusRoll,
-  positiveCaseTest,
-  sisterMenu,
-  storeStandingOrder,
-} from '../kernel/sisters.ts';
+import { type CombineFacts, type MagusChr, SisterOrder, combineCount, magusRoll, sisterMenu } from '../kernel/sisters.ts';
 import { type Ctx, abilityOf, canAct, has, onField, rankOf, rtOf, tryActor } from '../state.ts';
 import { releaseThreatenLink } from './threaten.ts';
 import { aeonGearOf } from '../aeon-gear.ts';
@@ -45,7 +30,6 @@ import { setGauge } from '../overdrive.ts';
 import { dismissGroupOutcome, summonGroupOutcome } from './aeon-party.ts';
 import { charge, hasteCounter, slowCounter } from './ctb.ts';
 import { FfxStream } from './streams.ts';
-import { chainCommand, chainPick, chainWorld, idsOf } from './target-world.ts';
 import { slotIfAny, unitOf } from './od-world.ts';
 import { slotOf } from './slots.ts';
 
@@ -300,75 +284,41 @@ export function storeMagusChr(ctx: Ctx, c: FFXCombatant, m: MagusChr): void {
 }
 
 /**
- * The Combine powers order of sister `actor` (event 18): the handler clears the standing order, tries the Delta Attack at `200 + motivation` with a target
- * search, writes motivation +10 (or -10), and when it queued the Delta Attack the joint action runs as Cindy's: the actor's counter becomes 0, each other
- * sister's `HasteSlow(tick(Agility) x rank)`, all three pay the bar. `run` carries out a command through the engine's executor.
+ * The joint action of a Combine powers whose search passed (script event 18, carried out by `./sister-orders.ts`; the Delta Attack is the one action the game gives the
+ * special-action kind 8): Cindy performs the Delta Attack at `targets`, the group the search stored (`mask` is the same group as a slot mask), whichever sister gave the
+ * order. Her counter becomes 0 first, each other sister's the recovery of the action's rank for her (`HasteSlow(tick(Agility) x rank)`); all three pay the bar. `run`
+ * carries a command out through the engine's executor.
  *
- * Returns the turn's result for `actor`: rank 0 when the Delta Attack ran (Cindy's own counter was charged here), a rank-3 pass otherwise (the rest command
- * on herself; its own rank is not in our data).
+ * Returns the turn's result for the sister who gave the order: rank 0 (Cindy's own counter was charged here, so the turn charges nothing more) and the damage dealt.
  */
-export function combineOrder(ctx: Ctx, actor: FFXCombatant, run: (who: FFXCombatant, command: Command) => OrderRun): OrderRun {
-  const s = ctx.rt.sisters!;
-  const request = aeonSpecialRequest(slotOf(ctx, actor), 0, [SisterOrder.Combine, 0xffff]);
-  if (request === null || request.kind !== EventKind.FirstOrder + 5) throw new Error('FFX engine: the requester no longer maps Combine powers to event 18');
-  s.parsed[actor.id] = Math.min(255, (s.parsed[actor.id] ?? 0) + 1);
+export function jointAction(ctx: Ctx, targets: readonly CombatantId[], mask: number, run: (who: FFXCombatant, command: Command) => OrderRun): OrderRun {
   const def = abilityOf(ctx, DELTA_ABILITY_ID);
   if (def === undefined) throw new Error("FFX engine: the Delta Attack ('delta-attack') is not registered");
   const cindy = ctx.rt.aeonRoster.get('cindy')!;
-  const draw = draw18(ctx);
 
-  s.order = storeStandingOrder(0);
-  let targets: CombatantId[] = [];
-  let mask = 0;
-  const outcome = combineEvent(s.motivation[actor.id] ?? 0, {
-    roll: (threshold) => magusRoll(DELTA_ATTACK, threshold, s.order, draw).value === 1,
-    target: () => {
-      const world = chainWorld(ctx, actor, def, false);
-      mask = autoTargetMask(world.slots, slotOf(ctx, actor), DELTA_ATTACK, 0, chainCommand(actor, def, 1, false), chainPick(ctx, world));
-      targets = idsOf(world, mask);
-      return mask !== 0;
-    },
-  });
-
-  // Nothing queued: she performs the rest command on herself, which is her last command (a pass sets none; `kernel/sister-orders.ts`, the proven handler).
-  if (!outcome.queued) s.memory[actor.id]!.last = SISTER_REST;
-  const mine = magusChrOf(ctx, actor);
-  increaseMotivation(mine, s.order, 0, outcome.motivationChange);
-  storeMagusChr(ctx, actor, mine); // the pair waits for the end of the action
-
-  let result: OrderRun = { rank: 3, damageDealt: 0 };
-  if (outcome.queued) {
-    // The joint action starts (kind 8): the actor's counter is 0, each other sister's the recovery of the action's rank for her.
-    const group = sistersOf(ctx);
-    const slots = new Map<number, SummonSlot>();
-    for (const c of group) {
-      slots.set(slotOf(ctx, c), {
-        ctb: rtOf(ctx, c.id).ctb,
-        agi: c.stats.agi,
-        haste: hasteCounter(c),
-        slow: slowCounter(c),
-        targetMask: mask,
-        flag451: 0,
-        flag5c0: 0,
-        mpUsed: 0,
-        odUsed: 100 / unitOf(c),
-        rank: rankOf(def),
-      });
-    }
-    summonCtb(group.map((c) => slotOf(ctx, c)), slotOf(ctx, cindy), slots);
-    for (const c of group) rtOf(ctx, c.id).ctb = slots.get(slotOf(ctx, c))!.ctb;
-
-    const joint = run(cindy, { kind: 'overdrive', id: DELTA_ABILITY_ID, targets });
-    // All three paid the 20-point bar: Cindy's executor spent hers, the other two pay here.
-    for (const c of group) if (c.id !== cindy.id) setGauge(ctx, c, Math.max(0, (c.overdrive?.gauge ?? 0) - 100), 'delta-attack');
-    charge(ctx, cindy, joint.rank);
-    result = { rank: 0, damageDealt: joint.damageDealt };
+  // The joint action starts (kind 8): the performer's counter is 0, each other sister's the recovery of the action's rank for her.
+  const group = sistersOf(ctx);
+  const slots = new Map<number, SummonSlot>();
+  for (const c of group) {
+    slots.set(slotOf(ctx, c), {
+      ctb: rtOf(ctx, c.id).ctb,
+      agi: c.stats.agi,
+      haste: hasteCounter(c),
+      slow: slowCounter(c),
+      targetMask: mask,
+      flag451: 0,
+      flag5c0: 0,
+      mpUsed: 0,
+      odUsed: 100 / unitOf(c),
+      rank: rankOf(def),
+    });
   }
+  summonCtb(group.map((c) => slotOf(ctx, c)), slotOf(ctx, cindy), slots);
+  for (const c of group) rtOf(ctx, c.id).ctb = slots.get(slotOf(ctx, c))!.ctb;
 
-  // The action is done: the positive-case test decides the column, then the end-of-action step applies the pair.
-  const done = magusChrOf(ctx, actor);
-  positiveCaseTest(done, 0, [result.damageDealt, 0, 0], 0);
-  afterAction(done);
-  storeMagusChr(ctx, actor, done);
-  return result;
+  const joint = run(cindy, { kind: 'overdrive', id: DELTA_ABILITY_ID, targets: [...targets] });
+  // All three paid the 20-point bar: Cindy's executor spent hers, the other two pay here.
+  for (const c of group) if (c.id !== cindy.id) setGauge(ctx, c, Math.max(0, (c.overdrive?.gauge ?? 0) - 100), 'delta-attack');
+  charge(ctx, cindy, joint.rank);
+  return { rank: 0, damageDealt: joint.damageDealt };
 }
