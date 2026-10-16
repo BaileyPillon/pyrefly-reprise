@@ -3,7 +3,8 @@
  * **Game case: FFX-2 only** (FFX has no garment grids). Numbers only, in our grid ids: no game text, no copied file.
  *
  * Source: the game's own plain grid cards (`menu/resdat00..63.bin` of Steam build 25501027, SHA-256 6EA7F142...CD69), one card per grid, read in
- * `FFX2-G09` section 3.1 (a data fact; the path finder over the cards is emulated, 24,850 vectors, 0 mismatches). A grid's key is our id;
+ * `FFX2-G09` §3.1 and §4.1 [verified: the game's own files, and the path finder over the cards emulated, 24,850 vectors, 0 mismatches];
+ * `research/re-ffx2-dressphere.md` §3.4 carries the correction of the old "compressed, not decoded" line. A grid's key is our id;
  * `plate` is the game's plate number n (plate id 0x6000 + n). `battle/ffx2/kernel/grid-path.ts` reads these.
  *
  * - `nodes`: the card's nodes in the card's order, `[gate, x, y]`: gate 0 is a dressphere node, 1 to 4 is a gate node with that number (a gate sits on its
@@ -14,7 +15,9 @@
  * - `colourOfGate`: which of the grid's colours the gate with number 1, 2, 3, 4 wears in our data (null: the grid has no such gate). **This is not one mapping
  *   for all grids and it is not the inferred 1 = red, 2 = green, 3 = yellow, 4 = blue** (the artwork look that would confirm that has not been done). Each table
  *   is the one under which that grid's own existing colour-keyed data pays what the game's plate row pays at the same gate number
- *   (`tests/unit/ffx2-grid-layout-data.test.ts` proves it, grid by grid and for every set of gates crossed). The five older stat grids (`vanguard`, `bum-rush`,
+ *   (`tests/unit/ffx2-grid-layout-data.test.ts` proves it, grid by grid and for every set of gates crossed). On 17 grids (two of them have no gate) that leaves one
+ *   table; on the other 22 the data cannot tell (every gate pays the same, two colours only ever come together, or a stat is paid by a pair), several tables pay the
+ *   same, and the one closest to the common colours was taken: a label, no number depends on which. The five older stat grids (`vanguard`, `bum-rush`,
  *   `flash-of-steel`, `protection-halo`, `hour-of-need`) have red and yellow on the physical stat and blue and green on the magical one in today's data, and the
  *   game pays the physical stat at the numbers 3 and 4, so their tables read blue, green, yellow, red. The colour flip (it waits for the artwork look) replaces
  *   those five tables with the common colours and swaps red and blue in those five grids' `gateEffects`; nothing else changes.
