@@ -19,7 +19,11 @@ import { enemy, stats } from './ffx-fixtures.test.ts';
 import { COMBINE, DISMISS, PAY, type Tap, Rig, SUMMON, build, ids, sisters, starts, yojimbo } from './helpers/ffxKRig.ts';
 import { DELTA, freeAttack, payDecision, sisterMenu } from './helpers/ffxKOracle.ts';
 
-/** A monster Zanmato cannot kill (Death resist 255) on its own formation slot; `zanmatoLevel` is the data's level, the game's Zanmato byte plus 1 (none = byte 0). */
+/**
+ * A monster with a great deal of HP and Death resistance 255, on its own formation slot. A landed Zanmato kills it all the same (the data's Zanmato ignores every
+ * resistance), so a free Zanmato before the Pay would end the battle: the cases that start above compatibility 0 give the monsters a Zanmato byte (a free attack is then
+ * never Zanmato) or start at 0. `zanmatoLevel` is the data's level, the game's Zanmato byte plus 1 (none = byte 0).
+ */
 const foe = (id: string, slot: number, zanmatoLevel?: number): EnemyDef =>
   enemy({ id, slot, stats: stats({ hp: 99999, maxHp: 99999, str: 1, agi: 1 }), immunities: { ko: 255 }, ...(zanmatoLevel === undefined ? {} : { zanmatoLevel }) });
 

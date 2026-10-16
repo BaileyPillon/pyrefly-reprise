@@ -16,7 +16,7 @@ import { COMBINE, DISMISS, PAY, Rig, SUMMON, build, sisters, yojimbo } from './h
 
 const types = (events: readonly BattleEvent[]): string[] => events.map((e) => e.type);
 
-/** A monster Zanmato cannot kill (Death resist 255). */
+/** A monster with a great deal of HP and Death resistance 255 (a landed Zanmato ignores every resistance and kills it all the same). */
 const solid = () => enemy({ id: 'dummy', stats: stats({ hp: 99999, maxHp: 99999, str: 1, agi: 1 }), immunities: { ko: 255 } });
 
 /** Summon Yojimbo at compatibility 0 (no free attack can come) and open his menu; returns the rig and where the log stood. */
