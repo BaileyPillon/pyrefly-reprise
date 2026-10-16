@@ -1,0 +1,43 @@
+/*
+ * The amount panel of the player's Yojimbo (`YojimboPayWidget.ts`; the hidden Last Summoning, FFX only). Authored on the HUD's 640x360 grid like every other `src/ui/ffx` component and scaled with it;
+ * nothing below is under 6.3 grid px (the 14 device px floor of `AirshipOrderWidget.ts`). Every selector is scoped to `.ffx-ypay`, so no other fight's screen can be touched by it. PROVISIONAL: no target for
+ * this panel was approved (rule 9); it is a first sketch beside the command stack in the Ink and Gold chrome.
+ */
+.ffxhud .ffx-ypay {
+  display: flex; flex-direction: column; gap: 3px;
+  width: 196px; padding: 6px 8px 7px;
+  background: rgba(11, 10, 18, 0.92);
+  border-left: 1.6px solid var(--ig-accent);
+  color: var(--ig-paper);
+  pointer-events: auto;
+}
+.ffxhud .ffx-ypay[hidden] { display: none; }
+/* the reset sits in `:where` so it carries no specificity and every rule below overrides it */
+.ffxhud .ffx-ypay :where(button) { all: unset; box-sizing: border-box; cursor: pointer; text-align: center; }
+.ffxhud .ffx-ypay__title {
+  font-family: var(--ig-font-display); font-size: 6.4px; letter-spacing: 0.22em; color: var(--ig-accent);
+}
+.ffxhud .ffx-ypay__digits { display: flex; align-items: center; gap: 1px; margin: 1px 0; }
+.ffxhud .ffx-ypay__cell { display: inline-flex; flex-direction: column; align-items: center; }
+.ffxhud .ffx-ypay__sep { display: inline-flex; flex-direction: column; align-items: center; }
+.ffxhud .ffx-ypay__sep .ffx-ypay__step { opacity: 0; min-width: 4px; }
+.ffxhud .ffx-ypay__comma { font-family: var(--ig-font-numeral); font-weight: 700; font-size: 11px; line-height: 1.15; opacity: 0.6; }
+.ffxhud .ffx-ypay__digit {
+  font-family: var(--ig-font-numeral); font-weight: 700; font-size: 11px; line-height: 1.15; min-width: 11px; padding: 0 1px;
+}
+.ffxhud .ffx-ypay__cell--on .ffx-ypay__digit { background: var(--ig-accent); color: var(--ig-ink); }
+.ffxhud .ffx-ypay__step { font-size: 6.3px; line-height: 1.2; min-width: 11px; opacity: 0.55; }
+.ffxhud .ffx-ypay__step:hover, .ffxhud .ffx-ypay__cell--on .ffx-ypay__step { opacity: 1; color: var(--ig-accent); }
+.ffxhud .ffx-ypay__unit { font-family: var(--ig-font-display); font-size: 6.4px; letter-spacing: 0.16em; opacity: 0.75; margin-left: 4px; align-self: flex-end; padding-bottom: 2px; }
+.ffxhud .ffx-ypay__purse { font-size: 6.4px; line-height: 1.35; color: rgba(244, 241, 232, 0.78); }
+.ffxhud .ffx-ypay__purse b { color: var(--ig-paper); font-family: var(--ig-font-numeral); font-weight: 700; }
+.ffxhud .ffx-ypay__note { font-size: 6.4px; line-height: 1.35; color: var(--ig-accent); min-height: 8.6px; }
+.ffxhud .ffx-ypay__row { display: flex; gap: 3px; }
+.ffxhud .ffx-ypay__btn {
+  flex: 1 1 0; padding: 1.4px 3px;
+  font-family: var(--ig-font-display); font-size: 6.4px; letter-spacing: 0.14em; line-height: 1.5;
+  border: 0.8px solid rgba(244, 241, 232, 0.4); color: var(--ig-paper); background: rgba(244, 241, 232, 0.06);
+}
+.ffxhud .ffx-ypay__btn:hover { border-color: var(--ig-accent); }
+.ffxhud .ffx-ypay__btn--pay { flex: 2 1 0; background: var(--ig-accent); color: var(--ig-ink); border-color: var(--ig-accent); font-weight: 700; }
+.ffxhud .ffx-ypay__keys { font-size: 6.3px; line-height: 1.3; letter-spacing: 0.06em; color: rgba(244, 241, 232, 0.55); }

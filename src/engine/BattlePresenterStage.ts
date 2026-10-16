@@ -289,7 +289,7 @@ export class PaintedStage implements BattleStage {
     this.lastState = state;
     const ids = new Set<CombatantId>([
       ...state.activeIds,
-      ...(state.aeonId ? [state.aeonId] : []),
+      ...(state.aeonIds ?? (state.aeonId ? [state.aeonId] : [])),
       ...state.enemyIds,
     ]);
     // Destructible parts are separate combatants that still need drawing.

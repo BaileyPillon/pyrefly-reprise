@@ -41,11 +41,11 @@ export const ORDERS: readonly OrderRow[] = [
   { command: SisterOrder.Free, id: 'sister-order-free', label: 'Free choice' },
   { command: SisterOrder.Repeat, id: 'sister-order-repeat', label: 'Repeat last' },
   { command: SisterOrder.Attack, id: 'sister-order-attack', label: 'Attack order' },
-  { command: SisterOrder.CindyBig, id: 'sister-order-cindy-spells', label: 'Spell order (Cindy)' },
-  { command: SisterOrder.CindySupport, id: 'sister-order-cindy-support', label: 'Revive and support (Cindy)' },
-  { command: SisterOrder.Combine, id: 'sister-order-combine', label: 'Combine for the Delta Attack' },
-  { command: SisterOrder.SandySupport, id: 'sister-order-sandy-support', label: 'Support order (Sandy)' },
-  { command: SisterOrder.MindyDrain, id: 'sister-order-mindy-drain', label: 'Drain order (Mindy)' },
+  { command: SisterOrder.CindyBig, id: 'sister-order-cindy-spells', label: 'Spells (Cindy)' },
+  { command: SisterOrder.CindySupport, id: 'sister-order-cindy-support', label: 'Support (Cindy)' },
+  { command: SisterOrder.Combine, id: 'sister-order-combine', label: 'Combine powers' },
+  { command: SisterOrder.SandySupport, id: 'sister-order-sandy-support', label: 'Support (Sandy)' },
+  { command: SisterOrder.MindyDrain, id: 'sister-order-mindy-drain', label: 'Drain (Mindy)' },
 ];
 
 /** The ability ids of the eight orders. */
@@ -77,7 +77,8 @@ export function aeonMenuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] |
         rank: 3,
         enabled: true,
         validTargets: [],
-        help: 'The payment is the command row\'s `gilSpent`, from 0 to the gil the party has.',
+        // The line the command slab prints (`ui/ffx/commandHelp.ts`): player-facing. The payment itself is the row's `gilSpent`, 0 to the gil the party has (the file's header); a screen asks for it (`ui/ffx/YojimboPay.ts`).
+        help: 'Pay him, and he strikes for you. The more gil, the better the blow.',
       },
       dismissRow(user),
     ];
@@ -101,6 +102,7 @@ export function aeonMenuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] |
       mpCost: 0,
       enabled: built,
       validTargets: [],
+      ...(o.command === SisterOrder.Combine ? { help: 'All three Sisters strike together: the Delta Attack, six hits on everyone.' } : {}),
     };
     if (!built) row.disabledReason = 'Not built: its target search is not decoded';
     rows.push(row);

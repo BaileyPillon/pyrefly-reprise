@@ -26,6 +26,7 @@ import { GUIDES } from '../../../src/data/guides/index.ts';
 import { GUIDE_DOCS, docForChapter } from '../../../src/data/guides/docs/index.ts';
 import { LAST_SUMMONING_GUIDE } from '../../../src/data/guides/last-summoning.ts';
 import { braskasFinalAeon } from '../../../src/engine/tactics/braskas-final-aeon.ts';
+import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { guideForState } from '../../../src/engine/tactics/guide.ts';
 import { tacticFor, TACTICS } from '../../../src/engine/tactics/index.ts';
 import { AEON_CALL_ORDER, LAST_SUMMONING_BOSS_IDS, SISTER_BODY_IDS, SURE_WAKIZASHI, lastSummoning, paymentFor } from '../../../src/engine/tactics/last-summoning.ts';
@@ -348,7 +349,7 @@ describe('the card and the document: cited, in the corpus form, and tied to the 
   });
 
   it('every label a hint speaks to is a row the line asks for (its own, or Chapter III’s in these fights)', () => {
-    const asked = ['Pay', 'Combine for the Delta Attack', 'Phoenix Down', 'Mega Phoenix', 'Life', 'Full-Life', 'Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion', 'Protect', 'Ether', 'Turbo Ether', 'Elixir', 'Candle of Life', 'Defend'];
+    const asked = ['Pay', 'Combine powers', 'Phoenix Down', 'Mega Phoenix', 'Life', 'Full-Life', 'Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion', 'Protect', 'Ether', 'Turbo Ether', 'Elixir', 'Candle of Life', 'Defend'];
     for (const h of LAST_SUMMONING_GUIDE.hints) for (const label of h.when.labels ?? []) expect(asked, label).toContain(label);
   });
 
@@ -399,7 +400,7 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(e.state().flags['yojimbo:gil']).toBe(50_000 - 32_768);
   });
 
-  it('calls Combine for the Delta Attack on a Sister’s turn when the game’s menu offers it, and the Delta Attack lands', async () => {
+  it('calls Combine powers on a Sister’s turn when the game’s menu offers it, and the Delta Attack lands', async () => {
     const { setup } = await firstLinkSetup(['valefor'], 4);
     const party = buildLastSummoningParty();
     for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 100;
@@ -442,6 +443,22 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(swingOf()?.targets).toEqual(['possessed-cindy']); // a tie goes to Cindy
     hp('possessed-mindy', 100);
     expect(swingOf()?.targets).toEqual(['possessed-mindy']);
+  });
+
+  it('shows the card’s top row as Pay on Yojimbo’s turn (the preview cannot price a payment, so the guard leaves it be), and Dismiss on a Sister’s turn with no Combine', async () => {
+    const e = await lastSummoningEngine(['valefor'], 8);
+    const yuna = inputFor(e, 'yuna');
+    e.submit({ ...yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Yojimbo')!.command, targets: [] });
+    const turn = inputFor(e, 'yojimbo');
+    const view = buildAdvisorView(e.state(), { actorId: turn.actorId, commands: turn.commands });
+    expect(view!.suggestions[0]).toMatchObject({ label: 'Pay', source: 'tactic' });
+    expect(view!.suggestions[0]!.effect).toMatch(/Pay him/);
+
+    const sisters = await lastSummoningEngine(['valefor'], 9);
+    const call = inputFor(sisters, 'yuna').commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
+    sisters.submit({ ...call.command, targets: [] });
+    const sturn = inputFor(sisters, sisters.state().aeonIds![0]!);
+    expect(buildAdvisorView(sisters.state(), { actorId: sturn.actorId, commands: sturn.commands })!.suggestions[0]).toMatchObject({ label: 'Dismiss', source: 'tactic' });
   });
 
   it('leaves Chapter III’s own link to Chapter III’s line, command for command', async () => {

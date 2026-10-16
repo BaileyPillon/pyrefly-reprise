@@ -44,6 +44,13 @@ const UNPRICED_KINDS: ReadonlySet<string> = new Set([
 ]);
 
 /**
+ * Abilities of the player's own Yojimbo and Magus Sisters (FFX only, the hidden Last Summoning) a preview cannot price either: the Pay hands the payment to the game's own roll (`battle/ffx/kernel/yojimbo.ts`, on
+ * its own random stream) and the command the roll chooses is resolved after it, and Combine powers queues the Delta Attack as Cindy's action. Neither shows an effect in the single resolution `simulate.ts` plays, so
+ * judging them "nothing" would hand the card's top row to Dismiss on every turn of these aeons. Shared advisor plumbing, inert for every other id.
+ */
+const UNPRICED_ABILITY_IDS: ReadonlySet<string> = new Set(['yojimbo-pay', 'sister-order-combine']);
+
+/**
  * Events that are bookkeeping rather than an effect on the board.
  *
  * The list is deliberately the *exclusions*: anything a future engine emits
@@ -143,6 +150,7 @@ export function changesNothing(
   // Nothing was simulated: a switch, priced by `switchValue` instead.
   if (!outcome) return false;
   if (UNPRICED_KINDS.has(command.kind)) return false;
+  if (command.kind === 'ability' && UNPRICED_ABILITY_IDS.has(command.id)) return false;
   // The engine refused the command outright. It is already at the bottom of the
   // ranking (`scoreOutcome`), and it is the plainest no-op there is.
   if (outcome.rejected) return true;

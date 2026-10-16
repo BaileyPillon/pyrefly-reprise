@@ -433,6 +433,10 @@
 .ffxhud .ffx-cmd__badge--ready {
   font-family: var(--ig-font-display); font-size: 5.8px; letter-spacing: 0.18em; color: var(--ig-accent);
 }
+/* The hidden Last Summoning: an aeon Yu Yevon has taken, on Yuna's Summon list (the offering screen's TAKEN, in the same red). */
+.ffxhud .ffx-cmd__badge--taken {
+  font-family: var(--ig-font-display); font-size: 5.4px; letter-spacing: 0.18em; color: #e0837a;
+}
 /* An Overdrive row is already ink-on-gold-border; a second ink chip on it
    reads as a hole, so the tag sits directly on the row face there. */
 .ffxhud .ig-cmd--overdrive .ffx-cmd__badge { background: transparent; padding: 0; }

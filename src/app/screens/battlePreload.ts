@@ -128,9 +128,10 @@ function stagedIds(state: {
   activeIds: readonly string[];
   enemyIds: readonly string[];
   aeonId?: string | null;
+  aeonIds?: readonly string[];
   combatants: Record<string, { flags: { isPart?: boolean; hidden?: boolean }; removed?: boolean }>;
 }): string[] {
-  const ids = new Set<string>([...state.activeIds, ...(state.aeonId ? [state.aeonId] : []), ...state.enemyIds]);
+  const ids = new Set<string>([...state.activeIds, ...(state.aeonIds ?? (state.aeonId ? [state.aeonId] : [])), ...state.enemyIds]);
   for (const [id, c] of Object.entries(state.combatants)) {
     if (c.flags.isPart && !c.flags.hidden && !c.removed) ids.add(id);
   }

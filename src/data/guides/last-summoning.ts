@@ -83,7 +83,7 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
     },
     // ---- the player's own Sisters (the tactic's Combine row)
     {
-      when: { labels: ['Combine for the Delta Attack'] },
+      when: { labels: ['Combine powers'] },
       text: 'All three Sisters are ready: Cindy throws the Delta Attack, six hits of Magic with no defence against them, on everyone the twin has at the front',
       cite: 'ffx-combat-core §6.3; re-ffx-last-summoning §1.4, §6.2',
     },

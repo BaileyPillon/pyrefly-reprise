@@ -45,15 +45,15 @@ export const OFFERING_PANELS: Readonly<Record<OfferingKey, OfferingPanel>> = {
     lose: 'Sonic Wings and its Overdrive: the first aeon you ever called.',
   },
   ifrit: {
-    fought: 'Ifrit is fought with the stats you gave it, and it drinks Fire. It answers with Meteor Strike and, when its gauge is full, Hellfire.',
+    fought: 'Ifrit is fought with the stats you gave it, and it drinks Fire. It answers with Meteor Strike, and Hellfire at a full gauge.',
     lose: 'Meteor Strike, Hellfire, and the aeon that feeds on Fire.',
   },
   ixion: {
-    fought: 'Ixion is fought with the stats you gave it, and it drinks Thunder. It answers with Aerospark and, when its gauge is full, Thor’s Hammer.',
+    fought: 'Ixion is fought with the stats you gave it, and it drinks Thunder. It answers with Aerospark, and Thor’s Hammer at a full gauge.',
     lose: 'Aerospark, Thor’s Hammer, and the aeon that feeds on Thunder.',
   },
   shiva: {
-    fought: 'Shiva is fought with the stats you gave her, and she drinks Ice. She answers with Heavenly Strike and, when her gauge is full, Diamond Dust.',
+    fought: 'Shiva is fought with the stats you gave her, and she drinks Ice. She answers with Heavenly Strike, and Diamond Dust at a full gauge.',
     lose: 'Heavenly Strike, Diamond Dust, and the aeon that feeds on Ice.',
   },
   bahamut: {

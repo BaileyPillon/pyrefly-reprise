@@ -13,7 +13,7 @@
  * 2. **The player's Yojimbo pays to be good**: Pay is his whole menu (RE section 8, the aeon-side note). The motivation is `4n + compatibility div 10` with `n = floor(log2 gil) - 2`, and once it is 63 the roll can no
  *    longer fall below Wakizashi on all, whatever the monsters' Zanmato byte (RE section 8.1 point 4), so the line pays **the smallest power of two that reaches 63**, or the largest the purse allows. Every doubling of
  *    the payment adds 4, which is why a payment is always a power of two. [The hire answer is the build's, 1; the line is written for it.]
- * 3. **The player's Sisters act only through the orders the engine has built**: Combine for the Delta Attack when the three gauges are full (the game's menu offers it only then, RE section 6.4 of the aeon-side
+ * 3. **The player's Sisters act only through the orders the engine has built**: Combine powers (the Delta Attack) when the three gauges are full (the game's menu offers it only then, RE section 6.4 of the aeon-side
  *    note), else the one thing left, Dismiss.
  *
  * 4. **Yuna calls an aeon when she has nothing urgent to do and the Grand Summon is ready** (not against Yu Yevon, whom no aeon hurts). A Grand Summon arrives with a full gauge, so the aeon opens with its Overdrive; then
@@ -47,7 +47,7 @@ export const SURE_WAKIZASHI = 63;
 export const AEON_CALL_ORDER: readonly string[] = ['Bahamut', 'Anima', 'Magus Sisters', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo'];
 
 /** The row Combine powers carries (`battle/ffx/aeon-commands.ts#ORDERS`). */
-const COMBINE_LABEL = 'Combine for the Delta Attack';
+const COMBINE_LABEL = 'Combine powers';
 
 const living = (engine: BattleEngine, id: CombatantId): FFXCombatant | undefined => {
   const c = engine.state().combatants[id] as FFXCombatant | undefined;
