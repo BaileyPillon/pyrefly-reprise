@@ -98,7 +98,7 @@ export const daigoroBite: AbilityDef = row({
 /** 0x4086: no damage, one hit record, an order to the dog (RE section 4.1: the script aims it at the second slot). */
 export const daigoroOrder: AbilityDef = row({
   id: DARK_DAIGORO_ORDER_ID, name: 'Daigoro', power: 0, formula: 'none', damageType: 'other', targeting: 'self', hits: 1, flags: [],
-  extra: { ordersActor: 'dark-daigoro', orderedAbility: DARK_DAIGORO_BITE_ID },
+  extra: { ordersActor: 'dark-daigoro', orderedAbility: DARK_DAIGORO_BITE_ID, orderedAim: 'game-picker' }, // the bite's victim is the note's stream-4 pick over the living front line (RE note 4.4; `battle/ffx/orders.ts`)
 });
 export const sandyAttack: AbilityDef = row({
   id: DARK_SANDY_ATTACK_ID, name: 'Attack', power: 36, formula: 'strength', damageType: 'physical', targeting: single, hits: 1, flags: CRIT, statusEffects: [apply('petrify')], shatterChance: SHATTER,
