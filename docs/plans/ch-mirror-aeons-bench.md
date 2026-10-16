@@ -4,16 +4,16 @@
 reverse-engineering session's (RE's) engine plays them (lane FFX-K), and the party preset of `data/ffx/builds/mirror-aeons.ts`. **No boss row, formation or script is ever touched to reach a number**: the levers are the party's
 own estimates and WHICH of the game's own fights each act uses (the plan: `docs/plans/ch-mirror-aeons-review.md` section 3).
 
-> **THE TABLE OF RECORD IS HELD (the release driver, 2026-10-15, after RE's independent check of its engine at d8fa5b69).** Today the Sisters can only Combine or Dismiss (the seven other orders are `enabled: false`, and every
-> bar is 0 after a Combine), and a landed Zanmato of Yuna's Yojimbo one-shots the first target only (RE's open item 7). **RE's note** (`research/re-ffx-zanmato-and-orders.md`) **has since settled what the game does: a landed player Zanmato hits every
-> legal enemy of one group with Death at 255 and Slice does nothing in this build, so it ENDS a Dark fight at once; the driver keeps that as faithful and rare (5 in 64 per Pay at the extreme: all 9,999,999 gil,
-> compatibility 255, byte 4, hire answer 1; more with a full gauge; never from a free attack against such foes).** In Act II the engine's first-target kill already ends the fight (Dark Yojimbo is the one legal target: his dog
-> is untargetable), so the Pay-on numbers already include that rule; the engine's group effect is still to land. RE is fixing the group effect and the orders on its branch as fast-forwards, and **a difficulty measured on that engine is not the chapter's.** So: the harness is built for every cell, **one smoke cell proves it runs** (below), and the full table
-> is left for the re-run the driver triggers when RE's follow-up has landed (the recipe below). Everything under "PRELIMINARY" was measured before the hold: it is kept only as the reason for the placeholder constants
-> (`MIRROR_ACT_I`, `MIRROR_ACT_II`, `ENDGAME_PHOENIX_DOWNS`) and as the shape to expect. **It is not the table of record and no decision should rest on it.**
-
-> **ACT II RELEASED (the driver, 2026-10-16, after RE's follow-up: `afda2d451`, the player's Zanmato kills every legal foe of the picked group; `4256d209a`, the Sisters' seven orders).** Merged into this branch (`b29b3557a`). **Act I and the whole chapter wait for the
-> last fix** (the player's Delta Attack becomes group-type: it must hit all three Dark Sisters). Act II alone, on the merged engine, 200 seeds a line, 17 Phoenix Downs, the shipped preset (`node --experimental-transform-types tools/mirror-aeons-bench.mjs --act2 --seeds 200 --lines advisor,nopay,noyojimbo,careless`):
+> **THE TABLE OF RECORD (the release driver's order, 2026-10-16), measured on the final engine.** Lane FFX-K at `494b2f2fb` / `53ce98a05` is merged: `afda2d451` (a landed player Zanmato kills every legal foe of the group it picked), `4256d209a` (the Sisters'
+> seven orders) and `494b2f2fb` (the player's Delta Attack hits every foe in reach, six hits on each; Combine powers searches before it rolls). RE's final gate passed on `53ce98a05`. **Every number below was re-run on that engine, 200 seeds a line (400 around the pick), and
+> equals the first run of 2026-10-15 (the engine as merged at `d8fa5b69`) to the seed.** The reasons, each measured: (1) **Act II alone is unchanged**: a Pay at compatibility 128 against a Zanmato byte of 4 buys no Zanmato without a full Overdrive gauge (0 in 64 up to 1,000,000 gil;
+> 17 in 64 at 100,000 with a full gauge: RE's lane handoff section 10.4), and the advisor's line never paid with a full gauge (a probe over the same fights: 266, 234 and 249 Pays in 200 fights a tier, the highest gauge at a Pay 90, 60 and 60); the Act II first-target kill already
+> ended a fight when Dark Yojimbo was the only legal foe. (2) **Act I is unchanged**: the advisor's line never calls the Sisters in Act I (a tally of its commands over 30 fights: no summon, no Combine), so a Delta Attack that now hits both Dark Sisters never enters its number (the
+> probe: 60 Act I fights played with the group flag on and taken off at run time are identical, outcome and ticks). (3) The seven orders are not used by the line either. **The picks stand: Act I the faithful pair `kino01_72`, Act II tier 2 `nagi05_71`, 17 Phoenix Downs: 74 percent
+> with Pay on (294 of 400), 70 with Yojimbo never sent in, a careless line 0 of 200, and every Act I and tier cell is below.** The Dark Aeons stand at BattleDistance 0 (nothing in the game's formation data gives one: `research/re-ffx-dark-aeons.md` section 2.2 and 2.3), so the
+> Sisters' reach-0 moves reach them; no cell was ever benched at distance 1.
+>
+> Act II alone on the final engine (`node --experimental-transform-types tools/mirror-aeons-bench.mjs --act2 --seeds 200 --lines advisor,nopay,noyojimbo,careless`):
 >
 > | Act II tier | advisor (Pay ON) | Pay OFF: Yojimbo sent in, never paid (his free attacks only) | Pay OFF: no Yojimbo | careless |
 > |---|---|---|---|---|
@@ -21,10 +21,8 @@ own estimates and WHICH of the game's own fights each act uses (the plan: `docs/
 > | **tier 2 `nagi05_71` (the pick)** | **97 percent (194)** | 28 percent (56) | 97 percent (193) | 0 of 200 |
 > | tier 3 `nagi05_72` | 100 percent (200) | 23 percent (46) | 100 percent (199) | 0 of 200 |
 >
-> **These equal the preliminary rows below to the seed**, so the fix did not move Act II: a Pay at compatibility 128 against a Zanmato byte of 4 buys no Zanmato without a full Overdrive gauge (0 in 64 up to 1,000,000 gil; 17 in 64 at 100,000 with a full gauge: RE's lane handoff
-> section 10.4), and Yojimbo's gauge never reaches full before a Pay (a probe over the same 200 fights a tier: 266, 234 and 249 Pays, none with a full gauge, the highest gauge at a Pay 90, 60 and 60); Act II's first-target kill already ended the fight when Dark Yojimbo was the only legal foe (his dog is untargetable). **Pay is therefore final for Act II: it
-> barely decides it (the Pay-on and no-Yojimbo lines are within three seeds in a hundred), and the worst thing a player can do is call Yojimbo and not pay him (23 to 28 percent).** What would change it is Yojimbo's starting gauge (a lever the preset names: full
-> raises the Zanmato chance to 17 in 64 at 100,000 gil and the Zanmato ends the fight), which this pass does not move.
+> **Pay is final for Act II**: it barely decides it (Pay on and no Yojimbo are within three seeds in a hundred), and the worst thing a player can do is call Yojimbo and not pay him (23 to 28 percent). What would change it is Yojimbo's starting gauge (a lever the preset names: full raises the
+> Zanmato chance to 17 in 64 at 100,000 gil, and a Zanmato ends the fight), which this pass does not move.
 
 Bailey, 2026-10-15: "i like the mirror match but make the difficulty appropriate not too easy not too hard". The target the plan turned that into: **a full run (Act I, the heal, Act II) with the advisor's line is won about
 70 percent of the time (60 to 80 accepted), and a careless line (the plain Attack on the first living enemy, no aeon, no item) mostly loses (under 20 percent).** Prefer the game's own formations; the trio with its gauges
@@ -42,20 +40,20 @@ at 0 (OUR adjustment) only if no faithful cell lands in the band.
   living enemy, no aeon, no item. Each is also an ablation of the shipped line (`ABLATIONS` in the helper: `shield-on-full`, `heal-45`, `no-auto-life`, `no-cheer`, `story-aeons-first`, `items-only`, `no-pay`, `no-yojimbo`).
 - **The levers**: `--phoenix N` (the bag's Phoenix Downs, the main one), `--luck N`, `--stat F` (a share of four stat caps), and the choice of cell.
 - **The tests**: the harness, the reach measurements (what a blade and a spell land: the hit rule is the game's) and **one smoke cell** (the shipped cell runs for all four lines, every fight ends) are always on; **the rate
-  pins are off unless `MIRROR_AEONS_BENCH=1`** (the shipped cell's band, the Pay-off lines, the trio and the singles), so RE's follow-up cannot turn the suite red before the driver has re-run the table.
+  pins are off unless `MIRROR_AEONS_BENCH=1`** (the shipped cell's band, the Pay-off lines, the trio and the singles), because they take about a minute; the driver turns them on for a release check (13 tests, green on the final engine).
 
-## The re-run recipe (the driver triggers it when RE's follow-up has landed)
+## How the table was run (the recipe; repeat it after any change to the engine, the preset or the line)
 
-1. Merge `origin/re-parity-ffx-yojimbo-sisters` into `ch-mirror-aeons`; run RE's six parity files and the chapter's suites (`tests/unit/chapters/mirror-aeons-*.test.ts`).
+1. Merge `origin/re-parity-ffx-yojimbo-sisters` into `ch-mirror-aeons` (done, `53ce98a05`); run RE's parity files and the chapter's suites (`tests/unit/chapters/mirror-aeons-*.test.ts`: all green).
 2. The whole matrix, Pay ON (about ten minutes; every Act I cell against every tier, and each act alone):
    `node --experimental-transform-types tools/mirror-aeons-bench.mjs --seeds 200 --phoenix 17 --acts --lines advisor,careless`
-3. Act II both ways: with Pay ON and Pay OFF (the table must say so; **label the Pay-on rows "provisional until RE's Zanmato fix" until that fix is in**, after which they are final):
+3. Act II both ways: with Pay ON and Pay OFF (the table says so; the Pay-on rows are final since RE's Zanmato fix is in):
    `node --experimental-transform-types tools/mirror-aeons-bench.mjs --seeds 200 --phoenix 17 --acts --lines advisor,nopay,noyojimbo --cells kino01_72:nagi05_70,kino01_72:nagi05_71,kino01_72:nagi05_72`
 4. If another Sister order now works and fills the bars, the shipped line may use it only with a measured gain (a design change of the line: the driver's call; `--ablate all` prints what each rule is worth).
 5. Pick the Act I cell and tier nearest 70 percent inside 60 to 80 for the advisor's line (`pickCell`); the adjusted trio only if no faithful cell lands in the band; the Phoenix Downs is the lever (`--phoenix 14` to
    `20`, 400 seeds around the pick; Luck and the stat share are cliffs, not dials). Set `MIRROR_ACT_I`, `MIRROR_ACT_II` and `ENDGAME_PHOENIX_DOWNS`, update the pins in the bench test, and run it with the rate pins on:
    `MIRROR_AEONS_BENCH=1 node node_modules/vitest/vitest.mjs run tests/unit/chapters/mirror-aeons-bench.test.ts --maxWorkers=4 --testTimeout=240000`
-6. Write the table of record here, replacing the PRELIMINARY sections, and update the handoff (`docs/handoff/ch-mirror-aeons.md`, section 4) and the placeholder notes in `data/ffx/builds/mirror-aeons.ts` and
+6. Write the table of record here, and update the handoff (`docs/handoff/ch-mirror-aeons.md`, section 4) and the notes in `data/ffx/builds/mirror-aeons.ts` and
    `data/ffx/mirror-aeons-ids.ts`.
 
 ## The smoke cell (run to prove the harness; nothing is concluded from 20 seeds)
@@ -73,9 +71,9 @@ at 0 (OUR adjustment) only if no faithful cell lands in the band.
 
 It ran: every fight ended, the counts add up, the three lines differ where they should (Act I is the same for all three, since no Yojimbo is sent in there; Act II differs by line).
 
-## PRELIMINARY: the run before the hold (the engine as merged at d8fa5b69)
+## The table of record: the cells, the levers and the line (200 seeds a line; 400 around the pick)
 
-The sections below were measured before the driver's hold, on 200 or 400 seeds a cell, and are the evidence behind the placeholder constants only.
+The whole matrix, the levers and the ablations were re-run on the final engine on 2026-10-16; the first run (the engine as merged at `d8fa5b69`, 2026-10-15) gave the same numbers to the seed, for the reasons in the banner above. The Phoenix Down table is the 400-seed one.
 
 
 ### How it was measured
@@ -95,7 +93,7 @@ The sections below were measured before the driver's hold, on 200 or 400 seeds a
 
 ### The table: Act I cell by Act II tier, the whole chapter, 17 Phoenix Downs, 200 seeds a line
 
-| Act I | Act II tier | advisor, **Pay ON (provisional)** | **Pay OFF: no Yojimbo (final)** | Pay OFF: Yojimbo unpaid | careless |
+| Act I | Act II tier | advisor, **Pay ON** | **Pay OFF: no Yojimbo** | Pay OFF: Yojimbo unpaid | careless |
 |---|---|---|---|---|---|
 | faithful trio `kino00_70` (gauges 100) | 1, 2 or 3 | 0 of 200 (lost in I 200) | 0 of 200 (Pay never enters: Act I is lost) | 0 of 200 | 0 of 200 |
 | **faithful pair `kino01_72`** | 1 `nagi05_70` | 69 percent (138; lost in I 26, in II 36) | 66 percent (132; 26 / 42) | 17 percent (34; 26 / 140) | 0 of 200 |
@@ -105,7 +103,7 @@ The sections below were measured before the driver's hold, on 200 or 400 seeds a
 
 Each act alone (fresh preset, 17 Phoenix Downs, 200 seeds):
 
-| Act | advisor, **Pay ON (provisional)** | **Pay OFF: no Yojimbo** | Pay OFF: Yojimbo unpaid | careless |
+| Act | advisor, **Pay ON** | **Pay OFF: no Yojimbo** | Pay OFF: Yojimbo unpaid | careless |
 |---|---|---|---|---|
 | faithful trio `kino00_70` | 0 of 200 | 0 of 200 | 0 of 200 | 0 of 200 |
 | **faithful pair `kino01_72`** | **87 percent** (174) | 87 percent (174) | 87 percent (174) | 0 of 200 |
@@ -135,31 +133,29 @@ What the tables say together:
   advisor 100 of 100 and by the careless line 0 of 100 (no plain blow lands on Evasion 240), and a single sister into tier 2 is 95 to 96 percent for the advisor (above the band).
 - **Tier 1 and tier 3** are in the band too (Pay OFF 66 and 74 percent) and are the one-constant alternatives (see the recommended cell).
 
-### The levers, on the placeholder cell (whole chapter)
+### The levers, on the pick (whole chapter)
 
 **Phoenix Downs in the bag (the main lever; Luck 60, stats at the caps; 200 seeds a cell)**
 
-| Phoenix Downs | advisor, **Pay ON (provisional)** | **Pay OFF: no Yojimbo** | advisor lost in Act I / in Act II |
-|---:|---|---|---|
-| 10 | 12 percent (23) | | 159 / 18 |
-| 14 | 44 percent (87) | | 81 / 32 |
-| 15 | 55 percent (110) | 52 percent (103) | 58 / 32 |
-| 16 | 68 percent (136) | 65 percent (130) | 36 / 28 |
-| **17** | **74 percent (147)** | **69 percent (138)** | 26 / 27 |
-| 18 | 80 percent (159) | 78 percent (155) | 13 / 28 |
-| 19 | 84 percent (168) | 82 percent (164) | 13 / 19 |
-| 20 | 88 percent (175) | 85 percent (170) | 8 / 17 |
-| 30 | 94 percent (188) | | 3 / 9 |
-| 99 | 94 percent (188) | | 3 / 9 |
+| Phoenix Downs | advisor, **Pay ON** | **Pay OFF: no Yojimbo** | Pay OFF: Yojimbo unpaid | advisor lost in Act I / in Act II |
+|---:|---|---|---|---|
+| 14 | 44 percent (174 of 400) | 41 percent (163) | 10 percent (39) | 161 / 65 |
+| 15 | 55 percent (220) | 52 percent (206) | 12 percent (49) | 113 / 67 |
+| 16 | 66 percent (264) | 63 percent (251) | 17 percent (66) | 75 / 61 |
+| **17** | **74 percent (294)** | **70 percent (278)** | 16 percent (65) | 53 / 53 |
+| 18 | 79 percent (315) | 77 percent (306) | 19 percent (77) | 34 / 51 |
+| 19 | 83 percent (330) | 80 percent (320) | 19 percent (74) | 25 / 45 |
+| 20 | 85 percent (341) | 83 percent (332) | 19 percent (76) | 18 / 41 |
 
-Each Phoenix Down is worth 3 to 13 points near the pick, and the curve flattens at 94 percent (a line that never runs out of Phoenix Downs still loses 6 percent of runs: the Zanmato and Passado one-shots). **17 is the pick**:
-the Pay-off line is on the target and the Pay-on line 4 over, both inside the band by more than a Phoenix Down's worth; 16 leaves Pay OFF at 65 and 18 puts Pay ON at 80, the edge of the band.
+(The 200-seed run of the first pass: 10 Phoenix Downs 12 percent, 30 and 99 94 percent: the curve flattens near 94, a line that never runs out of Phoenix Downs still loses 6 percent of runs to the Zanmato and Passado one-shots.)
+Each Phoenix Down is worth 4 to 11 points near the pick. **17 is the pick**: the line that never pays is ON the 70 percent target, the Pay-on line 4 over, both inside the band by more than a Phoenix Down's worth; 16 leaves Pay OFF at 63 and 18 puts Pay ON at 79, near the edge of the band.
 
 **Luck (every member's; the preset ships 60; the advisor's line, Pay ON; 200 seeds)**
 
 | Luck | whole chapter | lost in Act I / in Act II |
 |---:|---|---|
 | **60** | **74 percent (147)** | 26 / 27 |
+| **80** (re-run 2026-10-16) | 89 percent (178) | 7 / 15 |
 | 40 | 32 percent (64) | 94 / 42 |
 | 20 | 4 percent (7) | 176 / 17 |
 | 0 | 0 of 200 | 199 / 1 |
@@ -197,15 +193,16 @@ Every rule is load-bearing, and none is a secret: they appear in the guide's hin
 ### What is an estimate, and what waits
 
 **Estimates (named constants, one place each; none is a game number):** 17 Phoenix Downs (the lever, measured above); the party at the caps with Luck 60 (`ENDGAME_LUCK`); the Sisters' start gauges at 100 and
-Yojimbo's at 0 (`SISTERS_START_GAUGE`, `YOJIMBO_START_GAUGE`: the Sisters' first menu offers Combine powers only while all three gauges are full, and the orders that could fill a bar are not carried out); the Sisters' start
+Yojimbo's at 0 (`SISTERS_START_GAUGE`, `YOJIMBO_START_GAUGE`: the Sisters' first menu offers Combine powers only while all three gauges are full; the orders that fill a bar work now, so 0 is playable); the Sisters' start
 motivation 50 (`SISTERS_START_MOTIVATION`: RE marks it unsourced; it sets Combine powers' chance, 200 plus motivation in RE's kernel, and was not measured as a lever); Yojimbo's start compatibility 128 (**strongly indicated
 by the owner's saves, live confirmation pending**; a fixed per-chapter value, never persisted across sessions) and hire answer 2; the party's gil 1,500,000 (the line pays Yojimbo 100,000, `PAY_GIL`). The advisor's constants
 (`SHIELD_AT_GAUGE` 88, `HEAL_UNDER` 0.6, `ITEM_HEAL_UNDER` 0.25, `CHEER_STACKS` 5) are the line's own.
 
-**What waits for RE** (and each would need this bench re-run, because 17 Phoenix Downs is tuned to the engine as merged): **the Zanmato fix** (the Pay-on rows; see the notice at the top); the order of Zanmato and Auto-Life inside
-a hit (RE note 8.3); the dog's hit event while it is untargetable (8.4); the Sisters' seven other orders (listed, greyed, not carried out: nothing here uses one); the Pay roll's payment scale (the HUD has no payment picker yet and
-sends 0, so Yojimbo leaves; the advisor's line sends 100,000); and any change to what a Sister's summon costs or does. The bench's cells and constants are pinned in `tests/unit/chapters/mirror-aeons-bench.test.ts` (the picks,
-the 17, the Pay-off lines), so the day one moves a test says so.
+**What waited for RE, and what is open.** Closed on 2026-10-16 (the engine merged at `53ce98a05`): the group Zanmato, the seven orders, the group Delta Attack; the bench was re-run and the picks stand. **Open, none of it moves a number today:** the order of Zanmato and Auto-Life inside a hit
+(RE note 8.3) and the dog's hit event while it is untargetable (8.4), both inherited from the first note; **the advisor's line does not use the seven orders** (it may do so only with a measured gain: a design change of the line, the driver's call, and `--ablate all` above prices each rule);
+**the Sisters' start gauge** (100, chosen when only Combine powers worked; a start at 0 is playable now and is a lever to measure, not made here); **Yojimbo's start gauge** (0; full makes a Zanmato of the player's likely and ends the fight); the Pay amount screen (the presenter's ladder of
+amounts is a stop-gap, `engine/PayRows.ts`; the line pays 100,000); and any change to what a Sister's summon costs or does. The bench's cells and constants are pinned in `tests/unit/chapters/mirror-aeons-bench.test.ts` (the picks, the 17, the Pay-off lines; the rate pins run with
+`MIRROR_AEONS_BENCH=1`, 13 tests green), so the day one moves a test says so.
 
 **To repeat the tables** (one cell takes about two minutes on a busy machine; the whole matrix about ten); the lines are `advisor` (Pay ON), `nopay` (Yojimbo unpaid), `noyojimbo` (Pay OFF, no Yojimbo) and `careless`:
 

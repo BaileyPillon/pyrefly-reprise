@@ -21,7 +21,7 @@
  * | Bag | `./dreams-end.ts`'s bag (Phoenix Downs, X-Potions, Remedies, Holy Water, Elixir ...) less the Candle of Life, a Doom-kill route that belongs to Yu Yevon alone | the repository's endgame bag `[estimate]` |
  * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **Yojimbo starts at 0 and Yuna's three Magus Sisters at 100** | `./late-aeon-rows.ts`; the Sisters' menu offers Combine powers only while all three bars are full; **RE's follow-up (4256d209a) carries out all seven other orders now**, so a bar can be filled in the fight, and the full start is the bench's lever to re-read (0 is the other end) `[estimate]` |
  * | The Sisters' start motivation | `SISTERS_START_MOTIVATION` = 50 each | **an estimate: RE marks it unsourced** (`FFXPartyBuild.sisters`); it sets Combine powers' chance (200 plus motivation, always from 56 up) and the order menu's rolls |
- * | Phoenix Downs | `ENDGAME_PHOENIX_DOWNS` = 17 | the bench's lever (`docs/plans/ch-mirror-aeons-bench.md`); **a PRELIMINARY value** from the run on the engine as merged at d8fa5b69, to be re-set by the re-run the release driver triggers once RE's follow-up has landed `[estimate]` |
+ * | Phoenix Downs | `ENDGAME_PHOENIX_DOWNS` = 17 | the bench's lever (`docs/plans/ch-mirror-aeons-bench.md`); **set by the bench on the final engine (2026-10-16): 74 percent with Pay on, 70 with Yojimbo never sent in** `[estimate]` |
  *
  * `YOJIMBO_HIRE_ANSWER` and `YOJIMBO_START_COMPATIBILITY` are read by the engine's Yojimbo rules (re-parity lane FFX-K: `FFXPartyBuild.yojimbo`, required for a build that lists him); a chain carries the compatibility and the gil
  * through `state.flags` and nothing persists them across sessions (that would be save data), so every run starts from these values.
@@ -45,8 +45,9 @@ export const ENDGAME_BATTLES = 600;
  * which the whole chapter (both acts, the advisor's line) is won about seven times in ten**, the plan's target. The other items keep the repository's endgame bag's counts (`./dreams-end.ts`): none of them limits a fight
  * (Yuna heals with her spells), which the bench also measured.
  *
- * **PRELIMINARY.** These readings are from a first run on the engine as merged at d8fa5b69. The release driver HELD the table (2026-10-15): RE's follow-up (the seven Sister orders and the bars after a Combine, and a landed
- * Zanmato that spares what it should) changes what the Act II numbers mean, so 17 is a placeholder until the re-run the driver triggers (`docs/plans/ch-mirror-aeons-bench.md` says how).
+ * **The table of record (2026-10-16)** was run on the engine with RE's follow-up merged (`494b2f2fb`/`53ce98a05`: the group Zanmato, the seven orders, the group Delta Attack) and equals the first run of 2026-10-15 to the seed: 14, 15, 16, 17, 18
+ * and 19 Phoenix Downs win the whole chapter 44, 55, 66, **74**, 79 and 83 percent of the time with the advisor's line (400 seeds), and 41, 52, 63, **70**, 77 and 80 with Yojimbo never sent in, so 17 sits on the target for the line that never pays
+ * and inside the band for the one that does (`docs/plans/ch-mirror-aeons-bench.md`).
  */
 export const ENDGAME_PHOENIX_DOWNS = 17;
 /** Party gil: Yojimbo is paid from it (`[estimate]`; StrategyWiki speaks of paying "upwards of 2 million"). */

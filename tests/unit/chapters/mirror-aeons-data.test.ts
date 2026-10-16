@@ -157,6 +157,16 @@ describe('the eleven formations (RE section 3) and the one adjusted trio (OUR ad
   });
 });
 
+describe('no Dark Aeon stands out of reach (BattleDistance)', () => {
+  // RE's lane FFX-K (the release driver, 2026-10-16): a foe at BattleDistance 1 is OUT OF REACH of every reach-0 command, and the Sisters' Attack, Camisade, Razzia and Passado have reach 0 (the Delta Attack reaches 1,
+  // spells 3). The game's formation data for the Dark Aeons gives START POSITIONS only (`research/re-ffx-dark-aeons.md` section 2.3) and the formation scripts write no BattleDistance (section 2.2: the three things they do are
+  // the start type, random positions off and camera work), so every Dark Aeon is at distance 0 and nothing here sets one. The four bodies, the dog and every group's enemy list carry no `battleDistance`.
+  it('none of the four bodies, the dog or any enemy of the twelve groups carries a battleDistance', () => {
+    for (const e of [darkYojimbo(), darkSister('cindy', 0), darkSister('sandy', 0), darkSister('mindy', 0), darkDaigoro()]) expect(e.flags?.battleDistance, e.id).toBeUndefined();
+    for (const g of DARK_AEONS_GROUPS) for (const e of g.enemies) expect(e.flags?.battleDistance, `${g.id}: ${e.id}`).toBeUndefined();
+  });
+});
+
 describe('the fourteen move rows against the kernel fixtures (RE section 2)', () => {
   const ROWS = Object.entries(DARK_AEONS_ABILITIES);
   const dense = (pairs: unknown): Array<[number, number]> => ((pairs ?? []) as Array<[number, number]>).map(([a, b]) => [a, b]);

@@ -10,11 +10,12 @@
  *   5. **Yojimbo's menu, Pay lit** (Yuna's keys: Summon, Yojimbo), his Pay (Yuna pays 100,000 with the keys from the ladder of amounts that `engine/PayRows.ts` makes of the one Pay row; the advisor's line plays on), and **a Dark Zanmato** landing.
  *
  *   PYREFLY_BROWSER=gpu node tools/mirror-aeons-proof.mjs [--base http://127.0.0.1:5541/] [--out docs/screenshots/ch-mirror-aeons] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 2]
- *     [--entry card|word] [--scenario full|retry]
+ *     [--entry card|word] [--scenario full|retry|zanmato]
  *
  * The chapter is LISTED (Bailey, 2026-10-15): the default entry is its CARD on the board, walked to with the arrow keys and begun with Enter (`--entry word` types `yojimbo` instead, which still works). `--scenario full` plays
  * both acts to the post scene, the results and back to the board (the card's ribbon and "1 of 19" prove the clear was recorded); `--scenario retry` loses Act II on purpose (the party only defends), takes RETRY on the
- * results screen and shows Act II re-opened on a whole party and whole aeons.
+ * results screen and shows Act II re-opened on a whole party and whole aeons. `--scenario zanmato` makes the rare event CERTAIN by a nudge from the page (the foes' Zanmato byte cleared, the purse and Yojimbo's compatibility set) and plays
+ * a landed Zanmato of Yuna's Yojimbo ending Act I (both sisters fall in one action, the seam plays, Act II opens) and then Act II (Dark Yojimbo falls, the post scene, the results, the board), all with real keys after the nudge.
  *
  * Every check is printed as `check.<name>`; the exit code is 1 on a failed one. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. The word that opens the chapter is
  * read from `src/app/screens/frontend/yojimboDoor.ts`, never retyped. Nothing in the fight is changed from the page: every figure comes from the engine's own state.
@@ -251,6 +252,108 @@ try {
   await dismissCoach();
   await page.waitForTimeout(500);
   await shot('1-act-i-first-menu');
+
+  if (SCENARIO === 'zanmato') {
+    // --- A landed Zanmato of Yuna's Yojimbo ends each act (RE's afda2d451), in the order the engine logs it (the release driver, 2026-10-16: ko, ko, action-end, [the seam,] victory) --------------------
+    // A Pay buys a Zanmato only 3 times in 64 against the game's byte 4, so the rare event is made CERTAIN by a nudge from the page: the foes' Zanmato byte is cleared on the combatants and the purse and Yojimbo's compatibility
+    // are set so that a Pay of all the gil rolls one (2^22 gil, compatibility 0, hire answer 1: a motivation of exactly 80). Everything after the nudge is real keys and the engine's own rules.
+    const force = () =>
+      page.evaluate(() => {
+        const eng = window.__pyrefly.battle()?.engine;
+        if (!eng) return 'no engine';
+        const st = eng.state();
+        for (const id of st.enemyIds) {
+          const c = st.combatants[id];
+          if (c.enemy) c.enemy = { ...c.enemy, zanmatoLevel: undefined };
+        }
+        const rt = eng.ctx?.rt;
+        if (rt) rt.gil = 4194304;
+        if (rt?.yojimbo) {
+          rt.yojimbo.compat = 0;
+          rt.yojimbo.hire = 1;
+        }
+        st.flags['yojimbo:gil'] = 4194304;
+        st.flags['yojimbo:compatibility'] = 0;
+        return `ok gil=${rt?.gil} compat=${rt?.yojimbo?.compat}`;
+      });
+    const logTail = (from) =>
+      page.evaluate(
+        (n) =>
+          (window.__pyrefly.battleState()?.log ?? [])
+            .slice(n)
+            .map((e) => (e.type === 'action-start' ? `action-start(${e.abilityName ?? ''})` : e.type === 'ko' ? `ko:${e.targetId}` : e.type)),
+        from,
+      );
+    const zanmatoAct = async (label, pattern) => {
+      log(`zanmato.${label}.force`, await force());
+      let called = false;
+      for (let guard = 0; guard < 12 && !called; guard++) {
+        await waitBattleMenu(page, 60000).catch(() => null);
+        const labels = await rowsText();
+        if (labels.some((t) => /^summon/i.test(t))) {
+          called = (await pickRow(/^summon/i)) && (await pickRow(/^yojimbo/i));
+          break;
+        }
+        await passTurn();
+        await page.waitForTimeout(1800);
+      }
+      check(`${label}: Yuna called Yojimbo with the keys`, called, null);
+      await page.waitForTimeout(1800);
+      await waitBattleMenu(page, 60000).catch(() => null);
+      const menu = await rowsText();
+      if (menu.some((t) => /^aeon/i.test(t))) await pickRow(/^aeon/i);
+      await page.waitForTimeout(500);
+      const ladder = await collectRows();
+      log(`zanmato.${label}.ladder`, ladder);
+      const from = await logLen();
+      if (await pickRow(/^pay all$/i, { enter: false })) await page.waitForTimeout(300);
+      await shot(`${label}-z0-pay-all-highlighted`);
+      const paid = await pickRow(/^pay all$/i);
+      check(`${label}: Yuna paid Yojimbo everything with the keys`, paid, ladder);
+      for (let i = 1; i <= 16; i++) {
+        await sleep(350);
+        await shot(`${label}-z${String(i).padStart(2, '0')}`);
+        if ((await screenNow()) !== 'battle') break;
+      }
+      const tail = (await logTail(from)).join(',');
+      log(`zanmato.${label}.log`, tail);
+      check(`${label}: the log reads Pay, Zanmato, a ko for each foe, action-end, then victory (the seam's trigger between them in Act I)`, pattern.test(tail), tail);
+      return tail;
+    };
+    await installSeamLogger();
+    await zanmatoAct('act1', /action-start\(Zanmato\),ko:dark-(mindy|sandy),ko:dark-(mindy|sandy),action-end,script-trigger,victory$/);
+    // the seam, then Act II on a whole party
+    await waitFor('Act II battle menu', async () => (await screenNow()) === 'battle' && (await state())?.enemies?.join() === 'dark-yojimbo,dark-daigoro', { ms: 90000, pollMs: 500 }).catch(() => null);
+    await waitBattleMenu(page, 60000).catch(() => null);
+    const seam = await page.evaluate(() => window.__seam ?? []);
+    log('seam.timeline', seam.slice(0, 40));
+    check("the seam played after the Zanmato (the sisters' beat, the HUD faded to nothing and back)", seam.some((x) => x.row.startsWith('sisters-fall')) && seam.some((x) => x.row.startsWith('sisters-fall') && x.row.endsWith('opacity=0.00')), seam.slice(0, 12));
+    const act2 = await state();
+    check('Act II opened on Dark Yojimbo and his dog with a whole party', act2?.enemies?.join() === 'dark-yojimbo,dark-daigoro' && act2.active.every((id) => act2.party[id][0] === act2.party[id][1]), act2?.party);
+    await dismissCoach();
+    await zanmatoAct('act2', /action-start\(Zanmato\),ko:dark-yojimbo,action-end,victory$/);
+    // the post scene, the results and the board
+    await waitFor('the post scene or the results', async () => ['results', 'cutscene'].includes(await screenNow()), { ms: 60000, pollMs: 500 }).catch(() => null);
+    await shot('z-post-scene');
+    for (let guard = 0; (await screenNow()) === 'cutscene' && guard < 260; guard++) {
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(300);
+    }
+    await page.waitForTimeout(2500);
+    const resultsText = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 260));
+    log('results.text', resultsText);
+    await shot('z-results');
+    check('the results read Victory', /Victory/i.test(resultsText), resultsText);
+    for (let i = 0; i < 8 && (await screenNow()) !== 'chapter-select'; i++) {
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(1800);
+    }
+    await page.waitForTimeout(3000);
+    const after = await page.evaluate(() => window.__pyrefly.snapshotState().save.chapters['mirror-aeons'] ?? null);
+    log('board.after', after);
+    check('the clear is recorded in the save', after?.cleared === true, after);
+    await finish();
+  }
 
   // --- Act I: Yuna's own Sisters, with Combine powers lit ----------------------------------------------------------------------------------------
   // Pass turns with Defend (Q) until Yuna's menu is up (Tidus has First Strike and goes first), then Summon, Cindy.

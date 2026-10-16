@@ -33,8 +33,7 @@ export type Line = (d: Input, e: BattleEngine) => Command | null;
 /**
  * The line with one rule taken away (the bench's ablations: what each rule of `src/engine/tactics/mirror-aeons.ts` is worth). The names are the document's: `shield-on-full` waits for the full gauge, `heal-45` heals
  * under 45 percent, `no-auto-life`, `no-cheer`, `story-aeons-first` sends the five story aeons before Yojimbo, `items-only` heals from the bag and not with Yuna's spells.
- * **The two Pay-off lines** (the release driver's rule while the engine's landed Zanmato is being fixed: RE's open item 7, a Pay can roll a Zanmato that ignores a Dark Aeon's Death immunity and kills the first target, so
- * the Pay-on numbers of Act II are provisional): `no-pay` keeps Yojimbo as the first shield but never pays him (his own free attacks are all he gets; on a menu turn he is sent away), `no-yojimbo` never sends him in at all.
+ * **The two Pay-off lines** (the release driver's rule, 2026-10-15; RE's group Zanmato has landed since and a Pay at compatibility 128 buys none without a full gauge, so the Pay-on numbers are final too): `no-pay` keeps Yojimbo as the first shield but never pays him (his own free attacks are all he gets; on a menu turn he is sent away), `no-yojimbo` never sends him in at all.
  */
 export const ABLATIONS: Readonly<Record<string, Partial<LineOptions>>> = {
   'shield-on-full': { shieldAt: 100 },
