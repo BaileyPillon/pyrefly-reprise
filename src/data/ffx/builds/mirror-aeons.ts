@@ -118,7 +118,7 @@ function derivedAeon(id: string, gauge: number): AeonBuild {
   return {
     id,
     name: def.name,
-    spriteKey: id,
+    spriteKey: def.spriteKey, // the catalogue's art (r50.1): Yojimbo is `yojimbo-cavern`, the approved painting; every other aeon's art is its id
     stats: { ...s, maxHp: s.hp, maxMp: s.mp },
     hp: s.hp,
     mp: s.mp,

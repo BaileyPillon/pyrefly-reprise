@@ -9,6 +9,10 @@
  * and the adjusted trio), and that every pose the enemy set reads, the sidecar and the portrait exist on disk and in the manifest. It also pins that Yuna's own Yojimbo and Magus Sisters keep
  * the aeons' own subjects (`sandy` is still the red one): the change touched only the enemies.
  *
+ * **Yuna's own Yojimbo (FOC50-01 of the r50 focused review):** he drew the navy painting that D-054 says is not approved and not used (zero hits in `docs/target/approved-hashes.json`), and his turn-bar tile and HUD card showed a
+ * Y monogram because the chip code skips that painting. His art is now `yojimbo-cavern`, the approved gold, orange and purple one (attack, cast, hurt and idle are in the approved-hash sets), in the catalogue, in the chapter's build, and
+ * in the stage's `summon` (which staged an aeon under the id the event names and ignored the combatant's art). `portraits/yojimbo.png` is the navy bust: not wired.
+ *
  * Game case: FFX only [AGENTS.md rule 14]: Dark Cindy, Sandy, Mindy and Yojimbo are FFX's; FFX-2 draws none of them.
  */
 import { existsSync, readFileSync } from 'node:fs';
@@ -16,7 +20,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import type { FFXCombatant } from '../../../src/battle/common/types.ts';
-import { artCandidatesFor, artIdFor, ENEMY_POSES } from '../../../src/engine/BattlePresenterArt.ts';
+import { artCandidatesFor, artIdFor, ENEMY_POSES, summonArtId } from '../../../src/engine/BattlePresenterArt.ts';
+import { AEONS } from '../../../src/data/ffx/aeons/index.ts';
 import { resolvePortraitKey } from '../../../src/ui/ffx/portraits.ts';
 import {
   DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJIMBO_ID, SISTER_ADJUSTED_FORMATIONS, SISTER_FORMATIONS, YOJIMBO_TIERS, sistersGroupId, yojimboGroupId,
@@ -96,5 +101,38 @@ describe('every Dark Aeon draws its own Dark painting', () => {
     expect(aeons.map((c) => c.id)).toEqual(expect.arrayContaining(['cindy', 'mindy', 'sandy', 'yojimbo']));
     for (const c of aeons) expect(artIdFor(c), c.id).toBe(c.spriteKey || c.id);
     for (const id of ['cindy', 'sandy', 'mindy']) expect(artIdFor(engine.state().combatants[id]!), id).toBe(id);
+  });
+});
+
+describe("Yuna's own Yojimbo draws the approved painting, not the navy one (D-054)", () => {
+  const approved = readFileSync(join(ART, '..', '..', 'docs', 'target', 'approved-hashes.json'), 'utf8');
+
+  it('the catalogue and the chapter build name yojimbo-cavern; every other aeon keeps its own id as its art', () => {
+    expect(AEONS['yojimbo']!.spriteKey).toBe('yojimbo-cavern');
+    for (const id of ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut', 'anima', 'cindy', 'sandy', 'mindy']) expect(AEONS[id]!.spriteKey, id).toBe(id);
+    const engine = H.newEngine(1, sistersGroupId('kino01_72'));
+    const yojimbo = engine.state().combatants['yojimbo']!;
+    expect(yojimbo.side).toBe('aeon');
+    expect(yojimbo.spriteKey).toBe('yojimbo-cavern');
+    expect(artIdFor(yojimbo)).toBe('yojimbo-cavern');
+    for (const c of Object.values(engine.state().combatants)) if (c.side === 'aeon' || c.side === 'party') expect(artIdFor(c), c.id).not.toBe('yojimbo');
+  });
+
+  it('the painting is an approved one: its idle, attack, cast and hurt exist and the approved-hash sets name the cavern painting; the navy painting is in no set', () => {
+    for (const pose of ['idle', 'attack', 'cast', 'hurt']) expect(existsSync(join(ART, 'characters', 'yojimbo-cavern', `${pose}.png`)), pose).toBe(true);
+    expect(manifest.subjects['yojimbo-cavern']!.states).toEqual(expect.arrayContaining(['idle', 'attack', 'cast', 'hurt']));
+    expect(approved).toContain('characters/yojimbo-cavern/attack.png');
+    expect(approved).toContain('characters/yojimbo-cavern/cast.png');
+    expect(approved).toContain('characters/yojimbo-cavern/hurt.png');
+    for (const pose of ['idle', 'attack', 'overdrive']) expect(approved, `the navy ${pose}`).not.toContain(`characters/yojimbo/${pose}.png`);
+  });
+
+  it("a summoned aeon is staged under its combatant's art when the state knows it, else under the id the event names", () => {
+    const aeon = { id: 'yojimbo', side: 'aeon', spriteKey: 'yojimbo-cavern' } as unknown as FFXCombatant;
+    expect(summonArtId(aeon, 'yojimbo')).toBe('yojimbo-cavern');
+    expect(summonArtId({ ...aeon, id: 'bahamut', spriteKey: 'bahamut' } as FFXCombatant, 'bahamut')).toBe('bahamut');
+    expect(summonArtId(undefined, 'shiva')).toBe('shiva'); // a stage that has not seen the state
+    expect(summonArtId({ id: 'tidus', side: 'party', spriteKey: 'tidus' } as unknown as FFXCombatant, 'yojimbo')).toBe('yojimbo'); // only an aeon's own art counts
+    expect(summonArtId({ id: 'yojimbo', side: 'aeon' } as unknown as FFXCombatant, 'yojimbo')).toBe('yojimbo'); // an aeon with no art key
   });
 });

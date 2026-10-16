@@ -92,7 +92,7 @@ describe('the nine aeons (the section 6.4 formula on this Yuna at 600 battles)',
     for (const s of ['cindy', 'sandy', 'mindy']) expect(aeon(s).overdriveIds).toEqual(['delta-attack']);
     for (const a of mirrorAeonsBuild.aeons) {
       for (const id of [...a.abilityIds, ...a.overdriveIds]) expect(ids.has(id), `${a.id} ${id}`).toBe(true);
-      expect(a.spriteKey).toBe(a.id);
+      expect(a.spriteKey).toBe(a.id === 'yojimbo' ? 'yojimbo-cavern' : a.id); // r50.1: Yuna's Yojimbo draws the approved painting (D-054), never the navy `yojimbo`
     }
   });
 
