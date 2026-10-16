@@ -22,8 +22,11 @@ export const MIRROR_AEONS_META: ChapterMeta = {
   gameLabel: 'FFX',
   numeral: 'XXVII',
   ...MIRROR_AEONS_TEXT,
+  // The pause tab's own tagline (2 to 4 words) and blurb (two sentences), shorter than the board card's (`MIRROR_AEONS_TEXT`).
+  subtitle: 'The Dark Mirror',
+  blurb: "Yevon has put Yuna's friends in the wrong colours. Call your own sisters and your own blade, and send the shadows home.",
   location: 'Mushroom Rock Road, and the Cavern of the Stolen Fayth',
-  heroArt: 'pause/ch27-mirror-aeons',
+  heroArt: 'pause/ch9-yojimbo', // Chapter IX's approved Yojimbo plate stands in by reference until this chapter's own plate is painted (`pause/ch27-mirror-aeons`, Bailey's pick); the fallback is Yuna's portrait
   heroArtFallback: 'portraits/yuna.png',
   quote: { text: 'Sandy and Mindy. Wearing the wrong colours.', speaker: 'Yuna' },
   handwritten: 'heal early; spells for Mindy',

@@ -47,7 +47,7 @@ describe('the word (pure)', () => {
     expect(CHAPTER).toBe('mirror-aeons');
     expect(getChapter(CHAPTER)).toMatchObject({ id: CHAPTER, game: 'ffx', number: 27 });
     expect(getChapter(CHAPTER)?.experimental, 'a listed chapter is no experiment').toBeUndefined();
-    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain(CHAPTER);
+    expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).not.toContain(CHAPTER); // listed on 2026-10-15: no longer an experiment
     expect(CHAPTER_DOORS.find((d) => d.word === WORD)?.chapter).toBe(CHAPTER);
   });
 

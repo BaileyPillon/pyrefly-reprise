@@ -32,19 +32,14 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
 
   rules: [
     {
-      text: "Send an aeon in before the big move. The three sisters open with their joint attack, Dark Yojimbo ends his build-up with Zanmato, and Auto-Life does not turn either: an aeon takes the blow, so the party stands. Against the three, send Yuna's own Sisters (three bodies in one summon: the first two blows kill a lone aeon); against Dark Yojimbo, send her Yojimbo, the mirror.",
+      text: "Send an aeon in before the big move. Dark Yojimbo ends his build-up with Zanmato, and Auto-Life does not turn it: an aeon takes the blow, so the party stands. Send Yuna's own Yojimbo, the mirror, or a story aeon, a round early. (The trio's joint attack is the same lesson: three bodies in one summon, Yuna's Sisters, are the only shield that is still standing when it lands.)",
       short: 'An aeon takes the big move',
       cite: 'ffx-mirror-aeons §2, §3; re-ffx-yojimbo-sisters-feasibility §2, §4.1, §4.2; jegged-encounter-guides-ffx-b',
     },
     {
-      text: 'Blades for Cindy and Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Each sister down is one fewer to fill the joint attack.',
+      text: 'Blades for Cindy and Sandy, spells for Mindy. Dark Mindy is so hard to hit that a blade almost never finds her; a spell, an Overdrive or an aeon never misses. Quick Hit gets the most blows in.',
       short: 'Blades for Cindy, spells for Mindy',
       cite: 'ffx-mirror-aeons §2, §6; re-ffx-yojimbo-sisters-feasibility §2, §4.2',
-    },
-    {
-      text: 'Ribbon, Auto-Haste, Auto-Phoenix and Auto-Protect do the long work: the sisters and Yojimbo land Petrify, Poison, the Breaks, Slow and Sleep. Quick Hit gets the most blows in.',
-      short: 'Armour first, then Quick Hit',
-      cite: 'ffx-mirror-aeons §2, §3, §4; re-ffx-yojimbo-sisters-feasibility §2',
     },
     {
       text: "Dark Yojimbo's blade fills each turn and a little more whenever he is struck. When it is nearly full he uses Zanmato: send the aeon in a round early, not on the full gauge, or end him first. Before that, Cheer on Tidus: a third off every physical blow is what lets a full-health member live through his Wakizashi.",
@@ -52,14 +47,14 @@ export const MIRROR_AEONS_GUIDE: ChapterGuide = {
       cite: 'ffx-mirror-aeons §3; re-ffx-dark-aeons §4.2',
     },
     {
-      text: "Every fallen member costs a Phoenix Down and the bag holds only so many: heal early with Yuna's Curaga instead of waiting for the next blow, and keep Auto-Life on everyone. The bag is the clock of the road.",
+      text: "Every fallen member costs a Phoenix Down and the bag holds only so many: heal early with Yuna's Curaga instead of waiting for the next blow, and keep Auto-Life on everyone. Ribbon, Auto-Haste, Auto-Phoenix and Auto-Protect do the long work against the Petrify, Poison, Breaks and Slow the Dark ones land. The bag is the clock of the road.",
       short: 'Heal early: the bag is the clock',
-      cite: 'ffx-mirror-aeons §2; re-ffx-dark-aeons §6.3',
+      cite: 'ffx-mirror-aeons §2, §3, §4; re-ffx-dark-aeons §6.3',
     },
     {
       text: 'Your own Yojimbo is paid to act, and a bigger payment is a better stroke. Zanmato is a long shot, and nothing a Dark one carries turns it away: a lucky Zanmato can end it. Your Sisters have one order that works, Combine powers, and it needs all three of their gauges full.',
       short: 'Zanmato is a long shot',
-      cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §2, §5.5',
+      cite: 'ffx-mirror-aeons §5; re-ffx-yojimbo-sisters-feasibility §2, §5.5; re-ffx-zanmato-and-orders §0',
     },
   ],
 

@@ -251,7 +251,7 @@ afterEach(() => {
 
 /** Chapters whose post script authors every line before results(). */
 // Sin's two (XVII, XVIII): Sinfall and Breaking Through close before the tally (docs/plans/sin-two-chapters-plan.md §3.3).
-const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico', 'sin-fins-core', 'sin-face']);
+const ENDS_ON_RESULTS: ReadonlySet<string> = new Set(['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico', 'sin-fins-core', 'sin-face', 'mirror-aeons']); // Mirror Aeons (XXVII, listed 2026-10-15): its post scene is the cavern before the tally
 
 describe('the post-battle scenes play — critic round 02 #04', () => {
   it.each(CHAPTERS.map((c) => [c.id, c] as const))(
@@ -382,7 +382,9 @@ describe('the end of an arc — critic round 02 #32', () => {
         'ffx2-leblanc', 'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-natus', 'seymour-omnis',
         'ffx2-trema', 'isaaru-via-purifico', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'sin-fins-core', 'sin-face',
       ]);
-      const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id));
+      // Chapter 27 (Mirror Aeons, listed 2026-10-15): the post-game Dark Aeons, AFTER the story's finale, and no arc finale itself (`ARC_FINALE` stays Braska's Final Aeon).
+      const postGame = new Set(['mirror-aeons']);
+      const ofGame = CHAPTERS.filter((c) => c.game === game && !storyEarlierThanFinale.has(c.id) && !postGame.has(c.id));
       const lastByDisplayOrder = ofGame[ofGame.length - 1]!.id;
       expect(lastByDisplayOrder).toBe(id);
     }

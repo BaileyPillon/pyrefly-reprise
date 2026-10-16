@@ -327,7 +327,7 @@ describe('phase notes', () => {
 describe('src/data/guides', () => {
   it('has one guide per chapter, and every chapter that ships a tactic has one', () => {
     // The listed chapters' guides; a hidden experiment's guide (the Experiment's, 'ffx2-masterpiece-theatre') rides in GUIDES beside them and is pinned by its own suite.
-    expect(GUIDES.filter((g) => (CHAPTER_IDS as readonly string[]).includes(g.id))).toHaveLength(18);
+    expect(GUIDES.filter((g) => (CHAPTER_IDS as readonly string[]).includes(g.id))).toHaveLength(19);
     for (const id of [
       'seymour-flux',
       'yunalesca',

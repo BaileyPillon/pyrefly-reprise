@@ -1,12 +1,14 @@
-# Mirror Aeons: the difficulty bench (hidden FFX chapter 27, "Dark Mirror")
+# Mirror Aeons: the difficulty bench (Chapter XXVII, FFX, listed; "Dark Mirror")
 
 **Game case: FFX only** (AGENTS.md rule 14). The harness measures the real engine, with the Dark Aeons' AI coded from `research/re-ffx-dark-aeons.md` (nothing in it invented), Yuna's Yojimbo and Magus Sisters as the
 reverse-engineering session's (RE's) engine plays them (lane FFX-K), and the party preset of `data/ffx/builds/mirror-aeons.ts`. **No boss row, formation or script is ever touched to reach a number**: the levers are the party's
 own estimates and WHICH of the game's own fights each act uses (the plan: `docs/plans/ch-mirror-aeons-review.md` section 3).
 
 > **THE TABLE OF RECORD IS HELD (the release driver, 2026-10-15, after RE's independent check of its engine at d8fa5b69).** Today the Sisters can only Combine or Dismiss (the seven other orders are `enabled: false`, and every
-> bar is 0 after a Combine), and a landed Zanmato of Yuna's Yojimbo one-shots the first target even at Death resistance 255; every Dark Aeon is immune to Slice and Death and Zanmato's Slice effect is still untraced (RE's open
-> item 7). RE is fixing both on its branch as fast-forwards, and **a difficulty measured on that engine is not the chapter's.** So: the harness is built for every cell, **one smoke cell proves it runs** (below), and the full table
+> bar is 0 after a Combine), and a landed Zanmato of Yuna's Yojimbo one-shots the first target only (RE's open item 7). **RE's note** (`research/re-ffx-zanmato-and-orders.md`) **has since settled what the game does: a landed player Zanmato hits every
+> legal enemy of one group with Death at 255 and Slice does nothing in this build, so it ENDS a Dark fight at once; the driver keeps that as faithful and rare (5 in 64 per Pay at the extreme: all 9,999,999 gil,
+> compatibility 255, byte 4, hire answer 1; more with a full gauge; never from a free attack against such foes).** In Act II the engine's first-target kill already ends the fight (Dark Yojimbo is the one legal target: his dog
+> is untargetable), so the Pay-on numbers already include that rule; the engine's group effect is still to land. RE is fixing the group effect and the orders on its branch as fast-forwards, and **a difficulty measured on that engine is not the chapter's.** So: the harness is built for every cell, **one smoke cell proves it runs** (below), and the full table
 > is left for the re-run the driver triggers when RE's follow-up has landed (the recipe below). Everything under "PRELIMINARY" was measured before the hold: it is kept only as the reason for the placeholder constants
 > (`MIRROR_ACT_I`, `MIRROR_ACT_II`, `ENDGAME_PHOENIX_DOWNS`) and as the shape to expect. **It is not the table of record and no decision should rest on it.**
 
@@ -102,8 +104,8 @@ What the tables say together:
 
 - **Act II is easy alone (97 percent, Pay on or off) and hard in the chain (about 84 percent of the survivors of Act I win it) because the chain arrives with the Phoenix Downs Act I spent**; the heal gives back HP, MP and the
   aeons, not the bag. The bag is the chapter's budget, which is why it is the lever.
-- **Pay barely decides Act II**: alone, Pay ON and the line that never sends Yojimbo in are within one seed in a hundred; in the chain Pay ON is 3 to 5 points ahead in every tier (66 to 69, 69 to 74, 74 to 77), which is the
-  most the unfixed Zanmato's instant wins can be worth in the number (the fixed one will not win outright).
+- **Pay barely decides Act II**: alone, Pay ON and the line that never sends Yojimbo in are within one seed in a hundred; in the chain Pay ON is 3 to 5 points ahead in every tier (66 to 69, 69 to 74, 74 to 77), which is
+  the most the instant wins of a landed Zanmato can be worth in the number (the game's own rule, kept; rare per Pay).
 - **Calling Yojimbo and not paying him is the worst thing a player can do** (20 percent): the shield is gone at his first menu. Today the HUD's Pay row does exactly that (it sends a payment of nothing: the handoff's open item 1).
 
 ### Why the others are not the pick

@@ -88,7 +88,8 @@ describe('CutsceneRunner resumes past the results marker — #04', () => {
       // and so does Chapter X's (docs/plans/natus-story-draft.md, "Post-battle": the Calm Lands line, then `results()`),
       // and Chapter XIV's (docs/plans/isaaru-story-draft.md: the stairs interlude, then `results()`).
       // Sin's two (XVII, XVIII; FFX, listed 2026-09-29): Sinfall and Breaking Through close before the tally (docs/plans/sin-two-chapters-plan.md §3.3).
-      const endsOnResults = ['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico', 'sin-fins-core', 'sin-face'];
+      // Mirror Aeons (XXVII, listed 2026-10-15): the post scene is the cavern, then the tally.
+      const endsOnResults = ['yojimbo-cavern', 'seymour-natus', 'seymour-omnis', 'isaaru-via-purifico', 'sin-fins-core', 'sin-face', 'mirror-aeons'];
       if (endsOnResults.includes(chapter.id)) {
         expect(after).toBe(0);
         continue;

@@ -368,7 +368,7 @@ const FFX2_VEGNAGUN_SHUYIN_META: ChapterMeta = {
   musicKeys: ['scene-farplane', 'boss-vegnagun', 'boss-shuyin', 'victory-ffx2', 'ending-ffx2'],
 };
 
-/** All eighteen listed chapters' pause-screen metadata, in play order. */
+/** All nineteen listed chapters' pause-screen metadata, in play order (Mirror Aeons last, listed 2026-10-15). */
 export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META, YUNALESCA_META, BRASKAS_FINAL_AEON_META,
   FFX2_BAHAMUT_META, FFX2_VEGNAGUN_SHUYIN_META,
@@ -383,10 +383,11 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   DEN_OF_WOE_META, // Chapter XV (FFX-2), listed 2026-09-26
   IXION_DJOSE_META, // Chapter XVI (FFX-2), listed 2026-09-27
   ...SIN_CHAPTER_META, // Chapters XVII and XVIII (FFX), listed 2026-09-29 (D-279)
+  MIRROR_AEONS_META, // Chapter XXVII (FFX), listed 2026-10-15 on Bailey's word
 ] as const;
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META, MIRROR_AEONS_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

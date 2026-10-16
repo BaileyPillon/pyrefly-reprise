@@ -228,14 +228,19 @@ try {
   await page.keyboard.press('Enter');
   await page.waitForTimeout(2500);
   let s = await screenNow();
+  check('begun from party prep, the intro plays first (the pre scene)', s === 'cutscene', s);
   if (s === 'cutscene') {
+    await shot('0a-intro-opening');
     for (let guard = 0; s === 'cutscene' && guard < 260; guard++) {
+      if (guard === 5) await shot('0b-intro-sisters');
       await page.keyboard.press('Enter');
       await page.waitForTimeout(350);
       s = await screenNow();
     }
   }
   await assertScreen(page, 'battle', 120000);
+  await page.waitForTimeout(600);
+  await shot('0c-battle-start');
   await waitBattleMenu(page, 120000);
   await page.waitForTimeout(1500);
   await installSeamLogger();

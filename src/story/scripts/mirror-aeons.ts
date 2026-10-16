@@ -85,9 +85,9 @@ export const mirrorAeonsScripts: ChapterScripts = {
       parallel(...SISTERS.map((id) => fx('pyreflies-rising', id))),
       parallel(...SISTERS.map((id) => hideActor(id, 700))), // the sisters go with the light
       wait(1000),
-      say('auron', 'That was only the road.', { auto: 1800 }),
+      say('auron', 'That was only the road.', { auto: 1800, fallback: [{ who: 'tidus' }, { who: 'yuna' }, { who: 'lulu' }] }), // a listed chapter: the opening party may not field Auron
       say('tidus', 'Only?', { auto: 900 }),
-      say('auron', 'Yevon has a second summoner waiting below.', { auto: 2200 }),
+      say('auron', 'Yevon has a second summoner waiting below.', { auto: 2200, fallback: [{ who: 'lulu' }, { who: 'yuna' }, { who: 'tidus' }] }),
       fade('white', 3000),
       narrate('Deep in the cavern, a blade was already drawn.', 2200),
       flash(1200, '#ffffff'),

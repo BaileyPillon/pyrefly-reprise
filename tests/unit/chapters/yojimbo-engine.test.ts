@@ -517,8 +517,8 @@ describe('The Cavern build and the chapter registration', () => {
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).not.toContain('yojimbo-cavern');
     // X, XII, XIII and XIV listed 2026-09-25, XI and XV 2026-09-26, XVI 2026-09-27, XVII and XVIII 2026-09-29, after IX.
     const after = ['yojimbo-cavern', 'seymour-natus', 'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'sin-fins-core', 'sin-face'];
-    expect(CHAPTERS.map((c) => c.id).slice(-11)).toEqual(['evrae-airship', ...after]);
-    expect(CHAPTER_IDS.slice(-10)).toEqual(after);
+    expect(CHAPTERS.map((c) => c.id).slice(-12, -1)).toEqual(['evrae-airship', ...after]); // Mirror Aeons (2026-10-15) follows Sin
+    expect(CHAPTER_IDS.slice(-11, -1)).toEqual(after);
     // The story layer (tests/unit/chapters/yojimbo-content.test.ts pins its lines):
     // the pre scene ends by opening the battle, the post scene shows results.
     expect(ch?.scriptsRef.pre.at(-1)).toEqual({ type: 'battleStart' });
@@ -533,7 +533,7 @@ describe('The Cavern build and the chapter registration', () => {
 describe('FFX only: nothing here reaches another chapter or FFX-2', () => {
   it('no other formation, FFX or FFX-2, carries an ordering row or a Yojimbo script', () => {
     const ordering = ALL_ABILITIES.filter((a) => a.extra?.['ordersActor'] !== undefined).map((a) => a.id);
-    expect(ordering).toEqual(['yojimbo-daigoro']);
+    expect(ordering).toEqual(['yojimbo-daigoro', 'dark-daigoro-order']); // the second is Mirror Aeons' Dark Yojimbo's own order row (the dog's bite)
     expect(FFX2_ABILITIES.some((a) => a.extra?.['ordersActor'] !== undefined)).toBe(false);
     for (const [id, group] of Object.entries(ENEMY_GROUPS_BY_ID)) {
       if (id === GROUP_ID) continue;

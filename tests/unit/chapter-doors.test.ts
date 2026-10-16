@@ -52,13 +52,17 @@ describe('the table', () => {
     const chapters = CHAPTER_DOORS.map((d) => d.chapter);
     expect(new Set(chapters).size).toBe(chapters.length);
     for (const id of chapters) expect(getChapter(id), id).toBeDefined();
-    for (const id of chapters) {
+    // Mirror Aeons (the `yojimbo` word) was listed on the board on 2026-10-15 on Bailey's word: its word still opens it, so it is the one door chapter that is also a card.
+    const LISTED_DOOR_CHAPTERS = ['mirror-aeons'];
+    for (const id of chapters.filter((x) => !LISTED_DOOR_CHAPTERS.includes(x))) {
       expect(CHAPTERS.map((c) => c.id as string), id).not.toContain(id);
       expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(false);
     }
+    for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
     expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true)) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
+    for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
+    expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });
 
   it('leads the FFX words to FFX chapters and the FFX-2 words to FFX-2 chapters (the game of the row is the chapter\'s)', () => {

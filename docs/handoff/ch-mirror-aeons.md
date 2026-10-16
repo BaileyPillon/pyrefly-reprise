@@ -1,25 +1,33 @@
-# Mirror Aeons: the Dark Magus Sisters and Dark Yojimbo against Yuna's own Magus Sisters and Yojimbo (a hidden FFX chapter, number 27, "Dark Mirror")
+# Mirror Aeons: the Dark Magus Sisters and Dark Yojimbo against Yuna's own Magus Sisters and Yojimbo (Chapter XXVII, FFX; listed on the board; "Dark Mirror")
 
-**Status (2026-10-15, phase 2, built for Bailey, via the release driver): a FIGHT now, not a scaffold; not merged and not deployed.** Built, tested and proved in a production build in a browser. Branch `ch-mirror-aeons` (from
+**Status (2026-10-15, phase 2 and the listing, built for Bailey, via the release driver): a finished, LISTED chapter, complete end to end; not merged and not deployed; the difficulty table is HELD for RE's follow-up.**
+Bailey, relayed by the driver, verbatim: "We need to prioritize the dark Yojimbo and dark magnus sisters chapters over night. It needs to go live over night and not be hidden. It needs to be done and complete end-to-end."
+The chapter has a **card on the chapter board** (Chapter XXVII, the last of the FFX group; the board reads "of 19"), its clear, best time and attempts are recorded in the save like every listed chapter's, the typed word
+`yojimbo` still opens it, and the whole run was played in a production build with real keys: the card, party prep, the intro, Act I, the seam, the heal, Act II, the post scene, the results, the board with the ribbon, a
+retry, on a desktop and on a phone (section 8). **Listing does not touch the save schema** (section 2, `tests/unit/save-mirror-aeons-listed.test.ts`). Built, tested and proved in a production build in a browser. Branch `ch-mirror-aeons` (from
 `origin/r49-rc` f939b87f), in a worktree of its own (a sibling folder of the main tree), with the reverse-engineering session's (RE's) work merged: its two notes (`origin/re-ffx-yojimbo-sisters-feasibility` 8892f8f6, the rows,
 the formations and the aeon summon rules; `origin/re-ffx-dark-aeons` 36c3cdb8, the five scripts, the tier ladder and the mirror rule) and **lane FFX-K's engine at its FINAL tip, `origin/re-parity-ffx-yojimbo-sisters`
 d8fa5b69** (Yuna's Yojimbo and Magus Sisters in the engine; merged in two steps, 42dc0f547 and then d8fa5b69, which added only its handoff note and corrected test comments). Tip: see the last line of this file.
 
-**What phase 2 added, in one list** (details below): the Dark Aeons' AI as code (RE's note, every number from it); Yuna's Yojimbo and Sisters in the party build, both summonable in both acts; **the heal between the acts**
+**What phase 2 and the listing added, in one list** (details below): **the listing** (the card, "of 19", the clear recorded in the save, the typed word kept, the Atlas cites, the pause numeral, the plate over the road, the e2e counts);
+**Yuna's three Magus Sisters staged on the party's three spots** (they used to pile on one); the Dark Aeons' AI as code (RE's note, every number from it); Yuna's Yojimbo and Sisters in the party build, both summonable in both acts; **the heal between the acts**
 (the driver's delegated pick: the party and every aeon whole at Act II); **the difficulty measured and set** (the faithful pair into tier 2 with 17 Phoenix Downs: the advisor wins about three runs in four, a careless line none;
 `docs/plans/ch-mirror-aeons-bench.md`); the seam's HUD kept off the screen behind the white-out; the advisor's card kept off the two aeons' menus; the chapter's words, guide and advisor's line follow the new fight; the
 bench, the real-key proof and the smoke tool.
 
-**Two caveats from RE that shape the numbers (the driver's message, 2026-10-15; RE is fixing both on its branch as fast-forwards):**
-1. **Zanmato.** Today a landed Zanmato of Yuna's Yojimbo kills only the FIRST target and ignores Death resistance, while every Dark Aeon is immune to Slice and Death and Zanmato's Slice effect is still untraced (RE's open
-   item 7). **Every Act II number that lets Yojimbo be paid is therefore provisional until RE's Zanmato fix lands**: the bench carries Pay ON beside Pay OFF and labels the Pay-on rows (section 4). When RE says the fix is in,
-   the Pay-on rows are to be re-run (`node --experimental-transform-types tools/mirror-aeons-bench.mjs --lines advisor,nopay,noyojimbo ...`).
-2. **The Sisters' orders.** Only **Combine powers** and **Dismiss** work; the seven other orders are listed by the engine but not carried out yet (RE is decoding them). **Nothing here depends on them**: the advisor's line plays
+**What RE's Zanmato note settled (`research/re-ffx-zanmato-and-orders.md`, merged; the driver's calls, 2026-10-15):**
+1. **Dark Yojimbo's Zanmato is the Strength row 0x410A** (power 250, capped at 99,999, no Death), which **cleanses Auto-Life before the death check**, so no revive is queued: the chapter's data uses that row (pinned,
+   `mirror-aeons-ai.test.ts`; a cast Auto-Life is taken off and the holder stays down).
+2. **The player's Zanmato** (Yuna's Yojimbo, when a Pay or a free attack rolls it) **hits every legal enemy of one group with Death at 255, and Slice does nothing in this build**, so a landed Zanmato **ends a Dark Aeon fight at
+   once**. That is faithful and the driver KEEPS it. It is rare: never from the free attack against byte-4 foes, **about 7.8 percent per Pay at the extreme** (5 in 64: all 9,999,999 gil, compatibility 255, byte 4, hire answer
+   1), more with a full gauge; the guide card says "a lucky Zanmato can end it". **RE's engine fix for the group effect is still to land** (today the engine kills the first target only), so **every Act II number that lets
+   Yojimbo be paid stays provisional**: the bench carries Pay ON beside Pay OFF and labels the Pay-on rows (section 4); **the table is HELD for RE's follow-up** and the driver triggers the re-run.
+3. **The Sisters' orders.** Only **Combine powers** and **Dismiss** work; the seven other orders are listed by the engine but not carried out yet (RE is decoding them). **Nothing here depends on them**: the advisor's line plays
    Combine powers and Dismiss on a Sister's menu, the bench never uses another order, and the preset starts the Sisters with full gauges because without the other orders nothing else can fill them (RE's open item 1).
 
 **Authority:** Bailey, 2026-10-15, verbatim: "we definitely need an awesome chapter built with yojimbo AND magus sisters that would be so awesome. the most epic encounter ever!!!!!!!!!", then "i like the mirror match but
 make the difficulty appropriate not too easy not too hard", "ok let's do each mirror match" and "I'll go with all of your recommendations". The driver's decisions: FFX only, hidden behind a typed word, number 27, two acts,
-art provisional, listing it on the board waits for Bailey's word; and, delegated to the driver, **the party and the aeons are restored between the acts**.
+art provisional, and, delegated to the driver, **the party and the aeons are restored between the acts**. The listing (above) is Bailey's own word, relayed by the driver.
 
 **Game case: FFX only** (AGENTS.md rule 14). The Dark Aeons, Yuna's Yojimbo and Magus Sisters and CTB are FFX's (both RE notes say so); FFX-2's Yojimbo ("Tourist Trap") is another record. The shared plumbing (one registry
 row, one door row, one scene row, one trigger condition, a data barrel, one set-up call, one optional group field, one early return in the advisor) is "both" in kind (CHK-020), additive and inert for every other chapter; the
@@ -33,8 +41,10 @@ balance or fiction (RE 9.5) and needs Bailey's yes (rule 10).
 
 ## 1. What Bailey should see first
 
-1. On the chapter board type **`yojimbo`** (Y, O, J, I, M, B, O; none is a board key but the M, which is `select` and is claimed by the word as a later letter). No card appears; the board still says "of 18".
-2. Party prep says **EXP** (header "EXP · MIRROR AEONS"): Tidus, Yuna and Lulu on the field, Auron, Wakka, Kimahri and Rikku on the bench. Its tip: two sisters, no joint attack, every fallen member costs a Phoenix Down, so heal
+1. On the chapter board, **Chapter XXVII Mirror Aeons is the last card of the Final Fantasy X group** (after Sin: the Face), with the painting of Mindy over Mushroom Rock Road; the board reads "0 of 19 beaten", the pip
+   strip ends the FFX group with XXVII. Walk to it with the arrow keys and press Enter. **Typing `yojimbo` on the board still opens it** (Y, O, J, I, M, B, O; none is a board key but the M, which is `select` and is claimed
+   by the word as a later letter).
+2. Party prep says **CHAPTER XXVII** (header "XXVII · MIRROR AEONS"): Tidus, Yuna and Lulu on the field, Auron, Wakka, Kimahri and Rikku on the bench. Its tip: two sisters, no joint attack, every fallen member costs a Phoenix Down, so heal
    early and use spells on Mindy; in the cavern, Cheer first and call Yuna's Yojimbo in before his blade is full.
 3. The opening plays on **Mushroom Rock Road** (eight lines, our own words). The first menu has the party against **Dark Mindy and Dark Sandy** (2,000,000 and 2,500,000 HP, both Overdrive gauges at 0), the guide open and
    Tidus's tip Quick Hit on Sandy. **Yuna's Summon list holds seven: the five story aeons, Yojimbo, and Cindy** (the Sisters are ONE summon of three, offered under Cindy's name; Anima is left out). A Sister's menu is an **Aeon**

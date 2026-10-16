@@ -4,7 +4,7 @@
  * `stage-party-stature.test.ts` drives the stage with made-up slots; this one reads what the game ships: the registry's chapters, the
  * party each chapter fields, and the slots of the scene each stands in. It holds that
  *
- * - the eleven FFX chapters (I, II, III, VII, VIII, IX, X, XII, XIV, XVII, XVIII) are the only ones the rule reaches, by the chapter's own
+ * - the twelve FFX chapters (I, II, III, VII, VIII, IX, X, XII, XIV, XVII, XVIII, XXVII) are the only ones the rule reaches, by the chapter's own
  *   `game`; every FFX-2 chapter (IV, V, VI, XI, XIII, XV, XVI), the hidden Leblanc experiment and the hidden FF7 one get exactly the
  *   height their scene gave them before this change, whoever stands in them (FFX-2's Yuna and Rikku share two ids with FFX's);
  * - in an FFX chapter every hero stands at his scene's party height times the table's ratio, so Tidus stands at the party height itself and
@@ -35,10 +35,11 @@ const FFX_CHAPTERS = [
   'isaaru-via-purifico', // XIV
   'sin-fins-core', // XVII
   'sin-face', // XVIII
+  'mirror-aeons', // XXVII (listed 2026-10-15)
 ] as const;
 
-/** The hidden FFX experiments: FFX chapters by their own `game`, so the rule reaches them, but not on the board (the first test counts the listed eleven). Sinspawn Gui and Fayth (Evrae with FFX's camera; 2026-10-10; `mushroom-door.test.ts`, `fayth-door.test.ts`), Biran and Yenke (Kimahri alone at the Mountain Gate; 2026-10-14; `gagazet-door.test.ts`) and Mirror Aeons (Yuna's party against the Dark Aeons; 2026-10-15; `yojimbo-door.test.ts`). */
-const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui', 'exp-fayth', 'biran-yenke', 'mirror-aeons'] as const;
+/** The hidden FFX experiments: FFX chapters by their own `game`, so the rule reaches them, but not on the board (the first test counts the listed twelve). Sinspawn Gui and Fayth (Evrae with FFX's camera; 2026-10-10; `mushroom-door.test.ts`, `fayth-door.test.ts`), Biran and Yenke (Kimahri alone at the Mountain Gate; 2026-10-14; `gagazet-door.test.ts`) and (until its listing on 2026-10-15) Mirror Aeons (Yuna's party against the Dark Aeons; 2026-10-15; `yojimbo-door.test.ts`). */
+const HIDDEN_FFX_CHAPTERS = ['sinspawn-gui', 'exp-fayth', 'biran-yenke'] as const;
 const FFX_REACHED = [...FFX_CHAPTERS, ...HIDDEN_FFX_CHAPTERS];
 
 const ALL: readonly Chapter[] = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS];
@@ -58,7 +59,7 @@ function slotsOf(c: Chapter): { partyHeight: number; figureHeights: Readonly<Rec
 describe('party stature against the shipped chapters', () => {
   setStatureOff(false);
 
-  it('reaches exactly the eleven FFX chapters, by the chapter\'s own game', () => {
+  it('reaches exactly the twelve FFX chapters, by the chapter\'s own game', () => {
     expect(CHAPTERS.filter((c) => c.game === 'ffx').map((c) => c.id).sort()).toEqual([...FFX_CHAPTERS].sort());
     for (const c of ALL.filter((x) => x.game !== 'ffx')) expect(['ffx2', 'ff7'], c.id).toContain(c.game);
     expect(CHAPTERS.filter((c) => c.game === 'ffx2')).toHaveLength(7);

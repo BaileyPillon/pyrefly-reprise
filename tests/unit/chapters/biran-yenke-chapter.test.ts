@@ -42,7 +42,7 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
     expect(EXPERIMENT_CHAPTERS).toContain(BIRAN_YENKE);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(BIRAN_YENKE_ID);
     expect((CHAPTER_IDS as readonly string[]).includes(BIRAN_YENKE_ID)).toBe(false);
-    expect(CHAPTER_IDS).toHaveLength(18);
+    expect(CHAPTER_IDS).toHaveLength(19);
     expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length); // every hidden number is its own
   });
 
@@ -104,12 +104,15 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
   });
   afterAll(() => setExperimentStorageForTests(undefined));
 
-  it('has no card by default; handed in, it is the last FFX card, labelled EXP', () => {
-    expect(buildChapterTiles(save)).toHaveLength(18);
+  it('has no card by default; handed in, it is the last FFX card but Mirror Aeons, labelled EXP', () => {
+    expect(buildChapterTiles(save)).toHaveLength(19);
     const tiles = buildChapterTiles(save, WITH_CARD);
-    expect(tiles).toHaveLength(19);
+    expect(tiles).toHaveLength(20); // the nineteen listed cards (Mirror Aeons, XXVII, since 2026-10-15) and the one handed in
     const last = tiles.find((t) => t.id === BIRAN_YENKE_ID)!;
-    expect(tiles.filter((t) => t.game === 'ffx').at(-1)).toBe(last); // the last FFX card
+    // Cards sort by number: this one is 25, so it follows Sin: the Face (XVIII) and comes just before Mirror Aeons (XXVII, listed 2026-10-15), which is the last FFX card.
+    const ffxCards = tiles.filter((t) => t.game === 'ffx');
+    expect(ffxCards.at(-2)).toBe(last);
+    expect(ffxCards.at(-1)).toMatchObject({ id: 'mirror-aeons', numeral: 'XXVII' });
     expect(last).toMatchObject({ id: BIRAN_YENKE_ID, numeral: 'EXP', title: BIRAN_YENKE_TEXT.title, game: 'ffx', sceneKey: GAGAZET_RONSO_SCENE, playable: true });
   });
 
@@ -125,14 +128,14 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
     expect(window.localStorage.getItem('pyrefly-reprise:save:v1') ?? '').not.toContain(BIRAN_YENKE_ID);
   });
 
-  it("shows the cleared ribbon from the experiments' store, never from the save, and no part of 'N of 18'", () => {
+  it("shows the cleared ribbon from the experiments' store, never from the save, and no part of 'N of 19'", () => {
     const card = (): { cleared: boolean } => buildChapterTiles(save, WITH_CARD).find((t) => t.id === BIRAN_YENKE_ID)!;
     expect(card().cleared).toBe(false);
     recordExperimentClear(BIRAN_YENKE_ID, 99_000);
     expect(card().cleared).toBe(true);
     expect(save.isCleared(BIRAN_YENKE_ID)).toBe(false);
     const progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
-    expect([progress.beaten, progress.total]).toEqual([0, 18]);
+    expect([progress.beaten, progress.total]).toEqual([0, 19]);
   });
 });
 

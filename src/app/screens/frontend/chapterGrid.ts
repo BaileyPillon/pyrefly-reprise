@@ -105,6 +105,12 @@ export function silhouetteKeysFor(chapter: Chapter): readonly string[] {
   return ns ? keys.map((k) => inArtNamespace(ns, k)) : keys;
 }
 
+/**
+ * A chapter whose scene key is a code key and not a backdrop file paints another file on its plate and card: Mirror Aeons' scene is `mirror-aeons` (one stage built from Mushroom Rock Road's plates), whose road is
+ * `art/backdrops/mushroom-rock-road.png`. Without this the plate would be a dark field (no file is named `mirror-aeons`). FFX only.
+ */
+const BOARD_BACKDROP: Readonly<Record<string, string>> = { 'mirror-aeons': 'mushroom-rock-road' };
+
 function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
   return {
     kind: 'chapter',
@@ -114,7 +120,7 @@ function tileForChapter(chapter: Chapter, save: ClearedLookup): ChapterTile {
     numeral: chapterNumeral(chapter),
     title: chapter.title,
     location: chapter.location,
-    sceneKey: chapter.sceneKey,
+    sceneKey: BOARD_BACKDROP[chapter.id] ?? chapter.sceneKey,
     silhouetteKeys: silhouetteKeysFor(chapter),
     cleared: chapter.experimental ? experimentRecord(chapter.id).clears > 0 : save.isCleared(chapter.id), // an experiment's clears are in its own store, never the save
     playable: true,

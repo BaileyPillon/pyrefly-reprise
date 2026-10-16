@@ -110,7 +110,7 @@ describe('a listed chapter: the board and the save, like every other, and nothin
   it('has a card by default: an FFX card numbered XXVII, the last of its group, playable and unbeaten', () => {
     const tiles = buildChapterTiles(save);
     expect(tiles).toHaveLength(19);
-    expect(tiles.find((t) => t.id === MIRROR_AEONS_ID)).toMatchObject({ id: MIRROR_AEONS_ID, numeral: 'XXVII', title: MIRROR_AEONS_TEXT.title, game: 'ffx', sceneKey: MIRROR_AEONS_SCENE, playable: true, cleared: false });
+    expect(tiles.find((t) => t.id === MIRROR_AEONS_ID)).toMatchObject({ id: MIRROR_AEONS_ID, numeral: 'XXVII', title: MIRROR_AEONS_TEXT.title, game: 'ffx', sceneKey: 'mushroom-rock-road', playable: true, cleared: false });
     const ffx = tiles.filter((t) => t.game === 'ffx');
     expect(ffx[ffx.length - 1]!.id).toBe(MIRROR_AEONS_ID);
   });
@@ -202,7 +202,7 @@ describe('the guide card and document, and the line they teach', () => {
   it('says what the files and the engine say: an aeon takes the big move, a blade cannot find Mindy, blades for Cindy and Sandy, Zanmato a long shot; and no number', () => {
     const text = MIRROR_AEONS_GUIDE.rules.map((r) => r.text).join(' ');
     expect(text).toMatch(/Send an aeon in before the big move/);
-    expect(text).toMatch(/Auto-Life does not turn either/);
+    expect(text).toMatch(/Auto-Life does not turn it/);
     expect(text).toMatch(/Blades for Cindy and Sandy, spells for Mindy/);
     expect(text).toMatch(/Zanmato|long shot/);
     expect(text).not.toMatch(/\d/);

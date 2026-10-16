@@ -226,16 +226,20 @@ describe('every other chapter chains exactly as before', () => {
    * `checkpointOnEntry` anywhere else fails below, so a stray flag cannot slip past this guard.
    */
   // Chapter V's Shuyin link joined on 2026-09-26: D-217, an adaptation Bailey accepted (iter2-b1).
-  const CHECKPOINT_WITHOUT_SAVE_SPHERE: Readonly<Record<string, number>> = { 'ffx2-trema': 2, 'ffx2-vegnagun-shuyin': 5, 'sin-fins-core': 3 };
+  // Chapter XXVII's (Mirror Aeons, listed 2026-10-15; FFX only) Act II is a checkpoint too, and its entry heals the party and the aeons with NO card (`noSaveSphereCard`: the cavern has no Save Sphere).
+  const CHECKPOINT_WITHOUT_SAVE_SPHERE: Readonly<Record<string, number>> = { 'ffx2-trema': 2, 'ffx2-vegnagun-shuyin': 5, 'sin-fins-core': 3, 'mirror-aeons': 2 };
+  /** The chapters whose chain heals the party on a link's entry with no Save Sphere card: the flag is set, the card is not shown (`cards` stays 0 below). */
+  const HEALS_WITHOUT_CARD: readonly string[] = ['mirror-aeons'];
 
   it('covers every registered chapter but Chapter XI', () => {
     expect(others.length).toBeGreaterThanOrEqual(10);
   });
 
   for (const chapter of others) {
-    it(`${chapter.number}. ${chapter.id}: no Save Sphere, and no checkpoint but the named links (XIII's Trema, V's Shuyin, XVII's link 3), win or lose on any link`, async () => {
+    it(`${chapter.number}. ${chapter.id}: no Save Sphere card, and no checkpoint but the named links (XIII's Trema, V's Shuyin, XVII's link 3, XXVII's Act II), win or lose on any link`, async () => {
       const groups = await groupsOf(chapter);
-      expect(groups.some((g) => g.restoresPartyOnEntry === true)).toBe(false);
+      expect(groups.some((g) => g.restoresPartyOnEntry === true)).toBe(HEALS_WITHOUT_CARD.includes(chapter.id));
+      if (HEALS_WITHOUT_CARD.includes(chapter.id)) expect(groups.filter((g) => g.restoresPartyOnEntry === true).every((g) => g.noSaveSphereCard === true), chapter.id).toBe(true);
       const checkpointLink = CHECKPOINT_WITHOUT_SAVE_SPHERE[chapter.id] ?? 0;
       const flagged = groups.flatMap((g, i) => (g.checkpointOnEntry === true ? [i + 1] : []));
       expect(flagged).toEqual(checkpointLink > 0 ? [checkpointLink] : []);

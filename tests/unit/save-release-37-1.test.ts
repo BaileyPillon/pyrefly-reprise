@@ -110,10 +110,10 @@ describe('a live release 37.1 save on the release 38 build (the rename)', () => 
     expectProgressKept(new SaveStore(undefined, slot())); // the DEFAULT key must be the literal one
   });
 
-  it('shows on the board: three chapters beaten of the eighteen', () => {
+  it('shows on the board: three chapters beaten of the nineteen', () => {
     const store = new SaveStore(undefined, slot());
     const board = boardProgress(buildChapterTiles(store), 0);
-    expect([board.beaten, board.total]).toEqual([3, 18]);
+    expect([board.beaten, board.total]).toEqual([3, 19]);
   });
 
   it('survives a save and a reload under the same key, with a new clear beside the old records and no second key', () => {

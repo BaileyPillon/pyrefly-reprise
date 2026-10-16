@@ -289,8 +289,8 @@ describe('registration: listed as Chapter XVI (2026-09-27)', () => {
     const ch = getChapter('ffx2-ixion-djose');
     expect(ch).toBe(FFX2_IXION_DJOSE);
     expect([ch?.game, ch?.number, ch?.buildRef, ch?.enemyGroupRef]).toEqual(['ffx2', 16, djoseBuild, djoseIxionGroup]);
-    expect(CHAPTERS.at(-3)).toBe(FFX2_IXION_DJOSE);
-    expect(CHAPTER_IDS.at(-3)).toBe('ffx2-ixion-djose');
+    expect(CHAPTERS.at(-4)).toBe(FFX2_IXION_DJOSE);
+    expect(CHAPTER_IDS.at(-4)).toBe('ffx2-ixion-djose');
   });
 
   it('the scene is the Chamber on its stand-in plate (swappable in one line); the painting is look B, its own FFX-2 subject (D-268)', () => {

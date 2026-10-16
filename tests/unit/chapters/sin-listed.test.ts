@@ -64,11 +64,11 @@ function bareManifest(): ArtManifest {
 
 describe('the listing (plan §6, the Ixion listing 925ec32a as the template)', () => {
   it('both are listed after Chapter XVI, as XVII and XVIII, FFX, in CHAPTERS, CHAPTER_IDS and CHAPTER_META', () => {
-    expect(CHAPTER_IDS.slice(-3)).toEqual(['ffx2-ixion-djose', ...SIN]);
-    expect(CHAPTERS.slice(-2)).toEqual([SIN_FINS_CORE, SIN_FACE]);
+    expect(CHAPTER_IDS.slice(-4, -1)).toEqual(['ffx2-ixion-djose', ...SIN]); // Mirror Aeons (2026-10-15) follows them
+    expect(CHAPTERS.slice(-3, -1)).toEqual([SIN_FINS_CORE, SIN_FACE]);
     expect(UNLISTED_CHAPTERS.map((c) => c.id)).toEqual(['ff7-guard-scorpion']);
     expect([SIN_FINS_CORE.number, SIN_FACE.number, SIN_FINS_CORE.game, SIN_FACE.game]).toEqual([17, 18, 'ffx', 'ffx']);
-    expect(CHAPTER_META.slice(-2).map((m) => [m.id, m.numeral, m.gameLabel])).toEqual([
+    expect(CHAPTER_META.slice(-3, -1).map((m) => [m.id, m.numeral, m.gameLabel])).toEqual([
       ['sin-fins-core', 'XVII', 'FFX'],
       ['sin-face', 'XVIII', 'FFX'],
     ]);

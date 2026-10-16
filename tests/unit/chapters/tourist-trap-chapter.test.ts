@@ -53,7 +53,7 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
     expect(EXPERIMENT_CHAPTERS).toContain(FFX2_TOURIST_TRAP);
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain(TOURIST_TRAP_ID);
     expect((CHAPTER_IDS as readonly string[]).includes(TOURIST_TRAP_ID)).toBe(false);
-    expect(CHAPTER_IDS).toHaveLength(18);
+    expect(CHAPTER_IDS).toHaveLength(19);
     expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length); // every hidden number is its own
   });
 
@@ -119,7 +119,7 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
   afterAll(() => setExperimentStorageForTests(undefined));
 
   it('has no card by default; handed in, it is the last FFX-2 card, after the eighteen, labelled EXP', () => {
-    expect(buildChapterTiles(save)).toHaveLength(18);
+    expect(buildChapterTiles(save)).toHaveLength(19);
     const last = buildChapterTiles(save, WITH_CARD).at(-1)!;
     expect(last).toMatchObject({ id: TOURIST_TRAP_ID, numeral: 'EXP', title: TOURIST_TRAP_TEXT.title, game: 'ffx2', sceneKey: TOURIST_TRAP_SCENE, playable: true });
   });
@@ -136,13 +136,13 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
     expect(window.localStorage.getItem('pyrefly-reprise:save:v1') ?? '').not.toContain(TOURIST_TRAP_ID);
   });
 
-  it("shows the cleared ribbon from the experiments' store, never from the save, and no part of 'N of 18'", () => {
+  it("shows the cleared ribbon from the experiments' store, never from the save, and no part of 'N of 19'", () => {
     expect(buildChapterTiles(save, WITH_CARD).at(-1)!.cleared).toBe(false);
     recordExperimentClear(TOURIST_TRAP_ID, 99_000);
     expect(buildChapterTiles(save, WITH_CARD).at(-1)!.cleared).toBe(true);
     expect(save.isCleared(TOURIST_TRAP_ID)).toBe(false);
     const progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
-    expect([progress.beaten, progress.total]).toEqual([0, 18]);
+    expect([progress.beaten, progress.total]).toEqual([0, 19]);
   });
 });
 

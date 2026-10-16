@@ -5,7 +5,7 @@
  * indistinguishable wherever the number is the key (the entry card's `chapterNumber`, the phone prep's "FFX · n"). The rule, over EVERY registered chapter (the listed
  * eighteen, the unlisted FF7 experiment, the hidden experiments):
  *
- * - the listed chapters are 1 to 18, in `CHAPTERS` order, one each;
+ * - the listed chapters are 1 to 18, in `CHAPTERS` order, one each, and then Mirror Aeons, **27**, listed 2026-10-15 on Bailey's word (the hidden experiments hold 19 to 26, so the board's nineteenth card reads XXVII);
  * - 0 means "no place on the board" and only the unlisted FF7 experiment wears it;
  * - the hidden experiments are above the eighteen and each has its own: 19 the Leblanc preview, 20 the FFX-2 Experiment, 21 Sinspawn Gui, 22 Fayth (Evrae with FFX's camera), 23 the Tourist Trap, 24 Valefor at Besaid, 25 Biran and Yenke, 26 Angra Mainyu;
  * - every number is within the type's union (`Chapter.number`), so a typo fails `tsc` before it fails here.
@@ -30,11 +30,13 @@ describe('chapter numbers', () => {
     }
   });
 
-  it('the listed chapters are 1 to 18 in board order, and every hidden experiment is above them', () => {
-    expect(CHAPTERS.map((c) => c.number)).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
+  it('the listed chapters are 1 to 18 in board order and then Mirror Aeons, number 27 (listed 2026-10-15; 19 to 26 are the hidden experiments numbers); every hidden experiment is above 18 and none takes 27', () => {
+    expect(CHAPTERS.map((c) => c.number)).toEqual([...Array.from({ length: 18 }, (_, i) => i + 1), 27]);
+    expect(CHAPTERS[CHAPTERS.length - 1]!.id).toBe('mirror-aeons');
     for (const c of EXPERIMENT_CHAPTERS) {
       expect(c.experimental, c.id).toBe(true);
       expect(c.number, c.id).toBeGreaterThan(18);
+      expect(c.number, c.id).not.toBe(27);
     }
   });
 

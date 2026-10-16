@@ -5,7 +5,7 @@
  * Bailey, 2026-10-06: "put the experimental new chapter in the live build but make it hidden like you did with ff7 how i had to type limit at
  * the main menu"; the word, confirmed: "leblanc". What this pins, with the real `Input`, real key events and the real board:
  *
- * 1. **Hidden by default**: the board holds the eighteen and nothing else; no EXP card, no pip, no word on screen, "of 18" unchanged.
+ * 1. **Hidden by default**: the board holds the nineteen and nothing else; no EXP card, no pip, no word on screen, "of 19" unchanged.
  * 2. **The word opens it** (and only the word), the way "limit" opens FF7's: the board settles on the chapter, the cursor stays put, nothing is
  *    remembered and nothing is written to the save or the experiments' store. The tests read the word from its one constant.
  * 3. **The two doors do not interfere**: "limit" still opens FF7's; "limitleblanc" opens FF7's alone, "leblanclimit" the Leblanc one alone, a typo neither.
@@ -208,23 +208,23 @@ afterEach(() => {
 });
 
 describe('hidden by default', () => {
-  it('the board holds the eighteen: no experiment tile, no EXP numeral, no pip, "of 18" unchanged', () => {
+  it('the board holds the nineteen: no experiment tile, no EXP numeral, no pip, "of 19" unchanged', () => {
     const tiles = buildChapterTiles(new SaveStore());
     expect(new Set(tiles.map((t) => t.id))).toEqual(new Set(CHAPTERS.map((c) => c.id as string)));
-    expect(tiles).toHaveLength(18);
+    expect(tiles).toHaveLength(19);
     expect(tiles.some((t) => t.id === EXP || t.chapter?.experimental || t.numeral === 'EXP')).toBe(false);
-    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([11, 7]);
+    expect(groupChapterTiles(tiles).map((g) => g.tiles.length)).toEqual([12, 7]);
     const progress = boardProgress(tiles, 0);
-    expect(progress.total).toBe(18);
-    expect(progress.pips).toHaveLength(18);
+    expect(progress.total).toBe(19);
+    expect(progress.pips).toHaveLength(19);
   });
 
-  it('the mounted board draws eighteen cards and says nothing of the experiment', () => {
+  it('the mounted board draws nineteen cards and says nothing of the experiment', () => {
     const rig = mount();
-    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(18);
+    expect(rig.root.querySelectorAll('.fe-card')).toHaveLength(19);
     expect(rig.root.querySelector(`[data-card="${EXP}"]`)).toBeNull();
     expect(rig.root.textContent).not.toMatch(/experiment|EXP\b/i);
-    expect(rig.root.textContent).toMatch(/of 18 beaten/);
+    expect(rig.root.textContent).toMatch(/of 19 beaten/);
     expect(rig.screen.snapshot()['order'] as string[]).not.toContain(EXP);
   });
 
@@ -241,7 +241,7 @@ describe('hidden by default', () => {
 
   it('a card can still be built when a test hands the experiment in (the data path is intact)', () => {
     const tiles = buildChapterTiles(new SaveStore(), { experiments: EXPERIMENT_CHAPTERS.filter((c) => c.id === EXP) }); // the hidden FFX chapter (`mushroom-door.test.ts`) is another experiment, handed in by its own suite
-    expect(tiles).toHaveLength(19);
+    expect(tiles).toHaveLength(20); // the nineteen listed cards (Mirror Aeons, XXVII, since 2026-10-15) and the one handed in
     expect(tiles.at(-1)).toMatchObject({ id: EXP, numeral: 'EXP' });
   });
 });

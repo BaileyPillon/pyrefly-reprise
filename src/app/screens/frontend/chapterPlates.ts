@@ -59,12 +59,6 @@ export interface PlateComposition {
   readonly glow: string;
 }
 
-/**
- * A chapter whose scene key is a code key and not a backdrop file draws another file on its plate and card: Mirror Aeons' scene is `mirror-aeons` (a stage built from Mushroom Rock Road's plates), whose road is
- * `backdrops/mushroom-rock-road.png`. Without this the plate would be a dark field (no file is named `mirror-aeons`). FFX only.
- */
-const PLATE_BACKDROP: Readonly<Record<string, string>> = { 'mirror-aeons': 'mushroom-rock-road' };
-
 const P = (x: number, y: number, h: number, focus?: readonly [number, number]): Placement =>
   focus ? { x, y, h, focus } : { x, y, h };
 
@@ -307,9 +301,8 @@ export function plateArtHtml(
       : '';
   };
   const sceneStyle = `object-position:${comp.scene[where]}`;
-  const backdrop = PLATE_BACKDROP[tile.id] ?? tile.sceneKey;
-  const scene = backdrop
-    ? `${holder('cs-art__scene', `art/backdrops/${backdrop}.png`, sceneStyle)}<img class="cs-art__scene" ${lazy(`art/backdrops/${backdrop}.png`)} alt="" ` +
+  const scene = tile.sceneKey
+    ? `${holder('cs-art__scene', `art/backdrops/${tile.sceneKey}.png`, sceneStyle)}<img class="cs-art__scene" ${lazy(`art/backdrops/${tile.sceneKey}.png`)} alt="" ` +
       `style="${sceneStyle}" draggable="false" onerror="this.remove()">`
     : '';
   const bosses = comp.layers
