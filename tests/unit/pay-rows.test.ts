@@ -27,7 +27,7 @@ const menu = (): AvailableCommand[] => [payTemplate, dismiss];
 describe('payRows (pure)', () => {
   it('turns the one Pay row into one row per round amount the party can pay, and a last row for all of it, with Dismiss kept after them', () => {
     const rows = payRows(menu(), 1_500_000);
-    expect(rows.map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay 1,000,000', 'Pay all (1,500,000)', 'Dismiss']);
+    expect(rows.map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay 1,000,000', 'Pay all', 'Dismiss']);
     expect(rows.slice(0, 5).map((r) => (r.command as AbilityCommand).gilSpent)).toEqual([1_000, 10_000, 100_000, 1_000_000, 1_500_000]);
     for (const r of rows.slice(0, 5)) {
       expect(r.command).toMatchObject({ kind: 'ability', id: 'yojimbo-pay', targets: [] });
@@ -38,8 +38,8 @@ describe('payRows (pure)', () => {
   });
 
   it('leaves out an amount the party cannot pay, and a gil that equals a round amount is "all" rather than a repeat', () => {
-    expect(payRows(menu(), 50_000).map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay all (50,000)', 'Dismiss']);
-    expect(payRows(menu(), 1_000_000).map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay all (1,000,000)', 'Dismiss']);
+    expect(payRows(menu(), 50_000).map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay all', 'Dismiss']);
+    expect(payRows(menu(), 1_000_000).map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay all', 'Dismiss']);
     expect(payRows(menu(), 500).map((r) => r.label)).toEqual(['Pay 500', 'Dismiss']);
     for (const gil of [500, 1_000, 5_000, 99_999, 1_500_000, 9_999_999]) {
       const amounts = payRows(menu(), gil).flatMap((r) => ((r.command as AbilityCommand).gilSpent !== undefined && r.command.kind === 'ability' ? [(r.command as AbilityCommand).gilSpent!] : []));
@@ -71,16 +71,18 @@ describe('payRows (pure)', () => {
 describe('the Sisters\' order rows in short words', () => {
   const order = (id: string, label: string): AvailableCommand => ({ command: { kind: 'ability', id, targets: [] }, label, category: 'aeon', mpCost: 0, rank: 3, enabled: id === 'sister-order-combine', validTargets: [] });
 
-  it('names every one of the engine\'s eight orders, and no label is longer than the column shows (fifteen letters)', () => {
+  it('names every one of the engine\'s eight orders, and no label is longer than a phone tile shows (fifteen letters)', () => {
     const rows = shortOrderLabels(ORDERS.map((o) => order(o.id, o.label)));
-    expect(rows.map((r) => r.label)).toEqual(['Free choice', 'Repeat last', 'Attack order', 'Cindy: spells', 'Cindy: support', 'Combine powers', 'Sandy: support', 'Mindy: drain']);
+    expect(rows.map((r) => r.label)).toEqual(['Free choice', 'Repeat last', 'Attack order', 'Cindy: spells', 'Cindy: support', 'Combine', 'Sandy: support', 'Mindy: drain']);
     for (const r of rows) expect(r.label.length, r.label).toBeLessThanOrEqual(15);
   });
 
   it('changes nothing but the label of an order row (id, enabled, reason) and hands any other menu back as it was', () => {
     const combine = order('sister-order-combine', 'Combine for the Delta Attack');
     const [row] = shortOrderLabels([combine]);
-    expect(row).toMatchObject({ label: 'Combine powers', enabled: true, command: { id: 'sister-order-combine' } });
+    expect(row).toMatchObject({ label: 'Combine', enabled: true, command: { id: 'sister-order-combine' } });
+    expect(row!.help).toMatch(/Delta Attack/); // the row says Combine, its help line says Combine powers and the Delta Attack
+    expect(shortOrderLabels([{ ...combine, help: 'the engine\'s own help' }])[0]!.help).toBe('the engine\'s own help');
     expect(combine.label).toBe('Combine for the Delta Attack');
     const plain = [dismiss];
     expect(shortOrderLabels(plain)).toBe(plain);
@@ -108,7 +110,7 @@ describe('the engine takes exactly what each row says', () => {
       rig.submit(row.command);
       expect(rig.state.flags['yojimbo:gil'], row.label).toBe(GIL - amount);
     }
-    expect(labels).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay 1,000,000', 'Pay all (1,500,000)']);
+    expect(labels).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay 1,000,000', 'Pay all']);
   });
 
   it("the engine's own Pay row (the template) still pays nothing: that is why the ladder exists", () => {

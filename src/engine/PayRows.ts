@@ -14,7 +14,8 @@
  * each tenfold step here is worth about thirteen points.
  *
  * **The Sisters' orders** keep the engine's rows and ids; only their labels are shortened, because the command column cuts a label at about sixteen letters and the engine's own words ("Combine for the Delta Attack",
- * "Revive and support (Cindy)") read "COMBINE FOR THE ..." and "REVIVE AND SUPPOR..." on the one order that matters. The game's own name for it is Combine powers.
+ * "Revive and support (Cindy)") read "COMBINE FOR THE ..." and "REVIVE AND SUPPOR..." on the one order that matters, and a phone's half-width tile cuts anything over about thirteen letters ("COMBINE POWE..."). The game's own
+ * name for the order is Combine powers: the row says Combine and its help line says the rest.
  *
  * Imports no DOM and no `three` (layering, AGENTS.md rule 1): a pure function of the rows and the gil.
  */
@@ -49,7 +50,7 @@ export function payRows(commands: AvailableCommand[], gil: number | undefined): 
     help: `Pay him ${gilText(amount)} gil. A bigger payment buys a better stroke.`,
   });
   const rows: AvailableCommand[] = PAY_AMOUNTS.filter((a) => a < gil).map((a) => row(a, `Pay ${gilText(a)}`));
-  rows.push(row(Math.trunc(gil), rows.length === 0 ? `Pay ${gilText(Math.trunc(gil))}` : `Pay all (${gilText(Math.trunc(gil))})`));
+  rows.push(row(Math.trunc(gil), rows.length === 0 ? `Pay ${gilText(Math.trunc(gil))}` : 'Pay all')); // the amount is in the help line under the menu (a phone's half-width tile cuts "Pay all (1,500,000)")
   return [...commands.slice(0, at), ...rows, ...commands.slice(at + 1)];
 }
 
@@ -60,18 +61,21 @@ const ORDER_LABELS: Readonly<Record<string, string>> = {
   'sister-order-attack': 'Attack order',
   'sister-order-cindy-spells': 'Cindy: spells',
   'sister-order-cindy-support': 'Cindy: support',
-  'sister-order-combine': 'Combine powers',
+  'sister-order-combine': 'Combine',
   'sister-order-sandy-support': 'Sandy: support',
   'sister-order-mindy-drain': 'Mindy: drain',
 };
 
 /** The commands with every order row of a Sister relabelled in short words (nothing else about a row changes); any other menu comes back as the same array. */
 export function shortOrderLabels(commands: AvailableCommand[]): AvailableCommand[] {
+  const HELP: Readonly<Record<string, string>> = { 'sister-order-combine': 'Combine powers: the three Sisters strike together with the Delta Attack.' };
   const named = (c: AvailableCommand): string | undefined => (c.command.kind === 'ability' ? ORDER_LABELS[c.command.id] : undefined);
   if (!commands.some((c) => named(c) !== undefined)) return commands;
   return commands.map((c) => {
     const label = named(c);
-    return label === undefined ? c : { ...c, label };
+    if (label === undefined) return c;
+    const help = c.help ?? (c.command.kind === 'ability' ? HELP[c.command.id] : undefined);
+    return { ...c, label, ...(help === undefined ? {} : { help }) };
   });
 }
 

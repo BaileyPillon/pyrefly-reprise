@@ -38,8 +38,8 @@ const W = Number(arg('--w', '1600'));
 const H = Number(arg('--h', '900'));
 const TOUCH = flag('--touch');
 const SEED = Number(arg('--seed', '2'));
-const HAND_OVER = 66; // Dark Yojimbo's blade when the keys take over from the advisor (tier 2 adds 10 a turn and 2 a hit, so about three of his turns remain before a Zanmato)
-const SHIELD_AT = 66; // Yuna calls Yojimbo at her first menu from then on (the advisor's own line waits until 88; a person's turn order can skip a menu, and a Zanmato on a party with no aeon out ends the run)
+const HAND_OVER = 76; // Dark Yojimbo's blade when the keys take over from the advisor (tier 2 adds 10 a turn and 2 a hit: two or three of his turns remain before the Zanmato)
+const SHIELD_AT = 76; // Yuna calls Yojimbo at her first menu from then on (the advisor's own line waits for 88 and a person's turn order can skip that menu; sent in much earlier, the aeon is struck down before the blow it is there to take)
 const UNTIL = arg('--until', 'end');
 const ENTRY = arg('--entry', 'card');
 const SCENARIO = arg('--scenario', 'full'); // 'combine' stops after the Sisters' Combine powers (a quick look), 'end' plays the whole proof
@@ -478,7 +478,7 @@ try {
       }
       check('Yojimbo is on the field with Pay lit in his Aeon group and Dismiss beside it', st.aeonId === 'yojimbo' && payRows.some((t) => /^pay/i.test(t) && !/greyed/.test(t)) && ymenu.some((t) => /^dismiss/i.test(t)), { aeon: st.aeonId, menu: ymenu, group: payRows });
       // The Pay ladder (`engine/PayRows.ts`): one row per round amount the party can pay and a last one for all of it, in the Aeon group beside Dismiss.
-      check('the Aeon group is a ladder of payments with the amounts filled (Pay 100,000 and Pay all)', payRows.some((t) => /^pay 100,000$/i.test(t)) && payRows.some((t) => /^pay all \(/i.test(t)), { group: payRows });
+      check('the Aeon group is a ladder of payments with the amounts filled (Pay 100,000 and Pay all)', payRows.some((t) => /^pay 100,000$/i.test(t)) && payRows.some((t) => /^pay all$/i.test(t)), { group: payRows });
       if (await pickRow(/^pay 100,000$/i, { enter: false })) await page.waitForTimeout(400);
       await shot('7-act-ii-yojimbo-pay-menu');
       // Yuna pays him 100,000 with the keys (the cursor is on the row); then the advisor's line plays the rest, and a Dark Zanmato lands.

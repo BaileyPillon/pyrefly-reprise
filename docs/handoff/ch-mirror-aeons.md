@@ -56,7 +56,7 @@ balance or fiction (RE 9.5) and needs Bailey's yes (rule 10).
 5. Look at: the two **provisional** backdrops (existing plates), the Dark aeons drawn with the aeons' own paintings (the possessed aeons' convention; red-and-black Dark paintings are Bailey's pick), the music (existing cues by
    reference), the guide card and page.
 6. **Yojimbo's Pay is a ladder of amounts** in his Aeon group beside Dismiss (Pay 1,000, 10,000, 100,000, 1,000,000 and Pay all, capped by the gil left; `engine/PayRows.ts`, built from the engine's one Pay row, which pays nothing). A Sister's order
-   rows carry short words (Combine powers, not "Combine for the Delta Attack", which the command column cut). **The ladder is a stop-gap for a screen Bailey has not seen** (section 9, item 1). **Do not judge yet:** (a) the Pay ladder itself; (b) the Dark aeons' Overdrive gauges
+   rows carry short words (Combine, with a help line that says Combine powers and the Delta Attack, not "Combine for the Delta Attack", which the command column cut). **The ladder is a stop-gap for a screen Bailey has not seen** (section 9, item 1). **Do not judge yet:** (a) the Pay ladder itself; (b) the Dark aeons' Overdrive gauges
    are not drawn (the HUD's gauge widget exists only for Chapter IX's Yojimbo); (c) every Act II number that leans on a Pay (RE's Zanmato caveat above); (d) the pause screen's hero art and the card's painting (Mindy over the road: provisional).
 
 ## 2. What was built

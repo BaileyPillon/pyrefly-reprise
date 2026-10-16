@@ -99,7 +99,7 @@ describe('the presenter hands a person the ladder of Pay rows (FFX, Chapter XXVI
     expect(hud.yojimboMenus.length).toBeGreaterThanOrEqual(1);
     const first = hud.yojimboMenus[0]!;
     const gil = 1_500_000; // the chapter's build (`ENDGAME_GIL`)
-    expect(first.filter(isPay).map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay 1,000,000', 'Pay all (1,500,000)']);
+    expect(first.filter(isPay).map((r) => r.label)).toEqual(['Pay 1,000', 'Pay 10,000', 'Pay 100,000', 'Pay 1,000,000', 'Pay all']);
     expect(first.filter(isPay).map((r) => (r.command as AbilityCommand).gilSpent)).toEqual([1_000, 10_000, 100_000, 1_000_000, gil]);
     expect(first.at(-1)?.label).toBe('Dismiss');
     expect(hud.paid).toMatchObject({ kind: 'ability', id: 'yojimbo-pay', gilSpent: 100_000 });
