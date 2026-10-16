@@ -158,7 +158,9 @@ describe.skipIf(!haveArt)('the measured art on this disk', () => {
 describe.skipIf(!existsSync(resolve('docs/target/pose-measure.json')))('the D-298 stature floor (a bent, hunched or kneeling pose is not drawn under 0.60 of its idle height)', () => {
   // Bailey, 2026-10-05, on the driver's recommendation: lifted for exactly these two poses and no other.
   const LIFTED = ['lulu/critical', 'rikku-berserker/ready'];
-  it('holds for every measured pose except the two Bailey lifted, and those two say so in the record', () => {
+  // r50.1: Lulu's critical is held at 0.75 of her idle's height (a stature hold, `tests/unit/engine/pose-stature-hold.test.ts`: Bailey, 2026-10-16, "lulu looks tiny when hurt"), so of the two lifts only Rikku Berserker's ready still stands under the floor.
+  const UNDER = ['rikku-berserker/ready'];
+  it('holds for every measured pose except the two Bailey lifted, and those two say so in the record (Lulu critical now stands above the floor, held)', () => {
     const records = JSON.parse(readFileSync(resolve('docs/target/pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, { stature?: number; gateLifted?: unknown }> }> };
     const under: string[] = [];
     for (const [subject, sub] of Object.entries(records.subjects)) {
@@ -168,6 +170,6 @@ describe.skipIf(!existsSync(resolve('docs/target/pose-measure.json')))('the D-29
         if (r.gateLifted) expect(LIFTED, `${key} lifts the floor without Bailey's yes`).toContain(key);
       }
     }
-    expect(under.sort()).toEqual([...LIFTED].sort());
+    expect(under.sort()).toEqual([...UNDER].sort());
   });
 });

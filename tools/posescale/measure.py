@@ -56,6 +56,11 @@ KO_PROJECTION = 0.978
 # factor within 10 percent, and no factor is written for a KO, whose head against the standing one spreads wider than the tolerance between stages (Yuna: x0.972 in Chapter I, x1.033 in Chapter XVII). r394 (D-510): the engine now holds the head on screen instead (src/engine/HeadLock.ts, from the head boxes this script emits), so a KO needs no allowance and the ones written here are starting points the lock moves off.
 # poses-0930's stature gate (D-298): a bent, hunched, kneeling or lunging pose may not be drawn smaller than this fraction of the idle's height, whatever its head says
 STATURE_GATE = 0.60
+# r50.1 (Bailey, 2026-10-16: "lulu looks tiny when hurt - this problem again? ugh"): a STATURE HOLD (overrides.json `stature` {floor, ceiling, by}) draws a pose at no less than `floor` and no more than `ceiling` of its idle's
+# height, whatever its head says. The head-matched reading (reviews.json) keeps the head the idle's and lets a painting whose proportions differ from the idle's (Lulu's hurt and critical are squat, big-headed paintings of
+# a slender idle) come out at two thirds of her height; a hold trades that for a head bigger (or smaller) than the idle's by `held.headRatio`. The record keeps the ruler's reading (`reading`, `held.reading`) and says what the
+# hold cost (`held.headRatio`); the pose's `head` box is the one the engine's head lock must hold at the APPLIED scale (the idle's head box over the applied scale), so the lock, the table and `pose-scale-check.mjs` agree
+# and the lock does not undo the hold. A KO or any other lying pose is never held (its length against the idle's height is a different question, docs/handoff/r50-1.md).
 ANCHORS_JSON = HERE / "anchors.json"
 SEEDS_JSON = HERE / "seeds.json"
 REVIEWS_JSON = HERE / "reviews.json"
@@ -275,6 +280,22 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
                 smin = math.ceil(STATURE_GATE * idle_h / ph * 1000) / 1000  # r391: to the thousandth (it was the hundredth, which left a gated head up to 1.5 percent further off than it had to be)
                 rec["gate"] = {"reading": round(scale, 3), "stature": round(ph * smin / idle_h, 3)}
                 scale, src = smin, "gated"
+        hold = o.get("stature")
+        if hold and scale and not p.prone and src != "unreviewed":
+            idle_h = idle_box[3] - idle_box[1]
+            ph = p.bbox[3] - p.bbox[1]
+            was = ph * scale / idle_h
+            lo, hi = hold.get("floor"), hold.get("ceiling")
+            new = None
+            if lo and was < lo:
+                new = math.ceil(lo * idle_h / ph * 1000) / 1000
+            elif hi and was > hi:
+                new = math.floor(hi * idle_h / ph * 1000) / 1000
+            if new is not None and abs(new / scale - 1) > 1e-9:
+                if not hold.get("by"):
+                    raise SystemExit(f"{subject}/{pose}: a stature hold needs `by` (whose word it is)")
+                rec["held"] = {"reading": round(scale, 3), "readingStature": round(was, 3), "stature": round(ph * new / idle_h, 3), "headRatio": round(new / scale, 3), "by": hold["by"]}
+                scale, src = new, "held"
         if scale and not p.prone:
             rec["stature"] = round((p.bbox[3] - p.bbox[1]) * scale / (idle_box[3] - idle_box[1]), 3)
         rec["scale"], rec["scaleSrc"] = (round(scale, 3) if scale else None), src
@@ -282,7 +303,7 @@ def measure_subject(subject: str, ann: dict, ov: dict, reviews: dict, anchors: d
             rec["allow"] = {"scale": round(float(o["allow"]["scale"]), 4), "why": o["allow"]["why"]}
         if anchor:
             rec["anchor"] = [r1(anchor[0]), r1(anchor[1])]
-            hs = rec.get("reading") or scale
+            hs = scale if rec.get("held") else (rec.get("reading") or scale)  # a held pose registers the head the lock must hold at the applied scale
             if hs and ann.get("face"):  # a foe has no face box: its scale is read by the silhouette's mass, never as a head
                 rec["head"] = [r1(anchor[0] - bw / hs / 2), r1(anchor[1] - bh / hs / 2), r1(anchor[0] + bw / hs / 2), r1(anchor[1] + bh / hs / 2)]
         # ---- stance (standing poses only: a prone body rests by its own rule, PaintedRest.ts)
@@ -356,7 +377,7 @@ def cmd_table() -> None:
             allow = (r.get("allow") or {}).get("scale", 1.0)  # r392: the camera allowance, a factor on the applied scale
             if ko_like and r.get("scale"):
                 row["scale"] = round(r["scale"] / rec.get("koProjection", 1.0) * allow, 3)  # a KO's head is drawn smaller by its lying plane: see KO_PROJECTION
-            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated") or allow != 1.0):
+            elif pose != "idle" and r.get("scale") and (r.get("scaleSrc") in ("reviewed", "accepted", "gated", "held") or allow != 1.0):
                 row["scale"] = round(r["scale"] * allow, 3)
             st = r.get("stance")
             if st and st.get("flag"):
