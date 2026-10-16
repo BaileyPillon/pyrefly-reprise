@@ -25,7 +25,7 @@ import { SISTER_DISMISS, SisterOrder } from './kernel/sisters.ts';
 import { dismissAeon } from './aeons.ts';
 import { spendOverdrive } from './overdrive.ts';
 import { isPlayerYojimbo, payCommand, yojimboDismiss } from './adapt/yojimbo.ts';
-import { BUILT_ORDERS, combineOrder, isSister } from './adapt/sisters.ts';
+import { BUILT_ORDERS, isSister } from './adapt/sisters.ts';
 import { sisterOrder } from './adapt/sister-orders.ts';
 
 /** The ability id of Yojimbo's Pay. */
@@ -151,10 +151,8 @@ export function executeAeonCommand(ctx: Ctx, actor: FFXCombatant, command: Comma
     if (menu === null || menu.actorId !== actor.id || !menu.orders.includes(order.command)) return refuse(ctx, `${order.label} was not offered this turn`);
     if (!BUILT_ORDERS.has(order.command)) return refuse(ctx, `${order.label} is not built yet`);
     ctx.emit({ type: 'action-start', actorId: actor.id, command, abilityName: order.label, targets: [] });
-    const result =
-      order.command === SisterOrder.Combine
-        ? combineOrder(ctx, actor, (who, cmd) => run(who, cmd))
-        : sisterOrder(ctx, actor, order.command, (who, cmd) => run(who, cmd));
+    // All eight orders go through the one interpreter (Combine powers, event 18, included: its joint action is run from there).
+    const result = sisterOrder(ctx, actor, order.command, (who, cmd) => run(who, cmd));
     ctx.emit({ type: 'action-end', actorId: actor.id });
     return { rank: result.rank, damageDealt: result.damageDealt };
   }

@@ -8,8 +8,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { type Played, ORDER_ID, ORDER_COMMAND, playOrder, seeds, sistersRt, sweep } from './helpers/ffxOrderRig.ts';
-import { Rig, SUMMON, build, ids, sisters } from './helpers/ffxKRig.ts';
+import { type Played, type Scenario, ORDER_ID, ORDER_COMMAND, agree, playOrder, seeds, sistersRt, sweep } from './helpers/ffxOrderRig.ts';
+import { Rig, SUMMON, build, ids, sisters, starts } from './helpers/ffxKRig.ts';
 
 const REST = 0x312c;
 const CAMISADE = 0x30e5;
@@ -175,6 +175,65 @@ describe('Combine powers, in the proven handler\'s terms', () => {
       expect([sistersRt(p.rig).memory['cindy']!.last, sistersRt(p.rig).motivation['cindy'], p.performed], `seed ${seed}`).toEqual([REST, 0, []]);
     }
     expect(failed, 'seeds whose roll of 200 + M failed').toBeGreaterThan(3);
+  });
+
+  it('the search comes BEFORE the roll: no foe the Delta Attack reaches (reach 1), none targetable, a gauge one point short or a Curse ends with no draw at all, motivation -10 and the rest command', () => {
+    const cases: Array<[string, Partial<Scenario>]> = [
+      ['every foe out of reach', { monsters: [{ distance: 2 }, { distance: 3 }] }],
+      ['the only foe cannot be targeted', { monsters: [{ untargetable: true }] }],
+      ['her gauge one point short of the bar', { sisters: { cindy: { gauge: 19 } } }],
+      ['Cursed', { sisters: { cindy: { curse: true } } }],
+    ];
+    for (const [label, over] of cases) {
+      for (const seed of seeds(8)) {
+        const p = playOrder({ who: 'cindy', event: 18, m: 40, gauge: 20, seed, ...over });
+        agree(p, `${label} seed ${seed}`, 40); // the commands, the draws (the oracle took none), the private variables, the motivation, the gauge
+        expect([p.d18, p.d4], `${label} seed ${seed}: draws on streams 18 and 4`).toEqual([[], []]);
+        expect(starts(p.events).map(([, n]) => n), `${label} seed ${seed}`).not.toContain('delta-attack');
+        const rt = sistersRt(p.rig);
+        expect([rt.memory['cindy']!.last, rt.motivation['cindy']], `${label} seed ${seed}: the rest command is her last command; -10 from 40`).toEqual([REST, 30]);
+        expect(p.rig.fighter('cindy').overdrive!.gauge, `${label} seed ${seed}: nothing was paid`).toBe(label === 'her gauge one point short of the bar' ? 95 : 100);
+      }
+    }
+  });
+
+  it('a foe within reach and a full bar: the roll is then the order\'s one stream-18 draw (the chance 200 + M is the plain draw), and a pick among several foes its one stream-4 draw', () => {
+    for (const [monsters, pick] of [[[{}], 0], [[{}, {}], 1], [[{}, {}, {}], 1], [[{ distance: 1 }, { distance: 2 }, {}], 1]] as const) {
+      for (const seed of seeds(6)) {
+        const p = playOrder({ who: 'cindy', event: 18, m: 60, gauge: 20, seed, monsters: [...monsters] }); // 200 + 60 >= 256: the roll cannot fail
+        expect(p.oracle.fx.some((f) => f.kind === 'delta'), `${monsters.length} foes seed ${seed}: the roll cannot fail`).toBe(true);
+        expect([p.oracle.draws.i18, p.oracle.draws.i4], `${monsters.length} foes seed ${seed}: the oracle's draws`).toEqual([1, pick]);
+        // The joint action takes no draw of these two streams (the group is named, nothing is picked again).
+        expect([p.d18.length, p.d4.length], `${monsters.length} foes seed ${seed}: the engine's draws`).toEqual([1, pick]);
+      }
+    }
+  });
+
+  it('the Delta Attack on 3 foes hits all 3: the joint action is aimed at the whole stored group (not the one foe the pick landed on), six hits on each', () => {
+    for (const seed of seeds(6)) {
+      const p = playOrder({ who: 'cindy', event: 18, m: 60, gauge: 20, seed, monsters: [{}, {}, {}] });
+      expect(p.oracle.stored, `seed ${seed}: the stored group is the whole set (all monsters are group 0)`).toEqual([0x14, 0x15, 0x16]);
+      const start = p.events.find((e) => e.type === 'action-start' && e.abilityId === 'delta-attack');
+      expect(start, `seed ${seed}`).toMatchObject({ actorId: 'cindy', targets: ['m0', 'm1', 'm2'] });
+      // The record's 6 hits are per target: 6 blows on each foe, and the action's hits are numbered 0 to 17 across them (`hitCount` is the whole action's, 6 x 3).
+      const all = p.events.flatMap((e) => (e.type === 'damage' && e.sourceId === 'cindy' ? [e] : []));
+      expect(all.map((e) => e.hitIndex).sort((a, b) => a - b), `seed ${seed}: the action's hits`).toEqual(Array.from({ length: 18 }, (_, i) => i));
+      expect(new Set(all.map((e) => e.hitCount)), `seed ${seed}`).toEqual(new Set([18]));
+      for (const id of ['m0', 'm1', 'm2']) {
+        expect(all.filter((e) => e.targetId === id).length, `seed ${seed}: blows on ${id}`).toBe(6);
+        expect(p.rig.fighter(id).hp, `seed ${seed}: ${id} lost HP`).toBeLessThan(99999);
+      }
+    }
+  });
+
+  it('only the foes the Delta Attack can reach are in the group: a foe at distance 2 is outside its reach of 1 and is not hit, one at distance 1 is', () => {
+    for (const seed of seeds(6)) {
+      const p = playOrder({ who: 'sandy', event: 18, m: 60, gauge: 20, seed, monsters: [{ distance: 1 }, { distance: 2 }, {}] });
+      expect(p.oracle.stored, `seed ${seed}`).toEqual([0x14, 0x16]);
+      expect(p.events.find((e) => e.type === 'action-start' && e.abilityId === 'delta-attack'), `seed ${seed}`).toMatchObject({ actorId: 'cindy', targets: ['m0', 'm2'] });
+      const hit = (id: string): number => p.events.filter((e) => e.type === 'damage' && e.targetId === id && e.sourceId === 'cindy').length;
+      expect([hit('m0'), hit('m1'), hit('m2')], `seed ${seed}: hits on each foe`).toEqual([6, 0, 6]);
+    }
   });
 });
 

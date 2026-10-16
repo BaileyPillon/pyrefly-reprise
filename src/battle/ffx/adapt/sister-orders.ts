@@ -12,6 +12,9 @@
  *    the enemies, one stream-6 draw each). Group-type commands (Pray, Ultima, NulAll) are aimed at the stored group; the rest command is no action at all.
  * 3. After each action the positive-case test decides the column and the end-of-action step applies the gain pair the handler left (it stays set, so two queued spells
  *    apply it twice: the note's reading, unproved). The turn is charged the rank of the LAST action (unproved: the note does not run the queue).
+ * 4. **Combine powers** is the eighth order and the same mechanism: its handler (event 18) searches the Delta Attack FIRST (a target exists and her gauge is full, else
+ *    no draw at all), then rolls `200 + motivation`, then stores the group; a pass calls the joint action (`./sisters.ts#jointAction`: Cindy performs the Delta Attack at
+ *    the whole stored group, each of them taking all 6 hits) and writes (0, +10); a miss writes (0, -10) and the rest command, which is her last command.
  *
  * **Unproved here, and labelled so for the chapter** (note section 17): the Sisters' starting motivation (the build's estimate), the queue behaviour of Mindy's two
  * spells (the order they run in, the rank the turn is charged, what happens to a command whose target vanished first), and whether the standing order and the sisters'
@@ -26,7 +29,7 @@ import { TARGET_GROUP, TARGET_SELF, type OrderHost, type OrderState, runOrder } 
 import { type SearchChar, type SearchHost, type SearchWorld, SEARCH_SLOTS, targetSearch } from '../kernel/sister-search.ts';
 import { afterAction, increaseMotivation, magusRoll, positiveCaseTest, setMotivationChange, storeStandingOrder } from '../kernel/sisters.ts';
 import { type Ctx, abilityOf, enemies, friendlies, has, onField, targetable } from '../state.ts';
-import { type OrderRun, magusChrOf, points, storeMagusChr } from './sisters.ts';
+import { type OrderRun, jointAction, magusChrOf, points, storeMagusChr } from './sisters.ts';
 import { unitOf } from './od-world.ts';
 import { slotOf } from './slots.ts';
 import { FfxStream } from './streams.ts';
@@ -119,8 +122,9 @@ function resultsOf(ctx: Ctx, before: ReadonlyMap<CombatantId, { hp: number; mp: 
 }
 
 /**
- * Carry out the order `orderCommand` (0x3124, 0x3125, 0x3126, 0x3127, 0x3128, 0x312A or 0x312B; Combine powers is `adapt/sisters.ts#combineOrder`) for sister `actor`.
- * `run` carries a command out through the engine's executor. Returns the turn's result: the rank of the last action (3 for the rest command) and the HP damage dealt.
+ * Carry out the order `orderCommand` (0x3124 to 0x3129, 0x312A or 0x312B: Combine powers, 0x3129, included) for sister `actor`. `run` carries a command out through the
+ * engine's executor. Returns the turn's result: the rank of the last action (3 for the rest command; 0 after a joint action, whose rank Cindy's own counter was charged)
+ * and the HP damage dealt.
  */
 export function sisterOrder(ctx: Ctx, actor: FFXCombatant, orderCommand: number, run: (who: FFXCombatant, command: Command) => OrderRun): OrderRun {
   const s = ctx.rt.sisters!;
@@ -149,6 +153,8 @@ export function sisterOrder(ctx: Ctx, actor: FFXCombatant, orderCommand: number,
 
   let stored = 0;
   const queue: Queued[] = [];
+  /** Set by the Combine handler's `delta` call: the group the joint action is aimed at (an object, because a closure writes it). */
+  const joint: { ids: CombatantId[] | null; mask: number } = { ids: null, mask: 0 };
   const host: OrderHost = {
     roll: (a, b) => magusRoll(a, b, s.order, draw).value === 1,
     search: (cmd, T, P, F, Ch) => {
@@ -164,8 +170,10 @@ export function sisterOrder(ctx: Ctx, actor: FFXCombatant, orderCommand: number,
       const ids = target === TARGET_SELF ? [] : target === TARGET_GROUP ? idsOf(stored) : idsOf(1 << target);
       queue.push({ cmd, ids });
     },
+    // Combine powers' search passed: the joint action waits for the end of the handler, like the commands the other handlers queue, and is aimed at the stored group.
     delta: () => {
-      throw new Error('FFX engine: Combine powers is carried out by combineOrder, not by the order interpreter');
+      joint.ids = idsOf(stored);
+      joint.mask = stored;
     },
   };
 
@@ -192,6 +200,21 @@ export function sisterOrder(ctx: Ctx, actor: FFXCombatant, orderCommand: number,
   memory.count = st.count;
   storeMagusChr(ctx, actor, chr); // the pair waits for the end of the action
 
+  // The end of an action: the positive-case test decides the column, then the pair is applied (it stays set, so a second action applies it again).
+  const endAction = (flags: number, results: [number, number, number]): void => {
+    const mine = magusChrOf(ctx, actor);
+    positiveCaseTest(mine, flags, results, 0);
+    afterAction(mine);
+    storeMagusChr(ctx, actor, mine);
+  };
+
+  // Combine powers passed its search: the joint action is the one action of the turn (Cindy performs it, whoever gave the order); what it dealt is its result.
+  if (joint.ids !== null) {
+    const done = jointAction(ctx, joint.ids, joint.mask, run);
+    endAction(0, [done.damageDealt, 0, 0]);
+    return done;
+  }
+
   // The queued commands, one action each; the rest command is no action but still ends one (the pair is applied after it).
   let result: OrderRun = { rank: 3, damageDealt: 0 };
   let dealt = 0;
@@ -209,11 +232,7 @@ export function sisterOrder(ctx: Ctx, actor: FFXCombatant, orderCommand: number,
       dealt += result.damageDealt;
       results = resultsOf(ctx, before, actor, (flags & 0x10) !== 0);
     }
-    // The end of the action: the positive-case test decides the column, then the pair is applied (it stays set, so a second action applies it again).
-    const mine = magusChrOf(ctx, actor);
-    positiveCaseTest(mine, flags, results, 0);
-    afterAction(mine);
-    storeMagusChr(ctx, actor, mine);
+    endAction(flags, results);
   }
   return { rank: result.rank, damageDealt: dealt };
 }
