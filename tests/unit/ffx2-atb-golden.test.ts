@@ -192,6 +192,17 @@
  * Chapter V Active D = 1500 arm goes from 4/10 to 9/10** (seeds 1, 5, 6 and 7 lose no more; seed 10 is still lost): the heals in flight when a link ends now land before the next link
  * starts. An ablation that stops the window from waiting for a command held back for a chain lock gives the same 9/10, so the cause is the casts in flight, not that rule. The
  * Wait arm still equals the D = 0 arrays and a Wait engine switched to Active still equals the Active arrays (both asserted below). The old hashes are in git at ea431aa0.
+ *
+ * **Re-pinned a fourteenth time, one hash (`CH5_D1500` seed 8), for the Vegnagun Core's death entry** (re-parity RC9, lane X2-E, branch `re-parity-rc9-x2-stat-setter`, 2026-10-16, FFX-2 only; reason
+ * "game-code parity", the checked note FFX2-G05 section 3.6 and row XE4; `docs/handoff/re-parity-rc9-x2-stat-setter.md`). The Core's script, when the Core is knocked out, sets the hit points of both
+ * Bulwarks to 0 through the stat setter (the setter stores the number and runs no knock-out routine), after the action that killed the Core has applied every result. A Bulwark that is down already
+ * is unchanged; one that stands is left alive at 0 hit points, where the game's status process skips it (`kernel/status-timers.ts`: no clock, no Regen payout) until the next hit knocks it out.
+ * Cause, found by ablation (the entry's two calls removed reproduce the old digest): in Chapter V's link 3, seed 8, Paine's two-hit move kills the Core with its first hit and its second hit
+ * lands on the Right Bulwark as before (896 left of 3,000); the old engine let it Regen 93 and Rikku's later hit (2,241) knocked it out at event 910 of 916; it now stands at 0, gets no Regen,
+ * and the same hit knocks it out ten events sooner (906 events). Every other seed of the four arrays is unchanged (recomputed, equal): all twenty `CH5_D0` digests, all twenty `CH4_D0`, all
+ * ten `CH4_D1500` and the nine other `CH5_D1500`; D = 0 is still 20/20 in both chapters, the Wait arm still equals the D = 0 arrays, and the outcome of seed 8 is still a win. The line this
+ * reaches is the Active arm only: at D = 0 both Bulwarks are down when the Core falls on every seed (490 of 490 in the 500-seed measurement), so the entry stores 0 over 0. Over 60 Active seeds
+ * three differ (8, 16 and 28), all still won. The old hash is in git at 748038a0a.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -220,10 +231,10 @@ const CH4_D1500 = [
   '541a5b56a437d847', 'de4b9b9272b4f31c', 'efad46ae79750115', '5ce88d3db42b4f5c', 'bf3bc4c9c96b45cf',
   '78923b216f0cfa8a', 'be348b7486ab49d2', '4c461d984729b666', '16db2f8f02e22800', '6d253ccae574681b',
 ];
-/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
+/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Seed 8 re-pinned a fourth time for the Core's death entry (RC9 X2-E, see the fourteenth re-pin above); its old hash is in git at 748038a0a. */
 const CH5_D1500 = [
   '92819ec58ac5dabc', '4ca43d65de715648', 'fc8876ca27be75d6', '9569c0c08bb461f2', 'af03edc3758d8923',
-  'dc2a5848a5794ec5', 'fcc3c245eca146bd', '8fc4b62f1e0c4fa4', '1ce0a6f4e1bcf31c', '71141886d58a95c9',
+  'dc2a5848a5794ec5', 'fcc3c245eca146bd', '1984ed19b218f2c4', '1ce0a6f4e1bcf31c', '71141886d58a95c9',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */

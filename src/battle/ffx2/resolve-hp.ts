@@ -14,6 +14,7 @@ import { statusWord1 } from './adapt/words.ts';
 import { modDraw } from './adapt/draws.ts';
 import { resetGaugeOnKo } from './atb-engine.ts';
 import { hasAutoLife } from './kernel/status-timers-set.ts';
+import { leavesOnDeath } from './adapt/death-patterns.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
@@ -29,6 +30,8 @@ export interface ResolveContext {
   items?: ItemRegistry; // item names for the steal message
   /** A hit's Delay damage closed this unit's open command menu (`apply_atb_damage`, re-parity W4); the engine drops the menu. */
   onMenuClosed?(unit: Ffx2Unit): void;
+  /** A unit was knocked out (`pp_ko_resolve` marked it dead): the engine REQUESTS its script's death entry (kind 4), which runs after the action in flight (re-parity RC9, lane X2-E). Absent in unit fixtures. */
+  onKo?(target: Ffx2Unit, killer: CombatantId | undefined): void;
   /**
    * The engine's queue of counters (re-parity X2-D, `applied.ts`): a result applied to a girl who holds Counterattack, Evade & Counter
    * or Magic Counter may set one off; the engine plays it after the action. `pending` is how many she already has waiting. Absent in
@@ -67,8 +70,8 @@ export function applyHpDelta(
   // wait, which a revived unit then pays (`MsChrAtbInit(chr, 1, -1)`, one draw).
   resetGaugeOnKo(target, ctx.units, modDraw(ctx.rng, 64)); // `& 0x3f` of a draw of the unit's own purpose-0 stream, as the kernel names it
 
-  // Auto-Life (`pp_has_auto_life`): dead, not a character that leaves on death, Auto-Life on, and not ejected.
-  if (hasAutoLife(true, false, statusWord1(target))) {
+  // Auto-Life (`pp_has_auto_life`): dead, not a character that leaves on death (a monster whose script wrote a death pattern other than 0), Auto-Life on, and not ejected.
+  if (hasAutoLife(true, leavesOnDeath(target), statusWord1(target))) {
     removeStatus(target, 'auto-life');
     removeStatus(target, 'ko'); // a Death status that landed in the same hit is undone with the life it was spent on
     ctx.emit({ type: 'status-remove', targetId: target.id, status: 'auto-life', reason: 'consumed' });
@@ -91,6 +94,7 @@ export function applyHpDelta(
       ...(target.flags.partOf ? { ownerId: target.flags.partOf } : {}),
     });
   }
+  ctx.onKo?.(target, sourceId); // requests the monster's death entry, which runs after the action (`engineHooks.ts#markDeathEntry`)
 }
 
 /** Restore HP outside the damage chain (a Regen tick, a revival). */

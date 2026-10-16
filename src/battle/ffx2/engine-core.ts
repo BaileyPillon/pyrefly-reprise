@@ -27,7 +27,7 @@ import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './menu.ts';
-import { aiContextFor, berserkTurnCommand, runAfterActionHooks, runPartyCounters, type PendingCounter } from './engineHooks.ts';
+import { aiContextFor, berserkTurnCommand, markDeathEntry, runAfterActionHooks, runDeathEntries, runPartyCounters, type PendingCounter } from './engineHooks.ts';
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
@@ -142,6 +142,7 @@ export class Ffx2EngineCore {
       complete: (u) => completeCommand(u, u.gauge.costAtb, this.units, u.gauge.idleWait === true),
     });
     releaseItemHolds(this.units, this.battleState.flags); // a cast the step dropped (Stop, Petrify, a KO, ejection) gives its item back
+    runDeathEntries(this.units, (u) => this.aiContext(u));
   }
 
   /**
@@ -223,6 +224,7 @@ export class Ffx2EngineCore {
       onMenuClosed: (unit) => {
         if (this.inputOwner === unit.id) this.hitClosed = unit.id; // a Delay hit closed her open menu (`apply_atb_damage`)
       },
+      onKo: markDeathEntry, // a monster's death entry is requested at its knock-out and runs at the end of the action or step (RC9 X2-E)
       counters: {
         pending: (target) => this.counterQueue.filter((c) => c.target === target).length,
         queue: (target, source, cause) => this.counterQueue.push({ target, source, cause }),
@@ -341,6 +343,7 @@ export class Ffx2EngineCore {
     runAfterActionHooks(() => this.drafts.slice(startedAt), actor, env);
     // The counters this action set off (a Berserker's Counterattack, Magic Counter, Evade & Counter), played before the battle-end check.
     runPartyCounters(this.counterQueue, { ...env, mark: () => this.drafts.length, since: (from: number) => this.drafts.slice(from) });
+    runDeathEntries(this.units, (u) => this.aiContext(u)); // the monsters this action knocked out answer after its results are all in (RC9 X2-E)
     this.flushSignal(startedAt, actor);
   }
 
