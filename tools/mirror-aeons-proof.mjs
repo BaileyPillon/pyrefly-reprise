@@ -7,7 +7,7 @@
  *   2. **Yuna's own Sisters' menu with Combine powers lit** (Yuna's keys: Summon, Cindy; the Sisters' gauges start full, so the first Sister's menu offers Combine powers), and the Delta Attack the Combine plays;
  *   3. **the seam**: the sisters going with the light, the white-out with the HUD taken off the screen, the cut into the cavern (a frame every half second, and a timeline of the HUD's opacity and `hidden` printed);
  *   4. **the heal between the acts**: Act I's last party HP and Act II's first menu, whole (HP printed in the log, the frame kept);
- *   5. **Yojimbo's menu, Pay lit** (Yuna's keys: Summon, Yojimbo), his Pay (the advisor's line pays him 100,000 gil; the HUD has no payment picker yet, so its Pay row would send 0), and **a Dark Zanmato** landing.
+ *   5. **Yojimbo's menu, Pay lit** (Yuna's keys: Summon, Yojimbo), his Pay (Yuna pays 100,000 with the keys from the ladder of amounts that `engine/PayRows.ts` makes of the one Pay row; the advisor's line plays on), and **a Dark Zanmato** landing.
  *
  *   PYREFLY_BROWSER=gpu node tools/mirror-aeons-proof.mjs [--base http://127.0.0.1:5541/] [--out docs/screenshots/ch-mirror-aeons] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 2]
  *     [--entry card|word] [--scenario full|retry]
@@ -472,14 +472,15 @@ try {
         log('menu.yojimbo.group', payRows);
       }
       check('Yojimbo is on the field with Pay lit in his Aeon group and Dismiss beside it', st.aeonId === 'yojimbo' && payRows.some((t) => /^pay/i.test(t) && !/greyed/.test(t)) && ymenu.some((t) => /^dismiss/i.test(t)), { aeon: st.aeonId, menu: ymenu, group: payRows });
-      if (await pickRow(/^pay/i, { enter: false })) await page.waitForTimeout(400);
+      // The Pay ladder (`engine/PayRows.ts`): one row per round amount the party can pay and a last one for all of it, in the Aeon group beside Dismiss.
+      check('the Aeon group is a ladder of payments with the amounts filled (Pay 100,000 and Pay all)', payRows.some((t) => /^pay 100,000$/i.test(t)) && payRows.some((t) => /^pay all \(/i.test(t)), { group: payRows });
+      if (await pickRow(/^pay 100,000$/i, { enter: false })) await page.waitForTimeout(400);
       await shot('7-act-ii-yojimbo-pay-menu');
-      await page.keyboard.press('Escape'); // back out of the group: the advisor takes the turn
-      await page.waitForTimeout(500);
-      // The advisor takes his turn (it pays him 100,000), and a Dark Zanmato lands.
+      // Yuna pays him 100,000 with the keys (the cursor is on the row); then the advisor's line plays the rest, and a Dark Zanmato lands.
       const before = st.flags;
       const from = await logLen();
-      await page.evaluate(() => window.__pyrefly.autoBattle('intended'));
+      const picked = await pickRow(/^pay 100,000$/i);
+      check('Yuna paid Yojimbo 100,000 with the keys', picked, null);
       const pay = await waitStart('Pay in the log', /\bpay\b/i, from, 40000);
       if (pay) {
         await sleep(700);
@@ -487,7 +488,8 @@ try {
       }
       const afterPay = await state();
       log('pay.starts', await startsSince(from));
-      check("Yojimbo is paid (the party's gil went down by the payment)", !!pay && afterPay.flags.gil < before.gil, { before, after: afterPay.flags });
+      check("Yojimbo is paid exactly what the row said (the party's gil went down by 100,000)", !!pay && afterPay.flags.gil === before.gil - 100_000, { before, after: afterPay.flags });
+      await page.evaluate(() => window.__pyrefly.autoBattle('intended'));
       const zanLog = await waitStart("Dark Yojimbo's Zanmato in the log", /zanmato/i, from, 90000);
       // The enemy's ability name is on the HUD's top bar for the span of the action: read it as it plays.
       const zan = zanLog ? await waitFor('Zanmato on the top bar', async () => /zanmato/i.test(await helpBar()), { ms: 20000, pollMs: 40 }).catch(() => null) : null;
