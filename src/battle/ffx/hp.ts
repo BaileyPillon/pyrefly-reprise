@@ -18,6 +18,7 @@ import { gaugeOnDeath } from './gauge.ts';
 import { cancelReactionsOf, reactToDeath } from './adapt/reactions.ts';
 import { holdsDeathForHook } from './ai/hooks.ts';
 import { overkillReached, overkillStart, overkillStep } from './kernel/death-check.ts';
+import { payKill } from './adapt/loot.ts';
 
 /** Metadata for a `damage` event. */
 export interface DamageEventInfo {
@@ -311,6 +312,7 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
   const event: Parameters<Ctx['emit']>[0] = { type: 'ko', targetId: target.id };
   if (sourceId !== undefined) event.sourceId = sourceId;
   ctx.emit(event);
+  payKill(ctx, target, sourceId !== undefined ? tryActor(ctx, sourceId) : undefined); // the death check's loot roll (step 14): a monster pays now, at its death, before Auto-Phoenix (re-parity RC9)
   refreshCriticalStatus(ctx, target);
 
   // Auto-Phoenix is tried only when there was no Auto-Life for the death check to queue (VA 0x007b2910 answers -1, then 0x007b27b0 runs).
@@ -350,6 +352,7 @@ export function ejectActor(ctx: Ctx, target: FFXCombatant, cause: 'eject' | 'sha
   // `force`: the infliction step has already decided (it checked the target's extra-status immunity itself, and a Petrify that lands
   // on a monster puts Eject in the record whatever the monster's immunity says), so the old guard does not apply [re-parity W2].
   if (!force && cause !== 'banish' && (target.immunities['eject'] ?? 0) >= 255) return;
+  const wasAlive = target.alive;
   // The function that takes a character off the field also dissolves its Threaten pair (VA 0x0078e410) [re-parity W2].
   releaseThreatenLink(ctx, target);
   target.statuses['eject'] = {
@@ -370,6 +373,7 @@ export function ejectActor(ctx: Ctx, target: FFXCombatant, cause: 'eject' | 'sha
     instance: { ...(target.statuses['eject'] as NonNullable<(typeof target.statuses)['eject']>) },
   });
   if (cause === 'shatter') ctx.emit({ type: 'message', text: `${target.name} shatters`, kind: 'status' });
+  if (wasAlive && cause !== 'banish') payKill(ctx, target); // the death check's kind 2 (an Eject) pays the monster's loot as a KO does (FFX-G02 section 3.1); a party member has no rewards block (re-parity RC9)
 }
 
 /**

@@ -10,7 +10,8 @@
  * | damage variance, critical roll, Escape, the opening CTB | the roller's own, mode 0: party slot + 20, every aeon and party slot 7: 27, a monster slot + 8 (28 to 35) | `re-ffx-rng-hit.md` 2 |
  * | the hit-or-evade roll | the user's mode 1 (+ 16) | same |
  * | status infliction, extra statuses, shatter, Threaten | the user's mode 2 (+ 32) | same |
- * | steal success and amount | 10; the rare slot 11 (loot and drops are the engine's own model, on `BattleRng.aux`) | `re-ffx-rng-hit.md` 2 |
+ * | steal success and amount | 10; the rare slot 11 | `re-ffx-rng-hit.md` 2 |
+ * | **kill rewards** at each monster's death (re-parity RC9): the two item slots' chance rolls `% 255` and the gear roll, all on 10; the rare entry `& 0xff` after a slot's success, on 11; a bribed monster's two draws on the killer's own mode 0 stream | 10, 11 (shared with steal); the killer's | `FFX-G10` 3.4, `FFX-H02` 3.5, `kernel/drops.ts`, `adapt/loot.ts` |
  * | a script's `GetRandomValue` | 2, `& 0xFFFF`; one stream for every script and actor | `re-ffx-rng-hit.md` 2, `re-ffx-ai-*.md` |
  * | a script's actor picker (`findMatchingChr`), and a Berserk or Confuse target | 4, `% candidates`, ascending actor order, no draw under two | `re-ffx-ai-*.md`; Berserk and Confuse: `pp_BtlPickAutoTarget` (0x007996d0) |
  * | the targets of a random-target command, one draw per hit | 5, the same picker | `pp_BtlBuildTargetHits` (0x0078ba70) |
@@ -42,9 +43,9 @@ export const FfxStream = {
   Reflect: 6,
   /** An Overdrive result's hit removal: `value % (the number of targets holding the most hits)`, one draw for each hit taken away (re-parity RC4 lane B). */
   OverdriveRemoval: 16,
-  /** Steal success (and Pilfer's amount): `value % 255`. */
+  /** Steal success (and Pilfer's amount): `value % 255`. Also the kill rewards' item-slot chance rolls and the gear roll (`adapt/loot.ts`; the exe's loot routine 0x007990d0 shares the stream). */
   Steal: 10,
-  /** The rare-slot roll: `value & 0xff`. */
+  /** The rare-slot roll: `value & 0xff`. Also the kill rewards' rare-entry roll after a slot's success. */
   StealSlot: 11,
   /** Wakka's Attack Reels result. Named for the stream map; nothing draws it yet (the player's reel input is a stand-in on `BattleRng.aux`). */
   Reels: 19,

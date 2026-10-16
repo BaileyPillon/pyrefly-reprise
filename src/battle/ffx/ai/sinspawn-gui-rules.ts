@@ -37,9 +37,6 @@ export const GUI_FIGHT = 'gui.fight';
 export const GUI_ACCEL_LINE = 'gui.accelLine';
 /** The head's cycle state 1, 2 or 3, mirrored where a reader (the advisor, the HUD) can see it without the head's private memory; 3 is "it has shaken and the Venom is next". */
 export const GUI_HEAD_STATE_FLAG = 'gui.headState';
-/** AP and gil of a part's earlier deaths, banked when it grows back and paid with the battle's rewards (`results.ts#collectRewards`; RE §3.3). */
-export const BANKED_AP = 'rewards.bankedAp';
-export const BANKED_GIL = 'rewards.bankedGil';
 
 /** The body `v12`: how many of its turns since the last Demi (a Demi at 2 or more). */
 export const MEM_ATTACKS = 'attacks';
@@ -108,25 +105,22 @@ export function clearShield(c: FFXCombatant): void {
   delete c.statuses['defend'];
 }
 
-/** The AP and gil of a part's death, banked when it grows back: an arm that is killed again pays again (RE §3.3). */
-function bankPartDeath(ctx: Ctx, part: FFXCombatant): void {
-  const rewards = part.enemy?.rewards;
-  if (!rewards) return;
-  const overkilled = ctx.rt.overkilled.includes(part.id);
-  const ap = overkilled ? rewards.apOverkill : rewards.ap;
-  ctx.state.flags[BANKED_AP] = Number(ctx.state.flags[BANKED_AP] ?? 0) + ap;
-  ctx.state.flags[BANKED_GIL] = Number(ctx.state.flags[BANKED_GIL] ?? 0) + rewards.gil;
-  if (overkilled) ctx.rt.overkilled = ctx.rt.overkilled.filter((id) => id !== part.id); // its next death is judged afresh
+/**
+ * A part that grows back is judged afresh at its next death: its overkill mark (`Chr+0xf5f`) belongs to the life that ended. Its AP and gil were paid at that death, like every
+ * monster's (`adapt/loot.ts#payKill` from `hp.ts#koActor`; before re-parity RC9 they were banked here when the part returned and added at the end).
+ */
+function forgetOverkill(ctx: Ctx, part: FFXCombatant): void {
+  ctx.rt.overkilled = ctx.rt.overkilled.filter((id) => id !== part.id);
 }
 
 /**
  * The formation script's regrowth scene (RE §5.5): both arms are re-initialised from the monster record at full HP with their statuses cleared and are back in the battle. Each arm's earlier
- * death is paid first. Unless the body is already down, which nothing here checks: a dead body ends the battle before its next turn.
+ * death was paid when it happened. Unless the body is already down, which nothing here checks: a dead body ends the battle before its next turn.
  */
 export function regrowArms(ctx: Ctx): void {
   for (const arm of guiArms(ctx)) {
     if (isAlive(arm)) continue;
-    bankPartDeath(ctx, arm);
+    forgetOverkill(ctx, arm);
     restorePart(ctx, arm.id, arm.enemy?.forms[0]?.hp ?? 800); // the record's 800, a fresh body
     arm.statuses = {};
   }

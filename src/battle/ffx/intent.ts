@@ -62,6 +62,7 @@ import { abilityOf, commandAbility, has, isAlive, onField, rtOf, tryActor } from
 import { activeScriptId, chooseAiCommand } from './ai/index.ts';
 import { forcedTurn } from './forced-turn.ts';
 import { keepsControlWhenProvoked } from './adapt/target-world.ts';
+import { cloneLedger } from './adapt/loot.ts';
 import { fluxLine } from './ai/seymour-flux-rules.ts';
 import { advanceForm, hasNextForm } from './forms.ts';
 import { predictTurnOrder } from './turnQueue.ts';
@@ -212,6 +213,8 @@ export function cloneCtx(ctx: Ctx, rngState?: RngSnapshot): { ctx: Ctx; events: 
     // The queued item reactions and the death marks (re-parity RC4 lane F): a copy, so a dry run's hits cannot queue into the battle's list.
     ...(ctx.rt.itemReactions ? { itemReactions: ctx.rt.itemReactions.map((r) => ({ ...r })) } : {}),
     ...(ctx.rt.reactionDeaths ? { reactionDeaths: new Set(ctx.rt.reactionDeaths) } : {}),
+    // The battle's reward struct (re-parity RC9): a dry run that kills a monster pays into a copy, never into the battle's own ledger.
+    ...(ctx.rt.rewards ? { rewards: cloneLedger(ctx.rt.rewards) } : {}),
     // The seven Tidus counters (re-parity RC4 lane FFX-G) are changed in place by Tidus's own actions: a copy, so that a dry run of his heal or his
     // cover cannot move the counters the real battle's Cover scores read (found when the RC4 lanes were merged; `parity-ffx-rc4-merge.test.ts`).
     ...(ctx.rt.coverBond ? { coverBond: [...ctx.rt.coverBond] } : {}),

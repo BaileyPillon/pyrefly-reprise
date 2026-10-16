@@ -56,6 +56,7 @@ import { aimedPick } from '../common/intentTargets.ts';
 import { type Ctx, type EventInput, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { FFXContentRegistry, getFFXRegistry } from './registry.ts';
 import { executeCommand } from './execute.ts';
+import { cloneRewards } from './adapt/loot.ts';
 import { commandAbility } from './state.ts';
 import { critChance, hitChance } from './formulas.ts';
 import { markAirshipRuntime } from './ai/sin-setup.ts';
@@ -258,7 +259,7 @@ function cloneCombatant(c: FFXCombatant): FFXCombatant {
     out.enemy = {
       ...c.enemy,
       forms: c.enemy.forms.map((f) => ({ ...f })),
-      rewards: { ...c.enemy.rewards, drops: c.enemy.rewards.drops.map((d) => ({ ...d })) },
+      rewards: cloneRewards(c.enemy.rewards),
       ...(c.enemy.reviveRule ? { reviveRule: { ...c.enemy.reviveRule } } : {}),
     };
   }

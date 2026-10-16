@@ -10,6 +10,7 @@
 import type { AbilityId, CombatantId, FFXCombatant, MinigameKind } from '../common/types.ts';
 import type { AutoState } from './kernel/auto-status.ts';
 import type { PendingItemReaction } from './adapt/reactions.ts';
+import type { RewardLedger } from './adapt/loot.ts';
 
 /** Per-combatant engine bookkeeping. */
 export interface ActorRuntime {
@@ -54,6 +55,17 @@ export interface ActorRuntime {
   abilityIds: string[];
   /** Successful steals against this enemy, halving the base chance each time. */
   stealCount: number;
+  /**
+   * **The Distill bits this monster carries** (`Chr+0x616` bits 1, 2, 3 and 5: Power 0x2, Mana 0x4, Speed 0x8, Ability 0x20; re-parity RC9, FFX only). The engine has no status for them
+   * (`adapt/status.ts`): the status step sets this when a Power, Mana, Speed or Ability Distiller (or one of Kimahri's four Extract skills) lands, a new one replacing the old, and the monster's death reads it:
+   * its drop becomes the matching sphere (`adapt/loot.ts`, `kernel/drops.ts`). Absent when none.
+   */
+  distill?: number;
+  /**
+   * **The gil a Bribe offered this monster** (`Chr+0x701` is 2, value `Chr+0x708`; re-parity RC9, FFX only): a bribed monster that leaves pays no gil and its Bribe item, by the
+   * killer's own stream (`adapt/loot.ts`). Nothing sets it yet: the Bribe command is not in the engine (plan lane FFX-N, N1), so every shipped monster is paid the ordinary way.
+   */
+  bribed?: number;
   /**
    * **The game's Guard status on an enemy** (re-parity, `research/re-ffx-ai-seymour.md` section 3.5; FFX only): a
    * single-target *physical* party action aimed at a monster is redirected to **an ally that holds Guard and can
@@ -141,6 +153,11 @@ export interface FFXRuntime {
   chained: boolean;
   /** Ids of enemies that have been overkilled. */
   overkilled: CombatantId[];
+  /**
+   * **The battle's reward struct, as the kill rewards fill it** (re-parity RC9, FFX only): gil, each slot's AP, the item stacks, paid at each monster's death
+   * (`adapt/loot.ts#payKill`) and read once at the end (`results.ts`). Created by the first death that pays; absent before it.
+   */
+  rewards?: RewardLedger;
   /** Whether Escape / Flee are legal at all. */
   canEscape: boolean;
   /** Switch is disabled for this link (`EnemyGroupDef.lineUp.noSwitch`, the Sinspawn Gui trio): no bench row in any menu, and a Switch command is refused. Absent everywhere else. */
