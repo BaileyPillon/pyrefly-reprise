@@ -343,6 +343,7 @@
   display: flex;
   align-items: center;
   background: var(--ig-ink); /* opaque: the label under it must not show through the typed letters */
+  border: 1px solid rgba(227, 185, 74, 0.5); /* a hairline of the label's gold, so the empty field reads as a field on the dark board */
   border-left: calc(4 * var(--fe-k)) solid var(--ig-gold);
   box-shadow: 0 calc(6 * var(--fe-k)) calc(18 * var(--fe-k)) rgba(0, 0, 0, 0.55);
 }

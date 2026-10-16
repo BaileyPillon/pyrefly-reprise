@@ -243,6 +243,7 @@ describe('a long press puts the field up and the release asks for the keyboard',
     const slab = /\.fe-doorfield\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
     expect(slab).toMatch(/background:\s*var\(--ig-ink\)/); // opaque ink: the label under it must not show through the typed letters
     expect(slab).toMatch(/border-left:[^;]*var\(--ig-gold\)/);
+    expect(slab).toMatch(/border:\s*1px solid rgba\(227, 185, 74, 0\.5\)/); // a hairline of the label's gold: the empty field reads as a field on the dark board
     const input = /\.fe-doorfield__input\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
     expect(input).toMatch(/font-family:\s*var\(--ig-font-display\)/);
     expect(input).toMatch(/font-size:\s*max\(18px,/); // a phone zooms the page into a field set under 16px
