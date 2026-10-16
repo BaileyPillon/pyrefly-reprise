@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 /**
- * Mirror Aeons (the Dark Magus Sisters, then Dark Yojimbo, against Yuna's own Magus Sisters and Yojimbo; the hidden chapter 27): the chapter as the app sees it. **FFX only.**
+ * Mirror Aeons (the Dark Magus Sisters, then Dark Yojimbo, against Yuna's own Magus Sisters and Yojimbo; Chapter XXVII, LISTED 2026-10-15 on Bailey's word): the chapter as the app sees it. **FFX only.**
  *
- * What this pins: the registration (hidden, number 27, nowhere in the eighteen, found by `getChapter`, its pause metadata, its two-plate scene, its music and the departure of Dark Yojimbo), the experiments' store
- * (attempts and clears never touch the save), the story (linted, attributed, the seam wired to the `all-ko` trigger), the guide card and document (cited, tied to the tactic's rows) and the advisor's line.
+ * What this pins: the registration (listed, number 27, the last of the nineteen, found by `getChapter`, its pause metadata, its two-plate scene, its music and the departure of Dark Yojimbo), the board and the save
+ * (a card, "of 19", attempts and clears recorded in the save like every listed chapter's, nothing in the experiments' store), the story (linted, attributed, the seam wired to the `all-ko` trigger), the guide card and document (cited, tied to the tactic's rows) and the advisor's line.
  */
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
@@ -11,7 +11,7 @@ import type { Command, FFXCombatant } from '../../../src/battle/common/types.ts'
 import { SaveStore } from '../../../src/app/SaveData.ts';
 import { buildChapterTiles } from '../../../src/app/screens/frontend/chapterGrid.ts';
 import { boardProgress } from '../../../src/app/screens/frontend/chapterProgress.ts';
-import { EXPERIMENTS_KEY, experimentProgress, experimentRecord, recordExperimentClear, setExperimentStorageForTests } from '../../../src/app/experiments/experimentRecords.ts';
+import { setExperimentStorageForTests } from '../../../src/app/experiments/experimentRecords.ts';
 import { hasTrack } from '../../../src/audio/tracks/index.ts';
 import { CHAPTERS, CHAPTER_IDS, EXPERIMENT_CHAPTERS, getChapter } from '../../../src/data/encounters.ts';
 import { MIRROR_AEONS, MIRROR_AEONS_ID, MIRROR_AEONS_TEXT } from '../../../src/data/chapter-mirror-aeons.ts';
@@ -39,15 +39,15 @@ const SISTER_IDS = [DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID];
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- registration
 
-describe('the chapter is registered, hidden, and nowhere in the eighteen', () => {
-  it('is found by id, FFX, an experiment numbered 27, in EXPERIMENT_CHAPTERS and neither CHAPTERS nor CHAPTER_IDS', () => {
+describe('the chapter is registered and LISTED: the last of the nineteen', () => {
+  it('is found by id, FFX, numbered 27, no experiment, in CHAPTERS and CHAPTER_IDS (last) and in no experiments list', () => {
     expect(getChapter(MIRROR_AEONS_ID)).toBe(MIRROR_AEONS);
-    expect(MIRROR_AEONS).toMatchObject({ id: 'mirror-aeons', game: 'ffx', number: 27, experimental: true, sceneKey: MIRROR_AEONS_SCENE });
-    expect(EXPERIMENT_CHAPTERS).toContain(MIRROR_AEONS);
-    expect(CHAPTERS.map((c) => c.id as string)).not.toContain(MIRROR_AEONS_ID);
-    expect((CHAPTER_IDS as readonly string[]).includes(MIRROR_AEONS_ID)).toBe(false);
-    expect(CHAPTER_IDS).toHaveLength(18);
-    expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length);
+    expect(MIRROR_AEONS).toMatchObject({ id: 'mirror-aeons', game: 'ffx', number: 27, sceneKey: MIRROR_AEONS_SCENE });
+    expect(MIRROR_AEONS.experimental, 'a listed chapter is no experiment').toBeUndefined();
+    expect(CHAPTERS[CHAPTERS.length - 1]).toBe(MIRROR_AEONS);
+    expect(CHAPTER_IDS[CHAPTER_IDS.length - 1]).toBe(MIRROR_AEONS_ID);
+    expect(CHAPTER_IDS).toHaveLength(19);
+    expect(EXPERIMENT_CHAPTERS).not.toContain(MIRROR_AEONS);
   });
 
   it("is Act I's formation (the pair) chained to Act II's, our scripts and the generic boss cue then Yojimbo's own; the card's words carry no number", () => {
@@ -60,9 +60,9 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
     expect(Object.values(MIRROR_AEONS_TEXT).join(' ')).not.toMatch(/\d/);
   });
 
-  it('has pause metadata with the EXP numeral, three objectives the evaluator answers, and shipped art only', () => {
+  it('has pause metadata with the numeral XXVII, three objectives the evaluator answers, and shipped art only', () => {
     const meta = getChapterMeta(MIRROR_AEONS_ID)!;
-    expect(meta).toMatchObject({ id: MIRROR_AEONS_ID, gameLabel: 'FFX', numeral: 'EXP', title: MIRROR_AEONS_TEXT.title, focalCharacterId: 'yuna' });
+    expect(meta).toMatchObject({ id: MIRROR_AEONS_ID, gameLabel: 'FFX', numeral: 'XXVII', title: MIRROR_AEONS_TEXT.title, focalCharacterId: 'yuna' });
     expect(meta.objectives.map((o) => o.rule.kind)).toEqual(['parts-downed', 'link-reached', 'victory']);
     expect((meta.objectives[0]!.rule as unknown as { targetIds: string[] }).targetIds).toEqual([DARK_SANDY_ID, DARK_MINDY_ID]); // the pair
     expect(meta.objectives[1]!.rule).toEqual({ kind: 'link-reached', link: 2 });
@@ -96,8 +96,7 @@ describe('the chapter is registered, hidden, and nowhere in the eighteen', () =>
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- the store
 
-describe("an experiment, not a chapter: the board, the experiments' store and the save", () => {
-  const WITH_CARD = { experiments: EXPERIMENT_CHAPTERS.filter((c) => c.id === MIRROR_AEONS_ID) } as const;
+describe('a listed chapter: the board and the save, like every other, and nothing in the experiments\' store', () => {
   let save: SaveStore;
   let store: Record<string, string>;
   beforeEach(() => {
@@ -108,32 +107,30 @@ describe("an experiment, not a chapter: the board, the experiments' store and th
   });
   afterAll(() => setExperimentStorageForTests(undefined));
 
-  it('has no card by default; handed in, it is an FFX card labelled EXP', () => {
-    expect(buildChapterTiles(save)).toHaveLength(18);
-    const tiles = buildChapterTiles(save, WITH_CARD);
+  it('has a card by default: an FFX card numbered XXVII, the last of its group, playable and unbeaten', () => {
+    const tiles = buildChapterTiles(save);
     expect(tiles).toHaveLength(19);
-    expect(tiles.find((t) => t.id === MIRROR_AEONS_ID)).toMatchObject({ id: MIRROR_AEONS_ID, numeral: 'EXP', title: MIRROR_AEONS_TEXT.title, game: 'ffx', sceneKey: MIRROR_AEONS_SCENE, playable: true });
+    expect(tiles.find((t) => t.id === MIRROR_AEONS_ID)).toMatchObject({ id: MIRROR_AEONS_ID, numeral: 'XXVII', title: MIRROR_AEONS_TEXT.title, game: 'ffx', sceneKey: MIRROR_AEONS_SCENE, playable: true, cleared: false });
+    const ffx = tiles.filter((t) => t.game === 'ffx');
+    expect(ffx[ffx.length - 1]!.id).toBe(MIRROR_AEONS_ID);
   });
 
-  it("keeps its attempts and clears in the experiments' store and writes nothing to the save", () => {
-    const before = JSON.stringify(save.snapshot());
-    experimentProgress.recordAttempt(MIRROR_AEONS_ID);
-    experimentProgress.recordClear(MIRROR_AEONS_ID, 480_000, 40);
-    expect(experimentRecord(MIRROR_AEONS_ID)).toMatchObject({ attempts: 1, clears: 1, bestTimeMs: 480_000 });
-    expect(Object.keys(JSON.parse(store[EXPERIMENTS_KEY]!))).toEqual([MIRROR_AEONS_ID]);
-    expect(JSON.stringify(save.snapshot())).toBe(before);
-    expect(save.snapshot().chapters[MIRROR_AEONS_ID]).toBeUndefined();
-    expect(window.localStorage.getItem('pyrefly-reprise:save:v1') ?? '').not.toContain(MIRROR_AEONS_ID);
+  it('keeps its attempts, clears and best time in the save under its id, with the same fields as any chapter, and writes nothing to the experiments\' store', () => {
+    save.recordAttempt(MIRROR_AEONS_ID);
+    save.recordClear(MIRROR_AEONS_ID, 480_000, 40);
+    expect(save.chapter(MIRROR_AEONS_ID)).toMatchObject({ attempts: 1, cleared: true, bestTimeMs: 480_000, bestTurns: 40 });
+    expect(Object.keys(save.snapshot().chapters)).toEqual([MIRROR_AEONS_ID]);
+    expect(store, 'the experiments\' store is untouched').toEqual({});
   });
 
-  it("shows the cleared ribbon from the experiments' store, never from the save, and no part of 'N of 18'", () => {
-    const card = (): { cleared: boolean } => buildChapterTiles(save, WITH_CARD).find((t) => t.id === MIRROR_AEONS_ID)!;
+  it('shows the cleared ribbon from the save and counts in "N of 19"', () => {
+    const card = (): { cleared: boolean } => buildChapterTiles(save).find((t) => t.id === MIRROR_AEONS_ID)!;
     expect(card().cleared).toBe(false);
-    recordExperimentClear(MIRROR_AEONS_ID, 99_000);
+    save.recordClear(MIRROR_AEONS_ID, 99_000, 30);
     expect(card().cleared).toBe(true);
-    expect(save.isCleared(MIRROR_AEONS_ID)).toBe(false);
-    const progress = boardProgress(buildChapterTiles(save, WITH_CARD), 0);
-    expect([progress.beaten, progress.total]).toEqual([0, 18]);
+    expect(save.isCleared(MIRROR_AEONS_ID)).toBe(true);
+    const progress = boardProgress(buildChapterTiles(save), 0);
+    expect([progress.beaten, progress.total]).toEqual([1, 19]);
   });
 });
 

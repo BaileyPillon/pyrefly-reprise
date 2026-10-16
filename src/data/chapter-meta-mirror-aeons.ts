@@ -1,5 +1,5 @@
 /**
- * Pause-screen and prebattle-tab metadata for the hidden Mirror Aeons chapter (FFX only; `./chapter-mirror-aeons.ts`, Bailey 2026-10-15; scaffolded the same day)
+ * Pause-screen and prebattle-tab metadata for the Mirror Aeons chapter (Chapter XXVII, FFX only, listed 2026-10-15; `./chapter-mirror-aeons.ts`, Bailey 2026-10-15; scaffolded the same day)
  * [research/ffx-mirror-aeons.md, research/re-ffx-yojimbo-sisters-feasibility.md].
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. The Dark Aeons and Yuna's Yojimbo and Magus Sisters are FFX's.
@@ -20,7 +20,7 @@ import { DARK_MINDY_ID, DARK_SANDY_ID, MIRROR_ACT_I_PLATE, MIRROR_AEONS_ID } fro
 export const MIRROR_AEONS_META: ChapterMeta = {
   id: MIRROR_AEONS_ID,
   gameLabel: 'FFX',
-  numeral: 'EXP',
+  numeral: 'XXVII',
   ...MIRROR_AEONS_TEXT,
   location: 'Mushroom Rock Road, and the Cavern of the Stolen Fayth',
   heroArt: 'pause/ch27-mirror-aeons',

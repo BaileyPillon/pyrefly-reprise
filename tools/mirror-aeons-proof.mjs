@@ -10,6 +10,11 @@
  *   5. **Yojimbo's menu, Pay lit** (Yuna's keys: Summon, Yojimbo), his Pay (the advisor's line pays him 100,000 gil; the HUD has no payment picker yet, so its Pay row would send 0), and **a Dark Zanmato** landing.
  *
  *   PYREFLY_BROWSER=gpu node tools/mirror-aeons-proof.mjs [--base http://127.0.0.1:5541/] [--out docs/screenshots/ch-mirror-aeons] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 2]
+ *     [--entry card|word] [--scenario full|retry]
+ *
+ * The chapter is LISTED (Bailey, 2026-10-15): the default entry is its CARD on the board, walked to with the arrow keys and begun with Enter (`--entry word` types `yojimbo` instead, which still works). `--scenario full` plays
+ * both acts to the post scene, the results and back to the board (the card's ribbon and "1 of 19" prove the clear was recorded); `--scenario retry` loses Act II on purpose (the party only defends), takes RETRY on the
+ * results screen and shows Act II re-opened on a whole party and whole aeons.
  *
  * Every check is printed as `check.<name>`; the exit code is 1 on a failed one. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. The word that opens the chapter is
  * read from `src/app/screens/frontend/yojimboDoor.ts`, never retyped. Nothing in the fight is changed from the page: every figure comes from the engine's own state.
@@ -35,7 +40,9 @@ const TOUCH = flag('--touch');
 const SEED = Number(arg('--seed', '2'));
 const HAND_OVER = 76; // Dark Yojimbo's blade when the keys take over from the advisor
 const SHIELD_AT = 88; // `SHIELD_AT_GAUGE` of the line (engine/tactics/mirror-aeons.ts): the aeon goes in once his blade is within a round of full
-const UNTIL = arg('--until', 'end'); // 'combine' stops after the Sisters' Combine powers (a quick look), 'end' plays the whole proof
+const UNTIL = arg('--until', 'end');
+const ENTRY = arg('--entry', 'card');
+const SCENARIO = arg('--scenario', 'full'); // 'combine' stops after the Sisters' Combine powers (a quick look), 'end' plays the whole proof
 mkdirSync(OUT, { recursive: true });
 
 const { open, assertScreen, waitBattleMenu, waitFor, commandRows } = await import(pathToFileURL(join(REPO, 'critic', 'runner', 'lib', 'lib.mjs')).href);
@@ -186,16 +193,37 @@ try {
     await page.keyboard.press('Escape');
     await page.waitForTimeout(900);
   }
-  for (let attempt = 0; attempt < 3 && (await screenNow()) !== 'party-prep'; attempt++) {
-    if (attempt > 0 && (await guideUp())) {
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(900);
+  if (ENTRY === 'word') {
+    for (let attempt = 0; attempt < 3 && (await screenNow()) !== 'party-prep'; attempt++) {
+      if (attempt > 0 && (await guideUp())) {
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(900);
+      }
+      await page.keyboard.type(WORD, { delay: 150 });
+      await page.waitForTimeout(2200);
     }
-    await page.keyboard.type(WORD, { delay: 150 });
-    await page.waitForTimeout(2200);
+  } else {
+    // The card: walk the cursor with the arrow keys until the chapter's card is the selected one, then Enter.
+    const board = await page.evaluate(() => ({ cards: document.querySelectorAll('.fe-card').length, strip: document.querySelector('.cs-strip__count')?.textContent.replace(/\s+/g, ' ').trim() ?? '' }));
+    check('the board has nineteen cards and "of 19" (the chapter is listed)', board.cards === 19 && /of 19/.test(board.strip), board);
+    await shot('0-board');
+    let onCard = false;
+    for (let i = 0; i < 40 && !onCard; i++) {
+      onCard = (await page.evaluate(() => document.querySelector('.fe-card--sel')?.getAttribute('data-card') ?? null)) === 'mirror-aeons';
+      if (!onCard) {
+        await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(200);
+      }
+    }
+    check("the cursor reached the chapter's card with the arrow keys", onCard, null);
+    await page.waitForTimeout(800);
+    await shot('0-card');
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(2500);
   }
   await assertScreen(page, 'party-prep');
   await page.waitForTimeout(1200);
+  await shot('0-party-prep');
   await page.evaluate((seed) => window.__pyrefly.setSeed(seed), SEED);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(2500);
@@ -352,6 +380,41 @@ try {
     await page.waitForTimeout(500);
     await shot('6-act-ii-first-menu');
 
+    if (SCENARIO === 'retry') {
+      // Lose Act II on purpose: the party only defends. The results screen offers RETRY; Act II must re-open on a whole party and whole aeons.
+      await page.evaluate(() => {
+        window.__pyrefly.setBattleSpeed('skip');
+        window.__pyrefly.autoBattle('defend');
+      });
+      await waitFor('the defeat results', async () => (await screenNow()) === 'results', { ms: 12 * 60_000, pollMs: 500 }).catch(() => null);
+      await page.waitForTimeout(4000);
+      const lost = await state();
+      log('retry.lost', { screen: await screenNow(), outcome: lost?.outcome ?? null });
+      check('the party that only defends is beaten in Act II (the results screen, a defeat)', (await screenNow()) === 'results' && lost?.outcome === 'defeat', { outcome: lost?.outcome });
+      log('retry.results', await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 300)));
+      await shot('11-defeat-results');
+      let back = false;
+      for (let i = 0; i < 6 && !back; i++) {
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(2500);
+        const sc = await screenNow();
+        if (sc === 'party-prep') await page.keyboard.press('Enter');
+        if (sc === 'cutscene') for (let g = 0; g < 80 && (await screenNow()) === 'cutscene'; g++) { await page.keyboard.press('Enter'); await page.waitForTimeout(300); }
+        back = (await screenNow()) === 'battle';
+      }
+      check('RETRY took the cavern back up (the battle screen)', back, await screenNow());
+      if (back) {
+        await waitBattleMenu(page, 120000).catch(() => null);
+        await page.waitForTimeout(2000);
+        const again = await state();
+        log('retry.state', again);
+        check('Act II re-opened on Dark Yojimbo and his dog, with a whole party and whole aeons (the retry is the checkpoint, not the road)', again?.enemies?.join() === 'dark-yojimbo,dark-daigoro' && again.active.every((id) => again.party[id][0] === again.party[id][1]) && Object.values(again.aeons).every((a) => a === null || (a[0] === a[1] && a[2] === 0)), { enemies: again?.enemies, party: again?.party, aeons: again?.aeons });
+        await dismissCoach();
+        await shot('12-retry-act-ii-first-menu');
+      }
+      await finish();
+    }
+
     // --- Act II: Yojimbo's own menu, Pay lit; then the advisor pays him and a Dark Zanmato lands ----------------------------------------------------------
     // The advisor plays at skip speed until Dark Yojimbo's blade is nearly full (`HAND_OVER`); then the keys take the turns, Defending until Yuna's menu comes with his blade within a round of full (`SHIELD_AT`, the line's own
     // `SHIELD_AT_GAUGE`): Summon, Yojimbo. The advisor then pays him and Dark Yojimbo's Zanmato lands on him.
@@ -396,9 +459,18 @@ try {
       const ymenu = await rowsText();
       log('menu.yojimbo', ymenu);
       const st = await state();
-      check('Yojimbo is on the field with Pay and Dismiss on his menu', st.aeonId === 'yojimbo' && ymenu.some((t) => /^pay/i.test(t) && !/greyed/.test(t)) && ymenu.some((t) => /^dismiss/i.test(t)), { aeon: st.aeonId, menu: ymenu });
-      await page.waitForTimeout(400);
+      // The HUD folds his Pay into the Aeon group beside Dismiss (as it does a Sister's orders): open the group, put the cursor on Pay.
+      let payRows = ymenu;
+      if (ymenu.some((t) => /^aeon/i.test(t)) && (await pickRow(/^aeon/i))) {
+        await page.waitForTimeout(500);
+        payRows = await collectRows();
+        log('menu.yojimbo.group', payRows);
+      }
+      check('Yojimbo is on the field with Pay lit in his Aeon group and Dismiss beside it', st.aeonId === 'yojimbo' && payRows.some((t) => /^pay/i.test(t) && !/greyed/.test(t)) && ymenu.some((t) => /^dismiss/i.test(t)), { aeon: st.aeonId, menu: ymenu, group: payRows });
+      if (await pickRow(/^pay/i, { enter: false })) await page.waitForTimeout(400);
       await shot('7-act-ii-yojimbo-pay-menu');
+      await page.keyboard.press('Escape'); // back out of the group: the advisor takes the turn
+      await page.waitForTimeout(500);
       // The advisor takes his turn (it pays him 100,000), and a Dark Zanmato lands.
       const before = st.flags;
       const from = await logLen();
@@ -429,7 +501,41 @@ try {
     const end = await screenNow();
     const last = await state();
     log('end', { screen: end, outcome: last?.outcome ?? null, enemyHp: last?.enemyHp ?? null });
-    check('Act II is won (the engine says victory) and the chapter moves on to its post scene or results', (end === 'results' || end === 'cutscene') && last?.outcome === 'victory', { end, outcome: last?.outcome });
+    let wonText = false;
+    if (end === 'cutscene' || end === 'results') {
+      if (end === 'cutscene') {
+        await page.waitForTimeout(1500);
+        await shot('11-post-scene');
+        for (let guard = 0; (await screenNow()) === 'cutscene' && guard < 260; guard++) {
+          await page.keyboard.press('Enter');
+          await page.waitForTimeout(350);
+        }
+        await waitFor('results', async () => (await screenNow()) === 'results', { ms: 60_000, pollMs: 500 }).catch(() => null);
+      }
+      await page.waitForTimeout(7000);
+      if ((await screenNow()) === 'results') {
+        await shot('12-results');
+        const text = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 400));
+        log('results.text', text);
+        wonText = /Victory/i.test(text);
+      }
+      for (let i = 0; i < 8 && (await screenNow()) !== 'chapter-select'; i++) {
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(1800);
+      }
+      check('the results lead back to the board', (await screenNow()) === 'chapter-select', await screenNow());
+      await page.waitForTimeout(3500);
+      const after = await page.evaluate(() => ({
+        record: window.__pyrefly.snapshotState().save.chapters['mirror-aeons'] ?? null,
+        strip: document.querySelector('.cs-strip__count')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+        ribbon: !!document.querySelector('[data-card="mirror-aeons"] .fe-card__ribbon'),
+        pip: [...document.querySelectorAll('.cs-pip.is-lit')].map((e) => e.textContent),
+      }));
+      log('board.after', after);
+      check('the clear is recorded in the save like every listed chapter\'s, and the board shows the ribbon and "1 of 19"', after.record?.cleared === true && after.record.attempts >= 1 && after.ribbon && /^1\s*of 19/.test(after.strip), after);
+      await shot('13-board-cleared');
+    }
+    check('Act II is won: the post scene and the results (Victory) follow', (end === 'results' || end === 'cutscene') && wonText, { end, wonText });
   }
 } catch (e) {
   failures.push(`threw: ${String(e).slice(0, 300)}`);

@@ -109,6 +109,8 @@ export class FakeStage implements BattleStage {
   readonly calls: string[] = [];
   readonly actors = new Map<CombatantId, FakeActor>();
   readonly sides = new Map<CombatantId, 'party' | 'enemy' | 'aeon'>();
+  /** The slot each staged-mid-fight combatant (a summon) was given, by id (Mirror Aeons: the Magus Sisters take the party's three spots). */
+  readonly summonSlots = new Map<CombatantId, number>();
   readonly camera: CameraPort;
   readonly vfx: VfxPort;
 
@@ -189,6 +191,7 @@ export class FakeStage implements BattleStage {
     const actor = new FakeActor(id, this.calls);
     this.actors.set(id, actor);
     this.sides.set(id, opts.side);
+    this.summonSlots.set(id, opts.slot);
     return actor;
   }
   removeCombatant(id: CombatantId): void {

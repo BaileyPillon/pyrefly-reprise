@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import type { BattleSetup } from '../../../src/battle/common/types.ts';
+import type { BattleSetup, Command } from '../../../src/battle/common/types.ts';
 import { FFXEngine } from '../../../src/battle/ffx/index.ts';
 import { BattlePresenter } from '../../../src/engine/BattlePresenter.ts';
 import { defendStrategy, intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
@@ -28,7 +28,7 @@ const act1 = darkAeonsGroupOf(MIRROR_ACT_I);
 const act2 = darkAeonsGroupOf(MIRROR_ACT_II);
 
 /** Plays the chain from `startLink` on `setup`, `strategy` (the advisor's line by default) answering every menu. */
-async function play(seed: number, opts: { startLink?: number; setup?: BattleSetup; strategy?: AutoStrategy } = {}): Promise<{ result: EncounterChainResult; music: string[]; scripts: unknown[]; restaged: number }> {
+async function play(seed: number, opts: { startLink?: number; setup?: BattleSetup; strategy?: AutoStrategy } = {}): Promise<{ result: EncounterChainResult; music: string[]; scripts: unknown[]; restaged: number; stage: FakeStage }> {
   await registerBattleContent();
   const first = opts.setup ?? setupForChapter(chapter, seed);
   const group = (opts.startLink ?? 1) > 1 ? first.enemies : chapter.enemyGroupRef;
@@ -57,7 +57,7 @@ async function play(seed: number, opts: { startLink?: number; setup?: BattleSetu
     findGroup: findEnemyGroup,
     audio,
   });
-  return { result, music: audio.music, scripts: cutscenes.played, restaged };
+  return { result, music: audio.music, scripts: cutscenes.played, restaged, stage };
 }
 
 /**
@@ -127,6 +127,20 @@ describe('the chain: two acts, no results screen between them', () => {
     const state = engine.state();
     for (const id of state.activeIds) expect(state.combatants[id]!.hp, id).toBe(state.combatants[id]!.stats.maxHp);
     for (const a of mirrorAeonsBuild.aeons) expect(state.combatants[a.id]!.hp, a.id).toBe(state.combatants[a.id]!.stats.maxHp);
+  });
+});
+
+describe("Yuna's three Magus Sisters on the stage", () => {
+  it('arrive on the party\'s three spots, Sandy left, Cindy middle, Mindy right (not piled on one), and a lone aeon stands in the middle', async () => {
+    const sisters: AutoStrategy = (actorId, commands) => {
+      const summon = commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Cindy');
+      if (actorId === 'yuna' && summon) return { ...summon.command, targets: [] } as Command;
+      const home = commands.find((c) => c.enabled && c.command.kind === 'dismiss');
+      if (home) return { ...home.command, targets: [] } as Command;
+      return { kind: 'defend', targets: [] } as Command;
+    };
+    const { stage } = await play(1, { strategy: sisters });
+    expect([stage.summonSlots.get('sandy'), stage.summonSlots.get('cindy'), stage.summonSlots.get('mindy')]).toEqual([0, 1, 2]);
   });
 });
 

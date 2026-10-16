@@ -93,7 +93,7 @@ export interface ChapterSnapshot {
 export interface ChapterMeta {
   id: ChapterId;
   gameLabel: 'FFX' | 'FFX-2';
-  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII' | 'EXP';
+  numeral: 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'XI' | 'XII' | 'XIII' | 'XIV' | 'XV' | 'XVI' | 'XVII' | 'XVIII' | 'XXVII' | 'EXP';
   title: string;
   subtitle: string;
   location: string;
