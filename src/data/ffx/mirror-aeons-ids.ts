@@ -98,11 +98,13 @@ export const sistersGroupId = (file: string): string => `mirror-sisters-${file}`
 export const yojimboGroupId = (file: string): string => `mirror-yojimbo-${file}`;
 
 /**
- * **THE TWO PICKS, set by the bench** (`docs/plans/ch-mirror-aeons-bench.md`; the chapter's own choice among the game's fights, never a number of the game's). Act I fights **the faithful pair `kino01_72`** (Dark Mindy and
+ * **THE TWO PICKS, set by a PRELIMINARY bench run** (`docs/plans/ch-mirror-aeons-bench.md`; the chapter's own choice among the game's fights, never a number of the game's). **The table is HELD (the release driver,
+ * 2026-10-15): these are placeholders until RE's follow-up has landed and the driver re-runs it.** Act I fights **the faithful pair `kino01_72`** (Dark Mindy and
  * Dark Sandy, 4.5M HP together, both gauges starting at 0: no Delta Attack, a Mega Graviton on each one's sixth turn): RE's note recommends it as the game-sourced formation that is "not too easy, not too hard" (RE note 2.6),
  * and the bench agrees, because the faithful trio (`kino00_70`) is out of reach for the advisor's line, 1 win in 100, and so is the trio with its gauges started at 0, our adjustment (`SISTER_ADJUSTED_FORMATIONS`). Act II
  * fights **tier 2 `nagi05_71`** (+10 a turn: Zanmato on his eleventh turn, about four actions of the party's between Zanmatos), RE's recommendation too; the bench found the tiers 1 to 5 within a few points of each other
- * for a line that sends an aeon in on time (84 to 99 percent), so the tier is RE's reading and not a lever.
+ * for a line that sends an aeon in on time (84 to 99 percent), so the tier is RE's reading and not a lever. (The preliminary run, with Pay on and off: the pair into tiers 1, 2 and 3 is won 69, 74 and 77 percent of
+ * runs with Yojimbo paid and 66, 69 and 74 with him never sent in; the numbers that let Yojimbo be paid are provisional until RE's Zanmato fix.)
  */
 export const MIRROR_ACT_I = 'kino01_72' as const;
 export const MIRROR_ACT_II = 'nagi05_71' as const;

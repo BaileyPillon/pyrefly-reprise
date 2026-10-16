@@ -137,6 +137,7 @@ import {
   spentAlready,
 } from './advisor-committed.ts';
 import { menuChipFor, onTheMenu, pressable } from './advisor-menu.ts';
+import { isAeonMenu } from './advisor-aeons.ts';
 import { changeSuggestion, changeSuggestions, lockedToChange, sameChange } from './advisor-change.ts';
 import { holdingForTheBreath } from './airship-orders.ts';
 import type { InFlightSource } from './advisor-inflight.ts';
@@ -1221,6 +1222,7 @@ export function buildAdvisorView(
 ): AdvisorView | null {
   const actor = board.combatants[decision.actorId];
   if (!actor || board.game === 'ff7') return null; // FF7: the advisor is off in the slice (ff7-game-branch-audit)
+  if (isAeonMenu(decision.commands)) return null; // Yuna's own Yojimbo and Magus Sisters: a menu the simulation cannot price (`./advisor-aeons.ts`)
   const planner = given.planner !== false;
   const v3 = v3On(given);
   // DIFF-B (FFX-2, Chapter XIII only): the chapter's line is the card's top row (`./advisor-line.ts`).

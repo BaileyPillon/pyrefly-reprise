@@ -4,9 +4,18 @@
  * run (both acts, the heal between them) is won about 70 percent of the time, 60 to 80 accepted**, and a careless line (the plain Attack on the first living enemy, no aeon, no potion) **mostly loses**. The levers are the
  * party preset (`data/ffx/builds/mirror-aeons.ts`: its Phoenix Downs, Luck, stat fraction) and WHICH of the game's own formations each act uses; **no boss row is ever edited to fit a result**.
  *
- * What this file pins, in three parts: the harness (always on), what a blade and a spell can reach (the engine's hit rule is the game's, and it is why the line sends blades to Cindy and Sandy and spells to Mindy),
- * and **the shipped cell measured on the first seeds** (the full 200-seed table is the document's; here a band over fewer seeds keeps the suite quick). The chapter's picks and the preset's lever are pinned beside the
- * numbers that set them, so the day one moves the test says so.
+ * **Pay on and Pay off (the release driver's rule, 2026-10-15).** The engine's landed Zanmato kills the FIRST target and ignores a Dark Aeon's Death immunity (the reverse-engineering session's open item 7, being fixed), and a Pay
+ * can roll one, so every Act II number that lets Yojimbo be paid is provisional until that fix lands: the table carries the line with Pay on beside the two lines that never pay him (Yojimbo sent in and dismissed at his first
+ * menu, which loses the shield; Yojimbo never sent in, the competent no-Pay line). The Sisters' seven other orders are not carried out by the engine yet, so nothing here uses one: the line plays Combine powers and Dismiss.
+ *
+ * **THE TABLE IS HELD (the release driver, 2026-10-15, after RE's independent check of its engine).** Today the Sisters can only Combine or Dismiss (the seven other orders are `enabled: false` and their bars are 0 after a
+ * Combine), and a landed Zanmato one-shots the first target even at Death resistance 255; RE is fixing both on its branch. A difficulty measured on that engine is not the chapter's, so the harness is built, one smoke cell proves it
+ * runs, and **the rate pins below are OFF unless `MIRROR_AEONS_BENCH=1` is set**: the driver sets it when RE's follow-up has landed and the table is re-run (`docs/plans/ch-mirror-aeons-bench.md` says how). The constants the chapter
+ * ships (the pair, tier 2, 17 Phoenix Downs) come from a PRELIMINARY run on the engine as merged at d8fa5b69 and are placeholders until then.
+ *
+ * What this file holds, in four parts: the harness (always on), what a blade and a spell can reach (the engine's hit rule is the game's, and it is why the line sends blades to Cindy and Sandy and spells to Mindy; always on),
+ * **one smoke cell** (always on: the cell runs, every fight ends, nothing is asserted about how often it is won), and the **rate pins** of the preliminary run (the shipped cell's band over a few dozen seeds, the Pay-off lines,
+ * the trio, the singles; on with `MIRROR_AEONS_BENCH=1`). The chapter's picks and the preset's lever are pinned beside the numbers that set them, so the day one moves the test says so.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -14,9 +23,12 @@ import type { Command, FFXCombatant } from '../../../src/battle/common/types.ts'
 import { ENDGAME_PHOENIX_DOWNS, mirrorAeonsBuild } from '../../../src/data/ffx/builds/mirror-aeons.ts';
 import { MIRROR_ACT_I, MIRROR_ACT_II, SISTER_ADJUSTED_FORMATIONS, SISTER_LADDER, YOJIMBO_TIERS, sistersGroupId } from '../../../src/data/ffx/mirror-aeons-ids.ts';
 import {
-  ACT_I_CELLS, ACT_II_CELLS, BAND, CARELESS_AT_MOST, TARGET, advisorLine, carelessLine, inBand, pickCell, playAct, playChain, rateOf, share, withLuck, withPhoenixDowns, withStatFraction, type Rate,
+  ACT_I_CELLS, ACT_II_CELLS, BAND, CARELESS_AT_MOST, TARGET, ablatedLine, advisorLine, carelessLine, inBand, pickCell, playAct, playChain, rateOf, share, withLuck, withPhoenixDowns, withStatFraction, type Rate,
 } from '../helpers/mirrorAeonsBench.ts';
 import * as H from '../helpers/mirrorAeonsDrive.ts';
+
+/** The rate pins run only when the driver re-runs the bench (see the header); the rest of the file always runs. */
+const BENCH = process.env['MIRROR_AEONS_BENCH'] === '1';
 
 const rate = (wins: number, seeds = 100): Rate => ({ seeds, wins, lostFirst: seeds - wins, lostSecond: 0, unfinished: 0 });
 
@@ -110,12 +122,22 @@ describe('what a blade and a spell can reach (measured on the real engine, the p
   });
 });
 
-describe('the shipped cell, measured (the document\'s table has 200 seeds a line; here the first seeds, a band, and the reasons the others are not shipped)', () => {
+describe('one smoke cell (the table is held: nothing here says how often a line wins)', () => {
+  it('the shipped cell runs for every line: each fight ends, the counts add up, and a seed is a fight', () => {
+    for (const [name, line] of [['advisor', advisorLine], ['careless', carelessLine], ['Pay off, no Yojimbo', ablatedLine('no-yojimbo')], ['Pay off, Yojimbo unpaid', ablatedLine('no-pay')]] as const) {
+      const r = rateOf(4, MIRROR_ACT_I, MIRROR_ACT_II, line);
+      expect(r.unfinished, name).toBe(0);
+      expect(r.wins + r.lostFirst + r.lostSecond, name).toBe(4);
+    }
+  }, 120_000);
+});
+
+describe.skipIf(!BENCH)('the shipped cell, measured on the PRELIMINARY run (the document\'s table has 200 seeds a line; here the first seeds, a band, and the reasons the others are not shipped; on with MIRROR_AEONS_BENCH=1)', () => {
   it('the chapter ships the faithful pair and tier 2, with 17 Phoenix Downs in the bag, each set by the bench', () => {
     expect([MIRROR_ACT_I, MIRROR_ACT_II, ENDGAME_PHOENIX_DOWNS]).toEqual(['kino01_72', 'nagi05_71', 17]);
   });
 
-  it('the advisor\'s line wins the whole chapter about seven times in ten (60 seeds, band 55 to 85 percent), and a careless line loses it', () => {
+  it('the advisor\'s line (Pay ON: provisional until RE\'s Zanmato fix lands, see the Pay-off test beside it) wins the whole chapter about seven times in ten (60 seeds, band 55 to 85 percent), and a careless line loses it', () => {
     const advisor = rateOf(60, MIRROR_ACT_I, MIRROR_ACT_II, advisorLine);
     expect(advisor.unfinished).toBe(0);
     expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeGreaterThanOrEqual(0.55);
@@ -125,6 +147,17 @@ describe('the shipped cell, measured (the document\'s table has 200 seeds a line
     // eslint-disable-next-line no-console
     console.info(`[mirror-aeons bench] ${MIRROR_ACT_I} -> ${MIRROR_ACT_II}: advisor ${advisor.wins}/${advisor.seeds} (lost in I ${advisor.lostFirst}, in II ${advisor.lostSecond}), careless ${careless.wins}/${careless.seeds}`);
   }, 180_000);
+
+  it('Pay off, the numbers that do not lean on the engine\'s landed Zanmato (RE\'s open item 7: a Pay can roll one that ignores a Dark Aeon\'s Death immunity): never sending Yojimbo in wins about seven runs in ten, and sending him in without paying him loses the shield', () => {
+    const noYojimbo = rateOf(60, MIRROR_ACT_I, MIRROR_ACT_II, ablatedLine('no-yojimbo'));
+    expect(noYojimbo.unfinished).toBe(0);
+    expect(share(noYojimbo), `${noYojimbo.wins} of ${noYojimbo.seeds}`).toBeGreaterThanOrEqual(0.5);
+    expect(share(noYojimbo), `${noYojimbo.wins} of ${noYojimbo.seeds}`).toBeLessThanOrEqual(0.85);
+    const unpaid = rateOf(40, MIRROR_ACT_I, MIRROR_ACT_II, ablatedLine('no-pay'));
+    expect(share(unpaid), `${unpaid.wins} of ${unpaid.seeds}`).toBeLessThanOrEqual(0.4);
+    // eslint-disable-next-line no-console
+    console.info(`[mirror-aeons bench, Pay off] no Yojimbo ${noYojimbo.wins}/${noYojimbo.seeds} (lost in I ${noYojimbo.lostFirst}, in II ${noYojimbo.lostSecond}), Yojimbo unpaid ${unpaid.wins}/${unpaid.seeds}`);
+  }, 240_000);
 
   it('the faithful trio is out of the advisor\'s reach (the second Delta Attack has no shield: Mindy and Sandy kill a lone aeon first), and so is the trio with its gauges started at 0', () => {
     for (const cell of ['kino00_70', 'kino00_70-g0']) {

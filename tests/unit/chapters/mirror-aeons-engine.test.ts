@@ -1,12 +1,14 @@
 /**
- * The hidden Mirror Aeons chapter on the real FFX engine (the party preset against the Dark Aeons, **no boss AI**: the engine's own fallback, a plain Attack, until the reverse-engineering session's scripts land): the
- * opening state of both acts (the starting gauges, the battle id, the dog that takes no turns), Yuna's optional aeons summoned through the real command, the chain from Act I to Act II, and the `all-ko` trigger
- * that plays the seam. What is NOT asserted: how hard the fight is (the bench's job, and it waits for the AI).
+ * The hidden Mirror Aeons chapter on the real FFX engine (the party preset against the Dark Aeons, with the Dark AI of `battle/ffx/ai/dark-aeons.ts` and the reverse-engineering session's lane FFX-K engine for Yuna's
+ * Yojimbo and Magus Sisters): the opening state of both acts (the starting gauges, the battle id, the dog that takes no turns), Yuna's aeons summoned through the real command (Pay, the Sisters' Combine powers), the heal
+ * the chain gives Act II, the `all-ko` trigger that plays the seam, and the advisor's card kept off the two aeons' menus. What is NOT asserted: how hard the fight is (the bench's job:
+ * `tests/unit/chapters/mirror-aeons-bench.test.ts`).
  */
 import { describe, expect, it } from 'vitest';
 
 import type { BattleSetup, Command, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
+import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
 import { SISTERS_START_GAUGE, mirrorAeonsBuild } from '../../../src/data/ffx/builds/mirror-aeons.ts';
@@ -139,19 +141,48 @@ describe("Yuna's Yojimbo and Magus Sisters through the real summon command (the 
   });
 
   it('the Sisters arrive as ONE summon of three: Cindy asks, all three take the field, and the first one\'s menu lights Combine powers because their gauges start full', () => {
-    const e = H.newEngine(2);
-    summon(e, 'Cindy');
-    expect(e.state().aeonId).toBe('cindy');
-    expect(e.state().aeonIds).toEqual(['cindy', 'sandy', 'mindy']);
-    for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, id).toBe(SISTERS_START_GAUGE);
-    const d = nextInput(e);
-    expect(['cindy', 'sandy', 'mindy']).toContain(d.actorId);
-    const combine = d.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'sister-order-combine');
-    expect(combine?.enabled).toBe(true);
-    expect(d.commands.some((c) => c.command.kind === 'dismiss' && c.enabled)).toBe(true);
-    const events = e.submit({ ...combine!.command, targets: [] } as Command);
-    expect(events.filter((ev) => ev.type === 'action-start').map((ev) => (ev.type === 'action-start' ? ev.abilityId : ''))).toContain('delta-attack');
-    for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, `${id} paid the bar`).toBe(0);
+    // Combine powers rolls 200 plus the sister's motivation (250 of 256 at the estimate of 50), so a seed can fail it: take the first of the first twelve that does not (the other assertions hold on every seed tried).
+    let threw = false;
+    for (let seed = 1; seed <= 12 && !threw; seed++) {
+      const e = H.newEngine(seed);
+      summon(e, 'Cindy');
+      expect(e.state().aeonId).toBe('cindy');
+      expect(e.state().aeonIds).toEqual(['cindy', 'sandy', 'mindy']);
+      for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, id).toBe(SISTERS_START_GAUGE);
+      const d = nextInput(e);
+      expect(['cindy', 'sandy', 'mindy']).toContain(d.actorId);
+      const combine = d.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'sister-order-combine');
+      expect(combine?.enabled).toBe(true);
+      expect(d.commands.some((c) => c.command.kind === 'dismiss' && c.enabled)).toBe(true);
+      const events = e.submit({ ...combine!.command, targets: [] } as Command);
+      const started = events.filter((ev) => ev.type === 'action-start').map((ev) => (ev.type === 'action-start' ? ev.abilityId : ''));
+      if (!started.includes('delta-attack')) continue; // a failed roll is the order's own start and end and nothing else
+      for (const id of ['cindy', 'sandy', 'mindy']) expect(H.actor(e, id).overdrive?.gauge, `${id} paid the bar: nothing refills it until the other orders are carried out`).toBe(0);
+      threw = true;
+    }
+    expect(threw, 'a Delta Attack on one of the first twelve seeds').toBe(true);
+  });
+
+  it("the advisor's card stays off Yojimbo's and the Sisters' menus: it cannot price Pay or an order, and used to print Dismiss as the best move (RE's open item 12); Yuna's own turn still gets one", () => {
+    const plain = H.newEngine(2);
+    const yuna = yunaInput(plain);
+    expect(buildAdvisorView(plain.state(), { actorId: yuna.actorId, commands: yuna.commands }), "Yuna's turn").not.toBeNull();
+
+    const sisters = H.newEngine(2);
+    summon(sisters, 'Cindy');
+    const sisterMenu = nextInput(sisters);
+    expect(sisterMenu.commands.some((c) => c.command.kind === 'ability' && c.command.id === 'sister-order-combine')).toBe(true);
+    expect(buildAdvisorView(sisters.state(), { actorId: sisterMenu.actorId, commands: sisterMenu.commands }), "a Sister's turn").toBeNull();
+
+    let e = H.newEngine(1, H.ACT_II_GROUP);
+    let d: H.Input | undefined;
+    for (let seed = 1; seed <= 20 && d?.actorId !== 'yojimbo'; seed++) {
+      e = H.newEngine(seed, H.ACT_II_GROUP);
+      summon(e, 'Yojimbo');
+      d = nextInput(e);
+    }
+    if (d === undefined) throw new Error('no menu');
+    expect(buildAdvisorView(e.state(), { actorId: d.actorId, commands: d.commands }), "Yojimbo's turn").toBeNull();
   });
 
   it('with the gauges empty their menu offers Dismiss and nothing else that works (the other seven orders are not built): the reason the preset starts them full', () => {

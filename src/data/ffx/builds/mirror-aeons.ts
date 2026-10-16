@@ -19,9 +19,12 @@
  * | Yojimbo's starting compatibility | `YOJIMBO_START_COMPATIBILITY` = 128 | **strongly indicated by the owner's saves, live confirmation pending** (the game's files hold no start value: RE section 5.5, G08 section 3; the community also says 128) `[estimate]` until it is confirmed live |
  * | Gil | `ENDGAME_GIL` = 1,500,000 (Yojimbo is paid from it each time he acts) | StrategyWiki speaks of paying "upwards of 2 million" `[estimate]` |
  * | Bag | `./dreams-end.ts`'s bag (Phoenix Downs, X-Potions, Remedies, Holy Water, Elixir ...) less the Candle of Life, a Doom-kill route that belongs to Yu Yevon alone | the repository's endgame bag `[estimate]` |
- * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **the four new aeons start at 0** | `./late-aeon-rows.ts`; the Dark Sisters start full in the trio (RE section 4.2), Yuna's do not `[estimate]` |
+ * | Gauges | the members keep their Dream's End gauges; the five story aeons keep theirs; **Yojimbo starts at 0 and Yuna's three Magus Sisters at 100** | `./late-aeon-rows.ts`; the Sisters' menu offers Combine powers only while all three bars are full, and the seven other orders (the only way to fill one) are not carried out by the engine yet, so the preset starts them full `[estimate]` |
+ * | The Sisters' start motivation | `SISTERS_START_MOTIVATION` = 50 each | **an estimate: RE marks it unsourced** (`FFXPartyBuild.sisters`); it sets Combine powers' chance (200 plus motivation, always from 56 up) and the order menu's rolls |
+ * | Phoenix Downs | `ENDGAME_PHOENIX_DOWNS` = 17 | the bench's lever (`docs/plans/ch-mirror-aeons-bench.md`); **a PRELIMINARY value** from the run on the engine as merged at d8fa5b69, to be re-set by the re-run the release driver triggers once RE's follow-up has landed `[estimate]` |
  *
- * `YOJIMBO_HIRE_ANSWER` and `YOJIMBO_START_COMPATIBILITY` are read by the engine's Yojimbo rules once the reverse-engineering session wires them (`battle/ffx/ai/dark-aeons-seams.ts`); nothing reads them today.
+ * `YOJIMBO_HIRE_ANSWER` and `YOJIMBO_START_COMPATIBILITY` are read by the engine's Yojimbo rules (re-parity lane FFX-K: `FFXPartyBuild.yojimbo`, required for a build that lists him); a chain carries the compatibility and the gil
+ * through `state.flags` and nothing persists them across sessions (that would be save data), so every run starts from these values.
  */
 
 import type { AeonBuild, AutoAbilityId, FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
@@ -41,6 +44,9 @@ export const ENDGAME_BATTLES = 600;
  * the line's revives use the rest), so this number is the clock of Act I: with the repository's endgame bag's 10 the pair is lost four times in five, from 20 up it is won nineteen times in twenty, and **17 is the value at
  * which the whole chapter (both acts, the advisor's line) is won about seven times in ten**, the plan's target. The other items keep the repository's endgame bag's counts (`./dreams-end.ts`): none of them limits a fight
  * (Yuna heals with her spells), which the bench also measured.
+ *
+ * **PRELIMINARY.** These readings are from a first run on the engine as merged at d8fa5b69. The release driver HELD the table (2026-10-15): RE's follow-up (the seven Sister orders and the bars after a Combine, and a landed
+ * Zanmato that spares what it should) changes what the Act II numbers mean, so 17 is a placeholder until the re-run the driver triggers (`docs/plans/ch-mirror-aeons-bench.md` says how).
  */
 export const ENDGAME_PHOENIX_DOWNS = 17;
 /** Party gil: Yojimbo is paid from it (`[estimate]`; StrategyWiki speaks of paying "upwards of 2 million"). */

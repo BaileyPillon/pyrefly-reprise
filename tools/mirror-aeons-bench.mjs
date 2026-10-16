@@ -14,8 +14,9 @@
  *   --stat     Strength, Defense, Magic and Magic Defense at this fraction of the caps (the chapter ships 1)
  *   --cells    `actI:actII` chains to play (default: the three Act I cells against the three Act II tiers)
  *   --acts     also play each act alone (Act I from the fresh preset; Act II from the fresh preset, no carry)
- *   --ablate   the advisor's line with one rule taken away at a time, on the first of --cells (`all` or a comma list of: shield-on-full, heal-45, no-auto-life, no-cheer, story-aeons-first, items-only)
- *   --lines    `advisor`, `careless` or both (default both)
+ *   --ablate   the advisor's line with one rule taken away at a time, on the first of --cells (`all` or a comma list of: shield-on-full, heal-45, no-auto-life, no-cheer, story-aeons-first, items-only, no-pay, no-yojimbo)
+ *   --lines    any of `advisor` (the shipped line: Yojimbo paid), `careless`, `nopay` (Yojimbo sent in first but never paid: **Pay off**, his own free attacks only) and `noyojimbo` (he is never sent in), comma-separated;
+ *              default `advisor,careless`. **Pay on is provisional until RE's Zanmato fix lands** (a Pay can roll a Zanmato that today kills a Dark Aeon the game's rules would not), so Act II is read with `nopay` beside `advisor`.
  *
  * It prints one markdown row per cell and a JSON line per row for the document's builder. A machine that is busy takes about 0.1 to 0.2 seconds a fight.
  */
@@ -57,31 +58,40 @@ let party = withPhoenixDowns(mirrorAeonsBuild, phoenix);
 if (luck !== undefined) party = withLuck(party, luck);
 if (stat !== undefined) party = withStatFraction(party, stat);
 
+/** The lines a table can ask for. */
+const LINES = {
+  advisor: advisorLine,
+  careless: carelessLine,
+  nopay: ablatedLine('no-pay'),
+  noyojimbo: ablatedLine('no-yojimbo'),
+};
+for (const line of lines) if (LINES[line] === undefined) throw new Error(`no line '${line}' (advisor, careless, nopay, noyojimbo)`);
+
 const chains = args.has('--cells')
   ? args.get('--cells').split(',').map((c) => c.split(':'))
   : ACT_I_CELLS.flatMap((a) => ACT_II_CELLS.map((b) => [a, b]));
 
 const pct = (r) => `${(100 * share(r)).toFixed(0)}%`;
 const detail = (r) => `${r.wins}/${r.seeds}${r.lostFirst + r.lostSecond > 0 ? ` (lost in I ${r.lostFirst}, in II ${r.lostSecond})` : ''}${r.unfinished > 0 ? ` UNFINISHED ${r.unfinished}` : ''}`;
+const cell = (r) => (r ? `${pct(r)} ${detail(r)}` : '-');
+const head = (what) => `| ${what} | ${lines.join(' | ')} |\n|---|${lines.map(() => '---').join('|')}|`;
 
 console.log(`# Phoenix Downs ${phoenix}${luck !== undefined ? `, Luck ${luck}` : ''}${stat !== undefined ? `, stats x${stat}` : ''}, ${seeds} seeds a line`);
-console.log('| Act I | Act II | advisor (whole chapter) | careless (whole chapter) |');
-console.log('|---|---|---|---|');
+console.log(head('Act I then Act II (the whole chapter)'));
 for (const [actI, actII] of chains) {
   const row = {};
-  for (const line of lines) row[line] = rateOf(seeds, actI, actII, line === 'advisor' ? advisorLine : carelessLine, party);
-  console.log(`| ${actI} | ${actII} | ${row.advisor ? `${pct(row.advisor)} ${detail(row.advisor)}` : '-'} | ${row.careless ? `${pct(row.careless)} ${detail(row.careless)}` : '-'} |`);
-  console.log(JSON.stringify({ phoenix, luck: luck ?? null, stat: stat ?? null, seeds, actI, actII, ...Object.fromEntries(Object.entries(row).map(([k, v]) => [k, v])) }));
+  for (const line of lines) row[line] = rateOf(seeds, actI, actII, LINES[line], party);
+  console.log(`| ${actI} then ${actII} | ${lines.map((l) => cell(row[l])).join(' | ')} |`);
+  console.log(JSON.stringify({ phoenix, luck: luck ?? null, stat: stat ?? null, seeds, actI, actII, ...row }));
 }
 
 if (withActs) {
-  console.log('\n| Act alone | advisor | careless |');
-  console.log('|---|---|---|');
-  for (const cell of [...new Set(chains.flat())]) {
+  console.log(`\n${head('Act alone')}`);
+  for (const cellName of [...new Set(chains.flat())]) {
     const row = {};
-    for (const line of lines) row[line] = rateOf(seeds, cell, null, line === 'advisor' ? advisorLine : carelessLine, party);
-    console.log(`| ${cell} | ${row.advisor ? `${pct(row.advisor)} ${detail(row.advisor)}` : '-'} | ${row.careless ? `${pct(row.careless)} ${detail(row.careless)}` : '-'} |`);
-    console.log(JSON.stringify({ phoenix, luck: luck ?? null, stat: stat ?? null, seeds, act: cell, ...Object.fromEntries(Object.entries(row).map(([k, v]) => [k, v])) }));
+    for (const line of lines) row[line] = rateOf(seeds, cellName, null, LINES[line], party);
+    console.log(`| ${cellName} | ${lines.map((l) => cell(row[l])).join(' | ')} |`);
+    console.log(JSON.stringify({ phoenix, luck: luck ?? null, stat: stat ?? null, seeds, act: cellName, ...row }));
   }
 }
 
