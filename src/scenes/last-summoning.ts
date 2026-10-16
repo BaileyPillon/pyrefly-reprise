@@ -30,7 +30,7 @@ export const LAST_SUMMONING_ENEMY_SPOTS: Readonly<Record<string, Spot>> = {
   'possessed-yojimbo': [2.05, 0, -4.0], // the formation's first slot, as every possessed aeon of Chapter III
   'possessed-anima': [2.05, 0, -4.0],
   'possessed-sandy': [2.35, 0, -5.4],
-  'possessed-cindy': [0.55, 0, -6.2],
+  'possessed-cindy': [1.0, 0, -6.4],
   'possessed-mindy': [3.6, 0, -4.1],
 };
 

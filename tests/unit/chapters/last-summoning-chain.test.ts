@@ -4,7 +4,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import type { BattleEngine, Decision, FFXCombatant } from '../../../src/battle/common/types.ts';
-import { findEnemyGroup } from '../../../src/app/screens/BattleScreenSetup.ts';
+import { findEnemyGroup, setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
+import { PAY_ABILITY_ID } from '../../../src/battle/ffx/aeon-commands.ts';
 import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../../src/data/ffx/index.ts';
 import { lastSummoningGroup, lastSummoningOpener, possessionGroup, yuYevonLink } from '../../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { yuYevonGroup } from '../../../src/data/ffx/enemies/braskas-final-aeon.ts';
@@ -314,6 +315,29 @@ describe('on the real engine, the twin is a copy of the player’s aeon at full 
     expect(activeMembers(engine).map((c) => c.id)).toEqual(['tidus', 'yuna', 'auron']);
     const aeons = Object.values(engine.state().combatants).filter((c) => c.side === 'aeon');
     expect(aeons.map((c) => c.id).sort()).toEqual(['anima', 'bahamut', 'cindy', 'ifrit', 'ixion', 'mindy', 'sandy', 'shiva', 'valefor', 'yojimbo']);
+  });
+});
+
+describe('what a link hands to the next', () => {
+  it('carries the gil Pay spent and Yojimbo’s changed compatibility into the next link, and the locks grow by the link just fought', async () => {
+    const { setup } = await firstLinkSetup(['valefor'], 11);
+    const engine = newEngine(setup);
+    const yuna = inputFor(engine, 'yuna');
+    engine.submit({ ...yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Yojimbo')!.command, targets: [] });
+    const turn = inputFor(engine, 'yojimbo');
+    const pay = turn.commands.find((c) => c.enabled && c.command.kind === 'ability' && c.command.id === PAY_ABILITY_ID)!;
+    engine.submit({ ...pay.command, targets: [], gilSpent: 32_768 } as never);
+    const flags = engine.state().flags as Record<string, number>;
+    expect(flags['yojimbo:gil']).toBe(50_000 - 32_768);
+    expect(flags['yojimbo:compatibility']).not.toBe(128); // the roll's command moved it (+3 for Wakizashi on all, +4 for Zanmato, and so on)
+    const next = lastSummoningGroup(linkGroupId(['valefor', 'ifrit']))!;
+    const carried = setupForNextLink(setup, next, engine.state(), 12);
+    const second = newEngine(carried);
+    const nextFlags = second.state().flags as Record<string, number>;
+    expect(nextFlags['yojimbo:gil']).toBe(50_000 - 32_768);
+    expect(nextFlags['yojimbo:compatibility']).toBe(flags['yojimbo:compatibility']);
+    // The locks of the next link: Valefor, then Ifrit.
+    expect(Object.keys(nextFlags).filter((k) => k.startsWith('aeonDuel.lock:')).sort()).toEqual(['aeonDuel.lock:ifrit', 'aeonDuel.lock:valefor']);
   });
 });
 

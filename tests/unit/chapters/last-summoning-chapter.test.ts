@@ -349,7 +349,7 @@ describe('the card and the document: cited, in the corpus form, and tied to the 
   });
 
   it('every label a hint speaks to is a row the line asks for (its own, or Chapter III’s in these fights)', () => {
-    const asked = ['Pay', 'Combine powers', 'Phoenix Down', 'Mega Phoenix', 'Life', 'Full-Life', 'Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion', 'Protect', 'Ether', 'Turbo Ether', 'Elixir', 'Candle of Life', 'Defend'];
+    const asked = ['Pay', 'Combine', 'Phoenix Down', 'Mega Phoenix', 'Life', 'Full-Life', 'Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion', 'Protect', 'Ether', 'Turbo Ether', 'Elixir', 'Candle of Life', 'Defend'];
     for (const h of LAST_SUMMONING_GUIDE.hints) for (const label of h.when.labels ?? []) expect(asked, label).toContain(label);
   });
 
@@ -400,7 +400,7 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     expect(e.state().flags['yojimbo:gil']).toBe(50_000 - 32_768);
   });
 
-  it('calls Combine powers on a Sister’s turn when the game’s menu offers it, and the Delta Attack lands', async () => {
+  it('calls Combine on a Sister’s turn when the game’s menu offers it, and the Delta Attack lands', async () => {
     const { setup } = await firstLinkSetup(['valefor'], 4);
     const party = buildLastSummoningParty();
     for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 100;

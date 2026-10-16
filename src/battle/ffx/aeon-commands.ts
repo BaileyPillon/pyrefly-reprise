@@ -40,12 +40,12 @@ interface OrderRow {
 export const ORDERS: readonly OrderRow[] = [
   { command: SisterOrder.Free, id: 'sister-order-free', label: 'Free choice' },
   { command: SisterOrder.Repeat, id: 'sister-order-repeat', label: 'Repeat last' },
-  { command: SisterOrder.Attack, id: 'sister-order-attack', label: 'Attack order' },
-  { command: SisterOrder.CindyBig, id: 'sister-order-cindy-spells', label: 'Spells (Cindy)' },
-  { command: SisterOrder.CindySupport, id: 'sister-order-cindy-support', label: 'Support (Cindy)' },
-  { command: SisterOrder.Combine, id: 'sister-order-combine', label: 'Combine powers' },
-  { command: SisterOrder.SandySupport, id: 'sister-order-sandy-support', label: 'Support (Sandy)' },
-  { command: SisterOrder.MindyDrain, id: 'sister-order-mindy-drain', label: 'Drain (Mindy)' },
+  { command: SisterOrder.Attack, id: 'sister-order-attack', label: 'Attack' },
+  { command: SisterOrder.CindyBig, id: 'sister-order-cindy-spells', label: 'Spells' },
+  { command: SisterOrder.CindySupport, id: 'sister-order-cindy-support', label: 'Support' },
+  { command: SisterOrder.Combine, id: 'sister-order-combine', label: 'Combine' },
+  { command: SisterOrder.SandySupport, id: 'sister-order-sandy-support', label: 'Support' },
+  { command: SisterOrder.MindyDrain, id: 'sister-order-mindy-drain', label: 'Drain' },
 ];
 
 /** The ability ids of the eight orders. */
