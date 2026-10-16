@@ -24,7 +24,8 @@ the other 442 are all Chapter XVII, all from link 3 on, and reverting that one r
 | `f4d60a5e` | The kernels: `kernel/counter.ts` (counter kind, harmful, queue), `kernel/command-reach-table.ts` (979 target words), `kernel/forced-action-table.ts`; three fixtures (1,830 of the game's own vectors); the kernel test. Wired to nothing | FFX only |
 | `a5543c28` | The wiring: `counter-chain.ts`, `adapt/counter.ts`, `hit-apply.ts`, `engine-end.ts`, `runtime.ts`, `intent.ts`, `ticks.ts` (`collectReactions` goes), `reach.ts`, `targeting.ts`, the Omnis discs and the Core; the engine tests; the contract entry | FFX only |
 | `8a1d5b97` | A test fix: the merged-hooks probe takes the distance off the Mortiphasm discs and Sin's Genais Core (five tests of `re-parity-ai-merged-hooks` failed in the first full suite since the wiring: the probe is a command with no record, the plain Attack, reach 0) | FFX only; tests |
-| (the commit with this note) | This note (the mutation pass, the measurement, the disclosures, the open items, the CHANGELOG paragraph) and `tests/unit/parity-ffx-counters-seam.test.ts` (6 tests) | FFX only; docs and tests |
+| `4a119e5b` | The finishing pass: this note (the mutation pass, the measurement, the disclosures, the open items, the CHANGELOG paragraph) and `tests/unit/parity-ffx-counters-seam.test.ts` (6 tests) | FFX only; docs and tests |
+| (the commit after it) | This note's section 12 (the whole suite), the merge test and the guides line | FFX only; docs |
 
 ## 2. The rows (plan id, note row, what the engine did, what it does now)
 
@@ -170,8 +171,7 @@ Not mutated, and why: the cheap early exit in `adapt/counter.ts#armedCause` (a t
 
 ### 6.1 Goldens
 
-`ffx-engine-golden` (18 digests: seeds 1 and 7 of nine chapters), `ffx2-atb-golden` (6 tests) and `ff7-golden` (3) pass on the pins they had at the base: **nothing is re-baselined** (`git diff origin/r49-rc..HEAD` on the three files is empty). The nine FFX chapters of the golden are not Chapter XVII, and the pinned seeds meet no counter, no disc
-and no Core target that the new reach rule refuses.
+`ffx-engine-golden` (18 digests: seeds 1 and 7 of nine chapters), `ffx2-atb-golden` (6 tests) and `ff7-golden` (3) pass on the pins they had at the base: **nothing is re-baselined** (`git diff origin/r49-rc..HEAD` on the three files is empty). Chapter XVII, the one chapter whose line moves, is not among its nine chapters; Chapter XII is, and its two pinned seeds meet no command that the new reach rule refuses (and no chapter of the golden meets a counter).
 
 ### 6.2 How it was measured
 
@@ -202,7 +202,7 @@ Where one number stands in a cell, base and tip are equal. **158 of 168 seeds ha
 
 ### 6.4 Five hundred seeds, base against tip (seeds 1 to 500, every chapter)
 
-The first agent measured 500 seeds only for Chapters XII and XVII; the finishing pass did all fourteen at the level of the event log. **6,558 of 7,000 seeds are byte-identical; every one of the 442 that differ is Chapter XVII link 3.**
+The first agent measured the base at 500 seeds for the eleven listed chapters but the tip only for Chapters XII and XVII, by outcome, turns and KOs; the finishing pass did the tip for all fourteen chapters at the level of the whole event log. **6,558 of 7,000 seeds are byte-identical; every one of the 442 that differ is Chapter XVII link 3.**
 
 | Chapter | Seeds | Wins | Party turns (mean) | Engine turns (mean) | Party KOs (mean) | Identical event logs |
 |---|---:|---|---|---|---|---|
@@ -223,19 +223,19 @@ The first agent measured 500 seeds only for Chapters XII and XVII; the finishing
 
 ### 6.5 The one move, and its cause (Chapter XVII, link 3)
 
-- **What moves.** 442 of 500 seeds differ, every one first in **link 3** (Sinspawn Genais and Sin's Core; links 1 and 2 are byte-identical on all 500 seeds). Wins 437 -> 428 of 500 (87.4 -> 85.6 percent; z = -0.83, inside the noise of 500 fights): 27 seeds flip from a win to a defeat and 18 from a defeat to a win. Every defeat the chapter has is in link 3 apart from four early ones that
+- **What moves.** 442 of 500 seeds differ, every one first in **link 3** (Sinspawn Genais and Sin's Core; links 1 and 2 are byte-identical on all 500 seeds). Wins 437 -> 428 of 500 (87.4 -> 85.6 percent; z = -0.83, inside the noise of 500 fights): 27 seeds flip from a win to a defeat and 18 from a defeat to a win (a coin-flip split of the 45 that flip: two-sided exact p = 0.23). Every defeat the chapter has is in link 3 apart from four early ones that
   both trees share: 59 -> 68 of 500. Party turns 296.4 -> 296.8, party KOs 3 -> 3. No boss or party number changed.
 - **The cause.** On the ten moved seeds of the twelve, the first differing event is the same: Auron's **Dragon Fang** in link 3. The party's own Overdrive records have reach 0 (Dragon Fang is record 0x3065, target word 0x0407: reach 0; the note's section 5.2) and Sin's Genais Core sits at BattleDistance 3 while Genais stands, so Dragon Fang no longer picks the Core: its two hits (Genais and the Core, as the old
   "every non-physical command reaches" flag let it) become one, on Genais (`damage ... hitCount 2` against `hitCount 1`; `classify-diff.mjs`). From there the fight parts. The line wins fewer fights because it no longer gets the Core's share of every Dragon Fang.
 - **The proof that it is the only cause.** A third scratch tree is the tip with exactly two files put back to the base's (`targeting.ts` and `ai/sin-genais-core-rules.ts`: the old Core rule): all **500 of 500** Chapter XVII seeds are byte-identical to the base again (12 of 12 on the first pass). So the Core's reach rule is the whole of the move; the counter chain (G10) and the default attack (G11) move no seed of any chapter, and the
   discs (Chapter XII) and the Gui's head do not move one either (500 of 500 each).
-- **Why the other chapters cannot move through this rule.** Only three bodies carry a BattleDistance (the Gui's head 1, the four discs 2, the Core 3); no other chapter's target set meets `reachesTarget`'s new branch. And no shipped build wears Counterattack, Evade and Counter or Magic Counter (no file under `src/data/ffx/builds` names one; the party-prep screen shows the gear, it does not change it), so the counter chain is armed by nothing in the shipped chapters.
+- **Why no other chapter can move through this rule.** Only three bodies carry a BattleDistance (the Gui's head 1, the four discs 2, the Core 3); no other chapter's target set meets `reachesTarget`'s new branch. And no shipped build wears Counterattack, Evade and Counter or Magic Counter (no file under `src/data/ffx/builds` names one; the party-prep screen shows the gear, it does not change it), so the counter chain is armed by nothing in the shipped chapters.
 
 ## 7. Disclosures in player words (FFX only)
 
 1. **Chapter XVII, Sin's Core while Genais stands.** Only commands that reach far can aim at the Core until Genais falls: spells, Lancet, and the Attack of Wakka, Valefor and Anima. Auron's Dragon Fang (and every other Overdrive of the party) no longer hits the Core: it strikes Genais alone. Items and Valefor's Energy Ray cannot be aimed at the Core either. The fight's recommended
    line wins 428 of 500 simulated fights instead of 437 (87.4 to 85.6 percent; inside the noise). Nothing was tuned.
-2. **Chapter XII, the Mortiphasm discs.** Steal, Spare Change, the party's own Overdrives and most aeon Overdrives (Hellfire, Thor's Hammer, Diamond Dust, Mega Flare, Zanmato, Delta Attack) can no longer be aimed at a disc; spells, Lancet, items, the reels, Valefor's Energy Ray and Energy Blast, and the Attack of Wakka, Valefor and Anima still can. The recommended line plays the same on all 500 simulated fights (every fight's log is the base's).
+2. **Chapter XII, the Mortiphasm discs.** Steal, Spare Change, the party's own Overdrives and most aeon Overdrives (Hellfire, Thor's Hammer, Diamond Dust, Mega Flare, Zanmato and the Magus Sisters' Delta Attack) can no longer be aimed at a disc; spells, Lancet, items, the reels, Valefor's Energy Ray and Energy Blast, and the Attack of Wakka, Valefor and Anima still can. The recommended line plays the same on all 500 simulated fights (every fight's log is the base's).
 3. **Counters.** Counterattack, Evade and Counter and Magic Counter now follow the game. Any single-target attack that could hurt arms the counter, including an attack that misses (and the miss Evade and Counter forces) and a spell Nul turned aside; healing, buffs, attacks on a whole group or party, and attacks that do nothing at all never do. The wearer answers once per attack, however many hits it
    has, with its own normal Attack at the attacker, only if it can still act after the first hit (not asleep, petrified, confused, berserk, provoked, threatened or ejected) and is still standing when the attack ends. A counter is never answered by another counter. **No shipped build wears these abilities, so no chapter plays differently today.**
 4. **Berserk, Confuse and Provoke on a monster.** A monster the game gives no attack of its own (nearly every boss) loses the turn these would have forced on it instead of swinging a generic Attack; a Provoked boss whose script keeps control is unchanged. The recommended lines never inflict these on a boss, and no measured fight reached it.
@@ -249,8 +249,10 @@ The first agent measured 500 seeds only for Chapters XII and XVII; the finishing
 5. **When the decision is taken.** The game queues at the first *applied* hit; the engine decides at the first *arming* hit. They differ only if an earlier hit of the same command did not arm and a later hit changes the holder's state, which no rule of the shipped data does (a "no effect" is the same for every hit of one target). Latent.
 6. **Out of the model:** the byte at 0x0112ca12 (0 only in the eleven Belgemine duel scenes, none a chapter of the project); an auto-ability a monster's own script would write into `Chr+0x6bc` (none of the project's formation scripts is known to); FFX-G04 oq 5 (the Tidus-counter reader) and oq 11 (the whole per-hit pipeline has never been run in the harness; the control flow was re-read, section 3).
 7. **`CombatantFlags.outOfMeleeReach` and `REACHES_OUT_OF_MELEE`** are no longer read by any engine (kept in the type and as documentation; contract entry). A later cleanup may remove them once nothing cites them.
-8. **Merge hot spots** with the other RC9 lanes: `hit-apply.ts`, `engine-end.ts`, `targeting.ts`, `runtime.ts`, `ticks.ts` (keep both sides); `src/battle/ffx/index.ts` loses the export `collectReactions` (nothing imported it but `engine-end.ts`).
-9. **A heavy-load note.** In the finishing pass the full suite was run while the machine was at 100 percent CPU; see section 12 for the files that timed out and the single re-runs.
+8. **Merge hot spots** with the other RC9 lanes. A test merge of this branch with each sibling (`git merge-tree`, nothing written) conflicts only on `docs/CONTRACT-CHANGES.md` (every lane adds its entry at the top: keep both), plus two adjacent-addition conflicts with `re-parity-rc9-ffx-rewards`: `runtime.ts` (the import lines) and `intent.ts` (the lines `cloneCtx` copies): keep both.
+   `re-parity-rc9-x2-grids` merges clean; `types.ts` and `index.ts` merge by themselves with every sibling. Files to read when merging: `hit-apply.ts`, `engine-end.ts`, `targeting.ts`, `runtime.ts`, `ticks.ts`; `src/battle/ffx/index.ts` loses the export `collectReactions` (nothing imported it but `engine-end.ts`).
+9. **The guides need no change.** The Chapter XVII guide already says "while it lives, blades cannot reach the Core" and the Chapter XII guide "only Wakka can reach a disc with a blow"; the rule now enforces what they say (the old engine let Overdrives through).
+10. **A heavy-load note.** In the finishing pass the full suite was run while the machine was at 100 percent CPU; see section 12 for the files that timed out and the single re-runs.
 
 **Decisions for Bailey** (none blocks the merge):
 
@@ -267,7 +269,7 @@ The first agent measured 500 seeds only for Chapters XII and XVII; the finishing
 
 ## 10. CHANGELOG paragraph (plain words; for the main session to paste, not edited into `CHANGELOG.md` here)
 
-**FFX only.** Counters, reach and a monster's own attack now follow the game's code. Counterattack, Evade and Counter and Magic Counter answer a hit the way the game decides it: any single-target attack that could hurt arms the counter, including one that misses (and the miss Evade and Counter forces), while healing, buffs, attacks on a whole group and attacks that do nothing never do; the wearer answers once per attack, however many hits it has, with its own normal Attack, only if it can still act, and a counter never meets another counter. No build in the game wears these abilities yet, so no chapter plays differently through them today. A command now reaches a far target only when its own reach, read from the game's 979 commands, is at least the target's distance: the Mortiphasm discs in Chapter XII sit at distance 2 and Sin's Core in Chapter XVII at distance 3 until Genais falls, so Steal, Spare Change and the Overdrives can no longer be aimed at a disc, and Auron's Dragon Fang, items and Valefor's Energy Ray no longer reach the Core while Genais stands (spells, Lancet and the Attack of Wakka, Valefor and Anima still do). The recommended line wins 428 of 500 simulated fights at Chapter XVII instead of 437, which is within the noise, and every other chapter plays out identically on all 500. A monster the game gives no attack of its own, nearly every boss, now loses the turn Berserk, Confuse or Provoke would have forced on it. Nothing about any boss or party member's numbers changed.
+**FFX only.** Counters, reach and a monster's own attack now follow the game's code. Counterattack, Evade and Counter and Magic Counter answer a hit the way the game decides it: any single-target attack that could hurt arms the counter, including one that misses (and the miss Evade and Counter forces), while healing, buffs, attacks on a whole group and attacks that do nothing never do; the wearer answers once per attack, however many hits it has, with its own normal Attack, only if it can still act, and a counter never meets another counter. No build in the game wears these abilities yet, so no chapter plays differently through them today. A command now reaches a far target only when its own reach, read from the game's 979 commands, is at least the target's distance: the Mortiphasm discs in Chapter XII sit at distance 2 and Sin's Core in Chapter XVII at distance 3 until Genais falls, so Steal, Spare Change and most Overdrives can no longer be aimed at a disc, and Auron's Dragon Fang, items and Valefor's Energy Ray no longer reach the Core while Genais stands (spells, Lancet and the Attack of Wakka, Valefor and Anima still do). The recommended line wins 428 of 500 simulated fights at Chapter XVII instead of 437, which is within the noise, and every other chapter plays out identically on all 500. A monster the game gives no attack of its own, nearly every boss, now loses the turn Berserk, Confuse or Provoke would have forced on it. Nothing about any boss or party member's numbers changed.
 
 ## 11. Re-run commands (repo root of the worktree; Node 24; TEMP and TMP on D:, here the per-lane folder `D:/Tools/ffx-parity/tmp/ffx-counters`)
 
@@ -285,4 +287,16 @@ Tooling outside the repo (`D:\Tools\ffx-parity\rc9\ffx-counters\`): `export-coun
 
 ## 12. The whole suite
 
-The full suite (1,270 test files) was started on 2026-10-16 in two parts, because the first part was already running when the second was begun (every file runs once: part 1 is the 303 files of `tests/unit/chapters/`, `tests/unit/parity-ffx*`, `tests/unit/re-parity*` and the three golden files; part 2 is everything else; the new seam test, which part 1 had not collected, is run on its own). The results are written in the commit that follows this one.
+Run on 2026-10-16 in this worktree (`public/art` is the local art, so the art tests judge this disk), `--maxWorkers=2`, with every test file run once, in two parts because the first was already running when the second was begun: part 1 is the 303 files of `tests/unit/chapters/`, `tests/unit/parity-ffx*`, `tests/unit/re-parity*` and the three golden files; part 2 is the other 966.
+The new seam test, which part 1 had not collected, was run on its own (6 passed) and again in the final confirmation below. The machine was at 100 percent CPU for the whole run (other sessions). Together: 1,270 files and 19,979 tests.
+
+| Part | Files | Tests | Failures |
+|---|---|---|---|
+| 1 (3,228 s) | 303: 297 passed, 6 skipped | 4,587 passed, 38 skipped | none |
+| 2 (1,887 s) | 966: 950 passed, 9 skipped, 7 failed | 15,302 passed, 36 skipped, 1 todo, 9 failed | three timeouts under load and six art-only, below |
+
+- **Three timeouts under load, not failures of a rule.** `advisor-floor.test.ts`: "holds across 4. Bahamut" (22.5 s), "2. Lady Yunalesca" (21.0 s) and "3. Braska's Final Aeon" (18.5 s) hit the 15 s default while the machine was saturated. The file run alone passes **22 of 22** (85 s; the slowest test 11.9 s).
+- **Six art-only failures** (the painted art on this disk differs from the hashes the tests lock; `public/art` is gitignored and local; none touches the engine): `exp-leblanc` (Chapter VI's paintings, sha256), `engine/pose-install-0926`, `engine/pose-install-0930`, `engine/pose-install-songstress-0929`, `engine/pose-install-thief-0926` (the Rikku and item paintings, sha256) and `engine/pose-scale-art` (104 poses measured against art that changed).
+  The first agent's full run of 2026-10-15 had the same six and nothing else once the merged-hooks probe was fixed.
+- **Final confirmation after the last edit:** `tsc --noEmit` clean; the five lane files, `omnis-engine`, `sin-core-engine`, `re-parity-ai-sin-core`, `re-parity-ai-merged-hooks`, `ffx-engine-golden` and `ff7-golden`: 11 files, 206 tests, all passed (`ffx2-atb-golden` passed in part 1 and on its own earlier: 6 tests).
+- No dev or preview server was started by this lane; the scratch trees and the per-lane TEMP were removed at the end (the evidence files are kept in `D:\Tools\ffx-parity\rc9\ffx-counters\results-2026-10-16\`).
