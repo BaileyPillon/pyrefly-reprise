@@ -405,3 +405,45 @@ describe('the scripts are registered under the ids the data names, all of them o
     expect(group('nagi05_71').map((e) => e.aiScriptId)).toEqual([DARK_SCRIPTS.yojimbo, DARK_SCRIPTS.daigoro]);
   });
 });
+
+describe("Dark Yojimbo's Zanmato is the Strength row 0x410A, not a Death row (RE's Zanmato note, sections 1 and 5)", () => {
+  it('the row: Strength formula, power 250, capped at 99,999, on the whole front line, no Death or any other status, and the game\'s record cleanses Auto-Life (extra word 0x200)', async () => {
+    const { DARK_AEONS_ABILITIES, COMMAND_RECORDS_DARK_AEONS, DARK_ZANMATO_ID } = await import('../../../src/data/ffx/enemies/dark-aeons-abilities.ts');
+    const row = DARK_AEONS_ABILITIES[DARK_ZANMATO_ID]!;
+    expect([row.formula, row.power, row.targeting, row.hits]).toEqual(['strength', 250, 'all-enemies', 1]);
+    expect(row.flags).toContain('always-break-damage-limit'); // the cap bit: 99,999
+    expect(row.statusEffects, 'no Death on the Dark Yojimbo\'s row').toEqual([]);
+    expect(COMMAND_RECORDS_DARK_AEONS[DARK_ZANMATO_ID]).toMatchObject({ id: 0x410a, damageClass: 1, extra: 0x200 });
+    expect(DARK_ROWS.zanmato).toBe(DARK_ZANMATO_ID);
+  });
+
+  it('on the real engine it hits each front-line member for far more than 9,999 and takes a cast Auto-Life away before the death check: a holder at 3,000 HP dies and nothing revives him (the fayth\'s permanent Auto-Life, which this chapter\'s party never has, is outside the test)', () => {
+    const e = H.newEngine(1, H.ACT_II_GROUP);
+    (H.actor(e, 'dark-yojimbo').overdrive as { gauge: number }).gauge = 100;
+    for (const id of e.state().activeIds) {
+      const m = H.actor(e, id);
+      m.hp = 3_000;
+      m.statuses['auto-life'] = { id: 'auto-life', turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    }
+    let start = -1;
+    for (let i = 0; i < 200 && start < 0; i++) {
+      const d = e.nextDecision();
+      if (d.kind === 'battle-over') break;
+      if (d.kind === 'player-input') e.submit(H.defend());
+      start = H.log(e).findIndex((ev) => ev.type === 'action-start' && ev.actorId === 'dark-yojimbo' && ev.abilityId === DARK_ROWS.zanmato);
+    }
+    expect(start, 'Dark Yojimbo opened with Zanmato (his gauge was full)').toBeGreaterThanOrEqual(0);
+    const events = H.log(e).slice(start);
+    const dealt = events.filter((ev): ev is Extract<BattleEvent, { type: 'damage' }> => ev.type === 'damage' && ev.targetId !== 'dark-yojimbo');
+    expect(dealt.length).toBeGreaterThanOrEqual(1);
+    for (const ev of dealt) expect(ev.amount, `${ev.targetId}: capped at 99,999, far past a plain hit's 9,999`).toBeGreaterThan(9_999);
+    for (const ev of dealt) expect(ev.amount).toBeLessThanOrEqual(99_999);
+    for (const id of dealt.map((ev) => ev.targetId)) {
+      expect(H.actor(e, id).alive, `${id} died: Auto-Life was cleansed before the death check`).toBe(false);
+    }
+    for (const id of dealt.map((ev) => ev.targetId)) {
+      expect(events.some((ev) => ev.type === 'status-remove' && ev.targetId === id && ev.status === 'auto-life'), `${id}: Auto-Life is taken off by the hit`).toBe(true);
+    }
+    expect(events.filter((ev) => ev.type === 'revive'), 'no revive is queued').toEqual([]);
+  });
+});

@@ -88,7 +88,7 @@ export const MIRROR_AEONS_DOC: GuideDoc = {
         'Cheer on the swordsman first: at five stacks a third comes off every physical blow, enough to live through Wakizashi at full health. Put Auto-Life on everyone.',
         'Quick Hit for as many blows as you can, and keep swinging through the misses.',
         'When his gauge is nearly full, send Yuna\'s Yojimbo in before he acts, a round early rather than on the full gauge: he takes Zanmato for everyone.',
-        "Your own Yojimbo can be paid to strike; the Dark one resists Zanmato, so do not count on it.",
+        "Your own Yojimbo can be paid to strike; a lucky Zanmato can end the fight, but it is a long shot, so do not count on it.",
       ],
     },
     { t: 'list', label: 'Steal', items: ['Stamina Tonic x2 (common)', 'Elixir (rare)'] },
