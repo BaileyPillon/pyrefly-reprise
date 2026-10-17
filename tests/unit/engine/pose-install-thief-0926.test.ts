@@ -17,7 +17,8 @@
  *   painting in its slot and keeps attack and cast on the idle (D-179);
  * - where the local art is present (it is gitignored), each PNG's hash equals
  *   the locked one, the manifest lists the state, and each sidecar carries the
- *   body-height `scale` (not a head match) that `tryLoadMeta` passes through.
+ *   body-height `scale` (not a head match). Since the W3 sizing rule (2026-10-17) the size the engine DRAWS a pose at is the registered one (`src/data/art/poseRegistrationFfx2.ts`: the geometric mean of the
+ *   head and height scales, lifted to the stature floor), which `tryLoadMeta` passes through; the sidecar's body-height scale is still the file's own and is what the rule reads as the pose's head scale.
  *
  * Game case: FFX-2 only (the Thief dressphere; Rikku wears it in Chapter VI).
  */
@@ -29,6 +30,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetArtManifest } from '../../../src/engine/ArtManifest.ts';
 import { resolvePoseMap } from '../../../src/engine/BattlePresenterArt.ts';
 import { tryLoadMeta } from '../../../src/engine/PaintedArt.ts';
+import { POSE_REGISTRATION } from '../../../src/engine/PoseRegistration.ts';
 
 const ROOT = path.resolve(__dirname, '../../..');
 const ART = path.join(ROOT, 'public/art');
@@ -116,7 +118,7 @@ describe.skipIf(!haveArt)('the installed files on this disk (public/art is gitig
       expect(String(side.scaleNote), p).toMatch(/^Body height 2026-09-26/);
       expect(side.decision, p).toBe('D-199');
       const meta = await tryLoadMeta(`/art/characters/rikku-thief/${p}.png`);
-      expect(meta?.scale, p).toBe(SCALES[p]);
+      expect(meta?.scale, p).toBe(POSE_REGISTRATION['rikku-thief']?.[p]?.scale ?? SCALES[p]); // the registered scale (the sizing rule's), else the sidecar's
       expect(meta!.baselineY, p).toBeLessThanOrEqual(meta!.height);
     }
   });

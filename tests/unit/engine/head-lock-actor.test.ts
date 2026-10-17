@@ -118,7 +118,9 @@ describe('the strike solver\'s look at a pose it is not showing (PaintedActor.po
     shown.setPose('victory', { immediate: true, force: true });
     frame(shown, cam);
     const f = slotOf(shown, 'victory').lock;
-    expect(Math.abs(f - 1)).toBeGreaterThan(0.01); // the camera asks for more than a percent of her here, which the table does not know
+    // the camera asks for a few thousandths of her here, which the table does not know. It asked for more than a percent while her victory was drawn at 0.80 of her idle's height (the head sat a third of
+    // a figure lower than the idle's, so the converging camera drew it smaller); the W3 sizing rule draws it at 0.90 (body 0.90 of the idle's), so the head sits nearer the idle's and the camera has less to do
+    expect(Math.abs(f - 1)).toBeGreaterThan(0.002);
     expect(height(a) / height(b)).toBeCloseTo(f, 6); // and the solver is told exactly that much
   });
 

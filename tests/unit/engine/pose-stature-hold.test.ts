@@ -7,17 +7,19 @@ import { POSE_REGISTRATION_FFX } from '../../../src/data/art/poseRegistrationFfx
 import { checkPoseScale } from '../../../tools/pose-scale-check.mjs';
 
 /**
- * **Stature holds: a hurt figure is not drawn at two thirds of her height** (release 50.1; **FFX only**: the paintings and the records are the FFX party's).
+ * **Stature holds: a hurt figure is not drawn at two thirds of her height** (release 50.1, carried by the W3 sizing rule, 2026-10-17; **FFX only**: the paintings and the records are the FFX party's).
  *
- * Bailey, 2026-10-16, with a screenshot of Chapter XXVII: "lulu looks tiny when hurt - this problem again? ugh". The registration (release 39, D-420) scales every pose so its HEAD is the idle's head, and a painting
- * whose proportions differ from the idle's (Lulu's hurt and low-HP paintings are squat, big-headed figures of a slender idle) came out at 0.67 and 0.55 of her height in the live game (read through the stage camera,
- * Chapter XXVII and Chapter IX: hurt x0.666, low HP x0.544, head x1.00). `tools/posescale/overrides.json` `stature` now holds a hurt, attack, cast or low-HP pose to a floor (0.90 of the idle's height; 0.75 for the
- * low-HP slouch, which bends) and a ceiling (1.10), at the cost of a head bigger than the idle's by `held.headRatio`; the record says so, with whose word it is. After the hold, read the same way: Lulu hurt x0.906
- * (Chapter XXVII) and x0.903 (Chapter IX), low HP x0.749 and x0.748; Yuna hurt x0.904 and attack x0.905; Auron hurt x0.909, attack x0.902, low HP x0.753; Wakka cast x1.095; Rikku attack x0.890 (the table's 0.901 less the camera's 1 percent).
+ * Bailey, 2026-10-16, with a screenshot of Chapter XXVII: "lulu looks tiny when hurt - this problem again? ugh". The registration (release 39, D-420) scaled every pose so its HEAD was the idle's head, and a painting
+ * whose proportions differ from the idle's (Lulu's hurt and low-HP paintings are squat, big-headed figures of a slender idle) came out at 0.67 and 0.55 of her height in the live game. r50.1 held nine FFX poses
+ * to a floor (0.90 of the idle's height; 0.75 for the low-HP slouch, which bends) and a ceiling (1.10) at the cost of a head bigger than the idle's, and said so in the record (`held`).
  *
- * Held here: the poses a hold touches, exactly, with the numbers the table carries; that every FFX party member's hurt, attack and cast stand inside 0.90 to 1.10 of the idle's height in the record and their low-HP
- * pose at 0.75 or more; that the table, the record and `tools/pose-scale-check.mjs` agree on a held pose (its registered head is the idle's at the APPLIED scale, so the head lock does not undo the hold); and what
- * the check refuses (a hold with no owner's word, a ratio that is not the scale over the reading). A KO or other lying pose is never held (its length against the idle's height is a decision for Bailey, docs/handoff/r50-1.md).
+ * The W3 sizing rule (`tools/posescale/pose-ruler.mjs`, 2026-10-17: the geometric mean of the head and height scales, lifted to the floor) replaced the hold as a mechanism and keeps the nine as a special case: Lulu hurt,
+ * Lulu critical, Auron hurt and attack, Yuna hurt and Rikku attack are still lifted to their floor (within 0.012 of the r50.1 draw); Auron's low-HP pose, Wakka's cast and Yuna's attack are where the mean sits INSIDE
+ * the band, so no lift is needed and they are drawn at the mean (Auron critical 0.75 to 0.78, Wakka cast 1.10 to 1.06, Yuna attack 0.90 to 0.94: the head cost shrinks or stays in band).
+ *
+ * Held here: the nine poses' records and tables, exactly; that every FFX party member's hurt, attack and cast stand inside 0.90 to 1.10 of the idle's height in the record and their low-HP pose at 0.75 or more;
+ * that the table, the record and `tools/pose-scale-check.mjs` agree on a held pose (its registered head is the idle's at the APPLIED scale, so the head lock does not undo the hold); and what the check refuses
+ * (a hold with no owner's word, a ratio that is not the scale over the reading). A KO or other lying pose is never held (its length against the idle's height is a decision for Bailey, docs/handoff/r50-1.md).
  */
 
 interface Rec {
@@ -29,22 +31,28 @@ interface Rec {
   head?: number[];
   size?: number[];
   held?: { by?: string; reading: number; readingStature: number; stature: number; headRatio: number };
+  ruled?: { rule: string; head: number; height: number; mean: number; lift: string | null; headRatio: number; stature: number };
 }
 const record = JSON.parse(readFileSync(resolve(__dirname, '..', '..', '..', 'docs', 'target', 'pose-measure.json'), 'utf8')) as { subjects: Record<string, { poses: Record<string, Rec> }> };
 const PARTY = ['tidus', 'yuna', 'wakka', 'lulu', 'kimahri', 'auron', 'rikku'] as const;
 
-/** Every hold, with what it does: [subject, pose, scale applied, the ruler's reading, stature drawn]. */
-const HELD: ReadonlyArray<readonly [string, string, number, number, number]> = [
-  ['auron', 'attack', 0.887, 0.69, 0.901],
-  ['auron', 'critical', 0.788, 0.64, 0.75],
-  ['auron', 'hurt', 0.93, 0.75, 0.901],
-  ['lulu', 'critical', 0.733, 0.533, 0.75],
-  ['lulu', 'hurt', 0.903, 0.667, 0.901],
-  ['rikku', 'attack', 0.825, 0.734, 0.901],
-  ['wakka', 'cast', 1.074, 1.09, 1.1],
-  ['yuna', 'attack', 0.782, 0.761, 0.901],
-  ['yuna', 'hurt', 0.935, 0.804, 0.9],
+/**
+ * The nine r50.1 holds: [subject, pose, scale now, the head ruler's reading, stature drawn now, held now?, what r50.1 drew (box stature through the model)].
+ * Six come out within 0.012 of the r50.1 draw; the other three are drawn at the mean because it sits inside the band (see the header).
+ */
+const NINE: ReadonlyArray<readonly [string, string, number, number, number, boolean, number]> = [
+  ['auron', 'attack', 0.886, 0.69, 0.9, true, 0.9025],
+  ['auron', 'critical', 0.82, 0.64, 0.78, true, 0.7505],
+  ['auron', 'hurt', 0.931, 0.75, 0.9, true, 0.8997],
+  ['lulu', 'critical', 0.729, 0.533, 0.75, true, 0.754],
+  ['lulu', 'hurt', 0.897, 0.667, 0.9, true, 0.9074],
+  ['rikku', 'attack', 0.835, 0.734, 0.901, true, 0.8895],
+  ['wakka', 'cast', 1.032, 1.09, 1.057, false, 1.0995],
+  ['yuna', 'attack', 0.813, 0.761, 0.937, false, 0.9008],
+  ['yuna', 'hurt', 0.936, 0.804, 0.9, true, 0.8995],
 ];
+/** The three whose draw moves by more than 0.012 on purpose: the mean is inside the band, so it needs no lift. */
+const MOVED = new Set(['auron/critical', 'wakka/cast', 'yuna/attack']);
 
 describe('the FFX party is drawn within a tenth of its idle height when it fights or is hurt', () => {
   it('every hurt, attack and cast pose stands at 0.90 to 1.10 of its idle, and the low-HP pose at 0.75 or more', () => {
@@ -59,38 +67,49 @@ describe('the FFX party is drawn within a tenth of its idle height when it fight
     }
   });
 
-  it("Lulu's hurt was 0.665 of her height and is 0.90; her low-HP slouch was 0.546 and is 0.75 (the screenshot's complaint)", () => {
+  it("Lulu's hurt was 0.67 of her height and is 0.90; her low-HP slouch was 0.55 and is 0.75 (the screenshot's complaint)", () => {
     const hurt = record.subjects['lulu']!.poses['hurt']!;
     const crit = record.subjects['lulu']!.poses['critical']!;
-    expect([hurt.held!.readingStature, hurt.stature]).toEqual([0.665, 0.901]);
-    expect([crit.held!.readingStature, crit.stature]).toEqual([0.546, 0.75]);
-    expect(POSE_REGISTRATION_FFX['lulu']!['hurt']!.scale).toBe(0.903);
-    expect(POSE_REGISTRATION_FFX['lulu']!['critical']!.scale).toBe(0.733);
+    expect([hurt.held!.readingStature, hurt.stature]).toEqual([0.669, 0.9]);
+    expect([crit.held!.readingStature, crit.stature]).toEqual([0.549, 0.75]);
+    expect(POSE_REGISTRATION_FFX['lulu']!['hurt']!.scale).toBe(0.897);
+    expect(POSE_REGISTRATION_FFX['lulu']!['critical']!.scale).toBe(0.729);
   });
 });
 
-describe('the holds are exactly the nine poses that were off by more than a tenth', () => {
-  it('only the listed poses carry a hold, each with its scale, its reading, its stature and a head ratio inside x0.8 to x1.45', () => {
-    const found: string[] = [];
-    for (const [s, sub] of Object.entries(record.subjects)) for (const [p, r] of Object.entries(sub.poses)) if (r.held || r.scaleSrc === 'held') found.push(`${s}/${p}`);
-    expect(found.sort()).toEqual(HELD.map(([s, p]) => `${s}/${p}`).sort());
-    for (const [s, p, scale, reading, stature] of HELD) {
+describe('the nine r50.1 holds under the sizing rule', () => {
+  it('each keeps its record and its table scale; seven are still lifted to the floor (a recorded hold), two are drawn at the mean', () => {
+    for (const [s, p, scale, reading, stature, held] of NINE) {
       const r = record.subjects[s]!.poses[p]!;
       const w = `${s}/${p}`;
-      expect(r.scaleSrc, w).toBe('held');
+      expect(r.scaleSrc, w).toBe(held ? 'held' : 'ruled');
       expect(r.scale, w).toBe(scale);
-      expect(r.held!.reading, w).toBe(reading);
-      expect(r.held!.stature, w).toBe(stature);
-      expect(r.held!.headRatio, w).toBeCloseTo(scale / reading, 2);
-      expect(r.held!.headRatio, w).toBeGreaterThan(0.8);
-      expect(r.held!.headRatio, w).toBeLessThan(1.45);
-      expect(r.held!.by, `${w} says whose word it is`).toMatch(/Bailey 2026-10-16/);
+      expect(r.reading, w).toBe(reading);
+      expect(r.stature, w).toBe(stature);
+      expect(r.ruled!.rule, w).toBe('geomean/1');
       expect(POSE_REGISTRATION_FFX[s]![p]!.scale, `${w} table`).toBe(scale);
+      if (held) {
+        expect(r.held!.headRatio, w).toBeCloseTo(scale / reading, 2);
+        expect(r.held!.headRatio, w).toBeGreaterThan(0.8);
+        expect(r.held!.headRatio, w).toBeLessThan(1.45);
+        expect(r.held!.by, `${w} says whose word it is`).toMatch(/Bailey 2026-10-16/);
+      } else {
+        expect(r.held, w).toBeUndefined();
+      }
     }
   });
 
-  it('a held pose registers the head the lock must hold at the applied scale: its head box is the idle\'s over the scale, not the ruler\'s', () => {
-    for (const [s, p, scale] of HELD) {
+  it('six come out within 0.012 of the stature r50.1 drew (the box through the model); the other three move on purpose, to the mean', () => {
+    for (const [s, p, , , stature, , before] of NINE) {
+      const w = `${s}/${p}`;
+      if (MOVED.has(w)) expect(Math.abs(stature - before), w).toBeGreaterThan(0.012);
+      else expect(Math.abs(stature - before), w).toBeLessThanOrEqual(0.012);
+    }
+  });
+
+  it("a held pose registers the head the lock must hold at the applied scale: its head box is the idle's over the scale, not the ruler's", () => {
+    for (const [s, p, scale, , , held] of NINE) {
+      if (!held) continue;
       const sub = record.subjects[s]!;
       const r = sub.poses[p]!;
       const side = (b: number[]): number => Math.sqrt((b[2]! - b[0]!) * (b[3]! - b[1]!));
@@ -99,15 +118,17 @@ describe('the holds are exactly the nine poses that were off by more than a tent
     }
   });
 
-  it('no KO or other lying pose is held, and no scale outside the nine changed (the unheld poses keep their readings)', () => {
+  it('no KO is held or ruled, and the poses the rule leaves alone keep their readings', () => {
     for (const s of PARTY) {
       expect(record.subjects[s]!.poses['ko']!.scaleSrc, `${s}/ko`).not.toBe('held');
+      expect(record.subjects[s]!.poses['ko']!.scaleSrc, `${s}/ko`).not.toBe('ruled');
       expect(record.subjects[s]!.poses['ko']!.held, `${s}/ko`).toBeUndefined();
     }
-    expect(record.subjects['lulu']!.poses['attack']!.scale).toBe(1);
-    expect(record.subjects['lulu']!.poses['cast']!.scale).toBe(1.053);
-    expect(record.subjects['tidus']!.poses['hurt']!.scale).toBe(1);
-    expect(record.subjects['kimahri']!.poses['hurt']!.scale).toBe(1);
+    // Lulu's attack and cast: the mean of their head and height scales (the head ruler read 1.000 and 1.053), within a few percent
+    expect(record.subjects['lulu']!.poses['attack']!.scale).toBe(1.015);
+    expect(record.subjects['lulu']!.poses['cast']!.scale).toBe(1.026);
+    expect(record.subjects['tidus']!.poses['hurt']!.scale).toBe(0.96);
+    expect(record.subjects['kimahri']!.poses['hurt']!.scale).toBe(1.052);
   });
 });
 
