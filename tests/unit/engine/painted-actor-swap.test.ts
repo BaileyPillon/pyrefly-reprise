@@ -243,6 +243,41 @@ describe('the held-frame cut (smooth; the mechanics, on the cutany ablation: a c
   });
 });
 
+describe('the aligned dissolve must not pull overlapping bodies apart (smooth)', () => {
+  beforeEach(() => setPoseSwapMode('smooth'));
+
+  /** Bodies drawn on the stance (where the feet are, which the registration puts at the same place in every pose), whatever the head does. */
+  function onStance(poses: string[]): Actor {
+    const a = new PaintedActor({ name: 'tidus', worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
+    const map: Record<string, ReturnType<typeof painting>> = {};
+    for (const p of poses) {
+      const tex = painting('tidus', p);
+      const w = 96;
+      const h = Math.max(8, Math.round((96 * tex.meta.height) / tex.meta.width));
+      const d = new Uint8ClampedArray(w * h * 4);
+      const cx = (tex.meta.stanceX ?? tex.meta.width / 2) / tex.meta.width;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (y / h >= 0.1 && y / h < 0.98 && Math.abs(x / w - cx) <= 0.34) d[(y * w + x) * 4 + 3] = 255;
+      const sil = coarseMask(d, w, h, 90);
+      map[p] = { ...tex, meta: { ...tex.meta, ...(sil ? { silhouette: sil } : {}) } };
+    }
+    a.adoptPoses(map, 'idle');
+    a.position.set(-2, 0, 0);
+    a.setPose('idle', { immediate: true, force: true });
+    return a;
+  }
+
+  it('Tidus idle to hurt, bodies on the same feet and heads far apart: the plain dissolve, no drift', () => {
+    const a = onStance(['idle', 'hurt']);
+    for (let f = 0; f < 5; f++) step(a);
+    a.setPose('hurt');
+    expect(policyOf(a)).toBe('dissolve');
+    for (let f = 0; f < 10; f++) {
+      step(a);
+      for (const s of slotsOf(a)) expect((s as unknown as { align: number }).align).toBe(0);
+    }
+  });
+});
+
 describe('the cut and the distance between the heads (smooth, the default parts)', () => {
   beforeEach(() => setPoseSwapMode('smooth'));
 

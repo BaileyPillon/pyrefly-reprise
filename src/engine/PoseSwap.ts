@@ -112,12 +112,22 @@ export const CUT_MAX_DISTANCE = 0.07;
 
 export type SwapPolicy = 'dissolve' | 'aligned' | 'cut';
 
+/**
+ * An alignment brings the two HEADS together; it moves the two BODIES with them. Where the heads are far apart but the bodies already overlap well (Tidus idle to hurt: the
+ * silhouettes overlap by 0.46, the heads are 66 px apart), the slide pulls the bodies apart (0.10) and the double image the harness reads rises from 0.23 to 0.39. So the
+ * aligned dissolve is used only where it does not take the paintings out of each other: the overlap with the anchors at the meeting point must be at least the overlap where they
+ * stand. (Dark Mirror and the Bahamut fight, where the two move together, lost two thirds of their double images of 0.30 or more to the alignment.)
+ */
+export const ALIGN_MIN_GAIN = 0;
+
 /** What the policy needs to know about a pair of paintings changing places. */
 export interface SwapPairFacts {
   /** Intersection over union of the two silhouettes as drawn, 0 to 1; null when either has no silhouette (no pixels read). */
   readonly overlap: number | null;
   /** How far apart the two paintings' anchors (the heads, or the stand-in) are along x, as a share of the figure's height; null when either has no anchor. */
   readonly anchorDistance: number | null;
+  /** The same overlap with both anchors moved to the meeting point (what the middle of an aligned dissolve shows); null when it cannot be told. */
+  readonly overlapAligned?: number | null;
   /** The game holds still now ({@link figureHolding}). */
   readonly hold: boolean;
   /** Another blend is running (two paintings are already on screen): a cut would drop both. */
@@ -128,14 +138,15 @@ export interface SwapPairFacts {
  * How a pair of paintings changes places under `smooth`:
  *
  * - `cut`: overlap under {@link ALIGN_MIN_OVERLAP}, the heads no further apart than {@link CUT_MAX_DISTANCE}, the game holds still and nothing is blending: one step, never two paintings at once;
- * - `aligned`: the heads can be brought together (they are {@link ALIGN_MIN_DISTANCE} apart or more) and either the pair overlaps well or no hold is near;
+ * - `aligned`: the heads can be brought together (they are {@link ALIGN_MIN_DISTANCE} apart or more), either the pair overlaps well or no hold is near, and the alignment does not take the paintings out of each other ({@link ALIGN_MIN_GAIN});
  * - `dissolve`: everything else, the plain dissolve of today (unknown anchors, heads already together).
  *
  * An unknown overlap is never cut (a pair nobody measured is not a pair that reads as two people).
  */
 export function swapPolicy(f: SwapPairFacts, allow: { align: boolean; cut: boolean; cutMaxDistance?: number } = { align: true, cut: true }): SwapPolicy {
-  const canAlign = f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance >= ALIGN_MIN_DISTANCE;
   const known = f.overlap !== null && Number.isFinite(f.overlap);
+  const gain = known && f.overlapAligned != null && Number.isFinite(f.overlapAligned) ? f.overlapAligned - (f.overlap as number) : null;
+  const canAlign = f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance >= ALIGN_MIN_DISTANCE && (gain === null || gain >= ALIGN_MIN_GAIN);
   const maxStep = allow.cutMaxDistance ?? CUT_MAX_DISTANCE;
   const stepOk = maxStep === Infinity || (f.anchorDistance !== null && Number.isFinite(f.anchorDistance) && f.anchorDistance <= maxStep);
   if (allow.cut && known && (f.overlap as number) < ALIGN_MIN_OVERLAP && f.hold && !f.blending && stepOk) return 'cut';
@@ -163,6 +174,7 @@ export interface PoseSwapRecord {
   from: string;
   to: string;
   overlap: number | null;
+  overlapAligned: number | null;
   distance: number | null;
   hold: boolean;
   blending: boolean;

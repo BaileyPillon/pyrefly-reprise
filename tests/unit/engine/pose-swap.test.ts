@@ -8,6 +8,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   ALIGN_MIN_DISTANCE,
+  ALIGN_MIN_GAIN,
   ALIGN_MIN_OVERLAP,
   CUT_MAX_DISTANCE,
   MAX_DELTA_SMOOTH,
@@ -120,6 +121,26 @@ describe('the pair policy (changes 1 and 2)', () => {
     expect(swapPolicy(facts({ overlap: null, hold: true }))).toBe('aligned');
     expect(swapPolicy(facts({ overlap: null, hold: true, anchorDistance: null }))).toBe('dissolve');
     expect(swapPolicy(facts({ overlap: Number.NaN, hold: true, anchorDistance: Number.NaN }))).toBe('dissolve');
+  });
+});
+
+describe('the alignment must not take the paintings out of each other', () => {
+  it('the overlap with the anchors at the meeting point must be at least the overlap where they stand: otherwise the plain dissolve', () => {
+    expect(ALIGN_MIN_GAIN).toBe(0);
+    expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: 0.9 }))).toBe('aligned'); // the slide puts the bodies on each other
+    expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: 0.46 }))).toBe('aligned'); // no loss
+    expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: 0.1 }))).toBe('dissolve'); // Tidus idle to hurt: heads 66 px apart, bodies already together
+    expect(swapPolicy(facts({ overlap: 0.1, overlapAligned: 0.05, hold: false }))).toBe('dissolve');
+  });
+
+  it('an alignment that cannot be judged (no aligned overlap) is judged on the rest', () => {
+    expect(swapPolicy(facts({ overlap: 0.46 }))).toBe('aligned');
+    expect(swapPolicy(facts({ overlap: 0.46, overlapAligned: null }))).toBe('aligned');
+    expect(swapPolicy(facts({ overlap: null, overlapAligned: 0.2 }))).toBe('aligned');
+  });
+
+  it('the cut is not judged on it (a cut shows one painting)', () => {
+    expect(swapPolicy(facts({ overlap: 0.1, overlapAligned: 0.0, hold: true, anchorDistance: 0.04 }))).toBe('cut');
   });
 });
 
