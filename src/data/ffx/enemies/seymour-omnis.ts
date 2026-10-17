@@ -220,7 +220,7 @@ function mortiphasm(id: string, slot: number): EnemyDef {
     flags: {
       isPart: true,
       partOf: OMNIS_ID,
-      battleDistance: 2, // the formation script's init worker writes BattleDistance 2 on each disc (sins03_00, research/re-ffx-ai-seymour.md section 5.1); §2 [verified: 4 sources] says melee falls short
+      battleDistance: 2, // the formation script's battle-start worker writes BattleDistance 2 on each disc (sins03_00 lines 9906 to 9918 of its disassembly; research/re-ffx-ai-seymour.md section 5.1); §2 [verified: 4 sources] says melee falls short
       neverRandomTarget: true, // §2 [single source: GameFAQs]
       hideHpBar: true, // our estimate: a 1-HP bar on an unkillable disc says nothing true
     },

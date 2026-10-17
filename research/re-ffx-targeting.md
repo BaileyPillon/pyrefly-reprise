@@ -197,8 +197,8 @@ monster could hold one only if its script wrote the auto-ability property; no sc
 
 **Reach** (0x00799690, §2) is read from the record's target word (`Cmd+0x1a` and `Cmd+0x1b`). `kernel/command-reach-table.ts` carries the word of all 979 records of the game's command
 table (counts by reach 204 / 8 / 638 / 129, as the source note gives; a test pins them), and `reach.ts#reachOf` reads it. A command can pick a target when its reach is at least the target's
-BattleDistance, or when the target is the user. The distances the project knows: Sinspawn Gui's head **1**; the four Mortiphasm discs **2** (the formation script's init worker writes
-BattleDistance 2 on each disc: `research/re-ffx-ai-seymour.md` section 5.1, sins03_00 offsets 0xc23e, 0xc26e, 0xc29e, 0xc2ce, read); Sin's Genais Core **3** until Genais falls, then 0
+BattleDistance, or when the target is the user. The distances the project knows: Sinspawn Gui's head **1**; the four Mortiphasm discs **2** (the formation script's battle-start worker writes
+BattleDistance 2 on each disc: sins03_00 offsets 0xc23e, 0xc26e, 0xc29e, 0xc2ce, lines 9906 to 9918 of its disassembly, read; recorded in `research/re-ffx-ai-seymour.md` section 5.1); Sin's Genais Core **3** until Genais falls, then 0
 (`research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md`, Genais and the Core).
 
 | # | Rule | Engine before | Wired in |
