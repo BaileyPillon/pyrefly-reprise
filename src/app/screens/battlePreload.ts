@@ -50,6 +50,7 @@ import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
 import { plateIdFor } from './pause/plates.ts';
 import { sceneArtUrls } from './sceneArt.ts';
 import { SECTOR1_PLATE } from '../../scenes/sector1-reactor-staging.ts';
+import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../../data/ffx/mirror-aeons-ids.ts';
 import { setupForChapter } from './BattleScreenSetup.ts';
 import { createEngine } from './BattleScreenWiring.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
@@ -144,7 +145,8 @@ function rank(c: { side: string; flags: { isPart?: boolean } }): number {
 }
 
 /** Scenes whose painting is not `backdrops/<sceneKey>.png`: the scene module names its own file. */
-const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECTOR1_PLATE.url }; // FF7 (r29 PR-0222)
+// Mirror Aeons (FFX, Chapter XXVII; LIVE-R50-01): its scene key is a code key with no `backdrops/mirror-aeons.png`; the stage is the Mushroom Rock Road scene and opens on that plate (Act II swaps in the Cavern's).
+const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECTOR1_PLATE.url, [MIRROR_AEONS_SCENE]: `art/backdrops/${MIRROR_ACT_I_PLATE}.png` }; // FF7 (r29 PR-0222)
 
 /** The battle backdrop's URL as the scene loads it. */
 export function plateUrlFor(sceneKey: string): string {
