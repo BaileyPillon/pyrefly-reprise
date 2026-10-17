@@ -31,7 +31,7 @@ export interface ResolveContext {
   items?: ItemRegistry; // item names for the steal message
   /** A hit's Delay damage closed this unit's open command menu (`apply_atb_damage`, re-parity W4); the engine drops the menu. */
   onMenuClosed?(unit: Ffx2Unit): void;
-  /** A unit was knocked out (`pp_ko_resolve` marked it dead): the engine REQUESTS its script's death entry (kind 4), which runs after the action in flight (re-parity RC9, lane X2-E). Absent in unit fixtures. */
+  /** A unit was knocked out (`pp_ko_resolve` marked it dead): the engine REQUESTS its script's death entry (kind 4), which runs after the action in flight ([R], the lane's reading of the request queue; re-parity RC9, lane X2-E). Absent in unit fixtures. */
   onKo?(target: Ffx2Unit, killer: CombatantId | undefined): void;
   /**
    * The engine's queue of counters (re-parity X2-D, `applied.ts`): a result applied to a girl who holds Counterattack, Evade & Counter

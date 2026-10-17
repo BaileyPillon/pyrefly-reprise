@@ -16,7 +16,7 @@ function isFriendly(a: Side, b: Side): boolean {
 /** On the field and selectable. `allowDead` opens KO'd allies to revival effects. */
 export function isTargetable(unit: Ffx2Unit, allowDead = false): boolean {
   if (unit.removed || unit.flags.hidden || unit.flags.untargetable) return false;
-  if (!unit.alive && leavesOnDeath(unit)) return false; // a monster that fell with a death pattern other than 0 left the battle: nothing finds it, a Raise included (FFX2-G05 3.10)
+  if (!unit.alive && leavesOnDeath(unit)) return false; // a monster that fell with a death pattern other than 0 left the battle: nothing finds it, a Raise included ([I]: G05 section 8 says that a Raise cannot find it is inferred; the pattern itself is G05 3.10)
   return allowDead || unit.alive;
 }
 
