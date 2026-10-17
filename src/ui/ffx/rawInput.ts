@@ -206,6 +206,11 @@ export interface RawInputWatcherOptions {
    * set differs from {@link KEY_MAP} (no WASD) and must not change.
    */
   keyboard?: boolean;
+  /**
+   * Report a press once, when the button goes down: a held direction does not auto-repeat, from the keyboard or the pad (default false: menus repeat a held direction).
+   * For the Overdrive minigames (re-parity RC9, FFX only): the game reads a button as NEWLY pressed (the pad's pressed-edge word), so a held key is one press.
+   */
+  edgeOnly?: boolean;
 }
 
 export class RawInputWatcher {
@@ -215,6 +220,7 @@ export class RawInputWatcher {
   private readonly repeatAt = new Map<UiButton, number>();
   private readonly ignoreSuspend: boolean;
   private readonly keyboard: boolean;
+  private readonly edgeOnly: boolean;
 
   constructor(
     /**
@@ -227,6 +233,7 @@ export class RawInputWatcher {
   ) {
     this.ignoreSuspend = opts.ignoreSuspend === true;
     this.keyboard = opts.keyboard !== false;
+    this.edgeOnly = opts.edgeOnly === true;
   }
 
   /** Is this watcher muted right now? */
@@ -261,7 +268,7 @@ export class RawInputWatcher {
     if (this.muted) return;
     const button = KEY_MAP[e.code];
     if (!button) return;
-    if (e.repeat && !DIRECTIONS.has(button)) return;
+    if (e.repeat && (this.edgeOnly || !DIRECTIONS.has(button))) return;
     if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code === 'Tab') e.preventDefault();
     if (e.isTrusted) noteDevice('keyboard');
     this.onButton(button, 'keyboard', e.code);
@@ -296,7 +303,7 @@ export class RawInputWatcher {
         noteDevice('gamepad');
         this.onButton(button, 'gamepad');
         this.repeatAt.set(button, now + REPEAT_DELAY_MS);
-      } else if (DIRECTIONS.has(button)) {
+      } else if (DIRECTIONS.has(button) && !this.edgeOnly) {
         const due = this.repeatAt.get(button) ?? Infinity;
         if (now >= due) {
           this.onButton(button, 'gamepad');

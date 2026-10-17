@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 /**
  * od3 (FFX only): a wrong Bushido press sends the progress back to input 1 and
- * the attempt goes on; only timer expiry fails.
+ * the attempt goes on; only timer expiry fails. Since re-parity RC9 (lane FFX-A, FFX only) the rule is the one of the game's own controller
+ * (`kernel/minigame-bushido.ts`, proven against the machine code in `parity-ffx-minigames.test.ts`): a press is compared once a frame (1/30 s) as a whole word,
+ * and a seen press changes the chips at the next frame.
  *
  * `research/ffx-overdrive-input-rules-2026-09-30.md` Q1, reset-to-start
  * `[verified: 3 sources]` (GF-PF, GF-HD, AF): "if an incorrect button is
@@ -26,40 +28,61 @@ import type { BattleEvent, Command, Decision, MinigameResult, SequenceResult } f
 import { FFXContentRegistry, createFFXEngine } from '../../src/battle/ffx/index.ts';
 import { ABILITIES as AURON } from '../../src/data/ffx/abilities/overdrive-auron.ts';
 import { openAuronSequence } from '../../src/ui/ffx/minigames/AuronSequence.ts';
-import { resolveAuronSequence, stepAuronSequence } from '../../src/ui/ffx/minigames/logic.ts';
+import { Pad, type BushidoMove, bushidoFrame, bushidoStart } from '../../src/battle/ffx/kernel/minigame-bushido.ts';
 import { attackAbility, enemy, member, party, setup } from './ffx-fixtures.test.ts';
 
 // The overlay's default sequence (what `minigameParams` plays today: it publishes no `sequence`).
 const SEQ = ['up', 'down', 'left', 'right', 'confirm', 'cancel', 'triangle'] as const;
 const KEY: Record<string, string> = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', cancel: 'KeyX', triangle: 'KeyQ', l1: 'KeyF', r1: 'KeyR' };
 
-describe('stepAuronSequence: a wrong press resets to input 1 and the attempt continues [Q1, verified: 3 sources]', () => {
+const WORD: Record<string, number> = { up: Pad.Up, down: Pad.Down, left: Pad.Left, right: Pad.Right, confirm: Pad.Cross, cancel: Pad.Circle, triangle: Pad.Triangle, l1: Pad.L1, r1: Pad.R1 };
+const MOVE: BushidoMove = { limit: 4, words: SEQ.map((b) => WORD[b] as number) };
+
+/** Feed the buttons one a frame; returns the controller's state after the last one and what the last frame said. */
+function feed(buttons: readonly string[], start = bushidoStart()) {
+  let last: ReturnType<typeof bushidoFrame> = { done: false, wrong: false };
+  for (const b of buttons) last = bushidoFrame(start, MOVE, WORD[b] as number);
+  return { state: start, last };
+}
+
+describe('the controller: a wrong press resets to input 1 and the attempt continues [Q1, now a fact of the exe]', () => {
   it('a wrong press mid-sequence goes back to input 1 and is not the end of the attempt', () => {
-    expect(stepAuronSequence(SEQ, 3, 'down')).toEqual({ correctSoFar: 0, wrong: true, done: false });
+    const r = feed(['up', 'down', 'left', 'down']);
+    expect(r.last).toEqual({ done: false, wrong: true });
+    expect(r.state.index).toBe(0);
   });
 
   it('a wrong first press stays at input 1, still not done', () => {
-    expect(stepAuronSequence(SEQ, 0, 'triangle')).toEqual({ correctSoFar: 0, wrong: true, done: false });
+    const r = feed(['triangle']);
+    expect(r.last).toEqual({ done: false, wrong: true });
+    expect(r.state.index).toBe(0);
   });
 
-  it('the wrong press itself does not count as input 1 even when it is that button [estimate]', () => {
-    expect(stepAuronSequence(SEQ, 3, 'up')).toEqual({ correctSoFar: 0, wrong: true, done: false });
+  it('the wrong press itself does not count as input 1 even when it is that button', () => {
+    const r = feed(['up', 'down', 'left', 'up']); // input 4 is right; up is input 1 but does not start the run again
+    expect(r.last).toEqual({ done: false, wrong: true });
+    expect(r.state.index).toBe(0);
   });
 
   it('after a reset the full correct sequence completes', () => {
-    let c = 0;
-    for (const b of ['up', 'down', 'left', 'down']) c = stepAuronSequence(SEQ, c, b).correctSoFar;
-    expect(c).toBe(0);
-    let last = { correctSoFar: 0, wrong: false, done: false };
-    for (const b of SEQ) {
-      last = stepAuronSequence(SEQ, c, b);
-      c = last.correctSoFar;
-    }
-    expect(last).toEqual({ correctSoFar: 7, wrong: false, done: true });
+    const r0 = feed(['up', 'down', 'left', 'down']);
+    expect(r0.state.index).toBe(0);
+    const r1 = feed(SEQ, r0.state);
+    expect(r1.last).toMatchObject({ done: true, grade: 1 });
   });
 
-  it('a reset left unfinished resolves at expiry as a fail with no time remaining (PR-0267)', () => {
-    expect(resolveAuronSequence({ sequenceLength: 7, correctInputs: 0, elapsedMs: 4000, timerMs: 4000 })).toEqual({ success: false, correctInputs: 0, timeRemainingMs: 0 });
+  it('two buttons in one frame are one word that matches nothing: a wrong press', () => {
+    const s = bushidoStart();
+    bushidoFrame(s, MOVE, Pad.Up);
+    expect(bushidoFrame(s, MOVE, Pad.Down | Pad.Left)).toEqual({ done: false, wrong: true });
+    expect(s.index).toBe(0);
+  });
+
+  it('a reset left unfinished fails at the limit with no time remaining (PR-0267): frame 121 of a 4 s move, A = 0', () => {
+    const s = bushidoStart();
+    let r = feed(['up', 'down', 'left', 'down'], s).last;
+    for (let f = 5; f <= 121; f++) r = bushidoFrame(s, MOVE, 0);
+    expect(r).toEqual({ done: true, grade: 0, a: 0, frame: 121 });
   });
 });
 
@@ -96,7 +119,8 @@ describe('the real overlay with real keys: wrong press -> reset -> success or ex
     const o = open();
     await enter(['up', 'down', 'left'], 100);
     expect(o.done()).toBe(3);
-    press('down'); // wrong: input 4 is "right"
+    press('down'); // wrong: input 4 is "right"; the next frame (within 1/30 s) sees it
+    await vi.advanceTimersByTimeAsync(40);
     expect(o.done()).toBe(0);
     expect(o.wrong()).toEqual([3]);
     expect(o.root.querySelector('.ffx-mg--fail')).toBeNull();
@@ -119,9 +143,9 @@ describe('the real overlay with real keys: wrong press -> reset -> success or ex
     if (r?.kind !== 'auron-sequence') return;
     expect(r.sequence.success).toBe(true);
     expect(r.sequence.correctInputs).toBe(7);
-    // 4 000 - 1 000 = 3 000, measured from the opening, not from the reset.
-    expect(r.sequence.timeRemainingMs).toBeGreaterThan(3000 - 40);
-    expect(r.sequence.timeRemainingMs).toBeLessThanOrEqual(3000 + 40);
+    // 4 000 - 1 000 = 3 000, measured from the opening, not from the reset: the last press at 1 000 ms is seen by frame 31, A = 4 - 31/30 s.
+    expect(r.sequence.frame).toBe(31);
+    expect(r.sequence.timeRemainingMs).toBeCloseTo(Math.fround(4 - 31 / 30) * 1000, 6);
   });
 
   it('a wrong press and then nothing fails only at the timer, as the Fail row with no time remaining', async () => {
@@ -131,7 +155,7 @@ describe('the real overlay with real keys: wrong press -> reset -> success or ex
     await vi.advanceTimersByTimeAsync(3000); // 3 300 ms: still open
     expect(o.result()).toBeUndefined();
     await vi.advanceTimersByTimeAsync(1200); // past 4 000 ms and the 400 ms of flash + close
-    expect(o.result()).toEqual({ kind: 'auron-sequence', sequence: { success: false, correctInputs: 0, timeRemainingMs: 0 } });
+    expect(o.result()).toEqual({ kind: 'auron-sequence', sequence: { success: false, correctInputs: 0, timeRemainingMs: 0, frame: 121 } }); // the frame that finds 4 s gone
   });
 
   it('several wrong presses in a row keep the attempt open; a full sequence after them still succeeds', async () => {
@@ -174,8 +198,8 @@ function fang(sequence: SequenceResult): number {
 describe('what reaches the engine after a reset', () => {
   it('reset then expiry deals exactly the no-press Fail row; reset then completion deals the success with its bonus', () => {
     const expiry = fang({ success: false, correctInputs: 0, timeRemainingMs: 0 });
-    const noPress = fang(resolveAuronSequence({ sequenceLength: 7, correctInputs: 0, elapsedMs: 4000, timerMs: 4000 }));
-    const retried = fang(resolveAuronSequence({ sequenceLength: 7, correctInputs: 7, elapsedMs: 1000, timerMs: 4000 }));
+    const noPress = fang({ success: false, correctInputs: 0, timeRemainingMs: 0, frame: 121 });
+    const retried = fang({ success: true, correctInputs: 7, timeRemainingMs: 3000, frame: 30 });
     const slowSuccess = fang({ success: true, correctInputs: 7, timeRemainingMs: 0 });
     expect(noPress).toBe(expiry);
     expect(retried).toBeGreaterThan(slowSuccess);

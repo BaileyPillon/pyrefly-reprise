@@ -124,11 +124,13 @@ describe('a fail is the Fail row with no rider, and draws nothing new', () => {
 });
 
 describe('rowFromExtra(def, "fail") for each Bushido', () => {
+  // Tornado's rank is 7 here since RC9 lane FFX-B2 (FFX only; it was 6, the replacement row 0x310D's own rank): a fail row keeps the MENU row's rank, because
+  // the game charges the user the rank stored when the action was first calculated and the result handler never rewrites it (FFX-G01 row 17, FFX-H01 3.5).
   const want: Record<string, { power: number; hits: number; rank: number }> = {
     'dragon-fang': { power: 16, hits: 1, rank: 5 },
     'shooting-star': { power: 24, hits: 1, rank: 5 },
     'banishing-blade': { power: 28, hits: 1, rank: 6 },
-    tornado: { power: 15, hits: 1, rank: 6 },
+    tornado: { power: 15, hits: 1, rank: 7 },
   };
   for (const [id, w] of Object.entries(want)) {
     it(`${id}: the §5.5 Fail row, no status, no Delay, crit-eligible kept (Q3b), canMiss false (hard rule 5)`, () => {

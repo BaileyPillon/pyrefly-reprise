@@ -29,7 +29,7 @@ const board = (def: AbilityDef) =>
     party: party({ members: [member({ id: 'tidus', overdrive: od(def.id) }), member({ id: 'auron' }), member({ id: 'yuna' })], activeSlots: ['tidus', 'auron', 'yuna'] }),
     enemies: { id: 'g', game: 'ffx', enemies: [enemy({ id: 'dummy', hp: 99_999 })] },
   });
-const timing = (success: boolean, timeRemainingMs = 0): MinigameResult => ({ kind: 'tidus-timing', timing: { success, timeRemainingMs, timerMs: 2200 } });
+const timing = (success: boolean, timeRemainingMs = 0): MinigameResult => ({ kind: 'tidus-timing', timing: { success, timeRemainingMs, timerMs: 2000 } }); // Blitz Ace's limit is 2 s (RC9 lane FFX-A; it was 2.2 s)
 
 function fire(def: AbilityDef, result: MinigameResult): { amounts: number[]; misses: number; tick: number } {
   const reg = new FFXContentRegistry();
@@ -72,7 +72,10 @@ describe('Blitz Ace: success = 4 x 8 then the 24 x 1 "Last Hit"; fail = 4 x 8 [ย
     expect(bad.amounts).toHaveLength(8);
     expect(bad.amounts).toEqual(ok.amounts.slice(0, 8)); // the same volley, the same RNG draws
     expect(total(ok.amounts)).toBeGreaterThan(total(bad.amounts));
-    expect(bad.tick).toBeLessThan(ok.tick); // rank 6 against 7, unchanged
+    // RC9 lane FFX-B2 (FFX only): this line said `toBeLessThan` ("rank 6 against 7, unchanged"). The game charges the user the menu command's rank, 7, whatever
+    // the grade (FFX-G01 row 17, closed by FFX-H01 section 3.5: rank stored at the first calculation, never rewritten by the result handler); the fail used to
+    // come back sooner only because the engine read the replacement row's rank. The proof is `parity-ffx-engine-od-results.test.ts`.
+    expect(bad.tick).toBe(ok.tick);
   });
 
   it('the ยง5.2 bonus scales the finisher with the volley on a success, and a fail with time on the clock earns none', () => {

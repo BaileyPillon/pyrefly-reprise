@@ -7,13 +7,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import {
-  computeDamage,
-  degreesPerCast,
-  estimatedDamage,
-  furyCastsFor,
-  furyTierOf,
-} from '../../src/battle/ffx/index.ts';
+import { computeDamage, estimatedDamage, furyCastsFor } from '../../src/battle/ffx/index.ts';
 import { defTerm } from '../../src/battle/ffx/kernel/damage.ts';
 import { ability, attackAbility, fighter, stats } from './ffx-fixtures.test.ts';
 
@@ -312,40 +306,10 @@ describe('estimatedDamage (Warrior mode reference)', () => {
   });
 });
 
-describe("Lulu's Fury rotation model (§5.7)", () => {
+describe("Lulu's Fury rotation model (§5.7; the game's table since re-parity RC9, FFX-G01 section 6.4)", () => {
   const fury = (id: string) => ability({ id, name: id, category: 'overdrive', minigame: 'lulu-fury' });
 
-  it('assigns each spell its published rotation tier', () => {
-    expect(furyTierOf(fury('fire-fury'))).toBe('tier1');
-    expect(furyTierOf(fury('watera-fury'))).toBe('tier2');
-    expect(furyTierOf(fury('osmose-fury'))).toBe('tier2');
-    expect(furyTierOf(fury('firaga-fury'))).toBe('tier3');
-    expect(furyTierOf(fury('demi-fury'))).toBe('tier3');
-    expect(furyTierOf(fury('flare-fury'))).toBe('flare');
-    expect(furyTierOf(fury('ultima-fury'))).toBe('ultima');
-  });
-
-  // degreesPerCast = 5400 / castsAt15Rotations, exact at Magic 0 / 128 / 255.
-  // 5400 / castsAt15Rotations, kept exact: 5400/16 is 337.5, and rounding it
-  // up to the research table's printed 338 costs the 16th cast.
-  it.each([
-    ['fire-fury', 0, 5400 / 7],
-    ['fire-fury', 128, 450],
-    ['fire-fury', 255, 337.5],
-    ['fira-fury', 0, 900],
-    ['fira-fury', 128, 540],
-    ['fira-fury', 255, 337.5],
-    ['firaga-fury', 255, 450],
-    ['flare-fury', 0, 1350],
-    ['flare-fury', 255, 5400 / 7],
-    ['ultima-fury', 0, 1350],
-    ['ultima-fury', 128, 1350],
-    ['ultima-fury', 255, 1350],
-  ])('%s at Magic %i costs ~%f degrees per cast', (id, magic, expected) => {
-    expect(degreesPerCast(fury(id), magic)).toBeCloseTo(expected, 6);
-  });
-
-  it('reproduces the published "casts after 15 rotations" anchors', () => {
+  it('reproduces the published "casts after 15 rotations" anchors (the table of the game agrees at these three Magic values)', () => {
     const budget = 15 * 360;
     expect(furyCastsFor(fury('fire-fury'), 0, budget)).toBe(7);
     expect(furyCastsFor(fury('fire-fury'), 128, budget)).toBe(12);
@@ -355,12 +319,23 @@ describe("Lulu's Fury rotation model (§5.7)", () => {
     expect(furyCastsFor(fury('ultima-fury'), 255, budget)).toBe(4);
   });
 
+  it('between the anchors the casts are those of the game, not an interpolation: Fire Fury at Magic 90 after 5 / 10 / 15 / 20 rotations is 5 / 8 / 10 / 13', () => {
+    // the interpolated model gave 3 / 6 / 9 / 13 (FFX-G01 section 10, row 12)
+    expect([5, 10, 15, 20].map((r) => furyCastsFor(fury('fire-fury'), 90, r * 360))).toEqual([5, 8, 10, 13]);
+  });
+
+  it('counts whole rotations only, and a Fury always casts once', () => {
+    expect(furyCastsFor(fury('fire-fury'), 0, 5 * 360 + 359)).toBe(furyCastsFor(fury('fire-fury'), 0, 5 * 360));
+    expect(furyCastsFor(fury('fire-fury'), 0, 0)).toBe(1);
+    expect(furyCastsFor(fury('fire-fury'), 0, -50)).toBe(1);
+  });
+
   it('caps at 16 casts however far the stick swept', () => {
     expect(furyCastsFor(fury('fire-fury'), 255, 999999)).toBe(16);
   });
 
   it('gives the Gagazet-typical Lulu 6-7 casts of a -ga Fury', () => {
-    // §5.7 encounter reading: Magic 38-48 -> ~793 degrees per cast.
+    // Magic 44 is in the 40-74 bracket of the -ga group (row 0): 15 rotations reach the 7th cast.
     const budget = 15 * 360;
     expect(furyCastsFor(fury('firaga-fury'), 44, budget)).toBeGreaterThanOrEqual(6);
     expect(furyCastsFor(fury('firaga-fury'), 44, budget)).toBeLessThanOrEqual(7);
