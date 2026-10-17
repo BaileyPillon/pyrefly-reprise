@@ -34,6 +34,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 import { SIN_FIN_IMMUNITIES, SIN_GENAIS_CORE_GROUP_ID } from './sin-fins.ts';
 
 export const SIN_GENAIS_ID = 'sinspawn-genais';
@@ -93,19 +94,17 @@ const genais: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Sinspawn Genais', spriteKey: 'sinspawn-genais', hp: 20_000 }],
   aiScriptId: SIN_GENAIS_SCRIPT,
-  rewards: {
-    ap: 1_800, // §2.4
-    apOverkill: 2_700, // §2.4
-    gil: 10_000, // §2.4
+  // The loot record m139 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 10,000 gil, 1,800 AP (2,700 on an overkill), a Return Sphere always
+  // (chance byte 255), two on an overkill (§2.4 [decompiled]).
+  rewards: lootRewards(139, {
     overkillThreshold: 2_000, // §2.1
-    drops: [{ itemId: 'return-sphere', count: 1 }], // §2.4 [decompiled]
     steal: {
       baseChance: 100, // §2.4 [decompiled byte 255]
       common: { itemId: 'star-curtain', count: 1 }, // §2.4
       rare: { itemId: 'shining-gem', count: 1 }, // §2.4
     },
     bribe: { item: { itemId: 'star-curtain', count: 1 }, immune: true }, // §2.4 Bribe immune
-  },
+  }),
   abilityIds: [
     'sin-genais-venom',
     'sin-genais-thrashing',
@@ -157,19 +156,16 @@ const core: EnemyDef = {
   immunityFlags: ['boss', 'armored', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Sin', spriteKey: 'sin-core', hp: 36_000 }],
   aiScriptId: SIN_CORE_SCRIPT,
-  rewards: {
-    ap: 18_000, // §2.4
-    apOverkill: 27_000, // §2.4
-    gil: 10_000, // §2.4
+  // The loot record m138 (`data/ffx/loot/records.ts`; re-parity RC9): 10,000 gil, 18,000 AP (27,000 on an overkill), an MP Sphere always (chance byte 255), two on an overkill (§2.4 [decompiled]).
+  rewards: lootRewards(138, {
     overkillThreshold: 3_000, // §2.1
-    drops: [{ itemId: 'mp-sphere', count: 1 }], // §2.4 [decompiled]
     steal: {
       baseChance: 100, // §2.4 [decompiled byte 255]
       common: { itemId: 'stamina-spring', count: 3 }, // §2.4 "Stamina Spring ×3 / ×4"
       rare: { itemId: 'stamina-spring', count: 4 }, // §2.4
     },
     bribe: { item: { itemId: 'stamina-spring', count: 3 }, immune: true }, // §2.4 Bribe immune
-  },
+  }),
   abilityIds: [
     'sin-core-inactive',
     'sin-core-gathers',

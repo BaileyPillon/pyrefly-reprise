@@ -52,6 +52,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 import {
   DAIGORO_ATTACK,
   YOJIMBO_DAIGORO_ORDER,
@@ -109,7 +110,7 @@ const ginnem: EnemyDef = {
   immunityFlags: ['immune-to-sensor', 'immune-to-scan', 'immune-to-bribe'],
   forms: [{ name: 'Lady Ginnem', spriteKey: 'ginnem', hp: 10 }],
   aiScriptId: YOJIMBO_BYSTANDER_SCRIPT,
-  rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 1, drops: [] },
+  rewards: lootRewards(249, { overkillThreshold: 1 }), // the loot record m249: all zeros
   abilityIds: [],
   // B3 (our estimate): scenery the party cannot touch.
   flags: { untargetable: true, hideHpBar: true },
@@ -183,7 +184,7 @@ const yojimbo: EnemyDef = {
   aiScriptId: YOJIMBO_SCRIPT,
   // §2.4 [decompiled] + GameFAQs [verified: 2 sources] — no AP, no gil, no
   // drop, no steal. The real reward is the Chamber of the Fayth (§2.4, §7).
-  rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 4_060, drops: [] },
+  rewards: lootRewards(288, { overkillThreshold: 4_060 }), // the loot record m288 is all zeros too
   abilityIds: [YOJIMBO_SUMMON, YOJIMBO_DAIGORO_ORDER, YOJIMBO_KOZUKA, YOJIMBO_WAKIZASHI, YOJIMBO_ZANMATO],
   flags: { isBoss: true },
   poisonTickPercent: 25, // §2.1 [decompiled] — Poison-immune anyway
@@ -227,7 +228,7 @@ const daigoro: EnemyDef = {
   immunityFlags: ['immune-to-percentage-damage', 'immune-to-delay', 'immune-to-sensor', 'immune-to-scan'],
   forms: [{ name: 'Daigoro', spriteKey: 'daigoro', hp: 1 }],
   aiScriptId: YOJIMBO_BYSTANDER_SCRIPT,
-  rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 1, drops: [] },
+  rewards: lootRewards(266, { overkillThreshold: 1 }), // the loot record m266: all zeros
   abilityIds: [DAIGORO_ATTACK],
   // B3 (our estimate): the dog is never a target.
   flags: { untargetable: true, hideHpBar: true },

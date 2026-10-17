@@ -94,4 +94,9 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'lv-1-key-sphere': { id: 0x2051, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 1 Key Sphere (the id 81 the Gui note names)
   'lv-3-key-sphere': { id: 0x2053, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 3 Key Sphere
   'lv-4-key-sphere': { id: 0x2054, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 4 Key Sphere
+  // Re-parity RC9 (kill rewards from the game's loot records, lane FFX-M): the four Sphere Grid items the loot records name that the catalog lacked, each row as the game's table has it (type, both flag words and the damage class 0, rank byte 2, no status bytes).
+  'lv-2-key-sphere': { id: 0x2052, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Lv. 2 Key Sphere (Seymour Natus's drop, record m126)
+  'power-sphere': { id: 0x2046, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Power Sphere (what a Power Distiller turns a drop into)
+  'mana-sphere': { id: 0x2047, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Mana Sphere (a Mana Distiller's; also named by the Gui head's record)
+  'speed-sphere': { id: 0x2048, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Speed Sphere (a Speed Distiller's; also named by the Gui arm's record)
 };

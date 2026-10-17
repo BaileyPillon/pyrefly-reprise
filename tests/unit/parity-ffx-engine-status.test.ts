@@ -10,7 +10,9 @@
  * `inflictStatuses` returns for the same inputs and the same draws:
  *
  * 1. the draws: the hit roll, the variances, the critical roll, then one `% 101` draw per status with a chance byte (Threaten's is
- *    `% 100`), none for a cleansing command, and the one shatter roll of a Petrified target, in the game's order;
+ *    `% 100`), none for a cleansing command, and the one shatter roll of a Petrified target, in the game's order (a monster that
+ *    dies or leaves the field then pays its kill rewards, three more draws for this rig's reward-less monster, which `viaEngine`
+ *    takes off the end and checks: re-parity RC9, `parity-ffx-engine-loot.test.ts`);
  * 2. the target's words afterwards, read back from the engine's status instances: the permanent word, the thirteen counters, the
  *    extra word, the stage stacks and the buff flags, and what is given by equipment staying given;
  * 3. the target's HP, MP, CTB counter and maxima (Haste, Slow, Threaten, Delay, the Double HP and Double MP flags), and whether it
@@ -45,6 +47,9 @@ import {
 
 const POOL: AbilityDef[] = [...statusPool(ALL_ABILITIES), ...statusPool(CORE_ABILITIES.map((a) => ({ ...a })))];
 
+/** What `ScriptedRng.kinds()` prints for the three raw 31-bit draws of a reward-less monster's death (see `viaEngine`). */
+const KILL_REWARD_DRAWS = '?0-2147483647'.repeat(3);
+
 /** What the engine does. */
 function viaEngine(sit: StatusSituation, hits: number): Outcome {
   const rng = new ScriptedRng(sit.raws);
@@ -56,6 +61,7 @@ function viaEngine(sit: StatusSituation, hits: number): Outcome {
   ctx.rt.actors.get(user.id)!.ctb = sit.userCtb;
   if (sit.targetMonster) ctx.rt.actors.get(target.id)!.threatenChance = sit.threatenChance;
   ctx.rt.actors.get(target.id)!.regenTicks = sit.regenTicks;
+  const aliveBefore = target.alive;
   resolveAbility(ctx, user, sit.def, [target.id], {
     hits,
     ...(sit.power !== undefined ? { power: sit.power } : {}),
@@ -64,8 +70,17 @@ function viaEngine(sit: StatusSituation, hits: number): Outcome {
   });
   const ejected = target.removed;
   const dead = !target.alive && !target.removed;
+  // The death check's kill rewards (re-parity RC9, lane FFX-M; FFX only): a monster that was alive and dies or leaves the field pays at once, and for this rig's reward-less monster the roll is three raw draws of the
+  // game's streams (the two item slots' chance rolls and the gear roll; `parity-ffx-engine-loot.test.ts` proves the roll against its own oracle). They come last, after the hit's own draws, so they are taken off the end
+  // here, and only for a monster that did die or leave; every other draw, and every draw of a situation where nothing died, is compared with the kernels' exactly as before.
+  const pays = sit.targetMonster && aliveBefore && (dead || ejected);
+  let kinds = rng.kinds();
+  if (pays) {
+    expect(kinds.endsWith(KILL_REWARD_DRAWS), 'the death check rolled the kill rewards after the hit').toBe(true);
+    kinds = kinds.slice(0, kinds.length - KILL_REWARD_DRAWS.length);
+  }
   return {
-    kinds: rng.kinds(),
+    kinds,
     words: !dead && !ejected ? wordsOf(target) : null,
     dead,
     ejected,

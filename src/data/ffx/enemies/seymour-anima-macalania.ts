@@ -86,6 +86,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 
 /** Ids the engine, the tactic and the tests all key on. */
 export const SEYMOUR_MACALANIA_ID = 'seymour-macalania';
@@ -169,21 +170,18 @@ const seymour: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Seymour', spriteKey: 'seymour-macalania', hp: 6000 }],
   aiScriptId: SEYMOUR_MACALANIA_SCRIPT,
-  rewards: {
-    ap: 2000, // §1.1 [verified: 2 sources]
-    apOverkill: 3000, // §1.1 [verified: 2 sources]
-    gil: 5000, // §1.1
+  // The loot record m124 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 5,000 gil, 2,000 AP (3,000 on an overkill), the first slot always
+  // drops (chance byte 255): a Blk Magic Sphere, or, one time in eight, a **Special Sphere** in its place (the record's rare entry; the older table listed only the common one), two
+  // of whichever on an overkill. `blk-magic-sphere` has no ItemDef row of its own yet — see G-10 in the file header.
+  rewards: lootRewards(124, {
     overkillThreshold: 1400, // §1.1 [verified: 2 sources]
-    // §1.4 [verified: 2 sources]. `blk-magic-sphere` has no ItemDef row yet —
-    // see G-10 in the file header.
-    drops: [{ itemId: 'blk-magic-sphere', count: 1 }],
     steal: {
       baseChance: 100, // §1.4 [decompiled byte 255 = guaranteed, clamped to the 0-100 contract range]
       common: { itemId: 'turbo-ether', count: 1 },
       rare: { itemId: 'elixir', count: 1 },
     },
     bribe: { item: { itemId: 'elixir', count: 1 }, immune: true }, // §1.4 [decompiled]
-  },
+  }),
   abilityIds: [
     'shell', // §4.1 chance 254, the opening move — applied at setup, see the group's AI note
     'mac-blizzara',
@@ -259,12 +257,9 @@ function guardian(id: string, slot: number, suffix: string): EnemyDef {
     immunityFlags: [],
     forms: [{ name: `Guado Guardian ${suffix}`, spriteKey: 'guado-guardian', hp: 2000 }],
     aiScriptId: GUADO_GUARDIAN_SCRIPT,
-    rewards: {
-      ap: 290, // §2.1 [verified: 2 sources]
-      apOverkill: 435, // §2.1 [verified: 2 sources]
-      gil: 300, // §2.1
+    // The loot record m141 (`data/ffx/loot/records.ts`; re-parity RC9): 300 gil, 290 AP (435 on an overkill), an Ability Sphere always (chance byte 255), two on an overkill (§2.5).
+    rewards: lootRewards(141, {
       overkillThreshold: 2000, // §2.1 [verified: 2 sources] — equal to full HP
-      drops: [{ itemId: 'ability-sphere', count: 1 }], // §2.5
       steal: {
         baseChance: 100, // §2.4 [decompiled byte 255]
         common: { itemId: 'hi-potion', count: 1 }, // §2.4 [verified: 2 sources]
@@ -276,7 +271,7 @@ function guardian(id: string, slot: number, suffix: string): EnemyDef {
       // which is exactly `maxHP * 25` and is what the engine already computes
       // from the HP pool, so there is no cost field to set.
       bribe: { item: { itemId: 'ether', count: 10 }, immune: false },
-    },
+    }),
     abilityIds: [
       'protect', // §4.2 chance 254, the opening move — applied at setup
       'guardian-blizzard',
@@ -360,19 +355,16 @@ const anima: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-scan', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Anima', spriteKey: 'anima', hp: 18000 }],
   aiScriptId: ANIMA_MACALANIA_SCRIPT,
-  rewards: {
-    ap: 2500, // §3.1 [verified: 2 sources]
-    apOverkill: 3750, // §3.1 [verified: 2 sources]
-    gil: 3000, // §3.1
+  // The loot record m125 (`data/ffx/loot/records.ts`; re-parity RC9): 3,000 gil, 2,500 AP (3,750 on an overkill), an Ability Sphere always (§3.3), two on an overkill.
+  rewards: lootRewards(125, {
     overkillThreshold: 1400, // §3.1 [verified: 2 sources]
-    drops: [{ itemId: 'ability-sphere', count: 1 }], // §3.3
     steal: {
       baseChance: 100, // §3.3 [decompiled byte 255]
       common: { itemId: 'silence-grenade', count: 3 }, // §3.3 [verified: 2 sources]
       rare: { itemId: 'farplane-shadow', count: 1 }, // §3.3 [verified: 2 sources]
     },
     bribe: { item: { itemId: 'farplane-shadow', count: 1 }, immune: true }, // §3.3
-  },
+  }),
   abilityIds: ['anima-boost', 'anima-pain-boss', 'anima-oblivion'],
   // `hidden` is what keeps her off the field until the summon: `setup.ts`
   // reads it as `removed: true`, and `predicates.ts#targetable` already

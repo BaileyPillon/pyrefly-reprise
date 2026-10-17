@@ -328,6 +328,16 @@ async function goldenOf(chapterId: string, seed: number): Promise<string> {
  * to 2.6 s in `kernel/minigame-swordplay.ts` this file is 18/18 on the old values. The other 17 digests never moved. ffx-engine-golden is the only golden that moves
  * (ffx2-atb-golden and ff7-golden are unchanged). The seeds that do reach a changed number are measured, not pinned: the handoff compares the whole-chain event-log
  * digests of seeds 1 to 500 of the seven chapters whose line fires these Overdrives with the base's.
+ *
+ * FIVE digests re-baselined 2026-10-16 by RC9 lane FFX-M (FFX only; kill rewards by the game's own rolls, `docs/handoff/re-parity-rc9-ffx-rewards.md`): the five that moved are
+ * seymour-anima-macalania#1 and #7 (5b4108d1 -> 3f4769eb, 99b1fdc -> c69441ce), seymour-natus#1 and #7 (8994e748 -> 336d9ea6, 9e7c5b2 -> 8097fc70) and seymour-omnis#7
+ * (30b6f82f -> dc6a4262); every outcome is still a victory. The CAUSE is the victory event's `result.drops` and nothing else: the log carries the whole `BattleResult`, and
+ * a monster's death now pays its loot record (`data/ffx/loot/records.ts`, rolled on streams 10 and 11 by `adapt/loot.ts`) into the game's reward list, which STACKS equal items.
+ * Macalania, seeds 1 and 7: the list was four entries, one per drop (Ability Sphere, Blk Magic Sphere, Ability Sphere, Ability Sphere), and is two (Ability Sphere x3, Blk Magic Sphere
+ * x1). Natus, both seeds: nothing before, Lv. 2 Key Sphere x4 now (the record m126 names it, x2, and the line overkills him: x4). Omnis, seed 7: Lv. 3 Key Sphere x1 before, x2 now
+ * (the record's rare entry, one time in eight, came up on that seed). Proof: all 22 plays (the 11 FFX chapters, seeds 1 and 7) were replayed on the base (f939b87f) and on the lane
+ * and every link's log digested with the `drops` keys taken out: the 22 digests are the same on both trees, and only these five differ when the drops are put back, each by exactly
+ * the lists above. The other 13 digests, and every outcome and turn count over 500 seeds of all thirteen chapters (the two hidden ones included), are the base's.
  */
 const GOLDEN: Record<string, string> = {
   'seymour-flux#1': '18bfe5b2:victory',
@@ -336,16 +346,16 @@ const GOLDEN: Record<string, string> = {
   'yunalesca#7': '8e48c312:victory',
   'braskas-final-aeon#1': 'd3eb1d76:victory 5e4670d:victory bd952081:victory 9c42c87a:victory b8fc718:victory fc9cfb11:victory 70b56493:victory',
   'braskas-final-aeon#7': 'e2a2a0c3:victory 8d75fead:victory 9482b803:victory 31e06759:victory ab0e939f:victory 76f6bfc5:victory f2f0106a:victory',
-  'seymour-anima-macalania#1': '5b4108d1:victory',
-  'seymour-anima-macalania#7': '99b1fdc:victory',
+  'seymour-anima-macalania#1': '3f4769eb:victory',
+  'seymour-anima-macalania#7': 'c69441ce:victory',
   'evrae-airship#1': '4f323f6e:victory',
   'evrae-airship#7': 'b67a717e:victory',
   'yojimbo-cavern#1': 'daacc3d9:victory',
   'yojimbo-cavern#7': '164be66a:victory',
-  'seymour-natus#1': '8994e748:victory',
-  'seymour-natus#7': '9e7c5b2:victory',
+  'seymour-natus#1': '336d9ea6:victory',
+  'seymour-natus#7': '8097fc70:victory',
   'seymour-omnis#1': 'd2966784:victory',
-  'seymour-omnis#7': '30b6f82f:victory',
+  'seymour-omnis#7': 'dc6a4262:victory',
   'isaaru-via-purifico#1': '133684ff:victory 7cfaa2ad:victory 13b0bd8a:victory',
   'isaaru-via-purifico#7': '6a55a1ad:victory cfd75f2d:victory a36d68be:victory',
 };

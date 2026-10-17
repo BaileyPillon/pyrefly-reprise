@@ -30,16 +30,15 @@
  *   `threatenChance: 0` means **immune** in this contract (B10, the Evrae C-4
  *   and Yojimbo Y-3 precedent) until a source settles it.
  * - **N-4 Mortibody's Luck** — decompile 20, wiki 15. The decompile wins.
- * - **Rewards** — the drop is **Lv. 2 Key Sphere ×2** (×4 on Overkill,
- *   `[single source]`) [§1.4, verified: 4 sources for ×2], but no
- *   `lv-2-key-sphere` item record exists in `src/data/ffx/items/`, and the
- *   reward-resolve test refuses an id that does not resolve. **Not shipped**;
- *   the item record belongs to the items owner (said in the track's report).
+ * - **Rewards** — the drop is **Lv. 2 Key Sphere ×2** (×4 on Overkill) [§1.4, verified: 4 sources for ×2]. It was **not shipped** until the loot-record lane (re-parity RC9): the
+ *   game's own record m126 (`../loot/records.ts`) names it (the first slot, chance byte 255, two and, on an overkill, four), and the Lv. 2 Key Sphere now has its item row
+ *   (`../items/spheres.ts`), so the reward-resolve test accepts the id.
  * - **Slice** immunity has no `ImmunityFlag` (a Zanmato-resistance byte, as in
  *   `yojimbo.ts`); it is moot, Yuna does not own Yojimbo here.
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 import {
   MORTIBODY_BLIZZARD,
   MORTIBODY_CURA,
@@ -118,12 +117,10 @@ const natus: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-life', 'immune-to-delay', 'immune-to-bribe'],
   forms: [{ name: 'Seymour Natus', spriteKey: 'seymour-natus', hp: 36_000 }],
   aiScriptId: NATUS_SCRIPT,
-  rewards: {
-    ap: 6_300, // §1.1 [verified: 3 sources]
-    apOverkill: 9_450, // §1.1 [verified: 3 sources]
-    gil: 3_500, // §1.1 [decompiled] + wiki + GameFAQs
+  // The loot record m126 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 3,500 gil, 6,300 AP (9,450 on an overkill), the first slot always drops
+  // (chance byte 255) Lv. 2 Key Sphere x2, x4 on an overkill (§1.1 [verified: 3 sources]).
+  rewards: lootRewards(126, {
     overkillThreshold: 3_500, // §1.1 [verified: 3 sources]
-    drops: [], // Lv. 2 Key Sphere ×2 is sourced but has no item record — see the file header
     steal: {
       baseChance: 100, // §1.4 [decompiled byte 255, clamped to the contract's 0-100]
       common: { itemId: 'tetra-elemental', count: 2 }, // §1.4 [verified: 4 sources]
@@ -131,7 +128,7 @@ const natus: EnemyDef = {
     },
     // §1.4 [decompiled] — the record holds a Potion ×1 that can never be bribed.
     bribe: { item: { itemId: 'potion', count: 1 }, immune: true },
-  },
+  }),
   abilityIds: [
     NATUS_MULTI_FIRA, // §3.1 6:171
     NATUS_MULTI_BLIZZARA, // §3.1 6:173
@@ -211,7 +208,7 @@ const mortibody: EnemyDef = {
   aiScriptId: MORTIBODY_SCRIPT,
   // §2.1 [verified: 3 sources] — no AP, gil, steal or drop; Overkill 36,000
   // (it effectively cannot be Overkilled).
-  rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 36_000, drops: [] },
+  rewards: lootRewards(127, { overkillThreshold: 36_000 }), // the loot record m127: all zeros
   abilityIds: [
     MORTIBODY_FIRE, // §3.2 6:57
     MORTIBODY_BLIZZARD, // §3.2 6:58

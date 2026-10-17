@@ -35,6 +35,7 @@ import type { AeonId, BraskasFinalAeonEnemyId } from '../ids.ts';
 import { MANDATORY_AEON_IDS, POSSESSED_AEON_ORDER } from '../ids.ts';
 import type { EnemyDef, EnemyGroupDef } from '../../../battle/common/types.ts';
 import { POSSESSED_PLAIN_ATTACK } from '../command-records/enemies.ts';
+import { BFA_LINE_FILE, lootRewards } from '../loot/index.ts';
 
 // ---------------------------------------------------------------------------
 // Yu Pagodas
@@ -104,7 +105,8 @@ function yuPagoda(id: 'yu-pagoda-left' | 'yu-pagoda-right', slot: number, contex
     // §1.4: not directly killable for reward purposes — it revives instead
     // of staying dead. `overkillThreshold` is set high so a normal hit
     // never reads as an overkill.
-    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] },
+    // The loot records m173 (left) and m174 (right): all zeros, identical in every loot number (`data/ffx/loot/records.ts`). A Pagoda's death still rolls the game's three stream-10 draws.
+    rewards: lootRewards(BFA_LINE_FILE[id], { overkillThreshold: 99999 }),
     // §1.4 "Revive rule (critical to implement correctly)" [verified: 2
     // sources]. A destroyed Pagoda comes back, so two early swings cannot switch
     // the boss's heal / cleanse / Overdrive economy off for the rest of the
@@ -212,18 +214,15 @@ export const braskasFinalAeonGroup: EnemyGroupDef = {
         },
       ],
       aiScriptId: 'bfa-form-1',
-      rewards: {
-        ap: 0,
-        apOverkill: 0,
-        gil: 0,
+      // The loot record m132 (`data/ffx/loot/records.ts`): all zeros, so no AP, gil or item either way; its death still rolls the game's three stream-10 draws.
+      rewards: lootRewards(BFA_LINE_FILE['braskas-final-aeon'], {
         overkillThreshold: 20000, // §1.7 [verified: 2 sources] cosmetic — no AP either way
-        drops: [],
         steal: {
           baseChance: 100, // [estimate — no percentage published in the research; only the item table is sourced]
           common: { itemId: 'turbo-ether', count: 1 },
           rare: { itemId: 'elixir', count: 1 },
         },
-      },
+      }),
       abilityIds: [
         'left-arm-strike', // §1.3 — form 1
         'jecht-beam', // §1.3 — both forms
@@ -355,7 +354,7 @@ function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: number): E
     immunityFlags: ['boss', 'immune-to-scan'],
     forms: [{ name: `Possessed ${aeonId.replace('possessed-', '').replace(/^\w/, (c) => c.toUpperCase())}`, spriteKey: aeonId.replace('possessed-', ''), hp: 1 }],
     aiScriptId: 'possessed-aeon',
-    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] }, // §2.3 — no AP/gil for these
+    rewards: lootRewards(BFA_LINE_FILE[aeonId], { overkillThreshold: 99999 }), // §2.3 — no AP/gil for these: the records m163 to m169 and m178 to m180 are all zeros
     abilityIds: POSSESSED_AEON_ABILITY_IDS[aeonId],
     ...(POSSESSED_PLAIN_ATTACKERS.includes(aeonId) ? { plainAttack: POSSESSED_PLAIN_ATTACK } : {}),
     flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
@@ -483,7 +482,7 @@ export const yuYevonGroup: EnemyGroupDef = {
       threatenChance: 0, // §3.2 [verified: 2 sources] immune
       forms: [{ name: 'Yu Yevon', spriteKey: 'yu-yevon', hp: 99999 }],
       aiScriptId: 'yu-yevon',
-      rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 99999, drops: [] },
+      rewards: lootRewards(BFA_LINE_FILE['yu-yevon'], { overkillThreshold: 99999 }), // the record m176: all zeros
       abilityIds: [
         'gravija', // §3.3, §3.4 — scheduled turns, alternating with a no-op
         'curaga', // §3.3 [verified: 2 sources] shared id — his damage counter, capped at 9,999 by the engine's standard cap

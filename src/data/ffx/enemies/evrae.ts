@@ -75,6 +75,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
+import { lootRewards } from '../loot/index.ts';
 
 /** Ids the engine, the tactic and the tests all key on. */
 export const EVRAE_ID = 'evrae';
@@ -159,22 +160,17 @@ const evrae: EnemyDef = {
   immunityFlags: ['boss', 'immune-to-percentage-damage', 'immune-to-bribe'],
   forms: [{ name: 'Evrae', spriteKey: 'evrae', hp: 32_000 }],
   aiScriptId: EVRAE_SCRIPT,
-  rewards: {
-    ap: 5400, // §1.4 [verified: 2 sources]
-    apOverkill: 8100, // §1.4 [verified: 2 sources]
-    gil: 2600, // §1.4
+  // The loot record m119 (`data/ffx/loot/records.ts`, read from the game's own monster file; re-parity RC9): 2,600 gil, 5,400 AP (8,100 on an overkill), the first slot always
+  // drops (chance byte 255) a Blk Magic Sphere, two on an overkill (§1.4 [verified: 2 sources]).
+  rewards: lootRewards(119, {
     overkillThreshold: 2000, // §1.4 [verified: 2 sources]
-    // §1.4 [verified: 2 sources] — guaranteed, x2 on overkill. `blk-magic-sphere`
-    // has no `ItemDef` row yet, exactly as Chapter 1 ships `lv-4-key-sphere`;
-    // the row belongs to the FFX player-data agent.
-    drops: [{ itemId: 'blk-magic-sphere', count: 1 }],
     steal: {
       baseChance: 100, // §1.4 [decompiled byte 255 = guaranteed, clamped to the 0-100 contract range]
       common: { itemId: 'water-gem', count: 1 }, // §1.4 [verified: 2 sources]
       rare: { itemId: 'water-gem', count: 2 }, // §1.4 [verified: 2 sources]
     },
     bribe: { item: { itemId: 'water-gem', count: 1 }, immune: true }, // §1.4 — impossible
-  },
+  }),
   abilityIds: [
     'evrae-attack',
     'evrae-swooping-scythe',
@@ -246,8 +242,8 @@ const cid: EnemyDef = {
   immunityFlags: ['immune-to-sensor', 'immune-to-scan', 'immune-to-bribe'],
   forms: [{ name: 'Cid', spriteKey: 'cid', hp: 410 }],
   aiScriptId: CID_SCRIPT,
-  // §2.1 [decompiled] — 0 AP, 0 gil, and he never dies anyway.
-  rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 1, drops: [] },
+  // §2.1 [decompiled] — 0 AP, 0 gil, and he never dies anyway. The loot record m149 is all zeros.
+  rewards: lootRewards(149, { overkillThreshold: 1 }),
   abilityIds: ['cid-guided-missiles'],
   // `untargetable` is what makes him unreachable: `predicates.ts#targetable`
   // and `state.ts#livingEnemies` both honour it, so no command and no AoE finds
