@@ -23,14 +23,12 @@
  * command in the Gunner's kit. {@link expectedMinigameHits} supplies it from
  * the engine's own default roller, swept across the three rolls: Trigger Happy
  * is 6-16 shots [`minigames.ts`, ffx2-combat-core §3.1], so a preview says
- * "6-16 hits" and means it.
+ * "6-16 hits" and means it; Two Dice's sum of two faces is 3, 7 or 11 (`dice.ts`).
  *
  * ## Chain
  *
- * The chain counter is read off the *cloned* target, so a preview taken while a
- * chain is live quotes the chained figure — the number the player is about to
- * get — and `bumpChain` raises it as the previewed hits land, exactly as the real
- * resolution does, so a multi-hit action's later hits compound in the estimate.
+ * The chain counter is read off the *cloned* target, so a preview taken while a chain is live quotes the chained figure — the number the player is about
+ * to get — and `bumpChain` raises it as the previewed hits land, exactly as the real resolution does, so a multi-hit action's later hits compound.
  */
 
 import type {
@@ -48,6 +46,7 @@ import { chainMultiplier } from './chain.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { critPercent, hitPercent } from './hit.ts';
 import { rollTriggerHappy } from './minigames.ts';
+import { diceOf, expectedDiceHits } from './dice.ts';
 import { SeededRng } from '../common/rng.ts';
 import { aimedPick } from '../common/intentTargets.ts';
 
@@ -200,7 +199,7 @@ function deepClone<T>(value: T): T {
 export function expectedMinigameHits(ability: AbilityDef, roll: RollPolicy): number | null {
   const rng = new RollPolicyRng(roll);
   if (ability.minigame === 'gunner-trigger') return rollTriggerHappy(rng);
-  return null;
+  return expectedDiceHits(ability, roll);
 }
 
 // ------------------------------------------------------------ the simulation
@@ -269,10 +268,10 @@ export function simulateFFX2Command(
     ...(options.items ? { items: options.items } : {}),
   };
 
-  const shots = expectedMinigameHits(ability, options.roll ?? 'mid');
+  const expected = expectedMinigameHits(ability, options.roll ?? 'mid'); // Two Dice's sum is the game's hit override, Trigger Happy's count its shots
   try {
     resolveAbility(ctx, user, ability, command.targets, {
-      ...(shots !== null ? { shots } : {}), ...((command.kind === 'ability' || command.kind === 'item') && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
+      ...(expected === null ? {} : diceOf(ability) > 0 ? { hitsOverride: expected } : { shots: expected }), ...((command.kind === 'ability' || command.kind === 'item') && command.exactTargets === true ? { exactTargets: true } : {}), // exactTargets: AI-FFX2-b
     });
   } catch (err) {
     console.warn('[simulate/ffx2] command preview failed', command, err);

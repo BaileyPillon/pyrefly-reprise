@@ -86,6 +86,8 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   if (label.startsWith('x2-valefor-')) return;
   // The Alchemist's 53 Mix result rows (0x3183 to 0x31B8 except 0x31AD, re-parity RC9 lane X2-G) are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/mix_rows.json, tests/unit/data-ffx2-mix-results.test.ts).
   if (label.startsWith('x2-mix-')) return;
+  // Lady Luck's Two Dice and its two swap rows (0x30EB, 0x317D, 0x317E, re-parity RC10) are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/lady_luck_rows.json, tests/unit/parity-ffx2-minigames.test.ts).
+  if (label.startsWith('x2-lady-luck-two-dice')) return;
   // The hidden Angra Mainyu's fifteen rows (the boss's eight, Zarich's five, Tawrich's two: monmagic 0x4129 to 0x412d, 0x41f1 to 0x41f4, the Leblanc Osmose 0x406d and six party rows) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/angra_mainyu_rows.json, tests/unit/chapters/angra-mainyu-data.test.ts).
   if (label.startsWith('x2-angra-') || label.startsWith('x2-zarich-') || label.startsWith('x2-tawrich-')) return;
