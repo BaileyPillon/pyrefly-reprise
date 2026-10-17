@@ -16,10 +16,11 @@
  * 2. **The player's Yojimbo pays to be good**: Pay is his whole menu (RE section 8, the aeon-side note). The motivation is `4n + compatibility div 10` with `n = floor(log2 gil) - 2`, and once it is 63 the roll can no
  *    longer fall below Wakizashi on all, whatever the monsters' Zanmato byte (RE section 8.1 point 4), so the line pays **the smallest power of two that reaches 63**, or the largest the purse allows. Every doubling of
  *    the payment adds 4, which is why a payment is always a power of two. [The hire answer is the build's, 1; the line is written for it.]
- * 3. **The player's Sisters act only through the orders the engine has built**: Combine (the Delta Attack) when the three gauges are full (the game's menu offers it only then, RE section 6.4 of the aeon-side
- *    note), else the one thing left, Dismiss.
+ * 3. **The player's Sisters act only through the orders the engine has built**: Combine (the Delta Attack: six hits on one foe) when their menu offers it, else the one thing left, Dismiss. The menu offers it only while all
+ *    three of the Sisters' own stored gauges are full (RE section 6.4 of the aeon-side note; a Grand Summon's temporary gauge does not count), which the chapter's roster starts them at and which Combine then spends.
  *
- * 4. **Yuna calls an aeon when she has nothing urgent to do and the Grand Summon is ready** (not against Yu Yevon, whom no aeon hurts). A Grand Summon arrives with a full gauge, so the aeon opens with its Overdrive; then
+ * 4. **Yuna calls an aeon when she has nothing urgent to do and the Grand Summon is ready** (not against Yu Yevon, whom no aeon hurts). A Grand Summon arrives with a full temporary gauge, so an aeon with an Overdrive
+ *    opens with it (the Sisters and Yojimbo have no Overdrive row: their menus are Combine and Pay); then
  *    it hands the field back (Dismiss), because the party is parked while an aeon stands and three swords out-swing one aeon (Chapter III's note, `./braskas-final-aeon.ts#aeonTurn`, gives the same reason to keep an aeon's
  *    stay short). **Why this rule exists:** the roster is the chapter's whole point (Bahamut or Anima arriving on a full gauge open with a 9,999), and a line that never called one would leave the chapter's own aeons to
  *    the player alone. The order the aeons are called in is ours (the biggest Overdrive first, the ones that need a payment or all three gauges last), an `[estimate]`; it is a convenience of the line, not a promise of a win,
@@ -49,8 +50,8 @@ export const SURE_WAKIZASHI = 63;
 /** The aeons Yuna calls, first choice first (the Summon rows' labels): `[estimate]`, the biggest Overdrive first; Yojimbo last, because he needs a payment and the Sisters need all three gauges. */
 export const AEON_CALL_ORDER: readonly string[] = ['Bahamut', 'Anima', 'Magus Sisters', 'Ixion', 'Shiva', 'Ifrit', 'Valefor', 'Yojimbo'];
 
-/** The row Combine powers carries (`battle/ffx/aeon-commands.ts#ORDERS`). */
-const COMBINE_LABEL = 'Combine';
+/** The ability id Combine powers carries (`battle/ffx/aeon-commands.ts#ORDERS`). The line finds the row by this id, not by its label: the menu shows the order under a shorter name (`ui/ffx/aeonRowText.ts`). */
+export const COMBINE_ID = 'sister-order-combine';
 
 const living = (engine: BattleEngine, id: CombatantId): FFXCombatant | undefined => {
   const c = engine.state().combatants[id] as FFXCombatant | undefined;
@@ -107,7 +108,7 @@ function aeonTurn(actorId: CombatantId, commands: AvailableCommand[], engine: Ba
     return { ...pay.command, targets: [], gilSpent } as Command;
   }
   // The Sisters: the Delta Attack when the game's menu offers it, else the one row left.
-  const combine = row(commands, [COMBINE_LABEL]);
+  const combine = commands.find((c) => c.enabled && c.command.kind === 'ability' && c.command.id === COMBINE_ID);
   if (combine !== undefined) return aim(combine);
   const foe = foeFor(engine);
   const od = commands.find((c) => c.enabled && c.command.kind === 'overdrive' && (foe === undefined || c.validTargets.includes(foe.id)));

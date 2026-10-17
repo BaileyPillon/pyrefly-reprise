@@ -11,6 +11,9 @@ import { statusRowIds } from '../../src/ui/ffx/fieldRows.ts';
 import { badgeHtml, subRowVM } from '../../src/ui/ffx/commandMenuRows.ts';
 import type { TopGroupRow } from '../../src/ui/ffx/CommandMenuLogic.ts';
 import { TAKEN_REASON } from '../../src/data/ffx/last-summoning-ids.ts';
+import { ORDERS, ORDER_IDS, PAY_ABILITY_ID } from '../../src/battle/ffx/aeon-commands.ts';
+import { COMBINE_ID } from '../../src/engine/tactics/last-summoning.ts';
+import { COMBINE_HELP, COMBINE_ORDER_ID, ORDER_NOT_YET, PAY_HELP, SISTER_ORDER_SHORT, aeonRowText } from '../../src/ui/ffx/aeonRowText.ts';
 import { FakeStage, noSleep } from './helpers/FakeStage.ts';
 
 type Unsequenced<T> = T extends unknown ? Omit<T, 'seq'> : never;
@@ -92,5 +95,56 @@ describe('Yuna’s Summon list marks what Yu Yevon has taken', () => {
     expect(subRowVM(summon('Valefor', false), group, {}).badge).toBeUndefined();
     const spell = { command: { kind: 'ability', id: 'firaga', targets: [] }, label: 'Firaga', category: 'blackmagic', mpCost: 30, enabled: false, disabledReason: TAKEN_REASON, validTargets: [] } as unknown as AvailableCommand;
     expect(subRowVM(spell, group, {}).badge).toEqual({ kind: 'mp', text: '30' }); // only a Summon row carries the mark
+  });
+});
+
+describe('the aeons’ rows in the menu’s own words (the HUD’s text pass)', () => {
+  const ability = (id: string, label: string, enabled = true, extra: Partial<AvailableCommand> = {}): AvailableCommand =>
+    ({ command: { kind: 'ability', id, targets: [] }, label, category: 'aeon', mpCost: 0, enabled, validTargets: [], ...extra }) as AvailableCommand;
+
+  it('has a short label for every order the engine lists, and the order that has a handler is Combine', () => {
+    expect(Object.keys(SISTER_ORDER_SHORT).sort()).toEqual([...ORDER_IDS].sort());
+    for (const id of ORDER_IDS) expect(SISTER_ORDER_SHORT[id]!.length, id).toBeLessThanOrEqual(12); // a phone's menu cell
+    expect(COMBINE_ORDER_ID).toBe(COMBINE_ID);
+    expect(ORDER_IDS).toContain(COMBINE_ORDER_ID);
+    expect(ORDERS.find((o) => o.id === COMBINE_ORDER_ID)!.label).toBe('Combine for the Delta Attack'); // the RE lane's own name: its tests pin the action banner's
+  });
+
+  it('shortens a Sister’s order, words Pay and Combine, says "not available yet" for an order that cannot run, and changes nothing else', () => {
+    const dismiss = { command: { kind: 'dismiss', targets: [] }, label: 'Dismiss', category: 'aeon', mpCost: 0, enabled: true, validTargets: [] } as AvailableCommand;
+    const rows = [
+      ability(PAY_ABILITY_ID, 'Pay', true, { help: 'a developer note' }),
+      ability(COMBINE_ORDER_ID, 'Combine for the Delta Attack'),
+      ability('sister-order-attack', 'Attack order', false, { disabledReason: 'Not built: its target search is not decoded', help: 'the engine’s' }),
+      dismiss,
+    ];
+    const out = aeonRowText(rows);
+    expect(out.map((r) => r.label)).toEqual(['Pay', 'Combine', 'Attack', 'Dismiss']);
+    expect(out[0]).toMatchObject({ help: PAY_HELP });
+    expect(out[1]).toMatchObject({ help: COMBINE_HELP, enabled: true });
+    expect(out[2]).toMatchObject({ enabled: false, disabledReason: ORDER_NOT_YET, help: 'the engine’s' });
+    expect(out[3]).toBe(dismiss);
+    for (let i = 0; i < rows.length; i++) {
+      expect(out[i]!.command, String(i)).toBe(rows[i]!.command);
+      expect(out[i]!.enabled, String(i)).toBe(rows[i]!.enabled);
+      expect(out[i]!.validTargets, String(i)).toBe(rows[i]!.validTargets);
+    }
+    expect(rows[1]!.label).toBe('Combine for the Delta Attack'); // the engine's own rows are never written to
+    expect(rows[0]!.help).toBe('a developer note');
+  });
+
+  it('leaves a disabled order alone when the engine’s reason is not “not built”, and a Combine row that is enabled has no reason', () => {
+    const waiting = aeonRowText([ability('sister-order-mindy-drain', 'Drain order (Mindy)', false, { disabledReason: 'Cursed' })]);
+    expect(waiting[0]).toMatchObject({ label: 'Drain', disabledReason: 'Cursed' });
+    expect(aeonRowText([ability(COMBINE_ORDER_ID, 'Combine for the Delta Attack')])[0]!.disabledReason).toBeUndefined();
+  });
+
+  it('returns the very same array for a menu with no Pay and no order: every other aeon, every other chapter', () => {
+    const menu = [
+      { command: { kind: 'attack', targets: [] }, label: 'Attack', category: 'attack', mpCost: 0, enabled: true, validTargets: [] },
+      ability('firaga', 'Firaga', false, { disabledReason: 'Silenced' }),
+    ] as AvailableCommand[];
+    expect(aeonRowText(menu)).toBe(menu);
+    expect(aeonRowText([])).toEqual([]);
   });
 });

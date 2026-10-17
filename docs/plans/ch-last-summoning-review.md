@@ -84,7 +84,7 @@ The five extra aeons' **stats are `research/ffx-combat-core.md` §6.4.3's inside
 block Dream's End's five already use.
 
 **What the engine does not do for the player's Sisters (the RE session's boundary, kept):** only **Combine powers** has a handler (`BUILT_ORDERS`); the other seven orders are offered by the game's menu
-builder and listed greyed with a reason. The Sisters are therefore, in this chapter, the aeons that hold the field and fire the Delta Attack when all three gauges are full (a Grand Summon fills them);
+builder and listed greyed with a reason. The Sisters are therefore, in this chapter, the aeons that hold the field and fire the Delta Attack when all three of their own stored gauges are full (**the roster starts them full**, as the RE lane's handoff advises; a Grand Summon's temporary gauge does not open Combine, found by running it);
 every other order waits for the RE session's handlers and will light up with no change here (the menu rows are the engine's). Said in the guide, the handoff and the offering screen's words.
 
 ## 4. The pieces, in files
@@ -152,7 +152,7 @@ ends with the player's aeon standing). Then `tsc --noEmit`, `node tools/orphans.
 1. The Sisters' other seven orders (the RE session's handlers) and Yojimbo's menu beyond Pay and Dismiss (note's open question 3).
 2. Yojimbo's compatibility (live confirmation), his hire answer, the Sisters' motivation, the gauges: Bailey's or the RE session's to settle.
 3. A possessed look for the eight paintings, the Sisters' portraits, Yojimbo's hurt and KO paintings, Mindy's attack: art, Bailey's picks.
-4. How Sandy and Mindy enter play in the real battle (RE §9 item 6) and whether the Pagodas count for the Zanmato penalty (RE §9 item 4).
+4. How Sandy and Mindy enter play in the real battle (RE §9 item 6) and whether the Pagodas count for the Zanmato penalty (RE §9 item 4; **INFERRED**: the engine counts a destroyed Pagoda, KO'd not removed, so byte 4 in every link; if the game does not, a link reads a lower byte).
 5. Listing the chapter on the board waits for Bailey, as for every hidden chapter; the music is existing cues by reference (Bailey's ear).
 
 ## 11. As built, and where it parted from this plan (written 2026-10-15, after the chapter ran in a production build)
@@ -167,3 +167,9 @@ The preflight's verdict stands (PROCEED), its tables are what was built, and no 
 6. **The three Sisters out together** needed the presenter's folds the plan listed (slots, status rows, framing, preload) and nothing more; each stands on one of the party's three slots.
 7. **The data:** every number is the plan's. The Sisters' stage spots were moved once after the first browser pass (Cindy stood behind Tidus). Possessed Yojimbo and Sisters stand where section 6 of the plan said, no new painting; the one new file is `backdrops/last-summoning.png` (+ sidecar) in the r50 mirror, manifest regenerated, r49 unchanged.
 8. **Deliberately not built, for Bailey's yes (rule 10):** a telegraph banner when Yojimbo's gauge is full or the Sisters' three gauges are (the `charge` event the HUD already knows could carry it), a possessed look for the paintings, and portraits or hurt paintings for the Sisters and Yojimbo.
+
+9. **The RE engine's final tip (`d8fa5b69`, the driver's word: FINAL) is merged.** Its three last commits are comments, tests and its handoff note, so no behaviour moved; its new presenter test pins the order banner's name (`Combine for the Delta Attack`), which this lane's earlier shortening of the order labels in `battle/ffx/aeon-commands.ts` had broken. The labels, the Pay help line and "Not available yet" for an order the engine lists but cannot run now live in the HUD's text pass (`ui/ffx/aeonRowText.ts`, called first in `FFXBattleHud.chooseCommand`), so that file is exactly the RE lane's.
+
+10. **The Sisters start with full stored gauges** (`SISTERS_START_GAUGE`, `[estimate]`), because the engine offers Combine only while all three are full and nothing that ships can fill them yet (the seven other orders are not carried out). Running the advisor's Grand Summon of the Sisters showed the temporary gauge does not count, which overturned the plan's reading above. The player's Delta Attack is the data's single-enemy, six-hit move (not the front-line blow of the possessed Cindy's own); every line of text says so.
+
+11. **The two RE caveats (the driver's relay, 2026-10-15).** (a) A landed Zanmato of the player's Yojimbo kills only the first target and ignores Death resistance today, and its Slice effect is untraced: nothing here relies on it (the advisor's line never calls Yojimbo in the 120-chain bench; the possessed Yojimbo's own Zanmato is a fixed 9,999 and is this lane's record fix). In a possession link the best case for a landed player's Zanmato is 5 in 64 (7.8 percent; RE's check of the engine, which corrects its note). (b) Only Combine powers and Dismiss work of the Sisters' orders: the advisor and the offering screen are built on Combine only (the offering's Sisters panel keeps the approved frame's words, "the three orders, Combine powers and the Delta Attack", which promise more than the engine carries today).

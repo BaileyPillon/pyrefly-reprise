@@ -84,17 +84,18 @@ export const LAST_SUMMONING_GUIDE: ChapterGuide = {
       text: 'Pay for his best command: each doubling of the payment adds the same step to his motivation, and from a motivation of 63 the roll can no longer fall below Wakizashi on all, whatever the monsters’ Zanmato resistance',
       cite: 'ffx-combat-core §6.6; re-ffx-last-summoning §8.1',
     },
-    // ---- the player's own Sisters (the tactic's Combine row)
+    // ---- the player's own Sisters (the tactic's Combine row: the menu says "Combine", the engine's own name is the longer one; a hint takes either)
     {
-      when: { labels: ['Combine'] },
-      text: 'All three Sisters are ready: Cindy throws the Delta Attack, six hits of Magic with no defence against them, on everyone the twin has at the front',
+      when: { labels: ['Combine', 'Combine for the Delta Attack'] },
+      text: 'All three Sisters are ready: Combine sends Cindy’s Delta Attack, six hits on one foe, and spends all three of their gauges',
       cite: 'ffx-combat-core §6.3; re-ffx-last-summoning §1.4, §6.2',
     },
-    {
-      when: { kinds: ['dismiss'] },
-      text: 'The Sisters have nothing built to do until all three gauges are full: send them away and call them again with a Grand Summon, which arrives full',
+    // a Sister's Dismiss only: the line also dismisses Bahamut and the others after their Overdrive, and the words below are about the Sisters
+    ...(['cindy', 'sandy', 'mindy'] as const).map((who) => ({
+      when: { kinds: ['dismiss'] as const, actorId: who },
+      text: 'The Sisters have nothing built to do but Combine, which needs all three of their own gauges full: with it spent, send them away',
       cite: 'ffx-combat-core §6.2; re-ffx-last-summoning §5; re-ffx-yojimbo-sisters-feasibility §6',
-    },
+    })),
     // ---- the Sisters' fight (the tactic's focus: Cindy while she stands, then the Sister with the least HP)
     sisterHint('possessed-cindy'),
     sisterHint('possessed-sandy'),

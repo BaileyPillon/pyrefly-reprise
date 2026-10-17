@@ -44,6 +44,7 @@ import { FfxTargetPlate } from './targetPlateFfx.ts';
 import { TriggerPrompt } from './TriggerPrompt.ts';
 import { AirshipOrders } from './AirshipOrders.ts';
 import { YojimboPay } from './YojimboPay.ts';
+import { aeonRowText } from './aeonRowText.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
@@ -557,9 +558,11 @@ export class FFXBattleHud implements HudPort {
 
   async chooseCommand(
     actorId: CombatantId,
-    commands: AvailableCommand[],
+    engineCommands: AvailableCommand[],
     previewRank: (cmd: AvailableCommand | null) => TurnPreview[] | AtbSnapshot,
   ): Promise<Command> {
+    // The player's Yojimbo's and the Magus Sisters' rows in the menu's own words (short order labels, a help line for Pay and Combine); every other menu comes back as the same array (`./aeonRowText.ts`).
+    const commands = aeonRowText(engineCommands);
     const combatants = this.lastState?.combatants ?? {};
     const wrapped = (cmd: AvailableCommand | null): TurnPreview[] | AtbSnapshot => {
       const result = previewRank(cmd);

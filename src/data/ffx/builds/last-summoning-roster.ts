@@ -12,8 +12,11 @@
  *    Yojimbo never hired through the scene is 0, and which answer a player gave is in no source). The party's **gil 50,000** is Dream's End's own `[estimate]`.
  *  - {@link SISTERS_START}: each Sister's starting motivation **50**, the middle of 0 to 100. The engine's note says "UNSOURCED" and the chapter labels it; it moves the chance of the orders the Sisters' menu offers
  *    and the Combine powers roll (`200 + motivation` of 256).
- *  - The five extra aeons' **starting Overdrive gauges 0**: Dream's End's five carry `research/ffx-seymour-flux.md` section 7.9.2's values (60, 55, 50, 55, 70), which name no gauge for the others. An aeon's gauge
- *    carries from battle to battle and falls to 0 only when the aeon is defeated, so an unused aeon would hold whatever the story left; nothing sources that, so they start empty and the fight fills them.
+ *  - The extra aeons' **starting Overdrive gauges**: Dream's End's five carry `research/ffx-seymour-flux.md` section 7.9.2's values (60, 55, 50, 55, 70), which name no gauge for the others. An aeon's gauge
+ *    carries from battle to battle and falls to 0 only when the aeon is defeated, so an unused aeon would hold whatever the story left; nothing sources that. **Anima and Yojimbo start empty** (the fight fills
+ *    Anima's; Yojimbo's Pay needs none) and **the three Sisters start full** ({@link SISTERS_START_GAUGE}, `[estimate]`): the engine's Combine powers is offered only while all three of their own stored gauges
+ *    are full (a Grand Summon's temporary gauge does not count), and the engine can fill them only through the gains an aeon already has, because the seven other orders that would build them are not carried out
+ *    yet (the RE lane FFX-K's `docs/handoff/re-parity-ffx-yojimbo-sisters.md`, open item 1, whose advice for a chapter that owns the Sisters is to start them full). Combine spends the bar.
  */
 
 import type { AeonBuild, FFXPartyBuild } from '../../../battle/common/types.ts';
@@ -34,8 +37,11 @@ export const YOJIMBO_START: NonNullable<FFXPartyBuild['yojimbo']> = { compatibil
 /** The Sisters' starting state: every motivation 50 (`[estimate]`: the middle of 0 to 100; unsourced). See the file header. */
 export const SISTERS_START: NonNullable<FFXPartyBuild['sisters']> = { motivation: { cindy: 50, sandy: 50, mindy: 50 } };
 
-/** One extra aeon: its stat row, an empty gauge, and the abilities and Overdrive its catalog entry lists (`../aeons/index.ts`). */
-function extraAeon(id: string, name: string, abilityIds: string[], overdriveIds: string[]): AeonBuild {
+/** The Sisters' starting stored gauge: full (`[estimate]`; the file header says why). */
+export const SISTERS_START_GAUGE = 100;
+
+/** One extra aeon: its stat row, its starting gauge (empty unless given), and the abilities and Overdrive its catalog entry lists (`../aeons/index.ts`). */
+function extraAeon(id: string, name: string, abilityIds: string[], overdriveIds: string[], gauge = 0): AeonBuild {
   const row = INSIDE_SIN_OPTIONAL_ROWS[id]!;
   return withRow(
     {
@@ -45,7 +51,7 @@ function extraAeon(id: string, name: string, abilityIds: string[], overdriveIds:
       stats: { ...row, maxHp: row.hp, maxMp: row.mp },
       hp: row.hp,
       mp: row.mp,
-      overdriveGauge: 0,
+      overdriveGauge: gauge,
       abilityIds: [...abilityIds, 'shield', 'boost'],
       overdriveIds,
     },
@@ -61,8 +67,8 @@ export function optionalAeons(): AeonBuild[] {
   return [
     extraAeon('anima', 'Anima', ['pain'], ['oblivion']),
     extraAeon('yojimbo', 'Yojimbo', ['daigoro', 'kozuka', 'wakizashi-single', 'wakizashi-multi'], ['zanmato']),
-    extraAeon('cindy', 'Cindy', ['camisade'], ['delta-attack']),
-    extraAeon('sandy', 'Sandy', ['razzia'], ['delta-attack']),
-    extraAeon('mindy', 'Mindy', ['passado'], ['delta-attack']),
+    extraAeon('cindy', 'Cindy', ['camisade'], ['delta-attack'], SISTERS_START_GAUGE),
+    extraAeon('sandy', 'Sandy', ['razzia'], ['delta-attack'], SISTERS_START_GAUGE),
+    extraAeon('mindy', 'Mindy', ['passado'], ['delta-attack'], SISTERS_START_GAUGE),
   ];
 }

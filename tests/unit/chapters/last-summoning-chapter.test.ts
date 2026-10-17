@@ -29,10 +29,10 @@ import { braskasFinalAeon } from '../../../src/engine/tactics/braskas-final-aeon
 import { buildAdvisorView } from '../../../src/engine/tactics/advisor.ts';
 import { guideForState } from '../../../src/engine/tactics/guide.ts';
 import { tacticFor, TACTICS } from '../../../src/engine/tactics/index.ts';
-import { AEON_CALL_ORDER, LAST_SUMMONING_BOSS_IDS, SISTER_BODY_IDS, SURE_WAKIZASHI, lastSummoning, paymentFor } from '../../../src/engine/tactics/last-summoning.ts';
+import { AEON_CALL_ORDER, COMBINE_ID, LAST_SUMMONING_BOSS_IDS, SISTER_BODY_IDS, SURE_WAKIZASHI, lastSummoning, paymentFor } from '../../../src/engine/tactics/last-summoning.ts';
 import { CHAPTER_GAME, LOCK_REASON_PREFIX, onLastSummoningBoard } from '../../../src/engine/tactics/lookup.ts';
 import { AEON_LOCK_REASON_PREFIX } from '../../../src/battle/ffx/aeon-duel.ts';
-import { PAY_ABILITY_ID } from '../../../src/battle/ffx/aeon-commands.ts';
+import { ORDERS, ORDER_IDS, PAY_ABILITY_ID } from '../../../src/battle/ffx/aeon-commands.ts';
 import { departureKindOf } from '../../../src/engine/BattlePresenterDepartures.ts';
 import { pyreflyCanonFor, pyreflyDissolves } from '../../../src/engine/pyreflyCanon.ts';
 import { getScene, getSceneFactory, sceneKeys } from '../../../src/scenes/index.ts';
@@ -43,6 +43,7 @@ import type { SpeakerId, Step, StoryScript } from '../../../src/story/dsl.ts';
 import { MID_LINE_HOLD_MS, MID_SCRIPT_BUDGET_MS, blockingSteps, midBattleDeadlineMs, scriptDurationMs } from '../../../src/story/registry.ts';
 import { lastSummoningScripts as S } from '../../../src/story/scripts/last-summoning.ts';
 import { docForState } from '../../../src/ui/common/guideDoc.ts';
+import { COMBINE_HELP, PAY_HELP, aeonRowText } from '../../../src/ui/ffx/aeonRowText.ts';
 import { ALL_KEYS, firstLinkSetup, newEngine } from '../helpers/lastSummoningDrive.ts';
 
 // ----------------------------------------------------------------------------------------------------------------------------------------- registration
@@ -265,6 +266,14 @@ async function lastSummoningEngine(order: readonly OfferingKey[], seed = 1): Pro
   return newEngine(setup);
 }
 
+/** The same first link with the three Sisters' stored gauges spent (what Combine leaves): the engine offers them nothing but Dismiss. */
+async function spentSistersEngine(seed: number): Promise<BattleEngine> {
+  const { setup } = await firstLinkSetup(['valefor'], seed);
+  const party = buildLastSummoningParty();
+  for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 0;
+  return newEngine({ ...setup, party });
+}
+
 /** Chapter III's own possessed Valefor battle: the same enemy ids, none of this chapter's locks. */
 function chapterThreeEngine(seed = 1): BattleEngine {
   const chapter = getChapter('braskas-final-aeon')!;
@@ -350,7 +359,7 @@ describe('the card and the document: cited, in the corpus form, and tied to the 
   });
 
   it('every label a hint speaks to is a row the line asks for (its own, or Chapter III’s in these fights)', () => {
-    const asked = ['Pay', 'Combine', 'Phoenix Down', 'Mega Phoenix', 'Life', 'Full-Life', 'Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion', 'Protect', 'Ether', 'Turbo Ether', 'Elixir', 'Candle of Life', 'Defend'];
+    const asked = ['Pay', 'Combine', 'Combine for the Delta Attack', 'Phoenix Down', 'Mega Phoenix', 'Life', 'Full-Life', 'Curaga', 'Cura', 'Cure', 'X-Potion', 'Hi-Potion', 'Potion', 'Protect', 'Ether', 'Turbo Ether', 'Elixir', 'Candle of Life', 'Defend'];
     for (const h of LAST_SUMMONING_GUIDE.hints) for (const label of h.when.labels ?? []) expect(asked, label).toContain(label);
   });
 
@@ -402,10 +411,11 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
   });
 
   it('calls Combine on a Sister’s turn when the game’s menu offers it, and the Delta Attack lands', async () => {
-    const { setup } = await firstLinkSetup(['valefor'], 4);
+    // no gauge is set by hand: the roster starts the three Sisters full (the engine offers Combine only while all three of their stored gauges are full; RE open item 1) and Anima and Yojimbo empty
     const party = buildLastSummoningParty();
-    for (const a of party.aeons) if (['cindy', 'sandy', 'mindy'].includes(a.id)) a.overdriveGauge = 100;
-    const e = newEngine({ ...setup, party });
+    expect(party.aeons.filter((a) => ['cindy', 'sandy', 'mindy'].includes(a.id)).map((a) => a.overdriveGauge)).toEqual([100, 100, 100]);
+    expect(party.aeons.filter((a) => ['anima', 'yojimbo'].includes(a.id)).map((a) => a.overdriveGauge)).toEqual([0, 0]);
+    const e = await lastSummoningEngine(['valefor'], 4);
     const yuna = inputFor(e, 'yuna');
     const call = yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
     e.submit({ ...call.command, targets: [] });
@@ -413,12 +423,21 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     const turn = inputFor(e, e.state().aeonIds![0]!);
     const pick = lastSummoning(turn.actorId, turn.commands, e);
     expect(pick).toMatchObject({ kind: 'ability', id: 'sister-order-combine' });
+    expect(COMBINE_ID).toBe('sister-order-combine');
+    expect(ORDER_IDS).toContain(COMBINE_ID);
+    // The engine's row keeps the RE lane's name (its tests pin the banner's `abilityName`); the HUD's text pass gives the menu and the card the short one and a line that says what it does.
+    const engineRow = turn.commands.find((c) => c.command.kind === 'ability' && c.command.id === COMBINE_ID)!;
+    expect(engineRow.label).toBe('Combine for the Delta Attack');
+    expect(ORDERS.find((o) => o.id === COMBINE_ID)!.label).toBe(engineRow.label);
+    const menuRow = aeonRowText(turn.commands).find((c) => c.command.kind === 'ability' && c.command.id === COMBINE_ID)!;
+    expect(menuRow).toMatchObject({ label: 'Combine', enabled: true, help: COMBINE_HELP, command: engineRow.command });
     e.submit(pick!);
     expect(e.state().log.some((ev) => ev.type === 'action-start' && ev.abilityId === 'delta-attack')).toBe(true);
+    expect(e.state().log.some((ev) => ev.type === 'action-start' && ev.abilityName === 'Combine for the Delta Attack')).toBe(true);
   });
 
   it('sends a Sister’s turn without Combine to Dismiss: nothing else is built', async () => {
-    const e = await lastSummoningEngine(['valefor'], 5);
+    const e = await spentSistersEngine(5);
     const yuna = inputFor(e, 'yuna');
     const call = yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
     e.submit({ ...call.command, targets: [] });
@@ -455,11 +474,12 @@ describe('the advisor: Chapter III’s line, with Yojimbo’s payment, the Siste
     const yuna = inputFor(e, 'yuna');
     e.submit({ ...yuna.commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Yojimbo')!.command, targets: [] });
     const turn = inputFor(e, 'yojimbo');
-    const view = buildAdvisorView(e.state(), { actorId: turn.actorId, commands: turn.commands });
+    const view = buildAdvisorView(e.state(), { actorId: turn.actorId, commands: aeonRowText(turn.commands) }); // the HUD hands the card the rows after its text pass (`ui/ffx/aeonRowText.ts`)
     expect(view!.suggestions[0]).toMatchObject({ label: 'Pay', source: 'tactic' });
     expect(view!.suggestions[0]!.effect).toMatch(/Pay him/);
+    expect(view!.suggestions[0]!.effect).toContain(PAY_HELP);
 
-    const sisters = await lastSummoningEngine(['valefor'], 9);
+    const sisters = await spentSistersEngine(9);
     const call = inputFor(sisters, 'yuna').commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Magus Sisters')!;
     sisters.submit({ ...call.command, targets: [] });
     const sturn = inputFor(sisters, sisters.state().aeonIds![0]!);

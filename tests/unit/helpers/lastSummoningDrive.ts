@@ -34,8 +34,12 @@ export interface LinkRecord {
   partyDown: number;
   /** One of the player's aeons stood on the field when the link ended. */
   aeonStanding: boolean;
-  /** The ids of the player's aeons summoned during the link, in order. */
+  /** The player's aeons called during the link, from the engine's `summon` events, in order (the three Sisters are one: `sisters`). Any way of calling them counts: Summon or Yuna's Grand Summon. */
   summoned: string[];
+  /** Zanmato of the player's Yojimbo started during the link (the possessed Yojimbo's own is the ability `possessed-yojimbo-zanmato`). */
+  zanmato: number;
+  /** Combine powers, the player's Delta Attack, started during the link (the possessed Cindy's own is `possessed-cindy-delta-attack`). */
+  combine: number;
 }
 
 /** One whole chain. */
@@ -96,7 +100,6 @@ export async function playOrder(
   let outcome = 'cap';
   let turns = 0;
   let linkTurns = 0;
-  let summoned: string[] = [];
   let pos = 0; // how many offerings have been answered
   for (let step = 0; step < 1_000_000 && turns < maxTurns; step++) {
     const d: Decision = engine.nextDecision();
@@ -105,6 +108,13 @@ export async function playOrder(
       const state = engine.state();
       const fought = pos < order.length ? order[pos]! : ('yu-yevon' as const);
       const isYuYevon = group.id.endsWith('+yu-yevon');
+      const log = state.log as ReadonlyArray<{ type: string; aeonId?: string; abilityId?: string }>;
+      const summoned: string[] = [];
+      for (const e of log) {
+        if (e.type !== 'summon' || e.aeonId === undefined) continue;
+        const key = ['cindy', 'sandy', 'mindy'].includes(e.aeonId) ? 'sisters' : e.aeonId;
+        if (!summoned.includes(key)) summoned.push(key);
+      }
       links.push({
         link: links.length + 1,
         group: group.id,
@@ -115,6 +125,8 @@ export async function playOrder(
         partyDown: activeMembers(engine).filter((c) => !c.alive).length,
         aeonStanding: state.aeonId !== null && (state.combatants[state.aeonId]?.alive ?? false),
         summoned,
+        zanmato: log.filter((e) => e.type === 'action-start' && e.abilityId === 'zanmato').length,
+        combine: log.filter((e) => e.type === 'action-start' && e.abilityId === 'delta-attack').length,
       });
       outcome = d.result.outcome;
       if (outcome !== 'victory' || !group.nextGroupId) break;
@@ -129,7 +141,6 @@ export async function playOrder(
       setup = setupForNextLink(setup, next, state, seed + links.length);
       group = next;
       linkTurns = 0;
-      summoned = [];
       engine.setSeed(setup.seed);
       engine.init(setup);
       continue;
@@ -137,7 +148,6 @@ export async function playOrder(
     turns += 1;
     linkTurns += 1;
     const command = line === 'naive' ? naive(d) : (intendedStrategy(d.actorId, d.commands, engine as never) ?? naive(d));
-    if (command.kind === 'summon') summoned.push(command.id);
     engine.submit(command);
   }
   return { order: [...order], seed, line, links, outcome: links.length > 0 && links.every((l) => l.outcome === 'victory') && links.at(-1)!.fought === 'yu-yevon' ? 'victory' : outcome, last: engine.state() };

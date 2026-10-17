@@ -11,6 +11,10 @@
  *
  * The chain cannot be lost by one blow (the fayth's permanent Auto-Life stands a fallen member up in every link), so a lost link means the whole party was petrified or knocked out between two revives.
  * `PYREFLY_BENCH_SEEDS=<n>` raises the seeds per order (the default keeps the suite short).
+ *
+ * **What this bench does not rely on** (the RE lane FFX-K's open items 1 and 7, `docs/handoff/re-parity-ffx-yojimbo-sisters.md`): the Sisters' seven other orders (the player's Sisters only Combine, the one handler that works) and the
+ * effect of a landed Zanmato of the player's Yojimbo (which kills only the first target today and ignores Death resistance, its Slice effect untraced). The advisor's line never calls Yojimbo, and the naive line summons nothing,
+ * so no Zanmato of the player's is in these chains; a figure that involved one would be provisional until that engine fix lands. The possessed Yojimbo's own Zanmato is a fixed 9,999 and is this chapter's record fix.
  */
 import { describe, expect, it } from 'vitest';
 import type { OfferingKey } from '../../../src/data/ffx/last-summoning-ids.ts';

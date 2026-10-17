@@ -363,7 +363,8 @@ export function possessedAeonEnemyDef(aeonId: BraskasFinalAeonEnemyId, slot: num
     flags: { isBoss: true, noRevive: true }, // §2.3 [verified: 3 sources] — permanent Auto-Life on the PARTY, but a defeated possessed aeon is gone for good
     threatenChance: 0,
     // The game's Zanmato byte plus one (`adapt/yojimbo.ts#zanmatoByte`): the possessed Valefor to Yojimbo hold byte 2, the possessed Sisters byte 3 (research/re-ffx-last-summoning.md section 1.5, [bytes]). Read only by the player's
-    // Yojimbo, who no chain of Chapter III ever holds; the Pagodas' byte 4 is what sets the penalty in every link (RE 8.3).
+    // Yojimbo, who no chain of Chapter III ever holds. The Pagodas' byte 4 would then set the penalty in every link (RE 8.3), **INFERRED**: the engine takes the highest byte over every monster still on the field and a
+    // destroyed Pagoda is KO'd here, not removed, so it counts; if the game does not count a Pagoda that has fallen, a link would read a lower byte.
     zanmatoLevel: aeonId === 'possessed-cindy' || aeonId === 'possessed-sandy' || aeonId === 'possessed-mindy' ? 4 : 3,
     sensorText: POSSESSED_AEON_SENSOR_TEXT[aeonId] ?? 'Possessed. It used to be an ally.',
     scanText: 'Yu Yevon wears it now. Destroying it is the only mercy left.',
