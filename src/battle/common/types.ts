@@ -2841,16 +2841,16 @@ export interface AeonBuild {
  */
 export interface YojimboBuild {
   /**
-   * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`**: the game's image holds 0 and no initialiser
-   * was found, and a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) contradicts a default of 0
-   * (RE review, 2026-10-17). 128 is strongly indicated by that pack (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
-   * confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
+   * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`** (a build must say): the game's image holds 0 because the game writes its starting value at boot, and
+   * that value is **128, the game's own starting value (read at boot, 2026-10-17: before any save was loaded, FFX itself wrote compatibility 128 and hire answer 2)**. It is no longer an estimate;
+   * the earlier evidence, a community save pack (not the owner's: 107 saves, downloaded 2026-09-26: slots 1-84 all read 128; 164 by slot 106), agreed with it.
    * A chain carries the changed value to the next link (`state.flags['yojimbo:compatibility']`).
    */
   compatibility: number;
   /**
    * The hire answer, 0, 1 or 2: the reply the player gave in the recruitment haggle (0 the dearest start price, 2 the cheapest). It scales the
-   * motivation Pay makes (`kernel/yojimbo.ts`). The image's default, when he was never hired through that scene, is 0 (the same pack contradicts a default of 0: RE review, 2026-10-17; no value changes).
+   * motivation Pay makes (`kernel/yojimbo.ts`). The game's own starting value is **2** (read at boot, 2026-10-17, as above), not the image's 0, so a Yojimbo never hired through that scene answers 2.
+   * A chapter may give a player's own answer instead: Chapter XXVII gives 2, the game's start; Chapter 28 (the Last Summoning) gives 1, a player's Cavern answer (the two are not aligned on purpose).
    */
   hireAnswer: 0 | 1 | 2;
 }

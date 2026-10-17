@@ -6,10 +6,12 @@
  * Dream's End's five aeons already take (`./late-aeon-rows.ts`). `[estimate]` in that document's own sense: mechanically derived from `[verified: 3 sources]` constants and its declared Yuna profile. (HP MP STR DEF MAG MDEF
  * AGI EVA ACC LUCK; Yojimbo has no MP.)
  *
- * **Estimates of ours, each named** (the sources give none of them):
- *  - {@link YOJIMBO_START}: his starting compatibility **128**, "strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26): every slot from 1 to 84 reads 128 before recruitment, which contradicts the image's default of 0; and by the community, live confirmation
- *    pending" (`FFXPartyBuild.yojimbo`, the driver's value, the RE session's `docs/handoff/re-parity-ffx-yojimbo-sisters.md`); and his **hire answer 1**, the neutral answer of 0, 1 and 2 (the image's default for a
- *    Yojimbo never hired through the scene is 0, which that pack contradicts (RE review, 2026-10-17), and which answer a player gave is in no source; Chapter XXVII uses 2 and the two chapters are NOT aligned, because aligning moves a chapter's Zanmato odds and no source picks between two legal player histories). The party's **gil 50,000** is Dream's End's own `[estimate]`.
+ * **Estimates and choices of ours, each named** (the sources give none of them, except Yojimbo's two starting values, which are the game's own):
+ *  - {@link YOJIMBO_START}: his starting compatibility **128, the game's own starting value (read at boot, 2026-10-17: before any save was loaded, FFX itself wrote compatibility 128 and hire answer 2)** (`FFXPartyBuild.yojimbo`, the
+ *    RE session's `docs/handoff/re-parity-ffx-yojimbo-sisters.md`; the image holds 0 because the game writes it at boot; a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) agreed: every slot from 1 to 84 reads 128
+ *    before recruitment); and his **hire answer 1, a player's Cavern answer** (the three replies the haggle offers are 0, 1 and 2; the game's own starting value, the one a Yojimbo never hired through the scene has, is **2**,
+ *    read at boot on 2026-10-17, and Chapter XXVII uses it). **Chapter 28 keeps 1 on purpose: it is a choice of ours, which reply a player gave, and the two chapters are NOT aligned, because aligning moves a chapter's Zanmato odds and no source picks
+ *    between two legal player histories.** The party's **gil 50,000** is Dream's End's own `[estimate]`.
  *  - {@link SISTERS_START}: each Sister's starting motivation **50**, the middle of 0 to 100. The engine's note says "UNSOURCED" and the chapter labels it; it moves the chance of the orders the Sisters' menu offers
  *    and the Combine powers roll (`200 + motivation` of 256).
  *  - The extra aeons' **starting Overdrive gauges**: Dream's End's five carry `research/ffx-seymour-flux.md` section 7.9.2's values (60, 55, 50, 55, 70), which name no gauge for the others. An aeon's gauge
@@ -32,7 +34,7 @@ export const INSIDE_SIN_OPTIONAL_ROWS: Readonly<Record<string, AeonStatRow>> = {
   mindy: { hp: 4105, mp: 164, str: 63, def: 63, mag: 65, mdef: 68, agi: 29, eva: 36, acc: 43, luck: 17 },
 };
 
-/** Yojimbo's starting state: compatibility 128 (the driver's value, live confirmation pending) and the neutral hire answer. See the file header. */
+/** Yojimbo's starting state: compatibility 128 (the game's own starting value, read at boot, 2026-10-17) and hire answer 1, a player's Cavern answer (the game's own start is 2; Chapter XXVII uses it, this chapter keeps 1). See the file header. */
 export const YOJIMBO_START: NonNullable<FFXPartyBuild['yojimbo']> = { compatibility: 128, hireAnswer: 1 };
 
 /** The Sisters' starting state: every motivation 50 (`[estimate]`: the middle of 0 to 100; unsourced). See the file header. */

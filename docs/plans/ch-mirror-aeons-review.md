@@ -115,7 +115,7 @@ work. Frames under `docs/screenshots/ch-mirror-aeons/`, each looked at.
 
 1. The formation pick and the preset's numbers wait for the bench, which waits for RE's AI and the engine's summon rules.
 2. Dark paintings (red and black) of the four aeons, the Mushroom Rock Road and Cavern plates (both are provisional stand-ins already), and the music (no source names these fights' cues) are Bailey's picks.
-3. The player's Yojimbo's starting compatibility (named estimate) and the hire answer 2 (the third reply, which Jegged and the files agree is the cheaper path).
+3. The player's Yojimbo's starting compatibility (a named estimate when this plan was written; since 2026-10-17 it is the game's own starting value (read at boot, 2026-10-17)) and the hire answer 2 (the third reply, which Jegged and the files agree is the cheaper path; also the game's own starting value (read at boot, 2026-10-17)).
 4. Whether the five tiers should become five links (the game's own structure) instead of one tier; it multiplies Act II by five.
 
 ## 10. Update, 2026-10-15 (after the build): what the plan said and what was built
@@ -136,7 +136,7 @@ work. Frames under `docs/screenshots/ch-mirror-aeons/`, each looked at.
 | Plan or first build | Now | Why |
 |---|---|---|
 | The first note's section 2.2 read the formations' call `ct_7126` as a lock on the matching aeon | **Nothing is barred:** Yuna's own Yojimbo and Magus Sisters are summonable in both acts, against their dark twins | RE note section 9: `ct_7126` is a memory pin on the aeon's loaded data; the game's real lock (script call 0x703B) is used by none of the eleven formations. Proved at the usability gate and in the summon kernel, not yet seen on screen |
-| Yojimbo's starting compatibility 128, "the community says" | 128, **strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26), live confirmation pending** | RE's lane FFX-K asks the chapter to say so where it gives the value (`data/ffx/builds/mirror-aeons.ts`) |
+| Yojimbo's starting compatibility 128, "the community says" | 128, **the game's own starting value (read at boot, 2026-10-17)** (it had been strongly indicated by a community save pack, not the owner's: 107 saves, downloaded 2026-09-26) | RE's lane FFX-K asks the chapter to say so where it gives the value (`data/ffx/builds/mirror-aeons.ts`) |
 | The Master and Teleport Sphere ids `[inferred]` | `[bytes]`: 0x2050 and 0x2062 | RE note 1.3 (the loot rows) |
 | The start gauge 0 outside the trio formations `[inferred]` | `[bytes]` `[run]` | RE note 2.5 and 5.1 |
 | Act II's default: tier 3 `nagi05_72`, the middle of the five | unchanged; **RE recommends tier 2 `nagi05_71`**, and tiers 1 to 3 are the candidates (tiers 4 and 5 leave one to two player actions between Zanmatos) | RE note 2.6; the pick stays the bench's and the driver's |

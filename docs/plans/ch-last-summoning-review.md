@@ -77,7 +77,7 @@ skipped when that gauge is 100. One dead Sister makes Delta Attack impossible; t
 formations (they never act and are not targetable; omitted), the raw properties 295, 296, 217 and 238 (unmapped).
 
 **Our estimates, each in one place** (`src/data/ffx/builds/last-summoning-roster.ts`, labelled there and in the handoff): Yojimbo's **starting compatibility 128** ("strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26),
-live confirmation pending", the driver's value); his **hire answer 1** (the neutral answer; the game's default for a Yojimbo never hired through the scene is 0, and which answer the player gave is in no
+live confirmation pending" when this plan was written; **since 2026-10-17 it is the game's own starting value (read at boot, 2026-10-17) and no longer an estimate**); his **hire answer 1, a player's Cavern answer this chapter keeps on purpose** (the game's own starting value for a Yojimbo never hired through the scene is 2, read at boot on 2026-10-17, not the image's 0; which answer the player gave is in no
 source); the party's **gil 50,000** (Dream's End's own `[estimate]`); **each Sister's starting motivation 50** (the middle of 0 to 100; the engine says "UNSOURCED"); the five extra aeons' **starting
 gauges 0** (the five story aeons' are `ffx-seymour-flux` §7.9.2's; nothing sources the others); the stage spots and heights of the possessed Yojimbo and Sisters; the guide's and the story's words.
 The five extra aeons' **stats are `research/ffx-combat-core.md` §6.4.3's inside-Sin block** (Anima 4,288 HP ... Mindy 4,105 HP, `[estimate]` in that document's own sense, mechanically derived), the same
@@ -150,7 +150,7 @@ ends with the player's aeon standing). Then `tsc --noEmit`, `node tools/orphans.
 ## 10. Open questions (for the handoff)
 
 1. The Sisters' other seven orders (the RE session's handlers) and Yojimbo's menu beyond Pay and Dismiss (note's open question 3).
-2. Yojimbo's compatibility (live confirmation), his hire answer, the Sisters' motivation, the gauges: Bailey's or the RE session's to settle.
+2. Yojimbo's compatibility (128, read at boot on 2026-10-17: closed), his hire answer (1 here, kept on purpose; 2 is the game's own start), the Sisters' motivation, the gauges: Bailey's or the RE session's to settle.
 3. A possessed look for the eight paintings, the Sisters' portraits, Yojimbo's hurt and KO paintings, Mindy's attack: art, Bailey's picks.
 4. How Sandy and Mindy enter play in the real battle (RE §9 item 6) and whether the Pagodas count for the Zanmato penalty (RE §9 item 4; The Pagodas count (emulated at battle start: spawn loop sets DC8 for every formation word, selector -15 tests only DC8, DCD and monster slot, getter takes the maximum). After a Pagoda is destroyed it is unproven (RE review, 2026-10-17); L = 4 in every possession link, 5 against Braska).
 5. Listing the chapter on the board waits for Bailey, as for every hidden chapter; the music is existing cues by reference (Bailey's ear).

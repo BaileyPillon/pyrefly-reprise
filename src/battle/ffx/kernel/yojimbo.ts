@@ -19,11 +19,11 @@
  * | {@link dismissEvent} | worker 59, function 4 (event 10) | the player's Dismiss |
  * | {@link wipeEvent} | worker 59, function 5 (event 11) | Yojimbo knocked out or Petrified while he is out |
  *
- * **The two numbers the game's image does not hold.** The compatibility global is 0 in the image and no initialiser was found (note,
- * open question 1). The community says 128, and a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) agrees and contradicts a default of 0
- * (slots 1-84 all read 128; 164 by slot 106; RE main session; the save offset is inferred and live confirmation is pending), so 128 is strongly indicated;
- * nothing in this file holds a starting value, so a caller must give one. The hire answer (0, 1 or 2) is written only by the recruitment event; the image's default is 0, which the same pack
- * contradicts (RE review, 2026-10-17). No value changes here: the pack is a stranger's, not the owner's.
+ * **The two numbers the game's image does not hold.** The compatibility global and the hire answer are 0 in the image, and no initialiser was found in the static image (note, open question 1), because
+ * the game writes them at boot: **the game's own starting values are 128 and 2 (read at boot, 2026-10-17: before any save was loaded, FFX itself wrote compatibility 128 and hire answer 2)**. They are no
+ * longer estimates; the earlier evidence, a community save pack (not the owner's: 107 saves, downloaded 2026-09-26: slots 1-84 all read 128; 164 by slot 106; RE main session), agreed with the compatibility.
+ * Nothing in this file holds a starting value, so a caller must give one. The hire answer (0, 1 or 2) is written by the recruitment event; a build may give a player's own answer (Chapter XXVII gives
+ * the game's 2; Chapter 28 gives 1, a player's Cavern answer). No value changes here.
  *
  * Pure and deterministic (AGENTS.md rule 1): the draws and the target picks are callbacks of a {@link YojimboHost}; nothing here holds a
  * generator, imports the DOM, `three` or the engine.

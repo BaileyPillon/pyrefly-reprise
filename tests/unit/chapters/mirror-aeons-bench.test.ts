@@ -5,7 +5,7 @@
  * party preset (`data/ffx/builds/mirror-aeons.ts`: its Phoenix Downs, Luck, stat fraction) and WHICH of the game's own formations each act uses; **no boss row is ever edited to fit a result**.
  *
  * **Pay on and Pay off (the release driver's rule, 2026-10-15).** A Pay can roll a Zanmato, which kills every legal foe of a group whatever its Death resistance (RE's `afda2d451`, merged), so the table carries the line with Pay on
- * beside the two lines that never pay him (Yojimbo sent in and dismissed at his first menu, which loses the shield; Yojimbo never sent in, the competent no-Pay line). At compatibility 128 and hire answer 2 (an ESTIMATE) a Pay of 100,000 gil buys a Zanmato
+ * beside the two lines that never pay him (Yojimbo sent in and dismissed at his first menu, which loses the shield; Yojimbo never sent in, the competent no-Pay line). At compatibility 128 and hire answer 2 (the game's own starting values, read at boot, 2026-10-17) a Pay of 100,000 gil buys a Zanmato
  * 11 times in 64 (31 with a full Overdrive gauge, which the line never has when it pays): 42 of the advisor's 234 Pays at tier 2 did, and 42 of 200 Act II fights ended that way. Dark Yojimbo is the only legal foe in Act II, so the
  * first-target kill already ended those fights, and the Pay-on and Pay-off numbers agree closely. The Sisters' seven other orders work now (`4256d209a`); the line still plays only Combine powers and Dismiss.
  *
