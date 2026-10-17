@@ -52,6 +52,6 @@
 
 ## 7. What the deep review should look at
 
-1. A girl in Tempered Will crossing the green gate in a real fight: the maximum doubles, her bar scales, a Double HP icon shows.
+1. A girl in Tempered Will crossing the green gate in a real fight: the maximum doubles, her HP and MP scale to it, and the status plays the generic buff sound. (Corrected after the independent check: there is no Max HP x2 / Max MP x2 icon and no message line; `FFX2_ICONS` in `src/ui/common/statusLooks.ts` and `LANDS` in `src/ui/common/statusWords.ts` have no entry for either. An icon would be a visible change and needs a mockup and Bailey's yes; see the handoff, section 7.)
 2. The party-prep and pause screens read the data's node count and colours, which are unchanged.
 3. The seven plates left unwired.
