@@ -83,7 +83,7 @@ function step(a: Actor, cam: ReturnType<typeof cameraAt>, fieldMs: number, realM
 describe.each(SHAPES)('the attack key chain on the real PaintedActor, %s shape: ready > attack, then attack > follow 83 ms later, 40 ms hit-stop in the middle', (_name, STEPPED) => {
   beforeEach(() => setPoseBlendStepped(STEPPED));
 
-  it('frame by frame: never a third painting, follow comes in from 0 (not at a third of the way), attack only fades, and the blend ends 120 ms of REAL time after the follow request', () => {
+  it('frame by frame: never a third painting, follow waits for ready to go out (PoseBlend rule 2) and then comes in from 0 (not at a third of the way), attack only fades from there, and the blend ends 120 ms of REAL time after it began', () => {
     const a = tidus();
     const cam = cameraAt(3);
     const clock = new Clock();
@@ -107,23 +107,34 @@ describe.each(SHAPES)('the attack key chain on the real PaintedActor, %s shape: 
       expect(live(r.m).length, `frame ${r.f}`).toBeLessThanOrEqual(2);
       expect(live(r.m).includes('ready') && live(r.m).includes('follow'), `frame ${r.f}: ready and follow together`).toBe(false);
     }
+    // follow was asked for while ready still showed 0.19, so it waits (rule 2: a painting that still shows is not dropped); it begins the first frame ready is under 0.05, about two frames later
+    const startF = rows.findIndex((r) => (r.m['follow'] ?? 0) > 0);
+    expect(startF).toBeGreaterThan(5);
+    expect(startF).toBeLessThanOrEqual(9);
+    for (const r of rows.filter((x) => x.f >= 5 && x.f < startF)) expect(r.m['follow'] ?? 0, `frame ${r.f}: follow has not begun`).toBe(0);
+    // ready, the weaker painting, only falls while follow waits, and it is under 0.05 in the frame before follow's first
+    const waiting = rows.filter((r) => r.f >= 4 && r.f < startF);
+    for (let i = 1; i < waiting.length; i++) expect(waiting[i]!.m['ready'] ?? 0).toBeLessThanOrEqual(waiting[i - 1]!.m['ready'] ?? 0);
+    expect(rows[startF - 1]!.m['ready'] ?? 0).toBeLessThan(0.05);
     // follow's first appearance is the first step of a fresh blend, not a pop at 0.37
-    const firstFollow = rows.find((r) => (r.m['follow'] ?? 0) > 0)!;
+    const firstFollow = rows[startF]!;
     expect(firstFollow.m['follow']!).toBeLessThan(STEPPED ? 0.15 : 0.1); // (the stepped dissolve climbs linearly to its cap: 0.10 in the first frame)
-    // attack is already the stronger painting when follow is asked for, and from then on it only falls
-    const afterAsk = rows.filter((r) => r.f >= 5);
+    // attack is already the stronger painting when follow is asked for, rises while follow waits, and from the frame follow begins it only falls
     expect(rows[4]!.m['attack']!).toBeGreaterThan(0.6);
-    for (let i = 1; i < afterAsk.length; i++) expect(afterAsk[i]!.m['attack'] ?? 0).toBeLessThanOrEqual(afterAsk[i - 1]!.m['attack'] ?? 0);
+    const rising = rows.filter((r) => r.f >= 4 && r.f < startF);
+    for (let i = 1; i < rising.length; i++) expect(rising[i]!.m['attack'] ?? 0).toBeGreaterThanOrEqual(rising[i - 1]!.m['attack'] ?? 0);
+    const afterStart = rows.filter((r) => r.f >= startF);
+    for (let i = 1; i < afterStart.length; i++) expect(afterStart[i]!.m['attack'] ?? 0).toBeLessThanOrEqual(afterStart[i - 1]!.m['attack'] ?? 0);
     // follow only rises
-    const fol = afterAsk.map((r) => r.m['follow'] ?? 0);
+    const fol = afterStart.map((r) => r.m['follow'] ?? 0);
     for (let i = 1; i < fol.length; i++) expect(fol[i]!).toBeGreaterThanOrEqual(fol[i - 1]!);
-    // the hit-stop did not hold the blend: it is over 120 ms of real time after the request (the frame that crosses it), follow alone at 1
-    const done = afterAsk.find((r) => live(r.m).length === 1 && (r.m['follow'] ?? 0) === 1)!;
-    const real = (done.f - 5 + 1) * FRAME; // the updates from the one the request landed in, through the one that finished it
+    // the hit-stop did not hold the blend: it is over 120 ms of real time after follow began (the frame that crosses it), follow alone at 1
+    const done = afterStart.find((r) => live(r.m).length === 1 && (r.m['follow'] ?? 0) === 1)!;
+    const real = (done.f - (startF - 1)) * FRAME; // the updates that advanced follow's blend: the one after the update that began it, through the one that finished it
     expect(real).toBeGreaterThanOrEqual(120 - 1e-6);
     expect(real).toBeLessThan(120 + FRAME + 1e-6);
     // and no frame in the freeze repeats the one before it: the half-mixed plateau is gone
-    for (const f of [6, 7, 8]) expect(rows[f]!.m['follow']).not.toBe(rows[f - 1]!.m['follow']);
+    for (const f of [startF + 1, startF + 2, startF + 3]) expect(rows[f]!.m['follow']).not.toBe(rows[f - 1]!.m['follow']);
   });
 
   it('the ghost frames of the chain (both paintings at 0.15 or more) are five or fewer, with and without the hit-stop (the old crossfade read eight with it)', () => {

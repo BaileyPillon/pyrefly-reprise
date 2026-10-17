@@ -11,6 +11,7 @@ import { cachedPainting, paintingKey, type PreparedPainting } from './PaintedArt
 import { cleanMatte, type MatteOptions } from './PaintedMatte.ts';
 import { poseScaleFor } from './KoPoseScale.ts';
 import { poseRegistrationFor } from './PoseRegistration.ts';
+import { stampPainting, type PoseTrustStamp } from './PoseTrust.ts';
 
 export { cleanMatte, type MatteOptions } from './PaintedMatte.ts'; // matte cleanup lives there; re-exported for existing callers
 
@@ -67,6 +68,12 @@ export interface PoseMeta extends PoseFrame {
    * it disagrees with the side it is fighting on.
    */
   facing?: ArtFacing;
+  /**
+   * Pose continuity (2026-10-16; `PoseTrust.ts`): whether the install vouched for this painting, stamped from the compiled-in registration table for every
+   * character painting (`/art/characters/<subject>/<pose>.png`) and absent on everything else. `trust.trusted === false` makes `PaintedActor` treat the
+   * painting as missing, so the pose falls to the idle. Absent is drawn: a stand-in, a backdrop and a test's hand-made meta all draw as they always did.
+   */
+  trust?: PoseTrustStamp;
 }
 
 export interface PaintedTexture {
@@ -179,6 +186,16 @@ export async function tryLoadTexture(url: string): Promise<Texture | null> {
   }
 }
 
+/**
+ * The trust stamp of a character painting (`PoseTrust.ts`), as the one field it adds to a `PoseMeta`: from the compiled-in registration row's status,
+ * nothing measured or hashed here. `{}` for a URL that is not a character painting. Stamped in {@link tryLoadMeta} and, because a painting with no sidecar
+ * has no meta from it, again where {@link preparePainting} builds the one every actor reads: the stamp must not depend on a sidecar being there.
+ */
+function trustOf(imageUrl: string): { trust?: PoseTrustStamp } {
+  const trust = stampPainting(imageUrl);
+  return trust ? { trust } : {};
+}
+
 /** Reads `<image>.json`. Resolves to null when there is no sidecar. */
 export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
   const jsonUrl = shippedArtUrl(imageUrl.replace(/\.[a-z0-9]+$/i, '.json')); // a master's sidecar is asked for as `idle%402x.json` too (ArtShipped.ts)
@@ -201,6 +218,7 @@ export async function tryLoadMeta(imageUrl: string): Promise<PoseMeta | null> {
       ...(reg?.stanceX !== undefined ? { stanceX: reg.stanceX } : {}),
       ...(reg?.upright ? { upright: true } : {}),
       ...(reg?.head ? { head: reg.head } : {}), // r394 (D-510): where the head is, for `HeadLock.ts`
+      ...trustOf(imageUrl),
       ...(parseArtFacing(raw.facing) ? { facing: parseArtFacing(raw.facing)! } : {}),
       ...(raw.seed !== undefined ? { seed: raw.seed } : {}),
       ...(raw.prompt !== undefined ? { prompt: raw.prompt } : {}),
@@ -342,6 +360,7 @@ async function preparePainting(
       ...(meta?.stanceX !== undefined ? { stanceX: meta.stanceX } : {}),
       ...(meta?.upright ? { upright: true } : {}),
       ...(meta?.head ? { head: meta.head } : {}), // r394 (D-510)
+      ...trustOf(url), // pose continuity: the install's word on this painting, whether or not a sidecar was there
       // Facing is a per-*pose* question: it decides whether the plane is
       // mirrored, and one old frontal `cast.png` can sit in a right-facing set.
       ...(meta?.facing !== undefined ? { facing: meta.facing } : {}),

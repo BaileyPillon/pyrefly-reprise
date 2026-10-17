@@ -17,6 +17,7 @@ import {
   PoseBlend,
   POSE_BLEND_STEPPED_DEFAULT,
   QUAD_IN_OUT,
+  REPOINT_BELOW,
   STEPPED_AT,
   STEPPED_CAP,
   STEPPED_DISSOLVE,
@@ -61,8 +62,14 @@ class Rig {
     this.active = plan.to;
     return plan;
   }
-  step(ms: number): void {
+  /** One frame of the blend, then what `PaintedActor.update` does with a request PoseBlend rule 2 held and has begun on its own (`takeStart`). True when one began. */
+  step(ms: number): boolean {
     this.blend.advance(ms);
+    const s = this.blend.takeStart();
+    if (!s) return false;
+    if (!s.plan.reversed) this.planes[s.plan.to].pose = s.key;
+    this.active = s.plan.to;
+    return true;
   }
   lesser(): number {
     return Math.min(this.planes[0].fade, this.planes[1].fade);
@@ -202,13 +209,14 @@ describe('the stepped dissolve: from a standing start, at 30 / 60 / 120 / 144 fp
 // ---------------------------------------------------------------- the cap through requests in mid-blend
 
 describe('the stepped dissolve: a request in mid-blend (FB-1\'s rules, the cap kept)', () => {
-  it('ready > attack, then follow 83 ms later (the attack key chain): follow comes up from 0 under the cap, attack goes out from where it stands, ready is gone, no frame above 0.30', () => {
+  it('ready > attack, then follow 83 ms later (the attack key chain): follow waits for ready to fall under REPOINT_BELOW (rule 2), then comes up from 0 under the cap, attack goes out from where it stands, ready is gone, no frame above 0.30', () => {
     for (const fps of FPS) {
       const rig = new Rig([1, 0], STEPPED_DISSOLVE, ['ready', '']);
       const frame = 1000 / fps;
       rig.request('attack', 120);
       let t = 0;
       let asked = false;
+      let began = false;
       let seenLesser = 0;
       while (t < 600) {
         if (!asked && t >= 83) {
@@ -216,16 +224,21 @@ describe('the stepped dissolve: a request in mid-blend (FB-1\'s rules, the cap k
           const attackBefore = rig.planes[rig.active].fade;
           expect(attackBefore).toBeGreaterThan(0.6); // the stronger painting
           const plan = rig.request('follow', 120);
-          expect(plan).toMatchObject({ same: false, repoint: true, reversed: false });
-          expect(rig.planes[rig.active]).toEqual({ fade: 0, pose: 'follow' });
-          expect(rig.keysAbove(0.02)).toEqual(['attack']); // ready was dropped
+          expect(plan).toEqual({ same: true, deferred: true }); // ready still shows (0.08 to 0.15): it is not dropped for follow
+          expect(rig.keysAbove(0.02).sort()).toEqual(['attack', 'ready']);
         }
-        rig.step(frame);
+        if (rig.step(frame)) {
+          began = true;
+          expect(rig.planes[rig.active]).toEqual({ fade: 0, pose: 'follow' });
+          expect(rig.keysAbove(0.02)).toEqual(['attack']); // ready went out under REPOINT_BELOW before it was re-pointed
+        }
         t += frame;
         seenLesser = Math.max(seenLesser, rig.lesser());
         expect(rig.keysAbove(0.02).length).toBeLessThanOrEqual(2);
-        expect(rig.keysAbove(0.02).includes('ready') && asked).toBe(false);
+        expect(rig.keysAbove(0.02).includes('ready') && began).toBe(false);
       }
+      expect(began, `${fps} fps`).toBe(true);
+      expect(rig.blend.maxDropped, `${fps} fps`).toBeLessThan(REPOINT_BELOW);
       expect(seenLesser, `${fps} fps`).toBeLessThanOrEqual(STEPPED_CAP + EPS);
       expect(rig.planes[rig.active]).toEqual({ fade: 1, pose: 'follow' });
     }
@@ -310,7 +323,7 @@ function run(seed: number, fps: number, ms: number): Run {
     const step = rnd() < 0.15 ? 0 : dtMs; // a hit-stop frame hands the blend no time
     const before = rig.blend.progress;
     const blendingBefore = rig.blend.blending;
-    rig.step(step);
+    const began = rig.step(step); // true: a request rule 2 held began in this frame (it re-pointed the weaker plane, which was under REPOINT_BELOW)
     sinceLast += step;
     const now: [number, number] = [rig.planes[0].fade, rig.planes[1].fade];
     for (const f of now) if (!(f >= 0 && f <= 1)) fail(`a fade left 0..1: ${now}`);
@@ -320,20 +333,24 @@ function run(seed: number, fps: number, ms: number): Run {
     if (step === 0 && (now[0] !== prev[0] || now[1] !== prev[1])) fail('a frame of no time moved a fade');
     const bound = slopePerMs * step + EPS;
     const moved = Math.max(Math.abs(now[0] - prev[0]), Math.abs(now[1] - prev[1]));
-    if (moved > bound) {
+    if (began) {
+      if (rig.planes[rig.active].fade !== 0 || !rig.blend.blending) fail('a held request began without a fresh plane on its way in');
+    } else if (moved > bound) {
       // the one jump a blend has: the frame that crosses the step (or ends the blend)
       const after = rig.blend.progress;
       if (!(blendingBefore && before < STEPPED_AT && (after >= STEPPED_AT || !rig.blend.blending))) fail(`a plane moved ${moved} in ${step.toFixed(1)} ms away from the step`);
       res.steps++;
     }
     prev = now;
-    if (sinceLast >= ms + frame + 1e-6) {
+    if (sinceLast >= 2 * ms + frame + 1e-6) {
+      // within the blend length, or, when rule 2 held the last request until the weaker painting was gone, within two
       if (rig.blend.blending) fail(`still blending ${sinceLast} ms after the last request`);
       if (rig.planes[rig.active].fade !== 1 || rig.planes[rig.active].pose !== lastKey) fail('the last request did not land');
     }
     clock += dtMs;
   }
-  if (rig.blend.blending || rig.planes[rig.active].fade !== 1 || rig.planes[rig.active].pose !== lastKey) fail('not settled on the last request at the end');
+  if (rig.blend.blending || rig.blend.holding || rig.planes[rig.active].fade !== 1 || rig.planes[rig.active].pose !== lastKey) fail('not settled on the last request at the end');
+  if (rig.blend.maxDropped >= REPOINT_BELOW) fail(`a painting was dropped while it still showed ${rig.blend.maxDropped}`);
   return res;
 }
 
