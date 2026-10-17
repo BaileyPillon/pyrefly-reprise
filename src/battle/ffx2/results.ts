@@ -18,6 +18,7 @@
 import type { BattleResult, BattleState } from '../common/types.ts';
 import type { Ffx2Unit } from './internal.ts';
 import { evaluateEnd, outcomeOfEnd } from './adapt/battle-end.ts';
+import { rewardsOfBattle } from './kill-rewards.ts';
 
 /** Deterministic actor order: party by slot, then enemies by slot. */
 export function actorOrder(units: readonly Ffx2Unit[]): Ffx2Unit[] {
@@ -79,23 +80,28 @@ export function buildResult(
   elapsedMs: number,
 ): BattleResult {
   const won = outcome === 'victory';
-  const rewards = units.filter((u) => u.side === 'enemy' && u.enemy).map((u) => u.enemy?.rewards);
+  // What the battle paid is what the game's reward routine paid at each knock-out (`kill-rewards.ts`), not a sum over the monsters still on the field:
+  // one that is still standing when the battle is won pays nothing (re-parity RC9, lane X2-C; note FFX2-G03 section 4).
+  const paid = won ? rewardsOfBattle(units, state) : undefined;
 
   const result: BattleResult = {
     outcome,
     turns: state.turn,
     elapsedTicks: Math.round(state.ticks),
     elapsedMs: Math.round(elapsedMs),
-    // FFX-2 pays EXP, not Sphere Levels; `ap` is still per-dressphere AP.
-    ap: won ? rewards.reduce((sum, r) => sum + (r?.ap ?? 0), 0) : 0,
-    exp: won ? rewards.reduce((sum, r) => sum + (r?.exp ?? 0), 0) : 0,
-    // Pilfered gil was taken mid-battle (`steal.ts`), so it counts unless the party fell.
-    gil: (won ? rewards.reduce((sum, r) => sum + (r?.gil ?? 0), 0) : 0) + stolenGil(state, outcome),
-    drops: won ? rewards.flatMap((r) => r?.drops ?? []) : [],
+    // FFX-2 pays EXP, not Sphere Levels; `ap` is the AP of the best-credited girl, per dressphere (the three are equal unless one wears Double AP or Triple AP).
+    ap: paid?.ap ?? 0,
+    exp: paid?.exp ?? 0,
+    // Pilfered gil was taken mid-battle (`steal.ts`), so it counts unless the party fell. (The game banks it in the wallet at once and its results show only the
+    // kills' gil; the line keeps adding it, a screen item for the results-screen mockup.)
+    gil: (paid?.gil ?? 0) + stolenGil(state, outcome),
+    drops: paid?.drops ?? [],
     // X-2 has no Overkill; the field stays empty rather than being faked.
     overkilled: [],
     sphereLevelsGained: {},
     levelsGained: {},
+    // What each girl earned (her EXP after the end-of-battle rollback, her AP): the per-girl lines a later results screen can show.
+    ...(paid !== undefined && Object.keys(paid.rewardsByMember).length > 0 ? { rewardsByMember: paid.rewardsByMember } : {}),
   };
 
   const next = state.flags['nextGroupId'];

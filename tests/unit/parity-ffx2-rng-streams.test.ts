@@ -110,6 +110,7 @@ function expectedStream(role: string, userSlot: number, targetSlots: readonly nu
     case 'bribeSlot': return STEAL_SLOT;
     case 'bribe': return STEAL;
     case 'ko': case 'phase': return streamFor(target, 0); // the unit's own purpose-0 stream
+    case 'reward': return STEAL; // a knock-out's reward roll (any unit, a girl too): one draw on the fixed stream 10 (FFX2-G03 4.2; re-parity RC9, lane X2-C)
     case 'rider': return AUX_STREAM; // a status the game's tables cannot hold: the engine's own roll
     default: throw new Error(`no stream for the role ${role}`);
   }
@@ -164,7 +165,7 @@ describe('the draws of an action come from the stream the table names (written o
     expect([...r.users].filter((u) => u.startsWith('enemy')).length).toBeGreaterThanOrEqual(8);
     expect([...r.users].filter((u) => u.startsWith('party')).length).toBe(3);
     // the sample reaches every kind of draw
-    for (const role of ['hit', 'variance', 'crit', 'status', 'shatter', 'pick', 'steal', 'ko']) expect([...r.roles], role).toContain(role);
+    for (const role of ['hit', 'variance', 'crit', 'status', 'shatter', 'pick', 'steal', 'ko', 'reward']) expect([...r.roles], role).toContain(role);
   });
 
   it('the sweep runs one action for EVERY ability in the pool, the Steal included, whatever the random sample holds', () => {
@@ -173,7 +174,7 @@ describe('the draws of an action come from the stream the table names (written o
     expect(r.bad.slice(0, 5)).toEqual([]);
     expect([...r.abilities].sort()).toEqual([...new Set(POOL.map((a) => a.id))].sort());
     expect(POOL.map((a) => a.id)).toContain('x2-thief-steal');
-    for (const role of ['hit', 'variance', 'crit', 'status', 'shatter', 'pick', 'steal', 'ko']) expect([...r.roles], `${role}, from the sweep alone`).toContain(role);
+    for (const role of ['hit', 'variance', 'crit', 'status', 'shatter', 'pick', 'steal', 'ko', 'reward']) expect([...r.roles], `${role}, from the sweep alone`).toContain(role);
   });
 
   it('MUTANT: the hit roll on the variance stream is caught', () => {

@@ -1530,12 +1530,52 @@ export interface FFX2CommandRecord {
 }
 
 /**
+ * The kill-reward fields of one FFX-2 monster row (re-parity RC9, lane X2-C; **FFX-2 only**; note FFX2-G03 section 5.1): what the game's reward routine
+ * pays when the monster falls. Numbers read from `battle/kernel/monster.bin` (`monster2.bin` for the Oversoul Paragon) of the Steam build 25501027.
+ */
+export interface FFX2KillReward {
+  /** The row in monster.bin (`table` 1) or monster2.bin (`table` 2). */
+  table: 1 | 2;
+  row: number;
+  /** Row +0x9c. */
+  exp: number;
+  /** Row +0xa8. */
+  ap: number;
+  /** Row +0xa0. */
+  gil: number;
+  /** Row +0xaa: the drop chance byte out of 255 (0 never drops, 255 always). */
+  dropByte: number;
+  /** Row +0xac: the common slot's item id and quantity, then the rare slot's (the game's item ids: 0x2xxx consumables, 0x9xxx accessories, 0x7xxx key items). */
+  drop: readonly [number, number, number, number];
+}
+
+/**
+ * What a battle has paid so far by the game's kill-reward routine (re-parity RC9, lane X2-C; **FFX-2 only**): the part of the results buffer the routine writes
+ * (the EXP and gil totals, one record per save index with the EXP at battle start and the EXP gained, the five item lists) and each girl's AP pool.
+ * Plain numbers, created at the first knock-out of a battle and carried with the state (`BattleState.ffx2Rewards`); written by `battle/ffx2/kill-rewards.ts` only.
+ */
+export interface FFX2RewardLedger {
+  buffer: {
+    exp: number;
+    gil: number;
+    rec: Array<{ snap: number; pend: number }>;
+    lists: { count: number[]; ids: number[][]; qty: number[][] };
+  };
+  /** The AP credited to each owner slot this battle (capped at 99 for a girl). */
+  pools: number[];
+  /** The authored drops of monsters that carry no row of the game (hand-built test enemies); paid outright. */
+  extraDrops: ItemDrop[];
+}
+
+/**
  * The game's own monster row for one FFX-2 enemy, the part the engine's enemy data does not carry (re-parity W3;
  * **FFX-2 only**). The fields the engine does carry (ACC, the resist bytes, the percent and Delay immunities, the steal
  * byte and the stolen gil) are corrected in place from the same row where they differ, by
  * `src/data/ffx2/monster-records/`; `research/re-ffx2-commands.md` section 7 lists every correction.
  */
 export interface FFX2MonsterRecord {
+  /** The row's kill-reward fields (re-parity RC9, lane X2-C), laid by `attachMonsterRecords` from `data/ffx2/monster-records/kill-rewards.ts`. Absent: the enemy is paid from its authored `rewards`. */
+  kill?: FFX2KillReward;
   /** The row in monster.bin (`table` 1) or monster2.bin (`table` 2, the Oversoul version). */
   row: number;
   table: 1 | 2;
@@ -2467,6 +2507,12 @@ export interface BattleResult {
   /** Levels gained this battle, keyed by member id (FFX-2 only). */
   levelsGained?: Record<CombatantId, number>;
   /**
+   * FFX-2 only (re-parity RC9, lane X2-C): what each girl earned by the game's kill-reward routine, keyed by member id: her EXP (after the end-of-battle
+   * rollback: a girl who is dead or Petrified loses what she gained) and the AP credited to her (capped at 99 a battle). {@link BattleResult.exp} stays the
+   * results total; **{@link BattleResult.ap} is the AP of the best-credited girl**. Absent outside FFX-2 and on a battle that paid nothing.
+   */
+  rewardsByMember?: Record<CombatantId, { exp: number; ap: number }>;
+  /**
    * Party member ids (FFX only) who completed at least one full turn this
    * battle, mapped to how many turns — present only for a completed turn, so
    * `Object.keys()` is the participation set. Deliberately **separate** from
@@ -2580,6 +2626,8 @@ export interface BattleState {
   seed: number;
   /** Encounter-scoped flags an AI script or a story trigger can set and read. */
   flags: Record<string, number | string | boolean>;
+  /** FFX-2 only: what the battle has paid by the game's kill-reward routine so far (created at the first knock-out; `battle/ffx2/kill-rewards.ts`). */
+  ffx2Rewards?: FFX2RewardLedger;
 }
 
 /** Everything needed to start a battle. */

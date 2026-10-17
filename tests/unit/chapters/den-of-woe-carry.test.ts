@@ -207,12 +207,17 @@ describe('the flag is the only way in: every other chain carries what it always 
    * of a link in 30 of the 31 (a cast in flight resolves before the victory); in the other one, Chapter 6 seed 5, the second link opens with an Attack where the base threw a Grenade,
    * because the four Grenades the party carries are no longer the ones a cast in flight at the end of the first link had not yet spent. All thirty-two still win. The old hashes are in
    * git at ea431aa0.
+   *
+   * **Re-pinned on the r51 merge, all thirty-two, for the game's kill rewards** (re-parity RC9 lane X2-C, 2026-10-15, FFX-2 only; reason "game-code parity", note FFX2-G03; `docs/handoff/re-parity-rc9-x2-rewards.md`).
+   * The `victory` result is what the reward routine paid at each knock-out, so that one event's payload differs in every log (the Leg link no longer pays the Nodes it never kills; the Bulwarks
+   * pay one roll, not two items; Ormi in Act I, and Ormi and Logos in Act II, carry the game's rows). Cause, by ablation: with each victory result put back to what the old `buildResult`
+   * made from the same board, all thirty-two logs give their old digest again, so no battle changed. The old hashes (the item-ledger and commit-window pins above) are in git at 6b638df95. The lane built these on r49 (before RC8); r51-rc re-recorded them on the merged tree (RC8 plus this lane), and the ablation was re-run there: every one of the 119 logs equals RC8's pin again with the result put back.
    */
   const BASE = {
-    ch5: ['bc16d06c2b310e63', '3405995ca875714e', '6f3ff4787d226772', '19e4019ffcf7880c', '48022cc460c8aae2', '71a0d0a7a92737fa', '276aa8ad4aa650ab', '7a1ae4b195157295'],
-    ch6: ['aa6b56cbfa16061b', '2217fd51aa006da2', '78d4ed544301b45b', 'a39696f7ae0ccaa4', 'db1b541da1a3238e', '6b4f4ad70e4a2da1', '6ac5ea70c9ca5a53', 'e476922839d3ad3e'],
-    ch11: ['604514318823d2e0', '19c99ef6850db941', 'b11fcb2af7df9162', '748c9f80531df8af', '4f8dd5667cf843f8', '2201781c02da2e62', '387873d77b23913f', '9f660b4d1647783d'],
-    sisters: ['c7145c067ca3cb54', 'ce7ed8347fb795be', '1c46c157eb6a5aba', 'ec8e64761ac7c459', '3394a5010e63304e', '59aee9966c69a02f', 'e0fe326b14ac1a8c', '9fc81a1fb15172ec'],
+    ch5: ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5', '1df2185cc633c36e', 'e31506651bcd11b4', '72d5806b5c3b2b61', '683b6b8ff95c67ce', '5a286d9847ac4940'],
+    ch6: ['b0b4c773a1befb90', '8c376b36d385069c', '6fe874b5ecb5b461', '365c1eba055fd59c', 'b1d1d6d41283bcbb', '6cd025c80519651f', 'fd7f0e2d43ee3a08', '3ed02b1a62e706f7'],
+    ch11: ['c57d6c4c931ac635', '063311ab99058636', 'ec7371de0083568a', 'b69868dc39c3ba3e', '37f93f7640f15530', 'dc51ac6c750a7377', 'dba02b8a2f188141', 'ec3840d5d577ec90'],
+    sisters: ['a19749ad75adca36', '8d24cbf681413eae', '18b968df4c813a5a', 'f0c4a5365895279f', '75828a84b9db4f62', '0a72d2cf3d8fc46a', 'f1f2cba71e613d17', 'a870e972600b2493'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {

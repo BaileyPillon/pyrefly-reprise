@@ -14,6 +14,7 @@ import { statusWord1 } from './adapt/words.ts';
 import { modDraw } from './adapt/draws.ts';
 import { resetGaugeOnKo } from './atb-engine.ts';
 import { hasAutoLife } from './kernel/status-timers-set.ts';
+import { payKill } from './kill-rewards.ts';
 
 export interface ResolveContext {
   units: Ffx2Unit[];
@@ -79,6 +80,7 @@ export function applyHpDelta(
   }
 
   target.alive = false;
+  payKill(ctx, target); // the knock-out resolution's reward roll (`pp_ko_resolve`), before the chain breaks: the killing hit's chain counts (re-parity RC9, lane X2-C)
   if (breakChain(target)) {
     ctx.emit({ type: 'chain', targetId: target.id, count: 0, multiplier: 1 });
   }
