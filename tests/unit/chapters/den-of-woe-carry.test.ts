@@ -220,10 +220,16 @@ describe('the flag is the only way in: every other chain carries what it always 
    * real Pride of the Sword, no gate, where the ring's first link was red. Same girl, same dresses, other gate, so other stats and other draws from there. The other ten logs of the two chains,
    * and Chapters 5 and 6, are byte-identical. Cause re-proved on the merged tree: with `GRID_LAYOUTS = false` (src/battle/ffx2/constants.ts) all four pinned-log tests give the pins above
    * this paragraph again. The old hashes are in git at the commit before the r51 grids merge.
+   *
+   * **Chapter 6's eight re-pinned on the merge of the Chapter VI link opening onto r52-rc** (lane X2-L row XL1, FFX-2 only; reason "game-code parity": the game starts every link of a chain as a full
+   * battle, FFX2-G10 sections 4 to 6; `docs/handoff/re-parity-rc9-x2-link-open.md`; PR-0107 turned ON by Bailey's yes of 2026-10-17, "yes turn on chapter VI opening, keep going full speed"). No Den code changed; `SEPARATE_BATTLE_GAUGES` is
+   * `true` in `src/battle/ffx2/constants.ts`, so Chapter 6's Acts II and III open on random waits and the opening trim instead of every wait whole. All eight logs moved: Act I is identical in each, the first
+   * differing event is the opening gauge snapshot of Act II (link 2), and all eight are still victories in three links. Chapter 5, Chapter XI and the Sisters did not move (the flag is on no other group).
+   * With `separateBattleGauges: false` passed as an option on the merged tree the eight r52-rc hashes above return exactly (recorded and compared hash for hash). The old hashes are in git at 3c92b60cc (r52-rc).
    */
   const BASE = {
     ch5: ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5', '1df2185cc633c36e', 'e31506651bcd11b4', '72d5806b5c3b2b61', '683b6b8ff95c67ce', '5a286d9847ac4940'],
-    ch6: ['b0b4c773a1befb90', '8c376b36d385069c', '6fe874b5ecb5b461', '365c1eba055fd59c', 'b1d1d6d41283bcbb', '6cd025c80519651f', 'fd7f0e2d43ee3a08', '3ed02b1a62e706f7'],
+    ch6: ['19a5fa5740e9abf8', 'f9349289d38415a2', '0524e7eb879f2b4f', '5e7b35f786287615', '1395ad581aea4dba', 'cb34b47033c5c073', 'd02415d86d58eaf6', '9818e03b60a8900d'],
     ch11: ['b7cd66c2076fa8a6', '063311ab99058636', 'fdaf94c2b6de27be', '9e690bd8530228f8', '37f93f7640f15530', 'dc51ac6c750a7377', 'dba02b8a2f188141', 'ec3840d5d577ec90'],
     sisters: ['a19749ad75adca36', '2da59bd1e36d06ad', '18b968df4c813a5a', 'fe112e3ff0c86ad1', 'af10ad8707ac5fc5', '0a72d2cf3d8fc46a', 'f1f2cba71e613d17', 'a870e972600b2493'],
   };

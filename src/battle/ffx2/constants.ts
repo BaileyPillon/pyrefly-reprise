@@ -37,14 +37,16 @@ export type { AtbSpeed } from './clock.ts';
 export const LEBLANC_SCRIPT_SINIROTHX = true;
 
 /**
- * PR-0107's switch, **OFF** until Bailey rules: a chained link flagged
- * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the
- * source) opens on randomised bars (§1.6, `[single source]`) instead of the continuation's zero.
- * Sourced, but it moves Chapter VI outside its band at human pace (measured in
- * `docs/handoff/iter2-b1.md`), so the plan's stop rule keeps it off; Bailey kept it off on 2026-09-27 (D-242).
- * `Ffx2EngineOptions.separateBattleGauges` overrides it for a measurement run. FFX-2 only.
+ * PR-0107's switch, **ON since Bailey's yes of 2026-10-17** ("yes turn on chapter VI opening, keep going full speed"; merged onto r52-rc for release 53)
+ * (plan question Q19; it was `false` until then). A chained link flagged
+ * `EnemyGroupDef.opensAsSeparateBattle` (Chapter VI's Acts II and III, separate battles in the source) opens as the game opens every
+ * battle (FFX2-G10 sections 4 to 6): a random opening wait for each character, then the opening trim, no preemptive or ambush roll
+ * (`atb-open.ts`, `kernel/atb-start.ts`) instead of the continuation's every wait whole. Bailey kept it OFF on 2026-09-27 (D-242)
+ * because it moved Chapter VI 16.5 points at human pace on the engine of that day; re-measured on the engine as it is now it moves
+ * nothing outside the band (human 499/500 off and on, Active 467 against 465, bench 500/500; 500 seeds a row),
+ * `docs/handoff/re-parity-rc9-x2-link-open.md`. `Ffx2EngineOptions.separateBattleGauges` overrides it for a measurement run. FFX-2 only.
  */
-export const SEPARATE_BATTLE_GAUGES = false;
+export const SEPARATE_BATTLE_GAUGES = true;
 
 /** One *drawn* full HUD bar: 24,000 units (8.43 s of the Normal speed). Presentation only. */
 export const TICKS_PER_BAR = 24000;
