@@ -1,7 +1,7 @@
 /**
  * Re-parity RC10, lane FFX boss data (FFX only): the six switches of `src/battle/ffx/boss-data-corrections.ts`, each held to the game's own monster record.
  *
- * The record bytes are `tests/fixtures/ffx-boss-records.json` (numbers read from the owner's install for FFX-H02, 37 records). The tests prove:
+ * The record bytes are `tests/fixtures/ffx-boss-records.json` (numbers read from the owner's install for FFX-H02, 32 records). The tests prove:
  *  1. with every switch off nothing is read and nothing moves (also through the real engine);
  *  2. each switch's table says exactly what the record says (every listed byte is in the record; nothing the record disagrees with is added);
  *  3. closure: with every switch on, every engine row that stands for a record equals it on the floored stats, the 24 status bytes (Regen through its flag), the five extra
@@ -28,11 +28,18 @@ import {
   setBossDataSwitches,
   type BossDataSwitch,
 } from '../../src/battle/ffx/boss-data-corrections.ts';
-import { resistBytesWith } from '../../src/battle/ffx/adapt/status.ts';
+import { extraImmuneWord, resistBytesWith } from '../../src/battle/ffx/adapt/status.ts';
+import { specialWord } from '../../src/battle/ffx/adapt/words.ts';
+import { zanmatoByte } from '../../src/battle/ffx/adapt/yojimbo.ts';
 import { stealByteOf, stealChanceAfter } from '../../src/battle/ffx/adapt/steal.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { findEnemyGroup, setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS, getChapter, type Chapter } from '../../src/data/encounters.ts';
+import { buildBattle } from '../../src/battle/ffx/setup.ts';
+import { makeFfxRng } from '../../src/battle/ffx/adapt/streams.ts';
+import { getFFXRegistry, resolveAbility } from '../../src/battle/ffx/index.ts';
+import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
+import { ability } from './ffx-fixtures.test.ts';
 import { lastSummoningGroup } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
 
 interface Rec {
@@ -90,6 +97,9 @@ beforeAll(async () => {
   for (const g of groups) for (const e of [...g.enemies, ...(g.parts ?? [])]) if (!rows.has(e.id)) rows.set(e.id, e);
 });
 
+/** The switches as the module shipped them, read when this file is loaded (before any test or hook, and the ability-fixture file imported below runs its own tests first, whose afterEach would reset them). */
+const SHIPPED = { ...BOSS_DATA_SWITCHES };
+
 afterEach(() => {
   for (const id of BOSS_DATA_SWITCH_IDS) BOSS_DATA_SWITCHES[id] = false;
 });
@@ -110,7 +120,7 @@ const statusByte = (e: EnemyDef, s: (typeof ST)[number]): number => {
 describe('the switches', () => {
   it('are all off', () => {
     expect(BOSS_DATA_SWITCH_IDS).toEqual(['D1', 'D3', 'D7', 'D8', 'D9', 'D10']);
-    for (const id of BOSS_DATA_SWITCH_IDS) expect(BOSS_DATA_SWITCHES[id], id).toBe(false);
+    for (const id of BOSS_DATA_SWITCH_IDS) expect(SHIPPED[id], id).toBe(false);
   });
 
   it('setBossDataSwitches puts every switch back as it was', () => {
@@ -351,6 +361,30 @@ describe('through the engine', () => {
     expect(((await combatants('seymour-flux', { D7: true }))['seymour-flux'] as FFXCombatant).immunities.slow).toBe(255);
   });
 
+  it('the words the status and damage steps read (resistance bytes, extra word, special word, Zanmato byte) move with the switch and only with it', async () => {
+    const SLOW = ST.indexOf('slow');
+    const flux = async (on: Partial<Record<BossDataSwitch, boolean>>): Promise<FFXCombatant> => (await combatants('seymour-flux', on))['seymour-flux'] as FFXCombatant;
+    expect(resistBytesWith(await flux({}), 0)[SLOW]).toBe(0);
+    expect(resistBytesWith(await flux({ D7: true }), 0)[SLOW]).toBe(255);
+    const evrae = async (on: Partial<Record<BossDataSwitch, boolean>>): Promise<FFXCombatant> => (await combatants('evrae-airship', on))['evrae'] as FFXCombatant;
+    expect(extraImmuneWord(await evrae({})) & 0x4000).toBe(0x4000); // Doom
+    expect(extraImmuneWord(await evrae({ D8: true })) & 0x4000).toBe(0);
+    expect(specialWord(await evrae({})) & 0x04).toBe(0); // Life
+    expect(specialWord(await evrae({ D9: true })) & 0x04).toBe(0x04);
+    expect(zanmatoByte(await evrae({}))).toBe(2); // level 3 reads as byte 2 today
+    expect(zanmatoByte(await evrae({ D3: true }))).toBe(3); // the record's byte
+    const pagoda = async (on: Partial<Record<BossDataSwitch, boolean>>): Promise<FFXCombatant> => (await combatants('braskas-final-aeon', on))['yu-pagoda-left'] as FFXCombatant;
+    const base = await pagoda({});
+    const d10 = await pagoda({ D10: true });
+    for (const s of ['shell', 'protect', 'reflect', 'nul-tide', 'nul-blaze', 'nul-shock', 'nul-frost'] as const) {
+      expect(resistBytesWith(base, 0)[ST.indexOf(s)], s).toBe(0);
+      expect(resistBytesWith(d10, 0)[ST.indexOf(s)], s).toBe(255);
+    }
+    expect(resistBytesWith(base, 0)[ST.indexOf('regen')]).toBe(255); // already, through the flag
+    expect(extraImmuneWord(d10) & 0x401).toBe(0x001); // Scan in, Curse out (the base has Curse and no Scan)
+    expect(extraImmuneWord(base) & 0x401).toBe(0x400);
+  });
+
   it('D10 reaches the Yu Pagodas of Chapter III and of the hidden Last Summoning, and Yu Yevon', async () => {
     const on = await combatants('braskas-final-aeon', { D10: true, D9: true });
     for (const id of ['yu-pagoda-left', 'yu-pagoda-right']) {
@@ -364,5 +398,38 @@ describe('through the engine', () => {
     expect([y.immunities.scan, y.immunities['auto-life'], y.immunityFlags.includes('immune-to-sensor')]).toEqual([255, 255, false]);
     const ls = await combatants('braskas-final-aeon', { D10: true }, lastSummoningGroup('last-summoning:ifrit') as EnemyGroupDef);
     expect((ls['yu-pagoda-left'] as FFXCombatant).immunities.shell).toBe(255);
+  });
+});
+
+describe('a real cast at the row (the status step through the engine\'s own path)', () => {
+  /** How many of `casts` casts of `def` by the party at `target` leave `status` on it. */
+  function landed(chapterId: string, target: string, def: ReturnType<typeof ability>, status: string, on: Partial<Record<BossDataSwitch, boolean>>, casts: number): number {
+    const restore = setBossDataSwitches(on);
+    try {
+      let n = 0;
+      for (let seed = 1; seed <= casts; seed += 1) {
+        const rng = makeFfxRng(seed);
+        const ctx = buildBattle(setupForChapter(getChapter(chapterId) as Chapter, seed), rng, getFFXRegistry().clone(), () => undefined);
+        const user = Object.values(ctx.state.combatants).find((c) => c.side === 'party') as FFXCombatant;
+        resolveAbility(ctx, user, def, [target]);
+        if ((ctx.state.combatants[target] as FFXCombatant).statuses[status as 'slow'] !== undefined) n += 1;
+      }
+      return n;
+    } finally {
+      restore();
+    }
+  }
+
+  it('D7: Slow lands on Seymour Flux today and never with the switch (200 casts)', () => {
+    const slow = ALL_ABILITIES.find((a) => a.id === 'slow') as ReturnType<typeof ability>;
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', {}, 200)).toBeGreaterThan(100);
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', { D7: true }, 200)).toBe(0);
+    expect(landed('seymour-flux', 'seymour-flux', slow, 'slow', { D1: true, D3: true, D8: true, D9: true, D10: true }, 200)).toBeGreaterThan(100); // no other switch touches it
+  });
+
+  it('D8: a Doom lands on Evrae only with the switch (50 casts)', () => {
+    const doom = ability({ id: 'doom-probe', formula: 'none', canMiss: false, targeting: 'single-enemy', statusEffects: [{ status: 'doom', chance: 100, duration: 30 }] });
+    expect(landed('evrae-airship', 'evrae', doom, 'doom', {}, 50)).toBe(0);
+    expect(landed('evrae-airship', 'evrae', doom, 'doom', { D8: true }, 50)).toBe(50);
   });
 });

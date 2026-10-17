@@ -36,7 +36,7 @@ Written 2026-10-17 by the lane (a Sonnet sub-agent of the RE parity session).
 | Risk | Closure |
 |---|---|
 | A switch off changes a battle | 12-seed event logs of every FFX chapter byte-identical to `origin/r52-rc` (180 of 180); `ffx-engine-golden`, `ffx2-atb-golden`, `ff7-golden` unchanged; a test that throws if the group is read |
-| A table disagrees with the record | `tests/fixtures/ffx-boss-records.json` (37 records, numbers only); per-switch tests; a closure test: with every switch on, every mapped row equals its record on floored stats, 24 status bytes, 5 extra bits, 7 flags, Zanmato (residue listed with reasons) |
+| A table disagrees with the record | `tests/fixtures/ffx-boss-records.json` (32 records, numbers only); per-switch tests; a closure test: with every switch on, every mapped row equals its record on floored stats, 24 status bytes, 5 extra bits, 7 flags, Zanmato (residue listed with reasons) |
 | A tested line never meets the row | measured: 12 seeds of every chapter and 500 seeds of every chapter a switch touches, one table per switch; the engine inputs (resistance bytes, extra word) are asserted so a switch is shown to do something even where the line never casts the command |
 | Tests that are blind | a mutation pass of 10 faults over `boss-data-corrections.ts` |
 
