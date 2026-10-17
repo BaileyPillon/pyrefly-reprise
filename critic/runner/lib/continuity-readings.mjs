@@ -34,6 +34,11 @@ export function figureHeightPx(H, ext) {
   return dist(applyH(H, 0.5, ext.top), applyH(H, 0.5, ext.base));
 }
 
+/** Head to soles on screen (CSS px): from the top of the real head to the ground line, along the plane's own vertical axis. Null with no head box to measure from. */
+export function bodyHeightPx(H, ext, headTopT) {
+  return Number.isFinite(headTopT) && ext ? dist(applyH(H, 0.5, headTopT), applyH(H, 0.5, ext.base)) : null;
+}
+
 /** The silhouette's length on screen (CSS px): its left to its right edge, along the plane's own horizontal axis at the middle of its body. */
 export function figureLengthPx(H, ext) {
   const v = (ext.top + ext.base) / 2;
@@ -69,6 +74,12 @@ export function readHeight({ aFrom, aTo, Hf, Ht, k1600 }) {
     Object.assign(out, { vs: 'idle', pose: judged.pose, side: idleSide === 'from' ? 'to' : 'from', class: judged.cls ?? null, waived: judged.waiver ?? null });
     if (judged.cls === 'standing' || judged.cls === 'low') {
       out.stature = round(ownH / idleH, 4);
+      // a props-out pose (victory, defend) is judged head to soles, as the gate judges it: the box counts the raised sword or staff as height
+      if (judged.propsOut) {
+        const idleA = idleSide === 'from' ? aFrom : aTo, Hi = idleSide === 'from' ? Hf : Ht;
+        const own = bodyHeightPx(Hj, judged.extent, judged.headTopT), idleBody = bodyHeightPx(Hi, idleA.extent, idleA.headTopT);
+        if (own > 0 && idleBody > 0) { out.stature = round(own / idleBody, 4); out.basis = 'body'; }
+      }
       out.band = statureBandOf(judged.cls, judged.pose);
       if (outside(out.stature, out.band, SLACK + READ_SLACK)) out.flags.push(out.stature < out.band[0] ? 'stature-low' : 'stature-high');
     } else if (judged.cls === 'ko' && judged.extent) {
@@ -79,6 +90,12 @@ export function readHeight({ aFrom, aTo, Hf, Ht, k1600 }) {
   }
   const bf = statureBandOf(aFrom.cls, aFrom.pose), bt = statureBandOf(aTo.cls, aTo.pose);
   Object.assign(out, { waived: waiverOf(aFrom, aTo), class: `${aFrom.cls}>${aTo.cls}` });
+  // a pair with a props-out pose in it is compared head to soles on both sides (a box ratio would count a raised sword against the band), when both have a head to measure from
+  if (aFrom.propsOut || aTo.propsOut) {
+    const bfPx = bodyHeightPx(Hf, aFrom.extent, aFrom.headTopT), btPx = bodyHeightPx(Ht, aTo.extent, aTo.headTopT);
+    if (bfPx > 0 && btPx > 0) { out.ratio = round(btPx / bfPx, 4); out.basis = 'body'; }
+    else { out.ratio = null; out.report.push('props-out-unread'); return out; }
+  }
   if (bf && bt) {
     out.band = [round(bt[0] / bf[1], 4), round(bt[1] / bf[0], 4)];
     if (outside(out.ratio, out.band, 2 * (SLACK + READ_SLACK))) out.flags.push(out.ratio < out.band[0] ? 'stature-low' : 'stature-high');
