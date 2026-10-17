@@ -234,7 +234,7 @@ export function performCommand(
       (e) => env.emit(e),
     );
     // The new dressphere lists other auto-abilities: the character is rebuilt and the layer copied again, forced (re-parity X2-D).
-    if (changed) rebuildAutoLayer({ emit: (e) => env.emit(e), rng: env.rng }, actor);
+    if (changed) rebuildAutoLayer({ emit: (e) => env.emit(e), rng: env.rng, grids: env.grids }, actor);
     finishAction(env, actor, before, ATB_BASE_VALUE, false);
     return;
   }

@@ -266,6 +266,13 @@ export const CONFUSION_PICK = true;
 export const GRID_LAYOUTS = true;
 
 /**
+ * Whether a Garment Grid lists the auto-ability rows its plate row carries (re-parity RC10 lane XD1b; `FFX2-G04` 3.4, `FFX2-G09` 3.5; FFX-2 only): a gate pair is listed once the gates it names are crossed, an
+ * always-on pair as soon as the grid is worn, and the ones that keep a status or set an SOS set (Highroad Winds' SOS Haste, Double HP and Double MP of Downtrodder and Tempered Will) join the girl's automatic-status layer
+ * (`adapt/auto-grid.ts`). Off, a grid lists no row, as every build before RC10. A measurement and rollback switch; no random draw either way.
+ */
+export const GRID_AUTO_STATUS = true;
+
+/**
  * Whether a screen exists that lets a player choose the Alchemist's Mix's two items (re-parity RC9 lane X2-G left it for a mockup; the driver's item 88e; FFX-2 only). The engine takes a Mix with two items in
  * `extra` and makes the game's result (`adapt/mix.ts`), but the menu has no way to ask for them, so a Mix picked from the menu is the bare Mix of before: nothing happens and nothing is spent. Off, the Mix row stays
  * listed and is greyed with {@link MIX_PICKER_REASON}, so a player never picks it and an unattended Alchemist (the line the benches and the advisor play) never Mixes; the engine itself is unchanged and a test, an AI or

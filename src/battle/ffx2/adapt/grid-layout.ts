@@ -17,6 +17,8 @@ import type { GarmentGridDef } from '../internal.ts';
 /** A layout as the data ships it: the card's two arrays and the colour each gate number wears on this grid. */
 export interface GridLayoutInput extends Ffx2GridLayout {
   readonly colourOfGate: ReadonlyArray<GateColour | null>;
+  /** The game's plate number n (the plate id is `0x6000 + n`): which auto-ability rows the grid lists (`adapt/auto-grid.ts`, re-parity RC10 lane XD1b). */
+  readonly plate?: number;
 }
 
 /** The colour a gate node wears on this grid; a layout whose table has no colour for one of its own gates is a data error. */

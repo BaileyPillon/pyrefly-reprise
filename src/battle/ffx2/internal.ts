@@ -31,6 +31,7 @@ import type { AtbSpeed } from './clock.ts';
 import type { AtbMode } from './active.ts';
 import type { ResultsReport } from './results-tally.ts';
 import type { Ffx2AutoLayer } from './adapt/auto-layer.ts';
+import type { GridPlate } from './adapt/auto-grid.ts';
 import type { ItemHold } from './adapt/item-ledger.ts';
 
 /** `Omit` over a discriminated union, preserving the members. */
@@ -86,11 +87,7 @@ export interface Ffx2Gauge {
    * action time uses, but it is not a command: when it ends the unit is ready at once and nothing is added for fallen girls (RC3).
    */
   idleWait?: boolean;
-  /**
-   * What cuts an idle wait short (RC3): a bit mask of `WAKE_ON_RESULT` (a result lands on this unit) and `WAKE_ON_ALIVE_CHANGE` (any unit falls or is
-   * raised), `ai/idle.ts`. The game polls a ready monster every step, so a script that is waiting for something sees it on the very next step;
-   * the engine cannot poll every step (the presenter abandons a long run of decisions without an event), so it waits for the event instead.
-   */
+  /** What cuts an idle wait short (RC3, `ai/idle.ts`): a mask of `WAKE_ON_RESULT` (a result lands on this unit) and `WAKE_ON_ALIVE_CHANGE` (any unit falls or is raised). The game polls a ready monster every step; the engine waits for the event instead. */
   idleWake?: number;
 }
 
@@ -155,6 +152,8 @@ export interface GarmentGridDef {
   links: Array<{ from: number; to: number; gates: GateColour[] }>;
   /** Gate-combination bonuses. `gates: []` is the permanent equip effect. */
   bonuses: GateBonus[];
+  /** The game's plate number and gate numbers, when the data has a layout for this grid (`adapt/auto-grid.ts`; re-parity RC10 lane XD1b): which auto-ability rows the grid lists. */
+  gateRows?: GridPlate;
 }
 
 /** A `T-` gate effect (or the `P-` equip effect when `gates` is empty). §4.1 */
