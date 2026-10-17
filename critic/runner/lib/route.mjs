@@ -21,6 +21,9 @@
 //            stack; the reader and chooser now work in it (route-ui.mjs).
 //   Contexts --touch, --gamepad, --reduce-motion, a per-run audio-debug.jsonl and
 //            run.json's dboxTimeline, each recorded in run.json.contexts.
+//   FOC52-003 a HIDDEN chapter (the Last Summoning, Mirror Aeons, Sinspawn Gui ...) has no card on the board, so the walk below used to stop at "ASSERT-FAIL card sinspawn-gui got yunalesca".
+//            Such a chapter is opened by its typed word (route-pure.mjs DOOR_WORDS, a copy of the app's chapterDoors.ts that a unit test holds equal), by real key presses;
+//            run.json records `door` {word, how}; there is no card, so no 03-card.png and no dossier text.
 // Both games: shared critic plumbing. Writes <evidence>/<chapter>-<goal>[-tag]/run.json.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -28,7 +31,7 @@ import path from 'node:path';
 import { parseArgs, requireBase, requireEvidence } from './cli.mjs';
 import { makeIndexer } from './lib.mjs';
 import { playFight, closeFight } from './route-fight.mjs';
-import { budgetFor, deriveOutcome, inlineProbeRefusal, scriptedChangeAllowed } from './route-pure.mjs';
+import { budgetFor, deriveOutcome, doorWordFor, inlineProbeRefusal, scriptedChangeAllowed } from './route-pure.mjs';
 import { watchThenTap } from './route-scene.mjs';
 import { MODE, makeAudioLog, makeInput, makeSnap, openRoute, readDboxTimeline } from './route-evidence.mjs';
 import { battleSeedRead, makeChooser, measureCardVsRows, measureFoc, readRows, targetsUp } from './route-ui.mjs';
@@ -45,6 +48,7 @@ const MAXA = Number(args.attempts ?? process.env.ATTEMPTS ?? 1);
 const seedArg = String(args.seed ?? '1');
 const pinned = seedArg === 'drawn' ? null : Number(seedArg) | 0;
 const game = id.startsWith('ffx2') ? 'ffx2' : 'ffx';
+const door = doorWordFor(id); // FOC52-003: a hidden chapter has no card on the board; its word, typed there, opens it (null for a chapter with a card)
 const flags = { touch: Boolean(args.touch), gamepad: Boolean(args.gamepad), reduceMotion: Boolean(args['reduce-motion']) };
 const ctxTag = [flags.touch && 'touch', flags.gamepad && 'pad', flags.reduceMotion && 'rm'].filter(Boolean).join('-');
 const dir = [id, goal, args.tag, ctxTag].filter(Boolean).join('-');
@@ -106,6 +110,8 @@ async function findCard(target) {
   }
   return seen;
 }
+// FOC52-003: the letters of a hidden chapter's word, as real key presses 150 ms apart (the door's gap between two letters is 2 s: `secretDoor.ts#KEY_GAP_MS`).
+const typeDoor = async () => { for (const ch of door) { await input.press(ch); await page.waitForTimeout(150); } };
 const menuWait = async (n = 300) => { for (let i = 0; i < n; i++) { if ((await pbk())?.awaitingMenu) return true; await page.waitForTimeout(150); } return false; };
 const escPause = async () => { for (let i = 0; i < 5 && (await scr()) === 'pause'; i++) { await input.press('Escape'); await page.waitForTimeout(800); } };
 
@@ -126,19 +132,32 @@ try {
   for (let i = 0; i < 24 && (await scr()) !== 'chapter-select'; i++) { if (!(await brief()) && (await scr()) !== 'title') { await page.waitForTimeout(400); continue; } await input.press('Enter'); await page.waitForTimeout(400); }
   if (!(await want('chapter-select'))) throw new Error('board not reached');
   rec.boardAtEntry = await ss();
-  rec.boardWalk = await findCard(id);
-  if ((await selId()) !== id) throw new Error(`ASSERT-FAIL card ${id} got ${await selId()}`);
-  rec.dossier = await txt('#ui', 900);
-  await snap('03-card.png', 'chapter select, this chapter chosen by real input', { screen: 'chapter-select' }, { selectedId: id });
+  if (door) {
+    // The board has no card for this chapter (FOC52-003: the walk below stopped at "ASSERT-FAIL card sinspawn-gui got yunalesca"). Its word typed on the board opens it, by real key presses, one letter at a time.
+    rec.boardWalk = [];
+    rec.door = { word: door, how: 'typed on the chapter board, one key at a time (no card; the board opens party prep itself)' };
+    note('door', door);
+    await typeDoor();
+  } else {
+    rec.boardWalk = await findCard(id);
+    if ((await selId()) !== id) throw new Error(`ASSERT-FAIL card ${id} got ${await selId()}`);
+    rec.dossier = await txt('#ui', 900);
+    await snap('03-card.png', 'chapter select, this chapter chosen by real input', { screen: 'chapter-select' }, { selectedId: id });
+  }
 
   // ---------- Prep (Esc back exercised)
-  await input.press('Enter'); await page.waitForTimeout(2200);
+  if (!door) await input.press('Enter'); // a door has already taken the board into party prep
+  await page.waitForTimeout(2200);
   if ((await scr()) === 'party-prep') {
     await snap('04-prep.png', 'party prep, first tab', { screen: 'party-prep' });
     rec.prepText = await txt('#ui', 1500);
     await input.press('Escape'); await page.waitForTimeout(1300);
     rec.prepEsc = await scr(); note('prepEscGoesTo', rec.prepEsc);
-    if (rec.prepEsc === 'chapter-select') { rec.cardAfterBack = await selId(); if ((await selId()) !== id) await findCard(id); await input.press('Enter'); await page.waitForTimeout(2200); }
+    if (rec.prepEsc === 'chapter-select') {
+      if (door) await typeDoor(); // a fresh board visit: the word is typed again (nothing of it survives leaving the board)
+      else { rec.cardAfterBack = await selId(); if ((await selId()) !== id) await findCard(id); await input.press('Enter'); }
+      await page.waitForTimeout(2200);
+    }
     if (!(await want('party-prep', 10000))) throw new Error('prep re-entry failed');
     await input.press('Enter'); await page.waitForTimeout(2400);
   } else note('noPrep', await scr());
