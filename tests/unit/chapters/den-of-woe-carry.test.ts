@@ -212,12 +212,20 @@ describe('the flag is the only way in: every other chain carries what it always 
    * The `victory` result is what the reward routine paid at each knock-out, so that one event's payload differs in every log (the Leg link no longer pays the Nodes it never kills; the Bulwarks
    * pay one roll, not two items; Ormi in Act I, and Ormi and Logos in Act II, carry the game's rows). Cause, by ablation: with each victory result put back to what the old `buildResult`
    * made from the same board, all thirty-two logs give their old digest again, so no battle changed. The old hashes (the item-ledger and commit-window pins above) are in git at 6b638df95. The lane built these on r49 (before RC8); r51-rc re-recorded them on the merged tree (RC8 plus this lane), and the ablation was re-run there: every one of the 119 logs equals RC8's pin again with the result put back.
+   *
+   * **Chapter XI's seeds 1, 3 and 4 and the Sisters' seeds 2, 4 and 5 re-pinned on the r51 merge for RE parity RC9 lane X2-I, the Garment Grid layouts** (FFX-2 only; reason "game-data parity";
+   * `docs/handoff/re-parity-rc9-x2-grids.md`). No Den code changed; the grids did: Flash of Steel and Pride of the Sword are the game's real grids now, not rings. In every one of those six
+   * logs the first event that differs is the girl's own Change out of Itchy (the autopilot takes the first row of her Change menu, the dress it always took): Rikku's Dark Knight to Gunner now
+   * crosses the gate numbered 1, which pays Magic +20 (it wears blue in the data), where the ring's first link was red and paid Strength +20; Paine's Dark Knight to Gunner is a direct join on the
+   * real Pride of the Sword, no gate, where the ring's first link was red. Same girl, same dresses, other gate, so other stats and other draws from there. The other ten logs of the two chains,
+   * and Chapters 5 and 6, are byte-identical. Cause re-proved on the merged tree: with `GRID_LAYOUTS = false` (src/battle/ffx2/constants.ts) all four pinned-log tests give the pins above
+   * this paragraph again. The old hashes are in git at the commit before the r51 grids merge.
    */
   const BASE = {
     ch5: ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5', '1df2185cc633c36e', 'e31506651bcd11b4', '72d5806b5c3b2b61', '683b6b8ff95c67ce', '5a286d9847ac4940'],
     ch6: ['b0b4c773a1befb90', '8c376b36d385069c', '6fe874b5ecb5b461', '365c1eba055fd59c', 'b1d1d6d41283bcbb', '6cd025c80519651f', 'fd7f0e2d43ee3a08', '3ed02b1a62e706f7'],
-    ch11: ['c57d6c4c931ac635', '063311ab99058636', 'ec7371de0083568a', 'b69868dc39c3ba3e', '37f93f7640f15530', 'dc51ac6c750a7377', 'dba02b8a2f188141', 'ec3840d5d577ec90'],
-    sisters: ['a19749ad75adca36', '8d24cbf681413eae', '18b968df4c813a5a', 'f0c4a5365895279f', '75828a84b9db4f62', '0a72d2cf3d8fc46a', 'f1f2cba71e613d17', 'a870e972600b2493'],
+    ch11: ['b7cd66c2076fa8a6', '063311ab99058636', 'fdaf94c2b6de27be', '9e690bd8530228f8', '37f93f7640f15530', 'dc51ac6c750a7377', 'dba02b8a2f188141', 'ec3840d5d577ec90'],
+    sisters: ['a19749ad75adca36', '2da59bd1e36d06ad', '18b968df4c813a5a', 'fe112e3ff0c86ad1', 'af10ad8707ac5fc5', '0a72d2cf3d8fc46a', 'f1f2cba71e613d17', 'a870e972600b2493'],
   };
 
   it('Chapters 5, 6 and XI: byte-identical event logs to the base commit, seeds 1-8', () => {
