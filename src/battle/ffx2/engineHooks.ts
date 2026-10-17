@@ -203,6 +203,25 @@ function resolveAsCounter(env: CounterEnv, unit: Ffx2Unit, command: Extract<Comm
   env.emit({ type: 'action-end', actorId: unit.id });
 }
 
+/**
+ * The monster's **death entry** (kind 4; re-parity RC9, lane X2-E). The knock-out routine only *requests* it: `pp_ko_resolve` calls the entry runner (live `0x62b6b0`), which builds a request
+ * record (the function, a priority) and inserts it into the script thread's priority-sorted request list (live `0x729470`), then returns; the entry itself is not run there ([R], read from
+ * the code, not run). So the death entry runs at the next script pass, after the action in flight has applied all of its results. {@link markDeathEntry} is the engine's `ResolveContext.onKo` (the request); {@link runDeathEntries} is the pass, at the end of an action and of a logic step. Only a script
+ * that defines `onDeath` answers (the Vegnagun Core's), so every other fight is unchanged. A girl has no script. Several requests in one pass run in slot order.
+ */
+export function markDeathEntry(target: Ffx2Unit, killer: CombatantId | undefined): void {
+  if (target.side === 'enemy') target.deathPending = { killer };
+}
+
+export function runDeathEntries(units: readonly Ffx2Unit[], aiContext: (unit: Ffx2Unit) => AiContext): void {
+  for (const unit of units) {
+    const pending = unit.deathPending;
+    if (pending === undefined) continue;
+    delete unit.deathPending;
+    aiScriptFor(unit.enemy?.aiScriptId).onDeath?.(aiContext(unit), pending.killer);
+  }
+}
+
 /** A counter a result set off, waiting for the action that caused it to end (`applied.ts`). */
 export interface PendingCounter {
   target: Ffx2Unit;

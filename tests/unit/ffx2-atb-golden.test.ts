@@ -202,6 +202,17 @@
  * 60 of 60 (CH4_D0 20/20, CH5_D0 20/20, CH4_D1500 10/10, CH5_D1500 10/10): no battle changed, not one event before the victory moved. A knock-out now takes one draw on stream 10
  * (a girl's too) and a drop a draw on stream 11; neither moves any roll in these two chapters, whose intended line steals nothing. Outcomes are unchanged (CH5_D0_OUTCOMES stays).
  * The old hashes (the item-ledger and commit-window pins above) are in git at 6b638df95. The lane built these on r49 (before RC8); r51-rc re-recorded them on the merged tree (RC8 plus this lane), and the ablation was re-run there: every one of the 119 logs equals RC8's pin again with the result put back.
+ *
+ * **Re-pinned a fifteenth time, one hash (`CH5_D1500` seed 8), for the Vegnagun Core's death entry** (re-parity RC9, lane X2-E, branch `re-parity-rc9-x2-stat-setter`, 2026-10-16, FFX-2 only; reason
+ * "game-code parity", the checked note FFX2-G05 section 3.6 and row XE4; `docs/handoff/re-parity-rc9-x2-stat-setter.md`). The Core's script, when the Core is knocked out, sets the hit points of both
+ * Bulwarks to 0 through the stat setter (the setter stores the number and runs no knock-out routine), after the action that killed the Core has applied every result. A Bulwark that is down already
+ * is unchanged; one that stands is left alive at 0 hit points, where the game's status process skips it (`kernel/status-timers.ts`: no clock, no Regen payout) until the next hit knocks it out.
+ * Cause, found by ablation (the entry's two calls removed reproduce the old digest): in Chapter V's link 3, seed 8, Paine's two-hit move kills the Core with its first hit and its second hit
+ * lands on the Right Bulwark as before (896 left of 3,000); the old engine let it Regen 93 and Rikku's later hit (2,241) knocked it out at event 910 of 916; it now stands at 0, gets no Regen,
+ * and the same hit knocks it out ten events sooner (906 events). Every other seed of the four arrays is unchanged (recomputed, equal): all twenty `CH5_D0` digests, all twenty `CH4_D0`, all
+ * ten `CH4_D1500` and the nine other `CH5_D1500`; D = 0 is still 20/20 in both chapters, the Wait arm still equals the D = 0 arrays, and the outcome of seed 8 is still a win. The line this
+ * reaches is the Active arm only: at D = 0 both Bulwarks are down when the Core falls on every seed (490 of 490 in the 500-seed measurement), so the entry stores 0 over 0. Over 300 Active
+ * seeds of Chapter V nine differ (8, 16, 28, 80, 83, 100, 130, 264 and 273), all still won (244 of 300 in both trees); Chapters IV and VI over 200 Active seeds each: none. The old hash is in git at 748038a0a; on the r51 merge it was re-recorded on the merged tree (RC8 plus the kill rewards plus this lane), where seed 8's digest differs from the lane's own because the kill rewards moved every `victory` payload; the other nineteen arrays keep the kill rewards lane's values, and the ablation (the entry's two calls removed) returns the kill rewards lane's digest for seed 8.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -230,10 +241,10 @@ const CH4_D1500 = [
   'e65e760c1ac142e6', '038b6876c64668be', '77fffbaa2465740d', '0215917ad148e7a3', 'e545b8da99c618be',
   '58672e3d620855a9', 'a7d5a8cdd88520cf', '64a95bd84e97ab16', '432ba0925b4c68fe', 'da5c4743e5da05b7',
 ];
-/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. */
+/** Re-pinned for the menu-cancel correction (2026-09-26); the old hashes are in git at 63767b5b. Re-pinned again for re-parity W3 (2026-10-09); the old hashes are in git at 029d49c7. Re-pinned a third time for re-parity W4 (2026-10-10, see the tenth re-pin above); the old hashes are in git at 931613a8. Seed 8 re-pinned a fourth time for the Core's death entry (RC9 X2-E, see the fourteenth re-pin above); its old hash is in git at 748038a0a. */
 const CH5_D1500 = [
   'b48f133a94b43bda', '972a2c6e15a91cb4', '22f26e178f22dc79', '1b7114b300491d91', '4b4d635fa07e9d26',
-  'bfbdf0da96a1d104', 'd70c807c59cc3b6b', '3f540428874387f6', 'de09fabd64d2f030', 'dffb3e303697f33d',
+  'bfbdf0da96a1d104', 'd70c807c59cc3b6b', '6630724652e01f6a', 'de09fabd64d2f030', 'dffb3e303697f33d',
 ];
 const SEEDS_10 = SEEDS.slice(0, 10);
 /** One letter a seed, W a won chain and d a defeat (every seed wins at D = 0 on the live build, under W4 and in the merged RC3 tree; lane a alone, on the old clock, lost six). */

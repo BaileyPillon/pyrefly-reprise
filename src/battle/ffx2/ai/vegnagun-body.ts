@@ -38,6 +38,8 @@ import { mem, setMem } from '../internal.ts';
 import { speakTurn } from './idle.ts';
 import { CORE_CHARGES_BEFORE_MEMENTO } from '../constants.ts';
 import { resolveCommand } from '../adapt/command.ts';
+import { applyStat } from '../adapt/stat-setter.ts';
+import { StatId, chrMonster } from '../kernel/stat-setter.ts';
 import { abilityPerformedBy } from '../execute.ts';
 import { scriptMod, searchUniform } from './script-rolls.ts';
 
@@ -145,6 +147,16 @@ export const vegnagunBodyScript: AiScript = {
     if (!attacker || attacker.side !== 'party') return;
     ctx.flags[LOG_WHO] = sourceId;
     ctx.flags[LOG_CLASS] = logClassOf(ctx, sourceId);
+  },
+
+  /**
+   * The Core's **death entry** (`m287`, two compiled calls; re-parity RC9, lane X2-E, row XE4): the stat setter sets the hit points of `chr_mon2` and `chr_mon3`, the two Bulwarks, to 0.
+   * The setter stores the number and runs no knock-out routine, so a Bulwark stands at 0 HP, alive, with no `ko` event and no kill to pay (FFX2-G05 3.6). They are parts that never gate the
+   * victory and the link ends with the Core; a Bulwark already down stays down. The game queues the Core's own death command (0x413c) here too: the Core's collapse, which is the presenter's.
+   */
+  onDeath(ctx: AiContext): void {
+    applyStat(ctx.units, ctx.self, StatId.hp, chrMonster(2), 0);
+    applyStat(ctx.units, ctx.self, StatId.hp, chrMonster(3), 0);
   },
 };
 

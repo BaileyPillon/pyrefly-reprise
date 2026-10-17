@@ -120,6 +120,8 @@ export interface Ffx2Unit extends FFX2Combatant {
   autoLayer?: Ffx2AutoLayer;
   /** The most hits one chain on this unit ever reached this battle (`Chr+0x5ae`): it never resets, and the drop roll adds it to the current chain (`chain.ts#bumpChain`; re-parity RC9, lane X2-C). */
   bestChain?: number;
+  deathPattern?: number; // a monster's death pattern (`Chr+0x2d8`, from its script's init, `adapt/death-patterns.ts`; RC9 X2-E): 0 can be raised, any other value leaves the battle at its KO and blocks Auto-Life; absent: 0
+  deathPending?: { killer: CombatantId | undefined }; // the death entry this monster's KO requested and the engine has not run yet (`engineHooks.ts#markDeathEntry`, `runDeathEntries`; RC9 X2-E)
   /** The gil bribed into this enemy so far this battle (`Chr+0x67c`), which the Bribe accuracy formula reads (`adapt/inputs.ts`). */
   bribeAccumulated?: number;
   /** The Bribe threshold the last attempt stored (`Chr+0x680`); the reward grows with its square root (`kernel/steal.ts`). */
@@ -380,6 +382,8 @@ export interface AiScript {
    * [ffx2-trema §12.2]; an OFF option, and no other script defines it, so no other log changes.
    */
   onPartyAction?(ctx: AiContext, actor: Ffx2Unit, action: { abilityId: string | undefined; aimedAtSelf: boolean }): Command | null;
+  /** Optional **death entry** (kind 4; RC9 X2-E): runs once, at the end of the action or logic step that knocked `self` out (`engineHooks.ts#runDeathEntries`). The Vegnagun Core's sets its Bulwarks' hit points to 0. */
+  onDeath?(ctx: AiContext, killerId: CombatantId | undefined): void;
 }
 
 /** Read or write a numeric AI memory slot. */
