@@ -10,8 +10,9 @@
  * multiplier) and raised by 1 (stopping at 99) when a positive HP number is applied to it. So `chainCount` is the
  * number of landed hits in the current chain, and the next hit's multiplier is `chainMultiplier(chainCount)`.
  * The game clears the counter when the target is Stopped or Petrified or has finished reacting to the hit
- * (`kernel/apply.ts shouldResetChain`); the engine has no hit-reaction state, so the window below stands in for it
- * (2 s, 3 s after a critical, `[ffx2-combat-core §1.7]`; an open item in `docs/handoff/re-parity-w3.md`).
+ * (`kernel/hit-reaction.ts chainUpdate`, exe 0x00643d80). The engine's reaction is the window below: as long as the target's own damage
+ * clip plays (re-parity lane X2-A, `reaction.ts`), or 2 s, 3 s after a critical (`[ffx2-combat-core §1.7]`), for a body outside the data
+ * and with `CHAIN_WINDOW_PER_BODY` off.
  *
  * Three rules matter more than the damage bonus itself:
  * - a target inside its window is **in hit reaction**: the hit kernel forces the hit for the evadable accuracy
@@ -25,14 +26,10 @@
  */
 
 import type { BattleEvent, FFX2Combatant } from '../common/types.ts';
-import {
-  CHAIN_BASE,
-  CHAIN_LOCKS_ACTIONS,
-  CHAIN_MAX,
-  CHAIN_STEP,
-  CHAIN_WINDOW_TICKS,
-  CHAIN_WINDOW_TICKS_CRIT,
-} from './constants.ts';
+import { CHAIN_BASE, CHAIN_LOCKS_ACTIONS, CHAIN_MAX, CHAIN_STEP } from './constants.ts';
+import { chainUpdate } from './kernel/hit-reaction.ts';
+import { clearsOnStop, reactionWindow } from './reaction.ts';
+import { has } from './adapt/words.ts';
 
 /**
  * The multiplier a hit takes on a target whose counter is `count` (the game's (n + 28) / 20).
@@ -69,22 +66,26 @@ export function chainBefore(target: FFX2Combatant): number {
 
 /**
  * Apply a positive HP hit to `target`'s chain (`kernel/apply.ts applyHpDamage`): the counter goes up by one, stopping
- * at 99, and the window opens again — 3 s after a critical, 2 s otherwise. `before` is the counter the
- * hit read ({@link chainBefore}). Heals, misses and immune hits never call this. Returns the new counter.
+ * at 99, and the window opens again at its full length: the target's own damage clip (`hdmg1` after a critical, `dmg1` otherwise, at the
+ * animation speed it plays at), or 2 s / 3 s for a body outside the data (`reaction.ts reactionWindow`). A Stopped or Petrified target has no
+ * reaction: its window is 0 and the counter stays 0. `before` is the counter the hit read ({@link chainBefore}).
+ * Heals, misses and immune hits never call this. Returns the new counter.
  */
 export function bumpChain(target: FFX2Combatant, before: number, crit: boolean): number {
-  target.chainCount = Math.min(CHAIN_MAX, before + 1);
-  target.chainWindowTicks = crit ? CHAIN_WINDOW_TICKS_CRIT : CHAIN_WINDOW_TICKS;
+  const window = reactionWindow(target, crit);
+  target.chainWindowTicks = window;
+  target.chainCount = window > 0 ? Math.min(CHAIN_MAX, before + 1) : 0;
   return target.chainCount;
 }
 
 /**
  * Advance every chain window by `ticks` of global clock and return a `chain`
- * event with `count: 0` for each window that just expired.
+ * event with `count: 0` for each counter that was just cleared: the game's per-step update (`kernel/hit-reaction.ts chainUpdate`) clears the
+ * counter when the target's reaction has ended (the window ran out) and at once when it is Stopped or Petrified.
  *
  * Chain windows run on the **global** clock, not the target's own gauge rate —
  * they are a real-time recovery animation, not an ATB entry, so Haste and Slow
- * on the victim do not stretch them.
+ * on the victim do not stretch them (Haste shortens the reaction itself: its clip plays at twice the speed, `reaction.ts`).
  */
 export function advanceChainWindows(
   combatants: readonly FFX2Combatant[],
@@ -93,16 +94,13 @@ export function advanceChainWindows(
 ): void {
   if (ticks <= 0) return;
   for (const c of combatants) {
-    if (c.chainWindowTicks <= 0) continue;
-    c.chainWindowTicks -= ticks;
-    if (c.chainWindowTicks > 0) continue;
-    c.chainWindowTicks = 0;
-    if (c.chainCount > 0) {
-      c.chainCount = 0;
-      emit({ type: 'chain', targetId: c.id, count: 0, multiplier: 1 });
-    } else {
-      c.chainCount = 0;
-    }
+    if (c.chainWindowTicks <= 0 && c.chainCount === 0) continue;
+    if (c.chainWindowTicks > 0) c.chainWindowTicks = Math.max(0, c.chainWindowTicks - ticks);
+    const next = chainUpdate({ chain: c.chainCount, damageInFlight: c.chainWindowTicks > 0 ? 1 : 0, freeze: 0, stoppedOrPetrified: (has(c, 'stop') || has(c, 'petrify')) && clearsOnStop(c) });
+    if (next.chain === c.chainCount) continue;
+    const had = c.chainCount > 0;
+    c.chainCount = next.chain;
+    if (had) emit({ type: 'chain', targetId: c.id, count: 0, multiplier: 1 });
   }
 }
 

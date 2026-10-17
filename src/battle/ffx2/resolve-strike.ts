@@ -37,7 +37,7 @@ import {
 } from './adapt/inputs.ts';
 import { has, luckStage, specialWord, statusWord1 } from './adapt/words.ts';
 import { bumpChain, chainBefore, chainMultiplier } from './chain.ts';
-import { HIT_REACTION_STEPS } from './constants.ts';
+import { reactionSpan } from './reaction.ts';
 import { rollCritical, type CritInput } from './kernel/crit.ts';
 import { elementLadder } from './kernel/element.ts';
 import { HitResult, determineHits } from './kernel/hit.ts';
@@ -230,7 +230,7 @@ function strike(env: Env, target: Ffx2Unit): number {
       if (hp > 0 && !noChain) {
         ctx.emit({ type: 'chain', targetId: target.id, count: before, multiplier: chainMultiplier(before) });
         bumpChain(target, before, classes.critical);
-        target.gauge.hitReaction = HIT_REACTION_STEPS; // the flinch halves the target's tick for a while (`atb-engine.ts kernelUnit`)
+        target.gauge.hitReaction = reactionSpan(target, classes.critical); // the flinch halves the target's tick for as long as it lasts (`atb-engine.ts kernelUnit`, `reaction.ts`)
       }
       if (wasAlive) {
         ctx.emit({

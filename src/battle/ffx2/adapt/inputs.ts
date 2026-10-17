@@ -8,7 +8,7 @@
 
 import type { StatBlock } from '../../common/types.ts';
 import type { Ffx2Unit } from '../internal.ts';
-import { isChained } from '../chain.ts';
+import { inHitReaction } from '../reaction.ts';
 import { COUNTER_WORD0 } from '../kernel/counter-check.ts';
 import { holdsWord0 } from './auto-layer.ts';
 import type { HitAttacker, HitTarget } from '../kernel/hit.ts';
@@ -127,9 +127,9 @@ export function hitAttacker(user: Ffx2Unit, id: number): HitAttacker {
 }
 
 /**
- * The target as the hit determination reads it. A target inside its chain window counts as in hit reaction: the game's
- * chain counter lives exactly while the target reacts to a hit (`Chr+0xd98`/`+0xd58`), and the engine has no reaction
- * state, so its chain window stands in for it (an open item in `docs/handoff/re-parity-w3.md`).
+ * The target as the hit determination reads it. A target in hit reaction cannot evade: the game forces the hit while a damage tag is in
+ * flight (`Chr+0xd98`; note FFX2-G01 sections 4.3 and 13 row 5). The reaction is `reaction.ts inHitReaction`: the target's own reaction for
+ * a body in the data, its chain window for any other (re-parity lane X2-A).
  */
 export function hitTarget(target: Ffx2Unit, id: number): HitTarget {
   const { resist1 } = resistTables(target);
@@ -144,7 +144,7 @@ export function hitTarget(target: Ffx2Unit, id: number): HitTarget {
     petrified: has(target, 'petrify'),
     stopped: has(target, 'stop'),
     evadesPhysical: holdsWord0(target, COUNTER_WORD0.EVADE_AND_COUNTER), // Evade & Counter (word 0 bit 3): a physical-only command on accuracy formula 1 or 2 misses her with no roll (re-parity X2-D)
-    inHitReaction: isChained(target),
+    inHitReaction: inHitReaction(target),
     aided: false,
     maxHp: target.stats.maxHp,
     accumulated: target.bribeAccumulated ?? 0,
