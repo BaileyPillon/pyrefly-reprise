@@ -20,13 +20,14 @@
  * r.fromPixels   // the readings that trust no table (alpha baseline, silhouette stance, height from the alpha baseline)
  * ```
  */
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import sharp from 'sharp';
 import { gameOf, mirrorFor, parseFacing, poseClassOf, sideOf, subjectKind } from './pose-kinds.mjs';
 import { makeRef, placePose } from './pose-geometry.mjs';
-import { drawnMask, maskIou, readPaint } from './pose-pixels.mjs';
+import { checkHires } from './pose-hires.mjs';
+import { drawnMask, headBoxOn, maskIou, readPaint } from './pose-pixels.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const TABLE_FILES = [['ffx', 'poseRegistrationFfx.ts', 'POSE_REGISTRATION_FFX'], ['ffx2', 'poseRegistrationFfx2.ts', 'POSE_REGISTRATION_FFX2'], ['foes', 'poseRegistrationFoes.ts', 'POSE_REGISTRATION_FOES'], ['exp', 'poseRegistrationExp.ts', 'POSE_REGISTRATION_EXP']];
@@ -37,9 +38,10 @@ const round = (v, n = 4) => (v === null || v === undefined || !Number.isFinite(v
 /**
  * Everything the model reads besides pixels. Pass `table`, `tableSource`, `koScale` and `records` to supply them (a test, a fixture, a candidate table);
  * otherwise they are the repository's: `src/data/art/poseRegistration*.ts`, `src/engine/KoPoseScale.ts`, `docs/target/pose-measure.json`.
+ * `hires: true` also checks each painting's `@2x`/`@3x`/`@4x` masters against it (`pose-hires.mjs`; the gate asks, the critic and the stamp do not).
  * @returns {Promise<{root:string, artDir:string, table:object, tableSource:Record<string,string>, koScale:object, records:object, refs:Map<string,object>}>}
  */
-export async function loadModelInputs({ root = ROOT, artDir, table, tableSource, koScale, records } = {}) {
+export async function loadModelInputs({ root = ROOT, artDir, table, tableSource, koScale, records, hires = false } = {}) {
   const dir = artDir ?? join(root, 'public', 'art');
   let tbl = table;
   let src = tableSource;
@@ -60,13 +62,17 @@ export async function loadModelInputs({ root = ROOT, artDir, table, tableSource,
     const p = join(root, 'docs', 'target', 'pose-measure.json');
     rec = existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : { subjects: {} };
   }
-  return { root, artDir: dir, table: tbl, tableSource: src ?? {}, koScale: ko, records: rec, refs: new Map() };
+  return { root, artDir: dir, table: tbl, tableSource: src ?? {}, koScale: ko, records: rec, refs: new Map(), hires };
 }
 
-/** Every subject folder under `characters/`, sorted. */
+/**
+ * Every subject folder under `characters/`, sorted. A folder that is a link or a junction counts (`statSync` follows it): the build follows it into `dist`, so
+ * a gate that did not would pass paintings it never read.
+ */
 export function listSubjects(inputs) {
   const dir = join(inputs.artDir, 'characters');
-  return existsSync(dir) ? readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name).sort() : [];
+  const isDir = (d) => d.isDirectory() || (d.isSymbolicLink() && statSync(join(dir, d.name), { throwIfNoEntry: false })?.isDirectory() === true);
+  return existsSync(dir) ? readdirSync(dir, { withFileTypes: true }).filter(isDir).map((d) => d.name).sort() : [];
 }
 
 /** The paintings the game can ask for: no `@2x` masters, no `.1` candidates. */
@@ -123,12 +129,14 @@ async function readOne(inputs, R, pose) {
   const hasStanceBoth = !!m.stance && R.stanceMeasured !== null;
   return {
     subject, pose, kind: R.kind, game: R.game, class: cls, isRef: g.isRef, refPose: R.refName,
-    sha: m.sha, size: [m.W, m.H],
-    hasRow: g.hasRow, hasHead: g.hasHead, hasStance: g.hasStance, held: g.held, heldHeadRatio: g.heldHeadRatio,
+    sha: m.sha, size: [m.W, m.H], empty: m.empty, solidity: round(m.empty ? null : m.area / ((m.bbox[2] - m.bbox[0]) * (m.bbox[3] - m.bbox[1]))), areaOverIdle: round(R.M.area ? (m.area * g.uppEff ** 2) / (R.M.area * R.upp ** 2) : null),
+    headBox: (() => { const b = headBoxOn(m, row.head); return b ? { cy: round(b.cy), coverage: round(b.coverage) } : null; })(),
+    hasRow: g.hasRow, hasHead: g.hasHead, hasStance: g.hasStance, held: g.held, heldHeadRatio: g.heldHeadRatio, heldGap: round(g.heldGap),
+    refHasHead: !!R.head, refWide: R.M.proneRaw,
     status: row.status ?? null, rowSha: row.sha ?? null,
     scale: g.scale, scaleSrc: g.scaleSrc, anchorRow: g.anchor, anchorSrc: g.anchorSrc, clamped: g.clamped, lock: round(g.lock), prone: g.prone, mirror: g.mirror,
     stature: round(g.stature), statureTable: round(g.statureTable), bodyStature: round(g.bodyStature), headReal: round(g.headReal), headTable: round(g.headTable),
-    lengthRatio: round(g.lengthRatio), massRatio: round(R.M.mass && m.mass ? (m.mass * g.uppEff) / (R.M.mass * R.upp) : null), iou: round(iou),
+    lengthRatio: round(g.lengthRatio), massRatio: round(R.M.mass ? (m.mass * g.uppEff) / (R.M.mass * R.upp) : null), iou: round(iou),
     feetPx: m.stance ? { x: m.stance.x, row: m.stance.row } : null,
     feet: g.feetDx === null || g.feetDy === null ? null : { dx: round(g.feetDx), dy: round(g.feetDy) },
     feetRowGap: round(g.feetRowGap), sinkIdle: round(g.sinkIdle),
@@ -143,6 +151,8 @@ async function readOne(inputs, R, pose) {
       stanceBothRead: hasStanceBoth,
     },
     drawn: { upp: g.uppEff, anchor: g.anchor, shift: g.shift, mirror: g.mirror },
+    // the hi-DPI masters beside it, when the caller asked (`loadModelInputs({ hires: true })`): null when not checked
+    hires: inputs.hires ? await checkHires(join(inputs.artDir, 'characters', subject), pose, m) : null,
   };
 }
 

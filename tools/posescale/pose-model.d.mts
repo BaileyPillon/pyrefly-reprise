@@ -25,6 +25,8 @@ export interface ModelInputs {
   /** docs/target/pose-measure.json */
   records: { subjects?: Record<string, { poses?: Record<string, any> }> } & Record<string, any>;
   refs: Map<string, unknown>;
+  /** Also check each painting's `@2x`/`@3x`/`@4x` masters against it (`pose-hires.mjs`). */
+  hires?: boolean;
 }
 
 export interface PoseReading {
@@ -38,6 +40,22 @@ export interface PoseReading {
   /** sha256 (64 hex) of the master PNG on disk. */
   sha: string;
   size: [number, number];
+  /** Nothing opaque (no pixel over alpha 128) in the painting. */
+  empty: boolean;
+  /** Opaque pixels over the area of their bounding box (a rectangle is 1). */
+  solidity: number | null;
+  /** The painted area over the idle's, both at the size they are drawn. */
+  areaOverIdle: number | null;
+  /** Where the registered head box sits on the silhouette: its centre's height down the figure (0 top, 1 soles) and the share of the box that is painted. */
+  headBox: { cy: number | null; coverage: number | null } | null;
+  /** The idle has a registered head box. */
+  refHasHead: boolean;
+  /** The idle is itself wider than 1.15 times its height (a hull). */
+  refWide: boolean;
+  /** How far a recorded hold's `headRatio` is from its applied scale over its ruler reading. Null with no hold. */
+  heldGap: number | null;
+  /** The `@Nx` masters' problems, or null when not checked. */
+  hires: Array<{ code: 'hires-size' | 'hires-differs' | 'hires-unreadable'; tier: number; message: string }> | null;
   hasRow: boolean;
   hasHead: boolean;
   hasStance: boolean;
@@ -99,6 +117,7 @@ export function loadModelInputs(o?: {
   tableSource?: Record<string, string>;
   koScale?: Record<string, number>;
   records?: ModelInputs['records'];
+  hires?: boolean;
 }): Promise<ModelInputs>;
 export function listSubjects(inputs: ModelInputs): string[];
 export function listPoses(inputs: ModelInputs, subject: string): string[];

@@ -87,12 +87,19 @@ export function mirrorFor(artFacing, want) {
   return 1;
 }
 
+/**
+ * The paintings the staged costume change owns (`twirl-*`, exempt as today): the five keys, and only on the dresspheres and the hidden chapter's copies of them.
+ * (Pose continuity, 2026-10-17: it used to be any pose called `twirl...` on any subject, so a swapped `tidus/twirl-strike.png` was never read.)
+ */
+export const TWIRL_KEYS = /^twirl-(start|forming|going|mid|end)$/;
+const STAGED_KINDS = new Set(['dressphere-ffx2', 'exp-leblanc']);
+
 /** Poses the engine lays low (`critical | sleep | weak | kneel | low`), judged against the low band, not the standing one. */
 export const LOW_POSES = new Set(['critical', 'sleep', 'weak', 'kneel', 'low']);
 
 /**
  * The class of one pose, which decides the band it is judged in (`pose-bands.mjs`):
- * `idle` the reference itself; `staged` a dressphere `twirl-*` painting (the staged costume change: listed, never judged);
+ * `idle` the reference itself; `staged` a dressphere `twirl-*` painting (the staged costume change: listed, never judged, but never empty);
  * `part` any pose of a hull, fin, limb or film still; `ko` a knock-out; `wide` wider than tall and not a KO (the engine's aspect test lays it
  * down unless the table marks it `upright`); `low` critical, sleep, kneel; `standing` everything else (idle excepted).
  * @param {{pose: string, isRef: boolean, prone: boolean, kind: string}} o `prone`: wider than tall by the engine's 1.15 aspect test and not marked `upright`.
@@ -100,7 +107,7 @@ export const LOW_POSES = new Set(['critical', 'sleep', 'weak', 'kneel', 'low']);
 export function poseClassOf({ pose, isRef, prone, kind }) {
   if (isRef) return 'idle';
   if (kind === 'part' || kind === 'ff7') return 'part'; // a hull, a fin, a film still: not a standing figure, whatever the pose is called
-  if (pose.startsWith('twirl')) return 'staged';
+  if (STAGED_KINDS.has(kind) && TWIRL_KEYS.test(pose)) return 'staged';
   if (pose === 'ko' || pose.startsWith('ko-')) return 'ko';
   if (prone) return 'wide';
   if (LOW_POSES.has(pose)) return 'low';

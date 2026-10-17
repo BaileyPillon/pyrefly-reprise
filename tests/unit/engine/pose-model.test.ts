@@ -21,7 +21,7 @@ import { makeRef, placePose } from '../../../tools/posescale/pose-geometry.mjs';
 import { gameOf, mirrorFor, parseFacing, poseClassOf, sideOf, subjectKind } from '../../../tools/posescale/pose-kinds.mjs';
 import { bandVerdict, proposeStatus } from '../../../tools/posescale/pose-bands.mjs';
 import { diffStored, recordStatureGap, rowFieldsFromReading, shaMatches } from '../../../tools/posescale/pose-rows.mjs';
-import { loadModelInputs, readPose, type ModelInputs, type PoseReading } from '../../../tools/posescale/pose-model.mjs';
+import { loadModelInputs, readPose, type ModelInputs, type ModelRow, type PoseReading } from '../../../tools/posescale/pose-model.mjs';
 
 const ROOT = resolve(__dirname, '..', '..', '..');
 const ART = resolve(ROOT, 'public', 'art');
@@ -127,7 +127,11 @@ describe('subject kinds and pose classes', () => {
     expect(c('critical')).toBe('low');
     expect(c('sleep')).toBe('low');
     expect(c('ko', { prone: true })).toBe('ko');
-    expect(c('twirl-end')).toBe('staged');
+    expect(c('twirl-end', { kind: 'dressphere-ffx2' })).toBe('staged');
+    expect(c('twirl-end', { kind: 'exp-leblanc' })).toBe('staged');
+    // pose continuity, 2026-10-17: the exemption is the five keys on the dresspheres' own subjects, not any pose called twirl... on any subject
+    expect(c('twirl-end')).toBe('standing');
+    expect(c('twirl-strike', { kind: 'dressphere-ffx2' })).toBe('standing');
     expect(c('attack', { prone: true })).toBe('wide');
     expect(c('attack', { kind: 'part' })).toBe('part');
   });
@@ -140,6 +144,7 @@ const reading = (over: Partial<PoseReading> = {}): PoseReading =>
     hasRow: true, hasHead: true, hasStance: true, held: false, heldHeadRatio: null, status: null, rowSha: null,
     scale: 1, scaleSrc: 'reg', anchorRow: 900, anchorSrc: 'baseline', clamped: false, lock: 1, prone: false, mirror: 1,
     stature: 1, statureTable: 1, bodyStature: 1, headReal: 1, headTable: 1, lengthRatio: null, massRatio: null, iou: 0.6,
+    empty: false, areaOverIdle: 1, headBox: { cy: 0.2, coverage: 1 }, refHasHead: true, refWide: false, heldGap: null, hires: null,
     feetPx: { x: 400, row: 900 }, feet: { dx: 0, dy: 0 }, feetRowGap: 0, sinkIdle: 0, stanceRegistered: 400, stanceDiffPx: 0,
     fromPixels: { size: [800, 1000], alphaBaseline: 900, alphaBox: null, bbox: [], stanceX: 400, stanceRow: 900, figureHeightPx: 850, heightOverIdle: 1, feetRowGap: 0, sinkIdle: 0, stanceBothRead: true },
     drawn: { upp: 1, anchor: 900, shift: 0, mirror: 1 },
@@ -183,6 +188,35 @@ describe('the bands', () => {
     expect(bandVerdict(reading({ class: 'staged', stature: 1.3, feet: { dx: -0.22, dy: 0 } })).exempt).toBe(true);
     expect(proposeStatus(reading({ class: 'staged', stature: 1.3 }))).toBeNull();
     expect(bandVerdict(reading({ kind: 'ff7', class: 'part', hasRow: false })).exempt).toBe(true);
+  });
+
+  it('refuses a degenerate painting that the height and head bands alone passed (the holes a verifier found on 2026-10-17)', () => {
+    expect(bandVerdict(reading({ empty: true })).flags).toEqual(['empty']); // nothing opaque, and no exemption covers that
+    expect(bandVerdict(reading({ empty: true, class: 'staged' })).flags).toEqual(['empty']);
+    expect(bandVerdict(reading({ massRatio: 0.3 })).flags).toEqual(['mass-low']); // a bar, a blob and a pole, a small figure holding a full-height pole
+    expect(bandVerdict(reading({ massRatio: 2.4 })).flags).toEqual(['mass-high']); // an opaque slab
+    expect(bandVerdict(reading({ massRatio: 0.55 })).flags).toEqual([]); // r50's least is 0.55
+    expect(bandVerdict(reading({ solidity: 1 })).flags).toEqual(['slab']); // a rectangle of any size, however well it matches the idle's mass
+    expect(bandVerdict(reading({ solidity: 0.91 })).flags).toEqual([]); // r50's most is 0.91 (a column of a boss)
+    expect(bandVerdict(reading({ feetPx: null, feet: null })).flags).toEqual(['no-stance']);
+    expect(bandVerdict(reading({ iou: 0.02 })).flags).toEqual(['no-overlap']);
+    expect(bandVerdict(reading({ iou: 0.06 })).flags).toEqual([]); // r50's least is 0.054
+    expect(bandVerdict(reading({ class: 'ko', pose: 'ko', feetPx: null, feet: null, iou: 0.01, massRatio: 0.4 })).flags).toEqual([]); // a laid-down body has none of these
+  });
+
+  it('checks where the head box sits, not just how big it is, and that the head ratio of a hold is not typed', () => {
+    expect(bandVerdict(reading({ headBox: { cy: 0.75, coverage: 1 } })).flags).toEqual(['head-off']); // a box moved onto the legs reads the same size
+    expect(bandVerdict(reading({ headBox: { cy: 0.3, coverage: 0.02 } })).flags).toEqual(['head-off']); // a box on empty canvas
+    expect(bandVerdict(reading({ headBox: { cy: 0.45, coverage: 0.9 } })).flags).toEqual([]); // a crouching figure's head, r50's lowest is 0.54
+    expect(bandVerdict(reading({ hasHead: false, headReal: null })).flags).toEqual(['no-head']); // its idle has a face box, this pose has none
+    expect(bandVerdict(reading({ hasHead: false, headReal: null, refHasHead: false })).flags).toEqual([]); // a creature has no face anywhere
+    expect(bandVerdict(reading({ held: true, stature: 0.907, headReal: 1.0, heldGap: 0.35 })).flags).toEqual(['held-head']); // headRatio 1.0 typed over a head drawn at 0.55
+    expect(bandVerdict(reading({ held: true, stature: 0.907, headReal: 1.356, heldGap: 0.001 })).flags).toEqual([]);
+  });
+
+  it('lays a pose that is wider than tall down only where the idle is wide too', () => {
+    expect(bandVerdict(reading({ class: 'wide', pose: 'attack' })).flags).toEqual(['wide-pose']); // a lunge padded to 1.4 x: the engine lays it on the floor
+    expect(bandVerdict(reading({ class: 'wide', pose: 'attack', refWide: true })).flags).toEqual([]); // a hull whose idle is wide
   });
 
   it('flags a feetRow that sinks the boots under the floor (the knee-planted Lady Luck rows)', () => {
@@ -242,6 +276,8 @@ interface Known {
   pose: string;
   sha: string;
   why: string;
+  /** Read against the rows as r50.1 shipped them (before the data lane registered the Dark Aeons and Valefor and repaired the five Lady Luck rows): `legacyInputs`. */
+  before?: true;
   want: Partial<Record<'stature' | 'bodyStature' | 'headReal' | 'lengthRatio' | 'iou', number | null>> & { class: string; hasRow: boolean; anchorSrc?: string; feet?: { dx: number; dy: number } | null };
 }
 
@@ -250,22 +286,46 @@ const KNOWN: Known[] = [
   { subject: 'lulu', pose: 'hurt', sha: '34fc093a2614', why: 'FFX: a stature hold, the head paid for', want: { class: 'standing', hasRow: true, stature: 0.907, bodyStature: 0.874, headReal: 1.356, iou: 0.316, feet: { dx: 0, dy: 0 } } },
   { subject: 'lulu', pose: 'critical', sha: '01b736ed8dd5', why: 'FFX: the low class, a hold', want: { class: 'low', hasRow: true, stature: 0.754, bodyStature: 0.687, headReal: 1.374, iou: 0.461 } },
   { subject: 'lulu', pose: 'ko', sha: 'cdd75693478c', why: 'FFX: a KO is read by length', want: { class: 'ko', hasRow: true, lengthRatio: 0.423, headReal: 1, iou: 0.224, feet: null } },
-  { subject: 'dark-sandy', pose: 'attack', sha: 'f231535d77ac', why: 'FFX: a Dark Aeon with no row, the stance slides', want: { class: 'standing', hasRow: false, stature: 0.979, headReal: null, iou: 0.07, feet: { dx: -0.084, dy: 0.02 } } },
-  { subject: 'paine-lady-luck', pose: 'hurt', sha: '68685265e295', why: 'FFX-2: feetRow at the knees', want: { class: 'standing', hasRow: true, anchorSrc: 'feetRow', stature: 0.495, bodyStature: 0.322, iou: 0.092, feet: { dx: -0.023, dy: -0.356 } } },
-  { subject: 'rikku-lady-luck', pose: 'attack', sha: '965c0e6b01b1', why: 'FFX-2: feetRow at the knees', want: { class: 'standing', hasRow: true, anchorSrc: 'feetRow', stature: 0.434, bodyStature: 0.285, iou: 0.146, feet: { dx: -0.007, dy: -0.282 } } },
+  { subject: 'dark-sandy', pose: 'attack', sha: 'f231535d77ac', before: true, why: 'as r50.1 shipped it, FFX: a Dark Aeon with no row, the stance slides', want: { class: 'standing', hasRow: false, stature: 0.979, headReal: null, iou: 0.07, feet: { dx: -0.084, dy: 0.02 } } },
+  { subject: 'paine-lady-luck', pose: 'hurt', sha: '68685265e295', before: true, why: 'as r50.1 shipped it, FFX-2: feetRow at the knees', want: { class: 'standing', hasRow: true, anchorSrc: 'feetRow', stature: 0.495, bodyStature: 0.322, iou: 0.092, feet: { dx: -0.023, dy: -0.356 } } },
+  { subject: 'rikku-lady-luck', pose: 'attack', sha: '965c0e6b01b1', before: true, why: 'as r50.1 shipped it, FFX-2: feetRow at the knees', want: { class: 'standing', hasRow: true, anchorSrc: 'feetRow', stature: 0.434, bodyStature: 0.285, iou: 0.146, feet: { dx: -0.007, dy: -0.282 } } },
   { subject: 'bahamut', pose: 'attack', sha: '2331f25b981b', why: 'FFX: a player aeon, no head box', want: { class: 'standing', hasRow: true, stature: 1.047, headReal: null, iou: 0.694, feet: { dx: 0, dy: 0.006 } } },
-  { subject: 'valefor', pose: 'attack', sha: '8d98a668c7ca', why: 'FFX: an aeon with no row, laid down by the aspect test', want: { class: 'wide', hasRow: false, stature: 0.977, lengthRatio: 1.65, iou: 0.566, feet: null } },
+  { subject: 'valefor', pose: 'attack', sha: '8d98a668c7ca', before: true, why: 'as r50.1 shipped it, FFX: an aeon with no row, laid down by the aspect test', want: { class: 'wide', hasRow: false, stature: 0.977, lengthRatio: 1.65, iou: 0.566, feet: null } },
+  { subject: 'dark-sandy', pose: 'attack', sha: 'f231535d77ac', why: 'FFX: a Dark Aeon registered (2026-10-17), the stance no longer slides', want: { class: 'standing', hasRow: true, stature: 0.979, headReal: 1, iou: 0.331, feet: { dx: 0, dy: 0.0205 } } },
+  { subject: 'paine-lady-luck', pose: 'hurt', sha: '68685265e295', why: "FFX-2: planted at the soles (2026-10-17), the record's own 0.85", want: { class: 'standing', hasRow: true, anchorSrc: 'baseline', stature: 0.851, feet: { dx: 0, dy: 0 } } },
+  { subject: 'rikku-lady-luck', pose: 'attack', sha: '965c0e6b01b1', why: "FFX-2: planted at the soles (2026-10-17), the record's own 0.72", want: { class: 'standing', hasRow: true, anchorSrc: 'baseline', stature: 0.715, feet: { dx: 0, dy: 0 } } },
+  { subject: 'valefor', pose: 'attack', sha: '8d98a668c7ca', why: 'FFX: an aeon registered with its stance (2026-10-17): upright, not laid down by the aspect test', want: { class: 'standing', hasRow: true } },
   { subject: 'rikku-songstress', pose: 'twirl-end', sha: '43c71b80a42c', why: 'FFX-2: the staged costume change', want: { class: 'staged', hasRow: false, stature: 1.121, iou: 0.318 } },
 ];
 
 const artPresent = existsSync(resolve(ART, 'characters', 'lulu', 'idle.png'));
 let inputsPromise: Promise<ModelInputs> | null = null;
 const inputs = () => (inputsPromise ??= loadModelInputs({ root: ROOT }));
+/**
+ * The registration table as r50.1 shipped it for the rows the data lane changed (2026-10-17): no record for the Dark Aeons and Valefor, and the five Lady Luck rows planted
+ * at the knees by a `feetRow` the generator wrote from a silhouette that had lost the boots. The independent second reading must keep catching exactly these.
+ */
+const legacyInputs = async (): Promise<ModelInputs> => {
+  const base = await inputs();
+  const table: Record<string, Record<string, ModelRow>> = {};
+  for (const [s, rows] of Object.entries(base.table)) table[s] = { ...rows };
+  for (const s of ['dark-sandy', 'dark-mindy', 'dark-cindy', 'dark-yojimbo', 'valefor']) delete table[s];
+  const head = (h: [number, number, number, number]): ModelRow['head'] => h;
+  table['paine-lady-luck'] = {
+    ...table['paine-lady-luck'],
+    follow: { scale: 1.611, stanceX: 328.0, feetRow: 552.0, head: head([0.36, 0.1298, 0.4722, 0.2113]) },
+    hurt: { stanceX: 287.5, feetRow: 472.0, head: head([0.3136, 0.2478, 0.4962, 0.3429]) },
+    'od-x2-lady-luck-attack-reels': { scale: 1.298, stanceX: 338.5, feetRow: 760.0, head: head([0.5257, 0.2855, 0.6679, 0.3586]) },
+    'od-x2-lady-luck-magic-reels': { scale: 1.298, stanceX: 338.5, feetRow: 760.0, head: head([0.5257, 0.2855, 0.6679, 0.3586]) },
+  };
+  table['rikku-lady-luck'] = { ...table['rikku-lady-luck'], attack: { scale: 0.86, stanceX: 326.0, feetRow: 594.0, head: head([0.3381, 0.2702, 0.5213, 0.3646]) } };
+  return { ...base, table, refs: new Map() };
+};
 
 describe.skipIf(!artPresent)('readPose against real paintings (angle 1\'s independent numbers)', () => {
   // a row whose painting is not the pinned one (other art in this tree) is skipped, never failed: nothing is pinned to art it was not measured on
   for (const k of KNOWN) it.skipIf(!artHas(k.subject, k.pose, k.sha))(`${k.subject}/${k.pose}: ${k.why}`, async () => {
-    const r = await readPose(k.subject, k.pose, { inputs: await inputs() });
+    const r = await readPose(k.subject, k.pose, { inputs: k.before ? await legacyInputs() : await inputs() });
     expect(r.class).toBe(k.want.class);
     expect(r.hasRow).toBe(k.want.hasRow);
     if (k.want.anchorSrc) expect(r.anchorSrc).toBe(k.want.anchorSrc);
@@ -285,7 +345,7 @@ describe.skipIf(!artPresent)('readPose against real paintings (angle 1\'s indepe
   });
 
   it.skipIf(!artHas('paine-lady-luck', 'hurt', '68685265e295'))('reads the Lady Luck knee-planted row two ways, and they disagree by the whole defect: 0.85 by the pixels, 0.49 as drawn', async () => {
-    const r = await readPose('paine-lady-luck', 'hurt', { inputs: await inputs() });
+    const r = await readPose('paine-lady-luck', 'hurt', { inputs: await legacyInputs() });
     expect(r.fromPixels.heightOverIdle).toBeGreaterThan(0.8); // the record's own 0.852: boots at the bottom of the painting
     expect(r.stature).toBeLessThan(0.55); // the engine plants the knee row on the floor
     expect(r.feetRowGap).toBeGreaterThan(0.3);
@@ -294,10 +354,33 @@ describe.skipIf(!artPresent)('readPose against real paintings (angle 1\'s indepe
   });
 
   it.skipIf(!artHas('dark-sandy', 'attack', 'f231535d77ac'))('flags the Dark Aeon pose with no row as unregistered, and its stance as off the idle\'s', async () => {
-    const r = await readPose('dark-sandy', 'attack', { inputs: await inputs() });
+    const r = await readPose('dark-sandy', 'attack', { inputs: await legacyInputs() });
     const v = bandVerdict(r);
     expect(v.flags).toEqual(expect.arrayContaining(['unregistered', 'feet-x', 'feet-y']));
     expect(v.report).toContain('ghost-fail');
+  });
+
+  it.skipIf(!artHas('paine-lady-luck', 'hurt', '68685265e295'))("the repaired Lady Luck rows (feetRow guard, 2026-10-17) stand on their soles: the pixels' 0.85 is what is drawn, and no feet flag is left", async () => {
+    for (const [subject, pose, stature] of [['paine-lady-luck', 'hurt', 0.851], ['paine-lady-luck', 'follow', 0.989], ['paine-lady-luck', 'od-x2-lady-luck-attack-reels', 1.13], ['rikku-lady-luck', 'attack', 0.715]] as const) {
+      const r = await readPose(subject, pose, { inputs: await inputs() });
+      expect(r.feetRowGap, `${subject}/${pose}`).toBe(0);
+      expect(r.stature, `${subject}/${pose}`).toBeCloseTo(stature, 2);
+      expect(Math.abs(r.fromPixels.heightOverIdle! - r.stature!), `${subject}/${pose}: the two readings agree`).toBeLessThan(0.02);
+      expect(bandVerdict(r).flags.filter((f: string) => f.startsWith('feet')), `${subject}/${pose}`).toEqual([]);
+    }
+  });
+
+  it.skipIf(!artHas('dark-sandy', 'attack', 'f231535d77ac'))('the four Dark Aeons are registered now: a stance row that agrees with the pixels, a head box, stature 0.94 to 1.00', async () => {
+    for (const subject of ['dark-sandy', 'dark-mindy', 'dark-cindy', 'dark-yojimbo']) {
+      for (const pose of ['attack', 'cast', 'hurt']) {
+        const r = await readPose(subject, pose, { inputs: await inputs() });
+        expect(r.hasRow, `${subject}/${pose}`).toBe(true);
+        expect(r.hasHead, `${subject}/${pose} has a head box`).toBe(true);
+        expect(r.stature!, `${subject}/${pose}`).toBeGreaterThan(0.93);
+        expect(r.stature!, `${subject}/${pose}`).toBeLessThan(1.02);
+        expect(Math.abs(r.feet!.dx), `${subject}/${pose} feet x`).toBeLessThan(0.02);
+      }
+    }
   });
 
   it.skipIf(!artHas('lulu', 'hurt', '34fc093a2614'))('passes Lulu hurt as a hold and rewrites the same row fields from a second reading', async () => {

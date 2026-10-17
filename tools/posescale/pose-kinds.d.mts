@@ -7,6 +7,7 @@ export const DARK_AEONS: Set<string>;
 export const PARTS: Set<string>;
 export const GAME_FALLBACK: Readonly<Record<string, 'FFX' | 'FFX-2'>>;
 export const LOW_POSES: Set<string>;
+export const TWIRL_KEYS: RegExp;
 export function subjectKind(subject: string): SubjectKind;
 export function gameOf(subject: string, sidecarGame: unknown, tableSource?: string): ModelGame;
 export function sideOf(subject: string): 1 | -1;

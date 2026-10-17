@@ -198,6 +198,8 @@ export async function readPaint(pngPath, pose) {
     }
   }
   const empty = x1 < 0;
+  let area = 0;
+  for (let i = 0; i < mask.length; i++) area += mask[i];
   const bbox = empty ? [0, 0, W, H] : [x0, y0, x1 + 1, y1 + 1];
   const eng = await engineAlpha(a, W, H);
   const opened = empty ? null : openedSilhouette(mask, W, H, bbox[3] - bbox[1], 0.022);
@@ -210,11 +212,33 @@ export async function readPaint(pngPath, pose) {
   return {
     pose, W, H, mask, bbox, sidecar, hasSidecar: existsSync(sidecarPath),
     sha: sha256(pngPath),
+    // a painting with nothing opaque in it (no pixel over alpha 128) is not a painting: every reading below falls back to the whole canvas, so the gate must see this one
+    empty, area,
     engineBase: eng.base, engineBox: eng.box,
     stance: empty ? null : stanceFromHem(mask, W, H, bbox, stanceOpened),
-    mass: opened ? Math.sqrt(opened.area) : Math.sqrt(mask.reduce((s, v) => s + v, 0)),
+    mass: opened ? Math.sqrt(opened.area) : Math.sqrt(area),
     proneRaw: W > H * 1.15,
   };
+}
+
+/**
+ * Where a registered head box (fractions of its painting, `[x0, y0, x1, y1]`) sits on the painting's own silhouette: `cy` the box centre's height in the figure
+ * (0 = the top of the silhouette, 1 = its soles) and `coverage` the share of the box that is painted. The head reading takes the box's SIZE from the table; this is
+ * the pixel check that the box is on a head at all (a box moved onto the legs reads the same size). Null with no box or an empty painting.
+ * @param {{W:number,H:number,mask:Uint8Array,bbox:number[],empty?:boolean}} m
+ * @returns {{cy:number, coverage:number}|null}
+ */
+export function headBoxOn(m, head) {
+  if (!Array.isArray(head) || head.length < 4 || m.empty) return null;
+  const x0 = Math.max(0, Math.floor(head[0] * m.W));
+  const x1 = Math.min(m.W, Math.ceil(head[2] * m.W));
+  const y0 = Math.max(0, Math.floor(head[1] * m.H));
+  const y1 = Math.min(m.H, Math.ceil(head[3] * m.H));
+  if (x1 <= x0 || y1 <= y0) return { cy: Number.NaN, coverage: 0 };
+  let on = 0;
+  for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) on += m.mask[y * m.W + x];
+  const bh = m.bbox[3] - m.bbox[1];
+  return { cy: bh > 0 ? ((y0 + y1) / 2 - m.bbox[1]) / bh : Number.NaN, coverage: on / ((x1 - x0) * (y1 - y0)) };
 }
 
 // ---------------------------------------------------------------- the silhouette as the engine draws it

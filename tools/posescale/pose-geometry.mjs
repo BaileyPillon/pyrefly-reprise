@@ -120,6 +120,9 @@ export function placePose(R, m, { row = {}, rec = {}, koScale, facingOf, mirrorF
   const headEff = headTable ? headTable * lock : null;
   // a hold draws the figure at its height, not its head's: the record's own ratio is the head the player sees
   const headReal = held?.headRatio ? held.headRatio * lock : headEff;
+  // a hold's ratio is the applied scale over the ruler's reading, so it can be checked and not just believed (`BANDS.heldHeadGap`)
+  const appliedScale = pos(sc) ? sc : null;
+  const heldGap = held?.headRatio && pos(held.reading) && appliedScale ? Math.abs(held.headRatio - appliedScale / held.reading) : null;
   // the stance slid onto the idle's (never for a laid-down plane, never for the idle)
   const stanceReg = stanceOf(row);
   const shift = !isRef && R.stanceOff !== null && stanceReg !== null && !prone ? R.stanceOff - (stanceReg - m.W / 2) * uppEff * mirror : 0;
@@ -135,7 +138,7 @@ export function placePose(R, m, { row = {}, rec = {}, koScale, facingOf, mirrorF
     isRef, prone, clamped, facing, mirror,
     scale: sc, scaleSrc, anchor, anchorSrc, upp, uppEff, lock: locked ? lock : null, shift,
     statureTable, stature, bodyStature, lengthRatio, headTable, headEff, headReal,
-    held: !!held, heldHeadRatio: held?.headRatio ?? null,
+    held: !!held, heldHeadRatio: held?.headRatio ?? null, heldGap,
     hasRow: Object.keys(row).length > 0, hasHead: !!head, hasStance: stanceReg !== null,
     stanceRegistered: stanceReg, stanceDiffPx: m.stance && stanceReg !== null ? m.stance.x - stanceReg : null,
     feetDx, feetDy,
