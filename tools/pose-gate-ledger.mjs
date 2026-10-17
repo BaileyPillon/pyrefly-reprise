@@ -34,10 +34,12 @@ export const LEGACY_REASON = 'legacy: drawn as live r50.1; awaiting the ruler pi
 export const LEGACY_WORDS = "driver, under Bailey's 2026-10-16 permanent-fix request";
 
 /**
- * The hash of the legacy seal as the bootstrap wrote it on 2026-10-17 (254 entries): the first 32 hex characters of sha256 over the sorted entries joined by a newline.
+ * The hash of the legacy seal: the first 32 hex characters of sha256 over the sorted entries joined by a newline.
  * Changing it is a change to this file, in a diff somebody reads; a ledger whose `legacySeal` hashes to anything else carries a legacy row the bootstrap did not write.
+ * The bootstrap wrote 254 entries on 2026-10-17 (digest 03c93b5a6cf73567da8fa5597177e843). The W3 sizing rule (`tools/posescale/pose-ruler.mjs`, the same day) moved 139 of those paintings into
+ * band, and `node tools/pose-gate.mjs --prune-legacy` removed their rows and their seal entries: 115 entries are left, and the 139 cannot be put back. Re-pin it the same way after any later removal.
  */
-export const LEGACY_SEAL_DIGEST = '03c93b5a6cf73567da8fa5597177e843';
+export const LEGACY_SEAL_DIGEST = '33f3c41c2ddefae4df5c480dbe5a8dc6';
 
 /** The digest of a seal (see {@link LEGACY_SEAL_DIGEST}). */
 export const sealDigest = (seal) => createHash('sha256').update([...seal].sort().join('\n')).digest('hex').slice(0, 32);
@@ -228,6 +230,20 @@ export function buildLegacyLedger(paintings, date) {
   return { version: 1, legacySeal: rows.map((r) => sealOf(r.subject, r.pose, r.sha)).sort(), rows };
 }
 
+/**
+ * Remove the legacy rows whose paintings are in band now (pose continuity, W3: the sizing rule moved 145 of the 254 into band). The ratchet only ever shrinks: a removed row's seal entry goes too, so the
+ * row cannot be put back (a legacy row needs its entry in `legacySeal`), and the seal's pinned digest (`LEGACY_SEAL_DIGEST`) is re-pinned by hand from the digest this reports. A row that is not legacy is never touched.
+ * @param {object} ledger a parsed ledger @param {Set<string>} stillOut `waiverKey`s of the paintings that are still out of band or unregistered (`legacyPaintings` of a census taken with no ledger)
+ * @returns {{ledger: object, removed: object[], digest: string}}
+ */
+export function pruneLegacyLedger(ledger, stillOut) {
+  const keep = (r) => r.legacy !== true || stillOut.has(waiverKey(r.subject, r.pose, r.sha));
+  const removed = ledger.rows.filter((r) => !keep(r));
+  const gone = new Set(removed.map((r) => sealOf(r.subject, r.pose, r.sha)));
+  const legacySeal = (ledger.legacySeal ?? []).filter((s) => !gone.has(s));
+  return { ledger: { ...ledger, legacySeal, rows: ledger.rows.filter(keep) }, removed, digest: sealDigest(legacySeal) };
+}
+
 /** The ledger as text: one row to a line, so a diff shows one waiver as one line. */
 export function formatLedger(ledger) {
   const seal = (ledger.legacySeal ?? []).map((s) => `  ${JSON.stringify(s)}`).join(',\n');
@@ -236,6 +252,13 @@ export function formatLedger(ledger) {
   if (ledger.legacySeal) parts.push(` "legacySeal": [${seal ? `\n${seal}\n ` : ''}]`);
   parts.push(` "rows": [${rows ? `\n${rows}\n ` : ''}]`);
   return `{\n${parts.join(',\n')}\n}\n`;
+}
+
+/** Overwrite the ledger with a pruned one (rows only removed: the caller made it with {@link pruneLegacyLedger}). @returns {string} the path */
+export function writePrunedLedger(root, ledger) {
+  const path = ledgerFile(root);
+  writeFileSync(path, formatLedger(ledger));
+  return path;
 }
 
 /** Write a ledger, once: refuses when the file is there. @returns {string} the path */

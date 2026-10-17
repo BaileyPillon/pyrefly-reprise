@@ -37,6 +37,9 @@ export interface LedgerProblem {
 }
 
 export function waiverKey(subject: string, pose: string, sha: string): string;
+/** Remove the legacy rows of paintings that are in band now, and their seal entries (rows are only ever removed). `stillOut`: the `waiverKey`s still out of band. */
+export function pruneLegacyLedger(ledger: WaiverLedger, stillOut: Set<string>): { ledger: WaiverLedger; removed: WaiverRow[]; digest: string };
+export function writePrunedLedger(root: string, ledger: WaiverLedger): string;
 export function sealOf(subject: string, pose: string, sha: string): string;
 export function isBaileyWords(words: unknown): boolean;
 export function ledgerFile(root: string): string;
