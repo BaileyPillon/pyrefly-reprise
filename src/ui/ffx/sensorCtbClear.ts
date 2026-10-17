@@ -11,6 +11,12 @@
  * left by exactly what clears the names in its own rows, through
  * `--ffx-sensor-cdx` (a separate property, so the target-cursor steer that owns
  * `--ffx-sensor-dx` is untouched), and comes back when nothing is in the way.
+ *
+ * FOC52-002 (release 53, the deep review of release 52; FFX only): the parked `E ENEMY MOVE` chip is one more
+ * thing in those rows to stay left of. While the player aims in a fight that has the Yu Pagodas (Chapter III,
+ * and the hidden Chapter 28 built on it) the card folds to its one-line chip and is lifted to the top strip
+ * (`sensorAimFold.ts`), the strip the intent chip is parked in at the turn list's top-right corner, so
+ * `I POSSESSED VALEFOR` could be printed across `E ENEMY MOVE`. The chip's box goes in with the names.
  */
 
 /** Clear air between the plate's right edge and a name, in grid px. */
@@ -37,7 +43,7 @@ export function ctbClearShift(card: Box, names: readonly Box[], gap: number): nu
 }
 
 /** Per frame from `FFXBattleHud.update`. `scale` is the stage's grid-to-viewport factor. */
-export function keepSensorOffCtb(sensor: HTMLElement, ctb: HTMLElement, scale: number): void {
+export function keepSensorOffCtb(sensor: HTMLElement, ctb: HTMLElement, scale: number, chip: HTMLElement | null = null): void {
   if (!scale || sensor.hidden || document.documentElement.dataset['phoneBattle']) {
     sensor.style.removeProperty('--ffx-sensor-cdx');
     return;
@@ -47,6 +53,7 @@ export function keepSensorOffCtb(sensor: HTMLElement, ctb: HTMLElement, scale: n
   const prior = (parseFloat(sensor.style.getPropertyValue('--ffx-sensor-cdx')) || 0) * scale;
   const card = { left: now.left - prior, right: now.right - prior, top: now.top, bottom: now.bottom };
   const names = [...ctb.querySelectorAll<HTMLElement>('.ig-ctb__name')].map((n) => n.getBoundingClientRect());
+  if (chip) names.push(chip.getBoundingClientRect()); // FOC52-002: the parked E ENEMY MOVE chip, in the same top strip as the folded card
   const shift = ctbClearShift(card, names, CTB_GAP * scale) / scale;
   const next = `${Math.round(shift * 10) / 10}px`;
   if (shift === 0) sensor.style.removeProperty('--ffx-sensor-cdx');
