@@ -72,8 +72,9 @@ export function chainBefore(target: FFX2Combatant): number {
  * at 99, and the window opens again — 3 s after a critical, 2 s otherwise. `before` is the counter the
  * hit read ({@link chainBefore}). Heals, misses and immune hits never call this. Returns the new counter.
  */
-export function bumpChain(target: FFX2Combatant, before: number, crit: boolean): number {
+export function bumpChain(target: FFX2Combatant & { bestChain?: number }, before: number, crit: boolean): number {
   target.chainCount = Math.min(CHAIN_MAX, before + 1);
+  target.bestChain = Math.max(target.bestChain ?? 0, target.chainCount); // the best never falls (`Chr+0x5ae`); the kill-reward roll adds it to the current chain
   target.chainWindowTicks = crit ? CHAIN_WINDOW_TICKS_CRIT : CHAIN_WINDOW_TICKS;
   return target.chainCount;
 }

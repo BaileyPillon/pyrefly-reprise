@@ -1,103 +1,59 @@
 /**
- * What the player is asked to press for each Bushido, and how hard each
- * Swordplay tier is (PR-0308, release 38). **FFX only**: Auron's Bushido and
- * Tidus's Swordplay exist only in FFX; FFX-2 has neither.
+ * What the player is asked to press for each Bushido (**FFX only**: Auron's Bushido exists only in FFX; FFX-2 has none).
  *
- * Before this file every Bushido showed one invented 7-input sequence and every
- * Swordplay tier the same zone and speed, whatever Overdrive was chosen
- * (`minigameParams` published `inputs: 7`, which the overlay never read, and
- * `zonePercent`/`travelMs`, which the Swordplay overlay never read either).
+ * ## The game's order (re-parity RC9, lane FFX-A; Bailey 2026-10-11 "all your recommendations", plan question Q1, D-763)
  *
- * ## Bushido: sequence LENGTH is sourced, button ORDER is our estimate
+ * The four sequences are the game's own: `FFX-G01` section 6.3 reads them from the exe's table (VA 0x00C86B70) and the game's controller
+ * (VA 0x00890F70) was run over scripted presses in an emulator, 1,984 scripts, 0 mismatches (`tests/unit/parity-ffx-minigames.test.ts`). The
+ * kernel (`battle/ffx/kernel/minigame-bushido.ts`) holds them as the pad words of the PS2 layout the game keeps (0x10 Triangle, 0x20 Circle, 0x40
+ * Cross, 0x80 Square, 0x04 L1, 0x08 R1, 0x1000 Up, 0x2000 Right, 0x4000 Down, 0x8000 Left); this file names the same buttons the way the overlay
+ * does (`src/ui/ffx/rawInput.ts`: `confirm` is Cross, `cancel` is Circle), and `parity-ffx-engine-minigames.test.ts` pins every input of the
+ * four sequences against the note's own table.
  *
- * Lengths: Dragon Fang 8, Shooting Star 7, Banishing Blade 7, Tornado 6,
- * `[verified: 4 sources]` (FW-BU, GF-PF, XU, AGS;
- * `research/ffx-overdrive-input-rules-2026-09-30.md` D2). One dissent: GF-KB
- * lists Tornado with 5 inputs; four sources say 6, so 6 ships.
+ * | Bushido | Length | The game's order |
+ * |---|---:|---|
+ * | Shooting Star | 7 | Triangle, Cross, Square, Circle, Left, Right, Circle |
+ * | Dragon Fang | 8 | Down, Left, Up, Right, L1, R1, Cross, Circle |
+ * | Banishing Blade | 7 | Up, L1, Down, R1, Right, Left, Triangle |
+ * | Tornado | 6 | Circle, Right, R1, Left, L1, Triangle |
  *
- * Order: the sources conflict (same note, D3): the International order (the
- * `research/ffx-combat-core.md` §5.5 baseline, FW-BU and XU) against the NA/JP
- * order that the HD-era GameFAQs guide GF-KB and AGS give. **Our estimate,
- * Bailey 2026-10-03 ("all your recommendations"; GameFAQs is his preferred
- * source): the GameFAQs order**, until the Steam HD copy settles it (two Steam
- * checks on 2026-10-01 never got past a white window, so nothing here is
- * `[verified: Steam HD]`):
+ * Three of the four changed from the GameFAQs order Bailey picked on 2026-10-03: Dragon Fang's last two inputs are swapped, Shooting Star's
+ * second and seventh inputs are Cross and Circle (they were Circle and Cross), and Tornado opens with Circle (it opened with Cross).
+ * Banishing Blade was the same in every source and still is. The exe settles what the guides disagreed on (the "International" order of
+ * FW-BU and XU) once its bits are read in the PS2 layout; on the Steam PC build the live pad word was measured on 2026-10-13 (Circle is the
+ * Enter or C key there, Cross Backspace or X), so the order is what the game checks, whichever key a port binds to a bit.
  *
- * - Dragon Fang: the NA/JP order, the one that ends Circle, Cross (D3: GF-KB
- *   "Dragon Fang ends Circle, X"; the first six inputs are the same in every
- *   source). GF-PF's four-input "Left, Down, Up, Right" is a different layout
- *   of the same first buttons and is not used.
- * - Shooting Star: GF-KB's own order, written out in D3: Triangle, Circle,
- *   Square, Circle, Left, Right, X. It matches no other source (the
- *   International order is Triangle, Cross, Square, Circle, Left, Right,
- *   Circle; NA/JP Triangle, Circle, Square, Cross, Left, Right, Cross). It is
- *   GameFAQs, so it ships; if the Steam copy shows a typo it is one line here.
- * - Banishing Blade: no source disagrees (International = NA/JP,
- *   FW-BU "unchanged across versions"); the GameFAQs page is not transcribed
- *   in research/, so this is FW-BU's order.
- * - Tornado: the NA/JP order, which opens with Cross (D3: GF-KB, AGS); the
- *   rest from FW-BU's NA/JP variant, which AGS repeats.
- *
- * The tokens are the game's own `UiButton` names (`src/ui/ffx/rawInput.ts`):
- * `confirm` is Cross, `cancel` is Circle.
- *
- * ## Swordplay: the ORDERING is sourced, the NUMBERS are our estimate (adopted by Bailey 2026-10-04)
- *
- * "Zone width, marker speed and timer length all scale with the Overdrive's
- * strength: stronger Overdrive, narrower zone, faster marker, shorter timer"
- * `[verified: 2 sources]` (`research/ffx-combat-core.md` §5.3 rule 2). No source
- * publishes the values. §5.3's own "shipping parameters" table is the estimate:
- * **our estimate, adopted by Bailey 2026-10-04** (judgment call J of critic round 21,
- * "all your recommendations"; PR-0308; the same standing as Tornado's timer, D-312),
- * until the Steam HD copy can measure the four zones and sweeps and replace them:
- *
- * | tier | zone (% of the meter) | one crossing (ms) | window (zone x crossing) | timer (ms) |
- * |---|---:|---:|---:|---:|
- * | Spiral Cut | 22 | 1 400 | ~308 ms | 3 000 |
- * | Slice and Dice | 16 | 1 150 | ~184 ms | 3 000 |
- * | Energy Rain | 12 | 900 | ~108 ms | 2 600 |
- * | Blitz Ace | 9 | 700 | ~63 ms | 2 200 |
- *
- * Before release 39 every tier drew the pair the game played before release 38
- * (a 22 px half-width zone on a 360 px meter, 12.22 % of it, and a 340 px/s marker,
- * 1 059 ms a crossing), so Spiral Cut and Blitz Ace looked the same; the timers
- * alone carried the ordering. Now a stronger tier is harder to land: a narrower
- * zone AND a faster marker (Spiral Cut gets easier, Blitz Ace harder). The timers
- * are unchanged (`TIMER_MS` in `battle/ffx/overdrive.ts`: 3000, 3000, 2600, 2200).
- * The per-tier wiring (`swordplayGeometry`, the abilities' `minigameParams`) is
- * what reads these four rows, so a sourced value later is a one-row edit here.
+ * A wrong press sends the progress back to the first input, the timer keeps running, and the wrong press is not tried as the first input
+ * (the kernel, `FFX-G01` section 6.3). The lengths are the sourced 8 / 7 / 7 / 6.
  */
+
+import { Pad, BushidoCategory, bushidoMove } from '../../../battle/ffx/kernel/minigame-bushido.ts';
 
 /** A Bushido input, in the overlay's own button names. */
 export type BushidoInput = 'up' | 'down' | 'left' | 'right' | 'confirm' | 'cancel' | 'triangle' | 'square' | 'l1' | 'r1';
 
-/** Bushido sequences by ability id. Lengths `[verified: 4 sources]`; order `[estimate]`: the GameFAQs order (see the file header). */
-export const BUSHIDO_SEQUENCES: Readonly<Record<string, readonly BushidoInput[]>> = {
-  // down, left, up, right, L1, R1, Circle, Cross (8)
-  'dragon-fang': ['down', 'left', 'up', 'right', 'l1', 'r1', 'cancel', 'confirm'],
-  // Triangle, Circle, Square, Circle, left, right, Cross (7), GF-KB as recorded in D3
-  'shooting-star': ['triangle', 'cancel', 'square', 'cancel', 'left', 'right', 'confirm'],
-  // up, L1, down, R1, right, left, Triangle (7)
-  'banishing-blade': ['up', 'l1', 'down', 'r1', 'right', 'left', 'triangle'],
-  // Cross, right, R1, left, L1, Triangle (6)
-  tornado: ['confirm', 'right', 'r1', 'left', 'l1', 'triangle'],
+/** The overlay's button name of each pad word a sequence uses (`confirm` is Cross, `cancel` is Circle). */
+export const BUSHIDO_INPUT_OF_WORD: Readonly<Record<number, BushidoInput>> = {
+  [Pad.Up]: 'up',
+  [Pad.Down]: 'down',
+  [Pad.Left]: 'left',
+  [Pad.Right]: 'right',
+  [Pad.Cross]: 'confirm',
+  [Pad.Circle]: 'cancel',
+  [Pad.Triangle]: 'triangle',
+  [Pad.Square]: 'square',
+  [Pad.L1]: 'l1',
+  [Pad.R1]: 'r1',
 };
 
-/** One Swordplay tier's marker and zone. The ordering across tiers is sourced; the values are our estimate (see the file header). */
-export interface SwordplayTuning {
-  /** Time for the marker to cross the meter once, left to right, in ms. */
-  travelMs: number;
-  /** Width of the gold zone as a percentage of the meter. */
-  zonePercent: number;
+function sequenceOf(category: number): readonly BushidoInput[] {
+  return bushidoMove(category).words.map((w) => BUSHIDO_INPUT_OF_WORD[w] as BushidoInput);
 }
 
-/**
- * Zone and sweep per tier, strongest last: each row narrower and faster than the one before it.
- * `[estimate]`, adopted by Bailey 2026-10-04 (`research/ffx-combat-core.md` §5.3); not a source's number.
- */
-export const SWORDPLAY_TUNING: Readonly<Record<string, SwordplayTuning>> = {
-  'spiral-cut': { travelMs: 1400, zonePercent: 22 },
-  'slice-and-dice': { travelMs: 1150, zonePercent: 16 },
-  'energy-rain': { travelMs: 900, zonePercent: 12 },
-  'blitz-ace': { travelMs: 700, zonePercent: 9 },
+/** Bushido sequences by ability id: the game's, read from the kernel's pad words. */
+export const BUSHIDO_SEQUENCES: Readonly<Record<string, readonly BushidoInput[]>> = {
+  'dragon-fang': sequenceOf(BushidoCategory.DragonFang),
+  'shooting-star': sequenceOf(BushidoCategory.ShootingStar),
+  'banishing-blade': sequenceOf(BushidoCategory.BanishingBlade),
+  tornado: sequenceOf(BushidoCategory.Tornado),
 };

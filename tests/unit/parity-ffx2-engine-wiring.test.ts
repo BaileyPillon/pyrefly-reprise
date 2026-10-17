@@ -53,10 +53,13 @@ describe('the engine draws and decides what the kernels do, on generated situati
     }
   });
 
-  it('600 situations: the same draws in the same order, the same events and the same units afterwards', () => {
+  it('900 situations: the same draws in the same order, the same events and the same units afterwards', () => {
+    // 600 until the Mix results joined the catalog (re-parity RC9, lane X2-G): 37 of the 53 fit this pool and none of them ever misses (accuracy formula 0), so the pool grew from 277 to
+    // 314 and the same seed's sample of 600 fell to 17 evaded hits against this test's floor of 20. 900 keeps the sample as wide as it was (32 evaded hits, every other floor cleared by
+    // more than before); the engine equals the oracle on every one of them.
     const rng = makeRng(20261008);
     const seen = { dmg: 0, miss: 0, immune: 0, crit: 0, chain: 0, mp: 0, ko: 0, revive: 0, heal: 0, halved: 0, steal: 0, gil: 0, status: 0, kinds: new Set<string>(), abilities: new Set<string>() };
-    for (let i = 0; i < 600; i++) {
+    for (let i = 0; i < 900; i++) {
       const sit = randomSituation(rng, POOL);
       const { oracle } = compare(sit, `situation ${i}: ${sit.def.id} (${sit.userSide} -> ${sit.targetSide})`);
       for (const t of oracle.tokens) {

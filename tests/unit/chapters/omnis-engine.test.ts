@@ -68,7 +68,7 @@ describe('the stat blocks (research §1, §2)', () => {
     for (const e of d) {
       expect(e.hp).toBe(1);
       expect(e.immunityFlags).toEqual(expect.arrayContaining(['immune-to-damage', 'immune-to-scan', 'immune-to-sensor']));
-      expect(e.flags).toMatchObject({ isPart: true, partOf: OMNIS, outOfMeleeReach: true, neverRandomTarget: true });
+      expect(e.flags).toMatchObject({ isPart: true, partOf: OMNIS, battleDistance: 2, neverRandomTarget: true });
     }
   });
 });

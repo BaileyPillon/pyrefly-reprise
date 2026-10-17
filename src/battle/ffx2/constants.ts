@@ -250,3 +250,32 @@ export const HEAD_HALFWAY_LINE_AT = 51;
 
 /** The Core charges three times, then fires Memento Mori. §4.1 */
 export const CORE_CHARGES_BEFORE_MEMENTO = 3;
+
+/**
+ * A Confused girl acts by herself (re-parity RC9 lane X2-H): at her ready moment the game's Confusion pick (exe 0x00649350, `kernel/confusion-pick.ts`) chooses her command and
+ * target and she is never asked for a command. Off, a Confused girl keeps her menu, as every build before RC9 did: the switch exists so a measurement can put the old rule back
+ * through a module mock, as the other lanes' switches do.
+ */
+export const CONFUSION_PICK = true;
+
+/**
+ * Whether the Garment Grids the data has a layout for (`data/ffx2/garment-grids/layouts.ts`) are the game's real grids (re-parity RC9 lane X2-I; `FFX2-G09`; FFX-2 only): a girl moves to a
+ * dressphere node joined to hers directly or through exactly one gate node, and the move crosses that gate (`kernel/grid-path.ts`, `adapt/grid-layout.ts`). Off, every grid is the old ring of its
+ * node count with the gates spread over successive links (an `[estimate]`), which is also what a grid with no layout keeps. A measurement and rollback switch; no random draw either way.
+ */
+export const GRID_LAYOUTS = true;
+
+/**
+ * Whether a screen exists that lets a player choose the Alchemist's Mix's two items (re-parity RC9 lane X2-G left it for a mockup; the driver's item 88e; FFX-2 only). The engine takes a Mix with two items in
+ * `extra` and makes the game's result (`adapt/mix.ts`), but the menu has no way to ask for them, so a Mix picked from the menu is the bare Mix of before: nothing happens and nothing is spent. Off, the Mix row stays
+ * listed and is greyed with {@link MIX_PICKER_REASON}, so a player never picks it and an unattended Alchemist (the line the benches and the advisor play) never Mixes; the engine itself is unchanged and a test, an AI or
+ * a headless run can still submit a Mix directly. Turn it on when the picker lands.
+ */
+export const MIX_PICKER = false;
+
+/**
+ * The reason the Mix row is greyed while {@link MIX_PICKER} is off. Short on purpose: the desktop row gives the reason about 70 px beside the name (the phone about 120 px) and cuts it with an ellipsis, and the
+ * first wording, "needs the item picker" (21 letters), showed as "NEEDS THE ITE..." / "NEEDS THE ITEM ...", which reads as a missing item (r51 merge review, defect 2); "Not built yet" (13 letters) still
+ * came out "NOT BUILT Y..." on desktop, so the reason is nine letters. The help line carries the reason before the Mix's effect, so the player still reads what the row does. "Not built" is the wording FFX's aeon order rows already use for a command that is listed but has no code behind it (`ffx/aeon-commands.ts`).
+ */
+export const MIX_PICKER_REASON = 'Not built';

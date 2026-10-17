@@ -84,6 +84,8 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   if (label.startsWith('x2-yojimbo-') || label.startsWith('x2-daigoro-')) return;
   // The hidden Valefor at Besaid's three rows (monmagic 0x4091 to 0x4093) are the RE review's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/besaid_valefor_rows.json, tests/unit/chapters/besaid-valefor-data.test.ts).
   if (label.startsWith('x2-valefor-')) return;
+  // The Alchemist's 53 Mix result rows (0x3183 to 0x31B8 except 0x31AD, re-parity RC9 lane X2-G) are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/mix_rows.json, tests/unit/data-ffx2-mix-results.test.ts).
+  if (label.startsWith('x2-mix-')) return;
   // The hidden Angra Mainyu's fifteen rows (the boss's eight, Zarich's five, Tawrich's two: monmagic 0x4129 to 0x412d, 0x41f1 to 0x41f4, the Leblanc Osmose 0x406d and six party rows) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/angra_mainyu_rows.json, tests/unit/chapters/angra-mainyu-data.test.ts).
   if (label.startsWith('x2-angra-') || label.startsWith('x2-zarich-') || label.startsWith('x2-tawrich-')) return;

@@ -26,6 +26,7 @@ import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
 import { applyStatus, removeStatus } from './statuses.ts';
 import { FFX2_STATUS_ROM, startPhase } from './kernel/status-timers-set.ts';
 import { modDraw } from './adapt/draws.ts';
+import { ejectPays, payKill } from './kill-rewards.ts';
 
 /** The ability's own application of a status (its duration and stacks), else the record's amount, else "until cured". */
 function applicationFor(ability: AbilityDef, command: ResolvedCommand, status: StatusId, group2Index?: number): StatusApplication {
@@ -49,7 +50,12 @@ function addStatus(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, applic
   // **Eject removes the character from the battle.** `targeting.ts::isTargetable`, `engine.ts`'s `party()`, `gauges.ts`
   // and `results.ts` all test `!u.removed`, so removal, untargetability, a frozen gauge and "all three gone = defeat"
   // fall out of the flag; `revive()` clears it.
-  if (application.status === 'eject') target.removed = true;
+  if (application.status === 'eject') {
+    const leaving = !target.removed;
+    target.removed = true;
+    // The knock-out resolution runs for an Ejected character too, and its reward roll with it, except when the Eject came from Steal Will or a Bribe (re-parity RC9, lane X2-C).
+    if (leaving) payKill(ctx, target, ejectPays(abilityId));
+  }
 }
 
 function removeOne(ctx: ResolveContext, target: Ffx2Unit, status: StatusId, reason: 'dispelled' | 'overwritten'): void {

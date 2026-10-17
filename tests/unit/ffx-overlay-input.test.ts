@@ -12,8 +12,8 @@
  * the Gamepad API polled from `requestAnimationFrame`, `PointerEvent`s on the slab.
  *
  * The Overdrive's own sequence, zone and timer are NOT touched: the sequences come from `data/ffx/overdrives/inputs.ts`
- * (length sourced, order our estimate), and every case here resolves through the same `stepAuronSequence` /
- * `pressTidusTiming` the keys use.
+ * (the game's order, RC9 lane FFX-A), and every case here resolves through the same controllers the keys use
+ * (`kernel/minigame-bushido.ts`, `kernel/minigame-swordplay.ts`, a frame every 1/30 s: a press is seen by the NEXT frame, so presses are spaced out in time here).
  */
 import { readFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -226,7 +226,7 @@ describe('which device the first frame is worded for (TriggerHappy\'s guess, the
 // ------------------------------------------------------------- the Bushido overlay
 
 describe('Bushido: every input answers, and the chips say what to press (PR-0360, PR-0361)', () => {
-  const SHOOTING_STAR = BUSHIDO_SEQUENCES['shooting-star']!; // triangle, circle, square, circle, left, right, cross (our estimate, GameFAQs)
+  const SHOOTING_STAR = BUSHIDO_SEQUENCES['shooting-star']!; // triangle, cross, square, circle, left, right, circle (the game's order, the exe)
 
   const open = (sequence: readonly string[] = SHOOTING_STAR, timerMs = 3000) => {
     const root = document.createElement('div');
@@ -247,9 +247,9 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
     const o = open();
     expect(o.slab.dataset['input']).toBe('keyboard');
     expect(o.subtitle()).toBe('BUSHIDO · ENTER THE SEQUENCE');
-    expect(o.face()).toEqual(['Q△', 'Esc○', 'K□', 'Esc○', '←', '→', 'Enter✕']);
+    expect(o.face()).toEqual(['Q△', 'Enter✕', 'K□', 'Esc○', '←', '→', 'Esc○']);
     expect(o.chips().map((c) => c.dataset['btn'])).toEqual([...SHOOTING_STAR]); // the Overdrive's own order, untouched
-    expect(o.chips().map((c) => c.getAttribute('aria-label'))).toEqual(['Triangle, key Q', 'Circle, key Esc', 'Square, key K', 'Circle, key Esc', 'Left', 'Right', 'Cross, key Enter']);
+    expect(o.chips().map((c) => c.getAttribute('aria-label'))).toEqual(['Triangle, key Q', 'Cross, key Enter', 'Square, key K', 'Circle, key Esc', 'Left', 'Right', 'Circle, key Esc']);
     expect(o.chips().every((c) => c.getAttribute('role') === 'button')).toBe(true);
   });
 
@@ -269,7 +269,7 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
 
   it('every key the chips name, pressed for real, completes Shooting Star (a run using only what the overlay says)', async () => {
     const o = open();
-    for (const label of ['Q', 'Esc', 'K', 'Esc', '←', '→', 'Enter']) {
+    for (const label of ['Q', 'Enter', 'K', 'Esc', '←', '→', 'Esc']) {
       keydown(CODE_OF_CAP[label]!);
       await vi.advanceTimersByTimeAsync(100);
     }
@@ -296,12 +296,13 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
     expect(r.sequence.timeRemainingMs).toBeGreaterThan(0);
   });
 
-  it('after the first tap the words and the chips switch to a finger: TAP THE SEQUENCE, the symbols alone', () => {
+  it('after the first tap the words and the chips switch to a finger: TAP THE SEQUENCE, the symbols alone', async () => {
     const o = open();
     o.tap(0, 'touch');
     expect(o.slab.dataset['input']).toBe('pointer');
     expect(o.subtitle()).toBe('BUSHIDO · TAP THE SEQUENCE');
-    expect(o.face()).toEqual(['△', '○', '□', '○', '←', '→', '✕']);
+    expect(o.face()).toEqual(['△', '✕', '□', '○', '←', '→', '○']);
+    await vi.advanceTimersByTimeAsync(60); // the next frame sees the tap
     expect(o.done()).toBe(1);
   });
 
@@ -322,9 +323,12 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
   it('a wrong tap is a wrong press: the missed chip flashes, the progress goes back to input 1, the attempt goes on', async () => {
     const o = open();
     o.tap(0);
+    await vi.advanceTimersByTimeAsync(40); // a press is seen by the next frame; two taps inside one frame are one word that matches nothing
     o.tap(1);
+    await vi.advanceTimersByTimeAsync(40);
     expect(o.done()).toBe(2);
     o.tap(5); // the right arrow where input 3 (square) is expected
+    await vi.advanceTimersByTimeAsync(40);
     expect(o.done()).toBe(0);
     expect(o.wrong()).toEqual([2]);
     await vi.advanceTimersByTimeAsync(300);
@@ -335,12 +339,22 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
     expect(o.result()).toMatchObject({ kind: 'auron-sequence', sequence: { success: true, correctInputs: 7 } });
   });
 
-  it('a tap is the press of that chip\'s BUTTON, so a second Circle chip also answers a Circle that is due', () => {
+  it('a tap is the press of that chip\'s BUTTON, so the last Circle chip also answers the Circle that is due', async () => {
     const o = open();
-    o.tap(0); // triangle
-    o.tap(3); // the second circle chip: the button due is circle, so it counts
-    expect(o.done()).toBe(2);
+    for (const i of [0, 1, 2]) { o.tap(i); await vi.advanceTimersByTimeAsync(40); } // triangle, cross, square
+    o.tap(6); // the last chip is a Circle too: the button due is Circle, so it counts
+    await vi.advanceTimersByTimeAsync(40);
+    expect(o.done()).toBe(4);
     expect(o.wrong()).toEqual([]);
+  });
+
+  it('two taps inside one frame are one word that matches nothing: a wrong press, whichever chips they were', async () => {
+    const o = open();
+    o.tap(0);
+    o.tap(1); // the same 1/30 s frame as the first tap: Triangle and Cross together
+    await vi.advanceTimersByTimeAsync(60);
+    expect(o.done()).toBe(0);
+    expect(o.wrong()).toEqual([0]);
   });
 
   it('a press on the slab but not on a chip, or with a secondary mouse button, does nothing', () => {
@@ -358,8 +372,8 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
     stubPads([pad]);
     const o = open();
     expect(o.slab.dataset['input']).toBe('gamepad');
-    expect(o.face()).toEqual(['△', '○', '□', '○', '←', '→', '✕']);
-    for (const index of [3, 1, 2, 1, 14, 15, 0]) await tapPad(set, index);
+    expect(o.face()).toEqual(['△', '✕', '□', '○', '←', '→', '○']);
+    for (const index of [3, 0, 2, 1, 14, 15, 1]) await tapPad(set, index); // triangle, cross, square, circle, left, right, circle
     await vi.advanceTimersByTimeAsync(1000);
     expect(o.result()).toMatchObject({ kind: 'auron-sequence', sequence: { success: true, correctInputs: 7 } });
   });
@@ -397,7 +411,7 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
   it('with no input at all it still fails only at the timer, as the Fail row with no time left (unchanged)', async () => {
     const o = open();
     await vi.advanceTimersByTimeAsync(3000 + 500);
-    expect(o.result()).toEqual({ kind: 'auron-sequence', sequence: { success: false, correctInputs: 0, timeRemainingMs: 0 } });
+    expect(o.result()).toEqual({ kind: 'auron-sequence', sequence: { success: false, correctInputs: 0, timeRemainingMs: 0, frame: 91 } }); // the frame that finds 3 s gone
   });
 
   it('a tap after the attempt has settled is ignored', async () => {
@@ -421,8 +435,8 @@ describe('Bushido: every input answers, and the chips say what to press (PR-0360
 // ------------------------------------------------------------- the Swordplay overlay
 
 describe('Swordplay: a tap or a click anywhere on the slab is the confirm press (PR-0360)', () => {
-  // The overlay's defaults: a 360 px bar, gold zone 180 +/- 22 px, 340 px/s; dead centre 529 ms into a sweep.
-  const CENTRE_MS = Math.round((180 / 340) * 1000);
+  // The overlay's default is Spiral Cut: the marker is judged at 118 + 11 (f - 1) in frame f against [243, 267], so a press at 420 ms (frame 13, marker at 250) hits.
+  const HIT_MS = 420;
 
   const open = () => {
     const root = document.createElement('div');
@@ -454,7 +468,7 @@ describe('Swordplay: a tap or a click anywhere on the slab is the confirm press 
 
   it('a finger in the gold zone resolves the success, with the time left at the tap (the round 21 acceptance check)', async () => {
     const o = open();
-    await vi.advanceTimersByTimeAsync(CENTRE_MS);
+    await vi.advanceTimersByTimeAsync(HIT_MS);
     pointerdown(o.slab, 'touch');
     await vi.advanceTimersByTimeAsync(1000);
     const r = o.result();
@@ -462,13 +476,13 @@ describe('Swordplay: a tap or a click anywhere on the slab is the confirm press 
     if (r?.kind !== 'tidus-timing') return;
     expect(r.timing.success).toBe(true);
     expect(r.timing.timerMs).toBe(3000);
-    expect(r.timing.timeRemainingMs).toBeGreaterThan(3000 - CENTRE_MS - 40);
-    expect(r.timing.timeRemainingMs).toBeLessThanOrEqual(3000 - CENTRE_MS + 40);
+    expect(r.timing.frame).toBe(13);
+    expect(r.timing.timeRemainingMs).toBeCloseTo(Math.fround(3 - 13 / 30) * 1000, 6); // the A of the game: limit - frame / 30
   });
 
   it('a click on the bar (a child of the slab) is the same press', async () => {
     const o = open();
-    await vi.advanceTimersByTimeAsync(CENTRE_MS);
+    await vi.advanceTimersByTimeAsync(HIT_MS);
     pointerdown(o.bar, 'mouse');
     await vi.advanceTimersByTimeAsync(1000);
     expect(o.result()).toMatchObject({ kind: 'tidus-timing', timing: { success: true } });
@@ -478,10 +492,11 @@ describe('Swordplay: a tap or a click anywhere on the slab is the confirm press 
     const o = open();
     await vi.advanceTimersByTimeAsync(100);
     pointerdown(o.slab, 'touch');
-    expect(o.cursor()).toBe(0);
+    await vi.advanceTimersByTimeAsync(60); // frame 4 (due at 133 ms, run on the next animation frame) sees the press: a miss, the marker restarts at 118 and steps to 129
+    expect(o.cursor()).toBeCloseTo(4, 1);
     await vi.advanceTimersByTimeAsync(100);
     expect(o.result()).toBeUndefined();
-    await vi.advanceTimersByTimeAsync(CENTRE_MS - 100); // the restarted marker is centred about now
+    await vi.advanceTimersByTimeAsync(280); // t = 520 ms: frame 16 judges 118 + 11 x 12 = 250, the restarted marker in the window
     pointerdown(o.slab, 'touch');
     await vi.advanceTimersByTimeAsync(1000);
     expect(o.result()).toMatchObject({ kind: 'tidus-timing', timing: { success: true } });
@@ -490,12 +505,12 @@ describe('Swordplay: a tap or a click anywhere on the slab is the confirm press 
   it('with no press at all it fails only at the timer, with no time left (unchanged)', async () => {
     const o = open();
     await vi.advanceTimersByTimeAsync(3500);
-    expect(o.result()).toEqual({ kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 0, timerMs: 3000 } });
+    expect(o.result()).toEqual({ kind: 'tidus-timing', timing: { success: false, timeRemainingMs: 0, timerMs: 3000, frame: 91 } });
   });
 
   it('a secondary mouse button does not press; Enter and a pad Cross still do', async () => {
     const o = open();
-    await vi.advanceTimersByTimeAsync(CENTRE_MS);
+    await vi.advanceTimersByTimeAsync(HIT_MS);
     pointerdown(o.slab, 'mouse', { button: 2 });
     expect(o.result()).toBeUndefined();
     keydown('Enter');
@@ -506,7 +521,7 @@ describe('Swordplay: a tap or a click anywhere on the slab is the confirm press 
     const { pad, set } = makePad();
     stubPads([pad]);
     const p = open();
-    await vi.advanceTimersByTimeAsync(CENTRE_MS - 40);
+    await vi.advanceTimersByTimeAsync(HIT_MS); // the pad is polled each animation frame: the press arrives a few ms later, still in frame 13 or 14 (both in the window)
     await tapPad(set, 0);
     await vi.advanceTimersByTimeAsync(1000);
     expect(p.result()).toMatchObject({ kind: 'tidus-timing', timing: { success: true } });

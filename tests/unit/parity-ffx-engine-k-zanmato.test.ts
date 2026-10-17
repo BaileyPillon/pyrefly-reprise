@@ -20,7 +20,7 @@ import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx/index.ts';
 import { buildPossessedAeonChain } from '../../src/data/ffx/enemies/braskas-final-aeon.ts';
 import { PAY, Rig, SUMMON, build, starts, yojimbo } from './helpers/ffxKRig.ts';
 import { actionStreams, outcomeOf, pick } from './helpers/ffxZanmatoOracle.ts';
-import { GIL, STATUS_STREAM, type Run, type Spec, defOf, groupDraw, kos, payForZanmato, types, zanmatoTargets } from './helpers/ffxZanmatoRig.ts';
+import { GIL, STATUS_STREAM, type Run, type Spec, defOf, groupDraw, kos, payForZanmato, types, withoutRewards, zanmatoTargets } from './helpers/ffxZanmatoRig.ts';
 
 describe('a landed Zanmato hits every legal foe of the group (note section 2)', () => {
   for (const n of [1, 2, 3, 4, 8]) {
@@ -228,7 +228,7 @@ describe('chapter 28: a landed Zanmato against the Yu Pagodas, Braska Final Aeon
       const before = rig.events.length;
       rig.submit(PAY(99_999_999));
       const events = rig.events.slice(before);
-      if (starts(events)[1]?.[1] === 'zanmato') return { rig, events, streams: rig.taps.slice(from).map((t) => t.stream) };
+      if (starts(events)[1]?.[1] === 'zanmato') return { rig, events, streams: withoutRewards(rig.taps.slice(from).map((t) => t.stream)) };
     }
     throw new Error('no seed of the first sixty rolled a Zanmato');
   }

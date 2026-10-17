@@ -227,11 +227,11 @@ describe('B5: a result takes hits away from a plan made over all the targets', (
     expect(one.byStream.get(5)).toBeUndefined(); // no pick is drawn under two candidates
     expect(one.byStream.get(16)?.length).toBe(7); // 16 - 9
   });
-  it('a Fury with no casts plans nothing: no hit, no pick, no removal draw', () => {
+  it('a Fury that reports no casts casts once (RC9: the game casts start at 1): one hit lands and fifteen of the sixteen planned are taken away, a draw each', () => {
+    // `removalPlan(Fury, 0, ...)` already counts a grade of 0 as one cast; the engine used to plan nothing for it (lane FFX-A, FFX only, changed that)
     const got = engineHits(FURY, fury(0), 'lulu', 3, 55);
-    expect(got.hits).toEqual([0, 0, 0]);
-    expect(got.byStream.get(16)).toBeUndefined();
-    expect(got.byStream.get(5)?.length ?? 0).toBeLessThanOrEqual(1); // at most the one pick the action names its first target with
+    expect(got.hits.reduce((a, b) => a + b, 0)).toBe(1);
+    expect(got.byStream.get(16)?.length).toBe(15);
   });
   it('Demi and Ultima Fury (every enemy, not random) give every enemy the casts, with no pick and no removal draw', () => {
     for (const id of ['demi-fury', 'ultima-fury']) {

@@ -44,12 +44,13 @@ import type { Ffx2EngineOptions } from './internal.ts';
 import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
+import { isConfusedGirl } from './statuses.ts';
 import { stepsUntilNextEvent } from './lookahead.ts';
 import { buildCommands } from './menu.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';
-import { itemAvailable } from './adapt/item-ledger.ts';
+import { stockShort } from './adapt/mix.ts';
 import {
   allTargetsGone,
   clockHeldByMenu,
@@ -164,9 +165,9 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
       // anyway, and on a dressphere with no Attack (§3.4-3.6) the menu opened
       // with zero rows and locked the battle [round 05 PR-0045]. A suspended
       // minigame still belongs to the player and keeps its path. FFX-2 only.
-      if (actor.statuses.berserk && !this.awaitingMinigame) {
+      if ((actor.statuses.berserk || isConfusedGirl(actor)) && !this.awaitingMinigame) {
         this.inputOwner = null;
-        this.runBerserkTurn(actor);
+        this.runAutopilotTurn(actor);
         return { kind: 'resolved', events: this.flush() };
       }
       // Her chain lock lifted with a command already chosen: it fires, as her.
@@ -229,8 +230,8 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     // Active ATB, `active.ts`: everything this command aimed at died while the
     // menu was open. Refuse and reopen — the turn is not spent (preflight
     // §4.4 (a)). Under Wait this branch was unreachable.
-    // Likewise an item the reserved stock no longer has (the HUD greys it out first; a menu built before another girl's pick can still send it): refused, the turn not spent.
-    if (actor.controller === 'player' && (allTargetsGone(this.units, command, abilityFor(this.env(), command)) || (command.kind === 'item' && !itemAvailable(this.battleState.flags, command.id)))) {
+    // Likewise an item the reserved stock no longer has, or a Mix whose ingredients it cannot make (the HUD greys it out first; a menu built before another girl's pick can still send it): refused, the turn not spent.
+    if (actor.controller === 'player' && (allTargetsGone(this.units, command, abilityFor(this.env(), command)) || stockShort(this.battleState.flags, this.abilities, command))) {
       return this.flush();
     }
     if (!suspended) this.inputOwner = null;
@@ -341,7 +342,7 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
         // menu is open (PR-0076). Otherwise, under `throughInput`, the only
         // player `nextActor` hands back is a Berserked one (§2.8): resolve her.
         if (this.held?.actorId === actor.id) this.fireHeld(actor);
-        else if (throughInput) this.runBerserkTurn(actor);
+        else if (throughInput) this.runAutopilotTurn(actor);
         break;
       }
       if (actor) {

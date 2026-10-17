@@ -161,21 +161,17 @@ describe('Vegnagun -> Shuyin chain: rewards and steals (research §3)', () => {
     });
   });
 
-  // Read-only, same file. §3.3 line 339 gives the drop as one 50% roll
-  // between Mega-Potion and rare X-Potion; today's data instead ships two
-  // independent 50%-chance entries. That shape difference is `vegnagun-body.ts`'s
-  // to resolve, not asserted as a defect here — only that it matches what's
-  // shipped today.
+  // §3.3 line 339 gives the drop as one 50% roll between Mega-Potion and rare X-Potion. The data used to ship two independent 50%-chance entries that
+  // nothing read (the build paid both); since re-parity RC9 (lane X2-C) the authored list is the common slot and the row's byte 128 and rare slot are the game's.
   it('Bulwark R/L (read-only): exp/ap/gil/drop/steal, §3.3 lines 338-340', () => {
     for (const id of ['bulwark-r', 'bulwark-l']) {
       const e = CHAIN_ENEMIES[id]!;
       expect(e.rewards.exp, id).toBe(200);
       expect(e.rewards.ap, id).toBe(10);
       expect(e.rewards.gil, id).toBe(150);
-      expect(e.rewards.drops, id).toEqual([
-        { itemId: 'x2-mega-potion', count: 1, chance: 50 },
-        { itemId: 'x2-x-potion', count: 1, chance: 50 },
-      ]);
+      // The common slot; the row's drop byte 128 and rare X-Potion are `ffx2Record.kill` (re-parity RC9, lane X2-C; `parity-ffx2-rewards-data.test.ts`).
+      expect(e.rewards.drops, id).toEqual([{ itemId: 'x2-mega-potion', count: 1 }]);
+      expect(e.ffx2Record?.kill, id).toMatchObject({ dropByte: 128, drop: [0x2003, 1, 0x2002, 1] });
       // Rare slot is `x2-l-bomb`: an ItemDef row since 2026-09-25 (`items/damage.ts`).
       expect(authoredSteal(e.rewards.steal), id).toEqual({
         baseChance: 50,

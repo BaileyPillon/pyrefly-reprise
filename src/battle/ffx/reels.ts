@@ -31,6 +31,7 @@
  */
 
 import type { AbilityDef, ReelResult, Targeting } from '../common/types.ts';
+import { classifyReelLine } from './kernel/reel-line.ts';
 
 /** What one spin resolves to. */
 export interface ReelOutcome {
@@ -84,6 +85,19 @@ function normalise(symbol: string): string {
   return ALIASES[key] ?? key;
 }
 
+/**
+ * The numbers the game's line classifier works on (`./kernel/reel-line.ts`, `FFX-G01` section 7) for the symbols whose shot the command table fixes:
+ * result 1 and 2 are the Fire shot, so symbol 0 is Fire, and likewise Ice 1, Water 2, Thunder 3, Havoc 7, Time 8, Break 9 and Aurochs 10 (result 15).
+ * The Attack Reels symbols (1-hit, 2-hit, miss) are not in it: which numbers they carry is not established, so that strip keeps its own rule below.
+ */
+const SYMBOL_NUMBER: Readonly<Record<string, number>> = { fire: 0, ice: 1, water: 2, thunder: 3, skull: 7, 'egg-timer': 8, 'down-arrow': 9, aurochs: 10 };
+
+/** The shot of each classifier result: 2n - 1 hits one enemy and 2n every enemy (Fire 1 and 2, Ice 3 and 4, Water 5 and 6, Thunder 7 and 8, Havoc 9 and 10, Time 11 and 12, Break 13 and 14); 15 is Aurochs. */
+const SHOT_OF_RESULT: Readonly<Record<number, string>> = {
+  1: 'fire-shot', 2: 'fire-shot', 3: 'ice-shot', 4: 'ice-shot', 5: 'water-shot', 6: 'water-shot', 7: 'thunder-shot', 8: 'thunder-shot',
+  9: 'havoc-shot', 10: 'havoc-shot', 11: 'time-shot', 12: 'time-shot', 13: 'break-shot', 14: 'break-shot', 15: 'aurochs-shot',
+};
+
 /** Miss 0, "1 Hit" 1, "2 Hit" 2 — the only three symbols that carry a value. */
 const HIT_VALUE: Readonly<Record<string, number>> = { miss: 0, '1-hit': 1, '2-hit': 2 };
 
@@ -133,6 +147,16 @@ export function resolveReelSpin(def: AbilityDef, reels: ReelResult): ReelOutcome
   const fallback: ReelOutcome | null = fallbackId
     ? { shotId: fallbackId, targeting: 'random-enemy' }
     : { shotId: shots[shots.length - 1]!, targeting: 'random-enemy' };
+
+  // The game's classifier decides the match when every symbol is one it knows (0x007B1710): a PAIR of Aurochs symbols is no match, so a Power Shot, and three of
+  // them the Aurochs shot at every enemy; every other pair and three is as below.
+  const numbers = symbols.map((s) => SYMBOL_NUMBER[s]);
+  if (symbols.length === 3 && numbers.every((n) => n !== undefined)) {
+    const line = classifyReelLine(numbers as [number, number, number]);
+    const shot = SHOT_OF_RESULT[line.result];
+    if (shot === undefined || !shots.includes(shot)) return fallback;
+    return { shotId: shot, targeting: line.result === 15 || line.result % 2 === 0 ? 'all-enemies' : 'random-enemy' };
+  }
 
   // Which symbol, if any, the player lined up. Three of a kind beats a pair.
   const three = symbols.length === 3 && symbols[0] === symbols[1] && symbols[1] === symbols[2];

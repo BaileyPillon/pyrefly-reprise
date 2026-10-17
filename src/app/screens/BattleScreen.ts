@@ -28,7 +28,7 @@ import {
   uiPortsRegistered,
 } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
-import { inArtNamespace } from '../../data/art/artNamespace.ts';
+import { backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
@@ -450,7 +450,7 @@ export class BattleScreen extends Screen {
       bossName: boss.name,
       subline: chapter.subtitle,
       artKey: inArtNamespace(ns, boss.spriteKey || boss.id),
-      backdropKey: chapter.sceneKey,
+      backdropKey: backdropFileOf(chapter.sceneKey), // the start card's wash is a backdrop file (a code key names its plate: `artNamespace.ts#SCENE_BACKDROP_FILE`)
       party,
       game: chapter.game,
       ...(this.opts.openingHurry ? { holdMs: HURRIED_CARD_HOLD_MS } : {}),

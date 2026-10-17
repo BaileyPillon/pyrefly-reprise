@@ -168,7 +168,7 @@ describe('immuneToRider and the Immune row itself', () => {
   });
 });
 
-describe('Tornado timer 3 s, the other three 4 s [estimate, Bailey D-312]', () => {
+describe('Tornado timer 3 s, the other three 4 s [the limits of the game, FFX-G01 section 6.3; they were an estimate, Bailey D-312]', () => {
   it('timerMsFor and the published minigame params', () => {
     const user = fighter({ id: 'auron' });
     for (const def of Object.values(AURON)) {

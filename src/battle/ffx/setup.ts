@@ -28,6 +28,7 @@ import { type Ctx, type FFXRuntime, makeActorRuntime } from './state.ts';
 import { applyEquipmentToCombatant } from './equipment.ts';
 import { startAutoStatuses } from './adapt/auto-status.ts';
 import { stockAfter } from './adapt/bag.ts';
+import { cloneRewards } from './adapt/loot.ts';
 import { rebuildCarriedPools, refreshCriticalStatus } from './statuses.ts';
 import { seedInitialCtb } from './turnQueue.ts';
 import { spendEntryDraws } from './adapt/entry.ts';
@@ -216,7 +217,7 @@ function enemyToCombatant(e: EnemyDef, isPart: boolean): FFXCombatant {
       aiScriptId: e.aiScriptId,
       formIndex: 0,
       forms: e.forms.map((f) => ({ ...f })),
-      rewards: { ...e.rewards, drops: e.rewards.drops.map((d) => ({ ...d })) },
+      rewards: cloneRewards(e.rewards),
       ...(e.threatenChance !== undefined ? { threatenChance: e.threatenChance } : {}),
       ...(e.poisonTickPercent !== undefined ? { poisonTickPercent: e.poisonTickPercent } : {}),
       ...(e.doomTurns !== undefined ? { doomTurns: e.doomTurns } : {}),

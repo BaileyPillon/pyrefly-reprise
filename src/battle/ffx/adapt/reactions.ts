@@ -174,5 +174,7 @@ export function reactToDeath(ctx: Ctx, victim: FFXCombatant): void {
  */
 export function cancelReactionsOf(ctx: Ctx, victimId: CombatantId): void {
   for (const r of ctx.rt.itemReactions ?? []) if (r.userId === victimId) r.lost = true;
+  // A counter the dying character had queued goes too: the death check removes every action the character had queued (RC9, `counter-chain.ts`).
+  for (const c of ctx.rt.counters ?? []) if (c.holderId === victimId) c.lost = true;
   (ctx.rt.reactionDeaths ??= new Set()).add(victimId);
 }

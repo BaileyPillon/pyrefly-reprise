@@ -18,6 +18,8 @@ import { adjacentNodes } from './garment-grids.ts';
 import { aimer } from './aim.ts';
 import { commandMpCost } from './kernel/auto-ability.ts';
 import { STATUS_SPELLSPRING } from './kernel/command-usable.ts';
+import { MIX_PICKER, MIX_PICKER_REASON } from './constants.ts';
+import { MIX_COMMAND_ID } from './adapt/mix.ts';
 import { isSilenceable, isSpecialWearer, menuCategoryOf, offeredAbilityIds } from './adapt/menu.ts';
 import { validTargetIds } from './targeting.ts';
 
@@ -50,6 +52,8 @@ export function hpCostFor(actor: Ffx2Unit, ability: AbilityDef): number {
 /** Why a command row is greyed out, or `null` when it is offered. The game's order: Itch, then Silence, then the cost. */
 function disabledReason(actor: Ffx2Unit, ability: AbilityDef, mpCost: number): string | null {
   if (actor.statuses.itchy) return ITCHY_REASON;
+  // The Alchemist's Mix is listed but greyed until a screen can ask for its two items (`constants.ts#MIX_PICKER`; the driver's item 88e).
+  if (!MIX_PICKER && ability.id === MIX_COMMAND_ID) return MIX_PICKER_REASON;
   if (actor.statuses.silence && isSilenceable(ability)) return 'Silenced';
   if (actor.mp < mpCost && !actor.statuses.spellspring) return 'Not enough MP';
   // "…fails if the user cannot pay it" — an HP-cost ability is greyed out, not

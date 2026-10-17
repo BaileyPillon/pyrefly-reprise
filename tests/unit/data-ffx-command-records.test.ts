@@ -144,8 +144,10 @@ describe("the attached records are the game's table", () => {
     // 490 and 488 since the hidden Biran and Yenke chapter (FFX only, 2026-10-14): the Friend Sphere (0x2061), Bulldoze (0x60a5), the brothers' Fire Breath and Aqua Breath (0x60a2, 0x60a3), Berserk (0x400f), and
     // the brothers' own copies of Kimahri's Mighty Guard and White Wind (0x3072, 0x3070), each with its record (all seven rows are in the game's fixture; the RE review of 2026-10-14 asked for them).
     // 506 and 504 since the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the Dark Aeons' fourteen move rows (0x4086, 0x4100 to 0x4102, 0x4104 to 0x410b, 0x4127, 0x412b) and the Master and Teleport Spheres (0x2050, 0x2062), each with its record (all sixteen rows are in the game's fixtures).
-    expect(ALL_ABILITIES).toHaveLength(506);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(504);
+    // 494 and 492 since re-parity RC9 lane FFX-M (kill rewards from the game's loot records, FFX only): the Lv. 2 Key Sphere (0x2052, Seymour Natus's drop) and the Power, Mana and Speed Spheres (0x2046 to 0x2048, what a Distiller
+    // turns a drop into), the four item rows the loot records name that the catalog lacked, each with its record (all four rows are in both fixtures: type, flags and damage class 0, rank 2, no status bytes).
+    expect(ALL_ABILITIES).toHaveLength(510);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(508);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(2);
   });
 });

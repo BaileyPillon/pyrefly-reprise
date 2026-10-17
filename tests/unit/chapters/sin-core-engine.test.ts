@@ -373,19 +373,23 @@ describe('The Core falls: victory with Genais standing [§5.3.2 item 5, verified
     expectCoreOnlyVictory(e, act(e, d, 'ability', 'dark-attack', C));
   });
 
-  it('by an item (a Grenade over both)', () => {
+  // RC9 (lane FFX-G slice G-c): the Core's BattleDistance is 3 while Genais stands, and the game lets a command pick a target only when its reach (0 to 3, from its
+  // record) is at least that. An item is reach 2 and Valefor's Energy Ray reach 2, so neither is offered the Core any more (they used to be: "magic and every
+  // non-physical command always reached"); Genais is at distance 0 and still takes both.
+  it('an item cannot be thrown at the Core while Genais stands (every item has reach 2, the Core is at distance 3)', () => {
     const e = engine(13, ['tidus', 'wakka', 'auron']);
-    const d = turnOf(e, 'tidus')!;
-    live(e, C).hp = 1;
-    expectCoreOnlyVictory(e, act(e, d, 'item', 'grenade', C));
+    const r = row(turnOf(e, 'tidus')!, 'item', 'grenade')!;
+    expect(r.validTargets).toContain(G);
+    expect(r.validTargets).not.toContain(C);
   });
 
-  it("by an Overdrive (Valefor's Energy Ray)", () => {
+  it("by Valefor's Attack (reach 3: the record's 0x200 bit for the actor number 8); her Energy Ray (reach 2) falls short", () => {
     const e = engine(14, ['yuna', 'wakka', 'auron']);
     act(e, turnOf(e, 'yuna')!, 'summon', 'valefor', 'yuna');
     const d = turnOf(e, 'valefor')!;
+    expect(row(d, 'overdrive', 'energy-ray')!.validTargets).not.toContain(C);
     live(e, C).hp = 1;
-    expectCoreOnlyVictory(e, act(e, d, 'overdrive', 'energy-ray', C));
+    expectCoreOnlyVictory(e, act(e, d, 'attack', undefined, C));
   });
 });
 
@@ -396,7 +400,7 @@ describe('Genais dies off the player-side path: the liveness hook (REVIEW must-c
     enemyTurns(e, G, 1);
     const d = turnOf(e, 'auron')!;
     expect(live(e, G).alive).toBe(false);
-    expect(live(e, C).flags.outOfMeleeReach).not.toBe(true);
+    expect(live(e, C).flags.battleDistance ?? 0).toBe(0);
     expect(live(e, C).immunityFlags).not.toContain('immune-to-magical-damage');
     expect(['free', 'ready']).toContain(flags(e)['sin.core.state']); // free, or already gathering on its own turn since
     expect(row(d, 'attack')!.validTargets).toContain(C);
@@ -411,7 +415,7 @@ describe('Genais dies off the player-side path: the liveness hook (REVIEW must-c
     const at = act(e, turnOf(e, 'tidus')!, 'item', 'grenade', G);
     expect(counters(since(e, at), G)).toContain('sin-genais-cura');
     expect(live(e, G).alive).toBe(false);
-    expect(live(e, C).flags.outOfMeleeReach).not.toBe(true); // CHECK 2 finding 2: before the next menu, not after it
+    expect(live(e, C).flags.battleDistance ?? 0).toBe(0); // CHECK 2 finding 2: before the next menu, not after it
     expect(live(e, C).immunityFlags).not.toContain('immune-to-magical-damage');
     enemyTurns(e, C, 1);
     expect(['free', 'ready']).toContain(flags(e)['sin.core.state']);

@@ -38,6 +38,7 @@
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
 import { evraeGroup } from './evrae.ts';
+import { lootRewards } from '../loot/index.ts';
 
 export const SIN_LEFT_FIN_ID = 'left-fin';
 export const SIN_RIGHT_FIN_ID = 'right-fin';
@@ -134,13 +135,9 @@ function fin(id: string, name: string, script: string, rewards: EnemyDef['reward
 const FIN_SENSOR = 'When its core glows, Gravija follows. Distance turns it aside.';
 const FIN_SCAN = 'Once charged, Gravija takes most of everyone\'s HP. Back the ship away first. It strips statuses too.';
 
-/** `m136` — the Left Fin. §2.4 rewards [decompiled] + wiki + bover_87 [verified: 3 sources]. */
-const leftFin: EnemyDef = fin(SIN_LEFT_FIN_ID, 'Left Fin', SIN_LEFT_FIN_SCRIPT, {
-  ap: 16_000, // §2.4
-  apOverkill: 24_000, // §2.4
-  gil: 10_000, // §2.4
+/** `m136` — the Left Fin. §2.4 rewards [decompiled] + wiki + bover_87 [verified: 3 sources]; the loot record m136 (`../loot/records.ts`; re-parity RC9): 10,000 gil, 16,000 AP (24,000 on an overkill), an HP Sphere always (chance byte 255), two on an overkill. */
+const leftFin: EnemyDef = fin(SIN_LEFT_FIN_ID, 'Left Fin', SIN_LEFT_FIN_SCRIPT, lootRewards(136, {
   overkillThreshold: 10_000, // §2.1 [decompiled] + wiki + bover_87 + SinirothX
-  drops: [{ itemId: 'hp-sphere', count: 1 }], // §2.4 [decompiled] drop chance 255; x2 on Overkill not modelled
   steal: {
     baseChance: 100, // §2.4 [decompiled byte 255 = guaranteed, clamped to the contract's 0-100]
     common: { itemId: 'mega-potion', count: 1 }, // §2.4
@@ -148,22 +145,18 @@ const leftFin: EnemyDef = fin(SIN_LEFT_FIN_ID, 'Left Fin', SIN_LEFT_FIN_SCRIPT, 
   },
   // §2.4 "Bribe: immune on all five" [decompiled] + wiki; the item stands in, it can never be bribed.
   bribe: { item: { itemId: 'mega-potion', count: 1 }, immune: true },
-}, FIN_SENSOR, FIN_SCAN);
+}), FIN_SENSOR, FIN_SCAN);
 
-/** `m137` — the Right Fin. §2.4 rewards, AP per S-4 (resolved: 17,000). */
-const rightFin: EnemyDef = fin(SIN_RIGHT_FIN_ID, 'Right Fin', SIN_RIGHT_FIN_SCRIPT, {
-  ap: 17_000, // §2.4, S-4 resolved (bover_87's 16,000 is not so)
-  apOverkill: 25_500, // §2.4
-  gil: 10_000, // §2.4
+/** `m137` — the Right Fin. §2.4 rewards, AP per S-4 (resolved: 17,000); the loot record m137: 10,000 gil, 17,000 AP (25,500 on an overkill), a Lv. 3 Key Sphere always, two on an overkill (SinirothX's Lv. 2 is S-5, resolved). */
+const rightFin: EnemyDef = fin(SIN_RIGHT_FIN_ID, 'Right Fin', SIN_RIGHT_FIN_SCRIPT, lootRewards(137, {
   overkillThreshold: 10_000, // §2.1
-  drops: [{ itemId: 'lv-3-key-sphere', count: 1 }], // §2.4 [decompiled] (SinirothX's Lv. 2 is S-5, resolved)
   steal: {
     baseChance: 100, // §2.4 [decompiled byte 255]
     common: { itemId: 'x-potion', count: 1 }, // §2.4
     rare: { itemId: 'shining-gem', count: 1 }, // §2.4
   },
   bribe: { item: { itemId: 'x-potion', count: 1 }, immune: true }, // §2.4 Bribe immune
-}, FIN_SENSOR, FIN_SCAN);
+}), FIN_SENSOR, FIN_SCAN);
 
 /**
  * Cid — `m149`, the Evrae record (§2.5: "the stat block of

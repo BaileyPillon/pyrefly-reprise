@@ -18,7 +18,7 @@ import { describe, expect, it } from 'vitest';
 import type { BattleEvent, Command, Decision, MinigameResult } from '../../src/battle/common/types.ts';
 import { FFXContentRegistry, createFFXEngine, timingBonusFrom } from '../../src/battle/ffx/index.ts';
 import { ABILITIES as AURON } from '../../src/data/ffx/abilities/overdrive-auron.ts';
-import { resolveAuronSequence } from '../../src/ui/ffx/minigames/logic.ts';
+import { bushidoFrame, bushidoMove, bushidoStart } from '../../src/battle/ffx/kernel/minigame-bushido.ts';
 import { attackAbility, enemy, member, party, setup } from './ffx-fixtures.test.ts';
 
 type PlayerInput = Extract<Decision, { kind: 'player-input' }>;
@@ -97,13 +97,17 @@ describe('PR-0267: a failed Bushido earns no timing bonus [ffx-combat-core §5.2
   it('timingBonusFrom credits time remaining only to a completed sequence', () => {
     const fail: MinigameResult = { kind: 'auron-sequence', sequence: { success: false, correctInputs: 0, timeRemainingMs: 3900 } };
     const ok: MinigameResult = { kind: 'auron-sequence', sequence: { success: true, correctInputs: 8, timeRemainingMs: 2500 } };
-    expect(timingBonusFrom(fail, FANG)).toEqual({ timeRemainingMs: 0, timerMs: 4000 });
-    expect(timingBonusFrom(ok, FANG)).toEqual({ timeRemainingMs: 2500, timerMs: 4000 });
+    // RC9 lane FFX-B3 (FFX only): the payload also carries `scale`, the game's own A and B as float32 seconds (a failure: A = 0; FFX-G01 section 5). It was the
+    // two milliseconds only. The proof is `parity-ffx-engine-od-results.test.ts`.
+    expect(timingBonusFrom(fail, FANG)).toEqual({ timeRemainingMs: 0, timerMs: 4000, scale: { a: 0, b: 4 } });
+    expect(timingBonusFrom(ok, FANG)).toEqual({ timeRemainingMs: 2500, timerMs: 4000, scale: { a: 2.5, b: 4 } });
   });
 
-  it('the minigame reports no time remaining for a sequence ended by a wrong press', () => {
-    const r = resolveAuronSequence({ sequenceLength: 8, correctInputs: 0, elapsedMs: 100, timerMs: 4000 });
-    expect(r.success).toBe(false);
-    expect(r.timeRemainingMs).toBe(0);
+  it('the controller reports no time remaining for a sequence that did not finish: the limit ran out, A = 0 (RC9, the controller of the game)', () => {
+    const move = bushidoMove(0x32); // Dragon Fang, 4 s: 120 frames of input
+    const state = bushidoStart();
+    let r = bushidoFrame(state, move, 0);
+    for (let f = 2; f <= 121; f++) r = bushidoFrame(state, move, 0);
+    expect(r).toEqual({ done: true, grade: 0, a: 0, frame: 121 });
   });
 });

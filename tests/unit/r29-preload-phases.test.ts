@@ -71,5 +71,7 @@ describe('preloadBattle phases', () => {
   it('the FF7 fight warms its own plate, not backdrops/<sceneKey>.png (PR-0222)', () => {
     expect(plateUrlFor('sector1-reactor')).toMatch(/art\/backdrops\/ff7-film-reactor\.png$/);
     expect(plateUrlFor('gagazet')).toMatch(/art\/backdrops\/gagazet\.png$/);
+    // LIVE-R50-01: Chapter XXVII's scene key is a code key; its stage opens on Mushroom Rock Road's plate, so that is the file the prewarm asks for (it asked for backdrops/mirror-aeons.png, which does not exist).
+    expect(plateUrlFor('mirror-aeons')).toMatch(/art\/backdrops\/mushroom-rock-road\.png$/);
   });
 });

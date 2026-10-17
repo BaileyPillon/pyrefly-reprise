@@ -31,9 +31,17 @@ describe('chapter card BOSS row', () => {
     expect(bossNames(getChapter('sin-fins-core')!)).toBe('Sin');
   });
 
+  it('Chapter XXVII (FFX, Mirror Aeons) names the bosses of both acts, and its location fits the results strip (FOC50-03)', () => {
+    // The first formation is only Act I's pair; Dark Yojimbo, Act II's boss, was missing from the card. The results strip's caption holds about 37 letters before it cuts the location with an ellipsis.
+    const chapter = getChapter('mirror-aeons')!;
+    expect(bossNames(chapter)).toBe('Dark Sandy and Dark Mindy, then Dark Yojimbo');
+    expect(chapter.location).toBe('Mushroom Rock Road and the Cavern');
+    expect(chapter.location.length).toBeLessThanOrEqual(36);
+  });
+
   it('every other chapter still lists its first formation', () => {
     for (const c of CHAPTERS) {
-      if (c.id === 'ffx2-leblanc' || c.id === 'ffx2-den-of-woe' || c.id === 'sin-fins-core') continue;
+      if (c.id === 'ffx2-leblanc' || c.id === 'ffx2-den-of-woe' || c.id === 'sin-fins-core' || c.id === 'mirror-aeons') continue;
       expect(bossNames(c), c.id).toBe(c.enemyGroupRef.enemies.map((e) => e.name).join(' + '));
     }
   });

@@ -53,6 +53,12 @@ export const GENAIS_ENTER_BELOW = 10_000;
 const SHELL_FLAGS = ['armored', 'immune-to-percentage-damage'] as const;
 /** The Venom count at which Thrashing comes (Venom, Venom, Thrashing). */
 export const VENOM_BEFORE_THRASHING = 2;
+/**
+ * The Core's BattleDistance while Genais lives (the Core's init writes 3, `research/re-ffx-ai-evrae-yojimbo-isaaru-sin.md` section on Genais and the Core; Genais's
+ * death writes 0). The game's reach rule (`reach.ts#reachOf`) then lets only the commands of reach 3 pick it: the spells, Lancet, Scan and Wakka's Attack.
+ * It was the `outOfMeleeReach` flag (physical needs Wakka, Valefor, Anima or Mindy; everything else reaches) until RC9.
+ */
+const CORE_DISTANCE = 3;
 
 // ---------------------------------------------------------------------------
 // Link 3's own `state.flags` keys (beside the shared ones in `sin-ids.ts`)
@@ -157,7 +163,7 @@ export function applySinGenaisCoreSetup(ctx: Ctx): void {
   const genais = tryActor(ctx, SIN_GENAIS_ID);
   const core = tryActor(ctx, SIN_CORE_ID);
   if (!genais || !core || genais.enemy?.aiScriptId !== SIN_GENAIS_SCRIPT || core.enemy?.aiScriptId !== SIN_CORE_SCRIPT) return;
-  core.flags.outOfMeleeReach = true;
+  core.flags.battleDistance = CORE_DISTANCE;
   shellMarks(genais, true);
   ctx.state.flags[SIN_GENAIS_SHELLED] = true;
   ctx.state.flags[SIN_GENAIS_STEP] = 0;
@@ -195,7 +201,7 @@ export function syncGenaisCoreLiveness(ctx: Ctx): void {
   }
   if (genaisAlive(ctx) || !core) return;
   // Genais's death (note 6.3): the Core's distance is 0, so the party reaches it, and magic lands.
-  if (core.flags.outOfMeleeReach === true) core.flags.outOfMeleeReach = false;
+  if ((core.flags.battleDistance ?? 0) !== 0) core.flags.battleDistance = 0;
   syncCoreAbsorption(ctx);
   if (genaisShelled(ctx)) ctx.state.flags[SIN_GENAIS_SHELLED] = false;
   const state = coreState(ctx);

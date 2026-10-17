@@ -77,10 +77,18 @@ export function oracleOf(s: Spec, order: number): OracleFoe {
   };
 }
 
+/**
+ * The streams a monster's death pays its loot on (10 and 11: the drop rolls and the gear roll, `adapt/loot.ts#payKill`, re-parity RC9 lane FFX-M). A Zanmato kills, so every foe it kills rolls three of
+ * them; they belong to the kill and not to the action, so the action's draws below leave them out (the oracle lists the script's roll, the group draw and the status draws). Added on the r51 merge: the
+ * lane that wrote this rig predates the loot rolls.
+ */
+export const REWARD_STREAMS: readonly number[] = [10, 11];
+export const withoutRewards = (streams: readonly number[]): number[] => streams.filter((s) => !REWARD_STREAMS.includes(s));
+
 export interface Run {
   rig: Rig;
   events: BattleEvent[];
-  /** Every draw from the moment the payment was submitted. */
+  /** Every draw from the moment the payment was submitted, except the loot rolls of the deaths (`REWARD_STREAMS`). */
   streams: number[];
   taps: Array<{ stream: number; value: number }>;
   oracle: OracleFoe[];
@@ -105,7 +113,7 @@ export function payForZanmato(specs: readonly Spec[], over: { seed?: number; com
   const before = rig.events.length;
   rig.submit(PAY(over.amount ?? PAY_FOR_ZANMATO));
   const taps = rig.taps.slice(from);
-  return { rig, events: rig.events.slice(before), streams: taps.map((t) => t.stream), taps, oracle: specs.map((s, i) => oracleOf(s, i)) };
+  return { rig, events: rig.events.slice(before), streams: withoutRewards(taps.map((t) => t.stream)), taps, oracle: specs.map((s, i) => oracleOf(s, i)) };
 }
 
 export const kos = (events: readonly BattleEvent[]): string[] => events.flatMap((e) => (e.type === 'ko' ? [e.targetId] : []));

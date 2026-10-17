@@ -27,7 +27,7 @@ import { Ffx2AtbState } from './kernel/atb-gauge.ts';
 import { logicStep } from './logic-step.ts';
 import type { ResolveContext } from './resolve.ts';
 import type { MenuContext } from './menu.ts';
-import { aiContextFor, berserkTurnCommand, runAfterActionHooks, runPartyCounters, type PendingCounter } from './engineHooks.ts';
+import { aiContextFor, markDeathEntry, runAfterActionHooks, runAutopilot, runDeathEntries, runPartyCounters, type PendingCounter } from './engineHooks.ts';
 import { inventoryCounts } from './setup.ts';
 import { aiScriptFor } from './ai/index.ts';
 import { evaluateTriggers, signalFromEvents } from './triggers.ts';
@@ -37,7 +37,8 @@ import {
   allTargetsGone, awaitsPlayerInput, canTakeTurn, clockHeldByMenu, DEFAULT_ATB_MODE, DEFAULT_WAIT_SPLIT, heldStillPending, ownsInput, withDefaultTimedInput,
   type AtbMode, type HeldCommand, type MenuLevel,
 } from './active.ts';
-import { itemAvailable, releaseItemHolds } from './adapt/item-ledger.ts';
+import { releaseItemHolds } from './adapt/item-ledger.ts';
+import { stockShort } from './adapt/mix.ts';
 
 export class Ffx2EngineCore {
   protected rng: BattleRng = makeFfx2Rng(0);
@@ -142,6 +143,7 @@ export class Ffx2EngineCore {
       complete: (u) => completeCommand(u, u.gauge.costAtb, this.units, u.gauge.idleWait === true),
     });
     releaseItemHolds(this.units, this.battleState.flags); // a cast the step dropped (Stop, Petrify, a KO, ejection) gives its item back
+    runDeathEntries(this.units, (u) => this.aiContext(u));
   }
 
   /**
@@ -204,7 +206,7 @@ export class Ffx2EngineCore {
     this.held = null;
     if (!held) return;
     const ability = abilityFor(this.env(), held.command);
-    if (allTargetsGone(this.units, held.command, ability) || (held.command.kind === 'item' && !itemAvailable(this.battleState.flags, held.command.id))) return;
+    if (allTargetsGone(this.units, held.command, ability) || stockShort(this.battleState.flags, this.abilities, held.command)) return;
     const command = withDefaultTimedInput(held.command, ability, this.rng, this.options.minigames !== false);
     const before = this.drafts.length;
     this.beginTurn(actor);
@@ -223,6 +225,7 @@ export class Ffx2EngineCore {
       onMenuClosed: (unit) => {
         if (this.inputOwner === unit.id) this.hitClosed = unit.id; // a Delay hit closed her open menu (`apply_atb_damage`)
       },
+      onKo: markDeathEntry, // a monster's death entry is requested at its knock-out and runs at the end of the action or step (RC9 X2-E)
       counters: {
         pending: (target) => this.counterQueue.filter((c) => c.target === target).length,
         queue: (target, source, cause) => this.counterQueue.push({ target, source, cause }),
@@ -292,12 +295,11 @@ export class Ffx2EngineCore {
     };
   }
 
-  /** One Berserked party turn, resolved without the player (§2.8; `berserkTurnCommand`). */
-  protected runBerserkTurn(actor: Ffx2Unit): void {
+  /** One autopilot turn of a girl the player does not control: Berserk's Attack or Confusion's own pick (§2.8; `runAutopilot`). */
+  protected runAutopilotTurn(actor: Ffx2Unit): void {
     const before = this.drafts.length;
-    this.beginTurn(actor);
-    const command = berserkTurnCommand(actor, this.menuContext(actor), this.rng, (e) => this.emit(e));
-    performCommand(this.env(), actor, command, false, before);
+    const confusion = { units: this.units, abilities: this.abilities, dresspheres: this.dresspheres, items: this.options.items, inventory: inventoryCounts(this.battleState), rng: this.rng };
+    runAutopilot(actor, { menu: this.menuContext(actor), confusion, rng: this.rng, emit: (e) => this.emit(e), begin: () => this.beginTurn(actor), perform: (c) => performCommand(this.env(), actor, c, false, before) });
   }
 
   protected runAiTurn(actor: Ffx2Unit): void {
@@ -341,6 +343,7 @@ export class Ffx2EngineCore {
     runAfterActionHooks(() => this.drafts.slice(startedAt), actor, env);
     // The counters this action set off (a Berserker's Counterattack, Magic Counter, Evade & Counter), played before the battle-end check.
     runPartyCounters(this.counterQueue, { ...env, mark: () => this.drafts.length, since: (from: number) => this.drafts.slice(from) });
+    runDeathEntries(this.units, (u) => this.aiContext(u)); // the monsters this action knocked out answer after its results are all in (RC9 X2-E)
     this.flushSignal(startedAt, actor);
   }
 

@@ -39,6 +39,9 @@ import { LEBLANC_SCRIPT_SINIROTHX, SEPARATE_BATTLE_GAUGES } from './constants.ts
 import { newGauge } from './atb-engine.ts';
 import { openBattleGauges } from './atb-open.ts';
 import { aiScriptFor } from './ai/index.ts';
+import { applyStat } from './adapt/stat-setter.ts';
+import { deathPatternOf } from './adapt/death-patterns.ts';
+import { GROUP_OWN, StatId } from './kernel/stat-setter.ts';
 
 function emptyAtb(agi: number): Ffx2Unit['atb'] {
   return { ticks: 0, required: baseRequired(agi), gauge: 0, charging: null, recovery: 0 };
@@ -303,10 +306,14 @@ export function buildState(
   // Each girl's automatic-status layer (re-parity X2-D): the rows her dressphere and accessories list, the kept set at once, the SOS set while her HP is under a third.
   initAutoLayers(units, rng);
 
-  // The scripts' init entries run before the first gauge is rolled (AiScript.init, RC3): the Vegnagun Head's Agility 110 (row H3).
+  // The scripts' init entries run before the first gauge is rolled (AiScript.init, RC3): the Vegnagun Head's Agility 110 (row H3) and, in every boss script, the death pattern
+  // (`setdeathpat`, re-parity RC9 lane X2-E row XE5). Both go through the stat setter (`adapt/stat-setter.ts`), as the script's own calls do.
   for (const unit of units) {
-    const init = unit.side === 'enemy' ? aiScriptFor(unit.enemy?.aiScriptId).init : undefined;
-    if (init?.agi !== undefined) unit.stats = { ...unit.stats, agi: init.agi };
+    if (unit.side !== 'enemy') continue;
+    const init = aiScriptFor(unit.enemy?.aiScriptId).init;
+    if (init?.agi !== undefined) applyStat(units, unit, StatId.dex, GROUP_OWN, init.agi);
+    const pattern = deathPatternOf(unit);
+    if (pattern !== undefined) applyStat(units, unit, StatId.deathPattern, GROUP_OWN, pattern);
   }
 
   const separate = enemies.opensAsSeparateBattle === true && (options.separateBattleGauges ?? SEPARATE_BATTLE_GAUGES);

@@ -5,7 +5,8 @@
  * unlock counts/hit-count corrections from Fandom) and §5.2 (timed-input
  * bonus). All rows `[verified: 2 sources]`.
  *
- * Timed-input bonus (§5.2): `timerMs = 3000` for Tidus; the engine computes
+ * Timed-input bonus (§5.2): the move's own limit, 3000 ms for Spiral Cut, Slice and Dice and Energy Rain and 2000 ms for Blitz Ace (the game's, `FFX-G01`
+ * section 6.2; `timerMsFor` in `battle/ffx/overdrive.ts`); the engine computes
  * `damage += damage * timeRemaining // (timerMs*2)` (cap +50%) from the
  * `tidus-timing` minigame's `TimingResult` at resolve time — this file only
  * marks eligibility via `extra.timedInputBonus: true`, it is not a static
@@ -42,7 +43,6 @@
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
-import { SWORDPLAY_TUNING } from '../overdrives/inputs.ts';
 
 export const ABILITIES: Record<string, AbilityDef> = {
   /**
@@ -73,7 +73,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
-      minigameParams: { ...SWORDPLAY_TUNING['spiral-cut']! }, // zone and speed: overdrives/inputs.ts (ordering sourced; values our estimate, adopted by Bailey 2026-10-04)
       failPower: 24,
       failHits: 1,
       vfxKey: 'vfx-spiral-cut',
@@ -108,7 +107,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
-      minigameParams: { ...SWORDPLAY_TUNING['slice-and-dice']! }, // zone and speed: overdrives/inputs.ts (ordering sourced; values our estimate, adopted by Bailey 2026-10-04)
       failPower: 8,
       failHits: 3,
       vfxKey: 'vfx-slice-and-dice',
@@ -143,7 +141,6 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
-      minigameParams: { ...SWORDPLAY_TUNING['energy-rain']! }, // zone and speed: overdrives/inputs.ts (ordering sourced; values our estimate, adopted by Bailey 2026-10-04)
       failPower: 20,
       failHits: 1,
       vfxKey: 'vfx-energy-rain',
@@ -151,8 +148,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
   },
 
   /**
-   * §5.3 row 4 [verified: 2 sources]. Rank 7 on a successful timing chain
-   * (fail rank 6). Two-part hit: 8 hits at 4 DmgCon each, then a finishing
+   * §5.3 row 4 [verified: 2 sources]. Rank 7 whatever the grade: the user's recovery is the menu row's rank, and the "(fail rank 6)" the research table
+   * carries is the rank of the game's replacement row, which never reaches the user (`FFX-H01` section 3.5, re-parity RC9 lane FFX-B2; no `failRank`).
+   * Two-part hit: 8 hits at 4 DmgCon each, then a finishing
    * "Last Hit" at 24 DmgCon x1 — `power`/`hits` carry the 8x4 main volley,
    * `extra.finisherPower`/`extra.finisherHits` carry the finisher. The
    * finisher only fires on a successful chain; on fail the whole Overdrive
@@ -182,10 +180,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     minigame: 'tidus-timing',
     extra: {
       timedInputBonus: true,
-      minigameParams: { ...SWORDPLAY_TUNING['blitz-ace']! }, // zone and speed: overdrives/inputs.ts (ordering sourced; values our estimate, adopted by Bailey 2026-10-04)
       failPower: 4,
       failHits: 8,
-      failRank: 6, // rank on the fail branch; not asked for explicitly but preserves the research's "(fail rank 6)" note
       finisherPower: 24,
       finisherHits: 1,
       finisherAppliesOnSuccessOnly: true,
