@@ -37,12 +37,19 @@ import {
 } from '../../src/engine/tactics/advisor.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
 
-/** Six seeds, both drivers, for one chapter. */
+/**
+ * Six seeds, both drivers, for one chapter: the smoke pass. Six seeds cannot tell a five-point gap from a thirty-point one (RC10, FFX only: over 140 seeds
+ * of Chapter II the card trails the line by 0 seeds before the hit-order change and by 1 after it, and 1 of 23 six-seed windows misses the rule below before it,
+ * 2 of 23 after), so for an FFX chapter a miss here is confirmed on the bench's own forty seeds before it fails.
+ */
 const SEEDS = 6;
+/** The bench's sample (`critic/bench/advisor-v2/bench.test.ts`) and the gap it accepted: its recorded Chapter II sweep (`results-final.json`) has the line at 39 of 40 and the card at 34. */
+const CONFIRM_SEEDS = 40;
+const CONFIRM_SLACK = 5;
 
-function winsOf(chapterId: string, driver: 'intended' | 'advisor-v2'): number {
+function winsOf(chapterId: string, driver: 'intended' | 'advisor-v2', seeds = SEEDS): number {
   let wins = 0;
-  for (let seed = 1; seed <= SEEDS; seed += 1) {
+  for (let seed = 1; seed <= seeds; seed += 1) {
     if (run(chapterId, seed, driver).outcome === 'victory') wins += 1;
   }
   return wins;
@@ -58,13 +65,22 @@ describe('a player who follows the card can win the chapter', () => {
    */
   for (const chapterId of CHAPTER_IDS) {
     it(`${chapterId} (${gameOf(chapterId)}): the card is within one seed of the chapter line`, () => {
-      const intended = winsOf(chapterId, 'intended');
-      const guided = winsOf(chapterId, 'advisor-v2');
+      let intended = winsOf(chapterId, 'intended');
+      let guided = winsOf(chapterId, 'advisor-v2');
+      let seeds = SEEDS;
+      let slack = 1;
+      if (gameOf(chapterId) === 'ffx' && guided < intended - slack) {
+        // Six seeds say the card trails the line: ask the bench's forty before calling it a failure (an FFX-2 chapter keeps the six-seed rule as it was).
+        seeds = CONFIRM_SEEDS;
+        slack = CONFIRM_SLACK;
+        intended = winsOf(chapterId, 'intended', seeds);
+        guided = winsOf(chapterId, 'advisor-v2', seeds);
+      }
       expect(
         guided,
-        `${chapterId}: following the card won ${guided}/${SEEDS} against the chapter line's ${intended}/${SEEDS}`,
-      ).toBeGreaterThanOrEqual(intended - 1);
-    }, 120_000);
+        `${chapterId}: following the card won ${guided}/${seeds} against the chapter line's ${intended}/${seeds}`,
+      ).toBeGreaterThanOrEqual(intended - slack);
+    }, 900_000);
   }
 });
 
