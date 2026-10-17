@@ -88,6 +88,9 @@ describe('DIFF-B: the card\'s pick equals the line\'s pick in the decisions that
     expect(parted.some((p) => /item:x2-megalixir->[^ ]* -> (attack|ability):/.test(p) || /stash-mega-potion/.test(p))).toBe(true);
   }, 180_000);
 
+  // Re-parity RC9 lane X2-A, slice 1 (FFX-2 only; reason "game-code parity", note FFX2-G01 section 7): the hit reaction moved every replay of Chapter XIII, and seed 7 no longer reaches a board
+  // whose projected line differs from the live one. The board was searched again over the seeds in order (1 to 30): seeds 1, 2, 3, 8, 12, 19, 24 and 27 reach one (1, 1, 3, 1, 3, 6, 6 and 4 boards, the card
+  // following the live board on every one); the first, seed 1, is used. With `CHAIN_WINDOW_PER_BODY` off seed 7 reaches it as before.
   it('the line is read off the live board, not the projected one: where the two differ the card follows the live board', async () => {
     clearAdvisorCache();
     let projectedParted = 0;
@@ -103,9 +106,9 @@ describe('DIFF-B: the card\'s pick equals the line\'s pick in the decisions that
       }
       return topOf(ctx, false);
     };
-    await runChapterX(chapterById(TREMA), 7, driver, HOUSE);
+    await runChapterX(chapterById(TREMA), 1, driver, HOUSE);
     expect(wrong).toEqual([]);
-    expect(projectedParted, 'seed 7 no longer reaches a board whose projected line differs from the live one: re-pin the seed').toBeGreaterThanOrEqual(1);
+    expect(projectedParted, 'seed 1 no longer reaches a board whose projected line differs from the live one: re-pin the seed').toBeGreaterThanOrEqual(1);
   }, 120_000);
 
   it('a line this actor cannot press stays off the card (the hard gate is untouched): with the aimed row\'s targets emptied the card does not print it', async () => {

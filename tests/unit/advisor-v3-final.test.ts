@@ -183,10 +183,13 @@ describe('advisor v3 final fix (FFX-2 only)', () => {
     expect(standing(ctx, top(now)!, girl)).toBeGreaterThanOrEqual(standing(ctx, top(before)!, girl));
   }, 600_000);
 
-  it('C2-M1: a heal held for a chain lock covers nobody; the save stays (Vegnagun seed 1)', async () => {
+  // Re-parity RC9 lane X2-A, slice 1 (FFX-2 only; reason "game-code parity", note FFX2-G01 section 7): the hit reaction moved every replay of Chapter V, and seed 1 no longer reaches the board (the held
+  // Megalixir as the only command in flight). Searched again over the seeds in order (1 to 40): seeds 3, 8, 9, 11, 12, 13, 14, 18, 21, 23, 25, 26, 32, 33 and 38 reach it, the card naming the Mega-Potion on every one;
+  // the first, seed 3, is used. With `CHAIN_WINDOW_PER_BODY` off seed 1 reaches it as before.
+  it('C2-M1: a heal held for a chain lock covers nobody; the save stays (Vegnagun seed 3)', async () => {
     let found: { now: AdvisorView | null; before: AdvisorView | null } | null = null;
     try {
-      await runChapter(chapterById('ffx2-vegnagun-shuyin'), 1, (ctx) => {
+      await runChapter(chapterById('ffx2-vegnagun-shuyin'), 3, (ctx) => {
         const held = (ctx.engine as unknown as FFX2Engine).heldCommand();
         if (held && idOf(held.command) === 'x2-megalixir' && pendingCommands(ctx).length === 1) {
           // The check's board: the Megalixir is the only command in flight and it is held, and the party is down to 30 percent (stood in for the

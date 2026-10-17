@@ -86,22 +86,39 @@ export const CHARGE_VALUE_LONG = 39;
 // ---------------------------------------------------------------------------
 
 /*
- * The chain window stands in for the game's HIT REACTION (a motion-system state the exe holds no length for: re-parity W3
- * handoff section 7). It stays the 2 s and 3 s the old engine used, now in logic steps (29.97 a second): 60 and 90.
+ * The chain window stands in for the game's HIT REACTION. Re-parity lane X2-A (FFX-2 only, Bailey 2026-10-08 "1:1 parity", D-768): the exe holds no
+ * 2 s or 3 s; the counter lives as long as the target's damage clip plays (note FFX2-G01 section 7), so while `CHAIN_WINDOW_PER_BODY` is on the
+ * window is that clip per body (`reaction.ts`, `data/ffx2/hit-reaction-frames.ts`). The 2 s and 3 s below are what a body outside the data keeps
+ * (and what every body gets with the switch off), now in logic steps (29.97 a second): 60 and 90.
  */
+/**
+ * THE SWITCH of lane X2-A, slice 1 (FFX-2 only; the release driver turns the whole slice off by setting it `false`): the chain window, the
+ * span of the halved tick, the forced hit and the Haste halving follow each body's own hit reaction (rows XA1, XA2, XA4 and XA7 of the
+ * wiring plan's lane X2-A). Off, the engine is byte for byte the one of release 50.
+ */
+export const CHAIN_WINDOW_PER_BODY = true;
+
+/**
+ * Logic steps a reaction lasts beyond its clip: **1**, calibrated on the running game (2026-10-13, question Q1 of that day's live session): Yuna's Moogle Mascot
+ * reacted for 31 steps against a 30-frame clip, Paine's Tonberry Mascot 37 against 36, a Hasted Rikku's Black Cat Mascot 15 against a
+ * 28-frame clip at twice the speed (14 steps). One offset fits all three (clip +1, not +2 or +3); the girls' own damage script holds
+ * a one-step wait the monsters' lacks, so on a monster the offset is the same number carried over, not a measurement.
+ */
+export const HIT_REACTION_SCHEDULING_STEPS = 1;
+
 /**
  * How long a hit reaction halves the tick: **15 logic steps (0.5 s)**, MEASURED on the running game (2026-10-09,
  * `research/re-ffx2-timing-measured.md` section 5): after a weak Delay hit a girl's tick read 49 (99 halved) for 14 steps in two cases and 15
- * in the third, which is what makes her 4,000 units take 48 steps. The reaction is a motion-system state, so no number in the exe says
- * how long it lasts for another hit; this is one command's measurement used for every damaging hit (a listed open item). The 2 s of the
- * chain window below is a different clock: how long the chain counter lives.
+ * in the third, which is what makes her 4,000 units take 48 steps. That one command's measurement stood for every damaging hit; with
+ * `CHAIN_WINDOW_PER_BODY` on, a body in the data halves for its own reaction (31 steps for Yuna's Mascot) and 15 is what the others keep.
+ * The 2 s of the chain window below is a different clock: how long the chain counter lived.
  */
 export const HIT_REACTION_STEPS = 15;
 
-/** Chain window after a normal hit: 2 s = 60 logic steps. `[verified: 2 sources]` */
+/** Chain window after a normal hit: 2 s = 60 logic steps. `[verified: 2 sources]` Kept for a body outside the data. */
 export const CHAIN_WINDOW_TICKS = Math.round(2 * STEPS_PER_SECOND);
 
-/** Chain window after a **critical** hit: 3 s = 90 logic steps. `[verified: 2 sources]` */
+/** Chain window after a **critical** hit: 3 s = 90 logic steps. `[verified: 2 sources]` Kept for a body outside the data. */
 export const CHAIN_WINDOW_TICKS_CRIT = Math.round(3 * STEPS_PER_SECOND);
 
 /** `chainMult = CHAIN_BASE + CHAIN_STEP * chainNumber`. `[verified: 2 sources]` */

@@ -6,8 +6,9 @@
  * character update 0x643d80 (0x643db0) and the test it calls, 0x631300 (0x631320). Spec:
  * `research/re-ffx2-damage.md` section 4. The engine's `../chain.ts` keeps the byte counter this way (read before
  * the hit, raised by one when a positive HP number lands, capped at 99; `chainAdjusted` is the multiplier the
- * pipeline uses). What it cannot keep is the reset: the game clears the counter when the target's hit reaction
- * ends, and the engine has no hit-reaction state, so a 2 s window (3 s after a critical) stands in for it
+ * pipeline uses). The reset: the game clears the counter when the target's hit reaction ends
+ * (`./hit-reaction.ts chainUpdate`), and the engine's reaction is a window as long as the body's damage clip (re-parity
+ * lane X2-A, `../reaction.ts`); a body outside that data keeps the 2 s window (3 s after a critical) that stood in for it
  * (`docs/handoff/re-parity-w3.md`, open items).
  *
  * THE CHAIN. The counter is a byte on the TARGET (Chr+0x5ad). Applying a positive HP number to a character

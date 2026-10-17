@@ -242,10 +242,11 @@ describe('zero decision time is untouched (every golden and D = 0 bench)', () =>
   // `src/battle/ffx2/constants.ts`, so Acts II and III open on random waits and the opening trim instead of every wait whole. Cause, by comparing full event logs: Act I is identical, the first differing
   // event is the opening gauge snapshot of Act II (link 2) in all three seeds, and all three are still victories with no menu closed. With `separateBattleGauges: false` passed as an option on the merged
   // tree the old row (the r52-rc pins above: b0b4c773, 8c376b36, 6fe874b5) returns exactly. Chapters IV and V did not move. The old Chapter VI hashes are in git at 3c92b60cc (r52-rc).
+  // **Re-pinned once for the hit reaction, stacked on r52-rc and the Chapter VI link opening** (re-parity RC9 lane X2-A, slice 1, FFX-2 only; reason "game-code parity", the checked note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1; `docs/handoff/re-parity-rc9-x2-hit-reaction.md`): the nine D = 0 logs of Chapters IV, V and VI under the default Wait split (Chapters IV and V equal `ffx2-atb-golden.test.ts` CH4_D0 / CH5_D0 seeds 1 to 3 again; no menu is closed in any of them, as before). Cause, found by ablation (the switch `CHAIN_WINDOW_PER_BODY` forced off): X2-A per-body windows, on top of the link opening. The chain window, the span of the halved tick and the forced hit are each body's own damage clip plus one step (a girl 24 to 51 steps, Bahamut 52 and 82) where they were 60 and 90 steps and 15. The old hashes are the base 35aa31e77 (r52-rc 3c92b60cc plus the Chapter VI link opening)'s, the three Chapter VI ones being the link-opening row above. Proof on the merged tree (branch `re-parity-rc9-x2-hit-reaction-r52`, 2026-10-17): with `CHAIN_WINDOW_PER_BODY` forced off for the whole run through a module mock (a vitest setup file; `withReactionKnobs(OLD_REACTION)` is the same switch inside the process), these nine pins: 9 of 9 of the base's hashes come back exactly, and with it on all 9 move.
   const PINNED = [
-    ['45734a8be5dd203c', '70e64552622c11e3', '52b166f112447102'],
-    ['879b56fea2dcf126', '6653829069c3a0b6', '2d1beea724981df5'],
-    ['19a5fa5740e9abf8', 'f9349289d38415a2', '0524e7eb879f2b4f'],
+    ['911ada24be11c668', '88653e45b18896cd', 'cc1d746de1a57bd1'],
+    ['f088d67c48d6cc10', '3a74b5193adc4161', 'aeca4110de447dc4'],
+    ['eb0956532a9a6edd', '7900cad6eaeb5c12', '06350f07dfd4fd6a'],
   ];
   it('Chapters IV, V and VI at D = 0 under the default Wait split replay byte for byte, no menu ever closed', () => {
     [driveChapter4, driveChapter5, driveChapter6].forEach((drive, c) => {

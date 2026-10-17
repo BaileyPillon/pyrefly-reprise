@@ -70,7 +70,10 @@ function monsterAboutToAct(r: Rig): void {
 }
 
 describe('a damaging hit starts a hit reaction', () => {
-  it('a girl who is hit has her tick halved (95 -> 47) for 15 steps, then it is 95 again', () => {
+  // Re-parity RC9 lane X2-A, slice 1 (FFX-2 only; reason "game-code parity", note FFX2-G01 section 7 and the live game of 2026-10-13, question Q1): the halving lasts as long as the
+  // girl's own flinch, her damage clip plus one step (Yuna's here, 30 frames: 31 steps), where it was a flat 15 (the figure read off a Hasted Rikku, 28 frames at twice the speed, 14 + 1).
+  // With the switch off (`CHAIN_WINDOW_PER_BODY`) this test passes as it stood: 15.
+  it('a girl who is hit has her tick halved (95 -> 47) for her reaction (her clip plus one step, 31 here), then it is 95 again', () => {
     monsterPlays = 'zz-hit';
     const r = rig(0x183);
     const yuna = r.u('yuna');
@@ -78,13 +81,13 @@ describe('a damaging hit starts a hit reaction', () => {
     const hp = yuna.hp;
     r.engine.tick(STEP_MS);
     expect(yuna.hp).toBeLessThan(hp); // the hit landed
-    expect(yuna.gauge.hitReaction).toBe(15);
+    expect(yuna.gauge.hitReaction).toBe(31);
     const ticks: number[] = [];
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 32; i++) {
       r.engine.tick(STEP_MS);
       ticks.push(yuna.gauge.speeds.tick);
     }
-    expect(ticks).toEqual([...new Array<number>(15).fill(47), 95]);
+    expect(ticks).toEqual([...new Array<number>(31).fill(47), 95]);
   });
 
   it('a monster whose row says its reaction does not slow it still flinches (the counter runs) but keeps its tick; one whose row does not, halves', () => {
