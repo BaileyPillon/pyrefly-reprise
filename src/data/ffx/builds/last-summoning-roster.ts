@@ -7,9 +7,9 @@
  * AGI EVA ACC LUCK; Yojimbo has no MP.)
  *
  * **Estimates of ours, each named** (the sources give none of them):
- *  - {@link YOJIMBO_START}: his starting compatibility **128**, "strongly indicated by the owner's save files (every slot from 1 to 84 reads 128 before recruitment) and by the community, live confirmation
- *    pending" (`FFXPartyBuild.yojimbo`, the driver's value, the RE session's `docs/handoff/re-parity-ffx-yojimbo-sisters.md`); and his **hire answer 1**, the neutral answer of 0, 1 and 2 (the game's default for a
- *    Yojimbo never hired through the scene is 0, and which answer a player gave is in no source). The party's **gil 50,000** is Dream's End's own `[estimate]`.
+ *  - {@link YOJIMBO_START}: his starting compatibility **128**, "strongly indicated by a community save pack (not the owner's: 107 saves, downloaded 2026-09-26): every slot from 1 to 84 reads 128 before recruitment, which contradicts the image's default of 0; and by the community, live confirmation
+ *    pending" (`FFXPartyBuild.yojimbo`, the driver's value, the RE session's `docs/handoff/re-parity-ffx-yojimbo-sisters.md`); and his **hire answer 1**, the neutral answer of 0, 1 and 2 (the image's default for a
+ *    Yojimbo never hired through the scene is 0, which that pack contradicts (RE review, 2026-10-17), and which answer a player gave is in no source; Chapter XXVII uses 2 and the two chapters are NOT aligned, because aligning moves a chapter's Zanmato odds and no source picks between two legal player histories). The party's **gil 50,000** is Dream's End's own `[estimate]`.
  *  - {@link SISTERS_START}: each Sister's starting motivation **50**, the middle of 0 to 100. The engine's note says "UNSOURCED" and the chapter labels it; it moves the chance of the orders the Sisters' menu offers
  *    and the Combine powers roll (`200 + motivation` of 256).
  *  - The extra aeons' **starting Overdrive gauges**: Dream's End's five carry `research/ffx-seymour-flux.md` section 7.9.2's values (60, 55, 50, 55, 70), which name no gauge for the others. An aeon's gauge

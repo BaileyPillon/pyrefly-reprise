@@ -2734,14 +2734,15 @@ export interface AeonBuild {
 export interface YojimboBuild {
   /**
    * His compatibility at the start of the battle, 0 to 255. **No default anywhere in `src/battle`**: the game's image holds 0 and no initialiser
-   * was found. 128 is strongly indicated by the owner's own save files (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
+   * was found, and a community save pack (not the owner's: 107 saves, downloaded 2026-09-26) contradicts a default of 0
+   * (RE review, 2026-10-17). 128 is strongly indicated by that pack (slots 1-84 all read 128; 164 by slot 106) and the community says 128, live
    * confirmation pending; the chapter must say so where it gives its value (`docs/handoff/re-parity-ffx-yojimbo-sisters.md`).
    * A chain carries the changed value to the next link (`state.flags['yojimbo:compatibility']`).
    */
   compatibility: number;
   /**
    * The hire answer, 0, 1 or 2: the reply the player gave in the recruitment haggle (0 the dearest start price, 2 the cheapest). It scales the
-   * motivation Pay makes (`kernel/yojimbo.ts`). The game's default, when he was never hired through that scene, is 0.
+   * motivation Pay makes (`kernel/yojimbo.ts`). The image's default, when he was never hired through that scene, is 0 (the same pack contradicts a default of 0: RE review, 2026-10-17; no value changes).
    */
   hireAnswer: 0 | 1 | 2;
 }
