@@ -7,10 +7,10 @@
  * **Cindy's turn**, in order: (1) all three Sisters alive and each gauge at 100 or more: **Delta Attack** on the whole front line, all three gauges back to 0; (2) her HP below two thirds of her maximum
  * (`(max / 3) x 2`, integer): **Drain** on the front-line actor with the most HP; (3) Sandy's or Mindy's HP percent (255 for a dead one) at 50 or less: **Curaga** on the one with the lower percent (a tie goes to
  * Mindy); (4) else **Camisade** on a random living front-line actor. **Sandy's turn**: (1) all three full: send the token to Cindy (she throws the Delta Attack at once); (2) Cindy alive without Reflect:
- * **Reflect** on Cindy; (3) **Haste** on a random Sister without it; (4) **Razzia** on a random living front-line actor. **Mindy's turn**: (1) all three full: the token; (2) Cindy alive with Reflect: **Flare**
+ * **Reflect** on Cindy; (3) **Haste** on a random Sister without it (the game first makes, and throws away, a search of the Sisters for one without Reflect, which takes its own stream-4 draw: m179 @0x0305, then @0x0317); (4) **Razzia** on a random living front-line actor. **Mindy's turn**: (1) all three full: the token; (2) Cindy alive with Reflect: **Flare**
  * on Cindy (it bounces onto the front line through her Reflect); (3) a coin of 48.97 percent (`GetRandomValue() mod 100` above 50) **Passado**, else **Flare**, on a random living front-line actor.
  *
- * **The gauges** are the Sisters' own, on a 100-point scale: 0 to 9 after each of her turns (not after a Delta Attack or a token), **10 to 19 for every hit event that reaches her** (ignored at 0 HP, at 100 or for a
+ * **The gauges** are the Sisters' own, on a 100-point scale: 0 to 9 after each of her turns while her gauge is under 100 (no roll at 100, and none after a Delta Attack or a token), **10 to 19 for every hit event that reaches her** (ignored at 0 HP, at 100 or for a
  * command that does not touch HP), and **30 to 39 more when the hit is a Yu Pagoda's Power Wave**. **The Pagodas** feed the Sister whose gauge is lowest (ties drawn, stream 4) and take no action when that gauge is
  * already 100 ({@link sistersPowerWave}, called by `./yu-pagoda.ts`). Cindy **remembers her Reflect**: a Power Wave that strips it is undone on the hit.
  *
@@ -20,7 +20,7 @@
  */
 
 import type { Command, FFXCombatant } from '../../common/types.ts';
-import { type Ctx, has, isAlive, rtOf, tryActor } from '../state.ts';
+import { type Ctx, has, isAlive, rtOf, targetable, tryActor } from '../state.ts';
 import { frontLine, gameMod, highestHpLiving, pickActor, randomLiving } from './game-rolls.ts';
 import { queueReaction } from './hooks.ts';
 import { type HitEvent, registerHitScript } from './hit-script.ts';
@@ -72,9 +72,13 @@ function zeroGauges(ctx: Ctx): void {
   for (const c of sisterBodies(ctx)) rtOf(ctx, c.id).ai[GAUGE] = 0;
 }
 
-/** After a turn that was not the joint action: 0 to 9 on her gauge, clamped at 100. */
+/**
+ * After a turn that was not the joint action: 0 to 9 on her gauge, clamped at 100. **Only while the gauge is under 100**: the game's post-turn step is `if (v3 < 100)` around the whole roll (m178 @0x04bb, m179 @0x0352,
+ * m180 @0x031d, RE review F-new), so a Sister already at 100 draws nothing. This changes the stream's alignment, not the odds of any outcome.
+ */
 function gainAfterTurn(ai: AiContext): void {
   const gauge = num(ai.memory, GAUGE, 0);
+  if (gauge >= 100) return;
   ai.memory[GAUGE] = Math.min(100, gauge + gameMod(ai.ctx, 10));
 }
 
@@ -127,6 +131,9 @@ export const possessedSandyAi = (ai: AiContext): Command | null => {
   if (cindy !== undefined && isAlive(cindy) && !has(cindy, 'reflect')) {
     command = use(ai, 'reflect', [cindy.id]);
   } else {
+    // The game's m179 first searches the Sisters for one without Reflect (`findMatchingChr(Sisters, Reflect, Not)`, @0x0305) and throws the answer away; the search still takes its stream-4 draw
+    // when two or more qualify, so the draw is made here and discarded, and the Haste search (@0x0317) follows (RE review F-01). Stream alignment only; the odds of Haste, Razzia and every target are unchanged.
+    pickActor(ctx, sisterBodies(ctx).filter((c) => isAlive(c) && targetable(c) && !has(c, 'reflect')));
     const slow = sisterBodies(ctx).filter((c) => isAlive(c) && !has(c, 'haste'));
     const lucky = slow.length > 0 ? pickActor(ctx, slow) : undefined;
     if (lucky !== undefined) {

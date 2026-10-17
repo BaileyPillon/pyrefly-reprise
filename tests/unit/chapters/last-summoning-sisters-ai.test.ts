@@ -161,6 +161,22 @@ describe('Cindy’s turn: Delta Attack, Drain, Curaga, Camisade', () => {
     act(t, CINDY);
     expect(t.mem(CINDY)[GAUGE], 'clamps at 100').toBe(100);
   });
+
+  it('a Sister whose gauge is already 100 rolls no gain after her turn (the game guards the roll with if (v3 < 100): m178 @0x04bb, m179 @0x0352, m180 @0x031d), so Camisade draws only its pick', () => {
+    const t = fight();
+    setGauges(t, 100, 99, 100); // Sandy is one short, so there is no Delta Attack
+    t.rng.feed(2);
+    const command = act(t, CINDY);
+    expect([idOf(command), targetsOf(command)]).toEqual(['possessed-cindy-camisade', ['auron']]);
+    expect(t.rng.calls, 'the pick only: no gauge roll at 100').toEqual([[0, 2]]);
+    expect(t.mem(CINDY)[GAUGE]).toBe(100);
+    t.mem(CINDY)[GAUGE] = 99;
+    t.rng.calls.length = 0;
+    t.rng.feed(2);
+    t.rng.wide.push(0);
+    act(t, CINDY);
+    expect(t.rng.calls, 'at 99 the roll is still made').toEqual([[0, 2], [0, 0xffff]]);
+  });
 });
 
 describe('Sandy’s turn: the token, Reflect, Haste, Razzia', () => {
@@ -181,14 +197,31 @@ describe('Sandy’s turn: the token, Reflect, Haste, Razzia', () => {
     expect(t.mem(SANDY)[GAUGE]).toBe(3);
   });
 
-  it('Cindy dead: no Reflect; Haste on a random Sister without Haste (one pick among the living)', () => {
+  it('Sandy at 100 with Cindy a point short: her Reflect turn draws nothing at all (no gain roll at 100)', () => {
+    const t = fight();
+    setGauges(t, 99, 100, 100);
+    const command = act(t, SANDY);
+    expect([idOf(command), targetsOf(command)]).toEqual(['reflect', [CINDY]]);
+    expect(t.rng.calls).toEqual([]);
+    expect(t.mem(SANDY)[GAUGE]).toBe(100);
+  });
+
+  it('Cindy dead: no Reflect; Haste on a random Sister without Haste: first the game’s discarded search of the Sisters without Reflect (m179 @0x0305, one stream-4 draw), then the Haste pick (@0x0317)', () => {
     const t = fight();
     t.at(CINDY).alive = false;
-    t.rng.feed(1);
+    t.rng.feed(1, 0); // the discarded draw answers 1 (thrown away); the Haste pick answers 0, the first of Mindy (20) and Sandy (21) in actor order
     const command = act(t, SANDY);
-    expect(idOf(command)).toBe('haste');
-    expect(SISTERS.filter((id) => id !== CINDY)).toContain(targetsOf(command)[0]);
-    expect(t.rng.calls[0], 'the pick over two Sisters').toEqual([0, 1]);
+    expect([idOf(command), targetsOf(command)], 'the second draw picks the target, not the first').toEqual(['haste', [MINDY]]);
+    expect(t.rng.calls, 'two picks over the two living Sisters, then the gauge').toEqual([[0, 1], [0, 1], [0, 0xffff]]);
+  });
+
+  it('the discarded search draws only when two or more Sisters qualify: with Sandy alone standing, Haste is her only pick and nothing is drawn but the gauge', () => {
+    const t = fight();
+    t.at(CINDY).alive = false;
+    t.at(MINDY).alive = false;
+    const command = act(t, SANDY);
+    expect([idOf(command), targetsOf(command)]).toEqual(['haste', [SANDY]]);
+    expect(t.rng.calls).toEqual([[0, 0xffff]]);
   });
 
   it('Reflect on Cindy and every Sister hasted: Razzia on a random living front-line actor', () => {
@@ -196,9 +229,10 @@ describe('Sandy’s turn: the token, Reflect, Haste, Razzia', () => {
     const status = (): { id: 'haste'; turnsRemaining: number; ticksRemaining: null; charges: null; stacks: number; permanent: boolean } => ({ id: 'haste', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false });
     t.at(CINDY).statuses['reflect'] = { id: 'reflect', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
     for (const id of SISTERS) t.at(id).statuses['haste'] = status();
-    t.rng.feed(1);
+    t.rng.feed(0, 1); // the discarded search of the Sisters without Reflect (Sandy and Mindy) takes the 0; the Haste search finds nobody and draws nothing; the Razzia pick takes the 1
     const command = act(t, SANDY);
     expect([idOf(command), targetsOf(command)]).toEqual(['possessed-sandy-razzia', ['yuna']]);
+    expect(t.rng.calls, 'the discarded draw, the Razzia pick over three, then the gauge').toEqual([[0, 1], [0, 2], [0, 0xffff]]);
   });
 });
 
@@ -217,6 +251,16 @@ describe('Mindy’s turn: the token, Flare on Reflect, Passado or Flare', () => 
     const command = act(t, MINDY);
     expect([idOf(command), targetsOf(command)]).toEqual(['flare', [CINDY]]);
     expect(t.rng.calls, 'no pick, no coin: only the gauge').toEqual([[0, 0xffff]]);
+  });
+
+  it('Mindy at 100 with Cindy a point short: her Flare on Cindy draws nothing at all (no gain roll at 100)', () => {
+    const t = fight();
+    setGauges(t, 99, 100, 100);
+    t.at(CINDY).statuses['reflect'] = { id: 'reflect', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 0, permanent: false };
+    const command = act(t, MINDY);
+    expect([idOf(command), targetsOf(command)]).toEqual(['flare', [CINDY]]);
+    expect(t.rng.calls).toEqual([]);
+    expect(t.mem(MINDY)[GAUGE]).toBe(100);
   });
 
   it('else a coin on GetRandomValue() mod 100: above 50 Passado, 50 or under Flare, on the actor it picked (the pick comes first, our assumption (a))', () => {
