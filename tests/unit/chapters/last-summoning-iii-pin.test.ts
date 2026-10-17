@@ -18,8 +18,15 @@
  * section 5, which names exactly these seeds), which gave Energy Rain the game's limit of 3 s where the engine had 2.6 s. The line rolls Tidus's Swordplay from a stand-in (one draw for the 75 percent
  * test and, on a success, one draw for the time left); the draws are the same and in the same order, and the time left is read against 3,000 instead of 2,600, so the timing bonus differs by a point or two
  * in a few of Tidus's Energy Rains. **Proved by ablation on the release tree:** with Energy Rain's limit put back to 2.6 s (`kernel/minigame-swordplay.ts`, one number, then restored) all twelve rows of
- * `BEFORE` read exactly. `BEFORE` stays as the record of the hidden chapter's own proof (its lane changed nothing of Chapter III); `NOW` is `BEFORE` with the three rows the Overdrive lane moved, and it is
- * what the test asserts.
+ * `BEFORE` read exactly. `BEFORE` stays as the record of the hidden chapter's own proof (its lane changed nothing of Chapter III); `RELEASE_52` is `BEFORE` with the three rows the Overdrive lane moved.
+ *
+ * **Release 53 (2026-10-17): all twelve seeds moved, and why.** Release 53 merges RC10's FFX hit-order lane (`docs/handoff/re-parity-rc10-ffx-hit-order.md`, FFX only), which makes a group command draw its variance,
+ * critical-hit and status rolls for the targets in the game's SLOT order (Tidus, Yuna, Auron, Kimahri, Wakka, Lulu, Rikku, then the aeons, then the monsters) where the engine drew them in the party's formation
+ * order, and lands an action's hits round by round. Chapter III's links open with Blade Blitz at the party: the base calculates Lulu first (formation order), the tip Yuna first (slot 1), and every draw after it
+ * is dealt to a different character (that handoff's section 5.1 lists Chapter III as 0 of 12 identical logs). Every seed's first link reads differently (and some later links, not all), **and no
+ * outcome moved**: seed 3 is still the defeat on link 1, the eleven others are still seven-link victories over the same seven formations. **Proved by ablation on the release 53 tree:** with
+ * `HIT_CALC_SLOT_ORDER`, `HIT_ORDER_ROUND_ROBIN` and `DRAIN_RECOIL_ONE_RECORD` (`src/battle/ffx/hit-order.ts`, the lane's three rollback switches) all put to false, all twelve rows of `RELEASE_52` read exactly
+ * (14 of 14 tests of this file as they stood passed; the switches were then put back). `NOW` is what Chapter III reads on the release 53 tree, and it is what the test asserts; the two tables before it stay as the record.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -50,8 +57,24 @@ const MOVED_BY_THE_OVERDRIVE_LANE: Readonly<Record<number, string>> = {
   4: '065c748c513f4911:victory 166e3e5547aec6c9:victory 23499ef516629772:victory d86f7a5a47c46d5a:victory 67f9e95b4dbd65d9:victory 802793ded5736938:victory d9e1a30e1f1d9d9b:victory',
 };
 
-/** What Chapter III reads on the release tree: `BEFORE`, with the three moved rows. */
-const NOW: Readonly<Record<number, string>> = { ...BEFORE, ...MOVED_BY_THE_OVERDRIVE_LANE };
+/** What Chapter III read on the release 52 tree: `BEFORE`, with the three moved rows. */
+const RELEASE_52: Readonly<Record<number, string>> = { ...BEFORE, ...MOVED_BY_THE_OVERDRIVE_LANE };
+
+/** What Chapter III reads on the release 53 tree: the twelve rows RC10's hit-order lane moved (see the header; read from the release 53 tree's own run, whole-table digest 1a75c7ad63ce11ae). */
+const NOW: Readonly<Record<number, string>> = {
+  1: 'd6afd80f44b44e89:victory b4fc81c50ae62729:victory 2dc0c7f818b45e95:victory cb98eaa0075d2b13:victory a86a95e34b022c08:victory 20a7bd6936260852:victory c4097e732b6b791c:victory',
+  2: 'a3935a1059d729c7:victory d78d1085e1a1318e:victory 51b493eeb8cda593:victory fa524ab719904f7d:victory 8ebf250428d2f4c3:victory 3b61e63950439088:victory e42029a56c95e6ed:victory',
+  3: 'ec1cfe8a7902e35b:defeat',
+  4: '02ae5c9551851e1e:victory 166e3e5547aec6c9:victory f40b89c343eae51b:victory bcb6bd6352700875:victory 54ea68bce6287b56:victory cc271eecab3d1551:victory 28fcb2a12f98770a:victory',
+  5: '812493cca3351f56:victory bd7077dba11b74ee:victory ecdadf9baca3ae60:victory 5d925e96b17cfe18:victory 5f04420cf1016666:victory e4c08c00ba4d21c8:victory 5283ed30d06a2c5b:victory',
+  6: '24d41f9769be1bb8:victory 1b40c0095668f813:victory 29e5cc43dd10a0d0:victory 12f28c455a9fdf3b:victory 1907ff16135dd7fb:victory 24568f6745a03ef7:victory a84fac33e3fb712f:victory',
+  7: 'f24212315fbf4c99:victory 9eba2aff8f421263:victory 2fece7f57db94e10:victory e2c3b86889b033db:victory 086ee62380266d4d:victory a8b4fdbf7def1c90:victory 97c561b3f10984ac:victory',
+  8: 'c75777b90c959ba7:victory 8d6fd9ccb549b223:victory b91e9db7951a26d1:victory ddd891f318b3f6ed:victory 66847ee8a31b1665:victory bb3bf3ade6f68756:victory 188fccc652499ab6:victory',
+  9: 'dec0a5dae07a1321:victory c452237cfab21fbd:victory 3e8f27661817a6a2:victory da0da26264b54623:victory af16f6bad20c29fd:victory 47a8c9cd87623062:victory 726b46d5bead7ff1:victory',
+  10: '9c1db34fb251a176:victory 6868bb4184b59fcd:victory 83e7542cbd7b0027:victory f2c44334b77f7df6:victory 4ca258ae2cdbffd9:victory 90f9534f94fd4170:victory 9aeeebd60b479091:victory',
+  11: '92893773947efa83:victory 960bd8a3bd295aa3:victory 7e079e1c4f10ba2a:victory bc62766350792449:victory 1f34d8063ffae9e4:victory a698d76089fa4ddc:victory 0607123504460421:victory',
+  12: 'd46c6b0c17faa02b:victory 13a83e344bdf871b:victory 7021e2cb56f5d0d2:victory 856e1e08ccdd0a97:victory 04849d7981dd60de:victory f22d2035c505f2a7:victory 9f161768c3431625:victory',
+};
 
 describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning must not move it)", () => {
   for (let seed = 1; seed <= 12; seed++) {
@@ -68,7 +91,7 @@ describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning mu
     for (let seed = 1; seed <= 12; seed++) {
       const moved = MOVED_BY_THE_OVERDRIVE_LANE[seed];
       if (moved === undefined) {
-        expect(NOW[seed], `seed ${seed}`).toBe(BEFORE[seed]);
+        expect(RELEASE_52[seed], `seed ${seed}`).toBe(BEFORE[seed]);
         continue;
       }
       const before = BEFORE[seed]!.split(' ');
@@ -79,14 +102,28 @@ describe("Chapter III, twelve seeds, byte for byte (the hidden Last Summoning mu
     }
   });
 
-  it('the whole BEFORE table, as one digest: a26660257ba2716c; and the whole NOW table: 29cff1931cbb6349', () => {
+  it("release 53: every one of the twelve seeds moved (RC10's hit order), none in its outcome, its number of links or the formations fought", () => {
+    for (let seed = 1; seed <= 12; seed++) {
+      const before = RELEASE_52[seed]!.split(' ');
+      const after = NOW[seed]!.split(' ');
+      expect(after.length, `seed ${seed}: the same number of links`).toBe(before.length);
+      expect(after.map((p) => p.split(':')[1]), `seed ${seed}: every outcome is the same`).toEqual(before.map((p) => p.split(':')[1]));
+      expect(after[0], `seed ${seed}: the first link moved`).not.toBe(before[0]);
+    }
+    expect(Object.values(NOW).filter((row) => row.endsWith(':defeat'))).toEqual([NOW[3]]); // seed 3 is the only defeat, as it was
+  });
+
+  it('the whole BEFORE table, as one digest: a26660257ba2716c; release 52: 29cff1931cbb6349; and the whole NOW table (release 53): 1a75c7ad63ce11ae', () => {
     // The twelve rows of the table, `seed=row`, joined by newlines and hashed: the single value the handoff quotes. The literal was computed from the
     // BEFORE run's own output, not from this file, so a typo in a row above cannot hide behind it.
     const lines: string[] = [];
     for (let seed = 1; seed <= 12; seed++) lines.push(`${seed}=${BEFORE[seed]}`);
     expect(sha16(lines.join('\n'))).toBe('a26660257ba2716c');
+    const r52: string[] = [];
+    for (let seed = 1; seed <= 12; seed++) r52.push(`${seed}=${RELEASE_52[seed]}`);
+    expect(sha16(r52.join('\n'))).toBe('29cff1931cbb6349');
     const now: string[] = [];
     for (let seed = 1; seed <= 12; seed++) now.push(`${seed}=${NOW[seed]}`);
-    expect(sha16(now.join('\n'))).toBe('29cff1931cbb6349');
+    expect(sha16(now.join('\n'))).toBe('1a75c7ad63ce11ae'); // from the run's own output (the print before this table was pasted), not from the rows above
   });
 });
